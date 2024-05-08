@@ -13,13 +13,13 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/authz"
 	"github.com/stretchr/testify/require"
 
-	"github.com/initia-labs/miniwasm/x/tokenfactory/types"
+	"github.com/milkyway-labs/milk/x/tokenfactory/types"
 
 	"github.com/cometbft/cometbft/crypto/ed25519"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
 	authcodec "github.com/cosmos/cosmos-sdk/x/auth/codec"
-	proto "github.com/cosmos/gogoproto/proto"
+	"github.com/cosmos/gogoproto/proto"
 	initiaappparams "github.com/initia-labs/initia/app/params"
 )
 

@@ -63,7 +63,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/consensus"
 	consensusparamkeeper "github.com/cosmos/cosmos-sdk/x/consensus/keeper"
 	consensusparamtypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
-	genutil "github.com/cosmos/cosmos-sdk/x/genutil"
+	"github.com/cosmos/cosmos-sdk/x/genutil"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	"github.com/cosmos/cosmos-sdk/x/group"
 	groupkeeper "github.com/cosmos/cosmos-sdk/x/group/keeper"
@@ -71,7 +71,7 @@ import (
 	"github.com/cosmos/gogoproto/proto"
 
 	// ibc imports
-	packetforward "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward"
+	"github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward"
 	packetforwardkeeper "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/keeper"
 	packetforwardtypes "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/types"
 	"github.com/cosmos/ibc-go/modules/capability"
@@ -111,7 +111,7 @@ import (
 	icaauthtypes "github.com/initia-labs/initia/x/intertx/types"
 
 	// OPinit imports
-	opchild "github.com/initia-labs/OPinit/x/opchild"
+	"github.com/initia-labs/OPinit/x/opchild"
 	opchildkeeper "github.com/initia-labs/OPinit/x/opchild/keeper"
 	opchildlanes "github.com/initia-labs/OPinit/x/opchild/lanes"
 	opchildtypes "github.com/initia-labs/OPinit/x/opchild/types"
@@ -137,18 +137,18 @@ import (
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
 	// local imports
-	appante "github.com/initia-labs/miniwasm/app/ante"
-	apphook "github.com/initia-labs/miniwasm/app/hook"
-	ibcwasmhooks "github.com/initia-labs/miniwasm/app/ibc-hooks"
-	appkeepers "github.com/initia-labs/miniwasm/app/keepers"
-	"github.com/initia-labs/miniwasm/x/bank"
-	bankkeeper "github.com/initia-labs/miniwasm/x/bank/keeper"
-	"github.com/initia-labs/miniwasm/x/tokenfactory"
-	tokenfactorykeeper "github.com/initia-labs/miniwasm/x/tokenfactory/keeper"
-	tokenfactorytypes "github.com/initia-labs/miniwasm/x/tokenfactory/types"
+	appante "github.com/milkyway-labs/milk/app/ante"
+	apphook "github.com/milkyway-labs/milk/app/hook"
+	ibcwasmhooks "github.com/milkyway-labs/milk/app/ibc-hooks"
+	appkeepers "github.com/milkyway-labs/milk/app/keepers"
+	"github.com/milkyway-labs/milk/x/bank"
+	bankkeeper "github.com/milkyway-labs/milk/x/bank/keeper"
+	"github.com/milkyway-labs/milk/x/tokenfactory"
+	tokenfactorykeeper "github.com/milkyway-labs/milk/x/tokenfactory/keeper"
+	tokenfactorytypes "github.com/milkyway-labs/milk/x/tokenfactory/types"
 
 	// noble forwarding keeper
-	forwarding "github.com/noble-assets/forwarding/x/forwarding"
+	"github.com/noble-assets/forwarding/x/forwarding"
 	forwardingkeeper "github.com/noble-assets/forwarding/x/forwarding/keeper"
 	forwardingtypes "github.com/noble-assets/forwarding/x/forwarding/types"
 
@@ -156,14 +156,14 @@ import (
 	indexer "github.com/initia-labs/kvindexer"
 	indexerconfig "github.com/initia-labs/kvindexer/config"
 	blocksubmodule "github.com/initia-labs/kvindexer/submodules/block"
-	tx "github.com/initia-labs/kvindexer/submodules/tx"
+	"github.com/initia-labs/kvindexer/submodules/tx"
 	nft "github.com/initia-labs/kvindexer/submodules/wasm-nft"
 	pair "github.com/initia-labs/kvindexer/submodules/wasm-pair"
 	indexermodule "github.com/initia-labs/kvindexer/x/kvindexer"
 	indexerkeeper "github.com/initia-labs/kvindexer/x/kvindexer/keeper"
 
 	// unnamed import of statik for swagger UI support
-	_ "github.com/initia-labs/miniwasm/client/docs/statik"
+	_ "github.com/milkyway-labs/milk/client/docs/statik"
 )
 
 var (
@@ -191,7 +191,7 @@ var (
 )
 
 var (
-	_ servertypes.Application = (*MinitiaApp)(nil)
+	_ servertypes.Application = (*MilkApp)(nil)
 )
 
 func init() {
@@ -203,10 +203,10 @@ func init() {
 	DefaultNodeHome = filepath.Join(userHomeDir, "."+AppName)
 }
 
-// MinitiaApp extends an ABCI application, but with most of its parameters exported.
+// MilkApp extends an ABCI application, but with most of its parameters exported.
 // They are exported for convenience in creating helper functions, as object
 // capabilities aren't needed for testing.
-type MinitiaApp struct {
+type MilkApp struct {
 	*baseapp.BaseApp
 
 	legacyAmino       *codec.LegacyAmino
@@ -268,8 +268,8 @@ type MinitiaApp struct {
 	indexerModule indexermodule.AppModuleBasic
 }
 
-// NewMinitiaApp returns a reference to an initialized Initia.
-func NewMinitiaApp(
+// NewMilkApp returns a reference to an initialized Initia.
+func NewMilkApp(
 	logger log.Logger,
 	db dbm.DB,
 	traceStore io.Writer,
@@ -277,7 +277,7 @@ func NewMinitiaApp(
 	wasmOpts []wasmkeeper.Option,
 	appOpts servertypes.AppOptions,
 	baseAppOptions ...func(*baseapp.BaseApp),
-) *MinitiaApp {
+) *MilkApp {
 	encodingConfig := params.MakeEncodingConfig()
 	std.RegisterLegacyAminoCodec(encodingConfig.Amino)
 	std.RegisterInterfaces(encodingConfig.InterfaceRegistry)
@@ -310,7 +310,7 @@ func NewMinitiaApp(
 		panic(err)
 	}
 
-	app := &MinitiaApp{
+	app := &MilkApp{
 		BaseApp:           bApp,
 		legacyAmino:       legacyAmino,
 		appCodec:          appCodec,
@@ -1025,16 +1025,16 @@ func NewMinitiaApp(
 // handler so that we can verify bid transactions before they are inserted into the mempool.
 // With the POB CheckTx, we can verify the bid transaction and all of the bundled transactions
 // before inserting the bid transaction into the mempool.
-func (app *MinitiaApp) CheckTx(req *abci.RequestCheckTx) (*abci.ResponseCheckTx, error) {
+func (app *MilkApp) CheckTx(req *abci.RequestCheckTx) (*abci.ResponseCheckTx, error) {
 	return app.checkTxHandler(req)
 }
 
 // SetCheckTx sets the checkTxHandler for the app.
-func (app *MinitiaApp) SetCheckTx(handler blockchecktx.CheckTx) {
+func (app *MilkApp) SetCheckTx(handler blockchecktx.CheckTx) {
 	app.checkTxHandler = handler
 }
 
-func (app *MinitiaApp) setAnteHandler(
+func (app *MilkApp) setAnteHandler(
 	mevLane auctionante.MEVLane,
 	freeLane block.Lane,
 	wasmConfig wasmtypes.WasmConfig,
@@ -1068,7 +1068,7 @@ func (app *MinitiaApp) setAnteHandler(
 	return anteHandler
 }
 
-func (app *MinitiaApp) setPostHandler() {
+func (app *MilkApp) setPostHandler() {
 	postHandler, err := posthandler.NewPostHandler(
 		posthandler.HandlerOptions{},
 	)
@@ -1080,25 +1080,25 @@ func (app *MinitiaApp) setPostHandler() {
 }
 
 // Name returns the name of the App
-func (app *MinitiaApp) Name() string { return app.BaseApp.Name() }
+func (app *MilkApp) Name() string { return app.BaseApp.Name() }
 
 // PreBlocker application updates every pre block
-func (app *MinitiaApp) PreBlocker(ctx sdk.Context, _ *abci.RequestFinalizeBlock) (*sdk.ResponsePreBlock, error) {
+func (app *MilkApp) PreBlocker(ctx sdk.Context, _ *abci.RequestFinalizeBlock) (*sdk.ResponsePreBlock, error) {
 	return app.ModuleManager.PreBlock(ctx)
 }
 
 // BeginBlocker application updates every begin block
-func (app *MinitiaApp) BeginBlocker(ctx sdk.Context) (sdk.BeginBlock, error) {
+func (app *MilkApp) BeginBlocker(ctx sdk.Context) (sdk.BeginBlock, error) {
 	return app.ModuleManager.BeginBlock(ctx)
 }
 
 // EndBlocker application updates every end block
-func (app *MinitiaApp) EndBlocker(ctx sdk.Context) (sdk.EndBlock, error) {
+func (app *MilkApp) EndBlocker(ctx sdk.Context) (sdk.EndBlock, error) {
 	return app.ModuleManager.EndBlock(ctx)
 }
 
 // InitChainer application update at chain initialization
-func (app *MinitiaApp) InitChainer(ctx sdk.Context, req *abci.RequestInitChain) (*abci.ResponseInitChain, error) {
+func (app *MilkApp) InitChainer(ctx sdk.Context, req *abci.RequestInitChain) (*abci.ResponseInitChain, error) {
 	var genesisState GenesisState
 	if err := tmjson.Unmarshal(req.AppStateBytes, &genesisState); err != nil {
 		panic(err)
@@ -1108,12 +1108,12 @@ func (app *MinitiaApp) InitChainer(ctx sdk.Context, req *abci.RequestInitChain) 
 }
 
 // LoadHeight loads a particular height
-func (app *MinitiaApp) LoadHeight(height int64) error {
+func (app *MilkApp) LoadHeight(height int64) error {
 	return app.LoadVersion(height)
 }
 
 // ModuleAccountAddrs returns all the app's module account addresses.
-func (app *MinitiaApp) ModuleAccountAddrs() map[string]bool {
+func (app *MilkApp) ModuleAccountAddrs() map[string]bool {
 	modAccAddrs := make(map[string]bool)
 	for acc := range maccPerms {
 		modAccAddrs[authtypes.NewModuleAddress(acc).String()] = true
@@ -1126,7 +1126,7 @@ func (app *MinitiaApp) ModuleAccountAddrs() map[string]bool {
 //
 // NOTE: This is solely to be used for testing purposes as it may be desirable
 // for modules to register their own custom testing types.
-func (app *MinitiaApp) LegacyAmino() *codec.LegacyAmino {
+func (app *MilkApp) LegacyAmino() *codec.LegacyAmino {
 	return app.legacyAmino
 }
 
@@ -1134,39 +1134,39 @@ func (app *MinitiaApp) LegacyAmino() *codec.LegacyAmino {
 //
 // NOTE: This is solely to be used for testing purposes as it may be desirable
 // for modules to register their own custom testing types.
-func (app *MinitiaApp) AppCodec() codec.Codec {
+func (app *MilkApp) AppCodec() codec.Codec {
 	return app.appCodec
 }
 
 // InterfaceRegistry returns Initia's InterfaceRegistry
-func (app *MinitiaApp) InterfaceRegistry() types.InterfaceRegistry {
+func (app *MilkApp) InterfaceRegistry() types.InterfaceRegistry {
 	return app.interfaceRegistry
 }
 
 // GetKey returns the KVStoreKey for the provided store key.
 //
 // NOTE: This is solely to be used for testing purposes.
-func (app *MinitiaApp) GetKey(storeKey string) *storetypes.KVStoreKey {
+func (app *MilkApp) GetKey(storeKey string) *storetypes.KVStoreKey {
 	return app.keys[storeKey]
 }
 
 // GetTKey returns the TransientStoreKey for the provided store key.
 //
 // NOTE: This is solely to be used for testing purposes.
-func (app *MinitiaApp) GetTKey(storeKey string) *storetypes.TransientStoreKey {
+func (app *MilkApp) GetTKey(storeKey string) *storetypes.TransientStoreKey {
 	return app.tkeys[storeKey]
 }
 
 // GetMemKey returns the MemStoreKey for the provided mem key.
 //
 // NOTE: This is solely used for testing purposes.
-func (app *MinitiaApp) GetMemKey(storeKey string) *storetypes.MemoryStoreKey {
+func (app *MilkApp) GetMemKey(storeKey string) *storetypes.MemoryStoreKey {
 	return app.memKeys[storeKey]
 }
 
 // RegisterAPIRoutes registers all application module routes with the provided
 // API server.
-func (app *MinitiaApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig) {
+func (app *MilkApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig) {
 	clientCtx := apiSvr.ClientCtx
 
 	// Register new tx routes from grpc-gateway.
@@ -1191,14 +1191,14 @@ func (app *MinitiaApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.AP
 }
 
 // Simulate customize gas simulation to add fee deduction gas amount.
-func (app *MinitiaApp) Simulate(txBytes []byte) (sdk.GasInfo, *sdk.Result, error) {
+func (app *MilkApp) Simulate(txBytes []byte) (sdk.GasInfo, *sdk.Result, error) {
 	gasInfo, result, err := app.BaseApp.Simulate(txBytes)
 	gasInfo.GasUsed += FeeDeductionGasAmount
 	return gasInfo, result, err
 }
 
 // RegisterTxService implements the Application.RegisterTxService method.
-func (app *MinitiaApp) RegisterTxService(clientCtx client.Context) {
+func (app *MilkApp) RegisterTxService(clientCtx client.Context) {
 	authtx.RegisterTxService(
 		app.BaseApp.GRPCQueryRouter(), clientCtx,
 		app.Simulate, app.interfaceRegistry,
@@ -1206,7 +1206,7 @@ func (app *MinitiaApp) RegisterTxService(clientCtx client.Context) {
 }
 
 // RegisterTendermintService implements the Application.RegisterTendermintService method.
-func (app *MinitiaApp) RegisterTendermintService(clientCtx client.Context) {
+func (app *MilkApp) RegisterTendermintService(clientCtx client.Context) {
 	cmtservice.RegisterTendermintService(
 		clientCtx,
 		app.BaseApp.GRPCQueryRouter(),
@@ -1214,7 +1214,7 @@ func (app *MinitiaApp) RegisterTendermintService(clientCtx client.Context) {
 	)
 }
 
-func (app *MinitiaApp) RegisterNodeService(clientCtx client.Context, cfg config.Config) {
+func (app *MilkApp) RegisterNodeService(clientCtx client.Context, cfg config.Config) {
 	nodeservice.RegisterNodeService(clientCtx, app.GRPCQueryRouter(), cfg)
 }
 
@@ -1242,46 +1242,46 @@ func GetMaccPerms() map[string][]string {
 // TestingApp functions
 
 // GetBaseApp implements the TestingApp interface.
-func (app *MinitiaApp) GetBaseApp() *baseapp.BaseApp {
+func (app *MilkApp) GetBaseApp() *baseapp.BaseApp {
 	return app.BaseApp
 }
 
 // GetAccountKeeper implements the TestingApp interface.
-func (app *MinitiaApp) GetAccountKeeper() *authkeeper.AccountKeeper {
+func (app *MilkApp) GetAccountKeeper() *authkeeper.AccountKeeper {
 	return app.AccountKeeper
 }
 
 // GetStakingKeeper implements the TestingApp interface.
 // It returns opchild instead of original staking keeper.
-func (app *MinitiaApp) GetStakingKeeper() ibctestingtypes.StakingKeeper {
+func (app *MilkApp) GetStakingKeeper() ibctestingtypes.StakingKeeper {
 	return app.OPChildKeeper
 }
 
 // GetIBCKeeper implements the TestingApp interface.
-func (app *MinitiaApp) GetIBCKeeper() *ibckeeper.Keeper {
+func (app *MilkApp) GetIBCKeeper() *ibckeeper.Keeper {
 	return app.IBCKeeper
 }
 
 // GetICAControllerKeeper implements the TestingApp interface.
-func (app *MinitiaApp) GetICAControllerKeeper() *icacontrollerkeeper.Keeper {
+func (app *MilkApp) GetICAControllerKeeper() *icacontrollerkeeper.Keeper {
 	return app.ICAControllerKeeper
 }
 
 // GetICAAuthKeeper implements the TestingApp interface.
-func (app *MinitiaApp) GetICAAuthKeeper() *icaauthkeeper.Keeper {
+func (app *MilkApp) GetICAAuthKeeper() *icaauthkeeper.Keeper {
 	return app.ICAAuthKeeper
 }
 
 // GetScopedIBCKeeper implements the TestingApp interface.
-func (app *MinitiaApp) GetScopedIBCKeeper() capabilitykeeper.ScopedKeeper {
+func (app *MilkApp) GetScopedIBCKeeper() capabilitykeeper.ScopedKeeper {
 	return app.ScopedIBCKeeper
 }
 
 // TxConfig implements the TestingApp interface.
-func (app *MinitiaApp) TxConfig() client.TxConfig {
+func (app *MilkApp) TxConfig() client.TxConfig {
 	return app.txConfig
 }
-func (app *MinitiaApp) setupIndexer(appOpts servertypes.AppOptions, homePath string, ac, vc address.Codec, appCodec codec.Codec) error {
+func (app *MilkApp) setupIndexer(appOpts servertypes.AppOptions, homePath string, ac, vc address.Codec, appCodec codec.Codec) error {
 	// initialize the indexer fake-keeper
 	indexerConfig, err := indexerconfig.NewConfig(appOpts)
 	if err != nil {
@@ -1351,7 +1351,7 @@ func (app *MinitiaApp) setupIndexer(appOpts servertypes.AppOptions, homePath str
 
 // Close closes the underlying baseapp, the oracle service, and the prometheus server if required.
 // This method blocks on the closure of both the prometheus server, and the oracle-service
-func (app *MinitiaApp) Close() error {
+func (app *MilkApp) Close() error {
 	if app.indexerKeeper != nil {
 		if err := app.indexerKeeper.Close(); err != nil {
 			return err

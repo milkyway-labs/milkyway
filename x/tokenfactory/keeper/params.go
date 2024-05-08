@@ -3,7 +3,7 @@ package keeper
 import (
 	"context"
 
-	"github.com/initia-labs/miniwasm/x/tokenfactory/types"
+	"github.com/milkyway-labs/milk/x/tokenfactory/types"
 )
 
 // GetParams returns the total set params.

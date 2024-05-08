@@ -31,7 +31,7 @@ import (
 	"github.com/cosmos/ibc-go/v8/modules/apps/transfer"
 	ibc "github.com/cosmos/ibc-go/v8/modules/core"
 
-	opchild "github.com/initia-labs/OPinit/x/opchild"
+	"github.com/initia-labs/OPinit/x/opchild"
 
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
@@ -65,7 +65,7 @@ func TestGetMaccPerms(t *testing.T) {
 func TestInitGenesisOnMigration(t *testing.T) {
 	db := dbm.NewMemDB()
 	logger := log.NewLogger(os.Stdout)
-	app := NewMinitiaApp(
+	app := NewMilkApp(
 		logger, db, nil, true, []wasmkeeper.Option{}, EmptyAppOptions{})
 	ctx := app.NewContextLegacy(true, cmtproto.Header{Height: app.LastBlockHeight()})
 
@@ -119,7 +119,7 @@ func TestUpgradeStateOnGenesis(t *testing.T) {
 
 func TestGetKey(t *testing.T) {
 	db := dbm.NewMemDB()
-	app := NewMinitiaApp(
+	app := NewMilkApp(
 		log.NewLogger(os.Stdout),
 		db, nil, true, []wasmkeeper.Option{}, EmptyAppOptions{})
 

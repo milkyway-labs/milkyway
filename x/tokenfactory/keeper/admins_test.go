@@ -8,8 +8,8 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/stretchr/testify/require"
 
-	tokenFactorykeeper "github.com/initia-labs/miniwasm/x/tokenfactory/keeper"
-	"github.com/initia-labs/miniwasm/x/tokenfactory/types"
+	tokenFactorykeeper "github.com/milkyway-labs/milk/x/tokenfactory/keeper"
+	"github.com/milkyway-labs/milk/x/tokenfactory/types"
 )
 
 func TestAdminMsgs(t *testing.T) {

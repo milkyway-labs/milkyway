@@ -8,7 +8,7 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/initia-labs/miniwasm/x/tokenfactory/types"
+	"github.com/milkyway-labs/milk/x/tokenfactory/types"
 )
 
 func TestGenesis(t *testing.T) {

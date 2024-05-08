@@ -2,7 +2,7 @@ package app
 
 // Executor change plans
 
-func (app *MinitiaApp) RegisterExecutorChangePlans() error {
+func (app *MilkApp) RegisterExecutorChangePlans() error {
 	// err := app.OPChildKeeper.RegisterExecutorChangePlan(
 	// 	1,
 	// 	361,

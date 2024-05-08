@@ -11,9 +11,10 @@ import (
 	"github.com/initia-labs/OPinit/contrib/launchtools"
 	"github.com/initia-labs/OPinit/contrib/launchtools/steps"
 	"github.com/initia-labs/initia/app/params"
-	minitiaapp "github.com/initia-labs/miniwasm/app"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
+
+	milkapp "github.com/milkyway-labs/milk/app"
 )
 
 // DefaultLaunchStepFactories is a list of default launch step factories.
@@ -59,7 +60,7 @@ func LaunchCommand(ac *appCreator, enc params.EncodingConfig, mbm module.BasicMa
 	return launchtools.LaunchCmd(
 		ac,
 		func(denom string) map[string]json.RawMessage {
-			return minitiaapp.NewDefaultGenesisState(enc.Codec, mbm, denom)
+			return milkapp.NewDefaultGenesisState(enc.Codec, mbm, denom)
 		},
 		DefaultLaunchStepFactories,
 	)

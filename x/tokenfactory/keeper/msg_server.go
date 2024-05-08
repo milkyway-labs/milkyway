@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
-	"github.com/initia-labs/miniwasm/x/tokenfactory/types"
+	"github.com/milkyway-labs/milk/x/tokenfactory/types"
 )
 
 type msgServer struct {

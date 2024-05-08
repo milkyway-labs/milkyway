@@ -10,7 +10,7 @@ import (
 const upgradeName = "0.2.4"
 
 // RegisterUpgradeHandlers returns upgrade handlers
-func (app *MinitiaApp) RegisterUpgradeHandlers(cfg module.Configurator) {
+func (app *MilkApp) RegisterUpgradeHandlers(cfg module.Configurator) {
 	app.UpgradeKeeper.SetUpgradeHandler(upgradeName,
 		func(ctx context.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
 			return fromVM, nil

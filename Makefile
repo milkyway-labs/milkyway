@@ -66,8 +66,8 @@ build_tags_comma_sep := $(subst $(whitespace),$(comma),$(build_tags))
 
 # process linker flags
 
-ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=minitia \
-		  -X github.com/cosmos/cosmos-sdk/version.AppName=minitiad \
+ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=milk \
+		  -X github.com/cosmos/cosmos-sdk/version.AppName=milkd \
 		  -X github.com/cosmos/cosmos-sdk/version.Version=$(VERSION) \
 		  -X github.com/cosmos/cosmos-sdk/version.Commit=$(COMMIT) \
 		  -X "github.com/cosmos/cosmos-sdk/version.BuildTags=$(build_tags_comma_sep)" \
@@ -115,26 +115,26 @@ build: go.sum
 ifeq ($(OS),Windows_NT)
 	exit 1
 else
-	go build -mod=readonly $(BUILD_FLAGS) -o build/minitiad ./cmd/minitiad
+	go build -mod=readonly $(BUILD_FLAGS) -o build/milkd ./cmd/milkd
 endif
 
 build-linux:
 	mkdir -p $(BUILDDIR)
-	docker build --no-cache --tag initia/minimwasm ./
-	docker create --name temp initia/minimwasm:latest
-	docker cp temp:/usr/local/bin/minitiad $(BUILDDIR)/
+	docker build --no-cache --tag milkyway/milk ./
+	docker create --name temp milkyway/milk:latest
+	docker cp temp:/usr/local/bin/milkd $(BUILDDIR)/
 	docker rm temp
 
 build-linux-with-shared-library:
 	mkdir -p $(BUILDDIR)
-	docker build --tag initia/miniwasm-shared ./ -f ./shared.Dockerfile
-	docker create --name temp initia/miniwasm-shared:latest
-	docker cp temp:/usr/local/bin/minitiad $(BUILDDIR)/
+	docker build --tag milkyway/milk-shared ./ -f ./shared.Dockerfile
+	docker create --name temp milkyway/milk-shared:latest
+	docker cp temp:/usr/local/bin/milkd $(BUILDDIR)/
 	docker cp temp:/lib/libwasmvm.so $(BUILDDIR)/
 	docker rm temp
 
 install: go.sum 
-	go install -mod=readonly $(BUILD_FLAGS) ./cmd/minitiad
+	go install -mod=readonly $(BUILD_FLAGS) ./cmd/milkd
 
 update-swagger-docs: statik
 	$(BINDIR)/statik -src=client/docs/swagger-ui -dest=client/docs -f -m
@@ -195,7 +195,7 @@ go.sum: go.mod
 draw-deps:
 	@# requires brew install graphviz or apt-get install graphviz
 	go install github.com/RobotsAndPencils/goviz
-	@goviz -i ./cmd/minitiad -d 2 | dot -Tpng -o dependency-graph.png
+	@goviz -i ./cmd/milkd -d 2 | dot -Tpng -o dependency-graph.png
 
 distclean: clean tools-clean
 clean:

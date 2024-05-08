@@ -1,12 +1,12 @@
 syntax = "proto3";
-package miniwasm.tokenfactory.v1;
+package milk.tokenfactory.v1;
 
 import "gogoproto/gogo.proto";
 import "cosmos_proto/cosmos.proto";
 import "cosmos/base/v1beta1/coin.proto";
-import "miniwasm/tokenfactory/v1/authorityMetadata.proto";
+import "milk/tokenfactory/v1/authorityMetadata.proto";
 
-option go_package = "github.com/initia-labs/miniwasm/x/tokenfactory/types";
+option go_package = "github.com/milkyway-labs/milk/x/tokenfactory/types";
 
 // Params defines the parameters for the tokenfactory module.
 message Params {
