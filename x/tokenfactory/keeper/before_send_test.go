@@ -7,9 +7,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	bankkeeper "github.com/initia-labs/miniwasm/x/bank/keeper"
-	tokenFactorykeeper "github.com/initia-labs/miniwasm/x/tokenfactory/keeper"
-	"github.com/initia-labs/miniwasm/x/tokenfactory/types"
+	bankkeeper "github.com/milkyway-labs/milk/x/bank/keeper"
+	tokenFactorykeeper "github.com/milkyway-labs/milk/x/tokenfactory/keeper"
+	"github.com/milkyway-labs/milk/x/tokenfactory/types"
 
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"

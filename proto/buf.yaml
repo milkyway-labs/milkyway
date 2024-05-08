@@ -1,6 +1,6 @@
-# This module represents buf.build/initia-labs/miniwasm
+# This module represents buf.build/milkyway-labs/milk
 version: v1
-name: buf.build/initia-labs/miniwasm
+name: buf.build/milkyway-labs/milk
 deps:
   - buf.build/cosmos/cosmos-sdk
   - buf.build/cosmos/cosmos-proto

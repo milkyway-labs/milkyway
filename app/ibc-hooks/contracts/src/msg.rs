@@ -20,7 +20,7 @@ pub enum QueryMsg {
 pub enum IBCLifecycleComplete {
     #[serde(rename = "ibc_ack")]
     IBCAck {
-        /// The source channel (miniwasm side) of the IBC packet
+        /// The source channel (milk side) of the IBC packet
         channel: String,
         /// The sequence number that the packet was sent with
         sequence: u64,
@@ -31,7 +31,7 @@ pub enum IBCLifecycleComplete {
     },
     #[serde(rename = "ibc_timeout")]
     IBCTimeout {
-        /// The source channel (miniwasm side) of the IBC packet
+        /// The source channel (milk side) of the IBC packet
         channel: String,
         /// The sequence number that the packet was sent with
         sequence: u64,

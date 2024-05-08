@@ -24,9 +24,9 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 
-	"github.com/initia-labs/miniwasm/x/tokenfactory/client/cli"
-	"github.com/initia-labs/miniwasm/x/tokenfactory/keeper"
-	"github.com/initia-labs/miniwasm/x/tokenfactory/types"
+	"github.com/milkyway-labs/milk/x/tokenfactory/client/cli"
+	"github.com/milkyway-labs/milk/x/tokenfactory/keeper"
+	"github.com/milkyway-labs/milk/x/tokenfactory/types"
 )
 
 const ConsensusVersion = 1

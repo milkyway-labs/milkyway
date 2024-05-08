@@ -36,17 +36,17 @@ RUN LEDGER_ENABLED=false BUILD_TAGS=muslc LDFLAGS="-linkmode=external -extldflag
 
 FROM alpine:3.18
 
-RUN addgroup minitia \
-    && adduser -G minitia -D -h /minitia minitia
+RUN addgroup milk \
+    && adduser -G milk -D -h /milk milk
 
-WORKDIR /minitia
+WORKDIR /milk
 
-COPY --from=go-builder /code/build/minitiad /usr/local/bin/minitiad
+COPY --from=go-builder /code/build/milkd /usr/local/bin/milkd
 
 # for new-metric setup
-COPY --from=go-builder /code/contrib /minitia/contrib
+COPY --from=go-builder /code/contrib /milk/contrib
 
-USER minitia
+USER milk
 
 # rest server
 EXPOSE 1317
@@ -57,4 +57,4 @@ EXPOSE 26656
 # tendermint rpc
 EXPOSE 26657
 
-CMD ["/usr/local/bin/minitiad", "version"]
+CMD ["/usr/local/bin/milkd", "version"]

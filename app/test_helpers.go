@@ -12,6 +12,7 @@ import (
 	tmtypes "github.com/cometbft/cometbft/types"
 	dbm "github.com/cosmos/cosmos-db"
 
+	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
@@ -21,13 +22,12 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
 	opchildtypes "github.com/initia-labs/OPinit/x/opchild/types"
-	"github.com/initia-labs/miniwasm/types"
 
-	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
+	"github.com/milkyway-labs/milk/types"
 )
 
 // defaultConsensusParams defines the default Tendermint consensus params used in
-// MinitiaApp testing.
+// MilkApp testing.
 var defaultConsensusParams = &tmproto.ConsensusParams{
 	Block: &tmproto.BlockParams{
 		MaxBytes: 8000000,
@@ -52,9 +52,9 @@ func getOrCreateMemDB(db *dbm.DB) dbm.DB {
 	return dbm.NewMemDB()
 }
 
-func setup(db *dbm.DB, withGenesis bool) (*MinitiaApp, GenesisState) {
+func setup(db *dbm.DB, withGenesis bool) (*MilkApp, GenesisState) {
 	encCdc := MakeEncodingConfig()
-	app := NewMinitiaApp(
+	app := NewMilkApp(
 		log.NewNopLogger(),
 		getOrCreateMemDB(db),
 		nil,
@@ -75,7 +75,7 @@ func SetupWithGenesisAccounts(
 	valSet *tmtypes.ValidatorSet,
 	genAccs []authtypes.GenesisAccount,
 	balances ...banktypes.Balance,
-) *MinitiaApp {
+) *MilkApp {
 	app, genesisState := setup(nil, true)
 
 	if len(genAccs) == 0 {

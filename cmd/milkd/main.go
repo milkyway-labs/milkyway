@@ -6,13 +6,13 @@ import (
 
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
 
-	minitiaapp "github.com/initia-labs/miniwasm/app"
+	milkapp "github.com/milkyway-labs/milk/app"
 )
 
 func main() {
 	rootCmd, _ := NewRootCmd()
 
-	if err := svrcmd.Execute(rootCmd, minitiaapp.EnvPrefix, minitiaapp.DefaultNodeHome); err != nil {
+	if err := svrcmd.Execute(rootCmd, milkapp.EnvPrefix, milkapp.DefaultNodeHome); err != nil {
 		fmt.Fprintln(rootCmd.OutOrStderr(), err)
 		os.Exit(1)
 	}

@@ -43,25 +43,25 @@ import (
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
-	"github.com/initia-labs/initia/app/params"
-	minitiaapp "github.com/initia-labs/miniwasm/app"
-
 	opchildcli "github.com/initia-labs/OPinit/x/opchild/client/cli"
+	"github.com/initia-labs/initia/app/params"
+
+	milkapp "github.com/milkyway-labs/milk/app"
 )
 
 // NewRootCmd creates a new root command for initiad. It is called once in the
 // main function.
 func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 	sdkConfig := sdk.GetConfig()
-	sdkConfig.SetCoinType(minitiaapp.CoinType)
+	sdkConfig.SetCoinType(milkapp.CoinType)
 
-	accountPubKeyPrefix := minitiaapp.AccountAddressPrefix + "pub"
-	validatorAddressPrefix := minitiaapp.AccountAddressPrefix + "valoper"
-	validatorPubKeyPrefix := minitiaapp.AccountAddressPrefix + "valoperpub"
-	consNodeAddressPrefix := minitiaapp.AccountAddressPrefix + "valcons"
-	consNodePubKeyPrefix := minitiaapp.AccountAddressPrefix + "valconspub"
+	accountPubKeyPrefix := milkapp.AccountAddressPrefix + "pub"
+	validatorAddressPrefix := milkapp.AccountAddressPrefix + "valoper"
+	validatorPubKeyPrefix := milkapp.AccountAddressPrefix + "valoperpub"
+	consNodeAddressPrefix := milkapp.AccountAddressPrefix + "valcons"
+	consNodePubKeyPrefix := milkapp.AccountAddressPrefix + "valconspub"
 
-	sdkConfig.SetBech32PrefixForAccount(minitiaapp.AccountAddressPrefix, accountPubKeyPrefix)
+	sdkConfig.SetBech32PrefixForAccount(milkapp.AccountAddressPrefix, accountPubKeyPrefix)
 	sdkConfig.SetBech32PrefixForValidator(validatorAddressPrefix, validatorPubKeyPrefix)
 	sdkConfig.SetBech32PrefixForConsensusNode(consNodeAddressPrefix, consNodePubKeyPrefix)
 	sdkConfig.SetAddressVerifier(wasmtypes.VerifyAddressLen())
@@ -69,8 +69,8 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 	// seal moved to post setup
 	// sdkConfig.Seal()
 
-	encodingConfig := minitiaapp.MakeEncodingConfig()
-	basicManager := minitiaapp.BasicManager()
+	encodingConfig := milkapp.MakeEncodingConfig()
+	basicManager := milkapp.BasicManager()
 
 	// Get the executable name and configure the viper instance so that environmental
 	// variables are checked based off that name. The underscore character is used
@@ -90,12 +90,12 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 		WithLegacyAmino(encodingConfig.Amino).
 		WithInput(os.Stdin).
 		WithAccountRetriever(types.AccountRetriever{}).
-		WithHomeDir(minitiaapp.DefaultNodeHome).
-		WithViper(minitiaapp.EnvPrefix)
+		WithHomeDir(milkapp.DefaultNodeHome).
+		WithViper(milkapp.EnvPrefix)
 
 	rootCmd := &cobra.Command{
 		Use:   basename,
-		Short: "minitia App",
+		Short: "milk App",
 		PersistentPreRunE: func(cmd *cobra.Command, _ []string) error {
 			// set the default command outputs
 			cmd.SetOut(cmd.OutOrStdout())
@@ -136,7 +136,7 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 	initRootCmd(rootCmd, encodingConfig, basicManager)
 
 	// add keyring to autocli opts
-	autoCliOpts := minitiaapp.AutoCliOpts()
+	autoCliOpts := milkapp.AutoCliOpts()
 	initClientCtx, _ = config.ReadFromClientConfig(initClientCtx)
 	autoCliOpts.Keyring, _ = keyring.NewAutoCLIKeyring(initClientCtx.Keyring)
 	autoCliOpts.ClientCtx = initClientCtx
@@ -152,14 +152,14 @@ func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig, b
 	a := &appCreator{}
 
 	rootCmd.AddCommand(
-		InitCmd(basicManager, minitiaapp.DefaultNodeHome),
+		InitCmd(basicManager, milkapp.DefaultNodeHome),
 		debug.Cmd(),
 		confixcmd.ConfigCommand(),
-		pruning.Cmd(a.AppCreator(), minitiaapp.DefaultNodeHome),
+		pruning.Cmd(a.AppCreator(), milkapp.DefaultNodeHome),
 		snapshot.Cmd(a.AppCreator()),
 	)
 
-	server.AddCommandsWithStartCmdOptions(rootCmd, minitiaapp.DefaultNodeHome, a.AppCreator(), a.appExport, server.StartCmdOptions{
+	server.AddCommandsWithStartCmdOptions(rootCmd, milkapp.DefaultNodeHome, a.AppCreator(), a.appExport, server.StartCmdOptions{
 		AddFlags: addModuleInitFlags,
 		PostSetup: func(svrCtx *server.Context, clientCtx client.Context, ctx context.Context, g *errgroup.Group) error {
 			sdk.GetConfig().Seal()
@@ -197,11 +197,11 @@ func genesisCommand(encodingConfig params.EncodingConfig, basicManager module.Ba
 	ac := encodingConfig.TxConfig.SigningContext().AddressCodec()
 
 	cmd.AddCommand(
-		genutilcli.AddGenesisAccountCmd(minitiaapp.DefaultNodeHome, ac),
-		opchildcli.AddGenesisValidatorCmd(basicManager, encodingConfig.TxConfig, banktypes.GenesisBalancesIterator{}, minitiaapp.DefaultNodeHome),
-		opchildcli.AddFeeWhitelistCmd(minitiaapp.DefaultNodeHome, ac),
+		genutilcli.AddGenesisAccountCmd(milkapp.DefaultNodeHome, ac),
+		opchildcli.AddGenesisValidatorCmd(basicManager, encodingConfig.TxConfig, banktypes.GenesisBalancesIterator{}, milkapp.DefaultNodeHome),
+		opchildcli.AddFeeWhitelistCmd(milkapp.DefaultNodeHome, ac),
 		genutilcli.ValidateGenesisCmd(basicManager),
-		genutilcli.GenTxCmd(basicManager, encodingConfig.TxConfig, banktypes.GenesisBalancesIterator{}, minitiaapp.DefaultNodeHome, ac),
+		genutilcli.GenTxCmd(basicManager, encodingConfig.TxConfig, banktypes.GenesisBalancesIterator{}, milkapp.DefaultNodeHome, ac),
 	)
 
 	return cmd
@@ -267,7 +267,7 @@ func (a *appCreator) AppCreator() servertypes.AppCreator {
 			wasmOpts = append(wasmOpts, wasmkeeper.WithVMCacheMetrics(prometheus.DefaultRegisterer))
 		}
 
-		app := minitiaapp.NewMinitiaApp(
+		app := milkapp.NewMilkApp(
 			logger, db, traceStore, true,
 			wasmOpts,
 			appOpts,
@@ -300,15 +300,15 @@ func (a appCreator) appExport(
 		return servertypes.ExportedApp{}, errors.New("application home not set")
 	}
 
-	var initiaApp *minitiaapp.MinitiaApp
+	var initiaApp *milkapp.MilkApp
 	if height != -1 {
-		initiaApp = minitiaapp.NewMinitiaApp(logger, db, traceStore, false, []wasmkeeper.Option{}, appOpts)
+		initiaApp = milkapp.NewMilkApp(logger, db, traceStore, false, []wasmkeeper.Option{}, appOpts)
 
 		if err := initiaApp.LoadHeight(height); err != nil {
 			return servertypes.ExportedApp{}, err
 		}
 	} else {
-		initiaApp = minitiaapp.NewMinitiaApp(logger, db, traceStore, true, []wasmkeeper.Option{}, appOpts)
+		initiaApp = milkapp.NewMilkApp(logger, db, traceStore, true, []wasmkeeper.Option{}, appOpts)
 	}
 
 	return initiaApp.ExportAppStateAndValidators(forZeroHeight, jailAllowedAddrs, modulesToExport)

@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	appkeepers "github.com/initia-labs/miniwasm/app/keepers"
+	appkeepers "github.com/milkyway-labs/milk/app/keepers"
 
 	"cosmossdk.io/core/address"
 	"cosmossdk.io/log"
@@ -35,7 +35,8 @@ import (
 	authz "github.com/cosmos/cosmos-sdk/x/authz/module"
 
 	initiaappparams "github.com/initia-labs/initia/app/params"
-	minitiaapp "github.com/initia-labs/miniwasm/app"
+
+	milkapp "github.com/milkyway-labs/milk/app"
 
 	codecaddress "github.com/cosmos/cosmos-sdk/codec/address"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -49,10 +50,10 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
-	bankkeeper "github.com/initia-labs/miniwasm/x/bank/keeper"
-	"github.com/initia-labs/miniwasm/x/tokenfactory"
-	tokenfactorykeeper "github.com/initia-labs/miniwasm/x/tokenfactory/keeper"
-	tokenfactorytypes "github.com/initia-labs/miniwasm/x/tokenfactory/types"
+	bankkeeper "github.com/milkyway-labs/milk/x/bank/keeper"
+	"github.com/milkyway-labs/milk/x/tokenfactory"
+	tokenfactorykeeper "github.com/milkyway-labs/milk/x/tokenfactory/keeper"
+	tokenfactorytypes "github.com/milkyway-labs/milk/x/tokenfactory/types"
 
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
@@ -103,7 +104,7 @@ var (
 		"test5",
 	}
 
-	minitiaSupply = math.NewInt(100_000_000_000)
+	milkSupply = math.NewInt(100_000_000_000)
 )
 
 func MakeTestCodec(t testing.TB) codec.Codec {
@@ -137,9 +138,9 @@ func MakeEncodingConfig(_ testing.TB) initiaappparams.EncodingConfig {
 }
 
 func initialTotalSupply() sdk.Coins {
-	faucetBalance := sdk.NewCoins(sdk.NewCoin("uinit", minitiaSupply))
+	faucetBalance := sdk.NewCoins(sdk.NewCoin("uinit", milkSupply))
 	for _, testDenom := range testDenoms {
-		faucetBalance = faucetBalance.Add(sdk.NewCoin(testDenom, minitiaSupply))
+		faucetBalance = faucetBalance.Add(sdk.NewCoin(testDenom, milkSupply))
 	}
 
 	return faucetBalance
@@ -153,13 +154,13 @@ type TestFaucet struct {
 	minterModuleName string
 }
 
-func NewTestFaucet(t testing.TB, ctx sdk.Context, bankKeeper bankkeeper.Keeper, minterModuleName string, minitiaSupply ...sdk.Coin) *TestFaucet {
-	require.NotEmpty(t, minitiaSupply)
+func NewTestFaucet(t testing.TB, ctx sdk.Context, bankKeeper bankkeeper.Keeper, minterModuleName string, milkSupply ...sdk.Coin) *TestFaucet {
+	require.NotEmpty(t, milkSupply)
 	r := &TestFaucet{t: t, bankKeeper: bankKeeper, minterModuleName: minterModuleName}
 	_, _, addr := keyPubAddr()
 	r.sender = addr
-	r.Mint(ctx, addr, minitiaSupply...)
-	r.balance = minitiaSupply
+	r.Mint(ctx, addr, milkSupply...)
+	r.balance = milkSupply
 	return r
 }
 
@@ -324,7 +325,7 @@ func _createTestInput(
 		nil,
 		msgRouter,
 		nil,
-		minitiaapp.DefaultNodeHome,
+		milkapp.DefaultNodeHome,
 		wasmtypes.DefaultWasmConfig(),
 		"iterator,staking,stargate,cosmwasm_1_1,cosmwasm_1_2,cosmwasm_1_3,cosmwasm_1_4,cosmwasm_2_0",
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),

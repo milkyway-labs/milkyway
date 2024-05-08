@@ -5,13 +5,13 @@ const (
 	FeeDeductionGasAmount = 50_000
 
 	// AccountAddressPrefix is the prefix of bech32 encoded address
-	AccountAddressPrefix = "init"
+	AccountAddressPrefix = "milk"
 
 	// AppName is the application name
-	AppName = "minitia"
+	AppName = "milk"
 
 	// EnvPrefix is environment variable prefix for the app
-	EnvPrefix = "MINITIA"
+	EnvPrefix = "MILK"
 
 	// CoinType is the Cosmos Chain's coin type as defined in SLIP44 (https://github.com/satoshilabs/slips/blob/master/slip-0044.md)
 	CoinType = 118

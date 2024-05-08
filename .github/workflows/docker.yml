@@ -21,11 +21,11 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: miniwasm
+  IMAGE_NAME: milk
 
 jobs:
-  minitiad:
-    name: Minitiad
+  milkd:
+    name: Milkd
     runs-on: ubuntu-latest
     permissions:
       contents: read

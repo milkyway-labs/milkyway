@@ -1,3 +1,3 @@
 # Protobufs
 
-This is the public protocol buffers API for the [Miniwasm](https://github.com/initia-labs/miniwasm).
+This is the public protocol buffers API for the [Milk](https://github.com/milkyway-labs/milk).

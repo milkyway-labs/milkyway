@@ -1,4 +1,4 @@
-module github.com/initia-labs/miniwasm
+module github.com/milkyway-labs/milk
 
 go 1.22
 

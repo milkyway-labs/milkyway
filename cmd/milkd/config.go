@@ -9,11 +9,11 @@ import (
 	serverconfig "github.com/cosmos/cosmos-sdk/server/config"
 	indexerconfig "github.com/initia-labs/kvindexer/config"
 
-	"github.com/initia-labs/miniwasm/types"
+	"github.com/milkyway-labs/milk/types"
 )
 
-// minitiaAppConfig initia specify app config
-type minitiaAppConfig struct {
+// milkAppConfig initia specify app config
+type milkAppConfig struct {
 	serverconfig.Config
 	WasmConfig    wasmtypes.WasmConfig        `mapstructure:"wasm"`
 	IndexerConfig indexerconfig.IndexerConfig `mapstructure:"indexer"`
@@ -49,16 +49,16 @@ func initAppConfig() (string, interface{}) {
 	srvCfg.GRPC.Enable = true
 	srvCfg.GRPC.Address = "0.0.0.0:9090"
 
-	minitiaAppConfig := minitiaAppConfig{
+	milkAppConfig := milkAppConfig{
 		Config:        *srvCfg,
 		WasmConfig:    wasmtypes.DefaultWasmConfig(),
 		IndexerConfig: indexerconfig.DefaultConfig(),
 	}
 
-	minitiaAppTemplate := serverconfig.DefaultConfigTemplate +
+	milkAppTemplate := serverconfig.DefaultConfigTemplate +
 		wasmtypes.DefaultConfigTemplate() + indexerconfig.DefaultConfigTemplate
 
-	return minitiaAppTemplate, minitiaAppConfig
+	return milkAppTemplate, milkAppConfig
 }
 
 // initTendermintConfig helps to override default Tendermint Config values.

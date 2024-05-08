@@ -41052,7 +41052,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /miniwasm/tokenfactory/v1/denoms/{denom}/authority_metadata:
+  /milk/tokenfactory/v1/denoms/{denom}/authority_metadata:
     get:
       summary: |-
         DenomAuthorityMetadata defines a gRPC query method for fetching
@@ -41112,7 +41112,7 @@ paths:
           type: string
       tags:
         - Query
-  /miniwasm/tokenfactory/v1/denoms/{denom}/before_send_hook:
+  /milk/tokenfactory/v1/denoms/{denom}/before_send_hook:
     get:
       summary: |-
         BeforeSendHookAddress defines a gRPC query method for
@@ -41160,7 +41160,7 @@ paths:
           type: string
       tags:
         - Query
-  /miniwasm/tokenfactory/v1/denoms_from_creator/{creator}:
+  /milk/tokenfactory/v1/denoms_from_creator/{creator}:
     get:
       summary: |-
         DenomsFromCreator defines a gRPC query method for fetching all
@@ -41210,7 +41210,7 @@ paths:
           type: string
       tags:
         - Query
-  /miniwasm/tokenfactory/v1/params:
+  /milk/tokenfactory/v1/params:
     get:
       summary: >-
         Params defines a gRPC query method that returns the tokenfactory
@@ -41340,7 +41340,7 @@ paths:
         - Query
   /indexer/vmtype:
     get:
-      summary: VMType queries the type of the Minitia's VM
+      summary: VMType queries the type of the Milk's VM
       operationId: VMType
       responses:
         '200':
@@ -41480,7 +41480,7 @@ paths:
                         identity:
                           type: string
                           title: >-
-                            actually minitias have no identity because they
+                            actually milks have no identity because they
                             haven't MsgCreateValidator,
 
                             but we decided to keep this field for compatibility
@@ -41489,7 +41489,7 @@ paths:
                           type: string
                       title: >-
                         Proposer represents the proposer of a block: for
-                        minitia, it is the L2 operator
+                        milk, it is the L2 operator
                   title: Block represents a indexed block in a blockchain
               pagination:
                 description: pagination defines the pagination in the response.
@@ -41652,7 +41652,7 @@ paths:
                       identity:
                         type: string
                         title: >-
-                          actually minitias have no identity because they
+                          actually milks have no identity because they
                           haven't MsgCreateValidator,
 
                           but we decided to keep this field for compatibility
@@ -41660,7 +41660,7 @@ paths:
                       operator_address:
                         type: string
                     title: >-
-                      Proposer represents the proposer of a block: for minitia,
+                      Proposer represents the proposer of a block: for milk,
                       it is the L2 operator
                 title: Block represents a indexed block in a blockchain
             description: BlockResponse defines the response for the Block RPC.
@@ -70245,7 +70245,7 @@ definitions:
     title: |-
       QuerySmartContractStateResponse is the response type for the
       Query/SmartContractState RPC method
-  miniwasm.tokenfactory.v1.DenomAuthorityMetadata:
+  milk.tokenfactory.v1.DenomAuthorityMetadata:
     type: object
     properties:
       admin:
@@ -70255,7 +70255,7 @@ definitions:
       DenomAuthorityMetadata specifies metadata for addresses that have specific
       capabilities over a token factory denom. Right now there is only one Admin
       permission, but is planned to be extended to the future.
-  miniwasm.tokenfactory.v1.Params:
+  milk.tokenfactory.v1.Params:
     type: object
     properties:
       denom_creation_fee:
@@ -70288,7 +70288,7 @@ definitions:
 
           See: https://github.com/CosmWasm/token-factory/issues/11
     description: Params defines the parameters for the tokenfactory module.
-  miniwasm.tokenfactory.v1.QueryBeforeSendHookAddressResponse:
+  milk.tokenfactory.v1.QueryBeforeSendHookAddressResponse:
     type: object
     properties:
       cosmwasm_address:
@@ -70296,7 +70296,7 @@ definitions:
     description: |-
       QueryBeforeSendHookAddressResponse defines the response structure for the
       DenomBeforeSendHook gRPC query.
-  miniwasm.tokenfactory.v1.QueryDenomAuthorityMetadataResponse:
+  milk.tokenfactory.v1.QueryDenomAuthorityMetadataResponse:
     type: object
     properties:
       authority_metadata:
@@ -70316,7 +70316,7 @@ definitions:
     description: |-
       QueryDenomAuthorityMetadataResponse defines the response structure for the
       DenomAuthorityMetadata gRPC query.
-  miniwasm.tokenfactory.v1.QueryDenomsFromCreatorResponse:
+  milk.tokenfactory.v1.QueryDenomsFromCreatorResponse:
     type: object
     properties:
       denoms:
@@ -70326,7 +70326,7 @@ definitions:
     description: |-
       QueryDenomsFromCreatorRequest defines the response structure for the
       DenomsFromCreator gRPC query.
-  miniwasm.tokenfactory.v1.QueryParamsResponse:
+  milk.tokenfactory.v1.QueryParamsResponse:
     type: object
     properties:
       params:
@@ -70454,14 +70454,14 @@ definitions:
           identity:
             type: string
             title: >-
-              actually minitias have no identity because they haven't
+              actually milks have no identity because they haven't
               MsgCreateValidator,
 
               but we decided to keep this field for compatibility with L1
           operator_address:
             type: string
         title: >-
-          Proposer represents the proposer of a block: for minitia, it is the L2
+          Proposer represents the proposer of a block: for milk, it is the L2
           operator
     title: Block represents a indexed block in a blockchain
   indexer.block.v1.BlockResponse:
@@ -70517,14 +70517,14 @@ definitions:
               identity:
                 type: string
                 title: >-
-                  actually minitias have no identity because they haven't
+                  actually milks have no identity because they haven't
                   MsgCreateValidator,
 
                   but we decided to keep this field for compatibility with L1
               operator_address:
                 type: string
             title: >-
-              Proposer represents the proposer of a block: for minitia, it is
+              Proposer represents the proposer of a block: for milk, it is
               the L2 operator
         title: Block represents a indexed block in a blockchain
     description: BlockResponse defines the response for the Block RPC.
@@ -70583,14 +70583,14 @@ definitions:
                 identity:
                   type: string
                   title: >-
-                    actually minitias have no identity because they haven't
+                    actually milks have no identity because they haven't
                     MsgCreateValidator,
 
                     but we decided to keep this field for compatibility with L1
                 operator_address:
                   type: string
               title: >-
-                Proposer represents the proposer of a block: for minitia, it is
+                Proposer represents the proposer of a block: for milk, it is
                 the L2 operator
           title: Block represents a indexed block in a blockchain
       pagination:
@@ -70621,14 +70621,14 @@ definitions:
       identity:
         type: string
         title: >-
-          actually minitias have no identity because they haven't
+          actually milks have no identity because they haven't
           MsgCreateValidator,
 
           but we decided to keep this field for compatibility with L1
       operator_address:
         type: string
     title: >-
-      Proposer represents the proposer of a block: for minitia, it is the L2
+      Proposer represents the proposer of a block: for milk, it is the L2
       operator
   indexer.tx.v1.QueryTxResponse:
     type: object

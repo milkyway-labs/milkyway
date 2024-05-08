@@ -1,7 +1,7 @@
 package types_test
 
 import (
-	fmt "fmt"
+	"fmt"
 	"testing"
 
 	"github.com/cometbft/cometbft/crypto/ed25519"
@@ -9,7 +9,7 @@ import (
 	authcodec "github.com/cosmos/cosmos-sdk/x/auth/codec"
 	"github.com/stretchr/testify/require"
 
-	"github.com/initia-labs/miniwasm/x/tokenfactory/types"
+	"github.com/milkyway-labs/milk/x/tokenfactory/types"
 )
 
 func TestGenesisState_Validate(t *testing.T) {
