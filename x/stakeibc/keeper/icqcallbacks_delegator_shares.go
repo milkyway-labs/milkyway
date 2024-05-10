@@ -111,7 +111,7 @@ func DelegatorSharesCallback(k Keeper, ctx sdk.Context, args []byte, query icqty
 }
 
 // The number of tokens returned from the query must be consistent with the tokens
-// stored in our internal record keeping during this callback, otherwise the comparision
+// stored in our internal record keeping during this callback, otherwise the comparison
 // between the two is invalidated
 //
 // As a result, we must avoid a race condition between the ICQ and a delegate, undelegate,
@@ -155,7 +155,7 @@ func (k Keeper) CheckDelegationChangedDuringQuery(
 	return false, nil
 }
 
-// Check if a slash occured by comparing the validator's sharesToTokens rate and delegator shares
+// Check if a slash occurred by comparing the validator's sharesToTokens rate and delegator shares
 // from the query responses (tokens = shares * sharesToTokensRate)
 //
 // If the change in delegation only differs by a small precision error, it was likely

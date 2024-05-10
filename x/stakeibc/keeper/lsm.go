@@ -205,7 +205,7 @@ func (k Keeper) CalculateLSMStToken(liquidStakedShares sdkmath.Int, lsmLiquidSta
 	return stCoin
 }
 
-// Determines the new slash query checkpoint, by mulitplying the query threshold percent by the current TVL
+// Determines the new slash query checkpoint, by multiplying the query threshold percent by the current TVL
 func (k Keeper) GetUpdatedSlashQueryCheckpoint(ctx sdk.Context, totalDelegations sdkmath.Int) sdkmath.Int {
 	params := k.GetParams(ctx)
 	queryThreshold := sdkmath.LegacyNewDecWithPrec(int64(params.ValidatorSlashQueryThreshold), 2) // percentage
@@ -300,7 +300,7 @@ func (k Keeper) SubmitValidatorSlashQuery(ctx sdk.Context, lsmLiquidStake types.
 }
 
 // FinishLSMLiquidStake finishes the liquid staking flow by escrowing the LSM token,
-// sending a user their stToken, and then IBC transfering the LSM Token to the host zone
+// sending a user their stToken, and then IBC transferring the LSM Token to the host zone
 //
 // If the slash query interrupted the transaction, this function is called
 // asynchronously after the query callback

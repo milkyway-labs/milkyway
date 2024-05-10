@@ -9,6 +9,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	wasmvmtypes "github.com/CosmWasm/wasmvm/types"
+
 	"github.com/milkyway-labs/milk/x/tokenfactory/types"
 
 	errorsmod "cosmossdk.io/errors"

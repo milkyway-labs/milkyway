@@ -49,7 +49,7 @@ type RewardsSplit struct {
 // The following allows for chains to use foreign denoms as revenue, which can be traded to any other denom first
 //
 //  1. Epochly check the reward denom balance in the withdrawal address
-//     on callback, send all this reward denom from withdrawl ICA to trade ICA on the trade zone (OSMOSIS)
+//     on callback, send all this reward denom from withdrawal ICA to trade ICA on the trade zone (OSMOSIS)
 //  2. Epochly check the reward denom balance in trade ICA
 //     on callback, trade all reward denom for host denom defined by pool and routes in params
 //  3. Epochly check the host denom balance in trade ICA
@@ -233,7 +233,7 @@ func (k Keeper) BuildHostToTradeTransferMsg(
 	return msg, nil
 }
 
-// ICA tx will kick off transfering the reward tokens from the hostZone withdrawl ICA to the tradeZone trade ICA
+// ICA tx will kick off transferring the reward tokens from the hostZone withdrawal ICA to the tradeZone trade ICA
 // This will be two hops to unwind the ibc denom through the rewardZone using pfm in the transfer memo
 func (k Keeper) TransferRewardTokensHostToTrade(ctx sdk.Context, amount sdkmath.Int, route types.TradeRoute) error {
 	// If the min swap amount was not set it would be ZeroInt, if positive we need to compare to the amount given
@@ -269,7 +269,7 @@ func (k Keeper) TransferRewardTokensHostToTrade(ctx sdk.Context, amount sdkmath.
 	return nil
 }
 
-// ICA tx to kick off transfering the converted tokens back from tradeZone to the hostZone withdrawal ICA
+// ICA tx to kick off transferring the converted tokens back from tradeZone to the hostZone withdrawal ICA
 func (k Keeper) TransferConvertedTokensTradeToHost(ctx sdk.Context, amount sdkmath.Int, route types.TradeRoute) error {
 	// Timeout for ica tx and the transfer msgs is at end of epoch
 	strideEpochTracker, found := k.GetEpochTracker(ctx, epochstypes.STRIDE_EPOCH)

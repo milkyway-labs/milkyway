@@ -160,7 +160,7 @@ func (im IBCModule) OnAcknowledgementPacket(
 	//   2) The callback errors, in which case, it's better to not refund tokens to keep the state
 	//      changes as consistent as possible between records and the bank module
 	// Transfer initiated from users will flow through this branch without an error, since the callbacks
-	//   are only prevelant for transfer's initated by stakeibc
+	//   are only prevalent for transfer's initated by stakeibc
 	if err := im.keeper.OnAcknowledgementPacket(ctx, packet, acknowledgement); err != nil {
 		im.keeper.Logger(ctx).Error(fmt.Sprintf("Records OnAcknowledgementPacket failed: %s", err.Error()))
 		return errorsmod.Wrapf(err, "OnAckPacket callback failed")
@@ -183,7 +183,7 @@ func (im IBCModule) OnTimeoutPacket(
 	// This only errors if the callback fails, in which case, it's better to not refund tokens to keep the state
 	//   changes as consistent as possible between records and the bank module
 	// Transfer initiated from users will flow through this branch without an error, since the callbacks
-	//   are only prevelant for transfer's initated by stakeibc
+	//   are only prevalent for transfer's initated by stakeibc
 	if err := im.keeper.OnTimeoutPacket(ctx, packet); err != nil {
 		im.keeper.Logger(ctx).Error(fmt.Sprintf("Records OnTimeoutPacket failed: %s", err.Error()))
 		return errorsmod.Wrapf(err, "OnTimeoutPacket callback failed")

@@ -79,7 +79,7 @@ func (k Keeper) CallRegisteredICACallback(ctx sdk.Context, packet channeltypes.P
 		return nil
 	}
 	if err := callback.CallbackFunc(ctx, packet, ackResponse, callbackData.CallbackArgs); err != nil {
-		errMsg := fmt.Sprintf("Error occured while calling ICACallback (%s) | err: %s", callbackData.CallbackId, err.Error())
+		errMsg := fmt.Sprintf("Error occurred while calling ICACallback (%s) | err: %s", callbackData.CallbackId, err.Error())
 		k.Logger(ctx).Error(errMsg)
 		return errorsmod.Wrapf(types.ErrCallbackFailed, errMsg)
 	}

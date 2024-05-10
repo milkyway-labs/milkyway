@@ -154,7 +154,7 @@ func UnmarshalAmountFromBalanceQuery(cdc codec.BinaryCodec, queryResponseBz []by
 		return sdkmath.Int{}, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "query response is nil")
 	}
 
-	// If the query response is empty, that means the account was never registed (and thus has a 0 balance)
+	// If the query response is empty, that means the account was never registered (and thus has a 0 balance)
 	if len(queryResponseBz) == 0 {
 		return sdkmath.ZeroInt(), nil
 	}

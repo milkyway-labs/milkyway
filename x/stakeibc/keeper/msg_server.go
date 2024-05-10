@@ -678,7 +678,7 @@ func (k msgServer) RedeemStake(goCtx context.Context, msg *types.MsgRedeemStake)
 //   - The staker IBC transfers their tokenized shares to Stride
 //   - They then call LSMLiquidStake
 //   - - The staker's LSM Tokens are sent to the Stride module account
-//   - - The staker recieves stTokens
+//   - - The staker receives stTokens
 //
 // As a safety measure, at period checkpoints, the validator's sharesToTokens rate is queried and the transaction
 // is not settled until the query returns

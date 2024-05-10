@@ -22,7 +22,7 @@ import (
 
 // Iterate each deposit record marked TRANSFER_QUEUE and IBC transfer tokens from the Stride controller account to the delegation ICAs on each host zone
 func (k Keeper) TransferExistingDepositsToHostZones(ctx sdk.Context, epochNumber uint64, depositRecords []recordstypes.DepositRecord) {
-	k.Logger(ctx).Info("Transfering deposit records...")
+	k.Logger(ctx).Info("Transferring deposit records...")
 
 	transferDepositRecords := utils.FilterDepositRecords(depositRecords, func(record recordstypes.DepositRecord) (condition bool) {
 		isTransferRecord := record.Status == recordstypes.DepositRecord_TRANSFER_QUEUE
