@@ -13,22 +13,24 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/address"
 	"github.com/cosmos/cosmos-sdk/types/bech32"
 	"github.com/cosmos/cosmos-sdk/types/module"
+	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 
 	errorsmod "cosmossdk.io/errors"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	milkapp "github.com/milkyway-labs/milk/app"
+	icacallbacktypes "github.com/milkyway-labs/milk/x/icacallbacks/types"
+	recordstypes "github.com/milkyway-labs/milk/x/records/types"
 )
 
-// XXX
-//func FilterDepositRecords(arr []recordstypes.DepositRecord, condition func(recordstypes.DepositRecord) bool) (ret []recordstypes.DepositRecord) {
-//	for _, elem := range arr {
-//		if condition(elem) {
-//			ret = append(ret, elem)
-//		}
-//	}
-//	return ret
-//}
+func FilterDepositRecords(arr []recordstypes.DepositRecord, condition func(recordstypes.DepositRecord) bool) (ret []recordstypes.DepositRecord) {
+	for _, elem := range arr {
+		if condition(elem) {
+			ret = append(ret, elem)
+		}
+	}
+	return ret
+}
 
 func Int64ToCoinString(amount int64, denom string) string {
 	return strconv.FormatInt(amount, 10) + denom
@@ -240,19 +242,18 @@ func LogICACallbackWithHostZone(chainId string, callbackId string, s string, a .
 // Ex:
 //
 //	| COSMOSHUB-4   |  DELEGATE ICACALLBACK  |  ICA SUCCESS, Packet: ...
-// XXX
-//func LogICACallbackStatusWithHostZone(chainId string, callbackId string, status icacallbacktypes.AckResponseStatus, packet channeltypes.Packet) string {
-//	var statusMsg string
-//	switch status {
-//	case icacallbacktypes.AckResponseStatus_SUCCESS:
-//		statusMsg = "ICA SUCCESSFUL"
-//	case icacallbacktypes.AckResponseStatus_TIMEOUT:
-//		statusMsg = "ICA TIMEOUT"
-//	default:
-//		statusMsg = "ICA FAILED (ack error)"
-//	}
-//	return logCallbackWithHostZone(chainId, callbackId, "ICACALLBACK", "%s, Packet: %+v", statusMsg, packet)
-//}
+func LogICACallbackStatusWithHostZone(chainId string, callbackId string, status icacallbacktypes.AckResponseStatus, packet channeltypes.Packet) string {
+	var statusMsg string
+	switch status {
+	case icacallbacktypes.AckResponseStatus_SUCCESS:
+		statusMsg = "ICA SUCCESSFUL"
+	case icacallbacktypes.AckResponseStatus_TIMEOUT:
+		statusMsg = "ICA TIMEOUT"
+	default:
+		statusMsg = "ICA FAILED (ack error)"
+	}
+	return logCallbackWithHostZone(chainId, callbackId, "ICACALLBACK", "%s, Packet: %+v", statusMsg, packet)
+}
 
 // Returns a log string with a chain Id and icqcallback as a prefix
 // Ex:

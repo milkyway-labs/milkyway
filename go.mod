@@ -28,7 +28,7 @@ require (
 	github.com/cosmos/ibc-go/modules/capability v1.0.0
 	github.com/cosmos/ibc-go/v8 v8.2.1
 	github.com/cosmos/ics23/go v0.10.0
-	github.com/cosmos/interchain-security/v5 v5.0.0-alpha1 // indirect
+	github.com/cosmos/interchain-security/v5 v5.0.0-alpha1
 	github.com/golang/mock v1.6.0
 	github.com/golang/protobuf v1.5.4
 	github.com/golangci/golangci-lint v1.57.2
@@ -58,6 +58,8 @@ require (
 	google.golang.org/protobuf v1.33.0
 	gopkg.in/yaml.v2 v2.4.0
 )
+
+require github.com/Stride-Labs/ibc-rate-limiting v0.0.0-00010101000000-000000000000
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.2.1 // indirect
@@ -402,3 +404,5 @@ replace (
 	github.com/cosmos/ibc-go/v8 => github.com/initia-labs/ibc-go/v8 v8.0.0-20240419124350-4275a05abe2c
 	github.com/skip-mev/slinky => github.com/initia-labs/slinky v0.0.0-20240418051646-d45167cc66b1
 )
+
+replace github.com/Stride-Labs/ibc-rate-limiting => github.com/milkyway-labs/ibc-rate-limiting v0.0.0-20240509215339-45e398477ad5
