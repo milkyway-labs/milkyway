@@ -131,6 +131,9 @@ import (
 	auctionante "github.com/skip-mev/block-sdk/v2/x/auction/ante"
 	auctionkeeper "github.com/skip-mev/block-sdk/v2/x/auction/keeper"
 	auctiontypes "github.com/skip-mev/block-sdk/v2/x/auction/types"
+	"github.com/skip-mev/slinky/x/marketmap"
+	marketmapkeeper "github.com/skip-mev/slinky/x/marketmap/keeper"
+	marketmaptypes "github.com/skip-mev/slinky/x/marketmap/types"
 	"github.com/skip-mev/slinky/x/oracle"
 	oraclekeeper "github.com/skip-mev/slinky/x/oracle/keeper"
 	oracletypes "github.com/skip-mev/slinky/x/oracle/types"
@@ -261,6 +264,7 @@ type MilkApp struct {
 	AuctionKeeper         *auctionkeeper.Keeper // x/auction keeper used to process bids for POB auctions
 	PacketForwardKeeper   *packetforwardkeeper.Keeper
 	OracleKeeper          *oraclekeeper.Keeper // x/oracle keeper used for the slinky oracle
+	MarketMapKeeper       *marketmapkeeper.Keeper
 	TokenFactoryKeeper    *tokenfactorykeeper.Keeper
 	IBCHooksKeeper        *ibchookskeeper.Keeper
 	ForwardingKeeper      *forwardingkeeper.Keeper
@@ -330,6 +334,7 @@ func NewMilkApp(
 		ibcfeetypes.StoreKey, wasmtypes.StoreKey, opchildtypes.StoreKey,
 		auctiontypes.StoreKey, packetforwardtypes.StoreKey, oracletypes.StoreKey,
 		tokenfactorytypes.StoreKey, ibchookstypes.StoreKey, forwardingtypes.StoreKey,
+		marketmaptypes.StoreKey,
 		ratelimittypes.StoreKey, epochstypes.StoreKey, icqtypes.StoreKey,
 		icacallbackstypes.StoreKey, recordstypes.StoreKey, stakeibctypes.StoreKey,
 	)
@@ -410,13 +415,24 @@ func NewMilkApp(
 	////////////////////////////////
 
 	// initialize oracle keeper
+	marketMapKeeper := marketmapkeeper.NewKeeper(
+		runtime.NewKVStoreService(keys[marketmaptypes.StoreKey]),
+		appCodec,
+		authorityAccAddr,
+	)
+	app.MarketMapKeeper = marketMapKeeper
+
 	oracleKeeper := oraclekeeper.NewKeeper(
 		runtime.NewKVStoreService(keys[oracletypes.StoreKey]),
 		appCodec,
-		nil,
+		marketMapKeeper,
 		authorityAccAddr,
 	)
 	app.OracleKeeper = &oracleKeeper
+
+	// Add the oracle keeper as a hook to market map keeper so new market map entries can be created
+	// and propogated to the oracle keeper.
+	app.MarketMapKeeper.SetHooks(app.OracleKeeper.Hooks())
 
 	app.OPChildKeeper = opchildkeeper.NewKeeper(
 		appCodec,
@@ -854,6 +870,7 @@ func NewMilkApp(
 		ratelimit.NewAppModule(appCodec, app.RateLimitKeeper),
 		// slinky modules
 		oracle.NewAppModule(appCodec, *app.OracleKeeper),
+		marketmap.NewAppModule(appCodec, app.MarketMapKeeper),
 		// liquid staking modules
 		stakeibc.NewAppModule(appCodec, app.StakeIBCKeeper, app.AccountKeeper, app.BankKeeper),
 		epochs.NewAppModule(appCodec, app.EpochsKeeper),
@@ -893,6 +910,7 @@ func NewMilkApp(
 		authz.ModuleName,
 		ibcexported.ModuleName,
 		oracletypes.ModuleName,
+		marketmaptypes.ModuleName,
 		stakeibctypes.ModuleName,
 		epochstypes.ModuleName,
 		ratelimittypes.ModuleName,
@@ -904,6 +922,7 @@ func NewMilkApp(
 		feegrant.ModuleName,
 		group.ModuleName,
 		oracletypes.ModuleName,
+		marketmaptypes.ModuleName,
 		forwardingtypes.ModuleName,
 		stakeibctypes.ModuleName,
 		icqtypes.ModuleName,
@@ -918,11 +937,12 @@ func NewMilkApp(
 	genesisModuleOrder := []string{
 		capabilitytypes.ModuleName, authtypes.ModuleName, banktypes.ModuleName,
 		opchildtypes.ModuleName, genutiltypes.ModuleName, authz.ModuleName, group.ModuleName,
-		upgradetypes.ModuleName, feegrant.ModuleName, consensusparamtypes.ModuleName, ibcexported.ModuleName,
-		ibctransfertypes.ModuleName, icatypes.ModuleName, icaauthtypes.ModuleName,
-		ibcfeetypes.ModuleName, auctiontypes.ModuleName,
-		wasmtypes.ModuleName, oracletypes.ModuleName, packetforwardtypes.ModuleName,
-		tokenfactorytypes.ModuleName, ibchookstypes.ModuleName, forwardingtypes.ModuleName,
+		upgradetypes.ModuleName, feegrant.ModuleName, consensusparamtypes.ModuleName,
+		ibcexported.ModuleName, ibctransfertypes.ModuleName, icatypes.ModuleName,
+		icaauthtypes.ModuleName, ibcfeetypes.ModuleName, auctiontypes.ModuleName,
+		wasmtypes.ModuleName, oracletypes.ModuleName, marketmaptypes.ModuleName,
+		packetforwardtypes.ModuleName, tokenfactorytypes.ModuleName,
+		ibchookstypes.ModuleName, forwardingtypes.ModuleName,
 		stakeibctypes.ModuleName, epochstypes.ModuleName, icqtypes.ModuleName,
 		recordstypes.ModuleName, ratelimittypes.ModuleName, icacallbackstypes.ModuleName,
 	}
