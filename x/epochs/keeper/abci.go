@@ -3,11 +3,13 @@ package keeper
 import (
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/milkyway-labs/milk/utils"
 	"github.com/milkyway-labs/milk/x/epochs/types"
 )
 
@@ -30,6 +32,11 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) {
 			logger.Info(fmt.Sprintf("initial %s epoch", epochInfo.Identifier))
 		case shouldEpochStart:
 			epochInfo = endEpoch(epochInfo)
+
+			// Capitalize the epoch identifier for the logs
+			epochAlias := strings.ToUpper(strings.ReplaceAll(epochInfo.Identifier, "_epoch", ""))
+			logger.Info(utils.LogHeader("%s EPOCH %d", epochAlias, epochInfo.CurrentEpoch))
+			logger.Info(utils.LogHeader("Epoch Start Time: %s", epochInfo.CurrentEpochStartTime))
 
 			ctx.EventManager().EmitEvent(
 				sdk.NewEvent(
