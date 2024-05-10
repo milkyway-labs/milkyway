@@ -18,6 +18,7 @@ require (
 	// we also need to update `LIBWASMVM_VERSION` of images/private/Dockerfile#5
 	github.com/CosmWasm/wasmd v0.50.0
 	github.com/CosmWasm/wasmvm v1.5.2
+	github.com/Stride-Labs/ibc-rate-limiting v0.0.0-00010101000000-000000000000
 	github.com/cometbft/cometbft v0.38.6
 	github.com/cosmos/cosmos-db v1.0.2
 	github.com/cosmos/cosmos-proto v1.0.0-beta.5
@@ -58,8 +59,6 @@ require (
 	google.golang.org/protobuf v1.33.0
 	gopkg.in/yaml.v2 v2.4.0
 )
-
-require github.com/Stride-Labs/ibc-rate-limiting v0.0.0-00010101000000-000000000000
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.2.1 // indirect
@@ -380,23 +379,15 @@ require (
 )
 
 replace (
-	// use cosmos fork of keyring
+	// Use cosmos fork of keyring
 	github.com/99designs/keyring => github.com/cosmos/keyring v1.2.0
-
-	// dgrijalva/jwt-go is deprecated and doesn't receive security updates.
-	// TODO: remove it: https://github.com/cosmos/cosmos-sdk/issues/13134
-	github.com/dgrijalva/jwt-go => github.com/golang-jwt/jwt/v4 v4.4.2
-	// Fix upstream GHSA-h395-qcrw-5vmq vulnerability.
-	// TODO Remove it: https://github.com/cosmos/cosmos-sdk/issues/10409
-	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.9.1
-
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 
 	// Downgraded to avoid bugs in following commits which caused simulations to fail.
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
 )
 
-// initia custom
+// Initia custom
 replace (
 	github.com/cometbft/cometbft => github.com/initia-labs/cometbft v0.0.0-20240425025334-db711cb7c25d
 	github.com/cosmos/cosmos-sdk => github.com/initia-labs/cosmos-sdk v0.0.0-20240502043911-a4bdb8e06769
@@ -405,7 +396,7 @@ replace (
 	github.com/skip-mev/slinky => github.com/initia-labs/slinky v0.0.0-20240418051646-d45167cc66b1
 )
 
-// milk custom
+// Milk custom
 replace (
 	github.com/Stride-Labs/ibc-rate-limiting => github.com/milkyway-labs/ibc-rate-limiting v0.0.0-20240510185844-cc324d1f9af7
 	github.com/cosmos/relayer/v2 => github.com/milkyway-labs/relayer/v2 v2.0.0-20240510185220-0492766a512d
