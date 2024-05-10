@@ -7,9 +7,11 @@ BINDIR ?= $(GOPATH)/bin
 BUILDDIR ?= $(CURDIR)/build
 DOCKER := $(shell which docker)
 
+export GO111MODULE = on
+
 # don't override user values
 ifeq (,$(VERSION))
-  VERSION := $(shell git describe --tags)
+  VERSION := $(shell echo $(shell git describe --tags) | sed 's/^v//')
   # if VERSION is empty, then populate it with branch's name and raw commit hash
   ifeq (,$(VERSION))
     VERSION := $(BRANCH)-$(COMMIT)
@@ -18,9 +20,9 @@ endif
 
 TM_VERSION := $(shell go list -m github.com/cometbft/cometbft | sed 's:.* ::')
 
-export GO111MODULE = on
-
-# process build tags
+###############################################################################
+###                               Build flags                               ###
+###############################################################################
 
 build_tags = netgo
 ifeq ($(LEDGER_ENABLED),true)
@@ -64,7 +66,9 @@ whitespace += $(whitespace)
 comma := ,
 build_tags_comma_sep := $(subst $(whitespace),$(comma),$(build_tags))
 
-# process linker flags
+###############################################################################
+###                               Linker flags                              ###
+###############################################################################
 
 ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=milk \
 		  -X github.com/cosmos/cosmos-sdk/version.AppName=milkd \
@@ -80,7 +84,8 @@ endif
 ifeq (badgerdb,$(findstring badgerdb,$(COSMOS_BUILD_OPTIONS)))
   ldflags += -X github.com/cosmos/cosmos-sdk/types.DBBackend=badgerdb
 endif
-# handle rocksdb
+
+# Handle RocksDB
 ifeq (rocksdb,$(findstring rocksdb,$(COSMOS_BUILD_OPTIONS)))
   $(info ################################################################)
   $(info To use rocksdb, you need to install rocksdb first)
@@ -89,7 +94,8 @@ ifeq (rocksdb,$(findstring rocksdb,$(COSMOS_BUILD_OPTIONS)))
   CGO_ENABLED=1
   ldflags += -X github.com/cosmos/cosmos-sdk/types.DBBackend=rocksdb
 endif
-# handle boltdb
+
+# Handle BoltDB
 ifeq (boltdb,$(findstring boltdb,$(COSMOS_BUILD_OPTIONS)))
   ldflags += -X github.com/cosmos/cosmos-sdk/types.DBBackend=boltdb
 endif
@@ -101,6 +107,7 @@ ldflags += $(LDFLAGS)
 ldflags := $(strip $(ldflags))
 
 BUILD_FLAGS := -tags "$(build_tags)" -ldflags '$(ldflags)'
+
 # check for nostrip option
 ifeq (,$(findstring nostrip,$(COSMOS_BUILD_OPTIONS)))
   BUILD_FLAGS += -trimpath
@@ -109,7 +116,15 @@ endif
 # The below include contains the tools and runsim targets.
 include contrib/devtools/Makefile
 
+###############################################################################
+###                                   All                                   ###
+###############################################################################
+
 all: tools install lint test
+
+###############################################################################
+###                                 Build                                   ###
+###############################################################################
 
 build: go.sum
 ifeq ($(OS),Windows_NT)
@@ -232,16 +247,20 @@ benchmark:
 ###############################################################################
 ###                                Linting                                  ###
 ###############################################################################
+golangci_lint_cmd=github.com/golangci/golangci-lint/cmd/golangci-lint
 
 lint:
-	golangci-lint run --out-format=tab
+	@echo "--> Running linter"
+	@go run $(golangci_lint_cmd) run --timeout=10m
 
 lint-fix:
-	golangci-lint run --fix --out-format=tab --issues-exit-code=0
+	@echo "--> Running linter"
+	@go run $(golangci_lint_cmd) run --fix --out-format=tab --issues-exit-code=0
+
 .PHONY: lint lint-fix
 
 format:
-	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "./client/docs/statik/statik.go" -not -path "./tests/mocks/*" -not -name '*.pb.go' | xargs gofmt -w -s
-	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "./client/docs/statik/statik.go" -not -path "./tests/mocks/*" -not -name '*.pb.go' | xargs misspell -w
-	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "./client/docs/statik/statik.go" -not -path "./tests/mocks/*" -not -name '*.pb.go' | xargs goimports -w -local github.com/cosmos/cosmos-sdk
+	find . -name '*.go' -type f -not -path "*.git*" -not -path "./client/docs/statik/statik.go" -not -path "./tests/mocks/*" -not -name '*.pb.go' | xargs gofmt -w -s
+	find . -name '*.go' -type f -not -path "*.git*" -not -path "./client/docs/statik/statik.go" -not -path "./tests/mocks/*" -not -name '*.pb.go' | xargs misspell -w
+	find . -name '*.go' -type f -not -path "*.git*" -not -path "./client/docs/statik/statik.go" -not -path "./tests/mocks/*" -not -name '*.pb.go' | xargs goimports -w -local github.com/milkyway-labs/milk
 .PHONY: format
