@@ -3,6 +3,8 @@ package keeper
 import (
 	"fmt"
 
+	"cosmossdk.io/collections"
+	corestoretypes "cosmossdk.io/core/store"
 	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/log"
 	sdkmath "cosmossdk.io/math"
@@ -11,8 +13,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
-	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
-	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	icacontrollerkeeper "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/controller/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 	"github.com/spf13/cast"
@@ -27,9 +27,9 @@ type (
 	Keeper struct {
 		// *cosmosibckeeper.Keeper
 		cdc                   codec.Codec
+		storeService          corestoretypes.KVStoreService
 		storeKey              storetypes.StoreKey
 		memKey                storetypes.StoreKey
-		paramstore            paramtypes.Subspace
 		authority             string
 		ICAControllerKeeper   icacontrollerkeeper.Keeper
 		IBCKeeper             ibckeeper.Keeper
@@ -37,20 +37,18 @@ type (
 		AccountKeeper         types.AccountKeeper
 		InterchainQueryKeeper icqkeeper.Keeper
 		RecordsKeeper         recordsmodulekeeper.Keeper
-		StakingKeeper         stakingkeeper.Keeper
 		ICACallbacksKeeper    icacallbackskeeper.Keeper
 		hooks                 types.StakeIBCHooks
 		RatelimitKeeper       types.RatelimitKeeper
-		ICAOracleKeeper       types.ICAOracleKeeper
-		ConsumerKeeper        types.ConsumerKeeper
+		params                collections.Item[types.Params]
 	}
 )
 
 func NewKeeper(
 	cdc codec.Codec,
+	storeService corestoretypes.KVStoreService,
 	storeKey,
 	memKey storetypes.StoreKey,
-	ps paramtypes.Subspace,
 	authority string,
 	accountKeeper types.AccountKeeper,
 	bankKeeper bankkeeper.Keeper,
@@ -58,22 +56,15 @@ func NewKeeper(
 	ibcKeeper ibckeeper.Keeper,
 	interchainQueryKeeper icqkeeper.Keeper,
 	RecordsKeeper recordsmodulekeeper.Keeper,
-	StakingKeeper stakingkeeper.Keeper,
 	ICACallbacksKeeper icacallbackskeeper.Keeper,
 	RatelimitKeeper types.RatelimitKeeper,
-	icaOracleKeeper types.ICAOracleKeeper,
-	ConsumerKeeper types.ConsumerKeeper,
 ) Keeper {
-	// set KeyTable if it has not already been set
-	if !ps.HasKeyTable() {
-		ps = ps.WithKeyTable(types.ParamKeyTable())
-	}
-
+	sb := collections.NewSchemaBuilder(storeService)
 	return Keeper{
 		cdc:                   cdc,
+		storeService:          storeService,
 		storeKey:              storeKey,
 		memKey:                memKey,
-		paramstore:            ps,
 		authority:             authority,
 		AccountKeeper:         accountKeeper,
 		bankKeeper:            bankKeeper,
@@ -81,11 +72,9 @@ func NewKeeper(
 		IBCKeeper:             ibcKeeper,
 		InterchainQueryKeeper: interchainQueryKeeper,
 		RecordsKeeper:         RecordsKeeper,
-		StakingKeeper:         StakingKeeper,
 		ICACallbacksKeeper:    ICACallbacksKeeper,
 		RatelimitKeeper:       RatelimitKeeper,
-		ICAOracleKeeper:       icaOracleKeeper,
-		ConsumerKeeper:        ConsumerKeeper,
+		params:                collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 	}
 }
 

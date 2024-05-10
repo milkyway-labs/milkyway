@@ -28,7 +28,7 @@ require (
 	github.com/cosmos/ibc-go/modules/capability v1.0.0
 	github.com/cosmos/ibc-go/v8 v8.2.1
 	github.com/cosmos/ics23/go v0.10.0
-	github.com/cosmos/interchain-security/v5 v5.0.0-alpha1
+	github.com/cosmos/interchain-security/v5 v5.0.0-alpha1 // indirect
 	github.com/golang/mock v1.6.0
 	github.com/golang/protobuf v1.5.4
 	github.com/golangci/golangci-lint v1.57.2
@@ -405,4 +405,8 @@ replace (
 	github.com/skip-mev/slinky => github.com/initia-labs/slinky v0.0.0-20240418051646-d45167cc66b1
 )
 
-replace github.com/Stride-Labs/ibc-rate-limiting => github.com/milkyway-labs/ibc-rate-limiting v0.0.0-20240509215339-45e398477ad5
+// milk custom
+replace (
+	github.com/Stride-Labs/ibc-rate-limiting => github.com/milkyway-labs/ibc-rate-limiting v0.0.0-20240510185844-cc324d1f9af7
+	github.com/cosmos/relayer/v2 => github.com/milkyway-labs/relayer/v2 v2.0.0-20240510185220-0492766a512d
+)

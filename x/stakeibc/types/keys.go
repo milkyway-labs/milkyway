@@ -1,5 +1,9 @@
 package types
 
+import (
+	"cosmossdk.io/collections"
+)
+
 const (
 	// ModuleName defines the module name
 	ModuleName = "stakeibc"
@@ -30,6 +34,8 @@ const (
 
 // PortKey defines the key to store the port ID in store
 var PortKey = KeyPrefix("stakeibc-port-")
+
+var ParamsKey = collections.NewPrefix(1)
 
 // Generates a key byte prefix from a string
 func KeyPrefix(p string) []byte {

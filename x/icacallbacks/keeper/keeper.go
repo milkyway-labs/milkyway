@@ -35,19 +35,12 @@ func NewKeeper(
 	cdc codec.BinaryCodec,
 	storeKey,
 	memKey storetypes.StoreKey,
-	ps paramtypes.Subspace,
 	ibcKeeper ibckeeper.Keeper,
 ) *Keeper {
-	// set KeyTable if it has not already been set
-	if !ps.HasKeyTable() {
-		ps = ps.WithKeyTable(types.ParamKeyTable())
-	}
-
 	return &Keeper{
 		cdc:          cdc,
 		storeKey:     storeKey,
 		memKey:       memKey,
-		paramstore:   ps,
 		icacallbacks: make(map[string]types.ICACallback),
 		IBCKeeper:    ibcKeeper,
 	}

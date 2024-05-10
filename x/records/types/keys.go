@@ -1,5 +1,9 @@
 package types
 
+import (
+	"cosmossdk.io/collections"
+)
+
 const (
 	// ModuleName defines the module name
 	ModuleName = "records"
@@ -25,6 +29,8 @@ const (
 
 // PortKey defines the key to store the port ID in store
 var PortKey = KeyPrefix("records-port-")
+
+var ParamsKey = collections.NewPrefix(1)
 
 func KeyPrefix(p string) []byte {
 	return []byte(p)

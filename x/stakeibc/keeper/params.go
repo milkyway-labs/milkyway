@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"reflect"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milk/x/stakeibc/types"
@@ -8,17 +10,26 @@ import (
 
 // GetParams get all parameters as types.Params
 func (k Keeper) GetParams(ctx sdk.Context) (params types.Params) {
-	k.paramstore.GetParamSet(ctx, &params)
+	params, err := k.params.Get(ctx)
+	if err != nil {
+		panic(err) // XXX
+	}
 	return params
 }
 
 // SetParams set the params
 func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
-	k.paramstore.SetParamSet(ctx, &params)
+	if err := k.params.Set(ctx, params); err != nil {
+		panic(err) // XXX
+	}
 }
 
 func (k *Keeper) GetParam(ctx sdk.Context, key []byte) uint64 {
-	var out uint64
-	k.paramstore.Get(ctx, key, &out)
-	return out
+	params, err := k.params.Get(ctx)
+	if err != nil {
+		panic(err) // XXX
+	}
+	// XXX
+	f := reflect.ValueOf(params).FieldByName(string(key))
+	return f.Uint()
 }

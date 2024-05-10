@@ -3,6 +3,7 @@ package stride.interchainquery.v1;
 
 import "gogoproto/gogo.proto";
 import "cosmos_proto/cosmos.proto";
+import "cosmos/msg/v1/msg.proto";
 import "google/api/annotations.proto";
 import "tendermint/crypto/proof.proto";
 
@@ -10,6 +11,7 @@ option go_package = "github.com/milkyway-labs/milk/x/interchainquery/types";
 
 // Msg defines the interchainquery Msg service.
 service Msg {
+  option (cosmos.msg.v1.service) = true;
   // SubmitQueryResponse defines a method for submit query responses.
   rpc SubmitQueryResponse(MsgSubmitQueryResponse)
       returns (MsgSubmitQueryResponseResponse) {

@@ -18,7 +18,6 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	milkapp "github.com/milkyway-labs/milk/app"
 	icacallbacktypes "github.com/milkyway-labs/milk/x/icacallbacks/types"
 	recordstypes "github.com/milkyway-labs/milk/x/records/types"
 )
@@ -196,20 +195,21 @@ func ContainsString(s []string, e string) bool {
 	return false
 }
 
-// Convert any bech32 to stride address
-func ConvertAddressToStrideAddress(address string) string {
-	_, bz, err := bech32.DecodeAndConvert(address)
-	if err != nil {
-		return ""
-	}
-
-	bech32Addr, err := bech32.ConvertAndEncode(milkapp.AccountAddressPrefix, bz)
-	if err != nil {
-		return ""
-	}
-
-	return bech32Addr
-}
+// XXX
+//// Convert any bech32 to stride address
+//func ConvertAddressToStrideAddress(address string) string {
+//	_, bz, err := bech32.DecodeAndConvert(address)
+//	if err != nil {
+//		return ""
+//	}
+//
+//	bech32Addr, err := bech32.ConvertAndEncode(milkapp.AccountAddressPrefix, bz) // XXX
+//	if err != nil {
+//		return ""
+//	}
+//
+//	return bech32Addr
+//}
 
 // Returns a log string with a chainId and tab as the prefix
 // Ex:

@@ -3,6 +3,7 @@ package interchainquery
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"math/rand"
 
 	"cosmossdk.io/core/appmodule"
@@ -85,11 +86,6 @@ func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *r
 	if err != nil {
 		panic(err)
 	}
-}
-
-// GetTxCmd returns the capability module's root tx command.
-func (a AppModuleBasic) GetTxCmd() *cobra.Command {
-	return nil
 }
 
 // GetQueryCmd returns the capability module's root query command.
@@ -187,3 +183,16 @@ func (AppModule) ConsensusVersion() uint64 { return 1 }
 func (am AppModule) IsOnePerModuleType() {}
 
 func (am AppModule) IsAppModule() {}
+
+// GetTxCmd returns the capability module's root tx command.
+func (a AppModule) GetTxCmd() *cobra.Command {
+	// XXX: return an empty command. this prevents the following panic:
+	//      panic: submit-query-response flag redefined: chain-id
+	return &cobra.Command{
+		Use:                        types.ModuleName,
+		Short:                      fmt.Sprintf("%s transactions subcommands", types.ModuleName),
+		DisableFlagParsing:         true,
+		SuggestionsMinimumDistance: 2,
+		RunE:                       client.ValidateCmd,
+	}
+}
