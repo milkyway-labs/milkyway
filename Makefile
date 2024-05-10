@@ -196,8 +196,9 @@ proto-check-breaking:
 
 .PHONY: proto-all proto-gen proto-swagger-gen proto-pulsar-gen proto-format proto-lint proto-check-breaking
 
-########################################
-### Tools & dependencies
+###############################################################################
+###                          Tools & Dependencies                           ###
+###############################################################################
 
 go-mod-cache: go.sum
 	@echo "--> Download go modules to local cache"
@@ -209,40 +210,63 @@ go.sum: go.mod
 
 draw-deps:
 	@# requires brew install graphviz or apt-get install graphviz
-	go install github.com/RobotsAndPencils/goviz
+	@go install github.com/RobotsAndPencils/goviz
 	@goviz -i ./cmd/milkd -d 2 | dot -Tpng -o dependency-graph.png
 
-distclean: clean tools-clean
 clean:
 	rm -rf \
     $(BUILDDIR)/ \
     artifacts/ \
     tmp-swagger-gen/
 
+distclean: clean tools-clean
+
 .PHONY: distclean clean
 
-
 ###############################################################################
-###                           Tests 
+###                           Tests & Simulation                            ###
 ###############################################################################
 
 test: test-unit
+test-all: test-unit test-ledger-mock test-race test-cover
 
-test-all: test-unit test-race test-cover
+TEST_PACKAGES=./...
+TEST_TARGETS := test-unit test-unit-amino test-unit-proto test-ledger-mock test-race test-ledger test-race
 
-test-unit:
-	@VERSION=$(VERSION) go test -mod=readonly -tags='ledger test_ledger_mock' ./...
+# Test runs-specific rules. To add a new test target, just add
+# a new rule, customise ARGS or TEST_PACKAGES ad libitum, and
+# append the new rule to the TEST_TARGETS list.
+test-unit: test_tags += cgo ledger test_ledger_mock norace
+test-unit-amino: test_tags += ledger test_ledger_mock test_amino norace
+test-ledger: test_tags += cgo ledger norace
+test-ledger-mock: test_tags += ledger test_ledger_mock norace
+test-race: test_tags += cgo ledger test_ledger_mock
+test-race: ARGS=-race
+test-race: TEST_PACKAGES=$(PACKAGES_NOSIMULATION)
+$(TEST_TARGETS): run-tests
 
-test-race:
-	@VERSION=$(VERSION) go test -mod=readonly -race -tags='ledger test_ledger_mock' ./...
+ARGS += -tags "$(test_tags)"
+SUB_MODULES = $(shell find . -type f -name 'go.mod' -print0 | xargs -0 -n1 dirname | sort)
+CURRENT_DIR = $(shell pwd)
 
-test-cover:
-	@go test -mod=readonly -timeout 30m -race -coverprofile=coverage.txt -covermode=atomic -tags='ledger test_ledger_mock' ./...
+run-tests:
+ifneq (,$(shell which tparse 2>/dev/null))
+	go test -mod=readonly -json $(ARGS) $(TEST_PACKAGES) | tparse
+else
+	go test -mod=readonly $(ARGS) $(TEST_PACKAGES)
+endif
 
+.PHONY: run-tests test test-all $(TEST_TARGETS)
+
+###############################################################################
+###                                Benchmark                                ###
+###############################################################################
+
+becnchstat_cmd=golang.org/x/perf/cmd/benchstat
 benchmark:
-	@go test -timeout 20m -mod=readonly -bench=. ./... 
-
-.PHONY: test test-all test-cover test-unit test-race benchmark
+	@go test -mod=readonly -bench=. -count=$(BENCH_COUNT) -run=^a  ./... > bench-$(REF_NAME).txt
+	@test -e bench-master.txt && go run $(becnchstat_cmd) bench-master.txt bench-$(REF_NAME).txt || go run $(becnchstat_cmd) bench-$(REF_NAME).txt
+.PHONY: benchmark
 
 ###############################################################################
 ###                                Linting                                  ###
