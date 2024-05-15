@@ -1,7 +1,9 @@
 package keeper
 
 import (
+	"fmt"
 	"reflect"
+	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -30,6 +32,12 @@ func (k *Keeper) GetParam(ctx sdk.Context, key []byte) uint64 {
 		panic(err) // XXX
 	}
 	// XXX
-	f := reflect.ValueOf(params).FieldByName(string(key))
-	return f.Uint()
+	v := reflect.ValueOf(params)
+	t := reflect.TypeOf(params)
+	for i := 0; i < v.NumField(); i++ {
+		if strings.EqualFold(t.Field(i).Name, string(key)) {
+			return v.Field(i).Uint()
+		}
+	}
+	panic(fmt.Sprintf("param %s not found", key))
 }
