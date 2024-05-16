@@ -246,6 +246,7 @@ type MilkApp struct {
 	memKeys map[string]*storetypes.MemoryStoreKey
 
 	// keepers
+	// TODO: add gov keeper
 	AccountKeeper         *authkeeper.AccountKeeper
 	BankKeeper            *bankkeeper.Keeper
 	CapabilityKeeper      *capabilitykeeper.Keeper
@@ -285,7 +286,6 @@ type MilkApp struct {
 	ScopedICAControllerKeeper capabilitykeeper.ScopedKeeper
 	ScopedICAAuthKeeper       capabilitykeeper.ScopedKeeper
 	ScopedWasmKeeper          capabilitykeeper.ScopedKeeper
-	ScopedICQKeeper           capabilitykeeper.ScopedKeeper
 	ScopedFetchPriceKeeper    capabilitykeeper.ScopedKeeper
 
 	// the module manager
@@ -480,13 +480,6 @@ func NewMilkApp(
 		authorityAddr,
 	)
 
-	i := 0
-	moduleAddrs := make([]sdk.AccAddress, len(maccPerms))
-	for name := range maccPerms {
-		moduleAddrs[i] = authtypes.NewModuleAddress(name)
-		i += 1
-	}
-
 	feeGrantKeeper := feegrantkeeper.NewKeeper(appCodec, runtime.NewKVStoreService(keys[feegrant.StoreKey]), app.AccountKeeper)
 	app.FeeGrantKeeper = &feeGrantKeeper
 
@@ -555,15 +548,12 @@ func NewMilkApp(
 		authorityAddr,
 		app.BankKeeper,
 		app.IBCKeeper.ChannelKeeper,
-		app.IBCKeeper.ChannelKeeper, // ICS4Wrapper
+		app.IBCFeeKeeper,
 	)
 
-	app.ICACallbacksKeeper = *icacallbackskeeper.NewKeeper(
-		appCodec,
-		keys[icacallbackstypes.StoreKey],
-		keys[icacallbackstypes.MemStoreKey],
-		app.GetSubspace(icacallbackstypes.ModuleName),
-		*app.IBCKeeper,
+	hooksICS4Wrapper := ibchooks.NewICS4Middleware(
+		app.RateLimitKeeper,
+		ibcwasmhooks.NewWasmHooks(appCodec, ac, app.WasmKeeper),
 	)
 
 	////////////////////////////
@@ -610,7 +600,7 @@ func NewMilkApp(
 			communityPoolKeeper,
 			app.BankKeeper,
 			// ics4wrapper: transfer -> packet forward -> fee
-			app.IBCFeeKeeper,
+			hooksICS4Wrapper, // TODO: is it correct?
 			authorityAddr,
 		)
 		app.PacketForwardKeeper = packetForwardKeeper
@@ -627,12 +617,12 @@ func NewMilkApp(
 		transferStack = ibchooks.NewIBCMiddleware(
 			// receive: wasm -> packet forward -> forwarding -> transfer
 			transferStack,
-			ibchooks.NewICS4Middleware(
-				app.RateLimitKeeper,
-				ibcwasmhooks.NewWasmHooks(appCodec, ac, app.WasmKeeper),
-			),
+			hooksICS4Wrapper,
 			app.IBCHooksKeeper,
 		)
+
+		transferStack = ratelimit.NewIBCMiddleware(app.RateLimitKeeper, transferStack)
+		transferStack = records.NewIBCModule(app.RecordsKeeper, transferStack)
 
 		// create ibcfee middleware for transfer
 		transferStack = ibcfee.NewIBCMiddleware(
@@ -649,6 +639,7 @@ func NewMilkApp(
 
 	var icaHostStack porttypes.IBCModule
 	var icaControllerStack porttypes.IBCModule
+	var icaCallbacksStack porttypes.IBCModule
 	{
 		icaHostKeeper := icahostkeeper.NewKeeper(
 			appCodec, keys[icahosttypes.StoreKey],
@@ -683,11 +674,17 @@ func NewMilkApp(
 		)
 		app.ICAAuthKeeper = &icaAuthKeeper
 
-		icaAuthIBCModule := icaauth.NewIBCModule(*app.ICAAuthKeeper)
 		icaHostIBCModule := icahost.NewIBCModule(*app.ICAHostKeeper)
 		icaHostStack = ibcfee.NewIBCMiddleware(icaHostIBCModule, *app.IBCFeeKeeper)
+
+		icaAuthIBCModule := icaauth.NewIBCModule(*app.ICAAuthKeeper)
 		icaControllerIBCModule := icacontroller.NewIBCMiddleware(icaAuthIBCModule, *app.ICAControllerKeeper)
 		icaControllerStack = ibcfee.NewIBCMiddleware(icaControllerIBCModule, *app.IBCFeeKeeper)
+
+		icaCallbacksStack = icacallbacks.NewIBCModule(app.ICACallbacksKeeper)
+		icaCallbacksStack = stakeibc.NewIBCMiddleware(icaCallbacksStack, app.StakeIBCKeeper)
+		icaCallbacksStack = icacontroller.NewIBCMiddleware(icaCallbacksStack, *app.ICAControllerKeeper)
+		icaCallbacksStack = ibcfee.NewIBCMiddleware(icaCallbacksStack, *app.IBCFeeKeeper)
 	}
 
 	//////////////////////////////
@@ -707,10 +704,7 @@ func NewMilkApp(
 		hookMiddleware := ibchooks.NewIBCMiddleware(
 			// receive: hook -> wasm
 			wasmIBCModule,
-			ibchooks.NewICS4Middleware(
-				app.RateLimitKeeper,
-				ibcwasmhooks.NewWasmHooks(appCodec, ac, app.WasmKeeper),
-			),
+			hooksICS4Wrapper, // TODO: is it correct?
 			app.IBCHooksKeeper,
 		)
 
@@ -730,7 +724,7 @@ func NewMilkApp(
 	ibcRouter.AddRoute(ibctransfertypes.ModuleName, transferStack).
 		// TODO: add ica callbacks stack
 		AddRoute(icahosttypes.SubModuleName, icaHostStack).
-		AddRoute(icacontrollertypes.SubModuleName, icaControllerStack).
+		AddRoute(icacontrollertypes.SubModuleName, icaCallbacksStack).
 		AddRoute(icaauthtypes.ModuleName, icaControllerStack).
 		AddRoute(wasmtypes.ModuleName, wasmIBCStack)
 
@@ -811,6 +805,14 @@ func NewMilkApp(
 
 	app.InterchainQueryKeeper = icqkeeper.NewKeeper(appCodec, keys[icqtypes.StoreKey], app.IBCKeeper)
 
+	app.ICACallbacksKeeper = *icacallbackskeeper.NewKeeper(
+		appCodec,
+		keys[icacallbackstypes.StoreKey],
+		keys[icacallbackstypes.MemStoreKey],
+		app.GetSubspace(icacallbackstypes.ModuleName),
+		*app.IBCKeeper,
+	)
+
 	app.RecordsKeeper = *recordskeeper.NewKeeper(
 		appCodec,
 		keys[recordstypes.StoreKey],
@@ -844,6 +846,20 @@ func NewMilkApp(
 			app.StakeIBCKeeper.Hooks(),
 		),
 	)
+
+	// Register ICQ callbacks
+	err = app.InterchainQueryKeeper.SetCallbackHandler(stakeibctypes.ModuleName, app.StakeIBCKeeper.ICQCallbackHandler())
+	if err != nil {
+		panic(err)
+	}
+
+	// Register IBC callbacks
+	if err := app.ICACallbacksKeeper.SetICACallbacks(
+		app.StakeIBCKeeper.Callbacks(),
+		app.RecordsKeeper.Callbacks(),
+	); err != nil {
+		panic(err)
+	}
 
 	/****  Module Options ****/
 
