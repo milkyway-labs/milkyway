@@ -1106,9 +1106,9 @@ func NewMilkApp(
 	if err != nil {
 		errMsg := ""
 
-		// ignore injective proto annotations comes from github.com/cosoms/relayer
+		// ignore injective and ibc-rate-limiting proto annotations comes from github.com/cosoms/relayer
 		for _, s := range strings.Split(err.Error(), "\n") {
-			if strings.Contains(s, "injective") {
+			if strings.Contains(s, "injective") || strings.Contains(s, "ratelimit") {
 				continue
 			}
 

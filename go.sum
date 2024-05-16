@@ -1091,8 +1091,8 @@ github.com/matttproud/golang_protobuf_extensions v1.0.1/go.mod h1:D8He9yQNgCq6Z5
 github.com/mgechev/revive v1.3.7 h1:502QY0vQGe9KtYJ9FpxMz9rL+Fc/P13CI5POL4uHCcE=
 github.com/mgechev/revive v1.3.7/go.mod h1:RJ16jUbF0OWC3co/+XTxmFNgEpUPwnnA0BRllX2aDNA=
 github.com/miekg/dns v1.0.14/go.mod h1:W1PPwlIAgtquWBMBEV9nkV9Cazfe8ScdGz/Lj7v3Nrg=
-github.com/milkyway-labs/ibc-rate-limiting v0.0.0-20240510185844-cc324d1f9af7 h1:iue7YjSR+prnheC/GnmYctAmMkpA5taCIwvcMwLP3GM=
-github.com/milkyway-labs/ibc-rate-limiting v0.0.0-20240510185844-cc324d1f9af7/go.mod h1:YAf80eEQ4bdg5qXP4EI8eCxzhhWfqwiy9DoP8JXXg60=
+github.com/milkyway-labs/ibc-rate-limiting v0.0.0-20240509215339-45e398477ad5 h1:1QBEsR4IX53rUHE3EB4VzWiGfEyB+owTivjJU4+zYAM=
+github.com/milkyway-labs/ibc-rate-limiting v0.0.0-20240509215339-45e398477ad5/go.mod h1:YAf80eEQ4bdg5qXP4EI8eCxzhhWfqwiy9DoP8JXXg60=
 github.com/milkyway-labs/relayer/v2 v2.0.0-20240510185220-0492766a512d h1:2nNoD9y1Ucp9swVydBI4JrW/pyGp5cbo5IXAlFzlmyc=
 github.com/milkyway-labs/relayer/v2 v2.0.0-20240510185220-0492766a512d/go.mod h1:h4Ng2QsVpxExIq5S+WvLr8slDb9MSBh82gQS4DeMwDo=
 github.com/minio/highwayhash v1.0.2 h1:Aak5U0nElisjDCfPSG79Tgzkn2gl66NxOMspRrKnA/g=
