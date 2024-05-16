@@ -566,33 +566,6 @@ func NewMilkApp(
 		*app.IBCKeeper,
 	)
 
-	app.RecordsKeeper = *recordskeeper.NewKeeper(
-		appCodec,
-		keys[recordstypes.StoreKey],
-		keys[recordstypes.MemStoreKey],
-		app.GetSubspace(recordstypes.ModuleName),
-		app.AccountKeeper,
-		*app.TransferKeeper,
-		*app.IBCKeeper,
-		app.ICACallbacksKeeper,
-	)
-
-	app.StakeIBCKeeper = stakeibckeeper.NewKeeper(
-		appCodec,
-		keys[stakeibctypes.StoreKey],
-		keys[stakeibctypes.MemStoreKey],
-		app.GetSubspace(stakeibctypes.ModuleName),
-		authorityAddr,
-		app.AccountKeeper,
-		app.BankKeeper,
-		*app.ICAControllerKeeper,
-		*app.IBCKeeper,
-		app.InterchainQueryKeeper,
-		app.RecordsKeeper,
-		app.ICACallbacksKeeper,
-		app.RateLimitKeeper,
-	)
-
 	epochsKeeper := epochskeeper.NewKeeper(appCodec, keys[epochstypes.StoreKey])
 	app.EpochsKeeper = *epochsKeeper.SetHooks(
 		epochstypes.NewMultiEpochHooks(
@@ -680,6 +653,17 @@ func NewMilkApp(
 		)
 
 		transferStack = ratelimit.NewIBCMiddleware(app.RateLimitKeeper, transferStack)
+
+		app.RecordsKeeper = *recordskeeper.NewKeeper(
+			appCodec,
+			keys[recordstypes.StoreKey],
+			keys[recordstypes.MemStoreKey],
+			app.GetSubspace(recordstypes.ModuleName),
+			app.AccountKeeper,
+			*app.TransferKeeper,
+			*app.IBCKeeper,
+			app.ICACallbacksKeeper,
+		)
 		transferStack = records.NewIBCModule(app.RecordsKeeper, transferStack)
 
 		// create ibcfee middleware for transfer
@@ -740,6 +724,22 @@ func NewMilkApp(
 		icaControllerStack = ibcfee.NewIBCMiddleware(icaControllerIBCModule, *app.IBCFeeKeeper)
 
 		icaCallbacksStack = icacallbacks.NewIBCModule(app.ICACallbacksKeeper)
+
+		app.StakeIBCKeeper = stakeibckeeper.NewKeeper(
+			appCodec,
+			keys[stakeibctypes.StoreKey],
+			keys[stakeibctypes.MemStoreKey],
+			app.GetSubspace(stakeibctypes.ModuleName),
+			authorityAddr,
+			app.AccountKeeper,
+			app.BankKeeper,
+			*app.ICAControllerKeeper,
+			*app.IBCKeeper,
+			app.InterchainQueryKeeper,
+			app.RecordsKeeper,
+			app.ICACallbacksKeeper,
+			app.RateLimitKeeper,
+		)
 		icaCallbacksStack = stakeibc.NewIBCMiddleware(icaCallbacksStack, app.StakeIBCKeeper)
 		icaCallbacksStack = icacontroller.NewIBCMiddleware(icaCallbacksStack, *app.ICAControllerKeeper)
 		icaCallbacksStack = ibcfee.NewIBCMiddleware(icaCallbacksStack, *app.IBCFeeKeeper)
