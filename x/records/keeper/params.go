@@ -13,8 +13,5 @@ func (k Keeper) GetParams(ctx sdk.Context) types.Params {
 
 // SetParams set the params
 func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
-	// XXX
-	if err := k.params.Set(ctx, params); err != nil {
-		panic(err)
-	}
+	k.paramstore.SetParamSet(ctx, &params)
 }

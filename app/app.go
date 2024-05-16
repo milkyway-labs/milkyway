@@ -68,6 +68,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/group"
 	groupkeeper "github.com/cosmos/cosmos-sdk/x/group/keeper"
 	groupmodule "github.com/cosmos/cosmos-sdk/x/group/module"
+	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	"github.com/cosmos/gogoproto/proto"
 
@@ -160,7 +161,7 @@ import (
 	icqkeeper "github.com/milkyway-labs/milk/x/interchainquery/keeper"
 	icqtypes "github.com/milkyway-labs/milk/x/interchainquery/types"
 	"github.com/milkyway-labs/milk/x/records"
-	recordsmodulekeeper "github.com/milkyway-labs/milk/x/records/keeper"
+	recordskeeper "github.com/milkyway-labs/milk/x/records/keeper"
 	recordstypes "github.com/milkyway-labs/milk/x/records/types"
 	"github.com/milkyway-labs/milk/x/stakeibc"
 	stakeibckeeper "github.com/milkyway-labs/milk/x/stakeibc/keeper"
@@ -249,6 +250,7 @@ type MilkApp struct {
 	BankKeeper            *bankkeeper.Keeper
 	CapabilityKeeper      *capabilitykeeper.Keeper
 	UpgradeKeeper         *upgradekeeper.Keeper
+	ParamsKeeper          *paramskeeper.Keeper
 	GroupKeeper           *groupkeeper.Keeper
 	ConsensusParamsKeeper *consensusparamkeeper.Keeper
 	IBCKeeper             *ibckeeper.Keeper // IBC Keeper must be a pointer in the app, so we can SetRouter on it correctly
@@ -273,7 +275,7 @@ type MilkApp struct {
 	EpochsKeeper          epochskeeper.Keeper
 	InterchainQueryKeeper icqkeeper.Keeper
 	ICACallbacksKeeper    icacallbackskeeper.Keeper
-	RecordsKeeper         recordsmodulekeeper.Keeper
+	RecordsKeeper         recordskeeper.Keeper
 	StakeIBCKeeper        stakeibckeeper.Keeper
 
 	// make scoped keepers public for test purposes
@@ -335,10 +337,11 @@ func NewMilkApp(
 		auctiontypes.StoreKey, packetforwardtypes.StoreKey, oracletypes.StoreKey,
 		tokenfactorytypes.StoreKey, ibchookstypes.StoreKey, forwardingtypes.StoreKey,
 		marketmaptypes.StoreKey,
+		paramstypes.StoreKey,
 		ratelimittypes.StoreKey, epochstypes.StoreKey, icqtypes.StoreKey,
 		icacallbackstypes.StoreKey, recordstypes.StoreKey, stakeibctypes.StoreKey,
 	)
-	tkeys := storetypes.NewTransientStoreKeys(forwardingtypes.TransientStoreKey)
+	tkeys := storetypes.NewTransientStoreKeys(forwardingtypes.TransientStoreKey, paramstypes.TStoreKey)
 	memKeys := storetypes.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
 
 	// register streaming services
@@ -366,6 +369,14 @@ func NewMilkApp(
 	if err != nil {
 		panic(err)
 	}
+
+	paramsKeeper := initParamsKeeper(
+		appCodec,
+		legacyAmino,
+		keys[paramstypes.StoreKey],
+		tkeys[paramstypes.TStoreKey],
+	)
+	app.ParamsKeeper = &paramsKeeper
 
 	// set the BaseApp's parameter store
 	consensusParamsKeeper := consensusparamkeeper.NewKeeper(appCodec, runtime.NewKVStoreService(keys[consensusparamtypes.StoreKey]), authorityAddr, runtime.EventService{})
@@ -540,11 +551,19 @@ func NewMilkApp(
 	app.RateLimitKeeper = *ratelimitkeeper.NewKeeper(
 		appCodec,
 		keys[ratelimittypes.StoreKey],
-		paramstypes.Subspace{}, // XXX
+		app.GetSubspace(ratelimittypes.ModuleName),
 		authorityAddr,
 		app.BankKeeper,
 		app.IBCKeeper.ChannelKeeper,
 		app.IBCKeeper.ChannelKeeper, // ICS4Wrapper
+	)
+
+	app.ICACallbacksKeeper = *icacallbackskeeper.NewKeeper(
+		appCodec,
+		keys[icacallbackstypes.StoreKey],
+		keys[icacallbackstypes.MemStoreKey],
+		app.GetSubspace(icacallbackstypes.ModuleName),
+		*app.IBCKeeper,
 	)
 
 	////////////////////////////
@@ -709,6 +728,7 @@ func NewMilkApp(
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := porttypes.NewRouter()
 	ibcRouter.AddRoute(ibctransfertypes.ModuleName, transferStack).
+		// TODO: add ica callbacks stack
 		AddRoute(icahosttypes.SubModuleName, icaHostStack).
 		AddRoute(icacontrollertypes.SubModuleName, icaControllerStack).
 		AddRoute(icaauthtypes.ModuleName, icaControllerStack).
@@ -789,20 +809,13 @@ func NewMilkApp(
 
 	app.BankKeeper.SetHooks(app.TokenFactoryKeeper.Hooks())
 
-	app.ICACallbacksKeeper = *icacallbackskeeper.NewKeeper(
-		appCodec,
-		keys[icacallbackstypes.StoreKey],
-		keys[icacallbackstypes.MemStoreKey],
-		*app.IBCKeeper,
-	)
-
 	app.InterchainQueryKeeper = icqkeeper.NewKeeper(appCodec, keys[icqtypes.StoreKey], app.IBCKeeper)
 
-	app.RecordsKeeper = *recordsmodulekeeper.NewKeeper(
+	app.RecordsKeeper = *recordskeeper.NewKeeper(
 		appCodec,
-		runtime.NewKVStoreService(keys[recordstypes.StoreKey]),
 		keys[recordstypes.StoreKey],
 		keys[recordstypes.MemStoreKey],
+		app.GetSubspace(recordstypes.ModuleName),
 		app.AccountKeeper,
 		*app.TransferKeeper,
 		*app.IBCKeeper,
@@ -811,9 +824,9 @@ func NewMilkApp(
 
 	app.StakeIBCKeeper = stakeibckeeper.NewKeeper(
 		appCodec,
-		runtime.NewKVStoreService(keys[stakeibctypes.StoreKey]),
 		keys[stakeibctypes.StoreKey],
 		keys[stakeibctypes.MemStoreKey],
+		app.GetSubspace(stakeibctypes.ModuleName),
 		authorityAddr,
 		app.AccountKeeper,
 		app.BankKeeper,
@@ -1282,6 +1295,14 @@ func (app *MilkApp) GetMemKey(storeKey string) *storetypes.MemoryStoreKey {
 	return app.memKeys[storeKey]
 }
 
+// GetSubspace returns a param subspace for a given module name.
+//
+// NOTE: This is solely to be used for testing purposes.
+func (app *MilkApp) GetSubspace(moduleName string) paramstypes.Subspace {
+	subspace, _ := app.ParamsKeeper.GetSubspace(moduleName)
+	return subspace
+}
+
 // RegisterAPIRoutes registers all application module routes with the provided
 // API server.
 func (app *MilkApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig) {
@@ -1481,4 +1502,15 @@ func (app *MilkApp) Close() error {
 	}
 
 	return nil
+}
+
+// initParamsKeeper init params keeper and its subspaces
+func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino, key, tkey storetypes.StoreKey) paramskeeper.Keeper {
+	paramsKeeper := paramskeeper.NewKeeper(appCodec, legacyAmino, key, tkey)
+
+	paramsKeeper.Subspace(ratelimittypes.ModuleName)
+	paramsKeeper.Subspace(recordstypes.ModuleName)
+	paramsKeeper.Subspace(stakeibctypes.ModuleName)
+
+	return paramsKeeper
 }
