@@ -556,6 +556,64 @@ func NewMilkApp(
 		ibcwasmhooks.NewWasmHooks(appCodec, ac, app.WasmKeeper),
 	)
 
+	app.InterchainQueryKeeper = icqkeeper.NewKeeper(appCodec, keys[icqtypes.StoreKey], app.IBCKeeper)
+
+	app.ICACallbacksKeeper = *icacallbackskeeper.NewKeeper(
+		appCodec,
+		keys[icacallbackstypes.StoreKey],
+		keys[icacallbackstypes.MemStoreKey],
+		app.GetSubspace(icacallbackstypes.ModuleName),
+		*app.IBCKeeper,
+	)
+
+	app.RecordsKeeper = *recordskeeper.NewKeeper(
+		appCodec,
+		keys[recordstypes.StoreKey],
+		keys[recordstypes.MemStoreKey],
+		app.GetSubspace(recordstypes.ModuleName),
+		app.AccountKeeper,
+		*app.TransferKeeper,
+		*app.IBCKeeper,
+		app.ICACallbacksKeeper,
+	)
+
+	app.StakeIBCKeeper = stakeibckeeper.NewKeeper(
+		appCodec,
+		keys[stakeibctypes.StoreKey],
+		keys[stakeibctypes.MemStoreKey],
+		app.GetSubspace(stakeibctypes.ModuleName),
+		authorityAddr,
+		app.AccountKeeper,
+		app.BankKeeper,
+		*app.ICAControllerKeeper,
+		*app.IBCKeeper,
+		app.InterchainQueryKeeper,
+		app.RecordsKeeper,
+		app.ICACallbacksKeeper,
+		app.RateLimitKeeper,
+	)
+
+	epochsKeeper := epochskeeper.NewKeeper(appCodec, keys[epochstypes.StoreKey])
+	app.EpochsKeeper = *epochsKeeper.SetHooks(
+		epochstypes.NewMultiEpochHooks(
+			app.StakeIBCKeeper.Hooks(),
+		),
+	)
+
+	// Register ICQ callbacks
+	err = app.InterchainQueryKeeper.SetCallbackHandler(stakeibctypes.ModuleName, app.StakeIBCKeeper.ICQCallbackHandler())
+	if err != nil {
+		panic(err)
+	}
+
+	// Register IBC callbacks
+	if err := app.ICACallbacksKeeper.SetICACallbacks(
+		app.StakeIBCKeeper.Callbacks(),
+		app.RecordsKeeper.Callbacks(),
+	); err != nil {
+		panic(err)
+	}
+
 	////////////////////////////
 	// Transfer configuration //
 	////////////////////////////
@@ -802,64 +860,6 @@ func NewMilkApp(
 	app.TokenFactoryKeeper.SetContractKeeper(contractKeeper)
 
 	app.BankKeeper.SetHooks(app.TokenFactoryKeeper.Hooks())
-
-	app.InterchainQueryKeeper = icqkeeper.NewKeeper(appCodec, keys[icqtypes.StoreKey], app.IBCKeeper)
-
-	app.ICACallbacksKeeper = *icacallbackskeeper.NewKeeper(
-		appCodec,
-		keys[icacallbackstypes.StoreKey],
-		keys[icacallbackstypes.MemStoreKey],
-		app.GetSubspace(icacallbackstypes.ModuleName),
-		*app.IBCKeeper,
-	)
-
-	app.RecordsKeeper = *recordskeeper.NewKeeper(
-		appCodec,
-		keys[recordstypes.StoreKey],
-		keys[recordstypes.MemStoreKey],
-		app.GetSubspace(recordstypes.ModuleName),
-		app.AccountKeeper,
-		*app.TransferKeeper,
-		*app.IBCKeeper,
-		app.ICACallbacksKeeper,
-	)
-
-	app.StakeIBCKeeper = stakeibckeeper.NewKeeper(
-		appCodec,
-		keys[stakeibctypes.StoreKey],
-		keys[stakeibctypes.MemStoreKey],
-		app.GetSubspace(stakeibctypes.ModuleName),
-		authorityAddr,
-		app.AccountKeeper,
-		app.BankKeeper,
-		*app.ICAControllerKeeper,
-		*app.IBCKeeper,
-		app.InterchainQueryKeeper,
-		app.RecordsKeeper,
-		app.ICACallbacksKeeper,
-		app.RateLimitKeeper,
-	)
-
-	epochsKeeper := epochskeeper.NewKeeper(appCodec, keys[epochstypes.StoreKey])
-	app.EpochsKeeper = *epochsKeeper.SetHooks(
-		epochstypes.NewMultiEpochHooks(
-			app.StakeIBCKeeper.Hooks(),
-		),
-	)
-
-	// Register ICQ callbacks
-	err = app.InterchainQueryKeeper.SetCallbackHandler(stakeibctypes.ModuleName, app.StakeIBCKeeper.ICQCallbackHandler())
-	if err != nil {
-		panic(err)
-	}
-
-	// Register IBC callbacks
-	if err := app.ICACallbacksKeeper.SetICACallbacks(
-		app.StakeIBCKeeper.Callbacks(),
-		app.RecordsKeeper.Callbacks(),
-	); err != nil {
-		panic(err)
-	}
 
 	/****  Module Options ****/
 
