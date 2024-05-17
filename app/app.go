@@ -566,27 +566,6 @@ func NewMilkApp(
 		*app.IBCKeeper,
 	)
 
-	epochsKeeper := epochskeeper.NewKeeper(appCodec, keys[epochstypes.StoreKey])
-	app.EpochsKeeper = *epochsKeeper.SetHooks(
-		epochstypes.NewMultiEpochHooks(
-			app.StakeIBCKeeper.Hooks(),
-		),
-	)
-
-	// Register ICQ callbacks
-	err = app.InterchainQueryKeeper.SetCallbackHandler(stakeibctypes.ModuleName, app.StakeIBCKeeper.ICQCallbackHandler())
-	if err != nil {
-		panic(err)
-	}
-
-	// Register IBC callbacks
-	if err := app.ICACallbacksKeeper.SetICACallbacks(
-		app.StakeIBCKeeper.Callbacks(),
-		app.RecordsKeeper.Callbacks(),
-	); err != nil {
-		panic(err)
-	}
-
 	////////////////////////////
 	// Transfer configuration //
 	////////////////////////////
@@ -787,6 +766,27 @@ func NewMilkApp(
 		AddRoute(wasmtypes.ModuleName, wasmIBCStack)
 
 	app.IBCKeeper.SetRouter(ibcRouter)
+
+	epochsKeeper := epochskeeper.NewKeeper(appCodec, keys[epochstypes.StoreKey])
+	app.EpochsKeeper = *epochsKeeper.SetHooks(
+		epochstypes.NewMultiEpochHooks(
+			app.StakeIBCKeeper.Hooks(),
+		),
+	)
+
+	// Register ICQ callbacks
+	err = app.InterchainQueryKeeper.SetCallbackHandler(stakeibctypes.ModuleName, app.StakeIBCKeeper.ICQCallbackHandler())
+	if err != nil {
+		panic(err)
+	}
+
+	// Register IBC callbacks
+	if err := app.ICACallbacksKeeper.SetICACallbacks(
+		app.StakeIBCKeeper.Callbacks(),
+		app.RecordsKeeper.Callbacks(),
+	); err != nil {
+		panic(err)
+	}
 
 	//////////////////////////////
 	// WasmKeeper Configuration //
