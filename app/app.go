@@ -719,6 +719,7 @@ func NewMilkApp(
 			app.ICACallbacksKeeper,
 			app.RateLimitKeeper,
 		)
+		app.StakeIBCKeeper.SetHooks(stakeibctypes.NewMultiStakeIBCHooks())
 		icaCallbacksStack = stakeibc.NewIBCMiddleware(icaCallbacksStack, app.StakeIBCKeeper)
 		icaCallbacksStack = icacontroller.NewIBCMiddleware(icaCallbacksStack, *app.ICAControllerKeeper)
 		icaCallbacksStack = ibcfee.NewIBCMiddleware(icaCallbacksStack, *app.IBCFeeKeeper)
