@@ -44,7 +44,7 @@ func DefaultGenesis() *GenesisState {
 		{
 			Identifier:              STRIDE_EPOCH,
 			StartTime:               time.Time{},
-			Duration:                time.Hour * 6,
+			Duration:                time.Minute * 10,
 			CurrentEpoch:            0,
 			CurrentEpochStartHeight: 0,
 			CurrentEpochStartTime:   time.Time{},
