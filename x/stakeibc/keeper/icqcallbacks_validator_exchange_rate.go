@@ -4,11 +4,10 @@ import (
 	"fmt"
 
 	errorsmod "cosmossdk.io/errors"
-	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/gogoproto/proto"
 
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	stakingtypes "github.com/initia-labs/initia/x/mstaking/types"
 
 	"github.com/milkyway-labs/milk/utils"
 	icqtypes "github.com/milkyway-labs/milk/x/interchainquery/types"
@@ -109,7 +108,8 @@ func (k Keeper) CheckIfValidatorWasSlashed(
 	//     sharesToTokensRate = numTokens / numShares
 	//  We can use `validator.TokensFromShares`, plug in 1.0 for the number of shares,
 	//    and the returned number of tokens will be equal to the internal sharesToTokens rate
-	currentSharesToTokensRate := queriedValidator.TokensFromShares(sdkmath.LegacyNewDec(1.0))
+	currentSharesToTokensRate := queriedValidator.TokensFromShares(
+		sdk.NewDecCoins(sdk.NewInt64DecCoin(hostZone.HostDenom, 1))).AmountOf(hostZone.HostDenom)
 	validator.SharesToTokensRate = currentSharesToTokensRate
 	hostZone.Validators[valIndex] = &validator
 	k.SetHostZone(ctx, hostZone)

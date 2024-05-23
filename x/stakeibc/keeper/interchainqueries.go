@@ -5,13 +5,14 @@ import (
 	"strings"
 	"time"
 
+	"cosmossdk.io/collections"
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/bech32"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	v3 "github.com/cosmos/cosmos-sdk/x/bank/migrations/v3"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/cosmos/gogoproto/proto"
+	stakingtypes "github.com/initia-labs/initia/x/mstaking/types"
 
 	epochstypes "github.com/milkyway-labs/milk/x/epochs/types"
 
@@ -55,7 +56,7 @@ func (k Keeper) SubmitValidatorSharesToTokensRateICQ(
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid validator operator address, could not decode (%s)", err.Error())
 	}
-	queryData := stakingtypes.GetValidatorKey(validatorAddressBz)
+	queryData, _ := collections.EncodeKeyWithPrefix(stakingtypes.ValidatorsPrefix, collections.BytesKey, validatorAddressBz)
 
 	// Submit validator sharesToTokens rate ICQ
 	// Considering this query is executed manually, we can be conservative with the timeout
@@ -105,7 +106,10 @@ func (k Keeper) SubmitDelegationICQ(ctx sdk.Context, hostZone types.HostZone, va
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid delegator address, could not decode (%s)", err.Error())
 	}
-	queryData := stakingtypes.GetDelegationKey(delegatorAddressBz, validatorAddressBz)
+	queryData, _ := collections.EncodeKeyWithPrefix(
+		stakingtypes.DelegationsPrefix,
+		collections.PairKeyCodec(collections.BytesKey, collections.BytesKey),
+		collections.Join(delegatorAddressBz, validatorAddressBz))
 
 	// Store the current validator's delegation in the callback data so we can determine if it changed
 	// while the query was in flight
@@ -165,7 +169,10 @@ func (k Keeper) SubmitCalibrationICQ(ctx sdk.Context, hostZone types.HostZone, v
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid delegator address, could not decode (%s)", err.Error())
 	}
-	queryData := stakingtypes.GetDelegationKey(delegatorAddressBz, validatorAddressBz)
+	queryData, _ := collections.EncodeKeyWithPrefix(
+		stakingtypes.DelegationsPrefix,
+		collections.PairKeyCodec(collections.BytesKey, collections.BytesKey),
+		collections.Join(delegatorAddressBz, validatorAddressBz))
 
 	// Submit delegator shares ICQ
 	query := icqtypes.Query{

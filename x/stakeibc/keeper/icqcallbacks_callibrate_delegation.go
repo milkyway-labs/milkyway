@@ -4,7 +4,7 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	stakingtypes "github.com/initia-labs/initia/x/mstaking/types"
 
 	"github.com/milkyway-labs/milk/utils"
 	icqtypes "github.com/milkyway-labs/milk/x/interchainquery/types"
@@ -53,7 +53,7 @@ func CalibrateDelegationCallback(k Keeper, ctx sdk.Context, args []byte, query i
 
 	// Calculate the number of tokens delegated (using the internal sharesToTokensRate)
 	// note: truncateInt per https://github.com/cosmos/cosmos-sdk/blob/cb31043d35bad90c4daa923bb109f38fd092feda/x/staking/types/validator.go#L431
-	delegatedTokens := queriedDelegation.Shares.Mul(validator.SharesToTokensRate).TruncateInt()
+	delegatedTokens := queriedDelegation.Shares.AmountOf(hostZone.HostDenom).Mul(validator.SharesToTokensRate).TruncateInt()
 	k.Logger(ctx).Info(utils.LogICQCallbackWithHostZone(chainId, ICQCallbackID_Calibrate,
 		"Previous Delegation: %v, Current Delegation: %v", validator.Delegation, delegatedTokens))
 

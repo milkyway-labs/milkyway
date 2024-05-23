@@ -6,8 +6,8 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/cosmos/gogoproto/proto"
+	stakingtypes "github.com/initia-labs/initia/x/mstaking/types"
 	"github.com/spf13/cast"
 
 	"github.com/milkyway-labs/milk/utils"
@@ -39,7 +39,7 @@ func (k Keeper) DelegateOnHost(ctx sdk.Context, hostZone types.HostZone, amt sdk
 		msgs = append(msgs, &stakingtypes.MsgDelegate{
 			DelegatorAddress: hostZone.DelegationIcaAddress,
 			ValidatorAddress: validator.Address,
-			Amount:           sdk.NewCoin(amt.Denom, relativeAmount),
+			Amount:           sdk.NewCoins(sdk.NewCoin(amt.Denom, relativeAmount)),
 		})
 		splitDelegations = append(splitDelegations, &types.SplitDelegation{
 			Validator: validator.Address,

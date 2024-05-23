@@ -8,8 +8,8 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/cosmos/gogoproto/proto"
+	stakingtypes "github.com/initia-labs/initia/x/mstaking/types"
 
 	"github.com/milkyway-labs/milk/utils"
 	epochstypes "github.com/milkyway-labs/milk/x/epochs/types"
@@ -196,7 +196,7 @@ func (k Keeper) GetRebalanceICAMessages(
 			DelegatorAddress:    hostZone.DelegationIcaAddress,
 			ValidatorSrcAddress: srcValidator,
 			ValidatorDstAddress: dstValidator,
-			Amount:              sdk.NewCoin(hostZone.HostDenom, redelegationAmount),
+			Amount:              sdk.NewCoins(sdk.NewCoin(hostZone.HostDenom, redelegationAmount)),
 		})
 		rebalancings = append(rebalancings, &types.Rebalancing{
 			SrcValidator: srcValidator,

@@ -15,9 +15,9 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/cosmos/gogoproto/proto"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
+	stakingtypes "github.com/initia-labs/initia/x/mstaking/types"
 )
 
 // ICA Callback after undelegating

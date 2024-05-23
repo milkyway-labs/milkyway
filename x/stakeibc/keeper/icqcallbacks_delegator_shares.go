@@ -8,8 +8,8 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/cosmos/gogoproto/proto"
+	stakingtypes "github.com/initia-labs/initia/x/mstaking/types"
 	"github.com/spf13/cast"
 
 	"github.com/milkyway-labs/milk/utils"
@@ -173,7 +173,7 @@ func (k Keeper) CheckForSlash(
 
 	// Calculate the number of tokens delegated (using the internal sharesToTokensRate)
 	// note: truncateInt per https://github.com/cosmos/cosmos-sdk/blob/cb31043d35bad90c4daa923bb109f38fd092feda/x/staking/types/validator.go#L431
-	delegatedTokens = queriedDelegation.Shares.Mul(validator.SharesToTokensRate).TruncateInt()
+	delegatedTokens = queriedDelegation.Shares.AmountOf(hostZone.HostDenom).Mul(validator.SharesToTokensRate).TruncateInt()
 	k.Logger(ctx).Info(utils.LogICQCallbackWithHostZone(chainId, ICQCallbackID_Delegation,
 		"Previous Delegation: %v, Current Delegation: %v", validator.Delegation, delegatedTokens))
 

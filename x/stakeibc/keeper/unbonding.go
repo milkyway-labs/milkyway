@@ -9,8 +9,8 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/cosmos/gogoproto/proto"
+	stakingtypes "github.com/initia-labs/initia/x/mstaking/types"
 
 	"github.com/milkyway-labs/milk/utils"
 	recordstypes "github.com/milkyway-labs/milk/x/records/types"
@@ -274,7 +274,7 @@ func (k Keeper) GetUnbondingICAMessages(
 		msgs = append(msgs, &stakingtypes.MsgUndelegate{
 			DelegatorAddress: hostZone.DelegationIcaAddress,
 			ValidatorAddress: unbonding.Validator,
-			Amount:           sdk.NewCoin(hostZone.HostDenom, unbonding.Amount),
+			Amount:           sdk.NewCoins(sdk.NewCoin(hostZone.HostDenom, unbonding.Amount)),
 		})
 	}
 
