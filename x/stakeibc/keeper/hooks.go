@@ -11,7 +11,7 @@ import (
 	"github.com/milkyway-labs/milk/x/stakeibc/types"
 )
 
-const StrideEpochsPerDayEpoch = uint64(1440)
+const StrideEpochsPerDayEpoch = uint64(4)
 
 func (k Keeper) BeforeEpochStart(ctx sdk.Context, epochInfo epochstypes.EpochInfo) {
 	// Update the stakeibc epoch tracker

@@ -35,7 +35,7 @@ func DefaultGenesis() *GenesisState {
 		{
 			Identifier:              DAY_EPOCH,
 			StartTime:               time.Time{},
-			Duration:                time.Hour * 24,
+			Duration:                120 * time.Second,
 			CurrentEpoch:            0,
 			CurrentEpochStartHeight: 0,
 			CurrentEpochStartTime:   time.Time{},
@@ -44,7 +44,7 @@ func DefaultGenesis() *GenesisState {
 		{
 			Identifier:              STRIDE_EPOCH,
 			StartTime:               time.Time{},
-			Duration:                time.Minute * 1,
+			Duration:                30 * time.Second,
 			CurrentEpoch:            0,
 			CurrentEpochStartHeight: 0,
 			CurrentEpochStartTime:   time.Time{},
@@ -53,7 +53,7 @@ func DefaultGenesis() *GenesisState {
 		{
 			Identifier:              MINT_EPOCH,
 			StartTime:               time.Time{},
-			Duration:                time.Minute * 60,
+			Duration:                120 * time.Second,
 			CurrentEpoch:            0,
 			CurrentEpochStartHeight: 0,
 			CurrentEpochStartTime:   time.Time{},
@@ -62,7 +62,7 @@ func DefaultGenesis() *GenesisState {
 		{
 			Identifier:              HOUR_EPOCH,
 			StartTime:               time.Time{},
-			Duration:                time.Hour,
+			Duration:                30 * time.Second,
 			CurrentEpoch:            0,
 			CurrentEpochStartHeight: 0,
 			CurrentEpochStartTime:   time.Time{},
