@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 
-	"github.com/milkyway-labs/milk/x/epochs/types"
+	"github.com/milkyway-labs/milkyway/x/epochs/types"
 )
 
 // GetQueryCmd returns the cli query commands for this module

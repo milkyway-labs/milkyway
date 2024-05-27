@@ -154,7 +154,7 @@
       }
     },
     {
-      "url": "./tmp-swagger-gen/milk/tokenfactory/v1/query.swagger.json",
+      "url": "./tmp-swagger-gen/milkyway/tokenfactory/v1/query.swagger.json",
       "operationIds": {
         "rename": {
           "Params": "TokenFactoryParams"

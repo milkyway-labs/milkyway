@@ -14,11 +14,11 @@ import (
 	"github.com/cosmos/gogoproto/proto"
 	stakingtypes "github.com/initia-labs/initia/x/mstaking/types"
 
-	epochstypes "github.com/milkyway-labs/milk/x/epochs/types"
+	epochstypes "github.com/milkyway-labs/milkyway/x/epochs/types"
 
-	"github.com/milkyway-labs/milk/utils"
-	icqtypes "github.com/milkyway-labs/milk/x/interchainquery/types"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	"github.com/milkyway-labs/milkyway/utils"
+	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 // Submit a validator sharesToTokens rate ICQ as triggered either manually or epochly with a conservative timeout

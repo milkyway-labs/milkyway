@@ -8,7 +8,7 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/milkyway-labs/milk/utils"
+	"github.com/milkyway-labs/milkyway/utils"
 )
 
 const TypeMsgToggleTradeController = "toggle_trade_controller"

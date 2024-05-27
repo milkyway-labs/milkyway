@@ -1,7 +1,7 @@
 syntax = "proto3";
 package stride.icacallbacks;
 
-option go_package = "github.com/milkyway-labs/milk/x/icacallbacks/types";
+option go_package = "github.com/milkyway-labs/milkyway/x/icacallbacks/types";
 
 message CallbackData {
   string callback_key = 1;

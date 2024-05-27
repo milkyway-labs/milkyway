@@ -16,10 +16,10 @@ import (
 
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 
-	"github.com/milkyway-labs/milk/utils"
-	epochstypes "github.com/milkyway-labs/milk/x/epochs/types"
-	icqtypes "github.com/milkyway-labs/milk/x/interchainquery/types"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	"github.com/milkyway-labs/milkyway/utils"
+	epochstypes "github.com/milkyway-labs/milkyway/x/epochs/types"
+	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 // JSON Memo for PFM transfers

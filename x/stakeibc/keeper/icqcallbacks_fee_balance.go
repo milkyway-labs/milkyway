@@ -11,11 +11,11 @@ import (
 	clienttypes "github.com/cosmos/ibc-go/v8/modules/core/02-client/types"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 
-	"github.com/milkyway-labs/milk/utils"
-	epochtypes "github.com/milkyway-labs/milk/x/epochs/types"
-	icqkeeper "github.com/milkyway-labs/milk/x/interchainquery/keeper"
-	icqtypes "github.com/milkyway-labs/milk/x/interchainquery/types"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	"github.com/milkyway-labs/milkyway/utils"
+	epochtypes "github.com/milkyway-labs/milkyway/x/epochs/types"
+	icqkeeper "github.com/milkyway-labs/milkyway/x/interchainquery/keeper"
+	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 // FeeBalanceCallback is a callback handler for FeeBalnce queries.

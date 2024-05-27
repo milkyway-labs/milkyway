@@ -8,7 +8,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/spf13/cobra"
 
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 var _ = strconv.Itoa(0)

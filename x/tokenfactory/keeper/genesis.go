@@ -4,7 +4,7 @@ import (
 	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milk/x/tokenfactory/types"
+	"github.com/milkyway-labs/milkyway/x/tokenfactory/types"
 )
 
 // InitGenesis initializes the tokenfactory module's state from a provided genesis

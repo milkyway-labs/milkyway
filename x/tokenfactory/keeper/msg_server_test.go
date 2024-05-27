@@ -7,13 +7,13 @@ import (
 	"cosmossdk.io/math"
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milk/x/tokenfactory/keeper"
-	"github.com/milkyway-labs/milk/x/tokenfactory/types"
+	"github.com/milkyway-labs/milkyway/x/tokenfactory/keeper"
+	"github.com/milkyway-labs/milkyway/x/tokenfactory/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
-	tokenFactorykeeper "github.com/milkyway-labs/milk/x/tokenfactory/keeper"
+	tokenFactorykeeper "github.com/milkyway-labs/milkyway/x/tokenfactory/keeper"
 )
 
 // TestMintDenomMsg tests TypeMsgMint message is emitted on a successful mint

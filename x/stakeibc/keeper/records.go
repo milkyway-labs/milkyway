@@ -7,8 +7,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cast"
 
-	"github.com/milkyway-labs/milk/utils"
-	recordstypes "github.com/milkyway-labs/milk/x/records/types"
+	"github.com/milkyway-labs/milkyway/utils"
+	recordstypes "github.com/milkyway-labs/milkyway/x/records/types"
 )
 
 // Create a new deposit record for each host zone for the given epoch

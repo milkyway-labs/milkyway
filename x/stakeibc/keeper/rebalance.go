@@ -11,9 +11,9 @@ import (
 	"github.com/cosmos/gogoproto/proto"
 	stakingtypes "github.com/initia-labs/initia/x/mstaking/types"
 
-	"github.com/milkyway-labs/milk/utils"
-	epochstypes "github.com/milkyway-labs/milk/x/epochs/types"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	"github.com/milkyway-labs/milkyway/utils"
+	epochstypes "github.com/milkyway-labs/milkyway/x/epochs/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 const RebalanceIcaBatchSize = 5

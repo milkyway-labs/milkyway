@@ -8,11 +8,11 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/cosmos/gogoproto/proto"
 
-	icqkeeper "github.com/milkyway-labs/milk/x/interchainquery/keeper"
+	icqkeeper "github.com/milkyway-labs/milkyway/x/interchainquery/keeper"
 
-	"github.com/milkyway-labs/milk/utils"
-	icqtypes "github.com/milkyway-labs/milk/x/interchainquery/types"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	"github.com/milkyway-labs/milkyway/utils"
+	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 // WithdrawalHostBalanceCallback is a callback handler for WithdrawalBalance queries.

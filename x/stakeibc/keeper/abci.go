@@ -6,7 +6,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/telemetry"
 
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )

@@ -5,7 +5,7 @@ import (
 
 	"net/url"
 
-	"github.com/milkyway-labs/milk/x/tokenfactory/types"
+	"github.com/milkyway-labs/milkyway/x/tokenfactory/types"
 )
 
 type Querier struct {

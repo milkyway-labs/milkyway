@@ -11,8 +11,8 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/spf13/cast"
 
-	epochstypes "github.com/milkyway-labs/milk/x/epochs/types"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	epochstypes "github.com/milkyway-labs/milkyway/x/epochs/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 // SetEpochTracker set a specific epochTracker in the store from its index

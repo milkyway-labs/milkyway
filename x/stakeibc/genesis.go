@@ -3,8 +3,8 @@ package stakeibc
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milk/x/stakeibc/keeper"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/keeper"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 // InitGenesis initializes the capability module's state from a provided genesis

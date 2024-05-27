@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"github.com/milkyway-labs/milk/x/records/types"
+	"github.com/milkyway-labs/milkyway/x/records/types"
 )
 
 var _ types.QueryServer = Keeper{}

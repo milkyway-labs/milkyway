@@ -7,8 +7,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
-	"github.com/milkyway-labs/milk/x/stakeibc/keeper"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/keeper"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 func SimulateMsgDeleteValidator(

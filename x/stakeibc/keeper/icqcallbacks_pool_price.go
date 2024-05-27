@@ -8,9 +8,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/gogoproto/proto"
 
-	"github.com/milkyway-labs/milk/utils"
-	icqtypes "github.com/milkyway-labs/milk/x/interchainquery/types"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	"github.com/milkyway-labs/milkyway/utils"
+	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 // PoolPriceCallback is a callback handler for PoolPrice query.

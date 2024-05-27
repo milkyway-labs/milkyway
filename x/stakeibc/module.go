@@ -20,9 +20,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milk/x/stakeibc/client/cli"
-	"github.com/milkyway-labs/milk/x/stakeibc/keeper"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/client/cli"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/keeper"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 var (

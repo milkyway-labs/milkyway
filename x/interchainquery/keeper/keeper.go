@@ -13,9 +13,9 @@ import (
 	connectiontypes "github.com/cosmos/ibc-go/v8/modules/core/03-connection/types"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
-	"github.com/milkyway-labs/milk/utils"
+	"github.com/milkyway-labs/milkyway/utils"
 
-	"github.com/milkyway-labs/milk/x/interchainquery/types"
+	"github.com/milkyway-labs/milkyway/x/interchainquery/types"
 )
 
 // Keeper of this module maintains collections of registered zones.

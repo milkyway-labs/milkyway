@@ -4,15 +4,15 @@ import (
 	"context"
 	"fmt"
 
-	recordstypes "github.com/milkyway-labs/milk/x/records/types"
+	recordstypes "github.com/milkyway-labs/milkyway/x/records/types"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	bankTypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/cosmos/gogoproto/proto"
 
-	epochstypes "github.com/milkyway-labs/milk/x/epochs/types"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	epochstypes "github.com/milkyway-labs/milkyway/x/epochs/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 type IcaTx struct {

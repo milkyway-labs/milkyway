@@ -14,10 +14,10 @@ import (
 	clienttypes "github.com/cosmos/ibc-go/v8/modules/core/02-client/types"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 
-	"github.com/milkyway-labs/milk/utils"
-	epochstypes "github.com/milkyway-labs/milk/x/epochs/types"
-	recordstypes "github.com/milkyway-labs/milk/x/records/types"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	"github.com/milkyway-labs/milkyway/utils"
+	epochstypes "github.com/milkyway-labs/milkyway/x/epochs/types"
+	recordstypes "github.com/milkyway-labs/milkyway/x/records/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 // Iterate each deposit record marked TRANSFER_QUEUE and IBC transfer tokens from the Stride controller account to the delegation ICAs on each host zone

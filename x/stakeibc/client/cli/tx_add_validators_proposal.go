@@ -18,7 +18,7 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 	"github.com/spf13/cobra"
 
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 func parseAddValidatorsProposalFile(cdc codec.JSONCodec, proposalFile string) (proposal types.AddValidatorsProposal, err error) {

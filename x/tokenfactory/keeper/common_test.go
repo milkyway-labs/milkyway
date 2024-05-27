@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	appkeepers "github.com/milkyway-labs/milk/app/keepers"
+	appkeepers "github.com/milkyway-labs/milkyway/app/keepers"
 
 	"cosmossdk.io/core/address"
 	"cosmossdk.io/log"
@@ -36,7 +36,7 @@ import (
 
 	initiaappparams "github.com/initia-labs/initia/app/params"
 
-	milkapp "github.com/milkyway-labs/milk/app"
+	milkapp "github.com/milkyway-labs/milkyway/app"
 
 	codecaddress "github.com/cosmos/cosmos-sdk/codec/address"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -50,10 +50,10 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
-	bankkeeper "github.com/milkyway-labs/milk/x/bank/keeper"
-	"github.com/milkyway-labs/milk/x/tokenfactory"
-	tokenfactorykeeper "github.com/milkyway-labs/milk/x/tokenfactory/keeper"
-	tokenfactorytypes "github.com/milkyway-labs/milk/x/tokenfactory/types"
+	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
+	"github.com/milkyway-labs/milkyway/x/tokenfactory"
+	tokenfactorykeeper "github.com/milkyway-labs/milkyway/x/tokenfactory/keeper"
+	tokenfactorytypes "github.com/milkyway-labs/milkyway/x/tokenfactory/types"
 
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"

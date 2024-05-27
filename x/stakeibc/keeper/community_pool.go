@@ -16,10 +16,10 @@ import (
 
 	"github.com/cosmos/gogoproto/proto"
 
-	"github.com/milkyway-labs/milk/utils"
-	epochstypes "github.com/milkyway-labs/milk/x/epochs/types"
-	icqtypes "github.com/milkyway-labs/milk/x/interchainquery/types"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	"github.com/milkyway-labs/milkyway/utils"
+	epochstypes "github.com/milkyway-labs/milkyway/x/epochs/types"
+	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 // For each hostZone with a valid community pool, trigger the ICQs and ICAs to transfer tokens from DepositICA or back to ReturnICA

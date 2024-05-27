@@ -5,7 +5,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milk/x/interchainquery/types"
+	"github.com/milkyway-labs/milkyway/x/interchainquery/types"
 )
 
 var _ types.QueryServiceServer = Keeper{}

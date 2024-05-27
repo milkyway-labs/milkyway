@@ -10,7 +10,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	ibctransfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 
-	"github.com/milkyway-labs/milk/utils"
+	"github.com/milkyway-labs/milkyway/utils"
 )
 
 const TypeMsgRegisterHostZone = "register_host_zone"

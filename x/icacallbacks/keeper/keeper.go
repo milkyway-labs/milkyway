@@ -13,7 +13,7 @@ import (
 
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
-	"github.com/milkyway-labs/milk/x/icacallbacks/types"
+	"github.com/milkyway-labs/milkyway/x/icacallbacks/types"
 
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 

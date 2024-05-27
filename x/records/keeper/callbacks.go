@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	icacallbackstypes "github.com/milkyway-labs/milk/x/icacallbacks/types"
+	icacallbackstypes "github.com/milkyway-labs/milkyway/x/icacallbacks/types"
 )
 
 const IBCCallbacksID_NativeTransfer = "transfer"

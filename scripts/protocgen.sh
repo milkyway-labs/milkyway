@@ -24,11 +24,11 @@ generate_proto() {
 echo "Generating gogo proto code"
 cd proto
 
-generate_proto "./milk"
+generate_proto "./milkyway"
 generate_proto "./stride"
 
 cd ..
 
 # move proto files to the right places
-cp -r github.com/milkyway-labs/milk/* ./
+cp -r github.com/milkyway-labs/milkyway/* ./
 rm -rf github.com

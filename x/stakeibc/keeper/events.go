@@ -4,8 +4,8 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	recordstypes "github.com/milkyway-labs/milk/x/records/types"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	recordstypes "github.com/milkyway-labs/milkyway/x/records/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 // Emits a successful liquid stake event, and displays metadata such as the stToken amount

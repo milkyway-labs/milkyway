@@ -16,11 +16,11 @@ import (
 	connectiontypes "github.com/cosmos/ibc-go/v8/modules/core/03-connection/types"
 	"github.com/spf13/cast"
 
-	"github.com/milkyway-labs/milk/utils"
-	epochtypes "github.com/milkyway-labs/milk/x/epochs/types"
-	recordstypes "github.com/milkyway-labs/milk/x/records/types"
-	recordtypes "github.com/milkyway-labs/milk/x/records/types"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	"github.com/milkyway-labs/milkyway/utils"
+	epochtypes "github.com/milkyway-labs/milkyway/x/epochs/types"
+	recordstypes "github.com/milkyway-labs/milkyway/x/records/types"
+	recordtypes "github.com/milkyway-labs/milkyway/x/records/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 var (

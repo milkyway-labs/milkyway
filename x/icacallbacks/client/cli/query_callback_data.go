@@ -7,7 +7,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
 
-	"github.com/milkyway-labs/milk/x/icacallbacks/types"
+	"github.com/milkyway-labs/milkyway/x/icacallbacks/types"
 )
 
 func CmdListCallbackData() *cobra.Command {

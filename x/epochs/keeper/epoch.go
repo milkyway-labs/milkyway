@@ -5,7 +5,7 @@ import (
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milk/x/epochs/types"
+	"github.com/milkyway-labs/milkyway/x/epochs/types"
 )
 
 // GetEpochInfo returns epoch info by identifier

@@ -3,8 +3,8 @@ package interchainquery
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milk/x/interchainquery/keeper"
-	"github.com/milkyway-labs/milk/x/interchainquery/types"
+	"github.com/milkyway-labs/milkyway/x/interchainquery/keeper"
+	"github.com/milkyway-labs/milkyway/x/interchainquery/types"
 )
 
 // InitGenesis initializes the capability module's state from a provided genesis

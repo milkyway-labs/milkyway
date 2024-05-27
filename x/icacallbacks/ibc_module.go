@@ -10,8 +10,8 @@ import (
 	porttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 
-	"github.com/milkyway-labs/milk/x/icacallbacks/keeper"
-	"github.com/milkyway-labs/milk/x/icacallbacks/types"
+	"github.com/milkyway-labs/milkyway/x/icacallbacks/keeper"
+	"github.com/milkyway-labs/milkyway/x/icacallbacks/types"
 )
 
 var _ porttypes.IBCModule = &IBCModule{}

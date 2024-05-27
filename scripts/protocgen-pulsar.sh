@@ -33,6 +33,6 @@ generate_api() {
 
 # exclude ibc modules
 cd proto
-generate_api "./milk"
+generate_api "./milkyway"
 generate_api "./stride"
 cd ..

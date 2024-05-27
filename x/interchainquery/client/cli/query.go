@@ -12,7 +12,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/version"
 
-	"github.com/milkyway-labs/milk/x/interchainquery/types"
+	"github.com/milkyway-labs/milkyway/x/interchainquery/types"
 )
 
 // GetQueryCmd returns the cli query commands for this module.

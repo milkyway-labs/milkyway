@@ -9,7 +9,7 @@ import (
 	authcodec "github.com/cosmos/cosmos-sdk/x/auth/codec"
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milk/x/tokenfactory/types"
+	"github.com/milkyway-labs/milkyway/x/tokenfactory/types"
 )
 
 func TestGenesisState_Validate(t *testing.T) {

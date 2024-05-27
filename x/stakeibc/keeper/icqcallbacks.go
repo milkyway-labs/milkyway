@@ -3,7 +3,7 @@ package keeper
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	icqtypes "github.com/milkyway-labs/milk/x/interchainquery/types"
+	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
 )
 
 const (

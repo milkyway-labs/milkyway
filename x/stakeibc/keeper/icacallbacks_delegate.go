@@ -5,11 +5,11 @@ import (
 
 	"github.com/spf13/cast"
 
-	"github.com/milkyway-labs/milk/utils"
-	recordstypes "github.com/milkyway-labs/milk/x/records/types"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	"github.com/milkyway-labs/milkyway/utils"
+	recordstypes "github.com/milkyway-labs/milkyway/x/records/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 
-	icacallbackstypes "github.com/milkyway-labs/milk/x/icacallbacks/types"
+	icacallbackstypes "github.com/milkyway-labs/milkyway/x/icacallbacks/types"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"

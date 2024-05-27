@@ -8,8 +8,8 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	epochtypes "github.com/milkyway-labs/milk/x/epochs/types"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	epochtypes "github.com/milkyway-labs/milkyway/x/epochs/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 // RegisterInvariants registers all governance invariants.

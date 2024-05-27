@@ -1,7 +1,7 @@
 syntax = "proto3";
 package stride.stakeibc;
 
-option go_package = "github.com/milkyway-labs/milk/x/stakeibc/types";
+option go_package = "github.com/milkyway-labs/milkyway/x/stakeibc/types";
 
 enum ICAAccountType {
   DELEGATION = 0;

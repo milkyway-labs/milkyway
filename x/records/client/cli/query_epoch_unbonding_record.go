@@ -8,7 +8,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
 
-	"github.com/milkyway-labs/milk/x/records/types"
+	"github.com/milkyway-labs/milkyway/x/records/types"
 )
 
 func CmdListEpochUnbondingRecord() *cobra.Command {

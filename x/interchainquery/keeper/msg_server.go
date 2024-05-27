@@ -15,9 +15,9 @@ import (
 	ics23 "github.com/cosmos/ics23/go"
 	"github.com/spf13/cast"
 
-	"github.com/milkyway-labs/milk/utils"
+	"github.com/milkyway-labs/milkyway/utils"
 
-	"github.com/milkyway-labs/milk/x/interchainquery/types"
+	"github.com/milkyway-labs/milkyway/x/interchainquery/types"
 )
 
 type msgServer struct {

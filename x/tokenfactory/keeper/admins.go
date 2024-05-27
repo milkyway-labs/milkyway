@@ -3,7 +3,7 @@ package keeper
 import (
 	"context"
 
-	"github.com/milkyway-labs/milk/x/tokenfactory/types"
+	"github.com/milkyway-labs/milkyway/x/tokenfactory/types"
 )
 
 // GetAuthorityMetadata returns the authority metadata for a specific denom

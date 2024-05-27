@@ -17,7 +17,7 @@ import (
 	"github.com/cometbft/cometbft/crypto"
 	"github.com/cosmos/cosmos-sdk/codec"
 
-	"github.com/milkyway-labs/milk/x/interchainquery/types"
+	"github.com/milkyway-labs/milkyway/x/interchainquery/types"
 )
 
 // Generates a query ID based on the request information

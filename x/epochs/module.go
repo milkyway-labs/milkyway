@@ -21,10 +21,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milk/x/epochs/client/cli"
-	"github.com/milkyway-labs/milk/x/epochs/keeper"
-	"github.com/milkyway-labs/milk/x/epochs/simulation"
-	"github.com/milkyway-labs/milk/x/epochs/types"
+	"github.com/milkyway-labs/milkyway/x/epochs/client/cli"
+	"github.com/milkyway-labs/milkyway/x/epochs/keeper"
+	"github.com/milkyway-labs/milkyway/x/epochs/simulation"
+	"github.com/milkyway-labs/milkyway/x/epochs/types"
 )
 
 var (

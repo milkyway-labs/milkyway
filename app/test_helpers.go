@@ -23,7 +23,7 @@ import (
 
 	opchildtypes "github.com/initia-labs/OPinit/x/opchild/types"
 
-	"github.com/milkyway-labs/milk/types"
+	"github.com/milkyway-labs/milkyway/types"
 )
 
 // defaultConsensusParams defines the default Tendermint consensus params used in

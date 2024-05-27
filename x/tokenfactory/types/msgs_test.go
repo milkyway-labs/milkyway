@@ -13,7 +13,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/authz"
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milk/x/tokenfactory/types"
+	"github.com/milkyway-labs/milkyway/x/tokenfactory/types"
 
 	"github.com/cometbft/cometbft/crypto/ed25519"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"

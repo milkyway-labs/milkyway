@@ -3,7 +3,7 @@ package keeper
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milk/x/epochs/types"
+	"github.com/milkyway-labs/milkyway/x/epochs/types"
 )
 
 // AfterEpochEnd executes the indicated hook after epochs ends

@@ -3,7 +3,7 @@ package stride.icacallbacks;
 
 // this line is used by starport scaffolding # proto/packet/import
 
-option go_package = "github.com/milkyway-labs/milk/x/icacallbacks/types";
+option go_package = "github.com/milkyway-labs/milkyway/x/icacallbacks/types";
 
 message IcacallbacksPacketData {
   oneof packet {

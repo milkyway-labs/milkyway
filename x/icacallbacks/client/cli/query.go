@@ -10,7 +10,7 @@ import (
 	// "github.com/cosmos/cosmos-sdk/client/flags"
 	// sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milk/x/icacallbacks/types"
+	"github.com/milkyway-labs/milkyway/x/icacallbacks/types"
 )
 
 // GetQueryCmd returns the cli query commands for this module

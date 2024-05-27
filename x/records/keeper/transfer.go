@@ -8,10 +8,10 @@ import (
 	"github.com/cosmos/gogoproto/proto"
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 
-	"github.com/milkyway-labs/milk/utils"
-	icacallbackstypes "github.com/milkyway-labs/milk/x/icacallbacks/types"
+	"github.com/milkyway-labs/milkyway/utils"
+	icacallbackstypes "github.com/milkyway-labs/milkyway/x/icacallbacks/types"
 
-	"github.com/milkyway-labs/milk/x/records/types"
+	"github.com/milkyway-labs/milkyway/x/records/types"
 )
 
 var (

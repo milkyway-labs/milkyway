@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/milkyway-labs/milk/x/icacallbacks/types"
+	"github.com/milkyway-labs/milkyway/x/icacallbacks/types"
 )
 
 func (k Keeper) CallbackDataAll(c context.Context, req *types.QueryAllCallbackDataRequest) (*types.QueryAllCallbackDataResponse, error) {

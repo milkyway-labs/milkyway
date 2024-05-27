@@ -36,7 +36,7 @@ cd ..
 mkdir -p ./tmp-swagger-gen
 cd proto
 proto_dirs=$(find \
-  ./milk \
+  ./milkyway \
   ./stride \
   ../third_party/cosmos-sdk/proto/cosmos \
   ../third_party/ibc-go/proto/ibc \

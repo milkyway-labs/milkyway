@@ -5,8 +5,8 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milk/x/epochs/keeper"
-	"github.com/milkyway-labs/milk/x/epochs/types"
+	"github.com/milkyway-labs/milkyway/x/epochs/keeper"
+	"github.com/milkyway-labs/milkyway/x/epochs/types"
 )
 
 // InitGenesis initializes the capability module's state from a provided genesis

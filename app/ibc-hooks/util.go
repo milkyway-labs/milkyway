@@ -44,7 +44,7 @@ func isIcs721Packet(packetData []byte) (isIcs721 bool, ics721data nfttransfertyp
 	// Use wasm port prefix to ack like normal wasm chain.
 	//
 	// initia l1 is handling encoding and decoding depends on port id,
-	// so milk should ack like normal wasm chain.
+	// so milkyway should ack like normal wasm chain.
 	if data, err := nfttransfertypes.DecodePacketData(packetData, wasmPortPrefix); err != nil {
 		return false, data
 	} else {

@@ -8,10 +8,10 @@ import (
 	"github.com/cosmos/gogoproto/proto"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 
-	"github.com/milkyway-labs/milk/utils"
-	icacallbackstypes "github.com/milkyway-labs/milk/x/icacallbacks/types"
-	recordstypes "github.com/milkyway-labs/milk/x/records/types"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	"github.com/milkyway-labs/milkyway/utils"
+	icacallbackstypes "github.com/milkyway-labs/milkyway/x/icacallbacks/types"
+	recordstypes "github.com/milkyway-labs/milkyway/x/records/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 // ICACallback after an LSM token is detokenized into native stake

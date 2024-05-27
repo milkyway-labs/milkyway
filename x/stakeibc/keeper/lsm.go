@@ -16,10 +16,10 @@ import (
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 
-	icqtypes "github.com/milkyway-labs/milk/x/interchainquery/types"
+	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
 
-	recordstypes "github.com/milkyway-labs/milk/x/records/types"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	recordstypes "github.com/milkyway-labs/milkyway/x/records/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 var (

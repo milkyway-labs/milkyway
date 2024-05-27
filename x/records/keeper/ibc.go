@@ -7,8 +7,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 
-	"github.com/milkyway-labs/milk/x/icacallbacks"
-	icacallbacktypes "github.com/milkyway-labs/milk/x/icacallbacks/types"
+	"github.com/milkyway-labs/milkyway/x/icacallbacks"
+	icacallbacktypes "github.com/milkyway-labs/milkyway/x/icacallbacks/types"
 )
 
 // OnAcknowledgementPacket unmarshals the acknowledgement object to determine if the ack was successful and

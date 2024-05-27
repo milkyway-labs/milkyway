@@ -16,8 +16,8 @@ import (
 
 	icatypes "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/types"
 
-	epochtypes "github.com/milkyway-labs/milk/x/epochs/types"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	epochtypes "github.com/milkyway-labs/milkyway/x/epochs/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 const nanosecondsInDay = 86400000000000

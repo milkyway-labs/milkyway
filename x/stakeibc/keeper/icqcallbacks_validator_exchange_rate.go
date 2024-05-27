@@ -9,9 +9,9 @@ import (
 
 	stakingtypes "github.com/initia-labs/initia/x/mstaking/types"
 
-	"github.com/milkyway-labs/milk/utils"
-	icqtypes "github.com/milkyway-labs/milk/x/interchainquery/types"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	"github.com/milkyway-labs/milkyway/utils"
+	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 // ValidatorCallback is a callback handler for validator queries.

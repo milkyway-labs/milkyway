@@ -8,13 +8,13 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	v3 "github.com/cosmos/cosmos-sdk/x/bank/migrations/v3"
 
-	icqtypes "github.com/milkyway-labs/milk/x/interchainquery/types"
+	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
 
-	"github.com/milkyway-labs/milk/utils"
-	epochtypes "github.com/milkyway-labs/milk/x/epochs/types"
-	icacallbackstypes "github.com/milkyway-labs/milk/x/icacallbacks/types"
-	recordstypes "github.com/milkyway-labs/milk/x/records/types"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	"github.com/milkyway-labs/milkyway/utils"
+	epochtypes "github.com/milkyway-labs/milkyway/x/epochs/types"
+	icacallbackstypes "github.com/milkyway-labs/milkyway/x/icacallbacks/types"
+	recordstypes "github.com/milkyway-labs/milkyway/x/records/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"

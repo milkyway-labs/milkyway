@@ -18,9 +18,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milk/x/records/client/cli"
-	"github.com/milkyway-labs/milk/x/records/keeper"
-	"github.com/milkyway-labs/milk/x/records/types"
+	"github.com/milkyway-labs/milkyway/x/records/client/cli"
+	"github.com/milkyway-labs/milkyway/x/records/keeper"
+	"github.com/milkyway-labs/milkyway/x/records/types"
 )
 
 var (

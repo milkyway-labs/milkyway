@@ -3,7 +3,7 @@ package tokenfactory
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 
-	tokenfactoryv1 "github.com/milkyway-labs/milk/api/milk/tokenfactory/v1"
+	tokenfactoryv1 "github.com/milkyway-labs/milkyway/api/milkyway/tokenfactory/v1"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.

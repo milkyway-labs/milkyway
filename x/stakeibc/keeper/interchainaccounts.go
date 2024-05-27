@@ -13,10 +13,10 @@ import (
 	icatypes "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/types"
 	connectiontypes "github.com/cosmos/ibc-go/v8/modules/core/03-connection/types"
 
-	"github.com/milkyway-labs/milk/utils"
-	epochstypes "github.com/milkyway-labs/milk/x/epochs/types"
-	icacallbackstypes "github.com/milkyway-labs/milk/x/icacallbacks/types"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	"github.com/milkyway-labs/milkyway/utils"
+	epochstypes "github.com/milkyway-labs/milkyway/x/epochs/types"
+	icacallbackstypes "github.com/milkyway-labs/milkyway/x/icacallbacks/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 const (

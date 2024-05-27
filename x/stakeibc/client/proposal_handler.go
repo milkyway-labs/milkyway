@@ -1,7 +1,7 @@
 package client
 
 import (
-	"github.com/milkyway-labs/milk/x/stakeibc/client/cli"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/client/cli"
 
 	govclient "github.com/cosmos/cosmos-sdk/x/gov/client"
 )

@@ -7,10 +7,10 @@ import (
 
 	errorsmod "cosmossdk.io/errors"
 
-	"github.com/milkyway-labs/milk/utils"
-	icqkeeper "github.com/milkyway-labs/milk/x/interchainquery/keeper"
-	icqtypes "github.com/milkyway-labs/milk/x/interchainquery/types"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	"github.com/milkyway-labs/milkyway/utils"
+	icqkeeper "github.com/milkyway-labs/milkyway/x/interchainquery/keeper"
+	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 // CommunityPoolBalanceCallback is a callback handler for CommunityPoolBalance queries.

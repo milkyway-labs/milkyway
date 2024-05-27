@@ -9,7 +9,7 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/milkyway-labs/milk/utils"
+	"github.com/milkyway-labs/milkyway/utils"
 )
 
 const TypeMsgSetCommunityPoolRebate = "set_community_pool_rebate"

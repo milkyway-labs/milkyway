@@ -1,4 +1,4 @@
-module github.com/milkyway-labs/milk
+module github.com/milkyway-labs/milkyway
 
 go 1.22
 
@@ -400,7 +400,7 @@ replace (
 	github.com/noble-assets/forwarding => github.com/initia-labs/forwarding v0.0.0-20240513113423-5c2833d87227
 )
 
-// Milk custom
+// MilkyWay custom
 replace (
 	github.com/Stride-Labs/ibc-rate-limiting => github.com/milkyway-labs/ibc-rate-limiting v0.0.0-20240509215339-45e398477ad5
 	github.com/cosmos/relayer/v2 => github.com/milkyway-labs/relayer/v2 v2.0.0-20240510185220-0492766a512d

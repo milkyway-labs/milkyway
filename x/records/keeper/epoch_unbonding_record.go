@@ -10,9 +10,9 @@ import (
 
 	errorsmod "cosmossdk.io/errors"
 
-	stakeibctypes "github.com/milkyway-labs/milk/x/stakeibc/types"
+	stakeibctypes "github.com/milkyway-labs/milkyway/x/stakeibc/types"
 
-	"github.com/milkyway-labs/milk/x/records/types"
+	"github.com/milkyway-labs/milkyway/x/records/types"
 )
 
 // SetEpochUnbondingRecord set a specific epochUnbondingRecord in the store

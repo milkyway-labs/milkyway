@@ -21,10 +21,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milk/x/interchainquery/keeper"
+	"github.com/milkyway-labs/milkyway/x/interchainquery/keeper"
 
-	"github.com/milkyway-labs/milk/x/interchainquery/client/cli"
-	"github.com/milkyway-labs/milk/x/interchainquery/types"
+	"github.com/milkyway-labs/milkyway/x/interchainquery/client/cli"
+	"github.com/milkyway-labs/milkyway/x/interchainquery/types"
 )
 
 var (

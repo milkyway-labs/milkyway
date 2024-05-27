@@ -18,8 +18,8 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	icacallbacktypes "github.com/milkyway-labs/milk/x/icacallbacks/types"
-	recordstypes "github.com/milkyway-labs/milk/x/records/types"
+	icacallbacktypes "github.com/milkyway-labs/milkyway/x/icacallbacks/types"
+	recordstypes "github.com/milkyway-labs/milkyway/x/records/types"
 )
 
 func FilterDepositRecords(arr []recordstypes.DepositRecord, condition func(recordstypes.DepositRecord) bool) (ret []recordstypes.DepositRecord) {

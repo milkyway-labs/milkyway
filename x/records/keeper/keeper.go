@@ -11,9 +11,9 @@ import (
 	ibctransferkeeper "github.com/cosmos/ibc-go/v8/modules/apps/transfer/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
-	icacallbackskeeper "github.com/milkyway-labs/milk/x/icacallbacks/keeper"
+	icacallbackskeeper "github.com/milkyway-labs/milkyway/x/icacallbacks/keeper"
 
-	"github.com/milkyway-labs/milk/x/records/types"
+	"github.com/milkyway-labs/milkyway/x/records/types"
 )
 
 type (

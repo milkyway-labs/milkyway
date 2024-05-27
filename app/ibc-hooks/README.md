@@ -176,7 +176,7 @@ The contract that awaits the callback should implement the following interface f
 pub enum IBCLifecycleComplete {
     #[serde(rename = "ibc_ack")]
     IBCAck {
-        /// The source channel (milk side) of the IBC packet
+        /// The source channel (milkyway side) of the IBC packet
         channel: String,
         /// The sequence number that the packet was sent with
         sequence: u64,
@@ -187,7 +187,7 @@ pub enum IBCLifecycleComplete {
     },
     #[serde(rename = "ibc_timeout")]
     IBCTimeout {
-        /// The source channel (milk side) of the IBC packet
+        /// The source channel (milkyway side) of the IBC packet
         channel: String,
         /// The sequence number that the packet was sent with
         sequence: u64,

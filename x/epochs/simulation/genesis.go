@@ -9,7 +9,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milk/x/epochs/types"
+	"github.com/milkyway-labs/milkyway/x/epochs/types"
 )
 
 // RandomizedGenState generates a random GenesisState for mint

@@ -16,10 +16,10 @@ import (
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 	"github.com/spf13/cast"
 
-	icacallbackskeeper "github.com/milkyway-labs/milk/x/icacallbacks/keeper"
-	icqkeeper "github.com/milkyway-labs/milk/x/interchainquery/keeper"
-	recordsmodulekeeper "github.com/milkyway-labs/milk/x/records/keeper"
-	"github.com/milkyway-labs/milk/x/stakeibc/types"
+	icacallbackskeeper "github.com/milkyway-labs/milkyway/x/icacallbacks/keeper"
+	icqkeeper "github.com/milkyway-labs/milkyway/x/interchainquery/keeper"
+	recordsmodulekeeper "github.com/milkyway-labs/milkyway/x/records/keeper"
+	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 type (
