@@ -203,7 +203,7 @@ func ContainsString(s []string, e string) bool {
 //		return ""
 //	}
 //
-//	bech32Addr, err := bech32.ConvertAndEncode(milkapp.AccountAddressPrefix, bz) // XXX
+//	bech32Addr, err := bech32.ConvertAndEncode(milkywayapp.AccountAddressPrefix, bz) // XXX
 //	if err != nil {
 //		return ""
 //	}

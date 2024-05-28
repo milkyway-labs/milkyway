@@ -12,8 +12,8 @@ import (
 	"github.com/milkyway-labs/milkyway/types"
 )
 
-// milkAppConfig initia specify app config
-type milkAppConfig struct {
+// milkyWayAppConfig initia specify app config
+type milkyWayAppConfig struct {
 	serverconfig.Config
 	WasmConfig    wasmtypes.WasmConfig        `mapstructure:"wasm"`
 	IndexerConfig indexerconfig.IndexerConfig `mapstructure:"indexer"`
@@ -49,16 +49,16 @@ func initAppConfig() (string, interface{}) {
 	srvCfg.GRPC.Enable = true
 	srvCfg.GRPC.Address = "0.0.0.0:9090"
 
-	milkAppConfig := milkAppConfig{
+	milkywayAppConfig := milkyWayAppConfig{
 		Config:        *srvCfg,
 		WasmConfig:    wasmtypes.DefaultWasmConfig(),
 		IndexerConfig: indexerconfig.DefaultConfig(),
 	}
 
-	milkAppTemplate := serverconfig.DefaultConfigTemplate +
+	milkyWayAppTemplate := serverconfig.DefaultConfigTemplate +
 		wasmtypes.DefaultConfigTemplate() + indexerconfig.DefaultConfigTemplate
 
-	return milkAppTemplate, milkAppConfig
+	return milkyWayAppTemplate, milkywayAppConfig
 }
 
 // initTendermintConfig helps to override default Tendermint Config values.

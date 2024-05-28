@@ -26,8 +26,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 	"github.com/cosmos/cosmos-sdk/x/genutil/types"
 
-	milkapp "github.com/milkyway-labs/milkyway/app"
-	milktypes "github.com/milkyway-labs/milkyway/types"
+	milkywayapp "github.com/milkyway-labs/milkyway/app"
+	milkywaytypes "github.com/milkyway-labs/milkyway/types"
 )
 
 const (
@@ -137,7 +137,7 @@ func InitCmd(mbm module.BasicManager, defaultNodeHome string) *cobra.Command {
 			}
 
 			appState, err := json.MarshalIndent(
-				milkapp.NewDefaultGenesisState(cdc, mbm, denom), "", " ",
+				milkywayapp.NewDefaultGenesisState(cdc, mbm, denom), "", " ",
 			)
 			if err != nil {
 				return errors.Wrap(err, "Failed to marshall default genesis state")
@@ -179,7 +179,7 @@ func InitCmd(mbm module.BasicManager, defaultNodeHome string) *cobra.Command {
 	cmd.Flags().BoolP(FlagOverwrite, "o", false, "overwrite the genesis.json file")
 	cmd.Flags().Bool(FlagRecover, false, "provide seed phrase to recover existing key instead of creating")
 	cmd.Flags().String(flags.FlagChainID, "", "genesis file chain-id, if left blank will be randomly created")
-	cmd.Flags().String(FlagDenom, milktypes.BaseDenom, "genesis file default denom")
+	cmd.Flags().String(FlagDenom, milkywaytypes.BaseDenom, "genesis file default denom")
 
 	return cmd
 }

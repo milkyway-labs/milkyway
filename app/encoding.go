@@ -18,7 +18,7 @@ import (
 
 // MakeEncodingConfig creates an EncodingConfig for testing
 func MakeEncodingConfig() params.EncodingConfig {
-	tempApp := NewMilkApp(log.NewNopLogger(), dbm.NewMemDB(), nil, true, []wasmkeeper.Option{}, EmptyAppOptions{})
+	tempApp := NewMilkyWayApp(log.NewNopLogger(), dbm.NewMemDB(), nil, true, []wasmkeeper.Option{}, EmptyAppOptions{})
 	encodingConfig := params.EncodingConfig{
 		InterfaceRegistry: tempApp.InterfaceRegistry(),
 		Codec:             tempApp.AppCodec(),
@@ -30,7 +30,7 @@ func MakeEncodingConfig() params.EncodingConfig {
 }
 
 func AutoCliOpts() autocli.AppOptions {
-	tempApp := NewMilkApp(log.NewNopLogger(), dbm.NewMemDB(), nil, true, []wasmkeeper.Option{}, EmptyAppOptions{})
+	tempApp := NewMilkyWayApp(log.NewNopLogger(), dbm.NewMemDB(), nil, true, []wasmkeeper.Option{}, EmptyAppOptions{})
 	modules := make(map[string]appmodule.AppModule, 0)
 	for _, m := range tempApp.ModuleManager.Modules {
 		if moduleWithName, ok := m.(module.HasName); ok {
@@ -51,7 +51,7 @@ func AutoCliOpts() autocli.AppOptions {
 }
 
 func BasicManager() module.BasicManager {
-	tempApp := NewMilkApp(log.NewNopLogger(), dbm.NewMemDB(), nil, true, []wasmkeeper.Option{}, EmptyAppOptions{})
+	tempApp := NewMilkyWayApp(log.NewNopLogger(), dbm.NewMemDB(), nil, true, []wasmkeeper.Option{}, EmptyAppOptions{})
 	return tempApp.BasicModuleManager
 }
 

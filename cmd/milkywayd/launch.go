@@ -14,7 +14,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 
-	milkapp "github.com/milkyway-labs/milkyway/app"
+	milkywayapp "github.com/milkyway-labs/milkyway/app"
 )
 
 // DefaultLaunchStepFactories is a list of default launch step factories.
@@ -60,7 +60,7 @@ func LaunchCommand(ac *appCreator, enc params.EncodingConfig, mbm module.BasicMa
 	return launchtools.LaunchCmd(
 		ac,
 		func(denom string) map[string]json.RawMessage {
-			return milkapp.NewDefaultGenesisState(enc.Codec, mbm, denom)
+			return milkywayapp.NewDefaultGenesisState(enc.Codec, mbm, denom)
 		},
 		DefaultLaunchStepFactories,
 	)

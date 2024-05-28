@@ -27,7 +27,7 @@ import (
 )
 
 // defaultConsensusParams defines the default Tendermint consensus params used in
-// MilkApp testing.
+// MilkyWayApp testing.
 var defaultConsensusParams = &tmproto.ConsensusParams{
 	Block: &tmproto.BlockParams{
 		MaxBytes: 8000000,
@@ -52,9 +52,9 @@ func getOrCreateMemDB(db *dbm.DB) dbm.DB {
 	return dbm.NewMemDB()
 }
 
-func setup(db *dbm.DB, withGenesis bool) (*MilkApp, GenesisState) {
+func setup(db *dbm.DB, withGenesis bool) (*MilkyWayApp, GenesisState) {
 	encCdc := MakeEncodingConfig()
-	app := NewMilkApp(
+	app := NewMilkyWayApp(
 		log.NewNopLogger(),
 		getOrCreateMemDB(db),
 		nil,
@@ -75,7 +75,7 @@ func SetupWithGenesisAccounts(
 	valSet *tmtypes.ValidatorSet,
 	genAccs []authtypes.GenesisAccount,
 	balances ...banktypes.Balance,
-) *MilkApp {
+) *MilkyWayApp {
 	app, genesisState := setup(nil, true)
 
 	if len(genAccs) == 0 {

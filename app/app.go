@@ -217,7 +217,7 @@ var (
 )
 
 var (
-	_ servertypes.Application = (*MilkApp)(nil)
+	_ servertypes.Application = (*MilkyWayApp)(nil)
 )
 
 func init() {
@@ -229,10 +229,10 @@ func init() {
 	DefaultNodeHome = filepath.Join(userHomeDir, "."+AppName)
 }
 
-// MilkApp extends an ABCI application, but with most of its parameters exported.
+// MilkyWayApp extends an ABCI application, but with most of its parameters exported.
 // They are exported for convenience in creating helper functions, as object
 // capabilities aren't needed for testing.
-type MilkApp struct {
+type MilkyWayApp struct {
 	*baseapp.BaseApp
 
 	legacyAmino       *codec.LegacyAmino
@@ -303,8 +303,8 @@ type MilkApp struct {
 	indexerModule indexermodule.AppModuleBasic
 }
 
-// NewMilkApp returns a reference to an initialized Initia.
-func NewMilkApp(
+// NewMilkyWayApp returns a reference to an initialized Initia.
+func NewMilkyWayApp(
 	logger log.Logger,
 	db dbm.DB,
 	traceStore io.Writer,
@@ -312,7 +312,7 @@ func NewMilkApp(
 	wasmOpts []wasmkeeper.Option,
 	appOpts servertypes.AppOptions,
 	baseAppOptions ...func(*baseapp.BaseApp),
-) *MilkApp {
+) *MilkyWayApp {
 	encodingConfig := params.MakeEncodingConfig()
 	std.RegisterLegacyAminoCodec(encodingConfig.Amino)
 	std.RegisterInterfaces(encodingConfig.InterfaceRegistry)
@@ -349,7 +349,7 @@ func NewMilkApp(
 		panic(err)
 	}
 
-	app := &MilkApp{
+	app := &MilkyWayApp{
 		BaseApp:           bApp,
 		legacyAmino:       legacyAmino,
 		appCodec:          appCodec,
@@ -1173,16 +1173,16 @@ func NewMilkApp(
 // handler so that we can verify bid transactions before they are inserted into the mempool.
 // With the POB CheckTx, we can verify the bid transaction and all of the bundled transactions
 // before inserting the bid transaction into the mempool.
-func (app *MilkApp) CheckTx(req *abci.RequestCheckTx) (*abci.ResponseCheckTx, error) {
+func (app *MilkyWayApp) CheckTx(req *abci.RequestCheckTx) (*abci.ResponseCheckTx, error) {
 	return app.checkTxHandler(req)
 }
 
 // SetCheckTx sets the checkTxHandler for the app.
-func (app *MilkApp) SetCheckTx(handler blockchecktx.CheckTx) {
+func (app *MilkyWayApp) SetCheckTx(handler blockchecktx.CheckTx) {
 	app.checkTxHandler = handler
 }
 
-func (app *MilkApp) setAnteHandler(
+func (app *MilkyWayApp) setAnteHandler(
 	mevLane auctionante.MEVLane,
 	freeLane block.Lane,
 	wasmConfig wasmtypes.WasmConfig,
@@ -1216,7 +1216,7 @@ func (app *MilkApp) setAnteHandler(
 	return anteHandler
 }
 
-func (app *MilkApp) setPostHandler() {
+func (app *MilkyWayApp) setPostHandler() {
 	postHandler, err := posthandler.NewPostHandler(
 		posthandler.HandlerOptions{},
 	)
@@ -1228,25 +1228,25 @@ func (app *MilkApp) setPostHandler() {
 }
 
 // Name returns the name of the App
-func (app *MilkApp) Name() string { return app.BaseApp.Name() }
+func (app *MilkyWayApp) Name() string { return app.BaseApp.Name() }
 
 // PreBlocker application updates every pre block
-func (app *MilkApp) PreBlocker(ctx sdk.Context, _ *abci.RequestFinalizeBlock) (*sdk.ResponsePreBlock, error) {
+func (app *MilkyWayApp) PreBlocker(ctx sdk.Context, _ *abci.RequestFinalizeBlock) (*sdk.ResponsePreBlock, error) {
 	return app.ModuleManager.PreBlock(ctx)
 }
 
 // BeginBlocker application updates every begin block
-func (app *MilkApp) BeginBlocker(ctx sdk.Context) (sdk.BeginBlock, error) {
+func (app *MilkyWayApp) BeginBlocker(ctx sdk.Context) (sdk.BeginBlock, error) {
 	return app.ModuleManager.BeginBlock(ctx)
 }
 
 // EndBlocker application updates every end block
-func (app *MilkApp) EndBlocker(ctx sdk.Context) (sdk.EndBlock, error) {
+func (app *MilkyWayApp) EndBlocker(ctx sdk.Context) (sdk.EndBlock, error) {
 	return app.ModuleManager.EndBlock(ctx)
 }
 
 // InitChainer application update at chain initialization
-func (app *MilkApp) InitChainer(ctx sdk.Context, req *abci.RequestInitChain) (*abci.ResponseInitChain, error) {
+func (app *MilkyWayApp) InitChainer(ctx sdk.Context, req *abci.RequestInitChain) (*abci.ResponseInitChain, error) {
 	var genesisState GenesisState
 	if err := tmjson.Unmarshal(req.AppStateBytes, &genesisState); err != nil {
 		panic(err)
@@ -1256,12 +1256,12 @@ func (app *MilkApp) InitChainer(ctx sdk.Context, req *abci.RequestInitChain) (*a
 }
 
 // LoadHeight loads a particular height
-func (app *MilkApp) LoadHeight(height int64) error {
+func (app *MilkyWayApp) LoadHeight(height int64) error {
 	return app.LoadVersion(height)
 }
 
 // ModuleAccountAddrs returns all the app's module account addresses.
-func (app *MilkApp) ModuleAccountAddrs() map[string]bool {
+func (app *MilkyWayApp) ModuleAccountAddrs() map[string]bool {
 	modAccAddrs := make(map[string]bool)
 	for acc := range maccPerms {
 		modAccAddrs[authtypes.NewModuleAddress(acc).String()] = true
@@ -1274,7 +1274,7 @@ func (app *MilkApp) ModuleAccountAddrs() map[string]bool {
 //
 // NOTE: This is solely to be used for testing purposes as it may be desirable
 // for modules to register their own custom testing types.
-func (app *MilkApp) LegacyAmino() *codec.LegacyAmino {
+func (app *MilkyWayApp) LegacyAmino() *codec.LegacyAmino {
 	return app.legacyAmino
 }
 
@@ -1282,47 +1282,47 @@ func (app *MilkApp) LegacyAmino() *codec.LegacyAmino {
 //
 // NOTE: This is solely to be used for testing purposes as it may be desirable
 // for modules to register their own custom testing types.
-func (app *MilkApp) AppCodec() codec.Codec {
+func (app *MilkyWayApp) AppCodec() codec.Codec {
 	return app.appCodec
 }
 
 // InterfaceRegistry returns Initia's InterfaceRegistry
-func (app *MilkApp) InterfaceRegistry() types.InterfaceRegistry {
+func (app *MilkyWayApp) InterfaceRegistry() types.InterfaceRegistry {
 	return app.interfaceRegistry
 }
 
 // GetKey returns the KVStoreKey for the provided store key.
 //
 // NOTE: This is solely to be used for testing purposes.
-func (app *MilkApp) GetKey(storeKey string) *storetypes.KVStoreKey {
+func (app *MilkyWayApp) GetKey(storeKey string) *storetypes.KVStoreKey {
 	return app.keys[storeKey]
 }
 
 // GetTKey returns the TransientStoreKey for the provided store key.
 //
 // NOTE: This is solely to be used for testing purposes.
-func (app *MilkApp) GetTKey(storeKey string) *storetypes.TransientStoreKey {
+func (app *MilkyWayApp) GetTKey(storeKey string) *storetypes.TransientStoreKey {
 	return app.tkeys[storeKey]
 }
 
 // GetMemKey returns the MemStoreKey for the provided mem key.
 //
 // NOTE: This is solely used for testing purposes.
-func (app *MilkApp) GetMemKey(storeKey string) *storetypes.MemoryStoreKey {
+func (app *MilkyWayApp) GetMemKey(storeKey string) *storetypes.MemoryStoreKey {
 	return app.memKeys[storeKey]
 }
 
 // GetSubspace returns a param subspace for a given module name.
 //
 // NOTE: This is solely to be used for testing purposes.
-func (app *MilkApp) GetSubspace(moduleName string) paramstypes.Subspace {
+func (app *MilkyWayApp) GetSubspace(moduleName string) paramstypes.Subspace {
 	subspace, _ := app.ParamsKeeper.GetSubspace(moduleName)
 	return subspace
 }
 
 // RegisterAPIRoutes registers all application module routes with the provided
 // API server.
-func (app *MilkApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig) {
+func (app *MilkyWayApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig) {
 	clientCtx := apiSvr.ClientCtx
 
 	// Register new tx routes from grpc-gateway.
@@ -1347,14 +1347,14 @@ func (app *MilkApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APICo
 }
 
 // Simulate customize gas simulation to add fee deduction gas amount.
-func (app *MilkApp) Simulate(txBytes []byte) (sdk.GasInfo, *sdk.Result, error) {
+func (app *MilkyWayApp) Simulate(txBytes []byte) (sdk.GasInfo, *sdk.Result, error) {
 	gasInfo, result, err := app.BaseApp.Simulate(txBytes)
 	gasInfo.GasUsed += FeeDeductionGasAmount
 	return gasInfo, result, err
 }
 
 // RegisterTxService implements the Application.RegisterTxService method.
-func (app *MilkApp) RegisterTxService(clientCtx client.Context) {
+func (app *MilkyWayApp) RegisterTxService(clientCtx client.Context) {
 	authtx.RegisterTxService(
 		app.BaseApp.GRPCQueryRouter(), clientCtx,
 		app.Simulate, app.interfaceRegistry,
@@ -1362,7 +1362,7 @@ func (app *MilkApp) RegisterTxService(clientCtx client.Context) {
 }
 
 // RegisterTendermintService implements the Application.RegisterTendermintService method.
-func (app *MilkApp) RegisterTendermintService(clientCtx client.Context) {
+func (app *MilkyWayApp) RegisterTendermintService(clientCtx client.Context) {
 	cmtservice.RegisterTendermintService(
 		clientCtx,
 		app.BaseApp.GRPCQueryRouter(),
@@ -1370,7 +1370,7 @@ func (app *MilkApp) RegisterTendermintService(clientCtx client.Context) {
 	)
 }
 
-func (app *MilkApp) RegisterNodeService(clientCtx client.Context, cfg config.Config) {
+func (app *MilkyWayApp) RegisterNodeService(clientCtx client.Context, cfg config.Config) {
 	nodeservice.RegisterNodeService(clientCtx, app.GRPCQueryRouter(), cfg)
 }
 
@@ -1398,46 +1398,46 @@ func GetMaccPerms() map[string][]string {
 // TestingApp functions
 
 // GetBaseApp implements the TestingApp interface.
-func (app *MilkApp) GetBaseApp() *baseapp.BaseApp {
+func (app *MilkyWayApp) GetBaseApp() *baseapp.BaseApp {
 	return app.BaseApp
 }
 
 // GetAccountKeeper implements the TestingApp interface.
-func (app *MilkApp) GetAccountKeeper() *authkeeper.AccountKeeper {
+func (app *MilkyWayApp) GetAccountKeeper() *authkeeper.AccountKeeper {
 	return app.AccountKeeper
 }
 
 // GetStakingKeeper implements the TestingApp interface.
 // It returns opchild instead of original staking keeper.
-func (app *MilkApp) GetStakingKeeper() ibctestingtypes.StakingKeeper {
+func (app *MilkyWayApp) GetStakingKeeper() ibctestingtypes.StakingKeeper {
 	return app.OPChildKeeper
 }
 
 // GetIBCKeeper implements the TestingApp interface.
-func (app *MilkApp) GetIBCKeeper() *ibckeeper.Keeper {
+func (app *MilkyWayApp) GetIBCKeeper() *ibckeeper.Keeper {
 	return app.IBCKeeper
 }
 
 // GetICAControllerKeeper implements the TestingApp interface.
-func (app *MilkApp) GetICAControllerKeeper() *icacontrollerkeeper.Keeper {
+func (app *MilkyWayApp) GetICAControllerKeeper() *icacontrollerkeeper.Keeper {
 	return app.ICAControllerKeeper
 }
 
 // GetICAAuthKeeper implements the TestingApp interface.
-func (app *MilkApp) GetICAAuthKeeper() *icaauthkeeper.Keeper {
+func (app *MilkyWayApp) GetICAAuthKeeper() *icaauthkeeper.Keeper {
 	return app.ICAAuthKeeper
 }
 
 // GetScopedIBCKeeper implements the TestingApp interface.
-func (app *MilkApp) GetScopedIBCKeeper() capabilitykeeper.ScopedKeeper {
+func (app *MilkyWayApp) GetScopedIBCKeeper() capabilitykeeper.ScopedKeeper {
 	return app.ScopedIBCKeeper
 }
 
 // TxConfig implements the TestingApp interface.
-func (app *MilkApp) TxConfig() client.TxConfig {
+func (app *MilkyWayApp) TxConfig() client.TxConfig {
 	return app.txConfig
 }
-func (app *MilkApp) setupIndexer(appOpts servertypes.AppOptions, homePath string, ac, vc address.Codec, appCodec codec.Codec) error {
+func (app *MilkyWayApp) setupIndexer(appOpts servertypes.AppOptions, homePath string, ac, vc address.Codec, appCodec codec.Codec) error {
 	// initialize the indexer fake-keeper
 	indexerConfig, err := indexerconfig.NewConfig(appOpts)
 	if err != nil {
@@ -1507,7 +1507,7 @@ func (app *MilkApp) setupIndexer(appOpts servertypes.AppOptions, homePath string
 
 // Close closes the underlying baseapp, the oracle service, and the prometheus server if required.
 // This method blocks on the closure of both the prometheus server, and the oracle-service
-func (app *MilkApp) Close() error {
+func (app *MilkyWayApp) Close() error {
 	if app.indexerKeeper != nil {
 		if err := app.indexerKeeper.Close(); err != nil {
 			return err
