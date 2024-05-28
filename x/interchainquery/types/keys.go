@@ -32,7 +32,7 @@ const (
 	// The staking store is key'd by the validator's address
 	STAKING_STORE_QUERY_WITH_PROOF = "store/mstaking/key"
 	// The bank store is key'd by the account address
-	BANK_STORE_QUERY_WITH_PROOF = "store/bank/key"
+	BANK_STORE_QUERY_WITH_PROOF = "store/move/key"
 	// The Osmosis twap store - key'd by the pool ID and denom's
 	TWAP_STORE_QUERY_WITH_PROOF = "store/twap/key" // XXX
 )

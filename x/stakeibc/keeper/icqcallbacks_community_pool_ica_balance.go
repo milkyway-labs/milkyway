@@ -8,7 +8,6 @@ import (
 	errorsmod "cosmossdk.io/errors"
 
 	"github.com/milkyway-labs/milkyway/utils"
-	icqkeeper "github.com/milkyway-labs/milkyway/x/interchainquery/keeper"
 	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
 	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
@@ -34,7 +33,7 @@ func CommunityPoolIcaBalanceCallback(k Keeper, ctx sdk.Context, args []byte, que
 
 	// Unmarshal the query response args to determine the balance, denom, and icaType
 	//  get amount from the query response, get denom and icaType from marshalled callback data
-	amount, err := icqkeeper.UnmarshalAmountFromBalanceQuery(k.cdc, args)
+	amount, err := types.UnmarshalAmountFromMoveBankBalanceQuery(args)
 	if err != nil {
 		return errorsmod.Wrap(err, "unable to determine amount from query response")
 	}

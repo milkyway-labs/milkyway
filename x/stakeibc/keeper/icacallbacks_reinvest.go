@@ -6,7 +6,6 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/types/bech32"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	v3 "github.com/cosmos/cosmos-sdk/x/bank/migrations/v3"
 
 	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
 
@@ -110,7 +109,12 @@ func (k Keeper) ReinvestCallback(ctx sdk.Context, packet channeltypes.Packet, ac
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid fee account address, could not decode (%s)", err.Error())
 	}
-	queryData := append(v3.CreateAccountBalancesPrefix(feeAddressBz), []byte(hostZone.HostDenom)...)
+	queryData, err := types.MoveBankBalanceKey(feeAddressBz, hostZone.HostDenom)
+	if err != nil {
+		panic(fmt.Sprintf(
+			"cannot construct move bank balance key for address %s and denom %s",
+			hostZone.FeeIcaAddress, hostZone.HostDenom))
+	}
 
 	// Submit an ICQ for the rewards balance in the fee account
 	k.Logger(ctx).Info(utils.LogICACallbackWithHostZone(chainId, ICACallbackID_Reinvest, "Submitting ICQ for fee account balance"))

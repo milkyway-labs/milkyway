@@ -432,7 +432,12 @@ func (k Keeper) WithdrawalRewardBalanceQuery(ctx sdk.Context, route types.TradeR
 	if err != nil {
 		return errorsmod.Wrapf(err, "invalid withdrawal account address (%s), could not decode", withdrawalAccount.Address)
 	}
-	queryData := append(v3.CreateAccountBalancesPrefix(withdrawalAddressBz), []byte(route.RewardDenomOnHostZone)...)
+	queryData, err := types.MoveBankBalanceKey(withdrawalAddressBz, route.RewardDenomOnHostZone)
+	if err != nil {
+		panic(fmt.Sprintf(
+			"cannot construct move bank balance key for address %s and denom %s",
+			withdrawalAccount.Address, route.RewardDenomOnHostZone))
+	}
 
 	// Timeout the query halfway through the epoch (since that's when the first transfer
 	// in the pfm sequence will timeout)

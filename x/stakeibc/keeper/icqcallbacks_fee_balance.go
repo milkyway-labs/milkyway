@@ -13,7 +13,6 @@ import (
 
 	"github.com/milkyway-labs/milkyway/utils"
 	epochtypes "github.com/milkyway-labs/milkyway/x/epochs/types"
-	icqkeeper "github.com/milkyway-labs/milkyway/x/interchainquery/keeper"
 	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
 	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
@@ -34,7 +33,7 @@ func FeeBalanceCallback(k Keeper, ctx sdk.Context, args []byte, query icqtypes.Q
 	}
 
 	// Unmarshal the query response args to determine the balance
-	feeBalanceAmount, err := icqkeeper.UnmarshalAmountFromBalanceQuery(k.cdc, args)
+	feeBalanceAmount, err := types.UnmarshalAmountFromMoveBankBalanceQuery(args)
 	if err != nil {
 		return errorsmod.Wrap(err, "unable to determine balance from query response")
 	}

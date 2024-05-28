@@ -7,10 +7,8 @@ import (
 
 	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/bech32"
-	v3 "github.com/cosmos/cosmos-sdk/x/bank/migrations/v3"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	disttypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 
@@ -117,7 +115,12 @@ func (k Keeper) QueryCommunityPoolIcaBalance(
 		return errorsmod.Wrapf(err, "invalid %s address, could not decode (%s)",
 			icaType.String(), icaAddress)
 	}
-	queryData := append(v3.CreateAccountBalancesPrefix(addressBz), []byte(denom)...)
+	queryData, err := types.MoveBankBalanceKey(addressBz, denom)
+	if err != nil {
+		panic(fmt.Sprintf(
+			"cannot construct move bank balance key for address %s and denom %s",
+			icaAddress, denom))
+	}
 
 	// The response might be a coin, or might just be an int depending on sdk version
 	// Since we need the denom later, store the denom as callback data for the query

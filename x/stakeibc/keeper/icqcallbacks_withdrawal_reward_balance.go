@@ -7,8 +7,6 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	"github.com/cosmos/gogoproto/proto"
 
-	icqkeeper "github.com/milkyway-labs/milkyway/x/interchainquery/keeper"
-
 	"github.com/milkyway-labs/milkyway/utils"
 	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
 	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
@@ -27,7 +25,7 @@ func WithdrawalRewardBalanceCallback(k Keeper, ctx sdk.Context, args []byte, que
 	chainId := query.ChainId
 
 	// Unmarshal the query response args to determine the balance
-	withdrawalRewardBalanceAmount, err := icqkeeper.UnmarshalAmountFromBalanceQuery(k.cdc, args)
+	withdrawalRewardBalanceAmount, err := types.UnmarshalAmountFromMoveBankBalanceQuery(args)
 	if err != nil {
 		return errorsmod.Wrap(err, "unable to determine balance from query response")
 	}

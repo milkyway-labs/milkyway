@@ -10,7 +10,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/bech32"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	v3 "github.com/cosmos/cosmos-sdk/x/bank/migrations/v3"
 	"github.com/cosmos/gogoproto/proto"
 	stakingtypes "github.com/initia-labs/initia/x/mstaking/types"
 
@@ -208,7 +207,12 @@ func (k Keeper) SubmitWithdrawalHostBalanceICQ(ctx sdk.Context, hostZone types.H
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "invalid withdrawal account address, could not decode (%s)", err.Error())
 	}
-	queryData := append(v3.CreateAccountBalancesPrefix(withdrawalAddressBz), []byte(hostZone.HostDenom)...)
+	queryData, err := types.MoveBankBalanceKey(withdrawalAddressBz, hostZone.HostDenom)
+	if err != nil {
+		panic(fmt.Sprintf(
+			"cannot construct move bank balance key for address %s and denom %s",
+			hostZone.WithdrawalIcaAddress, hostZone.HostDenom))
+	}
 
 	// Timeout query at end of epoch
 	strideEpochTracker, found := k.GetEpochTracker(ctx, epochstypes.STRIDE_EPOCH)
