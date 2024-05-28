@@ -277,7 +277,7 @@ func _createTestInput(
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 		ac,
 	)
-	ibcHooksKeeper.Params.Set(ctx, ibchookstypes.DefaultParams())
+	require.NoError(t, ibcHooksKeeper.Params.Set(ctx, ibchookstypes.DefaultParams()))
 
 	wasmKeeper := wasmkeeper.NewKeeper(
 		appCodec,
