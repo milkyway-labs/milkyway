@@ -3,21 +3,15 @@ package keeper
 import (
 	"fmt"
 
+	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/log"
-
+	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	errorsmod "cosmossdk.io/errors"
-	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
-
+	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 
 	"github.com/milkyway-labs/milkyway/x/icacallbacks/types"
-
-	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
-
-	storetypes "cosmossdk.io/store/types"
 )
 
 type (
@@ -25,7 +19,6 @@ type (
 		cdc          codec.BinaryCodec
 		storeKey     storetypes.StoreKey
 		memKey       storetypes.StoreKey
-		paramstore   paramtypes.Subspace
 		icacallbacks map[string]types.ICACallback
 		IBCKeeper    ibckeeper.Keeper
 	}
@@ -35,19 +28,12 @@ func NewKeeper(
 	cdc codec.BinaryCodec,
 	storeKey,
 	memKey storetypes.StoreKey,
-	ps paramtypes.Subspace,
 	ibcKeeper ibckeeper.Keeper,
 ) *Keeper {
-	// set KeyTable if it has not already been set
-	if !ps.HasKeyTable() {
-		ps = ps.WithKeyTable(types.ParamKeyTable())
-	}
-
 	return &Keeper{
 		cdc:          cdc,
 		storeKey:     storeKey,
 		memKey:       memKey,
-		paramstore:   ps,
 		icacallbacks: make(map[string]types.ICACallback),
 		IBCKeeper:    ibcKeeper,
 	}

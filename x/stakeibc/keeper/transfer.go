@@ -30,7 +30,7 @@ func (k Keeper) TransferExistingDepositsToHostZones(ctx sdk.Context, epochNumber
 		return isTransferRecord && isBeforeCurrentEpoch
 	})
 
-	ibcTransferTimeoutNanos := k.GetParam(ctx, types.KeyIBCTransferTimeoutNanos)
+	ibcTransferTimeoutNanos := k.GetParams(ctx).IbcTransferTimeoutNanos
 
 	for _, depositRecord := range transferDepositRecords {
 		k.Logger(ctx).Info(utils.LogWithHostZone(depositRecord.HostZoneId,

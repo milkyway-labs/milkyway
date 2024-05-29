@@ -68,8 +68,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/group"
 	groupkeeper "github.com/cosmos/cosmos-sdk/x/group/keeper"
 	groupmodule "github.com/cosmos/cosmos-sdk/x/group/module"
-	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
-	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	"github.com/cosmos/gogoproto/proto"
 
 	// ibc imports
@@ -251,7 +249,6 @@ type MilkyWayApp struct {
 	BankKeeper            *bankkeeper.Keeper
 	CapabilityKeeper      *capabilitykeeper.Keeper
 	UpgradeKeeper         *upgradekeeper.Keeper
-	ParamsKeeper          *paramskeeper.Keeper
 	GroupKeeper           *groupkeeper.Keeper
 	ConsensusParamsKeeper *consensusparamkeeper.Keeper
 	IBCKeeper             *ibckeeper.Keeper // IBC Keeper must be a pointer in the app, so we can SetRouter on it correctly
@@ -337,11 +334,10 @@ func NewMilkyWayApp(
 		auctiontypes.StoreKey, packetforwardtypes.StoreKey, oracletypes.StoreKey,
 		tokenfactorytypes.StoreKey, ibchookstypes.StoreKey, forwardingtypes.StoreKey,
 		marketmaptypes.StoreKey,
-		paramstypes.StoreKey,
 		ratelimittypes.StoreKey, epochstypes.StoreKey, icqtypes.StoreKey,
 		icacallbackstypes.StoreKey, recordstypes.StoreKey, stakeibctypes.StoreKey,
 	)
-	tkeys := storetypes.NewTransientStoreKeys(forwardingtypes.TransientStoreKey, paramstypes.TStoreKey)
+	tkeys := storetypes.NewTransientStoreKeys(forwardingtypes.TransientStoreKey)
 	memKeys := storetypes.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
 
 	// register streaming services
@@ -369,14 +365,6 @@ func NewMilkyWayApp(
 	if err != nil {
 		panic(err)
 	}
-
-	paramsKeeper := initParamsKeeper(
-		appCodec,
-		legacyAmino,
-		keys[paramstypes.StoreKey],
-		tkeys[paramstypes.TStoreKey],
-	)
-	app.ParamsKeeper = &paramsKeeper
 
 	// set the BaseApp's parameter store
 	consensusParamsKeeper := consensusparamkeeper.NewKeeper(appCodec, runtime.NewKVStoreService(keys[consensusparamtypes.StoreKey]), authorityAddr, runtime.EventService{})
@@ -544,7 +532,6 @@ func NewMilkyWayApp(
 	app.RateLimitKeeper = *ratelimitkeeper.NewKeeper(
 		appCodec,
 		keys[ratelimittypes.StoreKey],
-		app.GetSubspace(ratelimittypes.ModuleName),
 		authorityAddr,
 		app.BankKeeper,
 		app.IBCKeeper.ChannelKeeper,
@@ -562,7 +549,6 @@ func NewMilkyWayApp(
 		appCodec,
 		keys[icacallbackstypes.StoreKey],
 		keys[icacallbackstypes.MemStoreKey],
-		app.GetSubspace(icacallbackstypes.ModuleName),
 		*app.IBCKeeper,
 	)
 
@@ -637,7 +623,6 @@ func NewMilkyWayApp(
 			appCodec,
 			keys[recordstypes.StoreKey],
 			keys[recordstypes.MemStoreKey],
-			app.GetSubspace(recordstypes.ModuleName),
 			app.AccountKeeper,
 			*app.TransferKeeper,
 			*app.IBCKeeper,
@@ -708,7 +693,7 @@ func NewMilkyWayApp(
 			appCodec,
 			keys[stakeibctypes.StoreKey],
 			keys[stakeibctypes.MemStoreKey],
-			app.GetSubspace(stakeibctypes.ModuleName),
+			runtime.NewKVStoreService(keys[stakeibctypes.StoreKey]),
 			authorityAddr,
 			app.AccountKeeper,
 			app.BankKeeper,
@@ -1312,14 +1297,6 @@ func (app *MilkyWayApp) GetMemKey(storeKey string) *storetypes.MemoryStoreKey {
 	return app.memKeys[storeKey]
 }
 
-// GetSubspace returns a param subspace for a given module name.
-//
-// NOTE: This is solely to be used for testing purposes.
-func (app *MilkyWayApp) GetSubspace(moduleName string) paramstypes.Subspace {
-	subspace, _ := app.ParamsKeeper.GetSubspace(moduleName)
-	return subspace
-}
-
 // RegisterAPIRoutes registers all application module routes with the provided
 // API server.
 func (app *MilkyWayApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig) {
@@ -1519,15 +1496,4 @@ func (app *MilkyWayApp) Close() error {
 	}
 
 	return nil
-}
-
-// initParamsKeeper init params keeper and its subspaces
-func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino, key, tkey storetypes.StoreKey) paramskeeper.Keeper {
-	paramsKeeper := paramskeeper.NewKeeper(appCodec, legacyAmino, key, tkey)
-
-	paramsKeeper.Subspace(ratelimittypes.ModuleName)
-	paramsKeeper.Subspace(recordstypes.ModuleName)
-	paramsKeeper.Subspace(stakeibctypes.ModuleName)
-
-	return paramsKeeper
 }

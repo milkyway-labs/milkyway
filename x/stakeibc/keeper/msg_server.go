@@ -407,7 +407,7 @@ func (k msgServer) ClearBalance(goCtx context.Context, msg *types.MsgClearBalanc
 		return nil, errorsmod.Wrapf(err, "failed to parse coin (%s)", coinString)
 	}
 	// KeyICATimeoutNanos are for our Stride ICA calls, KeyFeeTransferTimeoutNanos is for the IBC transfer
-	feeTransferTimeoutNanos := k.GetParam(ctx, types.KeyFeeTransferTimeoutNanos)
+	feeTransferTimeoutNanos := k.GetParams(ctx).FeeTransferTimeoutNanos
 	timeoutTimestamp := cast.ToUint64(ctx.BlockTime().UnixNano()) + feeTransferTimeoutNanos
 	msgs := []proto.Message{
 		&ibctransfertypes.MsgTransfer{
@@ -422,7 +422,7 @@ func (k msgServer) ClearBalance(goCtx context.Context, msg *types.MsgClearBalanc
 
 	connectionId := zone.GetConnectionId()
 
-	icaTimeoutNanos := k.GetParam(ctx, types.KeyICATimeoutNanos)
+	icaTimeoutNanos := k.GetParams(ctx).IcaTimeoutNanos
 	icaTimeoutNanos = cast.ToUint64(ctx.BlockTime().UnixNano()) + icaTimeoutNanos
 
 	_, err = k.SubmitTxs(ctx, connectionId, msgs, types.ICAAccountType_FEE, icaTimeoutNanos, "", nil)
@@ -1227,4 +1227,21 @@ func (k msgServer) ToggleTradeController(
 	}
 
 	return &types.MsgToggleTradeControllerResponse{}, nil
+}
+
+func (ms msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
+	if ms.GetAuthority() != msg.Authority {
+		return nil, errorsmod.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", ms.GetAuthority(), msg.Authority)
+	}
+
+	if err := msg.Params.Validate(); err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	if err := ms.SetParams(ctx, msg.Params); err != nil {
+		return nil, err
+	}
+
+	return &types.MsgUpdateParamsResponse{}, nil
 }
