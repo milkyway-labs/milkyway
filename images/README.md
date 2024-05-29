@@ -1,4 +1,4 @@
-# Specialized images for milk
+# Specialized images for MilkyWay
 
 ## `private`
 
@@ -9,7 +9,7 @@ Build like:
 
 ``` bash
 docker build \
-    -t milkd \
+    -t milkywayd \
     --build-arg LIBWASMVM_VERSION=v1.5.0 \
     --build-arg GITHUB_ACCESS_TOKEN=$PAT \
     -f images/private/Dockerfile \

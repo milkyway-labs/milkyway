@@ -239,7 +239,7 @@ To create a new token, use the create-denom command from the tokenfactory module
 To create a new token we can use the create-denom command.
 
 ```sh
-milkd tx tokenfactory create-denom ufoo --keyring-backend=test --from mylocalwallet
+milkywayd tx tokenfactory create-denom ufoo --keyring-backend=test --from mylocalwallet
 ```
 
 ## Mint a new token
@@ -247,7 +247,7 @@ milkd tx tokenfactory create-denom ufoo --keyring-backend=test --from mylocalwal
 Once a new token is created, it can be minted using the mint command in the tokenfactory module. Note that the complete tokenfactory address, in the format of factory/{creator address}/{subdenom}, must be used to mint the token.
 
 ```sh
-milkd tx tokenfactory mint 100000000000factory/init1c584m4lq25h83yp6ag8hh4htjr92d9542mvp0d/ufoo --keyring-backend=test --from mylocalwallet
+milkywayd tx tokenfactory mint 100000000000factory/init1c584m4lq25h83yp6ag8hh4htjr92d9542mvp0d/ufoo --keyring-backend=test --from mylocalwallet
 ```
 
 ## Checking Token metadata
@@ -255,7 +255,7 @@ milkd tx tokenfactory mint 100000000000factory/init1c584m4lq25h83yp6ag8hh4htjr92
 To view a token's metadata, use the denom-metadata command in the bank module. The following example queries the metadata for the token factory/init1c584m4lq25h83yp6ag8hh4htjr92d9542mvp0d/ufoo:
 
 ```sh
-milkd query bank denom-metadata --denom factory/init1c584m4lq25h83yp6ag8hh4htjr92d9542mvp0d/ufoo
+milkywayd query bank denom-metadata --denom factory/init1c584m4lq25h83yp6ag8hh4htjr92d9542mvp0d/ufoo
 ```
 
 ## Check the tokens created by an account
@@ -263,5 +263,5 @@ milkd query bank denom-metadata --denom factory/init1c584m4lq25h83yp6ag8hh4htjr9
 To see a list of tokens created by a specific account, use the denoms-from-creator command in the tokenfactory module. The following example shows tokens created by the account init1c584m4lq25h83yp6ag8hh4htjr92d9542mvp0d:
 
 ```sh
-milkd query tokenfactory denoms-from-creator init1c584m4lq25h83yp6ag8hh4htjr92d9542mvp0d
+milkywayd query tokenfactory denoms-from-creator init1c584m4lq25h83yp6ag8hh4htjr92d9542mvp0d
 ```

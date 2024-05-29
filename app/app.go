@@ -68,9 +68,14 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/group"
 	groupkeeper "github.com/cosmos/cosmos-sdk/x/group/keeper"
 	groupmodule "github.com/cosmos/cosmos-sdk/x/group/module"
+	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
+	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	"github.com/cosmos/gogoproto/proto"
 
 	// ibc imports
+	"github.com/Stride-Labs/ibc-rate-limiting/ratelimit"
+	ratelimitkeeper "github.com/Stride-Labs/ibc-rate-limiting/ratelimit/keeper"
+	ratelimittypes "github.com/Stride-Labs/ibc-rate-limiting/ratelimit/types"
 	"github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward"
 	packetforwardkeeper "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/keeper"
 	packetforwardtypes "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/types"
@@ -127,6 +132,9 @@ import (
 	auctionante "github.com/skip-mev/block-sdk/v2/x/auction/ante"
 	auctionkeeper "github.com/skip-mev/block-sdk/v2/x/auction/keeper"
 	auctiontypes "github.com/skip-mev/block-sdk/v2/x/auction/types"
+	"github.com/skip-mev/slinky/x/marketmap"
+	marketmapkeeper "github.com/skip-mev/slinky/x/marketmap/keeper"
+	marketmaptypes "github.com/skip-mev/slinky/x/marketmap/types"
 	"github.com/skip-mev/slinky/x/oracle"
 	oraclekeeper "github.com/skip-mev/slinky/x/oracle/keeper"
 	oracletypes "github.com/skip-mev/slinky/x/oracle/types"
@@ -137,15 +145,30 @@ import (
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
 	// local imports
-	appante "github.com/milkyway-labs/milk/app/ante"
-	apphook "github.com/milkyway-labs/milk/app/hook"
-	ibcwasmhooks "github.com/milkyway-labs/milk/app/ibc-hooks"
-	appkeepers "github.com/milkyway-labs/milk/app/keepers"
-	"github.com/milkyway-labs/milk/x/bank"
-	bankkeeper "github.com/milkyway-labs/milk/x/bank/keeper"
-	"github.com/milkyway-labs/milk/x/tokenfactory"
-	tokenfactorykeeper "github.com/milkyway-labs/milk/x/tokenfactory/keeper"
-	tokenfactorytypes "github.com/milkyway-labs/milk/x/tokenfactory/types"
+	appante "github.com/milkyway-labs/milkyway/app/ante"
+	apphook "github.com/milkyway-labs/milkyway/app/hook"
+	ibcwasmhooks "github.com/milkyway-labs/milkyway/app/ibc-hooks"
+	appkeepers "github.com/milkyway-labs/milkyway/app/keepers"
+	"github.com/milkyway-labs/milkyway/x/bank"
+	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
+	"github.com/milkyway-labs/milkyway/x/epochs"
+	epochskeeper "github.com/milkyway-labs/milkyway/x/epochs/keeper"
+	epochstypes "github.com/milkyway-labs/milkyway/x/epochs/types"
+	"github.com/milkyway-labs/milkyway/x/icacallbacks"
+	icacallbackskeeper "github.com/milkyway-labs/milkyway/x/icacallbacks/keeper"
+	icacallbackstypes "github.com/milkyway-labs/milkyway/x/icacallbacks/types"
+	"github.com/milkyway-labs/milkyway/x/interchainquery"
+	icqkeeper "github.com/milkyway-labs/milkyway/x/interchainquery/keeper"
+	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
+	"github.com/milkyway-labs/milkyway/x/records"
+	recordskeeper "github.com/milkyway-labs/milkyway/x/records/keeper"
+	recordstypes "github.com/milkyway-labs/milkyway/x/records/types"
+	"github.com/milkyway-labs/milkyway/x/stakeibc"
+	stakeibckeeper "github.com/milkyway-labs/milkyway/x/stakeibc/keeper"
+	stakeibctypes "github.com/milkyway-labs/milkyway/x/stakeibc/types"
+	"github.com/milkyway-labs/milkyway/x/tokenfactory"
+	tokenfactorykeeper "github.com/milkyway-labs/milkyway/x/tokenfactory/keeper"
+	tokenfactorytypes "github.com/milkyway-labs/milkyway/x/tokenfactory/types"
 
 	// noble forwarding keeper
 	"github.com/noble-assets/forwarding/x/forwarding"
@@ -163,7 +186,7 @@ import (
 	indexerkeeper "github.com/initia-labs/kvindexer/x/kvindexer/keeper"
 
 	// unnamed import of statik for swagger UI support
-	_ "github.com/milkyway-labs/milk/client/docs/statik"
+	_ "github.com/milkyway-labs/milkyway/client/docs/statik"
 )
 
 var (
@@ -178,9 +201,12 @@ var (
 		ibctransfertypes.ModuleName: {authtypes.Minter, authtypes.Burner},
 		// x/auction's module account must be instantiated upon genesis to accrue auction rewards not
 		// distributed to proposers
-		auctiontypes.ModuleName:      nil,
-		opchildtypes.ModuleName:      {authtypes.Minter, authtypes.Burner},
-		tokenfactorytypes.ModuleName: {authtypes.Minter, authtypes.Burner},
+		auctiontypes.ModuleName:           nil,
+		opchildtypes.ModuleName:           {authtypes.Minter, authtypes.Burner},
+		tokenfactorytypes.ModuleName:      {authtypes.Minter, authtypes.Burner},
+		icqtypes.ModuleName:               nil,
+		stakeibctypes.ModuleName:          {authtypes.Minter, authtypes.Burner, authtypes.Staking},
+		stakeibctypes.RewardCollectorName: nil,
 
 		// slinky oracle permissions
 		oracletypes.ModuleName: nil,
@@ -191,7 +217,7 @@ var (
 )
 
 var (
-	_ servertypes.Application = (*MilkApp)(nil)
+	_ servertypes.Application = (*MilkyWayApp)(nil)
 )
 
 func init() {
@@ -203,10 +229,10 @@ func init() {
 	DefaultNodeHome = filepath.Join(userHomeDir, "."+AppName)
 }
 
-// MilkApp extends an ABCI application, but with most of its parameters exported.
+// MilkyWayApp extends an ABCI application, but with most of its parameters exported.
 // They are exported for convenience in creating helper functions, as object
 // capabilities aren't needed for testing.
-type MilkApp struct {
+type MilkyWayApp struct {
 	*baseapp.BaseApp
 
 	legacyAmino       *codec.LegacyAmino
@@ -220,10 +246,12 @@ type MilkApp struct {
 	memKeys map[string]*storetypes.MemoryStoreKey
 
 	// keepers
+	// TODO: add gov keeper
 	AccountKeeper         *authkeeper.AccountKeeper
 	BankKeeper            *bankkeeper.Keeper
 	CapabilityKeeper      *capabilitykeeper.Keeper
 	UpgradeKeeper         *upgradekeeper.Keeper
+	ParamsKeeper          *paramskeeper.Keeper
 	GroupKeeper           *groupkeeper.Keeper
 	ConsensusParamsKeeper *consensusparamkeeper.Keeper
 	IBCKeeper             *ibckeeper.Keeper // IBC Keeper must be a pointer in the app, so we can SetRouter on it correctly
@@ -239,9 +267,17 @@ type MilkApp struct {
 	AuctionKeeper         *auctionkeeper.Keeper // x/auction keeper used to process bids for POB auctions
 	PacketForwardKeeper   *packetforwardkeeper.Keeper
 	OracleKeeper          *oraclekeeper.Keeper // x/oracle keeper used for the slinky oracle
+	MarketMapKeeper       *marketmapkeeper.Keeper
 	TokenFactoryKeeper    *tokenfactorykeeper.Keeper
 	IBCHooksKeeper        *ibchookskeeper.Keeper
 	ForwardingKeeper      *forwardingkeeper.Keeper
+	RateLimitKeeper       ratelimitkeeper.Keeper
+
+	EpochsKeeper          epochskeeper.Keeper
+	InterchainQueryKeeper icqkeeper.Keeper
+	ICACallbacksKeeper    icacallbackskeeper.Keeper
+	RecordsKeeper         recordskeeper.Keeper
+	StakeIBCKeeper        stakeibckeeper.Keeper
 
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper           capabilitykeeper.ScopedKeeper
@@ -250,7 +286,6 @@ type MilkApp struct {
 	ScopedICAControllerKeeper capabilitykeeper.ScopedKeeper
 	ScopedICAAuthKeeper       capabilitykeeper.ScopedKeeper
 	ScopedWasmKeeper          capabilitykeeper.ScopedKeeper
-	ScopedICQKeeper           capabilitykeeper.ScopedKeeper
 	ScopedFetchPriceKeeper    capabilitykeeper.ScopedKeeper
 
 	// the module manager
@@ -268,8 +303,8 @@ type MilkApp struct {
 	indexerModule indexermodule.AppModuleBasic
 }
 
-// NewMilkApp returns a reference to an initialized Initia.
-func NewMilkApp(
+// NewMilkyWayApp returns a reference to an initialized Initia.
+func NewMilkyWayApp(
 	logger log.Logger,
 	db dbm.DB,
 	traceStore io.Writer,
@@ -277,7 +312,7 @@ func NewMilkApp(
 	wasmOpts []wasmkeeper.Option,
 	appOpts servertypes.AppOptions,
 	baseAppOptions ...func(*baseapp.BaseApp),
-) *MilkApp {
+) *MilkyWayApp {
 	encodingConfig := params.MakeEncodingConfig()
 	std.RegisterLegacyAminoCodec(encodingConfig.Amino)
 	std.RegisterInterfaces(encodingConfig.InterfaceRegistry)
@@ -301,8 +336,12 @@ func NewMilkApp(
 		ibcfeetypes.StoreKey, wasmtypes.StoreKey, opchildtypes.StoreKey,
 		auctiontypes.StoreKey, packetforwardtypes.StoreKey, oracletypes.StoreKey,
 		tokenfactorytypes.StoreKey, ibchookstypes.StoreKey, forwardingtypes.StoreKey,
+		marketmaptypes.StoreKey,
+		paramstypes.StoreKey,
+		ratelimittypes.StoreKey, epochstypes.StoreKey, icqtypes.StoreKey,
+		icacallbackstypes.StoreKey, recordstypes.StoreKey, stakeibctypes.StoreKey,
 	)
-	tkeys := storetypes.NewTransientStoreKeys(forwardingtypes.TransientStoreKey)
+	tkeys := storetypes.NewTransientStoreKeys(forwardingtypes.TransientStoreKey, paramstypes.TStoreKey)
 	memKeys := storetypes.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
 
 	// register streaming services
@@ -310,7 +349,7 @@ func NewMilkApp(
 		panic(err)
 	}
 
-	app := &MilkApp{
+	app := &MilkyWayApp{
 		BaseApp:           bApp,
 		legacyAmino:       legacyAmino,
 		appCodec:          appCodec,
@@ -331,6 +370,14 @@ func NewMilkApp(
 		panic(err)
 	}
 
+	paramsKeeper := initParamsKeeper(
+		appCodec,
+		legacyAmino,
+		keys[paramstypes.StoreKey],
+		tkeys[paramstypes.TStoreKey],
+	)
+	app.ParamsKeeper = &paramsKeeper
+
 	// set the BaseApp's parameter store
 	consensusParamsKeeper := consensusparamkeeper.NewKeeper(appCodec, runtime.NewKVStoreService(keys[consensusparamtypes.StoreKey]), authorityAddr, runtime.EventService{})
 	app.ConsensusParamsKeeper = &consensusParamsKeeper
@@ -346,7 +393,6 @@ func NewMilkApp(
 	app.ScopedICAControllerKeeper = app.CapabilityKeeper.ScopeToModule(icacontrollertypes.SubModuleName)
 	app.ScopedICAAuthKeeper = app.CapabilityKeeper.ScopeToModule(icaauthtypes.ModuleName)
 	app.ScopedWasmKeeper = app.CapabilityKeeper.ScopeToModule(wasmtypes.ModuleName)
-
 	app.CapabilityKeeper.Seal()
 
 	// add keepers
@@ -380,13 +426,24 @@ func NewMilkApp(
 	////////////////////////////////
 
 	// initialize oracle keeper
+	marketMapKeeper := marketmapkeeper.NewKeeper(
+		runtime.NewKVStoreService(keys[marketmaptypes.StoreKey]),
+		appCodec,
+		authorityAccAddr,
+	)
+	app.MarketMapKeeper = marketMapKeeper
+
 	oracleKeeper := oraclekeeper.NewKeeper(
 		runtime.NewKVStoreService(keys[oracletypes.StoreKey]),
 		appCodec,
-		nil,
+		marketMapKeeper,
 		authorityAccAddr,
 	)
 	app.OracleKeeper = &oracleKeeper
+
+	// Add the oracle keeper as a hook to market map keeper so new market map entries can be created
+	// and propogated to the oracle keeper.
+	app.MarketMapKeeper.SetHooks(app.OracleKeeper.Hooks())
 
 	app.OPChildKeeper = opchildkeeper.NewKeeper(
 		appCodec,
@@ -422,13 +479,6 @@ func NewMilkApp(
 		app.BaseApp,
 		authorityAddr,
 	)
-
-	i := 0
-	moduleAddrs := make([]sdk.AccAddress, len(maccPerms))
-	for name := range maccPerms {
-		moduleAddrs[i] = authtypes.NewModuleAddress(name)
-		i += 1
-	}
 
 	feeGrantKeeper := feegrantkeeper.NewKeeper(appCodec, runtime.NewKVStoreService(keys[feegrant.StoreKey]), app.AccountKeeper)
 	app.FeeGrantKeeper = &feeGrantKeeper
@@ -491,6 +541,31 @@ func NewMilkApp(
 	)
 	app.BankKeeper.AppendSendRestriction(app.ForwardingKeeper.SendRestrictionFn)
 
+	app.RateLimitKeeper = *ratelimitkeeper.NewKeeper(
+		appCodec,
+		keys[ratelimittypes.StoreKey],
+		app.GetSubspace(ratelimittypes.ModuleName),
+		authorityAddr,
+		app.BankKeeper,
+		app.IBCKeeper.ChannelKeeper,
+		app.IBCFeeKeeper,
+	)
+
+	hooksICS4Wrapper := ibchooks.NewICS4Middleware(
+		app.RateLimitKeeper,
+		ibcwasmhooks.NewWasmHooks(appCodec, ac, app.WasmKeeper),
+	)
+
+	app.InterchainQueryKeeper = icqkeeper.NewKeeper(appCodec, keys[icqtypes.StoreKey], app.IBCKeeper)
+
+	app.ICACallbacksKeeper = *icacallbackskeeper.NewKeeper(
+		appCodec,
+		keys[icacallbackstypes.StoreKey],
+		keys[icacallbackstypes.MemStoreKey],
+		app.GetSubspace(icacallbackstypes.ModuleName),
+		*app.IBCKeeper,
+	)
+
 	////////////////////////////
 	// Transfer configuration //
 	////////////////////////////
@@ -535,7 +610,7 @@ func NewMilkApp(
 			communityPoolKeeper,
 			app.BankKeeper,
 			// ics4wrapper: transfer -> packet forward -> fee
-			app.IBCFeeKeeper,
+			hooksICS4Wrapper, // TODO: is it correct?
 			authorityAddr,
 		)
 		app.PacketForwardKeeper = packetForwardKeeper
@@ -552,12 +627,23 @@ func NewMilkApp(
 		transferStack = ibchooks.NewIBCMiddleware(
 			// receive: wasm -> packet forward -> forwarding -> transfer
 			transferStack,
-			ibchooks.NewICS4Middleware(
-				nil, /* ics4wrapper: not used */
-				ibcwasmhooks.NewWasmHooks(appCodec, ac, app.WasmKeeper),
-			),
+			hooksICS4Wrapper,
 			app.IBCHooksKeeper,
 		)
+
+		transferStack = ratelimit.NewIBCMiddleware(app.RateLimitKeeper, transferStack)
+
+		app.RecordsKeeper = *recordskeeper.NewKeeper(
+			appCodec,
+			keys[recordstypes.StoreKey],
+			keys[recordstypes.MemStoreKey],
+			app.GetSubspace(recordstypes.ModuleName),
+			app.AccountKeeper,
+			*app.TransferKeeper,
+			*app.IBCKeeper,
+			app.ICACallbacksKeeper,
+		)
+		transferStack = records.NewIBCModule(app.RecordsKeeper, transferStack)
 
 		// create ibcfee middleware for transfer
 		transferStack = ibcfee.NewIBCMiddleware(
@@ -574,6 +660,7 @@ func NewMilkApp(
 
 	var icaHostStack porttypes.IBCModule
 	var icaControllerStack porttypes.IBCModule
+	var icaCallbacksStack porttypes.IBCModule
 	{
 		icaHostKeeper := icahostkeeper.NewKeeper(
 			appCodec, keys[icahosttypes.StoreKey],
@@ -608,11 +695,34 @@ func NewMilkApp(
 		)
 		app.ICAAuthKeeper = &icaAuthKeeper
 
-		icaAuthIBCModule := icaauth.NewIBCModule(*app.ICAAuthKeeper)
 		icaHostIBCModule := icahost.NewIBCModule(*app.ICAHostKeeper)
 		icaHostStack = ibcfee.NewIBCMiddleware(icaHostIBCModule, *app.IBCFeeKeeper)
+
+		icaAuthIBCModule := icaauth.NewIBCModule(*app.ICAAuthKeeper)
 		icaControllerIBCModule := icacontroller.NewIBCMiddleware(icaAuthIBCModule, *app.ICAControllerKeeper)
 		icaControllerStack = ibcfee.NewIBCMiddleware(icaControllerIBCModule, *app.IBCFeeKeeper)
+
+		icaCallbacksStack = icacallbacks.NewIBCModule(app.ICACallbacksKeeper)
+
+		app.StakeIBCKeeper = stakeibckeeper.NewKeeper(
+			appCodec,
+			keys[stakeibctypes.StoreKey],
+			keys[stakeibctypes.MemStoreKey],
+			app.GetSubspace(stakeibctypes.ModuleName),
+			authorityAddr,
+			app.AccountKeeper,
+			app.BankKeeper,
+			*app.ICAControllerKeeper,
+			*app.IBCKeeper,
+			app.InterchainQueryKeeper,
+			app.RecordsKeeper,
+			app.ICACallbacksKeeper,
+			app.RateLimitKeeper,
+		)
+		app.StakeIBCKeeper.SetHooks(stakeibctypes.NewMultiStakeIBCHooks())
+		icaCallbacksStack = stakeibc.NewIBCMiddleware(icaCallbacksStack, app.StakeIBCKeeper)
+		icaCallbacksStack = icacontroller.NewIBCMiddleware(icaCallbacksStack, *app.ICAControllerKeeper)
+		icaCallbacksStack = ibcfee.NewIBCMiddleware(icaCallbacksStack, *app.IBCFeeKeeper)
 	}
 
 	//////////////////////////////
@@ -632,10 +742,7 @@ func NewMilkApp(
 		hookMiddleware := ibchooks.NewIBCMiddleware(
 			// receive: hook -> wasm
 			wasmIBCModule,
-			ibchooks.NewICS4Middleware(
-				nil, /* ics4wrapper: not used */
-				ibcwasmhooks.NewWasmHooks(appCodec, ac, app.WasmKeeper),
-			),
+			hooksICS4Wrapper, // TODO: is it correct?
 			app.IBCHooksKeeper,
 		)
 
@@ -653,12 +760,34 @@ func NewMilkApp(
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := porttypes.NewRouter()
 	ibcRouter.AddRoute(ibctransfertypes.ModuleName, transferStack).
+		// TODO: add ica callbacks stack
 		AddRoute(icahosttypes.SubModuleName, icaHostStack).
-		AddRoute(icacontrollertypes.SubModuleName, icaControllerStack).
+		AddRoute(icacontrollertypes.SubModuleName, icaCallbacksStack).
 		AddRoute(icaauthtypes.ModuleName, icaControllerStack).
 		AddRoute(wasmtypes.ModuleName, wasmIBCStack)
 
 	app.IBCKeeper.SetRouter(ibcRouter)
+
+	epochsKeeper := epochskeeper.NewKeeper(appCodec, keys[epochstypes.StoreKey])
+	app.EpochsKeeper = *epochsKeeper.SetHooks(
+		epochstypes.NewMultiEpochHooks(
+			app.StakeIBCKeeper.Hooks(),
+		),
+	)
+
+	// Register ICQ callbacks
+	err = app.InterchainQueryKeeper.SetCallbackHandler(stakeibctypes.ModuleName, app.StakeIBCKeeper.ICQCallbackHandler())
+	if err != nil {
+		panic(err)
+	}
+
+	// Register IBC callbacks
+	if err := app.ICACallbacksKeeper.SetICACallbacks(
+		app.StakeIBCKeeper.Callbacks(),
+		app.RecordsKeeper.Callbacks(),
+	); err != nil {
+		panic(err)
+	}
 
 	//////////////////////////////
 	// WasmKeeper Configuration //
@@ -768,8 +897,16 @@ func NewMilkApp(
 		packetforward.NewAppModule(app.PacketForwardKeeper, nil),
 		ibchooks.NewAppModule(appCodec, *app.IBCHooksKeeper),
 		forwarding.NewAppModule(app.ForwardingKeeper),
+		ratelimit.NewAppModule(appCodec, app.RateLimitKeeper),
 		// slinky modules
 		oracle.NewAppModule(appCodec, *app.OracleKeeper),
+		marketmap.NewAppModule(appCodec, app.MarketMapKeeper),
+		// liquid staking modules
+		stakeibc.NewAppModule(appCodec, app.StakeIBCKeeper, app.AccountKeeper, app.BankKeeper),
+		epochs.NewAppModule(appCodec, app.EpochsKeeper),
+		interchainquery.NewAppModule(appCodec, app.InterchainQueryKeeper),
+		records.NewAppModule(appCodec, app.RecordsKeeper, app.AccountKeeper, app.BankKeeper),
+		icacallbacks.NewAppModule(appCodec, app.ICACallbacksKeeper, app.AccountKeeper, app.BankKeeper),
 	)
 
 	if err := app.setupIndexer(appOpts, homePath, ac, vc, appCodec); err != nil {
@@ -803,6 +940,10 @@ func NewMilkApp(
 		authz.ModuleName,
 		ibcexported.ModuleName,
 		oracletypes.ModuleName,
+		marketmaptypes.ModuleName,
+		stakeibctypes.ModuleName,
+		epochstypes.ModuleName,
+		ratelimittypes.ModuleName,
 	)
 
 	app.ModuleManager.SetOrderEndBlockers(
@@ -811,7 +952,11 @@ func NewMilkApp(
 		feegrant.ModuleName,
 		group.ModuleName,
 		oracletypes.ModuleName,
+		marketmaptypes.ModuleName,
 		forwardingtypes.ModuleName,
+		stakeibctypes.ModuleName,
+		icqtypes.ModuleName,
+		ratelimittypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -822,11 +967,14 @@ func NewMilkApp(
 	genesisModuleOrder := []string{
 		capabilitytypes.ModuleName, authtypes.ModuleName, banktypes.ModuleName,
 		opchildtypes.ModuleName, genutiltypes.ModuleName, authz.ModuleName, group.ModuleName,
-		upgradetypes.ModuleName, feegrant.ModuleName, consensusparamtypes.ModuleName, ibcexported.ModuleName,
-		ibctransfertypes.ModuleName, icatypes.ModuleName, icaauthtypes.ModuleName,
-		ibcfeetypes.ModuleName, auctiontypes.ModuleName,
-		wasmtypes.ModuleName, oracletypes.ModuleName, packetforwardtypes.ModuleName,
-		tokenfactorytypes.ModuleName, ibchookstypes.ModuleName, forwardingtypes.ModuleName,
+		upgradetypes.ModuleName, feegrant.ModuleName, consensusparamtypes.ModuleName,
+		ibcexported.ModuleName, ibctransfertypes.ModuleName, icatypes.ModuleName,
+		icaauthtypes.ModuleName, ibcfeetypes.ModuleName, auctiontypes.ModuleName,
+		wasmtypes.ModuleName, oracletypes.ModuleName, marketmaptypes.ModuleName,
+		packetforwardtypes.ModuleName, tokenfactorytypes.ModuleName,
+		ibchookstypes.ModuleName, forwardingtypes.ModuleName,
+		stakeibctypes.ModuleName, epochstypes.ModuleName, icqtypes.ModuleName,
+		recordstypes.ModuleName, ratelimittypes.ModuleName, icacallbackstypes.ModuleName,
 	}
 
 	app.ModuleManager.SetOrderInitGenesis(genesisModuleOrder...)
@@ -975,9 +1123,9 @@ func NewMilkApp(
 	if err != nil {
 		errMsg := ""
 
-		// ignore injective proto annotations comes from github.com/cosoms/relayer
+		// ignore injective and ibc-rate-limiting proto annotations comes from github.com/cosoms/relayer
 		for _, s := range strings.Split(err.Error(), "\n") {
-			if strings.Contains(s, "injective") {
+			if strings.Contains(s, "injective") || strings.Contains(s, "ratelimit") {
 				continue
 			}
 
@@ -1025,16 +1173,16 @@ func NewMilkApp(
 // handler so that we can verify bid transactions before they are inserted into the mempool.
 // With the POB CheckTx, we can verify the bid transaction and all of the bundled transactions
 // before inserting the bid transaction into the mempool.
-func (app *MilkApp) CheckTx(req *abci.RequestCheckTx) (*abci.ResponseCheckTx, error) {
+func (app *MilkyWayApp) CheckTx(req *abci.RequestCheckTx) (*abci.ResponseCheckTx, error) {
 	return app.checkTxHandler(req)
 }
 
 // SetCheckTx sets the checkTxHandler for the app.
-func (app *MilkApp) SetCheckTx(handler blockchecktx.CheckTx) {
+func (app *MilkyWayApp) SetCheckTx(handler blockchecktx.CheckTx) {
 	app.checkTxHandler = handler
 }
 
-func (app *MilkApp) setAnteHandler(
+func (app *MilkyWayApp) setAnteHandler(
 	mevLane auctionante.MEVLane,
 	freeLane block.Lane,
 	wasmConfig wasmtypes.WasmConfig,
@@ -1068,7 +1216,7 @@ func (app *MilkApp) setAnteHandler(
 	return anteHandler
 }
 
-func (app *MilkApp) setPostHandler() {
+func (app *MilkyWayApp) setPostHandler() {
 	postHandler, err := posthandler.NewPostHandler(
 		posthandler.HandlerOptions{},
 	)
@@ -1080,40 +1228,40 @@ func (app *MilkApp) setPostHandler() {
 }
 
 // Name returns the name of the App
-func (app *MilkApp) Name() string { return app.BaseApp.Name() }
+func (app *MilkyWayApp) Name() string { return app.BaseApp.Name() }
 
 // PreBlocker application updates every pre block
-func (app *MilkApp) PreBlocker(ctx sdk.Context, _ *abci.RequestFinalizeBlock) (*sdk.ResponsePreBlock, error) {
+func (app *MilkyWayApp) PreBlocker(ctx sdk.Context, _ *abci.RequestFinalizeBlock) (*sdk.ResponsePreBlock, error) {
 	return app.ModuleManager.PreBlock(ctx)
 }
 
 // BeginBlocker application updates every begin block
-func (app *MilkApp) BeginBlocker(ctx sdk.Context) (sdk.BeginBlock, error) {
+func (app *MilkyWayApp) BeginBlocker(ctx sdk.Context) (sdk.BeginBlock, error) {
 	return app.ModuleManager.BeginBlock(ctx)
 }
 
 // EndBlocker application updates every end block
-func (app *MilkApp) EndBlocker(ctx sdk.Context) (sdk.EndBlock, error) {
+func (app *MilkyWayApp) EndBlocker(ctx sdk.Context) (sdk.EndBlock, error) {
 	return app.ModuleManager.EndBlock(ctx)
 }
 
 // InitChainer application update at chain initialization
-func (app *MilkApp) InitChainer(ctx sdk.Context, req *abci.RequestInitChain) (*abci.ResponseInitChain, error) {
+func (app *MilkyWayApp) InitChainer(ctx sdk.Context, req *abci.RequestInitChain) (*abci.ResponseInitChain, error) {
 	var genesisState GenesisState
 	if err := tmjson.Unmarshal(req.AppStateBytes, &genesisState); err != nil {
 		panic(err)
 	}
-	app.UpgradeKeeper.SetModuleVersionMap(ctx, app.ModuleManager.GetVersionMap())
+	_ = app.UpgradeKeeper.SetModuleVersionMap(ctx, app.ModuleManager.GetVersionMap())
 	return app.ModuleManager.InitGenesis(ctx, app.appCodec, genesisState)
 }
 
 // LoadHeight loads a particular height
-func (app *MilkApp) LoadHeight(height int64) error {
+func (app *MilkyWayApp) LoadHeight(height int64) error {
 	return app.LoadVersion(height)
 }
 
 // ModuleAccountAddrs returns all the app's module account addresses.
-func (app *MilkApp) ModuleAccountAddrs() map[string]bool {
+func (app *MilkyWayApp) ModuleAccountAddrs() map[string]bool {
 	modAccAddrs := make(map[string]bool)
 	for acc := range maccPerms {
 		modAccAddrs[authtypes.NewModuleAddress(acc).String()] = true
@@ -1126,7 +1274,7 @@ func (app *MilkApp) ModuleAccountAddrs() map[string]bool {
 //
 // NOTE: This is solely to be used for testing purposes as it may be desirable
 // for modules to register their own custom testing types.
-func (app *MilkApp) LegacyAmino() *codec.LegacyAmino {
+func (app *MilkyWayApp) LegacyAmino() *codec.LegacyAmino {
 	return app.legacyAmino
 }
 
@@ -1134,39 +1282,47 @@ func (app *MilkApp) LegacyAmino() *codec.LegacyAmino {
 //
 // NOTE: This is solely to be used for testing purposes as it may be desirable
 // for modules to register their own custom testing types.
-func (app *MilkApp) AppCodec() codec.Codec {
+func (app *MilkyWayApp) AppCodec() codec.Codec {
 	return app.appCodec
 }
 
 // InterfaceRegistry returns Initia's InterfaceRegistry
-func (app *MilkApp) InterfaceRegistry() types.InterfaceRegistry {
+func (app *MilkyWayApp) InterfaceRegistry() types.InterfaceRegistry {
 	return app.interfaceRegistry
 }
 
 // GetKey returns the KVStoreKey for the provided store key.
 //
 // NOTE: This is solely to be used for testing purposes.
-func (app *MilkApp) GetKey(storeKey string) *storetypes.KVStoreKey {
+func (app *MilkyWayApp) GetKey(storeKey string) *storetypes.KVStoreKey {
 	return app.keys[storeKey]
 }
 
 // GetTKey returns the TransientStoreKey for the provided store key.
 //
 // NOTE: This is solely to be used for testing purposes.
-func (app *MilkApp) GetTKey(storeKey string) *storetypes.TransientStoreKey {
+func (app *MilkyWayApp) GetTKey(storeKey string) *storetypes.TransientStoreKey {
 	return app.tkeys[storeKey]
 }
 
 // GetMemKey returns the MemStoreKey for the provided mem key.
 //
 // NOTE: This is solely used for testing purposes.
-func (app *MilkApp) GetMemKey(storeKey string) *storetypes.MemoryStoreKey {
+func (app *MilkyWayApp) GetMemKey(storeKey string) *storetypes.MemoryStoreKey {
 	return app.memKeys[storeKey]
+}
+
+// GetSubspace returns a param subspace for a given module name.
+//
+// NOTE: This is solely to be used for testing purposes.
+func (app *MilkyWayApp) GetSubspace(moduleName string) paramstypes.Subspace {
+	subspace, _ := app.ParamsKeeper.GetSubspace(moduleName)
+	return subspace
 }
 
 // RegisterAPIRoutes registers all application module routes with the provided
 // API server.
-func (app *MilkApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig) {
+func (app *MilkyWayApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig) {
 	clientCtx := apiSvr.ClientCtx
 
 	// Register new tx routes from grpc-gateway.
@@ -1191,14 +1347,14 @@ func (app *MilkApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APICo
 }
 
 // Simulate customize gas simulation to add fee deduction gas amount.
-func (app *MilkApp) Simulate(txBytes []byte) (sdk.GasInfo, *sdk.Result, error) {
+func (app *MilkyWayApp) Simulate(txBytes []byte) (sdk.GasInfo, *sdk.Result, error) {
 	gasInfo, result, err := app.BaseApp.Simulate(txBytes)
 	gasInfo.GasUsed += FeeDeductionGasAmount
 	return gasInfo, result, err
 }
 
 // RegisterTxService implements the Application.RegisterTxService method.
-func (app *MilkApp) RegisterTxService(clientCtx client.Context) {
+func (app *MilkyWayApp) RegisterTxService(clientCtx client.Context) {
 	authtx.RegisterTxService(
 		app.BaseApp.GRPCQueryRouter(), clientCtx,
 		app.Simulate, app.interfaceRegistry,
@@ -1206,7 +1362,7 @@ func (app *MilkApp) RegisterTxService(clientCtx client.Context) {
 }
 
 // RegisterTendermintService implements the Application.RegisterTendermintService method.
-func (app *MilkApp) RegisterTendermintService(clientCtx client.Context) {
+func (app *MilkyWayApp) RegisterTendermintService(clientCtx client.Context) {
 	cmtservice.RegisterTendermintService(
 		clientCtx,
 		app.BaseApp.GRPCQueryRouter(),
@@ -1214,7 +1370,7 @@ func (app *MilkApp) RegisterTendermintService(clientCtx client.Context) {
 	)
 }
 
-func (app *MilkApp) RegisterNodeService(clientCtx client.Context, cfg config.Config) {
+func (app *MilkyWayApp) RegisterNodeService(clientCtx client.Context, cfg config.Config) {
 	nodeservice.RegisterNodeService(clientCtx, app.GRPCQueryRouter(), cfg)
 }
 
@@ -1242,46 +1398,46 @@ func GetMaccPerms() map[string][]string {
 // TestingApp functions
 
 // GetBaseApp implements the TestingApp interface.
-func (app *MilkApp) GetBaseApp() *baseapp.BaseApp {
+func (app *MilkyWayApp) GetBaseApp() *baseapp.BaseApp {
 	return app.BaseApp
 }
 
 // GetAccountKeeper implements the TestingApp interface.
-func (app *MilkApp) GetAccountKeeper() *authkeeper.AccountKeeper {
+func (app *MilkyWayApp) GetAccountKeeper() *authkeeper.AccountKeeper {
 	return app.AccountKeeper
 }
 
 // GetStakingKeeper implements the TestingApp interface.
 // It returns opchild instead of original staking keeper.
-func (app *MilkApp) GetStakingKeeper() ibctestingtypes.StakingKeeper {
+func (app *MilkyWayApp) GetStakingKeeper() ibctestingtypes.StakingKeeper {
 	return app.OPChildKeeper
 }
 
 // GetIBCKeeper implements the TestingApp interface.
-func (app *MilkApp) GetIBCKeeper() *ibckeeper.Keeper {
+func (app *MilkyWayApp) GetIBCKeeper() *ibckeeper.Keeper {
 	return app.IBCKeeper
 }
 
 // GetICAControllerKeeper implements the TestingApp interface.
-func (app *MilkApp) GetICAControllerKeeper() *icacontrollerkeeper.Keeper {
+func (app *MilkyWayApp) GetICAControllerKeeper() *icacontrollerkeeper.Keeper {
 	return app.ICAControllerKeeper
 }
 
 // GetICAAuthKeeper implements the TestingApp interface.
-func (app *MilkApp) GetICAAuthKeeper() *icaauthkeeper.Keeper {
+func (app *MilkyWayApp) GetICAAuthKeeper() *icaauthkeeper.Keeper {
 	return app.ICAAuthKeeper
 }
 
 // GetScopedIBCKeeper implements the TestingApp interface.
-func (app *MilkApp) GetScopedIBCKeeper() capabilitykeeper.ScopedKeeper {
+func (app *MilkyWayApp) GetScopedIBCKeeper() capabilitykeeper.ScopedKeeper {
 	return app.ScopedIBCKeeper
 }
 
 // TxConfig implements the TestingApp interface.
-func (app *MilkApp) TxConfig() client.TxConfig {
+func (app *MilkyWayApp) TxConfig() client.TxConfig {
 	return app.txConfig
 }
-func (app *MilkApp) setupIndexer(appOpts servertypes.AppOptions, homePath string, ac, vc address.Codec, appCodec codec.Codec) error {
+func (app *MilkyWayApp) setupIndexer(appOpts servertypes.AppOptions, homePath string, ac, vc address.Codec, appCodec codec.Codec) error {
 	// initialize the indexer fake-keeper
 	indexerConfig, err := indexerconfig.NewConfig(appOpts)
 	if err != nil {
@@ -1351,7 +1507,7 @@ func (app *MilkApp) setupIndexer(appOpts servertypes.AppOptions, homePath string
 
 // Close closes the underlying baseapp, the oracle service, and the prometheus server if required.
 // This method blocks on the closure of both the prometheus server, and the oracle-service
-func (app *MilkApp) Close() error {
+func (app *MilkyWayApp) Close() error {
 	if app.indexerKeeper != nil {
 		if err := app.indexerKeeper.Close(); err != nil {
 			return err
@@ -1363,4 +1519,15 @@ func (app *MilkApp) Close() error {
 	}
 
 	return nil
+}
+
+// initParamsKeeper init params keeper and its subspaces
+func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino, key, tkey storetypes.StoreKey) paramskeeper.Keeper {
+	paramsKeeper := paramskeeper.NewKeeper(appCodec, legacyAmino, key, tkey)
+
+	paramsKeeper.Subspace(ratelimittypes.ModuleName)
+	paramsKeeper.Subspace(recordstypes.ModuleName)
+	paramsKeeper.Subspace(stakeibctypes.ModuleName)
+
+	return paramsKeeper
 }

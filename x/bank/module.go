@@ -7,7 +7,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/bank/exported"
 	"github.com/cosmos/cosmos-sdk/x/bank/types"
 
-	"github.com/milkyway-labs/milk/x/bank/keeper"
+	"github.com/milkyway-labs/milkyway/x/bank/keeper"
 )
 
 const ConsensusVersion = 1

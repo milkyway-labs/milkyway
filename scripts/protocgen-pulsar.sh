@@ -21,12 +21,18 @@ echo "Cleaning API directory"
 
 echo "Generating API module"
 
+generate_api() {
+  package="$1"
+  proto_dirs=$(find $package -path -prune -o -name '*.proto' -print0 | xargs -0 -n1 dirname | sort | uniq)
+  for dir in $proto_dirs; do
+    for file in $(find "${dir}" -maxdepth 1 -name '*.proto'); do
+      buf generate --template buf.gen.pulsar.yaml $file
+    done
+  done
+}
+
 # exclude ibc modules
 cd proto
-proto_dirs=$(find ./milk -path -prune -o -name '*.proto' -print0 | xargs -0 -n1 dirname | sort | uniq)
-for dir in $proto_dirs; do
-  for file in $(find "${dir}" -maxdepth 1 -name '*.proto'); do
-    buf generate --template buf.gen.pulsar.yaml $file
-  done
-done
+generate_api "./milkyway"
+generate_api "./stride"
 cd ..

@@ -17,7 +17,7 @@ FROM ubuntu:20.04
 
 WORKDIR /root
 
-COPY --from=go-builder /code/build/milkd /usr/local/bin/milkd
+COPY --from=go-builder /code/build/milkywayd /usr/local/bin/milkywayd
 COPY --from=go-builder /lib/libwasmvm.so /lib/libwasmvm.so
 
 # for new-metric setup
@@ -32,4 +32,4 @@ EXPOSE 26656
 # tendermint rpc
 EXPOSE 26657
 
-CMD ["/usr/local/bin/milkd", "version"]
+CMD ["/usr/local/bin/milkywayd", "version"]

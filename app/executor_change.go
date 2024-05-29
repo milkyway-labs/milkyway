@@ -2,7 +2,7 @@ package app
 
 // Executor change plans
 
-func (app *MilkApp) RegisterExecutorChangePlans() error {
+func (app *MilkyWayApp) RegisterExecutorChangePlans() error {
 	// err := app.OPChildKeeper.RegisterExecutorChangePlan(
 	// 	1,
 	// 	361,

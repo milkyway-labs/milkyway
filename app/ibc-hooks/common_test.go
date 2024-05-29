@@ -54,7 +54,7 @@ import (
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
-	wasmhooks "github.com/milkyway-labs/milk/app/ibc-hooks"
+	wasmhooks "github.com/milkyway-labs/milkyway/app/ibc-hooks"
 )
 
 var ModuleBasics = module.NewBasicManager(
@@ -277,7 +277,7 @@ func _createTestInput(
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 		ac,
 	)
-	ibcHooksKeeper.Params.Set(ctx, ibchookstypes.DefaultParams())
+	require.NoError(t, ibcHooksKeeper.Params.Set(ctx, ibchookstypes.DefaultParams()))
 
 	wasmKeeper := wasmkeeper.NewKeeper(
 		appCodec,

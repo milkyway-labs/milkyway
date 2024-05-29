@@ -10,8 +10,8 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/stretchr/testify/require"
 
-	tokenFactorykeeper "github.com/milkyway-labs/milk/x/tokenfactory/keeper"
-	"github.com/milkyway-labs/milk/x/tokenfactory/types"
+	tokenFactorykeeper "github.com/milkyway-labs/milkyway/x/tokenfactory/keeper"
+	"github.com/milkyway-labs/milkyway/x/tokenfactory/types"
 )
 
 func TestCreateDenom(t *testing.T) {

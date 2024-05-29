@@ -36,17 +36,17 @@ RUN LEDGER_ENABLED=false BUILD_TAGS=muslc LDFLAGS="-linkmode=external -extldflag
 
 FROM alpine:3.18
 
-RUN addgroup milk \
-    && adduser -G milk -D -h /milk milk
+RUN addgroup milkyway \
+    && adduser -G milkyway -D -h /milkyway milkyway
 
-WORKDIR /milk
+WORKDIR /milkyway
 
-COPY --from=go-builder /code/build/milkd /usr/local/bin/milkd
+COPY --from=go-builder /code/build/milkywayd /usr/local/bin/milkywayd
 
 # for new-metric setup
-COPY --from=go-builder /code/contrib /milk/contrib
+COPY --from=go-builder /code/contrib /milkyway/contrib
 
-USER milk
+USER milkyway
 
 # rest server
 EXPOSE 1317
@@ -57,4 +57,4 @@ EXPOSE 26656
 # tendermint rpc
 EXPOSE 26657
 
-CMD ["/usr/local/bin/milkd", "version"]
+CMD ["/usr/local/bin/milkywayd", "version"]

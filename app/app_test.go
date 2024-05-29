@@ -65,7 +65,7 @@ func TestGetMaccPerms(t *testing.T) {
 func TestInitGenesisOnMigration(t *testing.T) {
 	db := dbm.NewMemDB()
 	logger := log.NewLogger(os.Stdout)
-	app := NewMilkApp(
+	app := NewMilkyWayApp(
 		logger, db, nil, true, []wasmkeeper.Option{}, EmptyAppOptions{})
 	ctx := app.NewContextLegacy(true, cmtproto.Header{Height: app.LastBlockHeight()})
 
@@ -119,7 +119,7 @@ func TestUpgradeStateOnGenesis(t *testing.T) {
 
 func TestGetKey(t *testing.T) {
 	db := dbm.NewMemDB()
-	app := NewMilkApp(
+	app := NewMilkyWayApp(
 		log.NewLogger(os.Stdout),
 		db, nil, true, []wasmkeeper.Option{}, EmptyAppOptions{})
 

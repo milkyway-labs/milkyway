@@ -1,0 +1,7 @@
+issues:
+  exclude-rules:
+    - linters:
+        - staticcheck
+      text: "SA1019" # deprecated
+  exclude-dirs:
+    - x/tokenfactory
