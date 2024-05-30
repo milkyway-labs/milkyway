@@ -3,6 +3,8 @@ package keeper
 import (
 	"fmt"
 
+	"cosmossdk.io/collections"
+	corestoretypes "cosmossdk.io/core/store"
 	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/log"
 	sdkmath "cosmossdk.io/math"
@@ -11,7 +13,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
-	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	icacontrollerkeeper "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/controller/keeper"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 	"github.com/spf13/cast"
@@ -28,7 +29,6 @@ type (
 		cdc                   codec.Codec
 		storeKey              storetypes.StoreKey
 		memKey                storetypes.StoreKey
-		paramstore            paramtypes.Subspace
 		authority             string
 		ICAControllerKeeper   icacontrollerkeeper.Keeper
 		IBCKeeper             ibckeeper.Keeper
@@ -39,6 +39,7 @@ type (
 		ICACallbacksKeeper    icacallbackskeeper.Keeper
 		hooks                 types.StakeIBCHooks
 		RatelimitKeeper       types.RatelimitKeeper
+		params                collections.Item[types.Params]
 	}
 )
 
@@ -46,7 +47,7 @@ func NewKeeper(
 	cdc codec.Codec,
 	storeKey,
 	memKey storetypes.StoreKey,
-	ps paramtypes.Subspace,
+	storeService corestoretypes.KVStoreService,
 	authority string,
 	accountKeeper types.AccountKeeper,
 	bankKeeper bankkeeper.Keeper,
@@ -57,16 +58,11 @@ func NewKeeper(
 	ICACallbacksKeeper icacallbackskeeper.Keeper,
 	RatelimitKeeper types.RatelimitKeeper,
 ) Keeper {
-	// set KeyTable if it has not already been set
-	if !ps.HasKeyTable() {
-		ps = ps.WithKeyTable(types.ParamKeyTable())
-	}
-
+	sb := collections.NewSchemaBuilder(storeService)
 	return Keeper{
 		cdc:                   cdc,
 		storeKey:              storeKey,
 		memKey:                memKey,
-		paramstore:            ps,
 		authority:             authority,
 		AccountKeeper:         accountKeeper,
 		bankKeeper:            bankKeeper,
@@ -76,6 +72,7 @@ func NewKeeper(
 		RecordsKeeper:         RecordsKeeper,
 		ICACallbacksKeeper:    ICACallbacksKeeper,
 		RatelimitKeeper:       RatelimitKeeper,
+		params:                collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 	}
 }
 
@@ -106,7 +103,7 @@ func (k Keeper) GetICATimeoutNanos(ctx sdk.Context, epochType string) (uint64, e
 		return 0, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "Failed to get epoch tracker for %s", epochType)
 	}
 	// BUFFER by 5% of the epoch length
-	bufferSizeParam := k.GetParam(ctx, types.KeyBufferSize)
+	bufferSizeParam := k.GetParams(ctx).BufferSize
 	bufferSize := epochTracker.Duration / bufferSizeParam
 	// buffer size should not be negative or longer than the epoch duration
 	if bufferSize > epochTracker.Duration {
@@ -124,14 +121,15 @@ func (k Keeper) GetICATimeoutNanos(ctx sdk.Context, epochType string) (uint64, e
 
 func (k Keeper) GetOuterSafetyBounds(ctx sdk.Context, zone types.HostZone) (sdkmath.LegacyDec, sdkmath.LegacyDec) {
 	// Fetch the wide bounds
-	minSafetyThresholdInt := k.GetParam(ctx, types.KeyDefaultMinRedemptionRateThreshold)
+	params := k.GetParams(ctx)
+	minSafetyThresholdInt := params.DefaultMinRedemptionRateThreshold
 	minSafetyThreshold := sdkmath.LegacyNewDec(int64(minSafetyThresholdInt)).Quo(sdkmath.LegacyNewDec(100))
 
 	if !zone.MinRedemptionRate.IsNil() && zone.MinRedemptionRate.IsPositive() {
 		minSafetyThreshold = zone.MinRedemptionRate
 	}
 
-	maxSafetyThresholdInt := k.GetParam(ctx, types.KeyDefaultMaxRedemptionRateThreshold)
+	maxSafetyThresholdInt := params.DefaultMaxRedemptionRateThreshold
 	maxSafetyThreshold := sdkmath.LegacyNewDec(int64(maxSafetyThresholdInt)).Quo(sdkmath.LegacyNewDec(100))
 
 	if !zone.MaxRedemptionRate.IsNil() && zone.MaxRedemptionRate.IsPositive() {

@@ -36,10 +36,11 @@ func (k Keeper) BeforeEpochStart(ctx sdk.Context, epochInfo epochstypes.EpochInf
 	// Stride Epoch - Process Deposits and Delegations
 	if epochInfo.Identifier == epochstypes.STRIDE_EPOCH {
 		// Get cadence intervals
-		redemptionRateInterval := k.GetParam(ctx, types.KeyRedemptionRateInterval)
-		depositInterval := k.GetParam(ctx, types.KeyDepositInterval)
-		delegationInterval := k.GetParam(ctx, types.KeyDelegateInterval)
-		reinvestInterval := k.GetParam(ctx, types.KeyReinvestInterval)
+		params := k.GetParams(ctx)
+		redemptionRateInterval := params.RedemptionRateInterval
+		depositInterval := params.DepositInterval
+		delegationInterval := params.DelegateInterval
+		reinvestInterval := params.ReinvestInterval
 
 		// Claim accrued staking rewards at the beginning of the epoch
 		k.ClaimAccruedStakingRewards(ctx)

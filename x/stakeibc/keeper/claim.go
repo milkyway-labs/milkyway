@@ -4,14 +4,13 @@ import (
 	"context"
 	"fmt"
 
-	recordstypes "github.com/milkyway-labs/milkyway/x/records/types"
-
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	bankTypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/cosmos/gogoproto/proto"
 
 	epochstypes "github.com/milkyway-labs/milkyway/x/epochs/types"
+	recordstypes "github.com/milkyway-labs/milkyway/x/records/types"
 	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
@@ -128,7 +127,7 @@ func (k Keeper) GetRedemptionTransferMsg(ctx sdk.Context, userRedemptionRecord *
 		k.Logger(ctx).Error(errMsg)
 		return nil, errorsmod.Wrap(types.ErrEpochNotFound, errMsg)
 	}
-	icaTimeOutNanos := k.GetParam(ctx, types.KeyICATimeoutNanos)
+	icaTimeOutNanos := k.GetParams(ctx).IcaTimeoutNanos
 	nextEpochStarttime := epochTracker.NextEpochStartTime
 	timeout := nextEpochStarttime + icaTimeOutNanos
 
