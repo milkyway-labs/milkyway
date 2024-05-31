@@ -227,7 +227,7 @@ func (p Params) Validate() error {
 	if err := validTimeoutNanos(p.IbcTransferTimeoutNanos); err != nil {
 		return err
 	}
-	if err := isPercentage(p.ValidatorWeightCap); err != nil {
+	if err := validValidatorWeightCap(p.ValidatorWeightCap); err != nil {
 		return err
 	}
 
