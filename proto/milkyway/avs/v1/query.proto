@@ -1,0 +1,47 @@
+syntax = "proto3";
+package milkyway.avs.v1;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "milkyway/avs/v1/models.proto";
+import "milkyway/avs/v1/params.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/avs/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Params defines a gRPC query method that returns the parameters of the
+  // module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/milkyway/avs/v1/params";
+  }
+
+  // Services defines a gRPC query method that returns the actively validates
+  // services currently registered in the module.
+  rpc Services(QueryServicesRequest) returns (QueryServicesResponse) {
+    option (google.api.http).get = "/milkyway/avs/v1/services";
+  }
+}
+
+// QueryParamsRequest is the request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is the response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  Params params = 1 [ (gogoproto.nullable) = false ];
+}
+
+// QueryServicesRequest is the request type for the Query/Services RPC method.
+message QueryServicesRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryServicesResponse is the response type for the Query/Services RPC method.
+message QueryServicesResponse {
+  // AVS services defines the list of actively validates services
+  repeated AVS services = 1 [ (gogoproto.nullable) = false ];
+
+  // Pagination defines the pagination response
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
