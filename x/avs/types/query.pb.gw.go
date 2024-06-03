@@ -103,7 +103,7 @@ func request_Query_Service_0(ctx context.Context, marshaler runtime.Marshaler, c
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "service_id")
 	}
 
-	protoReq.ServiceId, err = runtime.Uint64(val)
+	protoReq.ServiceId, err = runtime.Uint32(val)
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "service_id", err)
@@ -130,7 +130,7 @@ func local_request_Query_Service_0(ctx context.Context, marshaler runtime.Marsha
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "service_id")
 	}
 
-	protoReq.ServiceId, err = runtime.Uint64(val)
+	protoReq.ServiceId, err = runtime.Uint32(val)
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "service_id", err)

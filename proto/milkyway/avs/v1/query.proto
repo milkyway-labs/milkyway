@@ -55,7 +55,7 @@ message QueryServicesResponse {
 // QueryServiceRequest is the request type for the Query/Service RPC method.
 message QueryServiceRequest {
   // ServiceID is the ID of the service to query
-  uint64 service_id = 1 [ (gogoproto.customname) = "ServiceID" ];
+  uint32 service_id = 1 [ (gogoproto.customname) = "ServiceID" ];
 }
 
 // QueryServiceResponse is the response type for the Query/Service RPC method.
