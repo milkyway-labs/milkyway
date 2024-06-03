@@ -2,6 +2,7 @@ syntax = "proto3";
 package milkyway.avs.v1;
 
 import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/avs/types";
 
@@ -12,4 +13,7 @@ message AVS {
 
   // Name is the name of the AVS
   string name = 2;
+
+  // Admin is the address of the user that has registered the AVS
+  string admin = 3 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 }

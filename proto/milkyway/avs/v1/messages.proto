@@ -25,7 +25,7 @@ service Msg {
 // details of the AVS to be register.
 message MsgRegisterAVS {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "avs/MsgRegisterAVS";
+  option (amino.name) = "milkyway/MsgRegisterAVS";
 
   // Sender is the address of the user registering the AVS
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
@@ -46,7 +46,7 @@ message MsgRegisterAVSResponse {
 // operators know that they can safely stop validating it.
 message MsgDeregisterAVS {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "avs/MsgDeregisterAVS";
+  option (amino.name) = "milkyway/MsgDeregisterAVS";
 
   // Sender is the address of the user deregistering the AVS
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
