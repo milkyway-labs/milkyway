@@ -22,6 +22,12 @@ service Query {
   rpc Services(QueryServicesRequest) returns (QueryServicesResponse) {
     option (google.api.http).get = "/milkyway/avs/v1/services";
   }
+
+  // Service defines a gRPC query method that returns the service by the given
+  // service id.
+  rpc Service(QueryServiceRequest) returns (QueryServiceResponse) {
+    option (google.api.http).get = "/milkyway/avs/v1/services/{service_id}";
+  }
 }
 
 // QueryParamsRequest is the request type for the Query/Params RPC method.
@@ -44,4 +50,15 @@ message QueryServicesResponse {
 
   // Pagination defines the pagination response
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryServiceRequest is the request type for the Query/Service RPC method.
+message QueryServiceRequest {
+  // ServiceID is the ID of the service to query
+  uint64 service_id = 1 [ (gogoproto.customname) = "ServiceID" ];
+}
+
+// QueryServiceResponse is the response type for the Query/Service RPC method.
+message QueryServiceResponse {
+  AVS service = 1 [ (gogoproto.nullable) = false ];
 }
