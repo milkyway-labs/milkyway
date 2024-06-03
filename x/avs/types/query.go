@@ -19,6 +19,6 @@ func NewQueryServicesRequest(pagination *query.PageRequest) *QueryServicesReques
 // NewQueryServiceRequest creates a new QueryServiceRequest instance
 func NewQueryServiceRequest(serviceID uint32) *QueryServiceRequest {
 	return &QueryServiceRequest{
-		ServiceID: serviceID,
+		ServiceId: serviceID,
 	}
 }
