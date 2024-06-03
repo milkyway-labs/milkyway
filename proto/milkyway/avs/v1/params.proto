@@ -1,0 +1,21 @@
+syntax = "proto3";
+package milkyway.avs.v1;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/avs/types";
+
+// Params defines the parameters for the avs module.
+message Params {
+
+  // AvsCreationFee defines the fee to register a new AVS. The fee is
+  // drawn from the MsgRegisterAVS creator's account, and transferred
+  // to the community pool.
+  repeated cosmos.base.v1beta1.Coin avs_registration_fee = 1 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.moretags) = "yaml:\"avs_registration_fee\"",
+    (gogoproto.nullable) = false
+  ];
+}
