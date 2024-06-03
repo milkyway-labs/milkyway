@@ -9,7 +9,7 @@ option go_package = "github.com/milkyway-labs/milkyway/x/avs/types";
 // AVS defines the fields of an AVS
 message AVS {
   // ID is the auto-generated unique identifier for the AVS
-  uint64 id = 1 [ (gogoproto.customname) = "ID" ];
+  uint32 id = 1 [ (gogoproto.customname) = "ID" ];
 
   // Name is the name of the AVS
   string name = 2;

@@ -38,7 +38,7 @@ message MsgRegisterAVS {
 // It returns the newly created AVS ID.
 message MsgRegisterAVSResponse {
   // NewAVSID is the ID of the newly registered AVS
-  uint64 new_avs_id = 1 [ (gogoproto.customname) = "NewAVSID" ];
+  uint32 new_avs_id = 1 [ (gogoproto.customname) = "NewAVSID" ];
 }
 
 // MsgDeregisterAVS defines the message structure for the DeregisterAVS gRPC

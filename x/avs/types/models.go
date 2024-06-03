@@ -8,7 +8,7 @@ import (
 )
 
 // NewAVS creates a new AVS instance
-func NewAVS(id uint64, name string, admin string) AVS {
+func NewAVS(id uint32, name string, admin string) AVS {
 	return AVS{
 		ID:    id,
 		Name:  name,
