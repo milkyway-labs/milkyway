@@ -3,15 +3,16 @@ package stakeibc
 
 import (
 	fmt "fmt"
+	io "io"
+	reflect "reflect"
+	sync "sync"
+
 	_ "github.com/cosmos/cosmos-proto"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	io "io"
-	reflect "reflect"
-	sync "sync"
 )
 
 var (
@@ -2010,7 +2011,7 @@ func (x *TradeConfig) GetMaxSwapAmount() string {
 // the swap. It makes the assumption that the reward token is always foreign to
 // the host so therefore the first two hops are to unwind the ibc denom enroute
 // to the trade chain and the last hop is the return so funds start/end in the
-// withdrawl ICA on hostZone
+// withdrawal ICA on hostZone
 // The structure is key'd on reward denom and host denom in their native forms
 // (i.e. reward_denom_on_reward_zone and host_denom_on_host_zone)
 type TradeRoute struct {
