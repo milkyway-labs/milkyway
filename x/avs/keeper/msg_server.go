@@ -19,6 +19,10 @@ type msgServer struct {
 	Keeper
 }
 
+func NewMsgServer(k Keeper) types.MsgServer {
+	return &msgServer{Keeper: k}
+}
+
 // RegisterService defines the rpc method for Msg/RegisterService
 func (k msgServer) RegisterService(goCtx context.Context, msg *types.MsgRegisterService) (*types.MsgRegisterServiceResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)

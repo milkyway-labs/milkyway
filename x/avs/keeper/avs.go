@@ -8,19 +8,19 @@ import (
 )
 
 // SetNextAVSID sets the next AVS ID to be used when registering a new AVS
-func (k *Keeper) SetNextAVSID(ctx sdk.Context, avsID uint32) {
+func (k Keeper) SetNextAVSID(ctx sdk.Context, avsID uint32) {
 	store := ctx.KVStore(k.storeKey)
 	store.Set(types.NextAVSIDKey(), types.GetAVSIDBytes(avsID))
 }
 
 // HasNextAVSID checks if the next AVS ID is set
-func (k *Keeper) HasNextAVSID(ctx sdk.Context) bool {
+func (k Keeper) HasNextAVSID(ctx sdk.Context) bool {
 	store := ctx.KVStore(k.storeKey)
 	return store.Has(types.NextAVSIDKey())
 }
 
 // GetNextAVSID returns the next AVS ID to be used when registering a new AVS
-func (k *Keeper) GetNextAVSID(ctx sdk.Context) (avsID uint32, err error) {
+func (k Keeper) GetNextAVSID(ctx sdk.Context) (avsID uint32, err error) {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(types.NextAVSIDKey())
 	if bz == nil {
@@ -34,7 +34,7 @@ func (k *Keeper) GetNextAVSID(ctx sdk.Context) (avsID uint32, err error) {
 // --------------------------------------------------------------------------------------------------------------------
 
 // SaveAVS stores a new AVS in the KVStore
-func (k *Keeper) SaveAVS(ctx sdk.Context, avs types.AVS) {
+func (k Keeper) SaveAVS(ctx sdk.Context, avs types.AVS) {
 	previous, existed := k.GetAVS(ctx, avs.ID)
 
 	// Save the AVS data
@@ -54,7 +54,7 @@ func (k *Keeper) SaveAVS(ctx sdk.Context, avs types.AVS) {
 }
 
 // GetAVS returns an AVS from the KVStore
-func (k *Keeper) GetAVS(ctx sdk.Context, avsID uint32) (avs types.AVS, found bool) {
+func (k Keeper) GetAVS(ctx sdk.Context, avsID uint32) (avs types.AVS, found bool) {
 	store := ctx.KVStore(k.storeKey)
 
 	bz := store.Get(types.AVSStoreKey(avsID))

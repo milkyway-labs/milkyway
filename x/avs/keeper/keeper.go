@@ -24,7 +24,7 @@ func NewKeeper(cdc codec.BinaryCodec, storeKey storetypes.StoreKey) Keeper {
 }
 
 // Logger returns a module-specific logger.
-func (k *Keeper) Logger(ctx sdk.Context) log.Logger {
+func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", "x/"+types.ModuleName)
 }
 
