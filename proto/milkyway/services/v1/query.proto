@@ -1,32 +1,33 @@
 syntax = "proto3";
-package milkyway.avs.v1;
+package milkyway.services.v1;
 
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
-import "milkyway/avs/v1/models.proto";
-import "milkyway/avs/v1/params.proto";
+import "milkyway/services/v1/models.proto";
+import "milkyway/services/v1/params.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/x/avs/types";
+option go_package = "github.com/milkyway-labs/milkyway/x/services/types";
 
 // Query defines the gRPC querier service.
 service Query {
   // Service defines a gRPC query method that returns the service by the given
   // service id.
   rpc Service(QueryServiceRequest) returns (QueryServiceResponse) {
-    option (google.api.http).get = "/milkyway/avs/v1/services/{service_id}";
+    option (google.api.http).get =
+        "/milkyway/services/v1/services/{service_id}";
   }
 
   // Services defines a gRPC query method that returns the actively validates
   // services currently registered in the module.
   rpc Services(QueryServicesRequest) returns (QueryServicesResponse) {
-    option (google.api.http).get = "/milkyway/avs/v1/services";
+    option (google.api.http).get = "/milkyway/services/v1/services";
   }
 
   // Params defines a gRPC query method that returns the parameters of the
   // module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/milkyway/avs/v1/params";
+    option (google.api.http).get = "/milkyway/services/v1/params";
   }
 }
 

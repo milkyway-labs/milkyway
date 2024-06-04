@@ -1,10 +1,10 @@
 syntax = "proto3";
-package milkyway.avs.v1;
+package milkyway.services.v1;
 
 import "gogoproto/gogo.proto";
 import "cosmos_proto/cosmos.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/x/avs/types";
+option go_package = "github.com/milkyway-labs/milkyway/x/services/types";
 
 // ServiceStatus defines the status of an AVS
 enum ServiceStatus {

@@ -2,10 +2,22 @@ package types
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
+
+// ParseServiceID parses a string into a uint32
+func ParseServiceID(value string) (uint32, error) {
+	id, err := strconv.ParseUint(value, 10, 32)
+	if err != nil {
+		return 0, err
+	}
+	return uint32(id), nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------
 
 // NewService creates a new Service instance
 func NewService(

@@ -5,10 +5,8 @@ import (
 )
 
 const (
-	ModuleName   = "avs"
-	RouterKey    = ModuleName
-	StoreKey     = ModuleName
-	QuerierRoute = ModuleName
+	ModuleName = "services"
+	StoreKey   = ModuleName
 
 	DoNotModify = "[do-not-modify]"
 )
