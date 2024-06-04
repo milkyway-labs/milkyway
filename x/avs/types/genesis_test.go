@@ -20,9 +20,18 @@ func TestValidateGenesis(t *testing.T) {
 			name: "duplicated service returns error",
 			genesis: &types.GenesisState{
 				Services: []types.AVS{
-					types.NewAVS(1, "MilkyWay", "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
-					types.NewAVS(1, "MilkyWay", "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
-				},
+					{
+						ID:     1,
+						Status: types.AVS_STATUS_CREATED,
+						Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+						Name:   "MilkyWay",
+					},
+					{
+						ID:     1,
+						Status: types.AVS_STATUS_CREATED,
+						Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+						Name:   "MilkyWay",
+					}},
 				Params: types.DefaultParams(),
 			},
 			shouldErr: true,
@@ -31,8 +40,18 @@ func TestValidateGenesis(t *testing.T) {
 			name: "invalid service returns error",
 			genesis: &types.GenesisState{
 				Services: []types.AVS{
-					types.NewAVS(1, "MilkyWay", "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
-					types.NewAVS(2, "IBC Relaying", ""),
+					{
+						ID:     1,
+						Status: types.AVS_STATUS_CREATED,
+						Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+						Name:   "MilkyWay",
+					},
+					{
+						ID:     2,
+						Status: types.AVS_STATUS_UNSPECIFIED,
+						Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+						Name:   "IBC Relaying",
+					},
 				},
 				Params: types.DefaultParams(),
 			},
@@ -57,8 +76,18 @@ func TestValidateGenesis(t *testing.T) {
 			name: "valid genesis returns no error",
 			genesis: &types.GenesisState{
 				Services: []types.AVS{
-					types.NewAVS(1, "MilkyWay", "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
-					types.NewAVS(2, "IBC Relaying", "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+					{
+						ID:     1,
+						Status: types.AVS_STATUS_CREATED,
+						Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+						Name:   "MilkyWay",
+					},
+					{
+						ID:     2,
+						Status: types.AVS_STATUS_REGISTERED,
+						Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+						Name:   "IBC Relaying",
+					},
 				},
 				Params: types.NewParams(
 					sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, sdkmath.NewInt(10))),

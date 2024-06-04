@@ -14,6 +14,7 @@ import (
 
 // AVSHooks event hooks for avs objects (noalias)
 type AVSHooks interface {
+	AfterAVSCreated(ctx sdk.Context, avsID uint32)      // Must be called after an AVS is created
 	AfterAVSRegistered(ctx sdk.Context, avsID uint32)   // Must be called after an AVS is registered
 	AfterAVSDeregistered(ctx sdk.Context, avsID uint32) // Must be called after an AVS is deregistered
 }
@@ -26,6 +27,13 @@ type MultiAVSHooks []AVSHooks
 // NewMultiAVSHooks creates a new MultiAVSHooks object
 func NewMultiAVSHooks(hooks ...AVSHooks) MultiAVSHooks {
 	return hooks
+}
+
+// AfterAVSCreated implements AVSHooks
+func (m MultiAVSHooks) AfterAVSCreated(ctx sdk.Context, avsID uint32) {
+	for _, hook := range m {
+		hook.AfterAVSCreated(ctx, avsID)
+	}
 }
 
 // AfterAVSRegistered implements AVSHooks
