@@ -20,5 +20,5 @@ message GenesisState {
 
   // NextAVSId defines the ID that will be assigned to the next AVS that gets
   // created.
-  uint32 next_avs_id = 3 [(gogoproto.customname) = "NextAVSID"];
+  uint32 next_avs_id = 3 [ (gogoproto.customname) = "NextAVSID" ];
 }
