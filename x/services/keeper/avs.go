@@ -4,7 +4,7 @@ import (
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/x/avs/types"
+	"github.com/milkyway-labs/milkyway/x/services/types"
 )
 
 // SetNextAVSID sets the next AVS ID to be used when registering a new AVS
