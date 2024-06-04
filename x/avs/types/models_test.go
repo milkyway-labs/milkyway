@@ -15,23 +15,53 @@ func TestAVS_Validate(t *testing.T) {
 		shouldErr bool
 	}{
 		{
-			name:      "invalid ID returns error",
-			avs:       types.NewAVS(0, "MilkyWay", "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+			name: "invalid status returns error",
+			avs: types.AVS{
+				ID:     1,
+				Status: types.AVS_STATUS_UNSPECIFIED,
+				Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				Name:   "MilkyWay",
+			},
 			shouldErr: true,
 		},
 		{
-			name:      "invalid name returns error",
-			avs:       types.NewAVS(1, "", "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+			name: "invalid ID returns error",
+			avs: types.AVS{
+				ID:     0,
+				Status: types.AVS_STATUS_CREATED,
+				Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				Name:   "MilkyWay",
+			},
 			shouldErr: true,
 		},
 		{
-			name:      "invalid address returns error",
-			avs:       types.NewAVS(1, "MilkyWay", "invalid_address"),
+			name: "invalid name returns error",
+			avs: types.AVS{
+				ID:     1,
+				Status: types.AVS_STATUS_CREATED,
+				Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				Name:   "",
+			},
 			shouldErr: true,
 		},
 		{
-			name:      "valid AVS returns no error",
-			avs:       types.NewAVS(1, "MilkyWay", "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+			name: "invalid address returns error",
+			avs: types.AVS{
+				ID:     1,
+				Status: types.AVS_STATUS_CREATED,
+				Admin:  "",
+				Name:   "MilkyWay",
+			},
+			shouldErr: true,
+		},
+		{
+			name: "valid AVS returns no error",
+			avs: types.AVS{
+				ID:     1,
+				Status: types.AVS_STATUS_CREATED,
+				Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				Name:   "MilkyWay",
+			},
 			shouldErr: false,
 		},
 	}

@@ -13,14 +13,6 @@ var (
 	_ sdk.Msg = &MsgDeregisterAVS{}
 )
 
-// NewMsgRegisterAVS returns a new MsgRegisterAVS instance
-func NewMsgRegisterAVS(name string, sender string) *MsgRegisterAVS {
-	return &MsgRegisterAVS{
-		Name:   name,
-		Sender: sender,
-	}
-}
-
 // ValidateBasic implements sdk.Msg
 func (msg *MsgRegisterAVS) ValidateBasic() error {
 	if strings.TrimSpace(msg.Name) == "" {
@@ -47,14 +39,6 @@ func (msg *MsgRegisterAVS) GetSigners() []sdk.AccAddress {
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-
-// NewMsgDeregisterAVS returns a new MsgDeregisterAVS instance
-func NewMsgDeregisterAVS(avsID uint64, sender string) *MsgDeregisterAVS {
-	return &MsgDeregisterAVS{
-		AVSID:  avsID,
-		Sender: sender,
-	}
-}
 
 // ValidateBasic implements sdk.Msg
 func (msg *MsgDeregisterAVS) ValidateBasic() error {

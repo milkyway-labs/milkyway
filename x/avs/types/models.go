@@ -8,16 +8,32 @@ import (
 )
 
 // NewAVS creates a new AVS instance
-func NewAVS(id uint32, name string, admin string) AVS {
+func NewAVS(
+	id uint32,
+	status AVSStatus,
+	name string,
+	description string,
+	website string,
+	pictureURL string,
+	admin string,
+) AVS {
 	return AVS{
-		ID:    id,
-		Name:  name,
-		Admin: admin,
+		ID:          id,
+		Status:      status,
+		Name:        name,
+		Description: description,
+		Website:     website,
+		PictureURL:  pictureURL,
+		Admin:       admin,
 	}
 }
 
 // Validate checks that the AVS has valid values.
 func (a *AVS) Validate() error {
+	if a.Status == AVS_STATUS_UNSPECIFIED {
+		return fmt.Errorf("invalid status: %s", a.Status)
+	}
+
 	if a.ID == 0 {
 		return fmt.Errorf("invalid id: %d", a.ID)
 	}
