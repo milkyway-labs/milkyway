@@ -28,7 +28,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // Params defines the parameters for the avs module.
 type Params struct {
-	// AvsCreationFee defines the fee to register a new AVS. The fee is
+	// AvsCreationFee defines the fee to register a new Service. The fee is
 	// drawn from the MsgRegisterAVS creator's account, and transferred
 	// to the community pool.
 	AvsRegistrationFee github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,1,rep,name=avs_registration_fee,json=avsRegistrationFee,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"avs_registration_fee" yaml:"avs_registration_fee"`

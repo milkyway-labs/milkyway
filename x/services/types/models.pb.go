@@ -24,17 +24,17 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// AVSStatus defines the status of an AVS
+// AVSStatus defines the status of an Service
 type AVSStatus int32
 
 const (
-	// AVS_STATUS_UNSPECIFIED defines the AVS status is unspecified
+	// AVS_STATUS_UNSPECIFIED defines the Service status is unspecified
 	AVS_STATUS_UNSPECIFIED AVSStatus = 0
-	// AVS_STATUS_CREATED defines the AVS status is created
+	// AVS_STATUS_CREATED defines the Service status is created
 	AVS_STATUS_CREATED AVSStatus = 1
-	// AVS_STATUS_REGISTERED defines the AVS status is updated
+	// AVS_STATUS_REGISTERED defines the Service status is updated
 	AVS_STATUS_REGISTERED AVSStatus = 2
-	// AVS_STATUS_UNREGISTERED defines the AVS status is unregistered
+	// AVS_STATUS_UNREGISTERED defines the Service status is unregistered
 	AVS_STATUS_UNREGISTERED AVSStatus = 3
 )
 
@@ -60,34 +60,34 @@ func (AVSStatus) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_85e2c65ca3819b2c, []int{0}
 }
 
-// AVS defines the fields of an AVS
-type AVS struct {
-	// ID is the auto-generated unique identifier for the AVS
+// Service defines the fields of an Service
+type Service struct {
+	// ID is the auto-generated unique identifier for the Service
 	ID uint32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	// Status is the status of the AVS
+	// Status is the status of the Service
 	Status AVSStatus `protobuf:"varint,2,opt,name=status,proto3,enum=milkyway.avs.v1.AVSStatus" json:"status,omitempty"`
-	// Admin is the address of the user that has registered the AVS
+	// Admin is the address of the user that has registered the Service
 	Admin string `protobuf:"bytes,3,opt,name=admin,proto3" json:"admin,omitempty"`
-	// Name is the name of the AVS
+	// Name is the name of the Service
 	Name string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	// Description is the description of the AVS (optional)
+	// Description is the description of the Service (optional)
 	Description string `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
-	// Website is the website of the AVS (optional)
+	// Website is the website of the Service (optional)
 	Website string `protobuf:"bytes,6,opt,name=website,proto3" json:"website,omitempty"`
-	// PictureURL is the URL of the picture of the AVS (optional)
+	// PictureURL is the URL of the picture of the Service (optional)
 	PictureURL string `protobuf:"bytes,7,opt,name=pictureURL,proto3" json:"pictureURL,omitempty"`
 }
 
-func (m *AVS) Reset()         { *m = AVS{} }
-func (m *AVS) String() string { return proto.CompactTextString(m) }
-func (*AVS) ProtoMessage()    {}
-func (*AVS) Descriptor() ([]byte, []int) {
+func (m *Service) Reset()         { *m = Service{} }
+func (m *Service) String() string { return proto.CompactTextString(m) }
+func (*Service) ProtoMessage()    {}
+func (*Service) Descriptor() ([]byte, []int) {
 	return fileDescriptor_85e2c65ca3819b2c, []int{0}
 }
-func (m *AVS) XXX_Unmarshal(b []byte) error {
+func (m *Service) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *AVS) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *Service) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
 		return xxx_messageInfo_AVS.Marshal(b, m, deterministic)
 	} else {
@@ -99,61 +99,61 @@ func (m *AVS) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (m *AVS) XXX_Merge(src proto.Message) {
+func (m *Service) XXX_Merge(src proto.Message) {
 	xxx_messageInfo_AVS.Merge(m, src)
 }
-func (m *AVS) XXX_Size() int {
+func (m *Service) XXX_Size() int {
 	return m.Size()
 }
-func (m *AVS) XXX_DiscardUnknown() {
+func (m *Service) XXX_DiscardUnknown() {
 	xxx_messageInfo_AVS.DiscardUnknown(m)
 }
 
 var xxx_messageInfo_AVS proto.InternalMessageInfo
 
-func (m *AVS) GetID() uint32 {
+func (m *Service) GetID() uint32 {
 	if m != nil {
 		return m.ID
 	}
 	return 0
 }
 
-func (m *AVS) GetStatus() AVSStatus {
+func (m *Service) GetStatus() AVSStatus {
 	if m != nil {
 		return m.Status
 	}
 	return AVS_STATUS_UNSPECIFIED
 }
 
-func (m *AVS) GetAdmin() string {
+func (m *Service) GetAdmin() string {
 	if m != nil {
 		return m.Admin
 	}
 	return ""
 }
 
-func (m *AVS) GetName() string {
+func (m *Service) GetName() string {
 	if m != nil {
 		return m.Name
 	}
 	return ""
 }
 
-func (m *AVS) GetDescription() string {
+func (m *Service) GetDescription() string {
 	if m != nil {
 		return m.Description
 	}
 	return ""
 }
 
-func (m *AVS) GetWebsite() string {
+func (m *Service) GetWebsite() string {
 	if m != nil {
 		return m.Website
 	}
 	return ""
 }
 
-func (m *AVS) GetPictureURL() string {
+func (m *Service) GetPictureURL() string {
 	if m != nil {
 		return m.PictureURL
 	}
@@ -162,7 +162,7 @@ func (m *AVS) GetPictureURL() string {
 
 func init() {
 	proto.RegisterEnum("milkyway.avs.v1.AVSStatus", AVSStatus_name, AVSStatus_value)
-	proto.RegisterType((*AVS)(nil), "milkyway.avs.v1.AVS")
+	proto.RegisterType((*Service)(nil), "milkyway.avs.v1.Service")
 }
 
 func init() { proto.RegisterFile("milkyway/avs/v1/models.proto", fileDescriptor_85e2c65ca3819b2c) }
@@ -197,7 +197,7 @@ var fileDescriptor_85e2c65ca3819b2c = []byte{
 	0x4f, 0x20, 0x19, 0x24, 0x02, 0x00, 0x00,
 }
 
-func (m *AVS) Marshal() (dAtA []byte, err error) {
+func (m *Service) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -207,12 +207,12 @@ func (m *AVS) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *AVS) MarshalTo(dAtA []byte) (int, error) {
+func (m *Service) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *AVS) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *Service) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -276,7 +276,7 @@ func encodeVarintModels(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *AVS) Size() (n int) {
+func (m *Service) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -317,7 +317,7 @@ func sovModels(x uint64) (n int) {
 func sozModels(x uint64) (n int) {
 	return sovModels(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *AVS) Unmarshal(dAtA []byte) error {
+func (m *Service) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -340,10 +340,10 @@ func (m *AVS) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: AVS: wiretype end group for non-group")
+			return fmt.Errorf("proto: Service: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AVS: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: Service: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:

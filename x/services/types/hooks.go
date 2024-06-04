@@ -14,9 +14,9 @@ import (
 
 // AVSHooks event hooks for avs objects (noalias)
 type AVSHooks interface {
-	AfterAVSCreated(ctx sdk.Context, avsID uint32)      // Must be called after an AVS is created
-	AfterAVSRegistered(ctx sdk.Context, avsID uint32)   // Must be called after an AVS is registered
-	AfterAVSDeregistered(ctx sdk.Context, avsID uint32) // Must be called after an AVS is deregistered
+	AfterAVSCreated(ctx sdk.Context, avsID uint32)      // Must be called after an Service is created
+	AfterAVSRegistered(ctx sdk.Context, avsID uint32)   // Must be called after an Service is registered
+	AfterAVSDeregistered(ctx sdk.Context, avsID uint32) // Must be called after an Service is deregistered
 }
 
 // --------------------------------------------------------------------------------------------------------------------

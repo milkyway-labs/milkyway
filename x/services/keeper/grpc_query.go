@@ -21,9 +21,9 @@ func (k Keeper) Services(ctx context.Context, request *types.QueryServicesReques
 	store := sdkCtx.KVStore(k.storeKey)
 	servicesStore := prefix.NewStore(store, types.AVSPrefix)
 
-	var services []types.AVS
+	var services []types.Service
 	pageRes, err := query.Paginate(servicesStore, request.Pagination, func(key []byte, value []byte) error {
-		var service types.AVS
+		var service types.Service
 		if err := k.cdc.Unmarshal(value, &service); err != nil {
 			return status.Error(codes.Internal, err.Error())
 		}

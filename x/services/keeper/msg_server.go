@@ -33,8 +33,8 @@ func (k msgServer) RegisterService(goCtx context.Context, msg *types.MsgRegister
 		return nil, err
 	}
 
-	// Create the AVS and validate it
-	avs := types.NewAVS(
+	// Create the Service and validate it
+	avs := types.NewService(
 		avsID,
 		types.AVS_STATUS_CREATED,
 		msg.Name,
@@ -47,10 +47,10 @@ func (k msgServer) RegisterService(goCtx context.Context, msg *types.MsgRegister
 		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	// Store the AVS
+	// Store the Service
 	k.SaveAVS(ctx, avs)
 
-	// Update the ID for the next AVS
+	// Update the ID for the next Service
 	k.SetNextAVSID(ctx, avs.ID+1)
 
 	// Emit the event
@@ -70,19 +70,19 @@ func (k msgServer) RegisterService(goCtx context.Context, msg *types.MsgRegister
 func (k msgServer) UpdateService(goCtx context.Context, msg *types.MsgUpdateService) (*types.MsgUpdateServiceResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// Check if the AVS exists
+	// Check if the Service exists
 	avs, found := k.GetAVS(ctx, msg.ServiceID)
 	if !found {
 		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, "avs with id %d not found", msg.ServiceID)
 	}
 
-	// Update the AVS and validate it
-	updated := avs.Update(types.NewAVSUpdate(msg.Name, msg.Description, msg.Website, msg.PictureURL))
+	// Update the Service and validate it
+	updated := avs.Update(types.NewServiceUpdate(msg.Name, msg.Description, msg.Website, msg.PictureURL))
 	if err := updated.Validate(); err != nil {
 		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	// Save the AVS
+	// Save the Service
 	k.SaveAVS(ctx, updated)
 
 	// Emit the event

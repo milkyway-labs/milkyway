@@ -7,19 +7,19 @@ import (
 	"github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-// SetNextAVSID sets the next AVS ID to be used when registering a new AVS
+// SetNextAVSID sets the next Service ID to be used when registering a new Service
 func (k Keeper) SetNextAVSID(ctx sdk.Context, avsID uint32) {
 	store := ctx.KVStore(k.storeKey)
 	store.Set(types.NextAVSIDKey(), types.GetAVSIDBytes(avsID))
 }
 
-// HasNextAVSID checks if the next AVS ID is set
+// HasNextAVSID checks if the next Service ID is set
 func (k Keeper) HasNextAVSID(ctx sdk.Context) bool {
 	store := ctx.KVStore(k.storeKey)
 	return store.Has(types.NextAVSIDKey())
 }
 
-// GetNextAVSID returns the next AVS ID to be used when registering a new AVS
+// GetNextAVSID returns the next Service ID to be used when registering a new Service
 func (k Keeper) GetNextAVSID(ctx sdk.Context) (avsID uint32, err error) {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(types.NextAVSIDKey())
@@ -33,16 +33,16 @@ func (k Keeper) GetNextAVSID(ctx sdk.Context) (avsID uint32, err error) {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// SaveAVS stores a new AVS in the KVStore
-func (k Keeper) SaveAVS(ctx sdk.Context, avs types.AVS) {
+// SaveAVS stores a new Service in the KVStore
+func (k Keeper) SaveAVS(ctx sdk.Context, avs types.Service) {
 	previous, existed := k.GetAVS(ctx, avs.ID)
 
-	// Save the AVS data
+	// Save the Service data
 	store := ctx.KVStore(k.storeKey)
 	store.Set(types.AVSStoreKey(avs.ID), k.cdc.MustMarshal(&avs))
 	k.Logger(ctx).Debug("saved avs", "id", avs.ID)
 
-	// Call the hook based on the AVS status change
+	// Call the hook based on the Service status change
 	switch {
 	case !existed:
 		k.AfterAVSCreated(ctx, avs.ID)
@@ -53,8 +53,8 @@ func (k Keeper) SaveAVS(ctx sdk.Context, avs types.AVS) {
 	}
 }
 
-// GetAVS returns an AVS from the KVStore
-func (k Keeper) GetAVS(ctx sdk.Context, avsID uint32) (avs types.AVS, found bool) {
+// GetAVS returns an Service from the KVStore
+func (k Keeper) GetAVS(ctx sdk.Context, avsID uint32) (avs types.Service, found bool) {
 	store := ctx.KVStore(k.storeKey)
 
 	bz := store.Get(types.AVSStoreKey(avsID))

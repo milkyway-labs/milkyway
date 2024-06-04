@@ -11,12 +11,12 @@ import (
 func TestAVS_Validate(t *testing.T) {
 	testCases := []struct {
 		name      string
-		avs       types.AVS
+		avs       types.Service
 		shouldErr bool
 	}{
 		{
 			name: "invalid status returns error",
-			avs: types.AVS{
+			avs: types.Service{
 				ID:     1,
 				Status: types.AVS_STATUS_UNSPECIFIED,
 				Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -26,7 +26,7 @@ func TestAVS_Validate(t *testing.T) {
 		},
 		{
 			name: "invalid ID returns error",
-			avs: types.AVS{
+			avs: types.Service{
 				ID:     0,
 				Status: types.AVS_STATUS_CREATED,
 				Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -36,7 +36,7 @@ func TestAVS_Validate(t *testing.T) {
 		},
 		{
 			name: "invalid name returns error",
-			avs: types.AVS{
+			avs: types.Service{
 				ID:     1,
 				Status: types.AVS_STATUS_CREATED,
 				Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -46,7 +46,7 @@ func TestAVS_Validate(t *testing.T) {
 		},
 		{
 			name: "invalid address returns error",
-			avs: types.AVS{
+			avs: types.Service{
 				ID:     1,
 				Status: types.AVS_STATUS_CREATED,
 				Admin:  "",
@@ -55,8 +55,8 @@ func TestAVS_Validate(t *testing.T) {
 			shouldErr: true,
 		},
 		{
-			name: "valid AVS returns no error",
-			avs: types.AVS{
+			name: "valid Service returns no error",
+			avs: types.Service{
 				ID:     1,
 				Status: types.AVS_STATUS_CREATED,
 				Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",

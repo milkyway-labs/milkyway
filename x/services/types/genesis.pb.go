@@ -28,8 +28,8 @@ type GenesisState struct {
 	// Params defines the parameters of the module.
 	Params Params `protobuf:"bytes,1,opt,name=params,proto3" json:"params"`
 	// Services defines the list of actively validated services.
-	Services []AVS `protobuf:"bytes,2,rep,name=services,proto3" json:"services" yaml:"services"`
-	// NextAVSId defines the ID that will be assigned to the next AVS that gets
+	Services []Service `protobuf:"bytes,2,rep,name=services,proto3" json:"services" yaml:"services"`
+	// NextAVSId defines the ID that will be assigned to the next Service that gets
 	// created.
 	NextAVSID uint32 `protobuf:"varint,3,opt,name=next_avs_id,json=nextAvsId,proto3" json:"next_avs_id,omitempty"`
 }
@@ -74,7 +74,7 @@ func (m *GenesisState) GetParams() Params {
 	return Params{}
 }
 
-func (m *GenesisState) GetServices() []AVS {
+func (m *GenesisState) GetServices() []Service {
 	if m != nil {
 		return m.Services
 	}
@@ -297,7 +297,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Services = append(m.Services, AVS{})
+			m.Services = append(m.Services, Service{})
 			if err := m.Services[len(m.Services)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}

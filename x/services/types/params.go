@@ -23,7 +23,7 @@ func DefaultParams() Params {
 // Validate checks that the parameters have valid values.
 func (p *Params) Validate() error {
 	if !p.AvsRegistrationFee.IsValid() {
-		return errors.Wrapf(sdkerrors.ErrInvalidCoins, "invalid AVS registration fee: %s", p.AvsRegistrationFee)
+		return errors.Wrapf(sdkerrors.ErrInvalidCoins, "invalid Service registration fee: %s", p.AvsRegistrationFee)
 	}
 
 	return nil

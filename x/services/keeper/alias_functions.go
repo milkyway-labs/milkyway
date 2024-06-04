@@ -8,13 +8,13 @@ import (
 )
 
 // IterateServices iterates over the services in the store and performs a callback function
-func (k Keeper) IterateServices(ctx sdk.Context, cb func(service types.AVS) (stop bool)) {
+func (k Keeper) IterateServices(ctx sdk.Context, cb func(service types.Service) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 	iterator := storetypes.KVStorePrefixIterator(store, types.AVSPrefix)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var service types.AVS
+		var service types.Service
 		k.cdc.MustUnmarshal(iterator.Value(), &service)
 
 		if cb(service) {

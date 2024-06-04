@@ -159,8 +159,8 @@ func (m *QueryServicesRequest) GetPagination() *query.PageRequest {
 
 // QueryServicesResponse is the response type for the Query/Services RPC method.
 type QueryServicesResponse struct {
-	// AVS services defines the list of actively validates services
-	Services []AVS `protobuf:"bytes,1,rep,name=services,proto3" json:"services"`
+	// Service services defines the list of actively validates services
+	Services []Service `protobuf:"bytes,1,rep,name=services,proto3" json:"services"`
 	// Pagination defines the pagination response
 	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
@@ -198,7 +198,7 @@ func (m *QueryServicesResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryServicesResponse proto.InternalMessageInfo
 
-func (m *QueryServicesResponse) GetServices() []AVS {
+func (m *QueryServicesResponse) GetServices() []Service {
 	if m != nil {
 		return m.Services
 	}
@@ -260,7 +260,7 @@ func (m *QueryServiceRequest) GetServiceId() uint32 {
 
 // QueryServiceResponse is the response type for the Query/Service RPC method.
 type QueryServiceResponse struct {
-	Service AVS `protobuf:"bytes,1,opt,name=service,proto3" json:"service"`
+	Service Service `protobuf:"bytes,1,opt,name=service,proto3" json:"service"`
 }
 
 func (m *QueryServiceResponse) Reset()         { *m = QueryServiceResponse{} }
@@ -296,11 +296,11 @@ func (m *QueryServiceResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryServiceResponse proto.InternalMessageInfo
 
-func (m *QueryServiceResponse) GetService() AVS {
+func (m *QueryServiceResponse) GetService() Service {
 	if m != nil {
 		return m.Service
 	}
-	return AVS{}
+	return Service{}
 }
 
 func init() {
@@ -1084,7 +1084,7 @@ func (m *QueryServicesResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Services = append(m.Services, AVS{})
+			m.Services = append(m.Services, Service{})
 			if err := m.Services[len(m.Services)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}

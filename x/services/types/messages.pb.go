@@ -35,18 +35,18 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // MsgRegisterServiceResponse defines the message structure for the
 // RegisterService gRPC service method. It allows an account to register a new
-// AVS that later on operators can opt to validate. It requires a sender address
-// as well as the details of the AVS to be register.
+// Service that later on operators can opt to validate. It requires a sender address
+// as well as the details of the Service to be register.
 type MsgRegisterService struct {
-	// Sender is the address of the user registering the AVS
+	// Sender is the address of the user registering the Service
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	// Name is the name of the AVS
+	// Name is the name of the Service
 	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty" yaml:"name"`
-	// Description is the description of the AVS (optional)
+	// Description is the description of the Service (optional)
 	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty" yaml:"description"`
-	// Website is the website of the AVS (optional)
+	// Website is the website of the Service (optional)
 	Website string `protobuf:"bytes,4,opt,name=website,proto3" json:"website,omitempty" yaml:"website"`
-	// PictureURL is the URL of the AVS picture (optional)
+	// PictureURL is the URL of the Service picture (optional)
 	PictureURL string `protobuf:"bytes,5,opt,name=picture_url,json=pictureUrl,proto3" json:"picture_url,omitempty" yaml:"picture_url"`
 }
 
@@ -119,9 +119,9 @@ func (m *MsgRegisterService) GetPictureURL() string {
 }
 
 // MsgRegisterServiceResponse is the return value of MsgRegisterService.
-// It returns the newly created AVS ID.
+// It returns the newly created Service ID.
 type MsgRegisterServiceResponse struct {
-	// NewServiceID is the ID of the newly registered AVS
+	// NewServiceID is the ID of the newly registered Service
 	NewServiceID uint32 `protobuf:"varint,1,opt,name=new_service_id,json=newServiceId,proto3" json:"new_service_id,omitempty"`
 }
 
@@ -166,23 +166,23 @@ func (m *MsgRegisterServiceResponse) GetNewServiceID() uint32 {
 }
 
 // MsgUpdateService defines the message structure for the UpdateService gRPC
-// service method. It allows the AVS owner to update the details of
-// an existing AVS.
+// service method. It allows the Service owner to update the details of
+// an existing Service.
 type MsgUpdateService struct {
-	// Sender is the address of the user updating the AVS
+	// Sender is the address of the user updating the Service
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	// ID represents the ID of the AVS to be updated
+	// ID represents the ID of the Service to be updated
 	ServiceID uint32 `protobuf:"varint,2,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
-	// Name is the new name of the AVS (optional).
+	// Name is the new name of the Service (optional).
 	// If it shouldn't be changed, use [do-not-modify] instead.
 	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty" yaml:"name"`
-	// Description is the new description of the AVS (optional)
+	// Description is the new description of the Service (optional)
 	// If it shouldn't be changed, use [do-not-modify] instead.
 	Description string `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty" yaml:"description"`
-	// Website is the new website of the AVS (optional)
+	// Website is the new website of the Service (optional)
 	// If it shouldn't be changed, use [do-not-modify] instead.
 	Website string `protobuf:"bytes,5,opt,name=website,proto3" json:"website,omitempty" yaml:"website"`
-	// PictureURL is the new URL of the AVS picture (optional)
+	// PictureURL is the new URL of the Service picture (optional)
 	// If it shouldn't be changed, use [do-not-modify] instead.
 	PictureURL string `protobuf:"bytes,6,opt,name=picture_url,json=pictureUrl,proto3" json:"picture_url,omitempty" yaml:"picture_url"`
 }

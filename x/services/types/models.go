@@ -7,8 +7,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// NewAVS creates a new AVS instance
-func NewAVS(
+// NewService creates a new Service instance
+func NewService(
 	id uint32,
 	status AVSStatus,
 	name string,
@@ -16,8 +16,8 @@ func NewAVS(
 	website string,
 	pictureURL string,
 	admin string,
-) AVS {
-	return AVS{
+) Service {
+	return Service{
 		ID:          id,
 		Status:      status,
 		Name:        name,
@@ -28,8 +28,8 @@ func NewAVS(
 	}
 }
 
-// Validate checks that the AVS has valid values.
-func (a *AVS) Validate() error {
+// Validate checks that the Service has valid values.
+func (a *Service) Validate() error {
 	if a.Status == AVS_STATUS_UNSPECIFIED {
 		return fmt.Errorf("invalid status: %s", a.Status)
 	}
@@ -52,22 +52,22 @@ func (a *AVS) Validate() error {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// AVSUpdate defines the fields that can be updated in an AVS.
-type AVSUpdate struct {
+// ServiceUpdate defines the fields that can be updated in an Service.
+type ServiceUpdate struct {
 	Name        string
 	Description string
 	Website     string
 	PictureURL  string
 }
 
-// NewAVSUpdate returns a new AVSUpdate instance.
-func NewAVSUpdate(
+// NewServiceUpdate returns a new ServiceUpdate instance.
+func NewServiceUpdate(
 	name string,
 	description string,
 	website string,
 	pictureURL string,
-) AVSUpdate {
-	return AVSUpdate{
+) ServiceUpdate {
+	return ServiceUpdate{
 		Name:        name,
 		Description: description,
 		Website:     website,
@@ -75,8 +75,8 @@ func NewAVSUpdate(
 	}
 }
 
-// Update returns a new AVS with updated fields.
-func (a *AVS) Update(update AVSUpdate) AVS {
+// Update returns a new Service with updated fields.
+func (a *Service) Update(update ServiceUpdate) Service {
 	if update.Name == DoNotModify {
 		update.Name = a.Name
 	}
@@ -93,7 +93,7 @@ func (a *AVS) Update(update AVSUpdate) AVS {
 		update.PictureURL = a.PictureURL
 	}
 
-	return NewAVS(
+	return NewService(
 		a.ID,
 		a.Status,
 		update.Name,

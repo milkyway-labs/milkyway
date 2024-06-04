@@ -7,7 +7,7 @@ import (
 )
 
 // NewGenesisState returns a new GenesisState instance
-func NewGenesisState(nextAVSID uint32, services []AVS, params Params) *GenesisState {
+func NewGenesisState(nextAVSID uint32, services []Service, params Params) *GenesisState {
 	return &GenesisState{
 		NextAVSID: nextAVSID,
 		Services:  services,
@@ -24,9 +24,9 @@ func DefaultGenesis() *GenesisState {
 
 // Validate validates the GenesisState and returns an error if it is invalid.
 func (data *GenesisState) Validate() error {
-	// Check for the next AVS ID
+	// Check for the next Service ID
 	if data.NextAVSID == 0 {
-		return fmt.Errorf("invalid next AVS ID: %d", data.NextAVSID)
+		return fmt.Errorf("invalid next Service ID: %d", data.NextAVSID)
 	}
 
 	// Check for duplicated services
@@ -51,8 +51,8 @@ func (data *GenesisState) Validate() error {
 
 // findDuplicatedService returns the first duplicated service in the slice.
 // If no duplicates are found, it returns nil instead.
-func findDuplicatedService(services []AVS) *AVS {
-	return utils.FindDuplicate(services, func(a, b AVS) bool {
+func findDuplicatedService(services []Service) *Service {
+	return utils.FindDuplicate(services, func(a, b Service) bool {
 		return a.ID == b.ID
 	})
 }
