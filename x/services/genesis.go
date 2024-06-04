@@ -1,10 +1,10 @@
-package avs
+package services
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/x/avs/keeper"
-	"github.com/milkyway-labs/milkyway/x/avs/types"
+	"github.com/milkyway-labs/milkyway/x/services/keeper"
+	"github.com/milkyway-labs/milkyway/x/services/types"
 )
 
 // ExportGenesis returns the GenesisState associated with the given context

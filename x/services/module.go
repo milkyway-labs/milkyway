@@ -1,4 +1,4 @@
-package avs
+package services
 
 import (
 	"context"
@@ -17,10 +17,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milkyway/x/avs/client/cli"
+	"github.com/milkyway-labs/milkyway/x/services/client/cli"
 
-	"github.com/milkyway-labs/milkyway/x/avs/keeper"
-	"github.com/milkyway-labs/milkyway/x/avs/types"
+	"github.com/milkyway-labs/milkyway/x/services/keeper"
+	"github.com/milkyway-labs/milkyway/x/services/types"
 )
 
 const (
