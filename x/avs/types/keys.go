@@ -9,6 +9,8 @@ const (
 	RouterKey    = ModuleName
 	StoreKey     = ModuleName
 	QuerierRoute = ModuleName
+
+	DoNotModify = "[do-not-modify]"
 )
 
 var (

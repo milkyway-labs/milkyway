@@ -16,7 +16,7 @@ service Msg {
   option (cosmos.msg.v1.service) = true;
 
   rpc RegisterAVS(MsgRegisterAVS) returns (MsgRegisterAVSResponse);
-  rpc DeregisterAVS(MsgDeregisterAVS) returns (MsgDeregisterAVSResponse);
+  rpc UpdateAVS(MsgUpdateAVS) returns (MsgUpdateAVSResponse);
 }
 
 // MsgRegisterAVSResponse defines the message structure for the RegisterAVS
@@ -40,10 +40,7 @@ message MsgRegisterAVS {
   string website = 4 [ (gogoproto.moretags) = "yaml:\"website\"" ];
 
   // PictureURL is the URL of the AVS picture (optional)
-  string picture_url = 5 [
-    (gogoproto.customname) = "NewAVSID",
-    (gogoproto.moretags) = "yaml:\"picture_url\""
-  ];
+  string picture_url = 5 [ (gogoproto.moretags) = "yaml:\"picture_url\"" ];
 }
 
 // MsgRegisterAVSResponse is the return value of MsgRegisterAVS.
@@ -53,19 +50,35 @@ message MsgRegisterAVSResponse {
   uint32 new_avs_id = 1 [ (gogoproto.customname) = "NewAVSID" ];
 }
 
-// MsgDeregisterAVS defines the message structure for the DeregisterAVS gRPC
-// service method. It allows the AVS owner to deregister their AVS so that
-// operators know that they can safely stop validating it.
-message MsgDeregisterAVS {
+// MsgUpdateAVS defines the message structure for the UpdateAVS gRPC
+// service method. It allows the AVS owner to update the details of
+// an existing AVS.
+message MsgUpdateAVS {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/MsgDeregisterAVS";
+  option (amino.name) = "milkyway/MsgUpdateAVS";
 
   // Sender is the address of the user deregistering the AVS
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
-  // AVSID is the ID of the AVS to be deregistered
-  uint64 avs_id = 2 [ (gogoproto.customname) = "AVSID" ];
+  // ID represents the ID of the AVS to be updated
+  uint64 id = 2 [ (gogoproto.customname) = "ID" ];
+
+  // Name is the new name of the AVS (optional).
+  // If it shouldn't be changed, use [do-not-modify] instead.
+  string name = 3 [ (gogoproto.moretags) = "yaml:\"name\"" ];
+
+  // Description is the new description of the AVS (optional)
+  // If it shouldn't be changed, use [do-not-modify] instead.
+  string description = 4 [ (gogoproto.moretags) = "yaml:\"description\"" ];
+
+  // Website is the new website of the AVS (optional)
+  // If it shouldn't be changed, use [do-not-modify] instead.
+  string website = 5 [ (gogoproto.moretags) = "yaml:\"website\"" ];
+
+  // PictureURL is the new URL of the AVS picture (optional)
+  // If it shouldn't be changed, use [do-not-modify] instead.
+  string picture_url = 6 [ (gogoproto.moretags) = "yaml:\"picture_url\"" ];
 }
 
-// MsgDeregisterAVSResponse is the return value of MsgDeregisterAVS.
-message MsgDeregisterAVSResponse {}
+// MsgUpdateAVSResponse is the return value of MsgUpdateAVS.
+message MsgUpdateAVSResponse {}
