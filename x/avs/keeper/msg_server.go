@@ -19,8 +19,8 @@ type msgServer struct {
 	Keeper
 }
 
-// RegisterAVS defines the rpc method for Msg/RegisterAVS
-func (k msgServer) RegisterAVS(goCtx context.Context, msg *types.MsgRegisterAVS) (*types.MsgRegisterAVSResponse, error) {
+// RegisterService defines the rpc method for Msg/RegisterService
+func (k msgServer) RegisterService(goCtx context.Context, msg *types.MsgRegisterService) (*types.MsgRegisterServiceResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Get the next reaction id
@@ -52,24 +52,24 @@ func (k msgServer) RegisterAVS(goCtx context.Context, msg *types.MsgRegisterAVS)
 	// Emit the event
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeRegisteredAVS,
-			sdk.NewAttribute(types.AttributeKeyAVSID, fmt.Sprintf("%d", avs.ID)),
+			types.EventTypeRegisteredService,
+			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", avs.ID)),
 		),
 	})
 
-	return &types.MsgRegisterAVSResponse{
-		NewAVSID: avs.ID,
+	return &types.MsgRegisterServiceResponse{
+		NewServiceID: avs.ID,
 	}, nil
 }
 
-// UpdateAVS defines the rpc method for Msg/UpdateAVS
-func (k msgServer) UpdateAVS(goCtx context.Context, msg *types.MsgUpdateAVS) (*types.MsgUpdateAVSResponse, error) {
+// UpdateService defines the rpc method for Msg/UpdateService
+func (k msgServer) UpdateService(goCtx context.Context, msg *types.MsgUpdateService) (*types.MsgUpdateServiceResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Check if the AVS exists
-	avs, found := k.GetAVS(ctx, msg.AVSID)
+	avs, found := k.GetAVS(ctx, msg.ServiceID)
 	if !found {
-		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, "avs with id %d not found", msg.AVSID)
+		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, "avs with id %d not found", msg.ServiceID)
 	}
 
 	// Update the AVS and validate it
@@ -84,10 +84,10 @@ func (k msgServer) UpdateAVS(goCtx context.Context, msg *types.MsgUpdateAVS) (*t
 	// Emit the event
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeUpdatedAVS,
-			sdk.NewAttribute(types.AttributeKeyAVSID, fmt.Sprintf("%d", msg.AVSID)),
+			types.EventTypeUpdatedService,
+			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
 		),
 	})
 
-	return &types.MsgUpdateAVSResponse{}, nil
+	return &types.MsgUpdateServiceResponse{}, nil
 }

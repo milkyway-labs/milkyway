@@ -9,12 +9,12 @@ import (
 )
 
 var (
-	_ sdk.Msg = &MsgRegisterAVS{}
-	_ sdk.Msg = &MsgUpdateAVS{}
+	_ sdk.Msg = &MsgRegisterService{}
+	_ sdk.Msg = &MsgUpdateService{}
 )
 
 // ValidateBasic implements sdk.Msg
-func (msg *MsgRegisterAVS) ValidateBasic() error {
+func (msg *MsgRegisterService) ValidateBasic() error {
 	if strings.TrimSpace(msg.Name) == "" || msg.Name == DoNotModify {
 		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid name: %s", msg.Name)
 	}
@@ -40,12 +40,12 @@ func (msg *MsgRegisterAVS) ValidateBasic() error {
 }
 
 // GetSignBytes implements sdk.Msg
-func (msg *MsgRegisterAVS) GetSignBytes() []byte {
+func (msg *MsgRegisterService) GetSignBytes() []byte {
 	return AminoCdc.MustMarshalJSON(msg)
 }
 
 // GetSigners implements sdk.Msg
-func (msg *MsgRegisterAVS) GetSigners() []sdk.AccAddress {
+func (msg *MsgRegisterService) GetSigners() []sdk.AccAddress {
 	addr, _ := sdk.AccAddressFromBech32(msg.Sender)
 	return []sdk.AccAddress{addr}
 }
@@ -53,9 +53,9 @@ func (msg *MsgRegisterAVS) GetSigners() []sdk.AccAddress {
 // --------------------------------------------------------------------------------------------------------------------
 
 // ValidateBasic implements sdk.Msg
-func (msg *MsgUpdateAVS) ValidateBasic() error {
-	if msg.AVSID == 0 {
-		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid avs id: %d", msg.AVSID)
+func (msg *MsgUpdateService) ValidateBasic() error {
+	if msg.ServiceID == 0 {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid service id: %d", msg.ServiceID)
 	}
 
 	_, err := sdk.AccAddressFromBech32(msg.Sender)
@@ -67,12 +67,12 @@ func (msg *MsgUpdateAVS) ValidateBasic() error {
 }
 
 // GetSignBytes implements sdk.Msg
-func (msg *MsgUpdateAVS) GetSignBytes() []byte {
+func (msg *MsgUpdateService) GetSignBytes() []byte {
 	return AminoCdc.MustMarshalJSON(msg)
 }
 
 // GetSigners implements sdk.Msg
-func (msg *MsgUpdateAVS) GetSigners() []sdk.AccAddress {
+func (msg *MsgUpdateService) GetSigners() []sdk.AccAddress {
 	addr, _ := sdk.AccAddressFromBech32(msg.Sender)
 	return []sdk.AccAddress{addr}
 }

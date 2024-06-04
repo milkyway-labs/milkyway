@@ -33,11 +33,11 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// MsgRegisterAVSResponse defines the message structure for the RegisterAVS
-// gRPC service method. It allows an account to register a new AVS that later on
-// operators can opt to validate. It requires a sender address as well as the
-// details of the AVS to be register.
-type MsgRegisterAVS struct {
+// MsgRegisterServiceResponse defines the message structure for the
+// RegisterService gRPC service method. It allows an account to register a new
+// AVS that later on operators can opt to validate. It requires a sender address
+// as well as the details of the AVS to be register.
+type MsgRegisterService struct {
 	// Sender is the address of the user registering the AVS
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
 	// Name is the name of the AVS
@@ -50,18 +50,18 @@ type MsgRegisterAVS struct {
 	PictureURL string `protobuf:"bytes,5,opt,name=picture_url,json=pictureUrl,proto3" json:"picture_url,omitempty" yaml:"picture_url"`
 }
 
-func (m *MsgRegisterAVS) Reset()         { *m = MsgRegisterAVS{} }
-func (m *MsgRegisterAVS) String() string { return proto.CompactTextString(m) }
-func (*MsgRegisterAVS) ProtoMessage()    {}
-func (*MsgRegisterAVS) Descriptor() ([]byte, []int) {
+func (m *MsgRegisterService) Reset()         { *m = MsgRegisterService{} }
+func (m *MsgRegisterService) String() string { return proto.CompactTextString(m) }
+func (*MsgRegisterService) ProtoMessage()    {}
+func (*MsgRegisterService) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ee6728b943d8fd23, []int{0}
 }
-func (m *MsgRegisterAVS) XXX_Unmarshal(b []byte) error {
+func (m *MsgRegisterService) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgRegisterAVS) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgRegisterService) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgRegisterAVS.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgRegisterService.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -71,72 +71,72 @@ func (m *MsgRegisterAVS) XXX_Marshal(b []byte, deterministic bool) ([]byte, erro
 		return b[:n], nil
 	}
 }
-func (m *MsgRegisterAVS) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgRegisterAVS.Merge(m, src)
+func (m *MsgRegisterService) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRegisterService.Merge(m, src)
 }
-func (m *MsgRegisterAVS) XXX_Size() int {
+func (m *MsgRegisterService) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgRegisterAVS) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgRegisterAVS.DiscardUnknown(m)
+func (m *MsgRegisterService) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRegisterService.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgRegisterAVS proto.InternalMessageInfo
+var xxx_messageInfo_MsgRegisterService proto.InternalMessageInfo
 
-func (m *MsgRegisterAVS) GetSender() string {
+func (m *MsgRegisterService) GetSender() string {
 	if m != nil {
 		return m.Sender
 	}
 	return ""
 }
 
-func (m *MsgRegisterAVS) GetName() string {
+func (m *MsgRegisterService) GetName() string {
 	if m != nil {
 		return m.Name
 	}
 	return ""
 }
 
-func (m *MsgRegisterAVS) GetDescription() string {
+func (m *MsgRegisterService) GetDescription() string {
 	if m != nil {
 		return m.Description
 	}
 	return ""
 }
 
-func (m *MsgRegisterAVS) GetWebsite() string {
+func (m *MsgRegisterService) GetWebsite() string {
 	if m != nil {
 		return m.Website
 	}
 	return ""
 }
 
-func (m *MsgRegisterAVS) GetPictureURL() string {
+func (m *MsgRegisterService) GetPictureURL() string {
 	if m != nil {
 		return m.PictureURL
 	}
 	return ""
 }
 
-// MsgRegisterAVSResponse is the return value of MsgRegisterAVS.
+// MsgRegisterServiceResponse is the return value of MsgRegisterService.
 // It returns the newly created AVS ID.
-type MsgRegisterAVSResponse struct {
-	// NewAVSID is the ID of the newly registered AVS
-	NewAVSID uint32 `protobuf:"varint,1,opt,name=new_avs_id,json=newAvsId,proto3" json:"new_avs_id,omitempty"`
+type MsgRegisterServiceResponse struct {
+	// NewServiceID is the ID of the newly registered AVS
+	NewServiceID uint32 `protobuf:"varint,1,opt,name=new_service_id,json=newServiceId,proto3" json:"new_service_id,omitempty"`
 }
 
-func (m *MsgRegisterAVSResponse) Reset()         { *m = MsgRegisterAVSResponse{} }
-func (m *MsgRegisterAVSResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgRegisterAVSResponse) ProtoMessage()    {}
-func (*MsgRegisterAVSResponse) Descriptor() ([]byte, []int) {
+func (m *MsgRegisterServiceResponse) Reset()         { *m = MsgRegisterServiceResponse{} }
+func (m *MsgRegisterServiceResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgRegisterServiceResponse) ProtoMessage()    {}
+func (*MsgRegisterServiceResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ee6728b943d8fd23, []int{1}
 }
-func (m *MsgRegisterAVSResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgRegisterServiceResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgRegisterAVSResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgRegisterServiceResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgRegisterAVSResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgRegisterServiceResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -146,33 +146,33 @@ func (m *MsgRegisterAVSResponse) XXX_Marshal(b []byte, deterministic bool) ([]by
 		return b[:n], nil
 	}
 }
-func (m *MsgRegisterAVSResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgRegisterAVSResponse.Merge(m, src)
+func (m *MsgRegisterServiceResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRegisterServiceResponse.Merge(m, src)
 }
-func (m *MsgRegisterAVSResponse) XXX_Size() int {
+func (m *MsgRegisterServiceResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgRegisterAVSResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgRegisterAVSResponse.DiscardUnknown(m)
+func (m *MsgRegisterServiceResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRegisterServiceResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgRegisterAVSResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgRegisterServiceResponse proto.InternalMessageInfo
 
-func (m *MsgRegisterAVSResponse) GetNewAVSID() uint32 {
+func (m *MsgRegisterServiceResponse) GetNewServiceID() uint32 {
 	if m != nil {
-		return m.NewAVSID
+		return m.NewServiceID
 	}
 	return 0
 }
 
-// MsgUpdateAVS defines the message structure for the UpdateAVS gRPC
+// MsgUpdateService defines the message structure for the UpdateService gRPC
 // service method. It allows the AVS owner to update the details of
 // an existing AVS.
-type MsgUpdateAVS struct {
-	// Sender is the address of the user deregistering the AVS
+type MsgUpdateService struct {
+	// Sender is the address of the user updating the AVS
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
 	// ID represents the ID of the AVS to be updated
-	AVSID uint32 `protobuf:"varint,2,opt,name=avs_id,json=avsId,proto3" json:"avs_id,omitempty"`
+	ServiceID uint32 `protobuf:"varint,2,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
 	// Name is the new name of the AVS (optional).
 	// If it shouldn't be changed, use [do-not-modify] instead.
 	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty" yaml:"name"`
@@ -187,18 +187,18 @@ type MsgUpdateAVS struct {
 	PictureURL string `protobuf:"bytes,6,opt,name=picture_url,json=pictureUrl,proto3" json:"picture_url,omitempty" yaml:"picture_url"`
 }
 
-func (m *MsgUpdateAVS) Reset()         { *m = MsgUpdateAVS{} }
-func (m *MsgUpdateAVS) String() string { return proto.CompactTextString(m) }
-func (*MsgUpdateAVS) ProtoMessage()    {}
-func (*MsgUpdateAVS) Descriptor() ([]byte, []int) {
+func (m *MsgUpdateService) Reset()         { *m = MsgUpdateService{} }
+func (m *MsgUpdateService) String() string { return proto.CompactTextString(m) }
+func (*MsgUpdateService) ProtoMessage()    {}
+func (*MsgUpdateService) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ee6728b943d8fd23, []int{2}
 }
-func (m *MsgUpdateAVS) XXX_Unmarshal(b []byte) error {
+func (m *MsgUpdateService) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgUpdateAVS) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgUpdateService) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgUpdateAVS.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgUpdateService.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -208,76 +208,76 @@ func (m *MsgUpdateAVS) XXX_Marshal(b []byte, deterministic bool) ([]byte, error)
 		return b[:n], nil
 	}
 }
-func (m *MsgUpdateAVS) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgUpdateAVS.Merge(m, src)
+func (m *MsgUpdateService) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUpdateService.Merge(m, src)
 }
-func (m *MsgUpdateAVS) XXX_Size() int {
+func (m *MsgUpdateService) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgUpdateAVS) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgUpdateAVS.DiscardUnknown(m)
+func (m *MsgUpdateService) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUpdateService.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgUpdateAVS proto.InternalMessageInfo
+var xxx_messageInfo_MsgUpdateService proto.InternalMessageInfo
 
-func (m *MsgUpdateAVS) GetSender() string {
+func (m *MsgUpdateService) GetSender() string {
 	if m != nil {
 		return m.Sender
 	}
 	return ""
 }
 
-func (m *MsgUpdateAVS) GetAVSID() uint32 {
+func (m *MsgUpdateService) GetServiceID() uint32 {
 	if m != nil {
-		return m.AVSID
+		return m.ServiceID
 	}
 	return 0
 }
 
-func (m *MsgUpdateAVS) GetName() string {
+func (m *MsgUpdateService) GetName() string {
 	if m != nil {
 		return m.Name
 	}
 	return ""
 }
 
-func (m *MsgUpdateAVS) GetDescription() string {
+func (m *MsgUpdateService) GetDescription() string {
 	if m != nil {
 		return m.Description
 	}
 	return ""
 }
 
-func (m *MsgUpdateAVS) GetWebsite() string {
+func (m *MsgUpdateService) GetWebsite() string {
 	if m != nil {
 		return m.Website
 	}
 	return ""
 }
 
-func (m *MsgUpdateAVS) GetPictureURL() string {
+func (m *MsgUpdateService) GetPictureURL() string {
 	if m != nil {
 		return m.PictureURL
 	}
 	return ""
 }
 
-// MsgUpdateAVSResponse is the return value of MsgUpdateAVS.
-type MsgUpdateAVSResponse struct {
+// MsgUpdateServiceResponse is the return value of MsgUpdateService.
+type MsgUpdateServiceResponse struct {
 }
 
-func (m *MsgUpdateAVSResponse) Reset()         { *m = MsgUpdateAVSResponse{} }
-func (m *MsgUpdateAVSResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgUpdateAVSResponse) ProtoMessage()    {}
-func (*MsgUpdateAVSResponse) Descriptor() ([]byte, []int) {
+func (m *MsgUpdateServiceResponse) Reset()         { *m = MsgUpdateServiceResponse{} }
+func (m *MsgUpdateServiceResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgUpdateServiceResponse) ProtoMessage()    {}
+func (*MsgUpdateServiceResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ee6728b943d8fd23, []int{3}
 }
-func (m *MsgUpdateAVSResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgUpdateServiceResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgUpdateAVSResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgUpdateServiceResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgUpdateAVSResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgUpdateServiceResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -287,66 +287,66 @@ func (m *MsgUpdateAVSResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte
 		return b[:n], nil
 	}
 }
-func (m *MsgUpdateAVSResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgUpdateAVSResponse.Merge(m, src)
+func (m *MsgUpdateServiceResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUpdateServiceResponse.Merge(m, src)
 }
-func (m *MsgUpdateAVSResponse) XXX_Size() int {
+func (m *MsgUpdateServiceResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgUpdateAVSResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgUpdateAVSResponse.DiscardUnknown(m)
+func (m *MsgUpdateServiceResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUpdateServiceResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgUpdateAVSResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgUpdateServiceResponse proto.InternalMessageInfo
 
 func init() {
-	proto.RegisterType((*MsgRegisterAVS)(nil), "milkyway.avs.v1.MsgRegisterAVS")
-	proto.RegisterType((*MsgRegisterAVSResponse)(nil), "milkyway.avs.v1.MsgRegisterAVSResponse")
-	proto.RegisterType((*MsgUpdateAVS)(nil), "milkyway.avs.v1.MsgUpdateAVS")
-	proto.RegisterType((*MsgUpdateAVSResponse)(nil), "milkyway.avs.v1.MsgUpdateAVSResponse")
+	proto.RegisterType((*MsgRegisterService)(nil), "milkyway.avs.v1.MsgRegisterService")
+	proto.RegisterType((*MsgRegisterServiceResponse)(nil), "milkyway.avs.v1.MsgRegisterServiceResponse")
+	proto.RegisterType((*MsgUpdateService)(nil), "milkyway.avs.v1.MsgUpdateService")
+	proto.RegisterType((*MsgUpdateServiceResponse)(nil), "milkyway.avs.v1.MsgUpdateServiceResponse")
 }
 
 func init() { proto.RegisterFile("milkyway/avs/v1/messages.proto", fileDescriptor_ee6728b943d8fd23) }
 
 var fileDescriptor_ee6728b943d8fd23 = []byte{
-	// 589 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0xbf, 0x6f, 0xd3, 0x40,
-	0x18, 0xad, 0xd3, 0x26, 0xb4, 0x97, 0xd2, 0x0a, 0xab, 0xa4, 0x26, 0x02, 0xbb, 0x32, 0x54, 0x45,
-	0x11, 0xb1, 0x09, 0x2c, 0xa8, 0x5b, 0xa2, 0x22, 0x54, 0x89, 0x20, 0x70, 0x94, 0x22, 0xb1, 0x44,
-	0xe7, 0xf8, 0x64, 0xac, 0xc6, 0x3f, 0xe4, 0xcf, 0x71, 0xc8, 0x86, 0x18, 0x99, 0xf8, 0x53, 0x32,
-	0x30, 0xb0, 0xb1, 0x32, 0x56, 0x4c, 0x2c, 0x58, 0xc8, 0x19, 0xb2, 0xe7, 0x2f, 0x40, 0x39, 0x5f,
-	0x5c, 0x27, 0x20, 0x50, 0xb3, 0x44, 0x79, 0xdf, 0x7b, 0xdf, 0xbd, 0xbb, 0xef, 0xf9, 0x0e, 0x89,
-	0xb6, 0xd5, 0x3b, 0x1f, 0x0e, 0xf0, 0x50, 0xc5, 0x21, 0xa8, 0x61, 0x4d, 0xb5, 0x09, 0x00, 0x36,
-	0x09, 0x28, 0x9e, 0xef, 0x06, 0x2e, 0xbf, 0x3b, 0xe7, 0x15, 0x1c, 0x82, 0x12, 0xd6, 0xca, 0x37,
-	0xb0, 0x6d, 0x39, 0xae, 0x4a, 0x7f, 0x13, 0x4d, 0xf9, 0x56, 0xd7, 0x05, 0xdb, 0x85, 0x0e, 0x45,
-	0x6a, 0x02, 0x18, 0x25, 0x26, 0x48, 0xd5, 0x31, 0x10, 0x35, 0xac, 0xe9, 0x24, 0xc0, 0x35, 0xb5,
-	0xeb, 0x5a, 0xce, 0x1f, 0xbc, 0x73, 0x9e, 0xf2, 0x33, 0xc0, 0xf8, 0x7d, 0xc6, 0xdb, 0x60, 0xd2,
-	0xcd, 0x81, 0xc9, 0x88, 0x3d, 0xd3, 0x35, 0xdd, 0xc4, 0x70, 0xf6, 0x8f, 0x55, 0x6f, 0x2f, 0x9f,
-	0xc6, 0xc3, 0x3e, 0xb6, 0xd9, 0x66, 0xe4, 0xaf, 0x39, 0xb4, 0xd3, 0x04, 0x53, 0x23, 0xa6, 0x05,
-	0x01, 0xf1, 0xeb, 0x67, 0x2d, 0xfe, 0x21, 0x2a, 0x00, 0x71, 0x0c, 0xe2, 0x0b, 0xdc, 0x01, 0x77,
-	0x7f, 0xab, 0x21, 0x7c, 0xff, 0x5c, 0xdd, 0x63, 0x27, 0xa8, 0x1b, 0x86, 0x4f, 0x00, 0x5a, 0x81,
-	0x6f, 0x39, 0xa6, 0xc6, 0x74, 0xfc, 0x5d, 0xb4, 0xe1, 0x60, 0x9b, 0x08, 0x39, 0xaa, 0xdf, 0x9d,
-	0x46, 0x52, 0x71, 0x88, 0xed, 0xde, 0xb1, 0x3c, 0xab, 0xca, 0x1a, 0x25, 0xf9, 0x27, 0xa8, 0x68,
-	0x10, 0xe8, 0xfa, 0x96, 0x17, 0x58, 0xae, 0x23, 0xac, 0x53, 0x6d, 0x69, 0x1a, 0x49, 0x7c, 0xa2,
-	0xcd, 0x90, 0xb2, 0x96, 0x95, 0xf2, 0x0f, 0xd0, 0xb5, 0x01, 0xd1, 0xc1, 0x0a, 0x88, 0xb0, 0x41,
-	0xbb, 0xf8, 0x69, 0x24, 0xed, 0x24, 0x5d, 0x8c, 0x90, 0xb5, 0xb9, 0x84, 0x7f, 0x8a, 0x8a, 0x9e,
-	0xd5, 0x0d, 0xfa, 0x3e, 0xe9, 0xf4, 0xfd, 0x9e, 0x90, 0xa7, 0x1d, 0xf7, 0xe2, 0x48, 0x42, 0x2f,
-	0x93, 0x72, 0x5b, 0x7b, 0x7e, 0xe9, 0x9a, 0x91, 0xca, 0x1a, 0x62, 0xa8, 0xed, 0xf7, 0x8e, 0x8f,
-	0x3e, 0x4c, 0x46, 0x15, 0x76, 0xc0, 0x8f, 0x93, 0x51, 0x65, 0x3f, 0x1d, 0xe3, 0xe2, 0xb8, 0xe4,
-	0x13, 0x54, 0x5a, 0xac, 0x68, 0x04, 0x3c, 0xd7, 0x01, 0xc2, 0x57, 0x10, 0x72, 0xc8, 0xa0, 0x83,
-	0x43, 0xe8, 0x58, 0x06, 0x1d, 0xe6, 0xf5, 0xc6, 0x76, 0x1c, 0x49, 0x9b, 0x2f, 0xc8, 0xa0, 0x7e,
-	0xd6, 0x3a, 0x3d, 0xd1, 0x36, 0x1d, 0x32, 0xa8, 0x87, 0x70, 0x6a, 0xc8, 0x3f, 0x73, 0x68, 0xbb,
-	0x09, 0x66, 0xdb, 0x33, 0x70, 0x40, 0x56, 0x4b, 0xe1, 0x00, 0x15, 0x98, 0x55, 0x8e, 0x5a, 0x6d,
-	0xc5, 0x91, 0x94, 0x4f, 0x7c, 0xf2, 0x78, 0x66, 0x92, 0xe6, 0xb4, 0x7e, 0x85, 0x9c, 0x36, 0x56,
-	0xca, 0x29, 0x7f, 0xe5, 0x9c, 0x0a, 0x2b, 0xe6, 0x74, 0xb8, 0x94, 0xd3, 0xcd, 0x6c, 0x4e, 0xe9,
-	0x38, 0xe5, 0x12, 0xda, 0xcb, 0xe2, 0x79, 0x46, 0x8f, 0xbe, 0x70, 0x68, 0xbd, 0x09, 0x26, 0xff,
-	0x1a, 0x15, 0xb3, 0x77, 0x40, 0x52, 0x96, 0xee, 0xb8, 0xb2, 0x98, 0x71, 0xf9, 0xe8, 0x3f, 0x82,
-	0xf4, 0x23, 0x78, 0x85, 0xb6, 0x2e, 0x43, 0xbd, 0xf3, 0xb7, 0xae, 0x94, 0x2e, 0x1f, 0xfe, 0x93,
-	0x9e, 0x2f, 0x59, 0xce, 0xbf, 0x9f, 0x8c, 0x2a, 0x5c, 0xe3, 0xd9, 0xb7, 0x58, 0xe4, 0x2e, 0x62,
-	0x91, 0xfb, 0x15, 0x8b, 0xdc, 0xa7, 0xb1, 0xb8, 0x76, 0x31, 0x16, 0xd7, 0x7e, 0x8c, 0xc5, 0xb5,
-	0x37, 0x55, 0xd3, 0x0a, 0xde, 0xf6, 0x75, 0xa5, 0xeb, 0xda, 0xea, 0x7c, 0xc5, 0x6a, 0x0f, 0xeb,
-	0x90, 0x22, 0xf5, 0x1d, 0x7d, 0x0d, 0x82, 0xa1, 0x47, 0x40, 0x2f, 0xd0, 0xa7, 0xe0, 0xf1, 0xef,
-	0x00, 0x00, 0x00, 0xff, 0xff, 0x3d, 0x91, 0xdb, 0x56, 0xf8, 0x04, 0x00, 0x00,
+	// 587 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0x3b, 0x8f, 0xd3, 0x4c,
+	0x14, 0x5d, 0x67, 0x1f, 0x9f, 0x76, 0xf6, 0xf9, 0x59, 0x2b, 0xf0, 0x1a, 0x64, 0x83, 0x97, 0x82,
+	0x7d, 0xc4, 0x26, 0x20, 0x21, 0xb4, 0x1d, 0x11, 0x08, 0x21, 0x11, 0x84, 0xbc, 0xa4, 0x41, 0x42,
+	0xd1, 0xd8, 0x1e, 0x99, 0xd1, 0xc6, 0x0f, 0xf9, 0x3a, 0x0e, 0xe9, 0x10, 0x25, 0x15, 0x3f, 0x25,
+	0x05, 0xff, 0x01, 0xca, 0x88, 0x8a, 0xca, 0x42, 0x4e, 0x91, 0x9a, 0xfc, 0x02, 0x94, 0xf1, 0x38,
+	0x4f, 0x24, 0xd8, 0x34, 0x51, 0xce, 0x3d, 0xe7, 0xce, 0x99, 0xb9, 0x67, 0x3c, 0x48, 0xf1, 0x68,
+	0xf3, 0xb2, 0xd3, 0xc6, 0x1d, 0x03, 0x27, 0x60, 0x24, 0x15, 0xc3, 0x23, 0x00, 0xd8, 0x25, 0xa0,
+	0x87, 0x51, 0x10, 0x07, 0xe2, 0x5e, 0xc1, 0xeb, 0x38, 0x01, 0x3d, 0xa9, 0xc8, 0xff, 0x63, 0x8f,
+	0xfa, 0x81, 0xc1, 0x7e, 0x73, 0x8d, 0x7c, 0x68, 0x07, 0xe0, 0x05, 0xd0, 0x60, 0xc8, 0xc8, 0x01,
+	0xa7, 0x94, 0x1c, 0x19, 0x16, 0x06, 0x62, 0x24, 0x15, 0x8b, 0xc4, 0xb8, 0x62, 0xd8, 0x01, 0xf5,
+	0x17, 0x78, 0xff, 0x72, 0xcc, 0x8f, 0x00, 0xe7, 0xaf, 0x73, 0xde, 0x03, 0x97, 0x6d, 0x0e, 0x5c,
+	0x4e, 0x1c, 0xb8, 0x81, 0x1b, 0xe4, 0x86, 0xa3, 0x7f, 0xbc, 0x7a, 0x73, 0xfe, 0x34, 0x21, 0x8e,
+	0xb0, 0xc7, 0x37, 0xa3, 0x7d, 0x2d, 0x21, 0xb1, 0x06, 0xae, 0x49, 0x5c, 0x0a, 0x31, 0x89, 0x2e,
+	0x48, 0x94, 0x50, 0x9b, 0x88, 0xf7, 0xd0, 0x06, 0x10, 0xdf, 0x21, 0x91, 0x24, 0xdc, 0x12, 0xee,
+	0x6e, 0x56, 0xa5, 0xef, 0x5f, 0xca, 0x07, 0xfc, 0x14, 0x8f, 0x1d, 0x27, 0x22, 0x00, 0x17, 0x71,
+	0x44, 0x7d, 0xd7, 0xe4, 0x3a, 0xf1, 0x08, 0xad, 0xf9, 0xd8, 0x23, 0x52, 0x89, 0xe9, 0xf7, 0x86,
+	0xa9, 0xba, 0xd5, 0xc1, 0x5e, 0xf3, 0x5c, 0x1b, 0x55, 0x35, 0x93, 0x91, 0xe2, 0x23, 0xb4, 0xe5,
+	0x10, 0xb0, 0x23, 0x1a, 0xc6, 0x34, 0xf0, 0xa5, 0x55, 0xa6, 0xbd, 0x36, 0x4c, 0x55, 0x31, 0xd7,
+	0x4e, 0x91, 0x9a, 0x39, 0x2d, 0x15, 0xcf, 0xd0, 0x7f, 0x6d, 0x62, 0x01, 0x8d, 0x89, 0xb4, 0xc6,
+	0xba, 0xc4, 0x61, 0xaa, 0xee, 0xe6, 0x5d, 0x9c, 0xd0, 0xcc, 0x42, 0x22, 0x3e, 0x45, 0x5b, 0x21,
+	0xb5, 0xe3, 0x56, 0x44, 0x1a, 0xad, 0xa8, 0x29, 0xad, 0xb3, 0x8e, 0x3b, 0x59, 0xaa, 0xa2, 0x57,
+	0x79, 0xb9, 0x6e, 0xbe, 0x98, 0xb8, 0x4e, 0x49, 0x35, 0x13, 0x71, 0x54, 0x8f, 0x9a, 0xe7, 0xa7,
+	0x1f, 0x07, 0xdd, 0x13, 0x7e, 0xc0, 0x4f, 0x83, 0xee, 0xc9, 0x8d, 0xf1, 0x28, 0x17, 0x47, 0xa6,
+	0xbd, 0x46, 0xf2, 0x62, 0xd5, 0x24, 0x10, 0x06, 0x3e, 0x10, 0xf1, 0x21, 0xda, 0xf5, 0x49, 0xbb,
+	0x01, 0x79, 0xb9, 0x41, 0x1d, 0x36, 0xd8, 0x9d, 0xea, 0x7e, 0x96, 0xaa, 0xdb, 0x2f, 0x49, 0x9b,
+	0xeb, 0x9f, 0x3f, 0x31, 0xb7, 0xfd, 0x09, 0x72, 0xb4, 0x5f, 0x25, 0xb4, 0x5f, 0x03, 0xb7, 0x1e,
+	0x3a, 0x38, 0x26, 0xcb, 0xa7, 0x73, 0x86, 0xd0, 0x94, 0x75, 0x89, 0x59, 0xef, 0x64, 0xa9, 0xba,
+	0x39, 0xf1, 0xdd, 0x84, 0xc2, 0x74, 0x9c, 0xe5, 0xea, 0x15, 0xb2, 0x5c, 0x5b, 0x2a, 0xcb, 0xf5,
+	0x2b, 0x67, 0xb9, 0xb1, 0x64, 0x96, 0xc7, 0x73, 0x59, 0x1e, 0x4e, 0x67, 0x39, 0x33, 0x5e, 0x4d,
+	0x46, 0xd2, 0x7c, 0xad, 0xc8, 0xf1, 0x7e, 0x4f, 0x40, 0xab, 0x35, 0x70, 0x45, 0x1b, 0xed, 0xcd,
+	0x7f, 0x33, 0x47, 0xfa, 0xdc, 0xbb, 0xa0, 0x2f, 0xde, 0x07, 0xf9, 0xf4, 0x1f, 0x44, 0xe3, 0x4b,
+	0xf3, 0x16, 0xed, 0xcc, 0x06, 0x7f, 0xfb, 0x4f, 0xdd, 0x33, 0x12, 0xf9, 0xf8, 0xaf, 0x92, 0x62,
+	0x79, 0x79, 0xfd, 0xc3, 0xa0, 0x7b, 0x22, 0x54, 0x9f, 0x7d, 0xcb, 0x14, 0xa1, 0x97, 0x29, 0xc2,
+	0xcf, 0x4c, 0x11, 0x3e, 0xf7, 0x95, 0x95, 0x5e, 0x5f, 0x59, 0xf9, 0xd1, 0x57, 0x56, 0xde, 0x94,
+	0x5d, 0x1a, 0xbf, 0x6b, 0x59, 0xba, 0x1d, 0x78, 0x46, 0xb1, 0x6a, 0xb9, 0x89, 0x2d, 0x18, 0x23,
+	0xe3, 0x3d, 0x7b, 0x55, 0xe2, 0x4e, 0x48, 0xc0, 0xda, 0x60, 0x4f, 0xca, 0x83, 0xdf, 0x01, 0x00,
+	0x00, 0xff, 0xff, 0x08, 0xe4, 0x2d, 0x1e, 0x40, 0x05, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -361,8 +361,8 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgClient interface {
-	RegisterAVS(ctx context.Context, in *MsgRegisterAVS, opts ...grpc.CallOption) (*MsgRegisterAVSResponse, error)
-	UpdateAVS(ctx context.Context, in *MsgUpdateAVS, opts ...grpc.CallOption) (*MsgUpdateAVSResponse, error)
+	RegisterService(ctx context.Context, in *MsgRegisterService, opts ...grpc.CallOption) (*MsgRegisterServiceResponse, error)
+	UpdateService(ctx context.Context, in *MsgUpdateService, opts ...grpc.CallOption) (*MsgUpdateServiceResponse, error)
 }
 
 type msgClient struct {
@@ -373,18 +373,18 @@ func NewMsgClient(cc grpc1.ClientConn) MsgClient {
 	return &msgClient{cc}
 }
 
-func (c *msgClient) RegisterAVS(ctx context.Context, in *MsgRegisterAVS, opts ...grpc.CallOption) (*MsgRegisterAVSResponse, error) {
-	out := new(MsgRegisterAVSResponse)
-	err := c.cc.Invoke(ctx, "/milkyway.avs.v1.Msg/RegisterAVS", in, out, opts...)
+func (c *msgClient) RegisterService(ctx context.Context, in *MsgRegisterService, opts ...grpc.CallOption) (*MsgRegisterServiceResponse, error) {
+	out := new(MsgRegisterServiceResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.avs.v1.Msg/RegisterService", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *msgClient) UpdateAVS(ctx context.Context, in *MsgUpdateAVS, opts ...grpc.CallOption) (*MsgUpdateAVSResponse, error) {
-	out := new(MsgUpdateAVSResponse)
-	err := c.cc.Invoke(ctx, "/milkyway.avs.v1.Msg/UpdateAVS", in, out, opts...)
+func (c *msgClient) UpdateService(ctx context.Context, in *MsgUpdateService, opts ...grpc.CallOption) (*MsgUpdateServiceResponse, error) {
+	out := new(MsgUpdateServiceResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.avs.v1.Msg/UpdateService", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -393,57 +393,57 @@ func (c *msgClient) UpdateAVS(ctx context.Context, in *MsgUpdateAVS, opts ...grp
 
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
-	RegisterAVS(context.Context, *MsgRegisterAVS) (*MsgRegisterAVSResponse, error)
-	UpdateAVS(context.Context, *MsgUpdateAVS) (*MsgUpdateAVSResponse, error)
+	RegisterService(context.Context, *MsgRegisterService) (*MsgRegisterServiceResponse, error)
+	UpdateService(context.Context, *MsgUpdateService) (*MsgUpdateServiceResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
 type UnimplementedMsgServer struct {
 }
 
-func (*UnimplementedMsgServer) RegisterAVS(ctx context.Context, req *MsgRegisterAVS) (*MsgRegisterAVSResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RegisterAVS not implemented")
+func (*UnimplementedMsgServer) RegisterService(ctx context.Context, req *MsgRegisterService) (*MsgRegisterServiceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RegisterService not implemented")
 }
-func (*UnimplementedMsgServer) UpdateAVS(ctx context.Context, req *MsgUpdateAVS) (*MsgUpdateAVSResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateAVS not implemented")
+func (*UnimplementedMsgServer) UpdateService(ctx context.Context, req *MsgUpdateService) (*MsgUpdateServiceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateService not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
 	s.RegisterService(&_Msg_serviceDesc, srv)
 }
 
-func _Msg_RegisterAVS_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgRegisterAVS)
+func _Msg_RegisterService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRegisterService)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).RegisterAVS(ctx, in)
+		return srv.(MsgServer).RegisterService(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/milkyway.avs.v1.Msg/RegisterAVS",
+		FullMethod: "/milkyway.avs.v1.Msg/RegisterService",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).RegisterAVS(ctx, req.(*MsgRegisterAVS))
+		return srv.(MsgServer).RegisterService(ctx, req.(*MsgRegisterService))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_UpdateAVS_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgUpdateAVS)
+func _Msg_UpdateService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUpdateService)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).UpdateAVS(ctx, in)
+		return srv.(MsgServer).UpdateService(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/milkyway.avs.v1.Msg/UpdateAVS",
+		FullMethod: "/milkyway.avs.v1.Msg/UpdateService",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).UpdateAVS(ctx, req.(*MsgUpdateAVS))
+		return srv.(MsgServer).UpdateService(ctx, req.(*MsgUpdateService))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -453,19 +453,19 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*MsgServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "RegisterAVS",
-			Handler:    _Msg_RegisterAVS_Handler,
+			MethodName: "RegisterService",
+			Handler:    _Msg_RegisterService_Handler,
 		},
 		{
-			MethodName: "UpdateAVS",
-			Handler:    _Msg_UpdateAVS_Handler,
+			MethodName: "UpdateService",
+			Handler:    _Msg_UpdateService_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "milkyway/avs/v1/messages.proto",
 }
 
-func (m *MsgRegisterAVS) Marshal() (dAtA []byte, err error) {
+func (m *MsgRegisterService) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -475,12 +475,12 @@ func (m *MsgRegisterAVS) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgRegisterAVS) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgRegisterService) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgRegisterAVS) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgRegisterService) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -523,7 +523,7 @@ func (m *MsgRegisterAVS) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgRegisterAVSResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgRegisterServiceResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -533,25 +533,25 @@ func (m *MsgRegisterAVSResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgRegisterAVSResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgRegisterServiceResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgRegisterAVSResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgRegisterServiceResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.NewAVSID != 0 {
-		i = encodeVarintMessages(dAtA, i, uint64(m.NewAVSID))
+	if m.NewServiceID != 0 {
+		i = encodeVarintMessages(dAtA, i, uint64(m.NewServiceID))
 		i--
 		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgUpdateAVS) Marshal() (dAtA []byte, err error) {
+func (m *MsgUpdateService) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -561,12 +561,12 @@ func (m *MsgUpdateAVS) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgUpdateAVS) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgUpdateService) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgUpdateAVS) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgUpdateService) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -599,8 +599,8 @@ func (m *MsgUpdateAVS) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x1a
 	}
-	if m.AVSID != 0 {
-		i = encodeVarintMessages(dAtA, i, uint64(m.AVSID))
+	if m.ServiceID != 0 {
+		i = encodeVarintMessages(dAtA, i, uint64(m.ServiceID))
 		i--
 		dAtA[i] = 0x10
 	}
@@ -614,7 +614,7 @@ func (m *MsgUpdateAVS) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgUpdateAVSResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgUpdateServiceResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -624,12 +624,12 @@ func (m *MsgUpdateAVSResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgUpdateAVSResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgUpdateServiceResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgUpdateAVSResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgUpdateServiceResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -648,7 +648,7 @@ func encodeVarintMessages(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *MsgRegisterAVS) Size() (n int) {
+func (m *MsgRegisterService) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -677,19 +677,19 @@ func (m *MsgRegisterAVS) Size() (n int) {
 	return n
 }
 
-func (m *MsgRegisterAVSResponse) Size() (n int) {
+func (m *MsgRegisterServiceResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.NewAVSID != 0 {
-		n += 1 + sovMessages(uint64(m.NewAVSID))
+	if m.NewServiceID != 0 {
+		n += 1 + sovMessages(uint64(m.NewServiceID))
 	}
 	return n
 }
 
-func (m *MsgUpdateAVS) Size() (n int) {
+func (m *MsgUpdateService) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -699,8 +699,8 @@ func (m *MsgUpdateAVS) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovMessages(uint64(l))
 	}
-	if m.AVSID != 0 {
-		n += 1 + sovMessages(uint64(m.AVSID))
+	if m.ServiceID != 0 {
+		n += 1 + sovMessages(uint64(m.ServiceID))
 	}
 	l = len(m.Name)
 	if l > 0 {
@@ -721,7 +721,7 @@ func (m *MsgUpdateAVS) Size() (n int) {
 	return n
 }
 
-func (m *MsgUpdateAVSResponse) Size() (n int) {
+func (m *MsgUpdateServiceResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -736,7 +736,7 @@ func sovMessages(x uint64) (n int) {
 func sozMessages(x uint64) (n int) {
 	return sovMessages(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *MsgRegisterAVS) Unmarshal(dAtA []byte) error {
+func (m *MsgRegisterService) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -759,10 +759,10 @@ func (m *MsgRegisterAVS) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgRegisterAVS: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgRegisterService: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgRegisterAVS: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgRegisterService: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -946,7 +946,7 @@ func (m *MsgRegisterAVS) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgRegisterAVSResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgRegisterServiceResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -969,17 +969,17 @@ func (m *MsgRegisterAVSResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgRegisterAVSResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgRegisterServiceResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgRegisterAVSResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgRegisterServiceResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NewAVSID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field NewServiceID", wireType)
 			}
-			m.NewAVSID = 0
+			m.NewServiceID = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowMessages
@@ -989,7 +989,7 @@ func (m *MsgRegisterAVSResponse) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.NewAVSID |= uint32(b&0x7F) << shift
+				m.NewServiceID |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1015,7 +1015,7 @@ func (m *MsgRegisterAVSResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgUpdateAVS) Unmarshal(dAtA []byte) error {
+func (m *MsgUpdateService) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1038,10 +1038,10 @@ func (m *MsgUpdateAVS) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgUpdateAVS: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgUpdateService: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgUpdateAVS: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgUpdateService: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1078,9 +1078,9 @@ func (m *MsgUpdateAVS) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AVSID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ServiceID", wireType)
 			}
-			m.AVSID = 0
+			m.ServiceID = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowMessages
@@ -1090,7 +1090,7 @@ func (m *MsgUpdateAVS) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.AVSID |= uint32(b&0x7F) << shift
+				m.ServiceID |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1244,7 +1244,7 @@ func (m *MsgUpdateAVS) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgUpdateAVSResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgUpdateServiceResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1267,10 +1267,10 @@ func (m *MsgUpdateAVSResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgUpdateAVSResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgUpdateServiceResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgUpdateAVSResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgUpdateServiceResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
