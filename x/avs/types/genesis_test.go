@@ -81,7 +81,7 @@ func TestValidateGenesis(t *testing.T) {
 		},
 		{
 			name:      "default genesis is valid",
-			genesis:   types.DefaultGenesisState(),
+			genesis:   types.DefaultGenesis(),
 			shouldErr: false,
 		},
 		{
@@ -112,7 +112,7 @@ func TestValidateGenesis(t *testing.T) {
 	for _, tc := range testCases {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
-			err := types.ValidateGenesis(tc.genesis)
+			err := tc.genesis.Validate()
 			if tc.shouldErr {
 				require.Error(t, err)
 			} else {

@@ -15,15 +15,15 @@ func NewGenesisState(nextAVSID uint32, services []AVS, params Params) *GenesisSt
 	}
 }
 
-// DefaultGenesisState returns a default GenesisState
-func DefaultGenesisState() *GenesisState {
+// DefaultGenesis returns a default GenesisState
+func DefaultGenesis() *GenesisState {
 	return NewGenesisState(1, nil, DefaultParams())
 }
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// ValidateGenesis validates the given genesis state and returns an error if something is invalid
-func ValidateGenesis(data *GenesisState) error {
+// Validate validates the GenesisState and returns an error if it is invalid.
+func (data *GenesisState) Validate() error {
 	// Check for the next AVS ID
 	if data.NextAVSID == 0 {
 		return fmt.Errorf("invalid next AVS ID: %d", data.NextAVSID)
