@@ -3,9 +3,8 @@ package types
 // DONTCOVER
 
 const (
-	EventTypeRegisterAVS     = "registered_avs"
-	EventTypeDeregisteredAVS = "deregistered_avs"
+	EventTypeRegisteredAVS = "registered_avs"
+	EventTypeUpdatedAVS    = "updated_avs"
 
-	AttributeKeyAVSID  = "avs_id"
-	AttributeKeySender = "sender"
+	AttributeKeyAVSID = "avs_id"
 )
