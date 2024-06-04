@@ -32,6 +32,18 @@ message MsgRegisterAVS {
 
   // Name is the name of the AVS
   string name = 2 [ (gogoproto.moretags) = "yaml:\"name\"" ];
+
+  // Description is the description of the AVS (optional)
+  string description = 3 [ (gogoproto.moretags) = "yaml:\"description\"" ];
+
+  // Website is the website of the AVS (optional)
+  string website = 4 [ (gogoproto.moretags) = "yaml:\"website\"" ];
+
+  // PictureURL is the URL of the AVS picture (optional)
+  string picture_url = 5 [
+    (gogoproto.customname) = "NewAVSID",
+    (gogoproto.moretags) = "yaml:\"picture_url\""
+  ];
 }
 
 // MsgRegisterAVSResponse is the return value of MsgRegisterAVS.
