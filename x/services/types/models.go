@@ -22,7 +22,7 @@ func ParseServiceID(value string) (uint32, error) {
 // NewService creates a new Service instance
 func NewService(
 	id uint32,
-	status AVSStatus,
+	status ServiceStatus,
 	name string,
 	description string,
 	website string,
@@ -42,7 +42,7 @@ func NewService(
 
 // Validate checks that the Service has valid values.
 func (a *Service) Validate() error {
-	if a.Status == AVS_STATUS_UNSPECIFIED {
+	if a.Status == SERVICE_STATUS_UNSPECIFIED {
 		return fmt.Errorf("invalid status: %s", a.Status)
 	}
 
@@ -64,7 +64,7 @@ func (a *Service) Validate() error {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// ServiceUpdate defines the fields that can be updated in an Service.
+// ServiceUpdate defines the fields that can be updated in a Service.
 type ServiceUpdate struct {
 	Name        string
 	Description string

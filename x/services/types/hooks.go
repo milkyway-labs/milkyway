@@ -7,45 +7,45 @@ import (
 )
 
 // Event Hooks
-// These can be utilized to communicate between an avs keeper and another
-// keeper which must take particular actions when AVSs change
-// state. The second keeper must implement this interface, which then the
-// avs keeper can call.
+// These can be utilized to communicate between a services keeper
+// and another keeper which must take particular actions when
+// services change state. The second keeper must implement this
+// interface, which then the services keeper can call.
 
-// AVSHooks event hooks for avs objects (noalias)
-type AVSHooks interface {
-	AfterAVSCreated(ctx sdk.Context, avsID uint32)      // Must be called after an Service is created
-	AfterAVSRegistered(ctx sdk.Context, avsID uint32)   // Must be called after an Service is registered
-	AfterAVSDeregistered(ctx sdk.Context, avsID uint32) // Must be called after an Service is deregistered
+// ServicesHooks event hooks for services objects (noalias)
+type ServicesHooks interface {
+	AfterServiceCreated(ctx sdk.Context, serviceID uint32)      // Must be called after a service is created
+	AfterServiceRegistered(ctx sdk.Context, serviceID uint32)   // Must be called after a service is registered
+	AfterServiceDeregistered(ctx sdk.Context, serviceID uint32) // Must be called after a service is deregistered
 }
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// MultiAVSHooks combines multiple avs hooks, all hook functions are run in array sequence
-type MultiAVSHooks []AVSHooks
+// MultiServicesHooks combines multiple services hooks, all hook functions are run in array sequence
+type MultiServicesHooks []ServicesHooks
 
-// NewMultiAVSHooks creates a new MultiAVSHooks object
-func NewMultiAVSHooks(hooks ...AVSHooks) MultiAVSHooks {
+// NewMultiServicesHooks creates a new MultiServicesHooks object
+func NewMultiServicesHooks(hooks ...ServicesHooks) MultiServicesHooks {
 	return hooks
 }
 
-// AfterAVSCreated implements AVSHooks
-func (m MultiAVSHooks) AfterAVSCreated(ctx sdk.Context, avsID uint32) {
+// AfterServiceCreated implements ServicesHooks
+func (m MultiServicesHooks) AfterServiceCreated(ctx sdk.Context, serviceID uint32) {
 	for _, hook := range m {
-		hook.AfterAVSCreated(ctx, avsID)
+		hook.AfterServiceCreated(ctx, serviceID)
 	}
 }
 
-// AfterAVSRegistered implements AVSHooks
-func (m MultiAVSHooks) AfterAVSRegistered(ctx sdk.Context, avsID uint32) {
+// AfterServiceRegistered implements ServicesHooks
+func (m MultiServicesHooks) AfterServiceRegistered(ctx sdk.Context, serviceID uint32) {
 	for _, hook := range m {
-		hook.AfterAVSRegistered(ctx, avsID)
+		hook.AfterServiceRegistered(ctx, serviceID)
 	}
 }
 
-// AfterAVSDeregistered implements AVSHooks
-func (m MultiAVSHooks) AfterAVSDeregistered(ctx sdk.Context, avsID uint32) {
+// AfterServiceDeregistered implements ServicesHooks
+func (m MultiServicesHooks) AfterServiceDeregistered(ctx sdk.Context, serviceID uint32) {
 	for _, hook := range m {
-		hook.AfterAVSDeregistered(ctx, avsID)
+		hook.AfterServiceDeregistered(ctx, serviceID)
 	}
 }

@@ -12,14 +12,17 @@ import (
 type Keeper struct {
 	storeKey storetypes.StoreKey
 	cdc      codec.BinaryCodec
-	hooks    types.AVSHooks
+	hooks    types.ServicesHooks
+
+	poolKeeper CommunityPoolKeeper
 }
 
 // NewKeeper creates a new keeper
-func NewKeeper(cdc codec.BinaryCodec, storeKey storetypes.StoreKey) Keeper {
+func NewKeeper(cdc codec.BinaryCodec, storeKey storetypes.StoreKey, poolKeeper CommunityPoolKeeper) Keeper {
 	return Keeper{
-		storeKey: storeKey,
-		cdc:      cdc,
+		storeKey:   storeKey,
+		cdc:        cdc,
+		poolKeeper: poolKeeper,
 	}
 }
 
@@ -29,7 +32,7 @@ func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 }
 
 // SetHooks allows to set the reactions hooks
-func (k *Keeper) SetHooks(rs types.AVSHooks) *Keeper {
+func (k *Keeper) SetHooks(rs types.ServicesHooks) *Keeper {
 	if k.hooks != nil {
 		panic("cannot set avs hooks twice")
 	}

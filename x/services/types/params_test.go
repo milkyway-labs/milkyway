@@ -17,9 +17,9 @@ func TestParams_Validate(t *testing.T) {
 		shouldErr bool
 	}{
 		{
-			name: "invalid Service registration fee returns error",
+			name: "invalid service registration fee returns error",
 			params: types.Params{
-				AvsRegistrationFee: sdk.Coins{sdk.Coin{Denom: "", Amount: sdkmath.NewInt(100)}},
+				ServiceRegistrationFee: sdk.Coins{sdk.Coin{Denom: "", Amount: sdkmath.NewInt(100)}},
 			},
 			shouldErr: true,
 		},
@@ -31,7 +31,7 @@ func TestParams_Validate(t *testing.T) {
 		{
 			name: "valid params returns no error",
 			params: types.Params{
-				AvsRegistrationFee: sdk.NewCoins(sdk.NewCoin("stake", sdkmath.NewInt(100))),
+				ServiceRegistrationFee: sdk.NewCoins(sdk.NewCoin("stake", sdkmath.NewInt(100))),
 			},
 			shouldErr: false,
 		},

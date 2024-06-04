@@ -7,23 +7,23 @@ import (
 )
 
 // NewParams creates a new Params object
-func NewParams(avsRegistrationFee sdk.Coins) Params {
+func NewParams(serviceRegistrationFee sdk.Coins) Params {
 	return Params{
-		AvsRegistrationFee: avsRegistrationFee,
+		ServiceRegistrationFee: serviceRegistrationFee,
 	}
 }
 
 // DefaultParams returns a default set of parameters.
 func DefaultParams() Params {
 	return Params{
-		AvsRegistrationFee: sdk.NewCoins(),
+		ServiceRegistrationFee: sdk.NewCoins(),
 	}
 }
 
 // Validate checks that the parameters have valid values.
 func (p *Params) Validate() error {
-	if !p.AvsRegistrationFee.IsValid() {
-		return errors.Wrapf(sdkerrors.ErrInvalidCoins, "invalid Service registration fee: %s", p.AvsRegistrationFee)
+	if !p.ServiceRegistrationFee.IsValid() {
+		return errors.Wrapf(sdkerrors.ErrInvalidCoins, "invalid service registration fee: %s", p.ServiceRegistrationFee)
 	}
 
 	return nil

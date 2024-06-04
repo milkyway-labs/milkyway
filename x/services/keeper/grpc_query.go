@@ -19,7 +19,7 @@ func (k Keeper) Services(ctx context.Context, request *types.QueryServicesReques
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
 	store := sdkCtx.KVStore(k.storeKey)
-	servicesStore := prefix.NewStore(store, types.AVSPrefix)
+	servicesStore := prefix.NewStore(store, types.ServicePrefix)
 
 	var services []types.Service
 	pageRes, err := query.Paginate(servicesStore, request.Pagination, func(key []byte, value []byte) error {
@@ -49,7 +49,7 @@ func (k Keeper) Service(ctx context.Context, request *types.QueryServiceRequest)
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	service, found := k.GetAVS(sdkCtx, request.ServiceId)
+	service, found := k.GetService(sdkCtx, request.ServiceId)
 	if !found {
 		return nil, status.Error(codes.NotFound, "service not found")
 	}

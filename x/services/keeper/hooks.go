@@ -6,26 +6,26 @@ import (
 	"github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-// Implement AVSHooks interface
-var _ types.AVSHooks = &Keeper{}
+// Implement ServicesHooks interface
+var _ types.ServicesHooks = &Keeper{}
 
-// AfterAVSCreated implements AVSHooks
-func (k Keeper) AfterAVSCreated(ctx sdk.Context, avsID uint32) {
+// AfterServiceCreated implements ServicesHooks
+func (k Keeper) AfterServiceCreated(ctx sdk.Context, avsID uint32) {
 	if k.hooks != nil {
-		k.hooks.AfterAVSCreated(ctx, avsID)
+		k.hooks.AfterServiceCreated(ctx, avsID)
 	}
 }
 
-// AfterAVSRegistered implements AVSHooks
-func (k Keeper) AfterAVSRegistered(ctx sdk.Context, avsID uint32) {
+// AfterServiceRegistered implements ServicesHooks
+func (k Keeper) AfterServiceRegistered(ctx sdk.Context, avsID uint32) {
 	if k.hooks != nil {
-		k.hooks.AfterAVSRegistered(ctx, avsID)
+		k.hooks.AfterServiceRegistered(ctx, avsID)
 	}
 }
 
-// AfterAVSDeregistered implements AVSHooks
-func (k Keeper) AfterAVSDeregistered(ctx sdk.Context, avsID uint32) {
+// AfterServiceDeregistered implements ServicesHooks
+func (k Keeper) AfterServiceDeregistered(ctx sdk.Context, avsID uint32) {
 	if k.hooks != nil {
-		k.hooks.AfterAVSDeregistered(ctx, avsID)
+		k.hooks.AfterServiceDeregistered(ctx, avsID)
 	}
 }

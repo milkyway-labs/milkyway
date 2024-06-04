@@ -12,13 +12,13 @@ message GenesisState {
   // Params defines the parameters of the module.
   Params params = 1 [ (gogoproto.nullable) = false ];
 
-  // Services defines the list of actively validated services.
+  // Services defines the list of services.
   repeated Service services = 2 [
     (gogoproto.moretags) = "yaml:\"services\"",
     (gogoproto.nullable) = false
   ];
 
-  // NextAVSId defines the ID that will be assigned to the next AVS that gets
-  // created.
-  uint32 next_avs_id = 3 [ (gogoproto.customname) = "NextAVSID" ];
+  // NextServiceID defines the ID that will be assigned to the
+  // next service that gets created.
+  uint32 next_service_id = 3 [ (gogoproto.customname) = "NextServiceID" ];
 }

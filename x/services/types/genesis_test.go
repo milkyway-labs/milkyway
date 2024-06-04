@@ -19,26 +19,26 @@ func TestValidateGenesis(t *testing.T) {
 		{
 			name: "invalid next Service ID returns error",
 			genesis: &types.GenesisState{
-				NextAVSID: 0,
-				Services:  nil,
-				Params:    types.DefaultParams(),
+				NextServiceID: 0,
+				Services:      nil,
+				Params:        types.DefaultParams(),
 			},
 			shouldErr: true,
 		},
 		{
 			name: "duplicated service returns error",
 			genesis: &types.GenesisState{
-				NextAVSID: 1,
+				NextServiceID: 1,
 				Services: []types.Service{
 					{
 						ID:     1,
-						Status: types.AVS_STATUS_CREATED,
+						Status: types.SERVICE_STATUS_CREATED,
 						Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 						Name:   "MilkyWay",
 					},
 					{
 						ID:     1,
-						Status: types.AVS_STATUS_CREATED,
+						Status: types.SERVICE_STATUS_CREATED,
 						Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 						Name:   "MilkyWay",
 					}},
@@ -49,17 +49,17 @@ func TestValidateGenesis(t *testing.T) {
 		{
 			name: "invalid service returns error",
 			genesis: &types.GenesisState{
-				NextAVSID: 1,
+				NextServiceID: 1,
 				Services: []types.Service{
 					{
 						ID:     1,
-						Status: types.AVS_STATUS_CREATED,
+						Status: types.SERVICE_STATUS_CREATED,
 						Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 						Name:   "MilkyWay",
 					},
 					{
 						ID:     2,
-						Status: types.AVS_STATUS_UNSPECIFIED,
+						Status: types.SERVICE_STATUS_UNSPECIFIED,
 						Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 						Name:   "IBC Relaying",
 					},
@@ -71,10 +71,10 @@ func TestValidateGenesis(t *testing.T) {
 		{
 			name: "invalid params returns error",
 			genesis: &types.GenesisState{
-				NextAVSID: 1,
-				Services:  nil,
+				NextServiceID: 1,
+				Services:      nil,
 				Params: types.Params{
-					AvsRegistrationFee: sdk.Coins{sdk.Coin{Denom: "", Amount: sdkmath.NewInt(10)}},
+					ServiceRegistrationFee: sdk.Coins{sdk.Coin{Denom: "", Amount: sdkmath.NewInt(10)}},
 				},
 			},
 			shouldErr: true,
@@ -87,17 +87,17 @@ func TestValidateGenesis(t *testing.T) {
 		{
 			name: "valid genesis returns no error",
 			genesis: &types.GenesisState{
-				NextAVSID: 1,
+				NextServiceID: 1,
 				Services: []types.Service{
 					{
 						ID:     1,
-						Status: types.AVS_STATUS_CREATED,
+						Status: types.SERVICE_STATUS_CREATED,
 						Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 						Name:   "MilkyWay",
 					},
 					{
 						ID:     2,
-						Status: types.AVS_STATUS_REGISTERED,
+						Status: types.SERVICE_STATUS_REGISTERED,
 						Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 						Name:   "IBC Relaying",
 					},
