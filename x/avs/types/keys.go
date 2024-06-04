@@ -14,7 +14,9 @@ const (
 )
 
 var (
-	AVSPrefix = []byte{0x02}
+	AVSPrefix = []byte{0x01}
+
+	ParamsKey = []byte{0x10}
 )
 
 // NextAVSIDKey returns the key for the next AVS ID
