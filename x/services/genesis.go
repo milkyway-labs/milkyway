@@ -16,7 +16,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	)
 }
 
-// exportNextAVSID returns the next AVS ID stored in the KVStore
+// exportNextAVSID returns the next Service ID stored in the KVStore
 func exportNextAVSID(ctx sdk.Context, k keeper.Keeper) uint32 {
 	nextAVSID, err := k.GetNextAVSID(ctx)
 	if err != nil {
@@ -26,9 +26,9 @@ func exportNextAVSID(ctx sdk.Context, k keeper.Keeper) uint32 {
 }
 
 // exportServices returns the services stored in the KVStore
-func exportServices(ctx sdk.Context, k keeper.Keeper) []types.AVS {
-	var services []types.AVS
-	k.IterateServices(ctx, func(service types.AVS) (stop bool) {
+func exportServices(ctx sdk.Context, k keeper.Keeper) []types.Service {
+	var services []types.Service
+	k.IterateServices(ctx, func(service types.Service) (stop bool) {
 		services = append(services, service)
 		return false
 	})
@@ -37,7 +37,7 @@ func exportServices(ctx sdk.Context, k keeper.Keeper) []types.AVS {
 
 // InitGenesis initializes the state from a GenesisState
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, state types.GenesisState) {
-	// Set the next AVS ID
+	// Set the next Service ID
 	k.SetNextAVSID(ctx, state.NextAVSID)
 
 	// Store the services

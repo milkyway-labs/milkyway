@@ -11,10 +11,10 @@ option go_package = "github.com/milkyway-labs/milkyway/x/avs/types";
 
 // Query defines the gRPC querier service.
 service Query {
-  // Params defines a gRPC query method that returns the parameters of the
-  // module.
-  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/milkyway/avs/v1/params";
+  // Service defines a gRPC query method that returns the service by the given
+  // service id.
+  rpc Service(QueryServiceRequest) returns (QueryServiceResponse) {
+    option (google.api.http).get = "/milkyway/avs/v1/services/{service_id}";
   }
 
   // Services defines a gRPC query method that returns the actively validates
@@ -23,10 +23,10 @@ service Query {
     option (google.api.http).get = "/milkyway/avs/v1/services";
   }
 
-  // Service defines a gRPC query method that returns the service by the given
-  // service id.
-  rpc Service(QueryServiceRequest) returns (QueryServiceResponse) {
-    option (google.api.http).get = "/milkyway/avs/v1/services/{service_id}";
+  // Params defines a gRPC query method that returns the parameters of the
+  // module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/milkyway/avs/v1/params";
   }
 }
 
@@ -46,7 +46,7 @@ message QueryServicesRequest {
 // QueryServicesResponse is the response type for the Query/Services RPC method.
 message QueryServicesResponse {
   // AVS services defines the list of actively validates services
-  repeated AVS services = 1 [ (gogoproto.nullable) = false ];
+  repeated Service services = 1 [ (gogoproto.nullable) = false ];
 
   // Pagination defines the pagination response
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -60,5 +60,5 @@ message QueryServiceRequest {
 
 // QueryServiceResponse is the response type for the Query/Service RPC method.
 message QueryServiceResponse {
-  AVS service = 1 [ (gogoproto.nullable) = false ];
+  Service service = 1 [ (gogoproto.nullable) = false ];
 }
