@@ -27,7 +27,7 @@ func (msg *MsgRegisterAVS) ValidateBasic() error {
 		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid website")
 	}
 
-	if msg.PictureUrl == DoNotModify {
+	if msg.PictureURL == DoNotModify {
 		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid picture URL")
 	}
 
@@ -54,8 +54,8 @@ func (msg *MsgRegisterAVS) GetSigners() []sdk.AccAddress {
 
 // ValidateBasic implements sdk.Msg
 func (msg *MsgUpdateAVS) ValidateBasic() error {
-	if msg.ID == 0 {
-		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid id: %d", msg.ID)
+	if msg.AVSID == 0 {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid avs id: %d", msg.AVSID)
 	}
 
 	_, err := sdk.AccAddressFromBech32(msg.Sender)
