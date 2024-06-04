@@ -49,3 +49,57 @@ func (a *AVS) Validate() error {
 
 	return nil
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// AVSUpdate defines the fields that can be updated in an AVS.
+type AVSUpdate struct {
+	Name        string
+	Description string
+	Website     string
+	PictureURL  string
+}
+
+// NewAVSUpdate returns a new AVSUpdate instance.
+func NewAVSUpdate(
+	name string,
+	description string,
+	website string,
+	pictureURL string,
+) AVSUpdate {
+	return AVSUpdate{
+		Name:        name,
+		Description: description,
+		Website:     website,
+		PictureURL:  pictureURL,
+	}
+}
+
+// Update returns a new AVS with updated fields.
+func (a *AVS) Update(update AVSUpdate) AVS {
+	if update.Name == DoNotModify {
+		update.Name = a.Name
+	}
+
+	if update.Description == DoNotModify {
+		update.Description = a.Description
+	}
+
+	if update.Website == DoNotModify {
+		update.Website = a.Website
+	}
+
+	if update.PictureURL == DoNotModify {
+		update.PictureURL = a.PictureURL
+	}
+
+	return NewAVS(
+		a.ID,
+		a.Status,
+		update.Name,
+		update.Description,
+		update.Website,
+		update.PictureURL,
+		a.Admin,
+	)
+}
