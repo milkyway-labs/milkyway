@@ -10,14 +10,14 @@ import (
 )
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	legacy.RegisterAminoMsg(cdc, &MsgRegisterAVS{}, "milkyway/MsgRegisterAVS")
-	legacy.RegisterAminoMsg(cdc, &MsgUpdateAVS{}, "milkyway/MsgUpdateAVS")
+	legacy.RegisterAminoMsg(cdc, &MsgRegisterService{}, "milkyway/MsgRegisterService")
+	legacy.RegisterAminoMsg(cdc, &MsgUpdateService{}, "milkyway/MsgUpdateService")
 }
 
 func RegisterInterfaces(registry types.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgRegisterAVS{},
-		&MsgUpdateAVS{},
+		&MsgRegisterService{},
+		&MsgUpdateService{},
 	)
 
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
