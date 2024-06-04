@@ -40,7 +40,10 @@ message MsgRegisterAVS {
   string website = 4 [ (gogoproto.moretags) = "yaml:\"website\"" ];
 
   // PictureURL is the URL of the AVS picture (optional)
-  string picture_url = 5 [ (gogoproto.moretags) = "yaml:\"picture_url\"" ];
+  string picture_url = 5 [
+    (gogoproto.moretags) = "yaml:\"picture_url\"",
+    (gogoproto.customname) = "PictureURL"
+  ];
 }
 
 // MsgRegisterAVSResponse is the return value of MsgRegisterAVS.
@@ -61,7 +64,7 @@ message MsgUpdateAVS {
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
   // ID represents the ID of the AVS to be updated
-  uint64 id = 2 [ (gogoproto.customname) = "ID" ];
+  uint32 avs_id = 2 [ (gogoproto.customname) = "AVSID" ];
 
   // Name is the new name of the AVS (optional).
   // If it shouldn't be changed, use [do-not-modify] instead.
@@ -77,7 +80,10 @@ message MsgUpdateAVS {
 
   // PictureURL is the new URL of the AVS picture (optional)
   // If it shouldn't be changed, use [do-not-modify] instead.
-  string picture_url = 6 [ (gogoproto.moretags) = "yaml:\"picture_url\"" ];
+  string picture_url = 6 [
+    (gogoproto.moretags) = "yaml:\"picture_url\"",
+    (gogoproto.customname) = "PictureURL"
+  ];
 }
 
 // MsgUpdateAVSResponse is the return value of MsgUpdateAVS.

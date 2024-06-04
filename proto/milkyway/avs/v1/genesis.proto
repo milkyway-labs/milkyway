@@ -17,4 +17,8 @@ message GenesisState {
     (gogoproto.moretags) = "yaml:\"services\"",
     (gogoproto.nullable) = false
   ];
+
+  // NextAVSId defines the ID that will be assigned to the next AVS that gets
+  // created.
+  uint32 next_avs_id = 3 [(gogoproto.customname) = "NextAVSID"];
 }

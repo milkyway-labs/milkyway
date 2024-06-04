@@ -7,22 +7,28 @@ import (
 )
 
 // NewGenesisState returns a new GenesisState instance
-func NewGenesisState(services []AVS, params Params) *GenesisState {
+func NewGenesisState(nextAVSID uint32, services []AVS, params Params) *GenesisState {
 	return &GenesisState{
-		Services: services,
-		Params:   params,
+		NextAVSID: nextAVSID,
+		Services:  services,
+		Params:    params,
 	}
 }
 
 // DefaultGenesisState returns a default GenesisState
 func DefaultGenesisState() *GenesisState {
-	return NewGenesisState(nil, DefaultParams())
+	return NewGenesisState(1, nil, DefaultParams())
 }
 
 // --------------------------------------------------------------------------------------------------------------------
 
 // ValidateGenesis validates the given genesis state and returns an error if something is invalid
 func ValidateGenesis(data *GenesisState) error {
+	// Check for the next AVS ID
+	if data.NextAVSID == 0 {
+		return fmt.Errorf("invalid next AVS ID: %d", data.NextAVSID)
+	}
+
 	// Check for duplicated services
 	if duplicate := findDuplicatedService(data.Services); duplicate != nil {
 		return fmt.Errorf("duplicated service: %d", duplicate.ID)
