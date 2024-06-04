@@ -47,7 +47,7 @@ type MsgRegisterAVS struct {
 	// Website is the website of the AVS (optional)
 	Website string `protobuf:"bytes,4,opt,name=website,proto3" json:"website,omitempty" yaml:"website"`
 	// PictureURL is the URL of the AVS picture (optional)
-	NewAVSID string `protobuf:"bytes,5,opt,name=picture_url,json=pictureUrl,proto3" json:"picture_url,omitempty" yaml:"picture_url"`
+	PictureUrl string `protobuf:"bytes,5,opt,name=picture_url,json=pictureUrl,proto3" json:"picture_url,omitempty" yaml:"picture_url"`
 }
 
 func (m *MsgRegisterAVS) Reset()         { *m = MsgRegisterAVS{} }
@@ -111,9 +111,9 @@ func (m *MsgRegisterAVS) GetWebsite() string {
 	return ""
 }
 
-func (m *MsgRegisterAVS) GetNewAVSID() string {
+func (m *MsgRegisterAVS) GetPictureUrl() string {
 	if m != nil {
-		return m.NewAVSID
+		return m.PictureUrl
 	}
 	return ""
 }
@@ -165,28 +165,40 @@ func (m *MsgRegisterAVSResponse) GetNewAVSID() uint32 {
 	return 0
 }
 
-// MsgDeregisterAVS defines the message structure for the DeregisterAVS gRPC
-// service method. It allows the AVS owner to deregister their AVS so that
-// operators know that they can safely stop validating it.
-type MsgDeregisterAVS struct {
+// MsgUpdateAVS defines the message structure for the UpdateAVS gRPC
+// service method. It allows the AVS owner to update the details of
+// an existing AVS.
+type MsgUpdateAVS struct {
 	// Sender is the address of the user deregistering the AVS
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	// AVSID is the ID of the AVS to be deregistered
-	AVSID uint64 `protobuf:"varint,2,opt,name=avs_id,json=avsId,proto3" json:"avs_id,omitempty"`
+	// ID represents the ID of the AVS to be updated
+	ID uint64 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	// Name is the new name of the AVS (optional).
+	// If it shouldn't be changed, use [do-not-modify] instead.
+	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty" yaml:"name"`
+	// Description is the new description of the AVS (optional)
+	// If it shouldn't be changed, use [do-not-modify] instead.
+	Description string `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty" yaml:"description"`
+	// Website is the new website of the AVS (optional)
+	// If it shouldn't be changed, use [do-not-modify] instead.
+	Website string `protobuf:"bytes,5,opt,name=website,proto3" json:"website,omitempty" yaml:"website"`
+	// PictureURL is the new URL of the AVS picture (optional)
+	// If it shouldn't be changed, use [do-not-modify] instead.
+	PictureUrl string `protobuf:"bytes,6,opt,name=picture_url,json=pictureUrl,proto3" json:"picture_url,omitempty" yaml:"picture_url"`
 }
 
-func (m *MsgDeregisterAVS) Reset()         { *m = MsgDeregisterAVS{} }
-func (m *MsgDeregisterAVS) String() string { return proto.CompactTextString(m) }
-func (*MsgDeregisterAVS) ProtoMessage()    {}
-func (*MsgDeregisterAVS) Descriptor() ([]byte, []int) {
+func (m *MsgUpdateAVS) Reset()         { *m = MsgUpdateAVS{} }
+func (m *MsgUpdateAVS) String() string { return proto.CompactTextString(m) }
+func (*MsgUpdateAVS) ProtoMessage()    {}
+func (*MsgUpdateAVS) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ee6728b943d8fd23, []int{2}
 }
-func (m *MsgDeregisterAVS) XXX_Unmarshal(b []byte) error {
+func (m *MsgUpdateAVS) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgDeregisterAVS) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgUpdateAVS) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgDeregisterAVS.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgUpdateAVS.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -196,48 +208,76 @@ func (m *MsgDeregisterAVS) XXX_Marshal(b []byte, deterministic bool) ([]byte, er
 		return b[:n], nil
 	}
 }
-func (m *MsgDeregisterAVS) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgDeregisterAVS.Merge(m, src)
+func (m *MsgUpdateAVS) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUpdateAVS.Merge(m, src)
 }
-func (m *MsgDeregisterAVS) XXX_Size() int {
+func (m *MsgUpdateAVS) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgDeregisterAVS) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgDeregisterAVS.DiscardUnknown(m)
+func (m *MsgUpdateAVS) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUpdateAVS.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgDeregisterAVS proto.InternalMessageInfo
+var xxx_messageInfo_MsgUpdateAVS proto.InternalMessageInfo
 
-func (m *MsgDeregisterAVS) GetSender() string {
+func (m *MsgUpdateAVS) GetSender() string {
 	if m != nil {
 		return m.Sender
 	}
 	return ""
 }
 
-func (m *MsgDeregisterAVS) GetAVSID() uint64 {
+func (m *MsgUpdateAVS) GetID() uint64 {
 	if m != nil {
-		return m.AVSID
+		return m.ID
 	}
 	return 0
 }
 
-// MsgDeregisterAVSResponse is the return value of MsgDeregisterAVS.
-type MsgDeregisterAVSResponse struct {
+func (m *MsgUpdateAVS) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
 }
 
-func (m *MsgDeregisterAVSResponse) Reset()         { *m = MsgDeregisterAVSResponse{} }
-func (m *MsgDeregisterAVSResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgDeregisterAVSResponse) ProtoMessage()    {}
-func (*MsgDeregisterAVSResponse) Descriptor() ([]byte, []int) {
+func (m *MsgUpdateAVS) GetDescription() string {
+	if m != nil {
+		return m.Description
+	}
+	return ""
+}
+
+func (m *MsgUpdateAVS) GetWebsite() string {
+	if m != nil {
+		return m.Website
+	}
+	return ""
+}
+
+func (m *MsgUpdateAVS) GetPictureUrl() string {
+	if m != nil {
+		return m.PictureUrl
+	}
+	return ""
+}
+
+// MsgUpdateAVSResponse is the return value of MsgUpdateAVS.
+type MsgUpdateAVSResponse struct {
+}
+
+func (m *MsgUpdateAVSResponse) Reset()         { *m = MsgUpdateAVSResponse{} }
+func (m *MsgUpdateAVSResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgUpdateAVSResponse) ProtoMessage()    {}
+func (*MsgUpdateAVSResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ee6728b943d8fd23, []int{3}
 }
-func (m *MsgDeregisterAVSResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgUpdateAVSResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgDeregisterAVSResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgUpdateAVSResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgDeregisterAVSResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgUpdateAVSResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -247,65 +287,65 @@ func (m *MsgDeregisterAVSResponse) XXX_Marshal(b []byte, deterministic bool) ([]
 		return b[:n], nil
 	}
 }
-func (m *MsgDeregisterAVSResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgDeregisterAVSResponse.Merge(m, src)
+func (m *MsgUpdateAVSResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUpdateAVSResponse.Merge(m, src)
 }
-func (m *MsgDeregisterAVSResponse) XXX_Size() int {
+func (m *MsgUpdateAVSResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgDeregisterAVSResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgDeregisterAVSResponse.DiscardUnknown(m)
+func (m *MsgUpdateAVSResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUpdateAVSResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgDeregisterAVSResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgUpdateAVSResponse proto.InternalMessageInfo
 
 func init() {
 	proto.RegisterType((*MsgRegisterAVS)(nil), "milkyway.avs.v1.MsgRegisterAVS")
 	proto.RegisterType((*MsgRegisterAVSResponse)(nil), "milkyway.avs.v1.MsgRegisterAVSResponse")
-	proto.RegisterType((*MsgDeregisterAVS)(nil), "milkyway.avs.v1.MsgDeregisterAVS")
-	proto.RegisterType((*MsgDeregisterAVSResponse)(nil), "milkyway.avs.v1.MsgDeregisterAVSResponse")
+	proto.RegisterType((*MsgUpdateAVS)(nil), "milkyway.avs.v1.MsgUpdateAVS")
+	proto.RegisterType((*MsgUpdateAVSResponse)(nil), "milkyway.avs.v1.MsgUpdateAVSResponse")
 }
 
 func init() { proto.RegisterFile("milkyway/avs/v1/messages.proto", fileDescriptor_ee6728b943d8fd23) }
 
 var fileDescriptor_ee6728b943d8fd23 = []byte{
-	// 565 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x53, 0xb1, 0x6f, 0xd3, 0x4e,
-	0x14, 0xae, 0xdb, 0x26, 0xbf, 0xf6, 0xf2, 0x6b, 0x0b, 0x56, 0xd5, 0xba, 0x16, 0xb2, 0x8b, 0x19,
-	0x4a, 0x23, 0x62, 0x13, 0x58, 0x50, 0xb6, 0x84, 0x48, 0xa8, 0x43, 0x18, 0x1c, 0x51, 0x24, 0x24,
-	0x14, 0x9d, 0xe3, 0x93, 0xb1, 0x1a, 0xfb, 0xac, 0x7b, 0x8e, 0x43, 0x36, 0xc4, 0xc8, 0x04, 0xff,
-	0x49, 0x06, 0x56, 0x36, 0x06, 0xc6, 0x8a, 0x89, 0x29, 0x42, 0xc9, 0x90, 0x3d, 0x7f, 0x01, 0xca,
-	0xf9, 0x12, 0xec, 0x80, 0xd4, 0x81, 0x25, 0xca, 0x7b, 0xdf, 0xf7, 0xee, 0xbb, 0xef, 0x3b, 0x3f,
-	0xa4, 0x05, 0x7e, 0xef, 0x6a, 0x38, 0xc0, 0x43, 0x0b, 0x27, 0x60, 0x25, 0x55, 0x2b, 0x20, 0x00,
-	0xd8, 0x23, 0x60, 0x46, 0x8c, 0xc6, 0x54, 0x3e, 0x58, 0xe2, 0x26, 0x4e, 0xc0, 0x4c, 0xaa, 0xea,
-	0x6d, 0x1c, 0xf8, 0x21, 0xb5, 0xf8, 0x6f, 0xca, 0x51, 0x4f, 0xba, 0x14, 0x02, 0x0a, 0x1d, 0x5e,
-	0x59, 0x69, 0x21, 0x20, 0x2d, 0xad, 0x2c, 0x07, 0x03, 0xb1, 0x92, 0xaa, 0x43, 0x62, 0x5c, 0xb5,
-	0xba, 0xd4, 0x0f, 0xff, 0xc0, 0xc3, 0xab, 0x15, 0xbe, 0x28, 0x04, 0x7e, 0x2c, 0xf0, 0x00, 0x3c,
-	0x7e, 0x39, 0xf0, 0x04, 0x70, 0xe8, 0x51, 0x8f, 0xa6, 0x82, 0x8b, 0x7f, 0xa2, 0x7b, 0x67, 0xdd,
-	0x4d, 0x84, 0x19, 0x0e, 0xc4, 0x65, 0x8c, 0x2f, 0x9b, 0x68, 0xbf, 0x05, 0x9e, 0x4d, 0x3c, 0x1f,
-	0x62, 0xc2, 0xea, 0x97, 0x6d, 0xf9, 0x21, 0x2a, 0x02, 0x09, 0x5d, 0xc2, 0x14, 0xe9, 0x54, 0xba,
-	0xbf, 0xdb, 0x50, 0xbe, 0x7f, 0xae, 0x1c, 0x0a, 0x07, 0x75, 0xd7, 0x65, 0x04, 0xa0, 0x1d, 0x33,
-	0x3f, 0xf4, 0x6c, 0xc1, 0x93, 0xef, 0xa1, 0xed, 0x10, 0x07, 0x44, 0xd9, 0xe4, 0xfc, 0x83, 0xf9,
-	0x58, 0x2f, 0x0d, 0x71, 0xd0, 0xab, 0x19, 0x8b, 0xae, 0x61, 0x73, 0x50, 0x7e, 0x82, 0x4a, 0x2e,
-	0x81, 0x2e, 0xf3, 0xa3, 0xd8, 0xa7, 0xa1, 0xb2, 0xc5, 0xb9, 0x47, 0xf3, 0xb1, 0x2e, 0xa7, 0xdc,
-	0x0c, 0x68, 0xd8, 0x59, 0xaa, 0xfc, 0x00, 0xfd, 0x37, 0x20, 0x0e, 0xf8, 0x31, 0x51, 0xb6, 0xf9,
-	0x94, 0x3c, 0x1f, 0xeb, 0xfb, 0xe9, 0x94, 0x00, 0x0c, 0x7b, 0x49, 0x91, 0x9f, 0xa2, 0x52, 0xe4,
-	0x77, 0xe3, 0x3e, 0x23, 0x9d, 0x3e, 0xeb, 0x29, 0x05, 0x3e, 0x61, 0x4c, 0xc6, 0xfa, 0xce, 0x73,
-	0x32, 0xa8, 0x5f, 0xb6, 0x2f, 0x9a, 0xbf, 0x35, 0x33, 0x44, 0xc3, 0x46, 0xa2, 0x7a, 0xc1, 0x7a,
-	0xb5, 0xb3, 0xf7, 0xb3, 0x51, 0x59, 0xd8, 0xfb, 0x30, 0x1b, 0x95, 0x8f, 0x57, 0x21, 0xe6, 0xc3,
-	0x32, 0x9a, 0xe8, 0x28, 0xdf, 0xb1, 0x09, 0x44, 0x34, 0x04, 0x22, 0x97, 0x11, 0x0a, 0xc9, 0xa0,
-	0x83, 0x13, 0xe8, 0xf8, 0x2e, 0x8f, 0x72, 0xaf, 0xf1, 0x7f, 0xf6, 0x1a, 0xf6, 0x4e, 0x48, 0x06,
-	0xf5, 0x04, 0x2e, 0x5c, 0xe3, 0x93, 0x84, 0x6e, 0xb5, 0xc0, 0x6b, 0x12, 0xf6, 0x4f, 0xef, 0x70,
-	0x8a, 0x8a, 0x42, 0x6e, 0xf1, 0x12, 0xdb, 0x8d, 0xdd, 0xc9, 0x58, 0x2f, 0xa4, 0x5a, 0x05, 0xbc,
-	0x10, 0xaa, 0x9d, 0xaf, 0xf9, 0x3a, 0xc9, 0xfa, 0xca, 0xc9, 0x1b, 0x2a, 0x52, 0xd6, 0x7b, 0x4b,
-	0x6f, 0x8f, 0xbe, 0x4a, 0x68, 0xab, 0x05, 0x9e, 0xfc, 0x12, 0x95, 0xb2, 0x5f, 0x8e, 0x6e, 0xae,
-	0x6d, 0x86, 0x99, 0xcf, 0x46, 0x3d, 0xbb, 0x81, 0xb0, 0x0a, 0xef, 0x35, 0xda, 0xcb, 0x87, 0x71,
-	0xf7, 0x6f, 0x93, 0x39, 0x8a, 0x7a, 0x7e, 0x23, 0x65, 0x79, 0xbc, 0x5a, 0x78, 0x37, 0x1b, 0x95,
-	0xa5, 0xc6, 0xb3, 0x6f, 0x13, 0x4d, 0xba, 0x9e, 0x68, 0xd2, 0xcf, 0x89, 0x26, 0x7d, 0x9c, 0x6a,
-	0x1b, 0xd7, 0x53, 0x6d, 0xe3, 0xc7, 0x54, 0xdb, 0x78, 0x55, 0xf1, 0xfc, 0xf8, 0x4d, 0xdf, 0x31,
-	0xbb, 0x34, 0xb0, 0x96, 0xa7, 0x56, 0x7a, 0xd8, 0x81, 0x55, 0x65, 0xbd, 0xe5, 0xfb, 0x14, 0x0f,
-	0x23, 0x02, 0x4e, 0x91, 0x2f, 0xd3, 0xe3, 0x5f, 0x01, 0x00, 0x00, 0xff, 0xff, 0xd4, 0x33, 0x12,
-	0x05, 0x3a, 0x04, 0x00, 0x00,
+	// 575 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x93, 0x4d, 0x8f, 0xd2, 0x40,
+	0x1c, 0xc6, 0x69, 0x79, 0x71, 0x77, 0x58, 0x77, 0x63, 0x83, 0x6c, 0x25, 0xda, 0x9a, 0x9a, 0xcd,
+	0x1a, 0x22, 0xad, 0xe8, 0x41, 0xb3, 0x37, 0x08, 0x89, 0xe1, 0x80, 0x89, 0x25, 0xbb, 0x26, 0x5e,
+	0xc8, 0x94, 0x4e, 0xea, 0x64, 0xe9, 0x4b, 0xfa, 0x2f, 0x45, 0x6e, 0xc6, 0xa3, 0x27, 0x3f, 0x0a,
+	0x26, 0x1e, 0xfc, 0x02, 0x26, 0x1e, 0x37, 0x9e, 0x3c, 0x11, 0x03, 0x07, 0xee, 0x7c, 0x02, 0x43,
+	0x3b, 0xd4, 0x82, 0x46, 0xdd, 0xbd, 0x10, 0x9e, 0xf9, 0x3d, 0xf3, 0xf6, 0x3c, 0x1d, 0x24, 0xd9,
+	0x74, 0x70, 0x3e, 0x1e, 0xe1, 0xb1, 0x86, 0x43, 0xd0, 0xc2, 0xba, 0x66, 0x13, 0x00, 0x6c, 0x11,
+	0x50, 0x3d, 0xdf, 0x0d, 0x5c, 0xe1, 0x60, 0xcd, 0x55, 0x1c, 0x82, 0x1a, 0xd6, 0x2b, 0x37, 0xb0,
+	0x4d, 0x1d, 0x57, 0x8b, 0x7e, 0x63, 0x4f, 0xe5, 0x56, 0xdf, 0x05, 0xdb, 0x85, 0x5e, 0xa4, 0xb4,
+	0x58, 0x30, 0x24, 0xc5, 0x4a, 0x33, 0x30, 0x10, 0x2d, 0xac, 0x1b, 0x24, 0xc0, 0x75, 0xad, 0xef,
+	0x52, 0xe7, 0x37, 0xee, 0x9c, 0x27, 0x7c, 0x25, 0x18, 0x3f, 0x64, 0xdc, 0x06, 0x2b, 0x3a, 0x1c,
+	0x58, 0x0c, 0x94, 0x2c, 0xd7, 0x72, 0xe3, 0x0d, 0x57, 0xff, 0xd8, 0xe8, 0xed, 0xed, 0xdb, 0x78,
+	0xd8, 0xc7, 0x36, 0x3b, 0x8c, 0xf2, 0x91, 0x47, 0xfb, 0x1d, 0xb0, 0x74, 0x62, 0x51, 0x08, 0x88,
+	0xdf, 0x38, 0xeb, 0x0a, 0x0f, 0x51, 0x01, 0x88, 0x63, 0x12, 0x5f, 0xe4, 0xee, 0x72, 0xf7, 0x77,
+	0x9b, 0xe2, 0xb7, 0x4f, 0xb5, 0x12, 0xbb, 0x41, 0xc3, 0x34, 0x7d, 0x02, 0xd0, 0x0d, 0x7c, 0xea,
+	0x58, 0x3a, 0xf3, 0x09, 0xf7, 0x50, 0xce, 0xc1, 0x36, 0x11, 0xf9, 0xc8, 0x7f, 0xb0, 0x9c, 0xca,
+	0xc5, 0x31, 0xb6, 0x07, 0x27, 0xca, 0x6a, 0x54, 0xd1, 0x23, 0x28, 0x3c, 0x45, 0x45, 0x93, 0x40,
+	0xdf, 0xa7, 0x5e, 0x40, 0x5d, 0x47, 0xcc, 0x46, 0xde, 0xf2, 0x72, 0x2a, 0x0b, 0xb1, 0x37, 0x05,
+	0x15, 0x3d, 0x6d, 0x15, 0x1e, 0xa0, 0x6b, 0x23, 0x62, 0x00, 0x0d, 0x88, 0x98, 0x8b, 0x66, 0x09,
+	0xcb, 0xa9, 0xbc, 0x1f, 0xcf, 0x62, 0x40, 0xd1, 0xd7, 0x16, 0xe1, 0x09, 0x2a, 0x7a, 0xb4, 0x1f,
+	0x0c, 0x7d, 0xd2, 0x1b, 0xfa, 0x03, 0x31, 0xbf, 0xbd, 0x4f, 0x0a, 0x2a, 0x3a, 0x62, 0xea, 0xd4,
+	0x1f, 0x9c, 0x1c, 0xbf, 0x5b, 0x4c, 0xaa, 0xec, 0x4a, 0xef, 0x17, 0x93, 0xea, 0x61, 0x12, 0xdc,
+	0x66, 0x40, 0x4a, 0x0b, 0x95, 0x37, 0x47, 0x74, 0x02, 0x9e, 0xeb, 0x00, 0x11, 0xaa, 0x08, 0x39,
+	0x64, 0xd4, 0xc3, 0x21, 0xf4, 0xa8, 0x19, 0xc5, 0x77, 0xbd, 0xb9, 0x37, 0x9b, 0xca, 0x3b, 0xcf,
+	0xc9, 0xa8, 0x71, 0xd6, 0x6d, 0xb7, 0xf4, 0x1d, 0x87, 0x8c, 0x1a, 0x21, 0xb4, 0x4d, 0xe5, 0x0b,
+	0x8f, 0xf6, 0x3a, 0x60, 0x9d, 0x7a, 0x26, 0x0e, 0xc8, 0xd5, 0x72, 0x2f, 0x23, 0x9e, 0x9a, 0x51,
+	0xea, 0xb9, 0x66, 0x61, 0x36, 0x95, 0xf9, 0x76, 0x4b, 0xe7, 0xa9, 0x99, 0xf4, 0x91, 0xbd, 0x44,
+	0x1f, 0xb9, 0x2b, 0xf5, 0x91, 0xbf, 0x74, 0x1f, 0x85, 0xff, 0xee, 0xe3, 0x68, 0xab, 0x8f, 0x9b,
+	0xe9, 0x3e, 0x92, 0xd8, 0x94, 0x32, 0x2a, 0xa5, 0xf5, 0xba, 0x8b, 0x47, 0x9f, 0x39, 0x94, 0xed,
+	0x80, 0x25, 0xbc, 0x44, 0xc5, 0xf4, 0xd7, 0x2d, 0xab, 0x5b, 0xaf, 0x57, 0xdd, 0xec, 0xb2, 0x72,
+	0xfc, 0x0f, 0x43, 0x52, 0xf6, 0x0b, 0xb4, 0xfb, 0xab, 0xbc, 0x3b, 0x7f, 0x9a, 0x95, 0xe0, 0xca,
+	0xd1, 0x5f, 0xf1, 0x7a, 0xc9, 0x4a, 0xfe, 0xed, 0x62, 0x52, 0xe5, 0x9a, 0xcf, 0xbe, 0xce, 0x24,
+	0xee, 0x62, 0x26, 0x71, 0x3f, 0x66, 0x12, 0xf7, 0x61, 0x2e, 0x65, 0x2e, 0xe6, 0x52, 0xe6, 0xfb,
+	0x5c, 0xca, 0xbc, 0xaa, 0x59, 0x34, 0x78, 0x3d, 0x34, 0xd4, 0xbe, 0x6b, 0x6b, 0xeb, 0x15, 0x6b,
+	0x03, 0x6c, 0x40, 0xa2, 0xb4, 0x37, 0xd1, 0x3b, 0x0f, 0xc6, 0x1e, 0x01, 0xa3, 0x10, 0x3d, 0xf2,
+	0xc7, 0x3f, 0x03, 0x00, 0x00, 0xff, 0xff, 0x33, 0x58, 0xed, 0x65, 0xd2, 0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -321,7 +361,7 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgClient interface {
 	RegisterAVS(ctx context.Context, in *MsgRegisterAVS, opts ...grpc.CallOption) (*MsgRegisterAVSResponse, error)
-	DeregisterAVS(ctx context.Context, in *MsgDeregisterAVS, opts ...grpc.CallOption) (*MsgDeregisterAVSResponse, error)
+	UpdateAVS(ctx context.Context, in *MsgUpdateAVS, opts ...grpc.CallOption) (*MsgUpdateAVSResponse, error)
 }
 
 type msgClient struct {
@@ -341,9 +381,9 @@ func (c *msgClient) RegisterAVS(ctx context.Context, in *MsgRegisterAVS, opts ..
 	return out, nil
 }
 
-func (c *msgClient) DeregisterAVS(ctx context.Context, in *MsgDeregisterAVS, opts ...grpc.CallOption) (*MsgDeregisterAVSResponse, error) {
-	out := new(MsgDeregisterAVSResponse)
-	err := c.cc.Invoke(ctx, "/milkyway.avs.v1.Msg/DeregisterAVS", in, out, opts...)
+func (c *msgClient) UpdateAVS(ctx context.Context, in *MsgUpdateAVS, opts ...grpc.CallOption) (*MsgUpdateAVSResponse, error) {
+	out := new(MsgUpdateAVSResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.avs.v1.Msg/UpdateAVS", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -353,7 +393,7 @@ func (c *msgClient) DeregisterAVS(ctx context.Context, in *MsgDeregisterAVS, opt
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	RegisterAVS(context.Context, *MsgRegisterAVS) (*MsgRegisterAVSResponse, error)
-	DeregisterAVS(context.Context, *MsgDeregisterAVS) (*MsgDeregisterAVSResponse, error)
+	UpdateAVS(context.Context, *MsgUpdateAVS) (*MsgUpdateAVSResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -363,8 +403,8 @@ type UnimplementedMsgServer struct {
 func (*UnimplementedMsgServer) RegisterAVS(ctx context.Context, req *MsgRegisterAVS) (*MsgRegisterAVSResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterAVS not implemented")
 }
-func (*UnimplementedMsgServer) DeregisterAVS(ctx context.Context, req *MsgDeregisterAVS) (*MsgDeregisterAVSResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeregisterAVS not implemented")
+func (*UnimplementedMsgServer) UpdateAVS(ctx context.Context, req *MsgUpdateAVS) (*MsgUpdateAVSResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateAVS not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -389,20 +429,20 @@ func _Msg_RegisterAVS_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_DeregisterAVS_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgDeregisterAVS)
+func _Msg_UpdateAVS_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUpdateAVS)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).DeregisterAVS(ctx, in)
+		return srv.(MsgServer).UpdateAVS(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/milkyway.avs.v1.Msg/DeregisterAVS",
+		FullMethod: "/milkyway.avs.v1.Msg/UpdateAVS",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).DeregisterAVS(ctx, req.(*MsgDeregisterAVS))
+		return srv.(MsgServer).UpdateAVS(ctx, req.(*MsgUpdateAVS))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -416,8 +456,8 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_RegisterAVS_Handler,
 		},
 		{
-			MethodName: "DeregisterAVS",
-			Handler:    _Msg_DeregisterAVS_Handler,
+			MethodName: "UpdateAVS",
+			Handler:    _Msg_UpdateAVS_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -444,10 +484,10 @@ func (m *MsgRegisterAVS) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.NewAVSID) > 0 {
-		i -= len(m.NewAVSID)
-		copy(dAtA[i:], m.NewAVSID)
-		i = encodeVarintMessages(dAtA, i, uint64(len(m.NewAVSID)))
+	if len(m.PictureUrl) > 0 {
+		i -= len(m.PictureUrl)
+		copy(dAtA[i:], m.PictureUrl)
+		i = encodeVarintMessages(dAtA, i, uint64(len(m.PictureUrl)))
 		i--
 		dAtA[i] = 0x2a
 	}
@@ -510,7 +550,7 @@ func (m *MsgRegisterAVSResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgDeregisterAVS) Marshal() (dAtA []byte, err error) {
+func (m *MsgUpdateAVS) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -520,18 +560,46 @@ func (m *MsgDeregisterAVS) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgDeregisterAVS) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgUpdateAVS) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgDeregisterAVS) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgUpdateAVS) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.AVSID != 0 {
-		i = encodeVarintMessages(dAtA, i, uint64(m.AVSID))
+	if len(m.PictureUrl) > 0 {
+		i -= len(m.PictureUrl)
+		copy(dAtA[i:], m.PictureUrl)
+		i = encodeVarintMessages(dAtA, i, uint64(len(m.PictureUrl)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.Website) > 0 {
+		i -= len(m.Website)
+		copy(dAtA[i:], m.Website)
+		i = encodeVarintMessages(dAtA, i, uint64(len(m.Website)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.Description) > 0 {
+		i -= len(m.Description)
+		copy(dAtA[i:], m.Description)
+		i = encodeVarintMessages(dAtA, i, uint64(len(m.Description)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintMessages(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.ID != 0 {
+		i = encodeVarintMessages(dAtA, i, uint64(m.ID))
 		i--
 		dAtA[i] = 0x10
 	}
@@ -545,7 +613,7 @@ func (m *MsgDeregisterAVS) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgDeregisterAVSResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgUpdateAVSResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -555,12 +623,12 @@ func (m *MsgDeregisterAVSResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgDeregisterAVSResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgUpdateAVSResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgDeregisterAVSResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgUpdateAVSResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -601,7 +669,7 @@ func (m *MsgRegisterAVS) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovMessages(uint64(l))
 	}
-	l = len(m.NewAVSID)
+	l = len(m.PictureUrl)
 	if l > 0 {
 		n += 1 + l + sovMessages(uint64(l))
 	}
@@ -620,7 +688,7 @@ func (m *MsgRegisterAVSResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgDeregisterAVS) Size() (n int) {
+func (m *MsgUpdateAVS) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -630,13 +698,29 @@ func (m *MsgDeregisterAVS) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovMessages(uint64(l))
 	}
-	if m.AVSID != 0 {
-		n += 1 + sovMessages(uint64(m.AVSID))
+	if m.ID != 0 {
+		n += 1 + sovMessages(uint64(m.ID))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovMessages(uint64(l))
+	}
+	l = len(m.Description)
+	if l > 0 {
+		n += 1 + l + sovMessages(uint64(l))
+	}
+	l = len(m.Website)
+	if l > 0 {
+		n += 1 + l + sovMessages(uint64(l))
+	}
+	l = len(m.PictureUrl)
+	if l > 0 {
+		n += 1 + l + sovMessages(uint64(l))
 	}
 	return n
 }
 
-func (m *MsgDeregisterAVSResponse) Size() (n int) {
+func (m *MsgUpdateAVSResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -810,7 +894,7 @@ func (m *MsgRegisterAVS) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NewAVSID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field PictureUrl", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -838,7 +922,7 @@ func (m *MsgRegisterAVS) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.NewAVSID = string(dAtA[iNdEx:postIndex])
+			m.PictureUrl = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -930,7 +1014,7 @@ func (m *MsgRegisterAVSResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgDeregisterAVS) Unmarshal(dAtA []byte) error {
+func (m *MsgUpdateAVS) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -953,10 +1037,10 @@ func (m *MsgDeregisterAVS) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgDeregisterAVS: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgUpdateAVS: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgDeregisterAVS: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgUpdateAVS: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -993,9 +1077,9 @@ func (m *MsgDeregisterAVS) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AVSID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
 			}
-			m.AVSID = 0
+			m.ID = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowMessages
@@ -1005,11 +1089,139 @@ func (m *MsgDeregisterAVS) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.AVSID |= uint64(b&0x7F) << shift
+				m.ID |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessages
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMessages
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Description", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessages
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMessages
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Description = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Website", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessages
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMessages
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Website = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PictureUrl", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessages
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMessages
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PictureUrl = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipMessages(dAtA[iNdEx:])
@@ -1031,7 +1243,7 @@ func (m *MsgDeregisterAVS) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgDeregisterAVSResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgUpdateAVSResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1054,10 +1266,10 @@ func (m *MsgDeregisterAVSResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgDeregisterAVSResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgUpdateAVSResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgDeregisterAVSResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgUpdateAVSResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

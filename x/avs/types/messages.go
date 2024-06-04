@@ -10,13 +10,25 @@ import (
 
 var (
 	_ sdk.Msg = &MsgRegisterAVS{}
-	_ sdk.Msg = &MsgDeregisterAVS{}
+	_ sdk.Msg = &MsgUpdateAVS{}
 )
 
 // ValidateBasic implements sdk.Msg
 func (msg *MsgRegisterAVS) ValidateBasic() error {
-	if strings.TrimSpace(msg.Name) == "" {
-		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid AVS name: %s", msg.Name)
+	if strings.TrimSpace(msg.Name) == "" || msg.Name == DoNotModify {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid name: %s", msg.Name)
+	}
+
+	if msg.Description == DoNotModify {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid description")
+	}
+
+	if msg.Website == DoNotModify {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid website")
+	}
+
+	if msg.PictureUrl == DoNotModify {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid picture URL")
 	}
 
 	_, err := sdk.AccAddressFromBech32(msg.Sender)
@@ -41,9 +53,9 @@ func (msg *MsgRegisterAVS) GetSigners() []sdk.AccAddress {
 // --------------------------------------------------------------------------------------------------------------------
 
 // ValidateBasic implements sdk.Msg
-func (msg *MsgDeregisterAVS) ValidateBasic() error {
-	if msg.AVSID == 0 {
-		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid id: %d", msg.AVSID)
+func (msg *MsgUpdateAVS) ValidateBasic() error {
+	if msg.ID == 0 {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid id: %d", msg.ID)
 	}
 
 	_, err := sdk.AccAddressFromBech32(msg.Sender)
@@ -55,12 +67,12 @@ func (msg *MsgDeregisterAVS) ValidateBasic() error {
 }
 
 // GetSignBytes implements sdk.Msg
-func (msg *MsgDeregisterAVS) GetSignBytes() []byte {
+func (msg *MsgUpdateAVS) GetSignBytes() []byte {
 	return AminoCdc.MustMarshalJSON(msg)
 }
 
 // GetSigners implements sdk.Msg
-func (msg *MsgDeregisterAVS) GetSigners() []sdk.AccAddress {
+func (msg *MsgUpdateAVS) GetSigners() []sdk.AccAddress {
 	addr, _ := sdk.AccAddressFromBech32(msg.Sender)
 	return []sdk.AccAddress{addr}
 }
