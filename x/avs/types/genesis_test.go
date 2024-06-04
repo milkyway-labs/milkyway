@@ -17,8 +17,18 @@ func TestValidateGenesis(t *testing.T) {
 		shouldErr bool
 	}{
 		{
+			name: "invalid next AVS ID returns error",
+			genesis: &types.GenesisState{
+				NextAVSID: 0,
+				Services:  nil,
+				Params:    types.DefaultParams(),
+			},
+			shouldErr: true,
+		},
+		{
 			name: "duplicated service returns error",
 			genesis: &types.GenesisState{
+				NextAVSID: 1,
 				Services: []types.AVS{
 					{
 						ID:     1,
@@ -39,6 +49,7 @@ func TestValidateGenesis(t *testing.T) {
 		{
 			name: "invalid service returns error",
 			genesis: &types.GenesisState{
+				NextAVSID: 1,
 				Services: []types.AVS{
 					{
 						ID:     1,
@@ -60,7 +71,8 @@ func TestValidateGenesis(t *testing.T) {
 		{
 			name: "invalid params returns error",
 			genesis: &types.GenesisState{
-				Services: nil,
+				NextAVSID: 1,
+				Services:  nil,
 				Params: types.Params{
 					AvsRegistrationFee: sdk.Coins{sdk.Coin{Denom: "", Amount: sdkmath.NewInt(10)}},
 				},
@@ -75,6 +87,7 @@ func TestValidateGenesis(t *testing.T) {
 		{
 			name: "valid genesis returns no error",
 			genesis: &types.GenesisState{
+				NextAVSID: 1,
 				Services: []types.AVS{
 					{
 						ID:     1,
