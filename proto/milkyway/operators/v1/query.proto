@@ -15,7 +15,7 @@ service Query {
   // operator id.
   rpc Operator(QueryOperatorRequest) returns (QueryOperatorResponse) {
     option (google.api.http).get =
-        "/milkyway/operators/v1/operators/{service_id}";
+        "/milkyway/operators/v1/operators/{operator_id}";
   }
 
   // Operators defines a gRPC query method that returns the list of operators.
