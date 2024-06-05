@@ -14,6 +14,21 @@ import (
 
 var _ types.QueryServer = &Keeper{}
 
+// Service implements the Query/Service gRPC method
+func (k *Keeper) Service(ctx context.Context, request *types.QueryServiceRequest) (*types.QueryServiceResponse, error) {
+	if request.ServiceId == 0 {
+		return nil, status.Error(codes.InvalidArgument, "invalid service ID")
+	}
+
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	service, found := k.GetService(sdkCtx, request.ServiceId)
+	if !found {
+		return nil, status.Error(codes.NotFound, "service not found")
+	}
+
+	return &types.QueryServiceResponse{Service: service}, nil
+}
+
 // Services implements the Query/Services gRPC method
 func (k *Keeper) Services(ctx context.Context, request *types.QueryServicesRequest) (*types.QueryServicesResponse, error) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
@@ -40,21 +55,6 @@ func (k *Keeper) Services(ctx context.Context, request *types.QueryServicesReque
 		Services:   services,
 		Pagination: pageRes,
 	}, nil
-}
-
-// Service implements the Query/Service gRPC method
-func (k *Keeper) Service(ctx context.Context, request *types.QueryServiceRequest) (*types.QueryServiceResponse, error) {
-	if request.ServiceId == 0 {
-		return nil, status.Error(codes.InvalidArgument, "invalid service ID")
-	}
-
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	service, found := k.GetService(sdkCtx, request.ServiceId)
-	if !found {
-		return nil, status.Error(codes.NotFound, "service not found")
-	}
-
-	return &types.QueryServiceResponse{Service: service}, nil
 }
 
 // Params implements the Query/Params gRPC method

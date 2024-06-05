@@ -84,7 +84,7 @@ func (k msgServer) UpdateService(goCtx context.Context, msg *types.MsgUpdateServ
 
 	// Make sure the user that is updating the service is the admin
 	if service.Admin != msg.Sender {
-		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "you are not the admin of the service")
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can update the service")
 	}
 
 	// Update the service
@@ -96,8 +96,11 @@ func (k msgServer) UpdateService(goCtx context.Context, msg *types.MsgUpdateServ
 		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	// Save the service
-	k.SaveService(ctx, updated)
+	// Update the service
+	err = k.Keeper.UpdateService(ctx, updated)
+	if err != nil {
+		return nil, err
+	}
 
 	// Emit the event
 	ctx.EventManager().EmitEvents(sdk.Events{
@@ -117,19 +120,22 @@ func (k msgServer) DeactivateService(goCtx context.Context, msg *types.MsgDeacti
 	// Check if the service exists
 	service, found := k.GetService(ctx, msg.ServiceID)
 	if !found {
-		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, "service with id %d not found", msg.ServiceID)
+		return nil, errors.Wrapf(types.ErrServiceNotFound, "service with id %d not found", msg.ServiceID)
 	}
 
 	// Make sure the user that is deactivating the service is the admin
 	if service.Admin != msg.Sender {
-		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "you are not the admin of the service")
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can deactivate the service")
 	}
 
 	// Deactivate the service
 	service.Status = types.SERVICE_STATUS_INACTIVE
 
-	// Save the service
-	k.SaveService(ctx, service)
+	// Update the service
+	err := k.Keeper.UpdateService(ctx, service)
+	if err != nil {
+		return nil, err
+	}
 
 	// Emit the event
 	ctx.EventManager().EmitEvents(sdk.Events{

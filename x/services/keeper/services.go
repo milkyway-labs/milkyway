@@ -64,23 +64,26 @@ func (k *Keeper) CreateService(ctx sdk.Context, service types.Service) error {
 	return nil
 }
 
-// SaveService stores a Service in the KVStore
-func (k *Keeper) SaveService(ctx sdk.Context, service types.Service) {
+// UpdateService updates an existing Service
+func (k *Keeper) UpdateService(ctx sdk.Context, service types.Service) error {
 	previous, existed := k.GetService(ctx, service.ID)
+	if !existed {
+		return types.ErrServiceNotFound
+	}
 
 	// Update the service
 	k.storeService(ctx, service)
-	k.Logger(ctx).Debug("saved service", "id", service.ID)
+	k.Logger(ctx).Debug("updated service", "id", service.ID)
 
 	// Call the hook based on the Service status change
 	switch {
-	case !existed:
-		k.AfterServiceCreated(ctx, service.ID)
 	case previous.Status == types.SERVICE_STATUS_CREATED && service.Status == types.SERVICE_STATUS_ACTIVE:
 		k.AfterServiceActivated(ctx, service.ID)
 	case previous.Status == types.SERVICE_STATUS_ACTIVE && service.Status == types.SERVICE_STATUS_INACTIVE:
 		k.AfterServiceDeactivated(ctx, service.ID)
 	}
+
+	return nil
 }
 
 // GetService returns an Service from the KVStore
