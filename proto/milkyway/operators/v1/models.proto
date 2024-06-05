@@ -15,7 +15,7 @@ enum OperatorStatus {
 
   // OPERATOR_STATUS_ACTIVE identifies an active validator which is providing
   // services
-  OPERATOR_STATUS_CREATED = 1;
+  OPERATOR_STATUS_ACTIVE = 1;
 
   // OPERATOR_STATUS_INACTIVATING identifies an operator that is in the process
   // of becoming inactive

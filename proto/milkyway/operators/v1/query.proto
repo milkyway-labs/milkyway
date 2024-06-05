@@ -38,7 +38,7 @@ message QueryOperatorRequest {
 
 // QueryOperatorResponse is the response type for the Query/Operator RPC method.
 message QueryOperatorResponse {
-  Operator service = 1 [ (gogoproto.nullable) = false ];
+  Operator operator = 1 [ (gogoproto.nullable) = false ];
 }
 
 // QueryOperatorsRequest is the request type for the Query/Operators RPC method.

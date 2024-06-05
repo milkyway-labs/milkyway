@@ -66,9 +66,9 @@ message MsgUpdateOperator {
   // OperatorID represents the ID of the operator to be updated
   uint32 operator_id = 2 [ (gogoproto.customname) = "OperatorID" ];
 
-  // Name is the new name of the operator.
+  // Moniker is the new moniker of the operator.
   // If it shouldn't be changed, use [do-not-modify] instead.
-  string name = 3 [ (gogoproto.moretags) = "yaml:\"name\"" ];
+  string moniker = 3 [ (gogoproto.moretags) = "yaml:\"name\"" ];
 
   // Website is the new website of the operator.
   // If it shouldn't be changed, use [do-not-modify] instead.
