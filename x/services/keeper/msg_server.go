@@ -16,10 +16,10 @@ var (
 )
 
 type msgServer struct {
-	Keeper
+	*Keeper
 }
 
-func NewMsgServer(k Keeper) types.MsgServer {
+func NewMsgServer(k *Keeper) types.MsgServer {
 	return &msgServer{Keeper: k}
 }
 

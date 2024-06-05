@@ -13,6 +13,16 @@ var (
 	_ sdk.Msg = &MsgUpdateService{}
 )
 
+func NewMsgRegisterService(name, description, website, pictureURL, sender string) *MsgRegisterService {
+	return &MsgRegisterService{
+		Name:        name,
+		Description: description,
+		Website:     website,
+		PictureURL:  pictureURL,
+		Sender:      sender,
+	}
+}
+
 // ValidateBasic implements sdk.Msg
 func (msg *MsgRegisterService) ValidateBasic() error {
 	if strings.TrimSpace(msg.Name) == "" || msg.Name == DoNotModify {
@@ -51,6 +61,17 @@ func (msg *MsgRegisterService) GetSigners() []sdk.AccAddress {
 }
 
 // --------------------------------------------------------------------------------------------------------------------
+
+func NewMsgUpdateService(serviceID uint32, name, description, website, pictureURL, sender string) *MsgUpdateService {
+	return &MsgUpdateService{
+		Sender:      sender,
+		ServiceID:   serviceID,
+		Name:        name,
+		Description: description,
+		Website:     website,
+		PictureURL:  pictureURL,
+	}
+}
 
 // ValidateBasic implements sdk.Msg
 func (msg *MsgUpdateService) ValidateBasic() error {

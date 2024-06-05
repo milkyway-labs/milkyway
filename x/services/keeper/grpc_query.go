@@ -15,7 +15,7 @@ import (
 var _ types.QueryServer = &Keeper{}
 
 // Services implements the Query/Services gRPC method
-func (k Keeper) Services(ctx context.Context, request *types.QueryServicesRequest) (*types.QueryServicesResponse, error) {
+func (k *Keeper) Services(ctx context.Context, request *types.QueryServicesRequest) (*types.QueryServicesResponse, error) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
 	store := sdkCtx.KVStore(k.storeKey)
@@ -43,7 +43,7 @@ func (k Keeper) Services(ctx context.Context, request *types.QueryServicesReques
 }
 
 // Service implements the Query/Service gRPC method
-func (k Keeper) Service(ctx context.Context, request *types.QueryServiceRequest) (*types.QueryServiceResponse, error) {
+func (k *Keeper) Service(ctx context.Context, request *types.QueryServiceRequest) (*types.QueryServiceResponse, error) {
 	if request.ServiceId == 0 {
 		return nil, status.Error(codes.InvalidArgument, "invalid service ID")
 	}
@@ -58,7 +58,7 @@ func (k Keeper) Service(ctx context.Context, request *types.QueryServiceRequest)
 }
 
 // Params implements the Query/Params gRPC method
-func (k Keeper) Params(ctx context.Context, _ *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
+func (k *Keeper) Params(ctx context.Context, _ *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	params := k.GetParams(sdkCtx)
 	return &types.QueryParamsResponse{Params: params}, nil

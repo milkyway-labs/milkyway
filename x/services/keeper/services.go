@@ -8,19 +8,19 @@ import (
 )
 
 // SetNextServiceID sets the next service ID to be used when registering a new Service
-func (k Keeper) SetNextServiceID(ctx sdk.Context, avsID uint32) {
+func (k *Keeper) SetNextServiceID(ctx sdk.Context, avsID uint32) {
 	store := ctx.KVStore(k.storeKey)
 	store.Set(types.NextServiceIDKey(), types.GetServiceIDBytes(avsID))
 }
 
 // HasNextServiceID checks if the next service ID is set
-func (k Keeper) HasNextServiceID(ctx sdk.Context) bool {
+func (k *Keeper) HasNextServiceID(ctx sdk.Context) bool {
 	store := ctx.KVStore(k.storeKey)
 	return store.Has(types.NextServiceIDKey())
 }
 
 // GetNextServiceID returns the next service ID to be used when registering a new Service
-func (k Keeper) GetNextServiceID(ctx sdk.Context) (avsID uint32, err error) {
+func (k *Keeper) GetNextServiceID(ctx sdk.Context) (avsID uint32, err error) {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(types.NextServiceIDKey())
 	if bz == nil {
@@ -34,7 +34,7 @@ func (k Keeper) GetNextServiceID(ctx sdk.Context) (avsID uint32, err error) {
 // --------------------------------------------------------------------------------------------------------------------
 
 // CreateService creates a new Service and stores it in the KVStore
-func (k Keeper) CreateService(ctx sdk.Context, service types.Service) error {
+func (k *Keeper) CreateService(ctx sdk.Context, service types.Service) error {
 	k.SaveService(ctx, service)
 
 	// Charge for the creation
@@ -55,7 +55,7 @@ func (k Keeper) CreateService(ctx sdk.Context, service types.Service) error {
 }
 
 // SaveService stores a Service in the KVStore
-func (k Keeper) SaveService(ctx sdk.Context, service types.Service) {
+func (k *Keeper) SaveService(ctx sdk.Context, service types.Service) {
 	previous, existed := k.GetService(ctx, service.ID)
 
 	// Save the Service data
@@ -75,7 +75,7 @@ func (k Keeper) SaveService(ctx sdk.Context, service types.Service) {
 }
 
 // GetService returns an Service from the KVStore
-func (k Keeper) GetService(ctx sdk.Context, serviceID uint32) (service types.Service, found bool) {
+func (k *Keeper) GetService(ctx sdk.Context, serviceID uint32) (service types.Service, found bool) {
 	store := ctx.KVStore(k.storeKey)
 
 	bz := store.Get(types.ServiceStoreKey(serviceID))
