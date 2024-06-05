@@ -1,0 +1,24 @@
+syntax = "proto3";
+package milkyway.operators.v1;
+
+import "gogoproto/gogo.proto";
+import "milkyway/operators/v1/models.proto";
+import "milkyway/operators/v1/params.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/operators/types";
+
+// GenesisState defines the operators module's genesis state.
+message GenesisState {
+  // Params defines the parameters of the module.
+  Params params = 1 [ (gogoproto.nullable) = false ];
+
+  // Operators defines the list of operators.
+  repeated Operator operators = 2 [
+    (gogoproto.moretags) = "yaml:\"operators\"",
+    (gogoproto.nullable) = false
+  ];
+
+  // NextOperatorID defines the ID that will be assigned to the
+  // next operator that gets created.
+  uint32 next_operator_id = 3 [ (gogoproto.customname) = "NextOperatorID" ];
+}

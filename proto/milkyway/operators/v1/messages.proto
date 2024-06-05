@@ -1,0 +1,105 @@
+syntax = "proto3";
+package milkyway.operators.v1;
+
+import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos/bank/v1beta1/bank.proto";
+import "cosmos/msg/v1/msg.proto";
+import "gogoproto/gogo.proto";
+import "milkyway/operators/v1/params.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/operators/types";
+
+// Msg defines the avs module's gRPC message service.
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+
+  rpc RegisterOperator(MsgRegisterOperator)
+      returns (MsgRegisterOperatorResponse);
+  rpc UpdateOperator(MsgUpdateOperator) returns (MsgUpdateOperatorResponse);
+  rpc DeactivateOperator(MsgDeactivateOperator)
+      returns (MsgDeactivateOperatorResponse);
+}
+
+// MsgRegisterOperator defines the message structure for the RegisterService
+// gRPC service method. It allows an account to register a new operator that can
+// opt-in to validate various services. It requires a sender address as well as
+// the details of the operator to be registered.
+message MsgRegisterOperator {
+  option (cosmos.msg.v1.signer) = "sender";
+  option (amino.name) = "milkyway/MsgRegisterOperator";
+
+  // Sender is the address of the user registering the operator
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // Moniker is the moniker of the operator
+  string moniker = 2 [ (gogoproto.moretags) = "yaml:\"moniker\"" ];
+
+  // Website is the website of the operator (optional)
+  string website = 3 [ (gogoproto.moretags) = "yaml:\"website\"" ];
+
+  // PictureURL is the URL of operator picture (optional)
+  string picture_url = 4 [
+    (gogoproto.moretags) = "yaml:\"picture_url\"",
+    (gogoproto.customname) = "PictureURL"
+  ];
+}
+
+// MsgRegisterOperatorResponse is the return value of MsgRegisterOperator.
+// It returns the newly created operator ID.
+message MsgRegisterOperatorResponse {
+  // NewOperatorID is the ID of the newly registered operator
+  uint32 new_operator_id = 1 [ (gogoproto.customname) = "NewOperatorID" ];
+}
+
+// MsgUpdateOperator defines the message structure for the UpdateService gRPC
+// service method. It allows the operator owner to update the details of an
+// existing operator.
+message MsgUpdateOperator {
+  option (cosmos.msg.v1.signer) = "sender";
+  option (amino.name) = "milkyway/MsgUpdateOperator";
+
+  // Sender is the address of the user updating the operator
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // OperatorID represents the ID of the operator to be updated
+  uint32 operator_id = 2 [ (gogoproto.customname) = "OperatorID" ];
+
+  // Name is the new name of the operator.
+  // If it shouldn't be changed, use [do-not-modify] instead.
+  string name = 3 [ (gogoproto.moretags) = "yaml:\"name\"" ];
+
+  // Website is the new website of the operator.
+  // If it shouldn't be changed, use [do-not-modify] instead.
+  string website = 4 [ (gogoproto.moretags) = "yaml:\"website\"" ];
+
+  // PictureURL is the new URL of the operator picture.
+  // If it shouldn't be changed, use [do-not-modify] instead.
+  string picture_url = 5 [
+    (gogoproto.moretags) = "yaml:\"picture_url\"",
+    (gogoproto.customname) = "PictureURL"
+  ];
+}
+
+// MsgUpdateOperatorResponse is the return value of MsgUpdateOperator.
+message MsgUpdateOperatorResponse {}
+
+// MsgDeactivateOperator defines the message structure for the
+// DeactivateOperator gRPC service method. It allows the operator owner to
+// signal that the operator will become inactive. This should be used to signal
+// users that the operator is going to stop performing services and they should
+// switch to another operator.
+message MsgDeactivateOperator {
+  option (cosmos.msg.v1.signer) = "sender";
+  option (amino.name) = "milkyway/MsgDeregisterOperator";
+
+  // Sender is the address of the user deregistering the operator
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // OperatorID represents the ID of the operator to be deregistered
+  uint32 operator_id = 2 [ (gogoproto.customname) = "OperatorID" ];
+}
+
+// MsgDeactivateOperatorResponse is the return value of MsgDeactivateOperator.
+message MsgDeactivateOperatorResponse {}

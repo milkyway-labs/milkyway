@@ -1,0 +1,17 @@
+syntax = "proto3";
+package milkyway.operators.v1;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/operators/types";
+
+// Params defines the parameters for the operators module.
+message Params {
+
+  // DeactivationTime represents the amount of seconds that will pass between
+  // the time that an operator signals its willingness to deactivate and the
+  // time that it actually becomes inactive.
+  uint64 deactivation_time = 1;
+}
