@@ -36,14 +36,14 @@ func (m MultiServicesHooks) AfterServiceCreated(ctx sdk.Context, serviceID uint3
 	}
 }
 
-// AfterServiceRegistered implements ServicesHooks
+// AfterServiceActivated implements ServicesHooks
 func (m MultiServicesHooks) AfterServiceActivated(ctx sdk.Context, serviceID uint32) {
 	for _, hook := range m {
 		hook.AfterServiceActivated(ctx, serviceID)
 	}
 }
 
-// AfterServiceDeregistered implements ServicesHooks
+// AfterServiceDeactivated implements ServicesHooks
 func (m MultiServicesHooks) AfterServiceDeactivated(ctx sdk.Context, serviceID uint32) {
 	for _, hook := range m {
 		hook.AfterServiceDeactivated(ctx, serviceID)
