@@ -1,0 +1,84 @@
+package types
+
+import (
+	"fmt"
+	"strings"
+)
+
+// NewOperator creates a new Operator object
+func NewOperator(
+	id uint32,
+	status OperatorStatus,
+	moniker string,
+	website string,
+	pictureURL string,
+) Operator {
+	return Operator{
+		ID:         id,
+		Status:     status,
+		Moniker:    moniker,
+		Website:    website,
+		PictureURL: pictureURL,
+	}
+}
+
+// Validate checks that the Operator has valid values.
+func (o *Operator) Validate() error {
+	if o.Status == OPERATOR_STATUS_UNSPECIFIED {
+		return fmt.Errorf("invalid status: %s", o.Status)
+	}
+
+	if o.ID == 0 {
+		return fmt.Errorf("invalid id: %d", o.ID)
+	}
+
+	if strings.TrimSpace(o.Moniker) == "" {
+		return fmt.Errorf("invalid moniker: %s", o.Moniker)
+	}
+
+	return nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// OperatorUpdate defines the fields that can be updated in an Operator.
+type OperatorUpdate struct {
+	Moniker    string
+	Website    string
+	PictureURL string
+}
+
+func NewOperatorUpdate(
+	moniker string,
+	website string,
+	pictureURL string,
+) OperatorUpdate {
+	return OperatorUpdate{
+		Moniker:    moniker,
+		Website:    website,
+		PictureURL: pictureURL,
+	}
+}
+
+// Update returns a new Operator with updated fields.
+func (o *Operator) Update(update OperatorUpdate) Operator {
+	if update.Moniker == DoNotModify {
+		update.Moniker = o.Moniker
+	}
+
+	if update.Website == DoNotModify {
+		update.Website = o.Website
+	}
+
+	if update.PictureURL == DoNotModify {
+		update.PictureURL = o.PictureURL
+	}
+
+	return NewOperator(
+		o.ID,
+		o.Status,
+		update.Moniker,
+		update.Website,
+		update.PictureURL,
+	)
+}
