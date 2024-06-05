@@ -7,5 +7,5 @@ const (
 	EventTypeUpdatedService     = "updated_service"
 	EventTypeDeactivatedService = "deactivated_service"
 
-	AttributeKeyServiceID = "avs_id"
+	AttributeKeyServiceID = "service_id"
 )
