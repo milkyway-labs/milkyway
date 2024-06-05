@@ -12,15 +12,11 @@ const (
 )
 
 var (
-	ServicePrefix = []byte{0x01}
+	ParamsKey = []byte{0x01}
 
-	ParamsKey = []byte{0x10}
+	NextServiceIDKey = []byte{0xa1}
+	ServicePrefix    = []byte{0xa2}
 )
-
-// NextServiceIDKey returns the key for the next service ID
-func NextServiceIDKey() []byte {
-	return []byte{0x01}
-}
 
 // GetServiceIDBytes returns the byte representation of the service ID
 func GetServiceIDBytes(serviceID uint32) (serviceIDBz []byte) {
