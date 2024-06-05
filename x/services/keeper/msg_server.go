@@ -28,14 +28,14 @@ func (k msgServer) CreateService(goCtx context.Context, msg *types.MsgCreateServ
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Get the next service id
-	avsID, err := k.GetNextServiceID(ctx)
+	serviceID, err := k.GetNextServiceID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
 	// Create the Service and validate it
-	avs := types.NewService(
-		avsID,
+	service := types.NewService(
+		serviceID,
 		types.SERVICE_STATUS_CREATED,
 		msg.Name,
 		msg.Description,
@@ -45,30 +45,30 @@ func (k msgServer) CreateService(goCtx context.Context, msg *types.MsgCreateServ
 	)
 
 	// Validate the service before storing
-	err = avs.Validate()
+	err = service.Validate()
 	if err != nil {
 		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	// Create the service
-	err = k.Keeper.CreateService(ctx, avs)
+	err = k.Keeper.CreateService(ctx, service)
 	if err != nil {
 		return nil, err
 	}
 
 	// Update the ID for the next service
-	k.SetNextServiceID(ctx, avs.ID+1)
+	k.SetNextServiceID(ctx, service.ID+1)
 
 	// Emit the event
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeCreatedService,
-			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", avs.ID)),
+			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", service.ID)),
 		),
 	})
 
 	return &types.MsgCreateServiceResponse{
-		NewServiceID: avs.ID,
+		NewServiceID: service.ID,
 	}, nil
 }
 
@@ -77,18 +77,18 @@ func (k msgServer) UpdateService(goCtx context.Context, msg *types.MsgUpdateServ
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Check if the service exists
-	avs, found := k.GetService(ctx, msg.ServiceID)
+	service, found := k.GetService(ctx, msg.ServiceID)
 	if !found {
-		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, "avs with id %d not found", msg.ServiceID)
+		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, "service with id %d not found", msg.ServiceID)
 	}
 
 	// Make sure the user that is updating the service is the admin
-	if avs.Admin != msg.Sender {
+	if service.Admin != msg.Sender {
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "you are not the admin of the service")
 	}
 
 	// Update the service
-	updated := avs.Update(types.NewServiceUpdate(msg.Name, msg.Description, msg.Website, msg.PictureURL))
+	updated := service.Update(types.NewServiceUpdate(msg.Name, msg.Description, msg.Website, msg.PictureURL))
 
 	// Validate the updated service
 	err := updated.Validate()
@@ -96,7 +96,7 @@ func (k msgServer) UpdateService(goCtx context.Context, msg *types.MsgUpdateServ
 		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	// Save the Service
+	// Save the service
 	k.SaveService(ctx, updated)
 
 	// Emit the event
@@ -111,31 +111,31 @@ func (k msgServer) UpdateService(goCtx context.Context, msg *types.MsgUpdateServ
 }
 
 // DeactivateService defines the rpc method for Msg/DeactivateService
-func (k msgServer) DeactivateService(goCtx context.Context, service *types.MsgDeactivateService) (*types.MsgDeactivateServiceResponse, error) {
+func (k msgServer) DeactivateService(goCtx context.Context, msg *types.MsgDeactivateService) (*types.MsgDeactivateServiceResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Check if the service exists
-	avs, found := k.GetService(ctx, service.ServiceID)
+	service, found := k.GetService(ctx, msg.ServiceID)
 	if !found {
-		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, "service with id %d not found", service.ServiceID)
+		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, "service with id %d not found", msg.ServiceID)
 	}
 
 	// Make sure the user that is deactivating the service is the admin
-	if avs.Admin != service.Sender {
+	if service.Admin != msg.Sender {
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "you are not the admin of the service")
 	}
 
 	// Deactivate the service
-	avs.Status = types.SERVICE_STATUS_INACTIVE
+	service.Status = types.SERVICE_STATUS_INACTIVE
 
-	// Save the Service
-	k.SaveService(ctx, avs)
+	// Save the service
+	k.SaveService(ctx, service)
 
 	// Emit the event
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeDeactivatedService,
-			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", service.ServiceID)),
+			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
 		),
 	})
 
