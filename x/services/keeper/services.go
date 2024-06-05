@@ -33,9 +33,15 @@ func (k *Keeper) GetNextServiceID(ctx sdk.Context) (avsID uint32, err error) {
 
 // --------------------------------------------------------------------------------------------------------------------
 
+func (k *Keeper) storeService(ctx sdk.Context, service types.Service) {
+	store := ctx.KVStore(k.storeKey)
+	store.Set(types.ServiceStoreKey(service.ID), k.cdc.MustMarshal(&service))
+}
+
 // CreateService creates a new Service and stores it in the KVStore
 func (k *Keeper) CreateService(ctx sdk.Context, service types.Service) error {
-	k.SaveService(ctx, service)
+	// Store the service
+	k.storeService(ctx, service)
 
 	// Charge for the creation
 	registrationFees := k.GetParams(ctx).ServiceRegistrationFee
@@ -51,6 +57,10 @@ func (k *Keeper) CreateService(ctx sdk.Context, service types.Service) error {
 		}
 	}
 
+	// Log and call the hooks
+	k.Logger(ctx).Debug("created service", "id", service.ID)
+	k.AfterServiceCreated(ctx, service.ID)
+
 	return nil
 }
 
@@ -58,9 +68,8 @@ func (k *Keeper) CreateService(ctx sdk.Context, service types.Service) error {
 func (k *Keeper) SaveService(ctx sdk.Context, service types.Service) {
 	previous, existed := k.GetService(ctx, service.ID)
 
-	// Save the Service data
-	store := ctx.KVStore(k.storeKey)
-	store.Set(types.ServiceStoreKey(service.ID), k.cdc.MustMarshal(&service))
+	// Update the service
+	k.storeService(ctx, service)
 	k.Logger(ctx).Debug("saved service", "id", service.ID)
 
 	// Call the hook based on the Service status change
