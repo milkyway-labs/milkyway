@@ -7,7 +7,7 @@ import "milkyway/services/v1/params.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/services/types";
 
-// GenesisState defines the avs module's genesis state.
+// GenesisState defines the services module's genesis state.
 message GenesisState {
   // Params defines the parameters of the module.
   Params params = 1 [ (gogoproto.nullable) = false ];

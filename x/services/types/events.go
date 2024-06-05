@@ -3,8 +3,9 @@ package types
 // DONTCOVER
 
 const (
-	EventTypeRegisteredService = "registered_service"
-	EventTypeUpdatedService    = "updated_service"
+	EventTypeCreatedService     = "created_service"
+	EventTypeUpdatedService     = "updated_service"
+	EventTypeDeactivatedService = "deactivated_service"
 
 	AttributeKeyServiceID = "avs_id"
 )

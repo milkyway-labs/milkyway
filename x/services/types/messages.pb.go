@@ -33,35 +33,35 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// MsgRegisterServiceResponse defines the message structure for the
-// RegisterService gRPC service method. It allows an account to register a new
-// AVS that later on operators can opt to validate. It requires a sender address
-// as well as the details of the AVS to be register.
-type MsgRegisterService struct {
-	// Sender is the address of the user registering the AVS
+// MsgCreateServiceResponse defines the message structure for the
+// CreateService gRPC service method. It allows an account to register a new
+// service that can be validated by operators. It requires a sender address
+// as well as the details of the service to be registered.
+type MsgCreateService struct {
+	// Sender is the address of the user registering the service
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	// Name is the name of the AVS
+	// Name is the name of the service
 	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty" yaml:"name"`
-	// Description is the description of the AVS (optional)
+	// Description is the description of the service
 	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty" yaml:"description"`
-	// Website is the website of the AVS (optional)
+	// Website is the website of the service
 	Website string `protobuf:"bytes,4,opt,name=website,proto3" json:"website,omitempty" yaml:"website"`
-	// PictureURL is the URL of the AVS picture (optional)
+	// PictureURL is the URL of the service picture
 	PictureURL string `protobuf:"bytes,5,opt,name=picture_url,json=pictureUrl,proto3" json:"picture_url,omitempty" yaml:"picture_url"`
 }
 
-func (m *MsgRegisterService) Reset()         { *m = MsgRegisterService{} }
-func (m *MsgRegisterService) String() string { return proto.CompactTextString(m) }
-func (*MsgRegisterService) ProtoMessage()    {}
-func (*MsgRegisterService) Descriptor() ([]byte, []int) {
+func (m *MsgCreateService) Reset()         { *m = MsgCreateService{} }
+func (m *MsgCreateService) String() string { return proto.CompactTextString(m) }
+func (*MsgCreateService) ProtoMessage()    {}
+func (*MsgCreateService) Descriptor() ([]byte, []int) {
 	return fileDescriptor_47bb30a8b53f4868, []int{0}
 }
-func (m *MsgRegisterService) XXX_Unmarshal(b []byte) error {
+func (m *MsgCreateService) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgRegisterService) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgCreateService) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgRegisterService.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgCreateService.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -71,72 +71,72 @@ func (m *MsgRegisterService) XXX_Marshal(b []byte, deterministic bool) ([]byte, 
 		return b[:n], nil
 	}
 }
-func (m *MsgRegisterService) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgRegisterService.Merge(m, src)
+func (m *MsgCreateService) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCreateService.Merge(m, src)
 }
-func (m *MsgRegisterService) XXX_Size() int {
+func (m *MsgCreateService) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgRegisterService) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgRegisterService.DiscardUnknown(m)
+func (m *MsgCreateService) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCreateService.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgRegisterService proto.InternalMessageInfo
+var xxx_messageInfo_MsgCreateService proto.InternalMessageInfo
 
-func (m *MsgRegisterService) GetSender() string {
+func (m *MsgCreateService) GetSender() string {
 	if m != nil {
 		return m.Sender
 	}
 	return ""
 }
 
-func (m *MsgRegisterService) GetName() string {
+func (m *MsgCreateService) GetName() string {
 	if m != nil {
 		return m.Name
 	}
 	return ""
 }
 
-func (m *MsgRegisterService) GetDescription() string {
+func (m *MsgCreateService) GetDescription() string {
 	if m != nil {
 		return m.Description
 	}
 	return ""
 }
 
-func (m *MsgRegisterService) GetWebsite() string {
+func (m *MsgCreateService) GetWebsite() string {
 	if m != nil {
 		return m.Website
 	}
 	return ""
 }
 
-func (m *MsgRegisterService) GetPictureURL() string {
+func (m *MsgCreateService) GetPictureURL() string {
 	if m != nil {
 		return m.PictureURL
 	}
 	return ""
 }
 
-// MsgRegisterServiceResponse is the return value of MsgRegisterService.
-// It returns the newly created AVS ID.
-type MsgRegisterServiceResponse struct {
-	// NewServiceID is the ID of the newly registered AVS
+// MsgCreateServiceResponse is the return value of MsgCreateService.
+// It returns the newly created service ID.
+type MsgCreateServiceResponse struct {
+	// NewServiceID is the ID of the newly registered service
 	NewServiceID uint32 `protobuf:"varint,1,opt,name=new_service_id,json=newServiceId,proto3" json:"new_service_id,omitempty"`
 }
 
-func (m *MsgRegisterServiceResponse) Reset()         { *m = MsgRegisterServiceResponse{} }
-func (m *MsgRegisterServiceResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgRegisterServiceResponse) ProtoMessage()    {}
-func (*MsgRegisterServiceResponse) Descriptor() ([]byte, []int) {
+func (m *MsgCreateServiceResponse) Reset()         { *m = MsgCreateServiceResponse{} }
+func (m *MsgCreateServiceResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgCreateServiceResponse) ProtoMessage()    {}
+func (*MsgCreateServiceResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_47bb30a8b53f4868, []int{1}
 }
-func (m *MsgRegisterServiceResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgCreateServiceResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgRegisterServiceResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgCreateServiceResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgRegisterServiceResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgCreateServiceResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -146,19 +146,19 @@ func (m *MsgRegisterServiceResponse) XXX_Marshal(b []byte, deterministic bool) (
 		return b[:n], nil
 	}
 }
-func (m *MsgRegisterServiceResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgRegisterServiceResponse.Merge(m, src)
+func (m *MsgCreateServiceResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCreateServiceResponse.Merge(m, src)
 }
-func (m *MsgRegisterServiceResponse) XXX_Size() int {
+func (m *MsgCreateServiceResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgRegisterServiceResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgRegisterServiceResponse.DiscardUnknown(m)
+func (m *MsgCreateServiceResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCreateServiceResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgRegisterServiceResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgCreateServiceResponse proto.InternalMessageInfo
 
-func (m *MsgRegisterServiceResponse) GetNewServiceID() uint32 {
+func (m *MsgCreateServiceResponse) GetNewServiceID() uint32 {
 	if m != nil {
 		return m.NewServiceID
 	}
@@ -166,23 +166,23 @@ func (m *MsgRegisterServiceResponse) GetNewServiceID() uint32 {
 }
 
 // MsgUpdateService defines the message structure for the UpdateService gRPC
-// service method. It allows the AVS owner to update the details of
-// an existing AVS.
+// service method. It allows the service admin to update the details of
+// an existing service.
 type MsgUpdateService struct {
 	// Sender is the address of the user updating the AVS
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
 	// ID represents the ID of the AVS to be updated
 	ServiceID uint32 `protobuf:"varint,2,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
-	// Name is the new name of the AVS (optional).
+	// Name is the new name of the AVS.
 	// If it shouldn't be changed, use [do-not-modify] instead.
 	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty" yaml:"name"`
-	// Description is the new description of the AVS (optional)
+	// Description is the new description of the AVS.
 	// If it shouldn't be changed, use [do-not-modify] instead.
 	Description string `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty" yaml:"description"`
-	// Website is the new website of the AVS (optional)
+	// Website is the new website of the AVS.
 	// If it shouldn't be changed, use [do-not-modify] instead.
 	Website string `protobuf:"bytes,5,opt,name=website,proto3" json:"website,omitempty" yaml:"website"`
-	// PictureURL is the new URL of the AVS picture (optional)
+	// PictureURL is the new URL of the AVS picture.
 	// If it shouldn't be changed, use [do-not-modify] instead.
 	PictureURL string `protobuf:"bytes,6,opt,name=picture_url,json=pictureUrl,proto3" json:"picture_url,omitempty" yaml:"picture_url"`
 }
@@ -299,11 +299,105 @@ func (m *MsgUpdateServiceResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateServiceResponse proto.InternalMessageInfo
 
+// MsgDeactivateService defines the message structure for the DeactivateService
+type MsgDeactivateService struct {
+	// Sender is the address of the user that wants to deactivate the service
+	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	// ServiceID represents the ID of the service to be deactivated
+	ServiceID uint32 `protobuf:"varint,2,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
+}
+
+func (m *MsgDeactivateService) Reset()         { *m = MsgDeactivateService{} }
+func (m *MsgDeactivateService) String() string { return proto.CompactTextString(m) }
+func (*MsgDeactivateService) ProtoMessage()    {}
+func (*MsgDeactivateService) Descriptor() ([]byte, []int) {
+	return fileDescriptor_47bb30a8b53f4868, []int{4}
+}
+func (m *MsgDeactivateService) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgDeactivateService) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgDeactivateService.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgDeactivateService) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgDeactivateService.Merge(m, src)
+}
+func (m *MsgDeactivateService) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgDeactivateService) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgDeactivateService.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgDeactivateService proto.InternalMessageInfo
+
+func (m *MsgDeactivateService) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+func (m *MsgDeactivateService) GetServiceID() uint32 {
+	if m != nil {
+		return m.ServiceID
+	}
+	return 0
+}
+
+// MsgDeactivateServiceResponse is the return value of MsgDeactivateService.
+type MsgDeactivateServiceResponse struct {
+}
+
+func (m *MsgDeactivateServiceResponse) Reset()         { *m = MsgDeactivateServiceResponse{} }
+func (m *MsgDeactivateServiceResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgDeactivateServiceResponse) ProtoMessage()    {}
+func (*MsgDeactivateServiceResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_47bb30a8b53f4868, []int{5}
+}
+func (m *MsgDeactivateServiceResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgDeactivateServiceResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgDeactivateServiceResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgDeactivateServiceResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgDeactivateServiceResponse.Merge(m, src)
+}
+func (m *MsgDeactivateServiceResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgDeactivateServiceResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgDeactivateServiceResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgDeactivateServiceResponse proto.InternalMessageInfo
+
 func init() {
-	proto.RegisterType((*MsgRegisterService)(nil), "milkyway.services.v1.MsgRegisterService")
-	proto.RegisterType((*MsgRegisterServiceResponse)(nil), "milkyway.services.v1.MsgRegisterServiceResponse")
+	proto.RegisterType((*MsgCreateService)(nil), "milkyway.services.v1.MsgCreateService")
+	proto.RegisterType((*MsgCreateServiceResponse)(nil), "milkyway.services.v1.MsgCreateServiceResponse")
 	proto.RegisterType((*MsgUpdateService)(nil), "milkyway.services.v1.MsgUpdateService")
 	proto.RegisterType((*MsgUpdateServiceResponse)(nil), "milkyway.services.v1.MsgUpdateServiceResponse")
+	proto.RegisterType((*MsgDeactivateService)(nil), "milkyway.services.v1.MsgDeactivateService")
+	proto.RegisterType((*MsgDeactivateServiceResponse)(nil), "milkyway.services.v1.MsgDeactivateServiceResponse")
 }
 
 func init() {
@@ -311,44 +405,47 @@ func init() {
 }
 
 var fileDescriptor_47bb30a8b53f4868 = []byte{
-	// 588 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x94, 0xcb, 0x6e, 0xd3, 0x40,
-	0x14, 0x86, 0xeb, 0xb4, 0x0d, 0xca, 0xa4, 0x69, 0x8b, 0x15, 0x81, 0x6b, 0x24, 0x1b, 0x5c, 0x84,
-	0x4a, 0x68, 0xed, 0xa6, 0x48, 0x08, 0x75, 0x47, 0x04, 0x0b, 0xa4, 0x06, 0x21, 0x97, 0x6c, 0xd8,
-	0x44, 0xbe, 0x8c, 0x86, 0x51, 0xe3, 0x8b, 0x7c, 0x9c, 0x84, 0xec, 0x10, 0x4b, 0x56, 0x3c, 0x4a,
-	0x16, 0xbc, 0x03, 0x2c, 0x2b, 0x56, 0xac, 0x2c, 0xe4, 0x20, 0x65, 0x4d, 0x9e, 0x00, 0xc5, 0x1e,
-	0xe7, 0x5a, 0xa4, 0x36, 0x9b, 0x28, 0xe7, 0xfc, 0xdf, 0xf8, 0xf7, 0x9c, 0x7f, 0x3c, 0x68, 0xdf,
-	0xa1, 0xad, 0x8b, 0x5e, 0xd7, 0xe8, 0x69, 0x80, 0x83, 0x0e, 0xb5, 0x30, 0x68, 0x9d, 0xaa, 0xe6,
-	0x60, 0x00, 0x83, 0x60, 0x50, 0xfd, 0xc0, 0x0b, 0x3d, 0xbe, 0x9c, 0x41, 0x6a, 0x06, 0xa9, 0x9d,
-	0xaa, 0x78, 0xdb, 0x70, 0xa8, 0xeb, 0x69, 0xc9, 0x6f, 0x0a, 0x8a, 0x7b, 0x96, 0x07, 0x8e, 0x07,
-	0xcd, 0xa4, 0xd2, 0xd2, 0x82, 0x49, 0x52, 0x5a, 0x69, 0xa6, 0x01, 0x58, 0xeb, 0x54, 0x4d, 0x1c,
-	0x1a, 0x55, 0xcd, 0xf2, 0xa8, 0xbb, 0xa4, 0xbb, 0x17, 0x13, 0x7d, 0x5c, 0x30, 0xfd, 0x2e, 0xd3,
-	0x1d, 0x20, 0xc9, 0x1b, 0x02, 0x61, 0x42, 0x99, 0x78, 0xc4, 0x4b, 0x0d, 0xc7, 0xff, 0x58, 0xf7,
-	0xc1, 0x95, 0xfb, 0xf2, 0x8d, 0xc0, 0x70, 0xd8, 0x1b, 0x29, 0xdf, 0x73, 0x88, 0xaf, 0x03, 0xd1,
-	0x31, 0xa1, 0x10, 0xe2, 0xe0, 0x3c, 0xe5, 0xf8, 0x63, 0x94, 0x07, 0xec, 0xda, 0x38, 0x10, 0xb8,
-	0xfb, 0xdc, 0x41, 0xa1, 0x26, 0xfc, 0xfc, 0x76, 0x54, 0x66, 0x5b, 0x79, 0x61, 0xdb, 0x01, 0x06,
-	0x38, 0x0f, 0x03, 0xea, 0x12, 0x9d, 0x71, 0xfc, 0x3e, 0xda, 0x70, 0x0d, 0x07, 0x0b, 0xb9, 0x84,
-	0xdf, 0x19, 0x45, 0x72, 0xb1, 0x67, 0x38, 0xad, 0x53, 0x65, 0xdc, 0x55, 0xf4, 0x44, 0xe4, 0x9f,
-	0xa3, 0xa2, 0x8d, 0xc1, 0x0a, 0xa8, 0x1f, 0x52, 0xcf, 0x15, 0xd6, 0x13, 0xf6, 0xce, 0x28, 0x92,
-	0xf9, 0x94, 0x9d, 0x11, 0x15, 0x7d, 0x16, 0xe5, 0x0f, 0xd1, 0xad, 0x2e, 0x36, 0x81, 0x86, 0x58,
-	0xd8, 0x48, 0x56, 0xf1, 0xa3, 0x48, 0xde, 0x4e, 0x57, 0x31, 0x41, 0xd1, 0x33, 0x84, 0x7f, 0x85,
-	0x8a, 0x3e, 0xb5, 0xc2, 0x76, 0x80, 0x9b, 0xed, 0xa0, 0x25, 0x6c, 0x26, 0x2b, 0x1e, 0xc6, 0x91,
-	0x8c, 0xde, 0xa6, 0xed, 0x86, 0x7e, 0x36, 0x75, 0x9d, 0x41, 0x15, 0x1d, 0xb1, 0xaa, 0x11, 0xb4,
-	0x4e, 0x9f, 0x7c, 0x1e, 0xf6, 0x2b, 0x6c, 0x83, 0x5f, 0x86, 0xfd, 0xca, 0xbd, 0xc9, 0x3c, 0x97,
-	0x47, 0xa6, 0xbc, 0x43, 0xe2, 0x72, 0x57, 0xc7, 0xe0, 0x7b, 0x2e, 0x60, 0xfe, 0x19, 0xda, 0x76,
-	0x71, 0xb7, 0xc9, 0x72, 0x68, 0x52, 0x3b, 0x19, 0x6c, 0xa9, 0xb6, 0x1b, 0x47, 0xf2, 0xd6, 0x1b,
-	0xdc, 0x65, 0xfc, 0xeb, 0x97, 0xfa, 0x96, 0x3b, 0xad, 0x6c, 0xe5, 0x6f, 0x0e, 0xed, 0xd6, 0x81,
-	0x34, 0x7c, 0xdb, 0x08, 0xf1, 0xea, 0xe9, 0x1c, 0x22, 0x34, 0x63, 0x9d, 0x4b, 0xac, 0x4b, 0x71,
-	0x24, 0x17, 0xa6, 0xbe, 0x05, 0xc8, 0x4c, 0x27, 0x59, 0xae, 0xdf, 0x20, 0xcb, 0x8d, 0x95, 0xb2,
-	0xdc, 0xbc, 0x71, 0x96, 0xf9, 0x15, 0xb3, 0x7c, 0xbc, 0x90, 0xe5, 0xde, 0x6c, 0x96, 0x73, 0xe3,
-	0x55, 0x44, 0x24, 0x2c, 0xf6, 0xb2, 0x1c, 0x4f, 0xfe, 0x70, 0x68, 0xbd, 0x0e, 0x84, 0x77, 0xd0,
-	0xce, 0xe2, 0x37, 0x73, 0xa0, 0x5e, 0x75, 0x43, 0xa8, 0xcb, 0x87, 0x42, 0x3c, 0xbe, 0x2e, 0x39,
-	0x39, 0x3e, 0x04, 0x95, 0xe6, 0x8f, 0xc0, 0xa3, 0xff, 0x3e, 0x62, 0x8e, 0x13, 0xd5, 0xeb, 0x71,
-	0x99, 0x91, 0xb8, 0xf9, 0x69, 0xd8, 0xaf, 0x70, 0xb5, 0xb3, 0x1f, 0xb1, 0xc4, 0x5d, 0xc6, 0x12,
-	0xf7, 0x3b, 0x96, 0xb8, 0xaf, 0x03, 0x69, 0xed, 0x72, 0x20, 0xad, 0xfd, 0x1a, 0x48, 0x6b, 0xef,
-	0x4f, 0x08, 0x0d, 0x3f, 0xb4, 0x4d, 0xd5, 0xf2, 0x1c, 0x2d, 0x7b, 0xf4, 0x51, 0xcb, 0x30, 0x61,
-	0x52, 0x69, 0x1f, 0xa7, 0xd7, 0x4d, 0xd8, 0xf3, 0x31, 0x98, 0xf9, 0xe4, 0xae, 0x79, 0xfa, 0x2f,
-	0x00, 0x00, 0xff, 0xff, 0x71, 0x14, 0x41, 0x1a, 0x68, 0x05, 0x00, 0x00,
+	// 627 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x94, 0x3d, 0x6f, 0xd3, 0x40,
+	0x18, 0xc7, 0xeb, 0xf4, 0x05, 0xf5, 0xda, 0x94, 0xd6, 0x8a, 0xc0, 0xb5, 0xc0, 0x06, 0x17, 0x21,
+	0x88, 0x5a, 0x9b, 0x14, 0x09, 0xa1, 0x6e, 0x94, 0x32, 0x20, 0xb5, 0x08, 0xb9, 0xea, 0xc2, 0x12,
+	0x9d, 0xed, 0xd3, 0x71, 0x6a, 0xfc, 0x22, 0x3f, 0x6e, 0x42, 0x36, 0xc4, 0xc8, 0xc4, 0x97, 0x60,
+	0xef, 0xc0, 0x37, 0x60, 0x61, 0xac, 0x60, 0x61, 0xb2, 0x90, 0x3b, 0x74, 0x26, 0x9f, 0x00, 0xe5,
+	0x7c, 0xce, 0x7b, 0x51, 0x0b, 0x82, 0x25, 0xca, 0xf3, 0xfc, 0x7f, 0xe7, 0xff, 0x73, 0xf7, 0xb7,
+	0x0f, 0xad, 0xf9, 0xac, 0x71, 0xd8, 0x6e, 0xe1, 0xb6, 0x05, 0x24, 0x6e, 0x32, 0x97, 0x80, 0xd5,
+	0xac, 0x59, 0x3e, 0x01, 0xc0, 0x94, 0x80, 0x19, 0xc5, 0x61, 0x12, 0xca, 0x95, 0x02, 0x32, 0x0b,
+	0xc8, 0x6c, 0xd6, 0xd4, 0x15, 0xec, 0xb3, 0x20, 0xb4, 0xf8, 0x6f, 0x0e, 0xaa, 0xab, 0x6e, 0x08,
+	0x7e, 0x08, 0x75, 0x5e, 0x59, 0x79, 0x21, 0x24, 0x2d, 0xaf, 0x2c, 0x07, 0x03, 0xb1, 0x9a, 0x35,
+	0x87, 0x24, 0xb8, 0x66, 0xb9, 0x21, 0x0b, 0xc6, 0xf4, 0xe0, 0xb0, 0xa7, 0x77, 0x0b, 0xa1, 0x5f,
+	0x17, 0xba, 0x0f, 0x94, 0x4f, 0x08, 0x54, 0x08, 0x15, 0x1a, 0xd2, 0x30, 0x37, 0xec, 0xfe, 0x13,
+	0xdd, 0xdb, 0x13, 0xf7, 0x15, 0xe1, 0x18, 0xfb, 0x62, 0x22, 0xe3, 0x73, 0x09, 0x2d, 0xef, 0x01,
+	0x7d, 0x1a, 0x13, 0x9c, 0x90, 0xfd, 0x9c, 0x92, 0x1f, 0xa0, 0x39, 0x20, 0x81, 0x47, 0x62, 0x45,
+	0xba, 0x25, 0xdd, 0x9b, 0xdf, 0x56, 0xbe, 0x7e, 0xda, 0xa8, 0x88, 0x8d, 0x3c, 0xf1, 0xbc, 0x98,
+	0x00, 0xec, 0x27, 0x31, 0x0b, 0xa8, 0x2d, 0x38, 0x79, 0x0d, 0xcd, 0x04, 0xd8, 0x27, 0x4a, 0x89,
+	0xf3, 0x57, 0x3b, 0xa9, 0xbe, 0xd0, 0xc6, 0x7e, 0x63, 0xcb, 0xe8, 0x76, 0x0d, 0x9b, 0x8b, 0xf2,
+	0x63, 0xb4, 0xe0, 0x11, 0x70, 0x63, 0x16, 0x25, 0x2c, 0x0c, 0x94, 0x69, 0xce, 0x5e, 0xeb, 0xa4,
+	0xba, 0x9c, 0xb3, 0x03, 0xa2, 0x61, 0x0f, 0xa2, 0xf2, 0x3a, 0xba, 0xd2, 0x22, 0x0e, 0xb0, 0x84,
+	0x28, 0x33, 0x7c, 0x95, 0xdc, 0x49, 0xf5, 0xa5, 0x7c, 0x95, 0x10, 0x0c, 0xbb, 0x40, 0xe4, 0x67,
+	0x68, 0x21, 0x62, 0x6e, 0x72, 0x14, 0x93, 0xfa, 0x51, 0xdc, 0x50, 0x66, 0xf9, 0x8a, 0x3b, 0x59,
+	0xaa, 0xa3, 0x97, 0x79, 0xfb, 0xc0, 0xde, 0xed, 0xbb, 0x0e, 0xa0, 0x86, 0x8d, 0x44, 0x75, 0x10,
+	0x37, 0xb6, 0xee, 0xbf, 0x3b, 0x3b, 0xae, 0x8a, 0x0d, 0xbe, 0x3f, 0x3b, 0xae, 0xae, 0xf6, 0x4e,
+	0x73, 0xf4, 0xc0, 0x0c, 0x1b, 0x29, 0xa3, 0x3d, 0x9b, 0x40, 0x14, 0x06, 0x40, 0xe4, 0x47, 0x68,
+	0x29, 0x20, 0xad, 0xba, 0x48, 0xa0, 0xce, 0x3c, 0x7e, 0xa8, 0xe5, 0xed, 0xe5, 0x2c, 0xd5, 0x17,
+	0x5f, 0x90, 0x96, 0xe0, 0x9f, 0xef, 0xd8, 0x8b, 0x41, 0xbf, 0xf2, 0x8c, 0x9f, 0x79, 0x32, 0x07,
+	0x91, 0xf7, 0x57, 0xc9, 0xac, 0x23, 0x34, 0x60, 0x5d, 0xe2, 0xd6, 0xe5, 0x2c, 0xd5, 0xe7, 0xfb,
+	0xbe, 0xf3, 0x50, 0x98, 0xf6, 0x72, 0x9c, 0xbe, 0x44, 0x8e, 0x33, 0x7f, 0x94, 0xe3, 0xec, 0xa5,
+	0x73, 0x9c, 0xfb, 0x17, 0x39, 0x0e, 0x1d, 0xaf, 0xa1, 0xf2, 0x1c, 0x87, 0x7a, 0x45, 0x8e, 0xc6,
+	0x47, 0x09, 0x55, 0xf6, 0x80, 0xee, 0x10, 0xec, 0x26, 0xac, 0xf9, 0xff, 0x32, 0xd9, 0xda, 0x18,
+	0x99, 0xff, 0xe6, 0xe0, 0xfc, 0x63, 0xe3, 0x18, 0x1a, 0xba, 0x31, 0xa9, 0x5f, 0xec, 0x63, 0xf3,
+	0x5b, 0x09, 0x4d, 0xef, 0x01, 0x95, 0x29, 0x2a, 0x0f, 0x7f, 0xf5, 0x77, 0xcd, 0x49, 0x37, 0x9c,
+	0x39, 0xfa, 0x62, 0xab, 0xe6, 0xc5, 0xb8, 0xde, 0x07, 0x40, 0x51, 0x79, 0xf8, 0x25, 0x3e, 0xdf,
+	0x68, 0x88, 0xfb, 0x8d, 0xd1, 0xc4, 0x84, 0x64, 0x40, 0x2b, 0xe3, 0xe9, 0x54, 0xcf, 0x7d, 0xc8,
+	0x18, 0xab, 0x6e, 0x5e, 0x9c, 0x2d, 0x4c, 0xd5, 0xd9, 0xb7, 0x67, 0xc7, 0x55, 0x69, 0x7b, 0xf7,
+	0x4b, 0xa6, 0x49, 0x27, 0x99, 0x26, 0xfd, 0xc8, 0x34, 0xe9, 0xc3, 0xa9, 0x36, 0x75, 0x72, 0xaa,
+	0x4d, 0x7d, 0x3f, 0xd5, 0xa6, 0x5e, 0x6d, 0x52, 0x96, 0xbc, 0x3e, 0x72, 0x4c, 0x37, 0xf4, 0xad,
+	0xe2, 0xf1, 0x1b, 0x0d, 0xec, 0x40, 0xaf, 0xb2, 0xde, 0xf4, 0xef, 0xe7, 0xa4, 0x1d, 0x11, 0x70,
+	0xe6, 0xf8, 0xe5, 0xfc, 0xf0, 0x57, 0x00, 0x00, 0x00, 0xff, 0xff, 0x01, 0x97, 0x2e, 0x47, 0x99,
+	0x06, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -363,8 +460,9 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgClient interface {
-	RegisterService(ctx context.Context, in *MsgRegisterService, opts ...grpc.CallOption) (*MsgRegisterServiceResponse, error)
+	CreateService(ctx context.Context, in *MsgCreateService, opts ...grpc.CallOption) (*MsgCreateServiceResponse, error)
 	UpdateService(ctx context.Context, in *MsgUpdateService, opts ...grpc.CallOption) (*MsgUpdateServiceResponse, error)
+	DeactivateService(ctx context.Context, in *MsgDeactivateService, opts ...grpc.CallOption) (*MsgDeactivateServiceResponse, error)
 }
 
 type msgClient struct {
@@ -375,9 +473,9 @@ func NewMsgClient(cc grpc1.ClientConn) MsgClient {
 	return &msgClient{cc}
 }
 
-func (c *msgClient) RegisterService(ctx context.Context, in *MsgRegisterService, opts ...grpc.CallOption) (*MsgRegisterServiceResponse, error) {
-	out := new(MsgRegisterServiceResponse)
-	err := c.cc.Invoke(ctx, "/milkyway.services.v1.Msg/RegisterService", in, out, opts...)
+func (c *msgClient) CreateService(ctx context.Context, in *MsgCreateService, opts ...grpc.CallOption) (*MsgCreateServiceResponse, error) {
+	out := new(MsgCreateServiceResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.services.v1.Msg/CreateService", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -393,41 +491,54 @@ func (c *msgClient) UpdateService(ctx context.Context, in *MsgUpdateService, opt
 	return out, nil
 }
 
+func (c *msgClient) DeactivateService(ctx context.Context, in *MsgDeactivateService, opts ...grpc.CallOption) (*MsgDeactivateServiceResponse, error) {
+	out := new(MsgDeactivateServiceResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.services.v1.Msg/DeactivateService", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
-	RegisterService(context.Context, *MsgRegisterService) (*MsgRegisterServiceResponse, error)
+	CreateService(context.Context, *MsgCreateService) (*MsgCreateServiceResponse, error)
 	UpdateService(context.Context, *MsgUpdateService) (*MsgUpdateServiceResponse, error)
+	DeactivateService(context.Context, *MsgDeactivateService) (*MsgDeactivateServiceResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
 type UnimplementedMsgServer struct {
 }
 
-func (*UnimplementedMsgServer) RegisterService(ctx context.Context, req *MsgRegisterService) (*MsgRegisterServiceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RegisterService not implemented")
+func (*UnimplementedMsgServer) CreateService(ctx context.Context, req *MsgCreateService) (*MsgCreateServiceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateService not implemented")
 }
 func (*UnimplementedMsgServer) UpdateService(ctx context.Context, req *MsgUpdateService) (*MsgUpdateServiceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateService not implemented")
+}
+func (*UnimplementedMsgServer) DeactivateService(ctx context.Context, req *MsgDeactivateService) (*MsgDeactivateServiceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeactivateService not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
 	s.RegisterService(&_Msg_serviceDesc, srv)
 }
 
-func _Msg_RegisterService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgRegisterService)
+func _Msg_CreateService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCreateService)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).RegisterService(ctx, in)
+		return srv.(MsgServer).CreateService(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/milkyway.services.v1.Msg/RegisterService",
+		FullMethod: "/milkyway.services.v1.Msg/CreateService",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).RegisterService(ctx, req.(*MsgRegisterService))
+		return srv.(MsgServer).CreateService(ctx, req.(*MsgCreateService))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -450,24 +561,46 @@ func _Msg_UpdateService_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_DeactivateService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgDeactivateService)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).DeactivateService(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/milkyway.services.v1.Msg/DeactivateService",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).DeactivateService(ctx, req.(*MsgDeactivateService))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "milkyway.services.v1.Msg",
 	HandlerType: (*MsgServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "RegisterService",
-			Handler:    _Msg_RegisterService_Handler,
+			MethodName: "CreateService",
+			Handler:    _Msg_CreateService_Handler,
 		},
 		{
 			MethodName: "UpdateService",
 			Handler:    _Msg_UpdateService_Handler,
+		},
+		{
+			MethodName: "DeactivateService",
+			Handler:    _Msg_DeactivateService_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "milkyway/services/v1/messages.proto",
 }
 
-func (m *MsgRegisterService) Marshal() (dAtA []byte, err error) {
+func (m *MsgCreateService) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -477,12 +610,12 @@ func (m *MsgRegisterService) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgRegisterService) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgCreateService) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgRegisterService) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgCreateService) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -525,7 +658,7 @@ func (m *MsgRegisterService) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgRegisterServiceResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgCreateServiceResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -535,12 +668,12 @@ func (m *MsgRegisterServiceResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgRegisterServiceResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgCreateServiceResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgRegisterServiceResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgCreateServiceResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -639,6 +772,64 @@ func (m *MsgUpdateServiceResponse) MarshalToSizedBuffer(dAtA []byte) (int, error
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgDeactivateService) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgDeactivateService) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgDeactivateService) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ServiceID != 0 {
+		i = encodeVarintMessages(dAtA, i, uint64(m.ServiceID))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintMessages(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgDeactivateServiceResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgDeactivateServiceResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgDeactivateServiceResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintMessages(dAtA []byte, offset int, v uint64) int {
 	offset -= sovMessages(v)
 	base := offset
@@ -650,7 +841,7 @@ func encodeVarintMessages(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *MsgRegisterService) Size() (n int) {
+func (m *MsgCreateService) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -679,7 +870,7 @@ func (m *MsgRegisterService) Size() (n int) {
 	return n
 }
 
-func (m *MsgRegisterServiceResponse) Size() (n int) {
+func (m *MsgCreateServiceResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -732,13 +923,38 @@ func (m *MsgUpdateServiceResponse) Size() (n int) {
 	return n
 }
 
+func (m *MsgDeactivateService) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovMessages(uint64(l))
+	}
+	if m.ServiceID != 0 {
+		n += 1 + sovMessages(uint64(m.ServiceID))
+	}
+	return n
+}
+
+func (m *MsgDeactivateServiceResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
 func sovMessages(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozMessages(x uint64) (n int) {
 	return sovMessages(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *MsgRegisterService) Unmarshal(dAtA []byte) error {
+func (m *MsgCreateService) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -761,10 +977,10 @@ func (m *MsgRegisterService) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgRegisterService: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgCreateService: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgRegisterService: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgCreateService: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -948,7 +1164,7 @@ func (m *MsgRegisterService) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgRegisterServiceResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgCreateServiceResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -971,10 +1187,10 @@ func (m *MsgRegisterServiceResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgRegisterServiceResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgCreateServiceResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgRegisterServiceResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgCreateServiceResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1273,6 +1489,157 @@ func (m *MsgUpdateServiceResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgUpdateServiceResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipMessages(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgDeactivateService) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowMessages
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgDeactivateService: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgDeactivateService: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessages
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMessages
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServiceID", wireType)
+			}
+			m.ServiceID = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessages
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ServiceID |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipMessages(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgDeactivateServiceResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowMessages
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgDeactivateServiceResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgDeactivateServiceResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

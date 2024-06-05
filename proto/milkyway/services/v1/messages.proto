@@ -15,47 +15,49 @@ option go_package = "github.com/milkyway-labs/milkyway/x/services/types";
 service Msg {
   option (cosmos.msg.v1.service) = true;
 
-  rpc RegisterService(MsgRegisterService) returns (MsgRegisterServiceResponse);
+  rpc CreateService(MsgCreateService) returns (MsgCreateServiceResponse);
   rpc UpdateService(MsgUpdateService) returns (MsgUpdateServiceResponse);
+  rpc DeactivateService(MsgDeactivateService)
+      returns (MsgDeactivateServiceResponse);
 }
 
-// MsgRegisterServiceResponse defines the message structure for the
-// RegisterService gRPC service method. It allows an account to register a new
-// AVS that later on operators can opt to validate. It requires a sender address
-// as well as the details of the AVS to be register.
-message MsgRegisterService {
+// MsgCreateServiceResponse defines the message structure for the
+// CreateService gRPC service method. It allows an account to register a new
+// service that can be validated by operators. It requires a sender address
+// as well as the details of the service to be registered.
+message MsgCreateService {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/MsgRegisterService";
+  option (amino.name) = "milkyway/MsgCreateService";
 
-  // Sender is the address of the user registering the AVS
+  // Sender is the address of the user registering the service
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
-  // Name is the name of the AVS
+  // Name is the name of the service
   string name = 2 [ (gogoproto.moretags) = "yaml:\"name\"" ];
 
-  // Description is the description of the AVS (optional)
+  // Description is the description of the service
   string description = 3 [ (gogoproto.moretags) = "yaml:\"description\"" ];
 
-  // Website is the website of the AVS (optional)
+  // Website is the website of the service
   string website = 4 [ (gogoproto.moretags) = "yaml:\"website\"" ];
 
-  // PictureURL is the URL of the AVS picture (optional)
+  // PictureURL is the URL of the service picture
   string picture_url = 5 [
     (gogoproto.moretags) = "yaml:\"picture_url\"",
     (gogoproto.customname) = "PictureURL"
   ];
 }
 
-// MsgRegisterServiceResponse is the return value of MsgRegisterService.
-// It returns the newly created AVS ID.
-message MsgRegisterServiceResponse {
-  // NewServiceID is the ID of the newly registered AVS
+// MsgCreateServiceResponse is the return value of MsgCreateService.
+// It returns the newly created service ID.
+message MsgCreateServiceResponse {
+  // NewServiceID is the ID of the newly registered service
   uint32 new_service_id = 1 [ (gogoproto.customname) = "NewServiceID" ];
 }
 
 // MsgUpdateService defines the message structure for the UpdateService gRPC
-// service method. It allows the AVS owner to update the details of
-// an existing AVS.
+// service method. It allows the service admin to update the details of
+// an existing service.
 message MsgUpdateService {
   option (cosmos.msg.v1.signer) = "sender";
   option (amino.name) = "milkyway/MsgUpdateService";
@@ -66,19 +68,19 @@ message MsgUpdateService {
   // ID represents the ID of the AVS to be updated
   uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
 
-  // Name is the new name of the AVS (optional).
+  // Name is the new name of the AVS.
   // If it shouldn't be changed, use [do-not-modify] instead.
   string name = 3 [ (gogoproto.moretags) = "yaml:\"name\"" ];
 
-  // Description is the new description of the AVS (optional)
+  // Description is the new description of the AVS.
   // If it shouldn't be changed, use [do-not-modify] instead.
   string description = 4 [ (gogoproto.moretags) = "yaml:\"description\"" ];
 
-  // Website is the new website of the AVS (optional)
+  // Website is the new website of the AVS.
   // If it shouldn't be changed, use [do-not-modify] instead.
   string website = 5 [ (gogoproto.moretags) = "yaml:\"website\"" ];
 
-  // PictureURL is the new URL of the AVS picture (optional)
+  // PictureURL is the new URL of the AVS picture.
   // If it shouldn't be changed, use [do-not-modify] instead.
   string picture_url = 6 [
     (gogoproto.moretags) = "yaml:\"picture_url\"",
@@ -88,3 +90,18 @@ message MsgUpdateService {
 
 // MsgUpdateServiceResponse is the return value of MsgUpdateService.
 message MsgUpdateServiceResponse {}
+
+// MsgDeactivateService defines the message structure for the DeactivateService
+message MsgDeactivateService {
+  option (cosmos.msg.v1.signer) = "sender";
+  option (amino.name) = "milkyway/MsgDeactivateService";
+
+  // Sender is the address of the user that wants to deactivate the service
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // ServiceID represents the ID of the service to be deactivated
+  uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
+}
+
+// MsgDeactivateServiceResponse is the return value of MsgDeactivateService.
+message MsgDeactivateServiceResponse {}

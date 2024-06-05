@@ -97,7 +97,7 @@ func TestValidateGenesis(t *testing.T) {
 					},
 					{
 						ID:     2,
-						Status: types.SERVICE_STATUS_REGISTERED,
+						Status: types.SERVICE_STATUS_ACTIVE,
 						Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 						Name:   "IBC Relaying",
 					},

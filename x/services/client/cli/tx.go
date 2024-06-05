@@ -32,6 +32,7 @@ func GetTxCmd() *cobra.Command {
 	subspacesTxCmd.AddCommand(
 		GetCmdCreateService(),
 		GetCmdEditService(),
+		GetCmdDeactivateService(),
 	)
 
 	return subspacesTxCmd
@@ -77,7 +78,7 @@ The service will be created with the sender as the owner.`,
 			}
 
 			// Create and validate the message
-			msg := types.NewMsgRegisterService(name, description, website, picture, creator)
+			msg := types.NewMsgCreateService(name, description, website, picture, creator)
 			if err = msg.ValidateBasic(); err != nil {
 				return fmt.Errorf("message validation failed: %w", err)
 			}
@@ -157,6 +158,41 @@ Only the fields that you provide will be updated`,
 	cmd.Flags().String(flagDescription, types.DoNotModify, "The new description of the service (optional)")
 	cmd.Flags().String(flagWebsite, types.DoNotModify, "The new website of the service (optional)")
 	cmd.Flags().String(flagPicture, types.DoNotModify, "The new picture URL of the service (optional)")
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// GetCmdDeactivateService returns the command allowing to deactivate an existing service
+func GetCmdDeactivateService() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "deactivate [id]",
+		Args:    cobra.ExactArgs(1),
+		Short:   "Deactivate an existing service",
+		Example: fmt.Sprintf(`%s tx %s deactivate 1 --from alice`, version.AppName, types.ModuleName),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			id, err := types.ParseServiceID(args[0])
+			if err != nil {
+				return err
+			}
+
+			creator := clientCtx.FromAddress.String()
+
+			// Create and validate the message
+			msg := types.NewMsgDeactivateService(id, creator)
+			if err = msg.ValidateBasic(); err != nil {
+				return fmt.Errorf("message validation failed: %w", err)
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
 
 	flags.AddTxFlagsToCmd(cmd)
 

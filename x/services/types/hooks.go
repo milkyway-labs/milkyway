@@ -14,9 +14,9 @@ import (
 
 // ServicesHooks event hooks for services objects (noalias)
 type ServicesHooks interface {
-	AfterServiceCreated(ctx sdk.Context, serviceID uint32)      // Must be called after a service is created
-	AfterServiceRegistered(ctx sdk.Context, serviceID uint32)   // Must be called after a service is registered
-	AfterServiceDeregistered(ctx sdk.Context, serviceID uint32) // Must be called after a service is deregistered
+	AfterServiceCreated(ctx sdk.Context, serviceID uint32)     // Must be called after a service is created
+	AfterServiceActivated(ctx sdk.Context, serviceID uint32)   // Must be called after a service is registered
+	AfterServiceDeactivated(ctx sdk.Context, serviceID uint32) // Must be called after a service is deregistered
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -37,15 +37,15 @@ func (m MultiServicesHooks) AfterServiceCreated(ctx sdk.Context, serviceID uint3
 }
 
 // AfterServiceRegistered implements ServicesHooks
-func (m MultiServicesHooks) AfterServiceRegistered(ctx sdk.Context, serviceID uint32) {
+func (m MultiServicesHooks) AfterServiceActivated(ctx sdk.Context, serviceID uint32) {
 	for _, hook := range m {
-		hook.AfterServiceRegistered(ctx, serviceID)
+		hook.AfterServiceActivated(ctx, serviceID)
 	}
 }
 
 // AfterServiceDeregistered implements ServicesHooks
-func (m MultiServicesHooks) AfterServiceDeregistered(ctx sdk.Context, serviceID uint32) {
+func (m MultiServicesHooks) AfterServiceDeactivated(ctx sdk.Context, serviceID uint32) {
 	for _, hook := range m {
-		hook.AfterServiceDeregistered(ctx, serviceID)
+		hook.AfterServiceDeactivated(ctx, serviceID)
 	}
 }

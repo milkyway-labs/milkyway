@@ -17,15 +17,15 @@ func (k *Keeper) AfterServiceCreated(ctx sdk.Context, avsID uint32) {
 }
 
 // AfterServiceRegistered implements ServicesHooks
-func (k *Keeper) AfterServiceRegistered(ctx sdk.Context, avsID uint32) {
+func (k *Keeper) AfterServiceActivated(ctx sdk.Context, avsID uint32) {
 	if k.hooks != nil {
-		k.hooks.AfterServiceRegistered(ctx, avsID)
+		k.hooks.AfterServiceActivated(ctx, avsID)
 	}
 }
 
 // AfterServiceDeregistered implements ServicesHooks
-func (k *Keeper) AfterServiceDeregistered(ctx sdk.Context, avsID uint32) {
+func (k *Keeper) AfterServiceDeactivated(ctx sdk.Context, avsID uint32) {
 	if k.hooks != nil {
-		k.hooks.AfterServiceDeregistered(ctx, avsID)
+		k.hooks.AfterServiceDeactivated(ctx, avsID)
 	}
 }

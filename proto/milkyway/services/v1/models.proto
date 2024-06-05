@@ -6,43 +6,45 @@ import "cosmos_proto/cosmos.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/services/types";
 
-// ServiceStatus defines the status of an AVS
+// ServiceStatus defines the status of a service
 enum ServiceStatus {
   option (gogoproto.goproto_enum_prefix) = false;
 
-  // SERVICE_STATUS_UNSPECIFIED defines the AVS status is unspecified
+  // SERVICE_STATUS_UNSPECIFIED defines an unspecified status
   SERVICE_STATUS_UNSPECIFIED = 0;
 
-  // SERVICE_STATUS_CREATED defines the AVS status is created
+  // SERVICE_STATUS_CREATED identifies a recently created service that is not
+  // yet active
   SERVICE_STATUS_CREATED = 1;
 
-  // SERVICE_STATUS_REGISTERED defines the AVS status is updated
-  SERVICE_STATUS_REGISTERED = 2;
+  // SERVICE_STATUS_REGISTERED identifies an active service
+  SERVICE_STATUS_ACTIVE = 2;
 
-  // SERVICE_STATUS_UNREGISTERED defines the AVS status is unregistered
-  SERVICE_STATUS_UNREGISTERED = 3;
+  // SERVICE_STATUS_INACTIVE identifies an inactive service
+  SERVICE_STATUS_INACTIVE = 3;
 }
 
-// Service defines the fields of an AVS
+// Service defines the fields of a service
 message Service {
-  // ID is the auto-generated unique identifier for the AVS
+  // ID is the unique identifier of the service
   uint32 id = 1 [ (gogoproto.customname) = "ID" ];
 
-  // Status is the status of the AVS
+  // Status is the status of the service
   ServiceStatus status = 2;
 
-  // Admin is the address of the user that has registered the AVS
+  // Admin is the address of the user that has administrative power over the
+  // service
   string admin = 3 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
-  // Name is the name of the AVS
+  // Name is the name of the service
   string name = 4;
 
-  // Description is the description of the AVS (optional)
+  // Description is the description of the service
   string description = 5;
 
-  // Website is the website of the AVS (optional)
+  // Website is the website of the service
   string website = 6;
 
-  // PictureURL is the URL of the picture of the AVS (optional)
+  // PictureURL is the URL of the picture of the service
   string pictureURL = 7;
 }

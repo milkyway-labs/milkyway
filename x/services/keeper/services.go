@@ -67,10 +67,10 @@ func (k *Keeper) SaveService(ctx sdk.Context, service types.Service) {
 	switch {
 	case !existed:
 		k.AfterServiceCreated(ctx, service.ID)
-	case previous.Status == types.SERVICE_STATUS_CREATED && service.Status == types.SERVICE_STATUS_REGISTERED:
-		k.AfterServiceRegistered(ctx, service.ID)
-	case previous.Status == types.SERVICE_STATUS_REGISTERED && service.Status == types.SERVICE_STATUS_UNREGISTERED:
-		k.AfterServiceDeregistered(ctx, service.ID)
+	case previous.Status == types.SERVICE_STATUS_CREATED && service.Status == types.SERVICE_STATUS_ACTIVE:
+		k.AfterServiceActivated(ctx, service.ID)
+	case previous.Status == types.SERVICE_STATUS_ACTIVE && service.Status == types.SERVICE_STATUS_INACTIVE:
+		k.AfterServiceDeactivated(ctx, service.ID)
 	}
 }
 

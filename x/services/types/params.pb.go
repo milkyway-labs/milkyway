@@ -26,7 +26,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// Params defines the parameters for the avs module.
+// Params defines the parameters for the module.
 type Params struct {
 	// ServiceRegistrationFee defines the fee to register a new service.
 	// The fee is drawn from the MsgRegisterService sender's account,
