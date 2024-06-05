@@ -36,7 +36,7 @@ func getCmdQueryService() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "service [service-id]",
 		Short:   "Query the service with the given id",
-		Example: fmt.Sprintf(`%s query posts service 1`, version.AppName),
+		Example: fmt.Sprintf(`%s query %s service 1`, version.AppName, types.ModuleName),
 		Args:    cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -69,7 +69,7 @@ func getCmdQueryServices() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "services",
 		Short:   "Query the services",
-		Example: fmt.Sprintf(`%s query services --page=2 --limit=100`, version.AppName),
+		Example: fmt.Sprintf(`%s query %s services --page=2 --limit=100`, version.AppName, types.ModuleName),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -103,7 +103,7 @@ func getCmdQueryParams() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "params",
 		Short:   "Query the module parameters",
-		Example: fmt.Sprintf(`%s query posts params`, version.AppName),
+		Example: fmt.Sprintf(`%s query %s params`, version.AppName, types.ModuleName),
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
