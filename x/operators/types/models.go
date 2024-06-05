@@ -2,8 +2,19 @@ package types
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
+
+func ParseOperatorID(value string) (uint32, error) {
+	operatorID, err := strconv.ParseUint(value, 10, 32)
+	if err != nil {
+		return 0, fmt.Errorf("invalid operator ID: %s", value)
+	}
+	return uint32(operatorID), nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------
 
 // NewOperator creates a new Operator object
 func NewOperator(
