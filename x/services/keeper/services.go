@@ -34,9 +34,6 @@ func (k *Keeper) storeService(ctx sdk.Context, service types.Service) {
 
 // CreateService creates a new Service and stores it in the KVStore
 func (k *Keeper) CreateService(ctx sdk.Context, service types.Service) error {
-	// Store the service
-	k.storeService(ctx, service)
-
 	// Charge for the creation
 	registrationFees := k.GetParams(ctx).ServiceRegistrationFee
 	if registrationFees != nil && !registrationFees.IsZero() {
@@ -50,6 +47,9 @@ func (k *Keeper) CreateService(ctx sdk.Context, service types.Service) error {
 			return err
 		}
 	}
+
+	// Store the service
+	k.storeService(ctx, service)
 
 	// Log and call the hooks
 	k.Logger(ctx).Debug("created service", "id", service.ID)
