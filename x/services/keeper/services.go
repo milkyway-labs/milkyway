@@ -36,7 +36,7 @@ func (k *Keeper) storeService(ctx sdk.Context, service types.Service) {
 func (k *Keeper) CreateService(ctx sdk.Context, service types.Service) error {
 	// Charge for the creation
 	registrationFees := k.GetParams(ctx).ServiceRegistrationFee
-	if registrationFees != nil && !registrationFees.IsZero() {
+	if !registrationFees.IsZero() {
 		userAddress, err := sdk.AccAddressFromBech32(service.Admin)
 		if err != nil {
 			return err
