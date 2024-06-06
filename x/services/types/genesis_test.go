@@ -17,7 +17,7 @@ func TestValidateGenesis(t *testing.T) {
 		shouldErr bool
 	}{
 		{
-			name: "invalid next Service ID returns error",
+			name: "invalid next service ID returns error",
 			genesis: &types.GenesisState{
 				NextServiceID: 0,
 				Services:      nil,

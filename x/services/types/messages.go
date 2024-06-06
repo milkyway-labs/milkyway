@@ -52,7 +52,7 @@ func (msg *MsgCreateService) ValidateBasic() error {
 
 // GetSignBytes implements sdk.Msg
 func (msg *MsgCreateService) GetSignBytes() []byte {
-	return AminoCdc.MustMarshalJSON(msg)
+	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(msg))
 }
 
 // GetSigners implements sdk.Msg
@@ -91,7 +91,7 @@ func (msg *MsgUpdateService) ValidateBasic() error {
 
 // GetSignBytes implements sdk.Msg
 func (msg *MsgUpdateService) GetSignBytes() []byte {
-	return AminoCdc.MustMarshalJSON(msg)
+	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(msg))
 }
 
 // GetSigners implements sdk.Msg
@@ -126,7 +126,7 @@ func (msg *MsgDeactivateService) ValidateBasic() error {
 
 // GetSignBytes implements sdk.Msg
 func (msg *MsgDeactivateService) GetSignBytes() []byte {
-	return AminoCdc.MustMarshalJSON(msg)
+	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(msg))
 }
 
 // GetSigners implements sdk.Msg
