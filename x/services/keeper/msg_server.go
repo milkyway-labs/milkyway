@@ -63,7 +63,7 @@ func (k msgServer) CreateService(goCtx context.Context, msg *types.MsgCreateServ
 	// Emit the event
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeCreatedService,
+			types.EventTypeCreateService,
 			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", service.ID)),
 		),
 	})
@@ -106,7 +106,7 @@ func (k msgServer) UpdateService(goCtx context.Context, msg *types.MsgUpdateServ
 	// Emit the event
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeUpdatedService,
+			types.EventTypeUpdateService,
 			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
 		),
 	})
@@ -141,7 +141,7 @@ func (k msgServer) DeactivateService(goCtx context.Context, msg *types.MsgDeacti
 	// Emit the event
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeDeactivatedService,
+			types.EventTypeDeactivateService,
 			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
 		),
 	})
