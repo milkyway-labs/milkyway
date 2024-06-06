@@ -18,8 +18,8 @@ type Keeper struct {
 }
 
 // NewKeeper creates a new keeper
-func NewKeeper(cdc codec.BinaryCodec, storeKey storetypes.StoreKey, poolKeeper CommunityPoolKeeper) Keeper {
-	return Keeper{
+func NewKeeper(cdc codec.BinaryCodec, storeKey storetypes.StoreKey, poolKeeper CommunityPoolKeeper) *Keeper {
+	return &Keeper{
 		storeKey:   storeKey,
 		cdc:        cdc,
 		poolKeeper: poolKeeper,
