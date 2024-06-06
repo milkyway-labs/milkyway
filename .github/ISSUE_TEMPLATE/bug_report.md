@@ -1,38 +1,21 @@
 ---
 name: Bug report
-about: Create a report to help us improve (use this for suspected bugs only, if not sure, open a regular issue below)
+about: Create a report to help us improve
 title: ''
-labels: Bug
-assignees: ''
+labels: 'kind/bug'
+
 ---
+<!-- < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < ☺ 
+v                            ✰  Thanks for opening an issue! ✰    
+v    Before smashing the submit button please review the template.
+v    Please also ensure that this is not a duplicate issue :)  
+☺ > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >  --> 
 
-<!-- This issue tracker is only for technical issues related to Initia.
+## Bug description
+<!-- A clear and concise description of what the bug is. -->
 
-General initia questions and/or support requests are best directed to the initia support team. 
+## Steps to reproduce
+<!-- Steps to reproduce the bug --> 
 
--->
-
-<!-- Describe the issue -->
-
-**Expected behavior**
-
-<!--- What behavior did you expect? Describe what the software should do in response to a specific action or command.-->
-
-**Actual behavior**
-
-<!--- What did the software actually do when you performed the action or command? If you're unsure whether the issue is related to Initia, feel free to ask us for clarification."
- -->
-
-**To reproduce**
-
-<!--- How reliably can you reproduce the issue, what are the steps to do so? -->
-
-**System information**
-
-<!-- What version of initia are you using, where did you get it (website, self-compiled, etc)? -->
-
-<!-- What type of machine are you observing the error on (OS/CPU and disk type)? -->
-
-<!-- initia-related issue? What is your operating system and its version? If Linux, what is your desktop environment and graphical shell? -->
-
-<!-- Any extra information that might be useful in the debugging process. -->
+## Expected behavior
+<!-- A clear and concise description of what you expected to happen. -->
