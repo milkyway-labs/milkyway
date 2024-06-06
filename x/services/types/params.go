@@ -16,7 +16,7 @@ func NewParams(serviceRegistrationFee sdk.Coins) Params {
 // DefaultParams returns a default set of parameters.
 func DefaultParams() Params {
 	return Params{
-		ServiceRegistrationFee: sdk.NewCoins(),
+		ServiceRegistrationFee: nil,
 	}
 }
 
