@@ -13,12 +13,6 @@ func (k *Keeper) SetNextServiceID(ctx sdk.Context, avsID uint32) {
 	store.Set(types.NextServiceIDKey, types.GetServiceIDBytes(avsID))
 }
 
-// HasNextServiceID checks if the next service ID is set
-func (k *Keeper) HasNextServiceID(ctx sdk.Context) bool {
-	store := ctx.KVStore(k.storeKey)
-	return store.Has(types.NextServiceIDKey)
-}
-
 // GetNextServiceID returns the next service ID to be used when registering a new Service
 func (k *Keeper) GetNextServiceID(ctx sdk.Context) (avsID uint32, err error) {
 	store := ctx.KVStore(k.storeKey)
