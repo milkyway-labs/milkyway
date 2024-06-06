@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"context"
 	"fmt"
 
 	"github.com/cosmos/cosmos-sdk/client"
@@ -50,7 +49,7 @@ func getCmdQueryService() *cobra.Command {
 				return err
 			}
 
-			res, err := queryClient.Service(context.Background(), types.NewQueryServiceRequest(serviceID))
+			res, err := queryClient.Service(cmd.Context(), types.NewQueryServiceRequest(serviceID))
 			if err != nil {
 				return err
 			}
@@ -83,7 +82,7 @@ func getCmdQueryServices() *cobra.Command {
 				return err
 			}
 
-			res, err := queryClient.Services(context.Background(), types.NewQueryServicesRequest(pageReq))
+			res, err := queryClient.Services(cmd.Context(), types.NewQueryServicesRequest(pageReq))
 			if err != nil {
 				return err
 			}
@@ -112,7 +111,7 @@ func getCmdQueryParams() *cobra.Command {
 			}
 			queryClient := types.NewQueryClient(clientCtx)
 
-			res, err := queryClient.Params(context.Background(), types.NewQueryParamsRequest())
+			res, err := queryClient.Params(cmd.Context(), types.NewQueryParamsRequest())
 			if err != nil {
 				return err
 			}
