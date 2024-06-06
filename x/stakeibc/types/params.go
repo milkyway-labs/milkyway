@@ -1,9 +1,8 @@
 package types
 
 import (
-	fmt "fmt"
+	"fmt"
 
-	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	"gopkg.in/yaml.v2"
 )
 
@@ -27,34 +26,7 @@ var (
 	DefaultIBCTransferTimeoutNanos      uint64 = 1800000000000 // 30 minutes
 	DefaultValidatorSlashQueryThreshold uint64 = 1             // denominated in percentage of TVL (1 => 1%)
 	DefaultValidatorWeightCap           uint64 = 10            // percentage (10 => 10%)
-
-	// KeyDepositInterval is store's key for the DepositInterval option
-	KeyDepositInterval                   = []byte("DepositInterval")
-	KeyDelegateInterval                  = []byte("DelegateInterval")
-	KeyReinvestInterval                  = []byte("ReinvestInterval")
-	KeyRewardsInterval                   = []byte("RewardsInterval")
-	KeyRedemptionRateInterval            = []byte("RedemptionRateInterval")
-	KeyStrideCommission                  = []byte("StrideCommission")
-	KeyICATimeoutNanos                   = []byte("ICATimeoutNanos")
-	KeyFeeTransferTimeoutNanos           = []byte("FeeTransferTimeoutNanos")
-	KeyBufferSize                        = []byte("BufferSize")
-	KeyIbcTimeoutBlocks                  = []byte("IBCTimeoutBlocks")
-	KeyDefaultMinRedemptionRateThreshold = []byte("DefaultMinRedemptionRateThreshold")
-	KeyDefaultMaxRedemptionRateThreshold = []byte("DefaultMaxRedemptionRateThreshold")
-	KeyMaxStakeICACallsPerEpoch          = []byte("MaxStakeICACallsPerEpoch")
-	KeyIBCTransferTimeoutNanos           = []byte("IBCTransferTimeoutNanos")
-	KeyMaxRedemptionRates                = []byte("MaxRedemptionRates")
-	KeyMinRedemptionRates                = []byte("MinRedemptionRates")
-	KeyValidatorSlashQueryThreshold      = []byte("ValidatorSlashQueryThreshold")
-	KeyValidatorWeightCap                = []byte("ValidatorWeightCap")
 )
-
-var _ paramtypes.ParamSet = (*Params)(nil)
-
-// ParamKeyTable the param key table for launch module
-func ParamKeyTable() paramtypes.KeyTable {
-	return paramtypes.NewKeyTable().RegisterParamSet(&Params{})
-}
 
 // NewParams creates a new Params instance
 func NewParams(
@@ -115,28 +87,6 @@ func DefaultParams() Params {
 		DefaultValidatorSlashQueryThreshold,
 		DefaultValidatorWeightCap,
 	)
-}
-
-// ParamSetPairs get the params.ParamSet
-func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
-	return paramtypes.ParamSetPairs{
-		paramtypes.NewParamSetPair(KeyDepositInterval, &p.DepositInterval, isPositive),
-		paramtypes.NewParamSetPair(KeyDelegateInterval, &p.DelegateInterval, isPositive),
-		paramtypes.NewParamSetPair(KeyRewardsInterval, &p.RewardsInterval, isPositive),
-		paramtypes.NewParamSetPair(KeyRedemptionRateInterval, &p.RedemptionRateInterval, isPositive),
-		paramtypes.NewParamSetPair(KeyStrideCommission, &p.StrideCommission, isCommission),
-		paramtypes.NewParamSetPair(KeyReinvestInterval, &p.ReinvestInterval, isPositive),
-		paramtypes.NewParamSetPair(KeyICATimeoutNanos, &p.IcaTimeoutNanos, isPositive),
-		paramtypes.NewParamSetPair(KeyBufferSize, &p.BufferSize, isPositive),
-		paramtypes.NewParamSetPair(KeyIbcTimeoutBlocks, &p.IbcTimeoutBlocks, isPositive),
-		paramtypes.NewParamSetPair(KeyFeeTransferTimeoutNanos, &p.FeeTransferTimeoutNanos, validTimeoutNanos),
-		paramtypes.NewParamSetPair(KeyMaxStakeICACallsPerEpoch, &p.MaxStakeIcaCallsPerEpoch, isPositive),
-		paramtypes.NewParamSetPair(KeyDefaultMinRedemptionRateThreshold, &p.DefaultMinRedemptionRateThreshold, validMinRedemptionRateThreshold),
-		paramtypes.NewParamSetPair(KeyDefaultMaxRedemptionRateThreshold, &p.DefaultMaxRedemptionRateThreshold, validMaxRedemptionRateThreshold),
-		paramtypes.NewParamSetPair(KeyIBCTransferTimeoutNanos, &p.IbcTransferTimeoutNanos, validTimeoutNanos),
-		paramtypes.NewParamSetPair(KeyValidatorSlashQueryThreshold, &p.ValidatorSlashQueryThreshold, isPositive),
-		paramtypes.NewParamSetPair(KeyValidatorWeightCap, &p.ValidatorWeightCap, validValidatorWeightCap),
-	}
 }
 
 func validTimeoutNanos(i interface{}) error {
@@ -277,7 +227,7 @@ func (p Params) Validate() error {
 	if err := validTimeoutNanos(p.IbcTransferTimeoutNanos); err != nil {
 		return err
 	}
-	if err := isPercentage(p.ValidatorWeightCap); err != nil {
+	if err := validValidatorWeightCap(p.ValidatorWeightCap); err != nil {
 		return err
 	}
 
