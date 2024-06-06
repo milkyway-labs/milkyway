@@ -10,9 +10,9 @@
 package testutil
 
 import (
+	context "context"
 	reflect "reflect"
 
-	types "github.com/cosmos/cosmos-sdk/types"
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -40,7 +40,7 @@ func (m *MockServicesHooks) EXPECT() *MockServicesHooksMockRecorder {
 }
 
 // AfterServiceActivated mocks base method.
-func (m *MockServicesHooks) AfterServiceActivated(ctx types.Context, serviceID uint32) {
+func (m *MockServicesHooks) AfterServiceActivated(ctx context.Context, serviceID uint32) {
 	m.ctrl.T.Helper()
 	m.ctrl.Call(m, "AfterServiceActivated", ctx, serviceID)
 }
@@ -52,7 +52,7 @@ func (mr *MockServicesHooksMockRecorder) AfterServiceActivated(ctx, serviceID an
 }
 
 // AfterServiceCreated mocks base method.
-func (m *MockServicesHooks) AfterServiceCreated(ctx types.Context, serviceID uint32) {
+func (m *MockServicesHooks) AfterServiceCreated(ctx context.Context, serviceID uint32) {
 	m.ctrl.T.Helper()
 	m.ctrl.Call(m, "AfterServiceCreated", ctx, serviceID)
 }
@@ -64,7 +64,7 @@ func (mr *MockServicesHooksMockRecorder) AfterServiceCreated(ctx, serviceID any)
 }
 
 // AfterServiceDeactivated mocks base method.
-func (m *MockServicesHooks) AfterServiceDeactivated(ctx types.Context, serviceID uint32) {
+func (m *MockServicesHooks) AfterServiceDeactivated(ctx context.Context, serviceID uint32) {
 	m.ctrl.T.Helper()
 	m.ctrl.Call(m, "AfterServiceDeactivated", ctx, serviceID)
 }

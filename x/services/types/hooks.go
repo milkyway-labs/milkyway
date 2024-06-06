@@ -3,7 +3,7 @@ package types
 // DONTCOVER
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"context"
 )
 
 // Event Hooks
@@ -14,12 +14,14 @@ import (
 
 // ServicesHooks event hooks for services objects (noalias)
 type ServicesHooks interface {
-	AfterServiceCreated(ctx sdk.Context, serviceID uint32)     // Must be called after a service is created
-	AfterServiceActivated(ctx sdk.Context, serviceID uint32)   // Must be called after a service is registered
-	AfterServiceDeactivated(ctx sdk.Context, serviceID uint32) // Must be called after a service is deregistered
+	AfterServiceCreated(ctx context.Context, serviceID uint32)     // Must be called after a service is created
+	AfterServiceActivated(ctx context.Context, serviceID uint32)   // Must be called after a service is registered
+	AfterServiceDeactivated(ctx context.Context, serviceID uint32) // Must be called after a service is deregistered
 }
 
 // --------------------------------------------------------------------------------------------------------------------
+
+var _ ServicesHooks = MultiServicesHooks{}
 
 // MultiServicesHooks combines multiple services hooks, all hook functions are run in array sequence
 type MultiServicesHooks []ServicesHooks
@@ -30,21 +32,21 @@ func NewMultiServicesHooks(hooks ...ServicesHooks) MultiServicesHooks {
 }
 
 // AfterServiceCreated implements ServicesHooks
-func (m MultiServicesHooks) AfterServiceCreated(ctx sdk.Context, serviceID uint32) {
+func (m MultiServicesHooks) AfterServiceCreated(ctx context.Context, serviceID uint32) {
 	for _, hook := range m {
 		hook.AfterServiceCreated(ctx, serviceID)
 	}
 }
 
 // AfterServiceActivated implements ServicesHooks
-func (m MultiServicesHooks) AfterServiceActivated(ctx sdk.Context, serviceID uint32) {
+func (m MultiServicesHooks) AfterServiceActivated(ctx context.Context, serviceID uint32) {
 	for _, hook := range m {
 		hook.AfterServiceActivated(ctx, serviceID)
 	}
 }
 
 // AfterServiceDeactivated implements ServicesHooks
-func (m MultiServicesHooks) AfterServiceDeactivated(ctx sdk.Context, serviceID uint32) {
+func (m MultiServicesHooks) AfterServiceDeactivated(ctx context.Context, serviceID uint32) {
 	for _, hook := range m {
 		hook.AfterServiceDeactivated(ctx, serviceID)
 	}
