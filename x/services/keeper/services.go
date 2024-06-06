@@ -8,21 +8,21 @@ import (
 )
 
 // SetNextServiceID sets the next service ID to be used when registering a new Service
-func (k *Keeper) SetNextServiceID(ctx sdk.Context, avsID uint32) {
+func (k *Keeper) SetNextServiceID(ctx sdk.Context, serviceID uint32) {
 	store := ctx.KVStore(k.storeKey)
-	store.Set(types.NextServiceIDKey, types.GetServiceIDBytes(avsID))
+	store.Set(types.NextServiceIDKey, types.GetServiceIDBytes(serviceID))
 }
 
 // GetNextServiceID returns the next service ID to be used when registering a new Service
-func (k *Keeper) GetNextServiceID(ctx sdk.Context) (avsID uint32, err error) {
+func (k *Keeper) GetNextServiceID(ctx sdk.Context) (serviceID uint32, err error) {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(types.NextServiceIDKey)
 	if bz == nil {
 		return 0, errors.Wrapf(types.ErrInvalidGenesis, "initial service id not set")
 	}
 
-	avsID = types.GetServiceIDFromBytes(bz)
-	return avsID, nil
+	serviceID = types.GetServiceIDFromBytes(bz)
+	return serviceID, nil
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ func (k *Keeper) CreateService(ctx sdk.Context, service types.Service) error {
 
 	// Charge for the creation
 	registrationFees := k.GetParams(ctx).ServiceRegistrationFee
-	if registrationFees != nil && registrationFees.IsZero() {
+	if registrationFees != nil && !registrationFees.IsZero() {
 		userAddress, err := sdk.AccAddressFromBech32(service.Admin)
 		if err != nil {
 			return err
