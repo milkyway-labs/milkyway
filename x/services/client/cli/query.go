@@ -37,7 +37,7 @@ func getCmdQueryService() *cobra.Command {
 		Use:     "service [service-id]",
 		Short:   "Query the service with the given id",
 		Example: fmt.Sprintf(`%s query %s service 1`, version.AppName, types.ModuleName),
-		Args:    cobra.ExactArgs(2),
+		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
