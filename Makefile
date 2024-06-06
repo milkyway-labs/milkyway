@@ -219,17 +219,12 @@ clean:
     artifacts/ \
     tmp-swagger-gen/
 
-distclean: clean tools-clean
-
-.PHONY: distclean clean
-
 ###############################################################################
 ###                                   Mocks                                 ###
 ###############################################################################
-
 mockgen:
-	@go install go.uber.org/mock/mockgen@latest
 	@./scripts/mockgen.sh
+
 .PHONY: mocks
 
 ###############################################################################

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-mockgen_cmd="mockgen"
+mockgen_cmd="go run go.uber.org/mock/mockgen"
 
 # Define an array of source and destination paths
 declare -a paths=(
