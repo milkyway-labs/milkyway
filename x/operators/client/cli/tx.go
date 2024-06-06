@@ -29,16 +29,16 @@ func GetTxCmd() *cobra.Command {
 	}
 
 	subspacesTxCmd.AddCommand(
-		GetCmdCreateService(),
-		GetCmdEditService(),
-		GetCmdDeactivateService(),
+		GetCmdRegisterOperator(),
+		GetCmdEditOperator(),
+		GetCmdDeregisterOperator(),
 	)
 
 	return subspacesTxCmd
 }
 
-// GetCmdCreateService returns the command allowing to create a new service
-func GetCmdCreateService() *cobra.Command {
+// GetCmdRegisterOperator returns the command allowing to register a new operator
+func GetCmdRegisterOperator() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "register [name]",
 		Args:  cobra.ExactArgs(1),
@@ -61,7 +61,6 @@ The operator will be created with the sender as the admin.`,
 			creator := clientCtx.FromAddress.String()
 
 			// Get optional data
-
 			website, err := cmd.Flags().GetString(flagWebsite)
 			if err != nil {
 				return err
@@ -73,7 +72,7 @@ The operator will be created with the sender as the admin.`,
 			}
 
 			// Create and validate the message
-			msg := types.NewMSg(moniker, description, website, picture, creator)
+			msg := types.NewMsgRegisterOperator(moniker, website, picture, creator)
 			if err = msg.ValidateBasic(); err != nil {
 				return fmt.Errorf("message validation failed: %w", err)
 			}
@@ -82,7 +81,6 @@ The operator will be created with the sender as the admin.`,
 		},
 	}
 
-	cmd.Flags().String(flagDescription, "", "The description of the service (optional)")
 	cmd.Flags().String(flagWebsite, "", "The website of the service (optional)")
 	cmd.Flags().String(flagPicture, "", "The picture URL of the service (optional)")
 
@@ -91,18 +89,18 @@ The operator will be created with the sender as the admin.`,
 	return cmd
 }
 
-// GetCmdEditService returns the command allowing to edit an existing service
-func GetCmdEditService() *cobra.Command {
+// GetCmdEditOperator returns the command allowing to edit an existing operator
+func GetCmdEditOperator() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "edit [id]",
 		Args:  cobra.ExactArgs(1),
-		Short: "Edit an existing service",
-		Long: `Edit an existing service having the provided it. 
+		Short: "Edit an existing operator",
+		Long: `Edit an existing operator having the provided it. 
 
-You can specify a description, website and a picture URL using the optional flags.
+You can specify the moniker, website and picture URL using the optional flags.
 Only the fields that you provide will be updated`,
 		Example: fmt.Sprintf(
-			`%s tx %s update 1 --description "My new description" --from alice`,
+			`%s tx %s update 1 --website https://example.com --from alice`,
 			version.AppName, types.ModuleName,
 		),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -111,7 +109,7 @@ Only the fields that you provide will be updated`,
 				return err
 			}
 
-			id, err := types.ParseServiceID(args[0])
+			id, err := types.ParseOperatorID(args[0])
 			if err != nil {
 				return err
 			}
@@ -119,12 +117,7 @@ Only the fields that you provide will be updated`,
 			creator := clientCtx.FromAddress.String()
 
 			// Get new fields values
-			name, err := cmd.Flags().GetString(flagMoniker)
-			if err != nil {
-				return err
-			}
-
-			description, err := cmd.Flags().GetString(flagDescription)
+			moniker, err := cmd.Flags().GetString(flagMoniker)
 			if err != nil {
 				return err
 			}
@@ -140,7 +133,7 @@ Only the fields that you provide will be updated`,
 			}
 
 			// Create and validate the message
-			msg := types.NewMsgUpdateService(id, name, description, website, picture, creator)
+			msg := types.NewMsgUpdateOperator(id, moniker, website, picture, creator)
 			if err = msg.ValidateBasic(); err != nil {
 				return fmt.Errorf("message validation failed: %w", err)
 			}
@@ -149,8 +142,7 @@ Only the fields that you provide will be updated`,
 		},
 	}
 
-	cmd.Flags().String(flagMoniker, types.DoNotModify, "The new name of the service (optional)")
-	cmd.Flags().String(flagDescription, types.DoNotModify, "The new description of the service (optional)")
+	cmd.Flags().String(flagMoniker, types.DoNotModify, "The new moniker of the service (optional)")
 	cmd.Flags().String(flagWebsite, types.DoNotModify, "The new website of the service (optional)")
 	cmd.Flags().String(flagPicture, types.DoNotModify, "The new picture URL of the service (optional)")
 
@@ -159,20 +151,20 @@ Only the fields that you provide will be updated`,
 	return cmd
 }
 
-// GetCmdDeactivateService returns the command allowing to deactivate an existing service
-func GetCmdDeactivateService() *cobra.Command {
+// GetCmdDeregisterOperator returns the command allowing to deactivate an existing service
+func GetCmdDeregisterOperator() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "deactivate [id]",
+		Use:     "deregister [id]",
 		Args:    cobra.ExactArgs(1),
-		Short:   "Deactivate an existing service",
-		Example: fmt.Sprintf(`%s tx %s deactivate 1 --from alice`, version.AppName, types.ModuleName),
+		Short:   "Deregister an existing service",
+		Example: fmt.Sprintf(`%s tx %s deregister 1 --from alice`, version.AppName, types.ModuleName),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			id, err := types.ParseServiceID(args[0])
+			id, err := types.ParseOperatorID(args[0])
 			if err != nil {
 				return err
 			}
@@ -180,7 +172,7 @@ func GetCmdDeactivateService() *cobra.Command {
 			creator := clientCtx.FromAddress.String()
 
 			// Create and validate the message
-			msg := types.NewMsgDeactivateService(id, creator)
+			msg := types.NewMsgDeregisterOperator(id, creator)
 			if err = msg.ValidateBasic(); err != nil {
 				return fmt.Errorf("message validation failed: %w", err)
 			}
