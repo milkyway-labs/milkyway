@@ -4,7 +4,7 @@ mockgen_cmd="go run go.uber.org/mock/mockgen"
 
 # Define an array of source and destination paths
 declare -a paths=(
-    "keeper/expected_keepers.go:testutil/expected_keepers_mocks.go"
+    "types/expected_keepers.go:testutil/expected_keepers_mocks.go"
     "types/hooks.go:testutil/hooks_mocks.go"
 )
 
