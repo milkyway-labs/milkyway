@@ -15,10 +15,21 @@ option go_package = "github.com/milkyway-labs/milkyway/x/services/types";
 service Msg {
   option (cosmos.msg.v1.service) = true;
 
+  // CreateService defines the operation for registering a new service.
   rpc CreateService(MsgCreateService) returns (MsgCreateServiceResponse);
+
+  // UpdateService defines the operation for updating an existing service.
   rpc UpdateService(MsgUpdateService) returns (MsgUpdateServiceResponse);
+
+  // DeactivateService defines the operation for deactivating an existing
+  // service.
   rpc DeactivateService(MsgDeactivateService)
       returns (MsgDeactivateServiceResponse);
+
+  // UpdateParams defines a (governance) operation for updating the module
+  // parameters.
+  // The authority defaults to the x/gov module account.
+  rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
 }
 
 // MsgCreateServiceResponse defines the message structure for the
@@ -92,6 +103,8 @@ message MsgUpdateService {
 message MsgUpdateServiceResponse {}
 
 // MsgDeactivateService defines the message structure for the DeactivateService
+// gRPC service method. It allows the service admin to deactivate an existing
+// service.
 message MsgDeactivateService {
   option (cosmos.msg.v1.signer) = "sender";
   option (amino.name) = "milkyway/MsgDeactivateService";
@@ -105,3 +118,25 @@ message MsgDeactivateService {
 
 // MsgDeactivateServiceResponse is the return value of MsgDeactivateService.
 message MsgDeactivateServiceResponse {}
+
+// MsgDeactivateService defines the message structure for the UpdateParams gRPC
+// service method. It allows the authority to update the module parameters.
+message MsgUpdateParams {
+  option (cosmos.msg.v1.signer) = "authority";
+  option (amino.name) = "milkyway/x/services/MsgUpdateParams";
+
+  // Authority is the address that controls the module (defaults to x/gov unless
+  // overwritten).
+  string authority = 1 [
+    (gogoproto.moretags) = "yaml:\"authority\"",
+    (cosmos_proto.scalar) = "cosmos.AddressString"
+  ];
+
+  // Params define the parameters to update.
+  //
+  // NOTE: All parameters must be supplied.
+  Params params = 2 [ (gogoproto.nullable) = false ];
+}
+
+// MsgDeactivateServiceResponse is the return value of MsgUpdateParams.
+message MsgUpdateParamsResponse {}

@@ -6,6 +6,7 @@ import (
 	"cosmossdk.io/log"
 	"cosmossdk.io/store"
 	"cosmossdk.io/store/metrics"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"go.uber.org/mock/gomock"
 
 	"github.com/milkyway-labs/milkyway/app"
@@ -65,7 +66,12 @@ func (suite *KeeperTestSuite) SetupTest() {
 	// Mocks initializations
 	suite.ctrl = gomock.NewController(suite.T())
 	suite.poolKeeper = testutil.NewMockCommunityPoolKeeper(suite.ctrl)
-	suite.k = keeper.NewKeeper(suite.cdc, suite.storeKey, suite.poolKeeper)
+	suite.k = keeper.NewKeeper(
+		suite.cdc,
+		suite.storeKey,
+		suite.poolKeeper,
+		authtypes.NewModuleAddress("gov").String(),
+	)
 }
 
 func (suite *KeeperTestSuite) TearDownTest() {
