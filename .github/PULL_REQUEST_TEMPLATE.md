@@ -1,32 +1,43 @@
-<!--
-*** Please remove the following help text before submitting: ***
+## Description
 
-Pull requests without a rationale and clear improvement may be closed
-immediately.
+Closes: #XXXX
 
--->
+<!-- Add a description of the changes that this PR introduces and the files that
+are the most critical to review. -->
 
-<!--
-Please provide clear motivation for your patch and explain how it improves
-initia user experience or initia developer experience
-significantly:
+---
 
-* Any test improvements or new tests that improve coverage are always welcome.
-* All other changes should have accompanying unit tests (see `src/test/`) or
-  functional tests (see `test/`). Contributors should note which tests cover
-  modified code. If no tests exist for a region of modified code, new tests
-  should accompany the change.
-* Bug fixes are most welcome when they come with steps to reproduce or an
-  explanation of the potential issue as well as reasoning for the way the bug
-  was fixed.
-* Features are welcome, but might be rejected due to design or scope issues.
-  If a feature is based on a lot of dependencies, contributors should first
-  consider building the system outside of initia, if possible.
--->
+### Author Checklist
 
-<!--
-Initia has a thorough review process and even the most trivial change
-needs to pass a lot of eyes and requires non-zero or even substantial time
-effort to review. There is a huge lack of active reviewers on the project, so
-patches often sit for a long time.
--->
+*All items are required. Please add a note to the item if the item is not applicable and
+please add links to any relevant follow up issues.*
+
+I have...
+
+- [ ] included the correct [type prefix](https://github.com/commitizen/conventional-commit-types/blob/v3.0.0/index.json) in the PR title
+- [ ] added `!` to the type prefix if API or client breaking change
+- [ ] targeted the correct branch (see [PR Targeting](https://github.com/desmos-labs/desmos/blob/master/CONTRIBUTING.md#pr-targeting))
+- [ ] provided a link to the relevant issue or specification
+- [ ] followed the guidelines for [building modules](https://docs.cosmos.network/v0.44/building-modules/intro.html)
+- [ ] included the necessary unit and integration [tests](https://github.com/desmos-labs/desmos/blob/master/CONTRIBUTING.md#testing)
+- [ ] added a changelog entry to `CHANGELOG.md`
+- [ ] included comments for [documenting Go code](https://blog.golang.org/godoc)
+- [ ] updated the relevant documentation or specification
+- [ ] reviewed "Files changed" and left comments if necessary
+- [ ] confirmed all CI checks have passed
+
+### Reviewers Checklist
+
+*All items are required. Please add a note if the item is not applicable and please add
+your handle next to the items reviewed if you only reviewed selected items.*
+
+I have...
+
+- [ ] confirmed the correct [type prefix](https://github.com/commitizen/conventional-commit-types/blob/v3.0.0/index.json) in the PR title
+- [ ] confirmed `!` in the type prefix if API or client breaking change
+- [ ] confirmed all author checklist items have been addressed
+- [ ] reviewed state machine logic
+- [ ] reviewed API design and naming
+- [ ] reviewed documentation is accurate
+- [ ] reviewed tests and test coverage
+- [ ] manually tested (if applicable)
