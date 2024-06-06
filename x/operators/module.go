@@ -149,7 +149,8 @@ func (am AppModule) BeginBlock(_ context.Context) error {
 }
 
 // EndBlock executes all ABCI EndBlock logic respective to the capability module. It returns no validator updates.
-func (am AppModule) EndBlock(_ context.Context) error {
+func (am AppModule) EndBlock(ctx context.Context) error {
+	EndBlocker(sdk.UnwrapSDKContext(ctx), am.keeper)
 	return nil
 }
 

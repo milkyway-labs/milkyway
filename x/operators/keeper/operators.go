@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"time"
+
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -99,7 +101,42 @@ func (k *Keeper) StartOperatorInactivation(ctx sdk.Context, operatorID uint32) e
 		return err
 	}
 
-	// TODO: Add the operator to the inactivating queue
+	// Insert the operator into the inactivating queue
+	k.InsertIntoInactivatingQueue(ctx, operator)
 
 	return nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// setOperatorAsInactivating sets the operator as inactivating in the KVStore
+func (k *Keeper) setOperatorAsInactivating(ctx sdk.Context, operatorID uint32, endTime time.Time) {
+	store := ctx.KVStore(k.storeKey)
+	store.Set(types.InactivatingOperatorQueueKey(operatorID, endTime), types.GetOperatorIDBytes(operatorID))
+}
+
+// InsertIntoInactivatingQueue inserts the operator into the inactivating queue
+func (k *Keeper) InsertIntoInactivatingQueue(ctx sdk.Context, operator types.Operator) {
+	endTime := ctx.BlockTime().Add(k.GetParams(ctx).DeactivationTime)
+	k.setOperatorAsInactivating(ctx, operator.ID, endTime)
+}
+
+// RemoveFromInactivatingQueue removes the operator from the inactivating queue
+func (k *Keeper) RemoveFromInactivatingQueue(ctx sdk.Context, operator types.Operator) {
+	store := ctx.KVStore(k.storeKey)
+
+	// Find the inactivating time for the operator
+	var inactivatingTime time.Time
+	k.iterateInactivatingOperatorsKeys(ctx, time.Time{}, func(key, _ []byte) (stop bool) {
+		operatorID, endTime := types.SplitInactivatingOperatorQueue(key)
+		if operatorID == operator.ID {
+			inactivatingTime = endTime
+			return true
+		}
+
+		return false
+	})
+
+	// Remove the operator from the inactivating queue
+	store.Delete(types.InactivatingOperatorQueueKey(operator.ID, inactivatingTime))
 }
