@@ -39,7 +39,7 @@ func (k *Keeper) Logger(ctx sdk.Context) log.Logger {
 // SetHooks allows to set the reactions hooks
 func (k *Keeper) SetHooks(rs types.ServicesHooks) *Keeper {
 	if k.hooks != nil {
-		panic("cannot set avs hooks twice")
+		panic("cannot set services hooks twice")
 	}
 
 	k.hooks = rs
