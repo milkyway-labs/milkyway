@@ -17,7 +17,7 @@ enum ServiceStatus {
   // yet active
   SERVICE_STATUS_CREATED = 1;
 
-  // SERVICE_STATUS_REGISTERED identifies an active service
+  // SERVICE_STATUS_ACTIVE identifies an active service
   SERVICE_STATUS_ACTIVE = 2;
 
   // SERVICE_STATUS_INACTIVE identifies an inactive service

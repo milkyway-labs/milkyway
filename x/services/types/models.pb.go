@@ -33,7 +33,7 @@ const (
 	// SERVICE_STATUS_CREATED identifies a recently created service that is not
 	// yet active
 	SERVICE_STATUS_CREATED ServiceStatus = 1
-	// SERVICE_STATUS_REGISTERED identifies an active service
+	// SERVICE_STATUS_ACTIVE identifies an active service
 	SERVICE_STATUS_ACTIVE ServiceStatus = 2
 	// SERVICE_STATUS_INACTIVE identifies an inactive service
 	SERVICE_STATUS_INACTIVE ServiceStatus = 3
