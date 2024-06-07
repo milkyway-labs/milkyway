@@ -42,7 +42,7 @@ func (msg *MsgRegisterOperator) ValidateBasic() error {
 
 // GetSignBytes implements sdk.Msg
 func (msg *MsgRegisterOperator) GetSignBytes() []byte {
-	return AminoCdc.MustMarshalJSON(msg)
+	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(msg))
 }
 
 // GetSigners implements sdk.Msg
@@ -80,7 +80,7 @@ func (msg *MsgUpdateOperator) ValidateBasic() error {
 
 // GetSignBytes implements sdk.Msg
 func (msg *MsgUpdateOperator) GetSignBytes() []byte {
-	return AminoCdc.MustMarshalJSON(msg)
+	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(msg))
 }
 
 // GetSigners implements sdk.Msg
@@ -91,8 +91,8 @@ func (msg *MsgUpdateOperator) GetSigners() []sdk.AccAddress {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// NewMsgDeregisterOperator creates a new MsgDeactivateOperator instance
-func NewMsgDeregisterOperator(operatorID uint32, sender string) *MsgDeactivateOperator {
+// NewMsgDeactivateOperator creates a new MsgDeactivateOperator instance
+func NewMsgDeactivateOperator(operatorID uint32, sender string) *MsgDeactivateOperator {
 	return &MsgDeactivateOperator{
 		OperatorID: operatorID,
 		Sender:     sender,
@@ -115,7 +115,7 @@ func (msg *MsgDeactivateOperator) ValidateBasic() error {
 
 // GetSignBytes implements sdk.Msg
 func (msg *MsgDeactivateOperator) GetSignBytes() []byte {
-	return AminoCdc.MustMarshalJSON(msg)
+	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(msg))
 }
 
 // GetSigners implements sdk.Msg
