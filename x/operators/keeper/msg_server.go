@@ -67,7 +67,9 @@ func (k msgServer) RegisterOperator(goCtx context.Context, msg *types.MsgRegiste
 		),
 	})
 
-	return &types.MsgRegisterOperatorResponse{}, nil
+	return &types.MsgRegisterOperatorResponse{
+		NewOperatorID: operatorID,
+	}, nil
 
 }
 
