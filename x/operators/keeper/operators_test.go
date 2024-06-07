@@ -424,3 +424,76 @@ func (suite *KeeperTestSuite) TestKeeper_StartOperatorInactivation() {
 		})
 	}
 }
+
+func (suite *KeeperTestSuite) TestKeeper_CompleteOperatorInactivation() {
+	testCases := []struct {
+		name     string
+		setup    func()
+		setupCtx func(ctx sdk.Context) sdk.Context
+		store    func(ctx sdk.Context)
+		operator types.Operator
+		check    func(ctx sdk.Context)
+	}{
+		{
+			name: "operator inactivation is completed properly",
+			setupCtx: func(ctx sdk.Context) sdk.Context {
+				return ctx.WithBlockTime(time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC))
+			},
+			store: func(ctx sdk.Context) {
+				suite.k.SetParams(ctx, types.NewParams(
+					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),
+					12*time.Hour,
+				))
+			},
+			operator: types.NewOperator(
+				1,
+				types.OPERATOR_STATUS_INACTIVATING,
+				"MilkyWay Operator",
+				"https://milkyway.com",
+				"https://milkyway.com/picture",
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			check: func(ctx sdk.Context) {
+				// Make sure the operator status has been updated
+				stored, found := suite.k.GetOperator(ctx, 1)
+				suite.Require().True(found)
+				suite.Require().Equal(types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_INACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				), stored)
+
+				// Make sure the operator has been removed from the inactivating queue
+				inactivatingQueue := suite.k.GetInactivatingOperators(ctx)
+				suite.Require().Len(inactivatingQueue, 0)
+
+				// Make sure the hook has been called
+				suite.Require().True(suite.hooks.CalledMap["AfterOperatorInactivatingCompleted"])
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.setup != nil {
+				tc.setup()
+			}
+			if tc.setupCtx != nil {
+				ctx = tc.setupCtx(ctx)
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			suite.k.CompleteOperatorInactivation(ctx, tc.operator)
+			if tc.check != nil {
+				tc.check(ctx)
+			}
+		})
+	}
+}

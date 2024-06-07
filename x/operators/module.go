@@ -1,4 +1,4 @@
-package services
+package operators
 
 import (
 	"context"
@@ -36,7 +36,7 @@ var (
 // AppModuleBasic
 // ----------------------------------------------------------------------------
 
-// AppModuleBasic implements the AppModuleBasic interface for the capability module.
+// AppModuleBasic implements the AppModuleBasic interface for the operators module.
 type AppModuleBasic struct {
 	cdc codec.BinaryCodec
 }
@@ -45,7 +45,7 @@ func NewAppModuleBasic(cdc codec.BinaryCodec) AppModuleBasic {
 	return AppModuleBasic{cdc: cdc}
 }
 
-// Name returns the capability module's name.
+// Name returns the operators module's name.
 func (AppModuleBasic) Name() string {
 	return types.ModuleName
 }
@@ -59,12 +59,12 @@ func (a AppModuleBasic) RegisterInterfaces(reg cdctypes.InterfaceRegistry) {
 	types.RegisterInterfaces(reg)
 }
 
-// DefaultGenesis returns the capability module's default genesis state.
+// DefaultGenesis returns the operators module's default genesis state.
 func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 	return cdc.MustMarshalJSON(types.DefaultGenesis())
 }
 
-// ValidateGenesis performs genesis state validation for the capability module.
+// ValidateGenesis performs genesis state validation for the operators module.
 func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncodingConfig, bz json.RawMessage) error {
 	var genState types.GenesisState
 	if err := cdc.UnmarshalJSON(bz, &genState); err != nil {
@@ -81,12 +81,12 @@ func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *r
 	}
 }
 
-// GetTxCmd returns the capability module's root tx command.
+// GetTxCmd returns the operators module's root tx command.
 func (a AppModuleBasic) GetTxCmd() *cobra.Command {
 	return cli.GetTxCmd()
 }
 
-// GetQueryCmd returns the capability module's root query command.
+// GetQueryCmd returns the operators module's root query command.
 func (AppModuleBasic) GetQueryCmd() *cobra.Command {
 	return cli.GetQueryCmd()
 }
@@ -95,7 +95,7 @@ func (AppModuleBasic) GetQueryCmd() *cobra.Command {
 // AppModule
 // ----------------------------------------------------------------------------
 
-// AppModule implements the AppModule interface for the capability module.
+// AppModule implements the AppModule interface for the operators module.
 type AppModule struct {
 	AppModuleBasic
 
@@ -110,7 +110,7 @@ func NewAppModule(cdc codec.Codec, keeper *keeper.Keeper) AppModule {
 	}
 }
 
-// Name returns the capability module's name.
+// Name returns the operators module's name.
 func (am AppModule) Name() string {
 	return am.AppModuleBasic.Name()
 }
@@ -121,12 +121,12 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 	types.RegisterQueryServer(cfg.QueryServer(), am.keeper)
 }
 
-// RegisterInvariants registers the capability module's invariants.
+// RegisterInvariants registers the operators module's invariants.
 func (am AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {
 	keeper.RegisterInvariants(ir, am.keeper)
 }
 
-// InitGenesis performs the capability module's genesis initialization It returns no validator updates.
+// InitGenesis performs the operators module's genesis initialization It returns no validator updates.
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.RawMessage) []abci.ValidatorUpdate {
 	var genState types.GenesisState
 	cdc.MustUnmarshalJSON(gs, &genState)
@@ -134,7 +134,7 @@ func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.Ra
 	return []abci.ValidatorUpdate{}
 }
 
-// ExportGenesis returns the capability module's exported genesis state as raw JSON bytes.
+// ExportGenesis returns the operators module's exported genesis state as raw JSON bytes.
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
 	genState := am.keeper.ExportGenesis(ctx)
 	return cdc.MustMarshalJSON(genState)
@@ -143,7 +143,7 @@ func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.Raw
 // ConsensusVersion implements ConsensusVersion.
 func (AppModule) ConsensusVersion() uint64 { return consensusVersion }
 
-// BeginBlock executes all ABCI BeginBlock logic respective to the capability module.
+// BeginBlock executes all ABCI BeginBlock logic respective to the operators module.
 func (am AppModule) BeginBlock(ctx context.Context) error {
 	BeginBlocker(sdk.UnwrapSDKContext(ctx), am.keeper)
 	return nil
