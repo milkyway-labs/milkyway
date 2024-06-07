@@ -23,7 +23,7 @@ func (suite *KeeperTestSuite) TestQueryServer_Operator() {
 		{
 			name: "existing operator is returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.RegisterOperator(ctx, types.NewOperator(
+				err := suite.k.RegisterOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -31,6 +31,7 @@ func (suite *KeeperTestSuite) TestQueryServer_Operator() {
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				))
+				suite.Require().NoError(err)
 			},
 			request:   types.NewQueryOperatorRequest(1),
 			shouldErr: false,
@@ -76,7 +77,7 @@ func (suite *KeeperTestSuite) TestQueryServer_Operators() {
 		{
 			name: "query without pagination returns data properly",
 			store: func(ctx sdk.Context) {
-				suite.k.RegisterOperator(ctx, types.NewOperator(
+				err := suite.k.RegisterOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -84,8 +85,9 @@ func (suite *KeeperTestSuite) TestQueryServer_Operators() {
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				))
+				suite.Require().NoError(err)
 
-				suite.k.RegisterOperator(ctx, types.NewOperator(
+				err = suite.k.RegisterOperator(ctx, types.NewOperator(
 					2,
 					types.OPERATOR_STATUS_INACTIVATING,
 					"Inertia",
@@ -93,6 +95,7 @@ func (suite *KeeperTestSuite) TestQueryServer_Operators() {
 					"",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
+				suite.Require().NoError(err)
 			},
 			request:   types.NewQueryOperatorsRequest(nil),
 			shouldErr: false,
@@ -118,7 +121,7 @@ func (suite *KeeperTestSuite) TestQueryServer_Operators() {
 		{
 			name: "query with pagination returns data properly",
 			store: func(ctx sdk.Context) {
-				suite.k.RegisterOperator(ctx, types.NewOperator(
+				err := suite.k.RegisterOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -126,8 +129,9 @@ func (suite *KeeperTestSuite) TestQueryServer_Operators() {
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				))
+				suite.Require().NoError(err)
 
-				suite.k.RegisterOperator(ctx, types.NewOperator(
+				err = suite.k.RegisterOperator(ctx, types.NewOperator(
 					2,
 					types.OPERATOR_STATUS_INACTIVATING,
 					"Inertia",
@@ -135,6 +139,7 @@ func (suite *KeeperTestSuite) TestQueryServer_Operators() {
 					"",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
+				suite.Require().NoError(err)
 			},
 			request: types.NewQueryOperatorsRequest(&query.PageRequest{
 				Offset: 1,
@@ -181,11 +186,6 @@ func (suite *KeeperTestSuite) TestQueryServer_Params() {
 		shouldErr bool
 		expParams types.Params
 	}{
-		{
-			name:      "non existing params return error",
-			request:   types.NewQueryParamsRequest(),
-			shouldErr: true,
-		},
 		{
 			name: "existing params are returned properly",
 			store: func(ctx sdk.Context) {

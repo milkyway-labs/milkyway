@@ -17,12 +17,8 @@ func BeginBlocker(ctx sdk.Context, keeper *keeper.Keeper) {
 	// Iterate over all the operators that are set to be inactivated by the current block time
 	keeper.IterateInactivatingOperatorQueue(ctx, ctx.BlockTime(), func(operator types.Operator) (stop bool) {
 
-		// Update the operator status
-		operator.Status = types.OPERATOR_STATUS_INACTIVE
-		err := keeper.UpdateOperator(ctx, operator)
-		if err != nil {
-			panic(fmt.Sprintf("error while updating operator: %s", err))
-		}
+		// Complete the operator inactivation process
+		keeper.CompleteOperatorInactivation(ctx, operator)
 
 		// Emit an event
 		ctx.EventManager().EmitEvent(

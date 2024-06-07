@@ -34,7 +34,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) {
 
 	// Store the operators
 	for _, operator := range state.Operators {
-		k.storeOperator(ctx, operator)
+		k.SaveOperator(ctx, operator)
 	}
 
 	// Store the inactivating operators

@@ -17,7 +17,7 @@ func (suite *KeeperTestSuite) TestValidOperatorsInvariant() {
 		{
 			name: "not found next operator id breaks invariant",
 			store: func(ctx sdk.Context) {
-				suite.k.RegisterOperator(ctx, types.NewOperator(
+				err := suite.k.RegisterOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -25,7 +25,9 @@ func (suite *KeeperTestSuite) TestValidOperatorsInvariant() {
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				))
-				suite.k.RegisterOperator(ctx, types.NewOperator(
+				suite.Require().NoError(err)
+
+				err = suite.k.RegisterOperator(ctx, types.NewOperator(
 					2,
 					types.OPERATOR_STATUS_INACTIVATING,
 					"Inertia",
@@ -33,6 +35,7 @@ func (suite *KeeperTestSuite) TestValidOperatorsInvariant() {
 					"",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
+				suite.Require().NoError(err)
 			},
 			expBroken: true,
 		},
@@ -40,7 +43,7 @@ func (suite *KeeperTestSuite) TestValidOperatorsInvariant() {
 			name: "operator with id equals to next operator id breaks invariant",
 			store: func(ctx sdk.Context) {
 				suite.k.SetNextOperatorID(ctx, 1)
-				suite.k.RegisterOperator(ctx, types.NewOperator(
+				err := suite.k.RegisterOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -48,6 +51,7 @@ func (suite *KeeperTestSuite) TestValidOperatorsInvariant() {
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				))
+				suite.Require().NoError(err)
 			},
 			expBroken: true,
 		},
@@ -55,7 +59,7 @@ func (suite *KeeperTestSuite) TestValidOperatorsInvariant() {
 			name: "operator with id higher than next operator id breaks invariant",
 			store: func(ctx sdk.Context) {
 				suite.k.SetNextOperatorID(ctx, 1)
-				suite.k.RegisterOperator(ctx, types.NewOperator(
+				err := suite.k.RegisterOperator(ctx, types.NewOperator(
 					2,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -63,6 +67,7 @@ func (suite *KeeperTestSuite) TestValidOperatorsInvariant() {
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				))
+				suite.Require().NoError(err)
 			},
 			expBroken: true,
 		},
@@ -70,7 +75,7 @@ func (suite *KeeperTestSuite) TestValidOperatorsInvariant() {
 			name: "invalid operator breaks invariant",
 			store: func(ctx sdk.Context) {
 				suite.k.SetNextOperatorID(ctx, 1)
-				suite.k.RegisterOperator(ctx, types.NewOperator(
+				err := suite.k.RegisterOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_UNSPECIFIED,
 					"MilkyWay Operator",
@@ -78,6 +83,7 @@ func (suite *KeeperTestSuite) TestValidOperatorsInvariant() {
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				))
+				suite.Require().NoError(err)
 			},
 			expBroken: true,
 		},
@@ -85,7 +91,7 @@ func (suite *KeeperTestSuite) TestValidOperatorsInvariant() {
 			name: "valid data does not break invariant",
 			store: func(ctx sdk.Context) {
 				suite.k.SetNextOperatorID(ctx, 3)
-				suite.k.RegisterOperator(ctx, types.NewOperator(
+				err := suite.k.RegisterOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -93,7 +99,9 @@ func (suite *KeeperTestSuite) TestValidOperatorsInvariant() {
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				))
-				suite.k.RegisterOperator(ctx, types.NewOperator(
+				suite.Require().NoError(err)
+
+				err = suite.k.RegisterOperator(ctx, types.NewOperator(
 					2,
 					types.OPERATOR_STATUS_INACTIVATING,
 					"Inertia",
@@ -101,6 +109,7 @@ func (suite *KeeperTestSuite) TestValidOperatorsInvariant() {
 					"",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
+				suite.Require().NoError(err)
 			},
 			expBroken: false,
 		},

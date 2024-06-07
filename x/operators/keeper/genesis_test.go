@@ -35,7 +35,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				suite.k.SetNextOperatorID(ctx, 10)
 				suite.k.SetParams(ctx, types.DefaultParams())
 
-				suite.k.RegisterOperator(ctx, types.NewOperator(
+				err := suite.k.RegisterOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -43,7 +43,9 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				))
-				suite.k.RegisterOperator(ctx, types.NewOperator(
+				suite.Require().NoError(err)
+
+				err = suite.k.RegisterOperator(ctx, types.NewOperator(
 					2,
 					types.OPERATOR_STATUS_INACTIVATING,
 					"Inertia",
@@ -51,6 +53,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					"",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
+				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				NextOperatorID: 10,
@@ -84,24 +87,27 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				suite.k.SetNextOperatorID(ctx, 10)
 				suite.k.SetParams(ctx, types.DefaultParams())
 
-				suite.k.RegisterOperator(ctx, types.NewOperator(
+				activeValidator := types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				))
-				suite.k.RegisterOperator(ctx, types.NewOperator(
+				)
+				err := suite.k.RegisterOperator(ctx, activeValidator)
+				suite.Require().NoError(err)
+
+				suite.k.StartOperatorInactivation(ctx, activeValidator)
+
+				err = suite.k.RegisterOperator(ctx, types.NewOperator(
 					2,
-					types.OPERATOR_STATUS_INACTIVE,
+					types.OPERATOR_STATUS_ACTIVE,
 					"Inertia",
 					"https://inertia.zone",
 					"",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
-
-				err := suite.k.StartOperatorInactivation(ctx, 2)
 				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
@@ -109,7 +115,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				Operators: []types.Operator{
 					types.NewOperator(
 						1,
-						types.OPERATOR_STATUS_ACTIVE,
+						types.OPERATOR_STATUS_INACTIVATING,
 						"MilkyWay Operator",
 						"https://milkyway.com",
 						"https://milkyway.com/picture",
@@ -117,7 +123,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					),
 					types.NewOperator(
 						2,
-						types.OPERATOR_STATUS_INACTIVATING,
+						types.OPERATOR_STATUS_ACTIVE,
 						"Inertia",
 						"https://inertia.zone",
 						"",
@@ -126,7 +132,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				},
 				UnbondingOperators: []types.UnbondingOperator{
 					types.NewUnbondingOperator(
-						2,
+						1,
 						time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC).Add(types.DefaultParams().DeactivationTime),
 					),
 				},

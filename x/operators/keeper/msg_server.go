@@ -51,7 +51,10 @@ func (k msgServer) RegisterOperator(goCtx context.Context, msg *types.MsgRegiste
 	}
 
 	// Store the operator
-	k.Keeper.RegisterOperator(ctx, operator)
+	err = k.Keeper.RegisterOperator(ctx, operator)
+	if err != nil {
+		return nil, err
+	}
 
 	// Update the ID for the next operator
 	k.SetNextOperatorID(ctx, operator.ID+1)
@@ -93,10 +96,7 @@ func (k msgServer) UpdateOperator(goCtx context.Context, msg *types.MsgUpdateOpe
 	}
 
 	// Store the updated operator
-	err = k.Keeper.UpdateOperator(ctx, updated)
-	if err != nil {
-		return nil, err
-	}
+	k.SaveOperator(ctx, updated)
 
 	// Emit the event
 	ctx.EventManager().EmitEvents(sdk.Events{
@@ -130,10 +130,7 @@ func (k msgServer) DeactivateOperator(goCtx context.Context, msg *types.MsgDeact
 	}
 
 	// Start the operator inactivation
-	err := k.Keeper.StartOperatorInactivation(ctx, msg.OperatorID)
-	if err != nil {
-		return nil, err
-	}
+	k.StartOperatorInactivation(ctx, operator)
 
 	// Emit the event
 	ctx.EventManager().EmitEvents(sdk.Events{
