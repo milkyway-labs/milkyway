@@ -18,7 +18,7 @@ func NewParams(registrationFee sdk.Coins, deactivationTime time.Duration) Params
 // DefaultParams returns default Params
 func DefaultParams() Params {
 	return Params{
-		OperatorRegistrationFee: sdk.NewCoins(),
+		OperatorRegistrationFee: nil,
 		DeactivationTime:        3 * 24 * time.Hour, // 3 days
 	}
 }

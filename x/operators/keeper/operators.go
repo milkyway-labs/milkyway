@@ -118,7 +118,7 @@ func (k *Keeper) StartOperatorInactivation(ctx sdk.Context, operatorID uint32) e
 	}
 
 	// Insert the operator into the inactivating queue
-	k.InsertIntoInactivatingQueue(ctx, operator)
+	k.insertIntoInactivatingQueue(ctx, operator)
 
 	return nil
 }
@@ -131,8 +131,8 @@ func (k *Keeper) setOperatorAsInactivating(ctx sdk.Context, operatorID uint32, e
 	store.Set(types.InactivatingOperatorQueueKey(operatorID, endTime), types.GetOperatorIDBytes(operatorID))
 }
 
-// InsertIntoInactivatingQueue inserts the operator into the inactivating queue
-func (k *Keeper) InsertIntoInactivatingQueue(ctx sdk.Context, operator types.Operator) {
+// insertIntoInactivatingQueue inserts the operator into the inactivating queue
+func (k *Keeper) insertIntoInactivatingQueue(ctx sdk.Context, operator types.Operator) {
 	endTime := ctx.BlockTime().Add(k.GetParams(ctx).DeactivationTime)
 	k.setOperatorAsInactivating(ctx, operator.ID, endTime)
 }

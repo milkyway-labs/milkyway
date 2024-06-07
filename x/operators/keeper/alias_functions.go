@@ -26,9 +26,19 @@ func (k *Keeper) IterateOperators(ctx sdk.Context, cb func(operator types.Operat
 	}
 }
 
+// GetOperators returns the services stored in the KVStore
+func (k *Keeper) GetOperators(ctx sdk.Context) []types.Operator {
+	var operators []types.Operator
+	k.IterateOperators(ctx, func(service types.Operator) (stop bool) {
+		operators = append(operators, service)
+		return false
+	})
+	return operators
+}
+
 // IterateInactivatingOperatorQueue iterates over all the operators that are set to be inactivated
 // by the given time and calls the given function.
-func (k *Keeper) IterateInactivatingOperatorQueue(ctx sdk.Context, endTime time.Time, fn func(poll types.Operator) (stop bool)) {
+func (k *Keeper) IterateInactivatingOperatorQueue(ctx sdk.Context, endTime time.Time, fn func(operator types.Operator) (stop bool)) {
 	k.iterateInactivatingOperatorsKeys(ctx, endTime, func(key, value []byte) (stop bool) {
 		operatorID, _ := types.SplitInactivatingOperatorQueueKey(key)
 		operator, found := k.GetOperator(ctx, operatorID)
@@ -60,4 +70,15 @@ func (k *Keeper) iterateInactivatingOperatorsKeys(ctx sdk.Context, endTime time.
 			break
 		}
 	}
+}
+
+// GetInactivatingOperators returns the inactivating operators stored in the KVStore
+func (k *Keeper) GetInactivatingOperators(ctx sdk.Context) []types.UnbondingOperator {
+	var operators []types.UnbondingOperator
+	k.iterateInactivatingOperatorsKeys(ctx, time.Time{}, func(key, value []byte) (stop bool) {
+		operatorID, endTime := types.SplitInactivatingOperatorQueueKey(key)
+		operators = append(operators, types.NewUnbondingOperator(operatorID, endTime))
+		return false
+	})
+	return operators
 }

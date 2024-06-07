@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"time"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/x/operators/types"
@@ -12,8 +10,8 @@ import (
 func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	return types.NewGenesisState(
 		k.exportNextOperatorID(ctx),
-		k.exportOperators(ctx),
-		k.exportInactivatingOperators(ctx),
+		k.GetOperators(ctx),
+		k.GetInactivatingOperators(ctx),
 		k.GetParams(ctx),
 	)
 }
@@ -25,27 +23,6 @@ func (k *Keeper) exportNextOperatorID(ctx sdk.Context) uint32 {
 		panic(err)
 	}
 	return nextAVSID
-}
-
-// exportOperators returns the services stored in the KVStore
-func (k *Keeper) exportOperators(ctx sdk.Context) []types.Operator {
-	var operators []types.Operator
-	k.IterateOperators(ctx, func(service types.Operator) (stop bool) {
-		operators = append(operators, service)
-		return false
-	})
-	return operators
-}
-
-// exportInactivatingOperators returns the inactivating operators stored in the KVStore
-func (k *Keeper) exportInactivatingOperators(ctx sdk.Context) []types.UnbondingOperator {
-	var operators []types.UnbondingOperator
-	k.iterateInactivatingOperatorsKeys(ctx, time.Time{}, func(key, value []byte) (stop bool) {
-		operatorID, endTime := types.SplitInactivatingOperatorQueueKey(key)
-		operators = append(operators, types.NewUnbondingOperator(operatorID, endTime))
-		return false
-	})
-	return operators
 }
 
 // --------------------------------------------------------------------------------------------------------------------

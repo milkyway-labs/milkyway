@@ -72,6 +72,9 @@ func (suite *KeeperTestSuite) SetupTest() {
 	suite.ctx = sdk.NewContext(ms, tmproto.Header{ChainID: "test-chain"}, false, log.NewNopLogger())
 	suite.cdc, suite.legacyAminoCdc = app.MakeCodecs()
 
+	// Mock initialization
+	suite.ctrl = gomock.NewController(suite.T())
+
 	// Authority address
 	authorityAddr := authtypes.NewModuleAddress(govtypes.ModuleName).String()
 

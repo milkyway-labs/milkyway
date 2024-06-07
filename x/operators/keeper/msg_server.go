@@ -124,6 +124,11 @@ func (k msgServer) DeactivateOperator(goCtx context.Context, msg *types.MsgDeact
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can deactivate the operator")
 	}
 
+	// Make sure the operator is not already inactivating
+	if operator.Status == types.OPERATOR_STATUS_INACTIVATING {
+		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, "operator is already inactivating")
+	}
+
 	// Start the operator inactivation
 	err := k.Keeper.StartOperatorInactivation(ctx, msg.OperatorID)
 	if err != nil {
