@@ -347,3 +347,80 @@ func (suite *KeeperTestSuite) TestKeeper_SaveOperator() {
 		})
 	}
 }
+
+func (suite *KeeperTestSuite) TestKeeper_StartOperatorInactivation() {
+	testCases := []struct {
+		name     string
+		setup    func()
+		setupCtx func(ctx sdk.Context) sdk.Context
+		store    func(ctx sdk.Context)
+		operator types.Operator
+		check    func(ctx sdk.Context)
+	}{
+		{
+			name: "operator inactivation is started properly",
+			setupCtx: func(ctx sdk.Context) sdk.Context {
+				return ctx.WithBlockTime(time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC))
+			},
+			store: func(ctx sdk.Context) {
+				suite.k.SetParams(ctx, types.NewParams(
+					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),
+					12*time.Hour,
+				))
+			},
+			operator: types.NewOperator(
+				1,
+				types.OPERATOR_STATUS_ACTIVE,
+				"MilkyWay Operator",
+				"https://milkyway.com",
+				"https://milkyway.com/picture",
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			check: func(ctx sdk.Context) {
+				// Make sure the operator status has been updated
+				stored, found := suite.k.GetOperator(ctx, 1)
+				suite.Require().True(found)
+				suite.Require().Equal(types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_INACTIVATING,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				), stored)
+
+				// Make sure the operator has been inserted into the inactivating queue
+				inactivatingQueue := suite.k.GetInactivatingOperators(ctx)
+				suite.Require().Len(inactivatingQueue, 1)
+				suite.Require().Equal(types.NewUnbondingOperator(
+					1,
+					time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC),
+				), inactivatingQueue[0])
+
+				// Make sure the hook has been called
+				suite.Require().True(suite.hooks.CalledMap["AfterOperatorInactivatingStarted"])
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.setup != nil {
+				tc.setup()
+			}
+			if tc.setupCtx != nil {
+				ctx = tc.setupCtx(ctx)
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			suite.k.StartOperatorInactivation(ctx, tc.operator)
+			if tc.check != nil {
+				tc.check(ctx)
+			}
+		})
+	}
+}
