@@ -54,10 +54,10 @@ func InactivatingOperatorQueueKey(operatorID uint32, endTime time.Time) []byte {
 	return append(InactivatingOperatorByTime(endTime), GetOperatorIDBytes(operatorID)...)
 }
 
-// SplitInactivatingOperatorQueue split the inactivating operator queue key into operatorID and endTime
-func SplitInactivatingOperatorQueue(key []byte) (operatorID uint32, endTime time.Time) {
-	if len(key[lenPrefix:]) != 20+lenTime {
-		panic(fmt.Errorf("unexpected key length (%d ≠ %d)", len(key[1:]), lenTime+8))
+// SplitInactivatingOperatorQueueKey split the inactivating operator queue key into operatorID and endTime
+func SplitInactivatingOperatorQueueKey(key []byte) (operatorID uint32, endTime time.Time) {
+	if len(key[lenPrefix:]) != 4+lenTime {
+		panic(fmt.Errorf("unexpected key length (%d ≠ %d)", len(key[1:]), lenTime+4))
 	}
 
 	endTime, err := sdk.ParseTimeBytes(key[lenPrefix : lenPrefix+lenTime])

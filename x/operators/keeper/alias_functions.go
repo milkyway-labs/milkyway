@@ -30,7 +30,7 @@ func (k *Keeper) IterateOperators(ctx sdk.Context, cb func(operator types.Operat
 // by the given time and calls the given function.
 func (k *Keeper) IterateInactivatingOperatorQueue(ctx sdk.Context, endTime time.Time, fn func(poll types.Operator) (stop bool)) {
 	k.iterateInactivatingOperatorsKeys(ctx, endTime, func(key, value []byte) (stop bool) {
-		operatorID, _ := types.SplitInactivatingOperatorQueue(key)
+		operatorID, _ := types.SplitInactivatingOperatorQueueKey(key)
 		operator, found := k.GetOperator(ctx, operatorID)
 		if !found {
 			panic(fmt.Sprintf("operator %d does not exist", operatorID))

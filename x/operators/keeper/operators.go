@@ -128,7 +128,7 @@ func (k *Keeper) RemoveFromInactivatingQueue(ctx sdk.Context, operator types.Ope
 	// Find the inactivating time for the operator
 	var inactivatingTime time.Time
 	k.iterateInactivatingOperatorsKeys(ctx, time.Time{}, func(key, _ []byte) (stop bool) {
-		operatorID, endTime := types.SplitInactivatingOperatorQueue(key)
+		operatorID, endTime := types.SplitInactivatingOperatorQueueKey(key)
 		if operatorID == operator.ID {
 			inactivatingTime = endTime
 			return true
