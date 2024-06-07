@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func ParseOperatorID(value string) (uint32, error) {
@@ -23,6 +25,7 @@ func NewOperator(
 	moniker string,
 	website string,
 	pictureURL string,
+	admin string,
 ) Operator {
 	return Operator{
 		ID:         id,
@@ -30,21 +33,27 @@ func NewOperator(
 		Moniker:    moniker,
 		Website:    website,
 		PictureURL: pictureURL,
+		Admin:      admin,
 	}
 }
 
 // Validate checks that the Operator has valid values.
 func (o *Operator) Validate() error {
-	if o.Status == OPERATOR_STATUS_UNSPECIFIED {
-		return fmt.Errorf("invalid status: %s", o.Status)
-	}
-
 	if o.ID == 0 {
 		return fmt.Errorf("invalid id: %d", o.ID)
 	}
 
+	if o.Status == OPERATOR_STATUS_UNSPECIFIED {
+		return fmt.Errorf("invalid status: %s", o.Status)
+	}
+
 	if strings.TrimSpace(o.Moniker) == "" {
 		return fmt.Errorf("invalid moniker: %s", o.Moniker)
+	}
+
+	_, err := sdk.AccAddressFromBech32(o.Admin)
+	if err != nil {
+		return fmt.Errorf("invalid admin address: %s", o.Admin)
 	}
 
 	return nil
@@ -91,5 +100,6 @@ func (o *Operator) Update(update OperatorUpdate) Operator {
 		update.Moniker,
 		update.Website,
 		update.PictureURL,
+		o.Admin,
 	)
 }
