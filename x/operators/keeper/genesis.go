@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"time"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/x/operators/types"
@@ -11,6 +13,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	return types.NewGenesisState(
 		k.exportNextOperatorID(ctx),
 		k.exportOperators(ctx),
+		k.exportInactivatingOperators(ctx),
 		k.GetParams(ctx),
 	)
 }
@@ -34,6 +37,17 @@ func (k *Keeper) exportOperators(ctx sdk.Context) []types.Operator {
 	return operators
 }
 
+// exportInactivatingOperators returns the inactivating operators stored in the KVStore
+func (k *Keeper) exportInactivatingOperators(ctx sdk.Context) []types.UnbondingOperator {
+	var operators []types.UnbondingOperator
+	k.iterateInactivatingOperatorsKeys(ctx, time.Time{}, func(key, value []byte) (stop bool) {
+		operatorID, endTime := types.SplitInactivatingOperatorQueueKey(key)
+		operators = append(operators, types.NewUnbondingOperator(operatorID, endTime))
+		return false
+	})
+	return operators
+}
+
 // --------------------------------------------------------------------------------------------------------------------
 
 // InitGenesis initializes the state from a GenesisState
@@ -41,9 +55,14 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) {
 	// Set the next operator ID
 	k.SetNextOperatorID(ctx, state.NextOperatorID)
 
-	// Store the services
-	for _, service := range state.Operators {
-		k.storeOperator(ctx, service)
+	// Store the operators
+	for _, operator := range state.Operators {
+		k.storeOperator(ctx, operator)
+	}
+
+	// Store the inactivating operators
+	for _, entry := range state.UnbondingOperators {
+		k.setOperatorAsInactivating(ctx, entry.OperatorID, entry.UnbondCompletionTime)
 	}
 
 	// Store params

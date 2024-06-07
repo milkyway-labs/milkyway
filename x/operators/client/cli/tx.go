@@ -172,7 +172,7 @@ func GetCmdDeregisterOperator() *cobra.Command {
 			creator := clientCtx.FromAddress.String()
 
 			// Create and validate the message
-			msg := types.NewMsgDeregisterOperator(id, creator)
+			msg := types.NewMsgDeactivateOperator(id, creator)
 			if err = msg.ValidateBasic(); err != nil {
 				return fmt.Errorf("message validation failed: %w", err)
 			}

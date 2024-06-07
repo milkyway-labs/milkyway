@@ -40,6 +40,7 @@ func (k msgServer) RegisterOperator(goCtx context.Context, msg *types.MsgRegiste
 		msg.Moniker,
 		msg.Website,
 		msg.PictureURL,
+		msg.Sender,
 	)
 
 	// Validate the operator before storing
