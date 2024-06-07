@@ -43,8 +43,24 @@ func (k *Keeper) storeOperator(ctx sdk.Context, operator types.Operator) {
 
 // RegisterOperator creates a new Operator and stores it in the KVStore
 func (k *Keeper) RegisterOperator(ctx sdk.Context, operator types.Operator) {
+	// Charge for the creation
+	registrationFees := k.GetParams(ctx).OperatorRegistrationFee
+	if !registrationFees.IsZero() {
+		userAddress, err := sdk.AccAddressFromBech32(operator.Admin)
+		if err != nil {
+			panic(err)
+		}
+
+		err = k.poolKeeper.FundCommunityPool(ctx, registrationFees, userAddress)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	// Store the operator
 	k.storeOperator(ctx, operator)
 
+	// Log and call the hooks
 	k.Logger(ctx).Info("operator created", "id", operator.ID)
 	k.AfterOperatorRegistered(ctx, operator.ID)
 }
