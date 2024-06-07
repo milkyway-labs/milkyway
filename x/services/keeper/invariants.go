@@ -19,16 +19,18 @@ func RegisterInvariants(ir sdk.InvariantRegistry, keeper *Keeper) {
 // ValidServicesInvariant checks that all the services are valid
 func ValidServicesInvariant(k *Keeper) sdk.Invariant {
 	return func(ctx sdk.Context) (message string, broken bool) {
+
+		// Get the next service id.
+		nextServiceID, err := k.GetNextServiceID(ctx)
+		if err != nil {
+			return sdk.FormatInvariant(types.ModuleName, "invalid services", "unable to get the next service ID"), true
+		}
+
 		var invalidServices []types.Service
 		k.IterateServices(ctx, func(service types.Service) (stop bool) {
 			invalid := false
 
 			// Make sure the service ID is never greater or equal to the next service ID
-			nextServiceID, err := k.GetNextServiceID(ctx)
-			if err != nil {
-				invalid = true
-			}
-
 			if service.ID >= nextServiceID {
 				invalid = true
 			}
