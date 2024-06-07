@@ -7,6 +7,7 @@ import (
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
 	"github.com/milkyway-labs/milkyway/x/operators/types"
 )
@@ -138,4 +139,19 @@ func (k msgServer) DeactivateOperator(goCtx context.Context, msg *types.MsgDeact
 	})
 
 	return &types.MsgDeactivateOperatorResponse{}, nil
+}
+
+// UpdateParams defines the rpc method for Msg/UpdateParams
+func (k msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
+	// Check the authority
+	authority := k.authority
+	if authority != msg.Authority {
+		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", authority, msg.Authority)
+	}
+
+	// Update the params
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	k.SetParams(ctx, msg.Params)
+
+	return &types.MsgUpdateParamsResponse{}, nil
 }

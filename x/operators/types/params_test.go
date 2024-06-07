@@ -2,7 +2,10 @@ package types_test
 
 import (
 	"testing"
+	"time"
 
+	sdkmath "cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
 	"github.com/milkyway-labs/milkyway/x/operators/types"
@@ -15,10 +18,19 @@ func TestParams_Validate(t *testing.T) {
 		shouldErr bool
 	}{
 		{
+			name: "invalid registration fee returns error",
+			params: types.NewParams(
+				sdk.Coins{sdk.Coin{Denom: "", Amount: sdkmath.NewInt(100_000_000)}},
+				24*time.Hour,
+			),
+			shouldErr: true,
+		},
+		{
 			name: "invalid deactivation time returns error",
-			params: types.Params{
-				DeactivationTime: 0,
-			},
+			params: types.NewParams(
+				nil,
+				0,
+			),
 			shouldErr: true,
 		},
 		{
@@ -27,8 +39,11 @@ func TestParams_Validate(t *testing.T) {
 			shouldErr: false,
 		},
 		{
-			name:      "valid params do not return errors",
-			params:    types.NewParams(60),
+			name: "valid params do not return errors",
+			params: types.NewParams(
+				sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),
+				60*time.Second,
+			),
 			shouldErr: false,
 		},
 	}

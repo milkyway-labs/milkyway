@@ -13,12 +13,15 @@ type Keeper struct {
 	storeKey storetypes.StoreKey
 	cdc      codec.BinaryCodec
 	hooks    types.OperatorsHooks
+
+	authority string
 }
 
-func NewKeeper(cdc codec.BinaryCodec, storeKey storetypes.StoreKey) Keeper {
-	return Keeper{
-		storeKey: storeKey,
-		cdc:      cdc,
+func NewKeeper(cdc codec.BinaryCodec, storeKey storetypes.StoreKey, authority string) *Keeper {
+	return &Keeper{
+		storeKey:  storeKey,
+		cdc:       cdc,
+		authority: authority,
 	}
 }
 

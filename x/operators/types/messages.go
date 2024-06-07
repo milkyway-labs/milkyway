@@ -1,6 +1,7 @@
 package types
 
 import (
+	"fmt"
 	"strings"
 
 	"cosmossdk.io/errors"
@@ -121,5 +122,40 @@ func (msg *MsgDeactivateOperator) GetSignBytes() []byte {
 // GetSigners implements sdk.Msg
 func (msg *MsgDeactivateOperator) GetSigners() []sdk.AccAddress {
 	addr, _ := sdk.AccAddressFromBech32(msg.Sender)
+	return []sdk.AccAddress{addr}
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+func NewMsgUpdateParams(params Params, authority string) *MsgUpdateParams {
+	return &MsgUpdateParams{
+		Params:    params,
+		Authority: authority,
+	}
+}
+
+// ValidateBasic implements sdk.Msg
+func (msg *MsgUpdateParams) ValidateBasic() error {
+	err := msg.Params.Validate()
+	if err != nil {
+		return fmt.Errorf("invalid params: %w", err)
+	}
+
+	_, err = sdk.AccAddressFromBech32(msg.Authority)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid authority address")
+	}
+
+	return nil
+}
+
+// GetSignBytes implements sdk.Msg
+func (msg *MsgUpdateParams) GetSignBytes() []byte {
+	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(msg))
+}
+
+// GetSigners implements sdk.Msg
+func (msg *MsgUpdateParams) GetSigners() []sdk.AccAddress {
+	addr, _ := sdk.AccAddressFromBech32(msg.Authority)
 	return []sdk.AccAddress{addr}
 }

@@ -15,11 +15,24 @@ option go_package = "github.com/milkyway-labs/milkyway/x/operators/types";
 service Msg {
   option (cosmos.msg.v1.service) = true;
 
+  // RegisterOperator defines the operation for registering a new operator.
   rpc RegisterOperator(MsgRegisterOperator)
       returns (MsgRegisterOperatorResponse);
+
+  // UpdateOperator defines the operation for updating an operator's details.
+  // The operator owner can update the moniker, website, and picture URL.
   rpc UpdateOperator(MsgUpdateOperator) returns (MsgUpdateOperatorResponse);
+
+  // DeactivateOperator defines the operation for deactivating an
+  // operator. Operators will require some time in order to be deactivated.
+  // This time is defined by the governance parameters.
   rpc DeactivateOperator(MsgDeactivateOperator)
       returns (MsgDeactivateOperatorResponse);
+
+  // UpdateParams defines a governance operation for updating the module
+  // parameters.
+  // The authority defaults to the x/gov module account.
+  rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
 }
 
 // MsgRegisterOperator defines the message structure for the RegisterService
@@ -103,3 +116,25 @@ message MsgDeactivateOperator {
 
 // MsgDeactivateOperatorResponse is the return value of MsgDeactivateOperator.
 message MsgDeactivateOperatorResponse {}
+
+// MsgUpdateParams defines the message structure for the UpdateParams gRPC
+// service method. It allows the authority to update the module parameters.
+message MsgUpdateParams {
+  option (cosmos.msg.v1.signer) = "authority";
+  option (amino.name) = "milkyway/x/services/MsgUpdateParams";
+
+  // Authority is the address that controls the module (defaults to x/gov unless
+  // overwritten).
+  string authority = 1 [
+    (gogoproto.moretags) = "yaml:\"authority\"",
+    (cosmos_proto.scalar) = "cosmos.AddressString"
+  ];
+
+  // Params define the parameters to update.
+  //
+  // NOTE: All parameters must be supplied.
+  Params params = 2 [ (gogoproto.nullable) = false ];
+}
+
+// MsgUpdateParamsResponse is the return value of MsgUpdateParams.
+message MsgUpdateParamsResponse {}

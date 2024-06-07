@@ -2,7 +2,9 @@ package types_test
 
 import (
 	"testing"
+	"time"
 
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
@@ -187,14 +189,14 @@ func TestMsgDeactivateOperator_ValidateBasic(t *testing.T) {
 			name: "invalid operator id returns error",
 			msg: types.NewMsgDeactivateOperator(
 				0,
-				msgUpdateOperator.Sender,
+				msgDeactivateOperator.Sender,
 			),
 			shouldErr: true,
 		},
 		{
 			name: "invalid sender address returns error",
 			msg: types.NewMsgDeactivateOperator(
-				msgUpdateOperator.OperatorID,
+				msgDeactivateOperator.OperatorID,
 				"invalid",
 			),
 			shouldErr: true,
@@ -227,4 +229,66 @@ func TestMsgDeactivateOperator_GetSignBytes(t *testing.T) {
 func TestMsgDeactivateOperator_GetSigners(t *testing.T) {
 	addr, _ := sdk.AccAddressFromBech32(msgDeactivateOperator.Sender)
 	require.Equal(t, []sdk.AccAddress{addr}, msgDeactivateOperator.GetSigners())
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+var msgUpdateParams = types.NewMsgUpdateParams(
+	types.NewParams(
+		sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),
+		24*time.Hour,
+	),
+	"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+)
+
+func TestMsgUpdateParams_ValidateBasic(t *testing.T) {
+	testCases := []struct {
+		name      string
+		msg       *types.MsgUpdateParams
+		shouldErr bool
+	}{
+		{
+			name: "invalid params return error",
+			msg: types.NewMsgUpdateParams(
+				types.NewParams(nil, 0),
+				msgUpdateParams.Authority,
+			),
+			shouldErr: true,
+		},
+		{
+			name: "invalid authority address returns error",
+			msg: types.NewMsgUpdateParams(
+				msgUpdateParams.Params,
+				"invalid",
+			),
+			shouldErr: true,
+		},
+		{
+			name:      "valid message returns no error",
+			msg:       msgUpdateParams,
+			shouldErr: false,
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			err := tc.msg.ValidateBasic()
+			if tc.shouldErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestMsgUpdateParams_GetSignBytes(t *testing.T) {
+	expected := `{"authority":"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4","params":{"deactivation_time":"86400000000000","operator_registration_fee":[{"amount":"100000000","denom":"uatom"}]}}`
+	require.Equal(t, expected, string(msgUpdateParams.GetSignBytes()))
+}
+
+func TestMsgUpdateParams_GetSigners(t *testing.T) {
+	addr, _ := sdk.AccAddressFromBech32(msgUpdateParams.Authority)
+	require.Equal(t, []sdk.AccAddress{addr}, msgUpdateParams.GetSigners())
 }

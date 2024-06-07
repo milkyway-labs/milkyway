@@ -10,6 +10,7 @@ import (
 
 const (
 	ModuleName = "operators"
+	StoreKey   = ModuleName
 
 	DoNotModify = "[do-not-modify]"
 )
