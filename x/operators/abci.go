@@ -9,12 +9,12 @@ import (
 	"github.com/milkyway-labs/milkyway/x/operators/types"
 )
 
-// EndBlocker is called at the end of every block.
+// BeginBlocker is called at the beginning of every block.
 //
 // It iterates over all the operators that are set to be inactivated by the current block time
 // and updates their status to inactive.
-func EndBlocker(ctx sdk.Context, keeper *keeper.Keeper) {
-	// Iterate over all the active polls that have been ended by the current block time
+func BeginBlocker(ctx sdk.Context, keeper *keeper.Keeper) {
+	// Iterate over all the operators that are set to be inactivated by the current block time
 	keeper.IterateInactivatingOperatorQueue(ctx, ctx.BlockTime(), func(operator types.Operator) (stop bool) {
 
 		// Update the operator status
