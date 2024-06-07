@@ -159,7 +159,7 @@ func (m *QueryServicesRequest) GetPagination() *query.PageRequest {
 
 // QueryServicesResponse is the response type for the Query/Services RPC method.
 type QueryServicesResponse struct {
-	// AVS services defines the list of actively validates services
+	// Services services defines the list of actively validates services
 	Services []Service `protobuf:"bytes,1,rep,name=services,proto3" json:"services"`
 	// Pagination defines the pagination response
 	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`

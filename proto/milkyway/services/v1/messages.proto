@@ -11,7 +11,7 @@ import "milkyway/services/v1/params.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/services/types";
 
-// Msg defines the avs module's gRPC message service.
+// Msg defines the services module's gRPC message service.
 service Msg {
   option (cosmos.msg.v1.service) = true;
 
@@ -73,25 +73,25 @@ message MsgUpdateService {
   option (cosmos.msg.v1.signer) = "sender";
   option (amino.name) = "milkyway/MsgUpdateService";
 
-  // Sender is the address of the user updating the AVS
+  // Sender is the address of the user updating the service
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
-  // ID represents the ID of the AVS to be updated
+  // ID represents the ID of the service to be updated
   uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
 
-  // Name is the new name of the AVS.
+  // Name is the new name of the service.
   // If it shouldn't be changed, use [do-not-modify] instead.
   string name = 3 [ (gogoproto.moretags) = "yaml:\"name\"" ];
 
-  // Description is the new description of the AVS.
+  // Description is the new description of the service.
   // If it shouldn't be changed, use [do-not-modify] instead.
   string description = 4 [ (gogoproto.moretags) = "yaml:\"description\"" ];
 
-  // Website is the new website of the AVS.
+  // Website is the new website of the service.
   // If it shouldn't be changed, use [do-not-modify] instead.
   string website = 5 [ (gogoproto.moretags) = "yaml:\"website\"" ];
 
-  // PictureURL is the new URL of the AVS picture.
+  // PictureURL is the new URL of the service picture.
   // If it shouldn't be changed, use [do-not-modify] instead.
   string picture_url = 6 [
     (gogoproto.moretags) = "yaml:\"picture_url\"",

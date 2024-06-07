@@ -169,20 +169,20 @@ func (m *MsgCreateServiceResponse) GetNewServiceID() uint32 {
 // service method. It allows the service admin to update the details of
 // an existing service.
 type MsgUpdateService struct {
-	// Sender is the address of the user updating the AVS
+	// Sender is the address of the user updating the service
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	// ID represents the ID of the AVS to be updated
+	// ID represents the ID of the service to be updated
 	ServiceID uint32 `protobuf:"varint,2,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
-	// Name is the new name of the AVS.
+	// Name is the new name of the service.
 	// If it shouldn't be changed, use [do-not-modify] instead.
 	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty" yaml:"name"`
-	// Description is the new description of the AVS.
+	// Description is the new description of the service.
 	// If it shouldn't be changed, use [do-not-modify] instead.
 	Description string `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty" yaml:"description"`
-	// Website is the new website of the AVS.
+	// Website is the new website of the service.
 	// If it shouldn't be changed, use [do-not-modify] instead.
 	Website string `protobuf:"bytes,5,opt,name=website,proto3" json:"website,omitempty" yaml:"website"`
-	// PictureURL is the new URL of the AVS picture.
+	// PictureURL is the new URL of the service picture.
 	// If it shouldn't be changed, use [do-not-modify] instead.
 	PictureURL string `protobuf:"bytes,6,opt,name=picture_url,json=pictureUrl,proto3" json:"picture_url,omitempty" yaml:"picture_url"`
 }

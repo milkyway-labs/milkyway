@@ -46,7 +46,7 @@ message QueryServicesRequest {
 
 // QueryServicesResponse is the response type for the Query/Services RPC method.
 message QueryServicesResponse {
-  // AVS services defines the list of actively validates services
+  // Services services defines the list of actively validates services
   repeated Service services = 1 [ (gogoproto.nullable) = false ];
 
   // Pagination defines the pagination response
