@@ -15,12 +15,6 @@ func (k *Keeper) SetNextOperatorID(ctx sdk.Context, operatorID uint32) {
 	store.Set(types.NextOperatorIDKey, types.GetOperatorIDBytes(operatorID))
 }
 
-// HasNextOperatorID checks if the next operator ID is set
-func (k *Keeper) HasNextOperatorID(ctx sdk.Context) bool {
-	store := ctx.KVStore(k.storeKey)
-	return store.Has(types.NextOperatorIDKey)
-}
-
 // GetNextOperatorID returns the next operator ID to be used when registering a new Operator
 func (k *Keeper) GetNextOperatorID(ctx sdk.Context) (operatorID uint32, err error) {
 	store := ctx.KVStore(k.storeKey)
