@@ -19,16 +19,19 @@ func RegisterInvariants(ir sdk.InvariantRegistry, keeper *Keeper) {
 // ValidOperatorsInvariant checks that all the operators are valid
 func ValidOperatorsInvariant(k *Keeper) sdk.Invariant {
 	return func(ctx sdk.Context) (message string, broken bool) {
+		// Get the next operator id
+		nextOperatorID, err := k.GetNextOperatorID(ctx)
+		if err != nil {
+			return sdk.FormatInvariant(types.ModuleName, "invalid operators",
+				fmt.Sprintf("unable to get the next operator ID: %v", err),
+			), true
+		}
+
 		var invalidOperators []types.Operator
 		k.IterateOperators(ctx, func(operator types.Operator) (stop bool) {
 			invalid := false
 
 			// Make sure the operator ID is never greater or equal to the next operator ID
-			nextOperatorID, err := k.GetNextOperatorID(ctx)
-			if err != nil {
-				invalid = true
-			}
-
 			if operator.ID >= nextOperatorID {
 				invalid = true
 			}
