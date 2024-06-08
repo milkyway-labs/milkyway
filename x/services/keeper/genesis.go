@@ -10,7 +10,7 @@ import (
 func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	return types.NewGenesisState(
 		k.exportNextServiceID(ctx),
-		k.exportServices(ctx),
+		k.GetServices(ctx),
 		k.GetParams(ctx),
 	)
 }
@@ -22,16 +22,6 @@ func (k *Keeper) exportNextServiceID(ctx sdk.Context) uint32 {
 		panic(err)
 	}
 	return nextAVSID
-}
-
-// exportServices returns the services stored in the KVStore
-func (k *Keeper) exportServices(ctx sdk.Context) []types.Service {
-	var services []types.Service
-	k.IterateServices(ctx, func(service types.Service) (stop bool) {
-		services = append(services, service)
-		return false
-	})
-	return services
 }
 
 // --------------------------------------------------------------------------------------------------------------------

@@ -22,3 +22,13 @@ func (k *Keeper) IterateServices(ctx sdk.Context, cb func(service types.Service)
 		}
 	}
 }
+
+// GetServices returns the services stored in the KVStore
+func (k *Keeper) GetServices(ctx sdk.Context) []types.Service {
+	var services []types.Service
+	k.IterateServices(ctx, func(service types.Service) (stop bool) {
+		services = append(services, service)
+		return false
+	})
+	return services
+}
