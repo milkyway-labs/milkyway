@@ -12,14 +12,11 @@ import (
 type Keeper struct {
 	storeKey storetypes.StoreKey
 	cdc      codec.Codec
-
-	authority string
 }
 
-func NewKeeper(storeKey storetypes.StoreKey, authority string) *Keeper {
+func NewKeeper(storeKey storetypes.StoreKey) *Keeper {
 	return &Keeper{
-		storeKey:  storeKey,
-		authority: authority,
+		storeKey: storeKey,
 	}
 }
 
