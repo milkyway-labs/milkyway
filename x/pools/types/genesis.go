@@ -12,6 +12,11 @@ func NewGenesis(nextPoolID uint32, pools []Pool) GenesisState {
 	}
 }
 
+// DefaultGenesis returns the default GenesisState
+func DefaultGenesis() GenesisState {
+	return NewGenesis(1, nil)
+}
+
 // Validate checks if the GenesisState is valid
 func (data *GenesisState) Validate() error {
 	// Validate the next pool ID

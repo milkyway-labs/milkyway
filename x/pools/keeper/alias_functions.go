@@ -55,12 +55,21 @@ func (k *Keeper) CreatePoolForDenomIfNotExists(ctx sdk.Context, denom string) er
 		return nil
 	}
 
-	// Create and store the pool
+	// Create the pool and validate it
 	pool := types.NewPool(poolID, denom)
+	err = pool.Validate()
+	if err != nil {
+		return err
+	}
+
+	// Save the pool
 	k.SavePool(ctx, pool)
 
 	// Increment the pool id
 	k.SetNextPoolID(ctx, poolID+1)
+
+	// Log the event
+	k.Logger(ctx).Debug("created pool", "id", poolID, "denom", denom)
 
 	return nil
 }
