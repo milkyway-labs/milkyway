@@ -10,7 +10,7 @@ import (
 // IteratePools iterates over the pools in the store and performs a callback function
 func (k *Keeper) IteratePools(ctx sdk.Context, cb func(pool types.Pool) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
-	iterator := storetypes.KVStorePrefixIterator(store, types.PooolPrefix)
+	iterator := storetypes.KVStorePrefixIterator(store, types.PoolPrefix)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
@@ -23,11 +23,11 @@ func (k *Keeper) IteratePools(ctx sdk.Context, cb func(pool types.Pool) (stop bo
 	}
 }
 
-// GetPoolForDenom returns the pool for the given denom if it exists.
+// GetPoolByDenom returns the pool for the given denom if it exists.
 // If the pool does not exist, false is returned instead
-func (k *Keeper) GetPoolForDenom(ctx sdk.Context, denom string) (types.Pool, bool) {
+func (k *Keeper) GetPoolByDenom(ctx sdk.Context, denom string) (types.Pool, bool) {
 	store := ctx.KVStore(k.storeKey)
-	iterator := storetypes.KVStorePrefixIterator(store, types.PooolPrefix)
+	iterator := storetypes.KVStorePrefixIterator(store, types.PoolPrefix)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
@@ -47,7 +47,7 @@ func (k *Keeper) GetPoolForDenom(ctx sdk.Context, denom string) (types.Pool, boo
 // In both cases, the pool is returned.
 func (k *Keeper) CreateOrGetPoolByDenom(ctx sdk.Context, denom string) (types.Pool, error) {
 	// If the pool already exists, just return
-	if pool, found := k.GetPoolForDenom(ctx, denom); found {
+	if pool, found := k.GetPoolByDenom(ctx, denom); found {
 		return pool, nil
 	}
 

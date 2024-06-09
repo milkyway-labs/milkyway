@@ -43,7 +43,7 @@ func (suite *KeeperTestSuite) TestKepeer_GetPoolForDenom() {
 				tc.store(ctx)
 			}
 
-			pool, found := suite.k.GetPoolForDenom(ctx, tc.denom)
+			pool, found := suite.k.GetPoolByDenom(ctx, tc.denom)
 			suite.Require().Equal(tc.expFound, found)
 			if tc.expFound {
 				suite.Require().Equal(tc.expPool, pool)
@@ -98,7 +98,7 @@ func (suite *KeeperTestSuite) TestKeeper_CreateOrGetPoolByDenom() {
 			expPool:   types.NewPool(1, "umilk"),
 			check: func(ctx sdk.Context) {
 				// Make sure the pool is stored properly
-				pool, found := suite.k.GetPoolForDenom(ctx, "umilk")
+				pool, found := suite.k.GetPoolByDenom(ctx, "umilk")
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewPool(1, "umilk"), pool)
 

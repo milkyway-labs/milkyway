@@ -12,7 +12,7 @@ const (
 var (
 	NextPoolIDKey = []byte{0x01}
 
-	PooolPrefix = []byte{0xa1}
+	PoolPrefix = []byte{0xa1}
 )
 
 // GetPoolIDBytes returns the byte representation of the pool ID
@@ -29,5 +29,5 @@ func GetPoolIDFromBytes(bz []byte) (poolID uint32) {
 
 // GetPoolStoreKey turns a pool ID into a key used to store a pool in the KVStore
 func GetPoolStoreKey(poolID uint32) []byte {
-	return append(PooolPrefix, GetPoolIDBytes(poolID)...)
+	return append(PoolPrefix, GetPoolIDBytes(poolID)...)
 }
