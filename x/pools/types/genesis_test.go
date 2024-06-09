@@ -11,7 +11,7 @@ import (
 func TestGenesis_Validate(t *testing.T) {
 	testCases := []struct {
 		name      string
-		genesis   types.GenesisState
+		genesis   *types.GenesisState
 		shouldErr bool
 	}{
 		{

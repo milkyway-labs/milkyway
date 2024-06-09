@@ -23,6 +23,16 @@ func (k *Keeper) IteratePools(ctx sdk.Context, cb func(pool types.Pool) (stop bo
 	}
 }
 
+// GetPools returns the list of stored pools
+func (k *Keeper) GetPools(ctx sdk.Context) []types.Pool {
+	var pools []types.Pool
+	k.IteratePools(ctx, func(pool types.Pool) (stop bool) {
+		pools = append(pools, pool)
+		return false
+	})
+	return pools
+}
+
 // GetPoolByDenom returns the pool for the given denom if it exists.
 // If the pool does not exist, false is returned instead
 func (k *Keeper) GetPoolByDenom(ctx sdk.Context, denom string) (types.Pool, bool) {

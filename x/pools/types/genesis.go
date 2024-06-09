@@ -5,15 +5,15 @@ import (
 )
 
 // NewGenesis creates a new GenesisState instance
-func NewGenesis(nextPoolID uint32, pools []Pool) GenesisState {
-	return GenesisState{
+func NewGenesis(nextPoolID uint32, pools []Pool) *GenesisState {
+	return &GenesisState{
 		NextPoolID: nextPoolID,
 		Pools:      pools,
 	}
 }
 
 // DefaultGenesis returns the default GenesisState
-func DefaultGenesis() GenesisState {
+func DefaultGenesis() *GenesisState {
 	return NewGenesis(1, nil)
 }
 
