@@ -42,24 +42,26 @@ func (k *Keeper) GetPoolForDenom(ctx sdk.Context, denom string) (types.Pool, boo
 	return types.Pool{}, false
 }
 
-// CreatePoolForDenomIfNotExists creates a new pool for the given denom if it does not exist
-func (k *Keeper) CreatePoolForDenomIfNotExists(ctx sdk.Context, denom string) error {
+// CreateOrGetPoolByDenom creates a new pool for the given denom if it does not exist.
+// If the pool already exists, no action is taken.
+// In both cases, the pool is returned.
+func (k *Keeper) CreateOrGetPoolByDenom(ctx sdk.Context, denom string) (types.Pool, error) {
 	// If the pool already exists, just return
-	if _, ok := k.GetPoolForDenom(ctx, denom); ok {
-		return nil
+	if pool, found := k.GetPoolForDenom(ctx, denom); found {
+		return pool, nil
 	}
 
 	// Get the pool id
 	poolID, err := k.GetNextPoolID(ctx)
 	if err != nil {
-		return nil
+		return types.Pool{}, err
 	}
 
 	// Create the pool and validate it
 	pool := types.NewPool(poolID, denom)
 	err = pool.Validate()
 	if err != nil {
-		return err
+		return types.Pool{}, err
 	}
 
 	// Save the pool
@@ -71,5 +73,5 @@ func (k *Keeper) CreatePoolForDenomIfNotExists(ctx sdk.Context, denom string) er
 	// Log the event
 	k.Logger(ctx).Debug("created pool", "id", poolID, "denom", denom)
 
-	return nil
+	return pool, nil
 }
