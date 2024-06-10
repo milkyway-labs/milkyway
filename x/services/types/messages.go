@@ -102,6 +102,41 @@ func (msg *MsgUpdateService) GetSigners() []sdk.AccAddress {
 
 // --------------------------------------------------------------------------------------------------------------------
 
+// NewMsgActivateService creates a new MsgActivateService instance
+func NewMsgActivateService(serviceID uint32, sender string) *MsgActivateService {
+	return &MsgActivateService{
+		ServiceID: serviceID,
+		Sender:    sender,
+	}
+}
+
+// ValidateBasic implements sdk.Msg
+func (msg *MsgActivateService) ValidateBasic() error {
+	if msg.ServiceID == 0 {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid service id: %d", msg.ServiceID)
+	}
+
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address")
+	}
+
+	return nil
+}
+
+// GetSignBytes implements sdk.Msg
+func (msg *MsgActivateService) GetSignBytes() []byte {
+	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(msg))
+}
+
+// GetSigners implements sdk.Msg
+func (msg *MsgActivateService) GetSigners() []sdk.AccAddress {
+	addr, _ := sdk.AccAddressFromBech32(msg.Sender)
+	return []sdk.AccAddress{addr}
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
 // NewMsgDeactivateService creates a new MsgDeactivateService instance
 func NewMsgDeactivateService(serviceID uint32, sender string) *MsgDeactivateService {
 	return &MsgDeactivateService{

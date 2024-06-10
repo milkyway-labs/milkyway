@@ -144,7 +144,7 @@ func (suite *KeeperTestSuite) TestMsgServer_CreateService() {
 			}
 
 			msgServer := keeper.NewMsgServer(suite.k)
-			res, err := msgServer.CreateService(sdk.WrapSDKContext(ctx), tc.msg)
+			res, err := msgServer.CreateService(ctx, tc.msg)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -296,7 +296,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateService() {
 			}
 
 			msgServer := keeper.NewMsgServer(suite.k)
-			res, err := msgServer.UpdateService(sdk.WrapSDKContext(ctx), tc.msg)
+			res, err := msgServer.UpdateService(ctx, tc.msg)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -311,6 +311,129 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateService() {
 				}
 			}
 		})
+	}
+}
+
+func (suite *KeeperTestSuite) TestMsgServer_ActivateService() {
+	testCases := []struct {
+		name        string
+		setup       func()
+		store       func(ctx sdk.Context)
+		setupCtx    func(ctx sdk.Context) sdk.Context
+		msg         *types.MsgActivateService
+		shouldErr   bool
+		expResponse *types.MsgActivateServiceResponse
+		expEvents   sdk.Events
+		check       func(ctx sdk.Context)
+	}{
+		{
+			name: "service not found returns error",
+			msg: types.NewMsgActivateService(
+				1,
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "non admin user returns error",
+			store: func(ctx sdk.Context) {
+				err := suite.k.CreateService(ctx, types.NewService(
+					1,
+					types.SERVICE_STATUS_CREATED,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgActivateService(
+				1,
+				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "already active service returns error",
+			store: func(ctx sdk.Context) {
+				err := suite.k.CreateService(ctx, types.NewService(
+					1,
+					types.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgActivateService(
+				1,
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "service with status CREATED is activated properly",
+			store: func(ctx sdk.Context) {
+				err := suite.k.CreateService(ctx, types.NewService(
+					1,
+					types.SERVICE_STATUS_CREATED,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgActivateService(
+				1,
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr:   false,
+			expResponse: &types.MsgActivateServiceResponse{},
+			expEvents: sdk.Events{
+				sdk.NewEvent(
+					types.EventTypeActivateService,
+					sdk.NewAttribute(types.AttributeKeyServiceID, "1"),
+				),
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.setup != nil {
+				tc.setup()
+			}
+			if tc.setupCtx != nil {
+				ctx = tc.setupCtx(ctx)
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			msgServer := keeper.NewMsgServer(suite.k)
+			res, err := msgServer.ActivateService(ctx, tc.msg)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expResponse, res)
+				for _, event := range tc.expEvents {
+					suite.Require().Contains(ctx.EventManager().Events(), event)
+				}
+
+				if tc.check != nil {
+					tc.check(ctx)
+				}
+			}
+		})
+
 	}
 }
 
@@ -412,7 +535,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateService() {
 			}
 
 			msgServer := keeper.NewMsgServer(suite.k)
-			res, err := msgServer.DeactivateService(sdk.WrapSDKContext(ctx), tc.msg)
+			res, err := msgServer.DeactivateService(ctx, tc.msg)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -481,7 +604,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateParams() {
 			}
 
 			msgServer := keeper.NewMsgServer(suite.k)
-			res, err := msgServer.UpdateParams(sdk.WrapSDKContext(ctx), tc.msg)
+			res, err := msgServer.UpdateParams(ctx, tc.msg)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {

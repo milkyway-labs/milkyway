@@ -114,6 +114,45 @@ func (k msgServer) UpdateService(goCtx context.Context, msg *types.MsgUpdateServ
 	return &types.MsgUpdateServiceResponse{}, nil
 }
 
+func (k msgServer) ActivateService(goCtx context.Context, msg *types.MsgActivateService) (*types.MsgActivateServiceResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Check if the service exists
+	service, found := k.GetService(ctx, msg.ServiceID)
+	if !found {
+		return nil, errors.Wrapf(types.ErrServiceNotFound, "service with id %d not found", msg.ServiceID)
+	}
+
+	// Make sure the user that is activating the service is the admin
+	if service.Admin != msg.Sender {
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can activate the service")
+	}
+
+	// Check if the service is already active
+	if service.Status == types.SERVICE_STATUS_ACTIVE {
+		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, "service with id %d is already active", msg.ServiceID)
+	}
+
+	// Activate the service
+	service.Status = types.SERVICE_STATUS_ACTIVE
+
+	// Update the service
+	err := k.Keeper.UpdateService(ctx, service)
+	if err != nil {
+		return nil, err
+	}
+
+	// Emit the event
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeActivateService,
+			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
+		),
+	})
+
+	return &types.MsgActivateServiceResponse{}, nil
+}
+
 // DeactivateService defines the rpc method for Msg/DeactivateService
 func (k msgServer) DeactivateService(goCtx context.Context, msg *types.MsgDeactivateService) (*types.MsgDeactivateServiceResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
