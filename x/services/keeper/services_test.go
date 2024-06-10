@@ -382,3 +382,62 @@ func (suite *KeeperTestSuite) TestKeeper_DeactivateService() {
 		})
 	}
 }
+
+func (suite *KeeperTestSuite) TestKeeper_GetService() {
+	testCases := []struct {
+		name       string
+		store      func(ctx sdk.Context)
+		serviceID  uint32
+		expFound   bool
+		expService types.Service
+	}{
+		{
+			name:      "service not found returns false",
+			serviceID: 1,
+			expFound:  false,
+		},
+		{
+			name: "service is returned properly",
+			store: func(ctx sdk.Context) {
+				suite.k.SaveService(ctx, types.NewService(
+					1,
+					types.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is an AVS of a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+			},
+			serviceID: 1,
+			expFound:  true,
+			expService: types.NewService(
+				1,
+				types.SERVICE_STATUS_ACTIVE,
+				"MilkyWay",
+				"MilkyWay is an AVS of a restaking platform",
+				"https://milkyway.com",
+				"https://milkyway.com/logo.png",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			service, found := suite.k.GetService(ctx, tc.serviceID)
+			if !tc.expFound {
+				suite.Require().False(found)
+			} else {
+				suite.Require().True(found)
+				suite.Require().Equal(tc.expService, service)
+			}
+		})
+	}
+}
