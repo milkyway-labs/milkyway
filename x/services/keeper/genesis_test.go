@@ -32,7 +32,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				suite.k.SetNextServiceID(ctx, 1)
 				suite.k.SetParams(ctx, types.DefaultParams())
 
-				err := suite.k.CreateService(ctx, types.NewService(
+				suite.k.SaveService(ctx, types.NewService(
 					1,
 					types.SERVICE_STATUS_ACTIVE,
 					"MilkyWay",
@@ -41,9 +41,8 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
-				suite.Require().NoError(err)
 
-				err = suite.k.CreateService(ctx, types.NewService(
+				suite.k.SaveService(ctx, types.NewService(
 					2,
 					types.SERVICE_STATUS_INACTIVE,
 					"Inertia",
@@ -52,7 +51,6 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					"https://inertia.zone/logo.png",
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 				))
-				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				NextServiceID: 1,

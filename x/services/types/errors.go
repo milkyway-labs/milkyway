@@ -5,6 +5,8 @@ import (
 )
 
 var (
-	ErrInvalidGenesis  = errors.Register(ModuleName, 1, "invalid genesis state")
-	ErrServiceNotFound = errors.Register(ModuleName, 2, "service not found")
+	ErrInvalidGenesis       = errors.Register(ModuleName, 1, "invalid genesis state")
+	ErrServiceNotFound      = errors.Register(ModuleName, 2, "service not found")
+	ErrServiceAlreadyActive = errors.Register(ModuleName, 3, "service is already active")
+	ErrServiceNotActive     = errors.Register(ModuleName, 4, "service is not active")
 )

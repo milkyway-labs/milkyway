@@ -97,11 +97,8 @@ func (k msgServer) UpdateService(goCtx context.Context, msg *types.MsgUpdateServ
 		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	// Update the service
-	err = k.Keeper.UpdateService(ctx, updated)
-	if err != nil {
-		return nil, err
-	}
+	// Save the service
+	k.Keeper.SaveService(ctx, updated)
 
 	// Emit the event
 	ctx.EventManager().EmitEvents(sdk.Events{
@@ -128,16 +125,8 @@ func (k msgServer) ActivateService(goCtx context.Context, msg *types.MsgActivate
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can activate the service")
 	}
 
-	// Check if the service is already active
-	if service.Status == types.SERVICE_STATUS_ACTIVE {
-		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, "service with id %d is already active", msg.ServiceID)
-	}
-
 	// Activate the service
-	service.Status = types.SERVICE_STATUS_ACTIVE
-
-	// Update the service
-	err := k.Keeper.UpdateService(ctx, service)
+	err := k.Keeper.ActivateService(ctx, msg.ServiceID)
 	if err != nil {
 		return nil, err
 	}
@@ -169,10 +158,7 @@ func (k msgServer) DeactivateService(goCtx context.Context, msg *types.MsgDeacti
 	}
 
 	// Deactivate the service
-	service.Status = types.SERVICE_STATUS_INACTIVE
-
-	// Update the service
-	err := k.Keeper.UpdateService(ctx, service)
+	err := k.Keeper.DeactivateService(ctx, msg.ServiceID)
 	if err != nil {
 		return nil, err
 	}

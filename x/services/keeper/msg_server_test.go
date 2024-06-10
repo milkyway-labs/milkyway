@@ -189,7 +189,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateService() {
 		{
 			name: "non admin user returns error",
 			store: func(ctx sdk.Context) {
-				err := suite.k.CreateService(ctx, types.NewService(
+				suite.k.SaveService(ctx, types.NewService(
 					1,
 					types.SERVICE_STATUS_CREATED,
 					"MilkyWay",
@@ -198,7 +198,6 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateService() {
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
-				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgUpdateService(
 				1,
@@ -213,7 +212,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateService() {
 		{
 			name: "invalid service returns error",
 			store: func(ctx sdk.Context) {
-				err := suite.k.CreateService(ctx, types.NewService(
+				suite.k.SaveService(ctx, types.NewService(
 					1,
 					types.SERVICE_STATUS_CREATED,
 					"MilkyWay",
@@ -222,7 +221,6 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateService() {
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
-				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgUpdateService(
 				1,
@@ -237,7 +235,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateService() {
 		{
 			name: "valid service is updated properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.CreateService(ctx, types.NewService(
+				suite.k.SaveService(ctx, types.NewService(
 					1,
 					types.SERVICE_STATUS_CREATED,
 					"MilkyWay",
@@ -246,7 +244,6 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateService() {
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
-				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgUpdateService(
 				1,
@@ -337,7 +334,7 @@ func (suite *KeeperTestSuite) TestMsgServer_ActivateService() {
 		{
 			name: "non admin user returns error",
 			store: func(ctx sdk.Context) {
-				err := suite.k.CreateService(ctx, types.NewService(
+				suite.k.SaveService(ctx, types.NewService(
 					1,
 					types.SERVICE_STATUS_CREATED,
 					"MilkyWay",
@@ -346,7 +343,6 @@ func (suite *KeeperTestSuite) TestMsgServer_ActivateService() {
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
-				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgActivateService(
 				1,
@@ -357,7 +353,7 @@ func (suite *KeeperTestSuite) TestMsgServer_ActivateService() {
 		{
 			name: "already active service returns error",
 			store: func(ctx sdk.Context) {
-				err := suite.k.CreateService(ctx, types.NewService(
+				suite.k.SaveService(ctx, types.NewService(
 					1,
 					types.SERVICE_STATUS_ACTIVE,
 					"MilkyWay",
@@ -366,7 +362,6 @@ func (suite *KeeperTestSuite) TestMsgServer_ActivateService() {
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
-				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgActivateService(
 				1,
@@ -377,7 +372,7 @@ func (suite *KeeperTestSuite) TestMsgServer_ActivateService() {
 		{
 			name: "service with status CREATED is activated properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.CreateService(ctx, types.NewService(
+				suite.k.SaveService(ctx, types.NewService(
 					1,
 					types.SERVICE_STATUS_CREATED,
 					"MilkyWay",
@@ -386,7 +381,6 @@ func (suite *KeeperTestSuite) TestMsgServer_ActivateService() {
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
-				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgActivateService(
 				1,
@@ -460,16 +454,15 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateService() {
 		{
 			name: "non admin user returns error",
 			store: func(ctx sdk.Context) {
-				err := suite.k.CreateService(ctx, types.NewService(
+				suite.k.SaveService(ctx, types.NewService(
 					1,
-					types.SERVICE_STATUS_CREATED,
+					types.SERVICE_STATUS_ACTIVE,
 					"MilkyWay",
 					"MilkyWay is a restaking platform",
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
-				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgDeactivateService(
 				1,
@@ -480,16 +473,15 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateService() {
 		{
 			name: "valid service is deactivated properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.CreateService(ctx, types.NewService(
+				suite.k.SaveService(ctx, types.NewService(
 					1,
-					types.SERVICE_STATUS_CREATED,
+					types.SERVICE_STATUS_ACTIVE,
 					"MilkyWay",
 					"MilkyWay is a restaking platform",
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
-				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgDeactivateService(
 				1,

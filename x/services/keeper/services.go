@@ -27,7 +27,8 @@ func (k *Keeper) GetNextServiceID(ctx sdk.Context) (serviceID uint32, err error)
 
 // --------------------------------------------------------------------------------------------------------------------
 
-func (k *Keeper) storeService(ctx sdk.Context, service types.Service) {
+// SaveService stores a Service in the KVStore
+func (k *Keeper) SaveService(ctx sdk.Context, service types.Service) {
 	store := ctx.KVStore(k.storeKey)
 	store.Set(types.ServiceStoreKey(service.ID), k.cdc.MustMarshal(&service))
 }
@@ -49,7 +50,7 @@ func (k *Keeper) CreateService(ctx sdk.Context, service types.Service) error {
 	}
 
 	// Store the service
-	k.storeService(ctx, service)
+	k.SaveService(ctx, service)
 
 	// Log and call the hooks
 	k.Logger(ctx).Debug("created service", "id", service.ID)
@@ -58,24 +59,47 @@ func (k *Keeper) CreateService(ctx sdk.Context, service types.Service) error {
 	return nil
 }
 
-// UpdateService updates an existing Service
-func (k *Keeper) UpdateService(ctx sdk.Context, service types.Service) error {
-	previous, existed := k.GetService(ctx, service.ID)
+// ActivateService activates the service with the given ID
+func (k *Keeper) ActivateService(ctx sdk.Context, serviceID uint32) error {
+	service, found := k.GetService(ctx, serviceID)
+	if !found {
+		return types.ErrServiceNotFound
+	}
+
+	// Check if the service is already active
+	if service.Status == types.SERVICE_STATUS_ACTIVE {
+		return types.ErrServiceAlreadyActive
+	}
+
+	service.Status = types.SERVICE_STATUS_ACTIVE
+	k.SaveService(ctx, service)
+
+	// Call the hook
+	k.AfterServiceActivated(ctx, serviceID)
+
+	return nil
+}
+
+// DeactivateService deactivates the service with the given ID
+func (k *Keeper) DeactivateService(ctx sdk.Context, serviceID uint32) error {
+	service, existed := k.GetService(ctx, serviceID)
 	if !existed {
 		return types.ErrServiceNotFound
 	}
 
-	// Update the service
-	k.storeService(ctx, service)
-	k.Logger(ctx).Debug("updated service", "id", service.ID)
-
-	// Call the hook based on the Service status change
-	switch {
-	case previous.Status == types.SERVICE_STATUS_CREATED && service.Status == types.SERVICE_STATUS_ACTIVE:
-		k.AfterServiceActivated(ctx, service.ID)
-	case previous.Status == types.SERVICE_STATUS_ACTIVE && service.Status == types.SERVICE_STATUS_INACTIVE:
-		k.AfterServiceDeactivated(ctx, service.ID)
+	// Make sure the service is active
+	if service.Status != types.SERVICE_STATUS_ACTIVE {
+		return types.ErrServiceNotActive
 	}
+
+	// Update the status
+	service.Status = types.SERVICE_STATUS_INACTIVE
+
+	// Update the service
+	k.SaveService(ctx, service)
+
+	// Call the hook
+	k.AfterServiceDeactivated(ctx, service.ID)
 
 	return nil
 }

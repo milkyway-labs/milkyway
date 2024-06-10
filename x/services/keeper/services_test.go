@@ -204,3 +204,181 @@ func (suite *KeeperTestSuite) TestKeeper_CreateService() {
 		})
 	}
 }
+
+func (suite *KeeperTestSuite) TestKeeper_ActivateService() {
+	testCases := []struct {
+		name      string
+		setup     func()
+		store     func(ctx sdk.Context)
+		serviceID uint32
+		shouldErr bool
+		check     func(ctx sdk.Context)
+	}{
+		{
+			name:      "service not found returns error",
+			serviceID: 1,
+			shouldErr: true,
+		},
+		{
+			name: "already active service returns error",
+			store: func(ctx sdk.Context) {
+				suite.k.SaveService(ctx, types.NewService(
+					1,
+					types.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is an AVS of a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+			},
+			serviceID: 1,
+			shouldErr: true,
+		},
+		{
+			name: "service is activated properly",
+			store: func(ctx sdk.Context) {
+				suite.k.SaveService(ctx, types.NewService(
+					1,
+					types.SERVICE_STATUS_CREATED,
+					"MilkyWay",
+					"MilkyWay is an AVS of a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+			},
+			serviceID: 1,
+			shouldErr: false,
+			check: func(ctx sdk.Context) {
+				service, found := suite.k.GetService(ctx, 1)
+				suite.Require().True(found)
+				suite.Require().Equal(types.NewService(
+					1,
+					types.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is an AVS of a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				), service)
+
+				// Make sure the hook was called
+				suite.Require().True(suite.hooks.CalledMap["AfterServiceActivated"])
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.setup != nil {
+				tc.setup()
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			err := suite.k.ActivateService(ctx, tc.serviceID)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+			}
+
+			if tc.check != nil {
+				tc.check(ctx)
+			}
+		})
+	}
+}
+
+func (suite *KeeperTestSuite) TestKeeper_DeactivateService() {
+	testCases := []struct {
+		name      string
+		setup     func()
+		store     func(ctx sdk.Context)
+		serviceID uint32
+		shouldErr bool
+		check     func(ctx sdk.Context)
+	}{
+		{
+			name:      "service not found returns error",
+			serviceID: 1,
+			shouldErr: true,
+		},
+		{
+			name: "inactive service returns error",
+			store: func(ctx sdk.Context) {
+				suite.k.SaveService(ctx, types.NewService(
+					1,
+					types.SERVICE_STATUS_CREATED,
+					"MilkyWay",
+					"MilkyWay is an AVS of a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+			},
+			serviceID: 1,
+			shouldErr: true,
+		},
+		{
+			name: "service is deactivated properly",
+			store: func(ctx sdk.Context) {
+				suite.k.SaveService(ctx, types.NewService(
+					1,
+					types.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is an AVS of a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+			},
+			serviceID: 1,
+			shouldErr: false,
+			check: func(ctx sdk.Context) {
+				service, found := suite.k.GetService(ctx, 1)
+				suite.Require().True(found)
+				suite.Require().Equal(types.NewService(
+					1,
+					types.SERVICE_STATUS_INACTIVE,
+					"MilkyWay",
+					"MilkyWay is an AVS of a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				), service)
+
+				// Make sure the hook was called
+				suite.Require().True(suite.hooks.CalledMap["AfterServiceDeactivated"])
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.setup != nil {
+				tc.setup()
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			err := suite.k.DeactivateService(ctx, tc.serviceID)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+			}
+
+			if tc.check != nil {
+				tc.check(ctx)
+			}
+		})
+	}
+}
