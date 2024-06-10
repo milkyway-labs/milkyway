@@ -17,11 +17,11 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 
 // exportNextServiceID returns the next Service ID stored in the KVStore
 func (k *Keeper) exportNextServiceID(ctx sdk.Context) uint32 {
-	nextAVSID, err := k.GetNextServiceID(ctx)
+	nextServiceID, err := k.GetNextServiceID(ctx)
 	if err != nil {
 		panic(err)
 	}
-	return nextAVSID
+	return nextServiceID
 }
 
 // --------------------------------------------------------------------------------------------------------------------

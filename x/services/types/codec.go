@@ -28,11 +28,11 @@ func RegisterInterfaces(registry types.InterfaceRegistry) {
 }
 
 var (
-	// AminoCdc references the global x/avs module codec. Note, the codec should
+	// AminoCdc references the global x/services module codec. Note, the codec should
 	// ONLY be used in certain instances of tests and for JSON encoding as Amino is
 	// still used for that purpose.
 	//
-	// The actual codec used for serialization should be provided to x/avs and
+	// The actual codec used for serialization should be provided to x/services and
 	// defined at the application level.
 	AminoCdc = codec.NewLegacyAmino()
 )

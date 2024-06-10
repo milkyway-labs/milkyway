@@ -66,12 +66,12 @@ func TestParseServiceID(t *testing.T) {
 func TestService_Validate(t *testing.T) {
 	testCases := []struct {
 		name      string
-		avs       types.Service
+		service   types.Service
 		shouldErr bool
 	}{
 		{
 			name: "invalid status returns error",
-			avs: types.Service{
+			service: types.Service{
 				ID:     1,
 				Status: types.SERVICE_STATUS_UNSPECIFIED,
 				Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -81,7 +81,7 @@ func TestService_Validate(t *testing.T) {
 		},
 		{
 			name: "invalid ID returns error",
-			avs: types.Service{
+			service: types.Service{
 				ID:     0,
 				Status: types.SERVICE_STATUS_CREATED,
 				Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -91,7 +91,7 @@ func TestService_Validate(t *testing.T) {
 		},
 		{
 			name: "invalid name returns error",
-			avs: types.Service{
+			service: types.Service{
 				ID:     1,
 				Status: types.SERVICE_STATUS_CREATED,
 				Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -101,7 +101,7 @@ func TestService_Validate(t *testing.T) {
 		},
 		{
 			name: "invalid address returns error",
-			avs: types.Service{
+			service: types.Service{
 				ID:     1,
 				Status: types.SERVICE_STATUS_CREATED,
 				Admin:  "",
@@ -111,7 +111,7 @@ func TestService_Validate(t *testing.T) {
 		},
 		{
 			name: "valid Service returns no error",
-			avs: types.Service{
+			service: types.Service{
 				ID:     1,
 				Status: types.SERVICE_STATUS_CREATED,
 				Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -124,7 +124,7 @@ func TestService_Validate(t *testing.T) {
 	for _, tc := range testCases {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
-			err := tc.avs.Validate()
+			err := tc.service.Validate()
 			if tc.shouldErr {
 				require.Error(t, err)
 			} else {
@@ -137,13 +137,13 @@ func TestService_Validate(t *testing.T) {
 func TestService_Update(t *testing.T) {
 	testCases := []struct {
 		name      string
-		avs       types.Service
+		service   types.Service
 		update    types.ServiceUpdate
 		expResult types.Service
 	}{
 		{
 			name: "update name",
-			avs: types.Service{
+			service: types.Service{
 				ID:     1,
 				Status: types.SERVICE_STATUS_CREATED,
 				Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -164,7 +164,7 @@ func TestService_Update(t *testing.T) {
 		},
 		{
 			name: "update description",
-			avs: types.Service{
+			service: types.Service{
 				ID:     1,
 				Status: types.SERVICE_STATUS_CREATED,
 				Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -186,7 +186,7 @@ func TestService_Update(t *testing.T) {
 		},
 		{
 			name: "update website",
-			avs: types.Service{
+			service: types.Service{
 				ID:     1,
 				Status: types.SERVICE_STATUS_CREATED,
 				Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -208,7 +208,7 @@ func TestService_Update(t *testing.T) {
 		},
 		{
 			name: "update picture URL",
-			avs: types.Service{
+			service: types.Service{
 				ID:     1,
 				Status: types.SERVICE_STATUS_CREATED,
 				Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -233,7 +233,7 @@ func TestService_Update(t *testing.T) {
 	for _, tc := range testCases {
 		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
-			result := tc.avs.Update(tc.update)
+			result := tc.service.Update(tc.update)
 			require.Equal(t, tc.expResult, result)
 		})
 	}
