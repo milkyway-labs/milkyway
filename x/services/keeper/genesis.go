@@ -33,7 +33,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) {
 
 	// Store the services
 	for _, service := range state.Services {
-		k.storeService(ctx, service)
+		k.SaveService(ctx, service)
 	}
 
 	// Store params
