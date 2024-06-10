@@ -3,6 +3,7 @@ package types_test
 import (
 	"testing"
 
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
@@ -190,6 +191,64 @@ func TestMsgUpdateService_GetSigners(t *testing.T) {
 
 // --------------------------------------------------------------------------------------------------------------------
 
+var msgActivateService = types.NewMsgActivateService(
+	1,
+	"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+)
+
+func TestMsgActivateService_ValidateBasic(t *testing.T) {
+	testCases := []struct {
+		name      string
+		msg       *types.MsgActivateService
+		shouldErr bool
+	}{
+		{
+			name: "invalid service id returns error",
+			msg: types.NewMsgActivateService(
+				0,
+				msgActivateService.Sender,
+			),
+			shouldErr: true,
+		},
+		{
+			name: "invalid sender address returns error",
+			msg: types.NewMsgActivateService(
+				msgActivateService.ServiceID,
+				"invalid",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "valid message returns no error",
+			msg:  msgActivateService,
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			err := tc.msg.ValidateBasic()
+			if tc.shouldErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestMsgActivateService_GetSignBytes(t *testing.T) {
+	expected := `{"type":"milkyway/MsgActivateService","value":{"sender":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","service_id":1}}`
+	require.Equal(t, expected, string(msgActivateService.GetSignBytes()))
+}
+
+func TestMsgActivateService_GetSigners(t *testing.T) {
+	addr, _ := sdk.AccAddressFromBech32(msgActivateService.Sender)
+	require.Equal(t, []sdk.AccAddress{addr}, msgActivateService.GetSigners())
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
 var msgDeactivateService = types.NewMsgDeactivateService(
 	1,
 	"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
@@ -202,7 +261,7 @@ func TestMsgDeactivateService_ValidateBasic(t *testing.T) {
 		shouldErr bool
 	}{
 		{
-			name: "invalid ID returns error",
+			name: "invalid service id returns error",
 			msg: types.NewMsgDeactivateService(
 				0,
 				msgDeactivateService.Sender,
@@ -243,5 +302,63 @@ func TestMsgDeactivateService_GetSignBytes(t *testing.T) {
 
 func TestMsgDeactivateService_GetSigners(t *testing.T) {
 	addr, _ := sdk.AccAddressFromBech32(msgDeactivateService.Sender)
+	require.Equal(t, []sdk.AccAddress{addr}, msgDeactivateService.GetSigners())
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+var msgUpdateParams = types.NewMsgUpdateParams(
+	types.DefaultParams(),
+	"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+)
+
+func TestMsgUpdateParams_ValidateBasic(t *testing.T) {
+	testCases := []struct {
+		name      string
+		msg       *types.MsgUpdateParams
+		shouldErr bool
+	}{
+		{
+			name: "invalid params return error",
+			msg: types.NewMsgUpdateParams(
+				types.NewParams(sdk.Coins{sdk.Coin{Denom: "invalid!", Amount: sdkmath.NewInt(100_000_000)}}),
+				msgUpdateParams.Authority,
+			),
+			shouldErr: true,
+		},
+		{
+			name: "invalid authority address returns error",
+			msg: types.NewMsgUpdateParams(
+				msgUpdateParams.Params,
+				"invalid",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "valid message returns no error",
+			msg:  msgUpdateParams,
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			err := tc.msg.ValidateBasic()
+			if tc.shouldErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestMsgUpdateParams_GetSignBytes(t *testing.T) {
+	expected := `{"type":"milkyway/services/MsgUpdateParams","value":{"authority":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","params":{"service_registration_fee":[]}}}`
+	require.Equal(t, expected, string(msgUpdateParams.GetSignBytes()))
+}
+
+func TestMsgUpdateParams_GetSigners(t *testing.T) {
+	addr, _ := sdk.AccAddressFromBech32(msgUpdateParams.Authority)
 	require.Equal(t, []sdk.AccAddress{addr}, msgDeactivateService.GetSigners())
 }

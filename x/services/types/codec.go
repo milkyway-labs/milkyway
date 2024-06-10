@@ -14,6 +14,7 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgUpdateService{}, "milkyway/MsgUpdateService")
 	legacy.RegisterAminoMsg(cdc, &MsgActivateService{}, "milkyway/MsgActivateService")
 	legacy.RegisterAminoMsg(cdc, &MsgDeactivateService{}, "milkyway/MsgDeactivateService")
+	legacy.RegisterAminoMsg(cdc, &MsgUpdateParams{}, "milkyway/services/MsgUpdateParams")
 }
 
 func RegisterInterfaces(registry types.InterfaceRegistry) {
@@ -22,6 +23,7 @@ func RegisterInterfaces(registry types.InterfaceRegistry) {
 		&MsgUpdateService{},
 		&MsgActivateService{},
 		&MsgDeactivateService{},
+		&MsgUpdateParams{},
 	)
 
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
