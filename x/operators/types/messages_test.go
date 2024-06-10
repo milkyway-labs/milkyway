@@ -284,7 +284,7 @@ func TestMsgUpdateParams_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgUpdateParams_GetSignBytes(t *testing.T) {
-	expected := `{"authority":"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4","params":{"deactivation_time":"86400000000000","operator_registration_fee":[{"amount":"100000000","denom":"uatom"}]}}`
+	expected := `{"type":"milkyway/operators/MsgUpdateParams","value":{"authority":"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4","params":{"deactivation_time":"86400000000000","operator_registration_fee":[{"amount":"100000000","denom":"uatom"}]}}}`
 	require.Equal(t, expected, string(msgUpdateParams.GetSignBytes()))
 }
 
