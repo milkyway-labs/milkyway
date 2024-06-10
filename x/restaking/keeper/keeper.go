@@ -3,6 +3,8 @@ package keeper
 import (
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/codec"
+
+	"github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
 type Keeper struct {
@@ -10,6 +12,9 @@ type Keeper struct {
 	cdc      codec.Codec
 
 	authority string
+
+	bankKeeper  types.BankKeeper
+	poolsKeeper types.PoolsKeeper
 }
 
 func NewKeeper(cdc codec.Codec, storeKey storetypes.StoreKey, authority string) *Keeper {
