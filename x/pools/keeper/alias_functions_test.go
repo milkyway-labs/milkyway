@@ -6,7 +6,7 @@ import (
 	"github.com/milkyway-labs/milkyway/x/pools/types"
 )
 
-func (suite *KeeperTestSuite) TestKepeer_GetPoolForDenom() {
+func (suite *KeeperTestSuite) TestKeeper_GetPoolForDenom() {
 	testCases := []struct {
 		name     string
 		setup    func()
