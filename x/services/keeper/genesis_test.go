@@ -113,3 +113,90 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		})
 	}
 }
+
+func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
+	testCases := []struct {
+		name    string
+		genesis *types.GenesisState
+		check   func(ctx sdk.Context)
+	}{
+		{
+			name: "next service id is initialized properly",
+			genesis: types.NewGenesisState(
+				10,
+				nil,
+				types.DefaultParams(),
+			),
+			check: func(ctx sdk.Context) {
+				nextServiceID, err := suite.k.GetNextServiceID(ctx)
+				suite.Require().NoError(err)
+				suite.Require().Equal(uint32(10), nextServiceID)
+			},
+		},
+		{
+			name: "services data are initialized properly",
+			genesis: types.NewGenesisState(
+				1,
+				[]types.Service{
+					types.NewService(
+						1,
+						types.SERVICE_STATUS_ACTIVE,
+						"MilkyWay",
+						"MilkyWay is an AVS of a restaking platform",
+						"https://milkyway.com",
+						"https://milkyway.com/logo.png",
+						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					),
+				},
+				types.DefaultParams(),
+			),
+			check: func(ctx sdk.Context) {
+				var services []types.Service
+				suite.k.IterateServices(ctx, func(service types.Service) (stop bool) {
+					services = append(services, service)
+					return false
+				})
+
+				suite.Require().Len(services, 1)
+				suite.Require().Equal(types.NewService(
+					1,
+					types.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is an AVS of a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				), services[0])
+			},
+		},
+		{
+			name: "params are initialized properly",
+			genesis: types.NewGenesisState(
+				1,
+				nil,
+				types.NewParams(
+					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(1_000_000_000))),
+				),
+			),
+			check: func(ctx sdk.Context) {
+				params := suite.k.GetParams(ctx)
+				suite.Require().Equal(types.NewParams(
+					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(1_000_000_000))),
+				), params)
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+
+			suite.k.InitGenesis(ctx, tc.genesis)
+
+			if tc.check != nil {
+				tc.check(ctx)
+			}
+		})
+	}
+}

@@ -27,7 +27,7 @@ func (k *Keeper) exportNextServiceID(ctx sdk.Context) uint32 {
 // --------------------------------------------------------------------------------------------------------------------
 
 // InitGenesis initializes the state from a GenesisState
-func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) {
+func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) {
 	// Set the next service ID
 	k.SetNextServiceID(ctx, state.NextServiceID)
 

@@ -130,7 +130,7 @@ func (am AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.RawMessage) []abci.ValidatorUpdate {
 	var genState types.GenesisState
 	cdc.MustUnmarshalJSON(gs, &genState)
-	am.keeper.InitGenesis(ctx, genState)
+	am.keeper.InitGenesis(ctx, &genState)
 	return []abci.ValidatorUpdate{}
 }
 
