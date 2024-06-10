@@ -26,7 +26,7 @@ func (k *Keeper) exportNextPoolID(ctx sdk.Context) uint32 {
 // --------------------------------------------------------------------------------------------------------------------
 
 // InitGenesis initializes the genesis store using the provided data
-func (k *Keeper) InitGenesis(ctx sdk.Context, data types.GenesisState) {
+func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
 	// Set the next pool id
 	k.SetNextPoolID(ctx, data.NextPoolID)
 
