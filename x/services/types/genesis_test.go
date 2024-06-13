@@ -38,7 +38,6 @@ func TestValidateGenesis(t *testing.T) {
 						"https://milkyway.com",
 						"https://milkyway.com/logo.png",
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-						types.GetServiceAddress(1).String(),
 					),
 					types.NewService(
 						1,
@@ -48,7 +47,6 @@ func TestValidateGenesis(t *testing.T) {
 						"https://milkyway.com",
 						"https://milkyway.com/logo.png",
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-						types.GetServiceAddress(1).String(),
 					),
 				},
 				Params: types.DefaultParams(),
@@ -68,7 +66,6 @@ func TestValidateGenesis(t *testing.T) {
 						"https://milkyway.com",
 						"https://milkyway.com/logo.png",
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-						types.GetServiceAddress(1).String(),
 					),
 					types.NewService(
 						2,
@@ -78,7 +75,6 @@ func TestValidateGenesis(t *testing.T) {
 						"",
 						"",
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-						types.GetServiceAddress(2).String(),
 					),
 				},
 				Params: types.DefaultParams(),
@@ -114,7 +110,6 @@ func TestValidateGenesis(t *testing.T) {
 						"https://milkyway.com",
 						"https://milkyway.com/logo.png",
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-						types.GetServiceAddress(1).String(),
 					),
 					types.NewService(
 						2,
@@ -124,7 +119,6 @@ func TestValidateGenesis(t *testing.T) {
 						"",
 						"",
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-						types.GetServiceAddress(2).String(),
 					),
 				},
 				Params: types.NewParams(

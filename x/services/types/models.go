@@ -34,7 +34,6 @@ func NewService(
 	website string,
 	pictureURL string,
 	admin string,
-	address string,
 ) Service {
 	return Service{
 		ID:          id,
@@ -44,7 +43,7 @@ func NewService(
 		Website:     website,
 		PictureURL:  pictureURL,
 		Admin:       admin,
-		Address:     address,
+		Address:     GetServiceAddress(id).String(),
 	}
 }
 
@@ -126,6 +125,5 @@ func (a *Service) Update(update ServiceUpdate) Service {
 		update.Website,
 		update.PictureURL,
 		a.Admin,
-		a.Address,
 	)
 }

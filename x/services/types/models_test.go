@@ -79,7 +79,6 @@ func TestService_Validate(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				types.GetServiceAddress(1).String(),
 			),
 			shouldErr: true,
 		},
@@ -93,7 +92,6 @@ func TestService_Validate(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				types.GetServiceAddress(1).String(),
 			),
 			shouldErr: true,
 		},
@@ -107,7 +105,6 @@ func TestService_Validate(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				types.GetServiceAddress(1).String(),
 			),
 			shouldErr: true,
 		},
@@ -121,22 +118,18 @@ func TestService_Validate(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"",
-				types.GetServiceAddress(1).String(),
 			),
 			shouldErr: true,
 		},
 		{
 			name: "invalid address returns error",
-			service: types.NewService(
-				1,
-				types.SERVICE_STATUS_ACTIVE,
-				"MilkyWay",
-				"MilkyWay is an AVS of a restaking platform",
-				"https://milkyway.com",
-				"https://milkyway.com/logo.png",
-				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				"",
-			),
+			service: types.Service{
+				ID:      1,
+				Status:  types.SERVICE_STATUS_ACTIVE,
+				Name:    "MilkyWay",
+				Admin:   "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				Address: "",
+			},
 			shouldErr: true,
 		},
 		{
@@ -149,7 +142,6 @@ func TestService_Validate(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				types.GetServiceAddress(1).String(),
 			),
 			shouldErr: false,
 		},
@@ -185,7 +177,6 @@ func TestService_Update(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				types.GetServiceAddress(1).String(),
 			),
 			update: types.NewServiceUpdate(
 				"MilkyWay2",
@@ -201,7 +192,6 @@ func TestService_Update(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				types.GetServiceAddress(1).String(),
 			),
 		},
 		{
@@ -214,7 +204,6 @@ func TestService_Update(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				types.GetServiceAddress(1).String(),
 			),
 			update: types.NewServiceUpdate(
 				types.DoNotModify,
@@ -230,7 +219,6 @@ func TestService_Update(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				types.GetServiceAddress(1).String(),
 			),
 		},
 		{
@@ -243,7 +231,6 @@ func TestService_Update(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				types.GetServiceAddress(1).String(),
 			),
 			update: types.NewServiceUpdate(
 				types.DoNotModify,
@@ -259,7 +246,6 @@ func TestService_Update(t *testing.T) {
 				"https://example.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				types.GetServiceAddress(1).String(),
 			),
 		},
 		{
@@ -272,7 +258,6 @@ func TestService_Update(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				types.GetServiceAddress(1).String(),
 			),
 			update: types.NewServiceUpdate(
 				types.DoNotModify,
@@ -288,7 +273,6 @@ func TestService_Update(t *testing.T) {
 				"https://milkyway.com",
 				"https://example.com/picture.jpg",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				types.GetServiceAddress(1).String(),
 			),
 		},
 	}
