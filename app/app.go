@@ -881,6 +881,7 @@ func NewMilkyWayApp(
 	app.PoolsKeeper = poolskeeper.NewKeeper(
 		app.appCodec,
 		keys[poolstypes.StoreKey],
+		app.AccountKeeper,
 	)
 
 	/****  Module Options ****/

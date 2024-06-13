@@ -32,6 +32,9 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
 
 	// Store the pools
 	for _, pool := range data.Pools {
-		k.SavePool(ctx, pool)
+		err := k.SavePool(ctx, pool)
+		if err != nil {
+			panic(err)
+		}
 	}
 }

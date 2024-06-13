@@ -2,10 +2,19 @@ package keeper
 
 import (
 	storetypes "cosmossdk.io/store/types"
+	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/x/pools/types"
 )
+
+// createAccountIfNotExists creates an account if it does not exist
+func (k *Keeper) createAccountIfNotExists(ctx sdk.Context, address sdk.AccAddress) {
+	if !k.accountKeeper.HasAccount(ctx, address) {
+		defer telemetry.IncrCounter(1, "new", "account")
+		k.accountKeeper.SetAccount(ctx, k.accountKeeper.NewAccountWithAddress(ctx, address))
+	}
+}
 
 // IteratePools iterates over the pools in the store and performs a callback function
 func (k *Keeper) IteratePools(ctx sdk.Context, cb func(pool types.Pool) (stop bool)) {
@@ -75,7 +84,10 @@ func (k *Keeper) CreateOrGetPoolByDenom(ctx sdk.Context, denom string) (types.Po
 	}
 
 	// Save the pool
-	k.SavePool(ctx, pool)
+	err = k.SavePool(ctx, pool)
+	if err != nil {
+		return types.Pool{}, err
+	}
 
 	// Increment the pool id
 	k.SetNextPoolID(ctx, poolID+1)

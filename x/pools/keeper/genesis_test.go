@@ -26,8 +26,11 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			name: "pools are exported properly",
 			store: func(ctx sdk.Context) {
 				suite.k.SetNextPoolID(ctx, 1)
-				suite.k.SavePool(ctx, types.NewPool(1, "umilk"))
-				suite.k.SavePool(ctx, types.NewPool(2, "uatom"))
+
+				err := suite.k.SavePool(ctx, types.NewPool(1, "umilk"))
+				suite.Require().NoError(err)
+				err = suite.k.SavePool(ctx, types.NewPool(2, "uatom"))
+				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				NextPoolID: 1,

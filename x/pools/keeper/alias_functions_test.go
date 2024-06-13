@@ -24,7 +24,8 @@ func (suite *KeeperTestSuite) TestKeeper_GetPoolForDenom() {
 		{
 			name: "existing pool is returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SavePool(ctx, types.NewPool(1, "umilk"))
+				err := suite.k.SavePool(ctx, types.NewPool(1, "umilk"))
+				suite.Require().NoError(err)
 			},
 			denom:    "umilk",
 			expFound: true,
@@ -82,7 +83,8 @@ func (suite *KeeperTestSuite) TestKeeper_CreateOrGetPoolByDenom() {
 		{
 			name: "existing pool is returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SavePool(ctx, types.NewPool(1, "umilk"))
+				err := suite.k.SavePool(ctx, types.NewPool(1, "umilk"))
+				suite.Require().NoError(err)
 			},
 			denom:     "umilk",
 			shouldErr: false,

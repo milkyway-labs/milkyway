@@ -76,7 +76,8 @@ func (m *QueryPoolByIdRequest) GetPoolId() uint32 {
 	return 0
 }
 
-// QueryPoolByDenomRequest is the request type for the Query/PollByDenom RPC method.
+// QueryPoolByDenomRequest is the request type for the Query/PollByDenom RPC
+// method.
 type QueryPoolByDenomRequest struct {
 	// Denom is the denom for which the pool is to be queried
 	Denom string `protobuf:"bytes,1,opt,name=denom,proto3" json:"denom,omitempty"`

@@ -25,7 +25,8 @@ func (suite *KeeperTestSuite) TestQueryServer_PoolById() {
 		{
 			name: "found pool is returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SavePool(ctx, types.NewPool(1, "umilk"))
+				err := suite.k.SavePool(ctx, types.NewPool(1, "umilk"))
+				suite.Require().NoError(err)
 			},
 			request: &types.QueryPoolByIdRequest{
 				PoolId: 1,
@@ -76,7 +77,8 @@ func (suite *KeeperTestSuite) TestQueryServer_PoolByDenom() {
 		{
 			name: "found pool is returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SavePool(ctx, types.NewPool(1, "umilk"))
+				err := suite.k.SavePool(ctx, types.NewPool(1, "umilk"))
+				suite.Require().NoError(err)
 			},
 			request: &types.QueryPoolByDenomRequest{
 				Denom: "umilk",

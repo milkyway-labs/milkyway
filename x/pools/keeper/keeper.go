@@ -12,12 +12,15 @@ import (
 type Keeper struct {
 	storeKey storetypes.StoreKey
 	cdc      codec.Codec
+
+	accountKeeper types.AccountKeeper
 }
 
-func NewKeeper(cdc codec.Codec, storeKey storetypes.StoreKey) *Keeper {
+func NewKeeper(cdc codec.Codec, storeKey storetypes.StoreKey, accountKeeper types.AccountKeeper) *Keeper {
 	return &Keeper{
-		storeKey: storeKey,
-		cdc:      cdc,
+		storeKey:      storeKey,
+		cdc:           cdc,
+		accountKeeper: accountKeeper,
 	}
 }
 

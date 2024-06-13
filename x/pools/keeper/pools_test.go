@@ -107,25 +107,37 @@ func (suite *KeeperTestSuite) TestKeeper_SavePool() {
 			store: func(ctx sdk.Context) {
 				suite.k.SetNextPoolID(ctx, 1)
 			},
-			shouldErr: true,
+			shouldErr: false,
 			pool:      types.NewPool(1, "uatom"),
 			check: func(ctx sdk.Context) {
+				// Make sure the pool is saved properly
 				pool, found := suite.k.GetPool(ctx, 1)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewPool(1, "uatom"), pool)
+
+				// Make sure the pool account is created
+				hasAccount := suite.ak.HasAccount(ctx, types.GetPoolAddress(1))
+				suite.Require().True(hasAccount)
 			},
 		},
 		{
 			name: "existing pool is overridden properly",
 			setup: func() {
 				suite.k.SetNextPoolID(suite.ctx, 1)
-				suite.k.SavePool(suite.ctx, types.NewPool(1, "uatom"))
+				err := suite.k.SavePool(suite.ctx, types.NewPool(1, "uatom"))
+				suite.Require().NoError(err)
 			},
-			pool: types.NewPool(1, "usdt"),
+			pool:      types.NewPool(1, "usdt"),
+			shouldErr: false,
 			check: func(ctx sdk.Context) {
+				// Make sure the pool is saved properly
 				pool, found := suite.k.GetPool(ctx, 1)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewPool(1, "usdt"), pool)
+
+				// Make sure the pool account is created
+				hasAccount := suite.ak.HasAccount(ctx, types.GetPoolAddress(1))
+				suite.Require().True(hasAccount)
 			},
 		},
 	}
@@ -141,7 +153,12 @@ func (suite *KeeperTestSuite) TestKeeper_SavePool() {
 				tc.store(ctx)
 			}
 
-			suite.k.SavePool(ctx, tc.pool)
+			err := suite.k.SavePool(ctx, tc.pool)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+			}
 
 			if tc.check != nil {
 				tc.check(ctx)
@@ -168,7 +185,8 @@ func (suite *KeeperTestSuite) TestKeeper_GetPool() {
 		{
 			name: "found pool is returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SavePool(ctx, types.NewPool(1, "uatom"))
+				err := suite.k.SavePool(ctx, types.NewPool(1, "uatom"))
+				suite.Require().NoError(err)
 			},
 			poolID:   1,
 			expFound: true,

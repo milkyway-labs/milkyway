@@ -3,6 +3,7 @@ package keeper
 import (
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/milkyway-labs/milkyway/x/pools/types"
 )
@@ -28,9 +29,18 @@ func (k *Keeper) GetNextPoolID(ctx sdk.Context) (serviceID uint32, err error) {
 // --------------------------------------------------------------------------------------------------------------------
 
 // SavePool stores the given pool inside the store
-func (k *Keeper) SavePool(ctx sdk.Context, pool types.Pool) {
+func (k *Keeper) SavePool(ctx sdk.Context, pool types.Pool) error {
 	store := ctx.KVStore(k.storeKey)
 	store.Set(types.GetPoolStoreKey(pool.ID), k.cdc.MustMarshal(&pool))
+
+	// Create the pool account if it does not exist
+	poolAddress, err := sdk.AccAddressFromBech32(pool.Address)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid pool address: %s", pool.Address)
+	}
+	k.createAccountIfNotExists(ctx, poolAddress)
+
+	return nil
 }
 
 // GetPool retrieves the pool with the given ID from the store.

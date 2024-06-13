@@ -5,7 +5,13 @@ import (
 	"strconv"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 )
+
+// GetPoolAddress generates a pool address from its id
+func GetPoolAddress(poolID uint32) sdk.AccAddress {
+	return authtypes.NewModuleAddress(fmt.Sprintf("pool-%d", poolID))
+}
 
 // ParsePoolID parses a pool id from a string
 func ParsePoolID(value string) (uint32, error) {
@@ -21,8 +27,9 @@ func ParsePoolID(value string) (uint32, error) {
 // NewPool creates a new Pool instance
 func NewPool(id uint32, denom string) Pool {
 	return Pool{
-		ID:    id,
-		Denom: denom,
+		ID:      id,
+		Denom:   denom,
+		Address: GetPoolAddress(id).String(),
 	}
 }
 
@@ -34,6 +41,11 @@ func (p *Pool) Validate() error {
 
 	if sdk.ValidateDenom(p.Denom) != nil {
 		return fmt.Errorf("invalid pool denom")
+	}
+
+	_, err := sdk.AccAddressFromBech32(p.Address)
+	if err != nil {
+		return fmt.Errorf("invalid pool address")
 	}
 
 	return nil
