@@ -45,4 +45,8 @@ message Operator {
 
   // PictureURL is the URL of the picture of the operator
   string pictureURL = 6;
+
+  // Address is the address of the account associated to the operator.
+  // This will be used to store tokens that are delegated to this operator.
+  string address = 7 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 }

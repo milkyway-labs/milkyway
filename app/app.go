@@ -870,6 +870,7 @@ func NewMilkyWayApp(
 	app.OperatorsKeeper = operatorskeeper.NewKeeper(
 		app.appCodec,
 		keys[operatorstypes.StoreKey],
+		app.AccountKeeper,
 		communityPoolKeeper,
 		authorityAddr,
 	)

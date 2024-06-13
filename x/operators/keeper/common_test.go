@@ -99,6 +99,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 	suite.k = keeper.NewKeeper(
 		suite.cdc,
 		suite.storeKey,
+		suite.ak,
 		keepers.NewCommunityPoolKeeper(suite.bk, authtypes.FeeCollectorName),
 		authorityAddr,
 	)

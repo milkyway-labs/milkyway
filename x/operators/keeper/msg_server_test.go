@@ -91,6 +91,10 @@ func (suite *KeeperTestSuite) TestMsgServer_RegisterOperator() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				), stored)
 
+				// Make sure the operator account has been created
+				hasAccount := suite.ak.HasAccount(ctx, types.GetOperatorAddress(2))
+				suite.Require().True(hasAccount)
+
 				// Make sure the next operator id has incremented
 				nextID, err := suite.k.GetNextOperatorID(ctx)
 				suite.Require().NoError(err)

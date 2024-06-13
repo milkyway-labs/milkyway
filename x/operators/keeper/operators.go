@@ -46,6 +46,13 @@ func (k *Keeper) RegisterOperator(ctx sdk.Context, operator types.Operator) erro
 		}
 	}
 
+	// Create the operator account if it does not exist
+	operatorAddress, err := sdk.AccAddressFromBech32(operator.Address)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid operator address: %s", operator.Address)
+	}
+	k.createAccountIfNotExists(ctx, operatorAddress)
+
 	// Store the operator
 	k.SaveOperator(ctx, operator)
 

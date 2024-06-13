@@ -36,7 +36,7 @@ func TestBeginBlocker(t *testing.T) {
 	ctx := sdk.NewContext(ms, tmproto.Header{ChainID: "test-chain"}, false, log.NewNopLogger())
 	cdc, _ := app.MakeCodecs()
 
-	operatorsKeeper := keeper.NewKeeper(cdc, keys[types.StoreKey], nil, "")
+	operatorsKeeper := keeper.NewKeeper(cdc, keys[types.StoreKey], nil, nil, "")
 
 	testCases := []struct {
 		name      string

@@ -6,8 +6,15 @@ import (
 	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 )
 
+// GetOperatorAddress generates an operator address from its id
+func GetOperatorAddress(operatorID uint32) sdk.AccAddress {
+	return authtypes.NewModuleAddress(fmt.Sprintf("operator-%d", operatorID))
+}
+
+// ParseOperatorID tries parsing the given value as an operator id
 func ParseOperatorID(value string) (uint32, error) {
 	operatorID, err := strconv.ParseUint(value, 10, 32)
 	if err != nil {
@@ -34,6 +41,7 @@ func NewOperator(
 		Website:    website,
 		PictureURL: pictureURL,
 		Admin:      admin,
+		Address:    GetOperatorAddress(id).String(),
 	}
 }
 
@@ -54,6 +62,11 @@ func (o *Operator) Validate() error {
 	_, err := sdk.AccAddressFromBech32(o.Admin)
 	if err != nil {
 		return fmt.Errorf("invalid admin address: %s", o.Admin)
+	}
+
+	_, err = sdk.AccAddressFromBech32(o.Address)
+	if err != nil {
+		return fmt.Errorf("invalid address: %s", o.Address)
 	}
 
 	return nil

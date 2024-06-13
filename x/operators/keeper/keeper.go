@@ -14,7 +14,8 @@ type Keeper struct {
 	cdc      codec.BinaryCodec
 	hooks    types.OperatorsHooks
 
-	poolKeeper types.CommunityPoolKeeper
+	accountKeeper types.AccountKeeper
+	poolKeeper    types.CommunityPoolKeeper
 
 	authority string
 }
@@ -22,14 +23,16 @@ type Keeper struct {
 func NewKeeper(
 	cdc codec.BinaryCodec,
 	storeKey storetypes.StoreKey,
+	accountKeeper types.AccountKeeper,
 	poolKeeper types.CommunityPoolKeeper,
 	authority string,
 ) *Keeper {
 	return &Keeper{
-		storeKey:   storeKey,
-		cdc:        cdc,
-		authority:  authority,
-		poolKeeper: poolKeeper,
+		storeKey:      storeKey,
+		cdc:           cdc,
+		authority:     authority,
+		accountKeeper: accountKeeper,
+		poolKeeper:    poolKeeper,
 	}
 }
 

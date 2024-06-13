@@ -28,7 +28,7 @@ func NewMsgServer(k *Keeper) types.MsgServer {
 func (k msgServer) RegisterOperator(goCtx context.Context, msg *types.MsgRegisterOperator) (*types.MsgRegisterOperatorResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// Get the next operator id
+	// Get the operator id
 	operatorID, err := k.GetNextOperatorID(ctx)
 	if err != nil {
 		return nil, err

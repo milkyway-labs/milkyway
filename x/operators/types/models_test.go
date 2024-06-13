@@ -118,6 +118,17 @@ func TestOperator_Validate(t *testing.T) {
 			shouldErr: true,
 		},
 		{
+			name: "invalid address returns error",
+			operator: types.Operator{
+				ID:      1,
+				Status:  types.OPERATOR_STATUS_ACTIVE,
+				Moniker: "MilkyWay Operator",
+				Admin:   "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				Address: "",
+			},
+			shouldErr: true,
+		},
+		{
 			name: "valid operator returns no error",
 			operator: types.NewOperator(
 				1,

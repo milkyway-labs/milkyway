@@ -5,10 +5,19 @@ import (
 	"time"
 
 	storetypes "cosmossdk.io/store/types"
+	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/x/operators/types"
 )
+
+// createAccountIfNotExists creates an account if it does not exist
+func (k *Keeper) createAccountIfNotExists(ctx sdk.Context, address sdk.AccAddress) {
+	if !k.accountKeeper.HasAccount(ctx, address) {
+		defer telemetry.IncrCounter(1, "new", "account")
+		k.accountKeeper.SetAccount(ctx, k.accountKeeper.NewAccountWithAddress(ctx, address))
+	}
+}
 
 // IterateOperators iterates over the operators in the store and performs a callback function
 func (k *Keeper) IterateOperators(ctx sdk.Context, cb func(operator types.Operator) (stop bool)) {
