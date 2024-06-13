@@ -25,6 +25,7 @@ func (suite *KeeperTestSuite) TestValidServicesInvariant() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				))
 			},
 			expBroken: true,
@@ -41,6 +42,7 @@ func (suite *KeeperTestSuite) TestValidServicesInvariant() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				))
 			},
 			expBroken: true,
@@ -57,6 +59,7 @@ func (suite *KeeperTestSuite) TestValidServicesInvariant() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(2).String(),
 				))
 			},
 			expBroken: true,
@@ -73,6 +76,7 @@ func (suite *KeeperTestSuite) TestValidServicesInvariant() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				))
 			},
 			expBroken: true,
@@ -89,6 +93,7 @@ func (suite *KeeperTestSuite) TestValidServicesInvariant() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				))
 			},
 			expBroken: false,

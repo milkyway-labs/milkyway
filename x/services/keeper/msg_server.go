@@ -34,6 +34,10 @@ func (k msgServer) CreateService(goCtx context.Context, msg *types.MsgCreateServ
 		return nil, err
 	}
 
+	// Create the service account
+	serviceAddress := types.GetServiceAddress(serviceID)
+	k.createAccountIfNotExists(ctx, serviceAddress)
+
 	// Create the Service and validate it
 	service := types.NewService(
 		serviceID,
@@ -43,6 +47,7 @@ func (k msgServer) CreateService(goCtx context.Context, msg *types.MsgCreateServ
 		msg.Website,
 		msg.PictureURL,
 		msg.Sender,
+		serviceAddress.String(),
 	)
 
 	// Validate the service before storing

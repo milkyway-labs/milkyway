@@ -40,6 +40,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				))
 
 				suite.k.SaveService(ctx, types.NewService(
@@ -50,6 +51,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					"https://inertia.zone",
 					"https://inertia.zone/logo.png",
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+					types.GetServiceAddress(2).String(),
 				))
 			},
 			expGenesis: &types.GenesisState{
@@ -63,6 +65,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 						"https://milkyway.com",
 						"https://milkyway.com/logo.png",
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+						types.GetServiceAddress(1).String(),
 					),
 					types.NewService(
 						2,
@@ -72,6 +75,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 						"https://inertia.zone",
 						"https://inertia.zone/logo.png",
 						"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+						types.GetServiceAddress(2).String(),
 					),
 				},
 				Params: types.DefaultParams(),
@@ -144,6 +148,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 						"https://milkyway.com",
 						"https://milkyway.com/logo.png",
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+						types.GetServiceAddress(1).String(),
 					),
 				},
 				types.DefaultParams(),
@@ -164,6 +169,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				), services[0])
 			},
 		},
