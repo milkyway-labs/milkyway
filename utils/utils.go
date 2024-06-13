@@ -288,7 +288,7 @@ func IsIBCToken(denom string) bool {
 
 // Returns the stDenom from a native denom by appending a st prefix
 func StAssetDenomFromHostZoneDenom(hostZoneDenom string) string {
-	return "st" + hostZoneDenom
+	return "milk" + hostZoneDenom
 }
 
 // Returns the native denom from an stDenom by removing the st prefix
