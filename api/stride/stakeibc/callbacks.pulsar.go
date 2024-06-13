@@ -2,19 +2,17 @@
 package stakeibc
 
 import (
-	fmt "fmt"
-	io "io"
-	reflect "reflect"
-	sync "sync"
-
 	v1beta1 "cosmossdk.io/api/cosmos/base/v1beta1"
+	fmt "fmt"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
 	_ "github.com/cosmos/gogoproto/gogoproto"
+	records "github.com/milkyway-labs/milkyway/api/stride/records"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-
-	records "github.com/milkyway-labs/milkyway/api/stride/records"
+	io "io"
+	reflect "reflect"
+	sync "sync"
 )
 
 var (

@@ -2,20 +2,19 @@
 package stakeibc
 
 import (
-	fmt "fmt"
-	io "io"
-	reflect "reflect"
-	sync "sync"
-
 	_ "cosmossdk.io/api/amino"
 	v1beta1 "cosmossdk.io/api/cosmos/base/v1beta1"
 	_ "cosmossdk.io/api/cosmos/msg/v1"
+	fmt "fmt"
 	_ "github.com/cosmos/cosmos-proto"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	io "io"
+	reflect "reflect"
+	sync "sync"
 )
 
 var (
@@ -23470,7 +23469,7 @@ type MsgSetCommunityPoolRebate struct {
 	ChainId string `protobuf:"bytes,2,opt,name=chain_id,json=chainId,proto3" json:"chain_id,omitempty"`
 	// Rebate percentage represented as a decimal (e.g. 0.2 for 20%)
 	RebateRate string `protobuf:"bytes,3,opt,name=rebate_rate,json=rebateRate,proto3" json:"rebate_rate,omitempty"`
-	// Number of stTokens received by the community pool after liquid staking
+	// Number of stTokens recieved by the community pool after liquid staking
 	LiquidStakedStTokenAmount string `protobuf:"bytes,4,opt,name=liquid_staked_st_token_amount,json=liquidStakedStTokenAmount,proto3" json:"liquid_staked_st_token_amount,omitempty"`
 }
 
