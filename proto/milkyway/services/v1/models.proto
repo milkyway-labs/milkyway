@@ -47,4 +47,9 @@ message Service {
 
   // PictureURL is the URL of the picture of the service
   string pictureURL = 7;
+
+  // Address is the address of the account associated with the service.
+  // This will be used in order to store all the tokens that are delegated to
+  // this service by various users.
+  string address = 8 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 }

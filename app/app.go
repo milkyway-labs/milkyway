@@ -859,6 +859,7 @@ func NewMilkyWayApp(
 	app.ServicesKeeper = serviceskeeper.NewKeeper(
 		app.appCodec,
 		keys[servicestypes.StoreKey],
+		app.AccountKeeper,
 		communityPoolKeeper,
 		authorityAddr,
 	)

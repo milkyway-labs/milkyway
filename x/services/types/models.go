@@ -6,7 +6,13 @@ import (
 	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 )
+
+// GetServiceAddress generates a service address from its id
+func GetServiceAddress(serviceID uint32) sdk.AccAddress {
+	return authtypes.NewModuleAddress(fmt.Sprintf("service-%d", serviceID))
+}
 
 // ParseServiceID parses a string into a uint32
 func ParseServiceID(value string) (uint32, error) {
@@ -28,6 +34,7 @@ func NewService(
 	website string,
 	pictureURL string,
 	admin string,
+	address string,
 ) Service {
 	return Service{
 		ID:          id,
@@ -37,6 +44,7 @@ func NewService(
 		Website:     website,
 		PictureURL:  pictureURL,
 		Admin:       admin,
+		Address:     address,
 	}
 }
 
@@ -57,6 +65,11 @@ func (a *Service) Validate() error {
 	_, err := sdk.AccAddressFromBech32(a.Admin)
 	if err != nil {
 		return fmt.Errorf("invalid admin address")
+	}
+
+	_, err = sdk.AccAddressFromBech32(a.Address)
+	if err != nil {
+		return fmt.Errorf("invalid service address")
 	}
 
 	return nil
@@ -113,5 +126,6 @@ func (a *Service) Update(update ServiceUpdate) Service {
 		update.Website,
 		update.PictureURL,
 		a.Admin,
+		a.Address,
 	)
 }

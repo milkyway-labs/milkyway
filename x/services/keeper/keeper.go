@@ -14,7 +14,8 @@ type Keeper struct {
 	cdc      codec.BinaryCodec
 	hooks    types.ServicesHooks
 
-	poolKeeper types.CommunityPoolKeeper
+	accountKeeper types.AccountKeeper
+	poolKeeper    types.CommunityPoolKeeper
 
 	// authority represents the address capable of executing a MsgUpdateParams message.
 	// Typically, this should be the x/gov module account.
@@ -22,12 +23,13 @@ type Keeper struct {
 }
 
 // NewKeeper creates a new keeper
-func NewKeeper(cdc codec.BinaryCodec, storeKey storetypes.StoreKey, poolKeeper types.CommunityPoolKeeper, authority string) *Keeper {
+func NewKeeper(cdc codec.BinaryCodec, storeKey storetypes.StoreKey, accountKeeper types.AccountKeeper, poolKeeper types.CommunityPoolKeeper, authority string) *Keeper {
 	return &Keeper{
-		storeKey:   storeKey,
-		cdc:        cdc,
-		poolKeeper: poolKeeper,
-		authority:  authority,
+		storeKey:      storeKey,
+		cdc:           cdc,
+		accountKeeper: accountKeeper,
+		poolKeeper:    poolKeeper,
+		authority:     authority,
 	}
 }
 

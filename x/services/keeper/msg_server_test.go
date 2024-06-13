@@ -109,9 +109,14 @@ func (suite *KeeperTestSuite) TestMsgServer_CreateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				), stored)
 
-				// Make sure the next service account has been incremented
+				// Make sure the service account has been created properly
+				hasAccount := suite.ak.HasAccount(ctx, types.GetServiceAddress(1))
+				suite.Require().True(hasAccount)
+
+				// Make sure the next service id has been incremented
 				nextServiceID, err := suite.k.GetNextServiceID(ctx)
 				suite.Require().NoError(err)
 				suite.Require().Equal(uint32(2), nextServiceID)
@@ -197,6 +202,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				))
 			},
 			msg: types.NewMsgUpdateService(
@@ -220,6 +226,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				))
 			},
 			msg: types.NewMsgUpdateService(
@@ -243,6 +250,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				))
 			},
 			msg: types.NewMsgUpdateService(
@@ -273,6 +281,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				), stored)
 			},
 		},
@@ -342,6 +351,7 @@ func (suite *KeeperTestSuite) TestMsgServer_ActivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				))
 			},
 			msg: types.NewMsgActivateService(
@@ -361,6 +371,7 @@ func (suite *KeeperTestSuite) TestMsgServer_ActivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				))
 			},
 			msg: types.NewMsgActivateService(
@@ -380,6 +391,7 @@ func (suite *KeeperTestSuite) TestMsgServer_ActivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				))
 			},
 			msg: types.NewMsgActivateService(
@@ -462,6 +474,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				))
 			},
 			msg: types.NewMsgDeactivateService(
@@ -481,6 +494,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				))
 			},
 			msg: types.NewMsgDeactivateService(
@@ -507,6 +521,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				), stored)
 			},
 		},

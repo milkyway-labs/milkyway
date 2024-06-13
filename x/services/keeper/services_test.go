@@ -124,6 +124,7 @@ func (suite *KeeperTestSuite) TestKeeper_CreateService() {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				types.GetServiceAddress(1).String(),
 			),
 			shouldErr: true,
 		},
@@ -147,6 +148,7 @@ func (suite *KeeperTestSuite) TestKeeper_CreateService() {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				types.GetServiceAddress(1).String(),
 			),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
@@ -172,6 +174,7 @@ func (suite *KeeperTestSuite) TestKeeper_CreateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				), service)
 
 				// Make sure the hook was called
@@ -230,6 +233,7 @@ func (suite *KeeperTestSuite) TestKeeper_ActivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				))
 			},
 			serviceID: 1,
@@ -246,6 +250,7 @@ func (suite *KeeperTestSuite) TestKeeper_ActivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				))
 			},
 			serviceID: 1,
@@ -261,6 +266,7 @@ func (suite *KeeperTestSuite) TestKeeper_ActivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				), service)
 
 				// Make sure the hook was called
@@ -319,6 +325,7 @@ func (suite *KeeperTestSuite) TestKeeper_DeactivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				))
 			},
 			serviceID: 1,
@@ -335,6 +342,7 @@ func (suite *KeeperTestSuite) TestKeeper_DeactivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				))
 			},
 			serviceID: 1,
@@ -350,6 +358,7 @@ func (suite *KeeperTestSuite) TestKeeper_DeactivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				), service)
 
 				// Make sure the hook was called
@@ -407,6 +416,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.GetServiceAddress(1).String(),
 				))
 			},
 			serviceID: 1,
@@ -419,6 +429,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetService() {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				types.GetServiceAddress(1).String(),
 			),
 		},
 	}
