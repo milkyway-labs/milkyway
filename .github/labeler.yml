@@ -1,0 +1,33 @@
+"x/services":
+  - changed-files:
+    - any-glob-to-any-file: x/services/**/*
+"x/operators":
+  - changed-files:
+    - any-glob-to-any-file: x/operators/**/*
+"x/pools":
+  - changed-files:
+    - any-glob-to-any-file: x/pools/**/*
+"x/restaking":
+  - changed-files:
+    - any-glob-to-any-file: x/restaking/**/*
+"x/client":
+  - changed-files:
+    - any-glob-to-any-file: client/**/*
+    - any-glob-to-any-file: x/*/client/**/*
+"kind/build":
+  - changed-files:
+    - any-glob-to-any-file: Makefile
+    - any-glob-to-any-file: Dockerfile
+    - any-glob-to-any-file: docker-compose.yml
+    - any-glob-to-any-file: scripts/*
+"kind/ci":
+  - changed-files:
+    - any-glob-to-any-file: .github/**/*.yml
+    - any-glob-to-any-file: buf.yaml
+    - any-glob-to-any-file: .mergify.yml
+    - any-glob-to-any-file: .golangci.yml
+    - any-glob-to-any-file: .github/dependabot.yml
+    - any-glob-to-any-file: .github/labeler.yml
+"kind/adr":
+  - changed-files:
+    - any-glob-to-any-file: docs/architecture/**/*
