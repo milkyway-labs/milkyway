@@ -1,0 +1,50 @@
+syntax = "proto3";
+package milkyway.services.v1;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/services/types";
+
+// ServiceStatus defines the status of a service
+enum ServiceStatus {
+  option (gogoproto.goproto_enum_prefix) = false;
+
+  // SERVICE_STATUS_UNSPECIFIED defines an unspecified status
+  SERVICE_STATUS_UNSPECIFIED = 0;
+
+  // SERVICE_STATUS_CREATED identifies a recently created service that is not
+  // yet active
+  SERVICE_STATUS_CREATED = 1;
+
+  // SERVICE_STATUS_ACTIVE identifies an active service
+  SERVICE_STATUS_ACTIVE = 2;
+
+  // SERVICE_STATUS_INACTIVE identifies an inactive service
+  SERVICE_STATUS_INACTIVE = 3;
+}
+
+// Service defines the fields of a service
+message Service {
+  // ID is the unique identifier of the service
+  uint32 id = 1 [ (gogoproto.customname) = "ID" ];
+
+  // Status is the status of the service
+  ServiceStatus status = 2;
+
+  // Admin is the address of the user that has administrative power over the
+  // service
+  string admin = 3 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // Name is the name of the service
+  string name = 4;
+
+  // Description is the description of the service
+  string description = 5;
+
+  // Website is the website of the service
+  string website = 6;
+
+  // PictureURL is the URL of the picture of the service
+  string pictureURL = 7;
+}

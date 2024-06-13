@@ -1,0 +1,21 @@
+syntax = "proto3";
+package milkyway.services.v1;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/services/types";
+
+// Params defines the parameters for the module.
+message Params {
+
+  // ServiceRegistrationFee defines the fee to register a new service.
+  // The fee is drawn from the MsgRegisterService sender's account,
+  // and transferred to the community pool.
+  repeated cosmos.base.v1beta1.Coin service_registration_fee = 1 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.moretags) = "yaml:\"service_registration_fee\"",
+    (gogoproto.nullable) = false
+  ];
+}

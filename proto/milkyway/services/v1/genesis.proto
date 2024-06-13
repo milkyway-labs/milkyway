@@ -1,0 +1,24 @@
+syntax = "proto3";
+package milkyway.services.v1;
+
+import "gogoproto/gogo.proto";
+import "milkyway/services/v1/models.proto";
+import "milkyway/services/v1/params.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/services/types";
+
+// GenesisState defines the services module's genesis state.
+message GenesisState {
+  // Params defines the parameters of the module.
+  Params params = 1 [ (gogoproto.nullable) = false ];
+
+  // Services defines the list of services.
+  repeated Service services = 2 [
+    (gogoproto.moretags) = "yaml:\"services\"",
+    (gogoproto.nullable) = false
+  ];
+
+  // NextServiceID defines the ID that will be assigned to the
+  // next service that gets created.
+  uint32 next_service_id = 3 [ (gogoproto.customname) = "NextServiceID" ];
+}

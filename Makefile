@@ -219,9 +219,13 @@ clean:
     artifacts/ \
     tmp-swagger-gen/
 
-distclean: clean tools-clean
+###############################################################################
+###                                   Mocks                                 ###
+###############################################################################
+mockgen:
+	@./scripts/mockgen.sh
 
-.PHONY: distclean clean
+.PHONY: mocks
 
 ###############################################################################
 ###                           Tests & Simulation                            ###
@@ -284,7 +288,7 @@ lint-fix:
 .PHONY: lint lint-fix
 
 format:
-	find . -name '*.go' -type f -not -path "*.git*" -not -path "./client/docs/statik/statik.go" -not -path "./tests/mocks/*" -not -name '*.pb.go' | xargs gofmt -w -s
-	find . -name '*.go' -type f -not -path "*.git*" -not -path "./client/docs/statik/statik.go" -not -path "./tests/mocks/*" -not -name '*.pb.go' | xargs misspell -w
-	find . -name '*.go' -type f -not -path "*.git*" -not -path "./client/docs/statik/statik.go" -not -path "./tests/mocks/*" -not -name '*.pb.go' | xargs goimports -w -local github.com/milkyway-labs/milkyway
+	find . -name '*.go' -type f -not -path "*.git*" -not -path "./client/docs/statik/statik.go" -not -name "*_mocks.go" -not -name '*.pb.go' -not -name '*.pulsar.go' | xargs gofmt -w -s
+	find . -name '*.go' -type f -not -path "*.git*" -not -path "./client/docs/statik/statik.go" -not -name "*_mocks.go" -not -name '*.pb.go' -not -name '*.pulsar.go' | xargs misspell -w
+	find . -name '*.go' -type f -not -path "*.git*" -not -path "./client/docs/statik/statik.go" -not -name "*_mocks.go" -not -name '*.pb.go' -not -name '*.pulsar.go' | xargs goimports -w -local github.com/milkyway-labs/milkyway
 .PHONY: format
