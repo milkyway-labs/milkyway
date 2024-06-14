@@ -19,7 +19,7 @@ func (k *Keeper) PerformPoolDelegation(ctx sdk.Context, amount sdk.Coin, delegat
 	if err != nil {
 		return err
 	}
-	poolAddr, err := sdk.AccAddressFromBech32(pool.AccountAddress)
+	poolAddr, err := sdk.AccAddressFromBech32(pool.Address)
 	if err != nil {
 		return err
 	}
