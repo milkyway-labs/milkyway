@@ -33,7 +33,7 @@ require (
 	github.com/cosmos/interchain-security/v5 v5.0.0-rc0 // indirect
 	github.com/golang/mock v1.6.0
 	github.com/golang/protobuf v1.5.4
-	github.com/golangci/golangci-lint v1.58.1
+	github.com/golangci/golangci-lint v1.59.1
 	github.com/gorilla/mux v1.8.1
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/hashicorp/go-metrics v0.5.3
@@ -62,6 +62,8 @@ require (
 	gopkg.in/yaml.v2 v2.4.0
 )
 
+require go.uber.org/mock v0.4.0
+
 require (
 	4d63.com/gocheckcompilerdirectives v1.2.1 // indirect
 	4d63.com/gochecknoglobals v0.2.1 // indirect
@@ -78,9 +80,9 @@ require (
 	github.com/99designs/keyring v1.2.2 // indirect
 	github.com/Abirdcfly/dupword v0.0.14 // indirect
 	github.com/Antonboom/errname v0.1.13 // indirect
-	github.com/Antonboom/nilnil v0.1.8 // indirect
-	github.com/Antonboom/testifylint v1.2.0 // indirect
-	github.com/BurntSushi/toml v1.3.2 // indirect
+	github.com/Antonboom/nilnil v0.1.9 // indirect
+	github.com/Antonboom/testifylint v1.3.1 // indirect
+	github.com/BurntSushi/toml v1.4.0 // indirect
 	github.com/Crocmagnon/fatcontext v0.2.2 // indirect
 	github.com/DataDog/datadog-go v3.2.0+incompatible // indirect
 	github.com/DataDog/zstd v1.5.5 // indirect
@@ -155,7 +157,7 @@ require (
 	github.com/ethereum/c-kzg-4844 v1.0.0 // indirect
 	github.com/ethereum/go-ethereum v1.14.2 // indirect
 	github.com/ettle/strcase v0.2.0 // indirect
-	github.com/fatih/color v1.16.0 // indirect
+	github.com/fatih/color v1.17.0 // indirect
 	github.com/fatih/structtag v1.2.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/firefart/nonamedreturns v1.0.5 // indirect
@@ -163,7 +165,7 @@ require (
 	github.com/fzipp/gocyclo v0.6.0 // indirect
 	github.com/getsentry/sentry-go v0.27.0 // indirect
 	github.com/ghostiam/protogetter v0.3.6 // indirect
-	github.com/go-critic/go-critic v0.11.3 // indirect
+	github.com/go-critic/go-critic v0.11.4 // indirect
 	github.com/go-kit/kit v0.13.0 // indirect
 	github.com/go-kit/log v0.2.1 // indirect
 	github.com/go-logfmt/logfmt v0.6.0 // indirect
@@ -176,7 +178,7 @@ require (
 	github.com/go-toolsmith/astp v1.1.0 // indirect
 	github.com/go-toolsmith/strparse v1.1.0 // indirect
 	github.com/go-toolsmith/typep v1.1.0 // indirect
-	github.com/go-viper/mapstructure/v2 v2.0.0-alpha.1 // indirect
+	github.com/go-viper/mapstructure/v2 v2.0.0 // indirect
 	github.com/go-xmlfmt/xmlfmt v1.1.2 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/godbus/dbus v0.0.0-20190726142602-4481cbc300e2 // indirect
@@ -188,7 +190,7 @@ require (
 	github.com/golang/snappy v0.0.5-0.20220116011046-fa5810519dcb // indirect
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a // indirect
 	github.com/golangci/gofmt v0.0.0-20231018234816-f50ced29576e // indirect
-	github.com/golangci/misspell v0.5.1 // indirect
+	github.com/golangci/misspell v0.6.0 // indirect
 	github.com/golangci/modinfo v0.3.4 // indirect
 	github.com/golangci/plugin-module-register v0.1.1 // indirect
 	github.com/golangci/revgrep v0.5.3 // indirect
@@ -218,7 +220,7 @@ require (
 	github.com/hashicorp/go-immutable-radix v1.3.1 // indirect
 	github.com/hashicorp/go-plugin v1.5.2 // indirect
 	github.com/hashicorp/go-safetemp v1.0.0 // indirect
-	github.com/hashicorp/go-version v1.6.0 // indirect
+	github.com/hashicorp/go-version v1.7.0 // indirect
 	github.com/hashicorp/golang-lru v1.0.2 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/hashicorp/yamux v0.1.1 // indirect
@@ -248,7 +250,7 @@ require (
 	github.com/kulti/thelper v0.6.3 // indirect
 	github.com/kunwardeep/paralleltest v1.0.10 // indirect
 	github.com/kyoh86/exportloopref v0.1.11 // indirect
-	github.com/lasiar/canonicalheader v1.0.6 // indirect
+	github.com/lasiar/canonicalheader v1.1.1 // indirect
 	github.com/ldez/gomoddirectives v0.2.4 // indirect
 	github.com/ldez/tagliatelle v0.5.0 // indirect
 	github.com/leonklingele/grouper v1.1.2 // indirect
@@ -284,7 +286,7 @@ require (
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
 	github.com/petermattis/goid v0.0.0-20231207134359-e60b3f734c67 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
-	github.com/polyfloyd/go-errorlint v1.5.1 // indirect
+	github.com/polyfloyd/go-errorlint v1.5.2 // indirect
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.52.2 // indirect
 	github.com/prometheus/procfs v0.13.0 // indirect
@@ -306,8 +308,8 @@ require (
 	github.com/santhosh-tekuri/jsonschema/v5 v5.3.1 // indirect
 	github.com/sasha-s/go-deadlock v0.3.1 // indirect
 	github.com/sashamelentyev/interfacebloat v1.1.0 // indirect
-	github.com/sashamelentyev/usestdlibvars v1.25.0 // indirect
-	github.com/securego/gosec/v2 v2.19.0 // indirect
+	github.com/sashamelentyev/usestdlibvars v1.26.0 // indirect
+	github.com/securego/gosec/v2 v2.20.1-0.20240525090044-5f0084eb01a9 // indirect
 	github.com/shazow/go-diff v0.0.0-20160112020656-b6b7b6733b8c // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/sivchari/containedctx v1.0.3 // indirect
@@ -345,8 +347,8 @@ require (
 	github.com/zondax/hid v0.9.2 // indirect
 	github.com/zondax/ledger-go v0.14.3 // indirect
 	gitlab.com/bosi/decorder v0.4.2 // indirect
-	go-simpler.org/musttag v0.12.1 // indirect
-	go-simpler.org/sloglint v0.6.0 // indirect
+	go-simpler.org/musttag v0.12.2 // indirect
+	go-simpler.org/sloglint v0.7.1 // indirect
 	go.etcd.io/bbolt v1.3.8 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.47.0 // indirect
@@ -355,7 +357,6 @@ require (
 	go.opentelemetry.io/otel/metric v1.22.0 // indirect
 	go.opentelemetry.io/otel/trace v1.22.0 // indirect
 	go.uber.org/automaxprocs v1.5.3 // indirect
-	go.uber.org/mock v0.4.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/exp v0.0.0-20240404231335-c0f41cb1a7a0 // indirect
@@ -377,7 +378,7 @@ require (
 	gotest.tools/v3 v3.5.1 // indirect
 	honnef.co/go/tools v0.4.7 // indirect
 	mvdan.cc/gofumpt v0.6.0 // indirect
-	mvdan.cc/unparam v0.0.0-20240427195214-063aff900ca1 // indirect
+	mvdan.cc/unparam v0.0.0-20240528143540-8a5130ca722f // indirect
 	nhooyr.io/websocket v1.8.6 // indirect
 	pgregory.net/rapid v1.1.0 // indirect
 	rsc.io/tmplfunc v0.0.3 // indirect
