@@ -47,7 +47,6 @@ func (k msgServer) CreateService(goCtx context.Context, msg *types.MsgCreateServ
 		msg.Website,
 		msg.PictureURL,
 		msg.Sender,
-		serviceAddress.String(),
 	)
 
 	// Validate the service before storing
