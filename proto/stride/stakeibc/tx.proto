@@ -49,6 +49,7 @@ service Msg {
       returns (MsgToggleTradeControllerResponse);
   rpc UpdateHostZoneParams(MsgUpdateHostZoneParams)
       returns (MsgUpdateHostZoneParamsResponse);
+  rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
 }
 
 message MsgUpdateInnerRedemptionRateBounds {

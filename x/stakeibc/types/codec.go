@@ -26,6 +26,7 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgSetCommunityPoolRebate{}, "stakeibc/SetCommunityPoolRebate", nil)
 	cdc.RegisterConcrete(&MsgToggleTradeController{}, "stakeibc/ToggleTradeController", nil)
 	cdc.RegisterConcrete(&MsgUpdateHostZoneParams{}, "stakeibc/MsgUpdateHostZoneParams", nil)
+	cdc.RegisterConcrete(&MsgUpdateParams{}, "stakeibc/MsgUpdateParams", nil)
 }
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
@@ -47,6 +48,7 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 		&MsgSetCommunityPoolRebate{},
 		&MsgToggleTradeController{},
 		&MsgUpdateHostZoneParams{},
+		&MsgUpdateParams{},
 	)
 
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
