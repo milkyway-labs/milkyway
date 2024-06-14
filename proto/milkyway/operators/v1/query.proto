@@ -1,0 +1,65 @@
+syntax = "proto3";
+package milkyway.operators.v1;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "milkyway/operators/v1/models.proto";
+import "milkyway/operators/v1/params.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/operators/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Operator defines a gRPC query method that returns the operator by the given
+  // operator id.
+  rpc Operator(QueryOperatorRequest) returns (QueryOperatorResponse) {
+    option (google.api.http).get =
+        "/milkyway/operators/v1/operators/{operator_id}";
+  }
+
+  // Operators defines a gRPC query method that returns the list of operators.
+  rpc Operators(QueryOperatorsRequest) returns (QueryOperatorsResponse) {
+    option (google.api.http).get = "/milkyway/operators/v1/operators";
+  }
+
+  // Params defines a gRPC query method that returns the parameters of the
+  // module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/milkyway/operators/v1/params";
+  }
+}
+
+// QueryOperatorRequest is the request type for the Query/Operator RPC method.
+message QueryOperatorRequest {
+  // OperatorId is the ID of the operator to query
+  uint32 operator_id = 1;
+}
+
+// QueryOperatorResponse is the response type for the Query/Operator RPC method.
+message QueryOperatorResponse {
+  Operator operator = 1 [ (gogoproto.nullable) = false ];
+}
+
+// QueryOperatorsRequest is the request type for the Query/Operators RPC method.
+message QueryOperatorsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryOperatorsResponse is the response type for the Query/Operators RPC
+// method.
+message QueryOperatorsResponse {
+  // Operators is the list of operators
+  repeated Operator operators = 1 [ (gogoproto.nullable) = false ];
+
+  // Pagination defines the pagination response
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryParamsRequest is the request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is the response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  Params params = 1 [ (gogoproto.nullable) = false ];
+}

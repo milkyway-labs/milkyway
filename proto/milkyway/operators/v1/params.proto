@@ -1,0 +1,27 @@
+syntax = "proto3";
+package milkyway.operators.v1;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/operators/types";
+
+// Params defines the parameters for the operators module.
+message Params {
+
+  // OperatorRegistrationFee represents the fee that an operator must pay in
+  // order to register itself with the network.
+  // The fee is drawn from the MsgRegisterOperator sender's account and
+  // transferred to the community pool.
+  repeated cosmos.base.v1beta1.Coin operator_registration_fee = 1 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.moretags) = "yaml:\"operator_creation_fee\"",
+    (gogoproto.nullable) = false
+  ];
+
+  // DeactivationTime represents the amount of time that will pass between
+  // the time that an operator signals its willingness to deactivate and the
+  // time that it actually becomes inactive.
+  int64 deactivation_time = 2 [ (gogoproto.stdduration) = true ];
+}

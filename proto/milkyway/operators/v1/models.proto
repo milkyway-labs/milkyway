@@ -1,0 +1,52 @@
+syntax = "proto3";
+package milkyway.operators.v1;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/operators/types";
+
+// OperatorStatus defines the possible statuses of an operator
+enum OperatorStatus {
+  option (gogoproto.goproto_enum_prefix) = false;
+
+  // OPERATOR_STATUS_UNSPECIFIED defines an unspecified status
+  OPERATOR_STATUS_UNSPECIFIED = 0;
+
+  // OPERATOR_STATUS_ACTIVE identifies an active validator which is providing
+  // services
+  OPERATOR_STATUS_ACTIVE = 1;
+
+  // OPERATOR_STATUS_INACTIVATING identifies an operator that is in the process
+  // of becoming inactive
+  OPERATOR_STATUS_INACTIVATING = 2;
+
+  // OPERATOR_STATUS_INACTIVE defines an inactive operator that is not providing
+  // services
+  OPERATOR_STATUS_INACTIVE = 3;
+}
+
+// Service defines the fields of an operator
+message Operator {
+  // ID is the auto-generated unique identifier for the operator
+  uint32 id = 1 [ (gogoproto.customname) = "ID" ];
+
+  // Status is the status of the operator
+  OperatorStatus status = 2;
+
+  // Admin is the address of the user that can manage the operator
+  string admin = 3 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // Moniker is the identifier of the operator
+  string moniker = 4;
+
+  // Website is the website of the operator
+  string website = 5;
+
+  // PictureURL is the URL of the picture of the operator
+  string pictureURL = 6;
+
+  // Address is the address of the account associated to the operator.
+  // This will be used to store tokens that are delegated to this operator.
+  string address = 7 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+}

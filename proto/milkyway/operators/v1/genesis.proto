@@ -1,0 +1,44 @@
+syntax = "proto3";
+package milkyway.operators.v1;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+import "milkyway/operators/v1/models.proto";
+import "milkyway/operators/v1/params.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/operators/types";
+
+// GenesisState defines the operators module's genesis state.
+message GenesisState {
+  // Params defines the parameters of the module.
+  Params params = 1 [ (gogoproto.nullable) = false ];
+
+  // NextOperatorID defines the ID that will be assigned to the
+  // next operator that gets created.
+  uint32 next_operator_id = 2 [ (gogoproto.customname) = "NextOperatorID" ];
+
+  // Operators defines the list of operators.
+  repeated Operator operators = 3 [
+    (gogoproto.moretags) = "yaml:\"operators\"",
+    (gogoproto.nullable) = false
+  ];
+
+  // UnbondingOperators defines the list of operators that are currently being
+  // unbonded.
+  repeated UnbondingOperator unbonding_operators = 4 [
+    (gogoproto.moretags) = "yaml:\"unbonding_operators\"",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// UnbondingOperator contains the data about an operator that is currently being
+// unbonded.
+message UnbondingOperator {
+  // OperatorID is the ID of the operator that is being unbonded.
+  uint32 operator_id = 1 [ (gogoproto.customname) = "OperatorID" ];
+
+  // UnbondingCompletionTime is the time at which the unbonding of the operator
+  // will be completed
+  google.protobuf.Timestamp unbond_completion_time = 2
+      [ (gogoproto.stdtime) = true, (gogoproto.nullable) = false ];
+}
