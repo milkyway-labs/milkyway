@@ -6,6 +6,7 @@ import (
 	"cosmossdk.io/log"
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/codec"
 	runtimeservices "github.com/cosmos/cosmos-sdk/runtime/services"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
@@ -15,6 +16,12 @@ import (
 
 	"github.com/initia-labs/initia/app/params"
 )
+
+// MakeCodecs creates the necessary codecs for Amino and Protobuf
+func MakeCodecs() (codec.Codec, *codec.LegacyAmino) {
+	encodingConfig := MakeEncodingConfig()
+	return encodingConfig.Codec, encodingConfig.Amino
+}
 
 // MakeEncodingConfig creates an EncodingConfig for testing
 func MakeEncodingConfig() params.EncodingConfig {
