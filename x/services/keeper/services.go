@@ -3,6 +3,7 @@ package keeper
 import (
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/milkyway-labs/milkyway/x/services/types"
 )
@@ -48,6 +49,13 @@ func (k *Keeper) CreateService(ctx sdk.Context, service types.Service) error {
 			return err
 		}
 	}
+
+	// Create the service account
+	serviceAddress, err := sdk.AccAddressFromBech32(service.Address)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid service address: %s", service.Address)
+	}
+	k.createAccountIfNotExists(ctx, serviceAddress)
 
 	// Store the service
 	k.SaveService(ctx, service)

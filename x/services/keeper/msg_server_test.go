@@ -111,7 +111,11 @@ func (suite *KeeperTestSuite) TestMsgServer_CreateService() {
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				), stored)
 
-				// Make sure the next service account has been incremented
+				// Make sure the service account has been created properly
+				hasAccount := suite.ak.HasAccount(ctx, types.GetServiceAddress(1))
+				suite.Require().True(hasAccount)
+
+				// Make sure the next service id has been incremented
 				nextServiceID, err := suite.k.GetNextServiceID(ctx)
 				suite.Require().NoError(err)
 				suite.Require().Equal(uint32(2), nextServiceID)

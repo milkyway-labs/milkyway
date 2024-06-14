@@ -161,6 +161,10 @@ func (suite *KeeperTestSuite) TestKeeper_CreateService() {
 				poolBalance := suite.bk.GetBalance(ctx, authtypes.NewModuleAddress(authtypes.FeeCollectorName), "uatom")
 				suite.Require().Equal(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000)), poolBalance)
 
+				// Make sure the service account has been created
+				hasAccount := suite.ak.HasAccount(ctx, types.GetServiceAddress(1))
+				suite.Require().True(hasAccount)
+
 				// Make sure the service has been created
 				service, found := suite.k.GetService(ctx, 1)
 				suite.Require().True(found)

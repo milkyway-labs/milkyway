@@ -30,18 +30,25 @@ func TestValidateGenesis(t *testing.T) {
 			genesis: &types.GenesisState{
 				NextServiceID: 1,
 				Services: []types.Service{
-					{
-						ID:     1,
-						Status: types.SERVICE_STATUS_CREATED,
-						Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-						Name:   "MilkyWay",
-					},
-					{
-						ID:     1,
-						Status: types.SERVICE_STATUS_CREATED,
-						Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-						Name:   "MilkyWay",
-					}},
+					types.NewService(
+						1,
+						types.SERVICE_STATUS_ACTIVE,
+						"MilkyWay",
+						"MilkyWay is an AVS of a restaking platform",
+						"https://milkyway.com",
+						"https://milkyway.com/logo.png",
+						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					),
+					types.NewService(
+						1,
+						types.SERVICE_STATUS_ACTIVE,
+						"MilkyWay",
+						"MilkyWay is an AVS of a restaking platform",
+						"https://milkyway.com",
+						"https://milkyway.com/logo.png",
+						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					),
+				},
 				Params: types.DefaultParams(),
 			},
 			shouldErr: true,
@@ -51,18 +58,24 @@ func TestValidateGenesis(t *testing.T) {
 			genesis: &types.GenesisState{
 				NextServiceID: 1,
 				Services: []types.Service{
-					{
-						ID:     1,
-						Status: types.SERVICE_STATUS_CREATED,
-						Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-						Name:   "MilkyWay",
-					},
-					{
-						ID:     2,
-						Status: types.SERVICE_STATUS_UNSPECIFIED,
-						Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-						Name:   "IBC Relaying",
-					},
+					types.NewService(
+						1,
+						types.SERVICE_STATUS_ACTIVE,
+						"MilkyWay",
+						"MilkyWay is an AVS of a restaking platform",
+						"https://milkyway.com",
+						"https://milkyway.com/logo.png",
+						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					),
+					types.NewService(
+						2,
+						types.SERVICE_STATUS_UNSPECIFIED,
+						"Tucana",
+						"",
+						"",
+						"",
+						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					),
 				},
 				Params: types.DefaultParams(),
 			},
@@ -89,18 +102,24 @@ func TestValidateGenesis(t *testing.T) {
 			genesis: &types.GenesisState{
 				NextServiceID: 1,
 				Services: []types.Service{
-					{
-						ID:     1,
-						Status: types.SERVICE_STATUS_CREATED,
-						Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-						Name:   "MilkyWay",
-					},
-					{
-						ID:     2,
-						Status: types.SERVICE_STATUS_ACTIVE,
-						Admin:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-						Name:   "IBC Relaying",
-					},
+					types.NewService(
+						1,
+						types.SERVICE_STATUS_ACTIVE,
+						"MilkyWay",
+						"MilkyWay is an AVS of a restaking platform",
+						"https://milkyway.com",
+						"https://milkyway.com/logo.png",
+						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					),
+					types.NewService(
+						2,
+						types.SERVICE_STATUS_ACTIVE,
+						"Tucana",
+						"",
+						"",
+						"",
+						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					),
 				},
 				Params: types.NewParams(
 					sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, sdkmath.NewInt(10))),
