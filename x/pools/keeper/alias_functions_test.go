@@ -93,21 +93,23 @@ func (suite *KeeperTestSuite) TestKeeper_CreateOrGetPoolByDenom() {
 		{
 			name: "non existing pool is created properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextPoolID(ctx, 1)
+				suite.k.SetNextPoolID(ctx, 2)
+				err := suite.k.SavePool(ctx, types.NewPool(1, "unit"))
+				suite.Require().NoError(err)
 			},
 			denom:     "umilk",
 			shouldErr: false,
-			expPool:   types.NewPool(1, "umilk"),
+			expPool:   types.NewPool(2, "umilk"),
 			check: func(ctx sdk.Context) {
 				// Make sure the pool is stored properly
 				pool, found := suite.k.GetPoolByDenom(ctx, "umilk")
 				suite.Require().True(found)
-				suite.Require().Equal(types.NewPool(1, "umilk"), pool)
+				suite.Require().Equal(types.NewPool(2, "umilk"), pool)
 
 				// Make sure the next pool id has been incremented
 				nextPoolID, err := suite.k.GetNextPoolID(ctx)
 				suite.Require().NoError(err)
-				suite.Require().Equal(uint32(2), nextPoolID)
+				suite.Require().Equal(uint32(3), nextPoolID)
 			},
 		},
 	}
