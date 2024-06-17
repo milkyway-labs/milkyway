@@ -79,3 +79,49 @@ func (suite *KeeperTestSuite) TestValidPoolsInvariant() {
 		})
 	}
 }
+
+func (suite *KeeperTestSuite) TestUniquePoolsInvariant() {
+	testCases := []struct {
+		name      string
+		setup     func()
+		store     func(ctx sdk.Context)
+		expBroken bool
+	}{
+		{
+			name: "duplicated pools break invariant",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SavePool(ctx, types.NewPool(1, "umilk"))
+				suite.Require().NoError(err)
+				err = suite.k.SavePool(ctx, types.NewPool(2, "umilk"))
+				suite.Require().NoError(err)
+			},
+			expBroken: true,
+		},
+		{
+			name: "valid data does not break invariant",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SavePool(ctx, types.NewPool(1, "umilk"))
+				suite.Require().NoError(err)
+				err = suite.k.SavePool(ctx, types.NewPool(2, "unit"))
+				suite.Require().NoError(err)
+			},
+			expBroken: false,
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.setup != nil {
+				tc.setup()
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			_, broken := keeper.UniquePoolsInvariant(suite.k)(ctx)
+			suite.Require().Equal(tc.expBroken, broken)
+		})
+	}
+}
