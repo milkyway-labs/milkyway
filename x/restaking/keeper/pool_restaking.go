@@ -9,36 +9,29 @@ import (
 )
 
 // SavePoolDelegation stores the given pool delegation in the store
-func (k *Keeper) SavePoolDelegation(ctx sdk.Context, delegation types.PoolDelegation) error {
+func (k *Keeper) SavePoolDelegation(ctx sdk.Context, delegation types.PoolDelegation) {
 	store := ctx.KVStore(k.storeKey)
 
-	delegationBz, err := k.cdc.Marshal(&delegation)
-	if err != nil {
-		return err
-	}
+	// Marshal and store the delegation
+	delegationBz := types.MustMarshalPoolDelegation(k.cdc, delegation)
+	store.Set(types.UserPoolDelegationStoreKey(delegation.UserAddress, delegation.PoolID), delegationBz)
 
-	store.Set(types.UserPoolDelegationStoreKey(delegation.PoolID, delegation.UserAddress), delegationBz)
-	return nil
+	// Store the delegation in the delegations by pool ID store
+	store.Set(types.DelegationsByPoolIDStoreKey(delegation.PoolID, delegation.UserAddress), []byte{})
 }
 
 // GetPoolDelegation retrieves the delegation for the given user and pool
 // If the delegation does not exist, false is returned instead
-func (k *Keeper) GetPoolDelegation(ctx sdk.Context, poolID uint32, userAddress string) (types.PoolDelegation, bool, error) {
+func (k *Keeper) GetPoolDelegation(ctx sdk.Context, poolID uint32, userAddress string) (types.PoolDelegation, bool) {
 	// Get the delegation amount from the store
 	store := ctx.KVStore(k.storeKey)
-	delegationAmountBz := store.Get(types.UserPoolDelegationStoreKey(poolID, userAddress))
+	delegationAmountBz := store.Get(types.UserPoolDelegationStoreKey(userAddress, poolID))
 	if delegationAmountBz == nil {
-		return types.PoolDelegation{}, false, nil
+		return types.PoolDelegation{}, false
 	}
 
 	// Parse the delegation amount
-	var delegation types.PoolDelegation
-	err := k.cdc.Unmarshal(delegationAmountBz, &delegation)
-	if err != nil {
-		return types.PoolDelegation{}, false, err
-	}
-
-	return delegation, true, nil
+	return types.MustUnmarshalPoolDelegation(k.cdc, delegationAmountBz), true
 }
 
 // AddPoolTokensAndShares adds the given amount of tokens to the pool and returns the added shares
@@ -72,10 +65,7 @@ func (k *Keeper) DelegateToPool(ctx sdk.Context, amount sdk.Coin, delegator stri
 	}
 
 	// Get or create the delegation object and call the appropriate hook if present
-	delegation, found, err := k.GetPoolDelegation(ctx, pool.ID, delegator)
-	if err != nil {
-		return sdkmath.LegacyZeroDec(), err
-	}
+	delegation, found := k.GetPoolDelegation(ctx, pool.ID, delegator)
 
 	if found {
 		// Delegation was found
@@ -120,10 +110,7 @@ func (k *Keeper) DelegateToPool(ctx sdk.Context, amount sdk.Coin, delegator stri
 
 	// Update delegation
 	delegation.Shares = delegation.Shares.Add(newShares)
-	err = k.SavePoolDelegation(ctx, delegation)
-	if err != nil {
-		return newShares, err
-	}
+	k.SavePoolDelegation(ctx, delegation)
 
 	// Call the after-modification hook
 	err = k.AfterPoolDelegationModified(ctx, pool.ID, delegator)

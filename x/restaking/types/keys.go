@@ -1,9 +1,8 @@
 package types
 
 import (
-	"time"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"bytes"
+	"fmt"
 
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 )
@@ -18,6 +17,7 @@ var (
 
 	PoolDelegationPrefix          = []byte{0xa1}
 	UnbondingPoolDelegationPrefix = []byte{0xa2}
+	PoolDelegationsByPoolIDPrefix = []byte{0x71}
 
 	ServiceDelegationPrefix          = []byte{0xb1}
 	UnbondingServiceDelegationPrefix = []byte{0xb2}
@@ -26,30 +26,42 @@ var (
 	UnbondingOperatorDelegationPrefix = []byte{0xc2}
 )
 
-// PoolDelegationsStorePrefix returns the prefix used to store all the delegations to a given pool
-func PoolDelegationsStorePrefix(poolID uint32) []byte {
-	return append(PoolDelegationPrefix, poolstypes.GetPoolIDBytes(poolID)...)
+// UserPoolDelegationsStorePrefix returns the prefix used to store all the delegations to a given pool
+func UserPoolDelegationsStorePrefix(userAddress string) []byte {
+	return append(PoolDelegationPrefix, []byte(userAddress)...)
 }
 
 // UserPoolDelegationStoreKey returns the key used to store the delegation of a user to a given pool
-func UserPoolDelegationStoreKey(poolID uint32, delegator string) []byte {
-	return append(PoolDelegationsStorePrefix(poolID), []byte(delegator)...)
+func UserPoolDelegationStoreKey(delegator string, poolID uint32) []byte {
+	return append(UserPoolDelegationsStorePrefix(delegator), poolstypes.GetPoolIDBytes(poolID)...)
 }
 
-// UnbondingDelegationsByTimeStorePrefix returns the prefix used to store all the unbonding delegations
-// that expire at the given time
-func UnbondingDelegationsByTimeStorePrefix(endTime time.Time) []byte {
-	return append(UnbondingPoolDelegationPrefix, sdk.FormatTimeBytes(endTime)...)
+// DelegationsByPoolIDStorePrefix returns the prefix used to store the delegations to a given pool
+func DelegationsByPoolIDStorePrefix(poolID uint32) []byte {
+	return append(PoolDelegationsByPoolIDPrefix, poolstypes.GetPoolIDBytes(poolID)...)
 }
 
-// UnbondingPoolDelegationsStorePrefix returns the prefix used to store all the unbonding delegations
-// to a given pool that expire at the given time
-func UnbondingPoolDelegationsStorePrefix(poolID uint32, endTime time.Time) []byte {
-	return append(UnbondingDelegationsByTimeStorePrefix(endTime), poolstypes.GetPoolIDBytes(poolID)...)
+// DelegationsByPoolIDStoreKey returns the key used to store the delegations to a given pool
+func DelegationsByPoolIDStoreKey(poolID uint32, delegatorAddress string) []byte {
+	return append(DelegationsByPoolIDStorePrefix(poolID), []byte(delegatorAddress)...)
 }
 
-// UserUnbondingPoolDelegationStoreKey returns the key used to store the unbonding delegation of a user
-// to a given pool that expires at the given time
-func UserUnbondingPoolDelegationStoreKey(poolID uint32, delegator string, endTime time.Time) []byte {
-	return append(UnbondingPoolDelegationsStorePrefix(poolID, endTime), []byte(delegator)...)
+// ParseDelegationsByPoolIDKey parses the pool ID and delegator address from the given key
+func ParseDelegationsByPoolIDKey(bz []byte) (poolID uint32, delegatorAddress string, err error) {
+	prefixLength := len(PoolDelegationsByPoolIDPrefix)
+	if prefix := bz[:prefixLength]; !bytes.Equal(prefix, PoolDelegationsByPoolIDPrefix) {
+		return 0, "", fmt.Errorf("invalid prefix; expected: %X, got: %x", PoolDelegationsByPoolIDPrefix, prefix)
+	}
+
+	// Remove the prefix
+	bz = bz[prefixLength:]
+
+	// Read the pool ID
+	poolID = poolstypes.GetPoolIDFromBytes(bz[:4])
+	bz = bz[4:]
+
+	// Read the delegator address
+	delegatorAddress = string(bz)
+
+	return poolID, delegatorAddress, nil
 }
