@@ -5,7 +5,6 @@ import (
 	"time"
 
 	sdkmath "cosmossdk.io/math"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
@@ -20,11 +19,11 @@ func TestGenesis_Validate(t *testing.T) {
 		{
 			name: "invalid pool delegation entry returns error",
 			genesis: types.NewGenesis(
-				[]types.PoolDelegationEntry{
-					types.NewPoolDelegationEntry(
+				[]types.PoolDelegation{
+					types.NewPoolDelegation(
 						0,
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-						sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+						sdkmath.LegacyNewDec(100),
 					),
 				},
 				nil,
@@ -37,11 +36,11 @@ func TestGenesis_Validate(t *testing.T) {
 			name: "invalid service delegation entry returns error",
 			genesis: types.NewGenesis(
 				nil,
-				[]types.ServiceDelegationEntry{
-					types.NewServiceDelegationEntry(
+				[]types.ServiceDelegation{
+					types.NewServiceDelegation(
 						0,
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-						sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+						sdkmath.LegacyNewDec(100),
 					),
 				},
 				nil,
@@ -54,11 +53,11 @@ func TestGenesis_Validate(t *testing.T) {
 			genesis: types.NewGenesis(
 				nil,
 				nil,
-				[]types.OperatorDelegationEntry{
-					types.NewOperatorDelegationEntry(
+				[]types.OperatorDelegation{
+					types.NewOperatorDelegation(
 						0,
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-						sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+						sdkmath.LegacyNewDec(100),
 					),
 				},
 				types.DefaultParams(),
@@ -83,25 +82,25 @@ func TestGenesis_Validate(t *testing.T) {
 		{
 			name: "valid genesis returns no error",
 			genesis: types.NewGenesis(
-				[]types.PoolDelegationEntry{
-					types.NewPoolDelegationEntry(
+				[]types.PoolDelegation{
+					types.NewPoolDelegation(
 						1,
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-						sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+						sdkmath.LegacyNewDec(100),
 					),
 				},
-				[]types.ServiceDelegationEntry{
-					types.NewServiceDelegationEntry(
+				[]types.ServiceDelegation{
+					types.NewServiceDelegation(
 						2,
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-						sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+						sdkmath.LegacyNewDec(100),
 					),
 				},
-				[]types.OperatorDelegationEntry{
-					types.NewOperatorDelegationEntry(
+				[]types.OperatorDelegation{
+					types.NewOperatorDelegation(
 						3,
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-						sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+						sdkmath.LegacyNewDec(100),
 					),
 				},
 				types.NewParams(5*24*time.Hour),
@@ -124,45 +123,45 @@ func TestGenesis_Validate(t *testing.T) {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-func TestPoolDelegationEntry_Validate(t *testing.T) {
+func TestPoolDelegation_Validate(t *testing.T) {
 	testCases := []struct {
 		name      string
-		entry     types.PoolDelegationEntry
+		entry     types.PoolDelegation
 		shouldErr bool
 	}{
 		{
 			name: "invalid pool id returns error",
-			entry: types.NewPoolDelegationEntry(
+			entry: types.NewPoolDelegation(
 				0,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+				sdkmath.LegacyNewDec(100),
 			),
 			shouldErr: true,
 		},
 		{
 			name: "invalid user address returns error",
-			entry: types.NewPoolDelegationEntry(
+			entry: types.NewPoolDelegation(
 				1,
 				"",
-				sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+				sdkmath.LegacyNewDec(100),
 			),
 			shouldErr: true,
 		},
 		{
-			name: "invalid amount returns error",
-			entry: types.NewPoolDelegationEntry(
+			name: "invalid shares returns error",
+			entry: types.NewPoolDelegation(
 				1,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				sdk.Coin{},
+				sdkmath.LegacyNewDec(-100),
 			),
 			shouldErr: true,
 		},
 		{
 			name: "valid entry returns no error",
-			entry: types.NewPoolDelegationEntry(
+			entry: types.NewPoolDelegation(
 				1,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+				sdkmath.LegacyNewDec(100),
 			),
 			shouldErr: false,
 		},
@@ -182,45 +181,45 @@ func TestPoolDelegationEntry_Validate(t *testing.T) {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-func TestServiceDelegationEntry_Validate(t *testing.T) {
+func TestServiceDelegation_Validate(t *testing.T) {
 	testCases := []struct {
 		name      string
-		entry     types.ServiceDelegationEntry
+		entry     types.ServiceDelegation
 		shouldErr bool
 	}{
 		{
 			name: "invalid service id returns error",
-			entry: types.NewServiceDelegationEntry(
+			entry: types.NewServiceDelegation(
 				0,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+				sdkmath.LegacyNewDec(100),
 			),
 			shouldErr: true,
 		},
 		{
 			name: "invalid user address returns error",
-			entry: types.NewServiceDelegationEntry(
+			entry: types.NewServiceDelegation(
 				1,
 				"",
-				sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+				sdkmath.LegacyNewDec(100),
 			),
 			shouldErr: true,
 		},
 		{
-			name: "invalid amount returns error",
-			entry: types.NewServiceDelegationEntry(
+			name: "invalid shares returns error",
+			entry: types.NewServiceDelegation(
 				1,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				sdk.Coin{},
+				sdkmath.LegacyNewDec(-100),
 			),
 			shouldErr: true,
 		},
 		{
 			name: "valid entry returns no error",
-			entry: types.NewServiceDelegationEntry(
+			entry: types.NewServiceDelegation(
 				1,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+				sdkmath.LegacyNewDec(100),
 			),
 			shouldErr: false,
 		},
@@ -240,45 +239,45 @@ func TestServiceDelegationEntry_Validate(t *testing.T) {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-func TestOperatorDelegationEntry_Validate(t *testing.T) {
+func TestOperatorDelegation_Validate(t *testing.T) {
 	testCases := []struct {
 		name      string
-		entry     types.OperatorDelegationEntry
+		entry     types.OperatorDelegation
 		shouldErr bool
 	}{
 		{
 			name: "invalid operator id returns error",
-			entry: types.NewOperatorDelegationEntry(
+			entry: types.NewOperatorDelegation(
 				0,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+				sdkmath.LegacyNewDec(100),
 			),
 			shouldErr: true,
 		},
 		{
 			name: "invalid user address returns error",
-			entry: types.NewOperatorDelegationEntry(
+			entry: types.NewOperatorDelegation(
 				1,
 				"",
-				sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+				sdkmath.LegacyNewDec(100),
 			),
 			shouldErr: true,
 		},
 		{
-			name: "invalid amount returns error",
-			entry: types.NewOperatorDelegationEntry(
+			name: "invalid shares returns error",
+			entry: types.NewOperatorDelegation(
 				1,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				sdk.Coin{},
+				sdkmath.LegacyNewDec(-100),
 			),
 			shouldErr: true,
 		},
 		{
 			name: "valid entry returns no error",
-			entry: types.NewOperatorDelegationEntry(
+			entry: types.NewOperatorDelegation(
 				1,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+				sdkmath.LegacyNewDec(100),
 			),
 			shouldErr: false,
 		},

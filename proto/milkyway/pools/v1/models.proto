@@ -20,15 +20,15 @@ message Pool {
 
   // Tokens define the delegated tokens.
   string tokens = 4 [
-    (cosmos_proto.scalar)  = "cosmos.Int",
+    (cosmos_proto.scalar) = "cosmos.Int",
     (gogoproto.customtype) = "cosmossdk.io/math.Int",
-    (gogoproto.nullable)   = false
+    (gogoproto.nullable) = false
   ];
 
   // DelegatorShares defines total shares issued to a pool's delegators.
   string delegator_shares = 5 [
-    (cosmos_proto.scalar)  = "cosmos.Dec",
+    (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable)   = false
+    (gogoproto.nullable) = false
   ];
 }

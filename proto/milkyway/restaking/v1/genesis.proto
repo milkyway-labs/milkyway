@@ -3,6 +3,7 @@ package milkyway.restaking.v1;
 
 import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
+import "milkyway/restaking/v1/models.proto";
 import "milkyway/restaking/v1/params.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/restaking/types";
@@ -13,58 +14,14 @@ message GenesisState {
   Params params = 1 [ (gogoproto.nullable) = false ];
 
   // PoolDelegations represents the delegations to pools.
-  repeated PoolDelegationEntry pools_delegations = 2
+  repeated PoolDelegation pools_delegations = 2
       [ (gogoproto.nullable) = false ];
 
   // ServiceDelegations represents the delegations to services.
-  repeated ServiceDelegationEntry services_delegations = 3
+  repeated ServiceDelegation services_delegations = 3
       [ (gogoproto.nullable) = false ];
 
   // OperatorDelegations represents the delegations to operators.
-  repeated OperatorDelegationEntry operators_delegations = 4
+  repeated OperatorDelegation operators_delegations = 4
       [ (gogoproto.nullable) = false ];
-}
-
-// PoolDelegationEntry contains the data of a single restake delegation to a
-// pool.
-message PoolDelegationEntry {
-  // PoolID represents the ID of the pool to which the tokens have been restaked
-  uint32 pool_id = 1 [ (gogoproto.customname) = "PoolID" ];
-
-  // UserAddress represents the address of the user who has restaked the tokens
-  string user_address = 2;
-
-  // Amount represents the amount of tokens that have been restaked
-  cosmos.base.v1beta1.Coin amount = 3
-      [ (gogoproto.customname) = "Amount", (gogoproto.nullable) = false ];
-}
-
-// ServiceDelegationEntry contains the data of a single restake delegation to a
-// service.
-message ServiceDelegationEntry {
-  // ServiceID represents the ID of the service to which the tokens have been
-  // restaked
-  uint32 service_id = 1 [ (gogoproto.customname) = "ServiceID" ];
-
-  // UserAddress represents the address of the user who has restaked the tokens
-  string user_address = 2;
-
-  // Amount represents the amount of tokens that have been restaked
-  cosmos.base.v1beta1.Coin amount = 3
-      [ (gogoproto.customname) = "Amount", (gogoproto.nullable) = false ];
-}
-
-// OperatorDelegationEntry contains the data of a single restake delegation to
-// an operator.
-message OperatorDelegationEntry {
-  // OperatorID represents the ID of the operator to which the tokens have been
-  // restaked
-  uint32 operator_id = 1 [ (gogoproto.customname) = "OperatorID" ];
-
-  // UserAddress represents the address of the user who has restaked the tokens
-  string user_address = 2;
-
-  // Amount represents the amount of tokens that have been restaked
-  cosmos.base.v1beta1.Coin amount = 3
-      [ (gogoproto.customname) = "Amount", (gogoproto.nullable) = false ];
 }

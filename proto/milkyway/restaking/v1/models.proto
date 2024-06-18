@@ -14,11 +14,52 @@ message PoolDelegation {
   option (gogoproto.goproto_getters) = false;
 
   // UserAddress is the encoded address of the user.
-  string user_address = 1
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string user_address = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
   // PoolID is the id of the pool.
   uint32 pool_id = 2 [ (gogoproto.customname) = "PoolID" ];
+
+  // Shares define the delegation shares received.
+  string shares = 3 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// OperatorDelegation represents the bond with tokens held by an account with a
+// given operator. It is owned by one delegator, and is associated with a
+// operator.
+message OperatorDelegation {
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  // UserAddress is the encoded address of the user.
+  string user_address = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // OperatorID is the id of the operator.
+  uint32 operator_id = 2 [ (gogoproto.customname) = "OperatorID" ];
+
+  // Shares define the delegation shares received.
+  string shares = 3 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// ServiceDelegation represents the bond with tokens held by an account with a
+// given service. It is owned by one delegator, and is associated with a
+// service.
+message ServiceDelegation {
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  // UserAddress is the encoded address of the user.
+  string user_address = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // ServiceID is the id of the service.
+  uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
 
   // Shares define the delegation shares received.
   string shares = 3 [
