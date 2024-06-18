@@ -1,0 +1,62 @@
+syntax = "proto3";
+package milkyway.pools.v1;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "milkyway/pools/v1/models.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/pools/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // PoolById defines a gRPC query method that returns the pool by the given ID.
+  rpc PoolById(QueryPoolByIdRequest) returns (QueryPoolResponse) {
+    option (google.api.http).get = "/milkyway/pool/v1/pool/{pool_id}";
+  }
+
+  // PoolByDenom defines a gRPC query method that returns the pool by the given
+  // denom.
+  rpc PoolByDenom(QueryPoolByDenomRequest) returns (QueryPoolResponse) {
+    option (google.api.http).get = "/milkyway/pool/v1/pool/denom/{denom}";
+  }
+
+  // Pools defines a gRPC query method that returns all pools.
+  rpc Pools(QueryPoolsRequest) returns (QueryPoolsResponse) {
+    option (google.api.http).get = "/milkyway/pool/v1/pools";
+  }
+}
+
+// QueryPoolByIdRequest is the request type for the Query/PoolById RPC method.
+message QueryPoolByIdRequest {
+  // PoolID is the ID of the pool to query
+  uint32 pool_id = 1;
+}
+
+// QueryPoolByDenomRequest is the request type for the Query/PollByDenom RPC
+// method.
+message QueryPoolByDenomRequest {
+  // Denom is the denom for which the pool is to be queried
+  string denom = 1;
+}
+
+// QueryOperatorRPoolsesponse is the response type for the Query/PoolById and
+// Query/PoolByDenom RPC methods.
+message QueryPoolResponse {
+  // Pool is the queried pool
+  Pool pool = 1 [ (gogoproto.nullable) = false ];
+}
+
+// QueryPoolsRequest is the request type for the Query/Pools RPC method.
+message QueryPoolsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryPoolsResponse is the response type for the Query/Pools RPC method.
+message QueryPoolsResponse {
+  // Pools is the list of pool
+  repeated Pool pools = 1 [ (gogoproto.nullable) = false ];
+
+  // Pagination defines the pagination response
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}

@@ -1,0 +1,20 @@
+syntax = "proto3";
+package milkyway.pools.v1;
+
+import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/pools/types";
+
+// Pool defines the structure of a restaking pool
+message Pool {
+  // ID is the auto-generated unique identifier for the pool
+  uint32 id = 1 [ (gogoproto.customname) = "ID" ];
+
+  // Denom represents the denomination of the tokens that are staked in the pool
+  string denom = 2;
+
+  // Address represents the address of the account that is associated with this
+  // pool. This will be used to store tokens that users delegate to this pool.
+  string address = 3 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+}
