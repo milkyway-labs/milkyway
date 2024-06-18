@@ -31,7 +31,7 @@ func UserPoolDelegationsStorePrefix(userAddress string) []byte {
 	return append(PoolDelegationPrefix, []byte(userAddress)...)
 }
 
-// UserPoolDelegationStoreKey returns the key used to store the delegation of a user to a given pool
+// UserPoolDelegationStoreKey returns the key used to store the user -> pool delegation association
 func UserPoolDelegationStoreKey(delegator string, poolID uint32) []byte {
 	return append(UserPoolDelegationsStorePrefix(delegator), poolstypes.GetPoolIDBytes(poolID)...)
 }
@@ -41,8 +41,8 @@ func DelegationsByPoolIDStorePrefix(poolID uint32) []byte {
 	return append(PoolDelegationsByPoolIDPrefix, poolstypes.GetPoolIDBytes(poolID)...)
 }
 
-// DelegationsByPoolIDStoreKey returns the key used to store the delegations to a given pool
-func DelegationsByPoolIDStoreKey(poolID uint32, delegatorAddress string) []byte {
+// DelegationByPoolIDStoreKey returns the key used to store the pool -> user delegation association
+func DelegationByPoolIDStoreKey(poolID uint32, delegatorAddress string) []byte {
 	return append(DelegationsByPoolIDStorePrefix(poolID), []byte(delegatorAddress)...)
 }
 

@@ -102,5 +102,49 @@ func (suite *KeeperTestSuite) SetupTest() {
 		suite.bk,
 		suite.pk,
 		authorityAddr,
-	)
+	).SetHooks(newMockHooks())
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// fundAccount adds the given amount of coins to the account with the given address
+func (suite *KeeperTestSuite) fundAccount(ctx sdk.Context, address string, amount sdk.Coins) {
+	// Mint the coins
+	moduleAcc := suite.ak.GetModuleAccount(ctx, authtypes.Minter)
+
+	err := suite.bk.MintCoins(ctx, moduleAcc.GetName(), amount)
+	suite.Require().NoError(err)
+
+	// Get the amount to the user
+	userAddress, err := sdk.AccAddressFromBech32(address)
+	suite.Require().NoError(err)
+	err = suite.bk.SendCoinsFromModuleToAccount(ctx, moduleAcc.GetName(), userAddress, amount)
+	suite.Require().NoError(err)
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+var _ types.RestakingHooks = &mockHooks{}
+
+type mockHooks struct {
+	CalledMap map[string]bool
+}
+
+func newMockHooks() *mockHooks {
+	return &mockHooks{CalledMap: make(map[string]bool)}
+}
+
+func (m mockHooks) BeforePoolDelegationCreated(ctx sdk.Context, poolID uint32, delegator string) error {
+	m.CalledMap["BeforePoolDelegationCreated"] = true
+	return nil
+}
+
+func (m mockHooks) BeforePoolDelegationSharesModified(ctx sdk.Context, poolID uint32, delegator string) error {
+	m.CalledMap["BeforePoolDelegationSharesModified"] = true
+	return nil
+}
+
+func (m mockHooks) AfterPoolDelegationModified(ctx sdk.Context, poolID uint32, delegator string) error {
+	m.CalledMap["AfterPoolDelegationModified"] = true
+	return nil
 }

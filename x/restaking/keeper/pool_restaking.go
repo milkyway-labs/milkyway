@@ -17,7 +17,7 @@ func (k *Keeper) SavePoolDelegation(ctx sdk.Context, delegation types.PoolDelega
 	store.Set(types.UserPoolDelegationStoreKey(delegation.UserAddress, delegation.PoolID), delegationBz)
 
 	// Store the delegation in the delegations by pool ID store
-	store.Set(types.DelegationsByPoolIDStoreKey(delegation.PoolID, delegation.UserAddress), []byte{})
+	store.Set(types.DelegationByPoolIDStoreKey(delegation.PoolID, delegation.UserAddress), []byte{})
 }
 
 // GetPoolDelegation retrieves the delegation for the given user and pool
