@@ -147,6 +147,7 @@ import (
 	apphook "github.com/milkyway-labs/milkyway/app/hook"
 	ibcwasmhooks "github.com/milkyway-labs/milkyway/app/ibc-hooks"
 	appkeepers "github.com/milkyway-labs/milkyway/app/keepers"
+	"github.com/milkyway-labs/milkyway/utils"
 	"github.com/milkyway-labs/milkyway/x/bank"
 	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
 	"github.com/milkyway-labs/milkyway/x/epochs"
@@ -401,7 +402,7 @@ func NewMilkyWayApp(
 		appCodec,
 		runtime.NewKVStoreService(keys[banktypes.StoreKey]),
 		app.AccountKeeper,
-		app.ModuleAccountAddrs(),
+		app.BlacklistedModuleAccountAddrs(),
 		authorityAddr,
 		logger,
 	)
@@ -1252,6 +1253,21 @@ func (app *MilkyWayApp) ModuleAccountAddrs() map[string]bool {
 		modAccAddrs[authtypes.NewModuleAddress(acc).String()] = true
 	}
 
+	return modAccAddrs
+}
+
+// ModuleAccountAddrs returns all the app's module account addresses.
+func (app *MilkyWayApp) BlacklistedModuleAccountAddrs() map[string]bool {
+	modAccAddrs := make(map[string]bool)
+	// DO NOT REMOVE: StringMapKeys fixes non-deterministic map iteration
+	for _, acc := range utils.StringMapKeys(maccPerms) {
+		// don't blacklist stakeibc module account, so that it can ibc transfer tokens
+		if acc == stakeibctypes.ModuleName ||
+			acc == stakeibctypes.RewardCollectorName {
+			continue
+		}
+		modAccAddrs[authtypes.NewModuleAddress(acc).String()] = true
+	}
 	return modAccAddrs
 }
 
