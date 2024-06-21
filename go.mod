@@ -37,8 +37,8 @@ require (
 	github.com/gorilla/mux v1.8.1
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/hashicorp/go-metrics v0.5.3
-	github.com/initia-labs/OPinit v0.2.9
-	github.com/initia-labs/initia v0.2.10
+	github.com/initia-labs/OPinit v0.3.1
+	github.com/initia-labs/initia v0.3.2
 	github.com/initia-labs/kvindexer v0.1.3
 	github.com/initia-labs/kvindexer/submodules/block v0.1.0
 	github.com/initia-labs/kvindexer/submodules/tx v0.1.0
@@ -48,7 +48,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.19.1
 	github.com/rakyll/statik v0.1.7
-	github.com/skip-mev/block-sdk/v2 v2.1.1
+	github.com/skip-mev/block-sdk/v2 v2.1.2
 	github.com/skip-mev/slinky v1.0.3
 	github.com/spf13/cast v1.6.0
 	github.com/spf13/cobra v1.8.1
@@ -238,7 +238,7 @@ require (
 	github.com/iancoleman/strcase v0.3.0 // indirect
 	github.com/improbable-eng/grpc-web v0.15.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/initia-labs/OPinit/api v0.2.6 // indirect
+	github.com/initia-labs/OPinit/api v0.3.0 // indirect
 	github.com/jgautheron/goconst v1.7.1 // indirect
 	github.com/jingyugao/rowserrcheck v1.1.1 // indirect
 	github.com/jirfag/go-printf-func-name v0.0.0-20200119135958-7558a9eaa5af // indirect
