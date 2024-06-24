@@ -9,7 +9,6 @@ option go_package = "github.com/milkyway-labs/milkyway/x/services/types";
 
 // Params defines the parameters for the module.
 message Params {
-
   // ServiceRegistrationFee defines the fee to register a new service.
   // The fee is drawn from the MsgRegisterService sender's account,
   // and transferred to the community pool.

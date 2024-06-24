@@ -31,7 +31,8 @@ func GetTxCmd() *cobra.Command {
 
 	subspacesTxCmd.AddCommand(
 		GetCmdCreateService(),
-		GetCmdEditService(),
+		GetCmdUpdateService(),
+		GetCmdActivateService(),
 		GetCmdDeactivateService(),
 	)
 
@@ -96,13 +97,13 @@ The service will be created with the sender as the owner.`,
 	return cmd
 }
 
-// GetCmdEditService returns the command allowing to edit an existing service
-func GetCmdEditService() *cobra.Command {
+// GetCmdUpdateService returns the command allowing to update an existing service
+func GetCmdUpdateService() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "edit [id]",
+		Use:   "update [id]",
 		Args:  cobra.ExactArgs(1),
-		Short: "Edit an existing service",
-		Long: `Edit an existing service having the provided it. 
+		Short: "Update an existing service",
+		Long: `Update an existing service having the provided it. 
 
 You can specify a description, website and a picture URL using the optional flags.
 Only the fields that you provide will be updated`,
@@ -158,6 +159,41 @@ Only the fields that you provide will be updated`,
 	cmd.Flags().String(flagDescription, types.DoNotModify, "The new description of the service (optional)")
 	cmd.Flags().String(flagWebsite, types.DoNotModify, "The new website of the service (optional)")
 	cmd.Flags().String(flagPicture, types.DoNotModify, "The new picture URL of the service (optional)")
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// GetCmdActivateService returns the command allowing to activate an existing service
+func GetCmdActivateService() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "activate [id]",
+		Args:    cobra.ExactArgs(1),
+		Short:   "Activate an existing service",
+		Example: fmt.Sprintf(`%s tx %s activate 1 --from alice`, version.AppName, types.ModuleName),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			id, err := types.ParseServiceID(args[0])
+			if err != nil {
+				return err
+			}
+
+			creator := clientCtx.FromAddress.String()
+
+			// Create and validate the message
+			msg := types.NewMsgActivateService(id, creator)
+			if err = msg.ValidateBasic(); err != nil {
+				return fmt.Errorf("message validation failed: %w", err)
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
 
 	flags.AddTxFlagsToCmd(cmd)
 
