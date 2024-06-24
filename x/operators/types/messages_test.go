@@ -95,7 +95,7 @@ func TestMsgRegisterOperator_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgRegisterOperator_GetSignBytes(t *testing.T) {
-	expected := `{"type":"milkyway/MsgRegisterOperator","value":{"moniker":"MilkyWay Operator","picture_url":"https://milkyway.com/picture","sender":"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4","website":"https://milkyway.com"}}`
+	expected := `{"type":"operators/MsgRegisterOperator","value":{"moniker":"MilkyWay Operator","picture_url":"https://milkyway.com/picture","sender":"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4","website":"https://milkyway.com"}}`
 	require.Equal(t, expected, string(msgRegisterOperator.GetSignBytes()))
 }
 
@@ -163,7 +163,7 @@ func TestMsgUpdateOperator_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgUpdateOperator_GetSignBytes(t *testing.T) {
-	expected := `{"type":"milkyway/MsgUpdateOperator","value":{"moniker":"MilkyWay Operator","operator_id":1,"picture_url":"https://milkyway.com/picture","sender":"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4","website":"https://milkyway.com"}}`
+	expected := `{"type":"operators/MsgUpdateOperator","value":{"moniker":"MilkyWay Operator","operator_id":1,"picture_url":"https://milkyway.com/picture","sender":"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4","website":"https://milkyway.com"}}`
 	require.Equal(t, expected, string(msgUpdateOperator.GetSignBytes()))
 }
 
@@ -222,7 +222,7 @@ func TestMsgDeactivateOperator_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgDeactivateOperator_GetSignBytes(t *testing.T) {
-	expected := `{"type":"milkyway/MsgDeactivateOperator","value":{"operator_id":1,"sender":"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"}}`
+	expected := `{"type":"operators/MsgDeactivateOperator","value":{"operator_id":1,"sender":"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"}}`
 	require.Equal(t, expected, string(msgDeactivateOperator.GetSignBytes()))
 }
 
@@ -284,7 +284,7 @@ func TestMsgUpdateParams_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgUpdateParams_GetSignBytes(t *testing.T) {
-	expected := `{"type":"milkyway/operators/MsgUpdateParams","value":{"authority":"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4","params":{"deactivation_time":"86400000000000","operator_registration_fee":[{"amount":"100000000","denom":"uatom"}]}}}`
+	expected := `{"type":"operators/MsgUpdateParams","value":{"authority":"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4","params":{"deactivation_time":"86400000000000","operator_registration_fee":[{"amount":"100000000","denom":"uatom"}]}}}`
 	require.Equal(t, expected, string(msgUpdateParams.GetSignBytes()))
 }
 

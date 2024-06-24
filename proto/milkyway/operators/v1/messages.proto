@@ -41,7 +41,7 @@ service Msg {
 // the details of the operator to be registered.
 message MsgRegisterOperator {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/MsgRegisterOperator";
+  option (amino.name) = "operators/MsgRegisterOperator";
 
   // Sender is the address of the user registering the operator
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
@@ -71,7 +71,7 @@ message MsgRegisterOperatorResponse {
 // existing operator.
 message MsgUpdateOperator {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/MsgUpdateOperator";
+  option (amino.name) = "operators/MsgUpdateOperator";
 
   // Sender is the address of the user updating the operator
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
@@ -105,9 +105,9 @@ message MsgUpdateOperatorResponse {}
 // switch to another operator.
 message MsgDeactivateOperator {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/MsgDeregisterOperator";
+  option (amino.name) = "operators/MsgDeactivateOperator";
 
-  // Sender is the address of the user deregistering the operator
+  // Sender is the address of the user deactivating the operator
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
   // OperatorID represents the ID of the operator to be deregistered
@@ -121,7 +121,7 @@ message MsgDeactivateOperatorResponse {}
 // service method. It allows the authority to update the module parameters.
 message MsgUpdateParams {
   option (cosmos.msg.v1.signer) = "authority";
-  option (amino.name) = "milkyway/x/services/MsgUpdateParams";
+  option (amino.name) = "operators/MsgUpdateParams";
 
   // Authority is the address that controls the module (defaults to x/gov unless
   // overwritten).

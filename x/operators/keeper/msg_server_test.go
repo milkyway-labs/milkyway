@@ -74,7 +74,7 @@ func (suite *KeeperTestSuite) TestMsgServer_RegisterOperator() {
 			},
 			expEvents: []sdk.Event{
 				sdk.NewEvent(
-					types.EventTypeRegisteredOperator,
+					types.EventTypeRegisterOperator,
 					sdk.NewAttribute(types.AttributeKeyOperatorID, "2"),
 				),
 			},
@@ -234,7 +234,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperator() {
 			expResponse: &types.MsgUpdateOperatorResponse{},
 			expEvents: []sdk.Event{
 				sdk.NewEvent(
-					types.EventTypeUpdatedOperator,
+					types.EventTypeUpdateOperator,
 					sdk.NewAttribute(types.AttributeKeyOperatorID, "1"),
 				),
 			},
@@ -370,7 +370,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 			expResponse: &types.MsgDeactivateOperatorResponse{},
 			expEvents: []sdk.Event{
 				sdk.NewEvent(
-					types.EventTypeStartedOperatorInactivation,
+					types.EventTypeStartOperatorInactivation,
 					sdk.NewAttribute(types.AttributeKeyOperatorID, "1"),
 				),
 			},

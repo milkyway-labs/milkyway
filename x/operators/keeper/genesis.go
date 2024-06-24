@@ -39,7 +39,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) {
 
 	// Store the inactivating operators
 	for _, entry := range state.UnbondingOperators {
-		k.setOperatorAsInactivating(ctx, entry.OperatorID, entry.UnbondCompletionTime)
+		k.setOperatorAsInactivating(ctx, entry.OperatorID, entry.UnbondingCompletionTime)
 	}
 
 	// Store params

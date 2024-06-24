@@ -39,6 +39,6 @@ message UnbondingOperator {
 
   // UnbondingCompletionTime is the time at which the unbonding of the operator
   // will be completed
-  google.protobuf.Timestamp unbond_completion_time = 2
+  google.protobuf.Timestamp unbonding_completion_time = 2
       [ (gogoproto.stdtime) = true, (gogoproto.nullable) = false ];
 }

@@ -88,8 +88,8 @@ func findDuplicateUnbondingOperators(operators []UnbondingOperator) *UnbondingOp
 // NewUnbondingOperator creates a new UnbondingOperator instance.
 func NewUnbondingOperator(operatorID uint32, completionTime time.Time) UnbondingOperator {
 	return UnbondingOperator{
-		OperatorID:           operatorID,
-		UnbondCompletionTime: completionTime,
+		OperatorID:              operatorID,
+		UnbondingCompletionTime: completionTime,
 	}
 }
 
@@ -99,8 +99,8 @@ func (o *UnbondingOperator) Validate() error {
 		return fmt.Errorf("invalid operator ID: %d", o.OperatorID)
 	}
 
-	if o.UnbondCompletionTime.IsZero() {
-		return fmt.Errorf("invalid unbond completion time: %s", o.UnbondCompletionTime)
+	if o.UnbondingCompletionTime.IsZero() {
+		return fmt.Errorf("invalid unbond completion time: %s", o.UnbondingCompletionTime)
 	}
 
 	return nil

@@ -9,7 +9,6 @@ option go_package = "github.com/milkyway-labs/milkyway/x/operators/types";
 
 // Params defines the parameters for the operators module.
 message Params {
-
   // OperatorRegistrationFee represents the fee that an operator must pay in
   // order to register itself with the network.
   // The fee is drawn from the MsgRegisterOperator sender's account and

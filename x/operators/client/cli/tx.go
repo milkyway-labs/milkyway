@@ -31,7 +31,7 @@ func GetTxCmd() *cobra.Command {
 	subspacesTxCmd.AddCommand(
 		GetCmdRegisterOperator(),
 		GetCmdEditOperator(),
-		GetCmdDeregisterOperator(),
+		GetCmdDeactivateOperator(),
 	)
 
 	return subspacesTxCmd
@@ -151,13 +151,13 @@ Only the fields that you provide will be updated`,
 	return cmd
 }
 
-// GetCmdDeregisterOperator returns the command allowing to deactivate an existing service
-func GetCmdDeregisterOperator() *cobra.Command {
+// GetCmdDeactivateOperator returns the command allowing to deactivate an existing service
+func GetCmdDeactivateOperator() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "deregister [id]",
+		Use:     "deactivate [id]",
 		Args:    cobra.ExactArgs(1),
-		Short:   "Deregister an existing service",
-		Example: fmt.Sprintf(`%s tx %s deregister 1 --from alice`, version.AppName, types.ModuleName),
+		Short:   "deactivate an existing service",
+		Example: fmt.Sprintf(`%s tx %s deactivate 1 --from alice`, version.AppName, types.ModuleName),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {

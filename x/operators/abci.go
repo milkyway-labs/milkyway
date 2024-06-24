@@ -23,7 +23,7 @@ func BeginBlocker(ctx sdk.Context, keeper *keeper.Keeper) {
 		// Emit an event
 		ctx.EventManager().EmitEvent(
 			sdk.NewEvent(
-				types.EventTypeCompletedOperatorInactivation,
+				types.EventTypeCompleteOperatorInactivation,
 				sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", operator.ID)),
 			),
 		)
