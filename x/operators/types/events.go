@@ -3,10 +3,10 @@ package types
 // DONTCOVER
 
 const (
-	EventTypeRegisteredOperator            = "registered_operator"
-	EventTypeUpdatedOperator               = "updated_operator"
-	EventTypeStartedOperatorInactivation   = "started_operator_inactivation"
-	EventTypeCompletedOperatorInactivation = "completed_operator_inactivation"
+	EventTypeRegisterOperator             = "register_operator"
+	EventTypeUpdateOperator               = "update_operator"
+	EventTypeStartOperatorInactivation    = "start_operator_inactivation"
+	EventTypeCompleteOperatorInactivation = "complete_operator_inactivation"
 
 	AttributeKeyOperatorID = "operator_id"
 )

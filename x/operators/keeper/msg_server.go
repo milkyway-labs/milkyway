@@ -62,7 +62,7 @@ func (k msgServer) RegisterOperator(goCtx context.Context, msg *types.MsgRegiste
 	// Emit the event
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeRegisteredOperator,
+			types.EventTypeRegisterOperator,
 			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", operator.ID)),
 		),
 	})
@@ -103,7 +103,7 @@ func (k msgServer) UpdateOperator(goCtx context.Context, msg *types.MsgUpdateOpe
 	// Emit the event
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeUpdatedOperator,
+			types.EventTypeUpdateOperator,
 			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", operator.ID)),
 		),
 	})
@@ -137,7 +137,7 @@ func (k msgServer) DeactivateOperator(goCtx context.Context, msg *types.MsgDeact
 	// Emit the event
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeStartedOperatorInactivation,
+			types.EventTypeStartOperatorInactivation,
 			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", msg.OperatorID)),
 		),
 	})

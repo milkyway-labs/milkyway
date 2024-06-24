@@ -10,10 +10,10 @@ import (
 )
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	legacy.RegisterAminoMsg(cdc, &MsgRegisterOperator{}, "milkyway/MsgRegisterOperator")
-	legacy.RegisterAminoMsg(cdc, &MsgUpdateOperator{}, "milkyway/MsgUpdateOperator")
-	legacy.RegisterAminoMsg(cdc, &MsgDeactivateOperator{}, "milkyway/MsgDeactivateOperator")
-	legacy.RegisterAminoMsg(cdc, &MsgUpdateParams{}, "milkyway/operators/MsgUpdateParams")
+	legacy.RegisterAminoMsg(cdc, &MsgRegisterOperator{}, "operators/MsgRegisterOperator")
+	legacy.RegisterAminoMsg(cdc, &MsgUpdateOperator{}, "operators/MsgUpdateOperator")
+	legacy.RegisterAminoMsg(cdc, &MsgDeactivateOperator{}, "operators/MsgDeactivateOperator")
+	legacy.RegisterAminoMsg(cdc, &MsgUpdateParams{}, "operators/MsgUpdateParams")
 
 }
 

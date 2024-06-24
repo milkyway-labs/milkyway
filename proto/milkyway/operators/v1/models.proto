@@ -44,7 +44,7 @@ message Operator {
   string website = 5;
 
   // PictureURL is the URL of the picture of the operator
-  string pictureURL = 6;
+  string picture_url = 6 [ (gogoproto.customname) = "PictureURL" ];
 
   // Address is the address of the account associated to the operator.
   // This will be used to store tokens that are delegated to this operator.

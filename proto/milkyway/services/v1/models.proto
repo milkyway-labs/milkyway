@@ -46,7 +46,8 @@ message Service {
   string website = 6;
 
   // PictureURL is the URL of the picture of the service
-  string pictureURL = 7;
+  string picture_url = 7 [ (gogoproto.customname) = "PictureURL" ];
+
 
   // Address is the address of the account associated with the service.
   // This will be used in order to store all the tokens that are delegated to

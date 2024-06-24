@@ -42,7 +42,7 @@ service Msg {
 // as well as the details of the service to be registered.
 message MsgCreateService {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/MsgCreateService";
+  option (amino.name) = "services/MsgCreateService";
 
   // Sender is the address of the user registering the service
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
@@ -75,7 +75,7 @@ message MsgCreateServiceResponse {
 // an existing service.
 message MsgUpdateService {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/MsgUpdateService";
+  option (amino.name) = "services/MsgUpdateService";
 
   // Sender is the address of the user updating the service
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
@@ -109,7 +109,7 @@ message MsgUpdateServiceResponse {}
 // MsgActivateService defines the message structure for the ActivateService gRPC
 message MsgActivateService {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/MsgActivateService";
+  option (amino.name) = "services/MsgActivateService";
 
   // Sender is the address of the user that wants to activate the service
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
@@ -126,7 +126,7 @@ message MsgActivateServiceResponse {}
 // service.
 message MsgDeactivateService {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/MsgDeactivateService";
+  option (amino.name) = "services/MsgDeactivateService";
 
   // Sender is the address of the user that wants to deactivate the service
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
@@ -142,7 +142,7 @@ message MsgDeactivateServiceResponse {}
 // service method. It allows the authority to update the module parameters.
 message MsgUpdateParams {
   option (cosmos.msg.v1.signer) = "authority";
-  option (amino.name) = "milkyway/x/services/MsgUpdateParams";
+  option (amino.name) = "services/MsgUpdateParams";
 
   // Authority is the address that controls the module (defaults to x/gov unless
   // overwritten).
