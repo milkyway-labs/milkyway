@@ -39,8 +39,8 @@ require (
 	github.com/gorilla/mux v1.8.1
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/hashicorp/go-metrics v0.5.3
-	github.com/initia-labs/OPinit v0.3.0
-	github.com/initia-labs/initia v0.3.0
+	github.com/initia-labs/OPinit v0.3.2
+	github.com/initia-labs/initia v0.3.3
 	github.com/initia-labs/kvindexer v0.1.4
 	github.com/initia-labs/kvindexer/submodules/block v0.1.0
 	github.com/initia-labs/kvindexer/submodules/tx v0.1.0
@@ -403,6 +403,11 @@ require (
 replace (
 	// Use cosmos fork of keyring
 	github.com/99designs/keyring => github.com/cosmos/keyring v1.2.0
+
+	// Use latest iavl version to fix following issue:
+	// https://github.com/cosmos/iavl/pull/943
+	github.com/cosmos/iavl => github.com/cosmos/iavl v1.1.4
+
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 
 	// Downgraded to avoid bugs in following commits which caused simulations to fail.
@@ -413,7 +418,6 @@ replace (
 replace (
 	github.com/cometbft/cometbft => github.com/initia-labs/cometbft v0.0.0-20240704071917-6c77a401128c
 	github.com/cosmos/cosmos-sdk => github.com/initia-labs/cosmos-sdk v0.0.0-20240514173001-c037b6c44d98
-	github.com/cosmos/iavl => github.com/initia-labs/iavl v0.0.0-20240415085037-7e81233cdd9e
 	github.com/cosmos/ibc-go/v8 => github.com/initia-labs/ibc-go/v8 v8.0.0-20240419124350-4275a05abe2c
 )
 
