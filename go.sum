@@ -1331,8 +1331,8 @@ github.com/sivchari/containedctx v1.0.3 h1:x+etemjbsh2fB5ewm5FeLNi5bUjK0V8n0RB+W
 github.com/sivchari/containedctx v1.0.3/go.mod h1:c1RDvCbnJLtH4lLcYD/GqwiBSSf4F5Qk0xld2rBqzJ4=
 github.com/sivchari/tenv v1.7.1 h1:PSpuD4bu6fSmtWMxSGWcvqUUgIn7k3yOJhOIzVWn8Ak=
 github.com/sivchari/tenv v1.7.1/go.mod h1:64yStXKSOxDfX47NlhVwND4dHwfZDdbp2Lyl018Icvg=
-github.com/skip-mev/block-sdk/v2 v2.1.1 h1:Audcf6Dtev16JRewV8M8GfjEDDsu6ayxlz9GHAt8tXs=
-github.com/skip-mev/block-sdk/v2 v2.1.1/go.mod h1:AOjFICNrPpq/Cq1f97CcC7ljWhxCzmfmyz4/Ir8/xFM=
+github.com/skip-mev/block-sdk/v2 v2.1.4 h1:KC9esgPOHiA2sgCqaqGEX6GWjGplpA+SpDAE4naIbeY=
+github.com/skip-mev/block-sdk/v2 v2.1.4/go.mod h1:b8W2xsdgsFlw2OQTOuSir6Q2a6tBFbRsE4WJetniitE=
 github.com/skip-mev/chaintestutil v0.0.0-20240116134208-3e49bf514803 h1:VRRVYN3wsOIOqVT3e3nDh3vyUl6RvF9QwdK4BvgPP9c=
 github.com/skip-mev/chaintestutil v0.0.0-20240116134208-3e49bf514803/go.mod h1:LF2koCTmygQnz11yjSfHvNP8axdyZ2lTEw0EwI+dnno=
 github.com/skip-mev/slinky v1.0.3 h1:+7Yw+HHjYqJ7gb5nrG1k2bplNG+qEmn5wws+OesdY2M=

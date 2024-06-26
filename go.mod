@@ -1,7 +1,6 @@
 module github.com/milkyway-labs/milkyway
 
 go 1.22
-
 require (
 	cosmossdk.io/api v0.7.5
 	cosmossdk.io/client/v2 v2.0.0-beta.1.0.20240124105859-5ad1805d0e79
@@ -48,7 +47,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.19.1
 	github.com/rakyll/statik v0.1.7
-	github.com/skip-mev/block-sdk/v2 v2.1.1
+	github.com/skip-mev/block-sdk/v2 v2.1.4
 	github.com/skip-mev/slinky v1.0.3
 	github.com/spf13/cast v1.6.0
 	github.com/spf13/cobra v1.8.1
