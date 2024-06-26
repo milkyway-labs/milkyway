@@ -6,15 +6,19 @@ import (
 	"os"
 	"testing"
 
+	"cosmossdk.io/math"
 	"github.com/stretchr/testify/require"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
+
 	nfttransfertypes "github.com/initia-labs/initia/x/ibc/nft-transfer/types"
 
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
+
+	ibchooks "github.com/milkyway-labs/milkyway/app/ibc-hooks"
 )
 
 func Test_OnReceivePacket(t *testing.T) {
@@ -83,9 +87,21 @@ func Test_onReceivePacket_memo(t *testing.T) {
 	dataBz, err := json.Marshal(&data)
 	require.NoError(t, err)
 
+	// funds foo coins to the intermediate sender
+	intermediateSender, err := sdk.AccAddressFromBech32(ibchooks.DeriveIntermediateSender("channel-0", data.GetSender()))
+	require.NoError(t, err)
+	denom := ibchooks.MustExtractDenomFromPacketOnRecv(channeltypes.Packet{
+		Data:               dataBz,
+		DestinationPort:    "wasm",
+		DestinationChannel: "channel-0",
+	})
+	input.Faucet.Fund(ctx, intermediateSender, sdk.NewCoin(denom, math.NewInt(10000)))
+
 	// failed to due to acl
 	ack := input.IBCHooksMiddleware.OnRecvPacket(ctx, channeltypes.Packet{
-		Data: dataBz,
+		Data:               dataBz,
+		DestinationPort:    "wasm",
+		DestinationChannel: "channel-0",
 	}, addr)
 	require.False(t, ack.Success())
 
@@ -96,8 +112,11 @@ func Test_onReceivePacket_memo(t *testing.T) {
 
 	// success
 	ack = input.IBCHooksMiddleware.OnRecvPacket(ctx, channeltypes.Packet{
-		Data: dataBz,
+		Data:               dataBz,
+		DestinationPort:    "wasm",
+		DestinationChannel: "channel-0",
 	}, addr)
+	fmt.Println(string(ack.Acknowledgement()))
 	require.True(t, ack.Success())
 
 	// check the contract state
