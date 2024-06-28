@@ -23,7 +23,7 @@ var DefaultLaunchStepFactories = []launchtools.LauncherStepFuncFactory[*launchto
 	steps.InitializeRPCHelpers,
 
 	// Initialize genesis
-	steps.InitializeGenesis,
+	InitializeGenesis,
 
 	// Add system keys to the keyring
 	steps.InitializeKeyring,
