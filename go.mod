@@ -52,6 +52,7 @@ require (
 	github.com/rakyll/statik v0.1.7
 	github.com/skip-mev/block-sdk/v2 v2.1.2
 	github.com/skip-mev/slinky v1.0.5
+	github.com/spf13/cast v1.6.0
 	github.com/spf13/cast v1.7.0
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0
@@ -240,7 +241,7 @@ require (
 	github.com/iancoleman/strcase v0.3.0 // indirect
 	github.com/improbable-eng/grpc-web v0.15.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/initia-labs/OPinit/api v0.2.6 // indirect
+	github.com/initia-labs/OPinit/api v0.3.0 // indirect
 	github.com/jgautheron/goconst v1.7.1 // indirect
 	github.com/jingyugao/rowserrcheck v1.1.1 // indirect
 	github.com/jirfag/go-printf-func-name v0.0.0-20200119135958-7558a9eaa5af // indirect
