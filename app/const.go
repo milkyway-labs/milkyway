@@ -5,7 +5,7 @@ const (
 	FeeDeductionGasAmount = 50_000
 
 	// AccountAddressPrefix is the prefix of bech32 encoded address
-	AccountAddressPrefix = "init"
+	AccountAddressPrefix = "milk"
 
 	// AppName is the application name
 	AppName = "milkyway"
