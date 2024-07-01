@@ -405,6 +405,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 				suite.Require().True(found)
 				suite.Require().Equal(operatorstypes.Operator{
 					ID:      1,
+					Status:  operatorstypes.OPERATOR_STATUS_ACTIVE,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
 					Tokens: sdk.NewCoins(
 						sdk.NewCoin("umilk", sdkmath.NewInt(80)),
@@ -446,6 +447,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 				// Create the operator
 				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      1,
+					Status:  operatorstypes.OPERATOR_STATUS_ACTIVE,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
 					Tokens: sdk.NewCoins(
 						sdk.NewCoin("umilk", sdkmath.NewInt(80)),
@@ -507,6 +509,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 				suite.Require().True(found)
 				suite.Require().Equal(operatorstypes.Operator{
 					ID:      1,
+					Status:  operatorstypes.OPERATOR_STATUS_ACTIVE,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
 					Tokens: sdk.NewCoins(
 						sdk.NewCoin("umilk", sdkmath.NewInt(180)),
