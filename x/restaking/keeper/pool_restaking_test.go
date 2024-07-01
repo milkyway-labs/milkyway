@@ -214,7 +214,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 		amount    sdk.Coin
 		delegator string
 		shouldErr bool
-		expShares sdkmath.LegacyDec
+		expShares sdk.DecCoins
 		check     func(ctx sdk.Context)
 	}{
 		{
@@ -280,7 +280,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 			amount:    sdk.NewCoin("umilk", sdkmath.NewInt(100)),
 			delegator: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			shouldErr: false,
-			expShares: sdkmath.LegacyNewDec(100),
+			expShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 			check: func(ctx sdk.Context) {
 				// Make sure the pool now exists
 				pool, found := suite.pk.GetPool(ctx, 1)
@@ -344,7 +344,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 			amount:    sdk.NewCoin("umilk", sdkmath.NewInt(100)),
 			delegator: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			shouldErr: false,
-			expShares: sdkmath.LegacyNewDec(500),
+			expShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(500))),
 			check: func(ctx sdk.Context) {
 				// Make sure the pool now exists
 				pool, found := suite.pk.GetPool(ctx, 1)
@@ -415,7 +415,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 			amount:    sdk.NewCoin("umilk", sdkmath.NewInt(100)),
 			delegator: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			shouldErr: false,
-			expShares: sdkmath.LegacyNewDecWithPrec(15625, 2),
+			expShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDecWithPrec(15625, 2))),
 			check: func(ctx sdk.Context) {
 				// Make sure the pool now exists
 				pool, found := suite.pk.GetPool(ctx, 1)

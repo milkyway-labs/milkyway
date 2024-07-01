@@ -52,11 +52,11 @@ func (k *Keeper) AddPoolTokensAndShares(
 // --------------------------------------------------------------------------------------------------------------------
 
 // DelegateToPool sends the given amount to the pool account and saves the delegation for the given user
-func (k *Keeper) DelegateToPool(ctx sdk.Context, amount sdk.Coin, delegator string) (sdkmath.LegacyDec, error) {
+func (k *Keeper) DelegateToPool(ctx sdk.Context, amount sdk.Coin, delegator string) (sdk.DecCoins, error) {
 	// Get or create the pool for the given amount denom
 	pool, err := k.poolsKeeper.CreateOrGetPoolByDenom(ctx, amount.Denom)
 	if err != nil {
-		return sdkmath.LegacyZeroDec(), err
+		return sdk.NewDecCoins(), err
 	}
 
 	// Get the amount to be bonded
@@ -69,27 +69,27 @@ func (k *Keeper) DelegateToPool(ctx sdk.Context, amount sdk.Coin, delegator stri
 		GetDelegation: func(ctx sdk.Context, receiverID uint32, delegator string) (types.Delegation, bool) {
 			return k.GetPoolDelegation(ctx, receiverID, delegator)
 		},
-		BuildDelegation: func(receiverID uint32, delegator string, shares sdkmath.LegacyDec) types.Delegation {
-			return types.NewPoolDelegation(receiverID, delegator, shares)
+		BuildDelegation: func(receiverID uint32, delegator string) types.Delegation {
+			return types.NewPoolDelegation(receiverID, delegator, sdkmath.LegacyZeroDec())
 		},
-		UpdateDelegation: func(ctx sdk.Context, delegation types.Delegation) (newShares sdkmath.LegacyDec, err error) {
+		UpdateDelegation: func(ctx sdk.Context, delegation types.Delegation) (sdk.DecCoins, error) {
 			// Calculate the new shares and add the tokens to the pool
-			_, newShares, err = k.AddPoolTokensAndShares(ctx, pool, amount.Amount)
+			_, newShares, err := k.AddPoolTokensAndShares(ctx, pool, amount.Amount)
 			if err != nil {
-				return newShares, err
+				return nil, err
 			}
 
 			// Update the delegation shares
 			poolDelegation, ok := delegation.(types.PoolDelegation)
 			if !ok {
-				return newShares, fmt.Errorf("invalid delegation type: %T", delegation)
+				return nil, fmt.Errorf("invalid delegation type: %T", delegation)
 			}
 			poolDelegation.Shares = poolDelegation.Shares.Add(newShares)
 
 			// Store the updated delegation
 			k.SavePoolDelegation(ctx, poolDelegation)
 
-			return newShares, err
+			return sdk.NewDecCoins(sdk.NewDecCoinFromDec(amount.Denom, newShares)), err
 		},
 		Hooks: types.DelegationHooks{
 			BeforeDelegationSharesModified: k.BeforePoolDelegationSharesModified,

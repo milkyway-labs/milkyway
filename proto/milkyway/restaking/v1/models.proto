@@ -4,6 +4,7 @@ package milkyway.restaking.v1;
 import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/restaking/types";
 
@@ -41,9 +42,8 @@ message OperatorDelegation {
   uint32 operator_id = 2 [ (gogoproto.customname) = "OperatorID" ];
 
   // Shares define the delegation shares received.
-  string shares = 3 [
-    (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+  repeated cosmos.base.v1beta1.DecCoin shares = 3 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
     (gogoproto.nullable) = false
   ];
 }

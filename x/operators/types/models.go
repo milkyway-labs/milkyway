@@ -72,6 +72,59 @@ func (o *Operator) Validate() error {
 	return nil
 }
 
+// InvalidExRate returns whether the exchange rates is invalid.
+// This can happen e.g. if Pool loses all tokens due to slashing. In this case,
+// make all future delegations invalid.
+func (o Operator) InvalidExRate() bool {
+	for _, token := range o.Tokens {
+		if token.IsZero() && o.DelegatorShares.AmountOf(token.Denom).IsPositive() {
+			return true
+		}
+	}
+	return false
+}
+
+// SharesFromTokens returns the shares of a delegation given a bond amount. It
+// returns an error if the pool has no tokens.
+func (o Operator) SharesFromTokens(tokens sdk.Coins) (sdk.DecCoins, error) {
+	if o.Tokens.IsZero() {
+		return nil, ErrInsufficientShares
+	}
+
+	shares := sdk.NewDecCoins()
+	for _, token := range tokens {
+		tokenDelegatorShares := o.DelegatorShares.AmountOf(token.Denom)
+		tokenAmount := o.Tokens.AmountOf(token.Denom)
+		shares = shares.Add(sdk.NewDecCoinFromDec(token.Denom, tokenDelegatorShares.MulInt(token.Amount).QuoInt(tokenAmount)))
+	}
+
+	return shares, nil
+}
+
+// AddTokensFromDelegation adds the given amount of tokens to the pool's total tokens,
+// also updating the pool's delegator shares.
+// It returns the updated pool and the shares issued.
+func (o Operator) AddTokensFromDelegation(amount sdk.Coins) (Operator, sdk.DecCoins) {
+	// calculate the shares to issue
+	var issuedShares sdk.DecCoins
+	if o.DelegatorShares.IsZero() {
+		// the first delegation to a operator sets the exchange rate to one
+		issuedShares = sdk.NewDecCoinsFromCoins(amount...)
+	} else {
+		shares, err := o.SharesFromTokens(amount)
+		if err != nil {
+			panic(err)
+		}
+
+		issuedShares = shares
+	}
+
+	o.Tokens = o.Tokens.Add(amount...)
+	o.DelegatorShares = o.DelegatorShares.Add(issuedShares...)
+
+	return o, issuedShares
+}
+
 // --------------------------------------------------------------------------------------------------------------------
 
 // OperatorUpdate defines the fields that can be updated in an Operator.

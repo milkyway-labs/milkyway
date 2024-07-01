@@ -101,6 +101,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 		suite.ak,
 		suite.bk,
 		suite.pk,
+		nil,
 		authorityAddr,
 	).SetHooks(newMockHooks())
 }
@@ -146,5 +147,20 @@ func (m mockHooks) BeforePoolDelegationSharesModified(ctx sdk.Context, poolID ui
 
 func (m mockHooks) AfterPoolDelegationModified(ctx sdk.Context, poolID uint32, delegator string) error {
 	m.CalledMap["AfterPoolDelegationModified"] = true
+	return nil
+}
+
+func (m mockHooks) BeforeOperatorDelegationCreated(ctx sdk.Context, operatorID uint32, delegator string) error {
+	m.CalledMap["BeforeOperatorDelegationCreated"] = true
+	return nil
+}
+
+func (m mockHooks) BeforeOperatorDelegationSharesModified(ctx sdk.Context, operatorID uint32, delegator string) error {
+	m.CalledMap["BeforeOperatorDelegationSharesModified"] = true
+	return nil
+}
+
+func (m mockHooks) AfterOperatorDelegationModified(ctx sdk.Context, operatorID uint32, delegator string) error {
+	m.CalledMap["AfterOperatorDelegationModified"] = true
 	return nil
 }

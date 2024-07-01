@@ -1,7 +1,6 @@
 package types
 
 import (
-	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -13,9 +12,9 @@ type DelegationReceiver interface {
 
 type DelegationGetter func(ctx sdk.Context, receiverID uint32, delegator string) (Delegation, bool)
 
-type DelegationBuilder func(receiverID uint32, delegator string, shares sdkmath.LegacyDec) Delegation
+type DelegationBuilder func(receiverID uint32, delegator string) Delegation
 
-type DelegationUpdater func(ctx sdk.Context, delegation Delegation) (newShares sdkmath.LegacyDec, err error)
+type DelegationUpdater func(ctx sdk.Context, delegation Delegation) (newShares sdk.DecCoins, err error)
 
 // Delegation is an interface that represents a delegation object.
 type Delegation interface {

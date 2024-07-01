@@ -31,3 +31,27 @@ func (k *Keeper) AfterPoolDelegationModified(ctx sdk.Context, poolID uint32, del
 	}
 	return nil
 }
+
+// BeforeOperatorDelegationCreated implements types.RestakingHooks
+func (k *Keeper) BeforeOperatorDelegationCreated(ctx sdk.Context, operatorID uint32, delegator string) error {
+	if k.hooks != nil {
+		return k.hooks.BeforeOperatorDelegationCreated(ctx, operatorID, delegator)
+	}
+	return nil
+}
+
+// BeforeOperatorDelegationSharesModified implements types.RestakingHooks
+func (k *Keeper) BeforeOperatorDelegationSharesModified(ctx sdk.Context, operatorID uint32, delegator string) error {
+	if k.hooks != nil {
+		return k.hooks.BeforeOperatorDelegationSharesModified(ctx, operatorID, delegator)
+	}
+	return nil
+}
+
+// AfterOperatorDelegationModified implements types.RestakingHooks
+func (k *Keeper) AfterOperatorDelegationModified(ctx sdk.Context, operatorID uint32, delegator string) error {
+	if k.hooks != nil {
+		return k.hooks.AfterOperatorDelegationModified(ctx, operatorID, delegator)
+	}
+	return nil
+}

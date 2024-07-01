@@ -5,6 +5,7 @@ import (
 	"time"
 
 	sdkmath "cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
@@ -57,7 +58,7 @@ func TestGenesis_Validate(t *testing.T) {
 					types.NewOperatorDelegation(
 						0,
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-						sdkmath.LegacyNewDec(100),
+						sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 					),
 				},
 				types.DefaultParams(),
@@ -100,7 +101,7 @@ func TestGenesis_Validate(t *testing.T) {
 					types.NewOperatorDelegation(
 						3,
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-						sdkmath.LegacyNewDec(100),
+						sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 					),
 				},
 				types.NewParams(5*24*time.Hour),
@@ -250,7 +251,7 @@ func TestOperatorDelegation_Validate(t *testing.T) {
 			entry: types.NewOperatorDelegation(
 				0,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				sdkmath.LegacyNewDec(100),
+				sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 			),
 			shouldErr: true,
 		},
@@ -259,7 +260,7 @@ func TestOperatorDelegation_Validate(t *testing.T) {
 			entry: types.NewOperatorDelegation(
 				1,
 				"",
-				sdkmath.LegacyNewDec(100),
+				sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 			),
 			shouldErr: true,
 		},
@@ -268,7 +269,7 @@ func TestOperatorDelegation_Validate(t *testing.T) {
 			entry: types.NewOperatorDelegation(
 				1,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				sdkmath.LegacyNewDec(-100),
+				sdk.DecCoins{sdk.DecCoin{Denom: "umilk", Amount: sdkmath.LegacyNewDec(-100)}},
 			),
 			shouldErr: true,
 		},
@@ -277,7 +278,7 @@ func TestOperatorDelegation_Validate(t *testing.T) {
 			entry: types.NewOperatorDelegation(
 				1,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				sdkmath.LegacyNewDec(100),
+				sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 			),
 			shouldErr: false,
 		},

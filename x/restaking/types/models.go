@@ -68,13 +68,15 @@ func MustUnmarshalPoolDelegation(cdc codec.BinaryCodec, bz []byte) PoolDelegatio
 
 // --------------------------------------------------------------------------------------------------------------------
 
-func NewOperatorDelegation(operatorID uint32, userAddress string, shares sdkmath.LegacyDec) OperatorDelegation {
+func NewOperatorDelegation(operatorID uint32, userAddress string, shares sdk.DecCoins) OperatorDelegation {
 	return OperatorDelegation{
 		OperatorID:  operatorID,
 		UserAddress: userAddress,
 		Shares:      shares,
 	}
 }
+
+func (d OperatorDelegation) isDelegation() {}
 
 func (d OperatorDelegation) Validate() error {
 	if d.OperatorID == 0 {
@@ -86,11 +88,39 @@ func (d OperatorDelegation) Validate() error {
 		return fmt.Errorf("invalid user address: %s", d.UserAddress)
 	}
 
-	if d.Shares.IsNegative() {
+	if d.Shares.IsAnyNegative() {
 		return ErrInvalidShares
 	}
 
 	return nil
+}
+
+// MustMarshalOperatorDelegation marshals the given operator delegation using the provided codec
+func MustMarshalOperatorDelegation(cdc codec.BinaryCodec, delegation OperatorDelegation) []byte {
+	bz, err := cdc.Marshal(&delegation)
+	if err != nil {
+		panic(err)
+	}
+	return bz
+}
+
+// UnmarshalOperatorDelegation unmarshals an operator delegation from the given bytes using the provided codec
+func UnmarshalOperatorDelegation(cdc codec.BinaryCodec, bz []byte) (OperatorDelegation, error) {
+	var delegation OperatorDelegation
+	err := cdc.Unmarshal(bz, &delegation)
+	if err != nil {
+		return OperatorDelegation{}, err
+	}
+	return delegation, nil
+}
+
+// MustUnmarshalOperatorDelegation unmarshals an operator delegation from the given bytes using the provided codec
+func MustUnmarshalOperatorDelegation(cdc codec.BinaryCodec, bz []byte) OperatorDelegation {
+	delegation, err := UnmarshalOperatorDelegation(cdc, bz)
+	if err != nil {
+		panic(err)
+	}
+	return delegation
 }
 
 // --------------------------------------------------------------------------------------------------------------------

@@ -15,9 +15,10 @@ type Keeper struct {
 
 	authority string
 
-	accountKeeper types.AccountKeeper
-	bankKeeper    types.BankKeeper
-	poolsKeeper   types.PoolsKeeper
+	accountKeeper   types.AccountKeeper
+	bankKeeper      types.BankKeeper
+	poolsKeeper     types.PoolsKeeper
+	operatorsKeeper types.OperatorsKeeper
 
 	hooks types.RestakingHooks
 }
@@ -28,6 +29,7 @@ func NewKeeper(
 	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
 	poolsKeeper types.PoolsKeeper,
+	operatorsKeeper types.OperatorsKeeper,
 	authority string,
 ) *Keeper {
 
@@ -40,9 +42,10 @@ func NewKeeper(
 		storeKey: storeKey,
 		cdc:      cdc,
 
-		accountKeeper: accountKeeper,
-		bankKeeper:    bankKeeper,
-		poolsKeeper:   poolsKeeper,
+		accountKeeper:   accountKeeper,
+		bankKeeper:      bankKeeper,
+		poolsKeeper:     poolsKeeper,
+		operatorsKeeper: operatorsKeeper,
 
 		authority: authority,
 	}
