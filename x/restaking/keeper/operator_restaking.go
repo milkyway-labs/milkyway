@@ -58,6 +58,11 @@ func (k *Keeper) DelegateToOperator(ctx sdk.Context, operatorID uint32, amount s
 		return sdk.NewDecCoins(), operatorstypes.ErrOperatorNotFound
 	}
 
+	// MAke sure the operator is active
+	if !operator.IsActive() {
+		return sdk.NewDecCoins(), operatorstypes.ErrOperatorNotActive
+	}
+
 	return k.PerformDelegation(ctx, types.DelegationData{
 		Amount:    amount,
 		Delegator: delegator,

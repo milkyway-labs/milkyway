@@ -226,10 +226,27 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 			shouldErr:  true,
 		},
 		{
+			name: "inactive operator returns error",
+			store: func(ctx sdk.Context) {
+				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+					ID:              1,
+					Status:          operatorstypes.OPERATOR_STATUS_INACTIVE,
+					Address:         operatorstypes.GetOperatorAddress(1).String(),
+					Tokens:          sdk.NewCoins(),
+					DelegatorShares: sdk.NewDecCoins(),
+				})
+			},
+			operatorID: 1,
+			amount:     sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
+			delegator:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			shouldErr:  true,
+		},
+		{
 			name: "invalid exchange rate operator returns error",
 			store: func(ctx sdk.Context) {
 				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:              1,
+					Status:          operatorstypes.OPERATOR_STATUS_ACTIVE,
 					Address:         operatorstypes.GetOperatorAddress(1).String(),
 					Tokens:          sdk.NewCoins(),
 					DelegatorShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
@@ -283,6 +300,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 				// Create the operator
 				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:              1,
+					Status:          operatorstypes.OPERATOR_STATUS_ACTIVE,
 					Address:         operatorstypes.GetOperatorAddress(1).String(),
 					Tokens:          sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(20))),
 					DelegatorShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
@@ -316,6 +334,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 				suite.Require().True(found)
 				suite.Require().Equal(operatorstypes.Operator{
 					ID:              1,
+					Status:          operatorstypes.OPERATOR_STATUS_ACTIVE,
 					Address:         operatorstypes.GetOperatorAddress(1).String(),
 					Tokens:          sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(120))),
 					DelegatorShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(600))),
@@ -345,6 +364,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 				// Create the operator
 				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:              1,
+					Status:          operatorstypes.OPERATOR_STATUS_ACTIVE,
 					Address:         operatorstypes.GetOperatorAddress(1).String(),
 					Tokens:          sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(80))),
 					DelegatorShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(125))),

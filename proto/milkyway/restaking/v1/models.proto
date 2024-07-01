@@ -62,9 +62,8 @@ message ServiceDelegation {
   uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
 
   // Shares define the delegation shares received.
-  string shares = 3 [
-    (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+  repeated cosmos.base.v1beta1.DecCoin shares = 3 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
     (gogoproto.nullable) = false
   ];
 }

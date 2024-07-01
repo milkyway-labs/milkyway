@@ -75,6 +75,11 @@ func (o *Operator) Validate() error {
 	return nil
 }
 
+// IsActive returns whether the operator is active.
+func (o Operator) IsActive() bool {
+	return o.Status == OPERATOR_STATUS_ACTIVE
+}
+
 // InvalidExRate returns whether the exchange rates is invalid.
 // This can happen e.g. if Pool loses all tokens due to slashing. In this case,
 // make all future delegations invalid.
