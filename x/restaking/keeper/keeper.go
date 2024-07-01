@@ -31,6 +31,7 @@ func NewKeeper(
 	bankKeeper types.BankKeeper,
 	poolsKeeper types.PoolsKeeper,
 	operatorsKeeper types.OperatorsKeeper,
+	servicesKeeper types.ServicesKeeper,
 	authority string,
 ) *Keeper {
 
@@ -47,6 +48,7 @@ func NewKeeper(
 		bankKeeper:      bankKeeper,
 		poolsKeeper:     poolsKeeper,
 		operatorsKeeper: operatorsKeeper,
+		servicesKeeper:  servicesKeeper,
 
 		authority: authority,
 	}

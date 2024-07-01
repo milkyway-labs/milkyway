@@ -22,6 +22,8 @@ import (
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	"github.com/milkyway-labs/milkyway/x/restaking/keeper"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
+	serviceskeeper "github.com/milkyway-labs/milkyway/x/services/keeper"
+	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 
@@ -49,6 +51,7 @@ type KeeperTestSuite struct {
 	bk bankkeeper.Keeper
 	pk *poolskeeper.Keeper
 	ok *operatorskeeper.Keeper
+	sk *serviceskeeper.Keeper
 	k  *keeper.Keeper
 }
 
@@ -56,7 +59,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 	// Define store keys
 	keys := storetypes.NewKVStoreKeys(
 		types.StoreKey,
-		authtypes.StoreKey, banktypes.StoreKey, poolstypes.StoreKey, operatorstypes.StoreKey,
+		authtypes.StoreKey, banktypes.StoreKey, poolstypes.StoreKey, operatorstypes.StoreKey, servicestypes.StoreKey,
 	)
 	suite.storeKey = keys[types.StoreKey]
 
@@ -115,6 +118,13 @@ func (suite *KeeperTestSuite) SetupTest() {
 		communityPoolKeeper,
 		authorityAddr,
 	)
+	suite.sk = serviceskeeper.NewKeeper(
+		suite.cdc,
+		keys[servicestypes.StoreKey],
+		suite.ak,
+		communityPoolKeeper,
+		authorityAddr,
+	)
 	suite.k = keeper.NewKeeper(
 		suite.cdc,
 		suite.storeKey,
@@ -122,6 +132,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 		suite.bk,
 		suite.pk,
 		suite.ok,
+		suite.sk,
 		authorityAddr,
 	).SetHooks(newMockHooks())
 }
