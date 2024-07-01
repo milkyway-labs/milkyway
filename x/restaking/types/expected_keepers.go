@@ -24,11 +24,12 @@ type PoolsKeeper interface {
 	SavePool(ctx sdk.Context, pool poolstypes.Pool) error
 }
 
-type ServicesKeeper interface {
-	GetService(ctx sdk.Context, serviceID uint32) (servicestypes.Service, bool)
-}
-
 type OperatorsKeeper interface {
 	GetOperator(ctx sdk.Context, operatorID uint32) (operatorstypes.Operator, bool)
 	SaveOperator(ctx sdk.Context, operator operatorstypes.Operator)
+}
+
+type ServicesKeeper interface {
+	GetService(ctx sdk.Context, serviceID uint32) (servicestypes.Service, bool)
+	SaveService(ctx sdk.Context, service servicestypes.Service)
 }

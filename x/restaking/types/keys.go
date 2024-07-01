@@ -6,6 +6,7 @@ import (
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
+	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
 const (
@@ -107,4 +108,46 @@ func ParseDelegationsByOperatorIDKey(bz []byte) (operatorID uint32, delegatorAdd
 	delegatorAddress = string(bz)
 
 	return operatorID, delegatorAddress, nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// UserServiceDelegationsStorePrefix returns the prefix used to store all the delegations to a given service
+func UserServiceDelegationsStorePrefix(userAddress string) []byte {
+	return append(ServiceDelegationPrefix, []byte(userAddress)...)
+}
+
+// UserServiceDelegationStoreKey returns the key used to store the user -> service delegation association
+func UserServiceDelegationStoreKey(delegator string, serviceID uint32) []byte {
+	return append(UserServiceDelegationsStorePrefix(delegator), servicestypes.GetServiceIDBytes(serviceID)...)
+}
+
+// DelegationsByServiceIDStorePrefix returns the prefix used to store the delegations to a given service
+func DelegationsByServiceIDStorePrefix(serviceID uint32) []byte {
+	return append(ServiceDelegationPrefix, servicestypes.GetServiceIDBytes(serviceID)...)
+}
+
+// DelegationByServiceIDStoreKey returns the key used to store the service -> user delegation association
+func DelegationByServiceIDStoreKey(serviceID uint32, delegatorAddress string) []byte {
+	return append(DelegationsByServiceIDStorePrefix(serviceID), []byte(delegatorAddress)...)
+}
+
+// ParseDelegationsByServiceIDKey parses the service ID and delegator address from the given key
+func ParseDelegationsByServiceIDKey(bz []byte) (serviceID uint32, delegatorAddress string, err error) {
+	prefixLength := len(ServiceDelegationPrefix)
+	if prefix := bz[:prefixLength]; !bytes.Equal(prefix, ServiceDelegationPrefix) {
+		return 0, "", fmt.Errorf("invalid prefix; expected: %X, got: %x", ServiceDelegationPrefix, prefix)
+	}
+
+	// Remove the prefix
+	bz = bz[prefixLength:]
+
+	// Read the service ID
+	serviceID = servicestypes.GetServiceIDFromBytes(bz[:4])
+	bz = bz[4:]
+
+	// Read the delegator address
+	delegatorAddress = string(bz)
+
+	return serviceID, delegatorAddress, nil
 }

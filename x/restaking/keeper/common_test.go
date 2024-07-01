@@ -184,3 +184,18 @@ func (m mockHooks) AfterOperatorDelegationModified(ctx sdk.Context, operatorID u
 	m.CalledMap["AfterOperatorDelegationModified"] = true
 	return nil
 }
+
+func (m mockHooks) BeforeServiceDelegationCreated(ctx sdk.Context, serviceID uint32, delegator string) error {
+	m.CalledMap["BeforeServiceDelegationCreated"] = true
+	return nil
+}
+
+func (m mockHooks) BeforeServiceDelegationSharesModified(ctx sdk.Context, serviceID uint32, delegator string) error {
+	m.CalledMap["BeforeServiceDelegationSharesModified"] = true
+	return nil
+}
+
+func (m mockHooks) AfterServiceDelegationModified(ctx sdk.Context, serviceID uint32, delegator string) error {
+	m.CalledMap["AfterServiceDelegationModified"] = true
+	return nil
+}

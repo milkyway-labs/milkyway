@@ -7,6 +7,7 @@ import (
 type RestakingHooks interface {
 	PoolRestakingHooks
 	OperatorRestakingHooks
+	ServiceRestakingHooks
 }
 
 type PoolRestakingHooks interface {
@@ -19,4 +20,10 @@ type OperatorRestakingHooks interface {
 	BeforeOperatorDelegationCreated(ctx sdk.Context, operatorID uint32, delegator string) error
 	BeforeOperatorDelegationSharesModified(ctx sdk.Context, operatorID uint32, delegator string) error
 	AfterOperatorDelegationModified(ctx sdk.Context, operatorID uint32, delegator string) error
+}
+
+type ServiceRestakingHooks interface {
+	BeforeServiceDelegationCreated(ctx sdk.Context, serviceID uint32, delegator string) error
+	BeforeServiceDelegationSharesModified(ctx sdk.Context, serviceID uint32, delegator string) error
+	AfterServiceDelegationModified(ctx sdk.Context, serviceID uint32, delegator string) error
 }

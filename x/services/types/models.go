@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 )
@@ -48,30 +49,90 @@ func NewService(
 }
 
 // Validate checks that the Service has valid values.
-func (a *Service) Validate() error {
-	if a.Status == SERVICE_STATUS_UNSPECIFIED {
-		return fmt.Errorf("invalid status: %s", a.Status)
+func (s Service) Validate() error {
+	if s.Status == SERVICE_STATUS_UNSPECIFIED {
+		return fmt.Errorf("invalid status: %s", s.Status)
 	}
 
-	if a.ID == 0 {
-		return fmt.Errorf("invalid id: %d", a.ID)
+	if s.ID == 0 {
+		return fmt.Errorf("invalid id: %d", s.ID)
 	}
 
-	if strings.TrimSpace(a.Name) == "" {
-		return fmt.Errorf("invalid name: %s", a.Name)
+	if strings.TrimSpace(s.Name) == "" {
+		return fmt.Errorf("invalid name: %s", s.Name)
 	}
 
-	_, err := sdk.AccAddressFromBech32(a.Admin)
+	_, err := sdk.AccAddressFromBech32(s.Admin)
 	if err != nil {
 		return fmt.Errorf("invalid admin address")
 	}
 
-	_, err = sdk.AccAddressFromBech32(a.Address)
+	_, err = sdk.AccAddressFromBech32(s.Address)
 	if err != nil {
 		return fmt.Errorf("invalid service address")
 	}
 
 	return nil
+}
+
+// IsActive returns whether the service is active.
+func (s Service) IsActive() bool {
+	return s.Status == SERVICE_STATUS_ACTIVE
+}
+
+// InvalidExRate returns whether the exchange rates is invalid.
+// This can happen e.g. if Service loses all tokens due to slashing. In this case,
+// make all future delegations invalid.
+func (s Service) InvalidExRate() bool {
+	for _, token := range s.Tokens {
+		if token.IsZero() && s.DelegatorShares.AmountOf(token.Denom).IsPositive() {
+			return true
+		}
+	}
+	return false
+}
+
+// SharesFromTokens returns the shares of a delegation given a bond amount. It
+// returns an error if the service has no tokens.
+func (s Service) SharesFromTokens(tokens sdk.Coin) (sdkmath.LegacyDec, error) {
+	if s.Tokens.IsZero() {
+		return sdkmath.LegacyZeroDec(), ErrInsufficientShares
+	}
+
+	delegatorTokenShares := s.DelegatorShares.AmountOf(tokens.Denom)
+	operatorTokenAmount := s.Tokens.AmountOf(tokens.Denom)
+
+	return delegatorTokenShares.MulInt(tokens.Amount).QuoInt(operatorTokenAmount), nil
+}
+
+// AddTokensFromDelegation adds the given amount of tokens to the service's total tokens,
+// also updating the service's delegator shares.
+// It returns the updated service and the shares issued.
+func (s Service) AddTokensFromDelegation(amount sdk.Coins) (Service, sdk.DecCoins) {
+	// calculate the shares to issue
+	issuedShares := sdk.NewDecCoins()
+	for _, token := range amount {
+		var tokenShares sdk.DecCoin
+		delegatorShares := s.DelegatorShares.AmountOf(token.Denom)
+
+		if delegatorShares.IsZero() {
+			// The first delegation to an operator sets the exchange rate to one
+			tokenShares = sdk.NewDecCoinFromCoin(token)
+		} else {
+			shares, err := s.SharesFromTokens(token)
+			if err != nil {
+				panic(err)
+			}
+			tokenShares = sdk.NewDecCoinFromDec(token.Denom, shares)
+		}
+
+		issuedShares = issuedShares.Add(tokenShares)
+	}
+
+	s.Tokens = s.Tokens.Add(amount...)
+	s.DelegatorShares = s.DelegatorShares.Add(issuedShares...)
+
+	return s, issuedShares
 }
 
 // --------------------------------------------------------------------------------------------------------------------

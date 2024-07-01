@@ -41,7 +41,7 @@ func TestGenesis_Validate(t *testing.T) {
 					types.NewServiceDelegation(
 						0,
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-						sdkmath.LegacyNewDec(100),
+						sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 					),
 				},
 				nil,
@@ -94,7 +94,7 @@ func TestGenesis_Validate(t *testing.T) {
 					types.NewServiceDelegation(
 						2,
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-						sdkmath.LegacyNewDec(100),
+						sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 					),
 				},
 				[]types.OperatorDelegation{
@@ -193,7 +193,7 @@ func TestServiceDelegation_Validate(t *testing.T) {
 			entry: types.NewServiceDelegation(
 				0,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				sdkmath.LegacyNewDec(100),
+				sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 			),
 			shouldErr: true,
 		},
@@ -202,7 +202,7 @@ func TestServiceDelegation_Validate(t *testing.T) {
 			entry: types.NewServiceDelegation(
 				1,
 				"",
-				sdkmath.LegacyNewDec(100),
+				sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 			),
 			shouldErr: true,
 		},
@@ -211,7 +211,7 @@ func TestServiceDelegation_Validate(t *testing.T) {
 			entry: types.NewServiceDelegation(
 				1,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				sdkmath.LegacyNewDec(-100),
+				sdk.DecCoins{sdk.DecCoin{Denom: "umilk", Amount: sdkmath.LegacyNewDec(100)}},
 			),
 			shouldErr: true,
 		},
@@ -220,7 +220,7 @@ func TestServiceDelegation_Validate(t *testing.T) {
 			entry: types.NewServiceDelegation(
 				1,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				sdkmath.LegacyNewDec(100),
+				sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 			),
 			shouldErr: false,
 		},

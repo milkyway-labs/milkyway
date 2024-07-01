@@ -19,6 +19,7 @@ type Keeper struct {
 	bankKeeper      types.BankKeeper
 	poolsKeeper     types.PoolsKeeper
 	operatorsKeeper types.OperatorsKeeper
+	servicesKeeper  types.ServicesKeeper
 
 	hooks types.RestakingHooks
 }

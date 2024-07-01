@@ -125,7 +125,7 @@ func MustUnmarshalOperatorDelegation(cdc codec.BinaryCodec, bz []byte) OperatorD
 
 // --------------------------------------------------------------------------------------------------------------------
 
-func NewServiceDelegation(serviceID uint32, userAddress string, shares sdkmath.LegacyDec) ServiceDelegation {
+func NewServiceDelegation(serviceID uint32, userAddress string, shares sdk.DecCoins) ServiceDelegation {
 	return ServiceDelegation{
 		ServiceID:   serviceID,
 		UserAddress: userAddress,
@@ -133,6 +133,10 @@ func NewServiceDelegation(serviceID uint32, userAddress string, shares sdkmath.L
 	}
 }
 
+// isDelegation implements Delegation
+func (d ServiceDelegation) isDelegation() {}
+
+// Validate validates the service delegation
 func (d ServiceDelegation) Validate() error {
 	if d.ServiceID == 0 {
 		return fmt.Errorf("invalid service id")
@@ -143,9 +147,37 @@ func (d ServiceDelegation) Validate() error {
 		return fmt.Errorf("invalid user address: %s", d.UserAddress)
 	}
 
-	if d.Shares.IsNegative() {
+	if d.Shares.IsAnyNegative() {
 		return ErrInvalidShares
 	}
 
 	return nil
+}
+
+// MustMarshalServiceDelegation marshals the given service delegation using the provided codec
+func MustMarshalServiceDelegation(cdc codec.BinaryCodec, delegation ServiceDelegation) []byte {
+	bz, err := cdc.Marshal(&delegation)
+	if err != nil {
+		panic(err)
+	}
+	return bz
+}
+
+// UnmarshalServiceDelegation unmarshals a service delegation from the given bytes using the provided codec
+func UnmarshalServiceDelegation(cdc codec.BinaryCodec, bz []byte) (ServiceDelegation, error) {
+	var delegation ServiceDelegation
+	err := cdc.Unmarshal(bz, &delegation)
+	if err != nil {
+		return ServiceDelegation{}, err
+	}
+	return delegation, nil
+}
+
+// MustUnmarshalServiceDelegation unmarshals a service delegation from the given bytes using the provided codec
+func MustUnmarshalServiceDelegation(cdc codec.BinaryCodec, bz []byte) ServiceDelegation {
+	delegation, err := UnmarshalServiceDelegation(cdc, bz)
+	if err != nil {
+		panic(err)
+	}
+	return delegation
 }
