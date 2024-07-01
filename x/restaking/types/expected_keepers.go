@@ -30,5 +30,5 @@ type ServicesKeeper interface {
 
 type OperatorsKeeper interface {
 	GetOperator(ctx sdk.Context, operatorID uint32) (operatorstypes.Operator, bool)
-	SaveOperator(ctx sdk.Context, operator operatorstypes.Operator) error
+	SaveOperator(ctx sdk.Context, operator operatorstypes.Operator)
 }

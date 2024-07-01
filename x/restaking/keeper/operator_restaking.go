@@ -44,8 +44,8 @@ func (k *Keeper) AddOperatorTokensAndShares(
 	operator, addedShares = operator.AddTokensFromDelegation(tokensToAdd)
 
 	// Save the operator
-	err = k.operatorsKeeper.SaveOperator(ctx, operator)
-	return operator, addedShares, err
+	k.operatorsKeeper.SaveOperator(ctx, operator)
+	return operator, addedShares, nil
 }
 
 // --------------------------------------------------------------------------------------------------------------------

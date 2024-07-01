@@ -14,8 +14,12 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
 	"github.com/milkyway-labs/milkyway/app"
+	appkeepers "github.com/milkyway-labs/milkyway/app/keepers"
 	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
+	operatorskeeper "github.com/milkyway-labs/milkyway/x/operators/keeper"
+	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	poolskeeper "github.com/milkyway-labs/milkyway/x/pools/keeper"
+	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	"github.com/milkyway-labs/milkyway/x/restaking/keeper"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 
@@ -44,12 +48,16 @@ type KeeperTestSuite struct {
 	ak authkeeper.AccountKeeper
 	bk bankkeeper.Keeper
 	pk *poolskeeper.Keeper
+	ok *operatorskeeper.Keeper
 	k  *keeper.Keeper
 }
 
 func (suite *KeeperTestSuite) SetupTest() {
 	// Define store keys
-	keys := storetypes.NewKVStoreKeys(types.StoreKey, authtypes.StoreKey, banktypes.StoreKey)
+	keys := storetypes.NewKVStoreKeys(
+		types.StoreKey,
+		authtypes.StoreKey, banktypes.StoreKey, poolstypes.StoreKey, operatorstypes.StoreKey,
+	)
 	suite.storeKey = keys[types.StoreKey]
 
 	// Create logger
@@ -73,6 +81,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 	authorityAddr := authtypes.NewModuleAddress(govtypes.ModuleName).String()
 
 	// Build keepers
+
 	suite.ak = authkeeper.NewAccountKeeper(
 		suite.cdc,
 		runtime.NewKVStoreService(keys[authtypes.StoreKey]),
@@ -90,10 +99,21 @@ func (suite *KeeperTestSuite) SetupTest() {
 		authorityAddr,
 		logger,
 	)
+	communityPoolKeeper := appkeepers.NewCommunityPoolKeeper(
+		suite.bk,
+		authtypes.FeeCollectorName,
+	)
 	suite.pk = poolskeeper.NewKeeper(
 		suite.cdc,
-		suite.storeKey,
+		keys[poolstypes.StoreKey],
 		suite.ak,
+	)
+	suite.ok = operatorskeeper.NewKeeper(
+		suite.cdc,
+		keys[operatorstypes.StoreKey],
+		suite.ak,
+		communityPoolKeeper,
+		authorityAddr,
 	)
 	suite.k = keeper.NewKeeper(
 		suite.cdc,
@@ -101,7 +121,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 		suite.ak,
 		suite.bk,
 		suite.pk,
-		nil,
+		suite.ok,
 		authorityAddr,
 	).SetHooks(newMockHooks())
 }

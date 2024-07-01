@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 )
@@ -35,13 +36,15 @@ func NewOperator(
 	admin string,
 ) Operator {
 	return Operator{
-		ID:         id,
-		Status:     status,
-		Moniker:    moniker,
-		Website:    website,
-		PictureURL: pictureURL,
-		Admin:      admin,
-		Address:    GetOperatorAddress(id).String(),
+		ID:              id,
+		Status:          status,
+		Admin:           admin,
+		Moniker:         moniker,
+		Website:         website,
+		PictureURL:      pictureURL,
+		Address:         GetOperatorAddress(id).String(),
+		Tokens:          sdk.NewCoins(),
+		DelegatorShares: sdk.NewDecCoins(),
 	}
 }
 
@@ -86,19 +89,15 @@ func (o Operator) InvalidExRate() bool {
 
 // SharesFromTokens returns the shares of a delegation given a bond amount. It
 // returns an error if the pool has no tokens.
-func (o Operator) SharesFromTokens(tokens sdk.Coins) (sdk.DecCoins, error) {
+func (o Operator) SharesFromTokens(tokens sdk.Coin) (sdkmath.LegacyDec, error) {
 	if o.Tokens.IsZero() {
-		return nil, ErrInsufficientShares
+		return sdkmath.LegacyZeroDec(), ErrInsufficientShares
 	}
 
-	shares := sdk.NewDecCoins()
-	for _, token := range tokens {
-		tokenDelegatorShares := o.DelegatorShares.AmountOf(token.Denom)
-		tokenAmount := o.Tokens.AmountOf(token.Denom)
-		shares = shares.Add(sdk.NewDecCoinFromDec(token.Denom, tokenDelegatorShares.MulInt(token.Amount).QuoInt(tokenAmount)))
-	}
+	delegatorTokenShares := o.DelegatorShares.AmountOf(tokens.Denom)
+	operatorTokenAmount := o.Tokens.AmountOf(tokens.Denom)
 
-	return shares, nil
+	return delegatorTokenShares.MulInt(tokens.Amount).QuoInt(operatorTokenAmount), nil
 }
 
 // AddTokensFromDelegation adds the given amount of tokens to the pool's total tokens,
@@ -106,17 +105,23 @@ func (o Operator) SharesFromTokens(tokens sdk.Coins) (sdk.DecCoins, error) {
 // It returns the updated pool and the shares issued.
 func (o Operator) AddTokensFromDelegation(amount sdk.Coins) (Operator, sdk.DecCoins) {
 	// calculate the shares to issue
-	var issuedShares sdk.DecCoins
-	if o.DelegatorShares.IsZero() {
-		// the first delegation to a operator sets the exchange rate to one
-		issuedShares = sdk.NewDecCoinsFromCoins(amount...)
-	} else {
-		shares, err := o.SharesFromTokens(amount)
-		if err != nil {
-			panic(err)
+	issuedShares := sdk.NewDecCoins()
+	for _, token := range amount {
+		var tokenShares sdk.DecCoin
+		delegatorShares := o.DelegatorShares.AmountOf(token.Denom)
+
+		if delegatorShares.IsZero() {
+			// The first delegation to an operator sets the exchange rate to one
+			tokenShares = sdk.NewDecCoinFromCoin(token)
+		} else {
+			shares, err := o.SharesFromTokens(token)
+			if err != nil {
+				panic(err)
+			}
+			tokenShares = sdk.NewDecCoinFromDec(token.Denom, shares)
 		}
 
-		issuedShares = shares
+		issuedShares = issuedShares.Add(tokenShares)
 	}
 
 	o.Tokens = o.Tokens.Add(amount...)
