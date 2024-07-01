@@ -155,47 +155,47 @@ func newMockHooks() *mockHooks {
 	return &mockHooks{CalledMap: make(map[string]bool)}
 }
 
-func (m mockHooks) BeforePoolDelegationCreated(ctx sdk.Context, poolID uint32, delegator string) error {
+func (m mockHooks) BeforePoolDelegationCreated(sdk.Context, uint32, string) error {
 	m.CalledMap["BeforePoolDelegationCreated"] = true
 	return nil
 }
 
-func (m mockHooks) BeforePoolDelegationSharesModified(ctx sdk.Context, poolID uint32, delegator string) error {
+func (m mockHooks) BeforePoolDelegationSharesModified(sdk.Context, uint32, string) error {
 	m.CalledMap["BeforePoolDelegationSharesModified"] = true
 	return nil
 }
 
-func (m mockHooks) AfterPoolDelegationModified(ctx sdk.Context, poolID uint32, delegator string) error {
+func (m mockHooks) AfterPoolDelegationModified(sdk.Context, uint32, string) error {
 	m.CalledMap["AfterPoolDelegationModified"] = true
 	return nil
 }
 
-func (m mockHooks) BeforeOperatorDelegationCreated(ctx sdk.Context, operatorID uint32, delegator string) error {
+func (m mockHooks) BeforeOperatorDelegationCreated(sdk.Context, uint32, string) error {
 	m.CalledMap["BeforeOperatorDelegationCreated"] = true
 	return nil
 }
 
-func (m mockHooks) BeforeOperatorDelegationSharesModified(ctx sdk.Context, operatorID uint32, delegator string) error {
+func (m mockHooks) BeforeOperatorDelegationSharesModified(sdk.Context, uint32, string) error {
 	m.CalledMap["BeforeOperatorDelegationSharesModified"] = true
 	return nil
 }
 
-func (m mockHooks) AfterOperatorDelegationModified(ctx sdk.Context, operatorID uint32, delegator string) error {
+func (m mockHooks) AfterOperatorDelegationModified(sdk.Context, uint32, string) error {
 	m.CalledMap["AfterOperatorDelegationModified"] = true
 	return nil
 }
 
-func (m mockHooks) BeforeServiceDelegationCreated(ctx sdk.Context, serviceID uint32, delegator string) error {
+func (m mockHooks) BeforeServiceDelegationCreated(sdk.Context, uint32, string) error {
 	m.CalledMap["BeforeServiceDelegationCreated"] = true
 	return nil
 }
 
-func (m mockHooks) BeforeServiceDelegationSharesModified(ctx sdk.Context, serviceID uint32, delegator string) error {
+func (m mockHooks) BeforeServiceDelegationSharesModified(sdk.Context, uint32, string) error {
 	m.CalledMap["BeforeServiceDelegationSharesModified"] = true
 	return nil
 }
 
-func (m mockHooks) AfterServiceDelegationModified(ctx sdk.Context, serviceID uint32, delegator string) error {
+func (m mockHooks) AfterServiceDelegationModified(sdk.Context, uint32, string) error {
 	m.CalledMap["AfterServiceDelegationModified"] = true
 	return nil
 }
