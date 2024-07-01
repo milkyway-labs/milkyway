@@ -92,8 +92,11 @@ message MsgDelegateService {
   uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
 
   // Amount is the amount of coins to be delegated
-  cosmos.base.v1beta1.Coin amount = 3
-      [ (gogoproto.customname) = "Amount", (gogoproto.nullable) = false ];
+  repeated cosmos.base.v1beta1.Coin amount = 3 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.customname) = "Amount",
+    (gogoproto.nullable) = false
+  ];
 }
 
 // MsgDelegateServiceResponse is the return value of MsgDelegateService.

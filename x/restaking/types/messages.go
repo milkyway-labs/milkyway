@@ -81,7 +81,7 @@ func (msg *MsgDelegateOperator) GetSigners() []sdk.AccAddress {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-func NewMsgDelegateService(serviceID uint32, amount sdk.Coin, delegator string) *MsgDelegateService {
+func NewMsgDelegateService(serviceID uint32, amount sdk.Coins, delegator string) *MsgDelegateService {
 	return &MsgDelegateService{
 		ServiceID: serviceID,
 		Amount:    amount,

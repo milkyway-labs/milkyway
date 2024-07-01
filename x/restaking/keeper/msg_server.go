@@ -7,6 +7,7 @@ import (
 	"cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/hashicorp/go-metrics"
 
@@ -28,6 +29,13 @@ func NewMsgServerImpl(keeper *Keeper) types.MsgServer {
 // PoolRestake defines the rpc method for Msg/PoolRestake
 func (k msgServer) PoolRestake(goCtx context.Context, msg *types.MsgJoinRestakingPool) (*types.MsgJoinRestakingPoolResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !msg.Amount.IsValid() || !msg.Amount.Amount.IsPositive() {
+		return nil, errors.Wrap(
+			sdkerrors.ErrInvalidRequest,
+			"invalid delegation amount",
+		)
+	}
 
 	newShares, err := k.Keeper.DelegateToPool(ctx, msg.Amount, msg.Delegator)
 	if err != nil {
@@ -61,6 +69,13 @@ func (k msgServer) PoolRestake(goCtx context.Context, msg *types.MsgJoinRestakin
 // OperatorRestake defines the rpc method for Msg/OperatorRestake
 func (k msgServer) OperatorRestake(goCtx context.Context, msg *types.MsgDelegateOperator) (*types.MsgDelegateOperatorResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !msg.Amount.IsValid() || !msg.Amount.IsAllPositive() {
+		return nil, errors.Wrap(
+			sdkerrors.ErrInvalidRequest,
+			"invalid delegation amount",
+		)
+	}
 
 	newShares, err := k.Keeper.DelegateToOperator(ctx, msg.OperatorID, msg.Amount, msg.Delegator)
 	if err != nil {
@@ -96,8 +111,45 @@ func (k msgServer) OperatorRestake(goCtx context.Context, msg *types.MsgDelegate
 
 // ServiceRestake defines the rpc method for Msg/ServiceRestake
 func (k msgServer) ServiceRestake(goCtx context.Context, msg *types.MsgDelegateService) (*types.MsgDelegateServiceResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if !msg.Amount.IsValid() || !msg.Amount.IsAllPositive() {
+		return nil, errors.Wrap(
+			sdkerrors.ErrInvalidRequest,
+			"invalid delegation amount",
+		)
+	}
+
+	newShares, err := k.Keeper.DelegateToService(ctx, msg.ServiceID, msg.Amount, msg.Delegator)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, token := range msg.Amount {
+		if token.Amount.IsInt64() {
+			defer func() {
+				telemetry.IncrCounter(1, types.ModuleName, "service restake")
+				telemetry.SetGaugeWithLabels(
+					[]string{"tx", "msg", sdk.MsgTypeURL(msg)},
+					float32(token.Amount.Int64()),
+					[]metrics.Label{telemetry.NewLabel("denom", token.Denom)},
+				)
+			}()
+		}
+	}
+
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeServiceRestake,
+			sdk.NewAttribute(types.AttributeKeyDelegator, msg.Delegator),
+			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
+			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Amount.String()),
+			sdk.NewAttribute(types.AttributeKeyNewShares, newShares.String()),
+		),
+	})
+
+	return &types.MsgDelegateServiceResponse{}, nil
 }
 
 // UpdateParams defines the rpc method for Msg/UpdateParams

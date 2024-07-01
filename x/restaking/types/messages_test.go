@@ -140,7 +140,7 @@ func TestMsgDelegateOperator_GetSigners(t *testing.T) {
 
 var msgDelegateService = types.NewMsgDelegateService(
 	1,
-	sdk.NewCoin("umilk", sdkmath.NewInt(100_000_000)),
+	sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100_000_000))),
 	"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 )
 
@@ -163,7 +163,7 @@ func TestMsgDelegateService_ValidateBasic(t *testing.T) {
 			name: "invalid amount returns error",
 			msg: types.NewMsgDelegateService(
 				msgDelegateService.ServiceID,
-				sdk.Coin{Denom: "invalid!", Amount: sdkmath.NewInt(100_000_000)},
+				sdk.Coins{sdk.Coin{Denom: "invalid!", Amount: sdkmath.NewInt(100_000_000)}},
 				msgDelegateService.Delegator,
 			),
 			shouldErr: true,
