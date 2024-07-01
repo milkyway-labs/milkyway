@@ -197,7 +197,7 @@ func TestMsgDelegateService_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgDelegateService_GetSignBytes(t *testing.T) {
-	expected := `{"type":"milkyway/MsgDelegateService","value":{"amount":{"amount":"100000000","denom":"umilk"},"delegator":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","service_id":1}}`
+	expected := `{"type":"milkyway/MsgDelegateService","value":{"amount":[{"amount":"100000000","denom":"umilk"}],"delegator":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","service_id":1}}`
 	require.Equal(t, expected, string(msgDelegateService.GetSignBytes()))
 }
 

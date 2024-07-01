@@ -18,7 +18,7 @@ func (k *Keeper) SaveOperatorDelegation(ctx sdk.Context, delegation types.Operat
 	store.Set(types.UserOperatorDelegationStoreKey(delegation.UserAddress, delegation.OperatorID), delegationBz)
 
 	// Store the delegation in the delegations by operator ID store
-	store.Set(types.DelegationByPoolIDStoreKey(delegation.OperatorID, delegation.UserAddress), []byte{})
+	store.Set(types.DelegationByOperatorIDStoreKey(delegation.OperatorID, delegation.UserAddress), []byte{})
 }
 
 // GetOperatorDelegation retrieves the delegation for the given user and operator

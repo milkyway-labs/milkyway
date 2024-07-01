@@ -211,7 +211,7 @@ func TestServiceDelegation_Validate(t *testing.T) {
 			entry: types.NewServiceDelegation(
 				1,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				sdk.DecCoins{sdk.DecCoin{Denom: "umilk", Amount: sdkmath.LegacyNewDec(100)}},
+				sdk.DecCoins{sdk.DecCoin{Denom: "umilk", Amount: sdkmath.LegacyNewDec(-100)}},
 			),
 			shouldErr: true,
 		},

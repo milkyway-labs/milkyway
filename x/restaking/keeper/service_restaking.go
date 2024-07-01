@@ -18,7 +18,7 @@ func (k *Keeper) SaveServiceDelegation(ctx sdk.Context, delegation types.Service
 	store.Set(types.UserServiceDelegationStoreKey(delegation.UserAddress, delegation.ServiceID), delegationBz)
 
 	// Store the delegation in the delegations by service ID store
-	store.Set(types.DelegationByPoolIDStoreKey(delegation.ServiceID, delegation.UserAddress), []byte{})
+	store.Set(types.DelegationByServiceIDStoreKey(delegation.ServiceID, delegation.UserAddress), []byte{})
 }
 
 // GetServiceDelegation retrieves the delegation for the given user and service

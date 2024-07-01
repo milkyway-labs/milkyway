@@ -36,15 +36,13 @@ func NewOperator(
 	admin string,
 ) Operator {
 	return Operator{
-		ID:              id,
-		Status:          status,
-		Admin:           admin,
-		Moniker:         moniker,
-		Website:         website,
-		PictureURL:      pictureURL,
-		Address:         GetOperatorAddress(id).String(),
-		Tokens:          sdk.NewCoins(),
-		DelegatorShares: sdk.NewDecCoins(),
+		ID:         id,
+		Status:     status,
+		Admin:      admin,
+		Moniker:    moniker,
+		Website:    website,
+		PictureURL: pictureURL,
+		Address:    GetOperatorAddress(id).String(),
 	}
 }
 
