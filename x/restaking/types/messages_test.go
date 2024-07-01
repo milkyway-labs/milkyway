@@ -70,7 +70,7 @@ func TestMsgJoinRestakingPool_GetSigners(t *testing.T) {
 
 var msgDelegateOperator = types.NewMsgDelegateOperator(
 	1,
-	sdk.NewCoin("umilk", sdkmath.NewInt(100_000_000)),
+	sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100_000_000))),
 	"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 )
 
@@ -93,7 +93,7 @@ func TestMsgDelegateOperator_ValidateBasic(t *testing.T) {
 			name: "invalid amount returns error",
 			msg: types.NewMsgDelegateOperator(
 				msgDelegateOperator.OperatorID,
-				sdk.Coin{Denom: "invalid!", Amount: sdkmath.NewInt(100_000_000)},
+				sdk.Coins{sdk.Coin{Denom: "invalid!", Amount: sdkmath.NewInt(100_000_000)}},
 				msgDelegateOperator.Delegator,
 			),
 			shouldErr: true,
@@ -127,7 +127,7 @@ func TestMsgDelegateOperator_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgDelegateOperator_GetSignBytes(t *testing.T) {
-	expected := `{"type":"milkyway/MsgDelegateOperator","value":{"amount":{"amount":"100000000","denom":"umilk"},"delegator":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","operator_id":1}}`
+	expected := `{"type":"milkyway/MsgDelegateOperator","value":{"amount":[{"amount":"100000000","denom":"umilk"}],"delegator":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","operator_id":1}}`
 	require.Equal(t, expected, string(msgDelegateOperator.GetSignBytes()))
 }
 

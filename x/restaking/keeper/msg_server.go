@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 
 	"cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/telemetry"
@@ -59,8 +60,38 @@ func (k msgServer) PoolRestake(goCtx context.Context, msg *types.MsgJoinRestakin
 
 // OperatorRestake defines the rpc method for Msg/OperatorRestake
 func (k msgServer) OperatorRestake(goCtx context.Context, msg *types.MsgDelegateOperator) (*types.MsgDelegateOperatorResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	newShares, err := k.Keeper.DelegateToOperator(ctx, msg.OperatorID, msg.Amount, msg.Delegator)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, token := range msg.Amount {
+		if token.Amount.IsInt64() {
+			defer func() {
+				telemetry.IncrCounter(1, types.ModuleName, "operator restake")
+				telemetry.SetGaugeWithLabels(
+					[]string{"tx", "msg", sdk.MsgTypeURL(msg)},
+					float32(token.Amount.Int64()),
+					[]metrics.Label{telemetry.NewLabel("denom", token.Denom)},
+				)
+			}()
+		}
+	}
+
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeOperatorRestake,
+			sdk.NewAttribute(types.AttributeKeyDelegator, msg.Delegator),
+			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", msg.OperatorID)),
+			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Amount.String()),
+			sdk.NewAttribute(types.AttributeKeyNewShares, newShares.String()),
+		),
+	})
+
+	return &types.MsgDelegateOperatorResponse{}, nil
 }
 
 // ServiceRestake defines the rpc method for Msg/ServiceRestake

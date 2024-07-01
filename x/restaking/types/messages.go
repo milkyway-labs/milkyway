@@ -42,7 +42,7 @@ func (msg *MsgJoinRestakingPool) GetSigners() []sdk.AccAddress {
 // --------------------------------------------------------------------------------------------------------------------
 
 // NewMsgDelegateOperator creates a new MsgDelegateOperator instance
-func NewMsgDelegateOperator(operatorID uint32, amount sdk.Coin, delegator string) *MsgDelegateOperator {
+func NewMsgDelegateOperator(operatorID uint32, amount sdk.Coins, delegator string) *MsgDelegateOperator {
 	return &MsgDelegateOperator{
 		OperatorID: operatorID,
 		Amount:     amount,
