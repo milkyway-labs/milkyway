@@ -17,6 +17,10 @@ func NewPoolDelegation(poolID uint32, userAddress string, shares sdkmath.LegacyD
 	}
 }
 
+// isDelegation implements Delegation
+func (d PoolDelegation) isDelegation() {}
+
+// Validate validates the pool delegation
 func (d PoolDelegation) Validate() error {
 	if d.PoolID == 0 {
 		return fmt.Errorf("invalid pool id")

@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"fmt"
+
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -57,66 +59,42 @@ func (k *Keeper) DelegateToPool(ctx sdk.Context, amount sdk.Coin, delegator stri
 		return sdkmath.LegacyZeroDec(), err
 	}
 
-	// In some situations, the exchange rate becomes invalid, e.g. if
-	// Pool loses all tokens due to slashing. In this case,
-	// make all future delegations invalid.
-	if pool.InvalidExRate() {
-		return sdkmath.LegacyZeroDec(), types.ErrDelegatorShareExRateInvalid
-	}
+	// Get the amount to be bonded
+	coins := sdk.NewCoins(sdk.NewCoin(pool.Denom, amount.Amount))
 
-	// Get or create the delegation object and call the appropriate hook if present
-	delegation, found := k.GetPoolDelegation(ctx, pool.ID, delegator)
+	return k.PerformDelegation(ctx, types.DelegationData{
+		Amount:    coins,
+		Delegator: delegator,
+		Receiver:  &pool,
+		GetDelegation: func(ctx sdk.Context, receiverID uint32, delegator string) (types.Delegation, bool) {
+			return k.GetPoolDelegation(ctx, receiverID, delegator)
+		},
+		BuildDelegation: func(receiverID uint32, delegator string, shares sdkmath.LegacyDec) types.Delegation {
+			return types.NewPoolDelegation(receiverID, delegator, shares)
+		},
+		UpdateDelegation: func(ctx sdk.Context, delegation types.Delegation) (newShares sdkmath.LegacyDec, err error) {
+			// Calculate the new shares and add the tokens to the pool
+			_, newShares, err = k.AddPoolTokensAndShares(ctx, pool, amount.Amount)
+			if err != nil {
+				return newShares, err
+			}
 
-	if found {
-		// Delegation was found
-		err = k.BeforePoolDelegationSharesModified(ctx, pool.ID, delegator)
-		if err != nil {
-			return sdkmath.LegacyZeroDec(), err
-		}
-	} else {
-		// Delegation was not found
-		delegation = types.NewPoolDelegation(pool.ID, delegator, sdkmath.LegacyZeroDec())
-		err = k.BeforePoolDelegationCreated(ctx, pool.ID, delegator)
-		if err != nil {
-			return sdkmath.LegacyZeroDec(), err
-		}
-	}
+			// Update the delegation shares
+			poolDelegation, ok := delegation.(types.PoolDelegation)
+			if !ok {
+				return newShares, fmt.Errorf("invalid delegation type: %T", delegation)
+			}
+			poolDelegation.Shares = poolDelegation.Shares.Add(newShares)
 
-	// Convert the addresses to sdk.AccAddress
-	delegatorAddress, err := k.accountKeeper.AddressCodec().StringToBytes(delegator)
-	if err != nil {
-		return sdkmath.LegacyZeroDec(), err
-	}
-	poolAddress, err := k.accountKeeper.AddressCodec().StringToBytes(pool.Address)
-	if err != nil {
-		return sdkmath.LegacyZeroDec(), err
-	}
+			// Store the updated delegation
+			k.SavePoolDelegation(ctx, poolDelegation)
 
-	// Get the bond amount
-	bondAmount := amount.Amount
-
-	// Send the funds to the pool account
-	coins := sdk.NewCoins(sdk.NewCoin(pool.Denom, bondAmount))
-	err = k.bankKeeper.SendCoins(ctx, delegatorAddress, poolAddress, coins)
-	if err != nil {
-		return sdkmath.LegacyDec{}, err
-	}
-
-	// Calculate the new shares and add the tokens to the pool
-	_, newShares, err := k.AddPoolTokensAndShares(ctx, pool, bondAmount)
-	if err != nil {
-		return newShares, err
-	}
-
-	// Update delegation
-	delegation.Shares = delegation.Shares.Add(newShares)
-	k.SavePoolDelegation(ctx, delegation)
-
-	// Call the after-modification hook
-	err = k.AfterPoolDelegationModified(ctx, pool.ID, delegator)
-	if err != nil {
-		return newShares, err
-	}
-
-	return newShares, nil
+			return newShares, err
+		},
+		Hooks: types.DelegationHooks{
+			BeforeDelegationSharesModified: k.BeforePoolDelegationSharesModified,
+			BeforeDelegationCreated:        k.BeforePoolDelegationCreated,
+			AfterDelegationModified:        k.AfterPoolDelegationModified,
+		},
+	})
 }
