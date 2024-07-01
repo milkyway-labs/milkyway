@@ -81,7 +81,7 @@ func (o Operator) IsActive() bool {
 }
 
 // InvalidExRate returns whether the exchange rates is invalid.
-// This can happen e.g. if Pool loses all tokens due to slashing. In this case,
+// This can happen e.g. if Operator loses all tokens due to slashing. In this case,
 // make all future delegations invalid.
 func (o Operator) InvalidExRate() bool {
 	for _, token := range o.Tokens {
@@ -93,7 +93,7 @@ func (o Operator) InvalidExRate() bool {
 }
 
 // SharesFromTokens returns the shares of a delegation given a bond amount. It
-// returns an error if the pool has no tokens.
+// returns an error if the operator has no tokens.
 func (o Operator) SharesFromTokens(tokens sdk.Coin) (sdkmath.LegacyDec, error) {
 	if o.Tokens.IsZero() {
 		return sdkmath.LegacyZeroDec(), ErrInsufficientShares
@@ -105,9 +105,9 @@ func (o Operator) SharesFromTokens(tokens sdk.Coin) (sdkmath.LegacyDec, error) {
 	return delegatorTokenShares.MulInt(tokens.Amount).QuoInt(operatorTokenAmount), nil
 }
 
-// AddTokensFromDelegation adds the given amount of tokens to the pool's total tokens,
-// also updating the pool's delegator shares.
-// It returns the updated pool and the shares issued.
+// AddTokensFromDelegation adds the given amount of tokens to the operator's total tokens,
+// also updating the operator's delegator shares.
+// It returns the updated operator and the shares issued.
 func (o Operator) AddTokensFromDelegation(amount sdk.Coins) (Operator, sdk.DecCoins) {
 	// calculate the shares to issue
 	issuedShares := sdk.NewDecCoins()
