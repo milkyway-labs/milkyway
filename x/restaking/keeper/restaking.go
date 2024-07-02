@@ -67,7 +67,7 @@ func (k *Keeper) PerformDelegation(ctx sdk.Context, data types.DelegationData) (
 	// Call the after-modification hook
 	err = hooks.AfterDelegationModified(ctx, receiver.GetID(), delegator)
 	if err != nil {
-		return newShares, err
+		return nil, err
 	}
 
 	return newShares, nil
