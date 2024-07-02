@@ -75,6 +75,11 @@ func (s Service) Validate() error {
 	return nil
 }
 
+// GetSharesDenom returns the shares denom for a service and token denom
+func (s Service) GetSharesDenom(tokenDenom string) string {
+	return fmt.Sprintf("service/%d/%s", s.ID, tokenDenom)
+}
+
 // IsActive returns whether the service is active.
 func (s Service) IsActive() bool {
 	return s.Status == SERVICE_STATUS_ACTIVE
@@ -99,7 +104,8 @@ func (s Service) SharesFromTokens(tokens sdk.Coin) (sdkmath.LegacyDec, error) {
 		return sdkmath.LegacyZeroDec(), ErrInsufficientShares
 	}
 
-	delegatorTokenShares := s.DelegatorShares.AmountOf(tokens.Denom)
+	sharesDenom := s.GetSharesDenom(tokens.Denom)
+	delegatorTokenShares := s.DelegatorShares.AmountOf(sharesDenom)
 	operatorTokenAmount := s.Tokens.AmountOf(tokens.Denom)
 
 	return delegatorTokenShares.MulInt(tokens.Amount).QuoInt(operatorTokenAmount), nil
@@ -113,17 +119,18 @@ func (s Service) AddTokensFromDelegation(amount sdk.Coins) (Service, sdk.DecCoin
 	issuedShares := sdk.NewDecCoins()
 	for _, token := range amount {
 		var tokenShares sdk.DecCoin
-		delegatorShares := s.DelegatorShares.AmountOf(token.Denom)
+		sharesDenom := s.GetSharesDenom(token.Denom)
 
+		delegatorShares := s.DelegatorShares.AmountOf(sharesDenom)
 		if delegatorShares.IsZero() {
 			// The first delegation to an operator sets the exchange rate to one
-			tokenShares = sdk.NewDecCoinFromCoin(token)
+			tokenShares = sdk.NewDecCoin(sharesDenom, token.Amount)
 		} else {
 			shares, err := s.SharesFromTokens(token)
 			if err != nil {
 				panic(err)
 			}
-			tokenShares = sdk.NewDecCoinFromDec(token.Denom, shares)
+			tokenShares = sdk.NewDecCoinFromDec(sharesDenom, shares)
 		}
 
 		issuedShares = issuedShares.Add(tokenShares)

@@ -150,30 +150,46 @@ func (suite *KeeperTestSuite) TestKeeper_AddOperatorTokensAndShares() {
 			tokensToAdd: sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 			shouldErr:   false,
 			expOperator: operatorstypes.Operator{
-				ID:              1,
-				Address:         operatorstypes.GetOperatorAddress(1).String(),
-				Tokens:          sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
-				DelegatorShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
+				ID:      1,
+				Address: operatorstypes.GetOperatorAddress(1).String(),
+				Tokens: sdk.NewCoins(
+					sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+				),
+				DelegatorShares: sdk.NewDecCoins(
+					sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(100)),
+				),
 			},
-			expAddedShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
+			expAddedShares: sdk.NewDecCoins(
+				sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(100)),
+			),
 		},
 		{
 			name: "adding tokens to a non-empty operator works properly",
 			operator: operatorstypes.Operator{
-				ID:              1,
-				Address:         operatorstypes.GetOperatorAddress(1).String(),
-				Tokens:          sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(50))),
-				DelegatorShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
+				ID:      1,
+				Address: operatorstypes.GetOperatorAddress(1).String(),
+				Tokens: sdk.NewCoins(
+					sdk.NewCoin("umilk", sdkmath.NewInt(50)),
+				),
+				DelegatorShares: sdk.NewDecCoins(
+					sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(100)),
+				),
 			},
 			tokensToAdd: sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(20))),
 			shouldErr:   false,
 			expOperator: operatorstypes.Operator{
-				ID:              1,
-				Address:         operatorstypes.GetOperatorAddress(1).String(),
-				Tokens:          sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(70))),
-				DelegatorShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(140))),
+				ID:      1,
+				Address: operatorstypes.GetOperatorAddress(1).String(),
+				Tokens: sdk.NewCoins(
+					sdk.NewCoin("umilk", sdkmath.NewInt(70)),
+				),
+				DelegatorShares: sdk.NewDecCoins(
+					sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(140)),
+				),
 			},
-			expAddedShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(40))),
+			expAddedShares: sdk.NewDecCoins(
+				sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(40)),
+			),
 		},
 	}
 
@@ -299,11 +315,15 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 			store: func(ctx sdk.Context) {
 				// Create the operator
 				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
-					ID:              1,
-					Status:          operatorstypes.OPERATOR_STATUS_ACTIVE,
-					Address:         operatorstypes.GetOperatorAddress(1).String(),
-					Tokens:          sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(20))),
-					DelegatorShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
+					ID:      1,
+					Status:  operatorstypes.OPERATOR_STATUS_ACTIVE,
+					Address: operatorstypes.GetOperatorAddress(1).String(),
+					Tokens: sdk.NewCoins(
+						sdk.NewCoin("umilk", sdkmath.NewInt(20)),
+					),
+					DelegatorShares: sdk.NewDecCoins(
+						sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(100)),
+					),
 				})
 
 				// Set the correct operator tokens amount
@@ -327,17 +347,23 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 			amount:     sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 			delegator:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			shouldErr:  false,
-			expShares:  sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(500))),
+			expShares: sdk.NewDecCoins(
+				sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(500)),
+			),
 			check: func(ctx sdk.Context) {
 				// Make sure the operator now exists
 				operator, found := suite.ok.GetOperator(ctx, 1)
 				suite.Require().True(found)
 				suite.Require().Equal(operatorstypes.Operator{
-					ID:              1,
-					Status:          operatorstypes.OPERATOR_STATUS_ACTIVE,
-					Address:         operatorstypes.GetOperatorAddress(1).String(),
-					Tokens:          sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(120))),
-					DelegatorShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(600))),
+					ID:      1,
+					Status:  operatorstypes.OPERATOR_STATUS_ACTIVE,
+					Address: operatorstypes.GetOperatorAddress(1).String(),
+					Tokens: sdk.NewCoins(
+						sdk.NewCoin("umilk", sdkmath.NewInt(120)),
+					),
+					DelegatorShares: sdk.NewDecCoins(
+						sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(600)),
+					),
 				}, operator)
 
 				// Make sure the delegation exists
@@ -346,7 +372,9 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 				suite.Require().Equal(types.NewOperatorDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(500))),
+					sdk.NewDecCoins(
+						sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(500)),
+					),
 				), delegation)
 
 				// Make sure the user balance has been reduced properly
@@ -363,11 +391,15 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 			store: func(ctx sdk.Context) {
 				// Create the operator
 				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
-					ID:              1,
-					Status:          operatorstypes.OPERATOR_STATUS_ACTIVE,
-					Address:         operatorstypes.GetOperatorAddress(1).String(),
-					Tokens:          sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(80))),
-					DelegatorShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(125))),
+					ID:      1,
+					Status:  operatorstypes.OPERATOR_STATUS_ACTIVE,
+					Address: operatorstypes.GetOperatorAddress(1).String(),
+					Tokens: sdk.NewCoins(
+						sdk.NewCoin("umilk", sdkmath.NewInt(80)),
+					),
+					DelegatorShares: sdk.NewDecCoins(
+						sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(125)),
+					),
 				})
 
 				// Set the correct operator tokens amount
@@ -384,7 +416,9 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 				suite.k.SaveOperatorDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(125))),
+					sdk.NewDecCoins(
+						sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(125)),
+					),
 				))
 
 				// Send some funds to the user
@@ -398,7 +432,9 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 			amount:     sdk.NewCoins(sdk.NewCoin("uinit", sdkmath.NewInt(100))),
 			delegator:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			shouldErr:  false,
-			expShares:  sdk.NewDecCoins(sdk.NewDecCoinFromDec("uinit", sdkmath.LegacyNewDec(100))),
+			expShares: sdk.NewDecCoins(
+				sdk.NewDecCoinFromDec("operator/1/uinit", sdkmath.LegacyNewDec(100)),
+			),
 			check: func(ctx sdk.Context) {
 				// Make sure the operator now exists
 				operator, found := suite.ok.GetOperator(ctx, 1)
@@ -412,8 +448,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 						sdk.NewCoin("uinit", sdkmath.NewInt(100)),
 					),
 					DelegatorShares: sdk.NewDecCoins(
-						sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(125)),
-						sdk.NewDecCoinFromDec("uinit", sdkmath.LegacyNewDec(100)),
+						sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(125)),
+						sdk.NewDecCoinFromDec("operator/1/uinit", sdkmath.LegacyNewDec(100)),
 					),
 				}, operator)
 
@@ -424,8 +460,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(
-						sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(125)),
-						sdk.NewDecCoinFromDec("uinit", sdkmath.LegacyNewDec(100)),
+						sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(125)),
+						sdk.NewDecCoinFromDec("operator/1/uinit", sdkmath.LegacyNewDec(100)),
 					),
 				), delegation)
 
@@ -454,8 +490,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 						sdk.NewCoin("uinit", sdkmath.NewInt(75)),
 					),
 					DelegatorShares: sdk.NewDecCoins(
-						sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(125)),
-						sdk.NewDecCoinFromDec("uinit", sdkmath.LegacyNewDec(200)),
+						sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(125)),
+						sdk.NewDecCoinFromDec("operator/1/uinit", sdkmath.LegacyNewDec(200)),
 					),
 				})
 
@@ -477,8 +513,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(
-						sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100)),
-						sdk.NewDecCoinFromDec("uinit", sdkmath.LegacyNewDec(60)),
+						sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(100)),
+						sdk.NewDecCoinFromDec("operator/1/uinit", sdkmath.LegacyNewDec(60)),
 					),
 				))
 
@@ -500,8 +536,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 			delegator: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			shouldErr: false,
 			expShares: sdk.NewDecCoins(
-				sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDecWithPrec(15625, 2)),
-				sdk.NewDecCoinFromDec("uinit", sdkmath.LegacyNewDec(600)),
+				sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDecWithPrec(15625, 2)),
+				sdk.NewDecCoinFromDec("operator/1/uinit", sdkmath.LegacyNewDec(600)),
 			),
 			check: func(ctx sdk.Context) {
 				// Make sure the operator now exists
@@ -516,8 +552,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 						sdk.NewCoin("uinit", sdkmath.NewInt(300)),
 					),
 					DelegatorShares: sdk.NewDecCoins(
-						sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDecWithPrec(28125, 2)),
-						sdk.NewDecCoinFromDec("uinit", sdkmath.LegacyNewDec(800)),
+						sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDecWithPrec(28125, 2)),
+						sdk.NewDecCoinFromDec("operator/1/uinit", sdkmath.LegacyNewDec(800)),
 					),
 				}, operator)
 
@@ -528,8 +564,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(
-						sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDecWithPrec(25625, 2)), // 100 (existing) + 156.25 (new)
-						sdk.NewDecCoinFromDec("uinit", sdkmath.LegacyNewDec(660)),              // 60 (existing) + 600 (new)
+						sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDecWithPrec(25625, 2)), // 100 (existing) + 156.25 (new)
+						sdk.NewDecCoinFromDec("operator/1/uinit", sdkmath.LegacyNewDec(660)),              // 60 (existing) + 600 (new)
 					),
 				), delegation)
 

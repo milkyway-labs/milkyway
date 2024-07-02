@@ -87,7 +87,8 @@ func (k *Keeper) DelegateToPool(ctx sdk.Context, amount sdk.Coin, delegator stri
 			// Store the updated delegation
 			k.SavePoolDelegation(ctx, poolDelegation)
 
-			return sdk.NewDecCoins(sdk.NewDecCoinFromDec(amount.Denom, newShares)), err
+			sharesDenom := pool.GetSharesDenom(amount.Denom)
+			return sdk.NewDecCoins(sdk.NewDecCoinFromDec(sharesDenom, newShares)), err
 		},
 		Hooks: types.DelegationHooks{
 			BeforeDelegationSharesModified: k.BeforePoolDelegationSharesModified,

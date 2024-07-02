@@ -54,6 +54,11 @@ func (p Pool) Validate() error {
 	return nil
 }
 
+// GetSharesDenom returns the shares denom for a pool and token denom
+func (p Pool) GetSharesDenom(tokenDenom string) string {
+	return fmt.Sprintf("pool/%d/%s", p.ID, tokenDenom)
+}
+
 // InvalidExRate returns whether the exchange rates is invalid.
 // This can happen e.g. if Pool loses all tokens due to slashing. In this case,
 // make all future delegations invalid.
