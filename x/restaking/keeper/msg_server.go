@@ -22,7 +22,7 @@ type msgServer struct {
 	*Keeper
 }
 
-func NewMsgServerImpl(keeper *Keeper) types.MsgServer {
+func NewMsgServer(keeper *Keeper) types.MsgServer {
 	return &msgServer{Keeper: keeper}
 }
 
