@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"fmt"
+
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -63,10 +65,9 @@ func (k *Keeper) GetPoolDelegations(ctx sdk.Context, poolID uint32) ([]types.Poo
 			return nil, err
 		}
 
-		bz := store.Get(types.UserPoolDelegationStoreKey(delegatorAddress, poolID))
-		delegation, err := types.UnmarshalPoolDelegation(k.cdc, bz)
-		if err != nil {
-			return nil, err
+		delegation, found := k.GetPoolDelegation(ctx, poolID, delegatorAddress)
+		if !found {
+			return nil, fmt.Errorf("delegation not found for pool %d and delegator %s", poolID, delegatorAddress)
 		}
 
 		delegations = append(delegations, delegation)
