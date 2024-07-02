@@ -40,10 +40,10 @@ func (k *Keeper) GetAllDelegatorPoolDelegations(ctx sdk.Context, delegator strin
 	defer iterator.Close()
 
 	var delegations []types.PoolDelegation
-	for i := 0; iterator.Valid(); iterator.Next() {
+	for ; iterator.Valid(); iterator.Next() {
 		delegation := types.MustUnmarshalPoolDelegation(k.cdc, iterator.Value())
 		delegations = append(delegations, delegation)
-		i++
+
 	}
 
 	return delegations
