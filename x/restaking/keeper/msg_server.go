@@ -26,8 +26,8 @@ func NewMsgServerImpl(keeper *Keeper) types.MsgServer {
 	return &msgServer{Keeper: keeper}
 }
 
-// PoolRestake defines the rpc method for Msg/PoolRestake
-func (k msgServer) PoolRestake(goCtx context.Context, msg *types.MsgJoinRestakingPool) (*types.MsgJoinRestakingPoolResponse, error) {
+// DelegatePool defines the rpc method for Msg/DelegatePool
+func (k msgServer) DelegatePool(goCtx context.Context, msg *types.MsgDelegatePool) (*types.MsgDelegatePoolResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if !msg.Amount.IsValid() || !msg.Amount.Amount.IsPositive() {
@@ -56,18 +56,18 @@ func (k msgServer) PoolRestake(goCtx context.Context, msg *types.MsgJoinRestakin
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypePoolRestake,
+			types.EventTypeDelegatePool,
 			sdk.NewAttribute(types.AttributeKeyDelegator, msg.Delegator),
 			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Amount.String()),
 			sdk.NewAttribute(types.AttributeKeyNewShares, newShares.String()),
 		),
 	})
 
-	return &types.MsgJoinRestakingPoolResponse{}, nil
+	return &types.MsgDelegatePoolResponse{}, nil
 }
 
-// OperatorRestake defines the rpc method for Msg/OperatorRestake
-func (k msgServer) OperatorRestake(goCtx context.Context, msg *types.MsgDelegateOperator) (*types.MsgDelegateOperatorResponse, error) {
+// DelegateOperator defines the rpc method for Msg/DelegateOperator
+func (k msgServer) DelegateOperator(goCtx context.Context, msg *types.MsgDelegateOperator) (*types.MsgDelegateOperatorResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if !msg.Amount.IsValid() || !msg.Amount.IsAllPositive() {
@@ -98,7 +98,7 @@ func (k msgServer) OperatorRestake(goCtx context.Context, msg *types.MsgDelegate
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeOperatorRestake,
+			types.EventTypeDelegateOperator,
 			sdk.NewAttribute(types.AttributeKeyDelegator, msg.Delegator),
 			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", msg.OperatorID)),
 			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Amount.String()),
@@ -109,8 +109,8 @@ func (k msgServer) OperatorRestake(goCtx context.Context, msg *types.MsgDelegate
 	return &types.MsgDelegateOperatorResponse{}, nil
 }
 
-// ServiceRestake defines the rpc method for Msg/ServiceRestake
-func (k msgServer) ServiceRestake(goCtx context.Context, msg *types.MsgDelegateService) (*types.MsgDelegateServiceResponse, error) {
+// DelegateService defines the rpc method for Msg/DelegateService
+func (k msgServer) DelegateService(goCtx context.Context, msg *types.MsgDelegateService) (*types.MsgDelegateServiceResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if !msg.Amount.IsValid() || !msg.Amount.IsAllPositive() {
@@ -141,7 +141,7 @@ func (k msgServer) ServiceRestake(goCtx context.Context, msg *types.MsgDelegateS
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeServiceRestake,
+			types.EventTypeDelegateService,
 			sdk.NewAttribute(types.AttributeKeyDelegator, msg.Delegator),
 			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
 			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Amount.String()),

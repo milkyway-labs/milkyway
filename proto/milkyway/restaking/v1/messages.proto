@@ -15,19 +15,19 @@ option go_package = "github.com/milkyway-labs/milkyway/x/restaking/types";
 service Msg {
   option (cosmos.msg.v1.service) = true;
 
-  // PoolRestake defines the operation that allows users to join a restaking
-  // pool with a given amount of assets. The pool can then be used to provide
-  // services with cryptoeconomic security.
-  rpc PoolRestake(MsgJoinRestakingPool) returns (MsgJoinRestakingPoolResponse);
+  // DelegatePool defines the operation that allows users to delegate any amount
+  // of an asset to a pool that can then be used to provide services with
+  // cryptoeconomic security.
+  rpc DelegatePool(MsgDelegatePool) returns (MsgDelegatePoolResponse);
 
-  // OperatorRestake defines the operation that allows users to delegate their
+  // DelegateOperator defines the operation that allows users to delegate their
   // assets to a specific operator.
-  rpc OperatorRestake(MsgDelegateOperator)
+  rpc DelegateOperator(MsgDelegateOperator)
       returns (MsgDelegateOperatorResponse);
 
-  // ServiceRestake defines the operation that allows users to delegate their
+  // DelegateService defines the operation that allows users to delegate their
   // assets to a specific service.
-  rpc ServiceRestake(MsgDelegateService) returns (MsgDelegateServiceResponse);
+  rpc DelegateService(MsgDelegateService) returns (MsgDelegateServiceResponse);
 
   // UpdateParams defines a (governance) operation for updating the module
   // parameters.
@@ -35,11 +35,11 @@ service Msg {
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
 }
 
-// MsgJoinRestakingPool defines the message structure for the PoolRestake gRPC
+// MsgDelegatePool defines the message structure for the DelegatePool gRPC
 // service method. It allows a user to put their assets into a restaking pool
 // that will later be used to provide cryptoeconomic security to services that
-// chose it.
-message MsgJoinRestakingPool {
+// choose it.
+message MsgDelegatePool {
   option (cosmos.msg.v1.signer) = "delegator";
   option (amino.name) = "milkyway/MsgJoinRestakingPool";
 
@@ -51,9 +51,8 @@ message MsgJoinRestakingPool {
       [ (gogoproto.customname) = "Amount", (gogoproto.nullable) = false ];
 }
 
-// MsgJoinRestakingPoolResponse defines the return value of
-// MsgJoinRestakingPool.
-message MsgJoinRestakingPoolResponse {}
+// MsgDelegatePoolResponse defines the return value of MsgDelegatePool.
+message MsgDelegatePoolResponse {}
 
 // MsgDelegateOperator defines the message structure for the OperatorRestake
 // gRPC service method. It allows a user to delegate their assets to an

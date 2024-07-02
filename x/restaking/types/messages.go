@@ -6,16 +6,16 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// NewMsgJoinRestakingPool creates a new MsgJoinRestakePool instance
-func NewMsgJoinRestakingPool(amount sdk.Coin, delegator string) *MsgJoinRestakingPool {
-	return &MsgJoinRestakingPool{
+// NewMsgDelegatePool creates a new MsgDelegatePool instance
+func NewMsgDelegatePool(amount sdk.Coin, delegator string) *MsgDelegatePool {
+	return &MsgDelegatePool{
 		Amount:    amount,
 		Delegator: delegator,
 	}
 }
 
 // ValidateBasic implements sdk.Msg
-func (msg *MsgJoinRestakingPool) ValidateBasic() error {
+func (msg *MsgDelegatePool) ValidateBasic() error {
 	if !msg.Amount.IsValid() || msg.Amount.IsZero() {
 		return errors.Wrap(sdkerrors.ErrInvalidRequest, "invalid amount")
 	}
@@ -29,12 +29,12 @@ func (msg *MsgJoinRestakingPool) ValidateBasic() error {
 }
 
 // GetSignBytes implements sdk.Msg
-func (msg *MsgJoinRestakingPool) GetSignBytes() []byte {
+func (msg *MsgDelegatePool) GetSignBytes() []byte {
 	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(msg))
 }
 
 // GetSigners implements sdk.Msg
-func (msg *MsgJoinRestakingPool) GetSigners() []sdk.AccAddress {
+func (msg *MsgDelegatePool) GetSigners() []sdk.AccAddress {
 	addr, _ := sdk.AccAddressFromBech32(msg.Delegator)
 	return []sdk.AccAddress{addr}
 }

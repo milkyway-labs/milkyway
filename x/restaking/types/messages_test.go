@@ -10,36 +10,36 @@ import (
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
-var msgJoinRestakingPool = types.NewMsgJoinRestakingPool(
+var msgDelegatePool = types.NewMsgDelegatePool(
 	sdk.NewCoin("umilk", sdkmath.NewInt(100_000_000)),
 	"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 )
 
-func TestMsgJoinRestakingPool_ValidateBasic(t *testing.T) {
+func TestMsgDelegatePool_ValidateBasic(t *testing.T) {
 	testCases := []struct {
 		name      string
-		msg       *types.MsgJoinRestakingPool
+		msg       *types.MsgDelegatePool
 		shouldErr bool
 	}{
 		{
 			name: "invalid amount returns error",
-			msg: types.NewMsgJoinRestakingPool(
+			msg: types.NewMsgDelegatePool(
 				sdk.Coin{Denom: "invalid!", Amount: sdkmath.NewInt(100_000_000)},
-				msgJoinRestakingPool.Delegator,
+				msgDelegatePool.Delegator,
 			),
 			shouldErr: true,
 		},
 		{
 			name: "invalid delegator address returns error",
-			msg: types.NewMsgJoinRestakingPool(
-				msgJoinRestakingPool.Amount,
+			msg: types.NewMsgDelegatePool(
+				msgDelegatePool.Amount,
 				"invalid",
 			),
 			shouldErr: true,
 		},
 		{
 			name: "valid message returns no error",
-			msg:  msgJoinRestakingPool,
+			msg:  msgDelegatePool,
 		},
 	}
 
@@ -56,14 +56,14 @@ func TestMsgJoinRestakingPool_ValidateBasic(t *testing.T) {
 	}
 }
 
-func TestMsgJoinRestakingPool_GetSignBytes(t *testing.T) {
-	expected := `{"type":"milkyway/MsgJoinRestakingPool","value":{"amount":{"amount":"100000000","denom":"umilk"},"delegator":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"}}`
-	require.Equal(t, expected, string(msgJoinRestakingPool.GetSignBytes()))
+func TestMsgDelegatePool_GetSignBytes(t *testing.T) {
+	expected := `{"type":"milkyway/MsgDelegatePool","value":{"amount":{"amount":"100000000","denom":"umilk"},"delegator":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"}}`
+	require.Equal(t, expected, string(msgDelegatePool.GetSignBytes()))
 }
 
-func TestMsgJoinRestakingPool_GetSigners(t *testing.T) {
-	addr, _ := sdk.AccAddressFromBech32(msgJoinRestakingPool.Delegator)
-	require.Equal(t, []sdk.AccAddress{addr}, msgJoinRestakingPool.GetSigners())
+func TestMsgDelegatePool_GetSigners(t *testing.T) {
+	addr, _ := sdk.AccAddressFromBech32(msgDelegatePool.Delegator)
+	require.Equal(t, []sdk.AccAddress{addr}, msgDelegatePool.GetSigners())
 }
 
 // --------------------------------------------------------------------------------------------------------------------

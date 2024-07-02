@@ -11,15 +11,14 @@ import (
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgDelegateService{}, "milkyway/MsgDelegateService")
-	legacy.RegisterAminoMsg(cdc, &MsgJoinRestakingPool{}, "milkyway/MsgJoinRestakingPool")
+	legacy.RegisterAminoMsg(cdc, &MsgDelegatePool{}, "milkyway/MsgDelegatePool")
 	legacy.RegisterAminoMsg(cdc, &MsgDelegateOperator{}, "milkyway/MsgDelegateOperator")
 	legacy.RegisterAminoMsg(cdc, &MsgUpdateParams{}, "milkyway/restaking/MsgUpdateParams")
-
 }
 
 func RegisterInterfaces(registry types.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgJoinRestakingPool{},
+		&MsgDelegatePool{},
 		&MsgDelegateService{},
 		&MsgDelegateOperator{},
 		&MsgUpdateParams{},

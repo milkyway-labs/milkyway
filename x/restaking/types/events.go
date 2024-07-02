@@ -1,9 +1,9 @@
 package types
 
 const (
-	EventTypePoolRestake     = "pool_restake"
-	EventTypeOperatorRestake = "operator_restake"
-	EventTypeServiceRestake  = "service_restake"
+	EventTypeDelegatePool     = "delegate_pool"
+	EventTypeDelegateOperator = "delegate_operator"
+	EventTypeDelegateService  = "delegate_service"
 
 	AttributeKeyDelegator  = "delegator"
 	AttributeKeyOperatorID = "operator_id"
