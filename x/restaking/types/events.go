@@ -7,6 +7,6 @@ const (
 
 	AttributeKeyDelegator  = "delegator"
 	AttributeKeyOperatorID = "operator_id"
-	AttributeKeyServiceID  = "operator_id"
+	AttributeKeyServiceID  = "service_id"
 	AttributeKeyNewShares  = "new_shares"
 )
