@@ -9,27 +9,18 @@ import (
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
-// IterateAllPoolDelegations iterates over all the pool delegations and performs a callback function
-func (k *Keeper) IterateAllPoolDelegations(ctx sdk.Context, cb func(delegation types.PoolDelegation) (stop bool)) {
+// GetAllPoolDelegations returns all the pool delegations
+func (k *Keeper) GetAllPoolDelegations(ctx sdk.Context) []types.PoolDelegation {
 	store := ctx.KVStore(k.storeKey)
 	iterator := store.Iterator(types.PoolDelegationPrefix, storetypes.PrefixEndBytes(types.PoolDelegationPrefix))
 	defer iterator.Close()
 
+	var delegations []types.PoolDelegation
 	for ; iterator.Valid(); iterator.Next() {
 		delegation := types.MustUnmarshalPoolDelegation(k.cdc, iterator.Value())
-		if cb(delegation) {
-			break
-		}
-	}
-}
-
-// GetAllPoolDelegations returns all the pool delegations
-func (k *Keeper) GetAllPoolDelegations(ctx sdk.Context) []types.PoolDelegation {
-	var delegations []types.PoolDelegation
-	k.IterateAllPoolDelegations(ctx, func(delegation types.PoolDelegation) bool {
 		delegations = append(delegations, delegation)
-		return false
-	})
+	}
+
 	return delegations
 }
 
@@ -45,7 +36,6 @@ func (k *Keeper) GetAllDelegatorPoolDelegations(ctx sdk.Context, delegator strin
 	for ; iterator.Valid(); iterator.Next() {
 		delegation := types.MustUnmarshalPoolDelegation(k.cdc, iterator.Value())
 		delegations = append(delegations, delegation)
-
 	}
 
 	return delegations
