@@ -24,15 +24,13 @@ func (k *Keeper) SaveServiceDelegation(ctx sdk.Context, delegation types.Service
 // GetServiceDelegation retrieves the delegation for the given user and service
 // If the delegation does not exist, false is returned instead
 func (k *Keeper) GetServiceDelegation(ctx sdk.Context, serviceID uint32, userAddress string) (types.ServiceDelegation, bool) {
-	// Get the delegation amount from the store
 	store := ctx.KVStore(k.storeKey)
-	delegationAmountBz := store.Get(types.UserServiceDelegationStoreKey(userAddress, serviceID))
-	if delegationAmountBz == nil {
+	delegationBz := store.Get(types.UserServiceDelegationStoreKey(userAddress, serviceID))
+	if delegationBz == nil {
 		return types.ServiceDelegation{}, false
 	}
 
-	// Parse the delegation amount
-	return types.MustUnmarshalServiceDelegation(k.cdc, delegationAmountBz), true
+	return types.MustUnmarshalServiceDelegation(k.cdc, delegationBz), true
 }
 
 // AddServiceTokensAndShares adds the given amount of tokens to the service and returns the added shares

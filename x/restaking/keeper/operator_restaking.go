@@ -24,15 +24,13 @@ func (k *Keeper) SaveOperatorDelegation(ctx sdk.Context, delegation types.Operat
 // GetOperatorDelegation retrieves the delegation for the given user and operator
 // If the delegation does not exist, false is returned instead
 func (k *Keeper) GetOperatorDelegation(ctx sdk.Context, operatorID uint32, userAddress string) (types.OperatorDelegation, bool) {
-	// Get the delegation amount from the store
 	store := ctx.KVStore(k.storeKey)
-	delegationAmountBz := store.Get(types.UserOperatorDelegationStoreKey(userAddress, operatorID))
-	if delegationAmountBz == nil {
+	delegationBz := store.Get(types.UserOperatorDelegationStoreKey(userAddress, operatorID))
+	if delegationBz == nil {
 		return types.OperatorDelegation{}, false
 	}
 
-	// Parse the delegation amount
-	return types.MustUnmarshalOperatorDelegation(k.cdc, delegationAmountBz), true
+	return types.MustUnmarshalOperatorDelegation(k.cdc, delegationBz), true
 }
 
 // AddOperatorTokensAndShares adds the given amount of tokens to the operator and returns the added shares

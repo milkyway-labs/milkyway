@@ -25,15 +25,13 @@ func (k *Keeper) SavePoolDelegation(ctx sdk.Context, delegation types.PoolDelega
 // GetPoolDelegation retrieves the delegation for the given user and pool
 // If the delegation does not exist, false is returned instead
 func (k *Keeper) GetPoolDelegation(ctx sdk.Context, poolID uint32, userAddress string) (types.PoolDelegation, bool) {
-	// Get the delegation amount from the store
 	store := ctx.KVStore(k.storeKey)
-	delegationAmountBz := store.Get(types.UserPoolDelegationStoreKey(userAddress, poolID))
-	if delegationAmountBz == nil {
+	delegationBz := store.Get(types.UserPoolDelegationStoreKey(userAddress, poolID))
+	if delegationBz == nil {
 		return types.PoolDelegation{}, false
 	}
 
-	// Parse the delegation amount
-	return types.MustUnmarshalPoolDelegation(k.cdc, delegationAmountBz), true
+	return types.MustUnmarshalPoolDelegation(k.cdc, delegationBz), true
 }
 
 // AddPoolTokensAndShares adds the given amount of tokens to the pool and returns the added shares
