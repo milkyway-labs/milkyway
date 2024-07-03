@@ -20,14 +20,14 @@ require (
 	github.com/CosmWasm/wasmvm v1.5.2
 	github.com/Stride-Labs/ibc-rate-limiting v0.0.0-00010101000000-000000000000
 	github.com/aptos-labs/serde-reflection/serde-generate/runtime/golang v0.0.0-20231213012317-73b6bbf74833
-	github.com/cometbft/cometbft v0.38.7
+	github.com/cometbft/cometbft v0.38.9
 	github.com/cosmos/cosmos-db v1.0.2
 	github.com/cosmos/cosmos-proto v1.0.0-beta.5
 	github.com/cosmos/cosmos-sdk v0.50.7
 	github.com/cosmos/go-bip39 v1.0.0
 	github.com/cosmos/gogoproto v1.5.0
 	github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8 v8.0.2
-	github.com/cosmos/ibc-go/modules/capability v1.0.0
+	github.com/cosmos/ibc-go/modules/capability v1.0.1
 	github.com/cosmos/ibc-go/v8 v8.2.1
 	github.com/cosmos/ics23/go v0.10.0
 	github.com/cosmos/interchain-security/v5 v5.0.0 // indirect
