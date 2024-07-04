@@ -1,0 +1,27 @@
+syntax = "proto3";
+package milkyway.restaking.v1;
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "milkyway/restaking/v1/models.proto";
+import "milkyway/restaking/v1/params.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/restaking/types";
+
+// GenesisState defines the restaking module's genesis state.
+message GenesisState {
+  // Params defines the parameters of the module.
+  Params params = 1 [ (gogoproto.nullable) = false ];
+
+  // PoolDelegations represents the delegations to pools.
+  repeated PoolDelegation pools_delegations = 2
+      [ (gogoproto.nullable) = false ];
+
+  // ServiceDelegations represents the delegations to services.
+  repeated ServiceDelegation services_delegations = 3
+      [ (gogoproto.nullable) = false ];
+
+  // OperatorDelegations represents the delegations to operators.
+  repeated OperatorDelegation operators_delegations = 4
+      [ (gogoproto.nullable) = false ];
+}

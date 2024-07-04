@@ -17,4 +17,18 @@ message Pool {
   // Address represents the address of the account that is associated with this
   // pool. This will be used to store tokens that users delegate to this pool.
   string address = 3 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // Tokens define the delegated tokens.
+  string tokens = 4 [
+    (cosmos_proto.scalar) = "cosmos.Int",
+    (gogoproto.customtype) = "cosmossdk.io/math.Int",
+    (gogoproto.nullable) = false
+  ];
+
+  // DelegatorShares defines total shares issued to a pool's delegators.
+  string delegator_shares = 5 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false
+  ];
 }

@@ -1,0 +1,124 @@
+syntax = "proto3";
+package milkyway.restaking.v1;
+
+import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos/bank/v1beta1/bank.proto";
+import "cosmos/msg/v1/msg.proto";
+import "gogoproto/gogo.proto";
+import "milkyway/restaking/v1/params.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/restaking/types";
+
+// Msg defines the restaking module's gRPC message service.
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+
+  // DelegatePool defines the operation that allows users to delegate any amount
+  // of an asset to a pool that can then be used to provide services with
+  // cryptoeconomic security.
+  rpc DelegatePool(MsgDelegatePool) returns (MsgDelegatePoolResponse);
+
+  // DelegateOperator defines the operation that allows users to delegate their
+  // assets to a specific operator.
+  rpc DelegateOperator(MsgDelegateOperator)
+      returns (MsgDelegateOperatorResponse);
+
+  // DelegateService defines the operation that allows users to delegate their
+  // assets to a specific service.
+  rpc DelegateService(MsgDelegateService) returns (MsgDelegateServiceResponse);
+
+  // UpdateParams defines a (governance) operation for updating the module
+  // parameters.
+  // The authority defaults to the x/gov module account.
+  rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+}
+
+// MsgDelegatePool defines the message structure for the DelegatePool gRPC
+// service method. It allows a user to put their assets into a restaking pool
+// that will later be used to provide cryptoeconomic security to services that
+// choose it.
+message MsgDelegatePool {
+  option (cosmos.msg.v1.signer) = "delegator";
+  option (amino.name) = "milkyway/MsgJoinRestakingPool";
+
+  // Delegator is the address of the user joining the pool
+  string delegator = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // Amount is the amount of coins to be staked
+  cosmos.base.v1beta1.Coin amount = 2
+      [ (gogoproto.customname) = "Amount", (gogoproto.nullable) = false ];
+}
+
+// MsgDelegatePoolResponse defines the return value of MsgDelegatePool.
+message MsgDelegatePoolResponse {}
+
+// MsgDelegateOperator defines the message structure for the OperatorRestake
+// gRPC service method. It allows a user to delegate their assets to an
+// operator.
+message MsgDelegateOperator {
+  option (cosmos.msg.v1.signer) = "delegator";
+  option (amino.name) = "milkyway/MsgDelegateOperator";
+
+  // Delegator is the address of the user delegating to the operator
+  string delegator = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // OperatorID is the ID of the operator to delegate to
+  uint32 operator_id = 2 [ (gogoproto.customname) = "OperatorID" ];
+
+  // Amount is the amount of coins to be delegated
+  repeated cosmos.base.v1beta1.Coin amount = 3 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.customname) = "Amount",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// MsgDelegateOperatorResponse is the return value of MsgDelegateOperator.
+message MsgDelegateOperatorResponse {}
+
+// MsgDelegateService defines the message structure for the ServiceRestake gRPC
+// service method. It allows a user to delegate their assets to a service.
+message MsgDelegateService {
+  option (cosmos.msg.v1.signer) = "delegator";
+  option (amino.name) = "milkyway/MsgDelegateService";
+
+  // Delegator is the address of the user delegating to the service
+  string delegator = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // ServiceID is the ID of the service to delegate to
+  uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
+
+  // Amount is the amount of coins to be delegated
+  repeated cosmos.base.v1beta1.Coin amount = 3 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.customname) = "Amount",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// MsgDelegateServiceResponse is the return value of MsgDelegateService.
+message MsgDelegateServiceResponse {}
+
+// MsgDeactivateService defines the message structure for the UpdateParams gRPC
+// service method. It allows the authority to update the module parameters.
+message MsgUpdateParams {
+  option (cosmos.msg.v1.signer) = "authority";
+  option (amino.name) = "milkyway/x/restaking/MsgUpdateParams";
+
+  // Authority is the address that controls the module (defaults to x/gov unless
+  // overwritten).
+  string authority = 1 [
+    (gogoproto.moretags) = "yaml:\"authority\"",
+    (cosmos_proto.scalar) = "cosmos.AddressString"
+  ];
+
+  // Params define the parameters to update.
+  //
+  // NOTE: All parameters must be supplied.
+  Params params = 2 [ (gogoproto.nullable) = false ];
+}
+
+// MsgDeactivateServiceResponse is the return value of MsgUpdateParams.
+message MsgUpdateParamsResponse {}

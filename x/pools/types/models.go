@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 )
@@ -27,14 +28,16 @@ func ParsePoolID(value string) (uint32, error) {
 // NewPool creates a new Pool instance
 func NewPool(id uint32, denom string) Pool {
 	return Pool{
-		ID:      id,
-		Denom:   denom,
-		Address: GetPoolAddress(id).String(),
+		ID:              id,
+		Denom:           denom,
+		Address:         GetPoolAddress(id).String(),
+		Tokens:          sdkmath.ZeroInt(),
+		DelegatorShares: sdkmath.LegacyZeroDec(),
 	}
 }
 
 // Validate checks if the pool is valid
-func (p *Pool) Validate() error {
+func (p Pool) Validate() error {
 	if p.ID == 0 {
 		return fmt.Errorf("invalid pool id")
 	}
@@ -49,4 +52,50 @@ func (p *Pool) Validate() error {
 	}
 
 	return nil
+}
+
+// GetSharesDenom returns the shares denom for a pool and token denom
+func (p Pool) GetSharesDenom(tokenDenom string) string {
+	return fmt.Sprintf("pool/%d/%s", p.ID, tokenDenom)
+}
+
+// InvalidExRate returns whether the exchange rates is invalid.
+// This can happen e.g. if Pool loses all tokens due to slashing. In this case,
+// make all future delegations invalid.
+func (p Pool) InvalidExRate() bool {
+	return p.Tokens.IsZero() && p.DelegatorShares.IsPositive()
+}
+
+// SharesFromTokens returns the shares of a delegation given a bond amount. It
+// returns an error if the pool has no tokens.
+func (p Pool) SharesFromTokens(amt sdkmath.Int) (sdkmath.LegacyDec, error) {
+	if p.Tokens.IsZero() {
+		return sdkmath.LegacyZeroDec(), ErrInsufficientShares
+	}
+
+	return p.DelegatorShares.MulInt(amt).QuoInt(p.Tokens), nil
+}
+
+// AddTokensFromDelegation adds the given amount of tokens to the pool's total tokens,
+// also updating the pool's delegator shares.
+// It returns the updated pool and the shares issued.
+func (p Pool) AddTokensFromDelegation(amount sdkmath.Int) (Pool, sdkmath.LegacyDec) {
+	// calculate the shares to issue
+	var issuedShares sdkmath.LegacyDec
+	if p.DelegatorShares.IsZero() {
+		// the first delegation to a validator sets the exchange rate to one
+		issuedShares = sdkmath.LegacyNewDecFromInt(amount)
+	} else {
+		shares, err := p.SharesFromTokens(amount)
+		if err != nil {
+			panic(err)
+		}
+
+		issuedShares = shares
+	}
+
+	p.Tokens = p.Tokens.Add(amount)
+	p.DelegatorShares = p.DelegatorShares.Add(issuedShares)
+
+	return p, issuedShares
 }

@@ -3,6 +3,7 @@ package milkyway.operators.v1;
 
 import "gogoproto/gogo.proto";
 import "cosmos_proto/cosmos.proto";
+import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/operators/types";
 
@@ -49,4 +50,16 @@ message Operator {
   // Address is the address of the account associated to the operator.
   // This will be used to store tokens that are delegated to this operator.
   string address = 7 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // Tokens define the delegated tokens.
+  repeated cosmos.base.v1beta1.Coin tokens = 8 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+
+  // DelegatorShares define the total shares issued to an operator's delegators.
+  repeated cosmos.base.v1beta1.DecCoin delegator_shares = 9 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
+    (gogoproto.nullable) = false
+  ];
 }
