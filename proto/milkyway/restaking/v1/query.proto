@@ -1,0 +1,470 @@
+syntax = "proto3";
+package milkyway.restaking.v1;
+
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/query/v1/query.proto";
+import "amino/amino.proto";
+import "milkyway/restaking/v1/models.proto";
+import "milkyway/restaking/v1/params.proto";
+import "milkyway/operators/v1/models.proto";
+import "milkyway/pools/v1/models.proto";
+import "milkyway/services/v1/models.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/restaking/types";
+
+// Query defines the gRPC querier service.
+service Query {
+
+  // PoolDelegations queries the delegations info for the given pool.
+  rpc PoolDelegations(QueryPoolDelegationsRequest)
+      returns (QueryPoolDelegationsResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get =
+        "/milkyway/restaking/v1/pools/{pool_id}/delegations";
+  }
+
+  // PoolDelegation queries the delegation info for the given pool and
+  // delegator.
+  rpc PoolDelegation(QueryPoolDelegationRequest)
+      returns (QueryPoolDelegationResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get = "/milkyway/restaking/v1/pools/{pool_id}/"
+                                   "delegations/{delegator_address}";
+  }
+
+  // OperatorDelegations queries the delegates info for the given operator.
+  rpc OperatorDelegations(QueryOperatorDelegationsRequest)
+      returns (QueryOperatorDelegationsResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get =
+        "/milkyway/restaking/v1/operators/{operator_id}/delegations";
+  }
+
+  // OperatorDelegation queries the delegation info for the given operator and
+  // delegator.
+  rpc OperatorDelegation(QueryOperatorDelegationRequest)
+      returns (QueryOperatorDelegationResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get =
+        "/milkyway/restaking/v1/operators/{operator_id}/delegations/"
+        "{delegator_address}";
+  }
+
+  // ServiceDelegations queries the delegates info for the given service.
+  rpc ServiceDelegations(QueryServiceDelegationsRequest)
+      returns (QueryServiceDelegationsResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get =
+        "/milkyway/restaking/v1/services/{service_id}/delegations";
+  }
+
+  // ServiceDelegation queries the delegation info for the given service and
+  // delegator.
+  rpc ServiceDelegation(QueryServiceDelegationRequest)
+      returns (QueryServiceDelegationResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get =
+        "/milkyway/restaking/v1/services/{service_id}/delegations/"
+        "{delegator_address}";
+  }
+
+  // DelegatorPoolDelegations queries all the pool delegations of a given
+  // delegator address.
+  rpc DelegatorPoolDelegations(QueryDelegatorPoolDelegationsRequest)
+      returns (QueryDelegatorPoolDelegationsResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get =
+        "/milkyway/restaking/v1/delegations/{delegator_address}/pools";
+  }
+
+  // DelegatorOperatorDelegations queries all the operator delegations of a
+  // given delegator address.
+  rpc DelegatorOperatorDelegations(QueryDelegatorOperatorDelegationsRequest)
+      returns (QueryDelegatorOperatorDelegationsResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get =
+        "/milkyway/restaking/v1/delegations/{delegator_address}/operators";
+  }
+
+  // DelegatorServiceDelegations queries all the service delegations of a given
+  // delegator address.
+  rpc DelegatorServiceDelegations(QueryDelegatorServiceDelegationsRequest)
+      returns (QueryDelegatorServiceDelegationsResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get =
+        "/milkyway/restaking/v1/delegations/{delegator_address}/services";
+  }
+
+  // DelegatorValidators queries all validators info for given delegator
+  // address.
+  rpc DelegatorPools(QueryDelegatorPoolsRequest)
+      returns (QueryDelegatorPoolsResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get =
+        "/milkyway/restaking/v1/delegators/{delegator_address}/pools";
+  }
+
+  // DelegatorPool queries the pool info for given delegator and pool id.
+  rpc DelegatorPool(QueryDelegatorPoolRequest)
+      returns (QueryDelegatorPoolResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get =
+        "/milkyway/restaking/v1/delegators/{delegator_address}/pools/{pool_id}";
+  }
+
+  // DelegatorOperators queries all operators info for given delegator
+  rpc DelegatorOperators(QueryDelegatorOperatorsRequest)
+      returns (QueryDelegatorOperatorsResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get =
+        "/milkyway/restaking/v1/delegators/{delegator_address}/operators";
+  }
+
+  // DelegatorOperator queries the operator info for given delegator and
+  // operator id.
+  rpc DelegatorOperator(QueryDelegatorOperatorRequest)
+      returns (QueryDelegatorOperatorResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get =
+        "/milkyway/restaking/v1/delegators/{delegator_address}/operators/"
+        "{operator_id}";
+  }
+
+  // DelegatorServices queries all services info for given delegator
+  rpc DelegatorServices(QueryDelegatorServicesRequest)
+      returns (QueryDelegatorServicesResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get =
+        "/milkyway/restaking/v1/delegators/{delegator_address}/services";
+  }
+
+  // DelegatorService queries the service info for given delegator and service
+  // id.
+  rpc DelegatorService(QueryDelegatorServiceRequest)
+      returns (QueryDelegatorServiceResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get = "/milkyway/restaking/v1/delegators/"
+                                   "{delegator_address}/services/{service_id}";
+  }
+
+  // Parameters queries the restaking parameters.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get = "/milkyway/restaking/v1/params";
+  }
+}
+
+// QueryPoolDelegationRequest is request type for the Query/PoolDelegation RPC
+// method.
+message QueryPoolDelegationsRequest {
+  // PoolId is the ID of the pool to query
+  uint32 pool_id = 1;
+
+  // Pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryPoolDelegationResponse is response type for the Query/PoolDelegation RPC
+// method.
+message QueryPoolDelegationsResponse {
+  // Delegations is the list of delegations
+  repeated PoolDelegationResponse delegations = 1
+      [ (gogoproto.nullable) = false ];
+
+  // Pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryPoolDelegationRequest is request type for the Query/PoolDelegation RPC
+// method.
+message QueryPoolDelegationRequest {
+  // PoolId is the ID of the pool to query
+  uint32 pool_id = 1;
+
+  // DelegatorAddress is the address of the delegator to query
+  string delegator_address = 2
+      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+}
+
+// QueryPoolDelegationResponse is response type for the Query/PoolDelegation RPC
+// method.
+message QueryPoolDelegationResponse {
+  // Delegation is the delegation
+  PoolDelegationResponse delegation = 1 [ (gogoproto.nullable) = false ];
+}
+
+// QueryOperatorDelegationsRequest is request type for the
+// Query/OperatorDelegations RPC method.
+message QueryOperatorDelegationsRequest {
+  // OperatorId is the ID of the operator to query
+  uint32 operator_id = 1;
+
+  // Pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryOperatorDelegationsResponse is response type for the
+// Query/OperatorDelegations RPC method.
+message QueryOperatorDelegationsResponse {
+  // Delegations is the list of delegations
+  repeated OperatorDelegationResponse delegations = 1
+      [ (gogoproto.nullable) = false ];
+
+  // Pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryOperatorDelegationRequest is request type for the
+// Query/OperatorDelegation RPC method.
+message QueryOperatorDelegationRequest {
+  // OperatorId is the ID of the operator to query
+  uint32 operator_id = 1;
+
+  // DelegatorAddress is the address of the delegator to query
+  string delegator_address = 2
+      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+}
+
+// QueryOperatorDelegationResponse is response type for the
+// Query/OperatorDelegation RPC method.
+message QueryOperatorDelegationResponse {
+  // Delegation is the delegation
+  OperatorDelegationResponse delegation = 1 [ (gogoproto.nullable) = false ];
+}
+
+// QueryServiceDelegationsRequest is request type for the
+// Query/ServiceDelegations RPC method.
+message QueryServiceDelegationsRequest {
+  // ServiceId is the ID of the service to query
+  uint32 service_id = 1;
+
+  // Pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryServiceDelegationsResponse is response type for the
+// Query/ServiceDelegations RPC method.
+message QueryServiceDelegationsResponse {
+  // Delegations is the list of delegations
+  repeated ServiceDelegationResponse delegations = 1
+      [ (gogoproto.nullable) = false ];
+
+  // Pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryServiceDelegationRequest is request type for the Query/ServiceDelegation
+// RPC method.
+message QueryServiceDelegationRequest {
+  // ServiceId is the ID of the service to query
+  uint32 service_id = 1;
+
+  // DelegatorAddress is the address of the delegator to query
+  string delegator_address = 2
+      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+}
+
+// QueryServiceDelegationResponse is response type for the
+// Query/ServiceDelegation RPC method.
+message QueryServiceDelegationResponse {
+  // Delegation is the delegation
+  ServiceDelegationResponse delegation = 1 [ (gogoproto.nullable) = false ];
+}
+
+// QueryDelegatorPoolDelegationsRequest is request type for the
+// Query/DelegatorPoolDelegations RPC method.
+message QueryDelegatorPoolDelegationsRequest {
+  // DelegatorAddress is the address of the delegator to query
+  string delegator_address = 1
+      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // Pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryDelegatorPoolDelegationsResponse is response type for the
+// Query/DelegatorPoolDelegations RPC method.
+message QueryDelegatorPoolDelegationsResponse {
+  // Delegations is the list of delegations
+  repeated PoolDelegationResponse delegations = 1
+      [ (gogoproto.nullable) = false ];
+
+  // Pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryDelegatorOperatorDelegationsRequest is request type for the
+// Query/DelegatorOperatorDelegations RPC method.
+message QueryDelegatorOperatorDelegationsRequest {
+  // DelegatorAddress is the address of the delegator to query
+  string delegator_address = 1
+      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // Pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryDelegatorOperatorDelegationsResponse is response type for the
+// Query/DelegatorOperatorDelegations RPC method.
+message QueryDelegatorOperatorDelegationsResponse {
+  // Delegations is the list of delegations
+  repeated OperatorDelegationResponse delegations = 1
+      [ (gogoproto.nullable) = false ];
+
+  // Pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryDelegatorServiceDelegationsRequest is request type for the
+// Query/DelegatorServiceDelegations RPC method.
+message QueryDelegatorServiceDelegationsRequest {
+  // DelegatorAddress is the address of the delegator to query
+  string delegator_address = 1
+      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // Pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryDelegatorServiceDelegationsResponse is response type for the
+// Query/DelegatorServiceDelegations RPC method.
+message QueryDelegatorServiceDelegationsResponse {
+  // Delegations is the list of delegations
+  repeated ServiceDelegationResponse delegations = 1
+      [ (gogoproto.nullable) = false ];
+
+  // Pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryDelegatorPoolsRequest is request type for the Query/DelegatorPools RPC
+// method.
+message QueryDelegatorPoolsRequest {
+  // DelegatorAddress is the address of the delegator to query
+  string delegator_address = 1
+      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // Pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryDelegatorPoolsResponse is response type for the Query/DelegatorPools RPC
+// method.
+message QueryDelegatorPoolsResponse {
+  // Pools is the list of pools
+  repeated milkyway.pools.v1.Pool pools = 1 [ (gogoproto.nullable) = false ];
+
+  // Pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryDelegatorPoolRequest is request type for the Query/DelegatorPool RPC
+// method.
+message QueryDelegatorPoolRequest {
+  // DelegatorAddress is the address of the delegator to query
+  string delegator_address = 1
+      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // PoolId is the ID of the pool to query
+  uint32 pool_id = 2;
+}
+
+// QueryDelegatorPoolResponse is response type for the Query/DelegatorPool RPC
+// method.
+message QueryDelegatorPoolResponse {
+  // Pool is the pool
+  milkyway.pools.v1.Pool pool = 1 [ (gogoproto.nullable) = false ];
+}
+
+// QueryDelegatorOperatorsRequest is request type for the
+// Query/DelegatorOperators RPC method.
+message QueryDelegatorOperatorsRequest {
+  // DelegatorAddress is the address of the delegator to query
+  string delegator_address = 1
+      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // Pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryDelegatorOperatorsResponse is response type for the
+// Query/DelegatorOperators RPC method.
+message QueryDelegatorOperatorsResponse {
+  // Operators is the list of operators
+  repeated milkyway.operators.v1.Operator operators = 1
+      [ (gogoproto.nullable) = false ];
+
+  // Pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryDelegatorOperatorRequest is request type for the Query/DelegatorOperator
+// RPC method.
+message QueryDelegatorOperatorRequest {
+  // DelegatorAddress is the address of the delegator to query
+  string delegator_address = 1
+      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // OperatorId is the ID of the operator to query
+  uint32 operator_id = 2;
+}
+
+// QueryDelegatorOperatorResponse is response type for the
+// Query/DelegatorOperator RPC method.
+message QueryDelegatorOperatorResponse {
+  // Operator is the operator
+  milkyway.operators.v1.Operator operator = 1 [ (gogoproto.nullable) = false ];
+}
+
+// QueryDelegatorServicesRequest is request type for the Query/DelegatorServices
+// RPC method.
+message QueryDelegatorServicesRequest {
+  // DelegatorAddress is the address of the delegator to query
+  string delegator_address = 1
+      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // Pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryDelegatorServicesResponse is response type for the
+// Query/DelegatorServices RPC method.
+message QueryDelegatorServicesResponse {
+  // Services is the list of services
+  repeated milkyway.services.v1.Service services = 1
+      [ (gogoproto.nullable) = false ];
+
+  // Pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryDelegatorServiceRequest is request type for the Query/DelegatorService
+// RPC method.
+message QueryDelegatorServiceRequest {
+  // DelegatorAddress is the address of the delegator to query
+  string delegator_address = 1
+      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // ServiceId is the ID of the service to query
+  uint32 service_id = 2;
+}
+
+// QueryDelegatorServiceResponse is response type for the Query/DelegatorService
+// RPC method.
+message QueryDelegatorServiceResponse {
+  // Service is the service
+  milkyway.services.v1.Service service = 1 [ (gogoproto.nullable) = false ];
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+}

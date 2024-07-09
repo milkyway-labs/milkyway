@@ -357,11 +357,11 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 }
 
 var (
-	pattern_Query_PoolById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1, 1, 0, 4, 1, 5, 3}, []string{"milkyway", "pool", "v1", "pool_id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_PoolById_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"milkyway", "pools", "v1", "pool", "pool_id"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_PoolByDenom_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1, 2, 3, 1, 0, 4, 1, 5, 3}, []string{"milkyway", "pool", "v1", "denom"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_PoolByDenom_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 4}, []string{"milkyway", "pools", "v1", "pool", "denom"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_Pools_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"milkyway", "pool", "v1", "pools"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_Pools_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 1}, []string{"milkyway", "pools", "v1"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (

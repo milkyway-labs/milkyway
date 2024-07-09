@@ -80,6 +80,12 @@ func (s Service) GetSharesDenom(tokenDenom string) string {
 	return fmt.Sprintf("service/%d/%s", s.ID, tokenDenom)
 }
 
+// GetTokenDenomFromSharesDenom returns the token denom from a shares denom
+func (s Service) GetTokenDenomFromSharesDenom(sharesDenom string) string {
+	parts := strings.Split(sharesDenom, "/")
+	return parts[len(parts)-1]
+}
+
 // IsActive returns whether the service is active.
 func (s Service) IsActive() bool {
 	return s.Status == SERVICE_STATUS_ACTIVE
@@ -95,6 +101,22 @@ func (s Service) InvalidExRate() bool {
 		}
 	}
 	return false
+}
+
+// TokensFromShares calculates the token worth of provided shares
+func (s Service) TokensFromShares(shares sdk.DecCoins) sdk.DecCoins {
+	tokens := sdk.NewDecCoins()
+	for _, share := range shares {
+		tokenDenom := s.GetTokenDenomFromSharesDenom(share.Denom)
+		operatorTokenAmount := s.Tokens.AmountOf(tokenDenom)
+		delegatorSharesAmount := s.DelegatorShares.AmountOf(share.Denom)
+
+		tokenAmount := share.Amount.MulInt(operatorTokenAmount).Quo(delegatorSharesAmount)
+
+		tokens = tokens.Add(sdk.NewDecCoinFromDec(tokenDenom, tokenAmount))
+	}
+
+	return tokens
 }
 
 // SharesFromTokens returns the shares of a delegation given a bond amount. It

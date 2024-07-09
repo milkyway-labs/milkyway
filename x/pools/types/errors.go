@@ -7,4 +7,5 @@ import (
 var (
 	ErrInvalidGenesis     = errors.Register(ModuleName, 1, "invalid genesis state")
 	ErrInsufficientShares = errors.Register(ModuleName, 2, "insufficient delegation shares")
+	ErrPoolNotFound       = errors.Register(ModuleName, 3, "pool not found")
 )

@@ -66,6 +66,19 @@ func MustUnmarshalPoolDelegation(cdc codec.BinaryCodec, bz []byte) PoolDelegatio
 	return delegation
 }
 
+// NewPoolDelegationResponse creates a new PoolDelegationResponse instance
+func NewPoolDelegationResponse(poolID uint32, userAddress string, shares sdkmath.LegacyDec, balance sdk.Coin) PoolDelegationResponse {
+	return PoolDelegationResponse{
+		Delegation: PoolDelegation{
+			UserAddress: userAddress,
+			PoolID:      poolID,
+			Shares:      shares,
+		},
+		Balance: balance,
+	}
+
+}
+
 // --------------------------------------------------------------------------------------------------------------------
 
 func NewOperatorDelegation(operatorID uint32, userAddress string, shares sdk.DecCoins) OperatorDelegation {
@@ -121,6 +134,18 @@ func MustUnmarshalOperatorDelegation(cdc codec.BinaryCodec, bz []byte) OperatorD
 		panic(err)
 	}
 	return delegation
+}
+
+// NewOperatorDelegationResponse creates a new OperatorDelegationResponse instance
+func NewOperatorDelegationResponse(operatorID uint32, userAddress string, shares sdk.DecCoins, balance sdk.Coins) OperatorDelegationResponse {
+	return OperatorDelegationResponse{
+		Delegation: OperatorDelegation{
+			UserAddress: userAddress,
+			OperatorID:  operatorID,
+			Shares:      shares,
+		},
+		Balance: balance,
+	}
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -180,4 +205,16 @@ func MustUnmarshalServiceDelegation(cdc codec.BinaryCodec, bz []byte) ServiceDel
 		panic(err)
 	}
 	return delegation
+}
+
+// NewServiceDelegationResponse creates a new ServiceDelegationResponse instance
+func NewServiceDelegationResponse(serviceID uint32, userAddress string, shares sdk.DecCoins, balance sdk.Coins) ServiceDelegationResponse {
+	return ServiceDelegationResponse{
+		Delegation: ServiceDelegation{
+			UserAddress: userAddress,
+			ServiceID:   serviceID,
+			Shares:      shares,
+		},
+		Balance: balance,
+	}
 }

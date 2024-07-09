@@ -78,6 +78,15 @@ func (o Operator) GetSharesDenom(tokenDenom string) string {
 	return fmt.Sprintf("operator/%d/%s", o.ID, tokenDenom)
 }
 
+// GetTokenDenomFromSharesDenom returns the token denom from a shares denom
+func (o Operator) GetTokenDenomFromSharesDenom(sharesDenom string) string {
+	parts := strings.Split(sharesDenom, "/")
+	if len(parts) != 3 {
+		return ""
+	}
+	return parts[2]
+}
+
 // IsActive returns whether the operator is active.
 func (o Operator) IsActive() bool {
 	return o.Status == OPERATOR_STATUS_ACTIVE
@@ -93,6 +102,22 @@ func (o Operator) InvalidExRate() bool {
 		}
 	}
 	return false
+}
+
+// TokensFromShares calculates the token worth of provided shares
+func (o Operator) TokensFromShares(shares sdk.DecCoins) sdk.DecCoins {
+	tokens := sdk.NewDecCoins()
+	for _, share := range shares {
+		tokenDenom := o.GetTokenDenomFromSharesDenom(share.Denom)
+		operatorTokenAmount := o.Tokens.AmountOf(tokenDenom)
+		delegatorSharesAmount := o.DelegatorShares.AmountOf(share.Denom)
+
+		tokenAmount := share.Amount.MulInt(operatorTokenAmount).Quo(delegatorSharesAmount)
+
+		tokens = tokens.Add(sdk.NewDecCoinFromDec(tokenDenom, tokenAmount))
+	}
+
+	return tokens
 }
 
 // SharesFromTokens returns the shares of a delegation given a bond amount. It
