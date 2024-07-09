@@ -65,3 +65,35 @@ func (k *Keeper) GetPoolDelegations(ctx sdk.Context, poolID uint32) ([]types.Poo
 
 	return delegations, nil
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+func (k *Keeper) GetAllOperatorDelegations(ctx sdk.Context) []types.OperatorDelegation {
+	store := ctx.KVStore(k.storeKey)
+	iterator := store.Iterator(types.OperatorDelegationPrefix, storetypes.PrefixEndBytes(types.OperatorDelegationPrefix))
+	defer iterator.Close()
+
+	var delegations []types.OperatorDelegation
+	for ; iterator.Valid(); iterator.Next() {
+		delegation := types.MustUnmarshalOperatorDelegation(k.cdc, iterator.Value())
+		delegations = append(delegations, delegation)
+	}
+
+	return delegations
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+func (k *Keeper) GetAllServiceDelegations(ctx sdk.Context) []types.ServiceDelegation {
+	store := ctx.KVStore(k.storeKey)
+	iterator := store.Iterator(types.ServiceDelegationPrefix, storetypes.PrefixEndBytes(types.ServiceDelegationPrefix))
+	defer iterator.Close()
+
+	var delegations []types.ServiceDelegation
+	for ; iterator.Valid(); iterator.Next() {
+		delegation := types.MustUnmarshalServiceDelegation(k.cdc, iterator.Value())
+		delegations = append(delegations, delegation)
+	}
+
+	return delegations
+}
