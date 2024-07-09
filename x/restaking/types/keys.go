@@ -18,14 +18,16 @@ var (
 	ParamsKey = []byte{0x01}
 
 	PoolDelegationPrefix          = []byte{0xa1}
-	UnbondingPoolDelegationPrefix = []byte{0xa2}
-	PoolDelegationsByPoolIDPrefix = []byte{0x71}
+	PoolDelegationsByPoolIDPrefix = []byte{0xa2}
+	UnbondingPoolDelegationPrefix = []byte{0xa3}
 
-	ServiceDelegationPrefix          = []byte{0xb1}
-	UnbondingServiceDelegationPrefix = []byte{0xb2}
+	OperatorDelegationPrefix          = []byte{0xb1}
+	OperatorDelegationByOperatorID    = []byte{0xb2}
+	UnbondingOperatorDelegationPrefix = []byte{0xb3}
 
-	OperatorDelegationPrefix          = []byte{0xc1}
-	UnbondingOperatorDelegationPrefix = []byte{0xc2}
+	ServiceDelegationPrefix            = []byte{0xc1}
+	ServiceDelegationByServiceIDPrefix = []byte{0xc2}
+	UnbondingServiceDelegationPrefix   = []byte{0xc3}
 )
 
 // UserPoolDelegationsStorePrefix returns the prefix used to store all the delegations to a given pool
@@ -82,7 +84,7 @@ func UserOperatorDelegationStoreKey(delegator string, operatorID uint32) []byte 
 
 // DelegationsByOperatorIDStorePrefix returns the prefix used to store the delegations to a given operator
 func DelegationsByOperatorIDStorePrefix(operatorID uint32) []byte {
-	return append(OperatorDelegationPrefix, operatorstypes.GetOperatorIDBytes(operatorID)...)
+	return append(OperatorDelegationByOperatorID, operatorstypes.GetOperatorIDBytes(operatorID)...)
 }
 
 // DelegationByOperatorIDStoreKey returns the key used to store the operator -> user delegation association
@@ -124,7 +126,7 @@ func UserServiceDelegationStoreKey(delegator string, serviceID uint32) []byte {
 
 // DelegationsByServiceIDStorePrefix returns the prefix used to store the delegations to a given service
 func DelegationsByServiceIDStorePrefix(serviceID uint32) []byte {
-	return append(ServiceDelegationPrefix, servicestypes.GetServiceIDBytes(serviceID)...)
+	return append(ServiceDelegationByServiceIDPrefix, servicestypes.GetServiceIDBytes(serviceID)...)
 }
 
 // DelegationByServiceIDStoreKey returns the key used to store the service -> user delegation association
