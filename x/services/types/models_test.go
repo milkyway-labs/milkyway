@@ -3,6 +3,8 @@ package types_test
 import (
 	"testing"
 
+	sdkmath "cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
 	"github.com/milkyway-labs/milkyway/x/services/types"
@@ -282,6 +284,94 @@ func TestService_Update(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			result := tc.service.Update(tc.update)
 			require.Equal(t, tc.expResult, result)
+		})
+	}
+}
+
+func TestService_SharesFromTokens(t *testing.T) {
+	testCases := []struct {
+		name      string
+		service   types.Service
+		tokens    sdk.Coin
+		shouldErr bool
+		expShares sdkmath.LegacyDec
+	}{
+		{
+			name: "service with no delegation shares returns error",
+			service: types.Service{
+				ID:              1,
+				Address:         types.GetServiceAddress(1).String(),
+				DelegatorShares: sdk.NewDecCoins(),
+				Tokens:          sdk.NewCoins(),
+			},
+			tokens:    sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+			shouldErr: true,
+		},
+		{
+			name: "shares are computed properly for non empty operator",
+			service: types.Service{
+				ID:      1,
+				Address: types.GetServiceAddress(1).String(),
+				Tokens: sdk.NewCoins(
+					sdk.NewCoin("umilk", sdkmath.NewInt(50)),
+				),
+				DelegatorShares: sdk.NewDecCoins(
+					sdk.NewDecCoinFromDec("service/1/umilk", sdkmath.LegacyNewDec(100)),
+				),
+			},
+			tokens:    sdk.NewCoin("umilk", sdkmath.NewInt(20)),
+			shouldErr: false,
+			expShares: sdkmath.LegacyNewDec(40),
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			shares, err := tc.service.SharesFromTokens(tc.tokens)
+			if tc.shouldErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+				require.Equal(t, tc.expShares, shares)
+			}
+		})
+	}
+}
+
+func TestService_TokensFromShares(t *testing.T) {
+	testCases := []struct {
+		name      string
+		service   types.Service
+		shares    sdk.DecCoins
+		expTokens sdk.DecCoins
+	}{
+		{
+			name: "service with shares returns correct amount",
+			service: types.Service{
+				ID:      1,
+				Address: types.GetServiceAddress(1).String(),
+				Tokens: sdk.NewCoins(
+					sdk.NewCoin("umilk", sdkmath.NewInt(70)),
+				),
+				DelegatorShares: sdk.NewDecCoins(
+					sdk.NewDecCoinFromDec("service/1/umilk", sdkmath.LegacyNewDec(140)),
+				),
+			},
+			shares: sdk.NewDecCoins(
+				sdk.NewDecCoinFromDec("service/1/umilk", sdkmath.LegacyNewDec(40)),
+			),
+			expTokens: sdk.NewDecCoins(
+				sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(20)),
+			),
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			tokens := tc.service.TokensFromShares(tc.shares)
+			require.Equal(t, tc.expTokens, tokens)
 		})
 	}
 }
