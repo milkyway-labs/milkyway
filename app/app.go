@@ -978,7 +978,7 @@ func NewMilkyWayApp(
 		consensus.NewAppModule(appCodec, *app.ConsensusParamsKeeper),
 		wasm.NewAppModule(appCodec, app.WasmKeeper, nil /* unused */, app.AccountKeeper, app.BankKeeper, app.MsgServiceRouter(), nil),
 		auction.NewAppModule(app.appCodec, *app.AuctionKeeper),
-		tokenfactory.NewAppModule(appCodec, *app.TokenFactoryKeeper, *app.AccountKeeper, *app.BankKeeper),
+		tokenfactory.NewAppModule(appCodec, app.TokenFactoryKeeper, *app.AccountKeeper, *app.BankKeeper),
 		// ibc modules
 		ibc.NewAppModule(app.IBCKeeper),
 		ibctransfer.NewAppModule(*app.TransferKeeper),
