@@ -187,7 +187,7 @@ func (k Querier) ServiceDelegations(goCtx context.Context, req *types.QueryServi
 
 	// Get the service delegations store
 	store := ctx.KVStore(k.storeKey)
-	delegationsStore := prefix.NewStore(store, types.OperatorDelegationPrefix)
+	delegationsStore := prefix.NewStore(store, types.ServiceDelegationPrefix)
 
 	// Query the service delegations for the given pool id
 	delegations, pageRes, err := query.GenericFilteredPaginate(k.cdc, delegationsStore, req.Pagination, func(key []byte, delegation *types.ServiceDelegation) (*types.ServiceDelegation, error) {
