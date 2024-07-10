@@ -53,7 +53,7 @@ service Query {
         "{delegator_address}";
   }
 
-  // ServiceDelegations queries the delegates info for the given service.
+  // ServiceDelegations queries the delegations info for the given service.
   rpc ServiceDelegations(QueryServiceDelegationsRequest)
       returns (QueryServiceDelegationsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
