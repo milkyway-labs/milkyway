@@ -82,11 +82,6 @@ func (s Service) GetSharesDenom(tokenDenom string) string {
 	return utils.GetSharesDenomFromTokenDenom("service", s.ID, tokenDenom)
 }
 
-// GetTokenDenomFromSharesDenom returns the token denom from a shares denom
-func (s Service) GetTokenDenomFromSharesDenom(sharesDenom string) string {
-	return utils.GetTokenDenomFromSharesDenom(sharesDenom)
-}
-
 // IsActive returns whether the service is active.
 func (s Service) IsActive() bool {
 	return s.Status == SERVICE_STATUS_ACTIVE
@@ -96,28 +91,12 @@ func (s Service) IsActive() bool {
 // This can happen e.g. if Service loses all tokens due to slashing. In this case,
 // make all future delegations invalid.
 func (s Service) InvalidExRate() bool {
-	for _, token := range s.Tokens {
-		if token.IsZero() && s.DelegatorShares.AmountOf(token.Denom).IsPositive() {
-			return true
-		}
-	}
-	return false
+	return utils.IsInvalidExRate(s.Tokens, s.DelegatorShares)
 }
 
 // TokensFromShares calculates the token worth of provided shares
 func (s Service) TokensFromShares(shares sdk.DecCoins) sdk.DecCoins {
-	tokens := sdk.NewDecCoins()
-	for _, share := range shares {
-		tokenDenom := s.GetTokenDenomFromSharesDenom(share.Denom)
-		operatorTokenAmount := s.Tokens.AmountOf(tokenDenom)
-		delegatorSharesAmount := s.DelegatorShares.AmountOf(share.Denom)
-
-		tokenAmount := share.Amount.MulInt(operatorTokenAmount).Quo(delegatorSharesAmount)
-
-		tokens = tokens.Add(sdk.NewDecCoinFromDec(tokenDenom, tokenAmount))
-	}
-
-	return tokens
+	return utils.ComputeTokensFromShares(shares, s.Tokens, s.DelegatorShares)
 }
 
 // SharesFromTokens returns the shares of a delegation given a bond amount. It
@@ -126,38 +105,14 @@ func (s Service) SharesFromTokens(tokens sdk.Coin) (sdkmath.LegacyDec, error) {
 	if s.Tokens.IsZero() {
 		return sdkmath.LegacyZeroDec(), ErrInsufficientShares
 	}
-
-	sharesDenom := s.GetSharesDenom(tokens.Denom)
-	delegatorTokenShares := s.DelegatorShares.AmountOf(sharesDenom)
-	operatorTokenAmount := s.Tokens.AmountOf(tokens.Denom)
-
-	return delegatorTokenShares.MulInt(tokens.Amount).QuoInt(operatorTokenAmount), nil
+	return utils.SharesFromTokens(tokens, s.GetSharesDenom, s.Tokens, s.DelegatorShares)
 }
 
 // AddTokensFromDelegation adds the given amount of tokens to the service's total tokens,
 // also updating the service's delegator shares.
 // It returns the updated service and the shares issued.
 func (s Service) AddTokensFromDelegation(amount sdk.Coins) (Service, sdk.DecCoins) {
-	// calculate the shares to issue
-	issuedShares := sdk.NewDecCoins()
-	for _, token := range amount {
-		var tokenShares sdk.DecCoin
-		sharesDenom := s.GetSharesDenom(token.Denom)
-
-		delegatorShares := s.DelegatorShares.AmountOf(sharesDenom)
-		if delegatorShares.IsZero() {
-			// The first delegation to an operator sets the exchange rate to one
-			tokenShares = sdk.NewDecCoin(sharesDenom, token.Amount)
-		} else {
-			shares, err := s.SharesFromTokens(token)
-			if err != nil {
-				panic(err)
-			}
-			tokenShares = sdk.NewDecCoinFromDec(sharesDenom, shares)
-		}
-
-		issuedShares = issuedShares.Add(tokenShares)
-	}
+	issuedShares := utils.IssueShares(amount, s.GetSharesDenom, s.Tokens, s.DelegatorShares)
 
 	s.Tokens = s.Tokens.Add(amount...)
 	s.DelegatorShares = s.DelegatorShares.Add(issuedShares...)

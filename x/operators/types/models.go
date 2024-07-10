@@ -80,11 +80,6 @@ func (o Operator) GetSharesDenom(tokenDenom string) string {
 	return utils.GetSharesDenomFromTokenDenom("operator", o.ID, tokenDenom)
 }
 
-// GetTokenDenomFromSharesDenom returns the token denom from a shares denom
-func (o Operator) GetTokenDenomFromSharesDenom(sharesDenom string) string {
-	return utils.GetTokenDenomFromSharesDenom(sharesDenom)
-}
-
 // IsActive returns whether the operator is active.
 func (o Operator) IsActive() bool {
 	return o.Status == OPERATOR_STATUS_ACTIVE
@@ -94,28 +89,12 @@ func (o Operator) IsActive() bool {
 // This can happen e.g. if Operator loses all tokens due to slashing. In this case,
 // make all future delegations invalid.
 func (o Operator) InvalidExRate() bool {
-	for _, token := range o.Tokens {
-		if token.IsZero() && o.DelegatorShares.AmountOf(token.Denom).IsPositive() {
-			return true
-		}
-	}
-	return false
+	return utils.IsInvalidExRate(o.Tokens, o.DelegatorShares)
 }
 
 // TokensFromShares calculates the token worth of provided shares
 func (o Operator) TokensFromShares(shares sdk.DecCoins) sdk.DecCoins {
-	tokens := sdk.NewDecCoins()
-	for _, share := range shares {
-		tokenDenom := o.GetTokenDenomFromSharesDenom(share.Denom)
-		operatorTokenAmount := o.Tokens.AmountOf(tokenDenom)
-		delegatorSharesAmount := o.DelegatorShares.AmountOf(share.Denom)
-
-		tokenAmount := share.Amount.MulInt(operatorTokenAmount).Quo(delegatorSharesAmount)
-
-		tokens = tokens.Add(sdk.NewDecCoinFromDec(tokenDenom, tokenAmount))
-	}
-
-	return tokens
+	return utils.ComputeTokensFromShares(shares, o.Tokens, o.DelegatorShares)
 }
 
 // SharesFromTokens returns the shares of a delegation given a bond amount. It
@@ -124,38 +103,14 @@ func (o Operator) SharesFromTokens(tokens sdk.Coin) (sdkmath.LegacyDec, error) {
 	if o.Tokens.IsZero() {
 		return sdkmath.LegacyZeroDec(), ErrInsufficientShares
 	}
-
-	sharesDenom := o.GetSharesDenom(tokens.Denom)
-	delegatorTokenShares := o.DelegatorShares.AmountOf(sharesDenom)
-	operatorTokenAmount := o.Tokens.AmountOf(tokens.Denom)
-
-	return delegatorTokenShares.MulInt(tokens.Amount).QuoInt(operatorTokenAmount), nil
+	return utils.SharesFromTokens(tokens, o.GetSharesDenom, o.Tokens, o.DelegatorShares)
 }
 
 // AddTokensFromDelegation adds the given amount of tokens to the operator's total tokens,
 // also updating the operator's delegator shares.
 // It returns the updated operator and the shares issued.
 func (o Operator) AddTokensFromDelegation(amount sdk.Coins) (Operator, sdk.DecCoins) {
-	// calculate the shares to issue
-	issuedShares := sdk.NewDecCoins()
-	for _, token := range amount {
-		var tokenShares sdk.DecCoin
-		sharesDenom := o.GetSharesDenom(token.Denom)
-
-		delegatorShares := o.DelegatorShares.AmountOf(sharesDenom)
-		if delegatorShares.IsZero() {
-			// The first delegation to an operator sets the exchange rate to one
-			tokenShares = sdk.NewDecCoin(sharesDenom, token.Amount)
-		} else {
-			shares, err := o.SharesFromTokens(token)
-			if err != nil {
-				panic(err)
-			}
-			tokenShares = sdk.NewDecCoinFromDec(sharesDenom, shares)
-		}
-
-		issuedShares = issuedShares.Add(tokenShares)
-	}
+	issuedShares := utils.IssueShares(amount, o.GetSharesDenom, o.Tokens, o.DelegatorShares)
 
 	o.Tokens = o.Tokens.Add(amount...)
 	o.DelegatorShares = o.DelegatorShares.Add(issuedShares...)
