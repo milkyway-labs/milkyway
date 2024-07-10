@@ -8,6 +8,8 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+
+	"github.com/milkyway-labs/milkyway/utils"
 )
 
 // GetServiceAddress generates a service address from its id
@@ -77,13 +79,12 @@ func (s Service) Validate() error {
 
 // GetSharesDenom returns the shares denom for a service and token denom
 func (s Service) GetSharesDenom(tokenDenom string) string {
-	return fmt.Sprintf("service/%d/%s", s.ID, tokenDenom)
+	return utils.GetSharesDenomFromTokenDenom("service", s.ID, tokenDenom)
 }
 
 // GetTokenDenomFromSharesDenom returns the token denom from a shares denom
 func (s Service) GetTokenDenomFromSharesDenom(sharesDenom string) string {
-	parts := strings.Split(sharesDenom, "/")
-	return parts[len(parts)-1]
+	return utils.GetTokenDenomFromSharesDenom(sharesDenom)
 }
 
 // IsActive returns whether the service is active.

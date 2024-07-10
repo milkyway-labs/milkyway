@@ -8,6 +8,8 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+
+	"github.com/milkyway-labs/milkyway/utils"
 )
 
 // GetOperatorAddress generates an operator address from its id
@@ -75,16 +77,12 @@ func (o *Operator) Validate() error {
 
 // GetSharesDenom returns the shares denom for an operator and token denom
 func (o Operator) GetSharesDenom(tokenDenom string) string {
-	return fmt.Sprintf("operator/%d/%s", o.ID, tokenDenom)
+	return utils.GetSharesDenomFromTokenDenom("operator", o.ID, tokenDenom)
 }
 
 // GetTokenDenomFromSharesDenom returns the token denom from a shares denom
 func (o Operator) GetTokenDenomFromSharesDenom(sharesDenom string) string {
-	parts := strings.Split(sharesDenom, "/")
-	if len(parts) != 3 {
-		return ""
-	}
-	return parts[2]
+	return utils.GetTokenDenomFromSharesDenom(sharesDenom)
 }
 
 // IsActive returns whether the operator is active.
