@@ -167,8 +167,8 @@ message QueryPoolDelegationsRequest {
   cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
-// QueryPoolDelegationsResponse is response type for the Query/PoolDelegations RPC
-// method.
+// QueryPoolDelegationsResponse is response type for the Query/PoolDelegations
+// RPC method.
 message QueryPoolDelegationsResponse {
   // Delegations is the list of delegations
   repeated PoolDelegationResponse delegations = 1

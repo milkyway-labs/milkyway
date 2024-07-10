@@ -35,7 +35,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// QueryPoolDelegationRequest is request type for the Query/PoolDelegation RPC
+// QueryPoolDelegationsRequest is request type for the Query/PoolDelegations RPC
 // method.
 type QueryPoolDelegationsRequest struct {
 	// PoolId is the ID of the pool to query
@@ -91,8 +91,8 @@ func (m *QueryPoolDelegationsRequest) GetPagination() *query.PageRequest {
 	return nil
 }
 
-// QueryPoolDelegationResponse is response type for the Query/PoolDelegation RPC
-// method.
+// QueryPoolDelegationsResponse is response type for the Query/PoolDelegations
+// RPC method.
 type QueryPoolDelegationsResponse struct {
 	// Delegations is the list of delegations
 	Delegations []PoolDelegationResponse `protobuf:"bytes,1,rep,name=delegations,proto3" json:"delegations"`
@@ -1905,12 +1905,12 @@ type QueryClient interface {
 	// PoolDelegation queries the delegation info for the given pool and
 	// delegator.
 	PoolDelegation(ctx context.Context, in *QueryPoolDelegationRequest, opts ...grpc.CallOption) (*QueryPoolDelegationResponse, error)
-	// OperatorDelegations queries the delegates info for the given operator.
+	// OperatorDelegations queries the delegations info for the given operator.
 	OperatorDelegations(ctx context.Context, in *QueryOperatorDelegationsRequest, opts ...grpc.CallOption) (*QueryOperatorDelegationsResponse, error)
 	// OperatorDelegation queries the delegation info for the given operator and
 	// delegator.
 	OperatorDelegation(ctx context.Context, in *QueryOperatorDelegationRequest, opts ...grpc.CallOption) (*QueryOperatorDelegationResponse, error)
-	// ServiceDelegations queries the delegates info for the given service.
+	// ServiceDelegations queries the delegations info for the given service.
 	ServiceDelegations(ctx context.Context, in *QueryServiceDelegationsRequest, opts ...grpc.CallOption) (*QueryServiceDelegationsResponse, error)
 	// ServiceDelegation queries the delegation info for the given service and
 	// delegator.
@@ -1924,7 +1924,7 @@ type QueryClient interface {
 	// DelegatorServiceDelegations queries all the service delegations of a given
 	// delegator address.
 	DelegatorServiceDelegations(ctx context.Context, in *QueryDelegatorServiceDelegationsRequest, opts ...grpc.CallOption) (*QueryDelegatorServiceDelegationsResponse, error)
-	// DelegatorValidators queries all validators info for given delegator
+	// DelegatorPools queries all pools info for given delegator
 	// address.
 	DelegatorPools(ctx context.Context, in *QueryDelegatorPoolsRequest, opts ...grpc.CallOption) (*QueryDelegatorPoolsResponse, error)
 	// DelegatorPool queries the pool info for given delegator and pool id.
@@ -1939,7 +1939,7 @@ type QueryClient interface {
 	// DelegatorService queries the service info for given delegator and service
 	// id.
 	DelegatorService(ctx context.Context, in *QueryDelegatorServiceRequest, opts ...grpc.CallOption) (*QueryDelegatorServiceResponse, error)
-	// Parameters queries the restaking parameters.
+	// Params queries the restaking parameters.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 }
 
@@ -2102,12 +2102,12 @@ type QueryServer interface {
 	// PoolDelegation queries the delegation info for the given pool and
 	// delegator.
 	PoolDelegation(context.Context, *QueryPoolDelegationRequest) (*QueryPoolDelegationResponse, error)
-	// OperatorDelegations queries the delegates info for the given operator.
+	// OperatorDelegations queries the delegations info for the given operator.
 	OperatorDelegations(context.Context, *QueryOperatorDelegationsRequest) (*QueryOperatorDelegationsResponse, error)
 	// OperatorDelegation queries the delegation info for the given operator and
 	// delegator.
 	OperatorDelegation(context.Context, *QueryOperatorDelegationRequest) (*QueryOperatorDelegationResponse, error)
-	// ServiceDelegations queries the delegates info for the given service.
+	// ServiceDelegations queries the delegations info for the given service.
 	ServiceDelegations(context.Context, *QueryServiceDelegationsRequest) (*QueryServiceDelegationsResponse, error)
 	// ServiceDelegation queries the delegation info for the given service and
 	// delegator.
@@ -2121,7 +2121,7 @@ type QueryServer interface {
 	// DelegatorServiceDelegations queries all the service delegations of a given
 	// delegator address.
 	DelegatorServiceDelegations(context.Context, *QueryDelegatorServiceDelegationsRequest) (*QueryDelegatorServiceDelegationsResponse, error)
-	// DelegatorValidators queries all validators info for given delegator
+	// DelegatorPools queries all pools info for given delegator
 	// address.
 	DelegatorPools(context.Context, *QueryDelegatorPoolsRequest) (*QueryDelegatorPoolsResponse, error)
 	// DelegatorPool queries the pool info for given delegator and pool id.
@@ -2136,7 +2136,7 @@ type QueryServer interface {
 	// DelegatorService queries the service info for given delegator and service
 	// id.
 	DelegatorService(context.Context, *QueryDelegatorServiceRequest) (*QueryDelegatorServiceResponse, error)
-	// Parameters queries the restaking parameters.
+	// Params queries the restaking parameters.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 }
 
