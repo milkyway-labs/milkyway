@@ -35,7 +35,7 @@ service Query {
                                    "delegations/{delegator_address}";
   }
 
-  // OperatorDelegations queries the delegates info for the given operator.
+  // OperatorDelegations queries the delegations info for the given operator.
   rpc OperatorDelegations(QueryOperatorDelegationsRequest)
       returns (QueryOperatorDelegationsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
