@@ -48,3 +48,38 @@ func NewQueryDelegatorOperatorDelegationsRequest(delegatorAddress string, pagina
 func NewQueryDelegatorServiceDelegationsRequest(delegatorAddress string, pagination *query.PageRequest) *QueryDelegatorServiceDelegationsRequest {
 	return &QueryDelegatorServiceDelegationsRequest{DelegatorAddress: delegatorAddress, Pagination: pagination}
 }
+
+// NewQueryDelegatorPoolsRequest creates a new QueryDelegatorPoolsRequest instance
+func NewQueryDelegatorPoolsRequest(delegatorAddress string, pagination *query.PageRequest) *QueryDelegatorPoolsRequest {
+	return &QueryDelegatorPoolsRequest{DelegatorAddress: delegatorAddress, Pagination: pagination}
+}
+
+// NewQueryDelegatorPoolRequest creates a new QueryDelegatorPoolRequest instance
+func NewQueryDelegatorPoolRequest(delegatorAddress string, poolID uint32) *QueryDelegatorPoolRequest {
+	return &QueryDelegatorPoolRequest{DelegatorAddress: delegatorAddress, PoolId: poolID}
+}
+
+// NewQueryDelegatorOperatorsRequest creates a new QueryDelegatorOperatorsRequest instance
+func NewQueryDelegatorOperatorsRequest(delegatorAddress string, pagination *query.PageRequest) *QueryDelegatorOperatorsRequest {
+	return &QueryDelegatorOperatorsRequest{DelegatorAddress: delegatorAddress, Pagination: pagination}
+}
+
+// NewQueryDelegatorOperatorRequest creates a new QueryDelegatorOperatorRequest instance
+func NewQueryDelegatorOperatorRequest(delegatorAddress string, operatorID uint32) *QueryDelegatorOperatorRequest {
+	return &QueryDelegatorOperatorRequest{DelegatorAddress: delegatorAddress, OperatorId: operatorID}
+}
+
+// NewQueryDelegatorServicesRequest creates a new QueryDelegatorServicesRequest instance
+func NewQueryDelegatorServicesRequest(delegatorAddress string, pagination *query.PageRequest) *QueryDelegatorServicesRequest {
+	return &QueryDelegatorServicesRequest{DelegatorAddress: delegatorAddress, Pagination: pagination}
+}
+
+// NewQueryDelegatorServiceRequest creates a new QueryDelegatorServiceRequest instance
+func NewQueryDelegatorServiceRequest(delegatorAddress string, serviceID uint32) *QueryDelegatorServiceRequest {
+	return &QueryDelegatorServiceRequest{DelegatorAddress: delegatorAddress, ServiceId: serviceID}
+}
+
+// NewQueryParamsRequest creates a new QueryParamsRequest instance
+func NewQueryParamsRequest() *QueryParamsRequest {
+	return &QueryParamsRequest{}
+}

@@ -469,7 +469,7 @@ func (k Querier) DelegatorOperators(goCtx context.Context, req *types.QueryDeleg
 
 	// Get the user operators delegations store
 	store := ctx.KVStore(k.storeKey)
-	delStore := prefix.NewStore(store, types.UserPoolDelegationsStorePrefix(req.DelegatorAddress))
+	delStore := prefix.NewStore(store, types.UserOperatorDelegationsStorePrefix(req.DelegatorAddress))
 
 	// Get the operators
 	var operators []operatorstypes.Operator
