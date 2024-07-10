@@ -157,7 +157,7 @@ service Query {
   }
 }
 
-// QueryPoolDelegationRequest is request type for the Query/PoolDelegation RPC
+// QueryPoolDelegationsRequest is request type for the Query/PoolDelegations RPC
 // method.
 message QueryPoolDelegationsRequest {
   // PoolId is the ID of the pool to query
