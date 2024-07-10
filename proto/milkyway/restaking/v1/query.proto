@@ -150,7 +150,7 @@ service Query {
                                    "{delegator_address}/services/{service_id}";
   }
 
-  // Parameters queries the restaking parameters.
+  // Params queries the restaking parameters.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
     option (google.api.http).get = "/milkyway/restaking/v1/params";
