@@ -35,11 +35,11 @@ func (k *Keeper) IterateOperators(ctx sdk.Context, cb func(operator types.Operat
 	}
 }
 
-// GetOperators returns the services stored in the KVStore
+// GetOperators returns the operators stored in the KVStore
 func (k *Keeper) GetOperators(ctx sdk.Context) []types.Operator {
 	var operators []types.Operator
-	k.IterateOperators(ctx, func(service types.Operator) (stop bool) {
-		operators = append(operators, service)
+	k.IterateOperators(ctx, func(operator types.Operator) (stop bool) {
+		operators = append(operators, operator)
 		return false
 	})
 	return operators

@@ -9,7 +9,7 @@ import (
 // Event Hooks
 // These can be utilized to communicate between an operators keeper
 // and another keeper which must take particular actions when
-// services change state. The second keeper must implement this
+// operators change state. The second keeper must implement this
 // interface, which then the operators keeper can call.
 
 // OperatorsHooks event hooks for operators objects (noalias)

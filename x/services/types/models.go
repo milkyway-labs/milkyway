@@ -106,9 +106,9 @@ func (s Service) SharesFromTokens(tokens sdk.Coin) (sdkmath.LegacyDec, error) {
 
 	sharesDenom := s.GetSharesDenom(tokens.Denom)
 	delegatorTokenShares := s.DelegatorShares.AmountOf(sharesDenom)
-	operatorTokenAmount := s.Tokens.AmountOf(tokens.Denom)
+	serviceTokenAmount := s.Tokens.AmountOf(tokens.Denom)
 
-	return delegatorTokenShares.MulInt(tokens.Amount).QuoInt(operatorTokenAmount), nil
+	return delegatorTokenShares.MulInt(tokens.Amount).QuoInt(serviceTokenAmount), nil
 }
 
 // AddTokensFromDelegation adds the given amount of tokens to the service's total tokens,
@@ -123,7 +123,7 @@ func (s Service) AddTokensFromDelegation(amount sdk.Coins) (Service, sdk.DecCoin
 
 		delegatorShares := s.DelegatorShares.AmountOf(sharesDenom)
 		if delegatorShares.IsZero() {
-			// The first delegation to an operator sets the exchange rate to one
+			// The first delegation to a service sets the exchange rate to one
 			tokenShares = sdk.NewDecCoin(sharesDenom, token.Amount)
 		} else {
 			shares, err := s.SharesFromTokens(token)

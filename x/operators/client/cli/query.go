@@ -14,7 +14,7 @@ import (
 
 // GetQueryCmd returns the command allowing to perform queries
 func GetQueryCmd() *cobra.Command {
-	servicesQueryCmd := &cobra.Command{
+	queryCmd := &cobra.Command{
 		Use:                        types.ModuleName,
 		Short:                      fmt.Sprintf("Querying commands for the %s module", types.ModuleName),
 		DisableFlagParsing:         true,
@@ -22,19 +22,19 @@ func GetQueryCmd() *cobra.Command {
 		RunE:                       client.ValidateCmd,
 	}
 
-	servicesQueryCmd.AddCommand(
+	queryCmd.AddCommand(
 		getCmdQueryOperator(),
 		getCmdQueryOperators(),
 		getCmdQueryParams(),
 	)
 
-	return servicesQueryCmd
+	return queryCmd
 }
 
 // getCmdQueryOperator returns the command allowing to query an operator
 func getCmdQueryOperator() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "operator [service-id]",
+		Use:     "operator [operator-id]",
 		Short:   "Query the operator with the given id",
 		Example: fmt.Sprintf(`%s query %s operator 1`, version.AppName, types.ModuleName),
 		Args:    cobra.ExactArgs(2),
@@ -45,12 +45,12 @@ func getCmdQueryOperator() *cobra.Command {
 			}
 			queryClient := types.NewQueryClient(clientCtx)
 
-			serviceID, err := types.ParseOperatorID(args[0])
+			operatorID, err := types.ParseOperatorID(args[0])
 			if err != nil {
 				return err
 			}
 
-			res, err := queryClient.Operator(context.Background(), types.NewQueryOperatorRequest(serviceID))
+			res, err := queryClient.Operator(context.Background(), types.NewQueryOperatorRequest(operatorID))
 			if err != nil {
 				return err
 			}
@@ -64,7 +64,7 @@ func getCmdQueryOperator() *cobra.Command {
 	return cmd
 }
 
-// getCmdQueryOperators returns the command allowing to query services
+// getCmdQueryOperators returns the command allowing to query operators
 func getCmdQueryOperators() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "operators",

@@ -21,7 +21,7 @@ const (
 
 // GetTxCmd returns a new command to perform services transactions
 func GetTxCmd() *cobra.Command {
-	subspacesTxCmd := &cobra.Command{
+	txCmd := &cobra.Command{
 		Use:                        types.ModuleName,
 		Short:                      "Services transaction subcommands",
 		DisableFlagParsing:         true,
@@ -29,14 +29,14 @@ func GetTxCmd() *cobra.Command {
 		RunE:                       client.ValidateCmd,
 	}
 
-	subspacesTxCmd.AddCommand(
+	txCmd.AddCommand(
 		GetCmdCreateService(),
 		GetCmdUpdateService(),
 		GetCmdActivateService(),
 		GetCmdDeactivateService(),
 	)
 
-	return subspacesTxCmd
+	return txCmd
 }
 
 // GetCmdCreateService returns the command allowing to create a new service

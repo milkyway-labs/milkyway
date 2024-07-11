@@ -18,9 +18,9 @@ const (
 	flagPicture = "picture"
 )
 
-// GetTxCmd returns a new command to perform services transactions
+// GetTxCmd returns a new command to perform operators transactions
 func GetTxCmd() *cobra.Command {
-	subspacesTxCmd := &cobra.Command{
+	txCmd := &cobra.Command{
 		Use:                        types.ModuleName,
 		Short:                      "Operators transaction subcommands",
 		DisableFlagParsing:         true,
@@ -28,13 +28,13 @@ func GetTxCmd() *cobra.Command {
 		RunE:                       client.ValidateCmd,
 	}
 
-	subspacesTxCmd.AddCommand(
+	txCmd.AddCommand(
 		GetCmdRegisterOperator(),
 		GetCmdEditOperator(),
 		GetCmdDeactivateOperator(),
 	)
 
-	return subspacesTxCmd
+	return txCmd
 }
 
 // GetCmdRegisterOperator returns the command allowing to register a new operator
@@ -42,8 +42,8 @@ func GetCmdRegisterOperator() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "register [name]",
 		Args:  cobra.ExactArgs(1),
-		Short: "Register a new service",
-		Long: `Register a new service having the given name. 
+		Short: "Register a new operator",
+		Long: `Register a new operator having the given name. 
 
 You can specify a website and a picture URL using the optional flags.
 The operator will be created with the sender as the admin.`,
@@ -81,8 +81,8 @@ The operator will be created with the sender as the admin.`,
 		},
 	}
 
-	cmd.Flags().String(flagWebsite, "", "The website of the service (optional)")
-	cmd.Flags().String(flagPicture, "", "The picture URL of the service (optional)")
+	cmd.Flags().String(flagWebsite, "", "The website of the operator (optional)")
+	cmd.Flags().String(flagPicture, "", "The picture URL of the operator (optional)")
 
 	flags.AddTxFlagsToCmd(cmd)
 
@@ -142,21 +142,21 @@ Only the fields that you provide will be updated`,
 		},
 	}
 
-	cmd.Flags().String(flagMoniker, types.DoNotModify, "The new moniker of the service (optional)")
-	cmd.Flags().String(flagWebsite, types.DoNotModify, "The new website of the service (optional)")
-	cmd.Flags().String(flagPicture, types.DoNotModify, "The new picture URL of the service (optional)")
+	cmd.Flags().String(flagMoniker, types.DoNotModify, "The new moniker of the operator (optional)")
+	cmd.Flags().String(flagWebsite, types.DoNotModify, "The new website of the operator (optional)")
+	cmd.Flags().String(flagPicture, types.DoNotModify, "The new picture URL of the operator (optional)")
 
 	flags.AddTxFlagsToCmd(cmd)
 
 	return cmd
 }
 
-// GetCmdDeactivateOperator returns the command allowing to deactivate an existing service
+// GetCmdDeactivateOperator returns the command allowing to deactivate an existing operator
 func GetCmdDeactivateOperator() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "deactivate [id]",
 		Args:    cobra.ExactArgs(1),
-		Short:   "deactivate an existing service",
+		Short:   "deactivate an existing operator",
 		Example: fmt.Sprintf(`%s tx %s deactivate 1 --from alice`, version.AppName, types.ModuleName),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
