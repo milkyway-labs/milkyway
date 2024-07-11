@@ -1,0 +1,233 @@
+syntax = "proto3";
+package milkyway.rewards.v1;
+
+import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/rewards/types";
+option (gogoproto.goproto_getters_all) = false;
+
+message RewardsPlan {
+  // ID is the unique identifier of the plan
+  uint64 id = 1 [ (gogoproto.customname) = "ID" ];
+
+  // Description is the description of the plan
+  string description = 2;
+
+  uint32 service_id = 3 [ (gogoproto.customname) = "ServiceID" ];
+
+  // Amount is the amount of rewards to be distributed.
+  repeated cosmos.base.v1beta1.Coin amount_per_day = 4 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+
+  // StartTime is the starting time of the plan
+  google.protobuf.Timestamp start_time = 5
+      [ (gogoproto.stdtime) = true, (gogoproto.nullable) = false ];
+
+  // EndTime is the ending time of the plan
+  google.protobuf.Timestamp end_time = 6
+      [ (gogoproto.stdtime) = true, (gogoproto.nullable) = false ];
+
+  PoolsDistribution pools_distribution = 7 [ (gogoproto.nullable) = false ];
+
+  OperatorsDistribution operators_distribution = 8
+      [ (gogoproto.nullable) = false ];
+
+  UsersDistribution users_distribution = 9 [ (gogoproto.nullable) = false ];
+}
+
+message PoolsDistribution {
+  uint32 weight = 1;
+
+  google.protobuf.Any type = 2
+      [ (cosmos_proto.accepts_interface) =
+            "milkyway.rewards.v1.PoolsDistributionType" ];
+}
+
+message PoolsDistributionTypeBasic {
+  option (cosmos_proto.implements_interface) =
+      "milkyway.rewards.v1.PoolsDistributionType";
+}
+
+message PoolsDistributionTypeWeighted {
+  option (cosmos_proto.implements_interface) =
+      "milkyway.rewards.v1.PoolsDistributionType";
+
+  repeated PoolDistributionWeight weights = 1 [ (gogoproto.nullable) = false ];
+}
+
+message PoolDistributionWeight {
+  uint32 pool_id = 1 [ (gogoproto.customname) = "PoolID" ];
+
+  uint32 weight = 2;
+}
+
+message PoolsDistributionTypeEgalitarian {
+  option (cosmos_proto.implements_interface) =
+      "milkyway.rewards.v1.PoolsDistributionType";
+}
+
+message OperatorsDistribution {
+  uint32 weight = 1;
+
+  google.protobuf.Any type = 2
+      [ (cosmos_proto.accepts_interface) =
+            "milkyway.rewards.v1.OperatorsDistributionType" ];
+}
+
+message OperatorsDistributionTypeBasic {
+  option (cosmos_proto.implements_interface) =
+      "milkyway.rewards.v1.OperatorsDistributionType";
+}
+
+message OperatorsDistributionTypeWeighted {
+  option (cosmos_proto.implements_interface) =
+      "milkyway.rewards.v1.OperatorsDistributionType";
+
+  repeated OperatorDistributionWeight weights = 1
+      [ (gogoproto.nullable) = false ];
+}
+
+message OperatorDistributionWeight {
+  uint32 operator_id = 1 [ (gogoproto.customname) = "OperatorID" ];
+
+  uint32 weight = 2;
+}
+
+message OperatorsDistributionTypeEgalitarian {
+  option (cosmos_proto.implements_interface) =
+      "milkyway.rewards.v1.OperatorsDistributionType";
+}
+
+message UsersDistribution {
+  uint32 weight = 1;
+
+  google.protobuf.Any type = 2
+      [ (cosmos_proto.accepts_interface) =
+            "milkyway.rewards.v1.UsersDistributionType" ];
+}
+
+message UsersDistributionTypeBasic {
+  option (cosmos_proto.implements_interface) =
+      "milkyway.rewards.v1.UsersDistributionType";
+}
+
+message AccumulatedCommission {
+  repeated cosmos.base.v1beta1.DecCoin commission = 1 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+message DelegatorStartingInfo {
+  uint64 previous_period = 1;
+  string stake = 2 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  uint64 height = 3 [
+    (gogoproto.jsontag) = "creation_height",
+    (amino.field_name) = "creation_height",
+    (amino.dont_omitempty) = true
+  ];
+}
+
+message HistoricalRewards {
+  repeated cosmos.base.v1beta1.DecCoin cumulative_reward_ratio = 1 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  uint32 reference_count = 2;
+}
+
+message CurrentRewards {
+  repeated cosmos.base.v1beta1.DecCoin rewards = 1 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+  uint64 period = 2;
+}
+
+message OutstandingRewards {
+  repeated cosmos.base.v1beta1.DecCoin rewards = 1 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+// TODO: add SlashEvent
+
+// ---------------------------------------------------------------------------
+
+// Pool is a Coins wrapper with denom.
+message Pool {
+  string denom = 1 [ (gogoproto.moretags) = "yaml:\"denom\"" ];
+  repeated cosmos.base.v1beta1.Coin coins = 2 [
+    (gogoproto.moretags) = "yaml:\"coins\"",
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// DecPool is a DecCoins wrapper with denom.
+message DecPool {
+  string denom = 1 [ (gogoproto.moretags) = "yaml:\"denom\"" ];
+  repeated cosmos.base.v1beta1.DecCoin dec_coins = 2 [
+    (gogoproto.moretags) = "yaml:\"dec_coins\"",
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
+    (gogoproto.nullable) = false
+  ];
+}
+
+message MultiHistoricalRewards {
+  repeated DecPool cumulative_reward_ratios = 1 [
+    (gogoproto.moretags) = "yaml:\"cumulative_reward_ratios\"",
+    (gogoproto.castrepeated) = "DecPools",
+    (gogoproto.nullable) = false
+  ];
+  uint32 reference_count = 2
+      [ (gogoproto.moretags) = "yaml:\"reference_count\"" ];
+}
+
+message MultiCurrentRewards {
+  repeated DecPool rewards = 1 [
+    (gogoproto.moretags) = "yaml:\"rewards\"",
+    (gogoproto.castrepeated) = "DecPools",
+    (gogoproto.nullable) = false
+  ];
+  uint64 period = 2;
+}
+
+message MultiOutstandingRewards {
+  repeated DecPool rewards = 1 [
+    (gogoproto.moretags) = "yaml:\"rewards\"",
+    (gogoproto.castrepeated) = "DecPools",
+    (gogoproto.nullable) = false
+  ];
+}
+
+message MultiDelegatorStartingInfo {
+  uint64 previous_period = 1
+      [ (gogoproto.moretags) = "yaml:\"previous_period\"" ];
+  repeated cosmos.base.v1beta1.DecCoin stakes = 2 [
+    (gogoproto.moretags) = "yaml:\"stakes\"",
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
+    (gogoproto.nullable) = false
+  ];
+  uint64 height = 3 [
+    (gogoproto.moretags) = "yaml:\"creation_height\"",
+    (gogoproto.jsontag) = "creation_height"
+  ];
+}

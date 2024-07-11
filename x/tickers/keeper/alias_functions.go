@@ -4,6 +4,8 @@ import (
 	"context"
 
 	"cosmossdk.io/collections"
+
+	"github.com/milkyway-labs/milkyway/x/tickers/types"
 )
 
 func (k *Keeper) SetTicker(ctx context.Context, denom, ticker string) error {
@@ -17,7 +19,11 @@ func (k *Keeper) SetTicker(ctx context.Context, denom, ticker string) error {
 }
 
 func (k *Keeper) GetTicker(ctx context.Context, denom string) (string, error) {
-	return k.Tickers.Get(ctx, denom)
+	ticker, err := k.Tickers.Get(ctx, denom)
+	if err != nil {
+		return "", types.ErrTickerNotFound
+	}
+	return ticker, nil
 }
 
 func (k *Keeper) RemoveTicker(ctx context.Context, denom string) error {

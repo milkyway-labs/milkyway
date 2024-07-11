@@ -1,0 +1,62 @@
+package types
+
+import (
+	"context"
+
+	"cosmossdk.io/core/address"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	slinkytypes "github.com/skip-mev/slinky/pkg/types"
+	oracletypes "github.com/skip-mev/slinky/x/oracle/types"
+
+	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
+)
+
+type AccountKeeper interface {
+	AddressCodec() address.Codec
+	GetModuleAddress(moduleName string) sdk.AccAddress
+}
+
+type BankKeeper interface {
+	SendCoins(ctx context.Context, fromAddr, toAddr sdk.AccAddress, amt sdk.Coins) error
+	SendCoinsFromModuleToAccount(ctx context.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error
+}
+
+type CommunityPoolKeeper interface {
+	FundCommunityPool(ctx context.Context, amount sdk.Coins, sender sdk.AccAddress) error
+}
+
+type OracleKeeper interface {
+	GetPriceWithNonceForCurrencyPair(ctx sdk.Context, cp slinkytypes.CurrencyPair) (oracletypes.QuotePriceWithNonce, error)
+	GetDecimalsForCurrencyPair(ctx sdk.Context, cp slinkytypes.CurrencyPair) (decimals uint64, err error)
+}
+
+type PoolsKeeper interface {
+	GetParams(ctx sdk.Context) poolstypes.Params
+	GetPool(ctx sdk.Context, poolID uint32) (poolstypes.Pool, bool)
+	GetPools(ctx sdk.Context) []poolstypes.Pool
+	IteratePools(ctx sdk.Context, cb func(poolstypes.Pool) bool)
+}
+
+type OperatorsKeeper interface {
+	GetOperator(ctx sdk.Context, operatorID uint32) (operatorstypes.Operator, bool)
+	IterateOperators(ctx sdk.Context, cb func(operator operatorstypes.Operator) (stop bool))
+}
+
+type ServicesKeeper interface {
+	GetService(ctx sdk.Context, serviceID uint32) (servicestypes.Service, bool)
+}
+
+type RestakingKeeper interface {
+	GetOperatorParams(ctx sdk.Context, operatorID uint32) restakingtypes.OperatorParams
+	GetServiceParams(ctx sdk.Context, serviceID uint32) restakingtypes.ServiceParams
+	GetPoolDelegation(ctx sdk.Context, poolID uint32, userAddress string) (restakingtypes.Delegation, bool)
+	GetOperatorDelegation(ctx sdk.Context, operatorID uint32, userAddress string) (restakingtypes.Delegation, bool)
+	GetServiceDelegation(ctx sdk.Context, serviceID uint32, userAddress string) (restakingtypes.Delegation, bool)
+}
+
+type TickersKeeper interface {
+	GetTicker(ctx context.Context, denom string) (ticker string, err error)
+}

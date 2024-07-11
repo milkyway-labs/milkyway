@@ -71,6 +71,11 @@ func (p Pool) TokensFromShares(shares sdkmath.LegacyDec) sdkmath.LegacyDec {
 	return (shares.MulInt(p.Tokens)).Quo(p.DelegatorShares)
 }
 
+// TokensFromSharesTruncated calculates the token worth of provided shares, truncated
+func (p Pool) TokensFromSharesTruncated(shares sdkmath.LegacyDec) sdkmath.LegacyDec {
+	return (shares.MulInt(p.Tokens)).QuoTruncate(p.DelegatorShares)
+}
+
 // SharesFromTokens returns the shares of a delegation given a bond amount. It
 // returns an error if the pool has no tokens.
 func (p Pool) SharesFromTokens(amt sdkmath.Int) (sdkmath.LegacyDec, error) {

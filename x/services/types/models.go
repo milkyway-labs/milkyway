@@ -99,6 +99,11 @@ func (s Service) TokensFromShares(shares sdk.DecCoins) sdk.DecCoins {
 	return utils.ComputeTokensFromShares(shares, s.Tokens, s.DelegatorShares)
 }
 
+// TokensFromSharesTruncated calculates the token worth of provided shares, truncated
+func (s Service) TokensFromSharesTruncated(shares sdk.DecCoins) sdk.DecCoins {
+	return utils.ComputeTokensFromSharesTruncated(shares, s.Tokens, s.DelegatorShares)
+}
+
 // SharesFromTokens returns the shares of a delegation given a bond amount. It
 // returns an error if the service has no tokens.
 func (s Service) SharesFromTokens(tokens sdk.Coin) (sdkmath.LegacyDec, error) {

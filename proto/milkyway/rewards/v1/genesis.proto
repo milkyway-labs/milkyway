@@ -1,0 +1,296 @@
+syntax = "proto3";
+package milkyway.rewards.v1;
+
+import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "google/protobuf/timestamp.proto";
+import "gogoproto/gogo.proto";
+import "milkyway/rewards/v1/params.proto";
+import "milkyway/rewards/v1/models.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/rewards/types";
+
+// PoolOutstandingRewardsRecord is used for import/export via genesis json.
+message PoolOutstandingRewardsRecord {
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  // pool_id is the ID of the pool.
+  uint32 pool_id = 1 [ (gogoproto.customname) = "PoolID" ];
+
+  // outstanding_rewards represents the outstanding rewards of a pool.
+  repeated cosmos.base.v1beta1.DecCoin outstanding_rewards = 2 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+// PoolHistoricalRewardsRecord is used for import / export via genesis
+// json.
+message PoolHistoricalRewardsRecord {
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  // pool_id is the ID of the pool.
+  uint32 pool_id = 1 [ (gogoproto.customname) = "PoolID" ];
+
+  // period defines the period the historical rewards apply to.
+  uint64 period = 2;
+
+  // rewards defines the historical rewards of a pool.
+  HistoricalRewards rewards = 3
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+}
+
+// PoolCurrentRewardsRecord is used for import / export via genesis json.
+message PoolCurrentRewardsRecord {
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  // pool_id is the ID of the pool.
+  uint32 pool_id = 1 [ (gogoproto.customname) = "PoolID" ];
+
+  // rewards defines the current rewards of a pool.
+  CurrentRewards rewards = 2
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+}
+
+// PoolDelegatorStartingInfoRecord used for import / export via genesis json.
+message PoolDelegatorStartingInfoRecord {
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  // delegator_address is the address of the delegator.
+  string delegator_address = 1
+      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // pool_id is the ID of the pool.
+  uint32 pool_id = 2 [ (gogoproto.customname) = "PoolID" ];
+
+  // starting_info defines the starting info of a delegator.
+  DelegatorStartingInfo starting_info = 3
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+}
+
+// OperatorOutstandingRewardsRecord is used for import/export via genesis json.
+message OperatorOutstandingRewardsRecord {
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  // operator_id is the ID of the operator.
+  uint32 operator_id = 1 [ (gogoproto.customname) = "OperatorID" ];
+
+  // outstanding_rewards represents the outstanding rewards of an operator.
+  repeated DecPool outstanding_rewards = 2 [
+    (gogoproto.castrepeated) = "DecPools",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+message OperatorAccumulatedCommissionRecord {
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  uint32 operator_id = 1;
+
+  // accumulated is the accumulated commission of an operator.
+  AccumulatedCommission accumulated = 2
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+}
+
+// OperatorHistoricalRewardsRecord is used for import / export via genesis
+// json.
+message OperatorHistoricalRewardsRecord {
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  // operator_id is the ID of the operator.
+  uint32 operator_id = 1 [ (gogoproto.customname) = "OperatorID" ];
+
+  // period defines the period the historical rewards apply to.
+  uint64 period = 2;
+
+  // rewards defines the historical rewards of an operator.
+  MultiHistoricalRewards rewards = 3
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+}
+
+// OperatorCurrentRewardsRecord is used for import / export via genesis json.
+message OperatorCurrentRewardsRecord {
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  // operator_id is the ID of the operator.
+  uint32 operator_id = 1 [ (gogoproto.customname) = "OperatorID" ];
+
+  // rewards defines the current rewards of an operator.
+  MultiCurrentRewards rewards = 2
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+}
+
+// OperatorDelegatorStartingInfoRecord used for import / export via genesis
+// json.
+message OperatorDelegatorStartingInfoRecord {
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  // delegator_address is the address of the delegator.
+  string delegator_address = 1
+      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // operator_id is the ID of the operator.
+  uint32 operator_id = 2 [ (gogoproto.customname) = "OperatorID" ];
+
+  // starting_info defines the starting info of a delegator.
+  MultiDelegatorStartingInfo starting_info = 3
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+}
+
+// ServiceOutstandingRewardsRecord is used for import/export via genesis json.
+message ServiceOutstandingRewardsRecord {
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  // service_id is the ID of the service.
+  uint32 service_id = 1 [ (gogoproto.customname) = "ServiceID" ];
+
+  // outstanding_rewards represents the outstanding rewards of a service.
+  repeated DecPool outstanding_rewards = 2 [
+    (gogoproto.castrepeated) = "DecPools",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+// ServiceHistoricalRewardsRecord is used for import / export via genesis
+// json.
+message ServiceHistoricalRewardsRecord {
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  // service_id is the ID of the service.
+  uint32 service_id = 1 [ (gogoproto.customname) = "ServiceID" ];
+
+  // period defines the period the historical rewards apply to.
+  uint64 period = 2;
+
+  // rewards defines the historical rewards of a service.
+  MultiHistoricalRewards rewards = 3
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+}
+
+// ServiceCurrentRewardsRecord is used for import / export via genesis json.
+message ServiceCurrentRewardsRecord {
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  // service_id is the ID of the service.
+  uint32 service_id = 1 [ (gogoproto.customname) = "ServiceID" ];
+
+  // rewards defines the current rewards of a service.
+  MultiCurrentRewards rewards = 2
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+}
+
+// ServiceDelegatorStartingInfoRecord used for import / export via genesis json.
+message ServiceDelegatorStartingInfoRecord {
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  // delegator_address is the address of the delegator.
+  string delegator_address = 1
+      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // service_id is the ID of the service.
+  uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
+
+  // starting_info defines the starting info of a delegator.
+  MultiDelegatorStartingInfo starting_info = 3
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+}
+
+// GenesisState defines the module's genesis state.
+message GenesisState {
+  // Params defines the parameters of the module.
+  Params params = 1 [ (gogoproto.nullable) = false ];
+
+  // NextRewardsPlanID represents the id to be used when creating the next
+  // rewards plan.
+  uint64 next_rewards_plan_id = 2
+      [ (gogoproto.customname) = "NextRewardsPlanID" ];
+
+  // RewardsPlans defines the list of rewards plans.
+  repeated RewardsPlan rewards_plans = 3 [ (gogoproto.nullable) = false ];
+
+  google.protobuf.Timestamp last_rewards_allocation_time = 4
+      [ (gogoproto.stdtime) = true ];
+
+  // pool_outstanding_rewards defines the outstanding rewards of all pools at
+  // genesis.
+  repeated PoolOutstandingRewardsRecord pool_outstanding_rewards = 5
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+
+  // pool_historical_rewards defines the historical rewards of all pools at
+  // genesis.
+  repeated PoolHistoricalRewardsRecord pool_historical_rewards = 6
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+
+  // pool_current_rewards defines the current rewards of all pools at genesis.
+  repeated PoolCurrentRewardsRecord pool_current_rewards = 7
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+
+  // pool_delegator_starting_infos defines the delegator starting infos of all
+  // pools at genesis.
+  repeated PoolDelegatorStartingInfoRecord pool_delegator_starting_infos = 8
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+
+  // operator_outstanding_rewards defines the outstanding rewards of all
+  // operators at genesis.
+  repeated OperatorOutstandingRewardsRecord operator_outstanding_rewards = 9
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+
+  // operator_accumulated_commissions defines the accumulated commissions of all
+  // operators at genesis.
+  repeated OperatorAccumulatedCommissionRecord
+      operator_accumulated_commissions = 10
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+
+  // operator_historical_rewards defines the historical rewards of all operators
+  // at genesis.
+  repeated OperatorHistoricalRewardsRecord operator_historical_rewards = 11
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+
+  // operator_current_rewards defines the current rewards of all operators at
+  // genesis.
+  repeated OperatorCurrentRewardsRecord operator_current_rewards = 12
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+
+  // operator_delegator_starting_infos defines the delegator starting infos of
+  // all operators at genesis.
+  repeated OperatorDelegatorStartingInfoRecord
+      operator_delegator_starting_infos = 13
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+
+  // service_outstanding_rewards defines the outstanding rewards of all services
+  // at genesis.
+  repeated ServiceOutstandingRewardsRecord service_outstanding_rewards = 14
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+
+  // service_historical_rewards defines the historical rewards of all services
+  // at genesis.
+  repeated ServiceHistoricalRewardsRecord service_historical_rewards = 15
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+
+  // service_current_rewards defines the current rewards of all services at
+  // genesis.
+  repeated ServiceCurrentRewardsRecord service_current_rewards = 16
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+
+  // service_delegator_starting_infos defines the delegator starting infos of
+  // all services at genesis.
+  repeated ServiceDelegatorStartingInfoRecord service_delegator_starting_infos =
+      17 [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+}

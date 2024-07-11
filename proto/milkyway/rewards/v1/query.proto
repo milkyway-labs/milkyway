@@ -1,0 +1,27 @@
+syntax = "proto3";
+package milkyway.rewards.v1;
+
+import "google/api/annotations.proto";
+import "gogoproto/gogo.proto";
+import "milkyway/rewards/v1/models.proto";
+import "milkyway/rewards/v1/params.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/rewards/types";
+option (gogoproto.goproto_getters_all) = false;
+
+// Query defines the gRPC querier service.
+service Query {
+  // Params defines a gRPC query method that returns the parameters of the
+  // module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/milkyway/rewards/v1/params";
+  }
+}
+
+// QueryParamsRequest is the request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is the response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  Params params = 1 [ (gogoproto.nullable) = false ];
+}

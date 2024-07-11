@@ -97,6 +97,11 @@ func (o Operator) TokensFromShares(shares sdk.DecCoins) sdk.DecCoins {
 	return utils.ComputeTokensFromShares(shares, o.Tokens, o.DelegatorShares)
 }
 
+// TokensFromSharesTruncated calculates the token worth of provided shares, truncated
+func (o Operator) TokensFromSharesTruncated(shares sdk.DecCoins) sdk.DecCoins {
+	return utils.ComputeTokensFromSharesTruncated(shares, o.Tokens, o.DelegatorShares)
+}
+
 // SharesFromTokens returns the shares of a delegation given a bond amount. It
 // returns an error if the operator has no tokens.
 func (o Operator) SharesFromTokens(tokens sdk.Coin) (sdkmath.LegacyDec, error) {

@@ -7,15 +7,14 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-func (k *Keeper) GetServiceParams(ctx sdk.Context, operatorID uint32) (params types.ServiceParams, found bool) {
+func (k *Keeper) GetServiceParams(ctx sdk.Context, operatorID uint32) (params types.ServiceParams) {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(types.ServiceParamsStoreKey(operatorID))
 	if bz == nil {
-		return params, false
+		return types.DefaultServiceParams()
 	}
-
 	k.cdc.MustUnmarshal(bz, &params)
-	return params, true
+	return params
 }
 
 func (k *Keeper) SaveServiceParams(ctx sdk.Context, serviceID uint32, params types.ServiceParams) {

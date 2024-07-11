@@ -171,6 +171,9 @@ import (
 	"github.com/milkyway-labs/milkyway/x/restaking"
 	restakingkeeper "github.com/milkyway-labs/milkyway/x/restaking/keeper"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/x/rewards"
+	rewardskeeper "github.com/milkyway-labs/milkyway/x/rewards/keeper"
+	rewardstypes "github.com/milkyway-labs/milkyway/x/rewards/types"
 	"github.com/milkyway-labs/milkyway/x/services"
 	serviceskeeper "github.com/milkyway-labs/milkyway/x/services/keeper"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
@@ -221,6 +224,7 @@ var (
 		icqtypes.ModuleName:               nil,
 		stakeibctypes.ModuleName:          {authtypes.Minter, authtypes.Burner, authtypes.Staking},
 		stakeibctypes.RewardCollectorName: nil,
+		rewardstypes.ModuleName:           nil,
 
 		// slinky oracle permissions
 		oracletypes.ModuleName: nil,
@@ -297,6 +301,7 @@ type MilkyWayApp struct {
 	PoolsKeeper     *poolskeeper.Keeper
 	RestakingKeeper *restakingkeeper.Keeper
 	TickersKeeper   *tickerskeeper.Keeper
+	RewardsKeeper   *rewardskeeper.Keeper
 
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper           capabilitykeeper.ScopedKeeper
@@ -361,7 +366,7 @@ func NewMilkyWayApp(
 
 		// Custom modules
 		servicestypes.StoreKey, operatorstypes.StoreKey, poolstypes.StoreKey, restakingtypes.StoreKey,
-		tickerstypes.StoreKey,
+		tickerstypes.StoreKey, rewardstypes.StoreKey,
 	)
 	tkeys := storetypes.NewTransientStoreKeys(forwardingtypes.TransientStoreKey)
 	memKeys := storetypes.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -908,6 +913,21 @@ func NewMilkyWayApp(
 		runtime.NewKVStoreService(keys[tickerstypes.StoreKey]),
 		authorityAddr,
 	)
+	app.RewardsKeeper = rewardskeeper.NewKeeper(
+		app.appCodec,
+		runtime.NewKVStoreService(keys[rewardstypes.StoreKey]),
+		app.AccountKeeper,
+		app.BankKeeper,
+		communityPoolKeeper,
+		app.OracleKeeper,
+		app.PoolsKeeper,
+		app.OperatorsKeeper,
+		app.ServicesKeeper,
+		app.RestakingKeeper,
+		app.TickersKeeper,
+		authorityAddr,
+	)
+	app.RestakingKeeper.SetHooks(app.RewardsKeeper.Hooks())
 
 	/****  Module Options ****/
 
@@ -960,6 +980,7 @@ func NewMilkyWayApp(
 		pools.NewAppModule(appCodec, app.PoolsKeeper),
 		restaking.NewAppModule(appCodec, app.RestakingKeeper),
 		tickers.NewAppModule(appCodec, app.TickersKeeper),
+		rewards.NewAppModule(appCodec, app.RewardsKeeper),
 	)
 
 	if err := app.setupIndexer(appOpts, homePath, ac, vc, appCodec); err != nil {
@@ -998,6 +1019,7 @@ func NewMilkyWayApp(
 		epochstypes.ModuleName,
 		ratelimittypes.ModuleName,
 
+		rewardstypes.ModuleName,
 		servicestypes.ModuleName,
 		operatorstypes.ModuleName,
 		poolstypes.ModuleName,
@@ -1040,7 +1062,7 @@ func NewMilkyWayApp(
 		recordstypes.ModuleName, ratelimittypes.ModuleName, icacallbackstypes.ModuleName,
 
 		servicestypes.ModuleName, operatorstypes.ModuleName, poolstypes.ModuleName, restakingtypes.ModuleName,
-		tickerstypes.ModuleName,
+		tickerstypes.ModuleName, rewardstypes.ModuleName,
 	}
 
 	app.ModuleManager.SetOrderInitGenesis(genesisModuleOrder...)
