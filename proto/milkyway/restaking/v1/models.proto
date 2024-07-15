@@ -28,6 +28,19 @@ message PoolDelegation {
   ];
 }
 
+// PoolDelegationResponse is equivalent to PoolDelegation except that it
+// contains a balance in addition to shares which is more suitable for client
+// responses.
+message PoolDelegationResponse {
+  option (gogoproto.equal) = false;
+
+  PoolDelegation delegation = 1
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+
+  cosmos.base.v1beta1.Coin balance = 2
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+}
+
 // OperatorDelegation represents the bond with tokens held by an account with a
 // given operator. It is owned by one delegator, and is associated with a
 // operator.
@@ -48,6 +61,22 @@ message OperatorDelegation {
   ];
 }
 
+// OperatorDelegationResponse is equivalent to OperatorDelegation except that it
+// contains a balance in addition to shares which is more suitable for client
+// responses.
+message OperatorDelegationResponse {
+  option (gogoproto.equal) = false;
+
+  OperatorDelegation delegation = 1
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+
+  repeated cosmos.base.v1beta1.Coin balance = 2 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
 // ServiceDelegation represents the bond with tokens held by an account with a
 // given service. It is owned by one delegator, and is associated with a
 // service.
@@ -65,5 +94,21 @@ message ServiceDelegation {
   repeated cosmos.base.v1beta1.DecCoin shares = 3 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
     (gogoproto.nullable) = false
+  ];
+}
+
+// ServiceDelegationResponse is equivalent to ServiceDelegation except that it
+// contains a balance in addition to shares which is more suitable for client
+// responses.
+message ServiceDelegationResponse {
+  option (gogoproto.equal) = false;
+
+  ServiceDelegation delegation = 1
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+
+  repeated cosmos.base.v1beta1.Coin balance = 2 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
   ];
 }

@@ -66,6 +66,11 @@ func (p Pool) InvalidExRate() bool {
 	return p.Tokens.IsZero() && p.DelegatorShares.IsPositive()
 }
 
+// TokensFromShares calculates the token worth of provided shares
+func (p Pool) TokensFromShares(shares sdkmath.LegacyDec) sdkmath.LegacyDec {
+	return (shares.MulInt(p.Tokens)).Quo(p.DelegatorShares)
+}
+
 // SharesFromTokens returns the shares of a delegation given a bond amount. It
 // returns an error if the pool has no tokens.
 func (p Pool) SharesFromTokens(amt sdkmath.Int) (sdkmath.LegacyDec, error) {

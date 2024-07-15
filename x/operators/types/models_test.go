@@ -3,12 +3,14 @@ package types_test
 import (
 	"testing"
 
+	sdkmath "cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
 	"github.com/milkyway-labs/milkyway/x/operators/types"
 )
 
-func TestParseServiceID(t *testing.T) {
+func TestParseOperatorID(t *testing.T) {
 	testCases := []struct {
 		name      string
 		value     string
@@ -155,7 +157,7 @@ func TestOperator_Validate(t *testing.T) {
 	}
 }
 
-func TestService_Update(t *testing.T) {
+func TestOperator_Update(t *testing.T) {
 	testCases := []struct {
 		name      string
 		operator  types.Operator
@@ -241,6 +243,94 @@ func TestService_Update(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			result := tc.operator.Update(tc.update)
 			require.Equal(t, tc.expResult, result)
+		})
+	}
+}
+
+func TestOperator_SharesFromTokens(t *testing.T) {
+	testCases := []struct {
+		name      string
+		operator  types.Operator
+		tokens    sdk.Coin
+		shouldErr bool
+		expShares sdkmath.LegacyDec
+	}{
+		{
+			name: "operator with no delegation shares returns error",
+			operator: types.Operator{
+				ID:              1,
+				Address:         types.GetOperatorAddress(1).String(),
+				DelegatorShares: sdk.NewDecCoins(),
+				Tokens:          sdk.NewCoins(),
+			},
+			tokens:    sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+			shouldErr: true,
+		},
+		{
+			name: "shares are computed properly for non empty operator",
+			operator: types.Operator{
+				ID:      1,
+				Address: types.GetOperatorAddress(1).String(),
+				Tokens: sdk.NewCoins(
+					sdk.NewCoin("umilk", sdkmath.NewInt(50)),
+				),
+				DelegatorShares: sdk.NewDecCoins(
+					sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(100)),
+				),
+			},
+			tokens:    sdk.NewCoin("umilk", sdkmath.NewInt(20)),
+			shouldErr: false,
+			expShares: sdkmath.LegacyNewDec(40),
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			shares, err := tc.operator.SharesFromTokens(tc.tokens)
+			if tc.shouldErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+				require.Equal(t, tc.expShares, shares)
+			}
+		})
+	}
+}
+
+func TestOperator_TokensFromShares(t *testing.T) {
+	testCases := []struct {
+		name      string
+		operator  types.Operator
+		shares    sdk.DecCoins
+		expTokens sdk.DecCoins
+	}{
+		{
+			name: "operator with shares returns correct amount",
+			operator: types.Operator{
+				ID:      1,
+				Address: types.GetOperatorAddress(1).String(),
+				Tokens: sdk.NewCoins(
+					sdk.NewCoin("umilk", sdkmath.NewInt(70)),
+				),
+				DelegatorShares: sdk.NewDecCoins(
+					sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(140)),
+				),
+			},
+			shares: sdk.NewDecCoins(
+				sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(40)),
+			),
+			expTokens: sdk.NewDecCoins(
+				sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(20)),
+			),
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			tokens := tc.operator.TokensFromShares(tc.shares)
+			require.Equal(t, tc.expTokens, tokens)
 		})
 	}
 }

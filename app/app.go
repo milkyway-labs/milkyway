@@ -168,6 +168,9 @@ import (
 	"github.com/milkyway-labs/milkyway/x/records"
 	recordskeeper "github.com/milkyway-labs/milkyway/x/records/keeper"
 	recordstypes "github.com/milkyway-labs/milkyway/x/records/types"
+	"github.com/milkyway-labs/milkyway/x/restaking"
+	restakingkeeper "github.com/milkyway-labs/milkyway/x/restaking/keeper"
+	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 	"github.com/milkyway-labs/milkyway/x/services"
 	serviceskeeper "github.com/milkyway-labs/milkyway/x/services/keeper"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
@@ -289,6 +292,7 @@ type MilkyWayApp struct {
 	ServicesKeeper  *serviceskeeper.Keeper
 	OperatorsKeeper *operatorskeeper.Keeper
 	PoolsKeeper     *poolskeeper.Keeper
+	RestakingKeeper *restakingkeeper.Keeper
 
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper           capabilitykeeper.ScopedKeeper
@@ -352,7 +356,7 @@ func NewMilkyWayApp(
 		icacallbackstypes.StoreKey, recordstypes.StoreKey, stakeibctypes.StoreKey,
 
 		// Custom modules
-		servicestypes.StoreKey, operatorstypes.StoreKey, poolstypes.StoreKey,
+		servicestypes.StoreKey, operatorstypes.StoreKey, poolstypes.StoreKey, restakingtypes.StoreKey,
 	)
 	tkeys := storetypes.NewTransientStoreKeys(forwardingtypes.TransientStoreKey)
 	memKeys := storetypes.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -884,6 +888,16 @@ func NewMilkyWayApp(
 		keys[poolstypes.StoreKey],
 		app.AccountKeeper,
 	)
+	app.RestakingKeeper = restakingkeeper.NewKeeper(
+		app.appCodec,
+		keys[restakingtypes.StoreKey],
+		app.AccountKeeper,
+		app.BankKeeper,
+		app.PoolsKeeper,
+		app.OperatorsKeeper,
+		app.ServicesKeeper,
+		authorityAddr,
+	)
 
 	/****  Module Options ****/
 
@@ -934,6 +948,7 @@ func NewMilkyWayApp(
 		services.NewAppModule(appCodec, app.ServicesKeeper),
 		operators.NewAppModule(appCodec, app.OperatorsKeeper),
 		pools.NewAppModule(appCodec, app.PoolsKeeper),
+		restaking.NewAppModule(appCodec, app.RestakingKeeper),
 	)
 
 	if err := app.setupIndexer(appOpts, homePath, ac, vc, appCodec); err != nil {
@@ -975,6 +990,7 @@ func NewMilkyWayApp(
 		servicestypes.ModuleName,
 		operatorstypes.ModuleName,
 		poolstypes.ModuleName,
+		restakingtypes.ModuleName,
 	)
 
 	app.ModuleManager.SetOrderEndBlockers(
@@ -992,6 +1008,7 @@ func NewMilkyWayApp(
 		servicestypes.ModuleName,
 		operatorstypes.ModuleName,
 		poolstypes.ModuleName,
+		restakingtypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -1011,7 +1028,7 @@ func NewMilkyWayApp(
 		stakeibctypes.ModuleName, epochstypes.ModuleName, icqtypes.ModuleName,
 		recordstypes.ModuleName, ratelimittypes.ModuleName, icacallbackstypes.ModuleName,
 
-		servicestypes.ModuleName, operatorstypes.ModuleName, poolstypes.ModuleName,
+		servicestypes.ModuleName, operatorstypes.ModuleName, poolstypes.ModuleName, restakingtypes.ModuleName,
 	}
 
 	app.ModuleManager.SetOrderInitGenesis(genesisModuleOrder...)
