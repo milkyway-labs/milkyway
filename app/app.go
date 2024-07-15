@@ -177,6 +177,9 @@ import (
 	"github.com/milkyway-labs/milkyway/x/stakeibc"
 	stakeibckeeper "github.com/milkyway-labs/milkyway/x/stakeibc/keeper"
 	stakeibctypes "github.com/milkyway-labs/milkyway/x/stakeibc/types"
+	"github.com/milkyway-labs/milkyway/x/tickers"
+	tickerskeeper "github.com/milkyway-labs/milkyway/x/tickers/keeper"
+	tickerstypes "github.com/milkyway-labs/milkyway/x/tickers/types"
 	"github.com/milkyway-labs/milkyway/x/tokenfactory"
 	tokenfactorykeeper "github.com/milkyway-labs/milkyway/x/tokenfactory/keeper"
 	tokenfactorytypes "github.com/milkyway-labs/milkyway/x/tokenfactory/types"
@@ -293,6 +296,7 @@ type MilkyWayApp struct {
 	OperatorsKeeper *operatorskeeper.Keeper
 	PoolsKeeper     *poolskeeper.Keeper
 	RestakingKeeper *restakingkeeper.Keeper
+	TickersKeeper   *tickerskeeper.Keeper
 
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper           capabilitykeeper.ScopedKeeper
@@ -357,6 +361,7 @@ func NewMilkyWayApp(
 
 		// Custom modules
 		servicestypes.StoreKey, operatorstypes.StoreKey, poolstypes.StoreKey, restakingtypes.StoreKey,
+		tickerstypes.StoreKey,
 	)
 	tkeys := storetypes.NewTransientStoreKeys(forwardingtypes.TransientStoreKey)
 	memKeys := storetypes.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -898,6 +903,12 @@ func NewMilkyWayApp(
 		app.ServicesKeeper,
 		authorityAddr,
 	)
+	app.TickersKeeper = tickerskeeper.NewKeeper(
+		app.appCodec,
+		runtime.NewKVStoreService(keys[tickerstypes.StoreKey]),
+		app.AccountKeeper,
+		authorityAddr,
+	)
 
 	/****  Module Options ****/
 
@@ -949,6 +960,7 @@ func NewMilkyWayApp(
 		operators.NewAppModule(appCodec, app.OperatorsKeeper),
 		pools.NewAppModule(appCodec, app.PoolsKeeper),
 		restaking.NewAppModule(appCodec, app.RestakingKeeper),
+		tickers.NewAppModule(appCodec, app.TickersKeeper),
 	)
 
 	if err := app.setupIndexer(appOpts, homePath, ac, vc, appCodec); err != nil {
@@ -1029,6 +1041,7 @@ func NewMilkyWayApp(
 		recordstypes.ModuleName, ratelimittypes.ModuleName, icacallbackstypes.ModuleName,
 
 		servicestypes.ModuleName, operatorstypes.ModuleName, poolstypes.ModuleName, restakingtypes.ModuleName,
+		tickerstypes.ModuleName,
 	}
 
 	app.ModuleManager.SetOrderInitGenesis(genesisModuleOrder...)

@@ -1,0 +1,15 @@
+syntax = "proto3";
+package milkyway.tickers.v1;
+
+import "gogoproto/gogo.proto";
+import "milkyway/tickers/v1/params.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/tickers/types";
+
+// GenesisState defines the module's genesis state.
+message GenesisState {
+  // Params defines the parameters of the module.
+  Params params = 1 [ (gogoproto.nullable) = false ];
+
+  map<string, string> tickers = 2;
+}
