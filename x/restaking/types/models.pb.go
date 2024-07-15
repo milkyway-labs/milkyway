@@ -72,6 +72,61 @@ func (m *PoolDelegation) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_PoolDelegation proto.InternalMessageInfo
 
+// PoolDelegationResponse is equivalent to PoolDelegation except that it
+// contains a balance in addition to shares which is more suitable for client
+// responses.
+type PoolDelegationResponse struct {
+	Delegation PoolDelegation `protobuf:"bytes,1,opt,name=delegation,proto3" json:"delegation"`
+	Balance    types.Coin     `protobuf:"bytes,2,opt,name=balance,proto3" json:"balance"`
+}
+
+func (m *PoolDelegationResponse) Reset()         { *m = PoolDelegationResponse{} }
+func (m *PoolDelegationResponse) String() string { return proto.CompactTextString(m) }
+func (*PoolDelegationResponse) ProtoMessage()    {}
+func (*PoolDelegationResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_86f4cd48423b1e2f, []int{1}
+}
+func (m *PoolDelegationResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *PoolDelegationResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_PoolDelegationResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *PoolDelegationResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PoolDelegationResponse.Merge(m, src)
+}
+func (m *PoolDelegationResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *PoolDelegationResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_PoolDelegationResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PoolDelegationResponse proto.InternalMessageInfo
+
+func (m *PoolDelegationResponse) GetDelegation() PoolDelegation {
+	if m != nil {
+		return m.Delegation
+	}
+	return PoolDelegation{}
+}
+
+func (m *PoolDelegationResponse) GetBalance() types.Coin {
+	if m != nil {
+		return m.Balance
+	}
+	return types.Coin{}
+}
+
 // OperatorDelegation represents the bond with tokens held by an account with a
 // given operator. It is owned by one delegator, and is associated with a
 // operator.
@@ -88,7 +143,7 @@ func (m *OperatorDelegation) Reset()         { *m = OperatorDelegation{} }
 func (m *OperatorDelegation) String() string { return proto.CompactTextString(m) }
 func (*OperatorDelegation) ProtoMessage()    {}
 func (*OperatorDelegation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_86f4cd48423b1e2f, []int{1}
+	return fileDescriptor_86f4cd48423b1e2f, []int{2}
 }
 func (m *OperatorDelegation) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -117,6 +172,61 @@ func (m *OperatorDelegation) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_OperatorDelegation proto.InternalMessageInfo
 
+// OperatorDelegationResponse is equivalent to OperatorDelegation except that it
+// contains a balance in addition to shares which is more suitable for client
+// responses.
+type OperatorDelegationResponse struct {
+	Delegation OperatorDelegation                       `protobuf:"bytes,1,opt,name=delegation,proto3" json:"delegation"`
+	Balance    github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,2,rep,name=balance,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"balance"`
+}
+
+func (m *OperatorDelegationResponse) Reset()         { *m = OperatorDelegationResponse{} }
+func (m *OperatorDelegationResponse) String() string { return proto.CompactTextString(m) }
+func (*OperatorDelegationResponse) ProtoMessage()    {}
+func (*OperatorDelegationResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_86f4cd48423b1e2f, []int{3}
+}
+func (m *OperatorDelegationResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *OperatorDelegationResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_OperatorDelegationResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *OperatorDelegationResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OperatorDelegationResponse.Merge(m, src)
+}
+func (m *OperatorDelegationResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *OperatorDelegationResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_OperatorDelegationResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_OperatorDelegationResponse proto.InternalMessageInfo
+
+func (m *OperatorDelegationResponse) GetDelegation() OperatorDelegation {
+	if m != nil {
+		return m.Delegation
+	}
+	return OperatorDelegation{}
+}
+
+func (m *OperatorDelegationResponse) GetBalance() github_com_cosmos_cosmos_sdk_types.Coins {
+	if m != nil {
+		return m.Balance
+	}
+	return nil
+}
+
 // ServiceDelegation represents the bond with tokens held by an account with a
 // given service. It is owned by one delegator, and is associated with a
 // service.
@@ -133,7 +243,7 @@ func (m *ServiceDelegation) Reset()         { *m = ServiceDelegation{} }
 func (m *ServiceDelegation) String() string { return proto.CompactTextString(m) }
 func (*ServiceDelegation) ProtoMessage()    {}
 func (*ServiceDelegation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_86f4cd48423b1e2f, []int{2}
+	return fileDescriptor_86f4cd48423b1e2f, []int{4}
 }
 func (m *ServiceDelegation) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -162,10 +272,68 @@ func (m *ServiceDelegation) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ServiceDelegation proto.InternalMessageInfo
 
+// ServiceDelegationResponse is equivalent to ServiceDelegation except that it
+// contains a balance in addition to shares which is more suitable for client
+// responses.
+type ServiceDelegationResponse struct {
+	Delegation ServiceDelegation                        `protobuf:"bytes,1,opt,name=delegation,proto3" json:"delegation"`
+	Balance    github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,2,rep,name=balance,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"balance"`
+}
+
+func (m *ServiceDelegationResponse) Reset()         { *m = ServiceDelegationResponse{} }
+func (m *ServiceDelegationResponse) String() string { return proto.CompactTextString(m) }
+func (*ServiceDelegationResponse) ProtoMessage()    {}
+func (*ServiceDelegationResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_86f4cd48423b1e2f, []int{5}
+}
+func (m *ServiceDelegationResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ServiceDelegationResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ServiceDelegationResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ServiceDelegationResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ServiceDelegationResponse.Merge(m, src)
+}
+func (m *ServiceDelegationResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *ServiceDelegationResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ServiceDelegationResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ServiceDelegationResponse proto.InternalMessageInfo
+
+func (m *ServiceDelegationResponse) GetDelegation() ServiceDelegation {
+	if m != nil {
+		return m.Delegation
+	}
+	return ServiceDelegation{}
+}
+
+func (m *ServiceDelegationResponse) GetBalance() github_com_cosmos_cosmos_sdk_types.Coins {
+	if m != nil {
+		return m.Balance
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*PoolDelegation)(nil), "milkyway.restaking.v1.PoolDelegation")
+	proto.RegisterType((*PoolDelegationResponse)(nil), "milkyway.restaking.v1.PoolDelegationResponse")
 	proto.RegisterType((*OperatorDelegation)(nil), "milkyway.restaking.v1.OperatorDelegation")
+	proto.RegisterType((*OperatorDelegationResponse)(nil), "milkyway.restaking.v1.OperatorDelegationResponse")
 	proto.RegisterType((*ServiceDelegation)(nil), "milkyway.restaking.v1.ServiceDelegation")
+	proto.RegisterType((*ServiceDelegationResponse)(nil), "milkyway.restaking.v1.ServiceDelegationResponse")
 }
 
 func init() {
@@ -173,37 +341,45 @@ func init() {
 }
 
 var fileDescriptor_86f4cd48423b1e2f = []byte{
-	// 473 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x93, 0x31, 0x6f, 0xd3, 0x40,
-	0x14, 0xc7, 0x7d, 0x54, 0x0a, 0xe4, 0x42, 0x2b, 0xd5, 0x2a, 0x52, 0x28, 0xc8, 0xae, 0xc2, 0x12,
-	0x09, 0xe2, 0x93, 0xc9, 0x06, 0x13, 0xc1, 0x8b, 0x25, 0x10, 0xc8, 0xdd, 0x58, 0xa2, 0xb3, 0x7d,
-	0x72, 0x4e, 0xb1, 0xfd, 0xa2, 0xbb, 0x6b, 0xc0, 0xdf, 0x80, 0x91, 0x8f, 0xd0, 0x99, 0xb9, 0xdf,
-	0x81, 0x8e, 0x55, 0x27, 0xc4, 0x60, 0x90, 0xb3, 0xb0, 0x33, 0xb0, 0x22, 0xdb, 0xe7, 0x36, 0x03,
-	0x63, 0xa5, 0x2e, 0xb6, 0xdf, 0x7b, 0x7f, 0xff, 0xff, 0xfa, 0xdd, 0xe9, 0xe1, 0x51, 0xc6, 0xd3,
-	0x65, 0xf1, 0x91, 0x16, 0x44, 0x30, 0xa9, 0xe8, 0x92, 0xe7, 0x09, 0x59, 0xbb, 0x24, 0x83, 0x98,
-	0xa5, 0xd2, 0x59, 0x09, 0x50, 0x60, 0x3e, 0xe8, 0x34, 0xce, 0x95, 0xc6, 0x59, 0xbb, 0x87, 0xfb,
-	0x34, 0xe3, 0x39, 0x90, 0xe6, 0xd9, 0x2a, 0x0f, 0x1f, 0x46, 0x20, 0x33, 0x90, 0xf3, 0xa6, 0x22,
-	0x6d, 0xa1, 0x47, 0x07, 0x09, 0x24, 0xd0, 0xf6, 0xeb, 0x2f, 0xdd, 0xb5, 0x5a, 0x0d, 0x09, 0xa9,
-	0x64, 0x64, 0xed, 0x86, 0x4c, 0x51, 0x97, 0x44, 0xc0, 0xf3, 0x76, 0x3e, 0xfa, 0x86, 0xf0, 0xde,
-	0x7b, 0x80, 0xd4, 0x63, 0x29, 0x4b, 0xa8, 0xe2, 0x90, 0x9b, 0x2f, 0xf1, 0xfd, 0x13, 0xc9, 0xc4,
-	0x9c, 0xc6, 0xb1, 0x60, 0x52, 0x0e, 0xd1, 0x11, 0x1a, 0xf7, 0x67, 0xc3, 0xcb, 0xb3, 0xc9, 0x81,
-	0x0e, 0x7c, 0xd5, 0x4e, 0x8e, 0x95, 0xe0, 0x79, 0x12, 0x0c, 0x6a, 0xb5, 0x6e, 0x99, 0x4f, 0xf0,
-	0xdd, 0x15, 0x40, 0x3a, 0xe7, 0xf1, 0xf0, 0xce, 0x11, 0x1a, 0xef, 0xce, 0x70, 0x55, 0xda, 0xbd,
-	0x3a, 0xc1, 0xf7, 0x82, 0x5e, 0x3d, 0xf2, 0x63, 0xd3, 0xc7, 0x3d, 0xb9, 0xa0, 0x82, 0xc9, 0xe1,
-	0x4e, 0xe3, 0xed, 0x9e, 0x97, 0xb6, 0xf1, 0xa3, 0xb4, 0x1f, 0xb5, 0xfe, 0x32, 0x5e, 0x3a, 0x1c,
-	0x48, 0x46, 0xd5, 0xc2, 0x79, 0xc3, 0x12, 0x1a, 0x15, 0x1e, 0x8b, 0x2e, 0xcf, 0x26, 0x58, 0xc7,
-	0x7b, 0x2c, 0x0a, 0xb4, 0xc1, 0x8b, 0x7b, 0x9f, 0x4f, 0x6d, 0xe3, 0xf7, 0xa9, 0x6d, 0x8c, 0xfe,
-	0x22, 0x6c, 0xbe, 0x5b, 0x31, 0x41, 0x15, 0x88, 0x9b, 0xa2, 0x21, 0x78, 0x00, 0xda, 0xf2, 0x9a,
-	0x68, 0xaf, 0x2a, 0x6d, 0xdc, 0x25, 0xf9, 0x5e, 0x80, 0x3b, 0x89, 0x1f, 0x9b, 0x7c, 0x8b, 0x6c,
-	0x67, 0x3c, 0x78, 0xfe, 0xd8, 0xd1, 0x21, 0xf5, 0xf9, 0x3b, 0xfa, 0xfc, 0x6b, 0x80, 0xd7, 0xc0,
-	0xf3, 0xd9, 0xb4, 0xe6, 0xfe, 0xfa, 0xd3, 0x7e, 0x9a, 0x70, 0xb5, 0x38, 0x09, 0x9d, 0x08, 0x32,
-	0x7d, 0xa7, 0xfa, 0x35, 0x91, 0xf1, 0x92, 0xa8, 0x62, 0xc5, 0x64, 0xf7, 0x8f, 0xfc, 0x0f, 0xf9,
-	0x1f, 0x84, 0xf7, 0x8f, 0x99, 0x58, 0xf3, 0x88, 0xdd, 0x14, 0xf8, 0x33, 0x8c, 0x65, 0xeb, 0x78,
-	0xcd, 0xbd, 0x5b, 0x95, 0x76, 0x5f, 0xe7, 0xf8, 0x5e, 0xd0, 0xd7, 0x82, 0x5b, 0xa2, 0x9e, 0xbd,
-	0x3d, 0xaf, 0x2c, 0x74, 0x51, 0x59, 0xe8, 0x57, 0x65, 0xa1, 0x2f, 0x1b, 0xcb, 0xb8, 0xd8, 0x58,
-	0xc6, 0xf7, 0x8d, 0x65, 0x7c, 0x98, 0x6e, 0x19, 0x77, 0x9b, 0x35, 0x49, 0x69, 0x28, 0xaf, 0x2a,
-	0xf2, 0x69, 0x6b, 0x1b, 0x9b, 0xa4, 0xb0, 0xd7, 0xec, 0xc3, 0xf4, 0x5f, 0x00, 0x00, 0x00, 0xff,
-	0xff, 0x09, 0xdd, 0x16, 0xcb, 0xb0, 0x03, 0x00, 0x00,
+	// 606 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x95, 0x3f, 0x6f, 0xd3, 0x40,
+	0x18, 0xc6, 0x7d, 0x14, 0xa5, 0xe4, 0x42, 0x2b, 0xd5, 0x2a, 0x28, 0x2d, 0xc8, 0xae, 0x8a, 0x90,
+	0xc2, 0x9f, 0xf8, 0x94, 0x44, 0x2c, 0x45, 0x42, 0x22, 0x78, 0xb1, 0x04, 0xa2, 0x72, 0x98, 0x58,
+	0xa2, 0xb3, 0x7d, 0x72, 0x8e, 0xd8, 0xbe, 0xc8, 0xe7, 0x06, 0xf2, 0x0d, 0x18, 0xf9, 0x08, 0x1d,
+	0x11, 0x53, 0x87, 0x7e, 0x07, 0x3a, 0x56, 0x9d, 0x10, 0x43, 0x40, 0x0e, 0x12, 0xec, 0x0c, 0xac,
+	0xc8, 0xf6, 0x39, 0x4d, 0x14, 0x07, 0x31, 0x54, 0x82, 0x25, 0xc9, 0xbd, 0xef, 0x73, 0xcf, 0x7b,
+	0xcf, 0xfd, 0x22, 0x1b, 0xee, 0xfa, 0xd4, 0xeb, 0x8f, 0x5e, 0xe3, 0x11, 0x0a, 0x09, 0x8f, 0x70,
+	0x9f, 0x06, 0x2e, 0x1a, 0x36, 0x90, 0xcf, 0x1c, 0xe2, 0x71, 0x6d, 0x10, 0xb2, 0x88, 0xc9, 0xd7,
+	0x72, 0x8d, 0x36, 0xd5, 0x68, 0xc3, 0xc6, 0xf6, 0x06, 0xf6, 0x69, 0xc0, 0x50, 0xfa, 0x99, 0x29,
+	0xb7, 0xb7, 0x6c, 0xc6, 0x7d, 0xc6, 0xbb, 0xe9, 0x0a, 0x65, 0x0b, 0xd1, 0xda, 0x74, 0x99, 0xcb,
+	0xb2, 0x7a, 0xf2, 0x4b, 0x54, 0x95, 0x4c, 0x83, 0x2c, 0xcc, 0x09, 0x1a, 0x36, 0x2c, 0x12, 0xe1,
+	0x06, 0xb2, 0x19, 0x0d, 0xb2, 0xfe, 0xee, 0x47, 0x00, 0xd7, 0xf7, 0x19, 0xf3, 0x74, 0xe2, 0x11,
+	0x17, 0x47, 0x94, 0x05, 0xf2, 0x43, 0x78, 0xf5, 0x80, 0x93, 0xb0, 0x8b, 0x1d, 0x27, 0x24, 0x9c,
+	0x57, 0xc1, 0x0e, 0xa8, 0x95, 0xdb, 0xd5, 0xb3, 0xe3, 0xfa, 0xa6, 0x18, 0xf8, 0x38, 0xeb, 0x74,
+	0xa2, 0x90, 0x06, 0xae, 0x59, 0x49, 0xd4, 0xa2, 0x24, 0xdf, 0x82, 0xab, 0x03, 0xc6, 0xbc, 0x2e,
+	0x75, 0xaa, 0x97, 0x76, 0x40, 0x6d, 0xad, 0x0d, 0xe3, 0xb1, 0x5a, 0x4a, 0x26, 0x18, 0xba, 0x59,
+	0x4a, 0x5a, 0x86, 0x23, 0x1b, 0xb0, 0xc4, 0x7b, 0x38, 0x24, 0xbc, 0xba, 0x92, 0x7a, 0x37, 0x4e,
+	0xc6, 0xaa, 0xf4, 0x79, 0xac, 0xde, 0xc8, 0xfc, 0xb9, 0xd3, 0xd7, 0x28, 0x43, 0x3e, 0x8e, 0x7a,
+	0xda, 0x53, 0xe2, 0x62, 0x7b, 0xa4, 0x13, 0xfb, 0xec, 0xb8, 0x0e, 0xc5, 0x78, 0x9d, 0xd8, 0xa6,
+	0x30, 0xd8, 0xbb, 0xf2, 0xf6, 0x50, 0x95, 0x7e, 0x1c, 0xaa, 0xd2, 0xee, 0x11, 0x80, 0xd7, 0xe7,
+	0x93, 0x98, 0x84, 0x0f, 0x58, 0xc0, 0x89, 0xbc, 0x0f, 0xa1, 0x33, 0xad, 0xa6, 0x79, 0x2a, 0xcd,
+	0xdb, 0x5a, 0xe1, 0xa5, 0x6b, 0xf3, 0x16, 0xed, 0x72, 0x72, 0xb4, 0xf7, 0xdf, 0x8f, 0xee, 0x02,
+	0x73, 0xc6, 0x43, 0x7e, 0x04, 0x57, 0x2d, 0xec, 0xe1, 0xc0, 0x26, 0x69, 0xcc, 0x4a, 0x73, 0x4b,
+	0x13, 0x87, 0x4b, 0x2e, 0x5a, 0x13, 0x17, 0xad, 0x3d, 0x61, 0x74, 0xce, 0x22, 0xdf, 0xb4, 0x77,
+	0x39, 0x3d, 0xf2, 0x2f, 0x00, 0xe5, 0xe7, 0x03, 0x12, 0xe2, 0x88, 0x85, 0x17, 0x05, 0x00, 0xc1,
+	0x0a, 0x13, 0x96, 0xe7, 0x10, 0xd6, 0xe3, 0xb1, 0x0a, 0xf3, 0x49, 0x86, 0x6e, 0xc2, 0x5c, 0x62,
+	0x38, 0x32, 0x9d, 0x81, 0xb1, 0x52, 0xab, 0x34, 0x6f, 0x16, 0x26, 0xd1, 0x89, 0x9d, 0x86, 0x69,
+	0x25, 0x61, 0x3e, 0x7c, 0x51, 0xef, 0xb9, 0x34, 0xea, 0x1d, 0x58, 0x9a, 0xcd, 0x7c, 0xf1, 0x37,
+	0x14, 0x5f, 0x75, 0xee, 0xf4, 0x51, 0x34, 0x1a, 0x10, 0x9e, 0xef, 0xe1, 0x05, 0xb0, 0xbe, 0x01,
+	0xb8, 0xbd, 0x98, 0x7c, 0x0a, 0xec, 0x45, 0x01, 0xb0, 0x3b, 0x4b, 0x80, 0x2d, 0xda, 0x2c, 0x83,
+	0xf6, 0x6a, 0x16, 0xda, 0xca, 0x9f, 0xa1, 0x3d, 0x10, 0x39, 0x6b, 0x7f, 0x91, 0x33, 0x0d, 0x59,
+	0x08, 0xf8, 0x27, 0x80, 0x1b, 0x1d, 0x12, 0x0e, 0xa9, 0x4d, 0x2e, 0x8a, 0xef, 0x7d, 0x08, 0x79,
+	0xe6, 0x78, 0x8e, 0x77, 0x2d, 0x1e, 0xab, 0x65, 0x31, 0xc7, 0xd0, 0xcd, 0xb2, 0x10, 0xfc, 0x2b,
+	0xb8, 0x31, 0x80, 0x5b, 0x0b, 0xa9, 0xa7, 0x6c, 0x3b, 0x05, 0x6c, 0x6b, 0x4b, 0xd8, 0x2e, 0xb8,
+	0xfc, 0x37, 0x68, 0xdb, 0xcf, 0x4e, 0x62, 0x05, 0x9c, 0xc6, 0x0a, 0xf8, 0x1a, 0x2b, 0xe0, 0xdd,
+	0x44, 0x91, 0x4e, 0x27, 0x8a, 0xf4, 0x69, 0xa2, 0x48, 0x2f, 0x5b, 0x33, 0xbe, 0x79, 0xac, 0xba,
+	0x87, 0x2d, 0x3e, 0x5d, 0xa1, 0x37, 0x33, 0x2f, 0x83, 0x74, 0x90, 0x55, 0x4a, 0x1f, 0xc7, 0xad,
+	0xdf, 0x01, 0x00, 0x00, 0xff, 0xff, 0xf4, 0x2d, 0x77, 0x9d, 0x2f, 0x06, 0x00, 0x00,
 }
 
 func (m *PoolDelegation) Marshal() (dAtA []byte, err error) {
@@ -248,6 +424,49 @@ func (m *PoolDelegation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xa
 	}
+	return len(dAtA) - i, nil
+}
+
+func (m *PoolDelegationResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *PoolDelegationResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *PoolDelegationResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.Balance.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintModels(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x12
+	{
+		size, err := m.Delegation.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintModels(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
 	return len(dAtA) - i, nil
 }
 
@@ -300,6 +519,53 @@ func (m *OperatorDelegation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *OperatorDelegationResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *OperatorDelegationResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *OperatorDelegationResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Balance) > 0 {
+		for iNdEx := len(m.Balance) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Balance[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintModels(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	{
+		size, err := m.Delegation.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintModels(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
 func (m *ServiceDelegation) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -349,6 +615,53 @@ func (m *ServiceDelegation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *ServiceDelegationResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ServiceDelegationResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceDelegationResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Balance) > 0 {
+		for iNdEx := len(m.Balance) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Balance[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintModels(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	{
+		size, err := m.Delegation.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintModels(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintModels(dAtA []byte, offset int, v uint64) int {
 	offset -= sovModels(v)
 	base := offset
@@ -378,6 +691,19 @@ func (m *PoolDelegation) Size() (n int) {
 	return n
 }
 
+func (m *PoolDelegationResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.Delegation.Size()
+	n += 1 + l + sovModels(uint64(l))
+	l = m.Balance.Size()
+	n += 1 + l + sovModels(uint64(l))
+	return n
+}
+
 func (m *OperatorDelegation) Size() (n int) {
 	if m == nil {
 		return 0
@@ -400,6 +726,23 @@ func (m *OperatorDelegation) Size() (n int) {
 	return n
 }
 
+func (m *OperatorDelegationResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.Delegation.Size()
+	n += 1 + l + sovModels(uint64(l))
+	if len(m.Balance) > 0 {
+		for _, e := range m.Balance {
+			l = e.Size()
+			n += 1 + l + sovModels(uint64(l))
+		}
+	}
+	return n
+}
+
 func (m *ServiceDelegation) Size() (n int) {
 	if m == nil {
 		return 0
@@ -415,6 +758,23 @@ func (m *ServiceDelegation) Size() (n int) {
 	}
 	if len(m.Shares) > 0 {
 		for _, e := range m.Shares {
+			l = e.Size()
+			n += 1 + l + sovModels(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *ServiceDelegationResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.Delegation.Size()
+	n += 1 + l + sovModels(uint64(l))
+	if len(m.Balance) > 0 {
+		for _, e := range m.Balance {
 			l = e.Size()
 			n += 1 + l + sovModels(uint64(l))
 		}
@@ -539,6 +899,122 @@ func (m *PoolDelegation) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if err := m.Shares.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipModels(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthModels
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *PoolDelegationResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowModels
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: PoolDelegationResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: PoolDelegationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Delegation", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowModels
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthModels
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthModels
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Delegation.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Balance", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowModels
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthModels
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthModels
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Balance.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -698,6 +1174,123 @@ func (m *OperatorDelegation) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *OperatorDelegationResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowModels
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: OperatorDelegationResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: OperatorDelegationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Delegation", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowModels
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthModels
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthModels
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Delegation.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Balance", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowModels
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthModels
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthModels
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Balance = append(m.Balance, types.Coin{})
+			if err := m.Balance[len(m.Balance)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipModels(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthModels
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *ServiceDelegation) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -809,6 +1402,123 @@ func (m *ServiceDelegation) Unmarshal(dAtA []byte) error {
 			}
 			m.Shares = append(m.Shares, types.DecCoin{})
 			if err := m.Shares[len(m.Shares)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipModels(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthModels
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ServiceDelegationResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowModels
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ServiceDelegationResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ServiceDelegationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Delegation", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowModels
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthModels
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthModels
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Delegation.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Balance", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowModels
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthModels
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthModels
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Balance = append(m.Balance, types.Coin{})
+			if err := m.Balance[len(m.Balance)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

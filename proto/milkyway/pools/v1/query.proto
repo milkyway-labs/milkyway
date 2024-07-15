@@ -12,18 +12,18 @@ option go_package = "github.com/milkyway-labs/milkyway/x/pools/types";
 service Query {
   // PoolById defines a gRPC query method that returns the pool by the given ID.
   rpc PoolById(QueryPoolByIdRequest) returns (QueryPoolResponse) {
-    option (google.api.http).get = "/milkyway/pool/v1/pool/{pool_id}";
+    option (google.api.http).get = "/milkyway/pools/v1/pools/{pool_id}";
   }
 
   // PoolByDenom defines a gRPC query method that returns the pool by the given
   // denom.
   rpc PoolByDenom(QueryPoolByDenomRequest) returns (QueryPoolResponse) {
-    option (google.api.http).get = "/milkyway/pool/v1/pool/denom/{denom}";
+    option (google.api.http).get = "/milkyway/pools/v1/pool/denom/{denom}";
   }
 
   // Pools defines a gRPC query method that returns all pools.
   rpc Pools(QueryPoolsRequest) returns (QueryPoolsResponse) {
-    option (google.api.http).get = "/milkyway/pool/v1/pools";
+    option (google.api.http).get = "/milkyway/pools/v1/pools";
   }
 }
 
