@@ -13,7 +13,7 @@ import (
 
 // GetQueryCmd returns the command allowing to perform queries
 func GetQueryCmd() *cobra.Command {
-	servicesQueryCmd := &cobra.Command{
+	queryCmd := &cobra.Command{
 		Use:                        types.ModuleName,
 		Short:                      fmt.Sprintf("Querying commands for the %s module", types.ModuleName),
 		DisableFlagParsing:         true,
@@ -21,16 +21,16 @@ func GetQueryCmd() *cobra.Command {
 		RunE:                       client.ValidateCmd,
 	}
 
-	servicesQueryCmd.AddCommand(
+	queryCmd.AddCommand(
 		getCmdQueryPoolByID(),
 		getCmdQueryPoolByDenom(),
 		getCmdQueryPools(),
 	)
 
-	return servicesQueryCmd
+	return queryCmd
 }
 
-// getCmdQueryPoolByID returns the command allowing to query a service
+// getCmdQueryPoolByID returns the command allowing to query a pool
 func getCmdQueryPoolByID() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "pool [pool-id]",
@@ -63,7 +63,7 @@ func getCmdQueryPoolByID() *cobra.Command {
 	return cmd
 }
 
-// getCmdQueryPoolByDenom returns the command allowing to query services
+// getCmdQueryPoolByDenom returns the command allowing to query pool by denom
 func getCmdQueryPoolByDenom() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "pool-by-denom [denom]",

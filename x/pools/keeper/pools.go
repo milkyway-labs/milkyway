@@ -8,22 +8,22 @@ import (
 	"github.com/milkyway-labs/milkyway/x/pools/types"
 )
 
-// SetNextPoolID sets the next service ID to be used when registering a new Pool
-func (k *Keeper) SetNextPoolID(ctx sdk.Context, serviceID uint32) {
+// SetNextPoolID sets the next pool ID to be used when registering a new Pool
+func (k *Keeper) SetNextPoolID(ctx sdk.Context, poolID uint32) {
 	store := ctx.KVStore(k.storeKey)
-	store.Set(types.NextPoolIDKey, types.GetPoolIDBytes(serviceID))
+	store.Set(types.NextPoolIDKey, types.GetPoolIDBytes(poolID))
 }
 
-// GetNextPoolID returns the next service ID to be used when registering a new Pool
-func (k *Keeper) GetNextPoolID(ctx sdk.Context) (serviceID uint32, err error) {
+// GetNextPoolID returns the next pool ID to be used when registering a new Pool
+func (k *Keeper) GetNextPoolID(ctx sdk.Context) (poolID uint32, err error) {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(types.NextPoolIDKey)
 	if bz == nil {
-		return 0, errors.Wrapf(types.ErrInvalidGenesis, "initial service id not set")
+		return 0, errors.Wrapf(types.ErrInvalidGenesis, "initial pool id not set")
 	}
 
-	serviceID = types.GetPoolIDFromBytes(bz)
-	return serviceID, nil
+	poolID = types.GetPoolIDFromBytes(bz)
+	return poolID, nil
 }
 
 // --------------------------------------------------------------------------------------------------------------------
