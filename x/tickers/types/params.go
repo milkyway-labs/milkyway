@@ -7,7 +7,7 @@ func NewParams() Params {
 
 // DefaultParams returns a default set of parameters.
 func DefaultParams() Params {
-	return Params{}
+	return NewParams()
 }
 
 // Validate checks that the parameters have valid values.

@@ -16,8 +16,6 @@ type Keeper struct {
 	cdc          codec.Codec
 	storeService corestoretypes.KVStoreService
 
-	accountKeeper types.AccountKeeper
-
 	Schema        collections.Schema
 	Params        collections.Item[types.Params]
 	Tickers       collections.Map[string, string]                      // denom => ticker
@@ -29,14 +27,12 @@ type Keeper struct {
 func NewKeeper(
 	cdc codec.Codec,
 	storeService corestoretypes.KVStoreService,
-	accountKeeper types.AccountKeeper,
 	authority string,
 ) *Keeper {
 	sb := collections.NewSchemaBuilder(storeService)
 	k := &Keeper{
-		cdc:           cdc,
-		storeService:  storeService,
-		accountKeeper: accountKeeper,
+		cdc:          cdc,
+		storeService: storeService,
 
 		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		Tickers: collections.NewMap(

@@ -906,7 +906,6 @@ func NewMilkyWayApp(
 	app.TickersKeeper = tickerskeeper.NewKeeper(
 		app.appCodec,
 		runtime.NewKVStoreService(keys[tickerstypes.StoreKey]),
-		app.AccountKeeper,
 		authorityAddr,
 	)
 

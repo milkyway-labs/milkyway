@@ -25,7 +25,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 // --------------------------------------------------------------------------------------------------------------------
 
 // InitGenesis initializes the state from a GenesisState
-func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) {
+func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) {
 	// Store params
 	if err := k.Params.Set(ctx, state.Params); err != nil {
 		panic(err)
