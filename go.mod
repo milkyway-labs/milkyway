@@ -13,7 +13,6 @@ require (
 	cosmossdk.io/log v1.4.1
 	cosmossdk.io/math v1.3.0
 	cosmossdk.io/store v1.1.0
-	cosmossdk.io/tools/confix v0.1.2
 	cosmossdk.io/x/feegrant v0.1.0
 	cosmossdk.io/x/tx v0.13.5
 	cosmossdk.io/x/upgrade v0.1.4
@@ -40,8 +39,8 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/hashicorp/go-metrics v0.5.3
 	github.com/initia-labs/OPinit v0.3.2
-	github.com/initia-labs/initia v0.3.3
-	github.com/initia-labs/kvindexer v0.1.4
+	github.com/initia-labs/initia v0.3.4
+	github.com/initia-labs/kvindexer v0.1.5
 	github.com/initia-labs/kvindexer/submodules/block v0.1.0
 	github.com/initia-labs/kvindexer/submodules/tx v0.1.0
 	github.com/initia-labs/kvindexer/submodules/wasm-nft v0.1.5
@@ -64,6 +63,7 @@ require (
 )
 
 require (
+	cosmossdk.io/tools/confix v0.1.1
 	github.com/noble-assets/forwarding/v2 v2.0.0-20240514101621-172acc02aac6
 	go.uber.org/mock v0.4.0
 )
@@ -101,6 +101,7 @@ require (
 	github.com/alexkohler/nakedret/v2 v2.0.4 // indirect
 	github.com/alexkohler/prealloc v1.0.0 // indirect
 	github.com/alingse/asasalint v0.0.11 // indirect
+	github.com/allegro/bigcache/v3 v3.1.0 // indirect
 	github.com/ashanbrown/forbidigo v1.6.0 // indirect
 	github.com/ashanbrown/makezero v1.1.1 // indirect
 	github.com/avast/retry-go/v4 v4.5.1 // indirect
@@ -246,7 +247,6 @@ require (
 	github.com/improbable-eng/grpc-web v0.15.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/initia-labs/OPinit/api v0.3.0 // indirect
-	github.com/initia-labs/movevm v0.3.4 // indirect
 	github.com/jgautheron/goconst v1.7.1 // indirect
 	github.com/jingyugao/rowserrcheck v1.1.1 // indirect
 	github.com/jirfag/go-printf-func-name v0.0.0-20200119135958-7558a9eaa5af // indirect

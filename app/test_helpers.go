@@ -57,6 +57,7 @@ func setup(homeDir string, db *dbm.DB, withGenesis bool) (*MilkyWayApp, GenesisS
 	app := NewMilkyWayApp(
 		log.NewNopLogger(),
 		getOrCreateMemDB(db),
+		getOrCreateMemDB(nil),
 		nil,
 		true,
 		[]wasmkeeper.Option{},

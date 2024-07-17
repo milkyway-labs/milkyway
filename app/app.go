@@ -336,6 +336,7 @@ type MilkyWayApp struct {
 func NewMilkyWayApp(
 	logger log.Logger,
 	db dbm.DB,
+	kvindexerDB dbm.DB,
 	traceStore io.Writer,
 	loadLatest bool,
 	wasmOpts []wasmkeeper.Option,
@@ -1009,7 +1010,7 @@ func NewMilkyWayApp(
 		rewards.NewAppModule(appCodec, app.RewardsKeeper),
 	)
 
-	if err := app.setupIndexer(appOpts, homePath, ac, vc, appCodec); err != nil {
+	if err := app.setupIndexer(kvindexerDB, appOpts, ac, vc, appCodec); err != nil {
 		panic(err)
 	}
 
@@ -1579,7 +1580,7 @@ func (app *MilkyWayApp) GetScopedIBCKeeper() capabilitykeeper.ScopedKeeper {
 func (app *MilkyWayApp) TxConfig() client.TxConfig {
 	return app.txConfig
 }
-func (app *MilkyWayApp) setupIndexer(appOpts servertypes.AppOptions, homePath string, ac, vc address.Codec, appCodec codec.Codec) error {
+func (app *MilkyWayApp) setupIndexer(db dbm.DB, appOpts servertypes.AppOptions, ac, vc address.Codec, appCodec codec.Codec) error {
 	// initialize the indexer fake-keeper
 	indexerConfig, err := indexerconfig.NewConfig(appOpts)
 	if err != nil {
@@ -1588,7 +1589,7 @@ func (app *MilkyWayApp) setupIndexer(appOpts servertypes.AppOptions, homePath st
 	app.indexerKeeper = indexerkeeper.NewKeeper(
 		appCodec,
 		"wasm",
-		homePath,
+		db,
 		indexerConfig,
 		ac,
 		vc,

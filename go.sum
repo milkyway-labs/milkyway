@@ -212,8 +212,8 @@ cosmossdk.io/simapp v0.0.0-20231211060251-d8fb76d4c267 h1:fLJ+ng4SiuEK7NhKPIAn7Q
 cosmossdk.io/simapp v0.0.0-20231211060251-d8fb76d4c267/go.mod h1:ril3K+x7sdvOTVZsBv0PGDePO54m64HLDq1AmVEREl8=
 cosmossdk.io/store v1.1.0 h1:LnKwgYMc9BInn9PhpTFEQVbL9UK475G2H911CGGnWHk=
 cosmossdk.io/store v1.1.0/go.mod h1:oZfW/4Fc/zYqu3JmQcQdUJ3fqu5vnYTn3LZFFy8P8ng=
-cosmossdk.io/tools/confix v0.1.2 h1:2hoM1oFCNisd0ltSAAZw2i4ponARPmlhuNu3yy0VwI4=
-cosmossdk.io/tools/confix v0.1.2/go.mod h1:7XfcbK9sC/KNgVGxgLM0BrFbVcR/+6Dg7MFfpx7duYo=
+cosmossdk.io/tools/confix v0.1.1 h1:aexyRv9+y15veH3Qw16lxQwo+ki7r2I+g0yNTEFEQM8=
+cosmossdk.io/tools/confix v0.1.1/go.mod h1:nQVvP1tHsGXS83PonPVWJtSbddIqyjEw99L4M3rPJyQ=
 cosmossdk.io/x/circuit v0.1.1 h1:KPJCnLChWrxD4jLwUiuQaf5mFD/1m7Omyo7oooefBVQ=
 cosmossdk.io/x/circuit v0.1.1/go.mod h1:B6f/urRuQH8gjt4eLIXfZJucrbreuYrKh5CSjaOxr+Q=
 cosmossdk.io/x/evidence v0.1.0 h1:J6OEyDl1rbykksdGynzPKG5R/zm6TacwW2fbLTW4nCk=
@@ -305,6 +305,8 @@ github.com/alingse/asasalint v0.0.11 h1:SFwnQXJ49Kx/1GghOFz1XGqHYKp21Kq1nHad/0WQ
 github.com/alingse/asasalint v0.0.11/go.mod h1:nCaoMhw7a9kSJObvQyVzNTPBDbNpdocqrSP7t/cW5+I=
 github.com/allegro/bigcache v1.2.1-0.20190218064605-e24eb225f156 h1:eMwmnE/GDgah4HI848JfFxHt+iPb26b4zyfspmqY0/8=
 github.com/allegro/bigcache v1.2.1-0.20190218064605-e24eb225f156/go.mod h1:Cb/ax3seSYIx7SuZdm2G2xzfwmv3TPSk2ucNfQESPXM=
+github.com/allegro/bigcache/v3 v3.1.0 h1:H2Vp8VOvxcrB91o86fUSVJFqeuz8kpyyB02eH3bSzwk=
+github.com/allegro/bigcache/v3 v3.1.0/go.mod h1:aPyh7jEvrog9zAwx5N7+JUQX5dZTSGpxF1LAR4dr35I=
 github.com/antihax/optional v1.0.0/go.mod h1:uupD/76wgC+ih3iEmQUL+0Ugr19nfwCT1kdvxnR2qWY=
 github.com/apache/thrift v0.12.0/go.mod h1:cp2SuWMxlEZw2r+iP2GNCdIi4C1qmUzdZFSVb+bacwQ=
 github.com/apache/thrift v0.13.0/go.mod h1:cp2SuWMxlEZw2r+iP2GNCdIi4C1qmUzdZFSVb+bacwQ=
@@ -954,10 +956,10 @@ github.com/initia-labs/cosmos-sdk v0.0.0-20240627065534-d2180fcfd501 h1:OcLFeu3V
 github.com/initia-labs/cosmos-sdk v0.0.0-20240627065534-d2180fcfd501/go.mod h1:84xDDJEHttRT7NDGwBaUOLVOMN0JNE9x7NbsYIxXs1s=
 github.com/initia-labs/ibc-go/v8 v8.0.0-20240419124350-4275a05abe2c h1:FDwh5zZbm9v7C37ni4FytQQ9Os5XxYp1px5U7Nqdu2Y=
 github.com/initia-labs/ibc-go/v8 v8.0.0-20240419124350-4275a05abe2c/go.mod h1:wj3qx75iC/XNnsMqbPDCIGs0G6Y3E/lo3bdqCyoCy+8=
-github.com/initia-labs/initia v0.3.3 h1:82ZkXki6CG+F+rPDBVpTzzSQY8NalXIZ0LnYSWNd+3U=
-github.com/initia-labs/initia v0.3.3/go.mod h1:1yWifo9GnhIvwDtCTTN6kb2mfq2On+oel6ha/rBXaQQ=
-github.com/initia-labs/kvindexer v0.1.4 h1:dtdDuIFjLCXVTnHCPw8LIl6ry1cnwNhQyRtQdHpCGGU=
-github.com/initia-labs/kvindexer v0.1.4/go.mod h1:rvAmgCAmEs4KM8sRRPcyTqNNwi8s2JiHybiFkYfp4KE=
+github.com/initia-labs/initia v0.3.4 h1:i2fwTx9WDwGp2nyX64r6jtdtgfJmRqKAXGdxbHBRg9s=
+github.com/initia-labs/initia v0.3.4/go.mod h1:nwtnVe3obacErGb7w6tq8Ych3U0d2f59rsgpVUeMnmM=
+github.com/initia-labs/kvindexer v0.1.5 h1:YLR4d237dNkGR8pe2zRGxx3CFB2CU6hhUmeJsshUw/0=
+github.com/initia-labs/kvindexer v0.1.5/go.mod h1:OV85HaQ9KVrg+zGPUlxT9RF9nAaM3Yq4/3MoHqGqhWk=
 github.com/initia-labs/kvindexer/submodules/block v0.1.0 h1:y+EXnksd/I2F96mzIoQA64nZUZON2P+99YrSzeLCLoY=
 github.com/initia-labs/kvindexer/submodules/block v0.1.0/go.mod h1:4c+c59wVAnjuaJv/pcDYaUkeVmOqVV+orqEjya/RIjo=
 github.com/initia-labs/kvindexer/submodules/tx v0.1.0 h1:6kbf6wmzXPN0XCQLasiFgq1AlZHkt5K3/ZG+IWw1nNs=
