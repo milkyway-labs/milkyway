@@ -299,6 +299,8 @@ github.com/alingse/asasalint v0.0.11 h1:SFwnQXJ49Kx/1GghOFz1XGqHYKp21Kq1nHad/0WQ
 github.com/alingse/asasalint v0.0.11/go.mod h1:nCaoMhw7a9kSJObvQyVzNTPBDbNpdocqrSP7t/cW5+I=
 github.com/allegro/bigcache v1.2.1-0.20190218064605-e24eb225f156 h1:eMwmnE/GDgah4HI848JfFxHt+iPb26b4zyfspmqY0/8=
 github.com/allegro/bigcache v1.2.1-0.20190218064605-e24eb225f156/go.mod h1:Cb/ax3seSYIx7SuZdm2G2xzfwmv3TPSk2ucNfQESPXM=
+github.com/allegro/bigcache/v3 v3.1.0 h1:H2Vp8VOvxcrB91o86fUSVJFqeuz8kpyyB02eH3bSzwk=
+github.com/allegro/bigcache/v3 v3.1.0/go.mod h1:aPyh7jEvrog9zAwx5N7+JUQX5dZTSGpxF1LAR4dr35I=
 github.com/antihax/optional v1.0.0/go.mod h1:uupD/76wgC+ih3iEmQUL+0Ugr19nfwCT1kdvxnR2qWY=
 github.com/apache/thrift v0.12.0/go.mod h1:cp2SuWMxlEZw2r+iP2GNCdIi4C1qmUzdZFSVb+bacwQ=
 github.com/apache/thrift v0.13.0/go.mod h1:cp2SuWMxlEZw2r+iP2GNCdIi4C1qmUzdZFSVb+bacwQ=
@@ -948,8 +950,8 @@ github.com/initia-labs/ibc-go/v8 v8.0.0-20240419124350-4275a05abe2c h1:FDwh5zZbm
 github.com/initia-labs/ibc-go/v8 v8.0.0-20240419124350-4275a05abe2c/go.mod h1:wj3qx75iC/XNnsMqbPDCIGs0G6Y3E/lo3bdqCyoCy+8=
 github.com/initia-labs/initia v0.2.10 h1:wX5EDpPEk15aM3hVEi3YU4ygZZ0O1wlTMuJIoALlpjQ=
 github.com/initia-labs/initia v0.2.10/go.mod h1:Ehh3gMaGOrt9qCQrggxZsiD3XAJh4IYzmOiueDRlw3Y=
-github.com/initia-labs/kvindexer v0.1.4 h1:dtdDuIFjLCXVTnHCPw8LIl6ry1cnwNhQyRtQdHpCGGU=
-github.com/initia-labs/kvindexer v0.1.4/go.mod h1:rvAmgCAmEs4KM8sRRPcyTqNNwi8s2JiHybiFkYfp4KE=
+github.com/initia-labs/kvindexer v0.1.5 h1:YLR4d237dNkGR8pe2zRGxx3CFB2CU6hhUmeJsshUw/0=
+github.com/initia-labs/kvindexer v0.1.5/go.mod h1:OV85HaQ9KVrg+zGPUlxT9RF9nAaM3Yq4/3MoHqGqhWk=
 github.com/initia-labs/kvindexer/submodules/block v0.1.0 h1:y+EXnksd/I2F96mzIoQA64nZUZON2P+99YrSzeLCLoY=
 github.com/initia-labs/kvindexer/submodules/block v0.1.0/go.mod h1:4c+c59wVAnjuaJv/pcDYaUkeVmOqVV+orqEjya/RIjo=
 github.com/initia-labs/kvindexer/submodules/tx v0.1.0 h1:6kbf6wmzXPN0XCQLasiFgq1AlZHkt5K3/ZG+IWw1nNs=
