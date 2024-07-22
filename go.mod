@@ -407,3 +407,5 @@ replace (
 	github.com/Stride-Labs/ibc-rate-limiting => github.com/milkyway-labs/ibc-rate-limiting v0.0.0-20240529144041-70ebeac5863b
 	github.com/cosmos/relayer/v2 => github.com/milkyway-labs/relayer/v2 v2.0.0-20240510185220-0492766a512d
 )
+
+retract v1.0.0-rc5 // Have two different versions with the same tag
