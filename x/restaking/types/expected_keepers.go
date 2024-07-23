@@ -17,20 +17,28 @@ type AccountKeeper interface {
 
 type BankKeeper interface {
 	SendCoins(ctx context.Context, fromAddr, toAddr sdk.AccAddress, amt sdk.Coins) error
+	GetBalance(ctx context.Context, addr sdk.AccAddress, denom string) sdk.Coin
+	GetAllBalances(ctx context.Context, addr sdk.AccAddress) sdk.Coins
 }
 
 type PoolsKeeper interface {
 	CreateOrGetPoolByDenom(ctx sdk.Context, denom string) (poolstypes.Pool, error)
 	GetPool(ctx sdk.Context, poolID uint32) (poolstypes.Pool, bool)
 	SavePool(ctx sdk.Context, pool poolstypes.Pool) error
+	IteratePools(ctx sdk.Context, cb func(poolstypes.Pool) bool)
+	GetPools(ctx sdk.Context) []poolstypes.Pool
 }
 
 type OperatorsKeeper interface {
 	GetOperator(ctx sdk.Context, operatorID uint32) (operatorstypes.Operator, bool)
 	SaveOperator(ctx sdk.Context, operator operatorstypes.Operator)
+	IterateOperators(ctx sdk.Context, cb func(operatorstypes.Operator) bool)
+	GetOperators(ctx sdk.Context) []operatorstypes.Operator
 }
 
 type ServicesKeeper interface {
 	GetService(ctx sdk.Context, serviceID uint32) (servicestypes.Service, bool)
 	SaveService(ctx sdk.Context, service servicestypes.Service)
+	IterateServices(ctx sdk.Context, cb func(servicestypes.Service) bool)
+	GetServices(ctx sdk.Context) []servicestypes.Service
 }
