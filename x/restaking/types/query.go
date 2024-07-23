@@ -39,16 +39,6 @@ func NewQueryDelegatorPoolDelegationsRequest(delegatorAddress string, pagination
 	return &QueryDelegatorPoolDelegationsRequest{DelegatorAddress: delegatorAddress, Pagination: pagination}
 }
 
-// NewQueryDelegatorOperatorDelegationsRequest creates a new QueryDelegatorOperatorDelegationsRequest instance
-func NewQueryDelegatorOperatorDelegationsRequest(delegatorAddress string, pagination *query.PageRequest) *QueryDelegatorOperatorDelegationsRequest {
-	return &QueryDelegatorOperatorDelegationsRequest{DelegatorAddress: delegatorAddress, Pagination: pagination}
-}
-
-// NewQueryDelegatorServiceDelegationsRequest creates a new QueryDelegatorServiceDelegationsRequest instance
-func NewQueryDelegatorServiceDelegationsRequest(delegatorAddress string, pagination *query.PageRequest) *QueryDelegatorServiceDelegationsRequest {
-	return &QueryDelegatorServiceDelegationsRequest{DelegatorAddress: delegatorAddress, Pagination: pagination}
-}
-
 // NewQueryDelegatorPoolsRequest creates a new QueryDelegatorPoolsRequest instance
 func NewQueryDelegatorPoolsRequest(delegatorAddress string, pagination *query.PageRequest) *QueryDelegatorPoolsRequest {
 	return &QueryDelegatorPoolsRequest{DelegatorAddress: delegatorAddress, Pagination: pagination}
@@ -59,6 +49,11 @@ func NewQueryDelegatorPoolRequest(delegatorAddress string, poolID uint32) *Query
 	return &QueryDelegatorPoolRequest{DelegatorAddress: delegatorAddress, PoolId: poolID}
 }
 
+// NewQueryDelegatorOperatorDelegationsRequest creates a new QueryDelegatorOperatorDelegationsRequest instance
+func NewQueryDelegatorOperatorDelegationsRequest(delegatorAddress string, pagination *query.PageRequest) *QueryDelegatorOperatorDelegationsRequest {
+	return &QueryDelegatorOperatorDelegationsRequest{DelegatorAddress: delegatorAddress, Pagination: pagination}
+}
+
 // NewQueryDelegatorOperatorsRequest creates a new QueryDelegatorOperatorsRequest instance
 func NewQueryDelegatorOperatorsRequest(delegatorAddress string, pagination *query.PageRequest) *QueryDelegatorOperatorsRequest {
 	return &QueryDelegatorOperatorsRequest{DelegatorAddress: delegatorAddress, Pagination: pagination}
@@ -67,6 +62,11 @@ func NewQueryDelegatorOperatorsRequest(delegatorAddress string, pagination *quer
 // NewQueryDelegatorOperatorRequest creates a new QueryDelegatorOperatorRequest instance
 func NewQueryDelegatorOperatorRequest(delegatorAddress string, operatorID uint32) *QueryDelegatorOperatorRequest {
 	return &QueryDelegatorOperatorRequest{DelegatorAddress: delegatorAddress, OperatorId: operatorID}
+}
+
+// NewQueryDelegatorServiceDelegationsRequest creates a new QueryDelegatorServiceDelegationsRequest instance
+func NewQueryDelegatorServiceDelegationsRequest(delegatorAddress string, pagination *query.PageRequest) *QueryDelegatorServiceDelegationsRequest {
+	return &QueryDelegatorServiceDelegationsRequest{DelegatorAddress: delegatorAddress, Pagination: pagination}
 }
 
 // NewQueryDelegatorServicesRequest creates a new QueryDelegatorServicesRequest instance

@@ -17,6 +17,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
+	"github.com/milkyway-labs/milkyway/x/restaking/client/cli"
 	"github.com/milkyway-labs/milkyway/x/restaking/keeper"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 )
@@ -81,12 +82,12 @@ func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *r
 
 // GetTxCmd returns the restaking module's root tx command.
 func (a AppModuleBasic) GetTxCmd() *cobra.Command {
-	return nil
+	return cli.GetTxCmd()
 }
 
 // GetQueryCmd returns the restaking module's root query command.
 func (AppModuleBasic) GetQueryCmd() *cobra.Command {
-	return nil
+	return cli.GetQueryCmd()
 }
 
 // ----------------------------------------------------------------------------
