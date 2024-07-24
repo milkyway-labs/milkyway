@@ -13,7 +13,7 @@ func (suite *KeeperTestSuite) TestKeeper_SaveServiceDelegation() {
 		name       string
 		setup      func()
 		store      func(ctx sdk.Context)
-		delegation types.ServiceDelegation
+		delegation types.Delegation
 		check      func(ctx sdk.Context)
 	}{
 		{
@@ -30,7 +30,7 @@ func (suite *KeeperTestSuite) TestKeeper_SaveServiceDelegation() {
 				delegationBz := store.Get(types.UserServiceDelegationStoreKey("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", 1))
 				suite.Require().NotNil(delegationBz)
 
-				delegation, err := types.UnmarshalServiceDelegation(suite.cdc, delegationBz)
+				delegation, err := types.UnmarshalDelegation(suite.cdc, delegationBz)
 				suite.Require().NoError(err)
 
 				suite.Require().Equal(types.NewServiceDelegation(
@@ -74,7 +74,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetServiceDelegation() {
 		serviceID     uint32
 		userAddress   string
 		expFound      bool
-		expDelegation types.ServiceDelegation
+		expDelegation types.Delegation
 		check         func(ctx sdk.Context)
 	}{
 		{

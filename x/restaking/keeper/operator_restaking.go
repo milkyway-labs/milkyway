@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"fmt"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
@@ -10,27 +8,27 @@ import (
 )
 
 // SaveOperatorDelegation stores the given operator delegation in the store
-func (k *Keeper) SaveOperatorDelegation(ctx sdk.Context, delegation types.OperatorDelegation) {
+func (k *Keeper) SaveOperatorDelegation(ctx sdk.Context, delegation types.Delegation) {
 	store := ctx.KVStore(k.storeKey)
 
 	// Marshal and store the delegation
-	delegationBz := types.MustMarshalOperatorDelegation(k.cdc, delegation)
-	store.Set(types.UserOperatorDelegationStoreKey(delegation.UserAddress, delegation.OperatorID), delegationBz)
+	delegationBz := types.MustMarshalDelegation(k.cdc, delegation)
+	store.Set(types.UserOperatorDelegationStoreKey(delegation.UserAddress, delegation.TargetID), delegationBz)
 
 	// Store the delegation in the delegations by operator ID store
-	store.Set(types.DelegationByOperatorIDStoreKey(delegation.OperatorID, delegation.UserAddress), []byte{})
+	store.Set(types.DelegationByOperatorIDStoreKey(delegation.TargetID, delegation.UserAddress), []byte{})
 }
 
 // GetOperatorDelegation retrieves the delegation for the given user and operator
 // If the delegation does not exist, false is returned instead
-func (k *Keeper) GetOperatorDelegation(ctx sdk.Context, operatorID uint32, userAddress string) (types.OperatorDelegation, bool) {
+func (k *Keeper) GetOperatorDelegation(ctx sdk.Context, operatorID uint32, userAddress string) (types.Delegation, bool) {
 	store := ctx.KVStore(k.storeKey)
 	delegationBz := store.Get(types.UserOperatorDelegationStoreKey(userAddress, operatorID))
 	if delegationBz == nil {
-		return types.OperatorDelegation{}, false
+		return types.Delegation{}, false
 	}
 
-	return types.MustUnmarshalOperatorDelegation(k.cdc, delegationBz), true
+	return types.MustUnmarshalDelegation(k.cdc, delegationBz), true
 }
 
 // AddOperatorTokensAndShares adds the given amount of tokens to the operator and returns the added shares
@@ -64,13 +62,11 @@ func (k *Keeper) DelegateToOperator(ctx sdk.Context, operatorID uint32, amount s
 	return k.PerformDelegation(ctx, types.DelegationData{
 		Amount:    amount,
 		Delegator: delegator,
-		Receiver:  &operator,
+		Target:    &operator,
 		GetDelegation: func(ctx sdk.Context, receiverID uint32, delegator string) (types.Delegation, bool) {
 			return k.GetOperatorDelegation(ctx, receiverID, delegator)
 		},
-		BuildDelegation: func(receiverID uint32, delegator string) types.Delegation {
-			return types.NewOperatorDelegation(receiverID, delegator, sdk.NewDecCoins())
-		},
+		BuildDelegation: types.NewOperatorDelegation,
 		UpdateDelegation: func(ctx sdk.Context, delegation types.Delegation) (newShares sdk.DecCoins, err error) {
 			// Calculate the new shares and add the tokens to the operator
 			_, newShares, err = k.AddOperatorTokensAndShares(ctx, operator, amount)
@@ -79,14 +75,10 @@ func (k *Keeper) DelegateToOperator(ctx sdk.Context, operatorID uint32, amount s
 			}
 
 			// Update the delegation shares
-			operatorDelegation, ok := delegation.(types.OperatorDelegation)
-			if !ok {
-				return newShares, fmt.Errorf("invalid delegation type: %T", delegation)
-			}
-			operatorDelegation.Shares = operatorDelegation.Shares.Add(newShares...)
+			delegation.Shares = delegation.Shares.Add(newShares...)
 
 			// Store the updated delegation
-			k.SaveOperatorDelegation(ctx, operatorDelegation)
+			k.SaveOperatorDelegation(ctx, delegation)
 
 			return newShares, err
 		},

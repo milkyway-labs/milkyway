@@ -20,15 +20,13 @@ func TestGenesis_Validate(t *testing.T) {
 		{
 			name: "invalid pool delegation entry returns error",
 			genesis: types.NewGenesis(
-				[]types.PoolDelegation{
+				[]types.Delegation{
 					types.NewPoolDelegation(
 						0,
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-						sdkmath.LegacyNewDec(100),
+						sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 					),
 				},
-				nil,
-				nil,
 				types.DefaultParams(),
 			),
 			shouldErr: true,
@@ -36,15 +34,13 @@ func TestGenesis_Validate(t *testing.T) {
 		{
 			name: "invalid service delegation entry returns error",
 			genesis: types.NewGenesis(
-				nil,
-				[]types.ServiceDelegation{
+				[]types.Delegation{
 					types.NewServiceDelegation(
 						0,
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 						sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 					),
 				},
-				nil,
 				types.DefaultParams(),
 			),
 			shouldErr: true,
@@ -52,9 +48,7 @@ func TestGenesis_Validate(t *testing.T) {
 		{
 			name: "invalid operator delegation entry returns error",
 			genesis: types.NewGenesis(
-				nil,
-				nil,
-				[]types.OperatorDelegation{
+				[]types.Delegation{
 					types.NewOperatorDelegation(
 						0,
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
@@ -69,8 +63,6 @@ func TestGenesis_Validate(t *testing.T) {
 			name: "invalid params return error",
 			genesis: types.NewGenesis(
 				nil,
-				nil,
-				nil,
 				types.NewParams(0),
 			),
 			shouldErr: true,
@@ -83,21 +75,17 @@ func TestGenesis_Validate(t *testing.T) {
 		{
 			name: "valid genesis returns no error",
 			genesis: types.NewGenesis(
-				[]types.PoolDelegation{
+				[]types.Delegation{
 					types.NewPoolDelegation(
 						1,
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-						sdkmath.LegacyNewDec(100),
+						sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 					),
-				},
-				[]types.ServiceDelegation{
 					types.NewServiceDelegation(
 						2,
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 						sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 					),
-				},
-				[]types.OperatorDelegation{
 					types.NewOperatorDelegation(
 						3,
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",

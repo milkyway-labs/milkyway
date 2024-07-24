@@ -8,107 +8,50 @@ import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/restaking/types";
 
-// PoolDelegation represents the bond with tokens held by an account with a
-// given pool. It is owned by one delegator, and is associated with a pool.
-message PoolDelegation {
+// DelegationType defines the type of delegation.
+enum DelegationType {
+  option (gogoproto.goproto_enum_prefix) = false;
+
+  DELEGATION_TYPE_UNSPECIFIED = 0;
+  DELEGATION_TYPE_POOL = 1;
+  DELEGATION_TYPE_OPERATOR = 2;
+  DELEGATION_TYPE_SERVICE = 3;
+}
+
+// Delegation represents the bond with tokens held by an account with a
+// given target.
+message Delegation {
   option (gogoproto.equal) = false;
   option (gogoproto.goproto_getters) = false;
 
-  // UserAddress is the encoded address of the user.
-  string user_address = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
-
-  // PoolID is the id of the pool.
-  uint32 pool_id = 2 [ (gogoproto.customname) = "PoolID" ];
-
-  // Shares define the delegation shares received.
-  string shares = 3 [
-    (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false
-  ];
-}
-
-// PoolDelegationResponse is equivalent to PoolDelegation except that it
-// contains a balance in addition to shares which is more suitable for client
-// responses.
-message PoolDelegationResponse {
-  option (gogoproto.equal) = false;
-
-  PoolDelegation delegation = 1
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
-
-  cosmos.base.v1beta1.Coin balance = 2
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
-}
-
-// OperatorDelegation represents the bond with tokens held by an account with a
-// given operator. It is owned by one delegator, and is associated with a
-// operator.
-message OperatorDelegation {
-  option (gogoproto.equal) = false;
-  option (gogoproto.goproto_getters) = false;
+  // Type is the type of delegation.
+  DelegationType type = 1;
 
   // UserAddress is the encoded address of the user.
-  string user_address = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string user_address = 2 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
-  // OperatorID is the id of the operator.
-  uint32 operator_id = 2 [ (gogoproto.customname) = "OperatorID" ];
+  // TargetID is the id of the target to which the delegation is associated
+  // (pool, operator, service).
+  uint32 target_id = 3 [ (gogoproto.customname) = "TargetID" ];
 
   // Shares define the delegation shares received.
-  repeated cosmos.base.v1beta1.DecCoin shares = 3 [
+  repeated cosmos.base.v1beta1.DecCoin shares = 4 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
     (gogoproto.nullable) = false
   ];
 }
 
-// OperatorDelegationResponse is equivalent to OperatorDelegation except that it
+// DelegationResponse is equivalent to Delegation except that it
 // contains a balance in addition to shares which is more suitable for client
 // responses.
-message OperatorDelegationResponse {
+message DelegationResponse {
   option (gogoproto.equal) = false;
 
-  OperatorDelegation delegation = 1
+  Delegation delegation = 1
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 
   repeated cosmos.base.v1beta1.Coin balance = 2 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
-}
-
-// ServiceDelegation represents the bond with tokens held by an account with a
-// given service. It is owned by one delegator, and is associated with a
-// service.
-message ServiceDelegation {
-  option (gogoproto.equal) = false;
-  option (gogoproto.goproto_getters) = false;
-
-  // UserAddress is the encoded address of the user.
-  string user_address = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
-
-  // ServiceID is the id of the service.
-  uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
-
-  // Shares define the delegation shares received.
-  repeated cosmos.base.v1beta1.DecCoin shares = 3 [
-    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
     (gogoproto.nullable) = false
-  ];
-}
-
-// ServiceDelegationResponse is equivalent to ServiceDelegation except that it
-// contains a balance in addition to shares which is more suitable for client
-// responses.
-message ServiceDelegationResponse {
-  option (gogoproto.equal) = false;
-
-  ServiceDelegation delegation = 1
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
-
-  repeated cosmos.base.v1beta1.Coin balance = 2 [
-    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
   ];
 }

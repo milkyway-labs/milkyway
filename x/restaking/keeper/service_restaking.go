@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"fmt"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
@@ -10,27 +8,27 @@ import (
 )
 
 // SaveServiceDelegation stores the given service delegation in the store
-func (k *Keeper) SaveServiceDelegation(ctx sdk.Context, delegation types.ServiceDelegation) {
+func (k *Keeper) SaveServiceDelegation(ctx sdk.Context, delegation types.Delegation) {
 	store := ctx.KVStore(k.storeKey)
 
 	// Marshal and store the delegation
-	delegationBz := types.MustMarshalServiceDelegation(k.cdc, delegation)
-	store.Set(types.UserServiceDelegationStoreKey(delegation.UserAddress, delegation.ServiceID), delegationBz)
+	delegationBz := types.MustMarshalDelegation(k.cdc, delegation)
+	store.Set(types.UserServiceDelegationStoreKey(delegation.UserAddress, delegation.TargetID), delegationBz)
 
 	// Store the delegation in the delegations by service ID store
-	store.Set(types.DelegationByServiceIDStoreKey(delegation.ServiceID, delegation.UserAddress), []byte{})
+	store.Set(types.DelegationByServiceIDStoreKey(delegation.TargetID, delegation.UserAddress), []byte{})
 }
 
 // GetServiceDelegation retrieves the delegation for the given user and service
 // If the delegation does not exist, false is returned instead
-func (k *Keeper) GetServiceDelegation(ctx sdk.Context, serviceID uint32, userAddress string) (types.ServiceDelegation, bool) {
+func (k *Keeper) GetServiceDelegation(ctx sdk.Context, serviceID uint32, userAddress string) (types.Delegation, bool) {
 	store := ctx.KVStore(k.storeKey)
 	delegationBz := store.Get(types.UserServiceDelegationStoreKey(userAddress, serviceID))
 	if delegationBz == nil {
-		return types.ServiceDelegation{}, false
+		return types.Delegation{}, false
 	}
 
-	return types.MustUnmarshalServiceDelegation(k.cdc, delegationBz), true
+	return types.MustUnmarshalDelegation(k.cdc, delegationBz), true
 }
 
 // AddServiceTokensAndShares adds the given amount of tokens to the service and returns the added shares
@@ -64,13 +62,11 @@ func (k *Keeper) DelegateToService(ctx sdk.Context, serviceID uint32, amount sdk
 	return k.PerformDelegation(ctx, types.DelegationData{
 		Amount:    amount,
 		Delegator: delegator,
-		Receiver:  &service,
+		Target:    &service,
 		GetDelegation: func(ctx sdk.Context, receiverID uint32, delegator string) (types.Delegation, bool) {
 			return k.GetServiceDelegation(ctx, receiverID, delegator)
 		},
-		BuildDelegation: func(receiverID uint32, delegator string) types.Delegation {
-			return types.NewServiceDelegation(receiverID, delegator, sdk.NewDecCoins())
-		},
+		BuildDelegation: types.NewServiceDelegation,
 		UpdateDelegation: func(ctx sdk.Context, delegation types.Delegation) (newShares sdk.DecCoins, err error) {
 			// Calculate the new shares and add the tokens to the service
 			_, newShares, err = k.AddServiceTokensAndShares(ctx, service, amount)
@@ -79,14 +75,10 @@ func (k *Keeper) DelegateToService(ctx sdk.Context, serviceID uint32, amount sdk
 			}
 
 			// Update the delegation shares
-			serviceDelegation, ok := delegation.(types.ServiceDelegation)
-			if !ok {
-				return newShares, fmt.Errorf("invalid delegation type: %T", delegation)
-			}
-			serviceDelegation.Shares = serviceDelegation.Shares.Add(newShares...)
+			delegation.Shares = delegation.Shares.Add(newShares...)
 
 			// Store the updated delegation
-			k.SaveServiceDelegation(ctx, serviceDelegation)
+			k.SaveServiceDelegation(ctx, delegation)
 
 			return newShares, err
 		},

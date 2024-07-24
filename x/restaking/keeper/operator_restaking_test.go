@@ -13,7 +13,7 @@ func (suite *KeeperTestSuite) TestKeeper_SaveOperatorDelegation() {
 		name       string
 		setup      func()
 		store      func(ctx sdk.Context)
-		delegation types.OperatorDelegation
+		delegation types.Delegation
 		check      func(ctx sdk.Context)
 	}{
 		{
@@ -30,7 +30,7 @@ func (suite *KeeperTestSuite) TestKeeper_SaveOperatorDelegation() {
 				delegationBz := store.Get(types.UserOperatorDelegationStoreKey("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", 1))
 				suite.Require().NotNil(delegationBz)
 
-				delegation, err := types.UnmarshalOperatorDelegation(suite.cdc, delegationBz)
+				delegation, err := types.UnmarshalDelegation(suite.cdc, delegationBz)
 				suite.Require().NoError(err)
 
 				suite.Require().Equal(types.NewOperatorDelegation(
@@ -74,7 +74,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetOperatorDelegation() {
 		operatorID    uint32
 		userAddress   string
 		expFound      bool
-		expDelegation types.OperatorDelegation
+		expDelegation types.Delegation
 		check         func(ctx sdk.Context)
 	}{
 		{

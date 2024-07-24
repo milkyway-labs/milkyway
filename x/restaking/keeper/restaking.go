@@ -13,7 +13,7 @@ import (
 // function that performs common operations for all of them.
 func (k *Keeper) PerformDelegation(ctx sdk.Context, data types.DelegationData) (sdk.DecCoins, error) {
 	// Get the data
-	receiver := data.Receiver
+	receiver := data.Target
 	delegator := data.Delegator
 	hooks := data.Hooks
 
@@ -35,7 +35,7 @@ func (k *Keeper) PerformDelegation(ctx sdk.Context, data types.DelegationData) (
 		}
 	} else {
 		// Delegation was not found
-		delegation = data.BuildDelegation(receiver.GetID(), delegator)
+		delegation = data.BuildDelegation(receiver.GetID(), delegator, sdk.NewDecCoins())
 		err := hooks.BeforeDelegationCreated(ctx, receiver.GetID(), delegator)
 		if err != nil {
 			return nil, err
