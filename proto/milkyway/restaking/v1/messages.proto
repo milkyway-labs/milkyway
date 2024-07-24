@@ -1,6 +1,8 @@
 syntax = "proto3";
 package milkyway.restaking.v1;
 
+import "google/protobuf/timestamp.proto";
+
 import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 import "cosmos/base/v1beta1/coin.proto";
@@ -42,6 +44,18 @@ service Msg {
   // parameters.
   // The authority defaults to the x/gov module account.
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+
+  // UndelegatePool defines the operation that allows users to undelegate their
+  // assets from a pool.
+  rpc UndelegatePool(MsgUndelegatePool) returns (MsgUndelegateResponse);
+
+  // UndelegateOperator defines the operation that allows users to undelegate
+  // their assets from a specific operator.
+  rpc UndelegateOperator(MsgUndelegateOperator) returns (MsgUndelegateResponse);
+
+  // UndelegateService defines the operation that allows users to undelegate
+  // their assets from a specific service.
+  rpc UndelegateService(MsgUndelegateService) returns (MsgUndelegateResponse);
 }
 
 // MsgUpdateOperatorParams defines the message structure for the
@@ -160,3 +174,65 @@ message MsgUpdateParams {
 
 // MsgDeactivateServiceResponse is the return value of MsgUpdateParams.
 message MsgUpdateParamsResponse {}
+
+// MsgUndelegatePool the message structure for the UndelegatePool gRPC service
+// method. It allows a user to undelegate their assets from a restaking pool.
+message MsgUndelegatePool {
+  option (cosmos.msg.v1.signer) = "delegator";
+  option (amino.name) = "milkyway/MsgUndelegatePool";
+
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  string delegator = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  uint32 pool_id = 2 [ (gogoproto.customname) = "PoolID" ];
+  cosmos.base.v1beta1.Coin amount = 3
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+}
+
+// MsgUndelegateOperator the message structure for the UndelegateOperator gRPC
+// service method. It allows a user to undelegate their assets from a restaking
+// operator.
+message MsgUndelegateOperator {
+  option (cosmos.msg.v1.signer) = "delegator";
+  option (amino.name) = "milkyway/MsgUndelegateOperator";
+
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  string delegator = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  uint32 operator_id = 2 [ (gogoproto.customname) = "OperatorID" ];
+  cosmos.base.v1beta1.Coin amount = 3
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+}
+
+// MsgUndelegateService the message structure for the UndelegateService gRPC
+// service method. It allows a user to undelegate their assets from a restaking
+// service.
+message MsgUndelegateService {
+  option (cosmos.msg.v1.signer) = "delegator";
+  option (amino.name) = "milkyway/MsgUndelegateService";
+
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  string delegator = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
+  cosmos.base.v1beta1.Coin amount = 3
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+}
+
+// MsgUndelegateResponse defines the response type for the undelegation methods.
+message MsgUndelegateResponse {
+  // CompletionTime represents the time at which the undelegation will be
+  // complete
+  google.protobuf.Timestamp completion_time = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true,
+    (gogoproto.stdtime) = true
+  ];
+
+  // Amount represents the amount of undelegated coins
+  cosmos.base.v1beta1.Coin amount = 2
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+}
