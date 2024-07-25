@@ -3,7 +3,6 @@ package keeper
 import (
 	"fmt"
 
-	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
@@ -110,7 +109,7 @@ func PositivePoolsDelegationsInvariant(k *Keeper) sdk.Invariant {
 		var count int
 
 		for _, delegation := range k.GetAllPoolDelegations(ctx) {
-			if delegation.Shares.IsNegative() {
+			if delegation.Shares.IsAnyNegative() {
 				count++
 				msg += fmt.Sprintf("pool delegation with negative shares: %v\n", delegation)
 			}
@@ -136,18 +135,18 @@ func PoolsDelegatorsSharesInvariant(k *Keeper) sdk.Invariant {
 		var broken bool
 
 		// Initialize a map: pool id -> its delegators shares
-		poolsDelegatorsShares := map[uint32]sdkmath.LegacyDec{}
+		poolsDelegatorsShares := map[uint32]sdk.DecCoins{}
 		for _, pool := range k.poolsKeeper.GetPools(ctx) {
-			poolsDelegatorsShares[pool.ID] = sdkmath.LegacyZeroDec()
+			poolsDelegatorsShares[pool.ID] = sdk.NewDecCoins()
 		}
 
 		// Iterate through all the pool delegations to calculate the total delegators shares for each pool
 		for _, delegation := range k.GetAllPoolDelegations(ctx) {
-			if _, ok := poolsDelegatorsShares[delegation.PoolID]; !ok {
-				poolsDelegatorsShares[delegation.PoolID] = sdkmath.LegacyZeroDec()
+			if _, ok := poolsDelegatorsShares[delegation.TargetID]; !ok {
+				poolsDelegatorsShares[delegation.TargetID] = sdk.NewDecCoins()
 			}
 
-			poolsDelegatorsShares[delegation.PoolID] = poolsDelegatorsShares[delegation.PoolID].Add(delegation.Shares)
+			poolsDelegatorsShares[delegation.TargetID] = poolsDelegatorsShares[delegation.TargetID].Add(delegation.Shares...)
 		}
 
 		for poolID, delegatorsShares := range poolsDelegatorsShares {
@@ -156,7 +155,8 @@ func PoolsDelegatorsSharesInvariant(k *Keeper) sdk.Invariant {
 				panic(fmt.Errorf("pool with id %d not found", poolID))
 			}
 
-			if !pool.DelegatorShares.Equal(delegatorsShares) {
+			sharesAmount := delegatorsShares.AmountOf(pool.GetSharesDenom(pool.Denom))
+			if !pool.DelegatorShares.Equal(sharesAmount) {
 				broken = true
 				msg += fmt.Sprintf("pool %d total shares: %v, delegators shares: %v\n", poolID, pool.DelegatorShares, delegatorsShares)
 			}
@@ -207,11 +207,11 @@ func OperatorsDelegatorsSharesInvariant(k *Keeper) sdk.Invariant {
 
 		// Iterate through all the operator delegations to calculate the total delegators shares for each operator
 		for _, delegation := range k.GetAllOperatorDelegations(ctx) {
-			if _, ok := operatorsDelegatorsShares[delegation.OperatorID]; !ok {
-				operatorsDelegatorsShares[delegation.OperatorID] = sdk.NewDecCoins()
+			if _, ok := operatorsDelegatorsShares[delegation.TargetID]; !ok {
+				operatorsDelegatorsShares[delegation.TargetID] = sdk.NewDecCoins()
 			}
 
-			operatorsDelegatorsShares[delegation.OperatorID] = operatorsDelegatorsShares[delegation.OperatorID].Add(delegation.Shares...)
+			operatorsDelegatorsShares[delegation.TargetID] = operatorsDelegatorsShares[delegation.TargetID].Add(delegation.Shares...)
 		}
 
 		for operatorID, delegatorsShares := range operatorsDelegatorsShares {
@@ -271,11 +271,11 @@ func ServicesDelegatorsSharesInvariant(k *Keeper) sdk.Invariant {
 
 		// Iterate through all the service delegations to calculate the total delegators shares for each service
 		for _, delegation := range k.GetAllServiceDelegations(ctx) {
-			if _, ok := servicesDelegatorsShares[delegation.ServiceID]; !ok {
-				servicesDelegatorsShares[delegation.ServiceID] = sdk.NewDecCoins()
+			if _, ok := servicesDelegatorsShares[delegation.TargetID]; !ok {
+				servicesDelegatorsShares[delegation.TargetID] = sdk.NewDecCoins()
 			}
 
-			servicesDelegatorsShares[delegation.ServiceID] = servicesDelegatorsShares[delegation.ServiceID].Add(delegation.Shares...)
+			servicesDelegatorsShares[delegation.TargetID] = servicesDelegatorsShares[delegation.TargetID].Add(delegation.Shares...)
 		}
 
 		for serviceID, delegatorsShares := range servicesDelegatorsShares {
