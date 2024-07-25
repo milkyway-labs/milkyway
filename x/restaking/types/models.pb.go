@@ -4,7 +4,6 @@
 package types
 
 import (
-	cosmossdk_io_math "cosmossdk.io/math"
 	fmt "fmt"
 	_ "github.com/cosmos/cosmos-proto"
 	github_com_cosmos_cosmos_sdk_types "github.com/cosmos/cosmos-sdk/types"
@@ -28,29 +27,64 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// PoolDelegation represents the bond with tokens held by an account with a
-// given pool. It is owned by one delegator, and is associated with a pool.
-type PoolDelegation struct {
-	// UserAddress is the encoded address of the user.
-	UserAddress string `protobuf:"bytes,1,opt,name=user_address,json=userAddress,proto3" json:"user_address,omitempty"`
-	// PoolID is the id of the pool.
-	PoolID uint32 `protobuf:"varint,2,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
-	// Shares define the delegation shares received.
-	Shares cosmossdk_io_math.LegacyDec `protobuf:"bytes,3,opt,name=shares,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"shares"`
+// DelegationType defines the type of delegation.
+type DelegationType int32
+
+const (
+	DELEGATION_TYPE_UNSPECIFIED DelegationType = 0
+	DELEGATION_TYPE_POOL        DelegationType = 1
+	DELEGATION_TYPE_OPERATOR    DelegationType = 2
+	DELEGATION_TYPE_SERVICE     DelegationType = 3
+)
+
+var DelegationType_name = map[int32]string{
+	0: "DELEGATION_TYPE_UNSPECIFIED",
+	1: "DELEGATION_TYPE_POOL",
+	2: "DELEGATION_TYPE_OPERATOR",
+	3: "DELEGATION_TYPE_SERVICE",
 }
 
-func (m *PoolDelegation) Reset()         { *m = PoolDelegation{} }
-func (m *PoolDelegation) String() string { return proto.CompactTextString(m) }
-func (*PoolDelegation) ProtoMessage()    {}
-func (*PoolDelegation) Descriptor() ([]byte, []int) {
+var DelegationType_value = map[string]int32{
+	"DELEGATION_TYPE_UNSPECIFIED": 0,
+	"DELEGATION_TYPE_POOL":        1,
+	"DELEGATION_TYPE_OPERATOR":    2,
+	"DELEGATION_TYPE_SERVICE":     3,
+}
+
+func (x DelegationType) String() string {
+	return proto.EnumName(DelegationType_name, int32(x))
+}
+
+func (DelegationType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_86f4cd48423b1e2f, []int{0}
 }
-func (m *PoolDelegation) XXX_Unmarshal(b []byte) error {
+
+// Delegation represents the bond with tokens held by an account with a
+// given target.
+type Delegation struct {
+	// Type is the type of delegation.
+	Type DelegationType `protobuf:"varint,1,opt,name=type,proto3,enum=milkyway.restaking.v1.DelegationType" json:"type,omitempty"`
+	// UserAddress is the encoded address of the user.
+	UserAddress string `protobuf:"bytes,2,opt,name=user_address,json=userAddress,proto3" json:"user_address,omitempty"`
+	// TargetID is the id of the target to which the delegation is associated
+	// (pool, operator, service).
+	TargetID uint32 `protobuf:"varint,3,opt,name=target_id,json=targetId,proto3" json:"target_id,omitempty"`
+	// Shares define the delegation shares received.
+	Shares github_com_cosmos_cosmos_sdk_types.DecCoins `protobuf:"bytes,4,rep,name=shares,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.DecCoins" json:"shares"`
+}
+
+func (m *Delegation) Reset()         { *m = Delegation{} }
+func (m *Delegation) String() string { return proto.CompactTextString(m) }
+func (*Delegation) ProtoMessage()    {}
+func (*Delegation) Descriptor() ([]byte, []int) {
+	return fileDescriptor_86f4cd48423b1e2f, []int{0}
+}
+func (m *Delegation) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *PoolDelegation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *Delegation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_PoolDelegation.Marshal(b, m, deterministic)
+		return xxx_messageInfo_Delegation.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -60,38 +94,38 @@ func (m *PoolDelegation) XXX_Marshal(b []byte, deterministic bool) ([]byte, erro
 		return b[:n], nil
 	}
 }
-func (m *PoolDelegation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PoolDelegation.Merge(m, src)
+func (m *Delegation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Delegation.Merge(m, src)
 }
-func (m *PoolDelegation) XXX_Size() int {
+func (m *Delegation) XXX_Size() int {
 	return m.Size()
 }
-func (m *PoolDelegation) XXX_DiscardUnknown() {
-	xxx_messageInfo_PoolDelegation.DiscardUnknown(m)
+func (m *Delegation) XXX_DiscardUnknown() {
+	xxx_messageInfo_Delegation.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_PoolDelegation proto.InternalMessageInfo
+var xxx_messageInfo_Delegation proto.InternalMessageInfo
 
-// PoolDelegationResponse is equivalent to PoolDelegation except that it
+// DelegationResponse is equivalent to Delegation except that it
 // contains a balance in addition to shares which is more suitable for client
 // responses.
-type PoolDelegationResponse struct {
-	Delegation PoolDelegation `protobuf:"bytes,1,opt,name=delegation,proto3" json:"delegation"`
-	Balance    types.Coin     `protobuf:"bytes,2,opt,name=balance,proto3" json:"balance"`
+type DelegationResponse struct {
+	Delegation Delegation                               `protobuf:"bytes,1,opt,name=delegation,proto3" json:"delegation"`
+	Balance    github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,2,rep,name=balance,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"balance"`
 }
 
-func (m *PoolDelegationResponse) Reset()         { *m = PoolDelegationResponse{} }
-func (m *PoolDelegationResponse) String() string { return proto.CompactTextString(m) }
-func (*PoolDelegationResponse) ProtoMessage()    {}
-func (*PoolDelegationResponse) Descriptor() ([]byte, []int) {
+func (m *DelegationResponse) Reset()         { *m = DelegationResponse{} }
+func (m *DelegationResponse) String() string { return proto.CompactTextString(m) }
+func (*DelegationResponse) ProtoMessage()    {}
+func (*DelegationResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_86f4cd48423b1e2f, []int{1}
 }
-func (m *PoolDelegationResponse) XXX_Unmarshal(b []byte) error {
+func (m *DelegationResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *PoolDelegationResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *DelegationResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_PoolDelegationResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_DelegationResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -101,226 +135,26 @@ func (m *PoolDelegationResponse) XXX_Marshal(b []byte, deterministic bool) ([]by
 		return b[:n], nil
 	}
 }
-func (m *PoolDelegationResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PoolDelegationResponse.Merge(m, src)
+func (m *DelegationResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DelegationResponse.Merge(m, src)
 }
-func (m *PoolDelegationResponse) XXX_Size() int {
+func (m *DelegationResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *PoolDelegationResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_PoolDelegationResponse.DiscardUnknown(m)
+func (m *DelegationResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_DelegationResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_PoolDelegationResponse proto.InternalMessageInfo
+var xxx_messageInfo_DelegationResponse proto.InternalMessageInfo
 
-func (m *PoolDelegationResponse) GetDelegation() PoolDelegation {
+func (m *DelegationResponse) GetDelegation() Delegation {
 	if m != nil {
 		return m.Delegation
 	}
-	return PoolDelegation{}
+	return Delegation{}
 }
 
-func (m *PoolDelegationResponse) GetBalance() types.Coin {
-	if m != nil {
-		return m.Balance
-	}
-	return types.Coin{}
-}
-
-// OperatorDelegation represents the bond with tokens held by an account with a
-// given operator. It is owned by one delegator, and is associated with a
-// operator.
-type OperatorDelegation struct {
-	// UserAddress is the encoded address of the user.
-	UserAddress string `protobuf:"bytes,1,opt,name=user_address,json=userAddress,proto3" json:"user_address,omitempty"`
-	// OperatorID is the id of the operator.
-	OperatorID uint32 `protobuf:"varint,2,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
-	// Shares define the delegation shares received.
-	Shares github_com_cosmos_cosmos_sdk_types.DecCoins `protobuf:"bytes,3,rep,name=shares,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.DecCoins" json:"shares"`
-}
-
-func (m *OperatorDelegation) Reset()         { *m = OperatorDelegation{} }
-func (m *OperatorDelegation) String() string { return proto.CompactTextString(m) }
-func (*OperatorDelegation) ProtoMessage()    {}
-func (*OperatorDelegation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_86f4cd48423b1e2f, []int{2}
-}
-func (m *OperatorDelegation) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *OperatorDelegation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_OperatorDelegation.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *OperatorDelegation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OperatorDelegation.Merge(m, src)
-}
-func (m *OperatorDelegation) XXX_Size() int {
-	return m.Size()
-}
-func (m *OperatorDelegation) XXX_DiscardUnknown() {
-	xxx_messageInfo_OperatorDelegation.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_OperatorDelegation proto.InternalMessageInfo
-
-// OperatorDelegationResponse is equivalent to OperatorDelegation except that it
-// contains a balance in addition to shares which is more suitable for client
-// responses.
-type OperatorDelegationResponse struct {
-	Delegation OperatorDelegation                       `protobuf:"bytes,1,opt,name=delegation,proto3" json:"delegation"`
-	Balance    github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,2,rep,name=balance,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"balance"`
-}
-
-func (m *OperatorDelegationResponse) Reset()         { *m = OperatorDelegationResponse{} }
-func (m *OperatorDelegationResponse) String() string { return proto.CompactTextString(m) }
-func (*OperatorDelegationResponse) ProtoMessage()    {}
-func (*OperatorDelegationResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_86f4cd48423b1e2f, []int{3}
-}
-func (m *OperatorDelegationResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *OperatorDelegationResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_OperatorDelegationResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *OperatorDelegationResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OperatorDelegationResponse.Merge(m, src)
-}
-func (m *OperatorDelegationResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *OperatorDelegationResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_OperatorDelegationResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_OperatorDelegationResponse proto.InternalMessageInfo
-
-func (m *OperatorDelegationResponse) GetDelegation() OperatorDelegation {
-	if m != nil {
-		return m.Delegation
-	}
-	return OperatorDelegation{}
-}
-
-func (m *OperatorDelegationResponse) GetBalance() github_com_cosmos_cosmos_sdk_types.Coins {
-	if m != nil {
-		return m.Balance
-	}
-	return nil
-}
-
-// ServiceDelegation represents the bond with tokens held by an account with a
-// given service. It is owned by one delegator, and is associated with a
-// service.
-type ServiceDelegation struct {
-	// UserAddress is the encoded address of the user.
-	UserAddress string `protobuf:"bytes,1,opt,name=user_address,json=userAddress,proto3" json:"user_address,omitempty"`
-	// ServiceID is the id of the service.
-	ServiceID uint32 `protobuf:"varint,2,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
-	// Shares define the delegation shares received.
-	Shares github_com_cosmos_cosmos_sdk_types.DecCoins `protobuf:"bytes,3,rep,name=shares,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.DecCoins" json:"shares"`
-}
-
-func (m *ServiceDelegation) Reset()         { *m = ServiceDelegation{} }
-func (m *ServiceDelegation) String() string { return proto.CompactTextString(m) }
-func (*ServiceDelegation) ProtoMessage()    {}
-func (*ServiceDelegation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_86f4cd48423b1e2f, []int{4}
-}
-func (m *ServiceDelegation) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ServiceDelegation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ServiceDelegation.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *ServiceDelegation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ServiceDelegation.Merge(m, src)
-}
-func (m *ServiceDelegation) XXX_Size() int {
-	return m.Size()
-}
-func (m *ServiceDelegation) XXX_DiscardUnknown() {
-	xxx_messageInfo_ServiceDelegation.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ServiceDelegation proto.InternalMessageInfo
-
-// ServiceDelegationResponse is equivalent to ServiceDelegation except that it
-// contains a balance in addition to shares which is more suitable for client
-// responses.
-type ServiceDelegationResponse struct {
-	Delegation ServiceDelegation                        `protobuf:"bytes,1,opt,name=delegation,proto3" json:"delegation"`
-	Balance    github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,2,rep,name=balance,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"balance"`
-}
-
-func (m *ServiceDelegationResponse) Reset()         { *m = ServiceDelegationResponse{} }
-func (m *ServiceDelegationResponse) String() string { return proto.CompactTextString(m) }
-func (*ServiceDelegationResponse) ProtoMessage()    {}
-func (*ServiceDelegationResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_86f4cd48423b1e2f, []int{5}
-}
-func (m *ServiceDelegationResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ServiceDelegationResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ServiceDelegationResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *ServiceDelegationResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ServiceDelegationResponse.Merge(m, src)
-}
-func (m *ServiceDelegationResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *ServiceDelegationResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_ServiceDelegationResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ServiceDelegationResponse proto.InternalMessageInfo
-
-func (m *ServiceDelegationResponse) GetDelegation() ServiceDelegation {
-	if m != nil {
-		return m.Delegation
-	}
-	return ServiceDelegation{}
-}
-
-func (m *ServiceDelegationResponse) GetBalance() github_com_cosmos_cosmos_sdk_types.Coins {
+func (m *DelegationResponse) GetBalance() github_com_cosmos_cosmos_sdk_types.Coins {
 	if m != nil {
 		return m.Balance
 	}
@@ -328,12 +162,9 @@ func (m *ServiceDelegationResponse) GetBalance() github_com_cosmos_cosmos_sdk_ty
 }
 
 func init() {
-	proto.RegisterType((*PoolDelegation)(nil), "milkyway.restaking.v1.PoolDelegation")
-	proto.RegisterType((*PoolDelegationResponse)(nil), "milkyway.restaking.v1.PoolDelegationResponse")
-	proto.RegisterType((*OperatorDelegation)(nil), "milkyway.restaking.v1.OperatorDelegation")
-	proto.RegisterType((*OperatorDelegationResponse)(nil), "milkyway.restaking.v1.OperatorDelegationResponse")
-	proto.RegisterType((*ServiceDelegation)(nil), "milkyway.restaking.v1.ServiceDelegation")
-	proto.RegisterType((*ServiceDelegationResponse)(nil), "milkyway.restaking.v1.ServiceDelegationResponse")
+	proto.RegisterEnum("milkyway.restaking.v1.DelegationType", DelegationType_name, DelegationType_value)
+	proto.RegisterType((*Delegation)(nil), "milkyway.restaking.v1.Delegation")
+	proto.RegisterType((*DelegationResponse)(nil), "milkyway.restaking.v1.DelegationResponse")
 }
 
 func init() {
@@ -341,48 +172,45 @@ func init() {
 }
 
 var fileDescriptor_86f4cd48423b1e2f = []byte{
-	// 606 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x95, 0x3f, 0x6f, 0xd3, 0x40,
-	0x18, 0xc6, 0x7d, 0x14, 0xa5, 0xe4, 0x42, 0x2b, 0xd5, 0x2a, 0x28, 0x2d, 0xc8, 0xae, 0x8a, 0x90,
-	0xc2, 0x9f, 0xf8, 0x94, 0x44, 0x2c, 0x45, 0x42, 0x22, 0x78, 0xb1, 0x04, 0xa2, 0x72, 0x98, 0x58,
-	0xa2, 0xb3, 0x7d, 0x72, 0x8e, 0xd8, 0xbe, 0xc8, 0xe7, 0x06, 0xf2, 0x0d, 0x18, 0xf9, 0x08, 0x1d,
-	0x11, 0x53, 0x87, 0x7e, 0x07, 0x3a, 0x56, 0x9d, 0x10, 0x43, 0x40, 0x0e, 0x12, 0xec, 0x0c, 0xac,
-	0xc8, 0xf6, 0x39, 0x4d, 0x14, 0x07, 0x31, 0x54, 0x82, 0x25, 0xc9, 0xbd, 0xef, 0x73, 0xcf, 0x7b,
-	0xcf, 0xfd, 0x22, 0x1b, 0xee, 0xfa, 0xd4, 0xeb, 0x8f, 0x5e, 0xe3, 0x11, 0x0a, 0x09, 0x8f, 0x70,
-	0x9f, 0x06, 0x2e, 0x1a, 0x36, 0x90, 0xcf, 0x1c, 0xe2, 0x71, 0x6d, 0x10, 0xb2, 0x88, 0xc9, 0xd7,
-	0x72, 0x8d, 0x36, 0xd5, 0x68, 0xc3, 0xc6, 0xf6, 0x06, 0xf6, 0x69, 0xc0, 0x50, 0xfa, 0x99, 0x29,
-	0xb7, 0xb7, 0x6c, 0xc6, 0x7d, 0xc6, 0xbb, 0xe9, 0x0a, 0x65, 0x0b, 0xd1, 0xda, 0x74, 0x99, 0xcb,
-	0xb2, 0x7a, 0xf2, 0x4b, 0x54, 0x95, 0x4c, 0x83, 0x2c, 0xcc, 0x09, 0x1a, 0x36, 0x2c, 0x12, 0xe1,
-	0x06, 0xb2, 0x19, 0x0d, 0xb2, 0xfe, 0xee, 0x47, 0x00, 0xd7, 0xf7, 0x19, 0xf3, 0x74, 0xe2, 0x11,
-	0x17, 0x47, 0x94, 0x05, 0xf2, 0x43, 0x78, 0xf5, 0x80, 0x93, 0xb0, 0x8b, 0x1d, 0x27, 0x24, 0x9c,
-	0x57, 0xc1, 0x0e, 0xa8, 0x95, 0xdb, 0xd5, 0xb3, 0xe3, 0xfa, 0xa6, 0x18, 0xf8, 0x38, 0xeb, 0x74,
-	0xa2, 0x90, 0x06, 0xae, 0x59, 0x49, 0xd4, 0xa2, 0x24, 0xdf, 0x82, 0xab, 0x03, 0xc6, 0xbc, 0x2e,
-	0x75, 0xaa, 0x97, 0x76, 0x40, 0x6d, 0xad, 0x0d, 0xe3, 0xb1, 0x5a, 0x4a, 0x26, 0x18, 0xba, 0x59,
-	0x4a, 0x5a, 0x86, 0x23, 0x1b, 0xb0, 0xc4, 0x7b, 0x38, 0x24, 0xbc, 0xba, 0x92, 0x7a, 0x37, 0x4e,
-	0xc6, 0xaa, 0xf4, 0x79, 0xac, 0xde, 0xc8, 0xfc, 0xb9, 0xd3, 0xd7, 0x28, 0x43, 0x3e, 0x8e, 0x7a,
-	0xda, 0x53, 0xe2, 0x62, 0x7b, 0xa4, 0x13, 0xfb, 0xec, 0xb8, 0x0e, 0xc5, 0x78, 0x9d, 0xd8, 0xa6,
-	0x30, 0xd8, 0xbb, 0xf2, 0xf6, 0x50, 0x95, 0x7e, 0x1c, 0xaa, 0xd2, 0xee, 0x11, 0x80, 0xd7, 0xe7,
-	0x93, 0x98, 0x84, 0x0f, 0x58, 0xc0, 0x89, 0xbc, 0x0f, 0xa1, 0x33, 0xad, 0xa6, 0x79, 0x2a, 0xcd,
-	0xdb, 0x5a, 0xe1, 0xa5, 0x6b, 0xf3, 0x16, 0xed, 0x72, 0x72, 0xb4, 0xf7, 0xdf, 0x8f, 0xee, 0x02,
-	0x73, 0xc6, 0x43, 0x7e, 0x04, 0x57, 0x2d, 0xec, 0xe1, 0xc0, 0x26, 0x69, 0xcc, 0x4a, 0x73, 0x4b,
-	0x13, 0x87, 0x4b, 0x2e, 0x5a, 0x13, 0x17, 0xad, 0x3d, 0x61, 0x74, 0xce, 0x22, 0xdf, 0xb4, 0x77,
-	0x39, 0x3d, 0xf2, 0x2f, 0x00, 0xe5, 0xe7, 0x03, 0x12, 0xe2, 0x88, 0x85, 0x17, 0x05, 0x00, 0xc1,
-	0x0a, 0x13, 0x96, 0xe7, 0x10, 0xd6, 0xe3, 0xb1, 0x0a, 0xf3, 0x49, 0x86, 0x6e, 0xc2, 0x5c, 0x62,
-	0x38, 0x32, 0x9d, 0x81, 0xb1, 0x52, 0xab, 0x34, 0x6f, 0x16, 0x26, 0xd1, 0x89, 0x9d, 0x86, 0x69,
-	0x25, 0x61, 0x3e, 0x7c, 0x51, 0xef, 0xb9, 0x34, 0xea, 0x1d, 0x58, 0x9a, 0xcd, 0x7c, 0xf1, 0x37,
-	0x14, 0x5f, 0x75, 0xee, 0xf4, 0x51, 0x34, 0x1a, 0x10, 0x9e, 0xef, 0xe1, 0x05, 0xb0, 0xbe, 0x01,
-	0xb8, 0xbd, 0x98, 0x7c, 0x0a, 0xec, 0x45, 0x01, 0xb0, 0x3b, 0x4b, 0x80, 0x2d, 0xda, 0x2c, 0x83,
-	0xf6, 0x6a, 0x16, 0xda, 0xca, 0x9f, 0xa1, 0x3d, 0x10, 0x39, 0x6b, 0x7f, 0x91, 0x33, 0x0d, 0x59,
-	0x08, 0xf8, 0x27, 0x80, 0x1b, 0x1d, 0x12, 0x0e, 0xa9, 0x4d, 0x2e, 0x8a, 0xef, 0x7d, 0x08, 0x79,
-	0xe6, 0x78, 0x8e, 0x77, 0x2d, 0x1e, 0xab, 0x65, 0x31, 0xc7, 0xd0, 0xcd, 0xb2, 0x10, 0xfc, 0x2b,
-	0xb8, 0x31, 0x80, 0x5b, 0x0b, 0xa9, 0xa7, 0x6c, 0x3b, 0x05, 0x6c, 0x6b, 0x4b, 0xd8, 0x2e, 0xb8,
-	0xfc, 0x37, 0x68, 0xdb, 0xcf, 0x4e, 0x62, 0x05, 0x9c, 0xc6, 0x0a, 0xf8, 0x1a, 0x2b, 0xe0, 0xdd,
-	0x44, 0x91, 0x4e, 0x27, 0x8a, 0xf4, 0x69, 0xa2, 0x48, 0x2f, 0x5b, 0x33, 0xbe, 0x79, 0xac, 0xba,
-	0x87, 0x2d, 0x3e, 0x5d, 0xa1, 0x37, 0x33, 0x2f, 0x83, 0x74, 0x90, 0x55, 0x4a, 0x1f, 0xc7, 0xad,
-	0xdf, 0x01, 0x00, 0x00, 0xff, 0xff, 0xf4, 0x2d, 0x77, 0x9d, 0x2f, 0x06, 0x00, 0x00,
+	// 551 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x93, 0x4f, 0x8f, 0xd2, 0x40,
+	0x18, 0xc6, 0x3b, 0x40, 0x56, 0x18, 0xd6, 0x0d, 0x4e, 0x30, 0x76, 0xd9, 0x4d, 0x8b, 0x24, 0x26,
+	0xb8, 0x86, 0x56, 0xe0, 0xe4, 0x7a, 0xe2, 0x4f, 0x35, 0x4d, 0x70, 0x21, 0x05, 0x4d, 0xf4, 0x42,
+	0xa6, 0x74, 0xd2, 0x6d, 0x80, 0x0e, 0xe9, 0x74, 0x51, 0xbe, 0xc1, 0x1e, 0x3c, 0xf8, 0x11, 0x36,
+	0xd1, 0x83, 0xf1, 0xe4, 0xc1, 0x0f, 0xb1, 0x37, 0x37, 0x9e, 0x3c, 0xad, 0x06, 0x0e, 0xfa, 0x31,
+	0x4c, 0xdb, 0x81, 0x45, 0xb2, 0x89, 0x5e, 0xa0, 0xef, 0xf3, 0x3c, 0xef, 0xf4, 0xfd, 0xbd, 0x6d,
+	0x61, 0x61, 0xec, 0x8c, 0x86, 0xb3, 0xd7, 0x78, 0xa6, 0x7a, 0x84, 0xf9, 0x78, 0xe8, 0xb8, 0xb6,
+	0x3a, 0x2d, 0xab, 0x63, 0x6a, 0x91, 0x11, 0x53, 0x26, 0x1e, 0xf5, 0x29, 0xba, 0xbd, 0xcc, 0x28,
+	0xab, 0x8c, 0x32, 0x2d, 0xe7, 0x6e, 0xe1, 0xb1, 0xe3, 0x52, 0x35, 0xfc, 0x8d, 0x92, 0xb9, 0xdd,
+	0x01, 0x65, 0x63, 0xca, 0xfa, 0x61, 0xa5, 0x46, 0x05, 0xb7, 0xb2, 0x36, 0xb5, 0x69, 0xa4, 0x07,
+	0x57, 0x5c, 0x95, 0xa2, 0x8c, 0x6a, 0x62, 0x46, 0xd4, 0x69, 0xd9, 0x24, 0x3e, 0x2e, 0xab, 0x03,
+	0xea, 0xb8, 0x91, 0x5f, 0xf8, 0x10, 0x83, 0xb0, 0x49, 0x46, 0xc4, 0xc6, 0xbe, 0x43, 0x5d, 0xf4,
+	0x08, 0x26, 0xfc, 0xd9, 0x84, 0x88, 0x20, 0x0f, 0x8a, 0x3b, 0x95, 0x7b, 0xca, 0xb5, 0x83, 0x29,
+	0x57, 0x0d, 0xbd, 0xd9, 0x84, 0x18, 0x61, 0x0b, 0x7a, 0x0c, 0xb7, 0x4f, 0x18, 0xf1, 0xfa, 0xd8,
+	0xb2, 0x3c, 0xc2, 0x98, 0x18, 0xcb, 0x83, 0x62, 0xaa, 0x2e, 0x7e, 0xfb, 0x52, 0xca, 0xf2, 0x39,
+	0x6b, 0x91, 0xd3, 0xf5, 0x3d, 0xc7, 0xb5, 0x8d, 0x74, 0x90, 0xe6, 0x12, 0xba, 0x0f, 0x53, 0x3e,
+	0xf6, 0x6c, 0xe2, 0xf7, 0x1d, 0x4b, 0x8c, 0xe7, 0x41, 0xf1, 0x66, 0x7d, 0x7b, 0x7e, 0x29, 0x27,
+	0x7b, 0xa1, 0xa8, 0x37, 0x8d, 0x64, 0x64, 0xeb, 0x16, 0x72, 0xe0, 0x16, 0x3b, 0xc6, 0x1e, 0x61,
+	0x62, 0x22, 0x1f, 0x2f, 0xa6, 0x2b, 0xfb, 0x0a, 0x3f, 0x3e, 0x40, 0x54, 0x38, 0xa2, 0xd2, 0x24,
+	0x83, 0x06, 0x75, 0xdc, 0x7a, 0xf5, 0xfc, 0x52, 0x16, 0x3e, 0xfd, 0x90, 0x1f, 0xd8, 0x8e, 0x7f,
+	0x7c, 0x62, 0x2a, 0x03, 0x3a, 0xe6, 0x6b, 0xe3, 0x7f, 0x25, 0x66, 0x0d, 0xd5, 0x00, 0x80, 0x2d,
+	0x7b, 0x98, 0xc1, 0x6f, 0x70, 0x98, 0x3c, 0x3d, 0x93, 0x85, 0xdf, 0x67, 0xb2, 0x50, 0xf8, 0x0a,
+	0x20, 0xba, 0xa2, 0x36, 0x08, 0x9b, 0x50, 0x97, 0x11, 0xd4, 0x82, 0xd0, 0x5a, 0xa9, 0xe1, 0xd2,
+	0xd2, 0x95, 0xbb, 0xff, 0x5c, 0x5a, 0x3d, 0x15, 0x0c, 0xf5, 0xf1, 0xd7, 0xe7, 0x03, 0x60, 0xac,
+	0xf5, 0x23, 0x02, 0x6f, 0x98, 0x78, 0x84, 0xdd, 0x01, 0x11, 0x63, 0x21, 0xda, 0xee, 0xb5, 0x68,
+	0x21, 0xd7, 0x43, 0xce, 0x55, 0xfc, 0x0f, 0xae, 0x08, 0x6a, 0x79, 0xf6, 0x61, 0x22, 0x20, 0x3a,
+	0x78, 0x0b, 0xe0, 0xce, 0xdf, 0xcf, 0x11, 0xc9, 0x70, 0xaf, 0xa9, 0xb5, 0xb4, 0xa7, 0xb5, 0x9e,
+	0xde, 0x3e, 0xea, 0xf7, 0x5e, 0x76, 0xb4, 0xfe, 0xf3, 0xa3, 0x6e, 0x47, 0x6b, 0xe8, 0x4f, 0x74,
+	0xad, 0x99, 0x11, 0x90, 0x08, 0xb3, 0x9b, 0x81, 0x4e, 0xbb, 0xdd, 0xca, 0x00, 0xb4, 0x0f, 0xc5,
+	0x4d, 0xa7, 0xdd, 0xd1, 0x8c, 0x5a, 0xaf, 0x6d, 0x64, 0x62, 0x68, 0x0f, 0xde, 0xd9, 0x74, 0xbb,
+	0x9a, 0xf1, 0x42, 0x6f, 0x68, 0x99, 0x78, 0x2e, 0x71, 0xfa, 0x5e, 0x12, 0xea, 0xcf, 0xce, 0xe7,
+	0x12, 0xb8, 0x98, 0x4b, 0xe0, 0xe7, 0x5c, 0x02, 0xef, 0x16, 0x92, 0x70, 0xb1, 0x90, 0x84, 0xef,
+	0x0b, 0x49, 0x78, 0x55, 0x5d, 0x23, 0x5c, 0x6e, 0xb6, 0x34, 0xc2, 0x26, 0x5b, 0x55, 0xea, 0x9b,
+	0xb5, 0x6f, 0x2b, 0x44, 0x36, 0xb7, 0xc2, 0xb7, 0xbb, 0xfa, 0x27, 0x00, 0x00, 0xff, 0xff, 0x17,
+	0xb7, 0x70, 0x19, 0x7e, 0x03, 0x00, 0x00,
 }
 
-func (m *PoolDelegation) Marshal() (dAtA []byte, err error) {
+func (m *Delegation) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -392,100 +220,12 @@ func (m *PoolDelegation) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *PoolDelegation) MarshalTo(dAtA []byte) (int, error) {
+func (m *Delegation) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *PoolDelegation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size := m.Shares.Size()
-		i -= size
-		if _, err := m.Shares.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintModels(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	if m.PoolID != 0 {
-		i = encodeVarintModels(dAtA, i, uint64(m.PoolID))
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.UserAddress) > 0 {
-		i -= len(m.UserAddress)
-		copy(dAtA[i:], m.UserAddress)
-		i = encodeVarintModels(dAtA, i, uint64(len(m.UserAddress)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *PoolDelegationResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *PoolDelegationResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *PoolDelegationResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.Balance.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintModels(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	{
-		size, err := m.Delegation.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintModels(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func (m *OperatorDelegation) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *OperatorDelegation) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *OperatorDelegation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *Delegation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -501,121 +241,30 @@ func (m *OperatorDelegation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				i = encodeVarintModels(dAtA, i, uint64(size))
 			}
 			i--
-			dAtA[i] = 0x1a
+			dAtA[i] = 0x22
 		}
 	}
-	if m.OperatorID != 0 {
-		i = encodeVarintModels(dAtA, i, uint64(m.OperatorID))
+	if m.TargetID != 0 {
+		i = encodeVarintModels(dAtA, i, uint64(m.TargetID))
 		i--
-		dAtA[i] = 0x10
+		dAtA[i] = 0x18
 	}
 	if len(m.UserAddress) > 0 {
 		i -= len(m.UserAddress)
 		copy(dAtA[i:], m.UserAddress)
 		i = encodeVarintModels(dAtA, i, uint64(len(m.UserAddress)))
 		i--
-		dAtA[i] = 0xa
+		dAtA[i] = 0x12
 	}
-	return len(dAtA) - i, nil
-}
-
-func (m *OperatorDelegationResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *OperatorDelegationResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *OperatorDelegationResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Balance) > 0 {
-		for iNdEx := len(m.Balance) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Balance[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintModels(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	{
-		size, err := m.Delegation.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintModels(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
-}
-
-func (m *ServiceDelegation) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ServiceDelegation) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ServiceDelegation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Shares) > 0 {
-		for iNdEx := len(m.Shares) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Shares[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintModels(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x1a
-		}
-	}
-	if m.ServiceID != 0 {
-		i = encodeVarintModels(dAtA, i, uint64(m.ServiceID))
+	if m.Type != 0 {
+		i = encodeVarintModels(dAtA, i, uint64(m.Type))
 		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.UserAddress) > 0 {
-		i -= len(m.UserAddress)
-		copy(dAtA[i:], m.UserAddress)
-		i = encodeVarintModels(dAtA, i, uint64(len(m.UserAddress)))
-		i--
-		dAtA[i] = 0xa
+		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *ServiceDelegationResponse) Marshal() (dAtA []byte, err error) {
+func (m *DelegationResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -625,12 +274,12 @@ func (m *ServiceDelegationResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *ServiceDelegationResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *DelegationResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *ServiceDelegationResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *DelegationResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -673,49 +322,21 @@ func encodeVarintModels(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *PoolDelegation) Size() (n int) {
+func (m *Delegation) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
+	if m.Type != 0 {
+		n += 1 + sovModels(uint64(m.Type))
+	}
 	l = len(m.UserAddress)
 	if l > 0 {
 		n += 1 + l + sovModels(uint64(l))
 	}
-	if m.PoolID != 0 {
-		n += 1 + sovModels(uint64(m.PoolID))
-	}
-	l = m.Shares.Size()
-	n += 1 + l + sovModels(uint64(l))
-	return n
-}
-
-func (m *PoolDelegationResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.Delegation.Size()
-	n += 1 + l + sovModels(uint64(l))
-	l = m.Balance.Size()
-	n += 1 + l + sovModels(uint64(l))
-	return n
-}
-
-func (m *OperatorDelegation) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.UserAddress)
-	if l > 0 {
-		n += 1 + l + sovModels(uint64(l))
-	}
-	if m.OperatorID != 0 {
-		n += 1 + sovModels(uint64(m.OperatorID))
+	if m.TargetID != 0 {
+		n += 1 + sovModels(uint64(m.TargetID))
 	}
 	if len(m.Shares) > 0 {
 		for _, e := range m.Shares {
@@ -726,46 +347,7 @@ func (m *OperatorDelegation) Size() (n int) {
 	return n
 }
 
-func (m *OperatorDelegationResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.Delegation.Size()
-	n += 1 + l + sovModels(uint64(l))
-	if len(m.Balance) > 0 {
-		for _, e := range m.Balance {
-			l = e.Size()
-			n += 1 + l + sovModels(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *ServiceDelegation) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.UserAddress)
-	if l > 0 {
-		n += 1 + l + sovModels(uint64(l))
-	}
-	if m.ServiceID != 0 {
-		n += 1 + sovModels(uint64(m.ServiceID))
-	}
-	if len(m.Shares) > 0 {
-		for _, e := range m.Shares {
-			l = e.Size()
-			n += 1 + l + sovModels(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *ServiceDelegationResponse) Size() (n int) {
+func (m *DelegationResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -788,7 +370,7 @@ func sovModels(x uint64) (n int) {
 func sozModels(x uint64) (n int) {
 	return sovModels(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *PoolDelegation) Unmarshal(dAtA []byte) error {
+func (m *Delegation) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -811,13 +393,32 @@ func (m *PoolDelegation) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: PoolDelegation: wiretype end group for non-group")
+			return fmt.Errorf("proto: Delegation: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: PoolDelegation: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: Delegation: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
+			}
+			m.Type = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowModels
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Type |= DelegationType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field UserAddress", wireType)
 			}
@@ -849,262 +450,11 @@ func (m *PoolDelegation) Unmarshal(dAtA []byte) error {
 			}
 			m.UserAddress = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PoolID", wireType)
-			}
-			m.PoolID = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowModels
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.PoolID |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
 		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Shares", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowModels
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthModels
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthModels
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Shares.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipModels(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthModels
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *PoolDelegationResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowModels
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: PoolDelegationResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: PoolDelegationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Delegation", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowModels
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthModels
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthModels
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Delegation.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Balance", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowModels
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthModels
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthModels
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Balance.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipModels(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthModels
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *OperatorDelegation) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowModels
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: OperatorDelegation: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: OperatorDelegation: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UserAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowModels
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthModels
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthModels
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.UserAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OperatorID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field TargetID", wireType)
 			}
-			m.OperatorID = 0
+			m.TargetID = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowModels
@@ -1114,12 +464,12 @@ func (m *OperatorDelegation) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.OperatorID |= uint32(b&0x7F) << shift
+				m.TargetID |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-		case 3:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Shares", wireType)
 			}
@@ -1174,7 +524,7 @@ func (m *OperatorDelegation) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *OperatorDelegationResponse) Unmarshal(dAtA []byte) error {
+func (m *DelegationResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1197,262 +547,10 @@ func (m *OperatorDelegationResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: OperatorDelegationResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: DelegationResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: OperatorDelegationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Delegation", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowModels
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthModels
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthModels
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Delegation.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Balance", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowModels
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthModels
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthModels
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Balance = append(m.Balance, types.Coin{})
-			if err := m.Balance[len(m.Balance)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipModels(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthModels
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ServiceDelegation) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowModels
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ServiceDelegation: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ServiceDelegation: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UserAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowModels
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthModels
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthModels
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.UserAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ServiceID", wireType)
-			}
-			m.ServiceID = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowModels
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ServiceID |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Shares", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowModels
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthModels
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthModels
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Shares = append(m.Shares, types.DecCoin{})
-			if err := m.Shares[len(m.Shares)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipModels(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthModels
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ServiceDelegationResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowModels
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ServiceDelegationResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ServiceDelegationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: DelegationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:

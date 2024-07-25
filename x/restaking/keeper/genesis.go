@@ -9,28 +9,23 @@ import (
 // ExportGenesis returns a new GenesisState instance containing the information currently present inside the store
 func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	return types.NewGenesis(
-		k.GetAllPoolDelegations(ctx),
-		k.GetAllServiceDelegations(ctx),
-		k.GetAllOperatorDelegations(ctx),
+		k.GetAllDelegations(ctx),
 		k.GetParams(ctx),
 	)
 }
 
 // InitGenesis initializes the genesis store using the provided data
 func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
-	// Store the pools delegations
-	for _, delegation := range data.PoolsDelegations {
-		k.SavePoolDelegation(ctx, delegation)
-	}
-
-	// Store the services delegations
-	for _, delegation := range data.ServicesDelegations {
-		k.SaveServiceDelegation(ctx, delegation)
-	}
-
-	// Store the operators delegations
-	for _, delegation := range data.OperatorsDelegations {
-		k.SaveOperatorDelegation(ctx, delegation)
+	// Store the delegations
+	for _, delegation := range data.Delegations {
+		switch delegation.Type {
+		case types.DELEGATION_TYPE_POOL:
+			k.SavePoolDelegation(ctx, delegation)
+		case types.DELEGATION_TYPE_OPERATOR:
+			k.SaveOperatorDelegation(ctx, delegation)
+		case types.DELEGATION_TYPE_SERVICE:
+			k.SaveServiceDelegation(ctx, delegation)
+		}
 	}
 
 	// Store the params

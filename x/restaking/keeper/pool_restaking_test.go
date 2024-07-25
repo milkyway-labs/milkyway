@@ -13,7 +13,7 @@ func (suite *KeeperTestSuite) TestKeeper_SavePoolDelegation() {
 		name       string
 		setup      func()
 		store      func(ctx sdk.Context)
-		delegation types.PoolDelegation
+		delegation types.Delegation
 		check      func(ctx sdk.Context)
 	}{
 		{
@@ -21,7 +21,7 @@ func (suite *KeeperTestSuite) TestKeeper_SavePoolDelegation() {
 			delegation: types.NewPoolDelegation(
 				1,
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				sdkmath.LegacyNewDec(100),
+				sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 			),
 			check: func(ctx sdk.Context) {
 				store := ctx.KVStore(suite.storeKey)
@@ -30,13 +30,13 @@ func (suite *KeeperTestSuite) TestKeeper_SavePoolDelegation() {
 				delegationBz := store.Get(types.UserPoolDelegationStoreKey("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", 1))
 				suite.Require().NotNil(delegationBz)
 
-				delegation, err := types.UnmarshalPoolDelegation(suite.cdc, delegationBz)
+				delegation, err := types.UnmarshalDelegation(suite.cdc, delegationBz)
 				suite.Require().NoError(err)
 
 				suite.Require().Equal(types.NewPoolDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					sdkmath.LegacyNewDec(100),
+					sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 				), delegation)
 
 				// Make sure the pool-user delegation key exists
@@ -74,7 +74,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetPoolDelegation() {
 		poolID        uint32
 		userAddress   string
 		expFound      bool
-		expDelegation types.PoolDelegation
+		expDelegation types.Delegation
 		check         func(ctx sdk.Context)
 	}{
 		{
@@ -89,7 +89,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetPoolDelegation() {
 				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-					sdkmath.LegacyNewDec(100),
+					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(100))),
 				))
 			},
 			poolID:      1,
@@ -98,7 +98,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetPoolDelegation() {
 			expDelegation: types.NewPoolDelegation(
 				1,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				sdkmath.LegacyNewDec(100),
+				sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(100))),
 			),
 		},
 	}
@@ -299,7 +299,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 				suite.Require().Equal(types.NewPoolDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					sdkmath.LegacyNewDec(100),
+					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(100))),
 				), delegation)
 
 				// Make sure the user balance has been reduced properly
@@ -363,7 +363,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 				suite.Require().Equal(types.NewPoolDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					sdkmath.LegacyNewDec(500),
+					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(500))),
 				), delegation)
 
 				// Make sure the user balance has been reduced properly
@@ -402,7 +402,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					sdkmath.LegacyNewDec(100),
+					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(100))),
 				))
 
 				// Send some funds to the user
@@ -434,7 +434,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 				suite.Require().Equal(types.NewPoolDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					sdkmath.LegacyNewDecWithPrec(25625, 2), // 100 (existing) + 156.25 (new)
+					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDecWithPrec(25625, 2))), // 100 (existing) + 156.25 (new)
 				), delegation)
 
 				// Make sure the user balance has been reduced properly

@@ -42,19 +42,19 @@ func (k Querier) PoolDelegations(goCtx context.Context, req *types.QueryPoolDele
 	delegationsStore := prefix.NewStore(store, types.PoolDelegationPrefix)
 
 	// Query the pool delegations for the given pool id
-	delegations, pageRes, err := query.GenericFilteredPaginate(k.cdc, delegationsStore, req.Pagination, func(key []byte, delegation *types.PoolDelegation) (*types.PoolDelegation, error) {
-		if delegation.PoolID != req.PoolId {
+	delegations, pageRes, err := query.GenericFilteredPaginate(k.cdc, delegationsStore, req.Pagination, func(key []byte, delegation *types.Delegation) (*types.Delegation, error) {
+		if delegation.TargetID != req.PoolId {
 			return nil, nil
 		}
 		return delegation, nil
-	}, func() *types.PoolDelegation {
-		return &types.PoolDelegation{}
+	}, func() *types.Delegation {
+		return &types.Delegation{}
 	})
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	poolDelegations := make([]types.PoolDelegationResponse, len(delegations))
+	poolDelegations := make([]types.DelegationResponse, len(delegations))
 	for i, delegation := range delegations {
 		response, err := PoolDelegationToPoolDelegationResponse(ctx, k.Keeper, *delegation)
 		if err != nil {
@@ -116,19 +116,19 @@ func (k Querier) OperatorDelegations(goCtx context.Context, req *types.QueryOper
 	delegationsStore := prefix.NewStore(store, types.OperatorDelegationPrefix)
 
 	// Query the operator delegations for the given pool id
-	delegations, pageRes, err := query.GenericFilteredPaginate(k.cdc, delegationsStore, req.Pagination, func(key []byte, delegation *types.OperatorDelegation) (*types.OperatorDelegation, error) {
-		if delegation.OperatorID != req.OperatorId {
+	delegations, pageRes, err := query.GenericFilteredPaginate(k.cdc, delegationsStore, req.Pagination, func(key []byte, delegation *types.Delegation) (*types.Delegation, error) {
+		if delegation.TargetID != req.OperatorId {
 			return nil, nil
 		}
 		return delegation, nil
-	}, func() *types.OperatorDelegation {
-		return &types.OperatorDelegation{}
+	}, func() *types.Delegation {
+		return &types.Delegation{}
 	})
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	operatorDelegations := make([]types.OperatorDelegationResponse, len(delegations))
+	operatorDelegations := make([]types.DelegationResponse, len(delegations))
 	for i, delegation := range delegations {
 		response, err := OperatorDelegationToOperatorDelegationResponse(ctx, k.Keeper, *delegation)
 		if err != nil {
@@ -190,19 +190,19 @@ func (k Querier) ServiceDelegations(goCtx context.Context, req *types.QueryServi
 	delegationsStore := prefix.NewStore(store, types.ServiceDelegationPrefix)
 
 	// Query the service delegations for the given pool id
-	delegations, pageRes, err := query.GenericFilteredPaginate(k.cdc, delegationsStore, req.Pagination, func(key []byte, delegation *types.ServiceDelegation) (*types.ServiceDelegation, error) {
-		if delegation.ServiceID != req.ServiceId {
+	delegations, pageRes, err := query.GenericFilteredPaginate(k.cdc, delegationsStore, req.Pagination, func(key []byte, delegation *types.Delegation) (*types.Delegation, error) {
+		if delegation.TargetID != req.ServiceId {
 			return nil, nil
 		}
 		return delegation, nil
-	}, func() *types.ServiceDelegation {
-		return &types.ServiceDelegation{}
+	}, func() *types.Delegation {
+		return &types.Delegation{}
 	})
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	serviceDelegationResponses := make([]types.ServiceDelegationResponse, len(delegations))
+	serviceDelegationResponses := make([]types.DelegationResponse, len(delegations))
 	for i, delegation := range delegations {
 		response, err := ServiceDelegationToServiceDelegationResponse(ctx, k.Keeper, *delegation)
 		if err != nil {
@@ -264,9 +264,9 @@ func (k Querier) DelegatorPoolDelegations(goCtx context.Context, req *types.Quer
 	delStore := prefix.NewStore(store, types.UserPoolDelegationsStorePrefix(req.DelegatorAddress))
 
 	// Get the delegations
-	var delegations []types.PoolDelegation
+	var delegations []types.Delegation
 	pageRes, err := query.Paginate(delStore, req.Pagination, func(key []byte, value []byte) error {
-		delegation, err := types.UnmarshalPoolDelegation(k.cdc, value)
+		delegation, err := types.UnmarshalDelegation(k.cdc, value)
 		if err != nil {
 			return err
 		}
@@ -277,7 +277,7 @@ func (k Querier) DelegatorPoolDelegations(goCtx context.Context, req *types.Quer
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	delegationsResponses := make([]types.PoolDelegationResponse, len(delegations))
+	delegationsResponses := make([]types.DelegationResponse, len(delegations))
 	for i, delegation := range delegations {
 		response, err := PoolDelegationToPoolDelegationResponse(ctx, k.Keeper, delegation)
 		if err != nil {
@@ -309,9 +309,9 @@ func (k Querier) DelegatorOperatorDelegations(goCtx context.Context, req *types.
 	delStore := prefix.NewStore(store, types.UserOperatorDelegationsStorePrefix(req.DelegatorAddress))
 
 	// Get the delegations
-	var delegations []types.OperatorDelegation
+	var delegations []types.Delegation
 	pageRes, err := query.Paginate(delStore, req.Pagination, func(key []byte, value []byte) error {
-		delegation, err := types.UnmarshalOperatorDelegation(k.cdc, value)
+		delegation, err := types.UnmarshalDelegation(k.cdc, value)
 		if err != nil {
 			return err
 		}
@@ -322,7 +322,7 @@ func (k Querier) DelegatorOperatorDelegations(goCtx context.Context, req *types.
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	delegationsResponses := make([]types.OperatorDelegationResponse, len(delegations))
+	delegationsResponses := make([]types.DelegationResponse, len(delegations))
 	for i, delegation := range delegations {
 		response, err := OperatorDelegationToOperatorDelegationResponse(ctx, k.Keeper, delegation)
 		if err != nil {
@@ -354,9 +354,9 @@ func (k Querier) DelegatorServiceDelegations(goCtx context.Context, req *types.Q
 	delStore := prefix.NewStore(store, types.UserServiceDelegationsStorePrefix(req.DelegatorAddress))
 
 	// Get the delegations
-	var delegations []types.ServiceDelegation
+	var delegations []types.Delegation
 	pageRes, err := query.Paginate(delStore, req.Pagination, func(key []byte, value []byte) error {
-		delegation, err := types.UnmarshalServiceDelegation(k.cdc, value)
+		delegation, err := types.UnmarshalDelegation(k.cdc, value)
 		if err != nil {
 			return err
 		}
@@ -367,7 +367,7 @@ func (k Querier) DelegatorServiceDelegations(goCtx context.Context, req *types.Q
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
-	delegationsResponses := make([]types.ServiceDelegationResponse, len(delegations))
+	delegationsResponses := make([]types.DelegationResponse, len(delegations))
 	for i, delegation := range delegations {
 		response, err := ServiceDelegationToServiceDelegationResponse(ctx, k.Keeper, delegation)
 		if err != nil {
@@ -401,12 +401,12 @@ func (k Querier) DelegatorPools(goCtx context.Context, req *types.QueryDelegator
 	// Get the pools
 	var pools []poolstypes.Pool
 	pageRes, err := query.Paginate(delStore, req.Pagination, func(key []byte, value []byte) error {
-		delegation, err := types.UnmarshalPoolDelegation(k.cdc, value)
+		delegation, err := types.UnmarshalDelegation(k.cdc, value)
 		if err != nil {
 			return err
 		}
 
-		pool, found := k.poolsKeeper.GetPool(ctx, delegation.PoolID)
+		pool, found := k.poolsKeeper.GetPool(ctx, delegation.TargetID)
 		if !found {
 			return poolstypes.ErrPoolNotFound
 		}
@@ -445,7 +445,7 @@ func (k Querier) DelegatorPool(goCtx context.Context, req *types.QueryDelegatorP
 		return nil, status.Error(codes.NotFound, "pool delegation not found")
 	}
 
-	pool, found := k.poolsKeeper.GetPool(ctx, delegation.PoolID)
+	pool, found := k.poolsKeeper.GetPool(ctx, delegation.TargetID)
 	if !found {
 		return nil, status.Error(codes.NotFound, "pool not found")
 	}
@@ -474,12 +474,12 @@ func (k Querier) DelegatorOperators(goCtx context.Context, req *types.QueryDeleg
 	// Get the operators
 	var operators []operatorstypes.Operator
 	pageRes, err := query.Paginate(delStore, req.Pagination, func(key []byte, value []byte) error {
-		delegation, err := types.UnmarshalOperatorDelegation(k.cdc, value)
+		delegation, err := types.UnmarshalDelegation(k.cdc, value)
 		if err != nil {
 			return err
 		}
 
-		operator, found := k.operatorsKeeper.GetOperator(ctx, delegation.OperatorID)
+		operator, found := k.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
 		if !found {
 			return operatorstypes.ErrOperatorNotFound
 		}
@@ -518,7 +518,7 @@ func (k Querier) DelegatorOperator(goCtx context.Context, req *types.QueryDelega
 		return nil, status.Error(codes.NotFound, "operator delegation not found")
 	}
 
-	operator, found := k.operatorsKeeper.GetOperator(ctx, delegation.OperatorID)
+	operator, found := k.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
 	if !found {
 		return nil, status.Error(codes.NotFound, "operator not found")
 	}
@@ -547,12 +547,12 @@ func (k Querier) DelegatorServices(goCtx context.Context, req *types.QueryDelega
 	// Get the services
 	var services []servicestypes.Service
 	pageRes, err := query.Paginate(delStore, req.Pagination, func(key []byte, value []byte) error {
-		delegation, err := types.UnmarshalServiceDelegation(k.cdc, value)
+		delegation, err := types.UnmarshalDelegation(k.cdc, value)
 		if err != nil {
 			return err
 		}
 
-		pool, found := k.servicesKeeper.GetService(ctx, delegation.ServiceID)
+		pool, found := k.servicesKeeper.GetService(ctx, delegation.TargetID)
 		if !found {
 			return servicestypes.ErrServiceNotFound
 		}
@@ -591,7 +591,7 @@ func (k Querier) DelegatorService(goCtx context.Context, req *types.QueryDelegat
 		return nil, status.Error(codes.NotFound, "service delegation not found")
 	}
 
-	service, found := k.servicesKeeper.GetService(ctx, delegation.ServiceID)
+	service, found := k.servicesKeeper.GetService(ctx, delegation.TargetID)
 	if !found {
 		return nil, status.Error(codes.NotFound, "service not found")
 	}
@@ -611,48 +611,35 @@ func (k Querier) Params(goCtx context.Context, _ *types.QueryParamsRequest) (*ty
 // --------------------------------------------------------------------------------------------------------------------
 
 // PoolDelegationToPoolDelegationResponse converts a PoolDelegation to a PoolDelegationResponse
-func PoolDelegationToPoolDelegationResponse(ctx sdk.Context, k *Keeper, delegation types.PoolDelegation) (types.PoolDelegationResponse, error) {
-	pool, found := k.poolsKeeper.GetPool(ctx, delegation.PoolID)
+func PoolDelegationToPoolDelegationResponse(ctx sdk.Context, k *Keeper, delegation types.Delegation) (types.DelegationResponse, error) {
+	pool, found := k.poolsKeeper.GetPool(ctx, delegation.TargetID)
 	if !found {
-		return types.PoolDelegationResponse{}, poolstypes.ErrPoolNotFound
+		return types.DelegationResponse{}, poolstypes.ErrPoolNotFound
 	}
 
-	return types.NewPoolDelegationResponse(
-		pool.ID,
-		delegation.UserAddress,
-		delegation.Shares,
-		sdk.NewCoin(pool.Denom, pool.TokensFromShares(delegation.Shares).TruncateInt()),
-	), nil
+	shareAmount := delegation.Shares.AmountOf(pool.GetSharesDenom(pool.Denom))
+	truncatedBalance := sdk.NewCoins(sdk.NewCoin(pool.Denom, pool.TokensFromShares(shareAmount).TruncateInt()))
+	return types.NewDelegationResponse(delegation, truncatedBalance), nil
 }
 
 // OperatorDelegationToOperatorDelegationResponse converts a OperatorDelegation to a OperatorDelegationResponse
-func OperatorDelegationToOperatorDelegationResponse(ctx sdk.Context, k *Keeper, delegation types.OperatorDelegation) (types.OperatorDelegationResponse, error) {
-	operator, found := k.operatorsKeeper.GetOperator(ctx, delegation.OperatorID)
+func OperatorDelegationToOperatorDelegationResponse(ctx sdk.Context, k *Keeper, delegation types.Delegation) (types.DelegationResponse, error) {
+	operator, found := k.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
 	if !found {
-		return types.OperatorDelegationResponse{}, operatorstypes.ErrOperatorNotFound
+		return types.DelegationResponse{}, operatorstypes.ErrOperatorNotFound
 	}
 
 	truncatedBalance, _ := operator.TokensFromShares(delegation.Shares).TruncateDecimal()
-	return types.NewOperatorDelegationResponse(
-		operator.ID,
-		delegation.UserAddress,
-		delegation.Shares,
-		truncatedBalance,
-	), nil
+	return types.NewDelegationResponse(delegation, truncatedBalance), nil
 }
 
 // ServiceDelegationToServiceDelegationResponse converts a ServiceDelegation to a ServiceDelegationResponse
-func ServiceDelegationToServiceDelegationResponse(ctx sdk.Context, k *Keeper, delegation types.ServiceDelegation) (types.ServiceDelegationResponse, error) {
-	service, found := k.servicesKeeper.GetService(ctx, delegation.ServiceID)
+func ServiceDelegationToServiceDelegationResponse(ctx sdk.Context, k *Keeper, delegation types.Delegation) (types.DelegationResponse, error) {
+	service, found := k.servicesKeeper.GetService(ctx, delegation.TargetID)
 	if !found {
-		return types.ServiceDelegationResponse{}, servicestypes.ErrServiceNotFound
+		return types.DelegationResponse{}, servicestypes.ErrServiceNotFound
 	}
 
 	truncatedBalance, _ := service.TokensFromShares(delegation.Shares).TruncateDecimal()
-	return types.NewServiceDelegationResponse(
-		service.ID,
-		delegation.UserAddress,
-		delegation.Shares,
-		truncatedBalance,
-	), nil
+	return types.NewDelegationResponse(delegation, truncatedBalance), nil
 }

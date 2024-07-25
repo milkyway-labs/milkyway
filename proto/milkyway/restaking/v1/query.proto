@@ -171,8 +171,7 @@ message QueryPoolDelegationsRequest {
 // RPC method.
 message QueryPoolDelegationsResponse {
   // Delegations is the list of delegations
-  repeated PoolDelegationResponse delegations = 1
-      [ (gogoproto.nullable) = false ];
+  repeated DelegationResponse delegations = 1 [ (gogoproto.nullable) = false ];
 
   // Pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -193,7 +192,7 @@ message QueryPoolDelegationRequest {
 // method.
 message QueryPoolDelegationResponse {
   // Delegation is the delegation
-  PoolDelegationResponse delegation = 1 [ (gogoproto.nullable) = false ];
+  DelegationResponse delegation = 1 [ (gogoproto.nullable) = false ];
 }
 
 // QueryOperatorDelegationsRequest is request type for the
@@ -210,8 +209,7 @@ message QueryOperatorDelegationsRequest {
 // Query/OperatorDelegations RPC method.
 message QueryOperatorDelegationsResponse {
   // Delegations is the list of delegations
-  repeated OperatorDelegationResponse delegations = 1
-      [ (gogoproto.nullable) = false ];
+  repeated DelegationResponse delegations = 1 [ (gogoproto.nullable) = false ];
 
   // Pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -232,7 +230,7 @@ message QueryOperatorDelegationRequest {
 // Query/OperatorDelegation RPC method.
 message QueryOperatorDelegationResponse {
   // Delegation is the delegation
-  OperatorDelegationResponse delegation = 1 [ (gogoproto.nullable) = false ];
+  DelegationResponse delegation = 1 [ (gogoproto.nullable) = false ];
 }
 
 // QueryServiceDelegationsRequest is request type for the
@@ -249,8 +247,7 @@ message QueryServiceDelegationsRequest {
 // Query/ServiceDelegations RPC method.
 message QueryServiceDelegationsResponse {
   // Delegations is the list of delegations
-  repeated ServiceDelegationResponse delegations = 1
-      [ (gogoproto.nullable) = false ];
+  repeated DelegationResponse delegations = 1 [ (gogoproto.nullable) = false ];
 
   // Pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -271,7 +268,7 @@ message QueryServiceDelegationRequest {
 // Query/ServiceDelegation RPC method.
 message QueryServiceDelegationResponse {
   // Delegation is the delegation
-  ServiceDelegationResponse delegation = 1 [ (gogoproto.nullable) = false ];
+  DelegationResponse delegation = 1 [ (gogoproto.nullable) = false ];
 }
 
 // QueryDelegatorPoolDelegationsRequest is request type for the
@@ -289,8 +286,7 @@ message QueryDelegatorPoolDelegationsRequest {
 // Query/DelegatorPoolDelegations RPC method.
 message QueryDelegatorPoolDelegationsResponse {
   // Delegations is the list of delegations
-  repeated PoolDelegationResponse delegations = 1
-      [ (gogoproto.nullable) = false ];
+  repeated DelegationResponse delegations = 1 [ (gogoproto.nullable) = false ];
 
   // Pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -311,8 +307,7 @@ message QueryDelegatorOperatorDelegationsRequest {
 // Query/DelegatorOperatorDelegations RPC method.
 message QueryDelegatorOperatorDelegationsResponse {
   // Delegations is the list of delegations
-  repeated OperatorDelegationResponse delegations = 1
-      [ (gogoproto.nullable) = false ];
+  repeated DelegationResponse delegations = 1 [ (gogoproto.nullable) = false ];
 
   // Pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -333,8 +328,7 @@ message QueryDelegatorServiceDelegationsRequest {
 // Query/DelegatorServiceDelegations RPC method.
 message QueryDelegatorServiceDelegationsResponse {
   // Delegations is the list of delegations
-  repeated ServiceDelegationResponse delegations = 1
-      [ (gogoproto.nullable) = false ];
+  repeated DelegationResponse delegations = 1 [ (gogoproto.nullable) = false ];
 
   // Pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;

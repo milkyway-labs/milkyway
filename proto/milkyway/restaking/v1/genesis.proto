@@ -13,15 +13,6 @@ message GenesisState {
   // Params defines the parameters of the module.
   Params params = 1 [ (gogoproto.nullable) = false ];
 
-  // PoolDelegations represents the delegations to pools.
-  repeated PoolDelegation pools_delegations = 2
-      [ (gogoproto.nullable) = false ];
-
-  // ServiceDelegations represents the delegations to services.
-  repeated ServiceDelegation services_delegations = 3
-      [ (gogoproto.nullable) = false ];
-
-  // OperatorDelegations represents the delegations to operators.
-  repeated OperatorDelegation operators_delegations = 4
-      [ (gogoproto.nullable) = false ];
+  // Delegations represents the delegations.
+  repeated Delegation delegations = 2 [ (gogoproto.nullable) = false ];
 }

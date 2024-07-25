@@ -13,7 +13,7 @@ import (
 func TestPoolDelegation_Validate(t *testing.T) {
 	testCases := []struct {
 		name      string
-		entry     types.PoolDelegation
+		entry     types.Delegation
 		shouldErr bool
 	}{
 		{
@@ -21,7 +21,7 @@ func TestPoolDelegation_Validate(t *testing.T) {
 			entry: types.NewPoolDelegation(
 				0,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				sdkmath.LegacyNewDec(100),
+				sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 			),
 			shouldErr: true,
 		},
@@ -30,7 +30,7 @@ func TestPoolDelegation_Validate(t *testing.T) {
 			entry: types.NewPoolDelegation(
 				1,
 				"",
-				sdkmath.LegacyNewDec(100),
+				sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 			),
 			shouldErr: true,
 		},
@@ -39,7 +39,7 @@ func TestPoolDelegation_Validate(t *testing.T) {
 			entry: types.NewPoolDelegation(
 				1,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				sdkmath.LegacyNewDec(-100),
+				sdk.DecCoins{sdk.DecCoin{Denom: "umilk", Amount: sdkmath.LegacyNewDec(-100)}},
 			),
 			shouldErr: true,
 		},
@@ -48,7 +48,7 @@ func TestPoolDelegation_Validate(t *testing.T) {
 			entry: types.NewPoolDelegation(
 				1,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				sdkmath.LegacyNewDec(100),
+				sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 			),
 			shouldErr: false,
 		},
@@ -71,7 +71,7 @@ func TestPoolDelegation_Validate(t *testing.T) {
 func TestServiceDelegation_Validate(t *testing.T) {
 	testCases := []struct {
 		name      string
-		entry     types.ServiceDelegation
+		entry     types.Delegation
 		shouldErr bool
 	}{
 		{
@@ -129,7 +129,7 @@ func TestServiceDelegation_Validate(t *testing.T) {
 func TestOperatorDelegation_Validate(t *testing.T) {
 	testCases := []struct {
 		name      string
-		entry     types.OperatorDelegation
+		entry     types.Delegation
 		shouldErr bool
 	}{
 		{

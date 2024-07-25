@@ -24,26 +24,26 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					sdkmath.LegacyNewDec(100),
+					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(100))),
 				))
 				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
 					2,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					sdkmath.LegacyNewDec(200),
+					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/2/utia", sdkmath.LegacyNewDec(200))),
 				))
 			},
 			expGenesis: &types.GenesisState{
 				Params: types.DefaultParams(),
-				PoolsDelegations: []types.PoolDelegation{
+				Delegations: []types.Delegation{
 					types.NewPoolDelegation(
 						1,
 						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-						sdkmath.LegacyNewDec(100),
+						sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(100))),
 					),
 					types.NewPoolDelegation(
 						2,
 						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-						sdkmath.LegacyNewDec(200),
+						sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/2/utia", sdkmath.LegacyNewDec(200))),
 					),
 				},
 			},
@@ -70,7 +70,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			},
 			expGenesis: &types.GenesisState{
 				Params: types.DefaultParams(),
-				ServicesDelegations: []types.ServiceDelegation{
+				Delegations: []types.Delegation{
 					types.NewServiceDelegation(
 						1,
 						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -110,7 +110,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			},
 			expGenesis: &types.GenesisState{
 				Params: types.DefaultParams(),
-				OperatorsDelegations: []types.OperatorDelegation{
+				Delegations: []types.Delegation{
 					types.NewOperatorDelegation(
 						1,
 						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -170,16 +170,16 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 			name: "pool delegations are stored properly",
 			genesis: &types.GenesisState{
 				Params: types.DefaultParams(),
-				PoolsDelegations: []types.PoolDelegation{
+				Delegations: []types.Delegation{
 					types.NewPoolDelegation(
 						1,
 						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-						sdkmath.LegacyNewDec(100),
+						sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 					),
 					types.NewPoolDelegation(
 						2,
 						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-						sdkmath.LegacyNewDec(200),
+						sdk.NewDecCoins(sdk.NewDecCoinFromDec("utia", sdkmath.LegacyNewDec(200))),
 					),
 				},
 			},
@@ -195,7 +195,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 			name: "services delegations are stored properly",
 			genesis: &types.GenesisState{
 				Params: types.DefaultParams(),
-				ServicesDelegations: []types.ServiceDelegation{
+				Delegations: []types.Delegation{
 					types.NewServiceDelegation(
 						1,
 						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -224,7 +224,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 			name: "operators delegations are stored properly",
 			genesis: &types.GenesisState{
 				Params: types.DefaultParams(),
-				OperatorsDelegations: []types.OperatorDelegation{
+				Delegations: []types.Delegation{
 					types.NewOperatorDelegation(
 						1,
 						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",

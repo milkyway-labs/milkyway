@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"fmt"
-
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -11,27 +9,27 @@ import (
 )
 
 // SavePoolDelegation stores the given pool delegation in the store
-func (k *Keeper) SavePoolDelegation(ctx sdk.Context, delegation types.PoolDelegation) {
+func (k *Keeper) SavePoolDelegation(ctx sdk.Context, delegation types.Delegation) {
 	store := ctx.KVStore(k.storeKey)
 
 	// Marshal and store the delegation
-	delegationBz := types.MustMarshalPoolDelegation(k.cdc, delegation)
-	store.Set(types.UserPoolDelegationStoreKey(delegation.UserAddress, delegation.PoolID), delegationBz)
+	delegationBz := types.MustMarshalDelegation(k.cdc, delegation)
+	store.Set(types.UserPoolDelegationStoreKey(delegation.UserAddress, delegation.TargetID), delegationBz)
 
 	// Store the delegation in the delegations by pool ID store
-	store.Set(types.DelegationByPoolIDStoreKey(delegation.PoolID, delegation.UserAddress), []byte{})
+	store.Set(types.DelegationByPoolIDStoreKey(delegation.TargetID, delegation.UserAddress), []byte{})
 }
 
 // GetPoolDelegation retrieves the delegation for the given user and pool
 // If the delegation does not exist, false is returned instead
-func (k *Keeper) GetPoolDelegation(ctx sdk.Context, poolID uint32, userAddress string) (types.PoolDelegation, bool) {
+func (k *Keeper) GetPoolDelegation(ctx sdk.Context, poolID uint32, userAddress string) (types.Delegation, bool) {
 	store := ctx.KVStore(k.storeKey)
 	delegationBz := store.Get(types.UserPoolDelegationStoreKey(userAddress, poolID))
 	if delegationBz == nil {
-		return types.PoolDelegation{}, false
+		return types.Delegation{}, false
 	}
 
-	return types.MustUnmarshalPoolDelegation(k.cdc, delegationBz), true
+	return types.MustUnmarshalDelegation(k.cdc, delegationBz), true
 }
 
 // AddPoolTokensAndShares adds the given amount of tokens to the pool and returns the added shares
@@ -63,13 +61,11 @@ func (k *Keeper) DelegateToPool(ctx sdk.Context, amount sdk.Coin, delegator stri
 	return k.PerformDelegation(ctx, types.DelegationData{
 		Amount:    coins,
 		Delegator: delegator,
-		Receiver:  &pool,
+		Target:    &pool,
 		GetDelegation: func(ctx sdk.Context, receiverID uint32, delegator string) (types.Delegation, bool) {
 			return k.GetPoolDelegation(ctx, receiverID, delegator)
 		},
-		BuildDelegation: func(receiverID uint32, delegator string) types.Delegation {
-			return types.NewPoolDelegation(receiverID, delegator, sdkmath.LegacyZeroDec())
-		},
+		BuildDelegation: types.NewPoolDelegation,
 		UpdateDelegation: func(ctx sdk.Context, delegation types.Delegation) (sdk.DecCoins, error) {
 			// Calculate the new shares and add the tokens to the pool
 			_, newShares, err := k.AddPoolTokensAndShares(ctx, pool, amount.Amount)
@@ -78,14 +74,11 @@ func (k *Keeper) DelegateToPool(ctx sdk.Context, amount sdk.Coin, delegator stri
 			}
 
 			// Update the delegation shares
-			poolDelegation, ok := delegation.(types.PoolDelegation)
-			if !ok {
-				return nil, fmt.Errorf("invalid delegation type: %T", delegation)
-			}
-			poolDelegation.Shares = poolDelegation.Shares.Add(newShares)
+			newDecShares := sdk.NewDecCoinFromDec(pool.GetSharesDenom(amount.Denom), newShares)
+			delegation.Shares = delegation.Shares.Add(newDecShares)
 
 			// Store the updated delegation
-			k.SavePoolDelegation(ctx, poolDelegation)
+			k.SavePoolDelegation(ctx, delegation)
 
 			sharesDenom := pool.GetSharesDenom(amount.Denom)
 			return sdk.NewDecCoins(sdk.NewDecCoinFromDec(sharesDenom, newShares)), err

@@ -4,8 +4,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// DelegationReceiver is an interface that represents the receiver of a delegation (operator, pool, service, etc).
-type DelegationReceiver interface {
+// DelegationTarget is an interface that represents the target of a delegation (operator, pool, service, etc).
+type DelegationTarget interface {
 	GetID() uint32
 	GetAddress() string
 	InvalidExRate() bool
@@ -15,15 +15,10 @@ type DelegationReceiver interface {
 type DelegationGetter func(ctx sdk.Context, receiverID uint32, delegator string) (Delegation, bool)
 
 // DelegationBuilder represents a function that allows to build a new delegation
-type DelegationBuilder func(receiverID uint32, delegator string) Delegation
+type DelegationBuilder func(targetID uint32, delegator string, shares sdk.DecCoins) Delegation
 
 // DelegationUpdater represents a function that allows to update an existing delegation
 type DelegationUpdater func(ctx sdk.Context, delegation Delegation) (newShares sdk.DecCoins, err error)
-
-// Delegation is an interface that represents a delegation object.
-type Delegation interface {
-	isDelegation()
-}
 
 // DelegationHooks contains the hooks that can be called before and after a delegation is modified.
 type DelegationHooks struct {
@@ -36,7 +31,7 @@ type DelegationHooks struct {
 type DelegationData struct {
 	Amount           sdk.Coins
 	Delegator        string
-	Receiver         DelegationReceiver
+	Target           DelegationTarget
 	GetDelegation    DelegationGetter
 	BuildDelegation  DelegationBuilder
 	UpdateDelegation DelegationUpdater
