@@ -40,8 +40,8 @@ func GetQueryCmd() *cobra.Command {
 // GetPoolsQueryCmd returns the command allowing to query pools
 func GetPoolsQueryCmd() *cobra.Command {
 	queryCmd := &cobra.Command{
-		Use:   "pools",
-		Short: "Querying commands for restaking pools",
+		Use:   "pool",
+		Short: "Querying commands for a restaking pool",
 	}
 
 	queryCmd.AddCommand(
@@ -131,8 +131,8 @@ func getPoolDelegationQueryCmd() *cobra.Command {
 // GetOperatorsQueryCmd returns the command allowing to query operators
 func GetOperatorsQueryCmd() *cobra.Command {
 	queryCmd := &cobra.Command{
-		Use:   "operators",
-		Short: "Querying commands for restaking operators",
+		Use:   "operator",
+		Short: "Querying commands for a restaking operator",
 	}
 
 	queryCmd.AddCommand(
@@ -222,8 +222,8 @@ func getOperatorDelegationQueryCmd() *cobra.Command {
 // GetServicesQueryCmd returns the command allowing to perform queries
 func GetServicesQueryCmd() *cobra.Command {
 	queryCmd := &cobra.Command{
-		Use:   "services",
-		Short: "Querying commands for restaking services",
+		Use:   "service",
+		Short: "Querying commands for a restaking service",
 	}
 
 	queryCmd.AddCommand(
