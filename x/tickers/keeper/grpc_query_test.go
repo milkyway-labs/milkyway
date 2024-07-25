@@ -10,7 +10,7 @@ func (s *KeeperTestSuite) TestQueryTicker() {
 	_, err := s.msgServer.RegisterTicker(s.Ctx, types.NewMsgRegisterTicker(s.authority, "umilk", "MILK"))
 	s.Require().NoError(err)
 
-	for _, tc := range []struct {
+	testCases := []struct {
 		name        string
 		req         *types.QueryTickerRequest
 		expectedErr string
@@ -36,7 +36,8 @@ func (s *KeeperTestSuite) TestQueryTicker() {
 			"rpc error: code = NotFound desc = ticker for denom uatom not registered",
 			nil,
 		},
-	} {
+	}
+	for _, tc := range testCases {
 		s.Run(tc.name, func() {
 			resp, err := s.queryServer.Ticker(s.Ctx, tc.req)
 			if tc.expectedErr == "" {
@@ -56,7 +57,7 @@ func (s *KeeperTestSuite) TestQueryDenoms() {
 	_, err = s.msgServer.RegisterTicker(s.Ctx, types.NewMsgRegisterTicker(s.authority, "umilk2", "MILK"))
 	s.Require().NoError(err)
 
-	for _, tc := range []struct {
+	testCases := []struct {
 		name        string
 		req         *types.QueryDenomsRequest
 		expectedErr string
@@ -86,7 +87,8 @@ func (s *KeeperTestSuite) TestQueryDenoms() {
 				fmt.Println(resp.Denoms)
 			},
 		},
-	} {
+	}
+	for _, tc := range testCases {
 		s.Run(tc.name, func() {
 			resp, err := s.queryServer.Denoms(s.Ctx, tc.req)
 			if tc.expectedErr == "" {

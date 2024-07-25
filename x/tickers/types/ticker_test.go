@@ -9,7 +9,7 @@ import (
 )
 
 func TestValidateTicker(t *testing.T) {
-	for _, tc := range []struct {
+	testCases := []struct {
 		name        string
 		ticker      string
 		expectedErr string
@@ -39,7 +39,8 @@ func TestValidateTicker(t *testing.T) {
 			"WHATALONGTICKER",
 			"ticker too long",
 		},
-	} {
+	}
+	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			err := types.ValidateTicker(tc.ticker)
 			if tc.expectedErr == "" {
