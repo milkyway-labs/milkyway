@@ -43,7 +43,7 @@ func (k Querier) PoolDelegations(goCtx context.Context, req *types.QueryPoolDele
 
 	// Query the pool delegations for the given pool id
 	delegations, pageRes, err := query.GenericFilteredPaginate(k.cdc, delegationsStore, req.Pagination, func(key []byte, delegation *types.Delegation) (*types.Delegation, error) {
-		if delegation.Type != types.DELEGATION_TYPE_POOL || delegation.TargetID != req.PoolId {
+		if delegation.TargetID != req.PoolId {
 			return nil, nil
 		}
 		return delegation, nil
@@ -117,7 +117,7 @@ func (k Querier) OperatorDelegations(goCtx context.Context, req *types.QueryOper
 
 	// Query the operator delegations for the given pool id
 	delegations, pageRes, err := query.GenericFilteredPaginate(k.cdc, delegationsStore, req.Pagination, func(key []byte, delegation *types.Delegation) (*types.Delegation, error) {
-		if delegation.Type != types.DELEGATION_TYPE_OPERATOR || delegation.TargetID != req.OperatorId {
+		if delegation.TargetID != req.OperatorId {
 			return nil, nil
 		}
 		return delegation, nil
@@ -191,7 +191,7 @@ func (k Querier) ServiceDelegations(goCtx context.Context, req *types.QueryServi
 
 	// Query the service delegations for the given pool id
 	delegations, pageRes, err := query.GenericFilteredPaginate(k.cdc, delegationsStore, req.Pagination, func(key []byte, delegation *types.Delegation) (*types.Delegation, error) {
-		if delegation.Type != types.DELEGATION_TYPE_SERVICE || delegation.TargetID != req.ServiceId {
+		if delegation.TargetID != req.ServiceId {
 			return nil, nil
 		}
 		return delegation, nil
