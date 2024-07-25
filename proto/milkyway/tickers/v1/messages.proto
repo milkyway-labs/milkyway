@@ -1,0 +1,88 @@
+syntax = "proto3";
+package milkyway.tickers.v1;
+
+import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/msg/v1/msg.proto";
+import "gogoproto/gogo.proto";
+import "milkyway/tickers/v1/params.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/tickers/types";
+
+// Msg defines the services module's gRPC message service.
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+
+  // RegisterTicker defines the operation for registering a ticker.
+  rpc RegisterTicker(MsgRegisterTicker) returns (MsgRegisterTickerResponse);
+
+  // DeregisterTicker defines the operation for de-registering a ticker with
+  // the token denomination.
+  rpc DeregisterTicker(MsgDeregisterTicker)
+      returns (MsgDeregisterTickerResponse);
+
+  // UpdateParams defines a (governance) operation for updating the module
+  // parameters.
+  // The authority defaults to the x/gov module account.
+  rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+}
+
+// MsgRegisterTicker defines the message structure for the RegisterTicker
+// gRPC service method. It allows the authority to register a ticker.
+message MsgRegisterTicker {
+  option (cosmos.msg.v1.signer) = "authority";
+  option (amino.name) = "tickers/MsgRegisterTicker";
+
+  // Authority is the address that controls the module (defaults to x/gov unless
+  // overwritten).
+  string authority = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // Denom represents the denomination of the token associated with the ticker.
+  string denom = 2;
+
+  // Ticker represents the ticker of the token denomination.
+  string ticker = 3;
+}
+
+// MsgRegisterTickerResponse is the return value of MsgRegisterTicker.
+message MsgRegisterTickerResponse {}
+
+// MsgDeregisterTicker defines the message structure for the DeregisterTicker
+// gRPC service method. It allows the authority to de-register a ticker with
+// the token denomination.
+message MsgDeregisterTicker {
+  option (cosmos.msg.v1.signer) = "authority";
+  option (amino.name) = "tickers/MsgDeregisterTicker";
+
+  // Authority is the address that controls the module (defaults to x/gov unless
+  // overwritten).
+  string authority = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // Denom represents the denomination of the token associated with the ticker.
+  string denom = 2;
+}
+
+// MsgRegisterTickerResponse is the return value of MsgDeregisterTicker.
+message MsgDeregisterTickerResponse {}
+
+// MsgUpdateParams defines the message structure for the UpdateParams gRPC
+// service method. It allows the authority to update the module parameters.
+message MsgUpdateParams {
+  option (cosmos.msg.v1.signer) = "authority";
+  option (amino.name) = "tickers/MsgUpdateParams";
+
+  // Authority is the address that controls the module (defaults to x/gov unless
+  // overwritten).
+  string authority = 1 [
+    (gogoproto.moretags) = "yaml:\"authority\"",
+    (cosmos_proto.scalar) = "cosmos.AddressString"
+  ];
+
+  // Params define the parameters to update.
+  //
+  // NOTE: All parameters must be supplied.
+  Params params = 2 [ (gogoproto.nullable) = false ];
+}
+
+// MsgUpdateParamsResponse is the return value of MsgUpdateParams.
+message MsgUpdateParamsResponse {}
