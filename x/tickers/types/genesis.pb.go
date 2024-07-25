@@ -26,7 +26,9 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // GenesisState defines the module's genesis state.
 type GenesisState struct {
 	// Params defines the parameters of the module.
-	Params  Params            `protobuf:"bytes,1,opt,name=params,proto3" json:"params"`
+	Params Params `protobuf:"bytes,1,opt,name=params,proto3" json:"params"`
+	// Tickers defines the denom-ticker map. Key is a denom and value is its
+	// ticker.
 	Tickers map[string]string `protobuf:"bytes,2,rep,name=tickers,proto3" json:"tickers,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 

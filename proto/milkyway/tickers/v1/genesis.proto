@@ -11,5 +11,7 @@ message GenesisState {
   // Params defines the parameters of the module.
   Params params = 1 [ (gogoproto.nullable) = false ];
 
+  // Tickers defines the denom-ticker map. Key is a denom and value is its
+  // ticker.
   map<string, string> tickers = 2;
 }

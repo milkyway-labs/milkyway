@@ -16,10 +16,14 @@ service Query {
     option (google.api.http).get = "/milkyway/tickers/v1/params";
   }
 
+  // Ticker defines a gRPC query method that returns a ticker of the given
+  // token denomination.
   rpc Ticker(QueryTickerRequest) returns (QueryTickerResponse) {
     option (google.api.http).get = "/milkyway/tickers/v1/tickers/{denom}";
   }
 
+  // Denoms defines a gRPC query method that returns all the token
+  // denominations associated with the given ticker.
   rpc Denoms(QueryDenomsRequest) returns (QueryDenomsResponse) {
     option (google.api.http).get = "/milkyway/tickers/v1/denoms/{ticker}";
   }
@@ -33,17 +37,30 @@ message QueryParamsResponse {
   Params params = 1 [ (gogoproto.nullable) = false ];
 }
 
-message QueryTickerRequest { string denom = 1; }
+// QueryTickerRequest is the request type for the Query/Ticker RPC method.
+message QueryTickerRequest {
+  // Denom is the token denomination for which the ticker is to be queried.
+  string denom = 1;
+}
 
-message QueryTickerResponse { string ticker = 1; }
+// QueryTickerResponse is the response type for the Query/Ticker RPC method.
+message QueryTickerResponse {
+  // Ticker is the ticker of the given token denomination.
+  string ticker = 1;
+}
 
+// QueryDenomsRequest is the request type for the Query/Denoms RPC method.
 message QueryDenomsRequest {
+  // Ticker is the ticker for which the denoms are to be queried.
   string ticker = 1;
 
   cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
+// QueryDenomsResponse is the response type for the Query/Denoms RPC method.
 message QueryDenomsResponse {
+  // Denom is the list of all the token denominations associated with the
+  // ticker.
   repeated string denoms = 1;
 
   cosmos.base.query.v1beta1.PageResponse pagination = 2;

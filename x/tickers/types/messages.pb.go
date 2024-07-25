@@ -31,12 +31,16 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+// MsgRegisterTicker defines the message structure for the RegisterTicker
+// gRPC service method. It allows the authority to register a ticker.
 type MsgRegisterTicker struct {
 	// Authority is the address that controls the module (defaults to x/gov unless
 	// overwritten).
 	Authority string `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
-	Denom     string `protobuf:"bytes,2,opt,name=denom,proto3" json:"denom,omitempty"`
-	Ticker    string `protobuf:"bytes,3,opt,name=ticker,proto3" json:"ticker,omitempty"`
+	// Denom represents the denomination of the token associated with the ticker.
+	Denom string `protobuf:"bytes,2,opt,name=denom,proto3" json:"denom,omitempty"`
+	// Ticker represents the ticker of the token denomination.
+	Ticker string `protobuf:"bytes,3,opt,name=ticker,proto3" json:"ticker,omitempty"`
 }
 
 func (m *MsgRegisterTicker) Reset()         { *m = MsgRegisterTicker{} }
@@ -93,6 +97,7 @@ func (m *MsgRegisterTicker) GetTicker() string {
 	return ""
 }
 
+// MsgRegisterTickerResponse is the return value of MsgRegisterTicker.
 type MsgRegisterTickerResponse struct {
 }
 
@@ -129,11 +134,15 @@ func (m *MsgRegisterTickerResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgRegisterTickerResponse proto.InternalMessageInfo
 
+// MsgDeregisterTicker defines the message structure for the DeregisterTicker
+// gRPC service method. It allows the authority to de-register a ticker with
+// the token denomination.
 type MsgDeregisterTicker struct {
 	// Authority is the address that controls the module (defaults to x/gov unless
 	// overwritten).
 	Authority string `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
-	Denom     string `protobuf:"bytes,2,opt,name=denom,proto3" json:"denom,omitempty"`
+	// Denom represents the denomination of the token associated with the ticker.
+	Denom string `protobuf:"bytes,2,opt,name=denom,proto3" json:"denom,omitempty"`
 }
 
 func (m *MsgDeregisterTicker) Reset()         { *m = MsgDeregisterTicker{} }
@@ -183,6 +192,7 @@ func (m *MsgDeregisterTicker) GetDenom() string {
 	return ""
 }
 
+// MsgRegisterTickerResponse is the return value of MsgDeregisterTicker.
 type MsgDeregisterTickerResponse struct {
 }
 
@@ -376,7 +386,10 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgClient interface {
+	// RegisterTicker defines the operation for registering a ticker.
 	RegisterTicker(ctx context.Context, in *MsgRegisterTicker, opts ...grpc.CallOption) (*MsgRegisterTickerResponse, error)
+	// DeregisterTicker defines the operation for de-registering a ticker with
+	// the token denomination.
 	DeregisterTicker(ctx context.Context, in *MsgDeregisterTicker, opts ...grpc.CallOption) (*MsgDeregisterTickerResponse, error)
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters.
@@ -421,7 +434,10 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
+	// RegisterTicker defines the operation for registering a ticker.
 	RegisterTicker(context.Context, *MsgRegisterTicker) (*MsgRegisterTickerResponse, error)
+	// DeregisterTicker defines the operation for de-registering a ticker with
+	// the token denomination.
 	DeregisterTicker(context.Context, *MsgDeregisterTicker) (*MsgDeregisterTickerResponse, error)
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters.

@@ -1,6 +1,0 @@
-syntax = "proto3";
-package milkyway.tickers.v1;
-
-import "gogoproto/gogo.proto";
-
-option go_package = "github.com/milkyway-labs/milkyway/x/tickers/types";

@@ -112,7 +112,9 @@ func (m *QueryParamsResponse) GetParams() Params {
 	return Params{}
 }
 
+// QueryTickerRequest is the request type for the Query/Ticker RPC method.
 type QueryTickerRequest struct {
+	// Denom is the token denomination for which the ticker is to be queried.
 	Denom string `protobuf:"bytes,1,opt,name=denom,proto3" json:"denom,omitempty"`
 }
 
@@ -156,7 +158,9 @@ func (m *QueryTickerRequest) GetDenom() string {
 	return ""
 }
 
+// QueryTickerResponse is the response type for the Query/Ticker RPC method.
 type QueryTickerResponse struct {
+	// Ticker is the ticker of the given token denomination.
 	Ticker string `protobuf:"bytes,1,opt,name=ticker,proto3" json:"ticker,omitempty"`
 }
 
@@ -200,7 +204,9 @@ func (m *QueryTickerResponse) GetTicker() string {
 	return ""
 }
 
+// QueryDenomsRequest is the request type for the Query/Denoms RPC method.
 type QueryDenomsRequest struct {
+	// Ticker is the ticker for which the denoms are to be queried.
 	Ticker     string             `protobuf:"bytes,1,opt,name=ticker,proto3" json:"ticker,omitempty"`
 	Pagination *query.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
@@ -252,7 +258,10 @@ func (m *QueryDenomsRequest) GetPagination() *query.PageRequest {
 	return nil
 }
 
+// QueryDenomsResponse is the response type for the Query/Denoms RPC method.
 type QueryDenomsResponse struct {
+	// Denom is the list of all the token denominations associated with the
+	// ticker.
 	Denoms     []string            `protobuf:"bytes,1,rep,name=denoms,proto3" json:"denoms,omitempty"`
 	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
@@ -364,7 +373,11 @@ type QueryClient interface {
 	// Params defines a gRPC query method that returns the parameters of the
 	// module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
+	// Ticker defines a gRPC query method that returns a ticker of the given
+	// token denomination.
 	Ticker(ctx context.Context, in *QueryTickerRequest, opts ...grpc.CallOption) (*QueryTickerResponse, error)
+	// Denoms defines a gRPC query method that returns all the token
+	// denominations associated with the given ticker.
 	Denoms(ctx context.Context, in *QueryDenomsRequest, opts ...grpc.CallOption) (*QueryDenomsResponse, error)
 }
 
@@ -408,7 +421,11 @@ type QueryServer interface {
 	// Params defines a gRPC query method that returns the parameters of the
 	// module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
+	// Ticker defines a gRPC query method that returns a ticker of the given
+	// token denomination.
 	Ticker(context.Context, *QueryTickerRequest) (*QueryTickerResponse, error)
+	// Denoms defines a gRPC query method that returns all the token
+	// denominations associated with the given ticker.
 	Denoms(context.Context, *QueryDenomsRequest) (*QueryDenomsResponse, error)
 }
 
