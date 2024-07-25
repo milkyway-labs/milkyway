@@ -7,6 +7,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/version"
 	"github.com/spf13/cobra"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
@@ -25,9 +26,7 @@ func GetTxCmd() *cobra.Command {
 	}
 
 	txCmd.AddCommand(
-		GetPoolsTxCmd(),
-		GetOperatorsTxCmd(),
-		GetServicesTxCmd(),
+		GetDelegateTxCmd(),
 	)
 
 	return txCmd
@@ -35,28 +34,29 @@ func GetTxCmd() *cobra.Command {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// GetPoolsTxCmd returns a new command to perform pools transactions
-func GetPoolsTxCmd() *cobra.Command {
+// GetDelegateTxCmd returns the command allowing to delegate tokens
+func GetDelegateTxCmd() *cobra.Command {
 	txCmd := &cobra.Command{
-		Use:   "pools",
-		Short: "Pools transactions subcommands",
+		Use:   "delegate",
+		Short: "Delegate transactions subcommands",
 	}
 
 	txCmd.AddCommand(
 		GetDelegateToPoolCmd(),
+		GetDelegateToOperatorCmd(),
+		GetDelegateToServiceCmd(),
 	)
 
 	return txCmd
-
 }
 
 // GetDelegateToPoolCmd returns the command allowing to delegate to a pool
 func GetDelegateToPoolCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "delegate [amount]",
+		Use:     "pool [amount]",
 		Args:    cobra.ExactArgs(1),
 		Short:   "Delegate the given amount to a pool",
-		Example: "delegate 1000000milk --from alice",
+		Example: fmt.Sprintf("%s tx %s delegate pool 1000000milk --from alice", version.AppName, types.ModuleName),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -85,30 +85,13 @@ func GetDelegateToPoolCmd() *cobra.Command {
 	return cmd
 }
 
-// --------------------------------------------------------------------------------------------------------------------
-
-// GetOperatorsTxCmd returns a new command to perform operators transactions
-func GetOperatorsTxCmd() *cobra.Command {
-	txCmd := &cobra.Command{
-		Use:   "operators",
-		Short: "Operators transactions subcommands",
-	}
-
-	txCmd.AddCommand(
-		GetDelegateToOperatorCmd(),
-	)
-
-	return txCmd
-
-}
-
 // GetDelegateToOperatorCmd returns the command allowing to delegate to an operator
 func GetDelegateToOperatorCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "delegate [operator-id] [amount]",
+		Use:     "operator [operator-id] [amount]",
 		Args:    cobra.ExactArgs(2),
 		Short:   "Delegate the given amount to an operator",
-		Example: "delegate 1 1000000milk --from alice",
+		Example: fmt.Sprintf("%s tx %s delegate operator 1 1000000milk --from alice", version.AppName, types.ModuleName),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -142,29 +125,13 @@ func GetDelegateToOperatorCmd() *cobra.Command {
 	return cmd
 }
 
-// --------------------------------------------------------------------------------------------------------------------
-
-// GetServicesTxCmd returns a new command to perform services transactions
-func GetServicesTxCmd() *cobra.Command {
-	txCmd := &cobra.Command{
-		Use:   "services",
-		Short: "Services transactions subcommands",
-	}
-
-	txCmd.AddCommand(
-		GetDelegateToServiceCmd(),
-	)
-
-	return txCmd
-}
-
 // GetDelegateToServiceCmd returns the command allowing to delegate to a service
 func GetDelegateToServiceCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "delegate [service-id] [amount]",
+		Use:     "service [service-id] [amount]",
 		Args:    cobra.ExactArgs(2),
 		Short:   "Delegate the given amount to a service",
-		Example: "delegate 1 1000000milk --from alice",
+		Example: fmt.Sprintf("%s tx %s delegate service 1 1000000milk --from alice", version.AppName, types.ModuleName),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
