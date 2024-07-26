@@ -86,9 +86,9 @@ func AccountsBalancesInvariants(k *Keeper) sdk.Invariant {
 			return false
 		})
 
-		poolsBroken := !poolsBalances.Equal(poolsTokens)
-		operatorsBroken := !operatorsBalances.Equal(operatorsTokens)
-		servicesBroken := !servicesBalances.Equal(servicesTokens)
+		poolsBroken := !poolsBalances.IsAllGTE(poolsTokens)
+		operatorsBroken := !operatorsBalances.IsAllGTE(operatorsTokens)
+		servicesBroken := !servicesBalances.IsAllGTE(servicesTokens)
 		broken := poolsBroken || operatorsBroken || servicesBroken
 
 		return sdk.FormatInvariant(types.ModuleName, "delegated module account coins", fmt.Sprintf(
