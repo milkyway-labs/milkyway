@@ -86,6 +86,9 @@ func AccountsBalancesInvariants(k *Keeper) sdk.Invariant {
 			return false
 		})
 
+		// We use IsAllGTE to check that the balances are greater or equal to the tokens
+		// This is used because users might have sent tokens to the accounts and if we check using Equals
+		// the invariant would be broken
 		poolsBroken := !poolsBalances.IsAllGTE(poolsTokens)
 		operatorsBroken := !operatorsBalances.IsAllGTE(operatorsTokens)
 		servicesBroken := !servicesBalances.IsAllGTE(servicesTokens)
