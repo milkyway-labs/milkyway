@@ -7,6 +7,24 @@ import (
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
+func (k *Keeper) GetOperatorParams(ctx sdk.Context, operatorID uint32) (params types.OperatorParams, found bool) {
+	store := ctx.KVStore(k.storeKey)
+	bz := store.Get(types.OperatorParamsStoreKey(operatorID))
+	if bz == nil {
+		return params, false
+	}
+
+	k.cdc.MustUnmarshal(bz, &params)
+	return params, true
+}
+
+func (k *Keeper) SaveOperatorParams(ctx sdk.Context, operatorID uint32, params types.OperatorParams) {
+	store := ctx.KVStore(k.storeKey)
+	store.Set(types.OperatorParamsStoreKey(operatorID), k.cdc.MustMarshal(&params))
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
 // SaveOperatorDelegation stores the given operator delegation in the store
 func (k *Keeper) SaveOperatorDelegation(ctx sdk.Context, delegation types.Delegation) {
 	store := ctx.KVStore(k.storeKey)

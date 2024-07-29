@@ -11,7 +11,10 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/hashicorp/go-metrics"
 
+	"github.com/milkyway-labs/milkyway/utils"
+	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
 var (
@@ -24,6 +27,63 @@ type msgServer struct {
 
 func NewMsgServer(keeper *Keeper) types.MsgServer {
 	return &msgServer{Keeper: keeper}
+}
+
+func (k msgServer) UpdateOperatorParams(goCtx context.Context, msg *types.MsgUpdateOperatorParams) (*types.MsgUpdateOperatorParamsResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	operator, found := k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
+	if !found {
+		return nil, operatorstypes.ErrOperatorNotFound
+	}
+
+	if operator.Admin != msg.Sender {
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can join the operator with a service")
+	}
+
+	k.SaveOperatorParams(ctx, msg.OperatorID, msg.OperatorParams)
+
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeUpdateOperatorParams,
+			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprint(msg.OperatorID)),
+			sdk.NewAttribute(types.AttributeKeyCommissionRate, msg.OperatorParams.CommissionRate.String()),
+			sdk.NewAttribute(
+				types.AttributeKeyJoinedServiceIDs, utils.FormatUint32Slice(msg.OperatorParams.JoinedServiceIDs)),
+		),
+	})
+
+	return &types.MsgUpdateOperatorParamsResponse{}, nil
+}
+
+func (k msgServer) UpdateServiceParams(goCtx context.Context, msg *types.MsgUpdateServiceParams) (*types.MsgUpdateServiceParamsResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	operator, found := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	if !found {
+		return nil, servicestypes.ErrServiceNotFound
+	}
+
+	if operator.Admin != msg.Sender {
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can join the operator with a service")
+	}
+
+	k.SaveServiceParams(ctx, msg.ServiceID, msg.ServiceParams)
+
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeUpdateServiceParams,
+			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprint(msg.ServiceID)),
+			sdk.NewAttribute(types.AttributeKeySlashFraction, msg.ServiceParams.SlashFraction.String()),
+			sdk.NewAttribute(
+				types.AttributeKeyWhitelistedPoolIDs, utils.FormatUint32Slice(msg.ServiceParams.WhitelistedPoolIDs)),
+			sdk.NewAttribute(
+				types.AttributeKeyWhitelistedOperatorIDs,
+				utils.FormatUint32Slice(msg.ServiceParams.WhitelistedOperatorIDs)),
+		),
+	})
+
+	return &types.MsgUpdateServiceParamsResponse{}, nil
 }
 
 // DelegatePool defines the rpc method for Msg/DelegatePool

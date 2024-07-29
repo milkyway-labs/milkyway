@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 
+	"github.com/milkyway-labs/milkyway/utils"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
@@ -17,6 +18,9 @@ const (
 var (
 	ParamsKey = []byte{0x01}
 
+	OperatorParamsPrefix = []byte{0x11}
+	ServiceParamsPrefix  = []byte{0x12}
+
 	PoolDelegationPrefix          = []byte{0xa1}
 	PoolDelegationsByPoolIDPrefix = []byte{0xa2}
 	UnbondingPoolDelegationPrefix = []byte{0xa3}
@@ -29,6 +33,14 @@ var (
 	ServiceDelegationByServiceIDPrefix = []byte{0xc2}
 	UnbondingServiceDelegationPrefix   = []byte{0xc3}
 )
+
+func OperatorParamsStoreKey(operatorID uint32) []byte {
+	return utils.CompositeKey(OperatorParamsPrefix, utils.Uint32ToBigEndian(operatorID))
+}
+
+func ServiceParamsStoreKey(serviceID uint32) []byte {
+	return utils.CompositeKey(ServiceParamsPrefix, utils.Uint32ToBigEndian(serviceID))
+}
 
 // UserPoolDelegationsStorePrefix returns the prefix used to store all the delegations to a given pool
 func UserPoolDelegationsStorePrefix(userAddress string) []byte {

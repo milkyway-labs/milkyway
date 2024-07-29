@@ -136,11 +136,45 @@ func GetOperatorsQueryCmd() *cobra.Command {
 	}
 
 	queryCmd.AddCommand(
+		getOperatorParamsQueryCmd(),
 		getOperatorDelegationsQueryCmd(),
 		getOperatorDelegationQueryCmd(),
 	)
 
 	return queryCmd
+}
+
+// getOperatorParamsQueryCmd returns the command allowing to query an
+// operator's params.
+func getOperatorParamsQueryCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "params [operator-id]",
+		Short:   "Query an operator's params",
+		Example: fmt.Sprintf(`%s query %s operator params 1`, version.AppName, types.ModuleName),
+		Args:    cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+
+			operatorID, err := operatorstypes.ParseOperatorID(args[0])
+			if err != nil {
+				return err
+			}
+			res, err := queryClient.OperatorParams(cmd.Context(), types.NewQueryOperatorParamsRequest(operatorID))
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
 }
 
 // getOperatorQueryCmd returns the command allowing to query an operator
@@ -227,11 +261,45 @@ func GetServicesQueryCmd() *cobra.Command {
 	}
 
 	queryCmd.AddCommand(
+		getServiceParamsQueryCmd(),
 		getServiceDelegationsQueryCmd(),
 		getServiceDelegationQueryCmd(),
 	)
 
 	return queryCmd
+}
+
+// getServiceParamsQueryCmd returns the command allowing to query a service's
+// params.
+func getServiceParamsQueryCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "params [service-id]",
+		Short:   "Query a service's params",
+		Example: fmt.Sprintf(`%s query %s service params 1`, version.AppName, types.ModuleName),
+		Args:    cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+
+			serviceID, err := servicestypes.ParseServiceID(args[0])
+			if err != nil {
+				return err
+			}
+			res, err := queryClient.ServiceParams(cmd.Context(), types.NewQueryServiceParamsRequest(serviceID))
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
 }
 
 // getServiceDelegationsQueryCmd returns the command allowing to query delegations of a service

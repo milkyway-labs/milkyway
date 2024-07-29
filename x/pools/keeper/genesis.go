@@ -9,6 +9,7 @@ import (
 // ExportGenesis returns a new GenesisState instance containing the information currently present inside the store
 func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	return types.NewGenesis(
+		k.GetParams(ctx),
 		k.exportNextPoolID(ctx),
 		k.GetPools(ctx),
 	)
@@ -27,6 +28,8 @@ func (k *Keeper) exportNextPoolID(ctx sdk.Context) uint32 {
 
 // InitGenesis initializes the genesis store using the provided data
 func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
+	k.SetParams(ctx, data.Params)
+
 	// Set the next pool id
 	k.SetNextPoolID(ctx, data.NextPoolID)
 

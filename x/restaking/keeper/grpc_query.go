@@ -25,6 +25,48 @@ func NewQuerier(keeper *Keeper) Querier {
 	return Querier{Keeper: keeper}
 }
 
+// OperatorParams queries the operator params for the given operator id
+func (k Querier) OperatorParams(goCtx context.Context, req *types.QueryOperatorParamsRequest) (*types.QueryOperatorParamsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
+	}
+
+	if req.OperatorId == 0 {
+		return nil, status.Error(codes.InvalidArgument, "operator id cannot be 0")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Get the operator params store
+	params, found := k.GetOperatorParams(ctx, req.OperatorId)
+	if !found {
+		params = types.DefaultOperatorParams()
+	}
+
+	return &types.QueryOperatorParamsResponse{OperatorParams: params}, nil
+}
+
+// ServiceParams queries the service params for the given service id
+func (k Querier) ServiceParams(goCtx context.Context, req *types.QueryServiceParamsRequest) (*types.QueryServiceParamsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
+	}
+
+	if req.ServiceId == 0 {
+		return nil, status.Error(codes.InvalidArgument, "service id cannot be 0")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Get the service params store
+	params, found := k.GetServiceParams(ctx, req.ServiceId)
+	if !found {
+		params = types.DefaultServiceParams()
+	}
+
+	return &types.QueryServiceParamsResponse{ServiceParams: params}, nil
+}
+
 // PoolDelegations queries the pool delegations for the given pool id
 func (k Querier) PoolDelegations(goCtx context.Context, req *types.QueryPoolDelegationsRequest) (*types.QueryPoolDelegationsResponse, error) {
 	if req == nil {

@@ -35,7 +35,7 @@ func GetOperatorIDFromBytes(bz []byte) (operatorID uint32) {
 	return binary.BigEndian.Uint32(bz)
 }
 
-// OperatorStoreKey turns a operator ID into a key used to store a operator in the KVStore
+// OperatorStoreKey returns a operator ID into a key used to store a operator in the KVStore
 func OperatorStoreKey(operatorID uint32) []byte {
 	return append(OperatorPrefix, GetOperatorIDBytes(operatorID)...)
 }

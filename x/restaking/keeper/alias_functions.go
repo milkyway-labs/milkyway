@@ -4,8 +4,46 @@ import (
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/milkyway-labs/milkyway/utils"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 )
+
+func (k *Keeper) IterateAllOperatorParams(
+	ctx sdk.Context, cb func(operatorID uint32, params types.OperatorParams) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+	iterator := storetypes.KVStorePrefixIterator(store, types.OperatorParamsPrefix)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var params types.OperatorParams
+		k.cdc.MustUnmarshal(iterator.Value(), &params)
+
+		operatorID := utils.BigEndianToUint32(iterator.Key())
+		if cb(operatorID, params) {
+			break
+		}
+	}
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+func (k *Keeper) IterateAllServiceParams(ctx sdk.Context, cb func(serviceID uint32, params types.ServiceParams) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+	iterator := storetypes.KVStorePrefixIterator(store, types.ServiceParamsPrefix)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var params types.ServiceParams
+		k.cdc.MustUnmarshal(iterator.Value(), &params)
+
+		serviceID := utils.BigEndianToUint32(iterator.Key())
+		if cb(serviceID, params) {
+			break
+		}
+	}
+}
+
+// --------------------------------------------------------------------------------------------------------------------
 
 // GetAllPoolDelegations returns all the pool delegations
 func (k *Keeper) GetAllPoolDelegations(ctx sdk.Context) []types.Delegation {
