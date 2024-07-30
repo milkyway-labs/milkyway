@@ -39,7 +39,7 @@ require (
 	github.com/hashicorp/go-metrics v0.5.3
 	github.com/initia-labs/OPinit v0.2.9
 	github.com/initia-labs/initia v0.2.10
-	github.com/initia-labs/kvindexer v0.1.4
+	github.com/initia-labs/kvindexer v0.1.6
 	github.com/initia-labs/kvindexer/submodules/block v0.1.0
 	github.com/initia-labs/kvindexer/submodules/tx v0.1.0
 	github.com/initia-labs/kvindexer/submodules/wasm-nft v0.1.4
@@ -95,6 +95,7 @@ require (
 	github.com/alexkohler/nakedret/v2 v2.0.4 // indirect
 	github.com/alexkohler/prealloc v1.0.0 // indirect
 	github.com/alingse/asasalint v0.0.11 // indirect
+	github.com/allegro/bigcache/v3 v3.1.0 // indirect
 	github.com/ashanbrown/forbidigo v1.6.0 // indirect
 	github.com/ashanbrown/makezero v1.1.1 // indirect
 	github.com/avast/retry-go/v4 v4.5.1 // indirect
