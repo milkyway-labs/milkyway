@@ -67,7 +67,7 @@ func TestMsgUpdateOperatorParams_GetSigners(t *testing.T) {
 
 var msgUpdateServiceParams = types.NewMsgUpdateServiceParams(
 	1, types.NewServiceParams(
-		sdkmath.LegacyNewDecWithPrec(5, 2), []uint32{1, 2, 3}, []uint32{4, 5, 6}),
+		sdkmath.LegacyNewDecWithPrec(1, 2), []uint32{1, 2, 3}, []uint32{4, 5, 6}),
 	"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd")
 
 func TestMsgUpdateServiceParams_ValidateBasic(t *testing.T) {
@@ -111,7 +111,7 @@ func TestMsgUpdateServiceParams_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgUpdateServiceParams_GetSignBytes(t *testing.T) {
-	expected := `{"type":"milkyway/MsgUpdateServiceParams","value":{"sender":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","service_id":1,"service_params":{"slash_fraction":"0.050000000000000000","whitelisted_operator_ids":[4,5,6],"whitelisted_pool_ids":[1,2,3]}}}`
+	expected := `{"type":"milkyway/MsgUpdateServiceParams","value":{"sender":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","service_id":1,"service_params":{"slash_fraction":"0.010000000000000000","whitelisted_operator_ids":[4,5,6],"whitelisted_pool_ids":[1,2,3]}}}`
 	require.Equal(t, expected, string(msgUpdateServiceParams.GetSignBytes()))
 }
 

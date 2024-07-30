@@ -123,7 +123,7 @@ func TestGenesis_Validate(t *testing.T) {
 					{
 						ServiceID: 2,
 						Params: types.NewServiceParams(
-							sdkmath.LegacyNewDecWithPrec(5, 2), []uint32{1, 2, 3}, []uint32{1, 5}),
+							sdkmath.LegacyNewDecWithPrec(1, 2), []uint32{1, 2, 3}, []uint32{1, 5}),
 					},
 				},
 				[]types.Delegation{
