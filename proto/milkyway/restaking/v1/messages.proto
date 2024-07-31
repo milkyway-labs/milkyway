@@ -52,21 +52,25 @@ message MsgUpdateOperatorParams {
 
   uint32 operator_id = 2 [ (gogoproto.customname) = "OperatorID" ];
 
-  OperatorParams operator_params = 3 [ (gogoproto.nullable) = false ];
+  OperatorParams params = 3 [ (gogoproto.nullable) = false ];
 }
 
 // MsgUpdateOperatorParamsResponse is the return value of
 // MsgUpdateOperatorParams.
 message MsgUpdateOperatorParamsResponse {}
 
+// MsgUpdateServiceParams defines the message structure for the
+// UpdateServiceParams gRPC service method. It allows the service admin to
+// update the service's parameters.
 message MsgUpdateServiceParams {
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
   uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
 
-  ServiceParams service_params = 3 [ (gogoproto.nullable) = false ];
+  ServiceParams params = 3 [ (gogoproto.nullable) = false ];
 }
 
+// MsgUpdateServiceParamsResponse is the return value of MsgUpdateServiceParams.
 message MsgUpdateServiceParamsResponse {}
 
 // MsgDelegatePool defines the message structure for the DelegatePool gRPC

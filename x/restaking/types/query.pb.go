@@ -2095,7 +2095,9 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type QueryClient interface {
+	// OperatorParams queries the operator params for the given operator.
 	OperatorParams(ctx context.Context, in *QueryOperatorParamsRequest, opts ...grpc.CallOption) (*QueryOperatorParamsResponse, error)
+	// ServiceParams queries the service params for the given service.
 	ServiceParams(ctx context.Context, in *QueryServiceParamsRequest, opts ...grpc.CallOption) (*QueryServiceParamsResponse, error)
 	// PoolDelegations queries the delegations info for the given pool.
 	PoolDelegations(ctx context.Context, in *QueryPoolDelegationsRequest, opts ...grpc.CallOption) (*QueryPoolDelegationsResponse, error)
@@ -2312,7 +2314,9 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 
 // QueryServer is the server API for Query service.
 type QueryServer interface {
+	// OperatorParams queries the operator params for the given operator.
 	OperatorParams(context.Context, *QueryOperatorParamsRequest) (*QueryOperatorParamsResponse, error)
+	// ServiceParams queries the service params for the given service.
 	ServiceParams(context.Context, *QueryServiceParamsRequest) (*QueryServiceParamsResponse, error)
 	// PoolDelegations queries the delegations info for the given pool.
 	PoolDelegations(context.Context, *QueryPoolDelegationsRequest) (*QueryPoolDelegationsResponse, error)

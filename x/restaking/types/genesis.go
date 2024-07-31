@@ -8,13 +8,16 @@ import (
 
 // NewGenesis creates a new genesis state
 func NewGenesis(
-	operatorParamsRecords []OperatorParamsRecord, serviceParamsRecords []ServiceParamsRecord,
-	delegations []Delegation, params Params) *GenesisState {
+	operatorsParamsRecords []OperatorParamsRecord,
+	servicesParamsRecords []ServiceParamsRecord,
+	delegations []Delegation,
+	params Params,
+) *GenesisState {
 	return &GenesisState{
-		OperatorParams: operatorParamsRecords,
-		ServiceParams:  serviceParamsRecords,
-		Delegations:    delegations,
-		Params:         params,
+		OperatorsParams: operatorsParamsRecords,
+		ServicesParams:  servicesParamsRecords,
+		Delegations:     delegations,
+		Params:          params,
 	}
 }
 
@@ -25,15 +28,15 @@ func DefaultGenesis() *GenesisState {
 
 // Validate performs basic validation of genesis data
 func (g *GenesisState) Validate() error {
-	if duplicate := findDuplicateOperatorParamsRecords(g.OperatorParams); duplicate != nil {
+	if duplicate := findDuplicateOperatorParamsRecords(g.OperatorsParams); duplicate != nil {
 		return fmt.Errorf("duplicated operator params: %d", duplicate.OperatorID)
 	}
 
-	if duplicate := findDuplicateServiceParamsRecords(g.ServiceParams); duplicate != nil {
+	if duplicate := findDuplicateServiceParamsRecords(g.ServicesParams); duplicate != nil {
 		return fmt.Errorf("duplicated service params: %d", duplicate.ServiceID)
 	}
 
-	for _, record := range g.OperatorParams {
+	for _, record := range g.OperatorsParams {
 		if record.OperatorID == 0 {
 			return fmt.Errorf("invalid operator id: %d", record.OperatorID)
 		}
@@ -43,7 +46,7 @@ func (g *GenesisState) Validate() error {
 		}
 	}
 
-	for _, record := range g.ServiceParams {
+	for _, record := range g.ServicesParams {
 		if record.ServiceID == 0 {
 			return fmt.Errorf("invalid service id: %d", record.ServiceID)
 		}

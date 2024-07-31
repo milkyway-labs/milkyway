@@ -36,11 +36,11 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 
 // InitGenesis initializes the genesis store using the provided data
 func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
-	for _, record := range data.OperatorParams {
+	for _, record := range data.OperatorsParams {
 		k.SaveOperatorParams(ctx, record.OperatorID, record.Params)
 	}
 
-	for _, record := range data.ServiceParams {
+	for _, record := range data.ServicesParams {
 		k.SaveServiceParams(ctx, record.ServiceID, record.Params)
 	}
 

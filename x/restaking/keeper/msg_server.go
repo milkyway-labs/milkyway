@@ -41,22 +41,21 @@ func (k msgServer) UpdateOperatorParams(goCtx context.Context, msg *types.MsgUpd
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can update the params")
 	}
 
-	for _, serviceID := range msg.OperatorParams.JoinedServiceIDs {
+	for _, serviceID := range msg.Params.JoinedServicesIDs {
 		_, found = k.servicesKeeper.GetService(ctx, serviceID)
 		if !found {
 			return nil, errors.Wrapf(sdkerrors.ErrNotFound, "service %d not found", serviceID)
 		}
 	}
 
-	k.SaveOperatorParams(ctx, msg.OperatorID, msg.OperatorParams)
+	k.SaveOperatorParams(ctx, msg.OperatorID, msg.Params)
 
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeUpdateOperatorParams,
 			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprint(msg.OperatorID)),
-			sdk.NewAttribute(types.AttributeKeyCommissionRate, msg.OperatorParams.CommissionRate.String()),
-			sdk.NewAttribute(
-				types.AttributeKeyJoinedServiceIDs, utils.FormatUint32Slice(msg.OperatorParams.JoinedServiceIDs)),
+			sdk.NewAttribute(types.AttributeKeyCommissionRate, msg.Params.CommissionRate.String()),
+			sdk.NewAttribute(types.AttributeKeyJoinedServiceIDs, utils.FormatUint32Slice(msg.Params.JoinedServicesIDs)),
 		),
 	})
 
@@ -75,32 +74,35 @@ func (k msgServer) UpdateServiceParams(goCtx context.Context, msg *types.MsgUpda
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can update the params")
 	}
 
-	for _, poolID := range msg.ServiceParams.WhitelistedPoolIDs {
+	for _, poolID := range msg.Params.WhitelistedPoolsIDs {
 		_, found = k.poolsKeeper.GetPool(ctx, poolID)
 		if !found {
 			return nil, errors.Wrapf(sdkerrors.ErrNotFound, "pool %d not found", poolID)
 		}
 	}
 
-	for _, operatorID := range msg.ServiceParams.WhitelistedOperatorIDs {
+	for _, operatorID := range msg.Params.WhitelistedOperatorsIDs {
 		_, found = k.operatorsKeeper.GetOperator(ctx, operatorID)
 		if !found {
 			return nil, errors.Wrapf(sdkerrors.ErrNotFound, "operator %d not found", operatorID)
 		}
 	}
 
-	k.SaveServiceParams(ctx, msg.ServiceID, msg.ServiceParams)
+	k.SaveServiceParams(ctx, msg.ServiceID, msg.Params)
 
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeUpdateServiceParams,
 			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprint(msg.ServiceID)),
-			sdk.NewAttribute(types.AttributeKeySlashFraction, msg.ServiceParams.SlashFraction.String()),
+			sdk.NewAttribute(types.AttributeKeySlashFraction, msg.Params.SlashFraction.String()),
 			sdk.NewAttribute(
-				types.AttributeKeyWhitelistedPoolIDs, utils.FormatUint32Slice(msg.ServiceParams.WhitelistedPoolIDs)),
+				types.AttributeKeyWhitelistedPoolIDs,
+				utils.FormatUint32Slice(msg.Params.WhitelistedPoolsIDs),
+			),
 			sdk.NewAttribute(
 				types.AttributeKeyWhitelistedOperatorIDs,
-				utils.FormatUint32Slice(msg.ServiceParams.WhitelistedOperatorIDs)),
+				utils.FormatUint32Slice(msg.Params.WhitelistedOperatorsIDs),
+			),
 		),
 	})
 

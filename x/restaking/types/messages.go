@@ -7,12 +7,11 @@ import (
 )
 
 // NewMsgUpdateOperatorParams creates a new MsgUpdateOperatorParams instance
-func NewMsgUpdateOperatorParams(
-	operatorID uint32, params OperatorParams, sender string) *MsgUpdateOperatorParams {
+func NewMsgUpdateOperatorParams(operatorID uint32, params OperatorParams, sender string) *MsgUpdateOperatorParams {
 	return &MsgUpdateOperatorParams{
-		OperatorID:     operatorID,
-		OperatorParams: params,
-		Sender:         sender,
+		OperatorID: operatorID,
+		Params:     params,
+		Sender:     sender,
 	}
 }
 
@@ -22,7 +21,7 @@ func (msg *MsgUpdateOperatorParams) ValidateBasic() error {
 		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid operator ID: %d", msg.OperatorID)
 	}
 
-	err := msg.OperatorParams.Validate()
+	err := msg.Params.Validate()
 	if err != nil {
 		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid operator params: %s", err)
 	}
@@ -49,12 +48,11 @@ func (msg *MsgUpdateOperatorParams) GetSigners() []sdk.AccAddress {
 // --------------------------------------------------------------------------------------------------------------------
 
 // NewMsgUpdateServiceParams creates a new MsgUpdateServiceParams instance
-func NewMsgUpdateServiceParams(
-	operatorID uint32, params ServiceParams, sender string) *MsgUpdateServiceParams {
+func NewMsgUpdateServiceParams(operatorID uint32, params ServiceParams, sender string) *MsgUpdateServiceParams {
 	return &MsgUpdateServiceParams{
-		ServiceID:     operatorID,
-		ServiceParams: params,
-		Sender:        sender,
+		ServiceID: operatorID,
+		Params:    params,
+		Sender:    sender,
 	}
 }
 
@@ -64,7 +62,7 @@ func (msg *MsgUpdateServiceParams) ValidateBasic() error {
 		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid service ID: %d", msg.ServiceID)
 	}
 
-	err := msg.ServiceParams.Validate()
+	err := msg.Params.Validate()
 	if err != nil {
 		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid service params: %s", err)
 	}

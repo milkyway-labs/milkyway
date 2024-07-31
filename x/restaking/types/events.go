@@ -8,10 +8,10 @@ const (
 	EventTypeDelegateService      = "delegate_service"
 
 	AttributeKeyCommissionRate         = "commission_rate"
-	AttributeKeyJoinedServiceIDs       = "joined_service_ids"
+	AttributeKeyJoinedServiceIDs       = "joined_services_ids"
 	AttributeKeySlashFraction          = "slash_fraction"
-	AttributeKeyWhitelistedPoolIDs     = "whitelisted_pool_ids"
-	AttributeKeyWhitelistedOperatorIDs = "whitelisted_operator_ids"
+	AttributeKeyWhitelistedPoolIDs     = "whitelisted_pools_ids"
+	AttributeKeyWhitelistedOperatorIDs = "whitelisted_operators_ids"
 	AttributeKeyDelegator              = "delegator"
 	AttributeKeyOperatorID             = "operator_id"
 	AttributeKeyServiceID              = "service_id"

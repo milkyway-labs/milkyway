@@ -23,15 +23,19 @@ func TestMsgUpdateOperatorParams_ValidateBasic(t *testing.T) {
 		{
 			name: "invalid operator id returns error",
 			msg: types.NewMsgUpdateOperatorParams(
-				0, msgUpdateOperatorParams.OperatorParams, msgUpdateOperatorParams.Sender,
+				0,
+				msgUpdateOperatorParams.Params,
+				msgUpdateOperatorParams.Sender,
 			),
 			shouldErr: true,
 		},
 		{
 			name: "invalid operator params returns error",
 			msg: types.NewMsgUpdateOperatorParams(
-				msgUpdateOperatorParams.OperatorID, types.NewOperatorParams(sdkmath.LegacyNewDec(2), nil),
-				msgUpdateOperatorParams.Sender),
+				msgUpdateOperatorParams.OperatorID,
+				types.NewOperatorParams(sdkmath.LegacyNewDec(2), nil),
+				msgUpdateOperatorParams.Sender,
+			),
 			shouldErr: true,
 		},
 		{
@@ -54,7 +58,7 @@ func TestMsgUpdateOperatorParams_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgUpdateOperatorParams_GetSignBytes(t *testing.T) {
-	expected := `{"type":"milkyway/MsgUpdateOperatorParams","value":{"operator_id":1,"operator_params":{"commission_rate":"0.100000000000000000","joined_service_ids":[1,2,3]},"sender":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"}}`
+	expected := `{"type":"milkyway/MsgUpdateOperatorParams","value":{"operator_id":1,"params":{"commission_rate":"0.100000000000000000","joined_services_ids":[1,2,3]},"sender":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"}}`
 	require.Equal(t, expected, string(msgUpdateOperatorParams.GetSignBytes()))
 }
 
@@ -79,7 +83,9 @@ func TestMsgUpdateServiceParams_ValidateBasic(t *testing.T) {
 		{
 			name: "invalid service id returns error",
 			msg: types.NewMsgUpdateServiceParams(
-				0, msgUpdateServiceParams.ServiceParams, msgUpdateServiceParams.Sender,
+				0,
+				msgUpdateServiceParams.Params,
+				msgUpdateServiceParams.Sender,
 			),
 			shouldErr: true,
 		},
@@ -111,7 +117,7 @@ func TestMsgUpdateServiceParams_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgUpdateServiceParams_GetSignBytes(t *testing.T) {
-	expected := `{"type":"milkyway/MsgUpdateServiceParams","value":{"sender":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","service_id":1,"service_params":{"slash_fraction":"0.010000000000000000","whitelisted_operator_ids":[4,5,6],"whitelisted_pool_ids":[1,2,3]}}}`
+	expected := `{"type":"milkyway/MsgUpdateServiceParams","value":{"params":{"slash_fraction":"0.010000000000000000","whitelisted_operators_ids":[4,5,6],"whitelisted_pools_ids":[1,2,3]},"sender":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","service_id":1}}`
 	require.Equal(t, expected, string(msgUpdateServiceParams.GetSignBytes()))
 }
 

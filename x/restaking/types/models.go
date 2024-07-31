@@ -10,10 +10,10 @@ import (
 	"github.com/milkyway-labs/milkyway/utils"
 )
 
-func NewOperatorParams(commissionRate math.LegacyDec, joinedServiceIDs []uint32) OperatorParams {
+func NewOperatorParams(commissionRate math.LegacyDec, joinedServicesIDs []uint32) OperatorParams {
 	return OperatorParams{
-		CommissionRate:   commissionRate,
-		JoinedServiceIDs: joinedServiceIDs,
+		CommissionRate:    commissionRate,
+		JoinedServicesIDs: joinedServicesIDs,
 	}
 }
 
@@ -26,11 +26,11 @@ func (p *OperatorParams) Validate() error {
 		return fmt.Errorf("invalid commission rate: %s", p.CommissionRate.String())
 	}
 
-	if duplicate := utils.FindDuplicate(p.JoinedServiceIDs); duplicate != nil {
+	if duplicate := utils.FindDuplicate(p.JoinedServicesIDs); duplicate != nil {
 		return fmt.Errorf("duplicated joined service id: %v", duplicate)
 	}
 
-	for _, serviceID := range p.JoinedServiceIDs {
+	for _, serviceID := range p.JoinedServicesIDs {
 		if serviceID == 0 {
 			return fmt.Errorf("invalid joined service id: %d", serviceID)
 		}
@@ -41,11 +41,14 @@ func (p *OperatorParams) Validate() error {
 // --------------------------------------------------------------------------------------------------------------------
 
 func NewServiceParams(
-	slashFraction math.LegacyDec, whitelistedPoolIDs, whitelistedOperatorIDs []uint32) ServiceParams {
+	slashFraction math.LegacyDec,
+	whitelistedPoolsIDs []uint32,
+	whitelistedOperatorsIDs []uint32,
+) ServiceParams {
 	return ServiceParams{
-		SlashFraction:          slashFraction,
-		WhitelistedPoolIDs:     whitelistedPoolIDs,
-		WhitelistedOperatorIDs: whitelistedOperatorIDs,
+		SlashFraction:           slashFraction,
+		WhitelistedPoolsIDs:     whitelistedPoolsIDs,
+		WhitelistedOperatorsIDs: whitelistedOperatorsIDs,
 	}
 }
 
@@ -58,21 +61,21 @@ func (p *ServiceParams) Validate() error {
 		return fmt.Errorf("invalid slash fraction: %s", p.SlashFraction.String())
 	}
 
-	if duplicate := utils.FindDuplicate(p.WhitelistedPoolIDs); duplicate != nil {
+	if duplicate := utils.FindDuplicate(p.WhitelistedPoolsIDs); duplicate != nil {
 		return fmt.Errorf("duplicated whitelisted pool id: %v", duplicate)
 	}
 
-	if duplicate := utils.FindDuplicate(p.WhitelistedOperatorIDs); duplicate != nil {
+	if duplicate := utils.FindDuplicate(p.WhitelistedOperatorsIDs); duplicate != nil {
 		return fmt.Errorf("duplicated whitelisted operator id: %v", duplicate)
 	}
 
-	for _, poolID := range p.WhitelistedPoolIDs {
+	for _, poolID := range p.WhitelistedPoolsIDs {
 		if poolID == 0 {
 			return fmt.Errorf("invalid whitelisted pool id: %d", poolID)
 		}
 	}
 
-	for _, operatorID := range p.WhitelistedOperatorIDs {
+	for _, operatorID := range p.WhitelistedOperatorsIDs {
 		if operatorID == 0 {
 			return fmt.Errorf("invalid whitelisted operator id: %d", operatorID)
 		}
