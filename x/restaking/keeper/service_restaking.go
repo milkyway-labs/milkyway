@@ -7,6 +7,24 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
+func (k *Keeper) GetServiceParams(ctx sdk.Context, operatorID uint32) (params types.ServiceParams, found bool) {
+	store := ctx.KVStore(k.storeKey)
+	bz := store.Get(types.ServiceParamsStoreKey(operatorID))
+	if bz == nil {
+		return params, false
+	}
+
+	k.cdc.MustUnmarshal(bz, &params)
+	return params, true
+}
+
+func (k *Keeper) SaveServiceParams(ctx sdk.Context, serviceID uint32, params types.ServiceParams) {
+	store := ctx.KVStore(k.storeKey)
+	store.Set(types.ServiceParamsStoreKey(serviceID), k.cdc.MustMarshal(&params))
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
 // SaveServiceDelegation stores the given service delegation in the store
 func (k *Keeper) SaveServiceDelegation(ctx sdk.Context, delegation types.Delegation) {
 	store := ctx.KVStore(k.storeKey)

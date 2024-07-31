@@ -307,3 +307,24 @@ func VerifyTxHash(txHash string) (err error) {
 	}
 	return nil
 }
+
+func ParseUint32Slice(s string) ([]uint32, error) {
+	ss := strings.Split(s, ",")
+	out := make([]uint32, len(ss))
+	for i, d := range ss {
+		u, err := strconv.ParseUint(d, 10, 32)
+		if err != nil {
+			return nil, err
+		}
+		out[i] = uint32(u)
+	}
+	return out, nil
+}
+
+func FormatUint32Slice(s []uint32) string {
+	ss := make([]string, len(s))
+	for i, u := range s {
+		ss[i] = fmt.Sprint(u)
+	}
+	return strings.Join(ss, ",")
+}

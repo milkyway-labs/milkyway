@@ -18,8 +18,40 @@ func TestGenesis_Validate(t *testing.T) {
 		shouldErr bool
 	}{
 		{
+			name: "invalid operator params record returns error",
+			genesis: types.NewGenesis(
+				[]types.OperatorParamsRecord{
+					{
+						OperatorID: 1,
+						Params:     types.NewOperatorParams(sdkmath.LegacyNewDec(2), nil),
+					},
+				},
+				nil,
+				nil,
+				types.DefaultParams(),
+			),
+			shouldErr: true,
+		},
+		{
+			name: "invalid service params record returns error",
+			genesis: types.NewGenesis(
+				nil,
+				[]types.ServiceParamsRecord{
+					{
+						ServiceID: 1,
+						Params:    types.NewServiceParams(sdkmath.LegacyNewDec(2), nil, nil),
+					},
+				},
+				nil,
+				types.DefaultParams(),
+			),
+			shouldErr: true,
+		},
+		{
 			name: "invalid pool delegation entry returns error",
 			genesis: types.NewGenesis(
+				nil,
+				nil,
 				[]types.Delegation{
 					types.NewPoolDelegation(
 						0,
@@ -34,6 +66,8 @@ func TestGenesis_Validate(t *testing.T) {
 		{
 			name: "invalid service delegation entry returns error",
 			genesis: types.NewGenesis(
+				nil,
+				nil,
 				[]types.Delegation{
 					types.NewServiceDelegation(
 						0,
@@ -48,6 +82,8 @@ func TestGenesis_Validate(t *testing.T) {
 		{
 			name: "invalid operator delegation entry returns error",
 			genesis: types.NewGenesis(
+				nil,
+				nil,
 				[]types.Delegation{
 					types.NewOperatorDelegation(
 						0,
@@ -63,6 +99,8 @@ func TestGenesis_Validate(t *testing.T) {
 			name: "invalid params return error",
 			genesis: types.NewGenesis(
 				nil,
+				nil,
+				nil,
 				types.NewParams(0),
 			),
 			shouldErr: true,
@@ -75,6 +113,19 @@ func TestGenesis_Validate(t *testing.T) {
 		{
 			name: "valid genesis returns no error",
 			genesis: types.NewGenesis(
+				[]types.OperatorParamsRecord{
+					{
+						OperatorID: 1,
+						Params:     types.NewOperatorParams(sdkmath.LegacyNewDecWithPrec(1, 1), []uint32{2, 3, 5}),
+					},
+				},
+				[]types.ServiceParamsRecord{
+					{
+						ServiceID: 2,
+						Params: types.NewServiceParams(
+							sdkmath.LegacyNewDecWithPrec(1, 2), []uint32{1, 2, 3}, []uint32{1, 5}),
+					},
+				},
 				[]types.Delegation{
 					types.NewPoolDelegation(
 						1,

@@ -17,6 +17,19 @@ option go_package = "github.com/milkyway-labs/milkyway/x/restaking/types";
 
 // Query defines the gRPC querier service.
 service Query {
+  rpc OperatorParams(QueryOperatorParamsRequest)
+      returns (QueryOperatorParamsResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get =
+        "/milkyway/restaking/v1/operator_params/{operator_id}";
+  }
+
+  rpc ServiceParams(QueryServiceParamsRequest)
+      returns (QueryServiceParamsResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get =
+        "/milkyway/restaking/v1/service_params/{service_id}";
+  }
 
   // PoolDelegations queries the delegations info for the given pool.
   rpc PoolDelegations(QueryPoolDelegationsRequest)
@@ -155,6 +168,32 @@ service Query {
     option (cosmos.query.v1.module_query_safe) = true;
     option (google.api.http).get = "/milkyway/restaking/v1/params";
   }
+}
+
+// QueryOperatorParamsRequest is request type for the Query/OperatorParams
+// RPC method.
+message QueryOperatorParamsRequest {
+  // OperatorId is the ID of the operator to query
+  uint32 operator_id = 1;
+}
+
+// QueryOperatorParamsResponse is response type for the Query/OperatorParams
+// RPC method.
+message QueryOperatorParamsResponse {
+  OperatorParams operator_params = 1 [ (gogoproto.nullable) = false ];
+}
+
+// QueryServiceParamsRequest is request type for the Query/ServiceParams
+// RPC method.
+message QueryServiceParamsRequest {
+  // ServiceId is the ID of the service to query
+  uint32 service_id = 1;
+}
+
+// QueryServiceParamsResponse is response type for the Query/ServiceParams
+// RPC method.
+message QueryServiceParamsResponse {
+  ServiceParams service_params = 1 [ (gogoproto.nullable) = false ];
 }
 
 // QueryPoolDelegationsRequest is request type for the Query/PoolDelegations RPC

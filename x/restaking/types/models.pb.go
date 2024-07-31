@@ -4,6 +4,7 @@
 package types
 
 import (
+	cosmossdk_io_math "cosmossdk.io/math"
 	fmt "fmt"
 	_ "github.com/cosmos/cosmos-proto"
 	github_com_cosmos_cosmos_sdk_types "github.com/cosmos/cosmos-sdk/types"
@@ -59,6 +60,106 @@ func (DelegationType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_86f4cd48423b1e2f, []int{0}
 }
 
+type OperatorParams struct {
+	// CommissionRate defines the commission rate charged to delegators, as a
+	// fraction.
+	CommissionRate   cosmossdk_io_math.LegacyDec `protobuf:"bytes,1,opt,name=commission_rate,json=commissionRate,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"commission_rate"`
+	JoinedServiceIDs []uint32                    `protobuf:"varint,2,rep,packed,name=joined_service_ids,json=joinedServiceIds,proto3" json:"joined_service_ids,omitempty"`
+}
+
+func (m *OperatorParams) Reset()         { *m = OperatorParams{} }
+func (m *OperatorParams) String() string { return proto.CompactTextString(m) }
+func (*OperatorParams) ProtoMessage()    {}
+func (*OperatorParams) Descriptor() ([]byte, []int) {
+	return fileDescriptor_86f4cd48423b1e2f, []int{0}
+}
+func (m *OperatorParams) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *OperatorParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_OperatorParams.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *OperatorParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OperatorParams.Merge(m, src)
+}
+func (m *OperatorParams) XXX_Size() int {
+	return m.Size()
+}
+func (m *OperatorParams) XXX_DiscardUnknown() {
+	xxx_messageInfo_OperatorParams.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_OperatorParams proto.InternalMessageInfo
+
+func (m *OperatorParams) GetJoinedServiceIDs() []uint32 {
+	if m != nil {
+		return m.JoinedServiceIDs
+	}
+	return nil
+}
+
+type ServiceParams struct {
+	SlashFraction          cosmossdk_io_math.LegacyDec `protobuf:"bytes,1,opt,name=slash_fraction,json=slashFraction,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"slash_fraction"`
+	WhitelistedPoolIDs     []uint32                    `protobuf:"varint,2,rep,packed,name=whitelisted_pool_ids,json=whitelistedPoolIds,proto3" json:"whitelisted_pool_ids,omitempty"`
+	WhitelistedOperatorIDs []uint32                    `protobuf:"varint,3,rep,packed,name=whitelisted_operator_ids,json=whitelistedOperatorIds,proto3" json:"whitelisted_operator_ids,omitempty"`
+}
+
+func (m *ServiceParams) Reset()         { *m = ServiceParams{} }
+func (m *ServiceParams) String() string { return proto.CompactTextString(m) }
+func (*ServiceParams) ProtoMessage()    {}
+func (*ServiceParams) Descriptor() ([]byte, []int) {
+	return fileDescriptor_86f4cd48423b1e2f, []int{1}
+}
+func (m *ServiceParams) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ServiceParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ServiceParams.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ServiceParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ServiceParams.Merge(m, src)
+}
+func (m *ServiceParams) XXX_Size() int {
+	return m.Size()
+}
+func (m *ServiceParams) XXX_DiscardUnknown() {
+	xxx_messageInfo_ServiceParams.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ServiceParams proto.InternalMessageInfo
+
+func (m *ServiceParams) GetWhitelistedPoolIDs() []uint32 {
+	if m != nil {
+		return m.WhitelistedPoolIDs
+	}
+	return nil
+}
+
+func (m *ServiceParams) GetWhitelistedOperatorIDs() []uint32 {
+	if m != nil {
+		return m.WhitelistedOperatorIDs
+	}
+	return nil
+}
+
 // Delegation represents the bond with tokens held by an account with a
 // given target.
 type Delegation struct {
@@ -77,7 +178,7 @@ func (m *Delegation) Reset()         { *m = Delegation{} }
 func (m *Delegation) String() string { return proto.CompactTextString(m) }
 func (*Delegation) ProtoMessage()    {}
 func (*Delegation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_86f4cd48423b1e2f, []int{0}
+	return fileDescriptor_86f4cd48423b1e2f, []int{2}
 }
 func (m *Delegation) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -118,7 +219,7 @@ func (m *DelegationResponse) Reset()         { *m = DelegationResponse{} }
 func (m *DelegationResponse) String() string { return proto.CompactTextString(m) }
 func (*DelegationResponse) ProtoMessage()    {}
 func (*DelegationResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_86f4cd48423b1e2f, []int{1}
+	return fileDescriptor_86f4cd48423b1e2f, []int{3}
 }
 func (m *DelegationResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -163,6 +264,8 @@ func (m *DelegationResponse) GetBalance() github_com_cosmos_cosmos_sdk_types.Coi
 
 func init() {
 	proto.RegisterEnum("milkyway.restaking.v1.DelegationType", DelegationType_name, DelegationType_value)
+	proto.RegisterType((*OperatorParams)(nil), "milkyway.restaking.v1.OperatorParams")
+	proto.RegisterType((*ServiceParams)(nil), "milkyway.restaking.v1.ServiceParams")
 	proto.RegisterType((*Delegation)(nil), "milkyway.restaking.v1.Delegation")
 	proto.RegisterType((*DelegationResponse)(nil), "milkyway.restaking.v1.DelegationResponse")
 }
@@ -172,42 +275,175 @@ func init() {
 }
 
 var fileDescriptor_86f4cd48423b1e2f = []byte{
-	// 551 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x93, 0x4f, 0x8f, 0xd2, 0x40,
-	0x18, 0xc6, 0x3b, 0x40, 0x56, 0x18, 0xd6, 0x0d, 0x4e, 0x30, 0x76, 0xd9, 0x4d, 0x8b, 0x24, 0x26,
-	0xb8, 0x86, 0x56, 0xe0, 0xe4, 0x7a, 0xe2, 0x4f, 0x35, 0x4d, 0x70, 0x21, 0x05, 0x4d, 0xf4, 0x42,
-	0xa6, 0x74, 0xd2, 0x6d, 0x80, 0x0e, 0xe9, 0x74, 0x51, 0xbe, 0xc1, 0x1e, 0x3c, 0xf8, 0x11, 0x36,
-	0xd1, 0x83, 0xf1, 0xe4, 0xc1, 0x0f, 0xb1, 0x37, 0x37, 0x9e, 0x3c, 0xad, 0x06, 0x0e, 0xfa, 0x31,
-	0x4c, 0xdb, 0x81, 0x45, 0xb2, 0x89, 0x5e, 0xa0, 0xef, 0xf3, 0x3c, 0xef, 0xf4, 0xfd, 0xbd, 0x6d,
-	0x61, 0x61, 0xec, 0x8c, 0x86, 0xb3, 0xd7, 0x78, 0xa6, 0x7a, 0x84, 0xf9, 0x78, 0xe8, 0xb8, 0xb6,
-	0x3a, 0x2d, 0xab, 0x63, 0x6a, 0x91, 0x11, 0x53, 0x26, 0x1e, 0xf5, 0x29, 0xba, 0xbd, 0xcc, 0x28,
-	0xab, 0x8c, 0x32, 0x2d, 0xe7, 0x6e, 0xe1, 0xb1, 0xe3, 0x52, 0x35, 0xfc, 0x8d, 0x92, 0xb9, 0xdd,
-	0x01, 0x65, 0x63, 0xca, 0xfa, 0x61, 0xa5, 0x46, 0x05, 0xb7, 0xb2, 0x36, 0xb5, 0x69, 0xa4, 0x07,
-	0x57, 0x5c, 0x95, 0xa2, 0x8c, 0x6a, 0x62, 0x46, 0xd4, 0x69, 0xd9, 0x24, 0x3e, 0x2e, 0xab, 0x03,
-	0xea, 0xb8, 0x91, 0x5f, 0xf8, 0x10, 0x83, 0xb0, 0x49, 0x46, 0xc4, 0xc6, 0xbe, 0x43, 0x5d, 0xf4,
-	0x08, 0x26, 0xfc, 0xd9, 0x84, 0x88, 0x20, 0x0f, 0x8a, 0x3b, 0x95, 0x7b, 0xca, 0xb5, 0x83, 0x29,
-	0x57, 0x0d, 0xbd, 0xd9, 0x84, 0x18, 0x61, 0x0b, 0x7a, 0x0c, 0xb7, 0x4f, 0x18, 0xf1, 0xfa, 0xd8,
-	0xb2, 0x3c, 0xc2, 0x98, 0x18, 0xcb, 0x83, 0x62, 0xaa, 0x2e, 0x7e, 0xfb, 0x52, 0xca, 0xf2, 0x39,
-	0x6b, 0x91, 0xd3, 0xf5, 0x3d, 0xc7, 0xb5, 0x8d, 0x74, 0x90, 0xe6, 0x12, 0xba, 0x0f, 0x53, 0x3e,
-	0xf6, 0x6c, 0xe2, 0xf7, 0x1d, 0x4b, 0x8c, 0xe7, 0x41, 0xf1, 0x66, 0x7d, 0x7b, 0x7e, 0x29, 0x27,
-	0x7b, 0xa1, 0xa8, 0x37, 0x8d, 0x64, 0x64, 0xeb, 0x16, 0x72, 0xe0, 0x16, 0x3b, 0xc6, 0x1e, 0x61,
-	0x62, 0x22, 0x1f, 0x2f, 0xa6, 0x2b, 0xfb, 0x0a, 0x3f, 0x3e, 0x40, 0x54, 0x38, 0xa2, 0xd2, 0x24,
-	0x83, 0x06, 0x75, 0xdc, 0x7a, 0xf5, 0xfc, 0x52, 0x16, 0x3e, 0xfd, 0x90, 0x1f, 0xd8, 0x8e, 0x7f,
-	0x7c, 0x62, 0x2a, 0x03, 0x3a, 0xe6, 0x6b, 0xe3, 0x7f, 0x25, 0x66, 0x0d, 0xd5, 0x00, 0x80, 0x2d,
-	0x7b, 0x98, 0xc1, 0x6f, 0x70, 0x98, 0x3c, 0x3d, 0x93, 0x85, 0xdf, 0x67, 0xb2, 0x50, 0xf8, 0x0a,
-	0x20, 0xba, 0xa2, 0x36, 0x08, 0x9b, 0x50, 0x97, 0x11, 0xd4, 0x82, 0xd0, 0x5a, 0xa9, 0xe1, 0xd2,
-	0xd2, 0x95, 0xbb, 0xff, 0x5c, 0x5a, 0x3d, 0x15, 0x0c, 0xf5, 0xf1, 0xd7, 0xe7, 0x03, 0x60, 0xac,
-	0xf5, 0x23, 0x02, 0x6f, 0x98, 0x78, 0x84, 0xdd, 0x01, 0x11, 0x63, 0x21, 0xda, 0xee, 0xb5, 0x68,
-	0x21, 0xd7, 0x43, 0xce, 0x55, 0xfc, 0x0f, 0xae, 0x08, 0x6a, 0x79, 0xf6, 0x61, 0x22, 0x20, 0x3a,
-	0x78, 0x0b, 0xe0, 0xce, 0xdf, 0xcf, 0x11, 0xc9, 0x70, 0xaf, 0xa9, 0xb5, 0xb4, 0xa7, 0xb5, 0x9e,
-	0xde, 0x3e, 0xea, 0xf7, 0x5e, 0x76, 0xb4, 0xfe, 0xf3, 0xa3, 0x6e, 0x47, 0x6b, 0xe8, 0x4f, 0x74,
-	0xad, 0x99, 0x11, 0x90, 0x08, 0xb3, 0x9b, 0x81, 0x4e, 0xbb, 0xdd, 0xca, 0x00, 0xb4, 0x0f, 0xc5,
-	0x4d, 0xa7, 0xdd, 0xd1, 0x8c, 0x5a, 0xaf, 0x6d, 0x64, 0x62, 0x68, 0x0f, 0xde, 0xd9, 0x74, 0xbb,
-	0x9a, 0xf1, 0x42, 0x6f, 0x68, 0x99, 0x78, 0x2e, 0x71, 0xfa, 0x5e, 0x12, 0xea, 0xcf, 0xce, 0xe7,
-	0x12, 0xb8, 0x98, 0x4b, 0xe0, 0xe7, 0x5c, 0x02, 0xef, 0x16, 0x92, 0x70, 0xb1, 0x90, 0x84, 0xef,
-	0x0b, 0x49, 0x78, 0x55, 0x5d, 0x23, 0x5c, 0x6e, 0xb6, 0x34, 0xc2, 0x26, 0x5b, 0x55, 0xea, 0x9b,
-	0xb5, 0x6f, 0x2b, 0x44, 0x36, 0xb7, 0xc2, 0xb7, 0xbb, 0xfa, 0x27, 0x00, 0x00, 0xff, 0xff, 0x17,
-	0xb7, 0x70, 0x19, 0x7e, 0x03, 0x00, 0x00,
+	// 755 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x54, 0x4f, 0x6f, 0xe2, 0x46,
+	0x14, 0xb7, 0x03, 0x4a, 0x93, 0x21, 0x50, 0x3a, 0xa2, 0xa9, 0x43, 0x22, 0x9b, 0x52, 0x55, 0xa2,
+	0xa9, 0x62, 0x17, 0x72, 0x6a, 0x7a, 0x0a, 0xc1, 0x69, 0x89, 0x68, 0x40, 0x86, 0xb6, 0x6a, 0x2f,
+	0xd6, 0x60, 0x4f, 0xcd, 0x04, 0xdb, 0x83, 0x3c, 0x0e, 0x94, 0x6f, 0x90, 0x43, 0x0f, 0xfd, 0x08,
+	0x51, 0x77, 0x0f, 0xab, 0x3d, 0xed, 0x61, 0x3f, 0x44, 0x6e, 0x1b, 0xed, 0x69, 0xb5, 0x07, 0x76,
+	0x45, 0x0e, 0xbb, 0xdf, 0x61, 0x2f, 0x2b, 0xff, 0x21, 0x10, 0x14, 0x69, 0x77, 0x2f, 0xb6, 0xdf,
+	0xef, 0xf7, 0xde, 0xcf, 0xef, 0xf7, 0xe6, 0x69, 0x40, 0xd1, 0x21, 0x76, 0x7f, 0x3c, 0x42, 0x63,
+	0xc5, 0xc3, 0xcc, 0x47, 0x7d, 0xe2, 0x5a, 0xca, 0xb0, 0xac, 0x38, 0xd4, 0xc4, 0x36, 0x93, 0x07,
+	0x1e, 0xf5, 0x29, 0xfc, 0x72, 0x96, 0x23, 0xdf, 0xe6, 0xc8, 0xc3, 0x72, 0xfe, 0x0b, 0xe4, 0x10,
+	0x97, 0x2a, 0xe1, 0x33, 0xca, 0xcc, 0x6f, 0x19, 0x94, 0x39, 0x94, 0xe9, 0x61, 0xa4, 0x44, 0x41,
+	0x4c, 0xe5, 0x2c, 0x6a, 0xd1, 0x08, 0x0f, 0xbe, 0x62, 0x54, 0x8c, 0x72, 0x94, 0x2e, 0x62, 0x58,
+	0x19, 0x96, 0xbb, 0xd8, 0x47, 0x65, 0xc5, 0xa0, 0xc4, 0x8d, 0xf8, 0xe2, 0xff, 0x3c, 0xc8, 0x34,
+	0x07, 0xd8, 0x43, 0x3e, 0xf5, 0x5a, 0xc8, 0x43, 0x0e, 0x83, 0x0d, 0xf0, 0xb9, 0x41, 0x1d, 0x87,
+	0x30, 0x46, 0xa8, 0xab, 0x7b, 0xc8, 0xc7, 0x02, 0x5f, 0xe0, 0x4b, 0xeb, 0xd5, 0x6f, 0xae, 0x26,
+	0x12, 0xf7, 0x72, 0x22, 0x6d, 0x47, 0x9a, 0xcc, 0xec, 0xcb, 0x84, 0x2a, 0x0e, 0xf2, 0x7b, 0x72,
+	0x03, 0x5b, 0xc8, 0x18, 0xd7, 0xb0, 0xa1, 0x65, 0xe6, 0xb5, 0x1a, 0xf2, 0x31, 0xac, 0x02, 0x78,
+	0x46, 0x89, 0x8b, 0x4d, 0x9d, 0x61, 0x6f, 0x48, 0x0c, 0xac, 0x13, 0x93, 0x09, 0x2b, 0x85, 0x44,
+	0x29, 0x5d, 0xcd, 0x4d, 0x27, 0x52, 0xf6, 0x24, 0x64, 0xdb, 0x11, 0x59, 0xaf, 0x31, 0x2d, 0x7b,
+	0x76, 0x07, 0x31, 0x59, 0xf1, 0x1d, 0x0f, 0xd2, 0x71, 0x18, 0xf7, 0x78, 0x02, 0x32, 0xcc, 0x46,
+	0xac, 0xa7, 0xff, 0xed, 0x21, 0xc3, 0x27, 0xd4, 0xfd, 0x94, 0x16, 0xd3, 0x61, 0xe9, 0x71, 0x5c,
+	0x09, 0x7f, 0x01, 0xb9, 0x51, 0x8f, 0xf8, 0xd8, 0x26, 0xcc, 0xc7, 0xa6, 0x3e, 0xa0, 0xd4, 0x5e,
+	0xe8, 0x71, 0x73, 0x3a, 0x91, 0xe0, 0x1f, 0x73, 0xbe, 0x45, 0xa9, 0x1d, 0x74, 0x09, 0x47, 0x4b,
+	0x98, 0xc9, 0x60, 0x07, 0x08, 0x8b, 0x4a, 0x34, 0x9e, 0x6b, 0xa8, 0x96, 0x08, 0xd5, 0xf2, 0xd3,
+	0x89, 0xb4, 0xb9, 0xa0, 0x36, 0x1b, 0x7d, 0xa0, 0xb8, 0x39, 0xba, 0x07, 0x37, 0x59, 0xf1, 0xe1,
+	0x0a, 0x00, 0x35, 0x6c, 0x63, 0x0b, 0x85, 0xed, 0xfe, 0x08, 0x92, 0xfe, 0x78, 0x10, 0x9d, 0x49,
+	0xa6, 0xf2, 0xad, 0x7c, 0xef, 0xee, 0xc8, 0xf3, 0x82, 0xce, 0x78, 0x80, 0xb5, 0xb0, 0x04, 0xfe,
+	0x04, 0x36, 0xce, 0x19, 0xf6, 0x74, 0x64, 0x9a, 0x1e, 0x66, 0x81, 0xc3, 0x60, 0x66, 0xc2, 0xf3,
+	0xa7, 0x7b, 0xb9, 0x78, 0x95, 0x0e, 0x23, 0xa6, 0xed, 0x7b, 0xc4, 0xb5, 0xb4, 0x54, 0x90, 0x1d,
+	0x43, 0xf0, 0x3b, 0xb0, 0xee, 0x23, 0xcf, 0xc2, 0xbe, 0x4e, 0x4c, 0x21, 0x51, 0xe0, 0x4b, 0xe9,
+	0xea, 0xc6, 0x74, 0x22, 0xad, 0x75, 0x42, 0xb0, 0x5e, 0xd3, 0xd6, 0x22, 0xba, 0x6e, 0x42, 0x02,
+	0x56, 0x59, 0x0f, 0x79, 0x98, 0x09, 0xc9, 0x42, 0xa2, 0x94, 0xaa, 0xec, 0xc8, 0xb1, 0x7c, 0xb0,
+	0x85, 0x72, 0xbc, 0x85, 0x72, 0x0d, 0x1b, 0x47, 0x94, 0xb8, 0xd5, 0xfd, 0xe0, 0xcc, 0x1e, 0xbf,
+	0x92, 0xbe, 0xb7, 0x88, 0xdf, 0x3b, 0xef, 0xca, 0x06, 0x75, 0xe2, 0xcd, 0x8e, 0x5f, 0x7b, 0xcc,
+	0xec, 0x2b, 0x81, 0x01, 0x36, 0xab, 0x61, 0x5a, 0xfc, 0x83, 0x83, 0xb5, 0x8b, 0x4b, 0x89, 0x7b,
+	0x7b, 0x29, 0x71, 0xc5, 0x67, 0x3c, 0x80, 0x73, 0xd7, 0x1a, 0x66, 0x03, 0xea, 0x32, 0x0c, 0x1b,
+	0x00, 0x98, 0xb7, 0x68, 0x38, 0xb4, 0x54, 0xe5, 0xeb, 0x0f, 0x0e, 0xad, 0xba, 0x1e, 0x34, 0xf5,
+	0xe8, 0xcd, 0x93, 0x5d, 0x5e, 0x5b, 0xa8, 0x87, 0x18, 0x7c, 0xd6, 0x45, 0x36, 0x72, 0x0d, 0x1c,
+	0xae, 0x47, 0xaa, 0xb2, 0x75, 0xaf, 0xb5, 0xd0, 0xd7, 0x0f, 0xb1, 0xaf, 0xd2, 0x47, 0xf8, 0x8a,
+	0x4c, 0xcd, 0xb4, 0x0f, 0x92, 0x81, 0xa3, 0xdd, 0x7f, 0x79, 0x90, 0xb9, 0x7b, 0x8e, 0x50, 0x02,
+	0xdb, 0x35, 0xb5, 0xa1, 0xfe, 0x7c, 0xd8, 0xa9, 0x37, 0x4f, 0xf5, 0xce, 0x9f, 0x2d, 0x55, 0xff,
+	0xed, 0xb4, 0xdd, 0x52, 0x8f, 0xea, 0xc7, 0x75, 0xb5, 0x96, 0xe5, 0xa0, 0x00, 0x72, 0xcb, 0x09,
+	0xad, 0x66, 0xb3, 0x91, 0xe5, 0xe1, 0x0e, 0x10, 0x96, 0x99, 0x66, 0x4b, 0xd5, 0x0e, 0x3b, 0x4d,
+	0x2d, 0xbb, 0x02, 0xb7, 0xc1, 0x57, 0xcb, 0x6c, 0x5b, 0xd5, 0x7e, 0xaf, 0x1f, 0xa9, 0xd9, 0x44,
+	0x3e, 0x79, 0xf1, 0x40, 0xe4, 0xaa, 0xbf, 0x5e, 0x4d, 0x45, 0xfe, 0x7a, 0x2a, 0xf2, 0xaf, 0xa7,
+	0x22, 0xff, 0xdf, 0x8d, 0xc8, 0x5d, 0xdf, 0x88, 0xdc, 0x8b, 0x1b, 0x91, 0xfb, 0x6b, 0x7f, 0xc1,
+	0xe1, 0x6c, 0xb2, 0x7b, 0x36, 0xea, 0xb2, 0xdb, 0x48, 0xf9, 0x67, 0xe1, 0xfa, 0x0b, 0x2d, 0x77,
+	0x57, 0xc3, 0x0b, 0x68, 0xff, 0x7d, 0x00, 0x00, 0x00, 0xff, 0xff, 0x71, 0xc9, 0x48, 0x40, 0x21,
+	0x05, 0x00, 0x00,
+}
+
+func (m *OperatorParams) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *OperatorParams) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *OperatorParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.JoinedServiceIDs) > 0 {
+		dAtA2 := make([]byte, len(m.JoinedServiceIDs)*10)
+		var j1 int
+		for _, num := range m.JoinedServiceIDs {
+			for num >= 1<<7 {
+				dAtA2[j1] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j1++
+			}
+			dAtA2[j1] = uint8(num)
+			j1++
+		}
+		i -= j1
+		copy(dAtA[i:], dAtA2[:j1])
+		i = encodeVarintModels(dAtA, i, uint64(j1))
+		i--
+		dAtA[i] = 0x12
+	}
+	{
+		size := m.CommissionRate.Size()
+		i -= size
+		if _, err := m.CommissionRate.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintModels(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *ServiceParams) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ServiceParams) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.WhitelistedOperatorIDs) > 0 {
+		dAtA4 := make([]byte, len(m.WhitelistedOperatorIDs)*10)
+		var j3 int
+		for _, num := range m.WhitelistedOperatorIDs {
+			for num >= 1<<7 {
+				dAtA4[j3] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j3++
+			}
+			dAtA4[j3] = uint8(num)
+			j3++
+		}
+		i -= j3
+		copy(dAtA[i:], dAtA4[:j3])
+		i = encodeVarintModels(dAtA, i, uint64(j3))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.WhitelistedPoolIDs) > 0 {
+		dAtA6 := make([]byte, len(m.WhitelistedPoolIDs)*10)
+		var j5 int
+		for _, num := range m.WhitelistedPoolIDs {
+			for num >= 1<<7 {
+				dAtA6[j5] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j5++
+			}
+			dAtA6[j5] = uint8(num)
+			j5++
+		}
+		i -= j5
+		copy(dAtA[i:], dAtA6[:j5])
+		i = encodeVarintModels(dAtA, i, uint64(j5))
+		i--
+		dAtA[i] = 0x12
+	}
+	{
+		size := m.SlashFraction.Size()
+		i -= size
+		if _, err := m.SlashFraction.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintModels(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
 }
 
 func (m *Delegation) Marshal() (dAtA []byte, err error) {
@@ -322,6 +558,49 @@ func encodeVarintModels(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
+func (m *OperatorParams) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.CommissionRate.Size()
+	n += 1 + l + sovModels(uint64(l))
+	if len(m.JoinedServiceIDs) > 0 {
+		l = 0
+		for _, e := range m.JoinedServiceIDs {
+			l += sovModels(uint64(e))
+		}
+		n += 1 + sovModels(uint64(l)) + l
+	}
+	return n
+}
+
+func (m *ServiceParams) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.SlashFraction.Size()
+	n += 1 + l + sovModels(uint64(l))
+	if len(m.WhitelistedPoolIDs) > 0 {
+		l = 0
+		for _, e := range m.WhitelistedPoolIDs {
+			l += sovModels(uint64(e))
+		}
+		n += 1 + sovModels(uint64(l)) + l
+	}
+	if len(m.WhitelistedOperatorIDs) > 0 {
+		l = 0
+		for _, e := range m.WhitelistedOperatorIDs {
+			l += sovModels(uint64(e))
+		}
+		n += 1 + sovModels(uint64(l)) + l
+	}
+	return n
+}
+
 func (m *Delegation) Size() (n int) {
 	if m == nil {
 		return 0
@@ -369,6 +648,402 @@ func sovModels(x uint64) (n int) {
 }
 func sozModels(x uint64) (n int) {
 	return sovModels(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (m *OperatorParams) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowModels
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: OperatorParams: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: OperatorParams: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CommissionRate", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowModels
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthModels
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthModels
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.CommissionRate.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType == 0 {
+				var v uint32
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowModels
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.JoinedServiceIDs = append(m.JoinedServiceIDs, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowModels
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthModels
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthModels
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				var count int
+				for _, integer := range dAtA[iNdEx:postIndex] {
+					if integer < 128 {
+						count++
+					}
+				}
+				elementCount = count
+				if elementCount != 0 && len(m.JoinedServiceIDs) == 0 {
+					m.JoinedServiceIDs = make([]uint32, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v uint32
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowModels
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= uint32(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.JoinedServiceIDs = append(m.JoinedServiceIDs, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field JoinedServiceIDs", wireType)
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipModels(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthModels
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ServiceParams) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowModels
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ServiceParams: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ServiceParams: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SlashFraction", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowModels
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthModels
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthModels
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.SlashFraction.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType == 0 {
+				var v uint32
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowModels
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.WhitelistedPoolIDs = append(m.WhitelistedPoolIDs, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowModels
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthModels
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthModels
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				var count int
+				for _, integer := range dAtA[iNdEx:postIndex] {
+					if integer < 128 {
+						count++
+					}
+				}
+				elementCount = count
+				if elementCount != 0 && len(m.WhitelistedPoolIDs) == 0 {
+					m.WhitelistedPoolIDs = make([]uint32, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v uint32
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowModels
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= uint32(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.WhitelistedPoolIDs = append(m.WhitelistedPoolIDs, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field WhitelistedPoolIDs", wireType)
+			}
+		case 3:
+			if wireType == 0 {
+				var v uint32
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowModels
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.WhitelistedOperatorIDs = append(m.WhitelistedOperatorIDs, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowModels
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthModels
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthModels
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				var count int
+				for _, integer := range dAtA[iNdEx:postIndex] {
+					if integer < 128 {
+						count++
+					}
+				}
+				elementCount = count
+				if elementCount != 0 && len(m.WhitelistedOperatorIDs) == 0 {
+					m.WhitelistedOperatorIDs = make([]uint32, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v uint32
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowModels
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= uint32(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.WhitelistedOperatorIDs = append(m.WhitelistedOperatorIDs, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field WhitelistedOperatorIDs", wireType)
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipModels(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthModels
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
 }
 func (m *Delegation) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)

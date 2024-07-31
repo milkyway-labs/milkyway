@@ -54,7 +54,7 @@ func (data *GenesisState) Validate() error {
 // findDuplicatedService returns the first duplicated service in the slice.
 // If no duplicates are found, it returns nil instead.
 func findDuplicatedService(services []Service) *Service {
-	return utils.FindDuplicate(services, func(a, b Service) bool {
+	return utils.FindDuplicateFunc(services, func(a, b Service) bool {
 		return a.ID == b.ID
 	})
 }

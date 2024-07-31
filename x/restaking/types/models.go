@@ -3,9 +3,84 @@ package types
 import (
 	"fmt"
 
+	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/milkyway-labs/milkyway/utils"
 )
+
+func NewOperatorParams(commissionRate math.LegacyDec, joinedServiceIDs []uint32) OperatorParams {
+	return OperatorParams{
+		CommissionRate:   commissionRate,
+		JoinedServiceIDs: joinedServiceIDs,
+	}
+}
+
+func DefaultOperatorParams() OperatorParams {
+	return NewOperatorParams(math.LegacyZeroDec(), nil)
+}
+
+func (p *OperatorParams) Validate() error {
+	if p.CommissionRate.IsNegative() || p.CommissionRate.GT(math.LegacyOneDec()) {
+		return fmt.Errorf("invalid commission rate: %s", p.CommissionRate.String())
+	}
+
+	if duplicate := utils.FindDuplicate(p.JoinedServiceIDs); duplicate != nil {
+		return fmt.Errorf("duplicated joined service id: %v", duplicate)
+	}
+
+	for _, serviceID := range p.JoinedServiceIDs {
+		if serviceID == 0 {
+			return fmt.Errorf("invalid joined service id: %d", serviceID)
+		}
+	}
+	return nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+func NewServiceParams(
+	slashFraction math.LegacyDec, whitelistedPoolIDs, whitelistedOperatorIDs []uint32) ServiceParams {
+	return ServiceParams{
+		SlashFraction:          slashFraction,
+		WhitelistedPoolIDs:     whitelistedPoolIDs,
+		WhitelistedOperatorIDs: whitelistedOperatorIDs,
+	}
+}
+
+func DefaultServiceParams() ServiceParams {
+	return NewServiceParams(math.LegacyZeroDec(), nil, nil)
+}
+
+func (p *ServiceParams) Validate() error {
+	if p.SlashFraction.IsNegative() || p.SlashFraction.GT(math.LegacyOneDec()) {
+		return fmt.Errorf("invalid slash fraction: %s", p.SlashFraction.String())
+	}
+
+	if duplicate := utils.FindDuplicate(p.WhitelistedPoolIDs); duplicate != nil {
+		return fmt.Errorf("duplicated whitelisted pool id: %v", duplicate)
+	}
+
+	if duplicate := utils.FindDuplicate(p.WhitelistedOperatorIDs); duplicate != nil {
+		return fmt.Errorf("duplicated whitelisted operator id: %v", duplicate)
+	}
+
+	for _, poolID := range p.WhitelistedPoolIDs {
+		if poolID == 0 {
+			return fmt.Errorf("invalid whitelisted pool id: %d", poolID)
+		}
+	}
+
+	for _, operatorID := range p.WhitelistedOperatorIDs {
+		if operatorID == 0 {
+			return fmt.Errorf("invalid whitelisted operator id: %d", operatorID)
+		}
+	}
+	return nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------
 
 // NewPoolDelegation creates a new Delegation instance representing a pool delegation
 func NewPoolDelegation(poolID uint32, userAddress string, shares sdk.DecCoins) Delegation {

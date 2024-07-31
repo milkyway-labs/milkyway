@@ -77,6 +77,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 		{
 			name: "genesis with pools is initialized properly",
 			genesis: types.NewGenesis(
+				types.DefaultParams(),
 				10,
 				[]types.Pool{
 					types.NewPool(1, "umilk"),

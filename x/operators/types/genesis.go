@@ -70,7 +70,7 @@ func (data *GenesisState) Validate() error {
 // findDuplicateOperators returns the first duplicated operator in the slice.
 // If no duplicates are found, it returns nil instead.
 func findDuplicateOperators(operators []Operator) *Operator {
-	return utils.FindDuplicate(operators, func(a, b Operator) bool {
+	return utils.FindDuplicateFunc(operators, func(a, b Operator) bool {
 		return a.ID == b.ID
 	})
 }
@@ -78,7 +78,7 @@ func findDuplicateOperators(operators []Operator) *Operator {
 // findDuplicateUnbondingOperators returns the first duplicated unbonding operator in the slice.
 // If no duplicates are found, it returns nil instead.
 func findDuplicateUnbondingOperators(operators []UnbondingOperator) *UnbondingOperator {
-	return utils.FindDuplicate(operators, func(a, b UnbondingOperator) bool {
+	return utils.FindDuplicateFunc(operators, func(a, b UnbondingOperator) bool {
 		return a.OperatorID == b.OperatorID
 	})
 }

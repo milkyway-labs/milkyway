@@ -14,6 +14,11 @@ func NewQueryPoolDelegationRequest(poolID uint32, delegatorAddress string) *Quer
 	return &QueryPoolDelegationRequest{PoolId: poolID, DelegatorAddress: delegatorAddress}
 }
 
+// NewQueryOperatorParamsRequest creates a new QueryOperatorParamsRequest instance
+func NewQueryOperatorParamsRequest(operatorID uint32) *QueryOperatorParamsRequest {
+	return &QueryOperatorParamsRequest{OperatorId: operatorID}
+}
+
 // NewQueryOperatorDelegationsRequest creates a new QueryOperatorDelegationsRequest instance
 func NewQueryOperatorDelegationsRequest(operatorID uint32, pagination *query.PageRequest) *QueryOperatorDelegationsRequest {
 	return &QueryOperatorDelegationsRequest{OperatorId: operatorID, Pagination: pagination}
@@ -22,6 +27,11 @@ func NewQueryOperatorDelegationsRequest(operatorID uint32, pagination *query.Pag
 // NewQueryOperatorDelegationRequest creates a new QueryOperatorDelegationRequest instance
 func NewQueryOperatorDelegationRequest(operatorID uint32, delegatorAddress string) *QueryOperatorDelegationRequest {
 	return &QueryOperatorDelegationRequest{OperatorId: operatorID, DelegatorAddress: delegatorAddress}
+}
+
+// NewQueryServiceParamsRequest creates a new QueryServiceParamsRequest instance
+func NewQueryServiceParamsRequest(serviceID uint32) *QueryServiceParamsRequest {
+	return &QueryServiceParamsRequest{ServiceId: serviceID}
 }
 
 // NewQueryServiceDelegationsRequest creates a new QueryServiceDelegationsRequest instance

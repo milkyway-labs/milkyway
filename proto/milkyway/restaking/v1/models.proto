@@ -8,6 +8,31 @@ import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/restaking/types";
 
+message OperatorParams {
+  // CommissionRate defines the commission rate charged to delegators, as a
+  // fraction.
+  string commission_rate = 1 [
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false
+  ];
+
+  repeated uint32 joined_service_ids = 2
+      [ (gogoproto.customname) = "JoinedServiceIDs" ];
+}
+
+message ServiceParams {
+  string slash_fraction = 1 [
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false
+  ];
+
+  repeated uint32 whitelisted_pool_ids = 2
+      [ (gogoproto.customname) = "WhitelistedPoolIDs" ];
+
+  repeated uint32 whitelisted_operator_ids = 3
+      [ (gogoproto.customname) = "WhitelistedOperatorIDs" ];
+}
+
 // DelegationType defines the type of delegation.
 enum DelegationType {
   option (gogoproto.goproto_enum_prefix) = false;

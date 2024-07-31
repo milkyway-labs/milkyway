@@ -8,11 +8,29 @@ import "milkyway/restaking/v1/params.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/restaking/types";
 
+message OperatorParamsRecord {
+  uint32 operator_id = 1 [ (gogoproto.customname) = "OperatorID" ];
+
+  OperatorParams params = 2 [ (gogoproto.nullable) = false ];
+}
+
+message ServiceParamsRecord {
+  uint32 service_id = 1 [ (gogoproto.customname) = "ServiceID" ];
+
+  ServiceParams params = 2 [ (gogoproto.nullable) = false ];
+}
+
 // GenesisState defines the restaking module's genesis state.
 message GenesisState {
   // Params defines the parameters of the module.
   Params params = 1 [ (gogoproto.nullable) = false ];
 
+  repeated OperatorParamsRecord operator_params = 2
+      [ (gogoproto.nullable) = false ];
+
+  repeated ServiceParamsRecord service_params = 3
+      [ (gogoproto.nullable) = false ];
+
   // Delegations represents the delegations.
-  repeated Delegation delegations = 2 [ (gogoproto.nullable) = false ];
+  repeated Delegation delegations = 4 [ (gogoproto.nullable) = false ];
 }
