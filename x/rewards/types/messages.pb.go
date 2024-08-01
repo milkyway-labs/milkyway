@@ -42,7 +42,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // new rewards plan. It requires a sender address as well as the details of
 // the plan to be created.
 type MsgCreateRewardsPlan struct {
-	// Sender is the address of the user registering the service
+	// Sender is the address of the user creating the rewards plan
 	Sender      string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
 	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
 	ServiceID   uint32 `protobuf:"varint,3,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`

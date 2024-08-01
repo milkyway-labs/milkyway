@@ -7,12 +7,18 @@ import (
 	sdkmath "cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/address"
 	"github.com/cosmos/gogoproto/proto"
 )
 
+// GetRewardsPoolAddress generates a rewards pool address from plan id.
+func GetRewardsPoolAddress(planID uint64) sdk.AccAddress {
+	return address.Module(ModuleName, []byte(fmt.Sprintf("rewards-plan-%d", planID)))
+}
+
 func NewRewardsPlan(
 	id uint64, description string, serviceID uint32, amtPerDay sdk.Coins, startTime, endTime time.Time,
-	poolsDistribution PoolsDistribution, operatorsDistribution OperatorsDistribution,
+	rewardsPool string, poolsDistribution PoolsDistribution, operatorsDistribution OperatorsDistribution,
 	usersDistribution UsersDistribution) RewardsPlan {
 	return RewardsPlan{
 		ID:                    id,
@@ -21,10 +27,23 @@ func NewRewardsPlan(
 		AmountPerDay:          amtPerDay,
 		StartTime:             startTime,
 		EndTime:               endTime,
+		RewardsPool:           rewardsPool,
 		PoolsDistribution:     poolsDistribution,
 		OperatorsDistribution: operatorsDistribution,
 		UsersDistribution:     usersDistribution,
 	}
+}
+
+func (plan RewardsPlan) IsActiveAt(t time.Time) bool {
+	return !plan.StartTime.After(t) && plan.EndTime.After(t)
+}
+
+func (plan RewardsPlan) MustGetRewardsPoolAddress() sdk.AccAddress {
+	addr, err := sdk.AccAddressFromBech32(plan.RewardsPool)
+	if err != nil {
+		panic(err)
+	}
+	return addr
 }
 
 func (plan RewardsPlan) TotalWeights() uint32 {
@@ -40,12 +59,15 @@ func (plan RewardsPlan) Validate() error {
 		return fmt.Errorf("invalid service ID")
 	}
 	if err := plan.AmountPerDay.Validate(); err != nil {
-		return err
+		return fmt.Errorf("invalid amount per day: %w", err)
 	}
 	if !plan.EndTime.After(plan.StartTime) {
 		return fmt.Errorf(
 			"end time must be after start time: %s <= %s",
 			plan.EndTime.Format(time.RFC3339), plan.StartTime.Format(time.RFC3339))
+	}
+	if _, err := sdk.AccAddressFromBech32(plan.RewardsPool); err != nil {
+		return fmt.Errorf("invalid rewards pool: %w", err)
 	}
 
 	// TODO: need to validate distribution types?

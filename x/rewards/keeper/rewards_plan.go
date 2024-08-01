@@ -33,7 +33,9 @@ func (k *Keeper) CreateRewardsPlan(
 	}
 
 	plan := types.NewRewardsPlan(
-		planID, description, serviceID, amt, startTime, endTime, poolsDistribution, operatorsDistribution,
+		planID, description, serviceID, amt, startTime, endTime,
+		types.GetRewardsPoolAddress(planID).String(),
+		poolsDistribution, operatorsDistribution,
 		usersDistribution)
 	if err := plan.Validate(); err != nil {
 		return types.RewardsPlan{}, err

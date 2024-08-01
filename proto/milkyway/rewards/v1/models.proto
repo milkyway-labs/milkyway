@@ -34,12 +34,14 @@ message RewardsPlan {
   google.protobuf.Timestamp end_time = 6
       [ (gogoproto.stdtime) = true, (gogoproto.nullable) = false ];
 
-  PoolsDistribution pools_distribution = 7 [ (gogoproto.nullable) = false ];
+  string rewards_pool = 7 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
-  OperatorsDistribution operators_distribution = 8
+  PoolsDistribution pools_distribution = 8 [ (gogoproto.nullable) = false ];
+
+  OperatorsDistribution operators_distribution = 9
       [ (gogoproto.nullable) = false ];
 
-  UsersDistribution users_distribution = 9 [ (gogoproto.nullable) = false ];
+  UsersDistribution users_distribution = 10 [ (gogoproto.nullable) = false ];
 }
 
 message PoolsDistribution {

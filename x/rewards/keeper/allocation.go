@@ -43,6 +43,11 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 	}
 
 	err = k.RewardsPlans.Walk(ctx, nil, func(planID uint64, plan types.RewardsPlan) (stop bool, err error) {
+		// Skip if the plan is not active at the current block time.
+		if !plan.IsActiveAt(sdkCtx.BlockTime()) {
+			return false, nil
+		}
+
 		err = k.AllocateRewardsByPlan(ctx, plan, timeSinceLastAllocation)
 		if err != nil {
 			return false, err
@@ -58,6 +63,23 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 func (k *Keeper) AllocateRewardsByPlan(
 	ctx context.Context, plan types.RewardsPlan, timeSinceLastAllocation time.Duration) error {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
+
+	rewards := sdk.NewDecCoinsFromCoins(plan.AmountPerDay...).
+		MulDecTruncate(math.LegacyNewDec(timeSinceLastAllocation.Milliseconds())).
+		QuoDecTruncate(math.LegacyNewDec((24 * time.Hour).Milliseconds()))
+
+	// Check if the rewards pool has enough coins to allocate rewards.
+	rewardsPoolAddr := plan.MustGetRewardsPoolAddress()
+	balances := k.bankKeeper.GetAllBalances(ctx, rewardsPoolAddr)
+	_, hasNeg := sdk.NewDecCoinsFromCoins(balances...).SafeSub(rewards)
+	if hasNeg {
+		sdkCtx.Logger().Info(
+			"Skipping rewards plan because its rewards pool has insufficient balances",
+			"plan_id", plan.ID,
+		)
+		return nil
+	}
+
 	service, found := k.servicesKeeper.GetService(sdkCtx, plan.ServiceID)
 	if !found {
 		return servicestypes.ErrServiceNotFound
@@ -66,12 +88,6 @@ func (k *Keeper) AllocateRewardsByPlan(
 	serviceParams := k.restakingKeeper.GetServiceParams(sdkCtx, service.ID)
 	pools := k.getPoolsForRewardsAllocation(ctx, service, serviceParams)
 	operators := k.getOperatorsForRewardsAllocation(ctx, service, serviceParams)
-
-	rewards := sdk.NewDecCoinsFromCoins(plan.AmountPerDay...).
-		MulDecTruncate(math.LegacyNewDec(timeSinceLastAllocation.Milliseconds())).
-		QuoDecTruncate(math.LegacyNewDec((24 * time.Hour).Milliseconds()))
-
-	// TODO: do not allocate rewards if balances of rewards pool < rewards
 
 	poolDistrInfos, totalPoolsDelValues, err := k.getPoolDistrInfos(ctx, pools)
 	if err != nil {

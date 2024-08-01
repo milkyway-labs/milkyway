@@ -35,7 +35,7 @@ message MsgCreateRewardsPlan {
   option (cosmos.msg.v1.signer) = "sender";
   option (amino.name) = "rewards/MsgCreateRewardsPlan";
 
-  // Sender is the address of the user registering the service
+  // Sender is the address of the user creating the rewards plan
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
   string description = 2;
