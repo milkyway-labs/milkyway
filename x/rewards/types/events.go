@@ -13,5 +13,6 @@ const (
 	AttributeKeyServiceID  = "service_id"
 	AttributeKeyDelegator  = "delegator"
 
-	AttributeKeyPool = "pool" // NOTE: it's different from the restaking pool
+	AttributeKeyAmountPerPool = "amount_per_pool"
+	AttributeKeyPool          = "pool" // NOTE: it's different from the restaking pool
 )

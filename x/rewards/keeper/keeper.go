@@ -8,9 +8,13 @@ import (
 	"cosmossdk.io/log"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	gogotypes "github.com/cosmos/gogoproto/types"
 
+	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
+	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
 type Keeper struct {
@@ -36,7 +40,7 @@ type Keeper struct {
 	PoolHistoricalRewards          collections.Map[collections.Pair[uint32, uint64], types.HistoricalRewards]
 	PoolCurrentRewards             collections.Map[uint32, types.CurrentRewards]
 	PoolOutstandingRewards         collections.Map[uint32, types.OutstandingRewards]
-	OperatorAccumulatedCommissions collections.Map[uint32, types.AccumulatedCommission]
+	OperatorAccumulatedCommissions collections.Map[uint32, types.MultiAccumulatedCommission]
 	OperatorDelegatorStartingInfos collections.Map[collections.Pair[uint32, string], types.MultiDelegatorStartingInfo]
 	OperatorHistoricalRewards      collections.Map[collections.Pair[uint32, uint64], types.MultiHistoricalRewards]
 	OperatorCurrentRewards         collections.Map[uint32, types.MultiCurrentRewards]
@@ -101,7 +105,7 @@ func NewKeeper(
 			collections.Uint32Key, codec.CollValue[types.OutstandingRewards](cdc)),
 		OperatorAccumulatedCommissions: collections.NewMap(
 			sb, types.OperatorAccumulatedCommissionKeyPrefix, "operator_accumulated_commissions",
-			collections.Uint32Key, codec.CollValue[types.AccumulatedCommission](cdc)),
+			collections.Uint32Key, codec.CollValue[types.MultiAccumulatedCommission](cdc)),
 		OperatorDelegatorStartingInfos: collections.NewMap(
 			sb, types.OperatorDelegatorStartingInfoKeyPrefix, "operator_delegator_starting_infos",
 			collections.PairKeyCodec(collections.Uint32Key, collections.StringKey),
@@ -150,4 +154,147 @@ func (k *Keeper) GetAuthority() string {
 func (k *Keeper) Logger(ctx context.Context) log.Logger {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	return sdkCtx.Logger().With("module", "x/"+types.ModuleName)
+}
+
+func (k Keeper) WithdrawPoolDelegationRewards(
+	ctx context.Context, delAddr string, poolID uint32) (sdk.Coins, error) {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	pool, found := k.poolsKeeper.GetPool(sdkCtx, poolID)
+	if !found {
+		return nil, poolstypes.ErrPoolNotFound
+	}
+
+	del, found := k.restakingKeeper.GetPoolDelegation(sdkCtx, poolID, delAddr)
+	if !found {
+		return nil, sdkerrors.ErrNotFound.Wrapf("pool delegation not found: %d, %s", poolID, delAddr)
+	}
+
+	// withdraw rewards
+	rewards, err := k.withdrawPoolDelegationRewards(ctx, pool, del)
+	if err != nil {
+		return nil, err
+	}
+
+	// reinitialize the delegation
+	err = k.initializePoolDelegation(ctx, poolID, delAddr)
+	if err != nil {
+		return nil, err
+	}
+	return rewards, nil
+}
+
+func (k Keeper) WithdrawOperatorDelegationRewards(
+	ctx context.Context, delAddr string, operatorID uint32) (types.Pools, error) {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	operator, found := k.operatorsKeeper.GetOperator(sdkCtx, operatorID)
+	if !found {
+		return nil, operatorstypes.ErrOperatorNotFound
+	}
+
+	del, found := k.restakingKeeper.GetOperatorDelegation(sdkCtx, operatorID, delAddr)
+	if !found {
+		return nil, sdkerrors.ErrNotFound.Wrapf("operator delegation not found: %d, %s", operatorID, delAddr)
+	}
+
+	// withdraw rewards
+	rewards, err := k.withdrawOperatorDelegationRewards(ctx, operator, del)
+	if err != nil {
+		return nil, err
+	}
+
+	// reinitialize the delegation
+	err = k.initializeOperatorDelegation(ctx, operatorID, delAddr)
+	if err != nil {
+		return nil, err
+	}
+	return rewards, nil
+}
+
+func (k Keeper) WithdrawServiceDelegationRewards(
+	ctx context.Context, delAddr string, serviceID uint32) (types.Pools, error) {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	service, found := k.servicesKeeper.GetService(sdkCtx, serviceID)
+	if !found {
+		return nil, servicestypes.ErrServiceNotFound
+	}
+
+	del, found := k.restakingKeeper.GetServiceDelegation(sdkCtx, serviceID, delAddr)
+	if !found {
+		return nil, sdkerrors.ErrNotFound.Wrapf("service delegation not found: %d, %s", serviceID, delAddr)
+	}
+
+	// withdraw rewards
+	rewards, err := k.withdrawServiceDelegationRewards(ctx, service, del)
+	if err != nil {
+		return nil, err
+	}
+
+	// reinitialize the delegation
+	err = k.initializeServiceDelegation(ctx, serviceID, delAddr)
+	if err != nil {
+		return nil, err
+	}
+	return rewards, nil
+}
+
+func (k Keeper) WithdrawOperatorCommission(ctx context.Context, operatorID uint32) (types.Pools, error) {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	operator, found := k.operatorsKeeper.GetOperator(sdkCtx, operatorID)
+	if !found {
+		return nil, operatorstypes.ErrOperatorNotFound
+	}
+
+	// fetch operator accumulated commission
+	accumCommission, err := k.OperatorAccumulatedCommissions.Get(ctx, operatorID)
+	if err != nil {
+		return nil, err
+	}
+	if accumCommission.Commissions.IsEmpty() {
+		return nil, types.ErrNoOperatorCommission
+	}
+
+	commissions, remainder := accumCommission.Commissions.TruncateDecimal()
+	// leave remainder to withdraw later
+	err = k.OperatorAccumulatedCommissions.Set(ctx, operatorID, types.MultiAccumulatedCommission{
+		Commissions: remainder,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	// update outstanding
+	outstanding, err := k.OperatorOutstandingRewards.Get(ctx, operatorID)
+	if err != nil {
+		return nil, err
+	}
+
+	err = k.OperatorOutstandingRewards.Set(ctx, operatorID, types.MultiOutstandingRewards{
+		Rewards: outstanding.Rewards.Sub(types.NewDecPoolsFromPools(commissions)),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	commissionCoins := commissions.Sum()
+	if !commissionCoins.IsZero() {
+		withdrawAddr, err := k.GetDelegatorWithdrawAddr(ctx, operator.Admin)
+		if err != nil {
+			return nil, err
+		}
+
+		err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, withdrawAddr, commissionCoins)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	sdkCtx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeWithdrawCommission,
+			sdk.NewAttribute(sdk.AttributeKeyAmount, commissions.String()),
+			sdk.NewAttribute(types.AttributeKeyAmountPerPool, commissions.String()),
+		),
+	)
+
+	return commissions, nil
 }

@@ -460,7 +460,7 @@ func (k *Keeper) allocateRewardsToOperatorPool(
 	if err != nil {
 		return err
 	}
-	currentCommission.Commission = currentCommission.Commission.Add(commission...)
+	currentCommission.Commissions = currentCommission.Commissions.Add(types.NewDecPool(denom, commission))
 	err = k.OperatorAccumulatedCommissions.Set(ctx, operator.ID, currentCommission)
 	if err != nil {
 		return err

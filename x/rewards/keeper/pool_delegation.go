@@ -256,7 +256,7 @@ func (k *Keeper) withdrawPoolDelegationRewards(ctx context.Context, pool poolsty
 			types.EventTypeWithdrawRewards,
 			sdk.NewAttribute(sdk.AttributeKeyAmount, finalRewards.String()),
 			sdk.NewAttribute(types.AttributeKeyPoolID, fmt.Sprint(pool.ID)),
-			sdk.NewAttribute(restakingtypes.AttributeKeyDelegator, del.UserAddress),
+			sdk.NewAttribute(types.AttributeKeyDelegator, del.UserAddress),
 		),
 	)
 

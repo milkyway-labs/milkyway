@@ -195,11 +195,6 @@ func NewCurrentRewards(rewards sdk.DecCoins, period uint64) CurrentRewards {
 	}
 }
 
-// return the initial accumulated commission (zero)
-func InitialAccumulatedCommission() AccumulatedCommission {
-	return AccumulatedCommission{}
-}
-
 // create a new DelegatorStartingInfo
 func NewDelegatorStartingInfo(previousPeriod uint64, stake sdkmath.LegacyDec, height uint64) DelegatorStartingInfo {
 	return DelegatorStartingInfo{
@@ -207,6 +202,11 @@ func NewDelegatorStartingInfo(previousPeriod uint64, stake sdkmath.LegacyDec, he
 		Stake:          stake,
 		Height:         height,
 	}
+}
+
+// return the initial accumulated commission (zero)
+func InitialMultiAccumulatedCommission() MultiAccumulatedCommission {
+	return MultiAccumulatedCommission{}
 }
 
 func NewMultiHistoricalRewards(cumulativeRewardRatios DecPools, referenceCount uint32) MultiHistoricalRewards {

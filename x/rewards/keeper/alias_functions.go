@@ -2,10 +2,10 @@ package keeper
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"cosmossdk.io/collections"
-	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	gogotypes "github.com/cosmos/gogoproto/types"
 
@@ -15,7 +15,7 @@ import (
 func (k *Keeper) GetLastRewardsAllocationTime(ctx context.Context) (*time.Time, error) {
 	ts, err := k.LastRewardsAllocationTime.Get(ctx)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
+		if errors.Is(err, collections.ErrNotFound) {
 			return nil, nil
 		}
 		return nil, err
@@ -63,6 +63,18 @@ func (k *Keeper) GetServiceOutstandingRewardsCoins(ctx context.Context, serviceI
 	}
 
 	return rewards.Rewards, nil
+}
+
+// get accumulated commission for an operator
+func (k Keeper) GetOperatorAccumulatedCommission(ctx context.Context, operatorID uint32) (commission types.MultiAccumulatedCommission, err error) {
+	commission, err = k.OperatorAccumulatedCommissions.Get(ctx, operatorID)
+	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			return types.MultiAccumulatedCommission{}, nil
+		}
+		return types.MultiAccumulatedCommission{}, err
+	}
+	return
 }
 
 // get the delegator withdraw address, defaulting to the delegator address

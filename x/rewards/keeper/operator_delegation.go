@@ -254,7 +254,7 @@ func (k *Keeper) withdrawOperatorDelegationRewards(ctx context.Context, operator
 			types.EventTypeWithdrawRewards,
 			sdk.NewAttribute(sdk.AttributeKeyAmount, coins.String()),
 			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprint(operator.ID)),
-			sdk.NewAttribute(restakingtypes.AttributeKeyDelegator, del.UserAddress),
+			sdk.NewAttribute(types.AttributeKeyDelegator, del.UserAddress),
 		),
 	)
 

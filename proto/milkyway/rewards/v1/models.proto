@@ -120,14 +120,6 @@ message UsersDistributionTypeBasic {
       "milkyway.rewards.v1.UsersDistributionType";
 }
 
-message AccumulatedCommission {
-  repeated cosmos.base.v1beta1.DecCoin commission = 1 [
-    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
-}
-
 message DelegatorStartingInfo {
   uint64 previous_period = 1;
   string stake = 2 [
@@ -217,6 +209,14 @@ message MultiOutstandingRewards {
     (gogoproto.moretags) = "yaml:\"rewards\"",
     (gogoproto.castrepeated) = "DecPools",
     (gogoproto.nullable) = false
+  ];
+}
+
+message MultiAccumulatedCommission {
+  repeated DecPool commissions = 1 [
+    (gogoproto.castrepeated) = "DecPools",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
   ];
 }
 

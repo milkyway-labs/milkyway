@@ -21,6 +21,20 @@ service Msg {
   rpc CreateRewardsPlan(MsgCreateRewardsPlan)
       returns (MsgCreateRewardsPlanResponse);
 
+  rpc WithdrawPoolDelReward(MsgWithdrawPoolDelReward)
+      returns (MsgWithdrawPoolDelRewardResponse);
+
+  rpc WithdrawOperatorDelReward(MsgWithdrawOperatorDelReward)
+      returns (MsgWithdrawOperatorDelRewardResponse);
+
+  rpc WithdrawServiceDelReward(MsgWithdrawServiceDelReward)
+      returns (MsgWithdrawServiceDelRewardResponse);
+
+  // WithdrawOperatorCommission defines a method to withdraw the
+  // full commission to the operator.
+  rpc WithdrawOperatorCommission(MsgWithdrawOperatorCommission)
+      returns (MsgWithdrawOperatorCommissionResponse);
+
   // UpdateParams defines a (governance) operation for updating the module
   // parameters.
   // The authority defaults to the x/gov module account.
@@ -34,6 +48,9 @@ service Msg {
 message MsgCreateRewardsPlan {
   option (cosmos.msg.v1.signer) = "sender";
   option (amino.name) = "rewards/MsgCreateRewardsPlan";
+
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
 
   // Sender is the address of the user creating the rewards plan
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
@@ -72,11 +89,108 @@ message MsgCreateRewardsPlanResponse {
       [ (gogoproto.customname) = "NewRewardsPlanID" ];
 }
 
+// Using Del instead of Delegator because of the limitation on the length of
+// amino msg name.
+message MsgWithdrawPoolDelReward {
+  option (cosmos.msg.v1.signer) = "delegator_address";
+  option (amino.name) = "rewards/MsgWithdrawPoolDeReward";
+
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  string delegator_address = 1
+      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  uint32 pool_id = 2 [ (gogoproto.customname) = "PoolID" ];
+}
+
+message MsgWithdrawPoolDelRewardResponse {
+  repeated cosmos.base.v1beta1.Coin amount = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true,
+    (amino.encoding) = "legacy_coins",
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
+
+// Using Del instead of Delegator because of the limitation on the length of
+// amino msg name.
+message MsgWithdrawOperatorDelReward {
+  option (cosmos.msg.v1.signer) = "delegator_address";
+  option (amino.name) = "rewards/MsgWithdrawOperatorDelReward";
+
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  string delegator_address = 1
+      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  uint32 operator_id = 2 [ (gogoproto.customname) = "OperatorID" ];
+}
+
+message MsgWithdrawOperatorDelRewardResponse {
+  repeated cosmos.base.v1beta1.Coin amount = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true,
+    (amino.encoding) = "legacy_coins",
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
+
+// Using Del instead of Delegator because of the limitation on the length of
+// amino msg name.
+message MsgWithdrawServiceDelReward {
+  option (cosmos.msg.v1.signer) = "delegator_address";
+  option (amino.name) = "rewards/MsgWithdrawServiceDelReward";
+
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  string delegator_address = 1
+      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
+}
+
+message MsgWithdrawServiceDelRewardResponse {
+  repeated cosmos.base.v1beta1.Coin amount = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true,
+    (amino.encoding) = "legacy_coins",
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
+
+// MsgWithdrawOperatorCommission withdraws the full commission to the operator.
+message MsgWithdrawOperatorCommission {
+  option (cosmos.msg.v1.signer) = "sender";
+  option (amino.name) = "cosmos-sdk/MsgWithdrawValCommission";
+
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  uint32 operator_id = 2 [ (gogoproto.customname) = "OperatorID" ];
+}
+
+// MsgWithdrawOperatorCommissionResponse defines the
+// Msg/WithdrawOperatorCommission response type.
+message MsgWithdrawOperatorCommissionResponse {
+  // Since: cosmos-sdk 0.46
+  repeated cosmos.base.v1beta1.Coin amount = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true,
+    (amino.encoding) = "legacy_coins",
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
+
 // MsgUpdateParams defines the message structure for the UpdateParams gRPC
 // service method. It allows the authority to update the module parameters.
 message MsgUpdateParams {
   option (cosmos.msg.v1.signer) = "authority";
   option (amino.name) = "rewards/MsgUpdateParams";
+
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
 
   // Authority is the address that controls the module (defaults to x/gov unless
   // overwritten).

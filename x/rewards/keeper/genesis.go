@@ -100,7 +100,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	}
 
 	operatorAccumulatedCommissions := []types.OperatorAccumulatedCommissionRecord{}
-	err = k.OperatorAccumulatedCommissions.Walk(ctx, nil, func(operatorID uint32, commission types.AccumulatedCommission) (stop bool, err error) {
+	err = k.OperatorAccumulatedCommissions.Walk(ctx, nil, func(operatorID uint32, commission types.MultiAccumulatedCommission) (stop bool, err error) {
 		operatorAccumulatedCommissions = append(operatorAccumulatedCommissions, types.OperatorAccumulatedCommissionRecord{
 			OperatorId:  operatorID,
 			Accumulated: commission,

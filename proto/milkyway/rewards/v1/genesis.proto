@@ -97,7 +97,7 @@ message OperatorAccumulatedCommissionRecord {
   uint32 operator_id = 1;
 
   // accumulated is the accumulated commission of an operator.
-  AccumulatedCommission accumulated = 2
+  MultiAccumulatedCommission accumulated = 2
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 }
 

@@ -26,7 +26,7 @@ func (k *Keeper) InitializeOperator(ctx context.Context, operator operatorstypes
 	}
 
 	// set accumulated commission
-	err = k.OperatorAccumulatedCommissions.Set(ctx, operator.ID, types.InitialAccumulatedCommission())
+	err = k.OperatorAccumulatedCommissions.Set(ctx, operator.ID, types.InitialMultiAccumulatedCommission())
 	if err != nil {
 		return err
 	}
