@@ -1,60 +1,30 @@
-FROM golang:1.22-alpine3.18 AS go-builder
-#ARG arch=x86_64
+# To build the Milkyway image, just run:
+# > docker build -t milkyway .
+#
+# Simple usage with a mounted data directory:
+# > docker run -it -p 26657:26657 -p 26656:26656 -v ~/.milkywayd:/root/.milkywayd milkyway milkywayd init
+# > docker run -it -p 26657:26657 -p 26656:26656 -v ~/.milkywayd:/root/.milkywayd milkyway milkywayd start
+#
+# If you want to run this container as a daemon, you can do so by executing
+# > docker run -td -p 26657:26657 -p 26656:26656 -v ~/.milkywayd:/root/.milkywayd --name milkyway milkywayd
+#
+# Once you have done so, you can enter the container shell by executing
+# > docker exec -it milkyway bash
+#
+# To exit the bash, just execute
+# > exit
+FROM alpine:edge
 
-# See https://github.com/CosmWasm/wasmvm/releases
-ENV LIBWASMVM_VERSION=v1.5.2
+# Install ca-certificates
+RUN apk add --update ca-certificates
 
-# this comes from standard alpine nightly file
-#  https://github.com/rust-lang/docker-rust-nightly/blob/master/alpine3.12/Dockerfile
-# with some changes to support our toolchain, etc
-RUN set -eux; apk add --no-cache ca-certificates build-base;
+# Install bash
+RUN apk add --no-cache bash
 
-RUN apk add git cmake
-# NOTE: add these to run with LEDGER_ENABLED=true
-# RUN apk add libusb-dev linux-headers
+# Copy over binaries from the build-env
+COPY --from=milkywaylabs/builder:latest /code/build/milkywayd /usr/bin/milkywayd
 
-WORKDIR /code
-COPY . /code/
+EXPOSE 26656 26657 1317 9090
 
-# Install mimalloc
-RUN git clone --depth 1 https://github.com/microsoft/mimalloc; cd mimalloc; mkdir build; cd build; cmake ..; make -j$(nproc); make install
-ENV MIMALLOC_RESERVE_HUGE_OS_PAGES=4
-
-# See https://github.com/\!cosm\!wasm/wasmvm/releases
-ADD https://github.com/CosmWasm/wasmvm/releases/download/${LIBWASMVM_VERSION}/libwasmvm_muslc.aarch64.a /lib/libwasmvm_muslc.aarch64.a
-ADD https://github.com/CosmWasm/wasmvm/releases/download/${LIBWASMVM_VERSION}/libwasmvm_muslc.x86_64.a /lib/libwasmvm_muslc.x86_64.a
-
-# Highly recommend to verify the version hash
-# RUN sha256sum /lib/libwasmvm_muslc.aarch64.a | grep a5e63292ec67f5bdefab51b42c3fbc3fa307c6aefeb6b409d971f1df909c3927
-# RUN sha256sum /lib/libwasmvm_muslc.x86_64.a | grep 762307147bf8f550bd5324b7f7c4f17ee20805ff93dc06cc073ffbd909438320
-# Copy the library you want to the final location that will be found by the linker flag `-linitia_muslc`
-
-RUN cp /lib/libwasmvm_muslc.`uname -m`.a /lib/libwasmvm_muslc.a
-
-# force it to use static lib (from above) not standard libwasmvm.so file
-RUN LEDGER_ENABLED=false BUILD_TAGS=muslc LDFLAGS="-linkmode=external -extldflags \"-L/code/mimalloc/build -lmimalloc -Wl,-z,muldefs -static\"" make build
-
-FROM alpine:3.18
-
-RUN addgroup milkyway \
-    && adduser -G milkyway -D -h /milkyway milkyway
-
-WORKDIR /milkyway
-
-COPY --from=go-builder /code/build/milkywayd /usr/local/bin/milkywayd
-
-# for new-metric setup
-COPY --from=go-builder /code/contrib /milkyway/contrib
-
-USER milkyway
-
-# rest server
-EXPOSE 1317
-# grpc
-EXPOSE 9090
-# tendermint p2p
-EXPOSE 26656
-# tendermint rpc
-EXPOSE 26657
-
-CMD ["/usr/local/bin/milkywayd", "version"]
+# Run milkywayd by default, omit entrypoint to ease using container with milkywayd
+CMD ["milkywayd"]

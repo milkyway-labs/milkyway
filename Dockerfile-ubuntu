@@ -1,0 +1,9 @@
+FROM ubuntu:22.04
+
+# Copy over binaries from the build-env
+COPY --from=milkywaylabs/builder:latest /code/build/milkywayd /usr/bin/milkywayd
+
+EXPOSE 26656 26657 1317 9090
+
+# Run milkywayd by default, omit entrypoint to ease using container with milkywayd
+CMD ["milkywayd"]
