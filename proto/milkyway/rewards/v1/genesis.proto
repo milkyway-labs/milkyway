@@ -36,8 +36,8 @@ message PoolOutstandingRewardsRecord {
   uint32 pool_id = 1 [ (gogoproto.customname) = "PoolID" ];
 
   // outstanding_rewards represents the outstanding rewards of a pool.
-  repeated cosmos.base.v1beta1.DecCoin outstanding_rewards = 2 [
-    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
+  repeated DecPool outstanding_rewards = 2 [
+    (gogoproto.castrepeated) = "DecPools",
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
@@ -113,7 +113,7 @@ message OperatorAccumulatedCommissionRecord {
   uint32 operator_id = 1;
 
   // accumulated is the accumulated commission of an operator.
-  MultiAccumulatedCommission accumulated = 2
+  AccumulatedCommission accumulated = 2
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 }
 
@@ -130,7 +130,7 @@ message OperatorHistoricalRewardsRecord {
   uint64 period = 2;
 
   // rewards defines the historical rewards of an operator.
-  MultiHistoricalRewards rewards = 3
+  HistoricalRewards rewards = 3
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 }
 
@@ -143,7 +143,7 @@ message OperatorCurrentRewardsRecord {
   uint32 operator_id = 1 [ (gogoproto.customname) = "OperatorID" ];
 
   // rewards defines the current rewards of an operator.
-  MultiCurrentRewards rewards = 2
+  CurrentRewards rewards = 2
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 }
 
@@ -161,7 +161,7 @@ message OperatorDelegatorStartingInfoRecord {
   uint32 operator_id = 2 [ (gogoproto.customname) = "OperatorID" ];
 
   // starting_info defines the starting info of a delegator.
-  MultiDelegatorStartingInfo starting_info = 3
+  DelegatorStartingInfo starting_info = 3
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 }
 
@@ -194,7 +194,7 @@ message ServiceHistoricalRewardsRecord {
   uint64 period = 2;
 
   // rewards defines the historical rewards of a service.
-  MultiHistoricalRewards rewards = 3
+  HistoricalRewards rewards = 3
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 }
 
@@ -207,7 +207,7 @@ message ServiceCurrentRewardsRecord {
   uint32 service_id = 1 [ (gogoproto.customname) = "ServiceID" ];
 
   // rewards defines the current rewards of a service.
-  MultiCurrentRewards rewards = 2
+  CurrentRewards rewards = 2
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 }
 
@@ -224,7 +224,7 @@ message ServiceDelegatorStartingInfoRecord {
   uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
 
   // starting_info defines the starting info of a delegator.
-  MultiDelegatorStartingInfo starting_info = 3
+  DelegatorStartingInfo starting_info = 3
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 }
 

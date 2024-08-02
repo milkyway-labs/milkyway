@@ -262,7 +262,7 @@ func (k *Keeper) allocateRewardsToPoolsBasic(
 	}
 	for _, distrInfo := range distrInfos {
 		poolRewards := rewards.MulDecTruncate(distrInfo.DelegationsValue).QuoDecTruncate(totalDelValues)
-		err := k.allocateRewardsToPool(ctx, *distrInfo.Pool, poolRewards)
+		err := k.allocateRewardsPool(ctx, types.NewDelegationTarget(distrInfo.Pool), distrInfo.Pool.Denom, poolRewards)
 		if err != nil {
 			return err
 		}
@@ -290,7 +290,7 @@ func (k *Keeper) allocateRewardsToPoolsWeighted(
 		}
 
 		poolRewards := rewards.MulDecTruncate(math.LegacyNewDec(int64(weight.Weight))).QuoDecTruncate(totalWeights)
-		err := k.allocateRewardsToPool(ctx, *distrInfo.Pool, poolRewards)
+		err := k.allocateRewardsPool(ctx, types.NewDelegationTarget(distrInfo.Pool), distrInfo.Pool.Denom, poolRewards)
 		if err != nil {
 			return err
 		}
@@ -303,42 +303,12 @@ func (k *Keeper) allocateRewardsToPoolsEgalitarian(
 	numPools := math.LegacyNewDec(int64(len(distrInfos)))
 	for _, distrInfo := range distrInfos {
 		poolRewards := rewards.QuoDecTruncate(numPools)
-		err := k.allocateRewardsToPool(ctx, *distrInfo.Pool, poolRewards)
+		err := k.allocateRewardsPool(ctx, types.NewDelegationTarget(distrInfo.Pool), distrInfo.Pool.Denom, poolRewards)
 		if err != nil {
 			return err
 		}
 	}
 	return nil
-}
-
-func (k *Keeper) allocateRewardsToPool(ctx context.Context, pool poolstypes.Pool, rewards sdk.DecCoins) error {
-	// update current rewards
-	currentRewards, err := k.PoolCurrentRewards.Get(ctx, pool.ID)
-	if err != nil {
-		return err
-	}
-	currentRewards.Rewards = currentRewards.Rewards.Add(rewards...)
-	err = k.PoolCurrentRewards.Set(ctx, pool.ID, currentRewards)
-	if err != nil {
-		return err
-	}
-
-	// update outstanding rewards
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	sdkCtx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			types.EventTypeRewards,
-			sdk.NewAttribute(types.AttributeKeyPoolID, fmt.Sprint(pool.ID)),
-			sdk.NewAttribute(sdk.AttributeKeyAmount, rewards.String()),
-		),
-	)
-
-	outstanding, err := k.PoolOutstandingRewards.Get(ctx, pool.ID)
-	if err != nil {
-		return err
-	}
-	outstanding.Rewards = outstanding.Rewards.Add(rewards...)
-	return k.PoolOutstandingRewards.Set(ctx, pool.ID, outstanding)
 }
 
 func (k *Keeper) allocateRewardsToOperators(
@@ -429,7 +399,7 @@ func (k *Keeper) allocateRewardsToOperator(
 			continue
 		}
 		tokenRewards := rewards.MulDecTruncate(tokenValue).QuoDec(distrInfo.DelegationsValue)
-		err = k.allocateRewardsToOperatorPool(ctx, *distrInfo.Operator, token.Denom, tokenRewards)
+		err = k.allocateRewardsPool(ctx, types.NewDelegationTarget(distrInfo.Operator), token.Denom, tokenRewards)
 		if err != nil {
 			return err
 		}
@@ -437,51 +407,56 @@ func (k *Keeper) allocateRewardsToOperator(
 	return nil
 }
 
-func (k *Keeper) allocateRewardsToOperatorPool(
-	ctx context.Context, operator operatorstypes.Operator, denom string, rewards sdk.DecCoins) error {
-	// split tokens between operator and delegators according to commission
+func (k *Keeper) allocateRewardsPool(
+	ctx context.Context, target *types.DelegationTarget, denom string, rewards sdk.DecCoins) error {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	// TODO: optimize this read operation? we already read operator params in
-	//       getOperatorsForRewardsAllocation
-	operatorParams := k.restakingKeeper.GetOperatorParams(sdkCtx, operator.ID)
-	commission := rewards.MulDec(operatorParams.CommissionRate)
-	shared := rewards.Sub(commission)
 
-	// update current commission
-	sdkCtx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			types.EventTypeCommission,
-			sdk.NewAttribute(sdk.AttributeKeyAmount, commission.String()),
-			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprint(operator.ID)),
-		),
-	)
+	shared := rewards
+	if target.Type() == restakingtypes.DELEGATION_TYPE_OPERATOR {
+		// split tokens between operator and delegators according to commission
+		// TODO: optimize this read operation? we already read operator params in
+		//       getOperatorsForRewardsAllocation
+		operatorParams := k.restakingKeeper.GetOperatorParams(sdkCtx, target.GetID())
+		commission := rewards.MulDec(operatorParams.CommissionRate)
+		shared = rewards.Sub(commission)
 
-	currentCommission, err := k.OperatorAccumulatedCommissions.Get(ctx, operator.ID)
-	if err != nil {
-		return err
+		// update current commission
+		sdkCtx.EventManager().EmitEvent(
+			sdk.NewEvent(
+				types.EventTypeCommission,
+				sdk.NewAttribute(sdk.AttributeKeyAmount, commission.String()),
+				sdk.NewAttribute(types.AttributeKeyDelegationType, restakingtypes.DELEGATION_TYPE_OPERATOR.String()),
+				sdk.NewAttribute(types.AttributeKeyDelegationTargetID, fmt.Sprint(target.GetID())),
+			),
+		)
+
+		currentCommission, err := k.GetOperatorAccumulatedCommission(ctx, target.GetID())
+		if err != nil {
+			return err
+		}
+		currentCommission.Commissions = currentCommission.Commissions.Add(types.NewDecPool(denom, commission))
+		err = k.OperatorAccumulatedCommissions.Set(ctx, target.GetID(), currentCommission)
+		if err != nil {
+			return err
+		}
 	}
-	currentCommission.Commissions = currentCommission.Commissions.Add(types.NewDecPool(denom, commission))
-	err = k.OperatorAccumulatedCommissions.Set(ctx, operator.ID, currentCommission)
-	if err != nil {
-		return err
-	}
 
-	currentRewards, err := k.OperatorCurrentRewards.Get(ctx, operator.ID)
+	currentRewards, err := k.GetCurrentRewards(ctx, target)
 	if err != nil {
 		return err
 	}
 	currentRewards.Rewards = currentRewards.Rewards.Add(types.NewDecPool(denom, shared))
-	err = k.OperatorCurrentRewards.Set(ctx, operator.ID, currentRewards)
+	err = k.SetCurrentRewards(ctx, target, currentRewards)
 	if err != nil {
 		return err
 	}
 
-	outstanding, err := k.OperatorOutstandingRewards.Get(ctx, operator.ID)
+	outstanding, err := k.GetOutstandingRewards(ctx, target)
 	if err != nil {
 		return err
 	}
 	outstanding.Rewards = outstanding.Rewards.Add(types.NewDecPool(denom, rewards))
-	err = k.OperatorOutstandingRewards.Set(ctx, operator.ID, outstanding)
+	err = k.SetOutstandingRewards(ctx, target, outstanding)
 	if err != nil {
 		return err
 	}
@@ -490,7 +465,8 @@ func (k *Keeper) allocateRewardsToOperatorPool(
 	sdkCtx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeRewards,
-			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprint(operator.ID)),
+			sdk.NewAttribute(types.AttributeKeyDelegationType, target.Type().String()),
+			sdk.NewAttribute(types.AttributeKeyDelegationTargetID, fmt.Sprint(target.GetID())),
 			sdk.NewAttribute(types.AttributeKeyPool, denom),
 			sdk.NewAttribute(sdk.AttributeKeyAmount, rewards.String()),
 		),
@@ -527,46 +503,11 @@ func (k *Keeper) allocateRewardsToService(
 			continue
 		}
 		tokenRewards := rewards.MulDecTruncate(tokenValue).QuoDecTruncate(totalDelValues)
-		err = k.allocateRewardsToServicePool(ctx, service, token.Denom, tokenRewards)
+		err = k.allocateRewardsPool(ctx, types.NewDelegationTarget(&service), token.Denom, tokenRewards)
 		if err != nil {
 			return err
 		}
 	}
-	return nil
-}
-
-func (k *Keeper) allocateRewardsToServicePool(
-	ctx context.Context, service servicestypes.Service, denom string, rewards sdk.DecCoins) error {
-	currentRewards, err := k.ServiceCurrentRewards.Get(ctx, service.ID)
-	if err != nil {
-		return err
-	}
-	currentRewards.Rewards = currentRewards.Rewards.Add(types.NewDecPool(denom, rewards))
-	err = k.ServiceCurrentRewards.Set(ctx, service.ID, currentRewards)
-	if err != nil {
-		return err
-	}
-
-	outstanding, err := k.ServiceOutstandingRewards.Get(ctx, service.ID)
-	if err != nil {
-		return err
-	}
-	outstanding.Rewards = outstanding.Rewards.Add(types.NewDecPool(denom, rewards))
-	err = k.ServiceOutstandingRewards.Set(ctx, service.ID, outstanding)
-	if err != nil {
-		return err
-	}
-
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	sdkCtx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			types.EventTypeRewards,
-			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprint(service.ID)),
-			sdk.NewAttribute(types.AttributeKeyPool, denom),
-			sdk.NewAttribute(sdk.AttributeKeyAmount, rewards.String()),
-		),
-	)
-
 	return nil
 }
 

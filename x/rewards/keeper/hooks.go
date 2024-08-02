@@ -4,13 +4,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
-	"github.com/milkyway-labs/milkyway/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
-var _ types.RestakingHooks = Hooks{}
+var _ restakingtypes.RestakingHooks = Hooks{}
 
 type Hooks struct {
 	k *Keeper
@@ -21,151 +18,91 @@ func (k *Keeper) Hooks() Hooks {
 }
 
 func (h Hooks) BeforePoolDelegationCreated(ctx sdk.Context, poolID uint32, delegator string) error {
-	pool, found := h.k.poolsKeeper.GetPool(ctx, poolID)
-	if !found {
-		return poolstypes.ErrPoolNotFound
-	}
-
-	// Initialize pool info if it doesn't exist yet.
-	exists, err := h.k.PoolCurrentRewards.Has(ctx, pool.ID)
-	if err != nil {
-		return err
-	}
-	if !exists {
-		if err := h.k.InitializePool(ctx, pool); err != nil {
-			return err
-		}
-	}
-
-	_, err = h.k.IncrementPoolPeriod(ctx, pool)
-	return err
+	return h.k.BeforeDelegationCreated(ctx, restakingtypes.DELEGATION_TYPE_POOL, poolID)
 }
 
 func (h Hooks) BeforePoolDelegationSharesModified(ctx sdk.Context, poolID uint32, delegator string) error {
-	pool, found := h.k.poolsKeeper.GetPool(ctx, poolID)
-	if !found {
-		return poolstypes.ErrPoolNotFound
-	}
-
-	// We don't have to initialize pool here because we can assume BeforePoolDelegationCreated
-	// has already been called when delegation shares are being modified.
-
-	del, found := h.k.restakingKeeper.GetPoolDelegation(ctx, poolID, delegator)
-	if !found {
-		return sdkerrors.ErrNotFound.Wrapf("pool delegation not found: %d, %s", poolID, delegator)
-	}
-
-	if _, err := h.k.withdrawPoolDelegationRewards(ctx, pool, del); err != nil {
-		return err
-	}
-
-	return nil
+	return h.k.BeforeDelegationSharesModified(ctx, restakingtypes.DELEGATION_TYPE_POOL, poolID, delegator)
 }
 
 func (h Hooks) AfterPoolDelegationModified(ctx sdk.Context, poolID uint32, delegator string) error {
-	delAddr, err := h.k.accountKeeper.AddressCodec().StringToBytes(delegator)
-	if err != nil {
-		return err
-	}
-	return h.k.initializePoolDelegation(ctx, poolID, delAddr)
+	return h.k.AfterDelegationModified(ctx, restakingtypes.DELEGATION_TYPE_POOL, poolID, delegator)
 }
 
 func (h Hooks) BeforeOperatorDelegationCreated(ctx sdk.Context, operatorID uint32, delegator string) error {
-	operator, found := h.k.operatorsKeeper.GetOperator(ctx, operatorID)
-	if !found {
-		return operatorstypes.ErrOperatorNotFound
-	}
-
-	// Initialize operator info if it doesn't exist yet.
-	exists, err := h.k.OperatorCurrentRewards.Has(ctx, operator.ID)
-	if err != nil {
-		return err
-	}
-	if !exists {
-		if err := h.k.InitializeOperator(ctx, operator); err != nil {
-			return err
-		}
-	}
-
-	_, err = h.k.IncrementOperatorPeriod(ctx, operator)
-	return err
+	return h.k.BeforeDelegationCreated(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, operatorID)
 }
 
 func (h Hooks) BeforeOperatorDelegationSharesModified(ctx sdk.Context, operatorID uint32, delegator string) error {
-	operator, found := h.k.operatorsKeeper.GetOperator(ctx, operatorID)
-	if !found {
-		return operatorstypes.ErrOperatorNotFound
-	}
-
-	// We don't have to initialize operator here because we can assume BeforeOperatorDelegationCreated
-	// has already been called when delegation shares are being modified.
-
-	del, found := h.k.restakingKeeper.GetOperatorDelegation(ctx, operatorID, delegator)
-	if !found {
-		return sdkerrors.ErrNotFound.Wrapf("operator delegation not found: %d, %s", operatorID, delegator)
-	}
-
-	if _, err := h.k.withdrawOperatorDelegationRewards(ctx, operator, del); err != nil {
-		return err
-	}
-
-	return nil
+	return h.k.BeforeDelegationSharesModified(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, operatorID, delegator)
 }
 
 func (h Hooks) AfterOperatorDelegationModified(ctx sdk.Context, operatorID uint32, delegator string) error {
-	delAddr, err := h.k.accountKeeper.AddressCodec().StringToBytes(delegator)
-	if err != nil {
-		return err
-	}
-	return h.k.initializeOperatorDelegation(ctx, operatorID, delAddr)
+	return h.k.AfterDelegationModified(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, operatorID, delegator)
 }
 
 func (h Hooks) BeforeServiceDelegationCreated(ctx sdk.Context, serviceID uint32, delegator string) error {
-	service, found := h.k.servicesKeeper.GetService(ctx, serviceID)
-	if !found {
-		return servicestypes.ErrServiceNotFound
+	return h.k.BeforeDelegationCreated(ctx, restakingtypes.DELEGATION_TYPE_SERVICE, serviceID)
+}
+
+func (h Hooks) BeforeServiceDelegationSharesModified(ctx sdk.Context, serviceID uint32, delegator string) error {
+	return h.k.BeforeDelegationSharesModified(ctx, restakingtypes.DELEGATION_TYPE_SERVICE, serviceID, delegator)
+}
+
+func (h Hooks) AfterServiceDelegationModified(ctx sdk.Context, serviceID uint32, delegator string) error {
+	return h.k.AfterDelegationModified(ctx, restakingtypes.DELEGATION_TYPE_SERVICE, serviceID, delegator)
+}
+
+func (k *Keeper) BeforeDelegationCreated(ctx sdk.Context, delType restakingtypes.DelegationType, targetID uint32) error {
+	target, err := k.GetDelegationTarget(ctx, delType, targetID)
+	if err != nil {
+		return err
 	}
 
-	// Initialize service info if it doesn't exist yet.
-	exists, err := h.k.ServiceCurrentRewards.Has(ctx, service.ID)
+	// Initialize target if it doesn't exist yet.
+	exists, err := k.HasCurrentRewards(ctx, target)
 	if err != nil {
 		return err
 	}
 	if !exists {
-		if err := h.k.InitializeService(ctx, service); err != nil {
+		if err := k.initializeDelegationTarget(ctx, target); err != nil {
 			return err
 		}
 	}
 
-	_, err = h.k.IncrementServicePeriod(ctx, service)
+	_, err = k.IncrementDelegationTargetPeriod(ctx, target)
 	return err
 }
 
-func (h Hooks) BeforeServiceDelegationSharesModified(ctx sdk.Context, serviceID uint32, delegator string) error {
-	service, found := h.k.servicesKeeper.GetService(ctx, serviceID)
-	if !found {
-		return servicestypes.ErrServiceNotFound
+func (k *Keeper) BeforeDelegationSharesModified(ctx sdk.Context, delType restakingtypes.DelegationType, targetID uint32, delegator string) error {
+	target, err := k.GetDelegationTarget(ctx, delType, targetID)
+	if err != nil {
+		return err
 	}
 
-	// We don't have to initialize service here because we can assume BeforeServiceDelegationCreated
+	// We don't have to initialize target here because we can assume BeforeDelegationCreated
 	// has already been called when delegation shares are being modified.
 
-	del, found := h.k.restakingKeeper.GetServiceDelegation(ctx, serviceID, delegator)
+	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(delegator)
+	if err != nil {
+		return err
+	}
+	del, found := k.GetDelegation(ctx, target, delAddr)
 	if !found {
-		return sdkerrors.ErrNotFound.Wrapf("service delegation not found: %d, %s", serviceID, delegator)
+		return sdkerrors.ErrNotFound.Wrapf("delegation not found: %d, %s", target.GetID(), delegator)
 	}
 
-	if _, err := h.k.withdrawServiceDelegationRewards(ctx, service, del); err != nil {
+	if _, err := k.withdrawDelegationRewards(ctx, target, del); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (h Hooks) AfterServiceDelegationModified(ctx sdk.Context, serviceID uint32, delegator string) error {
-	delAddr, err := h.k.accountKeeper.AddressCodec().StringToBytes(delegator)
+func (k *Keeper) AfterDelegationModified(ctx sdk.Context, delType restakingtypes.DelegationType, targetID uint32, delegator string) error {
+	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(delegator)
 	if err != nil {
 		return err
 	}
-	return h.k.initializeServiceDelegation(ctx, serviceID, delAddr)
+	return k.initializeDelegation(ctx, delType, targetID, delAddr)
 }

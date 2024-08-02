@@ -9,11 +9,13 @@ const (
 	EventTypeWithdrawRewards    = "withdraw_rewards"
 	EventTypeWithdrawCommission = "withdraw_commission"
 
-	AttributeKeyWithdrawAddress = "withdraw_address"
-	AttributeKeyPoolID          = "pool_id"
-	AttributeKeyOperatorID      = "operator_id"
-	AttributeKeyServiceID       = "service_id"
-	AttributeKeyDelegator       = "delegator"
+	AttributeKeyWithdrawAddress    = "withdraw_address"
+	AttributeKeyPoolID             = "pool_id"
+	AttributeKeyOperatorID         = "operator_id"
+	AttributeKeyDelegationType     = "delegation_type"
+	AttributeKeyDelegationTargetID = "delegation_target_id"
+	AttributeKeyServiceID          = "service_id"
+	AttributeKeyDelegator          = "delegator"
 
 	AttributeKeyAmountPerPool = "amount_per_pool"
 	AttributeKeyPool          = "pool" // NOTE: it's different from the restaking pool

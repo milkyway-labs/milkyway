@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"time"
 
-	sdkmath "cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/address"
@@ -181,14 +180,19 @@ func NewBasicUsersDistribution(weight uint32) UsersDistribution {
 
 func (t UsersDistributionTypeBasic) isUsersDistributionType() {}
 
-func NewHistoricalRewards(cumulativeRewardRatio sdk.DecCoins, referenceCount uint32) HistoricalRewards {
+// return the initial accumulated commission (zero)
+func InitialAccumulatedCommission() AccumulatedCommission {
+	return AccumulatedCommission{}
+}
+
+func NewHistoricalRewards(cumulativeRewardRatios DecPools, referenceCount uint32) HistoricalRewards {
 	return HistoricalRewards{
-		CumulativeRewardRatio: cumulativeRewardRatio,
-		ReferenceCount:        referenceCount,
+		CumulativeRewardRatios: cumulativeRewardRatios,
+		ReferenceCount:         referenceCount,
 	}
 }
 
-func NewCurrentRewards(rewards sdk.DecCoins, period uint64) CurrentRewards {
+func NewCurrentRewards(rewards DecPools, period uint64) CurrentRewards {
 	return CurrentRewards{
 		Rewards: rewards,
 		Period:  period,
@@ -196,36 +200,8 @@ func NewCurrentRewards(rewards sdk.DecCoins, period uint64) CurrentRewards {
 }
 
 // create a new DelegatorStartingInfo
-func NewDelegatorStartingInfo(previousPeriod uint64, stake sdkmath.LegacyDec, height uint64) DelegatorStartingInfo {
+func NewDelegatorStartingInfo(previousPeriod uint64, stakes sdk.DecCoins, height uint64) DelegatorStartingInfo {
 	return DelegatorStartingInfo{
-		PreviousPeriod: previousPeriod,
-		Stake:          stake,
-		Height:         height,
-	}
-}
-
-// return the initial accumulated commission (zero)
-func InitialMultiAccumulatedCommission() MultiAccumulatedCommission {
-	return MultiAccumulatedCommission{}
-}
-
-func NewMultiHistoricalRewards(cumulativeRewardRatios DecPools, referenceCount uint32) MultiHistoricalRewards {
-	return MultiHistoricalRewards{
-		CumulativeRewardRatios: cumulativeRewardRatios,
-		ReferenceCount:         referenceCount,
-	}
-}
-
-func NewMultiCurrentRewards(rewards DecPools, period uint64) MultiCurrentRewards {
-	return MultiCurrentRewards{
-		Rewards: rewards,
-		Period:  period,
-	}
-}
-
-// create a new MultiDelegatorStartingInfo
-func NewMultiDelegatorStartingInfo(previousPeriod uint64, stakes sdk.DecCoins, height uint64) MultiDelegatorStartingInfo {
-	return MultiDelegatorStartingInfo{
 		PreviousPeriod: previousPeriod,
 		Stakes:         stakes,
 		Height:         height,

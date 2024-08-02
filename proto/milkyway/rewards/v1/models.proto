@@ -120,44 +120,52 @@ message UsersDistributionTypeBasic {
       "milkyway.rewards.v1.UsersDistributionType";
 }
 
-message DelegatorStartingInfo {
-  uint64 previous_period = 1;
-  string stake = 2 [
-    (cosmos_proto.scalar) = "cosmos.Dec",
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
-  uint64 height = 3 [
-    (gogoproto.jsontag) = "creation_height",
-    (amino.field_name) = "creation_height",
-    (amino.dont_omitempty) = true
-  ];
-}
-
 message HistoricalRewards {
-  repeated cosmos.base.v1beta1.DecCoin cumulative_reward_ratio = 1 [
-    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
+  repeated DecPool cumulative_reward_ratios = 1 [
+    (gogoproto.moretags) = "yaml:\"cumulative_reward_ratios\"",
+    (gogoproto.castrepeated) = "DecPools",
+    (gogoproto.nullable) = false
   ];
-  uint32 reference_count = 2;
+  uint32 reference_count = 2
+      [ (gogoproto.moretags) = "yaml:\"reference_count\"" ];
 }
 
 message CurrentRewards {
-  repeated cosmos.base.v1beta1.DecCoin rewards = 1 [
-    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
+  repeated DecPool rewards = 1 [
+    (gogoproto.moretags) = "yaml:\"rewards\"",
+    (gogoproto.castrepeated) = "DecPools",
+    (gogoproto.nullable) = false
   ];
   uint64 period = 2;
 }
 
 message OutstandingRewards {
-  repeated cosmos.base.v1beta1.DecCoin rewards = 1 [
-    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
+  repeated DecPool rewards = 1 [
+    (gogoproto.moretags) = "yaml:\"rewards\"",
+    (gogoproto.castrepeated) = "DecPools",
+    (gogoproto.nullable) = false
+  ];
+}
+
+message AccumulatedCommission {
+  repeated DecPool commissions = 1 [
+    (gogoproto.castrepeated) = "DecPools",
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
+  ];
+}
+
+message DelegatorStartingInfo {
+  uint64 previous_period = 1
+      [ (gogoproto.moretags) = "yaml:\"previous_period\"" ];
+  repeated cosmos.base.v1beta1.DecCoin stakes = 2 [
+    (gogoproto.moretags) = "yaml:\"stakes\"",
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
+    (gogoproto.nullable) = false
+  ];
+  uint64 height = 3 [
+    (gogoproto.moretags) = "yaml:\"creation_height\"",
+    (gogoproto.jsontag) = "creation_height"
   ];
 }
 
@@ -182,54 +190,5 @@ message DecPool {
     (gogoproto.moretags) = "yaml:\"dec_coins\"",
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
     (gogoproto.nullable) = false
-  ];
-}
-
-message MultiHistoricalRewards {
-  repeated DecPool cumulative_reward_ratios = 1 [
-    (gogoproto.moretags) = "yaml:\"cumulative_reward_ratios\"",
-    (gogoproto.castrepeated) = "DecPools",
-    (gogoproto.nullable) = false
-  ];
-  uint32 reference_count = 2
-      [ (gogoproto.moretags) = "yaml:\"reference_count\"" ];
-}
-
-message MultiCurrentRewards {
-  repeated DecPool rewards = 1 [
-    (gogoproto.moretags) = "yaml:\"rewards\"",
-    (gogoproto.castrepeated) = "DecPools",
-    (gogoproto.nullable) = false
-  ];
-  uint64 period = 2;
-}
-
-message MultiOutstandingRewards {
-  repeated DecPool rewards = 1 [
-    (gogoproto.moretags) = "yaml:\"rewards\"",
-    (gogoproto.castrepeated) = "DecPools",
-    (gogoproto.nullable) = false
-  ];
-}
-
-message MultiAccumulatedCommission {
-  repeated DecPool commissions = 1 [
-    (gogoproto.castrepeated) = "DecPools",
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
-}
-
-message MultiDelegatorStartingInfo {
-  uint64 previous_period = 1
-      [ (gogoproto.moretags) = "yaml:\"previous_period\"" ];
-  repeated cosmos.base.v1beta1.DecCoin stakes = 2 [
-    (gogoproto.moretags) = "yaml:\"stakes\"",
-    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
-    (gogoproto.nullable) = false
-  ];
-  uint64 height = 3 [
-    (gogoproto.moretags) = "yaml:\"creation_height\"",
-    (gogoproto.jsontag) = "creation_height"
   ];
 }

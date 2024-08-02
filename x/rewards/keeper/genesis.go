@@ -112,7 +112,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	}
 
 	operatorOutstandingRewards := []types.OperatorOutstandingRewardsRecord{}
-	err = k.OperatorOutstandingRewards.Walk(ctx, nil, func(operatorID uint32, rewards types.MultiOutstandingRewards) (stop bool, err error) {
+	err = k.OperatorOutstandingRewards.Walk(ctx, nil, func(operatorID uint32, rewards types.OutstandingRewards) (stop bool, err error) {
 		operatorOutstandingRewards = append(operatorOutstandingRewards, types.OperatorOutstandingRewardsRecord{
 			OperatorID:         operatorID,
 			OutstandingRewards: rewards.Rewards,
@@ -124,7 +124,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	}
 
 	operatorAccumulatedCommissions := []types.OperatorAccumulatedCommissionRecord{}
-	err = k.OperatorAccumulatedCommissions.Walk(ctx, nil, func(operatorID uint32, commission types.MultiAccumulatedCommission) (stop bool, err error) {
+	err = k.OperatorAccumulatedCommissions.Walk(ctx, nil, func(operatorID uint32, commission types.AccumulatedCommission) (stop bool, err error) {
 		operatorAccumulatedCommissions = append(operatorAccumulatedCommissions, types.OperatorAccumulatedCommissionRecord{
 			OperatorId:  operatorID,
 			Accumulated: commission,
@@ -136,7 +136,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	}
 
 	operatorHistoricalRewards := []types.OperatorHistoricalRewardsRecord{}
-	err = k.OperatorHistoricalRewards.Walk(ctx, nil, func(key collections.Pair[uint32, uint64], rewards types.MultiHistoricalRewards) (stop bool, err error) {
+	err = k.OperatorHistoricalRewards.Walk(ctx, nil, func(key collections.Pair[uint32, uint64], rewards types.HistoricalRewards) (stop bool, err error) {
 		operatorID := key.K1()
 		period := key.K2()
 		operatorHistoricalRewards = append(operatorHistoricalRewards, types.OperatorHistoricalRewardsRecord{
@@ -151,7 +151,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	}
 
 	operatorCurrentRewards := []types.OperatorCurrentRewardsRecord{}
-	err = k.OperatorCurrentRewards.Walk(ctx, nil, func(operatorID uint32, rewards types.MultiCurrentRewards) (stop bool, err error) {
+	err = k.OperatorCurrentRewards.Walk(ctx, nil, func(operatorID uint32, rewards types.CurrentRewards) (stop bool, err error) {
 		operatorCurrentRewards = append(operatorCurrentRewards, types.OperatorCurrentRewardsRecord{
 			OperatorID: operatorID,
 			Rewards:    rewards,
@@ -163,7 +163,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	}
 
 	operatorDelegatorStartingInfos := []types.OperatorDelegatorStartingInfoRecord{}
-	err = k.OperatorDelegatorStartingInfos.Walk(ctx, nil, func(key collections.Pair[uint32, sdk.AccAddress], info types.MultiDelegatorStartingInfo) (stop bool, err error) {
+	err = k.OperatorDelegatorStartingInfos.Walk(ctx, nil, func(key collections.Pair[uint32, sdk.AccAddress], info types.DelegatorStartingInfo) (stop bool, err error) {
 		operatorID := key.K1()
 		delAddr := key.K2()
 		delegator, err := k.accountKeeper.AddressCodec().BytesToString(delAddr)
@@ -182,7 +182,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	}
 
 	serviceOutstandingRewards := []types.ServiceOutstandingRewardsRecord{}
-	err = k.ServiceOutstandingRewards.Walk(ctx, nil, func(serviceID uint32, rewards types.MultiOutstandingRewards) (stop bool, err error) {
+	err = k.ServiceOutstandingRewards.Walk(ctx, nil, func(serviceID uint32, rewards types.OutstandingRewards) (stop bool, err error) {
 		serviceOutstandingRewards = append(serviceOutstandingRewards, types.ServiceOutstandingRewardsRecord{
 			ServiceID:          serviceID,
 			OutstandingRewards: rewards.Rewards,
@@ -194,7 +194,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	}
 
 	serviceHistoricalRewards := []types.ServiceHistoricalRewardsRecord{}
-	err = k.ServiceHistoricalRewards.Walk(ctx, nil, func(key collections.Pair[uint32, uint64], rewards types.MultiHistoricalRewards) (stop bool, err error) {
+	err = k.ServiceHistoricalRewards.Walk(ctx, nil, func(key collections.Pair[uint32, uint64], rewards types.HistoricalRewards) (stop bool, err error) {
 		serviceID := key.K1()
 		period := key.K2()
 		serviceHistoricalRewards = append(serviceHistoricalRewards, types.ServiceHistoricalRewardsRecord{
@@ -209,7 +209,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	}
 
 	serviceCurrentRewards := []types.ServiceCurrentRewardsRecord{}
-	err = k.ServiceCurrentRewards.Walk(ctx, nil, func(serviceID uint32, rewards types.MultiCurrentRewards) (stop bool, err error) {
+	err = k.ServiceCurrentRewards.Walk(ctx, nil, func(serviceID uint32, rewards types.CurrentRewards) (stop bool, err error) {
 		serviceCurrentRewards = append(serviceCurrentRewards, types.ServiceCurrentRewardsRecord{
 			ServiceID: serviceID,
 			Rewards:   rewards,
@@ -221,7 +221,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	}
 
 	serviceDelegatorStartingInfos := []types.ServiceDelegatorStartingInfoRecord{}
-	err = k.ServiceDelegatorStartingInfos.Walk(ctx, nil, func(key collections.Pair[uint32, sdk.AccAddress], info types.MultiDelegatorStartingInfo) (stop bool, err error) {
+	err = k.ServiceDelegatorStartingInfos.Walk(ctx, nil, func(key collections.Pair[uint32, sdk.AccAddress], info types.DelegatorStartingInfo) (stop bool, err error) {
 		serviceID := key.K1()
 		delAddr := key.K2()
 		delegator, err := k.accountKeeper.AddressCodec().BytesToString(delAddr)
@@ -336,7 +336,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) {
 
 	for _, record := range state.OperatorOutstandingRewards {
 		if err := k.OperatorOutstandingRewards.Set(
-			ctx, record.OperatorID, types.MultiOutstandingRewards{Rewards: record.OutstandingRewards}); err != nil {
+			ctx, record.OperatorID, types.OutstandingRewards{Rewards: record.OutstandingRewards}); err != nil {
 			panic(err)
 		}
 	}
@@ -367,7 +367,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) {
 
 	for _, record := range state.ServiceOutstandingRewards {
 		if err := k.ServiceOutstandingRewards.Set(
-			ctx, record.ServiceID, types.MultiOutstandingRewards{Rewards: record.OutstandingRewards}); err != nil {
+			ctx, record.ServiceID, types.OutstandingRewards{Rewards: record.OutstandingRewards}); err != nil {
 			panic(err)
 		}
 	}

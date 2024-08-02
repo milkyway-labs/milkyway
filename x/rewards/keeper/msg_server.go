@@ -4,11 +4,9 @@ import (
 	"context"
 
 	"cosmossdk.io/errors"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
-	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 )
 
@@ -61,28 +59,16 @@ func (k msgServer) WithdrawDelegationReward(ctx context.Context, msg *types.MsgW
 		return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid delegator address: %s", err)
 	}
 
-	var amount sdk.Coins
-	switch msg.DelegationType {
-	case restakingtypes.DELEGATION_TYPE_POOL:
-		amount, err = k.WithdrawPoolDelegationRewards(ctx, delAddr, msg.TargetID)
-		if err != nil {
-			return nil, err
-		}
-	case restakingtypes.DELEGATION_TYPE_OPERATOR:
-		rewards, err := k.WithdrawOperatorDelegationRewards(ctx, delAddr, msg.TargetID)
-		if err != nil {
-			return nil, err
-		}
-		amount = rewards.Sum()
-	case restakingtypes.DELEGATION_TYPE_SERVICE:
-		rewards, err := k.WithdrawServiceDelegationRewards(ctx, delAddr, msg.TargetID)
-		if err != nil {
-			return nil, err
-		}
-		amount = rewards.Sum()
-	default:
-		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, "unknown delegation type: %s", msg.DelegationType)
+	target, err := k.GetDelegationTarget(ctx, msg.DelegationType, msg.TargetID)
+	if err != nil {
+		return nil, err
 	}
+
+	rewards, err := k.WithdrawDelegationRewards(ctx, delAddr, target)
+	if err != nil {
+		return nil, err
+	}
+	amount := rewards.Sum()
 
 	// TODO: telemetry?
 
