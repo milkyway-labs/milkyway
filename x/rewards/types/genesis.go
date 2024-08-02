@@ -12,6 +12,7 @@ func NewGenesisState(
 	nextRewardsPlanID uint64,
 	rewardsPlans []RewardsPlan,
 	lastRewardsAllocationTime *time.Time,
+	delegatorWithdrawInfos []DelegatorWithdrawInfo,
 	poolOutstandingRewardsRecords []PoolOutstandingRewardsRecord,
 	poolHistoricalRewardsRecords []PoolHistoricalRewardsRecord,
 	poolCurrentRewardsRecords []PoolCurrentRewardsRecord,
@@ -31,6 +32,7 @@ func NewGenesisState(
 		NextRewardsPlanID:              nextRewardsPlanID,
 		RewardsPlans:                   rewardsPlans,
 		LastRewardsAllocationTime:      lastRewardsAllocationTime,
+		DelegatorWithdrawInfos:         delegatorWithdrawInfos,
 		PoolOutstandingRewards:         poolOutstandingRewardsRecords,
 		PoolHistoricalRewards:          poolHistoricalRewardsRecords,
 		PoolCurrentRewards:             poolCurrentRewardsRecords,
@@ -50,7 +52,7 @@ func NewGenesisState(
 // DefaultGenesis returns the default genesis state.
 func DefaultGenesis() *GenesisState {
 	return NewGenesisState(
-		DefaultParams(), 1, []RewardsPlan{}, nil, []PoolOutstandingRewardsRecord{},
+		DefaultParams(), 1, []RewardsPlan{}, nil, []DelegatorWithdrawInfo{}, []PoolOutstandingRewardsRecord{},
 		[]PoolHistoricalRewardsRecord{}, []PoolCurrentRewardsRecord{}, []PoolDelegatorStartingInfoRecord{},
 		[]OperatorOutstandingRewardsRecord{}, []OperatorAccumulatedCommissionRecord{}, []OperatorHistoricalRewardsRecord{},
 		[]OperatorCurrentRewardsRecord{}, []OperatorDelegatorStartingInfoRecord{}, []ServiceOutstandingRewardsRecord{},

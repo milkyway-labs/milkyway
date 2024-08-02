@@ -33,6 +33,26 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		panic(err)
 	}
 
+	delegatorWithdrawInfos := []types.DelegatorWithdrawInfo{}
+	err = k.DelegatorWithdrawAddrs.Walk(ctx, nil, func(delAddr, withdrawAddr sdk.AccAddress) (stop bool, err error) {
+		delegator, err := k.accountKeeper.AddressCodec().BytesToString(delAddr)
+		if err != nil {
+			return false, err
+		}
+		withdraw, err := k.accountKeeper.AddressCodec().BytesToString(withdrawAddr)
+		if err != nil {
+			return false, err
+		}
+		delegatorWithdrawInfos = append(delegatorWithdrawInfos, types.DelegatorWithdrawInfo{
+			DelegatorAddress: delegator,
+			WithdrawAddress:  withdraw,
+		})
+		return false, nil
+	})
+	if err != nil {
+		panic(err)
+	}
+
 	poolOutstandingRewards := []types.PoolOutstandingRewardsRecord{}
 	err = k.PoolOutstandingRewards.Walk(ctx, nil, func(poolID uint32, rewards types.OutstandingRewards) (stop bool, err error) {
 		poolOutstandingRewards = append(poolOutstandingRewards, types.PoolOutstandingRewardsRecord{
@@ -73,9 +93,13 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	}
 
 	poolDelegatorStartingInfos := []types.PoolDelegatorStartingInfoRecord{}
-	err = k.PoolDelegatorStartingInfos.Walk(ctx, nil, func(key collections.Pair[uint32, string], info types.DelegatorStartingInfo) (stop bool, err error) {
+	err = k.PoolDelegatorStartingInfos.Walk(ctx, nil, func(key collections.Pair[uint32, sdk.AccAddress], info types.DelegatorStartingInfo) (stop bool, err error) {
 		poolID := key.K1()
-		delegator := key.K2()
+		delAddr := key.K2()
+		delegator, err := k.accountKeeper.AddressCodec().BytesToString(delAddr)
+		if err != nil {
+			return false, err
+		}
 		poolDelegatorStartingInfos = append(poolDelegatorStartingInfos, types.PoolDelegatorStartingInfoRecord{
 			DelegatorAddress: delegator,
 			PoolID:           poolID,
@@ -139,9 +163,13 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	}
 
 	operatorDelegatorStartingInfos := []types.OperatorDelegatorStartingInfoRecord{}
-	err = k.OperatorDelegatorStartingInfos.Walk(ctx, nil, func(key collections.Pair[uint32, string], info types.MultiDelegatorStartingInfo) (stop bool, err error) {
+	err = k.OperatorDelegatorStartingInfos.Walk(ctx, nil, func(key collections.Pair[uint32, sdk.AccAddress], info types.MultiDelegatorStartingInfo) (stop bool, err error) {
 		operatorID := key.K1()
-		delegator := key.K2()
+		delAddr := key.K2()
+		delegator, err := k.accountKeeper.AddressCodec().BytesToString(delAddr)
+		if err != nil {
+			return false, err
+		}
 		operatorDelegatorStartingInfos = append(operatorDelegatorStartingInfos, types.OperatorDelegatorStartingInfoRecord{
 			DelegatorAddress: delegator,
 			OperatorID:       operatorID,
@@ -193,9 +221,13 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	}
 
 	serviceDelegatorStartingInfos := []types.ServiceDelegatorStartingInfoRecord{}
-	err = k.ServiceDelegatorStartingInfos.Walk(ctx, nil, func(key collections.Pair[uint32, string], info types.MultiDelegatorStartingInfo) (stop bool, err error) {
+	err = k.ServiceDelegatorStartingInfos.Walk(ctx, nil, func(key collections.Pair[uint32, sdk.AccAddress], info types.MultiDelegatorStartingInfo) (stop bool, err error) {
 		serviceID := key.K1()
-		delegator := key.K2()
+		delAddr := key.K2()
+		delegator, err := k.accountKeeper.AddressCodec().BytesToString(delAddr)
+		if err != nil {
+			return false, err
+		}
 		serviceDelegatorStartingInfos = append(serviceDelegatorStartingInfos, types.ServiceDelegatorStartingInfoRecord{
 			DelegatorAddress: delegator,
 			ServiceID:        serviceID,
@@ -212,6 +244,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		nextRewardsPlanID,
 		rewardsPlans,
 		lastRewardsAllocationTime,
+		delegatorWithdrawInfos,
 		poolOutstandingRewards,
 		poolHistoricalRewards,
 		poolCurrentRewards,
@@ -255,6 +288,21 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) {
 		}
 	}
 
+	for _, info := range state.DelegatorWithdrawInfos {
+		delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(info.DelegatorAddress)
+		if err != nil {
+			panic(err)
+		}
+		withdrawAddr, err := k.accountKeeper.AddressCodec().StringToBytes(info.WithdrawAddress)
+		if err != nil {
+			panic(err)
+		}
+		err = k.DelegatorWithdrawAddrs.Set(ctx, delAddr, withdrawAddr)
+		if err != nil {
+			panic(err)
+		}
+	}
+
 	for _, record := range state.PoolOutstandingRewards {
 		if err := k.PoolOutstandingRewards.Set(
 			ctx, record.PoolID, types.OutstandingRewards{Rewards: record.OutstandingRewards}); err != nil {
@@ -276,8 +324,12 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) {
 	}
 
 	for _, record := range state.PoolDelegatorStartingInfos {
+		delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(record.DelegatorAddress)
+		if err != nil {
+			panic(err)
+		}
 		if err := k.PoolDelegatorStartingInfos.Set(
-			ctx, collections.Join(record.PoolID, record.DelegatorAddress), record.StartingInfo); err != nil {
+			ctx, collections.Join(record.PoolID, sdk.AccAddress(delAddr)), record.StartingInfo); err != nil {
 			panic(err)
 		}
 	}
@@ -303,8 +355,12 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) {
 	}
 
 	for _, record := range state.OperatorDelegatorStartingInfos {
+		delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(record.DelegatorAddress)
+		if err != nil {
+			panic(err)
+		}
 		if err := k.OperatorDelegatorStartingInfos.Set(
-			ctx, collections.Join(record.OperatorID, record.DelegatorAddress), record.StartingInfo); err != nil {
+			ctx, collections.Join(record.OperatorID, sdk.AccAddress(delAddr)), record.StartingInfo); err != nil {
 			panic(err)
 		}
 	}
@@ -330,8 +386,12 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) {
 	}
 
 	for _, record := range state.ServiceDelegatorStartingInfos {
+		delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(record.DelegatorAddress)
+		if err != nil {
+			panic(err)
+		}
 		if err := k.ServiceDelegatorStartingInfos.Set(
-			ctx, collections.Join(record.ServiceID, record.DelegatorAddress), record.StartingInfo); err != nil {
+			ctx, collections.Join(record.ServiceID, sdk.AccAddress(delAddr)), record.StartingInfo); err != nil {
 			panic(err)
 		}
 	}

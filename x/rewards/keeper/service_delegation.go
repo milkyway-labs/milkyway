@@ -15,7 +15,7 @@ import (
 )
 
 // initialize starting info for a new delegation
-func (k *Keeper) initializeServiceDelegation(ctx context.Context, serviceID uint32, del string) error {
+func (k *Keeper) initializeServiceDelegation(ctx context.Context, serviceID uint32, del sdk.AccAddress) error {
 	// period has already been incremented - we want to store the period ended by this delegation action
 	currentRewards, err := k.ServiceCurrentRewards.Get(ctx, serviceID)
 	if err != nil {
@@ -35,9 +35,9 @@ func (k *Keeper) initializeServiceDelegation(ctx context.Context, serviceID uint
 		return servicestypes.ErrServiceNotFound
 	}
 
-	delegation, found := k.restakingKeeper.GetServiceDelegation(sdkCtx, serviceID, del)
+	delegation, found := k.restakingKeeper.GetServiceDelegation(sdkCtx, serviceID, del.String())
 	if !found {
-		return sdkerrors.ErrNotFound.Wrapf("service delegation not found: %d, %s", serviceID, del)
+		return sdkerrors.ErrNotFound.Wrapf("service delegation not found: %d, %s", serviceID, del.String())
 	}
 
 	// calculate delegation stake in tokens
@@ -90,16 +90,21 @@ func (k *Keeper) calculateServiceDelegationRewardsBetween(ctx context.Context, s
 
 // calculate the total rewards accrued by a delegation
 func (k *Keeper) CalculateServiceDelegationRewards(ctx context.Context, service servicestypes.Service, del restakingtypes.Delegation, endingPeriod uint64) (rewards types.DecPools, err error) {
-	// fetch starting info for delegation
-	startingInfo, err := k.ServiceDelegatorStartingInfos.Get(ctx, collections.Join(service.ID, del.UserAddress))
+	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(del.UserAddress)
 	if err != nil {
-		return
+		return nil, err
+	}
+
+	// fetch starting info for delegation
+	startingInfo, err := k.ServiceDelegatorStartingInfos.Get(ctx, collections.Join(service.ID, sdk.AccAddress(delAddr)))
+	if err != nil {
+		return nil, err
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	if startingInfo.Height == uint64(sdkCtx.BlockHeight()) {
 		// started this height, no rewards yet
-		return
+		return nil, nil
 	}
 
 	startingPeriod := startingInfo.PreviousPeriod
@@ -166,8 +171,13 @@ func (k *Keeper) CalculateServiceDelegationRewards(ctx context.Context, service 
 }
 
 func (k *Keeper) withdrawServiceDelegationRewards(ctx context.Context, service servicestypes.Service, del restakingtypes.Delegation) (types.Pools, error) {
+	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(del.UserAddress)
+	if err != nil {
+		return nil, err
+	}
+
 	// check existence of delegator starting info
-	hasInfo, err := k.ServiceDelegatorStartingInfos.Has(ctx, collections.Join(service.ID, del.UserAddress))
+	hasInfo, err := k.ServiceDelegatorStartingInfos.Has(ctx, collections.Join(service.ID, sdk.AccAddress(delAddr)))
 	if err != nil {
 		return nil, err
 	}
@@ -212,7 +222,7 @@ func (k *Keeper) withdrawServiceDelegationRewards(ctx context.Context, service s
 
 	// add pools to user account
 	if !pools.IsEmpty() {
-		withdrawAddr, err := k.GetDelegatorWithdrawAddr(ctx, del.UserAddress)
+		withdrawAddr, err := k.GetDelegatorWithdrawAddr(ctx, delAddr)
 		if err != nil {
 			return nil, err
 		}
@@ -231,7 +241,7 @@ func (k *Keeper) withdrawServiceDelegationRewards(ctx context.Context, service s
 	}
 
 	// decrement reference count of starting period
-	startingInfo, err := k.ServiceDelegatorStartingInfos.Get(ctx, collections.Join(service.ID, del.UserAddress))
+	startingInfo, err := k.ServiceDelegatorStartingInfos.Get(ctx, collections.Join(service.ID, sdk.AccAddress(delAddr)))
 	if err != nil {
 		return nil, err
 	}
@@ -243,7 +253,7 @@ func (k *Keeper) withdrawServiceDelegationRewards(ctx context.Context, service s
 	}
 
 	// remove delegator starting info
-	err = k.ServiceDelegatorStartingInfos.Remove(ctx, collections.Join(service.ID, del.UserAddress))
+	err = k.ServiceDelegatorStartingInfos.Remove(ctx, collections.Join(service.ID, sdk.AccAddress(delAddr)))
 	if err != nil {
 		return nil, err
 	}

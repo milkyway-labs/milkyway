@@ -63,7 +63,11 @@ func (h Hooks) BeforePoolDelegationSharesModified(ctx sdk.Context, poolID uint32
 }
 
 func (h Hooks) AfterPoolDelegationModified(ctx sdk.Context, poolID uint32, delegator string) error {
-	return h.k.initializePoolDelegation(ctx, poolID, delegator)
+	delAddr, err := h.k.accountKeeper.AddressCodec().StringToBytes(delegator)
+	if err != nil {
+		return err
+	}
+	return h.k.initializePoolDelegation(ctx, poolID, delAddr)
 }
 
 func (h Hooks) BeforeOperatorDelegationCreated(ctx sdk.Context, operatorID uint32, delegator string) error {
@@ -109,7 +113,11 @@ func (h Hooks) BeforeOperatorDelegationSharesModified(ctx sdk.Context, operatorI
 }
 
 func (h Hooks) AfterOperatorDelegationModified(ctx sdk.Context, operatorID uint32, delegator string) error {
-	return h.k.initializeOperatorDelegation(ctx, operatorID, delegator)
+	delAddr, err := h.k.accountKeeper.AddressCodec().StringToBytes(delegator)
+	if err != nil {
+		return err
+	}
+	return h.k.initializeOperatorDelegation(ctx, operatorID, delAddr)
 }
 
 func (h Hooks) BeforeServiceDelegationCreated(ctx sdk.Context, serviceID uint32, delegator string) error {
@@ -155,5 +163,9 @@ func (h Hooks) BeforeServiceDelegationSharesModified(ctx sdk.Context, serviceID 
 }
 
 func (h Hooks) AfterServiceDelegationModified(ctx sdk.Context, serviceID uint32, delegator string) error {
-	return h.k.initializeServiceDelegation(ctx, serviceID, delegator)
+	delAddr, err := h.k.accountKeeper.AddressCodec().StringToBytes(delegator)
+	if err != nil {
+		return err
+	}
+	return h.k.initializeServiceDelegation(ctx, serviceID, delAddr)
 }

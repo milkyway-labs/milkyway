@@ -15,7 +15,7 @@ import (
 )
 
 // initialize starting info for a new delegation
-func (k *Keeper) initializeOperatorDelegation(ctx context.Context, operatorID uint32, del string) error {
+func (k *Keeper) initializeOperatorDelegation(ctx context.Context, operatorID uint32, del sdk.AccAddress) error {
 	// period has already been incremented - we want to store the period ended by this delegation action
 	currentRewards, err := k.OperatorCurrentRewards.Get(ctx, operatorID)
 	if err != nil {
@@ -35,9 +35,9 @@ func (k *Keeper) initializeOperatorDelegation(ctx context.Context, operatorID ui
 		return operatorstypes.ErrOperatorNotFound
 	}
 
-	delegation, found := k.restakingKeeper.GetOperatorDelegation(sdkCtx, operatorID, del)
+	delegation, found := k.restakingKeeper.GetOperatorDelegation(sdkCtx, operatorID, del.String())
 	if !found {
-		return sdkerrors.ErrNotFound.Wrapf("operator delegation not found: %d, %s", operatorID, del)
+		return sdkerrors.ErrNotFound.Wrapf("operator delegation not found: %d, %s", operatorID, del.String())
 	}
 
 	// calculate delegation stake in tokens
@@ -90,16 +90,21 @@ func (k *Keeper) calculateOperatorDelegationRewardsBetween(ctx context.Context, 
 
 // calculate the total rewards accrued by a delegation
 func (k *Keeper) CalculateOperatorDelegationRewards(ctx context.Context, operator operatorstypes.Operator, del restakingtypes.Delegation, endingPeriod uint64) (rewards types.DecPools, err error) {
-	// fetch starting info for delegation
-	startingInfo, err := k.OperatorDelegatorStartingInfos.Get(ctx, collections.Join(operator.ID, del.UserAddress))
+	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(del.UserAddress)
 	if err != nil {
-		return
+		return nil, err
+	}
+
+	// fetch starting info for delegation
+	startingInfo, err := k.OperatorDelegatorStartingInfos.Get(ctx, collections.Join(operator.ID, sdk.AccAddress(delAddr)))
+	if err != nil {
+		return nil, err
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	if startingInfo.Height == uint64(sdkCtx.BlockHeight()) {
 		// started this height, no rewards yet
-		return
+		return nil, nil
 	}
 
 	startingPeriod := startingInfo.PreviousPeriod
@@ -166,8 +171,13 @@ func (k *Keeper) CalculateOperatorDelegationRewards(ctx context.Context, operato
 }
 
 func (k *Keeper) withdrawOperatorDelegationRewards(ctx context.Context, operator operatorstypes.Operator, del restakingtypes.Delegation) (types.Pools, error) {
+	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(del.UserAddress)
+	if err != nil {
+		return nil, err
+	}
+
 	// check existence of delegator starting info
-	hasInfo, err := k.OperatorDelegatorStartingInfos.Has(ctx, collections.Join(operator.ID, del.UserAddress))
+	hasInfo, err := k.OperatorDelegatorStartingInfos.Has(ctx, collections.Join(operator.ID, sdk.AccAddress(delAddr)))
 	if err != nil {
 		return nil, err
 	}
@@ -212,7 +222,7 @@ func (k *Keeper) withdrawOperatorDelegationRewards(ctx context.Context, operator
 
 	// add pools to user account
 	if !pools.IsEmpty() {
-		withdrawAddr, err := k.GetDelegatorWithdrawAddr(ctx, del.UserAddress)
+		withdrawAddr, err := k.GetDelegatorWithdrawAddr(ctx, delAddr)
 		if err != nil {
 			return nil, err
 		}
@@ -231,7 +241,7 @@ func (k *Keeper) withdrawOperatorDelegationRewards(ctx context.Context, operator
 	}
 
 	// decrement reference count of starting period
-	startingInfo, err := k.OperatorDelegatorStartingInfos.Get(ctx, collections.Join(operator.ID, del.UserAddress))
+	startingInfo, err := k.OperatorDelegatorStartingInfos.Get(ctx, collections.Join(operator.ID, sdk.AccAddress(del.UserAddress)))
 	if err != nil {
 		return nil, err
 	}
@@ -243,7 +253,7 @@ func (k *Keeper) withdrawOperatorDelegationRewards(ctx context.Context, operator
 	}
 
 	// remove delegator starting info
-	err = k.OperatorDelegatorStartingInfos.Remove(ctx, collections.Join(operator.ID, del.UserAddress))
+	err = k.OperatorDelegatorStartingInfos.Remove(ctx, collections.Join(operator.ID, sdk.AccAddress(delAddr)))
 	if err != nil {
 		return nil, err
 	}

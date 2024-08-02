@@ -15,7 +15,7 @@ import (
 )
 
 // initialize starting info for a new delegation
-func (k *Keeper) initializePoolDelegation(ctx context.Context, poolID uint32, del string) error {
+func (k *Keeper) initializePoolDelegation(ctx context.Context, poolID uint32, del sdk.AccAddress) error {
 	// period has already been incremented - we want to store the period ended by this delegation action
 	currentRewards, err := k.PoolCurrentRewards.Get(ctx, poolID)
 	if err != nil {
@@ -35,9 +35,9 @@ func (k *Keeper) initializePoolDelegation(ctx context.Context, poolID uint32, de
 		return poolstypes.ErrPoolNotFound
 	}
 
-	delegation, found := k.restakingKeeper.GetPoolDelegation(sdkCtx, poolID, del)
+	delegation, found := k.restakingKeeper.GetPoolDelegation(sdkCtx, poolID, del.String())
 	if !found {
-		return sdkerrors.ErrNotFound.Wrapf("pool delegation not found: %d, %s", poolID, del)
+		return sdkerrors.ErrNotFound.Wrapf("pool delegation not found: %d, %s", poolID, del.String())
 	}
 
 	// calculate delegation stake in tokens
@@ -84,16 +84,21 @@ func (k *Keeper) calculatePoolDelegationRewardsBetween(ctx context.Context, pool
 
 // calculate the total rewards accrued by a delegation
 func (k *Keeper) CalculatePoolDelegationRewards(ctx context.Context, pool poolstypes.Pool, del restakingtypes.Delegation, endingPeriod uint64) (rewards sdk.DecCoins, err error) {
-	// fetch starting info for delegation
-	startingInfo, err := k.PoolDelegatorStartingInfos.Get(ctx, collections.Join(pool.ID, del.UserAddress))
+	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(del.UserAddress)
 	if err != nil {
-		return
+		return nil, err
+	}
+
+	// fetch starting info for delegation
+	startingInfo, err := k.PoolDelegatorStartingInfos.Get(ctx, collections.Join(pool.ID, sdk.AccAddress(delAddr)))
+	if err != nil {
+		return nil, err
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	if startingInfo.Height == uint64(sdkCtx.BlockHeight()) {
 		// started this height, no rewards yet
-		return
+		return nil, nil
 	}
 
 	startingPeriod := startingInfo.PreviousPeriod
@@ -156,8 +161,13 @@ func (k *Keeper) CalculatePoolDelegationRewards(ctx context.Context, pool poolst
 }
 
 func (k *Keeper) withdrawPoolDelegationRewards(ctx context.Context, pool poolstypes.Pool, del restakingtypes.Delegation) (sdk.Coins, error) {
+	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(del.UserAddress)
+	if err != nil {
+		return nil, err
+	}
+
 	// check existence of delegator starting info
-	hasInfo, err := k.PoolDelegatorStartingInfos.Has(ctx, collections.Join(pool.ID, del.UserAddress))
+	hasInfo, err := k.PoolDelegatorStartingInfos.Has(ctx, collections.Join(pool.ID, sdk.AccAddress(delAddr)))
 	if err != nil {
 		return nil, err
 	}
@@ -201,7 +211,7 @@ func (k *Keeper) withdrawPoolDelegationRewards(ctx context.Context, pool poolsty
 
 	// add coins to user account
 	if !finalRewards.IsZero() {
-		withdrawAddr, err := k.GetDelegatorWithdrawAddr(ctx, del.UserAddress)
+		withdrawAddr, err := k.GetDelegatorWithdrawAddr(ctx, delAddr)
 		if err != nil {
 			return nil, err
 		}
@@ -222,7 +232,7 @@ func (k *Keeper) withdrawPoolDelegationRewards(ctx context.Context, pool poolsty
 	// We don't use truncation remainder
 
 	// decrement reference count of starting period
-	startingInfo, err := k.PoolDelegatorStartingInfos.Get(ctx, collections.Join(pool.ID, del.UserAddress))
+	startingInfo, err := k.PoolDelegatorStartingInfos.Get(ctx, collections.Join(pool.ID, sdk.AccAddress(delAddr)))
 	if err != nil {
 		return nil, err
 	}
@@ -234,7 +244,7 @@ func (k *Keeper) withdrawPoolDelegationRewards(ctx context.Context, pool poolsty
 	}
 
 	// remove delegator starting info
-	err = k.PoolDelegatorStartingInfos.Remove(ctx, collections.Join(pool.ID, del.UserAddress))
+	err = k.PoolDelegatorStartingInfos.Remove(ctx, collections.Join(pool.ID, sdk.AccAddress(delAddr)))
 	if err != nil {
 		return nil, err
 	}

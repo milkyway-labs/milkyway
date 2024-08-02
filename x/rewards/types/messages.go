@@ -26,6 +26,13 @@ func NewMsgCreateRewardsPlan(
 	}
 }
 
+func NewMsgSetWithdrawAddress(delAddr, withdrawAddr string) *MsgSetWithdrawAddress {
+	return &MsgSetWithdrawAddress{
+		DelegatorAddress: delAddr,
+		WithdrawAddress:  withdrawAddr,
+	}
+}
+
 // NewMsgWithdrawDelegationReward creates a new MsgWithdrawDelegationReward instance
 func NewMsgWithdrawDelegationReward(delAddr string, delType restakingtypes.DelegationType, poolID uint32) *MsgWithdrawDelegationReward {
 	return &MsgWithdrawDelegationReward{

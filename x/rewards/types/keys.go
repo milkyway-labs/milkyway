@@ -12,9 +12,10 @@ const (
 var (
 	ParamsKey = collections.NewPrefix(0x01)
 
-	NextRewardsPlanIDKey         = collections.NewPrefix(0x11)
-	RewardsPlanKeyPrefix         = collections.NewPrefix(0x12)
-	LastRewardsAllocationTimeKey = collections.NewPrefix(0x13)
+	NextRewardsPlanIDKey           = collections.NewPrefix(0x11)
+	RewardsPlanKeyPrefix           = collections.NewPrefix(0x12)
+	LastRewardsAllocationTimeKey   = collections.NewPrefix(0x13)
+	DelegatorWithdrawAddrKeyPrefix = collections.NewPrefix(0x14)
 
 	PoolDelegatorStartingInfoKeyPrefix = collections.NewPrefix(0x21)
 	PoolHistoricalRewardsKeyPrefix     = collections.NewPrefix(0x22)

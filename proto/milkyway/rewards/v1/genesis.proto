@@ -11,6 +11,22 @@ import "milkyway/rewards/v1/models.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/rewards/types";
 
+// DelegatorWithdrawInfo is the address for where distributions rewards are
+// withdrawn to by default this struct is only used at genesis to feed in
+// default withdraw addresses.
+message DelegatorWithdrawInfo {
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  // delegator_address is the address of the delegator.
+  string delegator_address = 1
+      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // withdraw_address is the address to withdraw the delegation rewards to.
+  string withdraw_address = 2
+      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+}
+
 // PoolOutstandingRewardsRecord is used for import/export via genesis json.
 message PoolOutstandingRewardsRecord {
   option (gogoproto.equal) = false;
@@ -228,69 +244,73 @@ message GenesisState {
   google.protobuf.Timestamp last_rewards_allocation_time = 4
       [ (gogoproto.stdtime) = true ];
 
+  // delegator_withdraw_infos defines the delegator withdraw infos at genesis.
+  repeated DelegatorWithdrawInfo delegator_withdraw_infos = 5
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+
   // pool_outstanding_rewards defines the outstanding rewards of all pools at
   // genesis.
-  repeated PoolOutstandingRewardsRecord pool_outstanding_rewards = 5
+  repeated PoolOutstandingRewardsRecord pool_outstanding_rewards = 6
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 
   // pool_historical_rewards defines the historical rewards of all pools at
   // genesis.
-  repeated PoolHistoricalRewardsRecord pool_historical_rewards = 6
+  repeated PoolHistoricalRewardsRecord pool_historical_rewards = 7
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 
   // pool_current_rewards defines the current rewards of all pools at genesis.
-  repeated PoolCurrentRewardsRecord pool_current_rewards = 7
+  repeated PoolCurrentRewardsRecord pool_current_rewards = 8
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 
   // pool_delegator_starting_infos defines the delegator starting infos of all
   // pools at genesis.
-  repeated PoolDelegatorStartingInfoRecord pool_delegator_starting_infos = 8
+  repeated PoolDelegatorStartingInfoRecord pool_delegator_starting_infos = 9
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 
   // operator_outstanding_rewards defines the outstanding rewards of all
   // operators at genesis.
-  repeated OperatorOutstandingRewardsRecord operator_outstanding_rewards = 9
+  repeated OperatorOutstandingRewardsRecord operator_outstanding_rewards = 10
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 
   // operator_accumulated_commissions defines the accumulated commissions of all
   // operators at genesis.
   repeated OperatorAccumulatedCommissionRecord
-      operator_accumulated_commissions = 10
+      operator_accumulated_commissions = 11
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 
   // operator_historical_rewards defines the historical rewards of all operators
   // at genesis.
-  repeated OperatorHistoricalRewardsRecord operator_historical_rewards = 11
+  repeated OperatorHistoricalRewardsRecord operator_historical_rewards = 12
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 
   // operator_current_rewards defines the current rewards of all operators at
   // genesis.
-  repeated OperatorCurrentRewardsRecord operator_current_rewards = 12
+  repeated OperatorCurrentRewardsRecord operator_current_rewards = 13
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 
   // operator_delegator_starting_infos defines the delegator starting infos of
   // all operators at genesis.
   repeated OperatorDelegatorStartingInfoRecord
-      operator_delegator_starting_infos = 13
+      operator_delegator_starting_infos = 14
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 
   // service_outstanding_rewards defines the outstanding rewards of all services
   // at genesis.
-  repeated ServiceOutstandingRewardsRecord service_outstanding_rewards = 14
+  repeated ServiceOutstandingRewardsRecord service_outstanding_rewards = 15
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 
   // service_historical_rewards defines the historical rewards of all services
   // at genesis.
-  repeated ServiceHistoricalRewardsRecord service_historical_rewards = 15
+  repeated ServiceHistoricalRewardsRecord service_historical_rewards = 16
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 
   // service_current_rewards defines the current rewards of all services at
   // genesis.
-  repeated ServiceCurrentRewardsRecord service_current_rewards = 16
+  repeated ServiceCurrentRewardsRecord service_current_rewards = 17
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 
   // service_delegator_starting_infos defines the delegator starting infos of
   // all services at genesis.
   repeated ServiceDelegatorStartingInfoRecord service_delegator_starting_infos =
-      17 [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+      18 [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 }

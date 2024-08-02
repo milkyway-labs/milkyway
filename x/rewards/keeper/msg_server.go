@@ -36,25 +36,46 @@ func (k msgServer) CreateRewardsPlan(ctx context.Context, msg *types.MsgCreateRe
 	return &types.MsgCreateRewardsPlanResponse{NewRewardsPlanID: plan.ID}, nil
 }
 
+func (k msgServer) SetWithdrawAddress(ctx context.Context, msg *types.MsgSetWithdrawAddress) (*types.MsgSetWithdrawAddressResponse, error) {
+	delegatorAddress, err := k.accountKeeper.AddressCodec().StringToBytes(msg.DelegatorAddress)
+	if err != nil {
+		return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid delegator address: %s", err)
+	}
+
+	withdrawAddress, err := k.accountKeeper.AddressCodec().StringToBytes(msg.WithdrawAddress)
+	if err != nil {
+		return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid withdraw address: %s", err)
+	}
+
+	err = k.SetWithdrawAddr(ctx, delegatorAddress, withdrawAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.MsgSetWithdrawAddressResponse{}, nil
+}
+
 func (k msgServer) WithdrawDelegationReward(ctx context.Context, msg *types.MsgWithdrawDelegationReward) (*types.MsgWithdrawDelegationRewardResponse, error) {
-	var (
-		amount sdk.Coins
-		err    error
-	)
+	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(msg.DelegatorAddress)
+	if err != nil {
+		return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid delegator address: %s", err)
+	}
+
+	var amount sdk.Coins
 	switch msg.DelegationType {
 	case restakingtypes.DELEGATION_TYPE_POOL:
-		amount, err = k.WithdrawPoolDelegationRewards(ctx, msg.DelegatorAddress, msg.TargetID)
+		amount, err = k.WithdrawPoolDelegationRewards(ctx, delAddr, msg.TargetID)
 		if err != nil {
 			return nil, err
 		}
 	case restakingtypes.DELEGATION_TYPE_OPERATOR:
-		rewards, err := k.WithdrawOperatorDelegationRewards(ctx, msg.DelegatorAddress, msg.TargetID)
+		rewards, err := k.WithdrawOperatorDelegationRewards(ctx, delAddr, msg.TargetID)
 		if err != nil {
 			return nil, err
 		}
 		amount = rewards.Sum()
 	case restakingtypes.DELEGATION_TYPE_SERVICE:
-		rewards, err := k.WithdrawServiceDelegationRewards(ctx, msg.DelegatorAddress, msg.TargetID)
+		rewards, err := k.WithdrawServiceDelegationRewards(ctx, delAddr, msg.TargetID)
 		if err != nil {
 			return nil, err
 		}
