@@ -7,9 +7,9 @@ import (
 )
 
 // NewParams returns a new Params instance
-func NewParams(allowedServiceIDs []uint32) Params {
+func NewParams(allowedServicesIDs []uint32) Params {
 	return Params{
-		AllowedServiceIDs: allowedServiceIDs,
+		AllowedServicesIDs: allowedServicesIDs,
 	}
 }
 
@@ -20,11 +20,11 @@ func DefaultParams() Params {
 
 // Validate performs basic validation of params
 func (p *Params) Validate() error {
-	if duplicate := utils.FindDuplicate(p.AllowedServiceIDs); duplicate != nil {
+	if duplicate := utils.FindDuplicate(p.AllowedServicesIDs); duplicate != nil {
 		return fmt.Errorf("duplicated allowed service id: %v", duplicate)
 	}
 
-	for _, serviceID := range p.AllowedServiceIDs {
+	for _, serviceID := range p.AllowedServicesIDs {
 		if serviceID == 0 {
 			return fmt.Errorf("invalid service id: %d", serviceID)
 		}

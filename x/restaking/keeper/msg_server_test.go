@@ -26,9 +26,9 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperatorParams() {
 		{
 			name: "non-existent operator id returns an error",
 			msg: &types.MsgUpdateOperatorParams{
-				Sender:         "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				OperatorID:     1,
-				OperatorParams: types.NewOperatorParams(sdkmath.LegacyNewDecWithPrec(1, 1), nil),
+				Sender:     "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				OperatorID: 1,
+				Params:     types.NewOperatorParams(sdkmath.LegacyNewDecWithPrec(1, 1), nil),
 			},
 			shouldErr: true,
 		},
@@ -44,9 +44,9 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperatorParams() {
 				))
 			},
 			msg: &types.MsgUpdateOperatorParams{
-				Sender:         "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				OperatorID:     1,
-				OperatorParams: types.NewOperatorParams(sdkmath.LegacyNewDecWithPrec(1, 1), []uint32{1}),
+				Sender:     "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				OperatorID: 1,
+				Params:     types.NewOperatorParams(sdkmath.LegacyNewDecWithPrec(1, 1), []uint32{1}),
 			},
 			shouldErr: true,
 		},
@@ -62,9 +62,9 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperatorParams() {
 				))
 			},
 			msg: &types.MsgUpdateOperatorParams{
-				Sender:         "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				OperatorID:     1,
-				OperatorParams: types.NewOperatorParams(sdkmath.LegacyNewDecWithPrec(1, 1), []uint32{1}),
+				Sender:     "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				OperatorID: 1,
+				Params:     types.NewOperatorParams(sdkmath.LegacyNewDecWithPrec(1, 1), []uint32{1}),
 			},
 			shouldErr: true,
 		},
@@ -88,9 +88,9 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperatorParams() {
 				))
 			},
 			msg: &types.MsgUpdateOperatorParams{
-				Sender:         "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				OperatorID:     1,
-				OperatorParams: types.NewOperatorParams(sdkmath.LegacyNewDecWithPrec(1, 1), []uint32{1}),
+				Sender:     "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				OperatorID: 1,
+				Params:     types.NewOperatorParams(sdkmath.LegacyNewDecWithPrec(1, 1), []uint32{1}),
 			},
 			shouldErr: false,
 			expEvents: sdk.Events{
@@ -151,9 +151,9 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateServiceParams() {
 		{
 			name: "non-existent service id returns an error",
 			msg: &types.MsgUpdateServiceParams{
-				Sender:        "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				ServiceID:     1,
-				ServiceParams: types.NewServiceParams(sdkmath.LegacyNewDecWithPrec(1, 2), nil, nil),
+				Sender:    "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				ServiceID: 1,
+				Params:    types.NewServiceParams(sdkmath.LegacyNewDecWithPrec(1, 2), nil, nil),
 			},
 			shouldErr: true,
 		},
@@ -170,9 +170,9 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateServiceParams() {
 				))
 			},
 			msg: &types.MsgUpdateServiceParams{
-				Sender:        "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				ServiceID:     1,
-				ServiceParams: types.NewServiceParams(sdkmath.LegacyNewDecWithPrec(1, 2), []uint32{1}, nil),
+				Sender:    "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				ServiceID: 1,
+				Params:    types.NewServiceParams(sdkmath.LegacyNewDecWithPrec(1, 2), []uint32{1}, nil),
 			},
 			shouldErr: true,
 		},
@@ -189,9 +189,9 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateServiceParams() {
 				))
 			},
 			msg: &types.MsgUpdateServiceParams{
-				Sender:        "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				ServiceID:     1,
-				ServiceParams: types.NewServiceParams(sdkmath.LegacyNewDecWithPrec(1, 2), nil, []uint32{1}),
+				Sender:    "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				ServiceID: 1,
+				Params:    types.NewServiceParams(sdkmath.LegacyNewDecWithPrec(1, 2), nil, []uint32{1}),
 			},
 			shouldErr: true,
 		},
@@ -208,9 +208,9 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateServiceParams() {
 				))
 			},
 			msg: &types.MsgUpdateServiceParams{
-				Sender:        "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				ServiceID:     1,
-				ServiceParams: types.NewServiceParams(sdkmath.LegacyNewDecWithPrec(1, 2), nil, nil),
+				Sender:    "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				ServiceID: 1,
+				Params:    types.NewServiceParams(sdkmath.LegacyNewDecWithPrec(1, 2), nil, nil),
 			},
 			shouldErr: true,
 		},
@@ -242,9 +242,9 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateServiceParams() {
 				))
 			},
 			msg: &types.MsgUpdateServiceParams{
-				Sender:        "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				ServiceID:     1,
-				ServiceParams: types.NewServiceParams(sdkmath.LegacyNewDecWithPrec(1, 2), []uint32{1}, []uint32{2}),
+				Sender:    "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				ServiceID: 1,
+				Params:    types.NewServiceParams(sdkmath.LegacyNewDecWithPrec(1, 2), []uint32{1}, []uint32{2}),
 			},
 			shouldErr: false,
 			expEvents: sdk.Events{

@@ -17,6 +17,7 @@ option go_package = "github.com/milkyway-labs/milkyway/x/restaking/types";
 
 // Query defines the gRPC querier service.
 service Query {
+  // OperatorParams queries the operator params for the given operator.
   rpc OperatorParams(QueryOperatorParamsRequest)
       returns (QueryOperatorParamsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
@@ -24,6 +25,7 @@ service Query {
         "/milkyway/restaking/v1/operator_params/{operator_id}";
   }
 
+  // ServiceParams queries the service params for the given service.
   rpc ServiceParams(QueryServiceParamsRequest)
       returns (QueryServiceParamsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;

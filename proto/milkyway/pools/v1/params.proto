@@ -9,8 +9,8 @@ option go_package = "github.com/milkyway-labs/milkyway/x/pools/types";
 
 // Params defines the parameters for the pools module.
 message Params {
-  // AllowedServiceIDs defines the list of service IDs that the module allows
+  // AllowedServicesIDs defines the list of service IDs that the module allows
   // to join by pools.
-  repeated uint32 allowed_service_ids = 1
-      [ (gogoproto.customname) = "AllowedServiceIDs" ];
+  repeated uint32 allowed_services_ids = 1
+      [ (gogoproto.customname) = "AllowedServicesIDs" ];
 }
