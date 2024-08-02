@@ -11,9 +11,7 @@ import (
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgCreateRewardsPlan{}, "rewards/MsgCreateRewardsPlan")
-	legacy.RegisterAminoMsg(cdc, &MsgWithdrawPoolDelReward{}, "rewards/MsgWithdrawPoolDelReward")
-	legacy.RegisterAminoMsg(cdc, &MsgWithdrawOperatorDelReward{}, "rewards/MsgWithdrawOperatorDelReward")
-	legacy.RegisterAminoMsg(cdc, &MsgWithdrawServiceDelReward{}, "rewards/MsgWithdrawServiceDelReward")
+	legacy.RegisterAminoMsg(cdc, &MsgWithdrawDelegationReward{}, "rewards/MsgWithdrawDelegationReward")
 	legacy.RegisterAminoMsg(cdc, &MsgWithdrawOperatorCommission{}, "rewards/MsgWithdrawOperatorCommission")
 	legacy.RegisterAminoMsg(cdc, &MsgUpdateParams{}, "rewards/MsgUpdateParams")
 }
@@ -22,9 +20,7 @@ func RegisterInterfaces(registry types.InterfaceRegistry) {
 	registry.RegisterImplementations(
 		(*sdk.Msg)(nil),
 		&MsgCreateRewardsPlan{},
-		&MsgWithdrawPoolDelReward{},
-		&MsgWithdrawOperatorDelReward{},
-		&MsgWithdrawServiceDelReward{},
+		&MsgWithdrawDelegationReward{},
 		&MsgWithdrawOperatorCommission{},
 		&MsgUpdateParams{},
 	)

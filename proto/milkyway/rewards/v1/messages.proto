@@ -7,6 +7,7 @@ import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/msg/v1/msg.proto";
 import "google/protobuf/timestamp.proto";
 import "gogoproto/gogo.proto";
+import "milkyway/restaking/v1/models.proto";
 import "milkyway/rewards/v1/params.proto";
 import "milkyway/rewards/v1/models.proto";
 
@@ -21,14 +22,8 @@ service Msg {
   rpc CreateRewardsPlan(MsgCreateRewardsPlan)
       returns (MsgCreateRewardsPlanResponse);
 
-  rpc WithdrawPoolDelReward(MsgWithdrawPoolDelReward)
-      returns (MsgWithdrawPoolDelRewardResponse);
-
-  rpc WithdrawOperatorDelReward(MsgWithdrawOperatorDelReward)
-      returns (MsgWithdrawOperatorDelRewardResponse);
-
-  rpc WithdrawServiceDelReward(MsgWithdrawServiceDelReward)
-      returns (MsgWithdrawServiceDelRewardResponse);
+  rpc WithdrawDelegationReward(MsgWithdrawDelegationReward)
+      returns (MsgWithdrawDelegationRewardResponse);
 
   // WithdrawOperatorCommission defines a method to withdraw the
   // full commission to the operator.
@@ -89,9 +84,7 @@ message MsgCreateRewardsPlanResponse {
       [ (gogoproto.customname) = "NewRewardsPlanID" ];
 }
 
-// Using Del instead of Delegator because of the limitation on the length of
-// amino msg name.
-message MsgWithdrawPoolDelReward {
+message MsgWithdrawDelegationReward {
   option (cosmos.msg.v1.signer) = "delegator_address";
   option (amino.name) = "rewards/MsgWithdrawPoolDeReward";
 
@@ -100,56 +93,13 @@ message MsgWithdrawPoolDelReward {
 
   string delegator_address = 1
       [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
-  uint32 pool_id = 2 [ (gogoproto.customname) = "PoolID" ];
+
+  milkyway.restaking.v1.DelegationType delegation_type = 2;
+
+  uint32 target_id = 3 [ (gogoproto.customname) = "TargetID" ];
 }
 
-message MsgWithdrawPoolDelRewardResponse {
-  repeated cosmos.base.v1beta1.Coin amount = 1 [
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true,
-    (amino.encoding) = "legacy_coins",
-    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
-  ];
-}
-
-// Using Del instead of Delegator because of the limitation on the length of
-// amino msg name.
-message MsgWithdrawOperatorDelReward {
-  option (cosmos.msg.v1.signer) = "delegator_address";
-  option (amino.name) = "rewards/MsgWithdrawOperatorDelReward";
-
-  option (gogoproto.equal) = false;
-  option (gogoproto.goproto_getters) = false;
-
-  string delegator_address = 1
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
-  uint32 operator_id = 2 [ (gogoproto.customname) = "OperatorID" ];
-}
-
-message MsgWithdrawOperatorDelRewardResponse {
-  repeated cosmos.base.v1beta1.Coin amount = 1 [
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true,
-    (amino.encoding) = "legacy_coins",
-    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
-  ];
-}
-
-// Using Del instead of Delegator because of the limitation on the length of
-// amino msg name.
-message MsgWithdrawServiceDelReward {
-  option (cosmos.msg.v1.signer) = "delegator_address";
-  option (amino.name) = "rewards/MsgWithdrawServiceDelReward";
-
-  option (gogoproto.equal) = false;
-  option (gogoproto.goproto_getters) = false;
-
-  string delegator_address = 1
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
-  uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
-}
-
-message MsgWithdrawServiceDelRewardResponse {
+message MsgWithdrawDelegationRewardResponse {
   repeated cosmos.base.v1beta1.Coin amount = 1 [
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true,

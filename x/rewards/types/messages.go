@@ -4,6 +4,8 @@ import (
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
 // NewMsgCreateRewardsPlan creates a new MsgCreateRewardsPlan instance
@@ -24,27 +26,12 @@ func NewMsgCreateRewardsPlan(
 	}
 }
 
-// NewMsgWithdrawPoolDelReward creates a new MsgWithdrawPoolDelReward instance
-func NewMsgWithdrawPoolDelReward(delAddr string, poolID uint32) *MsgWithdrawPoolDelReward {
-	return &MsgWithdrawPoolDelReward{
+// NewMsgWithdrawDelegationReward creates a new MsgWithdrawDelegationReward instance
+func NewMsgWithdrawDelegationReward(delAddr string, delType restakingtypes.DelegationType, poolID uint32) *MsgWithdrawDelegationReward {
+	return &MsgWithdrawDelegationReward{
 		DelegatorAddress: delAddr,
-		PoolID:           poolID,
-	}
-}
-
-// NewMsgWithdrawOperatorDelReward creates a new MsgWithdrawOperatorDelReward instance
-func NewMsgWithdrawOperatorDelReward(delAddr string, operatorID uint32) *MsgWithdrawOperatorDelReward {
-	return &MsgWithdrawOperatorDelReward{
-		DelegatorAddress: delAddr,
-		OperatorID:       operatorID,
-	}
-}
-
-// NewMsgWithdrawServiceDelReward creates a new MsgWithdrawServiceDelReward instance
-func NewMsgWithdrawServiceDelReward(delAddr string, serviceID uint32) *MsgWithdrawServiceDelReward {
-	return &MsgWithdrawServiceDelReward{
-		DelegatorAddress: delAddr,
-		ServiceID:        serviceID,
+		DelegationType:   delType,
+		TargetID:         poolID,
 	}
 }
 
