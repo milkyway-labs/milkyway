@@ -16,10 +16,10 @@ I have...
 
 - [ ] included the correct [type prefix](https://github.com/commitizen/conventional-commit-types/blob/v3.0.0/index.json) in the PR title
 - [ ] added `!` to the type prefix if API or client breaking change
-- [ ] targeted the correct branch (see [PR Targeting](https://github.com/desmos-labs/desmos/blob/master/CONTRIBUTING.md#pr-targeting))
+- [ ] targeted the correct branch (see [PR Targeting](https://github.com/milkyway-labs/milkyway/blob/master/CONTRIBUTING.md#pr-targeting))
 - [ ] provided a link to the relevant issue or specification
 - [ ] followed the guidelines for [building modules](https://docs.cosmos.network/v0.44/building-modules/intro.html)
-- [ ] included the necessary unit and integration [tests](https://github.com/desmos-labs/desmos/blob/master/CONTRIBUTING.md#testing)
+- [ ] included the necessary unit and integration [tests](https://github.com/milkyway-labs/milkyway/blob/master/CONTRIBUTING.md#testing)
 - [ ] added a changelog entry to `CHANGELOG.md`
 - [ ] included comments for [documenting Go code](https://blog.golang.org/godoc)
 - [ ] updated the relevant documentation or specification

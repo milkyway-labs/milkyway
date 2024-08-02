@@ -77,6 +77,11 @@ ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=milkyway \
 		  -X "github.com/cosmos/cosmos-sdk/version.BuildTags=$(build_tags_comma_sep)" \
 		  -X github.com/cometbft/cometbft/version.TMCoreSemVer=$(TM_VERSION)
 
+# Static linking
+ifeq ($(LINK_STATICALLY),true)
+  ldflags += -linkmode=external -extldflags "-Wl,-z,muldefs -static"
+endif
+
 # DB backend selection
 ifeq (cleveldb,$(findstring cleveldb,$(COSMOS_BUILD_OPTIONS)))
   ldflags += -X github.com/cosmos/cosmos-sdk/types.DBBackend=cleveldb
@@ -133,20 +138,33 @@ else
 	go build -mod=readonly $(BUILD_FLAGS) -o build/milkywayd ./cmd/milkywayd
 endif
 
-build-linux:
-	mkdir -p $(BUILDDIR)
-	docker build --no-cache --tag milkyway/milkyway ./
-	docker create --name temp milkyway/milkyway:latest
-	docker cp temp:/usr/local/bin/milkywayd $(BUILDDIR)/
-	docker rm temp
+create-builder: go.sum
+	$(MAKE) -C contrib/images milkyway-builder CONTEXT=$(CURDIR)
 
-build-linux-with-shared-library:
+build-alpine: create-builder
 	mkdir -p $(BUILDDIR)
-	docker build --tag milkyway/milkyway-shared ./ -f ./shared.Dockerfile
-	docker create --name temp milkyway/milkyway-shared:latest
-	docker cp temp:/usr/local/bin/milkywayd $(BUILDDIR)/
-	docker cp temp:/lib/libwasmvm.so $(BUILDDIR)/
-	docker rm temp
+	$(DOCKER) build -f Dockerfile --rm --tag milkywaylabs/milkyway-alpine .
+	$(DOCKER) create --name milkyway-alpine --rm milkywaylabs/milkyway-alpine
+	$(DOCKER) cp milkyway-alpine:/usr/bin/milkywayd $(BUILDDIR)/milkywayd
+	$(DOCKER) rm milkyway-alpine
+
+build-linux: create-builder
+	mkdir -p $(BUILDDIR)
+	$(DOCKER) build -f Dockerfile-ubuntu --rm --tag milkywaylabs/milkyway-linux .
+	$(DOCKER) create --name milkyway-linux milkywaylabs/milkyway-linux
+	$(DOCKER) cp milkyway-linux:/usr/bin/milkywayd $(BUILDDIR)/milkywayd
+	$(DOCKER) rm milkyway-linux
+
+build-reproducible: go.sum
+	$(DOCKER) rm latest-build || true
+	$(DOCKER) run --volume=$(CURDIR):/sources:ro \
+        --env TARGET_PLATFORMS='linux/amd64 linux/arm64 darwin/amd64 windows/amd64' \
+        --env APP=milkyway \
+        --env VERSION=$(VERSION) \
+        --env COMMIT=$(COMMIT) \
+        --env LEDGER_ENABLED=$(LEDGER_ENABLED) \
+        --name latest-build cosmossdk/rbuilder:latest
+	$(DOCKER) cp -a latest-build:/home/builder/artifacts/ $(CURDIR)/
 
 install: go.sum 
 	go install -mod=readonly $(BUILD_FLAGS) ./cmd/milkywayd
