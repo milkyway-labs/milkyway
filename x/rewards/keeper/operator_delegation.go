@@ -105,13 +105,13 @@ func (k *Keeper) CalculateOperatorDelegationRewards(ctx context.Context, operato
 	startingPeriod := startingInfo.PreviousPeriod
 	stakes := startingInfo.Stakes
 
-	startingHeight := startingInfo.Height
-	// Slashes this block happened after reward allocation, but we have to account
-	// for them for the stake sanity check below.
-	endingHeight := uint64(sdkCtx.BlockHeight())
-	if endingHeight > startingHeight {
-		// TODO: handle slash events
-	}
+	// TODO: handle slash events
+	//startingHeight := startingInfo.Height
+	//// Slashes this block happened after reward allocation, but we have to account
+	//// for them for the stake sanity check below.
+	//endingHeight := uint64(sdkCtx.BlockHeight())
+	//if endingHeight > startingHeight {
+	//}
 
 	// A total stake sanity check; Recalculated final stake should be less than or
 	// equal to current stake here. We cannot use Equals because stake is truncated

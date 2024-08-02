@@ -513,7 +513,6 @@ func (k *Keeper) allocateRewardsToUsers(
 	default:
 		panic("unknown operators distribution type")
 	}
-	return nil
 }
 
 func (k *Keeper) allocateRewardsToService(

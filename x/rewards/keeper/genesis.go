@@ -257,7 +257,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) {
 
 	for _, record := range state.PoolOutstandingRewards {
 		if err := k.PoolOutstandingRewards.Set(
-			ctx, record.PoolID, types.OutstandingRewards{record.OutstandingRewards}); err != nil {
+			ctx, record.PoolID, types.OutstandingRewards{Rewards: record.OutstandingRewards}); err != nil {
 			panic(err)
 		}
 	}
@@ -284,7 +284,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) {
 
 	for _, record := range state.OperatorOutstandingRewards {
 		if err := k.OperatorOutstandingRewards.Set(
-			ctx, record.OperatorID, types.MultiOutstandingRewards{record.OutstandingRewards}); err != nil {
+			ctx, record.OperatorID, types.MultiOutstandingRewards{Rewards: record.OutstandingRewards}); err != nil {
 			panic(err)
 		}
 	}
@@ -311,7 +311,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) {
 
 	for _, record := range state.ServiceOutstandingRewards {
 		if err := k.ServiceOutstandingRewards.Set(
-			ctx, record.ServiceID, types.MultiOutstandingRewards{record.OutstandingRewards}); err != nil {
+			ctx, record.ServiceID, types.MultiOutstandingRewards{Rewards: record.OutstandingRewards}); err != nil {
 			panic(err)
 		}
 	}
