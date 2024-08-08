@@ -3,22 +3,47 @@ package keeper
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/milkyway-labs/milkyway/utils"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-// SetDelegation stores the given delegation in the store
-func (k *Keeper) SetDelegation(ctx sdk.Context, delegation types.Delegation) {
+func (k *Keeper) getDelegationKeyBuilders(delegation types.Delegation) (types.DelegationKeyBuilder, types.DelegationByTargetIDBuilder, error) {
 	switch delegation.Type {
 	case types.DELEGATION_TYPE_POOL:
-		k.SavePoolDelegation(ctx, delegation)
+		return types.UserPoolDelegationStoreKey, types.DelegationByPoolIDStoreKey, nil
+
 	case types.DELEGATION_TYPE_OPERATOR:
-		k.SaveOperatorDelegation(ctx, delegation)
+		return types.UserOperatorDelegationStoreKey, types.DelegationByOperatorIDStoreKey, nil
+
 	case types.DELEGATION_TYPE_SERVICE:
-		k.SaveServiceDelegation(ctx, delegation)
+		return types.UserServiceDelegationStoreKey, types.DelegationByServiceIDStoreKey, nil
+
+	default:
+		return nil, nil, types.ErrInvalidDelegationType
 	}
+}
+
+// SetDelegation stores the given delegation in the store
+func (k *Keeper) SetDelegation(ctx sdk.Context, delegation types.Delegation) error {
+	store := ctx.KVStore(k.storeKey)
+
+	// Get the keys builders
+	getDelegationKey, getDelegationByTargetID, err := k.getDelegationKeyBuilders(delegation)
+	if err != nil {
+		return err
+	}
+
+	// Marshal and store the delegation
+	delegationBz := types.MustMarshalDelegation(k.cdc, delegation)
+	store.Set(getDelegationKey(delegation.UserAddress, delegation.TargetID), delegationBz)
+
+	// Store the delegation in the delegations by pool ID store
+	store.Set(getDelegationByTargetID(delegation.TargetID, delegation.UserAddress), []byte{})
+
+	return nil
 }
 
 // GetDelegationForTarget returns the delegation for the given delegator and target.
@@ -46,6 +71,59 @@ func (k *Keeper) RemoveDelegation(ctx sdk.Context, delegation types.Delegation) 
 		k.RemoveOperatorDelegation(ctx, delegation)
 	case types.DELEGATION_TYPE_SERVICE:
 		k.RemoveServiceDelegation(ctx, delegation)
+	}
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+func (k *Keeper) getUnbondingDelegationKeyBuilder(ud types.UnbondingDelegation) (types.UnbondingDelegationKeyBuilder, error) {
+	switch ud.Type {
+	case types.UNBONDING_DELEGATION_TYPE_POOL:
+		return types.UserPoolUnbondingDelegationKey, nil
+
+	case types.UNBONDING_DELEGATION_TYPE_OPERATOR:
+		return types.UserOperatorUnbondingDelegationKey, nil
+
+	case types.UNBONDING_DELEGATION_TYPE_SERVICE:
+		return types.UserServiceUnbondingDelegationKey, nil
+
+	default:
+		return nil, types.ErrInvalidDelegationType
+	}
+}
+
+func (k *Keeper) SetUnbondingDelegation(ctx sdk.Context, ud types.UnbondingDelegation, entryID uint64) error {
+	// Get the key to be used to store the unbonding delegation
+	getUnbondingDelegation, err := k.getUnbondingDelegationKeyBuilder(ud)
+	if err != nil {
+		return err
+	}
+	unbondingDelegationKey := getUnbondingDelegation(ud.DelegatorAddress, ud.TargetID)
+
+	// Store the unbonding delegation
+	store := ctx.KVStore(k.storeKey)
+	store.Set(unbondingDelegationKey, types.MustMarshalUnbondingDelegation(k.cdc, ud))
+
+	// Set the index allowing to lookup the UnbondingDelegation by the unbondingID of an
+	// UnbondingDelegationEntry that it contains
+	store.Set(types.GetUnbondingIndexKey(entryID), unbondingDelegationKey)
+
+	// Set the type of the unbonding delegation so that we know how to deserialize id
+	store.Set(types.GetUnbondingTypeKey(entryID), utils.Uint32ToBytes(ud.TargetID))
+
+	return nil
+}
+
+func (k *Keeper) GetUnbondingDelegation(ctx sdk.Context, delegatorAddress string, target types.DelegationTarget) (types.UnbondingDelegation, bool) {
+	switch target.(type) {
+	case *poolstypes.Pool:
+		return k.GetPoolUnbondingDelegation(ctx, target.GetID(), delegatorAddress)
+	case *operatorstypes.Operator:
+		return k.GetOperatorUnbondingDelegation(ctx, delegatorAddress, target.GetID())
+	case *servicestypes.Service:
+		return k.GetServiceUnbondingDelegation(ctx, delegatorAddress, target.GetID())
+	default:
+		return types.UnbondingDelegation{}, types.ErrInvalidDelegationTarget
 	}
 }
 

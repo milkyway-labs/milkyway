@@ -57,11 +57,13 @@ func (suite *KeeperTestSuite) TestKeeper_SavePoolDelegation() {
 				tc.store(ctx)
 			}
 
-			suite.k.SavePoolDelegation(ctx, tc.delegation)
+			err := suite.k.SetDelegation(ctx, tc.delegation)
+			suite.Require().NoError(err)
 
 			if tc.check != nil {
 				tc.check(ctx)
 			}
+
 		})
 	}
 }
@@ -86,11 +88,12 @@ func (suite *KeeperTestSuite) TestKeeper_GetPoolDelegation() {
 		{
 			name: "found delegation is returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(100))),
 				))
+				suite.Require().NoError(err)
 			},
 			poolID:      1,
 			userAddress: "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
@@ -399,11 +402,12 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 				suite.pk.SetNextPoolID(ctx, 2)
 
 				// Save the existing delegation
-				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(100))),
 				))
+				suite.Require().NoError(err)
 
 				// Send some funds to the user
 				suite.fundAccount(

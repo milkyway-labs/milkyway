@@ -1,6 +1,8 @@
 package types
 
 import (
+	"time"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -41,10 +43,16 @@ type DelegationData struct {
 	Hooks            DelegationHooks
 }
 
+type UnbondingDelegationBuilder func(
+	delegatorAddress string, targetID uint32,
+	creationHeight int64, minTime time.Time, balance sdk.Coins, id uint64,
+) UnbondingDelegation
+
 type UndelegationData struct {
-	Amount    sdk.Coins
-	Delegator string
-	Target    DelegationTarget
-	Hooks     DelegationHooks
-	Shares    sdk.DecCoins
+	Amount                   sdk.Coins
+	Delegator                string
+	Target                   DelegationTarget
+	BuildUnbondingDelegation UnbondingDelegationBuilder
+	Hooks                    DelegationHooks
+	Shares                   sdk.DecCoins
 }

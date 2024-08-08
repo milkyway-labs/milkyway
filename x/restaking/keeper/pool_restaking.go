@@ -7,18 +7,6 @@ import (
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
-// SavePoolDelegation stores the given pool delegation in the store
-func (k *Keeper) SavePoolDelegation(ctx sdk.Context, delegation types.Delegation) {
-	store := ctx.KVStore(k.storeKey)
-
-	// Marshal and store the delegation
-	delegationBz := types.MustMarshalDelegation(k.cdc, delegation)
-	store.Set(types.UserPoolDelegationStoreKey(delegation.UserAddress, delegation.TargetID), delegationBz)
-
-	// Store the delegation in the delegations by pool ID store
-	store.Set(types.DelegationByPoolIDStoreKey(delegation.TargetID, delegation.UserAddress), []byte{})
-}
-
 // GetPoolDelegation retrieves the delegation for the given user and pool
 // If the delegation does not exist, false is returned instead
 func (k *Keeper) GetPoolDelegation(ctx sdk.Context, poolID uint32, userAddress string) (types.Delegation, bool) {
@@ -82,7 +70,10 @@ func (k *Keeper) DelegateToPool(ctx sdk.Context, amount sdk.Coin, delegator stri
 			delegation.Shares = delegation.Shares.Add(newShares)
 
 			// Store the updated delegation
-			k.SetDelegation(ctx, delegation)
+			err = k.SetDelegation(ctx, delegation)
+			if err != nil {
+				return nil, err
+			}
 
 			return sdk.NewDecCoins(newShares), err
 		},
@@ -92,4 +83,18 @@ func (k *Keeper) DelegateToPool(ctx sdk.Context, amount sdk.Coin, delegator stri
 			AfterDelegationModified:        k.AfterPoolDelegationModified,
 		},
 	})
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// GetPoolUnbondingDelegation returns the unbonding delegation for the given delegator address and pool id.
+// If no unbonding delegation is found, false is returned instead.
+func (k *Keeper) GetPoolUnbondingDelegation(ctx sdk.Context, poolID uint32, delegator string) (types.UnbondingDelegation, bool) {
+	store := ctx.KVStore(k.storeKey)
+	ubdBz := store.Get(types.UserPoolUnbondingDelegationKey(delegator, poolID))
+	if ubdBz == nil {
+		return types.UnbondingDelegation{}, false
+	}
+
+	return types.MustUnmarshalUnbondingDelegation(k.cdc, ubdBz), true
 }

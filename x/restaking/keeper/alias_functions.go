@@ -4,12 +4,13 @@ import (
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/utils"
+	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-func (k *Keeper) IterateAllOperatorParams(
-	ctx sdk.Context, cb func(operatorID uint32, params types.OperatorParams) (stop bool)) {
+// IterateAllOperatorParams iterates all operators params and performs the given callback function
+func (k *Keeper) IterateAllOperatorParams(ctx sdk.Context, cb func(operatorID uint32, params types.OperatorParams) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 	iterator := storetypes.KVStorePrefixIterator(store, types.OperatorParamsPrefix)
 	defer iterator.Close()
@@ -18,7 +19,7 @@ func (k *Keeper) IterateAllOperatorParams(
 		var params types.OperatorParams
 		k.cdc.MustUnmarshal(iterator.Value(), &params)
 
-		operatorID := utils.BigEndianToUint32(iterator.Key())
+		operatorID := operatorstypes.GetOperatorIDFromBytes(iterator.Key())
 		if cb(operatorID, params) {
 			break
 		}
@@ -27,6 +28,7 @@ func (k *Keeper) IterateAllOperatorParams(
 
 // --------------------------------------------------------------------------------------------------------------------
 
+// IterateAllServiceParams iterates all services params and performs the given callback function
 func (k *Keeper) IterateAllServiceParams(ctx sdk.Context, cb func(serviceID uint32, params types.ServiceParams) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 	iterator := storetypes.KVStorePrefixIterator(store, types.ServiceParamsPrefix)
@@ -36,7 +38,7 @@ func (k *Keeper) IterateAllServiceParams(ctx sdk.Context, cb func(serviceID uint
 		var params types.ServiceParams
 		k.cdc.MustUnmarshal(iterator.Value(), &params)
 
-		serviceID := utils.BigEndianToUint32(iterator.Key())
+		serviceID := servicestypes.GetServiceIDFromBytes(iterator.Key())
 		if cb(serviceID, params) {
 			break
 		}

@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"encoding/binary"
 	"time"
 
 	"cosmossdk.io/errors"
@@ -12,6 +13,27 @@ import (
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
+
+// IncrementUnbondingID increments and returns a unique ID for an unbonding operation
+func (k *Keeper) IncrementUnbondingID(ctx sdk.Context) (unbondingID uint64) {
+	store := ctx.KVStore(k.storeKey)
+	bz := store.Get(types.UnbondingIDKey)
+	if bz != nil {
+		unbondingID = binary.BigEndian.Uint64(bz)
+	}
+
+	// Increment the unbonding id
+	unbondingID++
+
+	// Convert back into bytes for storage
+	bz = make([]byte, 8)
+	binary.BigEndian.PutUint64(bz, unbondingID)
+
+	// Store the new unbonding id
+	store.Set(types.UnbondingIDKey, bz)
+
+	return unbondingID
+}
 
 // ValidateUnbondAmount validates that a given unbond or redelegation amount is valid based on upon the
 // converted shares. If the amount is valid, the total amount of respective shares is returned,
@@ -63,13 +85,22 @@ func (k *Keeper) Undelegate(ctx sdk.Context, data types.UndelegationData) (time.
 	//	return time.Time{}, types.ErrMaxUnbondingDelegationEntries
 	//}
 
+	// Unbond the tokens
 	returnAmount, err := k.Unbond(ctx, data)
 	if err != nil {
 		return time.Time{}, err
 	}
 
+	// Compute the time at which the unbonding delegation should end
 	completionTime := ctx.BlockHeader().Time.Add(k.UnbondingTime(ctx))
-	ubd := k.SetUnbondingDelegationEntry(ctx, data, ctx.BlockHeight(), completionTime, returnAmount)
+
+	// Store the unbonding delegation entry inside the store
+	ubd, err := k.SetUnbondingDelegationEntry(ctx, data, ctx.BlockHeight(), completionTime, returnAmount)
+	if err != nil {
+		return time.Time{}, err
+	}
+
+	// Insert the unbonding delegation into the unbonding queue
 	k.InsertUBDQueue(ctx, ubd, completionTime)
 
 	return completionTime, nil
@@ -108,7 +139,10 @@ func (k *Keeper) Unbond(ctx sdk.Context, data types.UndelegationData) (amount sd
 		k.RemoveDelegation(ctx, delegation)
 	} else {
 		// Store the updated delegation
-		k.SetDelegation(ctx, delegation)
+		err = k.SetDelegation(ctx, delegation)
+		if err != nil {
+			return nil, err
+		}
 
 		// Call the after delegation modification hook
 		err = data.Hooks.AfterDelegationModified(ctx, data.Target.GetID(), data.Delegator)
@@ -152,25 +186,30 @@ func (k *Keeper) RemoveTargetTokensAndShares(ctx sdk.Context, data types.Undeleg
 
 // SetUnbondingDelegationEntry adds an entry to the unbonding delegation at
 // the given addresses. It creates the unbonding delegation if it does not exist.
-func (k Keeper) SetUnbondingDelegationEntry(
+func (k *Keeper) SetUnbondingDelegationEntry(
 	ctx sdk.Context, data types.UndelegationData, creationHeight int64, minTime time.Time, balance sdk.Coins,
-) types.UnbondingDelegation {
-	ubd, found := k.GetUnbondingDelegation(ctx, delegatorAddr, validatorAddr)
+) (types.UnbondingDelegation, error) {
+	// Get the ID of the next unbonding delegation entry
 	id := k.IncrementUnbondingID(ctx)
+
+	// Either get the existing unbonding delegation, or create a new one
+	ubd, found := k.GetUnbondingDelegation(ctx, data.Delegator, data.Target)
 	if found {
 		ubd.AddEntry(creationHeight, minTime, balance, id)
 	} else {
-		ubd = types.NewUnbondingDelegation(delegatorAddr, validatorAddr, creationHeight, minTime, balance, id)
+		ubd = data.BuildUnbondingDelegation(data.Delegator, data.Target.GetID(), creationHeight, minTime, balance, id)
 	}
 
-	k.SetUnbondingDelegation(ctx, ubd)
+	err := k.SetUnbondingDelegation(ctx, ubd, id)
+	if err != nil {
+		return types.UnbondingDelegation{}, err
+	}
 
-	// Add to the UBDByUnbondingOp index to look up the UBD by the UBDE ID
-	k.SetUnbondingDelegationByUnbondingID(ctx, ubd, id)
-
-	if err := k.Hooks().AfterUnbondingInitiated(ctx, id); err != nil {
+	// Call the hook after the unbonding has been initiated
+	err = k.hooks.AfterUnbondingInitiated(ctx, id)
+	if err != nil {
 		k.Logger(ctx).Error("failed to call after unbonding initiated hook", "error", err)
 	}
 
-	return ubd
+	return ubd, nil
 }

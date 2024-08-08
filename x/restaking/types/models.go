@@ -2,6 +2,7 @@ package types
 
 import (
 	"fmt"
+	"time"
 
 	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -171,4 +172,89 @@ func NewDelegationResponse(delegation Delegation, balance sdk.Coins) DelegationR
 		Delegation: delegation,
 		Balance:    balance,
 	}
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+func NewUnbondingDelegationEntry(creationHeight int64, completionTime time.Time, balance sdk.Coins, unbondingID uint64) UnbondingDelegationEntry {
+	return UnbondingDelegationEntry{
+		CreationHeight: creationHeight,
+		CompletionTime: completionTime,
+		InitialBalance: balance,
+		Balance:        balance,
+		UnbondingId:    unbondingID,
+	}
+}
+
+func NewPoolUnbondingDelegation(
+	delegatorAddress string, poolID uint32,
+	creationHeight int64, minTime time.Time, balance sdk.Coins, id uint64,
+) UnbondingDelegation {
+	return UnbondingDelegation{
+		Type:             UNBONDING_DELEGATION_TYPE_POOL,
+		DelegatorAddress: delegatorAddress,
+		TargetID:         poolID,
+		Entries: []UnbondingDelegationEntry{
+			NewUnbondingDelegationEntry(creationHeight, minTime, balance, id),
+		},
+	}
+}
+
+// AddEntry - append entry to the unbonding delegation
+func (ubd *UnbondingDelegation) AddEntry(creationHeight int64, minTime time.Time, balance sdk.Coins, unbondingID uint64) {
+	// Check the entries exists with creation_height and complete_time
+	entryIndex := -1
+	for index, ubdEntry := range ubd.Entries {
+		if ubdEntry.CreationHeight == creationHeight && ubdEntry.CompletionTime.Equal(minTime) {
+			entryIndex = index
+			break
+		}
+	}
+
+	// entryIndex exists
+	if entryIndex != -1 {
+		ubdEntry := ubd.Entries[entryIndex]
+		ubdEntry.Balance = ubdEntry.Balance.Add(balance...)
+		ubdEntry.InitialBalance = ubdEntry.InitialBalance.Add(balance...)
+
+		// Update the entry
+		ubd.Entries[entryIndex] = ubdEntry
+	} else {
+		// Append the new unbonding delegation entry
+		entry := NewUnbondingDelegationEntry(creationHeight, minTime, balance, unbondingID)
+		ubd.Entries = append(ubd.Entries, entry)
+	}
+}
+
+// MarshalUnbondingDelegation marshals the unbonding delegation using the provided codec
+func MarshalUnbondingDelegation(cdc codec.BinaryCodec, unbondingDelegation UnbondingDelegation) []byte {
+	bz, err := cdc.Marshal(&unbondingDelegation)
+	if err != nil {
+		panic(err)
+	}
+	return bz
+}
+
+// MustMarshalUnbondingDelegation marshals the unbonding delegation using the provided codec
+func MustMarshalUnbondingDelegation(cdc codec.BinaryCodec, unbondingDelegation UnbondingDelegation) []byte {
+	return MarshalUnbondingDelegation(cdc, unbondingDelegation)
+}
+
+// UnmarshalUnbondingDelegation unmarshals the unbonding delegation from the given bytes using the provided codec
+func UnmarshalUnbondingDelegation(cdc codec.BinaryCodec, bz []byte) (UnbondingDelegation, error) {
+	var unbondingDelegation UnbondingDelegation
+	err := cdc.Unmarshal(bz, &unbondingDelegation)
+	if err != nil {
+		return UnbondingDelegation{}, err
+	}
+	return unbondingDelegation, nil
+}
+
+// MustUnmarshalUnbondingDelegation unmarshals the unbonding delegation from the given bytes using the provided codec
+func MustUnmarshalUnbondingDelegation(cdc codec.BinaryCodec, bz []byte) UnbondingDelegation {
+	unbondingDelegation, err := UnmarshalUnbondingDelegation(cdc, bz)
+	if err != nil {
+		panic(err)
+	}
+	return unbondingDelegation
 }
