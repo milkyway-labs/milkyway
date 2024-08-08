@@ -10,6 +10,7 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
+// getDelegationKeyBuilders returns the key builders for the given delegation
 func (k *Keeper) getDelegationKeyBuilders(delegation types.Delegation) (types.DelegationKeyBuilder, types.DelegationByTargetIDBuilder, error) {
 	switch delegation.Type {
 	case types.DELEGATION_TYPE_POOL:
@@ -76,6 +77,7 @@ func (k *Keeper) RemoveDelegation(ctx sdk.Context, delegation types.Delegation) 
 
 // --------------------------------------------------------------------------------------------------------------------
 
+// getUnbondingDelegationKeyBuilder returns the key builder for the given unbonding delegation
 func (k *Keeper) getUnbondingDelegationKeyBuilder(ud types.UnbondingDelegation) (types.UnbondingDelegationKeyBuilder, error) {
 	switch ud.Type {
 	case types.UNBONDING_DELEGATION_TYPE_POOL:
@@ -92,6 +94,7 @@ func (k *Keeper) getUnbondingDelegationKeyBuilder(ud types.UnbondingDelegation) 
 	}
 }
 
+// SetUnbondingDelegation stores the given unbonding delegation in the store
 func (k *Keeper) SetUnbondingDelegation(ctx sdk.Context, ud types.UnbondingDelegation, entryID uint64) error {
 	// Get the key to be used to store the unbonding delegation
 	getUnbondingDelegation, err := k.getUnbondingDelegationKeyBuilder(ud)
@@ -114,6 +117,7 @@ func (k *Keeper) SetUnbondingDelegation(ctx sdk.Context, ud types.UnbondingDeleg
 	return nil
 }
 
+// GetUnbondingDelegation returns the unbonding delegation for the given delegator and target.
 func (k *Keeper) GetUnbondingDelegation(ctx sdk.Context, delegatorAddress string, target types.DelegationTarget) (types.UnbondingDelegation, bool) {
 	switch target.(type) {
 	case *poolstypes.Pool:
@@ -123,7 +127,7 @@ func (k *Keeper) GetUnbondingDelegation(ctx sdk.Context, delegatorAddress string
 	case *servicestypes.Service:
 		return k.GetServiceUnbondingDelegation(ctx, delegatorAddress, target.GetID())
 	default:
-		return types.UnbondingDelegation{}, types.ErrInvalidDelegationTarget
+		return types.UnbondingDelegation{}, false
 	}
 }
 
