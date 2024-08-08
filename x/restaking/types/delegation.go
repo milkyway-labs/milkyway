@@ -9,6 +9,9 @@ type DelegationTarget interface {
 	GetID() uint32
 	GetAddress() string
 	InvalidExRate() bool
+	GetSharesDenom(tokenDenom string) string
+	SharesFromTokens(amt sdk.Coins) (sdk.DecCoins, error)
+	SharesFromTokensTruncated(tokens sdk.Coins) (sdk.DecCoins, error)
 }
 
 // DelegationGetter represents a function that allows to retrieve an existing delegation
@@ -25,6 +28,7 @@ type DelegationHooks struct {
 	BeforeDelegationSharesModified func(ctx sdk.Context, receiverID uint32, delegator string) error
 	BeforeDelegationCreated        func(ctx sdk.Context, receiverID uint32, delegator string) error
 	AfterDelegationModified        func(ctx sdk.Context, receiverID uint32, delegator string) error
+	BeforeDelegationRemoved        func(ctx sdk.Context, receiverID uint32, delegator string) error
 }
 
 // DelegationData contains the data required to perform a delegation.
@@ -32,8 +36,15 @@ type DelegationData struct {
 	Amount           sdk.Coins
 	Delegator        string
 	Target           DelegationTarget
-	GetDelegation    DelegationGetter
 	BuildDelegation  DelegationBuilder
 	UpdateDelegation DelegationUpdater
 	Hooks            DelegationHooks
+}
+
+type UndelegationData struct {
+	Amount    sdk.Coins
+	Delegator string
+	Target    DelegationTarget
+	Hooks     DelegationHooks
+	Shares    sdk.DecCoins
 }

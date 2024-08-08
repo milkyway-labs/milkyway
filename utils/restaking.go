@@ -55,34 +55,52 @@ func ComputeTokensFromShares(shares sdk.DecCoins, delegatedTokens sdk.Coins, del
 type ShareDenomGetter func(tokenDenom string) (shareDenom string)
 
 // SharesFromTokens returns the shares of a delegation given a bond amount.
-func SharesFromTokens(tokens sdk.Coin, getShareDenom ShareDenomGetter, delegatedTokens sdk.Coins, delegatorsShares sdk.DecCoins) (sdkmath.LegacyDec, error) {
-	sharesDenom := getShareDenom(tokens.Denom)
-	delegatorTokenShares := delegatorsShares.AmountOf(sharesDenom)
-	operatorTokenAmount := delegatedTokens.AmountOf(tokens.Denom)
-	return delegatorTokenShares.MulInt(tokens.Amount).QuoInt(operatorTokenAmount), nil
+func SharesFromTokens(tokens sdk.Coins, getShareDenom ShareDenomGetter, delegatedTokens sdk.Coins, delegatorsShares sdk.DecCoins) (sdk.DecCoins, error) {
+	shares := sdk.NewDecCoins()
+	for _, token := range tokens {
+		sharesDenom := getShareDenom(token.Denom)
+
+		delegatorTokenShares := delegatorsShares.AmountOf(sharesDenom)
+		operatorTokenAmount := delegatedTokens.AmountOf(token.Denom)
+		shareAmount := delegatorTokenShares.MulInt(token.Amount).QuoInt(operatorTokenAmount)
+
+		shares = shares.Add(sdk.NewDecCoinFromDec(sharesDenom, shareAmount))
+	}
+
+	return shares, nil
+}
+
+// SharesFromTokensTruncated returns the truncated shares of a delegation given a bond amount.
+func SharesFromTokensTruncated(tokens sdk.Coins, getShareDenom ShareDenomGetter, delegatedTokens sdk.Coins, delegatorsShares sdk.DecCoins) (sdk.DecCoins, error) {
+	shares := sdk.NewDecCoins()
+	for _, token := range tokens {
+		sharesDenom := getShareDenom(token.Denom)
+
+		delegatorTokenShares := delegatorsShares.AmountOf(sharesDenom)
+		operatorTokenAmount := delegatedTokens.AmountOf(token.Denom)
+		shareAmount := delegatorTokenShares.MulInt(token.Amount).QuoTruncate(sdkmath.LegacyNewDecFromInt(operatorTokenAmount))
+
+		shares = shares.Add(sdk.NewDecCoinFromDec(sharesDenom, shareAmount))
+	}
+
+	return shares, nil
 }
 
 // IssueShares calculates the shares to issue for a delegation of the given amount.
 func IssueShares(amount sdk.Coins, getShareDenom ShareDenomGetter, delegatedTokens sdk.Coins, delegatorsShares sdk.DecCoins) sdk.DecCoins {
-	// calculate the shares to issue
+
 	issuedShares := sdk.NewDecCoins()
-	for _, token := range amount {
-		var tokenShares sdk.DecCoin
-		sharesDenom := getShareDenom(token.Denom)
-
-		delegatorShares := delegatorsShares.AmountOf(sharesDenom)
-		if delegatorShares.IsZero() {
-			// The first delegation to an operator sets the exchange rate to one
-			tokenShares = sdk.NewDecCoin(sharesDenom, token.Amount)
-		} else {
-			shares, err := SharesFromTokens(token, getShareDenom, delegatedTokens, delegatorsShares)
-			if err != nil {
-				panic(err)
-			}
-			tokenShares = sdk.NewDecCoinFromDec(sharesDenom, shares)
+	if delegatorsShares.IsZero() {
+		// The first delegation to an operator sets the exchange rate to one
+		for _, token := range amount {
+			issuedShares = issuedShares.Add(sdk.NewDecCoin(getShareDenom(token.Denom), token.Amount))
 		}
-
-		issuedShares = issuedShares.Add(tokenShares)
+	} else {
+		shares, err := SharesFromTokens(amount, getShareDenom, delegatedTokens, delegatorsShares)
+		if err != nil {
+			panic(err)
+		}
+		issuedShares = shares
 	}
 
 	return issuedShares

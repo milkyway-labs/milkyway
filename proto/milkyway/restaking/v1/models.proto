@@ -1,9 +1,11 @@
 syntax = "proto3";
 package milkyway.restaking.v1;
 
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+
 import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
-import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/restaking/types";
@@ -108,8 +110,7 @@ message UnbondingDelegation {
   option (gogoproto.goproto_getters) = false;
 
   // Type is the type of the unbonding delegation.
-  UnbondingDelegationType type = 1
-      [ (gogoproto.enumname) = "UnbondingDelegationType" ];
+  UnbondingDelegationType type = 1;
 
   // DelegatorAddress is the encoded address of the delegator.
   string delegator_address = 2
@@ -142,13 +143,13 @@ message UnbondingDelegationEntry {
 
   // InitialBalance defines the tokens initially scheduled to receive at
   // completion.
-  string initial_balance = 3 [
+  repeated cosmos.base.v1beta1.Coin initial_balance = 3 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false
   ];
 
   // Balance defines the tokens to receive at completion.
-  string balance = 4 [
+  repeated cosmos.base.v1beta1.Coin balance = 4 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false
   ];

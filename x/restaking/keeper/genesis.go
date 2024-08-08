@@ -46,14 +46,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
 
 	// Store the delegations
 	for _, delegation := range data.Delegations {
-		switch delegation.Type {
-		case types.DELEGATION_TYPE_POOL:
-			k.SavePoolDelegation(ctx, delegation)
-		case types.DELEGATION_TYPE_OPERATOR:
-			k.SaveOperatorDelegation(ctx, delegation)
-		case types.DELEGATION_TYPE_SERVICE:
-			k.SaveServiceDelegation(ctx, delegation)
-		}
+		k.SetDelegation(ctx, delegation)
 	}
 
 	// Store the params

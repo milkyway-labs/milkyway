@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/telemetry"
@@ -149,6 +150,58 @@ func (k msgServer) DelegatePool(goCtx context.Context, msg *types.MsgDelegatePoo
 	return &types.MsgDelegatePoolResponse{}, nil
 }
 
+// UndelegatePool defines the rpc method for Msg/UndelegatePool
+func (k msgServer) UndelegatePool(goCtx context.Context, msg *types.MsgUndelegatePool) (*types.MsgUndelegateResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Parse the delegator address
+	delegatorAddress, err := sdk.AccAddressFromBech32(msg.Delegator)
+	if err != nil {
+		return nil, err
+	}
+
+	// Get the pool
+	pool, found := k.poolsKeeper.GetPool(ctx, msg.PoolID)
+	if !found {
+		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, "pool %d not found", msg.PoolID)
+	}
+
+	shares, err := k.ValidateUnbondAmount(ctx, delegatorAddress, &pool, msg.Amount)
+	if err != nil {
+		return nil, err
+	}
+
+	completionTime, err := k.Keeper.Undelegate(ctx, delegatorAddress, &pool, shares)
+	if err != nil {
+		return nil, err
+	}
+
+	if msg.Amount.Amount.IsInt64() {
+		defer func() {
+			telemetry.IncrCounter(1, types.ModuleName, "undelegate")
+			telemetry.SetGaugeWithLabels(
+				[]string{"tx", "msg", msg.Type()},
+				float32(msg.Amount.Amount.Int64()),
+				[]metrics.Label{telemetry.NewLabel("denom", msg.Amount.Denom)},
+			)
+		}()
+	}
+
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeUnbond,
+			sdk.NewAttribute(types.AttributeKeyValidator, msg.ValidatorAddress),
+			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Amount.String()),
+			sdk.NewAttribute(types.AttributeKeyDelegator, msg.DelegatorAddress),
+			sdk.NewAttribute(types.AttributeKeyCompletionTime, completionTime.Format(time.RFC3339)),
+		),
+	})
+
+	return &types.MsgUndelegateResponse{
+		CompletionTime: completionTime,
+	}, nil
+}
+
 // DelegateOperator defines the rpc method for Msg/DelegateOperator
 func (k msgServer) DelegateOperator(goCtx context.Context, msg *types.MsgDelegateOperator) (*types.MsgDelegateOperatorResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
@@ -192,6 +245,12 @@ func (k msgServer) DelegateOperator(goCtx context.Context, msg *types.MsgDelegat
 	return &types.MsgDelegateOperatorResponse{}, nil
 }
 
+// UndelegateOperator defines the rpc method for Msg/UndelegateOperator
+func (k msgServer) UndelegateOperator(ctx context.Context, operator *types.MsgUndelegateOperator) (*types.MsgUndelegateResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
 // DelegateService defines the rpc method for Msg/DelegateService
 func (k msgServer) DelegateService(goCtx context.Context, msg *types.MsgDelegateService) (*types.MsgDelegateServiceResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
@@ -233,6 +292,12 @@ func (k msgServer) DelegateService(goCtx context.Context, msg *types.MsgDelegate
 	})
 
 	return &types.MsgDelegateServiceResponse{}, nil
+}
+
+// UndelegateService defines the rpc method for Msg/UndelegateService
+func (k msgServer) UndelegateService(ctx context.Context, service *types.MsgUndelegateService) (*types.MsgUndelegateResponse, error) {
+	//TODO implement me
+	panic("implement me")
 }
 
 // UpdateParams defines the rpc method for Msg/UpdateParams

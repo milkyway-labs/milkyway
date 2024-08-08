@@ -62,6 +62,13 @@ func (k *Keeper) AddOperatorTokensAndShares(
 	return operator, addedShares, nil
 }
 
+// RemoveOperatorDelegation removes the given operator delegation from the store
+func (k *Keeper) RemoveOperatorDelegation(ctx sdk.Context, delegation types.Delegation) {
+	store := ctx.KVStore(k.storeKey)
+	store.Delete(types.UserOperatorDelegationStoreKey(delegation.UserAddress, delegation.TargetID))
+	store.Delete(types.DelegationByOperatorIDStoreKey(delegation.TargetID, delegation.UserAddress))
+}
+
 // --------------------------------------------------------------------------------------------------------------------
 
 // DelegateToOperator sends the given amount to the operator account and saves the delegation for the given user
@@ -78,12 +85,9 @@ func (k *Keeper) DelegateToOperator(ctx sdk.Context, operatorID uint32, amount s
 	}
 
 	return k.PerformDelegation(ctx, types.DelegationData{
-		Amount:    amount,
-		Delegator: delegator,
-		Target:    &operator,
-		GetDelegation: func(ctx sdk.Context, receiverID uint32, delegator string) (types.Delegation, bool) {
-			return k.GetOperatorDelegation(ctx, receiverID, delegator)
-		},
+		Amount:          amount,
+		Delegator:       delegator,
+		Target:          &operator,
 		BuildDelegation: types.NewOperatorDelegation,
 		UpdateDelegation: func(ctx sdk.Context, delegation types.Delegation) (newShares sdk.DecCoins, err error) {
 			// Calculate the new shares and add the tokens to the operator
@@ -96,7 +100,7 @@ func (k *Keeper) DelegateToOperator(ctx sdk.Context, operatorID uint32, amount s
 			delegation.Shares = delegation.Shares.Add(newShares...)
 
 			// Store the updated delegation
-			k.SaveOperatorDelegation(ctx, delegation)
+			k.SetDelegation(ctx, delegation)
 
 			return newShares, err
 		},

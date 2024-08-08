@@ -73,34 +73,106 @@ func (p Pool) TokensFromShares(shares sdkmath.LegacyDec) sdkmath.LegacyDec {
 
 // SharesFromTokens returns the shares of a delegation given a bond amount. It
 // returns an error if the pool has no tokens.
-func (p Pool) SharesFromTokens(amt sdkmath.Int) (sdkmath.LegacyDec, error) {
+func (p Pool) SharesFromTokens(amt sdk.Coins) (sdk.DecCoins, error) {
 	if p.Tokens.IsZero() {
-		return sdkmath.LegacyZeroDec(), ErrInsufficientShares
+		return sdk.NewDecCoins(), ErrInsufficientShares
 	}
 
-	return p.DelegatorShares.MulInt(amt).QuoInt(p.Tokens), nil
+	shares := sdk.NewDecCoins()
+	for _, coin := range amt {
+		if coin.Denom != p.Denom {
+			return sdk.NewDecCoins(), ErrInvalidDenom
+		}
+
+		shareDenom := p.GetSharesDenom(coin.Denom)
+		shareAmount := p.DelegatorShares.MulInt(coin.Amount).QuoInt(p.Tokens)
+
+		shares = shares.Add(sdk.NewDecCoinFromDec(shareDenom, shareAmount))
+	}
+
+	return shares, nil
+}
+
+// SharesFromTokensTruncated returns the truncated shares of a delegation given
+// a bond amount. It returns an error if the pool has no tokens.
+func (p Pool) SharesFromTokensTruncated(amt sdk.Coins) (sdk.DecCoins, error) {
+	if p.Tokens.IsZero() {
+		return sdk.NewDecCoins(), ErrInsufficientShares
+	}
+
+	shares := sdk.NewDecCoins()
+	for _, coin := range amt {
+		if coin.Denom != p.Denom {
+			return sdk.NewDecCoins(), ErrInvalidDenom
+		}
+
+		shareDenom := p.GetSharesDenom(coin.Denom)
+		shareAmount := p.DelegatorShares.MulInt(coin.Amount).QuoTruncate(sdkmath.LegacyNewDecFromInt(p.Tokens))
+
+		shares = shares.Add(sdk.NewDecCoinFromDec(shareDenom, shareAmount))
+	}
+
+	return shares, nil
 }
 
 // AddTokensFromDelegation adds the given amount of tokens to the pool's total tokens,
 // also updating the pool's delegator shares.
 // It returns the updated pool and the shares issued.
-func (p Pool) AddTokensFromDelegation(amount sdkmath.Int) (Pool, sdkmath.LegacyDec) {
+func (p Pool) AddTokensFromDelegation(amount sdk.Coin) (Pool, sdk.DecCoin, error) {
 	// calculate the shares to issue
-	var issuedShares sdkmath.LegacyDec
+	var issuedShares sdk.DecCoins
 	if p.DelegatorShares.IsZero() {
 		// the first delegation to a validator sets the exchange rate to one
-		issuedShares = sdkmath.LegacyNewDecFromInt(amount)
+		issuedShares = sdk.NewDecCoinsFromCoins(amount)
 	} else {
-		shares, err := p.SharesFromTokens(amount)
+		shares, err := p.SharesFromTokens(sdk.NewCoins(amount))
 		if err != nil {
-			panic(err)
+			return p, sdk.DecCoin{}, err
 		}
-
 		issuedShares = shares
 	}
 
-	p.Tokens = p.Tokens.Add(amount)
-	p.DelegatorShares = p.DelegatorShares.Add(issuedShares)
+	p.Tokens = p.Tokens.Add(amount.Amount)
+	p.DelegatorShares = p.DelegatorShares.Add(issuedShares[0].Amount)
 
-	return p, issuedShares
+	return p, issuedShares[0], nil
+}
+
+// RemoveDelShares removes delegator shares from an operator and returns
+// the amount of tokens that should be issued for those shares.
+// NOTE: Because token fractions are left in the operator,
+// the exchange rate of future shares of this validator can increase.
+func (p Pool) RemoveDelShares(shares sdk.DecCoins) (Pool, sdk.Coins, error) {
+	if len(shares) > 1 {
+		return p, sdk.Coins{}, ErrInvalidShares
+	}
+
+	for _, share := range shares {
+		if share.Denom != p.GetSharesDenom(p.Denom) {
+			return p, sdk.Coins{}, ErrInvalidShares
+		}
+	}
+
+	delShares := shares.AmountOf(p.GetSharesDenom(p.Denom))
+	remainingShares := p.DelegatorShares.Sub(delShares)
+
+	var issuedTokens sdkmath.Int
+	if remainingShares.IsZero() {
+		// Last delegation share gets any trimmings
+		issuedTokens = p.Tokens
+		p.Tokens = sdkmath.ZeroInt()
+	} else {
+		// Leave excess tokens in the operator
+		// However, fully use all the delegator shares
+		issuedTokens = p.TokensFromShares(delShares).TruncateInt()
+		p.Tokens = p.Tokens.Sub(issuedTokens)
+
+		if p.Tokens.IsNegative() {
+			panic("attempting to remove more tokens than available in operator")
+		}
+	}
+
+	p.DelegatorShares = remainingShares
+
+	return p, sdk.NewCoins(sdk.NewCoin(p.Denom, issuedTokens)), nil
 }

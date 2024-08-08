@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
@@ -34,15 +33,24 @@ func (k *Keeper) GetPoolDelegation(ctx sdk.Context, poolID uint32, userAddress s
 
 // AddPoolTokensAndShares adds the given amount of tokens to the pool and returns the added shares
 func (k *Keeper) AddPoolTokensAndShares(
-	ctx sdk.Context, pool poolstypes.Pool, tokensToAdd sdkmath.Int,
-) (poolOut poolstypes.Pool, addedShares sdkmath.LegacyDec, err error) {
-
+	ctx sdk.Context, pool poolstypes.Pool, tokensToAdd sdk.Coin,
+) (poolOut poolstypes.Pool, addedShares sdk.DecCoin, err error) {
 	// Update the pool tokens and shares and get the added shares
-	pool, addedShares = pool.AddTokensFromDelegation(tokensToAdd)
+	pool, addedShares, err = pool.AddTokensFromDelegation(tokensToAdd)
+	if err != nil {
+		return pool, sdk.DecCoin{}, err
+	}
 
 	// Save the pool
 	err = k.poolsKeeper.SavePool(ctx, pool)
 	return pool, addedShares, err
+}
+
+// RemovePoolDelegation removes the given pool delegation from the store
+func (k *Keeper) RemovePoolDelegation(ctx sdk.Context, delegation types.Delegation) {
+	store := ctx.KVStore(k.storeKey)
+	store.Delete(types.UserPoolDelegationStoreKey(delegation.UserAddress, delegation.TargetID))
+	store.Delete(types.DelegationByPoolIDStoreKey(delegation.TargetID, delegation.UserAddress))
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -59,29 +67,24 @@ func (k *Keeper) DelegateToPool(ctx sdk.Context, amount sdk.Coin, delegator stri
 	coins := sdk.NewCoins(sdk.NewCoin(pool.Denom, amount.Amount))
 
 	return k.PerformDelegation(ctx, types.DelegationData{
-		Amount:    coins,
-		Delegator: delegator,
-		Target:    &pool,
-		GetDelegation: func(ctx sdk.Context, receiverID uint32, delegator string) (types.Delegation, bool) {
-			return k.GetPoolDelegation(ctx, receiverID, delegator)
-		},
+		Amount:          coins,
+		Delegator:       delegator,
+		Target:          &pool,
 		BuildDelegation: types.NewPoolDelegation,
 		UpdateDelegation: func(ctx sdk.Context, delegation types.Delegation) (sdk.DecCoins, error) {
 			// Calculate the new shares and add the tokens to the pool
-			_, newShares, err := k.AddPoolTokensAndShares(ctx, pool, amount.Amount)
+			_, newShares, err := k.AddPoolTokensAndShares(ctx, pool, amount)
 			if err != nil {
 				return nil, err
 			}
 
 			// Update the delegation shares
-			newDecShares := sdk.NewDecCoinFromDec(pool.GetSharesDenom(amount.Denom), newShares)
-			delegation.Shares = delegation.Shares.Add(newDecShares)
+			delegation.Shares = delegation.Shares.Add(newShares)
 
 			// Store the updated delegation
-			k.SavePoolDelegation(ctx, delegation)
+			k.SetDelegation(ctx, delegation)
 
-			sharesDenom := pool.GetSharesDenom(amount.Denom)
-			return sdk.NewDecCoins(sdk.NewDecCoinFromDec(sharesDenom, newShares)), err
+			return sdk.NewDecCoins(newShares), err
 		},
 		Hooks: types.DelegationHooks{
 			BeforeDelegationSharesModified: k.BeforePoolDelegationSharesModified,

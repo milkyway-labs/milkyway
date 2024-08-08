@@ -62,6 +62,13 @@ func (k *Keeper) AddServiceTokensAndShares(
 	return service, addedShares, nil
 }
 
+// RemoveServiceDelegation removes the given service delegation from the store
+func (k *Keeper) RemoveServiceDelegation(ctx sdk.Context, delegation types.Delegation) {
+	store := ctx.KVStore(k.storeKey)
+	store.Delete(types.UserServiceDelegationStoreKey(delegation.UserAddress, delegation.TargetID))
+	store.Delete(types.DelegationByServiceIDStoreKey(delegation.TargetID, delegation.UserAddress))
+}
+
 // --------------------------------------------------------------------------------------------------------------------
 
 // DelegateToService sends the given amount to the service account and saves the delegation for the given user
@@ -78,12 +85,9 @@ func (k *Keeper) DelegateToService(ctx sdk.Context, serviceID uint32, amount sdk
 	}
 
 	return k.PerformDelegation(ctx, types.DelegationData{
-		Amount:    amount,
-		Delegator: delegator,
-		Target:    &service,
-		GetDelegation: func(ctx sdk.Context, receiverID uint32, delegator string) (types.Delegation, bool) {
-			return k.GetServiceDelegation(ctx, receiverID, delegator)
-		},
+		Amount:          amount,
+		Delegator:       delegator,
+		Target:          &service,
 		BuildDelegation: types.NewServiceDelegation,
 		UpdateDelegation: func(ctx sdk.Context, delegation types.Delegation) (newShares sdk.DecCoins, err error) {
 			// Calculate the new shares and add the tokens to the service
@@ -96,7 +100,7 @@ func (k *Keeper) DelegateToService(ctx sdk.Context, serviceID uint32, amount sdk
 			delegation.Shares = delegation.Shares.Add(newShares...)
 
 			// Store the updated delegation
-			k.SaveServiceDelegation(ctx, delegation)
+			k.SetDelegation(ctx, delegation)
 
 			return newShares, err
 		},
