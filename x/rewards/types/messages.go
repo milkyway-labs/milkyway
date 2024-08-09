@@ -33,9 +33,9 @@ func NewMsgSetWithdrawAddress(delAddr, withdrawAddr string) *MsgSetWithdrawAddre
 	}
 }
 
-// NewMsgWithdrawDelegationReward creates a new MsgWithdrawDelegationReward instance
-func NewMsgWithdrawDelegationReward(delAddr string, delType restakingtypes.DelegationType, poolID uint32) *MsgWithdrawDelegationReward {
-	return &MsgWithdrawDelegationReward{
+// NewMsgWithdrawDelegatorReward creates a new MsgWithdrawDelegatorReward instance
+func NewMsgWithdrawDelegatorReward(delAddr string, delType restakingtypes.DelegationType, poolID uint32) *MsgWithdrawDelegatorReward {
+	return &MsgWithdrawDelegatorReward{
 		DelegatorAddress: delAddr,
 		DelegationType:   delType,
 		TargetID:         poolID,

@@ -15,13 +15,15 @@ import (
 )
 
 type AccountKeeper interface {
+	NewAccountWithAddress(ctx context.Context, addr sdk.AccAddress) sdk.AccountI
+	HasAccount(ctx context.Context, addr sdk.AccAddress) bool
+	SetAccount(ctx context.Context, acc sdk.AccountI)
 	AddressCodec() address.Codec
 	GetModuleAddress(moduleName string) sdk.AccAddress
 }
 
 type BankKeeper interface {
 	GetAllBalances(ctx context.Context, addr sdk.AccAddress) sdk.Coins
-	SendCoins(ctx context.Context, fromAddr, toAddr sdk.AccAddress, amt sdk.Coins) error
 	SendCoinsFromModuleToAccount(ctx context.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error
 	BlockedAddr(addr sdk.AccAddress) bool
 }
@@ -39,7 +41,6 @@ type PoolsKeeper interface {
 	GetParams(ctx sdk.Context) poolstypes.Params
 	GetPool(ctx sdk.Context, poolID uint32) (poolstypes.Pool, bool)
 	GetPools(ctx sdk.Context) []poolstypes.Pool
-	IteratePools(ctx sdk.Context, cb func(poolstypes.Pool) bool)
 }
 
 type OperatorsKeeper interface {
@@ -57,6 +58,11 @@ type RestakingKeeper interface {
 	GetPoolDelegation(ctx sdk.Context, poolID uint32, userAddress string) (restakingtypes.Delegation, bool)
 	GetOperatorDelegation(ctx sdk.Context, operatorID uint32, userAddress string) (restakingtypes.Delegation, bool)
 	GetServiceDelegation(ctx sdk.Context, serviceID uint32, userAddress string) (restakingtypes.Delegation, bool)
+	IterateUserPoolDelegations(ctx sdk.Context, userAddress string, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
+	IterateUserOperatorDelegations(
+		ctx sdk.Context, userAddress string, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
+	IterateUserServiceDelegations(
+		ctx sdk.Context, userAddress string, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
 }
 
 type TickersKeeper interface {

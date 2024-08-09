@@ -24,7 +24,7 @@ func (k *Keeper) GetPrice(ctx context.Context, denom string) (math.LegacyDec, er
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	cp := slinkytypes.NewCurrencyPair(ticker, types.USDQuote)
+	cp := slinkytypes.NewCurrencyPair(ticker, types.USDTicker)
 	qpn, err := k.oracleKeeper.GetPriceWithNonceForCurrencyPair(sdkCtx, cp)
 	if err != nil {
 		// If currency pair is not found return 0 as well.

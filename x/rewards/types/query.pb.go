@@ -6,6 +6,10 @@ package types
 import (
 	context "context"
 	fmt "fmt"
+	_ "github.com/cosmos/cosmos-proto"
+	_ "github.com/cosmos/cosmos-sdk/types"
+	query "github.com/cosmos/cosmos-sdk/types/query"
+	_ "github.com/cosmos/cosmos-sdk/types/tx/amino"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	grpc1 "github.com/cosmos/gogoproto/grpc"
 	proto "github.com/cosmos/gogoproto/proto"
@@ -104,34 +108,1001 @@ func (m *QueryParamsResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryParamsResponse proto.InternalMessageInfo
 
+type QueryRewardsPlansRequest struct {
+	// pagination defines an optional pagination for the request.
+	Pagination *query.PageRequest `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (m *QueryRewardsPlansRequest) Reset()         { *m = QueryRewardsPlansRequest{} }
+func (m *QueryRewardsPlansRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryRewardsPlansRequest) ProtoMessage()    {}
+func (*QueryRewardsPlansRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f900c2389df7beb1, []int{2}
+}
+func (m *QueryRewardsPlansRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryRewardsPlansRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryRewardsPlansRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryRewardsPlansRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryRewardsPlansRequest.Merge(m, src)
+}
+func (m *QueryRewardsPlansRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryRewardsPlansRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryRewardsPlansRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryRewardsPlansRequest proto.InternalMessageInfo
+
+type QueryRewardsPlansResponse struct {
+	RewardsPlans []RewardsPlan `protobuf:"bytes,1,rep,name=rewards_plans,json=rewardsPlans,proto3" json:"rewards_plans"`
+	// pagination defines the pagination in the response.
+	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (m *QueryRewardsPlansResponse) Reset()         { *m = QueryRewardsPlansResponse{} }
+func (m *QueryRewardsPlansResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryRewardsPlansResponse) ProtoMessage()    {}
+func (*QueryRewardsPlansResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f900c2389df7beb1, []int{3}
+}
+func (m *QueryRewardsPlansResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryRewardsPlansResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryRewardsPlansResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryRewardsPlansResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryRewardsPlansResponse.Merge(m, src)
+}
+func (m *QueryRewardsPlansResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryRewardsPlansResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryRewardsPlansResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryRewardsPlansResponse proto.InternalMessageInfo
+
+type QueryRewardsPlanRequest struct {
+	PlanId uint64 `protobuf:"varint,1,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`
+}
+
+func (m *QueryRewardsPlanRequest) Reset()         { *m = QueryRewardsPlanRequest{} }
+func (m *QueryRewardsPlanRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryRewardsPlanRequest) ProtoMessage()    {}
+func (*QueryRewardsPlanRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f900c2389df7beb1, []int{4}
+}
+func (m *QueryRewardsPlanRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryRewardsPlanRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryRewardsPlanRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryRewardsPlanRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryRewardsPlanRequest.Merge(m, src)
+}
+func (m *QueryRewardsPlanRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryRewardsPlanRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryRewardsPlanRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryRewardsPlanRequest proto.InternalMessageInfo
+
+type QueryRewardsPlanResponse struct {
+	RewardsPlan RewardsPlan `protobuf:"bytes,2,opt,name=rewards_plan,json=rewardsPlan,proto3" json:"rewards_plan"`
+}
+
+func (m *QueryRewardsPlanResponse) Reset()         { *m = QueryRewardsPlanResponse{} }
+func (m *QueryRewardsPlanResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryRewardsPlanResponse) ProtoMessage()    {}
+func (*QueryRewardsPlanResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f900c2389df7beb1, []int{5}
+}
+func (m *QueryRewardsPlanResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryRewardsPlanResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryRewardsPlanResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryRewardsPlanResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryRewardsPlanResponse.Merge(m, src)
+}
+func (m *QueryRewardsPlanResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryRewardsPlanResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryRewardsPlanResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryRewardsPlanResponse proto.InternalMessageInfo
+
+// QueryPoolOutstandingRewardsRequest is the request type for the
+// Query/PoolOutstandingRewards RPC method.
+type QueryPoolOutstandingRewardsRequest struct {
+	// pool_id defines the pool ID to query for.
+	PoolId uint32 `protobuf:"varint,1,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+}
+
+func (m *QueryPoolOutstandingRewardsRequest) Reset()         { *m = QueryPoolOutstandingRewardsRequest{} }
+func (m *QueryPoolOutstandingRewardsRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryPoolOutstandingRewardsRequest) ProtoMessage()    {}
+func (*QueryPoolOutstandingRewardsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f900c2389df7beb1, []int{6}
+}
+func (m *QueryPoolOutstandingRewardsRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryPoolOutstandingRewardsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryPoolOutstandingRewardsRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryPoolOutstandingRewardsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryPoolOutstandingRewardsRequest.Merge(m, src)
+}
+func (m *QueryPoolOutstandingRewardsRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryPoolOutstandingRewardsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryPoolOutstandingRewardsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryPoolOutstandingRewardsRequest proto.InternalMessageInfo
+
+// QueryPoolOutstandingRewardsResponse is the response type for the
+// Query/PoolOutstandingRewards RPC method.
+type QueryPoolOutstandingRewardsResponse struct {
+	Rewards OutstandingRewards `protobuf:"bytes,1,opt,name=rewards,proto3" json:"rewards"`
+}
+
+func (m *QueryPoolOutstandingRewardsResponse) Reset()         { *m = QueryPoolOutstandingRewardsResponse{} }
+func (m *QueryPoolOutstandingRewardsResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryPoolOutstandingRewardsResponse) ProtoMessage()    {}
+func (*QueryPoolOutstandingRewardsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f900c2389df7beb1, []int{7}
+}
+func (m *QueryPoolOutstandingRewardsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryPoolOutstandingRewardsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryPoolOutstandingRewardsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryPoolOutstandingRewardsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryPoolOutstandingRewardsResponse.Merge(m, src)
+}
+func (m *QueryPoolOutstandingRewardsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryPoolOutstandingRewardsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryPoolOutstandingRewardsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryPoolOutstandingRewardsResponse proto.InternalMessageInfo
+
+// QueryOperatorOutstandingRewardsRequest is the request type for the
+// Query/OperatorOutstandingRewards RPC method.
+type QueryOperatorOutstandingRewardsRequest struct {
+	// operator_id defines the operator ID to query for.
+	OperatorId uint32 `protobuf:"varint,1,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
+}
+
+func (m *QueryOperatorOutstandingRewardsRequest) Reset() {
+	*m = QueryOperatorOutstandingRewardsRequest{}
+}
+func (m *QueryOperatorOutstandingRewardsRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryOperatorOutstandingRewardsRequest) ProtoMessage()    {}
+func (*QueryOperatorOutstandingRewardsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f900c2389df7beb1, []int{8}
+}
+func (m *QueryOperatorOutstandingRewardsRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryOperatorOutstandingRewardsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryOperatorOutstandingRewardsRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryOperatorOutstandingRewardsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryOperatorOutstandingRewardsRequest.Merge(m, src)
+}
+func (m *QueryOperatorOutstandingRewardsRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryOperatorOutstandingRewardsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryOperatorOutstandingRewardsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryOperatorOutstandingRewardsRequest proto.InternalMessageInfo
+
+// QueryOperatorOutstandingRewardsResponse is the response type for the
+// Query/OperatorOutstandingRewards RPC method.
+type QueryOperatorOutstandingRewardsResponse struct {
+	Rewards OutstandingRewards `protobuf:"bytes,1,opt,name=rewards,proto3" json:"rewards"`
+}
+
+func (m *QueryOperatorOutstandingRewardsResponse) Reset() {
+	*m = QueryOperatorOutstandingRewardsResponse{}
+}
+func (m *QueryOperatorOutstandingRewardsResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryOperatorOutstandingRewardsResponse) ProtoMessage()    {}
+func (*QueryOperatorOutstandingRewardsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f900c2389df7beb1, []int{9}
+}
+func (m *QueryOperatorOutstandingRewardsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryOperatorOutstandingRewardsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryOperatorOutstandingRewardsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryOperatorOutstandingRewardsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryOperatorOutstandingRewardsResponse.Merge(m, src)
+}
+func (m *QueryOperatorOutstandingRewardsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryOperatorOutstandingRewardsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryOperatorOutstandingRewardsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryOperatorOutstandingRewardsResponse proto.InternalMessageInfo
+
+// QueryServiceOutstandingRewardsRequest is the request type for the
+// Query/ServiceOutstandingRewards RPC method.
+type QueryServiceOutstandingRewardsRequest struct {
+	// service_id defines the service ID to query for.
+	ServiceId uint32 `protobuf:"varint,1,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
+}
+
+func (m *QueryServiceOutstandingRewardsRequest) Reset()         { *m = QueryServiceOutstandingRewardsRequest{} }
+func (m *QueryServiceOutstandingRewardsRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryServiceOutstandingRewardsRequest) ProtoMessage()    {}
+func (*QueryServiceOutstandingRewardsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f900c2389df7beb1, []int{10}
+}
+func (m *QueryServiceOutstandingRewardsRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryServiceOutstandingRewardsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryServiceOutstandingRewardsRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryServiceOutstandingRewardsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryServiceOutstandingRewardsRequest.Merge(m, src)
+}
+func (m *QueryServiceOutstandingRewardsRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryServiceOutstandingRewardsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryServiceOutstandingRewardsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryServiceOutstandingRewardsRequest proto.InternalMessageInfo
+
+// QueryServiceOutstandingRewardsResponse is the response type for the
+// Query/ServiceOutstandingRewards RPC method.
+type QueryServiceOutstandingRewardsResponse struct {
+	Rewards OutstandingRewards `protobuf:"bytes,1,opt,name=rewards,proto3" json:"rewards"`
+}
+
+func (m *QueryServiceOutstandingRewardsResponse) Reset() {
+	*m = QueryServiceOutstandingRewardsResponse{}
+}
+func (m *QueryServiceOutstandingRewardsResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryServiceOutstandingRewardsResponse) ProtoMessage()    {}
+func (*QueryServiceOutstandingRewardsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f900c2389df7beb1, []int{11}
+}
+func (m *QueryServiceOutstandingRewardsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryServiceOutstandingRewardsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryServiceOutstandingRewardsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryServiceOutstandingRewardsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryServiceOutstandingRewardsResponse.Merge(m, src)
+}
+func (m *QueryServiceOutstandingRewardsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryServiceOutstandingRewardsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryServiceOutstandingRewardsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryServiceOutstandingRewardsResponse proto.InternalMessageInfo
+
+// QueryOperatorCommissionRequest is the request type for the
+// Query/OperatorCommission RPC method
+type QueryOperatorCommissionRequest struct {
+	// operator_id defines the validator address to query for.
+	OperatorId uint32 `protobuf:"varint,1,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
+}
+
+func (m *QueryOperatorCommissionRequest) Reset()         { *m = QueryOperatorCommissionRequest{} }
+func (m *QueryOperatorCommissionRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryOperatorCommissionRequest) ProtoMessage()    {}
+func (*QueryOperatorCommissionRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f900c2389df7beb1, []int{12}
+}
+func (m *QueryOperatorCommissionRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryOperatorCommissionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryOperatorCommissionRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryOperatorCommissionRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryOperatorCommissionRequest.Merge(m, src)
+}
+func (m *QueryOperatorCommissionRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryOperatorCommissionRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryOperatorCommissionRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryOperatorCommissionRequest proto.InternalMessageInfo
+
+// QueryOperatorCommissionResponse is the response type for the
+// Query/OperatorCommission RPC method
+type QueryOperatorCommissionResponse struct {
+	// commission defines the commission the operator received.
+	Commission AccumulatedCommission `protobuf:"bytes,1,opt,name=commission,proto3" json:"commission"`
+}
+
+func (m *QueryOperatorCommissionResponse) Reset()         { *m = QueryOperatorCommissionResponse{} }
+func (m *QueryOperatorCommissionResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryOperatorCommissionResponse) ProtoMessage()    {}
+func (*QueryOperatorCommissionResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f900c2389df7beb1, []int{13}
+}
+func (m *QueryOperatorCommissionResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryOperatorCommissionResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryOperatorCommissionResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryOperatorCommissionResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryOperatorCommissionResponse.Merge(m, src)
+}
+func (m *QueryOperatorCommissionResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryOperatorCommissionResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryOperatorCommissionResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryOperatorCommissionResponse proto.InternalMessageInfo
+
+// QueryPoolDelegationRewardsRequest is the request type for the
+// Query/PoolDelegationRewards RPC method.
+type QueryPoolDelegationRewardsRequest struct {
+	// delegator_address defines the delegator address to query for.
+	DelegatorAddress string `protobuf:"bytes,1,opt,name=delegator_address,json=delegatorAddress,proto3" json:"delegator_address,omitempty"`
+	// pool_id defines the pool ID to query for.
+	PoolId uint32 `protobuf:"varint,2,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+}
+
+func (m *QueryPoolDelegationRewardsRequest) Reset()         { *m = QueryPoolDelegationRewardsRequest{} }
+func (m *QueryPoolDelegationRewardsRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryPoolDelegationRewardsRequest) ProtoMessage()    {}
+func (*QueryPoolDelegationRewardsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f900c2389df7beb1, []int{14}
+}
+func (m *QueryPoolDelegationRewardsRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryPoolDelegationRewardsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryPoolDelegationRewardsRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryPoolDelegationRewardsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryPoolDelegationRewardsRequest.Merge(m, src)
+}
+func (m *QueryPoolDelegationRewardsRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryPoolDelegationRewardsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryPoolDelegationRewardsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryPoolDelegationRewardsRequest proto.InternalMessageInfo
+
+// QueryPoolDelegationRewardsResponse is the response type for the
+// Query/PoolDelegationRewards RPC method.
+type QueryPoolDelegationRewardsResponse struct {
+	// rewards defines the rewards accrued by a delegation.
+	Rewards DecPools `protobuf:"bytes,1,rep,name=rewards,proto3,castrepeated=DecPools" json:"rewards"`
+}
+
+func (m *QueryPoolDelegationRewardsResponse) Reset()         { *m = QueryPoolDelegationRewardsResponse{} }
+func (m *QueryPoolDelegationRewardsResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryPoolDelegationRewardsResponse) ProtoMessage()    {}
+func (*QueryPoolDelegationRewardsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f900c2389df7beb1, []int{15}
+}
+func (m *QueryPoolDelegationRewardsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryPoolDelegationRewardsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryPoolDelegationRewardsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryPoolDelegationRewardsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryPoolDelegationRewardsResponse.Merge(m, src)
+}
+func (m *QueryPoolDelegationRewardsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryPoolDelegationRewardsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryPoolDelegationRewardsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryPoolDelegationRewardsResponse proto.InternalMessageInfo
+
+// QueryOperatorDelegationRewardsRequest is the request type for the
+// Query/OperatorDelegationRewards RPC method.
+type QueryOperatorDelegationRewardsRequest struct {
+	// delegator_address defines the delegator address to query for.
+	DelegatorAddress string `protobuf:"bytes,1,opt,name=delegator_address,json=delegatorAddress,proto3" json:"delegator_address,omitempty"`
+	// operator_id defines the operator ID to query for.
+	OperatorId uint32 `protobuf:"varint,2,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
+}
+
+func (m *QueryOperatorDelegationRewardsRequest) Reset()         { *m = QueryOperatorDelegationRewardsRequest{} }
+func (m *QueryOperatorDelegationRewardsRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryOperatorDelegationRewardsRequest) ProtoMessage()    {}
+func (*QueryOperatorDelegationRewardsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f900c2389df7beb1, []int{16}
+}
+func (m *QueryOperatorDelegationRewardsRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryOperatorDelegationRewardsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryOperatorDelegationRewardsRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryOperatorDelegationRewardsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryOperatorDelegationRewardsRequest.Merge(m, src)
+}
+func (m *QueryOperatorDelegationRewardsRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryOperatorDelegationRewardsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryOperatorDelegationRewardsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryOperatorDelegationRewardsRequest proto.InternalMessageInfo
+
+// QueryOperatorDelegationRewardsResponse is the response type for the
+// Query/OperatorDelegationRewards RPC method.
+type QueryOperatorDelegationRewardsResponse struct {
+	// rewards defines the rewards accrued by a delegation.
+	Rewards DecPools `protobuf:"bytes,1,rep,name=rewards,proto3,castrepeated=DecPools" json:"rewards"`
+}
+
+func (m *QueryOperatorDelegationRewardsResponse) Reset() {
+	*m = QueryOperatorDelegationRewardsResponse{}
+}
+func (m *QueryOperatorDelegationRewardsResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryOperatorDelegationRewardsResponse) ProtoMessage()    {}
+func (*QueryOperatorDelegationRewardsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f900c2389df7beb1, []int{17}
+}
+func (m *QueryOperatorDelegationRewardsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryOperatorDelegationRewardsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryOperatorDelegationRewardsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryOperatorDelegationRewardsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryOperatorDelegationRewardsResponse.Merge(m, src)
+}
+func (m *QueryOperatorDelegationRewardsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryOperatorDelegationRewardsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryOperatorDelegationRewardsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryOperatorDelegationRewardsResponse proto.InternalMessageInfo
+
+// QueryServiceDelegationRewardsRequest is the request type for the
+// Query/ServiceDelegationRewards RPC method.
+type QueryServiceDelegationRewardsRequest struct {
+	// delegator_address defines the delegator address to query for.
+	DelegatorAddress string `protobuf:"bytes,1,opt,name=delegator_address,json=delegatorAddress,proto3" json:"delegator_address,omitempty"`
+	// service_id defines the service ID to query for.
+	ServiceId uint32 `protobuf:"varint,2,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
+}
+
+func (m *QueryServiceDelegationRewardsRequest) Reset()         { *m = QueryServiceDelegationRewardsRequest{} }
+func (m *QueryServiceDelegationRewardsRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryServiceDelegationRewardsRequest) ProtoMessage()    {}
+func (*QueryServiceDelegationRewardsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f900c2389df7beb1, []int{18}
+}
+func (m *QueryServiceDelegationRewardsRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryServiceDelegationRewardsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryServiceDelegationRewardsRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryServiceDelegationRewardsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryServiceDelegationRewardsRequest.Merge(m, src)
+}
+func (m *QueryServiceDelegationRewardsRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryServiceDelegationRewardsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryServiceDelegationRewardsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryServiceDelegationRewardsRequest proto.InternalMessageInfo
+
+// QueryServiceDelegationRewardsResponse is the response type for the
+// Query/ServiceDelegationRewards RPC method.
+type QueryServiceDelegationRewardsResponse struct {
+	// rewards defines the rewards accrued by a delegation.
+	Rewards DecPools `protobuf:"bytes,1,rep,name=rewards,proto3,castrepeated=DecPools" json:"rewards"`
+}
+
+func (m *QueryServiceDelegationRewardsResponse) Reset()         { *m = QueryServiceDelegationRewardsResponse{} }
+func (m *QueryServiceDelegationRewardsResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryServiceDelegationRewardsResponse) ProtoMessage()    {}
+func (*QueryServiceDelegationRewardsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f900c2389df7beb1, []int{19}
+}
+func (m *QueryServiceDelegationRewardsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryServiceDelegationRewardsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryServiceDelegationRewardsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryServiceDelegationRewardsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryServiceDelegationRewardsResponse.Merge(m, src)
+}
+func (m *QueryServiceDelegationRewardsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryServiceDelegationRewardsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryServiceDelegationRewardsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryServiceDelegationRewardsResponse proto.InternalMessageInfo
+
+// QueryDelegationTotalRewardsRequest is the request type for the
+// Query/DelegationTotalRewards RPC method.
+type QueryDelegationTotalRewardsRequest struct {
+	// delegator_address defines the delegator address to query for.
+	DelegatorAddress string `protobuf:"bytes,1,opt,name=delegator_address,json=delegatorAddress,proto3" json:"delegator_address,omitempty"`
+}
+
+func (m *QueryDelegationTotalRewardsRequest) Reset()         { *m = QueryDelegationTotalRewardsRequest{} }
+func (m *QueryDelegationTotalRewardsRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryDelegationTotalRewardsRequest) ProtoMessage()    {}
+func (*QueryDelegationTotalRewardsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f900c2389df7beb1, []int{20}
+}
+func (m *QueryDelegationTotalRewardsRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryDelegationTotalRewardsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryDelegationTotalRewardsRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryDelegationTotalRewardsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryDelegationTotalRewardsRequest.Merge(m, src)
+}
+func (m *QueryDelegationTotalRewardsRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryDelegationTotalRewardsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryDelegationTotalRewardsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryDelegationTotalRewardsRequest proto.InternalMessageInfo
+
+// QueryDelegationTotalRewardsResponse is the response type for the
+// Query/DelegationTotalRewards RPC method.
+type QueryDelegationTotalRewardsResponse struct {
+	// rewards defines all the rewards accrued by a delegator.
+	Rewards []DelegationDelegatorReward `protobuf:"bytes,1,rep,name=rewards,proto3" json:"rewards"`
+	// total defines the sum of all the rewards.
+	Total DecPools `protobuf:"bytes,2,rep,name=total,proto3,castrepeated=DecPools" json:"total"`
+}
+
+func (m *QueryDelegationTotalRewardsResponse) Reset()         { *m = QueryDelegationTotalRewardsResponse{} }
+func (m *QueryDelegationTotalRewardsResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryDelegationTotalRewardsResponse) ProtoMessage()    {}
+func (*QueryDelegationTotalRewardsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f900c2389df7beb1, []int{21}
+}
+func (m *QueryDelegationTotalRewardsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryDelegationTotalRewardsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryDelegationTotalRewardsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryDelegationTotalRewardsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryDelegationTotalRewardsResponse.Merge(m, src)
+}
+func (m *QueryDelegationTotalRewardsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryDelegationTotalRewardsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryDelegationTotalRewardsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryDelegationTotalRewardsResponse proto.InternalMessageInfo
+
+// QueryDelegatorWithdrawAddressRequest is the request type for the
+// Query/DelegatorWithdrawAddress RPC method.
+type QueryDelegatorWithdrawAddressRequest struct {
+	// delegator_address defines the delegator address to query for.
+	DelegatorAddress string `protobuf:"bytes,1,opt,name=delegator_address,json=delegatorAddress,proto3" json:"delegator_address,omitempty"`
+}
+
+func (m *QueryDelegatorWithdrawAddressRequest) Reset()         { *m = QueryDelegatorWithdrawAddressRequest{} }
+func (m *QueryDelegatorWithdrawAddressRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryDelegatorWithdrawAddressRequest) ProtoMessage()    {}
+func (*QueryDelegatorWithdrawAddressRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f900c2389df7beb1, []int{22}
+}
+func (m *QueryDelegatorWithdrawAddressRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryDelegatorWithdrawAddressRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryDelegatorWithdrawAddressRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryDelegatorWithdrawAddressRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryDelegatorWithdrawAddressRequest.Merge(m, src)
+}
+func (m *QueryDelegatorWithdrawAddressRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryDelegatorWithdrawAddressRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryDelegatorWithdrawAddressRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryDelegatorWithdrawAddressRequest proto.InternalMessageInfo
+
+// QueryDelegatorWithdrawAddressResponse is the response type for the
+// Query/DelegatorWithdrawAddress RPC method.
+type QueryDelegatorWithdrawAddressResponse struct {
+	// withdraw_address defines the delegator address to query for.
+	WithdrawAddress string `protobuf:"bytes,1,opt,name=withdraw_address,json=withdrawAddress,proto3" json:"withdraw_address,omitempty"`
+}
+
+func (m *QueryDelegatorWithdrawAddressResponse) Reset()         { *m = QueryDelegatorWithdrawAddressResponse{} }
+func (m *QueryDelegatorWithdrawAddressResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryDelegatorWithdrawAddressResponse) ProtoMessage()    {}
+func (*QueryDelegatorWithdrawAddressResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f900c2389df7beb1, []int{23}
+}
+func (m *QueryDelegatorWithdrawAddressResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryDelegatorWithdrawAddressResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryDelegatorWithdrawAddressResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryDelegatorWithdrawAddressResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryDelegatorWithdrawAddressResponse.Merge(m, src)
+}
+func (m *QueryDelegatorWithdrawAddressResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryDelegatorWithdrawAddressResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryDelegatorWithdrawAddressResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryDelegatorWithdrawAddressResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*QueryParamsRequest)(nil), "milkyway.rewards.v1.QueryParamsRequest")
 	proto.RegisterType((*QueryParamsResponse)(nil), "milkyway.rewards.v1.QueryParamsResponse")
+	proto.RegisterType((*QueryRewardsPlansRequest)(nil), "milkyway.rewards.v1.QueryRewardsPlansRequest")
+	proto.RegisterType((*QueryRewardsPlansResponse)(nil), "milkyway.rewards.v1.QueryRewardsPlansResponse")
+	proto.RegisterType((*QueryRewardsPlanRequest)(nil), "milkyway.rewards.v1.QueryRewardsPlanRequest")
+	proto.RegisterType((*QueryRewardsPlanResponse)(nil), "milkyway.rewards.v1.QueryRewardsPlanResponse")
+	proto.RegisterType((*QueryPoolOutstandingRewardsRequest)(nil), "milkyway.rewards.v1.QueryPoolOutstandingRewardsRequest")
+	proto.RegisterType((*QueryPoolOutstandingRewardsResponse)(nil), "milkyway.rewards.v1.QueryPoolOutstandingRewardsResponse")
+	proto.RegisterType((*QueryOperatorOutstandingRewardsRequest)(nil), "milkyway.rewards.v1.QueryOperatorOutstandingRewardsRequest")
+	proto.RegisterType((*QueryOperatorOutstandingRewardsResponse)(nil), "milkyway.rewards.v1.QueryOperatorOutstandingRewardsResponse")
+	proto.RegisterType((*QueryServiceOutstandingRewardsRequest)(nil), "milkyway.rewards.v1.QueryServiceOutstandingRewardsRequest")
+	proto.RegisterType((*QueryServiceOutstandingRewardsResponse)(nil), "milkyway.rewards.v1.QueryServiceOutstandingRewardsResponse")
+	proto.RegisterType((*QueryOperatorCommissionRequest)(nil), "milkyway.rewards.v1.QueryOperatorCommissionRequest")
+	proto.RegisterType((*QueryOperatorCommissionResponse)(nil), "milkyway.rewards.v1.QueryOperatorCommissionResponse")
+	proto.RegisterType((*QueryPoolDelegationRewardsRequest)(nil), "milkyway.rewards.v1.QueryPoolDelegationRewardsRequest")
+	proto.RegisterType((*QueryPoolDelegationRewardsResponse)(nil), "milkyway.rewards.v1.QueryPoolDelegationRewardsResponse")
+	proto.RegisterType((*QueryOperatorDelegationRewardsRequest)(nil), "milkyway.rewards.v1.QueryOperatorDelegationRewardsRequest")
+	proto.RegisterType((*QueryOperatorDelegationRewardsResponse)(nil), "milkyway.rewards.v1.QueryOperatorDelegationRewardsResponse")
+	proto.RegisterType((*QueryServiceDelegationRewardsRequest)(nil), "milkyway.rewards.v1.QueryServiceDelegationRewardsRequest")
+	proto.RegisterType((*QueryServiceDelegationRewardsResponse)(nil), "milkyway.rewards.v1.QueryServiceDelegationRewardsResponse")
+	proto.RegisterType((*QueryDelegationTotalRewardsRequest)(nil), "milkyway.rewards.v1.QueryDelegationTotalRewardsRequest")
+	proto.RegisterType((*QueryDelegationTotalRewardsResponse)(nil), "milkyway.rewards.v1.QueryDelegationTotalRewardsResponse")
+	proto.RegisterType((*QueryDelegatorWithdrawAddressRequest)(nil), "milkyway.rewards.v1.QueryDelegatorWithdrawAddressRequest")
+	proto.RegisterType((*QueryDelegatorWithdrawAddressResponse)(nil), "milkyway.rewards.v1.QueryDelegatorWithdrawAddressResponse")
 }
 
 func init() { proto.RegisterFile("milkyway/rewards/v1/query.proto", fileDescriptor_f900c2389df7beb1) }
 
 var fileDescriptor_f900c2389df7beb1 = []byte{
-	// 291 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0xcf, 0xcd, 0xcc, 0xc9,
-	0xae, 0x2c, 0x4f, 0xac, 0xd4, 0x2f, 0x4a, 0x2d, 0x4f, 0x2c, 0x4a, 0x29, 0xd6, 0x2f, 0x33, 0xd4,
-	0x2f, 0x2c, 0x4d, 0x2d, 0xaa, 0xd4, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x12, 0x86, 0x29, 0xd0,
-	0x83, 0x2a, 0xd0, 0x2b, 0x33, 0x94, 0x92, 0x49, 0xcf, 0xcf, 0x4f, 0xcf, 0x49, 0xd5, 0x4f, 0x2c,
-	0xc8, 0xd4, 0x4f, 0xcc, 0xcb, 0xcb, 0x2f, 0x49, 0x2c, 0xc9, 0xcc, 0xcf, 0x2b, 0x86, 0x68, 0x91,
-	0x12, 0x49, 0xcf, 0x4f, 0xcf, 0x07, 0x33, 0xf5, 0x41, 0x2c, 0xa8, 0xa8, 0x02, 0x36, 0x9b, 0x72,
-	0xf3, 0x53, 0x52, 0x73, 0x8a, 0xf1, 0xa9, 0x28, 0x48, 0x2c, 0x4a, 0xcc, 0x85, 0xaa, 0x50, 0x12,
-	0xe1, 0x12, 0x0a, 0x04, 0xb9, 0x2d, 0x00, 0x2c, 0x18, 0x94, 0x5a, 0x58, 0x9a, 0x5a, 0x5c, 0xa2,
-	0x14, 0xc0, 0x25, 0x8c, 0x22, 0x5a, 0x5c, 0x90, 0x9f, 0x57, 0x9c, 0x2a, 0x64, 0xc9, 0xc5, 0x06,
-	0xd1, 0x2c, 0xc1, 0xa8, 0xc0, 0xa8, 0xc1, 0x6d, 0x24, 0xad, 0x87, 0xc5, 0x2b, 0x7a, 0x10, 0x4d,
-	0x4e, 0x2c, 0x27, 0xee, 0xc9, 0x33, 0x04, 0x41, 0x35, 0x18, 0x75, 0x31, 0x72, 0xb1, 0x82, 0x8d,
-	0x14, 0x6a, 0x60, 0xe4, 0x62, 0x83, 0x28, 0x11, 0x52, 0xc7, 0xaa, 0x1f, 0xd3, 0x3d, 0x52, 0x1a,
-	0x84, 0x15, 0x42, 0x9c, 0xa8, 0xa4, 0xdc, 0x74, 0xf9, 0xc9, 0x64, 0x26, 0x59, 0x21, 0x69, 0x7d,
-	0xdc, 0x5e, 0x77, 0xf2, 0x3f, 0xf1, 0x50, 0x8e, 0xe1, 0xc4, 0x23, 0x39, 0xc6, 0x0b, 0x8f, 0xe4,
-	0x18, 0x1f, 0x3c, 0x92, 0x63, 0x9c, 0xf0, 0x58, 0x8e, 0xe1, 0xc2, 0x63, 0x39, 0x86, 0x1b, 0x8f,
-	0xe5, 0x18, 0xa2, 0x0c, 0xd3, 0x33, 0x4b, 0x32, 0x4a, 0x93, 0xf4, 0x92, 0xf3, 0x73, 0xe1, 0x86,
-	0xe8, 0xe6, 0x24, 0x26, 0x15, 0x23, 0x8c, 0xac, 0x80, 0x1b, 0x5a, 0x52, 0x59, 0x90, 0x5a, 0x9c,
-	0xc4, 0x06, 0x0e, 0x4c, 0x63, 0x40, 0x00, 0x00, 0x00, 0xff, 0xff, 0x37, 0x78, 0xab, 0x6e, 0xfc,
-	0x01, 0x00, 0x00,
+	// 1271 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x58, 0xcf, 0x6f, 0x1b, 0x45,
+	0x14, 0xce, 0x98, 0x36, 0xa5, 0x2f, 0xad, 0x68, 0x27, 0x69, 0xeb, 0xb8, 0xad, 0x13, 0xb6, 0x6d,
+	0x12, 0x45, 0xcd, 0xae, 0x92, 0x56, 0xa4, 0x49, 0x28, 0x24, 0x4e, 0x08, 0x58, 0xb4, 0x4a, 0x6a,
+	0x53, 0x21, 0xe0, 0x10, 0xad, 0xbd, 0x2b, 0x77, 0x55, 0x7b, 0xc7, 0xdd, 0x5d, 0xc7, 0x8d, 0xa2,
+	0x48, 0x08, 0xae, 0x48, 0x20, 0x71, 0x40, 0xdc, 0x38, 0x22, 0x4e, 0x1c, 0x10, 0x67, 0x2e, 0x48,
+	0xb9, 0x20, 0x45, 0x70, 0xe1, 0x00, 0x94, 0x26, 0x48, 0x5c, 0xb8, 0xf0, 0x1f, 0xa0, 0x9d, 0x7d,
+	0x6b, 0xaf, 0xed, 0xd9, 0xdd, 0xc4, 0xc1, 0x97, 0xc8, 0x9e, 0x79, 0x3f, 0xbe, 0xef, 0x9b, 0x79,
+	0x9e, 0x4f, 0x81, 0x91, 0x8a, 0x51, 0x7e, 0xbc, 0x55, 0x57, 0xb7, 0x14, 0x4b, 0xaf, 0xab, 0x96,
+	0x66, 0x2b, 0x9b, 0xd3, 0xca, 0x93, 0x9a, 0x6e, 0x6d, 0xc9, 0x55, 0x8b, 0x39, 0x8c, 0x0e, 0xfa,
+	0x01, 0x32, 0x06, 0xc8, 0x9b, 0xd3, 0xa9, 0x2b, 0x25, 0xc6, 0x4a, 0x65, 0x5d, 0x51, 0xab, 0x86,
+	0xa2, 0x9a, 0x26, 0x73, 0x54, 0xc7, 0x60, 0xa6, 0xed, 0xa5, 0xa4, 0x86, 0x4a, 0xac, 0xc4, 0xf8,
+	0x47, 0xc5, 0xfd, 0x84, 0xab, 0xc3, 0x45, 0x66, 0x57, 0x98, 0xbd, 0xe1, 0x6d, 0x78, 0x5f, 0x70,
+	0xeb, 0xbc, 0x5a, 0x31, 0x4c, 0xa6, 0xf0, 0xbf, 0xb8, 0x94, 0xf6, 0x02, 0x94, 0x82, 0x6a, 0xeb,
+	0xca, 0xe6, 0x74, 0x41, 0x77, 0xd4, 0x69, 0xa5, 0xc8, 0x0c, 0x13, 0xf7, 0x27, 0x83, 0xfb, 0x1c,
+	0x6f, 0x23, 0xaa, 0xaa, 0x96, 0x0c, 0x93, 0x03, 0xc2, 0xd8, 0x51, 0x11, 0xc7, 0x0a, 0xd3, 0xf4,
+	0xb2, 0x1d, 0x15, 0x51, 0x55, 0x2d, 0xb5, 0x82, 0x11, 0xd2, 0x10, 0xd0, 0x07, 0x6e, 0x97, 0x75,
+	0xbe, 0x98, 0xd3, 0x9f, 0xd4, 0x74, 0xdb, 0x91, 0xd6, 0x61, 0xb0, 0x65, 0xd5, 0xae, 0x32, 0xd3,
+	0xd6, 0xe9, 0x1c, 0xf4, 0x7b, 0xc9, 0x49, 0x32, 0x4a, 0x26, 0x06, 0x66, 0x2e, 0xcb, 0x02, 0x11,
+	0x65, 0x2f, 0x29, 0x73, 0x62, 0xf7, 0x8f, 0x91, 0xbe, 0x1c, 0x26, 0x48, 0x05, 0x48, 0xf2, 0x8a,
+	0x39, 0x2f, 0x6e, 0xbd, 0xac, 0x9a, 0x7e, 0x37, 0xba, 0x0a, 0xd0, 0xe4, 0x86, 0xa5, 0xc7, 0x64,
+	0x54, 0xd2, 0x15, 0x42, 0xf6, 0x0e, 0x0e, 0x85, 0x90, 0xd7, 0xd5, 0x92, 0x8e, 0xb9, 0xb9, 0x40,
+	0xa6, 0xf4, 0x3d, 0x81, 0x61, 0x41, 0x13, 0x04, 0xbf, 0x0e, 0x67, 0x11, 0xe4, 0x46, 0xd5, 0xdd,
+	0x48, 0x92, 0xd1, 0x17, 0x26, 0x06, 0x66, 0x46, 0x85, 0x1c, 0x02, 0x15, 0x32, 0xa7, 0x5d, 0x22,
+	0x5f, 0xff, 0xfd, 0xed, 0x24, 0xc9, 0x9d, 0xb1, 0x02, 0x95, 0xe9, 0x9b, 0x2d, 0xb8, 0x13, 0x1c,
+	0xf7, 0x78, 0x2c, 0x6e, 0x0f, 0x4e, 0x0b, 0xf0, 0x19, 0xb8, 0xd4, 0x8e, 0xdb, 0xd7, 0xe6, 0x12,
+	0x9c, 0x72, 0xd1, 0x6e, 0x18, 0x1a, 0x17, 0xe6, 0x44, 0xae, 0xdf, 0xfd, 0x9a, 0xd5, 0x24, 0xbd,
+	0x53, 0xd0, 0x06, 0xd5, 0x2c, 0x9c, 0x09, 0x52, 0x45, 0x68, 0xf1, 0x4c, 0xbd, 0x23, 0x1b, 0x08,
+	0x90, 0x94, 0xee, 0x82, 0xe4, 0xdd, 0x04, 0xc6, 0xca, 0x6b, 0x35, 0xc7, 0x76, 0x54, 0x53, 0x33,
+	0xcc, 0x12, 0x66, 0x05, 0x51, 0x32, 0x56, 0xf6, 0x51, 0x9e, 0xcd, 0xf5, 0xbb, 0x5f, 0xb3, 0x9a,
+	0x64, 0xc3, 0xb5, 0xc8, 0x74, 0x04, 0x7c, 0x0f, 0x4e, 0x61, 0x53, 0x3c, 0xfe, 0x71, 0x21, 0xd6,
+	0xce, 0x0a, 0xc1, 0xc3, 0xf1, 0x4b, 0x48, 0x59, 0x18, 0xe3, 0x4d, 0xd7, 0xaa, 0xba, 0xa5, 0x3a,
+	0xcc, 0x0a, 0xc7, 0x3d, 0x02, 0x03, 0x0c, 0x83, 0x9a, 0xd8, 0xc1, 0x5f, 0xca, 0x6a, 0x52, 0x1d,
+	0xc6, 0x63, 0x4b, 0xf5, 0x84, 0xc3, 0x2a, 0xdc, 0xe0, 0x8d, 0xf3, 0xba, 0xb5, 0x69, 0x14, 0xf5,
+	0x70, 0x0a, 0x57, 0x01, 0x6c, 0x2f, 0xa6, 0xc9, 0xe0, 0x34, 0xae, 0x64, 0x35, 0x69, 0x13, 0xb5,
+	0x88, 0xa8, 0xd3, 0x13, 0xfc, 0x4b, 0x90, 0x6e, 0x11, 0x6e, 0x99, 0x55, 0x2a, 0x86, 0x6d, 0x1b,
+	0xcc, 0x3c, 0xb4, 0xf6, 0x4f, 0x61, 0x24, 0xb4, 0x04, 0x62, 0x7e, 0x08, 0x50, 0x6c, 0xac, 0x22,
+	0xec, 0x49, 0x21, 0xec, 0xa5, 0x62, 0xb1, 0x56, 0xa9, 0x95, 0x55, 0x47, 0xd7, 0x9a, 0x75, 0x82,
+	0xc8, 0x03, 0x85, 0xa4, 0x8f, 0x09, 0xbc, 0xdc, 0xb8, 0xb6, 0x2b, 0x7a, 0x59, 0x2f, 0xf1, 0x39,
+	0x6d, 0x53, 0xfe, 0x0d, 0x38, 0xaf, 0x79, 0x7b, 0xcc, 0xda, 0x50, 0x35, 0xcd, 0xd2, 0x6d, 0x4f,
+	0xba, 0xd3, 0x99, 0xe4, 0xcf, 0xdf, 0x4d, 0x0d, 0xe1, 0x0f, 0xc1, 0x92, 0xb7, 0x93, 0x77, 0x2c,
+	0x57, 0xb2, 0x73, 0x8d, 0x14, 0x5c, 0x0f, 0xce, 0x4e, 0xa2, 0x6d, 0x76, 0xa4, 0x28, 0x10, 0x28,
+	0xc1, 0xfd, 0xe0, 0xb1, 0xb9, 0x3f, 0x68, 0x57, 0x84, 0xfc, 0x57, 0xf4, 0xa2, 0x5b, 0x27, 0x73,
+	0xc1, 0x65, 0xfc, 0xcd, 0xb3, 0x91, 0x17, 0x71, 0xc1, 0x6e, 0x3b, 0xb7, 0x4f, 0x09, 0x5e, 0x3c,
+	0x5f, 0xf5, 0x5e, 0xd3, 0x6f, 0xbb, 0x06, 0x09, 0xc1, 0x08, 0x8e, 0xc5, 0x01, 0xea, 0x8d, 0x14,
+	0x9f, 0x10, 0xb8, 0x1e, 0x9c, 0x9d, 0x5e, 0x2b, 0xd1, 0x3a, 0xc9, 0x89, 0xce, 0x49, 0xbe, 0x11,
+	0x83, 0xa6, 0x37, 0x32, 0x3c, 0xc6, 0x6b, 0xd8, 0x6c, 0xf8, 0x0e, 0x73, 0xd4, 0x72, 0x4f, 0x34,
+	0x90, 0x7e, 0x24, 0xf8, 0x60, 0x84, 0x75, 0x43, 0x8e, 0xf9, 0x76, 0x8e, 0x72, 0x08, 0x47, 0xbf,
+	0xca, 0x8a, 0xdf, 0xc9, 0xab, 0x24, 0xfa, 0xcd, 0xa2, 0x59, 0x38, 0xe9, 0xb8, 0xcd, 0x92, 0x89,
+	0xee, 0x65, 0xf3, 0x2a, 0x48, 0x15, 0xbc, 0x3a, 0x8d, 0xb6, 0xef, 0x1a, 0xce, 0x23, 0xcd, 0x52,
+	0xeb, 0x48, 0xf4, 0x7f, 0x96, 0xad, 0x8c, 0x77, 0x23, 0xbc, 0x1d, 0xea, 0xb6, 0x0c, 0xe7, 0xea,
+	0xb8, 0x75, 0xe8, 0x76, 0x2f, 0xd5, 0x5b, 0x8b, 0xcd, 0x7c, 0x31, 0x08, 0x27, 0x79, 0x3b, 0xfa,
+	0x21, 0x81, 0x7e, 0xcf, 0xee, 0x51, 0xf1, 0x6b, 0xd1, 0xe9, 0x2d, 0x53, 0x13, 0xf1, 0x81, 0x1e,
+	0x58, 0xe9, 0xda, 0x47, 0xbf, 0xfc, 0xf5, 0x79, 0xe2, 0x2a, 0xbd, 0xac, 0x84, 0xdb, 0x58, 0xfa,
+	0x25, 0x81, 0x33, 0x41, 0xbf, 0x47, 0xa7, 0xc2, 0xeb, 0x0b, 0xcc, 0x67, 0x4a, 0x3e, 0x6c, 0x38,
+	0x82, 0x9a, 0xe4, 0xa0, 0xae, 0x53, 0x49, 0x08, 0xaa, 0xc5, 0x61, 0xd2, 0xaf, 0x08, 0x0c, 0x04,
+	0x8a, 0xd0, 0x9b, 0x87, 0xea, 0xe5, 0x23, 0x9b, 0x3a, 0x64, 0x34, 0x02, 0xbb, 0xcd, 0x81, 0xc9,
+	0xf4, 0x66, 0x3c, 0x30, 0x65, 0x1b, 0x3d, 0xe5, 0x0e, 0xfd, 0x89, 0xc0, 0x45, 0xb1, 0x39, 0xa3,
+	0xb3, 0x11, 0x07, 0x15, 0xe5, 0x06, 0x53, 0x77, 0x8e, 0x9e, 0x88, 0x1c, 0x16, 0x39, 0x87, 0x79,
+	0x7a, 0x47, 0x7c, 0xe2, 0xee, 0x98, 0x29, 0xdb, 0xf8, 0x5a, 0xee, 0x28, 0xac, 0x59, 0x68, 0xc3,
+	0x9f, 0xe1, 0xe7, 0x04, 0x52, 0xe1, 0x66, 0x8d, 0x2e, 0x84, 0x43, 0x8b, 0x75, 0x8b, 0xa9, 0x57,
+	0xbb, 0x4b, 0x46, 0x6e, 0x6f, 0x71, 0x6e, 0x19, 0xba, 0x28, 0xe4, 0xe6, 0x3f, 0x78, 0xb6, 0xb2,
+	0x1d, 0x78, 0x0e, 0xc5, 0x1c, 0x7f, 0x23, 0x30, 0x1c, 0xea, 0xe7, 0xe8, 0x7c, 0x38, 0xca, 0x38,
+	0x33, 0x99, 0x5a, 0xe8, 0x2a, 0x17, 0x09, 0xae, 0x72, 0x82, 0x8b, 0xf4, 0x35, 0x21, 0x41, 0x7c,
+	0xc8, 0x6c, 0x65, 0xbb, 0xf9, 0xc8, 0x89, 0xe9, 0xfd, 0x40, 0x80, 0x76, 0x7a, 0x3e, 0x7a, 0x2b,
+	0x5e, 0xfd, 0x0e, 0x93, 0x99, 0xba, 0x7d, 0xb4, 0x24, 0x64, 0xf2, 0x3a, 0x67, 0x32, 0x47, 0x67,
+	0x8f, 0x74, 0x54, 0x4d, 0x03, 0x49, 0x7f, 0x27, 0x70, 0x41, 0x68, 0xdb, 0xe8, 0x2b, 0xd1, 0xb3,
+	0x11, 0xe6, 0x31, 0x52, 0xb3, 0x47, 0xce, 0x43, 0x2e, 0x79, 0xce, 0xe5, 0x3e, 0x7d, 0x5b, 0xc8,
+	0xa5, 0xf1, 0x92, 0xd8, 0xca, 0x76, 0xc7, 0x43, 0xb4, 0xd3, 0x88, 0x6c, 0x9b, 0x3c, 0xfa, 0x2f,
+	0x81, 0xe1, 0x50, 0x3f, 0x16, 0x75, 0x03, 0xe3, 0x5c, 0x65, 0x6a, 0xa1, 0xab, 0x5c, 0xe4, 0xfa,
+	0x01, 0xe7, 0xfa, 0x90, 0xe6, 0x8f, 0xc3, 0x35, 0xe4, 0x78, 0xe9, 0x3f, 0x04, 0x92, 0x61, 0xde,
+	0x8b, 0xce, 0xc5, 0x0e, 0x4e, 0x28, 0xe3, 0xf9, 0x6e, 0x52, 0x91, 0xf0, 0x7b, 0x9c, 0x70, 0x9e,
+	0x3e, 0x38, 0x0e, 0x61, 0xe1, 0x64, 0xd2, 0x3d, 0x02, 0x17, 0xc5, 0x26, 0x2c, 0xea, 0x61, 0x88,
+	0x34, 0x89, 0x51, 0x0f, 0x43, 0xb4, 0xdf, 0x93, 0x96, 0x39, 0xd1, 0xbb, 0x74, 0xe1, 0x18, 0x44,
+	0xe9, 0x33, 0x02, 0xc9, 0x30, 0x87, 0x14, 0x75, 0x82, 0x31, 0x26, 0x2e, 0xea, 0x04, 0xe3, 0x0c,
+	0x99, 0x74, 0x8f, 0x13, 0x5b, 0xa5, 0x2b, 0xdd, 0x10, 0x6b, 0xb7, 0x72, 0x99, 0xb5, 0xdd, 0xe7,
+	0xe9, 0xbe, 0xdd, 0xfd, 0x34, 0xd9, 0xdb, 0x4f, 0x93, 0x3f, 0xf7, 0xd3, 0xe4, 0xb3, 0x83, 0x74,
+	0xdf, 0xde, 0x41, 0xba, 0xef, 0xd7, 0x83, 0x74, 0xdf, 0xfb, 0xd3, 0x25, 0xc3, 0x79, 0x54, 0x2b,
+	0xc8, 0x45, 0x56, 0x69, 0x74, 0x9b, 0x2a, 0xab, 0x05, 0xbb, 0xd9, 0xfb, 0x69, 0xa3, 0xbb, 0xb3,
+	0x55, 0xd5, 0xed, 0x42, 0x3f, 0xff, 0x2f, 0xe1, 0xad, 0xff, 0x02, 0x00, 0x00, 0xff, 0xff, 0x8b,
+	0x75, 0x4b, 0xf7, 0x4f, 0x15, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -149,6 +1120,26 @@ type QueryClient interface {
 	// Params defines a gRPC query method that returns the parameters of the
 	// module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
+	RewardsPlans(ctx context.Context, in *QueryRewardsPlansRequest, opts ...grpc.CallOption) (*QueryRewardsPlansResponse, error)
+	RewardsPlan(ctx context.Context, in *QueryRewardsPlanRequest, opts ...grpc.CallOption) (*QueryRewardsPlanResponse, error)
+	PoolOutstandingRewards(ctx context.Context, in *QueryPoolOutstandingRewardsRequest, opts ...grpc.CallOption) (*QueryPoolOutstandingRewardsResponse, error)
+	OperatorOutstandingRewards(ctx context.Context, in *QueryOperatorOutstandingRewardsRequest, opts ...grpc.CallOption) (*QueryOperatorOutstandingRewardsResponse, error)
+	ServiceOutstandingRewards(ctx context.Context, in *QueryServiceOutstandingRewardsRequest, opts ...grpc.CallOption) (*QueryServiceOutstandingRewardsResponse, error)
+	OperatorCommission(ctx context.Context, in *QueryOperatorCommissionRequest, opts ...grpc.CallOption) (*QueryOperatorCommissionResponse, error)
+	// PoolDelegationRewards queries the total rewards accrued by a pool
+	// delegation.
+	PoolDelegationRewards(ctx context.Context, in *QueryPoolDelegationRewardsRequest, opts ...grpc.CallOption) (*QueryPoolDelegationRewardsResponse, error)
+	// OperatorDelegationRewards queries the total rewards accrued by a operator
+	// delegation.
+	OperatorDelegationRewards(ctx context.Context, in *QueryOperatorDelegationRewardsRequest, opts ...grpc.CallOption) (*QueryOperatorDelegationRewardsResponse, error)
+	// ServiceDelegationRewards queries the total rewards accrued by a service
+	// delegation.
+	ServiceDelegationRewards(ctx context.Context, in *QueryServiceDelegationRewardsRequest, opts ...grpc.CallOption) (*QueryServiceDelegationRewardsResponse, error)
+	// DelegationTotalRewards queries the total rewards accrued by each
+	// delegation target.
+	DelegationTotalRewards(ctx context.Context, in *QueryDelegationTotalRewardsRequest, opts ...grpc.CallOption) (*QueryDelegationTotalRewardsResponse, error)
+	// DelegatorWithdrawAddress queries withdraw address of a delegator.
+	DelegatorWithdrawAddress(ctx context.Context, in *QueryDelegatorWithdrawAddressRequest, opts ...grpc.CallOption) (*QueryDelegatorWithdrawAddressResponse, error)
 }
 
 type queryClient struct {
@@ -168,11 +1159,130 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 	return out, nil
 }
 
+func (c *queryClient) RewardsPlans(ctx context.Context, in *QueryRewardsPlansRequest, opts ...grpc.CallOption) (*QueryRewardsPlansResponse, error) {
+	out := new(QueryRewardsPlansResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.rewards.v1.Query/RewardsPlans", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) RewardsPlan(ctx context.Context, in *QueryRewardsPlanRequest, opts ...grpc.CallOption) (*QueryRewardsPlanResponse, error) {
+	out := new(QueryRewardsPlanResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.rewards.v1.Query/RewardsPlan", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) PoolOutstandingRewards(ctx context.Context, in *QueryPoolOutstandingRewardsRequest, opts ...grpc.CallOption) (*QueryPoolOutstandingRewardsResponse, error) {
+	out := new(QueryPoolOutstandingRewardsResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.rewards.v1.Query/PoolOutstandingRewards", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) OperatorOutstandingRewards(ctx context.Context, in *QueryOperatorOutstandingRewardsRequest, opts ...grpc.CallOption) (*QueryOperatorOutstandingRewardsResponse, error) {
+	out := new(QueryOperatorOutstandingRewardsResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.rewards.v1.Query/OperatorOutstandingRewards", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) ServiceOutstandingRewards(ctx context.Context, in *QueryServiceOutstandingRewardsRequest, opts ...grpc.CallOption) (*QueryServiceOutstandingRewardsResponse, error) {
+	out := new(QueryServiceOutstandingRewardsResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.rewards.v1.Query/ServiceOutstandingRewards", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) OperatorCommission(ctx context.Context, in *QueryOperatorCommissionRequest, opts ...grpc.CallOption) (*QueryOperatorCommissionResponse, error) {
+	out := new(QueryOperatorCommissionResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.rewards.v1.Query/OperatorCommission", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) PoolDelegationRewards(ctx context.Context, in *QueryPoolDelegationRewardsRequest, opts ...grpc.CallOption) (*QueryPoolDelegationRewardsResponse, error) {
+	out := new(QueryPoolDelegationRewardsResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.rewards.v1.Query/PoolDelegationRewards", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) OperatorDelegationRewards(ctx context.Context, in *QueryOperatorDelegationRewardsRequest, opts ...grpc.CallOption) (*QueryOperatorDelegationRewardsResponse, error) {
+	out := new(QueryOperatorDelegationRewardsResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.rewards.v1.Query/OperatorDelegationRewards", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) ServiceDelegationRewards(ctx context.Context, in *QueryServiceDelegationRewardsRequest, opts ...grpc.CallOption) (*QueryServiceDelegationRewardsResponse, error) {
+	out := new(QueryServiceDelegationRewardsResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.rewards.v1.Query/ServiceDelegationRewards", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) DelegationTotalRewards(ctx context.Context, in *QueryDelegationTotalRewardsRequest, opts ...grpc.CallOption) (*QueryDelegationTotalRewardsResponse, error) {
+	out := new(QueryDelegationTotalRewardsResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.rewards.v1.Query/DelegationTotalRewards", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) DelegatorWithdrawAddress(ctx context.Context, in *QueryDelegatorWithdrawAddressRequest, opts ...grpc.CallOption) (*QueryDelegatorWithdrawAddressResponse, error) {
+	out := new(QueryDelegatorWithdrawAddressResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.rewards.v1.Query/DelegatorWithdrawAddress", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 type QueryServer interface {
 	// Params defines a gRPC query method that returns the parameters of the
 	// module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
+	RewardsPlans(context.Context, *QueryRewardsPlansRequest) (*QueryRewardsPlansResponse, error)
+	RewardsPlan(context.Context, *QueryRewardsPlanRequest) (*QueryRewardsPlanResponse, error)
+	PoolOutstandingRewards(context.Context, *QueryPoolOutstandingRewardsRequest) (*QueryPoolOutstandingRewardsResponse, error)
+	OperatorOutstandingRewards(context.Context, *QueryOperatorOutstandingRewardsRequest) (*QueryOperatorOutstandingRewardsResponse, error)
+	ServiceOutstandingRewards(context.Context, *QueryServiceOutstandingRewardsRequest) (*QueryServiceOutstandingRewardsResponse, error)
+	OperatorCommission(context.Context, *QueryOperatorCommissionRequest) (*QueryOperatorCommissionResponse, error)
+	// PoolDelegationRewards queries the total rewards accrued by a pool
+	// delegation.
+	PoolDelegationRewards(context.Context, *QueryPoolDelegationRewardsRequest) (*QueryPoolDelegationRewardsResponse, error)
+	// OperatorDelegationRewards queries the total rewards accrued by a operator
+	// delegation.
+	OperatorDelegationRewards(context.Context, *QueryOperatorDelegationRewardsRequest) (*QueryOperatorDelegationRewardsResponse, error)
+	// ServiceDelegationRewards queries the total rewards accrued by a service
+	// delegation.
+	ServiceDelegationRewards(context.Context, *QueryServiceDelegationRewardsRequest) (*QueryServiceDelegationRewardsResponse, error)
+	// DelegationTotalRewards queries the total rewards accrued by each
+	// delegation target.
+	DelegationTotalRewards(context.Context, *QueryDelegationTotalRewardsRequest) (*QueryDelegationTotalRewardsResponse, error)
+	// DelegatorWithdrawAddress queries withdraw address of a delegator.
+	DelegatorWithdrawAddress(context.Context, *QueryDelegatorWithdrawAddressRequest) (*QueryDelegatorWithdrawAddressResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -181,6 +1291,39 @@ type UnimplementedQueryServer struct {
 
 func (*UnimplementedQueryServer) Params(ctx context.Context, req *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
+}
+func (*UnimplementedQueryServer) RewardsPlans(ctx context.Context, req *QueryRewardsPlansRequest) (*QueryRewardsPlansResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RewardsPlans not implemented")
+}
+func (*UnimplementedQueryServer) RewardsPlan(ctx context.Context, req *QueryRewardsPlanRequest) (*QueryRewardsPlanResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RewardsPlan not implemented")
+}
+func (*UnimplementedQueryServer) PoolOutstandingRewards(ctx context.Context, req *QueryPoolOutstandingRewardsRequest) (*QueryPoolOutstandingRewardsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PoolOutstandingRewards not implemented")
+}
+func (*UnimplementedQueryServer) OperatorOutstandingRewards(ctx context.Context, req *QueryOperatorOutstandingRewardsRequest) (*QueryOperatorOutstandingRewardsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OperatorOutstandingRewards not implemented")
+}
+func (*UnimplementedQueryServer) ServiceOutstandingRewards(ctx context.Context, req *QueryServiceOutstandingRewardsRequest) (*QueryServiceOutstandingRewardsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ServiceOutstandingRewards not implemented")
+}
+func (*UnimplementedQueryServer) OperatorCommission(ctx context.Context, req *QueryOperatorCommissionRequest) (*QueryOperatorCommissionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OperatorCommission not implemented")
+}
+func (*UnimplementedQueryServer) PoolDelegationRewards(ctx context.Context, req *QueryPoolDelegationRewardsRequest) (*QueryPoolDelegationRewardsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PoolDelegationRewards not implemented")
+}
+func (*UnimplementedQueryServer) OperatorDelegationRewards(ctx context.Context, req *QueryOperatorDelegationRewardsRequest) (*QueryOperatorDelegationRewardsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OperatorDelegationRewards not implemented")
+}
+func (*UnimplementedQueryServer) ServiceDelegationRewards(ctx context.Context, req *QueryServiceDelegationRewardsRequest) (*QueryServiceDelegationRewardsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ServiceDelegationRewards not implemented")
+}
+func (*UnimplementedQueryServer) DelegationTotalRewards(ctx context.Context, req *QueryDelegationTotalRewardsRequest) (*QueryDelegationTotalRewardsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelegationTotalRewards not implemented")
+}
+func (*UnimplementedQueryServer) DelegatorWithdrawAddress(ctx context.Context, req *QueryDelegatorWithdrawAddressRequest) (*QueryDelegatorWithdrawAddressResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelegatorWithdrawAddress not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -205,6 +1348,204 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_RewardsPlans_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryRewardsPlansRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).RewardsPlans(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/milkyway.rewards.v1.Query/RewardsPlans",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).RewardsPlans(ctx, req.(*QueryRewardsPlansRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_RewardsPlan_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryRewardsPlanRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).RewardsPlan(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/milkyway.rewards.v1.Query/RewardsPlan",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).RewardsPlan(ctx, req.(*QueryRewardsPlanRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_PoolOutstandingRewards_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryPoolOutstandingRewardsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).PoolOutstandingRewards(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/milkyway.rewards.v1.Query/PoolOutstandingRewards",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).PoolOutstandingRewards(ctx, req.(*QueryPoolOutstandingRewardsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_OperatorOutstandingRewards_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryOperatorOutstandingRewardsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).OperatorOutstandingRewards(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/milkyway.rewards.v1.Query/OperatorOutstandingRewards",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).OperatorOutstandingRewards(ctx, req.(*QueryOperatorOutstandingRewardsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_ServiceOutstandingRewards_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryServiceOutstandingRewardsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ServiceOutstandingRewards(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/milkyway.rewards.v1.Query/ServiceOutstandingRewards",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ServiceOutstandingRewards(ctx, req.(*QueryServiceOutstandingRewardsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_OperatorCommission_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryOperatorCommissionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).OperatorCommission(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/milkyway.rewards.v1.Query/OperatorCommission",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).OperatorCommission(ctx, req.(*QueryOperatorCommissionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_PoolDelegationRewards_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryPoolDelegationRewardsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).PoolDelegationRewards(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/milkyway.rewards.v1.Query/PoolDelegationRewards",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).PoolDelegationRewards(ctx, req.(*QueryPoolDelegationRewardsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_OperatorDelegationRewards_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryOperatorDelegationRewardsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).OperatorDelegationRewards(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/milkyway.rewards.v1.Query/OperatorDelegationRewards",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).OperatorDelegationRewards(ctx, req.(*QueryOperatorDelegationRewardsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_ServiceDelegationRewards_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryServiceDelegationRewardsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ServiceDelegationRewards(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/milkyway.rewards.v1.Query/ServiceDelegationRewards",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ServiceDelegationRewards(ctx, req.(*QueryServiceDelegationRewardsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_DelegationTotalRewards_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryDelegationTotalRewardsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).DelegationTotalRewards(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/milkyway.rewards.v1.Query/DelegationTotalRewards",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).DelegationTotalRewards(ctx, req.(*QueryDelegationTotalRewardsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_DelegatorWithdrawAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryDelegatorWithdrawAddressRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).DelegatorWithdrawAddress(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/milkyway.rewards.v1.Query/DelegatorWithdrawAddress",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).DelegatorWithdrawAddress(ctx, req.(*QueryDelegatorWithdrawAddressRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Query_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "milkyway.rewards.v1.Query",
 	HandlerType: (*QueryServer)(nil),
@@ -212,6 +1553,50 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Params",
 			Handler:    _Query_Params_Handler,
+		},
+		{
+			MethodName: "RewardsPlans",
+			Handler:    _Query_RewardsPlans_Handler,
+		},
+		{
+			MethodName: "RewardsPlan",
+			Handler:    _Query_RewardsPlan_Handler,
+		},
+		{
+			MethodName: "PoolOutstandingRewards",
+			Handler:    _Query_PoolOutstandingRewards_Handler,
+		},
+		{
+			MethodName: "OperatorOutstandingRewards",
+			Handler:    _Query_OperatorOutstandingRewards_Handler,
+		},
+		{
+			MethodName: "ServiceOutstandingRewards",
+			Handler:    _Query_ServiceOutstandingRewards_Handler,
+		},
+		{
+			MethodName: "OperatorCommission",
+			Handler:    _Query_OperatorCommission_Handler,
+		},
+		{
+			MethodName: "PoolDelegationRewards",
+			Handler:    _Query_PoolDelegationRewards_Handler,
+		},
+		{
+			MethodName: "OperatorDelegationRewards",
+			Handler:    _Query_OperatorDelegationRewards_Handler,
+		},
+		{
+			MethodName: "ServiceDelegationRewards",
+			Handler:    _Query_ServiceDelegationRewards_Handler,
+		},
+		{
+			MethodName: "DelegationTotalRewards",
+			Handler:    _Query_DelegationTotalRewards_Handler,
+		},
+		{
+			MethodName: "DelegatorWithdrawAddress",
+			Handler:    _Query_DelegatorWithdrawAddress_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -274,6 +1659,752 @@ func (m *QueryParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *QueryRewardsPlansRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryRewardsPlansRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryRewardsPlansRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryRewardsPlansResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryRewardsPlansResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryRewardsPlansResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.RewardsPlans) > 0 {
+		for iNdEx := len(m.RewardsPlans) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.RewardsPlans[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryRewardsPlanRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryRewardsPlanRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryRewardsPlanRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.PlanId != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.PlanId))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryRewardsPlanResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryRewardsPlanResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryRewardsPlanResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.RewardsPlan.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintQuery(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x12
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryPoolOutstandingRewardsRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryPoolOutstandingRewardsRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryPoolOutstandingRewardsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.PoolId != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.PoolId))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryPoolOutstandingRewardsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryPoolOutstandingRewardsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryPoolOutstandingRewardsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.Rewards.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintQuery(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryOperatorOutstandingRewardsRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryOperatorOutstandingRewardsRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryOperatorOutstandingRewardsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.OperatorId != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.OperatorId))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryOperatorOutstandingRewardsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryOperatorOutstandingRewardsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryOperatorOutstandingRewardsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.Rewards.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintQuery(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryServiceOutstandingRewardsRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryServiceOutstandingRewardsRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryServiceOutstandingRewardsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ServiceId != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.ServiceId))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryServiceOutstandingRewardsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryServiceOutstandingRewardsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryServiceOutstandingRewardsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.Rewards.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintQuery(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryOperatorCommissionRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryOperatorCommissionRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryOperatorCommissionRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.OperatorId != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.OperatorId))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryOperatorCommissionResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryOperatorCommissionResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryOperatorCommissionResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.Commission.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintQuery(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryPoolDelegationRewardsRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryPoolDelegationRewardsRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryPoolDelegationRewardsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.PoolId != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.PoolId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.DelegatorAddress) > 0 {
+		i -= len(m.DelegatorAddress)
+		copy(dAtA[i:], m.DelegatorAddress)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.DelegatorAddress)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryPoolDelegationRewardsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryPoolDelegationRewardsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryPoolDelegationRewardsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Rewards) > 0 {
+		for iNdEx := len(m.Rewards) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Rewards[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryOperatorDelegationRewardsRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryOperatorDelegationRewardsRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryOperatorDelegationRewardsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.OperatorId != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.OperatorId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.DelegatorAddress) > 0 {
+		i -= len(m.DelegatorAddress)
+		copy(dAtA[i:], m.DelegatorAddress)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.DelegatorAddress)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryOperatorDelegationRewardsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryOperatorDelegationRewardsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryOperatorDelegationRewardsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Rewards) > 0 {
+		for iNdEx := len(m.Rewards) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Rewards[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryServiceDelegationRewardsRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryServiceDelegationRewardsRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryServiceDelegationRewardsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ServiceId != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.ServiceId))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.DelegatorAddress) > 0 {
+		i -= len(m.DelegatorAddress)
+		copy(dAtA[i:], m.DelegatorAddress)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.DelegatorAddress)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryServiceDelegationRewardsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryServiceDelegationRewardsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryServiceDelegationRewardsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Rewards) > 0 {
+		for iNdEx := len(m.Rewards) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Rewards[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryDelegationTotalRewardsRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryDelegationTotalRewardsRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryDelegationTotalRewardsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.DelegatorAddress) > 0 {
+		i -= len(m.DelegatorAddress)
+		copy(dAtA[i:], m.DelegatorAddress)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.DelegatorAddress)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryDelegationTotalRewardsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryDelegationTotalRewardsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryDelegationTotalRewardsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Total) > 0 {
+		for iNdEx := len(m.Total) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Total[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.Rewards) > 0 {
+		for iNdEx := len(m.Rewards) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Rewards[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryDelegatorWithdrawAddressRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryDelegatorWithdrawAddressRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryDelegatorWithdrawAddressRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.DelegatorAddress) > 0 {
+		i -= len(m.DelegatorAddress)
+		copy(dAtA[i:], m.DelegatorAddress)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.DelegatorAddress)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryDelegatorWithdrawAddressResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryDelegatorWithdrawAddressResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryDelegatorWithdrawAddressResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.WithdrawAddress) > 0 {
+		i -= len(m.WithdrawAddress)
+		copy(dAtA[i:], m.WithdrawAddress)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.WithdrawAddress)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
 	offset -= sovQuery(v)
 	base := offset
@@ -302,6 +2433,306 @@ func (m *QueryParamsResponse) Size() (n int) {
 	_ = l
 	l = m.Params.Size()
 	n += 1 + l + sovQuery(uint64(l))
+	return n
+}
+
+func (m *QueryRewardsPlansRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryRewardsPlansResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.RewardsPlans) > 0 {
+		for _, e := range m.RewardsPlans {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryRewardsPlanRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.PlanId != 0 {
+		n += 1 + sovQuery(uint64(m.PlanId))
+	}
+	return n
+}
+
+func (m *QueryRewardsPlanResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.RewardsPlan.Size()
+	n += 1 + l + sovQuery(uint64(l))
+	return n
+}
+
+func (m *QueryPoolOutstandingRewardsRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.PoolId != 0 {
+		n += 1 + sovQuery(uint64(m.PoolId))
+	}
+	return n
+}
+
+func (m *QueryPoolOutstandingRewardsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.Rewards.Size()
+	n += 1 + l + sovQuery(uint64(l))
+	return n
+}
+
+func (m *QueryOperatorOutstandingRewardsRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.OperatorId != 0 {
+		n += 1 + sovQuery(uint64(m.OperatorId))
+	}
+	return n
+}
+
+func (m *QueryOperatorOutstandingRewardsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.Rewards.Size()
+	n += 1 + l + sovQuery(uint64(l))
+	return n
+}
+
+func (m *QueryServiceOutstandingRewardsRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ServiceId != 0 {
+		n += 1 + sovQuery(uint64(m.ServiceId))
+	}
+	return n
+}
+
+func (m *QueryServiceOutstandingRewardsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.Rewards.Size()
+	n += 1 + l + sovQuery(uint64(l))
+	return n
+}
+
+func (m *QueryOperatorCommissionRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.OperatorId != 0 {
+		n += 1 + sovQuery(uint64(m.OperatorId))
+	}
+	return n
+}
+
+func (m *QueryOperatorCommissionResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.Commission.Size()
+	n += 1 + l + sovQuery(uint64(l))
+	return n
+}
+
+func (m *QueryPoolDelegationRewardsRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.DelegatorAddress)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	if m.PoolId != 0 {
+		n += 1 + sovQuery(uint64(m.PoolId))
+	}
+	return n
+}
+
+func (m *QueryPoolDelegationRewardsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Rewards) > 0 {
+		for _, e := range m.Rewards {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *QueryOperatorDelegationRewardsRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.DelegatorAddress)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	if m.OperatorId != 0 {
+		n += 1 + sovQuery(uint64(m.OperatorId))
+	}
+	return n
+}
+
+func (m *QueryOperatorDelegationRewardsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Rewards) > 0 {
+		for _, e := range m.Rewards {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *QueryServiceDelegationRewardsRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.DelegatorAddress)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	if m.ServiceId != 0 {
+		n += 1 + sovQuery(uint64(m.ServiceId))
+	}
+	return n
+}
+
+func (m *QueryServiceDelegationRewardsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Rewards) > 0 {
+		for _, e := range m.Rewards {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *QueryDelegationTotalRewardsRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.DelegatorAddress)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryDelegationTotalRewardsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Rewards) > 0 {
+		for _, e := range m.Rewards {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
+	if len(m.Total) > 0 {
+		for _, e := range m.Total {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *QueryDelegatorWithdrawAddressRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.DelegatorAddress)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryDelegatorWithdrawAddressResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.WithdrawAddress)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
 	return n
 }
 
@@ -422,6 +2853,1891 @@ func (m *QueryParamsResponse) Unmarshal(dAtA []byte) error {
 			if err := m.Params.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryRewardsPlansRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryRewardsPlansRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryRewardsPlansRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageRequest{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryRewardsPlansResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryRewardsPlansResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryRewardsPlansResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RewardsPlans", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RewardsPlans = append(m.RewardsPlans, RewardsPlan{})
+			if err := m.RewardsPlans[len(m.RewardsPlans)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageResponse{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryRewardsPlanRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryRewardsPlanRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryRewardsPlanRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PlanId", wireType)
+			}
+			m.PlanId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.PlanId |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryRewardsPlanResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryRewardsPlanResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryRewardsPlanResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RewardsPlan", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.RewardsPlan.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryPoolOutstandingRewardsRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryPoolOutstandingRewardsRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryPoolOutstandingRewardsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
+			}
+			m.PoolId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.PoolId |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryPoolOutstandingRewardsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryPoolOutstandingRewardsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryPoolOutstandingRewardsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Rewards", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Rewards.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryOperatorOutstandingRewardsRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryOperatorOutstandingRewardsRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryOperatorOutstandingRewardsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OperatorId", wireType)
+			}
+			m.OperatorId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.OperatorId |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryOperatorOutstandingRewardsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryOperatorOutstandingRewardsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryOperatorOutstandingRewardsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Rewards", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Rewards.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryServiceOutstandingRewardsRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryServiceOutstandingRewardsRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryServiceOutstandingRewardsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServiceId", wireType)
+			}
+			m.ServiceId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ServiceId |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryServiceOutstandingRewardsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryServiceOutstandingRewardsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryServiceOutstandingRewardsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Rewards", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Rewards.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryOperatorCommissionRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryOperatorCommissionRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryOperatorCommissionRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OperatorId", wireType)
+			}
+			m.OperatorId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.OperatorId |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryOperatorCommissionResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryOperatorCommissionResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryOperatorCommissionResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Commission", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Commission.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryPoolDelegationRewardsRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryPoolDelegationRewardsRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryPoolDelegationRewardsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DelegatorAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DelegatorAddress = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
+			}
+			m.PoolId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.PoolId |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryPoolDelegationRewardsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryPoolDelegationRewardsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryPoolDelegationRewardsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Rewards", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Rewards = append(m.Rewards, DecPool{})
+			if err := m.Rewards[len(m.Rewards)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryOperatorDelegationRewardsRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryOperatorDelegationRewardsRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryOperatorDelegationRewardsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DelegatorAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DelegatorAddress = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OperatorId", wireType)
+			}
+			m.OperatorId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.OperatorId |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryOperatorDelegationRewardsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryOperatorDelegationRewardsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryOperatorDelegationRewardsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Rewards", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Rewards = append(m.Rewards, DecPool{})
+			if err := m.Rewards[len(m.Rewards)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryServiceDelegationRewardsRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryServiceDelegationRewardsRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryServiceDelegationRewardsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DelegatorAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DelegatorAddress = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServiceId", wireType)
+			}
+			m.ServiceId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ServiceId |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryServiceDelegationRewardsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryServiceDelegationRewardsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryServiceDelegationRewardsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Rewards", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Rewards = append(m.Rewards, DecPool{})
+			if err := m.Rewards[len(m.Rewards)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryDelegationTotalRewardsRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryDelegationTotalRewardsRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryDelegationTotalRewardsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DelegatorAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DelegatorAddress = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryDelegationTotalRewardsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryDelegationTotalRewardsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryDelegationTotalRewardsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Rewards", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Rewards = append(m.Rewards, DelegationDelegatorReward{})
+			if err := m.Rewards[len(m.Rewards)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Total", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Total = append(m.Total, DecPool{})
+			if err := m.Total[len(m.Total)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryDelegatorWithdrawAddressRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryDelegatorWithdrawAddressRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryDelegatorWithdrawAddressRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DelegatorAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DelegatorAddress = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryDelegatorWithdrawAddressResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryDelegatorWithdrawAddressResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryDelegatorWithdrawAddressResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WithdrawAddress", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.WithdrawAddress = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

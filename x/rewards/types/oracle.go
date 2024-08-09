@@ -1,3 +1,3 @@
 package types
 
-const USDQuote = "USD"
+const USDTicker = "USD"

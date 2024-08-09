@@ -2,11 +2,13 @@ package keeper
 
 import (
 	"context"
-	"errors"
 	"time"
 
 	"cosmossdk.io/collections"
+	"cosmossdk.io/errors"
+	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	gogotypes "github.com/cosmos/gogoproto/types"
 
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
@@ -16,7 +18,7 @@ import (
 func (k *Keeper) GetLastRewardsAllocationTime(ctx context.Context) (*time.Time, error) {
 	ts, err := k.LastRewardsAllocationTime.Get(ctx)
 	if err != nil {
-		if errors.Is(err, collections.ErrNotFound) {
+		if errors.IsOf(err, collections.ErrNotFound) {
 			return nil, nil
 		}
 		return nil, err
@@ -34,6 +36,10 @@ func (k *Keeper) SetLastRewardsAllocationTime(ctx context.Context, t time.Time) 
 		return err
 	}
 	return k.LastRewardsAllocationTime.Set(ctx, *ts)
+}
+
+func (k *Keeper) GetRewardsPlan(ctx context.Context, planID uint64) (types.RewardsPlan, error) {
+	return k.RewardsPlans.Get(ctx, planID)
 }
 
 func (k *Keeper) SetDelegatorStartingInfo(
@@ -220,7 +226,7 @@ func (k *Keeper) GetOutstandingRewardsCoins(ctx context.Context, target *types.D
 	default:
 		panic("unknown delegation type")
 	}
-	if err != nil && !errors.Is(err, collections.ErrNotFound) {
+	if err != nil && !errors.IsOf(err, collections.ErrNotFound) {
 		return nil, err
 	}
 	return rewards.Rewards, nil
@@ -230,7 +236,7 @@ func (k *Keeper) GetOutstandingRewardsCoins(ctx context.Context, target *types.D
 func (k *Keeper) GetOperatorAccumulatedCommission(ctx context.Context, operatorID uint32) (commission types.AccumulatedCommission, err error) {
 	commission, err = k.OperatorAccumulatedCommissions.Get(ctx, operatorID)
 	if err != nil {
-		if errors.Is(err, collections.ErrNotFound) {
+		if errors.IsOf(err, collections.ErrNotFound) {
 			return types.AccumulatedCommission{}, nil
 		}
 		return types.AccumulatedCommission{}, err
@@ -241,8 +247,56 @@ func (k *Keeper) GetOperatorAccumulatedCommission(ctx context.Context, operatorI
 // get the delegator withdraw address, defaulting to the delegator address
 func (k *Keeper) GetDelegatorWithdrawAddr(ctx context.Context, delAddr sdk.AccAddress) (sdk.AccAddress, error) {
 	addr, err := k.DelegatorWithdrawAddrs.Get(ctx, delAddr)
-	if err != nil && errors.Is(err, collections.ErrNotFound) {
+	if err != nil && errors.IsOf(err, collections.ErrNotFound) {
 		return delAddr, nil
 	}
 	return addr, err
+}
+
+func (k *Keeper) DelegationRewards(
+	ctx context.Context, delAddr sdk.AccAddress, delType restakingtypes.DelegationType, targetID uint32,
+) (types.DecPools, error) {
+	target, err := k.GetDelegationTarget(ctx, delType, targetID)
+	if err != nil {
+		return nil, err
+	}
+
+	del, found := k.GetDelegation(ctx, target, delAddr)
+	if !found {
+		return nil, errors.Wrap(sdkerrors.ErrNotFound, "delegation not found")
+	}
+
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	cacheCtx, _ := sdkCtx.CacheContext()
+	endingPeriod, err := k.IncrementDelegationTargetPeriod(cacheCtx, target)
+	if err != nil {
+		return nil, err
+	}
+
+	rewards, err := k.CalculateDelegationRewards(cacheCtx, target, del, endingPeriod)
+	if err != nil {
+		return nil, err
+	}
+
+	return rewards, nil
+}
+
+func (k *Keeper) PoolDelegationRewards(ctx context.Context, delAddr sdk.AccAddress, poolID uint32) (types.DecPools, error) {
+	return k.DelegationRewards(ctx, delAddr, restakingtypes.DELEGATION_TYPE_POOL, poolID)
+}
+
+func (k *Keeper) OperatorDelegationRewards(ctx context.Context, delAddr sdk.AccAddress, operatorID uint32) (types.DecPools, error) {
+	return k.DelegationRewards(ctx, delAddr, restakingtypes.DELEGATION_TYPE_OPERATOR, operatorID)
+}
+
+func (k *Keeper) ServiceDelegationRewards(ctx context.Context, delAddr sdk.AccAddress, serviceID uint32) (types.DecPools, error) {
+	return k.DelegationRewards(ctx, delAddr, restakingtypes.DELEGATION_TYPE_SERVICE, serviceID)
+}
+
+// createAccountIfNotExists creates an account if it does not exist
+func (k *Keeper) createAccountIfNotExists(ctx context.Context, address sdk.AccAddress) {
+	if !k.accountKeeper.HasAccount(ctx, address) {
+		defer telemetry.IncrCounter(1, "new", "account")
+		k.accountKeeper.SetAccount(ctx, k.accountKeeper.NewAccountWithAddress(ctx, address))
+	}
 }

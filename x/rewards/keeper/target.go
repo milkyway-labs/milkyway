@@ -28,13 +28,13 @@ func (k *Keeper) GetDelegationTarget(
 	case restakingtypes.DELEGATION_TYPE_OPERATOR:
 		operator, found := k.operatorsKeeper.GetOperator(sdkCtx, targetID)
 		if !found {
-			return nil, operatorstypes.ErrOperatorNotActive
+			return nil, operatorstypes.ErrOperatorNotFound
 		}
 		return types.NewDelegationTarget(&operator), nil
 	case restakingtypes.DELEGATION_TYPE_SERVICE:
 		service, found := k.servicesKeeper.GetService(sdkCtx, targetID)
 		if !found {
-			return nil, servicestypes.ErrServiceNotActive
+			return nil, servicestypes.ErrServiceNotFound
 		}
 		return types.NewDelegationTarget(&service), nil
 	default:

@@ -5,17 +5,15 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"cosmossdk.io/core/appmodule"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	"github.com/spf13/cobra"
 
+	"cosmossdk.io/core/appmodule"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milkyway/x/rewards/client/cli"
 	"github.com/milkyway-labs/milkyway/x/rewards/keeper"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 )
@@ -33,7 +31,7 @@ var (
 // AppModuleBasic
 // ----------------------------------------------------------------------------
 
-// AppModuleBasic implements the AppModuleBasic interface for the rewards module.
+// AppModuleBasic implements the AppModuleBasic interface for the module.
 type AppModuleBasic struct {
 	cdc codec.BinaryCodec
 }
@@ -76,16 +74,6 @@ func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *r
 	if err != nil {
 		panic(err)
 	}
-}
-
-// GetTxCmd returns the module's root tx command.
-func (a AppModuleBasic) GetTxCmd() *cobra.Command {
-	return cli.GetTxCmd()
-}
-
-// GetQueryCmd returns the module's root query command.
-func (AppModuleBasic) GetQueryCmd() *cobra.Command {
-	return cli.GetQueryCmd()
 }
 
 // ----------------------------------------------------------------------------

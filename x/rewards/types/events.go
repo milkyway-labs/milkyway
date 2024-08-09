@@ -10,11 +10,8 @@ const (
 	EventTypeWithdrawCommission = "withdraw_commission"
 
 	AttributeKeyWithdrawAddress    = "withdraw_address"
-	AttributeKeyPoolID             = "pool_id"
-	AttributeKeyOperatorID         = "operator_id"
 	AttributeKeyDelegationType     = "delegation_type"
 	AttributeKeyDelegationTargetID = "delegation_target_id"
-	AttributeKeyServiceID          = "service_id"
 	AttributeKeyDelegator          = "delegator"
 
 	AttributeKeyAmountPerPool = "amount_per_pool"

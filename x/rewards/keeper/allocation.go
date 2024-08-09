@@ -76,6 +76,8 @@ func (k *Keeper) AllocateRewardsByPlan(
 		sdkCtx.Logger().Info(
 			"Skipping rewards plan because its rewards pool has insufficient balances",
 			"plan_id", plan.ID,
+			"balances", balances.String(),
+			"rewards", rewards.String(),
 		)
 		return nil
 	}
@@ -106,11 +108,22 @@ func (k *Keeper) AllocateRewardsByPlan(
 
 	var poolsRewards, operatorsRewards, usersRewards sdk.DecCoins
 
-	totalWeights := plan.TotalWeights()
-	if totalWeights > 0 {
+	if plan.TotalWeights() > 0 {
+		// Only sum weights with non-zero delegation values.
+		totalWeightsNonZeroDelValues := uint32(0)
+		if totalPoolsDelValues.IsPositive() {
+			totalWeightsNonZeroDelValues += plan.PoolsDistribution.Weight
+		}
+		if totalOperatorsDelValues.IsPositive() {
+			totalWeightsNonZeroDelValues += plan.OperatorsDistribution.Weight
+		}
+		if totalUsersDelValues.IsPositive() {
+			totalWeightsNonZeroDelValues += plan.UsersDistribution.Weight
+		}
+		totalWeightsDec := math.LegacyNewDec(int64(totalWeightsNonZeroDelValues))
+
 		// If weights are specified, then split rewards by
 		// rewards * weight / totalWeights
-		totalWeightsDec := math.LegacyNewDec(int64(totalWeights))
 		poolsRewards = rewards.MulDecTruncate(math.LegacyNewDec(int64(plan.PoolsDistribution.Weight))).
 			QuoDecTruncate(totalWeightsDec)
 		operatorsRewards = rewards.MulDecTruncate(math.LegacyNewDec(int64(plan.OperatorsDistribution.Weight))).
@@ -398,7 +411,7 @@ func (k *Keeper) allocateRewardsToOperator(
 		if tokenValue.IsZero() {
 			continue
 		}
-		tokenRewards := rewards.MulDecTruncate(tokenValue).QuoDec(distrInfo.DelegationsValue)
+		tokenRewards := rewards.MulDecTruncate(tokenValue).QuoDecTruncate(distrInfo.DelegationsValue)
 		err = k.allocateRewardsPool(ctx, types.NewDelegationTarget(distrInfo.Operator), token.Denom, tokenRewards)
 		if err != nil {
 			return err

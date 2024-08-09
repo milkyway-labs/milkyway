@@ -8,6 +8,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/address"
 	"github.com/cosmos/gogoproto/proto"
+
+	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
 // GetRewardsPoolAddress generates a rewards pool address from plan id.
@@ -17,7 +19,7 @@ func GetRewardsPoolAddress(planID uint64) sdk.AccAddress {
 
 func NewRewardsPlan(
 	id uint64, description string, serviceID uint32, amtPerDay sdk.Coins, startTime, endTime time.Time,
-	rewardsPool string, poolsDistribution PoolsDistribution, operatorsDistribution OperatorsDistribution,
+	poolsDistribution PoolsDistribution, operatorsDistribution OperatorsDistribution,
 	usersDistribution UsersDistribution) RewardsPlan {
 	return RewardsPlan{
 		ID:                    id,
@@ -26,7 +28,7 @@ func NewRewardsPlan(
 		AmountPerDay:          amtPerDay,
 		StartTime:             startTime,
 		EndTime:               endTime,
-		RewardsPool:           rewardsPool,
+		RewardsPool:           GetRewardsPoolAddress(id).String(),
 		PoolsDistribution:     poolsDistribution,
 		OperatorsDistribution: operatorsDistribution,
 		UsersDistribution:     usersDistribution,
@@ -205,5 +207,15 @@ func NewDelegatorStartingInfo(previousPeriod uint64, stakes sdk.DecCoins, height
 		PreviousPeriod: previousPeriod,
 		Stakes:         stakes,
 		Height:         height,
+	}
+}
+
+// create a new DelegationDelegatorReward
+func NewDelegationDelegatorReward(
+	delType restakingtypes.DelegationType, targetID uint32, rewards DecPools) DelegationDelegatorReward {
+	return DelegationDelegatorReward{
+		DelegationType:     delType,
+		DelegationTargetID: targetID,
+		Reward:             rewards,
 	}
 }

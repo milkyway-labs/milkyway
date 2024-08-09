@@ -53,7 +53,7 @@ func (k msgServer) SetWithdrawAddress(ctx context.Context, msg *types.MsgSetWith
 	return &types.MsgSetWithdrawAddressResponse{}, nil
 }
 
-func (k msgServer) WithdrawDelegationReward(ctx context.Context, msg *types.MsgWithdrawDelegationReward) (*types.MsgWithdrawDelegationRewardResponse, error) {
+func (k msgServer) WithdrawDelegatorReward(ctx context.Context, msg *types.MsgWithdrawDelegatorReward) (*types.MsgWithdrawDelegatorRewardResponse, error) {
 	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(msg.DelegatorAddress)
 	if err != nil {
 		return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid delegator address: %s", err)
@@ -72,7 +72,7 @@ func (k msgServer) WithdrawDelegationReward(ctx context.Context, msg *types.MsgW
 
 	// TODO: telemetry?
 
-	return &types.MsgWithdrawDelegationRewardResponse{Amount: amount}, nil
+	return &types.MsgWithdrawDelegatorRewardResponse{Amount: amount}, nil
 }
 
 func (k msgServer) WithdrawOperatorCommission(ctx context.Context, msg *types.MsgWithdrawOperatorCommission) (*types.MsgWithdrawOperatorCommissionResponse, error) {

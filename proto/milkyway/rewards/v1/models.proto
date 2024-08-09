@@ -7,6 +7,7 @@ import "cosmos/base/v1beta1/coin.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/any.proto";
 import "gogoproto/gogo.proto";
+import "milkyway/restaking/v1/models.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/rewards/types";
 option (gogoproto.goproto_getters_all) = false;
@@ -166,6 +167,19 @@ message DelegatorStartingInfo {
   uint64 height = 3 [
     (gogoproto.moretags) = "yaml:\"creation_height\"",
     (gogoproto.jsontag) = "creation_height"
+  ];
+}
+
+message DelegationDelegatorReward {
+  milkyway.restaking.v1.DelegationType delegation_type = 1;
+
+  uint32 delegation_target_id = 2
+      [ (gogoproto.customname) = "DelegationTargetID" ];
+
+  repeated DecPool reward = 3 [
+    (gogoproto.castrepeated) = "DecPools",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
   ];
 }
 

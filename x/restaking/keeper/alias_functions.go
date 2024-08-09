@@ -25,8 +25,6 @@ func (k *Keeper) IterateAllOperatorParams(
 	}
 }
 
-// --------------------------------------------------------------------------------------------------------------------
-
 func (k *Keeper) IterateAllServiceParams(ctx sdk.Context, cb func(serviceID uint32, params types.ServiceParams) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 	iterator := storetypes.KVStorePrefixIterator(store, types.ServiceParamsPrefix)
@@ -45,6 +43,24 @@ func (k *Keeper) IterateAllServiceParams(ctx sdk.Context, cb func(serviceID uint
 
 // --------------------------------------------------------------------------------------------------------------------
 
+func (k *Keeper) IterateUserPoolDelegations(ctx sdk.Context, userAddress string, cb func(del types.Delegation) (stop bool, err error)) error {
+	store := ctx.KVStore(k.storeKey)
+	iterator := storetypes.KVStorePrefixIterator(store, types.UserPoolDelegationsStorePrefix(userAddress))
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		delegation := types.MustUnmarshalDelegation(k.cdc, iterator.Value())
+		stop, err := cb(delegation)
+		if err != nil {
+			return err
+		}
+		if stop {
+			break
+		}
+	}
+	return nil
+}
+
 // GetAllPoolDelegations returns all the pool delegations
 func (k *Keeper) GetAllPoolDelegations(ctx sdk.Context) []types.Delegation {
 	store := ctx.KVStore(k.storeKey)
@@ -60,6 +76,24 @@ func (k *Keeper) GetAllPoolDelegations(ctx sdk.Context) []types.Delegation {
 	return delegations
 }
 
+func (k *Keeper) IterateUserOperatorDelegations(ctx sdk.Context, userAddress string, cb func(del types.Delegation) (stop bool, err error)) error {
+	store := ctx.KVStore(k.storeKey)
+	iterator := storetypes.KVStorePrefixIterator(store, types.UserOperatorDelegationsStorePrefix(userAddress))
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		delegation := types.MustUnmarshalDelegation(k.cdc, iterator.Value())
+		stop, err := cb(delegation)
+		if err != nil {
+			return err
+		}
+		if stop {
+			break
+		}
+	}
+	return nil
+}
+
 // GetAllOperatorDelegations returns all the operator delegations
 func (k *Keeper) GetAllOperatorDelegations(ctx sdk.Context) []types.Delegation {
 	store := ctx.KVStore(k.storeKey)
@@ -73,6 +107,24 @@ func (k *Keeper) GetAllOperatorDelegations(ctx sdk.Context) []types.Delegation {
 	}
 
 	return delegations
+}
+
+func (k *Keeper) IterateUserServiceDelegations(ctx sdk.Context, userAddress string, cb func(del types.Delegation) (stop bool, err error)) error {
+	store := ctx.KVStore(k.storeKey)
+	iterator := storetypes.KVStorePrefixIterator(store, types.UserServiceDelegationsStorePrefix(userAddress))
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		delegation := types.MustUnmarshalDelegation(k.cdc, iterator.Value())
+		stop, err := cb(delegation)
+		if err != nil {
+			return err
+		}
+		if stop {
+			break
+		}
+	}
+	return nil
 }
 
 // GetAllServiceDelegations returns all the service delegations

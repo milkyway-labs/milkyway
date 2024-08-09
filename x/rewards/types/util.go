@@ -47,7 +47,8 @@ func (target DelegationTarget) Tokens() sdk.Coins {
 func (target DelegationTarget) DelegatorShares() sdk.DecCoins {
 	switch target := target.DelegationTarget.(type) {
 	case *poolstypes.Pool:
-		return sdk.NewDecCoins(sdk.NewDecCoinFromDec(target.Denom, target.DelegatorShares))
+		sharesDenom := target.GetSharesDenom(target.Denom)
+		return sdk.NewDecCoins(sdk.NewDecCoinFromDec(sharesDenom, target.DelegatorShares))
 	case *operatorstypes.Operator:
 		return target.DelegatorShares
 	case *servicestypes.Service:

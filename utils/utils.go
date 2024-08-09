@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/binary"
 	"encoding/hex"
 	"errors"
 	"fmt"
@@ -327,4 +328,38 @@ func FormatUint32Slice(s []uint32) string {
 		ss[i] = fmt.Sprint(u)
 	}
 	return strings.Join(ss, ",")
+}
+
+func MustParseCoin(s string) sdk.Coin {
+	c, err := sdk.ParseCoinNormalized(strings.ReplaceAll(s, "_", ""))
+	if err != nil {
+		panic(err)
+	}
+	return c
+}
+
+func MustParseCoins(s string) sdk.Coins {
+	c, err := sdk.ParseCoinsNormalized(strings.ReplaceAll(s, "_", ""))
+	if err != nil {
+		panic(err)
+	}
+	return c
+}
+
+func MustParseDecCoins(s string) sdk.DecCoins {
+	d, err := sdk.ParseDecCoins(strings.ReplaceAll(s, "_", ""))
+	if err != nil {
+		panic(err)
+	}
+	return d
+}
+
+func MustParseDec(s string) sdkmath.LegacyDec {
+	return sdkmath.LegacyMustNewDecFromStr(strings.ReplaceAll(s, "_", ""))
+}
+
+func TestAddress(n uint64) sdk.AccAddress {
+	b := make([]byte, 8)
+	binary.BigEndian.PutUint64(b, n)
+	return address.Hash("test", b)
 }

@@ -27,8 +27,8 @@ service Msg {
   rpc SetWithdrawAddress(MsgSetWithdrawAddress)
       returns (MsgSetWithdrawAddressResponse);
 
-  rpc WithdrawDelegationReward(MsgWithdrawDelegationReward)
-      returns (MsgWithdrawDelegationRewardResponse);
+  rpc WithdrawDelegatorReward(MsgWithdrawDelegatorReward)
+      returns (MsgWithdrawDelegatorRewardResponse);
 
   // WithdrawOperatorCommission defines a method to withdraw the
   // full commission to the operator.
@@ -108,9 +108,9 @@ message MsgSetWithdrawAddress {
 // type.
 message MsgSetWithdrawAddressResponse {}
 
-message MsgWithdrawDelegationReward {
+message MsgWithdrawDelegatorReward {
   option (cosmos.msg.v1.signer) = "delegator_address";
-  option (amino.name) = "rewards/MsgWithdrawPoolDeReward";
+  option (amino.name) = "rewards/MsgWithdrawDelegatorReward";
 
   option (gogoproto.equal) = false;
   option (gogoproto.goproto_getters) = false;
@@ -123,7 +123,7 @@ message MsgWithdrawDelegationReward {
   uint32 target_id = 3 [ (gogoproto.customname) = "TargetID" ];
 }
 
-message MsgWithdrawDelegationRewardResponse {
+message MsgWithdrawDelegatorRewardResponse {
   repeated cosmos.base.v1beta1.Coin amount = 1 [
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true,
@@ -135,7 +135,7 @@ message MsgWithdrawDelegationRewardResponse {
 // MsgWithdrawOperatorCommission withdraws the full commission to the operator.
 message MsgWithdrawOperatorCommission {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "cosmos-sdk/MsgWithdrawValCommission";
+  option (amino.name) = "rewards/MsgWithdrawOperatorCommission";
 
   option (gogoproto.equal) = false;
   option (gogoproto.goproto_getters) = false;

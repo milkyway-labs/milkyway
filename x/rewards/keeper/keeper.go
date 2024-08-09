@@ -164,7 +164,7 @@ func (k *Keeper) Logger(ctx context.Context) log.Logger {
 }
 
 // SetWithdrawAddr sets a new address that will receive the rewards upon withdrawal
-func (k Keeper) SetWithdrawAddr(ctx context.Context, delegatorAddr, withdrawAddr sdk.AccAddress) error {
+func (k *Keeper) SetWithdrawAddr(ctx context.Context, delegatorAddr, withdrawAddr sdk.AccAddress) error {
 	if k.bankKeeper.BlockedAddr(withdrawAddr) {
 		return errorsmod.Wrapf(sdkerrors.ErrUnauthorized, "%s is not allowed to receive external funds", withdrawAddr)
 	}
@@ -184,7 +184,7 @@ func (k Keeper) SetWithdrawAddr(ctx context.Context, delegatorAddr, withdrawAddr
 	return nil
 }
 
-func (k Keeper) WithdrawDelegationRewards(
+func (k *Keeper) WithdrawDelegationRewards(
 	ctx context.Context, delAddr sdk.AccAddress, target *types.DelegationTarget) (types.Pools, error) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
@@ -207,7 +207,7 @@ func (k Keeper) WithdrawDelegationRewards(
 	return rewards, nil
 }
 
-func (k Keeper) WithdrawOperatorCommission(ctx context.Context, operatorID uint32) (types.Pools, error) {
+func (k *Keeper) WithdrawOperatorCommission(ctx context.Context, operatorID uint32) (types.Pools, error) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	operator, found := k.operatorsKeeper.GetOperator(sdkCtx, operatorID)
 	if !found {

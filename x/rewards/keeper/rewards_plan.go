@@ -34,7 +34,6 @@ func (k *Keeper) CreateRewardsPlan(
 
 	plan := types.NewRewardsPlan(
 		planID, description, serviceID, amt, startTime, endTime,
-		types.GetRewardsPoolAddress(planID).String(),
 		poolsDistribution, operatorsDistribution,
 		usersDistribution)
 	if err := plan.Validate(); err != nil {
@@ -44,6 +43,8 @@ func (k *Keeper) CreateRewardsPlan(
 	if err := k.RewardsPlans.Set(ctx, planID, plan); err != nil {
 		return types.RewardsPlan{}, err
 	}
+
+	k.createAccountIfNotExists(ctx, plan.MustGetRewardsPoolAddress())
 
 	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
