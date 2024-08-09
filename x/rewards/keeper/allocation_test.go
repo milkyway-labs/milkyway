@@ -6,6 +6,8 @@ import (
 	"cosmossdk.io/math"
 
 	"github.com/milkyway-labs/milkyway/utils"
+	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/x/rewards/types"
 )
 
 func (s *KeeperTestSuite) TestAllocateRewards_InactivePlan() {
@@ -136,13 +138,13 @@ func (s *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	// - $500 / $4600 * 0.578704 ~= 0.062903 $SERVICE2 (from Pool3)
 	rewards, err := s.keeper.PoolDelegationRewards(s.Ctx, aliceAddr, 1)
 	s.Require().NoError(err)
-	s.Require().Equal("4061.078622482100000000service1,25161.030595813200000000service2", rewards.String())
+	s.Require().Equal("4061.078622482100000000service1,25161.030595813200000000service2", rewards.Sum().String())
 	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, aliceAddr, 2)
 	s.Require().NoError(err)
-	s.Require().Equal("6091.617933723100000000service1", rewards.String())
+	s.Require().Equal("6091.617933723100000000service1", rewards.Sum().String())
 	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, aliceAddr, 3)
 	s.Require().NoError(err)
-	s.Require().Equal("10152.696556205000000000service1,62902.576489533000000000service2", rewards.String())
+	s.Require().Equal("10152.696556205000000000service1,62902.576489533000000000service2", rewards.Sum().String())
 
 	// Bob receives:
 	// - $300 / $5700 * 0.115741 ~= 0.006092 $SERVICE1 (from Service1)
@@ -150,13 +152,13 @@ func (s *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	// - $900 / $3600 * 1.157407 ~= 0.289352 $SERVICE3 (from Service3)
 	rewards, err = s.keeper.ServiceDelegationRewards(s.Ctx, bobAddr, service1.ID)
 	s.Require().NoError(err)
-	s.Require().Equal("6091.617933723100000000service1", rewards.String())
+	s.Require().Equal("6091.617933723100000000service1", rewards.Sum().String())
 	rewards, err = s.keeper.ServiceDelegationRewards(s.Ctx, bobAddr, service2.ID)
 	s.Require().NoError(err)
-	s.Require().Equal("75483.091787439600000000service2", rewards.String())
+	s.Require().Equal("75483.091787439600000000service2", rewards.Sum().String())
 	rewards, err = s.keeper.ServiceDelegationRewards(s.Ctx, bobAddr, service3.ID)
 	s.Require().NoError(err)
-	s.Require().Equal("289351.851851851800000000service3", rewards.String())
+	s.Require().Equal("289351.851851851800000000service3", rewards.Sum().String())
 
 	// Charlie receives:
 	// - $1000 / $5700 * 0.115741 * 0.9 ~= 0.018275 $SERVICE1 (from Operator1)
@@ -167,13 +169,13 @@ func (s *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	// - $500 / $3600 * 1.157407 * 0.98 ~= 0.157536 $SERVICE3 (from Operator3)
 	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, charlieAddr, operator1.ID)
 	s.Require().NoError(err)
-	s.Require().Equal("18274.853801169000000000service1,113224.637681159000000000service2", rewards.String())
+	s.Require().Equal("18274.853801169000000000service1,113224.637681159000000000service2", rewards.Sum().String())
 	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, charlieAddr, operator2.ID)
 	s.Require().NoError(err)
-	s.Require().Equal("19290.123456790000000000service1,305426.954732510000000000service3", rewards.String())
+	s.Require().Equal("19290.123456790000000000service1,305426.954732510000000000service3", rewards.Sum().String())
 	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, charlieAddr, operator3.ID)
 	s.Require().NoError(err)
-	s.Require().Equal("61644.524959742000000000service2,157536.008230452500000000service3", rewards.String())
+	s.Require().Equal("61644.524959742000000000service2,157536.008230452500000000service3", rewards.Sum().String())
 
 	// David receives:
 	// - $400 / $5700 * 0.115741 ~= 0.008122 $SERVICE1 (from Pool1)
@@ -192,33 +194,372 @@ func (s *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	// - $400 / $3600 * 1.157407 * 0.98 ~= 0.126029 $SERVICE3 (from Operator3)
 	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, davidAddr, 1)
 	s.Require().NoError(err)
-	s.Require().Equal("8122.157244964200000000service1,50322.061191626400000000service2", rewards.String())
+	s.Require().Equal("8122.157244964200000000service1,50322.061191626400000000service2", rewards.Sum().String())
 	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, davidAddr, 2)
 	s.Require().NoError(err)
-	s.Require().Equal("12183.235867446200000000service1", rewards.String())
+	s.Require().Equal("12183.235867446200000000service1", rewards.Sum().String())
 	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, davidAddr, 3)
 	s.Require().NoError(err)
-	s.Require().Equal("4061.078622482000000000service1,25161.030595813200000000service2", rewards.String())
+	s.Require().Equal("4061.078622482000000000service1,25161.030595813200000000service2", rewards.Sum().String())
 	rewards, err = s.keeper.ServiceDelegationRewards(s.Ctx, davidAddr, service1.ID)
 	s.Require().NoError(err)
-	s.Require().Equal("8122.157244964200000000service1", rewards.String())
+	s.Require().Equal("8122.157244964200000000service1", rewards.Sum().String())
 	rewards, err = s.keeper.ServiceDelegationRewards(s.Ctx, davidAddr, service2.ID)
 	s.Require().NoError(err)
-	s.Require().Equal("50322.061191626400000000service2", rewards.String())
+	s.Require().Equal("50322.061191626400000000service2", rewards.Sum().String())
 	rewards, err = s.keeper.ServiceDelegationRewards(s.Ctx, davidAddr, service3.ID)
 	s.Require().NoError(err)
-	s.Require().Equal("128600.823045267400000000service3", rewards.String())
+	s.Require().Equal("128600.823045267400000000service3", rewards.Sum().String())
 	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, davidAddr, operator1.ID)
 	s.Require().NoError(err)
-	s.Require().Equal("7309.941520467800000000service1,45289.855072463600000000service2", rewards.String())
+	s.Require().Equal("7309.941520467800000000service1,45289.855072463600000000service2", rewards.Sum().String())
 	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, davidAddr, operator2.ID)
 	s.Require().NoError(err)
-	s.Require().Equal("7716.049382716000000000service1,122170.781893004000000000service3", rewards.String())
+	s.Require().Equal("7716.049382716000000000service1,122170.781893004000000000service3", rewards.Sum().String())
 	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, davidAddr, operator3.ID)
 	s.Require().NoError(err)
-	s.Require().Equal("49315.619967793800000000service2,126028.806584362000000000service3", rewards.String())
+	s.Require().Equal("49315.619967793800000000service2,126028.806584362000000000service3", rewards.Sum().String())
 }
 
 func (s *KeeperTestSuite) TestAllocateRewards_MovingPrice() {
-	panic("not implemented")
+	// $MILK is $2 and $INIT is $3.
+	service, _, _ := s.setupSimpleScenario()
+
+	delAddr1 := utils.TestAddress(1)
+	s.DelegateService(service.ID, utils.MustParseCoins("100_000000umilk"), delAddr1.String(), true)
+	delAddr2 := utils.TestAddress(2)
+	s.DelegateService(service.ID, utils.MustParseCoins("100_000000uinit"), delAddr2.String(), true)
+
+	// Allocate rewards.
+	s.advanceBlock(10 * time.Second)
+	err := s.keeper.AllocateRewards(s.Ctx)
+	s.Require().NoError(err)
+
+	// They receive rewards by 1:2 ratio.
+	rewards, err := s.keeper.ServiceDelegationRewards(s.Ctx, delAddr1, service.ID)
+	s.Require().NoError(err)
+	s.Require().Equal("4629.629629629600000000service", rewards.Sum().String())
+	rewards, err = s.keeper.ServiceDelegationRewards(s.Ctx, delAddr2, service.ID)
+	s.Require().NoError(err)
+	s.Require().Equal("6944.444444444400000000service", rewards.Sum().String())
+
+	// Now price changes.
+	s.RegisterCurrency("umilk", "MILK", utils.MustParseDec("3"))
+	s.RegisterCurrency("uinit", "INIT", utils.MustParseDec("1"))
+
+	// Allocate rewards again.
+	s.advanceBlock(10 * time.Second)
+	err = s.keeper.AllocateRewards(s.Ctx)
+	s.Require().NoError(err)
+
+	// Now they receive rewards by 3:1 ratio.
+	// Note that already accumulated rewards are not affected.
+	rewards, err = s.keeper.ServiceDelegationRewards(s.Ctx, delAddr1, service.ID)
+	s.Require().NoError(err)
+	// Delta: +8680.5555555555umilk
+	s.Assert().Equal("13310.185185185100000000service", rewards.Sum().String())
+	rewards, err = s.keeper.ServiceDelegationRewards(s.Ctx, delAddr2, service.ID)
+	s.Require().NoError(err)
+	// Delta: +2893.5185185185umilk
+	s.Assert().Equal("9837.962962962900000000service", rewards.Sum().String())
+}
+
+func (s *KeeperTestSuite) TestAllocateRewards_ZeroDelegations() {
+	// Test if AllocateRewards handles pool/operator/service distribution
+	// correctly when the distribution info has weight specified but there's
+	// no delegation yet.
+
+	s.RegisterCurrency("umilk", "MILK", utils.MustParseDec("2"))
+
+	// Create a service.
+	serviceAdmin := utils.TestAddress(10000)
+	service := s.CreateService("Service", serviceAdmin.String())
+
+	// Add the created service ID to the pools module's allowed list.
+	poolsParams := s.App.PoolsKeeper.GetParams(s.Ctx)
+	poolsParams.AllowedServiceIDs = []uint32{service.ID}
+	s.App.PoolsKeeper.SetParams(s.Ctx, poolsParams)
+
+	// Create an active rewards plan.
+	planStartTime := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
+	planEndTime := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
+	plan := s.CreateRewardsPlan(
+		service.ID, utils.MustParseCoins("100_000000service"), planStartTime, planEndTime,
+		types.NewBasicPoolsDistribution(1), types.NewBasicOperatorsDistribution(2), types.NewBasicUsersDistribution(3),
+		serviceAdmin.String())
+	// Fund the rewards plan's rewards pool.
+	s.FundAccount(plan.RewardsPool, utils.MustParseCoins("100000_000000service"))
+
+	// Create an operator.
+	operatorAdmin := utils.TestAddress(10001)
+	operator := s.CreateOperator("Operator", operatorAdmin.String())
+	// Make the operator join the service and set its commission rate to 10%.
+	s.UpdateOperatorParams(operator.ID, utils.MustParseDec("0.1"), []uint32{service.ID})
+
+	// Call AllocateRewards to set last rewards allocation time.
+	err := s.keeper.AllocateRewards(s.Ctx)
+	s.Require().NoError(err)
+
+	// Try allocating rewards.
+	s.advanceBlock(10 * time.Second)
+	err = s.keeper.AllocateRewards(s.Ctx)
+	s.Require().NoError(err)
+
+	// There must be no outstanding rewards allocated.
+	target, err := s.keeper.GetDelegationTarget(s.Ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, operator.ID)
+	s.Require().NoError(err)
+	rewards, err := s.keeper.GetOutstandingRewardsCoins(s.Ctx, target)
+	s.Require().NoError(err)
+	s.Require().Empty(rewards)
+	target, err = s.keeper.GetDelegationTarget(s.Ctx, restakingtypes.DELEGATION_TYPE_SERVICE, service.ID)
+	s.Require().NoError(err)
+	rewards, err = s.keeper.GetOutstandingRewardsCoins(s.Ctx, target)
+	s.Require().NoError(err)
+	s.Require().Empty(rewards)
+
+	// Two users delegate the same amount of $MILK to a pool and the service.
+	delAddr1 := utils.TestAddress(1)
+	s.DelegatePool(utils.MustParseCoin("10_000000umilk"), delAddr1.String(), true)
+	delAddr2 := utils.TestAddress(2)
+	s.DelegateService(service.ID, utils.MustParseCoins("10_000000umilk"), delAddr2.String(), true)
+
+	// Allocate rewards.
+	s.advanceBlock(10 * time.Second)
+	err = s.keeper.AllocateRewards(s.Ctx)
+	s.Require().NoError(err)
+
+	// Still the operator has no rewards.
+	target, err = s.keeper.GetDelegationTarget(s.Ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, operator.ID)
+	s.Require().NoError(err)
+	rewards, err = s.keeper.GetOutstandingRewardsCoins(s.Ctx, target)
+	s.Require().NoError(err)
+	s.Require().Empty(rewards)
+
+	// The pool and the service receive rewards by 1:3 ratio.
+	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, delAddr1, 1)
+	s.Require().NoError(err)
+	s.Require().Equal("2893.518518518510000000service", rewards.Sum().String())
+	rewards, err = s.keeper.ServiceDelegationRewards(s.Ctx, delAddr2, service.ID)
+	s.Require().NoError(err)
+	s.Require().Equal("8680.555555555550000000service", rewards.Sum().String())
+}
+
+func (s *KeeperTestSuite) TestAllocateRewards_WeightedDistributions() {
+	// Register $MILK and $INIT. For simple calculation, set both currencies'
+	// price $1.
+	s.RegisterCurrency("umilk", "MILK", utils.MustParseDec("1"))
+	s.RegisterCurrency("uinit", "INIT", utils.MustParseDec("1"))
+
+	// Create a service.
+	serviceAdmin := utils.TestAddress(10000)
+	service := s.CreateService("Service", serviceAdmin.String())
+
+	// Add the created service ID to the pools module's allowed list.
+	poolsParams := s.App.PoolsKeeper.GetParams(s.Ctx)
+	poolsParams.AllowedServiceIDs = []uint32{service.ID}
+	s.App.PoolsKeeper.SetParams(s.Ctx, poolsParams)
+
+	// Create operators.
+	operatorAdmin1 := utils.TestAddress(10001)
+	operator1 := s.CreateOperator("Operator1", operatorAdmin1.String())
+	s.UpdateOperatorParams(operator1.ID, utils.MustParseDec("0.1"), []uint32{service.ID})
+	operatorAdmin2 := utils.TestAddress(10002)
+	operator2 := s.CreateOperator("Operator2", operatorAdmin2.String())
+	s.UpdateOperatorParams(operator2.ID, utils.MustParseDec("0.1"), []uint32{service.ID})
+
+	// Call AllocateRewards to set last rewards allocation time.
+	err := s.keeper.AllocateRewards(s.Ctx)
+	s.Require().NoError(err)
+
+	// Create an active rewards plan.
+	planStartTime := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
+	planEndTime := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
+	plan := s.CreateRewardsPlan(
+		service.ID, utils.MustParseCoins("100_000000service"), planStartTime, planEndTime,
+		types.NewWeightedPoolsDistribution(3, []types.PoolDistributionWeight{
+			types.NewPoolDistributionWeight(1, 2),
+			types.NewPoolDistributionWeight(2, 1),
+		}),
+		types.NewWeightedOperatorsDistribution(1, []types.OperatorDistributionWeight{
+			types.NewOperatorDistributionWeight(operator1.ID, 2),
+			types.NewOperatorDistributionWeight(operator2.ID, 3),
+		}),
+		types.NewBasicUsersDistribution(0), // No user rewards
+		serviceAdmin.String())
+	// Fund the rewards plan's rewards pool.
+	s.FundAccount(plan.RewardsPool, utils.MustParseCoins("100000_000000service"))
+
+	// Delegate to $MILK pool.
+	delAddr1 := utils.TestAddress(1)
+	s.DelegatePool(utils.MustParseCoin("300_000000umilk"), delAddr1.String(), true)
+	delAddr2 := utils.TestAddress(2)
+	s.DelegatePool(utils.MustParseCoin("200_000000umilk"), delAddr2.String(), true)
+	// Delegate to $INIT pool.
+	delAddr3 := utils.TestAddress(3)
+	s.DelegatePool(utils.MustParseCoin("200_000000uinit"), delAddr3.String(), true)
+	delAddr4 := utils.TestAddress(4)
+	s.DelegatePool(utils.MustParseCoin("300_000000uinit"), delAddr4.String(), true)
+	// Delegate to Operator1.
+	delAddr5 := utils.TestAddress(5)
+	s.DelegateOperator(operator1.ID, utils.MustParseCoins("100_000000umilk"), delAddr5.String(), true)
+	delAddr6 := utils.TestAddress(6)
+	s.DelegateOperator(operator1.ID, utils.MustParseCoins("200_000000uinit"), delAddr6.String(), true)
+	// Delegate to Operator2.
+	delAddr7 := utils.TestAddress(7)
+	s.DelegateOperator(operator2.ID, utils.MustParseCoins("200_000000umilk"), delAddr7.String(), true)
+	delAddr8 := utils.TestAddress(8)
+	s.DelegateOperator(operator2.ID, utils.MustParseCoins("100_000000uinit"), delAddr8.String(), true)
+
+	s.advanceBlock(10 * time.Second)
+	err = s.keeper.AllocateRewards(s.Ctx)
+	s.Require().NoError(err)
+
+	// delAddr1 receives 3/4 * 2/3 * $300 / $500 * 100 * (10 / 86400) ~= 0.003472 $SERVICE
+	rewards, err := s.keeper.PoolDelegationRewards(s.Ctx, delAddr1, 1)
+	s.Require().NoError(err)
+	s.Assert().Equal("3472.222222222200000000service", rewards.Sum().String())
+
+	// delAddr2 receives 3/4 * 2/3 * $200 / $500 * 100 * (10 / 86400) ~= 0.002315 $SERVICE
+	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, delAddr2, 1)
+	s.Require().NoError(err)
+	s.Assert().Equal("2314.814814814800000000service", rewards.Sum().String())
+
+	// delAddr3 receives 3/4 * 1/3 * $200 / $500 * 100 * (10 / 86400) ~= 0.001157 $SERVICE
+	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, delAddr3, 2)
+	s.Require().NoError(err)
+	s.Assert().Equal("1157.407407407400000000service", rewards.Sum().String())
+
+	// delAddr4 receives 3/4 * 1/3 * $300 / $500 * 100 * (10 / 86400) ~= 0.001736 $SERVICE
+	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, delAddr4, 2)
+	s.Require().NoError(err)
+	s.Assert().Equal("1736.111111111100000000service", rewards.Sum().String())
+
+	// Note that operators take commission from rewards.
+
+	// delAddr5 receives 1/4 * 2/5 * $100 / $300 * 100 * (10 / 86400) * 0.9 ~= 0.000347 $SERVICE
+	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, delAddr5, operator1.ID)
+	s.Require().NoError(err)
+	s.Assert().Equal("347.222222222200000000service", rewards.Sum().String())
+
+	// delAddr6 receives 1/4 * 2/5 * $200 / $300 * 100 * (10 / 86400) * 0.9 ~= 0.000694 $SERVICE
+	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, delAddr6, operator1.ID)
+	s.Require().NoError(err)
+	s.Assert().Equal("694.444444444400000000service", rewards.Sum().String())
+
+	// delAddr7 receives 1/4 * 3/5 * $200 / $300 * 100 * (10 / 86400) * 0.9 ~= 0.001042 $SERVICE
+	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, delAddr7, operator2.ID)
+	s.Require().NoError(err)
+	s.Assert().Equal("1041.666666666600000000service", rewards.Sum().String())
+
+	// delAddr8 receives 1/4 * 3/5 * $100 / $300 * 100 * (10 / 86400) * 0.9 ~= 0.000521 $SERVICE
+	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, delAddr8, operator2.ID)
+	s.Require().NoError(err)
+	s.Assert().Equal("520.833333333300000000service", rewards.Sum().String())
+}
+
+func (s *KeeperTestSuite) TestAllocateRewards_EgalitarianDistributions() {
+	// Register $MILK and $INIT. For simple calculation, set both currencies'
+	// price $1.
+	s.RegisterCurrency("umilk", "MILK", utils.MustParseDec("1"))
+	s.RegisterCurrency("uinit", "INIT", utils.MustParseDec("1"))
+
+	// Create a service.
+	serviceAdmin := utils.TestAddress(10000)
+	service := s.CreateService("Service", serviceAdmin.String())
+
+	// Add the created service ID to the pools module's allowed list.
+	poolsParams := s.App.PoolsKeeper.GetParams(s.Ctx)
+	poolsParams.AllowedServiceIDs = []uint32{service.ID}
+	s.App.PoolsKeeper.SetParams(s.Ctx, poolsParams)
+
+	// Create operators.
+	operatorAdmin1 := utils.TestAddress(10001)
+	operator1 := s.CreateOperator("Operator1", operatorAdmin1.String())
+	s.UpdateOperatorParams(operator1.ID, utils.MustParseDec("0.1"), []uint32{service.ID})
+	operatorAdmin2 := utils.TestAddress(10002)
+	operator2 := s.CreateOperator("Operator2", operatorAdmin2.String())
+	s.UpdateOperatorParams(operator2.ID, utils.MustParseDec("0.1"), []uint32{service.ID})
+
+	// Call AllocateRewards to set last rewards allocation time.
+	err := s.keeper.AllocateRewards(s.Ctx)
+	s.Require().NoError(err)
+
+	// Create an active rewards plan.
+	planStartTime := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
+	planEndTime := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
+	plan := s.CreateRewardsPlan(
+		service.ID, utils.MustParseCoins("100_000000service"), planStartTime, planEndTime,
+		types.NewEgalitarianPoolsDistribution(3),
+		types.NewEgalitarianOperatorsDistribution(1),
+		types.NewBasicUsersDistribution(0), // No user rewards
+		serviceAdmin.String())
+	// Fund the rewards plan's rewards pool.
+	s.FundAccount(plan.RewardsPool, utils.MustParseCoins("100000_000000service"))
+
+	// Delegate to $MILK pool.
+	delAddr1 := utils.TestAddress(1)
+	s.DelegatePool(utils.MustParseCoin("300_000000umilk"), delAddr1.String(), true)
+	delAddr2 := utils.TestAddress(2)
+	s.DelegatePool(utils.MustParseCoin("200_000000umilk"), delAddr2.String(), true)
+	// Delegate to $INIT pool.
+	delAddr3 := utils.TestAddress(3)
+	s.DelegatePool(utils.MustParseCoin("200_000000uinit"), delAddr3.String(), true)
+	delAddr4 := utils.TestAddress(4)
+	s.DelegatePool(utils.MustParseCoin("300_000000uinit"), delAddr4.String(), true)
+	// Delegate to Operator1.
+	delAddr5 := utils.TestAddress(5)
+	s.DelegateOperator(operator1.ID, utils.MustParseCoins("100_000000umilk"), delAddr5.String(), true)
+	delAddr6 := utils.TestAddress(6)
+	s.DelegateOperator(operator1.ID, utils.MustParseCoins("200_000000uinit"), delAddr6.String(), true)
+	// Delegate to Operator2.
+	delAddr7 := utils.TestAddress(7)
+	s.DelegateOperator(operator2.ID, utils.MustParseCoins("200_000000umilk"), delAddr7.String(), true)
+	delAddr8 := utils.TestAddress(8)
+	s.DelegateOperator(operator2.ID, utils.MustParseCoins("100_000000uinit"), delAddr8.String(), true)
+
+	s.advanceBlock(10 * time.Second)
+	err = s.keeper.AllocateRewards(s.Ctx)
+	s.Require().NoError(err)
+
+	// delAddr1 receives 3/4 * 1/2 * $300 / $500 * 100 * (10 / 86400) ~= 0.002604 $SERVICE
+	rewards, err := s.keeper.PoolDelegationRewards(s.Ctx, delAddr1, 1)
+	s.Require().NoError(err)
+	s.Assert().Equal("2604.166666666500000000service", rewards.Sum().String())
+
+	// delAddr2 receives 3/4 * 1/2 * $200 / $500 * 100 * (10 / 86400) ~= 0.001736 $SERVICE
+	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, delAddr2, 1)
+	s.Require().NoError(err)
+	s.Assert().Equal("1736.111111111000000000service", rewards.Sum().String())
+
+	// delAddr3 receives 3/4 * 1/2 * $200 / $500 * 100 * (10 / 86400) ~= 0.001736 $SERVICE
+	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, delAddr3, 2)
+	s.Require().NoError(err)
+	s.Assert().Equal("1736.111111111000000000service", rewards.Sum().String())
+
+	// delAddr4 receives 3/4 * 1/2 * $300 / $500 * 100 * (10 / 86400) ~= 0.002604 $SERVICE
+	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, delAddr4, 2)
+	s.Require().NoError(err)
+	s.Assert().Equal("2604.166666666500000000service", rewards.Sum().String())
+
+	// Note that operators take commission from rewards.
+
+	// delAddr5 receives 1/4 * 1/2 * $100 / $300 * 100 * (10 / 86400) * 0.9 ~= 0.000434 $SERVICE
+	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, delAddr5, operator1.ID)
+	s.Require().NoError(err)
+	s.Assert().Equal("434.027777777700000000service", rewards.Sum().String())
+
+	// delAddr6 receives 1/4 * 1/2 * $200 / $300 * 100 * (10 / 86400) * 0.9 ~= 0.000868 $SERVICE
+	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, delAddr6, operator1.ID)
+	s.Require().NoError(err)
+	s.Assert().Equal("868.055555555400000000service", rewards.Sum().String())
+
+	// delAddr7 receives 1/4 * 1/2 * $200 / $300 * 100 * (10 / 86400) * 0.9 ~= 0.000868 $SERVICE
+	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, delAddr7, operator2.ID)
+	s.Require().NoError(err)
+	s.Assert().Equal("868.055555555400000000service", rewards.Sum().String())
+
+	// delAddr8 receives 1/4 * 1/2 * $100 / $300 * 100 * (10 / 86400) * 0.9 ~= 0.000434 $SERVICE
+	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, delAddr8, operator2.ID)
+	s.Require().NoError(err)
+	s.Assert().Equal("434.027777777700000000service", rewards.Sum().String())
 }

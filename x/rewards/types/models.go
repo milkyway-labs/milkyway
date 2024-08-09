@@ -108,6 +108,13 @@ func NewEgalitarianPoolsDistribution(weight uint32) PoolsDistribution {
 	}
 }
 
+func NewPoolDistributionWeight(poolID, weight uint32) PoolDistributionWeight {
+	return PoolDistributionWeight{
+		PoolID: poolID,
+		Weight: weight,
+	}
+}
+
 type PoolsDistributionType interface {
 	proto.Message
 	isPoolsDistributionType()
@@ -155,6 +162,13 @@ func NewEgalitarianOperatorsDistribution(weight uint32) OperatorsDistribution {
 	return OperatorsDistribution{
 		Weight: weight,
 		Type:   a,
+	}
+}
+
+func NewOperatorDistributionWeight(operatorID, weight uint32) OperatorDistributionWeight {
+	return OperatorDistributionWeight{
+		OperatorID: operatorID,
+		Weight:     weight,
 	}
 }
 

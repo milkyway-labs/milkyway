@@ -23,6 +23,8 @@ func (k *Keeper) CreateRewardsPlan(
 		return types.RewardsPlan{}, servicestypes.ErrServiceNotFound
 	}
 
+	// TODO: check if pools, operators exist
+
 	// Get the next plan ID and increment it by 1
 	planID, err := k.NextRewardsPlanID.Get(ctx)
 	if err != nil {

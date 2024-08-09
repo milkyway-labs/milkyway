@@ -55,7 +55,7 @@ func (s *KeeperTestSuite) setupSimpleScenario() (servicestypes.Service, types.Re
 
 	// Create a service.
 	serviceAdmin := utils.TestAddress(10000)
-	service := s.CreateService("MilkyWay", serviceAdmin.String())
+	service := s.CreateService("Service", serviceAdmin.String())
 
 	// Add the created service ID to the pools module's allowed list.
 	poolsParams := s.App.PoolsKeeper.GetParams(s.Ctx)
@@ -66,13 +66,13 @@ func (s *KeeperTestSuite) setupSimpleScenario() (servicestypes.Service, types.Re
 	planStartTime := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
 	planEndTime := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
 	plan := s.CreateBasicRewardsPlan(
-		service.ID, utils.MustParseCoins("100_000000umilk"), planStartTime, planEndTime, serviceAdmin.String())
+		service.ID, utils.MustParseCoins("100_000000service"), planStartTime, planEndTime, serviceAdmin.String())
 	// Fund the rewards plan's rewards pool.
-	s.FundAccount(plan.RewardsPool, utils.MustParseCoins("100000_000000umilk"))
+	s.FundAccount(plan.RewardsPool, utils.MustParseCoins("100000_000000service"))
 
 	// Create an operator.
 	operatorAdmin := utils.TestAddress(10001)
-	operator := s.CreateOperator("MilkyWay", operatorAdmin.String())
+	operator := s.CreateOperator("Operator", operatorAdmin.String())
 	// Make the operator join the service and set its commission rate to 10%.
 	s.UpdateOperatorParams(operator.ID, utils.MustParseDec("0.1"), []uint32{service.ID})
 
