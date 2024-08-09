@@ -39,7 +39,7 @@ func (s *KeeperTestSuite) advanceBlock(duration time.Duration) {
 	s.Ctx = s.Ctx.WithBlockTime(s.Ctx.BlockTime().Add(duration)).WithBlockHeight(s.Ctx.BlockHeight() + 1)
 }
 
-func (s *KeeperTestSuite) setupSimpleScenario() (servicestypes.Service, types.RewardsPlan, operatorstypes.Operator) {
+func (s *KeeperTestSuite) setupSampleServiceAndOperator() (servicestypes.Service, operatorstypes.Operator) {
 	// This helper method:
 	// - registers $MILK, $INIT
 	// - creates a service named "MilkyWay"
@@ -62,14 +62,6 @@ func (s *KeeperTestSuite) setupSimpleScenario() (servicestypes.Service, types.Re
 	poolsParams.AllowedServiceIDs = []uint32{service.ID}
 	s.App.PoolsKeeper.SetParams(s.Ctx, poolsParams)
 
-	// Create an active rewards plan.
-	planStartTime := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
-	planEndTime := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
-	plan := s.CreateBasicRewardsPlan(
-		service.ID, utils.MustParseCoins("100_000000service"), planStartTime, planEndTime, serviceAdmin.String())
-	// Fund the rewards plan's rewards pool.
-	s.FundAccount(plan.RewardsPool, utils.MustParseCoins("100000_000000service"))
-
 	// Create an operator.
 	operatorAdmin := utils.TestAddress(10001)
 	operator := s.CreateOperator("Operator", operatorAdmin.String())
@@ -80,5 +72,5 @@ func (s *KeeperTestSuite) setupSimpleScenario() (servicestypes.Service, types.Re
 	err := s.keeper.AllocateRewards(s.Ctx)
 	s.Require().NoError(err)
 
-	return service, plan, operator
+	return service, operator
 }

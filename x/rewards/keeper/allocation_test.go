@@ -16,7 +16,15 @@ func (s *KeeperTestSuite) TestAllocateRewards_InactivePlan() {
 
 	// Plan's start time is 2024-01-01 so set block time before that.
 	s.Ctx = s.Ctx.WithBlockTime(time.Date(2023, 6, 1, 0, 0, 0, 0, time.UTC))
-	service, _, _ := s.setupSimpleScenario()
+	service, _ := s.setupSampleServiceAndOperator()
+
+	// Create an active rewards plan.
+	planStartTime := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
+	planEndTime := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
+	plan := s.CreateBasicRewardsPlan(
+		service.ID, utils.MustParseCoins("100_000000service"), planStartTime, planEndTime)
+	// Fund the rewards plan's rewards pool.
+	s.FundAccount(plan.RewardsPool, utils.MustParseCoins("100000_000000service"))
 
 	delAddr := utils.TestAddress(1)
 	s.DelegateService(service.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
@@ -76,13 +84,13 @@ func (s *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	planEndTime := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
 	plan1 := s.CreateBasicRewardsPlan(
 		service1.ID, utils.MustParseCoins("1000_000000service1"),
-		planStartTime, planEndTime, serviceAdmin1.String())
+		planStartTime, planEndTime)
 	plan2 := s.CreateBasicRewardsPlan(
 		service2.ID, utils.MustParseCoins("5000_000000service2"),
-		planStartTime, planEndTime, serviceAdmin1.String())
+		planStartTime, planEndTime)
 	plan3 := s.CreateBasicRewardsPlan(
 		service3.ID, utils.MustParseCoins("10000_000000service3"),
-		planStartTime, planEndTime, serviceAdmin1.String())
+		planStartTime, planEndTime)
 	s.FundAccount(plan1.RewardsPool, utils.MustParseCoins("1000000_000000service1"))
 	s.FundAccount(plan2.RewardsPool, utils.MustParseCoins("1000000_000000service2"))
 	s.FundAccount(plan3.RewardsPool, utils.MustParseCoins("1000000_000000service3"))
@@ -223,7 +231,15 @@ func (s *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 
 func (s *KeeperTestSuite) TestAllocateRewards_MovingPrice() {
 	// $MILK is $2 and $INIT is $3.
-	service, _, _ := s.setupSimpleScenario()
+	service, _ := s.setupSampleServiceAndOperator()
+
+	// Create an active rewards plan.
+	planStartTime := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
+	planEndTime := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
+	plan := s.CreateBasicRewardsPlan(
+		service.ID, utils.MustParseCoins("100_000000service"), planStartTime, planEndTime)
+	// Fund the rewards plan's rewards pool.
+	s.FundAccount(plan.RewardsPool, utils.MustParseCoins("100000_000000service"))
 
 	delAddr1 := utils.TestAddress(1)
 	s.DelegateService(service.ID, utils.MustParseCoins("100_000000umilk"), delAddr1.String(), true)
@@ -285,8 +301,7 @@ func (s *KeeperTestSuite) TestAllocateRewards_ZeroDelegations() {
 	planEndTime := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
 	plan := s.CreateRewardsPlan(
 		service.ID, utils.MustParseCoins("100_000000service"), planStartTime, planEndTime,
-		types.NewBasicPoolsDistribution(1), types.NewBasicOperatorsDistribution(2), types.NewBasicUsersDistribution(3),
-		serviceAdmin.String())
+		types.NewBasicPoolsDistribution(1), types.NewBasicOperatorsDistribution(2), types.NewBasicUsersDistribution(3))
 	// Fund the rewards plan's rewards pool.
 	s.FundAccount(plan.RewardsPool, utils.MustParseCoins("100000_000000service"))
 
@@ -371,24 +386,6 @@ func (s *KeeperTestSuite) TestAllocateRewards_WeightedDistributions() {
 	err := s.keeper.AllocateRewards(s.Ctx)
 	s.Require().NoError(err)
 
-	// Create an active rewards plan.
-	planStartTime := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
-	planEndTime := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
-	plan := s.CreateRewardsPlan(
-		service.ID, utils.MustParseCoins("100_000000service"), planStartTime, planEndTime,
-		types.NewWeightedPoolsDistribution(3, []types.PoolDistributionWeight{
-			types.NewPoolDistributionWeight(1, 2),
-			types.NewPoolDistributionWeight(2, 1),
-		}),
-		types.NewWeightedOperatorsDistribution(1, []types.OperatorDistributionWeight{
-			types.NewOperatorDistributionWeight(operator1.ID, 2),
-			types.NewOperatorDistributionWeight(operator2.ID, 3),
-		}),
-		types.NewBasicUsersDistribution(0), // No user rewards
-		serviceAdmin.String())
-	// Fund the rewards plan's rewards pool.
-	s.FundAccount(plan.RewardsPool, utils.MustParseCoins("100000_000000service"))
-
 	// Delegate to $MILK pool.
 	delAddr1 := utils.TestAddress(1)
 	s.DelegatePool(utils.MustParseCoin("300_000000umilk"), delAddr1.String(), true)
@@ -409,6 +406,24 @@ func (s *KeeperTestSuite) TestAllocateRewards_WeightedDistributions() {
 	s.DelegateOperator(operator2.ID, utils.MustParseCoins("200_000000umilk"), delAddr7.String(), true)
 	delAddr8 := utils.TestAddress(8)
 	s.DelegateOperator(operator2.ID, utils.MustParseCoins("100_000000uinit"), delAddr8.String(), true)
+
+	// Create an active rewards plan.
+	planStartTime := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
+	planEndTime := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
+	plan := s.CreateRewardsPlan(
+		service.ID, utils.MustParseCoins("100_000000service"), planStartTime, planEndTime,
+		types.NewWeightedPoolsDistribution(3, []types.PoolDistributionWeight{
+			types.NewPoolDistributionWeight(1, 2),
+			types.NewPoolDistributionWeight(2, 1),
+		}),
+		types.NewWeightedOperatorsDistribution(1, []types.OperatorDistributionWeight{
+			types.NewOperatorDistributionWeight(operator1.ID, 2),
+			types.NewOperatorDistributionWeight(operator2.ID, 3),
+		}),
+		types.NewBasicUsersDistribution(0), // No user rewards
+	)
+	// Fund the rewards plan's rewards pool.
+	s.FundAccount(plan.RewardsPool, utils.MustParseCoins("100000_000000service"))
 
 	s.advanceBlock(10 * time.Second)
 	err = s.keeper.AllocateRewards(s.Ctx)
@@ -492,7 +507,7 @@ func (s *KeeperTestSuite) TestAllocateRewards_EgalitarianDistributions() {
 		types.NewEgalitarianPoolsDistribution(3),
 		types.NewEgalitarianOperatorsDistribution(1),
 		types.NewBasicUsersDistribution(0), // No user rewards
-		serviceAdmin.String())
+	)
 	// Fund the rewards plan's rewards pool.
 	s.FundAccount(plan.RewardsPool, utils.MustParseCoins("100000_000000service"))
 

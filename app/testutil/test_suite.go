@@ -138,11 +138,13 @@ func (s *KeeperTestSuite) UpdateServiceParams(
 func (s *KeeperTestSuite) CreateRewardsPlan(
 	serviceID uint32, amtPerDay sdk.Coins, startTime, endTime time.Time,
 	poolsDistr types.PoolsDistribution, operatorsDistr types.OperatorsDistribution,
-	usersDistr types.UsersDistribution, admin string,
+	usersDistr types.UsersDistribution,
 ) types.RewardsPlan {
+	service, found := s.App.ServicesKeeper.GetService(s.Ctx, serviceID)
+	s.Require().True(found, "service must be found")
 	rewardsMsgServer := rewardskeeper.NewMsgServer(s.App.RewardsKeeper)
 	resp, err := rewardsMsgServer.CreateRewardsPlan(s.Ctx, types.NewMsgCreateRewardsPlan(
-		admin, "Rewards Plan", serviceID, amtPerDay, startTime, endTime,
+		service.Admin, "Rewards Plan", serviceID, amtPerDay, startTime, endTime,
 		poolsDistr, operatorsDistr, usersDistr))
 	s.Require().NoError(err)
 	// Return the newly created plan.
@@ -152,12 +154,11 @@ func (s *KeeperTestSuite) CreateRewardsPlan(
 }
 
 func (s *KeeperTestSuite) CreateBasicRewardsPlan(
-	serviceID uint32, amtPerDay sdk.Coins, startTime, endTime time.Time, admin string,
+	serviceID uint32, amtPerDay sdk.Coins, startTime, endTime time.Time,
 ) types.RewardsPlan {
 	return s.CreateRewardsPlan(
 		serviceID, amtPerDay, startTime, endTime,
-		types.NewBasicPoolsDistribution(0), types.NewBasicOperatorsDistribution(0), types.NewBasicUsersDistribution(0),
-		admin)
+		types.NewBasicPoolsDistribution(0), types.NewBasicOperatorsDistribution(0), types.NewBasicUsersDistribution(0))
 }
 
 func (s *KeeperTestSuite) DelegateOperator(operatorID uint32, amt sdk.Coins, delegator string, fund bool) {
