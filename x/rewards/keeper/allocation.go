@@ -6,10 +6,8 @@ import (
 	"slices"
 	"time"
 
-	"cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
@@ -24,14 +22,15 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 		return err
 	}
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	if err := k.SetLastRewardsAllocationTime(ctx, sdkCtx.BlockTime()); err != nil {
+		return err
+	}
+
 	if lastAllocationTime == nil {
 		// If there's no last rewards allocation time set yet, it means this is
 		// the first time AllocateRewards is called. In this case we just set
 		// the current block time as the last rewards allocation time and skip
 		// this block.
-		if err := k.SetLastRewardsAllocationTime(ctx, sdkCtx.BlockTime()); err != nil {
-			return err
-		}
 		return nil
 	}
 
@@ -106,24 +105,30 @@ func (k *Keeper) AllocateRewardsByPlan(
 		return err
 	}
 
+	totalDelValues := totalPoolsDelValues.Add(totalOperatorsDelValues).Add(totalUsersDelValues)
+	if totalDelValues.IsZero() {
+		// There's no delegations at all, so just skip.
+		return nil
+	}
+
 	var poolsRewards, operatorsRewards, usersRewards sdk.DecCoins
 
-	if plan.TotalWeights() > 0 {
-		// Only sum weights with non-zero delegation values.
-		totalWeightsNonZeroDelValues := uint32(0)
-		if totalPoolsDelValues.IsPositive() {
-			totalWeightsNonZeroDelValues += plan.PoolsDistribution.Weight
-		}
-		if totalOperatorsDelValues.IsPositive() {
-			totalWeightsNonZeroDelValues += plan.OperatorsDistribution.Weight
-		}
-		if totalUsersDelValues.IsPositive() {
-			totalWeightsNonZeroDelValues += plan.UsersDistribution.Weight
-		}
-		totalWeightsDec := math.LegacyNewDec(int64(totalWeightsNonZeroDelValues))
+	// Only sum weights with non-zero delegation values.
+	totalWeightsNonZeroDelValues := uint32(0)
+	if totalPoolsDelValues.IsPositive() {
+		totalWeightsNonZeroDelValues += plan.PoolsDistribution.Weight
+	}
+	if totalOperatorsDelValues.IsPositive() {
+		totalWeightsNonZeroDelValues += plan.OperatorsDistribution.Weight
+	}
+	if totalUsersDelValues.IsPositive() {
+		totalWeightsNonZeroDelValues += plan.UsersDistribution.Weight
+	}
 
+	if totalWeightsNonZeroDelValues > 0 {
 		// If weights are specified, then split rewards by
 		// rewards * weight / totalWeights
+		totalWeightsDec := math.LegacyNewDec(int64(totalWeightsNonZeroDelValues))
 		poolsRewards = rewards.MulDecTruncate(math.LegacyNewDec(int64(plan.PoolsDistribution.Weight))).
 			QuoDecTruncate(totalWeightsDec)
 		operatorsRewards = rewards.MulDecTruncate(math.LegacyNewDec(int64(plan.OperatorsDistribution.Weight))).
@@ -133,8 +138,6 @@ func (k *Keeper) AllocateRewardsByPlan(
 	} else {
 		// If there's no weights specified, then distribute rewards based on their
 		// total delegation values.
-		totalDelValues := totalPoolsDelValues.Add(totalOperatorsDelValues).Add(totalUsersDelValues)
-
 		poolsRewards = rewards.MulDecTruncate(totalPoolsDelValues).QuoDecTruncate(totalDelValues)
 		operatorsRewards = rewards.MulDecTruncate(totalOperatorsDelValues).QuoDecTruncate(totalDelValues)
 		usersRewards = rewards.MulDecTruncate(totalUsersDelValues).QuoDecTruncate(totalDelValues)
@@ -204,11 +207,10 @@ func (k *Keeper) getOperatorsForRewardsAllocation(
 }
 
 func (k *Keeper) getPoolDistrInfos(
-	ctx context.Context, pools []poolstypes.Pool) (
-	distrInfos []PoolDistributionInfo, totalDelValues math.LegacyDec, err error) {
-	distrInfos = make([]PoolDistributionInfo, len(pools))
+	ctx context.Context, pools []poolstypes.Pool,
+) (distrInfos []PoolDistributionInfo, totalDelValues math.LegacyDec, err error) {
 	totalDelValues = math.LegacyZeroDec()
-	for i, pool := range pools {
+	for _, pool := range pools {
 		delValue, err := k.GetCoinValue(ctx, sdk.NewCoin(pool.Denom, pool.Tokens))
 		if err != nil {
 			return nil, math.LegacyDec{}, err
@@ -216,21 +218,20 @@ func (k *Keeper) getPoolDistrInfos(
 		if delValue.IsZero() {
 			continue
 		}
-		distrInfos[i] = PoolDistributionInfo{
+		distrInfos = append(distrInfos, PoolDistributionInfo{
 			Pool:             &pool,
 			DelegationsValue: delValue,
-		}
+		})
 		totalDelValues = totalDelValues.Add(delValue)
 	}
 	return distrInfos, totalDelValues, nil
 }
 
 func (k *Keeper) getOperatorDistrInfos(
-	ctx context.Context, operators []operatorstypes.Operator) (
-	distrInfos []OperatorDistributionInfo, totalDelValues math.LegacyDec, err error) {
-	distrInfos = make([]OperatorDistributionInfo, len(operators))
+	ctx context.Context, operators []operatorstypes.Operator,
+) (distrInfos []OperatorDistributionInfo, totalDelValues math.LegacyDec, err error) {
 	totalDelValues = math.LegacyZeroDec()
-	for i, operator := range operators {
+	for _, operator := range operators {
 		delValue, err := k.GetCoinsValue(ctx, operator.Tokens)
 		if err != nil {
 			return nil, math.LegacyDec{}, err
@@ -238,10 +239,10 @@ func (k *Keeper) getOperatorDistrInfos(
 		if delValue.IsZero() {
 			continue
 		}
-		distrInfos[i] = OperatorDistributionInfo{
+		distrInfos = append(distrInfos, OperatorDistributionInfo{
 			Operator:         &operator,
 			DelegationsValue: delValue,
-		}
+		})
 		totalDelValues = totalDelValues.Add(delValue)
 	}
 	return distrInfos, totalDelValues, nil
@@ -293,13 +294,17 @@ func (k *Keeper) allocateRewardsToPoolsWeighted(
 
 	totalWeights := math.LegacyZeroDec()
 	for _, weight := range weights {
+		if _, ok := distrInfoByPoolID[weight.PoolID]; !ok {
+			// If there's no distrInfo for specified pool, skip it.
+			continue
+		}
 		totalWeights = totalWeights.Add(math.LegacyNewDec(int64(weight.Weight)))
 	}
 
 	for _, weight := range weights {
 		distrInfo, ok := distrInfoByPoolID[weight.PoolID]
 		if !ok {
-			return errors.Wrapf(sdkerrors.ErrNotFound, "distribution info for pool %d not found", weight.PoolID)
+			continue
 		}
 
 		poolRewards := rewards.MulDecTruncate(math.LegacyNewDec(int64(weight.Weight))).QuoDecTruncate(totalWeights)
@@ -370,13 +375,17 @@ func (k *Keeper) allocateRewardsToOperatorsWeighted(
 
 	totalWeights := math.LegacyZeroDec()
 	for _, weight := range weights {
+		if _, ok := distrInfoByOperatorID[weight.OperatorID]; !ok {
+			// If there's no distrInfo for specified operator, skip it.
+			continue
+		}
 		totalWeights = totalWeights.Add(math.LegacyNewDec(int64(weight.Weight)))
 	}
 
 	for _, weight := range weights {
 		distrInfo, ok := distrInfoByOperatorID[weight.OperatorID]
 		if !ok {
-			return errors.Wrapf(sdkerrors.ErrNotFound, "distribution info for operator %d not found", weight.OperatorID)
+			continue
 		}
 
 		operatorRewards := rewards.MulDecTruncate(math.LegacyNewDec(int64(weight.Weight))).QuoDecTruncate(totalWeights)
