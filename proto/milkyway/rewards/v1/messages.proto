@@ -47,7 +47,7 @@ service Msg {
 // the plan to be created.
 message MsgCreateRewardsPlan {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "rewards/MsgCreateRewardsPlan";
+  option (amino.name) = "milkyway/rewards/MsgCreateRewardsPlan";
 
   option (gogoproto.equal) = false;
   option (gogoproto.goproto_getters) = false;
@@ -93,7 +93,7 @@ message MsgCreateRewardsPlanResponse {
 // a delegator.
 message MsgSetWithdrawAddress {
   option (cosmos.msg.v1.signer) = "delegator_address";
-  option (amino.name) = "rewards/MsgSetWithdrawAddress";
+  option (amino.name) = "milkyway/rewards/MsgSetWithdrawAddress";
 
   option (gogoproto.equal) = false;
   option (gogoproto.goproto_getters) = false;
@@ -110,7 +110,7 @@ message MsgSetWithdrawAddressResponse {}
 
 message MsgWithdrawDelegatorReward {
   option (cosmos.msg.v1.signer) = "delegator_address";
-  option (amino.name) = "rewards/MsgWithdrawDelegatorReward";
+  option (amino.name) = "milkyway/rewards/MsgWithdrawDelegatorReward";
 
   option (gogoproto.equal) = false;
   option (gogoproto.goproto_getters) = false;
@@ -135,7 +135,7 @@ message MsgWithdrawDelegatorRewardResponse {
 // MsgWithdrawOperatorCommission withdraws the full commission to the operator.
 message MsgWithdrawOperatorCommission {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "rewards/MsgWithdrawOperatorCommission";
+  option (amino.name) = "milkyway/rewards/MsgWithdrawOperatorCommission";
 
   option (gogoproto.equal) = false;
   option (gogoproto.goproto_getters) = false;
@@ -161,7 +161,7 @@ message MsgWithdrawOperatorCommissionResponse {
 // service method. It allows the authority to update the module parameters.
 message MsgUpdateParams {
   option (cosmos.msg.v1.signer) = "authority";
-  option (amino.name) = "rewards/MsgUpdateParams";
+  option (amino.name) = "milkyway/rewards/MsgUpdateParams";
 
   option (gogoproto.equal) = false;
   option (gogoproto.goproto_getters) = false;

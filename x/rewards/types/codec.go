@@ -9,11 +9,11 @@ import (
 )
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	legacy.RegisterAminoMsg(cdc, &MsgCreateRewardsPlan{}, "rewards/MsgCreateRewardsPlan")
-	legacy.RegisterAminoMsg(cdc, &MsgSetWithdrawAddress{}, "rewards/MsgSetWithdrawAddress")
-	legacy.RegisterAminoMsg(cdc, &MsgWithdrawDelegatorReward{}, "rewards/MsgWithdrawDelegatorReward")
-	legacy.RegisterAminoMsg(cdc, &MsgWithdrawOperatorCommission{}, "rewards/MsgWithdrawOperatorCommission")
-	legacy.RegisterAminoMsg(cdc, &MsgUpdateParams{}, "rewards/MsgUpdateParams")
+	legacy.RegisterAminoMsg(cdc, &MsgCreateRewardsPlan{}, "milkyway/MsgCreateRewardsPlan")
+	legacy.RegisterAminoMsg(cdc, &MsgSetWithdrawAddress{}, "milkyway/MsgSetWithdrawAddress")
+	legacy.RegisterAminoMsg(cdc, &MsgWithdrawDelegatorReward{}, "milkyway/MsgWithdrawDelegatorReward")
+	legacy.RegisterAminoMsg(cdc, &MsgWithdrawOperatorCommission{}, "milkyway/MsgWithdrawOperatorCommission")
+	legacy.RegisterAminoMsg(cdc, &MsgUpdateParams{}, "milkyway/rewards/MsgUpdateParams")
 }
 
 func RegisterInterfaces(registry types.InterfaceRegistry) {
