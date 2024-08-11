@@ -19,9 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Msg_RegisterTicker_FullMethodName   = "/milkyway.tickers.v1.Msg/RegisterTicker"
-	Msg_DeregisterTicker_FullMethodName = "/milkyway.tickers.v1.Msg/DeregisterTicker"
-	Msg_UpdateParams_FullMethodName     = "/milkyway.tickers.v1.Msg/UpdateParams"
+	Msg_RegisterAsset_FullMethodName   = "/milkyway.tickers.v1.Msg/RegisterAsset"
+	Msg_DeregisterAsset_FullMethodName = "/milkyway.tickers.v1.Msg/DeregisterAsset"
+	Msg_UpdateParams_FullMethodName    = "/milkyway.tickers.v1.Msg/UpdateParams"
 )
 
 // MsgClient is the client API for Msg service.
@@ -30,11 +30,11 @@ const (
 //
 // Msg defines the services module's gRPC message service.
 type MsgClient interface {
-	// RegisterTicker defines the operation for registering a ticker.
-	RegisterTicker(ctx context.Context, in *MsgRegisterTicker, opts ...grpc.CallOption) (*MsgRegisterTickerResponse, error)
-	// DeregisterTicker defines the operation for de-registering a ticker with
-	// the token denomination.
-	DeregisterTicker(ctx context.Context, in *MsgDeregisterTicker, opts ...grpc.CallOption) (*MsgDeregisterTickerResponse, error)
+	// RegisterAsset defines the operation for registering an asset.
+	RegisterAsset(ctx context.Context, in *MsgRegisterAsset, opts ...grpc.CallOption) (*MsgRegisterAssetResponse, error)
+	// DeregisterAsset defines the operation for de-registering an asset with
+	// its denomination.
+	DeregisterAsset(ctx context.Context, in *MsgDeregisterAsset, opts ...grpc.CallOption) (*MsgDeregisterAssetResponse, error)
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters.
 	// The authority defaults to the x/gov module account.
@@ -49,20 +49,20 @@ func NewMsgClient(cc grpc.ClientConnInterface) MsgClient {
 	return &msgClient{cc}
 }
 
-func (c *msgClient) RegisterTicker(ctx context.Context, in *MsgRegisterTicker, opts ...grpc.CallOption) (*MsgRegisterTickerResponse, error) {
+func (c *msgClient) RegisterAsset(ctx context.Context, in *MsgRegisterAsset, opts ...grpc.CallOption) (*MsgRegisterAssetResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(MsgRegisterTickerResponse)
-	err := c.cc.Invoke(ctx, Msg_RegisterTicker_FullMethodName, in, out, cOpts...)
+	out := new(MsgRegisterAssetResponse)
+	err := c.cc.Invoke(ctx, Msg_RegisterAsset_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *msgClient) DeregisterTicker(ctx context.Context, in *MsgDeregisterTicker, opts ...grpc.CallOption) (*MsgDeregisterTickerResponse, error) {
+func (c *msgClient) DeregisterAsset(ctx context.Context, in *MsgDeregisterAsset, opts ...grpc.CallOption) (*MsgDeregisterAssetResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(MsgDeregisterTickerResponse)
-	err := c.cc.Invoke(ctx, Msg_DeregisterTicker_FullMethodName, in, out, cOpts...)
+	out := new(MsgDeregisterAssetResponse)
+	err := c.cc.Invoke(ctx, Msg_DeregisterAsset_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -85,11 +85,11 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 //
 // Msg defines the services module's gRPC message service.
 type MsgServer interface {
-	// RegisterTicker defines the operation for registering a ticker.
-	RegisterTicker(context.Context, *MsgRegisterTicker) (*MsgRegisterTickerResponse, error)
-	// DeregisterTicker defines the operation for de-registering a ticker with
-	// the token denomination.
-	DeregisterTicker(context.Context, *MsgDeregisterTicker) (*MsgDeregisterTickerResponse, error)
+	// RegisterAsset defines the operation for registering an asset.
+	RegisterAsset(context.Context, *MsgRegisterAsset) (*MsgRegisterAssetResponse, error)
+	// DeregisterAsset defines the operation for de-registering an asset with
+	// its denomination.
+	DeregisterAsset(context.Context, *MsgDeregisterAsset) (*MsgDeregisterAssetResponse, error)
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters.
 	// The authority defaults to the x/gov module account.
@@ -104,11 +104,11 @@ type MsgServer interface {
 // pointer dereference when methods are called.
 type UnimplementedMsgServer struct{}
 
-func (UnimplementedMsgServer) RegisterTicker(context.Context, *MsgRegisterTicker) (*MsgRegisterTickerResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RegisterTicker not implemented")
+func (UnimplementedMsgServer) RegisterAsset(context.Context, *MsgRegisterAsset) (*MsgRegisterAssetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RegisterAsset not implemented")
 }
-func (UnimplementedMsgServer) DeregisterTicker(context.Context, *MsgDeregisterTicker) (*MsgDeregisterTickerResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeregisterTicker not implemented")
+func (UnimplementedMsgServer) DeregisterAsset(context.Context, *MsgDeregisterAsset) (*MsgDeregisterAssetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeregisterAsset not implemented")
 }
 func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
@@ -134,38 +134,38 @@ func RegisterMsgServer(s grpc.ServiceRegistrar, srv MsgServer) {
 	s.RegisterService(&Msg_ServiceDesc, srv)
 }
 
-func _Msg_RegisterTicker_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgRegisterTicker)
+func _Msg_RegisterAsset_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRegisterAsset)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).RegisterTicker(ctx, in)
+		return srv.(MsgServer).RegisterAsset(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_RegisterTicker_FullMethodName,
+		FullMethod: Msg_RegisterAsset_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).RegisterTicker(ctx, req.(*MsgRegisterTicker))
+		return srv.(MsgServer).RegisterAsset(ctx, req.(*MsgRegisterAsset))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_DeregisterTicker_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgDeregisterTicker)
+func _Msg_DeregisterAsset_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgDeregisterAsset)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).DeregisterTicker(ctx, in)
+		return srv.(MsgServer).DeregisterAsset(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_DeregisterTicker_FullMethodName,
+		FullMethod: Msg_DeregisterAsset_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).DeregisterTicker(ctx, req.(*MsgDeregisterTicker))
+		return srv.(MsgServer).DeregisterAsset(ctx, req.(*MsgDeregisterAsset))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -196,12 +196,12 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*MsgServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "RegisterTicker",
-			Handler:    _Msg_RegisterTicker_Handler,
+			MethodName: "RegisterAsset",
+			Handler:    _Msg_RegisterAsset_Handler,
 		},
 		{
-			MethodName: "DeregisterTicker",
-			Handler:    _Msg_DeregisterTicker_Handler,
+			MethodName: "DeregisterAsset",
+			Handler:    _Msg_DeregisterAsset_Handler,
 		},
 		{
 			MethodName: "UpdateParams",

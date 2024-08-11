@@ -31,30 +31,27 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// MsgRegisterTicker defines the message structure for the RegisterTicker
-// gRPC service method. It allows the authority to register a ticker.
-type MsgRegisterTicker struct {
+// MsgRegisterAsset defines the message structure for the RegisterAsset
+// gRPC service method. It allows the authority to register an asset.
+type MsgRegisterAsset struct {
 	// Authority is the address that controls the module (defaults to x/gov unless
 	// overwritten).
 	Authority string `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
-	// Denom represents the denomination of the token associated with the ticker.
-	Denom string `protobuf:"bytes,2,opt,name=denom,proto3" json:"denom,omitempty"`
-	// Ticker represents the ticker of the token denomination.
-	Ticker string `protobuf:"bytes,3,opt,name=ticker,proto3" json:"ticker,omitempty"`
+	Asset     Asset  `protobuf:"bytes,2,opt,name=asset,proto3" json:"asset"`
 }
 
-func (m *MsgRegisterTicker) Reset()         { *m = MsgRegisterTicker{} }
-func (m *MsgRegisterTicker) String() string { return proto.CompactTextString(m) }
-func (*MsgRegisterTicker) ProtoMessage()    {}
-func (*MsgRegisterTicker) Descriptor() ([]byte, []int) {
+func (m *MsgRegisterAsset) Reset()         { *m = MsgRegisterAsset{} }
+func (m *MsgRegisterAsset) String() string { return proto.CompactTextString(m) }
+func (*MsgRegisterAsset) ProtoMessage()    {}
+func (*MsgRegisterAsset) Descriptor() ([]byte, []int) {
 	return fileDescriptor_5880bc6d23f66fb1, []int{0}
 }
-func (m *MsgRegisterTicker) XXX_Unmarshal(b []byte) error {
+func (m *MsgRegisterAsset) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgRegisterTicker) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgRegisterAsset) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgRegisterTicker.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgRegisterAsset.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -64,55 +61,48 @@ func (m *MsgRegisterTicker) XXX_Marshal(b []byte, deterministic bool) ([]byte, e
 		return b[:n], nil
 	}
 }
-func (m *MsgRegisterTicker) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgRegisterTicker.Merge(m, src)
+func (m *MsgRegisterAsset) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRegisterAsset.Merge(m, src)
 }
-func (m *MsgRegisterTicker) XXX_Size() int {
+func (m *MsgRegisterAsset) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgRegisterTicker) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgRegisterTicker.DiscardUnknown(m)
+func (m *MsgRegisterAsset) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRegisterAsset.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgRegisterTicker proto.InternalMessageInfo
+var xxx_messageInfo_MsgRegisterAsset proto.InternalMessageInfo
 
-func (m *MsgRegisterTicker) GetAuthority() string {
+func (m *MsgRegisterAsset) GetAuthority() string {
 	if m != nil {
 		return m.Authority
 	}
 	return ""
 }
 
-func (m *MsgRegisterTicker) GetDenom() string {
+func (m *MsgRegisterAsset) GetAsset() Asset {
 	if m != nil {
-		return m.Denom
+		return m.Asset
 	}
-	return ""
+	return Asset{}
 }
 
-func (m *MsgRegisterTicker) GetTicker() string {
-	if m != nil {
-		return m.Ticker
-	}
-	return ""
+// MsgRegisterAssetResponse is the return value of MsgRegisterAsset.
+type MsgRegisterAssetResponse struct {
 }
 
-// MsgRegisterTickerResponse is the return value of MsgRegisterTicker.
-type MsgRegisterTickerResponse struct {
-}
-
-func (m *MsgRegisterTickerResponse) Reset()         { *m = MsgRegisterTickerResponse{} }
-func (m *MsgRegisterTickerResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgRegisterTickerResponse) ProtoMessage()    {}
-func (*MsgRegisterTickerResponse) Descriptor() ([]byte, []int) {
+func (m *MsgRegisterAssetResponse) Reset()         { *m = MsgRegisterAssetResponse{} }
+func (m *MsgRegisterAssetResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgRegisterAssetResponse) ProtoMessage()    {}
+func (*MsgRegisterAssetResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_5880bc6d23f66fb1, []int{1}
 }
-func (m *MsgRegisterTickerResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgRegisterAssetResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgRegisterTickerResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgRegisterAssetResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgRegisterTickerResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgRegisterAssetResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -122,41 +112,41 @@ func (m *MsgRegisterTickerResponse) XXX_Marshal(b []byte, deterministic bool) ([
 		return b[:n], nil
 	}
 }
-func (m *MsgRegisterTickerResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgRegisterTickerResponse.Merge(m, src)
+func (m *MsgRegisterAssetResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRegisterAssetResponse.Merge(m, src)
 }
-func (m *MsgRegisterTickerResponse) XXX_Size() int {
+func (m *MsgRegisterAssetResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgRegisterTickerResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgRegisterTickerResponse.DiscardUnknown(m)
+func (m *MsgRegisterAssetResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRegisterAssetResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgRegisterTickerResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgRegisterAssetResponse proto.InternalMessageInfo
 
-// MsgDeregisterTicker defines the message structure for the DeregisterTicker
-// gRPC service method. It allows the authority to de-register a ticker with
+// MsgDeregisterAsset defines the message structure for the DeregisterAsset
+// gRPC service method. It allows the authority to de-register an asset with
 // the token denomination.
-type MsgDeregisterTicker struct {
+type MsgDeregisterAsset struct {
 	// Authority is the address that controls the module (defaults to x/gov unless
 	// overwritten).
 	Authority string `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
-	// Denom represents the denomination of the token associated with the ticker.
+	// Denom represents the denomination of the token associated with the asset.
 	Denom string `protobuf:"bytes,2,opt,name=denom,proto3" json:"denom,omitempty"`
 }
 
-func (m *MsgDeregisterTicker) Reset()         { *m = MsgDeregisterTicker{} }
-func (m *MsgDeregisterTicker) String() string { return proto.CompactTextString(m) }
-func (*MsgDeregisterTicker) ProtoMessage()    {}
-func (*MsgDeregisterTicker) Descriptor() ([]byte, []int) {
+func (m *MsgDeregisterAsset) Reset()         { *m = MsgDeregisterAsset{} }
+func (m *MsgDeregisterAsset) String() string { return proto.CompactTextString(m) }
+func (*MsgDeregisterAsset) ProtoMessage()    {}
+func (*MsgDeregisterAsset) Descriptor() ([]byte, []int) {
 	return fileDescriptor_5880bc6d23f66fb1, []int{2}
 }
-func (m *MsgDeregisterTicker) XXX_Unmarshal(b []byte) error {
+func (m *MsgDeregisterAsset) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgDeregisterTicker) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgDeregisterAsset) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgDeregisterTicker.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgDeregisterAsset.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -166,48 +156,48 @@ func (m *MsgDeregisterTicker) XXX_Marshal(b []byte, deterministic bool) ([]byte,
 		return b[:n], nil
 	}
 }
-func (m *MsgDeregisterTicker) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgDeregisterTicker.Merge(m, src)
+func (m *MsgDeregisterAsset) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgDeregisterAsset.Merge(m, src)
 }
-func (m *MsgDeregisterTicker) XXX_Size() int {
+func (m *MsgDeregisterAsset) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgDeregisterTicker) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgDeregisterTicker.DiscardUnknown(m)
+func (m *MsgDeregisterAsset) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgDeregisterAsset.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgDeregisterTicker proto.InternalMessageInfo
+var xxx_messageInfo_MsgDeregisterAsset proto.InternalMessageInfo
 
-func (m *MsgDeregisterTicker) GetAuthority() string {
+func (m *MsgDeregisterAsset) GetAuthority() string {
 	if m != nil {
 		return m.Authority
 	}
 	return ""
 }
 
-func (m *MsgDeregisterTicker) GetDenom() string {
+func (m *MsgDeregisterAsset) GetDenom() string {
 	if m != nil {
 		return m.Denom
 	}
 	return ""
 }
 
-// MsgRegisterTickerResponse is the return value of MsgDeregisterTicker.
-type MsgDeregisterTickerResponse struct {
+// MsgRegisterAssetResponse is the return value of MsgDeregisterAsset.
+type MsgDeregisterAssetResponse struct {
 }
 
-func (m *MsgDeregisterTickerResponse) Reset()         { *m = MsgDeregisterTickerResponse{} }
-func (m *MsgDeregisterTickerResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgDeregisterTickerResponse) ProtoMessage()    {}
-func (*MsgDeregisterTickerResponse) Descriptor() ([]byte, []int) {
+func (m *MsgDeregisterAssetResponse) Reset()         { *m = MsgDeregisterAssetResponse{} }
+func (m *MsgDeregisterAssetResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgDeregisterAssetResponse) ProtoMessage()    {}
+func (*MsgDeregisterAssetResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_5880bc6d23f66fb1, []int{3}
 }
-func (m *MsgDeregisterTickerResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgDeregisterAssetResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgDeregisterTickerResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgDeregisterAssetResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgDeregisterTickerResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgDeregisterAssetResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -217,17 +207,17 @@ func (m *MsgDeregisterTickerResponse) XXX_Marshal(b []byte, deterministic bool) 
 		return b[:n], nil
 	}
 }
-func (m *MsgDeregisterTickerResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgDeregisterTickerResponse.Merge(m, src)
+func (m *MsgDeregisterAssetResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgDeregisterAssetResponse.Merge(m, src)
 }
-func (m *MsgDeregisterTickerResponse) XXX_Size() int {
+func (m *MsgDeregisterAssetResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgDeregisterTickerResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgDeregisterTickerResponse.DiscardUnknown(m)
+func (m *MsgDeregisterAssetResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgDeregisterAssetResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgDeregisterTickerResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgDeregisterAssetResponse proto.InternalMessageInfo
 
 // MsgUpdateParams defines the message structure for the UpdateParams gRPC
 // service method. It allows the authority to update the module parameters.
@@ -326,10 +316,10 @@ func (m *MsgUpdateParamsResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 
 func init() {
-	proto.RegisterType((*MsgRegisterTicker)(nil), "milkyway.tickers.v1.MsgRegisterTicker")
-	proto.RegisterType((*MsgRegisterTickerResponse)(nil), "milkyway.tickers.v1.MsgRegisterTickerResponse")
-	proto.RegisterType((*MsgDeregisterTicker)(nil), "milkyway.tickers.v1.MsgDeregisterTicker")
-	proto.RegisterType((*MsgDeregisterTickerResponse)(nil), "milkyway.tickers.v1.MsgDeregisterTickerResponse")
+	proto.RegisterType((*MsgRegisterAsset)(nil), "milkyway.tickers.v1.MsgRegisterAsset")
+	proto.RegisterType((*MsgRegisterAssetResponse)(nil), "milkyway.tickers.v1.MsgRegisterAssetResponse")
+	proto.RegisterType((*MsgDeregisterAsset)(nil), "milkyway.tickers.v1.MsgDeregisterAsset")
+	proto.RegisterType((*MsgDeregisterAssetResponse)(nil), "milkyway.tickers.v1.MsgDeregisterAssetResponse")
 	proto.RegisterType((*MsgUpdateParams)(nil), "milkyway.tickers.v1.MsgUpdateParams")
 	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "milkyway.tickers.v1.MsgUpdateParamsResponse")
 }
@@ -339,39 +329,40 @@ func init() {
 }
 
 var fileDescriptor_5880bc6d23f66fb1 = []byte{
-	// 503 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x54, 0x41, 0x6b, 0x13, 0x41,
-	0x14, 0xce, 0xb4, 0x36, 0xd0, 0x51, 0xb4, 0xdd, 0x06, 0x9b, 0x6c, 0x70, 0x1b, 0x96, 0x22, 0x25,
-	0xb4, 0xbb, 0xa6, 0x45, 0xc5, 0xdc, 0x0c, 0x9e, 0x94, 0x80, 0xac, 0x7a, 0xf1, 0x22, 0x93, 0x64,
-	0x98, 0x2c, 0xcd, 0xec, 0x2c, 0xfb, 0xa6, 0xd5, 0xbd, 0x89, 0x47, 0x4f, 0xfe, 0x00, 0x7f, 0x44,
-	0x0e, 0xfe, 0x88, 0x22, 0x08, 0xc5, 0x93, 0xa7, 0x22, 0xc9, 0x21, 0x77, 0x7f, 0x81, 0x74, 0x77,
-	0x76, 0x5b, 0x33, 0x1b, 0xc8, 0xc5, 0xcb, 0xb2, 0xdf, 0x9b, 0xef, 0xbd, 0xef, 0xfb, 0xf6, 0x0d,
-	0x8b, 0x6d, 0xee, 0x8f, 0x8e, 0xe3, 0xf7, 0x24, 0x76, 0xa5, 0xdf, 0x3f, 0xa6, 0x11, 0xb8, 0xa7,
-	0x2d, 0x97, 0x53, 0x00, 0xc2, 0x28, 0x38, 0x61, 0x24, 0xa4, 0x30, 0xb6, 0x32, 0x8e, 0xa3, 0x38,
-	0xce, 0x69, 0xcb, 0xdc, 0x24, 0xdc, 0x0f, 0x84, 0x9b, 0x3c, 0x53, 0x9e, 0x59, 0xeb, 0x0b, 0xe0,
-	0x02, 0xde, 0x25, 0xc8, 0x4d, 0x81, 0x3a, 0xda, 0x4e, 0x91, 0xcb, 0x81, 0x25, 0x02, 0xc0, 0xd4,
-	0x41, 0x85, 0x09, 0x26, 0xd2, 0x86, 0xcb, 0x37, 0x55, 0x6d, 0x14, 0xb9, 0x0a, 0x49, 0x44, 0xb8,
-	0x1a, 0x68, 0x8f, 0x11, 0xde, 0xec, 0x02, 0xf3, 0x28, 0xf3, 0x41, 0xd2, 0xe8, 0x75, 0x42, 0x33,
-	0x1e, 0xe1, 0x75, 0x72, 0x22, 0x87, 0x22, 0xf2, 0x65, 0x5c, 0x45, 0x0d, 0xb4, 0xb7, 0xde, 0xa9,
-	0xfe, 0xfc, 0x76, 0x50, 0x51, 0x5e, 0x9e, 0x0e, 0x06, 0x11, 0x05, 0x78, 0x25, 0x23, 0x3f, 0x60,
-	0xde, 0x15, 0xd5, 0xa8, 0xe0, 0xb5, 0x01, 0x0d, 0x04, 0xaf, 0xae, 0x5c, 0xf6, 0x78, 0x29, 0x30,
-	0xee, 0xe2, 0x72, 0x2a, 0x5f, 0x5d, 0x4d, 0xca, 0x0a, 0xb5, 0x1f, 0x7e, 0x9a, 0x8d, 0x9b, 0x57,
-	0xdd, 0x9f, 0x67, 0xe3, 0xa6, 0xfe, 0x19, 0x35, 0x73, 0x76, 0x1d, 0xd7, 0xb4, 0xa2, 0x47, 0x21,
-	0x14, 0x01, 0x50, 0xfb, 0x2b, 0xc2, 0x5b, 0x5d, 0x60, 0xcf, 0x68, 0xf4, 0x1f, 0x13, 0xb5, 0x1f,
-	0xeb, 0xce, 0x77, 0x8b, 0x9c, 0xcf, 0xdb, 0xb0, 0xef, 0xe1, 0x7a, 0x41, 0x39, 0x77, 0xff, 0x03,
-	0xe1, 0x3b, 0x5d, 0x60, 0x6f, 0xc2, 0x01, 0x91, 0xf4, 0x65, 0xb2, 0x27, 0xe3, 0xb9, 0xee, 0x7c,
-	0xff, 0xcf, 0xc5, 0xce, 0x46, 0x4c, 0xf8, 0xa8, 0x6d, 0xe7, 0x47, 0xf6, 0x32, 0x69, 0x9e, 0xe0,
-	0x72, 0xba, 0xfd, 0x24, 0xce, 0xcd, 0xc3, 0xba, 0x53, 0x70, 0x25, 0x9d, 0x54, 0xb8, 0x73, 0xe3,
-	0xec, 0x62, 0xa7, 0xe4, 0xa9, 0x86, 0xf6, 0x91, 0x1e, 0xb9, 0x51, 0x14, 0xf9, 0xba, 0x77, 0xbb,
-	0x86, 0xb7, 0xe7, 0x4a, 0x59, 0xd4, 0xc3, 0xef, 0x2b, 0x78, 0xb5, 0x0b, 0xcc, 0x18, 0xe2, 0xdb,
-	0x73, 0x97, 0xef, 0x7e, 0xa1, 0x29, 0x6d, 0xe5, 0xa6, 0xb3, 0x1c, 0x2f, 0x53, 0x34, 0x02, 0xbc,
-	0xa1, 0x5d, 0x8b, 0xbd, 0x45, 0x33, 0xe6, 0x99, 0xe6, 0x83, 0x65, 0x99, 0xb9, 0x5e, 0x0f, 0xdf,
-	0xfa, 0x67, 0x91, 0xbb, 0x8b, 0x26, 0x5c, 0x67, 0x99, 0xfb, 0xcb, 0xb0, 0x32, 0x0d, 0x73, 0xed,
-	0xe3, 0x6c, 0xdc, 0x44, 0x9d, 0x17, 0x67, 0x13, 0x0b, 0x9d, 0x4f, 0x2c, 0xf4, 0x7b, 0x62, 0xa1,
-	0x2f, 0x53, 0xab, 0x74, 0x3e, 0xb5, 0x4a, 0xbf, 0xa6, 0x56, 0xe9, 0x6d, 0x8b, 0xf9, 0x72, 0x78,
-	0xd2, 0x73, 0xfa, 0x82, 0xbb, 0xd9, 0xe0, 0x83, 0x11, 0xe9, 0x41, 0x8e, 0xdc, 0x0f, 0xf9, 0xfa,
-	0x64, 0x1c, 0x52, 0xe8, 0x95, 0x93, 0x3f, 0xc3, 0xd1, 0xdf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x31,
-	0xc3, 0x3b, 0xf3, 0xd3, 0x04, 0x00, 0x00,
+	// 518 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x94, 0x31, 0x6f, 0xd3, 0x40,
+	0x14, 0xc7, 0x73, 0x85, 0x54, 0xca, 0x01, 0x6a, 0x31, 0x91, 0x9a, 0x1a, 0xe4, 0x06, 0x03, 0xa2,
+	0x8a, 0x1a, 0x9f, 0xd2, 0xa2, 0x48, 0x64, 0x6b, 0xc4, 0x04, 0x8a, 0x84, 0x82, 0x58, 0x58, 0xd0,
+	0x25, 0x3e, 0x5d, 0xad, 0xe4, 0x72, 0x96, 0xdf, 0xb5, 0xe0, 0x0d, 0x31, 0x32, 0x31, 0xf3, 0x29,
+	0x32, 0x30, 0xf0, 0x01, 0x18, 0xba, 0x20, 0x55, 0x4c, 0x4c, 0x15, 0x4a, 0x86, 0xec, 0x7c, 0x02,
+	0x54, 0xfb, 0xec, 0xb6, 0xb6, 0x8b, 0x32, 0xb0, 0x58, 0x7e, 0xef, 0x7e, 0xf7, 0xde, 0xff, 0xf9,
+	0xff, 0x64, 0x6c, 0x0b, 0x6f, 0x3c, 0x0a, 0xdf, 0xd1, 0x90, 0x28, 0x6f, 0x38, 0x62, 0x01, 0x90,
+	0xa3, 0x16, 0x11, 0x0c, 0x80, 0x72, 0x06, 0x8e, 0x1f, 0x48, 0x25, 0x8d, 0x3b, 0x09, 0xe3, 0x68,
+	0xc6, 0x39, 0x6a, 0x99, 0xb7, 0xa9, 0xf0, 0x26, 0x92, 0x44, 0xcf, 0x98, 0x33, 0x37, 0x87, 0x12,
+	0x84, 0x84, 0xb7, 0x51, 0x44, 0xe2, 0x40, 0x1f, 0x6d, 0xc4, 0x11, 0x11, 0xc0, 0xa3, 0x06, 0xc0,
+	0xf5, 0x41, 0x95, 0x4b, 0x2e, 0xe3, 0x0b, 0x67, 0x6f, 0x3a, 0x5b, 0x2f, 0x52, 0xe5, 0xd3, 0x80,
+	0x0a, 0xf8, 0x17, 0x21, 0xa4, 0xcb, 0xc6, 0x9a, 0xb0, 0xbf, 0x21, 0xbc, 0xde, 0x03, 0xde, 0x67,
+	0xdc, 0x03, 0xc5, 0x82, 0x7d, 0x00, 0xa6, 0x8c, 0x36, 0xae, 0xd0, 0x43, 0x75, 0x20, 0x03, 0x4f,
+	0x85, 0x35, 0x54, 0x47, 0xdb, 0x95, 0x6e, 0xed, 0xe7, 0xd7, 0x66, 0x55, 0x8b, 0xdd, 0x77, 0xdd,
+	0x80, 0x01, 0xbc, 0x52, 0x81, 0x37, 0xe1, 0xfd, 0x73, 0xd4, 0x68, 0xe3, 0x32, 0x3d, 0x2b, 0x50,
+	0x5b, 0xa9, 0xa3, 0xed, 0x1b, 0xbb, 0xa6, 0x53, 0xf0, 0x49, 0x9c, 0xa8, 0x45, 0xf7, 0xfa, 0xf1,
+	0xe9, 0x56, 0xa9, 0x1f, 0xe3, 0x9d, 0x27, 0x1f, 0x17, 0xd3, 0xc6, 0x79, 0x9d, 0x4f, 0x8b, 0x69,
+	0xe3, 0x7e, 0x4e, 0x79, 0x56, 0xa5, 0x6d, 0xe2, 0x5a, 0x36, 0xd7, 0x67, 0xe0, 0xcb, 0x09, 0x30,
+	0xfb, 0x0b, 0xc2, 0x46, 0x0f, 0xf8, 0x33, 0x16, 0xfc, 0x97, 0xc1, 0xaa, 0xb8, 0xec, 0xb2, 0x89,
+	0x14, 0xd1, 0x60, 0x95, 0x7e, 0x1c, 0x74, 0xda, 0x79, 0xd9, 0x0f, 0x8a, 0x64, 0x67, 0x54, 0xd8,
+	0xf7, 0xb0, 0x99, 0xcf, 0xa6, 0xd2, 0x7f, 0x20, 0xbc, 0xd6, 0x03, 0xfe, 0xda, 0x77, 0xa9, 0x62,
+	0x2f, 0x23, 0x37, 0x8d, 0xe7, 0x79, 0xdd, 0x3b, 0x7f, 0x4e, 0xb7, 0xd6, 0x43, 0x2a, 0xc6, 0x1d,
+	0x3b, 0x3d, 0xb2, 0x97, 0x99, 0xe5, 0x29, 0x5e, 0x8d, 0x77, 0x44, 0xbb, 0x74, 0xb7, 0xd0, 0xa5,
+	0xb8, 0xb1, 0xb6, 0x49, 0x5f, 0xe8, 0xec, 0xe5, 0x07, 0xae, 0x17, 0x0d, 0x7c, 0x51, 0xbb, 0xbd,
+	0x89, 0x37, 0x32, 0xa9, 0x64, 0xd4, 0xdd, 0xef, 0x2b, 0xf8, 0x5a, 0x0f, 0xb8, 0xc1, 0xf0, 0xad,
+	0xcb, 0x0b, 0xf8, 0xa8, 0x50, 0x53, 0xd6, 0x6d, 0xb3, 0xb9, 0x14, 0x96, 0xb4, 0x33, 0x46, 0x78,
+	0x2d, 0xbb, 0x10, 0x8f, 0xaf, 0xaa, 0x90, 0x01, 0x4d, 0xb2, 0x24, 0x98, 0x36, 0x1b, 0xe0, 0x9b,
+	0x97, 0x2c, 0x7c, 0x78, 0x55, 0x81, 0x8b, 0x94, 0xb9, 0xb3, 0x0c, 0x95, 0xf4, 0x30, 0xcb, 0x1f,
+	0x16, 0xd3, 0x06, 0xea, 0xbe, 0x38, 0x9e, 0x59, 0xe8, 0x64, 0x66, 0xa1, 0xdf, 0x33, 0x0b, 0x7d,
+	0x9e, 0x5b, 0xa5, 0x93, 0xb9, 0x55, 0xfa, 0x35, 0xb7, 0x4a, 0x6f, 0x5a, 0xdc, 0x53, 0x07, 0x87,
+	0x03, 0x67, 0x28, 0x05, 0x49, 0x0a, 0x37, 0xc7, 0x74, 0x00, 0x69, 0x44, 0xde, 0xa7, 0xc6, 0xa9,
+	0xd0, 0x67, 0x30, 0x58, 0x8d, 0xfe, 0x0b, 0x7b, 0x7f, 0x03, 0x00, 0x00, 0xff, 0xff, 0x0b, 0x49,
+	0xa8, 0xc6, 0xf3, 0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -386,11 +377,11 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgClient interface {
-	// RegisterTicker defines the operation for registering a ticker.
-	RegisterTicker(ctx context.Context, in *MsgRegisterTicker, opts ...grpc.CallOption) (*MsgRegisterTickerResponse, error)
-	// DeregisterTicker defines the operation for de-registering a ticker with
-	// the token denomination.
-	DeregisterTicker(ctx context.Context, in *MsgDeregisterTicker, opts ...grpc.CallOption) (*MsgDeregisterTickerResponse, error)
+	// RegisterAsset defines the operation for registering an asset.
+	RegisterAsset(ctx context.Context, in *MsgRegisterAsset, opts ...grpc.CallOption) (*MsgRegisterAssetResponse, error)
+	// DeregisterAsset defines the operation for de-registering an asset with
+	// its denomination.
+	DeregisterAsset(ctx context.Context, in *MsgDeregisterAsset, opts ...grpc.CallOption) (*MsgDeregisterAssetResponse, error)
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters.
 	// The authority defaults to the x/gov module account.
@@ -405,18 +396,18 @@ func NewMsgClient(cc grpc1.ClientConn) MsgClient {
 	return &msgClient{cc}
 }
 
-func (c *msgClient) RegisterTicker(ctx context.Context, in *MsgRegisterTicker, opts ...grpc.CallOption) (*MsgRegisterTickerResponse, error) {
-	out := new(MsgRegisterTickerResponse)
-	err := c.cc.Invoke(ctx, "/milkyway.tickers.v1.Msg/RegisterTicker", in, out, opts...)
+func (c *msgClient) RegisterAsset(ctx context.Context, in *MsgRegisterAsset, opts ...grpc.CallOption) (*MsgRegisterAssetResponse, error) {
+	out := new(MsgRegisterAssetResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.tickers.v1.Msg/RegisterAsset", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *msgClient) DeregisterTicker(ctx context.Context, in *MsgDeregisterTicker, opts ...grpc.CallOption) (*MsgDeregisterTickerResponse, error) {
-	out := new(MsgDeregisterTickerResponse)
-	err := c.cc.Invoke(ctx, "/milkyway.tickers.v1.Msg/DeregisterTicker", in, out, opts...)
+func (c *msgClient) DeregisterAsset(ctx context.Context, in *MsgDeregisterAsset, opts ...grpc.CallOption) (*MsgDeregisterAssetResponse, error) {
+	out := new(MsgDeregisterAssetResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.tickers.v1.Msg/DeregisterAsset", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -434,11 +425,11 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
-	// RegisterTicker defines the operation for registering a ticker.
-	RegisterTicker(context.Context, *MsgRegisterTicker) (*MsgRegisterTickerResponse, error)
-	// DeregisterTicker defines the operation for de-registering a ticker with
-	// the token denomination.
-	DeregisterTicker(context.Context, *MsgDeregisterTicker) (*MsgDeregisterTickerResponse, error)
+	// RegisterAsset defines the operation for registering an asset.
+	RegisterAsset(context.Context, *MsgRegisterAsset) (*MsgRegisterAssetResponse, error)
+	// DeregisterAsset defines the operation for de-registering an asset with
+	// its denomination.
+	DeregisterAsset(context.Context, *MsgDeregisterAsset) (*MsgDeregisterAssetResponse, error)
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters.
 	// The authority defaults to the x/gov module account.
@@ -449,11 +440,11 @@ type MsgServer interface {
 type UnimplementedMsgServer struct {
 }
 
-func (*UnimplementedMsgServer) RegisterTicker(ctx context.Context, req *MsgRegisterTicker) (*MsgRegisterTickerResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RegisterTicker not implemented")
+func (*UnimplementedMsgServer) RegisterAsset(ctx context.Context, req *MsgRegisterAsset) (*MsgRegisterAssetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RegisterAsset not implemented")
 }
-func (*UnimplementedMsgServer) DeregisterTicker(ctx context.Context, req *MsgDeregisterTicker) (*MsgDeregisterTickerResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeregisterTicker not implemented")
+func (*UnimplementedMsgServer) DeregisterAsset(ctx context.Context, req *MsgDeregisterAsset) (*MsgDeregisterAssetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeregisterAsset not implemented")
 }
 func (*UnimplementedMsgServer) UpdateParams(ctx context.Context, req *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
@@ -463,38 +454,38 @@ func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
 	s.RegisterService(&_Msg_serviceDesc, srv)
 }
 
-func _Msg_RegisterTicker_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgRegisterTicker)
+func _Msg_RegisterAsset_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRegisterAsset)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).RegisterTicker(ctx, in)
+		return srv.(MsgServer).RegisterAsset(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/milkyway.tickers.v1.Msg/RegisterTicker",
+		FullMethod: "/milkyway.tickers.v1.Msg/RegisterAsset",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).RegisterTicker(ctx, req.(*MsgRegisterTicker))
+		return srv.(MsgServer).RegisterAsset(ctx, req.(*MsgRegisterAsset))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_DeregisterTicker_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgDeregisterTicker)
+func _Msg_DeregisterAsset_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgDeregisterAsset)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).DeregisterTicker(ctx, in)
+		return srv.(MsgServer).DeregisterAsset(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/milkyway.tickers.v1.Msg/DeregisterTicker",
+		FullMethod: "/milkyway.tickers.v1.Msg/DeregisterAsset",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).DeregisterTicker(ctx, req.(*MsgDeregisterTicker))
+		return srv.(MsgServer).DeregisterAsset(ctx, req.(*MsgDeregisterAsset))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -522,12 +513,12 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*MsgServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "RegisterTicker",
-			Handler:    _Msg_RegisterTicker_Handler,
+			MethodName: "RegisterAsset",
+			Handler:    _Msg_RegisterAsset_Handler,
 		},
 		{
-			MethodName: "DeregisterTicker",
-			Handler:    _Msg_DeregisterTicker_Handler,
+			MethodName: "DeregisterAsset",
+			Handler:    _Msg_DeregisterAsset_Handler,
 		},
 		{
 			MethodName: "UpdateParams",
@@ -538,7 +529,7 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 	Metadata: "milkyway/tickers/v1/messages.proto",
 }
 
-func (m *MsgRegisterTicker) Marshal() (dAtA []byte, err error) {
+func (m *MsgRegisterAsset) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -548,23 +539,79 @@ func (m *MsgRegisterTicker) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgRegisterTicker) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgRegisterAsset) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgRegisterTicker) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgRegisterAsset) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Ticker) > 0 {
-		i -= len(m.Ticker)
-		copy(dAtA[i:], m.Ticker)
-		i = encodeVarintMessages(dAtA, i, uint64(len(m.Ticker)))
-		i--
-		dAtA[i] = 0x1a
+	{
+		size, err := m.Asset.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintMessages(dAtA, i, uint64(size))
 	}
+	i--
+	dAtA[i] = 0x12
+	if len(m.Authority) > 0 {
+		i -= len(m.Authority)
+		copy(dAtA[i:], m.Authority)
+		i = encodeVarintMessages(dAtA, i, uint64(len(m.Authority)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgRegisterAssetResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgRegisterAssetResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgRegisterAssetResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgDeregisterAsset) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgDeregisterAsset) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgDeregisterAsset) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
 	if len(m.Denom) > 0 {
 		i -= len(m.Denom)
 		copy(dAtA[i:], m.Denom)
@@ -582,7 +629,7 @@ func (m *MsgRegisterTicker) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgRegisterTickerResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgDeregisterAssetResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -592,72 +639,12 @@ func (m *MsgRegisterTickerResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgRegisterTickerResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgDeregisterAssetResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgRegisterTickerResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
-}
-
-func (m *MsgDeregisterTicker) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgDeregisterTicker) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgDeregisterTicker) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Denom) > 0 {
-		i -= len(m.Denom)
-		copy(dAtA[i:], m.Denom)
-		i = encodeVarintMessages(dAtA, i, uint64(len(m.Denom)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Authority) > 0 {
-		i -= len(m.Authority)
-		copy(dAtA[i:], m.Authority)
-		i = encodeVarintMessages(dAtA, i, uint64(len(m.Authority)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *MsgDeregisterTickerResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MsgDeregisterTickerResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MsgDeregisterTickerResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgDeregisterAssetResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -739,7 +726,31 @@ func encodeVarintMessages(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *MsgRegisterTicker) Size() (n int) {
+func (m *MsgRegisterAsset) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Authority)
+	if l > 0 {
+		n += 1 + l + sovMessages(uint64(l))
+	}
+	l = m.Asset.Size()
+	n += 1 + l + sovMessages(uint64(l))
+	return n
+}
+
+func (m *MsgRegisterAssetResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgDeregisterAsset) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -753,40 +764,10 @@ func (m *MsgRegisterTicker) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovMessages(uint64(l))
 	}
-	l = len(m.Ticker)
-	if l > 0 {
-		n += 1 + l + sovMessages(uint64(l))
-	}
 	return n
 }
 
-func (m *MsgRegisterTickerResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
-
-func (m *MsgDeregisterTicker) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Authority)
-	if l > 0 {
-		n += 1 + l + sovMessages(uint64(l))
-	}
-	l = len(m.Denom)
-	if l > 0 {
-		n += 1 + l + sovMessages(uint64(l))
-	}
-	return n
-}
-
-func (m *MsgDeregisterTickerResponse) Size() (n int) {
+func (m *MsgDeregisterAssetResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -825,7 +806,7 @@ func sovMessages(x uint64) (n int) {
 func sozMessages(x uint64) (n int) {
 	return sovMessages(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *MsgRegisterTicker) Unmarshal(dAtA []byte) error {
+func (m *MsgRegisterAsset) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -848,10 +829,175 @@ func (m *MsgRegisterTicker) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgRegisterTicker: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgRegisterAsset: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgRegisterTicker: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgRegisterAsset: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Authority", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessages
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMessages
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Authority = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Asset", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessages
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthMessages
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Asset.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipMessages(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgRegisterAssetResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowMessages
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgRegisterAssetResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgRegisterAssetResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipMessages(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgDeregisterAsset) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowMessages
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgDeregisterAsset: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgDeregisterAsset: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -918,38 +1064,6 @@ func (m *MsgRegisterTicker) Unmarshal(dAtA []byte) error {
 			}
 			m.Denom = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Ticker", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthMessages
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMessages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Ticker = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipMessages(dAtA[iNdEx:])
@@ -971,7 +1085,7 @@ func (m *MsgRegisterTicker) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgRegisterTickerResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgDeregisterAssetResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -994,174 +1108,10 @@ func (m *MsgRegisterTickerResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgRegisterTickerResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgDeregisterAssetResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgRegisterTickerResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipMessages(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthMessages
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgDeregisterTicker) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowMessages
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgDeregisterTicker: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgDeregisterTicker: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Authority", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthMessages
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMessages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Authority = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Denom", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthMessages
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMessages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Denom = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipMessages(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthMessages
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgDeregisterTickerResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowMessages
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgDeregisterTickerResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgDeregisterTickerResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgDeregisterAssetResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -20,7 +21,7 @@ func NewMsgServer(k *Keeper) types.MsgServer {
 	return &msgServer{Keeper: k}
 }
 
-func (k msgServer) RegisterTicker(ctx context.Context, msg *types.MsgRegisterTicker) (*types.MsgRegisterTickerResponse, error) {
+func (k msgServer) RegisterAsset(ctx context.Context, msg *types.MsgRegisterAsset) (*types.MsgRegisterAssetResponse, error) {
 	if err := msg.Validate(); err != nil {
 		return nil, err
 	}
@@ -29,23 +30,24 @@ func (k msgServer) RegisterTicker(ctx context.Context, msg *types.MsgRegisterTic
 		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", k.authority, msg.Authority)
 	}
 
-	if err := k.SetTicker(ctx, msg.Denom, msg.Ticker); err != nil {
+	if err := k.SetAsset(ctx, msg.Asset); err != nil {
 		return nil, err
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeRegisterTicker,
-			sdk.NewAttribute(types.AttributeKeyDenom, msg.Denom),
-			sdk.NewAttribute(types.AttributeKeyTicker, msg.Ticker),
+			types.EventTypeRegisterAsset,
+			sdk.NewAttribute(types.AttributeKeyDenom, msg.Asset.Denom),
+			sdk.NewAttribute(types.AttributeKeyTicker, msg.Asset.Ticker),
+			sdk.NewAttribute(types.AttributeKeyExponent, fmt.Sprint(msg.Asset.Exponent)),
 		),
 	})
 
-	return &types.MsgRegisterTickerResponse{}, nil
+	return &types.MsgRegisterAssetResponse{}, nil
 }
 
-func (k msgServer) DeregisterTicker(ctx context.Context, msg *types.MsgDeregisterTicker) (*types.MsgDeregisterTickerResponse, error) {
+func (k msgServer) DeregisterAsset(ctx context.Context, msg *types.MsgDeregisterAsset) (*types.MsgDeregisterAssetResponse, error) {
 	if err := msg.Validate(); err != nil {
 		return nil, err
 	}
@@ -54,19 +56,19 @@ func (k msgServer) DeregisterTicker(ctx context.Context, msg *types.MsgDeregiste
 		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", k.authority, msg.Authority)
 	}
 
-	if err := k.RemoveTicker(ctx, msg.Denom); err != nil {
+	if err := k.RemoveAsset(ctx, msg.Denom); err != nil {
 		return nil, err
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeDeregisterTicker,
+			types.EventTypeDeregisterAsset,
 			sdk.NewAttribute(types.AttributeKeyDenom, msg.Denom),
 		),
 	})
 
-	return &types.MsgDeregisterTickerResponse{}, nil
+	return &types.MsgDeregisterAssetResponse{}, nil
 }
 
 // UpdateParams defines the rpc method for Msg/UpdateParams

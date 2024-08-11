@@ -12,6 +12,7 @@ import (
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
+	tickerstypes "github.com/milkyway-labs/milkyway/x/tickers/types"
 )
 
 type AccountKeeper interface {
@@ -74,5 +75,5 @@ type RestakingKeeper interface {
 }
 
 type TickersKeeper interface {
-	GetTicker(ctx context.Context, denom string) (ticker string, err error)
+	GetAsset(ctx context.Context, denom string) (tickerstypes.Asset, error)
 }

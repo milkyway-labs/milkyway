@@ -5,34 +5,51 @@ import (
 )
 
 func (s *KeeperTestSuite) TestExportGenesis() {
-	_, err := s.msgServer.RegisterTicker(s.Ctx, types.NewMsgRegisterTicker(s.authority, "umilk", "MILK"))
+	_, err := s.msgServer.RegisterAsset(s.Ctx, &types.MsgRegisterAsset{
+		Authority: s.authority,
+		Asset:     types.NewAsset("umilk", "MILK", 6),
+	})
 	s.Require().NoError(err)
 
-	_, err = s.msgServer.RegisterTicker(s.Ctx, types.NewMsgRegisterTicker(s.authority, "umilk2", "MILK"))
+	_, err = s.msgServer.RegisterAsset(s.Ctx, &types.MsgRegisterAsset{
+		Authority: s.authority,
+		Asset:     types.NewAsset("umilk2", "MILK", 6),
+	})
 	s.Require().NoError(err)
 
-	_, err = s.msgServer.RegisterTicker(s.Ctx, types.NewMsgRegisterTicker(s.authority, "uatom", "ATOM"))
+	_, err = s.msgServer.RegisterAsset(s.Ctx, &types.MsgRegisterAsset{
+		Authority: s.authority,
+		Asset:     types.NewAsset("uatom", "ATOM", 6),
+	})
 	s.Require().NoError(err)
 
 	genState := s.App.TickersKeeper.ExportGenesis(s.Ctx)
 
-	s.Require().Equal(types.Tickers{
-		"umilk":  "MILK",
-		"umilk2": "MILK",
-		"uatom":  "ATOM",
-	}, genState.Tickers)
+	s.Require().Equal([]types.Asset{
+		types.NewAsset("uatom", "ATOM", 6),
+		types.NewAsset("umilk", "MILK", 6),
+		types.NewAsset("umilk2", "MILK", 6),
+	}, genState.Assets)
 }
 
 func (s *KeeperTestSuite) TestInitGenesis() {
-	genState := types.NewGenesisState(types.DefaultParams(), types.Tickers{
-		"umilk":  "MILK",
-		"umilk2": "MILK",
-		"uatom":  "ATOM",
+	genState := types.NewGenesisState(types.DefaultParams(), []types.Asset{
+		types.NewAsset("umilk", "MILK", 6),
+		types.NewAsset("umilk2", "MILK", 6),
+		types.NewAsset("uatom", "ATOM", 6),
 	})
 
 	s.App.TickersKeeper.InitGenesis(s.Ctx, genState)
 
-	resp, err := s.queryServer.Ticker(s.Ctx, &types.QueryTickerRequest{Denom: "umilk"})
+	resp, err := s.queryServer.Asset(s.Ctx, &types.QueryAssetRequest{Denom: "umilk"})
 	s.Require().NoError(err)
-	s.Require().Equal("MILK", resp.Ticker)
+	s.Require().Equal(types.NewAsset("umilk", "MILK", 6), resp.Asset)
+
+	resp, err = s.queryServer.Asset(s.Ctx, &types.QueryAssetRequest{Denom: "umilk2"})
+	s.Require().NoError(err)
+	s.Require().Equal(types.NewAsset("umilk2", "MILK", 6), resp.Asset)
+
+	resp, err = s.queryServer.Asset(s.Ctx, &types.QueryAssetRequest{Denom: "uatom"})
+	s.Require().NoError(err)
+	s.Require().Equal(types.NewAsset("uatom", "ATOM", 6), resp.Asset)
 }

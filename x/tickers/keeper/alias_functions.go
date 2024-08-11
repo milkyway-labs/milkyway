@@ -8,31 +8,27 @@ import (
 	"github.com/milkyway-labs/milkyway/x/tickers/types"
 )
 
-func (k *Keeper) SetTicker(ctx context.Context, denom, ticker string) error {
-	if err := k.Tickers.Set(ctx, denom, ticker); err != nil {
+func (k *Keeper) SetAsset(ctx context.Context, asset types.Asset) error {
+	if err := k.Assets.Set(ctx, asset.Denom, asset); err != nil {
 		return err
 	}
-	if err := k.TickerIndexes.Set(ctx, collections.Join(ticker, denom)); err != nil {
+	if err := k.TickerIndexes.Set(ctx, collections.Join(asset.Ticker, asset.Denom)); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (k *Keeper) GetTicker(ctx context.Context, denom string) (string, error) {
-	ticker, err := k.Tickers.Get(ctx, denom)
-	if err != nil {
-		return "", types.ErrTickerNotFound
-	}
-	return ticker, nil
+func (k *Keeper) GetAsset(ctx context.Context, denom string) (types.Asset, error) {
+	return k.Assets.Get(ctx, denom)
 }
 
-func (k *Keeper) RemoveTicker(ctx context.Context, denom string) error {
-	ticker, err := k.GetTicker(ctx, denom)
+func (k *Keeper) RemoveAsset(ctx context.Context, denom string) error {
+	asset, err := k.GetAsset(ctx, denom)
 	if err != nil {
 		return err
 	}
-	if err := k.Tickers.Remove(ctx, denom); err != nil {
+	if err := k.Assets.Remove(ctx, denom); err != nil {
 		return err
 	}
-	return k.TickerIndexes.Remove(ctx, collections.Join(ticker, denom))
+	return k.TickerIndexes.Remove(ctx, collections.Join(asset.Ticker, denom))
 }

@@ -17,29 +17,27 @@ import (
 )
 
 var (
-	md_MsgRegisterTicker           protoreflect.MessageDescriptor
-	fd_MsgRegisterTicker_authority protoreflect.FieldDescriptor
-	fd_MsgRegisterTicker_denom     protoreflect.FieldDescriptor
-	fd_MsgRegisterTicker_ticker    protoreflect.FieldDescriptor
+	md_MsgRegisterAsset           protoreflect.MessageDescriptor
+	fd_MsgRegisterAsset_authority protoreflect.FieldDescriptor
+	fd_MsgRegisterAsset_asset     protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_milkyway_tickers_v1_messages_proto_init()
-	md_MsgRegisterTicker = File_milkyway_tickers_v1_messages_proto.Messages().ByName("MsgRegisterTicker")
-	fd_MsgRegisterTicker_authority = md_MsgRegisterTicker.Fields().ByName("authority")
-	fd_MsgRegisterTicker_denom = md_MsgRegisterTicker.Fields().ByName("denom")
-	fd_MsgRegisterTicker_ticker = md_MsgRegisterTicker.Fields().ByName("ticker")
+	md_MsgRegisterAsset = File_milkyway_tickers_v1_messages_proto.Messages().ByName("MsgRegisterAsset")
+	fd_MsgRegisterAsset_authority = md_MsgRegisterAsset.Fields().ByName("authority")
+	fd_MsgRegisterAsset_asset = md_MsgRegisterAsset.Fields().ByName("asset")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgRegisterTicker)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgRegisterAsset)(nil)
 
-type fastReflection_MsgRegisterTicker MsgRegisterTicker
+type fastReflection_MsgRegisterAsset MsgRegisterAsset
 
-func (x *MsgRegisterTicker) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgRegisterTicker)(x)
+func (x *MsgRegisterAsset) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgRegisterAsset)(x)
 }
 
-func (x *MsgRegisterTicker) slowProtoReflect() protoreflect.Message {
+func (x *MsgRegisterAsset) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_tickers_v1_messages_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -51,43 +49,43 @@ func (x *MsgRegisterTicker) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgRegisterTicker_messageType fastReflection_MsgRegisterTicker_messageType
-var _ protoreflect.MessageType = fastReflection_MsgRegisterTicker_messageType{}
+var _fastReflection_MsgRegisterAsset_messageType fastReflection_MsgRegisterAsset_messageType
+var _ protoreflect.MessageType = fastReflection_MsgRegisterAsset_messageType{}
 
-type fastReflection_MsgRegisterTicker_messageType struct{}
+type fastReflection_MsgRegisterAsset_messageType struct{}
 
-func (x fastReflection_MsgRegisterTicker_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgRegisterTicker)(nil)
+func (x fastReflection_MsgRegisterAsset_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgRegisterAsset)(nil)
 }
-func (x fastReflection_MsgRegisterTicker_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgRegisterTicker)
+func (x fastReflection_MsgRegisterAsset_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgRegisterAsset)
 }
-func (x fastReflection_MsgRegisterTicker_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgRegisterTicker
+func (x fastReflection_MsgRegisterAsset_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgRegisterAsset
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgRegisterTicker) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgRegisterTicker
+func (x *fastReflection_MsgRegisterAsset) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgRegisterAsset
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgRegisterTicker) Type() protoreflect.MessageType {
-	return _fastReflection_MsgRegisterTicker_messageType
+func (x *fastReflection_MsgRegisterAsset) Type() protoreflect.MessageType {
+	return _fastReflection_MsgRegisterAsset_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgRegisterTicker) New() protoreflect.Message {
-	return new(fastReflection_MsgRegisterTicker)
+func (x *fastReflection_MsgRegisterAsset) New() protoreflect.Message {
+	return new(fastReflection_MsgRegisterAsset)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgRegisterTicker) Interface() protoreflect.ProtoMessage {
-	return (*MsgRegisterTicker)(x)
+func (x *fastReflection_MsgRegisterAsset) Interface() protoreflect.ProtoMessage {
+	return (*MsgRegisterAsset)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -95,22 +93,16 @@ func (x *fastReflection_MsgRegisterTicker) Interface() protoreflect.ProtoMessage
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgRegisterTicker) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgRegisterAsset) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Authority != "" {
 		value := protoreflect.ValueOfString(x.Authority)
-		if !f(fd_MsgRegisterTicker_authority, value) {
+		if !f(fd_MsgRegisterAsset_authority, value) {
 			return
 		}
 	}
-	if x.Denom != "" {
-		value := protoreflect.ValueOfString(x.Denom)
-		if !f(fd_MsgRegisterTicker_denom, value) {
-			return
-		}
-	}
-	if x.Ticker != "" {
-		value := protoreflect.ValueOfString(x.Ticker)
-		if !f(fd_MsgRegisterTicker_ticker, value) {
+	if x.Asset != nil {
+		value := protoreflect.ValueOfMessage(x.Asset.ProtoReflect())
+		if !f(fd_MsgRegisterAsset_asset, value) {
 			return
 		}
 	}
@@ -127,19 +119,17 @@ func (x *fastReflection_MsgRegisterTicker) Range(f func(protoreflect.FieldDescri
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgRegisterTicker) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgRegisterAsset) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "milkyway.tickers.v1.MsgRegisterTicker.authority":
+	case "milkyway.tickers.v1.MsgRegisterAsset.authority":
 		return x.Authority != ""
-	case "milkyway.tickers.v1.MsgRegisterTicker.denom":
-		return x.Denom != ""
-	case "milkyway.tickers.v1.MsgRegisterTicker.ticker":
-		return x.Ticker != ""
+	case "milkyway.tickers.v1.MsgRegisterAsset.asset":
+		return x.Asset != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterTicker"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterAsset"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterTicker does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterAsset does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -149,19 +139,17 @@ func (x *fastReflection_MsgRegisterTicker) Has(fd protoreflect.FieldDescriptor) 
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgRegisterTicker) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgRegisterAsset) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "milkyway.tickers.v1.MsgRegisterTicker.authority":
+	case "milkyway.tickers.v1.MsgRegisterAsset.authority":
 		x.Authority = ""
-	case "milkyway.tickers.v1.MsgRegisterTicker.denom":
-		x.Denom = ""
-	case "milkyway.tickers.v1.MsgRegisterTicker.ticker":
-		x.Ticker = ""
+	case "milkyway.tickers.v1.MsgRegisterAsset.asset":
+		x.Asset = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterTicker"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterAsset"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterTicker does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterAsset does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -171,22 +159,19 @@ func (x *fastReflection_MsgRegisterTicker) Clear(fd protoreflect.FieldDescriptor
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgRegisterTicker) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgRegisterAsset) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "milkyway.tickers.v1.MsgRegisterTicker.authority":
+	case "milkyway.tickers.v1.MsgRegisterAsset.authority":
 		value := x.Authority
 		return protoreflect.ValueOfString(value)
-	case "milkyway.tickers.v1.MsgRegisterTicker.denom":
-		value := x.Denom
-		return protoreflect.ValueOfString(value)
-	case "milkyway.tickers.v1.MsgRegisterTicker.ticker":
-		value := x.Ticker
-		return protoreflect.ValueOfString(value)
+	case "milkyway.tickers.v1.MsgRegisterAsset.asset":
+		value := x.Asset
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterTicker"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterAsset"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterTicker does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterAsset does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -200,19 +185,17 @@ func (x *fastReflection_MsgRegisterTicker) Get(descriptor protoreflect.FieldDesc
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgRegisterTicker) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgRegisterAsset) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "milkyway.tickers.v1.MsgRegisterTicker.authority":
+	case "milkyway.tickers.v1.MsgRegisterAsset.authority":
 		x.Authority = value.Interface().(string)
-	case "milkyway.tickers.v1.MsgRegisterTicker.denom":
-		x.Denom = value.Interface().(string)
-	case "milkyway.tickers.v1.MsgRegisterTicker.ticker":
-		x.Ticker = value.Interface().(string)
+	case "milkyway.tickers.v1.MsgRegisterAsset.asset":
+		x.Asset = value.Message().Interface().(*Asset)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterTicker"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterAsset"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterTicker does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterAsset does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -226,48 +209,48 @@ func (x *fastReflection_MsgRegisterTicker) Set(fd protoreflect.FieldDescriptor, 
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgRegisterTicker) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgRegisterAsset) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.tickers.v1.MsgRegisterTicker.authority":
-		panic(fmt.Errorf("field authority of message milkyway.tickers.v1.MsgRegisterTicker is not mutable"))
-	case "milkyway.tickers.v1.MsgRegisterTicker.denom":
-		panic(fmt.Errorf("field denom of message milkyway.tickers.v1.MsgRegisterTicker is not mutable"))
-	case "milkyway.tickers.v1.MsgRegisterTicker.ticker":
-		panic(fmt.Errorf("field ticker of message milkyway.tickers.v1.MsgRegisterTicker is not mutable"))
+	case "milkyway.tickers.v1.MsgRegisterAsset.asset":
+		if x.Asset == nil {
+			x.Asset = new(Asset)
+		}
+		return protoreflect.ValueOfMessage(x.Asset.ProtoReflect())
+	case "milkyway.tickers.v1.MsgRegisterAsset.authority":
+		panic(fmt.Errorf("field authority of message milkyway.tickers.v1.MsgRegisterAsset is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterTicker"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterAsset"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterTicker does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterAsset does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgRegisterTicker) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgRegisterAsset) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.tickers.v1.MsgRegisterTicker.authority":
+	case "milkyway.tickers.v1.MsgRegisterAsset.authority":
 		return protoreflect.ValueOfString("")
-	case "milkyway.tickers.v1.MsgRegisterTicker.denom":
-		return protoreflect.ValueOfString("")
-	case "milkyway.tickers.v1.MsgRegisterTicker.ticker":
-		return protoreflect.ValueOfString("")
+	case "milkyway.tickers.v1.MsgRegisterAsset.asset":
+		m := new(Asset)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterTicker"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterAsset"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterTicker does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterAsset does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgRegisterTicker) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgRegisterAsset) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.tickers.v1.MsgRegisterTicker", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.tickers.v1.MsgRegisterAsset", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -275,7 +258,7 @@ func (x *fastReflection_MsgRegisterTicker) WhichOneof(d protoreflect.OneofDescri
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgRegisterTicker) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgRegisterAsset) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -286,7 +269,7 @@ func (x *fastReflection_MsgRegisterTicker) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgRegisterTicker) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgRegisterAsset) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -298,7 +281,7 @@ func (x *fastReflection_MsgRegisterTicker) SetUnknown(fields protoreflect.RawFie
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgRegisterTicker) IsValid() bool {
+func (x *fastReflection_MsgRegisterAsset) IsValid() bool {
 	return x != nil
 }
 
@@ -308,9 +291,9 @@ func (x *fastReflection_MsgRegisterTicker) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgRegisterTicker) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgRegisterAsset) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgRegisterTicker)
+		x := input.Message.Interface().(*MsgRegisterAsset)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -326,12 +309,8 @@ func (x *fastReflection_MsgRegisterTicker) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		l = len(x.Denom)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		l = len(x.Ticker)
-		if l > 0 {
+		if x.Asset != nil {
+			l = options.Size(x.Asset)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
@@ -344,7 +323,7 @@ func (x *fastReflection_MsgRegisterTicker) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgRegisterTicker)
+		x := input.Message.Interface().(*MsgRegisterAsset)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -363,17 +342,17 @@ func (x *fastReflection_MsgRegisterTicker) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.Ticker) > 0 {
-			i -= len(x.Ticker)
-			copy(dAtA[i:], x.Ticker)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Ticker)))
-			i--
-			dAtA[i] = 0x1a
-		}
-		if len(x.Denom) > 0 {
-			i -= len(x.Denom)
-			copy(dAtA[i:], x.Denom)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Denom)))
+		if x.Asset != nil {
+			encoded, err := options.Marshal(x.Asset)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
 			dAtA[i] = 0x12
 		}
@@ -395,7 +374,7 @@ func (x *fastReflection_MsgRegisterTicker) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgRegisterTicker)
+		x := input.Message.Interface().(*MsgRegisterAsset)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -427,10 +406,10 @@ func (x *fastReflection_MsgRegisterTicker) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRegisterTicker: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRegisterAsset: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRegisterTicker: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRegisterAsset: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -467,9 +446,9 @@ func (x *fastReflection_MsgRegisterTicker) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 2:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Denom", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Asset", wireType)
 				}
-				var stringLen uint64
+				var msglen int
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -479,55 +458,27 @@ func (x *fastReflection_MsgRegisterTicker) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
+					msglen |= int(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
+				if msglen < 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
-				postIndex := iNdEx + intStringLen
+				postIndex := iNdEx + msglen
 				if postIndex < 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
 				}
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Denom = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 3:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Ticker", wireType)
+				if x.Asset == nil {
+					x.Asset = &Asset{}
 				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Asset); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Ticker = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
@@ -565,23 +516,23 @@ func (x *fastReflection_MsgRegisterTicker) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_MsgRegisterTickerResponse protoreflect.MessageDescriptor
+	md_MsgRegisterAssetResponse protoreflect.MessageDescriptor
 )
 
 func init() {
 	file_milkyway_tickers_v1_messages_proto_init()
-	md_MsgRegisterTickerResponse = File_milkyway_tickers_v1_messages_proto.Messages().ByName("MsgRegisterTickerResponse")
+	md_MsgRegisterAssetResponse = File_milkyway_tickers_v1_messages_proto.Messages().ByName("MsgRegisterAssetResponse")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgRegisterTickerResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgRegisterAssetResponse)(nil)
 
-type fastReflection_MsgRegisterTickerResponse MsgRegisterTickerResponse
+type fastReflection_MsgRegisterAssetResponse MsgRegisterAssetResponse
 
-func (x *MsgRegisterTickerResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgRegisterTickerResponse)(x)
+func (x *MsgRegisterAssetResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgRegisterAssetResponse)(x)
 }
 
-func (x *MsgRegisterTickerResponse) slowProtoReflect() protoreflect.Message {
+func (x *MsgRegisterAssetResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_tickers_v1_messages_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -593,43 +544,43 @@ func (x *MsgRegisterTickerResponse) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgRegisterTickerResponse_messageType fastReflection_MsgRegisterTickerResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgRegisterTickerResponse_messageType{}
+var _fastReflection_MsgRegisterAssetResponse_messageType fastReflection_MsgRegisterAssetResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgRegisterAssetResponse_messageType{}
 
-type fastReflection_MsgRegisterTickerResponse_messageType struct{}
+type fastReflection_MsgRegisterAssetResponse_messageType struct{}
 
-func (x fastReflection_MsgRegisterTickerResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgRegisterTickerResponse)(nil)
+func (x fastReflection_MsgRegisterAssetResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgRegisterAssetResponse)(nil)
 }
-func (x fastReflection_MsgRegisterTickerResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgRegisterTickerResponse)
+func (x fastReflection_MsgRegisterAssetResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgRegisterAssetResponse)
 }
-func (x fastReflection_MsgRegisterTickerResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgRegisterTickerResponse
+func (x fastReflection_MsgRegisterAssetResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgRegisterAssetResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgRegisterTickerResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgRegisterTickerResponse
+func (x *fastReflection_MsgRegisterAssetResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgRegisterAssetResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgRegisterTickerResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgRegisterTickerResponse_messageType
+func (x *fastReflection_MsgRegisterAssetResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgRegisterAssetResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgRegisterTickerResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgRegisterTickerResponse)
+func (x *fastReflection_MsgRegisterAssetResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgRegisterAssetResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgRegisterTickerResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgRegisterTickerResponse)(x)
+func (x *fastReflection_MsgRegisterAssetResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgRegisterAssetResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -637,7 +588,7 @@ func (x *fastReflection_MsgRegisterTickerResponse) Interface() protoreflect.Prot
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgRegisterTickerResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgRegisterAssetResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 }
 
 // Has reports whether a field is populated.
@@ -651,13 +602,13 @@ func (x *fastReflection_MsgRegisterTickerResponse) Range(f func(protoreflect.Fie
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgRegisterTickerResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgRegisterAssetResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterTickerResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterAssetResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterTickerResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterAssetResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -667,13 +618,13 @@ func (x *fastReflection_MsgRegisterTickerResponse) Has(fd protoreflect.FieldDesc
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgRegisterTickerResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgRegisterAssetResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterTickerResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterAssetResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterTickerResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterAssetResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -683,13 +634,13 @@ func (x *fastReflection_MsgRegisterTickerResponse) Clear(fd protoreflect.FieldDe
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgRegisterTickerResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgRegisterAssetResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterTickerResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterAssetResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterTickerResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterAssetResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -703,13 +654,13 @@ func (x *fastReflection_MsgRegisterTickerResponse) Get(descriptor protoreflect.F
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgRegisterTickerResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgRegisterAssetResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterTickerResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterAssetResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterTickerResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterAssetResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -723,36 +674,36 @@ func (x *fastReflection_MsgRegisterTickerResponse) Set(fd protoreflect.FieldDesc
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgRegisterTickerResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgRegisterAssetResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterTickerResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterAssetResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterTickerResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterAssetResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgRegisterTickerResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgRegisterAssetResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterTickerResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgRegisterAssetResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterTickerResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgRegisterAssetResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgRegisterTickerResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgRegisterAssetResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.tickers.v1.MsgRegisterTickerResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.tickers.v1.MsgRegisterAssetResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -760,7 +711,7 @@ func (x *fastReflection_MsgRegisterTickerResponse) WhichOneof(d protoreflect.One
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgRegisterTickerResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgRegisterAssetResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -771,7 +722,7 @@ func (x *fastReflection_MsgRegisterTickerResponse) GetUnknown() protoreflect.Raw
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgRegisterTickerResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgRegisterAssetResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -783,7 +734,7 @@ func (x *fastReflection_MsgRegisterTickerResponse) SetUnknown(fields protoreflec
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgRegisterTickerResponse) IsValid() bool {
+func (x *fastReflection_MsgRegisterAssetResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -793,9 +744,9 @@ func (x *fastReflection_MsgRegisterTickerResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgRegisterTickerResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgRegisterAssetResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgRegisterTickerResponse)
+		x := input.Message.Interface().(*MsgRegisterAssetResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -817,7 +768,7 @@ func (x *fastReflection_MsgRegisterTickerResponse) ProtoMethods() *protoiface.Me
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgRegisterTickerResponse)
+		x := input.Message.Interface().(*MsgRegisterAssetResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -847,7 +798,7 @@ func (x *fastReflection_MsgRegisterTickerResponse) ProtoMethods() *protoiface.Me
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgRegisterTickerResponse)
+		x := input.Message.Interface().(*MsgRegisterAssetResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -879,10 +830,10 @@ func (x *fastReflection_MsgRegisterTickerResponse) ProtoMethods() *protoiface.Me
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRegisterTickerResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRegisterAssetResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRegisterTickerResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgRegisterAssetResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			default:
@@ -921,27 +872,27 @@ func (x *fastReflection_MsgRegisterTickerResponse) ProtoMethods() *protoiface.Me
 }
 
 var (
-	md_MsgDeregisterTicker           protoreflect.MessageDescriptor
-	fd_MsgDeregisterTicker_authority protoreflect.FieldDescriptor
-	fd_MsgDeregisterTicker_denom     protoreflect.FieldDescriptor
+	md_MsgDeregisterAsset           protoreflect.MessageDescriptor
+	fd_MsgDeregisterAsset_authority protoreflect.FieldDescriptor
+	fd_MsgDeregisterAsset_denom     protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_milkyway_tickers_v1_messages_proto_init()
-	md_MsgDeregisterTicker = File_milkyway_tickers_v1_messages_proto.Messages().ByName("MsgDeregisterTicker")
-	fd_MsgDeregisterTicker_authority = md_MsgDeregisterTicker.Fields().ByName("authority")
-	fd_MsgDeregisterTicker_denom = md_MsgDeregisterTicker.Fields().ByName("denom")
+	md_MsgDeregisterAsset = File_milkyway_tickers_v1_messages_proto.Messages().ByName("MsgDeregisterAsset")
+	fd_MsgDeregisterAsset_authority = md_MsgDeregisterAsset.Fields().ByName("authority")
+	fd_MsgDeregisterAsset_denom = md_MsgDeregisterAsset.Fields().ByName("denom")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgDeregisterTicker)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgDeregisterAsset)(nil)
 
-type fastReflection_MsgDeregisterTicker MsgDeregisterTicker
+type fastReflection_MsgDeregisterAsset MsgDeregisterAsset
 
-func (x *MsgDeregisterTicker) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgDeregisterTicker)(x)
+func (x *MsgDeregisterAsset) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgDeregisterAsset)(x)
 }
 
-func (x *MsgDeregisterTicker) slowProtoReflect() protoreflect.Message {
+func (x *MsgDeregisterAsset) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_tickers_v1_messages_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -953,43 +904,43 @@ func (x *MsgDeregisterTicker) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgDeregisterTicker_messageType fastReflection_MsgDeregisterTicker_messageType
-var _ protoreflect.MessageType = fastReflection_MsgDeregisterTicker_messageType{}
+var _fastReflection_MsgDeregisterAsset_messageType fastReflection_MsgDeregisterAsset_messageType
+var _ protoreflect.MessageType = fastReflection_MsgDeregisterAsset_messageType{}
 
-type fastReflection_MsgDeregisterTicker_messageType struct{}
+type fastReflection_MsgDeregisterAsset_messageType struct{}
 
-func (x fastReflection_MsgDeregisterTicker_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgDeregisterTicker)(nil)
+func (x fastReflection_MsgDeregisterAsset_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgDeregisterAsset)(nil)
 }
-func (x fastReflection_MsgDeregisterTicker_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgDeregisterTicker)
+func (x fastReflection_MsgDeregisterAsset_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgDeregisterAsset)
 }
-func (x fastReflection_MsgDeregisterTicker_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgDeregisterTicker
+func (x fastReflection_MsgDeregisterAsset_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgDeregisterAsset
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgDeregisterTicker) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgDeregisterTicker
+func (x *fastReflection_MsgDeregisterAsset) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgDeregisterAsset
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgDeregisterTicker) Type() protoreflect.MessageType {
-	return _fastReflection_MsgDeregisterTicker_messageType
+func (x *fastReflection_MsgDeregisterAsset) Type() protoreflect.MessageType {
+	return _fastReflection_MsgDeregisterAsset_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgDeregisterTicker) New() protoreflect.Message {
-	return new(fastReflection_MsgDeregisterTicker)
+func (x *fastReflection_MsgDeregisterAsset) New() protoreflect.Message {
+	return new(fastReflection_MsgDeregisterAsset)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgDeregisterTicker) Interface() protoreflect.ProtoMessage {
-	return (*MsgDeregisterTicker)(x)
+func (x *fastReflection_MsgDeregisterAsset) Interface() protoreflect.ProtoMessage {
+	return (*MsgDeregisterAsset)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -997,16 +948,16 @@ func (x *fastReflection_MsgDeregisterTicker) Interface() protoreflect.ProtoMessa
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgDeregisterTicker) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgDeregisterAsset) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Authority != "" {
 		value := protoreflect.ValueOfString(x.Authority)
-		if !f(fd_MsgDeregisterTicker_authority, value) {
+		if !f(fd_MsgDeregisterAsset_authority, value) {
 			return
 		}
 	}
 	if x.Denom != "" {
 		value := protoreflect.ValueOfString(x.Denom)
-		if !f(fd_MsgDeregisterTicker_denom, value) {
+		if !f(fd_MsgDeregisterAsset_denom, value) {
 			return
 		}
 	}
@@ -1023,17 +974,17 @@ func (x *fastReflection_MsgDeregisterTicker) Range(f func(protoreflect.FieldDesc
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgDeregisterTicker) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgDeregisterAsset) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "milkyway.tickers.v1.MsgDeregisterTicker.authority":
+	case "milkyway.tickers.v1.MsgDeregisterAsset.authority":
 		return x.Authority != ""
-	case "milkyway.tickers.v1.MsgDeregisterTicker.denom":
+	case "milkyway.tickers.v1.MsgDeregisterAsset.denom":
 		return x.Denom != ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterTicker"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterAsset"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterTicker does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterAsset does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1043,17 +994,17 @@ func (x *fastReflection_MsgDeregisterTicker) Has(fd protoreflect.FieldDescriptor
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeregisterTicker) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgDeregisterAsset) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "milkyway.tickers.v1.MsgDeregisterTicker.authority":
+	case "milkyway.tickers.v1.MsgDeregisterAsset.authority":
 		x.Authority = ""
-	case "milkyway.tickers.v1.MsgDeregisterTicker.denom":
+	case "milkyway.tickers.v1.MsgDeregisterAsset.denom":
 		x.Denom = ""
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterTicker"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterAsset"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterTicker does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterAsset does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1063,19 +1014,19 @@ func (x *fastReflection_MsgDeregisterTicker) Clear(fd protoreflect.FieldDescript
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgDeregisterTicker) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgDeregisterAsset) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "milkyway.tickers.v1.MsgDeregisterTicker.authority":
+	case "milkyway.tickers.v1.MsgDeregisterAsset.authority":
 		value := x.Authority
 		return protoreflect.ValueOfString(value)
-	case "milkyway.tickers.v1.MsgDeregisterTicker.denom":
+	case "milkyway.tickers.v1.MsgDeregisterAsset.denom":
 		value := x.Denom
 		return protoreflect.ValueOfString(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterTicker"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterAsset"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterTicker does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterAsset does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1089,17 +1040,17 @@ func (x *fastReflection_MsgDeregisterTicker) Get(descriptor protoreflect.FieldDe
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeregisterTicker) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgDeregisterAsset) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "milkyway.tickers.v1.MsgDeregisterTicker.authority":
+	case "milkyway.tickers.v1.MsgDeregisterAsset.authority":
 		x.Authority = value.Interface().(string)
-	case "milkyway.tickers.v1.MsgDeregisterTicker.denom":
+	case "milkyway.tickers.v1.MsgDeregisterAsset.denom":
 		x.Denom = value.Interface().(string)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterTicker"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterAsset"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterTicker does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterAsset does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1113,44 +1064,44 @@ func (x *fastReflection_MsgDeregisterTicker) Set(fd protoreflect.FieldDescriptor
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeregisterTicker) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgDeregisterAsset) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.tickers.v1.MsgDeregisterTicker.authority":
-		panic(fmt.Errorf("field authority of message milkyway.tickers.v1.MsgDeregisterTicker is not mutable"))
-	case "milkyway.tickers.v1.MsgDeregisterTicker.denom":
-		panic(fmt.Errorf("field denom of message milkyway.tickers.v1.MsgDeregisterTicker is not mutable"))
+	case "milkyway.tickers.v1.MsgDeregisterAsset.authority":
+		panic(fmt.Errorf("field authority of message milkyway.tickers.v1.MsgDeregisterAsset is not mutable"))
+	case "milkyway.tickers.v1.MsgDeregisterAsset.denom":
+		panic(fmt.Errorf("field denom of message milkyway.tickers.v1.MsgDeregisterAsset is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterTicker"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterAsset"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterTicker does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterAsset does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgDeregisterTicker) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgDeregisterAsset) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.tickers.v1.MsgDeregisterTicker.authority":
+	case "milkyway.tickers.v1.MsgDeregisterAsset.authority":
 		return protoreflect.ValueOfString("")
-	case "milkyway.tickers.v1.MsgDeregisterTicker.denom":
+	case "milkyway.tickers.v1.MsgDeregisterAsset.denom":
 		return protoreflect.ValueOfString("")
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterTicker"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterAsset"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterTicker does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterAsset does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgDeregisterTicker) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgDeregisterAsset) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.tickers.v1.MsgDeregisterTicker", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.tickers.v1.MsgDeregisterAsset", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1158,7 +1109,7 @@ func (x *fastReflection_MsgDeregisterTicker) WhichOneof(d protoreflect.OneofDesc
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgDeregisterTicker) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgDeregisterAsset) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1169,7 +1120,7 @@ func (x *fastReflection_MsgDeregisterTicker) GetUnknown() protoreflect.RawFields
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeregisterTicker) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgDeregisterAsset) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1181,7 +1132,7 @@ func (x *fastReflection_MsgDeregisterTicker) SetUnknown(fields protoreflect.RawF
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgDeregisterTicker) IsValid() bool {
+func (x *fastReflection_MsgDeregisterAsset) IsValid() bool {
 	return x != nil
 }
 
@@ -1191,9 +1142,9 @@ func (x *fastReflection_MsgDeregisterTicker) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgDeregisterTicker) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgDeregisterAsset) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgDeregisterTicker)
+		x := input.Message.Interface().(*MsgDeregisterAsset)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1223,7 +1174,7 @@ func (x *fastReflection_MsgDeregisterTicker) ProtoMethods() *protoiface.Methods 
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgDeregisterTicker)
+		x := input.Message.Interface().(*MsgDeregisterAsset)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1267,7 +1218,7 @@ func (x *fastReflection_MsgDeregisterTicker) ProtoMethods() *protoiface.Methods 
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgDeregisterTicker)
+		x := input.Message.Interface().(*MsgDeregisterAsset)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1299,10 +1250,10 @@ func (x *fastReflection_MsgDeregisterTicker) ProtoMethods() *protoiface.Methods 
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgDeregisterTicker: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgDeregisterAsset: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgDeregisterTicker: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgDeregisterAsset: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -1405,23 +1356,23 @@ func (x *fastReflection_MsgDeregisterTicker) ProtoMethods() *protoiface.Methods 
 }
 
 var (
-	md_MsgDeregisterTickerResponse protoreflect.MessageDescriptor
+	md_MsgDeregisterAssetResponse protoreflect.MessageDescriptor
 )
 
 func init() {
 	file_milkyway_tickers_v1_messages_proto_init()
-	md_MsgDeregisterTickerResponse = File_milkyway_tickers_v1_messages_proto.Messages().ByName("MsgDeregisterTickerResponse")
+	md_MsgDeregisterAssetResponse = File_milkyway_tickers_v1_messages_proto.Messages().ByName("MsgDeregisterAssetResponse")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgDeregisterTickerResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgDeregisterAssetResponse)(nil)
 
-type fastReflection_MsgDeregisterTickerResponse MsgDeregisterTickerResponse
+type fastReflection_MsgDeregisterAssetResponse MsgDeregisterAssetResponse
 
-func (x *MsgDeregisterTickerResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgDeregisterTickerResponse)(x)
+func (x *MsgDeregisterAssetResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgDeregisterAssetResponse)(x)
 }
 
-func (x *MsgDeregisterTickerResponse) slowProtoReflect() protoreflect.Message {
+func (x *MsgDeregisterAssetResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_tickers_v1_messages_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1433,43 +1384,43 @@ func (x *MsgDeregisterTickerResponse) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgDeregisterTickerResponse_messageType fastReflection_MsgDeregisterTickerResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgDeregisterTickerResponse_messageType{}
+var _fastReflection_MsgDeregisterAssetResponse_messageType fastReflection_MsgDeregisterAssetResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgDeregisterAssetResponse_messageType{}
 
-type fastReflection_MsgDeregisterTickerResponse_messageType struct{}
+type fastReflection_MsgDeregisterAssetResponse_messageType struct{}
 
-func (x fastReflection_MsgDeregisterTickerResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgDeregisterTickerResponse)(nil)
+func (x fastReflection_MsgDeregisterAssetResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgDeregisterAssetResponse)(nil)
 }
-func (x fastReflection_MsgDeregisterTickerResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgDeregisterTickerResponse)
+func (x fastReflection_MsgDeregisterAssetResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgDeregisterAssetResponse)
 }
-func (x fastReflection_MsgDeregisterTickerResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgDeregisterTickerResponse
+func (x fastReflection_MsgDeregisterAssetResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgDeregisterAssetResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgDeregisterTickerResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgDeregisterTickerResponse
+func (x *fastReflection_MsgDeregisterAssetResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgDeregisterAssetResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgDeregisterTickerResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgDeregisterTickerResponse_messageType
+func (x *fastReflection_MsgDeregisterAssetResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgDeregisterAssetResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgDeregisterTickerResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgDeregisterTickerResponse)
+func (x *fastReflection_MsgDeregisterAssetResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgDeregisterAssetResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgDeregisterTickerResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgDeregisterTickerResponse)(x)
+func (x *fastReflection_MsgDeregisterAssetResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgDeregisterAssetResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -1477,7 +1428,7 @@ func (x *fastReflection_MsgDeregisterTickerResponse) Interface() protoreflect.Pr
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgDeregisterTickerResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgDeregisterAssetResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 }
 
 // Has reports whether a field is populated.
@@ -1491,13 +1442,13 @@ func (x *fastReflection_MsgDeregisterTickerResponse) Range(f func(protoreflect.F
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgDeregisterTickerResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgDeregisterAssetResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterTickerResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterAssetResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterTickerResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterAssetResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1507,13 +1458,13 @@ func (x *fastReflection_MsgDeregisterTickerResponse) Has(fd protoreflect.FieldDe
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeregisterTickerResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgDeregisterAssetResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterTickerResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterAssetResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterTickerResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterAssetResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1523,13 +1474,13 @@ func (x *fastReflection_MsgDeregisterTickerResponse) Clear(fd protoreflect.Field
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgDeregisterTickerResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgDeregisterAssetResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterTickerResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterAssetResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterTickerResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterAssetResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1543,13 +1494,13 @@ func (x *fastReflection_MsgDeregisterTickerResponse) Get(descriptor protoreflect
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeregisterTickerResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgDeregisterAssetResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterTickerResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterAssetResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterTickerResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterAssetResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1563,36 +1514,36 @@ func (x *fastReflection_MsgDeregisterTickerResponse) Set(fd protoreflect.FieldDe
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeregisterTickerResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgDeregisterAssetResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterTickerResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterAssetResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterTickerResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterAssetResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgDeregisterTickerResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgDeregisterAssetResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterTickerResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.tickers.v1.MsgDeregisterAssetResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterTickerResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.tickers.v1.MsgDeregisterAssetResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgDeregisterTickerResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgDeregisterAssetResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.tickers.v1.MsgDeregisterTickerResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.tickers.v1.MsgDeregisterAssetResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1600,7 +1551,7 @@ func (x *fastReflection_MsgDeregisterTickerResponse) WhichOneof(d protoreflect.O
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgDeregisterTickerResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgDeregisterAssetResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1611,7 +1562,7 @@ func (x *fastReflection_MsgDeregisterTickerResponse) GetUnknown() protoreflect.R
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgDeregisterTickerResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgDeregisterAssetResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1623,7 +1574,7 @@ func (x *fastReflection_MsgDeregisterTickerResponse) SetUnknown(fields protorefl
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgDeregisterTickerResponse) IsValid() bool {
+func (x *fastReflection_MsgDeregisterAssetResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -1633,9 +1584,9 @@ func (x *fastReflection_MsgDeregisterTickerResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgDeregisterTickerResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgDeregisterAssetResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgDeregisterTickerResponse)
+		x := input.Message.Interface().(*MsgDeregisterAssetResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1657,7 +1608,7 @@ func (x *fastReflection_MsgDeregisterTickerResponse) ProtoMethods() *protoiface.
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgDeregisterTickerResponse)
+		x := input.Message.Interface().(*MsgDeregisterAssetResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1687,7 +1638,7 @@ func (x *fastReflection_MsgDeregisterTickerResponse) ProtoMethods() *protoiface.
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgDeregisterTickerResponse)
+		x := input.Message.Interface().(*MsgDeregisterAssetResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1719,10 +1670,10 @@ func (x *fastReflection_MsgDeregisterTickerResponse) ProtoMethods() *protoiface.
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgDeregisterTickerResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgDeregisterAssetResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgDeregisterTickerResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgDeregisterAssetResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			default:
@@ -2628,9 +2579,9 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// MsgRegisterTicker defines the message structure for the RegisterTicker
-// gRPC service method. It allows the authority to register a ticker.
-type MsgRegisterTicker struct {
+// MsgRegisterAsset defines the message structure for the RegisterAsset
+// gRPC service method. It allows the authority to register an asset.
+type MsgRegisterAsset struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -2638,14 +2589,11 @@ type MsgRegisterTicker struct {
 	// Authority is the address that controls the module (defaults to x/gov unless
 	// overwritten).
 	Authority string `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
-	// Denom represents the denomination of the token associated with the ticker.
-	Denom string `protobuf:"bytes,2,opt,name=denom,proto3" json:"denom,omitempty"`
-	// Ticker represents the ticker of the token denomination.
-	Ticker string `protobuf:"bytes,3,opt,name=ticker,proto3" json:"ticker,omitempty"`
+	Asset     *Asset `protobuf:"bytes,2,opt,name=asset,proto3" json:"asset,omitempty"`
 }
 
-func (x *MsgRegisterTicker) Reset() {
-	*x = MsgRegisterTicker{}
+func (x *MsgRegisterAsset) Reset() {
+	*x = MsgRegisterAsset{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_tickers_v1_messages_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2653,47 +2601,40 @@ func (x *MsgRegisterTicker) Reset() {
 	}
 }
 
-func (x *MsgRegisterTicker) String() string {
+func (x *MsgRegisterAsset) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgRegisterTicker) ProtoMessage() {}
+func (*MsgRegisterAsset) ProtoMessage() {}
 
-// Deprecated: Use MsgRegisterTicker.ProtoReflect.Descriptor instead.
-func (*MsgRegisterTicker) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgRegisterAsset.ProtoReflect.Descriptor instead.
+func (*MsgRegisterAsset) Descriptor() ([]byte, []int) {
 	return file_milkyway_tickers_v1_messages_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *MsgRegisterTicker) GetAuthority() string {
+func (x *MsgRegisterAsset) GetAuthority() string {
 	if x != nil {
 		return x.Authority
 	}
 	return ""
 }
 
-func (x *MsgRegisterTicker) GetDenom() string {
+func (x *MsgRegisterAsset) GetAsset() *Asset {
 	if x != nil {
-		return x.Denom
+		return x.Asset
 	}
-	return ""
+	return nil
 }
 
-func (x *MsgRegisterTicker) GetTicker() string {
-	if x != nil {
-		return x.Ticker
-	}
-	return ""
-}
-
-// MsgRegisterTickerResponse is the return value of MsgRegisterTicker.
-type MsgRegisterTickerResponse struct {
+// MsgRegisterAssetResponse is the return value of MsgRegisterAsset.
+type MsgRegisterAssetResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *MsgRegisterTickerResponse) Reset() {
-	*x = MsgRegisterTickerResponse{}
+func (x *MsgRegisterAssetResponse) Reset() {
+	*x = MsgRegisterAssetResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_tickers_v1_messages_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2701,21 +2642,21 @@ func (x *MsgRegisterTickerResponse) Reset() {
 	}
 }
 
-func (x *MsgRegisterTickerResponse) String() string {
+func (x *MsgRegisterAssetResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgRegisterTickerResponse) ProtoMessage() {}
+func (*MsgRegisterAssetResponse) ProtoMessage() {}
 
-// Deprecated: Use MsgRegisterTickerResponse.ProtoReflect.Descriptor instead.
-func (*MsgRegisterTickerResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgRegisterAssetResponse.ProtoReflect.Descriptor instead.
+func (*MsgRegisterAssetResponse) Descriptor() ([]byte, []int) {
 	return file_milkyway_tickers_v1_messages_proto_rawDescGZIP(), []int{1}
 }
 
-// MsgDeregisterTicker defines the message structure for the DeregisterTicker
-// gRPC service method. It allows the authority to de-register a ticker with
+// MsgDeregisterAsset defines the message structure for the DeregisterAsset
+// gRPC service method. It allows the authority to de-register an asset with
 // the token denomination.
-type MsgDeregisterTicker struct {
+type MsgDeregisterAsset struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -2723,12 +2664,12 @@ type MsgDeregisterTicker struct {
 	// Authority is the address that controls the module (defaults to x/gov unless
 	// overwritten).
 	Authority string `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
-	// Denom represents the denomination of the token associated with the ticker.
+	// Denom represents the denomination of the token associated with the asset.
 	Denom string `protobuf:"bytes,2,opt,name=denom,proto3" json:"denom,omitempty"`
 }
 
-func (x *MsgDeregisterTicker) Reset() {
-	*x = MsgDeregisterTicker{}
+func (x *MsgDeregisterAsset) Reset() {
+	*x = MsgDeregisterAsset{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_tickers_v1_messages_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2736,40 +2677,40 @@ func (x *MsgDeregisterTicker) Reset() {
 	}
 }
 
-func (x *MsgDeregisterTicker) String() string {
+func (x *MsgDeregisterAsset) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgDeregisterTicker) ProtoMessage() {}
+func (*MsgDeregisterAsset) ProtoMessage() {}
 
-// Deprecated: Use MsgDeregisterTicker.ProtoReflect.Descriptor instead.
-func (*MsgDeregisterTicker) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgDeregisterAsset.ProtoReflect.Descriptor instead.
+func (*MsgDeregisterAsset) Descriptor() ([]byte, []int) {
 	return file_milkyway_tickers_v1_messages_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *MsgDeregisterTicker) GetAuthority() string {
+func (x *MsgDeregisterAsset) GetAuthority() string {
 	if x != nil {
 		return x.Authority
 	}
 	return ""
 }
 
-func (x *MsgDeregisterTicker) GetDenom() string {
+func (x *MsgDeregisterAsset) GetDenom() string {
 	if x != nil {
 		return x.Denom
 	}
 	return ""
 }
 
-// MsgRegisterTickerResponse is the return value of MsgDeregisterTicker.
-type MsgDeregisterTickerResponse struct {
+// MsgRegisterAssetResponse is the return value of MsgDeregisterAsset.
+type MsgDeregisterAssetResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *MsgDeregisterTickerResponse) Reset() {
-	*x = MsgDeregisterTickerResponse{}
+func (x *MsgDeregisterAssetResponse) Reset() {
+	*x = MsgDeregisterAssetResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_tickers_v1_messages_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2777,14 +2718,14 @@ func (x *MsgDeregisterTickerResponse) Reset() {
 	}
 }
 
-func (x *MsgDeregisterTickerResponse) String() string {
+func (x *MsgDeregisterAssetResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgDeregisterTickerResponse) ProtoMessage() {}
+func (*MsgDeregisterAssetResponse) ProtoMessage() {}
 
-// Deprecated: Use MsgDeregisterTickerResponse.ProtoReflect.Descriptor instead.
-func (*MsgDeregisterTickerResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgDeregisterAssetResponse.ProtoReflect.Descriptor instead.
+func (*MsgDeregisterAssetResponse) Descriptor() ([]byte, []int) {
 	return file_milkyway_tickers_v1_messages_proto_rawDescGZIP(), []int{3}
 }
 
@@ -2879,60 +2820,62 @@ var file_milkyway_tickers_v1_messages_proto_rawDesc = []byte{
 	0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67, 0x6f,
 	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x20, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
 	0x2f, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x72, 0x73, 0x2f, 0x76, 0x31, 0x2f, 0x70, 0x61, 0x72, 0x61,
-	0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xb0, 0x01, 0x0a, 0x11, 0x4d, 0x73, 0x67,
-	0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x72, 0x12, 0x36,
-	0x0a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64,
-	0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x09, 0x61, 0x75, 0x74,
-	0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x12, 0x16, 0x0a, 0x06,
-	0x74, 0x69, 0x63, 0x6b, 0x65, 0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x74, 0x69,
-	0x63, 0x6b, 0x65, 0x72, 0x3a, 0x35, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f,
-	0x72, 0x69, 0x74, 0x79, 0x8a, 0xe7, 0xb0, 0x2a, 0x22, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
-	0x79, 0x2f, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x72, 0x73, 0x2f, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x67,
-	0x69, 0x73, 0x74, 0x65, 0x72, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x72, 0x22, 0x1b, 0x0a, 0x19, 0x4d,
-	0x73, 0x67, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x72,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x9c, 0x01, 0x0a, 0x13, 0x4d, 0x73, 0x67,
-	0x44, 0x65, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x72,
-	0x12, 0x36, 0x0a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
-	0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x09, 0x61,
-	0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x64, 0x65, 0x6e, 0x6f,
-	0x6d, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x3a, 0x37,
-	0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x8a, 0xe7,
-	0xb0, 0x2a, 0x24, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x74, 0x69, 0x63, 0x6b,
-	0x65, 0x72, 0x73, 0x2f, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65,
-	0x72, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x72, 0x22, 0x1d, 0x0a, 0x1b, 0x4d, 0x73, 0x67, 0x44, 0x65,
-	0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x72, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xcd, 0x01, 0x0a, 0x0f, 0x4d, 0x73, 0x67, 0x55, 0x70,
-	0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x4a, 0x0a, 0x09, 0x61, 0x75,
-	0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x2c, 0xf2,
-	0xde, 0x1f, 0x10, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69,
-	0x74, 0x79, 0x22, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64,
-	0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x09, 0x61, 0x75, 0x74,
-	0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x39, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73,
-	0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
-	0x79, 0x2e, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x72, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x61, 0x72,
-	0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d,
-	0x73, 0x3a, 0x33, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74,
-	0x79, 0x8a, 0xe7, 0xb0, 0x2a, 0x20, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x74,
-	0x69, 0x63, 0x6b, 0x65, 0x72, 0x73, 0x2f, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
-	0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x19, 0x0a, 0x17, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64,
-	0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x32, 0xca, 0x02, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x68, 0x0a, 0x0e, 0x52, 0x65, 0x67,
-	0x69, 0x73, 0x74, 0x65, 0x72, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x72, 0x12, 0x26, 0x2e, 0x6d, 0x69,
-	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x72, 0x73, 0x2e, 0x76,
-	0x31, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x54, 0x69, 0x63,
-	0x6b, 0x65, 0x72, 0x1a, 0x2e, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x74,
-	0x69, 0x63, 0x6b, 0x65, 0x72, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x67,
-	0x69, 0x73, 0x74, 0x65, 0x72, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x12, 0x6e, 0x0a, 0x10, 0x44, 0x65, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65,
-	0x72, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x72, 0x12, 0x28, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
+	0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x20, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
+	0x61, 0x79, 0x2f, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x72, 0x73, 0x2f, 0x76, 0x31, 0x2f, 0x6d, 0x6f,
+	0x64, 0x65, 0x6c, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xb8, 0x01, 0x0a, 0x10, 0x4d,
+	0x73, 0x67, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x41, 0x73, 0x73, 0x65, 0x74, 0x12,
+	0x36, 0x0a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41,
+	0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x09, 0x61, 0x75,
+	0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x36, 0x0a, 0x05, 0x61, 0x73, 0x73, 0x65, 0x74,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
+	0x79, 0x2e, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x72, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x73, 0x73,
+	0x65, 0x74, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x05, 0x61, 0x73, 0x73, 0x65, 0x74, 0x3a,
+	0x34, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x8a,
+	0xe7, 0xb0, 0x2a, 0x21, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x74, 0x69, 0x63,
+	0x6b, 0x65, 0x72, 0x73, 0x2f, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72,
+	0x41, 0x73, 0x73, 0x65, 0x74, 0x22, 0x1a, 0x0a, 0x18, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x67, 0x69,
+	0x73, 0x74, 0x65, 0x72, 0x41, 0x73, 0x73, 0x65, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x22, 0x9a, 0x01, 0x0a, 0x12, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x72, 0x65, 0x67, 0x69, 0x73,
+	0x74, 0x65, 0x72, 0x41, 0x73, 0x73, 0x65, 0x74, 0x12, 0x36, 0x0a, 0x09, 0x61, 0x75, 0x74, 0x68,
+	0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d,
+	0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53,
+	0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79,
+	0x12, 0x14, 0x0a, 0x05, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x05, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x3a, 0x36, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74,
+	0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x8a, 0xe7, 0xb0, 0x2a, 0x23, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
+	0x77, 0x61, 0x79, 0x2f, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x72, 0x73, 0x2f, 0x4d, 0x73, 0x67, 0x44,
+	0x65, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x41, 0x73, 0x73, 0x65, 0x74, 0x22, 0x1c,
+	0x0a, 0x1a, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x41,
+	0x73, 0x73, 0x65, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xcd, 0x01, 0x0a,
+	0x0f, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73,
+	0x12, 0x4a, 0x0a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x42, 0x2c, 0xf2, 0xde, 0x1f, 0x10, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x61,
+	0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x22, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73,
+	0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e,
+	0x67, 0x52, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x39, 0x0a, 0x06,
+	0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x6d,
+	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x72, 0x73, 0x2e,
+	0x76, 0x31, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52,
+	0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x3a, 0x33, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75,
+	0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x8a, 0xe7, 0xb0, 0x2a, 0x20, 0x6d, 0x69, 0x6c, 0x6b,
+	0x79, 0x77, 0x61, 0x79, 0x2f, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x72, 0x73, 0x2f, 0x4d, 0x73, 0x67,
+	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x19, 0x0a, 0x17,
+	0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xc4, 0x02, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12,
+	0x65, 0x0a, 0x0d, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x41, 0x73, 0x73, 0x65, 0x74,
+	0x12, 0x25, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x74, 0x69, 0x63, 0x6b,
+	0x65, 0x72, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74,
+	0x65, 0x72, 0x41, 0x73, 0x73, 0x65, 0x74, 0x1a, 0x2d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
 	0x61, 0x79, 0x2e, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x72, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73,
-	0x67, 0x44, 0x65, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x54, 0x69, 0x63, 0x6b, 0x65,
-	0x72, 0x1a, 0x30, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x74, 0x69, 0x63,
-	0x6b, 0x65, 0x72, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x72, 0x65, 0x67,
-	0x69, 0x73, 0x74, 0x65, 0x72, 0x54, 0x69, 0x63, 0x6b, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x67, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x41, 0x73, 0x73, 0x65, 0x74, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6b, 0x0a, 0x0f, 0x44, 0x65, 0x72, 0x65, 0x67, 0x69,
+	0x73, 0x74, 0x65, 0x72, 0x41, 0x73, 0x73, 0x65, 0x74, 0x12, 0x27, 0x2e, 0x6d, 0x69, 0x6c, 0x6b,
+	0x79, 0x77, 0x61, 0x79, 0x2e, 0x74, 0x69, 0x63, 0x6b, 0x65, 0x72, 0x73, 0x2e, 0x76, 0x31, 0x2e,
+	0x4d, 0x73, 0x67, 0x44, 0x65, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x41, 0x73, 0x73,
+	0x65, 0x74, 0x1a, 0x2f, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x74, 0x69,
+	0x63, 0x6b, 0x65, 0x72, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x72, 0x65,
+	0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x41, 0x73, 0x73, 0x65, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f,
 	0x6e, 0x73, 0x65, 0x12, 0x62, 0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72,
 	0x61, 0x6d, 0x73, 0x12, 0x24, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x74,
 	0x69, 0x63, 0x6b, 0x65, 0x72, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64,
@@ -2971,27 +2914,29 @@ func file_milkyway_tickers_v1_messages_proto_rawDescGZIP() []byte {
 
 var file_milkyway_tickers_v1_messages_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_milkyway_tickers_v1_messages_proto_goTypes = []interface{}{
-	(*MsgRegisterTicker)(nil),           // 0: milkyway.tickers.v1.MsgRegisterTicker
-	(*MsgRegisterTickerResponse)(nil),   // 1: milkyway.tickers.v1.MsgRegisterTickerResponse
-	(*MsgDeregisterTicker)(nil),         // 2: milkyway.tickers.v1.MsgDeregisterTicker
-	(*MsgDeregisterTickerResponse)(nil), // 3: milkyway.tickers.v1.MsgDeregisterTickerResponse
-	(*MsgUpdateParams)(nil),             // 4: milkyway.tickers.v1.MsgUpdateParams
-	(*MsgUpdateParamsResponse)(nil),     // 5: milkyway.tickers.v1.MsgUpdateParamsResponse
-	(*Params)(nil),                      // 6: milkyway.tickers.v1.Params
+	(*MsgRegisterAsset)(nil),           // 0: milkyway.tickers.v1.MsgRegisterAsset
+	(*MsgRegisterAssetResponse)(nil),   // 1: milkyway.tickers.v1.MsgRegisterAssetResponse
+	(*MsgDeregisterAsset)(nil),         // 2: milkyway.tickers.v1.MsgDeregisterAsset
+	(*MsgDeregisterAssetResponse)(nil), // 3: milkyway.tickers.v1.MsgDeregisterAssetResponse
+	(*MsgUpdateParams)(nil),            // 4: milkyway.tickers.v1.MsgUpdateParams
+	(*MsgUpdateParamsResponse)(nil),    // 5: milkyway.tickers.v1.MsgUpdateParamsResponse
+	(*Asset)(nil),                      // 6: milkyway.tickers.v1.Asset
+	(*Params)(nil),                     // 7: milkyway.tickers.v1.Params
 }
 var file_milkyway_tickers_v1_messages_proto_depIdxs = []int32{
-	6, // 0: milkyway.tickers.v1.MsgUpdateParams.params:type_name -> milkyway.tickers.v1.Params
-	0, // 1: milkyway.tickers.v1.Msg.RegisterTicker:input_type -> milkyway.tickers.v1.MsgRegisterTicker
-	2, // 2: milkyway.tickers.v1.Msg.DeregisterTicker:input_type -> milkyway.tickers.v1.MsgDeregisterTicker
-	4, // 3: milkyway.tickers.v1.Msg.UpdateParams:input_type -> milkyway.tickers.v1.MsgUpdateParams
-	1, // 4: milkyway.tickers.v1.Msg.RegisterTicker:output_type -> milkyway.tickers.v1.MsgRegisterTickerResponse
-	3, // 5: milkyway.tickers.v1.Msg.DeregisterTicker:output_type -> milkyway.tickers.v1.MsgDeregisterTickerResponse
-	5, // 6: milkyway.tickers.v1.Msg.UpdateParams:output_type -> milkyway.tickers.v1.MsgUpdateParamsResponse
-	4, // [4:7] is the sub-list for method output_type
-	1, // [1:4] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	6, // 0: milkyway.tickers.v1.MsgRegisterAsset.asset:type_name -> milkyway.tickers.v1.Asset
+	7, // 1: milkyway.tickers.v1.MsgUpdateParams.params:type_name -> milkyway.tickers.v1.Params
+	0, // 2: milkyway.tickers.v1.Msg.RegisterAsset:input_type -> milkyway.tickers.v1.MsgRegisterAsset
+	2, // 3: milkyway.tickers.v1.Msg.DeregisterAsset:input_type -> milkyway.tickers.v1.MsgDeregisterAsset
+	4, // 4: milkyway.tickers.v1.Msg.UpdateParams:input_type -> milkyway.tickers.v1.MsgUpdateParams
+	1, // 5: milkyway.tickers.v1.Msg.RegisterAsset:output_type -> milkyway.tickers.v1.MsgRegisterAssetResponse
+	3, // 6: milkyway.tickers.v1.Msg.DeregisterAsset:output_type -> milkyway.tickers.v1.MsgDeregisterAssetResponse
+	5, // 7: milkyway.tickers.v1.Msg.UpdateParams:output_type -> milkyway.tickers.v1.MsgUpdateParamsResponse
+	5, // [5:8] is the sub-list for method output_type
+	2, // [2:5] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_milkyway_tickers_v1_messages_proto_init() }
@@ -3000,9 +2945,10 @@ func file_milkyway_tickers_v1_messages_proto_init() {
 		return
 	}
 	file_milkyway_tickers_v1_params_proto_init()
+	file_milkyway_tickers_v1_models_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_milkyway_tickers_v1_messages_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgRegisterTicker); i {
+			switch v := v.(*MsgRegisterAsset); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3014,7 +2960,7 @@ func file_milkyway_tickers_v1_messages_proto_init() {
 			}
 		}
 		file_milkyway_tickers_v1_messages_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgRegisterTickerResponse); i {
+			switch v := v.(*MsgRegisterAssetResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3026,7 +2972,7 @@ func file_milkyway_tickers_v1_messages_proto_init() {
 			}
 		}
 		file_milkyway_tickers_v1_messages_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgDeregisterTicker); i {
+			switch v := v.(*MsgDeregisterAsset); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3038,7 +2984,7 @@ func file_milkyway_tickers_v1_messages_proto_init() {
 			}
 		}
 		file_milkyway_tickers_v1_messages_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgDeregisterTickerResponse); i {
+			switch v := v.(*MsgDeregisterAssetResponse); i {
 			case 0:
 				return &v.state
 			case 1:

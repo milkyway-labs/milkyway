@@ -23,6 +23,7 @@ import (
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 	serviceskeeper "github.com/milkyway-labs/milkyway/x/services/keeper"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
+	tickerstypes "github.com/milkyway-labs/milkyway/x/tickers/types"
 )
 
 // KeeperTestSuite is a base test suite for the keeper tests.
@@ -59,7 +60,7 @@ func (s *KeeperTestSuite) FundAccount(addr string, amt sdk.Coins) {
 
 // RegisterCurrency registers a currency with the given denomination, ticker
 // and price. RegisterCurrency creates a market for the currency if not exists.
-func (s *KeeperTestSuite) RegisterCurrency(denom, ticker string, price math.LegacyDec) {
+func (s *KeeperTestSuite) RegisterCurrency(denom, ticker string, exponent uint32, price math.LegacyDec) {
 	// Create market only if it doesn't exist.
 	mmTicker := marketmaptypes.NewTicker(ticker, types.USDTicker, math.LegacyPrecision, 0, true)
 	hasMarket, err := s.App.MarketMapKeeper.HasMarket(s.Ctx, mmTicker.String())
@@ -76,7 +77,7 @@ func (s *KeeperTestSuite) RegisterCurrency(denom, ticker string, price math.Lega
 			BlockHeight:    uint64(s.Ctx.BlockHeight()),
 		})
 	s.Require().NoError(err)
-	err = s.App.TickersKeeper.SetTicker(s.Ctx, denom, ticker)
+	err = s.App.TickersKeeper.SetAsset(s.Ctx, tickerstypes.NewAsset(denom, ticker, exponent))
 	s.Require().NoError(err)
 }
 
