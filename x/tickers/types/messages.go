@@ -7,61 +7,42 @@ import (
 )
 
 var (
-	_ sdk.Msg = &MsgRegisterTicker{}
-	_ sdk.Msg = &MsgDeregisterTicker{}
+	_ sdk.Msg = &MsgRegisterAsset{}
+	_ sdk.Msg = &MsgDeregisterAsset{}
 	_ sdk.Msg = &MsgUpdateParams{}
 )
 
-func NewMsgRegisterTicker(authority, denom, ticker string) *MsgRegisterTicker {
-	return &MsgRegisterTicker{
-		Authority: authority,
-		Denom:     denom,
-		Ticker:    ticker,
-	}
-}
-
-func (msg *MsgRegisterTicker) Validate() error {
-	if _, err := sdk.AccAddressFromBech32(msg.Authority); err != nil {
+func (msg *MsgRegisterAsset) Validate() error {
+	_, err := sdk.AccAddressFromBech32(msg.Authority)
+	if err != nil {
 		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid authority address")
 	}
-	if err := sdk.ValidateDenom(msg.Denom); err != nil {
-		return errors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
-	if err := ValidateTicker(msg.Ticker); err != nil {
-		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid ticker: %s", err)
+	err = msg.Asset.Validate()
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 	return nil
 }
 
-func NewMsgDeregisterTicker(authority, denom string) *MsgDeregisterTicker {
-	return &MsgDeregisterTicker{
-		Authority: authority,
-		Denom:     denom,
-	}
-}
-
-func (msg *MsgDeregisterTicker) Validate() error {
-	if _, err := sdk.AccAddressFromBech32(msg.Authority); err != nil {
+func (msg *MsgDeregisterAsset) Validate() error {
+	_, err := sdk.AccAddressFromBech32(msg.Authority)
+	if err != nil {
 		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid authority address")
 	}
-	if err := sdk.ValidateDenom(msg.Denom); err != nil {
+	err = sdk.ValidateDenom(msg.Denom)
+	if err != nil {
 		return errors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 	return nil
-}
-
-func NewMsgUpdateParams(authority string, params Params) *MsgUpdateParams {
-	return &MsgUpdateParams{
-		Authority: authority,
-		Params:    params,
-	}
 }
 
 func (msg *MsgUpdateParams) Validate() error {
-	if _, err := sdk.AccAddressFromBech32(msg.Authority); err != nil {
+	_, err := sdk.AccAddressFromBech32(msg.Authority)
+	if err != nil {
 		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid authority address")
 	}
-	if err := msg.Params.Validate(); err != nil {
+	err = msg.Params.Validate()
+	if err != nil {
 		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid params: %s", err)
 	}
 	return nil

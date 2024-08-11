@@ -10,21 +10,20 @@ import (
 	slinkytypes "github.com/skip-mev/slinky/pkg/types"
 
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
-	tickerstypes "github.com/milkyway-labs/milkyway/x/tickers/types"
 )
 
 func (k *Keeper) GetPrice(ctx context.Context, denom string) (math.LegacyDec, error) {
-	ticker, err := k.tickersKeeper.GetTicker(ctx, denom)
+	asset, err := k.tickersKeeper.GetAsset(ctx, denom)
 	if err != nil {
-		// If ticker is not found, then we return 0 as price.
-		if errors.IsOf(err, tickerstypes.ErrTickerNotFound) {
+		// If asset is not found, then we return 0 as price.
+		if errors.IsOf(err, collections.ErrNotFound) {
 			return math.LegacyZeroDec(), nil
 		}
 		return math.LegacyDec{}, err
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	cp := slinkytypes.NewCurrencyPair(ticker, types.USDTicker)
+	cp := slinkytypes.NewCurrencyPair(asset.Ticker, types.USDTicker)
 	qpn, err := k.oracleKeeper.GetPriceWithNonceForCurrencyPair(sdkCtx, cp)
 	if err != nil {
 		// If currency pair is not found return 0 as well.

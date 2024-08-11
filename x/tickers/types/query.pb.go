@@ -7,6 +7,7 @@ import (
 	context "context"
 	fmt "fmt"
 	query "github.com/cosmos/cosmos-sdk/types/query"
+	_ "github.com/cosmos/cosmos-sdk/types/tx/amino"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	grpc1 "github.com/cosmos/gogoproto/grpc"
 	proto "github.com/cosmos/gogoproto/proto"
@@ -112,24 +113,27 @@ func (m *QueryParamsResponse) GetParams() Params {
 	return Params{}
 }
 
-// QueryTickerRequest is the request type for the Query/Ticker RPC method.
-type QueryTickerRequest struct {
-	// Denom is the token denomination for which the ticker is to be queried.
-	Denom string `protobuf:"bytes,1,opt,name=denom,proto3" json:"denom,omitempty"`
+// QueryAssetsRequest is the request type for the Query/Assets RPC method.
+type QueryAssetsRequest struct {
+	// Ticker defines an optional filter parameter to query assets with the given
+	// ticker.
+	Ticker string `protobuf:"bytes,1,opt,name=ticker,proto3" json:"ticker,omitempty"`
+	// Pagination defines an optional pagination for the request.
+	Pagination *query.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (m *QueryTickerRequest) Reset()         { *m = QueryTickerRequest{} }
-func (m *QueryTickerRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryTickerRequest) ProtoMessage()    {}
-func (*QueryTickerRequest) Descriptor() ([]byte, []int) {
+func (m *QueryAssetsRequest) Reset()         { *m = QueryAssetsRequest{} }
+func (m *QueryAssetsRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryAssetsRequest) ProtoMessage()    {}
+func (*QueryAssetsRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_92da30624cf2f87c, []int{2}
 }
-func (m *QueryTickerRequest) XXX_Unmarshal(b []byte) error {
+func (m *QueryAssetsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryTickerRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryAssetsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryTickerRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryAssetsRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -139,145 +143,151 @@ func (m *QueryTickerRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, 
 		return b[:n], nil
 	}
 }
-func (m *QueryTickerRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryTickerRequest.Merge(m, src)
+func (m *QueryAssetsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryAssetsRequest.Merge(m, src)
 }
-func (m *QueryTickerRequest) XXX_Size() int {
+func (m *QueryAssetsRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryTickerRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryTickerRequest.DiscardUnknown(m)
+func (m *QueryAssetsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryAssetsRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryTickerRequest proto.InternalMessageInfo
+var xxx_messageInfo_QueryAssetsRequest proto.InternalMessageInfo
 
-func (m *QueryTickerRequest) GetDenom() string {
+func (m *QueryAssetsRequest) GetTicker() string {
+	if m != nil {
+		return m.Ticker
+	}
+	return ""
+}
+
+func (m *QueryAssetsRequest) GetPagination() *query.PageRequest {
+	if m != nil {
+		return m.Pagination
+	}
+	return nil
+}
+
+// QueryAssetsResponse is the response type for the Query/Assets RPC method.
+type QueryAssetsResponse struct {
+	// Assets represents all the assets registered.
+	Assets []Asset `protobuf:"bytes,1,rep,name=assets,proto3" json:"assets"`
+	// Pagination defines the pagination in the response.
+	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (m *QueryAssetsResponse) Reset()         { *m = QueryAssetsResponse{} }
+func (m *QueryAssetsResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryAssetsResponse) ProtoMessage()    {}
+func (*QueryAssetsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_92da30624cf2f87c, []int{3}
+}
+func (m *QueryAssetsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryAssetsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryAssetsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryAssetsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryAssetsResponse.Merge(m, src)
+}
+func (m *QueryAssetsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryAssetsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryAssetsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryAssetsResponse proto.InternalMessageInfo
+
+func (m *QueryAssetsResponse) GetAssets() []Asset {
+	if m != nil {
+		return m.Assets
+	}
+	return nil
+}
+
+func (m *QueryAssetsResponse) GetPagination() *query.PageResponse {
+	if m != nil {
+		return m.Pagination
+	}
+	return nil
+}
+
+// QueryAssetRequest is the request type for the Query/Asset RPC method.
+type QueryAssetRequest struct {
+	// Denom is the token denomination for which the ticker is to be queried.
+	Denom string `protobuf:"bytes,1,opt,name=denom,proto3" json:"denom,omitempty"`
+}
+
+func (m *QueryAssetRequest) Reset()         { *m = QueryAssetRequest{} }
+func (m *QueryAssetRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryAssetRequest) ProtoMessage()    {}
+func (*QueryAssetRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_92da30624cf2f87c, []int{4}
+}
+func (m *QueryAssetRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryAssetRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryAssetRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryAssetRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryAssetRequest.Merge(m, src)
+}
+func (m *QueryAssetRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryAssetRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryAssetRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryAssetRequest proto.InternalMessageInfo
+
+func (m *QueryAssetRequest) GetDenom() string {
 	if m != nil {
 		return m.Denom
 	}
 	return ""
 }
 
-// QueryTickerResponse is the response type for the Query/Ticker RPC method.
-type QueryTickerResponse struct {
-	// Ticker is the ticker of the given token denomination.
-	Ticker string `protobuf:"bytes,1,opt,name=ticker,proto3" json:"ticker,omitempty"`
+// QueryAssetResponse is the response type for the Query/Asset RPC method.
+type QueryAssetResponse struct {
+	// Asset is the asset associated with the token denomination.
+	Asset Asset `protobuf:"bytes,1,opt,name=asset,proto3" json:"asset"`
 }
 
-func (m *QueryTickerResponse) Reset()         { *m = QueryTickerResponse{} }
-func (m *QueryTickerResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryTickerResponse) ProtoMessage()    {}
-func (*QueryTickerResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_92da30624cf2f87c, []int{3}
-}
-func (m *QueryTickerResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryTickerResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryTickerResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryTickerResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryTickerResponse.Merge(m, src)
-}
-func (m *QueryTickerResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryTickerResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryTickerResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryTickerResponse proto.InternalMessageInfo
-
-func (m *QueryTickerResponse) GetTicker() string {
-	if m != nil {
-		return m.Ticker
-	}
-	return ""
-}
-
-// QueryDenomsRequest is the request type for the Query/Denoms RPC method.
-type QueryDenomsRequest struct {
-	// Ticker is the ticker for which the denoms are to be queried.
-	Ticker     string             `protobuf:"bytes,1,opt,name=ticker,proto3" json:"ticker,omitempty"`
-	Pagination *query.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
-}
-
-func (m *QueryDenomsRequest) Reset()         { *m = QueryDenomsRequest{} }
-func (m *QueryDenomsRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryDenomsRequest) ProtoMessage()    {}
-func (*QueryDenomsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_92da30624cf2f87c, []int{4}
-}
-func (m *QueryDenomsRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryDenomsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryDenomsRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryDenomsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryDenomsRequest.Merge(m, src)
-}
-func (m *QueryDenomsRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryDenomsRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryDenomsRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryDenomsRequest proto.InternalMessageInfo
-
-func (m *QueryDenomsRequest) GetTicker() string {
-	if m != nil {
-		return m.Ticker
-	}
-	return ""
-}
-
-func (m *QueryDenomsRequest) GetPagination() *query.PageRequest {
-	if m != nil {
-		return m.Pagination
-	}
-	return nil
-}
-
-// QueryDenomsResponse is the response type for the Query/Denoms RPC method.
-type QueryDenomsResponse struct {
-	// Denom is the list of all the token denominations associated with the
-	// ticker.
-	Denoms     []string            `protobuf:"bytes,1,rep,name=denoms,proto3" json:"denoms,omitempty"`
-	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
-}
-
-func (m *QueryDenomsResponse) Reset()         { *m = QueryDenomsResponse{} }
-func (m *QueryDenomsResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryDenomsResponse) ProtoMessage()    {}
-func (*QueryDenomsResponse) Descriptor() ([]byte, []int) {
+func (m *QueryAssetResponse) Reset()         { *m = QueryAssetResponse{} }
+func (m *QueryAssetResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryAssetResponse) ProtoMessage()    {}
+func (*QueryAssetResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_92da30624cf2f87c, []int{5}
 }
-func (m *QueryDenomsResponse) XXX_Unmarshal(b []byte) error {
+func (m *QueryAssetResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryDenomsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryAssetResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryDenomsResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryAssetResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -287,75 +297,71 @@ func (m *QueryDenomsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte,
 		return b[:n], nil
 	}
 }
-func (m *QueryDenomsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryDenomsResponse.Merge(m, src)
+func (m *QueryAssetResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryAssetResponse.Merge(m, src)
 }
-func (m *QueryDenomsResponse) XXX_Size() int {
+func (m *QueryAssetResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryDenomsResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryDenomsResponse.DiscardUnknown(m)
+func (m *QueryAssetResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryAssetResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryDenomsResponse proto.InternalMessageInfo
+var xxx_messageInfo_QueryAssetResponse proto.InternalMessageInfo
 
-func (m *QueryDenomsResponse) GetDenoms() []string {
+func (m *QueryAssetResponse) GetAsset() Asset {
 	if m != nil {
-		return m.Denoms
+		return m.Asset
 	}
-	return nil
-}
-
-func (m *QueryDenomsResponse) GetPagination() *query.PageResponse {
-	if m != nil {
-		return m.Pagination
-	}
-	return nil
+	return Asset{}
 }
 
 func init() {
 	proto.RegisterType((*QueryParamsRequest)(nil), "milkyway.tickers.v1.QueryParamsRequest")
 	proto.RegisterType((*QueryParamsResponse)(nil), "milkyway.tickers.v1.QueryParamsResponse")
-	proto.RegisterType((*QueryTickerRequest)(nil), "milkyway.tickers.v1.QueryTickerRequest")
-	proto.RegisterType((*QueryTickerResponse)(nil), "milkyway.tickers.v1.QueryTickerResponse")
-	proto.RegisterType((*QueryDenomsRequest)(nil), "milkyway.tickers.v1.QueryDenomsRequest")
-	proto.RegisterType((*QueryDenomsResponse)(nil), "milkyway.tickers.v1.QueryDenomsResponse")
+	proto.RegisterType((*QueryAssetsRequest)(nil), "milkyway.tickers.v1.QueryAssetsRequest")
+	proto.RegisterType((*QueryAssetsResponse)(nil), "milkyway.tickers.v1.QueryAssetsResponse")
+	proto.RegisterType((*QueryAssetRequest)(nil), "milkyway.tickers.v1.QueryAssetRequest")
+	proto.RegisterType((*QueryAssetResponse)(nil), "milkyway.tickers.v1.QueryAssetResponse")
 }
 
 func init() { proto.RegisterFile("milkyway/tickers/v1/query.proto", fileDescriptor_92da30624cf2f87c) }
 
 var fileDescriptor_92da30624cf2f87c = []byte{
-	// 472 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x53, 0x41, 0x6b, 0xd4, 0x40,
-	0x18, 0x4d, 0x5a, 0x1b, 0x70, 0xbc, 0x4d, 0x17, 0x29, 0x5b, 0x4d, 0xcb, 0x28, 0x6d, 0x29, 0x76,
-	0x86, 0xd4, 0x93, 0xd7, 0x22, 0x7a, 0xf0, 0xb2, 0x06, 0x4f, 0xde, 0x26, 0xeb, 0x10, 0x43, 0x37,
-	0x99, 0x34, 0x33, 0x1b, 0x0d, 0xa5, 0x20, 0xde, 0xbc, 0x09, 0xfe, 0x03, 0x7f, 0x4d, 0x8f, 0x05,
-	0x2f, 0x9e, 0x44, 0x76, 0xfd, 0x21, 0x92, 0xf9, 0x26, 0xdd, 0x0d, 0xcd, 0x66, 0x6f, 0x99, 0xc9,
-	0xfb, 0xde, 0x7b, 0xdf, 0x7b, 0x09, 0xda, 0x4b, 0x93, 0xc9, 0x79, 0xf5, 0x89, 0x57, 0x4c, 0x27,
-	0xe3, 0x73, 0x51, 0x28, 0x56, 0x06, 0xec, 0x62, 0x2a, 0x8a, 0x8a, 0xe6, 0x85, 0xd4, 0x12, 0x6f,
-	0x37, 0x00, 0x6a, 0x01, 0xb4, 0x0c, 0x86, 0x83, 0x58, 0xc6, 0xd2, 0xbc, 0x67, 0xf5, 0x13, 0x40,
-	0x87, 0x8f, 0x62, 0x29, 0xe3, 0x89, 0x60, 0x3c, 0x4f, 0x18, 0xcf, 0x32, 0xa9, 0xb9, 0x4e, 0x64,
-	0xa6, 0xec, 0xdb, 0xe3, 0xb1, 0x54, 0xa9, 0x54, 0x2c, 0xe2, 0x4a, 0x80, 0x02, 0x2b, 0x83, 0x48,
-	0x68, 0x1e, 0xb0, 0x9c, 0xc7, 0x49, 0x66, 0xc0, 0x16, 0xbb, 0xdf, 0xe5, 0x2a, 0xe7, 0x05, 0x4f,
-	0x2d, 0x1b, 0x19, 0x20, 0xfc, 0xb6, 0xe6, 0x18, 0x99, 0xcb, 0x50, 0x5c, 0x4c, 0x85, 0xd2, 0x64,
-	0x84, 0xb6, 0x5b, 0xb7, 0x2a, 0x97, 0x99, 0x12, 0xf8, 0x05, 0xf2, 0x60, 0x78, 0xc7, 0xdd, 0x77,
-	0x8f, 0x1e, 0x9c, 0xee, 0xd2, 0x8e, 0xa5, 0x28, 0x0c, 0x9d, 0xdd, 0xbb, 0xfe, 0xb3, 0xe7, 0x84,
-	0x76, 0x80, 0x1c, 0x5b, 0x9d, 0x77, 0x06, 0x67, 0x75, 0xf0, 0x00, 0x6d, 0x7d, 0x10, 0x99, 0x4c,
-	0x0d, 0xdf, 0xfd, 0x10, 0x0e, 0xe4, 0xc4, 0xaa, 0x37, 0x58, 0xab, 0xfe, 0x10, 0x79, 0xa0, 0x62,
-	0xd1, 0xf6, 0x44, 0xb4, 0xa5, 0x7e, 0x59, 0x0f, 0x37, 0x2b, 0xac, 0x42, 0xe3, 0x57, 0x08, 0x2d,
-	0x62, 0xda, 0xd9, 0x30, 0x7b, 0x1c, 0x50, 0xc8, 0x94, 0xd6, 0x99, 0x52, 0x68, 0xcd, 0x66, 0x4a,
-	0x47, 0x3c, 0x16, 0x96, 0x33, 0x5c, 0x9a, 0x24, 0xa5, 0x35, 0xd9, 0xa8, 0x2e, 0x4c, 0x9a, 0x25,
-	0xea, 0x88, 0x36, 0x6b, 0x59, 0x38, 0xe1, 0xd7, 0x1d, 0xb2, 0x87, 0x6b, 0x65, 0x81, 0x74, 0x59,
-	0xf7, 0xf4, 0xe7, 0x26, 0xda, 0x32, 0xc2, 0xf8, 0x8b, 0x8b, 0x3c, 0xc8, 0x1a, 0x1f, 0x76, 0x16,
-	0x71, 0xb7, 0xd8, 0xe1, 0xd1, 0x7a, 0x20, 0x68, 0x92, 0x27, 0x5f, 0x7f, 0xfd, 0xfb, 0xb1, 0xf1,
-	0x18, 0xef, 0xb2, 0xd5, 0xdf, 0x10, 0xfe, 0xe6, 0x22, 0x0f, 0x5a, 0xea, 0xb3, 0xd0, 0xea, 0xbc,
-	0xcf, 0x42, 0xbb, 0x70, 0xf2, 0xcc, 0x58, 0x38, 0xc0, 0x4f, 0x3b, 0x2d, 0x34, 0x8f, 0x97, 0x26,
-	0xe1, 0x2b, 0xe3, 0x05, 0xca, 0xe8, 0xf3, 0xd2, 0xfa, 0x48, 0xfa, 0xbc, 0xb4, 0x7b, 0x5d, 0xe3,
-	0x05, 0x4a, 0x66, 0x97, 0x70, 0x75, 0x75, 0xf6, 0xe6, 0x7a, 0xe6, 0xbb, 0x37, 0x33, 0xdf, 0xfd,
-	0x3b, 0xf3, 0xdd, 0xef, 0x73, 0xdf, 0xb9, 0x99, 0xfb, 0xce, 0xef, 0xb9, 0xef, 0xbc, 0x0f, 0xe2,
-	0x44, 0x7f, 0x9c, 0x46, 0x74, 0x2c, 0xd3, 0x5b, 0xa6, 0x93, 0x09, 0x8f, 0xd4, 0x82, 0xf7, 0xf3,
-	0x2d, 0xb3, 0xae, 0x72, 0xa1, 0x22, 0xcf, 0xfc, 0xa9, 0xcf, 0xff, 0x07, 0x00, 0x00, 0xff, 0xff,
-	0x93, 0xeb, 0x52, 0xc4, 0x63, 0x04, 0x00, 0x00,
+	// 515 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x53, 0x4f, 0x8b, 0xd3, 0x40,
+	0x14, 0xef, 0xec, 0xda, 0xc0, 0xce, 0x9e, 0x76, 0xb6, 0x48, 0xe9, 0x6a, 0xb6, 0x64, 0x71, 0x5b,
+	0x57, 0x9c, 0x21, 0x15, 0x04, 0x0f, 0x1e, 0xec, 0x41, 0x0f, 0x7a, 0xa8, 0x39, 0x7a, 0x9b, 0x74,
+	0x87, 0x18, 0xb6, 0xc9, 0x64, 0x3b, 0xd3, 0x6a, 0x11, 0x41, 0x04, 0xef, 0x82, 0x78, 0xf4, 0xee,
+	0xd1, 0x8f, 0xb1, 0xc7, 0x05, 0x2f, 0x9e, 0x44, 0x5a, 0xc1, 0xaf, 0x21, 0x9d, 0x79, 0x69, 0xb7,
+	0x18, 0x93, 0x4b, 0x49, 0xa6, 0xbf, 0x7f, 0xef, 0xfd, 0x26, 0xf8, 0x30, 0x89, 0x47, 0x67, 0xb3,
+	0x57, 0x7c, 0xc6, 0x74, 0x3c, 0x3c, 0x13, 0x63, 0xc5, 0xa6, 0x3e, 0x3b, 0x9f, 0x88, 0xf1, 0x8c,
+	0x66, 0x63, 0xa9, 0x25, 0xd9, 0xcf, 0x01, 0x14, 0x00, 0x74, 0xea, 0xb7, 0xf6, 0x78, 0x12, 0xa7,
+	0x92, 0x99, 0x5f, 0x8b, 0x6b, 0x35, 0x22, 0x19, 0x49, 0xf3, 0xc8, 0x96, 0x4f, 0x70, 0x7a, 0x23,
+	0x92, 0x32, 0x1a, 0x09, 0xc6, 0xb3, 0x98, 0xf1, 0x34, 0x95, 0x9a, 0xeb, 0x58, 0xa6, 0x0a, 0xfe,
+	0x3d, 0x19, 0x4a, 0x95, 0x48, 0xc5, 0x42, 0xae, 0x84, 0x35, 0x65, 0x53, 0x3f, 0x14, 0x9a, 0xfb,
+	0x2c, 0xe3, 0x51, 0x9c, 0x1a, 0x30, 0x60, 0xdb, 0x45, 0x41, 0x33, 0x3e, 0xe6, 0x89, 0x2a, 0x43,
+	0x24, 0xf2, 0x54, 0x8c, 0x00, 0xe1, 0x35, 0x30, 0x79, 0xbe, 0x74, 0x19, 0x18, 0x5a, 0x20, 0xce,
+	0x27, 0x42, 0x69, 0x6f, 0x80, 0xf7, 0x37, 0x4e, 0x55, 0x26, 0x53, 0x25, 0xc8, 0x03, 0xec, 0x58,
+	0xf9, 0x26, 0x6a, 0xa3, 0xee, 0x6e, 0xef, 0x80, 0x16, 0x6c, 0x82, 0x5a, 0x52, 0xff, 0xda, 0xc5,
+	0xcf, 0xc3, 0x5a, 0x00, 0x04, 0x4f, 0x83, 0xcf, 0x23, 0xa5, 0x84, 0xce, 0x7d, 0xc8, 0x75, 0xec,
+	0x58, 0xa2, 0x11, 0xdc, 0x09, 0xe0, 0x8d, 0x3c, 0xc6, 0x78, 0x3d, 0x6d, 0x73, 0xcb, 0x98, 0x1d,
+	0x53, 0xbb, 0x1a, 0xba, 0x5c, 0x0d, 0xb5, 0x7d, 0xc0, 0x6a, 0xe8, 0x80, 0x47, 0x02, 0x34, 0x83,
+	0x2b, 0x4c, 0xef, 0x0b, 0x82, 0x41, 0x72, 0x5b, 0x18, 0xe4, 0x21, 0x76, 0xb8, 0x39, 0x69, 0xa2,
+	0xf6, 0x76, 0x77, 0xb7, 0xd7, 0x2a, 0x1c, 0xc4, 0x90, 0xfa, 0x3b, 0xcb, 0x39, 0xbe, 0xfe, 0xf9,
+	0x76, 0x82, 0x02, 0x20, 0x91, 0x27, 0x05, 0xf1, 0x3a, 0x95, 0xf1, 0xac, 0xf7, 0x46, 0xbe, 0xdb,
+	0x78, 0x6f, 0x1d, 0x2f, 0x5f, 0x4a, 0x03, 0xd7, 0x4f, 0x45, 0x2a, 0x13, 0xd8, 0x89, 0x7d, 0xf1,
+	0x9e, 0x5d, 0x5d, 0xe0, 0x6a, 0x90, 0xfb, 0xb8, 0x6e, 0x32, 0x41, 0x21, 0x65, 0x73, 0xd8, 0x3e,
+	0x2c, 0xbc, 0xf7, 0x79, 0x1b, 0xd7, 0x8d, 0x1c, 0x79, 0x87, 0xb0, 0x63, 0x1b, 0x23, 0x9d, 0x42,
+	0xf6, 0xbf, 0xd7, 0xa3, 0xd5, 0xad, 0x06, 0xda, 0x7c, 0xde, 0xd1, 0xfb, 0xef, 0xbf, 0x3f, 0x6d,
+	0xdd, 0x24, 0x07, 0xec, 0xff, 0x77, 0xd5, 0x44, 0xb0, 0x05, 0x95, 0x45, 0xd8, 0xb8, 0x39, 0x65,
+	0x11, 0x36, 0xbb, 0xae, 0x88, 0x00, 0x8d, 0x7e, 0x40, 0xb8, 0x6e, 0x78, 0xe4, 0xb8, 0x42, 0x38,
+	0x0f, 0xd0, 0xa9, 0xc4, 0x81, 0xff, 0x1d, 0xe3, 0x7f, 0x8b, 0x1c, 0x95, 0xf8, 0xb3, 0x37, 0xa6,
+	0xe4, 0xb7, 0xfd, 0xa7, 0x17, 0x73, 0x17, 0x5d, 0xce, 0x5d, 0xf4, 0x6b, 0xee, 0xa2, 0x8f, 0x0b,
+	0xb7, 0x76, 0xb9, 0x70, 0x6b, 0x3f, 0x16, 0x6e, 0xed, 0x85, 0x1f, 0xc5, 0xfa, 0xe5, 0x24, 0xa4,
+	0x43, 0x99, 0xac, 0x84, 0xee, 0x8e, 0x78, 0xa8, 0xd6, 0xb2, 0xaf, 0x57, 0xc2, 0x7a, 0x96, 0x09,
+	0x15, 0x3a, 0xe6, 0x13, 0xbf, 0xf7, 0x37, 0x00, 0x00, 0xff, 0xff, 0xc5, 0x07, 0x53, 0x27, 0xd1,
+	0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -373,12 +379,11 @@ type QueryClient interface {
 	// Params defines a gRPC query method that returns the parameters of the
 	// module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
-	// Ticker defines a gRPC query method that returns a ticker of the given
-	// token denomination.
-	Ticker(ctx context.Context, in *QueryTickerRequest, opts ...grpc.CallOption) (*QueryTickerResponse, error)
-	// Denoms defines a gRPC query method that returns all the token
-	// denominations associated with the given ticker.
-	Denoms(ctx context.Context, in *QueryDenomsRequest, opts ...grpc.CallOption) (*QueryDenomsResponse, error)
+	// Assets defined a gRPC query method that returns all assets registered.
+	Assets(ctx context.Context, in *QueryAssetsRequest, opts ...grpc.CallOption) (*QueryAssetsResponse, error)
+	// Asset defines a gRPC query method that returns the asset associated with
+	// the given token denomination.
+	Asset(ctx context.Context, in *QueryAssetRequest, opts ...grpc.CallOption) (*QueryAssetResponse, error)
 }
 
 type queryClient struct {
@@ -398,18 +403,18 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 	return out, nil
 }
 
-func (c *queryClient) Ticker(ctx context.Context, in *QueryTickerRequest, opts ...grpc.CallOption) (*QueryTickerResponse, error) {
-	out := new(QueryTickerResponse)
-	err := c.cc.Invoke(ctx, "/milkyway.tickers.v1.Query/Ticker", in, out, opts...)
+func (c *queryClient) Assets(ctx context.Context, in *QueryAssetsRequest, opts ...grpc.CallOption) (*QueryAssetsResponse, error) {
+	out := new(QueryAssetsResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.tickers.v1.Query/Assets", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *queryClient) Denoms(ctx context.Context, in *QueryDenomsRequest, opts ...grpc.CallOption) (*QueryDenomsResponse, error) {
-	out := new(QueryDenomsResponse)
-	err := c.cc.Invoke(ctx, "/milkyway.tickers.v1.Query/Denoms", in, out, opts...)
+func (c *queryClient) Asset(ctx context.Context, in *QueryAssetRequest, opts ...grpc.CallOption) (*QueryAssetResponse, error) {
+	out := new(QueryAssetResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.tickers.v1.Query/Asset", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -421,12 +426,11 @@ type QueryServer interface {
 	// Params defines a gRPC query method that returns the parameters of the
 	// module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
-	// Ticker defines a gRPC query method that returns a ticker of the given
-	// token denomination.
-	Ticker(context.Context, *QueryTickerRequest) (*QueryTickerResponse, error)
-	// Denoms defines a gRPC query method that returns all the token
-	// denominations associated with the given ticker.
-	Denoms(context.Context, *QueryDenomsRequest) (*QueryDenomsResponse, error)
+	// Assets defined a gRPC query method that returns all assets registered.
+	Assets(context.Context, *QueryAssetsRequest) (*QueryAssetsResponse, error)
+	// Asset defines a gRPC query method that returns the asset associated with
+	// the given token denomination.
+	Asset(context.Context, *QueryAssetRequest) (*QueryAssetResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -436,11 +440,11 @@ type UnimplementedQueryServer struct {
 func (*UnimplementedQueryServer) Params(ctx context.Context, req *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
 }
-func (*UnimplementedQueryServer) Ticker(ctx context.Context, req *QueryTickerRequest) (*QueryTickerResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Ticker not implemented")
+func (*UnimplementedQueryServer) Assets(ctx context.Context, req *QueryAssetsRequest) (*QueryAssetsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Assets not implemented")
 }
-func (*UnimplementedQueryServer) Denoms(ctx context.Context, req *QueryDenomsRequest) (*QueryDenomsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Denoms not implemented")
+func (*UnimplementedQueryServer) Asset(ctx context.Context, req *QueryAssetRequest) (*QueryAssetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Asset not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -465,38 +469,38 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_Ticker_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryTickerRequest)
+func _Query_Assets_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryAssetsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).Ticker(ctx, in)
+		return srv.(QueryServer).Assets(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/milkyway.tickers.v1.Query/Ticker",
+		FullMethod: "/milkyway.tickers.v1.Query/Assets",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Ticker(ctx, req.(*QueryTickerRequest))
+		return srv.(QueryServer).Assets(ctx, req.(*QueryAssetsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_Denoms_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryDenomsRequest)
+func _Query_Asset_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryAssetRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).Denoms(ctx, in)
+		return srv.(QueryServer).Asset(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/milkyway.tickers.v1.Query/Denoms",
+		FullMethod: "/milkyway.tickers.v1.Query/Asset",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Denoms(ctx, req.(*QueryDenomsRequest))
+		return srv.(QueryServer).Asset(ctx, req.(*QueryAssetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -510,12 +514,12 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Query_Params_Handler,
 		},
 		{
-			MethodName: "Ticker",
-			Handler:    _Query_Ticker_Handler,
+			MethodName: "Assets",
+			Handler:    _Query_Assets_Handler,
 		},
 		{
-			MethodName: "Denoms",
-			Handler:    _Query_Denoms_Handler,
+			MethodName: "Asset",
+			Handler:    _Query_Asset_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -578,7 +582,7 @@ func (m *QueryParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryTickerRequest) Marshal() (dAtA []byte, err error) {
+func (m *QueryAssetsRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -588,12 +592,103 @@ func (m *QueryTickerRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryTickerRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryAssetsRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryTickerRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryAssetsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Ticker) > 0 {
+		i -= len(m.Ticker)
+		copy(dAtA[i:], m.Ticker)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.Ticker)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryAssetsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryAssetsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryAssetsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Assets) > 0 {
+		for iNdEx := len(m.Assets) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Assets[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryAssetRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryAssetRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryAssetRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -608,7 +703,7 @@ func (m *QueryTickerRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryTickerResponse) Marshal() (dAtA []byte, err error) {
+func (m *QueryAssetResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -618,109 +713,26 @@ func (m *QueryTickerResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryTickerResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryAssetResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryTickerResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryAssetResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Ticker) > 0 {
-		i -= len(m.Ticker)
-		copy(dAtA[i:], m.Ticker)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Ticker)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *QueryDenomsRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryDenomsRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryDenomsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Pagination != nil {
-		{
-			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
+	{
+		size, err := m.Asset.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x12
+		i -= size
+		i = encodeVarintQuery(dAtA, i, uint64(size))
 	}
-	if len(m.Ticker) > 0 {
-		i -= len(m.Ticker)
-		copy(dAtA[i:], m.Ticker)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Ticker)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *QueryDenomsResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *QueryDenomsResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *QueryDenomsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Pagination != nil {
-		{
-			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Denoms) > 0 {
-		for iNdEx := len(m.Denoms) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.Denoms[iNdEx])
-			copy(dAtA[i:], m.Denoms[iNdEx])
-			i = encodeVarintQuery(dAtA, i, uint64(len(m.Denoms[iNdEx])))
-			i--
-			dAtA[i] = 0xa
-		}
-	}
+	i--
+	dAtA[i] = 0xa
 	return len(dAtA) - i, nil
 }
 
@@ -755,7 +767,43 @@ func (m *QueryParamsResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryTickerRequest) Size() (n int) {
+func (m *QueryAssetsRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Ticker)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryAssetsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Assets) > 0 {
+		for _, e := range m.Assets {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryAssetRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -768,52 +816,14 @@ func (m *QueryTickerRequest) Size() (n int) {
 	return n
 }
 
-func (m *QueryTickerResponse) Size() (n int) {
+func (m *QueryAssetResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = len(m.Ticker)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
-
-func (m *QueryDenomsRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Ticker)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	if m.Pagination != nil {
-		l = m.Pagination.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
-
-func (m *QueryDenomsResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Denoms) > 0 {
-		for _, s := range m.Denoms {
-			l = len(s)
-			n += 1 + l + sovQuery(uint64(l))
-		}
-	}
-	if m.Pagination != nil {
-		l = m.Pagination.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
+	l = m.Asset.Size()
+	n += 1 + l + sovQuery(uint64(l))
 	return n
 }
 
@@ -956,7 +966,7 @@ func (m *QueryParamsResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryTickerRequest) Unmarshal(dAtA []byte) error {
+func (m *QueryAssetsRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -979,174 +989,10 @@ func (m *QueryTickerRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryTickerRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryAssetsRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryTickerRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Denom", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Denom = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryTickerResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryTickerResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryTickerResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Ticker", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Ticker = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryDenomsRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryDenomsRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryDenomsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryAssetsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1238,7 +1084,7 @@ func (m *QueryDenomsRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryDenomsResponse) Unmarshal(dAtA []byte) error {
+func (m *QueryAssetsResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1261,17 +1107,17 @@ func (m *QueryDenomsResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryDenomsResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryAssetsResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryDenomsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryAssetsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Denoms", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Assets", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowQuery
@@ -1281,23 +1127,25 @@ func (m *QueryDenomsResponse) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthQuery
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthQuery
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Denoms = append(m.Denoms, string(dAtA[iNdEx:postIndex]))
+			m.Assets = append(m.Assets, Asset{})
+			if err := m.Assets[len(m.Assets)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
@@ -1332,6 +1180,171 @@ func (m *QueryDenomsResponse) Unmarshal(dAtA []byte) error {
 				m.Pagination = &query.PageResponse{}
 			}
 			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryAssetRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryAssetRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryAssetRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Denom", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Denom = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryAssetResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryAssetResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryAssetResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Asset", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Asset.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

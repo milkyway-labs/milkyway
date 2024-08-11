@@ -7,22 +7,31 @@ import (
 	"github.com/milkyway-labs/milkyway/x/tickers/types"
 )
 
-func (s *KeeperTestSuite) TestRegisterTicker() {
-	_, err := s.msgServer.RegisterTicker(s.Ctx, types.NewMsgRegisterTicker(s.authority, "umilk", "MILK"))
+func (s *KeeperTestSuite) TestRegisterAsset() {
+	_, err := s.msgServer.RegisterAsset(s.Ctx, &types.MsgRegisterAsset{
+		Authority: s.authority,
+		Asset:     types.NewAsset("umilk", "MILK", 6),
+	})
 	s.Require().NoError(err)
 
-	resp, err := s.queryServer.Ticker(s.Ctx, &types.QueryTickerRequest{Denom: "umilk"})
+	resp, err := s.queryServer.Asset(s.Ctx, &types.QueryAssetRequest{Denom: "umilk"})
 	s.Require().NoError(err)
-	s.Require().Equal("MILK", resp.Ticker)
+	s.Require().Equal(types.NewAsset("umilk", "MILK", 6), resp.Asset)
 }
 
-func (s *KeeperTestSuite) TestDeregisterTicker() {
-	_, err := s.msgServer.RegisterTicker(s.Ctx, types.NewMsgRegisterTicker(s.authority, "umilk", "MILK"))
+func (s *KeeperTestSuite) TestDeregisterAsset() {
+	_, err := s.msgServer.RegisterAsset(s.Ctx, &types.MsgRegisterAsset{
+		Authority: s.authority,
+		Asset:     types.NewAsset("umilk", "MILK", 6),
+	})
 	s.Require().NoError(err)
 
-	_, err = s.msgServer.DeregisterTicker(s.Ctx, types.NewMsgDeregisterTicker(s.authority, "umilk"))
+	_, err = s.msgServer.DeregisterAsset(s.Ctx, &types.MsgDeregisterAsset{
+		Authority: s.authority,
+		Denom:     "umilk",
+	})
 	s.Require().NoError(err)
 
-	_, err = s.queryServer.Ticker(s.Ctx, &types.QueryTickerRequest{Denom: "umilk"})
+	_, err = s.queryServer.Asset(s.Ctx, &types.QueryAssetRequest{Denom: "umilk"})
 	s.Require().Equal(codes.NotFound, status.Code(err))
 }

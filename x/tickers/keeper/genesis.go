@@ -13,13 +13,13 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		panic(err)
 	}
 
-	tickers := types.Tickers{}
-	_ = k.Tickers.Walk(ctx, nil, func(denom, ticker string) (stop bool, err error) {
-		tickers[denom] = ticker
+	assets := []types.Asset{}
+	_ = k.Assets.Walk(ctx, nil, func(_ string, asset types.Asset) (stop bool, err error) {
+		assets = append(assets, asset)
 		return false, nil
 	})
 
-	return types.NewGenesisState(params, tickers)
+	return types.NewGenesisState(params, assets)
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -31,8 +31,8 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) {
 		panic(err)
 	}
 
-	for denom, ticker := range state.Tickers {
-		if err := k.SetTicker(ctx, denom, ticker); err != nil {
+	for _, asset := range state.Assets {
+		if err := k.SetAsset(ctx, asset); err != nil {
 			panic(err)
 		}
 	}

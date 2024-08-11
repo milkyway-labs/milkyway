@@ -48,9 +48,9 @@ func (s *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	// - Operator2 sets 5% commission rate
 	// - Operator3 sets 2% commission rate
 
-	s.RegisterCurrency("umilk", "MILK", utils.MustParseDec("2"))
-	s.RegisterCurrency("uinit", "INIT", utils.MustParseDec("3"))
-	s.RegisterCurrency("uusd", "MUSD", utils.MustParseDec("1"))
+	s.RegisterCurrency("umilk", "MILK", 6, utils.MustParseDec("2"))
+	s.RegisterCurrency("uinit", "INIT", 6, utils.MustParseDec("3"))
+	s.RegisterCurrency("uusd", "MUSD", 6, utils.MustParseDec("1"))
 
 	// Create services.
 	serviceAdmin1 := testutil.TestAddress(10000)
@@ -253,8 +253,8 @@ func (s *KeeperTestSuite) TestAllocateRewards_MovingPrice() {
 	s.Require().Equal("6944.400000000000000000service", rewards.Sum().String())
 
 	// Now price changes.
-	s.RegisterCurrency("umilk", "MILK", utils.MustParseDec("3"))
-	s.RegisterCurrency("uinit", "INIT", utils.MustParseDec("1"))
+	s.RegisterCurrency("umilk", "MILK", 6, utils.MustParseDec("3"))
+	s.RegisterCurrency("uinit", "INIT", 6, utils.MustParseDec("1"))
 
 	// Allocate rewards again.
 	s.allocateRewards(10 * time.Second)
@@ -276,7 +276,7 @@ func (s *KeeperTestSuite) TestAllocateRewards_ZeroDelegations() {
 	// correctly when the distribution info has weight specified but there's
 	// no delegation yet.
 
-	s.RegisterCurrency("umilk", "MILK", utils.MustParseDec("2"))
+	s.RegisterCurrency("umilk", "MILK", 6, utils.MustParseDec("2"))
 
 	// Create a service.
 	serviceAdmin := testutil.TestAddress(10000)
@@ -348,8 +348,8 @@ func (s *KeeperTestSuite) TestAllocateRewards_ZeroDelegations() {
 func (s *KeeperTestSuite) TestAllocateRewards_WeightedDistributions() {
 	// Register $MILK and $INIT. For simple calculation, set both currencies'
 	// price $1.
-	s.RegisterCurrency("umilk", "MILK", utils.MustParseDec("1"))
-	s.RegisterCurrency("uinit", "INIT", utils.MustParseDec("1"))
+	s.RegisterCurrency("umilk", "MILK", 6, utils.MustParseDec("1"))
+	s.RegisterCurrency("uinit", "INIT", 6, utils.MustParseDec("1"))
 
 	// Create a service.
 	serviceAdmin := testutil.TestAddress(10000)
@@ -458,8 +458,8 @@ func (s *KeeperTestSuite) TestAllocateRewards_WeightedDistributions() {
 func (s *KeeperTestSuite) TestAllocateRewards_EgalitarianDistributions() {
 	// Register $MILK and $INIT. For simple calculation, set both currencies'
 	// price $1.
-	s.RegisterCurrency("umilk", "MILK", utils.MustParseDec("1"))
-	s.RegisterCurrency("uinit", "INIT", utils.MustParseDec("1"))
+	s.RegisterCurrency("umilk", "MILK", 6, utils.MustParseDec("1"))
+	s.RegisterCurrency("uinit", "INIT", 6, utils.MustParseDec("1"))
 
 	// Create a service.
 	serviceAdmin := testutil.TestAddress(10000)

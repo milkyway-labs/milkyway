@@ -20,8 +20,8 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	Query_Params_FullMethodName = "/milkyway.tickers.v1.Query/Params"
-	Query_Ticker_FullMethodName = "/milkyway.tickers.v1.Query/Ticker"
-	Query_Denoms_FullMethodName = "/milkyway.tickers.v1.Query/Denoms"
+	Query_Assets_FullMethodName = "/milkyway.tickers.v1.Query/Assets"
+	Query_Asset_FullMethodName  = "/milkyway.tickers.v1.Query/Asset"
 )
 
 // QueryClient is the client API for Query service.
@@ -33,12 +33,11 @@ type QueryClient interface {
 	// Params defines a gRPC query method that returns the parameters of the
 	// module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
-	// Ticker defines a gRPC query method that returns a ticker of the given
-	// token denomination.
-	Ticker(ctx context.Context, in *QueryTickerRequest, opts ...grpc.CallOption) (*QueryTickerResponse, error)
-	// Denoms defines a gRPC query method that returns all the token
-	// denominations associated with the given ticker.
-	Denoms(ctx context.Context, in *QueryDenomsRequest, opts ...grpc.CallOption) (*QueryDenomsResponse, error)
+	// Assets defined a gRPC query method that returns all assets registered.
+	Assets(ctx context.Context, in *QueryAssetsRequest, opts ...grpc.CallOption) (*QueryAssetsResponse, error)
+	// Asset defines a gRPC query method that returns the asset associated with
+	// the given token denomination.
+	Asset(ctx context.Context, in *QueryAssetRequest, opts ...grpc.CallOption) (*QueryAssetResponse, error)
 }
 
 type queryClient struct {
@@ -59,20 +58,20 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 	return out, nil
 }
 
-func (c *queryClient) Ticker(ctx context.Context, in *QueryTickerRequest, opts ...grpc.CallOption) (*QueryTickerResponse, error) {
+func (c *queryClient) Assets(ctx context.Context, in *QueryAssetsRequest, opts ...grpc.CallOption) (*QueryAssetsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(QueryTickerResponse)
-	err := c.cc.Invoke(ctx, Query_Ticker_FullMethodName, in, out, cOpts...)
+	out := new(QueryAssetsResponse)
+	err := c.cc.Invoke(ctx, Query_Assets_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *queryClient) Denoms(ctx context.Context, in *QueryDenomsRequest, opts ...grpc.CallOption) (*QueryDenomsResponse, error) {
+func (c *queryClient) Asset(ctx context.Context, in *QueryAssetRequest, opts ...grpc.CallOption) (*QueryAssetResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(QueryDenomsResponse)
-	err := c.cc.Invoke(ctx, Query_Denoms_FullMethodName, in, out, cOpts...)
+	out := new(QueryAssetResponse)
+	err := c.cc.Invoke(ctx, Query_Asset_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -88,12 +87,11 @@ type QueryServer interface {
 	// Params defines a gRPC query method that returns the parameters of the
 	// module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
-	// Ticker defines a gRPC query method that returns a ticker of the given
-	// token denomination.
-	Ticker(context.Context, *QueryTickerRequest) (*QueryTickerResponse, error)
-	// Denoms defines a gRPC query method that returns all the token
-	// denominations associated with the given ticker.
-	Denoms(context.Context, *QueryDenomsRequest) (*QueryDenomsResponse, error)
+	// Assets defined a gRPC query method that returns all assets registered.
+	Assets(context.Context, *QueryAssetsRequest) (*QueryAssetsResponse, error)
+	// Asset defines a gRPC query method that returns the asset associated with
+	// the given token denomination.
+	Asset(context.Context, *QueryAssetRequest) (*QueryAssetResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -107,11 +105,11 @@ type UnimplementedQueryServer struct{}
 func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
 }
-func (UnimplementedQueryServer) Ticker(context.Context, *QueryTickerRequest) (*QueryTickerResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Ticker not implemented")
+func (UnimplementedQueryServer) Assets(context.Context, *QueryAssetsRequest) (*QueryAssetsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Assets not implemented")
 }
-func (UnimplementedQueryServer) Denoms(context.Context, *QueryDenomsRequest) (*QueryDenomsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Denoms not implemented")
+func (UnimplementedQueryServer) Asset(context.Context, *QueryAssetRequest) (*QueryAssetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Asset not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 func (UnimplementedQueryServer) testEmbeddedByValue()               {}
@@ -152,38 +150,38 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_Ticker_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryTickerRequest)
+func _Query_Assets_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryAssetsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).Ticker(ctx, in)
+		return srv.(QueryServer).Assets(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_Ticker_FullMethodName,
+		FullMethod: Query_Assets_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Ticker(ctx, req.(*QueryTickerRequest))
+		return srv.(QueryServer).Assets(ctx, req.(*QueryAssetsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_Denoms_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryDenomsRequest)
+func _Query_Asset_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryAssetRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).Denoms(ctx, in)
+		return srv.(QueryServer).Asset(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_Denoms_FullMethodName,
+		FullMethod: Query_Asset_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Denoms(ctx, req.(*QueryDenomsRequest))
+		return srv.(QueryServer).Asset(ctx, req.(*QueryAssetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -200,12 +198,12 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Query_Params_Handler,
 		},
 		{
-			MethodName: "Ticker",
-			Handler:    _Query_Ticker_Handler,
+			MethodName: "Assets",
+			Handler:    _Query_Assets_Handler,
 		},
 		{
-			MethodName: "Denoms",
-			Handler:    _Query_Denoms_Handler,
+			MethodName: "Asset",
+			Handler:    _Query_Asset_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

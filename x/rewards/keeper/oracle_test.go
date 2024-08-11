@@ -5,7 +5,7 @@ import (
 )
 
 func (s *KeeperTestSuite) TestGetPrice() {
-	s.RegisterCurrency("umilk", "MILK", utils.MustParseDec("2"))
+	s.RegisterCurrency("umilk", "MILK", 6, utils.MustParseDec("2"))
 
 	price, err := s.keeper.GetPrice(s.Ctx, "umilk")
 	s.Require().NoError(err)

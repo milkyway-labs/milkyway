@@ -3,9 +3,10 @@ package types
 // DONTCOVER
 
 const (
-	EventTypeRegisterTicker   = "register_ticker"
-	EventTypeDeregisterTicker = "deregister_ticker"
+	EventTypeRegisterAsset   = "register_asset"
+	EventTypeDeregisterAsset = "deregister_asset"
 
-	AttributeKeyDenom  = "denom"
-	AttributeKeyTicker = "ticker"
+	AttributeKeyDenom    = "denom"
+	AttributeKeyTicker   = "ticker"
+	AttributeKeyExponent = "exponent"
 )

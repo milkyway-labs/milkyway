@@ -2,23 +2,19 @@ package types
 
 import (
 	"fmt"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-type Tickers = map[string]string
-
 // NewGenesisState returns a new GenesisState instance
-func NewGenesisState(params Params, tickers Tickers) *GenesisState {
+func NewGenesisState(params Params, assets []Asset) *GenesisState {
 	return &GenesisState{
-		Params:  params,
-		Tickers: tickers,
+		Params: params,
+		Assets: assets,
 	}
 }
 
 // DefaultGenesis returns a default GenesisState
 func DefaultGenesis() *GenesisState {
-	return NewGenesisState(DefaultParams(), Tickers{})
+	return NewGenesisState(DefaultParams(), nil)
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -31,11 +27,9 @@ func (data *GenesisState) Validate() error {
 		return fmt.Errorf("invalid params: %s", err)
 	}
 
-	for denom, ticker := range data.Tickers {
-		if err := sdk.ValidateDenom(denom); err != nil {
-			return err
-		}
-		if err := ValidateTicker(ticker); err != nil {
+	for _, asset := range data.Assets {
+		err = asset.Validate()
+		if err != nil {
 			return err
 		}
 	}

@@ -1,45 +1,75 @@
 package keeper_test
 
 import (
-	"fmt"
-
 	"github.com/milkyway-labs/milkyway/x/tickers/types"
 )
 
-func (s *KeeperTestSuite) TestQueryTicker() {
-	_, err := s.msgServer.RegisterTicker(s.Ctx, types.NewMsgRegisterTicker(s.authority, "umilk", "MILK"))
+func (s *KeeperTestSuite) TestQueryAssets() {
+	_, err := s.msgServer.RegisterAsset(s.Ctx, &types.MsgRegisterAsset{
+		Authority: s.authority,
+		Asset:     types.NewAsset("umilk", "MILK", 6),
+	})
+	s.Require().NoError(err)
+
+	_, err = s.msgServer.RegisterAsset(s.Ctx, &types.MsgRegisterAsset{
+		Authority: s.authority,
+		Asset:     types.NewAsset("umilk2", "MILK", 6),
+	})
+	s.Require().NoError(err)
+
+	_, err = s.msgServer.RegisterAsset(s.Ctx, &types.MsgRegisterAsset{
+		Authority: s.authority,
+		Asset:     types.NewAsset("uatom", "ATOM", 6),
+	})
 	s.Require().NoError(err)
 
 	testCases := []struct {
 		name        string
-		req         *types.QueryTickerRequest
+		req         *types.QueryAssetsRequest
 		expectedErr string
-		postRun     func(resp *types.QueryTickerResponse)
+		postRun     func(resp *types.QueryAssetsResponse)
 	}{
 		{
 			"successful query",
-			&types.QueryTickerRequest{Denom: "umilk"},
+			&types.QueryAssetsRequest{},
 			"",
-			func(resp *types.QueryTickerResponse) {
-				s.Require().Equal("MILK", resp.Ticker)
+			func(resp *types.QueryAssetsResponse) {
+				s.Require().Equal([]types.Asset{
+					types.NewAsset("uatom", "ATOM", 6),
+					types.NewAsset("umilk", "MILK", 6),
+					types.NewAsset("umilk2", "MILK", 6),
+				}, resp.Assets)
 			},
 		},
 		{
-			"invalid denom",
-			&types.QueryTickerRequest{Denom: "!@#$"},
-			"rpc error: code = InvalidArgument desc = invalid denom: !@#$",
-			nil,
+			"successful query with ticker",
+			&types.QueryAssetsRequest{Ticker: "MILK"},
+			"",
+			func(resp *types.QueryAssetsResponse) {
+				s.Require().Equal([]types.Asset{
+					types.NewAsset("umilk", "MILK", 6),
+					types.NewAsset("umilk2", "MILK", 6),
+				}, resp.Assets)
+			},
 		},
 		{
-			"ticker not registered",
-			&types.QueryTickerRequest{Denom: "uatom"},
-			"rpc error: code = NotFound desc = ticker for denom uatom not registered",
+			"successful query with ticker #2",
+			&types.QueryAssetsRequest{Ticker: "ATOM"},
+			"",
+			func(resp *types.QueryAssetsResponse) {
+				s.Require().Equal([]types.Asset{types.NewAsset("uatom", "ATOM", 6)}, resp.Assets)
+			},
+		},
+		{
+			"invalid ticker",
+			&types.QueryAssetsRequest{Ticker: "!@#$"},
+			"rpc error: code = InvalidArgument desc = bad ticker format: !@#$",
 			nil,
 		},
 	}
 	for _, tc := range testCases {
 		s.Run(tc.name, func() {
-			resp, err := s.queryServer.Ticker(s.Ctx, tc.req)
+			resp, err := s.queryServer.Assets(s.Ctx, tc.req)
 			if tc.expectedErr == "" {
 				s.Require().NoError(err)
 				tc.postRun(resp)
@@ -50,47 +80,43 @@ func (s *KeeperTestSuite) TestQueryTicker() {
 	}
 }
 
-func (s *KeeperTestSuite) TestQueryDenoms() {
-	_, err := s.msgServer.RegisterTicker(s.Ctx, types.NewMsgRegisterTicker(s.authority, "umilk", "MILK"))
-	s.Require().NoError(err)
-
-	_, err = s.msgServer.RegisterTicker(s.Ctx, types.NewMsgRegisterTicker(s.authority, "umilk2", "MILK"))
+func (s *KeeperTestSuite) TestQueryAsset() {
+	_, err := s.msgServer.RegisterAsset(s.Ctx, &types.MsgRegisterAsset{
+		Authority: s.authority,
+		Asset:     types.NewAsset("umilk", "MILK", 6),
+	})
 	s.Require().NoError(err)
 
 	testCases := []struct {
 		name        string
-		req         *types.QueryDenomsRequest
+		req         *types.QueryAssetRequest
 		expectedErr string
-		postRun     func(resp *types.QueryDenomsResponse)
+		postRun     func(resp *types.QueryAssetResponse)
 	}{
 		{
 			"successful query",
-			&types.QueryDenomsRequest{Ticker: "MILK"},
+			&types.QueryAssetRequest{Denom: "umilk"},
 			"",
-			func(resp *types.QueryDenomsResponse) {
-				s.Require().Equal([]string{"umilk", "umilk2"}, resp.Denoms)
+			func(resp *types.QueryAssetResponse) {
+				s.Require().Equal(types.NewAsset("umilk", "MILK", 6), resp.Asset)
 			},
 		},
 		{
-			"denoms not found",
-			&types.QueryDenomsRequest{Ticker: "ATOM"},
-			"",
-			func(resp *types.QueryDenomsResponse) {
-				s.Require().Empty(resp.Denoms)
-			},
+			"invalid denom",
+			&types.QueryAssetRequest{Denom: "!@#$"},
+			"rpc error: code = InvalidArgument desc = invalid denom: !@#$",
+			nil,
 		},
 		{
-			"invalid ticker",
-			&types.QueryDenomsRequest{},
-			"rpc error: code = InvalidArgument desc = invalid ticker: empty ticker",
-			func(resp *types.QueryDenomsResponse) {
-				fmt.Println(resp.Denoms)
-			},
+			"ticker not registered",
+			&types.QueryAssetRequest{Denom: "uatom"},
+			"rpc error: code = NotFound desc = asset for denom uatom not registered",
+			nil,
 		},
 	}
 	for _, tc := range testCases {
 		s.Run(tc.name, func() {
-			resp, err := s.queryServer.Denoms(s.Ctx, tc.req)
+			resp, err := s.queryServer.Asset(s.Ctx, tc.req)
 			if tc.expectedErr == "" {
 				s.Require().NoError(err)
 				tc.postRun(resp)

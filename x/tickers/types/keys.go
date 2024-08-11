@@ -12,6 +12,6 @@ const (
 var (
 	ParamsKey = collections.NewPrefix(0x01)
 
-	TickerKeyPrefix      = collections.NewPrefix(0x11)
+	AssetKeyPrefix       = collections.NewPrefix(0x11)
 	TickerIndexKeyPrefix = collections.NewPrefix(0x12)
 )

@@ -9,15 +9,15 @@ import (
 )
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	legacy.RegisterAminoMsg(cdc, &MsgRegisterTicker{}, "milkyway/MsgRegisterTicker")
-	legacy.RegisterAminoMsg(cdc, &MsgDeregisterTicker{}, "milkyway/MsgDeregisterTicker")
+	legacy.RegisterAminoMsg(cdc, &MsgRegisterAsset{}, "milkyway/MsgRegisterAsset")
+	legacy.RegisterAminoMsg(cdc, &MsgDeregisterAsset{}, "milkyway/MsgDeregisterAsset")
 	legacy.RegisterAminoMsg(cdc, &MsgUpdateParams{}, "milkyway/tickers/MsgUpdateParams")
 }
 
 func RegisterInterfaces(registry types.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgRegisterTicker{},
-		&MsgDeregisterTicker{},
+		&MsgRegisterAsset{},
+		&MsgDeregisterAsset{},
 		&MsgUpdateParams{},
 	)
 
