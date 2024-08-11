@@ -31,7 +31,7 @@ service Msg {
 // gRPC service method. It allows the authority to register a ticker.
 message MsgRegisterTicker {
   option (cosmos.msg.v1.signer) = "authority";
-  option (amino.name) = "tickers/MsgRegisterTicker";
+  option (amino.name) = "milkyway/tickers/MsgRegisterTicker";
 
   // Authority is the address that controls the module (defaults to x/gov unless
   // overwritten).
@@ -52,7 +52,7 @@ message MsgRegisterTickerResponse {}
 // the token denomination.
 message MsgDeregisterTicker {
   option (cosmos.msg.v1.signer) = "authority";
-  option (amino.name) = "tickers/MsgDeregisterTicker";
+  option (amino.name) = "milkyway/tickers/MsgDeregisterTicker";
 
   // Authority is the address that controls the module (defaults to x/gov unless
   // overwritten).
@@ -69,7 +69,7 @@ message MsgDeregisterTickerResponse {}
 // service method. It allows the authority to update the module parameters.
 message MsgUpdateParams {
   option (cosmos.msg.v1.signer) = "authority";
-  option (amino.name) = "tickers/MsgUpdateParams";
+  option (amino.name) = "milkyway/tickers/MsgUpdateParams";
 
   // Authority is the address that controls the module (defaults to x/gov unless
   // overwritten).

@@ -9,9 +9,9 @@ import (
 )
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	legacy.RegisterAminoMsg(cdc, &MsgRegisterTicker{}, "tickers/MsgRegisterTicker")
-	legacy.RegisterAminoMsg(cdc, &MsgDeregisterTicker{}, "tickers/MsgDeregisterTicker")
-	legacy.RegisterAminoMsg(cdc, &MsgUpdateParams{}, "tickers/MsgUpdateParams")
+	legacy.RegisterAminoMsg(cdc, &MsgRegisterTicker{}, "milkyway/MsgRegisterTicker")
+	legacy.RegisterAminoMsg(cdc, &MsgDeregisterTicker{}, "milkyway/MsgDeregisterTicker")
+	legacy.RegisterAminoMsg(cdc, &MsgUpdateParams{}, "milkyway/tickers/MsgUpdateParams")
 }
 
 func RegisterInterfaces(registry types.InterfaceRegistry) {

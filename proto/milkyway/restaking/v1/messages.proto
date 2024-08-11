@@ -48,6 +48,9 @@ service Msg {
 // UpdateOperatorParams gRPC service method. It allows the operator admin to
 // update the operator's parameters.
 message MsgUpdateOperatorParams {
+  option (cosmos.msg.v1.signer) = "sender";
+  option (amino.name) = "milkyway/restaking/MsgUpdateOperatorParams";
+
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
   uint32 operator_id = 2 [ (gogoproto.customname) = "OperatorID" ];
@@ -63,6 +66,9 @@ message MsgUpdateOperatorParamsResponse {}
 // UpdateServiceParams gRPC service method. It allows the service admin to
 // update the service's parameters.
 message MsgUpdateServiceParams {
+  option (cosmos.msg.v1.signer) = "sender";
+  option (amino.name) = "milkyway/restaking/MsgUpdateServiceParams";
+
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
   uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
@@ -79,7 +85,7 @@ message MsgUpdateServiceParamsResponse {}
 // choose it.
 message MsgDelegatePool {
   option (cosmos.msg.v1.signer) = "delegator";
-  option (amino.name) = "milkyway/MsgJoinRestakingPool";
+  option (amino.name) = "milkyway/restaking/MsgDelegatePool";
 
   // Delegator is the address of the user joining the pool
   string delegator = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
@@ -97,7 +103,7 @@ message MsgDelegatePoolResponse {}
 // operator.
 message MsgDelegateOperator {
   option (cosmos.msg.v1.signer) = "delegator";
-  option (amino.name) = "milkyway/MsgDelegateOperator";
+  option (amino.name) = "milkyway/restaking/MsgDelegateOperator";
 
   // Delegator is the address of the user delegating to the operator
   string delegator = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
@@ -120,7 +126,7 @@ message MsgDelegateOperatorResponse {}
 // service method. It allows a user to delegate their assets to a service.
 message MsgDelegateService {
   option (cosmos.msg.v1.signer) = "delegator";
-  option (amino.name) = "milkyway/MsgDelegateService";
+  option (amino.name) = "milkyway/restaking/MsgDelegateService";
 
   // Delegator is the address of the user delegating to the service
   string delegator = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
@@ -143,7 +149,7 @@ message MsgDelegateServiceResponse {}
 // service method. It allows the authority to update the module parameters.
 message MsgUpdateParams {
   option (cosmos.msg.v1.signer) = "authority";
-  option (amino.name) = "milkyway/x/restaking/MsgUpdateParams";
+  option (amino.name) = "milkyway/restaking/MsgUpdateParams";
 
   // Authority is the address that controls the module (defaults to x/gov unless
   // overwritten).
