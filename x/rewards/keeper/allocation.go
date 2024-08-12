@@ -180,12 +180,12 @@ func (k *Keeper) getPoolsForRewardsAllocation(
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	var pools []poolstypes.Pool
 	poolsParams := k.poolsKeeper.GetParams(sdkCtx)
-	if slices.Contains(poolsParams.AllowedServiceIDs, service.ID) {
+	if slices.Contains(poolsParams.AllowedServicesIDs, service.ID) {
 		// If there's no whitelisted pools, that means all pools.
-		if len(serviceParams.WhitelistedPoolIDs) == 0 {
+		if len(serviceParams.WhitelistedPoolsIDs) == 0 {
 			return k.poolsKeeper.GetPools(sdkCtx)
 		}
-		for _, poolID := range serviceParams.WhitelistedPoolIDs {
+		for _, poolID := range serviceParams.WhitelistedPoolsIDs {
 			pool, found := k.poolsKeeper.GetPool(sdkCtx, poolID)
 			if !found {
 				// TODO: panic here if we're sure that this never happens
@@ -206,9 +206,9 @@ func (k *Keeper) getOperatorsForRewardsAllocation(
 	var operators []operatorstypes.Operator
 	k.operatorsKeeper.IterateOperators(sdkCtx, func(operator operatorstypes.Operator) (stop bool) {
 		operatorParams := k.restakingKeeper.GetOperatorParams(sdkCtx, operator.ID)
-		if slices.Contains(operatorParams.JoinedServiceIDs, service.ID) &&
-			(len(serviceParams.WhitelistedOperatorIDs) == 0 ||
-				slices.Contains(serviceParams.WhitelistedOperatorIDs, operator.ID)) {
+		if slices.Contains(operatorParams.JoinedServicesIDs, service.ID) &&
+			(len(serviceParams.WhitelistedOperatorsIDs) == 0 ||
+				slices.Contains(serviceParams.WhitelistedOperatorsIDs, operator.ID)) {
 			operators = append(operators, operator)
 		}
 		return false

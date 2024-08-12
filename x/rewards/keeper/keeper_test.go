@@ -61,7 +61,7 @@ func (s *KeeperTestSuite) setupSampleServiceAndOperator() (servicestypes.Service
 
 	// Add the created service ID to the pools module's allowed list.
 	poolsParams := s.App.PoolsKeeper.GetParams(s.Ctx)
-	poolsParams.AllowedServiceIDs = []uint32{service.ID}
+	poolsParams.AllowedServicesIDs = []uint32{service.ID}
 	s.App.PoolsKeeper.SetParams(s.Ctx, poolsParams)
 
 	// Create an operator.

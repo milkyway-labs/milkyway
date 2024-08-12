@@ -61,7 +61,7 @@ func (s *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 
 	// Add only Service1 and Service2 to the pools module's allowed list.
 	poolsParams := s.App.PoolsKeeper.GetParams(s.Ctx)
-	poolsParams.AllowedServiceIDs = []uint32{service1.ID, service2.ID}
+	poolsParams.AllowedServicesIDs = []uint32{service1.ID, service2.ID}
 	s.App.PoolsKeeper.SetParams(s.Ctx, poolsParams)
 
 	// Create operators.
@@ -283,7 +283,7 @@ func (s *KeeperTestSuite) TestAllocateRewards_ZeroDelegations() {
 
 	// Add the created service ID to the pools module's allowed list.
 	poolsParams := s.App.PoolsKeeper.GetParams(s.Ctx)
-	poolsParams.AllowedServiceIDs = []uint32{service.ID}
+	poolsParams.AllowedServicesIDs = []uint32{service.ID}
 	s.App.PoolsKeeper.SetParams(s.Ctx, poolsParams)
 
 	// Create an active rewards plan.
@@ -356,7 +356,7 @@ func (s *KeeperTestSuite) TestAllocateRewards_WeightedDistributions() {
 
 	// Add the created service ID to the pools module's allowed list.
 	poolsParams := s.App.PoolsKeeper.GetParams(s.Ctx)
-	poolsParams.AllowedServiceIDs = []uint32{service.ID}
+	poolsParams.AllowedServicesIDs = []uint32{service.ID}
 	s.App.PoolsKeeper.SetParams(s.Ctx, poolsParams)
 
 	// Create operators.
@@ -466,7 +466,7 @@ func (s *KeeperTestSuite) TestAllocateRewards_EgalitarianDistributions() {
 
 	// Add the created service ID to the pools module's allowed list.
 	poolsParams := s.App.PoolsKeeper.GetParams(s.Ctx)
-	poolsParams.AllowedServiceIDs = []uint32{service.ID}
+	poolsParams.AllowedServicesIDs = []uint32{service.ID}
 	s.App.PoolsKeeper.SetParams(s.Ctx, poolsParams)
 
 	// Create operators.
