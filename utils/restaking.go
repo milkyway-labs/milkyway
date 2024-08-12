@@ -17,7 +17,7 @@ func GetSharesDenomFromTokenDenom(prefix string, id uint32, tokenDenom string) s
 // GetTokenDenomFromSharesDenom returns the token denom from the shares denom.
 // It expects the shares denom to be in the format "{xxxxxx}/{xxxxxx}/{tokenDenom}".
 func GetTokenDenomFromSharesDenom(sharesDenom string) string {
-	parts := strings.Split(sharesDenom, "/")
+	parts := strings.SplitN(sharesDenom, "/", 3)
 	if len(parts) != 3 {
 		return ""
 	}
