@@ -17,7 +17,7 @@ require (
 	cosmossdk.io/x/upgrade v0.1.4
 	// we also need to update `LIBWASMVM_VERSION` of images/private/Dockerfile#5
 	github.com/CosmWasm/wasmd v0.50.0
-	github.com/CosmWasm/wasmvm v1.5.2
+	github.com/CosmWasm/wasmvm v1.5.4
 	github.com/Stride-Labs/ibc-rate-limiting v0.0.0-00010101000000-000000000000
 	github.com/aptos-labs/serde-reflection/serde-generate/runtime/golang v0.0.0-20231213012317-73b6bbf74833
 	github.com/cometbft/cometbft v0.38.10
