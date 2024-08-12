@@ -4,29 +4,44 @@ import (
 	"github.com/milkyway-labs/milkyway/utils"
 )
 
-func (s *KeeperTestSuite) TestGetPrice() {
+func (s *KeeperTestSuite) TestGetAssetAndPrice() {
 	s.RegisterCurrency("umilk", "MILK", 6, utils.MustParseDec("2"))
 
-	price, err := s.keeper.GetPrice(s.Ctx, "umilk")
+	_, price, err := s.keeper.GetAssetAndPrice(s.Ctx, "umilk")
 	s.Require().NoError(err)
 	s.Require().Equal(utils.MustParseDec("2"), price)
+
+	_, price, err = s.keeper.GetAssetAndPrice(s.Ctx, "uinit")
+	s.Require().NoError(err)
+	s.Require().True(price.IsZero())
 }
 
 func (s *KeeperTestSuite) TestGetCoinValue() {
-	// TODO: uncomment this after adding exponent to tickers module
-	//s.RegisterCurrency("umilk", "MILK", utils.MustParseDec("2"))
-	//
-	//value, err := s.keeper.GetCoinValue(s.Ctx, utils.MustParseCoin("10_000000umilk"))
-	//s.Require().NoError(err)
-	//s.Require().Equal(utils.MustParseDec("20"), value)
+	s.RegisterCurrency("umilk", "MILK", 6, utils.MustParseDec("2"))
+	s.RegisterCurrency("afoo", "FOO", 18, utils.MustParseDec("0.53"))
+
+	value, err := s.keeper.GetCoinValue(s.Ctx, utils.MustParseCoin("10_000000umilk"))
+	s.Require().NoError(err)
+	s.Require().Equal(utils.MustParseDec("20"), value)
+
+	value, err = s.keeper.GetCoinValue(s.Ctx, utils.MustParseCoin("10_000000uinit"))
+	s.Require().NoError(err)
+	s.Require().True(value.IsZero())
+
+	value, err = s.keeper.GetCoinValue(s.Ctx, utils.MustParseCoin("1200000000000000afoo")) // 0.0012 $FOO
+	s.Require().NoError(err)
+	s.Require().Equal(utils.MustParseDec("0.000636"), value)
 }
 
 func (s *KeeperTestSuite) TestGetCoinsValue() {
-	// TODO: uncomment this after adding exponent to tickers module
-	//s.RegisterCurrency("umilk", "MILK", utils.MustParseDec("2"))
-	//s.RegisterCurrency("uinit", "INIT", utils.MustParseDec("3"))
-	//
-	//value, err := s.keeper.GetCoinsValue(s.Ctx, utils.MustParseCoins("10_000000umilk,5_5000000uinit"))
-	//s.Require().NoError(err)
-	//s.Require().Equal(utils.MustParseDec("36.5"), value)
+	s.RegisterCurrency("umilk", "MILK", 6, utils.MustParseDec("2"))
+	s.RegisterCurrency("uinit", "INIT", 6, utils.MustParseDec("3"))
+
+	value, err := s.keeper.GetCoinsValue(s.Ctx, utils.MustParseCoins("10_000000umilk,5_500000uinit"))
+	s.Require().NoError(err)
+	s.Require().Equal(utils.MustParseDec("36.5"), value)
+
+	value, err = s.keeper.GetCoinsValue(s.Ctx, utils.MustParseCoins("10_000000umilk,10_000000uatom"))
+	s.Require().NoError(err)
+	s.Require().Equal(utils.MustParseDec("20"), value)
 }
