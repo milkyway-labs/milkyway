@@ -35,8 +35,10 @@ func (s *KeeperTestSuite) SetupTest() {
 	s.queryServer = keeper.NewQueryServer(s.keeper)
 }
 
-func (s *KeeperTestSuite) advanceBlock(duration time.Duration) {
+func (s *KeeperTestSuite) allocateRewards(duration time.Duration) {
 	s.Ctx = s.Ctx.WithBlockTime(s.Ctx.BlockTime().Add(duration)).WithBlockHeight(s.Ctx.BlockHeight() + 1)
+	err := s.keeper.AllocateRewards(s.Ctx)
+	s.Require().NoError(err)
 }
 
 func (s *KeeperTestSuite) setupSampleServiceAndOperator() (servicestypes.Service, operatorstypes.Operator) {

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"time"
 
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
+
 	"github.com/milkyway-labs/milkyway/utils"
 )
 
@@ -60,7 +62,7 @@ func DefaultGenesis() *GenesisState {
 }
 
 // Validate checks that the genesis state is valid.
-func (genState *GenesisState) Validate() error {
+func (genState *GenesisState) Validate(unpacker codectypes.AnyUnpacker) error {
 	// Validate params
 	err := genState.Params.Validate()
 	if err != nil {
@@ -76,8 +78,12 @@ func (genState *GenesisState) Validate() error {
 		return fmt.Errorf("duplicated rewards plan: %d", duplicate.ID)
 	}
 
-	// TODO: add more validations
-
+	for i, plan := range genState.RewardsPlans {
+		err = plan.Validate(unpacker)
+		if err != nil {
+			return fmt.Errorf("invalid rewards plan at index %d: %w", i, err)
+		}
+	}
 	return nil
 }
 

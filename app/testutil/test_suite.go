@@ -138,7 +138,7 @@ func (s *KeeperTestSuite) UpdateServiceParams(
 func (s *KeeperTestSuite) CreateRewardsPlan(
 	serviceID uint32, amtPerDay sdk.Coins, startTime, endTime time.Time,
 	poolsDistr types.PoolsDistribution, operatorsDistr types.OperatorsDistribution,
-	usersDistr types.UsersDistribution,
+	usersDistr types.UsersDistribution, initialRewards sdk.Coins,
 ) types.RewardsPlan {
 	service, found := s.App.ServicesKeeper.GetService(s.Ctx, serviceID)
 	s.Require().True(found, "service must be found")
@@ -150,15 +150,19 @@ func (s *KeeperTestSuite) CreateRewardsPlan(
 	// Return the newly created plan.
 	plan, err := s.App.RewardsKeeper.GetRewardsPlan(s.Ctx, resp.NewRewardsPlanID)
 	s.Require().NoError(err)
+	if initialRewards.IsAllPositive() {
+		s.FundAccount(plan.RewardsPool, initialRewards)
+	}
 	return plan
 }
 
 func (s *KeeperTestSuite) CreateBasicRewardsPlan(
-	serviceID uint32, amtPerDay sdk.Coins, startTime, endTime time.Time,
+	serviceID uint32, amtPerDay sdk.Coins, startTime, endTime time.Time, initialRewards sdk.Coins,
 ) types.RewardsPlan {
 	return s.CreateRewardsPlan(
 		serviceID, amtPerDay, startTime, endTime,
-		types.NewBasicPoolsDistribution(0), types.NewBasicOperatorsDistribution(0), types.NewBasicUsersDistribution(0))
+		types.NewBasicPoolsDistribution(0), types.NewBasicOperatorsDistribution(0), types.NewBasicUsersDistribution(0),
+		initialRewards)
 }
 
 func (s *KeeperTestSuite) DelegateOperator(operatorID uint32, amt sdk.Coins, delegator string, fund bool) {

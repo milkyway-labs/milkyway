@@ -38,7 +38,7 @@ func (k *Keeper) GetDelegationTarget(
 		}
 		return types.NewDelegationTarget(&service), nil
 	default:
-		panic(fmt.Sprintf("unknown delegation type: %v", delType))
+		return nil, fmt.Errorf("unknown delegation type: %v", delType)
 	}
 }
 
@@ -101,9 +101,9 @@ func (k *Keeper) IncrementDelegationTargetPeriod(ctx context.Context, target *ty
 	}
 
 	communityFundingCoins, _ := communityFunding.TruncateDecimal()
-	moduleAcc := k.accountKeeper.GetModuleAddress(types.ModuleName)
 
-	if err := k.communityPoolKeeper.FundCommunityPool(ctx, communityFundingCoins.Sum(), moduleAcc); err != nil {
+	err = k.communityPoolKeeper.FundCommunityPool(ctx, communityFundingCoins.Sum(), types.RewardsPoolAddress)
+	if err != nil {
 		return 0, err
 	}
 	// Since we sent only truncated coins, subtract that amount from outstanding

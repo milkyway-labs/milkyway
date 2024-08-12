@@ -67,11 +67,17 @@ func (k *Keeper) AllocateRewardsByPlan(
 		MulDecTruncate(math.LegacyNewDec(timeSinceLastAllocation.Milliseconds())).
 		QuoDecTruncate(math.LegacyNewDec((24 * time.Hour).Milliseconds()))
 
+	// Truncate decimal and move the truncated rewards to the global rewards
+	// pool.
+	rewardsTruncated, _ := rewards.TruncateDecimal()
+	// Use this truncated rewards so that we don't allocate more rewards than
+	// what have been moved to the global rewards pool.
+	rewards = sdk.NewDecCoinsFromCoins(rewardsTruncated...)
+
 	// Check if the rewards pool has enough coins to allocate rewards.
-	rewardsPoolAddr := plan.MustGetRewardsPoolAddress()
-	balances := k.bankKeeper.GetAllBalances(ctx, rewardsPoolAddr)
-	_, hasNeg := sdk.NewDecCoinsFromCoins(balances...).SafeSub(rewards)
-	if hasNeg {
+	planRewardsPoolAddr := plan.MustGetRewardsPoolAddress()
+	balances := k.bankKeeper.GetAllBalances(ctx, planRewardsPoolAddr)
+	if !balances.IsAllGTE(rewardsTruncated) {
 		sdkCtx.Logger().Info(
 			"Skipping rewards plan because its rewards pool has insufficient balances",
 			"plan_id", plan.ID,
@@ -79,6 +85,10 @@ func (k *Keeper) AllocateRewardsByPlan(
 			"rewards", rewards.String(),
 		)
 		return nil
+	}
+	err := k.bankKeeper.SendCoins(ctx, planRewardsPoolAddr, types.RewardsPoolAddress, rewardsTruncated)
+	if err != nil {
+		return err
 	}
 
 	service, found := k.servicesKeeper.GetService(sdkCtx, plan.ServiceID)
@@ -251,12 +261,11 @@ func (k *Keeper) getOperatorDistrInfos(
 func (k *Keeper) allocateRewardsToPools(
 	ctx context.Context, distr types.PoolsDistribution, poolDistrInfos []PoolDistributionInfo,
 	rewards sdk.DecCoins) error {
-	var poolsDistrType types.PoolsDistributionType
-	err := k.cdc.UnpackAny(distr.Type, &poolsDistrType)
+	distrType, err := types.GetPoolsDistributionType(k.cdc, distr)
 	if err != nil {
 		return err
 	}
-	switch typ := poolsDistrType.(type) {
+	switch typ := distrType.(type) {
 	case *types.PoolsDistributionTypeBasic:
 		return k.allocateRewardsToPoolsBasic(ctx, poolDistrInfos, rewards)
 	case *types.PoolsDistributionTypeWeighted:
@@ -332,12 +341,11 @@ func (k *Keeper) allocateRewardsToPoolsEgalitarian(
 func (k *Keeper) allocateRewardsToOperators(
 	ctx context.Context, distr types.OperatorsDistribution, distrInfos []OperatorDistributionInfo,
 	rewards sdk.DecCoins) error {
-	var operatorsDistrType types.OperatorsDistributionType
-	err := k.cdc.UnpackAny(distr.Type, &operatorsDistrType)
+	distrType, err := types.GetOperatorsDistributionType(k.cdc, distr)
 	if err != nil {
 		return err
 	}
-	switch typ := operatorsDistrType.(type) {
+	switch typ := distrType.(type) {
 	case *types.OperatorsDistributionTypeBasic:
 		return k.allocateRewardsToOperatorsBasic(ctx, distrInfos, rewards)
 	case *types.OperatorsDistributionTypeWeighted:
@@ -500,12 +508,11 @@ func (k *Keeper) allocateRewardsPool(
 func (k *Keeper) allocateRewardsToUsers(
 	ctx context.Context, distr types.UsersDistribution, service servicestypes.Service, totalDelValues math.LegacyDec,
 	rewards sdk.DecCoins) error {
-	var usersDistrType types.UsersDistributionType
-	err := k.cdc.UnpackAny(distr.Type, &usersDistrType)
+	distrType, err := types.GetUsersDistributionType(k.cdc, distr)
 	if err != nil {
 		return err
 	}
-	switch usersDistrType.(type) {
+	switch distrType.(type) {
 	case *types.UsersDistributionTypeBasic:
 		return k.allocateRewardsToService(ctx, service, totalDelValues, rewards)
 	default:

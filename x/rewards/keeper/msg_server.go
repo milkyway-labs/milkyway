@@ -4,9 +4,11 @@ import (
 	"context"
 
 	"cosmossdk.io/errors"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
+	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 )
 
@@ -59,6 +61,10 @@ func (k msgServer) WithdrawDelegatorReward(ctx context.Context, msg *types.MsgWi
 		return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid delegator address: %s", err)
 	}
 
+	if msg.TargetID == 0 {
+		return nil, sdkerrors.ErrInvalidRequest.Wrapf("invalid target ID: %d", msg.TargetID)
+	}
+
 	target, err := k.GetDelegationTarget(ctx, msg.DelegationType, msg.TargetID)
 	if err != nil {
 		return nil, err
@@ -76,6 +82,22 @@ func (k msgServer) WithdrawDelegatorReward(ctx context.Context, msg *types.MsgWi
 }
 
 func (k msgServer) WithdrawOperatorCommission(ctx context.Context, msg *types.MsgWithdrawOperatorCommission) (*types.MsgWithdrawOperatorCommissionResponse, error) {
+	_, err := k.accountKeeper.AddressCodec().StringToBytes(msg.Sender)
+	if err != nil {
+		return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid sender address: %s", err)
+	}
+
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+
+	operator, found := k.operatorsKeeper.GetOperator(sdkCtx, msg.OperatorID)
+	if !found {
+		return nil, operatorstypes.ErrOperatorNotFound
+	}
+
+	if msg.Sender != operator.Admin {
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only operator admin can withdraw operator commission")
+	}
+
 	commissions, err := k.Keeper.WithdrawOperatorCommission(ctx, msg.OperatorID)
 	if err != nil {
 		return nil, err

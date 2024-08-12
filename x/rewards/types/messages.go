@@ -26,6 +26,7 @@ func NewMsgCreateRewardsPlan(
 	}
 }
 
+// NewMsgSetWithdrawAddress creates a new NewMsgSetWithdrawAddress instance
 func NewMsgSetWithdrawAddress(delAddr, withdrawAddr string) *MsgSetWithdrawAddress {
 	return &MsgSetWithdrawAddress{
 		DelegatorAddress: delAddr,
@@ -34,17 +35,20 @@ func NewMsgSetWithdrawAddress(delAddr, withdrawAddr string) *MsgSetWithdrawAddre
 }
 
 // NewMsgWithdrawDelegatorReward creates a new MsgWithdrawDelegatorReward instance
-func NewMsgWithdrawDelegatorReward(delAddr string, delType restakingtypes.DelegationType, poolID uint32) *MsgWithdrawDelegatorReward {
+func NewMsgWithdrawDelegatorReward(
+	delAddr string, delType restakingtypes.DelegationType, targetID uint32,
+) *MsgWithdrawDelegatorReward {
 	return &MsgWithdrawDelegatorReward{
 		DelegatorAddress: delAddr,
 		DelegationType:   delType,
-		TargetID:         poolID,
+		TargetID:         targetID,
 	}
 }
 
 // NewMsgWithdrawOperatorCommission creates a new MsgWithdrawOperatorCommission instance
-func NewMsgWithdrawOperatorCommission(operatorID uint32) *MsgWithdrawOperatorCommission {
+func NewMsgWithdrawOperatorCommission(sender string, operatorID uint32) *MsgWithdrawOperatorCommission {
 	return &MsgWithdrawOperatorCommission{
+		Sender:     sender,
 		OperatorID: operatorID,
 	}
 }

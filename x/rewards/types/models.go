@@ -4,12 +4,25 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/cosmos/cosmos-sdk/codec/types"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/address"
 	"github.com/cosmos/gogoproto/proto"
 
+	"github.com/milkyway-labs/milkyway/utils"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
+)
+
+const MaxRewardsPlanDescriptionLength = 1000
+
+var (
+	_ PoolsDistributionType     = (*PoolsDistributionTypeBasic)(nil)
+	_ PoolsDistributionType     = (*PoolsDistributionTypeWeighted)(nil)
+	_ PoolsDistributionType     = (*PoolsDistributionTypeEgalitarian)(nil)
+	_ OperatorsDistributionType = (*OperatorsDistributionTypeBasic)(nil)
+	_ OperatorsDistributionType = (*OperatorsDistributionTypeWeighted)(nil)
+	_ OperatorsDistributionType = (*OperatorsDistributionTypeEgalitarian)(nil)
+	_ UsersDistributionType     = (*UsersDistributionTypeBasic)(nil)
 )
 
 // GetRewardsPoolAddress generates a rewards pool address from plan id.
@@ -51,13 +64,15 @@ func (plan RewardsPlan) TotalWeights() uint32 {
 	return plan.PoolsDistribution.Weight + plan.OperatorsDistribution.Weight + plan.UsersDistribution.Weight
 }
 
-func (plan RewardsPlan) Validate() error {
+func (plan RewardsPlan) Validate(unpacker codectypes.AnyUnpacker) error {
 	if plan.ID == 0 {
-		return fmt.Errorf("invalid plan ID")
+		return fmt.Errorf("invalid plan ID: %d", plan.ID)
 	}
-	// TODO: validate description
+	if len(plan.Description) > MaxRewardsPlanDescriptionLength {
+		return fmt.Errorf("too long description")
+	}
 	if plan.ServiceID == 0 {
-		return fmt.Errorf("invalid service ID")
+		return fmt.Errorf("invalid service ID: %d", plan.ServiceID)
 	}
 	if err := plan.AmountPerDay.Validate(); err != nil {
 		return fmt.Errorf("invalid amount per day: %w", err)
@@ -71,12 +86,53 @@ func (plan RewardsPlan) Validate() error {
 		return fmt.Errorf("invalid rewards pool: %w", err)
 	}
 
-	// TODO: need to validate distribution types?
+	poolsDistrType, err := GetPoolsDistributionType(unpacker, plan.PoolsDistribution)
+	if err != nil {
+		return fmt.Errorf("get pools distribution type: %w", err)
+	}
+	err = poolsDistrType.Validate()
+	if err != nil {
+		return fmt.Errorf("invalid pools distribution type: %w", err)
+	}
+
+	operatorsDistrType, err := GetOperatorsDistributionType(unpacker, plan.OperatorsDistribution)
+	if err != nil {
+		return fmt.Errorf("get operators distribution type: %w", err)
+	}
+	err = operatorsDistrType.Validate()
+	if err != nil {
+		return fmt.Errorf("invalid operators distribution type: %w", err)
+	}
+
+	usersDistrType, err := GetUsersDistributionType(unpacker, plan.UsersDistribution)
+	if err != nil {
+		return fmt.Errorf("get users distribution type: %w", err)
+	}
+	err = usersDistrType.Validate()
+	if err != nil {
+		return fmt.Errorf("invalid users distribution type: %w", err)
+	}
+
 	return nil
 }
 
+type PoolsDistributionType interface {
+	proto.Message
+	isPoolsDistributionType()
+	Validate() error
+}
+
+func GetPoolsDistributionType(unpacker codectypes.AnyUnpacker, distr PoolsDistribution) (PoolsDistributionType, error) {
+	var distrType PoolsDistributionType
+	err := unpacker.UnpackAny(distr.Type, &distrType)
+	if err != nil {
+		return nil, err
+	}
+	return distrType, nil
+}
+
 func NewBasicPoolsDistribution(weight uint32) PoolsDistribution {
-	a, err := types.NewAnyWithValue(&PoolsDistributionTypeBasic{})
+	a, err := codectypes.NewAnyWithValue(&PoolsDistributionTypeBasic{})
 	if err != nil {
 		panic(err)
 	}
@@ -84,10 +140,14 @@ func NewBasicPoolsDistribution(weight uint32) PoolsDistribution {
 		Weight: weight,
 		Type:   a,
 	}
+}
+
+func (t PoolsDistributionTypeBasic) Validate() error {
+	return nil
 }
 
 func NewWeightedPoolsDistribution(weight uint32, poolWeights []PoolDistributionWeight) PoolsDistribution {
-	a, err := types.NewAnyWithValue(&PoolsDistributionTypeWeighted{Weights: poolWeights})
+	a, err := codectypes.NewAnyWithValue(&PoolsDistributionTypeWeighted{Weights: poolWeights})
 	if err != nil {
 		panic(err)
 	}
@@ -97,8 +157,27 @@ func NewWeightedPoolsDistribution(weight uint32, poolWeights []PoolDistributionW
 	}
 }
 
+func (t PoolsDistributionTypeWeighted) Validate() error {
+	duplicate := utils.FindDuplicateFunc(t.Weights, func(a, b PoolDistributionWeight) bool {
+		return a.PoolID == b.PoolID
+	})
+	if duplicate != nil {
+		return fmt.Errorf("duplicated weight for the same pool ID: %d", duplicate.PoolID)
+	}
+
+	for _, weight := range t.Weights {
+		if weight.Weight == 0 {
+			return fmt.Errorf("weight must be positive: %d", weight.Weight)
+		}
+		if weight.PoolID == 0 {
+			return fmt.Errorf("invalid pool ID: %d", weight.PoolID)
+		}
+	}
+	return nil
+}
+
 func NewEgalitarianPoolsDistribution(weight uint32) PoolsDistribution {
-	a, err := types.NewAnyWithValue(&PoolsDistributionTypeEgalitarian{})
+	a, err := codectypes.NewAnyWithValue(&PoolsDistributionTypeEgalitarian{})
 	if err != nil {
 		panic(err)
 	}
@@ -106,6 +185,10 @@ func NewEgalitarianPoolsDistribution(weight uint32) PoolsDistribution {
 		Weight: weight,
 		Type:   a,
 	}
+}
+
+func (t PoolsDistributionTypeEgalitarian) Validate() error {
+	return nil
 }
 
 func NewPoolDistributionWeight(poolID, weight uint32) PoolDistributionWeight {
@@ -113,11 +196,6 @@ func NewPoolDistributionWeight(poolID, weight uint32) PoolDistributionWeight {
 		PoolID: poolID,
 		Weight: weight,
 	}
-}
-
-type PoolsDistributionType interface {
-	proto.Message
-	isPoolsDistributionType()
 }
 
 func (t PoolsDistributionTypeBasic) isPoolsDistributionType() {}
@@ -129,10 +207,20 @@ func (t PoolsDistributionTypeEgalitarian) isPoolsDistributionType() {}
 type OperatorsDistributionType interface {
 	proto.Message
 	isOperatorsDistributionType()
+	Validate() error
+}
+
+func GetOperatorsDistributionType(unpacker codectypes.AnyUnpacker, distr OperatorsDistribution) (OperatorsDistributionType, error) {
+	var distrType OperatorsDistributionType
+	err := unpacker.UnpackAny(distr.Type, &distrType)
+	if err != nil {
+		return nil, err
+	}
+	return distrType, nil
 }
 
 func NewBasicOperatorsDistribution(weight uint32) OperatorsDistribution {
-	a, err := types.NewAnyWithValue(&OperatorsDistributionTypeBasic{})
+	a, err := codectypes.NewAnyWithValue(&OperatorsDistributionTypeBasic{})
 	if err != nil {
 		panic(err)
 	}
@@ -140,11 +228,15 @@ func NewBasicOperatorsDistribution(weight uint32) OperatorsDistribution {
 		Weight: weight,
 		Type:   a,
 	}
+}
+
+func (t OperatorsDistributionTypeBasic) Validate() error {
+	return nil
 }
 
 func NewWeightedOperatorsDistribution(
 	weight uint32, operatorWeights []OperatorDistributionWeight) OperatorsDistribution {
-	a, err := types.NewAnyWithValue(&OperatorsDistributionTypeWeighted{Weights: operatorWeights})
+	a, err := codectypes.NewAnyWithValue(&OperatorsDistributionTypeWeighted{Weights: operatorWeights})
 	if err != nil {
 		panic(err)
 	}
@@ -154,8 +246,27 @@ func NewWeightedOperatorsDistribution(
 	}
 }
 
+func (t OperatorsDistributionTypeWeighted) Validate() error {
+	duplicate := utils.FindDuplicateFunc(t.Weights, func(a, b OperatorDistributionWeight) bool {
+		return a.OperatorID == b.OperatorID
+	})
+	if duplicate != nil {
+		return fmt.Errorf("duplicated weight for the same operator ID: %d", duplicate.OperatorID)
+	}
+
+	for _, weight := range t.Weights {
+		if weight.Weight == 0 {
+			return fmt.Errorf("weight must be positive: %d", weight.Weight)
+		}
+		if weight.OperatorID == 0 {
+			return fmt.Errorf("invalid operator ID: %d", weight.OperatorID)
+		}
+	}
+	return nil
+}
+
 func NewEgalitarianOperatorsDistribution(weight uint32) OperatorsDistribution {
-	a, err := types.NewAnyWithValue(&OperatorsDistributionTypeEgalitarian{})
+	a, err := codectypes.NewAnyWithValue(&OperatorsDistributionTypeEgalitarian{})
 	if err != nil {
 		panic(err)
 	}
@@ -163,6 +274,10 @@ func NewEgalitarianOperatorsDistribution(weight uint32) OperatorsDistribution {
 		Weight: weight,
 		Type:   a,
 	}
+}
+
+func (t OperatorsDistributionTypeEgalitarian) Validate() error {
+	return nil
 }
 
 func NewOperatorDistributionWeight(operatorID, weight uint32) OperatorDistributionWeight {
@@ -181,10 +296,20 @@ func (t OperatorsDistributionTypeEgalitarian) isOperatorsDistributionType() {}
 type UsersDistributionType interface {
 	proto.Message
 	isUsersDistributionType()
+	Validate() error
+}
+
+func GetUsersDistributionType(unpacker codectypes.AnyUnpacker, distr UsersDistribution) (UsersDistributionType, error) {
+	var distrType UsersDistributionType
+	err := unpacker.UnpackAny(distr.Type, &distrType)
+	if err != nil {
+		return nil, err
+	}
+	return distrType, nil
 }
 
 func NewBasicUsersDistribution(weight uint32) UsersDistribution {
-	a, err := types.NewAnyWithValue(&UsersDistributionTypeBasic{})
+	a, err := codectypes.NewAnyWithValue(&UsersDistributionTypeBasic{})
 	if err != nil {
 		panic(err)
 	}
@@ -192,6 +317,10 @@ func NewBasicUsersDistribution(weight uint32) UsersDistribution {
 		Weight: weight,
 		Type:   a,
 	}
+}
+
+func (t UsersDistributionTypeBasic) Validate() error {
+	return nil
 }
 
 func (t UsersDistributionTypeBasic) isUsersDistributionType() {}

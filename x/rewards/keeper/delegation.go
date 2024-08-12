@@ -242,7 +242,7 @@ func (k *Keeper) withdrawDelegationRewards(
 			return nil, err
 		}
 
-		err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, withdrawAddr, coins)
+		err = k.bankKeeper.SendCoins(ctx, types.RewardsPoolAddress, withdrawAddr, coins)
 		if err != nil {
 			return nil, err
 		}

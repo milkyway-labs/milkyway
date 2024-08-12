@@ -256,7 +256,7 @@ func (k *Keeper) WithdrawOperatorCommission(ctx context.Context, operatorID uint
 			return nil, err
 		}
 
-		err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, withdrawAddr, commissionCoins)
+		err = k.bankKeeper.SendCoins(ctx, types.RewardsPoolAddress, withdrawAddr, commissionCoins)
 		if err != nil {
 			return nil, err
 		}

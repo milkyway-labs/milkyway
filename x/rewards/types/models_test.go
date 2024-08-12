@@ -1,14 +1,99 @@
 package types_test
 
 import (
+	"strings"
 	"testing"
 	"time"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"cosmossdk.io/math"
 	"github.com/stretchr/testify/require"
 
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/milkyway-labs/milkyway/utils"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 )
+
+func TestRewardsPlan_Validate(t *testing.T) {
+	ir := codectypes.NewInterfaceRegistry()
+	types.RegisterInterfaces(ir)
+
+	testCases := []struct {
+		name        string
+		malleate    func(plan *types.RewardsPlan)
+		expectedErr string
+	}{
+		{
+			"valid rewards plan",
+			nil,
+			"",
+		},
+		{
+			"invalid plan ID returns error",
+			func(plan *types.RewardsPlan) {
+				plan.ID = 0
+			},
+			"invalid plan ID: 0",
+		},
+		{
+			"too long description returns error",
+			func(plan *types.RewardsPlan) {
+				plan.Description = strings.Repeat("A", types.MaxRewardsPlanDescriptionLength+1)
+			},
+			"too long description",
+		},
+		{
+			"invalid service ID returns error",
+			func(plan *types.RewardsPlan) {
+				plan.ServiceID = 0
+			},
+			"invalid service ID: 0",
+		},
+		{
+			"invalid amount per day returns error",
+			func(plan *types.RewardsPlan) {
+				plan.AmountPerDay = sdk.Coins{sdk.Coin{Denom: "umilk", Amount: math.ZeroInt()}}
+			},
+			"invalid amount per day: coin 0umilk amount is not positive",
+		},
+		{
+			"end time must be after start time",
+			func(plan *types.RewardsPlan) {
+				plan.StartTime = time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
+				plan.EndTime = time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
+			},
+			"end time must be after start time: 2024-01-01T00:00:00Z <= 2024-01-01T00:00:00Z",
+		},
+		{
+			"invalid rewards pool returns error",
+			func(plan *types.RewardsPlan) {
+				plan.RewardsPool = "invalid"
+			},
+			"invalid rewards pool: decoding bech32 failed: invalid bech32 string length 7",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			plan := types.NewRewardsPlan(
+				1, "Plan", 1, utils.MustParseCoins("100_000000umilk"),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+				types.NewBasicPoolsDistribution(0), types.NewBasicOperatorsDistribution(0),
+				types.NewBasicUsersDistribution(0))
+			if tc.malleate != nil {
+				tc.malleate(&plan)
+			}
+			err := plan.Validate(ir)
+			if tc.expectedErr == "" {
+				require.NoError(t, err)
+			} else {
+				require.EqualError(t, err, tc.expectedErr)
+			}
+		})
+	}
+}
 
 func TestRewardsPlan_IsActiveAt(t *testing.T) {
 	startTime := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
@@ -53,6 +138,171 @@ func TestRewardsPlan_IsActiveAt(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			isActive := plan.IsActiveAt(tc.date)
 			require.Equal(t, tc.isActive, isActive)
+		})
+	}
+}
+
+func TestPoolsDistribution_Validate(t *testing.T) {
+	testCases := []struct {
+		name        string
+		distrType   types.PoolsDistributionType
+		expectedErr string
+	}{
+		{
+			"basic distribution type returns no error",
+			&types.PoolsDistributionTypeBasic{},
+			"",
+		},
+		{
+			"invalid pool ID returns error",
+			&types.PoolsDistributionTypeWeighted{
+				Weights: []types.PoolDistributionWeight{
+					{
+						PoolID: 0,
+						Weight: 1,
+					},
+				},
+			},
+			"invalid pool ID: 0",
+		},
+		{
+			"invalid weight returns error",
+			&types.PoolsDistributionTypeWeighted{
+				Weights: []types.PoolDistributionWeight{
+					{
+						PoolID: 1,
+						Weight: 0,
+					},
+				},
+			},
+			"weight must be positive: 0",
+		},
+		{
+			"duplicated pool ID returns error",
+			&types.PoolsDistributionTypeWeighted{
+				Weights: []types.PoolDistributionWeight{
+					{
+						PoolID: 1,
+						Weight: 1,
+					},
+					{
+						PoolID: 1,
+						Weight: 2,
+					},
+				},
+			},
+			"duplicated weight for the same pool ID: 1",
+		},
+		{
+			"egalitarian distribution type returns no error",
+			&types.PoolsDistributionTypeEgalitarian{},
+			"",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			err := tc.distrType.Validate()
+			if tc.expectedErr == "" {
+				require.NoError(t, err)
+			} else {
+				require.EqualError(t, err, tc.expectedErr)
+			}
+		})
+	}
+}
+
+func TestOperatorsDistribution_Validate(t *testing.T) {
+	testCases := []struct {
+		name        string
+		distrType   types.OperatorsDistributionType
+		expectedErr string
+	}{
+		{
+			"basic distribution type returns no error",
+			&types.OperatorsDistributionTypeBasic{},
+			"",
+		},
+		{
+			"invalid operator ID returns error",
+			&types.OperatorsDistributionTypeWeighted{
+				Weights: []types.OperatorDistributionWeight{
+					{
+						OperatorID: 0,
+						Weight:     1,
+					},
+				},
+			},
+			"invalid operator ID: 0",
+		},
+		{
+			"invalid weight returns error",
+			&types.OperatorsDistributionTypeWeighted{
+				Weights: []types.OperatorDistributionWeight{
+					{
+						OperatorID: 1,
+						Weight:     0,
+					},
+				},
+			},
+			"weight must be positive: 0",
+		},
+		{
+			"duplicated operator ID returns error",
+			&types.OperatorsDistributionTypeWeighted{
+				Weights: []types.OperatorDistributionWeight{
+					{
+						OperatorID: 1,
+						Weight:     1,
+					},
+					{
+						OperatorID: 1,
+						Weight:     2,
+					},
+				},
+			},
+			"duplicated weight for the same operator ID: 1",
+		},
+		{
+			"egalitarian distribution type returns no error",
+			&types.OperatorsDistributionTypeEgalitarian{},
+			"",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			err := tc.distrType.Validate()
+			if tc.expectedErr == "" {
+				require.NoError(t, err)
+			} else {
+				require.EqualError(t, err, tc.expectedErr)
+			}
+		})
+	}
+}
+
+func TestUsersDistribution_Validate(t *testing.T) {
+	testCases := []struct {
+		name        string
+		distrType   types.UsersDistributionType
+		expectedErr string
+	}{
+		{
+			"basic distribution type returns no error",
+			&types.UsersDistributionTypeBasic{},
+			"",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			err := tc.distrType.Validate()
+			if tc.expectedErr == "" {
+				require.NoError(t, err)
+			} else {
+				require.EqualError(t, err, tc.expectedErr)
+			}
 		})
 	}
 }

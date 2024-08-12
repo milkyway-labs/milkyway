@@ -48,7 +48,7 @@ func (k *Keeper) CreateRewardsPlan(
 		planID, description, serviceID, amt, startTime, endTime,
 		poolsDistribution, operatorsDistribution,
 		usersDistribution)
-	if err := plan.Validate(); err != nil {
+	if err := plan.Validate(k.cdc); err != nil {
 		return types.RewardsPlan{}, err
 	}
 
