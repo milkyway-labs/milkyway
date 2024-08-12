@@ -110,7 +110,7 @@ func TestMsgCreateService_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgCreateService_GetSignBytes(t *testing.T) {
-	expected := `{"type":"services/MsgCreateService","value":{"description":"MilkyWay is an AVS of a restaking platform","name":"MilkyWay","picture_url":"https://milkyway.com/logo.png","sender":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","website":"https://milkyway.com"}}`
+	expected := `{"type":"milkyway/MsgCreateService","value":{"description":"MilkyWay is an AVS of a restaking platform","name":"MilkyWay","picture_url":"https://milkyway.com/logo.png","sender":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","website":"https://milkyway.com"}}`
 	require.Equal(t, expected, string(msgCreateService.GetSignBytes()))
 }
 
@@ -180,7 +180,7 @@ func TestMsgUpdateService_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgUpdateService_GetSignBytes(t *testing.T) {
-	expected := `{"type":"services/MsgUpdateService","value":{"description":"MilkyWay is an AVS of a restaking platform","name":"MilkyWay","picture_url":"https://milkyway.com/logo.png","sender":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","service_id":1,"website":"https://milkyway.com"}}`
+	expected := `{"type":"milkyway/MsgUpdateService","value":{"description":"MilkyWay is an AVS of a restaking platform","name":"MilkyWay","picture_url":"https://milkyway.com/logo.png","sender":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","service_id":1,"website":"https://milkyway.com"}}`
 	require.Equal(t, expected, string(msgUpdateService.GetSignBytes()))
 }
 
@@ -238,7 +238,7 @@ func TestMsgActivateService_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgActivateService_GetSignBytes(t *testing.T) {
-	expected := `{"type":"services/MsgActivateService","value":{"sender":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","service_id":1}}`
+	expected := `{"type":"milkyway/MsgActivateService","value":{"sender":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","service_id":1}}`
 	require.Equal(t, expected, string(msgActivateService.GetSignBytes()))
 }
 
@@ -296,7 +296,7 @@ func TestMsgDeactivateService_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgDeactivateService_GetSignBytes(t *testing.T) {
-	expected := `{"type":"services/MsgDeactivateService","value":{"sender":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","service_id":1}}`
+	expected := `{"type":"milkyway/MsgDeactivateService","value":{"sender":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","service_id":1}}`
 	require.Equal(t, expected, string(msgDeactivateService.GetSignBytes()))
 }
 
@@ -354,7 +354,7 @@ func TestMsgUpdateParams_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgUpdateParams_GetSignBytes(t *testing.T) {
-	expected := `{"type":"services/MsgUpdateParams","value":{"authority":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","params":{"service_registration_fee":[]}}}`
+	expected := `{"type":"milkyway/services/MsgUpdateParams","value":{"authority":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","params":{"service_registration_fee":[]}}}`
 	require.Equal(t, expected, string(msgUpdateParams.GetSignBytes()))
 }
 
