@@ -46,7 +46,10 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
 
 	// Store the delegations
 	for _, delegation := range data.Delegations {
-		k.SetDelegation(ctx, delegation)
+		err := k.SetDelegation(ctx, delegation)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	// Store the params

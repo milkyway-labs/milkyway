@@ -176,6 +176,7 @@ func NewDelegationResponse(delegation Delegation, balance sdk.Coins) DelegationR
 
 // --------------------------------------------------------------------------------------------------------------------
 
+// NewUnbondingDelegationEntry creates a new UnbondingDelegationEntry instance
 func NewUnbondingDelegationEntry(creationHeight int64, completionTime time.Time, balance sdk.Coins, unbondingID uint64) UnbondingDelegationEntry {
 	return UnbondingDelegationEntry{
 		CreationHeight: creationHeight,
@@ -186,6 +187,8 @@ func NewUnbondingDelegationEntry(creationHeight int64, completionTime time.Time,
 	}
 }
 
+// NewPoolUnbondingDelegation creates a new UnbondingDelegation instance representing an
+// unbonding delegation to a pool
 func NewPoolUnbondingDelegation(
 	delegatorAddress string, poolID uint32,
 	creationHeight int64, minTime time.Time, balance sdk.Coins, id uint64,
@@ -200,7 +203,39 @@ func NewPoolUnbondingDelegation(
 	}
 }
 
-// AddEntry - append entry to the unbonding delegation
+// NewOperatorUnbondingDelegation creates a new UnbondingDelegation instance representing an
+// unbonding delegation to an operator
+func NewOperatorUnbondingDelegation(
+	delegatorAddress string, operatorID uint32,
+	creationHeight int64, minTime time.Time, balance sdk.Coins, id uint64,
+) UnbondingDelegation {
+	return UnbondingDelegation{
+		Type:             UNBONDING_DELEGATION_TYPE_OPERATOR,
+		DelegatorAddress: delegatorAddress,
+		TargetID:         operatorID,
+		Entries: []UnbondingDelegationEntry{
+			NewUnbondingDelegationEntry(creationHeight, minTime, balance, id),
+		},
+	}
+}
+
+// NewServiceUnbondingDelegation creates a new UnbondingDelegation instance representing an
+// unbonding delegation to a service
+func NewServiceUnbondingDelegation(
+	delegatorAddress string, serviceID uint32,
+	creationHeight int64, minTime time.Time, balance sdk.Coins, id uint64,
+) UnbondingDelegation {
+	return UnbondingDelegation{
+		Type:             UNBONDING_DELEGATION_TYPE_SERVICE,
+		DelegatorAddress: delegatorAddress,
+		TargetID:         serviceID,
+		Entries: []UnbondingDelegationEntry{
+			NewUnbondingDelegationEntry(creationHeight, minTime, balance, id),
+		},
+	}
+}
+
+// AddEntry allows to append a new entry to the unbonding delegation
 func (ubd *UnbondingDelegation) AddEntry(creationHeight int64, minTime time.Time, balance sdk.Coins, unbondingID uint64) {
 	// Check the entries exists with creation_height and complete_time
 	entryIndex := -1

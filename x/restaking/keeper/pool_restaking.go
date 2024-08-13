@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"time"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
@@ -40,8 +42,6 @@ func (k *Keeper) RemovePoolDelegation(ctx sdk.Context, delegation types.Delegati
 	store.Delete(types.UserPoolDelegationStoreKey(delegation.UserAddress, delegation.TargetID))
 	store.Delete(types.DelegationByPoolIDStoreKey(delegation.TargetID, delegation.UserAddress))
 }
-
-// --------------------------------------------------------------------------------------------------------------------
 
 // DelegateToPool sends the given amount to the pool account and saves the delegation for the given user
 func (k *Keeper) DelegateToPool(ctx sdk.Context, amount sdk.Coin, delegator string) (sdk.DecCoins, error) {
@@ -97,4 +97,37 @@ func (k *Keeper) GetPoolUnbondingDelegation(ctx sdk.Context, poolID uint32, dele
 	}
 
 	return types.MustUnmarshalUnbondingDelegation(k.cdc, ubdBz), true
+}
+
+// UndelegateFromPool removes the given amount from the pool account and saves the
+// unbonding delegation for the given user
+func (k *Keeper) UndelegateFromPool(ctx sdk.Context, amount sdk.Coin, delegator string) (time.Time, error) {
+	// Find the pool
+	pool, found := k.poolsKeeper.GetPoolByDenom(ctx, amount.Denom)
+	if !found {
+		return time.Time{}, poolstypes.ErrPoolNotFound
+	}
+
+	// Get the undelegation amount
+	undelegationAmount := sdk.NewCoins(amount)
+
+	// Get the shares
+	shares, err := k.ValidateUnbondAmount(ctx, delegator, &pool, undelegationAmount)
+	if err != nil {
+		return time.Time{}, err
+	}
+
+	return k.PerformUndelegation(ctx, types.UndelegationData{
+		Amount:                   undelegationAmount,
+		Delegator:                delegator,
+		Target:                   &pool,
+		BuildUnbondingDelegation: types.NewPoolUnbondingDelegation,
+		Hooks: types.DelegationHooks{
+			BeforeDelegationSharesModified: k.BeforePoolDelegationSharesModified,
+			BeforeDelegationCreated:        k.BeforePoolDelegationCreated,
+			AfterDelegationModified:        k.AfterPoolDelegationModified,
+			BeforeDelegationRemoved:        k.BeforePoolDelegationRemoved,
+		},
+		Shares: shares,
+	})
 }

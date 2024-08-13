@@ -292,9 +292,9 @@ func TestService_SharesFromTokens(t *testing.T) {
 	testCases := []struct {
 		name      string
 		service   types.Service
-		tokens    sdk.Coin
+		tokens    sdk.Coins
 		shouldErr bool
-		expShares sdkmath.LegacyDec
+		expShares sdk.DecCoins
 	}{
 		{
 			name: "service with no delegation shares returns error",
@@ -304,7 +304,9 @@ func TestService_SharesFromTokens(t *testing.T) {
 				DelegatorShares: sdk.NewDecCoins(),
 				Tokens:          sdk.NewCoins(),
 			},
-			tokens:    sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+			tokens: sdk.NewCoins(
+				sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+			),
 			shouldErr: true,
 		},
 		{
@@ -319,9 +321,13 @@ func TestService_SharesFromTokens(t *testing.T) {
 					sdk.NewDecCoinFromDec("service/1/umilk", sdkmath.LegacyNewDec(100)),
 				),
 			},
-			tokens:    sdk.NewCoin("umilk", sdkmath.NewInt(20)),
+			tokens: sdk.NewCoins(
+				sdk.NewCoin("umilk", sdkmath.NewInt(20)),
+			),
 			shouldErr: false,
-			expShares: sdkmath.LegacyNewDec(40),
+			expShares: sdk.NewDecCoins(
+				sdk.NewDecCoinFromDec("service/1/umilk", sdkmath.LegacyNewDec(40)),
+			),
 		},
 	}
 

@@ -157,3 +157,23 @@ message UnbondingDelegationEntry {
   // Incrementing id that uniquely identifies this entry
   uint64 unbonding_id = 5;
 }
+
+// DTData is a struct that contains the basic information about an unbonding
+// delegation. It is intended to be used as a marshalable pointer. For example,
+// a DTData can be used to construct the key to getting an UnbondingDelegation
+// from state.
+message DTData {
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  UnbondingDelegationType type = 1;
+  string delegator_address = 2
+      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  uint32 target_id = 3 [ (gogoproto.customname) = "TargetID" ];
+}
+
+// DTDataList defines an array of DTData objects.
+message DTDataList {
+  repeated DTData data = 1
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+}

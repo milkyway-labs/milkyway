@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"time"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
@@ -118,4 +120,34 @@ func (k *Keeper) GetOperatorUnbondingDelegation(ctx sdk.Context, delegatorAddres
 	}
 
 	return types.MustUnmarshalUnbondingDelegation(k.cdc, ubdBz), true
+}
+
+// UndelegateFromOperator removes the given amount from the operator account and saves the
+// unbonding delegation for the given user
+func (k *Keeper) UndelegateFromOperator(ctx sdk.Context, operatorID uint32, amount sdk.Coins, delegator string) (time.Time, error) {
+	// Find the operator
+	operator, found := k.operatorsKeeper.GetOperator(ctx, operatorID)
+	if !found {
+		return time.Time{}, operatorstypes.ErrOperatorNotFound
+	}
+
+	// Get the shares
+	shares, err := k.ValidateUnbondAmount(ctx, delegator, &operator, amount)
+	if err != nil {
+		return time.Time{}, err
+	}
+
+	return k.PerformUndelegation(ctx, types.UndelegationData{
+		Amount:                   amount,
+		Delegator:                delegator,
+		Target:                   &operator,
+		BuildUnbondingDelegation: types.NewOperatorUnbondingDelegation,
+		Hooks: types.DelegationHooks{
+			BeforeDelegationSharesModified: k.BeforeOperatorDelegationSharesModified,
+			BeforeDelegationCreated:        k.BeforeOperatorDelegationCreated,
+			AfterDelegationModified:        k.AfterOperatorDelegationModified,
+			BeforeDelegationRemoved:        k.BeforeOperatorDelegationRemoved,
+		},
+		Shares: shares,
+	})
 }

@@ -185,8 +185,7 @@ message MsgUndelegatePool {
   option (gogoproto.goproto_getters) = false;
 
   string delegator = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
-  uint32 pool_id = 2 [ (gogoproto.customname) = "PoolID" ];
-  cosmos.base.v1beta1.Coin amount = 3
+  cosmos.base.v1beta1.Coin amount = 2
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 }
 
@@ -202,8 +201,11 @@ message MsgUndelegateOperator {
 
   string delegator = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
   uint32 operator_id = 2 [ (gogoproto.customname) = "OperatorID" ];
-  cosmos.base.v1beta1.Coin amount = 3
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+  repeated cosmos.base.v1beta1.Coin amount = 3 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
 }
 
 // MsgUndelegateService the message structure for the UndelegateService gRPC
@@ -218,8 +220,11 @@ message MsgUndelegateService {
 
   string delegator = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
   uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
-  cosmos.base.v1beta1.Coin amount = 3
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+  repeated cosmos.base.v1beta1.Coin amount = 3 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
 }
 
 // MsgUndelegateResponse defines the response type for the undelegation methods.

@@ -251,9 +251,9 @@ func TestOperator_SharesFromTokens(t *testing.T) {
 	testCases := []struct {
 		name      string
 		operator  types.Operator
-		tokens    sdk.Coin
+		tokens    sdk.Coins
 		shouldErr bool
-		expShares sdkmath.LegacyDec
+		expShares sdk.DecCoins
 	}{
 		{
 			name: "operator with no delegation shares returns error",
@@ -263,7 +263,7 @@ func TestOperator_SharesFromTokens(t *testing.T) {
 				DelegatorShares: sdk.NewDecCoins(),
 				Tokens:          sdk.NewCoins(),
 			},
-			tokens:    sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+			tokens:    sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 			shouldErr: true,
 		},
 		{
@@ -278,9 +278,13 @@ func TestOperator_SharesFromTokens(t *testing.T) {
 					sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(100)),
 				),
 			},
-			tokens:    sdk.NewCoin("umilk", sdkmath.NewInt(20)),
+			tokens: sdk.NewCoins(
+				sdk.NewCoin("umilk", sdkmath.NewInt(20)),
+			),
 			shouldErr: false,
-			expShares: sdkmath.LegacyNewDec(40),
+			expShares: sdk.NewDecCoins(
+				sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(40)),
+			),
 		},
 	}
 

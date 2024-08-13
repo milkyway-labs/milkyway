@@ -123,7 +123,7 @@ func (p Pool) AddTokensFromDelegation(amount sdk.Coin) (Pool, sdk.DecCoin, error
 	var issuedShares sdk.DecCoins
 	if p.DelegatorShares.IsZero() {
 		// the first delegation to a validator sets the exchange rate to one
-		issuedShares = sdk.NewDecCoinsFromCoins(amount)
+		issuedShares = sdk.NewDecCoinsFromCoins(sdk.NewCoin(p.GetSharesDenom(amount.Denom), amount.Amount))
 	} else {
 		shares, err := p.SharesFromTokens(sdk.NewCoins(amount))
 		if err != nil {

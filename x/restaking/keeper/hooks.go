@@ -83,3 +83,37 @@ func (k *Keeper) AfterServiceDelegationModified(ctx sdk.Context, serviceID uint3
 	}
 	return nil
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// BeforePoolDelegationRemoved implements types.RestakingHooks
+func (k *Keeper) BeforePoolDelegationRemoved(ctx sdk.Context, poolID uint32, delegator string) error {
+	if k.hooks != nil {
+		return k.hooks.BeforePoolDelegationRemoved(ctx, poolID, delegator)
+	}
+	return nil
+}
+
+// BeforeOperatorDelegationRemoved implements types.RestakingHooks
+func (k *Keeper) BeforeOperatorDelegationRemoved(ctx sdk.Context, operatorID uint32, delegator string) error {
+	if k.hooks != nil {
+		return k.hooks.BeforeOperatorDelegationRemoved(ctx, operatorID, delegator)
+	}
+	return nil
+}
+
+// BeforeServiceDelegationRemoved implements types.RestakingHooks
+func (k *Keeper) BeforeServiceDelegationRemoved(ctx sdk.Context, serviceID uint32, delegator string) error {
+	if k.hooks != nil {
+		return k.hooks.BeforeServiceDelegationRemoved(ctx, serviceID, delegator)
+	}
+	return nil
+}
+
+// AfterUnbondingInitiated implements types.RestakingHooks
+func (k *Keeper) AfterUnbondingInitiated(ctx sdk.Context, unbondingDelegationID uint64) error {
+	if k.hooks != nil {
+		return k.hooks.AfterUnbondingInitiated(ctx, unbondingDelegationID)
+	}
+	return nil
+}

@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"time"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
@@ -118,4 +120,34 @@ func (k *Keeper) GetServiceUnbondingDelegation(ctx sdk.Context, delegator string
 	}
 
 	return types.MustUnmarshalUnbondingDelegation(k.cdc, ubdBz), true
+}
+
+// UndelegateFromService removes the given amount from the service account and saves the
+// unbonding delegation for the given user
+func (k *Keeper) UndelegateFromService(ctx sdk.Context, serviceID uint32, amount sdk.Coins, delegator string) (time.Time, error) {
+	// Find the service
+	service, found := k.servicesKeeper.GetService(ctx, serviceID)
+	if !found {
+		return time.Time{}, servicestypes.ErrServiceNotFound
+	}
+
+	// Get the shares
+	shares, err := k.ValidateUnbondAmount(ctx, delegator, &service, amount)
+	if err != nil {
+		return time.Time{}, err
+	}
+
+	return k.PerformUndelegation(ctx, types.UndelegationData{
+		Amount:                   amount,
+		Delegator:                delegator,
+		Target:                   &service,
+		BuildUnbondingDelegation: types.NewServiceUnbondingDelegation,
+		Hooks: types.DelegationHooks{
+			BeforeDelegationSharesModified: k.BeforeServiceDelegationSharesModified,
+			BeforeDelegationCreated:        k.BeforeServiceDelegationCreated,
+			AfterDelegationModified:        k.AfterServiceDelegationModified,
+			BeforeDelegationRemoved:        k.BeforeServiceDelegationRemoved,
+		},
+		Shares: shares,
+	})
 }

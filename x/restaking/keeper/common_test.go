@@ -210,3 +210,23 @@ func (m mockHooks) AfterServiceDelegationModified(sdk.Context, uint32, string) e
 	m.CalledMap["AfterServiceDelegationModified"] = true
 	return nil
 }
+
+func (m mockHooks) BeforePoolDelegationRemoved(ctx sdk.Context, poolID uint32, delegator string) error {
+	m.CalledMap["BeforePoolDelegationRemoved"] = true
+	return nil
+}
+
+func (m mockHooks) BeforeOperatorDelegationRemoved(ctx sdk.Context, operatorID uint32, delegator string) error {
+	m.CalledMap["BeforeOperatorDelegationRemoved"] = true
+	return nil
+}
+
+func (m mockHooks) BeforeServiceDelegationRemoved(ctx sdk.Context, serviceID uint32, delegator string) error {
+	m.CalledMap["BeforeServiceDelegationRemoved"] = true
+	return nil
+}
+
+func (m mockHooks) AfterUnbondingInitiated(ctx sdk.Context, unbondingDelegationID uint64) error {
+	m.CalledMap["AfterUnbondingInitiated"] = true
+	return nil
+}

@@ -60,11 +60,17 @@ func SharesFromTokens(tokens sdk.Coins, getShareDenom ShareDenomGetter, delegate
 	for _, token := range tokens {
 		sharesDenom := getShareDenom(token.Denom)
 
-		delegatorTokenShares := delegatorsShares.AmountOf(sharesDenom)
 		operatorTokenAmount := delegatedTokens.AmountOf(token.Denom)
-		shareAmount := delegatorTokenShares.MulInt(token.Amount).QuoInt(operatorTokenAmount)
 
-		shares = shares.Add(sdk.NewDecCoinFromDec(sharesDenom, shareAmount))
+		var sharesAmount sdkmath.LegacyDec
+		if operatorTokenAmount.IsZero() {
+			sharesAmount = sdkmath.LegacyNewDecFromInt(token.Amount)
+		} else {
+			delegatorTokenShares := delegatorsShares.AmountOf(sharesDenom)
+			sharesAmount = delegatorTokenShares.MulInt(token.Amount).QuoInt(operatorTokenAmount)
+		}
+
+		shares = shares.Add(sdk.NewDecCoinFromDec(sharesDenom, sharesAmount))
 	}
 
 	return shares, nil
@@ -78,9 +84,15 @@ func SharesFromTokensTruncated(tokens sdk.Coins, getShareDenom ShareDenomGetter,
 
 		delegatorTokenShares := delegatorsShares.AmountOf(sharesDenom)
 		operatorTokenAmount := delegatedTokens.AmountOf(token.Denom)
-		shareAmount := delegatorTokenShares.MulInt(token.Amount).QuoTruncate(sdkmath.LegacyNewDecFromInt(operatorTokenAmount))
 
-		shares = shares.Add(sdk.NewDecCoinFromDec(sharesDenom, shareAmount))
+		var sharesAmount sdkmath.LegacyDec
+		if operatorTokenAmount.IsZero() {
+			sharesAmount = sdkmath.LegacyNewDecFromInt(token.Amount)
+		} else {
+			sharesAmount = delegatorTokenShares.MulInt(token.Amount).QuoTruncate(sdkmath.LegacyNewDecFromInt(operatorTokenAmount))
+		}
+
+		shares = shares.Add(sdk.NewDecCoinFromDec(sharesDenom, sharesAmount))
 	}
 
 	return shares, nil

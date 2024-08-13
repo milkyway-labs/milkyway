@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"cosmossdk.io/errors"
+	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/utils"
@@ -39,10 +40,10 @@ func (k *Keeper) IncrementUnbondingID(ctx sdk.Context) (unbondingID uint64) {
 // converted shares. If the amount is valid, the total amount of respective shares is returned,
 // otherwise an error is returned.
 func (k *Keeper) ValidateUnbondAmount(
-	ctx sdk.Context, delAddr sdk.AccAddress, target types.DelegationTarget, amt sdk.Coins,
+	ctx sdk.Context, delAddr string, target types.DelegationTarget, amt sdk.Coins,
 ) (shares sdk.DecCoins, err error) {
 	// Get the delegation
-	delegation, found := k.GetDelegationForTarget(ctx, target, delAddr.String())
+	delegation, found := k.GetDelegationForTarget(ctx, target, delAddr)
 	if !found {
 		return shares, types.ErrDelegationNotFound
 	}
@@ -72,38 +73,6 @@ func (k *Keeper) ValidateUnbondAmount(
 	}
 
 	return shares, nil
-}
-
-// Undelegate unbonds an amount of delegator shares from a given validator. It
-// will verify that the unbonding entries between the delegator and validator
-// are not exceeded and unbond the staked tokens (based on shares) by creating
-// an unbonding object and inserting it into the unbonding queue which will be
-// processed during the staking EndBlocker.
-func (k *Keeper) Undelegate(ctx sdk.Context, data types.UndelegationData) (time.Time, error) {
-	// TODO: Probably we should implement this as well
-	//if k.HasMaxUnbondingDelegationEntries(ctx, delAddr, valAddr) {
-	//	return time.Time{}, types.ErrMaxUnbondingDelegationEntries
-	//}
-
-	// Unbond the tokens
-	returnAmount, err := k.Unbond(ctx, data)
-	if err != nil {
-		return time.Time{}, err
-	}
-
-	// Compute the time at which the unbonding delegation should end
-	completionTime := ctx.BlockHeader().Time.Add(k.UnbondingTime(ctx))
-
-	// Store the unbonding delegation entry inside the store
-	ubd, err := k.SetUnbondingDelegationEntry(ctx, data, ctx.BlockHeight(), completionTime, returnAmount)
-	if err != nil {
-		return time.Time{}, err
-	}
-
-	// Insert the unbonding delegation into the unbonding queue
-	k.InsertUBDQueue(ctx, ubd, completionTime)
-
-	return completionTime, nil
 }
 
 // Unbond unbonds a particular delegation and perform associated store operations.
@@ -206,10 +175,80 @@ func (k *Keeper) SetUnbondingDelegationEntry(
 	}
 
 	// Call the hook after the unbonding has been initiated
-	err = k.hooks.AfterUnbondingInitiated(ctx, id)
+	err = k.AfterUnbondingInitiated(ctx, id)
 	if err != nil {
 		k.Logger(ctx).Error("failed to call after unbonding initiated hook", "error", err)
 	}
 
 	return ubd, nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+// --- Unbonding queue operations
+// --------------------------------------------------------------------------------------------------------------------
+
+// GetUBDQueueTimeSlice gets a specific unbonding queue timeslice. A timeslice
+// is a slice of DVPairs corresponding to unbonding delegations that expire at a
+// certain time.
+func (k *Keeper) GetUBDQueueTimeSlice(ctx sdk.Context, timestamp time.Time) (dvPairs []types.DTData) {
+	store := ctx.KVStore(k.storeKey)
+
+	bz := store.Get(types.GetUnbondingDelegationTimeKey(timestamp))
+	if bz == nil {
+		return []types.DTData{}
+	}
+
+	pairs := types.DTDataList{}
+	k.cdc.MustUnmarshal(bz, &pairs)
+
+	return pairs.Data
+}
+
+// SetUBDQueueTimeSlice sets a specific unbonding queue timeslice.
+func (k *Keeper) SetUBDQueueTimeSlice(ctx sdk.Context, timestamp time.Time, keys []types.DTData) {
+	store := ctx.KVStore(k.storeKey)
+	bz := k.cdc.MustMarshal(&types.DTDataList{Data: keys})
+	store.Set(types.GetUnbondingDelegationTimeKey(timestamp), bz)
+}
+
+// InsertUBDQueue inserts an unbonding delegation to the appropriate timeslice
+// in the unbonding queue.
+func (k *Keeper) InsertUBDQueue(ctx sdk.Context, ubd types.UnbondingDelegation, completionTime time.Time) {
+	dvPair := types.DTData{Type: ubd.Type, DelegatorAddress: ubd.DelegatorAddress, TargetID: ubd.TargetID}
+
+	timeSlice := k.GetUBDQueueTimeSlice(ctx, completionTime)
+	if len(timeSlice) == 0 {
+		k.SetUBDQueueTimeSlice(ctx, completionTime, []types.DTData{dvPair})
+	} else {
+		timeSlice = append(timeSlice, dvPair)
+		k.SetUBDQueueTimeSlice(ctx, completionTime, timeSlice)
+	}
+}
+
+// UBDQueueIterator returns all the unbonding queue timeslices from time 0 until endTime.
+func (k *Keeper) UBDQueueIterator(ctx sdk.Context, endTime time.Time) storetypes.Iterator {
+	store := ctx.KVStore(k.storeKey)
+	return store.Iterator(types.UnbondingQueueKey, storetypes.InclusiveEndBytes(types.GetUnbondingDelegationTimeKey(endTime)))
+}
+
+// DequeueAllMatureUBDQueue returns a concatenated list of all the timeslices inclusively previous to
+// currTime, and deletes the timeslices from the queue.
+func (k *Keeper) DequeueAllMatureUBDQueue(ctx sdk.Context, currTime time.Time) (matureUnbonds []types.DTData) {
+	store := ctx.KVStore(k.storeKey)
+
+	// Get an iterator for all timeslices from time 0 until the current BlockHeader time
+	unbondingTimesliceIterator := k.UBDQueueIterator(ctx, currTime)
+	defer unbondingTimesliceIterator.Close()
+
+	for ; unbondingTimesliceIterator.Valid(); unbondingTimesliceIterator.Next() {
+		timeslice := types.DTDataList{}
+		value := unbondingTimesliceIterator.Value()
+		k.cdc.MustUnmarshal(value, &timeslice)
+
+		matureUnbonds = append(matureUnbonds, timeslice.Data...)
+
+		store.Delete(unbondingTimesliceIterator.Key())
+	}
+
+	return matureUnbonds
 }

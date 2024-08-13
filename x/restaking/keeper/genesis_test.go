@@ -21,16 +21,19 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			store: func(ctx sdk.Context) {
 				suite.k.SetParams(ctx, types.DefaultParams())
 
-				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(100))),
 				))
-				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
+				suite.Require().NoError(err)
+
+				err = suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					2,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/2/utia", sdkmath.LegacyNewDec(200))),
 				))
+				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				Params: types.DefaultParams(),
@@ -53,20 +56,23 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			store: func(ctx sdk.Context) {
 				suite.k.SetParams(ctx, types.DefaultParams())
 
-				suite.k.SaveServiceDelegation(ctx, types.NewServiceDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(100)),
 					),
 				))
-				suite.k.SaveServiceDelegation(ctx, types.NewServiceDelegation(
+				suite.Require().NoError(err)
+
+				err = suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					2,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("services/2/utia", sdkmath.LegacyNewDec(50)),
 					),
 				))
+				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				Params: types.DefaultParams(),
@@ -93,20 +99,23 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			store: func(ctx sdk.Context) {
 				suite.k.SetParams(ctx, types.DefaultParams())
 
-				suite.k.SaveOperatorDelegation(ctx, types.NewOperatorDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(100)),
 					),
 				))
-				suite.k.SaveOperatorDelegation(ctx, types.NewOperatorDelegation(
+				suite.Require().NoError(err)
+
+				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					2,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("operators/2/utia", sdkmath.LegacyNewDec(50)),
 					),
 				))
+				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				Params: types.DefaultParams(),

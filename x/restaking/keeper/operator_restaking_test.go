@@ -422,8 +422,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 						sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(125)),
 					),
 				))
-
 				suite.Require().NoError(err)
+
 				// Send some funds to the user
 				suite.fundAccount(
 					ctx,

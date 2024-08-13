@@ -3,6 +3,9 @@ package types
 import (
 	"bytes"
 	"fmt"
+	"time"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/utils"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
@@ -35,6 +38,8 @@ var (
 	ServiceDelegationPrefix            = []byte{0xc1}
 	ServiceDelegationByServiceIDPrefix = []byte{0xc2}
 	UnbondingServiceDelegationPrefix   = []byte{0xc3}
+
+	UnbondingQueueKey = []byte{0xd1}
 )
 
 // OperatorParamsStoreKey returns the key used to store the operator params
@@ -57,6 +62,12 @@ func GetUnbondingIndexKey(id uint64) []byte {
 // GetUnbondingTypeKey returns a key for an index containing the type of unbonding operations
 func GetUnbondingTypeKey(id uint64) []byte {
 	return append(UnbondingTypeKey, utils.Uint64ToBytes(id)...)
+}
+
+// GetUnbondingDelegationTimeKey creates the prefix for all unbonding delegations from a delegator
+func GetUnbondingDelegationTimeKey(timestamp time.Time) []byte {
+	bz := sdk.FormatTimeBytes(timestamp)
+	return append(UnbondingQueueKey, bz...)
 }
 
 // --------------------------------------------------------------------------------------------------------------------

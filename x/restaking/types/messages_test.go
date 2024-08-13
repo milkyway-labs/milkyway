@@ -381,3 +381,201 @@ func TestMsgUpdateParams_GetSigners(t *testing.T) {
 	addr, _ := sdk.AccAddressFromBech32(msgUpdateParams.Authority)
 	require.Equal(t, []sdk.AccAddress{addr}, msgDelegateOperator.GetSigners())
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+var msgUndelegatePool = types.NewMsgUndelegatePool(
+	sdk.NewCoin("umilk", sdkmath.NewInt(100_000_000)),
+	"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+)
+
+func TestMsgUndelegatePool_ValidateBasic(t *testing.T) {
+	testCases := []struct {
+		name      string
+		msg       *types.MsgUndelegatePool
+		shouldErr bool
+	}{
+		{
+			name: "invalid amount return error",
+			msg: types.NewMsgUndelegatePool(
+				sdk.Coin{Denom: "umilk", Amount: sdkmath.ZeroInt()},
+				msgUpdateParams.Authority,
+			),
+			shouldErr: true,
+		},
+		{
+			name: "invalid delegator address returns error",
+			msg: types.NewMsgUndelegatePool(
+				msgUndelegatePool.Amount,
+				"invalid",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "valid message returns no error",
+			msg:  msgUndelegatePool,
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			err := tc.msg.ValidateBasic()
+			if tc.shouldErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestMsgUndelegatePool_GetSignBytes(t *testing.T) {
+	expected := `{"type":"milkyway/MsgUndelegatePool","value":{"amount":{"amount":"100000000","denom":"umilk"},"delegator":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"}}`
+	require.Equal(t, expected, string(msgUndelegatePool.GetSignBytes()))
+}
+
+func TestMsgUndelegatePool_GetSigners(t *testing.T) {
+	addr, _ := sdk.AccAddressFromBech32(msgUndelegatePool.Delegator)
+	require.Equal(t, []sdk.AccAddress{addr}, msgDelegateOperator.GetSigners())
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+var msgUndelegateOperator = types.NewMsgUndelegateOperator(
+	1,
+	sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100_000_000))),
+	"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+)
+
+func TestMsgUndelegateOperator_ValidateBasic(t *testing.T) {
+	testCases := []struct {
+		name      string
+		msg       *types.MsgUndelegateOperator
+		shouldErr bool
+	}{
+		{
+			name: "invalid operator id returns error",
+			msg: types.NewMsgUndelegateOperator(
+				0,
+				msgUndelegateOperator.Amount,
+				msgUndelegateOperator.Delegator,
+			),
+			shouldErr: true,
+		},
+		{
+			name: "invalid amount returns error",
+			msg: types.NewMsgUndelegateOperator(
+				msgUndelegateOperator.OperatorID,
+				sdk.Coins{sdk.Coin{Denom: "umilk", Amount: sdkmath.ZeroInt()}},
+				msgUndelegateOperator.Delegator,
+			),
+			shouldErr: true,
+		},
+		{
+			name: "invalid delegator address returns error",
+			msg: types.NewMsgUndelegateOperator(
+				msgUndelegateOperator.OperatorID,
+				msgUndelegateOperator.Amount,
+				"invalid",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "valid message returns no error",
+			msg:  msgUndelegateOperator,
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			err := tc.msg.ValidateBasic()
+			if tc.shouldErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestMsgUndelegateOperator_GetSignBytes(t *testing.T) {
+	expected := `{"type":"milkyway/MsgUndelegateOperator","value":{"amount":[{"amount":"100000000","denom":"umilk"}],"delegator":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","operator_id":1}}`
+	require.Equal(t, expected, string(msgUndelegateOperator.GetSignBytes()))
+}
+
+func TestMsgUndelegateOperator_GetSigners(t *testing.T) {
+	addr, _ := sdk.AccAddressFromBech32(msgUndelegateOperator.Delegator)
+	require.Equal(t, []sdk.AccAddress{addr}, msgDelegateOperator.GetSigners())
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+var msgUndelegateService = types.NewMsgUndelegateService(
+	1,
+	sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100_000_000))),
+	"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+)
+
+func TestMsgUndelegateService_ValidateBasic(t *testing.T) {
+	testCases := []struct {
+		name      string
+		msg       *types.MsgUndelegateService
+		shouldErr bool
+	}{
+		{
+			name: "invalid service id returns error",
+			msg: types.NewMsgUndelegateService(
+				0,
+				msgUndelegateService.Amount,
+				msgUndelegateService.Delegator,
+			),
+			shouldErr: true,
+		},
+		{
+			name: "invalid amount returns error",
+			msg: types.NewMsgUndelegateService(
+				msgUndelegateService.ServiceID,
+				sdk.Coins{sdk.Coin{Denom: "umilk", Amount: sdkmath.ZeroInt()}},
+				msgUndelegateService.Delegator,
+			),
+			shouldErr: true,
+		},
+		{
+			name: "invalid delegator address returns error",
+			msg: types.NewMsgUndelegateService(
+				msgUndelegateService.ServiceID,
+				msgUndelegateService.Amount,
+				"invalid",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "valid message returns no error",
+			msg:  msgUndelegateService,
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			err := tc.msg.ValidateBasic()
+			if tc.shouldErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestMsgUndelegateService_GetSignBytes(t *testing.T) {
+	expected := `{"type":"milkyway/MsgUndelegateService","value":{"amount":[{"amount":"100000000","denom":"umilk"}],"delegator":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","service_id":1}}`
+	require.Equal(t, expected, string(msgUndelegateService.GetSignBytes()))
+}
+
+func TestMsgUndelegateService_GetSigners(t *testing.T) {
+	addr, _ := sdk.AccAddressFromBech32(msgUndelegateService.Delegator)
+	require.Equal(t, []sdk.AccAddress{addr}, msgDelegateOperator.GetSigners())
+}

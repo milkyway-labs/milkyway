@@ -34,16 +34,19 @@ func (suite *KeeperTestSuite) TestQuerier_PoolDelegations() {
 				})
 				suite.Require().NoError(err)
 
-				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(50))),
 				))
-				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
+				suite.Require().NoError(err)
+
+				err = suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					1,
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(100))),
 				))
+				suite.Require().NoError(err)
 			},
 			request:   types.NewQueryPoolDelegationsRequest(1, nil),
 			shouldErr: false,
@@ -78,16 +81,19 @@ func (suite *KeeperTestSuite) TestQuerier_PoolDelegations() {
 				})
 				suite.Require().NoError(err)
 
-				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(50))),
 				))
-				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
+				suite.Require().NoError(err)
+
+				err = suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					1,
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(100))),
 				))
+				suite.Require().NoError(err)
 			},
 			request: types.NewQueryPoolDelegationsRequest(1, &query.PageRequest{
 				Offset: 1,
@@ -165,11 +171,12 @@ func (suite *KeeperTestSuite) TestQuerier_PoolDelegation() {
 				})
 				suite.Require().NoError(err)
 
-				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(50))),
 				))
+				suite.Require().NoError(err)
 			},
 			request: types.NewQueryPoolDelegationRequest(
 				1,
@@ -229,20 +236,23 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegations() {
 					),
 				})
 
-				suite.k.SaveOperatorDelegation(ctx, types.NewOperatorDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(50)),
 					),
 				))
-				suite.k.SaveOperatorDelegation(ctx, types.NewOperatorDelegation(
+				suite.Require().NoError(err)
+
+				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(100)),
 					),
 				))
+				suite.Require().NoError(err)
 			},
 			request:   types.NewQueryOperatorDelegationsRequest(1, nil),
 			shouldErr: false,
@@ -287,20 +297,23 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegations() {
 					),
 				})
 
-				suite.k.SaveOperatorDelegation(ctx, types.NewOperatorDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(50)),
 					),
 				))
-				suite.k.SaveOperatorDelegation(ctx, types.NewOperatorDelegation(
+				suite.Require().NoError(err)
+
+				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(100)),
 					),
 				))
+				suite.Require().NoError(err)
 			},
 			request: types.NewQueryOperatorDelegationsRequest(1, &query.PageRequest{
 				Offset: 1,
@@ -386,13 +399,14 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegation() {
 					),
 				})
 
-				suite.k.SaveOperatorDelegation(ctx, types.NewOperatorDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(100)),
 					),
 				))
+				suite.Require().NoError(err)
 			},
 			request: types.NewQueryOperatorDelegationRequest(
 				1,
@@ -456,20 +470,23 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceDelegations() {
 					),
 				})
 
-				suite.k.SaveServiceDelegation(ctx, types.NewServiceDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(50)),
 					),
 				))
-				suite.k.SaveServiceDelegation(ctx, types.NewServiceDelegation(
+				suite.Require().NoError(err)
+
+				err = suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(100)),
 					),
 				))
+				suite.Require().NoError(err)
 			},
 			request:   types.NewQueryServiceDelegationsRequest(1, nil),
 			shouldErr: false,
@@ -514,20 +531,23 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceDelegations() {
 					),
 				})
 
-				suite.k.SaveServiceDelegation(ctx, types.NewServiceDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(50)),
 					),
 				))
-				suite.k.SaveServiceDelegation(ctx, types.NewServiceDelegation(
+				suite.Require().NoError(err)
+
+				err = suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(100)),
 					),
 				))
+				suite.Require().NoError(err)
 			},
 			request: types.NewQueryServiceDelegationsRequest(1, &query.PageRequest{
 				Offset: 1,
@@ -613,13 +633,14 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceDelegation() {
 					),
 				})
 
-				suite.k.SaveServiceDelegation(ctx, types.NewServiceDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(100)),
 					),
 				))
+				suite.Require().NoError(err)
 			},
 			request: types.NewQueryServiceDelegationRequest(
 				1,
@@ -690,16 +711,19 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorPoolDelegations() {
 				})
 				suite.Require().NoError(err)
 
-				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(50))),
 				))
-				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
+				suite.Require().NoError(err)
+
+				err = suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					2,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/2/utia", sdkmath.LegacyNewDec(100))),
 				))
+				suite.Require().NoError(err)
 			},
 			request:   types.NewQueryDelegatorPoolDelegationsRequest("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", nil),
 			shouldErr: false,
@@ -743,16 +767,19 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorPoolDelegations() {
 				})
 				suite.Require().NoError(err)
 
-				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(50))),
 				))
-				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
+				suite.Require().NoError(err)
+
+				err = suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					2,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/2/utia", sdkmath.LegacyNewDec(100))),
 				))
+				suite.Require().NoError(err)
 			},
 			request: types.NewQueryDelegatorPoolDelegationsRequest("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", &query.PageRequest{
 				Offset: 1,
@@ -825,20 +852,23 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperatorDelegations() {
 					),
 				})
 
-				suite.k.SaveOperatorDelegation(ctx, types.NewOperatorDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(50)),
 					),
 				))
-				suite.k.SaveOperatorDelegation(ctx, types.NewOperatorDelegation(
+				suite.Require().NoError(err)
+
+				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					2,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("operators/2/utia", sdkmath.LegacyNewDec(100)),
 					),
 				))
+				suite.Require().NoError(err)
 			},
 			request:   types.NewQueryDelegatorOperatorDelegationsRequest("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", nil),
 			shouldErr: false,
@@ -894,20 +924,23 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperatorDelegations() {
 					),
 				})
 
-				suite.k.SaveOperatorDelegation(ctx, types.NewOperatorDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(50)),
 					),
 				))
-				suite.k.SaveOperatorDelegation(ctx, types.NewOperatorDelegation(
+				suite.Require().NoError(err)
+
+				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					2,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("operators/2/utia", sdkmath.LegacyNewDec(100)),
 					),
 				))
+				suite.Require().NoError(err)
 			},
 			request: types.NewQueryDelegatorOperatorDelegationsRequest("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", &query.PageRequest{
 				Offset: 1,
@@ -984,20 +1017,23 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServiceDelegations() {
 					),
 				})
 
-				suite.k.SaveServiceDelegation(ctx, types.NewServiceDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(50)),
 					),
 				))
-				suite.k.SaveServiceDelegation(ctx, types.NewServiceDelegation(
+				suite.Require().NoError(err)
+
+				err = suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					2,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("services/2/utia", sdkmath.LegacyNewDec(100)),
 					),
 				))
+				suite.Require().NoError(err)
 			},
 			request:   types.NewQueryDelegatorServiceDelegationsRequest("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", nil),
 			shouldErr: false,
@@ -1053,20 +1089,23 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServiceDelegations() {
 					),
 				})
 
-				suite.k.SaveServiceDelegation(ctx, types.NewServiceDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(50)),
 					),
 				))
-				suite.k.SaveServiceDelegation(ctx, types.NewServiceDelegation(
+				suite.Require().NoError(err)
+
+				err = suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					2,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("services/2/utia", sdkmath.LegacyNewDec(100)),
 					),
 				))
+				suite.Require().NoError(err)
 			},
 			request: types.NewQueryDelegatorServiceDelegationsRequest("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", &query.PageRequest{
 				Offset: 1,
@@ -1139,16 +1178,19 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorPools() {
 				})
 				suite.Require().NoError(err)
 
-				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(50))),
 				))
-				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
+				suite.Require().NoError(err)
+
+				err = suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					2,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/2/utia", sdkmath.LegacyNewDec(100))),
 				))
+				suite.Require().NoError(err)
 			},
 			request:   types.NewQueryDelegatorPoolsRequest("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", nil),
 			shouldErr: false,
@@ -1190,16 +1232,19 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorPools() {
 				})
 				suite.Require().NoError(err)
 
-				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(50))),
 				))
-				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
+				suite.Require().NoError(err)
+
+				err = suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					2,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/2/utia", sdkmath.LegacyNewDec(100))),
 				))
+				suite.Require().NoError(err)
 			},
 			request: types.NewQueryDelegatorPoolsRequest("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", &query.PageRequest{
 				Offset: 1,
@@ -1263,11 +1308,12 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorPool() {
 				})
 				suite.Require().NoError(err)
 
-				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(50))),
 				))
+				suite.Require().NoError(err)
 			},
 			request:   types.NewQueryDelegatorPoolRequest("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", 1),
 			shouldErr: false,
@@ -1334,20 +1380,23 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperators() {
 					),
 				})
 
-				suite.k.SaveOperatorDelegation(ctx, types.NewOperatorDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(50)),
 					),
 				))
-				suite.k.SaveOperatorDelegation(ctx, types.NewOperatorDelegation(
+				suite.Require().NoError(err)
+
+				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					2,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("operators/2/utia", sdkmath.LegacyNewDec(100)),
 					),
 				))
+				suite.Require().NoError(err)
 			},
 			request:   types.NewQueryDelegatorOperatorsRequest("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", nil),
 			shouldErr: false,
@@ -1399,20 +1448,23 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperators() {
 					),
 				})
 
-				suite.k.SaveOperatorDelegation(ctx, types.NewOperatorDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(50)),
 					),
 				))
-				suite.k.SaveOperatorDelegation(ctx, types.NewOperatorDelegation(
+				suite.Require().NoError(err)
+
+				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					2,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("operators/2/utia", sdkmath.LegacyNewDec(100)),
 					),
 				))
+				suite.Require().NoError(err)
 			},
 			request: types.NewQueryDelegatorOperatorsRequest("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", &query.PageRequest{
 				Offset: 1,
@@ -1481,13 +1533,14 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperator() {
 					),
 				})
 
-				suite.k.SaveOperatorDelegation(ctx, types.NewOperatorDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(50)),
 					),
 				))
+				suite.Require().NoError(err)
 			},
 			request:   types.NewQueryDelegatorOperatorRequest("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", 1),
 			shouldErr: false,
@@ -1558,20 +1611,23 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServices() {
 					),
 				})
 
-				suite.k.SaveServiceDelegation(ctx, types.NewServiceDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(50)),
 					),
 				))
-				suite.k.SaveServiceDelegation(ctx, types.NewServiceDelegation(
+				suite.Require().NoError(err)
+
+				err = suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					2,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("services/2/utia", sdkmath.LegacyNewDec(100)),
 					),
 				))
+				suite.Require().NoError(err)
 			},
 			request:   types.NewQueryDelegatorServicesRequest("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", nil),
 			shouldErr: false,
@@ -1623,20 +1679,23 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServices() {
 					),
 				})
 
-				suite.k.SaveServiceDelegation(ctx, types.NewServiceDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(50)),
 					),
 				))
-				suite.k.SaveServiceDelegation(ctx, types.NewServiceDelegation(
+				suite.Require().NoError(err)
+
+				err = suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					2,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("services/2/utia", sdkmath.LegacyNewDec(100)),
 					),
 				))
+				suite.Require().NoError(err)
 			},
 			request: types.NewQueryDelegatorServicesRequest("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", &query.PageRequest{
 				Offset: 1,
@@ -1705,13 +1764,14 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorService() {
 					),
 				})
 
-				suite.k.SaveServiceDelegation(ctx, types.NewServiceDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(50)),
 					),
 				))
+				suite.Require().NoError(err)
 			},
 			request:   types.NewQueryDelegatorServiceRequest("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", 1),
 			shouldErr: false,

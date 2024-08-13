@@ -138,16 +138,16 @@ func (suite *KeeperTestSuite) TestKeeper_AddPoolTokensAndShares() {
 		setup          func()
 		store          func(ctx sdk.Context)
 		pool           poolstypes.Pool
-		tokensToAdd    sdkmath.Int
+		tokensToAdd    sdk.Coin
 		shouldErr      bool
 		expPool        poolstypes.Pool
-		expAddedShares sdkmath.LegacyDec
+		expAddedShares sdk.DecCoin
 		check          func(ctx sdk.Context)
 	}{
 		{
 			name:        "adding tokens to an empty pool works properly",
 			pool:        poolstypes.NewPool(1, "umilk"),
-			tokensToAdd: sdkmath.NewInt(100),
+			tokensToAdd: sdk.NewCoin("umilk", sdkmath.NewInt(100)),
 			shouldErr:   false,
 			expPool: poolstypes.Pool{
 				ID:              1,
@@ -156,7 +156,7 @@ func (suite *KeeperTestSuite) TestKeeper_AddPoolTokensAndShares() {
 				Tokens:          sdkmath.NewInt(100),
 				DelegatorShares: sdkmath.LegacyNewDec(100),
 			},
-			expAddedShares: sdkmath.LegacyNewDec(100),
+			expAddedShares: sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(100)),
 		},
 		{
 			name: "adding tokens to a non-empty pool works properly",
@@ -167,7 +167,7 @@ func (suite *KeeperTestSuite) TestKeeper_AddPoolTokensAndShares() {
 				Tokens:          sdkmath.NewInt(50),
 				DelegatorShares: sdkmath.LegacyNewDec(100),
 			},
-			tokensToAdd: sdkmath.NewInt(20),
+			tokensToAdd: sdk.NewCoin("umilk", sdkmath.NewInt(20)),
 			shouldErr:   false,
 			expPool: poolstypes.Pool{
 				ID:              1,
@@ -176,7 +176,19 @@ func (suite *KeeperTestSuite) TestKeeper_AddPoolTokensAndShares() {
 				Tokens:          sdkmath.NewInt(70),
 				DelegatorShares: sdkmath.LegacyNewDec(140),
 			},
-			expAddedShares: sdkmath.LegacyNewDec(40),
+			expAddedShares: sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(40)),
+		},
+		{
+			name: "adding tokens to a non-empty pool works properly",
+			pool: poolstypes.Pool{
+				ID:              1,
+				Denom:           "umilk",
+				Address:         poolstypes.GetPoolAddress(1).String(),
+				Tokens:          sdkmath.NewInt(50),
+				DelegatorShares: sdkmath.LegacyNewDec(100),
+			},
+			tokensToAdd: sdk.NewCoin("utia", sdkmath.NewInt(20)),
+			shouldErr:   true,
 		},
 	}
 
@@ -402,7 +414,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 				suite.pk.SetNextPoolID(ctx, 2)
 
 				// Save the existing delegation
-				err := suite.k.SetDelegation(ctx, types.NewPoolDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(100))),
