@@ -10,8 +10,6 @@ type RestakingHooks interface {
 	ServiceRestakingHooks
 }
 
-// TODO: change methods to receive context.Context instead of sdk.Context
-
 type PoolRestakingHooks interface {
 	BeforePoolDelegationCreated(ctx sdk.Context, poolID uint32, delegator string) error
 	BeforePoolDelegationSharesModified(ctx sdk.Context, poolID uint32, delegator string) error
