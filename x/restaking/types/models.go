@@ -213,14 +213,14 @@ func (e UnbondingDelegationEntry) IsMature(currentTime time.Time) bool {
 // unbonding delegation to a pool
 func NewPoolUnbondingDelegation(
 	delegatorAddress string, poolID uint32,
-	creationHeight int64, minTime time.Time, balance sdk.Coins, id uint64,
+	creationHeight int64, completionTime time.Time, balance sdk.Coins, id uint64,
 ) UnbondingDelegation {
 	return UnbondingDelegation{
 		Type:             UNBONDING_DELEGATION_TYPE_POOL,
 		DelegatorAddress: delegatorAddress,
 		TargetID:         poolID,
 		Entries: []UnbondingDelegationEntry{
-			NewUnbondingDelegationEntry(creationHeight, minTime, balance, id),
+			NewUnbondingDelegationEntry(creationHeight, completionTime, balance, id),
 		},
 	}
 }
@@ -229,14 +229,14 @@ func NewPoolUnbondingDelegation(
 // unbonding delegation to an operator
 func NewOperatorUnbondingDelegation(
 	delegatorAddress string, operatorID uint32,
-	creationHeight int64, minTime time.Time, balance sdk.Coins, id uint64,
+	creationHeight int64, completionTime time.Time, balance sdk.Coins, id uint64,
 ) UnbondingDelegation {
 	return UnbondingDelegation{
 		Type:             UNBONDING_DELEGATION_TYPE_OPERATOR,
 		DelegatorAddress: delegatorAddress,
 		TargetID:         operatorID,
 		Entries: []UnbondingDelegationEntry{
-			NewUnbondingDelegationEntry(creationHeight, minTime, balance, id),
+			NewUnbondingDelegationEntry(creationHeight, completionTime, balance, id),
 		},
 	}
 }
@@ -245,24 +245,24 @@ func NewOperatorUnbondingDelegation(
 // unbonding delegation to a service
 func NewServiceUnbondingDelegation(
 	delegatorAddress string, serviceID uint32,
-	creationHeight int64, minTime time.Time, balance sdk.Coins, id uint64,
+	creationHeight int64, completionTime time.Time, balance sdk.Coins, id uint64,
 ) UnbondingDelegation {
 	return UnbondingDelegation{
 		Type:             UNBONDING_DELEGATION_TYPE_SERVICE,
 		DelegatorAddress: delegatorAddress,
 		TargetID:         serviceID,
 		Entries: []UnbondingDelegationEntry{
-			NewUnbondingDelegationEntry(creationHeight, minTime, balance, id),
+			NewUnbondingDelegationEntry(creationHeight, completionTime, balance, id),
 		},
 	}
 }
 
 // AddEntry allows to append a new entry to the unbonding delegation
-func (ubd *UnbondingDelegation) AddEntry(creationHeight int64, minTime time.Time, balance sdk.Coins, unbondingID uint64) {
+func (ubd *UnbondingDelegation) AddEntry(creationHeight int64, completionTime time.Time, balance sdk.Coins, unbondingID uint64) {
 	// Check the entries exists with creation_height and complete_time
 	entryIndex := -1
 	for index, ubdEntry := range ubd.Entries {
-		if ubdEntry.CreationHeight == creationHeight && ubdEntry.CompletionTime.Equal(minTime) {
+		if ubdEntry.CreationHeight == creationHeight && ubdEntry.CompletionTime.Equal(completionTime) {
 			entryIndex = index
 			break
 		}
@@ -278,7 +278,7 @@ func (ubd *UnbondingDelegation) AddEntry(creationHeight int64, minTime time.Time
 		ubd.Entries[entryIndex] = ubdEntry
 	} else {
 		// Append the new unbonding delegation entry
-		entry := NewUnbondingDelegationEntry(creationHeight, minTime, balance, unbondingID)
+		entry := NewUnbondingDelegationEntry(creationHeight, completionTime, balance, unbondingID)
 		ubd.Entries = append(ubd.Entries, entry)
 	}
 }
