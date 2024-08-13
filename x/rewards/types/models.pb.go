@@ -6,14 +6,14 @@ package types
 import (
 	fmt "fmt"
 	_ "github.com/cosmos/cosmos-proto"
-	types1 "github.com/cosmos/cosmos-sdk/codec/types"
+	types2 "github.com/cosmos/cosmos-sdk/codec/types"
 	github_com_cosmos_cosmos_sdk_types "github.com/cosmos/cosmos-sdk/types"
 	types "github.com/cosmos/cosmos-sdk/types"
 	_ "github.com/cosmos/cosmos-sdk/types/tx/amino"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	proto "github.com/cosmos/gogoproto/proto"
 	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
-	types2 "github.com/milkyway-labs/milkyway/x/restaking/types"
+	types1 "github.com/milkyway-labs/milkyway/x/restaking/types"
 	_ "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
 	math "math"
@@ -44,11 +44,11 @@ type RewardsPlan struct {
 	// StartTime is the starting time of the plan
 	StartTime time.Time `protobuf:"bytes,5,opt,name=start_time,json=startTime,proto3,stdtime" json:"start_time"`
 	// EndTime is the ending time of the plan
-	EndTime               time.Time             `protobuf:"bytes,6,opt,name=end_time,json=endTime,proto3,stdtime" json:"end_time"`
-	RewardsPool           string                `protobuf:"bytes,7,opt,name=rewards_pool,json=rewardsPool,proto3" json:"rewards_pool,omitempty"`
-	PoolsDistribution     PoolsDistribution     `protobuf:"bytes,8,opt,name=pools_distribution,json=poolsDistribution,proto3" json:"pools_distribution"`
-	OperatorsDistribution OperatorsDistribution `protobuf:"bytes,9,opt,name=operators_distribution,json=operatorsDistribution,proto3" json:"operators_distribution"`
-	UsersDistribution     UsersDistribution     `protobuf:"bytes,10,opt,name=users_distribution,json=usersDistribution,proto3" json:"users_distribution"`
+	EndTime               time.Time         `protobuf:"bytes,6,opt,name=end_time,json=endTime,proto3,stdtime" json:"end_time"`
+	RewardsPool           string            `protobuf:"bytes,7,opt,name=rewards_pool,json=rewardsPool,proto3" json:"rewards_pool,omitempty"`
+	PoolsDistribution     Distribution      `protobuf:"bytes,8,opt,name=pools_distribution,json=poolsDistribution,proto3" json:"pools_distribution"`
+	OperatorsDistribution Distribution      `protobuf:"bytes,9,opt,name=operators_distribution,json=operatorsDistribution,proto3" json:"operators_distribution"`
+	UsersDistribution     UsersDistribution `protobuf:"bytes,10,opt,name=users_distribution,json=usersDistribution,proto3" json:"users_distribution"`
 }
 
 func (m *RewardsPlan) Reset()         { *m = RewardsPlan{} }
@@ -84,23 +84,29 @@ func (m *RewardsPlan) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_RewardsPlan proto.InternalMessageInfo
 
-type PoolsDistribution struct {
-	Weight uint32      `protobuf:"varint,1,opt,name=weight,proto3" json:"weight,omitempty"`
-	Type   *types1.Any `protobuf:"bytes,2,opt,name=type,proto3" json:"type,omitempty"`
+// Distribution represents distribution information for restaking
+// pools/operators.
+type Distribution struct {
+	DelegationType types1.DelegationType `protobuf:"varint,1,opt,name=delegation_type,json=delegationType,proto3,enum=milkyway.restaking.v1.DelegationType" json:"delegation_type,omitempty"`
+	// Weight is the rewards distribution weight among other types of delegation
+	// targets.
+	Weight uint32 `protobuf:"varint,2,opt,name=weight,proto3" json:"weight,omitempty"`
+	// Type is one of basic/weighted/egalitarian distributions.
+	Type *types2.Any `protobuf:"bytes,3,opt,name=type,proto3" json:"type,omitempty"`
 }
 
-func (m *PoolsDistribution) Reset()         { *m = PoolsDistribution{} }
-func (m *PoolsDistribution) String() string { return proto.CompactTextString(m) }
-func (*PoolsDistribution) ProtoMessage()    {}
-func (*PoolsDistribution) Descriptor() ([]byte, []int) {
+func (m *Distribution) Reset()         { *m = Distribution{} }
+func (m *Distribution) String() string { return proto.CompactTextString(m) }
+func (*Distribution) ProtoMessage()    {}
+func (*Distribution) Descriptor() ([]byte, []int) {
 	return fileDescriptor_fcf66d1f3415f5b6, []int{1}
 }
-func (m *PoolsDistribution) XXX_Unmarshal(b []byte) error {
+func (m *Distribution) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *PoolsDistribution) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *Distribution) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_PoolsDistribution.Marshal(b, m, deterministic)
+		return xxx_messageInfo_Distribution.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -110,33 +116,33 @@ func (m *PoolsDistribution) XXX_Marshal(b []byte, deterministic bool) ([]byte, e
 		return b[:n], nil
 	}
 }
-func (m *PoolsDistribution) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PoolsDistribution.Merge(m, src)
+func (m *Distribution) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Distribution.Merge(m, src)
 }
-func (m *PoolsDistribution) XXX_Size() int {
+func (m *Distribution) XXX_Size() int {
 	return m.Size()
 }
-func (m *PoolsDistribution) XXX_DiscardUnknown() {
-	xxx_messageInfo_PoolsDistribution.DiscardUnknown(m)
+func (m *Distribution) XXX_DiscardUnknown() {
+	xxx_messageInfo_Distribution.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_PoolsDistribution proto.InternalMessageInfo
+var xxx_messageInfo_Distribution proto.InternalMessageInfo
 
-type PoolsDistributionTypeBasic struct {
+type DistributionTypeBasic struct {
 }
 
-func (m *PoolsDistributionTypeBasic) Reset()         { *m = PoolsDistributionTypeBasic{} }
-func (m *PoolsDistributionTypeBasic) String() string { return proto.CompactTextString(m) }
-func (*PoolsDistributionTypeBasic) ProtoMessage()    {}
-func (*PoolsDistributionTypeBasic) Descriptor() ([]byte, []int) {
+func (m *DistributionTypeBasic) Reset()         { *m = DistributionTypeBasic{} }
+func (m *DistributionTypeBasic) String() string { return proto.CompactTextString(m) }
+func (*DistributionTypeBasic) ProtoMessage()    {}
+func (*DistributionTypeBasic) Descriptor() ([]byte, []int) {
 	return fileDescriptor_fcf66d1f3415f5b6, []int{2}
 }
-func (m *PoolsDistributionTypeBasic) XXX_Unmarshal(b []byte) error {
+func (m *DistributionTypeBasic) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *PoolsDistributionTypeBasic) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *DistributionTypeBasic) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_PoolsDistributionTypeBasic.Marshal(b, m, deterministic)
+		return xxx_messageInfo_DistributionTypeBasic.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -146,34 +152,34 @@ func (m *PoolsDistributionTypeBasic) XXX_Marshal(b []byte, deterministic bool) (
 		return b[:n], nil
 	}
 }
-func (m *PoolsDistributionTypeBasic) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PoolsDistributionTypeBasic.Merge(m, src)
+func (m *DistributionTypeBasic) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DistributionTypeBasic.Merge(m, src)
 }
-func (m *PoolsDistributionTypeBasic) XXX_Size() int {
+func (m *DistributionTypeBasic) XXX_Size() int {
 	return m.Size()
 }
-func (m *PoolsDistributionTypeBasic) XXX_DiscardUnknown() {
-	xxx_messageInfo_PoolsDistributionTypeBasic.DiscardUnknown(m)
+func (m *DistributionTypeBasic) XXX_DiscardUnknown() {
+	xxx_messageInfo_DistributionTypeBasic.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_PoolsDistributionTypeBasic proto.InternalMessageInfo
+var xxx_messageInfo_DistributionTypeBasic proto.InternalMessageInfo
 
-type PoolsDistributionTypeWeighted struct {
-	Weights []PoolDistributionWeight `protobuf:"bytes,1,rep,name=weights,proto3" json:"weights"`
+type DistributionTypeWeighted struct {
+	Weights []DistributionWeight `protobuf:"bytes,1,rep,name=weights,proto3" json:"weights"`
 }
 
-func (m *PoolsDistributionTypeWeighted) Reset()         { *m = PoolsDistributionTypeWeighted{} }
-func (m *PoolsDistributionTypeWeighted) String() string { return proto.CompactTextString(m) }
-func (*PoolsDistributionTypeWeighted) ProtoMessage()    {}
-func (*PoolsDistributionTypeWeighted) Descriptor() ([]byte, []int) {
+func (m *DistributionTypeWeighted) Reset()         { *m = DistributionTypeWeighted{} }
+func (m *DistributionTypeWeighted) String() string { return proto.CompactTextString(m) }
+func (*DistributionTypeWeighted) ProtoMessage()    {}
+func (*DistributionTypeWeighted) Descriptor() ([]byte, []int) {
 	return fileDescriptor_fcf66d1f3415f5b6, []int{3}
 }
-func (m *PoolsDistributionTypeWeighted) XXX_Unmarshal(b []byte) error {
+func (m *DistributionTypeWeighted) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *PoolsDistributionTypeWeighted) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *DistributionTypeWeighted) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_PoolsDistributionTypeWeighted.Marshal(b, m, deterministic)
+		return xxx_messageInfo_DistributionTypeWeighted.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -183,35 +189,35 @@ func (m *PoolsDistributionTypeWeighted) XXX_Marshal(b []byte, deterministic bool
 		return b[:n], nil
 	}
 }
-func (m *PoolsDistributionTypeWeighted) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PoolsDistributionTypeWeighted.Merge(m, src)
+func (m *DistributionTypeWeighted) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DistributionTypeWeighted.Merge(m, src)
 }
-func (m *PoolsDistributionTypeWeighted) XXX_Size() int {
+func (m *DistributionTypeWeighted) XXX_Size() int {
 	return m.Size()
 }
-func (m *PoolsDistributionTypeWeighted) XXX_DiscardUnknown() {
-	xxx_messageInfo_PoolsDistributionTypeWeighted.DiscardUnknown(m)
+func (m *DistributionTypeWeighted) XXX_DiscardUnknown() {
+	xxx_messageInfo_DistributionTypeWeighted.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_PoolsDistributionTypeWeighted proto.InternalMessageInfo
+var xxx_messageInfo_DistributionTypeWeighted proto.InternalMessageInfo
 
-type PoolDistributionWeight struct {
-	PoolID uint32 `protobuf:"varint,1,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
-	Weight uint32 `protobuf:"varint,2,opt,name=weight,proto3" json:"weight,omitempty"`
+type DistributionWeight struct {
+	DelegationTargetID uint32 `protobuf:"varint,1,opt,name=delegation_target_id,json=delegationTargetId,proto3" json:"delegation_target_id,omitempty"`
+	Weight             uint32 `protobuf:"varint,2,opt,name=weight,proto3" json:"weight,omitempty"`
 }
 
-func (m *PoolDistributionWeight) Reset()         { *m = PoolDistributionWeight{} }
-func (m *PoolDistributionWeight) String() string { return proto.CompactTextString(m) }
-func (*PoolDistributionWeight) ProtoMessage()    {}
-func (*PoolDistributionWeight) Descriptor() ([]byte, []int) {
+func (m *DistributionWeight) Reset()         { *m = DistributionWeight{} }
+func (m *DistributionWeight) String() string { return proto.CompactTextString(m) }
+func (*DistributionWeight) ProtoMessage()    {}
+func (*DistributionWeight) Descriptor() ([]byte, []int) {
 	return fileDescriptor_fcf66d1f3415f5b6, []int{4}
 }
-func (m *PoolDistributionWeight) XXX_Unmarshal(b []byte) error {
+func (m *DistributionWeight) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *PoolDistributionWeight) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *DistributionWeight) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_PoolDistributionWeight.Marshal(b, m, deterministic)
+		return xxx_messageInfo_DistributionWeight.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -221,33 +227,33 @@ func (m *PoolDistributionWeight) XXX_Marshal(b []byte, deterministic bool) ([]by
 		return b[:n], nil
 	}
 }
-func (m *PoolDistributionWeight) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PoolDistributionWeight.Merge(m, src)
+func (m *DistributionWeight) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DistributionWeight.Merge(m, src)
 }
-func (m *PoolDistributionWeight) XXX_Size() int {
+func (m *DistributionWeight) XXX_Size() int {
 	return m.Size()
 }
-func (m *PoolDistributionWeight) XXX_DiscardUnknown() {
-	xxx_messageInfo_PoolDistributionWeight.DiscardUnknown(m)
+func (m *DistributionWeight) XXX_DiscardUnknown() {
+	xxx_messageInfo_DistributionWeight.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_PoolDistributionWeight proto.InternalMessageInfo
+var xxx_messageInfo_DistributionWeight proto.InternalMessageInfo
 
-type PoolsDistributionTypeEgalitarian struct {
+type DistributionTypeEgalitarian struct {
 }
 
-func (m *PoolsDistributionTypeEgalitarian) Reset()         { *m = PoolsDistributionTypeEgalitarian{} }
-func (m *PoolsDistributionTypeEgalitarian) String() string { return proto.CompactTextString(m) }
-func (*PoolsDistributionTypeEgalitarian) ProtoMessage()    {}
-func (*PoolsDistributionTypeEgalitarian) Descriptor() ([]byte, []int) {
+func (m *DistributionTypeEgalitarian) Reset()         { *m = DistributionTypeEgalitarian{} }
+func (m *DistributionTypeEgalitarian) String() string { return proto.CompactTextString(m) }
+func (*DistributionTypeEgalitarian) ProtoMessage()    {}
+func (*DistributionTypeEgalitarian) Descriptor() ([]byte, []int) {
 	return fileDescriptor_fcf66d1f3415f5b6, []int{5}
 }
-func (m *PoolsDistributionTypeEgalitarian) XXX_Unmarshal(b []byte) error {
+func (m *DistributionTypeEgalitarian) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *PoolsDistributionTypeEgalitarian) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *DistributionTypeEgalitarian) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_PoolsDistributionTypeEgalitarian.Marshal(b, m, deterministic)
+		return xxx_messageInfo_DistributionTypeEgalitarian.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -257,213 +263,28 @@ func (m *PoolsDistributionTypeEgalitarian) XXX_Marshal(b []byte, deterministic b
 		return b[:n], nil
 	}
 }
-func (m *PoolsDistributionTypeEgalitarian) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PoolsDistributionTypeEgalitarian.Merge(m, src)
+func (m *DistributionTypeEgalitarian) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DistributionTypeEgalitarian.Merge(m, src)
 }
-func (m *PoolsDistributionTypeEgalitarian) XXX_Size() int {
+func (m *DistributionTypeEgalitarian) XXX_Size() int {
 	return m.Size()
 }
-func (m *PoolsDistributionTypeEgalitarian) XXX_DiscardUnknown() {
-	xxx_messageInfo_PoolsDistributionTypeEgalitarian.DiscardUnknown(m)
+func (m *DistributionTypeEgalitarian) XXX_DiscardUnknown() {
+	xxx_messageInfo_DistributionTypeEgalitarian.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_PoolsDistributionTypeEgalitarian proto.InternalMessageInfo
-
-type OperatorsDistribution struct {
-	Weight uint32      `protobuf:"varint,1,opt,name=weight,proto3" json:"weight,omitempty"`
-	Type   *types1.Any `protobuf:"bytes,2,opt,name=type,proto3" json:"type,omitempty"`
-}
-
-func (m *OperatorsDistribution) Reset()         { *m = OperatorsDistribution{} }
-func (m *OperatorsDistribution) String() string { return proto.CompactTextString(m) }
-func (*OperatorsDistribution) ProtoMessage()    {}
-func (*OperatorsDistribution) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fcf66d1f3415f5b6, []int{6}
-}
-func (m *OperatorsDistribution) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *OperatorsDistribution) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_OperatorsDistribution.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *OperatorsDistribution) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OperatorsDistribution.Merge(m, src)
-}
-func (m *OperatorsDistribution) XXX_Size() int {
-	return m.Size()
-}
-func (m *OperatorsDistribution) XXX_DiscardUnknown() {
-	xxx_messageInfo_OperatorsDistribution.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_OperatorsDistribution proto.InternalMessageInfo
-
-type OperatorsDistributionTypeBasic struct {
-}
-
-func (m *OperatorsDistributionTypeBasic) Reset()         { *m = OperatorsDistributionTypeBasic{} }
-func (m *OperatorsDistributionTypeBasic) String() string { return proto.CompactTextString(m) }
-func (*OperatorsDistributionTypeBasic) ProtoMessage()    {}
-func (*OperatorsDistributionTypeBasic) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fcf66d1f3415f5b6, []int{7}
-}
-func (m *OperatorsDistributionTypeBasic) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *OperatorsDistributionTypeBasic) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_OperatorsDistributionTypeBasic.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *OperatorsDistributionTypeBasic) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OperatorsDistributionTypeBasic.Merge(m, src)
-}
-func (m *OperatorsDistributionTypeBasic) XXX_Size() int {
-	return m.Size()
-}
-func (m *OperatorsDistributionTypeBasic) XXX_DiscardUnknown() {
-	xxx_messageInfo_OperatorsDistributionTypeBasic.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_OperatorsDistributionTypeBasic proto.InternalMessageInfo
-
-type OperatorsDistributionTypeWeighted struct {
-	Weights []OperatorDistributionWeight `protobuf:"bytes,1,rep,name=weights,proto3" json:"weights"`
-}
-
-func (m *OperatorsDistributionTypeWeighted) Reset()         { *m = OperatorsDistributionTypeWeighted{} }
-func (m *OperatorsDistributionTypeWeighted) String() string { return proto.CompactTextString(m) }
-func (*OperatorsDistributionTypeWeighted) ProtoMessage()    {}
-func (*OperatorsDistributionTypeWeighted) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fcf66d1f3415f5b6, []int{8}
-}
-func (m *OperatorsDistributionTypeWeighted) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *OperatorsDistributionTypeWeighted) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_OperatorsDistributionTypeWeighted.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *OperatorsDistributionTypeWeighted) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OperatorsDistributionTypeWeighted.Merge(m, src)
-}
-func (m *OperatorsDistributionTypeWeighted) XXX_Size() int {
-	return m.Size()
-}
-func (m *OperatorsDistributionTypeWeighted) XXX_DiscardUnknown() {
-	xxx_messageInfo_OperatorsDistributionTypeWeighted.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_OperatorsDistributionTypeWeighted proto.InternalMessageInfo
-
-type OperatorDistributionWeight struct {
-	OperatorID uint32 `protobuf:"varint,1,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
-	Weight     uint32 `protobuf:"varint,2,opt,name=weight,proto3" json:"weight,omitempty"`
-}
-
-func (m *OperatorDistributionWeight) Reset()         { *m = OperatorDistributionWeight{} }
-func (m *OperatorDistributionWeight) String() string { return proto.CompactTextString(m) }
-func (*OperatorDistributionWeight) ProtoMessage()    {}
-func (*OperatorDistributionWeight) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fcf66d1f3415f5b6, []int{9}
-}
-func (m *OperatorDistributionWeight) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *OperatorDistributionWeight) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_OperatorDistributionWeight.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *OperatorDistributionWeight) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OperatorDistributionWeight.Merge(m, src)
-}
-func (m *OperatorDistributionWeight) XXX_Size() int {
-	return m.Size()
-}
-func (m *OperatorDistributionWeight) XXX_DiscardUnknown() {
-	xxx_messageInfo_OperatorDistributionWeight.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_OperatorDistributionWeight proto.InternalMessageInfo
-
-type OperatorsDistributionTypeEgalitarian struct {
-}
-
-func (m *OperatorsDistributionTypeEgalitarian) Reset()         { *m = OperatorsDistributionTypeEgalitarian{} }
-func (m *OperatorsDistributionTypeEgalitarian) String() string { return proto.CompactTextString(m) }
-func (*OperatorsDistributionTypeEgalitarian) ProtoMessage()    {}
-func (*OperatorsDistributionTypeEgalitarian) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fcf66d1f3415f5b6, []int{10}
-}
-func (m *OperatorsDistributionTypeEgalitarian) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *OperatorsDistributionTypeEgalitarian) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_OperatorsDistributionTypeEgalitarian.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *OperatorsDistributionTypeEgalitarian) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OperatorsDistributionTypeEgalitarian.Merge(m, src)
-}
-func (m *OperatorsDistributionTypeEgalitarian) XXX_Size() int {
-	return m.Size()
-}
-func (m *OperatorsDistributionTypeEgalitarian) XXX_DiscardUnknown() {
-	xxx_messageInfo_OperatorsDistributionTypeEgalitarian.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_OperatorsDistributionTypeEgalitarian proto.InternalMessageInfo
+var xxx_messageInfo_DistributionTypeEgalitarian proto.InternalMessageInfo
 
 type UsersDistribution struct {
 	Weight uint32      `protobuf:"varint,1,opt,name=weight,proto3" json:"weight,omitempty"`
-	Type   *types1.Any `protobuf:"bytes,2,opt,name=type,proto3" json:"type,omitempty"`
+	Type   *types2.Any `protobuf:"bytes,2,opt,name=type,proto3" json:"type,omitempty"`
 }
 
 func (m *UsersDistribution) Reset()         { *m = UsersDistribution{} }
 func (m *UsersDistribution) String() string { return proto.CompactTextString(m) }
 func (*UsersDistribution) ProtoMessage()    {}
 func (*UsersDistribution) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fcf66d1f3415f5b6, []int{11}
+	return fileDescriptor_fcf66d1f3415f5b6, []int{6}
 }
 func (m *UsersDistribution) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -499,7 +320,7 @@ func (m *UsersDistributionTypeBasic) Reset()         { *m = UsersDistributionTyp
 func (m *UsersDistributionTypeBasic) String() string { return proto.CompactTextString(m) }
 func (*UsersDistributionTypeBasic) ProtoMessage()    {}
 func (*UsersDistributionTypeBasic) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fcf66d1f3415f5b6, []int{12}
+	return fileDescriptor_fcf66d1f3415f5b6, []int{7}
 }
 func (m *UsersDistributionTypeBasic) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -537,7 +358,7 @@ func (m *HistoricalRewards) Reset()         { *m = HistoricalRewards{} }
 func (m *HistoricalRewards) String() string { return proto.CompactTextString(m) }
 func (*HistoricalRewards) ProtoMessage()    {}
 func (*HistoricalRewards) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fcf66d1f3415f5b6, []int{13}
+	return fileDescriptor_fcf66d1f3415f5b6, []int{8}
 }
 func (m *HistoricalRewards) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -575,7 +396,7 @@ func (m *CurrentRewards) Reset()         { *m = CurrentRewards{} }
 func (m *CurrentRewards) String() string { return proto.CompactTextString(m) }
 func (*CurrentRewards) ProtoMessage()    {}
 func (*CurrentRewards) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fcf66d1f3415f5b6, []int{14}
+	return fileDescriptor_fcf66d1f3415f5b6, []int{9}
 }
 func (m *CurrentRewards) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -612,7 +433,7 @@ func (m *OutstandingRewards) Reset()         { *m = OutstandingRewards{} }
 func (m *OutstandingRewards) String() string { return proto.CompactTextString(m) }
 func (*OutstandingRewards) ProtoMessage()    {}
 func (*OutstandingRewards) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fcf66d1f3415f5b6, []int{15}
+	return fileDescriptor_fcf66d1f3415f5b6, []int{10}
 }
 func (m *OutstandingRewards) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -649,7 +470,7 @@ func (m *AccumulatedCommission) Reset()         { *m = AccumulatedCommission{} }
 func (m *AccumulatedCommission) String() string { return proto.CompactTextString(m) }
 func (*AccumulatedCommission) ProtoMessage()    {}
 func (*AccumulatedCommission) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fcf66d1f3415f5b6, []int{16}
+	return fileDescriptor_fcf66d1f3415f5b6, []int{11}
 }
 func (m *AccumulatedCommission) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -688,7 +509,7 @@ func (m *DelegatorStartingInfo) Reset()         { *m = DelegatorStartingInfo{} }
 func (m *DelegatorStartingInfo) String() string { return proto.CompactTextString(m) }
 func (*DelegatorStartingInfo) ProtoMessage()    {}
 func (*DelegatorStartingInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fcf66d1f3415f5b6, []int{17}
+	return fileDescriptor_fcf66d1f3415f5b6, []int{12}
 }
 func (m *DelegatorStartingInfo) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -718,7 +539,7 @@ func (m *DelegatorStartingInfo) XXX_DiscardUnknown() {
 var xxx_messageInfo_DelegatorStartingInfo proto.InternalMessageInfo
 
 type DelegationDelegatorReward struct {
-	DelegationType     types2.DelegationType `protobuf:"varint,1,opt,name=delegation_type,json=delegationType,proto3,enum=milkyway.restaking.v1.DelegationType" json:"delegation_type,omitempty"`
+	DelegationType     types1.DelegationType `protobuf:"varint,1,opt,name=delegation_type,json=delegationType,proto3,enum=milkyway.restaking.v1.DelegationType" json:"delegation_type,omitempty"`
 	DelegationTargetID uint32                `protobuf:"varint,2,opt,name=delegation_target_id,json=delegationTargetId,proto3" json:"delegation_target_id,omitempty"`
 	Reward             DecPools              `protobuf:"bytes,3,rep,name=reward,proto3,castrepeated=DecPools" json:"reward"`
 }
@@ -727,7 +548,7 @@ func (m *DelegationDelegatorReward) Reset()         { *m = DelegationDelegatorRe
 func (m *DelegationDelegatorReward) String() string { return proto.CompactTextString(m) }
 func (*DelegationDelegatorReward) ProtoMessage()    {}
 func (*DelegationDelegatorReward) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fcf66d1f3415f5b6, []int{18}
+	return fileDescriptor_fcf66d1f3415f5b6, []int{13}
 }
 func (m *DelegationDelegatorReward) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -766,7 +587,7 @@ func (m *Pool) Reset()         { *m = Pool{} }
 func (m *Pool) String() string { return proto.CompactTextString(m) }
 func (*Pool) ProtoMessage()    {}
 func (*Pool) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fcf66d1f3415f5b6, []int{19}
+	return fileDescriptor_fcf66d1f3415f5b6, []int{14}
 }
 func (m *Pool) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -805,7 +626,7 @@ func (m *DecPool) Reset()         { *m = DecPool{} }
 func (m *DecPool) String() string { return proto.CompactTextString(m) }
 func (*DecPool) ProtoMessage()    {}
 func (*DecPool) Descriptor() ([]byte, []int) {
-	return fileDescriptor_fcf66d1f3415f5b6, []int{20}
+	return fileDescriptor_fcf66d1f3415f5b6, []int{15}
 }
 func (m *DecPool) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -836,16 +657,11 @@ var xxx_messageInfo_DecPool proto.InternalMessageInfo
 
 func init() {
 	proto.RegisterType((*RewardsPlan)(nil), "milkyway.rewards.v1.RewardsPlan")
-	proto.RegisterType((*PoolsDistribution)(nil), "milkyway.rewards.v1.PoolsDistribution")
-	proto.RegisterType((*PoolsDistributionTypeBasic)(nil), "milkyway.rewards.v1.PoolsDistributionTypeBasic")
-	proto.RegisterType((*PoolsDistributionTypeWeighted)(nil), "milkyway.rewards.v1.PoolsDistributionTypeWeighted")
-	proto.RegisterType((*PoolDistributionWeight)(nil), "milkyway.rewards.v1.PoolDistributionWeight")
-	proto.RegisterType((*PoolsDistributionTypeEgalitarian)(nil), "milkyway.rewards.v1.PoolsDistributionTypeEgalitarian")
-	proto.RegisterType((*OperatorsDistribution)(nil), "milkyway.rewards.v1.OperatorsDistribution")
-	proto.RegisterType((*OperatorsDistributionTypeBasic)(nil), "milkyway.rewards.v1.OperatorsDistributionTypeBasic")
-	proto.RegisterType((*OperatorsDistributionTypeWeighted)(nil), "milkyway.rewards.v1.OperatorsDistributionTypeWeighted")
-	proto.RegisterType((*OperatorDistributionWeight)(nil), "milkyway.rewards.v1.OperatorDistributionWeight")
-	proto.RegisterType((*OperatorsDistributionTypeEgalitarian)(nil), "milkyway.rewards.v1.OperatorsDistributionTypeEgalitarian")
+	proto.RegisterType((*Distribution)(nil), "milkyway.rewards.v1.Distribution")
+	proto.RegisterType((*DistributionTypeBasic)(nil), "milkyway.rewards.v1.DistributionTypeBasic")
+	proto.RegisterType((*DistributionTypeWeighted)(nil), "milkyway.rewards.v1.DistributionTypeWeighted")
+	proto.RegisterType((*DistributionWeight)(nil), "milkyway.rewards.v1.DistributionWeight")
+	proto.RegisterType((*DistributionTypeEgalitarian)(nil), "milkyway.rewards.v1.DistributionTypeEgalitarian")
 	proto.RegisterType((*UsersDistribution)(nil), "milkyway.rewards.v1.UsersDistribution")
 	proto.RegisterType((*UsersDistributionTypeBasic)(nil), "milkyway.rewards.v1.UsersDistributionTypeBasic")
 	proto.RegisterType((*HistoricalRewards)(nil), "milkyway.rewards.v1.HistoricalRewards")
@@ -861,91 +677,84 @@ func init() {
 func init() { proto.RegisterFile("milkyway/rewards/v1/models.proto", fileDescriptor_fcf66d1f3415f5b6) }
 
 var fileDescriptor_fcf66d1f3415f5b6 = []byte{
-	// 1338 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x57, 0xcf, 0x6f, 0x13, 0xc7,
-	0x17, 0xcf, 0x3a, 0x89, 0x13, 0x3f, 0x13, 0x43, 0xf6, 0x9b, 0x58, 0x26, 0xfa, 0xd6, 0xeb, 0x6e,
-	0x5b, 0x94, 0x42, 0xed, 0x6d, 0xc2, 0x8d, 0x1e, 0x5a, 0x36, 0x46, 0xc5, 0x42, 0x6a, 0xd2, 0x0d,
-	0x08, 0x15, 0x0e, 0xab, 0xf5, 0xee, 0xb0, 0x8c, 0xf0, 0xee, 0x98, 0x9d, 0x75, 0xa8, 0x7b, 0x44,
-	0xdc, 0xda, 0x03, 0xf7, 0x1e, 0xaa, 0x9e, 0x5a, 0x71, 0xea, 0x01, 0xf5, 0x6f, 0x40, 0x1c, 0x2a,
-	0xd4, 0x53, 0x4f, 0xa6, 0x35, 0x52, 0x2b, 0xf5, 0xc8, 0x5f, 0x50, 0xcd, 0x8f, 0x35, 0x8b, 0xb3,
-	0x0e, 0x76, 0x24, 0x2e, 0x89, 0x67, 0xde, 0x7b, 0x9f, 0xf7, 0xeb, 0x33, 0xb3, 0x6f, 0xa0, 0x16,
-	0xe0, 0xce, 0x9d, 0xfe, 0x3d, 0xa7, 0x6f, 0x44, 0xe8, 0x9e, 0x13, 0x79, 0xd4, 0x38, 0xd8, 0x32,
-	0x02, 0xe2, 0xa1, 0x0e, 0x6d, 0x74, 0x23, 0x12, 0x13, 0xf5, 0x7f, 0x89, 0x46, 0x43, 0x6a, 0x34,
-	0x0e, 0xb6, 0x36, 0x56, 0x9d, 0x00, 0x87, 0xc4, 0xe0, 0x7f, 0x85, 0xde, 0xc6, 0x69, 0x97, 0xd0,
-	0x80, 0x50, 0x9b, 0xaf, 0x0c, 0xb1, 0x90, 0xa2, 0xaa, 0x58, 0x19, 0x6d, 0x87, 0x22, 0xe3, 0x60,
-	0xab, 0x8d, 0x62, 0x67, 0xcb, 0x70, 0x09, 0x0e, 0xa5, 0x5c, 0xf3, 0x09, 0xf1, 0x3b, 0xc8, 0xe0,
-	0xab, 0x76, 0xef, 0x96, 0x11, 0xe3, 0x00, 0xd1, 0xd8, 0x09, 0xba, 0x09, 0xf6, 0xb8, 0x82, 0x13,
-	0xf6, 0xa5, 0x68, 0xcd, 0x27, 0x3e, 0x11, 0x3e, 0xd9, 0x2f, 0xb9, 0xab, 0xa7, 0xd2, 0xa2, 0xb1,
-	0x73, 0x07, 0x87, 0xfe, 0x78, 0x62, 0xfa, 0x6f, 0x8b, 0x50, 0xb4, 0x44, 0x4a, 0x7b, 0x1d, 0x27,
-	0x54, 0xcb, 0x90, 0xc3, 0x5e, 0x45, 0xa9, 0x29, 0x9b, 0x0b, 0x66, 0x7e, 0x38, 0xd0, 0x72, 0xad,
-	0xa6, 0x95, 0xc3, 0x9e, 0x5a, 0x83, 0xa2, 0x87, 0xa8, 0x1b, 0xe1, 0x6e, 0x8c, 0x49, 0x58, 0xc9,
-	0xd5, 0x94, 0xcd, 0x82, 0x95, 0xde, 0x52, 0x3f, 0x02, 0xa0, 0x28, 0x3a, 0xc0, 0x2e, 0xb2, 0xb1,
-	0x57, 0x99, 0xaf, 0x29, 0x9b, 0x2b, 0xe6, 0xca, 0x70, 0xa0, 0x15, 0xf6, 0xc5, 0x6e, 0xab, 0x69,
-	0x15, 0xa4, 0x42, 0xcb, 0x53, 0xef, 0x42, 0xc9, 0x09, 0x48, 0x2f, 0x8c, 0xed, 0x2e, 0x8a, 0x6c,
-	0xcf, 0xe9, 0x57, 0x16, 0x6a, 0xf3, 0x9b, 0xc5, 0xed, 0xd3, 0x0d, 0x59, 0x34, 0x56, 0xa6, 0x86,
-	0x2c, 0x53, 0x63, 0x87, 0xe0, 0xd0, 0xfc, 0xf8, 0xc9, 0x40, 0x9b, 0x7b, 0xf4, 0x5c, 0xdb, 0xf4,
-	0x71, 0x7c, 0xbb, 0xd7, 0x6e, 0xb8, 0x24, 0x90, 0x15, 0x96, 0xff, 0xea, 0xd4, 0xbb, 0x63, 0xc4,
-	0xfd, 0x2e, 0xa2, 0xdc, 0x80, 0x5a, 0x27, 0x84, 0x8b, 0x3d, 0x14, 0x35, 0x9d, 0xbe, 0xba, 0x03,
-	0x40, 0x63, 0x27, 0x8a, 0x6d, 0x56, 0xd8, 0xca, 0x62, 0x4d, 0xd9, 0x2c, 0x6e, 0x6f, 0x34, 0x44,
-	0x51, 0x1b, 0x49, 0x51, 0x1b, 0x57, 0x93, 0xaa, 0x9b, 0xcb, 0xcc, 0xdf, 0xc3, 0xe7, 0x9a, 0x62,
-	0x15, 0xb8, 0x1d, 0x93, 0xa8, 0x9f, 0xc2, 0x32, 0x0a, 0x3d, 0x01, 0x91, 0x9f, 0x01, 0x62, 0x09,
-	0x85, 0x1e, 0x07, 0xf8, 0x04, 0x4e, 0x48, 0x0a, 0xd9, 0x5d, 0x42, 0x3a, 0x95, 0x25, 0x56, 0x49,
-	0xb3, 0xf2, 0xfb, 0xe3, 0xfa, 0x9a, 0xcc, 0xfc, 0xa2, 0xe7, 0x45, 0x88, 0xd2, 0xfd, 0x38, 0xc2,
-	0xa1, 0x6f, 0x15, 0xa5, 0xf6, 0x1e, 0x21, 0x1d, 0xf5, 0x26, 0xa8, 0xcc, 0x88, 0xda, 0x1e, 0xa6,
-	0x71, 0x84, 0xdb, 0x3d, 0xde, 0x8c, 0x65, 0x1e, 0xc7, 0x99, 0x46, 0x06, 0x47, 0x1b, 0xcc, 0x8c,
-	0x36, 0x53, 0xda, 0xe6, 0x02, 0x8b, 0xc9, 0x5a, 0xed, 0x8e, 0x0b, 0x54, 0x1f, 0xca, 0xa4, 0x8b,
-	0x22, 0x27, 0x26, 0xd1, 0x98, 0x83, 0x02, 0x77, 0x70, 0x36, 0xd3, 0xc1, 0x6e, 0x62, 0x92, 0xe1,
-	0x64, 0x9d, 0x64, 0x09, 0x59, 0x16, 0x3d, 0x8a, 0xc6, 0x9d, 0xc0, 0x11, 0x59, 0x5c, 0x63, 0xea,
-	0x59, 0x59, 0xf4, 0xc6, 0x05, 0xfa, 0x03, 0x05, 0x56, 0x0f, 0x25, 0xad, 0x96, 0x21, 0x7f, 0x0f,
-	0x61, 0xff, 0x76, 0xcc, 0xa9, 0xbd, 0x62, 0xc9, 0x95, 0x7a, 0x1d, 0x16, 0x18, 0x61, 0x38, 0x9f,
-	0x8b, 0xdb, 0x6b, 0x87, 0x5a, 0x79, 0x31, 0xec, 0x9b, 0xf5, 0xa7, 0x8f, 0xeb, 0x1f, 0x4e, 0x55,
-	0xdb, 0xab, 0xfd, 0x2e, 0xb2, 0x38, 0xa0, 0x7e, 0x05, 0x36, 0x32, 0xc5, 0xa6, 0x43, 0xb1, 0x7b,
-	0x61, 0x36, 0x48, 0xfd, 0x7b, 0x05, 0xde, 0xc9, 0x94, 0x5c, 0xe7, 0x59, 0x20, 0x4f, 0xbd, 0x02,
-	0x4b, 0x22, 0x23, 0x5a, 0x51, 0xf8, 0x39, 0x3a, 0x37, 0x91, 0x0d, 0x69, 0x0c, 0x61, 0x2f, 0x8b,
-	0x99, 0x20, 0xcc, 0x1a, 0xdd, 0x35, 0x28, 0x67, 0xe3, 0xaa, 0xef, 0xc1, 0x12, 0xa3, 0x99, 0x2d,
-	0x6f, 0x94, 0x15, 0x13, 0x86, 0x03, 0x2d, 0xcf, 0x94, 0x5b, 0x4d, 0x2b, 0xcf, 0x44, 0x2d, 0x2f,
-	0xd5, 0x9a, 0x5c, 0xba, 0x35, 0xfa, 0x97, 0x50, 0xcb, 0xf4, 0x77, 0xc9, 0x77, 0x3a, 0x38, 0x76,
-	0x22, 0xec, 0x84, 0xb3, 0x46, 0xfa, 0x9d, 0x02, 0xeb, 0x99, 0x7c, 0x9d, 0xc8, 0x8f, 0x9b, 0x53,
-	0xf0, 0x63, 0xeb, 0xe9, 0xe3, 0x7a, 0x7d, 0xea, 0xa3, 0x91, 0xe2, 0xc8, 0x3e, 0x54, 0x27, 0xaa,
-	0x08, 0x9e, 0xcc, 0x0e, 0xad, 0xff, 0xa4, 0xc0, 0xbb, 0x13, 0xa5, 0x23, 0xbe, 0xec, 0x8e, 0xf3,
-	0xc5, 0x38, 0xf2, 0x70, 0xbf, 0x99, 0x33, 0xc7, 0x88, 0x14, 0xc1, 0xc6, 0x64, 0x7c, 0xd5, 0x80,
-	0x62, 0x72, 0x7b, 0xbc, 0xe2, 0x4f, 0x69, 0x38, 0xd0, 0x20, 0x31, 0x6a, 0x35, 0x2d, 0x48, 0x54,
-	0x8e, 0xe0, 0xd1, 0x57, 0xf0, 0xfe, 0xc4, 0x18, 0xd2, 0x5c, 0x3a, 0x46, 0x06, 0xec, 0xae, 0x39,
-	0x74, 0x35, 0xbd, 0x9d, 0xbb, 0xe6, 0x90, 0x9b, 0xd7, 0xef, 0x9a, 0x4c, 0xf1, 0x1b, 0xee, 0x9a,
-	0x4c, 0x1b, 0xfd, 0x6f, 0x05, 0x56, 0x2f, 0x63, 0x1a, 0x93, 0x08, 0xbb, 0x4e, 0x47, 0x8e, 0x06,
-	0xea, 0xb7, 0x0a, 0x54, 0xdc, 0x5e, 0xd0, 0xeb, 0x38, 0x31, 0x3e, 0x40, 0xb6, 0x40, 0xb1, 0x23,
-	0x27, 0xc6, 0x24, 0x61, 0xd0, 0xff, 0x33, 0x19, 0xd4, 0x44, 0x2e, 0x3b, 0x8b, 0xe6, 0x79, 0x46,
-	0x97, 0x97, 0x03, 0x4d, 0xeb, 0x3b, 0x41, 0xe7, 0x82, 0x3e, 0x09, 0x4b, 0x7f, 0xf4, 0x5c, 0x5b,
-	0x96, 0x36, 0xd4, 0x2a, 0xbf, 0x52, 0x13, 0x81, 0x58, 0x5c, 0x49, 0xdd, 0x81, 0x93, 0x11, 0xba,
-	0x85, 0x22, 0x14, 0xba, 0xc8, 0x76, 0xd9, 0x27, 0x5e, 0xf4, 0xdc, 0xdc, 0x78, 0x39, 0xd0, 0xca,
-	0xc2, 0xc3, 0x98, 0x82, 0x6e, 0x95, 0x46, 0x3b, 0x3b, 0x7c, 0xe3, 0x81, 0x02, 0xa5, 0x9d, 0x5e,
-	0x14, 0xa1, 0x30, 0x4e, 0xb2, 0xbc, 0x01, 0x4b, 0x32, 0xf4, 0xa9, 0x72, 0xd2, 0x65, 0x4e, 0xa5,
-	0xc4, 0x23, 0xd7, 0x78, 0x3d, 0x85, 0x04, 0x90, 0xb1, 0xa2, 0x8b, 0x22, 0x4c, 0x3c, 0x1e, 0xea,
-	0x82, 0x25, 0x57, 0x7a, 0x17, 0xd4, 0xdd, 0x5e, 0x4c, 0x63, 0x27, 0xf4, 0xd8, 0xe7, 0xfe, 0xed,
-	0x47, 0xa2, 0x87, 0xb0, 0x7e, 0xd1, 0x95, 0x95, 0x45, 0xde, 0x0e, 0x09, 0x02, 0x4c, 0x29, 0x23,
-	0xee, 0x35, 0x28, 0xba, 0xa3, 0xd5, 0x74, 0x8e, 0xd7, 0xe5, 0x4c, 0x36, 0x72, 0xf3, 0xf3, 0x3f,
-	0xbf, 0x9c, 0x55, 0xac, 0x34, 0x8e, 0xfe, 0x43, 0x0e, 0xd6, 0x9b, 0xa8, 0x83, 0x7c, 0x76, 0x88,
-	0xf6, 0xd9, 0x24, 0x85, 0x43, 0xbf, 0x15, 0xde, 0x22, 0xac, 0x8f, 0xdd, 0x08, 0x1d, 0x60, 0xd2,
-	0xa3, 0xb6, 0x2c, 0x8e, 0x98, 0x3c, 0x53, 0x7d, 0x1c, 0x53, 0xd0, 0xad, 0x52, 0xb2, 0xb3, 0xc7,
-	0x37, 0xd4, 0x6f, 0x20, 0xcf, 0x86, 0x5b, 0x44, 0x2b, 0x39, 0x19, 0x70, 0xd6, 0x04, 0xd9, 0x44,
-	0x2e, 0x1f, 0x22, 0x9b, 0xb2, 0x52, 0x2b, 0x02, 0x5d, 0x58, 0xb2, 0x42, 0x9d, 0x9b, 0x62, 0xaa,
-	0x94, 0x20, 0xd4, 0x92, 0x1e, 0xd5, 0x4b, 0x90, 0xbf, 0x2d, 0x8e, 0xfa, 0x3c, 0x8f, 0xbb, 0xfe,
-	0xef, 0x40, 0x3b, 0xe9, 0x46, 0x88, 0xd1, 0x34, 0xb4, 0x85, 0xe8, 0x55, 0x2a, 0x63, 0x02, 0xdd,
-	0x92, 0xc6, 0xfa, 0xfd, 0x1c, 0x9c, 0x96, 0x15, 0xc2, 0x24, 0x1c, 0xd5, 0x4a, 0x90, 0x41, 0xfd,
-	0x02, 0x4e, 0x7a, 0x23, 0xa1, 0xcd, 0xaf, 0x10, 0x56, 0xa5, 0xd2, 0xf6, 0x07, 0xe9, 0xd6, 0xc8,
-	0x01, 0x5f, 0x34, 0x27, 0xd1, 0xe6, 0x97, 0x44, 0xc9, 0x7b, 0x6d, 0xad, 0x5e, 0x86, 0xb5, 0x34,
-	0x9e, 0x13, 0xf9, 0x28, 0x66, 0x57, 0xac, 0x38, 0x42, 0xe5, 0xe1, 0x40, 0x53, 0x53, 0x08, 0x5c,
-	0xdc, 0x6a, 0x5a, 0xaa, 0x37, 0xbe, 0xc7, 0xa6, 0x8e, 0xbc, 0xe0, 0x44, 0x65, 0xfe, 0xf8, 0x5c,
-	0x91, 0x10, 0xfa, 0x8f, 0x0a, 0x2c, 0xf0, 0x21, 0xf7, 0x0c, 0x2c, 0x7a, 0x28, 0x24, 0x01, 0xcf,
-	0xb2, 0x60, 0x9e, 0x7a, 0x39, 0xd0, 0x4e, 0x88, 0x02, 0xf2, 0x6d, 0xdd, 0x12, 0x62, 0xf5, 0x2e,
-	0x2c, 0xb2, 0xe7, 0x53, 0xd2, 0xf7, 0x23, 0x5e, 0x0e, 0x9f, 0xc9, 0xa6, 0x4b, 0x18, 0x6e, 0xa5,
-	0xcf, 0xf4, 0x92, 0x10, 0x9e, 0xf4, 0x5f, 0x15, 0x58, 0x92, 0xd1, 0x4f, 0x1d, 0xe6, 0x7d, 0x05,
-	0x0a, 0x1e, 0x72, 0xed, 0x74, 0xac, 0x47, 0x73, 0xf4, 0x73, 0x19, 0xee, 0xa9, 0x04, 0x4e, 0x1a,
-	0xcf, 0x4c, 0xd3, 0x65, 0x4f, 0xfe, 0x32, 0x77, 0x9f, 0xfc, 0x55, 0x9d, 0x7b, 0x32, 0xac, 0x2a,
-	0xcf, 0x86, 0x55, 0xe5, 0xcf, 0x61, 0x55, 0x79, 0xf8, 0xa2, 0x3a, 0xf7, 0xec, 0x45, 0x75, 0xee,
-	0x8f, 0x17, 0xd5, 0xb9, 0x1b, 0x5b, 0x29, 0xd0, 0xa4, 0x83, 0xf5, 0x8e, 0xd3, 0xa6, 0xa3, 0x95,
-	0xf1, 0xf5, 0xe8, 0x69, 0xcc, 0x7d, 0xb4, 0xf3, 0xfc, 0xb3, 0x75, 0xfe, 0xbf, 0x00, 0x00, 0x00,
-	0xff, 0xff, 0x8e, 0xa2, 0xb0, 0x75, 0x3b, 0x0f, 0x00, 0x00,
+	// 1232 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x57, 0x4d, 0x6f, 0x13, 0x47,
+	0x18, 0xce, 0x3a, 0x89, 0x13, 0x4f, 0x12, 0x43, 0xa6, 0x49, 0x64, 0xd2, 0xca, 0xeb, 0xae, 0x5a,
+	0xea, 0x7e, 0x78, 0xb7, 0x81, 0x1b, 0x3d, 0xb4, 0xd9, 0x18, 0x41, 0x84, 0x54, 0xa2, 0x05, 0x8a,
+	0x44, 0xa5, 0xae, 0xc6, 0x3b, 0xc3, 0x32, 0x62, 0x77, 0xc7, 0xcc, 0xac, 0x4d, 0xdd, 0x23, 0xe2,
+	0x56, 0x55, 0xe2, 0x1f, 0x54, 0xbd, 0x55, 0x9c, 0x7a, 0x40, 0x3d, 0xf7, 0x88, 0x38, 0xa1, 0x9e,
+	0x7a, 0x32, 0x6d, 0x90, 0x5a, 0xa9, 0x47, 0x7e, 0x41, 0xb5, 0x33, 0xb3, 0x66, 0xb3, 0x04, 0x88,
+	0xab, 0xf6, 0x02, 0x7e, 0xbf, 0x9e, 0xf7, 0xeb, 0xd9, 0x99, 0x09, 0x68, 0xc5, 0x34, 0xba, 0x39,
+	0xba, 0x8d, 0x46, 0x0e, 0x27, 0xb7, 0x11, 0xc7, 0xc2, 0x19, 0x6e, 0x39, 0x31, 0xc3, 0x24, 0x12,
+	0x76, 0x9f, 0xb3, 0x94, 0xc1, 0x37, 0x72, 0x0f, 0x5b, 0x7b, 0xd8, 0xc3, 0xad, 0xcd, 0x55, 0x14,
+	0xd3, 0x84, 0x39, 0xf2, 0x5f, 0xe5, 0xb7, 0x79, 0x22, 0x60, 0x22, 0x66, 0xc2, 0x97, 0x92, 0xa3,
+	0x04, 0x6d, 0x6a, 0x2a, 0xc9, 0xe9, 0x21, 0x41, 0x9c, 0xe1, 0x56, 0x8f, 0xa4, 0x68, 0xcb, 0x09,
+	0x18, 0x4d, 0xb4, 0xdd, 0x0c, 0x19, 0x0b, 0x23, 0xe2, 0x48, 0xa9, 0x37, 0xb8, 0xee, 0xa4, 0x34,
+	0x26, 0x22, 0x45, 0x71, 0x3f, 0xc7, 0x2e, 0x3b, 0xa0, 0x64, 0xa4, 0x4d, 0x6b, 0x21, 0x0b, 0x99,
+	0xca, 0x99, 0xfd, 0xd2, 0x5a, 0xab, 0xd0, 0x96, 0x48, 0xd1, 0x4d, 0x9a, 0x84, 0xe5, 0xc6, 0xac,
+	0x5f, 0xe6, 0xc1, 0x92, 0xa7, 0x5a, 0xda, 0x8b, 0x50, 0x02, 0x37, 0x40, 0x85, 0xe2, 0x86, 0xd1,
+	0x32, 0xda, 0x73, 0x6e, 0x75, 0x7f, 0x6c, 0x56, 0x76, 0xbb, 0x5e, 0x85, 0x62, 0xd8, 0x02, 0x4b,
+	0x98, 0x88, 0x80, 0xd3, 0x7e, 0x4a, 0x59, 0xd2, 0xa8, 0xb4, 0x8c, 0x76, 0xcd, 0x2b, 0xaa, 0xe0,
+	0x47, 0x00, 0x08, 0xc2, 0x87, 0x34, 0x20, 0x3e, 0xc5, 0x8d, 0xd9, 0x96, 0xd1, 0x5e, 0x71, 0x57,
+	0xf6, 0xc7, 0x66, 0xed, 0x92, 0xd2, 0xee, 0x76, 0xbd, 0x9a, 0x76, 0xd8, 0xc5, 0xf0, 0x16, 0xa8,
+	0xa3, 0x98, 0x0d, 0x92, 0xd4, 0xef, 0x13, 0xee, 0x63, 0x34, 0x6a, 0xcc, 0xb5, 0x66, 0xdb, 0x4b,
+	0xa7, 0x4e, 0xd8, 0x7a, 0x68, 0xd9, 0x98, 0x6c, 0x3d, 0x26, 0x7b, 0x87, 0xd1, 0xc4, 0xfd, 0xf8,
+	0xe1, 0xd8, 0x9c, 0xb9, 0xff, 0xc4, 0x6c, 0x87, 0x34, 0xbd, 0x31, 0xe8, 0xd9, 0x01, 0x8b, 0xf5,
+	0x84, 0xf5, 0x7f, 0x1d, 0x81, 0x6f, 0x3a, 0xe9, 0xa8, 0x4f, 0x84, 0x0c, 0x10, 0xde, 0xb2, 0x4a,
+	0xb1, 0x47, 0x78, 0x17, 0x8d, 0xe0, 0x0e, 0x00, 0x22, 0x45, 0x3c, 0xf5, 0xb3, 0xc1, 0x36, 0xe6,
+	0x5b, 0x46, 0x7b, 0xe9, 0xd4, 0xa6, 0xad, 0x86, 0x6a, 0xe7, 0x43, 0xb5, 0x2f, 0xe7, 0x53, 0x77,
+	0x17, 0xb3, 0x7c, 0xf7, 0x9e, 0x98, 0x86, 0x57, 0x93, 0x71, 0x99, 0x05, 0x7e, 0x0a, 0x16, 0x49,
+	0x82, 0x15, 0x44, 0x75, 0x0a, 0x88, 0x05, 0x92, 0x60, 0x09, 0xf0, 0x09, 0x58, 0xd6, 0x14, 0xf2,
+	0xfb, 0x8c, 0x45, 0x8d, 0x85, 0x6c, 0x92, 0x6e, 0xe3, 0xd7, 0x07, 0x9d, 0x35, 0xdd, 0xf9, 0x36,
+	0xc6, 0x9c, 0x08, 0x71, 0x29, 0xe5, 0x34, 0x09, 0xbd, 0x25, 0xed, 0xbd, 0xc7, 0x58, 0x04, 0xbf,
+	0x00, 0x30, 0x0b, 0x12, 0x3e, 0xa6, 0x22, 0xe5, 0xb4, 0x37, 0x90, 0xcb, 0x58, 0x94, 0x75, 0xbc,
+	0x6d, 0x1f, 0xc2, 0x51, 0xbb, 0x5b, 0x70, 0x74, 0xe7, 0xb2, 0x72, 0xbc, 0x55, 0x09, 0x51, 0x34,
+	0xc0, 0xaf, 0xc0, 0x06, 0xeb, 0x13, 0x8e, 0x52, 0xc6, 0x4b, 0xd8, 0xb5, 0xe9, 0xb0, 0xd7, 0x27,
+	0x30, 0x07, 0xf0, 0xbf, 0x04, 0x70, 0x20, 0x48, 0x19, 0x1b, 0x48, 0xec, 0x93, 0x87, 0x62, 0x5f,
+	0xc9, 0xdc, 0x0f, 0x2b, 0x7e, 0x50, 0x36, 0x58, 0x8f, 0x0c, 0xb0, 0x7c, 0x20, 0xdb, 0xe7, 0xe0,
+	0x18, 0x26, 0x11, 0x09, 0x51, 0x26, 0xf9, 0x19, 0x21, 0x24, 0xa1, 0xeb, 0xa7, 0xde, 0x2d, 0xa6,
+	0xd2, 0x5f, 0x84, 0x6c, 0x64, 0xe2, 0x7d, 0x79, 0xd4, 0x27, 0x5e, 0x1d, 0x1f, 0x90, 0xe1, 0x06,
+	0xa8, 0xde, 0x26, 0x34, 0xbc, 0x91, 0x4a, 0xda, 0xaf, 0x78, 0x5a, 0x82, 0x1e, 0x98, 0x93, 0xe0,
+	0xb3, 0xb2, 0x8f, 0xb5, 0x17, 0x78, 0xb0, 0x9d, 0x8c, 0xdc, 0xf6, 0xa3, 0x07, 0x9d, 0x77, 0x5e,
+	0x37, 0x3c, 0x99, 0x55, 0x62, 0x59, 0xdb, 0x60, 0xbd, 0x6c, 0x71, 0x91, 0xa0, 0xc1, 0x99, 0x23,
+	0x03, 0x59, 0xdf, 0x19, 0xa0, 0x51, 0x56, 0x5e, 0x95, 0x15, 0x13, 0x0c, 0xcf, 0x81, 0x05, 0x55,
+	0xbd, 0x68, 0x18, 0xf2, 0x83, 0x7b, 0xef, 0xb5, 0xab, 0x55, 0xb1, 0x7a, 0xfe, 0x79, 0xf4, 0x14,
+	0xf5, 0x0c, 0x01, 0x7c, 0x11, 0x0e, 0x9e, 0x07, 0x6b, 0xc5, 0x25, 0x21, 0x1e, 0x92, 0xd4, 0xd7,
+	0x47, 0xcf, 0x8a, 0xbb, 0xb1, 0x3f, 0x36, 0x61, 0x61, 0x2d, 0xd2, 0xbc, 0xdb, 0xf5, 0x20, 0x2e,
+	0xeb, 0xf0, 0xcb, 0xd6, 0x63, 0x9d, 0x03, 0x6f, 0x96, 0x6b, 0x39, 0x1b, 0xa2, 0x88, 0xa6, 0x88,
+	0x53, 0x94, 0x4c, 0xd1, 0xc0, 0x5d, 0x03, 0xac, 0xbe, 0xc0, 0xc7, 0x42, 0x5a, 0xe3, 0x00, 0x2b,
+	0xae, 0x6a, 0x56, 0x54, 0x5e, 0xc1, 0x8a, 0xce, 0xa3, 0x07, 0x9d, 0xf7, 0x8f, 0x44, 0xfb, 0x02,
+	0x35, 0x2e, 0x80, 0xcd, 0x43, 0xcd, 0x8a, 0x1f, 0xd3, 0x41, 0x5a, 0x7f, 0x1a, 0x60, 0xf5, 0x3c,
+	0x15, 0x29, 0xe3, 0x34, 0x40, 0x91, 0xbe, 0x01, 0xe0, 0xb7, 0x06, 0x68, 0x04, 0x83, 0x78, 0x10,
+	0xa1, 0x94, 0x0e, 0x89, 0xaf, 0x50, 0x7c, 0x9e, 0xcd, 0x3b, 0xe7, 0xcb, 0x5b, 0x87, 0xf3, 0x85,
+	0x04, 0xd9, 0x01, 0xe5, 0x9e, 0xce, 0x48, 0xf2, 0x6c, 0x6c, 0x9a, 0x23, 0x14, 0x47, 0x67, 0xac,
+	0x97, 0x61, 0x59, 0xf7, 0x9f, 0x98, 0x8b, 0x3a, 0x46, 0x78, 0x1b, 0xcf, 0xdd, 0x54, 0x21, 0x9e,
+	0x74, 0x82, 0x3b, 0xe0, 0x18, 0x27, 0xd7, 0x09, 0x27, 0x49, 0x40, 0xfc, 0x20, 0x3b, 0xc9, 0xd5,
+	0x86, 0xdd, 0xcd, 0x67, 0x63, 0x73, 0x43, 0x65, 0x28, 0x39, 0x58, 0x5e, 0x7d, 0xa2, 0xd9, 0x91,
+	0x8a, 0xbb, 0x06, 0xa8, 0xef, 0x0c, 0x38, 0x27, 0x49, 0x9a, 0x77, 0x79, 0x0d, 0x2c, 0xe8, 0xd2,
+	0x8f, 0xd4, 0x93, 0xa5, 0x7b, 0xaa, 0xe7, 0x19, 0xa5, 0xc7, 0xc1, 0x16, 0x72, 0xc0, 0x8c, 0x15,
+	0x7d, 0xc2, 0x29, 0xc3, 0xb2, 0xd4, 0x39, 0x4f, 0x4b, 0x56, 0x1f, 0xc0, 0x8b, 0x83, 0x54, 0xa4,
+	0x28, 0xc1, 0xd9, 0xa9, 0xfe, 0xff, 0x57, 0x62, 0x25, 0x60, 0x7d, 0x3b, 0xd0, 0x93, 0x25, 0x78,
+	0x87, 0xc5, 0x31, 0x15, 0x22, 0x23, 0xee, 0x15, 0xb0, 0x14, 0x4c, 0xa4, 0xa3, 0x25, 0x5e, 0xd7,
+	0x57, 0xef, 0x24, 0xcd, 0x8f, 0x7f, 0xfd, 0xf4, 0x81, 0xe1, 0x15, 0x71, 0xac, 0xef, 0x2b, 0x60,
+	0x5d, 0x7f, 0xb1, 0x8c, 0x5f, 0xca, 0x2e, 0x4c, 0x9a, 0x84, 0xbb, 0xc9, 0x75, 0x96, 0xed, 0xb1,
+	0xcf, 0xc9, 0x90, 0xb2, 0x81, 0xf0, 0xf5, 0x70, 0xd4, 0x03, 0xa3, 0xb0, 0xc7, 0x92, 0x83, 0xe5,
+	0xd5, 0x73, 0xcd, 0x9e, 0x54, 0xc0, 0x6f, 0x40, 0x35, 0x3b, 0xb1, 0x89, 0x68, 0x54, 0x74, 0xc1,
+	0x87, 0x3d, 0x14, 0xba, 0x24, 0x90, 0x6f, 0x85, 0xae, 0x9e, 0xd4, 0x8a, 0x42, 0x57, 0x91, 0xd9,
+	0xa0, 0x3e, 0x3c, 0xc2, 0xe3, 0x41, 0x83, 0x08, 0x4f, 0x67, 0x84, 0x67, 0x41, 0xf5, 0x86, 0xfa,
+	0xd4, 0x67, 0x65, 0xdd, 0x9d, 0xbf, 0xc7, 0xe6, 0xb1, 0x80, 0x13, 0x75, 0x76, 0x29, 0xd3, 0xf3,
+	0x56, 0x4a, 0x06, 0xcb, 0xd3, 0xc1, 0xd6, 0x9d, 0x0a, 0x38, 0xf1, 0xfc, 0x4c, 0x9b, 0xcc, 0x4a,
+	0x91, 0xe1, 0x3f, 0xbf, 0xb5, 0x5e, 0x76, 0xc0, 0x56, 0xa6, 0x3e, 0x60, 0x2f, 0x80, 0xaa, 0xe2,
+	0x44, 0x63, 0xf6, 0xdf, 0x73, 0x45, 0x43, 0x58, 0x3f, 0x18, 0x60, 0x4e, 0xbe, 0x65, 0x4e, 0x82,
+	0x79, 0x4c, 0x12, 0x16, 0xcb, 0x2e, 0x6b, 0xee, 0xf1, 0x67, 0x63, 0x73, 0x59, 0x0d, 0x50, 0xaa,
+	0x2d, 0x4f, 0x99, 0xe1, 0x2d, 0x30, 0x9f, 0xbd, 0x92, 0xf3, 0xbd, 0xbf, 0xe2, 0x81, 0xf8, 0x99,
+	0x5e, 0xba, 0x86, 0x91, 0x51, 0xd6, 0x54, 0x0f, 0x46, 0x95, 0xc9, 0xfa, 0xd9, 0x00, 0x0b, 0xba,
+	0xfa, 0x23, 0x97, 0x79, 0xc7, 0x00, 0x35, 0x4c, 0x02, 0xbf, 0x58, 0xeb, 0xab, 0x39, 0x7a, 0x4e,
+	0x97, 0x7b, 0x3c, 0x87, 0xd3, 0xc1, 0x53, 0xd3, 0x74, 0x11, 0xeb, 0x5f, 0xee, 0xc5, 0x87, 0x7f,
+	0x34, 0x67, 0x1e, 0xee, 0x37, 0x8d, 0xc7, 0xfb, 0x4d, 0xe3, 0xf7, 0xfd, 0xa6, 0x71, 0xef, 0x69,
+	0x73, 0xe6, 0xf1, 0xd3, 0xe6, 0xcc, 0x6f, 0x4f, 0x9b, 0x33, 0xd7, 0xb6, 0x0a, 0xa0, 0xf9, 0x06,
+	0x3b, 0x11, 0xea, 0x89, 0x89, 0xe4, 0x7c, 0x3d, 0xf9, 0x0b, 0x48, 0xe6, 0xe8, 0x55, 0xe5, 0xb5,
+	0x75, 0xfa, 0x9f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x47, 0x5b, 0x34, 0x71, 0x22, 0x0d, 0x00, 0x00,
 }
 
 func (m *RewardsPlan) Marshal() (dAtA []byte, err error) {
@@ -1055,7 +864,7 @@ func (m *RewardsPlan) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *PoolsDistribution) Marshal() (dAtA []byte, err error) {
+func (m *Distribution) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1065,12 +874,12 @@ func (m *PoolsDistribution) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *PoolsDistribution) MarshalTo(dAtA []byte) (int, error) {
+func (m *Distribution) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *PoolsDistribution) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *Distribution) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1085,17 +894,22 @@ func (m *PoolsDistribution) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i = encodeVarintModels(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0x1a
 	}
 	if m.Weight != 0 {
 		i = encodeVarintModels(dAtA, i, uint64(m.Weight))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.DelegationType != 0 {
+		i = encodeVarintModels(dAtA, i, uint64(m.DelegationType))
 		i--
 		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *PoolsDistributionTypeBasic) Marshal() (dAtA []byte, err error) {
+func (m *DistributionTypeBasic) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1105,12 +919,12 @@ func (m *PoolsDistributionTypeBasic) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *PoolsDistributionTypeBasic) MarshalTo(dAtA []byte) (int, error) {
+func (m *DistributionTypeBasic) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *PoolsDistributionTypeBasic) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *DistributionTypeBasic) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1118,7 +932,7 @@ func (m *PoolsDistributionTypeBasic) MarshalToSizedBuffer(dAtA []byte) (int, err
 	return len(dAtA) - i, nil
 }
 
-func (m *PoolsDistributionTypeWeighted) Marshal() (dAtA []byte, err error) {
+func (m *DistributionTypeWeighted) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1128,12 +942,12 @@ func (m *PoolsDistributionTypeWeighted) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *PoolsDistributionTypeWeighted) MarshalTo(dAtA []byte) (int, error) {
+func (m *DistributionTypeWeighted) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *PoolsDistributionTypeWeighted) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *DistributionTypeWeighted) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1155,7 +969,7 @@ func (m *PoolsDistributionTypeWeighted) MarshalToSizedBuffer(dAtA []byte) (int, 
 	return len(dAtA) - i, nil
 }
 
-func (m *PoolDistributionWeight) Marshal() (dAtA []byte, err error) {
+func (m *DistributionWeight) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1165,12 +979,12 @@ func (m *PoolDistributionWeight) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *PoolDistributionWeight) MarshalTo(dAtA []byte) (int, error) {
+func (m *DistributionWeight) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *PoolDistributionWeight) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *DistributionWeight) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1180,15 +994,15 @@ func (m *PoolDistributionWeight) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 		i--
 		dAtA[i] = 0x10
 	}
-	if m.PoolID != 0 {
-		i = encodeVarintModels(dAtA, i, uint64(m.PoolID))
+	if m.DelegationTargetID != 0 {
+		i = encodeVarintModels(dAtA, i, uint64(m.DelegationTargetID))
 		i--
 		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *PoolsDistributionTypeEgalitarian) Marshal() (dAtA []byte, err error) {
+func (m *DistributionTypeEgalitarian) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1198,168 +1012,12 @@ func (m *PoolsDistributionTypeEgalitarian) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *PoolsDistributionTypeEgalitarian) MarshalTo(dAtA []byte) (int, error) {
+func (m *DistributionTypeEgalitarian) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *PoolsDistributionTypeEgalitarian) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
-}
-
-func (m *OperatorsDistribution) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *OperatorsDistribution) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *OperatorsDistribution) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Type != nil {
-		{
-			size, err := m.Type.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintModels(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.Weight != 0 {
-		i = encodeVarintModels(dAtA, i, uint64(m.Weight))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *OperatorsDistributionTypeBasic) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *OperatorsDistributionTypeBasic) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *OperatorsDistributionTypeBasic) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
-}
-
-func (m *OperatorsDistributionTypeWeighted) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *OperatorsDistributionTypeWeighted) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *OperatorsDistributionTypeWeighted) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Weights) > 0 {
-		for iNdEx := len(m.Weights) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Weights[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintModels(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *OperatorDistributionWeight) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *OperatorDistributionWeight) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *OperatorDistributionWeight) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Weight != 0 {
-		i = encodeVarintModels(dAtA, i, uint64(m.Weight))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.OperatorID != 0 {
-		i = encodeVarintModels(dAtA, i, uint64(m.OperatorID))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *OperatorsDistributionTypeEgalitarian) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *OperatorsDistributionTypeEgalitarian) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *OperatorsDistributionTypeEgalitarian) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *DistributionTypeEgalitarian) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1820,12 +1478,15 @@ func (m *RewardsPlan) Size() (n int) {
 	return n
 }
 
-func (m *PoolsDistribution) Size() (n int) {
+func (m *Distribution) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
+	if m.DelegationType != 0 {
+		n += 1 + sovModels(uint64(m.DelegationType))
+	}
 	if m.Weight != 0 {
 		n += 1 + sovModels(uint64(m.Weight))
 	}
@@ -1836,7 +1497,7 @@ func (m *PoolsDistribution) Size() (n int) {
 	return n
 }
 
-func (m *PoolsDistributionTypeBasic) Size() (n int) {
+func (m *DistributionTypeBasic) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1845,7 +1506,7 @@ func (m *PoolsDistributionTypeBasic) Size() (n int) {
 	return n
 }
 
-func (m *PoolsDistributionTypeWeighted) Size() (n int) {
+func (m *DistributionTypeWeighted) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1860,14 +1521,14 @@ func (m *PoolsDistributionTypeWeighted) Size() (n int) {
 	return n
 }
 
-func (m *PoolDistributionWeight) Size() (n int) {
+func (m *DistributionWeight) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.PoolID != 0 {
-		n += 1 + sovModels(uint64(m.PoolID))
+	if m.DelegationTargetID != 0 {
+		n += 1 + sovModels(uint64(m.DelegationTargetID))
 	}
 	if m.Weight != 0 {
 		n += 1 + sovModels(uint64(m.Weight))
@@ -1875,71 +1536,7 @@ func (m *PoolDistributionWeight) Size() (n int) {
 	return n
 }
 
-func (m *PoolsDistributionTypeEgalitarian) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
-
-func (m *OperatorsDistribution) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Weight != 0 {
-		n += 1 + sovModels(uint64(m.Weight))
-	}
-	if m.Type != nil {
-		l = m.Type.Size()
-		n += 1 + l + sovModels(uint64(l))
-	}
-	return n
-}
-
-func (m *OperatorsDistributionTypeBasic) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
-
-func (m *OperatorsDistributionTypeWeighted) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Weights) > 0 {
-		for _, e := range m.Weights {
-			l = e.Size()
-			n += 1 + l + sovModels(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *OperatorDistributionWeight) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.OperatorID != 0 {
-		n += 1 + sovModels(uint64(m.OperatorID))
-	}
-	if m.Weight != 0 {
-		n += 1 + sovModels(uint64(m.Weight))
-	}
-	return n
-}
-
-func (m *OperatorsDistributionTypeEgalitarian) Size() (n int) {
+func (m *DistributionTypeEgalitarian) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2476,7 +2073,7 @@ func (m *RewardsPlan) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *PoolsDistribution) Unmarshal(dAtA []byte) error {
+func (m *Distribution) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2499,13 +2096,32 @@ func (m *PoolsDistribution) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: PoolsDistribution: wiretype end group for non-group")
+			return fmt.Errorf("proto: Distribution: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: PoolsDistribution: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: Distribution: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DelegationType", wireType)
+			}
+			m.DelegationType = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowModels
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.DelegationType |= types1.DelegationType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Weight", wireType)
 			}
@@ -2524,7 +2140,7 @@ func (m *PoolsDistribution) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 2:
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
 			}
@@ -2554,7 +2170,7 @@ func (m *PoolsDistribution) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Type == nil {
-				m.Type = &types1.Any{}
+				m.Type = &types2.Any{}
 			}
 			if err := m.Type.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -2581,7 +2197,7 @@ func (m *PoolsDistribution) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *PoolsDistributionTypeBasic) Unmarshal(dAtA []byte) error {
+func (m *DistributionTypeBasic) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2604,10 +2220,10 @@ func (m *PoolsDistributionTypeBasic) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: PoolsDistributionTypeBasic: wiretype end group for non-group")
+			return fmt.Errorf("proto: DistributionTypeBasic: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: PoolsDistributionTypeBasic: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: DistributionTypeBasic: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
@@ -2631,7 +2247,7 @@ func (m *PoolsDistributionTypeBasic) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *PoolsDistributionTypeWeighted) Unmarshal(dAtA []byte) error {
+func (m *DistributionTypeWeighted) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2654,10 +2270,10 @@ func (m *PoolsDistributionTypeWeighted) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: PoolsDistributionTypeWeighted: wiretype end group for non-group")
+			return fmt.Errorf("proto: DistributionTypeWeighted: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: PoolsDistributionTypeWeighted: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: DistributionTypeWeighted: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2689,7 +2305,7 @@ func (m *PoolsDistributionTypeWeighted) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Weights = append(m.Weights, PoolDistributionWeight{})
+			m.Weights = append(m.Weights, DistributionWeight{})
 			if err := m.Weights[len(m.Weights)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2715,7 +2331,7 @@ func (m *PoolsDistributionTypeWeighted) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *PoolDistributionWeight) Unmarshal(dAtA []byte) error {
+func (m *DistributionWeight) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2738,17 +2354,17 @@ func (m *PoolDistributionWeight) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: PoolDistributionWeight: wiretype end group for non-group")
+			return fmt.Errorf("proto: DistributionWeight: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: PoolDistributionWeight: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: DistributionWeight: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PoolID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DelegationTargetID", wireType)
 			}
-			m.PoolID = 0
+			m.DelegationTargetID = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowModels
@@ -2758,7 +2374,7 @@ func (m *PoolDistributionWeight) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.PoolID |= uint32(b&0x7F) << shift
+				m.DelegationTargetID |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2803,7 +2419,7 @@ func (m *PoolDistributionWeight) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *PoolsDistributionTypeEgalitarian) Unmarshal(dAtA []byte) error {
+func (m *DistributionTypeEgalitarian) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2826,387 +2442,10 @@ func (m *PoolsDistributionTypeEgalitarian) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: PoolsDistributionTypeEgalitarian: wiretype end group for non-group")
+			return fmt.Errorf("proto: DistributionTypeEgalitarian: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: PoolsDistributionTypeEgalitarian: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipModels(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthModels
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *OperatorsDistribution) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowModels
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: OperatorsDistribution: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: OperatorsDistribution: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Weight", wireType)
-			}
-			m.Weight = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowModels
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Weight |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowModels
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthModels
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthModels
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Type == nil {
-				m.Type = &types1.Any{}
-			}
-			if err := m.Type.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipModels(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthModels
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *OperatorsDistributionTypeBasic) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowModels
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: OperatorsDistributionTypeBasic: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: OperatorsDistributionTypeBasic: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipModels(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthModels
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *OperatorsDistributionTypeWeighted) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowModels
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: OperatorsDistributionTypeWeighted: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: OperatorsDistributionTypeWeighted: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Weights", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowModels
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthModels
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthModels
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Weights = append(m.Weights, OperatorDistributionWeight{})
-			if err := m.Weights[len(m.Weights)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipModels(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthModels
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *OperatorDistributionWeight) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowModels
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: OperatorDistributionWeight: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: OperatorDistributionWeight: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OperatorID", wireType)
-			}
-			m.OperatorID = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowModels
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.OperatorID |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Weight", wireType)
-			}
-			m.Weight = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowModels
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Weight |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipModels(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthModels
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *OperatorsDistributionTypeEgalitarian) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowModels
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: OperatorsDistributionTypeEgalitarian: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: OperatorsDistributionTypeEgalitarian: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: DistributionTypeEgalitarian: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
@@ -3308,7 +2547,7 @@ func (m *UsersDistribution) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Type == nil {
-				m.Type = &types1.Any{}
+				m.Type = &types2.Any{}
 			}
 			if err := m.Type.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3924,7 +3163,7 @@ func (m *DelegationDelegatorReward) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.DelegationType |= types2.DelegationType(b&0x7F) << shift
+				m.DelegationType |= types1.DelegationType(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}

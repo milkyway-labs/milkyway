@@ -138,7 +138,7 @@ func (s *KeeperTestSuite) UpdateServiceParams(
 
 func (s *KeeperTestSuite) CreateRewardsPlan(
 	serviceID uint32, amtPerDay sdk.Coins, startTime, endTime time.Time,
-	poolsDistr types.PoolsDistribution, operatorsDistr types.OperatorsDistribution,
+	poolsDistr types.Distribution, operatorsDistr types.Distribution,
 	usersDistr types.UsersDistribution, initialRewards sdk.Coins,
 ) types.RewardsPlan {
 	service, found := s.App.ServicesKeeper.GetService(s.Ctx, serviceID)

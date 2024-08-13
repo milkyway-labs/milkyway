@@ -37,75 +37,49 @@ message RewardsPlan {
 
   string rewards_pool = 7 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
-  PoolsDistribution pools_distribution = 8 [ (gogoproto.nullable) = false ];
+  Distribution pools_distribution = 8 [ (gogoproto.nullable) = false ];
 
-  OperatorsDistribution operators_distribution = 9
-      [ (gogoproto.nullable) = false ];
+  Distribution operators_distribution = 9 [ (gogoproto.nullable) = false ];
 
   UsersDistribution users_distribution = 10 [ (gogoproto.nullable) = false ];
 }
 
-message PoolsDistribution {
-  uint32 weight = 1;
+// Distribution represents distribution information for restaking
+// pools/operators.
+message Distribution {
+  milkyway.restaking.v1.DelegationType delegation_type = 1;
 
-  google.protobuf.Any type = 2
-      [ (cosmos_proto.accepts_interface) =
-            "milkyway.rewards.v1.PoolsDistributionType" ];
+  // Weight is the rewards distribution weight among other types of delegation
+  // targets.
+  uint32 weight = 2;
+
+  // Type is one of basic/weighted/egalitarian distributions.
+  google.protobuf.Any type = 3 [ (cosmos_proto.accepts_interface) =
+                                     "milkyway.rewards.v1.DistributionType" ];
 }
 
-message PoolsDistributionTypeBasic {
+message DistributionTypeBasic {
   option (cosmos_proto.implements_interface) =
-      "milkyway.rewards.v1.PoolsDistributionType";
+      "milkyway.rewards.v1.DistributionType";
 }
 
-message PoolsDistributionTypeWeighted {
+message DistributionTypeWeighted {
   option (cosmos_proto.implements_interface) =
-      "milkyway.rewards.v1.PoolsDistributionType";
+      "milkyway.rewards.v1.DistributionType";
 
-  repeated PoolDistributionWeight weights = 1 [ (gogoproto.nullable) = false ];
+  repeated DistributionWeight weights = 1 [ (gogoproto.nullable) = false ];
 }
 
-message PoolDistributionWeight {
-  uint32 pool_id = 1 [ (gogoproto.customname) = "PoolID" ];
+message DistributionWeight {
+  uint32 delegation_target_id = 1
+      [ (gogoproto.customname) = "DelegationTargetID" ];
 
   uint32 weight = 2;
 }
 
-message PoolsDistributionTypeEgalitarian {
+message DistributionTypeEgalitarian {
   option (cosmos_proto.implements_interface) =
-      "milkyway.rewards.v1.PoolsDistributionType";
-}
-
-message OperatorsDistribution {
-  uint32 weight = 1;
-
-  google.protobuf.Any type = 2
-      [ (cosmos_proto.accepts_interface) =
-            "milkyway.rewards.v1.OperatorsDistributionType" ];
-}
-
-message OperatorsDistributionTypeBasic {
-  option (cosmos_proto.implements_interface) =
-      "milkyway.rewards.v1.OperatorsDistributionType";
-}
-
-message OperatorsDistributionTypeWeighted {
-  option (cosmos_proto.implements_interface) =
-      "milkyway.rewards.v1.OperatorsDistributionType";
-
-  repeated OperatorDistributionWeight weights = 1
-      [ (gogoproto.nullable) = false ];
-}
-
-message OperatorDistributionWeight {
-  uint32 operator_id = 1 [ (gogoproto.customname) = "OperatorID" ];
-
-  uint32 weight = 2;
-}
-
-message OperatorsDistributionTypeEgalitarian {
-  option (cosmos_proto.implements_interface) =
-      "milkyway.rewards.v1.OperatorsDistributionType";
+      "milkyway.rewards.v1.DistributionType";
 }
 
 message UsersDistribution {

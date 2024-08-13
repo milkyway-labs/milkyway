@@ -27,8 +27,8 @@ func (k msgServer) CreateRewardsPlan(ctx context.Context, msg *types.MsgCreateRe
 	// TODO: need to charge fee?
 
 	plan, err := k.Keeper.CreateRewardsPlan(
-		ctx, msg.Description, msg.ServiceID, msg.Amount, msg.StartTime, msg.EndTime, msg.PoolsDistribution, msg.OperatorsDistribution,
-		msg.UsersDistribution)
+		ctx, msg.Description, msg.ServiceID, msg.Amount, msg.StartTime, msg.EndTime, msg.PoolsDistribution,
+		msg.OperatorsDistribution, msg.UsersDistribution)
 	if err != nil {
 		return nil, err
 	}
@@ -61,11 +61,11 @@ func (k msgServer) WithdrawDelegatorReward(ctx context.Context, msg *types.MsgWi
 		return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid delegator address: %s", err)
 	}
 
-	if msg.TargetID == 0 {
-		return nil, sdkerrors.ErrInvalidRequest.Wrapf("invalid target ID: %d", msg.TargetID)
+	if msg.DelegationTargetID == 0 {
+		return nil, sdkerrors.ErrInvalidRequest.Wrapf("invalid delegation target ID: %d", msg.DelegationTargetID)
 	}
 
-	target, err := k.GetDelegationTarget(ctx, msg.DelegationType, msg.TargetID)
+	target, err := k.GetDelegationTarget(ctx, msg.DelegationType, msg.DelegationTargetID)
 	if err != nil {
 		return nil, err
 	}

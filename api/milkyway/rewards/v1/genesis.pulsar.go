@@ -501,79 +501,79 @@ func (x *fastReflection_DelegatorWithdrawInfo) ProtoMethods() *protoiface.Method
 	}
 }
 
-var _ protoreflect.List = (*_PoolOutstandingRewardsRecord_2_list)(nil)
+var _ protoreflect.List = (*_OutstandingRewardsRecord_2_list)(nil)
 
-type _PoolOutstandingRewardsRecord_2_list struct {
+type _OutstandingRewardsRecord_2_list struct {
 	list *[]*DecPool
 }
 
-func (x *_PoolOutstandingRewardsRecord_2_list) Len() int {
+func (x *_OutstandingRewardsRecord_2_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_PoolOutstandingRewardsRecord_2_list) Get(i int) protoreflect.Value {
+func (x *_OutstandingRewardsRecord_2_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
 }
 
-func (x *_PoolOutstandingRewardsRecord_2_list) Set(i int, value protoreflect.Value) {
+func (x *_OutstandingRewardsRecord_2_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*DecPool)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_PoolOutstandingRewardsRecord_2_list) Append(value protoreflect.Value) {
+func (x *_OutstandingRewardsRecord_2_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*DecPool)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_PoolOutstandingRewardsRecord_2_list) AppendMutable() protoreflect.Value {
+func (x *_OutstandingRewardsRecord_2_list) AppendMutable() protoreflect.Value {
 	v := new(DecPool)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_PoolOutstandingRewardsRecord_2_list) Truncate(n int) {
+func (x *_OutstandingRewardsRecord_2_list) Truncate(n int) {
 	for i := n; i < len(*x.list); i++ {
 		(*x.list)[i] = nil
 	}
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_PoolOutstandingRewardsRecord_2_list) NewElement() protoreflect.Value {
+func (x *_OutstandingRewardsRecord_2_list) NewElement() protoreflect.Value {
 	v := new(DecPool)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_PoolOutstandingRewardsRecord_2_list) IsValid() bool {
+func (x *_OutstandingRewardsRecord_2_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_PoolOutstandingRewardsRecord                     protoreflect.MessageDescriptor
-	fd_PoolOutstandingRewardsRecord_pool_id             protoreflect.FieldDescriptor
-	fd_PoolOutstandingRewardsRecord_outstanding_rewards protoreflect.FieldDescriptor
+	md_OutstandingRewardsRecord                      protoreflect.MessageDescriptor
+	fd_OutstandingRewardsRecord_delegation_target_id protoreflect.FieldDescriptor
+	fd_OutstandingRewardsRecord_outstanding_rewards  protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_milkyway_rewards_v1_genesis_proto_init()
-	md_PoolOutstandingRewardsRecord = File_milkyway_rewards_v1_genesis_proto.Messages().ByName("PoolOutstandingRewardsRecord")
-	fd_PoolOutstandingRewardsRecord_pool_id = md_PoolOutstandingRewardsRecord.Fields().ByName("pool_id")
-	fd_PoolOutstandingRewardsRecord_outstanding_rewards = md_PoolOutstandingRewardsRecord.Fields().ByName("outstanding_rewards")
+	md_OutstandingRewardsRecord = File_milkyway_rewards_v1_genesis_proto.Messages().ByName("OutstandingRewardsRecord")
+	fd_OutstandingRewardsRecord_delegation_target_id = md_OutstandingRewardsRecord.Fields().ByName("delegation_target_id")
+	fd_OutstandingRewardsRecord_outstanding_rewards = md_OutstandingRewardsRecord.Fields().ByName("outstanding_rewards")
 }
 
-var _ protoreflect.Message = (*fastReflection_PoolOutstandingRewardsRecord)(nil)
+var _ protoreflect.Message = (*fastReflection_OutstandingRewardsRecord)(nil)
 
-type fastReflection_PoolOutstandingRewardsRecord PoolOutstandingRewardsRecord
+type fastReflection_OutstandingRewardsRecord OutstandingRewardsRecord
 
-func (x *PoolOutstandingRewardsRecord) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_PoolOutstandingRewardsRecord)(x)
+func (x *OutstandingRewardsRecord) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_OutstandingRewardsRecord)(x)
 }
 
-func (x *PoolOutstandingRewardsRecord) slowProtoReflect() protoreflect.Message {
+func (x *OutstandingRewardsRecord) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -585,43 +585,43 @@ func (x *PoolOutstandingRewardsRecord) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_PoolOutstandingRewardsRecord_messageType fastReflection_PoolOutstandingRewardsRecord_messageType
-var _ protoreflect.MessageType = fastReflection_PoolOutstandingRewardsRecord_messageType{}
+var _fastReflection_OutstandingRewardsRecord_messageType fastReflection_OutstandingRewardsRecord_messageType
+var _ protoreflect.MessageType = fastReflection_OutstandingRewardsRecord_messageType{}
 
-type fastReflection_PoolOutstandingRewardsRecord_messageType struct{}
+type fastReflection_OutstandingRewardsRecord_messageType struct{}
 
-func (x fastReflection_PoolOutstandingRewardsRecord_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_PoolOutstandingRewardsRecord)(nil)
+func (x fastReflection_OutstandingRewardsRecord_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_OutstandingRewardsRecord)(nil)
 }
-func (x fastReflection_PoolOutstandingRewardsRecord_messageType) New() protoreflect.Message {
-	return new(fastReflection_PoolOutstandingRewardsRecord)
+func (x fastReflection_OutstandingRewardsRecord_messageType) New() protoreflect.Message {
+	return new(fastReflection_OutstandingRewardsRecord)
 }
-func (x fastReflection_PoolOutstandingRewardsRecord_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_PoolOutstandingRewardsRecord
+func (x fastReflection_OutstandingRewardsRecord_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_OutstandingRewardsRecord
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_PoolOutstandingRewardsRecord) Descriptor() protoreflect.MessageDescriptor {
-	return md_PoolOutstandingRewardsRecord
+func (x *fastReflection_OutstandingRewardsRecord) Descriptor() protoreflect.MessageDescriptor {
+	return md_OutstandingRewardsRecord
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_PoolOutstandingRewardsRecord) Type() protoreflect.MessageType {
-	return _fastReflection_PoolOutstandingRewardsRecord_messageType
+func (x *fastReflection_OutstandingRewardsRecord) Type() protoreflect.MessageType {
+	return _fastReflection_OutstandingRewardsRecord_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_PoolOutstandingRewardsRecord) New() protoreflect.Message {
-	return new(fastReflection_PoolOutstandingRewardsRecord)
+func (x *fastReflection_OutstandingRewardsRecord) New() protoreflect.Message {
+	return new(fastReflection_OutstandingRewardsRecord)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_PoolOutstandingRewardsRecord) Interface() protoreflect.ProtoMessage {
-	return (*PoolOutstandingRewardsRecord)(x)
+func (x *fastReflection_OutstandingRewardsRecord) Interface() protoreflect.ProtoMessage {
+	return (*OutstandingRewardsRecord)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -629,16 +629,16 @@ func (x *fastReflection_PoolOutstandingRewardsRecord) Interface() protoreflect.P
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_PoolOutstandingRewardsRecord) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.PoolId != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.PoolId)
-		if !f(fd_PoolOutstandingRewardsRecord_pool_id, value) {
+func (x *fastReflection_OutstandingRewardsRecord) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.DelegationTargetId != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.DelegationTargetId)
+		if !f(fd_OutstandingRewardsRecord_delegation_target_id, value) {
 			return
 		}
 	}
 	if len(x.OutstandingRewards) != 0 {
-		value := protoreflect.ValueOfList(&_PoolOutstandingRewardsRecord_2_list{list: &x.OutstandingRewards})
-		if !f(fd_PoolOutstandingRewardsRecord_outstanding_rewards, value) {
+		value := protoreflect.ValueOfList(&_OutstandingRewardsRecord_2_list{list: &x.OutstandingRewards})
+		if !f(fd_OutstandingRewardsRecord_outstanding_rewards, value) {
 			return
 		}
 	}
@@ -655,17 +655,17 @@ func (x *fastReflection_PoolOutstandingRewardsRecord) Range(f func(protoreflect.
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_PoolOutstandingRewardsRecord) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_OutstandingRewardsRecord) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolOutstandingRewardsRecord.pool_id":
-		return x.PoolId != uint32(0)
-	case "milkyway.rewards.v1.PoolOutstandingRewardsRecord.outstanding_rewards":
+	case "milkyway.rewards.v1.OutstandingRewardsRecord.delegation_target_id":
+		return x.DelegationTargetId != uint32(0)
+	case "milkyway.rewards.v1.OutstandingRewardsRecord.outstanding_rewards":
 		return len(x.OutstandingRewards) != 0
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolOutstandingRewardsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OutstandingRewardsRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolOutstandingRewardsRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.OutstandingRewardsRecord does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -675,17 +675,17 @@ func (x *fastReflection_PoolOutstandingRewardsRecord) Has(fd protoreflect.FieldD
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolOutstandingRewardsRecord) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_OutstandingRewardsRecord) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolOutstandingRewardsRecord.pool_id":
-		x.PoolId = uint32(0)
-	case "milkyway.rewards.v1.PoolOutstandingRewardsRecord.outstanding_rewards":
+	case "milkyway.rewards.v1.OutstandingRewardsRecord.delegation_target_id":
+		x.DelegationTargetId = uint32(0)
+	case "milkyway.rewards.v1.OutstandingRewardsRecord.outstanding_rewards":
 		x.OutstandingRewards = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolOutstandingRewardsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OutstandingRewardsRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolOutstandingRewardsRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.OutstandingRewardsRecord does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -695,22 +695,22 @@ func (x *fastReflection_PoolOutstandingRewardsRecord) Clear(fd protoreflect.Fiel
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_PoolOutstandingRewardsRecord) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_OutstandingRewardsRecord) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "milkyway.rewards.v1.PoolOutstandingRewardsRecord.pool_id":
-		value := x.PoolId
+	case "milkyway.rewards.v1.OutstandingRewardsRecord.delegation_target_id":
+		value := x.DelegationTargetId
 		return protoreflect.ValueOfUint32(value)
-	case "milkyway.rewards.v1.PoolOutstandingRewardsRecord.outstanding_rewards":
+	case "milkyway.rewards.v1.OutstandingRewardsRecord.outstanding_rewards":
 		if len(x.OutstandingRewards) == 0 {
-			return protoreflect.ValueOfList(&_PoolOutstandingRewardsRecord_2_list{})
+			return protoreflect.ValueOfList(&_OutstandingRewardsRecord_2_list{})
 		}
-		listValue := &_PoolOutstandingRewardsRecord_2_list{list: &x.OutstandingRewards}
+		listValue := &_OutstandingRewardsRecord_2_list{list: &x.OutstandingRewards}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolOutstandingRewardsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OutstandingRewardsRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolOutstandingRewardsRecord does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.OutstandingRewardsRecord does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -724,19 +724,19 @@ func (x *fastReflection_PoolOutstandingRewardsRecord) Get(descriptor protoreflec
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolOutstandingRewardsRecord) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_OutstandingRewardsRecord) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolOutstandingRewardsRecord.pool_id":
-		x.PoolId = uint32(value.Uint())
-	case "milkyway.rewards.v1.PoolOutstandingRewardsRecord.outstanding_rewards":
+	case "milkyway.rewards.v1.OutstandingRewardsRecord.delegation_target_id":
+		x.DelegationTargetId = uint32(value.Uint())
+	case "milkyway.rewards.v1.OutstandingRewardsRecord.outstanding_rewards":
 		lv := value.List()
-		clv := lv.(*_PoolOutstandingRewardsRecord_2_list)
+		clv := lv.(*_OutstandingRewardsRecord_2_list)
 		x.OutstandingRewards = *clv.list
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolOutstandingRewardsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OutstandingRewardsRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolOutstandingRewardsRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.OutstandingRewardsRecord does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -750,49 +750,49 @@ func (x *fastReflection_PoolOutstandingRewardsRecord) Set(fd protoreflect.FieldD
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolOutstandingRewardsRecord) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_OutstandingRewardsRecord) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolOutstandingRewardsRecord.outstanding_rewards":
+	case "milkyway.rewards.v1.OutstandingRewardsRecord.outstanding_rewards":
 		if x.OutstandingRewards == nil {
 			x.OutstandingRewards = []*DecPool{}
 		}
-		value := &_PoolOutstandingRewardsRecord_2_list{list: &x.OutstandingRewards}
+		value := &_OutstandingRewardsRecord_2_list{list: &x.OutstandingRewards}
 		return protoreflect.ValueOfList(value)
-	case "milkyway.rewards.v1.PoolOutstandingRewardsRecord.pool_id":
-		panic(fmt.Errorf("field pool_id of message milkyway.rewards.v1.PoolOutstandingRewardsRecord is not mutable"))
+	case "milkyway.rewards.v1.OutstandingRewardsRecord.delegation_target_id":
+		panic(fmt.Errorf("field delegation_target_id of message milkyway.rewards.v1.OutstandingRewardsRecord is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolOutstandingRewardsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OutstandingRewardsRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolOutstandingRewardsRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.OutstandingRewardsRecord does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_PoolOutstandingRewardsRecord) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_OutstandingRewardsRecord) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolOutstandingRewardsRecord.pool_id":
+	case "milkyway.rewards.v1.OutstandingRewardsRecord.delegation_target_id":
 		return protoreflect.ValueOfUint32(uint32(0))
-	case "milkyway.rewards.v1.PoolOutstandingRewardsRecord.outstanding_rewards":
+	case "milkyway.rewards.v1.OutstandingRewardsRecord.outstanding_rewards":
 		list := []*DecPool{}
-		return protoreflect.ValueOfList(&_PoolOutstandingRewardsRecord_2_list{list: &list})
+		return protoreflect.ValueOfList(&_OutstandingRewardsRecord_2_list{list: &list})
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolOutstandingRewardsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OutstandingRewardsRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolOutstandingRewardsRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.OutstandingRewardsRecord does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_PoolOutstandingRewardsRecord) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_OutstandingRewardsRecord) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.PoolOutstandingRewardsRecord", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.OutstandingRewardsRecord", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -800,7 +800,7 @@ func (x *fastReflection_PoolOutstandingRewardsRecord) WhichOneof(d protoreflect.
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_PoolOutstandingRewardsRecord) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_OutstandingRewardsRecord) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -811,7 +811,7 @@ func (x *fastReflection_PoolOutstandingRewardsRecord) GetUnknown() protoreflect.
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolOutstandingRewardsRecord) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_OutstandingRewardsRecord) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -823,7 +823,7 @@ func (x *fastReflection_PoolOutstandingRewardsRecord) SetUnknown(fields protoref
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_PoolOutstandingRewardsRecord) IsValid() bool {
+func (x *fastReflection_OutstandingRewardsRecord) IsValid() bool {
 	return x != nil
 }
 
@@ -833,9 +833,9 @@ func (x *fastReflection_PoolOutstandingRewardsRecord) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_PoolOutstandingRewardsRecord) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_OutstandingRewardsRecord) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*PoolOutstandingRewardsRecord)
+		x := input.Message.Interface().(*OutstandingRewardsRecord)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -847,8 +847,8 @@ func (x *fastReflection_PoolOutstandingRewardsRecord) ProtoMethods() *protoiface
 		var n int
 		var l int
 		_ = l
-		if x.PoolId != 0 {
-			n += 1 + runtime.Sov(uint64(x.PoolId))
+		if x.DelegationTargetId != 0 {
+			n += 1 + runtime.Sov(uint64(x.DelegationTargetId))
 		}
 		if len(x.OutstandingRewards) > 0 {
 			for _, e := range x.OutstandingRewards {
@@ -866,7 +866,7 @@ func (x *fastReflection_PoolOutstandingRewardsRecord) ProtoMethods() *protoiface
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*PoolOutstandingRewardsRecord)
+		x := input.Message.Interface().(*OutstandingRewardsRecord)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -901,8 +901,8 @@ func (x *fastReflection_PoolOutstandingRewardsRecord) ProtoMethods() *protoiface
 				dAtA[i] = 0x12
 			}
 		}
-		if x.PoolId != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.PoolId))
+		if x.DelegationTargetId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.DelegationTargetId))
 			i--
 			dAtA[i] = 0x8
 		}
@@ -917,7 +917,7 @@ func (x *fastReflection_PoolOutstandingRewardsRecord) ProtoMethods() *protoiface
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*PoolOutstandingRewardsRecord)
+		x := input.Message.Interface().(*OutstandingRewardsRecord)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -949,17 +949,17 @@ func (x *fastReflection_PoolOutstandingRewardsRecord) ProtoMethods() *protoiface
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: PoolOutstandingRewardsRecord: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OutstandingRewardsRecord: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: PoolOutstandingRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OutstandingRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DelegationTargetId", wireType)
 				}
-				x.PoolId = 0
+				x.DelegationTargetId = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -969,7 +969,7 @@ func (x *fastReflection_PoolOutstandingRewardsRecord) ProtoMethods() *protoiface
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.PoolId |= uint32(b&0x7F) << shift
+					x.DelegationTargetId |= uint32(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -1044,29 +1044,29 @@ func (x *fastReflection_PoolOutstandingRewardsRecord) ProtoMethods() *protoiface
 }
 
 var (
-	md_PoolHistoricalRewardsRecord         protoreflect.MessageDescriptor
-	fd_PoolHistoricalRewardsRecord_pool_id protoreflect.FieldDescriptor
-	fd_PoolHistoricalRewardsRecord_period  protoreflect.FieldDescriptor
-	fd_PoolHistoricalRewardsRecord_rewards protoreflect.FieldDescriptor
+	md_HistoricalRewardsRecord                      protoreflect.MessageDescriptor
+	fd_HistoricalRewardsRecord_delegation_target_id protoreflect.FieldDescriptor
+	fd_HistoricalRewardsRecord_period               protoreflect.FieldDescriptor
+	fd_HistoricalRewardsRecord_rewards              protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_milkyway_rewards_v1_genesis_proto_init()
-	md_PoolHistoricalRewardsRecord = File_milkyway_rewards_v1_genesis_proto.Messages().ByName("PoolHistoricalRewardsRecord")
-	fd_PoolHistoricalRewardsRecord_pool_id = md_PoolHistoricalRewardsRecord.Fields().ByName("pool_id")
-	fd_PoolHistoricalRewardsRecord_period = md_PoolHistoricalRewardsRecord.Fields().ByName("period")
-	fd_PoolHistoricalRewardsRecord_rewards = md_PoolHistoricalRewardsRecord.Fields().ByName("rewards")
+	md_HistoricalRewardsRecord = File_milkyway_rewards_v1_genesis_proto.Messages().ByName("HistoricalRewardsRecord")
+	fd_HistoricalRewardsRecord_delegation_target_id = md_HistoricalRewardsRecord.Fields().ByName("delegation_target_id")
+	fd_HistoricalRewardsRecord_period = md_HistoricalRewardsRecord.Fields().ByName("period")
+	fd_HistoricalRewardsRecord_rewards = md_HistoricalRewardsRecord.Fields().ByName("rewards")
 }
 
-var _ protoreflect.Message = (*fastReflection_PoolHistoricalRewardsRecord)(nil)
+var _ protoreflect.Message = (*fastReflection_HistoricalRewardsRecord)(nil)
 
-type fastReflection_PoolHistoricalRewardsRecord PoolHistoricalRewardsRecord
+type fastReflection_HistoricalRewardsRecord HistoricalRewardsRecord
 
-func (x *PoolHistoricalRewardsRecord) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_PoolHistoricalRewardsRecord)(x)
+func (x *HistoricalRewardsRecord) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_HistoricalRewardsRecord)(x)
 }
 
-func (x *PoolHistoricalRewardsRecord) slowProtoReflect() protoreflect.Message {
+func (x *HistoricalRewardsRecord) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1078,43 +1078,43 @@ func (x *PoolHistoricalRewardsRecord) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_PoolHistoricalRewardsRecord_messageType fastReflection_PoolHistoricalRewardsRecord_messageType
-var _ protoreflect.MessageType = fastReflection_PoolHistoricalRewardsRecord_messageType{}
+var _fastReflection_HistoricalRewardsRecord_messageType fastReflection_HistoricalRewardsRecord_messageType
+var _ protoreflect.MessageType = fastReflection_HistoricalRewardsRecord_messageType{}
 
-type fastReflection_PoolHistoricalRewardsRecord_messageType struct{}
+type fastReflection_HistoricalRewardsRecord_messageType struct{}
 
-func (x fastReflection_PoolHistoricalRewardsRecord_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_PoolHistoricalRewardsRecord)(nil)
+func (x fastReflection_HistoricalRewardsRecord_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_HistoricalRewardsRecord)(nil)
 }
-func (x fastReflection_PoolHistoricalRewardsRecord_messageType) New() protoreflect.Message {
-	return new(fastReflection_PoolHistoricalRewardsRecord)
+func (x fastReflection_HistoricalRewardsRecord_messageType) New() protoreflect.Message {
+	return new(fastReflection_HistoricalRewardsRecord)
 }
-func (x fastReflection_PoolHistoricalRewardsRecord_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_PoolHistoricalRewardsRecord
+func (x fastReflection_HistoricalRewardsRecord_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_HistoricalRewardsRecord
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_PoolHistoricalRewardsRecord) Descriptor() protoreflect.MessageDescriptor {
-	return md_PoolHistoricalRewardsRecord
+func (x *fastReflection_HistoricalRewardsRecord) Descriptor() protoreflect.MessageDescriptor {
+	return md_HistoricalRewardsRecord
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_PoolHistoricalRewardsRecord) Type() protoreflect.MessageType {
-	return _fastReflection_PoolHistoricalRewardsRecord_messageType
+func (x *fastReflection_HistoricalRewardsRecord) Type() protoreflect.MessageType {
+	return _fastReflection_HistoricalRewardsRecord_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_PoolHistoricalRewardsRecord) New() protoreflect.Message {
-	return new(fastReflection_PoolHistoricalRewardsRecord)
+func (x *fastReflection_HistoricalRewardsRecord) New() protoreflect.Message {
+	return new(fastReflection_HistoricalRewardsRecord)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_PoolHistoricalRewardsRecord) Interface() protoreflect.ProtoMessage {
-	return (*PoolHistoricalRewardsRecord)(x)
+func (x *fastReflection_HistoricalRewardsRecord) Interface() protoreflect.ProtoMessage {
+	return (*HistoricalRewardsRecord)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -1122,22 +1122,22 @@ func (x *fastReflection_PoolHistoricalRewardsRecord) Interface() protoreflect.Pr
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_PoolHistoricalRewardsRecord) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.PoolId != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.PoolId)
-		if !f(fd_PoolHistoricalRewardsRecord_pool_id, value) {
+func (x *fastReflection_HistoricalRewardsRecord) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.DelegationTargetId != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.DelegationTargetId)
+		if !f(fd_HistoricalRewardsRecord_delegation_target_id, value) {
 			return
 		}
 	}
 	if x.Period != uint64(0) {
 		value := protoreflect.ValueOfUint64(x.Period)
-		if !f(fd_PoolHistoricalRewardsRecord_period, value) {
+		if !f(fd_HistoricalRewardsRecord_period, value) {
 			return
 		}
 	}
 	if x.Rewards != nil {
 		value := protoreflect.ValueOfMessage(x.Rewards.ProtoReflect())
-		if !f(fd_PoolHistoricalRewardsRecord_rewards, value) {
+		if !f(fd_HistoricalRewardsRecord_rewards, value) {
 			return
 		}
 	}
@@ -1154,19 +1154,19 @@ func (x *fastReflection_PoolHistoricalRewardsRecord) Range(f func(protoreflect.F
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_PoolHistoricalRewardsRecord) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_HistoricalRewardsRecord) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolHistoricalRewardsRecord.pool_id":
-		return x.PoolId != uint32(0)
-	case "milkyway.rewards.v1.PoolHistoricalRewardsRecord.period":
+	case "milkyway.rewards.v1.HistoricalRewardsRecord.delegation_target_id":
+		return x.DelegationTargetId != uint32(0)
+	case "milkyway.rewards.v1.HistoricalRewardsRecord.period":
 		return x.Period != uint64(0)
-	case "milkyway.rewards.v1.PoolHistoricalRewardsRecord.rewards":
+	case "milkyway.rewards.v1.HistoricalRewardsRecord.rewards":
 		return x.Rewards != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolHistoricalRewardsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.HistoricalRewardsRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolHistoricalRewardsRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.HistoricalRewardsRecord does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1176,19 +1176,19 @@ func (x *fastReflection_PoolHistoricalRewardsRecord) Has(fd protoreflect.FieldDe
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolHistoricalRewardsRecord) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_HistoricalRewardsRecord) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolHistoricalRewardsRecord.pool_id":
-		x.PoolId = uint32(0)
-	case "milkyway.rewards.v1.PoolHistoricalRewardsRecord.period":
+	case "milkyway.rewards.v1.HistoricalRewardsRecord.delegation_target_id":
+		x.DelegationTargetId = uint32(0)
+	case "milkyway.rewards.v1.HistoricalRewardsRecord.period":
 		x.Period = uint64(0)
-	case "milkyway.rewards.v1.PoolHistoricalRewardsRecord.rewards":
+	case "milkyway.rewards.v1.HistoricalRewardsRecord.rewards":
 		x.Rewards = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolHistoricalRewardsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.HistoricalRewardsRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolHistoricalRewardsRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.HistoricalRewardsRecord does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1198,22 +1198,22 @@ func (x *fastReflection_PoolHistoricalRewardsRecord) Clear(fd protoreflect.Field
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_PoolHistoricalRewardsRecord) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_HistoricalRewardsRecord) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "milkyway.rewards.v1.PoolHistoricalRewardsRecord.pool_id":
-		value := x.PoolId
+	case "milkyway.rewards.v1.HistoricalRewardsRecord.delegation_target_id":
+		value := x.DelegationTargetId
 		return protoreflect.ValueOfUint32(value)
-	case "milkyway.rewards.v1.PoolHistoricalRewardsRecord.period":
+	case "milkyway.rewards.v1.HistoricalRewardsRecord.period":
 		value := x.Period
 		return protoreflect.ValueOfUint64(value)
-	case "milkyway.rewards.v1.PoolHistoricalRewardsRecord.rewards":
+	case "milkyway.rewards.v1.HistoricalRewardsRecord.rewards":
 		value := x.Rewards
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolHistoricalRewardsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.HistoricalRewardsRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolHistoricalRewardsRecord does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.HistoricalRewardsRecord does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1227,19 +1227,19 @@ func (x *fastReflection_PoolHistoricalRewardsRecord) Get(descriptor protoreflect
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolHistoricalRewardsRecord) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_HistoricalRewardsRecord) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolHistoricalRewardsRecord.pool_id":
-		x.PoolId = uint32(value.Uint())
-	case "milkyway.rewards.v1.PoolHistoricalRewardsRecord.period":
+	case "milkyway.rewards.v1.HistoricalRewardsRecord.delegation_target_id":
+		x.DelegationTargetId = uint32(value.Uint())
+	case "milkyway.rewards.v1.HistoricalRewardsRecord.period":
 		x.Period = value.Uint()
-	case "milkyway.rewards.v1.PoolHistoricalRewardsRecord.rewards":
+	case "milkyway.rewards.v1.HistoricalRewardsRecord.rewards":
 		x.Rewards = value.Message().Interface().(*HistoricalRewards)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolHistoricalRewardsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.HistoricalRewardsRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolHistoricalRewardsRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.HistoricalRewardsRecord does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1253,52 +1253,52 @@ func (x *fastReflection_PoolHistoricalRewardsRecord) Set(fd protoreflect.FieldDe
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolHistoricalRewardsRecord) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_HistoricalRewardsRecord) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolHistoricalRewardsRecord.rewards":
+	case "milkyway.rewards.v1.HistoricalRewardsRecord.rewards":
 		if x.Rewards == nil {
 			x.Rewards = new(HistoricalRewards)
 		}
 		return protoreflect.ValueOfMessage(x.Rewards.ProtoReflect())
-	case "milkyway.rewards.v1.PoolHistoricalRewardsRecord.pool_id":
-		panic(fmt.Errorf("field pool_id of message milkyway.rewards.v1.PoolHistoricalRewardsRecord is not mutable"))
-	case "milkyway.rewards.v1.PoolHistoricalRewardsRecord.period":
-		panic(fmt.Errorf("field period of message milkyway.rewards.v1.PoolHistoricalRewardsRecord is not mutable"))
+	case "milkyway.rewards.v1.HistoricalRewardsRecord.delegation_target_id":
+		panic(fmt.Errorf("field delegation_target_id of message milkyway.rewards.v1.HistoricalRewardsRecord is not mutable"))
+	case "milkyway.rewards.v1.HistoricalRewardsRecord.period":
+		panic(fmt.Errorf("field period of message milkyway.rewards.v1.HistoricalRewardsRecord is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolHistoricalRewardsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.HistoricalRewardsRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolHistoricalRewardsRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.HistoricalRewardsRecord does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_PoolHistoricalRewardsRecord) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_HistoricalRewardsRecord) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolHistoricalRewardsRecord.pool_id":
+	case "milkyway.rewards.v1.HistoricalRewardsRecord.delegation_target_id":
 		return protoreflect.ValueOfUint32(uint32(0))
-	case "milkyway.rewards.v1.PoolHistoricalRewardsRecord.period":
+	case "milkyway.rewards.v1.HistoricalRewardsRecord.period":
 		return protoreflect.ValueOfUint64(uint64(0))
-	case "milkyway.rewards.v1.PoolHistoricalRewardsRecord.rewards":
+	case "milkyway.rewards.v1.HistoricalRewardsRecord.rewards":
 		m := new(HistoricalRewards)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolHistoricalRewardsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.HistoricalRewardsRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolHistoricalRewardsRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.HistoricalRewardsRecord does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_PoolHistoricalRewardsRecord) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_HistoricalRewardsRecord) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.PoolHistoricalRewardsRecord", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.HistoricalRewardsRecord", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1306,7 +1306,7 @@ func (x *fastReflection_PoolHistoricalRewardsRecord) WhichOneof(d protoreflect.O
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_PoolHistoricalRewardsRecord) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_HistoricalRewardsRecord) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1317,7 +1317,7 @@ func (x *fastReflection_PoolHistoricalRewardsRecord) GetUnknown() protoreflect.R
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolHistoricalRewardsRecord) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_HistoricalRewardsRecord) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1329,7 +1329,7 @@ func (x *fastReflection_PoolHistoricalRewardsRecord) SetUnknown(fields protorefl
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_PoolHistoricalRewardsRecord) IsValid() bool {
+func (x *fastReflection_HistoricalRewardsRecord) IsValid() bool {
 	return x != nil
 }
 
@@ -1339,9 +1339,9 @@ func (x *fastReflection_PoolHistoricalRewardsRecord) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_PoolHistoricalRewardsRecord) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_HistoricalRewardsRecord) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*PoolHistoricalRewardsRecord)
+		x := input.Message.Interface().(*HistoricalRewardsRecord)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1353,8 +1353,8 @@ func (x *fastReflection_PoolHistoricalRewardsRecord) ProtoMethods() *protoiface.
 		var n int
 		var l int
 		_ = l
-		if x.PoolId != 0 {
-			n += 1 + runtime.Sov(uint64(x.PoolId))
+		if x.DelegationTargetId != 0 {
+			n += 1 + runtime.Sov(uint64(x.DelegationTargetId))
 		}
 		if x.Period != 0 {
 			n += 1 + runtime.Sov(uint64(x.Period))
@@ -1373,7 +1373,7 @@ func (x *fastReflection_PoolHistoricalRewardsRecord) ProtoMethods() *protoiface.
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*PoolHistoricalRewardsRecord)
+		x := input.Message.Interface().(*HistoricalRewardsRecord)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1411,8 +1411,8 @@ func (x *fastReflection_PoolHistoricalRewardsRecord) ProtoMethods() *protoiface.
 			i--
 			dAtA[i] = 0x10
 		}
-		if x.PoolId != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.PoolId))
+		if x.DelegationTargetId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.DelegationTargetId))
 			i--
 			dAtA[i] = 0x8
 		}
@@ -1427,7 +1427,7 @@ func (x *fastReflection_PoolHistoricalRewardsRecord) ProtoMethods() *protoiface.
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*PoolHistoricalRewardsRecord)
+		x := input.Message.Interface().(*HistoricalRewardsRecord)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1459,17 +1459,17 @@ func (x *fastReflection_PoolHistoricalRewardsRecord) ProtoMethods() *protoiface.
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: PoolHistoricalRewardsRecord: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: HistoricalRewardsRecord: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: PoolHistoricalRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: HistoricalRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DelegationTargetId", wireType)
 				}
-				x.PoolId = 0
+				x.DelegationTargetId = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -1479,7 +1479,7 @@ func (x *fastReflection_PoolHistoricalRewardsRecord) ProtoMethods() *protoiface.
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.PoolId |= uint32(b&0x7F) << shift
+					x.DelegationTargetId |= uint32(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -1575,27 +1575,27 @@ func (x *fastReflection_PoolHistoricalRewardsRecord) ProtoMethods() *protoiface.
 }
 
 var (
-	md_PoolCurrentRewardsRecord         protoreflect.MessageDescriptor
-	fd_PoolCurrentRewardsRecord_pool_id protoreflect.FieldDescriptor
-	fd_PoolCurrentRewardsRecord_rewards protoreflect.FieldDescriptor
+	md_CurrentRewardsRecord                      protoreflect.MessageDescriptor
+	fd_CurrentRewardsRecord_delegation_target_id protoreflect.FieldDescriptor
+	fd_CurrentRewardsRecord_rewards              protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_milkyway_rewards_v1_genesis_proto_init()
-	md_PoolCurrentRewardsRecord = File_milkyway_rewards_v1_genesis_proto.Messages().ByName("PoolCurrentRewardsRecord")
-	fd_PoolCurrentRewardsRecord_pool_id = md_PoolCurrentRewardsRecord.Fields().ByName("pool_id")
-	fd_PoolCurrentRewardsRecord_rewards = md_PoolCurrentRewardsRecord.Fields().ByName("rewards")
+	md_CurrentRewardsRecord = File_milkyway_rewards_v1_genesis_proto.Messages().ByName("CurrentRewardsRecord")
+	fd_CurrentRewardsRecord_delegation_target_id = md_CurrentRewardsRecord.Fields().ByName("delegation_target_id")
+	fd_CurrentRewardsRecord_rewards = md_CurrentRewardsRecord.Fields().ByName("rewards")
 }
 
-var _ protoreflect.Message = (*fastReflection_PoolCurrentRewardsRecord)(nil)
+var _ protoreflect.Message = (*fastReflection_CurrentRewardsRecord)(nil)
 
-type fastReflection_PoolCurrentRewardsRecord PoolCurrentRewardsRecord
+type fastReflection_CurrentRewardsRecord CurrentRewardsRecord
 
-func (x *PoolCurrentRewardsRecord) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_PoolCurrentRewardsRecord)(x)
+func (x *CurrentRewardsRecord) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_CurrentRewardsRecord)(x)
 }
 
-func (x *PoolCurrentRewardsRecord) slowProtoReflect() protoreflect.Message {
+func (x *CurrentRewardsRecord) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1607,43 +1607,43 @@ func (x *PoolCurrentRewardsRecord) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_PoolCurrentRewardsRecord_messageType fastReflection_PoolCurrentRewardsRecord_messageType
-var _ protoreflect.MessageType = fastReflection_PoolCurrentRewardsRecord_messageType{}
+var _fastReflection_CurrentRewardsRecord_messageType fastReflection_CurrentRewardsRecord_messageType
+var _ protoreflect.MessageType = fastReflection_CurrentRewardsRecord_messageType{}
 
-type fastReflection_PoolCurrentRewardsRecord_messageType struct{}
+type fastReflection_CurrentRewardsRecord_messageType struct{}
 
-func (x fastReflection_PoolCurrentRewardsRecord_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_PoolCurrentRewardsRecord)(nil)
+func (x fastReflection_CurrentRewardsRecord_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_CurrentRewardsRecord)(nil)
 }
-func (x fastReflection_PoolCurrentRewardsRecord_messageType) New() protoreflect.Message {
-	return new(fastReflection_PoolCurrentRewardsRecord)
+func (x fastReflection_CurrentRewardsRecord_messageType) New() protoreflect.Message {
+	return new(fastReflection_CurrentRewardsRecord)
 }
-func (x fastReflection_PoolCurrentRewardsRecord_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_PoolCurrentRewardsRecord
+func (x fastReflection_CurrentRewardsRecord_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_CurrentRewardsRecord
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_PoolCurrentRewardsRecord) Descriptor() protoreflect.MessageDescriptor {
-	return md_PoolCurrentRewardsRecord
+func (x *fastReflection_CurrentRewardsRecord) Descriptor() protoreflect.MessageDescriptor {
+	return md_CurrentRewardsRecord
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_PoolCurrentRewardsRecord) Type() protoreflect.MessageType {
-	return _fastReflection_PoolCurrentRewardsRecord_messageType
+func (x *fastReflection_CurrentRewardsRecord) Type() protoreflect.MessageType {
+	return _fastReflection_CurrentRewardsRecord_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_PoolCurrentRewardsRecord) New() protoreflect.Message {
-	return new(fastReflection_PoolCurrentRewardsRecord)
+func (x *fastReflection_CurrentRewardsRecord) New() protoreflect.Message {
+	return new(fastReflection_CurrentRewardsRecord)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_PoolCurrentRewardsRecord) Interface() protoreflect.ProtoMessage {
-	return (*PoolCurrentRewardsRecord)(x)
+func (x *fastReflection_CurrentRewardsRecord) Interface() protoreflect.ProtoMessage {
+	return (*CurrentRewardsRecord)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -1651,16 +1651,16 @@ func (x *fastReflection_PoolCurrentRewardsRecord) Interface() protoreflect.Proto
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_PoolCurrentRewardsRecord) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.PoolId != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.PoolId)
-		if !f(fd_PoolCurrentRewardsRecord_pool_id, value) {
+func (x *fastReflection_CurrentRewardsRecord) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.DelegationTargetId != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.DelegationTargetId)
+		if !f(fd_CurrentRewardsRecord_delegation_target_id, value) {
 			return
 		}
 	}
 	if x.Rewards != nil {
 		value := protoreflect.ValueOfMessage(x.Rewards.ProtoReflect())
-		if !f(fd_PoolCurrentRewardsRecord_rewards, value) {
+		if !f(fd_CurrentRewardsRecord_rewards, value) {
 			return
 		}
 	}
@@ -1677,17 +1677,17 @@ func (x *fastReflection_PoolCurrentRewardsRecord) Range(f func(protoreflect.Fiel
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_PoolCurrentRewardsRecord) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_CurrentRewardsRecord) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolCurrentRewardsRecord.pool_id":
-		return x.PoolId != uint32(0)
-	case "milkyway.rewards.v1.PoolCurrentRewardsRecord.rewards":
+	case "milkyway.rewards.v1.CurrentRewardsRecord.delegation_target_id":
+		return x.DelegationTargetId != uint32(0)
+	case "milkyway.rewards.v1.CurrentRewardsRecord.rewards":
 		return x.Rewards != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolCurrentRewardsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.CurrentRewardsRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolCurrentRewardsRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.CurrentRewardsRecord does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1697,17 +1697,17 @@ func (x *fastReflection_PoolCurrentRewardsRecord) Has(fd protoreflect.FieldDescr
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolCurrentRewardsRecord) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_CurrentRewardsRecord) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolCurrentRewardsRecord.pool_id":
-		x.PoolId = uint32(0)
-	case "milkyway.rewards.v1.PoolCurrentRewardsRecord.rewards":
+	case "milkyway.rewards.v1.CurrentRewardsRecord.delegation_target_id":
+		x.DelegationTargetId = uint32(0)
+	case "milkyway.rewards.v1.CurrentRewardsRecord.rewards":
 		x.Rewards = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolCurrentRewardsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.CurrentRewardsRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolCurrentRewardsRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.CurrentRewardsRecord does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1717,19 +1717,19 @@ func (x *fastReflection_PoolCurrentRewardsRecord) Clear(fd protoreflect.FieldDes
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_PoolCurrentRewardsRecord) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_CurrentRewardsRecord) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "milkyway.rewards.v1.PoolCurrentRewardsRecord.pool_id":
-		value := x.PoolId
+	case "milkyway.rewards.v1.CurrentRewardsRecord.delegation_target_id":
+		value := x.DelegationTargetId
 		return protoreflect.ValueOfUint32(value)
-	case "milkyway.rewards.v1.PoolCurrentRewardsRecord.rewards":
+	case "milkyway.rewards.v1.CurrentRewardsRecord.rewards":
 		value := x.Rewards
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolCurrentRewardsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.CurrentRewardsRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolCurrentRewardsRecord does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.CurrentRewardsRecord does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1743,17 +1743,17 @@ func (x *fastReflection_PoolCurrentRewardsRecord) Get(descriptor protoreflect.Fi
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolCurrentRewardsRecord) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_CurrentRewardsRecord) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolCurrentRewardsRecord.pool_id":
-		x.PoolId = uint32(value.Uint())
-	case "milkyway.rewards.v1.PoolCurrentRewardsRecord.rewards":
+	case "milkyway.rewards.v1.CurrentRewardsRecord.delegation_target_id":
+		x.DelegationTargetId = uint32(value.Uint())
+	case "milkyway.rewards.v1.CurrentRewardsRecord.rewards":
 		x.Rewards = value.Message().Interface().(*CurrentRewards)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolCurrentRewardsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.CurrentRewardsRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolCurrentRewardsRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.CurrentRewardsRecord does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1767,48 +1767,48 @@ func (x *fastReflection_PoolCurrentRewardsRecord) Set(fd protoreflect.FieldDescr
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolCurrentRewardsRecord) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_CurrentRewardsRecord) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolCurrentRewardsRecord.rewards":
+	case "milkyway.rewards.v1.CurrentRewardsRecord.rewards":
 		if x.Rewards == nil {
 			x.Rewards = new(CurrentRewards)
 		}
 		return protoreflect.ValueOfMessage(x.Rewards.ProtoReflect())
-	case "milkyway.rewards.v1.PoolCurrentRewardsRecord.pool_id":
-		panic(fmt.Errorf("field pool_id of message milkyway.rewards.v1.PoolCurrentRewardsRecord is not mutable"))
+	case "milkyway.rewards.v1.CurrentRewardsRecord.delegation_target_id":
+		panic(fmt.Errorf("field delegation_target_id of message milkyway.rewards.v1.CurrentRewardsRecord is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolCurrentRewardsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.CurrentRewardsRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolCurrentRewardsRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.CurrentRewardsRecord does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_PoolCurrentRewardsRecord) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_CurrentRewardsRecord) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolCurrentRewardsRecord.pool_id":
+	case "milkyway.rewards.v1.CurrentRewardsRecord.delegation_target_id":
 		return protoreflect.ValueOfUint32(uint32(0))
-	case "milkyway.rewards.v1.PoolCurrentRewardsRecord.rewards":
+	case "milkyway.rewards.v1.CurrentRewardsRecord.rewards":
 		m := new(CurrentRewards)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolCurrentRewardsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.CurrentRewardsRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolCurrentRewardsRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.CurrentRewardsRecord does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_PoolCurrentRewardsRecord) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_CurrentRewardsRecord) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.PoolCurrentRewardsRecord", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.CurrentRewardsRecord", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1816,7 +1816,7 @@ func (x *fastReflection_PoolCurrentRewardsRecord) WhichOneof(d protoreflect.Oneo
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_PoolCurrentRewardsRecord) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_CurrentRewardsRecord) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1827,7 +1827,7 @@ func (x *fastReflection_PoolCurrentRewardsRecord) GetUnknown() protoreflect.RawF
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolCurrentRewardsRecord) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_CurrentRewardsRecord) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1839,7 +1839,7 @@ func (x *fastReflection_PoolCurrentRewardsRecord) SetUnknown(fields protoreflect
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_PoolCurrentRewardsRecord) IsValid() bool {
+func (x *fastReflection_CurrentRewardsRecord) IsValid() bool {
 	return x != nil
 }
 
@@ -1849,9 +1849,9 @@ func (x *fastReflection_PoolCurrentRewardsRecord) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_PoolCurrentRewardsRecord) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_CurrentRewardsRecord) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*PoolCurrentRewardsRecord)
+		x := input.Message.Interface().(*CurrentRewardsRecord)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1863,8 +1863,8 @@ func (x *fastReflection_PoolCurrentRewardsRecord) ProtoMethods() *protoiface.Met
 		var n int
 		var l int
 		_ = l
-		if x.PoolId != 0 {
-			n += 1 + runtime.Sov(uint64(x.PoolId))
+		if x.DelegationTargetId != 0 {
+			n += 1 + runtime.Sov(uint64(x.DelegationTargetId))
 		}
 		if x.Rewards != nil {
 			l = options.Size(x.Rewards)
@@ -1880,7 +1880,7 @@ func (x *fastReflection_PoolCurrentRewardsRecord) ProtoMethods() *protoiface.Met
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*PoolCurrentRewardsRecord)
+		x := input.Message.Interface().(*CurrentRewardsRecord)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1913,8 +1913,8 @@ func (x *fastReflection_PoolCurrentRewardsRecord) ProtoMethods() *protoiface.Met
 			i--
 			dAtA[i] = 0x12
 		}
-		if x.PoolId != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.PoolId))
+		if x.DelegationTargetId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.DelegationTargetId))
 			i--
 			dAtA[i] = 0x8
 		}
@@ -1929,7 +1929,7 @@ func (x *fastReflection_PoolCurrentRewardsRecord) ProtoMethods() *protoiface.Met
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*PoolCurrentRewardsRecord)
+		x := input.Message.Interface().(*CurrentRewardsRecord)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1961,17 +1961,17 @@ func (x *fastReflection_PoolCurrentRewardsRecord) ProtoMethods() *protoiface.Met
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: PoolCurrentRewardsRecord: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: CurrentRewardsRecord: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: PoolCurrentRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: CurrentRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DelegationTargetId", wireType)
 				}
-				x.PoolId = 0
+				x.DelegationTargetId = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -1981,7 +1981,7 @@ func (x *fastReflection_PoolCurrentRewardsRecord) ProtoMethods() *protoiface.Met
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.PoolId |= uint32(b&0x7F) << shift
+					x.DelegationTargetId |= uint32(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -2058,29 +2058,29 @@ func (x *fastReflection_PoolCurrentRewardsRecord) ProtoMethods() *protoiface.Met
 }
 
 var (
-	md_PoolDelegatorStartingInfoRecord                   protoreflect.MessageDescriptor
-	fd_PoolDelegatorStartingInfoRecord_delegator_address protoreflect.FieldDescriptor
-	fd_PoolDelegatorStartingInfoRecord_pool_id           protoreflect.FieldDescriptor
-	fd_PoolDelegatorStartingInfoRecord_starting_info     protoreflect.FieldDescriptor
+	md_DelegatorStartingInfoRecord                      protoreflect.MessageDescriptor
+	fd_DelegatorStartingInfoRecord_delegator_address    protoreflect.FieldDescriptor
+	fd_DelegatorStartingInfoRecord_delegation_target_id protoreflect.FieldDescriptor
+	fd_DelegatorStartingInfoRecord_starting_info        protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_milkyway_rewards_v1_genesis_proto_init()
-	md_PoolDelegatorStartingInfoRecord = File_milkyway_rewards_v1_genesis_proto.Messages().ByName("PoolDelegatorStartingInfoRecord")
-	fd_PoolDelegatorStartingInfoRecord_delegator_address = md_PoolDelegatorStartingInfoRecord.Fields().ByName("delegator_address")
-	fd_PoolDelegatorStartingInfoRecord_pool_id = md_PoolDelegatorStartingInfoRecord.Fields().ByName("pool_id")
-	fd_PoolDelegatorStartingInfoRecord_starting_info = md_PoolDelegatorStartingInfoRecord.Fields().ByName("starting_info")
+	md_DelegatorStartingInfoRecord = File_milkyway_rewards_v1_genesis_proto.Messages().ByName("DelegatorStartingInfoRecord")
+	fd_DelegatorStartingInfoRecord_delegator_address = md_DelegatorStartingInfoRecord.Fields().ByName("delegator_address")
+	fd_DelegatorStartingInfoRecord_delegation_target_id = md_DelegatorStartingInfoRecord.Fields().ByName("delegation_target_id")
+	fd_DelegatorStartingInfoRecord_starting_info = md_DelegatorStartingInfoRecord.Fields().ByName("starting_info")
 }
 
-var _ protoreflect.Message = (*fastReflection_PoolDelegatorStartingInfoRecord)(nil)
+var _ protoreflect.Message = (*fastReflection_DelegatorStartingInfoRecord)(nil)
 
-type fastReflection_PoolDelegatorStartingInfoRecord PoolDelegatorStartingInfoRecord
+type fastReflection_DelegatorStartingInfoRecord DelegatorStartingInfoRecord
 
-func (x *PoolDelegatorStartingInfoRecord) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_PoolDelegatorStartingInfoRecord)(x)
+func (x *DelegatorStartingInfoRecord) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_DelegatorStartingInfoRecord)(x)
 }
 
-func (x *PoolDelegatorStartingInfoRecord) slowProtoReflect() protoreflect.Message {
+func (x *DelegatorStartingInfoRecord) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2092,43 +2092,43 @@ func (x *PoolDelegatorStartingInfoRecord) slowProtoReflect() protoreflect.Messag
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_PoolDelegatorStartingInfoRecord_messageType fastReflection_PoolDelegatorStartingInfoRecord_messageType
-var _ protoreflect.MessageType = fastReflection_PoolDelegatorStartingInfoRecord_messageType{}
+var _fastReflection_DelegatorStartingInfoRecord_messageType fastReflection_DelegatorStartingInfoRecord_messageType
+var _ protoreflect.MessageType = fastReflection_DelegatorStartingInfoRecord_messageType{}
 
-type fastReflection_PoolDelegatorStartingInfoRecord_messageType struct{}
+type fastReflection_DelegatorStartingInfoRecord_messageType struct{}
 
-func (x fastReflection_PoolDelegatorStartingInfoRecord_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_PoolDelegatorStartingInfoRecord)(nil)
+func (x fastReflection_DelegatorStartingInfoRecord_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_DelegatorStartingInfoRecord)(nil)
 }
-func (x fastReflection_PoolDelegatorStartingInfoRecord_messageType) New() protoreflect.Message {
-	return new(fastReflection_PoolDelegatorStartingInfoRecord)
+func (x fastReflection_DelegatorStartingInfoRecord_messageType) New() protoreflect.Message {
+	return new(fastReflection_DelegatorStartingInfoRecord)
 }
-func (x fastReflection_PoolDelegatorStartingInfoRecord_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_PoolDelegatorStartingInfoRecord
+func (x fastReflection_DelegatorStartingInfoRecord_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_DelegatorStartingInfoRecord
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_PoolDelegatorStartingInfoRecord) Descriptor() protoreflect.MessageDescriptor {
-	return md_PoolDelegatorStartingInfoRecord
+func (x *fastReflection_DelegatorStartingInfoRecord) Descriptor() protoreflect.MessageDescriptor {
+	return md_DelegatorStartingInfoRecord
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_PoolDelegatorStartingInfoRecord) Type() protoreflect.MessageType {
-	return _fastReflection_PoolDelegatorStartingInfoRecord_messageType
+func (x *fastReflection_DelegatorStartingInfoRecord) Type() protoreflect.MessageType {
+	return _fastReflection_DelegatorStartingInfoRecord_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_PoolDelegatorStartingInfoRecord) New() protoreflect.Message {
-	return new(fastReflection_PoolDelegatorStartingInfoRecord)
+func (x *fastReflection_DelegatorStartingInfoRecord) New() protoreflect.Message {
+	return new(fastReflection_DelegatorStartingInfoRecord)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_PoolDelegatorStartingInfoRecord) Interface() protoreflect.ProtoMessage {
-	return (*PoolDelegatorStartingInfoRecord)(x)
+func (x *fastReflection_DelegatorStartingInfoRecord) Interface() protoreflect.ProtoMessage {
+	return (*DelegatorStartingInfoRecord)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -2136,22 +2136,22 @@ func (x *fastReflection_PoolDelegatorStartingInfoRecord) Interface() protoreflec
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_PoolDelegatorStartingInfoRecord) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_DelegatorStartingInfoRecord) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.DelegatorAddress != "" {
 		value := protoreflect.ValueOfString(x.DelegatorAddress)
-		if !f(fd_PoolDelegatorStartingInfoRecord_delegator_address, value) {
+		if !f(fd_DelegatorStartingInfoRecord_delegator_address, value) {
 			return
 		}
 	}
-	if x.PoolId != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.PoolId)
-		if !f(fd_PoolDelegatorStartingInfoRecord_pool_id, value) {
+	if x.DelegationTargetId != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.DelegationTargetId)
+		if !f(fd_DelegatorStartingInfoRecord_delegation_target_id, value) {
 			return
 		}
 	}
 	if x.StartingInfo != nil {
 		value := protoreflect.ValueOfMessage(x.StartingInfo.ProtoReflect())
-		if !f(fd_PoolDelegatorStartingInfoRecord_starting_info, value) {
+		if !f(fd_DelegatorStartingInfoRecord_starting_info, value) {
 			return
 		}
 	}
@@ -2168,19 +2168,19 @@ func (x *fastReflection_PoolDelegatorStartingInfoRecord) Range(f func(protorefle
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_PoolDelegatorStartingInfoRecord) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_DelegatorStartingInfoRecord) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolDelegatorStartingInfoRecord.delegator_address":
+	case "milkyway.rewards.v1.DelegatorStartingInfoRecord.delegator_address":
 		return x.DelegatorAddress != ""
-	case "milkyway.rewards.v1.PoolDelegatorStartingInfoRecord.pool_id":
-		return x.PoolId != uint32(0)
-	case "milkyway.rewards.v1.PoolDelegatorStartingInfoRecord.starting_info":
+	case "milkyway.rewards.v1.DelegatorStartingInfoRecord.delegation_target_id":
+		return x.DelegationTargetId != uint32(0)
+	case "milkyway.rewards.v1.DelegatorStartingInfoRecord.starting_info":
 		return x.StartingInfo != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolDelegatorStartingInfoRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DelegatorStartingInfoRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolDelegatorStartingInfoRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DelegatorStartingInfoRecord does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2190,19 +2190,19 @@ func (x *fastReflection_PoolDelegatorStartingInfoRecord) Has(fd protoreflect.Fie
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolDelegatorStartingInfoRecord) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_DelegatorStartingInfoRecord) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolDelegatorStartingInfoRecord.delegator_address":
+	case "milkyway.rewards.v1.DelegatorStartingInfoRecord.delegator_address":
 		x.DelegatorAddress = ""
-	case "milkyway.rewards.v1.PoolDelegatorStartingInfoRecord.pool_id":
-		x.PoolId = uint32(0)
-	case "milkyway.rewards.v1.PoolDelegatorStartingInfoRecord.starting_info":
+	case "milkyway.rewards.v1.DelegatorStartingInfoRecord.delegation_target_id":
+		x.DelegationTargetId = uint32(0)
+	case "milkyway.rewards.v1.DelegatorStartingInfoRecord.starting_info":
 		x.StartingInfo = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolDelegatorStartingInfoRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DelegatorStartingInfoRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolDelegatorStartingInfoRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DelegatorStartingInfoRecord does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2212,22 +2212,22 @@ func (x *fastReflection_PoolDelegatorStartingInfoRecord) Clear(fd protoreflect.F
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_PoolDelegatorStartingInfoRecord) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_DelegatorStartingInfoRecord) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "milkyway.rewards.v1.PoolDelegatorStartingInfoRecord.delegator_address":
+	case "milkyway.rewards.v1.DelegatorStartingInfoRecord.delegator_address":
 		value := x.DelegatorAddress
 		return protoreflect.ValueOfString(value)
-	case "milkyway.rewards.v1.PoolDelegatorStartingInfoRecord.pool_id":
-		value := x.PoolId
+	case "milkyway.rewards.v1.DelegatorStartingInfoRecord.delegation_target_id":
+		value := x.DelegationTargetId
 		return protoreflect.ValueOfUint32(value)
-	case "milkyway.rewards.v1.PoolDelegatorStartingInfoRecord.starting_info":
+	case "milkyway.rewards.v1.DelegatorStartingInfoRecord.starting_info":
 		value := x.StartingInfo
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolDelegatorStartingInfoRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DelegatorStartingInfoRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolDelegatorStartingInfoRecord does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DelegatorStartingInfoRecord does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -2241,19 +2241,19 @@ func (x *fastReflection_PoolDelegatorStartingInfoRecord) Get(descriptor protoref
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolDelegatorStartingInfoRecord) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_DelegatorStartingInfoRecord) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolDelegatorStartingInfoRecord.delegator_address":
+	case "milkyway.rewards.v1.DelegatorStartingInfoRecord.delegator_address":
 		x.DelegatorAddress = value.Interface().(string)
-	case "milkyway.rewards.v1.PoolDelegatorStartingInfoRecord.pool_id":
-		x.PoolId = uint32(value.Uint())
-	case "milkyway.rewards.v1.PoolDelegatorStartingInfoRecord.starting_info":
+	case "milkyway.rewards.v1.DelegatorStartingInfoRecord.delegation_target_id":
+		x.DelegationTargetId = uint32(value.Uint())
+	case "milkyway.rewards.v1.DelegatorStartingInfoRecord.starting_info":
 		x.StartingInfo = value.Message().Interface().(*DelegatorStartingInfo)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolDelegatorStartingInfoRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DelegatorStartingInfoRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolDelegatorStartingInfoRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DelegatorStartingInfoRecord does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2267,52 +2267,52 @@ func (x *fastReflection_PoolDelegatorStartingInfoRecord) Set(fd protoreflect.Fie
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolDelegatorStartingInfoRecord) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_DelegatorStartingInfoRecord) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolDelegatorStartingInfoRecord.starting_info":
+	case "milkyway.rewards.v1.DelegatorStartingInfoRecord.starting_info":
 		if x.StartingInfo == nil {
 			x.StartingInfo = new(DelegatorStartingInfo)
 		}
 		return protoreflect.ValueOfMessage(x.StartingInfo.ProtoReflect())
-	case "milkyway.rewards.v1.PoolDelegatorStartingInfoRecord.delegator_address":
-		panic(fmt.Errorf("field delegator_address of message milkyway.rewards.v1.PoolDelegatorStartingInfoRecord is not mutable"))
-	case "milkyway.rewards.v1.PoolDelegatorStartingInfoRecord.pool_id":
-		panic(fmt.Errorf("field pool_id of message milkyway.rewards.v1.PoolDelegatorStartingInfoRecord is not mutable"))
+	case "milkyway.rewards.v1.DelegatorStartingInfoRecord.delegator_address":
+		panic(fmt.Errorf("field delegator_address of message milkyway.rewards.v1.DelegatorStartingInfoRecord is not mutable"))
+	case "milkyway.rewards.v1.DelegatorStartingInfoRecord.delegation_target_id":
+		panic(fmt.Errorf("field delegation_target_id of message milkyway.rewards.v1.DelegatorStartingInfoRecord is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolDelegatorStartingInfoRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DelegatorStartingInfoRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolDelegatorStartingInfoRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DelegatorStartingInfoRecord does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_PoolDelegatorStartingInfoRecord) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_DelegatorStartingInfoRecord) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolDelegatorStartingInfoRecord.delegator_address":
+	case "milkyway.rewards.v1.DelegatorStartingInfoRecord.delegator_address":
 		return protoreflect.ValueOfString("")
-	case "milkyway.rewards.v1.PoolDelegatorStartingInfoRecord.pool_id":
+	case "milkyway.rewards.v1.DelegatorStartingInfoRecord.delegation_target_id":
 		return protoreflect.ValueOfUint32(uint32(0))
-	case "milkyway.rewards.v1.PoolDelegatorStartingInfoRecord.starting_info":
+	case "milkyway.rewards.v1.DelegatorStartingInfoRecord.starting_info":
 		m := new(DelegatorStartingInfo)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolDelegatorStartingInfoRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DelegatorStartingInfoRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolDelegatorStartingInfoRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DelegatorStartingInfoRecord does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_PoolDelegatorStartingInfoRecord) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_DelegatorStartingInfoRecord) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.PoolDelegatorStartingInfoRecord", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.DelegatorStartingInfoRecord", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -2320,7 +2320,7 @@ func (x *fastReflection_PoolDelegatorStartingInfoRecord) WhichOneof(d protorefle
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_PoolDelegatorStartingInfoRecord) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_DelegatorStartingInfoRecord) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -2331,7 +2331,7 @@ func (x *fastReflection_PoolDelegatorStartingInfoRecord) GetUnknown() protorefle
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolDelegatorStartingInfoRecord) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_DelegatorStartingInfoRecord) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -2343,7 +2343,7 @@ func (x *fastReflection_PoolDelegatorStartingInfoRecord) SetUnknown(fields proto
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_PoolDelegatorStartingInfoRecord) IsValid() bool {
+func (x *fastReflection_DelegatorStartingInfoRecord) IsValid() bool {
 	return x != nil
 }
 
@@ -2353,9 +2353,9 @@ func (x *fastReflection_PoolDelegatorStartingInfoRecord) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_PoolDelegatorStartingInfoRecord) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_DelegatorStartingInfoRecord) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*PoolDelegatorStartingInfoRecord)
+		x := input.Message.Interface().(*DelegatorStartingInfoRecord)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2371,8 +2371,8 @@ func (x *fastReflection_PoolDelegatorStartingInfoRecord) ProtoMethods() *protoif
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if x.PoolId != 0 {
-			n += 1 + runtime.Sov(uint64(x.PoolId))
+		if x.DelegationTargetId != 0 {
+			n += 1 + runtime.Sov(uint64(x.DelegationTargetId))
 		}
 		if x.StartingInfo != nil {
 			l = options.Size(x.StartingInfo)
@@ -2388,7 +2388,7 @@ func (x *fastReflection_PoolDelegatorStartingInfoRecord) ProtoMethods() *protoif
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*PoolDelegatorStartingInfoRecord)
+		x := input.Message.Interface().(*DelegatorStartingInfoRecord)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2421,8 +2421,8 @@ func (x *fastReflection_PoolDelegatorStartingInfoRecord) ProtoMethods() *protoif
 			i--
 			dAtA[i] = 0x1a
 		}
-		if x.PoolId != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.PoolId))
+		if x.DelegationTargetId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.DelegationTargetId))
 			i--
 			dAtA[i] = 0x10
 		}
@@ -2444,7 +2444,7 @@ func (x *fastReflection_PoolDelegatorStartingInfoRecord) ProtoMethods() *protoif
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*PoolDelegatorStartingInfoRecord)
+		x := input.Message.Interface().(*DelegatorStartingInfoRecord)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2476,10 +2476,10 @@ func (x *fastReflection_PoolDelegatorStartingInfoRecord) ProtoMethods() *protoif
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: PoolDelegatorStartingInfoRecord: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DelegatorStartingInfoRecord: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: PoolDelegatorStartingInfoRecord: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DelegatorStartingInfoRecord: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -2516,9 +2516,9 @@ func (x *fastReflection_PoolDelegatorStartingInfoRecord) ProtoMethods() *protoif
 				iNdEx = postIndex
 			case 2:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DelegationTargetId", wireType)
 				}
-				x.PoolId = 0
+				x.DelegationTargetId = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -2528,7 +2528,7 @@ func (x *fastReflection_PoolDelegatorStartingInfoRecord) ProtoMethods() *protoif
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.PoolId |= uint32(b&0x7F) << shift
+					x.DelegationTargetId |= uint32(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -2604,548 +2604,6 @@ func (x *fastReflection_PoolDelegatorStartingInfoRecord) ProtoMethods() *protoif
 	}
 }
 
-var _ protoreflect.List = (*_OperatorOutstandingRewardsRecord_2_list)(nil)
-
-type _OperatorOutstandingRewardsRecord_2_list struct {
-	list *[]*DecPool
-}
-
-func (x *_OperatorOutstandingRewardsRecord_2_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_OperatorOutstandingRewardsRecord_2_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
-}
-
-func (x *_OperatorOutstandingRewardsRecord_2_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*DecPool)
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_OperatorOutstandingRewardsRecord_2_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*DecPool)
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_OperatorOutstandingRewardsRecord_2_list) AppendMutable() protoreflect.Value {
-	v := new(DecPool)
-	*x.list = append(*x.list, v)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_OperatorOutstandingRewardsRecord_2_list) Truncate(n int) {
-	for i := n; i < len(*x.list); i++ {
-		(*x.list)[i] = nil
-	}
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_OperatorOutstandingRewardsRecord_2_list) NewElement() protoreflect.Value {
-	v := new(DecPool)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_OperatorOutstandingRewardsRecord_2_list) IsValid() bool {
-	return x.list != nil
-}
-
-var (
-	md_OperatorOutstandingRewardsRecord                     protoreflect.MessageDescriptor
-	fd_OperatorOutstandingRewardsRecord_operator_id         protoreflect.FieldDescriptor
-	fd_OperatorOutstandingRewardsRecord_outstanding_rewards protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_milkyway_rewards_v1_genesis_proto_init()
-	md_OperatorOutstandingRewardsRecord = File_milkyway_rewards_v1_genesis_proto.Messages().ByName("OperatorOutstandingRewardsRecord")
-	fd_OperatorOutstandingRewardsRecord_operator_id = md_OperatorOutstandingRewardsRecord.Fields().ByName("operator_id")
-	fd_OperatorOutstandingRewardsRecord_outstanding_rewards = md_OperatorOutstandingRewardsRecord.Fields().ByName("outstanding_rewards")
-}
-
-var _ protoreflect.Message = (*fastReflection_OperatorOutstandingRewardsRecord)(nil)
-
-type fastReflection_OperatorOutstandingRewardsRecord OperatorOutstandingRewardsRecord
-
-func (x *OperatorOutstandingRewardsRecord) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_OperatorOutstandingRewardsRecord)(x)
-}
-
-func (x *OperatorOutstandingRewardsRecord) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[5]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_OperatorOutstandingRewardsRecord_messageType fastReflection_OperatorOutstandingRewardsRecord_messageType
-var _ protoreflect.MessageType = fastReflection_OperatorOutstandingRewardsRecord_messageType{}
-
-type fastReflection_OperatorOutstandingRewardsRecord_messageType struct{}
-
-func (x fastReflection_OperatorOutstandingRewardsRecord_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_OperatorOutstandingRewardsRecord)(nil)
-}
-func (x fastReflection_OperatorOutstandingRewardsRecord_messageType) New() protoreflect.Message {
-	return new(fastReflection_OperatorOutstandingRewardsRecord)
-}
-func (x fastReflection_OperatorOutstandingRewardsRecord_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorOutstandingRewardsRecord
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_OperatorOutstandingRewardsRecord) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorOutstandingRewardsRecord
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_OperatorOutstandingRewardsRecord) Type() protoreflect.MessageType {
-	return _fastReflection_OperatorOutstandingRewardsRecord_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_OperatorOutstandingRewardsRecord) New() protoreflect.Message {
-	return new(fastReflection_OperatorOutstandingRewardsRecord)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_OperatorOutstandingRewardsRecord) Interface() protoreflect.ProtoMessage {
-	return (*OperatorOutstandingRewardsRecord)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_OperatorOutstandingRewardsRecord) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.OperatorId != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.OperatorId)
-		if !f(fd_OperatorOutstandingRewardsRecord_operator_id, value) {
-			return
-		}
-	}
-	if len(x.OutstandingRewards) != 0 {
-		value := protoreflect.ValueOfList(&_OperatorOutstandingRewardsRecord_2_list{list: &x.OutstandingRewards})
-		if !f(fd_OperatorOutstandingRewardsRecord_outstanding_rewards, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_OperatorOutstandingRewardsRecord) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorOutstandingRewardsRecord.operator_id":
-		return x.OperatorId != uint32(0)
-	case "milkyway.rewards.v1.OperatorOutstandingRewardsRecord.outstanding_rewards":
-		return len(x.OutstandingRewards) != 0
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorOutstandingRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorOutstandingRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorOutstandingRewardsRecord) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorOutstandingRewardsRecord.operator_id":
-		x.OperatorId = uint32(0)
-	case "milkyway.rewards.v1.OperatorOutstandingRewardsRecord.outstanding_rewards":
-		x.OutstandingRewards = nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorOutstandingRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorOutstandingRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_OperatorOutstandingRewardsRecord) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "milkyway.rewards.v1.OperatorOutstandingRewardsRecord.operator_id":
-		value := x.OperatorId
-		return protoreflect.ValueOfUint32(value)
-	case "milkyway.rewards.v1.OperatorOutstandingRewardsRecord.outstanding_rewards":
-		if len(x.OutstandingRewards) == 0 {
-			return protoreflect.ValueOfList(&_OperatorOutstandingRewardsRecord_2_list{})
-		}
-		listValue := &_OperatorOutstandingRewardsRecord_2_list{list: &x.OutstandingRewards}
-		return protoreflect.ValueOfList(listValue)
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorOutstandingRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorOutstandingRewardsRecord does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorOutstandingRewardsRecord) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorOutstandingRewardsRecord.operator_id":
-		x.OperatorId = uint32(value.Uint())
-	case "milkyway.rewards.v1.OperatorOutstandingRewardsRecord.outstanding_rewards":
-		lv := value.List()
-		clv := lv.(*_OperatorOutstandingRewardsRecord_2_list)
-		x.OutstandingRewards = *clv.list
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorOutstandingRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorOutstandingRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorOutstandingRewardsRecord) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorOutstandingRewardsRecord.outstanding_rewards":
-		if x.OutstandingRewards == nil {
-			x.OutstandingRewards = []*DecPool{}
-		}
-		value := &_OperatorOutstandingRewardsRecord_2_list{list: &x.OutstandingRewards}
-		return protoreflect.ValueOfList(value)
-	case "milkyway.rewards.v1.OperatorOutstandingRewardsRecord.operator_id":
-		panic(fmt.Errorf("field operator_id of message milkyway.rewards.v1.OperatorOutstandingRewardsRecord is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorOutstandingRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorOutstandingRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_OperatorOutstandingRewardsRecord) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorOutstandingRewardsRecord.operator_id":
-		return protoreflect.ValueOfUint32(uint32(0))
-	case "milkyway.rewards.v1.OperatorOutstandingRewardsRecord.outstanding_rewards":
-		list := []*DecPool{}
-		return protoreflect.ValueOfList(&_OperatorOutstandingRewardsRecord_2_list{list: &list})
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorOutstandingRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorOutstandingRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_OperatorOutstandingRewardsRecord) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.OperatorOutstandingRewardsRecord", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_OperatorOutstandingRewardsRecord) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorOutstandingRewardsRecord) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_OperatorOutstandingRewardsRecord) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_OperatorOutstandingRewardsRecord) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*OperatorOutstandingRewardsRecord)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		if x.OperatorId != 0 {
-			n += 1 + runtime.Sov(uint64(x.OperatorId))
-		}
-		if len(x.OutstandingRewards) > 0 {
-			for _, e := range x.OutstandingRewards {
-				l = options.Size(e)
-				n += 1 + l + runtime.Sov(uint64(l))
-			}
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorOutstandingRewardsRecord)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if len(x.OutstandingRewards) > 0 {
-			for iNdEx := len(x.OutstandingRewards) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.OutstandingRewards[iNdEx])
-				if err != nil {
-					return protoiface.MarshalOutput{
-						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-						Buf:               input.Buf,
-					}, err
-				}
-				i -= len(encoded)
-				copy(dAtA[i:], encoded)
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-				i--
-				dAtA[i] = 0x12
-			}
-		}
-		if x.OperatorId != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.OperatorId))
-			i--
-			dAtA[i] = 0x8
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorOutstandingRewardsRecord)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorOutstandingRewardsRecord: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorOutstandingRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OperatorId", wireType)
-				}
-				x.OperatorId = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.OperatorId |= uint32(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 2:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OutstandingRewards", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.OutstandingRewards = append(x.OutstandingRewards, &DecPool{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.OutstandingRewards[len(x.OutstandingRewards)-1]); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
 var (
 	md_OperatorAccumulatedCommissionRecord             protoreflect.MessageDescriptor
 	fd_OperatorAccumulatedCommissionRecord_operator_id protoreflect.FieldDescriptor
@@ -3168,7 +2626,7 @@ func (x *OperatorAccumulatedCommissionRecord) ProtoReflect() protoreflect.Messag
 }
 
 func (x *OperatorAccumulatedCommissionRecord) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[6]
+	mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3629,3670 +3087,6 @@ func (x *fastReflection_OperatorAccumulatedCommissionRecord) ProtoMethods() *pro
 	}
 }
 
-var (
-	md_OperatorHistoricalRewardsRecord             protoreflect.MessageDescriptor
-	fd_OperatorHistoricalRewardsRecord_operator_id protoreflect.FieldDescriptor
-	fd_OperatorHistoricalRewardsRecord_period      protoreflect.FieldDescriptor
-	fd_OperatorHistoricalRewardsRecord_rewards     protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_milkyway_rewards_v1_genesis_proto_init()
-	md_OperatorHistoricalRewardsRecord = File_milkyway_rewards_v1_genesis_proto.Messages().ByName("OperatorHistoricalRewardsRecord")
-	fd_OperatorHistoricalRewardsRecord_operator_id = md_OperatorHistoricalRewardsRecord.Fields().ByName("operator_id")
-	fd_OperatorHistoricalRewardsRecord_period = md_OperatorHistoricalRewardsRecord.Fields().ByName("period")
-	fd_OperatorHistoricalRewardsRecord_rewards = md_OperatorHistoricalRewardsRecord.Fields().ByName("rewards")
-}
-
-var _ protoreflect.Message = (*fastReflection_OperatorHistoricalRewardsRecord)(nil)
-
-type fastReflection_OperatorHistoricalRewardsRecord OperatorHistoricalRewardsRecord
-
-func (x *OperatorHistoricalRewardsRecord) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_OperatorHistoricalRewardsRecord)(x)
-}
-
-func (x *OperatorHistoricalRewardsRecord) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[7]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_OperatorHistoricalRewardsRecord_messageType fastReflection_OperatorHistoricalRewardsRecord_messageType
-var _ protoreflect.MessageType = fastReflection_OperatorHistoricalRewardsRecord_messageType{}
-
-type fastReflection_OperatorHistoricalRewardsRecord_messageType struct{}
-
-func (x fastReflection_OperatorHistoricalRewardsRecord_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_OperatorHistoricalRewardsRecord)(nil)
-}
-func (x fastReflection_OperatorHistoricalRewardsRecord_messageType) New() protoreflect.Message {
-	return new(fastReflection_OperatorHistoricalRewardsRecord)
-}
-func (x fastReflection_OperatorHistoricalRewardsRecord_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorHistoricalRewardsRecord
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_OperatorHistoricalRewardsRecord) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorHistoricalRewardsRecord
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_OperatorHistoricalRewardsRecord) Type() protoreflect.MessageType {
-	return _fastReflection_OperatorHistoricalRewardsRecord_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_OperatorHistoricalRewardsRecord) New() protoreflect.Message {
-	return new(fastReflection_OperatorHistoricalRewardsRecord)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_OperatorHistoricalRewardsRecord) Interface() protoreflect.ProtoMessage {
-	return (*OperatorHistoricalRewardsRecord)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_OperatorHistoricalRewardsRecord) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.OperatorId != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.OperatorId)
-		if !f(fd_OperatorHistoricalRewardsRecord_operator_id, value) {
-			return
-		}
-	}
-	if x.Period != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.Period)
-		if !f(fd_OperatorHistoricalRewardsRecord_period, value) {
-			return
-		}
-	}
-	if x.Rewards != nil {
-		value := protoreflect.ValueOfMessage(x.Rewards.ProtoReflect())
-		if !f(fd_OperatorHistoricalRewardsRecord_rewards, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_OperatorHistoricalRewardsRecord) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorHistoricalRewardsRecord.operator_id":
-		return x.OperatorId != uint32(0)
-	case "milkyway.rewards.v1.OperatorHistoricalRewardsRecord.period":
-		return x.Period != uint64(0)
-	case "milkyway.rewards.v1.OperatorHistoricalRewardsRecord.rewards":
-		return x.Rewards != nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorHistoricalRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorHistoricalRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorHistoricalRewardsRecord) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorHistoricalRewardsRecord.operator_id":
-		x.OperatorId = uint32(0)
-	case "milkyway.rewards.v1.OperatorHistoricalRewardsRecord.period":
-		x.Period = uint64(0)
-	case "milkyway.rewards.v1.OperatorHistoricalRewardsRecord.rewards":
-		x.Rewards = nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorHistoricalRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorHistoricalRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_OperatorHistoricalRewardsRecord) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "milkyway.rewards.v1.OperatorHistoricalRewardsRecord.operator_id":
-		value := x.OperatorId
-		return protoreflect.ValueOfUint32(value)
-	case "milkyway.rewards.v1.OperatorHistoricalRewardsRecord.period":
-		value := x.Period
-		return protoreflect.ValueOfUint64(value)
-	case "milkyway.rewards.v1.OperatorHistoricalRewardsRecord.rewards":
-		value := x.Rewards
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorHistoricalRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorHistoricalRewardsRecord does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorHistoricalRewardsRecord) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorHistoricalRewardsRecord.operator_id":
-		x.OperatorId = uint32(value.Uint())
-	case "milkyway.rewards.v1.OperatorHistoricalRewardsRecord.period":
-		x.Period = value.Uint()
-	case "milkyway.rewards.v1.OperatorHistoricalRewardsRecord.rewards":
-		x.Rewards = value.Message().Interface().(*HistoricalRewards)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorHistoricalRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorHistoricalRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorHistoricalRewardsRecord) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorHistoricalRewardsRecord.rewards":
-		if x.Rewards == nil {
-			x.Rewards = new(HistoricalRewards)
-		}
-		return protoreflect.ValueOfMessage(x.Rewards.ProtoReflect())
-	case "milkyway.rewards.v1.OperatorHistoricalRewardsRecord.operator_id":
-		panic(fmt.Errorf("field operator_id of message milkyway.rewards.v1.OperatorHistoricalRewardsRecord is not mutable"))
-	case "milkyway.rewards.v1.OperatorHistoricalRewardsRecord.period":
-		panic(fmt.Errorf("field period of message milkyway.rewards.v1.OperatorHistoricalRewardsRecord is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorHistoricalRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorHistoricalRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_OperatorHistoricalRewardsRecord) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorHistoricalRewardsRecord.operator_id":
-		return protoreflect.ValueOfUint32(uint32(0))
-	case "milkyway.rewards.v1.OperatorHistoricalRewardsRecord.period":
-		return protoreflect.ValueOfUint64(uint64(0))
-	case "milkyway.rewards.v1.OperatorHistoricalRewardsRecord.rewards":
-		m := new(HistoricalRewards)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorHistoricalRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorHistoricalRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_OperatorHistoricalRewardsRecord) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.OperatorHistoricalRewardsRecord", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_OperatorHistoricalRewardsRecord) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorHistoricalRewardsRecord) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_OperatorHistoricalRewardsRecord) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_OperatorHistoricalRewardsRecord) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*OperatorHistoricalRewardsRecord)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		if x.OperatorId != 0 {
-			n += 1 + runtime.Sov(uint64(x.OperatorId))
-		}
-		if x.Period != 0 {
-			n += 1 + runtime.Sov(uint64(x.Period))
-		}
-		if x.Rewards != nil {
-			l = options.Size(x.Rewards)
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorHistoricalRewardsRecord)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if x.Rewards != nil {
-			encoded, err := options.Marshal(x.Rewards)
-			if err != nil {
-				return protoiface.MarshalOutput{
-					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-					Buf:               input.Buf,
-				}, err
-			}
-			i -= len(encoded)
-			copy(dAtA[i:], encoded)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-			i--
-			dAtA[i] = 0x1a
-		}
-		if x.Period != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Period))
-			i--
-			dAtA[i] = 0x10
-		}
-		if x.OperatorId != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.OperatorId))
-			i--
-			dAtA[i] = 0x8
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorHistoricalRewardsRecord)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorHistoricalRewardsRecord: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorHistoricalRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OperatorId", wireType)
-				}
-				x.OperatorId = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.OperatorId |= uint32(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 2:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Period", wireType)
-				}
-				x.Period = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.Period |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 3:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Rewards", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if x.Rewards == nil {
-					x.Rewards = &HistoricalRewards{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Rewards); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
-	md_OperatorCurrentRewardsRecord             protoreflect.MessageDescriptor
-	fd_OperatorCurrentRewardsRecord_operator_id protoreflect.FieldDescriptor
-	fd_OperatorCurrentRewardsRecord_rewards     protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_milkyway_rewards_v1_genesis_proto_init()
-	md_OperatorCurrentRewardsRecord = File_milkyway_rewards_v1_genesis_proto.Messages().ByName("OperatorCurrentRewardsRecord")
-	fd_OperatorCurrentRewardsRecord_operator_id = md_OperatorCurrentRewardsRecord.Fields().ByName("operator_id")
-	fd_OperatorCurrentRewardsRecord_rewards = md_OperatorCurrentRewardsRecord.Fields().ByName("rewards")
-}
-
-var _ protoreflect.Message = (*fastReflection_OperatorCurrentRewardsRecord)(nil)
-
-type fastReflection_OperatorCurrentRewardsRecord OperatorCurrentRewardsRecord
-
-func (x *OperatorCurrentRewardsRecord) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_OperatorCurrentRewardsRecord)(x)
-}
-
-func (x *OperatorCurrentRewardsRecord) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[8]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_OperatorCurrentRewardsRecord_messageType fastReflection_OperatorCurrentRewardsRecord_messageType
-var _ protoreflect.MessageType = fastReflection_OperatorCurrentRewardsRecord_messageType{}
-
-type fastReflection_OperatorCurrentRewardsRecord_messageType struct{}
-
-func (x fastReflection_OperatorCurrentRewardsRecord_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_OperatorCurrentRewardsRecord)(nil)
-}
-func (x fastReflection_OperatorCurrentRewardsRecord_messageType) New() protoreflect.Message {
-	return new(fastReflection_OperatorCurrentRewardsRecord)
-}
-func (x fastReflection_OperatorCurrentRewardsRecord_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorCurrentRewardsRecord
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_OperatorCurrentRewardsRecord) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorCurrentRewardsRecord
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_OperatorCurrentRewardsRecord) Type() protoreflect.MessageType {
-	return _fastReflection_OperatorCurrentRewardsRecord_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_OperatorCurrentRewardsRecord) New() protoreflect.Message {
-	return new(fastReflection_OperatorCurrentRewardsRecord)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_OperatorCurrentRewardsRecord) Interface() protoreflect.ProtoMessage {
-	return (*OperatorCurrentRewardsRecord)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_OperatorCurrentRewardsRecord) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.OperatorId != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.OperatorId)
-		if !f(fd_OperatorCurrentRewardsRecord_operator_id, value) {
-			return
-		}
-	}
-	if x.Rewards != nil {
-		value := protoreflect.ValueOfMessage(x.Rewards.ProtoReflect())
-		if !f(fd_OperatorCurrentRewardsRecord_rewards, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_OperatorCurrentRewardsRecord) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorCurrentRewardsRecord.operator_id":
-		return x.OperatorId != uint32(0)
-	case "milkyway.rewards.v1.OperatorCurrentRewardsRecord.rewards":
-		return x.Rewards != nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorCurrentRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorCurrentRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorCurrentRewardsRecord) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorCurrentRewardsRecord.operator_id":
-		x.OperatorId = uint32(0)
-	case "milkyway.rewards.v1.OperatorCurrentRewardsRecord.rewards":
-		x.Rewards = nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorCurrentRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorCurrentRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_OperatorCurrentRewardsRecord) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "milkyway.rewards.v1.OperatorCurrentRewardsRecord.operator_id":
-		value := x.OperatorId
-		return protoreflect.ValueOfUint32(value)
-	case "milkyway.rewards.v1.OperatorCurrentRewardsRecord.rewards":
-		value := x.Rewards
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorCurrentRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorCurrentRewardsRecord does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorCurrentRewardsRecord) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorCurrentRewardsRecord.operator_id":
-		x.OperatorId = uint32(value.Uint())
-	case "milkyway.rewards.v1.OperatorCurrentRewardsRecord.rewards":
-		x.Rewards = value.Message().Interface().(*CurrentRewards)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorCurrentRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorCurrentRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorCurrentRewardsRecord) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorCurrentRewardsRecord.rewards":
-		if x.Rewards == nil {
-			x.Rewards = new(CurrentRewards)
-		}
-		return protoreflect.ValueOfMessage(x.Rewards.ProtoReflect())
-	case "milkyway.rewards.v1.OperatorCurrentRewardsRecord.operator_id":
-		panic(fmt.Errorf("field operator_id of message milkyway.rewards.v1.OperatorCurrentRewardsRecord is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorCurrentRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorCurrentRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_OperatorCurrentRewardsRecord) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorCurrentRewardsRecord.operator_id":
-		return protoreflect.ValueOfUint32(uint32(0))
-	case "milkyway.rewards.v1.OperatorCurrentRewardsRecord.rewards":
-		m := new(CurrentRewards)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorCurrentRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorCurrentRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_OperatorCurrentRewardsRecord) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.OperatorCurrentRewardsRecord", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_OperatorCurrentRewardsRecord) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorCurrentRewardsRecord) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_OperatorCurrentRewardsRecord) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_OperatorCurrentRewardsRecord) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*OperatorCurrentRewardsRecord)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		if x.OperatorId != 0 {
-			n += 1 + runtime.Sov(uint64(x.OperatorId))
-		}
-		if x.Rewards != nil {
-			l = options.Size(x.Rewards)
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorCurrentRewardsRecord)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if x.Rewards != nil {
-			encoded, err := options.Marshal(x.Rewards)
-			if err != nil {
-				return protoiface.MarshalOutput{
-					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-					Buf:               input.Buf,
-				}, err
-			}
-			i -= len(encoded)
-			copy(dAtA[i:], encoded)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-			i--
-			dAtA[i] = 0x12
-		}
-		if x.OperatorId != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.OperatorId))
-			i--
-			dAtA[i] = 0x8
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorCurrentRewardsRecord)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorCurrentRewardsRecord: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorCurrentRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OperatorId", wireType)
-				}
-				x.OperatorId = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.OperatorId |= uint32(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 2:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Rewards", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if x.Rewards == nil {
-					x.Rewards = &CurrentRewards{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Rewards); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
-	md_OperatorDelegatorStartingInfoRecord                   protoreflect.MessageDescriptor
-	fd_OperatorDelegatorStartingInfoRecord_delegator_address protoreflect.FieldDescriptor
-	fd_OperatorDelegatorStartingInfoRecord_operator_id       protoreflect.FieldDescriptor
-	fd_OperatorDelegatorStartingInfoRecord_starting_info     protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_milkyway_rewards_v1_genesis_proto_init()
-	md_OperatorDelegatorStartingInfoRecord = File_milkyway_rewards_v1_genesis_proto.Messages().ByName("OperatorDelegatorStartingInfoRecord")
-	fd_OperatorDelegatorStartingInfoRecord_delegator_address = md_OperatorDelegatorStartingInfoRecord.Fields().ByName("delegator_address")
-	fd_OperatorDelegatorStartingInfoRecord_operator_id = md_OperatorDelegatorStartingInfoRecord.Fields().ByName("operator_id")
-	fd_OperatorDelegatorStartingInfoRecord_starting_info = md_OperatorDelegatorStartingInfoRecord.Fields().ByName("starting_info")
-}
-
-var _ protoreflect.Message = (*fastReflection_OperatorDelegatorStartingInfoRecord)(nil)
-
-type fastReflection_OperatorDelegatorStartingInfoRecord OperatorDelegatorStartingInfoRecord
-
-func (x *OperatorDelegatorStartingInfoRecord) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_OperatorDelegatorStartingInfoRecord)(x)
-}
-
-func (x *OperatorDelegatorStartingInfoRecord) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[9]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_OperatorDelegatorStartingInfoRecord_messageType fastReflection_OperatorDelegatorStartingInfoRecord_messageType
-var _ protoreflect.MessageType = fastReflection_OperatorDelegatorStartingInfoRecord_messageType{}
-
-type fastReflection_OperatorDelegatorStartingInfoRecord_messageType struct{}
-
-func (x fastReflection_OperatorDelegatorStartingInfoRecord_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_OperatorDelegatorStartingInfoRecord)(nil)
-}
-func (x fastReflection_OperatorDelegatorStartingInfoRecord_messageType) New() protoreflect.Message {
-	return new(fastReflection_OperatorDelegatorStartingInfoRecord)
-}
-func (x fastReflection_OperatorDelegatorStartingInfoRecord_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorDelegatorStartingInfoRecord
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_OperatorDelegatorStartingInfoRecord) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorDelegatorStartingInfoRecord
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_OperatorDelegatorStartingInfoRecord) Type() protoreflect.MessageType {
-	return _fastReflection_OperatorDelegatorStartingInfoRecord_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_OperatorDelegatorStartingInfoRecord) New() protoreflect.Message {
-	return new(fastReflection_OperatorDelegatorStartingInfoRecord)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_OperatorDelegatorStartingInfoRecord) Interface() protoreflect.ProtoMessage {
-	return (*OperatorDelegatorStartingInfoRecord)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_OperatorDelegatorStartingInfoRecord) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.DelegatorAddress != "" {
-		value := protoreflect.ValueOfString(x.DelegatorAddress)
-		if !f(fd_OperatorDelegatorStartingInfoRecord_delegator_address, value) {
-			return
-		}
-	}
-	if x.OperatorId != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.OperatorId)
-		if !f(fd_OperatorDelegatorStartingInfoRecord_operator_id, value) {
-			return
-		}
-	}
-	if x.StartingInfo != nil {
-		value := protoreflect.ValueOfMessage(x.StartingInfo.ProtoReflect())
-		if !f(fd_OperatorDelegatorStartingInfoRecord_starting_info, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_OperatorDelegatorStartingInfoRecord) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord.delegator_address":
-		return x.DelegatorAddress != ""
-	case "milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord.operator_id":
-		return x.OperatorId != uint32(0)
-	case "milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord.starting_info":
-		return x.StartingInfo != nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorDelegatorStartingInfoRecord) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord.delegator_address":
-		x.DelegatorAddress = ""
-	case "milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord.operator_id":
-		x.OperatorId = uint32(0)
-	case "milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord.starting_info":
-		x.StartingInfo = nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_OperatorDelegatorStartingInfoRecord) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord.delegator_address":
-		value := x.DelegatorAddress
-		return protoreflect.ValueOfString(value)
-	case "milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord.operator_id":
-		value := x.OperatorId
-		return protoreflect.ValueOfUint32(value)
-	case "milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord.starting_info":
-		value := x.StartingInfo
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorDelegatorStartingInfoRecord) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord.delegator_address":
-		x.DelegatorAddress = value.Interface().(string)
-	case "milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord.operator_id":
-		x.OperatorId = uint32(value.Uint())
-	case "milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord.starting_info":
-		x.StartingInfo = value.Message().Interface().(*DelegatorStartingInfo)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorDelegatorStartingInfoRecord) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord.starting_info":
-		if x.StartingInfo == nil {
-			x.StartingInfo = new(DelegatorStartingInfo)
-		}
-		return protoreflect.ValueOfMessage(x.StartingInfo.ProtoReflect())
-	case "milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord.delegator_address":
-		panic(fmt.Errorf("field delegator_address of message milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord is not mutable"))
-	case "milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord.operator_id":
-		panic(fmt.Errorf("field operator_id of message milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_OperatorDelegatorStartingInfoRecord) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord.delegator_address":
-		return protoreflect.ValueOfString("")
-	case "milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord.operator_id":
-		return protoreflect.ValueOfUint32(uint32(0))
-	case "milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord.starting_info":
-		m := new(DelegatorStartingInfo)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_OperatorDelegatorStartingInfoRecord) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_OperatorDelegatorStartingInfoRecord) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorDelegatorStartingInfoRecord) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_OperatorDelegatorStartingInfoRecord) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_OperatorDelegatorStartingInfoRecord) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*OperatorDelegatorStartingInfoRecord)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		l = len(x.DelegatorAddress)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.OperatorId != 0 {
-			n += 1 + runtime.Sov(uint64(x.OperatorId))
-		}
-		if x.StartingInfo != nil {
-			l = options.Size(x.StartingInfo)
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorDelegatorStartingInfoRecord)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if x.StartingInfo != nil {
-			encoded, err := options.Marshal(x.StartingInfo)
-			if err != nil {
-				return protoiface.MarshalOutput{
-					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-					Buf:               input.Buf,
-				}, err
-			}
-			i -= len(encoded)
-			copy(dAtA[i:], encoded)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-			i--
-			dAtA[i] = 0x1a
-		}
-		if x.OperatorId != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.OperatorId))
-			i--
-			dAtA[i] = 0x10
-		}
-		if len(x.DelegatorAddress) > 0 {
-			i -= len(x.DelegatorAddress)
-			copy(dAtA[i:], x.DelegatorAddress)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DelegatorAddress)))
-			i--
-			dAtA[i] = 0xa
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorDelegatorStartingInfoRecord)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorDelegatorStartingInfoRecord: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorDelegatorStartingInfoRecord: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DelegatorAddress", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.DelegatorAddress = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 2:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OperatorId", wireType)
-				}
-				x.OperatorId = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.OperatorId |= uint32(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 3:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field StartingInfo", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if x.StartingInfo == nil {
-					x.StartingInfo = &DelegatorStartingInfo{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.StartingInfo); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var _ protoreflect.List = (*_ServiceOutstandingRewardsRecord_2_list)(nil)
-
-type _ServiceOutstandingRewardsRecord_2_list struct {
-	list *[]*DecPool
-}
-
-func (x *_ServiceOutstandingRewardsRecord_2_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_ServiceOutstandingRewardsRecord_2_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
-}
-
-func (x *_ServiceOutstandingRewardsRecord_2_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*DecPool)
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_ServiceOutstandingRewardsRecord_2_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*DecPool)
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_ServiceOutstandingRewardsRecord_2_list) AppendMutable() protoreflect.Value {
-	v := new(DecPool)
-	*x.list = append(*x.list, v)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_ServiceOutstandingRewardsRecord_2_list) Truncate(n int) {
-	for i := n; i < len(*x.list); i++ {
-		(*x.list)[i] = nil
-	}
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_ServiceOutstandingRewardsRecord_2_list) NewElement() protoreflect.Value {
-	v := new(DecPool)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_ServiceOutstandingRewardsRecord_2_list) IsValid() bool {
-	return x.list != nil
-}
-
-var (
-	md_ServiceOutstandingRewardsRecord                     protoreflect.MessageDescriptor
-	fd_ServiceOutstandingRewardsRecord_service_id          protoreflect.FieldDescriptor
-	fd_ServiceOutstandingRewardsRecord_outstanding_rewards protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_milkyway_rewards_v1_genesis_proto_init()
-	md_ServiceOutstandingRewardsRecord = File_milkyway_rewards_v1_genesis_proto.Messages().ByName("ServiceOutstandingRewardsRecord")
-	fd_ServiceOutstandingRewardsRecord_service_id = md_ServiceOutstandingRewardsRecord.Fields().ByName("service_id")
-	fd_ServiceOutstandingRewardsRecord_outstanding_rewards = md_ServiceOutstandingRewardsRecord.Fields().ByName("outstanding_rewards")
-}
-
-var _ protoreflect.Message = (*fastReflection_ServiceOutstandingRewardsRecord)(nil)
-
-type fastReflection_ServiceOutstandingRewardsRecord ServiceOutstandingRewardsRecord
-
-func (x *ServiceOutstandingRewardsRecord) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_ServiceOutstandingRewardsRecord)(x)
-}
-
-func (x *ServiceOutstandingRewardsRecord) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[10]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_ServiceOutstandingRewardsRecord_messageType fastReflection_ServiceOutstandingRewardsRecord_messageType
-var _ protoreflect.MessageType = fastReflection_ServiceOutstandingRewardsRecord_messageType{}
-
-type fastReflection_ServiceOutstandingRewardsRecord_messageType struct{}
-
-func (x fastReflection_ServiceOutstandingRewardsRecord_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_ServiceOutstandingRewardsRecord)(nil)
-}
-func (x fastReflection_ServiceOutstandingRewardsRecord_messageType) New() protoreflect.Message {
-	return new(fastReflection_ServiceOutstandingRewardsRecord)
-}
-func (x fastReflection_ServiceOutstandingRewardsRecord_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_ServiceOutstandingRewardsRecord
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_ServiceOutstandingRewardsRecord) Descriptor() protoreflect.MessageDescriptor {
-	return md_ServiceOutstandingRewardsRecord
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_ServiceOutstandingRewardsRecord) Type() protoreflect.MessageType {
-	return _fastReflection_ServiceOutstandingRewardsRecord_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_ServiceOutstandingRewardsRecord) New() protoreflect.Message {
-	return new(fastReflection_ServiceOutstandingRewardsRecord)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_ServiceOutstandingRewardsRecord) Interface() protoreflect.ProtoMessage {
-	return (*ServiceOutstandingRewardsRecord)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_ServiceOutstandingRewardsRecord) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.ServiceId != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.ServiceId)
-		if !f(fd_ServiceOutstandingRewardsRecord_service_id, value) {
-			return
-		}
-	}
-	if len(x.OutstandingRewards) != 0 {
-		value := protoreflect.ValueOfList(&_ServiceOutstandingRewardsRecord_2_list{list: &x.OutstandingRewards})
-		if !f(fd_ServiceOutstandingRewardsRecord_outstanding_rewards, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_ServiceOutstandingRewardsRecord) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.ServiceOutstandingRewardsRecord.service_id":
-		return x.ServiceId != uint32(0)
-	case "milkyway.rewards.v1.ServiceOutstandingRewardsRecord.outstanding_rewards":
-		return len(x.OutstandingRewards) != 0
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceOutstandingRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceOutstandingRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceOutstandingRewardsRecord) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.ServiceOutstandingRewardsRecord.service_id":
-		x.ServiceId = uint32(0)
-	case "milkyway.rewards.v1.ServiceOutstandingRewardsRecord.outstanding_rewards":
-		x.OutstandingRewards = nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceOutstandingRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceOutstandingRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_ServiceOutstandingRewardsRecord) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "milkyway.rewards.v1.ServiceOutstandingRewardsRecord.service_id":
-		value := x.ServiceId
-		return protoreflect.ValueOfUint32(value)
-	case "milkyway.rewards.v1.ServiceOutstandingRewardsRecord.outstanding_rewards":
-		if len(x.OutstandingRewards) == 0 {
-			return protoreflect.ValueOfList(&_ServiceOutstandingRewardsRecord_2_list{})
-		}
-		listValue := &_ServiceOutstandingRewardsRecord_2_list{list: &x.OutstandingRewards}
-		return protoreflect.ValueOfList(listValue)
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceOutstandingRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceOutstandingRewardsRecord does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceOutstandingRewardsRecord) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.ServiceOutstandingRewardsRecord.service_id":
-		x.ServiceId = uint32(value.Uint())
-	case "milkyway.rewards.v1.ServiceOutstandingRewardsRecord.outstanding_rewards":
-		lv := value.List()
-		clv := lv.(*_ServiceOutstandingRewardsRecord_2_list)
-		x.OutstandingRewards = *clv.list
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceOutstandingRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceOutstandingRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceOutstandingRewardsRecord) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.ServiceOutstandingRewardsRecord.outstanding_rewards":
-		if x.OutstandingRewards == nil {
-			x.OutstandingRewards = []*DecPool{}
-		}
-		value := &_ServiceOutstandingRewardsRecord_2_list{list: &x.OutstandingRewards}
-		return protoreflect.ValueOfList(value)
-	case "milkyway.rewards.v1.ServiceOutstandingRewardsRecord.service_id":
-		panic(fmt.Errorf("field service_id of message milkyway.rewards.v1.ServiceOutstandingRewardsRecord is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceOutstandingRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceOutstandingRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_ServiceOutstandingRewardsRecord) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.ServiceOutstandingRewardsRecord.service_id":
-		return protoreflect.ValueOfUint32(uint32(0))
-	case "milkyway.rewards.v1.ServiceOutstandingRewardsRecord.outstanding_rewards":
-		list := []*DecPool{}
-		return protoreflect.ValueOfList(&_ServiceOutstandingRewardsRecord_2_list{list: &list})
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceOutstandingRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceOutstandingRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_ServiceOutstandingRewardsRecord) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.ServiceOutstandingRewardsRecord", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_ServiceOutstandingRewardsRecord) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceOutstandingRewardsRecord) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_ServiceOutstandingRewardsRecord) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_ServiceOutstandingRewardsRecord) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*ServiceOutstandingRewardsRecord)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		if x.ServiceId != 0 {
-			n += 1 + runtime.Sov(uint64(x.ServiceId))
-		}
-		if len(x.OutstandingRewards) > 0 {
-			for _, e := range x.OutstandingRewards {
-				l = options.Size(e)
-				n += 1 + l + runtime.Sov(uint64(l))
-			}
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*ServiceOutstandingRewardsRecord)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if len(x.OutstandingRewards) > 0 {
-			for iNdEx := len(x.OutstandingRewards) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.OutstandingRewards[iNdEx])
-				if err != nil {
-					return protoiface.MarshalOutput{
-						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-						Buf:               input.Buf,
-					}, err
-				}
-				i -= len(encoded)
-				copy(dAtA[i:], encoded)
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-				i--
-				dAtA[i] = 0x12
-			}
-		}
-		if x.ServiceId != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.ServiceId))
-			i--
-			dAtA[i] = 0x8
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*ServiceOutstandingRewardsRecord)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ServiceOutstandingRewardsRecord: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ServiceOutstandingRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ServiceId", wireType)
-				}
-				x.ServiceId = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.ServiceId |= uint32(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 2:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OutstandingRewards", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.OutstandingRewards = append(x.OutstandingRewards, &DecPool{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.OutstandingRewards[len(x.OutstandingRewards)-1]); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
-	md_ServiceHistoricalRewardsRecord            protoreflect.MessageDescriptor
-	fd_ServiceHistoricalRewardsRecord_service_id protoreflect.FieldDescriptor
-	fd_ServiceHistoricalRewardsRecord_period     protoreflect.FieldDescriptor
-	fd_ServiceHistoricalRewardsRecord_rewards    protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_milkyway_rewards_v1_genesis_proto_init()
-	md_ServiceHistoricalRewardsRecord = File_milkyway_rewards_v1_genesis_proto.Messages().ByName("ServiceHistoricalRewardsRecord")
-	fd_ServiceHistoricalRewardsRecord_service_id = md_ServiceHistoricalRewardsRecord.Fields().ByName("service_id")
-	fd_ServiceHistoricalRewardsRecord_period = md_ServiceHistoricalRewardsRecord.Fields().ByName("period")
-	fd_ServiceHistoricalRewardsRecord_rewards = md_ServiceHistoricalRewardsRecord.Fields().ByName("rewards")
-}
-
-var _ protoreflect.Message = (*fastReflection_ServiceHistoricalRewardsRecord)(nil)
-
-type fastReflection_ServiceHistoricalRewardsRecord ServiceHistoricalRewardsRecord
-
-func (x *ServiceHistoricalRewardsRecord) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_ServiceHistoricalRewardsRecord)(x)
-}
-
-func (x *ServiceHistoricalRewardsRecord) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[11]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_ServiceHistoricalRewardsRecord_messageType fastReflection_ServiceHistoricalRewardsRecord_messageType
-var _ protoreflect.MessageType = fastReflection_ServiceHistoricalRewardsRecord_messageType{}
-
-type fastReflection_ServiceHistoricalRewardsRecord_messageType struct{}
-
-func (x fastReflection_ServiceHistoricalRewardsRecord_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_ServiceHistoricalRewardsRecord)(nil)
-}
-func (x fastReflection_ServiceHistoricalRewardsRecord_messageType) New() protoreflect.Message {
-	return new(fastReflection_ServiceHistoricalRewardsRecord)
-}
-func (x fastReflection_ServiceHistoricalRewardsRecord_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_ServiceHistoricalRewardsRecord
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_ServiceHistoricalRewardsRecord) Descriptor() protoreflect.MessageDescriptor {
-	return md_ServiceHistoricalRewardsRecord
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_ServiceHistoricalRewardsRecord) Type() protoreflect.MessageType {
-	return _fastReflection_ServiceHistoricalRewardsRecord_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_ServiceHistoricalRewardsRecord) New() protoreflect.Message {
-	return new(fastReflection_ServiceHistoricalRewardsRecord)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_ServiceHistoricalRewardsRecord) Interface() protoreflect.ProtoMessage {
-	return (*ServiceHistoricalRewardsRecord)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_ServiceHistoricalRewardsRecord) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.ServiceId != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.ServiceId)
-		if !f(fd_ServiceHistoricalRewardsRecord_service_id, value) {
-			return
-		}
-	}
-	if x.Period != uint64(0) {
-		value := protoreflect.ValueOfUint64(x.Period)
-		if !f(fd_ServiceHistoricalRewardsRecord_period, value) {
-			return
-		}
-	}
-	if x.Rewards != nil {
-		value := protoreflect.ValueOfMessage(x.Rewards.ProtoReflect())
-		if !f(fd_ServiceHistoricalRewardsRecord_rewards, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_ServiceHistoricalRewardsRecord) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.ServiceHistoricalRewardsRecord.service_id":
-		return x.ServiceId != uint32(0)
-	case "milkyway.rewards.v1.ServiceHistoricalRewardsRecord.period":
-		return x.Period != uint64(0)
-	case "milkyway.rewards.v1.ServiceHistoricalRewardsRecord.rewards":
-		return x.Rewards != nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceHistoricalRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceHistoricalRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceHistoricalRewardsRecord) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.ServiceHistoricalRewardsRecord.service_id":
-		x.ServiceId = uint32(0)
-	case "milkyway.rewards.v1.ServiceHistoricalRewardsRecord.period":
-		x.Period = uint64(0)
-	case "milkyway.rewards.v1.ServiceHistoricalRewardsRecord.rewards":
-		x.Rewards = nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceHistoricalRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceHistoricalRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_ServiceHistoricalRewardsRecord) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "milkyway.rewards.v1.ServiceHistoricalRewardsRecord.service_id":
-		value := x.ServiceId
-		return protoreflect.ValueOfUint32(value)
-	case "milkyway.rewards.v1.ServiceHistoricalRewardsRecord.period":
-		value := x.Period
-		return protoreflect.ValueOfUint64(value)
-	case "milkyway.rewards.v1.ServiceHistoricalRewardsRecord.rewards":
-		value := x.Rewards
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceHistoricalRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceHistoricalRewardsRecord does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceHistoricalRewardsRecord) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.ServiceHistoricalRewardsRecord.service_id":
-		x.ServiceId = uint32(value.Uint())
-	case "milkyway.rewards.v1.ServiceHistoricalRewardsRecord.period":
-		x.Period = value.Uint()
-	case "milkyway.rewards.v1.ServiceHistoricalRewardsRecord.rewards":
-		x.Rewards = value.Message().Interface().(*HistoricalRewards)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceHistoricalRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceHistoricalRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceHistoricalRewardsRecord) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.ServiceHistoricalRewardsRecord.rewards":
-		if x.Rewards == nil {
-			x.Rewards = new(HistoricalRewards)
-		}
-		return protoreflect.ValueOfMessage(x.Rewards.ProtoReflect())
-	case "milkyway.rewards.v1.ServiceHistoricalRewardsRecord.service_id":
-		panic(fmt.Errorf("field service_id of message milkyway.rewards.v1.ServiceHistoricalRewardsRecord is not mutable"))
-	case "milkyway.rewards.v1.ServiceHistoricalRewardsRecord.period":
-		panic(fmt.Errorf("field period of message milkyway.rewards.v1.ServiceHistoricalRewardsRecord is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceHistoricalRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceHistoricalRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_ServiceHistoricalRewardsRecord) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.ServiceHistoricalRewardsRecord.service_id":
-		return protoreflect.ValueOfUint32(uint32(0))
-	case "milkyway.rewards.v1.ServiceHistoricalRewardsRecord.period":
-		return protoreflect.ValueOfUint64(uint64(0))
-	case "milkyway.rewards.v1.ServiceHistoricalRewardsRecord.rewards":
-		m := new(HistoricalRewards)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceHistoricalRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceHistoricalRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_ServiceHistoricalRewardsRecord) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.ServiceHistoricalRewardsRecord", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_ServiceHistoricalRewardsRecord) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceHistoricalRewardsRecord) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_ServiceHistoricalRewardsRecord) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_ServiceHistoricalRewardsRecord) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*ServiceHistoricalRewardsRecord)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		if x.ServiceId != 0 {
-			n += 1 + runtime.Sov(uint64(x.ServiceId))
-		}
-		if x.Period != 0 {
-			n += 1 + runtime.Sov(uint64(x.Period))
-		}
-		if x.Rewards != nil {
-			l = options.Size(x.Rewards)
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*ServiceHistoricalRewardsRecord)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if x.Rewards != nil {
-			encoded, err := options.Marshal(x.Rewards)
-			if err != nil {
-				return protoiface.MarshalOutput{
-					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-					Buf:               input.Buf,
-				}, err
-			}
-			i -= len(encoded)
-			copy(dAtA[i:], encoded)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-			i--
-			dAtA[i] = 0x1a
-		}
-		if x.Period != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Period))
-			i--
-			dAtA[i] = 0x10
-		}
-		if x.ServiceId != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.ServiceId))
-			i--
-			dAtA[i] = 0x8
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*ServiceHistoricalRewardsRecord)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ServiceHistoricalRewardsRecord: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ServiceHistoricalRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ServiceId", wireType)
-				}
-				x.ServiceId = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.ServiceId |= uint32(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 2:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Period", wireType)
-				}
-				x.Period = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.Period |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 3:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Rewards", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if x.Rewards == nil {
-					x.Rewards = &HistoricalRewards{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Rewards); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
-	md_ServiceCurrentRewardsRecord            protoreflect.MessageDescriptor
-	fd_ServiceCurrentRewardsRecord_service_id protoreflect.FieldDescriptor
-	fd_ServiceCurrentRewardsRecord_rewards    protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_milkyway_rewards_v1_genesis_proto_init()
-	md_ServiceCurrentRewardsRecord = File_milkyway_rewards_v1_genesis_proto.Messages().ByName("ServiceCurrentRewardsRecord")
-	fd_ServiceCurrentRewardsRecord_service_id = md_ServiceCurrentRewardsRecord.Fields().ByName("service_id")
-	fd_ServiceCurrentRewardsRecord_rewards = md_ServiceCurrentRewardsRecord.Fields().ByName("rewards")
-}
-
-var _ protoreflect.Message = (*fastReflection_ServiceCurrentRewardsRecord)(nil)
-
-type fastReflection_ServiceCurrentRewardsRecord ServiceCurrentRewardsRecord
-
-func (x *ServiceCurrentRewardsRecord) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_ServiceCurrentRewardsRecord)(x)
-}
-
-func (x *ServiceCurrentRewardsRecord) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[12]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_ServiceCurrentRewardsRecord_messageType fastReflection_ServiceCurrentRewardsRecord_messageType
-var _ protoreflect.MessageType = fastReflection_ServiceCurrentRewardsRecord_messageType{}
-
-type fastReflection_ServiceCurrentRewardsRecord_messageType struct{}
-
-func (x fastReflection_ServiceCurrentRewardsRecord_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_ServiceCurrentRewardsRecord)(nil)
-}
-func (x fastReflection_ServiceCurrentRewardsRecord_messageType) New() protoreflect.Message {
-	return new(fastReflection_ServiceCurrentRewardsRecord)
-}
-func (x fastReflection_ServiceCurrentRewardsRecord_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_ServiceCurrentRewardsRecord
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_ServiceCurrentRewardsRecord) Descriptor() protoreflect.MessageDescriptor {
-	return md_ServiceCurrentRewardsRecord
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_ServiceCurrentRewardsRecord) Type() protoreflect.MessageType {
-	return _fastReflection_ServiceCurrentRewardsRecord_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_ServiceCurrentRewardsRecord) New() protoreflect.Message {
-	return new(fastReflection_ServiceCurrentRewardsRecord)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_ServiceCurrentRewardsRecord) Interface() protoreflect.ProtoMessage {
-	return (*ServiceCurrentRewardsRecord)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_ServiceCurrentRewardsRecord) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.ServiceId != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.ServiceId)
-		if !f(fd_ServiceCurrentRewardsRecord_service_id, value) {
-			return
-		}
-	}
-	if x.Rewards != nil {
-		value := protoreflect.ValueOfMessage(x.Rewards.ProtoReflect())
-		if !f(fd_ServiceCurrentRewardsRecord_rewards, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_ServiceCurrentRewardsRecord) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.ServiceCurrentRewardsRecord.service_id":
-		return x.ServiceId != uint32(0)
-	case "milkyway.rewards.v1.ServiceCurrentRewardsRecord.rewards":
-		return x.Rewards != nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceCurrentRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceCurrentRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceCurrentRewardsRecord) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.ServiceCurrentRewardsRecord.service_id":
-		x.ServiceId = uint32(0)
-	case "milkyway.rewards.v1.ServiceCurrentRewardsRecord.rewards":
-		x.Rewards = nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceCurrentRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceCurrentRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_ServiceCurrentRewardsRecord) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "milkyway.rewards.v1.ServiceCurrentRewardsRecord.service_id":
-		value := x.ServiceId
-		return protoreflect.ValueOfUint32(value)
-	case "milkyway.rewards.v1.ServiceCurrentRewardsRecord.rewards":
-		value := x.Rewards
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceCurrentRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceCurrentRewardsRecord does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceCurrentRewardsRecord) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.ServiceCurrentRewardsRecord.service_id":
-		x.ServiceId = uint32(value.Uint())
-	case "milkyway.rewards.v1.ServiceCurrentRewardsRecord.rewards":
-		x.Rewards = value.Message().Interface().(*CurrentRewards)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceCurrentRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceCurrentRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceCurrentRewardsRecord) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.ServiceCurrentRewardsRecord.rewards":
-		if x.Rewards == nil {
-			x.Rewards = new(CurrentRewards)
-		}
-		return protoreflect.ValueOfMessage(x.Rewards.ProtoReflect())
-	case "milkyway.rewards.v1.ServiceCurrentRewardsRecord.service_id":
-		panic(fmt.Errorf("field service_id of message milkyway.rewards.v1.ServiceCurrentRewardsRecord is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceCurrentRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceCurrentRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_ServiceCurrentRewardsRecord) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.ServiceCurrentRewardsRecord.service_id":
-		return protoreflect.ValueOfUint32(uint32(0))
-	case "milkyway.rewards.v1.ServiceCurrentRewardsRecord.rewards":
-		m := new(CurrentRewards)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceCurrentRewardsRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceCurrentRewardsRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_ServiceCurrentRewardsRecord) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.ServiceCurrentRewardsRecord", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_ServiceCurrentRewardsRecord) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceCurrentRewardsRecord) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_ServiceCurrentRewardsRecord) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_ServiceCurrentRewardsRecord) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*ServiceCurrentRewardsRecord)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		if x.ServiceId != 0 {
-			n += 1 + runtime.Sov(uint64(x.ServiceId))
-		}
-		if x.Rewards != nil {
-			l = options.Size(x.Rewards)
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*ServiceCurrentRewardsRecord)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if x.Rewards != nil {
-			encoded, err := options.Marshal(x.Rewards)
-			if err != nil {
-				return protoiface.MarshalOutput{
-					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-					Buf:               input.Buf,
-				}, err
-			}
-			i -= len(encoded)
-			copy(dAtA[i:], encoded)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-			i--
-			dAtA[i] = 0x12
-		}
-		if x.ServiceId != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.ServiceId))
-			i--
-			dAtA[i] = 0x8
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*ServiceCurrentRewardsRecord)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ServiceCurrentRewardsRecord: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ServiceCurrentRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ServiceId", wireType)
-				}
-				x.ServiceId = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.ServiceId |= uint32(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 2:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Rewards", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if x.Rewards == nil {
-					x.Rewards = &CurrentRewards{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Rewards); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
-	md_ServiceDelegatorStartingInfoRecord                   protoreflect.MessageDescriptor
-	fd_ServiceDelegatorStartingInfoRecord_delegator_address protoreflect.FieldDescriptor
-	fd_ServiceDelegatorStartingInfoRecord_service_id        protoreflect.FieldDescriptor
-	fd_ServiceDelegatorStartingInfoRecord_starting_info     protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_milkyway_rewards_v1_genesis_proto_init()
-	md_ServiceDelegatorStartingInfoRecord = File_milkyway_rewards_v1_genesis_proto.Messages().ByName("ServiceDelegatorStartingInfoRecord")
-	fd_ServiceDelegatorStartingInfoRecord_delegator_address = md_ServiceDelegatorStartingInfoRecord.Fields().ByName("delegator_address")
-	fd_ServiceDelegatorStartingInfoRecord_service_id = md_ServiceDelegatorStartingInfoRecord.Fields().ByName("service_id")
-	fd_ServiceDelegatorStartingInfoRecord_starting_info = md_ServiceDelegatorStartingInfoRecord.Fields().ByName("starting_info")
-}
-
-var _ protoreflect.Message = (*fastReflection_ServiceDelegatorStartingInfoRecord)(nil)
-
-type fastReflection_ServiceDelegatorStartingInfoRecord ServiceDelegatorStartingInfoRecord
-
-func (x *ServiceDelegatorStartingInfoRecord) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_ServiceDelegatorStartingInfoRecord)(x)
-}
-
-func (x *ServiceDelegatorStartingInfoRecord) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[13]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_ServiceDelegatorStartingInfoRecord_messageType fastReflection_ServiceDelegatorStartingInfoRecord_messageType
-var _ protoreflect.MessageType = fastReflection_ServiceDelegatorStartingInfoRecord_messageType{}
-
-type fastReflection_ServiceDelegatorStartingInfoRecord_messageType struct{}
-
-func (x fastReflection_ServiceDelegatorStartingInfoRecord_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_ServiceDelegatorStartingInfoRecord)(nil)
-}
-func (x fastReflection_ServiceDelegatorStartingInfoRecord_messageType) New() protoreflect.Message {
-	return new(fastReflection_ServiceDelegatorStartingInfoRecord)
-}
-func (x fastReflection_ServiceDelegatorStartingInfoRecord_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_ServiceDelegatorStartingInfoRecord
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_ServiceDelegatorStartingInfoRecord) Descriptor() protoreflect.MessageDescriptor {
-	return md_ServiceDelegatorStartingInfoRecord
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_ServiceDelegatorStartingInfoRecord) Type() protoreflect.MessageType {
-	return _fastReflection_ServiceDelegatorStartingInfoRecord_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_ServiceDelegatorStartingInfoRecord) New() protoreflect.Message {
-	return new(fastReflection_ServiceDelegatorStartingInfoRecord)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_ServiceDelegatorStartingInfoRecord) Interface() protoreflect.ProtoMessage {
-	return (*ServiceDelegatorStartingInfoRecord)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_ServiceDelegatorStartingInfoRecord) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.DelegatorAddress != "" {
-		value := protoreflect.ValueOfString(x.DelegatorAddress)
-		if !f(fd_ServiceDelegatorStartingInfoRecord_delegator_address, value) {
-			return
-		}
-	}
-	if x.ServiceId != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.ServiceId)
-		if !f(fd_ServiceDelegatorStartingInfoRecord_service_id, value) {
-			return
-		}
-	}
-	if x.StartingInfo != nil {
-		value := protoreflect.ValueOfMessage(x.StartingInfo.ProtoReflect())
-		if !f(fd_ServiceDelegatorStartingInfoRecord_starting_info, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_ServiceDelegatorStartingInfoRecord) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord.delegator_address":
-		return x.DelegatorAddress != ""
-	case "milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord.service_id":
-		return x.ServiceId != uint32(0)
-	case "milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord.starting_info":
-		return x.StartingInfo != nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceDelegatorStartingInfoRecord) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord.delegator_address":
-		x.DelegatorAddress = ""
-	case "milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord.service_id":
-		x.ServiceId = uint32(0)
-	case "milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord.starting_info":
-		x.StartingInfo = nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_ServiceDelegatorStartingInfoRecord) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord.delegator_address":
-		value := x.DelegatorAddress
-		return protoreflect.ValueOfString(value)
-	case "milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord.service_id":
-		value := x.ServiceId
-		return protoreflect.ValueOfUint32(value)
-	case "milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord.starting_info":
-		value := x.StartingInfo
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceDelegatorStartingInfoRecord) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord.delegator_address":
-		x.DelegatorAddress = value.Interface().(string)
-	case "milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord.service_id":
-		x.ServiceId = uint32(value.Uint())
-	case "milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord.starting_info":
-		x.StartingInfo = value.Message().Interface().(*DelegatorStartingInfo)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceDelegatorStartingInfoRecord) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord.starting_info":
-		if x.StartingInfo == nil {
-			x.StartingInfo = new(DelegatorStartingInfo)
-		}
-		return protoreflect.ValueOfMessage(x.StartingInfo.ProtoReflect())
-	case "milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord.delegator_address":
-		panic(fmt.Errorf("field delegator_address of message milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord is not mutable"))
-	case "milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord.service_id":
-		panic(fmt.Errorf("field service_id of message milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_ServiceDelegatorStartingInfoRecord) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord.delegator_address":
-		return protoreflect.ValueOfString("")
-	case "milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord.service_id":
-		return protoreflect.ValueOfUint32(uint32(0))
-	case "milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord.starting_info":
-		m := new(DelegatorStartingInfo)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_ServiceDelegatorStartingInfoRecord) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_ServiceDelegatorStartingInfoRecord) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceDelegatorStartingInfoRecord) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_ServiceDelegatorStartingInfoRecord) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_ServiceDelegatorStartingInfoRecord) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*ServiceDelegatorStartingInfoRecord)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		l = len(x.DelegatorAddress)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.ServiceId != 0 {
-			n += 1 + runtime.Sov(uint64(x.ServiceId))
-		}
-		if x.StartingInfo != nil {
-			l = options.Size(x.StartingInfo)
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*ServiceDelegatorStartingInfoRecord)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if x.StartingInfo != nil {
-			encoded, err := options.Marshal(x.StartingInfo)
-			if err != nil {
-				return protoiface.MarshalOutput{
-					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-					Buf:               input.Buf,
-				}, err
-			}
-			i -= len(encoded)
-			copy(dAtA[i:], encoded)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-			i--
-			dAtA[i] = 0x1a
-		}
-		if x.ServiceId != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.ServiceId))
-			i--
-			dAtA[i] = 0x10
-		}
-		if len(x.DelegatorAddress) > 0 {
-			i -= len(x.DelegatorAddress)
-			copy(dAtA[i:], x.DelegatorAddress)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DelegatorAddress)))
-			i--
-			dAtA[i] = 0xa
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*ServiceDelegatorStartingInfoRecord)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ServiceDelegatorStartingInfoRecord: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ServiceDelegatorStartingInfoRecord: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DelegatorAddress", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.DelegatorAddress = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 2:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ServiceId", wireType)
-				}
-				x.ServiceId = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.ServiceId |= uint32(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 3:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field StartingInfo", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if x.StartingInfo == nil {
-					x.StartingInfo = &DelegatorStartingInfo{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.StartingInfo); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
 var _ protoreflect.List = (*_GenesisState_3_list)(nil)
 
 type _GenesisState_3_list struct {
@@ -7398,7 +3192,7 @@ func (x *_GenesisState_5_list) IsValid() bool {
 var _ protoreflect.List = (*_GenesisState_6_list)(nil)
 
 type _GenesisState_6_list struct {
-	list *[]*PoolOutstandingRewardsRecord
+	list *[]*OutstandingRewardsRecord
 }
 
 func (x *_GenesisState_6_list) Len() int {
@@ -7414,18 +3208,18 @@ func (x *_GenesisState_6_list) Get(i int) protoreflect.Value {
 
 func (x *_GenesisState_6_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*PoolOutstandingRewardsRecord)
+	concreteValue := valueUnwrapped.Interface().(*OutstandingRewardsRecord)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_GenesisState_6_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*PoolOutstandingRewardsRecord)
+	concreteValue := valueUnwrapped.Interface().(*OutstandingRewardsRecord)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_GenesisState_6_list) AppendMutable() protoreflect.Value {
-	v := new(PoolOutstandingRewardsRecord)
+	v := new(OutstandingRewardsRecord)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -7438,7 +3232,7 @@ func (x *_GenesisState_6_list) Truncate(n int) {
 }
 
 func (x *_GenesisState_6_list) NewElement() protoreflect.Value {
-	v := new(PoolOutstandingRewardsRecord)
+	v := new(OutstandingRewardsRecord)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
@@ -7449,7 +3243,7 @@ func (x *_GenesisState_6_list) IsValid() bool {
 var _ protoreflect.List = (*_GenesisState_7_list)(nil)
 
 type _GenesisState_7_list struct {
-	list *[]*PoolHistoricalRewardsRecord
+	list *[]*HistoricalRewardsRecord
 }
 
 func (x *_GenesisState_7_list) Len() int {
@@ -7465,18 +3259,18 @@ func (x *_GenesisState_7_list) Get(i int) protoreflect.Value {
 
 func (x *_GenesisState_7_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*PoolHistoricalRewardsRecord)
+	concreteValue := valueUnwrapped.Interface().(*HistoricalRewardsRecord)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_GenesisState_7_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*PoolHistoricalRewardsRecord)
+	concreteValue := valueUnwrapped.Interface().(*HistoricalRewardsRecord)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_GenesisState_7_list) AppendMutable() protoreflect.Value {
-	v := new(PoolHistoricalRewardsRecord)
+	v := new(HistoricalRewardsRecord)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -7489,7 +3283,7 @@ func (x *_GenesisState_7_list) Truncate(n int) {
 }
 
 func (x *_GenesisState_7_list) NewElement() protoreflect.Value {
-	v := new(PoolHistoricalRewardsRecord)
+	v := new(HistoricalRewardsRecord)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
@@ -7500,7 +3294,7 @@ func (x *_GenesisState_7_list) IsValid() bool {
 var _ protoreflect.List = (*_GenesisState_8_list)(nil)
 
 type _GenesisState_8_list struct {
-	list *[]*PoolCurrentRewardsRecord
+	list *[]*CurrentRewardsRecord
 }
 
 func (x *_GenesisState_8_list) Len() int {
@@ -7516,18 +3310,18 @@ func (x *_GenesisState_8_list) Get(i int) protoreflect.Value {
 
 func (x *_GenesisState_8_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*PoolCurrentRewardsRecord)
+	concreteValue := valueUnwrapped.Interface().(*CurrentRewardsRecord)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_GenesisState_8_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*PoolCurrentRewardsRecord)
+	concreteValue := valueUnwrapped.Interface().(*CurrentRewardsRecord)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_GenesisState_8_list) AppendMutable() protoreflect.Value {
-	v := new(PoolCurrentRewardsRecord)
+	v := new(CurrentRewardsRecord)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -7540,7 +3334,7 @@ func (x *_GenesisState_8_list) Truncate(n int) {
 }
 
 func (x *_GenesisState_8_list) NewElement() protoreflect.Value {
-	v := new(PoolCurrentRewardsRecord)
+	v := new(CurrentRewardsRecord)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
@@ -7551,7 +3345,7 @@ func (x *_GenesisState_8_list) IsValid() bool {
 var _ protoreflect.List = (*_GenesisState_9_list)(nil)
 
 type _GenesisState_9_list struct {
-	list *[]*PoolDelegatorStartingInfoRecord
+	list *[]*DelegatorStartingInfoRecord
 }
 
 func (x *_GenesisState_9_list) Len() int {
@@ -7567,18 +3361,18 @@ func (x *_GenesisState_9_list) Get(i int) protoreflect.Value {
 
 func (x *_GenesisState_9_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*PoolDelegatorStartingInfoRecord)
+	concreteValue := valueUnwrapped.Interface().(*DelegatorStartingInfoRecord)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_GenesisState_9_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*PoolDelegatorStartingInfoRecord)
+	concreteValue := valueUnwrapped.Interface().(*DelegatorStartingInfoRecord)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_GenesisState_9_list) AppendMutable() protoreflect.Value {
-	v := new(PoolDelegatorStartingInfoRecord)
+	v := new(DelegatorStartingInfoRecord)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -7591,7 +3385,7 @@ func (x *_GenesisState_9_list) Truncate(n int) {
 }
 
 func (x *_GenesisState_9_list) NewElement() protoreflect.Value {
-	v := new(PoolDelegatorStartingInfoRecord)
+	v := new(DelegatorStartingInfoRecord)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
@@ -7602,7 +3396,7 @@ func (x *_GenesisState_9_list) IsValid() bool {
 var _ protoreflect.List = (*_GenesisState_10_list)(nil)
 
 type _GenesisState_10_list struct {
-	list *[]*OperatorOutstandingRewardsRecord
+	list *[]*OutstandingRewardsRecord
 }
 
 func (x *_GenesisState_10_list) Len() int {
@@ -7618,18 +3412,18 @@ func (x *_GenesisState_10_list) Get(i int) protoreflect.Value {
 
 func (x *_GenesisState_10_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*OperatorOutstandingRewardsRecord)
+	concreteValue := valueUnwrapped.Interface().(*OutstandingRewardsRecord)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_GenesisState_10_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*OperatorOutstandingRewardsRecord)
+	concreteValue := valueUnwrapped.Interface().(*OutstandingRewardsRecord)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_GenesisState_10_list) AppendMutable() protoreflect.Value {
-	v := new(OperatorOutstandingRewardsRecord)
+	v := new(OutstandingRewardsRecord)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -7642,7 +3436,7 @@ func (x *_GenesisState_10_list) Truncate(n int) {
 }
 
 func (x *_GenesisState_10_list) NewElement() protoreflect.Value {
-	v := new(OperatorOutstandingRewardsRecord)
+	v := new(OutstandingRewardsRecord)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
@@ -7704,7 +3498,7 @@ func (x *_GenesisState_11_list) IsValid() bool {
 var _ protoreflect.List = (*_GenesisState_12_list)(nil)
 
 type _GenesisState_12_list struct {
-	list *[]*OperatorHistoricalRewardsRecord
+	list *[]*HistoricalRewardsRecord
 }
 
 func (x *_GenesisState_12_list) Len() int {
@@ -7720,18 +3514,18 @@ func (x *_GenesisState_12_list) Get(i int) protoreflect.Value {
 
 func (x *_GenesisState_12_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*OperatorHistoricalRewardsRecord)
+	concreteValue := valueUnwrapped.Interface().(*HistoricalRewardsRecord)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_GenesisState_12_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*OperatorHistoricalRewardsRecord)
+	concreteValue := valueUnwrapped.Interface().(*HistoricalRewardsRecord)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_GenesisState_12_list) AppendMutable() protoreflect.Value {
-	v := new(OperatorHistoricalRewardsRecord)
+	v := new(HistoricalRewardsRecord)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -7744,7 +3538,7 @@ func (x *_GenesisState_12_list) Truncate(n int) {
 }
 
 func (x *_GenesisState_12_list) NewElement() protoreflect.Value {
-	v := new(OperatorHistoricalRewardsRecord)
+	v := new(HistoricalRewardsRecord)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
@@ -7755,7 +3549,7 @@ func (x *_GenesisState_12_list) IsValid() bool {
 var _ protoreflect.List = (*_GenesisState_13_list)(nil)
 
 type _GenesisState_13_list struct {
-	list *[]*OperatorCurrentRewardsRecord
+	list *[]*CurrentRewardsRecord
 }
 
 func (x *_GenesisState_13_list) Len() int {
@@ -7771,18 +3565,18 @@ func (x *_GenesisState_13_list) Get(i int) protoreflect.Value {
 
 func (x *_GenesisState_13_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*OperatorCurrentRewardsRecord)
+	concreteValue := valueUnwrapped.Interface().(*CurrentRewardsRecord)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_GenesisState_13_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*OperatorCurrentRewardsRecord)
+	concreteValue := valueUnwrapped.Interface().(*CurrentRewardsRecord)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_GenesisState_13_list) AppendMutable() protoreflect.Value {
-	v := new(OperatorCurrentRewardsRecord)
+	v := new(CurrentRewardsRecord)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -7795,7 +3589,7 @@ func (x *_GenesisState_13_list) Truncate(n int) {
 }
 
 func (x *_GenesisState_13_list) NewElement() protoreflect.Value {
-	v := new(OperatorCurrentRewardsRecord)
+	v := new(CurrentRewardsRecord)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
@@ -7806,7 +3600,7 @@ func (x *_GenesisState_13_list) IsValid() bool {
 var _ protoreflect.List = (*_GenesisState_14_list)(nil)
 
 type _GenesisState_14_list struct {
-	list *[]*OperatorDelegatorStartingInfoRecord
+	list *[]*DelegatorStartingInfoRecord
 }
 
 func (x *_GenesisState_14_list) Len() int {
@@ -7822,18 +3616,18 @@ func (x *_GenesisState_14_list) Get(i int) protoreflect.Value {
 
 func (x *_GenesisState_14_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*OperatorDelegatorStartingInfoRecord)
+	concreteValue := valueUnwrapped.Interface().(*DelegatorStartingInfoRecord)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_GenesisState_14_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*OperatorDelegatorStartingInfoRecord)
+	concreteValue := valueUnwrapped.Interface().(*DelegatorStartingInfoRecord)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_GenesisState_14_list) AppendMutable() protoreflect.Value {
-	v := new(OperatorDelegatorStartingInfoRecord)
+	v := new(DelegatorStartingInfoRecord)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -7846,7 +3640,7 @@ func (x *_GenesisState_14_list) Truncate(n int) {
 }
 
 func (x *_GenesisState_14_list) NewElement() protoreflect.Value {
-	v := new(OperatorDelegatorStartingInfoRecord)
+	v := new(DelegatorStartingInfoRecord)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
@@ -7857,7 +3651,7 @@ func (x *_GenesisState_14_list) IsValid() bool {
 var _ protoreflect.List = (*_GenesisState_15_list)(nil)
 
 type _GenesisState_15_list struct {
-	list *[]*ServiceOutstandingRewardsRecord
+	list *[]*OutstandingRewardsRecord
 }
 
 func (x *_GenesisState_15_list) Len() int {
@@ -7873,18 +3667,18 @@ func (x *_GenesisState_15_list) Get(i int) protoreflect.Value {
 
 func (x *_GenesisState_15_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*ServiceOutstandingRewardsRecord)
+	concreteValue := valueUnwrapped.Interface().(*OutstandingRewardsRecord)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_GenesisState_15_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*ServiceOutstandingRewardsRecord)
+	concreteValue := valueUnwrapped.Interface().(*OutstandingRewardsRecord)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_GenesisState_15_list) AppendMutable() protoreflect.Value {
-	v := new(ServiceOutstandingRewardsRecord)
+	v := new(OutstandingRewardsRecord)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -7897,7 +3691,7 @@ func (x *_GenesisState_15_list) Truncate(n int) {
 }
 
 func (x *_GenesisState_15_list) NewElement() protoreflect.Value {
-	v := new(ServiceOutstandingRewardsRecord)
+	v := new(OutstandingRewardsRecord)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
@@ -7908,7 +3702,7 @@ func (x *_GenesisState_15_list) IsValid() bool {
 var _ protoreflect.List = (*_GenesisState_16_list)(nil)
 
 type _GenesisState_16_list struct {
-	list *[]*ServiceHistoricalRewardsRecord
+	list *[]*HistoricalRewardsRecord
 }
 
 func (x *_GenesisState_16_list) Len() int {
@@ -7924,18 +3718,18 @@ func (x *_GenesisState_16_list) Get(i int) protoreflect.Value {
 
 func (x *_GenesisState_16_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*ServiceHistoricalRewardsRecord)
+	concreteValue := valueUnwrapped.Interface().(*HistoricalRewardsRecord)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_GenesisState_16_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*ServiceHistoricalRewardsRecord)
+	concreteValue := valueUnwrapped.Interface().(*HistoricalRewardsRecord)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_GenesisState_16_list) AppendMutable() protoreflect.Value {
-	v := new(ServiceHistoricalRewardsRecord)
+	v := new(HistoricalRewardsRecord)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -7948,7 +3742,7 @@ func (x *_GenesisState_16_list) Truncate(n int) {
 }
 
 func (x *_GenesisState_16_list) NewElement() protoreflect.Value {
-	v := new(ServiceHistoricalRewardsRecord)
+	v := new(HistoricalRewardsRecord)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
@@ -7959,7 +3753,7 @@ func (x *_GenesisState_16_list) IsValid() bool {
 var _ protoreflect.List = (*_GenesisState_17_list)(nil)
 
 type _GenesisState_17_list struct {
-	list *[]*ServiceCurrentRewardsRecord
+	list *[]*CurrentRewardsRecord
 }
 
 func (x *_GenesisState_17_list) Len() int {
@@ -7975,18 +3769,18 @@ func (x *_GenesisState_17_list) Get(i int) protoreflect.Value {
 
 func (x *_GenesisState_17_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*ServiceCurrentRewardsRecord)
+	concreteValue := valueUnwrapped.Interface().(*CurrentRewardsRecord)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_GenesisState_17_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*ServiceCurrentRewardsRecord)
+	concreteValue := valueUnwrapped.Interface().(*CurrentRewardsRecord)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_GenesisState_17_list) AppendMutable() protoreflect.Value {
-	v := new(ServiceCurrentRewardsRecord)
+	v := new(CurrentRewardsRecord)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -7999,7 +3793,7 @@ func (x *_GenesisState_17_list) Truncate(n int) {
 }
 
 func (x *_GenesisState_17_list) NewElement() protoreflect.Value {
-	v := new(ServiceCurrentRewardsRecord)
+	v := new(CurrentRewardsRecord)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
@@ -8010,7 +3804,7 @@ func (x *_GenesisState_17_list) IsValid() bool {
 var _ protoreflect.List = (*_GenesisState_18_list)(nil)
 
 type _GenesisState_18_list struct {
-	list *[]*ServiceDelegatorStartingInfoRecord
+	list *[]*DelegatorStartingInfoRecord
 }
 
 func (x *_GenesisState_18_list) Len() int {
@@ -8026,18 +3820,18 @@ func (x *_GenesisState_18_list) Get(i int) protoreflect.Value {
 
 func (x *_GenesisState_18_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*ServiceDelegatorStartingInfoRecord)
+	concreteValue := valueUnwrapped.Interface().(*DelegatorStartingInfoRecord)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_GenesisState_18_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*ServiceDelegatorStartingInfoRecord)
+	concreteValue := valueUnwrapped.Interface().(*DelegatorStartingInfoRecord)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_GenesisState_18_list) AppendMutable() protoreflect.Value {
-	v := new(ServiceDelegatorStartingInfoRecord)
+	v := new(DelegatorStartingInfoRecord)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -8050,7 +3844,7 @@ func (x *_GenesisState_18_list) Truncate(n int) {
 }
 
 func (x *_GenesisState_18_list) NewElement() protoreflect.Value {
-	v := new(ServiceDelegatorStartingInfoRecord)
+	v := new(DelegatorStartingInfoRecord)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
@@ -8112,7 +3906,7 @@ func (x *GenesisState) ProtoReflect() protoreflect.Message {
 }
 
 func (x *GenesisState) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[14]
+	mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8624,31 +4418,31 @@ func (x *fastReflection_GenesisState) Mutable(fd protoreflect.FieldDescriptor) p
 		return protoreflect.ValueOfList(value)
 	case "milkyway.rewards.v1.GenesisState.pool_outstanding_rewards":
 		if x.PoolOutstandingRewards == nil {
-			x.PoolOutstandingRewards = []*PoolOutstandingRewardsRecord{}
+			x.PoolOutstandingRewards = []*OutstandingRewardsRecord{}
 		}
 		value := &_GenesisState_6_list{list: &x.PoolOutstandingRewards}
 		return protoreflect.ValueOfList(value)
 	case "milkyway.rewards.v1.GenesisState.pool_historical_rewards":
 		if x.PoolHistoricalRewards == nil {
-			x.PoolHistoricalRewards = []*PoolHistoricalRewardsRecord{}
+			x.PoolHistoricalRewards = []*HistoricalRewardsRecord{}
 		}
 		value := &_GenesisState_7_list{list: &x.PoolHistoricalRewards}
 		return protoreflect.ValueOfList(value)
 	case "milkyway.rewards.v1.GenesisState.pool_current_rewards":
 		if x.PoolCurrentRewards == nil {
-			x.PoolCurrentRewards = []*PoolCurrentRewardsRecord{}
+			x.PoolCurrentRewards = []*CurrentRewardsRecord{}
 		}
 		value := &_GenesisState_8_list{list: &x.PoolCurrentRewards}
 		return protoreflect.ValueOfList(value)
 	case "milkyway.rewards.v1.GenesisState.pool_delegator_starting_infos":
 		if x.PoolDelegatorStartingInfos == nil {
-			x.PoolDelegatorStartingInfos = []*PoolDelegatorStartingInfoRecord{}
+			x.PoolDelegatorStartingInfos = []*DelegatorStartingInfoRecord{}
 		}
 		value := &_GenesisState_9_list{list: &x.PoolDelegatorStartingInfos}
 		return protoreflect.ValueOfList(value)
 	case "milkyway.rewards.v1.GenesisState.operator_outstanding_rewards":
 		if x.OperatorOutstandingRewards == nil {
-			x.OperatorOutstandingRewards = []*OperatorOutstandingRewardsRecord{}
+			x.OperatorOutstandingRewards = []*OutstandingRewardsRecord{}
 		}
 		value := &_GenesisState_10_list{list: &x.OperatorOutstandingRewards}
 		return protoreflect.ValueOfList(value)
@@ -8660,43 +4454,43 @@ func (x *fastReflection_GenesisState) Mutable(fd protoreflect.FieldDescriptor) p
 		return protoreflect.ValueOfList(value)
 	case "milkyway.rewards.v1.GenesisState.operator_historical_rewards":
 		if x.OperatorHistoricalRewards == nil {
-			x.OperatorHistoricalRewards = []*OperatorHistoricalRewardsRecord{}
+			x.OperatorHistoricalRewards = []*HistoricalRewardsRecord{}
 		}
 		value := &_GenesisState_12_list{list: &x.OperatorHistoricalRewards}
 		return protoreflect.ValueOfList(value)
 	case "milkyway.rewards.v1.GenesisState.operator_current_rewards":
 		if x.OperatorCurrentRewards == nil {
-			x.OperatorCurrentRewards = []*OperatorCurrentRewardsRecord{}
+			x.OperatorCurrentRewards = []*CurrentRewardsRecord{}
 		}
 		value := &_GenesisState_13_list{list: &x.OperatorCurrentRewards}
 		return protoreflect.ValueOfList(value)
 	case "milkyway.rewards.v1.GenesisState.operator_delegator_starting_infos":
 		if x.OperatorDelegatorStartingInfos == nil {
-			x.OperatorDelegatorStartingInfos = []*OperatorDelegatorStartingInfoRecord{}
+			x.OperatorDelegatorStartingInfos = []*DelegatorStartingInfoRecord{}
 		}
 		value := &_GenesisState_14_list{list: &x.OperatorDelegatorStartingInfos}
 		return protoreflect.ValueOfList(value)
 	case "milkyway.rewards.v1.GenesisState.service_outstanding_rewards":
 		if x.ServiceOutstandingRewards == nil {
-			x.ServiceOutstandingRewards = []*ServiceOutstandingRewardsRecord{}
+			x.ServiceOutstandingRewards = []*OutstandingRewardsRecord{}
 		}
 		value := &_GenesisState_15_list{list: &x.ServiceOutstandingRewards}
 		return protoreflect.ValueOfList(value)
 	case "milkyway.rewards.v1.GenesisState.service_historical_rewards":
 		if x.ServiceHistoricalRewards == nil {
-			x.ServiceHistoricalRewards = []*ServiceHistoricalRewardsRecord{}
+			x.ServiceHistoricalRewards = []*HistoricalRewardsRecord{}
 		}
 		value := &_GenesisState_16_list{list: &x.ServiceHistoricalRewards}
 		return protoreflect.ValueOfList(value)
 	case "milkyway.rewards.v1.GenesisState.service_current_rewards":
 		if x.ServiceCurrentRewards == nil {
-			x.ServiceCurrentRewards = []*ServiceCurrentRewardsRecord{}
+			x.ServiceCurrentRewards = []*CurrentRewardsRecord{}
 		}
 		value := &_GenesisState_17_list{list: &x.ServiceCurrentRewards}
 		return protoreflect.ValueOfList(value)
 	case "milkyway.rewards.v1.GenesisState.service_delegator_starting_infos":
 		if x.ServiceDelegatorStartingInfos == nil {
-			x.ServiceDelegatorStartingInfos = []*ServiceDelegatorStartingInfoRecord{}
+			x.ServiceDelegatorStartingInfos = []*DelegatorStartingInfoRecord{}
 		}
 		value := &_GenesisState_18_list{list: &x.ServiceDelegatorStartingInfos}
 		return protoreflect.ValueOfList(value)
@@ -8730,43 +4524,43 @@ func (x *fastReflection_GenesisState) NewField(fd protoreflect.FieldDescriptor) 
 		list := []*DelegatorWithdrawInfo{}
 		return protoreflect.ValueOfList(&_GenesisState_5_list{list: &list})
 	case "milkyway.rewards.v1.GenesisState.pool_outstanding_rewards":
-		list := []*PoolOutstandingRewardsRecord{}
+		list := []*OutstandingRewardsRecord{}
 		return protoreflect.ValueOfList(&_GenesisState_6_list{list: &list})
 	case "milkyway.rewards.v1.GenesisState.pool_historical_rewards":
-		list := []*PoolHistoricalRewardsRecord{}
+		list := []*HistoricalRewardsRecord{}
 		return protoreflect.ValueOfList(&_GenesisState_7_list{list: &list})
 	case "milkyway.rewards.v1.GenesisState.pool_current_rewards":
-		list := []*PoolCurrentRewardsRecord{}
+		list := []*CurrentRewardsRecord{}
 		return protoreflect.ValueOfList(&_GenesisState_8_list{list: &list})
 	case "milkyway.rewards.v1.GenesisState.pool_delegator_starting_infos":
-		list := []*PoolDelegatorStartingInfoRecord{}
+		list := []*DelegatorStartingInfoRecord{}
 		return protoreflect.ValueOfList(&_GenesisState_9_list{list: &list})
 	case "milkyway.rewards.v1.GenesisState.operator_outstanding_rewards":
-		list := []*OperatorOutstandingRewardsRecord{}
+		list := []*OutstandingRewardsRecord{}
 		return protoreflect.ValueOfList(&_GenesisState_10_list{list: &list})
 	case "milkyway.rewards.v1.GenesisState.operator_accumulated_commissions":
 		list := []*OperatorAccumulatedCommissionRecord{}
 		return protoreflect.ValueOfList(&_GenesisState_11_list{list: &list})
 	case "milkyway.rewards.v1.GenesisState.operator_historical_rewards":
-		list := []*OperatorHistoricalRewardsRecord{}
+		list := []*HistoricalRewardsRecord{}
 		return protoreflect.ValueOfList(&_GenesisState_12_list{list: &list})
 	case "milkyway.rewards.v1.GenesisState.operator_current_rewards":
-		list := []*OperatorCurrentRewardsRecord{}
+		list := []*CurrentRewardsRecord{}
 		return protoreflect.ValueOfList(&_GenesisState_13_list{list: &list})
 	case "milkyway.rewards.v1.GenesisState.operator_delegator_starting_infos":
-		list := []*OperatorDelegatorStartingInfoRecord{}
+		list := []*DelegatorStartingInfoRecord{}
 		return protoreflect.ValueOfList(&_GenesisState_14_list{list: &list})
 	case "milkyway.rewards.v1.GenesisState.service_outstanding_rewards":
-		list := []*ServiceOutstandingRewardsRecord{}
+		list := []*OutstandingRewardsRecord{}
 		return protoreflect.ValueOfList(&_GenesisState_15_list{list: &list})
 	case "milkyway.rewards.v1.GenesisState.service_historical_rewards":
-		list := []*ServiceHistoricalRewardsRecord{}
+		list := []*HistoricalRewardsRecord{}
 		return protoreflect.ValueOfList(&_GenesisState_16_list{list: &list})
 	case "milkyway.rewards.v1.GenesisState.service_current_rewards":
-		list := []*ServiceCurrentRewardsRecord{}
+		list := []*CurrentRewardsRecord{}
 		return protoreflect.ValueOfList(&_GenesisState_17_list{list: &list})
 	case "milkyway.rewards.v1.GenesisState.service_delegator_starting_infos":
-		list := []*ServiceDelegatorStartingInfoRecord{}
+		list := []*DelegatorStartingInfoRecord{}
 		return protoreflect.ValueOfList(&_GenesisState_18_list{list: &list})
 	default:
 		if fd.IsExtension() {
@@ -9483,7 +5277,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.PoolOutstandingRewards = append(x.PoolOutstandingRewards, &PoolOutstandingRewardsRecord{})
+				x.PoolOutstandingRewards = append(x.PoolOutstandingRewards, &OutstandingRewardsRecord{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.PoolOutstandingRewards[len(x.PoolOutstandingRewards)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
@@ -9517,7 +5311,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.PoolHistoricalRewards = append(x.PoolHistoricalRewards, &PoolHistoricalRewardsRecord{})
+				x.PoolHistoricalRewards = append(x.PoolHistoricalRewards, &HistoricalRewardsRecord{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.PoolHistoricalRewards[len(x.PoolHistoricalRewards)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
@@ -9551,7 +5345,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.PoolCurrentRewards = append(x.PoolCurrentRewards, &PoolCurrentRewardsRecord{})
+				x.PoolCurrentRewards = append(x.PoolCurrentRewards, &CurrentRewardsRecord{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.PoolCurrentRewards[len(x.PoolCurrentRewards)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
@@ -9585,7 +5379,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.PoolDelegatorStartingInfos = append(x.PoolDelegatorStartingInfos, &PoolDelegatorStartingInfoRecord{})
+				x.PoolDelegatorStartingInfos = append(x.PoolDelegatorStartingInfos, &DelegatorStartingInfoRecord{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.PoolDelegatorStartingInfos[len(x.PoolDelegatorStartingInfos)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
@@ -9619,7 +5413,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.OperatorOutstandingRewards = append(x.OperatorOutstandingRewards, &OperatorOutstandingRewardsRecord{})
+				x.OperatorOutstandingRewards = append(x.OperatorOutstandingRewards, &OutstandingRewardsRecord{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.OperatorOutstandingRewards[len(x.OperatorOutstandingRewards)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
@@ -9687,7 +5481,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.OperatorHistoricalRewards = append(x.OperatorHistoricalRewards, &OperatorHistoricalRewardsRecord{})
+				x.OperatorHistoricalRewards = append(x.OperatorHistoricalRewards, &HistoricalRewardsRecord{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.OperatorHistoricalRewards[len(x.OperatorHistoricalRewards)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
@@ -9721,7 +5515,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.OperatorCurrentRewards = append(x.OperatorCurrentRewards, &OperatorCurrentRewardsRecord{})
+				x.OperatorCurrentRewards = append(x.OperatorCurrentRewards, &CurrentRewardsRecord{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.OperatorCurrentRewards[len(x.OperatorCurrentRewards)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
@@ -9755,7 +5549,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.OperatorDelegatorStartingInfos = append(x.OperatorDelegatorStartingInfos, &OperatorDelegatorStartingInfoRecord{})
+				x.OperatorDelegatorStartingInfos = append(x.OperatorDelegatorStartingInfos, &DelegatorStartingInfoRecord{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.OperatorDelegatorStartingInfos[len(x.OperatorDelegatorStartingInfos)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
@@ -9789,7 +5583,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.ServiceOutstandingRewards = append(x.ServiceOutstandingRewards, &ServiceOutstandingRewardsRecord{})
+				x.ServiceOutstandingRewards = append(x.ServiceOutstandingRewards, &OutstandingRewardsRecord{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.ServiceOutstandingRewards[len(x.ServiceOutstandingRewards)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
@@ -9823,7 +5617,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.ServiceHistoricalRewards = append(x.ServiceHistoricalRewards, &ServiceHistoricalRewardsRecord{})
+				x.ServiceHistoricalRewards = append(x.ServiceHistoricalRewards, &HistoricalRewardsRecord{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.ServiceHistoricalRewards[len(x.ServiceHistoricalRewards)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
@@ -9857,7 +5651,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.ServiceCurrentRewards = append(x.ServiceCurrentRewards, &ServiceCurrentRewardsRecord{})
+				x.ServiceCurrentRewards = append(x.ServiceCurrentRewards, &CurrentRewardsRecord{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.ServiceCurrentRewards[len(x.ServiceCurrentRewards)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
@@ -9891,7 +5685,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.ServiceDelegatorStartingInfos = append(x.ServiceDelegatorStartingInfos, &ServiceDelegatorStartingInfoRecord{})
+				x.ServiceDelegatorStartingInfos = append(x.ServiceDelegatorStartingInfos, &DelegatorStartingInfoRecord{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.ServiceDelegatorStartingInfos[len(x.ServiceDelegatorStartingInfos)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
@@ -9992,20 +5786,21 @@ func (x *DelegatorWithdrawInfo) GetWithdrawAddress() string {
 	return ""
 }
 
-// PoolOutstandingRewardsRecord is used for import/export via genesis json.
-type PoolOutstandingRewardsRecord struct {
+// OutstandingRewardsRecord is used for import/export via genesis json.
+type OutstandingRewardsRecord struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// pool_id is the ID of the pool.
-	PoolId uint32 `protobuf:"varint,1,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
-	// outstanding_rewards represents the outstanding rewards of a pool.
+	// delegation_target_id is the ID of the delegation target.
+	DelegationTargetId uint32 `protobuf:"varint,1,opt,name=delegation_target_id,json=delegationTargetId,proto3" json:"delegation_target_id,omitempty"`
+	// outstanding_rewards represents the outstanding rewards of the delegation
+	// target.
 	OutstandingRewards []*DecPool `protobuf:"bytes,2,rep,name=outstanding_rewards,json=outstandingRewards,proto3" json:"outstanding_rewards,omitempty"`
 }
 
-func (x *PoolOutstandingRewardsRecord) Reset() {
-	*x = PoolOutstandingRewardsRecord{}
+func (x *OutstandingRewardsRecord) Reset() {
+	*x = OutstandingRewardsRecord{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -10013,48 +5808,48 @@ func (x *PoolOutstandingRewardsRecord) Reset() {
 	}
 }
 
-func (x *PoolOutstandingRewardsRecord) String() string {
+func (x *OutstandingRewardsRecord) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PoolOutstandingRewardsRecord) ProtoMessage() {}
+func (*OutstandingRewardsRecord) ProtoMessage() {}
 
-// Deprecated: Use PoolOutstandingRewardsRecord.ProtoReflect.Descriptor instead.
-func (*PoolOutstandingRewardsRecord) Descriptor() ([]byte, []int) {
+// Deprecated: Use OutstandingRewardsRecord.ProtoReflect.Descriptor instead.
+func (*OutstandingRewardsRecord) Descriptor() ([]byte, []int) {
 	return file_milkyway_rewards_v1_genesis_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *PoolOutstandingRewardsRecord) GetPoolId() uint32 {
+func (x *OutstandingRewardsRecord) GetDelegationTargetId() uint32 {
 	if x != nil {
-		return x.PoolId
+		return x.DelegationTargetId
 	}
 	return 0
 }
 
-func (x *PoolOutstandingRewardsRecord) GetOutstandingRewards() []*DecPool {
+func (x *OutstandingRewardsRecord) GetOutstandingRewards() []*DecPool {
 	if x != nil {
 		return x.OutstandingRewards
 	}
 	return nil
 }
 
-// PoolHistoricalRewardsRecord is used for import / export via genesis
+// HistoricalRewardsRecord is used for import / export via genesis
 // json.
-type PoolHistoricalRewardsRecord struct {
+type HistoricalRewardsRecord struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// pool_id is the ID of the pool.
-	PoolId uint32 `protobuf:"varint,1,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+	// delegation_target_id is the ID of the delegation target.
+	DelegationTargetId uint32 `protobuf:"varint,1,opt,name=delegation_target_id,json=delegationTargetId,proto3" json:"delegation_target_id,omitempty"`
 	// period defines the period the historical rewards apply to.
 	Period uint64 `protobuf:"varint,2,opt,name=period,proto3" json:"period,omitempty"`
-	// rewards defines the historical rewards of a pool.
+	// rewards defines the historical rewards of the delegation target.
 	Rewards *HistoricalRewards `protobuf:"bytes,3,opt,name=rewards,proto3" json:"rewards,omitempty"`
 }
 
-func (x *PoolHistoricalRewardsRecord) Reset() {
-	*x = PoolHistoricalRewardsRecord{}
+func (x *HistoricalRewardsRecord) Reset() {
+	*x = HistoricalRewardsRecord{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -10062,52 +5857,52 @@ func (x *PoolHistoricalRewardsRecord) Reset() {
 	}
 }
 
-func (x *PoolHistoricalRewardsRecord) String() string {
+func (x *HistoricalRewardsRecord) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PoolHistoricalRewardsRecord) ProtoMessage() {}
+func (*HistoricalRewardsRecord) ProtoMessage() {}
 
-// Deprecated: Use PoolHistoricalRewardsRecord.ProtoReflect.Descriptor instead.
-func (*PoolHistoricalRewardsRecord) Descriptor() ([]byte, []int) {
+// Deprecated: Use HistoricalRewardsRecord.ProtoReflect.Descriptor instead.
+func (*HistoricalRewardsRecord) Descriptor() ([]byte, []int) {
 	return file_milkyway_rewards_v1_genesis_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *PoolHistoricalRewardsRecord) GetPoolId() uint32 {
+func (x *HistoricalRewardsRecord) GetDelegationTargetId() uint32 {
 	if x != nil {
-		return x.PoolId
+		return x.DelegationTargetId
 	}
 	return 0
 }
 
-func (x *PoolHistoricalRewardsRecord) GetPeriod() uint64 {
+func (x *HistoricalRewardsRecord) GetPeriod() uint64 {
 	if x != nil {
 		return x.Period
 	}
 	return 0
 }
 
-func (x *PoolHistoricalRewardsRecord) GetRewards() *HistoricalRewards {
+func (x *HistoricalRewardsRecord) GetRewards() *HistoricalRewards {
 	if x != nil {
 		return x.Rewards
 	}
 	return nil
 }
 
-// PoolCurrentRewardsRecord is used for import / export via genesis json.
-type PoolCurrentRewardsRecord struct {
+// CurrentRewardsRecord is used for import / export via genesis json.
+type CurrentRewardsRecord struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// pool_id is the ID of the pool.
-	PoolId uint32 `protobuf:"varint,1,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
-	// rewards defines the current rewards of a pool.
+	// delegation_target_id is the ID of the delegation target.
+	DelegationTargetId uint32 `protobuf:"varint,1,opt,name=delegation_target_id,json=delegationTargetId,proto3" json:"delegation_target_id,omitempty"`
+	// rewards defines the current rewards of the delegation target.
 	Rewards *CurrentRewards `protobuf:"bytes,2,opt,name=rewards,proto3" json:"rewards,omitempty"`
 }
 
-func (x *PoolCurrentRewardsRecord) Reset() {
-	*x = PoolCurrentRewardsRecord{}
+func (x *CurrentRewardsRecord) Reset() {
+	*x = CurrentRewardsRecord{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -10115,47 +5910,47 @@ func (x *PoolCurrentRewardsRecord) Reset() {
 	}
 }
 
-func (x *PoolCurrentRewardsRecord) String() string {
+func (x *CurrentRewardsRecord) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PoolCurrentRewardsRecord) ProtoMessage() {}
+func (*CurrentRewardsRecord) ProtoMessage() {}
 
-// Deprecated: Use PoolCurrentRewardsRecord.ProtoReflect.Descriptor instead.
-func (*PoolCurrentRewardsRecord) Descriptor() ([]byte, []int) {
+// Deprecated: Use CurrentRewardsRecord.ProtoReflect.Descriptor instead.
+func (*CurrentRewardsRecord) Descriptor() ([]byte, []int) {
 	return file_milkyway_rewards_v1_genesis_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *PoolCurrentRewardsRecord) GetPoolId() uint32 {
+func (x *CurrentRewardsRecord) GetDelegationTargetId() uint32 {
 	if x != nil {
-		return x.PoolId
+		return x.DelegationTargetId
 	}
 	return 0
 }
 
-func (x *PoolCurrentRewardsRecord) GetRewards() *CurrentRewards {
+func (x *CurrentRewardsRecord) GetRewards() *CurrentRewards {
 	if x != nil {
 		return x.Rewards
 	}
 	return nil
 }
 
-// PoolDelegatorStartingInfoRecord used for import / export via genesis json.
-type PoolDelegatorStartingInfoRecord struct {
+// DelegatorStartingInfoRecord used for import / export via genesis json.
+type DelegatorStartingInfoRecord struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
 	// delegator_address is the address of the delegator.
 	DelegatorAddress string `protobuf:"bytes,1,opt,name=delegator_address,json=delegatorAddress,proto3" json:"delegator_address,omitempty"`
-	// pool_id is the ID of the pool.
-	PoolId uint32 `protobuf:"varint,2,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+	// delegation_target_id is the ID of the delegation target.
+	DelegationTargetId uint32 `protobuf:"varint,2,opt,name=delegation_target_id,json=delegationTargetId,proto3" json:"delegation_target_id,omitempty"`
 	// starting_info defines the starting info of a delegator.
 	StartingInfo *DelegatorStartingInfo `protobuf:"bytes,3,opt,name=starting_info,json=startingInfo,proto3" json:"starting_info,omitempty"`
 }
 
-func (x *PoolDelegatorStartingInfoRecord) Reset() {
-	*x = PoolDelegatorStartingInfoRecord{}
+func (x *DelegatorStartingInfoRecord) Reset() {
+	*x = DelegatorStartingInfoRecord{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -10163,80 +5958,34 @@ func (x *PoolDelegatorStartingInfoRecord) Reset() {
 	}
 }
 
-func (x *PoolDelegatorStartingInfoRecord) String() string {
+func (x *DelegatorStartingInfoRecord) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PoolDelegatorStartingInfoRecord) ProtoMessage() {}
+func (*DelegatorStartingInfoRecord) ProtoMessage() {}
 
-// Deprecated: Use PoolDelegatorStartingInfoRecord.ProtoReflect.Descriptor instead.
-func (*PoolDelegatorStartingInfoRecord) Descriptor() ([]byte, []int) {
+// Deprecated: Use DelegatorStartingInfoRecord.ProtoReflect.Descriptor instead.
+func (*DelegatorStartingInfoRecord) Descriptor() ([]byte, []int) {
 	return file_milkyway_rewards_v1_genesis_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *PoolDelegatorStartingInfoRecord) GetDelegatorAddress() string {
+func (x *DelegatorStartingInfoRecord) GetDelegatorAddress() string {
 	if x != nil {
 		return x.DelegatorAddress
 	}
 	return ""
 }
 
-func (x *PoolDelegatorStartingInfoRecord) GetPoolId() uint32 {
+func (x *DelegatorStartingInfoRecord) GetDelegationTargetId() uint32 {
 	if x != nil {
-		return x.PoolId
+		return x.DelegationTargetId
 	}
 	return 0
 }
 
-func (x *PoolDelegatorStartingInfoRecord) GetStartingInfo() *DelegatorStartingInfo {
+func (x *DelegatorStartingInfoRecord) GetStartingInfo() *DelegatorStartingInfo {
 	if x != nil {
 		return x.StartingInfo
-	}
-	return nil
-}
-
-// OperatorOutstandingRewardsRecord is used for import/export via genesis json.
-type OperatorOutstandingRewardsRecord struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// operator_id is the ID of the operator.
-	OperatorId uint32 `protobuf:"varint,1,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
-	// outstanding_rewards represents the outstanding rewards of an operator.
-	OutstandingRewards []*DecPool `protobuf:"bytes,2,rep,name=outstanding_rewards,json=outstandingRewards,proto3" json:"outstanding_rewards,omitempty"`
-}
-
-func (x *OperatorOutstandingRewardsRecord) Reset() {
-	*x = OperatorOutstandingRewardsRecord{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[5]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *OperatorOutstandingRewardsRecord) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*OperatorOutstandingRewardsRecord) ProtoMessage() {}
-
-// Deprecated: Use OperatorOutstandingRewardsRecord.ProtoReflect.Descriptor instead.
-func (*OperatorOutstandingRewardsRecord) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_genesis_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *OperatorOutstandingRewardsRecord) GetOperatorId() uint32 {
-	if x != nil {
-		return x.OperatorId
-	}
-	return 0
-}
-
-func (x *OperatorOutstandingRewardsRecord) GetOutstandingRewards() []*DecPool {
-	if x != nil {
-		return x.OutstandingRewards
 	}
 	return nil
 }
@@ -10254,7 +6003,7 @@ type OperatorAccumulatedCommissionRecord struct {
 func (x *OperatorAccumulatedCommissionRecord) Reset() {
 	*x = OperatorAccumulatedCommissionRecord{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[6]
+		mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -10268,7 +6017,7 @@ func (*OperatorAccumulatedCommissionRecord) ProtoMessage() {}
 
 // Deprecated: Use OperatorAccumulatedCommissionRecord.ProtoReflect.Descriptor instead.
 func (*OperatorAccumulatedCommissionRecord) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_genesis_proto_rawDescGZIP(), []int{6}
+	return file_milkyway_rewards_v1_genesis_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *OperatorAccumulatedCommissionRecord) GetOperatorId() uint32 {
@@ -10281,367 +6030,6 @@ func (x *OperatorAccumulatedCommissionRecord) GetOperatorId() uint32 {
 func (x *OperatorAccumulatedCommissionRecord) GetAccumulated() *AccumulatedCommission {
 	if x != nil {
 		return x.Accumulated
-	}
-	return nil
-}
-
-// OperatorHistoricalRewardsRecord is used for import / export via genesis
-// json.
-type OperatorHistoricalRewardsRecord struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// operator_id is the ID of the operator.
-	OperatorId uint32 `protobuf:"varint,1,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
-	// period defines the period the historical rewards apply to.
-	Period uint64 `protobuf:"varint,2,opt,name=period,proto3" json:"period,omitempty"`
-	// rewards defines the historical rewards of an operator.
-	Rewards *HistoricalRewards `protobuf:"bytes,3,opt,name=rewards,proto3" json:"rewards,omitempty"`
-}
-
-func (x *OperatorHistoricalRewardsRecord) Reset() {
-	*x = OperatorHistoricalRewardsRecord{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[7]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *OperatorHistoricalRewardsRecord) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*OperatorHistoricalRewardsRecord) ProtoMessage() {}
-
-// Deprecated: Use OperatorHistoricalRewardsRecord.ProtoReflect.Descriptor instead.
-func (*OperatorHistoricalRewardsRecord) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_genesis_proto_rawDescGZIP(), []int{7}
-}
-
-func (x *OperatorHistoricalRewardsRecord) GetOperatorId() uint32 {
-	if x != nil {
-		return x.OperatorId
-	}
-	return 0
-}
-
-func (x *OperatorHistoricalRewardsRecord) GetPeriod() uint64 {
-	if x != nil {
-		return x.Period
-	}
-	return 0
-}
-
-func (x *OperatorHistoricalRewardsRecord) GetRewards() *HistoricalRewards {
-	if x != nil {
-		return x.Rewards
-	}
-	return nil
-}
-
-// OperatorCurrentRewardsRecord is used for import / export via genesis json.
-type OperatorCurrentRewardsRecord struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// operator_id is the ID of the operator.
-	OperatorId uint32 `protobuf:"varint,1,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
-	// rewards defines the current rewards of an operator.
-	Rewards *CurrentRewards `protobuf:"bytes,2,opt,name=rewards,proto3" json:"rewards,omitempty"`
-}
-
-func (x *OperatorCurrentRewardsRecord) Reset() {
-	*x = OperatorCurrentRewardsRecord{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[8]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *OperatorCurrentRewardsRecord) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*OperatorCurrentRewardsRecord) ProtoMessage() {}
-
-// Deprecated: Use OperatorCurrentRewardsRecord.ProtoReflect.Descriptor instead.
-func (*OperatorCurrentRewardsRecord) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_genesis_proto_rawDescGZIP(), []int{8}
-}
-
-func (x *OperatorCurrentRewardsRecord) GetOperatorId() uint32 {
-	if x != nil {
-		return x.OperatorId
-	}
-	return 0
-}
-
-func (x *OperatorCurrentRewardsRecord) GetRewards() *CurrentRewards {
-	if x != nil {
-		return x.Rewards
-	}
-	return nil
-}
-
-// OperatorDelegatorStartingInfoRecord used for import / export via genesis
-// json.
-type OperatorDelegatorStartingInfoRecord struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// delegator_address is the address of the delegator.
-	DelegatorAddress string `protobuf:"bytes,1,opt,name=delegator_address,json=delegatorAddress,proto3" json:"delegator_address,omitempty"`
-	// operator_id is the ID of the operator.
-	OperatorId uint32 `protobuf:"varint,2,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
-	// starting_info defines the starting info of a delegator.
-	StartingInfo *DelegatorStartingInfo `protobuf:"bytes,3,opt,name=starting_info,json=startingInfo,proto3" json:"starting_info,omitempty"`
-}
-
-func (x *OperatorDelegatorStartingInfoRecord) Reset() {
-	*x = OperatorDelegatorStartingInfoRecord{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[9]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *OperatorDelegatorStartingInfoRecord) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*OperatorDelegatorStartingInfoRecord) ProtoMessage() {}
-
-// Deprecated: Use OperatorDelegatorStartingInfoRecord.ProtoReflect.Descriptor instead.
-func (*OperatorDelegatorStartingInfoRecord) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_genesis_proto_rawDescGZIP(), []int{9}
-}
-
-func (x *OperatorDelegatorStartingInfoRecord) GetDelegatorAddress() string {
-	if x != nil {
-		return x.DelegatorAddress
-	}
-	return ""
-}
-
-func (x *OperatorDelegatorStartingInfoRecord) GetOperatorId() uint32 {
-	if x != nil {
-		return x.OperatorId
-	}
-	return 0
-}
-
-func (x *OperatorDelegatorStartingInfoRecord) GetStartingInfo() *DelegatorStartingInfo {
-	if x != nil {
-		return x.StartingInfo
-	}
-	return nil
-}
-
-// ServiceOutstandingRewardsRecord is used for import/export via genesis json.
-type ServiceOutstandingRewardsRecord struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// service_id is the ID of the service.
-	ServiceId uint32 `protobuf:"varint,1,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
-	// outstanding_rewards represents the outstanding rewards of a service.
-	OutstandingRewards []*DecPool `protobuf:"bytes,2,rep,name=outstanding_rewards,json=outstandingRewards,proto3" json:"outstanding_rewards,omitempty"`
-}
-
-func (x *ServiceOutstandingRewardsRecord) Reset() {
-	*x = ServiceOutstandingRewardsRecord{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[10]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ServiceOutstandingRewardsRecord) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ServiceOutstandingRewardsRecord) ProtoMessage() {}
-
-// Deprecated: Use ServiceOutstandingRewardsRecord.ProtoReflect.Descriptor instead.
-func (*ServiceOutstandingRewardsRecord) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_genesis_proto_rawDescGZIP(), []int{10}
-}
-
-func (x *ServiceOutstandingRewardsRecord) GetServiceId() uint32 {
-	if x != nil {
-		return x.ServiceId
-	}
-	return 0
-}
-
-func (x *ServiceOutstandingRewardsRecord) GetOutstandingRewards() []*DecPool {
-	if x != nil {
-		return x.OutstandingRewards
-	}
-	return nil
-}
-
-// ServiceHistoricalRewardsRecord is used for import / export via genesis
-// json.
-type ServiceHistoricalRewardsRecord struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// service_id is the ID of the service.
-	ServiceId uint32 `protobuf:"varint,1,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
-	// period defines the period the historical rewards apply to.
-	Period uint64 `protobuf:"varint,2,opt,name=period,proto3" json:"period,omitempty"`
-	// rewards defines the historical rewards of a service.
-	Rewards *HistoricalRewards `protobuf:"bytes,3,opt,name=rewards,proto3" json:"rewards,omitempty"`
-}
-
-func (x *ServiceHistoricalRewardsRecord) Reset() {
-	*x = ServiceHistoricalRewardsRecord{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[11]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ServiceHistoricalRewardsRecord) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ServiceHistoricalRewardsRecord) ProtoMessage() {}
-
-// Deprecated: Use ServiceHistoricalRewardsRecord.ProtoReflect.Descriptor instead.
-func (*ServiceHistoricalRewardsRecord) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_genesis_proto_rawDescGZIP(), []int{11}
-}
-
-func (x *ServiceHistoricalRewardsRecord) GetServiceId() uint32 {
-	if x != nil {
-		return x.ServiceId
-	}
-	return 0
-}
-
-func (x *ServiceHistoricalRewardsRecord) GetPeriod() uint64 {
-	if x != nil {
-		return x.Period
-	}
-	return 0
-}
-
-func (x *ServiceHistoricalRewardsRecord) GetRewards() *HistoricalRewards {
-	if x != nil {
-		return x.Rewards
-	}
-	return nil
-}
-
-// ServiceCurrentRewardsRecord is used for import / export via genesis json.
-type ServiceCurrentRewardsRecord struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// service_id is the ID of the service.
-	ServiceId uint32 `protobuf:"varint,1,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
-	// rewards defines the current rewards of a service.
-	Rewards *CurrentRewards `protobuf:"bytes,2,opt,name=rewards,proto3" json:"rewards,omitempty"`
-}
-
-func (x *ServiceCurrentRewardsRecord) Reset() {
-	*x = ServiceCurrentRewardsRecord{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[12]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ServiceCurrentRewardsRecord) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ServiceCurrentRewardsRecord) ProtoMessage() {}
-
-// Deprecated: Use ServiceCurrentRewardsRecord.ProtoReflect.Descriptor instead.
-func (*ServiceCurrentRewardsRecord) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_genesis_proto_rawDescGZIP(), []int{12}
-}
-
-func (x *ServiceCurrentRewardsRecord) GetServiceId() uint32 {
-	if x != nil {
-		return x.ServiceId
-	}
-	return 0
-}
-
-func (x *ServiceCurrentRewardsRecord) GetRewards() *CurrentRewards {
-	if x != nil {
-		return x.Rewards
-	}
-	return nil
-}
-
-// ServiceDelegatorStartingInfoRecord used for import / export via genesis json.
-type ServiceDelegatorStartingInfoRecord struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// delegator_address is the address of the delegator.
-	DelegatorAddress string `protobuf:"bytes,1,opt,name=delegator_address,json=delegatorAddress,proto3" json:"delegator_address,omitempty"`
-	// service_id is the ID of the service.
-	ServiceId uint32 `protobuf:"varint,2,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
-	// starting_info defines the starting info of a delegator.
-	StartingInfo *DelegatorStartingInfo `protobuf:"bytes,3,opt,name=starting_info,json=startingInfo,proto3" json:"starting_info,omitempty"`
-}
-
-func (x *ServiceDelegatorStartingInfoRecord) Reset() {
-	*x = ServiceDelegatorStartingInfoRecord{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[13]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *ServiceDelegatorStartingInfoRecord) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ServiceDelegatorStartingInfoRecord) ProtoMessage() {}
-
-// Deprecated: Use ServiceDelegatorStartingInfoRecord.ProtoReflect.Descriptor instead.
-func (*ServiceDelegatorStartingInfoRecord) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_genesis_proto_rawDescGZIP(), []int{13}
-}
-
-func (x *ServiceDelegatorStartingInfoRecord) GetDelegatorAddress() string {
-	if x != nil {
-		return x.DelegatorAddress
-	}
-	return ""
-}
-
-func (x *ServiceDelegatorStartingInfoRecord) GetServiceId() uint32 {
-	if x != nil {
-		return x.ServiceId
-	}
-	return 0
-}
-
-func (x *ServiceDelegatorStartingInfoRecord) GetStartingInfo() *DelegatorStartingInfo {
-	if x != nil {
-		return x.StartingInfo
 	}
 	return nil
 }
@@ -10664,48 +6052,48 @@ type GenesisState struct {
 	DelegatorWithdrawInfos []*DelegatorWithdrawInfo `protobuf:"bytes,5,rep,name=delegator_withdraw_infos,json=delegatorWithdrawInfos,proto3" json:"delegator_withdraw_infos,omitempty"`
 	// pool_outstanding_rewards defines the outstanding rewards of all pools at
 	// genesis.
-	PoolOutstandingRewards []*PoolOutstandingRewardsRecord `protobuf:"bytes,6,rep,name=pool_outstanding_rewards,json=poolOutstandingRewards,proto3" json:"pool_outstanding_rewards,omitempty"`
+	PoolOutstandingRewards []*OutstandingRewardsRecord `protobuf:"bytes,6,rep,name=pool_outstanding_rewards,json=poolOutstandingRewards,proto3" json:"pool_outstanding_rewards,omitempty"`
 	// pool_historical_rewards defines the historical rewards of all pools at
 	// genesis.
-	PoolHistoricalRewards []*PoolHistoricalRewardsRecord `protobuf:"bytes,7,rep,name=pool_historical_rewards,json=poolHistoricalRewards,proto3" json:"pool_historical_rewards,omitempty"`
+	PoolHistoricalRewards []*HistoricalRewardsRecord `protobuf:"bytes,7,rep,name=pool_historical_rewards,json=poolHistoricalRewards,proto3" json:"pool_historical_rewards,omitempty"`
 	// pool_current_rewards defines the current rewards of all pools at genesis.
-	PoolCurrentRewards []*PoolCurrentRewardsRecord `protobuf:"bytes,8,rep,name=pool_current_rewards,json=poolCurrentRewards,proto3" json:"pool_current_rewards,omitempty"`
+	PoolCurrentRewards []*CurrentRewardsRecord `protobuf:"bytes,8,rep,name=pool_current_rewards,json=poolCurrentRewards,proto3" json:"pool_current_rewards,omitempty"`
 	// pool_delegator_starting_infos defines the delegator starting infos of all
 	// pools at genesis.
-	PoolDelegatorStartingInfos []*PoolDelegatorStartingInfoRecord `protobuf:"bytes,9,rep,name=pool_delegator_starting_infos,json=poolDelegatorStartingInfos,proto3" json:"pool_delegator_starting_infos,omitempty"`
+	PoolDelegatorStartingInfos []*DelegatorStartingInfoRecord `protobuf:"bytes,9,rep,name=pool_delegator_starting_infos,json=poolDelegatorStartingInfos,proto3" json:"pool_delegator_starting_infos,omitempty"`
 	// operator_outstanding_rewards defines the outstanding rewards of all
 	// operators at genesis.
-	OperatorOutstandingRewards []*OperatorOutstandingRewardsRecord `protobuf:"bytes,10,rep,name=operator_outstanding_rewards,json=operatorOutstandingRewards,proto3" json:"operator_outstanding_rewards,omitempty"`
+	OperatorOutstandingRewards []*OutstandingRewardsRecord `protobuf:"bytes,10,rep,name=operator_outstanding_rewards,json=operatorOutstandingRewards,proto3" json:"operator_outstanding_rewards,omitempty"`
 	// operator_accumulated_commissions defines the accumulated commissions of all
 	// operators at genesis.
 	OperatorAccumulatedCommissions []*OperatorAccumulatedCommissionRecord `protobuf:"bytes,11,rep,name=operator_accumulated_commissions,json=operatorAccumulatedCommissions,proto3" json:"operator_accumulated_commissions,omitempty"`
 	// operator_historical_rewards defines the historical rewards of all operators
 	// at genesis.
-	OperatorHistoricalRewards []*OperatorHistoricalRewardsRecord `protobuf:"bytes,12,rep,name=operator_historical_rewards,json=operatorHistoricalRewards,proto3" json:"operator_historical_rewards,omitempty"`
+	OperatorHistoricalRewards []*HistoricalRewardsRecord `protobuf:"bytes,12,rep,name=operator_historical_rewards,json=operatorHistoricalRewards,proto3" json:"operator_historical_rewards,omitempty"`
 	// operator_current_rewards defines the current rewards of all operators at
 	// genesis.
-	OperatorCurrentRewards []*OperatorCurrentRewardsRecord `protobuf:"bytes,13,rep,name=operator_current_rewards,json=operatorCurrentRewards,proto3" json:"operator_current_rewards,omitempty"`
+	OperatorCurrentRewards []*CurrentRewardsRecord `protobuf:"bytes,13,rep,name=operator_current_rewards,json=operatorCurrentRewards,proto3" json:"operator_current_rewards,omitempty"`
 	// operator_delegator_starting_infos defines the delegator starting infos of
 	// all operators at genesis.
-	OperatorDelegatorStartingInfos []*OperatorDelegatorStartingInfoRecord `protobuf:"bytes,14,rep,name=operator_delegator_starting_infos,json=operatorDelegatorStartingInfos,proto3" json:"operator_delegator_starting_infos,omitempty"`
+	OperatorDelegatorStartingInfos []*DelegatorStartingInfoRecord `protobuf:"bytes,14,rep,name=operator_delegator_starting_infos,json=operatorDelegatorStartingInfos,proto3" json:"operator_delegator_starting_infos,omitempty"`
 	// service_outstanding_rewards defines the outstanding rewards of all services
 	// at genesis.
-	ServiceOutstandingRewards []*ServiceOutstandingRewardsRecord `protobuf:"bytes,15,rep,name=service_outstanding_rewards,json=serviceOutstandingRewards,proto3" json:"service_outstanding_rewards,omitempty"`
+	ServiceOutstandingRewards []*OutstandingRewardsRecord `protobuf:"bytes,15,rep,name=service_outstanding_rewards,json=serviceOutstandingRewards,proto3" json:"service_outstanding_rewards,omitempty"`
 	// service_historical_rewards defines the historical rewards of all services
 	// at genesis.
-	ServiceHistoricalRewards []*ServiceHistoricalRewardsRecord `protobuf:"bytes,16,rep,name=service_historical_rewards,json=serviceHistoricalRewards,proto3" json:"service_historical_rewards,omitempty"`
+	ServiceHistoricalRewards []*HistoricalRewardsRecord `protobuf:"bytes,16,rep,name=service_historical_rewards,json=serviceHistoricalRewards,proto3" json:"service_historical_rewards,omitempty"`
 	// service_current_rewards defines the current rewards of all services at
 	// genesis.
-	ServiceCurrentRewards []*ServiceCurrentRewardsRecord `protobuf:"bytes,17,rep,name=service_current_rewards,json=serviceCurrentRewards,proto3" json:"service_current_rewards,omitempty"`
+	ServiceCurrentRewards []*CurrentRewardsRecord `protobuf:"bytes,17,rep,name=service_current_rewards,json=serviceCurrentRewards,proto3" json:"service_current_rewards,omitempty"`
 	// service_delegator_starting_infos defines the delegator starting infos of
 	// all services at genesis.
-	ServiceDelegatorStartingInfos []*ServiceDelegatorStartingInfoRecord `protobuf:"bytes,18,rep,name=service_delegator_starting_infos,json=serviceDelegatorStartingInfos,proto3" json:"service_delegator_starting_infos,omitempty"`
+	ServiceDelegatorStartingInfos []*DelegatorStartingInfoRecord `protobuf:"bytes,18,rep,name=service_delegator_starting_infos,json=serviceDelegatorStartingInfos,proto3" json:"service_delegator_starting_infos,omitempty"`
 }
 
 func (x *GenesisState) Reset() {
 	*x = GenesisState{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[14]
+		mi := &file_milkyway_rewards_v1_genesis_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -10719,7 +6107,7 @@ func (*GenesisState) ProtoMessage() {}
 
 // Deprecated: Use GenesisState.ProtoReflect.Descriptor instead.
 func (*GenesisState) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_genesis_proto_rawDescGZIP(), []int{14}
+	return file_milkyway_rewards_v1_genesis_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *GenesisState) GetParams() *Params {
@@ -10757,35 +6145,35 @@ func (x *GenesisState) GetDelegatorWithdrawInfos() []*DelegatorWithdrawInfo {
 	return nil
 }
 
-func (x *GenesisState) GetPoolOutstandingRewards() []*PoolOutstandingRewardsRecord {
+func (x *GenesisState) GetPoolOutstandingRewards() []*OutstandingRewardsRecord {
 	if x != nil {
 		return x.PoolOutstandingRewards
 	}
 	return nil
 }
 
-func (x *GenesisState) GetPoolHistoricalRewards() []*PoolHistoricalRewardsRecord {
+func (x *GenesisState) GetPoolHistoricalRewards() []*HistoricalRewardsRecord {
 	if x != nil {
 		return x.PoolHistoricalRewards
 	}
 	return nil
 }
 
-func (x *GenesisState) GetPoolCurrentRewards() []*PoolCurrentRewardsRecord {
+func (x *GenesisState) GetPoolCurrentRewards() []*CurrentRewardsRecord {
 	if x != nil {
 		return x.PoolCurrentRewards
 	}
 	return nil
 }
 
-func (x *GenesisState) GetPoolDelegatorStartingInfos() []*PoolDelegatorStartingInfoRecord {
+func (x *GenesisState) GetPoolDelegatorStartingInfos() []*DelegatorStartingInfoRecord {
 	if x != nil {
 		return x.PoolDelegatorStartingInfos
 	}
 	return nil
 }
 
-func (x *GenesisState) GetOperatorOutstandingRewards() []*OperatorOutstandingRewardsRecord {
+func (x *GenesisState) GetOperatorOutstandingRewards() []*OutstandingRewardsRecord {
 	if x != nil {
 		return x.OperatorOutstandingRewards
 	}
@@ -10799,49 +6187,49 @@ func (x *GenesisState) GetOperatorAccumulatedCommissions() []*OperatorAccumulate
 	return nil
 }
 
-func (x *GenesisState) GetOperatorHistoricalRewards() []*OperatorHistoricalRewardsRecord {
+func (x *GenesisState) GetOperatorHistoricalRewards() []*HistoricalRewardsRecord {
 	if x != nil {
 		return x.OperatorHistoricalRewards
 	}
 	return nil
 }
 
-func (x *GenesisState) GetOperatorCurrentRewards() []*OperatorCurrentRewardsRecord {
+func (x *GenesisState) GetOperatorCurrentRewards() []*CurrentRewardsRecord {
 	if x != nil {
 		return x.OperatorCurrentRewards
 	}
 	return nil
 }
 
-func (x *GenesisState) GetOperatorDelegatorStartingInfos() []*OperatorDelegatorStartingInfoRecord {
+func (x *GenesisState) GetOperatorDelegatorStartingInfos() []*DelegatorStartingInfoRecord {
 	if x != nil {
 		return x.OperatorDelegatorStartingInfos
 	}
 	return nil
 }
 
-func (x *GenesisState) GetServiceOutstandingRewards() []*ServiceOutstandingRewardsRecord {
+func (x *GenesisState) GetServiceOutstandingRewards() []*OutstandingRewardsRecord {
 	if x != nil {
 		return x.ServiceOutstandingRewards
 	}
 	return nil
 }
 
-func (x *GenesisState) GetServiceHistoricalRewards() []*ServiceHistoricalRewardsRecord {
+func (x *GenesisState) GetServiceHistoricalRewards() []*HistoricalRewardsRecord {
 	if x != nil {
 		return x.ServiceHistoricalRewards
 	}
 	return nil
 }
 
-func (x *GenesisState) GetServiceCurrentRewards() []*ServiceCurrentRewardsRecord {
+func (x *GenesisState) GetServiceCurrentRewards() []*CurrentRewardsRecord {
 	if x != nil {
 		return x.ServiceCurrentRewards
 	}
 	return nil
 }
 
-func (x *GenesisState) GetServiceDelegatorStartingInfos() []*ServiceDelegatorStartingInfoRecord {
+func (x *GenesisState) GetServiceDelegatorStartingInfos() []*DelegatorStartingInfoRecord {
 	if x != nil {
 		return x.ServiceDelegatorStartingInfos
 	}
@@ -10878,312 +6266,215 @@ var file_milkyway_rewards_v1_genesis_proto_rawDesc = []byte{
 	0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
 	0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x0f, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77,
 	0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x3a, 0x08, 0x88, 0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f,
-	0x00, 0x22, 0xb3, 0x01, 0x0a, 0x1c, 0x50, 0x6f, 0x6f, 0x6c, 0x4f, 0x75, 0x74, 0x73, 0x74, 0x61,
-	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65, 0x63, 0x6f,
-	0x72, 0x64, 0x12, 0x23, 0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x0d, 0x42, 0x0a, 0xe2, 0xde, 0x1f, 0x06, 0x50, 0x6f, 0x6f, 0x6c, 0x49, 0x44, 0x52,
-	0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x12, 0x64, 0x0a, 0x13, 0x6f, 0x75, 0x74, 0x73, 0x74,
-	0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x18, 0x02,
-	0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
-	0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x63, 0x50, 0x6f,
-	0x6f, 0x6c, 0x42, 0x15, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x08, 0x44, 0x65, 0x63, 0x50,
-	0x6f, 0x6f, 0x6c, 0x73, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x12, 0x6f, 0x75, 0x74, 0x73, 0x74,
-	0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x3a, 0x08, 0x88,
-	0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f, 0x00, 0x22, 0xb1, 0x01, 0x0a, 0x1b, 0x50, 0x6f, 0x6f, 0x6c,
-	0x48, 0x69, 0x73, 0x74, 0x6f, 0x72, 0x69, 0x63, 0x61, 0x6c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64,
-	0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x12, 0x23, 0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f,
-	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x0a, 0xe2, 0xde, 0x1f, 0x06, 0x50, 0x6f,
-	0x6f, 0x6c, 0x49, 0x44, 0x52, 0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x12, 0x16, 0x0a, 0x06,
-	0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x70, 0x65,
-	0x72, 0x69, 0x6f, 0x64, 0x12, 0x4b, 0x0a, 0x07, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x18,
-	0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
-	0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x48, 0x69, 0x73, 0x74,
-	0x6f, 0x72, 0x69, 0x63, 0x61, 0x6c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x42, 0x09, 0xc8,
-	0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x07, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64,
-	0x73, 0x3a, 0x08, 0x88, 0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f, 0x00, 0x22, 0x93, 0x01, 0x0a, 0x18,
-	0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x77, 0x61, 0x72,
-	0x64, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x12, 0x23, 0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c,
-	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x0a, 0xe2, 0xde, 0x1f, 0x06, 0x50,
-	0x6f, 0x6f, 0x6c, 0x49, 0x44, 0x52, 0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x12, 0x48, 0x0a,
-	0x07, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23,
-	0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64,
-	0x73, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x77, 0x61,
-	0x72, 0x64, 0x73, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x07,
-	0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x3a, 0x08, 0x88, 0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f,
-	0x00, 0x22, 0xf3, 0x01, 0x0a, 0x1f, 0x50, 0x6f, 0x6f, 0x6c, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61,
-	0x74, 0x6f, 0x72, 0x53, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x66, 0x6f, 0x52,
-	0x65, 0x63, 0x6f, 0x72, 0x64, 0x12, 0x45, 0x0a, 0x11, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
-	0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
-	0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64,
-	0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x10, 0x64, 0x65, 0x6c, 0x65,
-	0x67, 0x61, 0x74, 0x6f, 0x72, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x23, 0x0a, 0x07,
-	0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x0a, 0xe2,
-	0xde, 0x1f, 0x06, 0x50, 0x6f, 0x6f, 0x6c, 0x49, 0x44, 0x52, 0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49,
-	0x64, 0x12, 0x5a, 0x0a, 0x0d, 0x73, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x67, 0x5f, 0x69, 0x6e,
-	0x66, 0x6f, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
-	0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44,
-	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x67,
-	0x49, 0x6e, 0x66, 0x6f, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52,
-	0x0c, 0x73, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x66, 0x6f, 0x3a, 0x08, 0x88,
-	0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f, 0x00, 0x22, 0xc3, 0x01, 0x0a, 0x20, 0x4f, 0x70, 0x65, 0x72,
-	0x61, 0x74, 0x6f, 0x72, 0x4f, 0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x52,
-	0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x12, 0x2f, 0x0a, 0x0b,
-	0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x0d, 0x42, 0x0e, 0xe2, 0xde, 0x1f, 0x0a, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49,
-	0x44, 0x52, 0x0a, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x64, 0x12, 0x64, 0x0a,
-	0x13, 0x6f, 0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x72, 0x65, 0x77,
-	0x61, 0x72, 0x64, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x6d, 0x69, 0x6c,
-	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31,
-	0x2e, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x42, 0x15, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf,
-	0x1f, 0x08, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52,
-	0x12, 0x6f, 0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x77, 0x61,
-	0x72, 0x64, 0x73, 0x3a, 0x08, 0x88, 0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f, 0x00, 0x22, 0xa9, 0x01,
-	0x0a, 0x23, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x41, 0x63, 0x63, 0x75, 0x6d, 0x75,
-	0x6c, 0x61, 0x74, 0x65, 0x64, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52,
-	0x65, 0x63, 0x6f, 0x72, 0x64, 0x12, 0x1f, 0x0a, 0x0b, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f,
-	0x72, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0a, 0x6f, 0x70, 0x65, 0x72,
-	0x61, 0x74, 0x6f, 0x72, 0x49, 0x64, 0x12, 0x57, 0x0a, 0x0b, 0x61, 0x63, 0x63, 0x75, 0x6d, 0x75,
-	0x6c, 0x61, 0x74, 0x65, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69,
-	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76,
-	0x31, 0x2e, 0x41, 0x63, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x64, 0x43, 0x6f, 0x6d,
-	0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0,
-	0x2a, 0x01, 0x52, 0x0b, 0x61, 0x63, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x64, 0x3a,
-	0x08, 0x88, 0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f, 0x00, 0x22, 0xc1, 0x01, 0x0a, 0x1f, 0x4f, 0x70,
-	0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x48, 0x69, 0x73, 0x74, 0x6f, 0x72, 0x69, 0x63, 0x61, 0x6c,
-	0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x12, 0x2f, 0x0a,
-	0x0b, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x0d, 0x42, 0x0e, 0xe2, 0xde, 0x1f, 0x0a, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
-	0x49, 0x44, 0x52, 0x0a, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x64, 0x12, 0x16,
+	0x00, 0x22, 0xd4, 0x01, 0x0a, 0x18, 0x4f, 0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e,
+	0x67, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x12, 0x48,
+	0x0a, 0x14, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x61, 0x72,
+	0x67, 0x65, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x16, 0xe2, 0xde,
+	0x1f, 0x12, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x61, 0x72, 0x67,
+	0x65, 0x74, 0x49, 0x44, 0x52, 0x12, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x54, 0x61, 0x72, 0x67, 0x65, 0x74, 0x49, 0x64, 0x12, 0x64, 0x0a, 0x13, 0x6f, 0x75, 0x74, 0x73,
+	0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x18,
+	0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
+	0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x63, 0x50,
+	0x6f, 0x6f, 0x6c, 0x42, 0x15, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x08, 0x44, 0x65, 0x63,
+	0x50, 0x6f, 0x6f, 0x6c, 0x73, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x12, 0x6f, 0x75, 0x74, 0x73,
+	0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x3a, 0x08,
+	0x88, 0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f, 0x00, 0x22, 0xd2, 0x01, 0x0a, 0x17, 0x48, 0x69, 0x73,
+	0x74, 0x6f, 0x72, 0x69, 0x63, 0x61, 0x6c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65,
+	0x63, 0x6f, 0x72, 0x64, 0x12, 0x48, 0x0a, 0x14, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x5f, 0x74, 0x61, 0x72, 0x67, 0x65, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x0d, 0x42, 0x16, 0xe2, 0xde, 0x1f, 0x12, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x54, 0x61, 0x72, 0x67, 0x65, 0x74, 0x49, 0x44, 0x52, 0x12, 0x64, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x61, 0x72, 0x67, 0x65, 0x74, 0x49, 0x64, 0x12, 0x16,
 	0x0a, 0x06, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06,
 	0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x12, 0x4b, 0x0a, 0x07, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64,
 	0x73, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
 	0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x48, 0x69,
 	0x73, 0x74, 0x6f, 0x72, 0x69, 0x63, 0x61, 0x6c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x42,
 	0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x07, 0x72, 0x65, 0x77, 0x61,
-	0x72, 0x64, 0x73, 0x3a, 0x08, 0x88, 0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f, 0x00, 0x22, 0xa3, 0x01,
-	0x0a, 0x1c, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e,
-	0x74, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x12, 0x2f,
-	0x0a, 0x0b, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x0d, 0x42, 0x0e, 0xe2, 0xde, 0x1f, 0x0a, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f,
-	0x72, 0x49, 0x44, 0x52, 0x0a, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x64, 0x12,
-	0x48, 0x0a, 0x07, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x23, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61,
-	0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x52, 0x65,
-	0x77, 0x61, 0x72, 0x64, 0x73, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01,
-	0x52, 0x07, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x3a, 0x08, 0x88, 0xa0, 0x1f, 0x00, 0xe8,
-	0xa0, 0x1f, 0x00, 0x22, 0x83, 0x02, 0x0a, 0x23, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
-	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e,
-	0x67, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x12, 0x45, 0x0a, 0x11, 0x64,
-	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d,
-	0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67,
-	0x52, 0x10, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x41, 0x64, 0x64, 0x72, 0x65,
-	0x73, 0x73, 0x12, 0x2f, 0x0a, 0x0b, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x69,
-	0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x0e, 0xe2, 0xde, 0x1f, 0x0a, 0x4f, 0x70, 0x65,
-	0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x44, 0x52, 0x0a, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f,
-	0x72, 0x49, 0x64, 0x12, 0x5a, 0x0a, 0x0d, 0x73, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x67, 0x5f,
-	0x69, 0x6e, 0x66, 0x6f, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69, 0x6c,
-	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31,
-	0x2e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x74, 0x61, 0x72, 0x74, 0x69,
-	0x6e, 0x67, 0x49, 0x6e, 0x66, 0x6f, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a,
-	0x01, 0x52, 0x0c, 0x73, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x66, 0x6f, 0x3a,
-	0x08, 0x88, 0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f, 0x00, 0x22, 0xbf, 0x01, 0x0a, 0x1f, 0x53, 0x65,
-	0x72, 0x76, 0x69, 0x63, 0x65, 0x4f, 0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67,
-	0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x12, 0x2c, 0x0a,
-	0x0a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x0d, 0x42, 0x0d, 0xe2, 0xde, 0x1f, 0x09, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x44,
-	0x52, 0x09, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x12, 0x64, 0x0a, 0x13, 0x6f,
-	0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72,
-	0x64, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
-	0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44,
-	0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x42, 0x15, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x08,
-	0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x12, 0x6f,
-	0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64,
-	0x73, 0x3a, 0x08, 0x88, 0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f, 0x00, 0x22, 0xbd, 0x01, 0x0a, 0x1e,
-	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x48, 0x69, 0x73, 0x74, 0x6f, 0x72, 0x69, 0x63, 0x61,
-	0x6c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x12, 0x2c,
-	0x0a, 0x0a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x0d, 0x42, 0x0d, 0xe2, 0xde, 0x1f, 0x09, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49,
-	0x44, 0x52, 0x09, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x12, 0x16, 0x0a, 0x06,
-	0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x70, 0x65,
-	0x72, 0x69, 0x6f, 0x64, 0x12, 0x4b, 0x0a, 0x07, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x18,
-	0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
-	0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x48, 0x69, 0x73, 0x74,
-	0x6f, 0x72, 0x69, 0x63, 0x61, 0x6c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x42, 0x09, 0xc8,
-	0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x07, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64,
-	0x73, 0x3a, 0x08, 0x88, 0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f, 0x00, 0x22, 0x9f, 0x01, 0x0a, 0x1b,
-	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x52, 0x65,
-	0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x12, 0x2c, 0x0a, 0x0a, 0x73,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x42,
-	0x0d, 0xe2, 0xde, 0x1f, 0x09, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x44, 0x52, 0x09,
-	0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x12, 0x48, 0x0a, 0x07, 0x72, 0x65, 0x77,
-	0x61, 0x72, 0x64, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x6d, 0x69, 0x6c,
-	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31,
-	0x2e, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x42,
-	0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x07, 0x72, 0x65, 0x77, 0x61,
-	0x72, 0x64, 0x73, 0x3a, 0x08, 0x88, 0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f, 0x00, 0x22, 0xff, 0x01,
-	0x0a, 0x22, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
+	0x72, 0x64, 0x73, 0x3a, 0x08, 0x88, 0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f, 0x00, 0x22, 0xb4, 0x01,
+	0x0a, 0x14, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73,
+	0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x12, 0x48, 0x0a, 0x14, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x61, 0x72, 0x67, 0x65, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x0d, 0x42, 0x16, 0xe2, 0xde, 0x1f, 0x12, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x54, 0x61, 0x72, 0x67, 0x65, 0x74, 0x49, 0x44, 0x52, 0x12, 0x64, 0x65,
+	0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x61, 0x72, 0x67, 0x65, 0x74, 0x49, 0x64,
+	0x12, 0x48, 0x0a, 0x07, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x23, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77,
+	0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x52,
+	0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a,
+	0x01, 0x52, 0x07, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x3a, 0x08, 0x88, 0xa0, 0x1f, 0x00,
+	0xe8, 0xa0, 0x1f, 0x00, 0x22, 0x94, 0x02, 0x0a, 0x1b, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
 	0x6f, 0x72, 0x53, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65,
 	0x63, 0x6f, 0x72, 0x64, 0x12, 0x45, 0x0a, 0x11, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f,
 	0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42,
 	0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72,
 	0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x10, 0x64, 0x65, 0x6c, 0x65, 0x67,
-	0x61, 0x74, 0x6f, 0x72, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x2c, 0x0a, 0x0a, 0x73,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x42,
-	0x0d, 0xe2, 0xde, 0x1f, 0x09, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x44, 0x52, 0x09,
-	0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x12, 0x5a, 0x0a, 0x0d, 0x73, 0x74, 0x61,
-	0x72, 0x74, 0x69, 0x6e, 0x67, 0x5f, 0x69, 0x6e, 0x66, 0x6f, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x2a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61,
-	0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72,
-	0x53, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x66, 0x6f, 0x42, 0x09, 0xc8, 0xde,
-	0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0c, 0x73, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e,
-	0x67, 0x49, 0x6e, 0x66, 0x6f, 0x3a, 0x08, 0x88, 0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f, 0x00, 0x22,
-	0xb1, 0x10, 0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x53, 0x74, 0x61, 0x74, 0x65,
-	0x12, 0x39, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x1b, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61,
-	0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8,
-	0xde, 0x1f, 0x00, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x46, 0x0a, 0x14, 0x6e,
-	0x65, 0x78, 0x74, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x5f, 0x70, 0x6c, 0x61, 0x6e,
-	0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x42, 0x15, 0xe2, 0xde, 0x1f, 0x11, 0x4e,
-	0x65, 0x78, 0x74, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x50, 0x6c, 0x61, 0x6e, 0x49, 0x44,
-	0x52, 0x11, 0x6e, 0x65, 0x78, 0x74, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x50, 0x6c, 0x61,
-	0x6e, 0x49, 0x64, 0x12, 0x4b, 0x0a, 0x0d, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x5f, 0x70,
-	0x6c, 0x61, 0x6e, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x20, 0x2e, 0x6d, 0x69, 0x6c,
-	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31,
-	0x2e, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x50, 0x6c, 0x61, 0x6e, 0x42, 0x04, 0xc8, 0xde,
-	0x1f, 0x00, 0x52, 0x0c, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x50, 0x6c, 0x61, 0x6e, 0x73,
-	0x12, 0x61, 0x0a, 0x1c, 0x6c, 0x61, 0x73, 0x74, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73,
-	0x5f, 0x61, 0x6c, 0x6c, 0x6f, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x69, 0x6d, 0x65,
-	0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61,
-	0x6d, 0x70, 0x42, 0x04, 0x90, 0xdf, 0x1f, 0x01, 0x52, 0x19, 0x6c, 0x61, 0x73, 0x74, 0x52, 0x65,
-	0x77, 0x61, 0x72, 0x64, 0x73, 0x41, 0x6c, 0x6c, 0x6f, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54,
-	0x69, 0x6d, 0x65, 0x12, 0x6f, 0x0a, 0x18, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72,
-	0x5f, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x5f, 0x69, 0x6e, 0x66, 0x6f, 0x73, 0x18,
-	0x05, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
-	0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65,
-	0x67, 0x61, 0x74, 0x6f, 0x72, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x49, 0x6e, 0x66,
-	0x6f, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x16, 0x64, 0x65,
-	0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x49,
-	0x6e, 0x66, 0x6f, 0x73, 0x12, 0x76, 0x0a, 0x18, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x6f, 0x75, 0x74,
-	0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73,
-	0x18, 0x06, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x31, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
-	0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x6f, 0x6f,
-	0x6c, 0x4f, 0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x77, 0x61,
-	0x72, 0x64, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8,
-	0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x16, 0x70, 0x6f, 0x6f, 0x6c, 0x4f, 0x75, 0x74, 0x73, 0x74, 0x61,
-	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x12, 0x73, 0x0a, 0x17,
-	0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x68, 0x69, 0x73, 0x74, 0x6f, 0x72, 0x69, 0x63, 0x61, 0x6c, 0x5f,
-	0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x18, 0x07, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x30, 0x2e,
+	0x61, 0x74, 0x6f, 0x72, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x48, 0x0a, 0x14, 0x64,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x61, 0x72, 0x67, 0x65, 0x74,
+	0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x16, 0xe2, 0xde, 0x1f, 0x12, 0x44,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x61, 0x72, 0x67, 0x65, 0x74, 0x49,
+	0x44, 0x52, 0x12, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x61, 0x72,
+	0x67, 0x65, 0x74, 0x49, 0x64, 0x12, 0x5a, 0x0a, 0x0d, 0x73, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e,
+	0x67, 0x5f, 0x69, 0x6e, 0x66, 0x6f, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d,
+	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e,
+	0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x74, 0x61, 0x72,
+	0x74, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x66, 0x6f, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7,
+	0xb0, 0x2a, 0x01, 0x52, 0x0c, 0x73, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x66,
+	0x6f, 0x3a, 0x08, 0x88, 0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f, 0x00, 0x22, 0xb9, 0x01, 0x0a, 0x23,
+	0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x41, 0x63, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61,
+	0x74, 0x65, 0x64, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x63,
+	0x6f, 0x72, 0x64, 0x12, 0x2f, 0x0a, 0x0b, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x0e, 0xe2, 0xde, 0x1f, 0x0a, 0x4f, 0x70,
+	0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x44, 0x52, 0x0a, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74,
+	0x6f, 0x72, 0x49, 0x64, 0x12, 0x57, 0x0a, 0x0b, 0x61, 0x63, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61,
+	0x74, 0x65, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b,
+	0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e,
+	0x41, 0x63, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x64, 0x43, 0x6f, 0x6d, 0x6d, 0x69,
+	0x73, 0x73, 0x69, 0x6f, 0x6e, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01,
+	0x52, 0x0b, 0x61, 0x63, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x64, 0x3a, 0x08, 0x88,
+	0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f, 0x00, 0x22, 0xe3, 0x0f, 0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65,
+	0x73, 0x69, 0x73, 0x53, 0x74, 0x61, 0x74, 0x65, 0x12, 0x39, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61,
+	0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
+	0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x50,
+	0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x70, 0x61, 0x72,
+	0x61, 0x6d, 0x73, 0x12, 0x46, 0x0a, 0x14, 0x6e, 0x65, 0x78, 0x74, 0x5f, 0x72, 0x65, 0x77, 0x61,
+	0x72, 0x64, 0x73, 0x5f, 0x70, 0x6c, 0x61, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x04, 0x42, 0x15, 0xe2, 0xde, 0x1f, 0x11, 0x4e, 0x65, 0x78, 0x74, 0x52, 0x65, 0x77, 0x61, 0x72,
+	0x64, 0x73, 0x50, 0x6c, 0x61, 0x6e, 0x49, 0x44, 0x52, 0x11, 0x6e, 0x65, 0x78, 0x74, 0x52, 0x65,
+	0x77, 0x61, 0x72, 0x64, 0x73, 0x50, 0x6c, 0x61, 0x6e, 0x49, 0x64, 0x12, 0x4b, 0x0a, 0x0d, 0x72,
+	0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x5f, 0x70, 0x6c, 0x61, 0x6e, 0x73, 0x18, 0x03, 0x20, 0x03,
+	0x28, 0x0b, 0x32, 0x20, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65,
+	0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73,
+	0x50, 0x6c, 0x61, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0c, 0x72, 0x65, 0x77, 0x61,
+	0x72, 0x64, 0x73, 0x50, 0x6c, 0x61, 0x6e, 0x73, 0x12, 0x61, 0x0a, 0x1c, 0x6c, 0x61, 0x73, 0x74,
+	0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x5f, 0x61, 0x6c, 0x6c, 0x6f, 0x63, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a,
+	0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66,
+	0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x42, 0x04, 0x90, 0xdf, 0x1f, 0x01,
+	0x52, 0x19, 0x6c, 0x61, 0x73, 0x74, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x41, 0x6c, 0x6c,
+	0x6f, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x69, 0x6d, 0x65, 0x12, 0x6f, 0x0a, 0x18, 0x64,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61,
+	0x77, 0x5f, 0x69, 0x6e, 0x66, 0x6f, 0x73, 0x18, 0x05, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2a, 0x2e,
 	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73,
-	0x2e, 0x76, 0x31, 0x2e, 0x50, 0x6f, 0x6f, 0x6c, 0x48, 0x69, 0x73, 0x74, 0x6f, 0x72, 0x69, 0x63,
+	0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x57, 0x69, 0x74,
+	0x68, 0x64, 0x72, 0x61, 0x77, 0x49, 0x6e, 0x66, 0x6f, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8,
+	0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x16, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x57,
+	0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x49, 0x6e, 0x66, 0x6f, 0x73, 0x12, 0x72, 0x0a, 0x18,
+	0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x6f, 0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67,
+	0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x18, 0x06, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2d,
+	0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64,
+	0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67,
+	0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x42, 0x09, 0xc8,
+	0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x16, 0x70, 0x6f, 0x6f, 0x6c, 0x4f, 0x75,
+	0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73,
+	0x12, 0x6f, 0x0a, 0x17, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x68, 0x69, 0x73, 0x74, 0x6f, 0x72, 0x69,
+	0x63, 0x61, 0x6c, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x18, 0x07, 0x20, 0x03, 0x28,
+	0x0b, 0x32, 0x2c, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77,
+	0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x48, 0x69, 0x73, 0x74, 0x6f, 0x72, 0x69, 0x63,
 	0x61, 0x6c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x42,
 	0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x15, 0x70, 0x6f, 0x6f, 0x6c,
 	0x48, 0x69, 0x73, 0x74, 0x6f, 0x72, 0x69, 0x63, 0x61, 0x6c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64,
-	0x73, 0x12, 0x6a, 0x0a, 0x14, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x63, 0x75, 0x72, 0x72, 0x65, 0x6e,
+	0x73, 0x12, 0x66, 0x0a, 0x14, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x63, 0x75, 0x72, 0x72, 0x65, 0x6e,
 	0x74, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x18, 0x08, 0x20, 0x03, 0x28, 0x0b, 0x32,
+	0x29, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72,
+	0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x77,
+	0x61, 0x72, 0x64, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00,
+	0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x12, 0x70, 0x6f, 0x6f, 0x6c, 0x43, 0x75, 0x72, 0x72, 0x65,
+	0x6e, 0x74, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x12, 0x7e, 0x0a, 0x1d, 0x70, 0x6f, 0x6f,
+	0x6c, 0x5f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x73, 0x74, 0x61, 0x72,
+	0x74, 0x69, 0x6e, 0x67, 0x5f, 0x69, 0x6e, 0x66, 0x6f, 0x73, 0x18, 0x09, 0x20, 0x03, 0x28, 0x0b,
+	0x32, 0x30, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61,
+	0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72,
+	0x53, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x63, 0x6f,
+	0x72, 0x64, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x1a, 0x70,
+	0x6f, 0x6f, 0x6c, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x74, 0x61, 0x72,
+	0x74, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x66, 0x6f, 0x73, 0x12, 0x7a, 0x0a, 0x1c, 0x6f, 0x70, 0x65,
+	0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x6f, 0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e,
+	0x67, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x18, 0x0a, 0x20, 0x03, 0x28, 0x0b, 0x32,
 	0x2d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72,
-	0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x6f, 0x6f, 0x6c, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e,
-	0x74, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x42, 0x09,
-	0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x12, 0x70, 0x6f, 0x6f, 0x6c, 0x43,
-	0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x12, 0x82, 0x01,
-	0x0a, 0x1d, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72,
-	0x5f, 0x73, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x67, 0x5f, 0x69, 0x6e, 0x66, 0x6f, 0x73, 0x18,
-	0x09, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x34, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
-	0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x6f, 0x6f, 0x6c,
-	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e,
-	0x67, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x42, 0x09, 0xc8, 0xde, 0x1f,
-	0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x1a, 0x70, 0x6f, 0x6f, 0x6c, 0x44, 0x65, 0x6c, 0x65,
-	0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x66,
-	0x6f, 0x73, 0x12, 0x82, 0x01, 0x0a, 0x1c, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f,
-	0x6f, 0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x72, 0x65, 0x77, 0x61,
-	0x72, 0x64, 0x73, 0x18, 0x0a, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x35, 0x2e, 0x6d, 0x69, 0x6c, 0x6b,
-	0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e,
-	0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x4f, 0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64,
-	0x69, 0x6e, 0x67, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64,
-	0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x1a, 0x6f, 0x70, 0x65,
-	0x72, 0x61, 0x74, 0x6f, 0x72, 0x4f, 0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67,
-	0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x12, 0x8d, 0x01, 0x0a, 0x20, 0x6f, 0x70, 0x65, 0x72,
-	0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x63, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x64,
-	0x5f, 0x63, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x0b, 0x20, 0x03,
-	0x28, 0x0b, 0x32, 0x38, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65,
-	0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f,
-	0x72, 0x41, 0x63, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x64, 0x43, 0x6f, 0x6d, 0x6d,
-	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x42, 0x09, 0xc8, 0xde,
-	0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x1e, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f,
-	0x72, 0x41, 0x63, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x64, 0x43, 0x6f, 0x6d, 0x6d,
-	0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x7f, 0x0a, 0x1b, 0x6f, 0x70, 0x65, 0x72, 0x61,
-	0x74, 0x6f, 0x72, 0x5f, 0x68, 0x69, 0x73, 0x74, 0x6f, 0x72, 0x69, 0x63, 0x61, 0x6c, 0x5f, 0x72,
-	0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x18, 0x0c, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x34, 0x2e, 0x6d,
-	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e,
-	0x76, 0x31, 0x2e, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x48, 0x69, 0x73, 0x74, 0x6f,
-	0x72, 0x69, 0x63, 0x61, 0x6c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65, 0x63, 0x6f,
-	0x72, 0x64, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x19, 0x6f,
-	0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x48, 0x69, 0x73, 0x74, 0x6f, 0x72, 0x69, 0x63, 0x61,
-	0x6c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x12, 0x76, 0x0a, 0x18, 0x6f, 0x70, 0x65, 0x72,
-	0x61, 0x74, 0x6f, 0x72, 0x5f, 0x63, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x5f, 0x72, 0x65, 0x77,
-	0x61, 0x72, 0x64, 0x73, 0x18, 0x0d, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x31, 0x2e, 0x6d, 0x69, 0x6c,
+	0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e,
+	0x67, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x42, 0x09,
+	0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x1a, 0x6f, 0x70, 0x65, 0x72, 0x61,
+	0x74, 0x6f, 0x72, 0x4f, 0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x52, 0x65,
+	0x77, 0x61, 0x72, 0x64, 0x73, 0x12, 0x8d, 0x01, 0x0a, 0x20, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74,
+	0x6f, 0x72, 0x5f, 0x61, 0x63, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x63,
+	0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x0b, 0x20, 0x03, 0x28, 0x0b,
+	0x32, 0x38, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61,
+	0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x41,
+	0x63, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x64, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00,
+	0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x1e, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x41,
+	0x63, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x64, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x77, 0x0a, 0x1b, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f,
+	0x72, 0x5f, 0x68, 0x69, 0x73, 0x74, 0x6f, 0x72, 0x69, 0x63, 0x61, 0x6c, 0x5f, 0x72, 0x65, 0x77,
+	0x61, 0x72, 0x64, 0x73, 0x18, 0x0c, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2c, 0x2e, 0x6d, 0x69, 0x6c,
 	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31,
-	0x2e, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74,
-	0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x42, 0x09, 0xc8,
-	0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x16, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74,
-	0x6f, 0x72, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73,
-	0x12, 0x8e, 0x01, 0x0a, 0x21, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x64, 0x65,
-	0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x73, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x67,
-	0x5f, 0x69, 0x6e, 0x66, 0x6f, 0x73, 0x18, 0x0e, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x38, 0x2e, 0x6d,
-	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e,
-	0x76, 0x31, 0x2e, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c, 0x65, 0x67,
-	0x61, 0x74, 0x6f, 0x72, 0x53, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x66, 0x6f,
-	0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a,
-	0x01, 0x52, 0x1e, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c, 0x65, 0x67,
-	0x61, 0x74, 0x6f, 0x72, 0x53, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x66, 0x6f,
-	0x73, 0x12, 0x7f, 0x0a, 0x1b, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x6f, 0x75, 0x74,
-	0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73,
-	0x18, 0x0f, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x34, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
-	0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x4f, 0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x52,
-	0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x42, 0x09, 0xc8, 0xde,
-	0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x19, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
-	0x4f, 0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x77, 0x61, 0x72,
-	0x64, 0x73, 0x12, 0x7c, 0x0a, 0x1a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x68, 0x69,
-	0x73, 0x74, 0x6f, 0x72, 0x69, 0x63, 0x61, 0x6c, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73,
-	0x18, 0x10, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x33, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
-	0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x48, 0x69, 0x73, 0x74, 0x6f, 0x72, 0x69, 0x63, 0x61, 0x6c, 0x52, 0x65,
+	0x2e, 0x48, 0x69, 0x73, 0x74, 0x6f, 0x72, 0x69, 0x63, 0x61, 0x6c, 0x52, 0x65, 0x77, 0x61, 0x72,
+	0x64, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7,
+	0xb0, 0x2a, 0x01, 0x52, 0x19, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x48, 0x69, 0x73,
+	0x74, 0x6f, 0x72, 0x69, 0x63, 0x61, 0x6c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x12, 0x6e,
+	0x0a, 0x18, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x63, 0x75, 0x72, 0x72, 0x65,
+	0x6e, 0x74, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x18, 0x0d, 0x20, 0x03, 0x28, 0x0b,
+	0x32, 0x29, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61,
+	0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x52, 0x65,
 	0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x42, 0x09, 0xc8, 0xde, 0x1f,
-	0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x18, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x48,
-	0x69, 0x73, 0x74, 0x6f, 0x72, 0x69, 0x63, 0x61, 0x6c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73,
-	0x12, 0x73, 0x0a, 0x17, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x63, 0x75, 0x72, 0x72,
-	0x65, 0x6e, 0x74, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x18, 0x11, 0x20, 0x03, 0x28,
+	0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x16, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
+	0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x12, 0x86,
+	0x01, 0x0a, 0x21, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x64, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x73, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x67, 0x5f, 0x69,
+	0x6e, 0x66, 0x6f, 0x73, 0x18, 0x0e, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x30, 0x2e, 0x6d, 0x69, 0x6c,
+	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31,
+	0x2e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x74, 0x61, 0x72, 0x74, 0x69,
+	0x6e, 0x67, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x42, 0x09, 0xc8, 0xde,
+	0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x1e, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f,
+	0x72, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x74, 0x61, 0x72, 0x74, 0x69,
+	0x6e, 0x67, 0x49, 0x6e, 0x66, 0x6f, 0x73, 0x12, 0x78, 0x0a, 0x1b, 0x73, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x5f, 0x6f, 0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x72,
+	0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x18, 0x0f, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2d, 0x2e, 0x6d,
+	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e,
+	0x76, 0x31, 0x2e, 0x4f, 0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x52, 0x65,
+	0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x42, 0x09, 0xc8, 0xde, 0x1f,
+	0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x19, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x4f,
+	0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64,
+	0x73, 0x12, 0x75, 0x0a, 0x1a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x68, 0x69, 0x73,
+	0x74, 0x6f, 0x72, 0x69, 0x63, 0x61, 0x6c, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x18,
+	0x10, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2c, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
+	0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x48, 0x69, 0x73, 0x74,
+	0x6f, 0x72, 0x69, 0x63, 0x61, 0x6c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65, 0x63,
+	0x6f, 0x72, 0x64, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x18,
+	0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x48, 0x69, 0x73, 0x74, 0x6f, 0x72, 0x69, 0x63, 0x61,
+	0x6c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x12, 0x6c, 0x0a, 0x17, 0x73, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x5f, 0x63, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x5f, 0x72, 0x65, 0x77, 0x61,
+	0x72, 0x64, 0x73, 0x18, 0x11, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x6d, 0x69, 0x6c, 0x6b,
+	0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e,
+	0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65,
+	0x63, 0x6f, 0x72, 0x64, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52,
+	0x15, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x52,
+	0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x12, 0x84, 0x01, 0x0a, 0x20, 0x73, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x5f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x73, 0x74, 0x61,
+	0x72, 0x74, 0x69, 0x6e, 0x67, 0x5f, 0x69, 0x6e, 0x66, 0x6f, 0x73, 0x18, 0x12, 0x20, 0x03, 0x28,
 	0x0b, 0x32, 0x30, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77,
-	0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x43,
-	0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x52, 0x65, 0x63,
-	0x6f, 0x72, 0x64, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x15,
-	0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x52, 0x65,
-	0x77, 0x61, 0x72, 0x64, 0x73, 0x12, 0x8b, 0x01, 0x0a, 0x20, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
-	0x65, 0x5f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x73, 0x74, 0x61, 0x72,
-	0x74, 0x69, 0x6e, 0x67, 0x5f, 0x69, 0x6e, 0x66, 0x6f, 0x73, 0x18, 0x12, 0x20, 0x03, 0x28, 0x0b,
-	0x32, 0x37, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61,
-	0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65,
-	0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x67, 0x49,
-	0x6e, 0x66, 0x6f, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8,
-	0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x1d, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65, 0x6c,
-	0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x67, 0x49, 0x6e,
-	0x66, 0x6f, 0x73, 0x42, 0xda, 0x01, 0x0a, 0x17, 0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b,
-	0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x42,
-	0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a,
-	0x43, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x69, 0x6c, 0x6b,
-	0x79, 0x77, 0x61, 0x79, 0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
-	0x61, 0x79, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f,
-	0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2f, 0x76, 0x31, 0x3b, 0x72, 0x65, 0x77, 0x61, 0x72,
-	0x64, 0x73, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x4d, 0x52, 0x58, 0xaa, 0x02, 0x13, 0x4d, 0x69, 0x6c,
-	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x56, 0x31,
-	0xca, 0x02, 0x13, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x77, 0x61,
-	0x72, 0x64, 0x73, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x1f, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
-	0x79, 0x5c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42,
-	0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79,
-	0x77, 0x61, 0x79, 0x3a, 0x3a, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x3a, 0x3a, 0x56, 0x31,
-	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f,
+	0x72, 0x53, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x65, 0x63,
+	0x6f, 0x72, 0x64, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x1d,
+	0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72,
+	0x53, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x66, 0x6f, 0x73, 0x42, 0xda, 0x01,
+	0x0a, 0x17, 0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72,
+	0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73,
+	0x69, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x43, 0x67, 0x69, 0x74, 0x68, 0x75,
+	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2d, 0x6c,
+	0x61, 0x62, 0x73, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x61, 0x70, 0x69,
+	0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64,
+	0x73, 0x2f, 0x76, 0x31, 0x3b, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x76, 0x31, 0xa2, 0x02,
+	0x03, 0x4d, 0x52, 0x58, 0xaa, 0x02, 0x13, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
+	0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x13, 0x4d, 0x69, 0x6c,
+	0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x5c, 0x56, 0x31,
+	0xe2, 0x02, 0x1f, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x77, 0x61,
+	0x72, 0x64, 0x73, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61,
+	0x74, 0x61, 0xea, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x3a, 0x3a, 0x52,
+	0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x33,
 }
 
 var (
@@ -11198,68 +6489,52 @@ func file_milkyway_rewards_v1_genesis_proto_rawDescGZIP() []byte {
 	return file_milkyway_rewards_v1_genesis_proto_rawDescData
 }
 
-var file_milkyway_rewards_v1_genesis_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_milkyway_rewards_v1_genesis_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_milkyway_rewards_v1_genesis_proto_goTypes = []interface{}{
 	(*DelegatorWithdrawInfo)(nil),               // 0: milkyway.rewards.v1.DelegatorWithdrawInfo
-	(*PoolOutstandingRewardsRecord)(nil),        // 1: milkyway.rewards.v1.PoolOutstandingRewardsRecord
-	(*PoolHistoricalRewardsRecord)(nil),         // 2: milkyway.rewards.v1.PoolHistoricalRewardsRecord
-	(*PoolCurrentRewardsRecord)(nil),            // 3: milkyway.rewards.v1.PoolCurrentRewardsRecord
-	(*PoolDelegatorStartingInfoRecord)(nil),     // 4: milkyway.rewards.v1.PoolDelegatorStartingInfoRecord
-	(*OperatorOutstandingRewardsRecord)(nil),    // 5: milkyway.rewards.v1.OperatorOutstandingRewardsRecord
-	(*OperatorAccumulatedCommissionRecord)(nil), // 6: milkyway.rewards.v1.OperatorAccumulatedCommissionRecord
-	(*OperatorHistoricalRewardsRecord)(nil),     // 7: milkyway.rewards.v1.OperatorHistoricalRewardsRecord
-	(*OperatorCurrentRewardsRecord)(nil),        // 8: milkyway.rewards.v1.OperatorCurrentRewardsRecord
-	(*OperatorDelegatorStartingInfoRecord)(nil), // 9: milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord
-	(*ServiceOutstandingRewardsRecord)(nil),     // 10: milkyway.rewards.v1.ServiceOutstandingRewardsRecord
-	(*ServiceHistoricalRewardsRecord)(nil),      // 11: milkyway.rewards.v1.ServiceHistoricalRewardsRecord
-	(*ServiceCurrentRewardsRecord)(nil),         // 12: milkyway.rewards.v1.ServiceCurrentRewardsRecord
-	(*ServiceDelegatorStartingInfoRecord)(nil),  // 13: milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord
-	(*GenesisState)(nil),                        // 14: milkyway.rewards.v1.GenesisState
-	(*DecPool)(nil),                             // 15: milkyway.rewards.v1.DecPool
-	(*HistoricalRewards)(nil),                   // 16: milkyway.rewards.v1.HistoricalRewards
-	(*CurrentRewards)(nil),                      // 17: milkyway.rewards.v1.CurrentRewards
-	(*DelegatorStartingInfo)(nil),               // 18: milkyway.rewards.v1.DelegatorStartingInfo
-	(*AccumulatedCommission)(nil),               // 19: milkyway.rewards.v1.AccumulatedCommission
-	(*Params)(nil),                              // 20: milkyway.rewards.v1.Params
-	(*RewardsPlan)(nil),                         // 21: milkyway.rewards.v1.RewardsPlan
-	(*timestamppb.Timestamp)(nil),               // 22: google.protobuf.Timestamp
+	(*OutstandingRewardsRecord)(nil),            // 1: milkyway.rewards.v1.OutstandingRewardsRecord
+	(*HistoricalRewardsRecord)(nil),             // 2: milkyway.rewards.v1.HistoricalRewardsRecord
+	(*CurrentRewardsRecord)(nil),                // 3: milkyway.rewards.v1.CurrentRewardsRecord
+	(*DelegatorStartingInfoRecord)(nil),         // 4: milkyway.rewards.v1.DelegatorStartingInfoRecord
+	(*OperatorAccumulatedCommissionRecord)(nil), // 5: milkyway.rewards.v1.OperatorAccumulatedCommissionRecord
+	(*GenesisState)(nil),                        // 6: milkyway.rewards.v1.GenesisState
+	(*DecPool)(nil),                             // 7: milkyway.rewards.v1.DecPool
+	(*HistoricalRewards)(nil),                   // 8: milkyway.rewards.v1.HistoricalRewards
+	(*CurrentRewards)(nil),                      // 9: milkyway.rewards.v1.CurrentRewards
+	(*DelegatorStartingInfo)(nil),               // 10: milkyway.rewards.v1.DelegatorStartingInfo
+	(*AccumulatedCommission)(nil),               // 11: milkyway.rewards.v1.AccumulatedCommission
+	(*Params)(nil),                              // 12: milkyway.rewards.v1.Params
+	(*RewardsPlan)(nil),                         // 13: milkyway.rewards.v1.RewardsPlan
+	(*timestamppb.Timestamp)(nil),               // 14: google.protobuf.Timestamp
 }
 var file_milkyway_rewards_v1_genesis_proto_depIdxs = []int32{
-	15, // 0: milkyway.rewards.v1.PoolOutstandingRewardsRecord.outstanding_rewards:type_name -> milkyway.rewards.v1.DecPool
-	16, // 1: milkyway.rewards.v1.PoolHistoricalRewardsRecord.rewards:type_name -> milkyway.rewards.v1.HistoricalRewards
-	17, // 2: milkyway.rewards.v1.PoolCurrentRewardsRecord.rewards:type_name -> milkyway.rewards.v1.CurrentRewards
-	18, // 3: milkyway.rewards.v1.PoolDelegatorStartingInfoRecord.starting_info:type_name -> milkyway.rewards.v1.DelegatorStartingInfo
-	15, // 4: milkyway.rewards.v1.OperatorOutstandingRewardsRecord.outstanding_rewards:type_name -> milkyway.rewards.v1.DecPool
-	19, // 5: milkyway.rewards.v1.OperatorAccumulatedCommissionRecord.accumulated:type_name -> milkyway.rewards.v1.AccumulatedCommission
-	16, // 6: milkyway.rewards.v1.OperatorHistoricalRewardsRecord.rewards:type_name -> milkyway.rewards.v1.HistoricalRewards
-	17, // 7: milkyway.rewards.v1.OperatorCurrentRewardsRecord.rewards:type_name -> milkyway.rewards.v1.CurrentRewards
-	18, // 8: milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord.starting_info:type_name -> milkyway.rewards.v1.DelegatorStartingInfo
-	15, // 9: milkyway.rewards.v1.ServiceOutstandingRewardsRecord.outstanding_rewards:type_name -> milkyway.rewards.v1.DecPool
-	16, // 10: milkyway.rewards.v1.ServiceHistoricalRewardsRecord.rewards:type_name -> milkyway.rewards.v1.HistoricalRewards
-	17, // 11: milkyway.rewards.v1.ServiceCurrentRewardsRecord.rewards:type_name -> milkyway.rewards.v1.CurrentRewards
-	18, // 12: milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord.starting_info:type_name -> milkyway.rewards.v1.DelegatorStartingInfo
-	20, // 13: milkyway.rewards.v1.GenesisState.params:type_name -> milkyway.rewards.v1.Params
-	21, // 14: milkyway.rewards.v1.GenesisState.rewards_plans:type_name -> milkyway.rewards.v1.RewardsPlan
-	22, // 15: milkyway.rewards.v1.GenesisState.last_rewards_allocation_time:type_name -> google.protobuf.Timestamp
-	0,  // 16: milkyway.rewards.v1.GenesisState.delegator_withdraw_infos:type_name -> milkyway.rewards.v1.DelegatorWithdrawInfo
-	1,  // 17: milkyway.rewards.v1.GenesisState.pool_outstanding_rewards:type_name -> milkyway.rewards.v1.PoolOutstandingRewardsRecord
-	2,  // 18: milkyway.rewards.v1.GenesisState.pool_historical_rewards:type_name -> milkyway.rewards.v1.PoolHistoricalRewardsRecord
-	3,  // 19: milkyway.rewards.v1.GenesisState.pool_current_rewards:type_name -> milkyway.rewards.v1.PoolCurrentRewardsRecord
-	4,  // 20: milkyway.rewards.v1.GenesisState.pool_delegator_starting_infos:type_name -> milkyway.rewards.v1.PoolDelegatorStartingInfoRecord
-	5,  // 21: milkyway.rewards.v1.GenesisState.operator_outstanding_rewards:type_name -> milkyway.rewards.v1.OperatorOutstandingRewardsRecord
-	6,  // 22: milkyway.rewards.v1.GenesisState.operator_accumulated_commissions:type_name -> milkyway.rewards.v1.OperatorAccumulatedCommissionRecord
-	7,  // 23: milkyway.rewards.v1.GenesisState.operator_historical_rewards:type_name -> milkyway.rewards.v1.OperatorHistoricalRewardsRecord
-	8,  // 24: milkyway.rewards.v1.GenesisState.operator_current_rewards:type_name -> milkyway.rewards.v1.OperatorCurrentRewardsRecord
-	9,  // 25: milkyway.rewards.v1.GenesisState.operator_delegator_starting_infos:type_name -> milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord
-	10, // 26: milkyway.rewards.v1.GenesisState.service_outstanding_rewards:type_name -> milkyway.rewards.v1.ServiceOutstandingRewardsRecord
-	11, // 27: milkyway.rewards.v1.GenesisState.service_historical_rewards:type_name -> milkyway.rewards.v1.ServiceHistoricalRewardsRecord
-	12, // 28: milkyway.rewards.v1.GenesisState.service_current_rewards:type_name -> milkyway.rewards.v1.ServiceCurrentRewardsRecord
-	13, // 29: milkyway.rewards.v1.GenesisState.service_delegator_starting_infos:type_name -> milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord
-	30, // [30:30] is the sub-list for method output_type
-	30, // [30:30] is the sub-list for method input_type
-	30, // [30:30] is the sub-list for extension type_name
-	30, // [30:30] is the sub-list for extension extendee
-	0,  // [0:30] is the sub-list for field type_name
+	7,  // 0: milkyway.rewards.v1.OutstandingRewardsRecord.outstanding_rewards:type_name -> milkyway.rewards.v1.DecPool
+	8,  // 1: milkyway.rewards.v1.HistoricalRewardsRecord.rewards:type_name -> milkyway.rewards.v1.HistoricalRewards
+	9,  // 2: milkyway.rewards.v1.CurrentRewardsRecord.rewards:type_name -> milkyway.rewards.v1.CurrentRewards
+	10, // 3: milkyway.rewards.v1.DelegatorStartingInfoRecord.starting_info:type_name -> milkyway.rewards.v1.DelegatorStartingInfo
+	11, // 4: milkyway.rewards.v1.OperatorAccumulatedCommissionRecord.accumulated:type_name -> milkyway.rewards.v1.AccumulatedCommission
+	12, // 5: milkyway.rewards.v1.GenesisState.params:type_name -> milkyway.rewards.v1.Params
+	13, // 6: milkyway.rewards.v1.GenesisState.rewards_plans:type_name -> milkyway.rewards.v1.RewardsPlan
+	14, // 7: milkyway.rewards.v1.GenesisState.last_rewards_allocation_time:type_name -> google.protobuf.Timestamp
+	0,  // 8: milkyway.rewards.v1.GenesisState.delegator_withdraw_infos:type_name -> milkyway.rewards.v1.DelegatorWithdrawInfo
+	1,  // 9: milkyway.rewards.v1.GenesisState.pool_outstanding_rewards:type_name -> milkyway.rewards.v1.OutstandingRewardsRecord
+	2,  // 10: milkyway.rewards.v1.GenesisState.pool_historical_rewards:type_name -> milkyway.rewards.v1.HistoricalRewardsRecord
+	3,  // 11: milkyway.rewards.v1.GenesisState.pool_current_rewards:type_name -> milkyway.rewards.v1.CurrentRewardsRecord
+	4,  // 12: milkyway.rewards.v1.GenesisState.pool_delegator_starting_infos:type_name -> milkyway.rewards.v1.DelegatorStartingInfoRecord
+	1,  // 13: milkyway.rewards.v1.GenesisState.operator_outstanding_rewards:type_name -> milkyway.rewards.v1.OutstandingRewardsRecord
+	5,  // 14: milkyway.rewards.v1.GenesisState.operator_accumulated_commissions:type_name -> milkyway.rewards.v1.OperatorAccumulatedCommissionRecord
+	2,  // 15: milkyway.rewards.v1.GenesisState.operator_historical_rewards:type_name -> milkyway.rewards.v1.HistoricalRewardsRecord
+	3,  // 16: milkyway.rewards.v1.GenesisState.operator_current_rewards:type_name -> milkyway.rewards.v1.CurrentRewardsRecord
+	4,  // 17: milkyway.rewards.v1.GenesisState.operator_delegator_starting_infos:type_name -> milkyway.rewards.v1.DelegatorStartingInfoRecord
+	1,  // 18: milkyway.rewards.v1.GenesisState.service_outstanding_rewards:type_name -> milkyway.rewards.v1.OutstandingRewardsRecord
+	2,  // 19: milkyway.rewards.v1.GenesisState.service_historical_rewards:type_name -> milkyway.rewards.v1.HistoricalRewardsRecord
+	3,  // 20: milkyway.rewards.v1.GenesisState.service_current_rewards:type_name -> milkyway.rewards.v1.CurrentRewardsRecord
+	4,  // 21: milkyway.rewards.v1.GenesisState.service_delegator_starting_infos:type_name -> milkyway.rewards.v1.DelegatorStartingInfoRecord
+	22, // [22:22] is the sub-list for method output_type
+	22, // [22:22] is the sub-list for method input_type
+	22, // [22:22] is the sub-list for extension type_name
+	22, // [22:22] is the sub-list for extension extendee
+	0,  // [0:22] is the sub-list for field type_name
 }
 
 func init() { file_milkyway_rewards_v1_genesis_proto_init() }
@@ -11283,7 +6558,7 @@ func file_milkyway_rewards_v1_genesis_proto_init() {
 			}
 		}
 		file_milkyway_rewards_v1_genesis_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PoolOutstandingRewardsRecord); i {
+			switch v := v.(*OutstandingRewardsRecord); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -11295,7 +6570,7 @@ func file_milkyway_rewards_v1_genesis_proto_init() {
 			}
 		}
 		file_milkyway_rewards_v1_genesis_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PoolHistoricalRewardsRecord); i {
+			switch v := v.(*HistoricalRewardsRecord); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -11307,7 +6582,7 @@ func file_milkyway_rewards_v1_genesis_proto_init() {
 			}
 		}
 		file_milkyway_rewards_v1_genesis_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PoolCurrentRewardsRecord); i {
+			switch v := v.(*CurrentRewardsRecord); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -11319,7 +6594,7 @@ func file_milkyway_rewards_v1_genesis_proto_init() {
 			}
 		}
 		file_milkyway_rewards_v1_genesis_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PoolDelegatorStartingInfoRecord); i {
+			switch v := v.(*DelegatorStartingInfoRecord); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -11331,18 +6606,6 @@ func file_milkyway_rewards_v1_genesis_proto_init() {
 			}
 		}
 		file_milkyway_rewards_v1_genesis_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*OperatorOutstandingRewardsRecord); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_milkyway_rewards_v1_genesis_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*OperatorAccumulatedCommissionRecord); i {
 			case 0:
 				return &v.state
@@ -11354,91 +6617,7 @@ func file_milkyway_rewards_v1_genesis_proto_init() {
 				return nil
 			}
 		}
-		file_milkyway_rewards_v1_genesis_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*OperatorHistoricalRewardsRecord); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_milkyway_rewards_v1_genesis_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*OperatorCurrentRewardsRecord); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_milkyway_rewards_v1_genesis_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*OperatorDelegatorStartingInfoRecord); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_milkyway_rewards_v1_genesis_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ServiceOutstandingRewardsRecord); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_milkyway_rewards_v1_genesis_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ServiceHistoricalRewardsRecord); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_milkyway_rewards_v1_genesis_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ServiceCurrentRewardsRecord); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_milkyway_rewards_v1_genesis_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ServiceDelegatorStartingInfoRecord); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_milkyway_rewards_v1_genesis_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+		file_milkyway_rewards_v1_genesis_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GenesisState); i {
 			case 0:
 				return &v.state
@@ -11457,7 +6636,7 @@ func file_milkyway_rewards_v1_genesis_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_milkyway_rewards_v1_genesis_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   15,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

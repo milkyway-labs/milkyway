@@ -142,130 +142,60 @@ func TestRewardsPlan_IsActiveAt(t *testing.T) {
 	}
 }
 
-func TestPoolsDistribution_Validate(t *testing.T) {
+func TestDistribution_Validate(t *testing.T) {
 	testCases := []struct {
 		name        string
-		distrType   types.PoolsDistributionType
+		distrType   types.DistributionType
 		expectedErr string
 	}{
 		{
 			"basic distribution type returns no error",
-			&types.PoolsDistributionTypeBasic{},
+			&types.DistributionTypeBasic{},
 			"",
 		},
 		{
-			"invalid pool ID returns error",
-			&types.PoolsDistributionTypeWeighted{
-				Weights: []types.PoolDistributionWeight{
+			"invalid delegation target ID returns error",
+			&types.DistributionTypeWeighted{
+				Weights: []types.DistributionWeight{
 					{
-						PoolID: 0,
-						Weight: 1,
+						DelegationTargetID: 0,
+						Weight:             1,
 					},
 				},
 			},
-			"invalid pool ID: 0",
+			"invalid delegation target ID: 0",
 		},
 		{
 			"invalid weight returns error",
-			&types.PoolsDistributionTypeWeighted{
-				Weights: []types.PoolDistributionWeight{
+			&types.DistributionTypeWeighted{
+				Weights: []types.DistributionWeight{
 					{
-						PoolID: 1,
-						Weight: 0,
+						DelegationTargetID: 1,
+						Weight:             0,
 					},
 				},
 			},
 			"weight must be positive: 0",
 		},
 		{
-			"duplicated pool ID returns error",
-			&types.PoolsDistributionTypeWeighted{
-				Weights: []types.PoolDistributionWeight{
+			"duplicated delegation target ID returns error",
+			&types.DistributionTypeWeighted{
+				Weights: []types.DistributionWeight{
 					{
-						PoolID: 1,
-						Weight: 1,
+						DelegationTargetID: 1,
+						Weight:             1,
 					},
 					{
-						PoolID: 1,
-						Weight: 2,
+						DelegationTargetID: 1,
+						Weight:             2,
 					},
 				},
 			},
-			"duplicated weight for the same pool ID: 1",
+			"duplicated weight for the same delegation target ID: 1",
 		},
 		{
 			"egalitarian distribution type returns no error",
-			&types.PoolsDistributionTypeEgalitarian{},
-			"",
-		},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			err := tc.distrType.Validate()
-			if tc.expectedErr == "" {
-				require.NoError(t, err)
-			} else {
-				require.EqualError(t, err, tc.expectedErr)
-			}
-		})
-	}
-}
-
-func TestOperatorsDistribution_Validate(t *testing.T) {
-	testCases := []struct {
-		name        string
-		distrType   types.OperatorsDistributionType
-		expectedErr string
-	}{
-		{
-			"basic distribution type returns no error",
-			&types.OperatorsDistributionTypeBasic{},
-			"",
-		},
-		{
-			"invalid operator ID returns error",
-			&types.OperatorsDistributionTypeWeighted{
-				Weights: []types.OperatorDistributionWeight{
-					{
-						OperatorID: 0,
-						Weight:     1,
-					},
-				},
-			},
-			"invalid operator ID: 0",
-		},
-		{
-			"invalid weight returns error",
-			&types.OperatorsDistributionTypeWeighted{
-				Weights: []types.OperatorDistributionWeight{
-					{
-						OperatorID: 1,
-						Weight:     0,
-					},
-				},
-			},
-			"weight must be positive: 0",
-		},
-		{
-			"duplicated operator ID returns error",
-			&types.OperatorsDistributionTypeWeighted{
-				Weights: []types.OperatorDistributionWeight{
-					{
-						OperatorID: 1,
-						Weight:     1,
-					},
-					{
-						OperatorID: 1,
-						Weight:     2,
-					},
-				},
-			},
-			"duplicated weight for the same operator ID: 1",
-		},
-		{
-			"egalitarian distribution type returns no error",
-			&types.OperatorsDistributionTypeEgalitarian{},
+			&types.DistributionTypeEgalitarian{},
 			"",
 		},
 	}

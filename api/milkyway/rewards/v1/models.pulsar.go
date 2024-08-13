@@ -381,9 +381,9 @@ func (x *fastReflection_RewardsPlan) Set(fd protoreflect.FieldDescriptor, value 
 	case "milkyway.rewards.v1.RewardsPlan.rewards_pool":
 		x.RewardsPool = value.Interface().(string)
 	case "milkyway.rewards.v1.RewardsPlan.pools_distribution":
-		x.PoolsDistribution = value.Message().Interface().(*PoolsDistribution)
+		x.PoolsDistribution = value.Message().Interface().(*Distribution)
 	case "milkyway.rewards.v1.RewardsPlan.operators_distribution":
-		x.OperatorsDistribution = value.Message().Interface().(*OperatorsDistribution)
+		x.OperatorsDistribution = value.Message().Interface().(*Distribution)
 	case "milkyway.rewards.v1.RewardsPlan.users_distribution":
 		x.UsersDistribution = value.Message().Interface().(*UsersDistribution)
 	default:
@@ -424,12 +424,12 @@ func (x *fastReflection_RewardsPlan) Mutable(fd protoreflect.FieldDescriptor) pr
 		return protoreflect.ValueOfMessage(x.EndTime.ProtoReflect())
 	case "milkyway.rewards.v1.RewardsPlan.pools_distribution":
 		if x.PoolsDistribution == nil {
-			x.PoolsDistribution = new(PoolsDistribution)
+			x.PoolsDistribution = new(Distribution)
 		}
 		return protoreflect.ValueOfMessage(x.PoolsDistribution.ProtoReflect())
 	case "milkyway.rewards.v1.RewardsPlan.operators_distribution":
 		if x.OperatorsDistribution == nil {
-			x.OperatorsDistribution = new(OperatorsDistribution)
+			x.OperatorsDistribution = new(Distribution)
 		}
 		return protoreflect.ValueOfMessage(x.OperatorsDistribution.ProtoReflect())
 	case "milkyway.rewards.v1.RewardsPlan.users_distribution":
@@ -476,10 +476,10 @@ func (x *fastReflection_RewardsPlan) NewField(fd protoreflect.FieldDescriptor) p
 	case "milkyway.rewards.v1.RewardsPlan.rewards_pool":
 		return protoreflect.ValueOfString("")
 	case "milkyway.rewards.v1.RewardsPlan.pools_distribution":
-		m := new(PoolsDistribution)
+		m := new(Distribution)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "milkyway.rewards.v1.RewardsPlan.operators_distribution":
-		m := new(OperatorsDistribution)
+		m := new(Distribution)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "milkyway.rewards.v1.RewardsPlan.users_distribution":
 		m := new(UsersDistribution)
@@ -1019,7 +1019,7 @@ func (x *fastReflection_RewardsPlan) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				if x.PoolsDistribution == nil {
-					x.PoolsDistribution = &PoolsDistribution{}
+					x.PoolsDistribution = &Distribution{}
 				}
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.PoolsDistribution); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
@@ -1055,7 +1055,7 @@ func (x *fastReflection_RewardsPlan) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
 				if x.OperatorsDistribution == nil {
-					x.OperatorsDistribution = &OperatorsDistribution{}
+					x.OperatorsDistribution = &Distribution{}
 				}
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.OperatorsDistribution); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
@@ -1133,27 +1133,29 @@ func (x *fastReflection_RewardsPlan) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_PoolsDistribution        protoreflect.MessageDescriptor
-	fd_PoolsDistribution_weight protoreflect.FieldDescriptor
-	fd_PoolsDistribution_type   protoreflect.FieldDescriptor
+	md_Distribution                 protoreflect.MessageDescriptor
+	fd_Distribution_delegation_type protoreflect.FieldDescriptor
+	fd_Distribution_weight          protoreflect.FieldDescriptor
+	fd_Distribution_type            protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_milkyway_rewards_v1_models_proto_init()
-	md_PoolsDistribution = File_milkyway_rewards_v1_models_proto.Messages().ByName("PoolsDistribution")
-	fd_PoolsDistribution_weight = md_PoolsDistribution.Fields().ByName("weight")
-	fd_PoolsDistribution_type = md_PoolsDistribution.Fields().ByName("type")
+	md_Distribution = File_milkyway_rewards_v1_models_proto.Messages().ByName("Distribution")
+	fd_Distribution_delegation_type = md_Distribution.Fields().ByName("delegation_type")
+	fd_Distribution_weight = md_Distribution.Fields().ByName("weight")
+	fd_Distribution_type = md_Distribution.Fields().ByName("type")
 }
 
-var _ protoreflect.Message = (*fastReflection_PoolsDistribution)(nil)
+var _ protoreflect.Message = (*fastReflection_Distribution)(nil)
 
-type fastReflection_PoolsDistribution PoolsDistribution
+type fastReflection_Distribution Distribution
 
-func (x *PoolsDistribution) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_PoolsDistribution)(x)
+func (x *Distribution) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_Distribution)(x)
 }
 
-func (x *PoolsDistribution) slowProtoReflect() protoreflect.Message {
+func (x *Distribution) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1165,43 +1167,43 @@ func (x *PoolsDistribution) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_PoolsDistribution_messageType fastReflection_PoolsDistribution_messageType
-var _ protoreflect.MessageType = fastReflection_PoolsDistribution_messageType{}
+var _fastReflection_Distribution_messageType fastReflection_Distribution_messageType
+var _ protoreflect.MessageType = fastReflection_Distribution_messageType{}
 
-type fastReflection_PoolsDistribution_messageType struct{}
+type fastReflection_Distribution_messageType struct{}
 
-func (x fastReflection_PoolsDistribution_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_PoolsDistribution)(nil)
+func (x fastReflection_Distribution_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_Distribution)(nil)
 }
-func (x fastReflection_PoolsDistribution_messageType) New() protoreflect.Message {
-	return new(fastReflection_PoolsDistribution)
+func (x fastReflection_Distribution_messageType) New() protoreflect.Message {
+	return new(fastReflection_Distribution)
 }
-func (x fastReflection_PoolsDistribution_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_PoolsDistribution
+func (x fastReflection_Distribution_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_Distribution
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_PoolsDistribution) Descriptor() protoreflect.MessageDescriptor {
-	return md_PoolsDistribution
+func (x *fastReflection_Distribution) Descriptor() protoreflect.MessageDescriptor {
+	return md_Distribution
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_PoolsDistribution) Type() protoreflect.MessageType {
-	return _fastReflection_PoolsDistribution_messageType
+func (x *fastReflection_Distribution) Type() protoreflect.MessageType {
+	return _fastReflection_Distribution_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_PoolsDistribution) New() protoreflect.Message {
-	return new(fastReflection_PoolsDistribution)
+func (x *fastReflection_Distribution) New() protoreflect.Message {
+	return new(fastReflection_Distribution)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_PoolsDistribution) Interface() protoreflect.ProtoMessage {
-	return (*PoolsDistribution)(x)
+func (x *fastReflection_Distribution) Interface() protoreflect.ProtoMessage {
+	return (*Distribution)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -1209,16 +1211,22 @@ func (x *fastReflection_PoolsDistribution) Interface() protoreflect.ProtoMessage
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_PoolsDistribution) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_Distribution) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.DelegationType != 0 {
+		value := protoreflect.ValueOfEnum((protoreflect.EnumNumber)(x.DelegationType))
+		if !f(fd_Distribution_delegation_type, value) {
+			return
+		}
+	}
 	if x.Weight != uint32(0) {
 		value := protoreflect.ValueOfUint32(x.Weight)
-		if !f(fd_PoolsDistribution_weight, value) {
+		if !f(fd_Distribution_weight, value) {
 			return
 		}
 	}
 	if x.Type_ != nil {
 		value := protoreflect.ValueOfMessage(x.Type_.ProtoReflect())
-		if !f(fd_PoolsDistribution_type, value) {
+		if !f(fd_Distribution_type, value) {
 			return
 		}
 	}
@@ -1235,17 +1243,19 @@ func (x *fastReflection_PoolsDistribution) Range(f func(protoreflect.FieldDescri
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_PoolsDistribution) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_Distribution) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolsDistribution.weight":
+	case "milkyway.rewards.v1.Distribution.delegation_type":
+		return x.DelegationType != 0
+	case "milkyway.rewards.v1.Distribution.weight":
 		return x.Weight != uint32(0)
-	case "milkyway.rewards.v1.PoolsDistribution.type":
+	case "milkyway.rewards.v1.Distribution.type":
 		return x.Type_ != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistribution"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.Distribution"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistribution does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.Distribution does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1255,17 +1265,19 @@ func (x *fastReflection_PoolsDistribution) Has(fd protoreflect.FieldDescriptor) 
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolsDistribution) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_Distribution) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolsDistribution.weight":
+	case "milkyway.rewards.v1.Distribution.delegation_type":
+		x.DelegationType = 0
+	case "milkyway.rewards.v1.Distribution.weight":
 		x.Weight = uint32(0)
-	case "milkyway.rewards.v1.PoolsDistribution.type":
+	case "milkyway.rewards.v1.Distribution.type":
 		x.Type_ = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistribution"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.Distribution"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistribution does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.Distribution does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1275,19 +1287,22 @@ func (x *fastReflection_PoolsDistribution) Clear(fd protoreflect.FieldDescriptor
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_PoolsDistribution) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_Distribution) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "milkyway.rewards.v1.PoolsDistribution.weight":
+	case "milkyway.rewards.v1.Distribution.delegation_type":
+		value := x.DelegationType
+		return protoreflect.ValueOfEnum((protoreflect.EnumNumber)(value))
+	case "milkyway.rewards.v1.Distribution.weight":
 		value := x.Weight
 		return protoreflect.ValueOfUint32(value)
-	case "milkyway.rewards.v1.PoolsDistribution.type":
+	case "milkyway.rewards.v1.Distribution.type":
 		value := x.Type_
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistribution"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.Distribution"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistribution does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.Distribution does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1301,17 +1316,19 @@ func (x *fastReflection_PoolsDistribution) Get(descriptor protoreflect.FieldDesc
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolsDistribution) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_Distribution) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolsDistribution.weight":
+	case "milkyway.rewards.v1.Distribution.delegation_type":
+		x.DelegationType = (v1.DelegationType)(value.Enum())
+	case "milkyway.rewards.v1.Distribution.weight":
 		x.Weight = uint32(value.Uint())
-	case "milkyway.rewards.v1.PoolsDistribution.type":
+	case "milkyway.rewards.v1.Distribution.type":
 		x.Type_ = value.Message().Interface().(*anypb.Any)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistribution"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.Distribution"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistribution does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.Distribution does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1325,48 +1342,52 @@ func (x *fastReflection_PoolsDistribution) Set(fd protoreflect.FieldDescriptor, 
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolsDistribution) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_Distribution) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolsDistribution.type":
+	case "milkyway.rewards.v1.Distribution.type":
 		if x.Type_ == nil {
 			x.Type_ = new(anypb.Any)
 		}
 		return protoreflect.ValueOfMessage(x.Type_.ProtoReflect())
-	case "milkyway.rewards.v1.PoolsDistribution.weight":
-		panic(fmt.Errorf("field weight of message milkyway.rewards.v1.PoolsDistribution is not mutable"))
+	case "milkyway.rewards.v1.Distribution.delegation_type":
+		panic(fmt.Errorf("field delegation_type of message milkyway.rewards.v1.Distribution is not mutable"))
+	case "milkyway.rewards.v1.Distribution.weight":
+		panic(fmt.Errorf("field weight of message milkyway.rewards.v1.Distribution is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistribution"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.Distribution"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistribution does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.Distribution does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_PoolsDistribution) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_Distribution) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolsDistribution.weight":
+	case "milkyway.rewards.v1.Distribution.delegation_type":
+		return protoreflect.ValueOfEnum(0)
+	case "milkyway.rewards.v1.Distribution.weight":
 		return protoreflect.ValueOfUint32(uint32(0))
-	case "milkyway.rewards.v1.PoolsDistribution.type":
+	case "milkyway.rewards.v1.Distribution.type":
 		m := new(anypb.Any)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistribution"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.Distribution"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistribution does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.Distribution does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_PoolsDistribution) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_Distribution) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.PoolsDistribution", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.Distribution", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1374,7 +1395,7 @@ func (x *fastReflection_PoolsDistribution) WhichOneof(d protoreflect.OneofDescri
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_PoolsDistribution) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_Distribution) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1385,7 +1406,7 @@ func (x *fastReflection_PoolsDistribution) GetUnknown() protoreflect.RawFields {
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolsDistribution) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_Distribution) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1397,7 +1418,7 @@ func (x *fastReflection_PoolsDistribution) SetUnknown(fields protoreflect.RawFie
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_PoolsDistribution) IsValid() bool {
+func (x *fastReflection_Distribution) IsValid() bool {
 	return x != nil
 }
 
@@ -1407,9 +1428,9 @@ func (x *fastReflection_PoolsDistribution) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_PoolsDistribution) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_Distribution) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*PoolsDistribution)
+		x := input.Message.Interface().(*Distribution)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1421,6 +1442,9 @@ func (x *fastReflection_PoolsDistribution) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
+		if x.DelegationType != 0 {
+			n += 1 + runtime.Sov(uint64(x.DelegationType))
+		}
 		if x.Weight != 0 {
 			n += 1 + runtime.Sov(uint64(x.Weight))
 		}
@@ -1438,7 +1462,7 @@ func (x *fastReflection_PoolsDistribution) ProtoMethods() *protoiface.Methods {
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*PoolsDistribution)
+		x := input.Message.Interface().(*Distribution)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1469,10 +1493,15 @@ func (x *fastReflection_PoolsDistribution) ProtoMethods() *protoiface.Methods {
 			copy(dAtA[i:], encoded)
 			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 			i--
-			dAtA[i] = 0x12
+			dAtA[i] = 0x1a
 		}
 		if x.Weight != 0 {
 			i = runtime.EncodeVarint(dAtA, i, uint64(x.Weight))
+			i--
+			dAtA[i] = 0x10
+		}
+		if x.DelegationType != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.DelegationType))
 			i--
 			dAtA[i] = 0x8
 		}
@@ -1487,7 +1516,7 @@ func (x *fastReflection_PoolsDistribution) ProtoMethods() *protoiface.Methods {
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*PoolsDistribution)
+		x := input.Message.Interface().(*Distribution)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1519,13 +1548,32 @@ func (x *fastReflection_PoolsDistribution) ProtoMethods() *protoiface.Methods {
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: PoolsDistribution: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Distribution: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: PoolsDistribution: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: Distribution: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DelegationType", wireType)
+				}
+				x.DelegationType = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.DelegationType |= v1.DelegationType(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
 				if wireType != 0 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Weight", wireType)
 				}
@@ -1544,7 +1592,7 @@ func (x *fastReflection_PoolsDistribution) ProtoMethods() *protoiface.Methods {
 						break
 					}
 				}
-			case 2:
+			case 3:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Type_", wireType)
 				}
@@ -1616,23 +1664,23 @@ func (x *fastReflection_PoolsDistribution) ProtoMethods() *protoiface.Methods {
 }
 
 var (
-	md_PoolsDistributionTypeBasic protoreflect.MessageDescriptor
+	md_DistributionTypeBasic protoreflect.MessageDescriptor
 )
 
 func init() {
 	file_milkyway_rewards_v1_models_proto_init()
-	md_PoolsDistributionTypeBasic = File_milkyway_rewards_v1_models_proto.Messages().ByName("PoolsDistributionTypeBasic")
+	md_DistributionTypeBasic = File_milkyway_rewards_v1_models_proto.Messages().ByName("DistributionTypeBasic")
 }
 
-var _ protoreflect.Message = (*fastReflection_PoolsDistributionTypeBasic)(nil)
+var _ protoreflect.Message = (*fastReflection_DistributionTypeBasic)(nil)
 
-type fastReflection_PoolsDistributionTypeBasic PoolsDistributionTypeBasic
+type fastReflection_DistributionTypeBasic DistributionTypeBasic
 
-func (x *PoolsDistributionTypeBasic) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_PoolsDistributionTypeBasic)(x)
+func (x *DistributionTypeBasic) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_DistributionTypeBasic)(x)
 }
 
-func (x *PoolsDistributionTypeBasic) slowProtoReflect() protoreflect.Message {
+func (x *DistributionTypeBasic) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1644,43 +1692,43 @@ func (x *PoolsDistributionTypeBasic) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_PoolsDistributionTypeBasic_messageType fastReflection_PoolsDistributionTypeBasic_messageType
-var _ protoreflect.MessageType = fastReflection_PoolsDistributionTypeBasic_messageType{}
+var _fastReflection_DistributionTypeBasic_messageType fastReflection_DistributionTypeBasic_messageType
+var _ protoreflect.MessageType = fastReflection_DistributionTypeBasic_messageType{}
 
-type fastReflection_PoolsDistributionTypeBasic_messageType struct{}
+type fastReflection_DistributionTypeBasic_messageType struct{}
 
-func (x fastReflection_PoolsDistributionTypeBasic_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_PoolsDistributionTypeBasic)(nil)
+func (x fastReflection_DistributionTypeBasic_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_DistributionTypeBasic)(nil)
 }
-func (x fastReflection_PoolsDistributionTypeBasic_messageType) New() protoreflect.Message {
-	return new(fastReflection_PoolsDistributionTypeBasic)
+func (x fastReflection_DistributionTypeBasic_messageType) New() protoreflect.Message {
+	return new(fastReflection_DistributionTypeBasic)
 }
-func (x fastReflection_PoolsDistributionTypeBasic_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_PoolsDistributionTypeBasic
+func (x fastReflection_DistributionTypeBasic_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_DistributionTypeBasic
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_PoolsDistributionTypeBasic) Descriptor() protoreflect.MessageDescriptor {
-	return md_PoolsDistributionTypeBasic
+func (x *fastReflection_DistributionTypeBasic) Descriptor() protoreflect.MessageDescriptor {
+	return md_DistributionTypeBasic
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_PoolsDistributionTypeBasic) Type() protoreflect.MessageType {
-	return _fastReflection_PoolsDistributionTypeBasic_messageType
+func (x *fastReflection_DistributionTypeBasic) Type() protoreflect.MessageType {
+	return _fastReflection_DistributionTypeBasic_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_PoolsDistributionTypeBasic) New() protoreflect.Message {
-	return new(fastReflection_PoolsDistributionTypeBasic)
+func (x *fastReflection_DistributionTypeBasic) New() protoreflect.Message {
+	return new(fastReflection_DistributionTypeBasic)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_PoolsDistributionTypeBasic) Interface() protoreflect.ProtoMessage {
-	return (*PoolsDistributionTypeBasic)(x)
+func (x *fastReflection_DistributionTypeBasic) Interface() protoreflect.ProtoMessage {
+	return (*DistributionTypeBasic)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -1688,7 +1736,7 @@ func (x *fastReflection_PoolsDistributionTypeBasic) Interface() protoreflect.Pro
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_PoolsDistributionTypeBasic) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_DistributionTypeBasic) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 }
 
 // Has reports whether a field is populated.
@@ -1702,13 +1750,13 @@ func (x *fastReflection_PoolsDistributionTypeBasic) Range(f func(protoreflect.Fi
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_PoolsDistributionTypeBasic) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_DistributionTypeBasic) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistributionTypeBasic"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionTypeBasic"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistributionTypeBasic does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionTypeBasic does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1718,13 +1766,13 @@ func (x *fastReflection_PoolsDistributionTypeBasic) Has(fd protoreflect.FieldDes
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolsDistributionTypeBasic) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_DistributionTypeBasic) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistributionTypeBasic"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionTypeBasic"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistributionTypeBasic does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionTypeBasic does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1734,13 +1782,13 @@ func (x *fastReflection_PoolsDistributionTypeBasic) Clear(fd protoreflect.FieldD
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_PoolsDistributionTypeBasic) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_DistributionTypeBasic) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistributionTypeBasic"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionTypeBasic"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistributionTypeBasic does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionTypeBasic does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1754,13 +1802,13 @@ func (x *fastReflection_PoolsDistributionTypeBasic) Get(descriptor protoreflect.
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolsDistributionTypeBasic) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_DistributionTypeBasic) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistributionTypeBasic"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionTypeBasic"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistributionTypeBasic does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionTypeBasic does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1774,36 +1822,36 @@ func (x *fastReflection_PoolsDistributionTypeBasic) Set(fd protoreflect.FieldDes
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolsDistributionTypeBasic) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_DistributionTypeBasic) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistributionTypeBasic"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionTypeBasic"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistributionTypeBasic does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionTypeBasic does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_PoolsDistributionTypeBasic) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_DistributionTypeBasic) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistributionTypeBasic"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionTypeBasic"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistributionTypeBasic does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionTypeBasic does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_PoolsDistributionTypeBasic) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_DistributionTypeBasic) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.PoolsDistributionTypeBasic", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.DistributionTypeBasic", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1811,7 +1859,7 @@ func (x *fastReflection_PoolsDistributionTypeBasic) WhichOneof(d protoreflect.On
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_PoolsDistributionTypeBasic) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_DistributionTypeBasic) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1822,7 +1870,7 @@ func (x *fastReflection_PoolsDistributionTypeBasic) GetUnknown() protoreflect.Ra
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolsDistributionTypeBasic) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_DistributionTypeBasic) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1834,7 +1882,7 @@ func (x *fastReflection_PoolsDistributionTypeBasic) SetUnknown(fields protorefle
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_PoolsDistributionTypeBasic) IsValid() bool {
+func (x *fastReflection_DistributionTypeBasic) IsValid() bool {
 	return x != nil
 }
 
@@ -1844,9 +1892,9 @@ func (x *fastReflection_PoolsDistributionTypeBasic) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_PoolsDistributionTypeBasic) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_DistributionTypeBasic) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*PoolsDistributionTypeBasic)
+		x := input.Message.Interface().(*DistributionTypeBasic)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1868,7 +1916,7 @@ func (x *fastReflection_PoolsDistributionTypeBasic) ProtoMethods() *protoiface.M
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*PoolsDistributionTypeBasic)
+		x := input.Message.Interface().(*DistributionTypeBasic)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1898,7 +1946,7 @@ func (x *fastReflection_PoolsDistributionTypeBasic) ProtoMethods() *protoiface.M
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*PoolsDistributionTypeBasic)
+		x := input.Message.Interface().(*DistributionTypeBasic)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1930,10 +1978,10 @@ func (x *fastReflection_PoolsDistributionTypeBasic) ProtoMethods() *protoiface.M
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: PoolsDistributionTypeBasic: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DistributionTypeBasic: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: PoolsDistributionTypeBasic: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DistributionTypeBasic: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			default:
@@ -1971,77 +2019,77 @@ func (x *fastReflection_PoolsDistributionTypeBasic) ProtoMethods() *protoiface.M
 	}
 }
 
-var _ protoreflect.List = (*_PoolsDistributionTypeWeighted_1_list)(nil)
+var _ protoreflect.List = (*_DistributionTypeWeighted_1_list)(nil)
 
-type _PoolsDistributionTypeWeighted_1_list struct {
-	list *[]*PoolDistributionWeight
+type _DistributionTypeWeighted_1_list struct {
+	list *[]*DistributionWeight
 }
 
-func (x *_PoolsDistributionTypeWeighted_1_list) Len() int {
+func (x *_DistributionTypeWeighted_1_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_PoolsDistributionTypeWeighted_1_list) Get(i int) protoreflect.Value {
+func (x *_DistributionTypeWeighted_1_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
 }
 
-func (x *_PoolsDistributionTypeWeighted_1_list) Set(i int, value protoreflect.Value) {
+func (x *_DistributionTypeWeighted_1_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*PoolDistributionWeight)
+	concreteValue := valueUnwrapped.Interface().(*DistributionWeight)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_PoolsDistributionTypeWeighted_1_list) Append(value protoreflect.Value) {
+func (x *_DistributionTypeWeighted_1_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*PoolDistributionWeight)
+	concreteValue := valueUnwrapped.Interface().(*DistributionWeight)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_PoolsDistributionTypeWeighted_1_list) AppendMutable() protoreflect.Value {
-	v := new(PoolDistributionWeight)
+func (x *_DistributionTypeWeighted_1_list) AppendMutable() protoreflect.Value {
+	v := new(DistributionWeight)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_PoolsDistributionTypeWeighted_1_list) Truncate(n int) {
+func (x *_DistributionTypeWeighted_1_list) Truncate(n int) {
 	for i := n; i < len(*x.list); i++ {
 		(*x.list)[i] = nil
 	}
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_PoolsDistributionTypeWeighted_1_list) NewElement() protoreflect.Value {
-	v := new(PoolDistributionWeight)
+func (x *_DistributionTypeWeighted_1_list) NewElement() protoreflect.Value {
+	v := new(DistributionWeight)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_PoolsDistributionTypeWeighted_1_list) IsValid() bool {
+func (x *_DistributionTypeWeighted_1_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_PoolsDistributionTypeWeighted         protoreflect.MessageDescriptor
-	fd_PoolsDistributionTypeWeighted_weights protoreflect.FieldDescriptor
+	md_DistributionTypeWeighted         protoreflect.MessageDescriptor
+	fd_DistributionTypeWeighted_weights protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_milkyway_rewards_v1_models_proto_init()
-	md_PoolsDistributionTypeWeighted = File_milkyway_rewards_v1_models_proto.Messages().ByName("PoolsDistributionTypeWeighted")
-	fd_PoolsDistributionTypeWeighted_weights = md_PoolsDistributionTypeWeighted.Fields().ByName("weights")
+	md_DistributionTypeWeighted = File_milkyway_rewards_v1_models_proto.Messages().ByName("DistributionTypeWeighted")
+	fd_DistributionTypeWeighted_weights = md_DistributionTypeWeighted.Fields().ByName("weights")
 }
 
-var _ protoreflect.Message = (*fastReflection_PoolsDistributionTypeWeighted)(nil)
+var _ protoreflect.Message = (*fastReflection_DistributionTypeWeighted)(nil)
 
-type fastReflection_PoolsDistributionTypeWeighted PoolsDistributionTypeWeighted
+type fastReflection_DistributionTypeWeighted DistributionTypeWeighted
 
-func (x *PoolsDistributionTypeWeighted) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_PoolsDistributionTypeWeighted)(x)
+func (x *DistributionTypeWeighted) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_DistributionTypeWeighted)(x)
 }
 
-func (x *PoolsDistributionTypeWeighted) slowProtoReflect() protoreflect.Message {
+func (x *DistributionTypeWeighted) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2053,43 +2101,43 @@ func (x *PoolsDistributionTypeWeighted) slowProtoReflect() protoreflect.Message 
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_PoolsDistributionTypeWeighted_messageType fastReflection_PoolsDistributionTypeWeighted_messageType
-var _ protoreflect.MessageType = fastReflection_PoolsDistributionTypeWeighted_messageType{}
+var _fastReflection_DistributionTypeWeighted_messageType fastReflection_DistributionTypeWeighted_messageType
+var _ protoreflect.MessageType = fastReflection_DistributionTypeWeighted_messageType{}
 
-type fastReflection_PoolsDistributionTypeWeighted_messageType struct{}
+type fastReflection_DistributionTypeWeighted_messageType struct{}
 
-func (x fastReflection_PoolsDistributionTypeWeighted_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_PoolsDistributionTypeWeighted)(nil)
+func (x fastReflection_DistributionTypeWeighted_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_DistributionTypeWeighted)(nil)
 }
-func (x fastReflection_PoolsDistributionTypeWeighted_messageType) New() protoreflect.Message {
-	return new(fastReflection_PoolsDistributionTypeWeighted)
+func (x fastReflection_DistributionTypeWeighted_messageType) New() protoreflect.Message {
+	return new(fastReflection_DistributionTypeWeighted)
 }
-func (x fastReflection_PoolsDistributionTypeWeighted_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_PoolsDistributionTypeWeighted
+func (x fastReflection_DistributionTypeWeighted_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_DistributionTypeWeighted
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_PoolsDistributionTypeWeighted) Descriptor() protoreflect.MessageDescriptor {
-	return md_PoolsDistributionTypeWeighted
+func (x *fastReflection_DistributionTypeWeighted) Descriptor() protoreflect.MessageDescriptor {
+	return md_DistributionTypeWeighted
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_PoolsDistributionTypeWeighted) Type() protoreflect.MessageType {
-	return _fastReflection_PoolsDistributionTypeWeighted_messageType
+func (x *fastReflection_DistributionTypeWeighted) Type() protoreflect.MessageType {
+	return _fastReflection_DistributionTypeWeighted_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_PoolsDistributionTypeWeighted) New() protoreflect.Message {
-	return new(fastReflection_PoolsDistributionTypeWeighted)
+func (x *fastReflection_DistributionTypeWeighted) New() protoreflect.Message {
+	return new(fastReflection_DistributionTypeWeighted)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_PoolsDistributionTypeWeighted) Interface() protoreflect.ProtoMessage {
-	return (*PoolsDistributionTypeWeighted)(x)
+func (x *fastReflection_DistributionTypeWeighted) Interface() protoreflect.ProtoMessage {
+	return (*DistributionTypeWeighted)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -2097,10 +2145,10 @@ func (x *fastReflection_PoolsDistributionTypeWeighted) Interface() protoreflect.
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_PoolsDistributionTypeWeighted) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_DistributionTypeWeighted) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if len(x.Weights) != 0 {
-		value := protoreflect.ValueOfList(&_PoolsDistributionTypeWeighted_1_list{list: &x.Weights})
-		if !f(fd_PoolsDistributionTypeWeighted_weights, value) {
+		value := protoreflect.ValueOfList(&_DistributionTypeWeighted_1_list{list: &x.Weights})
+		if !f(fd_DistributionTypeWeighted_weights, value) {
 			return
 		}
 	}
@@ -2117,15 +2165,15 @@ func (x *fastReflection_PoolsDistributionTypeWeighted) Range(f func(protoreflect
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_PoolsDistributionTypeWeighted) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_DistributionTypeWeighted) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolsDistributionTypeWeighted.weights":
+	case "milkyway.rewards.v1.DistributionTypeWeighted.weights":
 		return len(x.Weights) != 0
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistributionTypeWeighted"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionTypeWeighted"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistributionTypeWeighted does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionTypeWeighted does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2135,15 +2183,15 @@ func (x *fastReflection_PoolsDistributionTypeWeighted) Has(fd protoreflect.Field
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolsDistributionTypeWeighted) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_DistributionTypeWeighted) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolsDistributionTypeWeighted.weights":
+	case "milkyway.rewards.v1.DistributionTypeWeighted.weights":
 		x.Weights = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistributionTypeWeighted"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionTypeWeighted"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistributionTypeWeighted does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionTypeWeighted does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2153,19 +2201,19 @@ func (x *fastReflection_PoolsDistributionTypeWeighted) Clear(fd protoreflect.Fie
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_PoolsDistributionTypeWeighted) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_DistributionTypeWeighted) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "milkyway.rewards.v1.PoolsDistributionTypeWeighted.weights":
+	case "milkyway.rewards.v1.DistributionTypeWeighted.weights":
 		if len(x.Weights) == 0 {
-			return protoreflect.ValueOfList(&_PoolsDistributionTypeWeighted_1_list{})
+			return protoreflect.ValueOfList(&_DistributionTypeWeighted_1_list{})
 		}
-		listValue := &_PoolsDistributionTypeWeighted_1_list{list: &x.Weights}
+		listValue := &_DistributionTypeWeighted_1_list{list: &x.Weights}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistributionTypeWeighted"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionTypeWeighted"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistributionTypeWeighted does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionTypeWeighted does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -2179,17 +2227,17 @@ func (x *fastReflection_PoolsDistributionTypeWeighted) Get(descriptor protorefle
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolsDistributionTypeWeighted) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_DistributionTypeWeighted) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolsDistributionTypeWeighted.weights":
+	case "milkyway.rewards.v1.DistributionTypeWeighted.weights":
 		lv := value.List()
-		clv := lv.(*_PoolsDistributionTypeWeighted_1_list)
+		clv := lv.(*_DistributionTypeWeighted_1_list)
 		x.Weights = *clv.list
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistributionTypeWeighted"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionTypeWeighted"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistributionTypeWeighted does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionTypeWeighted does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2203,45 +2251,45 @@ func (x *fastReflection_PoolsDistributionTypeWeighted) Set(fd protoreflect.Field
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolsDistributionTypeWeighted) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_DistributionTypeWeighted) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolsDistributionTypeWeighted.weights":
+	case "milkyway.rewards.v1.DistributionTypeWeighted.weights":
 		if x.Weights == nil {
-			x.Weights = []*PoolDistributionWeight{}
+			x.Weights = []*DistributionWeight{}
 		}
-		value := &_PoolsDistributionTypeWeighted_1_list{list: &x.Weights}
+		value := &_DistributionTypeWeighted_1_list{list: &x.Weights}
 		return protoreflect.ValueOfList(value)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistributionTypeWeighted"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionTypeWeighted"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistributionTypeWeighted does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionTypeWeighted does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_PoolsDistributionTypeWeighted) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_DistributionTypeWeighted) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolsDistributionTypeWeighted.weights":
-		list := []*PoolDistributionWeight{}
-		return protoreflect.ValueOfList(&_PoolsDistributionTypeWeighted_1_list{list: &list})
+	case "milkyway.rewards.v1.DistributionTypeWeighted.weights":
+		list := []*DistributionWeight{}
+		return protoreflect.ValueOfList(&_DistributionTypeWeighted_1_list{list: &list})
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistributionTypeWeighted"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionTypeWeighted"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistributionTypeWeighted does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionTypeWeighted does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_PoolsDistributionTypeWeighted) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_DistributionTypeWeighted) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.PoolsDistributionTypeWeighted", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.DistributionTypeWeighted", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -2249,7 +2297,7 @@ func (x *fastReflection_PoolsDistributionTypeWeighted) WhichOneof(d protoreflect
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_PoolsDistributionTypeWeighted) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_DistributionTypeWeighted) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -2260,7 +2308,7 @@ func (x *fastReflection_PoolsDistributionTypeWeighted) GetUnknown() protoreflect
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolsDistributionTypeWeighted) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_DistributionTypeWeighted) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -2272,7 +2320,7 @@ func (x *fastReflection_PoolsDistributionTypeWeighted) SetUnknown(fields protore
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_PoolsDistributionTypeWeighted) IsValid() bool {
+func (x *fastReflection_DistributionTypeWeighted) IsValid() bool {
 	return x != nil
 }
 
@@ -2282,9 +2330,9 @@ func (x *fastReflection_PoolsDistributionTypeWeighted) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_PoolsDistributionTypeWeighted) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_DistributionTypeWeighted) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*PoolsDistributionTypeWeighted)
+		x := input.Message.Interface().(*DistributionTypeWeighted)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2312,7 +2360,7 @@ func (x *fastReflection_PoolsDistributionTypeWeighted) ProtoMethods() *protoifac
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*PoolsDistributionTypeWeighted)
+		x := input.Message.Interface().(*DistributionTypeWeighted)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2358,7 +2406,7 @@ func (x *fastReflection_PoolsDistributionTypeWeighted) ProtoMethods() *protoifac
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*PoolsDistributionTypeWeighted)
+		x := input.Message.Interface().(*DistributionTypeWeighted)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2390,10 +2438,10 @@ func (x *fastReflection_PoolsDistributionTypeWeighted) ProtoMethods() *protoifac
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: PoolsDistributionTypeWeighted: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DistributionTypeWeighted: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: PoolsDistributionTypeWeighted: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DistributionTypeWeighted: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -2425,7 +2473,7 @@ func (x *fastReflection_PoolsDistributionTypeWeighted) ProtoMethods() *protoifac
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Weights = append(x.Weights, &PoolDistributionWeight{})
+				x.Weights = append(x.Weights, &DistributionWeight{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Weights[len(x.Weights)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
@@ -2466,27 +2514,27 @@ func (x *fastReflection_PoolsDistributionTypeWeighted) ProtoMethods() *protoifac
 }
 
 var (
-	md_PoolDistributionWeight         protoreflect.MessageDescriptor
-	fd_PoolDistributionWeight_pool_id protoreflect.FieldDescriptor
-	fd_PoolDistributionWeight_weight  protoreflect.FieldDescriptor
+	md_DistributionWeight                      protoreflect.MessageDescriptor
+	fd_DistributionWeight_delegation_target_id protoreflect.FieldDescriptor
+	fd_DistributionWeight_weight               protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_milkyway_rewards_v1_models_proto_init()
-	md_PoolDistributionWeight = File_milkyway_rewards_v1_models_proto.Messages().ByName("PoolDistributionWeight")
-	fd_PoolDistributionWeight_pool_id = md_PoolDistributionWeight.Fields().ByName("pool_id")
-	fd_PoolDistributionWeight_weight = md_PoolDistributionWeight.Fields().ByName("weight")
+	md_DistributionWeight = File_milkyway_rewards_v1_models_proto.Messages().ByName("DistributionWeight")
+	fd_DistributionWeight_delegation_target_id = md_DistributionWeight.Fields().ByName("delegation_target_id")
+	fd_DistributionWeight_weight = md_DistributionWeight.Fields().ByName("weight")
 }
 
-var _ protoreflect.Message = (*fastReflection_PoolDistributionWeight)(nil)
+var _ protoreflect.Message = (*fastReflection_DistributionWeight)(nil)
 
-type fastReflection_PoolDistributionWeight PoolDistributionWeight
+type fastReflection_DistributionWeight DistributionWeight
 
-func (x *PoolDistributionWeight) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_PoolDistributionWeight)(x)
+func (x *DistributionWeight) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_DistributionWeight)(x)
 }
 
-func (x *PoolDistributionWeight) slowProtoReflect() protoreflect.Message {
+func (x *DistributionWeight) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2498,43 +2546,43 @@ func (x *PoolDistributionWeight) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_PoolDistributionWeight_messageType fastReflection_PoolDistributionWeight_messageType
-var _ protoreflect.MessageType = fastReflection_PoolDistributionWeight_messageType{}
+var _fastReflection_DistributionWeight_messageType fastReflection_DistributionWeight_messageType
+var _ protoreflect.MessageType = fastReflection_DistributionWeight_messageType{}
 
-type fastReflection_PoolDistributionWeight_messageType struct{}
+type fastReflection_DistributionWeight_messageType struct{}
 
-func (x fastReflection_PoolDistributionWeight_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_PoolDistributionWeight)(nil)
+func (x fastReflection_DistributionWeight_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_DistributionWeight)(nil)
 }
-func (x fastReflection_PoolDistributionWeight_messageType) New() protoreflect.Message {
-	return new(fastReflection_PoolDistributionWeight)
+func (x fastReflection_DistributionWeight_messageType) New() protoreflect.Message {
+	return new(fastReflection_DistributionWeight)
 }
-func (x fastReflection_PoolDistributionWeight_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_PoolDistributionWeight
+func (x fastReflection_DistributionWeight_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_DistributionWeight
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_PoolDistributionWeight) Descriptor() protoreflect.MessageDescriptor {
-	return md_PoolDistributionWeight
+func (x *fastReflection_DistributionWeight) Descriptor() protoreflect.MessageDescriptor {
+	return md_DistributionWeight
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_PoolDistributionWeight) Type() protoreflect.MessageType {
-	return _fastReflection_PoolDistributionWeight_messageType
+func (x *fastReflection_DistributionWeight) Type() protoreflect.MessageType {
+	return _fastReflection_DistributionWeight_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_PoolDistributionWeight) New() protoreflect.Message {
-	return new(fastReflection_PoolDistributionWeight)
+func (x *fastReflection_DistributionWeight) New() protoreflect.Message {
+	return new(fastReflection_DistributionWeight)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_PoolDistributionWeight) Interface() protoreflect.ProtoMessage {
-	return (*PoolDistributionWeight)(x)
+func (x *fastReflection_DistributionWeight) Interface() protoreflect.ProtoMessage {
+	return (*DistributionWeight)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -2542,16 +2590,16 @@ func (x *fastReflection_PoolDistributionWeight) Interface() protoreflect.ProtoMe
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_PoolDistributionWeight) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.PoolId != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.PoolId)
-		if !f(fd_PoolDistributionWeight_pool_id, value) {
+func (x *fastReflection_DistributionWeight) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.DelegationTargetId != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.DelegationTargetId)
+		if !f(fd_DistributionWeight_delegation_target_id, value) {
 			return
 		}
 	}
 	if x.Weight != uint32(0) {
 		value := protoreflect.ValueOfUint32(x.Weight)
-		if !f(fd_PoolDistributionWeight_weight, value) {
+		if !f(fd_DistributionWeight_weight, value) {
 			return
 		}
 	}
@@ -2568,17 +2616,17 @@ func (x *fastReflection_PoolDistributionWeight) Range(f func(protoreflect.FieldD
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_PoolDistributionWeight) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_DistributionWeight) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolDistributionWeight.pool_id":
-		return x.PoolId != uint32(0)
-	case "milkyway.rewards.v1.PoolDistributionWeight.weight":
+	case "milkyway.rewards.v1.DistributionWeight.delegation_target_id":
+		return x.DelegationTargetId != uint32(0)
+	case "milkyway.rewards.v1.DistributionWeight.weight":
 		return x.Weight != uint32(0)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolDistributionWeight"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionWeight"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolDistributionWeight does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionWeight does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2588,17 +2636,17 @@ func (x *fastReflection_PoolDistributionWeight) Has(fd protoreflect.FieldDescrip
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolDistributionWeight) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_DistributionWeight) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolDistributionWeight.pool_id":
-		x.PoolId = uint32(0)
-	case "milkyway.rewards.v1.PoolDistributionWeight.weight":
+	case "milkyway.rewards.v1.DistributionWeight.delegation_target_id":
+		x.DelegationTargetId = uint32(0)
+	case "milkyway.rewards.v1.DistributionWeight.weight":
 		x.Weight = uint32(0)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolDistributionWeight"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionWeight"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolDistributionWeight does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionWeight does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2608,19 +2656,19 @@ func (x *fastReflection_PoolDistributionWeight) Clear(fd protoreflect.FieldDescr
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_PoolDistributionWeight) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_DistributionWeight) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "milkyway.rewards.v1.PoolDistributionWeight.pool_id":
-		value := x.PoolId
+	case "milkyway.rewards.v1.DistributionWeight.delegation_target_id":
+		value := x.DelegationTargetId
 		return protoreflect.ValueOfUint32(value)
-	case "milkyway.rewards.v1.PoolDistributionWeight.weight":
+	case "milkyway.rewards.v1.DistributionWeight.weight":
 		value := x.Weight
 		return protoreflect.ValueOfUint32(value)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolDistributionWeight"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionWeight"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolDistributionWeight does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionWeight does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -2634,17 +2682,17 @@ func (x *fastReflection_PoolDistributionWeight) Get(descriptor protoreflect.Fiel
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolDistributionWeight) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_DistributionWeight) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolDistributionWeight.pool_id":
-		x.PoolId = uint32(value.Uint())
-	case "milkyway.rewards.v1.PoolDistributionWeight.weight":
+	case "milkyway.rewards.v1.DistributionWeight.delegation_target_id":
+		x.DelegationTargetId = uint32(value.Uint())
+	case "milkyway.rewards.v1.DistributionWeight.weight":
 		x.Weight = uint32(value.Uint())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolDistributionWeight"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionWeight"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolDistributionWeight does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionWeight does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2658,44 +2706,44 @@ func (x *fastReflection_PoolDistributionWeight) Set(fd protoreflect.FieldDescrip
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolDistributionWeight) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_DistributionWeight) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolDistributionWeight.pool_id":
-		panic(fmt.Errorf("field pool_id of message milkyway.rewards.v1.PoolDistributionWeight is not mutable"))
-	case "milkyway.rewards.v1.PoolDistributionWeight.weight":
-		panic(fmt.Errorf("field weight of message milkyway.rewards.v1.PoolDistributionWeight is not mutable"))
+	case "milkyway.rewards.v1.DistributionWeight.delegation_target_id":
+		panic(fmt.Errorf("field delegation_target_id of message milkyway.rewards.v1.DistributionWeight is not mutable"))
+	case "milkyway.rewards.v1.DistributionWeight.weight":
+		panic(fmt.Errorf("field weight of message milkyway.rewards.v1.DistributionWeight is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolDistributionWeight"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionWeight"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolDistributionWeight does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionWeight does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_PoolDistributionWeight) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_DistributionWeight) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.PoolDistributionWeight.pool_id":
+	case "milkyway.rewards.v1.DistributionWeight.delegation_target_id":
 		return protoreflect.ValueOfUint32(uint32(0))
-	case "milkyway.rewards.v1.PoolDistributionWeight.weight":
+	case "milkyway.rewards.v1.DistributionWeight.weight":
 		return protoreflect.ValueOfUint32(uint32(0))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolDistributionWeight"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionWeight"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolDistributionWeight does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionWeight does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_PoolDistributionWeight) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_DistributionWeight) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.PoolDistributionWeight", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.DistributionWeight", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -2703,7 +2751,7 @@ func (x *fastReflection_PoolDistributionWeight) WhichOneof(d protoreflect.OneofD
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_PoolDistributionWeight) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_DistributionWeight) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -2714,7 +2762,7 @@ func (x *fastReflection_PoolDistributionWeight) GetUnknown() protoreflect.RawFie
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolDistributionWeight) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_DistributionWeight) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -2726,7 +2774,7 @@ func (x *fastReflection_PoolDistributionWeight) SetUnknown(fields protoreflect.R
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_PoolDistributionWeight) IsValid() bool {
+func (x *fastReflection_DistributionWeight) IsValid() bool {
 	return x != nil
 }
 
@@ -2736,9 +2784,9 @@ func (x *fastReflection_PoolDistributionWeight) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_PoolDistributionWeight) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_DistributionWeight) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*PoolDistributionWeight)
+		x := input.Message.Interface().(*DistributionWeight)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2750,8 +2798,8 @@ func (x *fastReflection_PoolDistributionWeight) ProtoMethods() *protoiface.Metho
 		var n int
 		var l int
 		_ = l
-		if x.PoolId != 0 {
-			n += 1 + runtime.Sov(uint64(x.PoolId))
+		if x.DelegationTargetId != 0 {
+			n += 1 + runtime.Sov(uint64(x.DelegationTargetId))
 		}
 		if x.Weight != 0 {
 			n += 1 + runtime.Sov(uint64(x.Weight))
@@ -2766,7 +2814,7 @@ func (x *fastReflection_PoolDistributionWeight) ProtoMethods() *protoiface.Metho
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*PoolDistributionWeight)
+		x := input.Message.Interface().(*DistributionWeight)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2790,8 +2838,8 @@ func (x *fastReflection_PoolDistributionWeight) ProtoMethods() *protoiface.Metho
 			i--
 			dAtA[i] = 0x10
 		}
-		if x.PoolId != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.PoolId))
+		if x.DelegationTargetId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.DelegationTargetId))
 			i--
 			dAtA[i] = 0x8
 		}
@@ -2806,7 +2854,7 @@ func (x *fastReflection_PoolDistributionWeight) ProtoMethods() *protoiface.Metho
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*PoolDistributionWeight)
+		x := input.Message.Interface().(*DistributionWeight)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2838,17 +2886,17 @@ func (x *fastReflection_PoolDistributionWeight) ProtoMethods() *protoiface.Metho
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: PoolDistributionWeight: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DistributionWeight: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: PoolDistributionWeight: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DistributionWeight: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DelegationTargetId", wireType)
 				}
-				x.PoolId = 0
+				x.DelegationTargetId = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -2858,7 +2906,7 @@ func (x *fastReflection_PoolDistributionWeight) ProtoMethods() *protoiface.Metho
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					x.PoolId |= uint32(b&0x7F) << shift
+					x.DelegationTargetId |= uint32(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
@@ -2918,23 +2966,23 @@ func (x *fastReflection_PoolDistributionWeight) ProtoMethods() *protoiface.Metho
 }
 
 var (
-	md_PoolsDistributionTypeEgalitarian protoreflect.MessageDescriptor
+	md_DistributionTypeEgalitarian protoreflect.MessageDescriptor
 )
 
 func init() {
 	file_milkyway_rewards_v1_models_proto_init()
-	md_PoolsDistributionTypeEgalitarian = File_milkyway_rewards_v1_models_proto.Messages().ByName("PoolsDistributionTypeEgalitarian")
+	md_DistributionTypeEgalitarian = File_milkyway_rewards_v1_models_proto.Messages().ByName("DistributionTypeEgalitarian")
 }
 
-var _ protoreflect.Message = (*fastReflection_PoolsDistributionTypeEgalitarian)(nil)
+var _ protoreflect.Message = (*fastReflection_DistributionTypeEgalitarian)(nil)
 
-type fastReflection_PoolsDistributionTypeEgalitarian PoolsDistributionTypeEgalitarian
+type fastReflection_DistributionTypeEgalitarian DistributionTypeEgalitarian
 
-func (x *PoolsDistributionTypeEgalitarian) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_PoolsDistributionTypeEgalitarian)(x)
+func (x *DistributionTypeEgalitarian) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_DistributionTypeEgalitarian)(x)
 }
 
-func (x *PoolsDistributionTypeEgalitarian) slowProtoReflect() protoreflect.Message {
+func (x *DistributionTypeEgalitarian) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2946,43 +2994,43 @@ func (x *PoolsDistributionTypeEgalitarian) slowProtoReflect() protoreflect.Messa
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_PoolsDistributionTypeEgalitarian_messageType fastReflection_PoolsDistributionTypeEgalitarian_messageType
-var _ protoreflect.MessageType = fastReflection_PoolsDistributionTypeEgalitarian_messageType{}
+var _fastReflection_DistributionTypeEgalitarian_messageType fastReflection_DistributionTypeEgalitarian_messageType
+var _ protoreflect.MessageType = fastReflection_DistributionTypeEgalitarian_messageType{}
 
-type fastReflection_PoolsDistributionTypeEgalitarian_messageType struct{}
+type fastReflection_DistributionTypeEgalitarian_messageType struct{}
 
-func (x fastReflection_PoolsDistributionTypeEgalitarian_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_PoolsDistributionTypeEgalitarian)(nil)
+func (x fastReflection_DistributionTypeEgalitarian_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_DistributionTypeEgalitarian)(nil)
 }
-func (x fastReflection_PoolsDistributionTypeEgalitarian_messageType) New() protoreflect.Message {
-	return new(fastReflection_PoolsDistributionTypeEgalitarian)
+func (x fastReflection_DistributionTypeEgalitarian_messageType) New() protoreflect.Message {
+	return new(fastReflection_DistributionTypeEgalitarian)
 }
-func (x fastReflection_PoolsDistributionTypeEgalitarian_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_PoolsDistributionTypeEgalitarian
+func (x fastReflection_DistributionTypeEgalitarian_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_DistributionTypeEgalitarian
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_PoolsDistributionTypeEgalitarian) Descriptor() protoreflect.MessageDescriptor {
-	return md_PoolsDistributionTypeEgalitarian
+func (x *fastReflection_DistributionTypeEgalitarian) Descriptor() protoreflect.MessageDescriptor {
+	return md_DistributionTypeEgalitarian
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_PoolsDistributionTypeEgalitarian) Type() protoreflect.MessageType {
-	return _fastReflection_PoolsDistributionTypeEgalitarian_messageType
+func (x *fastReflection_DistributionTypeEgalitarian) Type() protoreflect.MessageType {
+	return _fastReflection_DistributionTypeEgalitarian_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_PoolsDistributionTypeEgalitarian) New() protoreflect.Message {
-	return new(fastReflection_PoolsDistributionTypeEgalitarian)
+func (x *fastReflection_DistributionTypeEgalitarian) New() protoreflect.Message {
+	return new(fastReflection_DistributionTypeEgalitarian)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_PoolsDistributionTypeEgalitarian) Interface() protoreflect.ProtoMessage {
-	return (*PoolsDistributionTypeEgalitarian)(x)
+func (x *fastReflection_DistributionTypeEgalitarian) Interface() protoreflect.ProtoMessage {
+	return (*DistributionTypeEgalitarian)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -2990,7 +3038,7 @@ func (x *fastReflection_PoolsDistributionTypeEgalitarian) Interface() protorefle
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_PoolsDistributionTypeEgalitarian) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_DistributionTypeEgalitarian) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 }
 
 // Has reports whether a field is populated.
@@ -3004,13 +3052,13 @@ func (x *fastReflection_PoolsDistributionTypeEgalitarian) Range(f func(protorefl
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_PoolsDistributionTypeEgalitarian) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_DistributionTypeEgalitarian) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistributionTypeEgalitarian"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionTypeEgalitarian"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistributionTypeEgalitarian does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionTypeEgalitarian does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3020,13 +3068,13 @@ func (x *fastReflection_PoolsDistributionTypeEgalitarian) Has(fd protoreflect.Fi
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolsDistributionTypeEgalitarian) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_DistributionTypeEgalitarian) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistributionTypeEgalitarian"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionTypeEgalitarian"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistributionTypeEgalitarian does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionTypeEgalitarian does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3036,13 +3084,13 @@ func (x *fastReflection_PoolsDistributionTypeEgalitarian) Clear(fd protoreflect.
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_PoolsDistributionTypeEgalitarian) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_DistributionTypeEgalitarian) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistributionTypeEgalitarian"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionTypeEgalitarian"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistributionTypeEgalitarian does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionTypeEgalitarian does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -3056,13 +3104,13 @@ func (x *fastReflection_PoolsDistributionTypeEgalitarian) Get(descriptor protore
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolsDistributionTypeEgalitarian) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_DistributionTypeEgalitarian) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistributionTypeEgalitarian"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionTypeEgalitarian"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistributionTypeEgalitarian does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionTypeEgalitarian does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -3076,36 +3124,36 @@ func (x *fastReflection_PoolsDistributionTypeEgalitarian) Set(fd protoreflect.Fi
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolsDistributionTypeEgalitarian) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_DistributionTypeEgalitarian) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistributionTypeEgalitarian"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionTypeEgalitarian"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistributionTypeEgalitarian does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionTypeEgalitarian does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_PoolsDistributionTypeEgalitarian) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_DistributionTypeEgalitarian) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolsDistributionTypeEgalitarian"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.DistributionTypeEgalitarian"))
 		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.PoolsDistributionTypeEgalitarian does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.rewards.v1.DistributionTypeEgalitarian does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_PoolsDistributionTypeEgalitarian) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_DistributionTypeEgalitarian) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.PoolsDistributionTypeEgalitarian", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.DistributionTypeEgalitarian", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -3113,7 +3161,7 @@ func (x *fastReflection_PoolsDistributionTypeEgalitarian) WhichOneof(d protorefl
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_PoolsDistributionTypeEgalitarian) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_DistributionTypeEgalitarian) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -3124,7 +3172,7 @@ func (x *fastReflection_PoolsDistributionTypeEgalitarian) GetUnknown() protorefl
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_PoolsDistributionTypeEgalitarian) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_DistributionTypeEgalitarian) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -3136,7 +3184,7 @@ func (x *fastReflection_PoolsDistributionTypeEgalitarian) SetUnknown(fields prot
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_PoolsDistributionTypeEgalitarian) IsValid() bool {
+func (x *fastReflection_DistributionTypeEgalitarian) IsValid() bool {
 	return x != nil
 }
 
@@ -3146,9 +3194,9 @@ func (x *fastReflection_PoolsDistributionTypeEgalitarian) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_PoolsDistributionTypeEgalitarian) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_DistributionTypeEgalitarian) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*PoolsDistributionTypeEgalitarian)
+		x := input.Message.Interface().(*DistributionTypeEgalitarian)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3170,7 +3218,7 @@ func (x *fastReflection_PoolsDistributionTypeEgalitarian) ProtoMethods() *protoi
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*PoolsDistributionTypeEgalitarian)
+		x := input.Message.Interface().(*DistributionTypeEgalitarian)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3200,7 +3248,7 @@ func (x *fastReflection_PoolsDistributionTypeEgalitarian) ProtoMethods() *protoi
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*PoolsDistributionTypeEgalitarian)
+		x := input.Message.Interface().(*DistributionTypeEgalitarian)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3232,2151 +3280,10 @@ func (x *fastReflection_PoolsDistributionTypeEgalitarian) ProtoMethods() *protoi
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: PoolsDistributionTypeEgalitarian: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DistributionTypeEgalitarian: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: PoolsDistributionTypeEgalitarian: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
-	md_OperatorsDistribution        protoreflect.MessageDescriptor
-	fd_OperatorsDistribution_weight protoreflect.FieldDescriptor
-	fd_OperatorsDistribution_type   protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_milkyway_rewards_v1_models_proto_init()
-	md_OperatorsDistribution = File_milkyway_rewards_v1_models_proto.Messages().ByName("OperatorsDistribution")
-	fd_OperatorsDistribution_weight = md_OperatorsDistribution.Fields().ByName("weight")
-	fd_OperatorsDistribution_type = md_OperatorsDistribution.Fields().ByName("type")
-}
-
-var _ protoreflect.Message = (*fastReflection_OperatorsDistribution)(nil)
-
-type fastReflection_OperatorsDistribution OperatorsDistribution
-
-func (x *OperatorsDistribution) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_OperatorsDistribution)(x)
-}
-
-func (x *OperatorsDistribution) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[6]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_OperatorsDistribution_messageType fastReflection_OperatorsDistribution_messageType
-var _ protoreflect.MessageType = fastReflection_OperatorsDistribution_messageType{}
-
-type fastReflection_OperatorsDistribution_messageType struct{}
-
-func (x fastReflection_OperatorsDistribution_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_OperatorsDistribution)(nil)
-}
-func (x fastReflection_OperatorsDistribution_messageType) New() protoreflect.Message {
-	return new(fastReflection_OperatorsDistribution)
-}
-func (x fastReflection_OperatorsDistribution_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorsDistribution
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_OperatorsDistribution) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorsDistribution
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_OperatorsDistribution) Type() protoreflect.MessageType {
-	return _fastReflection_OperatorsDistribution_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_OperatorsDistribution) New() protoreflect.Message {
-	return new(fastReflection_OperatorsDistribution)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_OperatorsDistribution) Interface() protoreflect.ProtoMessage {
-	return (*OperatorsDistribution)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_OperatorsDistribution) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.Weight != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.Weight)
-		if !f(fd_OperatorsDistribution_weight, value) {
-			return
-		}
-	}
-	if x.Type_ != nil {
-		value := protoreflect.ValueOfMessage(x.Type_.ProtoReflect())
-		if !f(fd_OperatorsDistribution_type, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_OperatorsDistribution) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorsDistribution.weight":
-		return x.Weight != uint32(0)
-	case "milkyway.rewards.v1.OperatorsDistribution.type":
-		return x.Type_ != nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistribution"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistribution does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorsDistribution) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorsDistribution.weight":
-		x.Weight = uint32(0)
-	case "milkyway.rewards.v1.OperatorsDistribution.type":
-		x.Type_ = nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistribution"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistribution does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_OperatorsDistribution) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "milkyway.rewards.v1.OperatorsDistribution.weight":
-		value := x.Weight
-		return protoreflect.ValueOfUint32(value)
-	case "milkyway.rewards.v1.OperatorsDistribution.type":
-		value := x.Type_
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistribution"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistribution does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorsDistribution) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorsDistribution.weight":
-		x.Weight = uint32(value.Uint())
-	case "milkyway.rewards.v1.OperatorsDistribution.type":
-		x.Type_ = value.Message().Interface().(*anypb.Any)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistribution"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistribution does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorsDistribution) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorsDistribution.type":
-		if x.Type_ == nil {
-			x.Type_ = new(anypb.Any)
-		}
-		return protoreflect.ValueOfMessage(x.Type_.ProtoReflect())
-	case "milkyway.rewards.v1.OperatorsDistribution.weight":
-		panic(fmt.Errorf("field weight of message milkyway.rewards.v1.OperatorsDistribution is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistribution"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistribution does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_OperatorsDistribution) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorsDistribution.weight":
-		return protoreflect.ValueOfUint32(uint32(0))
-	case "milkyway.rewards.v1.OperatorsDistribution.type":
-		m := new(anypb.Any)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistribution"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistribution does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_OperatorsDistribution) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.OperatorsDistribution", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_OperatorsDistribution) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorsDistribution) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_OperatorsDistribution) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_OperatorsDistribution) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*OperatorsDistribution)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		if x.Weight != 0 {
-			n += 1 + runtime.Sov(uint64(x.Weight))
-		}
-		if x.Type_ != nil {
-			l = options.Size(x.Type_)
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorsDistribution)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if x.Type_ != nil {
-			encoded, err := options.Marshal(x.Type_)
-			if err != nil {
-				return protoiface.MarshalOutput{
-					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-					Buf:               input.Buf,
-				}, err
-			}
-			i -= len(encoded)
-			copy(dAtA[i:], encoded)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-			i--
-			dAtA[i] = 0x12
-		}
-		if x.Weight != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Weight))
-			i--
-			dAtA[i] = 0x8
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorsDistribution)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorsDistribution: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorsDistribution: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Weight", wireType)
-				}
-				x.Weight = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.Weight |= uint32(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 2:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Type_", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if x.Type_ == nil {
-					x.Type_ = &anypb.Any{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Type_); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
-	md_OperatorsDistributionTypeBasic protoreflect.MessageDescriptor
-)
-
-func init() {
-	file_milkyway_rewards_v1_models_proto_init()
-	md_OperatorsDistributionTypeBasic = File_milkyway_rewards_v1_models_proto.Messages().ByName("OperatorsDistributionTypeBasic")
-}
-
-var _ protoreflect.Message = (*fastReflection_OperatorsDistributionTypeBasic)(nil)
-
-type fastReflection_OperatorsDistributionTypeBasic OperatorsDistributionTypeBasic
-
-func (x *OperatorsDistributionTypeBasic) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_OperatorsDistributionTypeBasic)(x)
-}
-
-func (x *OperatorsDistributionTypeBasic) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[7]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_OperatorsDistributionTypeBasic_messageType fastReflection_OperatorsDistributionTypeBasic_messageType
-var _ protoreflect.MessageType = fastReflection_OperatorsDistributionTypeBasic_messageType{}
-
-type fastReflection_OperatorsDistributionTypeBasic_messageType struct{}
-
-func (x fastReflection_OperatorsDistributionTypeBasic_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_OperatorsDistributionTypeBasic)(nil)
-}
-func (x fastReflection_OperatorsDistributionTypeBasic_messageType) New() protoreflect.Message {
-	return new(fastReflection_OperatorsDistributionTypeBasic)
-}
-func (x fastReflection_OperatorsDistributionTypeBasic_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorsDistributionTypeBasic
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_OperatorsDistributionTypeBasic) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorsDistributionTypeBasic
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_OperatorsDistributionTypeBasic) Type() protoreflect.MessageType {
-	return _fastReflection_OperatorsDistributionTypeBasic_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_OperatorsDistributionTypeBasic) New() protoreflect.Message {
-	return new(fastReflection_OperatorsDistributionTypeBasic)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_OperatorsDistributionTypeBasic) Interface() protoreflect.ProtoMessage {
-	return (*OperatorsDistributionTypeBasic)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_OperatorsDistributionTypeBasic) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_OperatorsDistributionTypeBasic) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistributionTypeBasic"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistributionTypeBasic does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorsDistributionTypeBasic) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistributionTypeBasic"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistributionTypeBasic does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_OperatorsDistributionTypeBasic) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistributionTypeBasic"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistributionTypeBasic does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorsDistributionTypeBasic) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistributionTypeBasic"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistributionTypeBasic does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorsDistributionTypeBasic) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistributionTypeBasic"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistributionTypeBasic does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_OperatorsDistributionTypeBasic) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistributionTypeBasic"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistributionTypeBasic does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_OperatorsDistributionTypeBasic) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.OperatorsDistributionTypeBasic", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_OperatorsDistributionTypeBasic) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorsDistributionTypeBasic) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_OperatorsDistributionTypeBasic) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_OperatorsDistributionTypeBasic) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*OperatorsDistributionTypeBasic)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorsDistributionTypeBasic)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorsDistributionTypeBasic)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorsDistributionTypeBasic: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorsDistributionTypeBasic: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var _ protoreflect.List = (*_OperatorsDistributionTypeWeighted_1_list)(nil)
-
-type _OperatorsDistributionTypeWeighted_1_list struct {
-	list *[]*OperatorDistributionWeight
-}
-
-func (x *_OperatorsDistributionTypeWeighted_1_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_OperatorsDistributionTypeWeighted_1_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
-}
-
-func (x *_OperatorsDistributionTypeWeighted_1_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*OperatorDistributionWeight)
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_OperatorsDistributionTypeWeighted_1_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*OperatorDistributionWeight)
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_OperatorsDistributionTypeWeighted_1_list) AppendMutable() protoreflect.Value {
-	v := new(OperatorDistributionWeight)
-	*x.list = append(*x.list, v)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_OperatorsDistributionTypeWeighted_1_list) Truncate(n int) {
-	for i := n; i < len(*x.list); i++ {
-		(*x.list)[i] = nil
-	}
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_OperatorsDistributionTypeWeighted_1_list) NewElement() protoreflect.Value {
-	v := new(OperatorDistributionWeight)
-	return protoreflect.ValueOfMessage(v.ProtoReflect())
-}
-
-func (x *_OperatorsDistributionTypeWeighted_1_list) IsValid() bool {
-	return x.list != nil
-}
-
-var (
-	md_OperatorsDistributionTypeWeighted         protoreflect.MessageDescriptor
-	fd_OperatorsDistributionTypeWeighted_weights protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_milkyway_rewards_v1_models_proto_init()
-	md_OperatorsDistributionTypeWeighted = File_milkyway_rewards_v1_models_proto.Messages().ByName("OperatorsDistributionTypeWeighted")
-	fd_OperatorsDistributionTypeWeighted_weights = md_OperatorsDistributionTypeWeighted.Fields().ByName("weights")
-}
-
-var _ protoreflect.Message = (*fastReflection_OperatorsDistributionTypeWeighted)(nil)
-
-type fastReflection_OperatorsDistributionTypeWeighted OperatorsDistributionTypeWeighted
-
-func (x *OperatorsDistributionTypeWeighted) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_OperatorsDistributionTypeWeighted)(x)
-}
-
-func (x *OperatorsDistributionTypeWeighted) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[8]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_OperatorsDistributionTypeWeighted_messageType fastReflection_OperatorsDistributionTypeWeighted_messageType
-var _ protoreflect.MessageType = fastReflection_OperatorsDistributionTypeWeighted_messageType{}
-
-type fastReflection_OperatorsDistributionTypeWeighted_messageType struct{}
-
-func (x fastReflection_OperatorsDistributionTypeWeighted_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_OperatorsDistributionTypeWeighted)(nil)
-}
-func (x fastReflection_OperatorsDistributionTypeWeighted_messageType) New() protoreflect.Message {
-	return new(fastReflection_OperatorsDistributionTypeWeighted)
-}
-func (x fastReflection_OperatorsDistributionTypeWeighted_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorsDistributionTypeWeighted
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_OperatorsDistributionTypeWeighted) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorsDistributionTypeWeighted
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_OperatorsDistributionTypeWeighted) Type() protoreflect.MessageType {
-	return _fastReflection_OperatorsDistributionTypeWeighted_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_OperatorsDistributionTypeWeighted) New() protoreflect.Message {
-	return new(fastReflection_OperatorsDistributionTypeWeighted)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_OperatorsDistributionTypeWeighted) Interface() protoreflect.ProtoMessage {
-	return (*OperatorsDistributionTypeWeighted)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_OperatorsDistributionTypeWeighted) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if len(x.Weights) != 0 {
-		value := protoreflect.ValueOfList(&_OperatorsDistributionTypeWeighted_1_list{list: &x.Weights})
-		if !f(fd_OperatorsDistributionTypeWeighted_weights, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_OperatorsDistributionTypeWeighted) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorsDistributionTypeWeighted.weights":
-		return len(x.Weights) != 0
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistributionTypeWeighted"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistributionTypeWeighted does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorsDistributionTypeWeighted) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorsDistributionTypeWeighted.weights":
-		x.Weights = nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistributionTypeWeighted"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistributionTypeWeighted does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_OperatorsDistributionTypeWeighted) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "milkyway.rewards.v1.OperatorsDistributionTypeWeighted.weights":
-		if len(x.Weights) == 0 {
-			return protoreflect.ValueOfList(&_OperatorsDistributionTypeWeighted_1_list{})
-		}
-		listValue := &_OperatorsDistributionTypeWeighted_1_list{list: &x.Weights}
-		return protoreflect.ValueOfList(listValue)
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistributionTypeWeighted"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistributionTypeWeighted does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorsDistributionTypeWeighted) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorsDistributionTypeWeighted.weights":
-		lv := value.List()
-		clv := lv.(*_OperatorsDistributionTypeWeighted_1_list)
-		x.Weights = *clv.list
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistributionTypeWeighted"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistributionTypeWeighted does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorsDistributionTypeWeighted) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorsDistributionTypeWeighted.weights":
-		if x.Weights == nil {
-			x.Weights = []*OperatorDistributionWeight{}
-		}
-		value := &_OperatorsDistributionTypeWeighted_1_list{list: &x.Weights}
-		return protoreflect.ValueOfList(value)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistributionTypeWeighted"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistributionTypeWeighted does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_OperatorsDistributionTypeWeighted) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorsDistributionTypeWeighted.weights":
-		list := []*OperatorDistributionWeight{}
-		return protoreflect.ValueOfList(&_OperatorsDistributionTypeWeighted_1_list{list: &list})
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistributionTypeWeighted"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistributionTypeWeighted does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_OperatorsDistributionTypeWeighted) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.OperatorsDistributionTypeWeighted", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_OperatorsDistributionTypeWeighted) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorsDistributionTypeWeighted) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_OperatorsDistributionTypeWeighted) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_OperatorsDistributionTypeWeighted) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*OperatorsDistributionTypeWeighted)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		if len(x.Weights) > 0 {
-			for _, e := range x.Weights {
-				l = options.Size(e)
-				n += 1 + l + runtime.Sov(uint64(l))
-			}
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorsDistributionTypeWeighted)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if len(x.Weights) > 0 {
-			for iNdEx := len(x.Weights) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.Weights[iNdEx])
-				if err != nil {
-					return protoiface.MarshalOutput{
-						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-						Buf:               input.Buf,
-					}, err
-				}
-				i -= len(encoded)
-				copy(dAtA[i:], encoded)
-				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
-				i--
-				dAtA[i] = 0xa
-			}
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorsDistributionTypeWeighted)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorsDistributionTypeWeighted: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorsDistributionTypeWeighted: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Weights", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.Weights = append(x.Weights, &OperatorDistributionWeight{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Weights[len(x.Weights)-1]); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
-	md_OperatorDistributionWeight             protoreflect.MessageDescriptor
-	fd_OperatorDistributionWeight_operator_id protoreflect.FieldDescriptor
-	fd_OperatorDistributionWeight_weight      protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_milkyway_rewards_v1_models_proto_init()
-	md_OperatorDistributionWeight = File_milkyway_rewards_v1_models_proto.Messages().ByName("OperatorDistributionWeight")
-	fd_OperatorDistributionWeight_operator_id = md_OperatorDistributionWeight.Fields().ByName("operator_id")
-	fd_OperatorDistributionWeight_weight = md_OperatorDistributionWeight.Fields().ByName("weight")
-}
-
-var _ protoreflect.Message = (*fastReflection_OperatorDistributionWeight)(nil)
-
-type fastReflection_OperatorDistributionWeight OperatorDistributionWeight
-
-func (x *OperatorDistributionWeight) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_OperatorDistributionWeight)(x)
-}
-
-func (x *OperatorDistributionWeight) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[9]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_OperatorDistributionWeight_messageType fastReflection_OperatorDistributionWeight_messageType
-var _ protoreflect.MessageType = fastReflection_OperatorDistributionWeight_messageType{}
-
-type fastReflection_OperatorDistributionWeight_messageType struct{}
-
-func (x fastReflection_OperatorDistributionWeight_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_OperatorDistributionWeight)(nil)
-}
-func (x fastReflection_OperatorDistributionWeight_messageType) New() protoreflect.Message {
-	return new(fastReflection_OperatorDistributionWeight)
-}
-func (x fastReflection_OperatorDistributionWeight_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorDistributionWeight
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_OperatorDistributionWeight) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorDistributionWeight
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_OperatorDistributionWeight) Type() protoreflect.MessageType {
-	return _fastReflection_OperatorDistributionWeight_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_OperatorDistributionWeight) New() protoreflect.Message {
-	return new(fastReflection_OperatorDistributionWeight)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_OperatorDistributionWeight) Interface() protoreflect.ProtoMessage {
-	return (*OperatorDistributionWeight)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_OperatorDistributionWeight) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.OperatorId != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.OperatorId)
-		if !f(fd_OperatorDistributionWeight_operator_id, value) {
-			return
-		}
-	}
-	if x.Weight != uint32(0) {
-		value := protoreflect.ValueOfUint32(x.Weight)
-		if !f(fd_OperatorDistributionWeight_weight, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_OperatorDistributionWeight) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorDistributionWeight.operator_id":
-		return x.OperatorId != uint32(0)
-	case "milkyway.rewards.v1.OperatorDistributionWeight.weight":
-		return x.Weight != uint32(0)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorDistributionWeight"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorDistributionWeight does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorDistributionWeight) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorDistributionWeight.operator_id":
-		x.OperatorId = uint32(0)
-	case "milkyway.rewards.v1.OperatorDistributionWeight.weight":
-		x.Weight = uint32(0)
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorDistributionWeight"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorDistributionWeight does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_OperatorDistributionWeight) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "milkyway.rewards.v1.OperatorDistributionWeight.operator_id":
-		value := x.OperatorId
-		return protoreflect.ValueOfUint32(value)
-	case "milkyway.rewards.v1.OperatorDistributionWeight.weight":
-		value := x.Weight
-		return protoreflect.ValueOfUint32(value)
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorDistributionWeight"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorDistributionWeight does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorDistributionWeight) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorDistributionWeight.operator_id":
-		x.OperatorId = uint32(value.Uint())
-	case "milkyway.rewards.v1.OperatorDistributionWeight.weight":
-		x.Weight = uint32(value.Uint())
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorDistributionWeight"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorDistributionWeight does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorDistributionWeight) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorDistributionWeight.operator_id":
-		panic(fmt.Errorf("field operator_id of message milkyway.rewards.v1.OperatorDistributionWeight is not mutable"))
-	case "milkyway.rewards.v1.OperatorDistributionWeight.weight":
-		panic(fmt.Errorf("field weight of message milkyway.rewards.v1.OperatorDistributionWeight is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorDistributionWeight"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorDistributionWeight does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_OperatorDistributionWeight) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.rewards.v1.OperatorDistributionWeight.operator_id":
-		return protoreflect.ValueOfUint32(uint32(0))
-	case "milkyway.rewards.v1.OperatorDistributionWeight.weight":
-		return protoreflect.ValueOfUint32(uint32(0))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorDistributionWeight"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorDistributionWeight does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_OperatorDistributionWeight) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.OperatorDistributionWeight", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_OperatorDistributionWeight) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorDistributionWeight) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_OperatorDistributionWeight) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_OperatorDistributionWeight) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*OperatorDistributionWeight)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		if x.OperatorId != 0 {
-			n += 1 + runtime.Sov(uint64(x.OperatorId))
-		}
-		if x.Weight != 0 {
-			n += 1 + runtime.Sov(uint64(x.Weight))
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorDistributionWeight)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if x.Weight != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.Weight))
-			i--
-			dAtA[i] = 0x10
-		}
-		if x.OperatorId != 0 {
-			i = runtime.EncodeVarint(dAtA, i, uint64(x.OperatorId))
-			i--
-			dAtA[i] = 0x8
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorDistributionWeight)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorDistributionWeight: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorDistributionWeight: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OperatorId", wireType)
-				}
-				x.OperatorId = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.OperatorId |= uint32(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			case 2:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Weight", wireType)
-				}
-				x.Weight = 0
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					x.Weight |= uint32(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
-var (
-	md_OperatorsDistributionTypeEgalitarian protoreflect.MessageDescriptor
-)
-
-func init() {
-	file_milkyway_rewards_v1_models_proto_init()
-	md_OperatorsDistributionTypeEgalitarian = File_milkyway_rewards_v1_models_proto.Messages().ByName("OperatorsDistributionTypeEgalitarian")
-}
-
-var _ protoreflect.Message = (*fastReflection_OperatorsDistributionTypeEgalitarian)(nil)
-
-type fastReflection_OperatorsDistributionTypeEgalitarian OperatorsDistributionTypeEgalitarian
-
-func (x *OperatorsDistributionTypeEgalitarian) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_OperatorsDistributionTypeEgalitarian)(x)
-}
-
-func (x *OperatorsDistributionTypeEgalitarian) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[10]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_OperatorsDistributionTypeEgalitarian_messageType fastReflection_OperatorsDistributionTypeEgalitarian_messageType
-var _ protoreflect.MessageType = fastReflection_OperatorsDistributionTypeEgalitarian_messageType{}
-
-type fastReflection_OperatorsDistributionTypeEgalitarian_messageType struct{}
-
-func (x fastReflection_OperatorsDistributionTypeEgalitarian_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_OperatorsDistributionTypeEgalitarian)(nil)
-}
-func (x fastReflection_OperatorsDistributionTypeEgalitarian_messageType) New() protoreflect.Message {
-	return new(fastReflection_OperatorsDistributionTypeEgalitarian)
-}
-func (x fastReflection_OperatorsDistributionTypeEgalitarian_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorsDistributionTypeEgalitarian
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_OperatorsDistributionTypeEgalitarian) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorsDistributionTypeEgalitarian
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_OperatorsDistributionTypeEgalitarian) Type() protoreflect.MessageType {
-	return _fastReflection_OperatorsDistributionTypeEgalitarian_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_OperatorsDistributionTypeEgalitarian) New() protoreflect.Message {
-	return new(fastReflection_OperatorsDistributionTypeEgalitarian)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_OperatorsDistributionTypeEgalitarian) Interface() protoreflect.ProtoMessage {
-	return (*OperatorsDistributionTypeEgalitarian)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_OperatorsDistributionTypeEgalitarian) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_OperatorsDistributionTypeEgalitarian) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistributionTypeEgalitarian"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistributionTypeEgalitarian does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorsDistributionTypeEgalitarian) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistributionTypeEgalitarian"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistributionTypeEgalitarian does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_OperatorsDistributionTypeEgalitarian) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistributionTypeEgalitarian"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistributionTypeEgalitarian does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorsDistributionTypeEgalitarian) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistributionTypeEgalitarian"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistributionTypeEgalitarian does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorsDistributionTypeEgalitarian) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistributionTypeEgalitarian"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistributionTypeEgalitarian does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_OperatorsDistributionTypeEgalitarian) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.OperatorsDistributionTypeEgalitarian"))
-		}
-		panic(fmt.Errorf("message milkyway.rewards.v1.OperatorsDistributionTypeEgalitarian does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_OperatorsDistributionTypeEgalitarian) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.OperatorsDistributionTypeEgalitarian", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_OperatorsDistributionTypeEgalitarian) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorsDistributionTypeEgalitarian) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_OperatorsDistributionTypeEgalitarian) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_OperatorsDistributionTypeEgalitarian) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*OperatorsDistributionTypeEgalitarian)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorsDistributionTypeEgalitarian)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorsDistributionTypeEgalitarian)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorsDistributionTypeEgalitarian: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorsDistributionTypeEgalitarian: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: DistributionTypeEgalitarian: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			default:
@@ -5436,7 +3343,7 @@ func (x *UsersDistribution) ProtoReflect() protoreflect.Message {
 }
 
 func (x *UsersDistribution) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[11]
+	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5915,7 +3822,7 @@ func (x *UsersDistributionTypeBasic) ProtoReflect() protoreflect.Message {
 }
 
 func (x *UsersDistributionTypeBasic) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[12]
+	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6326,7 +4233,7 @@ func (x *HistoricalRewards) ProtoReflect() protoreflect.Message {
 }
 
 func (x *HistoricalRewards) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[13]
+	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6868,7 +4775,7 @@ func (x *CurrentRewards) ProtoReflect() protoreflect.Message {
 }
 
 func (x *CurrentRewards) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[14]
+	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7408,7 +5315,7 @@ func (x *OutstandingRewards) ProtoReflect() protoreflect.Message {
 }
 
 func (x *OutstandingRewards) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[15]
+	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7902,7 +5809,7 @@ func (x *AccumulatedCommission) ProtoReflect() protoreflect.Message {
 }
 
 func (x *AccumulatedCommission) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[16]
+	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8400,7 +6307,7 @@ func (x *DelegatorStartingInfo) ProtoReflect() protoreflect.Message {
 }
 
 func (x *DelegatorStartingInfo) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[17]
+	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8990,7 +6897,7 @@ func (x *DelegationDelegatorReward) ProtoReflect() protoreflect.Message {
 }
 
 func (x *DelegationDelegatorReward) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[18]
+	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9578,7 +7485,7 @@ func (x *Pool) ProtoReflect() protoreflect.Message {
 }
 
 func (x *Pool) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[19]
+	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10136,7 +8043,7 @@ func (x *DecPool) ProtoReflect() protoreflect.Message {
 }
 
 func (x *DecPool) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[20]
+	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10651,8 +8558,8 @@ type RewardsPlan struct {
 	// EndTime is the ending time of the plan
 	EndTime               *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
 	RewardsPool           string                 `protobuf:"bytes,7,opt,name=rewards_pool,json=rewardsPool,proto3" json:"rewards_pool,omitempty"`
-	PoolsDistribution     *PoolsDistribution     `protobuf:"bytes,8,opt,name=pools_distribution,json=poolsDistribution,proto3" json:"pools_distribution,omitempty"`
-	OperatorsDistribution *OperatorsDistribution `protobuf:"bytes,9,opt,name=operators_distribution,json=operatorsDistribution,proto3" json:"operators_distribution,omitempty"`
+	PoolsDistribution     *Distribution          `protobuf:"bytes,8,opt,name=pools_distribution,json=poolsDistribution,proto3" json:"pools_distribution,omitempty"`
+	OperatorsDistribution *Distribution          `protobuf:"bytes,9,opt,name=operators_distribution,json=operatorsDistribution,proto3" json:"operators_distribution,omitempty"`
 	UsersDistribution     *UsersDistribution     `protobuf:"bytes,10,opt,name=users_distribution,json=usersDistribution,proto3" json:"users_distribution,omitempty"`
 }
 
@@ -10725,14 +8632,14 @@ func (x *RewardsPlan) GetRewardsPool() string {
 	return ""
 }
 
-func (x *RewardsPlan) GetPoolsDistribution() *PoolsDistribution {
+func (x *RewardsPlan) GetPoolsDistribution() *Distribution {
 	if x != nil {
 		return x.PoolsDistribution
 	}
 	return nil
 }
 
-func (x *RewardsPlan) GetOperatorsDistribution() *OperatorsDistribution {
+func (x *RewardsPlan) GetOperatorsDistribution() *Distribution {
 	if x != nil {
 		return x.OperatorsDistribution
 	}
@@ -10746,17 +8653,23 @@ func (x *RewardsPlan) GetUsersDistribution() *UsersDistribution {
 	return nil
 }
 
-type PoolsDistribution struct {
+// Distribution represents distribution information for restaking
+// pools/operators.
+type Distribution struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Weight uint32     `protobuf:"varint,1,opt,name=weight,proto3" json:"weight,omitempty"`
-	Type_  *anypb.Any `protobuf:"bytes,2,opt,name=type,proto3" json:"type,omitempty"`
+	DelegationType v1.DelegationType `protobuf:"varint,1,opt,name=delegation_type,json=delegationType,proto3,enum=milkyway.restaking.v1.DelegationType" json:"delegation_type,omitempty"`
+	// Weight is the rewards distribution weight among other types of delegation
+	// targets.
+	Weight uint32 `protobuf:"varint,2,opt,name=weight,proto3" json:"weight,omitempty"`
+	// Type is one of basic/weighted/egalitarian distributions.
+	Type_ *anypb.Any `protobuf:"bytes,3,opt,name=type,proto3" json:"type,omitempty"`
 }
 
-func (x *PoolsDistribution) Reset() {
-	*x = PoolsDistribution{}
+func (x *Distribution) Reset() {
+	*x = Distribution{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -10764,39 +8677,46 @@ func (x *PoolsDistribution) Reset() {
 	}
 }
 
-func (x *PoolsDistribution) String() string {
+func (x *Distribution) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PoolsDistribution) ProtoMessage() {}
+func (*Distribution) ProtoMessage() {}
 
-// Deprecated: Use PoolsDistribution.ProtoReflect.Descriptor instead.
-func (*PoolsDistribution) Descriptor() ([]byte, []int) {
+// Deprecated: Use Distribution.ProtoReflect.Descriptor instead.
+func (*Distribution) Descriptor() ([]byte, []int) {
 	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *PoolsDistribution) GetWeight() uint32 {
+func (x *Distribution) GetDelegationType() v1.DelegationType {
+	if x != nil {
+		return x.DelegationType
+	}
+	return v1.DelegationType(0)
+}
+
+func (x *Distribution) GetWeight() uint32 {
 	if x != nil {
 		return x.Weight
 	}
 	return 0
 }
 
-func (x *PoolsDistribution) GetType_() *anypb.Any {
+func (x *Distribution) GetType_() *anypb.Any {
 	if x != nil {
 		return x.Type_
 	}
 	return nil
 }
 
-type PoolsDistributionTypeBasic struct {
+type DistributionTypeBasic struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *PoolsDistributionTypeBasic) Reset() {
-	*x = PoolsDistributionTypeBasic{}
+func (x *DistributionTypeBasic) Reset() {
+	*x = DistributionTypeBasic{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -10804,27 +8724,27 @@ func (x *PoolsDistributionTypeBasic) Reset() {
 	}
 }
 
-func (x *PoolsDistributionTypeBasic) String() string {
+func (x *DistributionTypeBasic) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PoolsDistributionTypeBasic) ProtoMessage() {}
+func (*DistributionTypeBasic) ProtoMessage() {}
 
-// Deprecated: Use PoolsDistributionTypeBasic.ProtoReflect.Descriptor instead.
-func (*PoolsDistributionTypeBasic) Descriptor() ([]byte, []int) {
+// Deprecated: Use DistributionTypeBasic.ProtoReflect.Descriptor instead.
+func (*DistributionTypeBasic) Descriptor() ([]byte, []int) {
 	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{2}
 }
 
-type PoolsDistributionTypeWeighted struct {
+type DistributionTypeWeighted struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Weights []*PoolDistributionWeight `protobuf:"bytes,1,rep,name=weights,proto3" json:"weights,omitempty"`
+	Weights []*DistributionWeight `protobuf:"bytes,1,rep,name=weights,proto3" json:"weights,omitempty"`
 }
 
-func (x *PoolsDistributionTypeWeighted) Reset() {
-	*x = PoolsDistributionTypeWeighted{}
+func (x *DistributionTypeWeighted) Reset() {
+	*x = DistributionTypeWeighted{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -10832,35 +8752,35 @@ func (x *PoolsDistributionTypeWeighted) Reset() {
 	}
 }
 
-func (x *PoolsDistributionTypeWeighted) String() string {
+func (x *DistributionTypeWeighted) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PoolsDistributionTypeWeighted) ProtoMessage() {}
+func (*DistributionTypeWeighted) ProtoMessage() {}
 
-// Deprecated: Use PoolsDistributionTypeWeighted.ProtoReflect.Descriptor instead.
-func (*PoolsDistributionTypeWeighted) Descriptor() ([]byte, []int) {
+// Deprecated: Use DistributionTypeWeighted.ProtoReflect.Descriptor instead.
+func (*DistributionTypeWeighted) Descriptor() ([]byte, []int) {
 	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *PoolsDistributionTypeWeighted) GetWeights() []*PoolDistributionWeight {
+func (x *DistributionTypeWeighted) GetWeights() []*DistributionWeight {
 	if x != nil {
 		return x.Weights
 	}
 	return nil
 }
 
-type PoolDistributionWeight struct {
+type DistributionWeight struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PoolId uint32 `protobuf:"varint,1,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
-	Weight uint32 `protobuf:"varint,2,opt,name=weight,proto3" json:"weight,omitempty"`
+	DelegationTargetId uint32 `protobuf:"varint,1,opt,name=delegation_target_id,json=delegationTargetId,proto3" json:"delegation_target_id,omitempty"`
+	Weight             uint32 `protobuf:"varint,2,opt,name=weight,proto3" json:"weight,omitempty"`
 }
 
-func (x *PoolDistributionWeight) Reset() {
-	*x = PoolDistributionWeight{}
+func (x *DistributionWeight) Reset() {
+	*x = DistributionWeight{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -10868,39 +8788,39 @@ func (x *PoolDistributionWeight) Reset() {
 	}
 }
 
-func (x *PoolDistributionWeight) String() string {
+func (x *DistributionWeight) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PoolDistributionWeight) ProtoMessage() {}
+func (*DistributionWeight) ProtoMessage() {}
 
-// Deprecated: Use PoolDistributionWeight.ProtoReflect.Descriptor instead.
-func (*PoolDistributionWeight) Descriptor() ([]byte, []int) {
+// Deprecated: Use DistributionWeight.ProtoReflect.Descriptor instead.
+func (*DistributionWeight) Descriptor() ([]byte, []int) {
 	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *PoolDistributionWeight) GetPoolId() uint32 {
+func (x *DistributionWeight) GetDelegationTargetId() uint32 {
 	if x != nil {
-		return x.PoolId
+		return x.DelegationTargetId
 	}
 	return 0
 }
 
-func (x *PoolDistributionWeight) GetWeight() uint32 {
+func (x *DistributionWeight) GetWeight() uint32 {
 	if x != nil {
 		return x.Weight
 	}
 	return 0
 }
 
-type PoolsDistributionTypeEgalitarian struct {
+type DistributionTypeEgalitarian struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *PoolsDistributionTypeEgalitarian) Reset() {
-	*x = PoolsDistributionTypeEgalitarian{}
+func (x *DistributionTypeEgalitarian) Reset() {
+	*x = DistributionTypeEgalitarian{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -10908,188 +8828,15 @@ func (x *PoolsDistributionTypeEgalitarian) Reset() {
 	}
 }
 
-func (x *PoolsDistributionTypeEgalitarian) String() string {
+func (x *DistributionTypeEgalitarian) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PoolsDistributionTypeEgalitarian) ProtoMessage() {}
+func (*DistributionTypeEgalitarian) ProtoMessage() {}
 
-// Deprecated: Use PoolsDistributionTypeEgalitarian.ProtoReflect.Descriptor instead.
-func (*PoolsDistributionTypeEgalitarian) Descriptor() ([]byte, []int) {
+// Deprecated: Use DistributionTypeEgalitarian.ProtoReflect.Descriptor instead.
+func (*DistributionTypeEgalitarian) Descriptor() ([]byte, []int) {
 	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{5}
-}
-
-type OperatorsDistribution struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Weight uint32     `protobuf:"varint,1,opt,name=weight,proto3" json:"weight,omitempty"`
-	Type_  *anypb.Any `protobuf:"bytes,2,opt,name=type,proto3" json:"type,omitempty"`
-}
-
-func (x *OperatorsDistribution) Reset() {
-	*x = OperatorsDistribution{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[6]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *OperatorsDistribution) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*OperatorsDistribution) ProtoMessage() {}
-
-// Deprecated: Use OperatorsDistribution.ProtoReflect.Descriptor instead.
-func (*OperatorsDistribution) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{6}
-}
-
-func (x *OperatorsDistribution) GetWeight() uint32 {
-	if x != nil {
-		return x.Weight
-	}
-	return 0
-}
-
-func (x *OperatorsDistribution) GetType_() *anypb.Any {
-	if x != nil {
-		return x.Type_
-	}
-	return nil
-}
-
-type OperatorsDistributionTypeBasic struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *OperatorsDistributionTypeBasic) Reset() {
-	*x = OperatorsDistributionTypeBasic{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[7]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *OperatorsDistributionTypeBasic) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*OperatorsDistributionTypeBasic) ProtoMessage() {}
-
-// Deprecated: Use OperatorsDistributionTypeBasic.ProtoReflect.Descriptor instead.
-func (*OperatorsDistributionTypeBasic) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{7}
-}
-
-type OperatorsDistributionTypeWeighted struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	Weights []*OperatorDistributionWeight `protobuf:"bytes,1,rep,name=weights,proto3" json:"weights,omitempty"`
-}
-
-func (x *OperatorsDistributionTypeWeighted) Reset() {
-	*x = OperatorsDistributionTypeWeighted{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[8]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *OperatorsDistributionTypeWeighted) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*OperatorsDistributionTypeWeighted) ProtoMessage() {}
-
-// Deprecated: Use OperatorsDistributionTypeWeighted.ProtoReflect.Descriptor instead.
-func (*OperatorsDistributionTypeWeighted) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{8}
-}
-
-func (x *OperatorsDistributionTypeWeighted) GetWeights() []*OperatorDistributionWeight {
-	if x != nil {
-		return x.Weights
-	}
-	return nil
-}
-
-type OperatorDistributionWeight struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	OperatorId uint32 `protobuf:"varint,1,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
-	Weight     uint32 `protobuf:"varint,2,opt,name=weight,proto3" json:"weight,omitempty"`
-}
-
-func (x *OperatorDistributionWeight) Reset() {
-	*x = OperatorDistributionWeight{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[9]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *OperatorDistributionWeight) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*OperatorDistributionWeight) ProtoMessage() {}
-
-// Deprecated: Use OperatorDistributionWeight.ProtoReflect.Descriptor instead.
-func (*OperatorDistributionWeight) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{9}
-}
-
-func (x *OperatorDistributionWeight) GetOperatorId() uint32 {
-	if x != nil {
-		return x.OperatorId
-	}
-	return 0
-}
-
-func (x *OperatorDistributionWeight) GetWeight() uint32 {
-	if x != nil {
-		return x.Weight
-	}
-	return 0
-}
-
-type OperatorsDistributionTypeEgalitarian struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *OperatorsDistributionTypeEgalitarian) Reset() {
-	*x = OperatorsDistributionTypeEgalitarian{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[10]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *OperatorsDistributionTypeEgalitarian) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*OperatorsDistributionTypeEgalitarian) ProtoMessage() {}
-
-// Deprecated: Use OperatorsDistributionTypeEgalitarian.ProtoReflect.Descriptor instead.
-func (*OperatorsDistributionTypeEgalitarian) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{10}
 }
 
 type UsersDistribution struct {
@@ -11104,7 +8851,7 @@ type UsersDistribution struct {
 func (x *UsersDistribution) Reset() {
 	*x = UsersDistribution{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[11]
+		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11118,7 +8865,7 @@ func (*UsersDistribution) ProtoMessage() {}
 
 // Deprecated: Use UsersDistribution.ProtoReflect.Descriptor instead.
 func (*UsersDistribution) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{11}
+	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *UsersDistribution) GetWeight() uint32 {
@@ -11144,7 +8891,7 @@ type UsersDistributionTypeBasic struct {
 func (x *UsersDistributionTypeBasic) Reset() {
 	*x = UsersDistributionTypeBasic{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[12]
+		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11158,7 +8905,7 @@ func (*UsersDistributionTypeBasic) ProtoMessage() {}
 
 // Deprecated: Use UsersDistributionTypeBasic.ProtoReflect.Descriptor instead.
 func (*UsersDistributionTypeBasic) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{12}
+	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{7}
 }
 
 type HistoricalRewards struct {
@@ -11173,7 +8920,7 @@ type HistoricalRewards struct {
 func (x *HistoricalRewards) Reset() {
 	*x = HistoricalRewards{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[13]
+		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11187,7 +8934,7 @@ func (*HistoricalRewards) ProtoMessage() {}
 
 // Deprecated: Use HistoricalRewards.ProtoReflect.Descriptor instead.
 func (*HistoricalRewards) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{13}
+	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *HistoricalRewards) GetCumulativeRewardRatios() []*DecPool {
@@ -11216,7 +8963,7 @@ type CurrentRewards struct {
 func (x *CurrentRewards) Reset() {
 	*x = CurrentRewards{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[14]
+		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11230,7 +8977,7 @@ func (*CurrentRewards) ProtoMessage() {}
 
 // Deprecated: Use CurrentRewards.ProtoReflect.Descriptor instead.
 func (*CurrentRewards) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{14}
+	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *CurrentRewards) GetRewards() []*DecPool {
@@ -11258,7 +9005,7 @@ type OutstandingRewards struct {
 func (x *OutstandingRewards) Reset() {
 	*x = OutstandingRewards{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[15]
+		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11272,7 +9019,7 @@ func (*OutstandingRewards) ProtoMessage() {}
 
 // Deprecated: Use OutstandingRewards.ProtoReflect.Descriptor instead.
 func (*OutstandingRewards) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{15}
+	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *OutstandingRewards) GetRewards() []*DecPool {
@@ -11293,7 +9040,7 @@ type AccumulatedCommission struct {
 func (x *AccumulatedCommission) Reset() {
 	*x = AccumulatedCommission{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[16]
+		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11307,7 +9054,7 @@ func (*AccumulatedCommission) ProtoMessage() {}
 
 // Deprecated: Use AccumulatedCommission.ProtoReflect.Descriptor instead.
 func (*AccumulatedCommission) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{16}
+	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *AccumulatedCommission) GetCommissions() []*DecPool {
@@ -11330,7 +9077,7 @@ type DelegatorStartingInfo struct {
 func (x *DelegatorStartingInfo) Reset() {
 	*x = DelegatorStartingInfo{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[17]
+		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11344,7 +9091,7 @@ func (*DelegatorStartingInfo) ProtoMessage() {}
 
 // Deprecated: Use DelegatorStartingInfo.ProtoReflect.Descriptor instead.
 func (*DelegatorStartingInfo) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{17}
+	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *DelegatorStartingInfo) GetPreviousPeriod() uint64 {
@@ -11381,7 +9128,7 @@ type DelegationDelegatorReward struct {
 func (x *DelegationDelegatorReward) Reset() {
 	*x = DelegationDelegatorReward{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[18]
+		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11395,7 +9142,7 @@ func (*DelegationDelegatorReward) ProtoMessage() {}
 
 // Deprecated: Use DelegationDelegatorReward.ProtoReflect.Descriptor instead.
 func (*DelegationDelegatorReward) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{18}
+	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *DelegationDelegatorReward) GetDelegationType() v1.DelegationType {
@@ -11432,7 +9179,7 @@ type Pool struct {
 func (x *Pool) Reset() {
 	*x = Pool{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[19]
+		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11446,7 +9193,7 @@ func (*Pool) ProtoMessage() {}
 
 // Deprecated: Use Pool.ProtoReflect.Descriptor instead.
 func (*Pool) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{19}
+	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *Pool) GetDenom() string {
@@ -11476,7 +9223,7 @@ type DecPool struct {
 func (x *DecPool) Reset() {
 	*x = DecPool{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[20]
+		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -11490,7 +9237,7 @@ func (*DecPool) ProtoMessage() {}
 
 // Deprecated: Use DecPool.ProtoReflect.Descriptor instead.
 func (*DecPool) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{20}
+	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *DecPool) GetDenom() string {
@@ -11525,7 +9272,7 @@ var file_milkyway_rewards_v1_models_proto_rawDesc = []byte{
 	0x6f, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6f, 0x67,
 	0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x22, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
 	0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x6d,
-	0x6f, 0x64, 0x65, 0x6c, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xce, 0x05, 0x0a, 0x0b,
+	0x6f, 0x64, 0x65, 0x6c, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xc0, 0x05, 0x0a, 0x0b,
 	0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x50, 0x6c, 0x61, 0x6e, 0x12, 0x16, 0x0a, 0x02, 0x69,
 	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x42, 0x06, 0xe2, 0xde, 0x1f, 0x02, 0x49, 0x44, 0x52,
 	0x02, 0x69, 0x64, 0x12, 0x20, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69,
@@ -11552,217 +9299,184 @@ var file_milkyway_rewards_v1_models_proto_rawDesc = []byte{
 	0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x5f, 0x70, 0x6f, 0x6f, 0x6c, 0x18, 0x07, 0x20, 0x01,
 	0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41,
 	0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x0b, 0x72, 0x65,
-	0x77, 0x61, 0x72, 0x64, 0x73, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x5b, 0x0a, 0x12, 0x70, 0x6f, 0x6f,
+	0x77, 0x61, 0x72, 0x64, 0x73, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x56, 0x0a, 0x12, 0x70, 0x6f, 0x6f,
 	0x6c, 0x73, 0x5f, 0x64, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x18,
-	0x08, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
-	0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x6f, 0x6f, 0x6c,
-	0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x04, 0xc8,
-	0xde, 0x1f, 0x00, 0x52, 0x11, 0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69,
-	0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x67, 0x0a, 0x16, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74,
-	0x6f, 0x72, 0x73, 0x5f, 0x64, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e,
-	0x18, 0x09, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
-	0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x70, 0x65,
-	0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69,
-	0x6f, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x15, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74,
-	0x6f, 0x72, 0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x12,
-	0x5b, 0x0a, 0x12, 0x75, 0x73, 0x65, 0x72, 0x73, 0x5f, 0x64, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62,
-	0x75, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x6d, 0x69,
-	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76,
-	0x31, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74,
-	0x69, 0x6f, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x11, 0x75, 0x73, 0x65, 0x72, 0x73,
-	0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x84, 0x01, 0x0a,
-	0x11, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69,
-	0x6f, 0x6e, 0x12, 0x16, 0x0a, 0x06, 0x77, 0x65, 0x69, 0x67, 0x68, 0x74, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x0d, 0x52, 0x06, 0x77, 0x65, 0x69, 0x67, 0x68, 0x74, 0x12, 0x57, 0x0a, 0x04, 0x74, 0x79,
-	0x70, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c,
-	0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x6e, 0x79, 0x42, 0x2d,
-	0xca, 0xb4, 0x2d, 0x29, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77,
-	0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x44, 0x69, 0x73,
-	0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x52, 0x04, 0x74,
-	0x79, 0x70, 0x65, 0x22, 0x4b, 0x0a, 0x1a, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x44, 0x69, 0x73, 0x74,
-	0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x42, 0x61, 0x73, 0x69,
-	0x63, 0x3a, 0x2d, 0xca, 0xb4, 0x2d, 0x29, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
-	0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x6f, 0x6f, 0x6c, 0x73,
-	0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65,
-	0x22, 0x9b, 0x01, 0x0a, 0x1d, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69,
-	0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x57, 0x65, 0x69, 0x67, 0x68, 0x74,
-	0x65, 0x64, 0x12, 0x4b, 0x0a, 0x07, 0x77, 0x65, 0x69, 0x67, 0x68, 0x74, 0x73, 0x18, 0x01, 0x20,
-	0x03, 0x28, 0x0b, 0x32, 0x2b, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72,
-	0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x6f, 0x6f, 0x6c, 0x44, 0x69,
-	0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x57, 0x65, 0x69, 0x67, 0x68, 0x74,
-	0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x07, 0x77, 0x65, 0x69, 0x67, 0x68, 0x74, 0x73, 0x3a,
-	0x2d, 0xca, 0xb4, 0x2d, 0x29, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65,
-	0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x44, 0x69,
-	0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x22, 0x55,
-	0x0a, 0x16, 0x50, 0x6f, 0x6f, 0x6c, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69,
-	0x6f, 0x6e, 0x57, 0x65, 0x69, 0x67, 0x68, 0x74, 0x12, 0x23, 0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c,
-	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x0a, 0xe2, 0xde, 0x1f, 0x06, 0x50,
-	0x6f, 0x6f, 0x6c, 0x49, 0x44, 0x52, 0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x12, 0x16, 0x0a,
-	0x06, 0x77, 0x65, 0x69, 0x67, 0x68, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x06, 0x77,
-	0x65, 0x69, 0x67, 0x68, 0x74, 0x22, 0x51, 0x0a, 0x20, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x44, 0x69,
-	0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x45, 0x67,
-	0x61, 0x6c, 0x69, 0x74, 0x61, 0x72, 0x69, 0x61, 0x6e, 0x3a, 0x2d, 0xca, 0xb4, 0x2d, 0x29, 0x6d,
-	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e,
-	0x76, 0x31, 0x2e, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75,
-	0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x22, 0x8c, 0x01, 0x0a, 0x15, 0x4f, 0x70, 0x65,
-	0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69,
-	0x6f, 0x6e, 0x12, 0x16, 0x0a, 0x06, 0x77, 0x65, 0x69, 0x67, 0x68, 0x74, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x0d, 0x52, 0x06, 0x77, 0x65, 0x69, 0x67, 0x68, 0x74, 0x12, 0x5b, 0x0a, 0x04, 0x74, 0x79,
-	0x70, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c,
-	0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x6e, 0x79, 0x42, 0x31,
-	0xca, 0xb4, 0x2d, 0x2d, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77,
-	0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
-	0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70,
-	0x65, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x53, 0x0a, 0x1e, 0x4f, 0x70, 0x65, 0x72, 0x61,
-	0x74, 0x6f, 0x72, 0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e,
-	0x54, 0x79, 0x70, 0x65, 0x42, 0x61, 0x73, 0x69, 0x63, 0x3a, 0x31, 0xca, 0xb4, 0x2d, 0x2d, 0x6d,
-	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e,
-	0x76, 0x31, 0x2e, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x44, 0x69, 0x73, 0x74,
-	0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x22, 0xa7, 0x01, 0x0a,
-	0x21, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69,
-	0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x57, 0x65, 0x69, 0x67, 0x68, 0x74,
-	0x65, 0x64, 0x12, 0x4f, 0x0a, 0x07, 0x77, 0x65, 0x69, 0x67, 0x68, 0x74, 0x73, 0x18, 0x01, 0x20,
-	0x03, 0x28, 0x0b, 0x32, 0x2f, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72,
-	0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74,
-	0x6f, 0x72, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x57, 0x65,
-	0x69, 0x67, 0x68, 0x74, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x07, 0x77, 0x65, 0x69, 0x67,
-	0x68, 0x74, 0x73, 0x3a, 0x31, 0xca, 0xb4, 0x2d, 0x2d, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
-	0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x70, 0x65,
-	0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69,
-	0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x22, 0x65, 0x0a, 0x1a, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74,
-	0x6f, 0x72, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x57, 0x65,
-	0x69, 0x67, 0x68, 0x74, 0x12, 0x2f, 0x0a, 0x0b, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
-	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x0e, 0xe2, 0xde, 0x1f, 0x0a, 0x4f,
-	0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x44, 0x52, 0x0a, 0x6f, 0x70, 0x65, 0x72, 0x61,
-	0x74, 0x6f, 0x72, 0x49, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x77, 0x65, 0x69, 0x67, 0x68, 0x74, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x06, 0x77, 0x65, 0x69, 0x67, 0x68, 0x74, 0x22, 0x59, 0x0a,
-	0x24, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69,
-	0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x45, 0x67, 0x61, 0x6c, 0x69, 0x74,
-	0x61, 0x72, 0x69, 0x61, 0x6e, 0x3a, 0x31, 0xca, 0xb4, 0x2d, 0x2d, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
-	0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x4f,
-	0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75,
-	0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x22, 0x84, 0x01, 0x0a, 0x11, 0x55, 0x73, 0x65,
-	0x72, 0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x16,
-	0x0a, 0x06, 0x77, 0x65, 0x69, 0x67, 0x68, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x06,
-	0x77, 0x65, 0x69, 0x67, 0x68, 0x74, 0x12, 0x57, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x6e, 0x79, 0x42, 0x2d, 0xca, 0xb4, 0x2d, 0x29,
+	0x08, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
+	0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x69, 0x73, 0x74,
+	0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x11,
+	0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f,
+	0x6e, 0x12, 0x5e, 0x0a, 0x16, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x5f, 0x64,
+	0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x09, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x21, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77,
+	0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75,
+	0x74, 0x69, 0x6f, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x15, 0x6f, 0x70, 0x65, 0x72,
+	0x61, 0x74, 0x6f, 0x72, 0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f,
+	0x6e, 0x12, 0x5b, 0x0a, 0x12, 0x75, 0x73, 0x65, 0x72, 0x73, 0x5f, 0x64, 0x69, 0x73, 0x74, 0x72,
+	0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e,
 	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73,
 	0x2e, 0x76, 0x31, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62,
-	0x75, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22,
-	0x4b, 0x0a, 0x1a, 0x55, 0x73, 0x65, 0x72, 0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75,
-	0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x42, 0x61, 0x73, 0x69, 0x63, 0x3a, 0x2d, 0xca,
-	0xb4, 0x2d, 0x29, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61,
-	0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x73, 0x44, 0x69, 0x73, 0x74,
-	0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x22, 0xe6, 0x01, 0x0a,
-	0x11, 0x48, 0x69, 0x73, 0x74, 0x6f, 0x72, 0x69, 0x63, 0x61, 0x6c, 0x52, 0x65, 0x77, 0x61, 0x72,
-	0x64, 0x73, 0x12, 0x8b, 0x01, 0x0a, 0x18, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x69, 0x76,
-	0x65, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x5f, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x73, 0x18,
-	0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
-	0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x63, 0x50,
-	0x6f, 0x6f, 0x6c, 0x42, 0x33, 0xc8, 0xde, 0x1f, 0x00, 0xf2, 0xde, 0x1f, 0x1f, 0x79, 0x61, 0x6d,
-	0x6c, 0x3a, 0x22, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x69, 0x76, 0x65, 0x5f, 0x72, 0x65,
-	0x77, 0x61, 0x72, 0x64, 0x5f, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x73, 0x22, 0xaa, 0xdf, 0x1f, 0x08,
-	0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x52, 0x16, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61,
-	0x74, 0x69, 0x76, 0x65, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x52, 0x61, 0x74, 0x69, 0x6f, 0x73,
-	0x12, 0x43, 0x0a, 0x0f, 0x72, 0x65, 0x66, 0x65, 0x72, 0x65, 0x6e, 0x63, 0x65, 0x5f, 0x63, 0x6f,
-	0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x1a, 0xf2, 0xde, 0x1f, 0x16, 0x79,
-	0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x72, 0x65, 0x66, 0x65, 0x72, 0x65, 0x6e, 0x63, 0x65, 0x5f, 0x63,
-	0x6f, 0x75, 0x6e, 0x74, 0x22, 0x52, 0x0e, 0x72, 0x65, 0x66, 0x65, 0x72, 0x65, 0x6e, 0x63, 0x65,
-	0x43, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x84, 0x01, 0x0a, 0x0e, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e,
-	0x74, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x12, 0x5a, 0x0a, 0x07, 0x72, 0x65, 0x77, 0x61,
-	0x72, 0x64, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x6d, 0x69, 0x6c, 0x6b,
-	0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e,
-	0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x42, 0x22, 0xc8, 0xde, 0x1f, 0x00, 0xf2, 0xde, 0x1f,
-	0x0e, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x22, 0xaa,
-	0xdf, 0x1f, 0x08, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x52, 0x07, 0x72, 0x65, 0x77,
-	0x61, 0x72, 0x64, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x22, 0x70, 0x0a, 0x12,
-	0x4f, 0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x52, 0x65, 0x77, 0x61, 0x72,
-	0x64, 0x73, 0x12, 0x5a, 0x0a, 0x07, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x18, 0x01, 0x20,
+	0x75, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x11, 0x75, 0x73, 0x65,
+	0x72, 0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xca,
+	0x01, 0x0a, 0x0c, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x12,
+	0x4e, 0x0a, 0x0f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x79,
+	0x70, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x25, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
+	0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31,
+	0x2e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x52,
+	0x0e, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x12,
+	0x16, 0x0a, 0x06, 0x77, 0x65, 0x69, 0x67, 0x68, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52,
+	0x06, 0x77, 0x65, 0x69, 0x67, 0x68, 0x74, 0x12, 0x52, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x6e, 0x79, 0x42, 0x28, 0xca, 0xb4, 0x2d,
+	0x24, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64,
+	0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f,
+	0x6e, 0x54, 0x79, 0x70, 0x65, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x41, 0x0a, 0x15, 0x44,
+	0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x42,
+	0x61, 0x73, 0x69, 0x63, 0x3a, 0x28, 0xca, 0xb4, 0x2d, 0x24, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
+	0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x69,
+	0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x22, 0x8d,
+	0x01, 0x0a, 0x18, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x54,
+	0x79, 0x70, 0x65, 0x57, 0x65, 0x69, 0x67, 0x68, 0x74, 0x65, 0x64, 0x12, 0x47, 0x0a, 0x07, 0x77,
+	0x65, 0x69, 0x67, 0x68, 0x74, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x6d,
+	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e,
+	0x76, 0x31, 0x2e, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x57,
+	0x65, 0x69, 0x67, 0x68, 0x74, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x07, 0x77, 0x65, 0x69,
+	0x67, 0x68, 0x74, 0x73, 0x3a, 0x28, 0xca, 0xb4, 0x2d, 0x24, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
+	0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x69,
+	0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x22, 0x76,
+	0x0a, 0x12, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x57, 0x65,
+	0x69, 0x67, 0x68, 0x74, 0x12, 0x48, 0x0a, 0x14, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x5f, 0x74, 0x61, 0x72, 0x67, 0x65, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x0d, 0x42, 0x16, 0xe2, 0xde, 0x1f, 0x12, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x54, 0x61, 0x72, 0x67, 0x65, 0x74, 0x49, 0x44, 0x52, 0x12, 0x64, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x61, 0x72, 0x67, 0x65, 0x74, 0x49, 0x64, 0x12, 0x16,
+	0x0a, 0x06, 0x77, 0x65, 0x69, 0x67, 0x68, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x06,
+	0x77, 0x65, 0x69, 0x67, 0x68, 0x74, 0x22, 0x47, 0x0a, 0x1b, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69,
+	0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x45, 0x67, 0x61, 0x6c, 0x69, 0x74,
+	0x61, 0x72, 0x69, 0x61, 0x6e, 0x3a, 0x28, 0xca, 0xb4, 0x2d, 0x24, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
+	0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44,
+	0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x22,
+	0x84, 0x01, 0x0a, 0x11, 0x55, 0x73, 0x65, 0x72, 0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62,
+	0x75, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x16, 0x0a, 0x06, 0x77, 0x65, 0x69, 0x67, 0x68, 0x74, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x06, 0x77, 0x65, 0x69, 0x67, 0x68, 0x74, 0x12, 0x57, 0x0a,
+	0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x67, 0x6f,
+	0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41, 0x6e,
+	0x79, 0x42, 0x2d, 0xca, 0xb4, 0x2d, 0x29, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
+	0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x73,
+	0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65,
+	0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x22, 0x4b, 0x0a, 0x1a, 0x55, 0x73, 0x65, 0x72, 0x73, 0x44,
+	0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x42,
+	0x61, 0x73, 0x69, 0x63, 0x3a, 0x2d, 0xca, 0xb4, 0x2d, 0x29, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
+	0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x73,
+	0x65, 0x72, 0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x54,
+	0x79, 0x70, 0x65, 0x22, 0xe6, 0x01, 0x0a, 0x11, 0x48, 0x69, 0x73, 0x74, 0x6f, 0x72, 0x69, 0x63,
+	0x61, 0x6c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x12, 0x8b, 0x01, 0x0a, 0x18, 0x63, 0x75,
+	0x6d, 0x75, 0x6c, 0x61, 0x74, 0x69, 0x76, 0x65, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x5f,
+	0x72, 0x61, 0x74, 0x69, 0x6f, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x6d,
+	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e,
+	0x76, 0x31, 0x2e, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x42, 0x33, 0xc8, 0xde, 0x1f, 0x00,
+	0xf2, 0xde, 0x1f, 0x1f, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61,
+	0x74, 0x69, 0x76, 0x65, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x5f, 0x72, 0x61, 0x74, 0x69,
+	0x6f, 0x73, 0x22, 0xaa, 0xdf, 0x1f, 0x08, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x52,
+	0x16, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x69, 0x76, 0x65, 0x52, 0x65, 0x77, 0x61, 0x72,
+	0x64, 0x52, 0x61, 0x74, 0x69, 0x6f, 0x73, 0x12, 0x43, 0x0a, 0x0f, 0x72, 0x65, 0x66, 0x65, 0x72,
+	0x65, 0x6e, 0x63, 0x65, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d,
+	0x42, 0x1a, 0xf2, 0xde, 0x1f, 0x16, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x72, 0x65, 0x66, 0x65,
+	0x72, 0x65, 0x6e, 0x63, 0x65, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x52, 0x0e, 0x72, 0x65,
+	0x66, 0x65, 0x72, 0x65, 0x6e, 0x63, 0x65, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x84, 0x01, 0x0a,
+	0x0e, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x12,
+	0x5a, 0x0a, 0x07, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b,
+	0x32, 0x1c, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61,
+	0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x42, 0x22,
+	0xc8, 0xde, 0x1f, 0x00, 0xf2, 0xde, 0x1f, 0x0e, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x72, 0x65,
+	0x77, 0x61, 0x72, 0x64, 0x73, 0x22, 0xaa, 0xdf, 0x1f, 0x08, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f,
+	0x6c, 0x73, 0x52, 0x07, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x12, 0x16, 0x0a, 0x06, 0x70,
+	0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x70, 0x65, 0x72,
+	0x69, 0x6f, 0x64, 0x22, 0x70, 0x0a, 0x12, 0x4f, 0x75, 0x74, 0x73, 0x74, 0x61, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x12, 0x5a, 0x0a, 0x07, 0x72, 0x65, 0x77,
+	0x61, 0x72, 0x64, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x6d, 0x69, 0x6c,
+	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31,
+	0x2e, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x42, 0x22, 0xc8, 0xde, 0x1f, 0x00, 0xf2, 0xde,
+	0x1f, 0x0e, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x22,
+	0xaa, 0xdf, 0x1f, 0x08, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x52, 0x07, 0x72, 0x65,
+	0x77, 0x61, 0x72, 0x64, 0x73, 0x22, 0x6e, 0x0a, 0x15, 0x41, 0x63, 0x63, 0x75, 0x6d, 0x75, 0x6c,
+	0x61, 0x74, 0x65, 0x64, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x55,
+	0x0a, 0x0b, 0x63, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x01, 0x20,
 	0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72,
 	0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f,
-	0x6c, 0x42, 0x22, 0xc8, 0xde, 0x1f, 0x00, 0xf2, 0xde, 0x1f, 0x0e, 0x79, 0x61, 0x6d, 0x6c, 0x3a,
-	0x22, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x22, 0xaa, 0xdf, 0x1f, 0x08, 0x44, 0x65, 0x63,
-	0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x52, 0x07, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x22, 0x6e,
-	0x0a, 0x15, 0x41, 0x63, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x65, 0x64, 0x43, 0x6f, 0x6d,
-	0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x55, 0x0a, 0x0b, 0x63, 0x6f, 0x6d, 0x6d, 0x69,
-	0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x6d,
-	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e,
-	0x76, 0x31, 0x2e, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x42, 0x15, 0xc8, 0xde, 0x1f, 0x00,
-	0xaa, 0xdf, 0x1f, 0x08, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0xa8, 0xe7, 0xb0, 0x2a,
-	0x01, 0x52, 0x0b, 0x63, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x22, 0x9f,
-	0x02, 0x0a, 0x15, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x74, 0x61, 0x72,
-	0x74, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x43, 0x0a, 0x0f, 0x70, 0x72, 0x65, 0x76,
-	0x69, 0x6f, 0x75, 0x73, 0x5f, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x04, 0x42, 0x1a, 0xf2, 0xde, 0x1f, 0x16, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x70, 0x72, 0x65,
-	0x76, 0x69, 0x6f, 0x75, 0x73, 0x5f, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x22, 0x52, 0x0e, 0x70,
-	0x72, 0x65, 0x76, 0x69, 0x6f, 0x75, 0x73, 0x50, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x12, 0x7a, 0x0a,
-	0x06, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e,
-	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65,
-	0x74, 0x61, 0x31, 0x2e, 0x44, 0x65, 0x63, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x44, 0xc8, 0xde, 0x1f,
-	0x00, 0xf2, 0xde, 0x1f, 0x0d, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x73, 0x74, 0x61, 0x6b, 0x65,
-	0x73, 0x22, 0xaa, 0xdf, 0x1f, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
-	0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73,
-	0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x44, 0x65, 0x63, 0x43, 0x6f, 0x69, 0x6e,
-	0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x73, 0x12, 0x45, 0x0a, 0x06, 0x68, 0x65, 0x69,
-	0x67, 0x68, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x42, 0x2d, 0xea, 0xde, 0x1f, 0x0f, 0x63,
-	0x72, 0x65, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0xf2, 0xde,
-	0x1f, 0x16, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x63, 0x72, 0x65, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x5f, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x22, 0x52, 0x06, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74,
-	0x22, 0x82, 0x02, 0x0a, 0x19, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x44,
-	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x12, 0x4e,
-	0x0a, 0x0f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x79, 0x70,
-	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x25, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
-	0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e,
-	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x52, 0x0e,
-	0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79, 0x70, 0x65, 0x12, 0x48,
-	0x0a, 0x14, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x61, 0x72,
-	0x67, 0x65, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x16, 0xe2, 0xde,
-	0x1f, 0x12, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x61, 0x72, 0x67,
-	0x65, 0x74, 0x49, 0x44, 0x52, 0x12, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x54, 0x61, 0x72, 0x67, 0x65, 0x74, 0x49, 0x64, 0x12, 0x4b, 0x0a, 0x06, 0x72, 0x65, 0x77, 0x61,
-	0x72, 0x64, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
-	0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44,
-	0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x42, 0x15, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x08,
-	0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x72,
-	0x65, 0x77, 0x61, 0x72, 0x64, 0x22, 0xa1, 0x01, 0x0a, 0x04, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x26,
-	0x0a, 0x05, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x10, 0xf2,
-	0xde, 0x1f, 0x0c, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x22, 0x52,
-	0x05, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x12, 0x71, 0x0a, 0x05, 0x63, 0x6f, 0x69, 0x6e, 0x73, 0x18,
-	0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62,
-	0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e,
-	0x42, 0x40, 0xc8, 0xde, 0x1f, 0x00, 0xf2, 0xde, 0x1f, 0x0c, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22,
-	0x63, 0x6f, 0x69, 0x6e, 0x73, 0x22, 0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62,
-	0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d,
-	0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69,
-	0x6e, 0x73, 0x52, 0x05, 0x63, 0x6f, 0x69, 0x6e, 0x73, 0x22, 0xb6, 0x01, 0x0a, 0x07, 0x44, 0x65,
-	0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x26, 0x0a, 0x05, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x42, 0x10, 0xf2, 0xde, 0x1f, 0x0c, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22,
-	0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x22, 0x52, 0x05, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x12, 0x82, 0x01,
-	0x0a, 0x09, 0x64, 0x65, 0x63, 0x5f, 0x63, 0x6f, 0x69, 0x6e, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28,
-	0x0b, 0x32, 0x1c, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e,
-	0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x44, 0x65, 0x63, 0x43, 0x6f, 0x69, 0x6e, 0x42,
-	0x47, 0xc8, 0xde, 0x1f, 0x00, 0xf2, 0xde, 0x1f, 0x10, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x64,
-	0x65, 0x63, 0x5f, 0x63, 0x6f, 0x69, 0x6e, 0x73, 0x22, 0xaa, 0xdf, 0x1f, 0x2b, 0x67, 0x69, 0x74,
+	0x6c, 0x42, 0x15, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x08, 0x44, 0x65, 0x63, 0x50, 0x6f,
+	0x6f, 0x6c, 0x73, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x0b, 0x63, 0x6f, 0x6d, 0x6d, 0x69, 0x73,
+	0x73, 0x69, 0x6f, 0x6e, 0x73, 0x22, 0x9f, 0x02, 0x0a, 0x15, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61,
+	0x74, 0x6f, 0x72, 0x53, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x66, 0x6f, 0x12,
+	0x43, 0x0a, 0x0f, 0x70, 0x72, 0x65, 0x76, 0x69, 0x6f, 0x75, 0x73, 0x5f, 0x70, 0x65, 0x72, 0x69,
+	0x6f, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x42, 0x1a, 0xf2, 0xde, 0x1f, 0x16, 0x79, 0x61,
+	0x6d, 0x6c, 0x3a, 0x22, 0x70, 0x72, 0x65, 0x76, 0x69, 0x6f, 0x75, 0x73, 0x5f, 0x70, 0x65, 0x72,
+	0x69, 0x6f, 0x64, 0x22, 0x52, 0x0e, 0x70, 0x72, 0x65, 0x76, 0x69, 0x6f, 0x75, 0x73, 0x50, 0x65,
+	0x72, 0x69, 0x6f, 0x64, 0x12, 0x7a, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x73, 0x18, 0x02,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61,
+	0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x44, 0x65, 0x63, 0x43, 0x6f,
+	0x69, 0x6e, 0x42, 0x44, 0xc8, 0xde, 0x1f, 0x00, 0xf2, 0xde, 0x1f, 0x0d, 0x79, 0x61, 0x6d, 0x6c,
+	0x3a, 0x22, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x73, 0x22, 0xaa, 0xdf, 0x1f, 0x2b, 0x67, 0x69, 0x74,
 	0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63,
 	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e,
-	0x44, 0x65, 0x63, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x08, 0x64, 0x65, 0x63, 0x43, 0x6f, 0x69,
-	0x6e, 0x73, 0x42, 0xdd, 0x01, 0xc8, 0xe1, 0x1e, 0x00, 0x0a, 0x17, 0x63, 0x6f, 0x6d, 0x2e, 0x6d,
-	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e,
-	0x76, 0x31, 0x42, 0x0b, 0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50,
-	0x01, 0x5a, 0x43, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x69,
-	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x6d, 0x69, 0x6c, 0x6b,
-	0x79, 0x77, 0x61, 0x79, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
-	0x79, 0x2f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2f, 0x76, 0x31, 0x3b, 0x72, 0x65, 0x77,
-	0x61, 0x72, 0x64, 0x73, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x4d, 0x52, 0x58, 0xaa, 0x02, 0x13, 0x4d,
-	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e,
-	0x56, 0x31, 0xca, 0x02, 0x13, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65,
-	0x77, 0x61, 0x72, 0x64, 0x73, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x1f, 0x4d, 0x69, 0x6c, 0x6b, 0x79,
-	0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x5c, 0x56, 0x31, 0x5c, 0x47,
-	0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x15, 0x4d, 0x69, 0x6c,
-	0x6b, 0x79, 0x77, 0x61, 0x79, 0x3a, 0x3a, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x3a, 0x3a,
-	0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x44, 0x65, 0x63, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x06, 0x73, 0x74, 0x61, 0x6b, 0x65, 0x73,
+	0x12, 0x45, 0x0a, 0x06, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04,
+	0x42, 0x2d, 0xea, 0xde, 0x1f, 0x0f, 0x63, 0x72, 0x65, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x68,
+	0x65, 0x69, 0x67, 0x68, 0x74, 0xf2, 0xde, 0x1f, 0x16, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x63,
+	0x72, 0x65, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x22, 0x52,
+	0x06, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x22, 0x82, 0x02, 0x0a, 0x19, 0x44, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x52,
+	0x65, 0x77, 0x61, 0x72, 0x64, 0x12, 0x4e, 0x0a, 0x0f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x25,
+	0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b,
+	0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x54, 0x79, 0x70, 0x65, 0x52, 0x0e, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x54, 0x79, 0x70, 0x65, 0x12, 0x48, 0x0a, 0x14, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x61, 0x72, 0x67, 0x65, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x0d, 0x42, 0x16, 0xe2, 0xde, 0x1f, 0x12, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x54, 0x61, 0x72, 0x67, 0x65, 0x74, 0x49, 0x44, 0x52, 0x12, 0x64, 0x65, 0x6c,
+	0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x61, 0x72, 0x67, 0x65, 0x74, 0x49, 0x64, 0x12,
+	0x4b, 0x0a, 0x06, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32,
+	0x1c, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72,
+	0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x42, 0x15, 0xc8,
+	0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x08, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0xa8,
+	0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x22, 0xa1, 0x01, 0x0a,
+	0x04, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x26, 0x0a, 0x05, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x42, 0x10, 0xf2, 0xde, 0x1f, 0x0c, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22,
+	0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x22, 0x52, 0x05, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x12, 0x71, 0x0a,
+	0x05, 0x63, 0x6f, 0x69, 0x6e, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63,
+	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74,
+	0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x40, 0xc8, 0xde, 0x1f, 0x00, 0xf2, 0xde, 0x1f,
+	0x0c, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x63, 0x6f, 0x69, 0x6e, 0x73, 0x22, 0xaa, 0xdf, 0x1f,
+	0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79,
+	0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x05, 0x63, 0x6f, 0x69, 0x6e, 0x73,
+	0x22, 0xb6, 0x01, 0x0a, 0x07, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x26, 0x0a, 0x05,
+	0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x10, 0xf2, 0xde, 0x1f,
+	0x0c, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x22, 0x52, 0x05, 0x64,
+	0x65, 0x6e, 0x6f, 0x6d, 0x12, 0x82, 0x01, 0x0a, 0x09, 0x64, 0x65, 0x63, 0x5f, 0x63, 0x6f, 0x69,
+	0x6e, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
+	0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x44,
+	0x65, 0x63, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x47, 0xc8, 0xde, 0x1f, 0x00, 0xf2, 0xde, 0x1f, 0x10,
+	0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x64, 0x65, 0x63, 0x5f, 0x63, 0x6f, 0x69, 0x6e, 0x73, 0x22,
+	0xaa, 0xdf, 0x1f, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63,
+	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b,
+	0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x44, 0x65, 0x63, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52,
+	0x08, 0x64, 0x65, 0x63, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x42, 0xdd, 0x01, 0xc8, 0xe1, 0x1e, 0x00,
+	0x0a, 0x17, 0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72,
+	0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x42, 0x0b, 0x4d, 0x6f, 0x64, 0x65, 0x6c,
+	0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x43, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62,
+	0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2d, 0x6c, 0x61,
+	0x62, 0x73, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x61, 0x70, 0x69, 0x2f,
+	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73,
+	0x2f, 0x76, 0x31, 0x3b, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x76, 0x31, 0xa2, 0x02, 0x03,
+	0x4d, 0x52, 0x58, 0xaa, 0x02, 0x13, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x52,
+	0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x13, 0x4d, 0x69, 0x6c, 0x6b,
+	0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x5c, 0x56, 0x31, 0xe2,
+	0x02, 0x1f, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x77, 0x61, 0x72,
+	0x64, 0x73, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74,
+	0x61, 0xea, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x3a, 0x3a, 0x52, 0x65,
+	0x77, 0x61, 0x72, 0x64, 0x73, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x33,
 }
 
 var (
@@ -11777,61 +9491,55 @@ func file_milkyway_rewards_v1_models_proto_rawDescGZIP() []byte {
 	return file_milkyway_rewards_v1_models_proto_rawDescData
 }
 
-var file_milkyway_rewards_v1_models_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
+var file_milkyway_rewards_v1_models_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
 var file_milkyway_rewards_v1_models_proto_goTypes = []interface{}{
-	(*RewardsPlan)(nil),                          // 0: milkyway.rewards.v1.RewardsPlan
-	(*PoolsDistribution)(nil),                    // 1: milkyway.rewards.v1.PoolsDistribution
-	(*PoolsDistributionTypeBasic)(nil),           // 2: milkyway.rewards.v1.PoolsDistributionTypeBasic
-	(*PoolsDistributionTypeWeighted)(nil),        // 3: milkyway.rewards.v1.PoolsDistributionTypeWeighted
-	(*PoolDistributionWeight)(nil),               // 4: milkyway.rewards.v1.PoolDistributionWeight
-	(*PoolsDistributionTypeEgalitarian)(nil),     // 5: milkyway.rewards.v1.PoolsDistributionTypeEgalitarian
-	(*OperatorsDistribution)(nil),                // 6: milkyway.rewards.v1.OperatorsDistribution
-	(*OperatorsDistributionTypeBasic)(nil),       // 7: milkyway.rewards.v1.OperatorsDistributionTypeBasic
-	(*OperatorsDistributionTypeWeighted)(nil),    // 8: milkyway.rewards.v1.OperatorsDistributionTypeWeighted
-	(*OperatorDistributionWeight)(nil),           // 9: milkyway.rewards.v1.OperatorDistributionWeight
-	(*OperatorsDistributionTypeEgalitarian)(nil), // 10: milkyway.rewards.v1.OperatorsDistributionTypeEgalitarian
-	(*UsersDistribution)(nil),                    // 11: milkyway.rewards.v1.UsersDistribution
-	(*UsersDistributionTypeBasic)(nil),           // 12: milkyway.rewards.v1.UsersDistributionTypeBasic
-	(*HistoricalRewards)(nil),                    // 13: milkyway.rewards.v1.HistoricalRewards
-	(*CurrentRewards)(nil),                       // 14: milkyway.rewards.v1.CurrentRewards
-	(*OutstandingRewards)(nil),                   // 15: milkyway.rewards.v1.OutstandingRewards
-	(*AccumulatedCommission)(nil),                // 16: milkyway.rewards.v1.AccumulatedCommission
-	(*DelegatorStartingInfo)(nil),                // 17: milkyway.rewards.v1.DelegatorStartingInfo
-	(*DelegationDelegatorReward)(nil),            // 18: milkyway.rewards.v1.DelegationDelegatorReward
-	(*Pool)(nil),                                 // 19: milkyway.rewards.v1.Pool
-	(*DecPool)(nil),                              // 20: milkyway.rewards.v1.DecPool
-	(*v1beta1.Coin)(nil),                         // 21: cosmos.base.v1beta1.Coin
-	(*timestamppb.Timestamp)(nil),                // 22: google.protobuf.Timestamp
-	(*anypb.Any)(nil),                            // 23: google.protobuf.Any
-	(*v1beta1.DecCoin)(nil),                      // 24: cosmos.base.v1beta1.DecCoin
-	(v1.DelegationType)(0),                       // 25: milkyway.restaking.v1.DelegationType
+	(*RewardsPlan)(nil),                 // 0: milkyway.rewards.v1.RewardsPlan
+	(*Distribution)(nil),                // 1: milkyway.rewards.v1.Distribution
+	(*DistributionTypeBasic)(nil),       // 2: milkyway.rewards.v1.DistributionTypeBasic
+	(*DistributionTypeWeighted)(nil),    // 3: milkyway.rewards.v1.DistributionTypeWeighted
+	(*DistributionWeight)(nil),          // 4: milkyway.rewards.v1.DistributionWeight
+	(*DistributionTypeEgalitarian)(nil), // 5: milkyway.rewards.v1.DistributionTypeEgalitarian
+	(*UsersDistribution)(nil),           // 6: milkyway.rewards.v1.UsersDistribution
+	(*UsersDistributionTypeBasic)(nil),  // 7: milkyway.rewards.v1.UsersDistributionTypeBasic
+	(*HistoricalRewards)(nil),           // 8: milkyway.rewards.v1.HistoricalRewards
+	(*CurrentRewards)(nil),              // 9: milkyway.rewards.v1.CurrentRewards
+	(*OutstandingRewards)(nil),          // 10: milkyway.rewards.v1.OutstandingRewards
+	(*AccumulatedCommission)(nil),       // 11: milkyway.rewards.v1.AccumulatedCommission
+	(*DelegatorStartingInfo)(nil),       // 12: milkyway.rewards.v1.DelegatorStartingInfo
+	(*DelegationDelegatorReward)(nil),   // 13: milkyway.rewards.v1.DelegationDelegatorReward
+	(*Pool)(nil),                        // 14: milkyway.rewards.v1.Pool
+	(*DecPool)(nil),                     // 15: milkyway.rewards.v1.DecPool
+	(*v1beta1.Coin)(nil),                // 16: cosmos.base.v1beta1.Coin
+	(*timestamppb.Timestamp)(nil),       // 17: google.protobuf.Timestamp
+	(v1.DelegationType)(0),              // 18: milkyway.restaking.v1.DelegationType
+	(*anypb.Any)(nil),                   // 19: google.protobuf.Any
+	(*v1beta1.DecCoin)(nil),             // 20: cosmos.base.v1beta1.DecCoin
 }
 var file_milkyway_rewards_v1_models_proto_depIdxs = []int32{
-	21, // 0: milkyway.rewards.v1.RewardsPlan.amount_per_day:type_name -> cosmos.base.v1beta1.Coin
-	22, // 1: milkyway.rewards.v1.RewardsPlan.start_time:type_name -> google.protobuf.Timestamp
-	22, // 2: milkyway.rewards.v1.RewardsPlan.end_time:type_name -> google.protobuf.Timestamp
-	1,  // 3: milkyway.rewards.v1.RewardsPlan.pools_distribution:type_name -> milkyway.rewards.v1.PoolsDistribution
-	6,  // 4: milkyway.rewards.v1.RewardsPlan.operators_distribution:type_name -> milkyway.rewards.v1.OperatorsDistribution
-	11, // 5: milkyway.rewards.v1.RewardsPlan.users_distribution:type_name -> milkyway.rewards.v1.UsersDistribution
-	23, // 6: milkyway.rewards.v1.PoolsDistribution.type:type_name -> google.protobuf.Any
-	4,  // 7: milkyway.rewards.v1.PoolsDistributionTypeWeighted.weights:type_name -> milkyway.rewards.v1.PoolDistributionWeight
-	23, // 8: milkyway.rewards.v1.OperatorsDistribution.type:type_name -> google.protobuf.Any
-	9,  // 9: milkyway.rewards.v1.OperatorsDistributionTypeWeighted.weights:type_name -> milkyway.rewards.v1.OperatorDistributionWeight
-	23, // 10: milkyway.rewards.v1.UsersDistribution.type:type_name -> google.protobuf.Any
-	20, // 11: milkyway.rewards.v1.HistoricalRewards.cumulative_reward_ratios:type_name -> milkyway.rewards.v1.DecPool
-	20, // 12: milkyway.rewards.v1.CurrentRewards.rewards:type_name -> milkyway.rewards.v1.DecPool
-	20, // 13: milkyway.rewards.v1.OutstandingRewards.rewards:type_name -> milkyway.rewards.v1.DecPool
-	20, // 14: milkyway.rewards.v1.AccumulatedCommission.commissions:type_name -> milkyway.rewards.v1.DecPool
-	24, // 15: milkyway.rewards.v1.DelegatorStartingInfo.stakes:type_name -> cosmos.base.v1beta1.DecCoin
-	25, // 16: milkyway.rewards.v1.DelegationDelegatorReward.delegation_type:type_name -> milkyway.restaking.v1.DelegationType
-	20, // 17: milkyway.rewards.v1.DelegationDelegatorReward.reward:type_name -> milkyway.rewards.v1.DecPool
-	21, // 18: milkyway.rewards.v1.Pool.coins:type_name -> cosmos.base.v1beta1.Coin
-	24, // 19: milkyway.rewards.v1.DecPool.dec_coins:type_name -> cosmos.base.v1beta1.DecCoin
-	20, // [20:20] is the sub-list for method output_type
-	20, // [20:20] is the sub-list for method input_type
-	20, // [20:20] is the sub-list for extension type_name
-	20, // [20:20] is the sub-list for extension extendee
-	0,  // [0:20] is the sub-list for field type_name
+	16, // 0: milkyway.rewards.v1.RewardsPlan.amount_per_day:type_name -> cosmos.base.v1beta1.Coin
+	17, // 1: milkyway.rewards.v1.RewardsPlan.start_time:type_name -> google.protobuf.Timestamp
+	17, // 2: milkyway.rewards.v1.RewardsPlan.end_time:type_name -> google.protobuf.Timestamp
+	1,  // 3: milkyway.rewards.v1.RewardsPlan.pools_distribution:type_name -> milkyway.rewards.v1.Distribution
+	1,  // 4: milkyway.rewards.v1.RewardsPlan.operators_distribution:type_name -> milkyway.rewards.v1.Distribution
+	6,  // 5: milkyway.rewards.v1.RewardsPlan.users_distribution:type_name -> milkyway.rewards.v1.UsersDistribution
+	18, // 6: milkyway.rewards.v1.Distribution.delegation_type:type_name -> milkyway.restaking.v1.DelegationType
+	19, // 7: milkyway.rewards.v1.Distribution.type:type_name -> google.protobuf.Any
+	4,  // 8: milkyway.rewards.v1.DistributionTypeWeighted.weights:type_name -> milkyway.rewards.v1.DistributionWeight
+	19, // 9: milkyway.rewards.v1.UsersDistribution.type:type_name -> google.protobuf.Any
+	15, // 10: milkyway.rewards.v1.HistoricalRewards.cumulative_reward_ratios:type_name -> milkyway.rewards.v1.DecPool
+	15, // 11: milkyway.rewards.v1.CurrentRewards.rewards:type_name -> milkyway.rewards.v1.DecPool
+	15, // 12: milkyway.rewards.v1.OutstandingRewards.rewards:type_name -> milkyway.rewards.v1.DecPool
+	15, // 13: milkyway.rewards.v1.AccumulatedCommission.commissions:type_name -> milkyway.rewards.v1.DecPool
+	20, // 14: milkyway.rewards.v1.DelegatorStartingInfo.stakes:type_name -> cosmos.base.v1beta1.DecCoin
+	18, // 15: milkyway.rewards.v1.DelegationDelegatorReward.delegation_type:type_name -> milkyway.restaking.v1.DelegationType
+	15, // 16: milkyway.rewards.v1.DelegationDelegatorReward.reward:type_name -> milkyway.rewards.v1.DecPool
+	16, // 17: milkyway.rewards.v1.Pool.coins:type_name -> cosmos.base.v1beta1.Coin
+	20, // 18: milkyway.rewards.v1.DecPool.dec_coins:type_name -> cosmos.base.v1beta1.DecCoin
+	19, // [19:19] is the sub-list for method output_type
+	19, // [19:19] is the sub-list for method input_type
+	19, // [19:19] is the sub-list for extension type_name
+	19, // [19:19] is the sub-list for extension extendee
+	0,  // [0:19] is the sub-list for field type_name
 }
 
 func init() { file_milkyway_rewards_v1_models_proto_init() }
@@ -11853,7 +9561,7 @@ func file_milkyway_rewards_v1_models_proto_init() {
 			}
 		}
 		file_milkyway_rewards_v1_models_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PoolsDistribution); i {
+			switch v := v.(*Distribution); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -11865,7 +9573,7 @@ func file_milkyway_rewards_v1_models_proto_init() {
 			}
 		}
 		file_milkyway_rewards_v1_models_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PoolsDistributionTypeBasic); i {
+			switch v := v.(*DistributionTypeBasic); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -11877,7 +9585,7 @@ func file_milkyway_rewards_v1_models_proto_init() {
 			}
 		}
 		file_milkyway_rewards_v1_models_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PoolsDistributionTypeWeighted); i {
+			switch v := v.(*DistributionTypeWeighted); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -11889,7 +9597,7 @@ func file_milkyway_rewards_v1_models_proto_init() {
 			}
 		}
 		file_milkyway_rewards_v1_models_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PoolDistributionWeight); i {
+			switch v := v.(*DistributionWeight); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -11901,7 +9609,7 @@ func file_milkyway_rewards_v1_models_proto_init() {
 			}
 		}
 		file_milkyway_rewards_v1_models_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PoolsDistributionTypeEgalitarian); i {
+			switch v := v.(*DistributionTypeEgalitarian); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -11913,66 +9621,6 @@ func file_milkyway_rewards_v1_models_proto_init() {
 			}
 		}
 		file_milkyway_rewards_v1_models_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*OperatorsDistribution); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_milkyway_rewards_v1_models_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*OperatorsDistributionTypeBasic); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_milkyway_rewards_v1_models_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*OperatorsDistributionTypeWeighted); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_milkyway_rewards_v1_models_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*OperatorDistributionWeight); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_milkyway_rewards_v1_models_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*OperatorsDistributionTypeEgalitarian); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_milkyway_rewards_v1_models_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UsersDistribution); i {
 			case 0:
 				return &v.state
@@ -11984,7 +9632,7 @@ func file_milkyway_rewards_v1_models_proto_init() {
 				return nil
 			}
 		}
-		file_milkyway_rewards_v1_models_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+		file_milkyway_rewards_v1_models_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UsersDistributionTypeBasic); i {
 			case 0:
 				return &v.state
@@ -11996,7 +9644,7 @@ func file_milkyway_rewards_v1_models_proto_init() {
 				return nil
 			}
 		}
-		file_milkyway_rewards_v1_models_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+		file_milkyway_rewards_v1_models_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*HistoricalRewards); i {
 			case 0:
 				return &v.state
@@ -12008,7 +9656,7 @@ func file_milkyway_rewards_v1_models_proto_init() {
 				return nil
 			}
 		}
-		file_milkyway_rewards_v1_models_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+		file_milkyway_rewards_v1_models_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*CurrentRewards); i {
 			case 0:
 				return &v.state
@@ -12020,7 +9668,7 @@ func file_milkyway_rewards_v1_models_proto_init() {
 				return nil
 			}
 		}
-		file_milkyway_rewards_v1_models_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
+		file_milkyway_rewards_v1_models_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*OutstandingRewards); i {
 			case 0:
 				return &v.state
@@ -12032,7 +9680,7 @@ func file_milkyway_rewards_v1_models_proto_init() {
 				return nil
 			}
 		}
-		file_milkyway_rewards_v1_models_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
+		file_milkyway_rewards_v1_models_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*AccumulatedCommission); i {
 			case 0:
 				return &v.state
@@ -12044,7 +9692,7 @@ func file_milkyway_rewards_v1_models_proto_init() {
 				return nil
 			}
 		}
-		file_milkyway_rewards_v1_models_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
+		file_milkyway_rewards_v1_models_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DelegatorStartingInfo); i {
 			case 0:
 				return &v.state
@@ -12056,7 +9704,7 @@ func file_milkyway_rewards_v1_models_proto_init() {
 				return nil
 			}
 		}
-		file_milkyway_rewards_v1_models_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
+		file_milkyway_rewards_v1_models_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DelegationDelegatorReward); i {
 			case 0:
 				return &v.state
@@ -12068,7 +9716,7 @@ func file_milkyway_rewards_v1_models_proto_init() {
 				return nil
 			}
 		}
-		file_milkyway_rewards_v1_models_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
+		file_milkyway_rewards_v1_models_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Pool); i {
 			case 0:
 				return &v.state
@@ -12080,7 +9728,7 @@ func file_milkyway_rewards_v1_models_proto_init() {
 				return nil
 			}
 		}
-		file_milkyway_rewards_v1_models_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
+		file_milkyway_rewards_v1_models_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DecPool); i {
 			case 0:
 				return &v.state
@@ -12099,7 +9747,7 @@ func file_milkyway_rewards_v1_models_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_milkyway_rewards_v1_models_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   21,
+			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

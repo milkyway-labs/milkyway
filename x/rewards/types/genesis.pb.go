@@ -73,26 +73,27 @@ func (m *DelegatorWithdrawInfo) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DelegatorWithdrawInfo proto.InternalMessageInfo
 
-// PoolOutstandingRewardsRecord is used for import/export via genesis json.
-type PoolOutstandingRewardsRecord struct {
-	// pool_id is the ID of the pool.
-	PoolID uint32 `protobuf:"varint,1,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
-	// outstanding_rewards represents the outstanding rewards of a pool.
+// OutstandingRewardsRecord is used for import/export via genesis json.
+type OutstandingRewardsRecord struct {
+	// delegation_target_id is the ID of the delegation target.
+	DelegationTargetID uint32 `protobuf:"varint,1,opt,name=delegation_target_id,json=delegationTargetId,proto3" json:"delegation_target_id,omitempty"`
+	// outstanding_rewards represents the outstanding rewards of the delegation
+	// target.
 	OutstandingRewards DecPools `protobuf:"bytes,2,rep,name=outstanding_rewards,json=outstandingRewards,proto3,castrepeated=DecPools" json:"outstanding_rewards"`
 }
 
-func (m *PoolOutstandingRewardsRecord) Reset()         { *m = PoolOutstandingRewardsRecord{} }
-func (m *PoolOutstandingRewardsRecord) String() string { return proto.CompactTextString(m) }
-func (*PoolOutstandingRewardsRecord) ProtoMessage()    {}
-func (*PoolOutstandingRewardsRecord) Descriptor() ([]byte, []int) {
+func (m *OutstandingRewardsRecord) Reset()         { *m = OutstandingRewardsRecord{} }
+func (m *OutstandingRewardsRecord) String() string { return proto.CompactTextString(m) }
+func (*OutstandingRewardsRecord) ProtoMessage()    {}
+func (*OutstandingRewardsRecord) Descriptor() ([]byte, []int) {
 	return fileDescriptor_95f74caade7824f2, []int{1}
 }
-func (m *PoolOutstandingRewardsRecord) XXX_Unmarshal(b []byte) error {
+func (m *OutstandingRewardsRecord) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *PoolOutstandingRewardsRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *OutstandingRewardsRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_PoolOutstandingRewardsRecord.Marshal(b, m, deterministic)
+		return xxx_messageInfo_OutstandingRewardsRecord.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -102,41 +103,41 @@ func (m *PoolOutstandingRewardsRecord) XXX_Marshal(b []byte, deterministic bool)
 		return b[:n], nil
 	}
 }
-func (m *PoolOutstandingRewardsRecord) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PoolOutstandingRewardsRecord.Merge(m, src)
+func (m *OutstandingRewardsRecord) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OutstandingRewardsRecord.Merge(m, src)
 }
-func (m *PoolOutstandingRewardsRecord) XXX_Size() int {
+func (m *OutstandingRewardsRecord) XXX_Size() int {
 	return m.Size()
 }
-func (m *PoolOutstandingRewardsRecord) XXX_DiscardUnknown() {
-	xxx_messageInfo_PoolOutstandingRewardsRecord.DiscardUnknown(m)
+func (m *OutstandingRewardsRecord) XXX_DiscardUnknown() {
+	xxx_messageInfo_OutstandingRewardsRecord.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_PoolOutstandingRewardsRecord proto.InternalMessageInfo
+var xxx_messageInfo_OutstandingRewardsRecord proto.InternalMessageInfo
 
-// PoolHistoricalRewardsRecord is used for import / export via genesis
+// HistoricalRewardsRecord is used for import / export via genesis
 // json.
-type PoolHistoricalRewardsRecord struct {
-	// pool_id is the ID of the pool.
-	PoolID uint32 `protobuf:"varint,1,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+type HistoricalRewardsRecord struct {
+	// delegation_target_id is the ID of the delegation target.
+	DelegationTargetID uint32 `protobuf:"varint,1,opt,name=delegation_target_id,json=delegationTargetId,proto3" json:"delegation_target_id,omitempty"`
 	// period defines the period the historical rewards apply to.
 	Period uint64 `protobuf:"varint,2,opt,name=period,proto3" json:"period,omitempty"`
-	// rewards defines the historical rewards of a pool.
+	// rewards defines the historical rewards of the delegation target.
 	Rewards HistoricalRewards `protobuf:"bytes,3,opt,name=rewards,proto3" json:"rewards"`
 }
 
-func (m *PoolHistoricalRewardsRecord) Reset()         { *m = PoolHistoricalRewardsRecord{} }
-func (m *PoolHistoricalRewardsRecord) String() string { return proto.CompactTextString(m) }
-func (*PoolHistoricalRewardsRecord) ProtoMessage()    {}
-func (*PoolHistoricalRewardsRecord) Descriptor() ([]byte, []int) {
+func (m *HistoricalRewardsRecord) Reset()         { *m = HistoricalRewardsRecord{} }
+func (m *HistoricalRewardsRecord) String() string { return proto.CompactTextString(m) }
+func (*HistoricalRewardsRecord) ProtoMessage()    {}
+func (*HistoricalRewardsRecord) Descriptor() ([]byte, []int) {
 	return fileDescriptor_95f74caade7824f2, []int{2}
 }
-func (m *PoolHistoricalRewardsRecord) XXX_Unmarshal(b []byte) error {
+func (m *HistoricalRewardsRecord) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *PoolHistoricalRewardsRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *HistoricalRewardsRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_PoolHistoricalRewardsRecord.Marshal(b, m, deterministic)
+		return xxx_messageInfo_HistoricalRewardsRecord.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -146,38 +147,38 @@ func (m *PoolHistoricalRewardsRecord) XXX_Marshal(b []byte, deterministic bool) 
 		return b[:n], nil
 	}
 }
-func (m *PoolHistoricalRewardsRecord) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PoolHistoricalRewardsRecord.Merge(m, src)
+func (m *HistoricalRewardsRecord) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HistoricalRewardsRecord.Merge(m, src)
 }
-func (m *PoolHistoricalRewardsRecord) XXX_Size() int {
+func (m *HistoricalRewardsRecord) XXX_Size() int {
 	return m.Size()
 }
-func (m *PoolHistoricalRewardsRecord) XXX_DiscardUnknown() {
-	xxx_messageInfo_PoolHistoricalRewardsRecord.DiscardUnknown(m)
+func (m *HistoricalRewardsRecord) XXX_DiscardUnknown() {
+	xxx_messageInfo_HistoricalRewardsRecord.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_PoolHistoricalRewardsRecord proto.InternalMessageInfo
+var xxx_messageInfo_HistoricalRewardsRecord proto.InternalMessageInfo
 
-// PoolCurrentRewardsRecord is used for import / export via genesis json.
-type PoolCurrentRewardsRecord struct {
-	// pool_id is the ID of the pool.
-	PoolID uint32 `protobuf:"varint,1,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
-	// rewards defines the current rewards of a pool.
+// CurrentRewardsRecord is used for import / export via genesis json.
+type CurrentRewardsRecord struct {
+	// delegation_target_id is the ID of the delegation target.
+	DelegationTargetID uint32 `protobuf:"varint,1,opt,name=delegation_target_id,json=delegationTargetId,proto3" json:"delegation_target_id,omitempty"`
+	// rewards defines the current rewards of the delegation target.
 	Rewards CurrentRewards `protobuf:"bytes,2,opt,name=rewards,proto3" json:"rewards"`
 }
 
-func (m *PoolCurrentRewardsRecord) Reset()         { *m = PoolCurrentRewardsRecord{} }
-func (m *PoolCurrentRewardsRecord) String() string { return proto.CompactTextString(m) }
-func (*PoolCurrentRewardsRecord) ProtoMessage()    {}
-func (*PoolCurrentRewardsRecord) Descriptor() ([]byte, []int) {
+func (m *CurrentRewardsRecord) Reset()         { *m = CurrentRewardsRecord{} }
+func (m *CurrentRewardsRecord) String() string { return proto.CompactTextString(m) }
+func (*CurrentRewardsRecord) ProtoMessage()    {}
+func (*CurrentRewardsRecord) Descriptor() ([]byte, []int) {
 	return fileDescriptor_95f74caade7824f2, []int{3}
 }
-func (m *PoolCurrentRewardsRecord) XXX_Unmarshal(b []byte) error {
+func (m *CurrentRewardsRecord) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *PoolCurrentRewardsRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *CurrentRewardsRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_PoolCurrentRewardsRecord.Marshal(b, m, deterministic)
+		return xxx_messageInfo_CurrentRewardsRecord.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -187,40 +188,40 @@ func (m *PoolCurrentRewardsRecord) XXX_Marshal(b []byte, deterministic bool) ([]
 		return b[:n], nil
 	}
 }
-func (m *PoolCurrentRewardsRecord) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PoolCurrentRewardsRecord.Merge(m, src)
+func (m *CurrentRewardsRecord) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CurrentRewardsRecord.Merge(m, src)
 }
-func (m *PoolCurrentRewardsRecord) XXX_Size() int {
+func (m *CurrentRewardsRecord) XXX_Size() int {
 	return m.Size()
 }
-func (m *PoolCurrentRewardsRecord) XXX_DiscardUnknown() {
-	xxx_messageInfo_PoolCurrentRewardsRecord.DiscardUnknown(m)
+func (m *CurrentRewardsRecord) XXX_DiscardUnknown() {
+	xxx_messageInfo_CurrentRewardsRecord.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_PoolCurrentRewardsRecord proto.InternalMessageInfo
+var xxx_messageInfo_CurrentRewardsRecord proto.InternalMessageInfo
 
-// PoolDelegatorStartingInfoRecord used for import / export via genesis json.
-type PoolDelegatorStartingInfoRecord struct {
+// DelegatorStartingInfoRecord used for import / export via genesis json.
+type DelegatorStartingInfoRecord struct {
 	// delegator_address is the address of the delegator.
 	DelegatorAddress string `protobuf:"bytes,1,opt,name=delegator_address,json=delegatorAddress,proto3" json:"delegator_address,omitempty"`
-	// pool_id is the ID of the pool.
-	PoolID uint32 `protobuf:"varint,2,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+	// delegation_target_id is the ID of the delegation target.
+	DelegationTargetID uint32 `protobuf:"varint,2,opt,name=delegation_target_id,json=delegationTargetId,proto3" json:"delegation_target_id,omitempty"`
 	// starting_info defines the starting info of a delegator.
 	StartingInfo DelegatorStartingInfo `protobuf:"bytes,3,opt,name=starting_info,json=startingInfo,proto3" json:"starting_info"`
 }
 
-func (m *PoolDelegatorStartingInfoRecord) Reset()         { *m = PoolDelegatorStartingInfoRecord{} }
-func (m *PoolDelegatorStartingInfoRecord) String() string { return proto.CompactTextString(m) }
-func (*PoolDelegatorStartingInfoRecord) ProtoMessage()    {}
-func (*PoolDelegatorStartingInfoRecord) Descriptor() ([]byte, []int) {
+func (m *DelegatorStartingInfoRecord) Reset()         { *m = DelegatorStartingInfoRecord{} }
+func (m *DelegatorStartingInfoRecord) String() string { return proto.CompactTextString(m) }
+func (*DelegatorStartingInfoRecord) ProtoMessage()    {}
+func (*DelegatorStartingInfoRecord) Descriptor() ([]byte, []int) {
 	return fileDescriptor_95f74caade7824f2, []int{4}
 }
-func (m *PoolDelegatorStartingInfoRecord) XXX_Unmarshal(b []byte) error {
+func (m *DelegatorStartingInfoRecord) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *PoolDelegatorStartingInfoRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *DelegatorStartingInfoRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_PoolDelegatorStartingInfoRecord.Marshal(b, m, deterministic)
+		return xxx_messageInfo_DelegatorStartingInfoRecord.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -230,61 +231,20 @@ func (m *PoolDelegatorStartingInfoRecord) XXX_Marshal(b []byte, deterministic bo
 		return b[:n], nil
 	}
 }
-func (m *PoolDelegatorStartingInfoRecord) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PoolDelegatorStartingInfoRecord.Merge(m, src)
+func (m *DelegatorStartingInfoRecord) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DelegatorStartingInfoRecord.Merge(m, src)
 }
-func (m *PoolDelegatorStartingInfoRecord) XXX_Size() int {
+func (m *DelegatorStartingInfoRecord) XXX_Size() int {
 	return m.Size()
 }
-func (m *PoolDelegatorStartingInfoRecord) XXX_DiscardUnknown() {
-	xxx_messageInfo_PoolDelegatorStartingInfoRecord.DiscardUnknown(m)
+func (m *DelegatorStartingInfoRecord) XXX_DiscardUnknown() {
+	xxx_messageInfo_DelegatorStartingInfoRecord.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_PoolDelegatorStartingInfoRecord proto.InternalMessageInfo
-
-// OperatorOutstandingRewardsRecord is used for import/export via genesis json.
-type OperatorOutstandingRewardsRecord struct {
-	// operator_id is the ID of the operator.
-	OperatorID uint32 `protobuf:"varint,1,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
-	// outstanding_rewards represents the outstanding rewards of an operator.
-	OutstandingRewards DecPools `protobuf:"bytes,2,rep,name=outstanding_rewards,json=outstandingRewards,proto3,castrepeated=DecPools" json:"outstanding_rewards"`
-}
-
-func (m *OperatorOutstandingRewardsRecord) Reset()         { *m = OperatorOutstandingRewardsRecord{} }
-func (m *OperatorOutstandingRewardsRecord) String() string { return proto.CompactTextString(m) }
-func (*OperatorOutstandingRewardsRecord) ProtoMessage()    {}
-func (*OperatorOutstandingRewardsRecord) Descriptor() ([]byte, []int) {
-	return fileDescriptor_95f74caade7824f2, []int{5}
-}
-func (m *OperatorOutstandingRewardsRecord) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *OperatorOutstandingRewardsRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_OperatorOutstandingRewardsRecord.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *OperatorOutstandingRewardsRecord) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OperatorOutstandingRewardsRecord.Merge(m, src)
-}
-func (m *OperatorOutstandingRewardsRecord) XXX_Size() int {
-	return m.Size()
-}
-func (m *OperatorOutstandingRewardsRecord) XXX_DiscardUnknown() {
-	xxx_messageInfo_OperatorOutstandingRewardsRecord.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_OperatorOutstandingRewardsRecord proto.InternalMessageInfo
+var xxx_messageInfo_DelegatorStartingInfoRecord proto.InternalMessageInfo
 
 type OperatorAccumulatedCommissionRecord struct {
-	OperatorId uint32 `protobuf:"varint,1,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
+	OperatorID uint32 `protobuf:"varint,1,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
 	// accumulated is the accumulated commission of an operator.
 	Accumulated AccumulatedCommission `protobuf:"bytes,2,opt,name=accumulated,proto3" json:"accumulated"`
 }
@@ -293,7 +253,7 @@ func (m *OperatorAccumulatedCommissionRecord) Reset()         { *m = OperatorAcc
 func (m *OperatorAccumulatedCommissionRecord) String() string { return proto.CompactTextString(m) }
 func (*OperatorAccumulatedCommissionRecord) ProtoMessage()    {}
 func (*OperatorAccumulatedCommissionRecord) Descriptor() ([]byte, []int) {
-	return fileDescriptor_95f74caade7824f2, []int{6}
+	return fileDescriptor_95f74caade7824f2, []int{5}
 }
 func (m *OperatorAccumulatedCommissionRecord) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -322,304 +282,6 @@ func (m *OperatorAccumulatedCommissionRecord) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_OperatorAccumulatedCommissionRecord proto.InternalMessageInfo
 
-// OperatorHistoricalRewardsRecord is used for import / export via genesis
-// json.
-type OperatorHistoricalRewardsRecord struct {
-	// operator_id is the ID of the operator.
-	OperatorID uint32 `protobuf:"varint,1,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
-	// period defines the period the historical rewards apply to.
-	Period uint64 `protobuf:"varint,2,opt,name=period,proto3" json:"period,omitempty"`
-	// rewards defines the historical rewards of an operator.
-	Rewards HistoricalRewards `protobuf:"bytes,3,opt,name=rewards,proto3" json:"rewards"`
-}
-
-func (m *OperatorHistoricalRewardsRecord) Reset()         { *m = OperatorHistoricalRewardsRecord{} }
-func (m *OperatorHistoricalRewardsRecord) String() string { return proto.CompactTextString(m) }
-func (*OperatorHistoricalRewardsRecord) ProtoMessage()    {}
-func (*OperatorHistoricalRewardsRecord) Descriptor() ([]byte, []int) {
-	return fileDescriptor_95f74caade7824f2, []int{7}
-}
-func (m *OperatorHistoricalRewardsRecord) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *OperatorHistoricalRewardsRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_OperatorHistoricalRewardsRecord.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *OperatorHistoricalRewardsRecord) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OperatorHistoricalRewardsRecord.Merge(m, src)
-}
-func (m *OperatorHistoricalRewardsRecord) XXX_Size() int {
-	return m.Size()
-}
-func (m *OperatorHistoricalRewardsRecord) XXX_DiscardUnknown() {
-	xxx_messageInfo_OperatorHistoricalRewardsRecord.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_OperatorHistoricalRewardsRecord proto.InternalMessageInfo
-
-// OperatorCurrentRewardsRecord is used for import / export via genesis json.
-type OperatorCurrentRewardsRecord struct {
-	// operator_id is the ID of the operator.
-	OperatorID uint32 `protobuf:"varint,1,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
-	// rewards defines the current rewards of an operator.
-	Rewards CurrentRewards `protobuf:"bytes,2,opt,name=rewards,proto3" json:"rewards"`
-}
-
-func (m *OperatorCurrentRewardsRecord) Reset()         { *m = OperatorCurrentRewardsRecord{} }
-func (m *OperatorCurrentRewardsRecord) String() string { return proto.CompactTextString(m) }
-func (*OperatorCurrentRewardsRecord) ProtoMessage()    {}
-func (*OperatorCurrentRewardsRecord) Descriptor() ([]byte, []int) {
-	return fileDescriptor_95f74caade7824f2, []int{8}
-}
-func (m *OperatorCurrentRewardsRecord) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *OperatorCurrentRewardsRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_OperatorCurrentRewardsRecord.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *OperatorCurrentRewardsRecord) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OperatorCurrentRewardsRecord.Merge(m, src)
-}
-func (m *OperatorCurrentRewardsRecord) XXX_Size() int {
-	return m.Size()
-}
-func (m *OperatorCurrentRewardsRecord) XXX_DiscardUnknown() {
-	xxx_messageInfo_OperatorCurrentRewardsRecord.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_OperatorCurrentRewardsRecord proto.InternalMessageInfo
-
-// OperatorDelegatorStartingInfoRecord used for import / export via genesis
-// json.
-type OperatorDelegatorStartingInfoRecord struct {
-	// delegator_address is the address of the delegator.
-	DelegatorAddress string `protobuf:"bytes,1,opt,name=delegator_address,json=delegatorAddress,proto3" json:"delegator_address,omitempty"`
-	// operator_id is the ID of the operator.
-	OperatorID uint32 `protobuf:"varint,2,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
-	// starting_info defines the starting info of a delegator.
-	StartingInfo DelegatorStartingInfo `protobuf:"bytes,3,opt,name=starting_info,json=startingInfo,proto3" json:"starting_info"`
-}
-
-func (m *OperatorDelegatorStartingInfoRecord) Reset()         { *m = OperatorDelegatorStartingInfoRecord{} }
-func (m *OperatorDelegatorStartingInfoRecord) String() string { return proto.CompactTextString(m) }
-func (*OperatorDelegatorStartingInfoRecord) ProtoMessage()    {}
-func (*OperatorDelegatorStartingInfoRecord) Descriptor() ([]byte, []int) {
-	return fileDescriptor_95f74caade7824f2, []int{9}
-}
-func (m *OperatorDelegatorStartingInfoRecord) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *OperatorDelegatorStartingInfoRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_OperatorDelegatorStartingInfoRecord.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *OperatorDelegatorStartingInfoRecord) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OperatorDelegatorStartingInfoRecord.Merge(m, src)
-}
-func (m *OperatorDelegatorStartingInfoRecord) XXX_Size() int {
-	return m.Size()
-}
-func (m *OperatorDelegatorStartingInfoRecord) XXX_DiscardUnknown() {
-	xxx_messageInfo_OperatorDelegatorStartingInfoRecord.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_OperatorDelegatorStartingInfoRecord proto.InternalMessageInfo
-
-// ServiceOutstandingRewardsRecord is used for import/export via genesis json.
-type ServiceOutstandingRewardsRecord struct {
-	// service_id is the ID of the service.
-	ServiceID uint32 `protobuf:"varint,1,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
-	// outstanding_rewards represents the outstanding rewards of a service.
-	OutstandingRewards DecPools `protobuf:"bytes,2,rep,name=outstanding_rewards,json=outstandingRewards,proto3,castrepeated=DecPools" json:"outstanding_rewards"`
-}
-
-func (m *ServiceOutstandingRewardsRecord) Reset()         { *m = ServiceOutstandingRewardsRecord{} }
-func (m *ServiceOutstandingRewardsRecord) String() string { return proto.CompactTextString(m) }
-func (*ServiceOutstandingRewardsRecord) ProtoMessage()    {}
-func (*ServiceOutstandingRewardsRecord) Descriptor() ([]byte, []int) {
-	return fileDescriptor_95f74caade7824f2, []int{10}
-}
-func (m *ServiceOutstandingRewardsRecord) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ServiceOutstandingRewardsRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ServiceOutstandingRewardsRecord.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *ServiceOutstandingRewardsRecord) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ServiceOutstandingRewardsRecord.Merge(m, src)
-}
-func (m *ServiceOutstandingRewardsRecord) XXX_Size() int {
-	return m.Size()
-}
-func (m *ServiceOutstandingRewardsRecord) XXX_DiscardUnknown() {
-	xxx_messageInfo_ServiceOutstandingRewardsRecord.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ServiceOutstandingRewardsRecord proto.InternalMessageInfo
-
-// ServiceHistoricalRewardsRecord is used for import / export via genesis
-// json.
-type ServiceHistoricalRewardsRecord struct {
-	// service_id is the ID of the service.
-	ServiceID uint32 `protobuf:"varint,1,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
-	// period defines the period the historical rewards apply to.
-	Period uint64 `protobuf:"varint,2,opt,name=period,proto3" json:"period,omitempty"`
-	// rewards defines the historical rewards of a service.
-	Rewards HistoricalRewards `protobuf:"bytes,3,opt,name=rewards,proto3" json:"rewards"`
-}
-
-func (m *ServiceHistoricalRewardsRecord) Reset()         { *m = ServiceHistoricalRewardsRecord{} }
-func (m *ServiceHistoricalRewardsRecord) String() string { return proto.CompactTextString(m) }
-func (*ServiceHistoricalRewardsRecord) ProtoMessage()    {}
-func (*ServiceHistoricalRewardsRecord) Descriptor() ([]byte, []int) {
-	return fileDescriptor_95f74caade7824f2, []int{11}
-}
-func (m *ServiceHistoricalRewardsRecord) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ServiceHistoricalRewardsRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ServiceHistoricalRewardsRecord.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *ServiceHistoricalRewardsRecord) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ServiceHistoricalRewardsRecord.Merge(m, src)
-}
-func (m *ServiceHistoricalRewardsRecord) XXX_Size() int {
-	return m.Size()
-}
-func (m *ServiceHistoricalRewardsRecord) XXX_DiscardUnknown() {
-	xxx_messageInfo_ServiceHistoricalRewardsRecord.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ServiceHistoricalRewardsRecord proto.InternalMessageInfo
-
-// ServiceCurrentRewardsRecord is used for import / export via genesis json.
-type ServiceCurrentRewardsRecord struct {
-	// service_id is the ID of the service.
-	ServiceID uint32 `protobuf:"varint,1,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
-	// rewards defines the current rewards of a service.
-	Rewards CurrentRewards `protobuf:"bytes,2,opt,name=rewards,proto3" json:"rewards"`
-}
-
-func (m *ServiceCurrentRewardsRecord) Reset()         { *m = ServiceCurrentRewardsRecord{} }
-func (m *ServiceCurrentRewardsRecord) String() string { return proto.CompactTextString(m) }
-func (*ServiceCurrentRewardsRecord) ProtoMessage()    {}
-func (*ServiceCurrentRewardsRecord) Descriptor() ([]byte, []int) {
-	return fileDescriptor_95f74caade7824f2, []int{12}
-}
-func (m *ServiceCurrentRewardsRecord) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ServiceCurrentRewardsRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ServiceCurrentRewardsRecord.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *ServiceCurrentRewardsRecord) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ServiceCurrentRewardsRecord.Merge(m, src)
-}
-func (m *ServiceCurrentRewardsRecord) XXX_Size() int {
-	return m.Size()
-}
-func (m *ServiceCurrentRewardsRecord) XXX_DiscardUnknown() {
-	xxx_messageInfo_ServiceCurrentRewardsRecord.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ServiceCurrentRewardsRecord proto.InternalMessageInfo
-
-// ServiceDelegatorStartingInfoRecord used for import / export via genesis json.
-type ServiceDelegatorStartingInfoRecord struct {
-	// delegator_address is the address of the delegator.
-	DelegatorAddress string `protobuf:"bytes,1,opt,name=delegator_address,json=delegatorAddress,proto3" json:"delegator_address,omitempty"`
-	// service_id is the ID of the service.
-	ServiceID uint32 `protobuf:"varint,2,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
-	// starting_info defines the starting info of a delegator.
-	StartingInfo DelegatorStartingInfo `protobuf:"bytes,3,opt,name=starting_info,json=startingInfo,proto3" json:"starting_info"`
-}
-
-func (m *ServiceDelegatorStartingInfoRecord) Reset()         { *m = ServiceDelegatorStartingInfoRecord{} }
-func (m *ServiceDelegatorStartingInfoRecord) String() string { return proto.CompactTextString(m) }
-func (*ServiceDelegatorStartingInfoRecord) ProtoMessage()    {}
-func (*ServiceDelegatorStartingInfoRecord) Descriptor() ([]byte, []int) {
-	return fileDescriptor_95f74caade7824f2, []int{13}
-}
-func (m *ServiceDelegatorStartingInfoRecord) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ServiceDelegatorStartingInfoRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ServiceDelegatorStartingInfoRecord.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *ServiceDelegatorStartingInfoRecord) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ServiceDelegatorStartingInfoRecord.Merge(m, src)
-}
-func (m *ServiceDelegatorStartingInfoRecord) XXX_Size() int {
-	return m.Size()
-}
-func (m *ServiceDelegatorStartingInfoRecord) XXX_DiscardUnknown() {
-	xxx_messageInfo_ServiceDelegatorStartingInfoRecord.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ServiceDelegatorStartingInfoRecord proto.InternalMessageInfo
-
 // GenesisState defines the module's genesis state.
 type GenesisState struct {
 	// Params defines the parameters of the module.
@@ -634,49 +296,49 @@ type GenesisState struct {
 	DelegatorWithdrawInfos []DelegatorWithdrawInfo `protobuf:"bytes,5,rep,name=delegator_withdraw_infos,json=delegatorWithdrawInfos,proto3" json:"delegator_withdraw_infos"`
 	// pool_outstanding_rewards defines the outstanding rewards of all pools at
 	// genesis.
-	PoolOutstandingRewards []PoolOutstandingRewardsRecord `protobuf:"bytes,6,rep,name=pool_outstanding_rewards,json=poolOutstandingRewards,proto3" json:"pool_outstanding_rewards"`
+	PoolOutstandingRewards []OutstandingRewardsRecord `protobuf:"bytes,6,rep,name=pool_outstanding_rewards,json=poolOutstandingRewards,proto3" json:"pool_outstanding_rewards"`
 	// pool_historical_rewards defines the historical rewards of all pools at
 	// genesis.
-	PoolHistoricalRewards []PoolHistoricalRewardsRecord `protobuf:"bytes,7,rep,name=pool_historical_rewards,json=poolHistoricalRewards,proto3" json:"pool_historical_rewards"`
+	PoolHistoricalRewards []HistoricalRewardsRecord `protobuf:"bytes,7,rep,name=pool_historical_rewards,json=poolHistoricalRewards,proto3" json:"pool_historical_rewards"`
 	// pool_current_rewards defines the current rewards of all pools at genesis.
-	PoolCurrentRewards []PoolCurrentRewardsRecord `protobuf:"bytes,8,rep,name=pool_current_rewards,json=poolCurrentRewards,proto3" json:"pool_current_rewards"`
+	PoolCurrentRewards []CurrentRewardsRecord `protobuf:"bytes,8,rep,name=pool_current_rewards,json=poolCurrentRewards,proto3" json:"pool_current_rewards"`
 	// pool_delegator_starting_infos defines the delegator starting infos of all
 	// pools at genesis.
-	PoolDelegatorStartingInfos []PoolDelegatorStartingInfoRecord `protobuf:"bytes,9,rep,name=pool_delegator_starting_infos,json=poolDelegatorStartingInfos,proto3" json:"pool_delegator_starting_infos"`
+	PoolDelegatorStartingInfos []DelegatorStartingInfoRecord `protobuf:"bytes,9,rep,name=pool_delegator_starting_infos,json=poolDelegatorStartingInfos,proto3" json:"pool_delegator_starting_infos"`
 	// operator_outstanding_rewards defines the outstanding rewards of all
 	// operators at genesis.
-	OperatorOutstandingRewards []OperatorOutstandingRewardsRecord `protobuf:"bytes,10,rep,name=operator_outstanding_rewards,json=operatorOutstandingRewards,proto3" json:"operator_outstanding_rewards"`
+	OperatorOutstandingRewards []OutstandingRewardsRecord `protobuf:"bytes,10,rep,name=operator_outstanding_rewards,json=operatorOutstandingRewards,proto3" json:"operator_outstanding_rewards"`
 	// operator_accumulated_commissions defines the accumulated commissions of all
 	// operators at genesis.
 	OperatorAccumulatedCommissions []OperatorAccumulatedCommissionRecord `protobuf:"bytes,11,rep,name=operator_accumulated_commissions,json=operatorAccumulatedCommissions,proto3" json:"operator_accumulated_commissions"`
 	// operator_historical_rewards defines the historical rewards of all operators
 	// at genesis.
-	OperatorHistoricalRewards []OperatorHistoricalRewardsRecord `protobuf:"bytes,12,rep,name=operator_historical_rewards,json=operatorHistoricalRewards,proto3" json:"operator_historical_rewards"`
+	OperatorHistoricalRewards []HistoricalRewardsRecord `protobuf:"bytes,12,rep,name=operator_historical_rewards,json=operatorHistoricalRewards,proto3" json:"operator_historical_rewards"`
 	// operator_current_rewards defines the current rewards of all operators at
 	// genesis.
-	OperatorCurrentRewards []OperatorCurrentRewardsRecord `protobuf:"bytes,13,rep,name=operator_current_rewards,json=operatorCurrentRewards,proto3" json:"operator_current_rewards"`
+	OperatorCurrentRewards []CurrentRewardsRecord `protobuf:"bytes,13,rep,name=operator_current_rewards,json=operatorCurrentRewards,proto3" json:"operator_current_rewards"`
 	// operator_delegator_starting_infos defines the delegator starting infos of
 	// all operators at genesis.
-	OperatorDelegatorStartingInfos []OperatorDelegatorStartingInfoRecord `protobuf:"bytes,14,rep,name=operator_delegator_starting_infos,json=operatorDelegatorStartingInfos,proto3" json:"operator_delegator_starting_infos"`
+	OperatorDelegatorStartingInfos []DelegatorStartingInfoRecord `protobuf:"bytes,14,rep,name=operator_delegator_starting_infos,json=operatorDelegatorStartingInfos,proto3" json:"operator_delegator_starting_infos"`
 	// service_outstanding_rewards defines the outstanding rewards of all services
 	// at genesis.
-	ServiceOutstandingRewards []ServiceOutstandingRewardsRecord `protobuf:"bytes,15,rep,name=service_outstanding_rewards,json=serviceOutstandingRewards,proto3" json:"service_outstanding_rewards"`
+	ServiceOutstandingRewards []OutstandingRewardsRecord `protobuf:"bytes,15,rep,name=service_outstanding_rewards,json=serviceOutstandingRewards,proto3" json:"service_outstanding_rewards"`
 	// service_historical_rewards defines the historical rewards of all services
 	// at genesis.
-	ServiceHistoricalRewards []ServiceHistoricalRewardsRecord `protobuf:"bytes,16,rep,name=service_historical_rewards,json=serviceHistoricalRewards,proto3" json:"service_historical_rewards"`
+	ServiceHistoricalRewards []HistoricalRewardsRecord `protobuf:"bytes,16,rep,name=service_historical_rewards,json=serviceHistoricalRewards,proto3" json:"service_historical_rewards"`
 	// service_current_rewards defines the current rewards of all services at
 	// genesis.
-	ServiceCurrentRewards []ServiceCurrentRewardsRecord `protobuf:"bytes,17,rep,name=service_current_rewards,json=serviceCurrentRewards,proto3" json:"service_current_rewards"`
+	ServiceCurrentRewards []CurrentRewardsRecord `protobuf:"bytes,17,rep,name=service_current_rewards,json=serviceCurrentRewards,proto3" json:"service_current_rewards"`
 	// service_delegator_starting_infos defines the delegator starting infos of
 	// all services at genesis.
-	ServiceDelegatorStartingInfos []ServiceDelegatorStartingInfoRecord `protobuf:"bytes,18,rep,name=service_delegator_starting_infos,json=serviceDelegatorStartingInfos,proto3" json:"service_delegator_starting_infos"`
+	ServiceDelegatorStartingInfos []DelegatorStartingInfoRecord `protobuf:"bytes,18,rep,name=service_delegator_starting_infos,json=serviceDelegatorStartingInfos,proto3" json:"service_delegator_starting_infos"`
 }
 
 func (m *GenesisState) Reset()         { *m = GenesisState{} }
 func (m *GenesisState) String() string { return proto.CompactTextString(m) }
 func (*GenesisState) ProtoMessage()    {}
 func (*GenesisState) Descriptor() ([]byte, []int) {
-	return fileDescriptor_95f74caade7824f2, []int{14}
+	return fileDescriptor_95f74caade7824f2, []int{6}
 }
 func (m *GenesisState) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -740,35 +402,35 @@ func (m *GenesisState) GetDelegatorWithdrawInfos() []DelegatorWithdrawInfo {
 	return nil
 }
 
-func (m *GenesisState) GetPoolOutstandingRewards() []PoolOutstandingRewardsRecord {
+func (m *GenesisState) GetPoolOutstandingRewards() []OutstandingRewardsRecord {
 	if m != nil {
 		return m.PoolOutstandingRewards
 	}
 	return nil
 }
 
-func (m *GenesisState) GetPoolHistoricalRewards() []PoolHistoricalRewardsRecord {
+func (m *GenesisState) GetPoolHistoricalRewards() []HistoricalRewardsRecord {
 	if m != nil {
 		return m.PoolHistoricalRewards
 	}
 	return nil
 }
 
-func (m *GenesisState) GetPoolCurrentRewards() []PoolCurrentRewardsRecord {
+func (m *GenesisState) GetPoolCurrentRewards() []CurrentRewardsRecord {
 	if m != nil {
 		return m.PoolCurrentRewards
 	}
 	return nil
 }
 
-func (m *GenesisState) GetPoolDelegatorStartingInfos() []PoolDelegatorStartingInfoRecord {
+func (m *GenesisState) GetPoolDelegatorStartingInfos() []DelegatorStartingInfoRecord {
 	if m != nil {
 		return m.PoolDelegatorStartingInfos
 	}
 	return nil
 }
 
-func (m *GenesisState) GetOperatorOutstandingRewards() []OperatorOutstandingRewardsRecord {
+func (m *GenesisState) GetOperatorOutstandingRewards() []OutstandingRewardsRecord {
 	if m != nil {
 		return m.OperatorOutstandingRewards
 	}
@@ -782,49 +444,49 @@ func (m *GenesisState) GetOperatorAccumulatedCommissions() []OperatorAccumulated
 	return nil
 }
 
-func (m *GenesisState) GetOperatorHistoricalRewards() []OperatorHistoricalRewardsRecord {
+func (m *GenesisState) GetOperatorHistoricalRewards() []HistoricalRewardsRecord {
 	if m != nil {
 		return m.OperatorHistoricalRewards
 	}
 	return nil
 }
 
-func (m *GenesisState) GetOperatorCurrentRewards() []OperatorCurrentRewardsRecord {
+func (m *GenesisState) GetOperatorCurrentRewards() []CurrentRewardsRecord {
 	if m != nil {
 		return m.OperatorCurrentRewards
 	}
 	return nil
 }
 
-func (m *GenesisState) GetOperatorDelegatorStartingInfos() []OperatorDelegatorStartingInfoRecord {
+func (m *GenesisState) GetOperatorDelegatorStartingInfos() []DelegatorStartingInfoRecord {
 	if m != nil {
 		return m.OperatorDelegatorStartingInfos
 	}
 	return nil
 }
 
-func (m *GenesisState) GetServiceOutstandingRewards() []ServiceOutstandingRewardsRecord {
+func (m *GenesisState) GetServiceOutstandingRewards() []OutstandingRewardsRecord {
 	if m != nil {
 		return m.ServiceOutstandingRewards
 	}
 	return nil
 }
 
-func (m *GenesisState) GetServiceHistoricalRewards() []ServiceHistoricalRewardsRecord {
+func (m *GenesisState) GetServiceHistoricalRewards() []HistoricalRewardsRecord {
 	if m != nil {
 		return m.ServiceHistoricalRewards
 	}
 	return nil
 }
 
-func (m *GenesisState) GetServiceCurrentRewards() []ServiceCurrentRewardsRecord {
+func (m *GenesisState) GetServiceCurrentRewards() []CurrentRewardsRecord {
 	if m != nil {
 		return m.ServiceCurrentRewards
 	}
 	return nil
 }
 
-func (m *GenesisState) GetServiceDelegatorStartingInfos() []ServiceDelegatorStartingInfoRecord {
+func (m *GenesisState) GetServiceDelegatorStartingInfos() []DelegatorStartingInfoRecord {
 	if m != nil {
 		return m.ServiceDelegatorStartingInfos
 	}
@@ -833,105 +495,86 @@ func (m *GenesisState) GetServiceDelegatorStartingInfos() []ServiceDelegatorStar
 
 func init() {
 	proto.RegisterType((*DelegatorWithdrawInfo)(nil), "milkyway.rewards.v1.DelegatorWithdrawInfo")
-	proto.RegisterType((*PoolOutstandingRewardsRecord)(nil), "milkyway.rewards.v1.PoolOutstandingRewardsRecord")
-	proto.RegisterType((*PoolHistoricalRewardsRecord)(nil), "milkyway.rewards.v1.PoolHistoricalRewardsRecord")
-	proto.RegisterType((*PoolCurrentRewardsRecord)(nil), "milkyway.rewards.v1.PoolCurrentRewardsRecord")
-	proto.RegisterType((*PoolDelegatorStartingInfoRecord)(nil), "milkyway.rewards.v1.PoolDelegatorStartingInfoRecord")
-	proto.RegisterType((*OperatorOutstandingRewardsRecord)(nil), "milkyway.rewards.v1.OperatorOutstandingRewardsRecord")
+	proto.RegisterType((*OutstandingRewardsRecord)(nil), "milkyway.rewards.v1.OutstandingRewardsRecord")
+	proto.RegisterType((*HistoricalRewardsRecord)(nil), "milkyway.rewards.v1.HistoricalRewardsRecord")
+	proto.RegisterType((*CurrentRewardsRecord)(nil), "milkyway.rewards.v1.CurrentRewardsRecord")
+	proto.RegisterType((*DelegatorStartingInfoRecord)(nil), "milkyway.rewards.v1.DelegatorStartingInfoRecord")
 	proto.RegisterType((*OperatorAccumulatedCommissionRecord)(nil), "milkyway.rewards.v1.OperatorAccumulatedCommissionRecord")
-	proto.RegisterType((*OperatorHistoricalRewardsRecord)(nil), "milkyway.rewards.v1.OperatorHistoricalRewardsRecord")
-	proto.RegisterType((*OperatorCurrentRewardsRecord)(nil), "milkyway.rewards.v1.OperatorCurrentRewardsRecord")
-	proto.RegisterType((*OperatorDelegatorStartingInfoRecord)(nil), "milkyway.rewards.v1.OperatorDelegatorStartingInfoRecord")
-	proto.RegisterType((*ServiceOutstandingRewardsRecord)(nil), "milkyway.rewards.v1.ServiceOutstandingRewardsRecord")
-	proto.RegisterType((*ServiceHistoricalRewardsRecord)(nil), "milkyway.rewards.v1.ServiceHistoricalRewardsRecord")
-	proto.RegisterType((*ServiceCurrentRewardsRecord)(nil), "milkyway.rewards.v1.ServiceCurrentRewardsRecord")
-	proto.RegisterType((*ServiceDelegatorStartingInfoRecord)(nil), "milkyway.rewards.v1.ServiceDelegatorStartingInfoRecord")
 	proto.RegisterType((*GenesisState)(nil), "milkyway.rewards.v1.GenesisState")
 }
 
 func init() { proto.RegisterFile("milkyway/rewards/v1/genesis.proto", fileDescriptor_95f74caade7824f2) }
 
 var fileDescriptor_95f74caade7824f2 = []byte{
-	// 1253 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x58, 0xcf, 0x6f, 0x1b, 0x45,
-	0x14, 0xf6, 0xb8, 0xc1, 0x6d, 0x9e, 0x93, 0x36, 0xd9, 0x26, 0xc5, 0xf9, 0x51, 0xaf, 0x9b, 0x48,
-	0x28, 0xaa, 0x88, 0x17, 0xa7, 0x20, 0x7e, 0xdc, 0xe2, 0x18, 0xa8, 0x55, 0x89, 0x46, 0x0e, 0x52,
-	0xa5, 0x5e, 0xac, 0xf1, 0xee, 0xc4, 0x59, 0x58, 0xef, 0xac, 0x76, 0xd6, 0xf9, 0x21, 0x21, 0x55,
-	0x82, 0x0b, 0x12, 0x02, 0x55, 0xe2, 0x0f, 0xa0, 0x12, 0x17, 0x40, 0x42, 0xa2, 0x82, 0x2b, 0x42,
-	0x88, 0x4b, 0x8f, 0x15, 0x27, 0x4e, 0x29, 0x72, 0x0e, 0x70, 0xe7, 0x0f, 0x00, 0xed, 0xec, 0xec,
-	0x7a, 0x9d, 0xcc, 0xae, 0x93, 0x8a, 0xba, 0x97, 0x28, 0x33, 0xf3, 0xcd, 0x7c, 0xdf, 0xdb, 0xf7,
-	0xbe, 0xd9, 0xb7, 0x86, 0x6b, 0x1d, 0xd3, 0xfa, 0xf0, 0x60, 0x0f, 0x1f, 0x68, 0x2e, 0xd9, 0xc3,
-	0xae, 0xc1, 0xb4, 0xdd, 0x8a, 0xd6, 0x26, 0x36, 0x61, 0x26, 0x2b, 0x3b, 0x2e, 0xf5, 0xa8, 0x72,
-	0x39, 0x84, 0x94, 0x05, 0xa4, 0xbc, 0x5b, 0x99, 0x9f, 0xc6, 0x1d, 0xd3, 0xa6, 0x1a, 0xff, 0x1b,
-	0xe0, 0xe6, 0xe7, 0x74, 0xca, 0x3a, 0x94, 0x35, 0xf9, 0x48, 0x0b, 0x06, 0x62, 0xa9, 0x18, 0x8c,
-	0xb4, 0x16, 0x66, 0x44, 0xdb, 0xad, 0xb4, 0x88, 0x87, 0x2b, 0x9a, 0x4e, 0x4d, 0x5b, 0xac, 0xab,
-	0x6d, 0x4a, 0xdb, 0x16, 0xd1, 0xf8, 0xa8, 0xd5, 0xdd, 0xd6, 0x3c, 0xb3, 0x43, 0x98, 0x87, 0x3b,
-	0x8e, 0x00, 0xcc, 0xb4, 0x69, 0x9b, 0x06, 0x07, 0xfb, 0xff, 0x89, 0xd9, 0x92, 0x4c, 0xbc, 0x83,
-	0x5d, 0xdc, 0x61, 0x69, 0x88, 0x0e, 0x35, 0x88, 0x25, 0x10, 0x4b, 0xdf, 0x23, 0x98, 0xad, 0x11,
-	0x8b, 0xb4, 0xb1, 0x47, 0xdd, 0x3b, 0xa6, 0xb7, 0x63, 0xb8, 0x78, 0xaf, 0x6e, 0x6f, 0x53, 0xe5,
-	0x6d, 0x98, 0x36, 0xc2, 0x85, 0x26, 0x36, 0x0c, 0x97, 0x30, 0x56, 0x40, 0x25, 0xb4, 0x32, 0x5e,
-	0x2d, 0xfc, 0xfe, 0xd3, 0xea, 0x8c, 0x88, 0x70, 0x3d, 0x58, 0xd9, 0xf2, 0x5c, 0xd3, 0x6e, 0x37,
-	0xa6, 0xa2, 0x2d, 0x62, 0x5e, 0xd9, 0x80, 0xa9, 0x3d, 0x71, 0x6c, 0x74, 0x4a, 0x76, 0xc8, 0x29,
-	0x97, 0xc2, 0x1d, 0x62, 0xfa, 0xad, 0x0b, 0x9f, 0x3e, 0x50, 0x33, 0x7f, 0x3f, 0x50, 0x33, 0x4b,
-	0x3f, 0x22, 0x58, 0xdc, 0xa4, 0xd4, 0xba, 0xdd, 0xf5, 0x98, 0x87, 0x6d, 0xc3, 0x87, 0x07, 0xa1,
-	0x35, 0x88, 0x4e, 0x5d, 0x43, 0x59, 0x86, 0xf3, 0x0e, 0xa5, 0x56, 0xd3, 0x34, 0xb8, 0xd8, 0xc9,
-	0x2a, 0xf4, 0x0e, 0xd5, 0x9c, 0xbf, 0xa5, 0x5e, 0x6b, 0xe4, 0xfc, 0xa5, 0xba, 0xa1, 0x18, 0x70,
-	0x99, 0xf6, 0x0f, 0x68, 0x8a, 0x87, 0x53, 0xc8, 0x96, 0xce, 0xad, 0xe4, 0xd7, 0x16, 0xcb, 0x92,
-	0x8c, 0x97, 0x6b, 0x44, 0xf7, 0x0f, 0xa9, 0xce, 0x3e, 0x3a, 0x54, 0x33, 0xdf, 0x3d, 0x51, 0x2f,
-	0x88, 0x09, 0xf6, 0xcd, 0x5f, 0x3f, 0x5c, 0x47, 0x0d, 0x85, 0x9e, 0x10, 0x14, 0x53, 0xfd, 0x10,
-	0xc1, 0x82, 0x0f, 0xbe, 0x69, 0x32, 0x8f, 0xba, 0xa6, 0x8e, 0xad, 0xa7, 0x10, 0x7d, 0x05, 0x72,
-	0x0e, 0x71, 0x4d, 0x6a, 0xf0, 0xe7, 0x37, 0xd6, 0x10, 0x23, 0xe5, 0x16, 0x9c, 0x0f, 0x03, 0x38,
-	0x57, 0x42, 0x2b, 0xf9, 0xb5, 0x97, 0xa4, 0x01, 0x9c, 0xe0, 0xae, 0x8e, 0xfb, 0xa1, 0x04, 0xf2,
-	0xc3, 0x13, 0x62, 0x9a, 0xbf, 0x44, 0x50, 0xf0, 0x15, 0x6c, 0x74, 0x5d, 0x97, 0xd8, 0xde, 0x53,
-	0x08, 0xbe, 0xd9, 0x17, 0x96, 0xe5, 0xc2, 0x96, 0xa5, 0xc2, 0x06, 0x09, 0x86, 0xa8, 0xfa, 0x07,
-	0x81, 0xea, 0xd3, 0x44, 0x35, 0xbb, 0xe5, 0x61, 0xd7, 0x33, 0xed, 0xb6, 0x5f, 0xb3, 0x42, 0xdc,
-	0xff, 0x54, 0xb9, 0xb1, 0x18, 0xb3, 0x89, 0x31, 0xde, 0x85, 0x49, 0x26, 0x14, 0x34, 0x4d, 0x7b,
-	0x9b, 0x8a, 0x14, 0x5c, 0x4f, 0xa8, 0x21, 0x89, 0xe8, 0x78, 0xc0, 0x13, 0x2c, 0xb6, 0x10, 0x8b,
-	0xfa, 0x37, 0x04, 0xa5, 0xdb, 0x0e, 0x71, 0xfd, 0xbd, 0x89, 0x95, 0xaf, 0x41, 0x9e, 0x0a, 0x4c,
-	0x3f, 0x2f, 0x17, 0x7b, 0x87, 0x2a, 0x84, 0x5b, 0xeb, 0xb5, 0x06, 0x84, 0x90, 0xe7, 0xe0, 0x82,
-	0x6f, 0x11, 0x2c, 0x87, 0x52, 0xd6, 0x75, 0xbd, 0xdb, 0xe9, 0x5a, 0xd8, 0x23, 0xc6, 0x06, 0xed,
-	0x74, 0x4c, 0xc6, 0x4c, 0x6a, 0x8b, 0x40, 0x54, 0x49, 0x20, 0x03, 0xc2, 0xef, 0x40, 0x1e, 0xf7,
-	0xf7, 0x8b, 0xe2, 0x92, 0x3f, 0x72, 0x29, 0x4f, 0xfc, 0x91, 0xc7, 0x4f, 0x8a, 0x69, 0xfd, 0x15,
-	0x81, 0x1a, 0x6a, 0x4d, 0x72, 0xed, 0x99, 0x1f, 0xf8, 0x88, 0x1d, 0xfc, 0x35, 0x82, 0xc5, 0x50,
-	0x89, 0xd4, 0xc5, 0x67, 0x0e, 0xe0, 0x59, 0x38, 0xfa, 0x93, 0x6c, 0xbf, 0x2a, 0x46, 0xe0, 0xea,
-	0x63, 0x31, 0x67, 0x87, 0xc6, 0x3c, 0x1a, 0x87, 0xff, 0x82, 0x40, 0xdd, 0x22, 0xee, 0xae, 0xa9,
-	0x93, 0x44, 0x83, 0xbf, 0x0c, 0xc0, 0x02, 0x48, 0x3f, 0x5b, 0x93, 0xbd, 0x43, 0x75, 0x5c, 0x6c,
-	0xac, 0xd7, 0x1a, 0xe3, 0x02, 0xf0, 0x1c, 0xdc, 0xfd, 0x33, 0x82, 0xa2, 0x10, 0x92, 0x64, 0x98,
-	0xb3, 0x05, 0x30, 0x62, 0xb7, 0x7c, 0x85, 0x60, 0x41, 0xe8, 0x90, 0x9a, 0xe5, 0x6c, 0xe2, 0x9f,
-	0x85, 0x53, 0xfe, 0x45, 0xb0, 0x24, 0xc8, 0x46, 0x60, 0x94, 0xc1, 0x78, 0xb3, 0x43, 0xe2, 0x1d,
-	0x8d, 0x4b, 0x1e, 0x4e, 0xc1, 0xc4, 0xbb, 0x41, 0x77, 0xbe, 0xe5, 0x61, 0x8f, 0x28, 0x6f, 0x42,
-	0x2e, 0x68, 0x78, 0x79, 0x80, 0xf9, 0xb5, 0x05, 0x29, 0xdf, 0x26, 0x87, 0x54, 0xc7, 0x7c, 0x82,
-	0x86, 0xd8, 0xa0, 0xbc, 0x03, 0x33, 0x36, 0xd9, 0xf7, 0x42, 0x63, 0x34, 0x1d, 0x0b, 0xdb, 0x61,
-	0xa4, 0x63, 0xd5, 0xd9, 0xde, 0xa1, 0x3a, 0xfd, 0x1e, 0xd9, 0x0f, 0x53, 0xb3, 0x69, 0x61, 0xbb,
-	0x5e, 0x6b, 0x4c, 0xdb, 0xc7, 0xa6, 0xfc, 0x72, 0x9c, 0x8c, 0x1f, 0xe1, 0x17, 0xa5, 0xef, 0xb0,
-	0x92, 0x54, 0x49, 0x6c, 0xab, 0x90, 0x33, 0xe1, 0xf6, 0xa7, 0x98, 0x82, 0x61, 0xd1, 0xc2, 0xac,
-	0x2f, 0x0a, 0x5b, 0x16, 0xd5, 0xb1, 0x67, 0x52, 0xbb, 0xe9, 0x7f, 0x13, 0x14, 0xc6, 0x78, 0x94,
-	0xf3, 0xe5, 0xe0, 0x83, 0xa1, 0x1c, 0x7e, 0x30, 0x94, 0xdf, 0x0f, 0x3f, 0x18, 0xaa, 0x63, 0xf7,
-	0x9f, 0xa8, 0xa8, 0x31, 0xe7, 0x9f, 0x22, 0xc8, 0xd6, 0xa3, 0x33, 0x7c, 0x94, 0x42, 0xa1, 0xd0,
-	0x2f, 0x8f, 0xa8, 0x35, 0xf7, 0x73, 0xc6, 0x0a, 0x2f, 0x70, 0xe9, 0x43, 0x92, 0x16, 0xff, 0x4a,
-	0x88, 0x27, 0xed, 0x8a, 0x21, 0x43, 0x30, 0x65, 0x17, 0x0a, 0xbc, 0x8f, 0x92, 0xdd, 0x46, 0x39,
-	0x4e, 0x58, 0x91, 0x67, 0x2d, 0xa5, 0xcd, 0x1f, 0xe0, 0x75, 0xa4, 0x40, 0x85, 0xc1, 0x8b, 0x9c,
-	0x77, 0x27, 0xba, 0x08, 0x22, 0xda, 0xf3, 0x9c, 0xf6, 0x95, 0x44, 0xda, 0x84, 0x0b, 0x2c, 0xce,
-	0x3a, 0xeb, 0xc8, 0x70, 0xca, 0x07, 0x30, 0xc3, 0x49, 0xf5, 0xc0, 0xd8, 0x11, 0xe3, 0x05, 0xce,
-	0xb8, 0x9a, 0xc8, 0x28, 0xbb, 0x72, 0xe2, 0x74, 0x8a, 0x73, 0x02, 0xa4, 0x7c, 0x8c, 0xe0, 0x2a,
-	0x27, 0xeb, 0xe7, 0x73, 0xc0, 0x83, 0xac, 0x30, 0xce, 0x59, 0x5f, 0x4d, 0x64, 0x4d, 0xb9, 0x46,
-	0xe2, 0xe4, 0xf3, 0x4e, 0x12, 0x96, 0x8b, 0x58, 0x8c, 0x5e, 0xa8, 0xb2, 0x14, 0x03, 0xd7, 0xf0,
-	0x9a, 0x54, 0xc3, 0xb0, 0x9e, 0x76, 0x40, 0x04, 0x4d, 0x04, 0x2b, 0x9f, 0x23, 0x28, 0x45, 0x22,
-	0x62, 0x0d, 0x5d, 0x53, 0x8f, 0x7a, 0x3e, 0x56, 0xc8, 0x73, 0x21, 0x6f, 0xa4, 0x0a, 0x49, 0x69,
-	0x4b, 0xe3, 0x5a, 0x8a, 0x34, 0x0d, 0xcf, 0x94, 0x7b, 0xb0, 0x10, 0xc9, 0x91, 0x94, 0xdf, 0x44,
-	0x4a, 0x5a, 0x86, 0x34, 0x9d, 0x71, 0x15, 0x73, 0x34, 0x09, 0xeb, 0x7b, 0x2e, 0x12, 0x70, 0xbc,
-	0x14, 0x27, 0x53, 0x3c, 0x97, 0xd6, 0x2e, 0x0e, 0x78, 0x8e, 0x4a, 0x81, 0xca, 0x17, 0x08, 0xae,
-	0x45, 0xc4, 0x89, 0x65, 0x79, 0xf1, 0x14, 0x99, 0x38, 0x65, 0x69, 0x46, 0x99, 0x48, 0x28, 0xcf,
-	0x7b, 0xb0, 0x10, 0xbe, 0xc5, 0x64, 0xc5, 0x79, 0x29, 0x25, 0x13, 0x43, 0xda, 0xb1, 0x81, 0x4c,
-	0xb0, 0x24, 0xac, 0xf2, 0x11, 0xcc, 0x87, 0x02, 0x24, 0x95, 0x30, 0xc5, 0xf9, 0x6f, 0xa4, 0xf1,
-	0x9f, 0xa2, 0x10, 0x0a, 0x2c, 0x01, 0xea, 0xdf, 0x81, 0x21, 0xfb, 0xf1, 0x32, 0x98, 0x4e, 0xb9,
-	0x03, 0x53, 0xfa, 0xa0, 0x81, 0x3b, 0x90, 0xc9, 0x70, 0xca, 0x67, 0x08, 0x4a, 0x21, 0x6b, 0x62,
-	0x0d, 0x28, 0x9c, 0xfe, 0xf5, 0x34, 0xfa, 0x53, 0x96, 0xc0, 0x55, 0x96, 0x02, 0x67, 0xd5, 0x5b,
-	0x8f, 0x7a, 0x45, 0xf4, 0xb8, 0x57, 0x44, 0x7f, 0xf6, 0x8a, 0xe8, 0xfe, 0x51, 0x31, 0xf3, 0xf8,
-	0xa8, 0x98, 0xf9, 0xe3, 0xa8, 0x98, 0xb9, 0x5b, 0x69, 0x9b, 0xde, 0x4e, 0xb7, 0x55, 0xd6, 0x69,
-	0x47, 0x0b, 0x65, 0xac, 0x5a, 0xb8, 0xc5, 0xa2, 0x91, 0xb6, 0x1f, 0xfd, 0x70, 0xe6, 0x1d, 0x38,
-	0x84, 0xb5, 0x72, 0xfc, 0x8d, 0x7b, 0xe3, 0xbf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x46, 0x04, 0x5a,
-	0x8a, 0x38, 0x14, 0x00, 0x00,
+	// 1080 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x57, 0x41, 0x6f, 0x1b, 0x45,
+	0x18, 0xf5, 0xa6, 0x26, 0x6d, 0xc6, 0x49, 0x13, 0x4f, 0xed, 0x64, 0xe3, 0xa4, 0xb6, 0xdb, 0x4a,
+	0x28, 0x54, 0xc4, 0x8b, 0xc3, 0x05, 0xb8, 0xd5, 0x31, 0x10, 0xab, 0x12, 0x8d, 0x9c, 0x4a, 0x95,
+	0x7a, 0xb1, 0xc6, 0xbb, 0x93, 0xcd, 0x8a, 0xdd, 0x1d, 0x6b, 0x66, 0x1c, 0x27, 0x1c, 0x38, 0x21,
+	0xc4, 0x05, 0xa9, 0x07, 0x7e, 0x40, 0x8f, 0x08, 0x09, 0x89, 0x43, 0x2f, 0xfc, 0x83, 0x1e, 0xab,
+	0x8a, 0x03, 0xa7, 0x14, 0x39, 0x07, 0xf8, 0x19, 0x68, 0x67, 0x67, 0xd6, 0x1b, 0x7b, 0xdc, 0x04,
+	0x99, 0x5e, 0xa2, 0xec, 0xcc, 0xb7, 0xef, 0xbd, 0x6f, 0xde, 0xdb, 0x6f, 0x64, 0x70, 0x27, 0xf0,
+	0xfc, 0xaf, 0x4f, 0x07, 0xe8, 0xd4, 0xa2, 0x78, 0x80, 0xa8, 0xc3, 0xac, 0xe3, 0xba, 0xe5, 0xe2,
+	0x10, 0x33, 0x8f, 0xd5, 0x7a, 0x94, 0x70, 0x02, 0x6f, 0xa9, 0x92, 0x9a, 0x2c, 0xa9, 0x1d, 0xd7,
+	0x4b, 0x79, 0x14, 0x78, 0x21, 0xb1, 0xc4, 0xdf, 0xb8, 0xae, 0xb4, 0x6e, 0x13, 0x16, 0x10, 0xd6,
+	0x11, 0x4f, 0x56, 0xfc, 0x20, 0xb7, 0xca, 0xf1, 0x93, 0xd5, 0x45, 0x0c, 0x5b, 0xc7, 0xf5, 0x2e,
+	0xe6, 0xa8, 0x6e, 0xd9, 0xc4, 0x0b, 0xe5, 0x7e, 0xc5, 0x25, 0xc4, 0xf5, 0xb1, 0x25, 0x9e, 0xba,
+	0xfd, 0x43, 0x8b, 0x7b, 0x01, 0x66, 0x1c, 0x05, 0x3d, 0x59, 0x50, 0x70, 0x89, 0x4b, 0x62, 0xe0,
+	0xe8, 0x3f, 0xb9, 0x5a, 0xd5, 0x89, 0xef, 0x21, 0x8a, 0x02, 0xf6, 0xb6, 0x8a, 0x80, 0x38, 0xd8,
+	0x97, 0x15, 0x77, 0x7f, 0x35, 0x40, 0xb1, 0x89, 0x7d, 0xec, 0x22, 0x4e, 0xe8, 0x13, 0x8f, 0x1f,
+	0x39, 0x14, 0x0d, 0x5a, 0xe1, 0x21, 0x81, 0x9f, 0x83, 0xbc, 0xa3, 0x36, 0x3a, 0xc8, 0x71, 0x28,
+	0x66, 0xcc, 0x34, 0xaa, 0xc6, 0xd6, 0x42, 0xc3, 0x7c, 0xfd, 0x62, 0xbb, 0x20, 0x3b, 0x7c, 0x10,
+	0xef, 0x1c, 0x70, 0xea, 0x85, 0x6e, 0x7b, 0x25, 0x79, 0x45, 0xae, 0xc3, 0x5d, 0xb0, 0x32, 0x90,
+	0xb0, 0x09, 0xca, 0xdc, 0x25, 0x28, 0xcb, 0xea, 0x0d, 0xb9, 0xfc, 0xd9, 0x8d, 0x1f, 0x9e, 0x57,
+	0x32, 0xff, 0x3c, 0xaf, 0x64, 0xee, 0xfe, 0x61, 0x00, 0xf3, 0x51, 0x9f, 0x33, 0x8e, 0x42, 0x27,
+	0x2a, 0x8d, 0xdb, 0x6a, 0x63, 0x9b, 0x50, 0x07, 0xee, 0x81, 0x82, 0xe4, 0xf7, 0x48, 0xd8, 0xe1,
+	0x88, 0xba, 0x98, 0x77, 0x3c, 0x47, 0xa8, 0x5e, 0x6a, 0xac, 0x0e, 0xcf, 0x2a, 0xb0, 0x99, 0xec,
+	0x3f, 0x16, 0xdb, 0xad, 0x66, 0x1b, 0x3a, 0xe3, 0x6b, 0x0e, 0x74, 0xc0, 0x2d, 0x32, 0x62, 0xe9,
+	0xc8, 0xd3, 0x33, 0xe7, 0xaa, 0xd7, 0xb6, 0x72, 0x3b, 0x9b, 0x35, 0x4d, 0x24, 0x6a, 0x4d, 0x6c,
+	0xef, 0x13, 0xe2, 0x37, 0x8a, 0x2f, 0xcf, 0x2a, 0x99, 0x5f, 0xde, 0x54, 0x6e, 0xc8, 0x05, 0xf6,
+	0xf3, 0xdf, 0xbf, 0xdd, 0x37, 0xda, 0x90, 0x4c, 0xa8, 0x4e, 0xb5, 0xf5, 0xda, 0x00, 0x6b, 0x7b,
+	0x1e, 0xe3, 0x84, 0x7a, 0x36, 0xf2, 0xdf, 0x55, 0x57, 0xab, 0x60, 0xbe, 0x87, 0xa9, 0x47, 0x1c,
+	0xe1, 0x40, 0xb6, 0x2d, 0x9f, 0xe0, 0x43, 0x70, 0x5d, 0x75, 0x78, 0xad, 0x6a, 0x6c, 0xe5, 0x76,
+	0xde, 0xd7, 0x76, 0x38, 0x21, 0xb0, 0xb1, 0x10, 0xf5, 0x1a, 0xf7, 0xa7, 0x10, 0x52, 0x4d, 0xbd,
+	0x30, 0x40, 0x61, 0xb7, 0x4f, 0x29, 0x0e, 0xf9, 0xbb, 0xea, 0x68, 0x6f, 0xa4, 0x7c, 0x4e, 0x28,
+	0xbf, 0xa7, 0x55, 0x7e, 0x51, 0xc5, 0x25, 0xb2, 0x7f, 0x9a, 0x03, 0x1b, 0xc9, 0x27, 0x71, 0xc0,
+	0x11, 0xe5, 0x5e, 0xe8, 0x46, 0x9f, 0x84, 0x54, 0xff, 0x3f, 0x7d, 0x18, 0xd3, 0x0e, 0x61, 0xee,
+	0x3f, 0x1f, 0xc2, 0x53, 0xb0, 0xc4, 0xa4, 0xcc, 0x8e, 0x17, 0x1e, 0x12, 0x69, 0xe2, 0xfd, 0x29,
+	0x31, 0xd5, 0x74, 0x96, 0x3e, 0x91, 0x45, 0x96, 0xda, 0x48, 0x1d, 0xcb, 0xef, 0x06, 0xb8, 0xf7,
+	0xa8, 0x87, 0xa9, 0xe8, 0xc1, 0xb6, 0xfb, 0x41, 0xdf, 0x47, 0x1c, 0x3b, 0xbb, 0x24, 0x08, 0x3c,
+	0xc6, 0x3c, 0x12, 0xca, 0xe3, 0xb1, 0x40, 0x8e, 0xc8, 0xb2, 0x91, 0xa7, 0x37, 0x87, 0x67, 0x15,
+	0xa0, 0xde, 0x6e, 0x35, 0xdb, 0x40, 0x95, 0xb4, 0x1c, 0xf8, 0x04, 0xe4, 0xd0, 0x08, 0x4f, 0xfa,
+	0xa8, 0x17, 0xaf, 0xe5, 0x4d, 0x8b, 0x4f, 0x23, 0xa5, 0xb4, 0x9f, 0x2f, 0x83, 0xc5, 0x2f, 0xe3,
+	0xa9, 0x7e, 0xc0, 0x11, 0xc7, 0xf0, 0x53, 0x30, 0x1f, 0x0f, 0x4a, 0xa1, 0x2f, 0xb7, 0xb3, 0xa1,
+	0xa5, 0xdb, 0x17, 0x25, 0x8d, 0x6c, 0x84, 0xdf, 0x96, 0x2f, 0xc0, 0x2f, 0x40, 0x21, 0xc4, 0x27,
+	0x5c, 0xcd, 0x84, 0x4e, 0xcf, 0x47, 0xa1, 0xf2, 0x2d, 0xdb, 0x28, 0x0e, 0xcf, 0x2a, 0xf9, 0xaf,
+	0xf0, 0x89, 0xca, 0xda, 0xbe, 0x8f, 0xc2, 0x56, 0xb3, 0x9d, 0x0f, 0xc7, 0x96, 0xa2, 0x8f, 0x6e,
+	0x29, 0x0d, 0x11, 0x7d, 0x7a, 0xd1, 0x70, 0xa9, 0x6a, 0x95, 0xa4, 0x5e, 0x95, 0x72, 0x16, 0xe9,
+	0x68, 0x89, 0x41, 0x04, 0x36, 0x7d, 0xc4, 0x46, 0xa2, 0x90, 0xef, 0x13, 0x5b, 0x26, 0xcb, 0x0b,
+	0xb0, 0x99, 0x15, 0x5d, 0x96, 0x6a, 0xf1, 0x45, 0x53, 0x53, 0x17, 0x4d, 0xed, 0xb1, 0xba, 0x68,
+	0x1a, 0xd9, 0x67, 0x6f, 0x2a, 0x46, 0x7b, 0x3d, 0x42, 0x91, 0x64, 0x0f, 0x12, 0x8c, 0xa8, 0x0a,
+	0x12, 0x60, 0x8e, 0x62, 0x9f, 0x8c, 0xf4, 0x28, 0x6f, 0xcc, 0x7c, 0x4f, 0x48, 0xbf, 0x24, 0x70,
+	0xe9, 0xdb, 0x25, 0xed, 0xd9, 0xaa, 0xa3, 0xab, 0x60, 0x90, 0x02, 0xb3, 0x47, 0x88, 0xdf, 0xd1,
+	0x0d, 0xe2, 0x79, 0x41, 0xb8, 0xad, 0x25, 0x9c, 0x76, 0x3d, 0x5c, 0xe0, 0x8c, 0x90, 0x27, 0x0b,
+	0x21, 0x01, 0x6b, 0x82, 0xf3, 0x28, 0x19, 0x75, 0x09, 0xe5, 0x75, 0x41, 0xf9, 0xe1, 0xd5, 0x26,
+	0xe3, 0x24, 0x63, 0x31, 0xc2, 0x9d, 0xa8, 0x83, 0x87, 0xa0, 0x20, 0x08, 0xed, 0x78, 0x42, 0x25,
+	0x6c, 0x37, 0x04, 0xdb, 0x07, 0x57, 0x98, 0x66, 0x93, 0x54, 0x30, 0x42, 0xbc, 0x58, 0x04, 0xbf,
+	0x05, 0xb7, 0x05, 0xcf, 0xc8, 0xc2, 0x0b, 0x23, 0x83, 0x99, 0x0b, 0x82, 0xf0, 0xa3, 0xab, 0xcf,
+	0x8c, 0x49, 0xde, 0x52, 0xc4, 0xa0, 0xad, 0x65, 0xf0, 0x1b, 0xb0, 0x99, 0x4c, 0x05, 0x9d, 0xa1,
+	0x60, 0x46, 0x43, 0x4b, 0x0a, 0x5d, 0x63, 0xea, 0x8f, 0x06, 0xa8, 0x26, 0xe4, 0xa9, 0x01, 0xd1,
+	0xb1, 0x93, 0x19, 0xc2, 0xcc, 0x9c, 0x10, 0xf0, 0x89, 0x5e, 0xc0, 0xe5, 0x63, 0x2f, 0xad, 0xa5,
+	0x4c, 0xde, 0x56, 0xcf, 0xe0, 0x00, 0x6c, 0x24, 0x72, 0x34, 0x41, 0x5b, 0x9c, 0x2d, 0x68, 0xeb,
+	0x0a, 0x7b, 0x32, 0x6c, 0x21, 0x30, 0x13, 0xe2, 0xf1, 0xc0, 0x2d, 0xcd, 0x10, 0xb8, 0x55, 0x85,
+	0x3a, 0x16, 0xba, 0xef, 0x0d, 0x70, 0x27, 0x21, 0x9c, 0x9a, 0xbc, 0x9b, 0xb3, 0x27, 0x2f, 0x39,
+	0xf1, 0x29, 0xe9, 0x3b, 0x01, 0x1b, 0x0c, 0xd3, 0x63, 0xcf, 0xc6, 0xda, 0xf0, 0x2d, 0xcf, 0x18,
+	0xbe, 0x75, 0x09, 0xae, 0xc9, 0x5e, 0x1f, 0x94, 0x14, 0xb3, 0xc6, 0xea, 0x95, 0xd9, 0xac, 0x36,
+	0x25, 0xf4, 0xa4, 0xd3, 0x3e, 0x58, 0x53, 0xb4, 0xe3, 0x46, 0xe7, 0x67, 0x30, 0xba, 0x28, 0x41,
+	0xc7, 0x7c, 0xfe, 0xce, 0x00, 0x55, 0x45, 0x37, 0xd5, 0x66, 0x38, 0xbb, 0xcd, 0xb7, 0x25, 0x89,
+	0xde, 0xe5, 0xc6, 0xc3, 0x97, 0xc3, 0xb2, 0xf1, 0x6a, 0x58, 0x36, 0xfe, 0x1a, 0x96, 0x8d, 0x67,
+	0xe7, 0xe5, 0xcc, 0xab, 0xf3, 0x72, 0xe6, 0xcf, 0xf3, 0x72, 0xe6, 0x69, 0xdd, 0xf5, 0xf8, 0x51,
+	0xbf, 0x5b, 0xb3, 0x49, 0x60, 0x29, 0xfe, 0x6d, 0x1f, 0x75, 0x59, 0xf2, 0x64, 0x9d, 0x24, 0x3f,
+	0x91, 0xf8, 0x69, 0x0f, 0xb3, 0xee, 0xbc, 0xb8, 0x23, 0x3f, 0xfe, 0x37, 0x00, 0x00, 0xff, 0xff,
+	0x68, 0xca, 0xe4, 0x9e, 0x22, 0x0e, 0x00, 0x00,
 }
 
 func (m *DelegatorWithdrawInfo) Marshal() (dAtA []byte, err error) {
@@ -971,7 +614,7 @@ func (m *DelegatorWithdrawInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *PoolOutstandingRewardsRecord) Marshal() (dAtA []byte, err error) {
+func (m *OutstandingRewardsRecord) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -981,12 +624,12 @@ func (m *PoolOutstandingRewardsRecord) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *PoolOutstandingRewardsRecord) MarshalTo(dAtA []byte) (int, error) {
+func (m *OutstandingRewardsRecord) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *PoolOutstandingRewardsRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *OutstandingRewardsRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1005,15 +648,15 @@ func (m *PoolOutstandingRewardsRecord) MarshalToSizedBuffer(dAtA []byte) (int, e
 			dAtA[i] = 0x12
 		}
 	}
-	if m.PoolID != 0 {
-		i = encodeVarintGenesis(dAtA, i, uint64(m.PoolID))
+	if m.DelegationTargetID != 0 {
+		i = encodeVarintGenesis(dAtA, i, uint64(m.DelegationTargetID))
 		i--
 		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *PoolHistoricalRewardsRecord) Marshal() (dAtA []byte, err error) {
+func (m *HistoricalRewardsRecord) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1023,12 +666,12 @@ func (m *PoolHistoricalRewardsRecord) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *PoolHistoricalRewardsRecord) MarshalTo(dAtA []byte) (int, error) {
+func (m *HistoricalRewardsRecord) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *PoolHistoricalRewardsRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *HistoricalRewardsRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1048,15 +691,15 @@ func (m *PoolHistoricalRewardsRecord) MarshalToSizedBuffer(dAtA []byte) (int, er
 		i--
 		dAtA[i] = 0x10
 	}
-	if m.PoolID != 0 {
-		i = encodeVarintGenesis(dAtA, i, uint64(m.PoolID))
+	if m.DelegationTargetID != 0 {
+		i = encodeVarintGenesis(dAtA, i, uint64(m.DelegationTargetID))
 		i--
 		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *PoolCurrentRewardsRecord) Marshal() (dAtA []byte, err error) {
+func (m *CurrentRewardsRecord) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1066,12 +709,12 @@ func (m *PoolCurrentRewardsRecord) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *PoolCurrentRewardsRecord) MarshalTo(dAtA []byte) (int, error) {
+func (m *CurrentRewardsRecord) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *PoolCurrentRewardsRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *CurrentRewardsRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1086,15 +729,15 @@ func (m *PoolCurrentRewardsRecord) MarshalToSizedBuffer(dAtA []byte) (int, error
 	}
 	i--
 	dAtA[i] = 0x12
-	if m.PoolID != 0 {
-		i = encodeVarintGenesis(dAtA, i, uint64(m.PoolID))
+	if m.DelegationTargetID != 0 {
+		i = encodeVarintGenesis(dAtA, i, uint64(m.DelegationTargetID))
 		i--
 		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *PoolDelegatorStartingInfoRecord) Marshal() (dAtA []byte, err error) {
+func (m *DelegatorStartingInfoRecord) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1104,12 +747,12 @@ func (m *PoolDelegatorStartingInfoRecord) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *PoolDelegatorStartingInfoRecord) MarshalTo(dAtA []byte) (int, error) {
+func (m *DelegatorStartingInfoRecord) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *PoolDelegatorStartingInfoRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *DelegatorStartingInfoRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1124,8 +767,8 @@ func (m *PoolDelegatorStartingInfoRecord) MarshalToSizedBuffer(dAtA []byte) (int
 	}
 	i--
 	dAtA[i] = 0x1a
-	if m.PoolID != 0 {
-		i = encodeVarintGenesis(dAtA, i, uint64(m.PoolID))
+	if m.DelegationTargetID != 0 {
+		i = encodeVarintGenesis(dAtA, i, uint64(m.DelegationTargetID))
 		i--
 		dAtA[i] = 0x10
 	}
@@ -1135,48 +778,6 @@ func (m *PoolDelegatorStartingInfoRecord) MarshalToSizedBuffer(dAtA []byte) (int
 		i = encodeVarintGenesis(dAtA, i, uint64(len(m.DelegatorAddress)))
 		i--
 		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *OperatorOutstandingRewardsRecord) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *OperatorOutstandingRewardsRecord) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *OperatorOutstandingRewardsRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.OutstandingRewards) > 0 {
-		for iNdEx := len(m.OutstandingRewards) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.OutstandingRewards[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintGenesis(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if m.OperatorID != 0 {
-		i = encodeVarintGenesis(dAtA, i, uint64(m.OperatorID))
-		i--
-		dAtA[i] = 0x8
 	}
 	return len(dAtA) - i, nil
 }
@@ -1211,304 +812,10 @@ func (m *OperatorAccumulatedCommissionRecord) MarshalToSizedBuffer(dAtA []byte) 
 	}
 	i--
 	dAtA[i] = 0x12
-	if m.OperatorId != 0 {
-		i = encodeVarintGenesis(dAtA, i, uint64(m.OperatorId))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *OperatorHistoricalRewardsRecord) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *OperatorHistoricalRewardsRecord) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *OperatorHistoricalRewardsRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.Rewards.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintGenesis(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	if m.Period != 0 {
-		i = encodeVarintGenesis(dAtA, i, uint64(m.Period))
-		i--
-		dAtA[i] = 0x10
-	}
 	if m.OperatorID != 0 {
 		i = encodeVarintGenesis(dAtA, i, uint64(m.OperatorID))
 		i--
 		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *OperatorCurrentRewardsRecord) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *OperatorCurrentRewardsRecord) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *OperatorCurrentRewardsRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.Rewards.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintGenesis(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	if m.OperatorID != 0 {
-		i = encodeVarintGenesis(dAtA, i, uint64(m.OperatorID))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *OperatorDelegatorStartingInfoRecord) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *OperatorDelegatorStartingInfoRecord) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *OperatorDelegatorStartingInfoRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.StartingInfo.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintGenesis(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	if m.OperatorID != 0 {
-		i = encodeVarintGenesis(dAtA, i, uint64(m.OperatorID))
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.DelegatorAddress) > 0 {
-		i -= len(m.DelegatorAddress)
-		copy(dAtA[i:], m.DelegatorAddress)
-		i = encodeVarintGenesis(dAtA, i, uint64(len(m.DelegatorAddress)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ServiceOutstandingRewardsRecord) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ServiceOutstandingRewardsRecord) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ServiceOutstandingRewardsRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.OutstandingRewards) > 0 {
-		for iNdEx := len(m.OutstandingRewards) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.OutstandingRewards[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintGenesis(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if m.ServiceID != 0 {
-		i = encodeVarintGenesis(dAtA, i, uint64(m.ServiceID))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ServiceHistoricalRewardsRecord) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ServiceHistoricalRewardsRecord) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ServiceHistoricalRewardsRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.Rewards.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintGenesis(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	if m.Period != 0 {
-		i = encodeVarintGenesis(dAtA, i, uint64(m.Period))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.ServiceID != 0 {
-		i = encodeVarintGenesis(dAtA, i, uint64(m.ServiceID))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ServiceCurrentRewardsRecord) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ServiceCurrentRewardsRecord) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ServiceCurrentRewardsRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.Rewards.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintGenesis(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	if m.ServiceID != 0 {
-		i = encodeVarintGenesis(dAtA, i, uint64(m.ServiceID))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ServiceDelegatorStartingInfoRecord) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ServiceDelegatorStartingInfoRecord) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ServiceDelegatorStartingInfoRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.StartingInfo.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintGenesis(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	if m.ServiceID != 0 {
-		i = encodeVarintGenesis(dAtA, i, uint64(m.ServiceID))
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.DelegatorAddress) > 0 {
-		i -= len(m.DelegatorAddress)
-		copy(dAtA[i:], m.DelegatorAddress)
-		i = encodeVarintGenesis(dAtA, i, uint64(len(m.DelegatorAddress)))
-		i--
-		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
@@ -1736,12 +1043,12 @@ func (m *GenesisState) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 	}
 	if m.LastRewardsAllocationTime != nil {
-		n11, err11 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(*m.LastRewardsAllocationTime, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(*m.LastRewardsAllocationTime):])
-		if err11 != nil {
-			return 0, err11
+		n5, err5 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(*m.LastRewardsAllocationTime, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(*m.LastRewardsAllocationTime):])
+		if err5 != nil {
+			return 0, err5
 		}
-		i -= n11
-		i = encodeVarintGenesis(dAtA, i, uint64(n11))
+		i -= n5
+		i = encodeVarintGenesis(dAtA, i, uint64(n5))
 		i--
 		dAtA[i] = 0x22
 	}
@@ -1805,14 +1112,14 @@ func (m *DelegatorWithdrawInfo) Size() (n int) {
 	return n
 }
 
-func (m *PoolOutstandingRewardsRecord) Size() (n int) {
+func (m *OutstandingRewardsRecord) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.PoolID != 0 {
-		n += 1 + sovGenesis(uint64(m.PoolID))
+	if m.DelegationTargetID != 0 {
+		n += 1 + sovGenesis(uint64(m.DelegationTargetID))
 	}
 	if len(m.OutstandingRewards) > 0 {
 		for _, e := range m.OutstandingRewards {
@@ -1823,14 +1130,14 @@ func (m *PoolOutstandingRewardsRecord) Size() (n int) {
 	return n
 }
 
-func (m *PoolHistoricalRewardsRecord) Size() (n int) {
+func (m *HistoricalRewardsRecord) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.PoolID != 0 {
-		n += 1 + sovGenesis(uint64(m.PoolID))
+	if m.DelegationTargetID != 0 {
+		n += 1 + sovGenesis(uint64(m.DelegationTargetID))
 	}
 	if m.Period != 0 {
 		n += 1 + sovGenesis(uint64(m.Period))
@@ -1840,21 +1147,21 @@ func (m *PoolHistoricalRewardsRecord) Size() (n int) {
 	return n
 }
 
-func (m *PoolCurrentRewardsRecord) Size() (n int) {
+func (m *CurrentRewardsRecord) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.PoolID != 0 {
-		n += 1 + sovGenesis(uint64(m.PoolID))
+	if m.DelegationTargetID != 0 {
+		n += 1 + sovGenesis(uint64(m.DelegationTargetID))
 	}
 	l = m.Rewards.Size()
 	n += 1 + l + sovGenesis(uint64(l))
 	return n
 }
 
-func (m *PoolDelegatorStartingInfoRecord) Size() (n int) {
+func (m *DelegatorStartingInfoRecord) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1864,29 +1171,11 @@ func (m *PoolDelegatorStartingInfoRecord) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovGenesis(uint64(l))
 	}
-	if m.PoolID != 0 {
-		n += 1 + sovGenesis(uint64(m.PoolID))
+	if m.DelegationTargetID != 0 {
+		n += 1 + sovGenesis(uint64(m.DelegationTargetID))
 	}
 	l = m.StartingInfo.Size()
 	n += 1 + l + sovGenesis(uint64(l))
-	return n
-}
-
-func (m *OperatorOutstandingRewardsRecord) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.OperatorID != 0 {
-		n += 1 + sovGenesis(uint64(m.OperatorID))
-	}
-	if len(m.OutstandingRewards) > 0 {
-		for _, e := range m.OutstandingRewards {
-			l = e.Size()
-			n += 1 + l + sovGenesis(uint64(l))
-		}
-	}
 	return n
 }
 
@@ -1896,126 +1185,10 @@ func (m *OperatorAccumulatedCommissionRecord) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.OperatorId != 0 {
-		n += 1 + sovGenesis(uint64(m.OperatorId))
+	if m.OperatorID != 0 {
+		n += 1 + sovGenesis(uint64(m.OperatorID))
 	}
 	l = m.Accumulated.Size()
-	n += 1 + l + sovGenesis(uint64(l))
-	return n
-}
-
-func (m *OperatorHistoricalRewardsRecord) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.OperatorID != 0 {
-		n += 1 + sovGenesis(uint64(m.OperatorID))
-	}
-	if m.Period != 0 {
-		n += 1 + sovGenesis(uint64(m.Period))
-	}
-	l = m.Rewards.Size()
-	n += 1 + l + sovGenesis(uint64(l))
-	return n
-}
-
-func (m *OperatorCurrentRewardsRecord) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.OperatorID != 0 {
-		n += 1 + sovGenesis(uint64(m.OperatorID))
-	}
-	l = m.Rewards.Size()
-	n += 1 + l + sovGenesis(uint64(l))
-	return n
-}
-
-func (m *OperatorDelegatorStartingInfoRecord) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.DelegatorAddress)
-	if l > 0 {
-		n += 1 + l + sovGenesis(uint64(l))
-	}
-	if m.OperatorID != 0 {
-		n += 1 + sovGenesis(uint64(m.OperatorID))
-	}
-	l = m.StartingInfo.Size()
-	n += 1 + l + sovGenesis(uint64(l))
-	return n
-}
-
-func (m *ServiceOutstandingRewardsRecord) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.ServiceID != 0 {
-		n += 1 + sovGenesis(uint64(m.ServiceID))
-	}
-	if len(m.OutstandingRewards) > 0 {
-		for _, e := range m.OutstandingRewards {
-			l = e.Size()
-			n += 1 + l + sovGenesis(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *ServiceHistoricalRewardsRecord) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.ServiceID != 0 {
-		n += 1 + sovGenesis(uint64(m.ServiceID))
-	}
-	if m.Period != 0 {
-		n += 1 + sovGenesis(uint64(m.Period))
-	}
-	l = m.Rewards.Size()
-	n += 1 + l + sovGenesis(uint64(l))
-	return n
-}
-
-func (m *ServiceCurrentRewardsRecord) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.ServiceID != 0 {
-		n += 1 + sovGenesis(uint64(m.ServiceID))
-	}
-	l = m.Rewards.Size()
-	n += 1 + l + sovGenesis(uint64(l))
-	return n
-}
-
-func (m *ServiceDelegatorStartingInfoRecord) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.DelegatorAddress)
-	if l > 0 {
-		n += 1 + l + sovGenesis(uint64(l))
-	}
-	if m.ServiceID != 0 {
-		n += 1 + sovGenesis(uint64(m.ServiceID))
-	}
-	l = m.StartingInfo.Size()
 	n += 1 + l + sovGenesis(uint64(l))
 	return n
 }
@@ -2248,7 +1421,7 @@ func (m *DelegatorWithdrawInfo) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *PoolOutstandingRewardsRecord) Unmarshal(dAtA []byte) error {
+func (m *OutstandingRewardsRecord) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2271,17 +1444,17 @@ func (m *PoolOutstandingRewardsRecord) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: PoolOutstandingRewardsRecord: wiretype end group for non-group")
+			return fmt.Errorf("proto: OutstandingRewardsRecord: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: PoolOutstandingRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: OutstandingRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PoolID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DelegationTargetID", wireType)
 			}
-			m.PoolID = 0
+			m.DelegationTargetID = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowGenesis
@@ -2291,7 +1464,7 @@ func (m *PoolOutstandingRewardsRecord) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.PoolID |= uint32(b&0x7F) << shift
+				m.DelegationTargetID |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2351,7 +1524,7 @@ func (m *PoolOutstandingRewardsRecord) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *PoolHistoricalRewardsRecord) Unmarshal(dAtA []byte) error {
+func (m *HistoricalRewardsRecord) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2374,17 +1547,17 @@ func (m *PoolHistoricalRewardsRecord) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: PoolHistoricalRewardsRecord: wiretype end group for non-group")
+			return fmt.Errorf("proto: HistoricalRewardsRecord: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: PoolHistoricalRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: HistoricalRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PoolID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DelegationTargetID", wireType)
 			}
-			m.PoolID = 0
+			m.DelegationTargetID = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowGenesis
@@ -2394,7 +1567,7 @@ func (m *PoolHistoricalRewardsRecord) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.PoolID |= uint32(b&0x7F) << shift
+				m.DelegationTargetID |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2472,7 +1645,7 @@ func (m *PoolHistoricalRewardsRecord) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *PoolCurrentRewardsRecord) Unmarshal(dAtA []byte) error {
+func (m *CurrentRewardsRecord) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2495,17 +1668,17 @@ func (m *PoolCurrentRewardsRecord) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: PoolCurrentRewardsRecord: wiretype end group for non-group")
+			return fmt.Errorf("proto: CurrentRewardsRecord: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: PoolCurrentRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: CurrentRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PoolID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DelegationTargetID", wireType)
 			}
-			m.PoolID = 0
+			m.DelegationTargetID = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowGenesis
@@ -2515,7 +1688,7 @@ func (m *PoolCurrentRewardsRecord) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.PoolID |= uint32(b&0x7F) << shift
+				m.DelegationTargetID |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2574,7 +1747,7 @@ func (m *PoolCurrentRewardsRecord) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *PoolDelegatorStartingInfoRecord) Unmarshal(dAtA []byte) error {
+func (m *DelegatorStartingInfoRecord) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2597,10 +1770,10 @@ func (m *PoolDelegatorStartingInfoRecord) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: PoolDelegatorStartingInfoRecord: wiretype end group for non-group")
+			return fmt.Errorf("proto: DelegatorStartingInfoRecord: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: PoolDelegatorStartingInfoRecord: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: DelegatorStartingInfoRecord: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2637,9 +1810,9 @@ func (m *PoolDelegatorStartingInfoRecord) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PoolID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field DelegationTargetID", wireType)
 			}
-			m.PoolID = 0
+			m.DelegationTargetID = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowGenesis
@@ -2649,7 +1822,7 @@ func (m *PoolDelegatorStartingInfoRecord) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.PoolID |= uint32(b&0x7F) << shift
+				m.DelegationTargetID |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2684,109 +1857,6 @@ func (m *PoolDelegatorStartingInfoRecord) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if err := m.StartingInfo.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipGenesis(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *OperatorOutstandingRewardsRecord) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowGenesis
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: OperatorOutstandingRewardsRecord: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: OperatorOutstandingRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OperatorID", wireType)
-			}
-			m.OperatorID = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.OperatorID |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OutstandingRewards", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.OutstandingRewards = append(m.OutstandingRewards, DecPool{})
-			if err := m.OutstandingRewards[len(m.OutstandingRewards)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -2842,9 +1912,9 @@ func (m *OperatorAccumulatedCommissionRecord) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OperatorId", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field OperatorID", wireType)
 			}
-			m.OperatorId = 0
+			m.OperatorID = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowGenesis
@@ -2854,7 +1924,7 @@ func (m *OperatorAccumulatedCommissionRecord) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.OperatorId |= uint32(b&0x7F) << shift
+				m.OperatorID |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -2889,823 +1959,6 @@ func (m *OperatorAccumulatedCommissionRecord) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if err := m.Accumulated.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipGenesis(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *OperatorHistoricalRewardsRecord) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowGenesis
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: OperatorHistoricalRewardsRecord: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: OperatorHistoricalRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OperatorID", wireType)
-			}
-			m.OperatorID = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.OperatorID |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Period", wireType)
-			}
-			m.Period = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Period |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Rewards", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Rewards.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipGenesis(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *OperatorCurrentRewardsRecord) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowGenesis
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: OperatorCurrentRewardsRecord: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: OperatorCurrentRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OperatorID", wireType)
-			}
-			m.OperatorID = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.OperatorID |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Rewards", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Rewards.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipGenesis(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *OperatorDelegatorStartingInfoRecord) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowGenesis
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: OperatorDelegatorStartingInfoRecord: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: OperatorDelegatorStartingInfoRecord: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DelegatorAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.DelegatorAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OperatorID", wireType)
-			}
-			m.OperatorID = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.OperatorID |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StartingInfo", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.StartingInfo.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipGenesis(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ServiceOutstandingRewardsRecord) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowGenesis
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ServiceOutstandingRewardsRecord: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ServiceOutstandingRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ServiceID", wireType)
-			}
-			m.ServiceID = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ServiceID |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OutstandingRewards", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.OutstandingRewards = append(m.OutstandingRewards, DecPool{})
-			if err := m.OutstandingRewards[len(m.OutstandingRewards)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipGenesis(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ServiceHistoricalRewardsRecord) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowGenesis
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ServiceHistoricalRewardsRecord: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ServiceHistoricalRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ServiceID", wireType)
-			}
-			m.ServiceID = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ServiceID |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Period", wireType)
-			}
-			m.Period = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Period |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Rewards", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Rewards.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipGenesis(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ServiceCurrentRewardsRecord) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowGenesis
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ServiceCurrentRewardsRecord: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ServiceCurrentRewardsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ServiceID", wireType)
-			}
-			m.ServiceID = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ServiceID |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Rewards", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Rewards.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipGenesis(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ServiceDelegatorStartingInfoRecord) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowGenesis
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ServiceDelegatorStartingInfoRecord: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ServiceDelegatorStartingInfoRecord: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DelegatorAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.DelegatorAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ServiceID", wireType)
-			}
-			m.ServiceID = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ServiceID |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StartingInfo", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.StartingInfo.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3944,7 +2197,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.PoolOutstandingRewards = append(m.PoolOutstandingRewards, PoolOutstandingRewardsRecord{})
+			m.PoolOutstandingRewards = append(m.PoolOutstandingRewards, OutstandingRewardsRecord{})
 			if err := m.PoolOutstandingRewards[len(m.PoolOutstandingRewards)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3978,7 +2231,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.PoolHistoricalRewards = append(m.PoolHistoricalRewards, PoolHistoricalRewardsRecord{})
+			m.PoolHistoricalRewards = append(m.PoolHistoricalRewards, HistoricalRewardsRecord{})
 			if err := m.PoolHistoricalRewards[len(m.PoolHistoricalRewards)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4012,7 +2265,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.PoolCurrentRewards = append(m.PoolCurrentRewards, PoolCurrentRewardsRecord{})
+			m.PoolCurrentRewards = append(m.PoolCurrentRewards, CurrentRewardsRecord{})
 			if err := m.PoolCurrentRewards[len(m.PoolCurrentRewards)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4046,7 +2299,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.PoolDelegatorStartingInfos = append(m.PoolDelegatorStartingInfos, PoolDelegatorStartingInfoRecord{})
+			m.PoolDelegatorStartingInfos = append(m.PoolDelegatorStartingInfos, DelegatorStartingInfoRecord{})
 			if err := m.PoolDelegatorStartingInfos[len(m.PoolDelegatorStartingInfos)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4080,7 +2333,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.OperatorOutstandingRewards = append(m.OperatorOutstandingRewards, OperatorOutstandingRewardsRecord{})
+			m.OperatorOutstandingRewards = append(m.OperatorOutstandingRewards, OutstandingRewardsRecord{})
 			if err := m.OperatorOutstandingRewards[len(m.OperatorOutstandingRewards)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4148,7 +2401,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.OperatorHistoricalRewards = append(m.OperatorHistoricalRewards, OperatorHistoricalRewardsRecord{})
+			m.OperatorHistoricalRewards = append(m.OperatorHistoricalRewards, HistoricalRewardsRecord{})
 			if err := m.OperatorHistoricalRewards[len(m.OperatorHistoricalRewards)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4182,7 +2435,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.OperatorCurrentRewards = append(m.OperatorCurrentRewards, OperatorCurrentRewardsRecord{})
+			m.OperatorCurrentRewards = append(m.OperatorCurrentRewards, CurrentRewardsRecord{})
 			if err := m.OperatorCurrentRewards[len(m.OperatorCurrentRewards)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4216,7 +2469,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.OperatorDelegatorStartingInfos = append(m.OperatorDelegatorStartingInfos, OperatorDelegatorStartingInfoRecord{})
+			m.OperatorDelegatorStartingInfos = append(m.OperatorDelegatorStartingInfos, DelegatorStartingInfoRecord{})
 			if err := m.OperatorDelegatorStartingInfos[len(m.OperatorDelegatorStartingInfos)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4250,7 +2503,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ServiceOutstandingRewards = append(m.ServiceOutstandingRewards, ServiceOutstandingRewardsRecord{})
+			m.ServiceOutstandingRewards = append(m.ServiceOutstandingRewards, OutstandingRewardsRecord{})
 			if err := m.ServiceOutstandingRewards[len(m.ServiceOutstandingRewards)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4284,7 +2537,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ServiceHistoricalRewards = append(m.ServiceHistoricalRewards, ServiceHistoricalRewardsRecord{})
+			m.ServiceHistoricalRewards = append(m.ServiceHistoricalRewards, HistoricalRewardsRecord{})
 			if err := m.ServiceHistoricalRewards[len(m.ServiceHistoricalRewards)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4318,7 +2571,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ServiceCurrentRewards = append(m.ServiceCurrentRewards, ServiceCurrentRewardsRecord{})
+			m.ServiceCurrentRewards = append(m.ServiceCurrentRewards, CurrentRewardsRecord{})
 			if err := m.ServiceCurrentRewards[len(m.ServiceCurrentRewards)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4352,7 +2605,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ServiceDelegatorStartingInfos = append(m.ServiceDelegatorStartingInfos, ServiceDelegatorStartingInfoRecord{})
+			m.ServiceDelegatorStartingInfos = append(m.ServiceDelegatorStartingInfos, DelegatorStartingInfoRecord{})
 			if err := m.ServiceDelegatorStartingInfos[len(m.ServiceDelegatorStartingInfos)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}

@@ -11,7 +11,7 @@ import (
 // NewMsgCreateRewardsPlan creates a new MsgCreateRewardsPlan instance
 func NewMsgCreateRewardsPlan(
 	sender string, description string, serviceID uint32, amt sdk.Coins, startTime, endTime time.Time,
-	poolsDistribution PoolsDistribution, operatorsDistribution OperatorsDistribution,
+	poolsDistribution Distribution, operatorsDistribution Distribution,
 	usersDistribution UsersDistribution) *MsgCreateRewardsPlan {
 	return &MsgCreateRewardsPlan{
 		Sender:                sender,
@@ -39,9 +39,9 @@ func NewMsgWithdrawDelegatorReward(
 	delAddr string, delType restakingtypes.DelegationType, targetID uint32,
 ) *MsgWithdrawDelegatorReward {
 	return &MsgWithdrawDelegatorReward{
-		DelegatorAddress: delAddr,
-		DelegationType:   delType,
-		TargetID:         targetID,
+		DelegatorAddress:   delAddr,
+		DelegationType:     delType,
+		DelegationTargetID: targetID,
 	}
 }
 

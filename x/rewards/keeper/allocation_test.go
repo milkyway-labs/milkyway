@@ -397,13 +397,13 @@ func (s *KeeperTestSuite) TestAllocateRewards_WeightedDistributions() {
 	planEndTime := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
 	s.CreateRewardsPlan(
 		service.ID, utils.MustParseCoins("100_000000service"), planStartTime, planEndTime,
-		types.NewWeightedPoolsDistribution(3, []types.PoolDistributionWeight{
-			types.NewPoolDistributionWeight(1, 2),
-			types.NewPoolDistributionWeight(2, 1),
+		types.NewWeightedPoolsDistribution(3, []types.DistributionWeight{
+			types.NewDistributionWeight(1, 2),
+			types.NewDistributionWeight(2, 1),
 		}),
-		types.NewWeightedOperatorsDistribution(1, []types.OperatorDistributionWeight{
-			types.NewOperatorDistributionWeight(operator1.ID, 2),
-			types.NewOperatorDistributionWeight(operator2.ID, 3),
+		types.NewWeightedOperatorsDistribution(1, []types.DistributionWeight{
+			types.NewDistributionWeight(operator1.ID, 2),
+			types.NewDistributionWeight(operator2.ID, 3),
 		}),
 		types.NewBasicUsersDistribution(0), // No user rewards
 		utils.MustParseCoins("100000_000000service"),

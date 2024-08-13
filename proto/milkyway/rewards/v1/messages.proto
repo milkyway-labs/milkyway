@@ -73,10 +73,9 @@ message MsgCreateRewardsPlan {
   google.protobuf.Timestamp end_time = 6
       [ (gogoproto.stdtime) = true, (gogoproto.nullable) = false ];
 
-  PoolsDistribution pools_distribution = 7 [ (gogoproto.nullable) = false ];
+  Distribution pools_distribution = 7 [ (gogoproto.nullable) = false ];
 
-  OperatorsDistribution operators_distribution = 8
-      [ (gogoproto.nullable) = false ];
+  Distribution operators_distribution = 8 [ (gogoproto.nullable) = false ];
 
   UsersDistribution users_distribution = 9 [ (gogoproto.nullable) = false ];
 }
@@ -120,7 +119,8 @@ message MsgWithdrawDelegatorReward {
 
   milkyway.restaking.v1.DelegationType delegation_type = 2;
 
-  uint32 target_id = 3 [ (gogoproto.customname) = "TargetID" ];
+  uint32 delegation_target_id = 3
+      [ (gogoproto.customname) = "DelegationTargetID" ];
 }
 
 message MsgWithdrawDelegatorRewardResponse {

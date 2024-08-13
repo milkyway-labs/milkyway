@@ -259,18 +259,18 @@ func (k *Keeper) getOperatorDistrInfos(
 }
 
 func (k *Keeper) allocateRewardsToPools(
-	ctx context.Context, distr types.PoolsDistribution, poolDistrInfos []PoolDistributionInfo,
+	ctx context.Context, distr types.Distribution, poolDistrInfos []PoolDistributionInfo,
 	rewards sdk.DecCoins) error {
-	distrType, err := types.GetPoolsDistributionType(k.cdc, distr)
+	distrType, err := types.GetDistributionType(k.cdc, distr)
 	if err != nil {
 		return err
 	}
 	switch typ := distrType.(type) {
-	case *types.PoolsDistributionTypeBasic:
+	case *types.DistributionTypeBasic:
 		return k.allocateRewardsToPoolsBasic(ctx, poolDistrInfos, rewards)
-	case *types.PoolsDistributionTypeWeighted:
+	case *types.DistributionTypeWeighted:
 		return k.allocateRewardsToPoolsWeighted(ctx, poolDistrInfos, rewards, typ.Weights)
-	case *types.PoolsDistributionTypeEgalitarian:
+	case *types.DistributionTypeEgalitarian:
 		return k.allocateRewardsToPoolsEgalitarian(ctx, poolDistrInfos, rewards)
 	default:
 		panic("unknown pools distribution type")
@@ -295,7 +295,7 @@ func (k *Keeper) allocateRewardsToPoolsBasic(
 
 func (k *Keeper) allocateRewardsToPoolsWeighted(
 	ctx context.Context, distrInfos []PoolDistributionInfo, rewards sdk.DecCoins,
-	weights []types.PoolDistributionWeight) error {
+	weights []types.DistributionWeight) error {
 	distrInfoByPoolID := map[uint32]PoolDistributionInfo{}
 	for _, distrInfo := range distrInfos {
 		distrInfoByPoolID[distrInfo.Pool.ID] = distrInfo
@@ -303,7 +303,7 @@ func (k *Keeper) allocateRewardsToPoolsWeighted(
 
 	totalWeights := math.LegacyZeroDec()
 	for _, weight := range weights {
-		if _, ok := distrInfoByPoolID[weight.PoolID]; !ok {
+		if _, ok := distrInfoByPoolID[weight.DelegationTargetID]; !ok {
 			// If there's no distrInfo for specified pool, skip it.
 			continue
 		}
@@ -311,7 +311,7 @@ func (k *Keeper) allocateRewardsToPoolsWeighted(
 	}
 
 	for _, weight := range weights {
-		distrInfo, ok := distrInfoByPoolID[weight.PoolID]
+		distrInfo, ok := distrInfoByPoolID[weight.DelegationTargetID]
 		if !ok {
 			continue
 		}
@@ -339,18 +339,18 @@ func (k *Keeper) allocateRewardsToPoolsEgalitarian(
 }
 
 func (k *Keeper) allocateRewardsToOperators(
-	ctx context.Context, distr types.OperatorsDistribution, distrInfos []OperatorDistributionInfo,
+	ctx context.Context, distr types.Distribution, distrInfos []OperatorDistributionInfo,
 	rewards sdk.DecCoins) error {
-	distrType, err := types.GetOperatorsDistributionType(k.cdc, distr)
+	distrType, err := types.GetDistributionType(k.cdc, distr)
 	if err != nil {
 		return err
 	}
 	switch typ := distrType.(type) {
-	case *types.OperatorsDistributionTypeBasic:
+	case *types.DistributionTypeBasic:
 		return k.allocateRewardsToOperatorsBasic(ctx, distrInfos, rewards)
-	case *types.OperatorsDistributionTypeWeighted:
+	case *types.DistributionTypeWeighted:
 		return k.allocateRewardsToOperatorsWeighted(ctx, distrInfos, rewards, typ.Weights)
-	case *types.OperatorsDistributionTypeEgalitarian:
+	case *types.DistributionTypeEgalitarian:
 		return k.allocateRewardsToOperatorsEgalitarian(ctx, distrInfos, rewards)
 	default:
 		panic("unknown operators distribution type")
@@ -375,7 +375,7 @@ func (k *Keeper) allocateRewardsToOperatorsBasic(
 
 func (k *Keeper) allocateRewardsToOperatorsWeighted(
 	ctx context.Context, distrInfos []OperatorDistributionInfo, rewards sdk.DecCoins,
-	weights []types.OperatorDistributionWeight) error {
+	weights []types.DistributionWeight) error {
 	distrInfoByOperatorID := map[uint32]OperatorDistributionInfo{}
 	for _, distrInfo := range distrInfos {
 		distrInfoByOperatorID[distrInfo.Operator.ID] = distrInfo
@@ -383,7 +383,7 @@ func (k *Keeper) allocateRewardsToOperatorsWeighted(
 
 	totalWeights := math.LegacyZeroDec()
 	for _, weight := range weights {
-		if _, ok := distrInfoByOperatorID[weight.OperatorID]; !ok {
+		if _, ok := distrInfoByOperatorID[weight.DelegationTargetID]; !ok {
 			// If there's no distrInfo for specified operator, skip it.
 			continue
 		}
@@ -391,7 +391,7 @@ func (k *Keeper) allocateRewardsToOperatorsWeighted(
 	}
 
 	for _, weight := range weights {
-		distrInfo, ok := distrInfoByOperatorID[weight.OperatorID]
+		distrInfo, ok := distrInfoByOperatorID[weight.DelegationTargetID]
 		if !ok {
 			continue
 		}

@@ -15,19 +15,19 @@ func NewGenesisState(
 	rewardsPlans []RewardsPlan,
 	lastRewardsAllocationTime *time.Time,
 	delegatorWithdrawInfos []DelegatorWithdrawInfo,
-	poolOutstandingRewardsRecords []PoolOutstandingRewardsRecord,
-	poolHistoricalRewardsRecords []PoolHistoricalRewardsRecord,
-	poolCurrentRewardsRecords []PoolCurrentRewardsRecord,
-	poolDelegatorStartingInfoRecords []PoolDelegatorStartingInfoRecord,
-	operatorOutstandingRewardsRecords []OperatorOutstandingRewardsRecord,
+	poolOutstandingRewardsRecords []OutstandingRewardsRecord,
+	poolHistoricalRewardsRecords []HistoricalRewardsRecord,
+	poolCurrentRewardsRecords []CurrentRewardsRecord,
+	poolDelegatorStartingInfoRecords []DelegatorStartingInfoRecord,
+	operatorOutstandingRewardsRecords []OutstandingRewardsRecord,
 	operatorAccumulatedCommissionRecords []OperatorAccumulatedCommissionRecord,
-	operatorHistoricalRewardsRecords []OperatorHistoricalRewardsRecord,
-	operatorCurrentRewardsRecords []OperatorCurrentRewardsRecord,
-	operatorDelegatorStartingInfoRecords []OperatorDelegatorStartingInfoRecord,
-	serviceOutstandingRewardsRecords []ServiceOutstandingRewardsRecord,
-	serviceHistoricalRewardsRecords []ServiceHistoricalRewardsRecord,
-	serviceCurrentRewardsRecords []ServiceCurrentRewardsRecord,
-	serviceDelegatorStartingInfoRecords []ServiceDelegatorStartingInfoRecord,
+	operatorHistoricalRewardsRecords []HistoricalRewardsRecord,
+	operatorCurrentRewardsRecords []CurrentRewardsRecord,
+	operatorDelegatorStartingInfoRecords []DelegatorStartingInfoRecord,
+	serviceOutstandingRewardsRecords []OutstandingRewardsRecord,
+	serviceHistoricalRewardsRecords []HistoricalRewardsRecord,
+	serviceCurrentRewardsRecords []CurrentRewardsRecord,
+	serviceDelegatorStartingInfoRecords []DelegatorStartingInfoRecord,
 ) *GenesisState {
 	return &GenesisState{
 		Params:                         params,
@@ -54,11 +54,11 @@ func NewGenesisState(
 // DefaultGenesis returns the default genesis state.
 func DefaultGenesis() *GenesisState {
 	return NewGenesisState(
-		DefaultParams(), 1, []RewardsPlan{}, nil, []DelegatorWithdrawInfo{}, []PoolOutstandingRewardsRecord{},
-		[]PoolHistoricalRewardsRecord{}, []PoolCurrentRewardsRecord{}, []PoolDelegatorStartingInfoRecord{},
-		[]OperatorOutstandingRewardsRecord{}, []OperatorAccumulatedCommissionRecord{}, []OperatorHistoricalRewardsRecord{},
-		[]OperatorCurrentRewardsRecord{}, []OperatorDelegatorStartingInfoRecord{}, []ServiceOutstandingRewardsRecord{},
-		[]ServiceHistoricalRewardsRecord{}, []ServiceCurrentRewardsRecord{}, []ServiceDelegatorStartingInfoRecord{})
+		DefaultParams(), 1, []RewardsPlan{}, nil, []DelegatorWithdrawInfo{}, []OutstandingRewardsRecord{},
+		[]HistoricalRewardsRecord{}, []CurrentRewardsRecord{}, []DelegatorStartingInfoRecord{},
+		[]OutstandingRewardsRecord{}, []OperatorAccumulatedCommissionRecord{}, []HistoricalRewardsRecord{},
+		[]CurrentRewardsRecord{}, []DelegatorStartingInfoRecord{}, []OutstandingRewardsRecord{},
+		[]HistoricalRewardsRecord{}, []CurrentRewardsRecord{}, []DelegatorStartingInfoRecord{})
 }
 
 // Validate checks that the genesis state is valid.

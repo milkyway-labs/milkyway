@@ -21,16 +21,16 @@ func (s *KeeperTestSuite) TestCreateRewardsPlan_PoolOrOperatorNotFound() {
 	// There's no pool 1 yet.
 	_, err := rewardsMsgServer.CreateRewardsPlan(s.Ctx, types.NewMsgCreateRewardsPlan(
 		service.Admin, "Rewards Plan", service.ID, amtPerDay, planStartTime, planEndTime,
-		types.NewWeightedPoolsDistribution(1, []types.PoolDistributionWeight{
-			types.NewPoolDistributionWeight(1, 1),
-			types.NewPoolDistributionWeight(2, 3),
+		types.NewWeightedPoolsDistribution(1, []types.DistributionWeight{
+			types.NewDistributionWeight(1, 1),
+			types.NewDistributionWeight(2, 3),
 		}),
-		types.NewWeightedOperatorsDistribution(1, []types.OperatorDistributionWeight{
-			types.NewOperatorDistributionWeight(1, 3),
-			types.NewOperatorDistributionWeight(2, 2),
+		types.NewWeightedOperatorsDistribution(1, []types.DistributionWeight{
+			types.NewDistributionWeight(1, 3),
+			types.NewDistributionWeight(2, 2),
 		}),
 		types.NewBasicUsersDistribution(1)))
-	s.Require().EqualError(err, "pool 1 not found: pool not found: not found")
+	s.Require().EqualError(err, "cannot get delegation target 1: pool not found: not found")
 
 	s.DelegatePool(utils.MustParseCoin("100_000000umilk"), utils.TestAddress(1).String(), true)
 	s.DelegatePool(utils.MustParseCoin("100_000000uinit"), utils.TestAddress(2).String(), true)
@@ -39,14 +39,14 @@ func (s *KeeperTestSuite) TestCreateRewardsPlan_PoolOrOperatorNotFound() {
 	// operator 2 this time.
 	_, err = rewardsMsgServer.CreateRewardsPlan(s.Ctx, types.NewMsgCreateRewardsPlan(
 		service.Admin, "Rewards Plan", service.ID, amtPerDay, planStartTime, planEndTime,
-		types.NewWeightedPoolsDistribution(1, []types.PoolDistributionWeight{
-			types.NewPoolDistributionWeight(1, 1),
-			types.NewPoolDistributionWeight(2, 3),
+		types.NewWeightedPoolsDistribution(1, []types.DistributionWeight{
+			types.NewDistributionWeight(1, 1),
+			types.NewDistributionWeight(2, 3),
 		}),
-		types.NewWeightedOperatorsDistribution(1, []types.OperatorDistributionWeight{
-			types.NewOperatorDistributionWeight(1, 3),
-			types.NewOperatorDistributionWeight(2, 2),
+		types.NewWeightedOperatorsDistribution(1, []types.DistributionWeight{
+			types.NewDistributionWeight(1, 3),
+			types.NewDistributionWeight(2, 2),
 		}),
 		types.NewBasicUsersDistribution(1)))
-	s.Require().EqualError(err, "operator 2 not found: operator not found: not found")
+	s.Require().EqualError(err, "cannot get delegation target 2: operator not found: not found")
 }
