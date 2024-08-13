@@ -149,6 +149,9 @@ import (
 	ibcwasmhooks "github.com/milkyway-labs/milkyway/app/ibc-hooks"
 	appkeepers "github.com/milkyway-labs/milkyway/app/keepers"
 	"github.com/milkyway-labs/milkyway/utils"
+	"github.com/milkyway-labs/milkyway/x/assets"
+	assetskeeper "github.com/milkyway-labs/milkyway/x/assets/keeper"
+	assetstypes "github.com/milkyway-labs/milkyway/x/assets/types"
 	"github.com/milkyway-labs/milkyway/x/bank"
 	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
 	"github.com/milkyway-labs/milkyway/x/epochs"
@@ -181,9 +184,6 @@ import (
 	"github.com/milkyway-labs/milkyway/x/stakeibc"
 	stakeibckeeper "github.com/milkyway-labs/milkyway/x/stakeibc/keeper"
 	stakeibctypes "github.com/milkyway-labs/milkyway/x/stakeibc/types"
-	"github.com/milkyway-labs/milkyway/x/tickers"
-	tickerskeeper "github.com/milkyway-labs/milkyway/x/tickers/keeper"
-	tickerstypes "github.com/milkyway-labs/milkyway/x/tickers/types"
 	"github.com/milkyway-labs/milkyway/x/tokenfactory"
 	tokenfactorykeeper "github.com/milkyway-labs/milkyway/x/tokenfactory/keeper"
 	tokenfactorytypes "github.com/milkyway-labs/milkyway/x/tokenfactory/types"
@@ -302,7 +302,7 @@ type MilkyWayApp struct {
 	OperatorsKeeper *operatorskeeper.Keeper
 	PoolsKeeper     *poolskeeper.Keeper
 	RestakingKeeper *restakingkeeper.Keeper
-	TickersKeeper   *tickerskeeper.Keeper
+	AssetsKeeper    *assetskeeper.Keeper
 	RewardsKeeper   *rewardskeeper.Keeper
 
 	// make scoped keepers public for test purposes
@@ -368,7 +368,7 @@ func NewMilkyWayApp(
 
 		// Custom modules
 		servicestypes.StoreKey, operatorstypes.StoreKey, poolstypes.StoreKey, restakingtypes.StoreKey,
-		tickerstypes.StoreKey, rewardstypes.StoreKey,
+		assetstypes.StoreKey, rewardstypes.StoreKey,
 	)
 	tkeys := storetypes.NewTransientStoreKeys(forwardingtypes.TransientStoreKey)
 	memKeys := storetypes.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -921,9 +921,9 @@ func NewMilkyWayApp(
 		app.ServicesKeeper,
 		authorityAddr,
 	)
-	app.TickersKeeper = tickerskeeper.NewKeeper(
+	app.AssetsKeeper = assetskeeper.NewKeeper(
 		app.appCodec,
-		runtime.NewKVStoreService(keys[tickerstypes.StoreKey]),
+		runtime.NewKVStoreService(keys[assetstypes.StoreKey]),
 		authorityAddr,
 	)
 	app.RewardsKeeper = rewardskeeper.NewKeeper(
@@ -937,7 +937,7 @@ func NewMilkyWayApp(
 		app.OperatorsKeeper,
 		app.ServicesKeeper,
 		app.RestakingKeeper,
-		app.TickersKeeper,
+		app.AssetsKeeper,
 		authorityAddr,
 	)
 	app.RestakingKeeper.SetHooks(app.RewardsKeeper.Hooks())
@@ -991,7 +991,7 @@ func NewMilkyWayApp(
 		operators.NewAppModule(appCodec, app.OperatorsKeeper),
 		pools.NewAppModule(appCodec, app.PoolsKeeper),
 		restaking.NewAppModule(appCodec, app.RestakingKeeper),
-		tickers.NewAppModule(appCodec, app.TickersKeeper),
+		assets.NewAppModule(appCodec, app.AssetsKeeper),
 		rewards.NewAppModule(appCodec, app.RewardsKeeper),
 	)
 
@@ -1075,7 +1075,7 @@ func NewMilkyWayApp(
 		recordstypes.ModuleName, ratelimittypes.ModuleName, icacallbackstypes.ModuleName,
 
 		servicestypes.ModuleName, operatorstypes.ModuleName, poolstypes.ModuleName, restakingtypes.ModuleName,
-		tickerstypes.ModuleName, rewardstypes.ModuleName,
+		assetstypes.ModuleName, rewardstypes.ModuleName,
 		crisistypes.ModuleName,
 	}
 

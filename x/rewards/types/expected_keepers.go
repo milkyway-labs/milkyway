@@ -8,11 +8,11 @@ import (
 	slinkytypes "github.com/skip-mev/slinky/pkg/types"
 	oracletypes "github.com/skip-mev/slinky/x/oracle/types"
 
+	assetstypes "github.com/milkyway-labs/milkyway/x/assets/types"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
-	tickerstypes "github.com/milkyway-labs/milkyway/x/tickers/types"
 )
 
 type AccountKeeper interface {
@@ -74,6 +74,6 @@ type RestakingKeeper interface {
 	IterateAllServiceDelegations(ctx sdk.Context, cb func(del restakingtypes.Delegation) (stop bool))
 }
 
-type TickersKeeper interface {
-	GetAsset(ctx context.Context, denom string) (tickerstypes.Asset, error)
+type AssetsKeeper interface {
+	GetAsset(ctx context.Context, denom string) (assetstypes.Asset, error)
 }

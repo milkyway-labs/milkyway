@@ -15,15 +15,15 @@ import (
 	oracletypes "github.com/skip-mev/slinky/x/oracle/types"
 
 	milkywayapp "github.com/milkyway-labs/milkyway/app"
+	assetstypes "github.com/milkyway-labs/milkyway/x/assets/types"
 	operatorskeeper "github.com/milkyway-labs/milkyway/x/operators/keeper"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	restakingkeeper "github.com/milkyway-labs/milkyway/x/restaking/keeper"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 	rewardskeeper "github.com/milkyway-labs/milkyway/x/rewards/keeper"
-	"github.com/milkyway-labs/milkyway/x/rewards/types"
+	rewardstypes "github.com/milkyway-labs/milkyway/x/rewards/types"
 	serviceskeeper "github.com/milkyway-labs/milkyway/x/services/keeper"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
-	tickerstypes "github.com/milkyway-labs/milkyway/x/tickers/types"
 )
 
 // KeeperTestSuite is a base test suite for the keeper tests.
@@ -62,7 +62,7 @@ func (s *KeeperTestSuite) FundAccount(addr string, amt sdk.Coins) {
 // and price. RegisterCurrency creates a market for the currency if not exists.
 func (s *KeeperTestSuite) RegisterCurrency(denom, ticker string, exponent uint32, price math.LegacyDec) {
 	// Create market only if it doesn't exist.
-	mmTicker := marketmaptypes.NewTicker(ticker, types.USDTicker, math.LegacyPrecision, 0, true)
+	mmTicker := marketmaptypes.NewTicker(ticker, rewardstypes.USDTicker, math.LegacyPrecision, 0, true)
 	hasMarket, err := s.App.MarketMapKeeper.HasMarket(s.Ctx, mmTicker.String())
 	s.Require().NoError(err)
 	if !hasMarket {
@@ -70,14 +70,14 @@ func (s *KeeperTestSuite) RegisterCurrency(denom, ticker string, exponent uint32
 		s.Require().NoError(err)
 	}
 	err = s.App.OracleKeeper.SetPriceForCurrencyPair(
-		s.Ctx, slinkytypes.NewCurrencyPair(ticker, types.USDTicker),
+		s.Ctx, slinkytypes.NewCurrencyPair(ticker, rewardstypes.USDTicker),
 		oracletypes.QuotePrice{
 			Price:          math.NewIntFromBigInt(price.BigInt()),
 			BlockTimestamp: s.Ctx.BlockTime(),
 			BlockHeight:    uint64(s.Ctx.BlockHeight()),
 		})
 	s.Require().NoError(err)
-	err = s.App.TickersKeeper.SetAsset(s.Ctx, tickerstypes.NewAsset(denom, ticker, exponent))
+	err = s.App.AssetsKeeper.SetAsset(s.Ctx, assetstypes.NewAsset(denom, ticker, exponent))
 	s.Require().NoError(err)
 }
 
@@ -154,13 +154,13 @@ func (s *KeeperTestSuite) UpdateServiceParams(
 // initial rewards.
 func (s *KeeperTestSuite) CreateRewardsPlan(
 	serviceID uint32, amtPerDay sdk.Coins, startTime, endTime time.Time,
-	poolsDistr types.Distribution, operatorsDistr types.Distribution,
-	usersDistr types.UsersDistribution, initialRewards sdk.Coins,
-) types.RewardsPlan {
+	poolsDistr rewardstypes.Distribution, operatorsDistr rewardstypes.Distribution,
+	usersDistr rewardstypes.UsersDistribution, initialRewards sdk.Coins,
+) rewardstypes.RewardsPlan {
 	service, found := s.App.ServicesKeeper.GetService(s.Ctx, serviceID)
 	s.Require().True(found, "service must be found")
 	rewardsMsgServer := rewardskeeper.NewMsgServer(s.App.RewardsKeeper)
-	resp, err := rewardsMsgServer.CreateRewardsPlan(s.Ctx, types.NewMsgCreateRewardsPlan(
+	resp, err := rewardsMsgServer.CreateRewardsPlan(s.Ctx, rewardstypes.NewMsgCreateRewardsPlan(
 		service.Admin, "Rewards Plan", serviceID, amtPerDay, startTime, endTime,
 		poolsDistr, operatorsDistr, usersDistr))
 	s.Require().NoError(err)
@@ -179,10 +179,10 @@ func (s *KeeperTestSuite) CreateRewardsPlan(
 // all entities.
 func (s *KeeperTestSuite) CreateBasicRewardsPlan(
 	serviceID uint32, amtPerDay sdk.Coins, startTime, endTime time.Time, initialRewards sdk.Coins,
-) types.RewardsPlan {
+) rewardstypes.RewardsPlan {
 	return s.CreateRewardsPlan(
 		serviceID, amtPerDay, startTime, endTime,
-		types.NewBasicPoolsDistribution(0), types.NewBasicOperatorsDistribution(0), types.NewBasicUsersDistribution(0),
+		rewardstypes.NewBasicPoolsDistribution(0), rewardstypes.NewBasicOperatorsDistribution(0), rewardstypes.NewBasicUsersDistribution(0),
 		initialRewards)
 }
 
