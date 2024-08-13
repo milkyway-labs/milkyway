@@ -25,8 +25,6 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-var DefaultTestStartTime = time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
-
 type KeeperTestSuite struct {
 	suite.Suite
 
@@ -36,7 +34,10 @@ type KeeperTestSuite struct {
 
 func (s *KeeperTestSuite) SetupTest() {
 	s.App = milkywayapp.Setup(false)
-	s.Ctx = s.App.NewContextLegacy(false, cmtproto.Header{Height: 1, Time: DefaultTestStartTime})
+	s.Ctx = s.App.NewContextLegacy(false, cmtproto.Header{
+		Height: 1,
+		Time:   time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+	})
 }
 
 // FundAccount adds the given amount of coins to the account with the given address
