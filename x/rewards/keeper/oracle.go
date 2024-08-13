@@ -10,18 +10,18 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	slinkytypes "github.com/skip-mev/slinky/pkg/types"
 
+	assetstypes "github.com/milkyway-labs/milkyway/x/assets/types"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
-	tickerstypes "github.com/milkyway-labs/milkyway/x/tickers/types"
 )
 
-func (k *Keeper) GetAssetAndPrice(ctx context.Context, denom string) (tickerstypes.Asset, math.LegacyDec, error) {
-	asset, err := k.tickersKeeper.GetAsset(ctx, denom)
+func (k *Keeper) GetAssetAndPrice(ctx context.Context, denom string) (assetstypes.Asset, math.LegacyDec, error) {
+	asset, err := k.assetsKeeper.GetAsset(ctx, denom)
 	if err != nil {
 		// If asset is not found, then we return 0 as price.
 		if errors.IsOf(err, collections.ErrNotFound) {
-			return tickerstypes.Asset{}, math.LegacyZeroDec(), nil
+			return assetstypes.Asset{}, math.LegacyZeroDec(), nil
 		}
-		return tickerstypes.Asset{}, math.LegacyDec{}, err
+		return assetstypes.Asset{}, math.LegacyDec{}, err
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)

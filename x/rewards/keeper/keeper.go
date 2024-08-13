@@ -31,7 +31,7 @@ type Keeper struct {
 	operatorsKeeper     types.OperatorsKeeper
 	servicesKeeper      types.ServicesKeeper
 	restakingKeeper     types.RestakingKeeper
-	tickersKeeper       types.TickersKeeper
+	assetsKeeper        types.AssetsKeeper
 
 	Schema                         collections.Schema
 	Params                         collections.Item[types.Params]
@@ -67,7 +67,7 @@ func NewKeeper(
 	operatorsKeeper types.OperatorsKeeper,
 	servicesKeeper types.ServicesKeeper,
 	restakingKeeper types.RestakingKeeper,
-	tickersKeeper types.TickersKeeper,
+	assetsKeeper types.AssetsKeeper,
 	authority string,
 ) *Keeper {
 	sb := collections.NewSchemaBuilder(storeService)
@@ -82,7 +82,7 @@ func NewKeeper(
 		operatorsKeeper:     operatorsKeeper,
 		servicesKeeper:      servicesKeeper,
 		restakingKeeper:     restakingKeeper,
-		tickersKeeper:       tickersKeeper,
+		assetsKeeper:        assetsKeeper,
 
 		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		NextRewardsPlanID: collections.NewItem(

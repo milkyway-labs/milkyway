@@ -29,7 +29,7 @@ func TestKeeperTestSuite(t *testing.T) {
 
 func (s *KeeperTestSuite) SetupTest() {
 	s.KeeperTestSuite.SetupTest()
-	s.authority = s.App.TickersKeeper.GetAuthority()
+	s.authority = s.App.RewardsKeeper.GetAuthority()
 	s.keeper = s.App.RewardsKeeper
 	s.msgServer = keeper.NewMsgServer(s.keeper)
 	s.queryServer = keeper.NewQueryServer(s.keeper)

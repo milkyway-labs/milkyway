@@ -1,0 +1,71 @@
+syntax = "proto3";
+package milkyway.assets.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "milkyway/assets/v1/params.proto";
+import "milkyway/assets/v1/models.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/assets/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Params defines a gRPC query method that returns the parameters of the
+  // module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/milkyway/assets/v1/params";
+  }
+
+  // Assets defined a gRPC query method that returns all assets registered.
+  rpc Assets(QueryAssetsRequest) returns (QueryAssetsResponse) {
+    option (google.api.http).get = "/milkyway/assets/v1/assets";
+  }
+
+  // Asset defines a gRPC query method that returns the asset associated with
+  // the given token denomination.
+  rpc Asset(QueryAssetRequest) returns (QueryAssetResponse) {
+    option (google.api.http).get = "/milkyway/assets/v1/assets/{denom}";
+  }
+}
+
+// QueryParamsRequest is the request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is the response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  Params params = 1 [ (gogoproto.nullable) = false ];
+}
+
+// QueryAssetsRequest is the request type for the Query/Assets RPC method.
+message QueryAssetsRequest {
+  // Ticker defines an optional filter parameter to query assets with the given
+  // ticker.
+  string ticker = 1;
+
+  // Pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryAssetsResponse is the response type for the Query/Assets RPC method.
+message QueryAssetsResponse {
+  // Assets represents all the assets registered.
+  repeated Asset assets = 1
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+
+  // Pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryAssetRequest is the request type for the Query/Asset RPC method.
+message QueryAssetRequest {
+  // Denom is the token denomination for which the ticker is to be queried.
+  string denom = 1;
+}
+
+// QueryAssetResponse is the response type for the Query/Asset RPC method.
+message QueryAssetResponse {
+  // Asset is the asset associated with the token denomination.
+  Asset asset = 1 [ (gogoproto.nullable) = false ];
+}
