@@ -70,10 +70,14 @@ func setup(db *dbm.DB, withGenesis bool) (*MilkyWayApp, GenesisState) {
 	return app, GenesisState{}
 }
 
+// Setup initializes a new MilkyWayApp for testing.
+// A single validator will be created and registered in opchild module.
 func Setup(isCheckTx bool) *MilkyWayApp {
 	app, genState := setup(nil, true)
 
-	privVal := ed25519.GenPrivKey()
+	// Create a validator which will be the admin of the chain as well as the
+	// bridge executor.
+	privVal := ed25519.GenPrivKey() // TODO: make it deterministic?
 	pubKey := privVal.PubKey()
 	pubKeyAny, err := codectypes.NewAnyWithValue(privVal.PubKey())
 	if err != nil {
