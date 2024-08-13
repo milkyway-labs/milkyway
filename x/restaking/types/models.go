@@ -209,6 +209,31 @@ func (e UnbondingDelegationEntry) IsMature(currentTime time.Time) bool {
 	return !e.CompletionTime.After(currentTime)
 }
 
+// Validate validates the unbonding delegation entry
+func (e UnbondingDelegationEntry) Validate() error {
+	if e.UnbondingId == 0 {
+		return fmt.Errorf("invalid unbonding id")
+	}
+
+	if e.CreationHeight == 0 {
+		return fmt.Errorf("invalid creation height")
+	}
+
+	if e.CompletionTime.IsZero() {
+		return fmt.Errorf("invalid completion time")
+	}
+
+	if !e.InitialBalance.IsValid() {
+		return fmt.Errorf("invalid initial balance")
+	}
+
+	if !e.Balance.IsValid() {
+		return fmt.Errorf("invalid balance")
+	}
+
+	return nil
+}
+
 // NewPoolUnbondingDelegation creates a new UnbondingDelegation instance representing an
 // unbonding delegation to a pool
 func NewPoolUnbondingDelegation(
@@ -286,6 +311,34 @@ func (ubd *UnbondingDelegation) AddEntry(creationHeight int64, completionTime ti
 // RemoveEntry removes the entry at index i from the unbonding delegation
 func (ubd *UnbondingDelegation) RemoveEntry(i int64) {
 	ubd.Entries = append(ubd.Entries[:i], ubd.Entries[i+1:]...)
+}
+
+func (udb UnbondingDelegation) Validate() error {
+	if udb.Type == UNBONDING_DELEGATION_TYPE_UNSPECIFIED {
+		return fmt.Errorf("invalid unbonding delegation type")
+	}
+
+	if udb.TargetID == 0 {
+		return fmt.Errorf("invalid target id")
+	}
+
+	_, err := sdk.AccAddressFromBech32(udb.DelegatorAddress)
+	if err != nil {
+		return fmt.Errorf("invalid delegator address")
+	}
+
+	if len(udb.Entries) == 0 {
+		return fmt.Errorf("empty entries")
+	}
+
+	for _, entry := range udb.Entries {
+		err = entry.Validate()
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // MarshalUnbondingDelegation marshals the unbonding delegation using the provided codec

@@ -372,3 +372,59 @@ func (k *Keeper) PerformUndelegation(ctx sdk.Context, data types.UndelegationDat
 
 	return completionTime, nil
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+// --- Unbonding iterations operations
+// --------------------------------------------------------------------------------------------------------------------
+
+func (k *Keeper) GetAllPoolUnbondingDelegations(ctx sdk.Context) []types.UnbondingDelegation {
+	store := ctx.KVStore(k.storeKey)
+	iterator := store.Iterator(types.UnbondingPoolDelegationPrefix, storetypes.PrefixEndBytes(types.UnbondingPoolDelegationPrefix))
+	defer iterator.Close()
+
+	var unbondingDelegations []types.UnbondingDelegation
+	for ; iterator.Valid(); iterator.Next() {
+		unbondingDelegation := types.MustUnmarshalUnbondingDelegation(k.cdc, iterator.Value())
+		unbondingDelegations = append(unbondingDelegations, unbondingDelegation)
+	}
+
+	return unbondingDelegations
+}
+
+func (k *Keeper) GetAllOperatorUnbondingDelegations(ctx sdk.Context) []types.UnbondingDelegation {
+	store := ctx.KVStore(k.storeKey)
+	iterator := store.Iterator(types.UnbondingOperatorDelegationPrefix, storetypes.PrefixEndBytes(types.UnbondingOperatorDelegationPrefix))
+	defer iterator.Close()
+
+	var unbondingDelegations []types.UnbondingDelegation
+	for ; iterator.Valid(); iterator.Next() {
+		unbondingDelegation := types.MustUnmarshalUnbondingDelegation(k.cdc, iterator.Value())
+		unbondingDelegations = append(unbondingDelegations, unbondingDelegation)
+	}
+
+	return unbondingDelegations
+}
+
+func (k *Keeper) GetAllServiceUnbondingDelegations(ctx sdk.Context) []types.UnbondingDelegation {
+	store := ctx.KVStore(k.storeKey)
+	iterator := store.Iterator(types.UnbondingServiceDelegationPrefix, storetypes.PrefixEndBytes(types.UnbondingServiceDelegationPrefix))
+	defer iterator.Close()
+
+	var unbondingDelegations []types.UnbondingDelegation
+	for ; iterator.Valid(); iterator.Next() {
+		unbondingDelegation := types.MustUnmarshalUnbondingDelegation(k.cdc, iterator.Value())
+		unbondingDelegations = append(unbondingDelegations, unbondingDelegation)
+	}
+
+	return unbondingDelegations
+}
+
+func (k *Keeper) GetAllUnbondingDelegations(ctx sdk.Context) []types.UnbondingDelegation {
+	var unbondingDelegations []types.UnbondingDelegation
+
+	unbondingDelegations = append(unbondingDelegations, k.GetAllPoolUnbondingDelegations(ctx)...)
+	unbondingDelegations = append(unbondingDelegations, k.GetAllOperatorUnbondingDelegations(ctx)...)
+	unbondingDelegations = append(unbondingDelegations, k.GetAllServiceUnbondingDelegations(ctx)...)
+
+	return unbondingDelegations
+}

@@ -30,12 +30,14 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		operatorParamsRecords,
 		serviceParamsRecords,
 		k.GetAllDelegations(ctx),
+		k.GetAllUnbondingDelegations(ctx),
 		k.GetParams(ctx),
 	)
 }
 
 // InitGenesis initializes the genesis store using the provided data
 func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
+	// Store the operator and service params
 	for _, record := range data.OperatorsParams {
 		k.SaveOperatorParams(ctx, record.OperatorID, record.Params)
 	}
@@ -49,6 +51,18 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
 		err := k.SetDelegation(ctx, delegation)
 		if err != nil {
 			panic(err)
+		}
+	}
+
+	// Store the unbonding delegations
+	for _, ubd := range data.UnbondingDelegations {
+		_, err := k.SetUnbondingDelegation(ctx, ubd)
+		if err != nil {
+			panic(err)
+		}
+
+		for _, entry := range ubd.Entries {
+			k.InsertUBDQueue(ctx, ubd, entry.CompletionTime)
 		}
 	}
 
