@@ -6,7 +6,6 @@ import (
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/utils"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
@@ -251,6 +250,34 @@ func (k *Keeper) PerformDelegation(ctx sdk.Context, data types.DelegationData) (
 // --- Unbonding operations
 // --------------------------------------------------------------------------------------------------------------------
 
+func (k *Keeper) getUnbondingDelegationTarget(ctx sdk.Context, ubd types.UnbondingDelegation) (types.DelegationTarget, error) {
+	switch ubd.Type {
+	case types.UNBONDING_DELEGATION_TYPE_POOL:
+		pool, found := k.poolsKeeper.GetPool(ctx, ubd.TargetID)
+		if !found {
+			return nil, poolstypes.ErrPoolNotFound
+		}
+		return &pool, nil
+
+	case types.UNBONDING_DELEGATION_TYPE_OPERATOR:
+		operator, found := k.operatorsKeeper.GetOperator(ctx, ubd.TargetID)
+		if !found {
+			return nil, operatorstypes.ErrOperatorNotFound
+		}
+		return &operator, nil
+
+	case types.UNBONDING_DELEGATION_TYPE_SERVICE:
+		service, found := k.servicesKeeper.GetService(ctx, ubd.TargetID)
+		if !found {
+			return nil, servicestypes.ErrServiceNotFound
+		}
+		return &service, nil
+
+	default:
+		return nil, types.ErrInvalidDelegationType
+	}
+}
+
 // getUnbondingDelegationKeyBuilder returns the key builder for the given unbonding delegation
 func (k *Keeper) getUnbondingDelegationKeyBuilder(ud types.UnbondingDelegation) (types.UnbondingDelegationKeyBuilder, error) {
 	switch ud.Type {
@@ -269,11 +296,11 @@ func (k *Keeper) getUnbondingDelegationKeyBuilder(ud types.UnbondingDelegation) 
 }
 
 // SetUnbondingDelegation stores the given unbonding delegation in the store
-func (k *Keeper) SetUnbondingDelegation(ctx sdk.Context, ud types.UnbondingDelegation, entryID uint64) error {
+func (k *Keeper) SetUnbondingDelegation(ctx sdk.Context, ud types.UnbondingDelegation) ([]byte, error) {
 	// Get the key to be used to store the unbonding delegation
 	getUnbondingDelegation, err := k.getUnbondingDelegationKeyBuilder(ud)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	unbondingDelegationKey := getUnbondingDelegation(ud.DelegatorAddress, ud.TargetID)
 
@@ -281,28 +308,37 @@ func (k *Keeper) SetUnbondingDelegation(ctx sdk.Context, ud types.UnbondingDeleg
 	store := ctx.KVStore(k.storeKey)
 	store.Set(unbondingDelegationKey, types.MustMarshalUnbondingDelegation(k.cdc, ud))
 
-	// Set the index allowing to lookup the UnbondingDelegation by the unbondingID of an
-	// UnbondingDelegationEntry that it contains
-	store.Set(types.GetUnbondingIndexKey(entryID), unbondingDelegationKey)
-
-	// Set the type of the unbonding delegation so that we know how to deserialize id
-	store.Set(types.GetUnbondingTypeKey(entryID), utils.Uint32ToBytes(ud.TargetID))
-
-	return nil
+	return unbondingDelegationKey, nil
 }
 
 // GetUnbondingDelegation returns the unbonding delegation for the given delegator and target.
-func (k *Keeper) GetUnbondingDelegation(ctx sdk.Context, delegatorAddress string, target types.DelegationTarget) (types.UnbondingDelegation, bool) {
-	switch target.(type) {
-	case *poolstypes.Pool:
-		return k.GetPoolUnbondingDelegation(ctx, target.GetID(), delegatorAddress)
-	case *operatorstypes.Operator:
-		return k.GetOperatorUnbondingDelegation(ctx, delegatorAddress, target.GetID())
-	case *servicestypes.Service:
-		return k.GetServiceUnbondingDelegation(ctx, delegatorAddress, target.GetID())
+func (k *Keeper) GetUnbondingDelegation(
+	ctx sdk.Context, delegatorAddress string, ubdType types.UnbondingDelegationType, targetID uint32,
+) (types.UnbondingDelegation, bool) {
+	switch ubdType {
+	case types.UNBONDING_DELEGATION_TYPE_POOL:
+		return k.GetPoolUnbondingDelegation(ctx, targetID, delegatorAddress)
+	case types.UNBONDING_DELEGATION_TYPE_OPERATOR:
+		return k.GetOperatorUnbondingDelegation(ctx, delegatorAddress, targetID)
+	case types.UNBONDING_DELEGATION_TYPE_SERVICE:
+		return k.GetServiceUnbondingDelegation(ctx, delegatorAddress, targetID)
 	default:
 		return types.UnbondingDelegation{}, false
 	}
+}
+
+// RemoveUnbondingDelegation removes the unbonding delegation object and associated index.
+func (k *Keeper) RemoveUnbondingDelegation(ctx sdk.Context, ubd types.UnbondingDelegation) error {
+	// Get the key to be used to store the unbonding delegation
+	getUnbondingDelegation, err := k.getUnbondingDelegationKeyBuilder(ubd)
+	if err != nil {
+		return err
+	}
+	unbondingDelegationKey := getUnbondingDelegation(ubd.DelegatorAddress, ubd.TargetID)
+
+	store := ctx.KVStore(k.storeKey)
+	store.Delete(unbondingDelegationKey)
+	return nil
 }
 
 // PerformUndelegation unbonds an amount of delegator shares from a given validator. It

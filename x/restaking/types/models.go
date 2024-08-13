@@ -9,6 +9,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/utils"
+	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
+	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
 func NewOperatorParams(commissionRate math.LegacyDec, joinedServicesIDs []uint32) OperatorParams {
@@ -176,6 +179,20 @@ func NewDelegationResponse(delegation Delegation, balance sdk.Coins) DelegationR
 
 // --------------------------------------------------------------------------------------------------------------------
 
+// GetUnboningDelegationTypeFromTarget returns the unbonding delegation type based on the target
+func GetUnboningDelegationTypeFromTarget(target DelegationTarget) (UnbondingDelegationType, error) {
+	switch target.(type) {
+	case *poolstypes.Pool:
+		return UNBONDING_DELEGATION_TYPE_POOL, nil
+	case *operatorstypes.Operator:
+		return UNBONDING_DELEGATION_TYPE_OPERATOR, nil
+	case *servicestypes.Service:
+		return UNBONDING_DELEGATION_TYPE_SERVICE, nil
+	default:
+		return UNBONDING_DELEGATION_TYPE_UNSPECIFIED, fmt.Errorf("invalid unbonding target type")
+	}
+}
+
 // NewUnbondingDelegationEntry creates a new UnbondingDelegationEntry instance
 func NewUnbondingDelegationEntry(creationHeight int64, completionTime time.Time, balance sdk.Coins, unbondingID uint64) UnbondingDelegationEntry {
 	return UnbondingDelegationEntry{
@@ -185,6 +202,11 @@ func NewUnbondingDelegationEntry(creationHeight int64, completionTime time.Time,
 		Balance:        balance,
 		UnbondingId:    unbondingID,
 	}
+}
+
+// IsMature tells whether is the current entry mature
+func (e UnbondingDelegationEntry) IsMature(currentTime time.Time) bool {
+	return !e.CompletionTime.After(currentTime)
 }
 
 // NewPoolUnbondingDelegation creates a new UnbondingDelegation instance representing an
@@ -259,6 +281,11 @@ func (ubd *UnbondingDelegation) AddEntry(creationHeight int64, minTime time.Time
 		entry := NewUnbondingDelegationEntry(creationHeight, minTime, balance, unbondingID)
 		ubd.Entries = append(ubd.Entries, entry)
 	}
+}
+
+// RemoveEntry removes the entry at index i from the unbonding delegation
+func (ubd *UnbondingDelegation) RemoveEntry(i int64) {
+	ubd.Entries = append(ubd.Entries[:i], ubd.Entries[i+1:]...)
 }
 
 // MarshalUnbondingDelegation marshals the unbonding delegation using the provided codec

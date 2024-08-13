@@ -36,6 +36,12 @@ func (k *Keeper) IncrementUnbondingID(ctx sdk.Context) (unbondingID uint64) {
 	return unbondingID
 }
 
+// DeleteUnbondingIndex removes a mapping from UnbondingId to unbonding operation
+func (k *Keeper) DeleteUnbondingIndex(ctx sdk.Context, id uint64) {
+	store := ctx.KVStore(k.storeKey)
+	store.Delete(types.GetUnbondingIndexKey(id))
+}
+
 // ValidateUnbondAmount validates that a given unbond or redelegation amount is valid based on upon the
 // converted shares. If the amount is valid, the total amount of respective shares is returned,
 // otherwise an error is returned.
@@ -162,17 +168,30 @@ func (k *Keeper) SetUnbondingDelegationEntry(
 	id := k.IncrementUnbondingID(ctx)
 
 	// Either get the existing unbonding delegation, or create a new one
-	ubd, found := k.GetUnbondingDelegation(ctx, data.Delegator, data.Target)
+	ubdType, err := types.GetUnboningDelegationTypeFromTarget(data.Target)
+	if err != nil {
+		return types.UnbondingDelegation{}, err
+	}
+
+	ubd, found := k.GetUnbondingDelegation(ctx, data.Delegator, ubdType, data.Target.GetID())
 	if found {
 		ubd.AddEntry(creationHeight, minTime, balance, id)
 	} else {
 		ubd = data.BuildUnbondingDelegation(data.Delegator, data.Target.GetID(), creationHeight, minTime, balance, id)
 	}
 
-	err := k.SetUnbondingDelegation(ctx, ubd, id)
+	unbondingDelegationKey, err := k.SetUnbondingDelegation(ctx, ubd)
 	if err != nil {
 		return types.UnbondingDelegation{}, err
 	}
+
+	// Set the index allowing to lookup the UnbondingDelegation by the unbondingID of an
+	// UnbondingDelegationEntry that it contains
+	store := ctx.KVStore(k.storeKey)
+	store.Set(types.GetUnbondingIndexKey(id), unbondingDelegationKey)
+
+	// Set the type of the unbonding delegation so that we know how to deserialize id
+	store.Set(types.GetUnbondingTypeKey(id), utils.Uint32ToBytes(ubd.TargetID))
 
 	// Call the hook after the unbonding has been initiated
 	err = k.AfterUnbondingInitiated(ctx, id)
@@ -181,6 +200,79 @@ func (k *Keeper) SetUnbondingDelegationEntry(
 	}
 
 	return ubd, nil
+}
+
+// CompleteUnbonding completes the unbonding of all mature entries in the
+// retrieved unbonding delegation object and returns the total unbonding balance
+// or an error upon failure.
+func (k *Keeper) CompleteUnbonding(ctx sdk.Context, data types.DTData) (sdk.Coins, error) {
+	// Get the unbonding delegation entry
+	ubd, found := k.GetUnbondingDelegation(ctx, data.DelegatorAddress, data.UnbondingDelegationType, data.TargetID)
+	if !found {
+		return nil, types.ErrNoUnbondingDelegation
+	}
+
+	// Get the target of the unbonding delegation
+	target, err := k.getUnbondingDelegationTarget(ctx, ubd)
+	if err != nil {
+		return nil, err
+	}
+
+	// Get the address of the target
+	targetAddress, err := sdk.AccAddressFromBech32(target.GetAddress())
+	if err != nil {
+		return nil, err
+	}
+
+	// Get the address of the delegator
+	delegatorAddress, err := sdk.AccAddressFromBech32(ubd.DelegatorAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	balances := sdk.NewCoins()
+	ctxTime := ctx.BlockHeader().Time
+
+	// Loop through all the entries and complete unbonding mature entries
+	for i := 0; i < len(ubd.Entries); i++ {
+		entry := ubd.Entries[i]
+		if entry.IsMature(ctxTime) {
+			// Remove the entry
+			ubd.RemoveEntry(int64(i))
+			i--
+
+			// Delete the index
+			k.DeleteUnbondingIndex(ctx, entry.UnbondingId)
+
+			// Track undelegation only when remaining or truncated shares are non-zero
+			if !entry.Balance.IsZero() {
+				amount := entry.Balance
+
+				// Send the coins back to the delegator
+				err = k.bankKeeper.SendCoins(ctx, targetAddress, delegatorAddress, amount)
+				if err != nil {
+					return nil, err
+				}
+
+				balances = balances.Add(amount...)
+			}
+		}
+	}
+
+	// Set the unbonding delegation or remove it if there are no more entries
+	if len(ubd.Entries) == 0 {
+		err = k.RemoveUnbondingDelegation(ctx, ubd)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		_, err = k.SetUnbondingDelegation(ctx, ubd)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return balances, nil
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -214,7 +306,11 @@ func (k *Keeper) SetUBDQueueTimeSlice(ctx sdk.Context, timestamp time.Time, keys
 // InsertUBDQueue inserts an unbonding delegation to the appropriate timeslice
 // in the unbonding queue.
 func (k *Keeper) InsertUBDQueue(ctx sdk.Context, ubd types.UnbondingDelegation, completionTime time.Time) {
-	dvPair := types.DTData{Type: ubd.Type, DelegatorAddress: ubd.DelegatorAddress, TargetID: ubd.TargetID}
+	dvPair := types.DTData{
+		UnbondingDelegationType: ubd.Type,
+		DelegatorAddress:        ubd.DelegatorAddress,
+		TargetID:                ubd.TargetID,
+	}
 
 	timeSlice := k.GetUBDQueueTimeSlice(ctx, completionTime)
 	if len(timeSlice) == 0 {

@@ -11,4 +11,5 @@ var (
 	ErrDelegationNotFound          = errors.Register(ModuleName, 4, "delegation not found")
 	ErrNotEnoughDelegationShares   = errors.Register(ModuleName, 5, "not enough delegation shares")
 	ErrInvalidDelegationType       = errors.Register(ModuleName, 6, "invalid delegation type")
+	ErrNoUnbondingDelegation       = errors.Register(ModuleName, 7, "no unbonding delegation found")
 )

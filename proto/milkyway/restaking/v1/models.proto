@@ -166,7 +166,7 @@ message DTData {
   option (gogoproto.equal) = false;
   option (gogoproto.goproto_getters) = false;
 
-  UnbondingDelegationType type = 1;
+  UnbondingDelegationType unbonding_delegation_type = 1;
   string delegator_address = 2
       [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
   uint32 target_id = 3 [ (gogoproto.customname) = "TargetID" ];

@@ -1,6 +1,7 @@
 package types
 
 const (
+	EventTypeCompleteUnbonding    = "complete_unbonding"
 	EventTypeUpdateOperatorParams = "update_operator_params"
 	EventTypeUpdateServiceParams  = "update_service_params"
 	EventTypeDelegatePool         = "delegate_pool"
@@ -18,4 +19,6 @@ const (
 	AttributeKeyServiceID              = "service_id"
 	AttributeKeyNewShares              = "new_shares"
 	AttributeKeyCompletionTime         = "completion_time"
+	AttributeUnbondingDelegationType   = "unbonding_delegation"
+	AttributeTargetID                  = "target_id"
 )
