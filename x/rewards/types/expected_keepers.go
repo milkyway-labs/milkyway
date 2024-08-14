@@ -41,6 +41,7 @@ type PoolsKeeper interface {
 	GetParams(ctx sdk.Context) poolstypes.Params
 	GetPool(ctx sdk.Context, poolID uint32) (poolstypes.Pool, bool)
 	GetPools(ctx sdk.Context) []poolstypes.Pool
+	IteratePools(ctx sdk.Context, cb func(pool poolstypes.Pool) (stop bool))
 }
 
 type OperatorsKeeper interface {
@@ -50,6 +51,7 @@ type OperatorsKeeper interface {
 
 type ServicesKeeper interface {
 	GetService(ctx sdk.Context, serviceID uint32) (servicestypes.Service, bool)
+	IterateServices(ctx sdk.Context, cb func(service servicestypes.Service) (stop bool))
 }
 
 type RestakingKeeper interface {
@@ -63,6 +65,9 @@ type RestakingKeeper interface {
 		ctx sdk.Context, userAddress string, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
 	IterateUserServiceDelegations(
 		ctx sdk.Context, userAddress string, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
+	IterateAllPoolDelegations(ctx sdk.Context, cb func(del restakingtypes.Delegation) (stop bool))
+	IterateAllOperatorDelegations(ctx sdk.Context, cb func(del restakingtypes.Delegation) (stop bool))
+	IterateAllServiceDelegations(ctx sdk.Context, cb func(del restakingtypes.Delegation) (stop bool))
 }
 
 type TickersKeeper interface {
