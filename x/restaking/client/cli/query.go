@@ -47,6 +47,8 @@ func GetPoolsQueryCmd() *cobra.Command {
 	queryCmd.AddCommand(
 		getPoolDelegationsQueryCmd(),
 		getPoolDelegationQueryCmd(),
+		getPoolUnbondingDelegationsQueryCmd(),
+		getPoolUnbondingDelegationQueryCmd(),
 	)
 
 	return queryCmd
@@ -126,6 +128,80 @@ func getPoolDelegationQueryCmd() *cobra.Command {
 	return cmd
 }
 
+// getPoolUnbondingDelegationsQueryCmd returns the command allowing to query the unbonding delegations of a pool
+func getPoolUnbondingDelegationsQueryCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "unbonding-delegations [pool-id]",
+		Short:   "Query the unbonding delegations of a pool",
+		Example: fmt.Sprintf(`%s query %s pool unbonding-delegations 1 --page=2 --limit=100`, version.AppName, types.ModuleName),
+		Args:    cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+
+			poolID, err := poolstypes.ParsePoolID(args[0])
+			if err != nil {
+				return err
+			}
+
+			pageReq, err := client.ReadPageRequest(cmd.Flags())
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.PoolUnbondingDelegations(cmd.Context(), types.NewQueryPoolUnbondingDelegationsRequest(poolID, pageReq))
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+	flags.AddPaginationFlagsToCmd(cmd, "pool unbonding delegations")
+
+	return cmd
+}
+
+// getPoolUnbondingDelegationQueryCmd returns the command allowing to query an unbonding delegation of a pool
+func getPoolUnbondingDelegationQueryCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "unbonding-delegation [pool-id] [delegator-address]",
+		Short:   "Query the unbonding delegation of a pool",
+		Example: fmt.Sprintf(`%s query %s pool unbonding-delegation 1 init1yu5vratzjspgtd0rnrc0d5a79kkqy0n57rhfyh`, version.AppName, types.ModuleName),
+		Args:    cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+
+			poolID, err := poolstypes.ParsePoolID(args[0])
+			if err != nil {
+				return err
+			}
+
+			delegatorAddress := args[1]
+
+			res, err := queryClient.PoolUnbondingDelegation(cmd.Context(), types.NewQueryPoolUnbondingDelegationRequest(poolID, delegatorAddress))
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
 // --------------------------------------------------------------------------------------------------------------------
 
 // GetOperatorsQueryCmd returns the command allowing to query operators
@@ -139,6 +215,8 @@ func GetOperatorsQueryCmd() *cobra.Command {
 		getOperatorParamsQueryCmd(),
 		getOperatorDelegationsQueryCmd(),
 		getOperatorDelegationQueryCmd(),
+		getOperatorUnbondingDelegationsQueryCmd(),
+		getOperatorUnbondingDelegationQueryCmd(),
 	)
 
 	return queryCmd
@@ -177,7 +255,7 @@ func getOperatorParamsQueryCmd() *cobra.Command {
 	return cmd
 }
 
-// getOperatorQueryCmd returns the command allowing to query an operator
+// getOperatorDelegationsQueryCmd returns the command allowing to query an operator delegations
 func getOperatorDelegationsQueryCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "delegations [operator-id]",
@@ -251,6 +329,80 @@ func getOperatorDelegationQueryCmd() *cobra.Command {
 	return cmd
 }
 
+// getOperatorUnbondingDelegationsQueryCmd returns the command allowing to query an operator unbonding delegations
+func getOperatorUnbondingDelegationsQueryCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "unbonding-delegations [operator-id]",
+		Short:   "Query the unbonding delegations of an operator",
+		Example: fmt.Sprintf(`%s query %s operator unbonding-delegations 1 --page=2 --limit=100`, version.AppName, types.ModuleName),
+		Args:    cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+
+			operatorID, err := operatorstypes.ParseOperatorID(args[0])
+			if err != nil {
+				return err
+			}
+
+			pageReq, err := client.ReadPageRequest(cmd.Flags())
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.OperatorUnbondingDelegations(cmd.Context(), types.NewQueryOperatorUnbondingDelegationsRequest(operatorID, pageReq))
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+	flags.AddPaginationFlagsToCmd(cmd, "operator unbonding delegations")
+
+	return cmd
+}
+
+// getOperatorUnbondingDelegationQueryCmd returns the command allowing to query an unbonding delegation of an operator
+func getOperatorUnbondingDelegationQueryCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "unbonding-delegation [operator-id] [delegator-address]",
+		Short:   "Query an unbonding delegation of an operator",
+		Example: fmt.Sprintf(`%s query %s operator unbondingdelegation 1 init1yu5vratzjspgtd0rnrc0d5a79kkqy0n57rhfyh`, version.AppName, types.ModuleName),
+		Args:    cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+
+			operatorID, err := operatorstypes.ParseOperatorID(args[0])
+			if err != nil {
+				return err
+			}
+
+			delegatorAddress := args[1]
+
+			res, err := queryClient.OperatorUnbondingDelegation(cmd.Context(), types.NewQueryOperatorUnbondingDelegationRequest(operatorID, delegatorAddress))
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
 // --------------------------------------------------------------------------------------------------------------------
 
 // GetServicesQueryCmd returns the command allowing to perform queries
@@ -264,6 +416,8 @@ func GetServicesQueryCmd() *cobra.Command {
 		getServiceParamsQueryCmd(),
 		getServiceDelegationsQueryCmd(),
 		getServiceDelegationQueryCmd(),
+		getServiceUnbondingDelegationsQueryCmd(),
+		getServiceUnbondingDelegationQueryCmd(),
 	)
 
 	return queryCmd
@@ -376,6 +530,80 @@ func getServiceDelegationQueryCmd() *cobra.Command {
 	return cmd
 }
 
+// getServiceUnbondingDelegationsQueryCmd returns the command allowing to query the unbonding delegations of a service
+func getServiceUnbondingDelegationsQueryCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "unbonding-delegations [service-id]",
+		Short:   "Query the unbonding delegations of a service",
+		Example: fmt.Sprintf(`%s query %s service unbonding-delegations 1 --page=2 --limit=100`, version.AppName, types.ModuleName),
+		Args:    cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+
+			serviceID, err := servicestypes.ParseServiceID(args[0])
+			if err != nil {
+				return err
+			}
+
+			pageReq, err := client.ReadPageRequest(cmd.Flags())
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.ServiceUnbondingDelegations(cmd.Context(), types.NewQueryServiceUnbondingDelegationsRequest(serviceID, pageReq))
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+	flags.AddPaginationFlagsToCmd(cmd, "service delegations")
+
+	return cmd
+}
+
+// getServiceUnbondingDelegationQueryCmd returns the command allowing to query an unbonding delegation of a service
+func getServiceUnbondingDelegationQueryCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "unbonding-delegation [service-id] [delegator-address]",
+		Short:   "Query an unbonding delegation of a service",
+		Example: fmt.Sprintf(`%s query %s service unbonding-delegation 1 init1yu5vratzjspgtd0rnrc0d5a79kkqy0n57rhfyh`, version.AppName, types.ModuleName),
+		Args:    cobra.ExactArgs(2),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+
+			serviceID, err := servicestypes.ParseServiceID(args[0])
+			if err != nil {
+				return err
+			}
+
+			delegatorAddress := args[1]
+
+			res, err := queryClient.ServiceUnbondingDelegation(cmd.Context(), types.NewQueryServiceUnbondingDelegationRequest(serviceID, delegatorAddress))
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
 // --------------------------------------------------------------------------------------------------------------------
 
 // GetDelegatorQueryCmd returns the command allowing to perform queries for a delegator
@@ -387,12 +615,15 @@ func GetDelegatorQueryCmd() *cobra.Command {
 
 	queryCmd.AddCommand(
 		getDelegatorPoolDelegationsQueryCmd(),
+		getDelegatorPoolUnbondingDelegationsQueryCmd(),
 		getDelegatorPoolsQueryCmd(),
 		getDelegatorPoolQueryCmd(),
 		getDelegatorOperatorDelegationsQueryCmd(),
+		getDelegatorOperatorUnbondingDelegationsQueryCmd(),
 		getDelegatorOperatorsQueryCmd(),
 		getDelegatorOperatorQueryCmd(),
 		getDelegatorServiceDelegationsQueryCmd(),
+		getDelegatorServiceUnbondingDelegationsQueryCmd(),
 		getDelegatorServicesQueryCmd(),
 		getDelegatorServiceQueryCmd(),
 	)
@@ -432,6 +663,42 @@ func getDelegatorPoolDelegationsQueryCmd() *cobra.Command {
 
 	flags.AddQueryFlagsToCmd(cmd)
 	flags.AddPaginationFlagsToCmd(cmd, "delegator pool delegations")
+
+	return cmd
+}
+
+// getDelegatorPoolUnbondingDelegationsQueryCmd returns the command allowing to query all pools unbonding delegations of a delegator
+func getDelegatorPoolUnbondingDelegationsQueryCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "pools-unbonding-delegations [delegator-address]",
+		Short:   "Query all pools unbonding delegations of a delegator",
+		Example: fmt.Sprintf(`%s query %s delegator pools-unbonding-delegations init1yu5vratzjspgtd0rnrc0d5a79kkqy0n57rhfyh --page=2 --limit=100`, version.AppName, types.ModuleName),
+		Args:    cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+
+			delegatorAddress := args[0]
+
+			pageReq, err := client.ReadPageRequest(cmd.Flags())
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.DelegatorPoolUnbondingDelegations(cmd.Context(), types.NewQueryDelegatorPoolUnbondingDelegationsRequest(delegatorAddress, pageReq))
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+	flags.AddPaginationFlagsToCmd(cmd, "delegator pool unbonding delegations")
 
 	return cmd
 }
@@ -542,6 +809,42 @@ func getDelegatorOperatorDelegationsQueryCmd() *cobra.Command {
 	return cmd
 }
 
+// getDelegatorOperatorDelegationsQueryCmd returns the command allowing to query all operators unbonding delegations of a delegator
+func getDelegatorOperatorUnbondingDelegationsQueryCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "operators-unbonding-delegations [delegator-address]",
+		Short:   "Query all operators unbonding delegations of a delegator",
+		Example: fmt.Sprintf(`%s query %s delegator operators-unbonding-delegations init1yu5vratzjspgtd0rnrc0d5a79kkqy0n57rhfyh --page=2 --limit=100`, version.AppName, types.ModuleName),
+		Args:    cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+
+			delegatorAddress := args[0]
+
+			pageReq, err := client.ReadPageRequest(cmd.Flags())
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.DelegatorOperatorUnbondingDelegations(cmd.Context(), types.NewQueryDelegatorOperatorUnbondingDelegationsRequest(delegatorAddress, pageReq))
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+	flags.AddPaginationFlagsToCmd(cmd, "delegator operator unbonding delegations")
+
+	return cmd
+}
+
 // getDelegatorOperatorsQueryCmd returns the command allowing to query all operators a delegator has delegated to
 func getDelegatorOperatorsQueryCmd() *cobra.Command {
 	cmd := &cobra.Command{
@@ -612,6 +915,7 @@ func getDelegatorOperatorQueryCmd() *cobra.Command {
 	return cmd
 }
 
+// getDelegatorServiceDelegationsQueryCmd returns the command allowing to query all services delegations of a delegator
 func getDelegatorServiceDelegationsQueryCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "services-delegations [delegator-address]",
@@ -647,6 +951,43 @@ func getDelegatorServiceDelegationsQueryCmd() *cobra.Command {
 	return cmd
 }
 
+// getDelegatorServiceDelegationsQueryCmd returns the command allowing to query all services unbonding delegations of a delegator
+func getDelegatorServiceUnbondingDelegationsQueryCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "services-unbonding-delegations [delegator-address]",
+		Short:   "Query all services delegations of a delegator",
+		Example: fmt.Sprintf(`%s query %s delegator services-unbonding-delegations init1yu5vratzjspgtd0rnrc0d5a79kkqy0n57rhfyh --page=2 --limit=100`, version.AppName, types.ModuleName),
+		Args:    cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+
+			delegatorAddress := args[0]
+
+			pageReq, err := client.ReadPageRequest(cmd.Flags())
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.DelegatorServiceUnbondingDelegations(cmd.Context(), types.NewQueryDelegatorServiceUnbondingDelegationsRequest(delegatorAddress, pageReq))
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+	flags.AddPaginationFlagsToCmd(cmd, "delegator service unbonding delegations")
+
+	return cmd
+}
+
+// getDelegatorServicesQueryCmd returns the command allowing to query all services a delegator has delegated to
 func getDelegatorServicesQueryCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "services [delegator-address]",
@@ -682,6 +1023,7 @@ func getDelegatorServicesQueryCmd() *cobra.Command {
 	return cmd
 }
 
+// getDelegatorServiceQueryCmd returns the command allowing to query a service a delegator has delegated to
 func getDelegatorServiceQueryCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "service [delegator-address] [service-id]",

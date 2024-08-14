@@ -29,6 +29,7 @@ func GetTxCmd() *cobra.Command {
 
 	txCmd.AddCommand(
 		GetDelegateTxCmd(),
+		GetUnbondTxCmd(),
 		GetUpdateTxCmd(),
 	)
 
@@ -155,6 +156,139 @@ func GetDelegateToServiceCmd() *cobra.Command {
 
 			// Create and validate the message
 			msg := types.NewMsgDelegateService(serviceID, amount, delegator)
+			if err = msg.ValidateBasic(); err != nil {
+				return fmt.Errorf("message validation failed: %w", err)
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// GetUnbondTxCmd returns the command allowing to unbond tokens
+func GetUnbondTxCmd() *cobra.Command {
+	txCmd := &cobra.Command{
+		Use:   "unbond",
+		Short: "Unbond transactions subcommands",
+	}
+
+	txCmd.AddCommand(
+		GetUnbondFromPoolCmd(),
+		GetUnbondFromOperatorCmd(),
+		GetUnbondFromServiceCmd(),
+	)
+
+	return txCmd
+}
+
+// GetUnbondFromPoolCmd returns the command allowing to unbond from a pool
+func GetUnbondFromPoolCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "pool [amount]",
+		Args:    cobra.ExactArgs(1),
+		Short:   "Unbond the given amount from a pool",
+		Example: fmt.Sprintf("%s tx %s unbond pool 1000000milk --from alice", version.AppName, types.ModuleName),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			amount, err := sdk.ParseCoinNormalized(args[1])
+			if err != nil {
+				return err
+			}
+
+			delegator := clientCtx.FromAddress.String()
+
+			// Create and validate the message
+			msg := types.NewMsgUndelegatePool(amount, delegator)
+			if err = msg.ValidateBasic(); err != nil {
+				return fmt.Errorf("message validation failed: %w", err)
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// GetUnbondFromOperatorCmd returns the command allowing to unbong from an operator
+func GetUnbondFromOperatorCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "operator [operator-id] [amount]",
+		Args:    cobra.ExactArgs(2),
+		Short:   "Unbond the given amount from an operator",
+		Example: fmt.Sprintf("%s tx %s unbond operator 1 1000000milk --from alice", version.AppName, types.ModuleName),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			operatorID, err := operatorstypes.ParseOperatorID(args[0])
+			if err != nil {
+				return err
+			}
+
+			amount, err := sdk.ParseCoinsNormalized(args[1])
+			if err != nil {
+				return err
+			}
+
+			delegator := clientCtx.FromAddress.String()
+
+			// Create and validate the message
+			msg := types.NewMsgUndelegateOperator(operatorID, amount, delegator)
+			if err = msg.ValidateBasic(); err != nil {
+				return fmt.Errorf("message validation failed: %w", err)
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// GetUnbondFromServiceCmd returns the command allowing to unbond from a service
+func GetUnbondFromServiceCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "service [service-id] [amount]",
+		Args:    cobra.ExactArgs(2),
+		Short:   "Unbond the given amount from a service",
+		Example: fmt.Sprintf("%s tx %s unbond service 1 1000000milk --from alice", version.AppName, types.ModuleName),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			serviceID, err := servicestypes.ParseServiceID(args[0])
+			if err != nil {
+				return err
+			}
+
+			amount, err := sdk.ParseCoinsNormalized(args[1])
+			if err != nil {
+				return err
+			}
+
+			delegator := clientCtx.FromAddress.String()
+
+			// Create and validate the message
+			msg := types.NewMsgUndelegateService(serviceID, amount, delegator)
 			if err = msg.ValidateBasic(); err != nil {
 				return fmt.Errorf("message validation failed: %w", err)
 			}
