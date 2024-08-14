@@ -112,7 +112,7 @@ func (k *Keeper) DelegateToOperator(ctx sdk.Context, operatorID uint32, amount s
 
 // GetOperatorUnbondingDelegation returns the unbonding delegation for the given delegator address and operator id.
 // If no unbonding delegation is found, false is returned instead.
-func (k *Keeper) GetOperatorUnbondingDelegation(ctx sdk.Context, delegatorAddress string, operatorID uint32) (types.UnbondingDelegation, bool) {
+func (k *Keeper) GetOperatorUnbondingDelegation(ctx sdk.Context, operatorID uint32, delegatorAddress string) (types.UnbondingDelegation, bool) {
 	store := ctx.KVStore(k.storeKey)
 	ubdBz := store.Get(types.UserOperatorUnbondingDelegationKey(delegatorAddress, operatorID))
 	if ubdBz == nil {

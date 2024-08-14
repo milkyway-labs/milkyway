@@ -29,15 +29,15 @@ var (
 
 	PoolDelegationPrefix          = []byte{0xa1}
 	PoolDelegationsByPoolIDPrefix = []byte{0xa2}
-	UnbondingPoolDelegationPrefix = []byte{0xa3}
+	PoolUnbondingDelegationPrefix = []byte{0xa3}
 
 	OperatorDelegationPrefix          = []byte{0xb1}
 	OperatorDelegationByOperatorID    = []byte{0xb2}
-	UnbondingOperatorDelegationPrefix = []byte{0xb3}
+	OperatorUnbondingDelegationPrefix = []byte{0xb3}
 
 	ServiceDelegationPrefix            = []byte{0xc1}
 	ServiceDelegationByServiceIDPrefix = []byte{0xc2}
-	UnbondingServiceDelegationPrefix   = []byte{0xc3}
+	ServiceUnbondingDelegationPrefix   = []byte{0xc3}
 
 	UnbondingQueueKey = []byte{0xd1}
 )
@@ -122,7 +122,7 @@ func ParseDelegationsByPoolIDKey(bz []byte) (poolID uint32, delegatorAddress str
 
 // PoolUnbondingDelegationsStorePrefix returns the prefix used to store all the unbonding delegations to a given pool
 func PoolUnbondingDelegationsStorePrefix(delegatorAddress string) []byte {
-	return append(UnbondingPoolDelegationPrefix, []byte(delegatorAddress)...)
+	return append(PoolUnbondingDelegationPrefix, []byte(delegatorAddress)...)
 }
 
 // UserPoolUnbondingDelegationKey returns the key used to store the unbonding delegation for the given pool and delegator
@@ -174,7 +174,7 @@ func ParseDelegationsByOperatorIDKey(bz []byte) (operatorID uint32, delegatorAdd
 
 // OperatorUnbondingDelegationsStorePrefix returns the prefix used to store all the unbonding delegations to a given pool
 func OperatorUnbondingDelegationsStorePrefix(delegatorAddress string) []byte {
-	return append(UnbondingOperatorDelegationPrefix, []byte(delegatorAddress)...)
+	return append(OperatorUnbondingDelegationPrefix, []byte(delegatorAddress)...)
 }
 
 // UserOperatorUnbondingDelegationKey returns the key used to store the unbonding delegation for the given pool and delegator
@@ -226,7 +226,7 @@ func ParseDelegationsByServiceIDKey(bz []byte) (serviceID uint32, delegatorAddre
 
 // ServiceUnbondingDelegationsStorePrefix returns the prefix used to store all the unbonding delegations to a given pool
 func ServiceUnbondingDelegationsStorePrefix(delegatorAddress string) []byte {
-	return append(UnbondingServiceDelegationPrefix, []byte(delegatorAddress)...)
+	return append(ServiceUnbondingDelegationPrefix, []byte(delegatorAddress)...)
 }
 
 // UserServiceUnbondingDelegationKey returns the key used to store the unbonding delegation for the given pool and delegator

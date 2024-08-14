@@ -14,6 +14,16 @@ func NewQueryPoolDelegationRequest(poolID uint32, delegatorAddress string) *Quer
 	return &QueryPoolDelegationRequest{PoolId: poolID, DelegatorAddress: delegatorAddress}
 }
 
+// NewQueryPoolUnbondingDelegationsRequest creates a new QueryPoolUnbondingDelegationsRequest instance
+func NewQueryPoolUnbondingDelegationsRequest(poolID uint32, pagination *query.PageRequest) *QueryPoolUnbondingDelegationsRequest {
+	return &QueryPoolUnbondingDelegationsRequest{PoolId: poolID, Pagination: pagination}
+}
+
+// NewQueryPoolUnbondingDelegationRequest creates a new QueryPoolUnbondingDelegationRequest instance
+func NewQueryPoolUnbondingDelegationRequest(poolID uint32, delegatorAddress string) *QueryPoolUnbondingDelegationRequest {
+	return &QueryPoolUnbondingDelegationRequest{PoolId: poolID, DelegatorAddress: delegatorAddress}
+}
+
 // NewQueryOperatorParamsRequest creates a new QueryOperatorParamsRequest instance
 func NewQueryOperatorParamsRequest(operatorID uint32) *QueryOperatorParamsRequest {
 	return &QueryOperatorParamsRequest{OperatorId: operatorID}
@@ -27,6 +37,16 @@ func NewQueryOperatorDelegationsRequest(operatorID uint32, pagination *query.Pag
 // NewQueryOperatorDelegationRequest creates a new QueryOperatorDelegationRequest instance
 func NewQueryOperatorDelegationRequest(operatorID uint32, delegatorAddress string) *QueryOperatorDelegationRequest {
 	return &QueryOperatorDelegationRequest{OperatorId: operatorID, DelegatorAddress: delegatorAddress}
+}
+
+// NewQueryOperatorUnbondingDelegationsRequest creates a new QueryOperatorUnbondingDelegationsRequest instance
+func NewQueryOperatorUnbondingDelegationsRequest(operatorID uint32, pagination *query.PageRequest) *QueryOperatorUnbondingDelegationsRequest {
+	return &QueryOperatorUnbondingDelegationsRequest{OperatorId: operatorID, Pagination: pagination}
+}
+
+// NewQueryOperatorUnbondingDelegationRequest creates a new QueryOperatorUnbondingDelegationRequest instance
+func NewQueryOperatorUnbondingDelegationRequest(operatorID uint32, delegatorAddress string) *QueryOperatorUnbondingDelegationRequest {
+	return &QueryOperatorUnbondingDelegationRequest{OperatorId: operatorID, DelegatorAddress: delegatorAddress}
 }
 
 // NewQueryServiceParamsRequest creates a new QueryServiceParamsRequest instance
@@ -44,9 +64,24 @@ func NewQueryServiceDelegationRequest(serviceID uint32, delegatorAddress string)
 	return &QueryServiceDelegationRequest{ServiceId: serviceID, DelegatorAddress: delegatorAddress}
 }
 
+// NewQueryServiceUnbondingDelegationsRequest creates a new QueryServiceUnbondingDelegationsRequest instance
+func NewQueryServiceUnbondingDelegationsRequest(serviceID uint32, pagination *query.PageRequest) *QueryServiceUnbondingDelegationsRequest {
+	return &QueryServiceUnbondingDelegationsRequest{ServiceId: serviceID, Pagination: pagination}
+}
+
+// NewQueryServiceUnbondingDelegationRequest creates a new QueryServiceUnbondingDelegationRequest instance
+func NewQueryServiceUnbondingDelegationRequest(serviceID uint32, delegatorAddress string) *QueryServiceUnbondingDelegationRequest {
+	return &QueryServiceUnbondingDelegationRequest{ServiceId: serviceID, DelegatorAddress: delegatorAddress}
+}
+
 // NewQueryDelegatorPoolDelegationsRequest creates a new QueryDelegatorPoolDelegationsRequest instance
 func NewQueryDelegatorPoolDelegationsRequest(delegatorAddress string, pagination *query.PageRequest) *QueryDelegatorPoolDelegationsRequest {
 	return &QueryDelegatorPoolDelegationsRequest{DelegatorAddress: delegatorAddress, Pagination: pagination}
+}
+
+// NewQueryDelegatorPoolUnbondingDelegationsRequest creates a new QueryDelegatorPoolUnbondingDelegationsRequest instance
+func NewQueryDelegatorPoolUnbondingDelegationsRequest(delegatorAddress string, pagination *query.PageRequest) *QueryDelegatorPoolUnbondingDelegationsRequest {
+	return &QueryDelegatorPoolUnbondingDelegationsRequest{DelegatorAddress: delegatorAddress, Pagination: pagination}
 }
 
 // NewQueryDelegatorPoolsRequest creates a new QueryDelegatorPoolsRequest instance
@@ -64,6 +99,11 @@ func NewQueryDelegatorOperatorDelegationsRequest(delegatorAddress string, pagina
 	return &QueryDelegatorOperatorDelegationsRequest{DelegatorAddress: delegatorAddress, Pagination: pagination}
 }
 
+// NewQueryDelegatorOperatorUnbondingDelegationsRequest creates a new QueryDelegatorOperatorUnbondingDelegationsRequest instance
+func NewQueryDelegatorOperatorUnbondingDelegationsRequest(delegatorAddress string, pagination *query.PageRequest) *QueryDelegatorOperatorUnbondingDelegationsRequest {
+	return &QueryDelegatorOperatorUnbondingDelegationsRequest{DelegatorAddress: delegatorAddress, Pagination: pagination}
+}
+
 // NewQueryDelegatorOperatorsRequest creates a new QueryDelegatorOperatorsRequest instance
 func NewQueryDelegatorOperatorsRequest(delegatorAddress string, pagination *query.PageRequest) *QueryDelegatorOperatorsRequest {
 	return &QueryDelegatorOperatorsRequest{DelegatorAddress: delegatorAddress, Pagination: pagination}
@@ -77,6 +117,11 @@ func NewQueryDelegatorOperatorRequest(delegatorAddress string, operatorID uint32
 // NewQueryDelegatorServiceDelegationsRequest creates a new QueryDelegatorServiceDelegationsRequest instance
 func NewQueryDelegatorServiceDelegationsRequest(delegatorAddress string, pagination *query.PageRequest) *QueryDelegatorServiceDelegationsRequest {
 	return &QueryDelegatorServiceDelegationsRequest{DelegatorAddress: delegatorAddress, Pagination: pagination}
+}
+
+// NewQueryDelegatorServiceUnbondingDelegationsRequest creates a new QueryDelegatorServiceUnbondingDelegationsRequest instance
+func NewQueryDelegatorServiceUnbondingDelegationsRequest(delegatorAddress string, pagination *query.PageRequest) *QueryDelegatorServiceUnbondingDelegationsRequest {
+	return &QueryDelegatorServiceUnbondingDelegationsRequest{DelegatorAddress: delegatorAddress, Pagination: pagination}
 }
 
 // NewQueryDelegatorServicesRequest creates a new QueryDelegatorServicesRequest instance

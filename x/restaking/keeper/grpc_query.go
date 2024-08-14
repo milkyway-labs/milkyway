@@ -141,6 +141,71 @@ func (k Querier) PoolDelegation(goCtx context.Context, req *types.QueryPoolDeleg
 	}, nil
 }
 
+// PoolUnbondingDelegations queries the pool unbonding delegations for the given pool id
+func (k Querier) PoolUnbondingDelegations(goCtx context.Context, req *types.QueryPoolUnbondingDelegationsRequest) (*types.QueryPoolUnbondingDelegationsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
+	}
+
+	if req.PoolId == 0 {
+		return nil, status.Error(codes.InvalidArgument, "pool id cannot be 0")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Get the pool unbonding delegations store
+	store := ctx.KVStore(k.storeKey)
+	delegationsStore := prefix.NewStore(store, types.PoolUnbondingDelegationPrefix)
+
+	// Query the pool unbonding delegations for the given pool id
+	var unbondingDelegations []types.UnbondingDelegation
+	pageRes, err := query.Paginate(delegationsStore, req.Pagination, func(key []byte, value []byte) error {
+		unbond, err := types.UnmarshalUnbondingDelegation(k.cdc, value)
+		if err != nil {
+			return err
+		}
+		unbondingDelegations = append(unbondingDelegations, unbond)
+		return nil
+	})
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryPoolUnbondingDelegationsResponse{
+		UnbondingDelegations: unbondingDelegations,
+		Pagination:           pageRes,
+	}, nil
+}
+
+// PoolUnbondingDelegation queries the pool unbonding delegation for the given pool id and user address
+func (k Querier) PoolUnbondingDelegation(goCtx context.Context, req *types.QueryPoolUnbondingDelegationRequest) (*types.QueryPoolUnbondingDelegationResponse, error) {
+	if req == nil {
+		return nil, status.Errorf(codes.InvalidArgument, "empty request")
+	}
+
+	if req.DelegatorAddress == "" {
+		return nil, status.Errorf(codes.InvalidArgument, "delegator address cannot be empty")
+	}
+	if req.PoolId == 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "pool id cannot be zero")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	unbond, found := k.GetPoolUnbondingDelegation(ctx, req.PoolId, req.DelegatorAddress)
+	if !found {
+		return nil, status.Errorf(
+			codes.NotFound,
+			"unbonding delegation with delegator %s not found for pool %d",
+			req.DelegatorAddress, req.PoolId,
+		)
+	}
+
+	return &types.QueryPoolUnbondingDelegationResponse{
+		UnbondingDelegation: unbond,
+	}, nil
+}
+
 // OperatorDelegations queries the operator delegations for the given operator id
 func (k Querier) OperatorDelegations(goCtx context.Context, req *types.QueryOperatorDelegationsRequest) (*types.QueryOperatorDelegationsResponse, error) {
 	if req == nil {
@@ -212,6 +277,71 @@ func (k Querier) OperatorDelegation(goCtx context.Context, req *types.QueryOpera
 
 	return &types.QueryOperatorDelegationResponse{
 		Delegation: response,
+	}, nil
+}
+
+// OperatorUnbondingDelegations queries the operator unbonding delegations for the given operator id
+func (k Querier) OperatorUnbondingDelegations(goCtx context.Context, req *types.QueryOperatorUnbondingDelegationsRequest) (*types.QueryOperatorUnbondingDelegationsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
+	}
+
+	if req.OperatorId == 0 {
+		return nil, status.Error(codes.InvalidArgument, "operator id cannot be 0")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Get the operator unbonding delegations store
+	store := ctx.KVStore(k.storeKey)
+	delegationsStore := prefix.NewStore(store, types.OperatorUnbondingDelegationPrefix)
+
+	// Query the operator unbonding delegations for the given pool id
+	var unbondingDelegations []types.UnbondingDelegation
+	pageRes, err := query.Paginate(delegationsStore, req.Pagination, func(key []byte, value []byte) error {
+		unbond, err := types.UnmarshalUnbondingDelegation(k.cdc, value)
+		if err != nil {
+			return err
+		}
+		unbondingDelegations = append(unbondingDelegations, unbond)
+		return nil
+	})
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryOperatorUnbondingDelegationsResponse{
+		UnbondingDelegations: unbondingDelegations,
+		Pagination:           pageRes,
+	}, nil
+}
+
+// OperatorUnbondingDelegation queries the operator unbonding delegation for the given operator id and user address
+func (k Querier) OperatorUnbondingDelegation(goCtx context.Context, req *types.QueryOperatorUnbondingDelegationRequest) (*types.QueryOperatorUnbondingDelegationResponse, error) {
+	if req == nil {
+		return nil, status.Errorf(codes.InvalidArgument, "empty request")
+	}
+
+	if req.DelegatorAddress == "" {
+		return nil, status.Errorf(codes.InvalidArgument, "delegator address cannot be empty")
+	}
+	if req.OperatorId == 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "operator id cannot be zero")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	unbond, found := k.GetOperatorUnbondingDelegation(ctx, req.OperatorId, req.DelegatorAddress)
+	if !found {
+		return nil, status.Errorf(
+			codes.NotFound,
+			"unbonding delegation with delegator %s not found for operator %d",
+			req.DelegatorAddress, req.OperatorId,
+		)
+	}
+
+	return &types.QueryOperatorUnbondingDelegationResponse{
+		UnbondingDelegation: unbond,
 	}, nil
 }
 
@@ -289,6 +419,71 @@ func (k Querier) ServiceDelegation(goCtx context.Context, req *types.QueryServic
 	}, nil
 }
 
+// ServiceUnbondingDelegations queries the service unbonding delegations for the given service id
+func (k Querier) ServiceUnbondingDelegations(goCtx context.Context, req *types.QueryServiceUnbondingDelegationsRequest) (*types.QueryServiceUnbondingDelegationsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
+	}
+
+	if req.ServiceId == 0 {
+		return nil, status.Error(codes.InvalidArgument, "service id cannot be 0")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Get the service unbonding delegations store
+	store := ctx.KVStore(k.storeKey)
+	delegationsStore := prefix.NewStore(store, types.ServiceUnbondingDelegationPrefix)
+
+	// Query the service unbonding delegations for the given pool id
+	var unbondingDelegations []types.UnbondingDelegation
+	pageRes, err := query.Paginate(delegationsStore, req.Pagination, func(key []byte, value []byte) error {
+		unbond, err := types.UnmarshalUnbondingDelegation(k.cdc, value)
+		if err != nil {
+			return err
+		}
+		unbondingDelegations = append(unbondingDelegations, unbond)
+		return nil
+	})
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryServiceUnbondingDelegationsResponse{
+		UnbondingDelegations: unbondingDelegations,
+		Pagination:           pageRes,
+	}, nil
+}
+
+// ServiceUnbondingDelegation queries the service unbonding delegation for the given service id and user address
+func (k Querier) ServiceUnbondingDelegation(goCtx context.Context, req *types.QueryServiceUnbondingDelegationRequest) (*types.QueryServiceUnbondingDelegationResponse, error) {
+	if req == nil {
+		return nil, status.Errorf(codes.InvalidArgument, "empty request")
+	}
+
+	if req.DelegatorAddress == "" {
+		return nil, status.Errorf(codes.InvalidArgument, "delegator address cannot be empty")
+	}
+	if req.ServiceId == 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "service id cannot be zero")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	unbond, found := k.GetServiceUnbondingDelegation(ctx, req.ServiceId, req.DelegatorAddress)
+	if !found {
+		return nil, status.Errorf(
+			codes.NotFound,
+			"unbonding delegation with delegator %s not found for service %d",
+			req.DelegatorAddress, req.ServiceId,
+		)
+	}
+
+	return &types.QueryServiceUnbondingDelegationResponse{
+		UnbondingDelegation: unbond,
+	}, nil
+}
+
 // DelegatorPoolDelegations queries the pool delegations for the given delegator address
 func (k Querier) DelegatorPoolDelegations(goCtx context.Context, req *types.QueryDelegatorPoolDelegationsRequest) (*types.QueryDelegatorPoolDelegationsResponse, error) {
 	if req == nil {
@@ -331,6 +526,42 @@ func (k Querier) DelegatorPoolDelegations(goCtx context.Context, req *types.Quer
 	return &types.QueryDelegatorPoolDelegationsResponse{
 		Delegations: delegationsResponses,
 		Pagination:  pageRes,
+	}, nil
+}
+
+// DelegatorPoolUnbondingDelegations queries the pool unbonding delegations for the given delegator address
+func (k Querier) DelegatorPoolUnbondingDelegations(goCtx context.Context, req *types.QueryDelegatorPoolUnbondingDelegationsRequest) (*types.QueryDelegatorPoolUnbondingDelegationsResponse, error) {
+	if req == nil {
+		return nil, status.Errorf(codes.InvalidArgument, "empty request")
+	}
+
+	if req.DelegatorAddress == "" {
+		return nil, status.Error(codes.InvalidArgument, "delegator address cannot be empty")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Get the user pool unbonding delegations store
+	store := ctx.KVStore(k.storeKey)
+	delStore := prefix.NewStore(store, types.PoolUnbondingDelegationsStorePrefix(req.DelegatorAddress))
+
+	// Get the unbonding delegations
+	var unbondingDelegations []types.UnbondingDelegation
+	pageRes, err := query.Paginate(delStore, req.Pagination, func(key []byte, value []byte) error {
+		unbonding, err := types.UnmarshalUnbondingDelegation(k.cdc, value)
+		if err != nil {
+			return err
+		}
+		unbondingDelegations = append(unbondingDelegations, unbonding)
+		return nil
+	})
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryDelegatorPoolUnbondingDelegationsResponse{
+		UnbondingDelegations: unbondingDelegations,
+		Pagination:           pageRes,
 	}, nil
 }
 
@@ -379,6 +610,42 @@ func (k Querier) DelegatorOperatorDelegations(goCtx context.Context, req *types.
 	}, nil
 }
 
+// DelegatorOperatorUnbondingDelegations queries the operator unbonding delegations for the given delegator address
+func (k Querier) DelegatorOperatorUnbondingDelegations(goCtx context.Context, req *types.QueryDelegatorOperatorUnbondingDelegationsRequest) (*types.QueryDelegatorOperatorUnbondingDelegationsResponse, error) {
+	if req == nil {
+		return nil, status.Errorf(codes.InvalidArgument, "empty request")
+	}
+
+	if req.DelegatorAddress == "" {
+		return nil, status.Error(codes.InvalidArgument, "delegator address cannot be empty")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Get the user operator unbonding delegations store
+	store := ctx.KVStore(k.storeKey)
+	delStore := prefix.NewStore(store, types.OperatorUnbondingDelegationsStorePrefix(req.DelegatorAddress))
+
+	// Get the unbonding delegations
+	var unbondingDelegations []types.UnbondingDelegation
+	pageRes, err := query.Paginate(delStore, req.Pagination, func(key []byte, value []byte) error {
+		unbonding, err := types.UnmarshalUnbondingDelegation(k.cdc, value)
+		if err != nil {
+			return err
+		}
+		unbondingDelegations = append(unbondingDelegations, unbonding)
+		return nil
+	})
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryDelegatorOperatorUnbondingDelegationsResponse{
+		UnbondingDelegations: unbondingDelegations,
+		Pagination:           pageRes,
+	}, nil
+}
+
 // DelegatorServiceDelegations queries the service delegations for the given delegator address
 func (k Querier) DelegatorServiceDelegations(goCtx context.Context, req *types.QueryDelegatorServiceDelegationsRequest) (*types.QueryDelegatorServiceDelegationsResponse, error) {
 	if req == nil {
@@ -421,6 +688,42 @@ func (k Querier) DelegatorServiceDelegations(goCtx context.Context, req *types.Q
 	return &types.QueryDelegatorServiceDelegationsResponse{
 		Delegations: delegationsResponses,
 		Pagination:  pageRes,
+	}, nil
+}
+
+// DelegatorServiceUnbondingDelegations queries the service unbonding delegations for the given delegator address
+func (k Querier) DelegatorServiceUnbondingDelegations(goCtx context.Context, req *types.QueryDelegatorServiceUnbondingDelegationsRequest) (*types.QueryDelegatorServiceUnbondingDelegationsResponse, error) {
+	if req == nil {
+		return nil, status.Errorf(codes.InvalidArgument, "empty request")
+	}
+
+	if req.DelegatorAddress == "" {
+		return nil, status.Error(codes.InvalidArgument, "delegator address cannot be empty")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Get the user services unbonding delegations store
+	store := ctx.KVStore(k.storeKey)
+	delStore := prefix.NewStore(store, types.ServiceUnbondingDelegationsStorePrefix(req.DelegatorAddress))
+
+	// Get the unbonding delegations
+	var unbondingDelegations []types.UnbondingDelegation
+	pageRes, err := query.Paginate(delStore, req.Pagination, func(key []byte, value []byte) error {
+		unbonding, err := types.UnmarshalUnbondingDelegation(k.cdc, value)
+		if err != nil {
+			return err
+		}
+		unbondingDelegations = append(unbondingDelegations, unbonding)
+		return nil
+	})
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryDelegatorServiceUnbondingDelegationsResponse{
+		UnbondingDelegations: unbondingDelegations,
+		Pagination:           pageRes,
 	}, nil
 }
 

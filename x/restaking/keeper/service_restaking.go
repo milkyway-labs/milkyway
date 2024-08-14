@@ -112,7 +112,7 @@ func (k *Keeper) DelegateToService(ctx sdk.Context, serviceID uint32, amount sdk
 
 // GetServiceUnbondingDelegation returns the unbonding delegation for the given delegator address and service id.
 // If no unbonding delegation is found, false is returned instead.
-func (k *Keeper) GetServiceUnbondingDelegation(ctx sdk.Context, delegator string, serviceID uint32) (types.UnbondingDelegation, bool) {
+func (k *Keeper) GetServiceUnbondingDelegation(ctx sdk.Context, serviceID uint32, delegator string) (types.UnbondingDelegation, bool) {
 	store := ctx.KVStore(k.storeKey)
 	ubdBz := store.Get(types.UserServiceUnbondingDelegationKey(delegator, serviceID))
 	if ubdBz == nil {

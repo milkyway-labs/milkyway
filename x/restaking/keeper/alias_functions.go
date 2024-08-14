@@ -319,9 +319,9 @@ func (k *Keeper) GetUnbondingDelegation(
 	case types.UNBONDING_DELEGATION_TYPE_POOL:
 		return k.GetPoolUnbondingDelegation(ctx, targetID, delegatorAddress)
 	case types.UNBONDING_DELEGATION_TYPE_OPERATOR:
-		return k.GetOperatorUnbondingDelegation(ctx, delegatorAddress, targetID)
+		return k.GetOperatorUnbondingDelegation(ctx, targetID, delegatorAddress)
 	case types.UNBONDING_DELEGATION_TYPE_SERVICE:
-		return k.GetServiceUnbondingDelegation(ctx, delegatorAddress, targetID)
+		return k.GetServiceUnbondingDelegation(ctx, targetID, delegatorAddress)
 	default:
 		return types.UnbondingDelegation{}, false
 	}
@@ -379,7 +379,7 @@ func (k *Keeper) PerformUndelegation(ctx sdk.Context, data types.UndelegationDat
 
 func (k *Keeper) GetAllPoolUnbondingDelegations(ctx sdk.Context) []types.UnbondingDelegation {
 	store := ctx.KVStore(k.storeKey)
-	iterator := store.Iterator(types.UnbondingPoolDelegationPrefix, storetypes.PrefixEndBytes(types.UnbondingPoolDelegationPrefix))
+	iterator := store.Iterator(types.PoolUnbondingDelegationPrefix, storetypes.PrefixEndBytes(types.PoolUnbondingDelegationPrefix))
 	defer iterator.Close()
 
 	var unbondingDelegations []types.UnbondingDelegation
@@ -393,7 +393,7 @@ func (k *Keeper) GetAllPoolUnbondingDelegations(ctx sdk.Context) []types.Unbondi
 
 func (k *Keeper) GetAllOperatorUnbondingDelegations(ctx sdk.Context) []types.UnbondingDelegation {
 	store := ctx.KVStore(k.storeKey)
-	iterator := store.Iterator(types.UnbondingOperatorDelegationPrefix, storetypes.PrefixEndBytes(types.UnbondingOperatorDelegationPrefix))
+	iterator := store.Iterator(types.OperatorUnbondingDelegationPrefix, storetypes.PrefixEndBytes(types.OperatorUnbondingDelegationPrefix))
 	defer iterator.Close()
 
 	var unbondingDelegations []types.UnbondingDelegation
@@ -407,7 +407,7 @@ func (k *Keeper) GetAllOperatorUnbondingDelegations(ctx sdk.Context) []types.Unb
 
 func (k *Keeper) GetAllServiceUnbondingDelegations(ctx sdk.Context) []types.UnbondingDelegation {
 	store := ctx.KVStore(k.storeKey)
-	iterator := store.Iterator(types.UnbondingServiceDelegationPrefix, storetypes.PrefixEndBytes(types.UnbondingServiceDelegationPrefix))
+	iterator := store.Iterator(types.ServiceUnbondingDelegationPrefix, storetypes.PrefixEndBytes(types.ServiceUnbondingDelegationPrefix))
 	defer iterator.Close()
 
 	var unbondingDelegations []types.UnbondingDelegation
