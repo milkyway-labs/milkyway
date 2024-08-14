@@ -313,6 +313,7 @@ func (ubd *UnbondingDelegation) RemoveEntry(i int64) {
 	ubd.Entries = append(ubd.Entries[:i], ubd.Entries[i+1:]...)
 }
 
+// Validate validates the unbonding delegation
 func (udb UnbondingDelegation) Validate() error {
 	if udb.Type == UNBONDING_DELEGATION_TYPE_UNSPECIFIED {
 		return fmt.Errorf("invalid unbonding delegation type")
