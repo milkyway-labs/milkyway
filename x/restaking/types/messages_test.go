@@ -399,7 +399,7 @@ func TestMsgUndelegatePool_ValidateBasic(t *testing.T) {
 			name: "invalid amount return error",
 			msg: types.NewMsgUndelegatePool(
 				sdk.Coin{Denom: "umilk", Amount: sdkmath.ZeroInt()},
-				msgUpdateParams.Authority,
+				msgUndelegatePool.Delegator,
 			),
 			shouldErr: true,
 		},
