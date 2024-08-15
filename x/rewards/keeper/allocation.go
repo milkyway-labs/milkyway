@@ -98,7 +98,7 @@ func (k *Keeper) AllocateRewardsByPlan(
 		return nil
 	}
 	// Send the current block's rewards to the global rewards pool.
-	err := k.bankKeeper.SendCoins(ctx, planRewardsPoolAddr, types.RewardsPoolAddress, rewardsTruncated)
+	err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, planRewardsPoolAddr, types.RewardsPoolName, rewardsTruncated)
 	if err != nil {
 		return err
 	}

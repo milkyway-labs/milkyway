@@ -286,7 +286,8 @@ func ModuleAccountInvariant(k *Keeper) sdk.Invariant {
 
 		expectedInt, _ := expectedCoins.TruncateDecimal()
 
-		balances := k.bankKeeper.GetAllBalances(ctx, types.RewardsPoolAddress)
+		rewardsPoolAddr := k.accountKeeper.GetModuleAddress(types.RewardsPoolName)
+		balances := k.bankKeeper.GetAllBalances(ctx, rewardsPoolAddr)
 		broken := !balances.IsAllGTE(expectedInt)
 		return sdk.FormatInvariant(
 			types.ModuleName, "ModuleAccount coins",

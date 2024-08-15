@@ -7,6 +7,11 @@ import (
 const (
 	ModuleName = "rewards"
 	StoreKey   = ModuleName
+
+	// RewardsPoolName is the account name of global rewards pool where rewards
+	// are moved from each rewards plan's rewards pool and distributed to
+	// delegators later.
+	RewardsPoolName = "rewards_pool"
 )
 
 var (

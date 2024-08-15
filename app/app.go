@@ -224,7 +224,7 @@ var (
 		icqtypes.ModuleName:               nil,
 		stakeibctypes.ModuleName:          {authtypes.Minter, authtypes.Burner, authtypes.Staking},
 		stakeibctypes.RewardCollectorName: nil,
-		rewardstypes.ModuleName:           nil,
+		rewardstypes.RewardsPoolName:      nil,
 
 		// slinky oracle permissions
 		oracletypes.ModuleName: nil,

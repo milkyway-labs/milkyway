@@ -102,7 +102,8 @@ func (k *Keeper) IncrementDelegationTargetPeriod(ctx context.Context, target typ
 
 	communityFundingCoins, _ := communityFunding.TruncateDecimal()
 
-	err = k.communityPoolKeeper.FundCommunityPool(ctx, communityFundingCoins.Sum(), types.RewardsPoolAddress)
+	rewardsPoolAddr := k.accountKeeper.GetModuleAddress(types.RewardsPoolName)
+	err = k.communityPoolKeeper.FundCommunityPool(ctx, communityFundingCoins.Sum(), rewardsPoolAddr)
 	if err != nil {
 		return 0, err
 	}
