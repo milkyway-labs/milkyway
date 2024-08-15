@@ -191,7 +191,7 @@ func (k *Keeper) SetUnbondingDelegationEntry(
 	store.Set(types.GetUnbondingIndexKey(id), unbondingDelegationKey)
 
 	// Set the type of the unbonding delegation so that we know how to deserialize id
-	store.Set(types.GetUnbondingTypeKey(id), utils.Uint32ToBytes(ubd.TargetID))
+	store.Set(types.GetUnbondingTypeKey(id), utils.Uint32ToBigEndian(ubd.TargetID))
 
 	// Call the hook after the unbonding has been initiated
 	err = k.AfterUnbondingInitiated(ctx, id)
