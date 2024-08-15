@@ -193,7 +193,7 @@ func GetUnbondFromPoolCmd() *cobra.Command {
 		Use:     "pool [amount]",
 		Args:    cobra.ExactArgs(1),
 		Short:   "Unbond the given amount from a pool",
-		Example: fmt.Sprintf("%s tx %s unbond pool 1000000milk --from alice", version.AppName, types.ModuleName),
+		Example: fmt.Sprintf("%s tx %s unbond pool 1000000umilk --from alice", version.AppName, types.ModuleName),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
