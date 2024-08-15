@@ -185,7 +185,7 @@ func (k *Keeper) SetWithdrawAddr(ctx context.Context, delegatorAddr, withdrawAdd
 }
 
 func (k *Keeper) WithdrawDelegationRewards(
-	ctx context.Context, delAddr sdk.AccAddress, target *types.DelegationTarget) (types.Pools, error) {
+	ctx context.Context, delAddr sdk.AccAddress, target types.DelegationTarget) (types.Pools, error) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
 	del, found := k.GetDelegation(sdkCtx, target, delAddr)

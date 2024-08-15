@@ -14,8 +14,8 @@ type DelegationTarget struct {
 	restakingtypes.DelegationTarget
 }
 
-func NewDelegationTarget(target restakingtypes.DelegationTarget) *DelegationTarget {
-	return &DelegationTarget{target}
+func NewDelegationTarget(target restakingtypes.DelegationTarget) DelegationTarget {
+	return DelegationTarget{target}
 }
 
 func (target DelegationTarget) Type() restakingtypes.DelegationType {

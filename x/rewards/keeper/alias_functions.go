@@ -43,7 +43,7 @@ func (k *Keeper) GetRewardsPlan(ctx context.Context, planID uint64) (types.Rewar
 }
 
 func (k *Keeper) SetDelegatorStartingInfo(
-	ctx context.Context, target *types.DelegationTarget, del sdk.AccAddress, info types.DelegatorStartingInfo,
+	ctx context.Context, target types.DelegationTarget, del sdk.AccAddress, info types.DelegatorStartingInfo,
 ) error {
 	switch target.Type() {
 	case restakingtypes.DELEGATION_TYPE_POOL:
@@ -57,7 +57,7 @@ func (k *Keeper) SetDelegatorStartingInfo(
 	}
 }
 
-func (k *Keeper) GetDelegatorStartingInfo(ctx context.Context, target *types.DelegationTarget, del sdk.AccAddress) (types.DelegatorStartingInfo, error) {
+func (k *Keeper) GetDelegatorStartingInfo(ctx context.Context, target types.DelegationTarget, del sdk.AccAddress) (types.DelegatorStartingInfo, error) {
 	switch target.Type() {
 	case restakingtypes.DELEGATION_TYPE_POOL:
 		return k.PoolDelegatorStartingInfos.Get(ctx, collections.Join(target.GetID(), del))
@@ -70,7 +70,7 @@ func (k *Keeper) GetDelegatorStartingInfo(ctx context.Context, target *types.Del
 	}
 }
 
-func (k *Keeper) HasDelegatorStartingInfo(ctx context.Context, target *types.DelegationTarget, del sdk.AccAddress) (bool, error) {
+func (k *Keeper) HasDelegatorStartingInfo(ctx context.Context, target types.DelegationTarget, del sdk.AccAddress) (bool, error) {
 	switch target.Type() {
 	case restakingtypes.DELEGATION_TYPE_POOL:
 		return k.PoolDelegatorStartingInfos.Has(ctx, collections.Join(target.GetID(), del))
@@ -83,7 +83,7 @@ func (k *Keeper) HasDelegatorStartingInfo(ctx context.Context, target *types.Del
 	}
 }
 
-func (k *Keeper) RemoveDelegatorStartingInfo(ctx context.Context, target *types.DelegationTarget, del sdk.AccAddress) error {
+func (k *Keeper) RemoveDelegatorStartingInfo(ctx context.Context, target types.DelegationTarget, del sdk.AccAddress) error {
 	switch target.Type() {
 	case restakingtypes.DELEGATION_TYPE_POOL:
 		return k.PoolDelegatorStartingInfos.Remove(ctx, collections.Join(target.GetID(), del))
@@ -97,7 +97,7 @@ func (k *Keeper) RemoveDelegatorStartingInfo(ctx context.Context, target *types.
 }
 
 func (k *Keeper) SetOutstandingRewards(
-	ctx context.Context, target *types.DelegationTarget, rewards types.OutstandingRewards,
+	ctx context.Context, target types.DelegationTarget, rewards types.OutstandingRewards,
 ) error {
 	switch target.Type() {
 	case restakingtypes.DELEGATION_TYPE_POOL:
@@ -111,7 +111,7 @@ func (k *Keeper) SetOutstandingRewards(
 	}
 }
 
-func (k *Keeper) GetOutstandingRewards(ctx context.Context, target *types.DelegationTarget) (types.OutstandingRewards, error) {
+func (k *Keeper) GetOutstandingRewards(ctx context.Context, target types.DelegationTarget) (types.OutstandingRewards, error) {
 	switch target.Type() {
 	case restakingtypes.DELEGATION_TYPE_POOL:
 		return k.PoolOutstandingRewards.Get(ctx, target.GetID())
@@ -124,7 +124,7 @@ func (k *Keeper) GetOutstandingRewards(ctx context.Context, target *types.Delega
 	}
 }
 
-func (k *Keeper) GetCurrentRewards(ctx context.Context, target *types.DelegationTarget) (types.CurrentRewards, error) {
+func (k *Keeper) GetCurrentRewards(ctx context.Context, target types.DelegationTarget) (types.CurrentRewards, error) {
 	switch target.Type() {
 	case restakingtypes.DELEGATION_TYPE_POOL:
 		return k.PoolCurrentRewards.Get(ctx, target.GetID())
@@ -138,7 +138,7 @@ func (k *Keeper) GetCurrentRewards(ctx context.Context, target *types.Delegation
 }
 
 func (k *Keeper) SetCurrentRewards(
-	ctx context.Context, target *types.DelegationTarget, rewards types.CurrentRewards,
+	ctx context.Context, target types.DelegationTarget, rewards types.CurrentRewards,
 ) error {
 	switch target.Type() {
 	case restakingtypes.DELEGATION_TYPE_POOL:
@@ -152,7 +152,7 @@ func (k *Keeper) SetCurrentRewards(
 	}
 }
 
-func (k *Keeper) HasCurrentRewards(ctx context.Context, target *types.DelegationTarget) (bool, error) {
+func (k *Keeper) HasCurrentRewards(ctx context.Context, target types.DelegationTarget) (bool, error) {
 	switch target.Type() {
 	case restakingtypes.DELEGATION_TYPE_POOL:
 		return k.PoolCurrentRewards.Has(ctx, target.GetID())
@@ -166,7 +166,7 @@ func (k *Keeper) HasCurrentRewards(ctx context.Context, target *types.Delegation
 }
 
 func (k *Keeper) GetHistoricalRewards(
-	ctx context.Context, target *types.DelegationTarget, period uint64,
+	ctx context.Context, target types.DelegationTarget, period uint64,
 ) (types.HistoricalRewards, error) {
 	switch target.Type() {
 	case restakingtypes.DELEGATION_TYPE_POOL:
@@ -181,7 +181,7 @@ func (k *Keeper) GetHistoricalRewards(
 }
 
 func (k *Keeper) SetHistoricalRewards(
-	ctx context.Context, target *types.DelegationTarget, period uint64,
+	ctx context.Context, target types.DelegationTarget, period uint64,
 	rewards types.HistoricalRewards,
 ) error {
 	switch target.Type() {
@@ -197,7 +197,7 @@ func (k *Keeper) SetHistoricalRewards(
 }
 
 func (k *Keeper) RemoveHistoricalRewards(
-	ctx context.Context, target *types.DelegationTarget, period uint64,
+	ctx context.Context, target types.DelegationTarget, period uint64,
 ) error {
 	switch target.Type() {
 	case restakingtypes.DELEGATION_TYPE_POOL:
@@ -211,7 +211,7 @@ func (k *Keeper) RemoveHistoricalRewards(
 	}
 }
 
-func (k *Keeper) GetOutstandingRewardsCoins(ctx context.Context, target *types.DelegationTarget) (types.DecPools, error) {
+func (k *Keeper) GetOutstandingRewardsCoins(ctx context.Context, target types.DelegationTarget) (types.DecPools, error) {
 	var (
 		rewards types.OutstandingRewards
 		err     error

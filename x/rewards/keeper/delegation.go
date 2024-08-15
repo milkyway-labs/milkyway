@@ -12,7 +12,7 @@ import (
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 )
 
-func (k *Keeper) GetDelegation(ctx context.Context, target *types.DelegationTarget, del sdk.AccAddress) (restakingtypes.Delegation, bool) {
+func (k *Keeper) GetDelegation(ctx context.Context, target types.DelegationTarget, del sdk.AccAddress) (restakingtypes.Delegation, bool) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	switch target.Type() {
 	case restakingtypes.DELEGATION_TYPE_POOL:
@@ -63,7 +63,7 @@ func (k *Keeper) initializeDelegation(ctx context.Context, delType restakingtype
 
 // calculate the rewards accrued by a delegation between two periods
 func (k *Keeper) calculateDelegationRewardsBetween(
-	ctx context.Context, target *types.DelegationTarget, startingPeriod, endingPeriod uint64, stakes sdk.DecCoins,
+	ctx context.Context, target types.DelegationTarget, startingPeriod, endingPeriod uint64, stakes sdk.DecCoins,
 ) (rewards types.DecPools, err error) {
 	// sanity check
 	if startingPeriod > endingPeriod {
@@ -101,7 +101,7 @@ func (k *Keeper) calculateDelegationRewardsBetween(
 }
 
 // calculate the total rewards accrued by a delegation
-func (k *Keeper) CalculateDelegationRewards(ctx context.Context, target *types.DelegationTarget, del restakingtypes.Delegation, endingPeriod uint64) (rewards types.DecPools, err error) {
+func (k *Keeper) CalculateDelegationRewards(ctx context.Context, target types.DelegationTarget, del restakingtypes.Delegation, endingPeriod uint64) (rewards types.DecPools, err error) {
 	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(del.UserAddress)
 	if err != nil {
 		return nil, err
@@ -183,7 +183,7 @@ func (k *Keeper) CalculateDelegationRewards(ctx context.Context, target *types.D
 }
 
 func (k *Keeper) withdrawDelegationRewards(
-	ctx context.Context, target *types.DelegationTarget, del restakingtypes.Delegation,
+	ctx context.Context, target types.DelegationTarget, del restakingtypes.Delegation,
 ) (types.Pools, error) {
 	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(del.UserAddress)
 	if err != nil {

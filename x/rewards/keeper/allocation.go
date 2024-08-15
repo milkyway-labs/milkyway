@@ -438,7 +438,7 @@ func (k *Keeper) allocateRewardsToOperator(
 }
 
 func (k *Keeper) allocateRewardsPool(
-	ctx context.Context, target *types.DelegationTarget, denom string, rewards sdk.DecCoins) error {
+	ctx context.Context, target types.DelegationTarget, denom string, rewards sdk.DecCoins) error {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
 	shared := rewards
