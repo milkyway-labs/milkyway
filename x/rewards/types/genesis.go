@@ -15,19 +15,10 @@ func NewGenesisState(
 	rewardsPlans []RewardsPlan,
 	lastRewardsAllocationTime *time.Time,
 	delegatorWithdrawInfos []DelegatorWithdrawInfo,
-	poolOutstandingRewardsRecords []OutstandingRewardsRecord,
-	poolHistoricalRewardsRecords []HistoricalRewardsRecord,
-	poolCurrentRewardsRecords []CurrentRewardsRecord,
-	poolDelegatorStartingInfoRecords []DelegatorStartingInfoRecord,
-	operatorOutstandingRewardsRecords []OutstandingRewardsRecord,
+	poolsRecords,
+	operatorsRecords,
+	servicesRecords DelegationTypeRecords,
 	operatorAccumulatedCommissionRecords []OperatorAccumulatedCommissionRecord,
-	operatorHistoricalRewardsRecords []HistoricalRewardsRecord,
-	operatorCurrentRewardsRecords []CurrentRewardsRecord,
-	operatorDelegatorStartingInfoRecords []DelegatorStartingInfoRecord,
-	serviceOutstandingRewardsRecords []OutstandingRewardsRecord,
-	serviceHistoricalRewardsRecords []HistoricalRewardsRecord,
-	serviceCurrentRewardsRecords []CurrentRewardsRecord,
-	serviceDelegatorStartingInfoRecords []DelegatorStartingInfoRecord,
 ) *GenesisState {
 	return &GenesisState{
 		Params:                         params,
@@ -35,30 +26,28 @@ func NewGenesisState(
 		RewardsPlans:                   rewardsPlans,
 		LastRewardsAllocationTime:      lastRewardsAllocationTime,
 		DelegatorWithdrawInfos:         delegatorWithdrawInfos,
-		PoolOutstandingRewards:         poolOutstandingRewardsRecords,
-		PoolHistoricalRewards:          poolHistoricalRewardsRecords,
-		PoolCurrentRewards:             poolCurrentRewardsRecords,
-		PoolDelegatorStartingInfos:     poolDelegatorStartingInfoRecords,
-		OperatorOutstandingRewards:     operatorOutstandingRewardsRecords,
+		PoolsRecords:                   poolsRecords,
+		OperatorsRecords:               operatorsRecords,
+		ServicesRecords:                servicesRecords,
 		OperatorAccumulatedCommissions: operatorAccumulatedCommissionRecords,
-		OperatorHistoricalRewards:      operatorHistoricalRewardsRecords,
-		OperatorCurrentRewards:         operatorCurrentRewardsRecords,
-		OperatorDelegatorStartingInfos: operatorDelegatorStartingInfoRecords,
-		ServiceOutstandingRewards:      serviceOutstandingRewardsRecords,
-		ServiceHistoricalRewards:       serviceHistoricalRewardsRecords,
-		ServiceCurrentRewards:          serviceCurrentRewardsRecords,
-		ServiceDelegatorStartingInfos:  serviceDelegatorStartingInfoRecords,
 	}
 }
 
 // DefaultGenesis returns the default genesis state.
 func DefaultGenesis() *GenesisState {
 	return NewGenesisState(
-		DefaultParams(), 1, []RewardsPlan{}, nil, []DelegatorWithdrawInfo{}, []OutstandingRewardsRecord{},
-		[]HistoricalRewardsRecord{}, []CurrentRewardsRecord{}, []DelegatorStartingInfoRecord{},
-		[]OutstandingRewardsRecord{}, []OperatorAccumulatedCommissionRecord{}, []HistoricalRewardsRecord{},
-		[]CurrentRewardsRecord{}, []DelegatorStartingInfoRecord{}, []OutstandingRewardsRecord{},
-		[]HistoricalRewardsRecord{}, []CurrentRewardsRecord{}, []DelegatorStartingInfoRecord{})
+		DefaultParams(), 1, []RewardsPlan{}, nil, []DelegatorWithdrawInfo{},
+		NewDelegationTypeRecords(
+			[]OutstandingRewardsRecord{}, []HistoricalRewardsRecord{}, []CurrentRewardsRecord{},
+			[]DelegatorStartingInfoRecord{}),
+		NewDelegationTypeRecords(
+			[]OutstandingRewardsRecord{}, []HistoricalRewardsRecord{}, []CurrentRewardsRecord{},
+			[]DelegatorStartingInfoRecord{}),
+		NewDelegationTypeRecords(
+			[]OutstandingRewardsRecord{}, []HistoricalRewardsRecord{}, []CurrentRewardsRecord{},
+			[]DelegatorStartingInfoRecord{}),
+		[]OperatorAccumulatedCommissionRecord{},
+	)
 }
 
 // Validate checks that the genesis state is valid.
@@ -85,6 +74,18 @@ func (genState *GenesisState) Validate(unpacker codectypes.AnyUnpacker) error {
 		}
 	}
 	return nil
+}
+
+func NewDelegationTypeRecords(
+	outstandingRewards []OutstandingRewardsRecord, historicalRewards []HistoricalRewardsRecord,
+	currentRewards []CurrentRewardsRecord, delegatorStartingInfos []DelegatorStartingInfoRecord,
+) DelegationTypeRecords {
+	return DelegationTypeRecords{
+		OutstandingRewards:     outstandingRewards,
+		HistoricalRewards:      historicalRewards,
+		CurrentRewards:         currentRewards,
+		DelegatorStartingInfos: delegatorStartingInfos,
+	}
 }
 
 // findDuplicateRewardsPlans returns the first duplicated rewards plan in the slice.
