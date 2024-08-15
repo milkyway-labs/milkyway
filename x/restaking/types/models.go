@@ -2,6 +2,7 @@ package types
 
 import (
 	"fmt"
+	"sort"
 	"time"
 
 	"cosmossdk.io/math"
@@ -285,16 +286,12 @@ func NewServiceUnbondingDelegation(
 // AddEntry allows to append a new entry to the unbonding delegation
 func (ubd *UnbondingDelegation) AddEntry(creationHeight int64, completionTime time.Time, balance sdk.Coins, unbondingID uint64) {
 	// Check the entries exists with creation_height and complete_time
-	entryIndex := -1
-	for index, ubdEntry := range ubd.Entries {
-		if ubdEntry.CreationHeight == creationHeight && ubdEntry.CompletionTime.Equal(completionTime) {
-			entryIndex = index
-			break
-		}
-	}
+	entryIndex := sort.Search(len(ubd.Entries), func(i int) bool {
+		return ubd.Entries[i].CreationHeight == creationHeight && ubd.Entries[i].CompletionTime.Equal(completionTime)
+	})
 
 	// entryIndex exists
-	if entryIndex != -1 {
+	if entryIndex != len(ubd.Entries) {
 		ubdEntry := ubd.Entries[entryIndex]
 		ubdEntry.Balance = ubdEntry.Balance.Add(balance...)
 		ubdEntry.InitialBalance = ubdEntry.InitialBalance.Add(balance...)
