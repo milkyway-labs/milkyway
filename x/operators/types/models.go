@@ -141,7 +141,7 @@ func (o Operator) RemoveDelShares(delShares sdk.DecCoins) (Operator, sdk.Coins) 
 	} else {
 		// Leave excess tokens in the operator
 		// However, fully use all the delegator shares
-		issuedTokens = utils.TruncateInt(o.TokensFromShares(delShares))
+		issuedTokens, _ = o.TokensFromShares(delShares).TruncateDecimal()
 		o.Tokens = o.Tokens.Sub(issuedTokens...)
 
 		if o.Tokens.IsAnyNegative() {

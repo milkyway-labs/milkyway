@@ -95,12 +95,3 @@ func IsAnyGT(coins, coinsB sdk.DecCoins) bool {
 func IsAnyLT(coins, coinsB sdk.DecCoins) bool {
 	return !IsAllGTE(coins, coinsB)
 }
-
-// TruncateInt truncates the decimal part of the coins.
-func TruncateInt(coins sdk.DecCoins) sdk.Coins {
-	truncated := sdk.NewCoins()
-	for _, coin := range coins {
-		truncated = truncated.Add(sdk.NewCoin(coin.Denom, coin.Amount.TruncateInt()))
-	}
-	return truncated
-}
