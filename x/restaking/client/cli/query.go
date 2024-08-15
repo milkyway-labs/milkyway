@@ -373,7 +373,7 @@ func getOperatorUnbondingDelegationQueryCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "unbonding-delegation [operator-id] [delegator-address]",
 		Short:   "Query an unbonding delegation of an operator",
-		Example: fmt.Sprintf(`%s query %s operator unbondingdelegation 1 init1yu5vratzjspgtd0rnrc0d5a79kkqy0n57rhfyh`, version.AppName, types.ModuleName),
+		Example: fmt.Sprintf(`%s query %s operator unbonding-delegation 1 init1yu5vratzjspgtd0rnrc0d5a79kkqy0n57rhfyh`, version.AppName, types.ModuleName),
 		Args:    cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
