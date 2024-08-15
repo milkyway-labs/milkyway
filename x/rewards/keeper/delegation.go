@@ -280,7 +280,7 @@ func (k *Keeper) withdrawDelegationRewards(
 			sdk.NewAttribute(sdk.AttributeKeyAmount, coins.String()),
 			sdk.NewAttribute(types.AttributeKeyDelegationType, target.Type().String()),
 			sdk.NewAttribute(types.AttributeKeyDelegationTargetID, fmt.Sprint(target.GetID())),
-			sdk.NewAttribute(types.AttributeKeyDelegator, del.UserAddress),
+			sdk.NewAttribute(restakingtypes.AttributeKeyDelegator, del.UserAddress),
 		),
 	)
 

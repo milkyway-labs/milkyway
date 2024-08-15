@@ -12,7 +12,6 @@ const (
 	AttributeKeyWithdrawAddress    = "withdraw_address"
 	AttributeKeyDelegationType     = "delegation_type"
 	AttributeKeyDelegationTargetID = "delegation_target_id"
-	AttributeKeyDelegator          = "delegator"
 
 	AttributeKeyAmountPerPool = "amount_per_pool"
 	AttributeKeyPool          = "pool" // NOTE: it's different from the restaking pool
