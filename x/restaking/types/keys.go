@@ -56,12 +56,12 @@ func ServiceParamsStoreKey(serviceID uint32) []byte {
 
 // GetUnbondingIndexKey returns a key for the index for looking up UnbondingDelegations by the UnbondingDelegationEntries they contain
 func GetUnbondingIndexKey(id uint64) []byte {
-	return append(UnbondingIndexKey, utils.Uint64ToBytes(id)...)
+	return append(UnbondingIndexKey, sdk.Uint64ToBigEndian(id)...)
 }
 
 // GetUnbondingTypeKey returns a key for an index containing the type of unbonding operations
 func GetUnbondingTypeKey(id uint64) []byte {
-	return append(UnbondingTypeKey, utils.Uint64ToBytes(id)...)
+	return append(UnbondingTypeKey, sdk.Uint64ToBigEndian(id)...)
 }
 
 // GetUnbondingDelegationTimeKey creates the prefix for all unbonding delegations from a delegator
