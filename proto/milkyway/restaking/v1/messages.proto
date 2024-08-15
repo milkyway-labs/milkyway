@@ -242,8 +242,4 @@ message MsgUndelegateResponse {
     (amino.dont_omitempty) = true,
     (gogoproto.stdtime) = true
   ];
-
-  // Amount represents the amount of undelegated coins
-  cosmos.base.v1beta1.Coin amount = 2
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 }
