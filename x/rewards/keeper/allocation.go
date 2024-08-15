@@ -16,7 +16,13 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
+// AllocateRewards allocates restaking rewards to different entities based on
+// active rewards plans. AllocateRewards skips rewards distribution when
+// there's no last rewards allocation time set. In that case, AllocateRewards
+// simply set the current block time as new last rewards allocation time.
 func (k *Keeper) AllocateRewards(ctx context.Context) error {
+	// Get last rewards allocation time and set the current block time as new
+	// last rewards allocation time.
 	lastAllocationTime, err := k.GetLastRewardsAllocationTime(ctx)
 	if err != nil {
 		return err
@@ -26,14 +32,15 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 		return err
 	}
 
+	// If there's no last rewards allocation time set yet, it means this is
+	// the first time AllocateRewards is called. In this case we just skip this
+	// block for rewards allocation.
 	if lastAllocationTime == nil {
-		// If there's no last rewards allocation time set yet, it means this is
-		// the first time AllocateRewards is called. In this case we just set
-		// the current block time as the last rewards allocation time and skip
-		// this block.
 		return nil
 	}
 
+	// Calculate time elapsed since the last rewards allocation to calculate
+	// rewards amount to allocate in this block.
 	timeSinceLastAllocation := sdkCtx.BlockTime().Sub(*lastAllocationTime)
 	// TODO: clip elapsed time to prevent too much rewards allocation after
 	//       possible chain halt?
@@ -41,6 +48,8 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 		return nil
 	}
 
+	// Iterate all rewards plan stored and allocate rewards by plan if it's
+	// active(plan's start time <= current block time < plans' end time).
 	err = k.RewardsPlans.Walk(ctx, nil, func(planID uint64, plan types.RewardsPlan) (stop bool, err error) {
 		// Skip if the plan is not active at the current block time.
 		if !plan.IsActiveAt(sdkCtx.BlockTime()) {
@@ -59,10 +68,11 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 	return nil
 }
 
+// AllocateRewardsByPlan allocates rewards by a specific rewards plan.
 func (k *Keeper) AllocateRewardsByPlan(
 	ctx context.Context, plan types.RewardsPlan, timeSinceLastAllocation time.Duration) error {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-
+	// Calculate rewards amount for this block by following formula:
+	// amountPerDay * timeSinceLastAllocation(ms) / 1 day(ms)
 	rewards := sdk.NewDecCoinsFromCoins(plan.AmountPerDay...).
 		MulDecTruncate(math.LegacyNewDec(timeSinceLastAllocation.Milliseconds())).
 		QuoDecTruncate(math.LegacyNewDec((24 * time.Hour).Milliseconds()))
@@ -77,6 +87,7 @@ func (k *Keeper) AllocateRewardsByPlan(
 	// Check if the rewards pool has enough coins to allocate rewards.
 	planRewardsPoolAddr := plan.MustGetRewardsPoolAddress()
 	balances := k.bankKeeper.GetAllBalances(ctx, planRewardsPoolAddr)
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	if !balances.IsAllGTE(rewardsTruncated) {
 		sdkCtx.Logger().Info(
 			"Skipping rewards plan because its rewards pool has insufficient balances",
@@ -86,6 +97,7 @@ func (k *Keeper) AllocateRewardsByPlan(
 		)
 		return nil
 	}
+	// Send the current block's rewards to the global rewards pool.
 	err := k.bankKeeper.SendCoins(ctx, planRewardsPoolAddr, types.RewardsPoolAddress, rewardsTruncated)
 	if err != nil {
 		return err
@@ -96,28 +108,29 @@ func (k *Keeper) AllocateRewardsByPlan(
 		return servicestypes.ErrServiceNotFound
 	}
 
+	// Get pools and operators that are eligible for this rewards plan's
+	// rewards allocation, along with each entity's total delegation value.
+	// If an entity's total delegation value is zero, then it won't be included
+	// in this block's rewards allocation.
 	serviceParams := k.restakingKeeper.GetServiceParams(sdkCtx, service.ID)
 	pools := k.getPoolsForRewardsAllocation(ctx, service, serviceParams)
 	operators := k.getOperatorsForRewardsAllocation(ctx, service, serviceParams)
-
 	poolDistrInfos, totalPoolsDelValues, err := k.getPoolDistrInfos(ctx, pools)
 	if err != nil {
 		return err
 	}
-
 	operatorDistrInfos, totalOperatorsDelValues, err := k.getOperatorDistrInfos(ctx, operators)
 	if err != nil {
 		return err
 	}
-
 	totalUsersDelValues, err := k.GetCoinsValue(ctx, service.Tokens)
 	if err != nil {
 		return err
 	}
 
 	totalDelValues := totalPoolsDelValues.Add(totalOperatorsDelValues).Add(totalUsersDelValues)
+	// There's no delegations at all, so just skip.
 	if totalDelValues.IsZero() {
-		// There's no delegations at all, so just skip.
 		return nil
 	}
 
