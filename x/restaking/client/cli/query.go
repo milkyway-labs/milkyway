@@ -955,7 +955,7 @@ func getDelegatorServiceDelegationsQueryCmd() *cobra.Command {
 func getDelegatorServiceUnbondingDelegationsQueryCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "services-unbonding-delegations [delegator-address]",
-		Short:   "Query all services delegations of a delegator",
+		Short:   "Query all services unbonding delegations of a delegator",
 		Example: fmt.Sprintf(`%s query %s delegator services-unbonding-delegations init1yu5vratzjspgtd0rnrc0d5a79kkqy0n57rhfyh --page=2 --limit=100`, version.AppName, types.ModuleName),
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
