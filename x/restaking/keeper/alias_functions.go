@@ -252,21 +252,21 @@ func (k *Keeper) PerformDelegation(ctx sdk.Context, data types.DelegationData) (
 
 func (k *Keeper) getUnbondingDelegationTarget(ctx sdk.Context, ubd types.UnbondingDelegation) (types.DelegationTarget, error) {
 	switch ubd.Type {
-	case types.UNBONDING_DELEGATION_TYPE_POOL:
+	case types.DELEGATION_TYPE_POOL:
 		pool, found := k.poolsKeeper.GetPool(ctx, ubd.TargetID)
 		if !found {
 			return nil, poolstypes.ErrPoolNotFound
 		}
 		return &pool, nil
 
-	case types.UNBONDING_DELEGATION_TYPE_OPERATOR:
+	case types.DELEGATION_TYPE_OPERATOR:
 		operator, found := k.operatorsKeeper.GetOperator(ctx, ubd.TargetID)
 		if !found {
 			return nil, operatorstypes.ErrOperatorNotFound
 		}
 		return &operator, nil
 
-	case types.UNBONDING_DELEGATION_TYPE_SERVICE:
+	case types.DELEGATION_TYPE_SERVICE:
 		service, found := k.servicesKeeper.GetService(ctx, ubd.TargetID)
 		if !found {
 			return nil, servicestypes.ErrServiceNotFound
@@ -281,13 +281,13 @@ func (k *Keeper) getUnbondingDelegationTarget(ctx sdk.Context, ubd types.Unbondi
 // getUnbondingDelegationKeyBuilder returns the key builder for the given unbonding delegation
 func (k *Keeper) getUnbondingDelegationKeyBuilder(ud types.UnbondingDelegation) (types.UnbondingDelegationKeyBuilder, error) {
 	switch ud.Type {
-	case types.UNBONDING_DELEGATION_TYPE_POOL:
+	case types.DELEGATION_TYPE_POOL:
 		return types.UserPoolUnbondingDelegationKey, nil
 
-	case types.UNBONDING_DELEGATION_TYPE_OPERATOR:
+	case types.DELEGATION_TYPE_OPERATOR:
 		return types.UserOperatorUnbondingDelegationKey, nil
 
-	case types.UNBONDING_DELEGATION_TYPE_SERVICE:
+	case types.DELEGATION_TYPE_SERVICE:
 		return types.UserServiceUnbondingDelegationKey, nil
 
 	default:
@@ -313,14 +313,14 @@ func (k *Keeper) SetUnbondingDelegation(ctx sdk.Context, ud types.UnbondingDeleg
 
 // GetUnbondingDelegation returns the unbonding delegation for the given delegator and target.
 func (k *Keeper) GetUnbondingDelegation(
-	ctx sdk.Context, delegatorAddress string, ubdType types.UnbondingDelegationType, targetID uint32,
+	ctx sdk.Context, delegatorAddress string, ubdType types.DelegationType, targetID uint32,
 ) (types.UnbondingDelegation, bool) {
 	switch ubdType {
-	case types.UNBONDING_DELEGATION_TYPE_POOL:
+	case types.DELEGATION_TYPE_POOL:
 		return k.GetPoolUnbondingDelegation(ctx, targetID, delegatorAddress)
-	case types.UNBONDING_DELEGATION_TYPE_OPERATOR:
+	case types.DELEGATION_TYPE_OPERATOR:
 		return k.GetOperatorUnbondingDelegation(ctx, targetID, delegatorAddress)
-	case types.UNBONDING_DELEGATION_TYPE_SERVICE:
+	case types.DELEGATION_TYPE_SERVICE:
 		return k.GetServiceUnbondingDelegation(ctx, targetID, delegatorAddress)
 	default:
 		return types.UnbondingDelegation{}, false

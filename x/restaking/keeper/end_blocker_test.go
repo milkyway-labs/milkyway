@@ -69,7 +69,7 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 				ubd, found := suite.k.GetUnbondingDelegation(
 					ctx,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.UNBONDING_DELEGATION_TYPE_POOL,
+					types.DELEGATION_TYPE_POOL,
 					1,
 				)
 				suite.Require().True(found)
@@ -133,7 +133,7 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 				_, found := suite.k.GetUnbondingDelegation(
 					ctx,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.UNBONDING_DELEGATION_TYPE_POOL,
+					types.DELEGATION_TYPE_POOL,
 					1,
 				)
 				suite.Require().False(found)
@@ -237,7 +237,7 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 				_, found := suite.k.GetUnbondingDelegation(
 					ctx,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.UNBONDING_DELEGATION_TYPE_POOL,
+					types.DELEGATION_TYPE_POOL,
 					1,
 				)
 				suite.Require().False(found)
@@ -245,7 +245,7 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 				_, found = suite.k.GetUnbondingDelegation(
 					ctx,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.UNBONDING_DELEGATION_TYPE_OPERATOR,
+					types.DELEGATION_TYPE_OPERATOR,
 					1,
 				)
 				suite.Require().False(found)
@@ -253,7 +253,7 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 				_, found = suite.k.GetUnbondingDelegation(
 					ctx,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.UNBONDING_DELEGATION_TYPE_SERVICE,
+					types.DELEGATION_TYPE_SERVICE,
 					1,
 				)
 				suite.Require().False(found)

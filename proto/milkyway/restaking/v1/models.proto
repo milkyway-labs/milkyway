@@ -93,16 +93,6 @@ message DelegationResponse {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// UnbondingDelegationType defines the type of an unbonding delegation.
-enum UnbondingDelegationType {
-  option (gogoproto.goproto_enum_prefix) = false;
-
-  UNBONDING_DELEGATION_TYPE_UNSPECIFIED = 0;
-  UNBONDING_DELEGATION_TYPE_POOL = 1;
-  UNBONDING_DELEGATION_TYPE_OPERATOR = 2;
-  UNBONDING_DELEGATION_TYPE_SERVICE = 3;
-}
-
 // UnbondingDelegation stores all of a single delegator's unbonding bonds
 // for a single target in an time-ordered list.
 message UnbondingDelegation {
@@ -110,7 +100,7 @@ message UnbondingDelegation {
   option (gogoproto.goproto_getters) = false;
 
   // Type is the type of the unbonding delegation.
-  UnbondingDelegationType type = 1;
+  DelegationType type = 1;
 
   // DelegatorAddress is the encoded address of the delegator.
   string delegator_address = 2
@@ -166,7 +156,7 @@ message DTData {
   option (gogoproto.equal) = false;
   option (gogoproto.goproto_getters) = false;
 
-  UnbondingDelegationType unbonding_delegation_type = 1;
+  DelegationType unbonding_delegation_type = 1;
   string delegator_address = 2
       [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
   uint32 target_id = 3 [ (gogoproto.customname) = "TargetID" ];

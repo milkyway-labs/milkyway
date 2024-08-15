@@ -179,17 +179,17 @@ func NewDelegationResponse(delegation Delegation, balance sdk.Coins) DelegationR
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// GetUnboningDelegationTypeFromTarget returns the unbonding delegation type based on the target
-func GetUnboningDelegationTypeFromTarget(target DelegationTarget) (UnbondingDelegationType, error) {
+// GetDelegationTypeFromTarget returns the unbonding delegation type based on the target
+func GetDelegationTypeFromTarget(target DelegationTarget) (DelegationType, error) {
 	switch target.(type) {
 	case *poolstypes.Pool:
-		return UNBONDING_DELEGATION_TYPE_POOL, nil
+		return DELEGATION_TYPE_POOL, nil
 	case *operatorstypes.Operator:
-		return UNBONDING_DELEGATION_TYPE_OPERATOR, nil
+		return DELEGATION_TYPE_OPERATOR, nil
 	case *servicestypes.Service:
-		return UNBONDING_DELEGATION_TYPE_SERVICE, nil
+		return DELEGATION_TYPE_SERVICE, nil
 	default:
-		return UNBONDING_DELEGATION_TYPE_UNSPECIFIED, fmt.Errorf("invalid unbonding target type")
+		return DELEGATION_TYPE_UNSPECIFIED, fmt.Errorf("invalid unbonding target type")
 	}
 }
 
@@ -200,7 +200,7 @@ func NewUnbondingDelegationEntry(creationHeight int64, completionTime time.Time,
 		CompletionTime: completionTime,
 		InitialBalance: balance,
 		Balance:        balance,
-		UnbondingId:    unbondingID,
+		UnbondingID:    unbondingID,
 	}
 }
 
@@ -211,7 +211,7 @@ func (e UnbondingDelegationEntry) IsMature(currentTime time.Time) bool {
 
 // Validate validates the unbonding delegation entry
 func (e UnbondingDelegationEntry) Validate() error {
-	if e.UnbondingId == 0 {
+	if e.UnbondingID == 0 {
 		return fmt.Errorf("invalid unbonding id")
 	}
 
@@ -241,7 +241,7 @@ func NewPoolUnbondingDelegation(
 	creationHeight int64, completionTime time.Time, balance sdk.Coins, id uint64,
 ) UnbondingDelegation {
 	return UnbondingDelegation{
-		Type:             UNBONDING_DELEGATION_TYPE_POOL,
+		Type:             DELEGATION_TYPE_POOL,
 		DelegatorAddress: delegatorAddress,
 		TargetID:         poolID,
 		Entries: []UnbondingDelegationEntry{
@@ -257,7 +257,7 @@ func NewOperatorUnbondingDelegation(
 	creationHeight int64, completionTime time.Time, balance sdk.Coins, id uint64,
 ) UnbondingDelegation {
 	return UnbondingDelegation{
-		Type:             UNBONDING_DELEGATION_TYPE_OPERATOR,
+		Type:             DELEGATION_TYPE_OPERATOR,
 		DelegatorAddress: delegatorAddress,
 		TargetID:         operatorID,
 		Entries: []UnbondingDelegationEntry{
@@ -273,7 +273,7 @@ func NewServiceUnbondingDelegation(
 	creationHeight int64, completionTime time.Time, balance sdk.Coins, id uint64,
 ) UnbondingDelegation {
 	return UnbondingDelegation{
-		Type:             UNBONDING_DELEGATION_TYPE_SERVICE,
+		Type:             DELEGATION_TYPE_SERVICE,
 		DelegatorAddress: delegatorAddress,
 		TargetID:         serviceID,
 		Entries: []UnbondingDelegationEntry{
@@ -315,7 +315,7 @@ func (ubd *UnbondingDelegation) RemoveEntry(i int64) {
 
 // Validate validates the unbonding delegation
 func (udb UnbondingDelegation) Validate() error {
-	if udb.Type == UNBONDING_DELEGATION_TYPE_UNSPECIFIED {
+	if udb.Type == DELEGATION_TYPE_UNSPECIFIED {
 		return fmt.Errorf("invalid unbonding delegation type")
 	}
 

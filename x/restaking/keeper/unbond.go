@@ -168,7 +168,7 @@ func (k *Keeper) SetUnbondingDelegationEntry(
 	id := k.IncrementUnbondingID(ctx)
 
 	// Either get the existing unbonding delegation, or create a new one
-	ubdType, err := types.GetUnboningDelegationTypeFromTarget(data.Target)
+	ubdType, err := types.GetDelegationTypeFromTarget(data.Target)
 	if err != nil {
 		return types.UnbondingDelegation{}, err
 	}
@@ -242,7 +242,7 @@ func (k *Keeper) CompleteUnbonding(ctx sdk.Context, data types.DTData) (sdk.Coin
 			i--
 
 			// Delete the index
-			k.DeleteUnbondingIndex(ctx, entry.UnbondingId)
+			k.DeleteUnbondingIndex(ctx, entry.UnbondingID)
 
 			// Track undelegation only when remaining or truncated shares are non-zero
 			if !entry.Balance.IsZero() {
