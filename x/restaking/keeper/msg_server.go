@@ -54,7 +54,7 @@ func (k msgServer) UpdateOperatorParams(goCtx context.Context, msg *types.MsgUpd
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeUpdateOperatorParams,
-			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprint(msg.OperatorID)),
+			sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, fmt.Sprint(msg.OperatorID)),
 			sdk.NewAttribute(types.AttributeKeyCommissionRate, msg.Params.CommissionRate.String()),
 			sdk.NewAttribute(types.AttributeKeyJoinedServiceIDs, utils.FormatUint32Slice(msg.Params.JoinedServicesIDs)),
 		),
@@ -94,7 +94,7 @@ func (k msgServer) UpdateServiceParams(goCtx context.Context, msg *types.MsgUpda
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeUpdateServiceParams,
-			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprint(msg.ServiceID)),
+			sdk.NewAttribute(servicestypes.AttributeKeyServiceID, fmt.Sprint(msg.ServiceID)),
 			sdk.NewAttribute(types.AttributeKeySlashFraction, msg.Params.SlashFraction.String()),
 			sdk.NewAttribute(
 				types.AttributeKeyWhitelistedPoolIDs,
@@ -224,7 +224,7 @@ func (k msgServer) DelegateOperator(goCtx context.Context, msg *types.MsgDelegat
 		sdk.NewEvent(
 			types.EventTypeDelegateOperator,
 			sdk.NewAttribute(types.AttributeKeyDelegator, msg.Delegator),
-			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", msg.OperatorID)),
+			sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, fmt.Sprintf("%d", msg.OperatorID)),
 			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Amount.String()),
 			sdk.NewAttribute(types.AttributeKeyNewShares, newShares.String()),
 		),
@@ -263,9 +263,10 @@ func (k msgServer) UndelegateOperator(goCtx context.Context, msg *types.MsgUndel
 	// Emit the undelegation event
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeUnbondPool,
+			types.EventTypeUnbondOperator,
 			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Amount.String()),
 			sdk.NewAttribute(types.AttributeKeyDelegator, msg.Delegator),
+			sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, fmt.Sprintf("%d", msg.OperatorID)),
 			sdk.NewAttribute(types.AttributeKeyCompletionTime, completionTime.Format(time.RFC3339)),
 		),
 	})
@@ -312,7 +313,7 @@ func (k msgServer) DelegateService(goCtx context.Context, msg *types.MsgDelegate
 		sdk.NewEvent(
 			types.EventTypeDelegateService,
 			sdk.NewAttribute(types.AttributeKeyDelegator, msg.Delegator),
-			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
+			sdk.NewAttribute(servicestypes.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
 			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Amount.String()),
 			sdk.NewAttribute(types.AttributeKeyNewShares, newShares.String()),
 		),
@@ -351,9 +352,10 @@ func (k msgServer) UndelegateService(goCtx context.Context, msg *types.MsgUndele
 	// Emit the undelegation event
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeUnbondPool,
+			types.EventTypeUnbondService,
 			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Amount.String()),
 			sdk.NewAttribute(types.AttributeKeyDelegator, msg.Delegator),
+			sdk.NewAttribute(servicestypes.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
 			sdk.NewAttribute(types.AttributeKeyCompletionTime, completionTime.Format(time.RFC3339)),
 		),
 	})
