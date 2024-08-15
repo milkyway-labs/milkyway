@@ -21,34 +21,40 @@ service Query {
     option (google.api.http).get = "/milkyway/rewards/v1/params";
   }
 
+  // RewardsPlans queries all rewards plans.
   rpc RewardsPlans(QueryRewardsPlansRequest)
       returns (QueryRewardsPlansResponse) {
     option (google.api.http).get = "/milkyway/rewards/v1/rewards_plans";
   }
 
+  // RewardsPlan queries a specific rewards plan by its ID.
   rpc RewardsPlan(QueryRewardsPlanRequest) returns (QueryRewardsPlanResponse) {
     option (google.api.http).get =
         "/milkyway/rewards/v1/rewards_plans/{plan_id}";
   }
 
+  // PoolOutstandingRewards queries rewards of a pool.
   rpc PoolOutstandingRewards(QueryPoolOutstandingRewardsRequest)
       returns (QueryPoolOutstandingRewardsResponse) {
     option (google.api.http).get =
         "/milkyway/rewards/v1/pools/{pool_id}/outstanding_rewards";
   }
 
+  // OperatorOutstandingRewards queries rewards of an operator.
   rpc OperatorOutstandingRewards(QueryOperatorOutstandingRewardsRequest)
       returns (QueryOperatorOutstandingRewardsResponse) {
     option (google.api.http).get =
         "/milkyway/rewards/v1/operators/{operator_id}/outstanding_rewards";
   }
 
+  // ServiceOutstandingRewards queries rewards of a service.
   rpc ServiceOutstandingRewards(QueryServiceOutstandingRewardsRequest)
       returns (QueryServiceOutstandingRewardsResponse) {
     option (google.api.http).get =
         "/milkyway/rewards/v1/services/{service_id}/outstanding_rewards";
   }
 
+  // OperatorCommission queries accumulated commission for an operator.
   rpc OperatorCommission(QueryOperatorCommissionRequest)
       returns (QueryOperatorCommissionResponse) {
     option (google.api.http).get =
@@ -106,11 +112,15 @@ message QueryParamsResponse {
   Params params = 1 [ (gogoproto.nullable) = false ];
 }
 
+// QueryRewardsPlansRequest is the request type for the Query/RewardsPlans RPC
+// method.
 message QueryRewardsPlansRequest {
   // pagination defines an optional pagination for the request.
   cosmos.base.query.v1beta1.PageRequest pagination = 1;
 }
 
+// QueryRewardsPlansResponse is the response type for the Query/RewardsPlans
+// RPC method.
 message QueryRewardsPlansResponse {
   repeated RewardsPlan rewards_plans = 1
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
@@ -119,8 +129,12 @@ message QueryRewardsPlansResponse {
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
+// QueryRewardsPlanRequest is the request type for the Query/RewardsPlan RPC
+// method.
 message QueryRewardsPlanRequest { uint64 plan_id = 1; }
 
+// QueryRewardsPlanResponse is the response type for the Query/RewardsPlan RPC
+// method.
 message QueryRewardsPlanResponse {
   RewardsPlan rewards_plan = 2 [ (gogoproto.nullable) = false ];
 }

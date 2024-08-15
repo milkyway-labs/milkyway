@@ -108,6 +108,8 @@ func (m *QueryParamsResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryParamsResponse proto.InternalMessageInfo
 
+// QueryRewardsPlansRequest is the request type for the Query/RewardsPlans RPC
+// method.
 type QueryRewardsPlansRequest struct {
 	// pagination defines an optional pagination for the request.
 	Pagination *query.PageRequest `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
@@ -146,6 +148,8 @@ func (m *QueryRewardsPlansRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryRewardsPlansRequest proto.InternalMessageInfo
 
+// QueryRewardsPlansResponse is the response type for the Query/RewardsPlans
+// RPC method.
 type QueryRewardsPlansResponse struct {
 	RewardsPlans []RewardsPlan `protobuf:"bytes,1,rep,name=rewards_plans,json=rewardsPlans,proto3" json:"rewards_plans"`
 	// pagination defines the pagination in the response.
@@ -185,6 +189,8 @@ func (m *QueryRewardsPlansResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryRewardsPlansResponse proto.InternalMessageInfo
 
+// QueryRewardsPlanRequest is the request type for the Query/RewardsPlan RPC
+// method.
 type QueryRewardsPlanRequest struct {
 	PlanId uint64 `protobuf:"varint,1,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`
 }
@@ -222,6 +228,8 @@ func (m *QueryRewardsPlanRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryRewardsPlanRequest proto.InternalMessageInfo
 
+// QueryRewardsPlanResponse is the response type for the Query/RewardsPlan RPC
+// method.
 type QueryRewardsPlanResponse struct {
 	RewardsPlan RewardsPlan `protobuf:"bytes,2,opt,name=rewards_plan,json=rewardsPlan,proto3" json:"rewards_plan"`
 }
@@ -1120,11 +1128,17 @@ type QueryClient interface {
 	// Params defines a gRPC query method that returns the parameters of the
 	// module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
+	// RewardsPlans queries all rewards plans.
 	RewardsPlans(ctx context.Context, in *QueryRewardsPlansRequest, opts ...grpc.CallOption) (*QueryRewardsPlansResponse, error)
+	// RewardsPlan queries a specific rewards plan by its ID.
 	RewardsPlan(ctx context.Context, in *QueryRewardsPlanRequest, opts ...grpc.CallOption) (*QueryRewardsPlanResponse, error)
+	// PoolOutstandingRewards queries rewards of a pool.
 	PoolOutstandingRewards(ctx context.Context, in *QueryPoolOutstandingRewardsRequest, opts ...grpc.CallOption) (*QueryPoolOutstandingRewardsResponse, error)
+	// OperatorOutstandingRewards queries rewards of an operator.
 	OperatorOutstandingRewards(ctx context.Context, in *QueryOperatorOutstandingRewardsRequest, opts ...grpc.CallOption) (*QueryOperatorOutstandingRewardsResponse, error)
+	// ServiceOutstandingRewards queries rewards of a service.
 	ServiceOutstandingRewards(ctx context.Context, in *QueryServiceOutstandingRewardsRequest, opts ...grpc.CallOption) (*QueryServiceOutstandingRewardsResponse, error)
+	// OperatorCommission queries accumulated commission for an operator.
 	OperatorCommission(ctx context.Context, in *QueryOperatorCommissionRequest, opts ...grpc.CallOption) (*QueryOperatorCommissionResponse, error)
 	// PoolDelegationRewards queries the total rewards accrued by a pool
 	// delegation.
@@ -1263,11 +1277,17 @@ type QueryServer interface {
 	// Params defines a gRPC query method that returns the parameters of the
 	// module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
+	// RewardsPlans queries all rewards plans.
 	RewardsPlans(context.Context, *QueryRewardsPlansRequest) (*QueryRewardsPlansResponse, error)
+	// RewardsPlan queries a specific rewards plan by its ID.
 	RewardsPlan(context.Context, *QueryRewardsPlanRequest) (*QueryRewardsPlanResponse, error)
+	// PoolOutstandingRewards queries rewards of a pool.
 	PoolOutstandingRewards(context.Context, *QueryPoolOutstandingRewardsRequest) (*QueryPoolOutstandingRewardsResponse, error)
+	// OperatorOutstandingRewards queries rewards of an operator.
 	OperatorOutstandingRewards(context.Context, *QueryOperatorOutstandingRewardsRequest) (*QueryOperatorOutstandingRewardsResponse, error)
+	// ServiceOutstandingRewards queries rewards of a service.
 	ServiceOutstandingRewards(context.Context, *QueryServiceOutstandingRewardsRequest) (*QueryServiceOutstandingRewardsResponse, error)
+	// OperatorCommission queries accumulated commission for an operator.
 	OperatorCommission(context.Context, *QueryOperatorCommissionRequest) (*QueryOperatorCommissionResponse, error)
 	// PoolDelegationRewards queries the total rewards accrued by a pool
 	// delegation.

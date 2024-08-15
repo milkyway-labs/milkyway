@@ -33,22 +33,31 @@ var _ = time.Kitchen
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+// RewardsPlan represents a rewards allocation plan.
 type RewardsPlan struct {
-	// ID is the unique identifier of the plan
+	// ID is the unique identifier of the plan.
 	ID uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	// Description is the description of the plan
+	// Description is the description of the plan.
 	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
-	ServiceID   uint32 `protobuf:"varint,3,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
-	// Amount is the amount of rewards to be distributed.
+	// ServiceID is the service ID which the plan is related to.
+	ServiceID uint32 `protobuf:"varint,3,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
+	// AmountPerDay is the amount of rewards to be distributed, per day.
+	// The rewards amount for every block will be calculated based on this.
 	AmountPerDay github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,4,rep,name=amount_per_day,json=amountPerDay,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"amount_per_day"`
-	// StartTime is the starting time of the plan
+	// StartTime is the starting time of the plan.
 	StartTime time.Time `protobuf:"bytes,5,opt,name=start_time,json=startTime,proto3,stdtime" json:"start_time"`
-	// EndTime is the ending time of the plan
-	EndTime               time.Time         `protobuf:"bytes,6,opt,name=end_time,json=endTime,proto3,stdtime" json:"end_time"`
-	RewardsPool           string            `protobuf:"bytes,7,opt,name=rewards_pool,json=rewardsPool,proto3" json:"rewards_pool,omitempty"`
-	PoolsDistribution     Distribution      `protobuf:"bytes,8,opt,name=pools_distribution,json=poolsDistribution,proto3" json:"pools_distribution"`
-	OperatorsDistribution Distribution      `protobuf:"bytes,9,opt,name=operators_distribution,json=operatorsDistribution,proto3" json:"operators_distribution"`
-	UsersDistribution     UsersDistribution `protobuf:"bytes,10,opt,name=users_distribution,json=usersDistribution,proto3" json:"users_distribution"`
+	// EndTime is the ending time of the plan.
+	EndTime time.Time `protobuf:"bytes,6,opt,name=end_time,json=endTime,proto3,stdtime" json:"end_time"`
+	// RewardsPool is the address where rewards to be distributed are stored.
+	// If the rewards pool doesn't have enough funds to be distributed, then
+	// the rewards allocation for this plan will be skipped.
+	RewardsPool string `protobuf:"bytes,7,opt,name=rewards_pool,json=rewardsPool,proto3" json:"rewards_pool,omitempty"`
+	// PoolsDistribution is the rewards distribution parameters for pools.
+	PoolsDistribution Distribution `protobuf:"bytes,8,opt,name=pools_distribution,json=poolsDistribution,proto3" json:"pools_distribution"`
+	// OperatorsDistribution is the rewards distribution parameters for operators.
+	OperatorsDistribution Distribution `protobuf:"bytes,9,opt,name=operators_distribution,json=operatorsDistribution,proto3" json:"operators_distribution"`
+	// UsersDistribution is the rewards distribution parameters for users.
+	UsersDistribution UsersDistribution `protobuf:"bytes,10,opt,name=users_distribution,json=usersDistribution,proto3" json:"users_distribution"`
 }
 
 func (m *RewardsPlan) Reset()         { *m = RewardsPlan{} }
@@ -84,9 +93,12 @@ func (m *RewardsPlan) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_RewardsPlan proto.InternalMessageInfo
 
-// Distribution represents distribution information for restaking
+// Distribution represents distribution parameters for restaking
 // pools/operators.
 type Distribution struct {
+	// DelegationType is the type of delegation target which this distribution
+	// parameters are for. It can be one of DELEGATION_TYPE_POOL and
+	// DELEGATION_TYPE_OPERATOR.
 	DelegationType types1.DelegationType `protobuf:"varint,1,opt,name=delegation_type,json=delegationType,proto3,enum=milkyway.restaking.v1.DelegationType" json:"delegation_type,omitempty"`
 	// Weight is the rewards distribution weight among other types of delegation
 	// targets.
@@ -128,6 +140,11 @@ func (m *Distribution) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Distribution proto.InternalMessageInfo
 
+// DistributionTypeBasic represents the simplest form of distribution.
+// Rewards are allocated to entities based on their delegation values.
+// For example, if there are three operators with delegation values of
+// $1000, $1500, and $2000, their rewards will be distributed in a
+// 2:3:4 ratio.
 type DistributionTypeBasic struct {
 }
 
@@ -164,6 +181,9 @@ func (m *DistributionTypeBasic) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DistributionTypeBasic proto.InternalMessageInfo
 
+// DistributionTypeWeighted is a type of distribution where the reward
+// weights for each entity are explicitly defined. Only the specified
+// delegation targets will receive rewards.
 type DistributionTypeWeighted struct {
 	Weights []DistributionWeight `protobuf:"bytes,1,rep,name=weights,proto3" json:"weights"`
 }
@@ -201,6 +221,7 @@ func (m *DistributionTypeWeighted) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DistributionTypeWeighted proto.InternalMessageInfo
 
+// DistributionWeight defines a delegation target and its assigned weight.
 type DistributionWeight struct {
 	DelegationTargetID uint32 `protobuf:"varint,1,opt,name=delegation_target_id,json=delegationTargetId,proto3" json:"delegation_target_id,omitempty"`
 	Weight             uint32 `protobuf:"varint,2,opt,name=weight,proto3" json:"weight,omitempty"`
@@ -239,6 +260,8 @@ func (m *DistributionWeight) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DistributionWeight proto.InternalMessageInfo
 
+// DistributionTypeEgalitarian is a distribution method where all entities
+// receive an equal share of rewards(a.k.a. egalitarian method).
 type DistributionTypeEgalitarian struct {
 }
 
@@ -275,9 +298,15 @@ func (m *DistributionTypeEgalitarian) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DistributionTypeEgalitarian proto.InternalMessageInfo
 
+// Distribution represents distribution parameters for delegators who directly
+// staked their tokens to the service.
 type UsersDistribution struct {
-	Weight uint32      `protobuf:"varint,1,opt,name=weight,proto3" json:"weight,omitempty"`
-	Type   *types2.Any `protobuf:"bytes,2,opt,name=type,proto3" json:"type,omitempty"`
+	// Weight is the rewards distribution weight among other types of delegation
+	// targets.
+	Weight uint32 `protobuf:"varint,1,opt,name=weight,proto3" json:"weight,omitempty"`
+	// Type defines the rewards distribution method. Currently only the basic
+	// distribution is allowed.
+	Type *types2.Any `protobuf:"bytes,2,opt,name=type,proto3" json:"type,omitempty"`
 }
 
 func (m *UsersDistribution) Reset()         { *m = UsersDistribution{} }
@@ -313,6 +342,11 @@ func (m *UsersDistribution) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UsersDistribution proto.InternalMessageInfo
 
+// UsersDistributionTypeBasic represents the simplest form of distribution.
+// Rewards are allocated to entities based on their delegation values.
+// For example, if there are three users with delegation values of
+// $1000, $1500, and $2000, their rewards will be distributed in a
+// 2:3:4 ratio.
 type UsersDistributionTypeBasic struct {
 }
 
@@ -349,6 +383,19 @@ func (m *UsersDistributionTypeBasic) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UsersDistributionTypeBasic proto.InternalMessageInfo
 
+// HistoricalRewards represents historical rewards for a delegation target.
+// Height is implicit within the store key.
+// Cumulative reward ratio is the sum from the zeroeth period
+// until this period of rewards / tokens, per the spec.
+// The reference count indicates the number of objects
+// which might need to reference this historical entry at any point.
+// ReferenceCount =
+//
+//	  number of outstanding delegations which ended the associated period (and
+//	  might need to read that record)
+//	+ number of slashes which ended the associated period (and might need to
+//	read that record)
+//	+ one per validator for the zeroeth period, set on initialization
 type HistoricalRewards struct {
 	CumulativeRewardRatios DecPools `protobuf:"bytes,1,rep,name=cumulative_reward_ratios,json=cumulativeRewardRatios,proto3,castrepeated=DecPools" json:"cumulative_reward_ratios" yaml:"cumulative_reward_ratios"`
 	ReferenceCount         uint32   `protobuf:"varint,2,opt,name=reference_count,json=referenceCount,proto3" json:"reference_count,omitempty" yaml:"reference_count"`
@@ -387,6 +434,9 @@ func (m *HistoricalRewards) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_HistoricalRewards proto.InternalMessageInfo
 
+// CurrentRewards represents current rewards and current
+// period for a delegation target kept as a running counter and incremented
+// each block as long as the delegation target's tokens remain constant.
 type CurrentRewards struct {
 	Rewards DecPools `protobuf:"bytes,1,rep,name=rewards,proto3,castrepeated=DecPools" json:"rewards" yaml:"rewards"`
 	Period  uint64   `protobuf:"varint,2,opt,name=period,proto3" json:"period,omitempty"`
@@ -425,6 +475,8 @@ func (m *CurrentRewards) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CurrentRewards proto.InternalMessageInfo
 
+// OutstandingRewards represents outstanding (un-withdrawn) rewards
+// for a delegation target inexpensive to track, allows simple sanity checks.
 type OutstandingRewards struct {
 	Rewards DecPools `protobuf:"bytes,1,rep,name=rewards,proto3,castrepeated=DecPools" json:"rewards" yaml:"rewards"`
 }
@@ -462,6 +514,9 @@ func (m *OutstandingRewards) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_OutstandingRewards proto.InternalMessageInfo
 
+// AccumulatedCommission represents accumulated commission
+// for a delegation target kept as a running counter, can be withdrawn at any
+// time.
 type AccumulatedCommission struct {
 	Commissions DecPools `protobuf:"bytes,1,rep,name=commissions,proto3,castrepeated=DecPools" json:"commissions"`
 }
@@ -499,6 +554,12 @@ func (m *AccumulatedCommission) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_AccumulatedCommission proto.InternalMessageInfo
 
+// DelegatorStartingInfo represents the starting info for a delegator reward
+// period. It tracks the previous delegation target period, the delegation's
+// amount of staking token, and the creation height (to check later on if any
+// slashes have occurred). NOTE: Even though validators are slashed to whole
+// staking tokens, the delegators within the validator may be left with less
+// than a full token, thus sdk.Dec is used.
 type DelegatorStartingInfo struct {
 	PreviousPeriod uint64                                      `protobuf:"varint,1,opt,name=previous_period,json=previousPeriod,proto3" json:"previous_period,omitempty" yaml:"previous_period"`
 	Stakes         github_com_cosmos_cosmos_sdk_types.DecCoins `protobuf:"bytes,2,rep,name=stakes,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.DecCoins" json:"stakes" yaml:"stakes"`
@@ -538,6 +599,9 @@ func (m *DelegatorStartingInfo) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DelegatorStartingInfo proto.InternalMessageInfo
 
+// DelegationDelegatorReward represents the properties of a delegator's
+// delegation reward. The delegator address implicit in the within the
+// query request.
 type DelegationDelegatorReward struct {
 	DelegationType     types1.DelegationType `protobuf:"varint,1,opt,name=delegation_type,json=delegationType,proto3,enum=milkyway.restaking.v1.DelegationType" json:"delegation_type,omitempty"`
 	DelegationTargetID uint32                `protobuf:"varint,2,opt,name=delegation_target_id,json=delegationTargetId,proto3" json:"delegation_target_id,omitempty"`

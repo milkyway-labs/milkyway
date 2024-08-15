@@ -27,6 +27,8 @@ service Msg {
   rpc SetWithdrawAddress(MsgSetWithdrawAddress)
       returns (MsgSetWithdrawAddressResponse);
 
+  // WithdrawDelegatorReward defines a method to withdraw rewards of delegator
+  // from a single delegation target.
   rpc WithdrawDelegatorReward(MsgWithdrawDelegatorReward)
       returns (MsgWithdrawDelegatorRewardResponse);
 
@@ -107,6 +109,8 @@ message MsgSetWithdrawAddress {
 // type.
 message MsgSetWithdrawAddressResponse {}
 
+// MsgWithdrawDelegatorReward represents delegation withdrawal to a delegator
+// from a single delegation target.
 message MsgWithdrawDelegatorReward {
   option (cosmos.msg.v1.signer) = "delegator_address";
   option (amino.name) = "milkyway/rewards/MsgWithdrawDelegatorReward";
@@ -123,6 +127,8 @@ message MsgWithdrawDelegatorReward {
       [ (gogoproto.customname) = "DelegationTargetID" ];
 }
 
+// MsgWithdrawDelegatorRewardResponse defines the Msg/WithdrawDelegatorReward
+// response type.
 message MsgWithdrawDelegatorRewardResponse {
   repeated cosmos.base.v1beta1.Coin amount = 1 [
     (gogoproto.nullable) = false,

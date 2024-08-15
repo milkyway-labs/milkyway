@@ -10866,6 +10866,8 @@ func (x *QueryParamsResponse) GetParams() *Params {
 	return nil
 }
 
+// QueryRewardsPlansRequest is the request type for the Query/RewardsPlans RPC
+// method.
 type QueryRewardsPlansRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -10902,6 +10904,8 @@ func (x *QueryRewardsPlansRequest) GetPagination() *v1beta1.PageRequest {
 	return nil
 }
 
+// QueryRewardsPlansResponse is the response type for the Query/RewardsPlans
+// RPC method.
 type QueryRewardsPlansResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -10946,6 +10950,8 @@ func (x *QueryRewardsPlansResponse) GetPagination() *v1beta1.PageResponse {
 	return nil
 }
 
+// QueryRewardsPlanRequest is the request type for the Query/RewardsPlan RPC
+// method.
 type QueryRewardsPlanRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -10981,6 +10987,8 @@ func (x *QueryRewardsPlanRequest) GetPlanId() uint64 {
 	return 0
 }
 
+// QueryRewardsPlanResponse is the response type for the Query/RewardsPlan RPC
+// method.
 type QueryRewardsPlanResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

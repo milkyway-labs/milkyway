@@ -216,6 +216,8 @@ func (m *MsgSetWithdrawAddressResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgSetWithdrawAddressResponse proto.InternalMessageInfo
 
+// MsgWithdrawDelegatorReward represents delegation withdrawal to a delegator
+// from a single delegation target.
 type MsgWithdrawDelegatorReward struct {
 	DelegatorAddress   string                `protobuf:"bytes,1,opt,name=delegator_address,json=delegatorAddress,proto3" json:"delegator_address,omitempty"`
 	DelegationType     types1.DelegationType `protobuf:"varint,2,opt,name=delegation_type,json=delegationType,proto3,enum=milkyway.restaking.v1.DelegationType" json:"delegation_type,omitempty"`
@@ -255,6 +257,8 @@ func (m *MsgWithdrawDelegatorReward) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgWithdrawDelegatorReward proto.InternalMessageInfo
 
+// MsgWithdrawDelegatorRewardResponse defines the Msg/WithdrawDelegatorReward
+// response type.
 type MsgWithdrawDelegatorRewardResponse struct {
 	Amount github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,1,rep,name=amount,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"amount"`
 }
@@ -575,6 +579,8 @@ type MsgClient interface {
 	// SetWithdrawAddress defines a method to change the withdraw address
 	// for a delegator.
 	SetWithdrawAddress(ctx context.Context, in *MsgSetWithdrawAddress, opts ...grpc.CallOption) (*MsgSetWithdrawAddressResponse, error)
+	// WithdrawDelegatorReward defines a method to withdraw rewards of delegator
+	// from a single delegation target.
 	WithdrawDelegatorReward(ctx context.Context, in *MsgWithdrawDelegatorReward, opts ...grpc.CallOption) (*MsgWithdrawDelegatorRewardResponse, error)
 	// WithdrawOperatorCommission defines a method to withdraw the
 	// full commission to the operator.
@@ -646,6 +652,8 @@ type MsgServer interface {
 	// SetWithdrawAddress defines a method to change the withdraw address
 	// for a delegator.
 	SetWithdrawAddress(context.Context, *MsgSetWithdrawAddress) (*MsgSetWithdrawAddressResponse, error)
+	// WithdrawDelegatorReward defines a method to withdraw rewards of delegator
+	// from a single delegation target.
 	WithdrawDelegatorReward(context.Context, *MsgWithdrawDelegatorReward) (*MsgWithdrawDelegatorRewardResponse, error)
 	// WithdrawOperatorCommission defines a method to withdraw the
 	// full commission to the operator.

@@ -8541,26 +8541,35 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// RewardsPlan represents a rewards allocation plan.
 type RewardsPlan struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// ID is the unique identifier of the plan
+	// ID is the unique identifier of the plan.
 	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	// Description is the description of the plan
+	// Description is the description of the plan.
 	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
-	ServiceId   uint32 `protobuf:"varint,3,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
-	// Amount is the amount of rewards to be distributed.
+	// ServiceID is the service ID which the plan is related to.
+	ServiceId uint32 `protobuf:"varint,3,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
+	// AmountPerDay is the amount of rewards to be distributed, per day.
+	// The rewards amount for every block will be calculated based on this.
 	AmountPerDay []*v1beta1.Coin `protobuf:"bytes,4,rep,name=amount_per_day,json=amountPerDay,proto3" json:"amount_per_day,omitempty"`
-	// StartTime is the starting time of the plan
+	// StartTime is the starting time of the plan.
 	StartTime *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
-	// EndTime is the ending time of the plan
-	EndTime               *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
-	RewardsPool           string                 `protobuf:"bytes,7,opt,name=rewards_pool,json=rewardsPool,proto3" json:"rewards_pool,omitempty"`
-	PoolsDistribution     *Distribution          `protobuf:"bytes,8,opt,name=pools_distribution,json=poolsDistribution,proto3" json:"pools_distribution,omitempty"`
-	OperatorsDistribution *Distribution          `protobuf:"bytes,9,opt,name=operators_distribution,json=operatorsDistribution,proto3" json:"operators_distribution,omitempty"`
-	UsersDistribution     *UsersDistribution     `protobuf:"bytes,10,opt,name=users_distribution,json=usersDistribution,proto3" json:"users_distribution,omitempty"`
+	// EndTime is the ending time of the plan.
+	EndTime *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
+	// RewardsPool is the address where rewards to be distributed are stored.
+	// If the rewards pool doesn't have enough funds to be distributed, then
+	// the rewards allocation for this plan will be skipped.
+	RewardsPool string `protobuf:"bytes,7,opt,name=rewards_pool,json=rewardsPool,proto3" json:"rewards_pool,omitempty"`
+	// PoolsDistribution is the rewards distribution parameters for pools.
+	PoolsDistribution *Distribution `protobuf:"bytes,8,opt,name=pools_distribution,json=poolsDistribution,proto3" json:"pools_distribution,omitempty"`
+	// OperatorsDistribution is the rewards distribution parameters for operators.
+	OperatorsDistribution *Distribution `protobuf:"bytes,9,opt,name=operators_distribution,json=operatorsDistribution,proto3" json:"operators_distribution,omitempty"`
+	// UsersDistribution is the rewards distribution parameters for users.
+	UsersDistribution *UsersDistribution `protobuf:"bytes,10,opt,name=users_distribution,json=usersDistribution,proto3" json:"users_distribution,omitempty"`
 }
 
 func (x *RewardsPlan) Reset() {
@@ -8653,13 +8662,16 @@ func (x *RewardsPlan) GetUsersDistribution() *UsersDistribution {
 	return nil
 }
 
-// Distribution represents distribution information for restaking
+// Distribution represents distribution parameters for restaking
 // pools/operators.
 type Distribution struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
+	// DelegationType is the type of delegation target which this distribution
+	// parameters are for. It can be one of DELEGATION_TYPE_POOL and
+	// DELEGATION_TYPE_OPERATOR.
 	DelegationType v1.DelegationType `protobuf:"varint,1,opt,name=delegation_type,json=delegationType,proto3,enum=milkyway.restaking.v1.DelegationType" json:"delegation_type,omitempty"`
 	// Weight is the rewards distribution weight among other types of delegation
 	// targets.
@@ -8709,6 +8721,11 @@ func (x *Distribution) GetType_() *anypb.Any {
 	return nil
 }
 
+// DistributionTypeBasic represents the simplest form of distribution.
+// Rewards are allocated to entities based on their delegation values.
+// For example, if there are three operators with delegation values of
+// $1000, $1500, and $2000, their rewards will be distributed in a
+// 2:3:4 ratio.
 type DistributionTypeBasic struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -8735,6 +8752,9 @@ func (*DistributionTypeBasic) Descriptor() ([]byte, []int) {
 	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{2}
 }
 
+// DistributionTypeWeighted is a type of distribution where the reward
+// weights for each entity are explicitly defined. Only the specified
+// delegation targets will receive rewards.
 type DistributionTypeWeighted struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -8770,6 +8790,7 @@ func (x *DistributionTypeWeighted) GetWeights() []*DistributionWeight {
 	return nil
 }
 
+// DistributionWeight defines a delegation target and its assigned weight.
 type DistributionWeight struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -8813,6 +8834,8 @@ func (x *DistributionWeight) GetWeight() uint32 {
 	return 0
 }
 
+// DistributionTypeEgalitarian is a distribution method where all entities
+// receive an equal share of rewards(a.k.a. egalitarian method).
 type DistributionTypeEgalitarian struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -8839,13 +8862,19 @@ func (*DistributionTypeEgalitarian) Descriptor() ([]byte, []int) {
 	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{5}
 }
 
+// Distribution represents distribution parameters for delegators who directly
+// staked their tokens to the service.
 type UsersDistribution struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Weight uint32     `protobuf:"varint,1,opt,name=weight,proto3" json:"weight,omitempty"`
-	Type_  *anypb.Any `protobuf:"bytes,2,opt,name=type,proto3" json:"type,omitempty"`
+	// Weight is the rewards distribution weight among other types of delegation
+	// targets.
+	Weight uint32 `protobuf:"varint,1,opt,name=weight,proto3" json:"weight,omitempty"`
+	// Type defines the rewards distribution method. Currently only the basic
+	// distribution is allowed.
+	Type_ *anypb.Any `protobuf:"bytes,2,opt,name=type,proto3" json:"type,omitempty"`
 }
 
 func (x *UsersDistribution) Reset() {
@@ -8882,6 +8911,11 @@ func (x *UsersDistribution) GetType_() *anypb.Any {
 	return nil
 }
 
+// UsersDistributionTypeBasic represents the simplest form of distribution.
+// Rewards are allocated to entities based on their delegation values.
+// For example, if there are three users with delegation values of
+// $1000, $1500, and $2000, their rewards will be distributed in a
+// 2:3:4 ratio.
 type UsersDistributionTypeBasic struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -8908,6 +8942,19 @@ func (*UsersDistributionTypeBasic) Descriptor() ([]byte, []int) {
 	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{7}
 }
 
+// HistoricalRewards represents historical rewards for a delegation target.
+// Height is implicit within the store key.
+// Cumulative reward ratio is the sum from the zeroeth period
+// until this period of rewards / tokens, per the spec.
+// The reference count indicates the number of objects
+// which might need to reference this historical entry at any point.
+// ReferenceCount =
+//
+//	  number of outstanding delegations which ended the associated period (and
+//	  might need to read that record)
+//	+ number of slashes which ended the associated period (and might need to
+//	read that record)
+//	+ one per validator for the zeroeth period, set on initialization
 type HistoricalRewards struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -8951,6 +8998,9 @@ func (x *HistoricalRewards) GetReferenceCount() uint32 {
 	return 0
 }
 
+// CurrentRewards represents current rewards and current
+// period for a delegation target kept as a running counter and incremented
+// each block as long as the delegation target's tokens remain constant.
 type CurrentRewards struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -8994,6 +9044,8 @@ func (x *CurrentRewards) GetPeriod() uint64 {
 	return 0
 }
 
+// OutstandingRewards represents outstanding (un-withdrawn) rewards
+// for a delegation target inexpensive to track, allows simple sanity checks.
 type OutstandingRewards struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -9029,6 +9081,9 @@ func (x *OutstandingRewards) GetRewards() []*DecPool {
 	return nil
 }
 
+// AccumulatedCommission represents accumulated commission
+// for a delegation target kept as a running counter, can be withdrawn at any
+// time.
 type AccumulatedCommission struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -9064,6 +9119,12 @@ func (x *AccumulatedCommission) GetCommissions() []*DecPool {
 	return nil
 }
 
+// DelegatorStartingInfo represents the starting info for a delegator reward
+// period. It tracks the previous delegation target period, the delegation's
+// amount of staking token, and the creation height (to check later on if any
+// slashes have occurred). NOTE: Even though validators are slashed to whole
+// staking tokens, the delegators within the validator may be left with less
+// than a full token, thus sdk.Dec is used.
 type DelegatorStartingInfo struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -9115,6 +9176,9 @@ func (x *DelegatorStartingInfo) GetHeight() uint64 {
 	return 0
 }
 
+// DelegationDelegatorReward represents the properties of a delegator's
+// delegation reward. The delegator address implicit in the within the
+// query request.
 type DelegationDelegatorReward struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

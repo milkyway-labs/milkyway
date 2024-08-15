@@ -38,6 +38,8 @@ type MsgClient interface {
 	// SetWithdrawAddress defines a method to change the withdraw address
 	// for a delegator.
 	SetWithdrawAddress(ctx context.Context, in *MsgSetWithdrawAddress, opts ...grpc.CallOption) (*MsgSetWithdrawAddressResponse, error)
+	// WithdrawDelegatorReward defines a method to withdraw rewards of delegator
+	// from a single delegation target.
 	WithdrawDelegatorReward(ctx context.Context, in *MsgWithdrawDelegatorReward, opts ...grpc.CallOption) (*MsgWithdrawDelegatorRewardResponse, error)
 	// WithdrawOperatorCommission defines a method to withdraw the
 	// full commission to the operator.
@@ -118,6 +120,8 @@ type MsgServer interface {
 	// SetWithdrawAddress defines a method to change the withdraw address
 	// for a delegator.
 	SetWithdrawAddress(context.Context, *MsgSetWithdrawAddress) (*MsgSetWithdrawAddressResponse, error)
+	// WithdrawDelegatorReward defines a method to withdraw rewards of delegator
+	// from a single delegation target.
 	WithdrawDelegatorReward(context.Context, *MsgWithdrawDelegatorReward) (*MsgWithdrawDelegatorRewardResponse, error)
 	// WithdrawOperatorCommission defines a method to withdraw the
 	// full commission to the operator.

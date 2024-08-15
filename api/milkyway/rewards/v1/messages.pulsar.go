@@ -5386,6 +5386,8 @@ func (*MsgSetWithdrawAddressResponse) Descriptor() ([]byte, []int) {
 	return file_milkyway_rewards_v1_messages_proto_rawDescGZIP(), []int{3}
 }
 
+// MsgWithdrawDelegatorReward represents delegation withdrawal to a delegator
+// from a single delegation target.
 type MsgWithdrawDelegatorReward struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -5437,6 +5439,8 @@ func (x *MsgWithdrawDelegatorReward) GetDelegationTargetId() uint32 {
 	return 0
 }
 
+// MsgWithdrawDelegatorRewardResponse defines the Msg/WithdrawDelegatorReward
+// response type.
 type MsgWithdrawDelegatorRewardResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
