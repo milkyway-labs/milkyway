@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"cosmossdk.io/math"
 	"github.com/stretchr/testify/require"
 
+	"cosmossdk.io/math"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -25,52 +25,52 @@ func TestRewardsPlan_Validate(t *testing.T) {
 		expectedErr string
 	}{
 		{
-			"valid rewards plan",
-			nil,
-			"",
+			name:        "valid rewards plan",
+			malleate:    nil,
+			expectedErr: "",
 		},
 		{
-			"invalid plan ID returns error",
-			func(plan *types.RewardsPlan) {
+			name: "invalid plan ID returns error",
+			malleate: func(plan *types.RewardsPlan) {
 				plan.ID = 0
 			},
-			"invalid plan ID: 0",
+			expectedErr: "invalid plan ID: 0",
 		},
 		{
-			"too long description returns error",
-			func(plan *types.RewardsPlan) {
+			name: "too long description returns error",
+			malleate: func(plan *types.RewardsPlan) {
 				plan.Description = strings.Repeat("A", types.MaxRewardsPlanDescriptionLength+1)
 			},
-			"too long description",
+			expectedErr: "too long description",
 		},
 		{
-			"invalid service ID returns error",
-			func(plan *types.RewardsPlan) {
+			name: "invalid service ID returns error",
+			malleate: func(plan *types.RewardsPlan) {
 				plan.ServiceID = 0
 			},
-			"invalid service ID: 0",
+			expectedErr: "invalid service ID: 0",
 		},
 		{
-			"invalid amount per day returns error",
-			func(plan *types.RewardsPlan) {
+			name: "invalid amount per day returns error",
+			malleate: func(plan *types.RewardsPlan) {
 				plan.AmountPerDay = sdk.Coins{sdk.Coin{Denom: "umilk", Amount: math.ZeroInt()}}
 			},
-			"invalid amount per day: coin 0umilk amount is not positive",
+			expectedErr: "invalid amount per day: coin 0umilk amount is not positive",
 		},
 		{
-			"end time must be after start time",
-			func(plan *types.RewardsPlan) {
+			name: "end time must be after start time",
+			malleate: func(plan *types.RewardsPlan) {
 				plan.StartTime = time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
 				plan.EndTime = time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
 			},
-			"end time must be after start time: 2024-01-01T00:00:00Z <= 2024-01-01T00:00:00Z",
+			expectedErr: "end time must be after start time: 2024-01-01T00:00:00Z <= 2024-01-01T00:00:00Z",
 		},
 		{
-			"invalid rewards pool returns error",
-			func(plan *types.RewardsPlan) {
+			name: "invalid rewards pool returns error",
+			malleate: func(plan *types.RewardsPlan) {
 				plan.RewardsPool = "invalid"
 			},
-			"invalid rewards pool: decoding bech32 failed: invalid bech32 string length 7",
+			expectedErr: "invalid rewards pool: decoding bech32 failed: invalid bech32 string length 7",
 		},
 	}
 
@@ -108,29 +108,29 @@ func TestRewardsPlan_IsActiveAt(t *testing.T) {
 		isActive bool
 	}{
 		{
-			"plan is active at start time",
-			startTime,
-			true,
+			name:     "plan is active at start time",
+			date:     startTime,
+			isActive: true,
 		},
 		{
-			"plan is inactive at end time",
-			endTime,
-			false,
+			name:     "plan is inactive at end time",
+			date:     endTime,
+			isActive: false,
 		},
 		{
-			"plan is inactive before start time",
-			startTime.AddDate(0, 0, -1),
-			false,
+			name:     "plan is inactive before start time",
+			date:     startTime.AddDate(0, 0, -1),
+			isActive: false,
 		},
 		{
-			"plan is active between start time and end time",
-			startTime.AddDate(0, 0, 1),
-			true,
+			name:     "plan is active between start time and end time",
+			date:     startTime.AddDate(0, 0, 1),
+			isActive: true,
 		},
 		{
-			"plan is inactive after end time",
-			endTime.AddDate(0, 0, 1),
-			false,
+			name:     "plan is inactive after end time",
+			date:     endTime.AddDate(0, 0, 1),
+			isActive: false,
 		},
 	}
 
@@ -149,54 +149,42 @@ func TestDistribution_Validate(t *testing.T) {
 		expectedErr string
 	}{
 		{
-			"basic distribution type returns no error",
-			&types.DistributionTypeBasic{},
-			"",
+			name:        "basic distribution type returns no error",
+			distrType:   &types.DistributionTypeBasic{},
+			expectedErr: "",
 		},
 		{
-			"invalid delegation target ID returns error",
-			&types.DistributionTypeWeighted{
+			name: "invalid delegation target ID returns error",
+			distrType: &types.DistributionTypeWeighted{
 				Weights: []types.DistributionWeight{
-					{
-						DelegationTargetID: 0,
-						Weight:             1,
-					},
+					types.NewDistributionWeight(0, 1),
 				},
 			},
-			"invalid delegation target ID: 0",
+			expectedErr: "invalid delegation target ID: 0",
 		},
 		{
-			"invalid weight returns error",
-			&types.DistributionTypeWeighted{
+			name: "invalid weight returns error",
+			distrType: &types.DistributionTypeWeighted{
 				Weights: []types.DistributionWeight{
-					{
-						DelegationTargetID: 1,
-						Weight:             0,
-					},
+					types.NewDistributionWeight(1, 0),
 				},
 			},
-			"weight must be positive: 0",
+			expectedErr: "weight must be positive: 0",
 		},
 		{
-			"duplicated delegation target ID returns error",
-			&types.DistributionTypeWeighted{
+			name: "duplicated delegation target ID returns error",
+			distrType: &types.DistributionTypeWeighted{
 				Weights: []types.DistributionWeight{
-					{
-						DelegationTargetID: 1,
-						Weight:             1,
-					},
-					{
-						DelegationTargetID: 1,
-						Weight:             2,
-					},
+					types.NewDistributionWeight(1, 1),
+					types.NewDistributionWeight(1, 2),
 				},
 			},
-			"duplicated weight for the same delegation target ID: 1",
+			expectedErr: "duplicated weight for the same delegation target ID: 1",
 		},
 		{
-			"egalitarian distribution type returns no error",
-			&types.DistributionTypeEgalitarian{},
-			"",
+			name:        "egalitarian distribution type returns no error",
+			distrType:   &types.DistributionTypeEgalitarian{},
+			expectedErr: "",
 		},
 	}
 
@@ -219,9 +207,9 @@ func TestUsersDistribution_Validate(t *testing.T) {
 		expectedErr string
 	}{
 		{
-			"basic distribution type returns no error",
-			&types.UsersDistributionTypeBasic{},
-			"",
+			name:        "basic distribution type returns no error",
+			distrType:   &types.UsersDistributionTypeBasic{},
+			expectedErr: "",
 		},
 	}
 
