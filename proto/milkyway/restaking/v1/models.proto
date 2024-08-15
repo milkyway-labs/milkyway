@@ -155,7 +155,7 @@ message UnbondingDelegationEntry {
   ];
 
   // Incrementing id that uniquely identifies this entry
-  uint64 unbonding_id = 5;
+  uint64 unbonding_id = 5 [ (gogoproto.customname) = "UnbondingID" ];
 }
 
 // DTData is a struct that contains the basic information about an unbonding
