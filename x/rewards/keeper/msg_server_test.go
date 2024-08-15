@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/milkyway-labs/milkyway/app/testutil"
 	"github.com/milkyway-labs/milkyway/utils"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
@@ -19,13 +20,13 @@ func (s *KeeperTestSuite) TestMsgSetWithdrawAddress() {
 		{
 			name: "success",
 			msg: types.NewMsgSetWithdrawAddress(
-				utils.TestAddress(1).String(),
-				utils.TestAddress(2).String(),
+				testutil.TestAddress(1).String(),
+				testutil.TestAddress(2).String(),
 			),
 			check: func(ctx context.Context) {
-				withdrawAddr, err := s.keeper.GetDelegatorWithdrawAddr(ctx, utils.TestAddress(1))
+				withdrawAddr, err := s.keeper.GetDelegatorWithdrawAddr(ctx, testutil.TestAddress(1))
 				s.Require().NoError(err)
-				s.Require().Equal(utils.TestAddress(2), withdrawAddr)
+				s.Require().Equal(testutil.TestAddress(2), withdrawAddr)
 			},
 			expectedErr: "",
 		},
@@ -33,14 +34,14 @@ func (s *KeeperTestSuite) TestMsgSetWithdrawAddress() {
 			name: "invalid delegator address returns error",
 			msg: types.NewMsgSetWithdrawAddress(
 				"invalid",
-				utils.TestAddress(2).String(),
+				testutil.TestAddress(2).String(),
 			),
 			expectedErr: "invalid delegator address: decoding bech32 failed: invalid bech32 string length 7: invalid address",
 		},
 		{
 			name: "invalid withdraw address returns error",
 			msg: types.NewMsgSetWithdrawAddress(
-				utils.TestAddress(1).String(),
+				testutil.TestAddress(1).String(),
 				"invalid",
 			),
 			expectedErr: "invalid withdraw address: decoding bech32 failed: invalid bech32 string length 7: invalid address",
@@ -72,7 +73,7 @@ func (s *KeeperTestSuite) TestMsgWithdrawDelegatorReward() {
 		time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 		utils.MustParseCoins("10000_000000service"))
 
-	delAddr := utils.TestAddress(1)
+	delAddr := testutil.TestAddress(1)
 
 	s.DelegateService(service.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
 
@@ -157,7 +158,7 @@ func (s *KeeperTestSuite) TestMsgWithdrawOperatorCommission() {
 		time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 		utils.MustParseCoins("10000_000000service"))
 
-	delAddr := utils.TestAddress(1)
+	delAddr := testutil.TestAddress(1)
 
 	s.DelegateOperator(operator.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
 
@@ -187,7 +188,7 @@ func (s *KeeperTestSuite) TestMsgWithdrawOperatorCommission() {
 		},
 		{
 			name:        "only admin can withdraw commission",
-			msg:         types.NewMsgWithdrawOperatorCommission(utils.TestAddress(1).String(), operator.ID),
+			msg:         types.NewMsgWithdrawOperatorCommission(testutil.TestAddress(1).String(), operator.ID),
 			expectedErr: "only operator admin can withdraw operator commission: unauthorized",
 		},
 		{

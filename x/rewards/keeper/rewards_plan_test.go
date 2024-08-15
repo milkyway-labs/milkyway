@@ -3,6 +3,7 @@ package keeper_test
 import (
 	"time"
 
+	"github.com/milkyway-labs/milkyway/app/testutil"
 	"github.com/milkyway-labs/milkyway/utils"
 	rewardskeeper "github.com/milkyway-labs/milkyway/x/rewards/keeper"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
@@ -32,8 +33,8 @@ func (s *KeeperTestSuite) TestCreateRewardsPlan_PoolOrOperatorNotFound() {
 		types.NewBasicUsersDistribution(1)))
 	s.Require().EqualError(err, "cannot get delegation target 1: pool not found: not found")
 
-	s.DelegatePool(utils.MustParseCoin("100_000000umilk"), utils.TestAddress(1).String(), true)
-	s.DelegatePool(utils.MustParseCoin("100_000000uinit"), utils.TestAddress(2).String(), true)
+	s.DelegatePool(utils.MustParseCoin("100_000000umilk"), testutil.TestAddress(1).String(), true)
+	s.DelegatePool(utils.MustParseCoin("100_000000uinit"), testutil.TestAddress(2).String(), true)
 
 	// After users delegates to pools, the pools are created, but there's no
 	// operator 2 this time.

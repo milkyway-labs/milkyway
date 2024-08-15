@@ -5,6 +5,7 @@ import (
 
 	"cosmossdk.io/math"
 
+	"github.com/milkyway-labs/milkyway/app/testutil"
 	"github.com/milkyway-labs/milkyway/utils"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
@@ -25,7 +26,7 @@ func (s *KeeperTestSuite) TestAllocateRewards_InactivePlan() {
 		service.ID, utils.MustParseCoins("100_000000service"), planStartTime, planEndTime,
 		utils.MustParseCoins("100000_000000service"))
 
-	delAddr := utils.TestAddress(1)
+	delAddr := testutil.TestAddress(1)
 	s.DelegateService(service.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
 
 	s.allocateRewards(3 * time.Second)
@@ -52,11 +53,11 @@ func (s *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	s.RegisterCurrency("uusd", "MUSD", utils.MustParseDec("1"))
 
 	// Create services.
-	serviceAdmin1 := utils.TestAddress(10000)
+	serviceAdmin1 := testutil.TestAddress(10000)
 	service1 := s.CreateService("Service1", serviceAdmin1.String())
-	serviceAdmin2 := utils.TestAddress(10001)
+	serviceAdmin2 := testutil.TestAddress(10001)
 	service2 := s.CreateService("Service2", serviceAdmin2.String())
-	serviceAdmin3 := utils.TestAddress(10003)
+	serviceAdmin3 := testutil.TestAddress(10003)
 	service3 := s.CreateService("Service3", serviceAdmin3.String())
 
 	// Add only Service1 and Service2 to the pools module's allowed list.
@@ -65,11 +66,11 @@ func (s *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	s.App.PoolsKeeper.SetParams(s.Ctx, poolsParams)
 
 	// Create operators.
-	operatorAdmin1 := utils.TestAddress(10004)
+	operatorAdmin1 := testutil.TestAddress(10004)
 	operator1 := s.CreateOperator("Operator1", operatorAdmin1.String())
-	operatorAdmin2 := utils.TestAddress(10005)
+	operatorAdmin2 := testutil.TestAddress(10005)
 	operator2 := s.CreateOperator("Operator2", operatorAdmin2.String())
-	operatorAdmin3 := utils.TestAddress(10006)
+	operatorAdmin3 := testutil.TestAddress(10006)
 	operator3 := s.CreateOperator("Operator3", operatorAdmin3.String())
 
 	s.UpdateOperatorParams(operator1.ID, utils.MustParseDec("0.1"), []uint32{service1.ID, service2.ID, service3.ID})
@@ -96,7 +97,7 @@ func (s *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	err := s.keeper.AllocateRewards(s.Ctx)
 	s.Require().NoError(err)
 
-	aliceAddr := utils.TestAddress(1)
+	aliceAddr := testutil.TestAddress(1)
 	s.DelegatePool(utils.MustParseCoin("100_000000umilk"), aliceAddr.String(), true) // $300
 	s.DelegatePool(utils.MustParseCoin("100_000000uinit"), aliceAddr.String(), true) // $200
 	s.DelegatePool(utils.MustParseCoin("500_000000uusd"), aliceAddr.String(), true)  // $500
@@ -106,18 +107,18 @@ func (s *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	// Whitelist only Operator2 and Operator3.
 	s.UpdateServiceParams(service3.ID, math.LegacyZeroDec(), nil, []uint32{operator2.ID, operator3.ID})
 
-	bobAddr := utils.TestAddress(2)
+	bobAddr := testutil.TestAddress(2)
 	s.DelegateService(service1.ID, utils.MustParseCoins("100_000000uinit"), bobAddr.String(), true) // $300
 	s.DelegateService(
 		service2.ID, utils.MustParseCoins("200_000000uinit"), bobAddr.String(), true) // $600
 	s.DelegateService(service3.ID, utils.MustParseCoins("300_000000uinit"), bobAddr.String(), true) // $900
 
-	charlieAddr := utils.TestAddress(3)
+	charlieAddr := testutil.TestAddress(3)
 	s.DelegateOperator(operator1.ID, utils.MustParseCoins("1000_000000uusd"), charlieAddr.String(), true) // $1000
 	s.DelegateOperator(operator2.ID, utils.MustParseCoins("1000_000000uusd"), charlieAddr.String(), true) // $1000
 	s.DelegateOperator(operator3.ID, utils.MustParseCoins("500_000000uusd"), charlieAddr.String(), true)  // $500
 
-	davidAddr := utils.TestAddress(4)
+	davidAddr := testutil.TestAddress(4)
 	s.DelegatePool(utils.MustParseCoin("200_000000umilk"), davidAddr.String(), true)                    // $400
 	s.DelegatePool(utils.MustParseCoin("200_000000uinit"), davidAddr.String(), true)                    // $600
 	s.DelegatePool(utils.MustParseCoin("200_000000uusd"), davidAddr.String(), true)                     // $200
@@ -235,9 +236,9 @@ func (s *KeeperTestSuite) TestAllocateRewards_MovingPrice() {
 		service.ID, utils.MustParseCoins("100_000000service"), planStartTime, planEndTime,
 		utils.MustParseCoins("100000_000000service"))
 
-	delAddr1 := utils.TestAddress(1)
+	delAddr1 := testutil.TestAddress(1)
 	s.DelegateService(service.ID, utils.MustParseCoins("100_000000umilk"), delAddr1.String(), true)
-	delAddr2 := utils.TestAddress(2)
+	delAddr2 := testutil.TestAddress(2)
 	s.DelegateService(service.ID, utils.MustParseCoins("100_000000uinit"), delAddr2.String(), true)
 
 	// Allocate rewards.
@@ -278,7 +279,7 @@ func (s *KeeperTestSuite) TestAllocateRewards_ZeroDelegations() {
 	s.RegisterCurrency("umilk", "MILK", utils.MustParseDec("2"))
 
 	// Create a service.
-	serviceAdmin := utils.TestAddress(10000)
+	serviceAdmin := testutil.TestAddress(10000)
 	service := s.CreateService("Service", serviceAdmin.String())
 
 	// Add the created service ID to the pools module's allowed list.
@@ -295,7 +296,7 @@ func (s *KeeperTestSuite) TestAllocateRewards_ZeroDelegations() {
 		utils.MustParseCoins("100000_000000service"))
 
 	// Create an operator.
-	operatorAdmin := utils.TestAddress(10001)
+	operatorAdmin := testutil.TestAddress(10001)
 	operator := s.CreateOperator("Operator", operatorAdmin.String())
 	// Make the operator join the service and set its commission rate to 10%.
 	s.UpdateOperatorParams(operator.ID, utils.MustParseDec("0.1"), []uint32{service.ID})
@@ -320,9 +321,9 @@ func (s *KeeperTestSuite) TestAllocateRewards_ZeroDelegations() {
 	s.Require().Empty(rewards)
 
 	// Two users delegate the same amount of $MILK to a pool and the service.
-	delAddr1 := utils.TestAddress(1)
+	delAddr1 := testutil.TestAddress(1)
 	s.DelegatePool(utils.MustParseCoin("10_000000umilk"), delAddr1.String(), true)
-	delAddr2 := utils.TestAddress(2)
+	delAddr2 := testutil.TestAddress(2)
 	s.DelegateService(service.ID, utils.MustParseCoins("10_000000umilk"), delAddr2.String(), true)
 
 	// Allocate rewards.
@@ -351,7 +352,7 @@ func (s *KeeperTestSuite) TestAllocateRewards_WeightedDistributions() {
 	s.RegisterCurrency("uinit", "INIT", utils.MustParseDec("1"))
 
 	// Create a service.
-	serviceAdmin := utils.TestAddress(10000)
+	serviceAdmin := testutil.TestAddress(10000)
 	service := s.CreateService("Service", serviceAdmin.String())
 
 	// Add the created service ID to the pools module's allowed list.
@@ -360,10 +361,10 @@ func (s *KeeperTestSuite) TestAllocateRewards_WeightedDistributions() {
 	s.App.PoolsKeeper.SetParams(s.Ctx, poolsParams)
 
 	// Create operators.
-	operatorAdmin1 := utils.TestAddress(10001)
+	operatorAdmin1 := testutil.TestAddress(10001)
 	operator1 := s.CreateOperator("Operator1", operatorAdmin1.String())
 	s.UpdateOperatorParams(operator1.ID, utils.MustParseDec("0.1"), []uint32{service.ID})
-	operatorAdmin2 := utils.TestAddress(10002)
+	operatorAdmin2 := testutil.TestAddress(10002)
 	operator2 := s.CreateOperator("Operator2", operatorAdmin2.String())
 	s.UpdateOperatorParams(operator2.ID, utils.MustParseDec("0.1"), []uint32{service.ID})
 
@@ -372,24 +373,24 @@ func (s *KeeperTestSuite) TestAllocateRewards_WeightedDistributions() {
 	s.Require().NoError(err)
 
 	// Delegate to $MILK pool.
-	delAddr1 := utils.TestAddress(1)
+	delAddr1 := testutil.TestAddress(1)
 	s.DelegatePool(utils.MustParseCoin("300_000000umilk"), delAddr1.String(), true)
-	delAddr2 := utils.TestAddress(2)
+	delAddr2 := testutil.TestAddress(2)
 	s.DelegatePool(utils.MustParseCoin("200_000000umilk"), delAddr2.String(), true)
 	// Delegate to $INIT pool.
-	delAddr3 := utils.TestAddress(3)
+	delAddr3 := testutil.TestAddress(3)
 	s.DelegatePool(utils.MustParseCoin("200_000000uinit"), delAddr3.String(), true)
-	delAddr4 := utils.TestAddress(4)
+	delAddr4 := testutil.TestAddress(4)
 	s.DelegatePool(utils.MustParseCoin("300_000000uinit"), delAddr4.String(), true)
 	// Delegate to Operator1.
-	delAddr5 := utils.TestAddress(5)
+	delAddr5 := testutil.TestAddress(5)
 	s.DelegateOperator(operator1.ID, utils.MustParseCoins("100_000000umilk"), delAddr5.String(), true)
-	delAddr6 := utils.TestAddress(6)
+	delAddr6 := testutil.TestAddress(6)
 	s.DelegateOperator(operator1.ID, utils.MustParseCoins("200_000000uinit"), delAddr6.String(), true)
 	// Delegate to Operator2.
-	delAddr7 := utils.TestAddress(7)
+	delAddr7 := testutil.TestAddress(7)
 	s.DelegateOperator(operator2.ID, utils.MustParseCoins("200_000000umilk"), delAddr7.String(), true)
-	delAddr8 := utils.TestAddress(8)
+	delAddr8 := testutil.TestAddress(8)
 	s.DelegateOperator(operator2.ID, utils.MustParseCoins("100_000000uinit"), delAddr8.String(), true)
 
 	// Create an active rewards plan.
@@ -461,7 +462,7 @@ func (s *KeeperTestSuite) TestAllocateRewards_EgalitarianDistributions() {
 	s.RegisterCurrency("uinit", "INIT", utils.MustParseDec("1"))
 
 	// Create a service.
-	serviceAdmin := utils.TestAddress(10000)
+	serviceAdmin := testutil.TestAddress(10000)
 	service := s.CreateService("Service", serviceAdmin.String())
 
 	// Add the created service ID to the pools module's allowed list.
@@ -470,10 +471,10 @@ func (s *KeeperTestSuite) TestAllocateRewards_EgalitarianDistributions() {
 	s.App.PoolsKeeper.SetParams(s.Ctx, poolsParams)
 
 	// Create operators.
-	operatorAdmin1 := utils.TestAddress(10001)
+	operatorAdmin1 := testutil.TestAddress(10001)
 	operator1 := s.CreateOperator("Operator1", operatorAdmin1.String())
 	s.UpdateOperatorParams(operator1.ID, utils.MustParseDec("0.1"), []uint32{service.ID})
-	operatorAdmin2 := utils.TestAddress(10002)
+	operatorAdmin2 := testutil.TestAddress(10002)
 	operator2 := s.CreateOperator("Operator2", operatorAdmin2.String())
 	s.UpdateOperatorParams(operator2.ID, utils.MustParseDec("0.1"), []uint32{service.ID})
 
@@ -493,24 +494,24 @@ func (s *KeeperTestSuite) TestAllocateRewards_EgalitarianDistributions() {
 	)
 
 	// Delegate to $MILK pool.
-	delAddr1 := utils.TestAddress(1)
+	delAddr1 := testutil.TestAddress(1)
 	s.DelegatePool(utils.MustParseCoin("300_000000umilk"), delAddr1.String(), true)
-	delAddr2 := utils.TestAddress(2)
+	delAddr2 := testutil.TestAddress(2)
 	s.DelegatePool(utils.MustParseCoin("200_000000umilk"), delAddr2.String(), true)
 	// Delegate to $INIT pool.
-	delAddr3 := utils.TestAddress(3)
+	delAddr3 := testutil.TestAddress(3)
 	s.DelegatePool(utils.MustParseCoin("200_000000uinit"), delAddr3.String(), true)
-	delAddr4 := utils.TestAddress(4)
+	delAddr4 := testutil.TestAddress(4)
 	s.DelegatePool(utils.MustParseCoin("300_000000uinit"), delAddr4.String(), true)
 	// Delegate to Operator1.
-	delAddr5 := utils.TestAddress(5)
+	delAddr5 := testutil.TestAddress(5)
 	s.DelegateOperator(operator1.ID, utils.MustParseCoins("100_000000umilk"), delAddr5.String(), true)
-	delAddr6 := utils.TestAddress(6)
+	delAddr6 := testutil.TestAddress(6)
 	s.DelegateOperator(operator1.ID, utils.MustParseCoins("200_000000uinit"), delAddr6.String(), true)
 	// Delegate to Operator2.
-	delAddr7 := utils.TestAddress(7)
+	delAddr7 := testutil.TestAddress(7)
 	s.DelegateOperator(operator2.ID, utils.MustParseCoins("200_000000umilk"), delAddr7.String(), true)
-	delAddr8 := utils.TestAddress(8)
+	delAddr8 := testutil.TestAddress(8)
 	s.DelegateOperator(operator2.ID, utils.MustParseCoins("100_000000uinit"), delAddr8.String(), true)
 
 	s.allocateRewards(10 * time.Second)

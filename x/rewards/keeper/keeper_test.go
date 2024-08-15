@@ -56,7 +56,7 @@ func (s *KeeperTestSuite) setupSampleServiceAndOperator() (servicestypes.Service
 	s.RegisterCurrency("uinit", "INIT", utils.MustParseDec("3"))
 
 	// Create a service.
-	serviceAdmin := utils.TestAddress(10000)
+	serviceAdmin := testutil.TestAddress(10000)
 	service := s.CreateService("Service", serviceAdmin.String())
 
 	// Add the created service ID to the pools module's allowed list.
@@ -65,7 +65,7 @@ func (s *KeeperTestSuite) setupSampleServiceAndOperator() (servicestypes.Service
 	s.App.PoolsKeeper.SetParams(s.Ctx, poolsParams)
 
 	// Create an operator.
-	operatorAdmin := utils.TestAddress(10001)
+	operatorAdmin := testutil.TestAddress(10001)
 	operator := s.CreateOperator("Operator", operatorAdmin.String())
 	// Make the operator join the service and set its commission rate to 10%.
 	s.UpdateOperatorParams(operator.ID, utils.MustParseDec("0.1"), []uint32{service.ID})

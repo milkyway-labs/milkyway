@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"encoding/binary"
 	"encoding/hex"
 	"errors"
 	"fmt"
@@ -356,10 +355,4 @@ func MustParseDecCoins(s string) sdk.DecCoins {
 
 func MustParseDec(s string) sdkmath.LegacyDec {
 	return sdkmath.LegacyMustNewDecFromStr(strings.ReplaceAll(s, "_", ""))
-}
-
-func TestAddress(n uint64) sdk.AccAddress {
-	b := make([]byte, 8)
-	binary.BigEndian.PutUint64(b, n)
-	return address.Hash("test", b)
 }

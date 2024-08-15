@@ -6,6 +6,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/types/query"
 
+	"github.com/milkyway-labs/milkyway/app/testutil"
 	"github.com/milkyway-labs/milkyway/utils"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
@@ -130,7 +131,7 @@ func (s *KeeperTestSuite) TestQuerier_PoolOutstandingRewards() {
 		utils.MustParseCoins("10000_000000service"),
 	)
 
-	delAddr := utils.TestAddress(1)
+	delAddr := testutil.TestAddress(1)
 	s.DelegatePool(utils.MustParseCoin("100_000000umilk"), delAddr.String(), true)
 
 	s.allocateRewards(10 * time.Second)
@@ -194,7 +195,7 @@ func (s *KeeperTestSuite) TestQuerier_OperatorOutstandingRewards() {
 		utils.MustParseCoins("10000_000000service"),
 	)
 
-	delAddr := utils.TestAddress(1)
+	delAddr := testutil.TestAddress(1)
 	s.DelegateOperator(operator.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
 
 	s.allocateRewards(10 * time.Second)
@@ -258,7 +259,7 @@ func (s *KeeperTestSuite) TestQuerier_ServiceOutstandingRewards() {
 		utils.MustParseCoins("10000_000000service"),
 	)
 
-	delAddr := utils.TestAddress(1)
+	delAddr := testutil.TestAddress(1)
 	s.DelegateService(service.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
 
 	s.allocateRewards(10 * time.Second)
@@ -322,7 +323,7 @@ func (s *KeeperTestSuite) TestQuerier_OperatorCommission() {
 		utils.MustParseCoins("10000_000000service"),
 	)
 
-	delAddr := utils.TestAddress(1)
+	delAddr := testutil.TestAddress(1)
 	s.DelegateOperator(operator.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
 
 	s.allocateRewards(10 * time.Second)
@@ -389,7 +390,7 @@ func (s *KeeperTestSuite) TestQuerier_PoolDelegationRewards() {
 		utils.MustParseCoins("10000_000000service"),
 	)
 
-	delAddr := utils.TestAddress(1)
+	delAddr := testutil.TestAddress(1)
 	s.DelegatePool(utils.MustParseCoin("100_000000umilk"), delAddr.String(), true)
 
 	s.allocateRewards(10 * time.Second)
@@ -466,7 +467,7 @@ func (s *KeeperTestSuite) TestQuerier_OperatorDelegationRewards() {
 		utils.MustParseCoins("10000_000000service"),
 	)
 
-	delAddr := utils.TestAddress(1)
+	delAddr := testutil.TestAddress(1)
 	s.DelegateOperator(operator.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
 
 	s.allocateRewards(10 * time.Second)
@@ -546,7 +547,7 @@ func (s *KeeperTestSuite) TestQuerier_ServiceDelegationRewards() {
 		utils.MustParseCoins("10000_000000service"),
 	)
 
-	delAddr := utils.TestAddress(1)
+	delAddr := testutil.TestAddress(1)
 	s.DelegateService(service.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
 
 	s.allocateRewards(10 * time.Second)
@@ -626,7 +627,7 @@ func (s *KeeperTestSuite) TestQuerier_DelegationTotalRewards() {
 		utils.MustParseCoins("10000_000000service"),
 	)
 
-	delAddr := utils.TestAddress(1)
+	delAddr := testutil.TestAddress(1)
 	s.DelegatePool(utils.MustParseCoin("100_000000umilk"), delAddr.String(), true)
 	s.DelegateOperator(operator.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
 	s.DelegateService(service.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
@@ -694,7 +695,7 @@ func (s *KeeperTestSuite) TestQuerier_DelegationTotalRewards() {
 		{
 			name: "no delegations found",
 			req: &types.QueryDelegationTotalRewardsRequest{
-				DelegatorAddress: utils.TestAddress(2).String(),
+				DelegatorAddress: testutil.TestAddress(2).String(),
 			},
 			expectedErr: "",
 			check: func(resp *types.QueryDelegationTotalRewardsResponse) {
@@ -730,7 +731,7 @@ func (s *KeeperTestSuite) TestQuerier_DelegatorWithdrawAddress() {
 		utils.MustParseCoins("10000_000000service"),
 	)
 
-	delAddr := utils.TestAddress(1)
+	delAddr := testutil.TestAddress(1)
 	s.DelegatePool(utils.MustParseCoin("100_000000umilk"), delAddr.String(), true)
 	s.DelegateOperator(operator.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
 	s.DelegateService(service.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
@@ -766,7 +767,7 @@ func (s *KeeperTestSuite) TestQuerier_DelegatorWithdrawAddress() {
 			name: "different withdraw address set",
 			store: func(ctx context.Context) {
 				_, err := s.msgServer.SetWithdrawAddress(ctx, types.NewMsgSetWithdrawAddress(
-					delAddr.String(), utils.TestAddress(2).String()))
+					delAddr.String(), testutil.TestAddress(2).String()))
 				s.Require().NoError(err)
 			},
 			req: &types.QueryDelegatorWithdrawAddressRequest{
@@ -774,7 +775,7 @@ func (s *KeeperTestSuite) TestQuerier_DelegatorWithdrawAddress() {
 			},
 			expectedErr: "",
 			check: func(resp *types.QueryDelegatorWithdrawAddressResponse) {
-				s.Require().Equal(utils.TestAddress(2).String(), resp.WithdrawAddress)
+				s.Require().Equal(testutil.TestAddress(2).String(), resp.WithdrawAddress)
 			},
 		},
 	}
