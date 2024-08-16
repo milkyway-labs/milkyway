@@ -1,24 +1,13 @@
 package keeper
 
 import (
-	sdkmath "cosmossdk.io/math"
+	"time"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 )
-
-// SavePoolDelegation stores the given pool delegation in the store
-func (k *Keeper) SavePoolDelegation(ctx sdk.Context, delegation types.Delegation) {
-	store := ctx.KVStore(k.storeKey)
-
-	// Marshal and store the delegation
-	delegationBz := types.MustMarshalDelegation(k.cdc, delegation)
-	store.Set(types.UserPoolDelegationStoreKey(delegation.UserAddress, delegation.TargetID), delegationBz)
-
-	// Store the delegation in the delegations by pool ID store
-	store.Set(types.DelegationByPoolIDStoreKey(delegation.TargetID, delegation.UserAddress), []byte{})
-}
 
 // GetPoolDelegation retrieves the delegation for the given user and pool
 // If the delegation does not exist, false is returned instead
@@ -34,18 +23,25 @@ func (k *Keeper) GetPoolDelegation(ctx sdk.Context, poolID uint32, userAddress s
 
 // AddPoolTokensAndShares adds the given amount of tokens to the pool and returns the added shares
 func (k *Keeper) AddPoolTokensAndShares(
-	ctx sdk.Context, pool poolstypes.Pool, tokensToAdd sdkmath.Int,
-) (poolOut poolstypes.Pool, addedShares sdkmath.LegacyDec, err error) {
-
+	ctx sdk.Context, pool poolstypes.Pool, tokensToAdd sdk.Coin,
+) (poolOut poolstypes.Pool, addedShares sdk.DecCoin, err error) {
 	// Update the pool tokens and shares and get the added shares
-	pool, addedShares = pool.AddTokensFromDelegation(tokensToAdd)
+	pool, addedShares, err = pool.AddTokensFromDelegation(tokensToAdd)
+	if err != nil {
+		return pool, sdk.DecCoin{}, err
+	}
 
 	// Save the pool
 	err = k.poolsKeeper.SavePool(ctx, pool)
 	return pool, addedShares, err
 }
 
-// --------------------------------------------------------------------------------------------------------------------
+// RemovePoolDelegation removes the given pool delegation from the store
+func (k *Keeper) RemovePoolDelegation(ctx sdk.Context, delegation types.Delegation) {
+	store := ctx.KVStore(k.storeKey)
+	store.Delete(types.UserPoolDelegationStoreKey(delegation.UserAddress, delegation.TargetID))
+	store.Delete(types.DelegationByPoolIDStoreKey(delegation.TargetID, delegation.UserAddress))
+}
 
 // DelegateToPool sends the given amount to the pool account and saves the delegation for the given user
 func (k *Keeper) DelegateToPool(ctx sdk.Context, amount sdk.Coin, delegator string) (sdk.DecCoins, error) {
@@ -59,34 +55,79 @@ func (k *Keeper) DelegateToPool(ctx sdk.Context, amount sdk.Coin, delegator stri
 	coins := sdk.NewCoins(sdk.NewCoin(pool.Denom, amount.Amount))
 
 	return k.PerformDelegation(ctx, types.DelegationData{
-		Amount:    coins,
-		Delegator: delegator,
-		Target:    &pool,
-		GetDelegation: func(ctx sdk.Context, receiverID uint32, delegator string) (types.Delegation, bool) {
-			return k.GetPoolDelegation(ctx, receiverID, delegator)
-		},
+		Amount:          coins,
+		Delegator:       delegator,
+		Target:          &pool,
 		BuildDelegation: types.NewPoolDelegation,
 		UpdateDelegation: func(ctx sdk.Context, delegation types.Delegation) (sdk.DecCoins, error) {
 			// Calculate the new shares and add the tokens to the pool
-			_, newShares, err := k.AddPoolTokensAndShares(ctx, pool, amount.Amount)
+			_, newShares, err := k.AddPoolTokensAndShares(ctx, pool, amount)
 			if err != nil {
 				return nil, err
 			}
 
 			// Update the delegation shares
-			newDecShares := sdk.NewDecCoinFromDec(pool.GetSharesDenom(amount.Denom), newShares)
-			delegation.Shares = delegation.Shares.Add(newDecShares)
+			delegation.Shares = delegation.Shares.Add(newShares)
 
 			// Store the updated delegation
-			k.SavePoolDelegation(ctx, delegation)
+			err = k.SetDelegation(ctx, delegation)
+			if err != nil {
+				return nil, err
+			}
 
-			sharesDenom := pool.GetSharesDenom(amount.Denom)
-			return sdk.NewDecCoins(sdk.NewDecCoinFromDec(sharesDenom, newShares)), err
+			return sdk.NewDecCoins(newShares), err
 		},
 		Hooks: types.DelegationHooks{
 			BeforeDelegationSharesModified: k.BeforePoolDelegationSharesModified,
 			BeforeDelegationCreated:        k.BeforePoolDelegationCreated,
 			AfterDelegationModified:        k.AfterPoolDelegationModified,
 		},
+	})
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// GetPoolUnbondingDelegation returns the unbonding delegation for the given delegator address and pool id.
+// If no unbonding delegation is found, false is returned instead.
+func (k *Keeper) GetPoolUnbondingDelegation(ctx sdk.Context, poolID uint32, delegator string) (types.UnbondingDelegation, bool) {
+	store := ctx.KVStore(k.storeKey)
+	ubdBz := store.Get(types.UserPoolUnbondingDelegationKey(delegator, poolID))
+	if ubdBz == nil {
+		return types.UnbondingDelegation{}, false
+	}
+
+	return types.MustUnmarshalUnbondingDelegation(k.cdc, ubdBz), true
+}
+
+// UndelegateFromPool removes the given amount from the pool account and saves the
+// unbonding delegation for the given user
+func (k *Keeper) UndelegateFromPool(ctx sdk.Context, amount sdk.Coin, delegator string) (time.Time, error) {
+	// Find the pool
+	pool, found := k.poolsKeeper.GetPoolByDenom(ctx, amount.Denom)
+	if !found {
+		return time.Time{}, poolstypes.ErrPoolNotFound
+	}
+
+	// Get the undelegation amount
+	undelegationAmount := sdk.NewCoins(amount)
+
+	// Get the shares
+	shares, err := k.ValidateUnbondAmount(ctx, delegator, &pool, undelegationAmount)
+	if err != nil {
+		return time.Time{}, err
+	}
+
+	return k.PerformUndelegation(ctx, types.UndelegationData{
+		Amount:                   undelegationAmount,
+		Delegator:                delegator,
+		Target:                   &pool,
+		BuildUnbondingDelegation: types.NewPoolUnbondingDelegation,
+		Hooks: types.DelegationHooks{
+			BeforeDelegationSharesModified: k.BeforePoolDelegationSharesModified,
+			BeforeDelegationCreated:        k.BeforePoolDelegationCreated,
+			AfterDelegationModified:        k.AfterPoolDelegationModified,
+			BeforeDelegationRemoved:        k.BeforePoolDelegationRemoved,
+		},
+		Shares: shares,
 	})
 }

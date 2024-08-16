@@ -163,6 +163,7 @@ func (msg *MsgDelegateOperator) GetSigners() []sdk.AccAddress {
 
 // --------------------------------------------------------------------------------------------------------------------
 
+// NewMsgDelegateService creates a new MsgDelegateService instance
 func NewMsgDelegateService(serviceID uint32, amount sdk.Coins, delegator string) *MsgDelegateService {
 	return &MsgDelegateService{
 		ServiceID: serviceID,
@@ -202,6 +203,7 @@ func (msg *MsgDelegateService) GetSigners() []sdk.AccAddress {
 
 // --------------------------------------------------------------------------------------------------------------------
 
+// NewMsgUpdateParams creates a new MsgUpdateParams instance
 func NewMsgUpdateParams(params Params, authority string) *MsgUpdateParams {
 	return &MsgUpdateParams{
 		Params:    params,
@@ -232,5 +234,120 @@ func (msg *MsgUpdateParams) GetSignBytes() []byte {
 // GetSigners implements sdk.Msg
 func (msg *MsgUpdateParams) GetSigners() []sdk.AccAddress {
 	addr, _ := sdk.AccAddressFromBech32(msg.Authority)
+	return []sdk.AccAddress{addr}
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewMsgUndelegatePool creates a new MsgUndelegatePool instance
+func NewMsgUndelegatePool(amount sdk.Coin, delegator string) *MsgUndelegatePool {
+	return &MsgUndelegatePool{
+		Amount:    amount,
+		Delegator: delegator,
+	}
+}
+
+// ValidateBasic implements sdk.Msg
+func (msg *MsgUndelegatePool) ValidateBasic() error {
+	if !msg.Amount.IsValid() || msg.Amount.IsZero() {
+		return errors.Wrap(sdkerrors.ErrInvalidRequest, "invalid amount")
+	}
+
+	_, err := sdk.AccAddressFromBech32(msg.Delegator)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid delegator address")
+	}
+
+	return nil
+}
+
+// GetSignBytes implements sdk.Msg
+func (msg *MsgUndelegatePool) GetSignBytes() []byte {
+	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(msg))
+}
+
+// GetSigners implements sdk.Msg
+func (msg *MsgUndelegatePool) GetSigners() []sdk.AccAddress {
+	addr, _ := sdk.AccAddressFromBech32(msg.Delegator)
+	return []sdk.AccAddress{addr}
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewMsgUndelegateOperator creates a new MsgUndelegateOperator instance
+func NewMsgUndelegateOperator(operatorID uint32, amount sdk.Coins, delegator string) *MsgUndelegateOperator {
+	return &MsgUndelegateOperator{
+		OperatorID: operatorID,
+		Amount:     amount,
+		Delegator:  delegator,
+	}
+}
+
+// ValidateBasic implements sdk.Msg
+func (msg *MsgUndelegateOperator) ValidateBasic() error {
+	if msg.OperatorID == 0 {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid operator id")
+	}
+
+	if !msg.Amount.IsValid() || msg.Amount.IsZero() {
+		return errors.Wrap(sdkerrors.ErrInvalidRequest, "invalid amount")
+	}
+
+	_, err := sdk.AccAddressFromBech32(msg.Delegator)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid delegator address")
+	}
+
+	return nil
+}
+
+// GetSignBytes implements sdk.Msg
+func (msg *MsgUndelegateOperator) GetSignBytes() []byte {
+	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(msg))
+}
+
+// GetSigners implements sdk.Msg
+func (msg *MsgUndelegateOperator) GetSigners() []sdk.AccAddress {
+	addr, _ := sdk.AccAddressFromBech32(msg.Delegator)
+	return []sdk.AccAddress{addr}
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewMsgUndelegateService creates a new MsgUndelegateService instance
+func NewMsgUndelegateService(serviceID uint32, amount sdk.Coins, delegator string) *MsgUndelegateService {
+	return &MsgUndelegateService{
+		ServiceID: serviceID,
+		Amount:    amount,
+		Delegator: delegator,
+	}
+}
+
+// ValidateBasic implements sdk.Msg
+func (msg *MsgUndelegateService) ValidateBasic() error {
+	if msg.ServiceID == 0 {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid service id")
+	}
+
+	if !msg.Amount.IsValid() || msg.Amount.IsZero() {
+		return errors.Wrap(sdkerrors.ErrInvalidRequest, "invalid amount")
+	}
+
+	_, err := sdk.AccAddressFromBech32(msg.Delegator)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid delegator address")
+	}
+
+	return nil
+}
+
+// GetSignBytes implements sdk.Msg
+func (msg *MsgUndelegateService) GetSignBytes() []byte {
+	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(msg))
+}
+
+// GetSigners implements sdk.Msg
+func (msg *MsgUndelegateService) GetSigners() []sdk.AccAddress {
+	addr, _ := sdk.AccAddressFromBech32(msg.Delegator)
 	return []sdk.AccAddress{addr}
 }

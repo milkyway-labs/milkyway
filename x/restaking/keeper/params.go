@@ -1,10 +1,17 @@
 package keeper
 
 import (
+	"time"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 )
+
+// UnbondingTime returns the unbonding time
+func (k *Keeper) UnbondingTime(ctx sdk.Context) time.Duration {
+	return k.GetParams(ctx).UnbondingTime
+}
 
 // SetParams sets module parameters
 func (k *Keeper) SetParams(ctx sdk.Context, params types.Params) {

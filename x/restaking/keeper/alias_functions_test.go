@@ -19,21 +19,26 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllPoolDelegations() {
 		{
 			name: "delegations are returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(100))),
 				))
-				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
+				suite.Require().NoError(err)
+
+				err = suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					2,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/2/utia", sdkmath.LegacyNewDec(50))),
 				))
-				suite.k.SavePoolDelegation(ctx, types.NewPoolDelegation(
+				suite.Require().NoError(err)
+
+				err = suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(100))),
 				))
+				suite.Require().NoError(err)
 			},
 			expDelegations: []types.Delegation{
 				types.NewPoolDelegation(

@@ -11,19 +11,27 @@ func NewGenesis(
 	operatorsParamsRecords []OperatorParamsRecord,
 	servicesParamsRecords []ServiceParamsRecord,
 	delegations []Delegation,
+	unbondingDelegations []UnbondingDelegation,
 	params Params,
 ) *GenesisState {
 	return &GenesisState{
-		OperatorsParams: operatorsParamsRecords,
-		ServicesParams:  servicesParamsRecords,
-		Delegations:     delegations,
-		Params:          params,
+		OperatorsParams:      operatorsParamsRecords,
+		ServicesParams:       servicesParamsRecords,
+		Delegations:          delegations,
+		UnbondingDelegations: unbondingDelegations,
+		Params:               params,
 	}
 }
 
 // DefaultGenesis returns a default genesis state
 func DefaultGenesis() *GenesisState {
-	return NewGenesis(nil, nil, nil, DefaultParams())
+	return NewGenesis(
+		nil,
+		nil,
+		nil,
+		nil,
+		DefaultParams(),
+	)
 }
 
 // Validate performs basic validation of genesis data
@@ -61,6 +69,14 @@ func (g *GenesisState) Validate() error {
 		err := entry.Validate()
 		if err != nil {
 			return fmt.Errorf("invalid delegation: %w", err)
+		}
+	}
+
+	// Validate unbonding delegations
+	for _, entry := range g.UnbondingDelegations {
+		err := entry.Validate()
+		if err != nil {
+			return fmt.Errorf("invalid unbonding delegation: %w", err)
 		}
 	}
 

@@ -3,6 +3,9 @@ package types
 import (
 	"bytes"
 	"fmt"
+	"time"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/utils"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
@@ -16,31 +19,66 @@ const (
 )
 
 var (
-	ParamsKey = []byte{0x01}
+	ParamsKey         = []byte{0x01}
+	UnbondingIDKey    = []byte{0x02}
+	UnbondingIndexKey = []byte{0x03}
+	UnbondingTypeKey  = []byte{0x04}
 
 	OperatorParamsPrefix = []byte{0x11}
 	ServiceParamsPrefix  = []byte{0x12}
 
 	PoolDelegationPrefix          = []byte{0xa1}
 	PoolDelegationsByPoolIDPrefix = []byte{0xa2}
-	UnbondingPoolDelegationPrefix = []byte{0xa3}
+	PoolUnbondingDelegationPrefix = []byte{0xa3}
 
 	OperatorDelegationPrefix          = []byte{0xb1}
 	OperatorDelegationByOperatorID    = []byte{0xb2}
-	UnbondingOperatorDelegationPrefix = []byte{0xb3}
+	OperatorUnbondingDelegationPrefix = []byte{0xb3}
 
 	ServiceDelegationPrefix            = []byte{0xc1}
 	ServiceDelegationByServiceIDPrefix = []byte{0xc2}
-	UnbondingServiceDelegationPrefix   = []byte{0xc3}
+	ServiceUnbondingDelegationPrefix   = []byte{0xc3}
+
+	UnbondingQueueKey = []byte{0xd1}
 )
 
+// OperatorParamsStoreKey returns the key used to store the operator params
 func OperatorParamsStoreKey(operatorID uint32) []byte {
-	return utils.CompositeKey(OperatorParamsPrefix, utils.Uint32ToBigEndian(operatorID))
+	return utils.CompositeKey(OperatorParamsPrefix, operatorstypes.GetOperatorIDBytes(operatorID))
 }
 
+// ServiceParamsStoreKey returns the key used to store the service params
 func ServiceParamsStoreKey(serviceID uint32) []byte {
-	return utils.CompositeKey(ServiceParamsPrefix, utils.Uint32ToBigEndian(serviceID))
+	return utils.CompositeKey(ServiceParamsPrefix, servicestypes.GetServiceIDBytes(serviceID))
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// GetUnbondingIndexKey returns a key for the index for looking up UnbondingDelegations by the UnbondingDelegationEntries they contain
+func GetUnbondingIndexKey(id uint64) []byte {
+	return append(UnbondingIndexKey, sdk.Uint64ToBigEndian(id)...)
+}
+
+// GetUnbondingTypeKey returns a key for an index containing the type of unbonding operations
+func GetUnbondingTypeKey(id uint64) []byte {
+	return append(UnbondingTypeKey, sdk.Uint64ToBigEndian(id)...)
+}
+
+// GetUnbondingDelegationTimeKey creates the prefix for all unbonding delegations from a delegator
+func GetUnbondingDelegationTimeKey(timestamp time.Time) []byte {
+	bz := sdk.FormatTimeBytes(timestamp)
+	return append(UnbondingQueueKey, bz...)
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+type DelegationKeyBuilder func(delegatorAddress string, targetID uint32) []byte
+
+type DelegationByTargetIDBuilder func(targetID uint32, delegationAddress string) []byte
+
+type UnbondingDelegationKeyBuilder func(delegatorAddress string, targetID uint32) []byte
+
+// --------------------------------------------------------------------------------------------------------------------
 
 // UserPoolDelegationsStorePrefix returns the prefix used to store all the delegations to a given pool
 func UserPoolDelegationsStorePrefix(userAddress string) []byte {
@@ -80,6 +118,16 @@ func ParseDelegationsByPoolIDKey(bz []byte) (poolID uint32, delegatorAddress str
 	delegatorAddress = string(bz)
 
 	return poolID, delegatorAddress, nil
+}
+
+// PoolUnbondingDelegationsStorePrefix returns the prefix used to store all the unbonding delegations to a given pool
+func PoolUnbondingDelegationsStorePrefix(delegatorAddress string) []byte {
+	return append(PoolUnbondingDelegationPrefix, []byte(delegatorAddress)...)
+}
+
+// UserPoolUnbondingDelegationKey returns the key used to store the unbonding delegation for the given pool and delegator
+func UserPoolUnbondingDelegationKey(delegatorAddress string, poolID uint32) []byte {
+	return append(PoolUnbondingDelegationsStorePrefix(delegatorAddress), poolstypes.GetPoolIDBytes(poolID)...)
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -124,6 +172,16 @@ func ParseDelegationsByOperatorIDKey(bz []byte) (operatorID uint32, delegatorAdd
 	return operatorID, delegatorAddress, nil
 }
 
+// OperatorUnbondingDelegationsStorePrefix returns the prefix used to store all the unbonding delegations to a given pool
+func OperatorUnbondingDelegationsStorePrefix(delegatorAddress string) []byte {
+	return append(OperatorUnbondingDelegationPrefix, []byte(delegatorAddress)...)
+}
+
+// UserOperatorUnbondingDelegationKey returns the key used to store the unbonding delegation for the given pool and delegator
+func UserOperatorUnbondingDelegationKey(delegatorAddress string, operatorID uint32) []byte {
+	return append(OperatorUnbondingDelegationsStorePrefix(delegatorAddress), operatorstypes.GetOperatorIDBytes(operatorID)...)
+}
+
 // --------------------------------------------------------------------------------------------------------------------
 
 // UserServiceDelegationsStorePrefix returns the prefix used to store all the delegations to a given service
@@ -164,4 +222,14 @@ func ParseDelegationsByServiceIDKey(bz []byte) (serviceID uint32, delegatorAddre
 	delegatorAddress = string(bz)
 
 	return serviceID, delegatorAddress, nil
+}
+
+// ServiceUnbondingDelegationsStorePrefix returns the prefix used to store all the unbonding delegations to a given pool
+func ServiceUnbondingDelegationsStorePrefix(delegatorAddress string) []byte {
+	return append(ServiceUnbondingDelegationPrefix, []byte(delegatorAddress)...)
+}
+
+// UserServiceUnbondingDelegationKey returns the key used to store the unbonding delegation for the given pool and delegator
+func UserServiceUnbondingDelegationKey(delegatorAddress string, serviceID uint32) []byte {
+	return append(ServiceUnbondingDelegationsStorePrefix(delegatorAddress), servicestypes.GetServiceIDBytes(serviceID)...)
 }

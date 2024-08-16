@@ -22,6 +22,7 @@ type BankKeeper interface {
 }
 
 type PoolsKeeper interface {
+	GetPoolByDenom(ctx sdk.Context, denom string) (poolstypes.Pool, bool)
 	CreateOrGetPoolByDenom(ctx sdk.Context, denom string) (poolstypes.Pool, error)
 	GetPool(ctx sdk.Context, poolID uint32) (poolstypes.Pool, bool)
 	SavePool(ctx sdk.Context, pool poolstypes.Pool) error

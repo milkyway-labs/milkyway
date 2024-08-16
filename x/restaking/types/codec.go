@@ -12,9 +12,14 @@ import (
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgUpdateOperatorParams{}, "milkyway/MsgUpdateOperatorParams")
 	legacy.RegisterAminoMsg(cdc, &MsgUpdateServiceParams{}, "milkyway/MsgUpdateServiceParams")
+
 	legacy.RegisterAminoMsg(cdc, &MsgDelegateService{}, "milkyway/MsgDelegateService")
+	legacy.RegisterAminoMsg(cdc, &MsgUndelegatePool{}, "milkyway/MsgUndelegatePool")
 	legacy.RegisterAminoMsg(cdc, &MsgDelegatePool{}, "milkyway/MsgDelegatePool")
+	legacy.RegisterAminoMsg(cdc, &MsgUndelegateService{}, "milkyway/MsgUndelegateService")
 	legacy.RegisterAminoMsg(cdc, &MsgDelegateOperator{}, "milkyway/MsgDelegateOperator")
+	legacy.RegisterAminoMsg(cdc, &MsgUndelegateOperator{}, "milkyway/MsgUndelegateOperator")
+
 	legacy.RegisterAminoMsg(cdc, &MsgUpdateParams{}, "milkyway/restaking/MsgUpdateParams")
 }
 

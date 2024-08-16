@@ -96,7 +96,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperatorParams() {
 			expEvents: sdk.Events{
 				sdk.NewEvent(
 					types.EventTypeUpdateOperatorParams,
-					sdk.NewAttribute(types.AttributeKeyOperatorID, "1"),
+					sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, "1"),
 					sdk.NewAttribute(types.AttributeKeyCommissionRate, "0.100000000000000000"),
 					sdk.NewAttribute(
 						types.AttributeKeyJoinedServiceIDs, "1"),
@@ -250,7 +250,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateServiceParams() {
 			expEvents: sdk.Events{
 				sdk.NewEvent(
 					types.EventTypeUpdateServiceParams,
-					sdk.NewAttribute(types.AttributeKeyServiceID, "1"),
+					sdk.NewAttribute(servicestypes.AttributeKeyServiceID, "1"),
 					sdk.NewAttribute(types.AttributeKeySlashFraction, "0.010000000000000000"),
 					sdk.NewAttribute(types.AttributeKeyWhitelistedPoolIDs, "1"),
 					sdk.NewAttribute(types.AttributeKeyWhitelistedOperatorIDs, "2"),
@@ -470,7 +470,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateOperator() {
 				sdk.NewEvent(
 					types.EventTypeDelegateOperator,
 					sdk.NewAttribute(types.AttributeKeyDelegator, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
-					sdk.NewAttribute(types.AttributeKeyOperatorID, "1"),
+					sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, "1"),
 					sdk.NewAttribute(sdk.AttributeKeyAmount, "100umilk"),
 					sdk.NewAttribute(types.AttributeKeyNewShares, "500.000000000000000000operator/1/umilk"),
 				),
@@ -584,7 +584,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateService() {
 				sdk.NewEvent(
 					types.EventTypeDelegateService,
 					sdk.NewAttribute(types.AttributeKeyDelegator, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
-					sdk.NewAttribute(types.AttributeKeyServiceID, "1"),
+					sdk.NewAttribute(servicestypes.AttributeKeyServiceID, "1"),
 					sdk.NewAttribute(sdk.AttributeKeyAmount, "100umilk"),
 					sdk.NewAttribute(types.AttributeKeyNewShares, "500.000000000000000000service/1/umilk"),
 				),

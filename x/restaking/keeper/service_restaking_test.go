@@ -57,7 +57,8 @@ func (suite *KeeperTestSuite) TestKeeper_SaveServiceDelegation() {
 				tc.store(ctx)
 			}
 
-			suite.k.SaveServiceDelegation(ctx, tc.delegation)
+			err := suite.k.SetDelegation(ctx, tc.delegation)
+			suite.Require().NoError(err)
 
 			if tc.check != nil {
 				tc.check(ctx)
@@ -86,11 +87,12 @@ func (suite *KeeperTestSuite) TestKeeper_GetServiceDelegation() {
 		{
 			name: "found delegation is returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SaveServiceDelegation(ctx, types.NewServiceDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 				))
+				suite.Require().NoError(err)
 			},
 			serviceID:   1,
 			userAddress: "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
@@ -411,7 +413,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 				suite.sk.SetNextServiceID(ctx, 2)
 
 				// Save the existing delegation
-				suite.k.SaveServiceDelegation(ctx, types.NewServiceDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(
@@ -419,6 +421,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 					),
 				))
 
+				suite.Require().NoError(err)
 				// Send some funds to the user
 				suite.fundAccount(
 					ctx,
@@ -505,7 +508,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 				suite.sk.SetNextServiceID(ctx, 2)
 
 				// Save the existing delegation
-				suite.k.SaveServiceDelegation(ctx, types.NewServiceDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(
@@ -513,6 +516,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 						sdk.NewDecCoinFromDec("service/1/uinit", sdkmath.LegacyNewDec(60)),
 					),
 				))
+				suite.Require().NoError(err)
 
 				// Send some funds to the user
 				suite.fundAccount(

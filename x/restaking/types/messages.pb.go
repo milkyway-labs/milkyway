@@ -15,18 +15,22 @@ import (
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	grpc1 "github.com/cosmos/gogoproto/grpc"
 	proto "github.com/cosmos/gogoproto/proto"
+	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	_ "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
 	math "math"
 	math_bits "math/bits"
+	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
+var _ = time.Kitchen
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the proto package it is being compiled against.
@@ -631,6 +635,177 @@ func (m *MsgUpdateParamsResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 
+// MsgUndelegatePool the message structure for the UndelegatePool gRPC service
+// method. It allows a user to undelegate their assets from a restaking pool.
+type MsgUndelegatePool struct {
+	Delegator string     `protobuf:"bytes,1,opt,name=delegator,proto3" json:"delegator,omitempty"`
+	Amount    types.Coin `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount"`
+}
+
+func (m *MsgUndelegatePool) Reset()         { *m = MsgUndelegatePool{} }
+func (m *MsgUndelegatePool) String() string { return proto.CompactTextString(m) }
+func (*MsgUndelegatePool) ProtoMessage()    {}
+func (*MsgUndelegatePool) Descriptor() ([]byte, []int) {
+	return fileDescriptor_9772be2b1a923bdb, []int{12}
+}
+func (m *MsgUndelegatePool) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgUndelegatePool) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgUndelegatePool.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgUndelegatePool) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUndelegatePool.Merge(m, src)
+}
+func (m *MsgUndelegatePool) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgUndelegatePool) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUndelegatePool.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgUndelegatePool proto.InternalMessageInfo
+
+// MsgUndelegateOperator the message structure for the UndelegateOperator gRPC
+// service method. It allows a user to undelegate their assets from a restaking
+// operator.
+type MsgUndelegateOperator struct {
+	Delegator  string                                   `protobuf:"bytes,1,opt,name=delegator,proto3" json:"delegator,omitempty"`
+	OperatorID uint32                                   `protobuf:"varint,2,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
+	Amount     github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,3,rep,name=amount,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"amount"`
+}
+
+func (m *MsgUndelegateOperator) Reset()         { *m = MsgUndelegateOperator{} }
+func (m *MsgUndelegateOperator) String() string { return proto.CompactTextString(m) }
+func (*MsgUndelegateOperator) ProtoMessage()    {}
+func (*MsgUndelegateOperator) Descriptor() ([]byte, []int) {
+	return fileDescriptor_9772be2b1a923bdb, []int{13}
+}
+func (m *MsgUndelegateOperator) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgUndelegateOperator) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgUndelegateOperator.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgUndelegateOperator) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUndelegateOperator.Merge(m, src)
+}
+func (m *MsgUndelegateOperator) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgUndelegateOperator) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUndelegateOperator.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgUndelegateOperator proto.InternalMessageInfo
+
+// MsgUndelegateService the message structure for the UndelegateService gRPC
+// service method. It allows a user to undelegate their assets from a restaking
+// service.
+type MsgUndelegateService struct {
+	Delegator string                                   `protobuf:"bytes,1,opt,name=delegator,proto3" json:"delegator,omitempty"`
+	ServiceID uint32                                   `protobuf:"varint,2,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
+	Amount    github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,3,rep,name=amount,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"amount"`
+}
+
+func (m *MsgUndelegateService) Reset()         { *m = MsgUndelegateService{} }
+func (m *MsgUndelegateService) String() string { return proto.CompactTextString(m) }
+func (*MsgUndelegateService) ProtoMessage()    {}
+func (*MsgUndelegateService) Descriptor() ([]byte, []int) {
+	return fileDescriptor_9772be2b1a923bdb, []int{14}
+}
+func (m *MsgUndelegateService) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgUndelegateService) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgUndelegateService.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgUndelegateService) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUndelegateService.Merge(m, src)
+}
+func (m *MsgUndelegateService) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgUndelegateService) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUndelegateService.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgUndelegateService proto.InternalMessageInfo
+
+// MsgUndelegateResponse defines the response type for the undelegation methods.
+type MsgUndelegateResponse struct {
+	// CompletionTime represents the time at which the undelegation will be
+	// complete
+	CompletionTime time.Time `protobuf:"bytes,1,opt,name=completion_time,json=completionTime,proto3,stdtime" json:"completion_time"`
+}
+
+func (m *MsgUndelegateResponse) Reset()         { *m = MsgUndelegateResponse{} }
+func (m *MsgUndelegateResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgUndelegateResponse) ProtoMessage()    {}
+func (*MsgUndelegateResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_9772be2b1a923bdb, []int{15}
+}
+func (m *MsgUndelegateResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgUndelegateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgUndelegateResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgUndelegateResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUndelegateResponse.Merge(m, src)
+}
+func (m *MsgUndelegateResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgUndelegateResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUndelegateResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgUndelegateResponse proto.InternalMessageInfo
+
+func (m *MsgUndelegateResponse) GetCompletionTime() time.Time {
+	if m != nil {
+		return m.CompletionTime
+	}
+	return time.Time{}
+}
+
 func init() {
 	proto.RegisterType((*MsgUpdateOperatorParams)(nil), "milkyway.restaking.v1.MsgUpdateOperatorParams")
 	proto.RegisterType((*MsgUpdateOperatorParamsResponse)(nil), "milkyway.restaking.v1.MsgUpdateOperatorParamsResponse")
@@ -644,6 +819,10 @@ func init() {
 	proto.RegisterType((*MsgDelegateServiceResponse)(nil), "milkyway.restaking.v1.MsgDelegateServiceResponse")
 	proto.RegisterType((*MsgUpdateParams)(nil), "milkyway.restaking.v1.MsgUpdateParams")
 	proto.RegisterType((*MsgUpdateParamsResponse)(nil), "milkyway.restaking.v1.MsgUpdateParamsResponse")
+	proto.RegisterType((*MsgUndelegatePool)(nil), "milkyway.restaking.v1.MsgUndelegatePool")
+	proto.RegisterType((*MsgUndelegateOperator)(nil), "milkyway.restaking.v1.MsgUndelegateOperator")
+	proto.RegisterType((*MsgUndelegateService)(nil), "milkyway.restaking.v1.MsgUndelegateService")
+	proto.RegisterType((*MsgUndelegateResponse)(nil), "milkyway.restaking.v1.MsgUndelegateResponse")
 }
 
 func init() {
@@ -651,59 +830,72 @@ func init() {
 }
 
 var fileDescriptor_9772be2b1a923bdb = []byte{
-	// 826 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x96, 0xbf, 0x6f, 0xd3, 0x40,
-	0x14, 0xc7, 0xe3, 0x86, 0x46, 0xca, 0x95, 0xfe, 0xc0, 0x2d, 0x34, 0x35, 0xd4, 0x09, 0x56, 0x5b,
-	0xa5, 0x51, 0x63, 0x93, 0x54, 0xad, 0x68, 0x98, 0x9a, 0x76, 0x09, 0x52, 0x44, 0x95, 0x8a, 0x85,
-	0xa5, 0x72, 0xe2, 0xc3, 0xb5, 0x12, 0xfb, 0x22, 0x9f, 0x1b, 0x88, 0x90, 0x10, 0x62, 0x64, 0xe2,
-	0x7f, 0x60, 0x41, 0x4c, 0x1d, 0x98, 0x59, 0x58, 0x3a, 0x16, 0x26, 0xa6, 0x80, 0xd2, 0xa1, 0x3b,
-	0x0b, 0x13, 0x12, 0x8a, 0x7d, 0xbe, 0x3a, 0x89, 0x9d, 0x1f, 0x1d, 0x58, 0xda, 0xdc, 0xbd, 0xef,
-	0xbd, 0x7b, 0xef, 0x63, 0x7f, 0x5f, 0x02, 0x56, 0x74, 0xad, 0x56, 0x6d, 0xbe, 0x90, 0x9b, 0x92,
-	0x09, 0xb1, 0x25, 0x57, 0x35, 0x43, 0x95, 0x1a, 0x19, 0x49, 0x87, 0x18, 0xcb, 0x2a, 0xc4, 0x62,
-	0xdd, 0x44, 0x16, 0x62, 0x6f, 0xbb, 0x2a, 0x91, 0xaa, 0xc4, 0x46, 0x86, 0xbb, 0x25, 0xeb, 0x9a,
-	0x81, 0x24, 0xfb, 0xaf, 0xa3, 0xe4, 0x96, 0x2a, 0x08, 0xeb, 0x08, 0x1f, 0xd9, 0x2b, 0xc9, 0x59,
-	0x90, 0x10, 0xef, 0xac, 0xa4, 0xb2, 0x8c, 0xa1, 0xd4, 0xc8, 0x94, 0xa1, 0x25, 0x67, 0xa4, 0x0a,
-	0xd2, 0x8c, 0xbe, 0xb8, 0x51, 0xa5, 0xf1, 0xce, 0x82, 0xc4, 0x17, 0x49, 0x5c, 0xc7, 0x4e, 0x89,
-	0x58, 0x25, 0x81, 0x05, 0x15, 0xa9, 0xc8, 0xb9, 0xb0, 0xf3, 0x89, 0xec, 0x0a, 0xfe, 0x9d, 0xd5,
-	0x65, 0x53, 0xd6, 0xf1, 0x60, 0x8d, 0x8e, 0x14, 0x58, 0x23, 0x1a, 0xe1, 0x2f, 0x03, 0x16, 0x8b,
-	0x58, 0x7d, 0x5a, 0x57, 0x64, 0x0b, 0x3e, 0xa9, 0x43, 0x53, 0xb6, 0x90, 0x79, 0x60, 0x67, 0x61,
-	0x1f, 0x80, 0x08, 0x86, 0x86, 0x02, 0xcd, 0x18, 0x93, 0x60, 0x92, 0xd1, 0x7c, 0xec, 0xfb, 0xe7,
-	0xf4, 0x02, 0x69, 0x7a, 0x57, 0x51, 0x4c, 0x88, 0xf1, 0xa1, 0x65, 0x6a, 0x86, 0x5a, 0x22, 0x3a,
-	0x56, 0x02, 0x53, 0x88, 0xe4, 0x38, 0xd2, 0x94, 0xd8, 0x44, 0x82, 0x49, 0x4e, 0xe7, 0x67, 0xda,
-	0xad, 0x38, 0x70, 0x53, 0x17, 0xf6, 0x4b, 0xc0, 0x95, 0x14, 0x14, 0x76, 0x0f, 0x44, 0x9c, 0x92,
-	0x63, 0xe1, 0x04, 0x93, 0x9c, 0xca, 0xae, 0x8a, 0xbe, 0xcf, 0x42, 0xec, 0xae, 0x2c, 0x7f, 0xe3,
-	0xac, 0x15, 0x0f, 0x95, 0xc8, 0xd1, 0x5c, 0xee, 0xed, 0xe5, 0x69, 0x8a, 0x94, 0xf0, 0xee, 0xf2,
-	0x34, 0x95, 0xf2, 0xe9, 0x3b, 0xa0, 0x47, 0xe1, 0x3e, 0x88, 0x07, 0x84, 0x4a, 0x10, 0xd7, 0x91,
-	0x81, 0xa1, 0xf0, 0x87, 0x01, 0x77, 0xa8, 0xe6, 0x10, 0x9a, 0x0d, 0xad, 0x02, 0xaf, 0x4d, 0x68,
-	0x03, 0x00, 0xec, 0xa4, 0xb8, 0x02, 0x34, 0xdd, 0x6e, 0xc5, 0xa3, 0x24, 0x71, 0x61, 0xbf, 0x14,
-	0x25, 0x82, 0x82, 0xc2, 0xe6, 0x7b, 0xf0, 0xac, 0x04, 0xe0, 0xe9, 0xaa, 0xaa, 0x87, 0xce, 0x4e,
-	0x0f, 0x9d, 0xf5, 0x41, 0x74, 0xba, 0x12, 0x09, 0x09, 0xc0, 0xfb, 0x47, 0x28, 0x9b, 0xaf, 0x0c,
-	0x98, 0x2d, 0x62, 0x75, 0x1f, 0xd6, 0xa0, 0x2a, 0x5b, 0xf0, 0x00, 0xa1, 0x1a, 0xbb, 0x0d, 0xa2,
-	0x8a, 0xb3, 0x46, 0xc3, 0xb9, 0x5c, 0x49, 0xd9, 0x5d, 0x10, 0x91, 0x75, 0x74, 0x62, 0x58, 0x36,
-	0x96, 0xa9, 0xec, 0x92, 0x48, 0x4e, 0x74, 0x2c, 0x25, 0x12, 0xcb, 0x88, 0x7b, 0x48, 0x33, 0xf2,
-	0x33, 0x9d, 0x0e, 0xdb, 0xad, 0x78, 0x64, 0xd7, 0x3e, 0x50, 0x22, 0x07, 0x73, 0x5b, 0x9d, 0x5e,
-	0xaf, 0x52, 0x76, 0xda, 0x15, 0xfc, 0xdb, 0xf5, 0x56, 0x2c, 0x2c, 0xd9, 0x1e, 0xf0, 0x6e, 0xd1,
-	0x06, 0x3f, 0x4e, 0x80, 0x79, 0x4f, 0xcc, 0x7d, 0x45, 0xae, 0xdd, 0xe4, 0xd8, 0x0e, 0xd1, 0x29,
-	0x95, 0x70, 0x22, 0x3c, 0x98, 0x4a, 0xae, 0x9b, 0xca, 0xa7, 0x9f, 0xf1, 0xa4, 0xaa, 0x59, 0xc7,
-	0x27, 0x65, 0xb1, 0x82, 0x74, 0x32, 0xad, 0xc8, 0xbf, 0x34, 0x56, 0xaa, 0x92, 0xd5, 0xac, 0x43,
-	0x6c, 0x1f, 0xc5, 0x94, 0xe0, 0x4e, 0x3f, 0xc1, 0xb5, 0xc1, 0x04, 0xdd, 0xba, 0x85, 0x65, 0x70,
-	0xd7, 0x67, 0x9b, 0x92, 0xfc, 0x30, 0x01, 0x58, 0x4f, 0x9c, 0xbc, 0x4f, 0xd7, 0x06, 0x39, 0x9e,
-	0x91, 0xfe, 0x33, 0xc5, 0x87, 0xfd, 0x14, 0x57, 0x07, 0x53, 0x24, 0x55, 0x0b, 0xf7, 0x00, 0xd7,
-	0xbf, 0x4b, 0x19, 0x7e, 0x73, 0xec, 0xe6, 0x38, 0x92, 0xcc, 0xa0, 0xc7, 0x20, 0x2a, 0x9f, 0x58,
-	0xc7, 0xc8, 0xd4, 0xac, 0x26, 0x01, 0xb8, 0xf1, 0xbb, 0x15, 0x9f, 0x6b, 0xca, 0x7a, 0x2d, 0x27,
-	0xd0, 0x90, 0x10, 0x0c, 0x95, 0x6a, 0xd8, 0x47, 0x74, 0xde, 0x38, 0x16, 0x5c, 0x0e, 0x98, 0x37,
-	0xbe, 0x83, 0xc6, 0x31, 0x1f, 0x4d, 0x36, 0xc0, 0x7c, 0xde, 0xfa, 0x89, 0xf9, 0xbc, 0x5b, 0x6e,
-	0xbb, 0xd9, 0x2f, 0x93, 0x20, 0x5c, 0xc4, 0x2a, 0xfb, 0x1a, 0x2c, 0xf8, 0x7e, 0x41, 0x89, 0x01,
-	0xe5, 0x05, 0x4c, 0x74, 0x6e, 0x7b, 0x3c, 0xbd, 0x5b, 0x07, 0xfb, 0x0a, 0xcc, 0xfb, 0x4d, 0xff,
-	0xf4, 0xb0, 0x74, 0x5d, 0x72, 0x6e, 0x6b, 0x2c, 0x39, 0xbd, 0xfc, 0x39, 0xb8, 0xd9, 0x35, 0x5e,
-	0xd7, 0x82, 0xd3, 0x78, 0x75, 0x9c, 0x38, 0x9a, 0x8e, 0xde, 0x63, 0x82, 0xb9, 0xbe, 0x29, 0x97,
-	0x1a, 0x9e, 0xc3, 0xd5, 0x72, 0xd9, 0xd1, 0xb5, 0xf4, 0x4e, 0x04, 0x66, 0x7b, 0xe7, 0xc1, 0xfa,
-	0xf0, 0x34, 0x44, 0xca, 0x65, 0x46, 0x96, 0x7a, 0x61, 0x76, 0x99, 0x67, 0x6d, 0xd8, 0x33, 0x21,
-	0xcf, 0x4e, 0x1c, 0x4d, 0xe7, 0xde, 0xc3, 0x4d, 0xbe, 0xb9, 0x3c, 0x4d, 0x31, 0xf9, 0xe2, 0x59,
-	0x9b, 0x67, 0xce, 0xdb, 0x3c, 0xf3, 0xab, 0xcd, 0x33, 0xef, 0x2f, 0xf8, 0xd0, 0xf9, 0x05, 0x1f,
-	0xfa, 0x71, 0xc1, 0x87, 0x9e, 0x6d, 0x7a, 0x66, 0x8a, 0x9b, 0x3a, 0x5d, 0x93, 0xcb, 0x98, 0xae,
-	0xa4, 0x97, 0x1e, 0xd3, 0xd8, 0x43, 0xa6, 0x1c, 0xb1, 0x7f, 0xb3, 0x6d, 0xfe, 0x0b, 0x00, 0x00,
-	0xff, 0xff, 0xa4, 0x60, 0x9a, 0xee, 0xd7, 0x0a, 0x00, 0x00,
+	// 1036 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x56, 0x41, 0x6f, 0xe3, 0x44,
+	0x14, 0x8e, 0x53, 0x88, 0xc8, 0x94, 0xb6, 0x5b, 0x6f, 0x97, 0x6d, 0x0d, 0xb5, 0x83, 0xb5, 0x5b,
+	0x65, 0x43, 0x6b, 0x93, 0xac, 0xba, 0xda, 0x06, 0x2e, 0xcd, 0xf6, 0x52, 0xa4, 0x8a, 0x55, 0x16,
+	0x2e, 0x5c, 0x2a, 0x27, 0x9e, 0x75, 0xad, 0xd8, 0x1e, 0xcb, 0xe3, 0x16, 0x22, 0x24, 0x84, 0x38,
+	0xa1, 0x3d, 0xed, 0x4f, 0xa8, 0x84, 0x90, 0x56, 0x9c, 0x7a, 0xe0, 0x07, 0x20, 0x71, 0xd9, 0xe3,
+	0xc2, 0x89, 0x53, 0x16, 0xa5, 0x87, 0x72, 0xe6, 0xc2, 0x09, 0x09, 0xd9, 0x1e, 0x4f, 0xec, 0xd8,
+	0x4e, 0x9c, 0x0a, 0xe5, 0xd2, 0x66, 0xe6, 0x7d, 0xf3, 0xe6, 0x7d, 0xdf, 0xcc, 0xfb, 0x3c, 0xe0,
+	0x8e, 0xa9, 0x1b, 0xbd, 0xfe, 0x97, 0x4a, 0x5f, 0x76, 0x20, 0x76, 0x95, 0x9e, 0x6e, 0x69, 0xf2,
+	0x59, 0x5d, 0x36, 0x21, 0xc6, 0x8a, 0x06, 0xb1, 0x64, 0x3b, 0xc8, 0x45, 0xec, 0xad, 0x10, 0x25,
+	0x51, 0x94, 0x74, 0x56, 0xe7, 0x04, 0x0d, 0x21, 0xcd, 0x80, 0xb2, 0x0f, 0xea, 0x9c, 0x3e, 0x95,
+	0x5d, 0xdd, 0xf4, 0xe2, 0xa6, 0x1d, 0xac, 0xe3, 0x56, 0x15, 0x53, 0xb7, 0x90, 0xec, 0xff, 0x25,
+	0x53, 0x1b, 0x5d, 0x84, 0x4d, 0x84, 0x8f, 0xfd, 0x91, 0x1c, 0x0c, 0x48, 0x88, 0x0f, 0x46, 0x72,
+	0x47, 0xc1, 0x50, 0x3e, 0xab, 0x77, 0xa0, 0xab, 0xd4, 0xe5, 0x2e, 0xd2, 0xad, 0x44, 0xdc, 0xea,
+	0xd1, 0xb8, 0x37, 0x20, 0xf1, 0xdb, 0x24, 0x6e, 0xe2, 0x80, 0x03, 0xd6, 0x48, 0x60, 0x4d, 0x43,
+	0x1a, 0x0a, 0x36, 0xf4, 0x7e, 0x91, 0x59, 0x31, 0x9d, 0xba, 0xad, 0x38, 0x8a, 0x89, 0x27, 0x63,
+	0x4c, 0xa4, 0x42, 0x83, 0x60, 0xc4, 0x7f, 0x19, 0x70, 0xfb, 0x08, 0x6b, 0x9f, 0xdb, 0xaa, 0xe2,
+	0xc2, 0x4f, 0x6d, 0xe8, 0x28, 0x2e, 0x72, 0x1e, 0xfb, 0x59, 0xd8, 0x0f, 0x41, 0x09, 0x43, 0x4b,
+	0x85, 0xce, 0x3a, 0x53, 0x61, 0xaa, 0xe5, 0xd6, 0xfa, 0xef, 0x3f, 0xef, 0xac, 0x11, 0xd2, 0xfb,
+	0xaa, 0xea, 0x40, 0x8c, 0x9f, 0xb8, 0x8e, 0x6e, 0x69, 0x6d, 0x82, 0x63, 0x65, 0xb0, 0x88, 0x48,
+	0x8e, 0x63, 0x5d, 0x5d, 0x2f, 0x56, 0x98, 0xea, 0x52, 0x6b, 0x79, 0x38, 0x10, 0x40, 0x98, 0xfa,
+	0xf0, 0xa0, 0x0d, 0x42, 0xc8, 0xa1, 0xca, 0x3e, 0x02, 0xa5, 0xa0, 0xe4, 0xf5, 0x85, 0x0a, 0x53,
+	0x5d, 0x6c, 0xdc, 0x95, 0x52, 0x0f, 0x4b, 0x8a, 0x57, 0xd6, 0x7a, 0xe3, 0xe5, 0x40, 0x28, 0xb4,
+	0xc9, 0xd2, 0x66, 0xf3, 0xbb, 0xab, 0x8b, 0x1a, 0x29, 0xe1, 0xd9, 0xd5, 0x45, 0xad, 0x96, 0xc2,
+	0x3b, 0x83, 0xa3, 0xf8, 0x3e, 0x10, 0x32, 0x42, 0x6d, 0x88, 0x6d, 0x64, 0x61, 0x28, 0xfe, 0xc3,
+	0x80, 0x77, 0x28, 0xe6, 0x09, 0x74, 0xce, 0xf4, 0x2e, 0xbc, 0xb6, 0x42, 0xdb, 0x00, 0xe0, 0x20,
+	0xc5, 0x48, 0xa0, 0xa5, 0xe1, 0x40, 0x28, 0x93, 0xc4, 0x87, 0x07, 0xed, 0x32, 0x01, 0x1c, 0xaa,
+	0x6c, 0x6b, 0x4c, 0x9e, 0x3b, 0x19, 0xf2, 0xc4, 0xaa, 0x1a, 0x53, 0x67, 0x6f, 0x4c, 0x9d, 0x7b,
+	0x93, 0xd4, 0x89, 0x25, 0x12, 0x2b, 0x80, 0x4f, 0x8f, 0x50, 0x6d, 0x7e, 0x65, 0xc0, 0xca, 0x11,
+	0xd6, 0x0e, 0xa0, 0x01, 0x35, 0xc5, 0x85, 0x8f, 0x11, 0x32, 0xd8, 0x07, 0xa0, 0xac, 0x06, 0x63,
+	0x34, 0x5d, 0x97, 0x11, 0x94, 0xdd, 0x07, 0x25, 0xc5, 0x44, 0xa7, 0x96, 0xeb, 0xcb, 0xb2, 0xd8,
+	0xd8, 0x90, 0xc8, 0x0a, 0xaf, 0xa5, 0x24, 0xd2, 0x32, 0xd2, 0x23, 0xa4, 0x5b, 0xad, 0x65, 0x8f,
+	0xe1, 0x70, 0x20, 0x94, 0xf6, 0xfd, 0x05, 0x6d, 0xb2, 0xb0, 0xb9, 0xeb, 0x71, 0x1d, 0xa5, 0xf4,
+	0xe8, 0x8a, 0xe9, 0x74, 0xa3, 0x15, 0x8b, 0x1b, 0x7e, 0x0f, 0x44, 0xa7, 0x28, 0xc1, 0x17, 0x45,
+	0x70, 0x33, 0x12, 0x0b, 0xaf, 0xc8, 0xb5, 0x49, 0xce, 0xdc, 0x21, 0x26, 0x55, 0x65, 0xa1, 0xb2,
+	0x30, 0x59, 0x95, 0x66, 0x5c, 0x95, 0x9f, 0x5e, 0x0b, 0x55, 0x4d, 0x77, 0x4f, 0x4e, 0x3b, 0x52,
+	0x17, 0x99, 0xc4, 0xad, 0xc8, 0xbf, 0x1d, 0xac, 0xf6, 0x64, 0xb7, 0x6f, 0x43, 0xec, 0x2f, 0xc5,
+	0x54, 0xc1, 0xbd, 0xa4, 0x82, 0x5b, 0x93, 0x15, 0x0c, 0xeb, 0x16, 0x37, 0xc1, 0xbb, 0x29, 0xd3,
+	0x54, 0xc9, 0x1f, 0x8a, 0x80, 0x8d, 0xc4, 0xc9, 0x7d, 0xba, 0xb6, 0x90, 0xb3, 0x35, 0xd2, 0x9c,
+	0x55, 0x7c, 0x98, 0x54, 0xf1, 0xee, 0x64, 0x15, 0x49, 0xd5, 0xe2, 0x7b, 0x80, 0x4b, 0xce, 0x52,
+	0x0d, 0x7f, 0x0b, 0xda, 0x2d, 0xe8, 0x48, 0xe2, 0x41, 0x9f, 0x80, 0xb2, 0x72, 0xea, 0x9e, 0x20,
+	0x47, 0x77, 0xfb, 0x44, 0xc0, 0xed, 0xbf, 0x07, 0xc2, 0x8d, 0xbe, 0x62, 0x1a, 0x4d, 0x91, 0x86,
+	0xc4, 0x6c, 0x51, 0x29, 0x86, 0xfd, 0x88, 0xfa, 0x4d, 0xd0, 0x82, 0x9b, 0x19, 0x7e, 0x93, 0x6a,
+	0x34, 0x41, 0xf3, 0xd1, 0x64, 0x13, 0x9a, 0x2f, 0x5a, 0x3f, 0x69, 0xbe, 0xe8, 0x14, 0xa5, 0xfb,
+	0x0b, 0x03, 0x56, 0xbd, 0x98, 0xa5, 0xfe, 0x1f, 0xfe, 0xf2, 0x71, 0x7e, 0x7f, 0x29, 0x7b, 0xc4,
+	0x5e, 0x5c, 0x5d, 0xd4, 0x98, 0x91, 0xb5, 0x7c, 0x7f, 0x2e, 0x14, 0xfe, 0x3a, 0x17, 0x0a, 0xc9,
+	0xa3, 0xe5, 0x28, 0xcb, 0x44, 0xb1, 0xe2, 0x8f, 0x45, 0x70, 0x2b, 0x36, 0x3b, 0x7f, 0x07, 0x39,
+	0xc9, 0x7f, 0xf7, 0x77, 0x3d, 0xde, 0xb3, 0xdc, 0xf8, 0xb8, 0x46, 0x7b, 0xd9, 0x1a, 0xf1, 0xe9,
+	0x1a, 0x51, 0xf3, 0x38, 0x2f, 0x82, 0xb5, 0x58, 0x64, 0xbe, 0xfe, 0x30, 0x3f, 0x8d, 0x1e, 0x66,
+	0x6b, 0xb4, 0x99, 0xae, 0x51, 0x68, 0x0d, 0xbd, 0xb1, 0x9b, 0x14, 0xb6, 0x09, 0xdb, 0x06, 0x2b,
+	0x5d, 0x64, 0xda, 0x06, 0x74, 0x75, 0x64, 0x1d, 0x7b, 0xcf, 0x58, 0x5f, 0xa8, 0xc5, 0x06, 0x27,
+	0x05, 0x6f, 0x5c, 0x29, 0x7c, 0xe3, 0x4a, 0x9f, 0x85, 0x6f, 0xdc, 0xd6, 0x92, 0x47, 0xe3, 0xf9,
+	0x6b, 0x81, 0x09, 0xca, 0x5b, 0x1e, 0x65, 0xf0, 0x30, 0x8d, 0x67, 0x6f, 0x81, 0x85, 0x23, 0xac,
+	0xb1, 0xdf, 0x80, 0xb5, 0xd4, 0xb7, 0xa1, 0x94, 0xe1, 0x0c, 0x19, 0x8f, 0x29, 0xee, 0xc1, 0x6c,
+	0x78, 0xca, 0xed, 0x6b, 0x70, 0x33, 0xed, 0xe1, 0xb5, 0x33, 0x2d, 0x5d, 0x0c, 0xce, 0xed, 0xce,
+	0x04, 0xa7, 0x9b, 0x3f, 0x05, 0x6f, 0xc7, 0x5e, 0x36, 0x5b, 0xd9, 0x69, 0xa2, 0x38, 0x4e, 0xca,
+	0x87, 0xa3, 0xfb, 0x38, 0xe0, 0x46, 0xe2, 0x81, 0x51, 0x9b, 0x9e, 0x23, 0xc4, 0x72, 0x8d, 0xfc,
+	0x58, 0xba, 0x27, 0x02, 0x2b, 0xe3, 0x9f, 0xe2, 0x7b, 0xd3, 0xd3, 0x10, 0x28, 0x57, 0xcf, 0x0d,
+	0x8d, 0x8a, 0x19, 0xfb, 0x6e, 0x6d, 0x4d, 0x3b, 0x13, 0x72, 0x76, 0x52, 0x3e, 0x1c, 0xdd, 0xe7,
+	0x04, 0x2c, 0x8f, 0x7d, 0x30, 0xaa, 0x13, 0x32, 0xc4, 0x90, 0xdc, 0x76, 0x1e, 0x24, 0xdd, 0xc9,
+	0x06, 0x6c, 0x8a, 0xaf, 0xe7, 0xca, 0x41, 0x8f, 0x6e, 0xb6, 0x1d, 0x2d, 0xb0, 0x9a, 0x74, 0xc8,
+	0x0f, 0xf2, 0xa4, 0x08, 0x0f, 0x6e, 0xa6, 0xfd, 0xb8, 0x37, 0xbf, 0xf5, 0xcc, 0xa1, 0x75, 0xf4,
+	0x72, 0xc8, 0x33, 0xaf, 0x86, 0x3c, 0xf3, 0xe7, 0x90, 0x67, 0x9e, 0x5f, 0xf2, 0x85, 0x57, 0x97,
+	0x7c, 0xe1, 0x8f, 0x4b, 0xbe, 0xf0, 0xc5, 0xfd, 0x88, 0x09, 0x86, 0x89, 0x77, 0x0c, 0xa5, 0x83,
+	0xe9, 0x48, 0xfe, 0x2a, 0xf2, 0xed, 0xf7, 0x5d, 0xb1, 0x53, 0xf2, 0xed, 0xe8, 0xfe, 0x7f, 0x01,
+	0x00, 0x00, 0xff, 0xff, 0x95, 0xaa, 0x36, 0x8d, 0xbf, 0x0f, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -736,6 +928,15 @@ type MsgClient interface {
 	// parameters.
 	// The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
+	// UndelegatePool defines the operation that allows users to undelegate their
+	// assets from a pool.
+	UndelegatePool(ctx context.Context, in *MsgUndelegatePool, opts ...grpc.CallOption) (*MsgUndelegateResponse, error)
+	// UndelegateOperator defines the operation that allows users to undelegate
+	// their assets from a specific operator.
+	UndelegateOperator(ctx context.Context, in *MsgUndelegateOperator, opts ...grpc.CallOption) (*MsgUndelegateResponse, error)
+	// UndelegateService defines the operation that allows users to undelegate
+	// their assets from a specific service.
+	UndelegateService(ctx context.Context, in *MsgUndelegateService, opts ...grpc.CallOption) (*MsgUndelegateResponse, error)
 }
 
 type msgClient struct {
@@ -800,6 +1001,33 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 	return out, nil
 }
 
+func (c *msgClient) UndelegatePool(ctx context.Context, in *MsgUndelegatePool, opts ...grpc.CallOption) (*MsgUndelegateResponse, error) {
+	out := new(MsgUndelegateResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.restaking.v1.Msg/UndelegatePool", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) UndelegateOperator(ctx context.Context, in *MsgUndelegateOperator, opts ...grpc.CallOption) (*MsgUndelegateResponse, error) {
+	out := new(MsgUndelegateResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.restaking.v1.Msg/UndelegateOperator", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) UndelegateService(ctx context.Context, in *MsgUndelegateService, opts ...grpc.CallOption) (*MsgUndelegateResponse, error) {
+	out := new(MsgUndelegateResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.restaking.v1.Msg/UndelegateService", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	// UpdateOperatorParams defines the operation for joining a service as an
@@ -820,6 +1048,15 @@ type MsgServer interface {
 	// parameters.
 	// The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
+	// UndelegatePool defines the operation that allows users to undelegate their
+	// assets from a pool.
+	UndelegatePool(context.Context, *MsgUndelegatePool) (*MsgUndelegateResponse, error)
+	// UndelegateOperator defines the operation that allows users to undelegate
+	// their assets from a specific operator.
+	UndelegateOperator(context.Context, *MsgUndelegateOperator) (*MsgUndelegateResponse, error)
+	// UndelegateService defines the operation that allows users to undelegate
+	// their assets from a specific service.
+	UndelegateService(context.Context, *MsgUndelegateService) (*MsgUndelegateResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -843,6 +1080,15 @@ func (*UnimplementedMsgServer) DelegateService(ctx context.Context, req *MsgDele
 }
 func (*UnimplementedMsgServer) UpdateParams(ctx context.Context, req *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
+}
+func (*UnimplementedMsgServer) UndelegatePool(ctx context.Context, req *MsgUndelegatePool) (*MsgUndelegateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UndelegatePool not implemented")
+}
+func (*UnimplementedMsgServer) UndelegateOperator(ctx context.Context, req *MsgUndelegateOperator) (*MsgUndelegateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UndelegateOperator not implemented")
+}
+func (*UnimplementedMsgServer) UndelegateService(ctx context.Context, req *MsgUndelegateService) (*MsgUndelegateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UndelegateService not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -957,6 +1203,60 @@ func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_UndelegatePool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUndelegatePool)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).UndelegatePool(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/milkyway.restaking.v1.Msg/UndelegatePool",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).UndelegatePool(ctx, req.(*MsgUndelegatePool))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_UndelegateOperator_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUndelegateOperator)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).UndelegateOperator(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/milkyway.restaking.v1.Msg/UndelegateOperator",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).UndelegateOperator(ctx, req.(*MsgUndelegateOperator))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_UndelegateService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUndelegateService)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).UndelegateService(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/milkyway.restaking.v1.Msg/UndelegateService",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).UndelegateService(ctx, req.(*MsgUndelegateService))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "milkyway.restaking.v1.Msg",
 	HandlerType: (*MsgServer)(nil),
@@ -984,6 +1284,18 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateParams",
 			Handler:    _Msg_UpdateParams_Handler,
+		},
+		{
+			MethodName: "UndelegatePool",
+			Handler:    _Msg_UndelegatePool_Handler,
+		},
+		{
+			MethodName: "UndelegateOperator",
+			Handler:    _Msg_UndelegateOperator_Handler,
+		},
+		{
+			MethodName: "UndelegateService",
+			Handler:    _Msg_UndelegateService_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -1396,6 +1708,175 @@ func (m *MsgUpdateParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	return len(dAtA) - i, nil
 }
 
+func (m *MsgUndelegatePool) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgUndelegatePool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgUndelegatePool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.Amount.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintMessages(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x12
+	if len(m.Delegator) > 0 {
+		i -= len(m.Delegator)
+		copy(dAtA[i:], m.Delegator)
+		i = encodeVarintMessages(dAtA, i, uint64(len(m.Delegator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgUndelegateOperator) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgUndelegateOperator) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgUndelegateOperator) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Amount) > 0 {
+		for iNdEx := len(m.Amount) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Amount[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintMessages(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if m.OperatorID != 0 {
+		i = encodeVarintMessages(dAtA, i, uint64(m.OperatorID))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Delegator) > 0 {
+		i -= len(m.Delegator)
+		copy(dAtA[i:], m.Delegator)
+		i = encodeVarintMessages(dAtA, i, uint64(len(m.Delegator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgUndelegateService) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgUndelegateService) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgUndelegateService) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Amount) > 0 {
+		for iNdEx := len(m.Amount) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Amount[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintMessages(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if m.ServiceID != 0 {
+		i = encodeVarintMessages(dAtA, i, uint64(m.ServiceID))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Delegator) > 0 {
+		i -= len(m.Delegator)
+		copy(dAtA[i:], m.Delegator)
+		i = encodeVarintMessages(dAtA, i, uint64(len(m.Delegator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgUndelegateResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgUndelegateResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgUndelegateResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	n6, err6 := github_com_cosmos_gogoproto_types.StdTimeMarshalTo(m.CompletionTime, dAtA[i-github_com_cosmos_gogoproto_types.SizeOfStdTime(m.CompletionTime):])
+	if err6 != nil {
+		return 0, err6
+	}
+	i -= n6
+	i = encodeVarintMessages(dAtA, i, uint64(n6))
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintMessages(dAtA []byte, offset int, v uint64) int {
 	offset -= sovMessages(v)
 	base := offset
@@ -1568,6 +2049,76 @@ func (m *MsgUpdateParamsResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
+	return n
+}
+
+func (m *MsgUndelegatePool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Delegator)
+	if l > 0 {
+		n += 1 + l + sovMessages(uint64(l))
+	}
+	l = m.Amount.Size()
+	n += 1 + l + sovMessages(uint64(l))
+	return n
+}
+
+func (m *MsgUndelegateOperator) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Delegator)
+	if l > 0 {
+		n += 1 + l + sovMessages(uint64(l))
+	}
+	if m.OperatorID != 0 {
+		n += 1 + sovMessages(uint64(m.OperatorID))
+	}
+	if len(m.Amount) > 0 {
+		for _, e := range m.Amount {
+			l = e.Size()
+			n += 1 + l + sovMessages(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *MsgUndelegateService) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Delegator)
+	if l > 0 {
+		n += 1 + l + sovMessages(uint64(l))
+	}
+	if m.ServiceID != 0 {
+		n += 1 + sovMessages(uint64(m.ServiceID))
+	}
+	if len(m.Amount) > 0 {
+		for _, e := range m.Amount {
+			l = e.Size()
+			n += 1 + l + sovMessages(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *MsgUndelegateResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = github_com_cosmos_gogoproto_types.SizeOfStdTime(m.CompletionTime)
+	n += 1 + l + sovMessages(uint64(l))
 	return n
 }
 
@@ -2624,6 +3175,474 @@ func (m *MsgUpdateParamsResponse) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: MsgUpdateParamsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipMessages(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgUndelegatePool) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowMessages
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgUndelegatePool: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgUndelegatePool: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Delegator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessages
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMessages
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Delegator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessages
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthMessages
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Amount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipMessages(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgUndelegateOperator) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowMessages
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgUndelegateOperator: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgUndelegateOperator: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Delegator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessages
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMessages
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Delegator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OperatorID", wireType)
+			}
+			m.OperatorID = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessages
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.OperatorID |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessages
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthMessages
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Amount = append(m.Amount, types.Coin{})
+			if err := m.Amount[len(m.Amount)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipMessages(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgUndelegateService) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowMessages
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgUndelegateService: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgUndelegateService: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Delegator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessages
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMessages
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Delegator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServiceID", wireType)
+			}
+			m.ServiceID = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessages
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ServiceID |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessages
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthMessages
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Amount = append(m.Amount, types.Coin{})
+			if err := m.Amount[len(m.Amount)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipMessages(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgUndelegateResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowMessages
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgUndelegateResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgUndelegateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CompletionTime", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessages
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthMessages
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := github_com_cosmos_gogoproto_types.StdTimeUnmarshal(&m.CompletionTime, dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipMessages(dAtA[iNdEx:])
