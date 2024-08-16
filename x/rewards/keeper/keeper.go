@@ -164,7 +164,7 @@ func (k *Keeper) Logger(ctx context.Context) log.Logger {
 }
 
 // SetWithdrawAddr sets a new address that will receive the rewards upon withdrawal
-func (k *Keeper) SetWithdrawAddr(ctx context.Context, delegatorAddr, withdrawAddr sdk.AccAddress) error {
+func (k *Keeper) SetWithdrawAddr(ctx context.Context, addr, withdrawAddr sdk.AccAddress) error {
 	if k.bankKeeper.BlockedAddr(withdrawAddr) {
 		return errorsmod.Wrapf(sdkerrors.ErrUnauthorized, "%s is not allowed to receive external funds", withdrawAddr)
 	}
@@ -177,7 +177,7 @@ func (k *Keeper) SetWithdrawAddr(ctx context.Context, delegatorAddr, withdrawAdd
 		),
 	)
 
-	err := k.DelegatorWithdrawAddrs.Set(ctx, delegatorAddr, withdrawAddr)
+	err := k.DelegatorWithdrawAddrs.Set(ctx, addr, withdrawAddr)
 	if err != nil {
 		return err
 	}

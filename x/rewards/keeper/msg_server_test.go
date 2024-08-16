@@ -31,12 +31,12 @@ func (s *KeeperTestSuite) TestMsgSetWithdrawAddress() {
 			expectedErr: "",
 		},
 		{
-			name: "invalid delegator address returns error",
+			name: "invalid sender address returns error",
 			msg: types.NewMsgSetWithdrawAddress(
 				"invalid",
 				testutil.TestAddress(2).String(),
 			),
-			expectedErr: "invalid delegator address: decoding bech32 failed: invalid bech32 string length 7: invalid address",
+			expectedErr: "invalid sender address: decoding bech32 failed: invalid bech32 string length 7: invalid address",
 		},
 		{
 			name: "invalid withdraw address returns error",

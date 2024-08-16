@@ -90,17 +90,16 @@ message MsgCreateRewardsPlanResponse {
       [ (gogoproto.customname) = "NewRewardsPlanID" ];
 }
 
-// MsgSetWithdrawAddress sets the withdraw address for
-// a delegator.
+// MsgSetWithdrawAddress sets the withdraw address for a delegator(or an
+// operator when withdrawing commission).
 message MsgSetWithdrawAddress {
-  option (cosmos.msg.v1.signer) = "delegator_address";
+  option (cosmos.msg.v1.signer) = "sender";
   option (amino.name) = "milkyway/rewards/MsgSetWithdrawAddress";
 
   option (gogoproto.equal) = false;
   option (gogoproto.goproto_getters) = false;
 
-  string delegator_address = 1
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
   string withdraw_address = 2
       [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 }

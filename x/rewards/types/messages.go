@@ -27,10 +27,10 @@ func NewMsgCreateRewardsPlan(
 }
 
 // NewMsgSetWithdrawAddress creates a new NewMsgSetWithdrawAddress instance
-func NewMsgSetWithdrawAddress(delAddr, withdrawAddr string) *MsgSetWithdrawAddress {
+func NewMsgSetWithdrawAddress(senderAddr, withdrawAddr string) *MsgSetWithdrawAddress {
 	return &MsgSetWithdrawAddress{
-		DelegatorAddress: delAddr,
-		WithdrawAddress:  withdrawAddr,
+		Sender:          senderAddr,
+		WithdrawAddress: withdrawAddr,
 	}
 }
 

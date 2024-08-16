@@ -36,10 +36,13 @@ func (k msgServer) CreateRewardsPlan(ctx context.Context, msg *types.MsgCreateRe
 	return &types.MsgCreateRewardsPlanResponse{NewRewardsPlanID: plan.ID}, nil
 }
 
+// SetWithdrawAddress sets the withdraw address for a delegator(or an operator
+// when withdrawing commission). The default withdraw address if not set
+// specified is the delegator(or an operator) address.
 func (k msgServer) SetWithdrawAddress(ctx context.Context, msg *types.MsgSetWithdrawAddress) (*types.MsgSetWithdrawAddressResponse, error) {
-	delegatorAddress, err := k.accountKeeper.AddressCodec().StringToBytes(msg.DelegatorAddress)
+	senderAddr, err := k.accountKeeper.AddressCodec().StringToBytes(msg.Sender)
 	if err != nil {
-		return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid delegator address: %s", err)
+		return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid sender address: %s", err)
 	}
 
 	withdrawAddress, err := k.accountKeeper.AddressCodec().StringToBytes(msg.WithdrawAddress)
@@ -47,7 +50,7 @@ func (k msgServer) SetWithdrawAddress(ctx context.Context, msg *types.MsgSetWith
 		return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid withdraw address: %s", err)
 	}
 
-	err = k.SetWithdrawAddr(ctx, delegatorAddress, withdrawAddress)
+	err = k.SetWithdrawAddr(ctx, senderAddr, withdrawAddress)
 	if err != nil {
 		return nil, err
 	}

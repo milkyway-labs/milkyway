@@ -36,7 +36,7 @@ type MsgClient interface {
 	// rewards plan.
 	CreateRewardsPlan(ctx context.Context, in *MsgCreateRewardsPlan, opts ...grpc.CallOption) (*MsgCreateRewardsPlanResponse, error)
 	// SetWithdrawAddress defines a method to change the withdraw address
-	// for a delegator.
+	// for a delegator(or an operator, when withdrawing commission).
 	SetWithdrawAddress(ctx context.Context, in *MsgSetWithdrawAddress, opts ...grpc.CallOption) (*MsgSetWithdrawAddressResponse, error)
 	// WithdrawDelegatorReward defines a method to withdraw rewards of delegator
 	// from a single delegation target.
@@ -118,7 +118,7 @@ type MsgServer interface {
 	// rewards plan.
 	CreateRewardsPlan(context.Context, *MsgCreateRewardsPlan) (*MsgCreateRewardsPlanResponse, error)
 	// SetWithdrawAddress defines a method to change the withdraw address
-	// for a delegator.
+	// for a delegator(or an operator, when withdrawing commission).
 	SetWithdrawAddress(context.Context, *MsgSetWithdrawAddress) (*MsgSetWithdrawAddressResponse, error)
 	// WithdrawDelegatorReward defines a method to withdraw rewards of delegator
 	// from a single delegation target.

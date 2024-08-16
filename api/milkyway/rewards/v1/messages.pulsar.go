@@ -1489,15 +1489,15 @@ func (x *fastReflection_MsgCreateRewardsPlanResponse) ProtoMethods() *protoiface
 }
 
 var (
-	md_MsgSetWithdrawAddress                   protoreflect.MessageDescriptor
-	fd_MsgSetWithdrawAddress_delegator_address protoreflect.FieldDescriptor
-	fd_MsgSetWithdrawAddress_withdraw_address  protoreflect.FieldDescriptor
+	md_MsgSetWithdrawAddress                  protoreflect.MessageDescriptor
+	fd_MsgSetWithdrawAddress_sender           protoreflect.FieldDescriptor
+	fd_MsgSetWithdrawAddress_withdraw_address protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_milkyway_rewards_v1_messages_proto_init()
 	md_MsgSetWithdrawAddress = File_milkyway_rewards_v1_messages_proto.Messages().ByName("MsgSetWithdrawAddress")
-	fd_MsgSetWithdrawAddress_delegator_address = md_MsgSetWithdrawAddress.Fields().ByName("delegator_address")
+	fd_MsgSetWithdrawAddress_sender = md_MsgSetWithdrawAddress.Fields().ByName("sender")
 	fd_MsgSetWithdrawAddress_withdraw_address = md_MsgSetWithdrawAddress.Fields().ByName("withdraw_address")
 }
 
@@ -1566,9 +1566,9 @@ func (x *fastReflection_MsgSetWithdrawAddress) Interface() protoreflect.ProtoMes
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_MsgSetWithdrawAddress) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.DelegatorAddress != "" {
-		value := protoreflect.ValueOfString(x.DelegatorAddress)
-		if !f(fd_MsgSetWithdrawAddress_delegator_address, value) {
+	if x.Sender != "" {
+		value := protoreflect.ValueOfString(x.Sender)
+		if !f(fd_MsgSetWithdrawAddress_sender, value) {
 			return
 		}
 	}
@@ -1593,8 +1593,8 @@ func (x *fastReflection_MsgSetWithdrawAddress) Range(f func(protoreflect.FieldDe
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_MsgSetWithdrawAddress) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.MsgSetWithdrawAddress.delegator_address":
-		return x.DelegatorAddress != ""
+	case "milkyway.rewards.v1.MsgSetWithdrawAddress.sender":
+		return x.Sender != ""
 	case "milkyway.rewards.v1.MsgSetWithdrawAddress.withdraw_address":
 		return x.WithdrawAddress != ""
 	default:
@@ -1613,8 +1613,8 @@ func (x *fastReflection_MsgSetWithdrawAddress) Has(fd protoreflect.FieldDescript
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgSetWithdrawAddress) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.MsgSetWithdrawAddress.delegator_address":
-		x.DelegatorAddress = ""
+	case "milkyway.rewards.v1.MsgSetWithdrawAddress.sender":
+		x.Sender = ""
 	case "milkyway.rewards.v1.MsgSetWithdrawAddress.withdraw_address":
 		x.WithdrawAddress = ""
 	default:
@@ -1633,8 +1633,8 @@ func (x *fastReflection_MsgSetWithdrawAddress) Clear(fd protoreflect.FieldDescri
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_MsgSetWithdrawAddress) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "milkyway.rewards.v1.MsgSetWithdrawAddress.delegator_address":
-		value := x.DelegatorAddress
+	case "milkyway.rewards.v1.MsgSetWithdrawAddress.sender":
+		value := x.Sender
 		return protoreflect.ValueOfString(value)
 	case "milkyway.rewards.v1.MsgSetWithdrawAddress.withdraw_address":
 		value := x.WithdrawAddress
@@ -1659,8 +1659,8 @@ func (x *fastReflection_MsgSetWithdrawAddress) Get(descriptor protoreflect.Field
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgSetWithdrawAddress) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.MsgSetWithdrawAddress.delegator_address":
-		x.DelegatorAddress = value.Interface().(string)
+	case "milkyway.rewards.v1.MsgSetWithdrawAddress.sender":
+		x.Sender = value.Interface().(string)
 	case "milkyway.rewards.v1.MsgSetWithdrawAddress.withdraw_address":
 		x.WithdrawAddress = value.Interface().(string)
 	default:
@@ -1683,8 +1683,8 @@ func (x *fastReflection_MsgSetWithdrawAddress) Set(fd protoreflect.FieldDescript
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_MsgSetWithdrawAddress) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.MsgSetWithdrawAddress.delegator_address":
-		panic(fmt.Errorf("field delegator_address of message milkyway.rewards.v1.MsgSetWithdrawAddress is not mutable"))
+	case "milkyway.rewards.v1.MsgSetWithdrawAddress.sender":
+		panic(fmt.Errorf("field sender of message milkyway.rewards.v1.MsgSetWithdrawAddress is not mutable"))
 	case "milkyway.rewards.v1.MsgSetWithdrawAddress.withdraw_address":
 		panic(fmt.Errorf("field withdraw_address of message milkyway.rewards.v1.MsgSetWithdrawAddress is not mutable"))
 	default:
@@ -1700,7 +1700,7 @@ func (x *fastReflection_MsgSetWithdrawAddress) Mutable(fd protoreflect.FieldDesc
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_MsgSetWithdrawAddress) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.rewards.v1.MsgSetWithdrawAddress.delegator_address":
+	case "milkyway.rewards.v1.MsgSetWithdrawAddress.sender":
 		return protoreflect.ValueOfString("")
 	case "milkyway.rewards.v1.MsgSetWithdrawAddress.withdraw_address":
 		return protoreflect.ValueOfString("")
@@ -1773,7 +1773,7 @@ func (x *fastReflection_MsgSetWithdrawAddress) ProtoMethods() *protoiface.Method
 		var n int
 		var l int
 		_ = l
-		l = len(x.DelegatorAddress)
+		l = len(x.Sender)
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
@@ -1817,10 +1817,10 @@ func (x *fastReflection_MsgSetWithdrawAddress) ProtoMethods() *protoiface.Method
 			i--
 			dAtA[i] = 0x12
 		}
-		if len(x.DelegatorAddress) > 0 {
-			i -= len(x.DelegatorAddress)
-			copy(dAtA[i:], x.DelegatorAddress)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DelegatorAddress)))
+		if len(x.Sender) > 0 {
+			i -= len(x.Sender)
+			copy(dAtA[i:], x.Sender)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Sender)))
 			i--
 			dAtA[i] = 0xa
 		}
@@ -1875,7 +1875,7 @@ func (x *fastReflection_MsgSetWithdrawAddress) ProtoMethods() *protoiface.Method
 			switch fieldNum {
 			case 1:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DelegatorAddress", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
 				}
 				var stringLen uint64
 				for shift := uint(0); ; shift += 7 {
@@ -1903,7 +1903,7 @@ func (x *fastReflection_MsgSetWithdrawAddress) ProtoMethods() *protoiface.Method
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.DelegatorAddress = string(dAtA[iNdEx:postIndex])
+				x.Sender = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 2:
 				if wireType != 2 {
@@ -5313,15 +5313,15 @@ func (x *MsgCreateRewardsPlanResponse) GetNewRewardsPlanId() uint64 {
 	return 0
 }
 
-// MsgSetWithdrawAddress sets the withdraw address for
-// a delegator.
+// MsgSetWithdrawAddress sets the withdraw address for a delegator(or an
+// operator when withdrawing commission).
 type MsgSetWithdrawAddress struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	DelegatorAddress string `protobuf:"bytes,1,opt,name=delegator_address,json=delegatorAddress,proto3" json:"delegator_address,omitempty"`
-	WithdrawAddress  string `protobuf:"bytes,2,opt,name=withdraw_address,json=withdrawAddress,proto3" json:"withdraw_address,omitempty"`
+	Sender          string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	WithdrawAddress string `protobuf:"bytes,2,opt,name=withdraw_address,json=withdrawAddress,proto3" json:"withdraw_address,omitempty"`
 }
 
 func (x *MsgSetWithdrawAddress) Reset() {
@@ -5344,9 +5344,9 @@ func (*MsgSetWithdrawAddress) Descriptor() ([]byte, []int) {
 	return file_milkyway_rewards_v1_messages_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *MsgSetWithdrawAddress) GetDelegatorAddress() string {
+func (x *MsgSetWithdrawAddress) GetSender() string {
 	if x != nil {
-		return x.DelegatorAddress
+		return x.Sender
 	}
 	return ""
 }
@@ -5709,20 +5709,18 @@ var file_milkyway_rewards_v1_messages_proto_rawDesc = []byte{
 	0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x5f, 0x70, 0x6c, 0x61, 0x6e, 0x5f, 0x69, 0x64,
 	0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x42, 0x14, 0xe2, 0xde, 0x1f, 0x10, 0x4e, 0x65, 0x77, 0x52,
 	0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x50, 0x6c, 0x61, 0x6e, 0x49, 0x44, 0x52, 0x10, 0x6e, 0x65,
-	0x77, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x50, 0x6c, 0x61, 0x6e, 0x49, 0x64, 0x22, 0xee,
+	0x77, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x50, 0x6c, 0x61, 0x6e, 0x49, 0x64, 0x22, 0xce,
 	0x01, 0x0a, 0x15, 0x4d, 0x73, 0x67, 0x53, 0x65, 0x74, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61,
-	0x77, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x45, 0x0a, 0x11, 0x64, 0x65, 0x6c, 0x65,
-	0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
-	0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x10, 0x64,
-	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12,
-	0x43, 0x0a, 0x10, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x5f, 0x61, 0x64, 0x64, 0x72,
-	0x65, 0x73, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63,
-	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72,
-	0x69, 0x6e, 0x67, 0x52, 0x0f, 0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x41, 0x64, 0x64,
-	0x72, 0x65, 0x73, 0x73, 0x3a, 0x49, 0x88, 0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f, 0x00, 0x82, 0xe7,
-	0xb0, 0x2a, 0x11, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64,
-	0x72, 0x65, 0x73, 0x73, 0x8a, 0xe7, 0xb0, 0x2a, 0x26, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
+	0x77, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x30, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64,
+	0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69,
+	0x6e, 0x67, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x43, 0x0a, 0x10, 0x77, 0x69,
+	0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
+	0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x0f,
+	0x77, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x3a,
+	0x3e, 0x88, 0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f, 0x00, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65,
+	0x6e, 0x64, 0x65, 0x72, 0x8a, 0xe7, 0xb0, 0x2a, 0x26, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
 	0x79, 0x2f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2f, 0x4d, 0x73, 0x67, 0x53, 0x65, 0x74,
 	0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x22,
 	0x1f, 0x0a, 0x1d, 0x4d, 0x73, 0x67, 0x53, 0x65, 0x74, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61,
