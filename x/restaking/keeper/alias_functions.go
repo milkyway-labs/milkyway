@@ -6,6 +6,7 @@ import (
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/milkyway-labs/milkyway/utils"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
@@ -309,6 +310,19 @@ func (k *Keeper) SetUnbondingDelegation(ctx sdk.Context, ud types.UnbondingDeleg
 	store.Set(unbondingDelegationKey, types.MustMarshalUnbondingDelegation(k.cdc, ud))
 
 	return unbondingDelegationKey, nil
+}
+
+// SetUnbondingDelegationByUnbondingID sets an index to look up an UnbondingDelegation
+// by the unbondingID of an UnbondingDelegationEntry that it contains Note, it does not
+// set the unbonding delegation itself, use SetUnbondingDelegation(ctx, ubd) for that
+func (k *Keeper) SetUnbondingDelegationByUnbondingID(ctx sdk.Context, ubd types.UnbondingDelegation, ubdKey []byte, id uint64) {
+	// Set the index allowing to lookup the UnbondingDelegation by the unbondingID of an
+	// UnbondingDelegationEntry that it contains
+	store := ctx.KVStore(k.storeKey)
+	store.Set(types.GetUnbondingIndexKey(id), ubdKey)
+
+	// Set the type of the unbonding delegation so that we know how to deserialize id
+	store.Set(types.GetUnbondingTypeKey(id), utils.Uint32ToBigEndian(ubd.TargetID))
 }
 
 // GetUnbondingDelegation returns the unbonding delegation for the given delegator and target.

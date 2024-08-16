@@ -284,7 +284,7 @@ func NewServiceUnbondingDelegation(
 }
 
 // AddEntry allows to append a new entry to the unbonding delegation
-func (ubd *UnbondingDelegation) AddEntry(creationHeight int64, completionTime time.Time, balance sdk.Coins, unbondingID uint64) {
+func (ubd *UnbondingDelegation) AddEntry(creationHeight int64, completionTime time.Time, balance sdk.Coins, unbondingID uint64) bool {
 	// Check the entries exists with creation_height and complete_time
 	entryIndex := sort.Search(len(ubd.Entries), func(i int) bool {
 		return ubd.Entries[i].CreationHeight == creationHeight && ubd.Entries[i].CompletionTime.Equal(completionTime)
@@ -298,11 +298,13 @@ func (ubd *UnbondingDelegation) AddEntry(creationHeight int64, completionTime ti
 
 		// Update the entry
 		ubd.Entries[entryIndex] = ubdEntry
-	} else {
-		// Append the new unbonding delegation entry
-		entry := NewUnbondingDelegationEntry(creationHeight, completionTime, balance, unbondingID)
-		ubd.Entries = append(ubd.Entries, entry)
+		return false
 	}
+
+	// Append the new unbonding delegation entry
+	entry := NewUnbondingDelegationEntry(creationHeight, completionTime, balance, unbondingID)
+	ubd.Entries = append(ubd.Entries, entry)
+	return true
 }
 
 // RemoveEntry removes the entry at index i from the unbonding delegation

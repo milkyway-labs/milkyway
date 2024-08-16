@@ -173,9 +173,10 @@ func (k *Keeper) SetUnbondingDelegationEntry(
 		return types.UnbondingDelegation{}, err
 	}
 
+	isNewUbdEntry := true
 	ubd, found := k.GetUnbondingDelegation(ctx, data.Delegator, ubdType, data.Target.GetID())
 	if found {
-		ubd.AddEntry(creationHeight, minTime, balance, id)
+		isNewUbdEntry = ubd.AddEntry(creationHeight, minTime, balance, id)
 	} else {
 		ubd = data.BuildUnbondingDelegation(data.Delegator, data.Target.GetID(), creationHeight, minTime, balance, id)
 	}
@@ -185,18 +186,16 @@ func (k *Keeper) SetUnbondingDelegationEntry(
 		return types.UnbondingDelegation{}, err
 	}
 
-	// Set the index allowing to lookup the UnbondingDelegation by the unbondingID of an
-	// UnbondingDelegationEntry that it contains
-	store := ctx.KVStore(k.storeKey)
-	store.Set(types.GetUnbondingIndexKey(id), unbondingDelegationKey)
+	// Only call the hook for new entries since calls to AfterUnbondingInitiated are not idempotent
+	if isNewUbdEntry {
+		// Add to the UBDByUnbondingOp index to look up the UBD by the UBDE ID
+		k.SetUnbondingDelegationByUnbondingID(ctx, ubd, unbondingDelegationKey, id)
 
-	// Set the type of the unbonding delegation so that we know how to deserialize id
-	store.Set(types.GetUnbondingTypeKey(id), utils.Uint32ToBigEndian(ubd.TargetID))
-
-	// Call the hook after the unbonding has been initiated
-	err = k.AfterUnbondingInitiated(ctx, id)
-	if err != nil {
-		k.Logger(ctx).Error("failed to call after unbonding initiated hook", "error", err)
+		// Call the hook after the unbonding has been initiated
+		err = k.AfterUnbondingInitiated(ctx, id)
+		if err != nil {
+			k.Logger(ctx).Error("failed to call after unbonding initiated hook", "error", err)
+		}
 	}
 
 	return ubd, nil
