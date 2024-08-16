@@ -23,7 +23,7 @@ service Msg {
       returns (MsgCreateRewardsPlanResponse);
 
   // SetWithdrawAddress defines a method to change the withdraw address
-  // for a delegator.
+  // for a delegator(or an operator, when withdrawing commission).
   rpc SetWithdrawAddress(MsgSetWithdrawAddress)
       returns (MsgSetWithdrawAddressResponse);
 
