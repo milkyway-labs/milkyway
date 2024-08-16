@@ -67,18 +67,22 @@ message MsgCreateRewardsPlan {
     (gogoproto.nullable) = false
   ];
 
-  // StartTime is the starting time of the plan
+  // StartTime is the starting time of the plan.
   google.protobuf.Timestamp start_time = 5
       [ (gogoproto.stdtime) = true, (gogoproto.nullable) = false ];
 
-  // EndTime is the ending time of the plan
+  // EndTime is the ending time of the plan.
   google.protobuf.Timestamp end_time = 6
       [ (gogoproto.stdtime) = true, (gogoproto.nullable) = false ];
 
+  // PoolsDistribution is the rewards distribution parameters for pools.
   Distribution pools_distribution = 7 [ (gogoproto.nullable) = false ];
 
+  // OperatorsDistribution is the rewards distribution parameters for operators.
   Distribution operators_distribution = 8 [ (gogoproto.nullable) = false ];
 
+  // UsersDistribution is the rewards distribution parameters for users who
+  // delegated directly to the service.
   UsersDistribution users_distribution = 9 [ (gogoproto.nullable) = false ];
 }
 

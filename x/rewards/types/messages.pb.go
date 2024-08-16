@@ -49,13 +49,17 @@ type MsgCreateRewardsPlan struct {
 	ServiceID   uint32 `protobuf:"varint,3,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
 	// Amount is the amount of rewards to be distributed.
 	Amount github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,4,rep,name=amount,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"amount"`
-	// StartTime is the starting time of the plan
+	// StartTime is the starting time of the plan.
 	StartTime time.Time `protobuf:"bytes,5,opt,name=start_time,json=startTime,proto3,stdtime" json:"start_time"`
-	// EndTime is the ending time of the plan
-	EndTime               time.Time         `protobuf:"bytes,6,opt,name=end_time,json=endTime,proto3,stdtime" json:"end_time"`
-	PoolsDistribution     Distribution      `protobuf:"bytes,7,opt,name=pools_distribution,json=poolsDistribution,proto3" json:"pools_distribution"`
-	OperatorsDistribution Distribution      `protobuf:"bytes,8,opt,name=operators_distribution,json=operatorsDistribution,proto3" json:"operators_distribution"`
-	UsersDistribution     UsersDistribution `protobuf:"bytes,9,opt,name=users_distribution,json=usersDistribution,proto3" json:"users_distribution"`
+	// EndTime is the ending time of the plan.
+	EndTime time.Time `protobuf:"bytes,6,opt,name=end_time,json=endTime,proto3,stdtime" json:"end_time"`
+	// PoolsDistribution is the rewards distribution parameters for pools.
+	PoolsDistribution Distribution `protobuf:"bytes,7,opt,name=pools_distribution,json=poolsDistribution,proto3" json:"pools_distribution"`
+	// OperatorsDistribution is the rewards distribution parameters for operators.
+	OperatorsDistribution Distribution `protobuf:"bytes,8,opt,name=operators_distribution,json=operatorsDistribution,proto3" json:"operators_distribution"`
+	// UsersDistribution is the rewards distribution parameters for users who
+	// delegated directly to the service.
+	UsersDistribution UsersDistribution `protobuf:"bytes,9,opt,name=users_distribution,json=usersDistribution,proto3" json:"users_distribution"`
 }
 
 func (m *MsgCreateRewardsPlan) Reset()         { *m = MsgCreateRewardsPlan{} }

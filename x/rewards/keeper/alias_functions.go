@@ -15,6 +15,8 @@ import (
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 )
 
+// GetLastRewardsAllocationTime returns the last time rewards were allocated.
+// If there's no last rewards allocation time set yet, nil is returned.
 func (k *Keeper) GetLastRewardsAllocationTime(ctx context.Context) (*time.Time, error) {
 	ts, err := k.LastRewardsAllocationTime.Get(ctx)
 	if err != nil {
@@ -30,6 +32,7 @@ func (k *Keeper) GetLastRewardsAllocationTime(ctx context.Context) (*time.Time, 
 	return &t, nil
 }
 
+// SetLastRewardsAllocationTime sets the last time rewards were allocated.
 func (k *Keeper) SetLastRewardsAllocationTime(ctx context.Context, t time.Time) error {
 	ts, err := gogotypes.TimestampProto(t)
 	if err != nil {
@@ -38,10 +41,12 @@ func (k *Keeper) SetLastRewardsAllocationTime(ctx context.Context, t time.Time) 
 	return k.LastRewardsAllocationTime.Set(ctx, *ts)
 }
 
+// GetRewardsPlan returns a rewards plan by ID.
 func (k *Keeper) GetRewardsPlan(ctx context.Context, planID uint64) (types.RewardsPlan, error) {
 	return k.RewardsPlans.Get(ctx, planID)
 }
 
+// SetDelegatorStartingInfo sets the delegator starting info for a delegator.
 func (k *Keeper) SetDelegatorStartingInfo(
 	ctx context.Context, target types.DelegationTarget, del sdk.AccAddress, info types.DelegatorStartingInfo,
 ) error {
@@ -253,7 +258,7 @@ func (k *Keeper) GetDelegatorWithdrawAddr(ctx context.Context, delAddr sdk.AccAd
 	return addr, err
 }
 
-func (k *Keeper) DelegationRewards(
+func (k *Keeper) GetDelegationRewards(
 	ctx context.Context, delAddr sdk.AccAddress, delType restakingtypes.DelegationType, targetID uint32,
 ) (types.DecPools, error) {
 	target, err := k.GetDelegationTarget(ctx, delType, targetID)
@@ -281,16 +286,22 @@ func (k *Keeper) DelegationRewards(
 	return rewards, nil
 }
 
-func (k *Keeper) PoolDelegationRewards(ctx context.Context, delAddr sdk.AccAddress, poolID uint32) (types.DecPools, error) {
-	return k.DelegationRewards(ctx, delAddr, restakingtypes.DELEGATION_TYPE_POOL, poolID)
+func (k *Keeper) GetPoolDelegationRewards(
+	ctx context.Context, delAddr sdk.AccAddress, poolID uint32,
+) (types.DecPools, error) {
+	return k.GetDelegationRewards(ctx, delAddr, restakingtypes.DELEGATION_TYPE_POOL, poolID)
 }
 
-func (k *Keeper) OperatorDelegationRewards(ctx context.Context, delAddr sdk.AccAddress, operatorID uint32) (types.DecPools, error) {
-	return k.DelegationRewards(ctx, delAddr, restakingtypes.DELEGATION_TYPE_OPERATOR, operatorID)
+func (k *Keeper) GetOperatorDelegationRewards(
+	ctx context.Context, delAddr sdk.AccAddress, operatorID uint32,
+) (types.DecPools, error) {
+	return k.GetDelegationRewards(ctx, delAddr, restakingtypes.DELEGATION_TYPE_OPERATOR, operatorID)
 }
 
-func (k *Keeper) ServiceDelegationRewards(ctx context.Context, delAddr sdk.AccAddress, serviceID uint32) (types.DecPools, error) {
-	return k.DelegationRewards(ctx, delAddr, restakingtypes.DELEGATION_TYPE_SERVICE, serviceID)
+func (k *Keeper) GetServiceDelegationRewards(
+	ctx context.Context, delAddr sdk.AccAddress, serviceID uint32,
+) (types.DecPools, error) {
+	return k.GetDelegationRewards(ctx, delAddr, restakingtypes.DELEGATION_TYPE_SERVICE, serviceID)
 }
 
 // createAccountIfNotExists creates an account if it does not exist

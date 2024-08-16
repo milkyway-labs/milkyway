@@ -5183,13 +5183,17 @@ type MsgCreateRewardsPlan struct {
 	ServiceId   uint32 `protobuf:"varint,3,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
 	// Amount is the amount of rewards to be distributed.
 	Amount []*v1beta1.Coin `protobuf:"bytes,4,rep,name=amount,proto3" json:"amount,omitempty"`
-	// StartTime is the starting time of the plan
+	// StartTime is the starting time of the plan.
 	StartTime *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
-	// EndTime is the ending time of the plan
-	EndTime               *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
-	PoolsDistribution     *Distribution          `protobuf:"bytes,7,opt,name=pools_distribution,json=poolsDistribution,proto3" json:"pools_distribution,omitempty"`
-	OperatorsDistribution *Distribution          `protobuf:"bytes,8,opt,name=operators_distribution,json=operatorsDistribution,proto3" json:"operators_distribution,omitempty"`
-	UsersDistribution     *UsersDistribution     `protobuf:"bytes,9,opt,name=users_distribution,json=usersDistribution,proto3" json:"users_distribution,omitempty"`
+	// EndTime is the ending time of the plan.
+	EndTime *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
+	// PoolsDistribution is the rewards distribution parameters for pools.
+	PoolsDistribution *Distribution `protobuf:"bytes,7,opt,name=pools_distribution,json=poolsDistribution,proto3" json:"pools_distribution,omitempty"`
+	// OperatorsDistribution is the rewards distribution parameters for operators.
+	OperatorsDistribution *Distribution `protobuf:"bytes,8,opt,name=operators_distribution,json=operatorsDistribution,proto3" json:"operators_distribution,omitempty"`
+	// UsersDistribution is the rewards distribution parameters for users who
+	// delegated directly to the service.
+	UsersDistribution *UsersDistribution `protobuf:"bytes,9,opt,name=users_distribution,json=usersDistribution,proto3" json:"users_distribution,omitempty"`
 }
 
 func (x *MsgCreateRewardsPlan) Reset() {

@@ -154,7 +154,7 @@ func (q queryServer) PoolDelegationRewards(ctx context.Context, req *types.Query
 		return nil, status.Error(codes.InvalidArgument, "invalid pool id")
 	}
 
-	rewards, err := q.k.PoolDelegationRewards(ctx, delAddr, req.PoolId)
+	rewards, err := q.k.GetPoolDelegationRewards(ctx, delAddr, req.PoolId)
 	if err != nil {
 		return nil, err
 	}
@@ -173,7 +173,7 @@ func (q queryServer) OperatorDelegationRewards(ctx context.Context, req *types.Q
 		return nil, status.Error(codes.InvalidArgument, "invalid operator id")
 	}
 
-	rewards, err := q.k.OperatorDelegationRewards(ctx, delAddr, req.OperatorId)
+	rewards, err := q.k.GetOperatorDelegationRewards(ctx, delAddr, req.OperatorId)
 	if err != nil {
 		return nil, err
 	}
@@ -192,7 +192,7 @@ func (q queryServer) ServiceDelegationRewards(ctx context.Context, req *types.Qu
 		return nil, status.Error(codes.InvalidArgument, "invalid service id")
 	}
 
-	rewards, err := q.k.ServiceDelegationRewards(ctx, delAddr, req.ServiceId)
+	rewards, err := q.k.GetServiceDelegationRewards(ctx, delAddr, req.ServiceId)
 	if err != nil {
 		return nil, err
 	}
@@ -212,7 +212,7 @@ func (q queryServer) DelegationTotalRewards(ctx context.Context, req *types.Quer
 	total := types.DecPools{}
 	var delRewards []types.DelegationDelegatorReward
 	err = q.k.restakingKeeper.IterateUserPoolDelegations(sdkCtx, req.DelegatorAddress, func(del restakingtypes.Delegation) (stop bool, err error) {
-		delReward, err := q.k.PoolDelegationRewards(ctx, delAddr, del.TargetID)
+		delReward, err := q.k.GetPoolDelegationRewards(ctx, delAddr, del.TargetID)
 		if err != nil {
 			return false, err
 		}
@@ -224,7 +224,7 @@ func (q queryServer) DelegationTotalRewards(ctx context.Context, req *types.Quer
 		return nil, err
 	}
 	err = q.k.restakingKeeper.IterateUserOperatorDelegations(sdkCtx, req.DelegatorAddress, func(del restakingtypes.Delegation) (stop bool, err error) {
-		delReward, err := q.k.OperatorDelegationRewards(ctx, delAddr, del.TargetID)
+		delReward, err := q.k.GetOperatorDelegationRewards(ctx, delAddr, del.TargetID)
 		if err != nil {
 			return false, err
 		}
@@ -236,7 +236,7 @@ func (q queryServer) DelegationTotalRewards(ctx context.Context, req *types.Quer
 		return nil, err
 	}
 	err = q.k.restakingKeeper.IterateUserServiceDelegations(sdkCtx, req.DelegatorAddress, func(del restakingtypes.Delegation) (stop bool, err error) {
-		delReward, err := q.k.ServiceDelegationRewards(ctx, delAddr, del.TargetID)
+		delReward, err := q.k.GetServiceDelegationRewards(ctx, delAddr, del.TargetID)
 		if err != nil {
 			return false, err
 		}

@@ -11,7 +11,7 @@ import "milkyway/rewards/v1/models.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/rewards/types";
 
-// DelegatorWithdrawInfo is the address for where distributions rewards are
+// DelegatorWithdrawInfo is the address for where delegation rewards are
 // withdrawn to by default this struct is only used at genesis to feed in
 // default withdraw addresses.
 message DelegatorWithdrawInfo {
@@ -143,6 +143,7 @@ message GenesisState {
   // RewardsPlans defines the list of rewards plans.
   repeated RewardsPlan rewards_plans = 3 [ (gogoproto.nullable) = false ];
 
+  // last_rewards_allocation_time is the last time rewards were allocated.
   google.protobuf.Timestamp last_rewards_allocation_time = 4
       [ (gogoproto.stdtime) = true ];
 

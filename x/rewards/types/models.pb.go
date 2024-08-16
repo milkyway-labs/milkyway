@@ -641,7 +641,8 @@ func (m *DelegationDelegatorReward) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DelegationDelegatorReward proto.InternalMessageInfo
 
-// Pool is a Coins wrapper with denom.
+// Pool is a Coins wrapper with denom which represents the rewards pool for the
+// given denom. It is used to represent the rewards associated with the denom.
 type Pool struct {
 	Denom string                                   `protobuf:"bytes,1,opt,name=denom,proto3" json:"denom,omitempty" yaml:"denom"`
 	Coins github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,2,rep,name=coins,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"coins" yaml:"coins"`
@@ -680,7 +681,9 @@ func (m *Pool) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Pool proto.InternalMessageInfo
 
-// DecPool is a DecCoins wrapper with denom.
+// DecPool is a DecCoins wrapper with denom which represents the rewards pool
+// for the given denom. It is used to represent the rewards associated with the
+// denom.
 type DecPool struct {
 	Denom    string                                      `protobuf:"bytes,1,opt,name=denom,proto3" json:"denom,omitempty" yaml:"denom"`
 	DecCoins github_com_cosmos_cosmos_sdk_types.DecCoins `protobuf:"bytes,2,rep,name=dec_coins,json=decCoins,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.DecCoins" json:"dec_coins" yaml:"dec_coins"`

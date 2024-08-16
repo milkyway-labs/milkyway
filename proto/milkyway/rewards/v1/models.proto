@@ -224,7 +224,8 @@ message DelegationDelegatorReward {
 
 // ---------------------------------------------------------------------------
 
-// Pool is a Coins wrapper with denom.
+// Pool is a Coins wrapper with denom which represents the rewards pool for the
+// given denom. It is used to represent the rewards associated with the denom.
 message Pool {
   string denom = 1 [ (gogoproto.moretags) = "yaml:\"denom\"" ];
   repeated cosmos.base.v1beta1.Coin coins = 2 [
@@ -234,7 +235,9 @@ message Pool {
   ];
 }
 
-// DecPool is a DecCoins wrapper with denom.
+// DecPool is a DecCoins wrapper with denom which represents the rewards pool
+// for the given denom. It is used to represent the rewards associated with the
+// denom.
 message DecPool {
   string denom = 1 [ (gogoproto.moretags) = "yaml:\"denom\"" ];
   repeated cosmos.base.v1beta1.DecCoin dec_coins = 2 [

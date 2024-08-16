@@ -9230,7 +9230,8 @@ func (x *DelegationDelegatorReward) GetReward() []*DecPool {
 	return nil
 }
 
-// Pool is a Coins wrapper with denom.
+// Pool is a Coins wrapper with denom which represents the rewards pool for the
+// given denom. It is used to represent the rewards associated with the denom.
 type Pool struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -9274,7 +9275,9 @@ func (x *Pool) GetCoins() []*v1beta1.Coin {
 	return nil
 }
 
-// DecPool is a DecCoins wrapper with denom.
+// DecPool is a DecCoins wrapper with denom which represents the rewards pool
+// for the given denom. It is used to represent the rewards associated with the
+// denom.
 type DecPool struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

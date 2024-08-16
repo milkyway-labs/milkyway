@@ -25,6 +25,7 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
+// KeeperTestSuite is a base test suite for the keeper tests.
 type KeeperTestSuite struct {
 	suite.Suite
 
@@ -32,6 +33,7 @@ type KeeperTestSuite struct {
 	Ctx sdk.Context
 }
 
+// SetupTest creates a new MilkyWayApp and context for the test.
 func (s *KeeperTestSuite) SetupTest() {
 	s.App = milkywayapp.Setup(false)
 	s.Ctx = s.App.NewContextLegacy(false, cmtproto.Header{
@@ -55,6 +57,8 @@ func (s *KeeperTestSuite) FundAccount(addr string, amt sdk.Coins) {
 	s.Require().NoError(err)
 }
 
+// RegisterCurrency registers a currency with the given denomination, ticker
+// and price. RegisterCurrency creates a market for the currency if not exists.
 func (s *KeeperTestSuite) RegisterCurrency(denom, ticker string, price math.LegacyDec) {
 	// Create market only if it doesn't exist.
 	mmTicker := marketmaptypes.NewTicker(ticker, types.USDTicker, math.LegacyPrecision, 0, true)
@@ -76,6 +80,9 @@ func (s *KeeperTestSuite) RegisterCurrency(denom, ticker string, price math.Lega
 	s.Require().NoError(err)
 }
 
+// CreateService creates an example service with the given service name and
+// admin address. The service description and URLs related to the service are
+// randomly chosen. The service is also activated.
 func (s *KeeperTestSuite) CreateService(name, admin string) servicestypes.Service {
 	servicesMsgServer := serviceskeeper.NewMsgServer(s.App.ServicesKeeper)
 	resp, err := servicesMsgServer.CreateService(s.Ctx, servicestypes.NewMsgCreateService(
@@ -94,6 +101,9 @@ func (s *KeeperTestSuite) CreateService(name, admin string) servicestypes.Servic
 	return service
 }
 
+// CreateOperator creates an example operator with the given operator name and
+// admin address. The operator description and URLs related to the operator are
+// randomly chosen.
 func (s *KeeperTestSuite) CreateOperator(name, admin string) operatorstypes.Operator {
 	operatorsMsgServer := operatorskeeper.NewMsgServer(s.App.OperatorsKeeper)
 	resp, err := operatorsMsgServer.RegisterOperator(s.Ctx, operatorstypes.NewMsgRegisterOperator(
@@ -108,6 +118,7 @@ func (s *KeeperTestSuite) CreateOperator(name, admin string) operatorstypes.Oper
 	return operator
 }
 
+// UpdateOperatorParams updates the operator's params.
 func (s *KeeperTestSuite) UpdateOperatorParams(
 	operatorID uint32, commissionRate math.LegacyDec, joinedServicesIDs []uint32) {
 	operator, found := s.App.OperatorsKeeper.GetOperator(s.Ctx, operatorID)
@@ -122,6 +133,7 @@ func (s *KeeperTestSuite) UpdateOperatorParams(
 	s.Require().NoError(err)
 }
 
+// UpdateServiceParams updates the service's params.
 func (s *KeeperTestSuite) UpdateServiceParams(
 	serviceID uint32, slashFraction math.LegacyDec, whitelistedPoolsIDs, whitelistedOperatorsIDs []uint32) {
 	service, found := s.App.ServicesKeeper.GetService(s.Ctx, serviceID)
@@ -136,6 +148,9 @@ func (s *KeeperTestSuite) UpdateServiceParams(
 	s.Require().NoError(err)
 }
 
+// CreateRewardsPlan creates a rewards plan with the given parameters.
+// The plan's name is chosen randomly. The plan is also funded with the given
+// initial rewards.
 func (s *KeeperTestSuite) CreateRewardsPlan(
 	serviceID uint32, amtPerDay sdk.Coins, startTime, endTime time.Time,
 	poolsDistr types.Distribution, operatorsDistr types.Distribution,
@@ -157,6 +172,10 @@ func (s *KeeperTestSuite) CreateRewardsPlan(
 	return plan
 }
 
+// CreateBasicRewardsPlan creates a rewards plan with basic distribution for
+// all restaking entities. Weights among the entities are set to 0, which means
+// that the rewards are distributed based on the total delegation values among
+// all entities.
 func (s *KeeperTestSuite) CreateBasicRewardsPlan(
 	serviceID uint32, amtPerDay sdk.Coins, startTime, endTime time.Time, initialRewards sdk.Coins,
 ) types.RewardsPlan {
@@ -166,6 +185,8 @@ func (s *KeeperTestSuite) CreateBasicRewardsPlan(
 		initialRewards)
 }
 
+// DelegateOperator delegates the given amount of coins to the operator. If fund
+// is true, the delegator's account is funded with the given amount of coins.
 func (s *KeeperTestSuite) DelegateOperator(operatorID uint32, amt sdk.Coins, delegator string, fund bool) {
 	if fund {
 		s.FundAccount(delegator, amt)
@@ -176,6 +197,8 @@ func (s *KeeperTestSuite) DelegateOperator(operatorID uint32, amt sdk.Coins, del
 	s.Require().NoError(err)
 }
 
+// DelegateService delegates the given amount of coins to the service. If fund
+// is true, the delegator's account is funded with the given amount of coins.
 func (s *KeeperTestSuite) DelegateService(serviceID uint32, amt sdk.Coins, delegator string, fund bool) {
 	if fund {
 		s.FundAccount(delegator, amt)
@@ -185,6 +208,8 @@ func (s *KeeperTestSuite) DelegateService(serviceID uint32, amt sdk.Coins, deleg
 	s.Require().NoError(err)
 }
 
+// DelegatePool delegates the given amount of coins to the pool. If fund is
+// true, the delegator's account is funded with the given amount of coins.
 func (s *KeeperTestSuite) DelegatePool(amt sdk.Coin, delegator string, fund bool) {
 	if fund {
 		s.FundAccount(delegator, sdk.NewCoins(amt))

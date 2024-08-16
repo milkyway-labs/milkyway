@@ -229,6 +229,9 @@ func (k *Keeper) getOperatorsForRewardsAllocation(
 	return operators
 }
 
+// getPoolDistrInfos returns a list of PoolDistributionInfo calculated based
+// on each pool's delegation values. getPoolDistrInfos also returns the total
+// delegation values of all pools.
 func (k *Keeper) getPoolDistrInfos(
 	ctx context.Context, pools []poolstypes.Pool,
 ) (distrInfos []PoolDistributionInfo, totalDelValues math.LegacyDec, err error) {
@@ -238,6 +241,9 @@ func (k *Keeper) getPoolDistrInfos(
 		if err != nil {
 			return nil, math.LegacyDec{}, err
 		}
+		// Skip if there's no delegations value. This can happen when there's
+		// no tokens delegated at all or there's no price associated with the
+		// pool's tokens.
 		if delValue.IsZero() {
 			continue
 		}

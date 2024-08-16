@@ -31,7 +31,7 @@ func (s *KeeperTestSuite) TestAllocateRewards_InactivePlan() {
 
 	s.allocateRewards(3 * time.Second)
 
-	rewards, err := s.keeper.ServiceDelegationRewards(s.Ctx, delAddr, service.ID)
+	rewards, err := s.keeper.GetServiceDelegationRewards(s.Ctx, delAddr, service.ID)
 	s.Require().NoError(err)
 	s.Require().Empty(rewards)
 }
@@ -140,13 +140,13 @@ func (s *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	// - $300 / $5700 * 0.115741 ~= 0.006092 $SERVICE1 (from Pool2)
 	// - $500 / $5700 * 0.115741 ~= 0.010153 $SERVICE1 (from Pool3)
 	// - $500 / $4600 * 0.578704 ~= 0.062903 $SERVICE2 (from Pool3)
-	rewards, err := s.keeper.PoolDelegationRewards(s.Ctx, aliceAddr, 1)
+	rewards, err := s.keeper.GetPoolDelegationRewards(s.Ctx, aliceAddr, 1)
 	s.Require().NoError(err)
 	s.Require().Equal("4061.052631578900000000service1,25161.000000000000000000service2", rewards.Sum().String())
-	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, aliceAddr, 2)
+	rewards, err = s.keeper.GetPoolDelegationRewards(s.Ctx, aliceAddr, 2)
 	s.Require().NoError(err)
 	s.Require().Equal("6091.578947368400000000service1", rewards.Sum().String())
-	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, aliceAddr, 3)
+	rewards, err = s.keeper.GetPoolDelegationRewards(s.Ctx, aliceAddr, 3)
 	s.Require().NoError(err)
 	s.Require().Equal("10152.631578947000000000service1,62902.500000000000000000service2", rewards.Sum().String())
 
@@ -154,13 +154,13 @@ func (s *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	// - $300 / $5700 * 0.115741 ~= 0.006092 $SERVICE1 (from Service1)
 	// - $600 / $4600 * 0.578704 ~= 0.075483 $SERVICE2 (from Service2)
 	// - $900 / $3600 * 1.157407 ~= 0.289352 $SERVICE3 (from Service3)
-	rewards, err = s.keeper.ServiceDelegationRewards(s.Ctx, bobAddr, service1.ID)
+	rewards, err = s.keeper.GetServiceDelegationRewards(s.Ctx, bobAddr, service1.ID)
 	s.Require().NoError(err)
 	s.Assert().Equal("6091.578947368400000000service1", rewards.Sum().String())
-	rewards, err = s.keeper.ServiceDelegationRewards(s.Ctx, bobAddr, service2.ID)
+	rewards, err = s.keeper.GetServiceDelegationRewards(s.Ctx, bobAddr, service2.ID)
 	s.Require().NoError(err)
 	s.Assert().Equal("75483.000000000000000000service2", rewards.Sum().String())
-	rewards, err = s.keeper.ServiceDelegationRewards(s.Ctx, bobAddr, service3.ID)
+	rewards, err = s.keeper.GetServiceDelegationRewards(s.Ctx, bobAddr, service3.ID)
 	s.Require().NoError(err)
 	s.Assert().Equal("289351.749999999900000000service3", rewards.Sum().String())
 
@@ -171,13 +171,13 @@ func (s *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	// - $1000 / $3600 * 1.157407 * 0.95 ~= 0.305427 $SERVICE3 (from Operator2)
 	// - $500 / $4600 * 0.578704 * 0.98 ~= 0.061645 $SERVICE2 (from Operator3)
 	// - $500 / $3600 * 1.157407 * 0.98 ~= 0.157536 $SERVICE3 (from Operator3)
-	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, charlieAddr, operator1.ID)
+	rewards, err = s.keeper.GetOperatorDelegationRewards(s.Ctx, charlieAddr, operator1.ID)
 	s.Require().NoError(err)
 	s.Assert().Equal("18274.736842105000000000service1,113224.500000000000000000service2", rewards.Sum().String())
-	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, charlieAddr, operator2.ID)
+	rewards, err = s.keeper.GetOperatorDelegationRewards(s.Ctx, charlieAddr, operator2.ID)
 	s.Require().NoError(err)
 	s.Assert().Equal("19290.000000000000000000service1,305426.847222222000000000service3", rewards.Sum().String())
-	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, charlieAddr, operator3.ID)
+	rewards, err = s.keeper.GetOperatorDelegationRewards(s.Ctx, charlieAddr, operator3.ID)
 	s.Require().NoError(err)
 	s.Assert().Equal("61644.450000000000000000service2,157535.952777777500000000service3", rewards.Sum().String())
 
@@ -196,31 +196,31 @@ func (s *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	// - $400 / $3600 * 1.157407 * 0.95 ~= 0.122171 $SERVICE3 (from Operator2)
 	// - $400 / $4600 * 0.578704 * 0.98 ~= 0.049316 $SERVICE2 (from Operator3)
 	// - $400 / $3600 * 1.157407 * 0.98 ~= 0.126029 $SERVICE3 (from Operator3)
-	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, davidAddr, 1)
+	rewards, err = s.keeper.GetPoolDelegationRewards(s.Ctx, davidAddr, 1)
 	s.Require().NoError(err)
 	s.Assert().Equal("8122.105263157800000000service1,50322.000000000000000000service2", rewards.Sum().String())
-	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, davidAddr, 2)
+	rewards, err = s.keeper.GetPoolDelegationRewards(s.Ctx, davidAddr, 2)
 	s.Require().NoError(err)
 	s.Assert().Equal("12183.157894736800000000service1", rewards.Sum().String())
-	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, davidAddr, 3)
+	rewards, err = s.keeper.GetPoolDelegationRewards(s.Ctx, davidAddr, 3)
 	s.Require().NoError(err)
 	s.Assert().Equal("4061.052631578800000000service1,25161.000000000000000000service2", rewards.Sum().String())
-	rewards, err = s.keeper.ServiceDelegationRewards(s.Ctx, davidAddr, service1.ID)
+	rewards, err = s.keeper.GetServiceDelegationRewards(s.Ctx, davidAddr, service1.ID)
 	s.Require().NoError(err)
 	s.Assert().Equal("8122.105263157800000000service1", rewards.Sum().String())
-	rewards, err = s.keeper.ServiceDelegationRewards(s.Ctx, davidAddr, service2.ID)
+	rewards, err = s.keeper.GetServiceDelegationRewards(s.Ctx, davidAddr, service2.ID)
 	s.Require().NoError(err)
 	s.Assert().Equal("50322.000000000000000000service2", rewards.Sum().String())
-	rewards, err = s.keeper.ServiceDelegationRewards(s.Ctx, davidAddr, service3.ID)
+	rewards, err = s.keeper.GetServiceDelegationRewards(s.Ctx, davidAddr, service3.ID)
 	s.Require().NoError(err)
 	s.Assert().Equal("128600.777777777600000000service3", rewards.Sum().String())
-	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, davidAddr, operator1.ID)
+	rewards, err = s.keeper.GetOperatorDelegationRewards(s.Ctx, davidAddr, operator1.ID)
 	s.Require().NoError(err)
 	s.Assert().Equal("7309.894736842000000000service1,45289.800000000000000000service2", rewards.Sum().String())
-	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, davidAddr, operator2.ID)
+	rewards, err = s.keeper.GetOperatorDelegationRewards(s.Ctx, davidAddr, operator2.ID)
 	s.Require().NoError(err)
 	s.Assert().Equal("7716.000000000000000000service1,122170.738888888800000000service3", rewards.Sum().String())
-	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, davidAddr, operator3.ID)
+	rewards, err = s.keeper.GetOperatorDelegationRewards(s.Ctx, davidAddr, operator3.ID)
 	s.Require().NoError(err)
 	s.Assert().Equal("49315.560000000000000000service2,126028.762222222200000000service3", rewards.Sum().String())
 }
@@ -245,10 +245,10 @@ func (s *KeeperTestSuite) TestAllocateRewards_MovingPrice() {
 	s.allocateRewards(10 * time.Second)
 
 	// They receive rewards by 1:2 ratio.
-	rewards, err := s.keeper.ServiceDelegationRewards(s.Ctx, delAddr1, service.ID)
+	rewards, err := s.keeper.GetServiceDelegationRewards(s.Ctx, delAddr1, service.ID)
 	s.Require().NoError(err)
 	s.Require().Equal("4629.600000000000000000service", rewards.Sum().String())
-	rewards, err = s.keeper.ServiceDelegationRewards(s.Ctx, delAddr2, service.ID)
+	rewards, err = s.keeper.GetServiceDelegationRewards(s.Ctx, delAddr2, service.ID)
 	s.Require().NoError(err)
 	s.Require().Equal("6944.400000000000000000service", rewards.Sum().String())
 
@@ -261,11 +261,11 @@ func (s *KeeperTestSuite) TestAllocateRewards_MovingPrice() {
 
 	// Now they receive rewards by 3:1 ratio.
 	// Note that already accumulated rewards are not affected.
-	rewards, err = s.keeper.ServiceDelegationRewards(s.Ctx, delAddr1, service.ID)
+	rewards, err = s.keeper.GetServiceDelegationRewards(s.Ctx, delAddr1, service.ID)
 	s.Require().NoError(err)
 	// Delta: +8680.5555555555umilk
 	s.Require().Equal("13310.100000000000000000service", rewards.Sum().String())
-	rewards, err = s.keeper.ServiceDelegationRewards(s.Ctx, delAddr2, service.ID)
+	rewards, err = s.keeper.GetServiceDelegationRewards(s.Ctx, delAddr2, service.ID)
 	s.Require().NoError(err)
 	// Delta: +2893.5185185185umilk
 	s.Require().Equal("9837.900000000000000000service", rewards.Sum().String())
@@ -337,10 +337,10 @@ func (s *KeeperTestSuite) TestAllocateRewards_ZeroDelegations() {
 	s.Require().Empty(rewards)
 
 	// The pool and the service receive rewards by 1:3 ratio.
-	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, delAddr1, 1)
+	rewards, err = s.keeper.GetPoolDelegationRewards(s.Ctx, delAddr1, 1)
 	s.Require().NoError(err)
 	s.Require().Equal("2893.500000000000000000service", rewards.Sum().String())
-	rewards, err = s.keeper.ServiceDelegationRewards(s.Ctx, delAddr2, service.ID)
+	rewards, err = s.keeper.GetServiceDelegationRewards(s.Ctx, delAddr2, service.ID)
 	s.Require().NoError(err)
 	s.Require().Equal("8680.500000000000000000service", rewards.Sum().String())
 }
@@ -413,44 +413,44 @@ func (s *KeeperTestSuite) TestAllocateRewards_WeightedDistributions() {
 	s.allocateRewards(10 * time.Second)
 
 	// delAddr1 receives 3/4 * 2/3 * $300 / $500 * 100 * (10 / 86400) ~= 0.003472 $SERVICE
-	rewards, err := s.keeper.PoolDelegationRewards(s.Ctx, delAddr1, 1)
+	rewards, err := s.keeper.GetPoolDelegationRewards(s.Ctx, delAddr1, 1)
 	s.Require().NoError(err)
 	s.Require().Equal("3472.200000000000000000service", rewards.Sum().String())
 
 	// delAddr2 receives 3/4 * 2/3 * $200 / $500 * 100 * (10 / 86400) ~= 0.002315 $SERVICE
-	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, delAddr2, 1)
+	rewards, err = s.keeper.GetPoolDelegationRewards(s.Ctx, delAddr2, 1)
 	s.Require().NoError(err)
 	s.Require().Equal("2314.800000000000000000service", rewards.Sum().String())
 
 	// delAddr3 receives 3/4 * 1/3 * $200 / $500 * 100 * (10 / 86400) ~= 0.001157 $SERVICE
-	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, delAddr3, 2)
+	rewards, err = s.keeper.GetPoolDelegationRewards(s.Ctx, delAddr3, 2)
 	s.Require().NoError(err)
 	s.Require().Equal("1157.400000000000000000service", rewards.Sum().String())
 
 	// delAddr4 receives 3/4 * 1/3 * $300 / $500 * 100 * (10 / 86400) ~= 0.001736 $SERVICE
-	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, delAddr4, 2)
+	rewards, err = s.keeper.GetPoolDelegationRewards(s.Ctx, delAddr4, 2)
 	s.Require().NoError(err)
 	s.Require().Equal("1736.100000000000000000service", rewards.Sum().String())
 
 	// Note that operators take commission from rewards.
 
 	// delAddr5 receives 1/4 * 2/5 * $100 / $300 * 100 * (10 / 86400) * 0.9 ~= 0.000347 $SERVICE
-	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, delAddr5, operator1.ID)
+	rewards, err = s.keeper.GetOperatorDelegationRewards(s.Ctx, delAddr5, operator1.ID)
 	s.Require().NoError(err)
 	s.Assert().Equal("347.220000000000000000service", rewards.Sum().String())
 
 	// delAddr6 receives 1/4 * 2/5 * $200 / $300 * 100 * (10 / 86400) * 0.9 ~= 0.000694 $SERVICE
-	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, delAddr6, operator1.ID)
+	rewards, err = s.keeper.GetOperatorDelegationRewards(s.Ctx, delAddr6, operator1.ID)
 	s.Require().NoError(err)
 	s.Assert().Equal("694.440000000000000000service", rewards.Sum().String())
 
 	// delAddr7 receives 1/4 * 3/5 * $200 / $300 * 100 * (10 / 86400) * 0.9 ~= 0.001042 $SERVICE
-	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, delAddr7, operator2.ID)
+	rewards, err = s.keeper.GetOperatorDelegationRewards(s.Ctx, delAddr7, operator2.ID)
 	s.Require().NoError(err)
 	s.Assert().Equal("1041.660000000000000000service", rewards.Sum().String())
 
 	// delAddr8 receives 1/4 * 3/5 * $100 / $300 * 100 * (10 / 86400) * 0.9 ~= 0.000521 $SERVICE
-	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, delAddr8, operator2.ID)
+	rewards, err = s.keeper.GetOperatorDelegationRewards(s.Ctx, delAddr8, operator2.ID)
 	s.Require().NoError(err)
 	s.Assert().Equal("520.830000000000000000service", rewards.Sum().String())
 }
@@ -517,44 +517,44 @@ func (s *KeeperTestSuite) TestAllocateRewards_EgalitarianDistributions() {
 	s.allocateRewards(10 * time.Second)
 
 	// delAddr1 receives 3/4 * 1/2 * $300 / $500 * 100 * (10 / 86400) ~= 0.002604 $SERVICE
-	rewards, err := s.keeper.PoolDelegationRewards(s.Ctx, delAddr1, 1)
+	rewards, err := s.keeper.GetPoolDelegationRewards(s.Ctx, delAddr1, 1)
 	s.Require().NoError(err)
 	s.Require().Equal("2604.150000000000000000service", rewards.Sum().String())
 
 	// delAddr2 receives 3/4 * 1/2 * $200 / $500 * 100 * (10 / 86400) ~= 0.001736 $SERVICE
-	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, delAddr2, 1)
+	rewards, err = s.keeper.GetPoolDelegationRewards(s.Ctx, delAddr2, 1)
 	s.Require().NoError(err)
 	s.Require().Equal("1736.100000000000000000service", rewards.Sum().String())
 
 	// delAddr3 receives 3/4 * 1/2 * $200 / $500 * 100 * (10 / 86400) ~= 0.001736 $SERVICE
-	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, delAddr3, 2)
+	rewards, err = s.keeper.GetPoolDelegationRewards(s.Ctx, delAddr3, 2)
 	s.Require().NoError(err)
 	s.Require().Equal("1736.100000000000000000service", rewards.Sum().String())
 
 	// delAddr4 receives 3/4 * 1/2 * $300 / $500 * 100 * (10 / 86400) ~= 0.002604 $SERVICE
-	rewards, err = s.keeper.PoolDelegationRewards(s.Ctx, delAddr4, 2)
+	rewards, err = s.keeper.GetPoolDelegationRewards(s.Ctx, delAddr4, 2)
 	s.Require().NoError(err)
 	s.Require().Equal("2604.150000000000000000service", rewards.Sum().String())
 
 	// Note that operators take commission from rewards.
 
 	// delAddr5 receives 1/4 * 1/2 * $100 / $300 * 100 * (10 / 86400) * 0.9 ~= 0.000434 $SERVICE
-	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, delAddr5, operator1.ID)
+	rewards, err = s.keeper.GetOperatorDelegationRewards(s.Ctx, delAddr5, operator1.ID)
 	s.Require().NoError(err)
 	s.Require().Equal("434.025000000000000000service", rewards.Sum().String())
 
 	// delAddr6 receives 1/4 * 1/2 * $200 / $300 * 100 * (10 / 86400) * 0.9 ~= 0.000868 $SERVICE
-	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, delAddr6, operator1.ID)
+	rewards, err = s.keeper.GetOperatorDelegationRewards(s.Ctx, delAddr6, operator1.ID)
 	s.Require().NoError(err)
 	s.Require().Equal("868.050000000000000000service", rewards.Sum().String())
 
 	// delAddr7 receives 1/4 * 1/2 * $200 / $300 * 100 * (10 / 86400) * 0.9 ~= 0.000868 $SERVICE
-	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, delAddr7, operator2.ID)
+	rewards, err = s.keeper.GetOperatorDelegationRewards(s.Ctx, delAddr7, operator2.ID)
 	s.Require().NoError(err)
 	s.Require().Equal("868.050000000000000000service", rewards.Sum().String())
 
 	// delAddr8 receives 1/4 * 1/2 * $100 / $300 * 100 * (10 / 86400) * 0.9 ~= 0.000434 $SERVICE
-	rewards, err = s.keeper.OperatorDelegationRewards(s.Ctx, delAddr8, operator2.ID)
+	rewards, err = s.keeper.GetOperatorDelegationRewards(s.Ctx, delAddr8, operator2.ID)
 	s.Require().NoError(err)
 	s.Require().Equal("434.025000000000000000service", rewards.Sum().String())
 }

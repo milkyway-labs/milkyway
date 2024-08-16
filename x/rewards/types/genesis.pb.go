@@ -30,7 +30,7 @@ var _ = time.Kitchen
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// DelegatorWithdrawInfo is the address for where distributions rewards are
+// DelegatorWithdrawInfo is the address for where delegation rewards are
 // withdrawn to by default this struct is only used at genesis to feed in
 // default withdraw addresses.
 type DelegatorWithdrawInfo struct {
@@ -368,8 +368,9 @@ type GenesisState struct {
 	// rewards plan.
 	NextRewardsPlanID uint64 `protobuf:"varint,2,opt,name=next_rewards_plan_id,json=nextRewardsPlanId,proto3" json:"next_rewards_plan_id,omitempty"`
 	// RewardsPlans defines the list of rewards plans.
-	RewardsPlans              []RewardsPlan `protobuf:"bytes,3,rep,name=rewards_plans,json=rewardsPlans,proto3" json:"rewards_plans"`
-	LastRewardsAllocationTime *time.Time    `protobuf:"bytes,4,opt,name=last_rewards_allocation_time,json=lastRewardsAllocationTime,proto3,stdtime" json:"last_rewards_allocation_time,omitempty"`
+	RewardsPlans []RewardsPlan `protobuf:"bytes,3,rep,name=rewards_plans,json=rewardsPlans,proto3" json:"rewards_plans"`
+	// last_rewards_allocation_time is the last time rewards were allocated.
+	LastRewardsAllocationTime *time.Time `protobuf:"bytes,4,opt,name=last_rewards_allocation_time,json=lastRewardsAllocationTime,proto3,stdtime" json:"last_rewards_allocation_time,omitempty"`
 	// delegator_withdraw_infos defines the delegator withdraw infos at genesis.
 	DelegatorWithdrawInfos []DelegatorWithdrawInfo `protobuf:"bytes,5,rep,name=delegator_withdraw_infos,json=delegatorWithdrawInfos,proto3" json:"delegator_withdraw_infos"`
 	// pools_records defines a group of genesis records of all pools at genesis.
