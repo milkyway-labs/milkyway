@@ -47,8 +47,24 @@ func NewOperator(
 	}
 }
 
+func (o Operator) GetID() uint32 {
+	return o.ID
+}
+
+func (o Operator) GetAddress() string {
+	return o.Address
+}
+
+func (o Operator) GetTokens() sdk.Coins {
+	return o.Tokens
+}
+
+func (o Operator) GetDelegatorShares() sdk.DecCoins {
+	return o.DelegatorShares
+}
+
 // Validate checks that the Operator has valid values.
-func (o *Operator) Validate() error {
+func (o Operator) Validate() error {
 	if o.ID == 0 {
 		return fmt.Errorf("invalid id: %d", o.ID)
 	}

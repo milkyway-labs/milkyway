@@ -49,6 +49,22 @@ func NewService(
 	}
 }
 
+func (s Service) GetID() uint32 {
+	return s.ID
+}
+
+func (s Service) GetAddress() string {
+	return s.Address
+}
+
+func (s Service) GetTokens() sdk.Coins {
+	return s.Tokens
+}
+
+func (s Service) GetDelegatorShares() sdk.DecCoins {
+	return s.DelegatorShares
+}
+
 // Validate checks that the Service has valid values.
 func (s Service) Validate() error {
 	if s.Status == SERVICE_STATUS_UNSPECIFIED {

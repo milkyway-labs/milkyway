@@ -3659,6 +3659,1965 @@ func (x *fastReflection_QueryPoolDelegationResponse) ProtoMethods() *protoiface.
 }
 
 var (
+	md_QueryPoolUnbondingDelegationsRequest            protoreflect.MessageDescriptor
+	fd_QueryPoolUnbondingDelegationsRequest_pool_id    protoreflect.FieldDescriptor
+	fd_QueryPoolUnbondingDelegationsRequest_pagination protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_restaking_v1_query_proto_init()
+	md_QueryPoolUnbondingDelegationsRequest = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryPoolUnbondingDelegationsRequest")
+	fd_QueryPoolUnbondingDelegationsRequest_pool_id = md_QueryPoolUnbondingDelegationsRequest.Fields().ByName("pool_id")
+	fd_QueryPoolUnbondingDelegationsRequest_pagination = md_QueryPoolUnbondingDelegationsRequest.Fields().ByName("pagination")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryPoolUnbondingDelegationsRequest)(nil)
+
+type fastReflection_QueryPoolUnbondingDelegationsRequest QueryPoolUnbondingDelegationsRequest
+
+func (x *QueryPoolUnbondingDelegationsRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryPoolUnbondingDelegationsRequest)(x)
+}
+
+func (x *QueryPoolUnbondingDelegationsRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryPoolUnbondingDelegationsRequest_messageType fastReflection_QueryPoolUnbondingDelegationsRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryPoolUnbondingDelegationsRequest_messageType{}
+
+type fastReflection_QueryPoolUnbondingDelegationsRequest_messageType struct{}
+
+func (x fastReflection_QueryPoolUnbondingDelegationsRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryPoolUnbondingDelegationsRequest)(nil)
+}
+func (x fastReflection_QueryPoolUnbondingDelegationsRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryPoolUnbondingDelegationsRequest)
+}
+func (x fastReflection_QueryPoolUnbondingDelegationsRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryPoolUnbondingDelegationsRequest
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryPoolUnbondingDelegationsRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryPoolUnbondingDelegationsRequest
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryPoolUnbondingDelegationsRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryPoolUnbondingDelegationsRequest_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryPoolUnbondingDelegationsRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryPoolUnbondingDelegationsRequest)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryPoolUnbondingDelegationsRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryPoolUnbondingDelegationsRequest)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryPoolUnbondingDelegationsRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.PoolId != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.PoolId)
+		if !f(fd_QueryPoolUnbondingDelegationsRequest_pool_id, value) {
+			return
+		}
+	}
+	if x.Pagination != nil {
+		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+		if !f(fd_QueryPoolUnbondingDelegationsRequest_pagination, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryPoolUnbondingDelegationsRequest) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest.pool_id":
+		return x.PoolId != uint32(0)
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest.pagination":
+		return x.Pagination != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryPoolUnbondingDelegationsRequest) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest.pool_id":
+		x.PoolId = uint32(0)
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest.pagination":
+		x.Pagination = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryPoolUnbondingDelegationsRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest.pool_id":
+		value := x.PoolId
+		return protoreflect.ValueOfUint32(value)
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest.pagination":
+		value := x.Pagination
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryPoolUnbondingDelegationsRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest.pool_id":
+		x.PoolId = uint32(value.Uint())
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest.pagination":
+		x.Pagination = value.Message().Interface().(*v1beta1.PageRequest)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryPoolUnbondingDelegationsRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest.pagination":
+		if x.Pagination == nil {
+			x.Pagination = new(v1beta1.PageRequest)
+		}
+		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest.pool_id":
+		panic(fmt.Errorf("field pool_id of message milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryPoolUnbondingDelegationsRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest.pool_id":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest.pagination":
+		m := new(v1beta1.PageRequest)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryPoolUnbondingDelegationsRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryPoolUnbondingDelegationsRequest) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryPoolUnbondingDelegationsRequest) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryPoolUnbondingDelegationsRequest) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryPoolUnbondingDelegationsRequest) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryPoolUnbondingDelegationsRequest)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.PoolId != 0 {
+			n += 1 + runtime.Sov(uint64(x.PoolId))
+		}
+		if x.Pagination != nil {
+			l = options.Size(x.Pagination)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryPoolUnbondingDelegationsRequest)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Pagination != nil {
+			encoded, err := options.Marshal(x.Pagination)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if x.PoolId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.PoolId))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryPoolUnbondingDelegationsRequest)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryPoolUnbondingDelegationsRequest: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryPoolUnbondingDelegationsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
+				}
+				x.PoolId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.PoolId |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Pagination == nil {
+					x.Pagination = &v1beta1.PageRequest{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Pagination); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var _ protoreflect.List = (*_QueryPoolUnbondingDelegationsResponse_1_list)(nil)
+
+type _QueryPoolUnbondingDelegationsResponse_1_list struct {
+	list *[]*UnbondingDelegation
+}
+
+func (x *_QueryPoolUnbondingDelegationsResponse_1_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_QueryPoolUnbondingDelegationsResponse_1_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_QueryPoolUnbondingDelegationsResponse_1_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*UnbondingDelegation)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_QueryPoolUnbondingDelegationsResponse_1_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*UnbondingDelegation)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_QueryPoolUnbondingDelegationsResponse_1_list) AppendMutable() protoreflect.Value {
+	v := new(UnbondingDelegation)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_QueryPoolUnbondingDelegationsResponse_1_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_QueryPoolUnbondingDelegationsResponse_1_list) NewElement() protoreflect.Value {
+	v := new(UnbondingDelegation)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_QueryPoolUnbondingDelegationsResponse_1_list) IsValid() bool {
+	return x.list != nil
+}
+
+var (
+	md_QueryPoolUnbondingDelegationsResponse                       protoreflect.MessageDescriptor
+	fd_QueryPoolUnbondingDelegationsResponse_unbonding_delegations protoreflect.FieldDescriptor
+	fd_QueryPoolUnbondingDelegationsResponse_pagination            protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_restaking_v1_query_proto_init()
+	md_QueryPoolUnbondingDelegationsResponse = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryPoolUnbondingDelegationsResponse")
+	fd_QueryPoolUnbondingDelegationsResponse_unbonding_delegations = md_QueryPoolUnbondingDelegationsResponse.Fields().ByName("unbonding_delegations")
+	fd_QueryPoolUnbondingDelegationsResponse_pagination = md_QueryPoolUnbondingDelegationsResponse.Fields().ByName("pagination")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryPoolUnbondingDelegationsResponse)(nil)
+
+type fastReflection_QueryPoolUnbondingDelegationsResponse QueryPoolUnbondingDelegationsResponse
+
+func (x *QueryPoolUnbondingDelegationsResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryPoolUnbondingDelegationsResponse)(x)
+}
+
+func (x *QueryPoolUnbondingDelegationsResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryPoolUnbondingDelegationsResponse_messageType fastReflection_QueryPoolUnbondingDelegationsResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryPoolUnbondingDelegationsResponse_messageType{}
+
+type fastReflection_QueryPoolUnbondingDelegationsResponse_messageType struct{}
+
+func (x fastReflection_QueryPoolUnbondingDelegationsResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryPoolUnbondingDelegationsResponse)(nil)
+}
+func (x fastReflection_QueryPoolUnbondingDelegationsResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryPoolUnbondingDelegationsResponse)
+}
+func (x fastReflection_QueryPoolUnbondingDelegationsResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryPoolUnbondingDelegationsResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryPoolUnbondingDelegationsResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryPoolUnbondingDelegationsResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryPoolUnbondingDelegationsResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryPoolUnbondingDelegationsResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryPoolUnbondingDelegationsResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryPoolUnbondingDelegationsResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryPoolUnbondingDelegationsResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryPoolUnbondingDelegationsResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryPoolUnbondingDelegationsResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if len(x.UnbondingDelegations) != 0 {
+		value := protoreflect.ValueOfList(&_QueryPoolUnbondingDelegationsResponse_1_list{list: &x.UnbondingDelegations})
+		if !f(fd_QueryPoolUnbondingDelegationsResponse_unbonding_delegations, value) {
+			return
+		}
+	}
+	if x.Pagination != nil {
+		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+		if !f(fd_QueryPoolUnbondingDelegationsResponse_pagination, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryPoolUnbondingDelegationsResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse.unbonding_delegations":
+		return len(x.UnbondingDelegations) != 0
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse.pagination":
+		return x.Pagination != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryPoolUnbondingDelegationsResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse.unbonding_delegations":
+		x.UnbondingDelegations = nil
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse.pagination":
+		x.Pagination = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryPoolUnbondingDelegationsResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse.unbonding_delegations":
+		if len(x.UnbondingDelegations) == 0 {
+			return protoreflect.ValueOfList(&_QueryPoolUnbondingDelegationsResponse_1_list{})
+		}
+		listValue := &_QueryPoolUnbondingDelegationsResponse_1_list{list: &x.UnbondingDelegations}
+		return protoreflect.ValueOfList(listValue)
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse.pagination":
+		value := x.Pagination
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryPoolUnbondingDelegationsResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse.unbonding_delegations":
+		lv := value.List()
+		clv := lv.(*_QueryPoolUnbondingDelegationsResponse_1_list)
+		x.UnbondingDelegations = *clv.list
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse.pagination":
+		x.Pagination = value.Message().Interface().(*v1beta1.PageResponse)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryPoolUnbondingDelegationsResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse.unbonding_delegations":
+		if x.UnbondingDelegations == nil {
+			x.UnbondingDelegations = []*UnbondingDelegation{}
+		}
+		value := &_QueryPoolUnbondingDelegationsResponse_1_list{list: &x.UnbondingDelegations}
+		return protoreflect.ValueOfList(value)
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse.pagination":
+		if x.Pagination == nil {
+			x.Pagination = new(v1beta1.PageResponse)
+		}
+		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryPoolUnbondingDelegationsResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse.unbonding_delegations":
+		list := []*UnbondingDelegation{}
+		return protoreflect.ValueOfList(&_QueryPoolUnbondingDelegationsResponse_1_list{list: &list})
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse.pagination":
+		m := new(v1beta1.PageResponse)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryPoolUnbondingDelegationsResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryPoolUnbondingDelegationsResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryPoolUnbondingDelegationsResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryPoolUnbondingDelegationsResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryPoolUnbondingDelegationsResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryPoolUnbondingDelegationsResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if len(x.UnbondingDelegations) > 0 {
+			for _, e := range x.UnbondingDelegations {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if x.Pagination != nil {
+			l = options.Size(x.Pagination)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryPoolUnbondingDelegationsResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Pagination != nil {
+			encoded, err := options.Marshal(x.Pagination)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.UnbondingDelegations) > 0 {
+			for iNdEx := len(x.UnbondingDelegations) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.UnbondingDelegations[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0xa
+			}
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryPoolUnbondingDelegationsResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryPoolUnbondingDelegationsResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryPoolUnbondingDelegationsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UnbondingDelegations", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.UnbondingDelegations = append(x.UnbondingDelegations, &UnbondingDelegation{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.UnbondingDelegations[len(x.UnbondingDelegations)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Pagination == nil {
+					x.Pagination = &v1beta1.PageResponse{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Pagination); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_QueryPoolUnbondingDelegationRequest                   protoreflect.MessageDescriptor
+	fd_QueryPoolUnbondingDelegationRequest_pool_id           protoreflect.FieldDescriptor
+	fd_QueryPoolUnbondingDelegationRequest_delegator_address protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_restaking_v1_query_proto_init()
+	md_QueryPoolUnbondingDelegationRequest = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryPoolUnbondingDelegationRequest")
+	fd_QueryPoolUnbondingDelegationRequest_pool_id = md_QueryPoolUnbondingDelegationRequest.Fields().ByName("pool_id")
+	fd_QueryPoolUnbondingDelegationRequest_delegator_address = md_QueryPoolUnbondingDelegationRequest.Fields().ByName("delegator_address")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryPoolUnbondingDelegationRequest)(nil)
+
+type fastReflection_QueryPoolUnbondingDelegationRequest QueryPoolUnbondingDelegationRequest
+
+func (x *QueryPoolUnbondingDelegationRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryPoolUnbondingDelegationRequest)(x)
+}
+
+func (x *QueryPoolUnbondingDelegationRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[10]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryPoolUnbondingDelegationRequest_messageType fastReflection_QueryPoolUnbondingDelegationRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryPoolUnbondingDelegationRequest_messageType{}
+
+type fastReflection_QueryPoolUnbondingDelegationRequest_messageType struct{}
+
+func (x fastReflection_QueryPoolUnbondingDelegationRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryPoolUnbondingDelegationRequest)(nil)
+}
+func (x fastReflection_QueryPoolUnbondingDelegationRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryPoolUnbondingDelegationRequest)
+}
+func (x fastReflection_QueryPoolUnbondingDelegationRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryPoolUnbondingDelegationRequest
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryPoolUnbondingDelegationRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryPoolUnbondingDelegationRequest
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryPoolUnbondingDelegationRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryPoolUnbondingDelegationRequest_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryPoolUnbondingDelegationRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryPoolUnbondingDelegationRequest)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryPoolUnbondingDelegationRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryPoolUnbondingDelegationRequest)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryPoolUnbondingDelegationRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.PoolId != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.PoolId)
+		if !f(fd_QueryPoolUnbondingDelegationRequest_pool_id, value) {
+			return
+		}
+	}
+	if x.DelegatorAddress != "" {
+		value := protoreflect.ValueOfString(x.DelegatorAddress)
+		if !f(fd_QueryPoolUnbondingDelegationRequest_delegator_address, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryPoolUnbondingDelegationRequest) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest.pool_id":
+		return x.PoolId != uint32(0)
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest.delegator_address":
+		return x.DelegatorAddress != ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryPoolUnbondingDelegationRequest) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest.pool_id":
+		x.PoolId = uint32(0)
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest.delegator_address":
+		x.DelegatorAddress = ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryPoolUnbondingDelegationRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest.pool_id":
+		value := x.PoolId
+		return protoreflect.ValueOfUint32(value)
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest.delegator_address":
+		value := x.DelegatorAddress
+		return protoreflect.ValueOfString(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryPoolUnbondingDelegationRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest.pool_id":
+		x.PoolId = uint32(value.Uint())
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest.delegator_address":
+		x.DelegatorAddress = value.Interface().(string)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryPoolUnbondingDelegationRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest.pool_id":
+		panic(fmt.Errorf("field pool_id of message milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest is not mutable"))
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest.delegator_address":
+		panic(fmt.Errorf("field delegator_address of message milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryPoolUnbondingDelegationRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest.pool_id":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest.delegator_address":
+		return protoreflect.ValueOfString("")
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryPoolUnbondingDelegationRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryPoolUnbondingDelegationRequest) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryPoolUnbondingDelegationRequest) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryPoolUnbondingDelegationRequest) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryPoolUnbondingDelegationRequest) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryPoolUnbondingDelegationRequest)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.PoolId != 0 {
+			n += 1 + runtime.Sov(uint64(x.PoolId))
+		}
+		l = len(x.DelegatorAddress)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryPoolUnbondingDelegationRequest)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.DelegatorAddress) > 0 {
+			i -= len(x.DelegatorAddress)
+			copy(dAtA[i:], x.DelegatorAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DelegatorAddress)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if x.PoolId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.PoolId))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryPoolUnbondingDelegationRequest)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryPoolUnbondingDelegationRequest: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryPoolUnbondingDelegationRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
+				}
+				x.PoolId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.PoolId |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DelegatorAddress", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.DelegatorAddress = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_QueryPoolUnbondingDelegationResponse                      protoreflect.MessageDescriptor
+	fd_QueryPoolUnbondingDelegationResponse_unbonding_delegation protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_restaking_v1_query_proto_init()
+	md_QueryPoolUnbondingDelegationResponse = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryPoolUnbondingDelegationResponse")
+	fd_QueryPoolUnbondingDelegationResponse_unbonding_delegation = md_QueryPoolUnbondingDelegationResponse.Fields().ByName("unbonding_delegation")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryPoolUnbondingDelegationResponse)(nil)
+
+type fastReflection_QueryPoolUnbondingDelegationResponse QueryPoolUnbondingDelegationResponse
+
+func (x *QueryPoolUnbondingDelegationResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryPoolUnbondingDelegationResponse)(x)
+}
+
+func (x *QueryPoolUnbondingDelegationResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[11]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryPoolUnbondingDelegationResponse_messageType fastReflection_QueryPoolUnbondingDelegationResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryPoolUnbondingDelegationResponse_messageType{}
+
+type fastReflection_QueryPoolUnbondingDelegationResponse_messageType struct{}
+
+func (x fastReflection_QueryPoolUnbondingDelegationResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryPoolUnbondingDelegationResponse)(nil)
+}
+func (x fastReflection_QueryPoolUnbondingDelegationResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryPoolUnbondingDelegationResponse)
+}
+func (x fastReflection_QueryPoolUnbondingDelegationResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryPoolUnbondingDelegationResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryPoolUnbondingDelegationResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryPoolUnbondingDelegationResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryPoolUnbondingDelegationResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryPoolUnbondingDelegationResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryPoolUnbondingDelegationResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryPoolUnbondingDelegationResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryPoolUnbondingDelegationResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryPoolUnbondingDelegationResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryPoolUnbondingDelegationResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.UnbondingDelegation != nil {
+		value := protoreflect.ValueOfMessage(x.UnbondingDelegation.ProtoReflect())
+		if !f(fd_QueryPoolUnbondingDelegationResponse_unbonding_delegation, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryPoolUnbondingDelegationResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationResponse.unbonding_delegation":
+		return x.UnbondingDelegation != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryPoolUnbondingDelegationResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationResponse.unbonding_delegation":
+		x.UnbondingDelegation = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryPoolUnbondingDelegationResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationResponse.unbonding_delegation":
+		value := x.UnbondingDelegation
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryPoolUnbondingDelegationResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationResponse.unbonding_delegation":
+		x.UnbondingDelegation = value.Message().Interface().(*UnbondingDelegation)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryPoolUnbondingDelegationResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationResponse.unbonding_delegation":
+		if x.UnbondingDelegation == nil {
+			x.UnbondingDelegation = new(UnbondingDelegation)
+		}
+		return protoreflect.ValueOfMessage(x.UnbondingDelegation.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryPoolUnbondingDelegationResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryPoolUnbondingDelegationResponse.unbonding_delegation":
+		m := new(UnbondingDelegation)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryPoolUnbondingDelegationResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryPoolUnbondingDelegationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryPoolUnbondingDelegationResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryPoolUnbondingDelegationResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryPoolUnbondingDelegationResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryPoolUnbondingDelegationResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryPoolUnbondingDelegationResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryPoolUnbondingDelegationResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryPoolUnbondingDelegationResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.UnbondingDelegation != nil {
+			l = options.Size(x.UnbondingDelegation)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryPoolUnbondingDelegationResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.UnbondingDelegation != nil {
+			encoded, err := options.Marshal(x.UnbondingDelegation)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryPoolUnbondingDelegationResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryPoolUnbondingDelegationResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryPoolUnbondingDelegationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UnbondingDelegation", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.UnbondingDelegation == nil {
+					x.UnbondingDelegation = &UnbondingDelegation{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.UnbondingDelegation); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
 	md_QueryOperatorDelegationsRequest             protoreflect.MessageDescriptor
 	fd_QueryOperatorDelegationsRequest_operator_id protoreflect.FieldDescriptor
 	fd_QueryOperatorDelegationsRequest_pagination  protoreflect.FieldDescriptor
@@ -3680,7 +5639,7 @@ func (x *QueryOperatorDelegationsRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryOperatorDelegationsRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[8]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4214,7 +6173,7 @@ func (x *QueryOperatorDelegationsResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryOperatorDelegationsResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[9]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4736,7 +6695,7 @@ func (x *QueryOperatorDelegationRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryOperatorDelegationRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[10]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5202,7 +7161,7 @@ func (x *QueryOperatorDelegationResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryOperatorDelegationResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[11]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5618,6 +7577,1965 @@ func (x *fastReflection_QueryOperatorDelegationResponse) ProtoMethods() *protoif
 }
 
 var (
+	md_QueryOperatorUnbondingDelegationsRequest             protoreflect.MessageDescriptor
+	fd_QueryOperatorUnbondingDelegationsRequest_operator_id protoreflect.FieldDescriptor
+	fd_QueryOperatorUnbondingDelegationsRequest_pagination  protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_restaking_v1_query_proto_init()
+	md_QueryOperatorUnbondingDelegationsRequest = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryOperatorUnbondingDelegationsRequest")
+	fd_QueryOperatorUnbondingDelegationsRequest_operator_id = md_QueryOperatorUnbondingDelegationsRequest.Fields().ByName("operator_id")
+	fd_QueryOperatorUnbondingDelegationsRequest_pagination = md_QueryOperatorUnbondingDelegationsRequest.Fields().ByName("pagination")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryOperatorUnbondingDelegationsRequest)(nil)
+
+type fastReflection_QueryOperatorUnbondingDelegationsRequest QueryOperatorUnbondingDelegationsRequest
+
+func (x *QueryOperatorUnbondingDelegationsRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryOperatorUnbondingDelegationsRequest)(x)
+}
+
+func (x *QueryOperatorUnbondingDelegationsRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[16]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryOperatorUnbondingDelegationsRequest_messageType fastReflection_QueryOperatorUnbondingDelegationsRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryOperatorUnbondingDelegationsRequest_messageType{}
+
+type fastReflection_QueryOperatorUnbondingDelegationsRequest_messageType struct{}
+
+func (x fastReflection_QueryOperatorUnbondingDelegationsRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryOperatorUnbondingDelegationsRequest)(nil)
+}
+func (x fastReflection_QueryOperatorUnbondingDelegationsRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryOperatorUnbondingDelegationsRequest)
+}
+func (x fastReflection_QueryOperatorUnbondingDelegationsRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryOperatorUnbondingDelegationsRequest
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryOperatorUnbondingDelegationsRequest
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryOperatorUnbondingDelegationsRequest_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryOperatorUnbondingDelegationsRequest)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryOperatorUnbondingDelegationsRequest)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.OperatorId != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.OperatorId)
+		if !f(fd_QueryOperatorUnbondingDelegationsRequest_operator_id, value) {
+			return
+		}
+	}
+	if x.Pagination != nil {
+		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+		if !f(fd_QueryOperatorUnbondingDelegationsRequest_pagination, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsRequest) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest.operator_id":
+		return x.OperatorId != uint32(0)
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest.pagination":
+		return x.Pagination != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsRequest) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest.operator_id":
+		x.OperatorId = uint32(0)
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest.pagination":
+		x.Pagination = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest.operator_id":
+		value := x.OperatorId
+		return protoreflect.ValueOfUint32(value)
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest.pagination":
+		value := x.Pagination
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest.operator_id":
+		x.OperatorId = uint32(value.Uint())
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest.pagination":
+		x.Pagination = value.Message().Interface().(*v1beta1.PageRequest)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest.pagination":
+		if x.Pagination == nil {
+			x.Pagination = new(v1beta1.PageRequest)
+		}
+		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest.operator_id":
+		panic(fmt.Errorf("field operator_id of message milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest.operator_id":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest.pagination":
+		m := new(v1beta1.PageRequest)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsRequest) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsRequest) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsRequest) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsRequest) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryOperatorUnbondingDelegationsRequest)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.OperatorId != 0 {
+			n += 1 + runtime.Sov(uint64(x.OperatorId))
+		}
+		if x.Pagination != nil {
+			l = options.Size(x.Pagination)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryOperatorUnbondingDelegationsRequest)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Pagination != nil {
+			encoded, err := options.Marshal(x.Pagination)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if x.OperatorId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.OperatorId))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryOperatorUnbondingDelegationsRequest)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryOperatorUnbondingDelegationsRequest: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryOperatorUnbondingDelegationsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OperatorId", wireType)
+				}
+				x.OperatorId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.OperatorId |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Pagination == nil {
+					x.Pagination = &v1beta1.PageRequest{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Pagination); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var _ protoreflect.List = (*_QueryOperatorUnbondingDelegationsResponse_1_list)(nil)
+
+type _QueryOperatorUnbondingDelegationsResponse_1_list struct {
+	list *[]*UnbondingDelegation
+}
+
+func (x *_QueryOperatorUnbondingDelegationsResponse_1_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_QueryOperatorUnbondingDelegationsResponse_1_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_QueryOperatorUnbondingDelegationsResponse_1_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*UnbondingDelegation)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_QueryOperatorUnbondingDelegationsResponse_1_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*UnbondingDelegation)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_QueryOperatorUnbondingDelegationsResponse_1_list) AppendMutable() protoreflect.Value {
+	v := new(UnbondingDelegation)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_QueryOperatorUnbondingDelegationsResponse_1_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_QueryOperatorUnbondingDelegationsResponse_1_list) NewElement() protoreflect.Value {
+	v := new(UnbondingDelegation)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_QueryOperatorUnbondingDelegationsResponse_1_list) IsValid() bool {
+	return x.list != nil
+}
+
+var (
+	md_QueryOperatorUnbondingDelegationsResponse                       protoreflect.MessageDescriptor
+	fd_QueryOperatorUnbondingDelegationsResponse_unbonding_delegations protoreflect.FieldDescriptor
+	fd_QueryOperatorUnbondingDelegationsResponse_pagination            protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_restaking_v1_query_proto_init()
+	md_QueryOperatorUnbondingDelegationsResponse = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryOperatorUnbondingDelegationsResponse")
+	fd_QueryOperatorUnbondingDelegationsResponse_unbonding_delegations = md_QueryOperatorUnbondingDelegationsResponse.Fields().ByName("unbonding_delegations")
+	fd_QueryOperatorUnbondingDelegationsResponse_pagination = md_QueryOperatorUnbondingDelegationsResponse.Fields().ByName("pagination")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryOperatorUnbondingDelegationsResponse)(nil)
+
+type fastReflection_QueryOperatorUnbondingDelegationsResponse QueryOperatorUnbondingDelegationsResponse
+
+func (x *QueryOperatorUnbondingDelegationsResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryOperatorUnbondingDelegationsResponse)(x)
+}
+
+func (x *QueryOperatorUnbondingDelegationsResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[17]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryOperatorUnbondingDelegationsResponse_messageType fastReflection_QueryOperatorUnbondingDelegationsResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryOperatorUnbondingDelegationsResponse_messageType{}
+
+type fastReflection_QueryOperatorUnbondingDelegationsResponse_messageType struct{}
+
+func (x fastReflection_QueryOperatorUnbondingDelegationsResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryOperatorUnbondingDelegationsResponse)(nil)
+}
+func (x fastReflection_QueryOperatorUnbondingDelegationsResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryOperatorUnbondingDelegationsResponse)
+}
+func (x fastReflection_QueryOperatorUnbondingDelegationsResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryOperatorUnbondingDelegationsResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryOperatorUnbondingDelegationsResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryOperatorUnbondingDelegationsResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryOperatorUnbondingDelegationsResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryOperatorUnbondingDelegationsResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if len(x.UnbondingDelegations) != 0 {
+		value := protoreflect.ValueOfList(&_QueryOperatorUnbondingDelegationsResponse_1_list{list: &x.UnbondingDelegations})
+		if !f(fd_QueryOperatorUnbondingDelegationsResponse_unbonding_delegations, value) {
+			return
+		}
+	}
+	if x.Pagination != nil {
+		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+		if !f(fd_QueryOperatorUnbondingDelegationsResponse_pagination, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse.unbonding_delegations":
+		return len(x.UnbondingDelegations) != 0
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse.pagination":
+		return x.Pagination != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse.unbonding_delegations":
+		x.UnbondingDelegations = nil
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse.pagination":
+		x.Pagination = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse.unbonding_delegations":
+		if len(x.UnbondingDelegations) == 0 {
+			return protoreflect.ValueOfList(&_QueryOperatorUnbondingDelegationsResponse_1_list{})
+		}
+		listValue := &_QueryOperatorUnbondingDelegationsResponse_1_list{list: &x.UnbondingDelegations}
+		return protoreflect.ValueOfList(listValue)
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse.pagination":
+		value := x.Pagination
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse.unbonding_delegations":
+		lv := value.List()
+		clv := lv.(*_QueryOperatorUnbondingDelegationsResponse_1_list)
+		x.UnbondingDelegations = *clv.list
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse.pagination":
+		x.Pagination = value.Message().Interface().(*v1beta1.PageResponse)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse.unbonding_delegations":
+		if x.UnbondingDelegations == nil {
+			x.UnbondingDelegations = []*UnbondingDelegation{}
+		}
+		value := &_QueryOperatorUnbondingDelegationsResponse_1_list{list: &x.UnbondingDelegations}
+		return protoreflect.ValueOfList(value)
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse.pagination":
+		if x.Pagination == nil {
+			x.Pagination = new(v1beta1.PageResponse)
+		}
+		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse.unbonding_delegations":
+		list := []*UnbondingDelegation{}
+		return protoreflect.ValueOfList(&_QueryOperatorUnbondingDelegationsResponse_1_list{list: &list})
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse.pagination":
+		m := new(v1beta1.PageResponse)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryOperatorUnbondingDelegationsResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryOperatorUnbondingDelegationsResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if len(x.UnbondingDelegations) > 0 {
+			for _, e := range x.UnbondingDelegations {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if x.Pagination != nil {
+			l = options.Size(x.Pagination)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryOperatorUnbondingDelegationsResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Pagination != nil {
+			encoded, err := options.Marshal(x.Pagination)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.UnbondingDelegations) > 0 {
+			for iNdEx := len(x.UnbondingDelegations) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.UnbondingDelegations[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0xa
+			}
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryOperatorUnbondingDelegationsResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryOperatorUnbondingDelegationsResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryOperatorUnbondingDelegationsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UnbondingDelegations", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.UnbondingDelegations = append(x.UnbondingDelegations, &UnbondingDelegation{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.UnbondingDelegations[len(x.UnbondingDelegations)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Pagination == nil {
+					x.Pagination = &v1beta1.PageResponse{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Pagination); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_QueryOperatorUnbondingDelegationRequest                   protoreflect.MessageDescriptor
+	fd_QueryOperatorUnbondingDelegationRequest_operator_id       protoreflect.FieldDescriptor
+	fd_QueryOperatorUnbondingDelegationRequest_delegator_address protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_restaking_v1_query_proto_init()
+	md_QueryOperatorUnbondingDelegationRequest = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryOperatorUnbondingDelegationRequest")
+	fd_QueryOperatorUnbondingDelegationRequest_operator_id = md_QueryOperatorUnbondingDelegationRequest.Fields().ByName("operator_id")
+	fd_QueryOperatorUnbondingDelegationRequest_delegator_address = md_QueryOperatorUnbondingDelegationRequest.Fields().ByName("delegator_address")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryOperatorUnbondingDelegationRequest)(nil)
+
+type fastReflection_QueryOperatorUnbondingDelegationRequest QueryOperatorUnbondingDelegationRequest
+
+func (x *QueryOperatorUnbondingDelegationRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryOperatorUnbondingDelegationRequest)(x)
+}
+
+func (x *QueryOperatorUnbondingDelegationRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[18]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryOperatorUnbondingDelegationRequest_messageType fastReflection_QueryOperatorUnbondingDelegationRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryOperatorUnbondingDelegationRequest_messageType{}
+
+type fastReflection_QueryOperatorUnbondingDelegationRequest_messageType struct{}
+
+func (x fastReflection_QueryOperatorUnbondingDelegationRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryOperatorUnbondingDelegationRequest)(nil)
+}
+func (x fastReflection_QueryOperatorUnbondingDelegationRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryOperatorUnbondingDelegationRequest)
+}
+func (x fastReflection_QueryOperatorUnbondingDelegationRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryOperatorUnbondingDelegationRequest
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryOperatorUnbondingDelegationRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryOperatorUnbondingDelegationRequest
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryOperatorUnbondingDelegationRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryOperatorUnbondingDelegationRequest_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryOperatorUnbondingDelegationRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryOperatorUnbondingDelegationRequest)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryOperatorUnbondingDelegationRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryOperatorUnbondingDelegationRequest)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryOperatorUnbondingDelegationRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.OperatorId != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.OperatorId)
+		if !f(fd_QueryOperatorUnbondingDelegationRequest_operator_id, value) {
+			return
+		}
+	}
+	if x.DelegatorAddress != "" {
+		value := protoreflect.ValueOfString(x.DelegatorAddress)
+		if !f(fd_QueryOperatorUnbondingDelegationRequest_delegator_address, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryOperatorUnbondingDelegationRequest) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest.operator_id":
+		return x.OperatorId != uint32(0)
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest.delegator_address":
+		return x.DelegatorAddress != ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryOperatorUnbondingDelegationRequest) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest.operator_id":
+		x.OperatorId = uint32(0)
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest.delegator_address":
+		x.DelegatorAddress = ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryOperatorUnbondingDelegationRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest.operator_id":
+		value := x.OperatorId
+		return protoreflect.ValueOfUint32(value)
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest.delegator_address":
+		value := x.DelegatorAddress
+		return protoreflect.ValueOfString(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryOperatorUnbondingDelegationRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest.operator_id":
+		x.OperatorId = uint32(value.Uint())
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest.delegator_address":
+		x.DelegatorAddress = value.Interface().(string)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryOperatorUnbondingDelegationRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest.operator_id":
+		panic(fmt.Errorf("field operator_id of message milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest is not mutable"))
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest.delegator_address":
+		panic(fmt.Errorf("field delegator_address of message milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryOperatorUnbondingDelegationRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest.operator_id":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest.delegator_address":
+		return protoreflect.ValueOfString("")
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryOperatorUnbondingDelegationRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryOperatorUnbondingDelegationRequest) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryOperatorUnbondingDelegationRequest) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryOperatorUnbondingDelegationRequest) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryOperatorUnbondingDelegationRequest) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryOperatorUnbondingDelegationRequest)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.OperatorId != 0 {
+			n += 1 + runtime.Sov(uint64(x.OperatorId))
+		}
+		l = len(x.DelegatorAddress)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryOperatorUnbondingDelegationRequest)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.DelegatorAddress) > 0 {
+			i -= len(x.DelegatorAddress)
+			copy(dAtA[i:], x.DelegatorAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DelegatorAddress)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if x.OperatorId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.OperatorId))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryOperatorUnbondingDelegationRequest)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryOperatorUnbondingDelegationRequest: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryOperatorUnbondingDelegationRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OperatorId", wireType)
+				}
+				x.OperatorId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.OperatorId |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DelegatorAddress", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.DelegatorAddress = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_QueryOperatorUnbondingDelegationResponse                      protoreflect.MessageDescriptor
+	fd_QueryOperatorUnbondingDelegationResponse_unbonding_delegation protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_restaking_v1_query_proto_init()
+	md_QueryOperatorUnbondingDelegationResponse = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryOperatorUnbondingDelegationResponse")
+	fd_QueryOperatorUnbondingDelegationResponse_unbonding_delegation = md_QueryOperatorUnbondingDelegationResponse.Fields().ByName("unbonding_delegation")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryOperatorUnbondingDelegationResponse)(nil)
+
+type fastReflection_QueryOperatorUnbondingDelegationResponse QueryOperatorUnbondingDelegationResponse
+
+func (x *QueryOperatorUnbondingDelegationResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryOperatorUnbondingDelegationResponse)(x)
+}
+
+func (x *QueryOperatorUnbondingDelegationResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[19]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryOperatorUnbondingDelegationResponse_messageType fastReflection_QueryOperatorUnbondingDelegationResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryOperatorUnbondingDelegationResponse_messageType{}
+
+type fastReflection_QueryOperatorUnbondingDelegationResponse_messageType struct{}
+
+func (x fastReflection_QueryOperatorUnbondingDelegationResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryOperatorUnbondingDelegationResponse)(nil)
+}
+func (x fastReflection_QueryOperatorUnbondingDelegationResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryOperatorUnbondingDelegationResponse)
+}
+func (x fastReflection_QueryOperatorUnbondingDelegationResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryOperatorUnbondingDelegationResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryOperatorUnbondingDelegationResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryOperatorUnbondingDelegationResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryOperatorUnbondingDelegationResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryOperatorUnbondingDelegationResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryOperatorUnbondingDelegationResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryOperatorUnbondingDelegationResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryOperatorUnbondingDelegationResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryOperatorUnbondingDelegationResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryOperatorUnbondingDelegationResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.UnbondingDelegation != nil {
+		value := protoreflect.ValueOfMessage(x.UnbondingDelegation.ProtoReflect())
+		if !f(fd_QueryOperatorUnbondingDelegationResponse_unbonding_delegation, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryOperatorUnbondingDelegationResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationResponse.unbonding_delegation":
+		return x.UnbondingDelegation != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryOperatorUnbondingDelegationResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationResponse.unbonding_delegation":
+		x.UnbondingDelegation = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryOperatorUnbondingDelegationResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationResponse.unbonding_delegation":
+		value := x.UnbondingDelegation
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryOperatorUnbondingDelegationResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationResponse.unbonding_delegation":
+		x.UnbondingDelegation = value.Message().Interface().(*UnbondingDelegation)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryOperatorUnbondingDelegationResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationResponse.unbonding_delegation":
+		if x.UnbondingDelegation == nil {
+			x.UnbondingDelegation = new(UnbondingDelegation)
+		}
+		return protoreflect.ValueOfMessage(x.UnbondingDelegation.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryOperatorUnbondingDelegationResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryOperatorUnbondingDelegationResponse.unbonding_delegation":
+		m := new(UnbondingDelegation)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryOperatorUnbondingDelegationResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryOperatorUnbondingDelegationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryOperatorUnbondingDelegationResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryOperatorUnbondingDelegationResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryOperatorUnbondingDelegationResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryOperatorUnbondingDelegationResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryOperatorUnbondingDelegationResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryOperatorUnbondingDelegationResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryOperatorUnbondingDelegationResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.UnbondingDelegation != nil {
+			l = options.Size(x.UnbondingDelegation)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryOperatorUnbondingDelegationResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.UnbondingDelegation != nil {
+			encoded, err := options.Marshal(x.UnbondingDelegation)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryOperatorUnbondingDelegationResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryOperatorUnbondingDelegationResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryOperatorUnbondingDelegationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UnbondingDelegation", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.UnbondingDelegation == nil {
+					x.UnbondingDelegation = &UnbondingDelegation{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.UnbondingDelegation); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
 	md_QueryServiceDelegationsRequest            protoreflect.MessageDescriptor
 	fd_QueryServiceDelegationsRequest_service_id protoreflect.FieldDescriptor
 	fd_QueryServiceDelegationsRequest_pagination protoreflect.FieldDescriptor
@@ -5639,7 +9557,7 @@ func (x *QueryServiceDelegationsRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryServiceDelegationsRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[12]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[20]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6173,7 +10091,7 @@ func (x *QueryServiceDelegationsResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryServiceDelegationsResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[13]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[21]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6695,7 +10613,7 @@ func (x *QueryServiceDelegationRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryServiceDelegationRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[14]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[22]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7161,7 +11079,7 @@ func (x *QueryServiceDelegationResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryServiceDelegationResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[15]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[23]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7577,6 +11495,1965 @@ func (x *fastReflection_QueryServiceDelegationResponse) ProtoMethods() *protoifa
 }
 
 var (
+	md_QueryServiceUnbondingDelegationsRequest            protoreflect.MessageDescriptor
+	fd_QueryServiceUnbondingDelegationsRequest_service_id protoreflect.FieldDescriptor
+	fd_QueryServiceUnbondingDelegationsRequest_pagination protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_restaking_v1_query_proto_init()
+	md_QueryServiceUnbondingDelegationsRequest = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryServiceUnbondingDelegationsRequest")
+	fd_QueryServiceUnbondingDelegationsRequest_service_id = md_QueryServiceUnbondingDelegationsRequest.Fields().ByName("service_id")
+	fd_QueryServiceUnbondingDelegationsRequest_pagination = md_QueryServiceUnbondingDelegationsRequest.Fields().ByName("pagination")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryServiceUnbondingDelegationsRequest)(nil)
+
+type fastReflection_QueryServiceUnbondingDelegationsRequest QueryServiceUnbondingDelegationsRequest
+
+func (x *QueryServiceUnbondingDelegationsRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryServiceUnbondingDelegationsRequest)(x)
+}
+
+func (x *QueryServiceUnbondingDelegationsRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[24]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryServiceUnbondingDelegationsRequest_messageType fastReflection_QueryServiceUnbondingDelegationsRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryServiceUnbondingDelegationsRequest_messageType{}
+
+type fastReflection_QueryServiceUnbondingDelegationsRequest_messageType struct{}
+
+func (x fastReflection_QueryServiceUnbondingDelegationsRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryServiceUnbondingDelegationsRequest)(nil)
+}
+func (x fastReflection_QueryServiceUnbondingDelegationsRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryServiceUnbondingDelegationsRequest)
+}
+func (x fastReflection_QueryServiceUnbondingDelegationsRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryServiceUnbondingDelegationsRequest
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryServiceUnbondingDelegationsRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryServiceUnbondingDelegationsRequest
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryServiceUnbondingDelegationsRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryServiceUnbondingDelegationsRequest_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryServiceUnbondingDelegationsRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryServiceUnbondingDelegationsRequest)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryServiceUnbondingDelegationsRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryServiceUnbondingDelegationsRequest)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryServiceUnbondingDelegationsRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.ServiceId != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.ServiceId)
+		if !f(fd_QueryServiceUnbondingDelegationsRequest_service_id, value) {
+			return
+		}
+	}
+	if x.Pagination != nil {
+		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+		if !f(fd_QueryServiceUnbondingDelegationsRequest_pagination, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryServiceUnbondingDelegationsRequest) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest.service_id":
+		return x.ServiceId != uint32(0)
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest.pagination":
+		return x.Pagination != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryServiceUnbondingDelegationsRequest) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest.service_id":
+		x.ServiceId = uint32(0)
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest.pagination":
+		x.Pagination = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryServiceUnbondingDelegationsRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest.service_id":
+		value := x.ServiceId
+		return protoreflect.ValueOfUint32(value)
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest.pagination":
+		value := x.Pagination
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryServiceUnbondingDelegationsRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest.service_id":
+		x.ServiceId = uint32(value.Uint())
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest.pagination":
+		x.Pagination = value.Message().Interface().(*v1beta1.PageRequest)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryServiceUnbondingDelegationsRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest.pagination":
+		if x.Pagination == nil {
+			x.Pagination = new(v1beta1.PageRequest)
+		}
+		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest.service_id":
+		panic(fmt.Errorf("field service_id of message milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryServiceUnbondingDelegationsRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest.service_id":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest.pagination":
+		m := new(v1beta1.PageRequest)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryServiceUnbondingDelegationsRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryServiceUnbondingDelegationsRequest) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryServiceUnbondingDelegationsRequest) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryServiceUnbondingDelegationsRequest) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryServiceUnbondingDelegationsRequest) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryServiceUnbondingDelegationsRequest)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.ServiceId != 0 {
+			n += 1 + runtime.Sov(uint64(x.ServiceId))
+		}
+		if x.Pagination != nil {
+			l = options.Size(x.Pagination)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryServiceUnbondingDelegationsRequest)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Pagination != nil {
+			encoded, err := options.Marshal(x.Pagination)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if x.ServiceId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.ServiceId))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryServiceUnbondingDelegationsRequest)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceUnbondingDelegationsRequest: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceUnbondingDelegationsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ServiceId", wireType)
+				}
+				x.ServiceId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.ServiceId |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Pagination == nil {
+					x.Pagination = &v1beta1.PageRequest{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Pagination); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var _ protoreflect.List = (*_QueryServiceUnbondingDelegationsResponse_1_list)(nil)
+
+type _QueryServiceUnbondingDelegationsResponse_1_list struct {
+	list *[]*UnbondingDelegation
+}
+
+func (x *_QueryServiceUnbondingDelegationsResponse_1_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_QueryServiceUnbondingDelegationsResponse_1_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_QueryServiceUnbondingDelegationsResponse_1_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*UnbondingDelegation)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_QueryServiceUnbondingDelegationsResponse_1_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*UnbondingDelegation)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_QueryServiceUnbondingDelegationsResponse_1_list) AppendMutable() protoreflect.Value {
+	v := new(UnbondingDelegation)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_QueryServiceUnbondingDelegationsResponse_1_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_QueryServiceUnbondingDelegationsResponse_1_list) NewElement() protoreflect.Value {
+	v := new(UnbondingDelegation)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_QueryServiceUnbondingDelegationsResponse_1_list) IsValid() bool {
+	return x.list != nil
+}
+
+var (
+	md_QueryServiceUnbondingDelegationsResponse                       protoreflect.MessageDescriptor
+	fd_QueryServiceUnbondingDelegationsResponse_unbonding_delegations protoreflect.FieldDescriptor
+	fd_QueryServiceUnbondingDelegationsResponse_pagination            protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_restaking_v1_query_proto_init()
+	md_QueryServiceUnbondingDelegationsResponse = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryServiceUnbondingDelegationsResponse")
+	fd_QueryServiceUnbondingDelegationsResponse_unbonding_delegations = md_QueryServiceUnbondingDelegationsResponse.Fields().ByName("unbonding_delegations")
+	fd_QueryServiceUnbondingDelegationsResponse_pagination = md_QueryServiceUnbondingDelegationsResponse.Fields().ByName("pagination")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryServiceUnbondingDelegationsResponse)(nil)
+
+type fastReflection_QueryServiceUnbondingDelegationsResponse QueryServiceUnbondingDelegationsResponse
+
+func (x *QueryServiceUnbondingDelegationsResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryServiceUnbondingDelegationsResponse)(x)
+}
+
+func (x *QueryServiceUnbondingDelegationsResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[25]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryServiceUnbondingDelegationsResponse_messageType fastReflection_QueryServiceUnbondingDelegationsResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryServiceUnbondingDelegationsResponse_messageType{}
+
+type fastReflection_QueryServiceUnbondingDelegationsResponse_messageType struct{}
+
+func (x fastReflection_QueryServiceUnbondingDelegationsResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryServiceUnbondingDelegationsResponse)(nil)
+}
+func (x fastReflection_QueryServiceUnbondingDelegationsResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryServiceUnbondingDelegationsResponse)
+}
+func (x fastReflection_QueryServiceUnbondingDelegationsResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryServiceUnbondingDelegationsResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryServiceUnbondingDelegationsResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryServiceUnbondingDelegationsResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryServiceUnbondingDelegationsResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryServiceUnbondingDelegationsResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryServiceUnbondingDelegationsResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryServiceUnbondingDelegationsResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryServiceUnbondingDelegationsResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryServiceUnbondingDelegationsResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryServiceUnbondingDelegationsResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if len(x.UnbondingDelegations) != 0 {
+		value := protoreflect.ValueOfList(&_QueryServiceUnbondingDelegationsResponse_1_list{list: &x.UnbondingDelegations})
+		if !f(fd_QueryServiceUnbondingDelegationsResponse_unbonding_delegations, value) {
+			return
+		}
+	}
+	if x.Pagination != nil {
+		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+		if !f(fd_QueryServiceUnbondingDelegationsResponse_pagination, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryServiceUnbondingDelegationsResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse.unbonding_delegations":
+		return len(x.UnbondingDelegations) != 0
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse.pagination":
+		return x.Pagination != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryServiceUnbondingDelegationsResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse.unbonding_delegations":
+		x.UnbondingDelegations = nil
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse.pagination":
+		x.Pagination = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryServiceUnbondingDelegationsResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse.unbonding_delegations":
+		if len(x.UnbondingDelegations) == 0 {
+			return protoreflect.ValueOfList(&_QueryServiceUnbondingDelegationsResponse_1_list{})
+		}
+		listValue := &_QueryServiceUnbondingDelegationsResponse_1_list{list: &x.UnbondingDelegations}
+		return protoreflect.ValueOfList(listValue)
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse.pagination":
+		value := x.Pagination
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryServiceUnbondingDelegationsResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse.unbonding_delegations":
+		lv := value.List()
+		clv := lv.(*_QueryServiceUnbondingDelegationsResponse_1_list)
+		x.UnbondingDelegations = *clv.list
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse.pagination":
+		x.Pagination = value.Message().Interface().(*v1beta1.PageResponse)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryServiceUnbondingDelegationsResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse.unbonding_delegations":
+		if x.UnbondingDelegations == nil {
+			x.UnbondingDelegations = []*UnbondingDelegation{}
+		}
+		value := &_QueryServiceUnbondingDelegationsResponse_1_list{list: &x.UnbondingDelegations}
+		return protoreflect.ValueOfList(value)
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse.pagination":
+		if x.Pagination == nil {
+			x.Pagination = new(v1beta1.PageResponse)
+		}
+		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryServiceUnbondingDelegationsResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse.unbonding_delegations":
+		list := []*UnbondingDelegation{}
+		return protoreflect.ValueOfList(&_QueryServiceUnbondingDelegationsResponse_1_list{list: &list})
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse.pagination":
+		m := new(v1beta1.PageResponse)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryServiceUnbondingDelegationsResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryServiceUnbondingDelegationsResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryServiceUnbondingDelegationsResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryServiceUnbondingDelegationsResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryServiceUnbondingDelegationsResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryServiceUnbondingDelegationsResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if len(x.UnbondingDelegations) > 0 {
+			for _, e := range x.UnbondingDelegations {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if x.Pagination != nil {
+			l = options.Size(x.Pagination)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryServiceUnbondingDelegationsResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Pagination != nil {
+			encoded, err := options.Marshal(x.Pagination)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.UnbondingDelegations) > 0 {
+			for iNdEx := len(x.UnbondingDelegations) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.UnbondingDelegations[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0xa
+			}
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryServiceUnbondingDelegationsResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceUnbondingDelegationsResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceUnbondingDelegationsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UnbondingDelegations", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.UnbondingDelegations = append(x.UnbondingDelegations, &UnbondingDelegation{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.UnbondingDelegations[len(x.UnbondingDelegations)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Pagination == nil {
+					x.Pagination = &v1beta1.PageResponse{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Pagination); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_QueryServiceUnbondingDelegationRequest                   protoreflect.MessageDescriptor
+	fd_QueryServiceUnbondingDelegationRequest_service_id        protoreflect.FieldDescriptor
+	fd_QueryServiceUnbondingDelegationRequest_delegator_address protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_restaking_v1_query_proto_init()
+	md_QueryServiceUnbondingDelegationRequest = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryServiceUnbondingDelegationRequest")
+	fd_QueryServiceUnbondingDelegationRequest_service_id = md_QueryServiceUnbondingDelegationRequest.Fields().ByName("service_id")
+	fd_QueryServiceUnbondingDelegationRequest_delegator_address = md_QueryServiceUnbondingDelegationRequest.Fields().ByName("delegator_address")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryServiceUnbondingDelegationRequest)(nil)
+
+type fastReflection_QueryServiceUnbondingDelegationRequest QueryServiceUnbondingDelegationRequest
+
+func (x *QueryServiceUnbondingDelegationRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryServiceUnbondingDelegationRequest)(x)
+}
+
+func (x *QueryServiceUnbondingDelegationRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[26]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryServiceUnbondingDelegationRequest_messageType fastReflection_QueryServiceUnbondingDelegationRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryServiceUnbondingDelegationRequest_messageType{}
+
+type fastReflection_QueryServiceUnbondingDelegationRequest_messageType struct{}
+
+func (x fastReflection_QueryServiceUnbondingDelegationRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryServiceUnbondingDelegationRequest)(nil)
+}
+func (x fastReflection_QueryServiceUnbondingDelegationRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryServiceUnbondingDelegationRequest)
+}
+func (x fastReflection_QueryServiceUnbondingDelegationRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryServiceUnbondingDelegationRequest
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryServiceUnbondingDelegationRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryServiceUnbondingDelegationRequest
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryServiceUnbondingDelegationRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryServiceUnbondingDelegationRequest_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryServiceUnbondingDelegationRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryServiceUnbondingDelegationRequest)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryServiceUnbondingDelegationRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryServiceUnbondingDelegationRequest)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryServiceUnbondingDelegationRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.ServiceId != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.ServiceId)
+		if !f(fd_QueryServiceUnbondingDelegationRequest_service_id, value) {
+			return
+		}
+	}
+	if x.DelegatorAddress != "" {
+		value := protoreflect.ValueOfString(x.DelegatorAddress)
+		if !f(fd_QueryServiceUnbondingDelegationRequest_delegator_address, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryServiceUnbondingDelegationRequest) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest.service_id":
+		return x.ServiceId != uint32(0)
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest.delegator_address":
+		return x.DelegatorAddress != ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryServiceUnbondingDelegationRequest) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest.service_id":
+		x.ServiceId = uint32(0)
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest.delegator_address":
+		x.DelegatorAddress = ""
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryServiceUnbondingDelegationRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest.service_id":
+		value := x.ServiceId
+		return protoreflect.ValueOfUint32(value)
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest.delegator_address":
+		value := x.DelegatorAddress
+		return protoreflect.ValueOfString(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryServiceUnbondingDelegationRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest.service_id":
+		x.ServiceId = uint32(value.Uint())
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest.delegator_address":
+		x.DelegatorAddress = value.Interface().(string)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryServiceUnbondingDelegationRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest.service_id":
+		panic(fmt.Errorf("field service_id of message milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest is not mutable"))
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest.delegator_address":
+		panic(fmt.Errorf("field delegator_address of message milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryServiceUnbondingDelegationRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest.service_id":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest.delegator_address":
+		return protoreflect.ValueOfString("")
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryServiceUnbondingDelegationRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryServiceUnbondingDelegationRequest) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryServiceUnbondingDelegationRequest) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryServiceUnbondingDelegationRequest) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryServiceUnbondingDelegationRequest) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryServiceUnbondingDelegationRequest)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.ServiceId != 0 {
+			n += 1 + runtime.Sov(uint64(x.ServiceId))
+		}
+		l = len(x.DelegatorAddress)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryServiceUnbondingDelegationRequest)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.DelegatorAddress) > 0 {
+			i -= len(x.DelegatorAddress)
+			copy(dAtA[i:], x.DelegatorAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DelegatorAddress)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if x.ServiceId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.ServiceId))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryServiceUnbondingDelegationRequest)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceUnbondingDelegationRequest: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceUnbondingDelegationRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ServiceId", wireType)
+				}
+				x.ServiceId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.ServiceId |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DelegatorAddress", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.DelegatorAddress = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_QueryServiceUnbondingDelegationResponse                      protoreflect.MessageDescriptor
+	fd_QueryServiceUnbondingDelegationResponse_unbonding_delegation protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_restaking_v1_query_proto_init()
+	md_QueryServiceUnbondingDelegationResponse = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryServiceUnbondingDelegationResponse")
+	fd_QueryServiceUnbondingDelegationResponse_unbonding_delegation = md_QueryServiceUnbondingDelegationResponse.Fields().ByName("unbonding_delegation")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryServiceUnbondingDelegationResponse)(nil)
+
+type fastReflection_QueryServiceUnbondingDelegationResponse QueryServiceUnbondingDelegationResponse
+
+func (x *QueryServiceUnbondingDelegationResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryServiceUnbondingDelegationResponse)(x)
+}
+
+func (x *QueryServiceUnbondingDelegationResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[27]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryServiceUnbondingDelegationResponse_messageType fastReflection_QueryServiceUnbondingDelegationResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryServiceUnbondingDelegationResponse_messageType{}
+
+type fastReflection_QueryServiceUnbondingDelegationResponse_messageType struct{}
+
+func (x fastReflection_QueryServiceUnbondingDelegationResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryServiceUnbondingDelegationResponse)(nil)
+}
+func (x fastReflection_QueryServiceUnbondingDelegationResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryServiceUnbondingDelegationResponse)
+}
+func (x fastReflection_QueryServiceUnbondingDelegationResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryServiceUnbondingDelegationResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryServiceUnbondingDelegationResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryServiceUnbondingDelegationResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryServiceUnbondingDelegationResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryServiceUnbondingDelegationResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryServiceUnbondingDelegationResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryServiceUnbondingDelegationResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryServiceUnbondingDelegationResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryServiceUnbondingDelegationResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryServiceUnbondingDelegationResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.UnbondingDelegation != nil {
+		value := protoreflect.ValueOfMessage(x.UnbondingDelegation.ProtoReflect())
+		if !f(fd_QueryServiceUnbondingDelegationResponse_unbonding_delegation, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryServiceUnbondingDelegationResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationResponse.unbonding_delegation":
+		return x.UnbondingDelegation != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryServiceUnbondingDelegationResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationResponse.unbonding_delegation":
+		x.UnbondingDelegation = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryServiceUnbondingDelegationResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationResponse.unbonding_delegation":
+		value := x.UnbondingDelegation
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryServiceUnbondingDelegationResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationResponse.unbonding_delegation":
+		x.UnbondingDelegation = value.Message().Interface().(*UnbondingDelegation)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryServiceUnbondingDelegationResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationResponse.unbonding_delegation":
+		if x.UnbondingDelegation == nil {
+			x.UnbondingDelegation = new(UnbondingDelegation)
+		}
+		return protoreflect.ValueOfMessage(x.UnbondingDelegation.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryServiceUnbondingDelegationResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryServiceUnbondingDelegationResponse.unbonding_delegation":
+		m := new(UnbondingDelegation)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceUnbondingDelegationResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceUnbondingDelegationResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryServiceUnbondingDelegationResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryServiceUnbondingDelegationResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryServiceUnbondingDelegationResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryServiceUnbondingDelegationResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryServiceUnbondingDelegationResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryServiceUnbondingDelegationResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryServiceUnbondingDelegationResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.UnbondingDelegation != nil {
+			l = options.Size(x.UnbondingDelegation)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryServiceUnbondingDelegationResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.UnbondingDelegation != nil {
+			encoded, err := options.Marshal(x.UnbondingDelegation)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryServiceUnbondingDelegationResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceUnbondingDelegationResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceUnbondingDelegationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UnbondingDelegation", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.UnbondingDelegation == nil {
+					x.UnbondingDelegation = &UnbondingDelegation{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.UnbondingDelegation); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
 	md_QueryDelegatorPoolDelegationsRequest                   protoreflect.MessageDescriptor
 	fd_QueryDelegatorPoolDelegationsRequest_delegator_address protoreflect.FieldDescriptor
 	fd_QueryDelegatorPoolDelegationsRequest_pagination        protoreflect.FieldDescriptor
@@ -7598,7 +13475,7 @@ func (x *QueryDelegatorPoolDelegationsRequest) ProtoReflect() protoreflect.Messa
 }
 
 func (x *QueryDelegatorPoolDelegationsRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[16]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[28]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8148,7 +14025,7 @@ func (x *QueryDelegatorPoolDelegationsResponse) ProtoReflect() protoreflect.Mess
 }
 
 func (x *QueryDelegatorPoolDelegationsResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[17]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[29]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8649,6 +14526,1078 @@ func (x *fastReflection_QueryDelegatorPoolDelegationsResponse) ProtoMethods() *p
 }
 
 var (
+	md_QueryDelegatorPoolUnbondingDelegationsRequest                   protoreflect.MessageDescriptor
+	fd_QueryDelegatorPoolUnbondingDelegationsRequest_delegator_address protoreflect.FieldDescriptor
+	fd_QueryDelegatorPoolUnbondingDelegationsRequest_pagination        protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_restaking_v1_query_proto_init()
+	md_QueryDelegatorPoolUnbondingDelegationsRequest = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryDelegatorPoolUnbondingDelegationsRequest")
+	fd_QueryDelegatorPoolUnbondingDelegationsRequest_delegator_address = md_QueryDelegatorPoolUnbondingDelegationsRequest.Fields().ByName("delegator_address")
+	fd_QueryDelegatorPoolUnbondingDelegationsRequest_pagination = md_QueryDelegatorPoolUnbondingDelegationsRequest.Fields().ByName("pagination")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest)(nil)
+
+type fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest QueryDelegatorPoolUnbondingDelegationsRequest
+
+func (x *QueryDelegatorPoolUnbondingDelegationsRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest)(x)
+}
+
+func (x *QueryDelegatorPoolUnbondingDelegationsRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[30]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest_messageType fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest_messageType{}
+
+type fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest_messageType struct{}
+
+func (x fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest)(nil)
+}
+func (x fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest)
+}
+func (x fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryDelegatorPoolUnbondingDelegationsRequest
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryDelegatorPoolUnbondingDelegationsRequest
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryDelegatorPoolUnbondingDelegationsRequest)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.DelegatorAddress != "" {
+		value := protoreflect.ValueOfString(x.DelegatorAddress)
+		if !f(fd_QueryDelegatorPoolUnbondingDelegationsRequest_delegator_address, value) {
+			return
+		}
+	}
+	if x.Pagination != nil {
+		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+		if !f(fd_QueryDelegatorPoolUnbondingDelegationsRequest_pagination, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest.delegator_address":
+		return x.DelegatorAddress != ""
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest.pagination":
+		return x.Pagination != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest.delegator_address":
+		x.DelegatorAddress = ""
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest.pagination":
+		x.Pagination = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest.delegator_address":
+		value := x.DelegatorAddress
+		return protoreflect.ValueOfString(value)
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest.pagination":
+		value := x.Pagination
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest.delegator_address":
+		x.DelegatorAddress = value.Interface().(string)
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest.pagination":
+		x.Pagination = value.Message().Interface().(*v1beta1.PageRequest)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest.pagination":
+		if x.Pagination == nil {
+			x.Pagination = new(v1beta1.PageRequest)
+		}
+		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest.delegator_address":
+		panic(fmt.Errorf("field delegator_address of message milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest.delegator_address":
+		return protoreflect.ValueOfString("")
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest.pagination":
+		m := new(v1beta1.PageRequest)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsRequest) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryDelegatorPoolUnbondingDelegationsRequest)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.DelegatorAddress)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.Pagination != nil {
+			l = options.Size(x.Pagination)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryDelegatorPoolUnbondingDelegationsRequest)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Pagination != nil {
+			encoded, err := options.Marshal(x.Pagination)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.DelegatorAddress) > 0 {
+			i -= len(x.DelegatorAddress)
+			copy(dAtA[i:], x.DelegatorAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DelegatorAddress)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryDelegatorPoolUnbondingDelegationsRequest)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryDelegatorPoolUnbondingDelegationsRequest: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryDelegatorPoolUnbondingDelegationsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DelegatorAddress", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.DelegatorAddress = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Pagination == nil {
+					x.Pagination = &v1beta1.PageRequest{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Pagination); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var _ protoreflect.List = (*_QueryDelegatorPoolUnbondingDelegationsResponse_1_list)(nil)
+
+type _QueryDelegatorPoolUnbondingDelegationsResponse_1_list struct {
+	list *[]*UnbondingDelegation
+}
+
+func (x *_QueryDelegatorPoolUnbondingDelegationsResponse_1_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_QueryDelegatorPoolUnbondingDelegationsResponse_1_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_QueryDelegatorPoolUnbondingDelegationsResponse_1_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*UnbondingDelegation)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_QueryDelegatorPoolUnbondingDelegationsResponse_1_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*UnbondingDelegation)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_QueryDelegatorPoolUnbondingDelegationsResponse_1_list) AppendMutable() protoreflect.Value {
+	v := new(UnbondingDelegation)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_QueryDelegatorPoolUnbondingDelegationsResponse_1_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_QueryDelegatorPoolUnbondingDelegationsResponse_1_list) NewElement() protoreflect.Value {
+	v := new(UnbondingDelegation)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_QueryDelegatorPoolUnbondingDelegationsResponse_1_list) IsValid() bool {
+	return x.list != nil
+}
+
+var (
+	md_QueryDelegatorPoolUnbondingDelegationsResponse                       protoreflect.MessageDescriptor
+	fd_QueryDelegatorPoolUnbondingDelegationsResponse_unbonding_delegations protoreflect.FieldDescriptor
+	fd_QueryDelegatorPoolUnbondingDelegationsResponse_pagination            protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_restaking_v1_query_proto_init()
+	md_QueryDelegatorPoolUnbondingDelegationsResponse = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryDelegatorPoolUnbondingDelegationsResponse")
+	fd_QueryDelegatorPoolUnbondingDelegationsResponse_unbonding_delegations = md_QueryDelegatorPoolUnbondingDelegationsResponse.Fields().ByName("unbonding_delegations")
+	fd_QueryDelegatorPoolUnbondingDelegationsResponse_pagination = md_QueryDelegatorPoolUnbondingDelegationsResponse.Fields().ByName("pagination")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse)(nil)
+
+type fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse QueryDelegatorPoolUnbondingDelegationsResponse
+
+func (x *QueryDelegatorPoolUnbondingDelegationsResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse)(x)
+}
+
+func (x *QueryDelegatorPoolUnbondingDelegationsResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[31]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse_messageType fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse_messageType{}
+
+type fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse_messageType struct{}
+
+func (x fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse)(nil)
+}
+func (x fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse)
+}
+func (x fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryDelegatorPoolUnbondingDelegationsResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryDelegatorPoolUnbondingDelegationsResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryDelegatorPoolUnbondingDelegationsResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if len(x.UnbondingDelegations) != 0 {
+		value := protoreflect.ValueOfList(&_QueryDelegatorPoolUnbondingDelegationsResponse_1_list{list: &x.UnbondingDelegations})
+		if !f(fd_QueryDelegatorPoolUnbondingDelegationsResponse_unbonding_delegations, value) {
+			return
+		}
+	}
+	if x.Pagination != nil {
+		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+		if !f(fd_QueryDelegatorPoolUnbondingDelegationsResponse_pagination, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse.unbonding_delegations":
+		return len(x.UnbondingDelegations) != 0
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse.pagination":
+		return x.Pagination != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse.unbonding_delegations":
+		x.UnbondingDelegations = nil
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse.pagination":
+		x.Pagination = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse.unbonding_delegations":
+		if len(x.UnbondingDelegations) == 0 {
+			return protoreflect.ValueOfList(&_QueryDelegatorPoolUnbondingDelegationsResponse_1_list{})
+		}
+		listValue := &_QueryDelegatorPoolUnbondingDelegationsResponse_1_list{list: &x.UnbondingDelegations}
+		return protoreflect.ValueOfList(listValue)
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse.pagination":
+		value := x.Pagination
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse.unbonding_delegations":
+		lv := value.List()
+		clv := lv.(*_QueryDelegatorPoolUnbondingDelegationsResponse_1_list)
+		x.UnbondingDelegations = *clv.list
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse.pagination":
+		x.Pagination = value.Message().Interface().(*v1beta1.PageResponse)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse.unbonding_delegations":
+		if x.UnbondingDelegations == nil {
+			x.UnbondingDelegations = []*UnbondingDelegation{}
+		}
+		value := &_QueryDelegatorPoolUnbondingDelegationsResponse_1_list{list: &x.UnbondingDelegations}
+		return protoreflect.ValueOfList(value)
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse.pagination":
+		if x.Pagination == nil {
+			x.Pagination = new(v1beta1.PageResponse)
+		}
+		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse.unbonding_delegations":
+		list := []*UnbondingDelegation{}
+		return protoreflect.ValueOfList(&_QueryDelegatorPoolUnbondingDelegationsResponse_1_list{list: &list})
+	case "milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse.pagination":
+		m := new(v1beta1.PageResponse)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryDelegatorPoolUnbondingDelegationsResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryDelegatorPoolUnbondingDelegationsResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if len(x.UnbondingDelegations) > 0 {
+			for _, e := range x.UnbondingDelegations {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if x.Pagination != nil {
+			l = options.Size(x.Pagination)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryDelegatorPoolUnbondingDelegationsResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Pagination != nil {
+			encoded, err := options.Marshal(x.Pagination)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.UnbondingDelegations) > 0 {
+			for iNdEx := len(x.UnbondingDelegations) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.UnbondingDelegations[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0xa
+			}
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryDelegatorPoolUnbondingDelegationsResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryDelegatorPoolUnbondingDelegationsResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryDelegatorPoolUnbondingDelegationsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UnbondingDelegations", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.UnbondingDelegations = append(x.UnbondingDelegations, &UnbondingDelegation{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.UnbondingDelegations[len(x.UnbondingDelegations)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Pagination == nil {
+					x.Pagination = &v1beta1.PageResponse{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Pagination); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
 	md_QueryDelegatorOperatorDelegationsRequest                   protoreflect.MessageDescriptor
 	fd_QueryDelegatorOperatorDelegationsRequest_delegator_address protoreflect.FieldDescriptor
 	fd_QueryDelegatorOperatorDelegationsRequest_pagination        protoreflect.FieldDescriptor
@@ -8670,7 +15619,7 @@ func (x *QueryDelegatorOperatorDelegationsRequest) ProtoReflect() protoreflect.M
 }
 
 func (x *QueryDelegatorOperatorDelegationsRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[18]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[32]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9220,7 +16169,7 @@ func (x *QueryDelegatorOperatorDelegationsResponse) ProtoReflect() protoreflect.
 }
 
 func (x *QueryDelegatorOperatorDelegationsResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[19]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[33]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9721,6 +16670,1078 @@ func (x *fastReflection_QueryDelegatorOperatorDelegationsResponse) ProtoMethods(
 }
 
 var (
+	md_QueryDelegatorOperatorUnbondingDelegationsRequest                   protoreflect.MessageDescriptor
+	fd_QueryDelegatorOperatorUnbondingDelegationsRequest_delegator_address protoreflect.FieldDescriptor
+	fd_QueryDelegatorOperatorUnbondingDelegationsRequest_pagination        protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_restaking_v1_query_proto_init()
+	md_QueryDelegatorOperatorUnbondingDelegationsRequest = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryDelegatorOperatorUnbondingDelegationsRequest")
+	fd_QueryDelegatorOperatorUnbondingDelegationsRequest_delegator_address = md_QueryDelegatorOperatorUnbondingDelegationsRequest.Fields().ByName("delegator_address")
+	fd_QueryDelegatorOperatorUnbondingDelegationsRequest_pagination = md_QueryDelegatorOperatorUnbondingDelegationsRequest.Fields().ByName("pagination")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest)(nil)
+
+type fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest QueryDelegatorOperatorUnbondingDelegationsRequest
+
+func (x *QueryDelegatorOperatorUnbondingDelegationsRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest)(x)
+}
+
+func (x *QueryDelegatorOperatorUnbondingDelegationsRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[34]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest_messageType fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest_messageType{}
+
+type fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest_messageType struct{}
+
+func (x fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest)(nil)
+}
+func (x fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest)
+}
+func (x fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryDelegatorOperatorUnbondingDelegationsRequest
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryDelegatorOperatorUnbondingDelegationsRequest
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryDelegatorOperatorUnbondingDelegationsRequest)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.DelegatorAddress != "" {
+		value := protoreflect.ValueOfString(x.DelegatorAddress)
+		if !f(fd_QueryDelegatorOperatorUnbondingDelegationsRequest_delegator_address, value) {
+			return
+		}
+	}
+	if x.Pagination != nil {
+		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+		if !f(fd_QueryDelegatorOperatorUnbondingDelegationsRequest_pagination, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest.delegator_address":
+		return x.DelegatorAddress != ""
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest.pagination":
+		return x.Pagination != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest.delegator_address":
+		x.DelegatorAddress = ""
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest.pagination":
+		x.Pagination = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest.delegator_address":
+		value := x.DelegatorAddress
+		return protoreflect.ValueOfString(value)
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest.pagination":
+		value := x.Pagination
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest.delegator_address":
+		x.DelegatorAddress = value.Interface().(string)
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest.pagination":
+		x.Pagination = value.Message().Interface().(*v1beta1.PageRequest)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest.pagination":
+		if x.Pagination == nil {
+			x.Pagination = new(v1beta1.PageRequest)
+		}
+		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest.delegator_address":
+		panic(fmt.Errorf("field delegator_address of message milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest.delegator_address":
+		return protoreflect.ValueOfString("")
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest.pagination":
+		m := new(v1beta1.PageRequest)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsRequest) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryDelegatorOperatorUnbondingDelegationsRequest)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.DelegatorAddress)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.Pagination != nil {
+			l = options.Size(x.Pagination)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryDelegatorOperatorUnbondingDelegationsRequest)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Pagination != nil {
+			encoded, err := options.Marshal(x.Pagination)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.DelegatorAddress) > 0 {
+			i -= len(x.DelegatorAddress)
+			copy(dAtA[i:], x.DelegatorAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DelegatorAddress)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryDelegatorOperatorUnbondingDelegationsRequest)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryDelegatorOperatorUnbondingDelegationsRequest: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryDelegatorOperatorUnbondingDelegationsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DelegatorAddress", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.DelegatorAddress = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Pagination == nil {
+					x.Pagination = &v1beta1.PageRequest{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Pagination); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var _ protoreflect.List = (*_QueryDelegatorOperatorUnbondingDelegationsResponse_1_list)(nil)
+
+type _QueryDelegatorOperatorUnbondingDelegationsResponse_1_list struct {
+	list *[]*UnbondingDelegation
+}
+
+func (x *_QueryDelegatorOperatorUnbondingDelegationsResponse_1_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_QueryDelegatorOperatorUnbondingDelegationsResponse_1_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_QueryDelegatorOperatorUnbondingDelegationsResponse_1_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*UnbondingDelegation)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_QueryDelegatorOperatorUnbondingDelegationsResponse_1_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*UnbondingDelegation)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_QueryDelegatorOperatorUnbondingDelegationsResponse_1_list) AppendMutable() protoreflect.Value {
+	v := new(UnbondingDelegation)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_QueryDelegatorOperatorUnbondingDelegationsResponse_1_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_QueryDelegatorOperatorUnbondingDelegationsResponse_1_list) NewElement() protoreflect.Value {
+	v := new(UnbondingDelegation)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_QueryDelegatorOperatorUnbondingDelegationsResponse_1_list) IsValid() bool {
+	return x.list != nil
+}
+
+var (
+	md_QueryDelegatorOperatorUnbondingDelegationsResponse                       protoreflect.MessageDescriptor
+	fd_QueryDelegatorOperatorUnbondingDelegationsResponse_unbonding_delegations protoreflect.FieldDescriptor
+	fd_QueryDelegatorOperatorUnbondingDelegationsResponse_pagination            protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_restaking_v1_query_proto_init()
+	md_QueryDelegatorOperatorUnbondingDelegationsResponse = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryDelegatorOperatorUnbondingDelegationsResponse")
+	fd_QueryDelegatorOperatorUnbondingDelegationsResponse_unbonding_delegations = md_QueryDelegatorOperatorUnbondingDelegationsResponse.Fields().ByName("unbonding_delegations")
+	fd_QueryDelegatorOperatorUnbondingDelegationsResponse_pagination = md_QueryDelegatorOperatorUnbondingDelegationsResponse.Fields().ByName("pagination")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse)(nil)
+
+type fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse QueryDelegatorOperatorUnbondingDelegationsResponse
+
+func (x *QueryDelegatorOperatorUnbondingDelegationsResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse)(x)
+}
+
+func (x *QueryDelegatorOperatorUnbondingDelegationsResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[35]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse_messageType fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse_messageType{}
+
+type fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse_messageType struct{}
+
+func (x fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse)(nil)
+}
+func (x fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse)
+}
+func (x fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryDelegatorOperatorUnbondingDelegationsResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryDelegatorOperatorUnbondingDelegationsResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryDelegatorOperatorUnbondingDelegationsResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if len(x.UnbondingDelegations) != 0 {
+		value := protoreflect.ValueOfList(&_QueryDelegatorOperatorUnbondingDelegationsResponse_1_list{list: &x.UnbondingDelegations})
+		if !f(fd_QueryDelegatorOperatorUnbondingDelegationsResponse_unbonding_delegations, value) {
+			return
+		}
+	}
+	if x.Pagination != nil {
+		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+		if !f(fd_QueryDelegatorOperatorUnbondingDelegationsResponse_pagination, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse.unbonding_delegations":
+		return len(x.UnbondingDelegations) != 0
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse.pagination":
+		return x.Pagination != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse.unbonding_delegations":
+		x.UnbondingDelegations = nil
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse.pagination":
+		x.Pagination = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse.unbonding_delegations":
+		if len(x.UnbondingDelegations) == 0 {
+			return protoreflect.ValueOfList(&_QueryDelegatorOperatorUnbondingDelegationsResponse_1_list{})
+		}
+		listValue := &_QueryDelegatorOperatorUnbondingDelegationsResponse_1_list{list: &x.UnbondingDelegations}
+		return protoreflect.ValueOfList(listValue)
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse.pagination":
+		value := x.Pagination
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse.unbonding_delegations":
+		lv := value.List()
+		clv := lv.(*_QueryDelegatorOperatorUnbondingDelegationsResponse_1_list)
+		x.UnbondingDelegations = *clv.list
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse.pagination":
+		x.Pagination = value.Message().Interface().(*v1beta1.PageResponse)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse.unbonding_delegations":
+		if x.UnbondingDelegations == nil {
+			x.UnbondingDelegations = []*UnbondingDelegation{}
+		}
+		value := &_QueryDelegatorOperatorUnbondingDelegationsResponse_1_list{list: &x.UnbondingDelegations}
+		return protoreflect.ValueOfList(value)
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse.pagination":
+		if x.Pagination == nil {
+			x.Pagination = new(v1beta1.PageResponse)
+		}
+		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse.unbonding_delegations":
+		list := []*UnbondingDelegation{}
+		return protoreflect.ValueOfList(&_QueryDelegatorOperatorUnbondingDelegationsResponse_1_list{list: &list})
+	case "milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse.pagination":
+		m := new(v1beta1.PageResponse)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryDelegatorOperatorUnbondingDelegationsResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryDelegatorOperatorUnbondingDelegationsResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if len(x.UnbondingDelegations) > 0 {
+			for _, e := range x.UnbondingDelegations {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if x.Pagination != nil {
+			l = options.Size(x.Pagination)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryDelegatorOperatorUnbondingDelegationsResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Pagination != nil {
+			encoded, err := options.Marshal(x.Pagination)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.UnbondingDelegations) > 0 {
+			for iNdEx := len(x.UnbondingDelegations) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.UnbondingDelegations[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0xa
+			}
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryDelegatorOperatorUnbondingDelegationsResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryDelegatorOperatorUnbondingDelegationsResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryDelegatorOperatorUnbondingDelegationsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UnbondingDelegations", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.UnbondingDelegations = append(x.UnbondingDelegations, &UnbondingDelegation{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.UnbondingDelegations[len(x.UnbondingDelegations)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Pagination == nil {
+					x.Pagination = &v1beta1.PageResponse{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Pagination); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
 	md_QueryDelegatorServiceDelegationsRequest                   protoreflect.MessageDescriptor
 	fd_QueryDelegatorServiceDelegationsRequest_delegator_address protoreflect.FieldDescriptor
 	fd_QueryDelegatorServiceDelegationsRequest_pagination        protoreflect.FieldDescriptor
@@ -9742,7 +17763,7 @@ func (x *QueryDelegatorServiceDelegationsRequest) ProtoReflect() protoreflect.Me
 }
 
 func (x *QueryDelegatorServiceDelegationsRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[20]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[36]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10292,7 +18313,7 @@ func (x *QueryDelegatorServiceDelegationsResponse) ProtoReflect() protoreflect.M
 }
 
 func (x *QueryDelegatorServiceDelegationsResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[21]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[37]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10793,6 +18814,1078 @@ func (x *fastReflection_QueryDelegatorServiceDelegationsResponse) ProtoMethods()
 }
 
 var (
+	md_QueryDelegatorServiceUnbondingDelegationsRequest                   protoreflect.MessageDescriptor
+	fd_QueryDelegatorServiceUnbondingDelegationsRequest_delegator_address protoreflect.FieldDescriptor
+	fd_QueryDelegatorServiceUnbondingDelegationsRequest_pagination        protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_restaking_v1_query_proto_init()
+	md_QueryDelegatorServiceUnbondingDelegationsRequest = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryDelegatorServiceUnbondingDelegationsRequest")
+	fd_QueryDelegatorServiceUnbondingDelegationsRequest_delegator_address = md_QueryDelegatorServiceUnbondingDelegationsRequest.Fields().ByName("delegator_address")
+	fd_QueryDelegatorServiceUnbondingDelegationsRequest_pagination = md_QueryDelegatorServiceUnbondingDelegationsRequest.Fields().ByName("pagination")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest)(nil)
+
+type fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest QueryDelegatorServiceUnbondingDelegationsRequest
+
+func (x *QueryDelegatorServiceUnbondingDelegationsRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest)(x)
+}
+
+func (x *QueryDelegatorServiceUnbondingDelegationsRequest) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[38]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest_messageType fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest_messageType{}
+
+type fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest_messageType struct{}
+
+func (x fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest)(nil)
+}
+func (x fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest)
+}
+func (x fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryDelegatorServiceUnbondingDelegationsRequest
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryDelegatorServiceUnbondingDelegationsRequest
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryDelegatorServiceUnbondingDelegationsRequest)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.DelegatorAddress != "" {
+		value := protoreflect.ValueOfString(x.DelegatorAddress)
+		if !f(fd_QueryDelegatorServiceUnbondingDelegationsRequest_delegator_address, value) {
+			return
+		}
+	}
+	if x.Pagination != nil {
+		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+		if !f(fd_QueryDelegatorServiceUnbondingDelegationsRequest_pagination, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest.delegator_address":
+		return x.DelegatorAddress != ""
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest.pagination":
+		return x.Pagination != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest.delegator_address":
+		x.DelegatorAddress = ""
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest.pagination":
+		x.Pagination = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest.delegator_address":
+		value := x.DelegatorAddress
+		return protoreflect.ValueOfString(value)
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest.pagination":
+		value := x.Pagination
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest.delegator_address":
+		x.DelegatorAddress = value.Interface().(string)
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest.pagination":
+		x.Pagination = value.Message().Interface().(*v1beta1.PageRequest)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest.pagination":
+		if x.Pagination == nil {
+			x.Pagination = new(v1beta1.PageRequest)
+		}
+		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest.delegator_address":
+		panic(fmt.Errorf("field delegator_address of message milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest.delegator_address":
+		return protoreflect.ValueOfString("")
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest.pagination":
+		m := new(v1beta1.PageRequest)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsRequest) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryDelegatorServiceUnbondingDelegationsRequest)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.DelegatorAddress)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.Pagination != nil {
+			l = options.Size(x.Pagination)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryDelegatorServiceUnbondingDelegationsRequest)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Pagination != nil {
+			encoded, err := options.Marshal(x.Pagination)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.DelegatorAddress) > 0 {
+			i -= len(x.DelegatorAddress)
+			copy(dAtA[i:], x.DelegatorAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.DelegatorAddress)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryDelegatorServiceUnbondingDelegationsRequest)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryDelegatorServiceUnbondingDelegationsRequest: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryDelegatorServiceUnbondingDelegationsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DelegatorAddress", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.DelegatorAddress = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Pagination == nil {
+					x.Pagination = &v1beta1.PageRequest{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Pagination); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var _ protoreflect.List = (*_QueryDelegatorServiceUnbondingDelegationsResponse_1_list)(nil)
+
+type _QueryDelegatorServiceUnbondingDelegationsResponse_1_list struct {
+	list *[]*UnbondingDelegation
+}
+
+func (x *_QueryDelegatorServiceUnbondingDelegationsResponse_1_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_QueryDelegatorServiceUnbondingDelegationsResponse_1_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_QueryDelegatorServiceUnbondingDelegationsResponse_1_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*UnbondingDelegation)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_QueryDelegatorServiceUnbondingDelegationsResponse_1_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*UnbondingDelegation)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_QueryDelegatorServiceUnbondingDelegationsResponse_1_list) AppendMutable() protoreflect.Value {
+	v := new(UnbondingDelegation)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_QueryDelegatorServiceUnbondingDelegationsResponse_1_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_QueryDelegatorServiceUnbondingDelegationsResponse_1_list) NewElement() protoreflect.Value {
+	v := new(UnbondingDelegation)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_QueryDelegatorServiceUnbondingDelegationsResponse_1_list) IsValid() bool {
+	return x.list != nil
+}
+
+var (
+	md_QueryDelegatorServiceUnbondingDelegationsResponse                       protoreflect.MessageDescriptor
+	fd_QueryDelegatorServiceUnbondingDelegationsResponse_unbonding_delegations protoreflect.FieldDescriptor
+	fd_QueryDelegatorServiceUnbondingDelegationsResponse_pagination            protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_restaking_v1_query_proto_init()
+	md_QueryDelegatorServiceUnbondingDelegationsResponse = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryDelegatorServiceUnbondingDelegationsResponse")
+	fd_QueryDelegatorServiceUnbondingDelegationsResponse_unbonding_delegations = md_QueryDelegatorServiceUnbondingDelegationsResponse.Fields().ByName("unbonding_delegations")
+	fd_QueryDelegatorServiceUnbondingDelegationsResponse_pagination = md_QueryDelegatorServiceUnbondingDelegationsResponse.Fields().ByName("pagination")
+}
+
+var _ protoreflect.Message = (*fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse)(nil)
+
+type fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse QueryDelegatorServiceUnbondingDelegationsResponse
+
+func (x *QueryDelegatorServiceUnbondingDelegationsResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse)(x)
+}
+
+func (x *QueryDelegatorServiceUnbondingDelegationsResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[39]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse_messageType fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse_messageType{}
+
+type fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse_messageType struct{}
+
+func (x fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse)(nil)
+}
+func (x fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse)
+}
+func (x fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryDelegatorServiceUnbondingDelegationsResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryDelegatorServiceUnbondingDelegationsResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryDelegatorServiceUnbondingDelegationsResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if len(x.UnbondingDelegations) != 0 {
+		value := protoreflect.ValueOfList(&_QueryDelegatorServiceUnbondingDelegationsResponse_1_list{list: &x.UnbondingDelegations})
+		if !f(fd_QueryDelegatorServiceUnbondingDelegationsResponse_unbonding_delegations, value) {
+			return
+		}
+	}
+	if x.Pagination != nil {
+		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+		if !f(fd_QueryDelegatorServiceUnbondingDelegationsResponse_pagination, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse.unbonding_delegations":
+		return len(x.UnbondingDelegations) != 0
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse.pagination":
+		return x.Pagination != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse.unbonding_delegations":
+		x.UnbondingDelegations = nil
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse.pagination":
+		x.Pagination = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse.unbonding_delegations":
+		if len(x.UnbondingDelegations) == 0 {
+			return protoreflect.ValueOfList(&_QueryDelegatorServiceUnbondingDelegationsResponse_1_list{})
+		}
+		listValue := &_QueryDelegatorServiceUnbondingDelegationsResponse_1_list{list: &x.UnbondingDelegations}
+		return protoreflect.ValueOfList(listValue)
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse.pagination":
+		value := x.Pagination
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse.unbonding_delegations":
+		lv := value.List()
+		clv := lv.(*_QueryDelegatorServiceUnbondingDelegationsResponse_1_list)
+		x.UnbondingDelegations = *clv.list
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse.pagination":
+		x.Pagination = value.Message().Interface().(*v1beta1.PageResponse)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse.unbonding_delegations":
+		if x.UnbondingDelegations == nil {
+			x.UnbondingDelegations = []*UnbondingDelegation{}
+		}
+		value := &_QueryDelegatorServiceUnbondingDelegationsResponse_1_list{list: &x.UnbondingDelegations}
+		return protoreflect.ValueOfList(value)
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse.pagination":
+		if x.Pagination == nil {
+			x.Pagination = new(v1beta1.PageResponse)
+		}
+		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse.unbonding_delegations":
+		list := []*UnbondingDelegation{}
+		return protoreflect.ValueOfList(&_QueryDelegatorServiceUnbondingDelegationsResponse_1_list{list: &list})
+	case "milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse.pagination":
+		m := new(v1beta1.PageResponse)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_QueryDelegatorServiceUnbondingDelegationsResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*QueryDelegatorServiceUnbondingDelegationsResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if len(x.UnbondingDelegations) > 0 {
+			for _, e := range x.UnbondingDelegations {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if x.Pagination != nil {
+			l = options.Size(x.Pagination)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*QueryDelegatorServiceUnbondingDelegationsResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.Pagination != nil {
+			encoded, err := options.Marshal(x.Pagination)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.UnbondingDelegations) > 0 {
+			for iNdEx := len(x.UnbondingDelegations) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.UnbondingDelegations[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0xa
+			}
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*QueryDelegatorServiceUnbondingDelegationsResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryDelegatorServiceUnbondingDelegationsResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryDelegatorServiceUnbondingDelegationsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UnbondingDelegations", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.UnbondingDelegations = append(x.UnbondingDelegations, &UnbondingDelegation{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.UnbondingDelegations[len(x.UnbondingDelegations)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.Pagination == nil {
+					x.Pagination = &v1beta1.PageResponse{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Pagination); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
 	md_QueryDelegatorPoolsRequest                   protoreflect.MessageDescriptor
 	fd_QueryDelegatorPoolsRequest_delegator_address protoreflect.FieldDescriptor
 	fd_QueryDelegatorPoolsRequest_pagination        protoreflect.FieldDescriptor
@@ -10814,7 +19907,7 @@ func (x *QueryDelegatorPoolsRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryDelegatorPoolsRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[22]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[40]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11364,7 +20457,7 @@ func (x *QueryDelegatorPoolsResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryDelegatorPoolsResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[23]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[41]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11886,7 +20979,7 @@ func (x *QueryDelegatorPoolRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryDelegatorPoolRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[24]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[42]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12352,7 +21445,7 @@ func (x *QueryDelegatorPoolResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryDelegatorPoolResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[25]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[43]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12789,7 +21882,7 @@ func (x *QueryDelegatorOperatorsRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryDelegatorOperatorsRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[26]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[44]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13339,7 +22432,7 @@ func (x *QueryDelegatorOperatorsResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryDelegatorOperatorsResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[27]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[45]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13861,7 +22954,7 @@ func (x *QueryDelegatorOperatorRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryDelegatorOperatorRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[28]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[46]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14327,7 +23420,7 @@ func (x *QueryDelegatorOperatorResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryDelegatorOperatorResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[29]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[47]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14764,7 +23857,7 @@ func (x *QueryDelegatorServicesRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryDelegatorServicesRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[30]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[48]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -15314,7 +24407,7 @@ func (x *QueryDelegatorServicesResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryDelegatorServicesResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[31]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[49]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -15836,7 +24929,7 @@ func (x *QueryDelegatorServiceRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryDelegatorServiceRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[32]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[50]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -16302,7 +25395,7 @@ func (x *QueryDelegatorServiceResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryDelegatorServiceResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[33]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[51]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -16735,7 +25828,7 @@ func (x *QueryParamsRequest) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryParamsRequest) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[34]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[52]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -17093,7 +26186,7 @@ func (x *QueryParamsResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *QueryParamsResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[35]
+	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[53]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -17850,6 +26943,178 @@ func (x *QueryPoolDelegationResponse) GetDelegation() *DelegationResponse {
 	return nil
 }
 
+// QueryPoolUnbondingDelegationsRequest is request type for the
+// Query/PoolUnbondingDelegations RPC method.
+type QueryPoolUnbondingDelegationsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	PoolId     uint32               `protobuf:"varint,1,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+	Pagination *v1beta1.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (x *QueryPoolUnbondingDelegationsRequest) Reset() {
+	*x = QueryPoolUnbondingDelegationsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryPoolUnbondingDelegationsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryPoolUnbondingDelegationsRequest) ProtoMessage() {}
+
+// Deprecated: Use QueryPoolUnbondingDelegationsRequest.ProtoReflect.Descriptor instead.
+func (*QueryPoolUnbondingDelegationsRequest) Descriptor() ([]byte, []int) {
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *QueryPoolUnbondingDelegationsRequest) GetPoolId() uint32 {
+	if x != nil {
+		return x.PoolId
+	}
+	return 0
+}
+
+func (x *QueryPoolUnbondingDelegationsRequest) GetPagination() *v1beta1.PageRequest {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+// QueryPoolUnbondingDelegationsResponse is response type for the
+// Query/PoolUnbondingDelegations RPC method.
+type QueryPoolUnbondingDelegationsResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	UnbondingDelegations []*UnbondingDelegation `protobuf:"bytes,1,rep,name=unbonding_delegations,json=unbondingDelegations,proto3" json:"unbonding_delegations,omitempty"`
+	Pagination           *v1beta1.PageResponse  `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (x *QueryPoolUnbondingDelegationsResponse) Reset() {
+	*x = QueryPoolUnbondingDelegationsResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryPoolUnbondingDelegationsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryPoolUnbondingDelegationsResponse) ProtoMessage() {}
+
+// Deprecated: Use QueryPoolUnbondingDelegationsResponse.ProtoReflect.Descriptor instead.
+func (*QueryPoolUnbondingDelegationsResponse) Descriptor() ([]byte, []int) {
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *QueryPoolUnbondingDelegationsResponse) GetUnbondingDelegations() []*UnbondingDelegation {
+	if x != nil {
+		return x.UnbondingDelegations
+	}
+	return nil
+}
+
+func (x *QueryPoolUnbondingDelegationsResponse) GetPagination() *v1beta1.PageResponse {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+// QueryPoolUnbondingDelegationRequest is request type for the
+// Query/PoolUnbondingDelegation RPC method.
+type QueryPoolUnbondingDelegationRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	PoolId           uint32 `protobuf:"varint,1,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+	DelegatorAddress string `protobuf:"bytes,2,opt,name=delegator_address,json=delegatorAddress,proto3" json:"delegator_address,omitempty"`
+}
+
+func (x *QueryPoolUnbondingDelegationRequest) Reset() {
+	*x = QueryPoolUnbondingDelegationRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[10]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryPoolUnbondingDelegationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryPoolUnbondingDelegationRequest) ProtoMessage() {}
+
+// Deprecated: Use QueryPoolUnbondingDelegationRequest.ProtoReflect.Descriptor instead.
+func (*QueryPoolUnbondingDelegationRequest) Descriptor() ([]byte, []int) {
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *QueryPoolUnbondingDelegationRequest) GetPoolId() uint32 {
+	if x != nil {
+		return x.PoolId
+	}
+	return 0
+}
+
+func (x *QueryPoolUnbondingDelegationRequest) GetDelegatorAddress() string {
+	if x != nil {
+		return x.DelegatorAddress
+	}
+	return ""
+}
+
+// QueryPoolUnbondingDelegationResponse is response type for the
+// Query/PoolUnbondingDelegation RPC method.
+type QueryPoolUnbondingDelegationResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	UnbondingDelegation *UnbondingDelegation `protobuf:"bytes,1,opt,name=unbonding_delegation,json=unbondingDelegation,proto3" json:"unbonding_delegation,omitempty"`
+}
+
+func (x *QueryPoolUnbondingDelegationResponse) Reset() {
+	*x = QueryPoolUnbondingDelegationResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[11]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryPoolUnbondingDelegationResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryPoolUnbondingDelegationResponse) ProtoMessage() {}
+
+// Deprecated: Use QueryPoolUnbondingDelegationResponse.ProtoReflect.Descriptor instead.
+func (*QueryPoolUnbondingDelegationResponse) Descriptor() ([]byte, []int) {
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *QueryPoolUnbondingDelegationResponse) GetUnbondingDelegation() *UnbondingDelegation {
+	if x != nil {
+		return x.UnbondingDelegation
+	}
+	return nil
+}
+
 // QueryOperatorDelegationsRequest is request type for the
 // Query/OperatorDelegations RPC method.
 type QueryOperatorDelegationsRequest struct {
@@ -17866,7 +27131,7 @@ type QueryOperatorDelegationsRequest struct {
 func (x *QueryOperatorDelegationsRequest) Reset() {
 	*x = QueryOperatorDelegationsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[8]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -17880,7 +27145,7 @@ func (*QueryOperatorDelegationsRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryOperatorDelegationsRequest.ProtoReflect.Descriptor instead.
 func (*QueryOperatorDelegationsRequest) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{8}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *QueryOperatorDelegationsRequest) GetOperatorId() uint32 {
@@ -17913,7 +27178,7 @@ type QueryOperatorDelegationsResponse struct {
 func (x *QueryOperatorDelegationsResponse) Reset() {
 	*x = QueryOperatorDelegationsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[9]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -17927,7 +27192,7 @@ func (*QueryOperatorDelegationsResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryOperatorDelegationsResponse.ProtoReflect.Descriptor instead.
 func (*QueryOperatorDelegationsResponse) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{9}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *QueryOperatorDelegationsResponse) GetDelegations() []*DelegationResponse {
@@ -17960,7 +27225,7 @@ type QueryOperatorDelegationRequest struct {
 func (x *QueryOperatorDelegationRequest) Reset() {
 	*x = QueryOperatorDelegationRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[10]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -17974,7 +27239,7 @@ func (*QueryOperatorDelegationRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryOperatorDelegationRequest.ProtoReflect.Descriptor instead.
 func (*QueryOperatorDelegationRequest) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{10}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *QueryOperatorDelegationRequest) GetOperatorId() uint32 {
@@ -18005,7 +27270,7 @@ type QueryOperatorDelegationResponse struct {
 func (x *QueryOperatorDelegationResponse) Reset() {
 	*x = QueryOperatorDelegationResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[11]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18019,12 +27284,191 @@ func (*QueryOperatorDelegationResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryOperatorDelegationResponse.ProtoReflect.Descriptor instead.
 func (*QueryOperatorDelegationResponse) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{11}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *QueryOperatorDelegationResponse) GetDelegation() *DelegationResponse {
 	if x != nil {
 		return x.Delegation
+	}
+	return nil
+}
+
+// QueryOperatorUnbondingDelegationsRequest is request type for the
+// Query/OperatorUnbondingDelegations RPC method.
+type QueryOperatorUnbondingDelegationsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// OperatorId is the ID of the operator to query
+	OperatorId uint32 `protobuf:"varint,1,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
+	// Pagination defines an optional pagination for the request.
+	Pagination *v1beta1.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (x *QueryOperatorUnbondingDelegationsRequest) Reset() {
+	*x = QueryOperatorUnbondingDelegationsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[16]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryOperatorUnbondingDelegationsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryOperatorUnbondingDelegationsRequest) ProtoMessage() {}
+
+// Deprecated: Use QueryOperatorUnbondingDelegationsRequest.ProtoReflect.Descriptor instead.
+func (*QueryOperatorUnbondingDelegationsRequest) Descriptor() ([]byte, []int) {
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *QueryOperatorUnbondingDelegationsRequest) GetOperatorId() uint32 {
+	if x != nil {
+		return x.OperatorId
+	}
+	return 0
+}
+
+func (x *QueryOperatorUnbondingDelegationsRequest) GetPagination() *v1beta1.PageRequest {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+// QueryOperatorUnbondingDelegationsResponse is response type for the
+// Query/OperatorUnbondingDelegations RPC method.
+type QueryOperatorUnbondingDelegationsResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// UnbondingDelegations is the list of unbonding delegations
+	UnbondingDelegations []*UnbondingDelegation `protobuf:"bytes,1,rep,name=unbonding_delegations,json=unbondingDelegations,proto3" json:"unbonding_delegations,omitempty"`
+	// Pagination defines the pagination in the response.
+	Pagination *v1beta1.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (x *QueryOperatorUnbondingDelegationsResponse) Reset() {
+	*x = QueryOperatorUnbondingDelegationsResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[17]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryOperatorUnbondingDelegationsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryOperatorUnbondingDelegationsResponse) ProtoMessage() {}
+
+// Deprecated: Use QueryOperatorUnbondingDelegationsResponse.ProtoReflect.Descriptor instead.
+func (*QueryOperatorUnbondingDelegationsResponse) Descriptor() ([]byte, []int) {
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *QueryOperatorUnbondingDelegationsResponse) GetUnbondingDelegations() []*UnbondingDelegation {
+	if x != nil {
+		return x.UnbondingDelegations
+	}
+	return nil
+}
+
+func (x *QueryOperatorUnbondingDelegationsResponse) GetPagination() *v1beta1.PageResponse {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+// QueryOperatorUnbondingDelegationRequest is request type for the
+// Query/OperatorUnbondingDelegation RPC method.
+type QueryOperatorUnbondingDelegationRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// OperatorId is the ID of the operator to query
+	OperatorId uint32 `protobuf:"varint,1,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
+	// DelegatorAddress is the address of the delegator to query
+	DelegatorAddress string `protobuf:"bytes,2,opt,name=delegator_address,json=delegatorAddress,proto3" json:"delegator_address,omitempty"`
+}
+
+func (x *QueryOperatorUnbondingDelegationRequest) Reset() {
+	*x = QueryOperatorUnbondingDelegationRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[18]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryOperatorUnbondingDelegationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryOperatorUnbondingDelegationRequest) ProtoMessage() {}
+
+// Deprecated: Use QueryOperatorUnbondingDelegationRequest.ProtoReflect.Descriptor instead.
+func (*QueryOperatorUnbondingDelegationRequest) Descriptor() ([]byte, []int) {
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *QueryOperatorUnbondingDelegationRequest) GetOperatorId() uint32 {
+	if x != nil {
+		return x.OperatorId
+	}
+	return 0
+}
+
+func (x *QueryOperatorUnbondingDelegationRequest) GetDelegatorAddress() string {
+	if x != nil {
+		return x.DelegatorAddress
+	}
+	return ""
+}
+
+// QueryOperatorUnbondingDelegationResponse is response type for the
+// Query/OperatorUnbondingDelegation RPC method.
+type QueryOperatorUnbondingDelegationResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// UnbondingDelegation is the unbonding delegation
+	UnbondingDelegation *UnbondingDelegation `protobuf:"bytes,1,opt,name=unbonding_delegation,json=unbondingDelegation,proto3" json:"unbonding_delegation,omitempty"`
+}
+
+func (x *QueryOperatorUnbondingDelegationResponse) Reset() {
+	*x = QueryOperatorUnbondingDelegationResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[19]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryOperatorUnbondingDelegationResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryOperatorUnbondingDelegationResponse) ProtoMessage() {}
+
+// Deprecated: Use QueryOperatorUnbondingDelegationResponse.ProtoReflect.Descriptor instead.
+func (*QueryOperatorUnbondingDelegationResponse) Descriptor() ([]byte, []int) {
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *QueryOperatorUnbondingDelegationResponse) GetUnbondingDelegation() *UnbondingDelegation {
+	if x != nil {
+		return x.UnbondingDelegation
 	}
 	return nil
 }
@@ -18045,7 +27489,7 @@ type QueryServiceDelegationsRequest struct {
 func (x *QueryServiceDelegationsRequest) Reset() {
 	*x = QueryServiceDelegationsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[12]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[20]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18059,7 +27503,7 @@ func (*QueryServiceDelegationsRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryServiceDelegationsRequest.ProtoReflect.Descriptor instead.
 func (*QueryServiceDelegationsRequest) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{12}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *QueryServiceDelegationsRequest) GetServiceId() uint32 {
@@ -18092,7 +27536,7 @@ type QueryServiceDelegationsResponse struct {
 func (x *QueryServiceDelegationsResponse) Reset() {
 	*x = QueryServiceDelegationsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[13]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[21]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18106,7 +27550,7 @@ func (*QueryServiceDelegationsResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryServiceDelegationsResponse.ProtoReflect.Descriptor instead.
 func (*QueryServiceDelegationsResponse) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{13}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *QueryServiceDelegationsResponse) GetDelegations() []*DelegationResponse {
@@ -18139,7 +27583,7 @@ type QueryServiceDelegationRequest struct {
 func (x *QueryServiceDelegationRequest) Reset() {
 	*x = QueryServiceDelegationRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[14]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[22]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18153,7 +27597,7 @@ func (*QueryServiceDelegationRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryServiceDelegationRequest.ProtoReflect.Descriptor instead.
 func (*QueryServiceDelegationRequest) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{14}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *QueryServiceDelegationRequest) GetServiceId() uint32 {
@@ -18184,7 +27628,7 @@ type QueryServiceDelegationResponse struct {
 func (x *QueryServiceDelegationResponse) Reset() {
 	*x = QueryServiceDelegationResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[15]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[23]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18198,12 +27642,191 @@ func (*QueryServiceDelegationResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryServiceDelegationResponse.ProtoReflect.Descriptor instead.
 func (*QueryServiceDelegationResponse) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{15}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *QueryServiceDelegationResponse) GetDelegation() *DelegationResponse {
 	if x != nil {
 		return x.Delegation
+	}
+	return nil
+}
+
+// QueryServiceUnbondingDelegationsRequest is request type for the
+// Query/ServiceUnbondingDelegations RPC method.
+type QueryServiceUnbondingDelegationsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// ServiceId is the ID of the service to query
+	ServiceId uint32 `protobuf:"varint,1,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
+	// Pagination defines an optional pagination for the request.
+	Pagination *v1beta1.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (x *QueryServiceUnbondingDelegationsRequest) Reset() {
+	*x = QueryServiceUnbondingDelegationsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[24]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryServiceUnbondingDelegationsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryServiceUnbondingDelegationsRequest) ProtoMessage() {}
+
+// Deprecated: Use QueryServiceUnbondingDelegationsRequest.ProtoReflect.Descriptor instead.
+func (*QueryServiceUnbondingDelegationsRequest) Descriptor() ([]byte, []int) {
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *QueryServiceUnbondingDelegationsRequest) GetServiceId() uint32 {
+	if x != nil {
+		return x.ServiceId
+	}
+	return 0
+}
+
+func (x *QueryServiceUnbondingDelegationsRequest) GetPagination() *v1beta1.PageRequest {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+// QueryServiceUnbondingDelegationsResponse is response type for the
+// Query/ServiceUnbondingDelegations RPC method.
+type QueryServiceUnbondingDelegationsResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// UnbondingDelegations is the list of unbonding delegations
+	UnbondingDelegations []*UnbondingDelegation `protobuf:"bytes,1,rep,name=unbonding_delegations,json=unbondingDelegations,proto3" json:"unbonding_delegations,omitempty"`
+	// Pagination defines the pagination in the response.
+	Pagination *v1beta1.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (x *QueryServiceUnbondingDelegationsResponse) Reset() {
+	*x = QueryServiceUnbondingDelegationsResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[25]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryServiceUnbondingDelegationsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryServiceUnbondingDelegationsResponse) ProtoMessage() {}
+
+// Deprecated: Use QueryServiceUnbondingDelegationsResponse.ProtoReflect.Descriptor instead.
+func (*QueryServiceUnbondingDelegationsResponse) Descriptor() ([]byte, []int) {
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *QueryServiceUnbondingDelegationsResponse) GetUnbondingDelegations() []*UnbondingDelegation {
+	if x != nil {
+		return x.UnbondingDelegations
+	}
+	return nil
+}
+
+func (x *QueryServiceUnbondingDelegationsResponse) GetPagination() *v1beta1.PageResponse {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+// QueryServiceUnbondingDelegationRequest is request type for the
+// Query/ServiceUnbondingDelegation RPC method.
+type QueryServiceUnbondingDelegationRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// ServiceId is the ID of the service to query
+	ServiceId uint32 `protobuf:"varint,1,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
+	// DelegatorAddress is the address of the delegator to query
+	DelegatorAddress string `protobuf:"bytes,2,opt,name=delegator_address,json=delegatorAddress,proto3" json:"delegator_address,omitempty"`
+}
+
+func (x *QueryServiceUnbondingDelegationRequest) Reset() {
+	*x = QueryServiceUnbondingDelegationRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[26]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryServiceUnbondingDelegationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryServiceUnbondingDelegationRequest) ProtoMessage() {}
+
+// Deprecated: Use QueryServiceUnbondingDelegationRequest.ProtoReflect.Descriptor instead.
+func (*QueryServiceUnbondingDelegationRequest) Descriptor() ([]byte, []int) {
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *QueryServiceUnbondingDelegationRequest) GetServiceId() uint32 {
+	if x != nil {
+		return x.ServiceId
+	}
+	return 0
+}
+
+func (x *QueryServiceUnbondingDelegationRequest) GetDelegatorAddress() string {
+	if x != nil {
+		return x.DelegatorAddress
+	}
+	return ""
+}
+
+// QueryServiceUnbondingDelegationResponse is response type for the
+// Query/ServiceUnbondingDelegation RPC method.
+type QueryServiceUnbondingDelegationResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// UnbondingDelegation is the unbonding delegation
+	UnbondingDelegation *UnbondingDelegation `protobuf:"bytes,1,opt,name=unbonding_delegation,json=unbondingDelegation,proto3" json:"unbonding_delegation,omitempty"`
+}
+
+func (x *QueryServiceUnbondingDelegationResponse) Reset() {
+	*x = QueryServiceUnbondingDelegationResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[27]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryServiceUnbondingDelegationResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryServiceUnbondingDelegationResponse) ProtoMessage() {}
+
+// Deprecated: Use QueryServiceUnbondingDelegationResponse.ProtoReflect.Descriptor instead.
+func (*QueryServiceUnbondingDelegationResponse) Descriptor() ([]byte, []int) {
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *QueryServiceUnbondingDelegationResponse) GetUnbondingDelegation() *UnbondingDelegation {
+	if x != nil {
+		return x.UnbondingDelegation
 	}
 	return nil
 }
@@ -18224,7 +27847,7 @@ type QueryDelegatorPoolDelegationsRequest struct {
 func (x *QueryDelegatorPoolDelegationsRequest) Reset() {
 	*x = QueryDelegatorPoolDelegationsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[16]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[28]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18238,7 +27861,7 @@ func (*QueryDelegatorPoolDelegationsRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryDelegatorPoolDelegationsRequest.ProtoReflect.Descriptor instead.
 func (*QueryDelegatorPoolDelegationsRequest) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{16}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *QueryDelegatorPoolDelegationsRequest) GetDelegatorAddress() string {
@@ -18271,7 +27894,7 @@ type QueryDelegatorPoolDelegationsResponse struct {
 func (x *QueryDelegatorPoolDelegationsResponse) Reset() {
 	*x = QueryDelegatorPoolDelegationsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[17]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[29]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18285,7 +27908,7 @@ func (*QueryDelegatorPoolDelegationsResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryDelegatorPoolDelegationsResponse.ProtoReflect.Descriptor instead.
 func (*QueryDelegatorPoolDelegationsResponse) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{17}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *QueryDelegatorPoolDelegationsResponse) GetDelegations() []*DelegationResponse {
@@ -18296,6 +27919,100 @@ func (x *QueryDelegatorPoolDelegationsResponse) GetDelegations() []*DelegationRe
 }
 
 func (x *QueryDelegatorPoolDelegationsResponse) GetPagination() *v1beta1.PageResponse {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+// QueryDelegatorPoolUnbondingDelegationsRequest is request type for the
+// Query/DelegatorPoolUnbondingDelegations RPC method.
+type QueryDelegatorPoolUnbondingDelegationsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// DelegatorAddress is the address of the delegator to query
+	DelegatorAddress string `protobuf:"bytes,1,opt,name=delegator_address,json=delegatorAddress,proto3" json:"delegator_address,omitempty"`
+	// Pagination defines an optional pagination for the request.
+	Pagination *v1beta1.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (x *QueryDelegatorPoolUnbondingDelegationsRequest) Reset() {
+	*x = QueryDelegatorPoolUnbondingDelegationsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[30]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryDelegatorPoolUnbondingDelegationsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryDelegatorPoolUnbondingDelegationsRequest) ProtoMessage() {}
+
+// Deprecated: Use QueryDelegatorPoolUnbondingDelegationsRequest.ProtoReflect.Descriptor instead.
+func (*QueryDelegatorPoolUnbondingDelegationsRequest) Descriptor() ([]byte, []int) {
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{30}
+}
+
+func (x *QueryDelegatorPoolUnbondingDelegationsRequest) GetDelegatorAddress() string {
+	if x != nil {
+		return x.DelegatorAddress
+	}
+	return ""
+}
+
+func (x *QueryDelegatorPoolUnbondingDelegationsRequest) GetPagination() *v1beta1.PageRequest {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+// QueryDelegatorPoolUnbondingDelegationsResponse is response type for the
+// Query/DelegatorPoolUnbondingDelegations RPC method.
+type QueryDelegatorPoolUnbondingDelegationsResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// UnbondingDelegations is the list of unbonding delegations
+	UnbondingDelegations []*UnbondingDelegation `protobuf:"bytes,1,rep,name=unbonding_delegations,json=unbondingDelegations,proto3" json:"unbonding_delegations,omitempty"`
+	// Pagination defines the pagination in the response.
+	Pagination *v1beta1.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (x *QueryDelegatorPoolUnbondingDelegationsResponse) Reset() {
+	*x = QueryDelegatorPoolUnbondingDelegationsResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[31]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryDelegatorPoolUnbondingDelegationsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryDelegatorPoolUnbondingDelegationsResponse) ProtoMessage() {}
+
+// Deprecated: Use QueryDelegatorPoolUnbondingDelegationsResponse.ProtoReflect.Descriptor instead.
+func (*QueryDelegatorPoolUnbondingDelegationsResponse) Descriptor() ([]byte, []int) {
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{31}
+}
+
+func (x *QueryDelegatorPoolUnbondingDelegationsResponse) GetUnbondingDelegations() []*UnbondingDelegation {
+	if x != nil {
+		return x.UnbondingDelegations
+	}
+	return nil
+}
+
+func (x *QueryDelegatorPoolUnbondingDelegationsResponse) GetPagination() *v1beta1.PageResponse {
 	if x != nil {
 		return x.Pagination
 	}
@@ -18318,7 +28035,7 @@ type QueryDelegatorOperatorDelegationsRequest struct {
 func (x *QueryDelegatorOperatorDelegationsRequest) Reset() {
 	*x = QueryDelegatorOperatorDelegationsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[18]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[32]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18332,7 +28049,7 @@ func (*QueryDelegatorOperatorDelegationsRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryDelegatorOperatorDelegationsRequest.ProtoReflect.Descriptor instead.
 func (*QueryDelegatorOperatorDelegationsRequest) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{18}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *QueryDelegatorOperatorDelegationsRequest) GetDelegatorAddress() string {
@@ -18365,7 +28082,7 @@ type QueryDelegatorOperatorDelegationsResponse struct {
 func (x *QueryDelegatorOperatorDelegationsResponse) Reset() {
 	*x = QueryDelegatorOperatorDelegationsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[19]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[33]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18379,7 +28096,7 @@ func (*QueryDelegatorOperatorDelegationsResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryDelegatorOperatorDelegationsResponse.ProtoReflect.Descriptor instead.
 func (*QueryDelegatorOperatorDelegationsResponse) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{19}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *QueryDelegatorOperatorDelegationsResponse) GetDelegations() []*DelegationResponse {
@@ -18390,6 +28107,100 @@ func (x *QueryDelegatorOperatorDelegationsResponse) GetDelegations() []*Delegati
 }
 
 func (x *QueryDelegatorOperatorDelegationsResponse) GetPagination() *v1beta1.PageResponse {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+// QueryDelegatorOperatorUnbondingDelegationsRequest is request type for the
+// Query/DelegatorOperatorUnbondingDelegations RPC method.
+type QueryDelegatorOperatorUnbondingDelegationsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// DelegatorAddress is the address of the delegator to query
+	DelegatorAddress string `protobuf:"bytes,1,opt,name=delegator_address,json=delegatorAddress,proto3" json:"delegator_address,omitempty"`
+	// Pagination defines an optional pagination for the request.
+	Pagination *v1beta1.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (x *QueryDelegatorOperatorUnbondingDelegationsRequest) Reset() {
+	*x = QueryDelegatorOperatorUnbondingDelegationsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[34]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryDelegatorOperatorUnbondingDelegationsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryDelegatorOperatorUnbondingDelegationsRequest) ProtoMessage() {}
+
+// Deprecated: Use QueryDelegatorOperatorUnbondingDelegationsRequest.ProtoReflect.Descriptor instead.
+func (*QueryDelegatorOperatorUnbondingDelegationsRequest) Descriptor() ([]byte, []int) {
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{34}
+}
+
+func (x *QueryDelegatorOperatorUnbondingDelegationsRequest) GetDelegatorAddress() string {
+	if x != nil {
+		return x.DelegatorAddress
+	}
+	return ""
+}
+
+func (x *QueryDelegatorOperatorUnbondingDelegationsRequest) GetPagination() *v1beta1.PageRequest {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+// QueryDelegatorOperatorUnbondingDelegationsResponse is response type for the
+// Query/DelegatorOperatorUnbondingDelegations RPC method.
+type QueryDelegatorOperatorUnbondingDelegationsResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// UnbondingDelegations is the list of unbonding delegations
+	UnbondingDelegations []*UnbondingDelegation `protobuf:"bytes,1,rep,name=unbonding_delegations,json=unbondingDelegations,proto3" json:"unbonding_delegations,omitempty"`
+	// Pagination defines the pagination in the response.
+	Pagination *v1beta1.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (x *QueryDelegatorOperatorUnbondingDelegationsResponse) Reset() {
+	*x = QueryDelegatorOperatorUnbondingDelegationsResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[35]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryDelegatorOperatorUnbondingDelegationsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryDelegatorOperatorUnbondingDelegationsResponse) ProtoMessage() {}
+
+// Deprecated: Use QueryDelegatorOperatorUnbondingDelegationsResponse.ProtoReflect.Descriptor instead.
+func (*QueryDelegatorOperatorUnbondingDelegationsResponse) Descriptor() ([]byte, []int) {
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{35}
+}
+
+func (x *QueryDelegatorOperatorUnbondingDelegationsResponse) GetUnbondingDelegations() []*UnbondingDelegation {
+	if x != nil {
+		return x.UnbondingDelegations
+	}
+	return nil
+}
+
+func (x *QueryDelegatorOperatorUnbondingDelegationsResponse) GetPagination() *v1beta1.PageResponse {
 	if x != nil {
 		return x.Pagination
 	}
@@ -18412,7 +28223,7 @@ type QueryDelegatorServiceDelegationsRequest struct {
 func (x *QueryDelegatorServiceDelegationsRequest) Reset() {
 	*x = QueryDelegatorServiceDelegationsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[20]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[36]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18426,7 +28237,7 @@ func (*QueryDelegatorServiceDelegationsRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryDelegatorServiceDelegationsRequest.ProtoReflect.Descriptor instead.
 func (*QueryDelegatorServiceDelegationsRequest) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{20}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *QueryDelegatorServiceDelegationsRequest) GetDelegatorAddress() string {
@@ -18459,7 +28270,7 @@ type QueryDelegatorServiceDelegationsResponse struct {
 func (x *QueryDelegatorServiceDelegationsResponse) Reset() {
 	*x = QueryDelegatorServiceDelegationsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[21]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[37]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18473,7 +28284,7 @@ func (*QueryDelegatorServiceDelegationsResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryDelegatorServiceDelegationsResponse.ProtoReflect.Descriptor instead.
 func (*QueryDelegatorServiceDelegationsResponse) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{21}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{37}
 }
 
 func (x *QueryDelegatorServiceDelegationsResponse) GetDelegations() []*DelegationResponse {
@@ -18484,6 +28295,100 @@ func (x *QueryDelegatorServiceDelegationsResponse) GetDelegations() []*Delegatio
 }
 
 func (x *QueryDelegatorServiceDelegationsResponse) GetPagination() *v1beta1.PageResponse {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+// QueryDelegatorServiceUnbondingDelegationsRequest is request type for the
+// Query/DelegatorServiceUnbondingDelegations RPC method.
+type QueryDelegatorServiceUnbondingDelegationsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// DelegatorAddress is the address of the delegator to query
+	DelegatorAddress string `protobuf:"bytes,1,opt,name=delegator_address,json=delegatorAddress,proto3" json:"delegator_address,omitempty"`
+	// Pagination defines an optional pagination for the request.
+	Pagination *v1beta1.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (x *QueryDelegatorServiceUnbondingDelegationsRequest) Reset() {
+	*x = QueryDelegatorServiceUnbondingDelegationsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[38]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryDelegatorServiceUnbondingDelegationsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryDelegatorServiceUnbondingDelegationsRequest) ProtoMessage() {}
+
+// Deprecated: Use QueryDelegatorServiceUnbondingDelegationsRequest.ProtoReflect.Descriptor instead.
+func (*QueryDelegatorServiceUnbondingDelegationsRequest) Descriptor() ([]byte, []int) {
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{38}
+}
+
+func (x *QueryDelegatorServiceUnbondingDelegationsRequest) GetDelegatorAddress() string {
+	if x != nil {
+		return x.DelegatorAddress
+	}
+	return ""
+}
+
+func (x *QueryDelegatorServiceUnbondingDelegationsRequest) GetPagination() *v1beta1.PageRequest {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+// QueryDelegatorServiceUnbondingDelegationsResponse is response type for the
+// Query/DelegatorServiceUnbondingDelegations RPC method.
+type QueryDelegatorServiceUnbondingDelegationsResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// UnbondingDelegations is the list of unbonding delegations
+	UnbondingDelegations []*UnbondingDelegation `protobuf:"bytes,1,rep,name=unbonding_delegations,json=unbondingDelegations,proto3" json:"unbonding_delegations,omitempty"`
+	// Pagination defines the pagination in the response.
+	Pagination *v1beta1.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (x *QueryDelegatorServiceUnbondingDelegationsResponse) Reset() {
+	*x = QueryDelegatorServiceUnbondingDelegationsResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[39]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *QueryDelegatorServiceUnbondingDelegationsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QueryDelegatorServiceUnbondingDelegationsResponse) ProtoMessage() {}
+
+// Deprecated: Use QueryDelegatorServiceUnbondingDelegationsResponse.ProtoReflect.Descriptor instead.
+func (*QueryDelegatorServiceUnbondingDelegationsResponse) Descriptor() ([]byte, []int) {
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{39}
+}
+
+func (x *QueryDelegatorServiceUnbondingDelegationsResponse) GetUnbondingDelegations() []*UnbondingDelegation {
+	if x != nil {
+		return x.UnbondingDelegations
+	}
+	return nil
+}
+
+func (x *QueryDelegatorServiceUnbondingDelegationsResponse) GetPagination() *v1beta1.PageResponse {
 	if x != nil {
 		return x.Pagination
 	}
@@ -18506,7 +28411,7 @@ type QueryDelegatorPoolsRequest struct {
 func (x *QueryDelegatorPoolsRequest) Reset() {
 	*x = QueryDelegatorPoolsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[22]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[40]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18520,7 +28425,7 @@ func (*QueryDelegatorPoolsRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryDelegatorPoolsRequest.ProtoReflect.Descriptor instead.
 func (*QueryDelegatorPoolsRequest) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{22}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{40}
 }
 
 func (x *QueryDelegatorPoolsRequest) GetDelegatorAddress() string {
@@ -18553,7 +28458,7 @@ type QueryDelegatorPoolsResponse struct {
 func (x *QueryDelegatorPoolsResponse) Reset() {
 	*x = QueryDelegatorPoolsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[23]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[41]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18567,7 +28472,7 @@ func (*QueryDelegatorPoolsResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryDelegatorPoolsResponse.ProtoReflect.Descriptor instead.
 func (*QueryDelegatorPoolsResponse) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{23}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{41}
 }
 
 func (x *QueryDelegatorPoolsResponse) GetPools() []*v1.Pool {
@@ -18600,7 +28505,7 @@ type QueryDelegatorPoolRequest struct {
 func (x *QueryDelegatorPoolRequest) Reset() {
 	*x = QueryDelegatorPoolRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[24]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[42]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18614,7 +28519,7 @@ func (*QueryDelegatorPoolRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryDelegatorPoolRequest.ProtoReflect.Descriptor instead.
 func (*QueryDelegatorPoolRequest) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{24}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{42}
 }
 
 func (x *QueryDelegatorPoolRequest) GetDelegatorAddress() string {
@@ -18645,7 +28550,7 @@ type QueryDelegatorPoolResponse struct {
 func (x *QueryDelegatorPoolResponse) Reset() {
 	*x = QueryDelegatorPoolResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[25]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[43]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18659,7 +28564,7 @@ func (*QueryDelegatorPoolResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryDelegatorPoolResponse.ProtoReflect.Descriptor instead.
 func (*QueryDelegatorPoolResponse) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{25}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{43}
 }
 
 func (x *QueryDelegatorPoolResponse) GetPool() *v1.Pool {
@@ -18685,7 +28590,7 @@ type QueryDelegatorOperatorsRequest struct {
 func (x *QueryDelegatorOperatorsRequest) Reset() {
 	*x = QueryDelegatorOperatorsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[26]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[44]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18699,7 +28604,7 @@ func (*QueryDelegatorOperatorsRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryDelegatorOperatorsRequest.ProtoReflect.Descriptor instead.
 func (*QueryDelegatorOperatorsRequest) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{26}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{44}
 }
 
 func (x *QueryDelegatorOperatorsRequest) GetDelegatorAddress() string {
@@ -18732,7 +28637,7 @@ type QueryDelegatorOperatorsResponse struct {
 func (x *QueryDelegatorOperatorsResponse) Reset() {
 	*x = QueryDelegatorOperatorsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[27]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[45]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18746,7 +28651,7 @@ func (*QueryDelegatorOperatorsResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryDelegatorOperatorsResponse.ProtoReflect.Descriptor instead.
 func (*QueryDelegatorOperatorsResponse) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{27}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{45}
 }
 
 func (x *QueryDelegatorOperatorsResponse) GetOperators() []*v11.Operator {
@@ -18779,7 +28684,7 @@ type QueryDelegatorOperatorRequest struct {
 func (x *QueryDelegatorOperatorRequest) Reset() {
 	*x = QueryDelegatorOperatorRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[28]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[46]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18793,7 +28698,7 @@ func (*QueryDelegatorOperatorRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryDelegatorOperatorRequest.ProtoReflect.Descriptor instead.
 func (*QueryDelegatorOperatorRequest) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{28}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{46}
 }
 
 func (x *QueryDelegatorOperatorRequest) GetDelegatorAddress() string {
@@ -18824,7 +28729,7 @@ type QueryDelegatorOperatorResponse struct {
 func (x *QueryDelegatorOperatorResponse) Reset() {
 	*x = QueryDelegatorOperatorResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[29]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[47]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18838,7 +28743,7 @@ func (*QueryDelegatorOperatorResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryDelegatorOperatorResponse.ProtoReflect.Descriptor instead.
 func (*QueryDelegatorOperatorResponse) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{29}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{47}
 }
 
 func (x *QueryDelegatorOperatorResponse) GetOperator() *v11.Operator {
@@ -18864,7 +28769,7 @@ type QueryDelegatorServicesRequest struct {
 func (x *QueryDelegatorServicesRequest) Reset() {
 	*x = QueryDelegatorServicesRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[30]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[48]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18878,7 +28783,7 @@ func (*QueryDelegatorServicesRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryDelegatorServicesRequest.ProtoReflect.Descriptor instead.
 func (*QueryDelegatorServicesRequest) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{30}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{48}
 }
 
 func (x *QueryDelegatorServicesRequest) GetDelegatorAddress() string {
@@ -18911,7 +28816,7 @@ type QueryDelegatorServicesResponse struct {
 func (x *QueryDelegatorServicesResponse) Reset() {
 	*x = QueryDelegatorServicesResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[31]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[49]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18925,7 +28830,7 @@ func (*QueryDelegatorServicesResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryDelegatorServicesResponse.ProtoReflect.Descriptor instead.
 func (*QueryDelegatorServicesResponse) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{31}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{49}
 }
 
 func (x *QueryDelegatorServicesResponse) GetServices() []*v12.Service {
@@ -18958,7 +28863,7 @@ type QueryDelegatorServiceRequest struct {
 func (x *QueryDelegatorServiceRequest) Reset() {
 	*x = QueryDelegatorServiceRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[32]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[50]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -18972,7 +28877,7 @@ func (*QueryDelegatorServiceRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryDelegatorServiceRequest.ProtoReflect.Descriptor instead.
 func (*QueryDelegatorServiceRequest) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{32}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{50}
 }
 
 func (x *QueryDelegatorServiceRequest) GetDelegatorAddress() string {
@@ -19003,7 +28908,7 @@ type QueryDelegatorServiceResponse struct {
 func (x *QueryDelegatorServiceResponse) Reset() {
 	*x = QueryDelegatorServiceResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[33]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[51]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -19017,7 +28922,7 @@ func (*QueryDelegatorServiceResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryDelegatorServiceResponse.ProtoReflect.Descriptor instead.
 func (*QueryDelegatorServiceResponse) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{33}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{51}
 }
 
 func (x *QueryDelegatorServiceResponse) GetService() *v12.Service {
@@ -19037,7 +28942,7 @@ type QueryParamsRequest struct {
 func (x *QueryParamsRequest) Reset() {
 	*x = QueryParamsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[34]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[52]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -19051,7 +28956,7 @@ func (*QueryParamsRequest) ProtoMessage() {}
 
 // Deprecated: Use QueryParamsRequest.ProtoReflect.Descriptor instead.
 func (*QueryParamsRequest) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{34}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{52}
 }
 
 // QueryParamsResponse is response type for the Query/Params RPC method.
@@ -19067,7 +28972,7 @@ type QueryParamsResponse struct {
 func (x *QueryParamsResponse) Reset() {
 	*x = QueryParamsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[35]
+		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[53]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -19081,7 +28986,7 @@ func (*QueryParamsResponse) ProtoMessage() {}
 
 // Deprecated: Use QueryParamsResponse.ProtoReflect.Descriptor instead.
 func (*QueryParamsResponse) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{35}
+	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{53}
 }
 
 func (x *QueryParamsResponse) GetParams() *Params {
@@ -19176,117 +29081,215 @@ var file_milkyway_restaking_v1_query_proto_rawDesc = []byte{
 	0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65,
 	0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x04,
 	0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0a, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x22, 0x8a, 0x01, 0x0a, 0x1f, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74,
-	0x6f, 0x72, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71,
+	0x22, 0x87, 0x01, 0x0a, 0x24, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x6f, 0x6f, 0x6c, 0x55, 0x6e,
+	0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x17, 0x0a, 0x07, 0x70, 0x6f, 0x6f,
+	0x6c, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x06, 0x70, 0x6f, 0x6f, 0x6c,
+	0x49, 0x64, 0x12, 0x46, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
+	0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74,
+	0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0a,
+	0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xd7, 0x01, 0x0a, 0x25, 0x51,
+	0x75, 0x65, 0x72, 0x79, 0x50, 0x6f, 0x6f, 0x6c, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e,
+	0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x65, 0x0a, 0x15, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e,
+	0x67, 0x5f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x01, 0x20,
+	0x03, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72,
+	0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x6e, 0x62, 0x6f,
+	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42,
+	0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x14, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67,
+	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x47, 0x0a, 0x0a, 0x70,
+	0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x27, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75,
+	0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x22, 0x85, 0x01, 0x0a, 0x23, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x6f,
+	0x6f, 0x6c, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x17, 0x0a, 0x07,
+	0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x06, 0x70,
+	0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x12, 0x45, 0x0a, 0x11, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
+	0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
+	0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64,
+	0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x10, 0x64, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x6f, 0x72, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x22, 0x8b, 0x01, 0x0a,
+	0x24, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x6f, 0x6f, 0x6c, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64,
+	0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x63, 0x0a, 0x14, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x5f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72,
+	0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x6e, 0x62, 0x6f,
+	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42,
+	0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x13, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67,
+	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x8a, 0x01, 0x0a, 0x1f, 0x51,
+	0x75, 0x65, 0x72, 0x79, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1f,
+	0x0a, 0x0b, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x0d, 0x52, 0x0a, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x64, 0x12,
+	0x46, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73,
+	0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e,
+	0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0a, 0x70, 0x61, 0x67,
+	0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xbe, 0x01, 0x0a, 0x20, 0x51, 0x75, 0x65, 0x72,
+	0x79, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x51, 0x0a, 0x0b,
+	0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28,
+	0x0b, 0x32, 0x29, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73,
+	0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x04, 0xc8, 0xde,
+	0x1f, 0x00, 0x52, 0x0b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12,
+	0x47, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73,
+	0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e,
+	0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x52, 0x0a, 0x70, 0x61,
+	0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x88, 0x01, 0x0a, 0x1e, 0x51, 0x75, 0x65,
+	0x72, 0x79, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1f, 0x0a, 0x0b, 0x6f,
+	0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d,
+	0x52, 0x0a, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x64, 0x12, 0x45, 0x0a, 0x11,
+	0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73,
+	0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73,
+	0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e,
+	0x67, 0x52, 0x10, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x41, 0x64, 0x64, 0x72,
+	0x65, 0x73, 0x73, 0x22, 0x72, 0x0a, 0x1f, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x70, 0x65, 0x72,
+	0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4f, 0x0a, 0x0a, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x6d, 0x69, 0x6c,
+	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e,
+	0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0a, 0x64, 0x65, 0x6c,
+	0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x93, 0x01, 0x0a, 0x28, 0x51, 0x75, 0x65, 0x72,
+	0x79, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71,
 	0x75, 0x65, 0x73, 0x74, 0x12, 0x1f, 0x0a, 0x0b, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
 	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0a, 0x6f, 0x70, 0x65, 0x72, 0x61,
 	0x74, 0x6f, 0x72, 0x49, 0x64, 0x12, 0x46, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74,
 	0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73, 0x6d,
 	0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31,
 	0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xbe, 0x01,
-	0x0a, 0x20, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x44,
-	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x12, 0x51, 0x0a, 0x0b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
-	0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e,
-	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x47, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6f, 0x73, 0x6d,
-	0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31,
-	0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x88,
-	0x01, 0x0a, 0x1e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
-	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
-	0x74, 0x12, 0x1f, 0x0a, 0x0b, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x69, 0x64,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0a, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
-	0x49, 0x64, 0x12, 0x45, 0x0a, 0x11, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f,
-	0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2,
-	0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73,
-	0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x10, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
-	0x6f, 0x72, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x22, 0x72, 0x0a, 0x1f, 0x51, 0x75, 0x65,
-	0x72, 0x79, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4f, 0x0a, 0x0a,
-	0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b,
-	0x32, 0x29, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74,
-	0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x04, 0xc8, 0xde, 0x1f,
-	0x00, 0x52, 0x0a, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x87, 0x01,
-	0x0a, 0x1e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65,
-	0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x0d, 0x52, 0x09, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x12,
-	0x46, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20,
-	0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73,
-	0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e,
-	0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0a, 0x70, 0x61, 0x67,
-	0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xbd, 0x01, 0x0a, 0x1f, 0x51, 0x75, 0x65, 0x72,
-	0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69,
-	0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x51, 0x0a, 0x0b, 0x64,
-	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b,
-	0x32, 0x29, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74,
-	0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x04, 0xc8, 0xde, 0x1f,
-	0x00, 0x52, 0x0b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x47,
-	0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65,
-	0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50,
-	0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x52, 0x0a, 0x70, 0x61, 0x67,
-	0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x85, 0x01, 0x0a, 0x1d, 0x51, 0x75, 0x65, 0x72,
-	0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69,
-	0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x09, 0x73,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x12, 0x45, 0x0a, 0x11, 0x64, 0x65, 0x6c, 0x65,
+	0x74, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xdb, 0x01,
+	0x0a, 0x29, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x55,
+	0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x65, 0x0a, 0x15, 0x75,
+	0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69, 0x6c,
+	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e,
+	0x76, 0x31, 0x2e, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x14, 0x75, 0x6e,
+	0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x73, 0x12, 0x47, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
+	0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74,
+	0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x52,
+	0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x91, 0x01, 0x0a, 0x27,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x55, 0x6e, 0x62,
+	0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1f, 0x0a, 0x0b, 0x6f, 0x70, 0x65, 0x72, 0x61,
+	0x74, 0x6f, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0a, 0x6f, 0x70,
+	0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x64, 0x12, 0x45, 0x0a, 0x11, 0x64, 0x65, 0x6c, 0x65,
 	0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x02, 0x20,
 	0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
 	0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x10, 0x64,
 	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x22,
-	0x71, 0x0a, 0x1e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44,
-	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x12, 0x4f, 0x0a, 0x0a, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
-	0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65,
-	0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0a, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69,
-	0x6f, 0x6e, 0x22, 0xb5, 0x01, 0x0a, 0x24, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65,
-	0x67, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f, 0x6c, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x45, 0x0a, 0x11, 0x64,
-	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d,
-	0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67,
-	0x52, 0x10, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x41, 0x64, 0x64, 0x72, 0x65,
-	0x73, 0x73, 0x12, 0x46, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
+	0x8f, 0x01, 0x0a, 0x28, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f,
+	0x72, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x63, 0x0a, 0x14,
+	0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69, 0x6c,
+	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e,
+	0x76, 0x31, 0x2e, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x13, 0x75, 0x6e,
+	0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x22, 0x87, 0x01, 0x0a, 0x1e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x09, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x49, 0x64, 0x12, 0x46, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
+	0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65,
+	0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52,
+	0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xbd, 0x01, 0x0a, 0x1f,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x51, 0x0a, 0x0b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x01,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
+	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c,
+	0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42,
+	0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x73, 0x12, 0x47, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
 	0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74,
-	0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0a,
-	0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xc3, 0x01, 0x0a, 0x25, 0x51,
-	0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f,
-	0x6c, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x51, 0x0a, 0x0b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69,
-	0x6f, 0x6e, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x6d, 0x69, 0x6c, 0x6b,
+	0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x52,
+	0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x85, 0x01, 0x0a, 0x1d,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1d, 0x0a,
+	0x0a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0d, 0x52, 0x09, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x12, 0x45, 0x0a, 0x11,
+	0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73,
+	0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73,
+	0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e,
+	0x67, 0x52, 0x10, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x41, 0x64, 0x64, 0x72,
+	0x65, 0x73, 0x73, 0x22, 0x71, 0x0a, 0x1e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4f, 0x0a, 0x0a, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x6d, 0x69, 0x6c, 0x6b,
 	0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76,
 	0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0b, 0x64, 0x65, 0x6c, 0x65,
-	0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x47, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e,
-	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6f,
-	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e,
-	0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x22, 0xb9, 0x01, 0x0a, 0x28, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61,
-	0x74, 0x6f, 0x72, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c, 0x65, 0x67,
-	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x45, 0x0a,
-	0x11, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65,
-	0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f,
-	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69,
-	0x6e, 0x67, 0x52, 0x10, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x41, 0x64, 0x64,
-	0x72, 0x65, 0x73, 0x73, 0x12, 0x46, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69,
-	0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
-	0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62,
-	0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xc7, 0x01, 0x0a,
-	0x29, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x4f,
-	0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f,
+	0x6f, 0x6e, 0x73, 0x65, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0a, 0x64, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x90, 0x01, 0x0a, 0x27, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67,
+	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x09, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49,
+	0x64, 0x12, 0x46, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62,
+	0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61,
+	0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0a, 0x70,
+	0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xda, 0x01, 0x0a, 0x28, 0x51, 0x75,
+	0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64,
+	0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x65, 0x0a, 0x15, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64,
+	0x69, 0x6e, 0x67, 0x5f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18,
+	0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
+	0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x6e,
+	0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x14, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x47, 0x0a,
+	0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e,
+	0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61,
+	0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69,
+	0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x8e, 0x01, 0x0a, 0x26, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67,
+	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x09, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64,
+	0x12, 0x45, 0x0a, 0x11, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64,
+	0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d,
+	0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53,
+	0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x10, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72,
+	0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x22, 0x8e, 0x01, 0x0a, 0x27, 0x51, 0x75, 0x65, 0x72,
+	0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e,
+	0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x12, 0x63, 0x0a, 0x14, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67,
+	0x5f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73,
+	0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64,
+	0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x04, 0xc8,
+	0xde, 0x1f, 0x00, 0x52, 0x13, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65,
+	0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xb5, 0x01, 0x0a, 0x24, 0x51, 0x75, 0x65,
+	0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f, 0x6c, 0x44,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x12, 0x45, 0x0a, 0x11, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61,
+	0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4,
+	0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
+	0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x10, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f,
+	0x72, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x46, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69,
+	0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63,
+	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79,
+	0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x22, 0xc3, 0x01, 0x0a, 0x25, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61,
+	0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f, 0x6c, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f,
 	0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x51, 0x0a, 0x0b, 0x64, 0x65,
 	0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32,
 	0x29, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61,
@@ -19297,26 +29300,130 @@ var file_milkyway_restaking_v1_query_proto_rawDesc = []byte{
 	0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e,
 	0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61,
 	0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69,
-	0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xb8, 0x01, 0x0a, 0x27, 0x51, 0x75, 0x65, 0x72, 0x79,
-	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
-	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x12, 0x45, 0x0a, 0x11, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f,
-	0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2,
-	0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73,
-	0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x10, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
-	0x6f, 0x72, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x46, 0x0a, 0x0a, 0x70, 0x61, 0x67,
-	0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e,
-	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72,
-	0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x22, 0xc6, 0x01, 0x0a, 0x28, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67,
-	0x61, 0x74, 0x6f, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65, 0x6c, 0x65, 0x67,
-	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x51,
-	0x0a, 0x0b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x01, 0x20,
-	0x03, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72,
-	0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65,
-	0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x04,
-	0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xbe, 0x01, 0x0a, 0x2d, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f, 0x6c, 0x55, 0x6e, 0x62,
+	0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x45, 0x0a, 0x11, 0x64, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
+	0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x10, 0x64,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12,
+	0x46, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73,
+	0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e,
+	0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0a, 0x70, 0x61, 0x67,
+	0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xe0, 0x01, 0x0a, 0x2e, 0x51, 0x75, 0x65, 0x72,
+	0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f, 0x6c, 0x55, 0x6e,
+	0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x65, 0x0a, 0x15, 0x75, 0x6e,
+	0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b,
+	0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76,
+	0x31, 0x2e, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x14, 0x75, 0x6e, 0x62,
+	0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x73, 0x12, 0x47, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62,
+	0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61,
+	0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x52, 0x0a,
+	0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xb9, 0x01, 0x0a, 0x28, 0x51,
+	0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x4f, 0x70, 0x65,
+	0x72, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x45, 0x0a, 0x11, 0x64, 0x65, 0x6c, 0x65, 0x67,
+	0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41,
+	0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x10, 0x64, 0x65,
+	0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x46,
+	0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65,
+	0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50,
+	0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69,
+	0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xc7, 0x01, 0x0a, 0x29, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f,
+	0x72, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x51, 0x0a, 0x0b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x6d, 0x69, 0x6c, 0x6b,
+	0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76,
+	0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0b, 0x64, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x47, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e,
+	0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x22, 0xc2, 0x01, 0x0a, 0x31, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61,
+	0x74, 0x6f, 0x72, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x55, 0x6e, 0x62, 0x6f, 0x6e,
+	0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x45, 0x0a, 0x11, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61,
+	0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64,
+	0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x10, 0x64, 0x65, 0x6c,
+	0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x46, 0x0a,
+	0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e,
+	0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61,
+	0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xe4, 0x01, 0x0a, 0x32, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
+	0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x65, 0x0a, 0x15,
+	0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69,
+	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67,
+	0x2e, 0x76, 0x31, 0x2e, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c,
+	0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x14, 0x75,
+	0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x73, 0x12, 0x47, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
+	0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65,
+	0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xb8, 0x01, 0x0a,
+	0x27, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x45, 0x0a, 0x11, 0x64, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e,
+	0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x10, 0x64,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12,
+	0x46, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73,
+	0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e,
+	0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0a, 0x70, 0x61, 0x67,
+	0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0xc6, 0x01, 0x0a, 0x28, 0x51, 0x75, 0x65, 0x72,
+	0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x51, 0x0a, 0x0b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x6d, 0x69, 0x6c, 0x6b,
+	0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76,
+	0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0b, 0x64, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x47, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e,
+	0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x22, 0xc1, 0x01, 0x0a, 0x30, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61,
+	0x74, 0x6f, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64,
+	0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x45, 0x0a, 0x11, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
+	0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
+	0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64,
+	0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x10, 0x64, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x6f, 0x72, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x46, 0x0a, 0x0a,
+	0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71,
+	0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67,
+	0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x22, 0xe3, 0x01, 0x0a, 0x31, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65,
+	0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x55, 0x6e,
+	0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x65, 0x0a, 0x15, 0x75, 0x6e,
+	0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b,
+	0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76,
+	0x31, 0x2e, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x14, 0x75, 0x6e, 0x62,
+	0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e,
 	0x73, 0x12, 0x47, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18,
 	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62,
 	0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61,
@@ -19435,7 +29542,7 @@ var file_milkyway_restaking_v1_query_proto_rawDesc = []byte{
 	0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b,
 	0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76,
 	0x31, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7,
-	0xb0, 0x2a, 0x01, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x32, 0xa8, 0x1d, 0x0a, 0x05,
+	0xb0, 0x2a, 0x01, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x32, 0xa7, 0x2f, 0x0a, 0x05,
 	0x51, 0x75, 0x65, 0x72, 0x79, 0x12, 0xba, 0x01, 0x0a, 0x0e, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74,
 	0x6f, 0x72, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x31, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
 	0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31,
@@ -19484,208 +29591,352 @@ var file_milkyway_restaking_v1_query_proto_rawDesc = []byte{
 	0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x2f, 0x7b, 0x70,
 	0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69,
 	0x6f, 0x6e, 0x73, 0x2f, 0x7b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61,
-	0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x12, 0xcf, 0x01, 0x0a, 0x13, 0x4f, 0x70, 0x65, 0x72,
-	0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12,
-	0x36, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61,
-	0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x70, 0x65,
-	0x72, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x37, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
-	0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e,
-	0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c,
-	0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x22, 0x47, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x3c, 0x12, 0x3a, 0x2f,
-	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69,
-	0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x2f,
-	0x7b, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x64, 0x65,
-	0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0xe0, 0x01, 0x0a, 0x12, 0x4f, 0x70,
-	0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x12, 0x35, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74,
-	0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x70,
-	0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x36, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
-	0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e,
-	0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c,
-	0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
-	0x5b, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x50, 0x12, 0x4e, 0x2f, 0x6d,
-	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e,
-	0x67, 0x2f, 0x76, 0x31, 0x2f, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x2f, 0x7b,
-	0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x64, 0x65, 0x6c,
-	0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2f, 0x7b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61,
-	0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x12, 0xca, 0x01, 0x0a,
-	0x12, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69,
-	0x6f, 0x6e, 0x73, 0x12, 0x35, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72,
-	0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72,
-	0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69,
-	0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x36, 0x2e, 0x6d, 0x69, 0x6c,
-	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e,
-	0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44,
-	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x22, 0x45, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x3a, 0x12,
-	0x38, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61,
-	0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73,
-	0x2f, 0x7b, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x64, 0x65,
-	0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0xdb, 0x01, 0x0a, 0x11, 0x53, 0x65,
-	0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12,
-	0x34, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61,
-	0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x35, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
-	0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75,
-	0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x59, 0x88, 0xe7,
-	0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x4e, 0x12, 0x4c, 0x2f, 0x6d, 0x69, 0x6c, 0x6b,
-	0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76,
-	0x31, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f, 0x7b, 0x73, 0x65, 0x72, 0x76,
-	0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69,
-	0x6f, 0x6e, 0x73, 0x2f, 0x7b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61,
-	0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x12, 0xe0, 0x01, 0x0a, 0x18, 0x44, 0x65, 0x6c, 0x65,
-	0x67, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f, 0x6c, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
+	0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x12, 0xe0, 0x01, 0x0a, 0x18, 0x50, 0x6f, 0x6f, 0x6c,
+	0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
 	0x69, 0x6f, 0x6e, 0x73, 0x12, 0x3b, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
 	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65,
-	0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f, 0x6c, 0x44,
+	0x72, 0x79, 0x50, 0x6f, 0x6f, 0x6c, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44,
 	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
 	0x74, 0x1a, 0x3c, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73,
-	0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44,
-	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f, 0x6c, 0x44, 0x65, 0x6c, 0x65,
+	0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50,
+	0x6f, 0x6f, 0x6c, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65,
 	0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
 	0x49, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x3e, 0x12, 0x3c, 0x2f, 0x6d,
 	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e,
-	0x67, 0x2f, 0x76, 0x31, 0x2f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73,
-	0x2f, 0x7b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72,
-	0x65, 0x73, 0x73, 0x7d, 0x2f, 0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x12, 0xf0, 0x01, 0x0a, 0x1c, 0x44,
-	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
-	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x3f, 0x2e, 0x6d, 0x69,
-	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67,
-	0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
-	0x6f, 0x72, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x40, 0x2e, 0x6d,
-	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e,
-	0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61,
-	0x74, 0x6f, 0x72, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c, 0x65, 0x67,
-	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x4d,
-	0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x42, 0x12, 0x40, 0x2f, 0x6d, 0x69,
-	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67,
-	0x2f, 0x76, 0x31, 0x2f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2f,
+	0x67, 0x2f, 0x76, 0x31, 0x2f, 0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x2f, 0x7b, 0x70, 0x6f, 0x6f, 0x6c,
+	0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x64,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0xf1, 0x01, 0x0a, 0x17, 0x50,
+	0x6f, 0x6f, 0x6c, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x3a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
+	0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51,
+	0x75, 0x65, 0x72, 0x79, 0x50, 0x6f, 0x6f, 0x6c, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e,
+	0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x3b, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65,
+	0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x50, 0x6f, 0x6f, 0x6c, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c,
+	0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
+	0x5d, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x52, 0x12, 0x50, 0x2f, 0x6d,
+	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e,
+	0x67, 0x2f, 0x76, 0x31, 0x2f, 0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x2f, 0x7b, 0x70, 0x6f, 0x6f, 0x6c,
+	0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x64,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2f, 0x7b, 0x64, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x12, 0xcf,
+	0x01, 0x0a, 0x13, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c, 0x65, 0x67,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x36, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
+	0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51,
+	0x75, 0x65, 0x72, 0x79, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x37,
+	0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b,
+	0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x70, 0x65, 0x72,
+	0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x47, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3,
+	0xe4, 0x93, 0x02, 0x3c, 0x12, 0x3a, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f,
+	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x6f, 0x70, 0x65,
+	0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x2f, 0x7b, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
+	0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73,
+	0x12, 0xe0, 0x01, 0x0a, 0x12, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c,
+	0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x35, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
+	0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c,
+	0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x36,
+	0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b,
+	0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x70, 0x65, 0x72,
+	0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x5b, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4,
+	0x93, 0x02, 0x50, 0x12, 0x4e, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72,
+	0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x6f, 0x70, 0x65, 0x72,
+	0x61, 0x74, 0x6f, 0x72, 0x73, 0x2f, 0x7b, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f,
+	0x69, 0x64, 0x7d, 0x2f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2f,
 	0x7b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65,
-	0x73, 0x73, 0x7d, 0x2f, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x12, 0xec, 0x01,
-	0x0a, 0x1b, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x3e, 0x2e,
+	0x73, 0x73, 0x7d, 0x12, 0xf4, 0x01, 0x0a, 0x1c, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
+	0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x73, 0x12, 0x3f, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
+	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65,
+	0x72, 0x79, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64,
+	0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x40, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
+	0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75,
+	0x65, 0x72, 0x79, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x55, 0x6e, 0x62, 0x6f, 0x6e,
+	0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x51, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3,
+	0xe4, 0x93, 0x02, 0x46, 0x12, 0x44, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f,
+	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x6f, 0x70, 0x65,
+	0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x2f, 0x7b, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
+	0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x64,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x85, 0x02, 0x0a, 0x1b, 0x4f,
+	0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67,
+	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x3e, 0x2e, 0x6d, 0x69, 0x6c,
+	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e,
+	0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
+	0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x3f, 0x2e, 0x6d, 0x69, 0x6c,
+	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e,
+	0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
+	0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x65, 0x88, 0xe7, 0xb0,
+	0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x5a, 0x12, 0x58, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
+	0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31,
+	0x2f, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x2f, 0x7b, 0x6f, 0x70, 0x65, 0x72,
+	0x61, 0x74, 0x6f, 0x72, 0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x5f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2f, 0x7b,
+	0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73,
+	0x73, 0x7d, 0x12, 0xca, 0x01, 0x0a, 0x12, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65,
+	0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x35, 0x2e, 0x6d, 0x69, 0x6c, 0x6b,
+	0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76,
+	0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65,
+	0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x36, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74,
+	0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x45, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82,
+	0xd3, 0xe4, 0x93, 0x02, 0x3a, 0x12, 0x38, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
+	0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x73, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f, 0x7b, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f,
+	0x69, 0x64, 0x7d, 0x2f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12,
+	0xdb, 0x01, 0x0a, 0x11, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65, 0x6c, 0x65, 0x67,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x34, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
+	0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75,
+	0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x35, 0x2e, 0x6d, 0x69,
+	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67,
+	0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x22, 0x59, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x4e, 0x12,
+	0x4c, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61,
+	0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73,
+	0x2f, 0x7b, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x64, 0x65,
+	0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2f, 0x7b, 0x64, 0x65, 0x6c, 0x65, 0x67,
+	0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x12, 0xef, 0x01,
+	0x0a, 0x1b, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x3e, 0x2e,
 	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69,
-	0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67,
-	0x61, 0x74, 0x6f, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65, 0x6c, 0x65, 0x67,
+	0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67,
 	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x3f, 0x2e,
 	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69,
-	0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67,
-	0x61, 0x74, 0x6f, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65, 0x6c, 0x65, 0x67,
-	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x4c,
-	0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x41, 0x12, 0x3f, 0x2f, 0x6d, 0x69,
+	0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x4f,
+	0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x44, 0x12, 0x42, 0x2f, 0x6d, 0x69,
 	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67,
-	0x2f, 0x76, 0x31, 0x2f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2f,
-	0x7b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65,
-	0x73, 0x73, 0x7d, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x12, 0xc1, 0x01, 0x0a,
-	0x0e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x12,
-	0x31, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61,
+	0x2f, 0x76, 0x31, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f, 0x7b, 0x73, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64,
+	0x69, 0x6e, 0x67, 0x5f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12,
+	0x80, 0x02, 0x0a, 0x1a, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x55, 0x6e, 0x62, 0x6f, 0x6e,
+	0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x3d,
+	0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b,
+	0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x3e, 0x2e,
+	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69,
+	0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x63, 0x88,
+	0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x58, 0x12, 0x56, 0x2f, 0x6d, 0x69, 0x6c,
+	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f,
+	0x76, 0x31, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f, 0x7b, 0x73, 0x65, 0x72,
+	0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x5f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2f, 0x7b,
+	0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73,
+	0x73, 0x7d, 0x12, 0xe0, 0x01, 0x0a, 0x18, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72,
+	0x50, 0x6f, 0x6f, 0x6c, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12,
+	0x3b, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61,
 	0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c,
-	0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x1a, 0x32, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65,
-	0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
-	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x48, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4,
-	0x93, 0x02, 0x3d, 0x12, 0x3b, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72,
+	0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f, 0x6c, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x3c, 0x2e, 0x6d,
+	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e,
+	0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61,
+	0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f, 0x6c, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x49, 0x88, 0xe7, 0xb0, 0x2a,
+	0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x3e, 0x12, 0x3c, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
+	0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f,
+	0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2f, 0x7b, 0x64, 0x65, 0x6c,
+	0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x2f,
+	0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x12, 0x85, 0x02, 0x0a, 0x21, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61,
+	0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f, 0x6c, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67,
+	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x44, 0x2e, 0x6d, 0x69,
+	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67,
+	0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
+	0x6f, 0x72, 0x50, 0x6f, 0x6f, 0x6c, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x45, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73,
+	0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f, 0x6c, 0x55, 0x6e, 0x62, 0x6f,
+	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x53, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82,
+	0xd3, 0xe4, 0x93, 0x02, 0x48, 0x12, 0x46, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
+	0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x64, 0x65,
+	0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2f, 0x7b, 0x64, 0x65, 0x6c, 0x65, 0x67,
+	0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x2f, 0x75, 0x6e,
+	0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x12, 0xf0, 0x01,
+	0x0a, 0x1c, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x4f, 0x70, 0x65, 0x72, 0x61,
+	0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x3f,
+	0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b,
+	0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x6f, 0x72, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65, 0x6c,
+	0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x40, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61,
+	0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c,
+	0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x44, 0x65,
+	0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x22, 0x4d, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x42, 0x12, 0x40,
+	0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b,
+	0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x73, 0x2f, 0x7b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64,
+	0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x2f, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73,
+	0x12, 0x95, 0x02, 0x0a, 0x25, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x4f, 0x70,
+	0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x48, 0x2e, 0x6d, 0x69, 0x6c,
+	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e,
+	0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f,
+	0x72, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x49, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
+	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65,
+	0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x4f, 0x70, 0x65, 0x72, 0x61,
+	0x74, 0x6f, 0x72, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
+	0x57, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x4c, 0x12, 0x4a, 0x2f, 0x6d,
+	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e,
+	0x67, 0x2f, 0x76, 0x31, 0x2f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73,
+	0x2f, 0x7b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72,
+	0x65, 0x73, 0x73, 0x7d, 0x2f, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x6f,
+	0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x12, 0xec, 0x01, 0x0a, 0x1b, 0x44, 0x65, 0x6c,
+	0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65, 0x6c,
+	0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x3e, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
+	0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31,
+	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x3f, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
+	0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31,
+	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x4c, 0x88, 0xe7, 0xb0, 0x2a, 0x01,
+	0x82, 0xd3, 0xe4, 0x93, 0x02, 0x41, 0x12, 0x3f, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
+	0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x64,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2f, 0x7b, 0x64, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x2f, 0x73,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x12, 0x91, 0x02, 0x0a, 0x24, 0x44, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x55, 0x6e, 0x62, 0x6f,
+	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73,
+	0x12, 0x47, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74,
+	0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65,
+	0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x55, 0x6e,
+	0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x48, 0x2e, 0x6d, 0x69, 0x6c, 0x6b,
+	0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76,
+	0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72,
+	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67,
+	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x22, 0x56, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x4b,
+	0x12, 0x49, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74,
+	0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x73, 0x2f, 0x7b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f,
+	0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x2f, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x12, 0xc1, 0x01, 0x0a, 0x0e,
+	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x12, 0x31,
+	0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b,
+	0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x32, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73,
+	0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x48, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93,
+	0x02, 0x3d, 0x12, 0x3b, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65,
+	0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x64, 0x65, 0x6c, 0x65, 0x67,
+	0x61, 0x74, 0x6f, 0x72, 0x73, 0x2f, 0x7b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72,
+	0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x2f, 0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x12,
+	0xc8, 0x01, 0x0a, 0x0d, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f,
+	0x6c, 0x12, 0x30, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73,
+	0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x31, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72,
+	0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72,
+	0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x52, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4,
+	0x93, 0x02, 0x47, 0x12, 0x45, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72,
 	0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x64, 0x65, 0x6c, 0x65,
 	0x67, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x2f, 0x7b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f,
 	0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x2f, 0x70, 0x6f, 0x6f, 0x6c, 0x73,
-	0x12, 0xc8, 0x01, 0x0a, 0x0d, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f,
-	0x6f, 0x6c, 0x12, 0x30, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65,
-	0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
-	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x1a, 0x31, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
+	0x2f, 0x7b, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x7d, 0x12, 0xd1, 0x01, 0x0a, 0x12, 0x44,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
+	0x73, 0x12, 0x35, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73,
+	0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
+	0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x36, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
+	0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31,
+	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x4f,
+	0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x22, 0x4c, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x41, 0x12, 0x3f, 0x2f,
+	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69,
+	0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x73,
+	0x2f, 0x7b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72,
+	0x65, 0x73, 0x73, 0x7d, 0x2f, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x12, 0xdc,
+	0x01, 0x0a, 0x11, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x4f, 0x70, 0x65, 0x72,
+	0x61, 0x74, 0x6f, 0x72, 0x12, 0x34, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
 	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65,
-	0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x6f, 0x6f, 0x6c, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x52, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3,
-	0xe4, 0x93, 0x02, 0x47, 0x12, 0x45, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f,
-	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x64, 0x65, 0x6c,
-	0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x2f, 0x7b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
-	0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x2f, 0x70, 0x6f, 0x6f, 0x6c,
-	0x73, 0x2f, 0x7b, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x7d, 0x12, 0xd1, 0x01, 0x0a, 0x12,
-	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f,
-	0x72, 0x73, 0x12, 0x35, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65,
-	0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
-	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f,
-	0x72, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x36, 0x2e, 0x6d, 0x69, 0x6c, 0x6b,
-	0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76,
-	0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72,
-	0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x22, 0x4c, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x41, 0x12, 0x3f,
-	0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b,
-	0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72,
-	0x73, 0x2f, 0x7b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64,
-	0x72, 0x65, 0x73, 0x73, 0x7d, 0x2f, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x12,
-	0xdc, 0x01, 0x0a, 0x11, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x4f, 0x70, 0x65,
-	0x72, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x34, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
-	0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75,
-	0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x4f, 0x70, 0x65, 0x72,
-	0x61, 0x74, 0x6f, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x35, 0x2e, 0x6d, 0x69,
-	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67,
-	0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
-	0x6f, 0x72, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x22, 0x5a, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x4f, 0x12,
-	0x4d, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61,
-	0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f,
-	0x72, 0x73, 0x2f, 0x7b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64,
-	0x64, 0x72, 0x65, 0x73, 0x73, 0x7d, 0x2f, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73,
-	0x2f, 0x7b, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x69, 0x64, 0x7d, 0x12, 0xcd,
-	0x01, 0x0a, 0x11, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x65, 0x72, 0x76,
-	0x69, 0x63, 0x65, 0x73, 0x12, 0x34, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
-	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65,
-	0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x35, 0x2e, 0x6d, 0x69, 0x6c,
+	0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x4f, 0x70, 0x65, 0x72, 0x61,
+	0x74, 0x6f, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x35, 0x2e, 0x6d, 0x69, 0x6c,
 	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e,
 	0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f,
-	0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x22, 0x4b, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x40, 0x12, 0x3e,
+	0x72, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x22, 0x5a, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x4f, 0x12, 0x4d,
 	0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b,
 	0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72,
 	0x73, 0x2f, 0x7b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64,
-	0x72, 0x65, 0x73, 0x73, 0x7d, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x12, 0xd7,
-	0x01, 0x0a, 0x10, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x65, 0x72, 0x76,
-	0x69, 0x63, 0x65, 0x12, 0x33, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72,
+	0x72, 0x65, 0x73, 0x73, 0x7d, 0x2f, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x2f,
+	0x7b, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x69, 0x64, 0x7d, 0x12, 0xcd, 0x01,
+	0x0a, 0x11, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x73, 0x12, 0x34, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72,
 	0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72,
 	0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63,
-	0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x34, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
-	0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31,
-	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x58,
-	0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x4d, 0x12, 0x4b, 0x2f, 0x6d, 0x69,
-	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67,
-	0x2f, 0x76, 0x31, 0x2f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x2f, 0x7b,
-	0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73,
-	0x73, 0x7d, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f, 0x7b, 0x73, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x7d, 0x12, 0x8b, 0x01, 0x0a, 0x06, 0x50, 0x61, 0x72,
-	0x61, 0x6d, 0x73, 0x12, 0x29, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72,
-	0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72,
-	0x79, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2a,
-	0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b,
-	0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61,
-	0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x2a, 0x88, 0xe7, 0xb0, 0x2a,
-	0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1f, 0x12, 0x1d, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
-	0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f,
-	0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0xe6, 0x01, 0x0a, 0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x6d,
-	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e,
-	0x67, 0x2e, 0x76, 0x31, 0x42, 0x0a, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x72, 0x6f, 0x74, 0x6f,
-	0x50, 0x01, 0x5a, 0x47, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d,
-	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x6d, 0x69, 0x6c,
-	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
-	0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x3b,
-	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x4d, 0x52,
-	0x58, 0xaa, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x52, 0x65, 0x73,
-	0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b,
-	0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56,
-	0x31, 0xe2, 0x02, 0x21, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x73,
-	0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74,
-	0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x17, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
-	0x3a, 0x3a, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31, 0x62,
-	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x35, 0x2e, 0x6d, 0x69, 0x6c, 0x6b,
+	0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76,
+	0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72,
+	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x22, 0x4b, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x40, 0x12, 0x3e, 0x2f,
+	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69,
+	0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x73,
+	0x2f, 0x7b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72,
+	0x65, 0x73, 0x73, 0x7d, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x12, 0xd7, 0x01,
+	0x0a, 0x10, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x12, 0x33, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65,
+	0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x34, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
+	0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e,
+	0x51, 0x75, 0x65, 0x72, 0x79, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x58, 0x88,
+	0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x4d, 0x12, 0x4b, 0x2f, 0x6d, 0x69, 0x6c,
+	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f,
+	0x76, 0x31, 0x2f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x2f, 0x7b, 0x64,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
+	0x7d, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f, 0x7b, 0x73, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x7d, 0x12, 0x8b, 0x01, 0x0a, 0x06, 0x50, 0x61, 0x72, 0x61,
+	0x6d, 0x73, 0x12, 0x29, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65,
+	0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2a, 0x2e,
+	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69,
+	0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x61, 0x72, 0x61, 0x6d,
+	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x2a, 0x88, 0xe7, 0xb0, 0x2a, 0x01,
+	0x82, 0xd3, 0xe4, 0x93, 0x02, 0x1f, 0x12, 0x1d, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
+	0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x70,
+	0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0xe6, 0x01, 0x0a, 0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x69,
+	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67,
+	0x2e, 0x76, 0x31, 0x42, 0x0a, 0x51, 0x75, 0x65, 0x72, 0x79, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50,
+	0x01, 0x5a, 0x47, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x69,
+	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x6d, 0x69, 0x6c, 0x6b,
+	0x79, 0x77, 0x61, 0x79, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
+	0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x3b, 0x72,
+	0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x4d, 0x52, 0x58,
+	0xaa, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x52, 0x65, 0x73, 0x74,
+	0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79,
+	0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31,
+	0xe2, 0x02, 0x21, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x73, 0x74,
+	0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61,
+	0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x17, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x3a,
+	0x3a, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -19700,132 +29951,190 @@ func file_milkyway_restaking_v1_query_proto_rawDescGZIP() []byte {
 	return file_milkyway_restaking_v1_query_proto_rawDescData
 }
 
-var file_milkyway_restaking_v1_query_proto_msgTypes = make([]protoimpl.MessageInfo, 36)
+var file_milkyway_restaking_v1_query_proto_msgTypes = make([]protoimpl.MessageInfo, 54)
 var file_milkyway_restaking_v1_query_proto_goTypes = []interface{}{
-	(*QueryOperatorParamsRequest)(nil),                // 0: milkyway.restaking.v1.QueryOperatorParamsRequest
-	(*QueryOperatorParamsResponse)(nil),               // 1: milkyway.restaking.v1.QueryOperatorParamsResponse
-	(*QueryServiceParamsRequest)(nil),                 // 2: milkyway.restaking.v1.QueryServiceParamsRequest
-	(*QueryServiceParamsResponse)(nil),                // 3: milkyway.restaking.v1.QueryServiceParamsResponse
-	(*QueryPoolDelegationsRequest)(nil),               // 4: milkyway.restaking.v1.QueryPoolDelegationsRequest
-	(*QueryPoolDelegationsResponse)(nil),              // 5: milkyway.restaking.v1.QueryPoolDelegationsResponse
-	(*QueryPoolDelegationRequest)(nil),                // 6: milkyway.restaking.v1.QueryPoolDelegationRequest
-	(*QueryPoolDelegationResponse)(nil),               // 7: milkyway.restaking.v1.QueryPoolDelegationResponse
-	(*QueryOperatorDelegationsRequest)(nil),           // 8: milkyway.restaking.v1.QueryOperatorDelegationsRequest
-	(*QueryOperatorDelegationsResponse)(nil),          // 9: milkyway.restaking.v1.QueryOperatorDelegationsResponse
-	(*QueryOperatorDelegationRequest)(nil),            // 10: milkyway.restaking.v1.QueryOperatorDelegationRequest
-	(*QueryOperatorDelegationResponse)(nil),           // 11: milkyway.restaking.v1.QueryOperatorDelegationResponse
-	(*QueryServiceDelegationsRequest)(nil),            // 12: milkyway.restaking.v1.QueryServiceDelegationsRequest
-	(*QueryServiceDelegationsResponse)(nil),           // 13: milkyway.restaking.v1.QueryServiceDelegationsResponse
-	(*QueryServiceDelegationRequest)(nil),             // 14: milkyway.restaking.v1.QueryServiceDelegationRequest
-	(*QueryServiceDelegationResponse)(nil),            // 15: milkyway.restaking.v1.QueryServiceDelegationResponse
-	(*QueryDelegatorPoolDelegationsRequest)(nil),      // 16: milkyway.restaking.v1.QueryDelegatorPoolDelegationsRequest
-	(*QueryDelegatorPoolDelegationsResponse)(nil),     // 17: milkyway.restaking.v1.QueryDelegatorPoolDelegationsResponse
-	(*QueryDelegatorOperatorDelegationsRequest)(nil),  // 18: milkyway.restaking.v1.QueryDelegatorOperatorDelegationsRequest
-	(*QueryDelegatorOperatorDelegationsResponse)(nil), // 19: milkyway.restaking.v1.QueryDelegatorOperatorDelegationsResponse
-	(*QueryDelegatorServiceDelegationsRequest)(nil),   // 20: milkyway.restaking.v1.QueryDelegatorServiceDelegationsRequest
-	(*QueryDelegatorServiceDelegationsResponse)(nil),  // 21: milkyway.restaking.v1.QueryDelegatorServiceDelegationsResponse
-	(*QueryDelegatorPoolsRequest)(nil),                // 22: milkyway.restaking.v1.QueryDelegatorPoolsRequest
-	(*QueryDelegatorPoolsResponse)(nil),               // 23: milkyway.restaking.v1.QueryDelegatorPoolsResponse
-	(*QueryDelegatorPoolRequest)(nil),                 // 24: milkyway.restaking.v1.QueryDelegatorPoolRequest
-	(*QueryDelegatorPoolResponse)(nil),                // 25: milkyway.restaking.v1.QueryDelegatorPoolResponse
-	(*QueryDelegatorOperatorsRequest)(nil),            // 26: milkyway.restaking.v1.QueryDelegatorOperatorsRequest
-	(*QueryDelegatorOperatorsResponse)(nil),           // 27: milkyway.restaking.v1.QueryDelegatorOperatorsResponse
-	(*QueryDelegatorOperatorRequest)(nil),             // 28: milkyway.restaking.v1.QueryDelegatorOperatorRequest
-	(*QueryDelegatorOperatorResponse)(nil),            // 29: milkyway.restaking.v1.QueryDelegatorOperatorResponse
-	(*QueryDelegatorServicesRequest)(nil),             // 30: milkyway.restaking.v1.QueryDelegatorServicesRequest
-	(*QueryDelegatorServicesResponse)(nil),            // 31: milkyway.restaking.v1.QueryDelegatorServicesResponse
-	(*QueryDelegatorServiceRequest)(nil),              // 32: milkyway.restaking.v1.QueryDelegatorServiceRequest
-	(*QueryDelegatorServiceResponse)(nil),             // 33: milkyway.restaking.v1.QueryDelegatorServiceResponse
-	(*QueryParamsRequest)(nil),                        // 34: milkyway.restaking.v1.QueryParamsRequest
-	(*QueryParamsResponse)(nil),                       // 35: milkyway.restaking.v1.QueryParamsResponse
-	(*OperatorParams)(nil),                            // 36: milkyway.restaking.v1.OperatorParams
-	(*ServiceParams)(nil),                             // 37: milkyway.restaking.v1.ServiceParams
-	(*v1beta1.PageRequest)(nil),                       // 38: cosmos.base.query.v1beta1.PageRequest
-	(*DelegationResponse)(nil),                        // 39: milkyway.restaking.v1.DelegationResponse
-	(*v1beta1.PageResponse)(nil),                      // 40: cosmos.base.query.v1beta1.PageResponse
-	(*v1.Pool)(nil),                                   // 41: milkyway.pools.v1.Pool
-	(*v11.Operator)(nil),                              // 42: milkyway.operators.v1.Operator
-	(*v12.Service)(nil),                               // 43: milkyway.services.v1.Service
-	(*Params)(nil),                                    // 44: milkyway.restaking.v1.Params
+	(*QueryOperatorParamsRequest)(nil),                         // 0: milkyway.restaking.v1.QueryOperatorParamsRequest
+	(*QueryOperatorParamsResponse)(nil),                        // 1: milkyway.restaking.v1.QueryOperatorParamsResponse
+	(*QueryServiceParamsRequest)(nil),                          // 2: milkyway.restaking.v1.QueryServiceParamsRequest
+	(*QueryServiceParamsResponse)(nil),                         // 3: milkyway.restaking.v1.QueryServiceParamsResponse
+	(*QueryPoolDelegationsRequest)(nil),                        // 4: milkyway.restaking.v1.QueryPoolDelegationsRequest
+	(*QueryPoolDelegationsResponse)(nil),                       // 5: milkyway.restaking.v1.QueryPoolDelegationsResponse
+	(*QueryPoolDelegationRequest)(nil),                         // 6: milkyway.restaking.v1.QueryPoolDelegationRequest
+	(*QueryPoolDelegationResponse)(nil),                        // 7: milkyway.restaking.v1.QueryPoolDelegationResponse
+	(*QueryPoolUnbondingDelegationsRequest)(nil),               // 8: milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest
+	(*QueryPoolUnbondingDelegationsResponse)(nil),              // 9: milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse
+	(*QueryPoolUnbondingDelegationRequest)(nil),                // 10: milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest
+	(*QueryPoolUnbondingDelegationResponse)(nil),               // 11: milkyway.restaking.v1.QueryPoolUnbondingDelegationResponse
+	(*QueryOperatorDelegationsRequest)(nil),                    // 12: milkyway.restaking.v1.QueryOperatorDelegationsRequest
+	(*QueryOperatorDelegationsResponse)(nil),                   // 13: milkyway.restaking.v1.QueryOperatorDelegationsResponse
+	(*QueryOperatorDelegationRequest)(nil),                     // 14: milkyway.restaking.v1.QueryOperatorDelegationRequest
+	(*QueryOperatorDelegationResponse)(nil),                    // 15: milkyway.restaking.v1.QueryOperatorDelegationResponse
+	(*QueryOperatorUnbondingDelegationsRequest)(nil),           // 16: milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest
+	(*QueryOperatorUnbondingDelegationsResponse)(nil),          // 17: milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse
+	(*QueryOperatorUnbondingDelegationRequest)(nil),            // 18: milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest
+	(*QueryOperatorUnbondingDelegationResponse)(nil),           // 19: milkyway.restaking.v1.QueryOperatorUnbondingDelegationResponse
+	(*QueryServiceDelegationsRequest)(nil),                     // 20: milkyway.restaking.v1.QueryServiceDelegationsRequest
+	(*QueryServiceDelegationsResponse)(nil),                    // 21: milkyway.restaking.v1.QueryServiceDelegationsResponse
+	(*QueryServiceDelegationRequest)(nil),                      // 22: milkyway.restaking.v1.QueryServiceDelegationRequest
+	(*QueryServiceDelegationResponse)(nil),                     // 23: milkyway.restaking.v1.QueryServiceDelegationResponse
+	(*QueryServiceUnbondingDelegationsRequest)(nil),            // 24: milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest
+	(*QueryServiceUnbondingDelegationsResponse)(nil),           // 25: milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse
+	(*QueryServiceUnbondingDelegationRequest)(nil),             // 26: milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest
+	(*QueryServiceUnbondingDelegationResponse)(nil),            // 27: milkyway.restaking.v1.QueryServiceUnbondingDelegationResponse
+	(*QueryDelegatorPoolDelegationsRequest)(nil),               // 28: milkyway.restaking.v1.QueryDelegatorPoolDelegationsRequest
+	(*QueryDelegatorPoolDelegationsResponse)(nil),              // 29: milkyway.restaking.v1.QueryDelegatorPoolDelegationsResponse
+	(*QueryDelegatorPoolUnbondingDelegationsRequest)(nil),      // 30: milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest
+	(*QueryDelegatorPoolUnbondingDelegationsResponse)(nil),     // 31: milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse
+	(*QueryDelegatorOperatorDelegationsRequest)(nil),           // 32: milkyway.restaking.v1.QueryDelegatorOperatorDelegationsRequest
+	(*QueryDelegatorOperatorDelegationsResponse)(nil),          // 33: milkyway.restaking.v1.QueryDelegatorOperatorDelegationsResponse
+	(*QueryDelegatorOperatorUnbondingDelegationsRequest)(nil),  // 34: milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest
+	(*QueryDelegatorOperatorUnbondingDelegationsResponse)(nil), // 35: milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse
+	(*QueryDelegatorServiceDelegationsRequest)(nil),            // 36: milkyway.restaking.v1.QueryDelegatorServiceDelegationsRequest
+	(*QueryDelegatorServiceDelegationsResponse)(nil),           // 37: milkyway.restaking.v1.QueryDelegatorServiceDelegationsResponse
+	(*QueryDelegatorServiceUnbondingDelegationsRequest)(nil),   // 38: milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest
+	(*QueryDelegatorServiceUnbondingDelegationsResponse)(nil),  // 39: milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse
+	(*QueryDelegatorPoolsRequest)(nil),                         // 40: milkyway.restaking.v1.QueryDelegatorPoolsRequest
+	(*QueryDelegatorPoolsResponse)(nil),                        // 41: milkyway.restaking.v1.QueryDelegatorPoolsResponse
+	(*QueryDelegatorPoolRequest)(nil),                          // 42: milkyway.restaking.v1.QueryDelegatorPoolRequest
+	(*QueryDelegatorPoolResponse)(nil),                         // 43: milkyway.restaking.v1.QueryDelegatorPoolResponse
+	(*QueryDelegatorOperatorsRequest)(nil),                     // 44: milkyway.restaking.v1.QueryDelegatorOperatorsRequest
+	(*QueryDelegatorOperatorsResponse)(nil),                    // 45: milkyway.restaking.v1.QueryDelegatorOperatorsResponse
+	(*QueryDelegatorOperatorRequest)(nil),                      // 46: milkyway.restaking.v1.QueryDelegatorOperatorRequest
+	(*QueryDelegatorOperatorResponse)(nil),                     // 47: milkyway.restaking.v1.QueryDelegatorOperatorResponse
+	(*QueryDelegatorServicesRequest)(nil),                      // 48: milkyway.restaking.v1.QueryDelegatorServicesRequest
+	(*QueryDelegatorServicesResponse)(nil),                     // 49: milkyway.restaking.v1.QueryDelegatorServicesResponse
+	(*QueryDelegatorServiceRequest)(nil),                       // 50: milkyway.restaking.v1.QueryDelegatorServiceRequest
+	(*QueryDelegatorServiceResponse)(nil),                      // 51: milkyway.restaking.v1.QueryDelegatorServiceResponse
+	(*QueryParamsRequest)(nil),                                 // 52: milkyway.restaking.v1.QueryParamsRequest
+	(*QueryParamsResponse)(nil),                                // 53: milkyway.restaking.v1.QueryParamsResponse
+	(*OperatorParams)(nil),                                     // 54: milkyway.restaking.v1.OperatorParams
+	(*ServiceParams)(nil),                                      // 55: milkyway.restaking.v1.ServiceParams
+	(*v1beta1.PageRequest)(nil),                                // 56: cosmos.base.query.v1beta1.PageRequest
+	(*DelegationResponse)(nil),                                 // 57: milkyway.restaking.v1.DelegationResponse
+	(*v1beta1.PageResponse)(nil),                               // 58: cosmos.base.query.v1beta1.PageResponse
+	(*UnbondingDelegation)(nil),                                // 59: milkyway.restaking.v1.UnbondingDelegation
+	(*v1.Pool)(nil),                                            // 60: milkyway.pools.v1.Pool
+	(*v11.Operator)(nil),                                       // 61: milkyway.operators.v1.Operator
+	(*v12.Service)(nil),                                        // 62: milkyway.services.v1.Service
+	(*Params)(nil),                                             // 63: milkyway.restaking.v1.Params
 }
 var file_milkyway_restaking_v1_query_proto_depIdxs = []int32{
-	36, // 0: milkyway.restaking.v1.QueryOperatorParamsResponse.operator_params:type_name -> milkyway.restaking.v1.OperatorParams
-	37, // 1: milkyway.restaking.v1.QueryServiceParamsResponse.service_params:type_name -> milkyway.restaking.v1.ServiceParams
-	38, // 2: milkyway.restaking.v1.QueryPoolDelegationsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
-	39, // 3: milkyway.restaking.v1.QueryPoolDelegationsResponse.delegations:type_name -> milkyway.restaking.v1.DelegationResponse
-	40, // 4: milkyway.restaking.v1.QueryPoolDelegationsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
-	39, // 5: milkyway.restaking.v1.QueryPoolDelegationResponse.delegation:type_name -> milkyway.restaking.v1.DelegationResponse
-	38, // 6: milkyway.restaking.v1.QueryOperatorDelegationsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
-	39, // 7: milkyway.restaking.v1.QueryOperatorDelegationsResponse.delegations:type_name -> milkyway.restaking.v1.DelegationResponse
-	40, // 8: milkyway.restaking.v1.QueryOperatorDelegationsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
-	39, // 9: milkyway.restaking.v1.QueryOperatorDelegationResponse.delegation:type_name -> milkyway.restaking.v1.DelegationResponse
-	38, // 10: milkyway.restaking.v1.QueryServiceDelegationsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
-	39, // 11: milkyway.restaking.v1.QueryServiceDelegationsResponse.delegations:type_name -> milkyway.restaking.v1.DelegationResponse
-	40, // 12: milkyway.restaking.v1.QueryServiceDelegationsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
-	39, // 13: milkyway.restaking.v1.QueryServiceDelegationResponse.delegation:type_name -> milkyway.restaking.v1.DelegationResponse
-	38, // 14: milkyway.restaking.v1.QueryDelegatorPoolDelegationsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
-	39, // 15: milkyway.restaking.v1.QueryDelegatorPoolDelegationsResponse.delegations:type_name -> milkyway.restaking.v1.DelegationResponse
-	40, // 16: milkyway.restaking.v1.QueryDelegatorPoolDelegationsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
-	38, // 17: milkyway.restaking.v1.QueryDelegatorOperatorDelegationsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
-	39, // 18: milkyway.restaking.v1.QueryDelegatorOperatorDelegationsResponse.delegations:type_name -> milkyway.restaking.v1.DelegationResponse
-	40, // 19: milkyway.restaking.v1.QueryDelegatorOperatorDelegationsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
-	38, // 20: milkyway.restaking.v1.QueryDelegatorServiceDelegationsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
-	39, // 21: milkyway.restaking.v1.QueryDelegatorServiceDelegationsResponse.delegations:type_name -> milkyway.restaking.v1.DelegationResponse
-	40, // 22: milkyway.restaking.v1.QueryDelegatorServiceDelegationsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
-	38, // 23: milkyway.restaking.v1.QueryDelegatorPoolsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
-	41, // 24: milkyway.restaking.v1.QueryDelegatorPoolsResponse.pools:type_name -> milkyway.pools.v1.Pool
-	40, // 25: milkyway.restaking.v1.QueryDelegatorPoolsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
-	41, // 26: milkyway.restaking.v1.QueryDelegatorPoolResponse.pool:type_name -> milkyway.pools.v1.Pool
-	38, // 27: milkyway.restaking.v1.QueryDelegatorOperatorsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
-	42, // 28: milkyway.restaking.v1.QueryDelegatorOperatorsResponse.operators:type_name -> milkyway.operators.v1.Operator
-	40, // 29: milkyway.restaking.v1.QueryDelegatorOperatorsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
-	42, // 30: milkyway.restaking.v1.QueryDelegatorOperatorResponse.operator:type_name -> milkyway.operators.v1.Operator
-	38, // 31: milkyway.restaking.v1.QueryDelegatorServicesRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
-	43, // 32: milkyway.restaking.v1.QueryDelegatorServicesResponse.services:type_name -> milkyway.services.v1.Service
-	40, // 33: milkyway.restaking.v1.QueryDelegatorServicesResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
-	43, // 34: milkyway.restaking.v1.QueryDelegatorServiceResponse.service:type_name -> milkyway.services.v1.Service
-	44, // 35: milkyway.restaking.v1.QueryParamsResponse.params:type_name -> milkyway.restaking.v1.Params
-	0,  // 36: milkyway.restaking.v1.Query.OperatorParams:input_type -> milkyway.restaking.v1.QueryOperatorParamsRequest
-	2,  // 37: milkyway.restaking.v1.Query.ServiceParams:input_type -> milkyway.restaking.v1.QueryServiceParamsRequest
-	4,  // 38: milkyway.restaking.v1.Query.PoolDelegations:input_type -> milkyway.restaking.v1.QueryPoolDelegationsRequest
-	6,  // 39: milkyway.restaking.v1.Query.PoolDelegation:input_type -> milkyway.restaking.v1.QueryPoolDelegationRequest
-	8,  // 40: milkyway.restaking.v1.Query.OperatorDelegations:input_type -> milkyway.restaking.v1.QueryOperatorDelegationsRequest
-	10, // 41: milkyway.restaking.v1.Query.OperatorDelegation:input_type -> milkyway.restaking.v1.QueryOperatorDelegationRequest
-	12, // 42: milkyway.restaking.v1.Query.ServiceDelegations:input_type -> milkyway.restaking.v1.QueryServiceDelegationsRequest
-	14, // 43: milkyway.restaking.v1.Query.ServiceDelegation:input_type -> milkyway.restaking.v1.QueryServiceDelegationRequest
-	16, // 44: milkyway.restaking.v1.Query.DelegatorPoolDelegations:input_type -> milkyway.restaking.v1.QueryDelegatorPoolDelegationsRequest
-	18, // 45: milkyway.restaking.v1.Query.DelegatorOperatorDelegations:input_type -> milkyway.restaking.v1.QueryDelegatorOperatorDelegationsRequest
-	20, // 46: milkyway.restaking.v1.Query.DelegatorServiceDelegations:input_type -> milkyway.restaking.v1.QueryDelegatorServiceDelegationsRequest
-	22, // 47: milkyway.restaking.v1.Query.DelegatorPools:input_type -> milkyway.restaking.v1.QueryDelegatorPoolsRequest
-	24, // 48: milkyway.restaking.v1.Query.DelegatorPool:input_type -> milkyway.restaking.v1.QueryDelegatorPoolRequest
-	26, // 49: milkyway.restaking.v1.Query.DelegatorOperators:input_type -> milkyway.restaking.v1.QueryDelegatorOperatorsRequest
-	28, // 50: milkyway.restaking.v1.Query.DelegatorOperator:input_type -> milkyway.restaking.v1.QueryDelegatorOperatorRequest
-	30, // 51: milkyway.restaking.v1.Query.DelegatorServices:input_type -> milkyway.restaking.v1.QueryDelegatorServicesRequest
-	32, // 52: milkyway.restaking.v1.Query.DelegatorService:input_type -> milkyway.restaking.v1.QueryDelegatorServiceRequest
-	34, // 53: milkyway.restaking.v1.Query.Params:input_type -> milkyway.restaking.v1.QueryParamsRequest
-	1,  // 54: milkyway.restaking.v1.Query.OperatorParams:output_type -> milkyway.restaking.v1.QueryOperatorParamsResponse
-	3,  // 55: milkyway.restaking.v1.Query.ServiceParams:output_type -> milkyway.restaking.v1.QueryServiceParamsResponse
-	5,  // 56: milkyway.restaking.v1.Query.PoolDelegations:output_type -> milkyway.restaking.v1.QueryPoolDelegationsResponse
-	7,  // 57: milkyway.restaking.v1.Query.PoolDelegation:output_type -> milkyway.restaking.v1.QueryPoolDelegationResponse
-	9,  // 58: milkyway.restaking.v1.Query.OperatorDelegations:output_type -> milkyway.restaking.v1.QueryOperatorDelegationsResponse
-	11, // 59: milkyway.restaking.v1.Query.OperatorDelegation:output_type -> milkyway.restaking.v1.QueryOperatorDelegationResponse
-	13, // 60: milkyway.restaking.v1.Query.ServiceDelegations:output_type -> milkyway.restaking.v1.QueryServiceDelegationsResponse
-	15, // 61: milkyway.restaking.v1.Query.ServiceDelegation:output_type -> milkyway.restaking.v1.QueryServiceDelegationResponse
-	17, // 62: milkyway.restaking.v1.Query.DelegatorPoolDelegations:output_type -> milkyway.restaking.v1.QueryDelegatorPoolDelegationsResponse
-	19, // 63: milkyway.restaking.v1.Query.DelegatorOperatorDelegations:output_type -> milkyway.restaking.v1.QueryDelegatorOperatorDelegationsResponse
-	21, // 64: milkyway.restaking.v1.Query.DelegatorServiceDelegations:output_type -> milkyway.restaking.v1.QueryDelegatorServiceDelegationsResponse
-	23, // 65: milkyway.restaking.v1.Query.DelegatorPools:output_type -> milkyway.restaking.v1.QueryDelegatorPoolsResponse
-	25, // 66: milkyway.restaking.v1.Query.DelegatorPool:output_type -> milkyway.restaking.v1.QueryDelegatorPoolResponse
-	27, // 67: milkyway.restaking.v1.Query.DelegatorOperators:output_type -> milkyway.restaking.v1.QueryDelegatorOperatorsResponse
-	29, // 68: milkyway.restaking.v1.Query.DelegatorOperator:output_type -> milkyway.restaking.v1.QueryDelegatorOperatorResponse
-	31, // 69: milkyway.restaking.v1.Query.DelegatorServices:output_type -> milkyway.restaking.v1.QueryDelegatorServicesResponse
-	33, // 70: milkyway.restaking.v1.Query.DelegatorService:output_type -> milkyway.restaking.v1.QueryDelegatorServiceResponse
-	35, // 71: milkyway.restaking.v1.Query.Params:output_type -> milkyway.restaking.v1.QueryParamsResponse
-	54, // [54:72] is the sub-list for method output_type
-	36, // [36:54] is the sub-list for method input_type
-	36, // [36:36] is the sub-list for extension type_name
-	36, // [36:36] is the sub-list for extension extendee
-	0,  // [0:36] is the sub-list for field type_name
+	54, // 0: milkyway.restaking.v1.QueryOperatorParamsResponse.operator_params:type_name -> milkyway.restaking.v1.OperatorParams
+	55, // 1: milkyway.restaking.v1.QueryServiceParamsResponse.service_params:type_name -> milkyway.restaking.v1.ServiceParams
+	56, // 2: milkyway.restaking.v1.QueryPoolDelegationsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	57, // 3: milkyway.restaking.v1.QueryPoolDelegationsResponse.delegations:type_name -> milkyway.restaking.v1.DelegationResponse
+	58, // 4: milkyway.restaking.v1.QueryPoolDelegationsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	57, // 5: milkyway.restaking.v1.QueryPoolDelegationResponse.delegation:type_name -> milkyway.restaking.v1.DelegationResponse
+	56, // 6: milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	59, // 7: milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse.unbonding_delegations:type_name -> milkyway.restaking.v1.UnbondingDelegation
+	58, // 8: milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	59, // 9: milkyway.restaking.v1.QueryPoolUnbondingDelegationResponse.unbonding_delegation:type_name -> milkyway.restaking.v1.UnbondingDelegation
+	56, // 10: milkyway.restaking.v1.QueryOperatorDelegationsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	57, // 11: milkyway.restaking.v1.QueryOperatorDelegationsResponse.delegations:type_name -> milkyway.restaking.v1.DelegationResponse
+	58, // 12: milkyway.restaking.v1.QueryOperatorDelegationsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	57, // 13: milkyway.restaking.v1.QueryOperatorDelegationResponse.delegation:type_name -> milkyway.restaking.v1.DelegationResponse
+	56, // 14: milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	59, // 15: milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse.unbonding_delegations:type_name -> milkyway.restaking.v1.UnbondingDelegation
+	58, // 16: milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	59, // 17: milkyway.restaking.v1.QueryOperatorUnbondingDelegationResponse.unbonding_delegation:type_name -> milkyway.restaking.v1.UnbondingDelegation
+	56, // 18: milkyway.restaking.v1.QueryServiceDelegationsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	57, // 19: milkyway.restaking.v1.QueryServiceDelegationsResponse.delegations:type_name -> milkyway.restaking.v1.DelegationResponse
+	58, // 20: milkyway.restaking.v1.QueryServiceDelegationsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	57, // 21: milkyway.restaking.v1.QueryServiceDelegationResponse.delegation:type_name -> milkyway.restaking.v1.DelegationResponse
+	56, // 22: milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	59, // 23: milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse.unbonding_delegations:type_name -> milkyway.restaking.v1.UnbondingDelegation
+	58, // 24: milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	59, // 25: milkyway.restaking.v1.QueryServiceUnbondingDelegationResponse.unbonding_delegation:type_name -> milkyway.restaking.v1.UnbondingDelegation
+	56, // 26: milkyway.restaking.v1.QueryDelegatorPoolDelegationsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	57, // 27: milkyway.restaking.v1.QueryDelegatorPoolDelegationsResponse.delegations:type_name -> milkyway.restaking.v1.DelegationResponse
+	58, // 28: milkyway.restaking.v1.QueryDelegatorPoolDelegationsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	56, // 29: milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	59, // 30: milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse.unbonding_delegations:type_name -> milkyway.restaking.v1.UnbondingDelegation
+	58, // 31: milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	56, // 32: milkyway.restaking.v1.QueryDelegatorOperatorDelegationsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	57, // 33: milkyway.restaking.v1.QueryDelegatorOperatorDelegationsResponse.delegations:type_name -> milkyway.restaking.v1.DelegationResponse
+	58, // 34: milkyway.restaking.v1.QueryDelegatorOperatorDelegationsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	56, // 35: milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	59, // 36: milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse.unbonding_delegations:type_name -> milkyway.restaking.v1.UnbondingDelegation
+	58, // 37: milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	56, // 38: milkyway.restaking.v1.QueryDelegatorServiceDelegationsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	57, // 39: milkyway.restaking.v1.QueryDelegatorServiceDelegationsResponse.delegations:type_name -> milkyway.restaking.v1.DelegationResponse
+	58, // 40: milkyway.restaking.v1.QueryDelegatorServiceDelegationsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	56, // 41: milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	59, // 42: milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse.unbonding_delegations:type_name -> milkyway.restaking.v1.UnbondingDelegation
+	58, // 43: milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	56, // 44: milkyway.restaking.v1.QueryDelegatorPoolsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	60, // 45: milkyway.restaking.v1.QueryDelegatorPoolsResponse.pools:type_name -> milkyway.pools.v1.Pool
+	58, // 46: milkyway.restaking.v1.QueryDelegatorPoolsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	60, // 47: milkyway.restaking.v1.QueryDelegatorPoolResponse.pool:type_name -> milkyway.pools.v1.Pool
+	56, // 48: milkyway.restaking.v1.QueryDelegatorOperatorsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	61, // 49: milkyway.restaking.v1.QueryDelegatorOperatorsResponse.operators:type_name -> milkyway.operators.v1.Operator
+	58, // 50: milkyway.restaking.v1.QueryDelegatorOperatorsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	61, // 51: milkyway.restaking.v1.QueryDelegatorOperatorResponse.operator:type_name -> milkyway.operators.v1.Operator
+	56, // 52: milkyway.restaking.v1.QueryDelegatorServicesRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	62, // 53: milkyway.restaking.v1.QueryDelegatorServicesResponse.services:type_name -> milkyway.services.v1.Service
+	58, // 54: milkyway.restaking.v1.QueryDelegatorServicesResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	62, // 55: milkyway.restaking.v1.QueryDelegatorServiceResponse.service:type_name -> milkyway.services.v1.Service
+	63, // 56: milkyway.restaking.v1.QueryParamsResponse.params:type_name -> milkyway.restaking.v1.Params
+	0,  // 57: milkyway.restaking.v1.Query.OperatorParams:input_type -> milkyway.restaking.v1.QueryOperatorParamsRequest
+	2,  // 58: milkyway.restaking.v1.Query.ServiceParams:input_type -> milkyway.restaking.v1.QueryServiceParamsRequest
+	4,  // 59: milkyway.restaking.v1.Query.PoolDelegations:input_type -> milkyway.restaking.v1.QueryPoolDelegationsRequest
+	6,  // 60: milkyway.restaking.v1.Query.PoolDelegation:input_type -> milkyway.restaking.v1.QueryPoolDelegationRequest
+	8,  // 61: milkyway.restaking.v1.Query.PoolUnbondingDelegations:input_type -> milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest
+	10, // 62: milkyway.restaking.v1.Query.PoolUnbondingDelegation:input_type -> milkyway.restaking.v1.QueryPoolUnbondingDelegationRequest
+	12, // 63: milkyway.restaking.v1.Query.OperatorDelegations:input_type -> milkyway.restaking.v1.QueryOperatorDelegationsRequest
+	14, // 64: milkyway.restaking.v1.Query.OperatorDelegation:input_type -> milkyway.restaking.v1.QueryOperatorDelegationRequest
+	16, // 65: milkyway.restaking.v1.Query.OperatorUnbondingDelegations:input_type -> milkyway.restaking.v1.QueryOperatorUnbondingDelegationsRequest
+	18, // 66: milkyway.restaking.v1.Query.OperatorUnbondingDelegation:input_type -> milkyway.restaking.v1.QueryOperatorUnbondingDelegationRequest
+	20, // 67: milkyway.restaking.v1.Query.ServiceDelegations:input_type -> milkyway.restaking.v1.QueryServiceDelegationsRequest
+	22, // 68: milkyway.restaking.v1.Query.ServiceDelegation:input_type -> milkyway.restaking.v1.QueryServiceDelegationRequest
+	24, // 69: milkyway.restaking.v1.Query.ServiceUnbondingDelegations:input_type -> milkyway.restaking.v1.QueryServiceUnbondingDelegationsRequest
+	26, // 70: milkyway.restaking.v1.Query.ServiceUnbondingDelegation:input_type -> milkyway.restaking.v1.QueryServiceUnbondingDelegationRequest
+	28, // 71: milkyway.restaking.v1.Query.DelegatorPoolDelegations:input_type -> milkyway.restaking.v1.QueryDelegatorPoolDelegationsRequest
+	30, // 72: milkyway.restaking.v1.Query.DelegatorPoolUnbondingDelegations:input_type -> milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsRequest
+	32, // 73: milkyway.restaking.v1.Query.DelegatorOperatorDelegations:input_type -> milkyway.restaking.v1.QueryDelegatorOperatorDelegationsRequest
+	34, // 74: milkyway.restaking.v1.Query.DelegatorOperatorUnbondingDelegations:input_type -> milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsRequest
+	36, // 75: milkyway.restaking.v1.Query.DelegatorServiceDelegations:input_type -> milkyway.restaking.v1.QueryDelegatorServiceDelegationsRequest
+	38, // 76: milkyway.restaking.v1.Query.DelegatorServiceUnbondingDelegations:input_type -> milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsRequest
+	40, // 77: milkyway.restaking.v1.Query.DelegatorPools:input_type -> milkyway.restaking.v1.QueryDelegatorPoolsRequest
+	42, // 78: milkyway.restaking.v1.Query.DelegatorPool:input_type -> milkyway.restaking.v1.QueryDelegatorPoolRequest
+	44, // 79: milkyway.restaking.v1.Query.DelegatorOperators:input_type -> milkyway.restaking.v1.QueryDelegatorOperatorsRequest
+	46, // 80: milkyway.restaking.v1.Query.DelegatorOperator:input_type -> milkyway.restaking.v1.QueryDelegatorOperatorRequest
+	48, // 81: milkyway.restaking.v1.Query.DelegatorServices:input_type -> milkyway.restaking.v1.QueryDelegatorServicesRequest
+	50, // 82: milkyway.restaking.v1.Query.DelegatorService:input_type -> milkyway.restaking.v1.QueryDelegatorServiceRequest
+	52, // 83: milkyway.restaking.v1.Query.Params:input_type -> milkyway.restaking.v1.QueryParamsRequest
+	1,  // 84: milkyway.restaking.v1.Query.OperatorParams:output_type -> milkyway.restaking.v1.QueryOperatorParamsResponse
+	3,  // 85: milkyway.restaking.v1.Query.ServiceParams:output_type -> milkyway.restaking.v1.QueryServiceParamsResponse
+	5,  // 86: milkyway.restaking.v1.Query.PoolDelegations:output_type -> milkyway.restaking.v1.QueryPoolDelegationsResponse
+	7,  // 87: milkyway.restaking.v1.Query.PoolDelegation:output_type -> milkyway.restaking.v1.QueryPoolDelegationResponse
+	9,  // 88: milkyway.restaking.v1.Query.PoolUnbondingDelegations:output_type -> milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse
+	11, // 89: milkyway.restaking.v1.Query.PoolUnbondingDelegation:output_type -> milkyway.restaking.v1.QueryPoolUnbondingDelegationResponse
+	13, // 90: milkyway.restaking.v1.Query.OperatorDelegations:output_type -> milkyway.restaking.v1.QueryOperatorDelegationsResponse
+	15, // 91: milkyway.restaking.v1.Query.OperatorDelegation:output_type -> milkyway.restaking.v1.QueryOperatorDelegationResponse
+	17, // 92: milkyway.restaking.v1.Query.OperatorUnbondingDelegations:output_type -> milkyway.restaking.v1.QueryOperatorUnbondingDelegationsResponse
+	19, // 93: milkyway.restaking.v1.Query.OperatorUnbondingDelegation:output_type -> milkyway.restaking.v1.QueryOperatorUnbondingDelegationResponse
+	21, // 94: milkyway.restaking.v1.Query.ServiceDelegations:output_type -> milkyway.restaking.v1.QueryServiceDelegationsResponse
+	23, // 95: milkyway.restaking.v1.Query.ServiceDelegation:output_type -> milkyway.restaking.v1.QueryServiceDelegationResponse
+	25, // 96: milkyway.restaking.v1.Query.ServiceUnbondingDelegations:output_type -> milkyway.restaking.v1.QueryServiceUnbondingDelegationsResponse
+	27, // 97: milkyway.restaking.v1.Query.ServiceUnbondingDelegation:output_type -> milkyway.restaking.v1.QueryServiceUnbondingDelegationResponse
+	29, // 98: milkyway.restaking.v1.Query.DelegatorPoolDelegations:output_type -> milkyway.restaking.v1.QueryDelegatorPoolDelegationsResponse
+	31, // 99: milkyway.restaking.v1.Query.DelegatorPoolUnbondingDelegations:output_type -> milkyway.restaking.v1.QueryDelegatorPoolUnbondingDelegationsResponse
+	33, // 100: milkyway.restaking.v1.Query.DelegatorOperatorDelegations:output_type -> milkyway.restaking.v1.QueryDelegatorOperatorDelegationsResponse
+	35, // 101: milkyway.restaking.v1.Query.DelegatorOperatorUnbondingDelegations:output_type -> milkyway.restaking.v1.QueryDelegatorOperatorUnbondingDelegationsResponse
+	37, // 102: milkyway.restaking.v1.Query.DelegatorServiceDelegations:output_type -> milkyway.restaking.v1.QueryDelegatorServiceDelegationsResponse
+	39, // 103: milkyway.restaking.v1.Query.DelegatorServiceUnbondingDelegations:output_type -> milkyway.restaking.v1.QueryDelegatorServiceUnbondingDelegationsResponse
+	41, // 104: milkyway.restaking.v1.Query.DelegatorPools:output_type -> milkyway.restaking.v1.QueryDelegatorPoolsResponse
+	43, // 105: milkyway.restaking.v1.Query.DelegatorPool:output_type -> milkyway.restaking.v1.QueryDelegatorPoolResponse
+	45, // 106: milkyway.restaking.v1.Query.DelegatorOperators:output_type -> milkyway.restaking.v1.QueryDelegatorOperatorsResponse
+	47, // 107: milkyway.restaking.v1.Query.DelegatorOperator:output_type -> milkyway.restaking.v1.QueryDelegatorOperatorResponse
+	49, // 108: milkyway.restaking.v1.Query.DelegatorServices:output_type -> milkyway.restaking.v1.QueryDelegatorServicesResponse
+	51, // 109: milkyway.restaking.v1.Query.DelegatorService:output_type -> milkyway.restaking.v1.QueryDelegatorServiceResponse
+	53, // 110: milkyway.restaking.v1.Query.Params:output_type -> milkyway.restaking.v1.QueryParamsResponse
+	84, // [84:111] is the sub-list for method output_type
+	57, // [57:84] is the sub-list for method input_type
+	57, // [57:57] is the sub-list for extension type_name
+	57, // [57:57] is the sub-list for extension extendee
+	0,  // [0:57] is the sub-list for field type_name
 }
 
 func init() { file_milkyway_restaking_v1_query_proto_init() }
@@ -19933,7 +30242,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryOperatorDelegationsRequest); i {
+			switch v := v.(*QueryPoolUnbondingDelegationsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -19945,7 +30254,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryOperatorDelegationsResponse); i {
+			switch v := v.(*QueryPoolUnbondingDelegationsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -19957,7 +30266,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryOperatorDelegationRequest); i {
+			switch v := v.(*QueryPoolUnbondingDelegationRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -19969,7 +30278,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryOperatorDelegationResponse); i {
+			switch v := v.(*QueryPoolUnbondingDelegationResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -19981,7 +30290,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryServiceDelegationsRequest); i {
+			switch v := v.(*QueryOperatorDelegationsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -19993,7 +30302,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryServiceDelegationsResponse); i {
+			switch v := v.(*QueryOperatorDelegationsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -20005,7 +30314,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryServiceDelegationRequest); i {
+			switch v := v.(*QueryOperatorDelegationRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -20017,7 +30326,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryServiceDelegationResponse); i {
+			switch v := v.(*QueryOperatorDelegationResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -20029,7 +30338,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryDelegatorPoolDelegationsRequest); i {
+			switch v := v.(*QueryOperatorUnbondingDelegationsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -20041,7 +30350,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryDelegatorPoolDelegationsResponse); i {
+			switch v := v.(*QueryOperatorUnbondingDelegationsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -20053,7 +30362,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryDelegatorOperatorDelegationsRequest); i {
+			switch v := v.(*QueryOperatorUnbondingDelegationRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -20065,7 +30374,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryDelegatorOperatorDelegationsResponse); i {
+			switch v := v.(*QueryOperatorUnbondingDelegationResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -20077,7 +30386,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryDelegatorServiceDelegationsRequest); i {
+			switch v := v.(*QueryServiceDelegationsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -20089,7 +30398,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryDelegatorServiceDelegationsResponse); i {
+			switch v := v.(*QueryServiceDelegationsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -20101,7 +30410,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryDelegatorPoolsRequest); i {
+			switch v := v.(*QueryServiceDelegationRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -20113,7 +30422,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryDelegatorPoolsResponse); i {
+			switch v := v.(*QueryServiceDelegationResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -20125,7 +30434,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryDelegatorPoolRequest); i {
+			switch v := v.(*QueryServiceUnbondingDelegationsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -20137,7 +30446,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[25].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryDelegatorPoolResponse); i {
+			switch v := v.(*QueryServiceUnbondingDelegationsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -20149,7 +30458,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[26].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryDelegatorOperatorsRequest); i {
+			switch v := v.(*QueryServiceUnbondingDelegationRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -20161,7 +30470,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[27].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryDelegatorOperatorsResponse); i {
+			switch v := v.(*QueryServiceUnbondingDelegationResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -20173,7 +30482,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[28].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryDelegatorOperatorRequest); i {
+			switch v := v.(*QueryDelegatorPoolDelegationsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -20185,7 +30494,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[29].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryDelegatorOperatorResponse); i {
+			switch v := v.(*QueryDelegatorPoolDelegationsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -20197,7 +30506,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[30].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryDelegatorServicesRequest); i {
+			switch v := v.(*QueryDelegatorPoolUnbondingDelegationsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -20209,7 +30518,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[31].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryDelegatorServicesResponse); i {
+			switch v := v.(*QueryDelegatorPoolUnbondingDelegationsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -20221,7 +30530,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[32].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryDelegatorServiceRequest); i {
+			switch v := v.(*QueryDelegatorOperatorDelegationsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -20233,7 +30542,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[33].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryDelegatorServiceResponse); i {
+			switch v := v.(*QueryDelegatorOperatorDelegationsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -20245,7 +30554,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[34].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryParamsRequest); i {
+			switch v := v.(*QueryDelegatorOperatorUnbondingDelegationsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -20257,6 +30566,222 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[35].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryDelegatorOperatorUnbondingDelegationsResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_restaking_v1_query_proto_msgTypes[36].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryDelegatorServiceDelegationsRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_restaking_v1_query_proto_msgTypes[37].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryDelegatorServiceDelegationsResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_restaking_v1_query_proto_msgTypes[38].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryDelegatorServiceUnbondingDelegationsRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_restaking_v1_query_proto_msgTypes[39].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryDelegatorServiceUnbondingDelegationsResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_restaking_v1_query_proto_msgTypes[40].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryDelegatorPoolsRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_restaking_v1_query_proto_msgTypes[41].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryDelegatorPoolsResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_restaking_v1_query_proto_msgTypes[42].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryDelegatorPoolRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_restaking_v1_query_proto_msgTypes[43].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryDelegatorPoolResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_restaking_v1_query_proto_msgTypes[44].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryDelegatorOperatorsRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_restaking_v1_query_proto_msgTypes[45].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryDelegatorOperatorsResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_restaking_v1_query_proto_msgTypes[46].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryDelegatorOperatorRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_restaking_v1_query_proto_msgTypes[47].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryDelegatorOperatorResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_restaking_v1_query_proto_msgTypes[48].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryDelegatorServicesRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_restaking_v1_query_proto_msgTypes[49].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryDelegatorServicesResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_restaking_v1_query_proto_msgTypes[50].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryDelegatorServiceRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_restaking_v1_query_proto_msgTypes[51].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryDelegatorServiceResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_restaking_v1_query_proto_msgTypes[52].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*QueryParamsRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_restaking_v1_query_proto_msgTypes[53].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*QueryParamsResponse); i {
 			case 0:
 				return &v.state
@@ -20275,7 +30800,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_milkyway_restaking_v1_query_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   36,
+			NumMessages:   54,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

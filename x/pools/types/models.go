@@ -38,6 +38,18 @@ func NewPool(id uint32, denom string) Pool {
 	}
 }
 
+func (p Pool) GetID() uint32 {
+	return p.ID
+}
+
+func (p Pool) GetDenom() string {
+	return p.Denom
+}
+
+func (p Pool) GetAddress() string {
+	return p.Address
+}
+
 // Validate checks if the pool is valid
 func (p Pool) Validate() error {
 	if p.ID == 0 {
