@@ -956,8 +956,7 @@ func PoolDelegationToPoolDelegationResponse(ctx sdk.Context, k *Keeper, delegati
 		return types.DelegationResponse{}, poolstypes.ErrPoolNotFound
 	}
 
-	shareAmount := delegation.Shares.AmountOf(pool.GetSharesDenom(pool.Denom))
-	truncatedBalance := sdk.NewCoins(sdk.NewCoin(pool.Denom, pool.TokensFromShares(shareAmount).TruncateInt()))
+	truncatedBalance, _ := pool.TokensFromShares(delegation.Shares).TruncateDecimal()
 	return types.NewDelegationResponse(delegation, truncatedBalance), nil
 }
 
