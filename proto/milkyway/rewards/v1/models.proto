@@ -224,6 +224,10 @@ message DelegationDelegatorReward {
 
 // ---------------------------------------------------------------------------
 
+// Types below are taken from Initia's modified version of x/distribution.
+// See
+// https://github.com/initia-labs/initia/blob/v0.2.10/proto/initia/distribution/v1/distribution.proto#L38-L56
+
 // Pool is a Coins wrapper with denom which represents the rewards pool for the
 // given denom. It is used to represent the rewards associated with the denom.
 message Pool {
