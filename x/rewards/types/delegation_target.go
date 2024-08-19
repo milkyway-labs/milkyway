@@ -1,6 +1,8 @@
 package types
 
 import (
+	"cosmossdk.io/errors"
+
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
@@ -17,6 +19,8 @@ func GetDelegationTargetType(target restakingtypes.DelegationTarget) (restakingt
 	case *servicestypes.Service:
 		return restakingtypes.DELEGATION_TYPE_SERVICE, nil
 	default:
-		return restakingtypes.DELEGATION_TYPE_UNSPECIFIED, restakingtypes.ErrInvalidDelegationType
+		return restakingtypes.DELEGATION_TYPE_UNSPECIFIED, errors.Wrapf(
+			restakingtypes.ErrInvalidDelegationType, "invalid delegation target type: %T", target,
+		)
 	}
 }

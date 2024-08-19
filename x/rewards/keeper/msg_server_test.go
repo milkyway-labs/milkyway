@@ -108,7 +108,7 @@ func (s *KeeperTestSuite) TestMsgWithdrawDelegatorReward() {
 			msg: types.NewMsgWithdrawDelegatorReward(
 				delAddr.String(), restakingtypes.DelegationType(5), service.ID,
 			),
-			expectedErr: restakingtypes.ErrInvalidDelegationType.Error(),
+			expectedErr: "invalid delegation type: 5: invalid delegation type",
 		},
 		{
 			name: "invalid target ID returns error",

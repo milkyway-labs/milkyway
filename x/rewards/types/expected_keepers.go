@@ -47,6 +47,7 @@ type PoolsKeeper interface {
 
 type OperatorsKeeper interface {
 	GetOperator(ctx sdk.Context, operatorID uint32) (operatorstypes.Operator, bool)
+	GetOperators(ctx sdk.Context) []operatorstypes.Operator
 	IterateOperators(ctx sdk.Context, cb func(operator operatorstypes.Operator) (stop bool))
 }
 

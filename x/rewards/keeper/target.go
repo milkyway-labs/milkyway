@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	"cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -37,7 +38,7 @@ func (k *Keeper) GetDelegationTarget(
 		}
 		return &service, nil
 	default:
-		return nil, restakingtypes.ErrInvalidDelegationType
+		return nil, errors.Wrapf(restakingtypes.ErrInvalidDelegationType, "invalid delegation type: %s", delType)
 	}
 }
 

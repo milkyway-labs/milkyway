@@ -3,6 +3,7 @@ package keeper
 import (
 	"time"
 
+	"cosmossdk.io/errors"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -68,7 +69,7 @@ func (k *Keeper) getDelegationKeyBuilders(delegation types.Delegation) (types.De
 		return types.UserServiceDelegationStoreKey, types.DelegationByServiceIDStoreKey, nil
 
 	default:
-		return nil, nil, types.ErrInvalidDelegationType
+		return nil, nil, errors.Wrapf(types.ErrInvalidDelegationType, "invalid delegation type: %v", delegation.Type)
 	}
 }
 
@@ -356,7 +357,7 @@ func (k *Keeper) getUnbondingDelegationTarget(ctx sdk.Context, ubd types.Unbondi
 		return &service, nil
 
 	default:
-		return nil, types.ErrInvalidDelegationType
+		return nil, errors.Wrapf(types.ErrInvalidDelegationType, "invalid delegation type %v", ubd.Type)
 	}
 }
 
@@ -373,7 +374,7 @@ func (k *Keeper) getUnbondingDelegationKeyBuilder(ud types.UnbondingDelegation) 
 		return types.UserServiceUnbondingDelegationKey, nil
 
 	default:
-		return nil, types.ErrInvalidDelegationType
+		return nil, errors.Wrapf(types.ErrInvalidDelegationType, "invalid delegation type %v", ud.Type)
 	}
 }
 
