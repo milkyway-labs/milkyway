@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/telemetry"
@@ -53,7 +54,7 @@ func (k msgServer) UpdateOperatorParams(goCtx context.Context, msg *types.MsgUpd
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeUpdateOperatorParams,
-			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprint(msg.OperatorID)),
+			sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, fmt.Sprint(msg.OperatorID)),
 			sdk.NewAttribute(types.AttributeKeyCommissionRate, msg.Params.CommissionRate.String()),
 			sdk.NewAttribute(types.AttributeKeyJoinedServiceIDs, utils.FormatUint32Slice(msg.Params.JoinedServicesIDs)),
 		),
@@ -93,7 +94,7 @@ func (k msgServer) UpdateServiceParams(goCtx context.Context, msg *types.MsgUpda
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeUpdateServiceParams,
-			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprint(msg.ServiceID)),
+			sdk.NewAttribute(servicestypes.AttributeKeyServiceID, fmt.Sprint(msg.ServiceID)),
 			sdk.NewAttribute(types.AttributeKeySlashFraction, msg.Params.SlashFraction.String()),
 			sdk.NewAttribute(
 				types.AttributeKeyWhitelistedPoolIDs,
@@ -127,7 +128,7 @@ func (k msgServer) DelegatePool(goCtx context.Context, msg *types.MsgDelegatePoo
 
 	if msg.Amount.Amount.IsInt64() {
 		defer func() {
-			telemetry.IncrCounter(1, types.ModuleName, "pool restake")
+			telemetry.IncrCounter(1, types.ModuleName, "pool_restake")
 			telemetry.SetGaugeWithLabels(
 				[]string{"tx", "msg", sdk.MsgTypeURL(msg)},
 				float32(msg.Amount.Amount.Int64()),
@@ -149,6 +150,43 @@ func (k msgServer) DelegatePool(goCtx context.Context, msg *types.MsgDelegatePoo
 	return &types.MsgDelegatePoolResponse{}, nil
 }
 
+// UndelegatePool defines the rpc method for Msg/UndelegatePool
+func (k msgServer) UndelegatePool(goCtx context.Context, msg *types.MsgUndelegatePool) (*types.MsgUndelegateResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Perform the undelegation
+	completionTime, err := k.Keeper.UndelegateFromPool(ctx, msg.Amount, msg.Delegator)
+	if err != nil {
+		return nil, err
+	}
+
+	// Log the undelegation
+	if msg.Amount.Amount.IsInt64() {
+		defer func() {
+			telemetry.IncrCounter(1, types.ModuleName, "undelegate_pool")
+			telemetry.SetGaugeWithLabels(
+				[]string{"tx", "msg", sdk.MsgTypeURL(msg)},
+				float32(msg.Amount.Amount.Int64()),
+				[]metrics.Label{telemetry.NewLabel("denom", msg.Amount.Denom)},
+			)
+		}()
+	}
+
+	// Emit the undelegation event
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeUnbondPool,
+			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Amount.String()),
+			sdk.NewAttribute(types.AttributeKeyDelegator, msg.Delegator),
+			sdk.NewAttribute(types.AttributeKeyCompletionTime, completionTime.Format(time.RFC3339)),
+		),
+	})
+
+	return &types.MsgUndelegateResponse{
+		CompletionTime: completionTime,
+	}, nil
+}
+
 // DelegateOperator defines the rpc method for Msg/DelegateOperator
 func (k msgServer) DelegateOperator(goCtx context.Context, msg *types.MsgDelegateOperator) (*types.MsgDelegateOperatorResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
@@ -168,11 +206,14 @@ func (k msgServer) DelegateOperator(goCtx context.Context, msg *types.MsgDelegat
 	for _, token := range msg.Amount {
 		if token.Amount.IsInt64() {
 			defer func() {
-				telemetry.IncrCounter(1, types.ModuleName, "operator restake")
+				telemetry.IncrCounter(1, types.ModuleName, "operator_restake")
 				telemetry.SetGaugeWithLabels(
 					[]string{"tx", "msg", sdk.MsgTypeURL(msg)},
 					float32(token.Amount.Int64()),
-					[]metrics.Label{telemetry.NewLabel("denom", token.Denom)},
+					[]metrics.Label{
+						telemetry.NewLabel("operator_id", fmt.Sprintf("%d", msg.OperatorID)),
+						telemetry.NewLabel("denom", token.Denom),
+					},
 				)
 			}()
 		}
@@ -183,13 +224,56 @@ func (k msgServer) DelegateOperator(goCtx context.Context, msg *types.MsgDelegat
 		sdk.NewEvent(
 			types.EventTypeDelegateOperator,
 			sdk.NewAttribute(types.AttributeKeyDelegator, msg.Delegator),
-			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", msg.OperatorID)),
+			sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, fmt.Sprintf("%d", msg.OperatorID)),
 			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Amount.String()),
 			sdk.NewAttribute(types.AttributeKeyNewShares, newShares.String()),
 		),
 	})
 
 	return &types.MsgDelegateOperatorResponse{}, nil
+}
+
+// UndelegateOperator defines the rpc method for Msg/UndelegateOperator
+func (k msgServer) UndelegateOperator(goCtx context.Context, msg *types.MsgUndelegateOperator) (*types.MsgUndelegateResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Perform the undelegation
+	completionTime, err := k.Keeper.UndelegateFromOperator(ctx, msg.OperatorID, msg.Amount, msg.Delegator)
+	if err != nil {
+		return nil, err
+	}
+
+	// Log the undelegation
+	for _, token := range msg.Amount {
+		if token.Amount.IsInt64() {
+			defer func() {
+				telemetry.IncrCounter(1, types.ModuleName, "undelegete_operator")
+				telemetry.SetGaugeWithLabels(
+					[]string{"tx", "msg", sdk.MsgTypeURL(msg)},
+					float32(token.Amount.Int64()),
+					[]metrics.Label{
+						telemetry.NewLabel("operator_id", fmt.Sprintf("%d", msg.OperatorID)),
+						telemetry.NewLabel("denom", token.Denom),
+					},
+				)
+			}()
+		}
+	}
+
+	// Emit the undelegation event
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeUnbondOperator,
+			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Amount.String()),
+			sdk.NewAttribute(types.AttributeKeyDelegator, msg.Delegator),
+			sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, fmt.Sprintf("%d", msg.OperatorID)),
+			sdk.NewAttribute(types.AttributeKeyCompletionTime, completionTime.Format(time.RFC3339)),
+		),
+	})
+
+	return &types.MsgUndelegateResponse{
+		CompletionTime: completionTime,
+	}, nil
 }
 
 // DelegateService defines the rpc method for Msg/DelegateService
@@ -215,7 +299,10 @@ func (k msgServer) DelegateService(goCtx context.Context, msg *types.MsgDelegate
 				telemetry.SetGaugeWithLabels(
 					[]string{"tx", "msg", sdk.MsgTypeURL(msg)},
 					float32(token.Amount.Int64()),
-					[]metrics.Label{telemetry.NewLabel("denom", token.Denom)},
+					[]metrics.Label{
+						telemetry.NewLabel("service_id", fmt.Sprintf("%d", msg.ServiceID)),
+						telemetry.NewLabel("denom", token.Denom),
+					},
 				)
 			}()
 		}
@@ -226,13 +313,56 @@ func (k msgServer) DelegateService(goCtx context.Context, msg *types.MsgDelegate
 		sdk.NewEvent(
 			types.EventTypeDelegateService,
 			sdk.NewAttribute(types.AttributeKeyDelegator, msg.Delegator),
-			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
+			sdk.NewAttribute(servicestypes.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
 			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Amount.String()),
 			sdk.NewAttribute(types.AttributeKeyNewShares, newShares.String()),
 		),
 	})
 
 	return &types.MsgDelegateServiceResponse{}, nil
+}
+
+// UndelegateService defines the rpc method for Msg/UndelegateService
+func (k msgServer) UndelegateService(goCtx context.Context, msg *types.MsgUndelegateService) (*types.MsgUndelegateResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Perform the undelegation
+	completionTime, err := k.Keeper.UndelegateFromService(ctx, msg.ServiceID, msg.Amount, msg.Delegator)
+	if err != nil {
+		return nil, err
+	}
+
+	// Log the undelegation
+	for _, token := range msg.Amount {
+		if token.Amount.IsInt64() {
+			defer func() {
+				telemetry.IncrCounter(1, types.ModuleName, "undelegete_service")
+				telemetry.SetGaugeWithLabels(
+					[]string{"tx", "msg", sdk.MsgTypeURL(msg)},
+					float32(token.Amount.Int64()),
+					[]metrics.Label{
+						telemetry.NewLabel("service_id", fmt.Sprintf("%d", msg.ServiceID)),
+						telemetry.NewLabel("denom", token.Denom),
+					},
+				)
+			}()
+		}
+	}
+
+	// Emit the undelegation event
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeUnbondService,
+			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Amount.String()),
+			sdk.NewAttribute(types.AttributeKeyDelegator, msg.Delegator),
+			sdk.NewAttribute(servicestypes.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
+			sdk.NewAttribute(types.AttributeKeyCompletionTime, completionTime.Format(time.RFC3339)),
+		),
+	})
+
+	return &types.MsgUndelegateResponse{
+		CompletionTime: completionTime,
+	}, nil
 }
 
 // UpdateParams defines the rpc method for Msg/UpdateParams

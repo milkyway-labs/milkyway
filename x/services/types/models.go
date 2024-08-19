@@ -5,7 +5,6 @@ import (
 	"strconv"
 	"strings"
 
-	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
@@ -106,11 +105,20 @@ func (s Service) TokensFromSharesTruncated(shares sdk.DecCoins) sdk.DecCoins {
 
 // SharesFromTokens returns the shares of a delegation given a bond amount. It
 // returns an error if the service has no tokens.
-func (s Service) SharesFromTokens(tokens sdk.Coin) (sdkmath.LegacyDec, error) {
+func (s Service) SharesFromTokens(tokens sdk.Coins) (sdk.DecCoins, error) {
 	if s.Tokens.IsZero() {
-		return sdkmath.LegacyZeroDec(), ErrInsufficientShares
+		return sdk.NewDecCoins(), ErrInsufficientShares
 	}
 	return utils.SharesFromTokens(tokens, s.GetSharesDenom, s.Tokens, s.DelegatorShares)
+}
+
+// SharesFromTokensTruncated returns the truncated shares of a delegation given a bond amount.
+// It returns an error if the service has no tokens.
+func (s Service) SharesFromTokensTruncated(tokens sdk.Coins) (sdk.DecCoins, error) {
+	if s.Tokens.IsZero() {
+		return sdk.NewDecCoins(), ErrInsufficientShares
+	}
+	return utils.SharesFromTokensTruncated(tokens, s.GetSharesDenom, s.Tokens, s.DelegatorShares)
 }
 
 // AddTokensFromDelegation adds the given amount of tokens to the service's total tokens,
@@ -123,6 +131,33 @@ func (s Service) AddTokensFromDelegation(amount sdk.Coins) (Service, sdk.DecCoin
 	s.DelegatorShares = s.DelegatorShares.Add(issuedShares...)
 
 	return s, issuedShares
+}
+
+// RemoveDelShares removes delegator shares from a service.
+// NOTE: Because token fractions are left in the service, the exchange rate of future shares
+// of this validator can increase.
+func (s Service) RemoveDelShares(delShares sdk.DecCoins) (Service, sdk.Coins) {
+	remainingShares := s.DelegatorShares.Sub(delShares)
+
+	var issuedTokens sdk.Coins
+	if remainingShares.IsZero() {
+		// Last delegation share gets any trimmings
+		issuedTokens = s.Tokens
+		s.Tokens = sdk.NewCoins()
+	} else {
+		// Leave excess tokens in the validator
+		// However fully use all the delegator shares
+		issuedTokens, _ = s.TokensFromShares(delShares).TruncateDecimal()
+		s.Tokens = s.Tokens.Sub(issuedTokens...)
+
+		if s.Tokens.IsAnyNegative() {
+			panic("attempting to remove more tokens than available in service")
+		}
+	}
+
+	s.DelegatorShares = remainingShares
+
+	return s, issuedTokens
 }
 
 // --------------------------------------------------------------------------------------------------------------------

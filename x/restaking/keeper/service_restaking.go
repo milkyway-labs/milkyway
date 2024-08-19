@@ -1,12 +1,22 @@
 package keeper
 
 import (
+	"time"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
+// SaveServiceParams stored the given params for the given service
+func (k *Keeper) SaveServiceParams(ctx sdk.Context, serviceID uint32, params types.ServiceParams) {
+	store := ctx.KVStore(k.storeKey)
+	store.Set(types.ServiceParamsStoreKey(serviceID), k.cdc.MustMarshal(&params))
+}
+
+// GetServiceParams returns the params for the given service, if any.
+// If not params are found, false is returned instead.
 func (k *Keeper) GetServiceParams(ctx sdk.Context, operatorID uint32) (params types.ServiceParams) {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(types.ServiceParamsStoreKey(operatorID))
@@ -17,24 +27,7 @@ func (k *Keeper) GetServiceParams(ctx sdk.Context, operatorID uint32) (params ty
 	return params
 }
 
-func (k *Keeper) SaveServiceParams(ctx sdk.Context, serviceID uint32, params types.ServiceParams) {
-	store := ctx.KVStore(k.storeKey)
-	store.Set(types.ServiceParamsStoreKey(serviceID), k.cdc.MustMarshal(&params))
-}
-
 // --------------------------------------------------------------------------------------------------------------------
-
-// SaveServiceDelegation stores the given service delegation in the store
-func (k *Keeper) SaveServiceDelegation(ctx sdk.Context, delegation types.Delegation) {
-	store := ctx.KVStore(k.storeKey)
-
-	// Marshal and store the delegation
-	delegationBz := types.MustMarshalDelegation(k.cdc, delegation)
-	store.Set(types.UserServiceDelegationStoreKey(delegation.UserAddress, delegation.TargetID), delegationBz)
-
-	// Store the delegation in the delegations by service ID store
-	store.Set(types.DelegationByServiceIDStoreKey(delegation.TargetID, delegation.UserAddress), []byte{})
-}
 
 // GetServiceDelegation retrieves the delegation for the given user and service
 // If the delegation does not exist, false is returned instead
@@ -61,6 +54,13 @@ func (k *Keeper) AddServiceTokensAndShares(
 	return service, addedShares, nil
 }
 
+// RemoveServiceDelegation removes the given service delegation from the store
+func (k *Keeper) RemoveServiceDelegation(ctx sdk.Context, delegation types.Delegation) {
+	store := ctx.KVStore(k.storeKey)
+	store.Delete(types.UserServiceDelegationStoreKey(delegation.UserAddress, delegation.TargetID))
+	store.Delete(types.DelegationByServiceIDStoreKey(delegation.TargetID, delegation.UserAddress))
+}
+
 // --------------------------------------------------------------------------------------------------------------------
 
 // DelegateToService sends the given amount to the service account and saves the delegation for the given user
@@ -77,12 +77,9 @@ func (k *Keeper) DelegateToService(ctx sdk.Context, serviceID uint32, amount sdk
 	}
 
 	return k.PerformDelegation(ctx, types.DelegationData{
-		Amount:    amount,
-		Delegator: delegator,
-		Target:    &service,
-		GetDelegation: func(ctx sdk.Context, receiverID uint32, delegator string) (types.Delegation, bool) {
-			return k.GetServiceDelegation(ctx, receiverID, delegator)
-		},
+		Amount:          amount,
+		Delegator:       delegator,
+		Target:          &service,
 		BuildDelegation: types.NewServiceDelegation,
 		UpdateDelegation: func(ctx sdk.Context, delegation types.Delegation) (newShares sdk.DecCoins, err error) {
 			// Calculate the new shares and add the tokens to the service
@@ -95,7 +92,10 @@ func (k *Keeper) DelegateToService(ctx sdk.Context, serviceID uint32, amount sdk
 			delegation.Shares = delegation.Shares.Add(newShares...)
 
 			// Store the updated delegation
-			k.SaveServiceDelegation(ctx, delegation)
+			err = k.SetDelegation(ctx, delegation)
+			if err != nil {
+				return nil, err
+			}
 
 			return newShares, err
 		},
@@ -104,5 +104,49 @@ func (k *Keeper) DelegateToService(ctx sdk.Context, serviceID uint32, amount sdk
 			BeforeDelegationCreated:        k.BeforeServiceDelegationCreated,
 			AfterDelegationModified:        k.AfterServiceDelegationModified,
 		},
+	})
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// GetServiceUnbondingDelegation returns the unbonding delegation for the given delegator address and service id.
+// If no unbonding delegation is found, false is returned instead.
+func (k *Keeper) GetServiceUnbondingDelegation(ctx sdk.Context, serviceID uint32, delegator string) (types.UnbondingDelegation, bool) {
+	store := ctx.KVStore(k.storeKey)
+	ubdBz := store.Get(types.UserServiceUnbondingDelegationKey(delegator, serviceID))
+	if ubdBz == nil {
+		return types.UnbondingDelegation{}, false
+	}
+
+	return types.MustUnmarshalUnbondingDelegation(k.cdc, ubdBz), true
+}
+
+// UndelegateFromService removes the given amount from the service account and saves the
+// unbonding delegation for the given user
+func (k *Keeper) UndelegateFromService(ctx sdk.Context, serviceID uint32, amount sdk.Coins, delegator string) (time.Time, error) {
+	// Find the service
+	service, found := k.servicesKeeper.GetService(ctx, serviceID)
+	if !found {
+		return time.Time{}, servicestypes.ErrServiceNotFound
+	}
+
+	// Get the shares
+	shares, err := k.ValidateUnbondAmount(ctx, delegator, &service, amount)
+	if err != nil {
+		return time.Time{}, err
+	}
+
+	return k.PerformUndelegation(ctx, types.UndelegationData{
+		Amount:                   amount,
+		Delegator:                delegator,
+		Target:                   &service,
+		BuildUnbondingDelegation: types.NewServiceUnbondingDelegation,
+		Hooks: types.DelegationHooks{
+			BeforeDelegationSharesModified: k.BeforeServiceDelegationSharesModified,
+			BeforeDelegationCreated:        k.BeforeServiceDelegationCreated,
+			AfterDelegationModified:        k.AfterServiceDelegationModified,
+			BeforeDelegationRemoved:        k.BeforeServiceDelegationRemoved,
+		},
+		Shares: shares,
 	})
 }

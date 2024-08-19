@@ -106,3 +106,19 @@ func (k *Keeper) AfterDelegationModified(ctx sdk.Context, delType restakingtypes
 	}
 	return k.initializeDelegation(ctx, delType, targetID, delAddr)
 }
+
+func (h Hooks) BeforePoolDelegationRemoved(_ sdk.Context, _ uint32, _ string) error {
+	return nil
+}
+
+func (h Hooks) BeforeOperatorDelegationRemoved(_ sdk.Context, _ uint32, _ string) error {
+	return nil
+}
+
+func (h Hooks) BeforeServiceDelegationRemoved(_ sdk.Context, _ uint32, _ string) error {
+	return nil
+}
+
+func (h Hooks) AfterUnbondingInitiated(_ sdk.Context, _ uint64) error {
+	return nil
+}

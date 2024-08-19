@@ -1,12 +1,22 @@
 package keeper
 
 import (
+	"time"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
+// SaveOperatorParams stored the given params for the given operator
+func (k *Keeper) SaveOperatorParams(ctx sdk.Context, operatorID uint32, params types.OperatorParams) {
+	store := ctx.KVStore(k.storeKey)
+	store.Set(types.OperatorParamsStoreKey(operatorID), k.cdc.MustMarshal(&params))
+}
+
+// GetOperatorParams returns the params for the given operator, if any.
+// If not params are found, false is returned instead.
 func (k *Keeper) GetOperatorParams(ctx sdk.Context, operatorID uint32) (params types.OperatorParams) {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(types.OperatorParamsStoreKey(operatorID))
@@ -17,24 +27,7 @@ func (k *Keeper) GetOperatorParams(ctx sdk.Context, operatorID uint32) (params t
 	return params
 }
 
-func (k *Keeper) SaveOperatorParams(ctx sdk.Context, operatorID uint32, params types.OperatorParams) {
-	store := ctx.KVStore(k.storeKey)
-	store.Set(types.OperatorParamsStoreKey(operatorID), k.cdc.MustMarshal(&params))
-}
-
 // --------------------------------------------------------------------------------------------------------------------
-
-// SaveOperatorDelegation stores the given operator delegation in the store
-func (k *Keeper) SaveOperatorDelegation(ctx sdk.Context, delegation types.Delegation) {
-	store := ctx.KVStore(k.storeKey)
-
-	// Marshal and store the delegation
-	delegationBz := types.MustMarshalDelegation(k.cdc, delegation)
-	store.Set(types.UserOperatorDelegationStoreKey(delegation.UserAddress, delegation.TargetID), delegationBz)
-
-	// Store the delegation in the delegations by operator ID store
-	store.Set(types.DelegationByOperatorIDStoreKey(delegation.TargetID, delegation.UserAddress), []byte{})
-}
 
 // GetOperatorDelegation retrieves the delegation for the given user and operator
 // If the delegation does not exist, false is returned instead
@@ -61,6 +54,13 @@ func (k *Keeper) AddOperatorTokensAndShares(
 	return operator, addedShares, nil
 }
 
+// RemoveOperatorDelegation removes the given operator delegation from the store
+func (k *Keeper) RemoveOperatorDelegation(ctx sdk.Context, delegation types.Delegation) {
+	store := ctx.KVStore(k.storeKey)
+	store.Delete(types.UserOperatorDelegationStoreKey(delegation.UserAddress, delegation.TargetID))
+	store.Delete(types.DelegationByOperatorIDStoreKey(delegation.TargetID, delegation.UserAddress))
+}
+
 // --------------------------------------------------------------------------------------------------------------------
 
 // DelegateToOperator sends the given amount to the operator account and saves the delegation for the given user
@@ -77,12 +77,9 @@ func (k *Keeper) DelegateToOperator(ctx sdk.Context, operatorID uint32, amount s
 	}
 
 	return k.PerformDelegation(ctx, types.DelegationData{
-		Amount:    amount,
-		Delegator: delegator,
-		Target:    &operator,
-		GetDelegation: func(ctx sdk.Context, receiverID uint32, delegator string) (types.Delegation, bool) {
-			return k.GetOperatorDelegation(ctx, receiverID, delegator)
-		},
+		Amount:          amount,
+		Delegator:       delegator,
+		Target:          &operator,
 		BuildDelegation: types.NewOperatorDelegation,
 		UpdateDelegation: func(ctx sdk.Context, delegation types.Delegation) (newShares sdk.DecCoins, err error) {
 			// Calculate the new shares and add the tokens to the operator
@@ -95,7 +92,10 @@ func (k *Keeper) DelegateToOperator(ctx sdk.Context, operatorID uint32, amount s
 			delegation.Shares = delegation.Shares.Add(newShares...)
 
 			// Store the updated delegation
-			k.SaveOperatorDelegation(ctx, delegation)
+			err = k.SetDelegation(ctx, delegation)
+			if err != nil {
+				return nil, err
+			}
 
 			return newShares, err
 		},
@@ -104,5 +104,49 @@ func (k *Keeper) DelegateToOperator(ctx sdk.Context, operatorID uint32, amount s
 			BeforeDelegationCreated:        k.BeforeOperatorDelegationCreated,
 			AfterDelegationModified:        k.AfterOperatorDelegationModified,
 		},
+	})
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// GetOperatorUnbondingDelegation returns the unbonding delegation for the given delegator address and operator id.
+// If no unbonding delegation is found, false is returned instead.
+func (k *Keeper) GetOperatorUnbondingDelegation(ctx sdk.Context, operatorID uint32, delegatorAddress string) (types.UnbondingDelegation, bool) {
+	store := ctx.KVStore(k.storeKey)
+	ubdBz := store.Get(types.UserOperatorUnbondingDelegationKey(delegatorAddress, operatorID))
+	if ubdBz == nil {
+		return types.UnbondingDelegation{}, false
+	}
+
+	return types.MustUnmarshalUnbondingDelegation(k.cdc, ubdBz), true
+}
+
+// UndelegateFromOperator removes the given amount from the operator account and saves the
+// unbonding delegation for the given user
+func (k *Keeper) UndelegateFromOperator(ctx sdk.Context, operatorID uint32, amount sdk.Coins, delegator string) (time.Time, error) {
+	// Find the operator
+	operator, found := k.operatorsKeeper.GetOperator(ctx, operatorID)
+	if !found {
+		return time.Time{}, operatorstypes.ErrOperatorNotFound
+	}
+
+	// Get the shares
+	shares, err := k.ValidateUnbondAmount(ctx, delegator, &operator, amount)
+	if err != nil {
+		return time.Time{}, err
+	}
+
+	return k.PerformUndelegation(ctx, types.UndelegationData{
+		Amount:                   amount,
+		Delegator:                delegator,
+		Target:                   &operator,
+		BuildUnbondingDelegation: types.NewOperatorUnbondingDelegation,
+		Hooks: types.DelegationHooks{
+			BeforeDelegationSharesModified: k.BeforeOperatorDelegationSharesModified,
+			BeforeDelegationCreated:        k.BeforeOperatorDelegationCreated,
+			AfterDelegationModified:        k.AfterOperatorDelegationModified,
+			BeforeDelegationRemoved:        k.BeforeOperatorDelegationRemoved,
+		},
+		Shares: shares,
 	})
 }

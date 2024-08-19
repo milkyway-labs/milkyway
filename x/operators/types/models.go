@@ -5,7 +5,6 @@ import (
 	"strconv"
 	"strings"
 
-	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
@@ -104,11 +103,20 @@ func (o Operator) TokensFromSharesTruncated(shares sdk.DecCoins) sdk.DecCoins {
 
 // SharesFromTokens returns the shares of a delegation given a bond amount. It
 // returns an error if the operator has no tokens.
-func (o Operator) SharesFromTokens(tokens sdk.Coin) (sdkmath.LegacyDec, error) {
+func (o Operator) SharesFromTokens(tokens sdk.Coins) (sdk.DecCoins, error) {
 	if o.Tokens.IsZero() {
-		return sdkmath.LegacyZeroDec(), ErrInsufficientShares
+		return sdk.NewDecCoins(), ErrInsufficientShares
 	}
 	return utils.SharesFromTokens(tokens, o.GetSharesDenom, o.Tokens, o.DelegatorShares)
+}
+
+// SharesFromTokensTruncated returns the truncated shares of a delegation given a bond amount.
+// It returns an error if the operator has no tokens.
+func (o Operator) SharesFromTokensTruncated(tokens sdk.Coins) (sdk.DecCoins, error) {
+	if o.Tokens.IsZero() {
+		return sdk.NewDecCoins(), ErrInsufficientShares
+	}
+	return utils.SharesFromTokensTruncated(tokens, o.GetSharesDenom, o.Tokens, o.DelegatorShares)
 }
 
 // AddTokensFromDelegation adds the given amount of tokens to the operator's total tokens,
@@ -121,6 +129,34 @@ func (o Operator) AddTokensFromDelegation(amount sdk.Coins) (Operator, sdk.DecCo
 	o.DelegatorShares = o.DelegatorShares.Add(issuedShares...)
 
 	return o, issuedShares
+}
+
+// RemoveDelShares removes delegator shares from an operator and returns
+// the amount of tokens that should be issued for those shares.
+// NOTE: Because token fractions are left in the operator,
+// the exchange rate of future shares of this validator can increase.
+func (o Operator) RemoveDelShares(delShares sdk.DecCoins) (Operator, sdk.Coins) {
+	remainingShares := o.DelegatorShares.Sub(delShares)
+
+	var issuedTokens sdk.Coins
+	if remainingShares.IsZero() {
+		// Last delegation share gets any trimmings
+		issuedTokens = o.Tokens
+		o.Tokens = sdk.NewCoins()
+	} else {
+		// Leave excess tokens in the operator
+		// However, fully use all the delegator shares
+		issuedTokens, _ = o.TokensFromShares(delShares).TruncateDecimal()
+		o.Tokens = o.Tokens.Sub(issuedTokens...)
+
+		if o.Tokens.IsAnyNegative() {
+			panic("attempting to remove more tokens than available in operator")
+		}
+	}
+
+	o.DelegatorShares = remainingShares
+
+	return o, issuedTokens
 }
 
 // --------------------------------------------------------------------------------------------------------------------

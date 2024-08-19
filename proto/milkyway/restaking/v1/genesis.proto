@@ -43,4 +43,8 @@ message GenesisState {
 
   // Delegations represents the delegations.
   repeated Delegation delegations = 4 [ (gogoproto.nullable) = false ];
+
+  // UnbondingDelegations represents the unbonding delegations.
+  repeated UnbondingDelegation unbonding_delegations = 5
+      [ (gogoproto.nullable) = false ];
 }
