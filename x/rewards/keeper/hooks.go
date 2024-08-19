@@ -83,11 +83,7 @@ func (k *Keeper) BeforeDelegationSharesModified(ctx sdk.Context, delType restaki
 	// We don't have to initialize target here because we can assume BeforeDelegationCreated
 	// has already been called when delegation shares are being modified.
 
-	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(delegator)
-	if err != nil {
-		return err
-	}
-	del, found := k.GetDelegation(ctx, target, delAddr)
+	del, found := k.restakingKeeper.GetDelegationForTarget(ctx, target, delegator)
 	if !found {
 		return sdkerrors.ErrNotFound.Wrapf("delegation not found: %d, %s", target.GetID(), delegator)
 	}
@@ -104,7 +100,11 @@ func (k *Keeper) AfterDelegationModified(ctx sdk.Context, delType restakingtypes
 	if err != nil {
 		return err
 	}
-	return k.initializeDelegation(ctx, delType, targetID, delAddr)
+	target, err := k.GetDelegationTarget(ctx, delType, targetID)
+	if err != nil {
+		return err
+	}
+	return k.initializeDelegation(ctx, target, delAddr)
 }
 
 func (h Hooks) BeforePoolDelegationRemoved(_ sdk.Context, _ uint32, _ string) error {

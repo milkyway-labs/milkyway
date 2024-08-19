@@ -185,10 +185,14 @@ func (k *Keeper) SetWithdrawAddr(ctx context.Context, addr, withdrawAddr sdk.Acc
 }
 
 func (k *Keeper) WithdrawDelegationRewards(
-	ctx context.Context, delAddr sdk.AccAddress, target types.DelegationTarget) (types.Pools, error) {
+	ctx context.Context, delAddr sdk.AccAddress, target restakingtypes.DelegationTarget) (types.Pools, error) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
-	del, found := k.GetDelegation(sdkCtx, target, delAddr)
+	delegator, err := k.accountKeeper.AddressCodec().BytesToString(delAddr)
+	if err != nil {
+		return nil, err
+	}
+	del, found := k.restakingKeeper.GetDelegationForTarget(sdkCtx, target, delegator)
 	if !found {
 		return nil, sdkerrors.ErrNotFound.Wrapf("delegation not found: %d, %s", target.GetID(), delAddr.String())
 	}
@@ -200,7 +204,7 @@ func (k *Keeper) WithdrawDelegationRewards(
 	}
 
 	// reinitialize the delegation
-	err = k.initializeDelegation(ctx, target.Type(), target.GetID(), delAddr)
+	err = k.initializeDelegation(ctx, target, delAddr)
 	if err != nil {
 		return nil, err
 	}

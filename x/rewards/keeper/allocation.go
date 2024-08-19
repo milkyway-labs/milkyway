@@ -304,7 +304,7 @@ func (k *Keeper) allocateRewardsToPoolsBasic(
 	}
 	for _, distrInfo := range distrInfos {
 		poolRewards := rewards.MulDecTruncate(distrInfo.DelegationsValue).QuoDecTruncate(totalDelValues)
-		err := k.allocateRewardsPool(ctx, types.NewDelegationTarget(distrInfo.Pool), distrInfo.Pool.Denom, poolRewards)
+		err := k.allocateRewardsPool(ctx, distrInfo.Pool, distrInfo.Pool.Denom, poolRewards)
 		if err != nil {
 			return err
 		}
@@ -336,7 +336,7 @@ func (k *Keeper) allocateRewardsToPoolsWeighted(
 		}
 
 		poolRewards := rewards.MulDecTruncate(math.LegacyNewDec(int64(weight.Weight))).QuoDecTruncate(totalWeights)
-		err := k.allocateRewardsPool(ctx, types.NewDelegationTarget(distrInfo.Pool), distrInfo.Pool.Denom, poolRewards)
+		err := k.allocateRewardsPool(ctx, distrInfo.Pool, distrInfo.Pool.Denom, poolRewards)
 		if err != nil {
 			return err
 		}
@@ -349,7 +349,7 @@ func (k *Keeper) allocateRewardsToPoolsEgalitarian(
 	numPools := math.LegacyNewDec(int64(len(distrInfos)))
 	for _, distrInfo := range distrInfos {
 		poolRewards := rewards.QuoDecTruncate(numPools)
-		err := k.allocateRewardsPool(ctx, types.NewDelegationTarget(distrInfo.Pool), distrInfo.Pool.Denom, poolRewards)
+		err := k.allocateRewardsPool(ctx, distrInfo.Pool, distrInfo.Pool.Denom, poolRewards)
 		if err != nil {
 			return err
 		}
@@ -448,7 +448,7 @@ func (k *Keeper) allocateRewardsToOperator(
 			continue
 		}
 		tokenRewards := rewards.MulDecTruncate(tokenValue).QuoDecTruncate(distrInfo.DelegationsValue)
-		err = k.allocateRewardsPool(ctx, types.NewDelegationTarget(distrInfo.Operator), token.Denom, tokenRewards)
+		err = k.allocateRewardsPool(ctx, distrInfo.Operator, token.Denom, tokenRewards)
 		if err != nil {
 			return err
 		}
@@ -457,11 +457,11 @@ func (k *Keeper) allocateRewardsToOperator(
 }
 
 func (k *Keeper) allocateRewardsPool(
-	ctx context.Context, target types.DelegationTarget, denom string, rewards sdk.DecCoins) error {
+	ctx context.Context, target restakingtypes.DelegationTarget, denom string, rewards sdk.DecCoins) error {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
 	shared := rewards
-	if target.Type() == restakingtypes.DELEGATION_TYPE_OPERATOR {
+	if _, ok := target.(*operatorstypes.Operator); ok {
 		// split tokens between operator and delegators according to commission
 		// TODO: optimize this read operation? we already read operator params in
 		//       getOperatorsForRewardsAllocation
@@ -510,11 +510,15 @@ func (k *Keeper) allocateRewardsPool(
 		return err
 	}
 
+	delType, err := types.GetDelegationTargetType(target)
+	if err != nil {
+		return err
+	}
 	// update outstanding rewards
 	sdkCtx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeRewards,
-			sdk.NewAttribute(types.AttributeKeyDelegationType, target.Type().String()),
+			sdk.NewAttribute(types.AttributeKeyDelegationType, delType.String()),
 			sdk.NewAttribute(types.AttributeKeyDelegationTargetID, fmt.Sprint(target.GetID())),
 			sdk.NewAttribute(types.AttributeKeyPool, denom),
 			sdk.NewAttribute(sdk.AttributeKeyAmount, rewards.String()),
@@ -551,7 +555,7 @@ func (k *Keeper) allocateRewardsToService(
 			continue
 		}
 		tokenRewards := rewards.MulDecTruncate(tokenValue).QuoDecTruncate(totalDelValues)
-		err = k.allocateRewardsPool(ctx, types.NewDelegationTarget(&service), token.Denom, tokenRewards)
+		err = k.allocateRewardsPool(ctx, &service, token.Denom, tokenRewards)
 		if err != nil {
 			return err
 		}

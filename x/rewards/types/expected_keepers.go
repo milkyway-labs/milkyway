@@ -61,6 +61,7 @@ type RestakingKeeper interface {
 	GetPoolDelegation(ctx sdk.Context, poolID uint32, userAddress string) (restakingtypes.Delegation, bool)
 	GetOperatorDelegation(ctx sdk.Context, operatorID uint32, userAddress string) (restakingtypes.Delegation, bool)
 	GetServiceDelegation(ctx sdk.Context, serviceID uint32, userAddress string) (restakingtypes.Delegation, bool)
+	GetDelegationForTarget(ctx sdk.Context, target restakingtypes.DelegationTarget, delegator string) (restakingtypes.Delegation, bool)
 	IterateUserPoolDelegations(ctx sdk.Context, userAddress string, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
 	IterateUserOperatorDelegations(
 		ctx sdk.Context, userAddress string, cb func(del restakingtypes.Delegation) (stop bool, err error)) error

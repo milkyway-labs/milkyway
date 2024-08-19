@@ -11,8 +11,11 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	gogotypes "github.com/cosmos/gogoproto/types"
 
+	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
+	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
 // GetLastRewardsAllocationTime returns the last time rewards were allocated.
@@ -48,188 +51,188 @@ func (k *Keeper) GetRewardsPlan(ctx context.Context, planID uint64) (types.Rewar
 
 // SetDelegatorStartingInfo sets the delegator starting info for a delegator.
 func (k *Keeper) SetDelegatorStartingInfo(
-	ctx context.Context, target types.DelegationTarget, del sdk.AccAddress, info types.DelegatorStartingInfo,
+	ctx context.Context, target restakingtypes.DelegationTarget, del sdk.AccAddress, info types.DelegatorStartingInfo,
 ) error {
-	switch target.Type() {
-	case restakingtypes.DELEGATION_TYPE_POOL:
+	switch target.(type) {
+	case *poolstypes.Pool:
 		return k.PoolDelegatorStartingInfos.Set(ctx, collections.Join(target.GetID(), del), info)
-	case restakingtypes.DELEGATION_TYPE_OPERATOR:
+	case *operatorstypes.Operator:
 		return k.OperatorDelegatorStartingInfos.Set(ctx, collections.Join(target.GetID(), del), info)
-	case restakingtypes.DELEGATION_TYPE_SERVICE:
+	case *servicestypes.Service:
 		return k.ServiceDelegatorStartingInfos.Set(ctx, collections.Join(target.GetID(), del), info)
 	default:
-		panic("unknown delegation type")
+		return restakingtypes.ErrInvalidDelegationType
 	}
 }
 
-func (k *Keeper) GetDelegatorStartingInfo(ctx context.Context, target types.DelegationTarget, del sdk.AccAddress) (types.DelegatorStartingInfo, error) {
-	switch target.Type() {
-	case restakingtypes.DELEGATION_TYPE_POOL:
+func (k *Keeper) GetDelegatorStartingInfo(ctx context.Context, target restakingtypes.DelegationTarget, del sdk.AccAddress) (types.DelegatorStartingInfo, error) {
+	switch target.(type) {
+	case *poolstypes.Pool:
 		return k.PoolDelegatorStartingInfos.Get(ctx, collections.Join(target.GetID(), del))
-	case restakingtypes.DELEGATION_TYPE_OPERATOR:
+	case *operatorstypes.Operator:
 		return k.OperatorDelegatorStartingInfos.Get(ctx, collections.Join(target.GetID(), del))
-	case restakingtypes.DELEGATION_TYPE_SERVICE:
+	case *servicestypes.Service:
 		return k.ServiceDelegatorStartingInfos.Get(ctx, collections.Join(target.GetID(), del))
 	default:
-		panic("unknown delegation type")
+		return types.DelegatorStartingInfo{}, restakingtypes.ErrInvalidDelegationType
 	}
 }
 
-func (k *Keeper) HasDelegatorStartingInfo(ctx context.Context, target types.DelegationTarget, del sdk.AccAddress) (bool, error) {
-	switch target.Type() {
-	case restakingtypes.DELEGATION_TYPE_POOL:
+func (k *Keeper) HasDelegatorStartingInfo(ctx context.Context, target restakingtypes.DelegationTarget, del sdk.AccAddress) (bool, error) {
+	switch target.(type) {
+	case *poolstypes.Pool:
 		return k.PoolDelegatorStartingInfos.Has(ctx, collections.Join(target.GetID(), del))
-	case restakingtypes.DELEGATION_TYPE_OPERATOR:
+	case *operatorstypes.Operator:
 		return k.OperatorDelegatorStartingInfos.Has(ctx, collections.Join(target.GetID(), del))
-	case restakingtypes.DELEGATION_TYPE_SERVICE:
+	case *servicestypes.Service:
 		return k.ServiceDelegatorStartingInfos.Has(ctx, collections.Join(target.GetID(), del))
 	default:
-		panic("unknown delegation type")
+		return false, restakingtypes.ErrInvalidDelegationType
 	}
 }
 
-func (k *Keeper) RemoveDelegatorStartingInfo(ctx context.Context, target types.DelegationTarget, del sdk.AccAddress) error {
-	switch target.Type() {
-	case restakingtypes.DELEGATION_TYPE_POOL:
+func (k *Keeper) RemoveDelegatorStartingInfo(ctx context.Context, target restakingtypes.DelegationTarget, del sdk.AccAddress) error {
+	switch target.(type) {
+	case *poolstypes.Pool:
 		return k.PoolDelegatorStartingInfos.Remove(ctx, collections.Join(target.GetID(), del))
-	case restakingtypes.DELEGATION_TYPE_OPERATOR:
+	case *operatorstypes.Operator:
 		return k.OperatorDelegatorStartingInfos.Remove(ctx, collections.Join(target.GetID(), del))
-	case restakingtypes.DELEGATION_TYPE_SERVICE:
+	case *servicestypes.Service:
 		return k.ServiceDelegatorStartingInfos.Remove(ctx, collections.Join(target.GetID(), del))
 	default:
-		panic("unknown delegation type")
+		return restakingtypes.ErrInvalidDelegationType
 	}
 }
 
 func (k *Keeper) SetOutstandingRewards(
-	ctx context.Context, target types.DelegationTarget, rewards types.OutstandingRewards,
+	ctx context.Context, target restakingtypes.DelegationTarget, rewards types.OutstandingRewards,
 ) error {
-	switch target.Type() {
-	case restakingtypes.DELEGATION_TYPE_POOL:
+	switch target.(type) {
+	case *poolstypes.Pool:
 		return k.PoolOutstandingRewards.Set(ctx, target.GetID(), rewards)
-	case restakingtypes.DELEGATION_TYPE_OPERATOR:
+	case *operatorstypes.Operator:
 		return k.OperatorOutstandingRewards.Set(ctx, target.GetID(), rewards)
-	case restakingtypes.DELEGATION_TYPE_SERVICE:
+	case *servicestypes.Service:
 		return k.ServiceOutstandingRewards.Set(ctx, target.GetID(), rewards)
 	default:
-		panic("unknown delegation type")
+		return restakingtypes.ErrInvalidDelegationType
 	}
 }
 
-func (k *Keeper) GetOutstandingRewards(ctx context.Context, target types.DelegationTarget) (types.OutstandingRewards, error) {
-	switch target.Type() {
-	case restakingtypes.DELEGATION_TYPE_POOL:
+func (k *Keeper) GetOutstandingRewards(ctx context.Context, target restakingtypes.DelegationTarget) (types.OutstandingRewards, error) {
+	switch target.(type) {
+	case *poolstypes.Pool:
 		return k.PoolOutstandingRewards.Get(ctx, target.GetID())
-	case restakingtypes.DELEGATION_TYPE_OPERATOR:
+	case *operatorstypes.Operator:
 		return k.OperatorOutstandingRewards.Get(ctx, target.GetID())
-	case restakingtypes.DELEGATION_TYPE_SERVICE:
+	case *servicestypes.Service:
 		return k.ServiceOutstandingRewards.Get(ctx, target.GetID())
 	default:
-		panic("unknown delegation type")
+		return types.OutstandingRewards{}, restakingtypes.ErrInvalidDelegationType
 	}
 }
 
-func (k *Keeper) GetCurrentRewards(ctx context.Context, target types.DelegationTarget) (types.CurrentRewards, error) {
-	switch target.Type() {
-	case restakingtypes.DELEGATION_TYPE_POOL:
+func (k *Keeper) GetCurrentRewards(ctx context.Context, target restakingtypes.DelegationTarget) (types.CurrentRewards, error) {
+	switch target.(type) {
+	case *poolstypes.Pool:
 		return k.PoolCurrentRewards.Get(ctx, target.GetID())
-	case restakingtypes.DELEGATION_TYPE_OPERATOR:
+	case *operatorstypes.Operator:
 		return k.OperatorCurrentRewards.Get(ctx, target.GetID())
-	case restakingtypes.DELEGATION_TYPE_SERVICE:
+	case *servicestypes.Service:
 		return k.ServiceCurrentRewards.Get(ctx, target.GetID())
 	default:
-		panic("unknown delegation type")
+		return types.CurrentRewards{}, restakingtypes.ErrInvalidDelegationType
 	}
 }
 
 func (k *Keeper) SetCurrentRewards(
-	ctx context.Context, target types.DelegationTarget, rewards types.CurrentRewards,
+	ctx context.Context, target restakingtypes.DelegationTarget, rewards types.CurrentRewards,
 ) error {
-	switch target.Type() {
-	case restakingtypes.DELEGATION_TYPE_POOL:
+	switch target.(type) {
+	case *poolstypes.Pool:
 		return k.PoolCurrentRewards.Set(ctx, target.GetID(), rewards)
-	case restakingtypes.DELEGATION_TYPE_OPERATOR:
+	case *operatorstypes.Operator:
 		return k.OperatorCurrentRewards.Set(ctx, target.GetID(), rewards)
-	case restakingtypes.DELEGATION_TYPE_SERVICE:
+	case *servicestypes.Service:
 		return k.ServiceCurrentRewards.Set(ctx, target.GetID(), rewards)
 	default:
-		panic("unknown delegation type")
+		return restakingtypes.ErrInvalidDelegationType
 	}
 }
 
-func (k *Keeper) HasCurrentRewards(ctx context.Context, target types.DelegationTarget) (bool, error) {
-	switch target.Type() {
-	case restakingtypes.DELEGATION_TYPE_POOL:
+func (k *Keeper) HasCurrentRewards(ctx context.Context, target restakingtypes.DelegationTarget) (bool, error) {
+	switch target.(type) {
+	case *poolstypes.Pool:
 		return k.PoolCurrentRewards.Has(ctx, target.GetID())
-	case restakingtypes.DELEGATION_TYPE_OPERATOR:
+	case *operatorstypes.Operator:
 		return k.OperatorCurrentRewards.Has(ctx, target.GetID())
-	case restakingtypes.DELEGATION_TYPE_SERVICE:
+	case *servicestypes.Service:
 		return k.ServiceCurrentRewards.Has(ctx, target.GetID())
 	default:
-		panic("unknown delegation type")
+		return false, restakingtypes.ErrInvalidDelegationType
 	}
 }
 
 func (k *Keeper) GetHistoricalRewards(
-	ctx context.Context, target types.DelegationTarget, period uint64,
+	ctx context.Context, target restakingtypes.DelegationTarget, period uint64,
 ) (types.HistoricalRewards, error) {
-	switch target.Type() {
-	case restakingtypes.DELEGATION_TYPE_POOL:
+	switch target.(type) {
+	case *poolstypes.Pool:
 		return k.PoolHistoricalRewards.Get(ctx, collections.Join(target.GetID(), period))
-	case restakingtypes.DELEGATION_TYPE_OPERATOR:
+	case *operatorstypes.Operator:
 		return k.OperatorHistoricalRewards.Get(ctx, collections.Join(target.GetID(), period))
-	case restakingtypes.DELEGATION_TYPE_SERVICE:
+	case *servicestypes.Service:
 		return k.ServiceHistoricalRewards.Get(ctx, collections.Join(target.GetID(), period))
 	default:
-		panic("unknown delegation type")
+		return types.HistoricalRewards{}, restakingtypes.ErrInvalidDelegationType
 	}
 }
 
 func (k *Keeper) SetHistoricalRewards(
-	ctx context.Context, target types.DelegationTarget, period uint64,
+	ctx context.Context, target restakingtypes.DelegationTarget, period uint64,
 	rewards types.HistoricalRewards,
 ) error {
-	switch target.Type() {
-	case restakingtypes.DELEGATION_TYPE_POOL:
+	switch target.(type) {
+	case *poolstypes.Pool:
 		return k.PoolHistoricalRewards.Set(ctx, collections.Join(target.GetID(), period), rewards)
-	case restakingtypes.DELEGATION_TYPE_OPERATOR:
+	case *operatorstypes.Operator:
 		return k.OperatorHistoricalRewards.Set(ctx, collections.Join(target.GetID(), period), rewards)
-	case restakingtypes.DELEGATION_TYPE_SERVICE:
+	case *servicestypes.Service:
 		return k.ServiceHistoricalRewards.Set(ctx, collections.Join(target.GetID(), period), rewards)
 	default:
-		panic("unknown delegation type")
+		return restakingtypes.ErrInvalidDelegationType
 	}
 }
 
 func (k *Keeper) RemoveHistoricalRewards(
-	ctx context.Context, target types.DelegationTarget, period uint64,
+	ctx context.Context, target restakingtypes.DelegationTarget, period uint64,
 ) error {
-	switch target.Type() {
-	case restakingtypes.DELEGATION_TYPE_POOL:
+	switch target.(type) {
+	case *poolstypes.Pool:
 		return k.PoolHistoricalRewards.Remove(ctx, collections.Join(target.GetID(), period))
-	case restakingtypes.DELEGATION_TYPE_OPERATOR:
+	case *operatorstypes.Operator:
 		return k.OperatorHistoricalRewards.Remove(ctx, collections.Join(target.GetID(), period))
-	case restakingtypes.DELEGATION_TYPE_SERVICE:
+	case *servicestypes.Service:
 		return k.ServiceHistoricalRewards.Remove(ctx, collections.Join(target.GetID(), period))
 	default:
-		panic("unknown delegation type")
+		return restakingtypes.ErrInvalidDelegationType
 	}
 }
 
-func (k *Keeper) GetOutstandingRewardsCoins(ctx context.Context, target types.DelegationTarget) (types.DecPools, error) {
+func (k *Keeper) GetOutstandingRewardsCoins(ctx context.Context, target restakingtypes.DelegationTarget) (types.DecPools, error) {
 	var (
 		rewards types.OutstandingRewards
 		err     error
 	)
-	switch target.Type() {
-	case restakingtypes.DELEGATION_TYPE_POOL:
+	switch target.(type) {
+	case *poolstypes.Pool:
 		rewards, err = k.PoolOutstandingRewards.Get(ctx, target.GetID())
-	case restakingtypes.DELEGATION_TYPE_OPERATOR:
+	case *operatorstypes.Operator:
 		rewards, err = k.OperatorOutstandingRewards.Get(ctx, target.GetID())
-	case restakingtypes.DELEGATION_TYPE_SERVICE:
+	case *servicestypes.Service:
 		rewards, err = k.ServiceOutstandingRewards.Get(ctx, target.GetID())
 	default:
-		panic("unknown delegation type")
+		return nil, restakingtypes.ErrInvalidDelegationType
 	}
 	if err != nil && !errors.IsOf(err, collections.ErrNotFound) {
 		return nil, err
@@ -266,12 +269,17 @@ func (k *Keeper) GetDelegationRewards(
 		return nil, err
 	}
 
-	del, found := k.GetDelegation(ctx, target, delAddr)
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	delegator, err := k.accountKeeper.AddressCodec().BytesToString(delAddr)
+	if err != nil {
+		return nil, err
+	}
+
+	del, found := k.restakingKeeper.GetDelegationForTarget(sdkCtx, target, delegator)
 	if !found {
 		return nil, errors.Wrap(sdkerrors.ErrNotFound, "delegation not found")
 	}
 
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	cacheCtx, _ := sdkCtx.CacheContext()
 	endingPeriod, err := k.IncrementDelegationTargetPeriod(cacheCtx, target)
 	if err != nil {

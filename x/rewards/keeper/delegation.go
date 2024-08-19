@@ -12,27 +12,8 @@ import (
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 )
 
-func (k *Keeper) GetDelegation(ctx context.Context, target types.DelegationTarget, del sdk.AccAddress) (restakingtypes.Delegation, bool) {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	switch target.Type() {
-	case restakingtypes.DELEGATION_TYPE_POOL:
-		return k.restakingKeeper.GetPoolDelegation(sdkCtx, target.GetID(), del.String())
-	case restakingtypes.DELEGATION_TYPE_OPERATOR:
-		return k.restakingKeeper.GetOperatorDelegation(sdkCtx, target.GetID(), del.String())
-	case restakingtypes.DELEGATION_TYPE_SERVICE:
-		return k.restakingKeeper.GetServiceDelegation(sdkCtx, target.GetID(), del.String())
-	default:
-		panic("unknown delegation type")
-	}
-}
-
 // initialize starting info for a new delegation
-func (k *Keeper) initializeDelegation(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32, del sdk.AccAddress) error {
-	target, err := k.GetDelegationTarget(ctx, delType, targetID)
-	if err != nil {
-		return err
-	}
-
+func (k *Keeper) initializeDelegation(ctx context.Context, target restakingtypes.DelegationTarget, delAddr sdk.AccAddress) error {
 	// period has already been incremented - we want to store the period ended by this delegation action
 	currentRewards, err := k.GetCurrentRewards(ctx, target)
 	if err != nil {
@@ -46,24 +27,28 @@ func (k *Keeper) initializeDelegation(ctx context.Context, delType restakingtype
 		return err
 	}
 
-	delegation, found := k.GetDelegation(ctx, target, del)
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	delegator, err := k.accountKeeper.AddressCodec().BytesToString(delAddr)
+	if err != nil {
+		return err
+	}
+	delegation, found := k.restakingKeeper.GetDelegationForTarget(sdkCtx, target, delegator)
 	if !found {
-		return sdkerrors.ErrNotFound.Wrapf("delegation not found: %d, %s", targetID, del.String())
+		return sdkerrors.ErrNotFound.Wrapf("delegation not found: %d, %s", target.GetID(), delAddr.String())
 	}
 
 	// calculate delegation stake in tokens
 	// we don't store directly, so multiply delegation shares * (tokens per share)
 	// note: necessary to truncate so we don't allow withdrawing more rewards than owed
 	stake := target.TokensFromSharesTruncated(delegation.Shares)
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	return k.SetDelegatorStartingInfo(
-		ctx, target, del,
+		ctx, target, delAddr,
 		types.NewDelegatorStartingInfo(previousPeriod, stake, uint64(sdkCtx.BlockHeight())))
 }
 
 // calculate the rewards accrued by a delegation between two periods
 func (k *Keeper) calculateDelegationRewardsBetween(
-	ctx context.Context, target types.DelegationTarget, startingPeriod, endingPeriod uint64, stakes sdk.DecCoins,
+	ctx context.Context, target restakingtypes.DelegationTarget, startingPeriod, endingPeriod uint64, stakes sdk.DecCoins,
 ) (rewards types.DecPools, err error) {
 	// sanity check
 	if startingPeriod > endingPeriod {
@@ -101,7 +86,7 @@ func (k *Keeper) calculateDelegationRewardsBetween(
 }
 
 // calculate the total rewards accrued by a delegation
-func (k *Keeper) CalculateDelegationRewards(ctx context.Context, target types.DelegationTarget, del restakingtypes.Delegation, endingPeriod uint64) (rewards types.DecPools, err error) {
+func (k *Keeper) CalculateDelegationRewards(ctx context.Context, target restakingtypes.DelegationTarget, del restakingtypes.Delegation, endingPeriod uint64) (rewards types.DecPools, err error) {
 	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(del.UserAddress)
 	if err != nil {
 		return nil, err
@@ -183,7 +168,7 @@ func (k *Keeper) CalculateDelegationRewards(ctx context.Context, target types.De
 }
 
 func (k *Keeper) withdrawDelegationRewards(
-	ctx context.Context, target types.DelegationTarget, del restakingtypes.Delegation,
+	ctx context.Context, target restakingtypes.DelegationTarget, del restakingtypes.Delegation,
 ) (types.Pools, error) {
 	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(del.UserAddress)
 	if err != nil {
@@ -223,7 +208,7 @@ func (k *Keeper) withdrawDelegationRewards(
 		logger.Info(
 			"rounding error withdrawing rewards from delegation target",
 			"delegator", del.UserAddress,
-			"delegation_type", target.Type().String(),
+			"delegation_type", del.Type.String(),
 			"delegation_target_id", target.GetID(),
 			"got", rewards.String(),
 			"expected", rewardsRaw.String(),
