@@ -277,10 +277,11 @@ func (k *Keeper) withdrawDelegationRewards(
 	sdkCtx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeWithdrawRewards,
-			sdk.NewAttribute(sdk.AttributeKeyAmount, coins.String()),
-			sdk.NewAttribute(types.AttributeKeyDelegationType, target.Type().String()),
+			sdk.NewAttribute(types.AttributeKeyDelegationType, del.Type.String()),
 			sdk.NewAttribute(types.AttributeKeyDelegationTargetID, fmt.Sprint(target.GetID())),
 			sdk.NewAttribute(restakingtypes.AttributeKeyDelegator, del.UserAddress),
+			sdk.NewAttribute(sdk.AttributeKeyAmount, coins.String()),
+			sdk.NewAttribute(types.AttributeKeyAmountPerPool, pools.String()),
 		),
 	)
 

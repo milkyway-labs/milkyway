@@ -265,9 +265,8 @@ func (k *Keeper) WithdrawOperatorCommission(ctx context.Context, operatorID uint
 	sdkCtx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeWithdrawCommission,
-			sdk.NewAttribute(types.AttributeKeyDelegationType, restakingtypes.DELEGATION_TYPE_OPERATOR.String()),
-			sdk.NewAttribute(types.AttributeKeyDelegationTargetID, fmt.Sprint(operatorID)),
-			sdk.NewAttribute(sdk.AttributeKeyAmount, commissions.String()),
+			sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, fmt.Sprint(operatorID)),
+			sdk.NewAttribute(sdk.AttributeKeyAmount, commissions.Sum().String()),
 			sdk.NewAttribute(types.AttributeKeyAmountPerPool, commissions.String()),
 		),
 	)
