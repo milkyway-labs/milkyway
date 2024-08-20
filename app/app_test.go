@@ -6,6 +6,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/cosmos/cosmos-sdk/x/crisis"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
 
@@ -86,6 +87,7 @@ func TestInitGenesisOnMigration(t *testing.T) {
 	_, err := app.ModuleManager.RunMigrations(ctx, app.configurator,
 		module.VersionMap{
 			"bank":               bank.AppModule{}.ConsensusVersion(),
+			"crisis":             crisis.AppModule{}.ConsensusVersion(),
 			"auth":               auth.AppModule{}.ConsensusVersion(),
 			"authz":              authzmodule.AppModule{}.ConsensusVersion(),
 			"upgrade":            upgrade.AppModule{}.ConsensusVersion(),
