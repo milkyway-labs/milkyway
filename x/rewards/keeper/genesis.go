@@ -8,15 +8,15 @@ import (
 )
 
 // ExportGenesis returns the GenesisState associated with the given context
-func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
+func (k *Keeper) ExportGenesis(ctx sdk.Context) (*types.GenesisState, error) {
 	params, err := k.Params.Get(ctx)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	nextRewardsPlanID, err := k.NextRewardsPlanID.Get(ctx)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	rewardsPlans := []types.RewardsPlan{}
@@ -25,12 +25,12 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		return false, nil
 	})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	lastRewardsAllocationTime, err := k.GetLastRewardsAllocationTime(ctx)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	delegatorWithdrawInfos := []types.DelegatorWithdrawInfo{}
@@ -50,7 +50,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		return false, nil
 	})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	poolOutstandingRewards := []types.OutstandingRewardsRecord{}
@@ -62,7 +62,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		return false, nil
 	})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	poolHistoricalRewards := []types.HistoricalRewardsRecord{}
@@ -77,7 +77,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		return false, nil
 	})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	poolCurrentRewards := []types.CurrentRewardsRecord{}
@@ -89,7 +89,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		return false, nil
 	})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	poolDelegatorStartingInfos := []types.DelegatorStartingInfoRecord{}
@@ -108,7 +108,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		return false, nil
 	})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	operatorOutstandingRewards := []types.OutstandingRewardsRecord{}
@@ -120,7 +120,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		return false, nil
 	})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	operatorAccumulatedCommissions := []types.OperatorAccumulatedCommissionRecord{}
@@ -132,7 +132,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		return false, nil
 	})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	operatorHistoricalRewards := []types.HistoricalRewardsRecord{}
@@ -147,7 +147,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		return false, nil
 	})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	operatorCurrentRewards := []types.CurrentRewardsRecord{}
@@ -159,7 +159,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		return false, nil
 	})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	operatorDelegatorStartingInfos := []types.DelegatorStartingInfoRecord{}
@@ -178,7 +178,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		return false, nil
 	})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	serviceOutstandingRewards := []types.OutstandingRewardsRecord{}
@@ -190,7 +190,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		return false, nil
 	})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	serviceHistoricalRewards := []types.HistoricalRewardsRecord{}
@@ -205,7 +205,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		return false, nil
 	})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	serviceCurrentRewards := []types.CurrentRewardsRecord{}
@@ -217,7 +217,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		return false, nil
 	})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	serviceDelegatorStartingInfos := []types.DelegatorStartingInfoRecord{}
@@ -236,7 +236,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		return false, nil
 	})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	return types.NewGenesisState(
@@ -253,150 +253,151 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		types.NewDelegationTypeRecords(
 			serviceOutstandingRewards, serviceHistoricalRewards, serviceCurrentRewards, serviceDelegatorStartingInfos),
 		operatorAccumulatedCommissions,
-	)
+	), nil
 }
 
 // --------------------------------------------------------------------------------------------------------------------
 
 // InitGenesis initializes the state from a GenesisState
-func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) {
+func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) error {
 	// Store params
 	if err := k.Params.Set(ctx, state.Params); err != nil {
-		panic(err)
+		return err
 	}
 
 	// Set the next distribution plan ID
 	if err := k.NextRewardsPlanID.Set(ctx, state.NextRewardsPlanID); err != nil {
-		panic(err)
+		return err
 	}
 
 	// Store the rewards plans
 	for _, plan := range state.RewardsPlans {
 		if err := k.RewardsPlans.Set(ctx, plan.ID, plan); err != nil {
-			panic(err)
+			return err
 		}
 	}
 
 	if state.LastRewardsAllocationTime != nil {
 		if err := k.SetLastRewardsAllocationTime(ctx, *state.LastRewardsAllocationTime); err != nil {
-			panic(err)
+			return err
 		}
 	}
 
 	for _, info := range state.DelegatorWithdrawInfos {
 		delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(info.DelegatorAddress)
 		if err != nil {
-			panic(err)
+			return err
 		}
 		withdrawAddr, err := k.accountKeeper.AddressCodec().StringToBytes(info.WithdrawAddress)
 		if err != nil {
-			panic(err)
+			return err
 		}
 		err = k.DelegatorWithdrawAddrs.Set(ctx, delAddr, withdrawAddr)
 		if err != nil {
-			panic(err)
+			return err
 		}
 	}
 
 	for _, record := range state.PoolsRecords.OutstandingRewards {
 		if err := k.PoolOutstandingRewards.Set(
 			ctx, record.DelegationTargetID, types.OutstandingRewards{Rewards: record.OutstandingRewards}); err != nil {
-			panic(err)
+			return err
 		}
 	}
 
 	for _, record := range state.PoolsRecords.HistoricalRewards {
 		if err := k.PoolHistoricalRewards.Set(
 			ctx, collections.Join(record.DelegationTargetID, record.Period), record.Rewards); err != nil {
-			panic(err)
+			return err
 		}
 	}
 
 	for _, record := range state.PoolsRecords.CurrentRewards {
 		if err := k.PoolCurrentRewards.Set(ctx, record.DelegationTargetID, record.Rewards); err != nil {
-			panic(err)
+			return err
 		}
 	}
 
 	for _, record := range state.PoolsRecords.DelegatorStartingInfos {
 		delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(record.DelegatorAddress)
 		if err != nil {
-			panic(err)
+			return err
 		}
 		if err := k.PoolDelegatorStartingInfos.Set(
 			ctx, collections.Join(record.DelegationTargetID, sdk.AccAddress(delAddr)), record.StartingInfo); err != nil {
-			panic(err)
+			return err
 		}
 	}
 
 	for _, record := range state.OperatorsRecords.OutstandingRewards {
 		if err := k.OperatorOutstandingRewards.Set(
 			ctx, record.DelegationTargetID, types.OutstandingRewards{Rewards: record.OutstandingRewards}); err != nil {
-			panic(err)
+			return err
 		}
 	}
 
 	for _, record := range state.OperatorsRecords.HistoricalRewards {
 		if err := k.OperatorHistoricalRewards.Set(
 			ctx, collections.Join(record.DelegationTargetID, record.Period), record.Rewards); err != nil {
-			panic(err)
+			return err
 		}
 	}
 
 	for _, record := range state.OperatorsRecords.CurrentRewards {
 		if err := k.OperatorCurrentRewards.Set(ctx, record.DelegationTargetID, record.Rewards); err != nil {
-			panic(err)
+			return err
 		}
 	}
 
 	for _, record := range state.OperatorsRecords.DelegatorStartingInfos {
 		delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(record.DelegatorAddress)
 		if err != nil {
-			panic(err)
+			return err
 		}
 		if err := k.OperatorDelegatorStartingInfos.Set(
 			ctx, collections.Join(record.DelegationTargetID, sdk.AccAddress(delAddr)), record.StartingInfo); err != nil {
-			panic(err)
+			return err
 		}
 	}
 
 	for _, record := range state.ServicesRecords.OutstandingRewards {
 		if err := k.ServiceOutstandingRewards.Set(
 			ctx, record.DelegationTargetID, types.OutstandingRewards{Rewards: record.OutstandingRewards}); err != nil {
-			panic(err)
+			return err
 		}
 	}
 
 	for _, record := range state.ServicesRecords.HistoricalRewards {
 		if err := k.ServiceHistoricalRewards.Set(
 			ctx, collections.Join(record.DelegationTargetID, record.Period), record.Rewards); err != nil {
-			panic(err)
+			return err
 		}
 	}
 
 	for _, record := range state.ServicesRecords.CurrentRewards {
 		if err := k.ServiceCurrentRewards.Set(ctx, record.DelegationTargetID, record.Rewards); err != nil {
-			panic(err)
+			return err
 		}
 	}
 
 	for _, record := range state.ServicesRecords.DelegatorStartingInfos {
 		delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(record.DelegatorAddress)
 		if err != nil {
-			panic(err)
+			return err
 		}
 		if err := k.ServiceDelegatorStartingInfos.Set(
 			ctx, collections.Join(record.DelegationTargetID, sdk.AccAddress(delAddr)), record.StartingInfo); err != nil {
-			panic(err)
+			return err
 		}
 	}
 
 	for _, record := range state.OperatorAccumulatedCommissions {
 		err := k.OperatorAccumulatedCommissions.Set(ctx, record.OperatorID, record.Accumulated)
 		if err != nil {
-			panic(err)
+			return err
 		}
 	}
 
 	// TODO: check module holdings
+	return nil
 }
