@@ -445,7 +445,8 @@ func NewMilkyWayApp(
 		app.BankKeeper,
 		authtypes.FeeCollectorName,
 		authorityAddr,
-		app.AccountKeeper.AddressCodec())
+		app.AccountKeeper.AddressCodec(),
+	)
 
 	////////////////////////////////
 	// OPChildKeeper Configuration //
