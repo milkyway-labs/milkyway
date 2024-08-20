@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"cosmossdk.io/errors"
@@ -16,8 +17,6 @@ func (k *Keeper) CreateRewardsPlan(
 	poolsDistribution types.Distribution, operatorsDistribution types.Distribution,
 	usersDistribution types.UsersDistribution,
 ) (types.RewardsPlan, error) {
-	// TODO: validate arguments.
-
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	_, found := k.servicesKeeper.GetService(sdkCtx, serviceID)
 	if !found {
@@ -60,7 +59,7 @@ func (k *Keeper) CreateRewardsPlan(
 	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeCreateRewardsPlan,
-			// TODO: add attributes
+			sdk.NewAttribute(types.AttributeKeyRewardsPlanID, fmt.Sprint(planID)),
 		),
 	})
 

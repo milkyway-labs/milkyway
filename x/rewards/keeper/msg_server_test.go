@@ -10,6 +10,80 @@ import (
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 )
 
+func (s *KeeperTestSuite) TestMsgCreateRewardsPlan() {
+	service, _ := s.setupSampleServiceAndOperator()
+	msgCreateRewardsPlan := types.NewMsgCreateRewardsPlan(
+		testutil.TestAddress(1).String(), "Rewards Plan", service.ID, utils.MustParseCoins("100_000000service"),
+		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC), time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+		types.NewBasicPoolsDistribution(0), types.NewBasicOperatorsDistribution(0), types.NewBasicUsersDistribution(0))
+
+	testCases := []struct {
+		name        string
+		preRun      func(ctx context.Context)
+		msg         *types.MsgCreateRewardsPlan
+		check       func(ctx context.Context, resp *types.MsgCreateRewardsPlanResponse)
+		expectedErr string
+	}{
+		{
+			name: "success",
+			msg:  msgCreateRewardsPlan,
+			check: func(ctx context.Context, resp *types.MsgCreateRewardsPlanResponse) {
+				s.Require().Equal(uint64(1), resp.NewRewardsPlanID)
+				_, err := s.keeper.GetRewardsPlan(ctx, resp.NewRewardsPlanID)
+				s.Require().NoError(err)
+			},
+		},
+		{
+			name: "rewards plan creation fee is charged",
+			preRun: func(ctx context.Context) {
+				// Change rewards plan creation fee to 100 $MILK.
+				params, err := s.keeper.Params.Get(ctx)
+				s.Require().NoError(err)
+				params.RewardsPlanCreationFee = utils.MustParseCoins("100_000000umilk")
+				err = s.keeper.Params.Set(ctx, params)
+				s.Require().NoError(err)
+
+				// Fund the sender account enough coins to pay the fee.
+				s.FundAccount(msgCreateRewardsPlan.Sender, utils.MustParseCoins("500_000000umilk"))
+			},
+			msg: msgCreateRewardsPlan,
+			check: func(ctx context.Context, resp *types.MsgCreateRewardsPlanResponse) {
+				// Check that the balance is decreased by amount of the fee.
+				senderAddr, err := s.App.AccountKeeper.AddressCodec().StringToBytes(msgCreateRewardsPlan.Sender)
+				s.Require().NoError(err)
+				balances := s.App.BankKeeper.GetAllBalances(ctx, senderAddr)
+				s.Require().Equal("400000000umilk", balances.String())
+			},
+		},
+		{
+			name: "service not found",
+			msg: types.NewMsgCreateRewardsPlan(
+				msgCreateRewardsPlan.Sender, msgCreateRewardsPlan.Description, 2, msgCreateRewardsPlan.Amount,
+				msgCreateRewardsPlan.StartTime, msgCreateRewardsPlan.EndTime, msgCreateRewardsPlan.PoolsDistribution,
+				msgCreateRewardsPlan.OperatorsDistribution, msgCreateRewardsPlan.UsersDistribution),
+			expectedErr: "service not found: not found",
+		},
+	}
+
+	for _, tc := range testCases {
+		s.Run(tc.name, func() {
+			ctx, _ := s.Ctx.CacheContext()
+			if tc.preRun != nil {
+				tc.preRun(ctx)
+			}
+			resp, err := s.msgServer.CreateRewardsPlan(ctx, tc.msg)
+			if tc.expectedErr == "" {
+				s.Require().NoError(err)
+				if tc.check != nil {
+					tc.check(ctx, resp)
+				}
+			} else {
+				s.Require().EqualError(err, tc.expectedErr)
+			}
+		})
+	}
+}
+
 func (s *KeeperTestSuite) TestMsgSetWithdrawAddress() {
 	testCases := []struct {
 		name        string

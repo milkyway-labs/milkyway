@@ -24,7 +24,24 @@ func NewMsgServer(k *Keeper) types.MsgServer {
 
 // CreateRewardsPlan defines the rpc method for Msg/CreateRewardsPlan
 func (k msgServer) CreateRewardsPlan(ctx context.Context, msg *types.MsgCreateRewardsPlan) (*types.MsgCreateRewardsPlanResponse, error) {
-	// TODO: need to charge fee?
+	// Charge fee for rewards plan creation. Fee is charged only in msg server and
+	// not when calling the keeper's method directly. This gives freedom to other
+	// modules to call the keeper's method directly without charging the fee.
+	params, err := k.Params.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+	creationFee := params.RewardsPlanCreationFee
+	if creationFee.IsAllPositive() {
+		senderAddr, err := k.accountKeeper.AddressCodec().StringToBytes(msg.Sender)
+		if err != nil {
+			return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid sender address: %s", err)
+		}
+		err = k.communityPoolKeeper.FundCommunityPool(ctx, creationFee, senderAddr)
+		if err != nil {
+			return nil, err
+		}
+	}
 
 	plan, err := k.Keeper.CreateRewardsPlan(
 		ctx, msg.Description, msg.ServiceID, msg.Amount, msg.StartTime, msg.EndTime, msg.PoolsDistribution,

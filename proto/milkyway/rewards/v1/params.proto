@@ -1,7 +1,20 @@
 syntax = "proto3";
 package milkyway.rewards.v1;
 
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+
 option go_package = "github.com/milkyway-labs/milkyway/x/rewards/types";
+option (gogoproto.goproto_getters_all) = false;
 
 // Params defines the parameters for the module.
-message Params {}
+message Params {
+  // RewardsPlanCreationFee represents the fee that an account must pay in
+  // order to create a rewards plan.
+  // The fee is drawn from the MsgCreateRewardsPlan sender's account and
+  // transferred to the community pool.
+  repeated cosmos.base.v1beta1.Coin rewards_plan_creation_fee = 1 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+}
