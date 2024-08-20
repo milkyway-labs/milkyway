@@ -38,10 +38,7 @@ func (k Querier) OperatorParams(goCtx context.Context, req *types.QueryOperatorP
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Get the operator params store
-	params, found := k.GetOperatorParams(ctx, req.OperatorId)
-	if !found {
-		params = types.DefaultOperatorParams()
-	}
+	params := k.GetOperatorParams(ctx, req.OperatorId)
 
 	return &types.QueryOperatorParamsResponse{OperatorParams: params}, nil
 }
@@ -59,10 +56,7 @@ func (k Querier) ServiceParams(goCtx context.Context, req *types.QueryServicePar
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Get the service params store
-	params, found := k.GetServiceParams(ctx, req.ServiceId)
-	if !found {
-		params = types.DefaultServiceParams()
-	}
+	params := k.GetServiceParams(ctx, req.ServiceId)
 
 	return &types.QueryServiceParamsResponse{ServiceParams: params}, nil
 }
@@ -962,8 +956,7 @@ func PoolDelegationToPoolDelegationResponse(ctx sdk.Context, k *Keeper, delegati
 		return types.DelegationResponse{}, poolstypes.ErrPoolNotFound
 	}
 
-	shareAmount := delegation.Shares.AmountOf(pool.GetSharesDenom(pool.Denom))
-	truncatedBalance := sdk.NewCoins(sdk.NewCoin(pool.Denom, pool.TokensFromShares(shareAmount).TruncateInt()))
+	truncatedBalance, _ := pool.TokensFromShares(delegation.Shares).TruncateDecimal()
 	return types.NewDelegationResponse(delegation, truncatedBalance), nil
 }
 

@@ -70,6 +70,52 @@ func setup(db *dbm.DB, withGenesis bool) (*MilkyWayApp, GenesisState) {
 	return app, GenesisState{}
 }
 
+// Setup initializes a new MilkyWayApp for testing.
+// A single validator will be created and registered in opchild module.
+func Setup(isCheckTx bool) *MilkyWayApp {
+	app, genState := setup(nil, true)
+
+	// Create a validator which will be the admin of the chain as well as the
+	// bridge executor.
+	privVal := ed25519.GenPrivKey() // TODO: make it deterministic?
+	pubKey := privVal.PubKey()
+	pubKeyAny, err := codectypes.NewAnyWithValue(privVal.PubKey())
+	if err != nil {
+		panic(err)
+	}
+	validator := opchildtypes.Validator{
+		Moniker:         "test-validator",
+		OperatorAddress: sdk.ValAddress(privVal.PubKey().Address()).String(),
+		ConsensusPubkey: pubKeyAny,
+		ConsPower:       1,
+	}
+
+	// set validators and delegations
+	var opchildGenesis opchildtypes.GenesisState
+	app.AppCodec().MustUnmarshalJSON(genState[opchildtypes.ModuleName], &opchildGenesis)
+	opchildGenesis.Params.Admin = sdk.AccAddress(pubKey.Address().Bytes()).String()
+	opchildGenesis.Params.BridgeExecutor = sdk.AccAddress(pubKey.Address().Bytes()).String()
+	opchildGenesis.Validators = []opchildtypes.Validator{validator}
+	genState[opchildtypes.ModuleName] = app.AppCodec().MustMarshalJSON(&opchildGenesis)
+
+	if !isCheckTx {
+		genStateBytes, err := json.Marshal(genState)
+		if err != nil {
+			panic(err)
+		}
+		_, err = app.InitChain(&abci.RequestInitChain{
+			Validators:      []abci.ValidatorUpdate{},
+			ConsensusParams: defaultConsensusParams,
+			AppStateBytes:   genStateBytes,
+		})
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	return app
+}
+
 // SetupWithGenesisAccounts setup initiaapp with genesis account
 func SetupWithGenesisAccounts(
 	valSet *tmtypes.ValidatorSet,

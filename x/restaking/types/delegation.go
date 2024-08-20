@@ -10,8 +10,12 @@ import (
 type DelegationTarget interface {
 	GetID() uint32
 	GetAddress() string
+	GetTokens() sdk.Coins
+	GetDelegatorShares() sdk.DecCoins
 	InvalidExRate() bool
 	GetSharesDenom(tokenDenom string) string
+	TokensFromShares(shares sdk.DecCoins) sdk.DecCoins
+	TokensFromSharesTruncated(shares sdk.DecCoins) sdk.DecCoins
 	SharesFromTokens(amt sdk.Coins) (sdk.DecCoins, error)
 	SharesFromTokensTruncated(tokens sdk.Coins) (sdk.DecCoins, error)
 }

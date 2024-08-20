@@ -5,6 +5,7 @@ import "gogoproto/gogo.proto";
 import "cosmos_proto/cosmos.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/pools/types";
+option (gogoproto.goproto_getters_all) = false;
 
 // Pool defines the structure of a restaking pool
 message Pool {

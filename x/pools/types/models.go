@@ -7,6 +7,8 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+
+	"github.com/milkyway-labs/milkyway/utils"
 )
 
 // GetPoolAddress generates a pool address from its id
@@ -36,6 +38,18 @@ func NewPool(id uint32, denom string) Pool {
 	}
 }
 
+func (p Pool) GetID() uint32 {
+	return p.ID
+}
+
+func (p Pool) GetDenom() string {
+	return p.Denom
+}
+
+func (p Pool) GetAddress() string {
+	return p.Address
+}
+
 // Validate checks if the pool is valid
 func (p Pool) Validate() error {
 	if p.ID == 0 {
@@ -54,6 +68,16 @@ func (p Pool) Validate() error {
 	return nil
 }
 
+// GetTokens returns the pool's tokens as sdk.Coins.
+func (p Pool) GetTokens() sdk.Coins {
+	return sdk.NewCoins(sdk.NewCoin(p.Denom, p.Tokens))
+}
+
+// GetDelegatorShares returns delegator shares of the pool as sdk.DecCoins.
+func (p Pool) GetDelegatorShares() sdk.DecCoins {
+	return sdk.NewDecCoins(sdk.NewDecCoinFromDec(p.GetSharesDenom(p.Denom), p.DelegatorShares))
+}
+
 // GetSharesDenom returns the shares denom for a pool and token denom
 func (p Pool) GetSharesDenom(tokenDenom string) string {
 	return fmt.Sprintf("pool/%d/%s", p.ID, tokenDenom)
@@ -67,8 +91,13 @@ func (p Pool) InvalidExRate() bool {
 }
 
 // TokensFromShares calculates the token worth of provided shares
-func (p Pool) TokensFromShares(shares sdkmath.LegacyDec) sdkmath.LegacyDec {
-	return (shares.MulInt(p.Tokens)).Quo(p.DelegatorShares)
+func (p Pool) TokensFromShares(shares sdk.DecCoins) sdk.DecCoins {
+	return utils.ComputeTokensFromShares(shares, p.GetTokens(), p.GetDelegatorShares())
+}
+
+// TokensFromSharesTruncated calculates the token worth of provided shares, truncated
+func (p Pool) TokensFromSharesTruncated(shares sdk.DecCoins) sdk.DecCoins {
+	return utils.ComputeTokensFromSharesTruncated(shares, p.GetTokens(), p.GetDelegatorShares())
 }
 
 // SharesFromTokens returns the shares of a delegation given a bond amount. It
@@ -156,16 +185,16 @@ func (p Pool) RemoveDelShares(shares sdk.DecCoins) (Pool, sdk.Coins, error) {
 	delShares := shares.AmountOf(p.GetSharesDenom(p.Denom))
 	remainingShares := p.DelegatorShares.Sub(delShares)
 
-	var issuedTokens sdkmath.Int
+	var issuedTokens sdk.Coins
 	if remainingShares.IsZero() {
 		// Last delegation share gets any trimmings
-		issuedTokens = p.Tokens
+		issuedTokens = sdk.NewCoins(sdk.NewCoin(p.Denom, p.Tokens))
 		p.Tokens = sdkmath.ZeroInt()
 	} else {
 		// Leave excess tokens in the operator
 		// However, fully use all the delegator shares
-		issuedTokens = p.TokensFromShares(delShares).TruncateInt()
-		p.Tokens = p.Tokens.Sub(issuedTokens)
+		issuedTokens, _ = p.TokensFromShares(shares).TruncateDecimal()
+		p.Tokens = p.Tokens.Sub(issuedTokens.AmountOf(p.Denom))
 
 		if p.Tokens.IsNegative() {
 			panic("attempting to remove more tokens than available in operator")
@@ -174,5 +203,5 @@ func (p Pool) RemoveDelShares(shares sdk.DecCoins) (Pool, sdk.Coins, error) {
 
 	p.DelegatorShares = remainingShares
 
-	return p, sdk.NewCoins(sdk.NewCoin(p.Denom, issuedTokens)), nil
+	return p, issuedTokens, nil
 }

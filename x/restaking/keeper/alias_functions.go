@@ -3,6 +3,7 @@ package keeper
 import (
 	"time"
 
+	"cosmossdk.io/errors"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -68,7 +69,7 @@ func (k *Keeper) getDelegationKeyBuilders(delegation types.Delegation) (types.De
 		return types.UserServiceDelegationStoreKey, types.DelegationByServiceIDStoreKey, nil
 
 	default:
-		return nil, nil, types.ErrInvalidDelegationType
+		return nil, nil, errors.Wrapf(types.ErrInvalidDelegationType, "invalid delegation type: %v", delegation.Type)
 	}
 }
 
@@ -124,47 +125,128 @@ func (k *Keeper) RemoveDelegation(ctx sdk.Context, delegation types.Delegation) 
 // --- Delegations iterations operations
 // --------------------------------------------------------------------------------------------------------------------
 
-// GetAllPoolDelegations returns all the pool delegations
-func (k *Keeper) GetAllPoolDelegations(ctx sdk.Context) []types.Delegation {
+func (k *Keeper) IterateUserPoolDelegations(ctx sdk.Context, userAddress string, cb func(del types.Delegation) (stop bool, err error)) error {
+	store := ctx.KVStore(k.storeKey)
+	iterator := storetypes.KVStorePrefixIterator(store, types.UserPoolDelegationsStorePrefix(userAddress))
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		delegation := types.MustUnmarshalDelegation(k.cdc, iterator.Value())
+		stop, err := cb(delegation)
+		if err != nil {
+			return err
+		}
+		if stop {
+			break
+		}
+	}
+	return nil
+}
+
+func (k *Keeper) IterateAllPoolDelegations(ctx sdk.Context, cb func(del types.Delegation) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 	iterator := store.Iterator(types.PoolDelegationPrefix, storetypes.PrefixEndBytes(types.PoolDelegationPrefix))
 	defer iterator.Close()
 
-	var delegations []types.Delegation
 	for ; iterator.Valid(); iterator.Next() {
 		delegation := types.MustUnmarshalDelegation(k.cdc, iterator.Value())
-		delegations = append(delegations, delegation)
+		if cb(delegation) {
+			break
+		}
 	}
+}
+
+// GetAllPoolDelegations returns all the pool delegations
+func (k *Keeper) GetAllPoolDelegations(ctx sdk.Context) []types.Delegation {
+	var delegations []types.Delegation
+	k.IterateAllPoolDelegations(ctx, func(del types.Delegation) (stop bool) {
+		delegations = append(delegations, del)
+		return false
+	})
 
 	return delegations
 }
 
-// GetAllOperatorDelegations returns all the operator delegations
-func (k *Keeper) GetAllOperatorDelegations(ctx sdk.Context) []types.Delegation {
+func (k *Keeper) IterateUserOperatorDelegations(ctx sdk.Context, userAddress string, cb func(del types.Delegation) (stop bool, err error)) error {
+	store := ctx.KVStore(k.storeKey)
+	iterator := storetypes.KVStorePrefixIterator(store, types.UserOperatorDelegationsStorePrefix(userAddress))
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		delegation := types.MustUnmarshalDelegation(k.cdc, iterator.Value())
+		stop, err := cb(delegation)
+		if err != nil {
+			return err
+		}
+		if stop {
+			break
+		}
+	}
+	return nil
+}
+
+func (k *Keeper) IterateAllOperatorDelegations(ctx sdk.Context, cb func(del types.Delegation) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 	iterator := store.Iterator(types.OperatorDelegationPrefix, storetypes.PrefixEndBytes(types.OperatorDelegationPrefix))
 	defer iterator.Close()
 
-	var delegations []types.Delegation
 	for ; iterator.Valid(); iterator.Next() {
 		delegation := types.MustUnmarshalDelegation(k.cdc, iterator.Value())
-		delegations = append(delegations, delegation)
+		if cb(delegation) {
+			break
+		}
 	}
+}
+
+// GetAllOperatorDelegations returns all the operator delegations
+func (k *Keeper) GetAllOperatorDelegations(ctx sdk.Context) []types.Delegation {
+	var delegations []types.Delegation
+	k.IterateAllOperatorDelegations(ctx, func(del types.Delegation) (stop bool) {
+		delegations = append(delegations, del)
+		return false
+	})
 
 	return delegations
 }
 
-// GetAllServiceDelegations returns all the service delegations
-func (k *Keeper) GetAllServiceDelegations(ctx sdk.Context) []types.Delegation {
+func (k *Keeper) IterateUserServiceDelegations(ctx sdk.Context, userAddress string, cb func(del types.Delegation) (stop bool, err error)) error {
+	store := ctx.KVStore(k.storeKey)
+	iterator := storetypes.KVStorePrefixIterator(store, types.UserServiceDelegationsStorePrefix(userAddress))
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		delegation := types.MustUnmarshalDelegation(k.cdc, iterator.Value())
+		stop, err := cb(delegation)
+		if err != nil {
+			return err
+		}
+		if stop {
+			break
+		}
+	}
+	return nil
+}
+
+func (k *Keeper) IterateAllServiceDelegations(ctx sdk.Context, cb func(del types.Delegation) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 	iterator := store.Iterator(types.ServiceDelegationPrefix, storetypes.PrefixEndBytes(types.ServiceDelegationPrefix))
 	defer iterator.Close()
 
-	var delegations []types.Delegation
 	for ; iterator.Valid(); iterator.Next() {
 		delegation := types.MustUnmarshalDelegation(k.cdc, iterator.Value())
-		delegations = append(delegations, delegation)
+		if cb(delegation) {
+			break
+		}
 	}
+}
+
+// GetAllServiceDelegations returns all the service delegations
+func (k *Keeper) GetAllServiceDelegations(ctx sdk.Context) []types.Delegation {
+	var delegations []types.Delegation
+	k.IterateAllServiceDelegations(ctx, func(del types.Delegation) (stop bool) {
+		delegations = append(delegations, del)
+		return false
+	})
 
 	return delegations
 }
@@ -275,7 +357,7 @@ func (k *Keeper) getUnbondingDelegationTarget(ctx sdk.Context, ubd types.Unbondi
 		return &service, nil
 
 	default:
-		return nil, types.ErrInvalidDelegationType
+		return nil, errors.Wrapf(types.ErrInvalidDelegationType, "invalid delegation type %v", ubd.Type)
 	}
 }
 
@@ -292,7 +374,7 @@ func (k *Keeper) getUnbondingDelegationKeyBuilder(ud types.UnbondingDelegation) 
 		return types.UserServiceUnbondingDelegationKey, nil
 
 	default:
-		return nil, types.ErrInvalidDelegationType
+		return nil, errors.Wrapf(types.ErrInvalidDelegationType, "invalid delegation type %v", ud.Type)
 	}
 }
 

@@ -25,6 +25,9 @@ const (
 	Msg_DelegateOperator_FullMethodName     = "/milkyway.restaking.v1.Msg/DelegateOperator"
 	Msg_DelegateService_FullMethodName      = "/milkyway.restaking.v1.Msg/DelegateService"
 	Msg_UpdateParams_FullMethodName         = "/milkyway.restaking.v1.Msg/UpdateParams"
+	Msg_UndelegatePool_FullMethodName       = "/milkyway.restaking.v1.Msg/UndelegatePool"
+	Msg_UndelegateOperator_FullMethodName   = "/milkyway.restaking.v1.Msg/UndelegateOperator"
+	Msg_UndelegateService_FullMethodName    = "/milkyway.restaking.v1.Msg/UndelegateService"
 )
 
 // MsgClient is the client API for Msg service.
@@ -51,6 +54,15 @@ type MsgClient interface {
 	// parameters.
 	// The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
+	// UndelegatePool defines the operation that allows users to undelegate their
+	// assets from a pool.
+	UndelegatePool(ctx context.Context, in *MsgUndelegatePool, opts ...grpc.CallOption) (*MsgUndelegateResponse, error)
+	// UndelegateOperator defines the operation that allows users to undelegate
+	// their assets from a specific operator.
+	UndelegateOperator(ctx context.Context, in *MsgUndelegateOperator, opts ...grpc.CallOption) (*MsgUndelegateResponse, error)
+	// UndelegateService defines the operation that allows users to undelegate
+	// their assets from a specific service.
+	UndelegateService(ctx context.Context, in *MsgUndelegateService, opts ...grpc.CallOption) (*MsgUndelegateResponse, error)
 }
 
 type msgClient struct {
@@ -121,6 +133,36 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 	return out, nil
 }
 
+func (c *msgClient) UndelegatePool(ctx context.Context, in *MsgUndelegatePool, opts ...grpc.CallOption) (*MsgUndelegateResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgUndelegateResponse)
+	err := c.cc.Invoke(ctx, Msg_UndelegatePool_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) UndelegateOperator(ctx context.Context, in *MsgUndelegateOperator, opts ...grpc.CallOption) (*MsgUndelegateResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgUndelegateResponse)
+	err := c.cc.Invoke(ctx, Msg_UndelegateOperator_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) UndelegateService(ctx context.Context, in *MsgUndelegateService, opts ...grpc.CallOption) (*MsgUndelegateResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgUndelegateResponse)
+	err := c.cc.Invoke(ctx, Msg_UndelegateService_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility.
@@ -145,6 +187,15 @@ type MsgServer interface {
 	// parameters.
 	// The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
+	// UndelegatePool defines the operation that allows users to undelegate their
+	// assets from a pool.
+	UndelegatePool(context.Context, *MsgUndelegatePool) (*MsgUndelegateResponse, error)
+	// UndelegateOperator defines the operation that allows users to undelegate
+	// their assets from a specific operator.
+	UndelegateOperator(context.Context, *MsgUndelegateOperator) (*MsgUndelegateResponse, error)
+	// UndelegateService defines the operation that allows users to undelegate
+	// their assets from a specific service.
+	UndelegateService(context.Context, *MsgUndelegateService) (*MsgUndelegateResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -172,6 +223,15 @@ func (UnimplementedMsgServer) DelegateService(context.Context, *MsgDelegateServi
 }
 func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
+}
+func (UnimplementedMsgServer) UndelegatePool(context.Context, *MsgUndelegatePool) (*MsgUndelegateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UndelegatePool not implemented")
+}
+func (UnimplementedMsgServer) UndelegateOperator(context.Context, *MsgUndelegateOperator) (*MsgUndelegateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UndelegateOperator not implemented")
+}
+func (UnimplementedMsgServer) UndelegateService(context.Context, *MsgUndelegateService) (*MsgUndelegateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UndelegateService not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 func (UnimplementedMsgServer) testEmbeddedByValue()             {}
@@ -302,6 +362,60 @@ func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_UndelegatePool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUndelegatePool)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).UndelegatePool(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_UndelegatePool_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).UndelegatePool(ctx, req.(*MsgUndelegatePool))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_UndelegateOperator_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUndelegateOperator)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).UndelegateOperator(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_UndelegateOperator_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).UndelegateOperator(ctx, req.(*MsgUndelegateOperator))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_UndelegateService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUndelegateService)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).UndelegateService(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_UndelegateService_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).UndelegateService(ctx, req.(*MsgUndelegateService))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -332,6 +446,18 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateParams",
 			Handler:    _Msg_UpdateParams_Handler,
+		},
+		{
+			MethodName: "UndelegatePool",
+			Handler:    _Msg_UndelegatePool_Handler,
+		},
+		{
+			MethodName: "UndelegateOperator",
+			Handler:    _Msg_UndelegateOperator_Handler,
+		},
+		{
+			MethodName: "UndelegateService",
+			Handler:    _Msg_UndelegateService_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

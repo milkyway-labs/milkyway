@@ -51,6 +51,23 @@ func ComputeTokensFromShares(shares sdk.DecCoins, delegatedTokens sdk.Coins, del
 	return tokens
 }
 
+// ComputeTokensFromSharesTruncated calculates the token worth of provided shares, truncated.
+func ComputeTokensFromSharesTruncated(shares sdk.DecCoins, delegatedTokens sdk.Coins, delegatorShares sdk.DecCoins) sdk.DecCoins {
+	tokens := sdk.NewDecCoins()
+	for _, share := range shares {
+		tokenDenom := GetTokenDenomFromSharesDenom(share.Denom)
+
+		operatorTokenAmount := delegatedTokens.AmountOf(tokenDenom)
+		delegatorSharesAmount := delegatorShares.AmountOf(share.Denom)
+
+		tokenAmount := share.Amount.MulInt(operatorTokenAmount).QuoTruncate(delegatorSharesAmount)
+
+		tokens = tokens.Add(sdk.NewDecCoinFromDec(tokenDenom, tokenAmount))
+	}
+
+	return tokens
+}
+
 // ShareDenomGetter represents a function that returns the shares denom given a token denom.
 type ShareDenomGetter func(tokenDenom string) (shareDenom string)
 

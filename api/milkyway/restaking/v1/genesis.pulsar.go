@@ -1133,12 +1133,64 @@ func (x *_GenesisState_4_list) IsValid() bool {
 	return x.list != nil
 }
 
+var _ protoreflect.List = (*_GenesisState_5_list)(nil)
+
+type _GenesisState_5_list struct {
+	list *[]*UnbondingDelegation
+}
+
+func (x *_GenesisState_5_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_GenesisState_5_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_GenesisState_5_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*UnbondingDelegation)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_GenesisState_5_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*UnbondingDelegation)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_GenesisState_5_list) AppendMutable() protoreflect.Value {
+	v := new(UnbondingDelegation)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_5_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_GenesisState_5_list) NewElement() protoreflect.Value {
+	v := new(UnbondingDelegation)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_5_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
-	md_GenesisState                  protoreflect.MessageDescriptor
-	fd_GenesisState_params           protoreflect.FieldDescriptor
-	fd_GenesisState_operators_params protoreflect.FieldDescriptor
-	fd_GenesisState_services_params  protoreflect.FieldDescriptor
-	fd_GenesisState_delegations      protoreflect.FieldDescriptor
+	md_GenesisState                       protoreflect.MessageDescriptor
+	fd_GenesisState_params                protoreflect.FieldDescriptor
+	fd_GenesisState_operators_params      protoreflect.FieldDescriptor
+	fd_GenesisState_services_params       protoreflect.FieldDescriptor
+	fd_GenesisState_delegations           protoreflect.FieldDescriptor
+	fd_GenesisState_unbonding_delegations protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -1148,6 +1200,7 @@ func init() {
 	fd_GenesisState_operators_params = md_GenesisState.Fields().ByName("operators_params")
 	fd_GenesisState_services_params = md_GenesisState.Fields().ByName("services_params")
 	fd_GenesisState_delegations = md_GenesisState.Fields().ByName("delegations")
+	fd_GenesisState_unbonding_delegations = md_GenesisState.Fields().ByName("unbonding_delegations")
 }
 
 var _ protoreflect.Message = (*fastReflection_GenesisState)(nil)
@@ -1239,6 +1292,12 @@ func (x *fastReflection_GenesisState) Range(f func(protoreflect.FieldDescriptor,
 			return
 		}
 	}
+	if len(x.UnbondingDelegations) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_5_list{list: &x.UnbondingDelegations})
+		if !f(fd_GenesisState_unbonding_delegations, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -1262,6 +1321,8 @@ func (x *fastReflection_GenesisState) Has(fd protoreflect.FieldDescriptor) bool 
 		return len(x.ServicesParams) != 0
 	case "milkyway.restaking.v1.GenesisState.delegations":
 		return len(x.Delegations) != 0
+	case "milkyway.restaking.v1.GenesisState.unbonding_delegations":
+		return len(x.UnbondingDelegations) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.GenesisState"))
@@ -1286,6 +1347,8 @@ func (x *fastReflection_GenesisState) Clear(fd protoreflect.FieldDescriptor) {
 		x.ServicesParams = nil
 	case "milkyway.restaking.v1.GenesisState.delegations":
 		x.Delegations = nil
+	case "milkyway.restaking.v1.GenesisState.unbonding_delegations":
+		x.UnbondingDelegations = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.GenesisState"))
@@ -1323,6 +1386,12 @@ func (x *fastReflection_GenesisState) Get(descriptor protoreflect.FieldDescripto
 		}
 		listValue := &_GenesisState_4_list{list: &x.Delegations}
 		return protoreflect.ValueOfList(listValue)
+	case "milkyway.restaking.v1.GenesisState.unbonding_delegations":
+		if len(x.UnbondingDelegations) == 0 {
+			return protoreflect.ValueOfList(&_GenesisState_5_list{})
+		}
+		listValue := &_GenesisState_5_list{list: &x.UnbondingDelegations}
+		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.GenesisState"))
@@ -1357,6 +1426,10 @@ func (x *fastReflection_GenesisState) Set(fd protoreflect.FieldDescriptor, value
 		lv := value.List()
 		clv := lv.(*_GenesisState_4_list)
 		x.Delegations = *clv.list
+	case "milkyway.restaking.v1.GenesisState.unbonding_delegations":
+		lv := value.List()
+		clv := lv.(*_GenesisState_5_list)
+		x.UnbondingDelegations = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.GenesisState"))
@@ -1400,6 +1473,12 @@ func (x *fastReflection_GenesisState) Mutable(fd protoreflect.FieldDescriptor) p
 		}
 		value := &_GenesisState_4_list{list: &x.Delegations}
 		return protoreflect.ValueOfList(value)
+	case "milkyway.restaking.v1.GenesisState.unbonding_delegations":
+		if x.UnbondingDelegations == nil {
+			x.UnbondingDelegations = []*UnbondingDelegation{}
+		}
+		value := &_GenesisState_5_list{list: &x.UnbondingDelegations}
+		return protoreflect.ValueOfList(value)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.GenesisState"))
@@ -1425,6 +1504,9 @@ func (x *fastReflection_GenesisState) NewField(fd protoreflect.FieldDescriptor) 
 	case "milkyway.restaking.v1.GenesisState.delegations":
 		list := []*Delegation{}
 		return protoreflect.ValueOfList(&_GenesisState_4_list{list: &list})
+	case "milkyway.restaking.v1.GenesisState.unbonding_delegations":
+		list := []*UnbondingDelegation{}
+		return protoreflect.ValueOfList(&_GenesisState_5_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.GenesisState"))
@@ -1516,6 +1598,12 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
 		}
+		if len(x.UnbondingDelegations) > 0 {
+			for _, e := range x.UnbondingDelegations {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -1544,6 +1632,22 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.UnbondingDelegations) > 0 {
+			for iNdEx := len(x.UnbondingDelegations) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.UnbondingDelegations[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x2a
+			}
 		}
 		if len(x.Delegations) > 0 {
 			for iNdEx := len(x.Delegations) - 1; iNdEx >= 0; iNdEx-- {
@@ -1794,6 +1898,40 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
+			case 5:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UnbondingDelegations", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.UnbondingDelegations = append(x.UnbondingDelegations, &UnbondingDelegation{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.UnbondingDelegations[len(x.UnbondingDelegations)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -1950,6 +2088,8 @@ type GenesisState struct {
 	ServicesParams []*ServiceParamsRecord `protobuf:"bytes,3,rep,name=services_params,json=servicesParams,proto3" json:"services_params,omitempty"`
 	// Delegations represents the delegations.
 	Delegations []*Delegation `protobuf:"bytes,4,rep,name=delegations,proto3" json:"delegations,omitempty"`
+	// UnbondingDelegations represents the unbonding delegations.
+	UnbondingDelegations []*UnbondingDelegation `protobuf:"bytes,5,rep,name=unbonding_delegations,json=unbondingDelegations,proto3" json:"unbonding_delegations,omitempty"`
 }
 
 func (x *GenesisState) Reset() {
@@ -2000,6 +2140,13 @@ func (x *GenesisState) GetDelegations() []*Delegation {
 	return nil
 }
 
+func (x *GenesisState) GetUnbondingDelegations() []*UnbondingDelegation {
+	if x != nil {
+		return x.UnbondingDelegations
+	}
+	return nil
+}
+
 var File_milkyway_restaking_v1_genesis_proto protoreflect.FileDescriptor
 
 var file_milkyway_restaking_v1_genesis_proto_rawDesc = []byte{
@@ -2032,7 +2179,7 @@ var file_milkyway_restaking_v1_genesis_proto_rawDesc = []byte{
 	0x24, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61,
 	0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x50,
 	0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x70, 0x61, 0x72,
-	0x61, 0x6d, 0x73, 0x22, 0xcf, 0x02, 0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x53,
+	0x61, 0x6d, 0x73, 0x22, 0xb6, 0x03, 0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x53,
 	0x74, 0x61, 0x74, 0x65, 0x12, 0x3b, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x01,
 	0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
 	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x61, 0x72,
@@ -2053,22 +2200,28 @@ var file_milkyway_restaking_v1_genesis_proto_rawDesc = []byte{
 	0x21, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61,
 	0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69,
 	0x6f, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x73, 0x42, 0xe8, 0x01, 0x0a, 0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x69,
-	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67,
-	0x2e, 0x76, 0x31, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x50, 0x72, 0x6f, 0x74,
-	0x6f, 0x50, 0x01, 0x5a, 0x47, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
-	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x6d, 0x69,
-	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
-	0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31,
-	0x3b, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x4d,
-	0x52, 0x58, 0xaa, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x52, 0x65,
-	0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x15, 0x4d, 0x69, 0x6c,
-	0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c,
-	0x56, 0x31, 0xe2, 0x02, 0x21, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65,
-	0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65,
-	0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x17, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
-	0x79, 0x3a, 0x3a, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31,
-	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x65, 0x0a, 0x15, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x5f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x05,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
+	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x6e, 0x62,
+	0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x14, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e,
+	0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x42, 0xe8, 0x01, 0x0a,
+	0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65,
+	0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65,
+	0x73, 0x69, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x47, 0x67, 0x69, 0x74, 0x68,
+	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2d,
+	0x6c, 0x61, 0x62, 0x73, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x61, 0x70,
+	0x69, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61,
+	0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x3b, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e,
+	0x67, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x4d, 0x52, 0x58, 0xaa, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b,
+	0x79, 0x77, 0x61, 0x79, 0x2e, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x56,
+	0x31, 0xca, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x73,
+	0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x21, 0x4d, 0x69, 0x6c, 0x6b,
+	0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56,
+	0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x17,
+	0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x3a, 0x3a, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b,
+	0x69, 0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -2092,6 +2245,7 @@ var file_milkyway_restaking_v1_genesis_proto_goTypes = []interface{}{
 	(*ServiceParams)(nil),        // 4: milkyway.restaking.v1.ServiceParams
 	(*Params)(nil),               // 5: milkyway.restaking.v1.Params
 	(*Delegation)(nil),           // 6: milkyway.restaking.v1.Delegation
+	(*UnbondingDelegation)(nil),  // 7: milkyway.restaking.v1.UnbondingDelegation
 }
 var file_milkyway_restaking_v1_genesis_proto_depIdxs = []int32{
 	3, // 0: milkyway.restaking.v1.OperatorParamsRecord.params:type_name -> milkyway.restaking.v1.OperatorParams
@@ -2100,11 +2254,12 @@ var file_milkyway_restaking_v1_genesis_proto_depIdxs = []int32{
 	0, // 3: milkyway.restaking.v1.GenesisState.operators_params:type_name -> milkyway.restaking.v1.OperatorParamsRecord
 	1, // 4: milkyway.restaking.v1.GenesisState.services_params:type_name -> milkyway.restaking.v1.ServiceParamsRecord
 	6, // 5: milkyway.restaking.v1.GenesisState.delegations:type_name -> milkyway.restaking.v1.Delegation
-	6, // [6:6] is the sub-list for method output_type
-	6, // [6:6] is the sub-list for method input_type
-	6, // [6:6] is the sub-list for extension type_name
-	6, // [6:6] is the sub-list for extension extendee
-	0, // [0:6] is the sub-list for field type_name
+	7, // 6: milkyway.restaking.v1.GenesisState.unbonding_delegations:type_name -> milkyway.restaking.v1.UnbondingDelegation
+	7, // [7:7] is the sub-list for method output_type
+	7, // [7:7] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_milkyway_restaking_v1_genesis_proto_init() }

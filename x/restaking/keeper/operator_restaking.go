@@ -17,15 +17,14 @@ func (k *Keeper) SaveOperatorParams(ctx sdk.Context, operatorID uint32, params t
 
 // GetOperatorParams returns the params for the given operator, if any.
 // If not params are found, false is returned instead.
-func (k *Keeper) GetOperatorParams(ctx sdk.Context, operatorID uint32) (params types.OperatorParams, found bool) {
+func (k *Keeper) GetOperatorParams(ctx sdk.Context, operatorID uint32) (params types.OperatorParams) {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(types.OperatorParamsStoreKey(operatorID))
 	if bz == nil {
-		return params, false
+		return types.DefaultOperatorParams()
 	}
-
 	k.cdc.MustUnmarshal(bz, &params)
-	return params, true
+	return params
 }
 
 // --------------------------------------------------------------------------------------------------------------------

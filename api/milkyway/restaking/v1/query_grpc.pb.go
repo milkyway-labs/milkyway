@@ -19,24 +19,33 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Query_OperatorParams_FullMethodName               = "/milkyway.restaking.v1.Query/OperatorParams"
-	Query_ServiceParams_FullMethodName                = "/milkyway.restaking.v1.Query/ServiceParams"
-	Query_PoolDelegations_FullMethodName              = "/milkyway.restaking.v1.Query/PoolDelegations"
-	Query_PoolDelegation_FullMethodName               = "/milkyway.restaking.v1.Query/PoolDelegation"
-	Query_OperatorDelegations_FullMethodName          = "/milkyway.restaking.v1.Query/OperatorDelegations"
-	Query_OperatorDelegation_FullMethodName           = "/milkyway.restaking.v1.Query/OperatorDelegation"
-	Query_ServiceDelegations_FullMethodName           = "/milkyway.restaking.v1.Query/ServiceDelegations"
-	Query_ServiceDelegation_FullMethodName            = "/milkyway.restaking.v1.Query/ServiceDelegation"
-	Query_DelegatorPoolDelegations_FullMethodName     = "/milkyway.restaking.v1.Query/DelegatorPoolDelegations"
-	Query_DelegatorOperatorDelegations_FullMethodName = "/milkyway.restaking.v1.Query/DelegatorOperatorDelegations"
-	Query_DelegatorServiceDelegations_FullMethodName  = "/milkyway.restaking.v1.Query/DelegatorServiceDelegations"
-	Query_DelegatorPools_FullMethodName               = "/milkyway.restaking.v1.Query/DelegatorPools"
-	Query_DelegatorPool_FullMethodName                = "/milkyway.restaking.v1.Query/DelegatorPool"
-	Query_DelegatorOperators_FullMethodName           = "/milkyway.restaking.v1.Query/DelegatorOperators"
-	Query_DelegatorOperator_FullMethodName            = "/milkyway.restaking.v1.Query/DelegatorOperator"
-	Query_DelegatorServices_FullMethodName            = "/milkyway.restaking.v1.Query/DelegatorServices"
-	Query_DelegatorService_FullMethodName             = "/milkyway.restaking.v1.Query/DelegatorService"
-	Query_Params_FullMethodName                       = "/milkyway.restaking.v1.Query/Params"
+	Query_OperatorParams_FullMethodName                        = "/milkyway.restaking.v1.Query/OperatorParams"
+	Query_ServiceParams_FullMethodName                         = "/milkyway.restaking.v1.Query/ServiceParams"
+	Query_PoolDelegations_FullMethodName                       = "/milkyway.restaking.v1.Query/PoolDelegations"
+	Query_PoolDelegation_FullMethodName                        = "/milkyway.restaking.v1.Query/PoolDelegation"
+	Query_PoolUnbondingDelegations_FullMethodName              = "/milkyway.restaking.v1.Query/PoolUnbondingDelegations"
+	Query_PoolUnbondingDelegation_FullMethodName               = "/milkyway.restaking.v1.Query/PoolUnbondingDelegation"
+	Query_OperatorDelegations_FullMethodName                   = "/milkyway.restaking.v1.Query/OperatorDelegations"
+	Query_OperatorDelegation_FullMethodName                    = "/milkyway.restaking.v1.Query/OperatorDelegation"
+	Query_OperatorUnbondingDelegations_FullMethodName          = "/milkyway.restaking.v1.Query/OperatorUnbondingDelegations"
+	Query_OperatorUnbondingDelegation_FullMethodName           = "/milkyway.restaking.v1.Query/OperatorUnbondingDelegation"
+	Query_ServiceDelegations_FullMethodName                    = "/milkyway.restaking.v1.Query/ServiceDelegations"
+	Query_ServiceDelegation_FullMethodName                     = "/milkyway.restaking.v1.Query/ServiceDelegation"
+	Query_ServiceUnbondingDelegations_FullMethodName           = "/milkyway.restaking.v1.Query/ServiceUnbondingDelegations"
+	Query_ServiceUnbondingDelegation_FullMethodName            = "/milkyway.restaking.v1.Query/ServiceUnbondingDelegation"
+	Query_DelegatorPoolDelegations_FullMethodName              = "/milkyway.restaking.v1.Query/DelegatorPoolDelegations"
+	Query_DelegatorPoolUnbondingDelegations_FullMethodName     = "/milkyway.restaking.v1.Query/DelegatorPoolUnbondingDelegations"
+	Query_DelegatorOperatorDelegations_FullMethodName          = "/milkyway.restaking.v1.Query/DelegatorOperatorDelegations"
+	Query_DelegatorOperatorUnbondingDelegations_FullMethodName = "/milkyway.restaking.v1.Query/DelegatorOperatorUnbondingDelegations"
+	Query_DelegatorServiceDelegations_FullMethodName           = "/milkyway.restaking.v1.Query/DelegatorServiceDelegations"
+	Query_DelegatorServiceUnbondingDelegations_FullMethodName  = "/milkyway.restaking.v1.Query/DelegatorServiceUnbondingDelegations"
+	Query_DelegatorPools_FullMethodName                        = "/milkyway.restaking.v1.Query/DelegatorPools"
+	Query_DelegatorPool_FullMethodName                         = "/milkyway.restaking.v1.Query/DelegatorPool"
+	Query_DelegatorOperators_FullMethodName                    = "/milkyway.restaking.v1.Query/DelegatorOperators"
+	Query_DelegatorOperator_FullMethodName                     = "/milkyway.restaking.v1.Query/DelegatorOperator"
+	Query_DelegatorServices_FullMethodName                     = "/milkyway.restaking.v1.Query/DelegatorServices"
+	Query_DelegatorService_FullMethodName                      = "/milkyway.restaking.v1.Query/DelegatorService"
+	Query_Params_FullMethodName                                = "/milkyway.restaking.v1.Query/Params"
 )
 
 // QueryClient is the client API for Query service.
@@ -54,25 +63,52 @@ type QueryClient interface {
 	// PoolDelegation queries the delegation info for the given pool and
 	// delegator.
 	PoolDelegation(ctx context.Context, in *QueryPoolDelegationRequest, opts ...grpc.CallOption) (*QueryPoolDelegationResponse, error)
+	// PoolUnbondingDelegations queries the unbonding delegations info for the
+	// given pool.
+	PoolUnbondingDelegations(ctx context.Context, in *QueryPoolUnbondingDelegationsRequest, opts ...grpc.CallOption) (*QueryPoolUnbondingDelegationsResponse, error)
+	// PoolUnbondingDelegation queries the unbonding delegation info for the given
+	// pool and delegator.
+	PoolUnbondingDelegation(ctx context.Context, in *QueryPoolUnbondingDelegationRequest, opts ...grpc.CallOption) (*QueryPoolUnbondingDelegationResponse, error)
 	// OperatorDelegations queries the delegations info for the given operator.
 	OperatorDelegations(ctx context.Context, in *QueryOperatorDelegationsRequest, opts ...grpc.CallOption) (*QueryOperatorDelegationsResponse, error)
 	// OperatorDelegation queries the delegation info for the given operator and
 	// delegator.
 	OperatorDelegation(ctx context.Context, in *QueryOperatorDelegationRequest, opts ...grpc.CallOption) (*QueryOperatorDelegationResponse, error)
+	// OperatorUnbondingDelegations queries the unbonding delegations info for the
+	// given operator.
+	OperatorUnbondingDelegations(ctx context.Context, in *QueryOperatorUnbondingDelegationsRequest, opts ...grpc.CallOption) (*QueryOperatorUnbondingDelegationsResponse, error)
+	// OperatorUnbondingDelegation queries the unbonding delegation info for the
+	// given operator and delegator.
+	OperatorUnbondingDelegation(ctx context.Context, in *QueryOperatorUnbondingDelegationRequest, opts ...grpc.CallOption) (*QueryOperatorUnbondingDelegationResponse, error)
 	// ServiceDelegations queries the delegations info for the given service.
 	ServiceDelegations(ctx context.Context, in *QueryServiceDelegationsRequest, opts ...grpc.CallOption) (*QueryServiceDelegationsResponse, error)
 	// ServiceDelegation queries the delegation info for the given service and
 	// delegator.
 	ServiceDelegation(ctx context.Context, in *QueryServiceDelegationRequest, opts ...grpc.CallOption) (*QueryServiceDelegationResponse, error)
+	// ServiceUnbondingDelegations queries the unbonding delegations info for the
+	// given service.
+	ServiceUnbondingDelegations(ctx context.Context, in *QueryServiceUnbondingDelegationsRequest, opts ...grpc.CallOption) (*QueryServiceUnbondingDelegationsResponse, error)
+	// ServiceUnbondingDelegation queries the unbonding delegation info for the
+	// given service and delegator.
+	ServiceUnbondingDelegation(ctx context.Context, in *QueryServiceUnbondingDelegationRequest, opts ...grpc.CallOption) (*QueryServiceUnbondingDelegationResponse, error)
 	// DelegatorPoolDelegations queries all the pool delegations of a given
 	// delegator address.
 	DelegatorPoolDelegations(ctx context.Context, in *QueryDelegatorPoolDelegationsRequest, opts ...grpc.CallOption) (*QueryDelegatorPoolDelegationsResponse, error)
+	// DelegatorPoolUnbondingDelegations queries all the pool unbonding
+	// delegations of a given delegator address.
+	DelegatorPoolUnbondingDelegations(ctx context.Context, in *QueryDelegatorPoolUnbondingDelegationsRequest, opts ...grpc.CallOption) (*QueryDelegatorPoolUnbondingDelegationsResponse, error)
 	// DelegatorOperatorDelegations queries all the operator delegations of a
 	// given delegator address.
 	DelegatorOperatorDelegations(ctx context.Context, in *QueryDelegatorOperatorDelegationsRequest, opts ...grpc.CallOption) (*QueryDelegatorOperatorDelegationsResponse, error)
+	// DelegatorOperatorUnbondingDelegations queries all the operator unbonding
+	// delegations of a given delegator address.
+	DelegatorOperatorUnbondingDelegations(ctx context.Context, in *QueryDelegatorOperatorUnbondingDelegationsRequest, opts ...grpc.CallOption) (*QueryDelegatorOperatorUnbondingDelegationsResponse, error)
 	// DelegatorServiceDelegations queries all the service delegations of a given
 	// delegator address.
 	DelegatorServiceDelegations(ctx context.Context, in *QueryDelegatorServiceDelegationsRequest, opts ...grpc.CallOption) (*QueryDelegatorServiceDelegationsResponse, error)
+	// DelegatorServiceUnbondingDelegations queries all the service unbonding
+	// delegations of a given delegator address.
+	DelegatorServiceUnbondingDelegations(ctx context.Context, in *QueryDelegatorServiceUnbondingDelegationsRequest, opts ...grpc.CallOption) (*QueryDelegatorServiceUnbondingDelegationsResponse, error)
 	// DelegatorPools queries all pools info for given delegator
 	// address.
 	DelegatorPools(ctx context.Context, in *QueryDelegatorPoolsRequest, opts ...grpc.CallOption) (*QueryDelegatorPoolsResponse, error)
@@ -140,6 +176,26 @@ func (c *queryClient) PoolDelegation(ctx context.Context, in *QueryPoolDelegatio
 	return out, nil
 }
 
+func (c *queryClient) PoolUnbondingDelegations(ctx context.Context, in *QueryPoolUnbondingDelegationsRequest, opts ...grpc.CallOption) (*QueryPoolUnbondingDelegationsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(QueryPoolUnbondingDelegationsResponse)
+	err := c.cc.Invoke(ctx, Query_PoolUnbondingDelegations_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) PoolUnbondingDelegation(ctx context.Context, in *QueryPoolUnbondingDelegationRequest, opts ...grpc.CallOption) (*QueryPoolUnbondingDelegationResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(QueryPoolUnbondingDelegationResponse)
+	err := c.cc.Invoke(ctx, Query_PoolUnbondingDelegation_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *queryClient) OperatorDelegations(ctx context.Context, in *QueryOperatorDelegationsRequest, opts ...grpc.CallOption) (*QueryOperatorDelegationsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(QueryOperatorDelegationsResponse)
@@ -154,6 +210,26 @@ func (c *queryClient) OperatorDelegation(ctx context.Context, in *QueryOperatorD
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(QueryOperatorDelegationResponse)
 	err := c.cc.Invoke(ctx, Query_OperatorDelegation_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) OperatorUnbondingDelegations(ctx context.Context, in *QueryOperatorUnbondingDelegationsRequest, opts ...grpc.CallOption) (*QueryOperatorUnbondingDelegationsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(QueryOperatorUnbondingDelegationsResponse)
+	err := c.cc.Invoke(ctx, Query_OperatorUnbondingDelegations_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) OperatorUnbondingDelegation(ctx context.Context, in *QueryOperatorUnbondingDelegationRequest, opts ...grpc.CallOption) (*QueryOperatorUnbondingDelegationResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(QueryOperatorUnbondingDelegationResponse)
+	err := c.cc.Invoke(ctx, Query_OperatorUnbondingDelegation_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -180,10 +256,40 @@ func (c *queryClient) ServiceDelegation(ctx context.Context, in *QueryServiceDel
 	return out, nil
 }
 
+func (c *queryClient) ServiceUnbondingDelegations(ctx context.Context, in *QueryServiceUnbondingDelegationsRequest, opts ...grpc.CallOption) (*QueryServiceUnbondingDelegationsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(QueryServiceUnbondingDelegationsResponse)
+	err := c.cc.Invoke(ctx, Query_ServiceUnbondingDelegations_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) ServiceUnbondingDelegation(ctx context.Context, in *QueryServiceUnbondingDelegationRequest, opts ...grpc.CallOption) (*QueryServiceUnbondingDelegationResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(QueryServiceUnbondingDelegationResponse)
+	err := c.cc.Invoke(ctx, Query_ServiceUnbondingDelegation_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *queryClient) DelegatorPoolDelegations(ctx context.Context, in *QueryDelegatorPoolDelegationsRequest, opts ...grpc.CallOption) (*QueryDelegatorPoolDelegationsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(QueryDelegatorPoolDelegationsResponse)
 	err := c.cc.Invoke(ctx, Query_DelegatorPoolDelegations_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) DelegatorPoolUnbondingDelegations(ctx context.Context, in *QueryDelegatorPoolUnbondingDelegationsRequest, opts ...grpc.CallOption) (*QueryDelegatorPoolUnbondingDelegationsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(QueryDelegatorPoolUnbondingDelegationsResponse)
+	err := c.cc.Invoke(ctx, Query_DelegatorPoolUnbondingDelegations_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -200,10 +306,30 @@ func (c *queryClient) DelegatorOperatorDelegations(ctx context.Context, in *Quer
 	return out, nil
 }
 
+func (c *queryClient) DelegatorOperatorUnbondingDelegations(ctx context.Context, in *QueryDelegatorOperatorUnbondingDelegationsRequest, opts ...grpc.CallOption) (*QueryDelegatorOperatorUnbondingDelegationsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(QueryDelegatorOperatorUnbondingDelegationsResponse)
+	err := c.cc.Invoke(ctx, Query_DelegatorOperatorUnbondingDelegations_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *queryClient) DelegatorServiceDelegations(ctx context.Context, in *QueryDelegatorServiceDelegationsRequest, opts ...grpc.CallOption) (*QueryDelegatorServiceDelegationsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(QueryDelegatorServiceDelegationsResponse)
 	err := c.cc.Invoke(ctx, Query_DelegatorServiceDelegations_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) DelegatorServiceUnbondingDelegations(ctx context.Context, in *QueryDelegatorServiceUnbondingDelegationsRequest, opts ...grpc.CallOption) (*QueryDelegatorServiceUnbondingDelegationsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(QueryDelegatorServiceUnbondingDelegationsResponse)
+	err := c.cc.Invoke(ctx, Query_DelegatorServiceUnbondingDelegations_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -295,25 +421,52 @@ type QueryServer interface {
 	// PoolDelegation queries the delegation info for the given pool and
 	// delegator.
 	PoolDelegation(context.Context, *QueryPoolDelegationRequest) (*QueryPoolDelegationResponse, error)
+	// PoolUnbondingDelegations queries the unbonding delegations info for the
+	// given pool.
+	PoolUnbondingDelegations(context.Context, *QueryPoolUnbondingDelegationsRequest) (*QueryPoolUnbondingDelegationsResponse, error)
+	// PoolUnbondingDelegation queries the unbonding delegation info for the given
+	// pool and delegator.
+	PoolUnbondingDelegation(context.Context, *QueryPoolUnbondingDelegationRequest) (*QueryPoolUnbondingDelegationResponse, error)
 	// OperatorDelegations queries the delegations info for the given operator.
 	OperatorDelegations(context.Context, *QueryOperatorDelegationsRequest) (*QueryOperatorDelegationsResponse, error)
 	// OperatorDelegation queries the delegation info for the given operator and
 	// delegator.
 	OperatorDelegation(context.Context, *QueryOperatorDelegationRequest) (*QueryOperatorDelegationResponse, error)
+	// OperatorUnbondingDelegations queries the unbonding delegations info for the
+	// given operator.
+	OperatorUnbondingDelegations(context.Context, *QueryOperatorUnbondingDelegationsRequest) (*QueryOperatorUnbondingDelegationsResponse, error)
+	// OperatorUnbondingDelegation queries the unbonding delegation info for the
+	// given operator and delegator.
+	OperatorUnbondingDelegation(context.Context, *QueryOperatorUnbondingDelegationRequest) (*QueryOperatorUnbondingDelegationResponse, error)
 	// ServiceDelegations queries the delegations info for the given service.
 	ServiceDelegations(context.Context, *QueryServiceDelegationsRequest) (*QueryServiceDelegationsResponse, error)
 	// ServiceDelegation queries the delegation info for the given service and
 	// delegator.
 	ServiceDelegation(context.Context, *QueryServiceDelegationRequest) (*QueryServiceDelegationResponse, error)
+	// ServiceUnbondingDelegations queries the unbonding delegations info for the
+	// given service.
+	ServiceUnbondingDelegations(context.Context, *QueryServiceUnbondingDelegationsRequest) (*QueryServiceUnbondingDelegationsResponse, error)
+	// ServiceUnbondingDelegation queries the unbonding delegation info for the
+	// given service and delegator.
+	ServiceUnbondingDelegation(context.Context, *QueryServiceUnbondingDelegationRequest) (*QueryServiceUnbondingDelegationResponse, error)
 	// DelegatorPoolDelegations queries all the pool delegations of a given
 	// delegator address.
 	DelegatorPoolDelegations(context.Context, *QueryDelegatorPoolDelegationsRequest) (*QueryDelegatorPoolDelegationsResponse, error)
+	// DelegatorPoolUnbondingDelegations queries all the pool unbonding
+	// delegations of a given delegator address.
+	DelegatorPoolUnbondingDelegations(context.Context, *QueryDelegatorPoolUnbondingDelegationsRequest) (*QueryDelegatorPoolUnbondingDelegationsResponse, error)
 	// DelegatorOperatorDelegations queries all the operator delegations of a
 	// given delegator address.
 	DelegatorOperatorDelegations(context.Context, *QueryDelegatorOperatorDelegationsRequest) (*QueryDelegatorOperatorDelegationsResponse, error)
+	// DelegatorOperatorUnbondingDelegations queries all the operator unbonding
+	// delegations of a given delegator address.
+	DelegatorOperatorUnbondingDelegations(context.Context, *QueryDelegatorOperatorUnbondingDelegationsRequest) (*QueryDelegatorOperatorUnbondingDelegationsResponse, error)
 	// DelegatorServiceDelegations queries all the service delegations of a given
 	// delegator address.
 	DelegatorServiceDelegations(context.Context, *QueryDelegatorServiceDelegationsRequest) (*QueryDelegatorServiceDelegationsResponse, error)
+	// DelegatorServiceUnbondingDelegations queries all the service unbonding
+	// delegations of a given delegator address.
+	DelegatorServiceUnbondingDelegations(context.Context, *QueryDelegatorServiceUnbondingDelegationsRequest) (*QueryDelegatorServiceUnbondingDelegationsResponse, error)
 	// DelegatorPools queries all pools info for given delegator
 	// address.
 	DelegatorPools(context.Context, *QueryDelegatorPoolsRequest) (*QueryDelegatorPoolsResponse, error)
@@ -353,11 +506,23 @@ func (UnimplementedQueryServer) PoolDelegations(context.Context, *QueryPoolDeleg
 func (UnimplementedQueryServer) PoolDelegation(context.Context, *QueryPoolDelegationRequest) (*QueryPoolDelegationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PoolDelegation not implemented")
 }
+func (UnimplementedQueryServer) PoolUnbondingDelegations(context.Context, *QueryPoolUnbondingDelegationsRequest) (*QueryPoolUnbondingDelegationsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PoolUnbondingDelegations not implemented")
+}
+func (UnimplementedQueryServer) PoolUnbondingDelegation(context.Context, *QueryPoolUnbondingDelegationRequest) (*QueryPoolUnbondingDelegationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PoolUnbondingDelegation not implemented")
+}
 func (UnimplementedQueryServer) OperatorDelegations(context.Context, *QueryOperatorDelegationsRequest) (*QueryOperatorDelegationsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OperatorDelegations not implemented")
 }
 func (UnimplementedQueryServer) OperatorDelegation(context.Context, *QueryOperatorDelegationRequest) (*QueryOperatorDelegationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OperatorDelegation not implemented")
+}
+func (UnimplementedQueryServer) OperatorUnbondingDelegations(context.Context, *QueryOperatorUnbondingDelegationsRequest) (*QueryOperatorUnbondingDelegationsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OperatorUnbondingDelegations not implemented")
+}
+func (UnimplementedQueryServer) OperatorUnbondingDelegation(context.Context, *QueryOperatorUnbondingDelegationRequest) (*QueryOperatorUnbondingDelegationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OperatorUnbondingDelegation not implemented")
 }
 func (UnimplementedQueryServer) ServiceDelegations(context.Context, *QueryServiceDelegationsRequest) (*QueryServiceDelegationsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ServiceDelegations not implemented")
@@ -365,14 +530,29 @@ func (UnimplementedQueryServer) ServiceDelegations(context.Context, *QueryServic
 func (UnimplementedQueryServer) ServiceDelegation(context.Context, *QueryServiceDelegationRequest) (*QueryServiceDelegationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ServiceDelegation not implemented")
 }
+func (UnimplementedQueryServer) ServiceUnbondingDelegations(context.Context, *QueryServiceUnbondingDelegationsRequest) (*QueryServiceUnbondingDelegationsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ServiceUnbondingDelegations not implemented")
+}
+func (UnimplementedQueryServer) ServiceUnbondingDelegation(context.Context, *QueryServiceUnbondingDelegationRequest) (*QueryServiceUnbondingDelegationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ServiceUnbondingDelegation not implemented")
+}
 func (UnimplementedQueryServer) DelegatorPoolDelegations(context.Context, *QueryDelegatorPoolDelegationsRequest) (*QueryDelegatorPoolDelegationsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelegatorPoolDelegations not implemented")
+}
+func (UnimplementedQueryServer) DelegatorPoolUnbondingDelegations(context.Context, *QueryDelegatorPoolUnbondingDelegationsRequest) (*QueryDelegatorPoolUnbondingDelegationsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelegatorPoolUnbondingDelegations not implemented")
 }
 func (UnimplementedQueryServer) DelegatorOperatorDelegations(context.Context, *QueryDelegatorOperatorDelegationsRequest) (*QueryDelegatorOperatorDelegationsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelegatorOperatorDelegations not implemented")
 }
+func (UnimplementedQueryServer) DelegatorOperatorUnbondingDelegations(context.Context, *QueryDelegatorOperatorUnbondingDelegationsRequest) (*QueryDelegatorOperatorUnbondingDelegationsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelegatorOperatorUnbondingDelegations not implemented")
+}
 func (UnimplementedQueryServer) DelegatorServiceDelegations(context.Context, *QueryDelegatorServiceDelegationsRequest) (*QueryDelegatorServiceDelegationsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelegatorServiceDelegations not implemented")
+}
+func (UnimplementedQueryServer) DelegatorServiceUnbondingDelegations(context.Context, *QueryDelegatorServiceUnbondingDelegationsRequest) (*QueryDelegatorServiceUnbondingDelegationsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelegatorServiceUnbondingDelegations not implemented")
 }
 func (UnimplementedQueryServer) DelegatorPools(context.Context, *QueryDelegatorPoolsRequest) (*QueryDelegatorPoolsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelegatorPools not implemented")
@@ -488,6 +668,42 @@ func _Query_PoolDelegation_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_PoolUnbondingDelegations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryPoolUnbondingDelegationsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).PoolUnbondingDelegations(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_PoolUnbondingDelegations_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).PoolUnbondingDelegations(ctx, req.(*QueryPoolUnbondingDelegationsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_PoolUnbondingDelegation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryPoolUnbondingDelegationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).PoolUnbondingDelegation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_PoolUnbondingDelegation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).PoolUnbondingDelegation(ctx, req.(*QueryPoolUnbondingDelegationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Query_OperatorDelegations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryOperatorDelegationsRequest)
 	if err := dec(in); err != nil {
@@ -520,6 +736,42 @@ func _Query_OperatorDelegation_Handler(srv interface{}, ctx context.Context, dec
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).OperatorDelegation(ctx, req.(*QueryOperatorDelegationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_OperatorUnbondingDelegations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryOperatorUnbondingDelegationsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).OperatorUnbondingDelegations(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_OperatorUnbondingDelegations_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).OperatorUnbondingDelegations(ctx, req.(*QueryOperatorUnbondingDelegationsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_OperatorUnbondingDelegation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryOperatorUnbondingDelegationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).OperatorUnbondingDelegation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_OperatorUnbondingDelegation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).OperatorUnbondingDelegation(ctx, req.(*QueryOperatorUnbondingDelegationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -560,6 +812,42 @@ func _Query_ServiceDelegation_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_ServiceUnbondingDelegations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryServiceUnbondingDelegationsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ServiceUnbondingDelegations(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_ServiceUnbondingDelegations_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ServiceUnbondingDelegations(ctx, req.(*QueryServiceUnbondingDelegationsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_ServiceUnbondingDelegation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryServiceUnbondingDelegationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ServiceUnbondingDelegation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_ServiceUnbondingDelegation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ServiceUnbondingDelegation(ctx, req.(*QueryServiceUnbondingDelegationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Query_DelegatorPoolDelegations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryDelegatorPoolDelegationsRequest)
 	if err := dec(in); err != nil {
@@ -574,6 +862,24 @@ func _Query_DelegatorPoolDelegations_Handler(srv interface{}, ctx context.Contex
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).DelegatorPoolDelegations(ctx, req.(*QueryDelegatorPoolDelegationsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_DelegatorPoolUnbondingDelegations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryDelegatorPoolUnbondingDelegationsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).DelegatorPoolUnbondingDelegations(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_DelegatorPoolUnbondingDelegations_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).DelegatorPoolUnbondingDelegations(ctx, req.(*QueryDelegatorPoolUnbondingDelegationsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -596,6 +902,24 @@ func _Query_DelegatorOperatorDelegations_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_DelegatorOperatorUnbondingDelegations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryDelegatorOperatorUnbondingDelegationsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).DelegatorOperatorUnbondingDelegations(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_DelegatorOperatorUnbondingDelegations_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).DelegatorOperatorUnbondingDelegations(ctx, req.(*QueryDelegatorOperatorUnbondingDelegationsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Query_DelegatorServiceDelegations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryDelegatorServiceDelegationsRequest)
 	if err := dec(in); err != nil {
@@ -610,6 +934,24 @@ func _Query_DelegatorServiceDelegations_Handler(srv interface{}, ctx context.Con
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).DelegatorServiceDelegations(ctx, req.(*QueryDelegatorServiceDelegationsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_DelegatorServiceUnbondingDelegations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryDelegatorServiceUnbondingDelegationsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).DelegatorServiceUnbondingDelegations(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_DelegatorServiceUnbondingDelegations_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).DelegatorServiceUnbondingDelegations(ctx, req.(*QueryDelegatorServiceUnbondingDelegationsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -764,12 +1106,28 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Query_PoolDelegation_Handler,
 		},
 		{
+			MethodName: "PoolUnbondingDelegations",
+			Handler:    _Query_PoolUnbondingDelegations_Handler,
+		},
+		{
+			MethodName: "PoolUnbondingDelegation",
+			Handler:    _Query_PoolUnbondingDelegation_Handler,
+		},
+		{
 			MethodName: "OperatorDelegations",
 			Handler:    _Query_OperatorDelegations_Handler,
 		},
 		{
 			MethodName: "OperatorDelegation",
 			Handler:    _Query_OperatorDelegation_Handler,
+		},
+		{
+			MethodName: "OperatorUnbondingDelegations",
+			Handler:    _Query_OperatorUnbondingDelegations_Handler,
+		},
+		{
+			MethodName: "OperatorUnbondingDelegation",
+			Handler:    _Query_OperatorUnbondingDelegation_Handler,
 		},
 		{
 			MethodName: "ServiceDelegations",
@@ -780,16 +1138,36 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Query_ServiceDelegation_Handler,
 		},
 		{
+			MethodName: "ServiceUnbondingDelegations",
+			Handler:    _Query_ServiceUnbondingDelegations_Handler,
+		},
+		{
+			MethodName: "ServiceUnbondingDelegation",
+			Handler:    _Query_ServiceUnbondingDelegation_Handler,
+		},
+		{
 			MethodName: "DelegatorPoolDelegations",
 			Handler:    _Query_DelegatorPoolDelegations_Handler,
+		},
+		{
+			MethodName: "DelegatorPoolUnbondingDelegations",
+			Handler:    _Query_DelegatorPoolUnbondingDelegations_Handler,
 		},
 		{
 			MethodName: "DelegatorOperatorDelegations",
 			Handler:    _Query_DelegatorOperatorDelegations_Handler,
 		},
 		{
+			MethodName: "DelegatorOperatorUnbondingDelegations",
+			Handler:    _Query_DelegatorOperatorUnbondingDelegations_Handler,
+		},
+		{
 			MethodName: "DelegatorServiceDelegations",
 			Handler:    _Query_DelegatorServiceDelegations_Handler,
+		},
+		{
+			MethodName: "DelegatorServiceUnbondingDelegations",
+			Handler:    _Query_DelegatorServiceUnbondingDelegations_Handler,
 		},
 		{
 			MethodName: "DelegatorPools",

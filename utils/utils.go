@@ -328,3 +328,31 @@ func FormatUint32Slice(s []uint32) string {
 	}
 	return strings.Join(ss, ",")
 }
+
+func MustParseCoin(s string) sdk.Coin {
+	c, err := sdk.ParseCoinNormalized(strings.ReplaceAll(s, "_", ""))
+	if err != nil {
+		panic(err)
+	}
+	return c
+}
+
+func MustParseCoins(s string) sdk.Coins {
+	c, err := sdk.ParseCoinsNormalized(strings.ReplaceAll(s, "_", ""))
+	if err != nil {
+		panic(err)
+	}
+	return c
+}
+
+func MustParseDecCoins(s string) sdk.DecCoins {
+	d, err := sdk.ParseDecCoins(strings.ReplaceAll(s, "_", ""))
+	if err != nil {
+		panic(err)
+	}
+	return d
+}
+
+func MustParseDec(s string) sdkmath.LegacyDec {
+	return sdkmath.LegacyMustNewDecFromStr(strings.ReplaceAll(s, "_", ""))
+}

@@ -47,8 +47,24 @@ func NewOperator(
 	}
 }
 
+func (o Operator) GetID() uint32 {
+	return o.ID
+}
+
+func (o Operator) GetAddress() string {
+	return o.Address
+}
+
+func (o Operator) GetTokens() sdk.Coins {
+	return o.Tokens
+}
+
+func (o Operator) GetDelegatorShares() sdk.DecCoins {
+	return o.DelegatorShares
+}
+
 // Validate checks that the Operator has valid values.
-func (o *Operator) Validate() error {
+func (o Operator) Validate() error {
 	if o.ID == 0 {
 		return fmt.Errorf("invalid id: %d", o.ID)
 	}
@@ -94,6 +110,11 @@ func (o Operator) InvalidExRate() bool {
 // TokensFromShares calculates the token worth of provided shares
 func (o Operator) TokensFromShares(shares sdk.DecCoins) sdk.DecCoins {
 	return utils.ComputeTokensFromShares(shares, o.Tokens, o.DelegatorShares)
+}
+
+// TokensFromSharesTruncated calculates the token worth of provided shares, truncated
+func (o Operator) TokensFromSharesTruncated(shares sdk.DecCoins) sdk.DecCoins {
+	return utils.ComputeTokensFromSharesTruncated(shares, o.Tokens, o.DelegatorShares)
 }
 
 // SharesFromTokens returns the shares of a delegation given a bond amount. It
