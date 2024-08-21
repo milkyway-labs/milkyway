@@ -172,6 +172,47 @@ func (msg *MsgDeactivateService) GetSigners() []sdk.AccAddress {
 
 // --------------------------------------------------------------------------------------------------------------------
 
+// NewMsgTransferServiceOwnership creates a new MsgTransferServiceOwnership instance
+func NewMsgTransferServiceOwnership(serviceID uint32, newAdmin, sender string) *MsgTransferServiceOwnership {
+	return &MsgTransferServiceOwnership{
+		ServiceID: serviceID,
+		NewAdmin:  newAdmin,
+		Sender:    sender,
+	}
+}
+
+// ValidateBasic implements sdk.Msg
+func (msg *MsgTransferServiceOwnership) ValidateBasic() error {
+	if msg.ServiceID == 0 {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid service ID: %d", msg.ServiceID)
+	}
+
+	_, err := sdk.AccAddressFromBech32(msg.NewAdmin)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid new admin address")
+	}
+
+	_, err = sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address")
+	}
+
+	return nil
+}
+
+// GetSignBytes implements sdk.Msg
+func (msg *MsgTransferServiceOwnership) GetSignBytes() []byte {
+	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(msg))
+}
+
+// GetSigners implements sdk.Msg
+func (msg *MsgTransferServiceOwnership) GetSigners() []sdk.AccAddress {
+	addr, _ := sdk.AccAddressFromBech32(msg.Sender)
+	return []sdk.AccAddress{addr}
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
 func NewMsgUpdateParams(params Params, authority string) *MsgUpdateParams {
 	return &MsgUpdateParams{
 		Authority: authority,

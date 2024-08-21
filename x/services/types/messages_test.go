@@ -307,6 +307,76 @@ func TestMsgDeactivateService_GetSigners(t *testing.T) {
 
 // --------------------------------------------------------------------------------------------------------------------
 
+var msgTransferServiceOwnership = types.NewMsgTransferServiceOwnership(
+	1,
+	"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+	"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+)
+
+func TestMsgTransferServiceOwnership_ValidateBasic(t *testing.T) {
+	testCases := []struct {
+		name      string
+		msg       *types.MsgTransferServiceOwnership
+		shouldErr bool
+	}{
+		{
+			name: "invalid service id returns error",
+			msg: types.NewMsgTransferServiceOwnership(
+				0,
+				msgTransferServiceOwnership.NewAdmin,
+				msgTransferServiceOwnership.Sender,
+			),
+			shouldErr: true,
+		},
+		{
+			name: "invalid new admin address returns error",
+			msg: types.NewMsgTransferServiceOwnership(
+				msgTransferServiceOwnership.ServiceID,
+				"invalid",
+				msgTransferServiceOwnership.Sender,
+			),
+			shouldErr: true,
+		},
+		{
+			name: "invalid sender address returns error",
+			msg: types.NewMsgTransferServiceOwnership(
+				msgTransferServiceOwnership.ServiceID,
+				msgTransferServiceOwnership.NewAdmin,
+				"invalid",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "valid message returns no error",
+			msg:  msgTransferServiceOwnership,
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			err := tc.msg.ValidateBasic()
+			if tc.shouldErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestMsgTransferServiceOwnership_GetSignBytes(t *testing.T) {
+	expected := `{"new_admin":"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn","sender":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","service_id":1}`
+	require.Equal(t, expected, string(msgTransferServiceOwnership.GetSignBytes()))
+}
+
+func TestMsgTransferServiceOwnership_GetSigners(t *testing.T) {
+	addr, _ := sdk.AccAddressFromBech32(msgTransferServiceOwnership.Sender)
+	require.Equal(t, []sdk.AccAddress{addr}, msgTransferServiceOwnership.GetSigners())
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
 var msgUpdateParams = types.NewMsgUpdateParams(
 	types.DefaultParams(),
 	"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",

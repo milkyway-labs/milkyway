@@ -19,11 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Msg_CreateService_FullMethodName     = "/milkyway.services.v1.Msg/CreateService"
-	Msg_UpdateService_FullMethodName     = "/milkyway.services.v1.Msg/UpdateService"
-	Msg_ActivateService_FullMethodName   = "/milkyway.services.v1.Msg/ActivateService"
-	Msg_DeactivateService_FullMethodName = "/milkyway.services.v1.Msg/DeactivateService"
-	Msg_UpdateParams_FullMethodName      = "/milkyway.services.v1.Msg/UpdateParams"
+	Msg_CreateService_FullMethodName            = "/milkyway.services.v1.Msg/CreateService"
+	Msg_UpdateService_FullMethodName            = "/milkyway.services.v1.Msg/UpdateService"
+	Msg_ActivateService_FullMethodName          = "/milkyway.services.v1.Msg/ActivateService"
+	Msg_DeactivateService_FullMethodName        = "/milkyway.services.v1.Msg/DeactivateService"
+	Msg_TransferServiceOwnership_FullMethodName = "/milkyway.services.v1.Msg/TransferServiceOwnership"
+	Msg_UpdateParams_FullMethodName             = "/milkyway.services.v1.Msg/UpdateParams"
 )
 
 // MsgClient is the client API for Msg service.
@@ -42,6 +43,9 @@ type MsgClient interface {
 	// DeactivateService defines the operation for deactivating an existing
 	// service.
 	DeactivateService(ctx context.Context, in *MsgDeactivateService, opts ...grpc.CallOption) (*MsgDeactivateServiceResponse, error)
+	// TransferServiceOwnership defines the operation for transferring the
+	// ownership of an operator to another account.
+	TransferServiceOwnership(ctx context.Context, in *MsgTransferServiceOwnership, opts ...grpc.CallOption) (*MsgTransferServiceOwnershipResponse, error)
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters.
 	// The authority defaults to the x/gov module account.
@@ -96,6 +100,16 @@ func (c *msgClient) DeactivateService(ctx context.Context, in *MsgDeactivateServ
 	return out, nil
 }
 
+func (c *msgClient) TransferServiceOwnership(ctx context.Context, in *MsgTransferServiceOwnership, opts ...grpc.CallOption) (*MsgTransferServiceOwnershipResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgTransferServiceOwnershipResponse)
+	err := c.cc.Invoke(ctx, Msg_TransferServiceOwnership_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(MsgUpdateParamsResponse)
@@ -122,6 +136,9 @@ type MsgServer interface {
 	// DeactivateService defines the operation for deactivating an existing
 	// service.
 	DeactivateService(context.Context, *MsgDeactivateService) (*MsgDeactivateServiceResponse, error)
+	// TransferServiceOwnership defines the operation for transferring the
+	// ownership of an operator to another account.
+	TransferServiceOwnership(context.Context, *MsgTransferServiceOwnership) (*MsgTransferServiceOwnershipResponse, error)
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters.
 	// The authority defaults to the x/gov module account.
@@ -147,6 +164,9 @@ func (UnimplementedMsgServer) ActivateService(context.Context, *MsgActivateServi
 }
 func (UnimplementedMsgServer) DeactivateService(context.Context, *MsgDeactivateService) (*MsgDeactivateServiceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeactivateService not implemented")
+}
+func (UnimplementedMsgServer) TransferServiceOwnership(context.Context, *MsgTransferServiceOwnership) (*MsgTransferServiceOwnershipResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TransferServiceOwnership not implemented")
 }
 func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
@@ -244,6 +264,24 @@ func _Msg_DeactivateService_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_TransferServiceOwnership_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgTransferServiceOwnership)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).TransferServiceOwnership(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_TransferServiceOwnership_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).TransferServiceOwnership(ctx, req.(*MsgTransferServiceOwnership))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MsgUpdateParams)
 	if err := dec(in); err != nil {
@@ -284,6 +322,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeactivateService",
 			Handler:    _Msg_DeactivateService_Handler,
+		},
+		{
+			MethodName: "TransferServiceOwnership",
+			Handler:    _Msg_TransferServiceOwnership_Handler,
 		},
 		{
 			MethodName: "UpdateParams",

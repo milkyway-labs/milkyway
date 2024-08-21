@@ -127,6 +127,47 @@ func (msg *MsgDeactivateOperator) GetSigners() []sdk.AccAddress {
 
 // --------------------------------------------------------------------------------------------------------------------
 
+// NewMsgTransferOperatorOwnership creates a new MsgTransferOperatorOwnership instance
+func NewMsgTransferOperatorOwnership(operatorID uint32, newAdmin, sender string) *MsgTransferOperatorOwnership {
+	return &MsgTransferOperatorOwnership{
+		OperatorID: operatorID,
+		NewAdmin:   newAdmin,
+		Sender:     sender,
+	}
+}
+
+// ValidateBasic implements sdk.Msg
+func (msg *MsgTransferOperatorOwnership) ValidateBasic() error {
+	if msg.OperatorID == 0 {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid operator ID: %d", msg.OperatorID)
+	}
+
+	_, err := sdk.AccAddressFromBech32(msg.NewAdmin)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid new admin address")
+	}
+
+	_, err = sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address")
+	}
+
+	return nil
+}
+
+// GetSignBytes implements sdk.Msg
+func (msg *MsgTransferOperatorOwnership) GetSignBytes() []byte {
+	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(msg))
+}
+
+// GetSigners implements sdk.Msg
+func (msg *MsgTransferOperatorOwnership) GetSigners() []sdk.AccAddress {
+	addr, _ := sdk.AccAddressFromBech32(msg.Sender)
+	return []sdk.AccAddress{addr}
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
 func NewMsgUpdateParams(params Params, authority string) *MsgUpdateParams {
 	return &MsgUpdateParams{
 		Params:    params,

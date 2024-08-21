@@ -233,6 +233,76 @@ func TestMsgDeactivateOperator_GetSigners(t *testing.T) {
 
 // --------------------------------------------------------------------------------------------------------------------
 
+var msgTransferOperatorOwnership = types.NewMsgTransferOperatorOwnership(
+	1,
+	"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+	"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+)
+
+func TestMsgTransferOperatorOwnership_ValidateBasic(t *testing.T) {
+	testCases := []struct {
+		name      string
+		msg       *types.MsgTransferOperatorOwnership
+		shouldErr bool
+	}{
+		{
+			name: "invalid operator id returns error",
+			msg: types.NewMsgTransferOperatorOwnership(
+				0,
+				msgTransferOperatorOwnership.NewAdmin,
+				msgTransferOperatorOwnership.Sender,
+			),
+			shouldErr: true,
+		},
+		{
+			name: "invalid new admin address returns error",
+			msg: types.NewMsgTransferOperatorOwnership(
+				msgTransferOperatorOwnership.OperatorID,
+				"invalid",
+				msgTransferOperatorOwnership.Sender,
+			),
+			shouldErr: true,
+		},
+		{
+			name: "invalid sender address returns error",
+			msg: types.NewMsgTransferOperatorOwnership(
+				msgTransferOperatorOwnership.OperatorID,
+				msgTransferOperatorOwnership.NewAdmin,
+				"invalid",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "valid message returns no error",
+			msg:  msgTransferOperatorOwnership,
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			err := tc.msg.ValidateBasic()
+			if tc.shouldErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestMsgTransferOperatorOwnership_GetSignBytes(t *testing.T) {
+	expected := `{"new_admin":"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn","operator_id":1,"sender":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"}`
+	require.Equal(t, expected, string(msgTransferOperatorOwnership.GetSignBytes()))
+}
+
+func TestMsgTransferOperatorOwnership_GetSigners(t *testing.T) {
+	addr, _ := sdk.AccAddressFromBech32(msgTransferOperatorOwnership.Sender)
+	require.Equal(t, []sdk.AccAddress{addr}, msgTransferOperatorOwnership.GetSigners())
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
 var msgUpdateParams = types.NewMsgUpdateParams(
 	types.NewParams(
 		sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),

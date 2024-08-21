@@ -145,6 +145,37 @@ func (k msgServer) DeactivateOperator(goCtx context.Context, msg *types.MsgDeact
 	return &types.MsgDeactivateOperatorResponse{}, nil
 }
 
+// TransferOperatorOwnership defines the rpc method for Msg/TransferOperatorOwnership
+func (k msgServer) TransferOperatorOwnership(goCtx context.Context, msg *types.MsgTransferOperatorOwnership) (*types.MsgTransferOperatorOwnershipResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Check if the operator exists
+	operator, found := k.GetOperator(ctx, msg.OperatorID)
+	if !found {
+		return nil, types.ErrOperatorNotFound
+	}
+
+	// Make sure only the admin can transfer the operator ownership
+	if operator.Admin != msg.Sender {
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can transfer the operator ownership")
+	}
+
+	// Update the operator admin
+	operator.Admin = msg.NewAdmin
+	k.SaveOperator(ctx, operator)
+
+	// Emit the event
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeTransferOperatorOwnership,
+			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", msg.OperatorID)),
+			sdk.NewAttribute(types.AttributeKeyNewAdmin, msg.NewAdmin),
+		),
+	})
+
+	return &types.MsgTransferOperatorOwnershipResponse{}, nil
+}
+
 // UpdateParams defines the rpc method for Msg/UpdateParams
 func (k msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
 	// Check the authority

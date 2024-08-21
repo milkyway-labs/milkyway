@@ -234,3 +234,43 @@ func GetCmdDeactivateService() *cobra.Command {
 
 	return cmd
 }
+
+// GetCmdTransferServiceOwnership returns the command allowing to transfer the
+// ownership of a service
+func GetCmdTransferServiceOwnership() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "transfer-ownership [id] [new-admin]",
+		Args:  cobra.ExactArgs(2),
+		Short: "transfer the ownership of a service",
+		Example: fmt.Sprintf(
+			`%s tx %s transfer-ownership 1 cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4 --from alice`,
+			version.AppName, types.ModuleName),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			id, err := types.ParseServiceID(args[0])
+			if err != nil {
+				return err
+			}
+
+			newAdmin := args[1]
+
+			sender := clientCtx.FromAddress.String()
+
+			// Create and validate the message
+			msg := types.NewMsgTransferServiceOwnership(id, newAdmin, sender)
+			if err = msg.ValidateBasic(); err != nil {
+				return fmt.Errorf("message validation failed: %w", err)
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}

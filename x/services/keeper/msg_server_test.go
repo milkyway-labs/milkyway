@@ -549,6 +549,124 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateService() {
 	}
 }
 
+func (suite *KeeperTestSuite) TestMsgServer_TransferServiceOwnership() {
+	testCases := []struct {
+		name        string
+		setup       func()
+		store       func(ctx sdk.Context)
+		setupCtx    func(ctx sdk.Context) sdk.Context
+		msg         *types.MsgTransferServiceOwnership
+		shouldErr   bool
+		expResponse *types.MsgTransferServiceOwnershipResponse
+		expEvents   sdk.Events
+		check       func(ctx sdk.Context)
+	}{
+		{
+			name: "not found service returns error",
+			msg: types.NewMsgTransferServiceOwnership(
+				1,
+				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "non admin sender returns error",
+			store: func(ctx sdk.Context) {
+				suite.k.SaveService(ctx, types.NewService(
+					1,
+					types.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+			},
+			msg: types.NewMsgTransferServiceOwnership(
+				1,
+				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "service ownership transferred successfully",
+			store: func(ctx sdk.Context) {
+				suite.k.SaveService(ctx, types.NewService(
+					1,
+					types.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+			},
+			msg: types.NewMsgTransferServiceOwnership(
+				1,
+				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr:   false,
+			expResponse: &types.MsgTransferServiceOwnershipResponse{},
+			expEvents: []sdk.Event{
+				sdk.NewEvent(
+					types.EventTypeTransferServiceOwnership,
+					sdk.NewAttribute(types.AttributeKeyServiceID, "1"),
+					sdk.NewAttribute(types.AttributeKeyNewAdmin, "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn"),
+				),
+			},
+			check: func(ctx sdk.Context) {
+				// Make sure the service was updated
+				stored, found := suite.k.GetService(ctx, 1)
+				suite.Require().True(found)
+				suite.Require().Equal(types.NewService(
+					1,
+					types.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+				), stored)
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.setup != nil {
+				tc.setup()
+			}
+			if tc.setupCtx != nil {
+				ctx = tc.setupCtx(ctx)
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			msgServer := keeper.NewMsgServer(suite.k)
+			res, err := msgServer.TransferServiceOwnership(sdk.WrapSDKContext(ctx), tc.msg)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expResponse, res)
+				for _, event := range tc.expEvents {
+					suite.Require().Contains(ctx.EventManager().Events(), event)
+				}
+
+				if tc.check != nil {
+					tc.check(ctx)
+				}
+			}
+		})
+	}
+}
+
 func (suite *KeeperTestSuite) TestMsgServer_UpdateParams() {
 	testCases := []struct {
 		name        string
