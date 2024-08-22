@@ -431,6 +431,121 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 	}
 }
 
+func (suite *KeeperTestSuite) TestMsgServer_TransferOperatorOwnership() {
+	testCases := []struct {
+		name        string
+		setup       func()
+		store       func(ctx sdk.Context)
+		setupCtx    func(ctx sdk.Context) sdk.Context
+		msg         *types.MsgTransferOperatorOwnership
+		shouldErr   bool
+		expResponse *types.MsgTransferOperatorOwnershipResponse
+		expEvents   sdk.Events
+		check       func(ctx sdk.Context)
+	}{
+		{
+			name: "not found operator returns error",
+			msg: types.NewMsgTransferOperatorOwnership(
+				1,
+				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "non admin sender returns error",
+			store: func(ctx sdk.Context) {
+				suite.k.SaveOperator(ctx, types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+			},
+			msg: types.NewMsgTransferOperatorOwnership(
+				1,
+				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "operator ownership transferred successfully",
+			store: func(ctx sdk.Context) {
+				suite.k.SaveOperator(ctx, types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+			},
+			msg: types.NewMsgTransferOperatorOwnership(
+				1,
+				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			shouldErr:   false,
+			expResponse: &types.MsgTransferOperatorOwnershipResponse{},
+			expEvents: []sdk.Event{
+				sdk.NewEvent(
+					types.EventTypeTransferOperatorOwnership,
+					sdk.NewAttribute(types.AttributeKeyOperatorID, "1"),
+					sdk.NewAttribute(types.AttributeKeyNewAdmin, "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn"),
+				),
+			},
+			check: func(ctx sdk.Context) {
+				// Make sure the operator was updated
+				stored, found := suite.k.GetOperator(ctx, 1)
+				suite.Require().True(found)
+				suite.Require().Equal(types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+				), stored)
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.setup != nil {
+				tc.setup()
+			}
+			if tc.setupCtx != nil {
+				ctx = tc.setupCtx(ctx)
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			msgServer := keeper.NewMsgServer(suite.k)
+			res, err := msgServer.TransferOperatorOwnership(sdk.WrapSDKContext(ctx), tc.msg)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expResponse, res)
+				for _, event := range tc.expEvents {
+					suite.Require().Contains(ctx.EventManager().Events(), event)
+				}
+
+				if tc.check != nil {
+					tc.check(ctx)
+				}
+			}
+		})
+	}
+}
+
 func (suite *KeeperTestSuite) TestMsgServer_UpdateParams() {
 	testCases := []struct {
 		name        string

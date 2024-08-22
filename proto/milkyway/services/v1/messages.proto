@@ -30,6 +30,11 @@ service Msg {
   rpc DeactivateService(MsgDeactivateService)
       returns (MsgDeactivateServiceResponse);
 
+  // TransferServiceOwnership defines the operation for transferring the
+  // ownership of an operator to another account.
+  rpc TransferServiceOwnership(MsgTransferServiceOwnership)
+      returns (MsgTransferServiceOwnershipResponse);
+
   // UpdateParams defines a (governance) operation for updating the module
   // parameters.
   // The authority defaults to the x/gov module account.
@@ -137,6 +142,27 @@ message MsgDeactivateService {
 
 // MsgDeactivateServiceResponse is the return value of MsgDeactivateService.
 message MsgDeactivateServiceResponse {}
+
+// MsgTransferServiceOwnership defines the message structure for the
+// TransferServiceOwnership gRPC service method. It allows a service admin to
+// transfer the ownership of the service to another account.
+message MsgTransferServiceOwnership {
+  option (cosmos.msg.v1.signer) = "sender";
+  option (amino.name) = "milkyway/services/MsgTransferServiceOwnership";
+
+  // Sender is the address of the user transferring the ownership
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // ServiceID represents the ID of the service to transfer ownership
+  uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
+
+  // NewAdmin is the address of the new admin of the service
+  string new_admin = 3 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+}
+
+// MsgTransferServiceOwnershipResponse is the return value of
+// MsgTransferServiceOwnership.
+message MsgTransferServiceOwnershipResponse {}
 
 // MsgDeactivateService defines the message structure for the UpdateParams gRPC
 // service method. It allows the authority to update the module parameters.
