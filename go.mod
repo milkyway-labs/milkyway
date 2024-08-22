@@ -46,7 +46,7 @@ require (
 	github.com/initia-labs/kvindexer/submodules/wasm-pair v0.1.0
 	github.com/noble-assets/forwarding v0.0.0-20240416085758-ed8e9efaf69a
 	github.com/pkg/errors v0.9.1
-	github.com/prometheus/client_golang v1.20.0
+	github.com/prometheus/client_golang v1.20.1
 	github.com/rakyll/statik v0.1.7
 	github.com/skip-mev/block-sdk/v2 v2.1.1
 	github.com/skip-mev/slinky v1.0.5
