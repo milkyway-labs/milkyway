@@ -29,7 +29,7 @@ func TestKeeperTestSuite(t *testing.T) {
 
 func (s *KeeperTestSuite) SetupTest() {
 	s.KeeperTestSuite.SetupTest()
-	s.authority = s.App.TickersKeeper.GetAuthority()
+	s.authority = s.App.RewardsKeeper.GetAuthority()
 	s.keeper = s.App.RewardsKeeper
 	s.msgServer = keeper.NewMsgServer(s.keeper)
 	s.queryServer = keeper.NewQueryServer(s.keeper)
@@ -52,8 +52,8 @@ func (s *KeeperTestSuite) setupSampleServiceAndOperator() (servicestypes.Service
 	//   - it joins the newly created service
 
 	// Register $MILK and $INIT.
-	s.RegisterCurrency("umilk", "MILK", utils.MustParseDec("2"))
-	s.RegisterCurrency("uinit", "INIT", utils.MustParseDec("3"))
+	s.RegisterCurrency("umilk", "MILK", 6, utils.MustParseDec("2"))
+	s.RegisterCurrency("uinit", "INIT", 6, utils.MustParseDec("3"))
 
 	// Create a service.
 	serviceAdmin := testutil.TestAddress(10000)

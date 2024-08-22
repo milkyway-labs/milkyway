@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	stdmath "math"
 
 	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
@@ -9,46 +10,49 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	slinkytypes "github.com/skip-mev/slinky/pkg/types"
 
+	assetstypes "github.com/milkyway-labs/milkyway/x/assets/types"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
-	tickerstypes "github.com/milkyway-labs/milkyway/x/tickers/types"
 )
 
-func (k *Keeper) GetPrice(ctx context.Context, denom string) (math.LegacyDec, error) {
-	ticker, err := k.tickersKeeper.GetTicker(ctx, denom)
+func (k *Keeper) GetAssetAndPrice(ctx context.Context, denom string) (assetstypes.Asset, math.LegacyDec, error) {
+	asset, err := k.assetsKeeper.GetAsset(ctx, denom)
 	if err != nil {
-		// If ticker is not found, then we return 0 as price.
-		if errors.IsOf(err, tickerstypes.ErrTickerNotFound) {
-			return math.LegacyZeroDec(), nil
+		// If asset is not found, then we return 0 as price.
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return assetstypes.Asset{}, math.LegacyZeroDec(), nil
 		}
-		return math.LegacyDec{}, err
+		return assetstypes.Asset{}, math.LegacyDec{}, err
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	cp := slinkytypes.NewCurrencyPair(ticker, types.USDTicker)
+	cp := slinkytypes.NewCurrencyPair(asset.Ticker, types.USDTicker)
 	qpn, err := k.oracleKeeper.GetPriceWithNonceForCurrencyPair(sdkCtx, cp)
 	if err != nil {
 		// If currency pair is not found return 0 as well.
 		if errors.IsOf(err, collections.ErrNotFound) {
-			return math.LegacyZeroDec(), nil
+			return asset, math.LegacyZeroDec(), nil
 		}
-		return math.LegacyDec{}, err
+		return asset, math.LegacyDec{}, err
 	}
 	decimals, err := k.oracleKeeper.GetDecimalsForCurrencyPair(sdkCtx, cp)
 	if err != nil {
-		return math.LegacyDec{}, err
+		return asset, math.LegacyDec{}, err
 	}
 
 	// Divide returned quote price by 10^{decimals} gives us the real price in
 	// decimal number.
-	return math.LegacyNewDecFromIntWithPrec(qpn.Price, int64(decimals)), nil
+	return asset, math.LegacyNewDecFromIntWithPrec(qpn.Price, int64(decimals)), nil
 }
 
 func (k *Keeper) GetCoinValue(ctx context.Context, coin sdk.Coin) (math.LegacyDec, error) {
-	price, err := k.GetPrice(ctx, coin.Denom)
+	asset, price, err := k.GetAssetAndPrice(ctx, coin.Denom)
 	if err != nil {
 		return math.LegacyDec{}, err
 	}
-	return price.MulInt(coin.Amount), nil
+	if price.IsZero() {
+		return math.LegacyZeroDec(), nil
+	}
+	return price.MulInt(coin.Amount).QuoInt64(int64(stdmath.Pow10(int(asset.Exponent)))), nil
 }
 
 func (k *Keeper) GetCoinsValue(ctx context.Context, coins sdk.Coins) (math.LegacyDec, error) {
