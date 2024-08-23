@@ -36,18 +36,28 @@ func NewKeeper(
 
 		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		Assets: collections.NewMap(
-			sb, types.AssetKeyPrefix, "assets", collections.StringKey, codec.CollValue[types.Asset](cdc)),
+			sb,
+			types.AssetKeyPrefix,
+			"assets",
+			collections.StringKey,
+			codec.CollValue[types.Asset](cdc),
+		),
 		TickerIndexes: collections.NewKeySet(
-			sb, types.TickerIndexKeyPrefix, "ticker_indexes",
-			collections.PairKeyCodec(collections.StringKey, collections.StringKey)),
+			sb,
+			types.TickerIndexKeyPrefix,
+			"ticker_indexes",
+			collections.PairKeyCodec(collections.StringKey, collections.StringKey),
+		),
 
 		authority: authority,
 	}
+
 	schema, err := sb.Build()
 	if err != nil {
 		panic(err)
 	}
 	k.Schema = schema
+
 	return k
 }
 

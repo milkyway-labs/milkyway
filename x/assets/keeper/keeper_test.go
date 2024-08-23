@@ -13,7 +13,9 @@ import (
 type KeeperTestSuite struct {
 	testutil.KeeperTestSuite
 
-	authority   string
+	authority string
+
+	keeper      *keeper.Keeper
 	msgServer   types.MsgServer
 	queryServer types.QueryServer
 }
@@ -22,9 +24,11 @@ func TestKeeperTestSuite(t *testing.T) {
 	suite.Run(t, new(KeeperTestSuite))
 }
 
-func (s *KeeperTestSuite) SetupTest() {
-	s.KeeperTestSuite.SetupTest()
-	s.authority = s.App.AssetsKeeper.GetAuthority()
-	s.msgServer = keeper.NewMsgServer(s.App.AssetsKeeper)
-	s.queryServer = keeper.NewQueryServer(s.App.AssetsKeeper)
+func (suite *KeeperTestSuite) SetupTest() {
+	suite.KeeperTestSuite.SetupTest()
+	suite.authority = suite.App.AssetsKeeper.GetAuthority()
+
+	suite.keeper = suite.App.AssetsKeeper
+	suite.msgServer = keeper.NewMsgServer(suite.App.AssetsKeeper)
+	suite.queryServer = keeper.NewQueryServer(suite.App.AssetsKeeper)
 }

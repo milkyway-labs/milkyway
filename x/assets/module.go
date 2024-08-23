@@ -110,12 +110,20 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.RawMessage) {
 	var genState types.GenesisState
 	cdc.MustUnmarshalJSON(gs, &genState)
-	am.keeper.InitGenesis(ctx, &genState)
+
+	err := am.keeper.InitGenesis(ctx, &genState)
+	if err != nil {
+		panic(err)
+	}
 }
 
 // ExportGenesis returns the module's exported genesis state as raw JSON bytes.
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
-	genState := am.keeper.ExportGenesis(ctx)
+	genState, err := am.keeper.ExportGenesis(ctx)
+	if err != nil {
+		panic(err)
+	}
+
 	return cdc.MustMarshalJSON(genState)
 }
 

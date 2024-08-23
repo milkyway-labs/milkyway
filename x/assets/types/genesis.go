@@ -27,11 +27,13 @@ func (data *GenesisState) Validate() error {
 		return fmt.Errorf("invalid params: %s", err)
 	}
 
+	// Validate the assets
 	for _, asset := range data.Assets {
 		err = asset.Validate()
 		if err != nil {
 			return err
 		}
 	}
+
 	return nil
 }

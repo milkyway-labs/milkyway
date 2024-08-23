@@ -1,127 +1,202 @@
 package keeper_test
 
 import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/query"
+
+	"github.com/milkyway-labs/milkyway/x/assets/keeper"
 	"github.com/milkyway-labs/milkyway/x/assets/types"
 )
 
-func (s *KeeperTestSuite) TestQueryAssets() {
-	_, err := s.msgServer.RegisterAsset(s.Ctx, &types.MsgRegisterAsset{
-		Authority: s.authority,
-		Asset:     types.NewAsset("umilk", "MILK", 6),
-	})
-	s.Require().NoError(err)
-
-	_, err = s.msgServer.RegisterAsset(s.Ctx, &types.MsgRegisterAsset{
-		Authority: s.authority,
-		Asset:     types.NewAsset("umilk2", "MILK", 6),
-	})
-	s.Require().NoError(err)
-
-	_, err = s.msgServer.RegisterAsset(s.Ctx, &types.MsgRegisterAsset{
-		Authority: s.authority,
-		Asset:     types.NewAsset("uatom", "ATOM", 6),
-	})
-	s.Require().NoError(err)
-
+func (suite *KeeperTestSuite) TestQuerier_Assets() {
 	testCases := []struct {
-		name        string
-		req         *types.QueryAssetsRequest
-		expectedErr string
-		postRun     func(resp *types.QueryAssetsResponse)
+		name      string
+		store     func(ctx sdk.Context)
+		req       *types.QueryAssetsRequest
+		shouldErr bool
+		expAssets []types.Asset
 	}{
 		{
-			"successful query",
-			&types.QueryAssetsRequest{},
-			"",
-			func(resp *types.QueryAssetsResponse) {
-				s.Require().Equal([]types.Asset{
-					types.NewAsset("uatom", "ATOM", 6),
-					types.NewAsset("umilk", "MILK", 6),
-					types.NewAsset("umilk2", "MILK", 6),
-				}, resp.Assets)
+			name: "query without pagination returns all assets",
+			store: func(ctx sdk.Context) {
+				err := suite.keeper.SetAsset(ctx, types.NewAsset("umilk", "MILK", 6))
+				suite.Require().NoError(err)
+
+				err = suite.keeper.SetAsset(ctx, types.NewAsset("umilk2", "MILK", 6))
+				suite.Require().NoError(err)
+
+				err = suite.keeper.SetAsset(ctx, types.NewAsset("uatom", "ATOM", 6))
+				suite.Require().NoError(err)
+			},
+			req:       types.NewQueryAssetsRequest("", nil),
+			shouldErr: false,
+			expAssets: []types.Asset{
+				types.NewAsset("uatom", "ATOM", 6),
+				types.NewAsset("umilk", "MILK", 6),
+				types.NewAsset("umilk2", "MILK", 6),
 			},
 		},
 		{
-			"successful query with ticker",
-			&types.QueryAssetsRequest{Ticker: "MILK"},
-			"",
-			func(resp *types.QueryAssetsResponse) {
-				s.Require().Equal([]types.Asset{
-					types.NewAsset("umilk", "MILK", 6),
-					types.NewAsset("umilk2", "MILK", 6),
-				}, resp.Assets)
+			name: "query with ticker returns assets with the given ticker",
+			store: func(ctx sdk.Context) {
+				err := suite.keeper.SetAsset(ctx, types.NewAsset("umilk", "MILK", 6))
+				suite.Require().NoError(err)
+
+				err = suite.keeper.SetAsset(ctx, types.NewAsset("umilk2", "MILK", 6))
+				suite.Require().NoError(err)
+
+				err = suite.keeper.SetAsset(ctx, types.NewAsset("uatom", "ATOM", 6))
+				suite.Require().NoError(err)
+			},
+			req:       types.NewQueryAssetsRequest("MILK", nil),
+			shouldErr: false,
+			expAssets: []types.Asset{
+				types.NewAsset("umilk", "MILK", 6),
+				types.NewAsset("umilk2", "MILK", 6),
 			},
 		},
 		{
-			"successful query with ticker #2",
-			&types.QueryAssetsRequest{Ticker: "ATOM"},
-			"",
-			func(resp *types.QueryAssetsResponse) {
-				s.Require().Equal([]types.Asset{types.NewAsset("uatom", "ATOM", 6)}, resp.Assets)
+			name: "query with ticker and pagination returns assets with the given ticker",
+			store: func(ctx sdk.Context) {
+				err := suite.keeper.SetAsset(ctx, types.NewAsset("umilk", "MILK", 6))
+				suite.Require().NoError(err)
+
+				err = suite.keeper.SetAsset(ctx, types.NewAsset("umilk2", "MILK", 6))
+				suite.Require().NoError(err)
+
+				err = suite.keeper.SetAsset(ctx, types.NewAsset("uatom", "ATOM", 6))
+				suite.Require().NoError(err)
+			},
+			req: types.NewQueryAssetsRequest("MILK", &query.PageRequest{
+				Limit:  1,
+				Offset: 1,
+			}),
+			shouldErr: false,
+			expAssets: []types.Asset{
+				types.NewAsset("umilk2", "MILK", 6),
 			},
 		},
 		{
-			"invalid ticker",
-			&types.QueryAssetsRequest{Ticker: "!@#$"},
-			"rpc error: code = InvalidArgument desc = bad ticker format: !@#$",
-			nil,
+			name:      "invalid ticker returns error",
+			req:       types.NewQueryAssetsRequest("!@#$", nil),
+			shouldErr: true,
 		},
 	}
+
 	for _, tc := range testCases {
-		s.Run(tc.name, func() {
-			resp, err := s.queryServer.Assets(s.Ctx, tc.req)
-			if tc.expectedErr == "" {
-				s.Require().NoError(err)
-				tc.postRun(resp)
+		suite.Run(tc.name, func() {
+			suite.SetupTest()
+
+			ctx, _ := suite.Ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			queryServer := keeper.NewQueryServer(suite.keeper)
+			res, err := queryServer.Assets(ctx, tc.req)
+			if tc.shouldErr {
+				suite.Require().Error(err)
 			} else {
-				s.Require().EqualError(err, tc.expectedErr)
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expAssets, res.Assets)
+			}
+
+		})
+	}
+}
+
+func (suite *KeeperTestSuite) TestQuerier_Asset() {
+	testCases := []struct {
+		name      string
+		store     func(ctx sdk.Context)
+		req       *types.QueryAssetRequest
+		shouldErr bool
+		expAsset  types.Asset
+	}{
+		{
+			name: "existing asset is returned properly",
+			store: func(ctx sdk.Context) {
+				err := suite.keeper.SetAsset(ctx, types.NewAsset("umilk", "MILK", 6))
+				suite.Require().NoError(err)
+			},
+			req:       types.NewQueryAssetRequest("umilk"),
+			shouldErr: false,
+			expAsset:  types.NewAsset("umilk", "MILK", 6),
+		},
+		{
+			name:      "invalid denom returns error",
+			req:       types.NewQueryAssetRequest("!@#$"),
+			shouldErr: true,
+		},
+		{
+			name:      "non-existing asset returns error",
+			req:       types.NewQueryAssetRequest("umilk"),
+			shouldErr: true,
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			suite.SetupTest()
+
+			ctx, _ := suite.Ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			queryServer := keeper.NewQueryServer(suite.keeper)
+			res, err := queryServer.Asset(ctx, tc.req)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expAsset, res.Asset)
 			}
 		})
 	}
 }
 
-func (s *KeeperTestSuite) TestQueryAsset() {
-	_, err := s.msgServer.RegisterAsset(s.Ctx, &types.MsgRegisterAsset{
-		Authority: s.authority,
-		Asset:     types.NewAsset("umilk", "MILK", 6),
-	})
-	s.Require().NoError(err)
-
+func (suite *KeeperTestSuite) TestQuerier_Params() {
 	testCases := []struct {
-		name        string
-		req         *types.QueryAssetRequest
-		expectedErr string
-		postRun     func(resp *types.QueryAssetResponse)
+		name      string
+		store     func(ctx sdk.Context)
+		shouldErr bool
+		expParams types.Params
 	}{
 		{
-			"successful query",
-			&types.QueryAssetRequest{Denom: "umilk"},
-			"",
-			func(resp *types.QueryAssetResponse) {
-				s.Require().Equal(types.NewAsset("umilk", "MILK", 6), resp.Asset)
+			name:      "non existing params returns empty params",
+			shouldErr: false,
+			expParams: types.Params{},
+		},
+		{
+			name: "existing params are returned properly",
+			store: func(ctx sdk.Context) {
+				err := suite.keeper.Params.Set(ctx, types.DefaultParams())
+				suite.Require().NoError(err)
 			},
-		},
-		{
-			"invalid denom",
-			&types.QueryAssetRequest{Denom: "!@#$"},
-			"rpc error: code = InvalidArgument desc = invalid denom: !@#$",
-			nil,
-		},
-		{
-			"ticker not registered",
-			&types.QueryAssetRequest{Denom: "uatom"},
-			"rpc error: code = NotFound desc = asset for denom uatom not registered",
-			nil,
+			shouldErr: false,
+			expParams: types.DefaultParams(),
 		},
 	}
+
 	for _, tc := range testCases {
-		s.Run(tc.name, func() {
-			resp, err := s.queryServer.Asset(s.Ctx, tc.req)
-			if tc.expectedErr == "" {
-				s.Require().NoError(err)
-				tc.postRun(resp)
+		tc := tc
+		suite.Run(tc.name, func() {
+			suite.SetupTest()
+
+			ctx, _ := suite.Ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			queryServer := keeper.NewQueryServer(suite.keeper)
+			res, err := queryServer.Params(ctx, types.NewQueryParamsRequest())
+			if tc.shouldErr {
+				suite.Require().Error(err)
 			} else {
-				s.Require().EqualError(err, tc.expectedErr)
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expParams, res.Params)
 			}
 		})
 	}

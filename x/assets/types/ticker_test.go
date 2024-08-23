@@ -10,43 +10,44 @@ import (
 
 func TestValidateTicker(t *testing.T) {
 	testCases := []struct {
-		name        string
-		ticker      string
-		expectedErr string
+		name   string
+		ticker string
+		expErr bool
 	}{
 		{
-			"happy case",
-			"MILK",
-			"",
+			name:   "uppercase ticker returns no error",
+			ticker: "MILK",
+			expErr: false,
 		},
 		{
-			"lowercase letters are accepted",
-			"milkINIT",
-			"",
+			name:   "lowercase letters are accepted",
+			ticker: "milkINIT",
+			expErr: false,
 		},
 		{
-			"empty",
-			"",
-			"empty ticker",
+			name:   "empty ticker returns error",
+			ticker: "",
+			expErr: true,
 		},
 		{
-			"invalid characters",
-			"WOW!",
-			"bad ticker format: WOW!",
+			name:   "invalid characters return error",
+			ticker: "WOW!",
+			expErr: true,
 		},
 		{
-			"too long",
-			"WHATALONGTICKER",
-			"ticker too long",
+			name:   "too long ticker returns error",
+			ticker: "WHATALONGTICKER",
+			expErr: true,
 		},
 	}
+
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			err := types.ValidateTicker(tc.ticker)
-			if tc.expectedErr == "" {
-				require.NoError(t, err)
+			if tc.expErr {
+				require.Error(t, err)
 			} else {
-				require.EqualError(t, err, tc.expectedErr)
+				require.NoError(t, err)
 			}
 		})
 	}

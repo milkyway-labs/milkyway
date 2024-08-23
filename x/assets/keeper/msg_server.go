@@ -21,16 +21,21 @@ func NewMsgServer(k *Keeper) types.MsgServer {
 	return &msgServer{Keeper: k}
 }
 
+// RegisterAsset defines the rpc method for Msg/RegisterAsset
 func (k msgServer) RegisterAsset(ctx context.Context, msg *types.MsgRegisterAsset) (*types.MsgRegisterAssetResponse, error) {
-	if err := msg.Validate(); err != nil {
+	err := msg.Validate()
+	if err != nil {
 		return nil, err
 	}
 
+	// Check if the authority is correct
 	if k.authority != msg.Authority {
 		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", k.authority, msg.Authority)
 	}
 
-	if err := k.SetAsset(ctx, msg.Asset); err != nil {
+	// Store the asset
+	err = k.SetAsset(ctx, msg.Asset)
+	if err != nil {
 		return nil, err
 	}
 
@@ -47,16 +52,22 @@ func (k msgServer) RegisterAsset(ctx context.Context, msg *types.MsgRegisterAsse
 	return &types.MsgRegisterAssetResponse{}, nil
 }
 
+// DeregisterAsset defines the rpc method for Msg/DeregisterAsset
 func (k msgServer) DeregisterAsset(ctx context.Context, msg *types.MsgDeregisterAsset) (*types.MsgDeregisterAssetResponse, error) {
-	if err := msg.Validate(); err != nil {
+	// Validate the message
+	err := msg.Validate()
+	if err != nil {
 		return nil, err
 	}
 
+	// Check if the authority is correct
 	if k.authority != msg.Authority {
 		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", k.authority, msg.Authority)
 	}
 
-	if err := k.RemoveAsset(ctx, msg.Denom); err != nil {
+	// Remove the asset
+	err = k.RemoveAsset(ctx, msg.Denom)
+	if err != nil {
 		return nil, err
 	}
 
@@ -73,16 +84,20 @@ func (k msgServer) DeregisterAsset(ctx context.Context, msg *types.MsgDeregister
 
 // UpdateParams defines the rpc method for Msg/UpdateParams
 func (k msgServer) UpdateParams(ctx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
-	if err := msg.Validate(); err != nil {
+	// Validate the message
+	err := msg.Validate()
+	if err != nil {
 		return nil, err
 	}
 
+	// Check if the authority is correct
 	if k.authority != msg.Authority {
 		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", k.authority, msg.Authority)
 	}
 
-	// store params
-	if err := k.Params.Set(ctx, msg.Params); err != nil {
+	// Store the params
+	err = k.Params.Set(ctx, msg.Params)
+	if err != nil {
 		return nil, err
 	}
 
