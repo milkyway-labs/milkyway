@@ -1,6 +1,8 @@
 package keeper_test
 
 import (
+	"time"
+
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -396,6 +398,117 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegatePool() {
 	}
 }
 
+func (suite *KeeperTestSuite) TestMsgServer_UndelegatePool() {
+	testCases := []struct {
+		name      string
+		setup     func()
+		store     func(ctx sdk.Context)
+		setupCtx  func(ctx sdk.Context) sdk.Context
+		msg       *types.MsgUndelegatePool
+		shouldErr bool
+		expEvents sdk.Events
+		check     func(ctx sdk.Context)
+	}{
+		{
+			name: "non existing delegation returns error",
+			msg: &types.MsgUndelegatePool{
+				Delegator: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				Amount:    sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+			},
+			shouldErr: true,
+		},
+		{
+			name: "existing delegation is unbonded properly",
+			setupCtx: func(ctx sdk.Context) sdk.Context {
+				return ctx.WithBlockTime(time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC))
+			},
+			store: func(ctx sdk.Context) {
+				// Set the unbonding time to 1 week
+				suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour))
+
+				// Create the pool
+				err := suite.pk.SavePool(ctx, poolstypes.Pool{
+					ID:      1,
+					Denom:   "umilk",
+					Address: poolstypes.GetPoolAddress(1).String(),
+				})
+				suite.Require().NoError(err)
+
+				// Send some funds to the user
+				suite.fundAccount(
+					ctx,
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
+				)
+
+				// Delegate some funds
+				msgServer := keeper.NewMsgServer(suite.k)
+				_, err = msgServer.DelegatePool(ctx, &types.MsgDelegatePool{
+					Delegator: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					Amount:    sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+				})
+				suite.Require().NoError(err)
+
+				// Check the delegation
+				delegation, found := suite.k.GetPoolDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().True(found)
+				suite.Require().Equal(sdk.NewDecCoins(sdk.NewDecCoin("pool/1/umilk", sdkmath.NewInt(100))), delegation.Shares)
+			},
+			msg: &types.MsgUndelegatePool{
+				Delegator: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				Amount:    sdk.NewCoin("umilk", sdkmath.NewInt(100)),
+			},
+			shouldErr: false,
+			expEvents: sdk.Events{
+				sdk.NewEvent(
+					types.EventTypeUnbondPool,
+					sdk.NewAttribute(sdk.AttributeKeyAmount, "100umilk"),
+					sdk.NewAttribute(types.AttributeKeyDelegator, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+					sdk.NewAttribute(types.AttributeKeyCompletionTime, "2024-01-08T00:00:00Z"),
+				),
+			},
+			check: func(ctx sdk.Context) {
+				// Check the delegation
+				delegation, found := suite.k.GetPoolDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().False(found)
+				suite.Require().Empty(delegation.Shares)
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.setup != nil {
+				tc.setup()
+			}
+			if tc.setupCtx != nil {
+				ctx = tc.setupCtx(ctx)
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			msgServer := keeper.NewMsgServer(suite.k)
+			_, err := msgServer.UndelegatePool(ctx, tc.msg)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				for _, event := range tc.expEvents {
+					suite.Require().Contains(ctx.EventManager().Events(), event)
+				}
+
+				if tc.check != nil {
+					tc.check(ctx)
+				}
+			}
+		})
+	}
+
+}
+
 func (suite *KeeperTestSuite) TestMsgServer_DelegateOperator() {
 	testCases := []struct {
 		name      string
@@ -510,6 +623,119 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateOperator() {
 	}
 }
 
+func (suite *KeeperTestSuite) TestMsgServer_UndelegateOperator() {
+	testCases := []struct {
+		name      string
+		setup     func()
+		store     func(ctx sdk.Context)
+		setupCtx  func(ctx sdk.Context) sdk.Context
+		msg       *types.MsgUndelegateOperator
+		shouldErr bool
+		expEvents sdk.Events
+		check     func(ctx sdk.Context)
+	}{
+		{
+			name: "non existing delegation returns error",
+			msg: &types.MsgUndelegateOperator{
+				Delegator:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				OperatorID: 1,
+				Amount:     sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
+			},
+			shouldErr: true,
+		},
+		{
+			name: "existing delegation is unbonded properly",
+			setupCtx: func(ctx sdk.Context) sdk.Context {
+				return ctx.WithBlockTime(time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC))
+			},
+			store: func(ctx sdk.Context) {
+				// Set the unbonding time to 1 week
+				suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour))
+
+				// Create the operator
+				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+					ID:      1,
+					Status:  operatorstypes.OPERATOR_STATUS_ACTIVE,
+					Address: operatorstypes.GetOperatorAddress(1).String(),
+				})
+
+				// Send some funds to the user
+				suite.fundAccount(
+					ctx,
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
+				)
+
+				// Delegate some funds
+				msgServer := keeper.NewMsgServer(suite.k)
+				_, err := msgServer.DelegateOperator(ctx, &types.MsgDelegateOperator{
+					OperatorID: 1,
+					Delegator:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					Amount:     sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
+				})
+				suite.Require().NoError(err)
+
+				// Check the delegation
+				delegation, found := suite.k.GetOperatorDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().True(found)
+				suite.Require().Equal(sdk.NewDecCoins(sdk.NewDecCoin("operator/1/umilk", sdkmath.NewInt(100))), delegation.Shares)
+			},
+			msg: &types.MsgUndelegateOperator{
+				Delegator:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				OperatorID: 1,
+				Amount:     sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
+			},
+			shouldErr: false,
+			expEvents: sdk.Events{
+				sdk.NewEvent(
+					types.EventTypeUnbondOperator,
+					sdk.NewAttribute(sdk.AttributeKeyAmount, "100umilk"),
+					sdk.NewAttribute(types.AttributeKeyDelegator, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+					sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, "1"),
+					sdk.NewAttribute(types.AttributeKeyCompletionTime, "2024-01-08T00:00:00Z"),
+				),
+			},
+			check: func(ctx sdk.Context) {
+				// Check the delegation
+				delegation, found := suite.k.GetOperatorDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().False(found)
+				suite.Require().Empty(delegation.Shares)
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.setup != nil {
+				tc.setup()
+			}
+			if tc.setupCtx != nil {
+				ctx = tc.setupCtx(ctx)
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			msgServer := keeper.NewMsgServer(suite.k)
+			_, err := msgServer.UndelegateOperator(ctx, tc.msg)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				for _, event := range tc.expEvents {
+					suite.Require().Contains(ctx.EventManager().Events(), event)
+				}
+
+				if tc.check != nil {
+					tc.check(ctx)
+				}
+			}
+		})
+	}
+}
+
 func (suite *KeeperTestSuite) TestMsgServer_DelegateService() {
 	testCases := []struct {
 		name      string
@@ -608,6 +834,119 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateService() {
 
 			msgServer := keeper.NewMsgServer(suite.k)
 			_, err := msgServer.DelegateService(ctx, tc.msg)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				for _, event := range tc.expEvents {
+					suite.Require().Contains(ctx.EventManager().Events(), event)
+				}
+
+				if tc.check != nil {
+					tc.check(ctx)
+				}
+			}
+		})
+	}
+}
+
+func (suite *KeeperTestSuite) TestMsgServer_UndelegateService() {
+	testCases := []struct {
+		name      string
+		setup     func()
+		store     func(ctx sdk.Context)
+		setupCtx  func(ctx sdk.Context) sdk.Context
+		msg       *types.MsgUndelegateService
+		shouldErr bool
+		expEvents sdk.Events
+		check     func(ctx sdk.Context)
+	}{
+		{
+			name: "non existing delegation returns error",
+			msg: &types.MsgUndelegateService{
+				Delegator: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				ServiceID: 1,
+				Amount:    sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
+			},
+			shouldErr: true,
+		},
+		{
+			name: "existing delegation is unbonded properly",
+			setupCtx: func(ctx sdk.Context) sdk.Context {
+				return ctx.WithBlockTime(time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC))
+			},
+			store: func(ctx sdk.Context) {
+				// Set the unbonding time to 1 week
+				suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour))
+
+				// Create the service
+				suite.sk.SaveService(ctx, servicestypes.Service{
+					ID:      1,
+					Status:  servicestypes.SERVICE_STATUS_ACTIVE,
+					Address: servicestypes.GetServiceAddress(1).String(),
+				})
+
+				// Send some funds to the user
+				suite.fundAccount(
+					ctx,
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
+				)
+
+				// Delegate some funds
+				msgServer := keeper.NewMsgServer(suite.k)
+				_, err := msgServer.DelegateService(ctx, &types.MsgDelegateService{
+					ServiceID: 1,
+					Delegator: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					Amount:    sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
+				})
+				suite.Require().NoError(err)
+
+				// Check the delegation
+				delegation, found := suite.k.GetServiceDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().True(found)
+				suite.Require().Equal(sdk.NewDecCoins(sdk.NewDecCoin("service/1/umilk", sdkmath.NewInt(100))), delegation.Shares)
+			},
+			msg: &types.MsgUndelegateService{
+				Delegator: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				ServiceID: 1,
+				Amount:    sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
+			},
+			shouldErr: false,
+			expEvents: sdk.Events{
+				sdk.NewEvent(
+					types.EventTypeUnbondService,
+					sdk.NewAttribute(sdk.AttributeKeyAmount, "100umilk"),
+					sdk.NewAttribute(types.AttributeKeyDelegator, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+					sdk.NewAttribute(servicestypes.AttributeKeyServiceID, "1"),
+					sdk.NewAttribute(types.AttributeKeyCompletionTime, "2024-01-08T00:00:00Z"),
+				),
+			},
+			check: func(ctx sdk.Context) {
+				// Check the delegation
+				delegation, found := suite.k.GetServiceDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().False(found)
+				suite.Require().Empty(delegation.Shares)
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.setup != nil {
+				tc.setup()
+			}
+			if tc.setupCtx != nil {
+				ctx = tc.setupCtx(ctx)
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			msgServer := keeper.NewMsgServer(suite.k)
+			_, err := msgServer.UndelegateService(ctx, tc.msg)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
