@@ -47,9 +47,29 @@ func OperatorParamsStoreKey(operatorID uint32) []byte {
 	return utils.CompositeKey(OperatorParamsPrefix, operatorstypes.GetOperatorIDBytes(operatorID))
 }
 
+// ParseOperatorParamsKey parses the operator ID from the given key
+func ParseOperatorParamsKey(bz []byte) (operatorID uint32, err error) {
+	bz = bytes.TrimPrefix(bz, OperatorParamsPrefix)
+	if len(bz) != 4 {
+		return 0, fmt.Errorf("invalid key length; expected: 4, got: %d", len(bz))
+	}
+
+	return operatorstypes.GetOperatorIDFromBytes(bz), nil
+}
+
 // ServiceParamsStoreKey returns the key used to store the service params
 func ServiceParamsStoreKey(serviceID uint32) []byte {
 	return utils.CompositeKey(ServiceParamsPrefix, servicestypes.GetServiceIDBytes(serviceID))
+}
+
+// ParseServiceParamsKey parses the service ID from the given key
+func ParseServiceParamsKey(bz []byte) (serviceID uint32, err error) {
+	bz = bytes.TrimPrefix(bz, ServiceParamsPrefix)
+	if len(bz) != 4 {
+		return 0, fmt.Errorf("invalid key length; expected: 4, got: %d", len(bz))
+	}
+
+	return servicestypes.GetServiceIDFromBytes(bz), nil
 }
 
 // --------------------------------------------------------------------------------------------------------------------
