@@ -8,27 +8,9 @@ import (
 
 // ExportGenesis returns a new GenesisState instance containing the information currently present inside the store
 func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
-	var operatorParamsRecords []types.OperatorParamsRecord
-	k.IterateAllOperatorParams(ctx, func(operatorID uint32, params types.OperatorParams) (stop bool) {
-		operatorParamsRecords = append(operatorParamsRecords, types.OperatorParamsRecord{
-			OperatorID: operatorID,
-			Params:     params,
-		})
-		return false
-	})
-
-	var serviceParamsRecords []types.ServiceParamsRecord
-	k.IterateAllServiceParams(ctx, func(serviceID uint32, params types.ServiceParams) (stop bool) {
-		serviceParamsRecords = append(serviceParamsRecords, types.ServiceParamsRecord{
-			ServiceID: serviceID,
-			Params:    params,
-		})
-		return false
-	})
-
 	return types.NewGenesis(
-		operatorParamsRecords,
-		serviceParamsRecords,
+		k.GetAllOperatorsParams(ctx),
+		k.GetAllServicesParams(ctx),
 		k.GetAllDelegations(ctx),
 		k.GetAllUnbondingDelegations(ctx),
 		k.GetParams(ctx),

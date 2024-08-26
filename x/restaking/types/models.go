@@ -15,6 +15,7 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
+// NewOperatorParams creates a new OperatorParams instance
 func NewOperatorParams(commissionRate math.LegacyDec, joinedServicesIDs []uint32) OperatorParams {
 	return OperatorParams{
 		CommissionRate:    commissionRate,
@@ -22,10 +23,12 @@ func NewOperatorParams(commissionRate math.LegacyDec, joinedServicesIDs []uint32
 	}
 }
 
+// DefaultOperatorParams returns the default operator params
 func DefaultOperatorParams() OperatorParams {
 	return NewOperatorParams(math.LegacyZeroDec(), nil)
 }
 
+// Validate validates the operator params
 func (p *OperatorParams) Validate() error {
 	if p.CommissionRate.IsNegative() || p.CommissionRate.GT(math.LegacyOneDec()) {
 		return fmt.Errorf("invalid commission rate: %s", p.CommissionRate.String())
@@ -45,6 +48,7 @@ func (p *OperatorParams) Validate() error {
 
 // --------------------------------------------------------------------------------------------------------------------
 
+// NewServiceParams creates a new ServiceParams instance
 func NewServiceParams(
 	slashFraction math.LegacyDec,
 	whitelistedPoolsIDs []uint32,
@@ -57,10 +61,12 @@ func NewServiceParams(
 	}
 }
 
+// DefaultServiceParams returns the default service params
 func DefaultServiceParams() ServiceParams {
 	return NewServiceParams(math.LegacyZeroDec(), nil, nil)
 }
 
+// Validate validates the service params
 func (p *ServiceParams) Validate() error {
 	if p.SlashFraction.IsNegative() || p.SlashFraction.GT(math.LegacyOneDec()) {
 		return fmt.Errorf("invalid slash fraction: %s", p.SlashFraction.String())

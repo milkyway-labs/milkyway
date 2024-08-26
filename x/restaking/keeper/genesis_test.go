@@ -17,6 +17,80 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		expGenesis *types.GenesisState
 	}{
 		{
+			name: "operator params are exported properly",
+			store: func(ctx sdk.Context) {
+				suite.k.SetParams(ctx, types.DefaultParams())
+
+				suite.k.SaveOperatorParams(ctx, 1, types.NewOperatorParams(
+					sdkmath.LegacyNewDecWithPrec(1, 2),
+					[]uint32{1, 2},
+				))
+
+				suite.k.SaveOperatorParams(ctx, 2, types.NewOperatorParams(
+					sdkmath.LegacyNewDecWithPrec(5, 2),
+					[]uint32{3, 4},
+				))
+			},
+			expGenesis: &types.GenesisState{
+				Params: types.DefaultParams(),
+				OperatorsParams: []types.OperatorParamsRecord{
+					{
+						OperatorID: 1,
+						Params: types.NewOperatorParams(
+							sdkmath.LegacyNewDecWithPrec(1, 2),
+							[]uint32{1, 2},
+						),
+					},
+					{
+						OperatorID: 2,
+						Params: types.NewOperatorParams(
+							sdkmath.LegacyNewDecWithPrec(5, 2),
+							[]uint32{3, 4},
+						),
+					},
+				},
+			},
+		},
+		{
+			name: "service params are exported properly",
+			store: func(ctx sdk.Context) {
+				suite.k.SetParams(ctx, types.DefaultParams())
+
+				suite.k.SaveServiceParams(ctx, 1, types.NewServiceParams(
+					sdkmath.LegacyNewDecWithPrec(1, 2),
+					[]uint32{1, 2},
+					nil,
+				))
+
+				suite.k.SaveServiceParams(ctx, 2, types.NewServiceParams(
+					sdkmath.LegacyNewDecWithPrec(5, 2),
+					[]uint32{3, 4},
+					[]uint32{5, 6},
+				))
+			},
+			expGenesis: &types.GenesisState{
+				Params: types.DefaultParams(),
+				ServicesParams: []types.ServiceParamsRecord{
+					{
+						ServiceID: 1,
+						Params: types.NewServiceParams(
+							sdkmath.LegacyNewDecWithPrec(1, 2),
+							[]uint32{1, 2},
+							nil,
+						),
+					},
+					{
+						ServiceID: 2,
+						Params: types.NewServiceParams(
+							sdkmath.LegacyNewDecWithPrec(5, 2),
+							[]uint32{3, 4},
+							[]uint32{5, 6},
+						),
+					},
+				},
+			},
+		},
+		{
 			name: "pool delegations are exported properly",
 			store: func(ctx sdk.Context) {
 				suite.k.SetParams(ctx, types.DefaultParams())
@@ -138,6 +212,93 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			},
 		},
 		{
+			name: "pool unbonding delegations are exported properly",
+			store: func(ctx sdk.Context) {
+				suite.k.SetParams(ctx, types.DefaultParams())
+
+				_, err := suite.k.SetUnbondingDelegation(ctx, types.NewPoolUnbondingDelegation(
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					1,
+					10,
+					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					sdk.NewCoins(sdk.NewCoin("pool/1/umilk", sdkmath.NewInt(100))),
+					1,
+				))
+				suite.Require().NoError(err)
+			},
+			expGenesis: &types.GenesisState{
+				Params: types.DefaultParams(),
+				UnbondingDelegations: []types.UnbondingDelegation{
+					types.NewPoolUnbondingDelegation(
+						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+						1,
+						10,
+						time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+						sdk.NewCoins(sdk.NewCoin("pool/1/umilk", sdkmath.NewInt(100))),
+						1,
+					),
+				},
+			},
+		},
+		{
+			name: "operator unbonding delegations are exported properly",
+			store: func(ctx sdk.Context) {
+				suite.k.SetParams(ctx, types.DefaultParams())
+
+				_, err := suite.k.SetUnbondingDelegation(ctx, types.NewOperatorUnbondingDelegation(
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					1,
+					10,
+					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					sdk.NewCoins(sdk.NewCoin("operator/1/umilk", sdkmath.NewInt(100))),
+					1,
+				))
+				suite.Require().NoError(err)
+			},
+			expGenesis: &types.GenesisState{
+				Params: types.DefaultParams(),
+				UnbondingDelegations: []types.UnbondingDelegation{
+					types.NewOperatorUnbondingDelegation(
+						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+						1,
+						10,
+						time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+						sdk.NewCoins(sdk.NewCoin("operator/1/umilk", sdkmath.NewInt(100))),
+						1,
+					),
+				},
+			},
+		},
+		{
+			name: "service unbonding delegations are exported properly",
+			store: func(ctx sdk.Context) {
+				suite.k.SetParams(ctx, types.DefaultParams())
+
+				_, err := suite.k.SetUnbondingDelegation(ctx, types.NewServiceUnbondingDelegation(
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					1,
+					10,
+					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					sdk.NewCoins(sdk.NewCoin("service/1/umilk", sdkmath.NewInt(100))),
+					1,
+				))
+				suite.Require().NoError(err)
+			},
+			expGenesis: &types.GenesisState{
+				Params: types.DefaultParams(),
+				UnbondingDelegations: []types.UnbondingDelegation{
+					types.NewServiceUnbondingDelegation(
+						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+						1,
+						10,
+						time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+						sdk.NewCoins(sdk.NewCoin("service/1/umilk", sdkmath.NewInt(100))),
+						1,
+					),
+				},
+			},
+		},
+		{
 			name: "params are exported properly",
 			store: func(ctx sdk.Context) {
 				suite.k.SetParams(ctx, types.NewParams(
@@ -175,6 +336,80 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 		genesis *types.GenesisState
 		check   func(ctx sdk.Context)
 	}{
+		{
+			name: "operator params are stored properly",
+			genesis: &types.GenesisState{
+				Params: types.DefaultParams(),
+				OperatorsParams: []types.OperatorParamsRecord{
+					{
+						OperatorID: 1,
+						Params: types.NewOperatorParams(
+							sdkmath.LegacyNewDecWithPrec(1, 2),
+							[]uint32{1, 2},
+						),
+					},
+					{
+						OperatorID: 2,
+						Params: types.NewOperatorParams(
+							sdkmath.LegacyNewDecWithPrec(5, 2),
+							[]uint32{3, 4},
+						),
+					},
+				},
+			},
+			check: func(ctx sdk.Context) {
+				stored := suite.k.GetOperatorParams(ctx, 1)
+				suite.Require().Equal(types.NewOperatorParams(
+					sdkmath.LegacyNewDecWithPrec(1, 2),
+					[]uint32{1, 2},
+				), stored)
+
+				stored = suite.k.GetOperatorParams(ctx, 2)
+				suite.Require().Equal(types.NewOperatorParams(
+					sdkmath.LegacyNewDecWithPrec(5, 2),
+					[]uint32{3, 4},
+				), stored)
+			},
+		},
+		{
+			name: "service params are stored properly",
+			genesis: &types.GenesisState{
+				Params: types.DefaultParams(),
+				ServicesParams: []types.ServiceParamsRecord{
+					{
+						ServiceID: 1,
+						Params: types.NewServiceParams(
+							sdkmath.LegacyNewDecWithPrec(1, 2),
+							[]uint32{1, 2},
+							nil,
+						),
+					},
+					{
+						ServiceID: 2,
+						Params: types.NewServiceParams(
+							sdkmath.LegacyNewDecWithPrec(5, 2),
+							[]uint32{3, 4},
+							[]uint32{5, 6},
+						),
+					},
+				},
+			},
+			check: func(ctx sdk.Context) {
+				stored := suite.k.GetServiceParams(ctx, 1)
+				suite.Require().Equal(types.NewServiceParams(
+					sdkmath.LegacyNewDecWithPrec(1, 2),
+					[]uint32{1, 2},
+					nil,
+				), stored)
+
+				stored = suite.k.GetServiceParams(ctx, 2)
+				suite.Require().Equal(types.NewServiceParams(
+					sdkmath.LegacyNewDecWithPrec(5, 2),
+					[]uint32{3, 4},
+					[]uint32{5, 6},
+				), stored)
+			},
+		},
 		{
 			name: "pool delegations are stored properly",
 			genesis: &types.GenesisState{
@@ -256,6 +491,93 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 
 				_, operator2DelegationFound := suite.k.GetOperatorDelegation(ctx, 2, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
 				suite.Require().True(operator2DelegationFound)
+			},
+		},
+		{
+			name: "pool unbonding delegations are stored properly",
+			genesis: &types.GenesisState{
+				Params: types.DefaultParams(),
+				UnbondingDelegations: []types.UnbondingDelegation{
+					types.NewPoolUnbondingDelegation(
+						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+						1,
+						10,
+						time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+						sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
+						1,
+					),
+				},
+			},
+			check: func(ctx sdk.Context) {
+				stored, poolUnbondingDelegationFound := suite.k.GetPoolUnbondingDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().True(poolUnbondingDelegationFound)
+
+				suite.Require().Equal(types.NewPoolUnbondingDelegation(
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					1,
+					10,
+					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
+					1,
+				), stored)
+			},
+		},
+		{
+			name: "operator unbonding delegations are stored properly",
+			genesis: &types.GenesisState{
+				Params: types.DefaultParams(),
+				UnbondingDelegations: []types.UnbondingDelegation{
+					types.NewOperatorUnbondingDelegation(
+						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+						1,
+						10,
+						time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+						sdk.NewCoins(sdk.NewCoin("operators/1/umilk", sdkmath.NewInt(100))),
+						1,
+					),
+				},
+			},
+			check: func(ctx sdk.Context) {
+				stored, operatorUnbondingDelegationFound := suite.k.GetOperatorUnbondingDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().True(operatorUnbondingDelegationFound)
+
+				suite.Require().Equal(types.NewOperatorUnbondingDelegation(
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					1,
+					10,
+					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					sdk.NewCoins(sdk.NewCoin("operators/1/umilk", sdkmath.NewInt(100))),
+					1,
+				), stored)
+			},
+		},
+		{
+			name: "service unbonding delegations are stored properly",
+			genesis: &types.GenesisState{
+				Params: types.DefaultParams(),
+				UnbondingDelegations: []types.UnbondingDelegation{
+					types.NewServiceUnbondingDelegation(
+						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+						1,
+						10,
+						time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+						sdk.NewCoins(sdk.NewCoin("services/1/umilk", sdkmath.NewInt(100))),
+						1,
+					),
+				},
+			},
+			check: func(ctx sdk.Context) {
+				stored, serviceUnbondingDelegationFound := suite.k.GetServiceUnbondingDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().True(serviceUnbondingDelegationFound)
+
+				suite.Require().Equal(types.NewServiceUnbondingDelegation(
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					1,
+					10,
+					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					sdk.NewCoins(sdk.NewCoin("services/1/umilk", sdkmath.NewInt(100))),
+					1,
+				), stored)
 			},
 		},
 		{

@@ -14,6 +14,130 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
+func (suite *KeeperTestSuite) TestQuerier_OperatorParams() {
+	testCases := []struct {
+		name      string
+		store     func(ctx sdk.Context)
+		request   *types.QueryOperatorParamsRequest
+		shouldErr bool
+		expParams types.OperatorParams
+	}{
+		{
+			name:      "invalid request returns error",
+			request:   nil,
+			shouldErr: true,
+		},
+		{
+			name:      "invalid operator id returns error",
+			request:   types.NewQueryOperatorParamsRequest(0),
+			shouldErr: true,
+		},
+		{
+			name:      "not found operator params returns default value",
+			request:   types.NewQueryOperatorParamsRequest(1),
+			shouldErr: false,
+			expParams: types.DefaultOperatorParams(),
+		},
+		{
+			name: "found operator params are returned properly",
+			store: func(ctx sdk.Context) {
+				suite.k.SaveOperatorParams(ctx, 1, types.NewOperatorParams(
+					sdkmath.LegacyNewDecWithPrec(1, 2),
+					[]uint32{1, 2},
+				))
+			},
+			request:   types.NewQueryOperatorParamsRequest(1),
+			shouldErr: false,
+			expParams: types.NewOperatorParams(
+				sdkmath.LegacyNewDecWithPrec(1, 2),
+				[]uint32{1, 2},
+			),
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			querier := keeper.NewQuerier(suite.k)
+			res, err := querier.OperatorParams(sdk.WrapSDKContext(ctx), tc.request)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expParams, res.OperatorParams)
+			}
+		})
+	}
+}
+
+func (suite *KeeperTestSuite) TestQuerier_ServiceParams() {
+	testCases := []struct {
+		name      string
+		store     func(ctx sdk.Context)
+		request   *types.QueryServiceParamsRequest
+		shouldErr bool
+		expParams types.ServiceParams
+	}{
+		{
+			name:      "invalid request returns error",
+			request:   nil,
+			shouldErr: true,
+		},
+		{
+			name:      "invalid service id returns error",
+			request:   types.NewQueryServiceParamsRequest(0),
+			shouldErr: true,
+		},
+		{
+			name:      "not found service params returns default value",
+			request:   types.NewQueryServiceParamsRequest(1),
+			shouldErr: false,
+			expParams: types.DefaultServiceParams(),
+		},
+		{
+			name: "found service params are returned properly",
+			store: func(ctx sdk.Context) {
+				suite.k.SaveServiceParams(ctx, 1, types.NewServiceParams(
+					sdkmath.LegacyNewDecWithPrec(1, 2),
+					[]uint32{1, 2},
+					nil,
+				))
+			},
+			request:   types.NewQueryServiceParamsRequest(1),
+			shouldErr: false,
+			expParams: types.NewServiceParams(
+				sdkmath.LegacyNewDecWithPrec(1, 2),
+				[]uint32{1, 2},
+				nil,
+			),
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			querier := keeper.NewQuerier(suite.k)
+			res, err := querier.ServiceParams(sdk.WrapSDKContext(ctx), tc.request)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expParams, res.ServiceParams)
+			}
+		})
+	}
+}
+
 func (suite *KeeperTestSuite) TestQuerier_PoolDelegations() {
 	testCases := []struct {
 		name           string

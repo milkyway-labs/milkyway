@@ -30,6 +30,7 @@ func NewMsgServer(keeper *Keeper) types.MsgServer {
 	return &msgServer{Keeper: keeper}
 }
 
+// UpdateOperatorParams defines the rpc method for Msg/UpdateOperatorParams
 func (k msgServer) UpdateOperatorParams(goCtx context.Context, msg *types.MsgUpdateOperatorParams) (*types.MsgUpdateOperatorParamsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
@@ -63,6 +64,7 @@ func (k msgServer) UpdateOperatorParams(goCtx context.Context, msg *types.MsgUpd
 	return &types.MsgUpdateOperatorParamsResponse{}, nil
 }
 
+// UpdateServiceParams defines the rpc method for Msg/UpdateServiceParams
 func (k msgServer) UpdateServiceParams(goCtx context.Context, msg *types.MsgUpdateServiceParams) (*types.MsgUpdateServiceParamsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
