@@ -2,20 +2,16 @@ package keeper
 
 import (
 	"context"
-	"fmt"
 
 	"cosmossdk.io/collections"
 	collcodec "cosmossdk.io/collections/codec"
 	corestoretypes "cosmossdk.io/core/store"
-	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/log"
 	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	gogotypes "github.com/cosmos/gogoproto/types"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 )
 
@@ -33,25 +29,28 @@ type Keeper struct {
 	restakingKeeper     types.RestakingKeeper
 	assetsKeeper        types.AssetsKeeper
 
-	Schema                         collections.Schema
-	Params                         collections.Item[types.Params]
-	NextRewardsPlanID              collections.Item[uint64]
-	RewardsPlans                   collections.Map[uint64, types.RewardsPlan]
-	LastRewardsAllocationTime      collections.Item[gogotypes.Timestamp]
-	DelegatorWithdrawAddrs         collections.Map[sdk.AccAddress, sdk.AccAddress]
-	PoolDelegatorStartingInfos     collections.Map[collections.Pair[uint32, sdk.AccAddress], types.DelegatorStartingInfo]
-	PoolHistoricalRewards          collections.Map[collections.Pair[uint32, uint64], types.HistoricalRewards]
-	PoolCurrentRewards             collections.Map[uint32, types.CurrentRewards]
-	PoolOutstandingRewards         collections.Map[uint32, types.OutstandingRewards]
+	Schema                    collections.Schema
+	Params                    collections.Item[types.Params]
+	NextRewardsPlanID         collections.Item[uint64]
+	RewardsPlans              collections.Map[uint64, types.RewardsPlan]
+	LastRewardsAllocationTime collections.Item[gogotypes.Timestamp]
+	DelegatorWithdrawAddrs    collections.Map[sdk.AccAddress, sdk.AccAddress]
+
+	PoolDelegatorStartingInfos collections.Map[collections.Pair[uint32, sdk.AccAddress], types.DelegatorStartingInfo]
+	PoolHistoricalRewards      collections.Map[collections.Pair[uint32, uint64], types.HistoricalRewards]
+	PoolCurrentRewards         collections.Map[uint32, types.CurrentRewards]
+	PoolOutstandingRewards     collections.Map[uint32, types.OutstandingRewards]
+
 	OperatorAccumulatedCommissions collections.Map[uint32, types.AccumulatedCommission]
 	OperatorDelegatorStartingInfos collections.Map[collections.Pair[uint32, sdk.AccAddress], types.DelegatorStartingInfo]
 	OperatorHistoricalRewards      collections.Map[collections.Pair[uint32, uint64], types.HistoricalRewards]
 	OperatorCurrentRewards         collections.Map[uint32, types.CurrentRewards]
 	OperatorOutstandingRewards     collections.Map[uint32, types.OutstandingRewards]
-	ServiceDelegatorStartingInfos  collections.Map[collections.Pair[uint32, sdk.AccAddress], types.DelegatorStartingInfo]
-	ServiceHistoricalRewards       collections.Map[collections.Pair[uint32, uint64], types.HistoricalRewards]
-	ServiceCurrentRewards          collections.Map[uint32, types.CurrentRewards]
-	ServiceOutstandingRewards      collections.Map[uint32, types.OutstandingRewards]
+
+	ServiceDelegatorStartingInfos collections.Map[collections.Pair[uint32, sdk.AccAddress], types.DelegatorStartingInfo]
+	ServiceHistoricalRewards      collections.Map[collections.Pair[uint32, uint64], types.HistoricalRewards]
+	ServiceCurrentRewards         collections.Map[uint32, types.CurrentRewards]
+	ServiceOutstandingRewards     collections.Map[uint32, types.OutstandingRewards]
 
 	authority string
 }
@@ -163,117 +162,10 @@ func (k *Keeper) Logger(ctx context.Context) log.Logger {
 	return sdkCtx.Logger().With("module", "x/"+types.ModuleName)
 }
 
-// SetWithdrawAddr sets a new address that will receive the rewards upon withdrawal
-func (k *Keeper) SetWithdrawAddr(ctx context.Context, addr, withdrawAddr sdk.AccAddress) error {
-	if k.bankKeeper.BlockedAddr(withdrawAddr) {
-		return errorsmod.Wrapf(sdkerrors.ErrUnauthorized, "%s is not allowed to receive external funds", withdrawAddr)
+// createAccountIfNotExists creates an account if it does not exist.
+func (k *Keeper) createAccountIfNotExists(ctx context.Context, address sdk.AccAddress) {
+	if !k.accountKeeper.HasAccount(ctx, address) {
+		defer telemetry.IncrCounter(1, "new", "account")
+		k.accountKeeper.SetAccount(ctx, k.accountKeeper.NewAccountWithAddress(ctx, address))
 	}
-
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	sdkCtx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			types.EventTypeSetWithdrawAddress,
-			sdk.NewAttribute(types.AttributeKeyWithdrawAddress, withdrawAddr.String()),
-		),
-	)
-
-	err := k.DelegatorWithdrawAddrs.Set(ctx, addr, withdrawAddr)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (k *Keeper) WithdrawDelegationRewards(
-	ctx context.Context, delAddr sdk.AccAddress, target restakingtypes.DelegationTarget) (types.Pools, error) {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-
-	delegator, err := k.accountKeeper.AddressCodec().BytesToString(delAddr)
-	if err != nil {
-		return nil, err
-	}
-	del, found := k.restakingKeeper.GetDelegationForTarget(sdkCtx, target, delegator)
-	if !found {
-		return nil, sdkerrors.ErrNotFound.Wrapf("delegation not found: %d, %s", target.GetID(), delAddr.String())
-	}
-
-	// withdraw rewards
-	rewards, err := k.withdrawDelegationRewards(ctx, target, del)
-	if err != nil {
-		return nil, err
-	}
-
-	// reinitialize the delegation
-	err = k.initializeDelegation(ctx, target, delAddr)
-	if err != nil {
-		return nil, err
-	}
-	return rewards, nil
-}
-
-func (k *Keeper) WithdrawOperatorCommission(ctx context.Context, operatorID uint32) (types.Pools, error) {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	operator, found := k.operatorsKeeper.GetOperator(sdkCtx, operatorID)
-	if !found {
-		return nil, operatorstypes.ErrOperatorNotFound
-	}
-
-	// fetch operator accumulated commission
-	accumCommission, err := k.OperatorAccumulatedCommissions.Get(ctx, operatorID)
-	if err != nil {
-		return nil, err
-	}
-	if accumCommission.Commissions.IsEmpty() {
-		return nil, types.ErrNoOperatorCommission
-	}
-
-	commissions, remainder := accumCommission.Commissions.TruncateDecimal()
-	// leave remainder to withdraw later
-	err = k.OperatorAccumulatedCommissions.Set(ctx, operatorID, types.AccumulatedCommission{
-		Commissions: remainder,
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	// update outstanding
-	outstanding, err := k.OperatorOutstandingRewards.Get(ctx, operatorID)
-	if err != nil {
-		return nil, err
-	}
-
-	err = k.OperatorOutstandingRewards.Set(ctx, operatorID, types.OutstandingRewards{
-		Rewards: outstanding.Rewards.Sub(types.NewDecPoolsFromPools(commissions)),
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	commissionCoins := commissions.Sum()
-	if !commissionCoins.IsZero() {
-		adminAddr, err := k.accountKeeper.AddressCodec().StringToBytes(operator.Admin)
-		if err != nil {
-			return nil, err
-		}
-		withdrawAddr, err := k.GetDelegatorWithdrawAddr(ctx, adminAddr)
-		if err != nil {
-			return nil, err
-		}
-
-		err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.RewardsPoolName, withdrawAddr, commissionCoins)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	sdkCtx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			types.EventTypeWithdrawCommission,
-			sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, fmt.Sprint(operatorID)),
-			sdk.NewAttribute(sdk.AttributeKeyAmount, commissions.Sum().String()),
-			sdk.NewAttribute(types.AttributeKeyAmountPerPool, commissions.String()),
-		),
-	)
-
-	return commissions, nil
 }

@@ -1,9 +1,9 @@
 package keeper_test
 
 import (
-	"context"
 	"time"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 
 	"github.com/milkyway-labs/milkyway/app/testutil"
@@ -12,642 +12,764 @@ import (
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 )
 
-func (s *KeeperTestSuite) TestQuerier_RewardsPlans() {
-	service, _ := s.setupSampleServiceAndOperator()
-
-	plan1 := s.CreateBasicRewardsPlan(
-		service.ID, utils.MustParseCoins("100_000000service"),
-		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
-		time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-		utils.MustParseCoins("10000_000000service"),
-	)
-
-	plan2 := s.CreateBasicRewardsPlan(
-		service.ID, utils.MustParseCoins("100_000000service"),
-		time.Date(2024, 3, 1, 0, 0, 0, 0, time.UTC),
-		time.Date(2025, 6, 1, 0, 0, 0, 0, time.UTC),
-		utils.MustParseCoins("10000_000000service"),
-	)
-
+func (suite *KeeperTestSuite) TestQuerier_RewardsPlans() {
 	testCases := []struct {
-		name        string
-		req         *types.QueryRewardsPlansRequest
-		expectedErr string
-		check       func(resp *types.QueryRewardsPlansResponse)
+		name      string
+		store     func(ctx sdk.Context)
+		req       *types.QueryRewardsPlansRequest
+		shouldErr bool
+		expPlans  []types.RewardsPlan
 	}{
 		{
-			name:        "query without pagination returns data properly",
-			req:         &types.QueryRewardsPlansRequest{},
-			expectedErr: "",
-			check: func(resp *types.QueryRewardsPlansResponse) {
-				s.Require().Equal([]types.RewardsPlan{plan1, plan2}, resp.RewardsPlans)
+			name: "query without pagination returns data properly",
+			store: func(ctx sdk.Context) {
+				err := suite.keeper.RewardsPlans.Set(ctx, 1, types.NewRewardsPlan(
+					1,
+					"Plan 1",
+					1,
+					utils.MustParseCoins("100_000000service"),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+					types.NewEgalitarianPoolsDistribution(1),
+					types.NewEgalitarianOperatorsDistribution(1),
+					types.NewBasicUsersDistribution(1),
+				))
+				suite.Require().NoError(err)
+
+				err = suite.keeper.RewardsPlans.Set(ctx, 2, types.NewRewardsPlan(
+					2,
+					"Plan 2",
+					2,
+					utils.MustParseCoins("100_000000service"),
+					time.Date(2024, 3, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 6, 1, 0, 0, 0, 0, time.UTC),
+					types.NewEgalitarianPoolsDistribution(1),
+					types.NewEgalitarianOperatorsDistribution(1),
+					types.NewBasicUsersDistribution(1),
+				))
+				suite.Require().NoError(err)
+			},
+			req:       types.NewQueryRewardsPlansRequest(nil),
+			shouldErr: false,
+			expPlans: []types.RewardsPlan{
+				types.NewRewardsPlan(
+					1,
+					"Plan 1",
+					1,
+					utils.MustParseCoins("100_000000service"),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+					types.NewEgalitarianPoolsDistribution(1),
+					types.NewEgalitarianOperatorsDistribution(1),
+					types.NewBasicUsersDistribution(1),
+				),
+				types.NewRewardsPlan(
+					2,
+					"Plan 2",
+					2,
+					utils.MustParseCoins("100_000000service"),
+					time.Date(2024, 3, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 6, 1, 0, 0, 0, 0, time.UTC),
+					types.NewEgalitarianPoolsDistribution(1),
+					types.NewEgalitarianOperatorsDistribution(1),
+					types.NewBasicUsersDistribution(1),
+				),
 			},
 		},
 		{
-			name:        "query with pagination returns data properly",
-			req:         &types.QueryRewardsPlansRequest{Pagination: &query.PageRequest{Offset: 1, Limit: 1}},
-			expectedErr: "",
-			check: func(resp *types.QueryRewardsPlansResponse) {
-				s.Require().Equal([]types.RewardsPlan{plan2}, resp.RewardsPlans)
+			name: "query with pagination returns data properly",
+			store: func(ctx sdk.Context) {
+				err := suite.keeper.RewardsPlans.Set(ctx, 1, types.NewRewardsPlan(
+					1,
+					"Plan 1",
+					1,
+					utils.MustParseCoins("100_000000service"),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+					types.NewEgalitarianPoolsDistribution(1),
+					types.NewEgalitarianOperatorsDistribution(1),
+					types.NewBasicUsersDistribution(1),
+				))
+				suite.Require().NoError(err)
+
+				err = suite.keeper.RewardsPlans.Set(ctx, 2, types.NewRewardsPlan(
+					2,
+					"Plan 2",
+					2,
+					utils.MustParseCoins("100_000000service"),
+					time.Date(2024, 3, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 6, 1, 0, 0, 0, 0, time.UTC),
+					types.NewEgalitarianPoolsDistribution(1),
+					types.NewEgalitarianOperatorsDistribution(1),
+					types.NewBasicUsersDistribution(1),
+				))
+				suite.Require().NoError(err)
+			},
+			req: types.NewQueryRewardsPlansRequest(&query.PageRequest{
+				Limit:  1,
+				Offset: 1,
+			}),
+			shouldErr: false,
+			expPlans: []types.RewardsPlan{
+				types.NewRewardsPlan(
+					2,
+					"Plan 2",
+					2,
+					utils.MustParseCoins("100_000000service"),
+					time.Date(2024, 3, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 6, 1, 0, 0, 0, 0, time.UTC),
+					types.NewEgalitarianPoolsDistribution(1),
+					types.NewEgalitarianOperatorsDistribution(1),
+					types.NewBasicUsersDistribution(1),
+				),
 			},
 		},
 	}
 
 	for _, tc := range testCases {
-		s.Run(tc.name, func() {
-			ctx, _ := s.Ctx.CacheContext()
-			resp, err := s.queryServer.RewardsPlans(ctx, tc.req)
-			if tc.expectedErr == "" {
-				s.Require().NoError(err)
-				if tc.check != nil {
-					tc.check(resp)
-				}
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.Ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			res, err := suite.queryServer.RewardsPlans(ctx, tc.req)
+			if tc.shouldErr {
+				suite.Require().Error(err)
 			} else {
-				s.Require().EqualError(err, tc.expectedErr)
+				suite.Require().NoError(err)
+				for i, plan := range res.RewardsPlans {
+					suite.Require().True(tc.expPlans[i].Equal(plan))
+				}
 			}
 		})
 	}
 }
 
-func (s *KeeperTestSuite) TestQuerier_RewardsPlan() {
-	service, _ := s.setupSampleServiceAndOperator()
-
-	plan := s.CreateBasicRewardsPlan(
-		service.ID, utils.MustParseCoins("100_000000service"),
-		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
-		time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-		utils.MustParseCoins("10000_000000service"),
-	)
-
+func (suite *KeeperTestSuite) TestQuerier_RewardsPlan() {
 	testCases := []struct {
-		name        string
-		req         *types.QueryRewardsPlanRequest
-		expectedErr string
-		check       func(resp *types.QueryRewardsPlanResponse)
+		name      string
+		store     func(ctx sdk.Context)
+		req       *types.QueryRewardsPlanRequest
+		shouldErr bool
+		expPlan   types.RewardsPlan
 	}{
 		{
-			name:        "success",
-			req:         &types.QueryRewardsPlanRequest{PlanId: plan.ID},
-			expectedErr: "",
-			check: func(resp *types.QueryRewardsPlanResponse) {
-				s.Require().Equal(plan, resp.RewardsPlan)
+			name:      "invalid plan ID returns error",
+			req:       types.NewQueryRewardsPlanRequest(0),
+			shouldErr: true,
+		},
+		{
+			name:      "not found plan returns error",
+			req:       types.NewQueryRewardsPlanRequest(1),
+			shouldErr: true,
+		},
+		{
+			name: "found plan returns data properly",
+			store: func(ctx sdk.Context) {
+				err := suite.keeper.RewardsPlans.Set(ctx, 1, types.NewRewardsPlan(
+					1,
+					"Plan 1",
+					1,
+					utils.MustParseCoins("100_000000service"),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+					types.NewEgalitarianPoolsDistribution(1),
+					types.NewEgalitarianOperatorsDistribution(1),
+					types.NewBasicUsersDistribution(1),
+				))
+				suite.Require().NoError(err)
 			},
-		},
-		{
-			name:        "invalid plan ID returns error",
-			req:         &types.QueryRewardsPlanRequest{PlanId: 0},
-			expectedErr: "rpc error: code = InvalidArgument desc = invalid plan id",
-		},
-		{
-			name:        "plan not found",
-			req:         &types.QueryRewardsPlanRequest{PlanId: 2},
-			expectedErr: "rpc error: code = NotFound desc = plan not found",
+			req:       types.NewQueryRewardsPlanRequest(1),
+			shouldErr: false,
+			expPlan: types.NewRewardsPlan(
+				1,
+				"Plan 1",
+				1,
+				utils.MustParseCoins("100_000000service"),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+				types.NewEgalitarianPoolsDistribution(1),
+				types.NewEgalitarianOperatorsDistribution(1),
+				types.NewBasicUsersDistribution(1),
+			),
 		},
 	}
 
 	for _, tc := range testCases {
-		s.Run(tc.name, func() {
-			ctx, _ := s.Ctx.CacheContext()
-			resp, err := s.queryServer.RewardsPlan(ctx, tc.req)
-			if tc.expectedErr == "" {
-				s.Require().NoError(err)
-				if tc.check != nil {
-					tc.check(resp)
-				}
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.Ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			res, err := suite.queryServer.RewardsPlan(ctx, tc.req)
+			if tc.shouldErr {
+				suite.Require().Error(err)
 			} else {
-				s.Require().EqualError(err, tc.expectedErr)
+				suite.Require().NoError(err)
+				suite.Require().True(tc.expPlan.Equal(res.RewardsPlan))
 			}
 		})
 	}
 }
 
-func (s *KeeperTestSuite) TestQuerier_PoolOutstandingRewards() {
-	service, _ := s.setupSampleServiceAndOperator()
-
-	s.CreateBasicRewardsPlan(
-		service.ID, utils.MustParseCoins("100_000000service"),
-		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
-		time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-		utils.MustParseCoins("10000_000000service"),
-	)
-
-	delAddr := testutil.TestAddress(1)
-	s.DelegatePool(utils.MustParseCoin("100_000000umilk"), delAddr.String(), true)
-
-	s.allocateRewards(10 * time.Second)
-
+func (suite *KeeperTestSuite) TestQuerier_PoolOutstandingRewards() {
 	testCases := []struct {
-		name        string
-		req         *types.QueryPoolOutstandingRewardsRequest
-		expectedErr string
-		check       func(resp *types.QueryPoolOutstandingRewardsResponse)
+		name       string
+		store      func(ctx sdk.Context)
+		req        *types.QueryPoolOutstandingRewardsRequest
+		shouldErr  bool
+		expRewards []types.OutstandingRewards
 	}{
 		{
-			name:        "success",
-			req:         &types.QueryPoolOutstandingRewardsRequest{PoolId: 1},
-			expectedErr: "",
-			check: func(resp *types.QueryPoolOutstandingRewardsResponse) {
-				s.Require().Equal(types.OutstandingRewards{
+			name:      "invalid pool ID returns error",
+			req:       types.NewQueryPoolOutstandingRewardsRequest(0),
+			shouldErr: true,
+		},
+		{
+			name:      "pool not found",
+			req:       types.NewQueryPoolOutstandingRewardsRequest(1),
+			shouldErr: true,
+		},
+		{
+			name: "existing outstanding rewards are returned properly",
+			store: func(ctx sdk.Context) {
+				// Create a service and a rewards plan
+				service, _ := suite.setupSampleServiceAndOperator(ctx)
+				suite.CreateBasicRewardsPlan(
+					ctx,
+					service.ID,
+					utils.MustParseCoins("100_000000service"),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+					utils.MustParseCoins("10000_000000service"),
+				)
+
+				// Delegate to the pool
+				delAddr := testutil.TestAddress(1)
+				suite.DelegatePool(ctx, utils.MustParseCoin("100_000000umilk"), delAddr.String(), true)
+
+				// Allocate rewards
+				suite.allocateRewards(10 * time.Second)
+			},
+			req:       types.NewQueryPoolOutstandingRewardsRequest(1),
+			shouldErr: false,
+			expRewards: []types.OutstandingRewards{
+				{
 					Rewards: types.DecPools{
 						{
 							Denom:    "umilk",
 							DecCoins: utils.MustParseDecCoins("11574service"),
 						},
 					},
-				}, resp.Rewards)
+				},
 			},
-		},
-		{
-			name:        "invalid pool ID returns error",
-			req:         &types.QueryPoolOutstandingRewardsRequest{PoolId: 0},
-			expectedErr: "rpc error: code = InvalidArgument desc = invalid pool id",
-		},
-		{
-			name:        "pool not found",
-			req:         &types.QueryPoolOutstandingRewardsRequest{PoolId: 2},
-			expectedErr: "pool not found: not found",
 		},
 	}
 
 	for _, tc := range testCases {
-		s.Run(tc.name, func() {
-			ctx, _ := s.Ctx.CacheContext()
-			resp, err := s.queryServer.PoolOutstandingRewards(ctx, tc.req)
-			if tc.expectedErr == "" {
-				s.Require().NoError(err)
-				if tc.check != nil {
-					tc.check(resp)
-				}
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.Ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			res, err := suite.queryServer.PoolOutstandingRewards(ctx, tc.req)
+			if tc.shouldErr {
+				suite.Require().Error(err)
 			} else {
-				s.Require().EqualError(err, tc.expectedErr)
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expRewards, res.Rewards)
 			}
 		})
 	}
 }
 
-func (s *KeeperTestSuite) TestQuerier_OperatorOutstandingRewards() {
-	service, operator := s.setupSampleServiceAndOperator()
-
-	s.CreateBasicRewardsPlan(
-		service.ID, utils.MustParseCoins("100_000000service"),
-		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
-		time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-		utils.MustParseCoins("10000_000000service"),
-	)
-
-	delAddr := testutil.TestAddress(1)
-	s.DelegateOperator(operator.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
-
-	s.allocateRewards(10 * time.Second)
-
+func (suite *KeeperTestSuite) TestQuerier_OperatorOutstandingRewards() {
 	testCases := []struct {
-		name        string
-		req         *types.QueryOperatorOutstandingRewardsRequest
-		expectedErr string
-		check       func(resp *types.QueryOperatorOutstandingRewardsResponse)
+		name       string
+		store      func(ctx sdk.Context)
+		req        *types.QueryOperatorOutstandingRewardsRequest
+		shouldErr  bool
+		expRewards []types.OutstandingRewards
 	}{
 		{
-			name:        "success",
-			req:         &types.QueryOperatorOutstandingRewardsRequest{OperatorId: operator.ID},
-			expectedErr: "",
-			check: func(resp *types.QueryOperatorOutstandingRewardsResponse) {
-				s.Require().Equal(types.OutstandingRewards{
+			name:      "invalid operator ID returns error",
+			req:       types.NewQueryOperatorOutstandingRewardsRequest(0),
+			shouldErr: true,
+		},
+		{
+			name:      "operator not found returns error",
+			req:       types.NewQueryOperatorOutstandingRewardsRequest(2),
+			shouldErr: true,
+		},
+		{
+			name: "existing rewards are returned properly",
+			store: func(ctx sdk.Context) {
+				// Create a service and a rewards plan
+				service, operator := suite.setupSampleServiceAndOperator(ctx)
+				suite.CreateBasicRewardsPlan(
+					ctx,
+					service.ID,
+					utils.MustParseCoins("100_000000service"),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+					utils.MustParseCoins("10000_000000service"),
+				)
+
+				// Delegate to the operator
+				delAddr := testutil.TestAddress(1)
+				suite.DelegateOperator(ctx, operator.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
+
+				// Allocate rewards
+				suite.allocateRewards(10 * time.Second)
+			},
+			req:       types.NewQueryOperatorOutstandingRewardsRequest(1),
+			shouldErr: false,
+			expRewards: []types.OutstandingRewards{
+				{
 					Rewards: types.DecPools{
 						{
 							Denom:    "umilk",
 							DecCoins: utils.MustParseDecCoins("11574service"),
 						},
 					},
-				}, resp.Rewards)
+				},
 			},
-		},
-		{
-			name:        "invalid operator ID returns error",
-			req:         &types.QueryOperatorOutstandingRewardsRequest{OperatorId: 0},
-			expectedErr: "rpc error: code = InvalidArgument desc = invalid operator id",
-		},
-		{
-			name:        "operator not found",
-			req:         &types.QueryOperatorOutstandingRewardsRequest{OperatorId: 2},
-			expectedErr: "operator not found: not found",
 		},
 	}
 
 	for _, tc := range testCases {
-		s.Run(tc.name, func() {
-			ctx, _ := s.Ctx.CacheContext()
-			resp, err := s.queryServer.OperatorOutstandingRewards(ctx, tc.req)
-			if tc.expectedErr == "" {
-				s.Require().NoError(err)
-				if tc.check != nil {
-					tc.check(resp)
-				}
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.Ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			res, err := suite.queryServer.OperatorOutstandingRewards(ctx, tc.req)
+			if tc.shouldErr {
+				suite.Require().Error(err)
 			} else {
-				s.Require().EqualError(err, tc.expectedErr)
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expRewards, res.Rewards)
 			}
 		})
 	}
 }
 
-func (s *KeeperTestSuite) TestQuerier_ServiceOutstandingRewards() {
-	service, _ := s.setupSampleServiceAndOperator()
-
-	s.CreateBasicRewardsPlan(
-		service.ID, utils.MustParseCoins("100_000000service"),
-		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
-		time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-		utils.MustParseCoins("10000_000000service"),
-	)
-
-	delAddr := testutil.TestAddress(1)
-	s.DelegateService(service.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
-
-	s.allocateRewards(10 * time.Second)
-
+func (suite *KeeperTestSuite) TestQuerier_ServiceOutstandingRewards() {
 	testCases := []struct {
-		name        string
-		req         *types.QueryServiceOutstandingRewardsRequest
-		expectedErr string
-		check       func(resp *types.QueryServiceOutstandingRewardsResponse)
+		name       string
+		store      func(ctx sdk.Context)
+		req        *types.QueryServiceOutstandingRewardsRequest
+		shouldErr  bool
+		expRewards []types.OutstandingRewards
 	}{
 		{
-			name:        "success",
-			req:         &types.QueryServiceOutstandingRewardsRequest{ServiceId: service.ID},
-			expectedErr: "",
-			check: func(resp *types.QueryServiceOutstandingRewardsResponse) {
-				s.Require().Equal(types.OutstandingRewards{
+			name:      "invalid service ID returns error",
+			req:       types.NewQueryServiceOutstandingRewardsRequest(0),
+			shouldErr: true,
+		},
+		{
+			name:      "service not found",
+			req:       types.NewQueryServiceOutstandingRewardsRequest(1),
+			shouldErr: true,
+		},
+		{
+			name: "exiting rewards are returned properly",
+			store: func(ctx sdk.Context) {
+				// Create a service and a rewards plan
+				service, _ := suite.setupSampleServiceAndOperator(ctx)
+				suite.CreateBasicRewardsPlan(
+					ctx,
+					service.ID,
+					utils.MustParseCoins("100_000000service"),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+					utils.MustParseCoins("10000_000000service"),
+				)
+
+				// Delegate to the service
+				delAddr := testutil.TestAddress(1)
+				suite.DelegateService(ctx, service.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
+
+				// Allocate rewards
+				suite.allocateRewards(10 * time.Second)
+			},
+			req:       types.NewQueryServiceOutstandingRewardsRequest(1),
+			shouldErr: false,
+			expRewards: []types.OutstandingRewards{
+				{
 					Rewards: types.DecPools{
 						{
 							Denom:    "umilk",
 							DecCoins: utils.MustParseDecCoins("11574service"),
 						},
 					},
-				}, resp.Rewards)
-			},
-		},
-		{
-			name:        "invalid service ID returns error",
-			req:         &types.QueryServiceOutstandingRewardsRequest{ServiceId: 0},
-			expectedErr: "rpc error: code = InvalidArgument desc = invalid service id",
-		},
-		{
-			name:        "service not found",
-			req:         &types.QueryServiceOutstandingRewardsRequest{ServiceId: 2},
-			expectedErr: "service not found: not found",
-		},
-	}
-
-	for _, tc := range testCases {
-		s.Run(tc.name, func() {
-			ctx, _ := s.Ctx.CacheContext()
-			resp, err := s.queryServer.ServiceOutstandingRewards(ctx, tc.req)
-			if tc.expectedErr == "" {
-				s.Require().NoError(err)
-				if tc.check != nil {
-					tc.check(resp)
-				}
-			} else {
-				s.Require().EqualError(err, tc.expectedErr)
-			}
-		})
-	}
-}
-
-func (s *KeeperTestSuite) TestQuerier_OperatorCommission() {
-	service, operator := s.setupSampleServiceAndOperator()
-
-	s.CreateBasicRewardsPlan(
-		service.ID, utils.MustParseCoins("100_000000service"),
-		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
-		time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-		utils.MustParseCoins("10000_000000service"),
-	)
-
-	delAddr := testutil.TestAddress(1)
-	s.DelegateOperator(operator.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
-
-	s.allocateRewards(10 * time.Second)
-
-	testCases := []struct {
-		name        string
-		req         *types.QueryOperatorCommissionRequest
-		expectedErr string
-		check       func(resp *types.QueryOperatorCommissionResponse)
-	}{
-		{
-			name:        "success",
-			req:         &types.QueryOperatorCommissionRequest{OperatorId: operator.ID},
-			expectedErr: "",
-			check: func(resp *types.QueryOperatorCommissionResponse) {
-				s.Require().Equal(types.AccumulatedCommission{
-					Commissions: types.DecPools{
-						{
-							Denom:    "umilk",
-							DecCoins: utils.MustParseDecCoins("1157.4service"),
-						},
-					},
-				}, resp.Commission)
-			},
-		},
-		{
-			name:        "invalid operator ID returns error",
-			req:         &types.QueryOperatorCommissionRequest{OperatorId: 0},
-			expectedErr: "rpc error: code = InvalidArgument desc = invalid operator id",
-		},
-		{
-			name:        "operator not found",
-			req:         &types.QueryOperatorCommissionRequest{OperatorId: 2},
-			expectedErr: "",
-			check: func(resp *types.QueryOperatorCommissionResponse) {
-				s.Require().Equal(types.AccumulatedCommission{}, resp.Commission)
+				},
 			},
 		},
 	}
 
 	for _, tc := range testCases {
-		s.Run(tc.name, func() {
-			ctx, _ := s.Ctx.CacheContext()
-			resp, err := s.queryServer.OperatorCommission(ctx, tc.req)
-			if tc.expectedErr == "" {
-				s.Require().NoError(err)
-				if tc.check != nil {
-					tc.check(resp)
-				}
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.Ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			res, err := suite.queryServer.ServiceOutstandingRewards(ctx, tc.req)
+			if tc.shouldErr {
+				suite.Require().Error(err)
 			} else {
-				s.Require().EqualError(err, tc.expectedErr)
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expRewards, res.Rewards)
 			}
 		})
 	}
 }
 
-func (s *KeeperTestSuite) TestQuerier_PoolDelegationRewards() {
-	service, _ := s.setupSampleServiceAndOperator()
-
-	s.CreateBasicRewardsPlan(
-		service.ID, utils.MustParseCoins("100_000000service"),
-		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
-		time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-		utils.MustParseCoins("10000_000000service"),
-	)
-
-	delAddr := testutil.TestAddress(1)
-	s.DelegatePool(utils.MustParseCoin("100_000000umilk"), delAddr.String(), true)
-
-	s.allocateRewards(10 * time.Second)
-
+func (suite *KeeperTestSuite) TestQuerier_OperatorCommission() {
 	testCases := []struct {
-		name        string
-		req         *types.QueryPoolDelegationRewardsRequest
-		expectedErr string
-		check       func(resp *types.QueryPoolDelegationRewardsResponse)
+		name          string
+		store         func(ctx sdk.Context)
+		req           *types.QueryOperatorCommissionRequest
+		shouldErr     bool
+		expCommission types.AccumulatedCommission
 	}{
 		{
-			name: "success",
-			req: &types.QueryPoolDelegationRewardsRequest{
-				DelegatorAddress: delAddr.String(),
-				PoolId:           1,
+			name:      "invalid operator ID returns error",
+			req:       types.NewQueryOperatorCommissionRequest(0),
+			shouldErr: true,
+		},
+		{
+			name:      "operator not found",
+			req:       types.NewQueryOperatorCommissionRequest(1),
+			shouldErr: true,
+		},
+		{
+			name: "existing commission is returned properly",
+			store: func(ctx sdk.Context) {
+				// Create a service and a rewards plan
+				service, operator := suite.setupSampleServiceAndOperator(ctx)
+				suite.CreateBasicRewardsPlan(
+					ctx,
+					service.ID,
+					utils.MustParseCoins("100_000000service"),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+					utils.MustParseCoins("10000_000000service"),
+				)
+
+				// Delegate to the operator
+				delAddr := testutil.TestAddress(1)
+				suite.DelegateOperator(ctx, operator.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
+
+				// Allocate rewards
+				suite.allocateRewards(10 * time.Second)
 			},
-			expectedErr: "",
-			check: func(resp *types.QueryPoolDelegationRewardsResponse) {
-				s.Require().Equal(types.DecPools{
+			req:       types.NewQueryOperatorCommissionRequest(1),
+			shouldErr: false,
+			expCommission: types.AccumulatedCommission{
+				Commissions: types.DecPools{
 					{
 						Denom:    "umilk",
-						DecCoins: utils.MustParseDecCoins("11574service"),
+						DecCoins: utils.MustParseDecCoins("1157.4service"),
 					},
-				}, resp.Rewards)
+				},
 			},
-		},
-		{
-			name: "invalid delegator address returns error",
-			req:  &types.QueryPoolDelegationRewardsRequest{DelegatorAddress: "invalid", PoolId: 1},
-			expectedErr: "rpc error: code = InvalidArgument desc = invalid delegator address: decoding bech32 failed:" +
-				" invalid bech32 string length 7",
-		},
-		{
-			name: "invalid pool ID returns error",
-			req: &types.QueryPoolDelegationRewardsRequest{
-				DelegatorAddress: delAddr.String(),
-				PoolId:           0,
-			},
-			expectedErr: "rpc error: code = InvalidArgument desc = invalid pool id",
-		},
-		{
-			name: "pool not found",
-			req: &types.QueryPoolDelegationRewardsRequest{
-				DelegatorAddress: delAddr.String(),
-				PoolId:           2,
-			},
-			expectedErr: "pool not found: not found",
 		},
 	}
 
 	for _, tc := range testCases {
-		s.Run(tc.name, func() {
-			ctx, _ := s.Ctx.CacheContext()
-			resp, err := s.queryServer.PoolDelegationRewards(ctx, tc.req)
-			if tc.expectedErr == "" {
-				s.Require().NoError(err)
-				if tc.check != nil {
-					tc.check(resp)
-				}
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.Ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			res, err := suite.queryServer.OperatorCommission(ctx, tc.req)
+			if tc.shouldErr {
+				suite.Require().Error(err)
 			} else {
-				s.Require().EqualError(err, tc.expectedErr)
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expCommission, res.Commission)
 			}
 		})
 	}
 }
 
-func (s *KeeperTestSuite) TestQuerier_OperatorDelegationRewards() {
-	service, operator := s.setupSampleServiceAndOperator()
-
-	s.CreateBasicRewardsPlan(
-		service.ID, utils.MustParseCoins("100_000000service"),
-		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
-		time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-		utils.MustParseCoins("10000_000000service"),
-	)
-
-	delAddr := testutil.TestAddress(1)
-	s.DelegateOperator(operator.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
-
-	s.allocateRewards(10 * time.Second)
-
+func (suite *KeeperTestSuite) TestQuerier_PoolDelegationRewards() {
 	testCases := []struct {
-		name        string
-		req         *types.QueryOperatorDelegationRewardsRequest
-		expectedErr string
-		check       func(resp *types.QueryOperatorDelegationRewardsResponse)
+		name       string
+		store      func(ctx sdk.Context)
+		req        *types.QueryPoolDelegationRewardsRequest
+		shouldErr  bool
+		expRewards types.DecPools
 	}{
 		{
-			name: "success",
-			req: &types.QueryOperatorDelegationRewardsRequest{
-				DelegatorAddress: delAddr.String(),
-				OperatorId:       operator.ID,
-			},
-			expectedErr: "",
-			check: func(resp *types.QueryOperatorDelegationRewardsResponse) {
-				s.Require().Equal(types.DecPools{
-					{
-						Denom:    "umilk",
-						DecCoins: utils.MustParseDecCoins("10416.6service"), // After deducting commission
-					},
-				}, resp.Rewards)
-			},
+			name:      "invalid delegator address returns error",
+			req:       types.NewQueryPoolDelegationRewardsRequest(1, "invalid"),
+			shouldErr: true,
 		},
 		{
-			name: "invalid delegator address returns error",
-			req: &types.QueryOperatorDelegationRewardsRequest{
-				DelegatorAddress: "invalid",
-				OperatorId:       operator.ID,
-			},
-			expectedErr: "rpc error: code = InvalidArgument desc = invalid delegator address: decoding bech32 failed:" +
-				" invalid bech32 string length 7",
+			name:      "invalid pool ID returns error",
+			req:       types.NewQueryPoolDelegationRewardsRequest(0, testutil.TestAddress(1).String()),
+			shouldErr: true,
 		},
 		{
-			name: "invalid operator ID returns error",
-			req: &types.QueryOperatorDelegationRewardsRequest{
-				DelegatorAddress: delAddr.String(),
-				OperatorId:       0,
-			},
-			expectedErr: "rpc error: code = InvalidArgument desc = invalid operator id",
+			name:      "pool not found returns error",
+			req:       types.NewQueryPoolDelegationRewardsRequest(1, testutil.TestAddress(1).String()),
+			shouldErr: true,
 		},
 		{
-			name: "operator not found",
-			req: &types.QueryOperatorDelegationRewardsRequest{
-				DelegatorAddress: delAddr.String(),
-				OperatorId:       2,
+			name: "existing rewards are returned properly",
+			store: func(ctx sdk.Context) {
+				// Create a service and a rewards plan
+				service, _ := suite.setupSampleServiceAndOperator(ctx)
+				suite.CreateBasicRewardsPlan(
+					ctx,
+					service.ID,
+					utils.MustParseCoins("100_000000service"),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+					utils.MustParseCoins("10000_000000service"),
+				)
+
+				// Delegate to the pool
+				delAddr := testutil.TestAddress(1)
+				suite.DelegatePool(ctx, utils.MustParseCoin("100_000000umilk"), delAddr.String(), true)
+
+				// Allocate rewards
+				suite.allocateRewards(10 * time.Second)
 			},
-			expectedErr: "operator not found: not found",
+			req: types.NewQueryPoolDelegationRewardsRequest(
+				1, testutil.TestAddress(1).String(),
+			),
+			shouldErr: false,
+			expRewards: types.DecPools{
+				{
+					Denom:    "umilk",
+					DecCoins: utils.MustParseDecCoins("11574service"),
+				},
+			},
 		},
 	}
 
 	for _, tc := range testCases {
-		s.Run(tc.name, func() {
-			ctx, _ := s.Ctx.CacheContext()
-			resp, err := s.queryServer.OperatorDelegationRewards(ctx, tc.req)
-			if tc.expectedErr == "" {
-				s.Require().NoError(err)
-				if tc.check != nil {
-					tc.check(resp)
-				}
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.Ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			res, err := suite.queryServer.PoolDelegationRewards(ctx, tc.req)
+			if tc.shouldErr {
+				suite.Require().Error(err)
 			} else {
-				s.Require().EqualError(err, tc.expectedErr)
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expRewards, res.Rewards)
 			}
 		})
 	}
 }
 
-func (s *KeeperTestSuite) TestQuerier_ServiceDelegationRewards() {
-	service, _ := s.setupSampleServiceAndOperator()
-
-	s.CreateBasicRewardsPlan(
-		service.ID, utils.MustParseCoins("100_000000service"),
-		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
-		time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-		utils.MustParseCoins("10000_000000service"),
-	)
-
-	delAddr := testutil.TestAddress(1)
-	s.DelegateService(service.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
-
-	s.allocateRewards(10 * time.Second)
-
+func (suite *KeeperTestSuite) TestQuerier_OperatorDelegationRewards() {
 	testCases := []struct {
-		name        string
-		req         *types.QueryServiceDelegationRewardsRequest
-		expectedErr string
-		check       func(resp *types.QueryServiceDelegationRewardsResponse)
+		name       string
+		store      func(ctx sdk.Context)
+		req        *types.QueryOperatorDelegationRewardsRequest
+		shouldErr  bool
+		expRewards types.DecPools
 	}{
 		{
-			name: "success",
-			req: &types.QueryServiceDelegationRewardsRequest{
-				DelegatorAddress: delAddr.String(),
-				ServiceId:        service.ID,
-			},
-			expectedErr: "",
-			check: func(resp *types.QueryServiceDelegationRewardsResponse) {
-				s.Require().Equal(types.DecPools{
-					{
-						Denom:    "umilk",
-						DecCoins: utils.MustParseDecCoins("11574service"),
-					},
-				}, resp.Rewards)
-			},
+			name:      "invalid delegator address returns error",
+			req:       types.NewQueryOperatorDelegationRewardsRequest(1, "invalid"),
+			shouldErr: true,
 		},
 		{
-			name: "invalid delegator address returns error",
-			req: &types.QueryServiceDelegationRewardsRequest{
-				DelegatorAddress: "invalid",
-				ServiceId:        service.ID,
-			},
-			expectedErr: "rpc error: code = InvalidArgument desc = invalid delegator address: decoding bech32 failed:" +
-				" invalid bech32 string length 7",
+			name:      "invalid operator ID returns error",
+			req:       types.NewQueryOperatorDelegationRewardsRequest(0, testutil.TestAddress(1).String()),
+			shouldErr: true,
 		},
 		{
-			name: "invalid service ID returns error",
-			req: &types.QueryServiceDelegationRewardsRequest{
-				DelegatorAddress: delAddr.String(),
-				ServiceId:        0,
-			},
-			expectedErr: "rpc error: code = InvalidArgument desc = invalid service id",
+			name:      "operator not found returns error",
+			req:       types.NewQueryOperatorDelegationRewardsRequest(1, testutil.TestAddress(1).String()),
+			shouldErr: true,
 		},
 		{
-			name: "service not found",
-			req: &types.QueryServiceDelegationRewardsRequest{
-				DelegatorAddress: delAddr.String(),
-				ServiceId:        2,
+			name: "existing rewards are returned properly",
+			store: func(ctx sdk.Context) {
+				// Create a service and a rewards plan
+				service, operator := suite.setupSampleServiceAndOperator(ctx)
+				suite.CreateBasicRewardsPlan(
+					ctx,
+					service.ID,
+					utils.MustParseCoins("100_000000service"),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+					utils.MustParseCoins("10000_000000service"),
+				)
+
+				// Delegate to the operator
+				delAddr := testutil.TestAddress(1)
+				suite.DelegateOperator(ctx, operator.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
+
+				// Allocate rewards
+				suite.allocateRewards(10 * time.Second)
 			},
-			expectedErr: "service not found: not found",
+			req:       types.NewQueryOperatorDelegationRewardsRequest(1, testutil.TestAddress(1).String()),
+			shouldErr: false,
+			expRewards: types.DecPools{
+				{
+					Denom:    "umilk",
+					DecCoins: utils.MustParseDecCoins("10416.6service"), // After deducting commission
+				},
+			},
 		},
 	}
 
 	for _, tc := range testCases {
-		s.Run(tc.name, func() {
-			ctx, _ := s.Ctx.CacheContext()
-			resp, err := s.queryServer.ServiceDelegationRewards(ctx, tc.req)
-			if tc.expectedErr == "" {
-				s.Require().NoError(err)
-				if tc.check != nil {
-					tc.check(resp)
-				}
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.Ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			res, err := suite.queryServer.OperatorDelegationRewards(ctx, tc.req)
+			if tc.shouldErr {
+				suite.Require().Error(err)
 			} else {
-				s.Require().EqualError(err, tc.expectedErr)
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expRewards, res.Rewards)
 			}
 		})
 	}
 }
 
-func (s *KeeperTestSuite) TestQuerier_DelegationTotalRewards() {
-	service, operator := s.setupSampleServiceAndOperator()
-
-	s.CreateBasicRewardsPlan(
-		service.ID, utils.MustParseCoins("100_000000service"),
-		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
-		time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-		utils.MustParseCoins("10000_000000service"),
-	)
-
-	delAddr := testutil.TestAddress(1)
-	s.DelegatePool(utils.MustParseCoin("100_000000umilk"), delAddr.String(), true)
-	s.DelegateOperator(operator.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
-	s.DelegateService(service.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
-
-	s.allocateRewards(10 * time.Second)
-
+func (suite *KeeperTestSuite) TestQuerier_ServiceDelegationRewards() {
 	testCases := []struct {
-		name        string
-		req         *types.QueryDelegationTotalRewardsRequest
-		expectedErr string
-		check       func(resp *types.QueryDelegationTotalRewardsResponse)
+		name       string
+		store      func(ctx sdk.Context)
+		req        *types.QueryServiceDelegationRewardsRequest
+		shouldErr  bool
+		expRewards types.DecPools
 	}{
 		{
-			name: "success",
-			req: &types.QueryDelegationTotalRewardsRequest{
-				DelegatorAddress: delAddr.String(),
+			name:      "invalid delegator address returns error",
+			req:       types.NewQueryServiceDelegationRewardsRequest(1, "invalid"),
+			shouldErr: true,
+		},
+		{
+			name:      "invalid service ID returns error",
+			req:       types.NewQueryServiceDelegationRewardsRequest(0, testutil.TestAddress(1).String()),
+			shouldErr: true,
+		},
+		{
+			name:      "service not found returns error",
+			req:       types.NewQueryServiceDelegationRewardsRequest(1, testutil.TestAddress(1).String()),
+			shouldErr: true,
+		},
+		{
+			name: "existing rewards are returned properly",
+			store: func(ctx sdk.Context) {
+				// Create a service and a rewards plan
+				service, _ := suite.setupSampleServiceAndOperator(ctx)
+				suite.CreateBasicRewardsPlan(
+					ctx,
+					service.ID,
+					utils.MustParseCoins("100_000000service"),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+					utils.MustParseCoins("10000_000000service"),
+				)
+
+				// Delegate to the service
+				delAddr := testutil.TestAddress(1)
+				suite.DelegateService(ctx, service.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
+
+				// Allocate rewards
+				suite.allocateRewards(10 * time.Second)
 			},
-			expectedErr: "",
-			check: func(resp *types.QueryDelegationTotalRewardsResponse) {
-				s.Require().Equal([]types.DelegationDelegatorReward{
+			req:       types.NewQueryServiceDelegationRewardsRequest(1, testutil.TestAddress(1).String()),
+			shouldErr: false,
+			expRewards: types.DecPools{
+				{
+					Denom:    "umilk",
+					DecCoins: utils.MustParseDecCoins("11574service"),
+				},
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.Ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			res, err := suite.queryServer.ServiceDelegationRewards(ctx, tc.req)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expRewards, res.Rewards)
+			}
+		})
+	}
+}
+
+func (suite *KeeperTestSuite) TestQuerier_DelegatorTotalRewards() {
+	testCases := []struct {
+		name      string
+		store     func(ctx sdk.Context)
+		req       *types.QueryDelegatorTotalRewardsRequest
+		shouldErr bool
+		expRes    *types.QueryDelegatorTotalRewardsResponse
+	}{
+		{
+			name:      "invalid delegator address returns error",
+			req:       types.NewQueryDelegatorTotalRewardsRequest("invalid"),
+			shouldErr: true,
+		},
+		{
+			name:      "no delegations found return empty response",
+			req:       types.NewQueryDelegatorTotalRewardsRequest("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+			shouldErr: false,
+			expRes: &types.QueryDelegatorTotalRewardsResponse{
+				Rewards: nil,
+				Total:   nil,
+			},
+		},
+		{
+			name: "existing rewards are returned properly",
+			store: func(ctx sdk.Context) {
+				// Create a service and operator, and a rewards plan
+				service, operator := suite.setupSampleServiceAndOperator(ctx)
+				suite.CreateBasicRewardsPlan(
+					ctx,
+					service.ID,
+					utils.MustParseCoins("100_000000service"),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+					utils.MustParseCoins("10000_000000service"),
+				)
+
+				// Delegate to pools, operators and services
+				delAddr := testutil.TestAddress(1)
+				suite.DelegatePool(ctx, utils.MustParseCoin("100_000000umilk"), delAddr.String(), true)
+				suite.DelegateOperator(ctx, operator.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
+				suite.DelegateService(ctx, service.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
+
+				// Allocate the rewards
+				suite.allocateRewards(10 * time.Second)
+			},
+			req:       types.NewQueryDelegatorTotalRewardsRequest(testutil.TestAddress(1).String()),
+			shouldErr: false,
+			expRes: &types.QueryDelegatorTotalRewardsResponse{
+				Rewards: []types.DelegationDelegatorReward{
 					types.NewDelegationDelegatorReward(
 						restakingtypes.DELEGATION_TYPE_POOL, 1,
 						types.DecPools{
@@ -658,7 +780,7 @@ func (s *KeeperTestSuite) TestQuerier_DelegationTotalRewards() {
 						},
 					),
 					types.NewDelegationDelegatorReward(
-						restakingtypes.DELEGATION_TYPE_OPERATOR, operator.ID,
+						restakingtypes.DELEGATION_TYPE_OPERATOR, 1,
 						types.DecPools{
 							{
 								Denom:    "umilk",
@@ -667,7 +789,7 @@ func (s *KeeperTestSuite) TestQuerier_DelegationTotalRewards() {
 						},
 					),
 					types.NewDelegationDelegatorReward(
-						restakingtypes.DELEGATION_TYPE_SERVICE, service.ID,
+						restakingtypes.DELEGATION_TYPE_SERVICE, 1,
 						types.DecPools{
 							{
 								Denom:    "umilk",
@@ -675,125 +797,82 @@ func (s *KeeperTestSuite) TestQuerier_DelegationTotalRewards() {
 							},
 						},
 					),
-				}, resp.Rewards)
-				s.Require().Equal(types.DecPools{
+				},
+				Total: types.DecPools{
 					{
 						Denom:    "umilk",
 						DecCoins: utils.MustParseDecCoins("11188.2service"),
 					},
-				}, resp.Total)
-			},
-		},
-		{
-			name: "invalid delegator address returns error",
-			req: &types.QueryDelegationTotalRewardsRequest{
-				DelegatorAddress: "invalid",
-			},
-			expectedErr: "rpc error: code = InvalidArgument desc = invalid delegator address: decoding bech32 failed:" +
-				" invalid bech32 string length 7",
-		},
-		{
-			name: "no delegations found",
-			req: &types.QueryDelegationTotalRewardsRequest{
-				DelegatorAddress: testutil.TestAddress(2).String(),
-			},
-			expectedErr: "",
-			check: func(resp *types.QueryDelegationTotalRewardsResponse) {
-				s.Require().Empty(resp.Rewards)
-				s.Require().Equal("", resp.Total.String())
+				},
 			},
 		},
 	}
 
 	for _, tc := range testCases {
-		s.Run(tc.name, func() {
-			ctx, _ := s.Ctx.CacheContext()
-			resp, err := s.queryServer.DelegationTotalRewards(ctx, tc.req)
-			if tc.expectedErr == "" {
-				s.Require().NoError(err)
-				if tc.check != nil {
-					tc.check(resp)
-				}
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.Ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			res, err := suite.queryServer.DelegatorTotalRewards(ctx, tc.req)
+			if tc.shouldErr {
+				suite.Require().Error(err)
 			} else {
-				s.Require().EqualError(err, tc.expectedErr)
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expRes, res)
 			}
 		})
 	}
 }
 
-func (s *KeeperTestSuite) TestQuerier_DelegatorWithdrawAddress() {
-	service, operator := s.setupSampleServiceAndOperator()
-
-	s.CreateBasicRewardsPlan(
-		service.ID, utils.MustParseCoins("100_000000service"),
-		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
-		time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-		utils.MustParseCoins("10000_000000service"),
-	)
-
-	delAddr := testutil.TestAddress(1)
-	s.DelegatePool(utils.MustParseCoin("100_000000umilk"), delAddr.String(), true)
-	s.DelegateOperator(operator.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
-	s.DelegateService(service.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
-
-	s.allocateRewards(10 * time.Second)
-
+func (suite *KeeperTestSuite) TestQuerier_DelegatorWithdrawAddress() {
 	testCases := []struct {
-		name        string
-		store       func(ctx context.Context)
-		req         *types.QueryDelegatorWithdrawAddressRequest
-		expectedErr string
-		check       func(resp *types.QueryDelegatorWithdrawAddressResponse)
+		name               string
+		store              func(ctx sdk.Context)
+		req                *types.QueryDelegatorWithdrawAddressRequest
+		shouldErr          bool
+		expWithdrawAddress string
 	}{
 		{
-			name: "success",
-			req: &types.QueryDelegatorWithdrawAddressRequest{
-				DelegatorAddress: delAddr.String(),
-			},
-			expectedErr: "",
-			check: func(resp *types.QueryDelegatorWithdrawAddressResponse) {
-				s.Require().Equal(delAddr.String(), resp.WithdrawAddress)
-			},
+			name:      "invalid delegator address returns error",
+			req:       types.NewQueryDelegatorWithdrawAddressRequest("invalid"),
+			shouldErr: true,
 		},
 		{
-			name: "invalid delegator address returns error",
-			req: &types.QueryDelegatorWithdrawAddressRequest{
-				DelegatorAddress: "invalid",
-			},
-			expectedErr: "rpc error: code = InvalidArgument desc = invalid delegator address: decoding bech32 failed:" +
-				" invalid bech32 string length 7",
+			name:               "delegator without custom address returns default address",
+			req:                types.NewQueryDelegatorWithdrawAddressRequest(testutil.TestAddress(1).String()),
+			shouldErr:          true,
+			expWithdrawAddress: testutil.TestAddress(1).String(),
 		},
 		{
-			name: "different withdraw address set",
-			store: func(ctx context.Context) {
-				_, err := s.msgServer.SetWithdrawAddress(ctx, types.NewMsgSetWithdrawAddress(
-					delAddr.String(), testutil.TestAddress(2).String()))
-				s.Require().NoError(err)
+			name: "delegator with different withdraw address set returns proper value",
+			store: func(ctx sdk.Context) {
+				_, err := suite.msgServer.SetWithdrawAddress(ctx, types.NewMsgSetWithdrawAddress(
+					testutil.TestAddress(1).String(),
+					testutil.TestAddress(2).String(),
+				))
+				suite.Require().NoError(err)
 			},
-			req: &types.QueryDelegatorWithdrawAddressRequest{
-				DelegatorAddress: delAddr.String(),
-			},
-			expectedErr: "",
-			check: func(resp *types.QueryDelegatorWithdrawAddressResponse) {
-				s.Require().Equal(testutil.TestAddress(2).String(), resp.WithdrawAddress)
-			},
+			req:                types.NewQueryDelegatorWithdrawAddressRequest(testutil.TestAddress(1).String()),
+			shouldErr:          false,
+			expWithdrawAddress: testutil.TestAddress(2).String(),
 		},
 	}
 
 	for _, tc := range testCases {
-		s.Run(tc.name, func() {
-			ctx, _ := s.Ctx.CacheContext()
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.Ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
 			}
-			resp, err := s.queryServer.DelegatorWithdrawAddress(ctx, tc.req)
-			if tc.expectedErr == "" {
-				s.Require().NoError(err)
-				if tc.check != nil {
-					tc.check(resp)
-				}
+
+			res, err := suite.queryServer.DelegatorWithdrawAddress(ctx, tc.req)
+			if tc.shouldErr {
+				suite.Require().Error(err)
 			} else {
-				s.Require().EqualError(err, tc.expectedErr)
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expWithdrawAddress, res.WithdrawAddress)
 			}
 		})
 	}

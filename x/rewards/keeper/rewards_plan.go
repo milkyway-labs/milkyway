@@ -13,8 +13,14 @@ import (
 )
 
 func (k *Keeper) CreateRewardsPlan(
-	ctx context.Context, description string, serviceID uint32, amt sdk.Coins, startTime, endTime time.Time,
-	poolsDistribution types.Distribution, operatorsDistribution types.Distribution,
+	ctx context.Context,
+	description string,
+	serviceID uint32,
+	amt sdk.Coins,
+	startTime,
+	endTime time.Time,
+	poolsDistribution types.Distribution,
+	operatorsDistribution types.Distribution,
 	usersDistribution types.UsersDistribution,
 ) (types.RewardsPlan, error) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
@@ -32,25 +38,42 @@ func (k *Keeper) CreateRewardsPlan(
 		return types.RewardsPlan{}, err
 	}
 
+	// Create the rewards plan
 	plan := types.NewRewardsPlan(
-		planID, description, serviceID, amt, startTime, endTime,
-		poolsDistribution, operatorsDistribution, usersDistribution)
-	if err := plan.Validate(k.cdc); err != nil {
+		planID,
+		description,
+		serviceID,
+		amt,
+		startTime,
+		endTime,
+		poolsDistribution,
+		operatorsDistribution,
+		usersDistribution,
+	)
+
+	// Validate the plan
+	err = plan.Validate(k.cdc)
+	if err != nil {
 		return types.RewardsPlan{}, err
 	}
 
+	// Validate the pools distribution
 	err = k.validateDistributionDelegationTargets(ctx, poolsDistribution)
 	if err != nil {
 		return types.RewardsPlan{}, err
 	}
+
+	// Validate the operators distribution
 	err = k.validateDistributionDelegationTargets(ctx, operatorsDistribution)
 	if err != nil {
 		return types.RewardsPlan{}, err
 	}
+
 	// We don't need to validate users distribution since there's
 	// types.UsersDistributionTypeBasic only which doesn't need a validation.
 
-	if err := k.RewardsPlans.Set(ctx, planID, plan); err != nil {
+	err = k.RewardsPlans.Set(ctx, planID, plan)
+	if err != nil {
 		return types.RewardsPlan{}, err
 	}
 
@@ -86,4 +109,9 @@ func (k *Keeper) validateDistributionDelegationTargets(ctx context.Context, dist
 		}
 	}
 	return nil
+}
+
+// GetRewardsPlan returns a rewards plan by ID.
+func (k *Keeper) GetRewardsPlan(ctx context.Context, planID uint64) (types.RewardsPlan, error) {
+	return k.RewardsPlans.Get(ctx, planID)
 }

@@ -10,12 +10,19 @@ import (
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 )
 
-func (s *KeeperTestSuite) TestMsgCreateRewardsPlan() {
-	service, _ := s.setupSampleServiceAndOperator()
+func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
+	service, _ := suite.setupSampleServiceAndOperator()
 	msgCreateRewardsPlan := types.NewMsgCreateRewardsPlan(
-		testutil.TestAddress(1).String(), "Rewards Plan", service.ID, utils.MustParseCoins("100_000000service"),
-		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC), time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-		types.NewBasicPoolsDistribution(0), types.NewBasicOperatorsDistribution(0), types.NewBasicUsersDistribution(0))
+		testutil.TestAddress(1).String(),
+		"Rewards Plan",
+		service.ID,
+		utils.MustParseCoins("100_000000service"),
+		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+		time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+		types.NewBasicPoolsDistribution(0),
+		types.NewBasicOperatorsDistribution(0),
+		types.NewBasicUsersDistribution(0),
+	)
 
 	testCases := []struct {
 		name        string
@@ -25,66 +32,73 @@ func (s *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 		expectedErr string
 	}{
 		{
+			name: "service not found returns error",
+			msg: types.NewMsgCreateRewardsPlan(
+				msgCreateRewardsPlan.Sender,
+				msgCreateRewardsPlan.Description,
+				2,
+				msgCreateRewardsPlan.Amount,
+				msgCreateRewardsPlan.StartTime,
+				msgCreateRewardsPlan.EndTime,
+				msgCreateRewardsPlan.PoolsDistribution,
+				msgCreateRewardsPlan.OperatorsDistribution,
+				msgCreateRewardsPlan.UsersDistribution,
+			),
+			expectedErr: "service not found: not found",
+		},
+		{
 			name: "success",
 			msg:  msgCreateRewardsPlan,
 			check: func(ctx context.Context, resp *types.MsgCreateRewardsPlanResponse) {
-				s.Require().Equal(uint64(1), resp.NewRewardsPlanID)
-				_, err := s.keeper.GetRewardsPlan(ctx, resp.NewRewardsPlanID)
-				s.Require().NoError(err)
+				suite.Require().Equal(uint64(1), resp.NewRewardsPlanID)
+				_, err := suite.keeper.GetRewardsPlan(ctx, resp.NewRewardsPlanID)
+				suite.Require().NoError(err)
 			},
 		},
 		{
 			name: "rewards plan creation fee is charged",
 			preRun: func(ctx context.Context) {
 				// Change rewards plan creation fee to 100 $MILK.
-				params, err := s.keeper.Params.Get(ctx)
-				s.Require().NoError(err)
+				params, err := suite.keeper.Params.Get(ctx)
+				suite.Require().NoError(err)
 				params.RewardsPlanCreationFee = utils.MustParseCoins("100_000000umilk")
-				err = s.keeper.Params.Set(ctx, params)
-				s.Require().NoError(err)
+				err = suite.keeper.Params.Set(ctx, params)
+				suite.Require().NoError(err)
 
 				// Fund the sender account enough coins to pay the fee.
-				s.FundAccount(msgCreateRewardsPlan.Sender, utils.MustParseCoins("500_000000umilk"))
+				suite.FundAccount(msgCreateRewardsPlan.Sender, utils.MustParseCoins("500_000000umilk"))
 			},
 			msg: msgCreateRewardsPlan,
 			check: func(ctx context.Context, resp *types.MsgCreateRewardsPlanResponse) {
 				// Check that the balance is decreased by amount of the fee.
-				senderAddr, err := s.App.AccountKeeper.AddressCodec().StringToBytes(msgCreateRewardsPlan.Sender)
-				s.Require().NoError(err)
-				balances := s.App.BankKeeper.GetAllBalances(ctx, senderAddr)
-				s.Require().Equal("400000000umilk", balances.String())
+				senderAddr, err := suite.App.AccountKeeper.AddressCodec().StringToBytes(msgCreateRewardsPlan.Sender)
+				suite.Require().NoError(err)
+				balances := suite.App.BankKeeper.GetAllBalances(ctx, senderAddr)
+				suite.Require().Equal("400000000umilk", balances.String())
 			},
-		},
-		{
-			name: "service not found",
-			msg: types.NewMsgCreateRewardsPlan(
-				msgCreateRewardsPlan.Sender, msgCreateRewardsPlan.Description, 2, msgCreateRewardsPlan.Amount,
-				msgCreateRewardsPlan.StartTime, msgCreateRewardsPlan.EndTime, msgCreateRewardsPlan.PoolsDistribution,
-				msgCreateRewardsPlan.OperatorsDistribution, msgCreateRewardsPlan.UsersDistribution),
-			expectedErr: "service not found: not found",
 		},
 	}
 
 	for _, tc := range testCases {
-		s.Run(tc.name, func() {
-			ctx, _ := s.Ctx.CacheContext()
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.Ctx.CacheContext()
 			if tc.preRun != nil {
 				tc.preRun(ctx)
 			}
-			resp, err := s.msgServer.CreateRewardsPlan(ctx, tc.msg)
+			resp, err := suite.msgServer.CreateRewardsPlan(ctx, tc.msg)
 			if tc.expectedErr == "" {
-				s.Require().NoError(err)
+				suite.Require().NoError(err)
 				if tc.check != nil {
 					tc.check(ctx, resp)
 				}
 			} else {
-				s.Require().EqualError(err, tc.expectedErr)
+				suite.Require().EqualError(err, tc.expectedErr)
 			}
 		})
 	}
 }
 
-func (s *KeeperTestSuite) TestMsgSetWithdrawAddress() {
+func (suite *KeeperTestSuite) TestMsgSetWithdrawAddress() {
 	testCases := []struct {
 		name        string
 		msg         *types.MsgSetWithdrawAddress
@@ -98,9 +112,9 @@ func (s *KeeperTestSuite) TestMsgSetWithdrawAddress() {
 				testutil.TestAddress(2).String(),
 			),
 			check: func(ctx context.Context) {
-				withdrawAddr, err := s.keeper.GetDelegatorWithdrawAddr(ctx, testutil.TestAddress(1))
-				s.Require().NoError(err)
-				s.Require().Equal(testutil.TestAddress(2), withdrawAddr)
+				withdrawAddr, err := suite.keeper.GetDelegatorWithdrawAddr(ctx, testutil.TestAddress(1))
+				suite.Require().NoError(err)
+				suite.Require().Equal(testutil.TestAddress(2), withdrawAddr)
 			},
 			expectedErr: "",
 		},
@@ -123,25 +137,25 @@ func (s *KeeperTestSuite) TestMsgSetWithdrawAddress() {
 	}
 
 	for _, tc := range testCases {
-		s.Run(tc.name, func() {
-			ctx, _ := s.Ctx.CacheContext()
-			_, err := s.msgServer.SetWithdrawAddress(ctx, tc.msg)
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.Ctx.CacheContext()
+			_, err := suite.msgServer.SetWithdrawAddress(ctx, tc.msg)
 			if tc.expectedErr == "" {
-				s.Require().NoError(err)
+				suite.Require().NoError(err)
 				if tc.check != nil {
 					tc.check(ctx)
 				}
 			} else {
-				s.Require().EqualError(err, tc.expectedErr)
+				suite.Require().EqualError(err, tc.expectedErr)
 			}
 		})
 	}
 }
 
-func (s *KeeperTestSuite) TestMsgWithdrawDelegatorReward() {
-	service, operator := s.setupSampleServiceAndOperator()
+func (suite *KeeperTestSuite) TestMsgWithdrawDelegatorReward() {
+	service, operator := suite.setupSampleServiceAndOperator()
 
-	s.CreateBasicRewardsPlan(
+	suite.CreateBasicRewardsPlan(
 		service.ID, utils.MustParseCoins("100_000000service"),
 		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 		time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
@@ -149,9 +163,9 @@ func (s *KeeperTestSuite) TestMsgWithdrawDelegatorReward() {
 
 	delAddr := testutil.TestAddress(1)
 
-	s.DelegateService(service.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
+	suite.DelegateService(service.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
 
-	s.allocateRewards(10 * time.Second)
+	suite.allocateRewards(10 * time.Second)
 
 	testCases := []struct {
 		name        string
@@ -165,8 +179,8 @@ func (s *KeeperTestSuite) TestMsgWithdrawDelegatorReward() {
 				delAddr.String(), restakingtypes.DELEGATION_TYPE_SERVICE, service.ID,
 			),
 			check: func(ctx context.Context) {
-				balances := s.App.BankKeeper.GetAllBalances(ctx, delAddr)
-				s.Require().Equal("11574service", balances.String())
+				balances := suite.App.BankKeeper.GetAllBalances(ctx, delAddr)
+				suite.Require().Equal("11574service", balances.String())
 			},
 			expectedErr: "",
 		},
@@ -208,25 +222,25 @@ func (s *KeeperTestSuite) TestMsgWithdrawDelegatorReward() {
 	}
 
 	for _, tc := range testCases {
-		s.Run(tc.name, func() {
-			ctx, _ := s.Ctx.CacheContext()
-			_, err := s.msgServer.WithdrawDelegatorReward(ctx, tc.msg)
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.Ctx.CacheContext()
+			_, err := suite.msgServer.WithdrawDelegatorReward(ctx, tc.msg)
 			if tc.expectedErr == "" {
-				s.Require().NoError(err)
+				suite.Require().NoError(err)
 				if tc.check != nil {
 					tc.check(ctx)
 				}
 			} else {
-				s.Require().EqualError(err, tc.expectedErr)
+				suite.Require().EqualError(err, tc.expectedErr)
 			}
 		})
 	}
 }
 
-func (s *KeeperTestSuite) TestMsgWithdrawOperatorCommission() {
-	service, operator := s.setupSampleServiceAndOperator()
+func (suite *KeeperTestSuite) TestMsgWithdrawOperatorCommission() {
+	service, operator := suite.setupSampleServiceAndOperator()
 
-	s.CreateBasicRewardsPlan(
+	suite.CreateBasicRewardsPlan(
 		service.ID, utils.MustParseCoins("100_000000service"),
 		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 		time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
@@ -234,9 +248,9 @@ func (s *KeeperTestSuite) TestMsgWithdrawOperatorCommission() {
 
 	delAddr := testutil.TestAddress(1)
 
-	s.DelegateOperator(operator.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
+	suite.DelegateOperator(operator.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
 
-	s.allocateRewards(10 * time.Second)
+	suite.allocateRewards(10 * time.Second)
 
 	testCases := []struct {
 		name        string
@@ -248,10 +262,10 @@ func (s *KeeperTestSuite) TestMsgWithdrawOperatorCommission() {
 			name: "success",
 			msg:  types.NewMsgWithdrawOperatorCommission(operator.Admin, operator.ID),
 			check: func(ctx context.Context) {
-				adminAddr, err := s.App.AccountKeeper.AddressCodec().StringToBytes(operator.Admin)
-				s.Require().NoError(err)
-				balances := s.App.BankKeeper.GetAllBalances(ctx, adminAddr)
-				s.Require().Equal("1157service", balances.String())
+				adminAddr, err := suite.App.AccountKeeper.AddressCodec().StringToBytes(operator.Admin)
+				suite.Require().NoError(err)
+				balances := suite.App.BankKeeper.GetAllBalances(ctx, adminAddr)
+				suite.Require().Equal("1157service", balances.String())
 			},
 			expectedErr: "",
 		},
@@ -273,16 +287,16 @@ func (s *KeeperTestSuite) TestMsgWithdrawOperatorCommission() {
 	}
 
 	for _, tc := range testCases {
-		s.Run(tc.name, func() {
-			ctx, _ := s.Ctx.CacheContext()
-			_, err := s.msgServer.WithdrawOperatorCommission(ctx, tc.msg)
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.Ctx.CacheContext()
+			_, err := suite.msgServer.WithdrawOperatorCommission(ctx, tc.msg)
 			if tc.expectedErr == "" {
-				s.Require().NoError(err)
+				suite.Require().NoError(err)
 				if tc.check != nil {
 					tc.check(ctx)
 				}
 			} else {
-				s.Require().EqualError(err, tc.expectedErr)
+				suite.Require().EqualError(err, tc.expectedErr)
 			}
 		})
 	}

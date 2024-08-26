@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/suite"
 
 	"github.com/milkyway-labs/milkyway/app/testutil"
@@ -27,21 +28,21 @@ func TestKeeperTestSuite(t *testing.T) {
 	suite.Run(t, new(KeeperTestSuite))
 }
 
-func (s *KeeperTestSuite) SetupTest() {
-	s.KeeperTestSuite.SetupTest()
-	s.authority = s.App.RewardsKeeper.GetAuthority()
-	s.keeper = s.App.RewardsKeeper
-	s.msgServer = keeper.NewMsgServer(s.keeper)
-	s.queryServer = keeper.NewQueryServer(s.keeper)
+func (suite *KeeperTestSuite) SetupTest() {
+	suite.KeeperTestSuite.SetupTest()
+	suite.authority = suite.App.RewardsKeeper.GetAuthority()
+	suite.keeper = suite.App.RewardsKeeper
+	suite.msgServer = keeper.NewMsgServer(suite.keeper)
+	suite.queryServer = keeper.NewQueryServer(suite.keeper)
 }
 
-func (s *KeeperTestSuite) allocateRewards(duration time.Duration) {
-	s.Ctx = s.Ctx.WithBlockTime(s.Ctx.BlockTime().Add(duration)).WithBlockHeight(s.Ctx.BlockHeight() + 1)
-	err := s.keeper.AllocateRewards(s.Ctx)
-	s.Require().NoError(err)
+func (suite *KeeperTestSuite) allocateRewards(duration time.Duration) {
+	suite.Ctx = suite.Ctx.WithBlockTime(suite.Ctx.BlockTime().Add(duration)).WithBlockHeight(suite.Ctx.BlockHeight() + 1)
+	err := suite.keeper.AllocateRewards(suite.Ctx)
+	suite.Require().NoError(err)
 }
 
-func (s *KeeperTestSuite) setupSampleServiceAndOperator() (servicestypes.Service, operatorstypes.Operator) {
+func (suite *KeeperTestSuite) setupSampleServiceAndOperator(ctx sdk.Context) (servicestypes.Service, operatorstypes.Operator) {
 	// This helper method:
 	// - registers $MILK, $INIT
 	// - creates a service named "MilkyWay"
@@ -52,27 +53,28 @@ func (s *KeeperTestSuite) setupSampleServiceAndOperator() (servicestypes.Service
 	//   - it joins the newly created service
 
 	// Register $MILK and $INIT.
-	s.RegisterCurrency("umilk", "MILK", 6, utils.MustParseDec("2"))
-	s.RegisterCurrency("uinit", "INIT", 6, utils.MustParseDec("3"))
+	suite.RegisterCurrency(ctx, "umilk", "MILK", 6, utils.MustParseDec("2"))
+	suite.RegisterCurrency(ctx, "uinit", "INIT", 6, utils.MustParseDec("3"))
 
 	// Create a service.
 	serviceAdmin := testutil.TestAddress(10000)
-	service := s.CreateService("Service", serviceAdmin.String())
+	service := suite.CreateService(ctx, "Service", serviceAdmin.String())
 
 	// Add the created service ID to the pools module's allowed list.
-	poolsParams := s.App.PoolsKeeper.GetParams(s.Ctx)
+	poolsParams := suite.App.PoolsKeeper.GetParams(suite.Ctx)
 	poolsParams.AllowedServicesIDs = []uint32{service.ID}
-	s.App.PoolsKeeper.SetParams(s.Ctx, poolsParams)
+	suite.App.PoolsKeeper.SetParams(suite.Ctx, poolsParams)
 
 	// Create an operator.
 	operatorAdmin := testutil.TestAddress(10001)
-	operator := s.CreateOperator("Operator", operatorAdmin.String())
+	operator := suite.CreateOperator(ctx, "Operator", operatorAdmin.String())
+
 	// Make the operator join the service and set its commission rate to 10%.
-	s.UpdateOperatorParams(operator.ID, utils.MustParseDec("0.1"), []uint32{service.ID})
+	suite.UpdateOperatorParams(ctx, operator.ID, utils.MustParseDec("0.1"), []uint32{service.ID})
 
 	// Call AllocateRewards to set last rewards allocation time.
-	err := s.keeper.AllocateRewards(s.Ctx)
-	s.Require().NoError(err)
+	err := suite.keeper.AllocateRewards(suite.Ctx)
+	suite.Require().NoError(err)
 
 	return service, operator
 }

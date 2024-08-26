@@ -199,7 +199,7 @@ func (q queryServer) ServiceDelegationRewards(ctx context.Context, req *types.Qu
 	return &types.QueryServiceDelegationRewardsResponse{Rewards: rewards}, nil
 }
 
-func (q queryServer) DelegationTotalRewards(ctx context.Context, req *types.QueryDelegationTotalRewardsRequest) (*types.QueryDelegationTotalRewardsResponse, error) {
+func (q queryServer) DelegatorTotalRewards(ctx context.Context, req *types.QueryDelegatorTotalRewardsRequest) (*types.QueryDelegatorTotalRewardsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -248,7 +248,7 @@ func (q queryServer) DelegationTotalRewards(ctx context.Context, req *types.Quer
 		return nil, err
 	}
 
-	return &types.QueryDelegationTotalRewardsResponse{Rewards: delRewards, Total: total}, nil
+	return &types.QueryDelegatorTotalRewardsResponse{Rewards: delRewards, Total: total}, nil
 }
 
 func (q queryServer) DelegatorWithdrawAddress(ctx context.Context, req *types.QueryDelegatorWithdrawAddressRequest) (*types.QueryDelegatorWithdrawAddressResponse, error) {
@@ -259,6 +259,7 @@ func (q queryServer) DelegatorWithdrawAddress(ctx context.Context, req *types.Qu
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "invalid delegator address: %s", err)
 	}
+
 	withdrawAddr, err := q.k.GetDelegatorWithdrawAddr(ctx, delAddr)
 	if err != nil {
 		return nil, err
@@ -267,5 +268,6 @@ func (q queryServer) DelegatorWithdrawAddress(ctx context.Context, req *types.Qu
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "invalid withdraw address: %s", err)
 	}
+
 	return &types.QueryDelegatorWithdrawAddressResponse{WithdrawAddress: withdrawAddrStr}, nil
 }
