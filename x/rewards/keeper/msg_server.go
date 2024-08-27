@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -10,6 +11,7 @@ import (
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
+	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
 var _ types.MsgServer = msgServer{}
@@ -23,7 +25,9 @@ func NewMsgServer(k *Keeper) types.MsgServer {
 }
 
 // CreateRewardsPlan defines the rpc method for Msg/CreateRewardsPlan
-func (k msgServer) CreateRewardsPlan(ctx context.Context, msg *types.MsgCreateRewardsPlan) (*types.MsgCreateRewardsPlanResponse, error) {
+func (k msgServer) CreateRewardsPlan(goCtx context.Context, msg *types.MsgCreateRewardsPlan) (*types.MsgCreateRewardsPlanResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
 	// Charge fee for rewards plan creation. Fee is charged only in msg server and
 	// not when calling the keeper's method directly. This gives freedom to other
 	// modules to call the keeper's method directly without charging the fee.
@@ -31,12 +35,14 @@ func (k msgServer) CreateRewardsPlan(ctx context.Context, msg *types.MsgCreateRe
 	if err != nil {
 		return nil, err
 	}
+
 	creationFee := params.RewardsPlanCreationFee
 	if creationFee.IsAllPositive() {
 		senderAddr, err := k.accountKeeper.AddressCodec().StringToBytes(msg.Sender)
 		if err != nil {
 			return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid sender address: %s", err)
 		}
+
 		err = k.communityPoolKeeper.FundCommunityPool(ctx, creationFee, senderAddr)
 		if err != nil {
 			return nil, err
@@ -44,11 +50,27 @@ func (k msgServer) CreateRewardsPlan(ctx context.Context, msg *types.MsgCreateRe
 	}
 
 	plan, err := k.Keeper.CreateRewardsPlan(
-		ctx, msg.Description, msg.ServiceID, msg.Amount, msg.StartTime, msg.EndTime, msg.PoolsDistribution,
-		msg.OperatorsDistribution, msg.UsersDistribution)
+		ctx,
+		msg.Description,
+		msg.ServiceID,
+		msg.Amount,
+		msg.StartTime,
+		msg.EndTime,
+		msg.PoolsDistribution,
+		msg.OperatorsDistribution,
+		msg.UsersDistribution,
+	)
 	if err != nil {
 		return nil, err
 	}
+
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeCreateRewardsPlan,
+			sdk.NewAttribute(types.AttributeKeyRewardsPlanID, fmt.Sprint(plan.ID)),
+			sdk.NewAttribute(servicestypes.AttributeKeyServiceID, fmt.Sprint(msg.ServiceID)),
+		),
+	})
 
 	return &types.MsgCreateRewardsPlanResponse{NewRewardsPlanID: plan.ID}, nil
 }
@@ -56,7 +78,10 @@ func (k msgServer) CreateRewardsPlan(ctx context.Context, msg *types.MsgCreateRe
 // SetWithdrawAddress sets the withdraw address for a delegator(or an operator
 // when withdrawing commission). The default withdraw address if not set
 // specified is the delegator(or an operator) address.
-func (k msgServer) SetWithdrawAddress(ctx context.Context, msg *types.MsgSetWithdrawAddress) (*types.MsgSetWithdrawAddressResponse, error) {
+func (k msgServer) SetWithdrawAddress(goCtx context.Context, msg *types.MsgSetWithdrawAddress) (*types.MsgSetWithdrawAddressResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Parse the addresses
 	senderAddr, err := k.accountKeeper.AddressCodec().StringToBytes(msg.Sender)
 	if err != nil {
 		return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid sender address: %s", err)
@@ -67,10 +92,20 @@ func (k msgServer) SetWithdrawAddress(ctx context.Context, msg *types.MsgSetWith
 		return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid withdraw address: %s", err)
 	}
 
-	err = k.SetWithdrawAddr(ctx, senderAddr, withdrawAddress)
+	// Set the withdraw address
+	err = k.Keeper.SetWithdrawAddress(ctx, senderAddr, withdrawAddress)
 	if err != nil {
 		return nil, err
 	}
+
+	// Emit an event
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeSetWithdrawAddress,
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
+			sdk.NewAttribute(types.AttributeKeyWithdrawAddress, msg.WithdrawAddress),
+		),
+	)
 
 	return &types.MsgSetWithdrawAddressResponse{}, nil
 }
@@ -95,8 +130,6 @@ func (k msgServer) WithdrawDelegatorReward(ctx context.Context, msg *types.MsgWi
 		return nil, err
 	}
 	amount := rewards.Sum()
-
-	// TODO: telemetry?
 
 	return &types.MsgWithdrawDelegatorRewardResponse{Amount: amount}, nil
 }

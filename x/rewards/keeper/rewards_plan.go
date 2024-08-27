@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"cosmossdk.io/errors"
@@ -29,12 +28,15 @@ func (k *Keeper) CreateRewardsPlan(
 		return types.RewardsPlan{}, servicestypes.ErrServiceNotFound
 	}
 
-	// Get the next plan ID and increment it by 1
+	// Get the plan id to be used
 	planID, err := k.NextRewardsPlanID.Get(ctx)
 	if err != nil {
 		return types.RewardsPlan{}, err
 	}
-	if err := k.NextRewardsPlanID.Set(ctx, planID+1); err != nil {
+
+	// Increment the plan id
+	err = k.NextRewardsPlanID.Set(ctx, planID+1)
+	if err != nil {
 		return types.RewardsPlan{}, err
 	}
 
@@ -72,19 +74,14 @@ func (k *Keeper) CreateRewardsPlan(
 	// We don't need to validate users distribution since there's
 	// types.UsersDistributionTypeBasic only which doesn't need a validation.
 
+	// Create a rewards pool account if it doesn't exist
+	k.createAccountIfNotExists(ctx, plan.MustGetRewardsPoolAddress())
+
+	// Store the rewards plan
 	err = k.RewardsPlans.Set(ctx, planID, plan)
 	if err != nil {
 		return types.RewardsPlan{}, err
 	}
-
-	k.createAccountIfNotExists(ctx, plan.MustGetRewardsPoolAddress())
-
-	sdkCtx.EventManager().EmitEvents(sdk.Events{
-		sdk.NewEvent(
-			types.EventTypeCreateRewardsPlan,
-			sdk.NewAttribute(types.AttributeKeyRewardsPlanID, fmt.Sprint(planID)),
-		),
-	})
 
 	return plan, nil
 }

@@ -36,10 +36,11 @@ func (suite *KeeperTestSuite) SetupTest() {
 	suite.queryServer = keeper.NewQueryServer(suite.keeper)
 }
 
-func (suite *KeeperTestSuite) allocateRewards(duration time.Duration) {
-	suite.Ctx = suite.Ctx.WithBlockTime(suite.Ctx.BlockTime().Add(duration)).WithBlockHeight(suite.Ctx.BlockHeight() + 1)
-	err := suite.keeper.AllocateRewards(suite.Ctx)
+func (suite *KeeperTestSuite) allocateRewards(ctx sdk.Context, duration time.Duration) sdk.Context {
+	ctx = ctx.WithBlockTime(ctx.BlockTime().Add(duration)).WithBlockHeight(ctx.BlockHeight() + 1)
+	err := suite.keeper.AllocateRewards(ctx)
 	suite.Require().NoError(err)
+	return ctx
 }
 
 func (suite *KeeperTestSuite) setupSampleServiceAndOperator(ctx sdk.Context) (servicestypes.Service, operatorstypes.Operator) {
@@ -61,9 +62,9 @@ func (suite *KeeperTestSuite) setupSampleServiceAndOperator(ctx sdk.Context) (se
 	service := suite.CreateService(ctx, "Service", serviceAdmin.String())
 
 	// Add the created service ID to the pools module's allowed list.
-	poolsParams := suite.App.PoolsKeeper.GetParams(suite.Ctx)
+	poolsParams := suite.App.PoolsKeeper.GetParams(ctx)
 	poolsParams.AllowedServicesIDs = []uint32{service.ID}
-	suite.App.PoolsKeeper.SetParams(suite.Ctx, poolsParams)
+	suite.App.PoolsKeeper.SetParams(ctx, poolsParams)
 
 	// Create an operator.
 	operatorAdmin := testutil.TestAddress(10001)
@@ -73,7 +74,7 @@ func (suite *KeeperTestSuite) setupSampleServiceAndOperator(ctx sdk.Context) (se
 	suite.UpdateOperatorParams(ctx, operator.ID, utils.MustParseDec("0.1"), []uint32{service.ID})
 
 	// Call AllocateRewards to set last rewards allocation time.
-	err := suite.keeper.AllocateRewards(suite.Ctx)
+	err := suite.keeper.AllocateRewards(ctx)
 	suite.Require().NoError(err)
 
 	return service, operator

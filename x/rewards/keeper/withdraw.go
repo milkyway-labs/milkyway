@@ -13,20 +13,14 @@ import (
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 )
 
-// SetWithdrawAddr sets a new address that will receive the rewards upon withdrawal
-func (k *Keeper) SetWithdrawAddr(ctx context.Context, addr, withdrawAddr sdk.AccAddress) error {
+// SetWithdrawAddress sets a new address that will receive the rewards upon withdrawal
+func (k *Keeper) SetWithdrawAddress(ctx context.Context, addr, withdrawAddr sdk.AccAddress) error {
+	// Check if the withdraw address is blocked
 	if k.bankKeeper.BlockedAddr(withdrawAddr) {
 		return errorsmod.Wrapf(sdkerrors.ErrUnauthorized, "%s is not allowed to receive external funds", withdrawAddr)
 	}
 
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	sdkCtx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			types.EventTypeSetWithdrawAddress,
-			sdk.NewAttribute(types.AttributeKeyWithdrawAddress, withdrawAddr.String()),
-		),
-	)
-
+	// Set the withdraw address
 	err := k.DelegatorWithdrawAddrs.Set(ctx, addr, withdrawAddr)
 	if err != nil {
 		return err

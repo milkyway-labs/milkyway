@@ -194,15 +194,15 @@ func (suite *KeeperTestSuite) CreateRewardsPlan(
 
 	rewardsMsgServer := rewardskeeper.NewMsgServer(suite.App.RewardsKeeper)
 	resp, err := rewardsMsgServer.CreateRewardsPlan(ctx, rewardstypes.NewMsgCreateRewardsPlan(
-		service.Admin,
-		"Rewards Plan",
 		serviceID,
+		"Rewards Plan",
 		amtPerDay,
 		startTime,
 		endTime,
 		poolsDistr,
 		operatorsDistr,
 		usersDistr,
+		service.Admin,
 	))
 	suite.Require().NoError(err)
 

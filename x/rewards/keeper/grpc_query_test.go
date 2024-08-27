@@ -218,9 +218,10 @@ func (suite *KeeperTestSuite) TestQuerier_PoolOutstandingRewards() {
 	testCases := []struct {
 		name       string
 		store      func(ctx sdk.Context)
+		updateCtx  func(ctx sdk.Context) sdk.Context
 		req        *types.QueryPoolOutstandingRewardsRequest
 		shouldErr  bool
-		expRewards []types.OutstandingRewards
+		expRewards types.OutstandingRewards
 	}{
 		{
 			name:      "invalid pool ID returns error",
@@ -249,19 +250,18 @@ func (suite *KeeperTestSuite) TestQuerier_PoolOutstandingRewards() {
 				// Delegate to the pool
 				delAddr := testutil.TestAddress(1)
 				suite.DelegatePool(ctx, utils.MustParseCoin("100_000000umilk"), delAddr.String(), true)
-
+			},
+			updateCtx: func(ctx sdk.Context) sdk.Context {
 				// Allocate rewards
-				suite.allocateRewards(10 * time.Second)
+				return suite.allocateRewards(ctx, 10*time.Second)
 			},
 			req:       types.NewQueryPoolOutstandingRewardsRequest(1),
 			shouldErr: false,
-			expRewards: []types.OutstandingRewards{
-				{
-					Rewards: types.DecPools{
-						{
-							Denom:    "umilk",
-							DecCoins: utils.MustParseDecCoins("11574service"),
-						},
+			expRewards: types.OutstandingRewards{
+				Rewards: types.DecPools{
+					{
+						Denom:    "umilk",
+						DecCoins: utils.MustParseDecCoins("11574service"),
 					},
 				},
 			},
@@ -273,6 +273,9 @@ func (suite *KeeperTestSuite) TestQuerier_PoolOutstandingRewards() {
 			ctx, _ := suite.Ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
+			}
+			if tc.updateCtx != nil {
+				ctx = tc.updateCtx(ctx)
 			}
 
 			res, err := suite.queryServer.PoolOutstandingRewards(ctx, tc.req)
@@ -290,9 +293,10 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorOutstandingRewards() {
 	testCases := []struct {
 		name       string
 		store      func(ctx sdk.Context)
+		updateCtx  func(ctx sdk.Context) sdk.Context
 		req        *types.QueryOperatorOutstandingRewardsRequest
 		shouldErr  bool
-		expRewards []types.OutstandingRewards
+		expRewards types.OutstandingRewards
 	}{
 		{
 			name:      "invalid operator ID returns error",
@@ -321,19 +325,18 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorOutstandingRewards() {
 				// Delegate to the operator
 				delAddr := testutil.TestAddress(1)
 				suite.DelegateOperator(ctx, operator.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
-
+			},
+			updateCtx: func(ctx sdk.Context) sdk.Context {
 				// Allocate rewards
-				suite.allocateRewards(10 * time.Second)
+				return suite.allocateRewards(ctx, 10*time.Second)
 			},
 			req:       types.NewQueryOperatorOutstandingRewardsRequest(1),
 			shouldErr: false,
-			expRewards: []types.OutstandingRewards{
-				{
-					Rewards: types.DecPools{
-						{
-							Denom:    "umilk",
-							DecCoins: utils.MustParseDecCoins("11574service"),
-						},
+			expRewards: types.OutstandingRewards{
+				Rewards: types.DecPools{
+					{
+						Denom:    "umilk",
+						DecCoins: utils.MustParseDecCoins("11574service"),
 					},
 				},
 			},
@@ -345,6 +348,9 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorOutstandingRewards() {
 			ctx, _ := suite.Ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
+			}
+			if tc.updateCtx != nil {
+				ctx = tc.updateCtx(ctx)
 			}
 
 			res, err := suite.queryServer.OperatorOutstandingRewards(ctx, tc.req)
@@ -362,9 +368,10 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceOutstandingRewards() {
 	testCases := []struct {
 		name       string
 		store      func(ctx sdk.Context)
+		updateCtx  func(ctx sdk.Context) sdk.Context
 		req        *types.QueryServiceOutstandingRewardsRequest
 		shouldErr  bool
-		expRewards []types.OutstandingRewards
+		expRewards types.OutstandingRewards
 	}{
 		{
 			name:      "invalid service ID returns error",
@@ -393,19 +400,18 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceOutstandingRewards() {
 				// Delegate to the service
 				delAddr := testutil.TestAddress(1)
 				suite.DelegateService(ctx, service.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
-
+			},
+			updateCtx: func(ctx sdk.Context) sdk.Context {
 				// Allocate rewards
-				suite.allocateRewards(10 * time.Second)
+				return suite.allocateRewards(ctx, 10*time.Second)
 			},
 			req:       types.NewQueryServiceOutstandingRewardsRequest(1),
 			shouldErr: false,
-			expRewards: []types.OutstandingRewards{
-				{
-					Rewards: types.DecPools{
-						{
-							Denom:    "umilk",
-							DecCoins: utils.MustParseDecCoins("11574service"),
-						},
+			expRewards: types.OutstandingRewards{
+				Rewards: types.DecPools{
+					{
+						Denom:    "umilk",
+						DecCoins: utils.MustParseDecCoins("11574service"),
 					},
 				},
 			},
@@ -417,6 +423,9 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceOutstandingRewards() {
 			ctx, _ := suite.Ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
+			}
+			if tc.updateCtx != nil {
+				ctx = tc.updateCtx(ctx)
 			}
 
 			res, err := suite.queryServer.ServiceOutstandingRewards(ctx, tc.req)
@@ -434,6 +443,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorCommission() {
 	testCases := []struct {
 		name          string
 		store         func(ctx sdk.Context)
+		updateCtx     func(ctx sdk.Context) sdk.Context
 		req           *types.QueryOperatorCommissionRequest
 		shouldErr     bool
 		expCommission types.AccumulatedCommission
@@ -444,9 +454,10 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorCommission() {
 			shouldErr: true,
 		},
 		{
-			name:      "operator not found",
-			req:       types.NewQueryOperatorCommissionRequest(1),
-			shouldErr: true,
+			name:          "operator not found returns zero",
+			req:           types.NewQueryOperatorCommissionRequest(1),
+			shouldErr:     false,
+			expCommission: types.AccumulatedCommission{},
 		},
 		{
 			name: "existing commission is returned properly",
@@ -465,9 +476,10 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorCommission() {
 				// Delegate to the operator
 				delAddr := testutil.TestAddress(1)
 				suite.DelegateOperator(ctx, operator.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
-
+			},
+			updateCtx: func(ctx sdk.Context) sdk.Context {
 				// Allocate rewards
-				suite.allocateRewards(10 * time.Second)
+				return suite.allocateRewards(ctx, 10*time.Second)
 			},
 			req:       types.NewQueryOperatorCommissionRequest(1),
 			shouldErr: false,
@@ -488,6 +500,9 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorCommission() {
 			if tc.store != nil {
 				tc.store(ctx)
 			}
+			if tc.updateCtx != nil {
+				ctx = tc.updateCtx(ctx)
+			}
 
 			res, err := suite.queryServer.OperatorCommission(ctx, tc.req)
 			if tc.shouldErr {
@@ -504,6 +519,7 @@ func (suite *KeeperTestSuite) TestQuerier_PoolDelegationRewards() {
 	testCases := []struct {
 		name       string
 		store      func(ctx sdk.Context)
+		updateCtx  func(ctx sdk.Context) sdk.Context
 		req        *types.QueryPoolDelegationRewardsRequest
 		shouldErr  bool
 		expRewards types.DecPools
@@ -540,9 +556,10 @@ func (suite *KeeperTestSuite) TestQuerier_PoolDelegationRewards() {
 				// Delegate to the pool
 				delAddr := testutil.TestAddress(1)
 				suite.DelegatePool(ctx, utils.MustParseCoin("100_000000umilk"), delAddr.String(), true)
-
+			},
+			updateCtx: func(ctx sdk.Context) sdk.Context {
 				// Allocate rewards
-				suite.allocateRewards(10 * time.Second)
+				return suite.allocateRewards(ctx, 10*time.Second)
 			},
 			req: types.NewQueryPoolDelegationRewardsRequest(
 				1, testutil.TestAddress(1).String(),
@@ -563,6 +580,9 @@ func (suite *KeeperTestSuite) TestQuerier_PoolDelegationRewards() {
 			if tc.store != nil {
 				tc.store(ctx)
 			}
+			if tc.updateCtx != nil {
+				ctx = tc.updateCtx(ctx)
+			}
 
 			res, err := suite.queryServer.PoolDelegationRewards(ctx, tc.req)
 			if tc.shouldErr {
@@ -579,6 +599,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegationRewards() {
 	testCases := []struct {
 		name       string
 		store      func(ctx sdk.Context)
+		updateCtx  func(ctx sdk.Context) sdk.Context
 		req        *types.QueryOperatorDelegationRewardsRequest
 		shouldErr  bool
 		expRewards types.DecPools
@@ -615,9 +636,10 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegationRewards() {
 				// Delegate to the operator
 				delAddr := testutil.TestAddress(1)
 				suite.DelegateOperator(ctx, operator.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
-
+			},
+			updateCtx: func(ctx sdk.Context) sdk.Context {
 				// Allocate rewards
-				suite.allocateRewards(10 * time.Second)
+				return suite.allocateRewards(ctx, 10*time.Second)
 			},
 			req:       types.NewQueryOperatorDelegationRewardsRequest(1, testutil.TestAddress(1).String()),
 			shouldErr: false,
@@ -636,6 +658,9 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegationRewards() {
 			if tc.store != nil {
 				tc.store(ctx)
 			}
+			if tc.updateCtx != nil {
+				ctx = tc.updateCtx(ctx)
+			}
 
 			res, err := suite.queryServer.OperatorDelegationRewards(ctx, tc.req)
 			if tc.shouldErr {
@@ -652,6 +677,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceDelegationRewards() {
 	testCases := []struct {
 		name       string
 		store      func(ctx sdk.Context)
+		updateCtx  func(ctx sdk.Context) sdk.Context
 		req        *types.QueryServiceDelegationRewardsRequest
 		shouldErr  bool
 		expRewards types.DecPools
@@ -688,9 +714,10 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceDelegationRewards() {
 				// Delegate to the service
 				delAddr := testutil.TestAddress(1)
 				suite.DelegateService(ctx, service.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
-
+			},
+			updateCtx: func(ctx sdk.Context) sdk.Context {
 				// Allocate rewards
-				suite.allocateRewards(10 * time.Second)
+				return suite.allocateRewards(ctx, 10*time.Second)
 			},
 			req:       types.NewQueryServiceDelegationRewardsRequest(1, testutil.TestAddress(1).String()),
 			shouldErr: false,
@@ -709,6 +736,9 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceDelegationRewards() {
 			if tc.store != nil {
 				tc.store(ctx)
 			}
+			if tc.updateCtx != nil {
+				ctx = tc.updateCtx(ctx)
+			}
 
 			res, err := suite.queryServer.ServiceDelegationRewards(ctx, tc.req)
 			if tc.shouldErr {
@@ -725,6 +755,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorTotalRewards() {
 	testCases := []struct {
 		name      string
 		store     func(ctx sdk.Context)
+		updateCtx func(ctx sdk.Context) sdk.Context
 		req       *types.QueryDelegatorTotalRewardsRequest
 		shouldErr bool
 		expRes    *types.QueryDelegatorTotalRewardsResponse
@@ -740,7 +771,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorTotalRewards() {
 			shouldErr: false,
 			expRes: &types.QueryDelegatorTotalRewardsResponse{
 				Rewards: nil,
-				Total:   nil,
+				Total:   types.DecPools{},
 			},
 		},
 		{
@@ -762,9 +793,10 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorTotalRewards() {
 				suite.DelegatePool(ctx, utils.MustParseCoin("100_000000umilk"), delAddr.String(), true)
 				suite.DelegateOperator(ctx, operator.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
 				suite.DelegateService(ctx, service.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
-
-				// Allocate the rewards
-				suite.allocateRewards(10 * time.Second)
+			},
+			updateCtx: func(ctx sdk.Context) sdk.Context {
+				// Allocate rewards
+				return suite.allocateRewards(ctx, 10*time.Second)
 			},
 			req:       types.NewQueryDelegatorTotalRewardsRequest(testutil.TestAddress(1).String()),
 			shouldErr: false,
@@ -814,6 +846,9 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorTotalRewards() {
 			if tc.store != nil {
 				tc.store(ctx)
 			}
+			if tc.updateCtx != nil {
+				ctx = tc.updateCtx(ctx)
+			}
 
 			res, err := suite.queryServer.DelegatorTotalRewards(ctx, tc.req)
 			if tc.shouldErr {
@@ -840,23 +875,27 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorWithdrawAddress() {
 			shouldErr: true,
 		},
 		{
-			name:               "delegator without custom address returns default address",
-			req:                types.NewQueryDelegatorWithdrawAddressRequest(testutil.TestAddress(1).String()),
-			shouldErr:          true,
-			expWithdrawAddress: testutil.TestAddress(1).String(),
+			name: "delegator without custom address returns default address",
+			req: types.NewQueryDelegatorWithdrawAddressRequest(
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr:          false,
+			expWithdrawAddress: "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 		},
 		{
 			name: "delegator with different withdraw address set returns proper value",
 			store: func(ctx sdk.Context) {
 				_, err := suite.msgServer.SetWithdrawAddress(ctx, types.NewMsgSetWithdrawAddress(
-					testutil.TestAddress(1).String(),
-					testutil.TestAddress(2).String(),
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
 				suite.Require().NoError(err)
 			},
-			req:                types.NewQueryDelegatorWithdrawAddressRequest(testutil.TestAddress(1).String()),
+			req: types.NewQueryDelegatorWithdrawAddressRequest(
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
 			shouldErr:          false,
-			expWithdrawAddress: testutil.TestAddress(2).String(),
+			expWithdrawAddress: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 		},
 	}
 

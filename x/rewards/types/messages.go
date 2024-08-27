@@ -10,9 +10,16 @@ import (
 
 // NewMsgCreateRewardsPlan creates a new MsgCreateRewardsPlan instance
 func NewMsgCreateRewardsPlan(
-	sender string, description string, serviceID uint32, amt sdk.Coins, startTime, endTime time.Time,
-	poolsDistribution Distribution, operatorsDistribution Distribution,
-	usersDistribution UsersDistribution) *MsgCreateRewardsPlan {
+	serviceID uint32,
+	description string,
+	amt sdk.Coins,
+	startTime,
+	endTime time.Time,
+	poolsDistribution Distribution,
+	operatorsDistribution Distribution,
+	usersDistribution UsersDistribution,
+	sender string,
+) *MsgCreateRewardsPlan {
 	return &MsgCreateRewardsPlan{
 		Sender:                sender,
 		Description:           description,
@@ -27,28 +34,30 @@ func NewMsgCreateRewardsPlan(
 }
 
 // NewMsgSetWithdrawAddress creates a new NewMsgSetWithdrawAddress instance
-func NewMsgSetWithdrawAddress(senderAddr, withdrawAddr string) *MsgSetWithdrawAddress {
+func NewMsgSetWithdrawAddress(withdrawAddress string, userAddress string) *MsgSetWithdrawAddress {
 	return &MsgSetWithdrawAddress{
-		Sender:          senderAddr,
-		WithdrawAddress: withdrawAddr,
+		Sender:          userAddress,
+		WithdrawAddress: withdrawAddress,
 	}
 }
 
 // NewMsgWithdrawDelegatorReward creates a new MsgWithdrawDelegatorReward instance
 func NewMsgWithdrawDelegatorReward(
-	delAddr string, delType restakingtypes.DelegationType, targetID uint32,
+	delegationType restakingtypes.DelegationType,
+	targetID uint32,
+	delegatorAddress string,
 ) *MsgWithdrawDelegatorReward {
 	return &MsgWithdrawDelegatorReward{
-		DelegatorAddress:   delAddr,
-		DelegationType:     delType,
+		DelegatorAddress:   delegatorAddress,
+		DelegationType:     delegationType,
 		DelegationTargetID: targetID,
 	}
 }
 
 // NewMsgWithdrawOperatorCommission creates a new MsgWithdrawOperatorCommission instance
-func NewMsgWithdrawOperatorCommission(sender string, operatorID uint32) *MsgWithdrawOperatorCommission {
+func NewMsgWithdrawOperatorCommission(operatorID uint32, senderAddress string) *MsgWithdrawOperatorCommission {
 	return &MsgWithdrawOperatorCommission{
-		Sender:     sender,
+		Sender:     senderAddress,
 		OperatorID: operatorID,
 	}
 }
