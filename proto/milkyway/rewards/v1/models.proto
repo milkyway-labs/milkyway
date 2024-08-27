@@ -14,6 +14,8 @@ option (gogoproto.goproto_getters_all) = false;
 
 // RewardsPlan represents a rewards allocation plan.
 message RewardsPlan {
+  option (gogoproto.equal) = true;
+
   // ID is the unique identifier of the plan.
   uint64 id = 1 [ (gogoproto.customname) = "ID" ];
 
@@ -56,6 +58,8 @@ message RewardsPlan {
 // Distribution represents distribution parameters for restaking
 // pools/operators.
 message Distribution {
+  option (gogoproto.equal) = true;
+
   // DelegationType is the type of delegation target which this distribution
   // parameters are for. It can be one of DELEGATION_TYPE_POOL and
   // DELEGATION_TYPE_OPERATOR.
@@ -108,6 +112,8 @@ message DistributionTypeEgalitarian {
 // Distribution represents distribution parameters for delegators who directly
 // staked their tokens to the service.
 message UsersDistribution {
+  option (gogoproto.equal) = true;
+
   // Weight is the rewards distribution weight among other types of delegation
   // targets.
   uint32 weight = 1;

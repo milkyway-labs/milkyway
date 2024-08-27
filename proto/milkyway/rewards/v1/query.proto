@@ -88,10 +88,10 @@ service Query {
         "{service_id}";
   }
 
-  // DelegationTotalRewards queries the total rewards accrued by each
-  // delegation target.
-  rpc DelegationTotalRewards(QueryDelegationTotalRewardsRequest)
-      returns (QueryDelegationTotalRewardsResponse) {
+  // DelegatorTotalRewards queries the total rewards accrued by a single
+  // delegator
+  rpc DelegatorTotalRewards(QueryDelegatorTotalRewardsRequest)
+      returns (QueryDelegatorTotalRewardsResponse) {
     option (google.api.http).get =
         "/milkyway/rewards/v1/delegators/{delegator_address}/rewards";
   }
@@ -262,17 +262,17 @@ message QueryServiceDelegationRewardsResponse {
   ];
 }
 
-// QueryDelegationTotalRewardsRequest is the request type for the
-// Query/DelegationTotalRewards RPC method.
-message QueryDelegationTotalRewardsRequest {
+// QueryDelegatorTotalRewardsRequest is the request type for the
+// Query/DelegatorTotalRewards RPC method.
+message QueryDelegatorTotalRewardsRequest {
   // delegator_address defines the delegator address to query for.
   string delegator_address = 1
       [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 }
 
-// QueryDelegationTotalRewardsResponse is the response type for the
-// Query/DelegationTotalRewards RPC method.
-message QueryDelegationTotalRewardsResponse {
+// QueryDelegatorTotalRewardsResponse is the response type for the
+// Query/DelegatorTotalRewards RPC method.
+message QueryDelegatorTotalRewardsResponse {
   // rewards defines all the rewards accrued by a delegator.
   repeated DelegationDelegatorReward rewards = 1
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];

@@ -1,288 +1,518 @@
 package keeper_test
 
 import (
-	"context"
 	"time"
+
+	sdkmath "cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/app/testutil"
 	"github.com/milkyway-labs/milkyway/utils"
+	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/x/rewards/keeper"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
+	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-func (s *KeeperTestSuite) TestMsgCreateRewardsPlan() {
-	service, _ := s.setupSampleServiceAndOperator()
-	msgCreateRewardsPlan := types.NewMsgCreateRewardsPlan(
-		testutil.TestAddress(1).String(), "Rewards Plan", service.ID, utils.MustParseCoins("100_000000service"),
-		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC), time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-		types.NewBasicPoolsDistribution(0), types.NewBasicOperatorsDistribution(0), types.NewBasicUsersDistribution(0))
-
+func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 	testCases := []struct {
 		name        string
-		preRun      func(ctx context.Context)
+		setup       func()
+		store       func(ctx sdk.Context)
+		setupCtx    func(ctx sdk.Context) sdk.Context
 		msg         *types.MsgCreateRewardsPlan
-		check       func(ctx context.Context, resp *types.MsgCreateRewardsPlanResponse)
-		expectedErr string
+		shouldErr   bool
+		expResponse *types.MsgCreateRewardsPlanResponse
+		expEvents   sdk.Events
+		check       func(ctx sdk.Context)
 	}{
 		{
-			name: "success",
-			msg:  msgCreateRewardsPlan,
-			check: func(ctx context.Context, resp *types.MsgCreateRewardsPlanResponse) {
-				s.Require().Equal(uint64(1), resp.NewRewardsPlanID)
-				_, err := s.keeper.GetRewardsPlan(ctx, resp.NewRewardsPlanID)
-				s.Require().NoError(err)
-			},
+			name: "service not found returns error",
+			msg: types.NewMsgCreateRewardsPlan(
+				1,
+				"Rewards Plan",
+				utils.MustParseCoins("100_000000service"),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+				types.NewBasicPoolsDistribution(0),
+				types.NewBasicOperatorsDistribution(0),
+				types.NewBasicUsersDistribution(0),
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr: true,
 		},
 		{
-			name: "rewards plan creation fee is charged",
-			preRun: func(ctx context.Context) {
+			name: "service is created and fee is charged",
+			store: func(ctx sdk.Context) {
+				// Create a service
+				_, _ = suite.setupSampleServiceAndOperator(ctx)
+
 				// Change rewards plan creation fee to 100 $MILK.
-				params, err := s.keeper.Params.Get(ctx)
-				s.Require().NoError(err)
+				params, err := suite.keeper.Params.Get(ctx)
+				suite.Require().NoError(err)
+
 				params.RewardsPlanCreationFee = utils.MustParseCoins("100_000000umilk")
-				err = s.keeper.Params.Set(ctx, params)
-				s.Require().NoError(err)
+				err = suite.keeper.Params.Set(ctx, params)
+				suite.Require().NoError(err)
+
+				// Set the next plan id
+				err = suite.keeper.NextRewardsPlanID.Set(ctx, 1)
+				suite.Require().NoError(err)
 
 				// Fund the sender account enough coins to pay the fee.
-				s.FundAccount(msgCreateRewardsPlan.Sender, utils.MustParseCoins("500_000000umilk"))
+				suite.FundAccount(ctx, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", utils.MustParseCoins("500_000000umilk"))
 			},
-			msg: msgCreateRewardsPlan,
-			check: func(ctx context.Context, resp *types.MsgCreateRewardsPlanResponse) {
-				// Check that the balance is decreased by amount of the fee.
-				senderAddr, err := s.App.AccountKeeper.AddressCodec().StringToBytes(msgCreateRewardsPlan.Sender)
-				s.Require().NoError(err)
-				balances := s.App.BankKeeper.GetAllBalances(ctx, senderAddr)
-				s.Require().Equal("400000000umilk", balances.String())
-			},
-		},
-		{
-			name: "service not found",
 			msg: types.NewMsgCreateRewardsPlan(
-				msgCreateRewardsPlan.Sender, msgCreateRewardsPlan.Description, 2, msgCreateRewardsPlan.Amount,
-				msgCreateRewardsPlan.StartTime, msgCreateRewardsPlan.EndTime, msgCreateRewardsPlan.PoolsDistribution,
-				msgCreateRewardsPlan.OperatorsDistribution, msgCreateRewardsPlan.UsersDistribution),
-			expectedErr: "service not found: not found",
+				1,
+				"Rewards Plan",
+				utils.MustParseCoins("100_000000service"),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+				types.NewBasicPoolsDistribution(0),
+				types.NewBasicOperatorsDistribution(0),
+				types.NewBasicUsersDistribution(0),
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			expResponse: &types.MsgCreateRewardsPlanResponse{
+				NewRewardsPlanID: 1,
+			},
+			expEvents: []sdk.Event{
+				sdk.NewEvent(
+					types.EventTypeCreateRewardsPlan,
+					sdk.NewAttribute(types.AttributeKeyRewardsPlanID, "1"),
+					sdk.NewAttribute(servicestypes.AttributeKeyServiceID, "1"),
+				),
+			},
+			check: func(ctx sdk.Context) {
+				// Make sure the next plan id has been increased
+				nextPlanID, err := suite.keeper.NextRewardsPlanID.Get(ctx)
+				suite.Require().NoError(err)
+
+				suite.Require().Equal(uint64(2), nextPlanID)
+
+				// Make sure the rewards plan has been created
+				_, err = suite.keeper.GetRewardsPlan(ctx, 1)
+				suite.Require().NoError(err)
+
+				// Make sure the balance is decreased by amount of the fee
+				senderAddr, err := sdk.AccAddressFromBech32("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd")
+				suite.Require().NoError(err)
+
+				balances := suite.App.BankKeeper.GetAllBalances(ctx, senderAddr)
+				suite.Require().Equal("400000000umilk", balances.String())
+			},
 		},
 	}
 
 	for _, tc := range testCases {
-		s.Run(tc.name, func() {
-			ctx, _ := s.Ctx.CacheContext()
-			if tc.preRun != nil {
-				tc.preRun(ctx)
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.Ctx.CacheContext()
+			if tc.setup != nil {
+				tc.setup()
 			}
-			resp, err := s.msgServer.CreateRewardsPlan(ctx, tc.msg)
-			if tc.expectedErr == "" {
-				s.Require().NoError(err)
-				if tc.check != nil {
-					tc.check(ctx, resp)
-				}
+			if tc.setupCtx != nil {
+				ctx = tc.setupCtx(ctx)
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			msgServer := keeper.NewMsgServer(suite.keeper)
+			res, err := msgServer.CreateRewardsPlan(ctx, tc.msg)
+			if tc.shouldErr {
+				suite.Require().Error(err)
 			} else {
-				s.Require().EqualError(err, tc.expectedErr)
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expResponse, res)
+				for _, event := range tc.expEvents {
+					suite.Require().Contains(ctx.EventManager().Events(), event)
+				}
+
+				if tc.check != nil {
+					tc.check(ctx)
+				}
 			}
 		})
 	}
 }
 
-func (s *KeeperTestSuite) TestMsgSetWithdrawAddress() {
+func (suite *KeeperTestSuite) TestMsgSetWithdrawAddress() {
 	testCases := []struct {
 		name        string
+		setup       func()
+		store       func(ctx sdk.Context)
+		setupCtx    func(ctx sdk.Context) sdk.Context
 		msg         *types.MsgSetWithdrawAddress
-		check       func(ctx context.Context)
-		expectedErr string
+		shouldErr   bool
+		expResponse *types.MsgSetWithdrawAddressResponse
+		expEvents   sdk.Events
+		check       func(ctx sdk.Context)
 	}{
-		{
-			name: "success",
-			msg: types.NewMsgSetWithdrawAddress(
-				testutil.TestAddress(1).String(),
-				testutil.TestAddress(2).String(),
-			),
-			check: func(ctx context.Context) {
-				withdrawAddr, err := s.keeper.GetDelegatorWithdrawAddr(ctx, testutil.TestAddress(1))
-				s.Require().NoError(err)
-				s.Require().Equal(testutil.TestAddress(2), withdrawAddr)
-			},
-			expectedErr: "",
-		},
 		{
 			name: "invalid sender address returns error",
 			msg: types.NewMsgSetWithdrawAddress(
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				"invalid",
-				testutil.TestAddress(2).String(),
 			),
-			expectedErr: "invalid sender address: decoding bech32 failed: invalid bech32 string length 7: invalid address",
+			shouldErr: true,
 		},
 		{
 			name: "invalid withdraw address returns error",
 			msg: types.NewMsgSetWithdrawAddress(
-				testutil.TestAddress(1).String(),
 				"invalid",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 			),
-			expectedErr: "invalid withdraw address: decoding bech32 failed: invalid bech32 string length 7: invalid address",
+			shouldErr: true,
+		},
+		{
+			name: "success",
+			msg: types.NewMsgSetWithdrawAddress(
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr:   false,
+			expResponse: &types.MsgSetWithdrawAddressResponse{},
+			expEvents: []sdk.Event{
+				sdk.NewEvent(
+					types.EventTypeSetWithdrawAddress,
+					sdk.NewAttribute(sdk.AttributeKeySender, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"),
+					sdk.NewAttribute(types.AttributeKeyWithdrawAddress, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+				),
+			},
+			check: func(ctx sdk.Context) {
+				// Make sure the withdrawal address has been set
+				delegatorAddr, err := sdk.AccAddressFromBech32("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd")
+				suite.Require().NoError(err)
+
+				withdrawAddr, err := suite.keeper.GetDelegatorWithdrawAddr(ctx, delegatorAddr)
+				suite.Require().NoError(err)
+				suite.Require().Equal("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", withdrawAddr.String())
+			},
 		},
 	}
 
 	for _, tc := range testCases {
-		s.Run(tc.name, func() {
-			ctx, _ := s.Ctx.CacheContext()
-			_, err := s.msgServer.SetWithdrawAddress(ctx, tc.msg)
-			if tc.expectedErr == "" {
-				s.Require().NoError(err)
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.Ctx.CacheContext()
+			if tc.setup != nil {
+				tc.setup()
+			}
+			if tc.setupCtx != nil {
+				ctx = tc.setupCtx(ctx)
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			msgServer := keeper.NewMsgServer(suite.keeper)
+			res, err := msgServer.SetWithdrawAddress(ctx, tc.msg)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expResponse, res)
+				for _, event := range tc.expEvents {
+					suite.Require().Contains(ctx.EventManager().Events(), event)
+				}
+
 				if tc.check != nil {
 					tc.check(ctx)
 				}
-			} else {
-				s.Require().EqualError(err, tc.expectedErr)
 			}
 		})
 	}
 }
 
-func (s *KeeperTestSuite) TestMsgWithdrawDelegatorReward() {
-	service, operator := s.setupSampleServiceAndOperator()
-
-	s.CreateBasicRewardsPlan(
-		service.ID, utils.MustParseCoins("100_000000service"),
-		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
-		time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-		utils.MustParseCoins("10000_000000service"))
-
-	delAddr := testutil.TestAddress(1)
-
-	s.DelegateService(service.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
-
-	s.allocateRewards(10 * time.Second)
-
+func (suite *KeeperTestSuite) TestMsgWithdrawDelegatorReward() {
 	testCases := []struct {
 		name        string
+		setup       func()
+		setupCtx    func(ctx sdk.Context) sdk.Context
+		store       func(ctx sdk.Context)
+		updateCtx   func(ctx sdk.Context) sdk.Context
 		msg         *types.MsgWithdrawDelegatorReward
-		check       func(ctx context.Context)
-		expectedErr string
+		shouldErr   bool
+		expResponse *types.MsgWithdrawDelegatorRewardResponse
+		expEvents   sdk.Events
+		check       func(ctx sdk.Context)
 	}{
-		{
-			name: "success",
-			msg: types.NewMsgWithdrawDelegatorReward(
-				delAddr.String(), restakingtypes.DELEGATION_TYPE_SERVICE, service.ID,
-			),
-			check: func(ctx context.Context) {
-				balances := s.App.BankKeeper.GetAllBalances(ctx, delAddr)
-				s.Require().Equal("11574service", balances.String())
-			},
-			expectedErr: "",
-		},
 		{
 			name: "invalid delegator address returns error",
 			msg: types.NewMsgWithdrawDelegatorReward(
-				"invalid", restakingtypes.DELEGATION_TYPE_SERVICE, service.ID,
+				restakingtypes.DELEGATION_TYPE_SERVICE,
+				1,
+				"invalid",
 			),
-			expectedErr: "invalid delegator address: decoding bech32 failed: invalid bech32 string length 7: invalid address",
+			shouldErr: true,
 		},
 		{
 			name: "invalid delegation type returns error",
 			msg: types.NewMsgWithdrawDelegatorReward(
-				delAddr.String(), restakingtypes.DelegationType(5), service.ID,
+				restakingtypes.DelegationType(5),
+				1,
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 			),
-			expectedErr: "invalid delegation type: 5: invalid delegation type",
+			shouldErr: true,
 		},
 		{
 			name: "invalid target ID returns error",
 			msg: types.NewMsgWithdrawDelegatorReward(
-				delAddr.String(), restakingtypes.DELEGATION_TYPE_SERVICE, 0,
+				restakingtypes.DELEGATION_TYPE_SERVICE,
+				0,
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 			),
-			expectedErr: "invalid delegation target ID: 0: invalid request",
+			shouldErr: true,
 		},
 		{
-			name: "delegation not found",
+			name: "operator delegation not found returns error",
 			msg: types.NewMsgWithdrawDelegatorReward(
-				delAddr.String(), restakingtypes.DELEGATION_TYPE_OPERATOR, operator.ID,
+				restakingtypes.DELEGATION_TYPE_OPERATOR,
+				1,
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 			),
-			expectedErr: "delegation not found: 1, cosmos103vfz2vlvjyl3v2qalnlpnvtecdrdaxhs725g07fcw9acfkwsaps2jwxt9: not found",
+			shouldErr: true,
 		},
 		{
-			name: "delegation not found #2",
+			name: "service delegation not found returns error",
 			msg: types.NewMsgWithdrawDelegatorReward(
-				delAddr.String(), restakingtypes.DELEGATION_TYPE_SERVICE, 3,
+				restakingtypes.DELEGATION_TYPE_SERVICE,
+				3,
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 			),
-			expectedErr: "service not found: not found",
+			shouldErr: true,
+		},
+		{
+			name: "found delegation rewards is withdrawn properly",
+			store: func(ctx sdk.Context) {
+				// Create a service and its reward plan
+				service, _ := suite.setupSampleServiceAndOperator(ctx)
+				suite.CreateBasicRewardsPlan(
+					ctx,
+					service.ID,
+					utils.MustParseCoins("100_000000service"),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+					utils.MustParseCoins("10000_000000service"),
+				)
+
+				// Delegate some tokens to the service
+				suite.DelegateService(
+					ctx,
+					1,
+					utils.MustParseCoins("100_000000umilk"),
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					true,
+				)
+			},
+			updateCtx: func(ctx sdk.Context) sdk.Context {
+				// Allocate rewards
+				return suite.allocateRewards(ctx, 10*time.Second)
+			},
+			msg: types.NewMsgWithdrawDelegatorReward(
+				restakingtypes.DELEGATION_TYPE_SERVICE,
+				1,
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr: false,
+			expResponse: &types.MsgWithdrawDelegatorRewardResponse{
+				Amount: sdk.NewCoins(sdk.NewCoin("service", sdkmath.NewInt(11574))),
+			},
+			expEvents: sdk.Events{
+				sdk.NewEvent(
+					types.EventTypeWithdrawRewards,
+					sdk.NewAttribute(types.AttributeKeyDelegationType, restakingtypes.DELEGATION_TYPE_SERVICE.String()),
+					sdk.NewAttribute(types.AttributeKeyDelegationTargetID, "1"),
+					sdk.NewAttribute(restakingtypes.AttributeKeyDelegator, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"),
+					sdk.NewAttribute(sdk.AttributeKeyAmount, "11574service"),
+					sdk.NewAttribute(types.AttributeKeyAmountPerPool, "denom:\"umilk\" coins:<denom:\"service\" amount:\"11574\" > "),
+				),
+			},
+			check: func(ctx sdk.Context) {
+				delegatorAddress, err := sdk.AccAddressFromBech32("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd")
+				suite.Require().NoError(err)
+
+				balances := suite.App.BankKeeper.GetAllBalances(ctx, delegatorAddress)
+				suite.Require().Equal("11574service", balances.String())
+			},
 		},
 	}
 
 	for _, tc := range testCases {
-		s.Run(tc.name, func() {
-			ctx, _ := s.Ctx.CacheContext()
-			_, err := s.msgServer.WithdrawDelegatorReward(ctx, tc.msg)
-			if tc.expectedErr == "" {
-				s.Require().NoError(err)
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.Ctx.CacheContext()
+			if tc.setup != nil {
+				tc.setup()
+			}
+			if tc.setupCtx != nil {
+				ctx = tc.setupCtx(ctx)
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+			if tc.updateCtx != nil {
+				ctx = tc.updateCtx(ctx)
+			}
+
+			msgServer := keeper.NewMsgServer(suite.keeper)
+			res, err := msgServer.WithdrawDelegatorReward(ctx, tc.msg)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expResponse, res)
+				for _, event := range tc.expEvents {
+					suite.Require().Contains(ctx.EventManager().Events(), event)
+				}
+
 				if tc.check != nil {
 					tc.check(ctx)
 				}
-			} else {
-				s.Require().EqualError(err, tc.expectedErr)
 			}
 		})
 	}
 }
 
-func (s *KeeperTestSuite) TestMsgWithdrawOperatorCommission() {
-	service, operator := s.setupSampleServiceAndOperator()
-
-	s.CreateBasicRewardsPlan(
-		service.ID, utils.MustParseCoins("100_000000service"),
-		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
-		time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-		utils.MustParseCoins("10000_000000service"))
-
-	delAddr := testutil.TestAddress(1)
-
-	s.DelegateOperator(operator.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
-
-	s.allocateRewards(10 * time.Second)
-
+func (suite *KeeperTestSuite) TestMsgWithdrawOperatorCommission() {
 	testCases := []struct {
 		name        string
+		setup       func()
+		setupCtx    func(ctx sdk.Context) sdk.Context
+		store       func(ctx sdk.Context)
+		updateCtx   func(ctx sdk.Context) sdk.Context
 		msg         *types.MsgWithdrawOperatorCommission
-		check       func(ctx context.Context)
-		expectedErr string
+		shouldErr   bool
+		expResponse *types.MsgWithdrawOperatorCommissionResponse
+		expEvents   sdk.Events
+		check       func(ctx sdk.Context)
 	}{
 		{
-			name: "success",
-			msg:  types.NewMsgWithdrawOperatorCommission(operator.Admin, operator.ID),
-			check: func(ctx context.Context) {
-				adminAddr, err := s.App.AccountKeeper.AddressCodec().StringToBytes(operator.Admin)
-				s.Require().NoError(err)
-				balances := s.App.BankKeeper.GetAllBalances(ctx, adminAddr)
-				s.Require().Equal("1157service", balances.String())
+			name:      "invalid sender address returns error",
+			msg:       types.NewMsgWithdrawOperatorCommission(1, "invalid"),
+			shouldErr: true,
+		},
+		{
+			name:      "operator not found returns error",
+			msg:       types.NewMsgWithdrawOperatorCommission(1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+			shouldErr: true,
+		},
+		{
+			name: "non-admin address returns error",
+			store: func(ctx sdk.Context) {
+				// Create a service and a reward plan
+				service, operator := suite.setupSampleServiceAndOperator(ctx)
+				suite.CreateBasicRewardsPlan(
+					ctx,
+					service.ID,
+					utils.MustParseCoins("100_000000service"),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+					utils.MustParseCoins("10000_000000service"),
+				)
+
+				// Delegate to an operator
+				suite.DelegateOperator(
+					ctx,
+					operator.ID,
+					utils.MustParseCoins("100_000000umilk"),
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					true,
+				)
 			},
-			expectedErr: "",
+			updateCtx: func(ctx sdk.Context) sdk.Context {
+				// Allocate rewards
+				return suite.allocateRewards(ctx, 10*time.Second)
+			},
+			msg: types.NewMsgWithdrawOperatorCommission(
+				1,
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			shouldErr: true,
 		},
+
 		{
-			name:        "invalid sender address returns error",
-			msg:         types.NewMsgWithdrawOperatorCommission("invalid", operator.ID),
-			expectedErr: "invalid sender address: decoding bech32 failed: invalid bech32 string length 7: invalid address",
-		},
-		{
-			name:        "only admin can withdraw commission",
-			msg:         types.NewMsgWithdrawOperatorCommission(testutil.TestAddress(1).String(), operator.ID),
-			expectedErr: "only operator admin can withdraw operator commission: unauthorized",
-		},
-		{
-			name:        "operator not found",
-			msg:         types.NewMsgWithdrawOperatorCommission(operator.Admin, 3),
-			expectedErr: "operator not found: not found",
+			name: "existing operator commission is withdrawn properly",
+			store: func(ctx sdk.Context) {
+				// Create a service and its rewards plan
+				service, operator := suite.setupSampleServiceAndOperator(ctx)
+				suite.CreateBasicRewardsPlan(
+					ctx,
+					service.ID,
+					utils.MustParseCoins("100_000000service"),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+					utils.MustParseCoins("10000_000000service"),
+				)
+
+				// Delegate to the operator
+				suite.DelegateOperator(
+					ctx,
+					operator.ID,
+					utils.MustParseCoins("100_000000umilk"),
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					true,
+				)
+			},
+			updateCtx: func(ctx sdk.Context) sdk.Context {
+				// Allocate rewards
+				return suite.allocateRewards(ctx, 10*time.Second)
+			},
+			msg: types.NewMsgWithdrawOperatorCommission(1, testutil.TestAddress(10001).String()),
+			expResponse: &types.MsgWithdrawOperatorCommissionResponse{
+				Amount: sdk.NewCoins(sdk.NewCoin("service", sdkmath.NewInt(1157))),
+			},
+			expEvents: sdk.Events{
+				sdk.NewEvent(
+					types.EventTypeWithdrawCommission,
+					sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, "1"),
+					sdk.NewAttribute(sdk.AttributeKeyAmount, "1157service"),
+					sdk.NewAttribute(types.AttributeKeyAmountPerPool, "denom:\"umilk\" coins:<denom:\"service\" amount:\"1157\" > "),
+				),
+			},
+			check: func(ctx sdk.Context) {
+				// Make sure the funds have been sent to the admin
+				adminAddress := testutil.TestAddress(10001)
+				balances := suite.App.BankKeeper.GetAllBalances(ctx, adminAddress)
+				suite.Require().Equal("1157service", balances.String())
+			},
+			shouldErr: false,
 		},
 	}
 
 	for _, tc := range testCases {
-		s.Run(tc.name, func() {
-			ctx, _ := s.Ctx.CacheContext()
-			_, err := s.msgServer.WithdrawOperatorCommission(ctx, tc.msg)
-			if tc.expectedErr == "" {
-				s.Require().NoError(err)
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.Ctx.CacheContext()
+			if tc.setup != nil {
+				tc.setup()
+			}
+			if tc.setupCtx != nil {
+				ctx = tc.setupCtx(ctx)
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+			if tc.updateCtx != nil {
+				ctx = tc.updateCtx(ctx)
+			}
+
+			msgServer := keeper.NewMsgServer(suite.keeper)
+			res, err := msgServer.WithdrawOperatorCommission(ctx, tc.msg)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expResponse, res)
+				for _, event := range tc.expEvents {
+					suite.Require().Contains(ctx.EventManager().Events(), event)
+				}
+
 				if tc.check != nil {
 					tc.check(ctx)
 				}
-			} else {
-				s.Require().EqualError(err, tc.expectedErr)
 			}
 		})
 	}

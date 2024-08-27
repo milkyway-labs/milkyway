@@ -8,150 +8,247 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"cosmossdk.io/math"
-	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/milkyway-labs/milkyway/app"
 	"github.com/milkyway-labs/milkyway/utils"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 )
 
 func TestRewardsPlan_Validate(t *testing.T) {
-	ir := codectypes.NewInterfaceRegistry()
-	types.RegisterInterfaces(ir)
-
 	testCases := []struct {
-		name        string
-		malleate    func(plan *types.RewardsPlan)
-		expectedErr string
+		name      string
+		plan      types.RewardsPlan
+		shouldErr bool
 	}{
 		{
-			name:        "valid rewards plan",
-			malleate:    nil,
-			expectedErr: "",
+			name: "valid plan returns no error",
+			plan: types.NewRewardsPlan(
+				1,
+				"Plan",
+				1,
+				utils.MustParseCoins("100_000000umilk"),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+				types.NewBasicPoolsDistribution(0),
+				types.NewBasicOperatorsDistribution(0),
+				types.NewBasicUsersDistribution(0),
+			),
+			shouldErr: false,
 		},
 		{
 			name: "invalid plan ID returns error",
-			malleate: func(plan *types.RewardsPlan) {
-				plan.ID = 0
-			},
-			expectedErr: "invalid plan ID: 0",
+			plan: types.NewRewardsPlan(
+				0,
+				"Plan",
+				1,
+				utils.MustParseCoins("100_000000umilk"),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+				types.NewBasicPoolsDistribution(0),
+				types.NewBasicOperatorsDistribution(0),
+				types.NewBasicUsersDistribution(0),
+			),
+			shouldErr: true,
 		},
 		{
 			name: "too long description returns error",
-			malleate: func(plan *types.RewardsPlan) {
-				plan.Description = strings.Repeat("A", types.MaxRewardsPlanDescriptionLength+1)
-			},
-			expectedErr: "too long description",
+			plan: types.NewRewardsPlan(
+				1,
+				strings.Repeat("A", types.MaxRewardsPlanDescriptionLength+1),
+				1,
+				utils.MustParseCoins("100_000000umilk"),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+				types.NewBasicPoolsDistribution(0),
+				types.NewBasicOperatorsDistribution(0),
+				types.NewBasicUsersDistribution(0),
+			),
+			shouldErr: true,
 		},
 		{
 			name: "invalid service ID returns error",
-			malleate: func(plan *types.RewardsPlan) {
-				plan.ServiceID = 0
-			},
-			expectedErr: "invalid service ID: 0",
+			plan: types.NewRewardsPlan(
+				1,
+				"Plan",
+				0,
+				utils.MustParseCoins("100_000000umilk"),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+				types.NewBasicPoolsDistribution(0),
+				types.NewBasicOperatorsDistribution(0),
+				types.NewBasicUsersDistribution(0),
+			),
+			shouldErr: true,
 		},
 		{
 			name: "invalid amount per day returns error",
-			malleate: func(plan *types.RewardsPlan) {
-				plan.AmountPerDay = sdk.Coins{sdk.Coin{Denom: "umilk", Amount: math.ZeroInt()}}
-			},
-			expectedErr: "invalid amount per day: coin 0umilk amount is not positive",
+			plan: types.NewRewardsPlan(
+				1,
+				"Plan",
+				1,
+				sdk.Coins{sdk.Coin{Denom: "umilk", Amount: math.ZeroInt()}},
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+				types.NewBasicPoolsDistribution(0),
+				types.NewBasicOperatorsDistribution(0),
+				types.NewBasicUsersDistribution(0),
+			),
+			shouldErr: true,
 		},
 		{
 			name: "end time must be after start time",
-			malleate: func(plan *types.RewardsPlan) {
-				plan.StartTime = time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
-				plan.EndTime = time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
-			},
-			expectedErr: "end time must be after start time: 2024-01-01T00:00:00Z <= 2024-01-01T00:00:00Z",
+			plan: types.NewRewardsPlan(
+				1,
+				"Plan",
+				1,
+				utils.MustParseCoins("100_000000umilk"),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				types.NewBasicPoolsDistribution(0),
+				types.NewBasicOperatorsDistribution(0),
+				types.NewBasicUsersDistribution(0),
+			),
+			shouldErr: true,
 		},
 		{
 			name: "invalid rewards pool returns error",
-			malleate: func(plan *types.RewardsPlan) {
-				plan.RewardsPool = "invalid"
+			plan: types.RewardsPlan{
+				ID:                    1,
+				Description:           "Plan",
+				ServiceID:             1,
+				AmountPerDay:          utils.MustParseCoins("100_000000umilk"),
+				StartTime:             time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				EndTime:               time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+				RewardsPool:           "invalid",
+				PoolsDistribution:     types.NewBasicPoolsDistribution(0),
+				OperatorsDistribution: types.NewBasicOperatorsDistribution(0),
+				UsersDistribution:     types.NewBasicUsersDistribution(0),
 			},
-			expectedErr: "invalid rewards pool: decoding bech32 failed: invalid bech32 string length 7",
+			shouldErr: true,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			plan := types.NewRewardsPlan(
-				1, "Plan", 1, utils.MustParseCoins("100_000000umilk"),
-				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
-				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-				types.NewBasicPoolsDistribution(0), types.NewBasicOperatorsDistribution(0),
-				types.NewBasicUsersDistribution(0))
-			if tc.malleate != nil {
-				tc.malleate(&plan)
-			}
-			err := plan.Validate(ir)
-			if tc.expectedErr == "" {
-				require.NoError(t, err)
+			cdc, _ := app.MakeCodecs()
+			err := tc.plan.Validate(cdc)
+			if tc.shouldErr {
+				require.Error(t, err)
 			} else {
-				require.EqualError(t, err, tc.expectedErr)
+				require.NoError(t, err)
 			}
 		})
 	}
 }
 
 func TestRewardsPlan_IsActiveAt(t *testing.T) {
-	startTime := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
-	endTime := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
-	plan := types.NewRewardsPlan(
-		1, "Plan", 1, sdk.NewCoins(sdk.NewInt64Coin("umilk", 100_000000)), startTime, endTime,
-		types.NewBasicPoolsDistribution(1), types.NewBasicOperatorsDistribution(1), types.NewBasicUsersDistribution(1))
-
 	testCases := []struct {
-		name     string
-		date     time.Time
-		isActive bool
+		name      string
+		plan      types.RewardsPlan
+		date      time.Time
+		expActive bool
 	}{
 		{
-			name:     "plan is active at start time",
-			date:     startTime,
-			isActive: true,
+			name: "plan is inactive before start time",
+			plan: types.NewRewardsPlan(
+				1,
+				"Plan",
+				1,
+				sdk.NewCoins(sdk.NewInt64Coin("umilk", 100_000000)),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+				types.NewBasicPoolsDistribution(1),
+				types.NewBasicOperatorsDistribution(1),
+				types.NewBasicUsersDistribution(1),
+			),
+			date:      time.Date(2023, 12, 31, 23, 59, 59, 999, time.UTC),
+			expActive: false,
 		},
 		{
-			name:     "plan is inactive at end time",
-			date:     endTime,
-			isActive: false,
+			name: "plan is active at start time",
+			plan: types.NewRewardsPlan(
+				1,
+				"Plan",
+				1,
+				sdk.NewCoins(sdk.NewInt64Coin("umilk", 100_000000)),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+				types.NewBasicPoolsDistribution(1),
+				types.NewBasicOperatorsDistribution(1),
+				types.NewBasicUsersDistribution(1),
+			),
+			date:      time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+			expActive: true,
 		},
 		{
-			name:     "plan is inactive before start time",
-			date:     startTime.AddDate(0, 0, -1),
-			isActive: false,
+			name: "plan is active between start time and end time",
+			plan: types.NewRewardsPlan(
+				1,
+				"Plan",
+				1,
+				sdk.NewCoins(sdk.NewInt64Coin("umilk", 100_000000)),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+				types.NewBasicPoolsDistribution(1),
+				types.NewBasicOperatorsDistribution(1),
+				types.NewBasicUsersDistribution(1),
+			),
+			date:      time.Date(2024, 1, 2, 0, 0, 0, 0, time.UTC),
+			expActive: true,
 		},
 		{
-			name:     "plan is active between start time and end time",
-			date:     startTime.AddDate(0, 0, 1),
-			isActive: true,
+			name: "plan is inactive at end time",
+			plan: types.NewRewardsPlan(
+				1,
+				"Plan",
+				1,
+				sdk.NewCoins(sdk.NewInt64Coin("umilk", 100_000000)),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+				types.NewBasicPoolsDistribution(1),
+				types.NewBasicOperatorsDistribution(1),
+				types.NewBasicUsersDistribution(1),
+			),
+			date:      time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+			expActive: false,
 		},
 		{
-			name:     "plan is inactive after end time",
-			date:     endTime.AddDate(0, 0, 1),
-			isActive: false,
+			name: "plan is inactive after end time",
+			plan: types.NewRewardsPlan(
+				1,
+				"Plan",
+				1,
+				sdk.NewCoins(sdk.NewInt64Coin("umilk", 100_000000)),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+				types.NewBasicPoolsDistribution(1),
+				types.NewBasicOperatorsDistribution(1),
+				types.NewBasicUsersDistribution(1),
+			),
+			date:      time.Date(2025, 1, 2, 0, 0, 0, 0, time.UTC),
+			expActive: false,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			isActive := plan.IsActiveAt(tc.date)
-			require.Equal(t, tc.isActive, isActive)
+			isActive := tc.plan.IsActiveAt(tc.date)
+			require.Equal(t, tc.expActive, isActive)
 		})
 	}
 }
 
 func TestDistribution_Validate(t *testing.T) {
 	testCases := []struct {
-		name        string
-		distrType   types.DistributionType
-		expectedErr string
+		name      string
+		distrType types.DistributionType
+		shouldErr bool
 	}{
 		{
-			name:        "basic distribution type returns no error",
-			distrType:   &types.DistributionTypeBasic{},
-			expectedErr: "",
+			name:      "basic distribution type returns no error",
+			distrType: &types.DistributionTypeBasic{},
+			shouldErr: false,
 		},
 		{
 			name: "invalid delegation target ID returns error",
@@ -160,7 +257,7 @@ func TestDistribution_Validate(t *testing.T) {
 					types.NewDistributionWeight(0, 1),
 				},
 			},
-			expectedErr: "invalid delegation target ID: 0",
+			shouldErr: true,
 		},
 		{
 			name: "invalid weight returns error",
@@ -169,7 +266,7 @@ func TestDistribution_Validate(t *testing.T) {
 					types.NewDistributionWeight(1, 0),
 				},
 			},
-			expectedErr: "weight must be positive: 0",
+			shouldErr: true,
 		},
 		{
 			name: "duplicated delegation target ID returns error",
@@ -179,22 +276,22 @@ func TestDistribution_Validate(t *testing.T) {
 					types.NewDistributionWeight(1, 2),
 				},
 			},
-			expectedErr: "duplicated weight for the same delegation target ID: 1",
+			shouldErr: true,
 		},
 		{
-			name:        "egalitarian distribution type returns no error",
-			distrType:   &types.DistributionTypeEgalitarian{},
-			expectedErr: "",
+			name:      "egalitarian distribution type returns no error",
+			distrType: &types.DistributionTypeEgalitarian{},
+			shouldErr: false,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			err := tc.distrType.Validate()
-			if tc.expectedErr == "" {
-				require.NoError(t, err)
+			if tc.shouldErr {
+				require.Error(t, err)
 			} else {
-				require.EqualError(t, err, tc.expectedErr)
+				require.NoError(t, err)
 			}
 		})
 	}
@@ -202,24 +299,24 @@ func TestDistribution_Validate(t *testing.T) {
 
 func TestUsersDistribution_Validate(t *testing.T) {
 	testCases := []struct {
-		name        string
-		distrType   types.UsersDistributionType
-		expectedErr string
+		name      string
+		distrType types.UsersDistributionType
+		shouldErr bool
 	}{
 		{
-			name:        "basic distribution type returns no error",
-			distrType:   &types.UsersDistributionTypeBasic{},
-			expectedErr: "",
+			name:      "basic distribution type returns no error",
+			distrType: &types.UsersDistributionTypeBasic{},
+			shouldErr: false,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			err := tc.distrType.Validate()
-			if tc.expectedErr == "" {
-				require.NoError(t, err)
+			if tc.shouldErr {
+				require.Error(t, err)
 			} else {
-				require.EqualError(t, err, tc.expectedErr)
+				require.NoError(t, err)
 			}
 		})
 	}

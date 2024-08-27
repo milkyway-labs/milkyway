@@ -6,10 +6,12 @@ import (
 	"slices"
 	"time"
 
+	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	gogotypes "github.com/cosmos/gogoproto/types"
 
 	"github.com/milkyway-labs/milkyway/utils"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
@@ -18,6 +20,39 @@ import (
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
+
+// DistributionInfo stores information about a delegation target and its
+// delegation value.
+type DistributionInfo struct {
+	DelegationTarget restakingtypes.DelegationTarget
+	DelegationsValue math.LegacyDec
+}
+
+// GetLastRewardsAllocationTime returns the last time rewards were allocated.
+// If there's no last rewards allocation time set yet, nil is returned.
+func (k *Keeper) GetLastRewardsAllocationTime(ctx context.Context) (*time.Time, error) {
+	ts, err := k.LastRewardsAllocationTime.Get(ctx)
+	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	t, err := gogotypes.TimestampFromProto(&ts)
+	if err != nil {
+		return nil, err
+	}
+	return &t, nil
+}
+
+// SetLastRewardsAllocationTime sets the last time rewards were allocated.
+func (k *Keeper) SetLastRewardsAllocationTime(ctx context.Context, t time.Time) error {
+	ts, err := gogotypes.TimestampProto(t)
+	if err != nil {
+		return err
+	}
+	return k.LastRewardsAllocationTime.Set(ctx, *ts)
+}
 
 // AllocateRewards allocates restaking rewards to different entities based on
 // active rewards plans. AllocateRewards skips rewards distribution when
@@ -45,8 +80,8 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 	// Calculate time elapsed since the last rewards allocation to calculate
 	// rewards amount to allocate in this block.
 	timeSinceLastAllocation := sdkCtx.BlockTime().Sub(*lastAllocationTime)
-	// TODO: clip elapsed time to prevent too much rewards allocation after
-	//       possible chain halt?
+
+	// TODO: clip elapsed time to prevent too much rewards allocation after possible chain halt?
 	if timeSinceLastAllocation == 0 {
 		return nil
 	}
@@ -88,6 +123,7 @@ func (k *Keeper) AllocateRewardsByPlan(
 	// Truncate decimal and move the truncated rewards to the global rewards
 	// pool.
 	rewardsTruncated, _ := rewards.TruncateDecimal()
+
 	// Use this truncated rewards so that we don't allocate more rewards than
 	// what have been moved to the global rewards pool.
 	rewards = sdk.NewDecCoinsFromCoins(rewardsTruncated...)
@@ -121,22 +157,26 @@ func (k *Keeper) AllocateRewardsByPlan(
 	// If an entity's total delegation value is zero, then it won't be included
 	// in this block's rewards allocation.
 	serviceParams := k.restakingKeeper.GetServiceParams(sdkCtx, service.ID)
+
 	eligiblePools := k.getEligiblePools(ctx, service, serviceParams, pools)
-	eligibleOperators := k.getEligibleOperators(ctx, service, serviceParams, operators)
 	poolDistrInfos, totalPoolsDelValues, err := k.getDistrInfos(ctx, eligiblePools)
 	if err != nil {
 		return err
 	}
+
+	eligibleOperators := k.getEligibleOperators(ctx, service, serviceParams, operators)
 	operatorDistrInfos, totalOperatorsDelValues, err := k.getDistrInfos(ctx, eligibleOperators)
 	if err != nil {
 		return err
 	}
+
 	totalUsersDelValues, err := k.GetCoinsValue(ctx, service.Tokens)
 	if err != nil {
 		return err
 	}
 
 	totalDelValues := totalPoolsDelValues.Add(totalOperatorsDelValues).Add(totalUsersDelValues)
+
 	// There's no delegations at all, so just skip.
 	if totalDelValues.IsZero() {
 		return nil
@@ -274,6 +314,10 @@ func (k *Keeper) getDistrInfos(
 	return distrInfos, totalDelValues, nil
 }
 
+// allocateRewards allocates rewards to each delegation target based on the
+// given distribution type. allocateRewards skips rewards allocation if there's
+// no delegation targets specified in the distribution. If the distribution type
+// is unknown, then an error is returned.
 func (k *Keeper) allocateRewards(
 	ctx context.Context, distr types.Distribution, distrInfos []DistributionInfo, rewards sdk.DecCoins,
 ) error {
@@ -281,6 +325,7 @@ func (k *Keeper) allocateRewards(
 	if err != nil {
 		return err
 	}
+
 	switch typ := distrType.(type) {
 	case *types.DistributionTypeBasic:
 		return k.allocateRewardsBasic(ctx, distrInfos, rewards)
@@ -293,6 +338,10 @@ func (k *Keeper) allocateRewards(
 	}
 }
 
+// allocateRewardsBasic allocates rewards to each delegation target based on
+// their delegation values. Each delegation target receives rewards based on
+// the following formula:
+// targetRewards = rewards * targetDelegationsValue / totalDelegationsValue
 func (k *Keeper) allocateRewardsBasic(
 	ctx context.Context, distrInfos []DistributionInfo, rewards sdk.DecCoins,
 ) error {
@@ -310,9 +359,13 @@ func (k *Keeper) allocateRewardsBasic(
 	return nil
 }
 
+// allocateRewardsWeighted allocates rewards to each delegation target based on
+// their delegation values and weights. Each delegation target receives rewards
+// based on the following formula:
+// targetRewards = rewards * weight / totalWeights
 func (k *Keeper) allocateRewardsWeighted(
-	ctx context.Context, distrInfos []DistributionInfo, rewards sdk.DecCoins,
-	weights []types.DistributionWeight) error {
+	ctx context.Context, distrInfos []DistributionInfo, rewards sdk.DecCoins, weights []types.DistributionWeight,
+) error {
 	distrInfoByTargetID := map[uint32]DistributionInfo{}
 	for _, distrInfo := range distrInfos {
 		distrInfoByTargetID[distrInfo.DelegationTarget.GetID()] = distrInfo
@@ -342,6 +395,9 @@ func (k *Keeper) allocateRewardsWeighted(
 	return nil
 }
 
+// allocateRewardsEgalitarian allocates rewards to each delegation target equally.
+// Each delegation target receives rewards based on the following formula:
+// targetRewards = rewards / numTargets
 func (k *Keeper) allocateRewardsEgalitarian(
 	ctx context.Context, distrInfos []DistributionInfo, rewards sdk.DecCoins,
 ) error {
@@ -356,14 +412,22 @@ func (k *Keeper) allocateRewardsEgalitarian(
 	return nil
 }
 
+// allocateRewardsToUsers allocates rewards to users based on the given users
+// distribution. allocateRewardsToUsers skips rewards allocation if there's no
+// users specified in the distribution. If the users distribution type is unknown,
+// then an error is returned.
 func (k *Keeper) allocateRewardsToUsers(
-	ctx context.Context, distr types.UsersDistribution, service servicestypes.Service, totalDelValues math.LegacyDec,
+	ctx context.Context,
+	distr types.UsersDistribution,
+	service servicestypes.Service,
+	totalDelValues math.LegacyDec,
 	rewards sdk.DecCoins,
 ) error {
 	distrType, err := types.GetUsersDistributionType(k.cdc, distr)
 	if err != nil {
 		return err
 	}
+
 	switch distrType.(type) {
 	case *types.UsersDistributionTypeBasic:
 		return k.allocateDelegationTargetRewards(ctx, DistributionInfo{
@@ -375,6 +439,7 @@ func (k *Keeper) allocateRewardsToUsers(
 	}
 }
 
+// allocateDelegationTargetRewards allocates rewards to a specific delegation target.
 func (k *Keeper) allocateDelegationTargetRewards(
 	ctx context.Context, distrInfo DistributionInfo, rewards sdk.DecCoins,
 ) error {
@@ -386,6 +451,7 @@ func (k *Keeper) allocateDelegationTargetRewards(
 		if tokenValue.IsZero() {
 			continue
 		}
+
 		tokenRewards := rewards.MulDecTruncate(tokenValue).QuoDecTruncate(distrInfo.DelegationsValue)
 		err = k.allocateRewardsPool(ctx, distrInfo.DelegationTarget, token.Denom, tokenRewards)
 		if err != nil {
@@ -395,6 +461,7 @@ func (k *Keeper) allocateDelegationTargetRewards(
 	return nil
 }
 
+// allocateRewardsPool allocates rewards to a specific delegation target's rewards pool.
 func (k *Keeper) allocateRewardsPool(
 	ctx context.Context, target restakingtypes.DelegationTarget, denom string, rewards sdk.DecCoins,
 ) error {
@@ -402,9 +469,8 @@ func (k *Keeper) allocateRewardsPool(
 
 	shared := rewards
 	if _, ok := target.(*operatorstypes.Operator); ok {
-		// split tokens between operator and delegators according to commission
-		// TODO: optimize this read operation? we already read operator params in
-		//       getEligibleOperators
+		// Split tokens between operator and delegators according to commission
+		// TODO: optimize this read operation? we already read operator params in getEligibleOperators
 		operatorParams := k.restakingKeeper.GetOperatorParams(sdkCtx, target.GetID())
 		commission := rewards.MulDec(operatorParams.CommissionRate)
 		shared = rewards.Sub(commission)
@@ -430,31 +496,36 @@ func (k *Keeper) allocateRewardsPool(
 		}
 	}
 
+	// Update current rewards
 	currentRewards, err := k.GetCurrentRewards(ctx, target)
 	if err != nil {
 		return err
 	}
+
 	currentRewards.Rewards = currentRewards.Rewards.Add(types.NewDecPool(denom, shared))
 	err = k.SetCurrentRewards(ctx, target, currentRewards)
 	if err != nil {
 		return err
 	}
 
+	// Update the outstanding rewards
 	outstanding, err := k.GetOutstandingRewards(ctx, target)
 	if err != nil {
 		return err
 	}
+
 	outstanding.Rewards = outstanding.Rewards.Add(types.NewDecPool(denom, rewards))
 	err = k.SetOutstandingRewards(ctx, target, outstanding)
 	if err != nil {
 		return err
 	}
 
+	// Emit the event
 	delType, err := types.GetDelegationTargetType(target)
 	if err != nil {
 		return err
 	}
-	// update outstanding rewards
+
 	sdkCtx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeRewards,
@@ -466,9 +537,4 @@ func (k *Keeper) allocateRewardsPool(
 	)
 
 	return nil
-}
-
-type DistributionInfo struct {
-	DelegationTarget restakingtypes.DelegationTarget
-	DelegationsValue math.LegacyDec
 }

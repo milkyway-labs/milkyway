@@ -35,141 +35,185 @@ type KeeperTestSuite struct {
 }
 
 // SetupTest creates a new MilkyWayApp and context for the test.
-func (s *KeeperTestSuite) SetupTest() {
-	s.App = milkywayapp.Setup(false)
-	s.Ctx = s.App.NewContextLegacy(false, cmtproto.Header{
+func (suite *KeeperTestSuite) SetupTest() {
+	suite.App = milkywayapp.Setup(false)
+	suite.Ctx = suite.App.NewContextLegacy(false, cmtproto.Header{
 		Height: 1,
 		Time:   time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 	})
 }
 
 // FundAccount adds the given amount of coins to the account with the given address
-func (s *KeeperTestSuite) FundAccount(addr string, amt sdk.Coins) {
+func (suite *KeeperTestSuite) FundAccount(ctx sdk.Context, addr string, amt sdk.Coins) {
 	// Mint the coins
-	moduleAcc := s.App.AccountKeeper.GetModuleAccount(s.Ctx, authtypes.Minter)
+	moduleAcc := suite.App.AccountKeeper.GetModuleAccount(ctx, authtypes.Minter)
 
-	err := s.App.BankKeeper.MintCoins(s.Ctx, moduleAcc.GetName(), amt)
-	s.Require().NoError(err)
+	err := suite.App.BankKeeper.MintCoins(ctx, moduleAcc.GetName(), amt)
+	suite.Require().NoError(err)
 
-	// Get the amount to the user
+	// Send the amount to the user
 	accAddr, err := sdk.AccAddressFromBech32(addr)
-	s.Require().NoError(err)
-	err = s.App.BankKeeper.SendCoinsFromModuleToAccount(s.Ctx, moduleAcc.GetName(), accAddr, amt)
-	s.Require().NoError(err)
+	suite.Require().NoError(err)
+
+	err = suite.App.BankKeeper.SendCoinsFromModuleToAccount(ctx, moduleAcc.GetName(), accAddr, amt)
+	suite.Require().NoError(err)
 }
 
 // RegisterCurrency registers a currency with the given denomination, ticker
 // and price. RegisterCurrency creates a market for the currency if not exists.
-func (s *KeeperTestSuite) RegisterCurrency(denom, ticker string, exponent uint32, price math.LegacyDec) {
-	// Create market only if it doesn't exist.
+func (suite *KeeperTestSuite) RegisterCurrency(ctx sdk.Context, denom string, ticker string, exponent uint32, price math.LegacyDec) {
+	// Create the market only if it doesn't exist.
 	mmTicker := marketmaptypes.NewTicker(ticker, rewardstypes.USDTicker, math.LegacyPrecision, 0, true)
-	hasMarket, err := s.App.MarketMapKeeper.HasMarket(s.Ctx, mmTicker.String())
-	s.Require().NoError(err)
+	hasMarket, err := suite.App.MarketMapKeeper.HasMarket(ctx, mmTicker.String())
+	suite.Require().NoError(err)
+
 	if !hasMarket {
-		err = s.App.MarketMapKeeper.CreateMarket(s.Ctx, marketmaptypes.Market{Ticker: mmTicker})
-		s.Require().NoError(err)
+		err = suite.App.MarketMapKeeper.CreateMarket(ctx, marketmaptypes.Market{Ticker: mmTicker})
+		suite.Require().NoError(err)
 	}
-	err = s.App.OracleKeeper.SetPriceForCurrencyPair(
-		s.Ctx, slinkytypes.NewCurrencyPair(ticker, rewardstypes.USDTicker),
+
+	// Set the price for the currency pair.
+	err = suite.App.OracleKeeper.SetPriceForCurrencyPair(
+		ctx,
+		slinkytypes.NewCurrencyPair(ticker, rewardstypes.USDTicker),
 		oracletypes.QuotePrice{
 			Price:          math.NewIntFromBigInt(price.BigInt()),
-			BlockTimestamp: s.Ctx.BlockTime(),
-			BlockHeight:    uint64(s.Ctx.BlockHeight()),
-		})
-	s.Require().NoError(err)
-	err = s.App.AssetsKeeper.SetAsset(s.Ctx, assetstypes.NewAsset(denom, ticker, exponent))
-	s.Require().NoError(err)
+			BlockTimestamp: ctx.BlockTime(),
+			BlockHeight:    uint64(ctx.BlockHeight()),
+		},
+	)
+	suite.Require().NoError(err)
+
+	// Register the currency.
+	err = suite.App.AssetsKeeper.SetAsset(ctx, assetstypes.NewAsset(denom, ticker, exponent))
+	suite.Require().NoError(err)
 }
 
 // CreateService creates an example service with the given service name and
 // admin address. The service description and URLs related to the service are
 // randomly chosen. The service is also activated.
-func (s *KeeperTestSuite) CreateService(name, admin string) servicestypes.Service {
-	servicesMsgServer := serviceskeeper.NewMsgServer(s.App.ServicesKeeper)
-	resp, err := servicesMsgServer.CreateService(s.Ctx, servicestypes.NewMsgCreateService(
+func (suite *KeeperTestSuite) CreateService(ctx sdk.Context, name string, admin string) servicestypes.Service {
+	servicesMsgServer := serviceskeeper.NewMsgServer(suite.App.ServicesKeeper)
+	resp, err := servicesMsgServer.CreateService(ctx, servicestypes.NewMsgCreateService(
 		name,
 		fmt.Sprintf("%s AVS", name),
 		"https://example.com",
 		"https://example.com/picture.png",
 		admin,
 	))
-	s.Require().NoError(err)
+	suite.Require().NoError(err)
+
 	// Also activate the service.
-	_, err = servicesMsgServer.ActivateService(s.Ctx, servicestypes.NewMsgActivateService(resp.NewServiceID, admin))
-	s.Require().NoError(err)
-	service, found := s.App.ServicesKeeper.GetService(s.Ctx, resp.NewServiceID)
-	s.Require().True(found, "service must be found")
+	_, err = servicesMsgServer.ActivateService(ctx, servicestypes.NewMsgActivateService(resp.NewServiceID, admin))
+	suite.Require().NoError(err)
+
+	service, found := suite.App.ServicesKeeper.GetService(ctx, resp.NewServiceID)
+	suite.Require().True(found, "service must be found")
 	return service
 }
 
 // CreateOperator creates an example operator with the given operator name and
 // admin address. The operator description and URLs related to the operator are
 // randomly chosen.
-func (s *KeeperTestSuite) CreateOperator(name, admin string) operatorstypes.Operator {
-	operatorsMsgServer := operatorskeeper.NewMsgServer(s.App.OperatorsKeeper)
-	resp, err := operatorsMsgServer.RegisterOperator(s.Ctx, operatorstypes.NewMsgRegisterOperator(
+func (suite *KeeperTestSuite) CreateOperator(ctx sdk.Context, name string, admin string) operatorstypes.Operator {
+	// Register the operator
+	operatorsMsgServer := operatorskeeper.NewMsgServer(suite.App.OperatorsKeeper)
+	resp, err := operatorsMsgServer.RegisterOperator(ctx, operatorstypes.NewMsgRegisterOperator(
 		name,
 		"https://example.com",
 		"https://example.com/picture.png",
 		admin,
 	))
-	s.Require().NoError(err)
-	operator, found := s.App.OperatorsKeeper.GetOperator(s.Ctx, resp.NewOperatorID)
-	s.Require().True(found, "operator must be found")
+	suite.Require().NoError(err)
+
+	// Make sure the operator is found
+	operator, found := suite.App.OperatorsKeeper.GetOperator(ctx, resp.NewOperatorID)
+	suite.Require().True(found, "operator must be found")
 	return operator
 }
 
 // UpdateOperatorParams updates the operator's params.
-func (s *KeeperTestSuite) UpdateOperatorParams(
-	operatorID uint32, commissionRate math.LegacyDec, joinedServicesIDs []uint32) {
-	operator, found := s.App.OperatorsKeeper.GetOperator(s.Ctx, operatorID)
-	s.Require().True(found, "operator must be found")
+func (suite *KeeperTestSuite) UpdateOperatorParams(
+	ctx sdk.Context,
+	operatorID uint32,
+	commissionRate math.LegacyDec,
+	joinedServicesIDs []uint32,
+) {
+	// Make sure the operator is found
+	operator, found := suite.App.OperatorsKeeper.GetOperator(ctx, operatorID)
+	suite.Require().True(found, "operator must be found")
+
 	// Make the operator join the service and set its commission rate to 10%.
-	restakingMsgServer := restakingkeeper.NewMsgServer(s.App.RestakingKeeper)
-	_, err := restakingMsgServer.UpdateOperatorParams(
-		s.Ctx, restakingtypes.NewMsgUpdateOperatorParams(
-			operator.ID,
-			restakingtypes.NewOperatorParams(commissionRate, joinedServicesIDs),
-			operator.Admin))
-	s.Require().NoError(err)
+	restakingMsgServer := restakingkeeper.NewMsgServer(suite.App.RestakingKeeper)
+	_, err := restakingMsgServer.UpdateOperatorParams(ctx, restakingtypes.NewMsgUpdateOperatorParams(
+		operator.ID,
+		restakingtypes.NewOperatorParams(commissionRate, joinedServicesIDs),
+		operator.Admin,
+	))
+	suite.Require().NoError(err)
 }
 
 // UpdateServiceParams updates the service's params.
-func (s *KeeperTestSuite) UpdateServiceParams(
-	serviceID uint32, slashFraction math.LegacyDec, whitelistedPoolsIDs, whitelistedOperatorsIDs []uint32) {
-	service, found := s.App.ServicesKeeper.GetService(s.Ctx, serviceID)
-	s.Require().True(found, "service must be found")
+func (suite *KeeperTestSuite) UpdateServiceParams(
+	ctx sdk.Context,
+	serviceID uint32,
+	slashFraction math.LegacyDec,
+	whitelistedPoolsIDs []uint32,
+	whitelistedOperatorsIDs []uint32,
+) {
+	// Make sure the service is found
+	service, found := suite.App.ServicesKeeper.GetService(ctx, serviceID)
+	suite.Require().True(found, "service must be found")
+
 	// Make the operator join the service and set its commission rate to 10%.
-	restakingMsgServer := restakingkeeper.NewMsgServer(s.App.RestakingKeeper)
-	_, err := restakingMsgServer.UpdateServiceParams(
-		s.Ctx, restakingtypes.NewMsgUpdateServiceParams(
-			service.ID,
-			restakingtypes.NewServiceParams(slashFraction, whitelistedPoolsIDs, whitelistedOperatorsIDs),
-			service.Admin))
-	s.Require().NoError(err)
+	restakingMsgServer := restakingkeeper.NewMsgServer(suite.App.RestakingKeeper)
+	_, err := restakingMsgServer.UpdateServiceParams(ctx, restakingtypes.NewMsgUpdateServiceParams(
+		service.ID,
+		restakingtypes.NewServiceParams(slashFraction, whitelistedPoolsIDs, whitelistedOperatorsIDs),
+		service.Admin,
+	))
+	suite.Require().NoError(err)
 }
 
 // CreateRewardsPlan creates a rewards plan with the given parameters.
 // The plan's name is chosen randomly. The plan is also funded with the given
 // initial rewards.
-func (s *KeeperTestSuite) CreateRewardsPlan(
-	serviceID uint32, amtPerDay sdk.Coins, startTime, endTime time.Time,
-	poolsDistr rewardstypes.Distribution, operatorsDistr rewardstypes.Distribution,
-	usersDistr rewardstypes.UsersDistribution, initialRewards sdk.Coins,
+func (suite *KeeperTestSuite) CreateRewardsPlan(
+	ctx sdk.Context,
+	serviceID uint32,
+	amtPerDay sdk.Coins,
+	startTime time.Time,
+	endTime time.Time,
+	poolsDistr rewardstypes.Distribution,
+	operatorsDistr rewardstypes.Distribution,
+	usersDistr rewardstypes.UsersDistribution,
+	initialRewards sdk.Coins,
 ) rewardstypes.RewardsPlan {
-	service, found := s.App.ServicesKeeper.GetService(s.Ctx, serviceID)
-	s.Require().True(found, "service must be found")
-	rewardsMsgServer := rewardskeeper.NewMsgServer(s.App.RewardsKeeper)
-	resp, err := rewardsMsgServer.CreateRewardsPlan(s.Ctx, rewardstypes.NewMsgCreateRewardsPlan(
-		service.Admin, "Rewards Plan", serviceID, amtPerDay, startTime, endTime,
-		poolsDistr, operatorsDistr, usersDistr))
-	s.Require().NoError(err)
+	service, found := suite.App.ServicesKeeper.GetService(ctx, serviceID)
+	suite.Require().True(found, "service must be found")
+
+	rewardsMsgServer := rewardskeeper.NewMsgServer(suite.App.RewardsKeeper)
+	resp, err := rewardsMsgServer.CreateRewardsPlan(ctx, rewardstypes.NewMsgCreateRewardsPlan(
+		serviceID,
+		"Rewards Plan",
+		amtPerDay,
+		startTime,
+		endTime,
+		poolsDistr,
+		operatorsDistr,
+		usersDistr,
+		service.Admin,
+	))
+	suite.Require().NoError(err)
+
 	// Return the newly created plan.
-	plan, err := s.App.RewardsKeeper.GetRewardsPlan(s.Ctx, resp.NewRewardsPlanID)
-	s.Require().NoError(err)
+	plan, err := suite.App.RewardsKeeper.GetRewardsPlan(ctx, resp.NewRewardsPlanID)
+	suite.Require().NoError(err)
+
 	if initialRewards.IsAllPositive() {
-		s.FundAccount(plan.RewardsPool, initialRewards)
+		suite.FundAccount(ctx, plan.RewardsPool, initialRewards)
 	}
+
 	return plan
 }
 
@@ -177,45 +221,79 @@ func (s *KeeperTestSuite) CreateRewardsPlan(
 // all restaking entities. Weights among the entities are set to 0, which means
 // that the rewards are distributed based on the total delegation values among
 // all entities.
-func (s *KeeperTestSuite) CreateBasicRewardsPlan(
-	serviceID uint32, amtPerDay sdk.Coins, startTime, endTime time.Time, initialRewards sdk.Coins,
+func (suite *KeeperTestSuite) CreateBasicRewardsPlan(
+	ctx sdk.Context,
+	serviceID uint32,
+	amtPerDay sdk.Coins,
+	startTime,
+	endTime time.Time,
+	initialRewards sdk.Coins,
 ) rewardstypes.RewardsPlan {
-	return s.CreateRewardsPlan(
-		serviceID, amtPerDay, startTime, endTime,
-		rewardstypes.NewBasicPoolsDistribution(0), rewardstypes.NewBasicOperatorsDistribution(0), rewardstypes.NewBasicUsersDistribution(0),
-		initialRewards)
+	return suite.CreateRewardsPlan(
+		ctx,
+		serviceID,
+		amtPerDay,
+		startTime,
+		endTime,
+		rewardstypes.NewBasicPoolsDistribution(0),
+		rewardstypes.NewBasicOperatorsDistribution(0),
+		rewardstypes.NewBasicUsersDistribution(0),
+		initialRewards,
+	)
 }
 
 // DelegateOperator delegates the given amount of coins to the operator. If fund
 // is true, the delegator's account is funded with the given amount of coins.
-func (s *KeeperTestSuite) DelegateOperator(operatorID uint32, amt sdk.Coins, delegator string, fund bool) {
+func (suite *KeeperTestSuite) DelegateOperator(
+	ctx sdk.Context,
+	operatorID uint32,
+	amt sdk.Coins,
+	delegator string,
+	fund bool,
+) {
+	// Fund the delegator's account if needed.
 	if fund {
-		s.FundAccount(delegator, amt)
+		suite.FundAccount(ctx, delegator, amt)
 	}
-	restakingMsgServer := restakingkeeper.NewMsgServer(s.App.RestakingKeeper)
-	_, err := restakingMsgServer.DelegateOperator(
-		s.Ctx, restakingtypes.NewMsgDelegateOperator(operatorID, amt, delegator))
-	s.Require().NoError(err)
+
+	// Delegate the coins to the operator.
+	restakingMsgServer := restakingkeeper.NewMsgServer(suite.App.RestakingKeeper)
+	_, err := restakingMsgServer.DelegateOperator(ctx, restakingtypes.NewMsgDelegateOperator(
+		operatorID,
+		amt,
+		delegator,
+	))
+	suite.Require().NoError(err)
 }
 
 // DelegateService delegates the given amount of coins to the service. If fund
 // is true, the delegator's account is funded with the given amount of coins.
-func (s *KeeperTestSuite) DelegateService(serviceID uint32, amt sdk.Coins, delegator string, fund bool) {
+func (suite *KeeperTestSuite) DelegateService(ctx sdk.Context, serviceID uint32, amt sdk.Coins, delegator string, fund bool) {
+	// Fund the delegator's account if needed.
 	if fund {
-		s.FundAccount(delegator, amt)
+		suite.FundAccount(ctx, delegator, amt)
 	}
-	restakingMsgServer := restakingkeeper.NewMsgServer(s.App.RestakingKeeper)
-	_, err := restakingMsgServer.DelegateService(s.Ctx, restakingtypes.NewMsgDelegateService(serviceID, amt, delegator))
-	s.Require().NoError(err)
+
+	// Delegate the coins to the service.
+	restakingMsgServer := restakingkeeper.NewMsgServer(suite.App.RestakingKeeper)
+	_, err := restakingMsgServer.DelegateService(ctx, restakingtypes.NewMsgDelegateService(
+		serviceID,
+		amt,
+		delegator,
+	))
+	suite.Require().NoError(err)
 }
 
 // DelegatePool delegates the given amount of coins to the pool. If fund is
 // true, the delegator's account is funded with the given amount of coins.
-func (s *KeeperTestSuite) DelegatePool(amt sdk.Coin, delegator string, fund bool) {
+func (suite *KeeperTestSuite) DelegatePool(ctx sdk.Context, amt sdk.Coin, delegator string, fund bool) {
+	// Fund the delegator's account if needed.
 	if fund {
-		s.FundAccount(delegator, sdk.NewCoins(amt))
+		suite.FundAccount(ctx, delegator, sdk.NewCoins(amt))
 	}
-	restakingMsgServer := restakingkeeper.NewMsgServer(s.App.RestakingKeeper)
-	_, err := restakingMsgServer.DelegatePool(s.Ctx, restakingtypes.NewMsgDelegatePool(amt, delegator))
-	s.Require().NoError(err)
+
+	// Delegate the coins to the pool.
+	restakingMsgServer := restakingkeeper.NewMsgServer(suite.App.RestakingKeeper)
+	_, err := restakingMsgServer.DelegatePool(ctx, restakingtypes.NewMsgDelegatePool(amt, delegator))
+	suite.Require().NoError(err)
 }
