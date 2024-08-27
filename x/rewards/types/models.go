@@ -13,6 +13,7 @@ import (
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
+// MaxRewardsPlanDescriptionLength is the maximum length of a rewards plan description.
 const MaxRewardsPlanDescriptionLength = 1000
 
 var (
@@ -30,10 +31,18 @@ func GetRewardsPoolAddress(planID uint64) sdk.AccAddress {
 	return address.Module(ModuleName, []byte(fmt.Sprintf("rewards-plan-%d", planID)))
 }
 
+// NewRewardsPlan creates a new rewards plan.
 func NewRewardsPlan(
-	id uint64, description string, serviceID uint32, amtPerDay sdk.Coins, startTime, endTime time.Time,
-	poolsDistribution Distribution, operatorsDistribution Distribution,
-	usersDistribution UsersDistribution) RewardsPlan {
+	id uint64,
+	description string,
+	serviceID uint32,
+	amtPerDay sdk.Coins,
+	startTime,
+	endTime time.Time,
+	poolsDistribution Distribution,
+	operatorsDistribution Distribution,
+	usersDistribution UsersDistribution,
+) RewardsPlan {
 	return RewardsPlan{
 		ID:                    id,
 		Description:           description,
@@ -48,10 +57,12 @@ func NewRewardsPlan(
 	}
 }
 
+// IsActiveAt returns true if the plan is active at the given time.
 func (plan RewardsPlan) IsActiveAt(t time.Time) bool {
 	return !plan.StartTime.After(t) && plan.EndTime.After(t)
 }
 
+// MustGetRewardsPoolAddress returns the rewards pool address.
 func (plan RewardsPlan) MustGetRewardsPoolAddress() sdk.AccAddress {
 	addr, err := sdk.AccAddressFromBech32(plan.RewardsPool)
 	if err != nil {
@@ -60,35 +71,47 @@ func (plan RewardsPlan) MustGetRewardsPoolAddress() sdk.AccAddress {
 	return addr
 }
 
+// Validate checks the plan for validity.
 func (plan RewardsPlan) Validate(unpacker codectypes.AnyUnpacker) error {
 	if plan.ID == 0 {
 		return fmt.Errorf("invalid plan ID: %d", plan.ID)
 	}
+
 	if len(plan.Description) > MaxRewardsPlanDescriptionLength {
 		return fmt.Errorf("too long description")
 	}
+
 	if plan.ServiceID == 0 {
 		return fmt.Errorf("invalid service ID: %d", plan.ServiceID)
 	}
-	if err := plan.AmountPerDay.Validate(); err != nil {
+
+	err := plan.AmountPerDay.Validate()
+	if err != nil {
 		return fmt.Errorf("invalid amount per day: %w", err)
 	}
+
 	if !plan.EndTime.After(plan.StartTime) {
 		return fmt.Errorf(
 			"end time must be after start time: %s <= %s",
-			plan.EndTime.Format(time.RFC3339), plan.StartTime.Format(time.RFC3339))
+			plan.EndTime.Format(time.RFC3339),
+			plan.StartTime.Format(time.RFC3339),
+		)
 	}
-	if _, err := sdk.AccAddressFromBech32(plan.RewardsPool); err != nil {
+
+	_, err = sdk.AccAddressFromBech32(plan.RewardsPool)
+	if err != nil {
 		return fmt.Errorf("invalid rewards pool: %w", err)
 	}
 
 	if plan.PoolsDistribution.DelegationType != restakingtypes.DELEGATION_TYPE_POOL {
 		return fmt.Errorf("pools distribution has invalid delegation type: %v", plan.PoolsDistribution.DelegationType)
 	}
+
 	poolsDistrType, err := GetDistributionType(unpacker, plan.PoolsDistribution)
 	if err != nil {
 		return fmt.Errorf("get pools distribution type: %w", err)
 	}
+
 	err = poolsDistrType.Validate()
 	if err != nil {
 		return fmt.Errorf("invalid pools distribution type: %w", err)
@@ -97,10 +120,12 @@ func (plan RewardsPlan) Validate(unpacker codectypes.AnyUnpacker) error {
 	if plan.OperatorsDistribution.DelegationType != restakingtypes.DELEGATION_TYPE_OPERATOR {
 		return fmt.Errorf("operators distribution has invalid delegation type: %v", plan.OperatorsDistribution.DelegationType)
 	}
+
 	operatorsDistrType, err := GetDistributionType(unpacker, plan.OperatorsDistribution)
 	if err != nil {
 		return fmt.Errorf("get operators distribution type: %w", err)
 	}
+
 	err = operatorsDistrType.Validate()
 	if err != nil {
 		return fmt.Errorf("invalid operators distribution type: %w", err)
@@ -110,6 +135,7 @@ func (plan RewardsPlan) Validate(unpacker codectypes.AnyUnpacker) error {
 	if err != nil {
 		return fmt.Errorf("get users distribution type: %w", err)
 	}
+
 	err = usersDistrType.Validate()
 	if err != nil {
 		return fmt.Errorf("invalid users distribution type: %w", err)
@@ -118,12 +144,16 @@ func (plan RewardsPlan) Validate(unpacker codectypes.AnyUnpacker) error {
 	return nil
 }
 
+// --------------------------------------------------------------------------------------------------------------------
+
+// DistributionType represents a generic distribution type
 type DistributionType interface {
 	proto.Message
 	isDistributionType()
 	Validate() error
 }
 
+// GetDistributionType returns the distribution type from the distribution
 func GetDistributionType(unpacker codectypes.AnyUnpacker, distr Distribution) (DistributionType, error) {
 	var distrType DistributionType
 	err := unpacker.UnpackAny(distr.Type, &distrType)
@@ -133,6 +163,17 @@ func GetDistributionType(unpacker codectypes.AnyUnpacker, distr Distribution) (D
 	return distrType, nil
 }
 
+// NewDistributionWeight creates a new distribution weight
+func NewDistributionWeight(targetID, weight uint32) DistributionWeight {
+	return DistributionWeight{
+		DelegationTargetID: targetID,
+		Weight:             weight,
+	}
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// newBasicDistribution creates a new basic distribution
 func newBasicDistribution(delType restakingtypes.DelegationType, weight uint32) Distribution {
 	a, err := codectypes.NewAnyWithValue(&DistributionTypeBasic{})
 	if err != nil {
@@ -145,18 +186,27 @@ func newBasicDistribution(delType restakingtypes.DelegationType, weight uint32) 
 	}
 }
 
+// NewBasicPoolsDistribution creates a new basic pools distribution
 func NewBasicPoolsDistribution(weight uint32) Distribution {
 	return newBasicDistribution(restakingtypes.DELEGATION_TYPE_POOL, weight)
 }
 
+// NewBasicOperatorsDistribution creates a new basic operators distribution
 func NewBasicOperatorsDistribution(weight uint32) Distribution {
 	return newBasicDistribution(restakingtypes.DELEGATION_TYPE_OPERATOR, weight)
 }
 
+// Validate checks the distribution for validity
 func (t DistributionTypeBasic) Validate() error {
 	return nil
 }
 
+// isDistributionType is a marker function
+func (t DistributionTypeBasic) isDistributionType() {}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// newWeightedDistribution creates a new weighted distribution
 func newWeightedDistribution(delType restakingtypes.DelegationType, weight uint32, weights []DistributionWeight) Distribution {
 	a, err := codectypes.NewAnyWithValue(&DistributionTypeWeighted{Weights: weights})
 	if err != nil {
@@ -169,14 +219,17 @@ func newWeightedDistribution(delType restakingtypes.DelegationType, weight uint3
 	}
 }
 
+// NewWeightedPoolsDistribution creates a new weighted pools distribution
 func NewWeightedPoolsDistribution(weight uint32, weights []DistributionWeight) Distribution {
 	return newWeightedDistribution(restakingtypes.DELEGATION_TYPE_POOL, weight, weights)
 }
 
+// NewWeightedOperatorsDistribution creates a new weighted operators distribution
 func NewWeightedOperatorsDistribution(weight uint32, weights []DistributionWeight) Distribution {
 	return newWeightedDistribution(restakingtypes.DELEGATION_TYPE_OPERATOR, weight, weights)
 }
 
+// Validate checks the distribution for validity
 func (t DistributionTypeWeighted) Validate() error {
 	duplicate := utils.FindDuplicateFunc(t.Weights, func(a, b DistributionWeight) bool {
 		return a.DelegationTargetID == b.DelegationTargetID
@@ -196,13 +249,12 @@ func (t DistributionTypeWeighted) Validate() error {
 	return nil
 }
 
-func NewDistributionWeight(targetID, weight uint32) DistributionWeight {
-	return DistributionWeight{
-		DelegationTargetID: targetID,
-		Weight:             weight,
-	}
-}
+// isDistributionType is a marker function
+func (t DistributionTypeWeighted) isDistributionType() {}
 
+// --------------------------------------------------------------------------------------------------------------------
+
+// newEgalitarianDistribution creates a new egalitarian distribution
 func newEgalitarianDistribution(delType restakingtypes.DelegationType, weight uint32) Distribution {
 	a, err := codectypes.NewAnyWithValue(&DistributionTypeEgalitarian{})
 	if err != nil {
@@ -215,30 +267,34 @@ func newEgalitarianDistribution(delType restakingtypes.DelegationType, weight ui
 	}
 }
 
+// NewEgalitarianPoolsDistribution creates a new egalitarian pools distribution
 func NewEgalitarianPoolsDistribution(weight uint32) Distribution {
 	return newEgalitarianDistribution(restakingtypes.DELEGATION_TYPE_POOL, weight)
 }
 
+// NewEgalitarianOperatorsDistribution creates a new egalitarian operators distribution
 func NewEgalitarianOperatorsDistribution(weight uint32) Distribution {
 	return newEgalitarianDistribution(restakingtypes.DELEGATION_TYPE_OPERATOR, weight)
 }
 
+// Validate checks the distribution for validity
 func (t DistributionTypeEgalitarian) Validate() error {
 	return nil
 }
 
-func (t DistributionTypeBasic) isDistributionType() {}
-
-func (t DistributionTypeWeighted) isDistributionType() {}
-
+// isDistributionType is a marker function
 func (t DistributionTypeEgalitarian) isDistributionType() {}
 
+// --------------------------------------------------------------------------------------------------------------------
+
+// UsersDistributionType represents a generic users distribution type
 type UsersDistributionType interface {
 	proto.Message
 	isUsersDistributionType()
 	Validate() error
 }
 
+// GetUsersDistributionType returns the users distribution type from the distribution
 func GetUsersDistributionType(unpacker codectypes.AnyUnpacker, distr UsersDistribution) (UsersDistributionType, error) {
 	var distrType UsersDistributionType
 	err := unpacker.UnpackAny(distr.Type, &distrType)
@@ -248,6 +304,7 @@ func GetUsersDistributionType(unpacker codectypes.AnyUnpacker, distr UsersDistri
 	return distrType, nil
 }
 
+// NewBasicUsersDistribution creates a new basic users distribution
 func NewBasicUsersDistribution(weight uint32) UsersDistribution {
 	a, err := codectypes.NewAnyWithValue(&UsersDistributionTypeBasic{})
 	if err != nil {
@@ -259,17 +316,22 @@ func NewBasicUsersDistribution(weight uint32) UsersDistribution {
 	}
 }
 
+// Validate checks the users distribution for validity
 func (t UsersDistributionTypeBasic) Validate() error {
 	return nil
 }
 
+// isUsersDistributionType is a marker function
 func (t UsersDistributionTypeBasic) isUsersDistributionType() {}
 
-// return the initial accumulated commission (zero)
+// --------------------------------------------------------------------------------------------------------------------
+
+// InitialAccumulatedCommission returns the initial accumulated commission (zero)
 func InitialAccumulatedCommission() AccumulatedCommission {
 	return AccumulatedCommission{}
 }
 
+// NewHistoricalRewards creates a new historical rewards
 func NewHistoricalRewards(cumulativeRewardRatios DecPools, referenceCount uint32) HistoricalRewards {
 	return HistoricalRewards{
 		CumulativeRewardRatios: cumulativeRewardRatios,
@@ -277,6 +339,7 @@ func NewHistoricalRewards(cumulativeRewardRatios DecPools, referenceCount uint32
 	}
 }
 
+// NewCurrentRewards creates a new current rewards
 func NewCurrentRewards(rewards DecPools, period uint64) CurrentRewards {
 	return CurrentRewards{
 		Rewards: rewards,
@@ -284,7 +347,7 @@ func NewCurrentRewards(rewards DecPools, period uint64) CurrentRewards {
 	}
 }
 
-// create a new DelegatorStartingInfo
+// NewDelegatorStartingInfo creates a new delegator starting info
 func NewDelegatorStartingInfo(previousPeriod uint64, stakes sdk.DecCoins, height uint64) DelegatorStartingInfo {
 	return DelegatorStartingInfo{
 		PreviousPeriod: previousPeriod,
@@ -293,7 +356,7 @@ func NewDelegatorStartingInfo(previousPeriod uint64, stakes sdk.DecCoins, height
 	}
 }
 
-// create a new DelegationDelegatorReward
+// NewDelegationDelegatorReward creates a new delegation delegator reward
 func NewDelegationDelegatorReward(
 	delType restakingtypes.DelegationType, targetID uint32, rewards DecPools) DelegationDelegatorReward {
 	return DelegationDelegatorReward{
