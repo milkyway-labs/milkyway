@@ -129,9 +129,8 @@ func (k msgServer) WithdrawDelegatorReward(ctx context.Context, msg *types.MsgWi
 	if err != nil {
 		return nil, err
 	}
-	amount := rewards.Sum()
 
-	return &types.MsgWithdrawDelegatorRewardResponse{Amount: amount}, nil
+	return &types.MsgWithdrawDelegatorRewardResponse{Amount: rewards.Sum()}, nil
 }
 
 func (k msgServer) WithdrawOperatorCommission(ctx context.Context, msg *types.MsgWithdrawOperatorCommission) (*types.MsgWithdrawOperatorCommissionResponse, error) {
@@ -156,10 +155,7 @@ func (k msgServer) WithdrawOperatorCommission(ctx context.Context, msg *types.Ms
 		return nil, err
 	}
 
-	amount := commissions.Sum()
-	// TODO: telemetry?
-
-	return &types.MsgWithdrawOperatorCommissionResponse{Amount: amount}, nil
+	return &types.MsgWithdrawOperatorCommissionResponse{Amount: commissions.Sum()}, nil
 }
 
 // UpdateParams defines the rpc method for Msg/UpdateParams
