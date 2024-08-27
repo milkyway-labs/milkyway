@@ -9,7 +9,7 @@
 [![Codecov](https://codecov.io/gh/milkyway-labs/milkyway/branch/main/graph/badge.svg)](https://codecov.io/gh/milkyway-labs/milkyway/branch/main)
 [![Tests status](https://github.com/milkyway-labs/milkyway/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/milkyway-labs/milkyway/actions/workflows/test.yml?query=branch%3Amain+)
 [![Lint status](https://github.com/milkyway-labs/milkyway/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/milkyway-labs/milkyway/actions/workflows/lint.yml?query=branch%3Amain+)
-[![Discord](https://img.shields.io/discord/653856306553159696)](https://discord.com/invite/4ywmNE3tqq)
+[![Discord](https://img.shields.io/discord/1166634853576482876)](https://discord.com/invite/4ywmNE3tqq)
 
 ## Introduction
 MilkyWay is a restaking protocol built as an _optimistic rollup_ on top of [Initia](https://initia.xyz/).
