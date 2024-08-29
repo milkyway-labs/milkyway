@@ -344,6 +344,24 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 			shouldErr: true,
 		},
 		{
+			name: "already inactive operator returns error",
+			store: func(ctx sdk.Context) {
+				suite.k.SaveOperator(ctx, types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_INACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+			},
+			msg: types.NewMsgDeactivateOperator(
+				1,
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			shouldErr: true,
+		},
+		{
 			name: "operator inactivation started successfully",
 			setupCtx: func(ctx sdk.Context) sdk.Context {
 				return ctx.WithBlockTime(time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC))
