@@ -43,8 +43,11 @@ func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 			shouldErr: true,
 		},
 		{
-			name: "service is created and fee is charged",
+			name: "sender different from admin returns error",
 			store: func(ctx sdk.Context) {
+				// Create a service
+				_, _ = suite.setupSampleServiceAndOperator(ctx)
+
 				// Create a service
 				_, _ = suite.setupSampleServiceAndOperator(ctx)
 
@@ -74,6 +77,40 @@ func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 				types.NewBasicUsersDistribution(0),
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 			),
+			shouldErr: true,
+		},
+		{
+			name: "service is created and fee is charged",
+			store: func(ctx sdk.Context) {
+				// Create a service
+				_, _ = suite.setupSampleServiceAndOperator(ctx)
+
+				// Change rewards plan creation fee to 100 $MILK.
+				params, err := suite.keeper.Params.Get(ctx)
+				suite.Require().NoError(err)
+
+				params.RewardsPlanCreationFee = utils.MustParseCoins("100_000000umilk")
+				err = suite.keeper.Params.Set(ctx, params)
+				suite.Require().NoError(err)
+
+				// Set the next plan id
+				err = suite.keeper.NextRewardsPlanID.Set(ctx, 1)
+				suite.Require().NoError(err)
+
+				// Fund the sender account enough coins to pay the fee.
+				suite.FundAccount(ctx, testutil.TestAddress(10000).String(), utils.MustParseCoins("500_000000umilk"))
+			},
+			msg: types.NewMsgCreateRewardsPlan(
+				1,
+				"Rewards Plan",
+				utils.MustParseCoins("100_000000service"),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+				types.NewBasicPoolsDistribution(0),
+				types.NewBasicOperatorsDistribution(0),
+				types.NewBasicUsersDistribution(0),
+				testutil.TestAddress(10000).String(),
+			),
 			expResponse: &types.MsgCreateRewardsPlanResponse{
 				NewRewardsPlanID: 1,
 			},
@@ -96,7 +133,7 @@ func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 				suite.Require().NoError(err)
 
 				// Make sure the balance is decreased by amount of the fee
-				senderAddr, err := sdk.AccAddressFromBech32("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd")
+				senderAddr, err := sdk.AccAddressFromBech32(testutil.TestAddress(10000).String())
 				suite.Require().NoError(err)
 
 				balances := suite.App.BankKeeper.GetAllBalances(ctx, senderAddr)

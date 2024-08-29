@@ -28,6 +28,32 @@ func NewMsgServer(k *Keeper) types.MsgServer {
 func (k msgServer) CreateRewardsPlan(goCtx context.Context, msg *types.MsgCreateRewardsPlan) (*types.MsgCreateRewardsPlanResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	// Make sure the creator is the admin of the service
+	service, found := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	if !found {
+		return nil, servicestypes.ErrServiceNotFound
+	}
+
+	if msg.Sender != service.Admin {
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only service admin can create rewards plan")
+	}
+
+	// Create the plan
+	plan, err := k.Keeper.CreateRewardsPlan(
+		ctx,
+		msg.Description,
+		msg.ServiceID,
+		msg.Amount,
+		msg.StartTime,
+		msg.EndTime,
+		msg.PoolsDistribution,
+		msg.OperatorsDistribution,
+		msg.UsersDistribution,
+	)
+	if err != nil {
+		return nil, err
+	}
+
 	// Charge fee for rewards plan creation. Fee is charged only in msg server and
 	// not when calling the keeper's method directly. This gives freedom to other
 	// modules to call the keeper's method directly without charging the fee.
@@ -47,21 +73,6 @@ func (k msgServer) CreateRewardsPlan(goCtx context.Context, msg *types.MsgCreate
 		if err != nil {
 			return nil, err
 		}
-	}
-
-	plan, err := k.Keeper.CreateRewardsPlan(
-		ctx,
-		msg.Description,
-		msg.ServiceID,
-		msg.Amount,
-		msg.StartTime,
-		msg.EndTime,
-		msg.PoolsDistribution,
-		msg.OperatorsDistribution,
-		msg.UsersDistribution,
-	)
-	if err != nil {
-		return nil, err
 	}
 
 	ctx.EventManager().EmitEvents(sdk.Events{
