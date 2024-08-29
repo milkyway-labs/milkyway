@@ -36,9 +36,11 @@ const (
 //
 // Msg defines the restaking module's gRPC message service.
 type MsgClient interface {
-	// UpdateOperatorParams defines the operation for joining a service as an
-	// operator.
+	// UpdateOperatorParams defines the operation that allows the operator admin
+	// to update the operator's parameters.
 	UpdateOperatorParams(ctx context.Context, in *MsgUpdateOperatorParams, opts ...grpc.CallOption) (*MsgUpdateOperatorParamsResponse, error)
+	// UpdateServiceParams defines the operation that allows the service admin to
+	// update the service's parameters.
 	UpdateServiceParams(ctx context.Context, in *MsgUpdateServiceParams, opts ...grpc.CallOption) (*MsgUpdateServiceParamsResponse, error)
 	// DelegatePool defines the operation that allows users to delegate any amount
 	// of an asset to a pool that can then be used to provide services with
@@ -169,9 +171,11 @@ func (c *msgClient) UndelegateService(ctx context.Context, in *MsgUndelegateServ
 //
 // Msg defines the restaking module's gRPC message service.
 type MsgServer interface {
-	// UpdateOperatorParams defines the operation for joining a service as an
-	// operator.
+	// UpdateOperatorParams defines the operation that allows the operator admin
+	// to update the operator's parameters.
 	UpdateOperatorParams(context.Context, *MsgUpdateOperatorParams) (*MsgUpdateOperatorParamsResponse, error)
+	// UpdateServiceParams defines the operation that allows the service admin to
+	// update the service's parameters.
 	UpdateServiceParams(context.Context, *MsgUpdateServiceParams) (*MsgUpdateServiceParamsResponse, error)
 	// DelegatePool defines the operation that allows users to delegate any amount
 	// of an asset to a pool that can then be used to provide services with

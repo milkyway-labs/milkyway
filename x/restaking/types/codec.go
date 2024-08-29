@@ -28,8 +28,11 @@ func RegisterInterfaces(registry types.InterfaceRegistry) {
 		&MsgUpdateOperatorParams{},
 		&MsgUpdateServiceParams{},
 		&MsgDelegatePool{},
+		&MsgUndelegatePool{},
 		&MsgDelegateService{},
+		&MsgUndelegateService{},
 		&MsgDelegateOperator{},
+		&MsgUndelegateOperator{},
 		&MsgUpdateParams{},
 	)
 

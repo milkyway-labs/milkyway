@@ -28,7 +28,7 @@ enum OperatorStatus {
   OPERATOR_STATUS_INACTIVE = 3;
 }
 
-// Service defines the fields of an operator
+// Operator defines the fields of an operator
 message Operator {
   // ID is the auto-generated unique identifier for the operator
   uint32 id = 1 [ (gogoproto.customname) = "ID" ];

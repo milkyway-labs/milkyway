@@ -1225,7 +1225,7 @@ type Service struct {
 	Address string `protobuf:"bytes,8,opt,name=address,proto3" json:"address,omitempty"`
 	// Tokens define the delegated tokens.
 	Tokens []*v1beta1.Coin `protobuf:"bytes,9,rep,name=tokens,proto3" json:"tokens,omitempty"`
-	// DelegatorShares define the total shares issued to an operator's delegators.
+	// DelegatorShares define the total shares issued to a service's delegators.
 	DelegatorShares []*v1beta1.DecCoin `protobuf:"bytes,10,rep,name=delegator_shares,json=delegatorShares,proto3" json:"delegator_shares,omitempty"`
 }
 

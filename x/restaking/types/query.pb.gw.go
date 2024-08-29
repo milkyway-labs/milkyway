@@ -3135,9 +3135,9 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 }
 
 var (
-	pattern_Query_OperatorParams_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"milkyway", "restaking", "v1", "operator_params", "operator_id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_OperatorParams_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"milkyway", "restaking", "v1", "operators", "operator_id", "params"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_Query_ServiceParams_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"milkyway", "restaking", "v1", "service_params", "service_id"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_Query_ServiceParams_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"milkyway", "restaking", "v1", "services", "service_id", "params"}, "", runtime.AssumeColonVerbOpt(false)))
 
 	pattern_Query_PoolDelegations_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 2, 5}, []string{"milkyway", "restaking", "v1", "pools", "pool_id", "delegations"}, "", runtime.AssumeColonVerbOpt(false)))
 

@@ -49,7 +49,7 @@ service Msg {
 // the plan to be created.
 message MsgCreateRewardsPlan {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/rewards/MsgCreateRewardsPlan";
+  option (amino.name) = "milkyway/MsgCreateRewardsPlan";
 
   option (gogoproto.equal) = false;
   option (gogoproto.goproto_getters) = false;
@@ -98,7 +98,7 @@ message MsgCreateRewardsPlanResponse {
 // operator when withdrawing commission).
 message MsgSetWithdrawAddress {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/rewards/MsgSetWithdrawAddress";
+  option (amino.name) = "milkyway/MsgSetWithdrawAddress";
 
   option (gogoproto.equal) = false;
   option (gogoproto.goproto_getters) = false;
@@ -116,7 +116,7 @@ message MsgSetWithdrawAddressResponse {}
 // from a single delegation target.
 message MsgWithdrawDelegatorReward {
   option (cosmos.msg.v1.signer) = "delegator_address";
-  option (amino.name) = "milkyway/rewards/MsgWithdrawDelegatorReward";
+  option (amino.name) = "milkyway/MsgWithdrawDelegatorReward";
 
   option (gogoproto.equal) = false;
   option (gogoproto.goproto_getters) = false;
@@ -144,7 +144,7 @@ message MsgWithdrawDelegatorRewardResponse {
 // MsgWithdrawOperatorCommission withdraws the full commission to the operator.
 message MsgWithdrawOperatorCommission {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/rewards/MsgWithdrawOperatorCommission";
+  option (amino.name) = "milkyway/MsgWithdrawOperatorCommission";
 
   option (gogoproto.equal) = false;
   option (gogoproto.goproto_getters) = false;

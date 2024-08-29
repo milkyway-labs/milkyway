@@ -65,7 +65,7 @@ func (OperatorStatus) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_8fb40b1089c56c16, []int{0}
 }
 
-// Service defines the fields of an operator
+// Operator defines the fields of an operator
 type Operator struct {
 	// ID is the auto-generated unique identifier for the operator
 	ID uint32 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
