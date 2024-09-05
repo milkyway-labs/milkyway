@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"cosmossdk.io/errors"
@@ -75,7 +76,7 @@ func (k *Keeper) CreateRewardsPlan(
 	// types.UsersDistributionTypeBasic only which doesn't need a validation.
 
 	// Create a rewards pool account if it doesn't exist
-	k.createAccountIfNotExists(ctx, plan.MustGetRewardsPoolAddress())
+	k.createAccountIfNotExists(ctx, plan.MustGetRewardsPoolAddress(k.accountKeeper.AddressCodec()))
 
 	// Store the rewards plan
 	err = k.RewardsPlans.Set(ctx, planID, plan)
@@ -111,4 +112,71 @@ func (k *Keeper) validateDistributionDelegationTargets(ctx context.Context, dist
 // GetRewardsPlan returns a rewards plan by ID.
 func (k *Keeper) GetRewardsPlan(ctx context.Context, planID uint64) (types.RewardsPlan, error) {
 	return k.RewardsPlans.Get(ctx, planID)
+}
+
+// terminateRewardsPlan removes a rewards plan and transfers the remaining
+// rewards in the plan's rewards pool to the service's address.
+func (k *Keeper) terminateRewardsPlan(ctx context.Context, plan types.RewardsPlan) error {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+
+	// Transfer remaining rewards in the plan's rewards pool to the service's
+	// address.
+	rewardsPoolAddr := plan.MustGetRewardsPoolAddress(k.accountKeeper.AddressCodec())
+	remaining := k.bankKeeper.GetAllBalances(ctx, rewardsPoolAddr)
+	if remaining.IsAllPositive() {
+		// Get the service's address.
+		service, found := k.servicesKeeper.GetService(sdkCtx, plan.ServiceID)
+		if !found {
+			return servicestypes.ErrServiceNotFound
+		}
+		serviceAddr, err := k.accountKeeper.AddressCodec().StringToBytes(service.Address)
+		if err != nil {
+			return err
+		}
+
+		// Transfer all the remaining rewards to the service's address.
+		err = k.bankKeeper.SendCoins(ctx, rewardsPoolAddr, serviceAddr, remaining)
+		if err != nil {
+			return err
+		}
+	}
+
+	// Remove the plan.
+	err := k.RewardsPlans.Remove(ctx, plan.ID)
+	if err != nil {
+		return err
+	}
+
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeTerminateRewardsPlan,
+			sdk.NewAttribute(types.AttributeKeyRewardsPlanID, fmt.Sprint(plan.ID)),
+			sdk.NewAttribute(types.AttributeKeyRemainingRewards, remaining.String()),
+		),
+	})
+
+	return nil
+}
+
+// TerminateEndedRewardsPlans terminates all rewards plans that have ended.
+func (k *Keeper) TerminateEndedRewardsPlans(ctx context.Context) error {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	// Get the current block time
+	blockTime := sdkCtx.BlockTime()
+
+	// Iterate over all rewards plans
+	err := k.RewardsPlans.Walk(ctx, nil, func(planID uint64, plan types.RewardsPlan) (stop bool, err error) {
+		// If the plan has already ended, terminate it
+		if !blockTime.Before(plan.EndTime) {
+			err = k.terminateRewardsPlan(ctx, plan)
+			if err != nil {
+				return false, err
+			}
+		}
+		return false, nil
+	})
+	if err != nil {
+		return err
+	}
+	return nil
 }
