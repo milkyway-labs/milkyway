@@ -304,6 +304,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) error {
 		return fmt.Errorf("rewards pool module account has not been set")
 	}
 	rewardsPoolBalances := k.bankKeeper.GetAllBalances(ctx, rewardsPoolAcc.GetAddress())
+
 	// Save the rewards pool module account if balances are zero.
 	// This code is taken from Cosmos SDK.
 	if rewardsPoolBalances.IsZero() {
