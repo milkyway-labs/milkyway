@@ -129,7 +129,7 @@ func (k *Keeper) AllocateRewardsByPlan(
 	rewards = sdk.NewDecCoinsFromCoins(rewardsTruncated...)
 
 	// Check if the rewards pool has enough coins to allocate rewards.
-	planRewardsPoolAddr := plan.MustGetRewardsPoolAddress()
+	planRewardsPoolAddr := plan.MustGetRewardsPoolAddress(k.accountKeeper.AddressCodec())
 	balances := k.bankKeeper.GetAllBalances(ctx, planRewardsPoolAddr)
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	if !balances.IsAllGTE(rewardsTruncated) {

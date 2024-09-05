@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	coreaddress "cosmossdk.io/core/address"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/address"
@@ -63,8 +64,8 @@ func (plan RewardsPlan) IsActiveAt(t time.Time) bool {
 }
 
 // MustGetRewardsPoolAddress returns the rewards pool address.
-func (plan RewardsPlan) MustGetRewardsPoolAddress() sdk.AccAddress {
-	addr, err := sdk.AccAddressFromBech32(plan.RewardsPool)
+func (plan RewardsPlan) MustGetRewardsPoolAddress(addressCodec coreaddress.Codec) sdk.AccAddress {
+	addr, err := addressCodec.StringToBytes(plan.RewardsPool)
 	if err != nil {
 		panic(err)
 	}
