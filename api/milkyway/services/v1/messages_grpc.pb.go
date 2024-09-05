@@ -44,7 +44,7 @@ type MsgClient interface {
 	// service.
 	DeactivateService(ctx context.Context, in *MsgDeactivateService, opts ...grpc.CallOption) (*MsgDeactivateServiceResponse, error)
 	// TransferServiceOwnership defines the operation for transferring the
-	// ownership of an operator to another account.
+	// ownership of a service to another account.
 	TransferServiceOwnership(ctx context.Context, in *MsgTransferServiceOwnership, opts ...grpc.CallOption) (*MsgTransferServiceOwnershipResponse, error)
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters.
@@ -137,7 +137,7 @@ type MsgServer interface {
 	// service.
 	DeactivateService(context.Context, *MsgDeactivateService) (*MsgDeactivateServiceResponse, error)
 	// TransferServiceOwnership defines the operation for transferring the
-	// ownership of an operator to another account.
+	// ownership of a service to another account.
 	TransferServiceOwnership(context.Context, *MsgTransferServiceOwnership) (*MsgTransferServiceOwnershipResponse, error)
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters.

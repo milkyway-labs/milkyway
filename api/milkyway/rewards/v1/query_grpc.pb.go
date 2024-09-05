@@ -29,7 +29,7 @@ const (
 	Query_PoolDelegationRewards_FullMethodName      = "/milkyway.rewards.v1.Query/PoolDelegationRewards"
 	Query_OperatorDelegationRewards_FullMethodName  = "/milkyway.rewards.v1.Query/OperatorDelegationRewards"
 	Query_ServiceDelegationRewards_FullMethodName   = "/milkyway.rewards.v1.Query/ServiceDelegationRewards"
-	Query_DelegationTotalRewards_FullMethodName     = "/milkyway.rewards.v1.Query/DelegationTotalRewards"
+	Query_DelegatorTotalRewards_FullMethodName      = "/milkyway.rewards.v1.Query/DelegatorTotalRewards"
 	Query_DelegatorWithdrawAddress_FullMethodName   = "/milkyway.rewards.v1.Query/DelegatorWithdrawAddress"
 )
 
@@ -63,9 +63,9 @@ type QueryClient interface {
 	// ServiceDelegationRewards queries the total rewards accrued by a service
 	// delegation.
 	ServiceDelegationRewards(ctx context.Context, in *QueryServiceDelegationRewardsRequest, opts ...grpc.CallOption) (*QueryServiceDelegationRewardsResponse, error)
-	// DelegationTotalRewards queries the total rewards accrued by each
-	// delegation target.
-	DelegationTotalRewards(ctx context.Context, in *QueryDelegationTotalRewardsRequest, opts ...grpc.CallOption) (*QueryDelegationTotalRewardsResponse, error)
+	// DelegatorTotalRewards queries the total rewards accrued by a single
+	// delegator
+	DelegatorTotalRewards(ctx context.Context, in *QueryDelegatorTotalRewardsRequest, opts ...grpc.CallOption) (*QueryDelegatorTotalRewardsResponse, error)
 	// DelegatorWithdrawAddress queries withdraw address of a delegator.
 	DelegatorWithdrawAddress(ctx context.Context, in *QueryDelegatorWithdrawAddressRequest, opts ...grpc.CallOption) (*QueryDelegatorWithdrawAddressResponse, error)
 }
@@ -178,10 +178,10 @@ func (c *queryClient) ServiceDelegationRewards(ctx context.Context, in *QuerySer
 	return out, nil
 }
 
-func (c *queryClient) DelegationTotalRewards(ctx context.Context, in *QueryDelegationTotalRewardsRequest, opts ...grpc.CallOption) (*QueryDelegationTotalRewardsResponse, error) {
+func (c *queryClient) DelegatorTotalRewards(ctx context.Context, in *QueryDelegatorTotalRewardsRequest, opts ...grpc.CallOption) (*QueryDelegatorTotalRewardsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(QueryDelegationTotalRewardsResponse)
-	err := c.cc.Invoke(ctx, Query_DelegationTotalRewards_FullMethodName, in, out, cOpts...)
+	out := new(QueryDelegatorTotalRewardsResponse)
+	err := c.cc.Invoke(ctx, Query_DelegatorTotalRewards_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -228,9 +228,9 @@ type QueryServer interface {
 	// ServiceDelegationRewards queries the total rewards accrued by a service
 	// delegation.
 	ServiceDelegationRewards(context.Context, *QueryServiceDelegationRewardsRequest) (*QueryServiceDelegationRewardsResponse, error)
-	// DelegationTotalRewards queries the total rewards accrued by each
-	// delegation target.
-	DelegationTotalRewards(context.Context, *QueryDelegationTotalRewardsRequest) (*QueryDelegationTotalRewardsResponse, error)
+	// DelegatorTotalRewards queries the total rewards accrued by a single
+	// delegator
+	DelegatorTotalRewards(context.Context, *QueryDelegatorTotalRewardsRequest) (*QueryDelegatorTotalRewardsResponse, error)
 	// DelegatorWithdrawAddress queries withdraw address of a delegator.
 	DelegatorWithdrawAddress(context.Context, *QueryDelegatorWithdrawAddressRequest) (*QueryDelegatorWithdrawAddressResponse, error)
 	mustEmbedUnimplementedQueryServer()
@@ -273,8 +273,8 @@ func (UnimplementedQueryServer) OperatorDelegationRewards(context.Context, *Quer
 func (UnimplementedQueryServer) ServiceDelegationRewards(context.Context, *QueryServiceDelegationRewardsRequest) (*QueryServiceDelegationRewardsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ServiceDelegationRewards not implemented")
 }
-func (UnimplementedQueryServer) DelegationTotalRewards(context.Context, *QueryDelegationTotalRewardsRequest) (*QueryDelegationTotalRewardsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DelegationTotalRewards not implemented")
+func (UnimplementedQueryServer) DelegatorTotalRewards(context.Context, *QueryDelegatorTotalRewardsRequest) (*QueryDelegatorTotalRewardsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DelegatorTotalRewards not implemented")
 }
 func (UnimplementedQueryServer) DelegatorWithdrawAddress(context.Context, *QueryDelegatorWithdrawAddressRequest) (*QueryDelegatorWithdrawAddressResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelegatorWithdrawAddress not implemented")
@@ -480,20 +480,20 @@ func _Query_ServiceDelegationRewards_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_DelegationTotalRewards_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryDelegationTotalRewardsRequest)
+func _Query_DelegatorTotalRewards_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryDelegatorTotalRewardsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).DelegationTotalRewards(ctx, in)
+		return srv.(QueryServer).DelegatorTotalRewards(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_DelegationTotalRewards_FullMethodName,
+		FullMethod: Query_DelegatorTotalRewards_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).DelegationTotalRewards(ctx, req.(*QueryDelegationTotalRewardsRequest))
+		return srv.(QueryServer).DelegatorTotalRewards(ctx, req.(*QueryDelegatorTotalRewardsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -564,8 +564,8 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Query_ServiceDelegationRewards_Handler,
 		},
 		{
-			MethodName: "DelegationTotalRewards",
-			Handler:    _Query_DelegationTotalRewards_Handler,
+			MethodName: "DelegatorTotalRewards",
+			Handler:    _Query_DelegatorTotalRewards_Handler,
 		},
 		{
 			MethodName: "DelegatorWithdrawAddress",

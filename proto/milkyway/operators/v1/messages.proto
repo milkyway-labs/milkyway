@@ -40,13 +40,13 @@ service Msg {
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
 }
 
-// MsgRegisterOperator defines the message structure for the RegisterService
+// MsgRegisterOperator defines the message structure for the RegisterOperator
 // gRPC service method. It allows an account to register a new operator that can
 // opt-in to validate various services. It requires a sender address as well as
 // the details of the operator to be registered.
 message MsgRegisterOperator {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/operators/MsgRegisterOperator";
+  option (amino.name) = "milkyway/MsgRegisterOperator";
 
   // Sender is the address of the user registering the operator
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
@@ -71,12 +71,12 @@ message MsgRegisterOperatorResponse {
   uint32 new_operator_id = 1 [ (gogoproto.customname) = "NewOperatorID" ];
 }
 
-// MsgUpdateOperator defines the message structure for the UpdateService gRPC
+// MsgUpdateOperator defines the message structure for the UpdateOperator gRPC
 // service method. It allows the operator owner to update the details of an
 // existing operator.
 message MsgUpdateOperator {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/operators/MsgUpdateOperator";
+  option (amino.name) = "milkyway/MsgUpdateOperator";
 
   // Sender is the address of the user updating the operator
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
@@ -110,7 +110,7 @@ message MsgUpdateOperatorResponse {}
 // switch to another operator.
 message MsgDeactivateOperator {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/operators/MsgDeactivateOperator";
+  option (amino.name) = "milkyway/MsgDeactivateOperator";
 
   // Sender is the address of the user deactivating the operator
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
@@ -127,12 +127,12 @@ message MsgDeactivateOperatorResponse {}
 // transfer the ownership of the operator to another account.
 message MsgTransferOperatorOwnership {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/services/MsgTransferOperatorOwnership";
+  option (amino.name) = "milkyway/MsgTransferOperatorOwnership";
 
   // Sender is the address of the user transferring the ownership
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
-  // OperatorID represents the ID of the service to transfer ownership
+  // OperatorID represents the ID of the operator to transfer ownership
   uint32 operator_id = 2 [ (gogoproto.customname) = "OperatorID" ];
 
   // NewAdmin is the address of the new admin of the operator

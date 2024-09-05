@@ -115,7 +115,11 @@ func (m *OperatorParams) GetJoinedServicesIDs() []uint32 {
 	return nil
 }
 
+// ServiceParams represent the params that have been set for an individual
+// service.
 type ServiceParams struct {
+	// SlashFraction defines the fraction of the delegation that will be slashed
+	// in case of a misbehavior.
 	SlashFraction cosmossdk_io_math.LegacyDec `protobuf:"bytes,1,opt,name=slash_fraction,json=slashFraction,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"slash_fraction"`
 	// WhitelistedPoolsIDs defines the list of pool IDs that are providing
 	// cryptoeconomic security to the service.

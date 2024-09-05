@@ -3,8 +3,6 @@ package milkyway.services.v1;
 
 import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
-import "cosmos/base/v1beta1/coin.proto";
-import "cosmos/bank/v1beta1/bank.proto";
 import "cosmos/msg/v1/msg.proto";
 import "gogoproto/gogo.proto";
 import "milkyway/services/v1/params.proto";
@@ -31,7 +29,7 @@ service Msg {
       returns (MsgDeactivateServiceResponse);
 
   // TransferServiceOwnership defines the operation for transferring the
-  // ownership of an operator to another account.
+  // ownership of a service to another account.
   rpc TransferServiceOwnership(MsgTransferServiceOwnership)
       returns (MsgTransferServiceOwnershipResponse);
 
@@ -114,7 +112,7 @@ message MsgUpdateServiceResponse {}
 // MsgActivateService defines the message structure for the ActivateService gRPC
 message MsgActivateService {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/services/MsgActivateService";
+  option (amino.name) = "milkyway/MsgActivateService";
 
   // Sender is the address of the user that wants to activate the service
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
@@ -131,7 +129,7 @@ message MsgActivateServiceResponse {}
 // service.
 message MsgDeactivateService {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/services/MsgDeactivateService";
+  option (amino.name) = "milkyway/MsgDeactivateService";
 
   // Sender is the address of the user that wants to deactivate the service
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
@@ -148,7 +146,7 @@ message MsgDeactivateServiceResponse {}
 // transfer the ownership of the service to another account.
 message MsgTransferServiceOwnership {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/services/MsgTransferServiceOwnership";
+  option (amino.name) = "milkyway/MsgTransferServiceOwnership";
 
   // Sender is the address of the user transferring the ownership
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];

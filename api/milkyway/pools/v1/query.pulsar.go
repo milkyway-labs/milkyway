@@ -2370,7 +2370,7 @@ func (x *QueryPoolByDenomRequest) GetDenom() string {
 	return ""
 }
 
-// QueryOperatorRPoolsesponse is the response type for the Query/PoolById and
+// QueryPoolResponse is the response type for the Query/PoolById and
 // Query/PoolByDenom RPC methods.
 type QueryPoolResponse struct {
 	state         protoimpl.MessageState

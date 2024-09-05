@@ -22,7 +22,7 @@ service Query {
       returns (QueryOperatorParamsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
     option (google.api.http).get =
-        "/milkyway/restaking/v1/operator_params/{operator_id}";
+        "/milkyway/restaking/v1/operators/{operator_id}/params";
   }
 
   // ServiceParams queries the service params for the given service.
@@ -30,7 +30,7 @@ service Query {
       returns (QueryServiceParamsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
     option (google.api.http).get =
-        "/milkyway/restaking/v1/service_params/{service_id}";
+        "/milkyway/restaking/v1/services/{service_id}/params";
   }
 
   // PoolDelegations queries the delegations info for the given pool.

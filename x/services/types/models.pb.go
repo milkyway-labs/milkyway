@@ -86,7 +86,7 @@ type Service struct {
 	Address string `protobuf:"bytes,8,opt,name=address,proto3" json:"address,omitempty"`
 	// Tokens define the delegated tokens.
 	Tokens github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,9,rep,name=tokens,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"tokens"`
-	// DelegatorShares define the total shares issued to an operator's delegators.
+	// DelegatorShares define the total shares issued to a service's delegators.
 	DelegatorShares github_com_cosmos_cosmos_sdk_types.DecCoins `protobuf:"bytes,10,rep,name=delegator_shares,json=delegatorShares,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.DecCoins" json:"delegator_shares"`
 }
 

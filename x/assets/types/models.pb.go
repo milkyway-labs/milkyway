@@ -23,6 +23,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+// Asset represents an asset that can be registered on the chain.
 type Asset struct {
 	// Denom is the denomination of the asset.
 	Denom string `protobuf:"bytes,1,opt,name=denom,proto3" json:"denom,omitempty"`

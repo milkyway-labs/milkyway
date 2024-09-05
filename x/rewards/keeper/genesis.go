@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"fmt"
+
 	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -128,9 +130,9 @@ func (k *Keeper) exportDelegationsRecords(
 ) (types.DelegationTypeRecords, error) {
 	// Get the outstanding rewards
 	var outstandingRewards []types.OutstandingRewardsRecord
-	err := outstandingRewardsCollection.Walk(ctx, nil, func(poolID uint32, rewards types.OutstandingRewards) (stop bool, err error) {
+	err := outstandingRewardsCollection.Walk(ctx, nil, func(targetID uint32, rewards types.OutstandingRewards) (stop bool, err error) {
 		outstandingRewards = append(outstandingRewards, types.OutstandingRewardsRecord{
-			DelegationTargetID: poolID,
+			DelegationTargetID: targetID,
 			OutstandingRewards: rewards.Rewards,
 		})
 		return false, nil
@@ -142,10 +144,10 @@ func (k *Keeper) exportDelegationsRecords(
 	// Get the historical rewards
 	var historicalRewards []types.HistoricalRewardsRecord
 	err = historicalRewardsCollection.Walk(ctx, nil, func(key collections.Pair[uint32, uint64], rewards types.HistoricalRewards) (stop bool, err error) {
-		poolID := key.K1()
+		targetID := key.K1()
 		period := key.K2()
 		historicalRewards = append(historicalRewards, types.HistoricalRewardsRecord{
-			DelegationTargetID: poolID,
+			DelegationTargetID: targetID,
 			Period:             period,
 			Rewards:            rewards,
 		})
@@ -157,9 +159,9 @@ func (k *Keeper) exportDelegationsRecords(
 
 	// Get the current rewards
 	var currentRewards []types.CurrentRewardsRecord
-	err = currentRewardsCollection.Walk(ctx, nil, func(poolID uint32, rewards types.CurrentRewards) (stop bool, err error) {
+	err = currentRewardsCollection.Walk(ctx, nil, func(targetID uint32, rewards types.CurrentRewards) (stop bool, err error) {
 		currentRewards = append(currentRewards, types.CurrentRewardsRecord{
-			DelegationTargetID: poolID,
+			DelegationTargetID: targetID,
 			Rewards:            rewards,
 		})
 		return false, nil
@@ -171,7 +173,7 @@ func (k *Keeper) exportDelegationsRecords(
 	// Get the delegator starting infos
 	var delegatorStartingInfos []types.DelegatorStartingInfoRecord
 	err = startingInfoCollection.Walk(ctx, nil, func(key collections.Pair[uint32, sdk.AccAddress], info types.DelegatorStartingInfo) (stop bool, err error) {
-		poolID := key.K1()
+		targetID := key.K1()
 		delAddr := key.K2()
 
 		delegator, err := k.accountKeeper.AddressCodec().BytesToString(delAddr)
@@ -181,7 +183,7 @@ func (k *Keeper) exportDelegationsRecords(
 
 		delegatorStartingInfos = append(delegatorStartingInfos, types.DelegatorStartingInfoRecord{
 			DelegatorAddress:   delegator,
-			DelegationTargetID: poolID,
+			DelegationTargetID: targetID,
 			StartingInfo:       info,
 		})
 		return false, nil
@@ -203,6 +205,8 @@ func (k *Keeper) exportDelegationsRecords(
 
 // InitGenesis initializes the state from a GenesisState
 func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) error {
+	var totalOutstandingRewards sdk.DecCoins
+
 	// Store params
 	if err := k.Params.Set(ctx, state.Params); err != nil {
 		return err
@@ -244,28 +248,32 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) error {
 	}
 
 	// Initialize the pool records
-	if err := k.initializeDelegationRecords(
+	poolsTotalOutstandingRewards, err := k.initializeDelegationRecords(
 		ctx,
 		state.PoolsRecords,
 		k.PoolOutstandingRewards,
 		k.PoolHistoricalRewards,
 		k.PoolCurrentRewards,
 		k.PoolDelegatorStartingInfos,
-	); err != nil {
+	)
+	if err != nil {
 		return err
 	}
+	totalOutstandingRewards = totalOutstandingRewards.Add(poolsTotalOutstandingRewards...)
 
 	// Initialize the operator records
-	if err := k.initializeDelegationRecords(
+	operatorsTotalOutstandingRewards, err := k.initializeDelegationRecords(
 		ctx,
 		state.OperatorsRecords,
 		k.OperatorOutstandingRewards,
 		k.OperatorHistoricalRewards,
 		k.OperatorCurrentRewards,
 		k.OperatorDelegatorStartingInfos,
-	); err != nil {
+	)
+	if err != nil {
 		return err
 	}
+	totalOutstandingRewards = totalOutstandingRewards.Add(operatorsTotalOutstandingRewards...)
 
 	// Store the operator accumulated commissions
 	for _, record := range state.OperatorAccumulatedCommissions {
@@ -276,18 +284,40 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) error {
 	}
 
 	// Initialize the service records
-	if err := k.initializeDelegationRecords(
+	servicesTotalOutstandingRewards, err := k.initializeDelegationRecords(
 		ctx,
 		state.ServicesRecords,
 		k.ServiceOutstandingRewards,
 		k.ServiceHistoricalRewards,
 		k.ServiceCurrentRewards,
 		k.ServiceDelegatorStartingInfos,
-	); err != nil {
+	)
+	if err != nil {
 		return err
 	}
+	totalOutstandingRewards = totalOutstandingRewards.Add(servicesTotalOutstandingRewards...)
 
-	// TODO: check module holdings
+	// Check module holdings. Sum of all outstanding rewards must not be
+	// greater than the holdings of the rewards pool module account.
+	rewardsPoolAcc := k.accountKeeper.GetModuleAccount(ctx, types.RewardsPoolName)
+	if rewardsPoolAcc == nil {
+		return fmt.Errorf("rewards pool module account has not been set")
+	}
+	rewardsPoolBalances := k.bankKeeper.GetAllBalances(ctx, rewardsPoolAcc.GetAddress())
+
+	// Save the rewards pool module account if balances are zero.
+	// This code is taken from Cosmos SDK.
+	if rewardsPoolBalances.IsZero() {
+		k.accountKeeper.SetModuleAccount(ctx, rewardsPoolAcc)
+	}
+
+	totalOutstandingRewardsTruncated, _ := totalOutstandingRewards.TruncateDecimal()
+	if totalOutstandingRewardsTruncated.IsAnyGT(rewardsPoolBalances) {
+		return fmt.Errorf("rewards pool module balance does not match the module holdings: %s < %s",
+			rewardsPoolBalances,
+			totalOutstandingRewardsTruncated)
+	}
+
 	return nil
 }
 
@@ -299,29 +329,30 @@ func (k *Keeper) initializeDelegationRecords(
 	historicalRewardsCollection collections.Map[collections.Pair[uint32, uint64], types.HistoricalRewards],
 	currentRewardsCollection collections.Map[uint32, types.CurrentRewards],
 	startingInfoCollection collections.Map[collections.Pair[uint32, sdk.AccAddress], types.DelegatorStartingInfo],
-) error {
+) (totalOutstandingRewards sdk.DecCoins, err error) {
 
 	// Store the outstanding rewards
 	for _, outstanding := range records.OutstandingRewards {
-		err := outstandingRewardsCollection.Set(ctx, outstanding.DelegationTargetID, types.OutstandingRewards{Rewards: outstanding.OutstandingRewards})
+		err = outstandingRewardsCollection.Set(ctx, outstanding.DelegationTargetID, types.OutstandingRewards{Rewards: outstanding.OutstandingRewards})
 		if err != nil {
-			return err
+			return nil, err
 		}
+		totalOutstandingRewards = totalOutstandingRewards.Add(outstanding.OutstandingRewards.Sum()...)
 	}
 
 	// Store the historical rewards
 	for _, historical := range records.HistoricalRewards {
-		err := historicalRewardsCollection.Set(ctx, collections.Join(historical.DelegationTargetID, historical.Period), historical.Rewards)
+		err = historicalRewardsCollection.Set(ctx, collections.Join(historical.DelegationTargetID, historical.Period), historical.Rewards)
 		if err != nil {
-			return err
+			return nil, err
 		}
 	}
 
 	// Store the current rewards
 	for _, current := range records.CurrentRewards {
-		err := currentRewardsCollection.Set(ctx, current.DelegationTargetID, current.Rewards)
+		err = currentRewardsCollection.Set(ctx, current.DelegationTargetID, current.Rewards)
 		if err != nil {
-			return err
+			return nil, err
 		}
 	}
 
@@ -329,14 +360,14 @@ func (k *Keeper) initializeDelegationRecords(
 	for _, startingInfo := range records.DelegatorStartingInfos {
 		delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(startingInfo.DelegatorAddress)
 		if err != nil {
-			return err
+			return nil, err
 		}
 
 		err = startingInfoCollection.Set(ctx, collections.Join(startingInfo.DelegationTargetID, sdk.AccAddress(delAddr)), startingInfo.StartingInfo)
 		if err != nil {
-			return err
+			return nil, err
 		}
 	}
 
-	return nil
+	return totalOutstandingRewards, nil
 }

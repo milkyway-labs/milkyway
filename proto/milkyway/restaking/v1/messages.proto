@@ -2,11 +2,9 @@ syntax = "proto3";
 package milkyway.restaking.v1;
 
 import "google/protobuf/timestamp.proto";
-
 import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 import "cosmos/base/v1beta1/coin.proto";
-import "cosmos/bank/v1beta1/bank.proto";
 import "cosmos/msg/v1/msg.proto";
 import "gogoproto/gogo.proto";
 import "milkyway/restaking/v1/params.proto";
@@ -18,11 +16,13 @@ option go_package = "github.com/milkyway-labs/milkyway/x/restaking/types";
 service Msg {
   option (cosmos.msg.v1.service) = true;
 
-  // UpdateOperatorParams defines the operation for joining a service as an
-  // operator.
+  // UpdateOperatorParams defines the operation that allows the operator admin
+  // to update the operator's parameters.
   rpc UpdateOperatorParams(MsgUpdateOperatorParams)
       returns (MsgUpdateOperatorParamsResponse);
 
+  // UpdateServiceParams defines the operation that allows the service admin to
+  // update the service's parameters.
   rpc UpdateServiceParams(MsgUpdateServiceParams)
       returns (MsgUpdateServiceParamsResponse);
 
@@ -63,7 +63,7 @@ service Msg {
 // update the operator's parameters.
 message MsgUpdateOperatorParams {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/restaking/MsgUpdateOperatorParams";
+  option (amino.name) = "milkyway/MsgUpdateOperatorParams";
 
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
@@ -81,7 +81,7 @@ message MsgUpdateOperatorParamsResponse {}
 // update the service's parameters.
 message MsgUpdateServiceParams {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/restaking/MsgUpdateServiceParams";
+  option (amino.name) = "milkyway/MsgUpdateServiceParams";
 
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
@@ -99,7 +99,7 @@ message MsgUpdateServiceParamsResponse {}
 // choose it.
 message MsgDelegatePool {
   option (cosmos.msg.v1.signer) = "delegator";
-  option (amino.name) = "milkyway/restaking/MsgDelegatePool";
+  option (amino.name) = "milkyway/MsgDelegatePool";
 
   // Delegator is the address of the user joining the pool
   string delegator = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
@@ -112,12 +112,12 @@ message MsgDelegatePool {
 // MsgDelegatePoolResponse defines the return value of MsgDelegatePool.
 message MsgDelegatePoolResponse {}
 
-// MsgDelegateOperator defines the message structure for the OperatorRestake
+// MsgDelegateOperator defines the message structure for the DelegateOperator
 // gRPC service method. It allows a user to delegate their assets to an
 // operator.
 message MsgDelegateOperator {
   option (cosmos.msg.v1.signer) = "delegator";
-  option (amino.name) = "milkyway/restaking/MsgDelegateOperator";
+  option (amino.name) = "milkyway/MsgDelegateOperator";
 
   // Delegator is the address of the user delegating to the operator
   string delegator = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
@@ -136,11 +136,11 @@ message MsgDelegateOperator {
 // MsgDelegateOperatorResponse is the return value of MsgDelegateOperator.
 message MsgDelegateOperatorResponse {}
 
-// MsgDelegateService defines the message structure for the ServiceRestake gRPC
+// MsgDelegateService defines the message structure for the DelegateService gRPC
 // service method. It allows a user to delegate their assets to a service.
 message MsgDelegateService {
   option (cosmos.msg.v1.signer) = "delegator";
-  option (amino.name) = "milkyway/restaking/MsgDelegateService";
+  option (amino.name) = "milkyway/MsgDelegateService";
 
   // Delegator is the address of the user delegating to the service
   string delegator = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
@@ -159,7 +159,7 @@ message MsgDelegateService {
 // MsgDelegateServiceResponse is the return value of MsgDelegateService.
 message MsgDelegateServiceResponse {}
 
-// MsgDeactivateService defines the message structure for the UpdateParams gRPC
+// MsgUpdateParams defines the message structure for the UpdateParams gRPC
 // service method. It allows the authority to update the module parameters.
 message MsgUpdateParams {
   option (cosmos.msg.v1.signer) = "authority";
@@ -178,7 +178,7 @@ message MsgUpdateParams {
   Params params = 2 [ (gogoproto.nullable) = false ];
 }
 
-// MsgDeactivateServiceResponse is the return value of MsgUpdateParams.
+// MsgUpdateParamsResponse is the return value of MsgUpdateParams.
 message MsgUpdateParamsResponse {}
 
 // MsgUndelegatePool the message structure for the UndelegatePool gRPC service
@@ -190,7 +190,10 @@ message MsgUndelegatePool {
   option (gogoproto.equal) = false;
   option (gogoproto.goproto_getters) = false;
 
+  // Delegator is the address of the user undelegating from the pool.
   string delegator = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // Amount is the amount of coins to be undelegated.
   cosmos.base.v1beta1.Coin amount = 2
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 }
@@ -205,8 +208,13 @@ message MsgUndelegateOperator {
   option (gogoproto.equal) = false;
   option (gogoproto.goproto_getters) = false;
 
+  // Delegator is the address of the user undelegating from the operator.
   string delegator = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // OperatorID is the ID of the operator to undelegate from.
   uint32 operator_id = 2 [ (gogoproto.customname) = "OperatorID" ];
+
+  // Amount is the amount of coins to be undelegated.
   repeated cosmos.base.v1beta1.Coin amount = 3 [
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true,
@@ -224,8 +232,13 @@ message MsgUndelegateService {
   option (gogoproto.equal) = false;
   option (gogoproto.goproto_getters) = false;
 
+  // Delegator is the address of the user undelegating from the service.
   string delegator = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // ServiceID is the ID of the service to undelegate from.
   uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
+
+  // Amount is the amount of coins to be undelegated.
   repeated cosmos.base.v1beta1.Coin amount = 3 [
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true,

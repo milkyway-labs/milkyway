@@ -21,6 +21,8 @@ type AccountKeeper interface {
 	SetAccount(ctx context.Context, acc sdk.AccountI)
 	AddressCodec() address.Codec
 	GetModuleAddress(moduleName string) sdk.AccAddress
+	GetModuleAccount(ctx context.Context, moduleName string) sdk.ModuleAccountI
+	SetModuleAccount(ctx context.Context, macc sdk.ModuleAccountI)
 }
 
 type BankKeeper interface {

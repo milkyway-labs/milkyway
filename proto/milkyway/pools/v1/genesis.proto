@@ -2,7 +2,6 @@ syntax = "proto3";
 package milkyway.pools.v1;
 
 import "gogoproto/gogo.proto";
-import "google/protobuf/timestamp.proto";
 import "milkyway/pools/v1/models.proto";
 import "milkyway/pools/v1/params.proto";
 
@@ -19,7 +18,7 @@ message GenesisState {
     (gogoproto.moretags) = "yaml:\"next_pool_id\""
   ];
 
-  // Operators defines the list of pools.
+  // Pools defines the list of pools.
   repeated Pool pools = 3
       [ (gogoproto.moretags) = "yaml:\"pools\"", (gogoproto.nullable) = false ];
 }

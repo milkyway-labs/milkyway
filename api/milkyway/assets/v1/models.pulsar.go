@@ -558,6 +558,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Asset represents an asset that can be registered on the chain.
 type Asset struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

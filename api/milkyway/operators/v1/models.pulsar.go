@@ -1136,7 +1136,7 @@ func (OperatorStatus) EnumDescriptor() ([]byte, []int) {
 	return file_milkyway_operators_v1_models_proto_rawDescGZIP(), []int{0}
 }
 
-// Service defines the fields of an operator
+// Operator defines the fields of an operator
 type Operator struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

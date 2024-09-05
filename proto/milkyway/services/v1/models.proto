@@ -61,7 +61,7 @@ message Service {
     (gogoproto.nullable) = false
   ];
 
-  // DelegatorShares define the total shares issued to an operator's delegators.
+  // DelegatorShares define the total shares issued to a service's delegators.
   repeated cosmos.base.v1beta1.DecCoin delegator_shares = 10 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
     (gogoproto.nullable) = false
