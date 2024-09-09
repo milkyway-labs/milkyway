@@ -10,4 +10,6 @@ const (
 
 var (
 	ParamsKey = collections.NewPrefix(0x01)
+
+	InsuranceFundKey = collections.NewPrefix(0x10)
 )

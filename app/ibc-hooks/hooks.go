@@ -6,6 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
+	"github.com/milkyway-labs/milkyway/utils"
 
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	ibchooks "github.com/initia-labs/initia/x/ibc-hooks"
@@ -32,7 +33,7 @@ func NewWasmHooks(codec codec.Codec, ac address.Codec, wasmKeeper *wasmkeeper.Ke
 }
 
 func (h WasmHooks) OnRecvPacketOverride(im ibchooks.IBCMiddleware, ctx sdk.Context, packet channeltypes.Packet, relayer sdk.AccAddress) ibcexported.Acknowledgement {
-	if isIcs20, ics20Data := isIcs20Packet(packet.GetData()); isIcs20 {
+	if isIcs20, ics20Data := utils.IsIcs20Packet(packet.GetData()); isIcs20 {
 		return h.onRecvIcs20Packet(ctx, im, packet, relayer, ics20Data)
 	}
 
@@ -44,7 +45,7 @@ func (h WasmHooks) OnRecvPacketOverride(im ibchooks.IBCMiddleware, ctx sdk.Conte
 }
 
 func (h WasmHooks) OnAcknowledgementPacketOverride(im ibchooks.IBCMiddleware, ctx sdk.Context, packet channeltypes.Packet, acknowledgement []byte, relayer sdk.AccAddress) error {
-	if isIcs20, ics20Data := isIcs20Packet(packet.GetData()); isIcs20 {
+	if isIcs20, ics20Data := utils.IsIcs20Packet(packet.GetData()); isIcs20 {
 		return h.onAckIcs20Packet(ctx, im, packet, acknowledgement, relayer, ics20Data)
 	}
 
@@ -56,7 +57,7 @@ func (h WasmHooks) OnAcknowledgementPacketOverride(im ibchooks.IBCMiddleware, ct
 }
 
 func (h WasmHooks) OnTimeoutPacketOverride(im ibchooks.IBCMiddleware, ctx sdk.Context, packet channeltypes.Packet, relayer sdk.AccAddress) error {
-	if isIcs20, ics20Data := isIcs20Packet(packet.GetData()); isIcs20 {
+	if isIcs20, ics20Data := utils.IsIcs20Packet(packet.GetData()); isIcs20 {
 		return h.onTimeoutIcs20Packet(ctx, im, packet, relayer, ics20Data)
 	}
 

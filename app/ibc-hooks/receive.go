@@ -4,18 +4,17 @@ import (
 	"encoding/json"
 	"fmt"
 
+	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
+	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
-
 	ibchooks "github.com/initia-labs/initia/x/ibc-hooks"
 	nfttransfertypes "github.com/initia-labs/initia/x/ibc/nft-transfer/types"
 
-	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
-	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
+	utils "github.com/milkyway-labs/milkyway/utils"
 )
 
 func (h WasmHooks) onRecvIcs20Packet(
@@ -29,19 +28,19 @@ func (h WasmHooks) onRecvIcs20Packet(
 	if !isWasmRouted || hookData.Message == nil {
 		return im.App.OnRecvPacket(ctx, packet, relayer)
 	} else if err != nil {
-		return newEmitErrorAcknowledgement(err)
+		return utils.NewEmitErrorAcknowledgement(err)
 	}
 
 	msg := hookData.Message
 	if allowed, err := h.checkACL(im, ctx, msg.Contract); err != nil {
-		return newEmitErrorAcknowledgement(err)
+		return utils.NewEmitErrorAcknowledgement(err)
 	} else if !allowed {
-		return newEmitErrorAcknowledgement(fmt.Errorf("contract `%s` is not allowed to be used in ibchooks", msg.Contract))
+		return utils.NewEmitErrorAcknowledgement(fmt.Errorf("contract `%s` is not allowed to be used in ibchooks", msg.Contract))
 	}
 
 	// Validate whether the receiver is correctly specified or not.
 	if err := validateReceiver(msg, data.Receiver); err != nil {
-		return newEmitErrorAcknowledgement(err)
+		return utils.NewEmitErrorAcknowledgement(err)
 	}
 
 	// Calculate the receiver / contract caller based on the packet's channel and sender
@@ -56,7 +55,7 @@ func (h WasmHooks) onRecvIcs20Packet(
 	data.Receiver = intermediateSender
 	bz, err := json.Marshal(data)
 	if err != nil {
-		return newEmitErrorAcknowledgement(err)
+		return utils.NewEmitErrorAcknowledgement(err)
 	}
 	packet.Data = bz
 
@@ -76,7 +75,7 @@ func (h WasmHooks) onRecvIcs20Packet(
 	msg.Funds = sdk.NewCoins(sdk.NewCoin(denom, amount))
 	_, err = h.execMsg(ctx, msg)
 	if err != nil {
-		return newEmitErrorAcknowledgement(err)
+		return utils.NewEmitErrorAcknowledgement(err)
 	}
 
 	return ack
@@ -93,19 +92,19 @@ func (h WasmHooks) onRecvIcs721Packet(
 	if !isWasmRouted || hookData.Message == nil {
 		return im.App.OnRecvPacket(ctx, packet, relayer)
 	} else if err != nil {
-		return newEmitErrorAcknowledgement(err)
+		return utils.NewEmitErrorAcknowledgement(err)
 	}
 
 	msg := hookData.Message
 	if allowed, err := h.checkACL(im, ctx, msg.Contract); err != nil {
-		return newEmitErrorAcknowledgement(err)
+		return utils.NewEmitErrorAcknowledgement(err)
 	} else if !allowed {
-		return newEmitErrorAcknowledgement(fmt.Errorf("contract `%s` is not allowed to be used in ibchooks", msg.Contract))
+		return utils.NewEmitErrorAcknowledgement(fmt.Errorf("contract `%s` is not allowed to be used in ibchooks", msg.Contract))
 	}
 
 	// Validate whether the receiver is correctly specified or not.
 	if err := validateReceiver(msg, data.Receiver); err != nil {
-		return newEmitErrorAcknowledgement(err)
+		return utils.NewEmitErrorAcknowledgement(err)
 	}
 
 	// Calculate the receiver / contract caller based on the packet's channel and sender
@@ -120,7 +119,7 @@ func (h WasmHooks) onRecvIcs721Packet(
 	data.Receiver = intermediateSender
 	bz, err := json.Marshal(data)
 	if err != nil {
-		return newEmitErrorAcknowledgement(err)
+		return utils.NewEmitErrorAcknowledgement(err)
 	}
 	packet.Data = bz
 
@@ -133,7 +132,7 @@ func (h WasmHooks) onRecvIcs721Packet(
 	msg.Funds = sdk.NewCoins()
 	_, err = h.execMsg(ctx, msg)
 	if err != nil {
-		return newEmitErrorAcknowledgement(err)
+		return utils.NewEmitErrorAcknowledgement(err)
 	}
 
 	return ack

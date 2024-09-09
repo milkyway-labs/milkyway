@@ -11,13 +11,14 @@ import (
 )
 
 type Keeper struct {
-	// TODO
 	cdc          codec.Codec
 	storeService corestoretypes.KVStoreService
 
-	Schema     collections.Schema
-	Params     collections.Item[types.Params]
-	BankKeeper types.BankKeeper
+	ModuleAddress  string
+	Schema         collections.Schema
+	Params         collections.Item[types.Params]
+	BankKeeper     types.BankKeeper
+	InsuranceFunds collections.Map[sdk.AccAddress, types.UserInsuranceFund]
 
 	authority string
 }
@@ -33,7 +34,14 @@ func NewKeeper(
 		cdc:          cdc,
 		storeService: storeService,
 
-		Params:    collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		InsuranceFunds: collections.NewMap[sdk.AccAddress, types.UserInsuranceFund](
+			sb,
+			types.InsuranceFundKey,
+			"insurance_fund",
+			sdk.AccAddressKey,
+			codec.CollValue[types.UserInsuranceFund](cdc),
+		),
 		authority: authority,
 	}
 

@@ -46,8 +46,8 @@ message MsgMintStakingRepresentation {
 
   // The amount of tokens that will be minted
   repeated cosmos.base.v1beta1.Coin amount = 3 [
-    (amino.encoding)         = "legacy_coins",
-    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins", 
+    (amino.encoding) = "legacy_coins",
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false
   ];
 }
@@ -71,8 +71,8 @@ message MsgBurnStakingRepresentation {
 
   // The amount of tokens that will be burned from the user's balance.
   repeated cosmos.base.v1beta1.Coin amount = 3 [
-    (amino.encoding)         = "legacy_coins",
-    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins", 
+    (amino.encoding) = "legacy_coins",
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false
   ];
 }

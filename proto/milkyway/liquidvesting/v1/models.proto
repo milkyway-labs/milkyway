@@ -1,0 +1,16 @@
+syntax = "proto3";
+package milkyway.liquidvesting.v1;
+
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/liquidvesting/types";
+
+// UserInsuranceFund defines an user's insurance fund.
+message UserInsuranceFund {
+  // Amount of coins deposited into the user's insurance fund.
+  repeated cosmos.base.v1beta1.Coin balance = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
