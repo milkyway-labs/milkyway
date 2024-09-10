@@ -1,6 +1,8 @@
 package ibc_hooks_test
 
 import (
+	"testing"
+
 	"cosmossdk.io/log"
 	"cosmossdk.io/store"
 	"cosmossdk.io/store/metrics"
@@ -27,12 +29,12 @@ import (
 	ibchooks "github.com/initia-labs/initia/x/ibc-hooks"
 	ibchookskeeper "github.com/initia-labs/initia/x/ibc-hooks/keeper"
 	ibchookstypes "github.com/initia-labs/initia/x/ibc-hooks/types"
+	"github.com/stretchr/testify/suite"
+
 	"github.com/milkyway-labs/milkyway/app"
 	liquidvestinghooks "github.com/milkyway-labs/milkyway/x/liquidvesting/ibc-hooks"
 	liquidvestingkeeper "github.com/milkyway-labs/milkyway/x/liquidvesting/keeper"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/x/liquidvesting/types"
-	"github.com/stretchr/testify/suite"
-	"testing"
 )
 
 func TestHooksTestSuite(t *testing.T) {

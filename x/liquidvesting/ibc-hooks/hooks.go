@@ -97,6 +97,14 @@ func (h Hooks) onRecvIcs20Packet(
 		if err != nil {
 			return utils.NewEmitErrorAcknowledgement(err)
 		}
+
+		// Dispatch the deposit event.
+		ctx.EventManager().EmitEvent(
+			sdk.NewEvent(types.EventTypeDepositToUserInsuranceFund,
+				sdk.NewAttribute(types.AttributeKeyUser, deposit.Depositor),
+				sdk.NewAttribute(types.AttributeKeyDeposited, amount.String()),
+			),
+		)
 	}
 
 	return im.App.OnRecvPacket(ctx, packet, relayer)

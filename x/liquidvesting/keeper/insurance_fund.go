@@ -27,20 +27,7 @@ func (k *Keeper) AddToUserInsuranceFund(
 	// Update the user's insurance fund
 	insuranceFund.Add(amount)
 	// Store the updated user's insurance fund
-	err = k.InsuranceFunds.Set(ctx, user, insuranceFund)
-	if err != nil {
-		return err
-	}
-
-	// Dispatch the deposit event.
-	ctx.EventManager().EmitEvent(
-		sdk.NewEvent(types.EventDepositToUserInsuranceFund,
-			sdk.NewAttribute("user", user.String()),
-			sdk.NewAttribute("deposited", amount.String()),
-		),
-	)
-
-	return nil
+	return k.InsuranceFunds.Set(ctx, user, insuranceFund)
 }
 
 // WithdrawFromUserInsuranceFund withdraws coins from the user's insurance fund
