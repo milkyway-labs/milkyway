@@ -10,9 +10,7 @@ import (
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 )
 
-var (
-	_ types.MsgServer = msgServer{}
-)
+var _ types.MsgServer = msgServer{}
 
 type msgServer struct {
 	*Keeper
@@ -48,6 +46,15 @@ func (m msgServer) MintStakingRepresentation(
 		return nil, err
 	}
 
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeMintStakingRepresentation,
+			sdk.NewAttribute(types.AttributeKeyMinter, msg.Sender),
+			sdk.NewAttribute(types.AttributeKeyAmount, msg.Amount.String()),
+			sdk.NewAttribute(types.AttributeKeyTo, msg.Receiver),
+		),
+	})
+
 	return &types.MsgMintStakingRepresentationResponse{}, nil
 }
 
@@ -76,6 +83,15 @@ func (m msgServer) BurnStakingRepresentation(
 	if err != nil {
 		return nil, err
 	}
+
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeBurnStakingRepresentation,
+			sdk.NewAttribute(types.AttributeKeyMinter, msg.Sender),
+			sdk.NewAttribute(types.AttributeKeyAmount, msg.Amount.String()),
+			sdk.NewAttribute(types.AttributeKeyFrom, msg.User),
+		),
+	})
 
 	return &types.MsgBurnStakingRepresentationResponse{}, nil
 }
