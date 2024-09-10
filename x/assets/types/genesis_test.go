@@ -22,7 +22,6 @@ func TestGenesis_Validate(t *testing.T) {
 		{
 			name: "invalid asset returns error",
 			genesis: types.NewGenesisState(
-				types.DefaultParams(),
 				[]types.Asset{
 					types.NewAsset("@#$%", "bitcoin", 1),
 				},

@@ -5,19 +5,12 @@ import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
-import "milkyway/assets/v1/params.proto";
 import "milkyway/assets/v1/models.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/assets/types";
 
 // Query defines the gRPC querier service.
 service Query {
-  // Params defines a gRPC query method that returns the parameters of the
-  // module.
-  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/milkyway/assets/v1/params";
-  }
-
   // Assets defined a gRPC query method that returns all assets registered.
   rpc Assets(QueryAssetsRequest) returns (QueryAssetsResponse) {
     option (google.api.http).get = "/milkyway/assets/v1/assets";
@@ -28,14 +21,6 @@ service Query {
   rpc Asset(QueryAssetRequest) returns (QueryAssetResponse) {
     option (google.api.http).get = "/milkyway/assets/v1/assets/{denom}";
   }
-}
-
-// QueryParamsRequest is the request type for the Query/Params RPC method.
-message QueryParamsRequest {}
-
-// QueryParamsResponse is the response type for the Query/Params RPC method.
-message QueryParamsResponse {
-  Params params = 1 [ (gogoproto.nullable) = false ];
 }
 
 // QueryAssetsRequest is the request type for the Query/Assets RPC method.

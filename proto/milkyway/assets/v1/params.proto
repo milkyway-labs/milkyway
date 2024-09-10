@@ -1,7 +1,0 @@
-syntax = "proto3";
-package milkyway.assets.v1;
-
-option go_package = "github.com/milkyway-labs/milkyway/x/assets/types";
-
-// Params defines the parameters for the module.
-message Params {}

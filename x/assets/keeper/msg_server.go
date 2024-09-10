@@ -81,25 +81,3 @@ func (k msgServer) DeregisterAsset(ctx context.Context, msg *types.MsgDeregister
 
 	return &types.MsgDeregisterAssetResponse{}, nil
 }
-
-// UpdateParams defines the rpc method for Msg/UpdateParams
-func (k msgServer) UpdateParams(ctx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
-	// Validate the message
-	err := msg.Validate()
-	if err != nil {
-		return nil, err
-	}
-
-	// Check if the authority is correct
-	if k.authority != msg.Authority {
-		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", k.authority, msg.Authority)
-	}
-
-	// Store the params
-	err = k.Params.Set(ctx, msg.Params)
-	if err != nil {
-		return nil, err
-	}
-
-	return &types.MsgUpdateParamsResponse{}, nil
-}

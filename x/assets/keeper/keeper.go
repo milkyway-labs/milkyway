@@ -17,7 +17,6 @@ type Keeper struct {
 	storeService corestoretypes.KVStoreService
 
 	Schema        collections.Schema
-	Params        collections.Item[types.Params]
 	Assets        collections.Map[string, types.Asset]                 // denom => types.Asset
 	TickerIndexes collections.KeySet[collections.Pair[string, string]] // ticker + denom => nil
 
@@ -34,7 +33,6 @@ func NewKeeper(
 		cdc:          cdc,
 		storeService: storeService,
 
-		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		Assets: collections.NewMap(
 			sb,
 			types.AssetKeyPrefix,
