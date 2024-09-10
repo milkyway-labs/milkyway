@@ -4,6 +4,7 @@ import (
 	"slices"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 )
@@ -27,15 +28,36 @@ func (k *Keeper) MintStakingRepresentation(
 ) error {
 	var toMintTokens sdk.Coins
 	for _, coin := range amount {
-		newTokenDenom, err := types.GetVestedRepresentationDenom(coin.Denom)
+		// Create the vested representation for the received denom
+		vestedRepresentationDenom, err := types.GetVestedRepresentationDenom(coin.Denom)
 		if err != nil {
 			return err
 		}
-		toMintTokens = append(toMintTokens, sdk.NewCoin(newTokenDenom, coin.Amount))
+
+		// Check if we have the metadata for the vested representation
+		_, vestedDenomMetadataFound := k.BankKeeper.GetDenomMetaData(ctx, vestedRepresentationDenom)
+		if !vestedDenomMetadataFound {
+			// We don't have the metadata for the vested representation
+			// we should create it
+			denomMetadata := banktypes.Metadata{
+				DenomUnits: []*banktypes.DenomUnit{{
+					Denom:    vestedRepresentationDenom,
+					Exponent: 0,
+				}},
+				Base:        vestedRepresentationDenom,
+				Name:        vestedRepresentationDenom,
+				Symbol:      vestedRepresentationDenom,
+				Display:     vestedRepresentationDenom,
+				Description: "Vested representation of " + vestedRepresentationDenom,
+			}
+			k.BankKeeper.SetDenomMetaData(ctx, denomMetadata)
+		}
+
+		toMintTokens = append(toMintTokens, sdk.NewCoin(vestedRepresentationDenom, coin.Amount))
 	}
 
 	// Mint the tokens to the module
-	err := k.BankKeeper.MintCoins(goCtx, types.ModuleName, toMintTokens)
+	err := k.BankKeeper.MintCoins(ctx, types.ModuleName, toMintTokens)
 	if err != nil {
 		return err
 	}
