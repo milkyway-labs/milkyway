@@ -93,7 +93,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					},
 				},
 				{
-					RpcMethod: "DelegationTotalRewards",
+					RpcMethod: "DelegatorTotalRewards",
 					Use:       "rewards [delegator-address]",
 					Short:     "Query all delegator rewards",
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
@@ -115,6 +115,10 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 			Service: rewardsv1.Msg_ServiceDesc.ServiceName,
 			RpcCommandOptions: []*autocliv1.RpcCommandOptions{
 				{
+					RpcMethod: "CreateRewardsPlan",
+					Skip:      true,
+				},
+				{
 					RpcMethod: "SetWithdrawAddress",
 					Use:       "set-withdraw-addr [withdraw-address]",
 					Short:     "Change the default withdraw address for rewards associated with an address",
@@ -129,7 +133,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Example:   fmt.Sprintf("%s tx rewards withdraw-rewards pool [pool-id] --from mykey", version.AppName),
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "delegation_type"},
-						{ProtoField: "target_id"},
+						{ProtoField: "delegation_target_id"},
 					},
 				},
 				{
