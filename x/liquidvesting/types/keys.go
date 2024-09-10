@@ -6,6 +6,7 @@ import (
 
 const (
 	ModuleName = "liquidvesting"
+	StoreKey   = ModuleName
 )
 
 var (

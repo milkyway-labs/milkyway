@@ -14,18 +14,24 @@ type Keeper struct {
 	cdc          codec.Codec
 	storeService corestoretypes.KVStoreService
 
-	ModuleAddress  string
+	// Keepers
+	BankKeeper types.BankKeeper
+
+	// Keeper data
 	Schema         collections.Schema
 	Params         collections.Item[types.Params]
-	BankKeeper     types.BankKeeper
 	InsuranceFunds collections.Map[sdk.AccAddress, types.UserInsuranceFund]
 
-	authority string
+	// Addresses
+	ModuleAddress string
+	authority     string
 }
 
 func NewKeeper(
 	cdc codec.Codec,
 	storeService corestoretypes.KVStoreService,
+	bankKeeper types.BankKeeper,
+	moduleAddress string,
 	authority string,
 ) *Keeper {
 	sb := collections.NewSchemaBuilder(storeService)
@@ -33,6 +39,8 @@ func NewKeeper(
 	k := &Keeper{
 		cdc:          cdc,
 		storeService: storeService,
+
+		BankKeeper: bankKeeper,
 
 		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		InsuranceFunds: collections.NewMap[sdk.AccAddress, types.UserInsuranceFund](
@@ -42,7 +50,9 @@ func NewKeeper(
 			sdk.AccAddressKey,
 			codec.CollValue[types.UserInsuranceFund](cdc),
 		),
-		authority: authority,
+
+		ModuleAddress: moduleAddress,
+		authority:     authority,
 	}
 
 	schema, err := sb.Build()

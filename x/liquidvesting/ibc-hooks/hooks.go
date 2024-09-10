@@ -1,4 +1,4 @@
-package liquidvesting
+package ibc_hooks
 
 import (
 	"encoding/json"
@@ -26,7 +26,9 @@ type Hooks struct {
 }
 
 func NewHooks(k *keeper.Keeper) Hooks {
-	return Hooks{k}
+	return Hooks{
+		Keeper: k,
+	}
 }
 
 func (h Hooks) onRecvIcs20Packet(
@@ -42,15 +44,15 @@ func (h Hooks) onRecvIcs20Packet(
 		return im.App.OnRecvPacket(ctx, packet, relayer)
 	}
 
-	// Ensure that we the receiver is the x/liquidvesting module account
+	// Ensure the receiver is the x/liquidvesting module account
 	if ics20Packet.Receiver != h.ModuleAddress {
 		return utils.NewEmitErrorAcknowledgement(
 			fmt.Errorf("the receiver should be the module address, got: %s, expected: %s", ics20Packet.Receiver, h.ModuleAddress),
 		)
 	}
 
-	// Parse the message from the memo.
-	bytes, err := json.Marshal(object)
+	// Parse the message from the memo
+	bytes, err := json.Marshal(object[types.ModuleName])
 	if err != nil {
 		return utils.NewEmitErrorAcknowledgement(err)
 	}
@@ -75,23 +77,26 @@ func (h Hooks) onRecvIcs20Packet(
 	if !ok {
 		return utils.NewEmitErrorAcknowledgement(fmt.Errorf("invalid ics20 amount"))
 	}
-	ics20Deposit := sdk.NewCoin(ics20Packet.Denom, amount)
+	receivedAmount := sdk.NewCoin(ics20Packet.Denom, amount)
 
 	// Ensure that we have received the same amount of tokens
 	// as the ones that needs to be added to the users' insurance fund
-	if !ics20Deposit.Equal(totalDeposit) {
+	if !receivedAmount.Equal(totalDeposit) {
 		return utils.NewEmitErrorAcknowledgement(
-			fmt.Errorf("amount deposited is not equal to the amounts to deposit in the users' insurance fund"),
+			fmt.Errorf("amount received is not equal to the amounts to deposit in the users' insurance fund"),
 		)
 	}
 
-	// Deposit the amount into the users' insurance fund
+	// Deposit the amounts into the users' insurance fund
 	for _, deposit := range depositMsg.Amounts {
 		accountAddress, err := sdk.AccAddressFromBech32(deposit.Depositor)
 		if err != nil {
 			return utils.NewEmitErrorAcknowledgement(err)
 		}
-		h.AddToUserInsuranceFund(ctx, accountAddress, sdk.NewCoins(deposit.Amount))
+		err = h.AddToUserInsuranceFund(ctx, accountAddress, sdk.NewCoins(deposit.Amount))
+		if err != nil {
+			return utils.NewEmitErrorAcknowledgement(err)
+		}
 	}
 
 	return im.App.OnRecvPacket(ctx, packet, relayer)

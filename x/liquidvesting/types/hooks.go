@@ -3,7 +3,6 @@ package types
 import (
 	fmt "fmt"
 
-	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -17,7 +16,7 @@ type InsuranceDeposit struct {
 
 func (i InsuranceDeposit) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(i.Depositor); err != nil {
-		return err
+		return fmt.Errorf("invalid depositor address: %s", err)
 	}
 	return i.Amount.Validate()
 }
@@ -45,9 +44,9 @@ func (msg MsgDepositInsurance) ValidateBasic() error {
 	return nil
 }
 
-func (msg MsgDepositInsurance) GetTotalDepositAmount() (sdk.Coin, error) {
+func (msg MsgDepositInsurance) GetTotalDepositAmount() (*sdk.Coin, error) {
 	if len(msg.Amounts) == 0 {
-		return sdk.NewCoin("", math.NewInt(0)), fmt.Errorf("no coins to deposit")
+		return nil, fmt.Errorf("no coins to deposit")
 	}
 
 	totalAmount := msg.Amounts[0].Amount
@@ -60,11 +59,11 @@ func (msg MsgDepositInsurance) GetTotalDepositAmount() (sdk.Coin, error) {
 
 		// Ensure that the deposits have all the same denom
 		if deposit.Amount.Denom != totalAmount.Denom {
-			return sdk.NewCoin("", math.NewInt(0)), fmt.Errorf("can't deposit multiple denoms")
+			return nil, fmt.Errorf("can't deposit multiple denoms")
 		} else {
 			totalAmount = totalAmount.Add(deposit.Amount)
 		}
 	}
 
-	return totalAmount, nil
+	return &totalAmount, nil
 }

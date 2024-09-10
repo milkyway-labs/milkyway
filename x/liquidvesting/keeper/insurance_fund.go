@@ -9,7 +9,7 @@ import (
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 )
 
-// DepositToUserInsuranceFund deposits coins to the user's insurance fund.
+// AddToUserInsuranceFund adds the provided amount to the user's insurance fund.
 func (k *Keeper) AddToUserInsuranceFund(
 	ctx sdk.Context,
 	user sdk.AccAddress,
@@ -55,13 +55,27 @@ func (k *Keeper) WithdrawFromUserInsuranceFund(
 
 // GetUserInsuranceFundBalance returns the amount of coins in the user's insurance fund.
 func (k *Keeper) GetUserInsuranceFundBalance(
-	sdk context.Context,
+	ctx context.Context,
 	user sdk.AccAddress,
 ) (sdk.Coins, error) {
-	panic("unimplemented")
+	insuranceFund, err := k.InsuranceFunds.Get(ctx, user)
+	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			return sdk.NewCoins(), nil
+		} else {
+			return nil, err
+		}
+	}
+
+	return insuranceFund.Balance, nil
 }
 
 // GetInsuranceFundBalance returns the amount of coins in the insurance fund.
-func (k *Keeper) GetInsuranceFundBalance(sdk context.Context) (sdk.Coins, error) {
-	panic("unimplemented")
+func (k *Keeper) GetInsuranceFundBalance(ctx context.Context) (sdk.Coins, error) {
+	accAddr, err := sdk.AccAddressFromBech32(k.ModuleAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	return k.BankKeeper.GetAllBalances(ctx, accAddr), nil
 }

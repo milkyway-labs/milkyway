@@ -2,7 +2,6 @@ package types
 
 import (
 	context "context"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -22,4 +21,6 @@ type BankKeeper interface {
 		recipientModule string,
 		amt sdk.Coins,
 	) error
+
+	GetAllBalances(ctx context.Context, addr sdk.AccAddress) sdk.Coins
 }

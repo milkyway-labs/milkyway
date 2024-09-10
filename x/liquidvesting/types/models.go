@@ -10,8 +10,6 @@ func NewInsuranceFund() UserInsuranceFund {
 	}
 }
 
-func (u *UserInsuranceFund) Add(amount sdk.Coins) UserInsuranceFund {
-	return UserInsuranceFund{
-		Balance: u.Balance.Sort().Add(amount.Sort()...),
-	}
+func (u *UserInsuranceFund) Add(amount sdk.Coins) {
+	u.Balance = u.Balance.Sort().Add(amount.Sort()...)
 }
