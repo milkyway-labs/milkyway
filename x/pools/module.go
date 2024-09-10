@@ -24,7 +24,7 @@ import (
 )
 
 const (
-	consensusVersion = 1
+	consensusVersion = 2
 )
 
 var (
@@ -114,6 +114,12 @@ func (am AppModule) Name() string {
 // RegisterServices registers a GRPC query service to respond to the module-specific GRPC queries.
 func (am AppModule) RegisterServices(cfg module.Configurator) {
 	types.RegisterQueryServer(cfg.QueryServer(), am.keeper)
+
+	m := keeper.NewMigrator(am.keeper)
+	err := cfg.RegisterMigration(types.ModuleName, 1, m.Migrate1To2)
+	if err != nil {
+		panic(err)
+	}
 }
 
 // RegisterInvariants registers the pools module's invariants.
