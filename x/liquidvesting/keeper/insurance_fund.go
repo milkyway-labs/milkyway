@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	"context"
 	"errors"
 
 	"cosmossdk.io/collections"
@@ -42,7 +41,7 @@ func (k *Keeper) WithdrawFromUserInsuranceFund(
 
 // GetUserInsuranceFundBalance returns the amount of coins in the user's insurance fund.
 func (k *Keeper) GetUserInsuranceFundBalance(
-	ctx context.Context,
+	ctx sdk.Context,
 	user sdk.AccAddress,
 ) (sdk.Coins, error) {
 	insuranceFund, err := k.InsuranceFunds.Get(ctx, user)
@@ -58,7 +57,7 @@ func (k *Keeper) GetUserInsuranceFundBalance(
 }
 
 // GetInsuranceFundBalance returns the amount of coins in the insurance fund.
-func (k *Keeper) GetInsuranceFundBalance(ctx context.Context) (sdk.Coins, error) {
+func (k *Keeper) GetInsuranceFundBalance(ctx sdk.Context) (sdk.Coins, error) {
 	accAddr, err := sdk.AccAddressFromBech32(k.ModuleAddress)
 	if err != nil {
 		return nil, err

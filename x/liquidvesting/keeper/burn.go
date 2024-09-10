@@ -22,6 +22,7 @@ func (k *Keeper) IsBurner(goCtx context.Context, user sdk.AccAddress) (bool, err
 // from the user's balance.
 // NOTE: If the coins are restaked they will be unstaked first.
 func (k *Keeper) BurnStakingRepresentation(
+	ctx sdk.Context,
 	user sdk.AccAddress,
 	amount sdk.Coins,
 ) error {

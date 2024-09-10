@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	"context"
 	"slices"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -10,8 +9,8 @@ import (
 )
 
 // IsMinter tells if a user have the permissions to mint tokens.
-func (k *Keeper) IsMinter(goCtx context.Context, user sdk.AccAddress) (bool, error) {
-	params, err := k.Params.Get(goCtx)
+func (k *Keeper) IsMinter(ctx sdk.Context, user sdk.AccAddress) (bool, error) {
+	params, err := k.Params.Get(ctx)
 	if err != nil {
 		return false, err
 	}
@@ -22,7 +21,7 @@ func (k *Keeper) IsMinter(goCtx context.Context, user sdk.AccAddress) (bool, err
 // MintStakingRepresentation mints the staking representation of the provided
 // amount to the user.
 func (k *Keeper) MintStakingRepresentation(
-	goCtx context.Context,
+	ctx sdk.Context,
 	user sdk.AccAddress,
 	amount sdk.Coins,
 ) error {
@@ -43,7 +42,7 @@ func (k *Keeper) MintStakingRepresentation(
 
 	// Transfer the minted tokens to the user
 	return k.BankKeeper.SendCoinsFromModuleToAccount(
-		goCtx,
+		ctx,
 		types.ModuleName,
 		user,
 		toMintTokens,

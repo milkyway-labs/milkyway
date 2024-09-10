@@ -27,7 +27,9 @@ func (m msgServer) MintStakingRepresentation(
 	goCtx context.Context,
 	msg *types.MsgMintStakingRepresentation,
 ) (*types.MsgMintStakingRepresentationResponse, error) {
-	accAddr, err := sdk.AccAddressFromBech32(msg.Sender)
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return nil, err
 	}
@@ -36,12 +38,12 @@ func (m msgServer) MintStakingRepresentation(
 		return nil, err
 	}
 
-	isMinter, err := m.IsMinter(goCtx, accAddr)
+	isMinter, err := m.IsMinter(ctx, sender)
 	if !isMinter {
 		return nil, types.ErrNotMinter
 	}
 
-	err = m.Keeper.MintStakingRepresentation(goCtx, receiver, msg.Amount)
+	err = m.Keeper.MintStakingRepresentation(ctx, receiver, msg.Amount)
 	if err != nil {
 		return nil, err
 	}
@@ -54,6 +56,8 @@ func (m msgServer) BurnStakingRepresentation(
 	goCtx context.Context,
 	msg *types.MsgBurnStakingRepresentation,
 ) (*types.MsgBurnStakingRepresentationResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return nil, err
@@ -68,7 +72,7 @@ func (m msgServer) BurnStakingRepresentation(
 		return nil, types.ErrNotBurner
 	}
 
-	err = m.Keeper.BurnStakingRepresentation(user, msg.Amount)
+	err = m.Keeper.BurnStakingRepresentation(ctx, user, msg.Amount)
 	if err != nil {
 		return nil, err
 	}
