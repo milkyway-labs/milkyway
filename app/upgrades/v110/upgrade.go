@@ -42,6 +42,13 @@ func (u *Upgrade) Name() string {
 // Handler implements upgrades.Upgrade
 func (u *Upgrade) Handler() upgradetypes.UpgradeHandler {
 	return func(ctx context.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
+		// Set the consensus version to 1 in order to run migrations from 1 to 2 for the following modules
+		fromVM[operatorstypes.ModuleName] = 1
+		fromVM[poolstypes.ModuleName] = 1
+		fromVM[restakingtypes.ModuleName] = 1
+		fromVM[rewardstypes.ModuleName] = 1
+		fromVM[servicestypes.ModuleName] = 1
+
 		// This upgrade does not require any migration, so we can simply return the current version map
 		return u.mm.RunMigrations(ctx, u.configurator, fromVM)
 	}
