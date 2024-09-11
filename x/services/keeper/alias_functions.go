@@ -41,3 +41,17 @@ func (k *Keeper) GetServices(ctx sdk.Context) []types.Service {
 	})
 	return services
 }
+
+// IsServiceDelegationsAddress returns true if the provided address is the address
+// where the users' asset are kept when they restake toward a service.
+func (k *Keeper) IsServiceDelegationsAddress(ctx sdk.Context, address string) bool {
+	isServiceAddress := false
+	k.IterateServices(ctx, func(service types.Service) bool {
+		if service.GetAddress() == address {
+			isServiceAddress = true
+		}
+		return isServiceAddress
+	})
+
+	return isServiceAddress
+}
