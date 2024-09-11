@@ -15,7 +15,11 @@ type Keeper struct {
 	storeService corestoretypes.KVStoreService
 
 	// Keepers
-	BankKeeper types.BankKeeper
+	BankKeeper      types.BankKeeper
+	OperatorsKeeper types.OperatorsKeeper
+	PoolsKeeper     types.PoolsKeeper
+	ServicesKeeper  types.ServicesKeeper
+	RestakingKeeper types.RestakingKeeper
 
 	// Keeper data
 	Schema         collections.Schema
@@ -31,6 +35,10 @@ func NewKeeper(
 	cdc codec.Codec,
 	storeService corestoretypes.KVStoreService,
 	bankKeeper types.BankKeeper,
+	operatorsKeeper types.OperatorsKeeper,
+	poolsKeeper types.PoolsKeeper,
+	servicesKeeper types.ServicesKeeper,
+	restakingKeeper types.RestakingKeeper,
 	moduleAddress string,
 	authority string,
 ) *Keeper {
@@ -40,7 +48,11 @@ func NewKeeper(
 		cdc:          cdc,
 		storeService: storeService,
 
-		BankKeeper: bankKeeper,
+		BankKeeper:      bankKeeper,
+		OperatorsKeeper: operatorsKeeper,
+		PoolsKeeper:     poolsKeeper,
+		ServicesKeeper:  servicesKeeper,
+		RestakingKeeper: restakingKeeper,
 
 		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		InsuranceFunds: collections.NewMap[sdk.AccAddress, types.UserInsuranceFund](

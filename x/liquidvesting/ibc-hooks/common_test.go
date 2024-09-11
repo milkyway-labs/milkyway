@@ -119,6 +119,10 @@ func (suite *HooksTestSuite) SetupTest() {
 		suite.cdc,
 		runtime.NewKVStoreService(keys[liquidvestingtypes.StoreKey]),
 		bankKeeper,
+		nil,
+		nil,
+		nil,
+		nil,
 		authtypes.NewModuleAddress(liquidvestingtypes.ModuleName).String(),
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
