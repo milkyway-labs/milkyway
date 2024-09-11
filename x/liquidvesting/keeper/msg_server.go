@@ -63,8 +63,6 @@ func (m msgServer) BurnStakingRepresentation(
 	goCtx context.Context,
 	msg *types.MsgBurnStakingRepresentation,
 ) (*types.MsgBurnStakingRepresentationResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return nil, err
@@ -74,7 +72,8 @@ func (m msgServer) BurnStakingRepresentation(
 		return nil, err
 	}
 
-	isBurner, err := m.IsBurner(goCtx, sender)
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	isBurner, err := m.IsBurner(ctx, sender)
 	if !isBurner {
 		return nil, types.ErrNotBurner
 	}
