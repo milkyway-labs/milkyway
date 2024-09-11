@@ -11,7 +11,7 @@ import (
 
 // IsMinter tells if a user have the permissions to mint tokens.
 func (k *Keeper) IsMinter(ctx sdk.Context, user sdk.AccAddress) (bool, error) {
-	params, err := k.Params.Get(ctx)
+	params, err := k.GetParams(ctx)
 	if err != nil {
 		return false, err
 	}
