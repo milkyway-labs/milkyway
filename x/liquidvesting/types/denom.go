@@ -20,10 +20,16 @@ func GetVestedRepresentationDenom(denom string) (string, error) {
 
 // IsVestedRepresentationDenom tells if the provided denom is
 // a representation of a vested denom.
-func IsVestedRepresentationDenom(denom string) (string, bool) {
+func IsVestedRepresentationDenom(denom string) bool {
+	return strings.HasPrefix(denom, VestedRepresentationDenomPrefix+"/")
+}
+
+// VestedDenomToNative convertes the denom of a vested token representation
+// to its native denom.
+func VestedDenomToNative(denom string) (string, error) {
 	if !strings.HasPrefix(denom, VestedRepresentationDenomPrefix+"/") {
-		return "", false
+		return "", ErrInvalidDenom
 	}
 
-	return strings.TrimPrefix(denom, VestedRepresentationDenomPrefix+"/"), true
+	return strings.TrimPrefix(denom, VestedRepresentationDenomPrefix+"/"), nil
 }
