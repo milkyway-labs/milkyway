@@ -92,6 +92,7 @@ func (suite *KeeperTestSuite) TestKeeper_WithdrawFromInsuranceFund() {
 
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
+			suite.SetupTest()
 			tc.setup()
 			accAddr := sdk.MustAccAddressFromBech32(tc.from)
 			err := suite.k.WithdrawFromUserInsuranceFund(suite.ctx, accAddr, tc.amount)

@@ -156,8 +156,8 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 	}
 
 	for _, tc := range testCases {
-		tc := tc
 		suite.Run(tc.name, func() {
+			suite.SetupTest()
 			data := transfertypes.FungibleTokenPacketData{
 				Denom:    tc.transferAmount.Denom,
 				Amount:   tc.transferAmount.Amount.String(),

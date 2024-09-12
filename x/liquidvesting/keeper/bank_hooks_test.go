@@ -113,10 +113,12 @@ func (suite *KeeperTestSuite) TestBankHooks_TestPoolRestaking() {
 		},
 	}
 
-	suite.createPool(testPoolId, vestedDenom)
 	for _, tc := range testCases {
 		tc := tc
 		suite.Run(tc.name, func() {
+			suite.SetupTest()
+			suite.createPool(testPoolId, vestedDenom)
+
 			ctx, _ := suite.ctx.CacheContext()
 			tc.setup()
 			msgServer := restakingkeeper.NewMsgServer(suite.rk)
@@ -234,11 +236,12 @@ func (suite *KeeperTestSuite) TestBankHooks_TestServiceRestaking() {
 		},
 	}
 
-	suite.createService(testServiceId)
-
 	for _, tc := range testCases {
 		tc := tc
 		suite.Run(tc.name, func() {
+			suite.SetupTest()
+			suite.createService(testServiceId)
+
 			ctx, _ := suite.ctx.CacheContext()
 			tc.setup()
 			msgServer := restakingkeeper.NewMsgServer(suite.rk)
@@ -355,11 +358,11 @@ func (suite *KeeperTestSuite) TestBankHooks_TestOperatorRestaking() {
 		},
 	}
 
-	suite.createOperator(testOperatorId)
-
 	for _, tc := range testCases {
-		tc := tc
 		suite.Run(tc.name, func() {
+			suite.SetupTest()
+			suite.createOperator(testOperatorId)
+
 			ctx, _ := suite.ctx.CacheContext()
 			tc.setup()
 			msgServer := restakingkeeper.NewMsgServer(suite.rk)
