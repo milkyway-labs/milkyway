@@ -165,6 +165,7 @@ import (
 	"github.com/milkyway-labs/milkyway/x/interchainquery"
 	icqkeeper "github.com/milkyway-labs/milkyway/x/interchainquery/keeper"
 	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
+	liquidvestingtypes "github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 	"github.com/milkyway-labs/milkyway/x/operators"
 	operatorskeeper "github.com/milkyway-labs/milkyway/x/operators/keeper"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
@@ -275,6 +276,9 @@ var (
 
 		// connect oracle permissions
 		oracletypes.ModuleName: nil,
+
+		// MilkyWay permissions
+		liquidvestingtypes.ModuleName: {authtypes.Minter, authtypes.Burner},
 
 		// this is only for testing
 		authtypes.Minter: {authtypes.Minter},
@@ -1136,7 +1140,7 @@ func NewMilkyWayApp(
 		recordstypes.ModuleName, ratelimittypes.ModuleName, icacallbackstypes.ModuleName,
 
 		servicestypes.ModuleName, operatorstypes.ModuleName, poolstypes.ModuleName, restakingtypes.ModuleName,
-		assetstypes.ModuleName, rewardstypes.ModuleName,
+		assetstypes.ModuleName, rewardstypes.ModuleName, liquidvestingtypes.ModuleName,
 		crisistypes.ModuleName,
 	}
 
