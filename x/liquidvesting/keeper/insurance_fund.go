@@ -9,6 +9,8 @@ import (
 )
 
 // AddToUserInsuranceFund adds the provided amount to the user's insurance fund.
+// NOTE: We assume that the amount that will be added to the user's insurance fund
+// is already present in the module account balance.
 func (k *Keeper) AddToUserInsuranceFund(
 	ctx sdk.Context,
 	user sdk.AccAddress,
@@ -36,7 +38,33 @@ func (k *Keeper) WithdrawFromUserInsuranceFund(
 	user sdk.AccAddress,
 	amount sdk.Coins,
 ) error {
-	panic("unimplemented")
+	insuranceFund, err := k.InsuranceFunds.Get(ctx, user)
+	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			return types.ErrInsufficientInsuranceFundBalance
+		}
+		return err
+	}
+
+	// Ensure that the user can withdraw that amount from their insurance fund
+	if !insuranceFund.Balance.IsAllGTE(amount) {
+		return types.ErrInsufficientInsuranceFundBalance
+	}
+
+	// Update the user insurance fund
+	insuranceFund.Balance = insuranceFund.Balance.Sub(amount...)
+	err = k.InsuranceFunds.Set(ctx, user, insuranceFund)
+	if err != nil {
+		return err
+	}
+
+	// Send the coins back to the user
+	err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, user, amount)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // GetUserInsuranceFundBalance returns the amount of coins in the user's insurance fund.
