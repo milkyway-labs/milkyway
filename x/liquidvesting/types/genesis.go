@@ -11,3 +11,7 @@ func NewGenesisState(params Params) *GenesisState {
 func DefaultGenesisState() *GenesisState {
 	return NewGenesisState(DefaultParams())
 }
+
+func (g *GenesisState) Validate() error {
+	return g.Params.Validate()
+}
