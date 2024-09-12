@@ -11,6 +11,11 @@ permissions:
   pull-requests: read
   statuses: write
 
+# Cancel all previous runs of the same workflow when a new one is triggered in the same branch.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   main:
     runs-on: ubuntu-latest

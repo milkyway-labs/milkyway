@@ -2,6 +2,11 @@ name: "Pull Request Labeler"
 on:
   - pull_request_target
 
+# Cancel all previous runs of the same workflow when a new one is triggered in the same branch.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   Labeler:
     runs-on: ubuntu-latest

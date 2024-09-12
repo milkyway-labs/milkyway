@@ -11,17 +11,12 @@ env:
   GOPRIVATE: github.com/milkyway-labs
   GH_ACCESS_TOKEN: ${{ secrets.GOPRIVATE_ACCESS_TOKEN }}
 
+# Cancel all previous runs of the same workflow when a new one is triggered in the same branch.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ !contains(github.ref, 'tags/')}}
+
 jobs:
-  Cleanup-runs:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cleanup 🧹
-        uses: rokroskar/workflow-run-cleanup-action@master
-        env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-    if: "!startsWith(github.ref, 'refs/tags/') && github.ref != 'refs/heads/main'"
-
-
   GolangCI:
     runs-on: ubuntu-latest
     timeout-minutes: 30
