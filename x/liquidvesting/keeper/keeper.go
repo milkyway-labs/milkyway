@@ -15,16 +15,16 @@ type Keeper struct {
 	storeService corestoretypes.KVStoreService
 
 	// Keepers
-	BankKeeper      types.BankKeeper
-	OperatorsKeeper types.OperatorsKeeper
-	PoolsKeeper     types.PoolsKeeper
-	ServicesKeeper  types.ServicesKeeper
-	RestakingKeeper types.RestakingKeeper
+	bankKeeper      types.BankKeeper
+	operatorsKeeper types.OperatorsKeeper
+	poolsKeeper     types.PoolsKeeper
+	servicesKeeper  types.ServicesKeeper
+	restakingKeeper types.RestakingKeeper
 
 	// Keeper data
-	Schema         collections.Schema
-	Params         collections.Item[types.Params]
-	InsuranceFunds collections.Map[sdk.AccAddress, types.UserInsuranceFund]
+	schema         collections.Schema
+	params         collections.Item[types.Params]
+	insuranceFunds collections.Map[sdk.AccAddress, types.UserInsuranceFund]
 
 	// Addresses
 	moduleAddress string
@@ -48,14 +48,14 @@ func NewKeeper(
 		cdc:          cdc,
 		storeService: storeService,
 
-		BankKeeper:      bankKeeper,
-		OperatorsKeeper: operatorsKeeper,
-		PoolsKeeper:     poolsKeeper,
-		ServicesKeeper:  servicesKeeper,
-		RestakingKeeper: restakingKeeper,
+		bankKeeper:      bankKeeper,
+		operatorsKeeper: operatorsKeeper,
+		poolsKeeper:     poolsKeeper,
+		servicesKeeper:  servicesKeeper,
+		restakingKeeper: restakingKeeper,
 
-		Params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
-		InsuranceFunds: collections.NewMap[sdk.AccAddress, types.UserInsuranceFund](
+		params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
+		insuranceFunds: collections.NewMap[sdk.AccAddress, types.UserInsuranceFund](
 			sb,
 			types.InsuranceFundKey,
 			"insurance_fund",
@@ -71,7 +71,7 @@ func NewKeeper(
 	if err != nil {
 		panic(err)
 	}
-	k.Schema = schema
+	k.schema = schema
 
 	return k
 }

@@ -35,7 +35,7 @@ func (k *Keeper) MintVestedRepresentation(
 		}
 
 		// Check if we have the metadata for the vested representation
-		_, vestedDenomMetadataFound := k.BankKeeper.GetDenomMetaData(ctx, vestedRepresentationDenom)
+		_, vestedDenomMetadataFound := k.bankKeeper.GetDenomMetaData(ctx, vestedRepresentationDenom)
 		if !vestedDenomMetadataFound {
 			// We don't have the metadata for the vested representation
 			// we should create it
@@ -50,20 +50,20 @@ func (k *Keeper) MintVestedRepresentation(
 				Display:     vestedRepresentationDenom,
 				Description: "Vested representation of " + vestedRepresentationDenom,
 			}
-			k.BankKeeper.SetDenomMetaData(ctx, denomMetadata)
+			k.bankKeeper.SetDenomMetaData(ctx, denomMetadata)
 		}
 
 		toMintTokens = append(toMintTokens, sdk.NewCoin(vestedRepresentationDenom, coin.Amount))
 	}
 
 	// Mint the tokens to the module
-	err := k.BankKeeper.MintCoins(ctx, types.ModuleName, toMintTokens)
+	err := k.bankKeeper.MintCoins(ctx, types.ModuleName, toMintTokens)
 	if err != nil {
 		return err
 	}
 
 	// Transfer the minted tokens to the user
-	return k.BankKeeper.SendCoinsFromModuleToAccount(
+	return k.bankKeeper.SendCoinsFromModuleToAccount(
 		ctx,
 		types.ModuleName,
 		user,

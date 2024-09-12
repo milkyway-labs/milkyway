@@ -17,7 +17,7 @@ func (suite *KeeperTestSuite) TestExportGenesis() {
 		{
 			name: "params are exported correctly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.Params.Set(ctx, types.DefaultParams())
+				err := suite.k.SetParams(ctx, types.DefaultParams())
 				suite.Require().NoError(err)
 			},
 			shouldErr: false,
@@ -61,7 +61,7 @@ func (suite *KeeperTestSuite) TestInitGenesis() {
 			),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				params, _ := suite.k.Params.Get(ctx)
+				params, _ := suite.k.GetParams(ctx)
 				suite.Assert().Equal(types.DefaultParams(), params)
 			},
 		},
@@ -80,7 +80,7 @@ func (suite *KeeperTestSuite) TestInitGenesis() {
 			genesis:   types.NewGenesisState(types.NewParams(math.LegacyNewDec(100), nil, nil)),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				params, _ := suite.k.Params.Get(ctx)
+				params, _ := suite.k.GetParams(ctx)
 				suite.Assert().Equal(math.LegacyNewDec(100), params.InsurancePercentage)
 			},
 		},

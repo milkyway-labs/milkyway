@@ -10,11 +10,16 @@ import (
 )
 
 func (k *Keeper) SetParams(ctx sdk.Context, params types.Params) error {
-	return k.Params.Set(ctx, params)
+	err := params.Validate()
+	if err != nil {
+		return err
+	}
+
+	return k.params.Set(ctx, params)
 }
 
 func (k *Keeper) GetParams(ctx sdk.Context) (types.Params, error) {
-	params, err := k.Params.Get(ctx)
+	params, err := k.params.Get(ctx)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
 			return types.DefaultParams(), nil

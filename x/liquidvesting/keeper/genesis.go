@@ -9,7 +9,7 @@ import (
 // ExportGenesis returns the GenesisState associated with the given context
 func (k *Keeper) ExportGenesis(ctx sdk.Context) (*types.GenesisState, error) {
 	// Get the params
-	params, err := k.Params.Get(ctx)
+	params, err := k.params.Get(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -27,7 +27,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 	}
 
 	// Store the params
-	err = k.Params.Set(ctx, state.Params)
+	err = k.SetParams(ctx, state.Params)
 	if err != nil {
 		return err
 	}

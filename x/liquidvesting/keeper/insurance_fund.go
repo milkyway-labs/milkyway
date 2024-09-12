@@ -16,7 +16,7 @@ func (k *Keeper) AddToUserInsuranceFund(
 	user sdk.AccAddress,
 	amount sdk.Coins,
 ) error {
-	insuranceFund, err := k.InsuranceFunds.Get(ctx, user)
+	insuranceFund, err := k.insuranceFunds.Get(ctx, user)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
 			insuranceFund = types.NewInsuranceFund()
@@ -28,7 +28,7 @@ func (k *Keeper) AddToUserInsuranceFund(
 	// Update the user's insurance fund
 	insuranceFund.Add(amount)
 	// Store the updated user's insurance fund
-	return k.InsuranceFunds.Set(ctx, user, insuranceFund)
+	return k.insuranceFunds.Set(ctx, user, insuranceFund)
 }
 
 // WithdrawFromUserInsuranceFund withdraws coins from the user's insurance fund
@@ -38,7 +38,7 @@ func (k *Keeper) WithdrawFromUserInsuranceFund(
 	user sdk.AccAddress,
 	amount sdk.Coins,
 ) error {
-	insuranceFund, err := k.InsuranceFunds.Get(ctx, user)
+	insuranceFund, err := k.insuranceFunds.Get(ctx, user)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
 			return types.ErrInsufficientInsuranceFundBalance
@@ -53,13 +53,13 @@ func (k *Keeper) WithdrawFromUserInsuranceFund(
 
 	// Update the user insurance fund
 	insuranceFund.Balance = insuranceFund.Balance.Sub(amount...)
-	err = k.InsuranceFunds.Set(ctx, user, insuranceFund)
+	err = k.insuranceFunds.Set(ctx, user, insuranceFund)
 	if err != nil {
 		return err
 	}
 
 	// Send the coins back to the user
-	err = k.BankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, user, amount)
+	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, user, amount)
 	if err != nil {
 		return err
 	}
@@ -72,7 +72,7 @@ func (k *Keeper) GetUserInsuranceFundBalance(
 	ctx sdk.Context,
 	user sdk.AccAddress,
 ) (sdk.Coins, error) {
-	insuranceFund, err := k.InsuranceFunds.Get(ctx, user)
+	insuranceFund, err := k.insuranceFunds.Get(ctx, user)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
 			return sdk.NewCoins(), nil
@@ -91,5 +91,5 @@ func (k *Keeper) GetInsuranceFundBalance(ctx sdk.Context) (sdk.Coins, error) {
 		return nil, err
 	}
 
-	return k.BankKeeper.GetAllBalances(ctx, accAddr), nil
+	return k.bankKeeper.GetAllBalances(ctx, accAddr), nil
 }
