@@ -19,12 +19,12 @@ message Params {
   ];
 
   // This value represents the list of users who are authorized to execute the
-  // MsgBurnStakingRepresentation.
+  // MsgBurnVestedRepresentation.
   repeated string burners = 2
       [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
   // This value represents the list of users who are authorized to execute the
-  // MsgMintStakingRepresentation.
+  // MsgMintVestedRepresentation.
   repeated string minters = 3
       [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 }

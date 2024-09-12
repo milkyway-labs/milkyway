@@ -19,9 +19,9 @@ func (k *Keeper) IsMinter(ctx sdk.Context, user sdk.AccAddress) (bool, error) {
 	return slices.Contains(params.Minters, user.String()), nil
 }
 
-// MintStakingRepresentation mints the staking representation of the provided
+// MintVestedRepresentation mints the vested staked representation of the provided
 // amount to the user.
-func (k *Keeper) MintStakingRepresentation(
+func (k *Keeper) MintVestedRepresentation(
 	ctx sdk.Context,
 	user sdk.AccAddress,
 	amount sdk.Coins,

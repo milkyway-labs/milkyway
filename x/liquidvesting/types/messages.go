@@ -7,20 +7,20 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// NewMsgMintStakingRepresentation creates a new MsgMintStakingRepresentation instance.
-func NewMsgMintStakingRepresentation(
+// NewMsgMintVestedRepresentation creates a new MsgMintVestedRepresentation instance.
+func NewMsgMintVestedRepresentation(
 	sender string,
 	receiver string,
 	amount types.Coins,
-) *MsgMintStakingRepresentation {
-	return &MsgMintStakingRepresentation{
+) *MsgMintVestedRepresentation {
+	return &MsgMintVestedRepresentation{
 		Sender:   sender,
 		Receiver: receiver,
 		Amount:   amount,
 	}
 }
 
-func (msg *MsgMintStakingRepresentation) ValidateBasic() error {
+func (msg *MsgMintVestedRepresentation) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address")
@@ -38,20 +38,20 @@ func (msg *MsgMintStakingRepresentation) ValidateBasic() error {
 	return nil
 }
 
-// NewMsgBurnStakingRepresentation creates a new MsgBurnStakingRepresentation instance.
-func NewMsgBurnStakingRepresentation(
+// NewMsgBurnVestedRepresentation creates a new MsgBurnVestedRepresentation instance.
+func NewMsgBurnVestedRepresentation(
 	sender string,
 	user string,
 	amount types.Coins,
-) *MsgBurnStakingRepresentation {
-	return &MsgBurnStakingRepresentation{
+) *MsgBurnVestedRepresentation {
+	return &MsgBurnVestedRepresentation{
 		Sender: sender,
 		User:   user,
 		Amount: amount,
 	}
 }
 
-func (msg *MsgBurnStakingRepresentation) ValidateBasic() error {
+func (msg *MsgBurnVestedRepresentation) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address")

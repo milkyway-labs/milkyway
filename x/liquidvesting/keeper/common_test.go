@@ -188,13 +188,13 @@ func (suite *KeeperTestSuite) SetupTest() {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// mintStakingRepresentation mints the vested representation of the provided amount to
+// mintVestedRepresentation mints the vested representation of the provided amount to
 // the user balance
 func (suite *KeeperTestSuite) mintVestedRepresentation(address string, amount sdk.Coins) {
 	accAddress, err := sdk.AccAddressFromBech32(address)
 	suite.Assert().NoError(err)
 
-	suite.Assert().NoError(suite.k.MintStakingRepresentation(
+	suite.Assert().NoError(suite.k.MintVestedRepresentation(
 		suite.ctx, accAddress, amount,
 	))
 }

@@ -17,13 +17,13 @@ func (k *Keeper) IsBurner(ctx sdk.Context, user sdk.AccAddress) (bool, error) {
 	return slices.Contains(params.Burners, user.String()), nil
 }
 
-// BurnStakingRepresentation burns the staking representation
+// BurnVestedRepresentation burns the vested staking representation
 // from the user's balance.
 // NOTE: If the coins are restaked they will be unstaked first.
-func (k *Keeper) BurnStakingRepresentation(
-	ctx sdk.Context,
-	user sdk.AccAddress,
-	amount sdk.Coins,
+func (k *Keeper) BurnVestedRepresentation(
+	_ sdk.Context,
+	_ sdk.AccAddress,
+	_ sdk.Coins,
 ) error {
 	panic("unimplemented")
 }

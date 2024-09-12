@@ -20,11 +20,11 @@ func NewMsgServer(k *Keeper) types.MsgServer {
 	return &msgServer{Keeper: k}
 }
 
-// MintStakingRepresentation implements types.MsgServer.
-func (m msgServer) MintStakingRepresentation(
+// MintVestedRepresentation implements types.MsgServer.
+func (m msgServer) MintVestedRepresentation(
 	goCtx context.Context,
-	msg *types.MsgMintStakingRepresentation,
-) (*types.MsgMintStakingRepresentationResponse, error) {
+	msg *types.MsgMintVestedRepresentation,
+) (*types.MsgMintVestedRepresentationResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
@@ -41,28 +41,28 @@ func (m msgServer) MintStakingRepresentation(
 		return nil, types.ErrNotMinter
 	}
 
-	err = m.Keeper.MintStakingRepresentation(ctx, receiver, msg.Amount)
+	err = m.Keeper.MintVestedRepresentation(ctx, receiver, msg.Amount)
 	if err != nil {
 		return nil, err
 	}
 
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeMintStakingRepresentation,
+			types.EventTypeMintVestedRepresentation,
 			sdk.NewAttribute(types.AttributeKeyMinter, msg.Sender),
 			sdk.NewAttribute(types.AttributeKeyAmount, msg.Amount.String()),
 			sdk.NewAttribute(types.AttributeKeyTo, msg.Receiver),
 		),
 	})
 
-	return &types.MsgMintStakingRepresentationResponse{}, nil
+	return &types.MsgMintVestedRepresentationResponse{}, nil
 }
 
-// BurnStakingRepresentation implements types.MsgServer.
-func (m msgServer) BurnStakingRepresentation(
+// BurnVestedRepresentation implements types.MsgServer.
+func (m msgServer) BurnVestedRepresentation(
 	goCtx context.Context,
-	msg *types.MsgBurnStakingRepresentation,
-) (*types.MsgBurnStakingRepresentationResponse, error) {
+	msg *types.MsgBurnVestedRepresentation,
+) (*types.MsgBurnVestedRepresentationResponse, error) {
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return nil, err
@@ -78,21 +78,21 @@ func (m msgServer) BurnStakingRepresentation(
 		return nil, types.ErrNotBurner
 	}
 
-	err = m.Keeper.BurnStakingRepresentation(ctx, user, msg.Amount)
+	err = m.Keeper.BurnVestedRepresentation(ctx, user, msg.Amount)
 	if err != nil {
 		return nil, err
 	}
 
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeBurnStakingRepresentation,
+			types.EventTypeBurnVestedRepresentation,
 			sdk.NewAttribute(types.AttributeKeyMinter, msg.Sender),
 			sdk.NewAttribute(types.AttributeKeyAmount, msg.Amount.String()),
 			sdk.NewAttribute(types.AttributeKeyFrom, msg.User),
 		),
 	})
 
-	return &types.MsgBurnStakingRepresentationResponse{}, nil
+	return &types.MsgBurnVestedRepresentationResponse{}, nil
 }
 
 // UpdateParams implements types.MsgServer.

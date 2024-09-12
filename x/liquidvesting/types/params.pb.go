@@ -33,10 +33,10 @@ type Params struct {
 	// the insurance fund to restake 100 vested tokens
 	InsurancePercentage cosmossdk_io_math.LegacyDec `protobuf:"bytes,1,opt,name=insurance_percentage,json=insurancePercentage,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"insurance_percentage"`
 	// This value represents the list of users who are authorized to execute the
-	// MsgBurnStakingRepresentation.
+	// MsgBurnVestedRepresentation.
 	Burners []string `protobuf:"bytes,2,rep,name=burners,proto3" json:"burners,omitempty"`
 	// This value represents the list of users who are authorized to execute the
-	// MsgMintStakingRepresentation.
+	// MsgMintVestedRepresentation.
 	Minters []string `protobuf:"bytes,3,rep,name=minters,proto3" json:"minters,omitempty"`
 }
 
