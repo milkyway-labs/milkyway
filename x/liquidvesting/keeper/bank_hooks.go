@@ -17,7 +17,7 @@ type BankHooks struct {
 	*Keeper
 }
 
-func NewBankHooks(k *Keeper) BankHooks {
+func (k *Keeper) BankHooks() BankHooks {
 	return BankHooks{k}
 }
 
@@ -28,8 +28,13 @@ func (h BankHooks) BlockBeforeSend(
 	to sdk.AccAddress,
 	amount sdk.Coins,
 ) error {
-	ctx := sdk.UnwrapSDKContext(goCtx)
+	// Don't check when transferring from or to the module account, this is to allow
+	// the minting and burning of the vested representations
+	if to.String() == h.moduleAddress || from.String() == h.moduleAddress {
+		return nil
+	}
 
+	ctx := sdk.UnwrapSDKContext(goCtx)
 	for _, coin := range amount {
 		// Check if coin is a representation of a vested originalDenom
 		if types.IsVestedRepresentationDenom(coin.Denom) {
@@ -169,10 +174,10 @@ func (h BankHooks) getUserDelegateAmount(ctx sdk.Context, user sdk.AccAddress, d
 
 // TrackBeforeSend implements keeper.BankHooks.
 func (h BankHooks) TrackBeforeSend(
-	ctx context.Context,
-	from sdk.AccAddress,
-	to sdk.AccAddress,
-	amount sdk.Coins,
+	_ context.Context,
+	_ sdk.AccAddress,
+	_ sdk.AccAddress,
+	_ sdk.Coins,
 ) {
 	// Noting to do here.
 }
