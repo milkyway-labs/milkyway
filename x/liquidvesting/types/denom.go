@@ -13,6 +13,10 @@ const (
 // GetVestedRepresentationDenom returns the denom used to
 // represent the vested version of the provided denom.
 func GetVestedRepresentationDenom(denom string) (string, error) {
+	if IsVestedRepresentationDenom(denom) {
+		return "", ErrInvalidDenom
+	}
+
 	// Create the vested representation of the provided denom
 	vestedDenom := strings.Join([]string{VestedRepresentationDenomPrefix, denom}, "/")
 	return vestedDenom, sdk.ValidateDenom(vestedDenom)
