@@ -58,7 +58,7 @@ func (k *Keeper) GetUserInsuranceFundBalance(
 
 // GetInsuranceFundBalance returns the amount of coins in the insurance fund.
 func (k *Keeper) GetInsuranceFundBalance(ctx sdk.Context) (sdk.Coins, error) {
-	accAddr, err := sdk.AccAddressFromBech32(k.ModuleAddress)
+	accAddr, err := sdk.AccAddressFromBech32(k.moduleAddress)
 	if err != nil {
 		return nil, err
 	}

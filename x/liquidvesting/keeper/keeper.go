@@ -27,7 +27,7 @@ type Keeper struct {
 	InsuranceFunds collections.Map[sdk.AccAddress, types.UserInsuranceFund]
 
 	// Addresses
-	ModuleAddress string
+	moduleAddress string
 	authority     string
 }
 
@@ -63,7 +63,7 @@ func NewKeeper(
 			codec.CollValue[types.UserInsuranceFund](cdc),
 		),
 
-		ModuleAddress: moduleAddress,
+		moduleAddress: moduleAddress,
 		authority:     authority,
 	}
 
