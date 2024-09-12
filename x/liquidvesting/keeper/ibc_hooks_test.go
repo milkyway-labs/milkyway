@@ -1,19 +1,21 @@
-package ibc_hooks_test
+package keeper_test
 
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 	"github.com/stretchr/testify/require"
 )
 
-func (suite *HooksTestSuite) TestHooks_IbcTriggers() {
-	user1 := suite.userAddress("user1")
-	user2 := suite.userAddress("user2")
+func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
+	user1 := authtypes.NewModuleAddress("user1")
+	user2 := authtypes.NewModuleAddress("user2")
+	moduleAddress := authtypes.NewModuleAddress(types.ModuleName).String()
 
 	testCases := []struct {
 		name           string
@@ -48,13 +50,13 @@ func (suite *HooksTestSuite) TestHooks_IbcTriggers() {
 			shouldErr: true,
 			errorMessage: fmt.Sprintf(
 				"ibc hook error: the receiver should be the module address, got: %s, expected: %s",
-				user2.String(), suite.k.ModuleAddress),
+				user2.String(), moduleAddress),
 		},
 		{
 			name:           "transfer not received denom",
 			transferAmount: sdk.NewInt64Coin("foo", 1000),
 			sender:         user1.String(),
-			receiver:       suite.k.ModuleAddress,
+			receiver:       moduleAddress,
 			memo: fmt.Sprintf(`{"liquidvesting": {
 				"amounts": [
 					{
@@ -73,7 +75,7 @@ func (suite *HooksTestSuite) TestHooks_IbcTriggers() {
 			name:           "multiple denoms in amount to deposit",
 			transferAmount: sdk.NewInt64Coin("foo", 1000),
 			sender:         user1.String(),
-			receiver:       suite.k.ModuleAddress,
+			receiver:       moduleAddress,
 			memo: fmt.Sprintf(`{
 			"liquidvesting": {
 				"amounts": [{
@@ -92,7 +94,7 @@ func (suite *HooksTestSuite) TestHooks_IbcTriggers() {
 			name:           "deposit more coins then received",
 			transferAmount: sdk.NewInt64Coin("foo", 1000),
 			sender:         user1.String(),
-			receiver:       suite.k.ModuleAddress,
+			receiver:       moduleAddress,
 			memo: fmt.Sprintf(`{
             "liquidvesting": {
                 "amounts": [{
@@ -111,7 +113,7 @@ func (suite *HooksTestSuite) TestHooks_IbcTriggers() {
 			name:           "deposit less coins then received",
 			transferAmount: sdk.NewInt64Coin("foo", 1000),
 			sender:         user1.String(),
-			receiver:       suite.k.ModuleAddress,
+			receiver:       moduleAddress,
 			memo: fmt.Sprintf(`{
             "liquidvesting": {
                 "amounts": [{
@@ -130,7 +132,7 @@ func (suite *HooksTestSuite) TestHooks_IbcTriggers() {
 			name:           "correct deposit",
 			transferAmount: sdk.NewInt64Coin("foo", 1000),
 			sender:         user1.String(),
-			receiver:       suite.k.ModuleAddress,
+			receiver:       moduleAddress,
 			memo: fmt.Sprintf(`{
             "liquidvesting": {
                 "amounts": [{
@@ -169,7 +171,7 @@ func (suite *HooksTestSuite) TestHooks_IbcTriggers() {
 			require.NoError(suite.T(), err)
 
 			relayer := suite.ak.GetModuleAddress("relayer")
-			ack := suite.IBCHooksMiddleware.OnRecvPacket(suite.ctx, channeltypes.Packet{
+			ack := suite.ibcm.OnRecvPacket(suite.ctx, channeltypes.Packet{
 				Data: dataBz,
 			}, relayer)
 			ack.Acknowledgement()

@@ -1,4 +1,4 @@
-package ibc_hooks
+package keeper
 
 import (
 	"encoding/json"
@@ -12,26 +12,23 @@ import (
 	ibchooks "github.com/initia-labs/initia/x/ibc-hooks"
 
 	"github.com/milkyway-labs/milkyway/utils"
-	"github.com/milkyway-labs/milkyway/x/liquidvesting/keeper"
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 )
 
-var _ ibchooks.OnRecvPacketOverrideHooks = Hooks{}
+var _ ibchooks.OnRecvPacketOverrideHooks = IBCHooks{}
 
-// Hooks represents the structure that implements the
+// IBCHooks represents the structure that implements the
 // ibc_hooks.OnRecvPacketOverrideHooks interface to execute
 // custom logic when an IBC token transfer packet is received.
-type Hooks struct {
-	*keeper.Keeper
+type IBCHooks struct {
+	*Keeper
 }
 
-func NewHooks(k *keeper.Keeper) Hooks {
-	return Hooks{
-		Keeper: k,
-	}
+func (k *Keeper) IBCHooks() IBCHooks {
+	return IBCHooks{k}
 }
 
-func (h Hooks) onRecvIcs20Packet(
+func (h IBCHooks) onRecvIcs20Packet(
 	ctx sdk.Context,
 	im ibchooks.IBCMiddleware,
 	packet chan4types.Packet,
@@ -45,9 +42,9 @@ func (h Hooks) onRecvIcs20Packet(
 	}
 
 	// Ensure the receiver is the x/liquidvesting module account
-	if ics20Packet.Receiver != h.ModuleAddress {
+	if ics20Packet.Receiver != h.moduleAddress {
 		return utils.NewEmitErrorAcknowledgement(
-			fmt.Errorf("the receiver should be the module address, got: %s, expected: %s", ics20Packet.Receiver, h.ModuleAddress),
+			fmt.Errorf("the receiver should be the module address, got: %s, expected: %s", ics20Packet.Receiver, h.moduleAddress),
 		)
 	}
 
@@ -111,7 +108,7 @@ func (h Hooks) onRecvIcs20Packet(
 }
 
 // OnRecvPacketOverride implements ibc_hooks.OnRecvPacketOverrideHooks.
-func (h Hooks) OnRecvPacketOverride(
+func (h IBCHooks) OnRecvPacketOverride(
 	im ibchooks.IBCMiddleware,
 	ctx sdk.Context,
 	packet chan4types.Packet,
