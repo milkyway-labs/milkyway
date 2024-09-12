@@ -49,7 +49,7 @@ func getCmdQueryPoolByID() *cobra.Command {
 				return err
 			}
 
-			res, err := queryClient.PoolById(cmd.Context(), types.NewQueryPoolByIdRequest(poolID))
+			res, err := queryClient.PoolByID(cmd.Context(), types.NewQueryPoolByIDRequest(poolID))
 			if err != nil {
 				return err
 			}

@@ -10,8 +10,8 @@ option go_package = "github.com/milkyway-labs/milkyway/x/pools/types";
 
 // Query defines the gRPC querier service.
 service Query {
-  // PoolById defines a gRPC query method that returns the pool by the given ID.
-  rpc PoolById(QueryPoolByIdRequest) returns (QueryPoolResponse) {
+  // PoolByID defines a gRPC query method that returns the pool by the given ID.
+  rpc PoolByID(QueryPoolByIdRequest) returns (QueryPoolResponse) {
     option (google.api.http).get = "/milkyway/pools/v1/pools/{pool_id}";
   }
 

@@ -47,7 +47,7 @@ func (k msgServer) RegisterOperator(goCtx context.Context, msg *types.MsgRegiste
 	// Validate the operator before storing
 	err = operator.Validate()
 	if err != nil {
-		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, err.Error())
+		return nil, errors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	// Store the operator
@@ -94,7 +94,7 @@ func (k msgServer) UpdateOperator(goCtx context.Context, msg *types.MsgUpdateOpe
 	// Validate the updated operator before storing
 	err := updated.Validate()
 	if err != nil {
-		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, err.Error())
+		return nil, errors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	// Store the updated operator

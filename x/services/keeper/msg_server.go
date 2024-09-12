@@ -48,7 +48,7 @@ func (k msgServer) CreateService(goCtx context.Context, msg *types.MsgCreateServ
 	// Validate the service before storing
 	err = service.Validate()
 	if err != nil {
-		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, err.Error())
+		return nil, errors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	// Create the service
@@ -94,7 +94,7 @@ func (k msgServer) UpdateService(goCtx context.Context, msg *types.MsgUpdateServ
 	// Validate the updated service
 	err := updated.Validate()
 	if err != nil {
-		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, err.Error())
+		return nil, errors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	// Save the service

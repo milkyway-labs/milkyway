@@ -4,10 +4,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/query"
 )
 
-// NewQueryPoolByIdRequest creates a new instance of QueryPoolByIdRequest
-func NewQueryPoolByIdRequest(poolId uint32) *QueryPoolByIdRequest {
+// NewQueryPoolByIDRequest creates a new instance of QueryPoolByIdRequest
+func NewQueryPoolByIDRequest(poolID uint32) *QueryPoolByIdRequest {
 	return &QueryPoolByIdRequest{
-		PoolId: poolId,
+		PoolId: poolID,
 	}
 }
 

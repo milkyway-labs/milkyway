@@ -82,7 +82,8 @@ func (k *Keeper) calculateDelegationRewardsBetween(
 			diff.DecCoins.MulDecTruncate(stakes.AmountOf(diff.Denom)),
 		))
 	}
-	return
+
+	return rewards, nil
 }
 
 // CalculateDelegationRewards calculates the total rewards accrued by a delegation
@@ -111,12 +112,12 @@ func (k *Keeper) CalculateDelegationRewards(
 	stakes := startingInfo.Stakes
 
 	// TODO: handle slash events
-	//startingHeight := startingInfo.Height
-	//// Slashes this block happened after reward allocation, but we have to account
-	//// for them for the stake sanity check below.
-	//endingHeight := uint64(sdkCtx.BlockHeight())
-	//if endingHeight > startingHeight {
-	//}
+	// startingHeight := startingInfo.Height
+	// // Slashes this block happened after reward allocation, but we have to account
+	// // for them for the stake sanity check below.
+	// endingHeight := uint64(sdkCtx.BlockHeight())
+	// if endingHeight > startingHeight {
+	// }
 
 	// A total stake sanity check; Recalculated final stake should be less than or
 	// equal to current stake here. We cannot use Equals because stake is truncated

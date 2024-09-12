@@ -23,8 +23,8 @@ func NewDecPoolsFromPools(pools Pools) DecPools {
 }
 
 // Sum returns sum of pool tokens
-func (p DecPools) Sum() (coins sdk.DecCoins) {
-	for _, p := range p {
+func (pools DecPools) Sum() (coins sdk.DecCoins) {
+	for _, p := range pools {
 		coins = coins.Add(p.DecCoins...)
 	}
 
@@ -244,20 +244,20 @@ func (pools DecPools) String() string {
 // Sort interface
 
 // Len implements sort.Interface for DecPools
-func (p DecPools) Len() int { return len(p) }
+func (pools DecPools) Len() int { return len(pools) }
 
 // Less implements sort.Interface for DecPools
-func (p DecPools) Less(i, j int) bool { return p[i].Denom < p[j].Denom }
+func (pools DecPools) Less(i, j int) bool { return pools[i].Denom < pools[j].Denom }
 
 // Swap implements sort.Interface for DecPools
-func (p DecPools) Swap(i, j int) { p[i], p[j] = p[j], p[i] }
+func (pools DecPools) Swap(i, j int) { pools[i], pools[j] = pools[j], pools[i] }
 
 var _ sort.Interface = DecPools{}
 
 // Sort is a helper function to sort the set of p in-place
-func (p DecPools) Sort() DecPools {
-	sort.Sort(p)
-	return p
+func (pools DecPools) Sort() DecPools {
+	sort.Sort(pools)
+	return pools
 }
 
 //-----------------------------------------------------------------------------

@@ -29,7 +29,7 @@ func (msg *MsgRegisterAsset) Validate() error {
 
 	err = msg.Asset.Validate()
 	if err != nil {
-		return errors.Wrapf(sdkerrors.ErrInvalidRequest, err.Error())
+		return errors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	return nil

@@ -202,30 +202,30 @@ func NewServiceUpdate(
 }
 
 // Update returns a new Service with updated fields.
-func (a *Service) Update(update ServiceUpdate) Service {
+func (s *Service) Update(update ServiceUpdate) Service {
 	if update.Name == DoNotModify {
-		update.Name = a.Name
+		update.Name = s.Name
 	}
 
 	if update.Description == DoNotModify {
-		update.Description = a.Description
+		update.Description = s.Description
 	}
 
 	if update.Website == DoNotModify {
-		update.Website = a.Website
+		update.Website = s.Website
 	}
 
 	if update.PictureURL == DoNotModify {
-		update.PictureURL = a.PictureURL
+		update.PictureURL = s.PictureURL
 	}
 
 	return NewService(
-		a.ID,
-		a.Status,
+		s.ID,
+		s.Status,
 		update.Name,
 		update.Description,
 		update.Website,
 		update.PictureURL,
-		a.Admin,
+		s.Admin,
 	)
 }

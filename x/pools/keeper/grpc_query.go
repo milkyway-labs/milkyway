@@ -14,8 +14,8 @@ import (
 
 var _ types.QueryServer = &Keeper{}
 
-// PoolById implements the Query/PoolById gRPC method
-func (k *Keeper) PoolById(ctx context.Context, request *types.QueryPoolByIdRequest) (*types.QueryPoolResponse, error) {
+// PoolByID implements the Query/PoolById gRPC method
+func (k *Keeper) PoolByID(ctx context.Context, request *types.QueryPoolByIdRequest) (*types.QueryPoolResponse, error) {
 	if request.PoolId == 0 {
 		return nil, status.Error(codes.InvalidArgument, "invalid pool id")
 	}

@@ -12,7 +12,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/address"
 	"github.com/cosmos/cosmos-sdk/types/bech32"
-	"github.com/cosmos/cosmos-sdk/types/module"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 
 	errorsmod "cosmossdk.io/errors"
@@ -37,7 +36,7 @@ func Int64ToCoinString(amount int64, denom string) string {
 
 func ValidateAdminAddress(address string) error {
 	if !Admins[address] {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, fmt.Sprintf("address (%s) is not an admin", address))
+		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "address (%s) is not an admin", address)
 	}
 	return nil
 }
@@ -67,7 +66,7 @@ func Int32MapKeys[V any](m map[int32]V) []int32 {
 	return keys
 }
 
-//==============================  ADDRESS VERIFICATION UTILS  ================================
+// ==============================  ADDRESS VERIFICATION UTILS  ================================
 // ref: https://github.com/cosmos/cosmos-sdk/blob/b75c2ebcfab1a6b535723f1ac2889a2fc2509520/types/address.go#L177
 
 var errBech32EmptyAddress = errors.New("decoding Bech32 address failed: must provide a non empty address")
@@ -142,82 +141,13 @@ func AccAddressFromBech32(address string, bech32prefix string) (addr AccAddress,
 	return AccAddress(bz), nil
 }
 
-// ==============================  AIRDROP UTILS  ================================
-// max64 returns the maximum of its inputs.
-func Max64(i, j int64) int64 {
-	if i > j {
-		return i
-	}
-	return j
-}
-
-// Min64 returns the minimum of its inputs.
-func Min64(i, j int64) int64 {
-	if i < j {
-		return i
-	}
-	return j
-}
-
-// Compute coin amount for specific period using linear vesting calculation algorithm.
-func GetVestedCoinsAt(vAt int64, vStart int64, vLength int64, vCoins sdk.Coins) sdk.Coins {
-	var vestedCoins sdk.Coins
-
-	if vAt < 0 || vStart < 0 || vLength < 0 {
-		return sdk.Coins{}
-	}
-
-	vEnd := vStart + vLength
-	if vAt <= vStart {
-		return sdk.Coins{}
-	} else if vAt >= vEnd {
-		return vCoins
-	}
-
-	// calculate the vesting scalar
-	portion := sdkmath.LegacyNewDec(vAt - vStart).Quo(sdkmath.LegacyNewDec(vLength))
-
-	for _, ovc := range vCoins {
-		vestedAmt := sdkmath.LegacyNewDec(ovc.Amount.Int64()).Mul(portion).RoundInt()
-		vestedCoins = append(vestedCoins, sdk.NewCoin(ovc.Denom, vestedAmt))
-	}
-
-	return vestedCoins
-}
-
-// check string array inclusion
-func ContainsString(s []string, e string) bool {
-	for _, a := range s {
-		if a == e {
-			return true
-		}
-	}
-	return false
-}
-
-// XXX
-//// Convert any bech32 to stride address
-//func ConvertAddressToStrideAddress(address string) string {
-//	_, bz, err := bech32.DecodeAndConvert(address)
-//	if err != nil {
-//		return ""
-//	}
-//
-//	bech32Addr, err := bech32.ConvertAndEncode(milkywayapp.AccountAddressPrefix, bz) // XXX
-//	if err != nil {
-//		return ""
-//	}
-//
-//	return bech32Addr
-//}
-
-// Returns a log string with a chainId and tab as the prefix
+// LogWithHostZone returns a log string with a chainId and tab as the prefix
 // Ex:
 //
 //	| COSMOSHUB-4   |   string
-func LogWithHostZone(chainId string, s string, a ...any) string {
+func LogWithHostZone(chainID string, s string, a ...any) string {
 	msg := fmt.Sprintf(s, a...)
-	return fmt.Sprintf("|   %-13s |  %s", strings.ToUpper(chainId), msg)
+	return fmt.Sprintf("|   %-13s |  %s", strings.ToUpper(chainID), msg)
 }
 
 // Returns a log string with a chain Id and callback as a prefix
@@ -225,24 +155,24 @@ func LogWithHostZone(chainId string, s string, a ...any) string {
 // Format:
 //
 //	|   CHAIN-ID    |  {CALLBACK_ID} {CALLBACK_TYPE}  |  string
-func logCallbackWithHostZone(chainId string, callbackId string, callbackType string, s string, a ...any) string {
+func logCallbackWithHostZone(chainID string, callbackID string, callbackType string, s string, a ...any) string {
 	msg := fmt.Sprintf(s, a...)
-	return fmt.Sprintf("|   %-13s |  %s %s  |  %s", strings.ToUpper(chainId), strings.ToUpper(callbackId), callbackType, msg)
+	return fmt.Sprintf("|   %-13s |  %s %s  |  %s", strings.ToUpper(chainID), strings.ToUpper(callbackID), callbackType, msg)
 }
 
-// Returns a log string with a chain Id and icacallback as a prefix
+// LogICACallbackWithHostZone returns a log string with a chain Id and icacallback as a prefix
 // Ex:
 //
 //	| COSMOSHUB-4   |  DELEGATE ICACALLBACK  |  string
-func LogICACallbackWithHostZone(chainId string, callbackId string, s string, a ...any) string {
-	return logCallbackWithHostZone(chainId, callbackId, "ICACALLBACK", s, a...)
+func LogICACallbackWithHostZone(chainID string, callbackID string, s string, a ...any) string {
+	return logCallbackWithHostZone(chainID, callbackID, "ICACALLBACK", s, a...)
 }
 
-// Returns a log string with a chain Id and icacallback as a prefix, and status of the callback
+// LogICACallbackStatusWithHostZone returns a log string with a chain Id and icacallback as a prefix, and status of the callback
 // Ex:
 //
 //	| COSMOSHUB-4   |  DELEGATE ICACALLBACK  |  ICA SUCCESS, Packet: ...
-func LogICACallbackStatusWithHostZone(chainId string, callbackId string, status icacallbacktypes.AckResponseStatus, packet channeltypes.Packet) string {
+func LogICACallbackStatusWithHostZone(chainID string, callbackID string, status icacallbacktypes.AckResponseStatus, packet channeltypes.Packet) string {
 	var statusMsg string
 	switch status {
 	case icacallbacktypes.AckResponseStatus_SUCCESS:
@@ -252,18 +182,18 @@ func LogICACallbackStatusWithHostZone(chainId string, callbackId string, status 
 	default:
 		statusMsg = "ICA FAILED (ack error)"
 	}
-	return logCallbackWithHostZone(chainId, callbackId, "ICACALLBACK", "%s, Packet: %+v", statusMsg, packet)
+	return logCallbackWithHostZone(chainID, callbackID, "ICACALLBACK", "%s, Packet: %+v", statusMsg, packet)
 }
 
-// Returns a log string with a chain Id and icqcallback as a prefix
+// LogICQCallbackWithHostZone returns a log string with a chain Id and icqcallback as a prefix
 // Ex:
 //
 //	| COSMOSHUB-4   |  WITHDRAWALHOSTBALANCE ICQCALLBACK  |  string
-func LogICQCallbackWithHostZone(chainId string, callbackId string, s string, a ...any) string {
-	return logCallbackWithHostZone(chainId, callbackId, "ICQCALLBACK", s, a...)
+func LogICQCallbackWithHostZone(chainID string, callbackID string, s string, a ...any) string {
+	return logCallbackWithHostZone(chainID, callbackID, "ICQCALLBACK", s, a...)
 }
 
-// Returns a log header string with a dash padding on either side
+// LogHeader returns a log header string with a dash padding on either side
 // Ex:
 //
 //	------------------------------ string ------------------------------
@@ -274,29 +204,12 @@ func LogHeader(s string, a ...any) string {
 	return fmt.Sprintf("%s %s %s", pad, header, pad)
 }
 
-// Logs a module's migration info
-func LogModuleMigration(ctx sdk.Context, versionMap module.VersionMap, moduleName string) {
-	currentVersion := versionMap[moduleName]
-	ctx.Logger().Info(fmt.Sprintf("migrating module %s from version %d to version %d", moduleName, currentVersion-1, currentVersion))
-}
-
-// isIBCToken checks if the token came from the IBC module
-// Each IBC token starts with an ibc/ denom, the check is rather simple
-func IsIBCToken(denom string) bool {
-	return strings.HasPrefix(denom, "ibc/")
-}
-
-// Returns the stDenom from a native denom by appending a st prefix
+// StAssetDenomFromHostZoneDenom returns the stDenom from a native denom by appending a st prefix
 func StAssetDenomFromHostZoneDenom(hostZoneDenom string) string {
 	return "milk" + hostZoneDenom
 }
 
-// Returns the native denom from an stDenom by removing the st prefix
-func HostZoneDenomFromStAssetDenom(stAssetDenom string) string {
-	return stAssetDenom[2:]
-}
-
-// Verifies a tx hash is valid
+// VerifyTxHash verifies a tx hash is valid
 func VerifyTxHash(txHash string) (err error) {
 	if txHash == "" {
 		return errorsmod.Wrapf(sdkerrors.ErrTxDecode, "tx hash is empty")

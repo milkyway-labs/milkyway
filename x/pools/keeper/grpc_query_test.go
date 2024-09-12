@@ -6,7 +6,7 @@ import (
 	"github.com/milkyway-labs/milkyway/x/pools/types"
 )
 
-func (suite *KeeperTestSuite) TestQueryServer_PoolById() {
+func (suite *KeeperTestSuite) TestQueryServer_PoolByID() {
 	testCases := []struct {
 		name      string
 		setup     func()
@@ -47,7 +47,7 @@ func (suite *KeeperTestSuite) TestQueryServer_PoolById() {
 				tc.store(ctx)
 			}
 
-			res, err := suite.k.PoolById(ctx, tc.request)
+			res, err := suite.k.PoolByID(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {

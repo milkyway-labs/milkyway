@@ -319,25 +319,25 @@ func (ubd *UnbondingDelegation) RemoveEntry(i int64) {
 }
 
 // Validate validates the unbonding delegation
-func (udb UnbondingDelegation) Validate() error {
-	if udb.Type == DELEGATION_TYPE_UNSPECIFIED {
+func (ubd UnbondingDelegation) Validate() error {
+	if ubd.Type == DELEGATION_TYPE_UNSPECIFIED {
 		return fmt.Errorf("invalid unbonding delegation type")
 	}
 
-	if udb.TargetID == 0 {
+	if ubd.TargetID == 0 {
 		return fmt.Errorf("invalid target id")
 	}
 
-	_, err := sdk.AccAddressFromBech32(udb.DelegatorAddress)
+	_, err := sdk.AccAddressFromBech32(ubd.DelegatorAddress)
 	if err != nil {
 		return fmt.Errorf("invalid delegator address")
 	}
 
-	if len(udb.Entries) == 0 {
+	if len(ubd.Entries) == 0 {
 		return fmt.Errorf("empty entries")
 	}
 
-	for _, entry := range udb.Entries {
+	for _, entry := range ubd.Entries {
 		err = entry.Validate()
 		if err != nil {
 			return err

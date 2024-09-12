@@ -467,9 +467,9 @@ func (k *Keeper) RemoveUnbondingDelegation(ctx sdk.Context, ubd types.UnbondingD
 // processed during the staking EndBlocker.
 func (k *Keeper) PerformUndelegation(ctx sdk.Context, data types.UndelegationData) (time.Time, error) {
 	// TODO: Probably we should implement this as well
-	//if k.HasMaxUnbondingDelegationEntries(ctx, delAddr, valAddr) {
-	//	return time.Time{}, types.ErrMaxUnbondingDelegationEntries
-	//}
+	// if k.HasMaxUnbondingDelegationEntries(ctx, delAddr, valAddr) {
+	//	 return time.Time{}, types.ErrMaxUnbondingDelegationEntries
+	// }
 
 	// Unbond the tokens
 	returnAmount, err := k.Unbond(ctx, data)

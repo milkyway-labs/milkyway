@@ -13,8 +13,8 @@ import (
 type Pools []Pool
 
 // Sum returns sum of pool tokens
-func (p Pools) Sum() (coins sdk.Coins) {
-	for _, p := range p {
+func (pools Pools) Sum() (coins sdk.Coins) {
+	for _, p := range pools {
 		coins = coins.Add(p.Coins...)
 	}
 
@@ -200,20 +200,20 @@ func (pools Pools) String() string {
 // Sort interface
 
 // Len implements sort.Interface for Pools
-func (p Pools) Len() int { return len(p) }
+func (pools Pools) Len() int { return len(pools) }
 
 // Less implements sort.Interface for Pools
-func (p Pools) Less(i, j int) bool { return p[i].Denom < p[j].Denom }
+func (pools Pools) Less(i, j int) bool { return pools[i].Denom < pools[j].Denom }
 
 // Swap implements sort.Interface for Pools
-func (p Pools) Swap(i, j int) { p[i], p[j] = p[j], p[i] }
+func (pools Pools) Swap(i, j int) { pools[i], pools[j] = pools[j], pools[i] }
 
 var _ sort.Interface = Pools{}
 
 // Sort is a helper function to sort the set of p in-place
-func (p Pools) Sort() Pools {
-	sort.Sort(p)
-	return p
+func (pools Pools) Sort() Pools {
+	sort.Sort(pools)
+	return pools
 }
 
 //-----------------------------------------------------------------------------

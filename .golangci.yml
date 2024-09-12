@@ -1,7 +1,56 @@
+run:
+  tests: false
+
+linters:
+  disable-all: true
+  enable:
+    - bodyclose
+    - dogsled
+    - copyloopvar
+    - goconst
+    - gocritic
+    - gofmt
+    - goimports
+    - gosec
+    - gosimple
+    - govet
+    - ineffassign
+    - misspell
+    - nakedret
+    - nolintlint
+    - staticcheck
+    - stylecheck
+    - typecheck
+    - unconvert
+    - unused
+    - unparam
+
 issues:
-  exclude-rules:
-    - linters:
-        - staticcheck
-      text: "SA1019" # deprecated
+  max-issues-per-linter: 10000
+  max-same-issues: 10000
   exclude-dirs:
-    - x/tokenfactory
+    - "app/ibc-hooks/*"
+    - "x/epochs/*"
+    - "x/interchainquery/*"
+    - "x/icacallbacks/*"
+    - "x/stakeibc/*"
+    - "x/records/*"
+    - "x/tokenfactory/*"
+  exclude-rules:
+    - text: "The legacy v1beta1 gov types maintained in this file are deprecated and will be removed in a future release"
+      linters:
+        - staticcheck
+    - text: "G115: integer overflow conversion"
+      linters:
+        - gosec
+
+linters-settings:
+  goimports:
+    local-prefixes: gitlab.com/milkyway-labs/milkyway
+  dogsled:
+    max-blank-identifiers: 3
+  nolintlint:
+    allow-unused: false
+    require-explanation: false
+    require-specific: false
+
