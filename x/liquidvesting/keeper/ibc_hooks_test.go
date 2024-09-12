@@ -9,7 +9,6 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
-	"github.com/stretchr/testify/require"
 )
 
 func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
@@ -147,11 +146,11 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				addrInsuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, user1)
-				require.NoError(suite.T(), err)
-				require.Equal(suite.T(), "600foo", addrInsuranceFund.String())
+				suite.Assert().NoError(err)
+				suite.Assert().Equal("600foo", addrInsuranceFund.String())
 				addr2InsuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, user2)
-				require.NoError(suite.T(), err)
-				require.Equal(suite.T(), "400foo", addr2InsuranceFund.String())
+				suite.Assert().NoError(err)
+				suite.Assert().Equal("400foo", addr2InsuranceFund.String())
 			},
 		},
 	}
@@ -168,7 +167,7 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			}
 
 			dataBz, err := json.Marshal(&data)
-			require.NoError(suite.T(), err)
+			suite.Assert().NoError(err)
 
 			relayer := suite.ak.GetModuleAddress("relayer")
 			ack := suite.ibcm.OnRecvPacket(suite.ctx, channeltypes.Packet{
@@ -177,16 +176,16 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			ack.Acknowledgement()
 
 			if tc.shouldErr {
-				require.False(suite.T(), ack.Success())
+				suite.Assert().False(ack.Success())
 				castedAck := ack.(channeltypes.Acknowledgement)
 				errorResponse := castedAck.Response.(*channeltypes.Acknowledgement_Error)
-				require.Equal(suite.T(), tc.errorMessage, errorResponse.Error)
+				suite.Assert().Equal(tc.errorMessage, errorResponse.Error)
 
 				if tc.check != nil {
 					tc.check(suite.ctx)
 				}
 			} else {
-				require.True(suite.T(), ack.Success())
+				suite.Assert().True(ack.Success())
 			}
 		})
 	}
