@@ -95,3 +95,35 @@ func IsAnyGT(coins, coinsB sdk.DecCoins) bool {
 func IsAnyLT(coins, coinsB sdk.DecCoins) bool {
 	return !IsAllGTE(coins, coinsB)
 }
+
+// IntersectCoinsByDenom returns the intersection of two coins.
+// e.g.
+// IntersectCoinsByDenom({2A, 3B}, {A}) = {2A}
+// IntersectCoinsByDenom({2A, 3B}, {5C}) = {}
+// IntersectCoinsByDenom({2A, 3B}, {A, B}) = {2A, 3B}
+func IntersectCoinsByDenom(coins, coinsB sdk.Coins) sdk.Coins {
+	res := sdk.NewCoins()
+	for _, coin := range coins {
+		amount := coinsB.AmountOf(coin.Denom)
+		if !amount.IsZero() {
+			res.Add(coin)
+		}
+	}
+	return res
+}
+
+// IntersectCoinsByDenom returns the intersection of two coins.
+// e.g.
+// IntersectCoinsByDenom({2A, 3B}, {A}) = {2A}
+// IntersectCoinsByDenom({2A, 3B}, {5C}) = {}
+// IntersectCoinsByDenom({2A, 3B}, {A, B}) = {2A, 3B}
+func IntersectDecCoinsByDenom(coins, coinsB sdk.DecCoins) sdk.DecCoins {
+	res := sdk.NewDecCoins()
+	for _, coin := range coins {
+		amount := coinsB.AmountOf(coin.Denom)
+		if !amount.IsZero() {
+			res.Add(coin)
+		}
+	}
+	return res
+}

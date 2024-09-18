@@ -11,4 +11,5 @@ var (
 	ErrInvalidDenom                             = errors.Register(ModuleName, 4, "invalid denom")
 	ErrVestedRepresentationCannoteBeTransferred = errors.Register(ModuleName, 5, "vested representation can't be transferred")
 	ErrInsufficientInsuranceFundBalance         = errors.Register(ModuleName, 6, "insufficient insurance fund balance")
+	ErrInsufficientBalance                      = errors.Register(ModuleName, 7, "insufficient balance")
 )

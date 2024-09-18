@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"fmt"
 	"time"
 
 	"cosmossdk.io/errors"
@@ -122,6 +123,22 @@ func (k *Keeper) GetDelegationForTarget(
 		return k.GetServiceDelegation(ctx, target.GetID(), delegator)
 	default:
 		return types.Delegation{}, false
+	}
+}
+
+// GetDelegationTargetFromDelegation returns the target of the given delegation.
+func (k *Keeper) GetDelegationTargetFromDelegation(
+	ctx sdk.Context, delegation types.Delegation,
+) (types.DelegationTarget, bool) {
+	switch delegation.Type {
+	case types.DELEGATION_TYPE_POOL:
+		return k.poolsKeeper.GetPool(ctx, delegation.TargetID)
+	case types.DELEGATION_TYPE_SERVICE:
+		return k.servicesKeeper.GetService(ctx, delegation.TargetID)
+	case types.DELEGATION_TYPE_OPERATOR:
+		return k.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
+	default:
+		return nil, false
 	}
 }
 
@@ -271,6 +288,61 @@ func (k *Keeper) GetAllServiceDelegations(ctx sdk.Context) []types.Delegation {
 	})
 
 	return delegations
+}
+
+// IterateUserDelegations iterates over the user's delegations.
+// The delegations will be iterated in the following order:
+// 1. Pool delegations
+// 2. Service delegations
+// 3. Operator delegations
+func (k *Keeper) IterateUserDelegations(
+	ctx sdk.Context, userAddress string, cb func(del types.Delegation) (stop bool, err error),
+) error {
+	store := ctx.KVStore(k.storeKey)
+	poolIterator := storetypes.KVStorePrefixIterator(store, types.UserPoolDelegationsStorePrefix(userAddress))
+	defer poolIterator.Close()
+
+	// Iterate pools delegations
+	for ; poolIterator.Valid(); poolIterator.Next() {
+		delegation := types.MustUnmarshalDelegation(k.cdc, poolIterator.Value())
+		stop, err := cb(delegation)
+		if err != nil {
+			return err
+		}
+		if stop {
+			return nil
+		}
+	}
+
+	// Iterate service delegations
+	servicesIterator := storetypes.KVStorePrefixIterator(store, types.UserServiceDelegationsStorePrefix(userAddress))
+	defer servicesIterator.Close()
+	for ; servicesIterator.Valid(); servicesIterator.Next() {
+		delegation := types.MustUnmarshalDelegation(k.cdc, servicesIterator.Value())
+		stop, err := cb(delegation)
+		if err != nil {
+			return err
+		}
+		if stop {
+			return nil
+		}
+	}
+
+	// Iterate operators delegations
+	operatorsIterator := storetypes.KVStorePrefixIterator(store, types.UserOperatorDelegationsStorePrefix(userAddress))
+	defer operatorsIterator.Close()
+	for ; operatorsIterator.Valid(); operatorsIterator.Next() {
+		delegation := types.MustUnmarshalDelegation(k.cdc, operatorsIterator.Value())
+		stop, err := cb(delegation)
+		if err != nil {
+			return err
+		}
+		if stop {
+			return nil
+		}
+	}
+
+	return nil
 }
 
 // GetAllDelegations returns all the delegations
@@ -490,6 +562,107 @@ func (k *Keeper) PerformUndelegation(ctx sdk.Context, data types.UndelegationDat
 	k.InsertUBDQueue(ctx, ubd, completionTime)
 
 	return completionTime, nil
+}
+
+// UndelegateRestakedAssets schedules an undelegations of the provided amount from the user's delegations.
+// The algorithm will go over the user's delegation in the following order: pools, services and operators.
+func (k *Keeper) UndelegateRestakedAssets(ctx sdk.Context, user sdk.AccAddress, amount sdk.Coins) error {
+	undelegations := []types.UndelegationData{}
+	toUndelegateTokens := amount
+
+	err := k.IterateUserDelegations(ctx, user.String(), func(delegation types.Delegation) (bool, error) {
+		target, found := k.GetDelegationTargetFromDelegation(ctx, delegation)
+		if !found {
+			return false, nil
+		}
+
+		// Compute the shares that this delegation should have to undelegate
+		// all the remaining tokens
+		involvedShares, err := target.SharesFromTokens(toUndelegateTokens)
+		if err != nil {
+			return true, err
+		}
+		// Filter the shares to only the ones that can be removed from the current
+		// delegation
+		involvedShares = utils.IntersectDecCoinsByDenom(involvedShares, delegation.Shares)
+		// No shares, keep iterating
+		if len(involvedShares) == 0 {
+			return false, nil
+		}
+
+		toUndelegatedShares := sdk.NewDecCoins()
+		for _, share := range involvedShares {
+			delShareAmount := delegation.Shares.AmountOf(share.Denom)
+			if delShareAmount.GTE(share.Amount) {
+				// The share of this delegation covers for the amount to undelegate
+				toUndelegatedShares.Add(share)
+			} else {
+				// The share of this delegation don't cover the full amount to undelegate
+				toUndelegatedShares.Add(sdk.NewDecCoinFromDec(share.Denom, delShareAmount))
+			}
+		}
+
+		// Update the coins from the
+		coins := target.TokensFromShares(toUndelegatedShares)
+		truncatedCoins, _ := coins.TruncateDecimal()
+		toUndelegateTokens = toUndelegateTokens.Sub(truncatedCoins...)
+
+		// Update the list of undelegations to perform
+		var buildUnbondingDelegation types.UnbondingDelegationBuilder
+		var hooks types.DelegationHooks
+		switch delegation.Type {
+		case types.DELEGATION_TYPE_POOL:
+			buildUnbondingDelegation = types.NewPoolUnbondingDelegation
+			hooks = types.DelegationHooks{
+				BeforeDelegationSharesModified: k.BeforePoolDelegationSharesModified,
+				BeforeDelegationCreated:        k.BeforePoolDelegationCreated,
+				AfterDelegationModified:        k.AfterPoolDelegationModified,
+				BeforeDelegationRemoved:        k.BeforePoolDelegationRemoved,
+			}
+		case types.DELEGATION_TYPE_SERVICE:
+			buildUnbondingDelegation = types.NewServiceUnbondingDelegation
+			hooks = types.DelegationHooks{
+				BeforeDelegationSharesModified: k.BeforeServiceDelegationSharesModified,
+				BeforeDelegationCreated:        k.BeforeServiceDelegationCreated,
+				AfterDelegationModified:        k.AfterServiceDelegationModified,
+				BeforeDelegationRemoved:        k.BeforeServiceDelegationRemoved,
+			}
+		case types.DELEGATION_TYPE_OPERATOR:
+			buildUnbondingDelegation = types.NewOperatorUnbondingDelegation
+			hooks = types.DelegationHooks{
+				BeforeDelegationSharesModified: k.BeforeOperatorDelegationSharesModified,
+				BeforeDelegationCreated:        k.BeforeOperatorDelegationCreated,
+				AfterDelegationModified:        k.AfterOperatorDelegationModified,
+				BeforeDelegationRemoved:        k.BeforeOperatorDelegationRemoved,
+			}
+		default:
+			return true, fmt.Errorf("unsupported delegation type: %s", delegation.Type.String())
+		}
+		undelegations = append(undelegations, types.UndelegationData{
+			Amount:                   truncatedCoins,
+			Delegator:                user.String(),
+			Target:                   target,
+			BuildUnbondingDelegation: buildUnbondingDelegation,
+			Hooks:                    hooks,
+			Shares:                   toUndelegatedShares,
+		})
+
+		// We have finished to undelegate the tokens, stop the iteration.
+		if toUndelegateTokens.IsZero() {
+			return true, nil
+		}
+
+		return false, nil
+	})
+	if err != nil {
+		return err
+	}
+
+	if !toUndelegateTokens.IsZero() {
+		return fmt.Errorf("can't undelegate the provided coins: %s", amount.String())
+	}
+
+	return nil
 }
 
 // --------------------------------------------------------------------------------------------------------------------
