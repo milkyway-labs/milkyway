@@ -6,5 +6,5 @@ import (
 
 // RegisterUpgradeHandlers returns upgrade handlers
 func (app *MilkyWayApp) RegisterUpgradeHandlers() {
-	app.registerUpgrade(v110.NewUpgrade(app.ModuleManager, app.Configurator()))
+	app.registerUpgrade(v110.NewUpgrade(app.ModuleManager, app.Configurator(), app.appCodec, app.keys, app.RewardsKeeper))
 }
