@@ -3,7 +3,6 @@ package types
 import (
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	types "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
@@ -11,7 +10,7 @@ import (
 func NewMsgMintVestedRepresentation(
 	sender string,
 	receiver string,
-	amount types.Coins,
+	amount sdk.Coins,
 ) *MsgMintVestedRepresentation {
 	return &MsgMintVestedRepresentation{
 		Sender:   sender,
@@ -42,7 +41,7 @@ func (msg *MsgMintVestedRepresentation) ValidateBasic() error {
 func NewMsgBurnVestedRepresentation(
 	sender string,
 	user string,
-	amount types.Coins,
+	amount sdk.Coins,
 ) *MsgBurnVestedRepresentation {
 	return &MsgBurnVestedRepresentation{
 		Sender: sender,
