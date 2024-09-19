@@ -1484,8 +1484,8 @@ func (app *MilkyWayApp) RegisterNodeService(clientCtx client.Context, cfg config
 }
 
 // Configurator returns the app's configurator.
-func (a *MilkyWayApp) Configurator() module.Configurator {
-	return a.configurator
+func (app *MilkyWayApp) Configurator() module.Configurator {
+	return app.configurator
 }
 
 // registerUpgrade registers the given upgrade to be supported by the app
