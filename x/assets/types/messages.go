@@ -9,7 +9,6 @@ import (
 var (
 	_ sdk.Msg = &MsgRegisterAsset{}
 	_ sdk.Msg = &MsgDeregisterAsset{}
-	_ sdk.Msg = &MsgUpdateParams{}
 )
 
 // NewMsgRegisterAsset creates a new MsgRegisterAsset instance
@@ -52,27 +51,6 @@ func (msg *MsgDeregisterAsset) Validate() error {
 	err = sdk.ValidateDenom(msg.Denom)
 	if err != nil {
 		return errors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
-	return nil
-}
-
-// NewMsgUpdateParams creates a new MsgUpdateParams instance
-func NewMsgUpdateParams(authority string, params Params) *MsgUpdateParams {
-	return &MsgUpdateParams{
-		Authority: authority,
-		Params:    params,
-	}
-}
-
-// Validate validates the MsgUpdateParams instance
-func (msg *MsgUpdateParams) Validate() error {
-	_, err := sdk.AccAddressFromBech32(msg.Authority)
-	if err != nil {
-		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid authority address")
-	}
-	err = msg.Params.Validate()
-	if err != nil {
-		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid params: %s", err)
 	}
 	return nil
 }

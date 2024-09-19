@@ -13,8 +13,3 @@ func NewQueryAssetsRequest(ticker string, pagination *query.PageRequest) *QueryA
 func NewQueryAssetRequest(denom string) *QueryAssetRequest {
 	return &QueryAssetRequest{Denom: denom}
 }
-
-// NewQueryParamsRequest creates a new instance of QueryParamsRequest
-func NewQueryParamsRequest() *QueryParamsRequest {
-	return &QueryParamsRequest{}
-}

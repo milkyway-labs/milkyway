@@ -1,19 +1,10 @@
 package app
 
 import (
-	"context"
-
-	upgradetypes "cosmossdk.io/x/upgrade/types"
-	"github.com/cosmos/cosmos-sdk/types/module"
+	v110 "github.com/milkyway-labs/milkyway/app/upgrades/v110"
 )
 
-const upgradeName = "0.2.4"
-
 // RegisterUpgradeHandlers returns upgrade handlers
-func (app *MilkyWayApp) RegisterUpgradeHandlers(cfg module.Configurator) {
-	app.UpgradeKeeper.SetUpgradeHandler(upgradeName,
-		func(ctx context.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
-			return fromVM, nil
-		},
-	)
+func (app *MilkyWayApp) RegisterUpgradeHandlers() {
+	app.registerUpgrade(v110.NewUpgrade(app.ModuleManager, app.Configurator(), app.appCodec, app.keys, app.RewardsKeeper))
 }

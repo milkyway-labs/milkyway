@@ -86,13 +86,3 @@ func (q queryServer) Asset(ctx context.Context, req *types.QueryAssetRequest) (*
 
 	return &types.QueryAssetResponse{Asset: asset}, nil
 }
-
-// Params queries the module params
-func (q queryServer) Params(ctx context.Context, _ *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
-	params, err := q.k.Params.Get(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	return &types.QueryParamsResponse{Params: params}, nil
-}

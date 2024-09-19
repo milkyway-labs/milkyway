@@ -148,6 +148,7 @@ import (
 	apphook "github.com/milkyway-labs/milkyway/app/hook"
 	ibcwasmhooks "github.com/milkyway-labs/milkyway/app/ibc-hooks"
 	appkeepers "github.com/milkyway-labs/milkyway/app/keepers"
+	"github.com/milkyway-labs/milkyway/app/upgrades"
 	"github.com/milkyway-labs/milkyway/utils"
 	"github.com/milkyway-labs/milkyway/x/assets"
 	assetskeeper "github.com/milkyway-labs/milkyway/x/assets/keeper"
@@ -1093,7 +1094,7 @@ func NewMilkyWayApp(
 	app.indexerModule.RegisterServices(app.configurator)
 
 	// register upgrade handler for later use
-	app.RegisterUpgradeHandlers(app.configurator)
+	app.RegisterUpgradeHandlers()
 
 	autocliv1.RegisterQueryServer(app.GRPCQueryRouter(), runtimeservices.NewAutoCLIQueryService(app.ModuleManager.Modules))
 
@@ -1480,6 +1481,26 @@ func (app *MilkyWayApp) RegisterTendermintService(clientCtx client.Context) {
 
 func (app *MilkyWayApp) RegisterNodeService(clientCtx client.Context, cfg config.Config) {
 	nodeservice.RegisterNodeService(clientCtx, app.GRPCQueryRouter(), cfg)
+}
+
+// Configurator returns the app's configurator.
+func (app *MilkyWayApp) Configurator() module.Configurator {
+	return app.configurator
+}
+
+// registerUpgrade registers the given upgrade to be supported by the app
+func (app *MilkyWayApp) registerUpgrade(upgrade upgrades.Upgrade) {
+	app.UpgradeKeeper.SetUpgradeHandler(upgrade.Name(), upgrade.Handler())
+
+	upgradeInfo, err := app.UpgradeKeeper.ReadUpgradeInfoFromDisk()
+	if err != nil {
+		panic(err)
+	}
+
+	if upgradeInfo.Name == upgrade.Name() && !app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
+		// Configure store loader that checks if version == upgradeHeight and applies store upgrades
+		app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, upgrade.StoreUpgrades()))
+	}
 }
 
 // RegisterSwaggerAPI registers swagger route with API Server

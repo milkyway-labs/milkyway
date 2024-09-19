@@ -14,17 +14,6 @@ func (suite *KeeperTestSuite) TestExportGenesis() {
 		expGenesis *types.GenesisState
 	}{
 		{
-			name: "params are exported correctly",
-			store: func(ctx sdk.Context) {
-				err := suite.keeper.Params.Set(ctx, types.DefaultParams())
-				suite.Require().NoError(err)
-			},
-			shouldErr: false,
-			expGenesis: &types.GenesisState{
-				Params: types.DefaultParams(),
-			},
-		},
-		{
 			name: "assets are exported correctly",
 			store: func(ctx sdk.Context) {
 				err := suite.keeper.SetAsset(ctx, types.NewAsset("umilk", "MILK", 6))
@@ -77,7 +66,6 @@ func (suite *KeeperTestSuite) TestInitGenesis() {
 		{
 			name: "genesis is initialized properly",
 			genesis: types.NewGenesisState(
-				types.DefaultParams(),
 				[]types.Asset{
 					types.NewAsset("umilk", "MILK", 6),
 					types.NewAsset("umilk2", "MILK", 6),
