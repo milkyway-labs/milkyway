@@ -1,6 +1,10 @@
 package keeper_test
 
 import (
+	"fmt"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
+	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 	"time"
 
 	sdkmath "cosmossdk.io/math"
@@ -568,6 +572,190 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServiceUnbondingDelegations() {
 
 			if tc.check != nil {
 				tc.check(ctx)
+			}
+		})
+	}
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
+	delegator := "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"
+	testCases := []struct {
+		name      string
+		setup     func(ctx sdk.Context)
+		account   string
+		amount    sdk.Coins
+		shouldErr bool
+		check     func(ctx sdk.Context)
+	}{
+		{
+			name:      "undelegate without delegations fails",
+			account:   delegator,
+			amount:    sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)),
+			shouldErr: true,
+		},
+		{
+			name: "undelegate more then delegated fails",
+			setup: func(ctx sdk.Context) {
+				// Fund the account
+				suite.fundAccount(ctx, delegator, sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)))
+
+				suite.pk.SetNextPoolID(ctx, 1)
+				_, err := suite.k.DelegateToPool(ctx, sdk.NewInt64Coin("stake", 300), delegator)
+				suite.Assert().NoError(err)
+
+				// Delegate to service
+				err = suite.sk.CreateService(ctx, servicestypes.NewService(1, servicestypes.SERVICE_STATUS_ACTIVE,
+					"", "", "", "", ""))
+				suite.Assert().NoError(err)
+				_, err = suite.k.DelegateToService(ctx, 1,
+					sdk.NewCoins(sdk.NewInt64Coin("stake", 350)), delegator)
+				suite.Assert().NoError(err)
+
+				// Delegate to operator
+				err = suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
+					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "",
+				))
+				suite.Assert().NoError(err)
+				_, err = suite.k.DelegateToOperator(ctx, 1,
+					sdk.NewCoins(sdk.NewInt64Coin("stake", 350)), delegator)
+				suite.Assert().NoError(err)
+			},
+			account:   delegator,
+			amount:    sdk.NewCoins(sdk.NewInt64Coin("stake", 1100)),
+			shouldErr: true,
+		},
+		{
+			name:    "undelegate with multiple delegations torward a pool",
+			account: delegator,
+			amount:  sdk.NewCoins(sdk.NewInt64Coin("stake", 300)),
+			setup: func(ctx sdk.Context) {
+				// Fund the delegator account
+				suite.fundAccount(ctx, delegator, sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)))
+
+				// Set the first pool id
+				suite.pk.SetNextPoolID(ctx, 1)
+
+				// Create delegators delegations
+				for i := 0; i < 100; i++ {
+					amount := int64(i*5 + 300)
+					d := authtypes.NewModuleAddress(fmt.Sprintf("delegator-%d", i)).String()
+					suite.fundAccount(ctx, d, sdk.NewCoins(sdk.NewInt64Coin("stake", amount)))
+					_, err := suite.k.DelegateToPool(ctx, sdk.NewInt64Coin("stake", amount), d)
+					suite.Assert().NoError(err)
+				}
+
+				// Delegate to pool
+				_, err := suite.k.DelegateToPool(ctx, sdk.NewInt64Coin("stake", 300), delegator)
+				suite.Assert().NoError(err)
+			},
+		},
+		{
+			name: "partial undelegate leaves balances to operator",
+			setup: func(ctx sdk.Context) {
+				// Fund the account
+				suite.fundAccount(ctx, delegator, sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)))
+
+				suite.pk.SetNextPoolID(ctx, 1)
+				_, err := suite.k.DelegateToPool(ctx, sdk.NewInt64Coin("stake", 300), delegator)
+				suite.Assert().NoError(err)
+
+				// Delegate to service
+				err = suite.sk.CreateService(ctx, servicestypes.NewService(1, servicestypes.SERVICE_STATUS_ACTIVE,
+					"", "", "", "", ""))
+				suite.Assert().NoError(err)
+				_, err = suite.k.DelegateToService(ctx, 1,
+					sdk.NewCoins(sdk.NewInt64Coin("stake", 350)), delegator)
+				suite.Assert().NoError(err)
+
+				// Delegate to operator
+				err = suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
+					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "",
+				))
+				suite.Assert().NoError(err)
+				_, err = suite.k.DelegateToOperator(ctx, 1,
+					sdk.NewCoins(sdk.NewInt64Coin("stake", 350)), delegator)
+				suite.Assert().NoError(err)
+			},
+			account: delegator,
+			amount:  sdk.NewCoins(sdk.NewInt64Coin("stake", 950)),
+			check: func(ctx sdk.Context) {
+				del, found := suite.k.GetServiceDelegation(ctx, 1, delegator)
+				suite.Assert().True(found)
+				suite.Assert().Equal(types.DELEGATION_TYPE_OPERATOR, del.Type)
+				operator, _ := suite.ok.GetOperator(ctx, 1)
+				suite.Assert().Equal(
+					sdk.NewDecCoins(sdk.NewInt64DecCoin("stake", 50)),
+					operator.TokensFromSharesTruncated(del.Shares))
+			},
+		},
+		{
+			name: "undelegate  with amounts shared between pool, service and operator",
+			setup: func(ctx sdk.Context) {
+				// Prepare pool, service and operator
+				suite.pk.SetNextPoolID(ctx, 1)
+				err := suite.sk.CreateService(ctx, servicestypes.NewService(1, servicestypes.SERVICE_STATUS_ACTIVE,
+					"", "", "", "", ""))
+				err = suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
+					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "",
+				))
+
+				// Create delegators delegations
+				for i := 0; i < 100; i++ {
+					amount := int64(i*5 + 300)
+					totalAmount := amount * 3
+					d := authtypes.NewModuleAddress(fmt.Sprintf("delegator-%d", i)).String()
+					suite.fundAccount(ctx, d, sdk.NewCoins(sdk.NewInt64Coin("stake", totalAmount)))
+
+					// Perform delegations
+					_, err = suite.k.DelegateToPool(ctx, sdk.NewInt64Coin("stake", amount), d)
+					suite.Assert().NoError(err)
+					_, err = suite.k.DelegateToService(ctx, 1,
+						sdk.NewCoins(sdk.NewInt64Coin("stake", amount)), d)
+					suite.Assert().NoError(err)
+					_, err = suite.k.DelegateToOperator(ctx, 1,
+						sdk.NewCoins(sdk.NewInt64Coin("stake", amount)), d)
+					suite.Assert().NoError(err)
+				}
+
+				// Fund the account
+				suite.fundAccount(ctx, delegator, sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)))
+
+				// Perform delegations
+				_, err = suite.k.DelegateToPool(ctx, sdk.NewInt64Coin("stake", 300), delegator)
+				suite.Assert().NoError(err)
+				_, err = suite.k.DelegateToService(ctx, 1,
+					sdk.NewCoins(sdk.NewInt64Coin("stake", 350)), delegator)
+				suite.Assert().NoError(err)
+				_, err = suite.k.DelegateToOperator(ctx, 1,
+					sdk.NewCoins(sdk.NewInt64Coin("stake", 350)), delegator)
+				suite.Assert().NoError(err)
+			},
+			account:   "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			amount:    sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)),
+			shouldErr: false,
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			suite.SetupTest()
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.setup != nil {
+				tc.setup(ctx)
+			}
+
+			accAddr := sdk.MustAccAddressFromBech32(tc.account)
+			completionTime, err := suite.k.UnbondRestakedAssets(ctx, accAddr, tc.amount)
+
+			if !tc.shouldErr {
+				suite.Assert().NoError(err)
+				expectedCompletion := ctx.BlockHeader().Time.Add(suite.k.UnbondingTime(ctx))
+				suite.Assert().Equal(expectedCompletion, completionTime)
+			} else {
+				suite.Assert().Error(err)
 			}
 		})
 	}
