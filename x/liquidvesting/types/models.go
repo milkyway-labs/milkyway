@@ -13,3 +13,10 @@ func NewInsuranceFund() UserInsuranceFund {
 func (u *UserInsuranceFund) Add(amount sdk.Coins) {
 	u.Balance = u.Balance.Sort().Add(amount.Sort()...)
 }
+
+func NewBurnCoins(delegator string, amount sdk.Coins) BurnCoins {
+	return BurnCoins{
+		DelegatorAddress: delegator,
+		Amount:           amount,
+	}
+}

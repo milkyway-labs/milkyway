@@ -9,9 +9,11 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 
+	"github.com/milkyway-labs/milkyway/x/liquidvesting/keeper"
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 )
 
@@ -76,13 +78,15 @@ func (a AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux 
 }
 
 // ----------------------------------------------------------------------------
-// AppModuleBasic
+// AppModule
 // ----------------------------------------------------------------------------
 
 // AppModule implements the AppModule interface for the
 // liquidvesting module.
 type AppModule struct {
 	AppModuleBasic
+
+	keeper *keeper.Keeper
 }
 
 // ConsensusVersion implements ConsensusVersion.
@@ -93,3 +97,9 @@ func (a AppModule) IsAppModule() {}
 
 // IsOnePerModuleType implements appmodule.AppModule.
 func (a AppModule) IsOnePerModuleType() {}
+
+// EndBlock executes all ABCI EndBlock logic respective to the restaking module.
+func (am AppModule) EndBlock(ctx context.Context) error {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	return EndBlocker(sdkCtx, am.keeper)
+}

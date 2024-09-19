@@ -1,8 +1,10 @@
 package keeper_test
 
 import (
-	sdkmath "cosmossdk.io/math"
 	"fmt"
+	"testing"
+
+	sdkmath "cosmossdk.io/math"
 	distributiontypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	capabilitytypes "github.com/cosmos/ibc-go/modules/capability/types"
@@ -13,7 +15,6 @@ import (
 	ibchooks "github.com/initia-labs/initia/x/ibc-hooks"
 	ibchookskeeper "github.com/initia-labs/initia/x/ibc-hooks/keeper"
 	ibchookstypes "github.com/initia-labs/initia/x/ibc-hooks/types"
-	"testing"
 
 	"cosmossdk.io/log"
 	"cosmossdk.io/store"
@@ -164,6 +165,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 	)
 	suite.k = keeper.NewKeeper(
 		suite.cdc,
+		keys[types.StoreKey],
 		runtime.NewKVStoreService(keys[types.StoreKey]),
 		suite.bk,
 		suite.ok,

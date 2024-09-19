@@ -49,9 +49,9 @@ func (m msgServer) MintVestedRepresentation(
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeMintVestedRepresentation,
-			sdk.NewAttribute(types.AttributeKeyMinter, msg.Sender),
-			sdk.NewAttribute(types.AttributeKeyAmount, msg.Amount.String()),
-			sdk.NewAttribute(types.AttributeKeyTo, msg.Receiver),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
+			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Amount.String()),
+			sdk.NewAttribute(types.AttributeKeyReceiver, msg.Receiver),
 		),
 	})
 
@@ -86,9 +86,9 @@ func (m msgServer) BurnVestedRepresentation(
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeBurnVestedRepresentation,
-			sdk.NewAttribute(types.AttributeKeyMinter, msg.Sender),
-			sdk.NewAttribute(types.AttributeKeyAmount, msg.Amount.String()),
-			sdk.NewAttribute(types.AttributeKeyFrom, msg.User),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
+			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Amount.String()),
+			sdk.NewAttribute(types.AttributeKeyUser, msg.User),
 		),
 	})
 

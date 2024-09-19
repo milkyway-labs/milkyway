@@ -5,10 +5,6 @@ const (
 	EventTypeMintVestedRepresentation   = "mint_vested_representation"
 	EventTypeBurnVestedRepresentation   = "burn_vested_representation"
 
-	AttributeKeyUser      = "user"
-	AttributeKeyMinter    = "minter"
-	AttributeKeyTo        = "to"
-	AttributeKeyFrom      = "from"
-	AttributeKeyAmount    = "amount"
-	AttributeKeyDeposited = "deposited"
+	AttributeKeyUser     = "user"
+	AttributeKeyReceiver = "receiver"
 )

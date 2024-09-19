@@ -99,7 +99,7 @@ func (h IBCHooks) onRecvIcs20Packet(
 		ctx.EventManager().EmitEvent(
 			sdk.NewEvent(types.EventTypeDepositToUserInsuranceFund,
 				sdk.NewAttribute(types.AttributeKeyUser, deposit.Depositor),
-				sdk.NewAttribute(types.AttributeKeyDeposited, amount.String()),
+				sdk.NewAttribute(sdk.AttributeKeyAmount, amount.String()),
 			),
 		)
 	}

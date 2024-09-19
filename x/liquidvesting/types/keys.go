@@ -1,7 +1,10 @@
 package types
 
 import (
+	"time"
+
 	"cosmossdk.io/collections"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 const (
@@ -13,4 +16,13 @@ var (
 	ParamsKey = collections.NewPrefix(0x01)
 
 	InsuranceFundKey = collections.NewPrefix(0x10)
+
+	BurnCoinsQueuKey = []byte{0x20}
 )
+
+// GetBurnCoinsQueueTimeKey creates the prefix to obtain the list of
+// coins to burn for each delegator
+func GetBurnCoinsQueueTimeKey(timestamp time.Time) []byte {
+	bz := sdk.FormatTimeBytes(timestamp)
+	return append(BurnCoinsQueuKey, bz...)
+}

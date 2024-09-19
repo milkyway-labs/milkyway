@@ -285,9 +285,7 @@ var (
 	}
 )
 
-var (
-	_ servertypes.Application = (*MilkyWayApp)(nil)
-)
+var _ servertypes.Application = (*MilkyWayApp)(nil)
 
 func init() {
 	userHomeDir, err := os.UserHomeDir()
@@ -1120,6 +1118,7 @@ func NewMilkyWayApp(
 		operatorstypes.ModuleName,
 		poolstypes.ModuleName,
 		restakingtypes.ModuleName,
+		liquidvestingtypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
