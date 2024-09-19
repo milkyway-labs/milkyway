@@ -112,11 +112,11 @@ func IntersectCoinsByDenom(coins, coinsB sdk.Coins) sdk.Coins {
 	return res
 }
 
-// IntersectCoinsByDenom returns the intersection of two coins.
+// IntersectDecCoinsByDenom returns the intersection of two coins.
 // e.g.
-// IntersectCoinsByDenom({2A, 3B}, {A}) = {2A}
-// IntersectCoinsByDenom({2A, 3B}, {5C}) = {}
-// IntersectCoinsByDenom({2A, 3B}, {A, B}) = {2A, 3B}
+// IntersectDecCoinsByDenom{2A, 3B}, {A}) = {2A}
+// IntersectDecCoinsByDenom({2A, 3B}, {5C}) = {}
+// IntersectDecCoinsByDenom({2A, 3B}, {A, B}) = {2A, 3B}
 func IntersectDecCoinsByDenom(coins, coinsB sdk.DecCoins) sdk.DecCoins {
 	res := sdk.NewDecCoins()
 	for _, coin := range coins {
