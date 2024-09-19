@@ -106,7 +106,7 @@ func IntersectCoinsByDenom(coins, coinsB sdk.Coins) sdk.Coins {
 	for _, coin := range coins {
 		amount := coinsB.AmountOf(coin.Denom)
 		if !amount.IsZero() {
-			res.Add(coin)
+			res = res.Add(coin)
 		}
 	}
 	return res
@@ -122,7 +122,7 @@ func IntersectDecCoinsByDenom(coins, coinsB sdk.DecCoins) sdk.DecCoins {
 	for _, coin := range coins {
 		amount := coinsB.AmountOf(coin.Denom)
 		if !amount.IsZero() {
-			res.Add(coin)
+			res = res.Add(coin)
 		}
 	}
 	return res

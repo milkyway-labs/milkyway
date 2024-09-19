@@ -2,6 +2,7 @@ package types
 
 import (
 	context "context"
+	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
@@ -51,5 +52,5 @@ type RestakingKeeper interface {
 	GetPoolDelegation(ctx sdk.Context, poolID uint32, userAddress string) (restakingtypes.Delegation, bool)
 	IterateUserServiceDelegations(ctx sdk.Context, userAddress string, cb func(restakingtypes.Delegation) (bool, error)) error
 	IterateUserOperatorDelegations(ctx sdk.Context, userAddress string, cb func(restakingtypes.Delegation) (bool, error)) error
-	UndelegateRestakedAssets(ctx sdk.Context, user sdk.AccAddress, amount sdk.Coins) error
+	UnbondRestakedAssets(ctx sdk.Context, user sdk.AccAddress, amount sdk.Coins) (time.Time, error)
 }

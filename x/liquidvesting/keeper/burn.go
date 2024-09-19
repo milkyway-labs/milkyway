@@ -44,7 +44,7 @@ func (k *Keeper) BurnVestedRepresentation(
 	if !userBalance.IsAllGTE(amount) {
 		// Compute the amount that should be unstaked
 		toUnstake := amount.Sub(userBalance...)
-		err := k.restakingKeeper.UndelegateRestakedAssets(ctx, accAddress, toUnstake)
+		completionTime, err := k.restakingKeeper.UnbondRestakedAssets(ctx, accAddress, toUnstake)
 		if err != nil {
 			return err
 		}

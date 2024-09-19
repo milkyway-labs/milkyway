@@ -132,11 +132,23 @@ func (k *Keeper) GetDelegationTargetFromDelegation(
 ) (types.DelegationTarget, bool) {
 	switch delegation.Type {
 	case types.DELEGATION_TYPE_POOL:
-		return k.poolsKeeper.GetPool(ctx, delegation.TargetID)
+		if t, found := k.poolsKeeper.GetPool(ctx, delegation.TargetID); found {
+			return &t, true
+		} else {
+			return nil, false
+		}
 	case types.DELEGATION_TYPE_SERVICE:
-		return k.servicesKeeper.GetService(ctx, delegation.TargetID)
+		if t, found := k.servicesKeeper.GetService(ctx, delegation.TargetID); found {
+			return &t, true
+		} else {
+			return nil, false
+		}
 	case types.DELEGATION_TYPE_OPERATOR:
-		return k.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
+		if t, found := k.operatorsKeeper.GetOperator(ctx, delegation.TargetID); found {
+			return &t, true
+		} else {
+			return nil, false
+		}
 	default:
 		return nil, false
 	}
@@ -564,10 +576,11 @@ func (k *Keeper) PerformUndelegation(ctx sdk.Context, data types.UndelegationDat
 	return completionTime, nil
 }
 
-// UndelegateRestakedAssets schedules an undelegations of the provided amount from the user's delegations.
-// The algorithm will go over the user's delegation in the following order: pools, services and operators.
-func (k *Keeper) UndelegateRestakedAssets(ctx sdk.Context, user sdk.AccAddress, amount sdk.Coins) error {
-	undelegations := []types.UndelegationData{}
+// UnbondRestakedAssets unbonds the provided amount from the user's delegations.
+// The algorithm will go over the user's delegation in the following order: pools, services and operators
+// until the token undelegated matches the provided amount.
+func (k *Keeper) UnbondRestakedAssets(ctx sdk.Context, user sdk.AccAddress, amount sdk.Coins) (time.Time, error) {
+	var undelegations []types.UndelegationData
 	toUndelegateTokens := amount
 
 	err := k.IterateUserDelegations(ctx, user.String(), func(delegation types.Delegation) (bool, error) {
@@ -595,14 +608,16 @@ func (k *Keeper) UndelegateRestakedAssets(ctx sdk.Context, user sdk.AccAddress, 
 			delShareAmount := delegation.Shares.AmountOf(share.Denom)
 			if delShareAmount.GTE(share.Amount) {
 				// The share of this delegation covers for the amount to undelegate
-				toUndelegatedShares.Add(share)
+				// use the full share amount
+				toUndelegatedShares = toUndelegatedShares.Add(share)
 			} else {
 				// The share of this delegation don't cover the full amount to undelegate
-				toUndelegatedShares.Add(sdk.NewDecCoinFromDec(share.Denom, delShareAmount))
+				// use the amount from the delegation
+				toUndelegatedShares = toUndelegatedShares.Add(sdk.NewDecCoinFromDec(share.Denom, delShareAmount))
 			}
 		}
 
-		// Update the coins from the
+		// Update the coins to undelegate
 		coins := target.TokensFromShares(toUndelegatedShares)
 		truncatedCoins, _ := coins.TruncateDecimal()
 		toUndelegateTokens = toUndelegateTokens.Sub(truncatedCoins...)
@@ -655,14 +670,26 @@ func (k *Keeper) UndelegateRestakedAssets(ctx sdk.Context, user sdk.AccAddress, 
 		return false, nil
 	})
 	if err != nil {
-		return err
+		return time.Time{}, err
 	}
 
 	if !toUndelegateTokens.IsZero() {
-		return fmt.Errorf("can't undelegate the provided coins: %s", amount.String())
+		return time.Time{}, fmt.Errorf("user hasn't restaked the provided amount: %s", amount.String())
 	}
 
-	return nil
+	// Enqueue the undelegations
+	var completionTime time.Time
+	for _, u := range undelegations {
+		ct, err := k.PerformUndelegation(ctx, u)
+		if err != nil {
+			return time.Time{}, err
+		}
+		if completionTime.IsZero() {
+			completionTime = ct
+		}
+	}
+
+	return completionTime, nil
 }
 
 // --------------------------------------------------------------------------------------------------------------------
