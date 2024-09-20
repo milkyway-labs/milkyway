@@ -7,7 +7,7 @@ import (
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 )
 
-func (suite *KeeperTestSuite) TestExportGenesis() {
+func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 	testCases := []struct {
 		name       string
 		store      func(ctx sdk.Context)
@@ -47,7 +47,7 @@ func (suite *KeeperTestSuite) TestExportGenesis() {
 	}
 }
 
-func (suite *KeeperTestSuite) TestInitGenesis() {
+func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 	testCases := []struct {
 		name      string
 		genesis   *types.GenesisState

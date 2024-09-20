@@ -5,7 +5,7 @@ import (
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 )
 
-func (suite *KeeperTestSuite) TestMintVestedRepresentation() {
+func (suite *KeeperTestSuite) TestKeepr_MintVestedRepresentation() {
 	testCases := []struct {
 		name      string
 		setup     func()
