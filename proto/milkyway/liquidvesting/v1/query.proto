@@ -52,7 +52,10 @@ message QueryUserInsuranceFundRequest {
 // Query/UserInsuranceFund RPC method.
 message QueryUserInsuranceFundResponse {
   // amount is the amount of tokens that is in the user's insurance fund.
-  repeated cosmos.base.v1beta1.Coin amount = 1 [ (gogoproto.nullable) = false ];
+  repeated cosmos.base.v1beta1.Coin amount = 1 [ 
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false 
+  ];
 }
 
 // QueryUserRestakableAssetsRequest is the request type for the
@@ -66,7 +69,10 @@ message QueryUserRestakableAssetsRequest {
 // Query/UserRestakableAssets RPC method.
 message QueryUserRestakableAssetsResponse {
   // amount is the amount of tokens that the user can restake.
-  repeated cosmos.base.v1beta1.Coin amount = 1 [ (gogoproto.nullable) = false ];
+  repeated cosmos.base.v1beta1.Coin amount = 1 [ 
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false 
+  ];
 }
 
 // QueryInsuranceFundRequest is the request type for the
@@ -77,7 +83,10 @@ message QueryInsuranceFundRequest {}
 // Query/InsuranceFund RPC method.
 message QueryInsuranceFundResponse {
   // amount is the amount of tokens that are in the insurance fund.
-  repeated cosmos.base.v1beta1.Coin amount = 1 [ (gogoproto.nullable) = false ];
+  repeated cosmos.base.v1beta1.Coin amount = 1 [ 
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false 
+  ];
 }
 
 // QueryParamsRequest is the request type for the Query/Params RPC method.

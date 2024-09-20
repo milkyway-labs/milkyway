@@ -5,6 +5,8 @@ import (
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 )
@@ -44,6 +46,10 @@ func (q Querier) Params(goCtx context.Context, _ *types.QueryParamsRequest) (*ty
 
 // UserInsuranceFund implements types.QueryServer.
 func (q Querier) UserInsuranceFund(goCtx context.Context, req *types.QueryUserInsuranceFundRequest) (*types.QueryUserInsuranceFundResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
+	}
+
 	sdkCtx := sdk.UnwrapSDKContext(goCtx)
 
 	accAddr, err := sdk.AccAddressFromBech32(req.UserAddress)
@@ -60,6 +66,10 @@ func (q Querier) UserInsuranceFund(goCtx context.Context, req *types.QueryUserIn
 
 // UserRestakableAssets implements types.QueryServer.
 func (q Querier) UserRestakableAssets(goCtx context.Context, req *types.QueryUserRestakableAssetsRequest) (*types.QueryUserRestakableAssetsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
+	}
+
 	sdkCtx := sdk.UnwrapSDKContext(goCtx)
 
 	accAddr, err := sdk.AccAddressFromBech32(req.UserAddress)
