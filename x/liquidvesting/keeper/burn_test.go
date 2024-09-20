@@ -96,6 +96,35 @@ func (suite *KeeperTestSuite) TestKeeper_TestBurn() {
 				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin(vestedStake, 800)), toBurnCoins)
 			},
 		},
+		{
+			name: "burn more coins then owned delegations",
+			setup: func(ctx sdk.Context) {
+				// Add some tokens to the user's insurance fund so they can restake
+				// the vested representation
+				suite.fundAccountInsuranceFund(ctx, testAccount, sdk.NewCoins(sdk.NewInt64Coin("stake", 100)))
+				// Fund the account
+				suite.mintVestedRepresentation(testAccount, sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)))
+				suite.fundAccount(ctx, testAccount, sdk.NewCoins(sdk.NewInt64Coin("stake2", 200)))
+
+				// Delegate some vested representation to pool, service and operator
+				suite.createPool(1, vestedStake)
+				_, err := suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedStake, 200), testAccount)
+				suite.Assert().NoError(err)
+
+				suite.createService(1)
+				_, err = suite.rk.DelegateToService(ctx, 1,
+					sdk.NewCoins(sdk.NewInt64Coin(vestedStake, 300)), testAccount)
+				suite.Assert().NoError(err)
+
+				suite.createOperator(1)
+				_, err = suite.rk.DelegateToOperator(ctx, 1,
+					sdk.NewCoins(sdk.NewInt64Coin(vestedStake, 300)), testAccount)
+				suite.Assert().NoError(err)
+			},
+			account:   testAccount,
+			amount:    sdk.NewCoins(sdk.NewInt64Coin(vestedStake, 2000)),
+			shouldErr: true,
+		},
 	}
 
 	for _, tc := range testCases {
