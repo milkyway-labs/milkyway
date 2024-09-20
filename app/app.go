@@ -165,6 +165,8 @@ import (
 	"github.com/milkyway-labs/milkyway/x/interchainquery"
 	icqkeeper "github.com/milkyway-labs/milkyway/x/interchainquery/keeper"
 	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
+	"github.com/milkyway-labs/milkyway/x/liquidvesting"
+	liquidvestingkeeper "github.com/milkyway-labs/milkyway/x/liquidvesting/keeper"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 	"github.com/milkyway-labs/milkyway/x/operators"
 	operatorskeeper "github.com/milkyway-labs/milkyway/x/operators/keeper"
@@ -346,12 +348,13 @@ type MilkyWayApp struct {
 	RecordsKeeper         recordskeeper.Keeper
 	StakeIBCKeeper        stakeibckeeper.Keeper
 
-	ServicesKeeper  *serviceskeeper.Keeper
-	OperatorsKeeper *operatorskeeper.Keeper
-	PoolsKeeper     *poolskeeper.Keeper
-	RestakingKeeper *restakingkeeper.Keeper
-	AssetsKeeper    *assetskeeper.Keeper
-	RewardsKeeper   *rewardskeeper.Keeper
+	ServicesKeeper      *serviceskeeper.Keeper
+	OperatorsKeeper     *operatorskeeper.Keeper
+	PoolsKeeper         *poolskeeper.Keeper
+	RestakingKeeper     *restakingkeeper.Keeper
+	AssetsKeeper        *assetskeeper.Keeper
+	RewardsKeeper       *rewardskeeper.Keeper
+	LiquidVestingKeeper *liquidvestingkeeper.Keeper
 
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper           capabilitykeeper.ScopedKeeper
@@ -424,7 +427,7 @@ func NewMilkyWayApp(
 
 		// Custom modules
 		servicestypes.StoreKey, operatorstypes.StoreKey, poolstypes.StoreKey, restakingtypes.StoreKey,
-		assetstypes.StoreKey, rewardstypes.StoreKey,
+		assetstypes.StoreKey, rewardstypes.StoreKey, liquidvestingtypes.StoreKey,
 	)
 	tkeys := storetypes.NewTransientStoreKeys(forwardingtypes.TransientStoreKey)
 	memKeys := storetypes.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -474,6 +477,9 @@ func NewMilkyWayApp(
 
 	// add keepers
 	app.WasmKeeper = &wasmkeeper.Keeper{}
+
+	// add empty liquidvesting keeper
+	app.LiquidVestingKeeper = &liquidvestingkeeper.Keeper{}
 
 	accountKeeper := authkeeper.NewAccountKeeper(
 		appCodec,
@@ -647,6 +653,11 @@ func NewMilkyWayApp(
 		ibcwasmhooks.NewWasmHooks(appCodec, ac, app.WasmKeeper),
 	)
 
+	hooksICS4LiquidVesting := ibchooks.NewICS4Middleware(
+		hooksICS4Wrapper,
+		liquidvestingkeeper.NewIBCHooks(app.LiquidVestingKeeper),
+	)
+
 	app.InterchainQueryKeeper = icqkeeper.NewKeeper(appCodec, keys[icqtypes.StoreKey], app.IBCKeeper)
 
 	app.ICACallbacksKeeper = *icacallbackskeeper.NewKeeper(
@@ -718,6 +729,13 @@ func NewMilkyWayApp(
 			// receive: wasm -> packet forward -> forwarding -> transfer
 			transferStack,
 			hooksICS4Wrapper,
+			app.IBCHooksKeeper,
+		)
+
+		transferStack = ibchooks.NewIBCMiddleware(
+			// receive: liquidvesting -> wasm -> packet forward -> forwarding -> transfer
+			transferStack,
+			hooksICS4LiquidVesting,
 			app.IBCHooksKeeper,
 		)
 
@@ -952,8 +970,6 @@ func NewMilkyWayApp(
 	app.TokenFactoryKeeper = &tokenfactoryKeeper
 	app.TokenFactoryKeeper.SetContractKeeper(contractKeeper)
 
-	app.BankKeeper.SetHooks(app.TokenFactoryKeeper.Hooks())
-
 	// Custom modules
 	app.ServicesKeeper = serviceskeeper.NewKeeper(
 		app.appCodec,
@@ -1004,6 +1020,23 @@ func NewMilkyWayApp(
 		authorityAddr,
 	)
 	app.RestakingKeeper.SetHooks(app.RewardsKeeper.Hooks())
+	// Here we do an object asign so that the pointer that we have
+	// used before to configure the IBC hooks don't change
+	*app.LiquidVestingKeeper = *liquidvestingkeeper.NewKeeper(
+		app.appCodec,
+		keys[liquidvestingtypes.StoreKey],
+		runtime.NewKVStoreService(keys[liquidvestingtypes.StoreKey]),
+		app.BankKeeper,
+		app.OperatorsKeeper,
+		app.PoolsKeeper,
+		app.ServicesKeeper,
+		app.RestakingKeeper,
+		authtypes.NewModuleAddress(liquidvestingtypes.ModuleName).String(),
+		authorityAddr)
+
+	app.BankKeeper.SetHooks(
+		bankkeeper.NewComposedBankHooks(app.TokenFactoryKeeper.Hooks(),
+			app.LiquidVestingKeeper.BankHooks()))
 
 	/****  Module Options ****/
 
@@ -1056,6 +1089,7 @@ func NewMilkyWayApp(
 		restaking.NewAppModule(appCodec, app.RestakingKeeper),
 		assets.NewAppModule(appCodec, app.AssetsKeeper),
 		rewards.NewAppModule(appCodec, app.RewardsKeeper),
+		liquidvesting.NewAppModule(appCodec, app.LiquidVestingKeeper),
 	)
 
 	if err := app.setupIndexer(kvindexerDB, appOpts, ac, vc, appCodec); err != nil {

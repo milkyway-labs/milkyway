@@ -24,6 +24,10 @@ type IBCHooks struct {
 	*Keeper
 }
 
+func NewIBCHooks(k *Keeper) IBCHooks {
+	return IBCHooks{k}
+}
+
 func (k *Keeper) IBCHooks() IBCHooks {
 	return IBCHooks{k}
 }
