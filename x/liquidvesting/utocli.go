@@ -63,7 +63,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "BurnVestedRepresentation",
-					Use:       "mint-vested-representation [sender] [user] [amount]",
+					Use:       "burn-vested-representation [sender] [user] [amount]",
 					Short:     "Burns an user's staked vested tokens representation",
 					Example:   fmt.Sprintf(`$ %s tx liquidvesting burn-vested-representation init1... init1... 1000vestd/umilk`, version.AppName),
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
@@ -71,6 +71,10 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 						{ProtoField: "user"},
 						{ProtoField: "amount"},
 					},
+				},
+				{
+					RpcMethod: "UpdateParams",
+					Skip:      true,
 				},
 			},
 			EnhanceCustomCommand: true,
