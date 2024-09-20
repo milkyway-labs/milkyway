@@ -30,13 +30,6 @@ func (k *Keeper) BurnVestedRepresentation(
 	accAddress sdk.AccAddress,
 	amount sdk.Coins,
 ) error {
-	isBurner, err := k.IsBurner(ctx, accAddress)
-	if err != nil {
-		return nil
-	}
-	if !isBurner {
-		return types.ErrNotBurner
-	}
 	// Ensure that we are burning vested representations tokens
 	for _, c := range amount {
 		if !types.IsVestedRepresentationDenom(c.Denom) {
@@ -61,9 +54,16 @@ func (k *Keeper) BurnVestedRepresentation(
 		}
 	}
 
+	liquidCoinsIsZero := liquidCoins.IsZero()
+	toUnbondCoinsIsZero := toUnbondCoins.IsZero()
+
+	if liquidCoinsIsZero && toUnbondCoinsIsZero {
+		return types.ErrInsufficientBalance.Wrap(amount.String())
+	}
+
 	// The amount to burn is not in the user balance, check if we can remove that
 	// amount from the user's delegations.
-	if !toUnbondCoins.IsZero() {
+	if !toUnbondCoinsIsZero {
 		completionTime, err := k.restakingKeeper.UnbondRestakedAssets(ctx, accAddress, toUnbondCoins)
 		if err != nil {
 			return err
@@ -74,12 +74,14 @@ func (k *Keeper) BurnVestedRepresentation(
 		k.InsertBurnCoinsQueue(ctx, types.NewBurnCoins(accAddress.String(), toUnbondCoins), completionTime)
 	}
 
-	// Burn the liquid coins
-	if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, accAddress, types.ModuleName, liquidCoins); err != nil {
-		return err
-	}
-	if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, liquidCoins); err != nil {
-		return err
+	if !liquidCoinsIsZero {
+		// Burn the liquid coins
+		if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, accAddress, types.ModuleName, liquidCoins); err != nil {
+			return err
+		}
+		if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, liquidCoins); err != nil {
+			return err
+		}
 	}
 
 	return nil

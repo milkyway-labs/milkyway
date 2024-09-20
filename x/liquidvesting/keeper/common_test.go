@@ -190,6 +190,15 @@ func (suite *KeeperTestSuite) SetupTest() {
 
 // --------------------------------------------------------------------------------------------------------------------
 
+// fundAccount add the given amount of coins to the account's balance
+func (suite *KeeperTestSuite) fundAccount(ctx sdk.Context, address string, amount sdk.Coins) {
+	// Mint the tokens in the insurance fund.
+	suite.Assert().NoError(suite.bk.MintCoins(ctx, types.ModuleName, amount))
+
+	suite.Assert().NoError(suite.bk.SendCoinsFromModuleToAccount(
+		ctx, types.ModuleName, sdk.MustAccAddressFromBech32(address), amount))
+}
+
 // mintVestedRepresentation mints the vested representation of the provided amount to
 // the user balance
 func (suite *KeeperTestSuite) mintVestedRepresentation(address string, amount sdk.Coins) {
