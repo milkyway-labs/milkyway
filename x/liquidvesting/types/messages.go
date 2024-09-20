@@ -34,6 +34,10 @@ func (msg *MsgMintVestedRepresentation) ValidateBasic() error {
 		return err
 	}
 
+	if msg.Amount.IsZero() {
+		return ErrInvalidAmount
+	}
+
 	return nil
 }
 
@@ -65,5 +69,26 @@ func (msg *MsgBurnVestedRepresentation) ValidateBasic() error {
 		return err
 	}
 
+	if msg.Amount.IsZero() {
+		return ErrInvalidAmount
+	}
+
 	return nil
+}
+
+// NewMsgUpdateParams creates a new MsgUpdateParams instance
+func NewMsgUpdateParams(authority string, params Params) *MsgUpdateParams {
+	return &MsgUpdateParams{
+		Authority: authority,
+		Params:    params,
+	}
+}
+
+func (msg *MsgUpdateParams) ValidateBasic() error {
+	_, err := sdk.AccAddressFromBech32(msg.Authority)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address")
+	}
+
+	return msg.Params.Validate()
 }

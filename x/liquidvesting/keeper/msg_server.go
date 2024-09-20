@@ -41,7 +41,7 @@ func (m msgServer) MintVestedRepresentation(
 		return nil, types.ErrNotMinter
 	}
 
-	err = m.Keeper.MintVestedRepresentation(ctx, receiver, msg.Amount)
+	mintedAmount, err := m.Keeper.MintVestedRepresentation(ctx, receiver, msg.Amount)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (m msgServer) MintVestedRepresentation(
 		sdk.NewEvent(
 			types.EventTypeMintVestedRepresentation,
 			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
-			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Amount.String()),
+			sdk.NewAttribute(sdk.AttributeKeyAmount, mintedAmount.String()),
 			sdk.NewAttribute(types.AttributeKeyReceiver, msg.Receiver),
 		),
 	})

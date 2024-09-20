@@ -44,7 +44,7 @@ func (suite *KeeperTestSuite) TestMintVestedRepresentation() {
 				tc.setup()
 			}
 			accAddr := sdk.MustAccAddressFromBech32(tc.to)
-			err := suite.k.MintVestedRepresentation(ctx, accAddr, tc.amount)
+			_, err := suite.k.MintVestedRepresentation(ctx, accAddr, tc.amount)
 
 			if tc.shouldErr {
 				suite.Require().Error(err)

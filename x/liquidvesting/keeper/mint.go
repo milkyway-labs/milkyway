@@ -25,13 +25,13 @@ func (k *Keeper) MintVestedRepresentation(
 	ctx sdk.Context,
 	user sdk.AccAddress,
 	amount sdk.Coins,
-) error {
+) (sdk.Coins, error) {
 	var toMintTokens sdk.Coins
 	for _, coin := range amount {
 		// Create the vested representation for the received denom
 		vestedRepresentationDenom, err := types.GetVestedRepresentationDenom(coin.Denom)
 		if err != nil {
-			return err
+			return sdk.Coins{}, err
 		}
 
 		// Check if we have the metadata for the vested representation
@@ -59,14 +59,15 @@ func (k *Keeper) MintVestedRepresentation(
 	// Mint the tokens to the module
 	err := k.bankKeeper.MintCoins(ctx, types.ModuleName, toMintTokens)
 	if err != nil {
-		return err
+		return sdk.Coins{}, err
 	}
 
 	// Transfer the minted tokens to the user
-	return k.bankKeeper.SendCoinsFromModuleToAccount(
+	err = k.bankKeeper.SendCoinsFromModuleToAccount(
 		ctx,
 		types.ModuleName,
 		user,
 		toMintTokens,
 	)
+	return toMintTokens, err
 }

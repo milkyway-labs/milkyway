@@ -205,9 +205,10 @@ func (suite *KeeperTestSuite) mintVestedRepresentation(address string, amount sd
 	accAddress, err := sdk.AccAddressFromBech32(address)
 	suite.Assert().NoError(err)
 
-	suite.Assert().NoError(suite.k.MintVestedRepresentation(
+	_, err = suite.k.MintVestedRepresentation(
 		suite.ctx, accAddress, amount,
-	))
+	)
+	suite.Assert().NoError(err)
 }
 
 // fundAccountInsuranceFund add the given amount of coins to the account's insurance fund
