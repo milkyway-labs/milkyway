@@ -16,11 +16,6 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 			Service: assetsv1.Query_ServiceDesc.ServiceName,
 			RpcCommandOptions: []*autocliv1.RpcCommandOptions{
 				{
-					RpcMethod: "Params",
-					Use:       "params",
-					Short:     "Query the current assets parameters",
-				},
-				{
 					RpcMethod: "Assets",
 					Use:       "assets",
 					Short:     "Query all assets",
@@ -41,10 +36,6 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 		Tx: &autocliv1.ServiceCommandDescriptor{
 			Service: assetsv1.Msg_ServiceDesc.ServiceName,
 			RpcCommandOptions: []*autocliv1.RpcCommandOptions{
-				{
-					RpcMethod: "UpdateParams",
-					Skip:      true,
-				},
 				{
 					RpcMethod: "RegisterAsset",
 					Skip:      true,
