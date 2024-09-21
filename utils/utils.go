@@ -271,9 +271,9 @@ func MustParseDec(s string) sdkmath.LegacyDec {
 	return sdkmath.LegacyMustNewDecFromStr(strings.ReplaceAll(s, "_", ""))
 }
 
-// JsonStringHasKey parses the provided data as a json object and checks
+// JSONStringHasKey parses the provided data as a json object and checks
 // if it contains the provided key.
-func JsonStringHasKey(data, key string) (found bool, jsonObject map[string]interface{}) {
+func JSONStringHasKey(data, key string) (found bool, jsonObject map[string]interface{}) {
 	jsonObject = make(map[string]interface{})
 
 	// If there is no data, nothing to do here.

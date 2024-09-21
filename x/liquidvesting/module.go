@@ -97,30 +97,30 @@ func NewAppModule(cdc codec.Codec, keeper *keeper.Keeper) AppModule {
 }
 
 // Name returns the module's name.
-func (am AppModule) Name() string {
-	return am.AppModuleBasic.Name()
+func (a AppModule) Name() string {
+	return a.AppModuleBasic.Name()
 }
 
 // RegisterServices registers a GRPC query service to respond to the module-specific GRPC queries.
-func (am AppModule) RegisterServices(cfg module.Configurator) {
-	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServer(am.keeper))
-	types.RegisterQueryServer(cfg.QueryServer(), keeper.NewQuerier(am.keeper))
+func (a AppModule) RegisterServices(cfg module.Configurator) {
+	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServer(a.keeper))
+	types.RegisterQueryServer(cfg.QueryServer(), keeper.NewQuerier(a.keeper))
 }
 
 // InitGenesis performs the module's genesis initialization It returns no validator updates.
-func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.RawMessage) {
+func (a AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.RawMessage) {
 	var genState types.GenesisState
 	cdc.MustUnmarshalJSON(gs, &genState)
 
-	err := am.keeper.InitGenesis(ctx, &genState)
+	err := a.keeper.InitGenesis(ctx, &genState)
 	if err != nil {
 		panic(err)
 	}
 }
 
 // ExportGenesis returns the module's exported genesis state as raw JSON bytes.
-func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
-	genState, err := am.keeper.ExportGenesis(ctx)
+func (a AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
+	genState, err := a.keeper.ExportGenesis(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -138,7 +138,7 @@ func (a AppModule) IsAppModule() {}
 func (a AppModule) IsOnePerModuleType() {}
 
 // EndBlock executes all ABCI EndBlock logic respective to the restaking module.
-func (am AppModule) EndBlock(ctx context.Context) error {
+func (a AppModule) EndBlock(ctx context.Context) error {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	return EndBlocker(sdkCtx, am.keeper)
+	return EndBlocker(sdkCtx, a.keeper)
 }

@@ -39,7 +39,7 @@ func (h IBCHooks) onRecvIcs20Packet(
 	relayer sdk.AccAddress,
 	ics20Packet transfertypes.FungibleTokenPacketData,
 ) exported.Acknowledgement {
-	objFound, object := utils.JsonStringHasKey(ics20Packet.GetMemo(), types.ModuleName)
+	objFound, object := utils.JSONStringHasKey(ics20Packet.GetMemo(), types.ModuleName)
 	if !objFound {
 		// Module payload not found, pass the packet to next middleware
 		return im.App.OnRecvPacket(ctx, packet, relayer)

@@ -37,6 +37,9 @@ func (m msgServer) MintVestedRepresentation(
 	}
 
 	isMinter, err := m.IsMinter(ctx, sender)
+	if err != nil {
+		return nil, err
+	}
 	if !isMinter {
 		return nil, types.ErrNotMinter
 	}
@@ -74,6 +77,9 @@ func (m msgServer) BurnVestedRepresentation(
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	isBurner, err := m.IsBurner(ctx, sender)
+	if err != nil {
+		return nil, err
+	}
 	if !isBurner {
 		return nil, types.ErrNotBurner
 	}

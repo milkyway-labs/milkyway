@@ -45,7 +45,7 @@ func validateAndParseMemo(memo string) (
 	hookData HookData,
 	err error,
 ) {
-	isWasmRouted, metadata := utils.JsonStringHasKey(memo, wasmHookMemoKey)
+	isWasmRouted, metadata := utils.JSONStringHasKey(memo, wasmHookMemoKey)
 	if !isWasmRouted {
 		return
 	}

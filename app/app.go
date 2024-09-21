@@ -1020,7 +1020,7 @@ func NewMilkyWayApp(
 		authorityAddr,
 	)
 	app.RestakingKeeper.SetHooks(app.RewardsKeeper.Hooks())
-	// Here we do an object asign so that the pointer that we have
+	// Here we do an object assign so that the pointer that we have
 	// used before to configure the IBC hooks don't change
 	*app.LiquidVestingKeeper = *liquidvestingkeeper.NewKeeper(
 		app.appCodec,
