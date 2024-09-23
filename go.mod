@@ -59,7 +59,7 @@ require (
 	golang.org/x/crypto v0.27.0
 	golang.org/x/sync v0.8.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20240827150818-7e3bb234dfed
-	google.golang.org/grpc v1.66.2
+	google.golang.org/grpc v1.67.0
 	google.golang.org/protobuf v1.34.2
 	gopkg.in/yaml.v2 v2.4.0
 )
@@ -194,7 +194,7 @@ require (
 	github.com/gofrs/flock v0.12.1 // indirect
 	github.com/gogo/googleapis v1.4.1 // indirect
 	github.com/gogo/protobuf v1.3.3 // indirect
-	github.com/golang/glog v1.2.1 // indirect
+	github.com/golang/glog v1.2.2 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/snappy v0.0.5-0.20220116011046-fa5810519dcb // indirect
 	github.com/golangci/dupl v0.0.0-20180902072040-3e9179ac440a // indirect
