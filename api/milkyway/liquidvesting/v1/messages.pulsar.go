@@ -2843,8 +2843,8 @@ const (
 
 // MsgMintVestedRepresentation defines the message structure for the
 // MintVestedRepresentation gRPC service method. It allows an authorized
-// account to mint an user's staked vested tokens representation that can be
-// used in the liquid staking module.
+// account to mint a user's staked vested tokens representation that can be
+// used in the liquid vesting module.
 type MsgMintVestedRepresentation struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -2929,7 +2929,7 @@ func (*MsgMintVestedRepresentationResponse) Descriptor() ([]byte, []int) {
 
 // MsgBurnVestedRepresentation defines the message structure for the
 // BurnVestedRepresentation gRPC service method. It allows an authorized
-// account to burn an user's staked vested tokens representation.
+// account to burn a user's staked vested tokens representation.
 type MsgBurnVestedRepresentation struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

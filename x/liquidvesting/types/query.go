@@ -1,9 +1,28 @@
 package types
 
+import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	query "github.com/cosmos/cosmos-sdk/types/query"
+)
+
 // NewQueryUserInsuranceFundRequest creates a new QueryUserInsuranceFundRequest object.
 func NewQueryUserInsuranceFundRequest(user string) *QueryUserInsuranceFundRequest {
 	return &QueryUserInsuranceFundRequest{
 		UserAddress: user,
+	}
+}
+
+// NewQueryUserInsuranceFundsRequest creates a new QueryUsersInsuranceFundRequest object.
+func NewQueryUserInsuranceFundsRequest(pagination *query.PageRequest) *QueryUserInsuranceFundsRequest {
+	return &QueryUserInsuranceFundsRequest{
+		Pagination: pagination,
+	}
+}
+
+func NewUserInsuranceFundData(userAddress string, balance sdk.Coins) UserInsuranceFundData {
+	return UserInsuranceFundData{
+		UserAddress: userAddress,
+		Balance:     balance,
 	}
 }
 

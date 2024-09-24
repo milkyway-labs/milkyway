@@ -1575,7 +1575,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// UserInsuranceFund defines an user's insurance fund.
+// UserInsuranceFund defines a user's insurance fund.
 type UserInsuranceFund struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

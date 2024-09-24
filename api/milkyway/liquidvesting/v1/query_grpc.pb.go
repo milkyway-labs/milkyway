@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	Query_UserInsuranceFund_FullMethodName    = "/milkyway.liquidvesting.v1.Query/UserInsuranceFund"
+	Query_UserInsuranceFunds_FullMethodName   = "/milkyway.liquidvesting.v1.Query/UserInsuranceFunds"
 	Query_UserRestakableAssets_FullMethodName = "/milkyway.liquidvesting.v1.Query/UserRestakableAssets"
 	Query_InsuranceFund_FullMethodName        = "/milkyway.liquidvesting.v1.Query/InsuranceFund"
 	Query_Params_FullMethodName               = "/milkyway.liquidvesting.v1.Query/Params"
@@ -34,6 +35,9 @@ type QueryClient interface {
 	// UserInsuranceFund defines a gRPC query method that returns the user's
 	// insurance fund balance given their address.
 	UserInsuranceFund(ctx context.Context, in *QueryUserInsuranceFundRequest, opts ...grpc.CallOption) (*QueryUserInsuranceFundResponse, error)
+	// UserInsuranceFunds defines a gRPC query method that returns all user's
+	// insurance fund balance.
+	UserInsuranceFunds(ctx context.Context, in *QueryUserInsuranceFundsRequest, opts ...grpc.CallOption) (*QueryUserInsuranceFundsResponse, error)
 	// UserRestakableAssets defines a gRPC query method that returns
 	// the amount of assets that can be restaked from the one minted by this
 	// module.
@@ -58,6 +62,16 @@ func (c *queryClient) UserInsuranceFund(ctx context.Context, in *QueryUserInsura
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(QueryUserInsuranceFundResponse)
 	err := c.cc.Invoke(ctx, Query_UserInsuranceFund_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) UserInsuranceFunds(ctx context.Context, in *QueryUserInsuranceFundsRequest, opts ...grpc.CallOption) (*QueryUserInsuranceFundsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(QueryUserInsuranceFundsResponse)
+	err := c.cc.Invoke(ctx, Query_UserInsuranceFunds_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -103,6 +117,9 @@ type QueryServer interface {
 	// UserInsuranceFund defines a gRPC query method that returns the user's
 	// insurance fund balance given their address.
 	UserInsuranceFund(context.Context, *QueryUserInsuranceFundRequest) (*QueryUserInsuranceFundResponse, error)
+	// UserInsuranceFunds defines a gRPC query method that returns all user's
+	// insurance fund balance.
+	UserInsuranceFunds(context.Context, *QueryUserInsuranceFundsRequest) (*QueryUserInsuranceFundsResponse, error)
 	// UserRestakableAssets defines a gRPC query method that returns
 	// the amount of assets that can be restaked from the one minted by this
 	// module.
@@ -125,6 +142,9 @@ type UnimplementedQueryServer struct{}
 
 func (UnimplementedQueryServer) UserInsuranceFund(context.Context, *QueryUserInsuranceFundRequest) (*QueryUserInsuranceFundResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserInsuranceFund not implemented")
+}
+func (UnimplementedQueryServer) UserInsuranceFunds(context.Context, *QueryUserInsuranceFundsRequest) (*QueryUserInsuranceFundsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserInsuranceFunds not implemented")
 }
 func (UnimplementedQueryServer) UserRestakableAssets(context.Context, *QueryUserRestakableAssetsRequest) (*QueryUserRestakableAssetsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserRestakableAssets not implemented")
@@ -170,6 +190,24 @@ func _Query_UserInsuranceFund_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).UserInsuranceFund(ctx, req.(*QueryUserInsuranceFundRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_UserInsuranceFunds_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryUserInsuranceFundsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).UserInsuranceFunds(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_UserInsuranceFunds_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).UserInsuranceFunds(ctx, req.(*QueryUserInsuranceFundsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -238,6 +276,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UserInsuranceFund",
 			Handler:    _Query_UserInsuranceFund_Handler,
+		},
+		{
+			MethodName: "UserInsuranceFunds",
+			Handler:    _Query_UserInsuranceFunds_Handler,
 		},
 		{
 			MethodName: "UserRestakableAssets",

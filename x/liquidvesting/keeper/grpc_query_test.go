@@ -3,6 +3,7 @@ package keeper_test
 import (
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/query"
 
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/keeper"
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
@@ -121,6 +122,76 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFund() {
 			} else {
 				suite.Assert().NoError(err)
 				suite.Assert().Equal(tc.expBalance, resp.Amount)
+			}
+		})
+	}
+}
+
+func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFunds() {
+	user1 := "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"
+	user2 := "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"
+
+	testCases := []struct {
+		name              string
+		setup             func(ctx sdk.Context)
+		shouldErr         bool
+		request           *types.QueryUserInsuranceFundsRequest
+		expInsuranceFunds []types.UserInsuranceFundData
+	}{
+		{
+			name:      "empty request",
+			request:   nil,
+			shouldErr: true,
+		},
+		{
+			name: "no pagination",
+			setup: func(ctx sdk.Context) {
+				suite.fundAccountInsuranceFund(ctx, user1, sdk.NewCoins(sdk.NewInt64Coin(iBCDenom, 1000)))
+				suite.fundAccountInsuranceFund(ctx, user2, sdk.NewCoins(
+					sdk.NewInt64Coin(iBCDenom, 1000), sdk.NewInt64Coin("stake", 1000)))
+			},
+			request:   types.NewQueryUserInsuranceFundsRequest(nil),
+			shouldErr: false,
+			expInsuranceFunds: []types.UserInsuranceFundData{
+				types.NewUserInsuranceFundData(user1, sdk.NewCoins(sdk.NewInt64Coin(iBCDenom, 1000))),
+				types.NewUserInsuranceFundData(user2, sdk.NewCoins(
+					sdk.NewInt64Coin(iBCDenom, 1000), sdk.NewInt64Coin("stake", 1000))),
+			},
+		},
+		{
+			name: "respects handle pagination",
+			setup: func(ctx sdk.Context) {
+				suite.fundAccountInsuranceFund(ctx, user1, sdk.NewCoins(sdk.NewInt64Coin(iBCDenom, 1000)))
+				suite.fundAccountInsuranceFund(ctx, user2, sdk.NewCoins(
+					sdk.NewInt64Coin(iBCDenom, 1000), sdk.NewInt64Coin("stake", 1000)))
+			},
+			request: types.NewQueryUserInsuranceFundsRequest(&query.PageRequest{
+				Offset: 0,
+				Limit:  1,
+			}),
+			shouldErr: false,
+			expInsuranceFunds: []types.UserInsuranceFundData{
+				types.NewUserInsuranceFundData(user1, sdk.NewCoins(sdk.NewInt64Coin(iBCDenom, 1000))),
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		suite.Run(tc.name, func() {
+			suite.SetupTest()
+			ctx, _ := suite.ctx.CacheContext()
+
+			if tc.setup != nil {
+				tc.setup(ctx)
+			}
+
+			querier := keeper.NewQuerier(suite.k)
+			resp, err := querier.UserInsuranceFunds(ctx, tc.request)
+			if tc.shouldErr {
+				suite.Assert().Error(err)
+			} else {
+				suite.Assert().NoError(err)
+				suite.Assert().Equal(tc.expInsuranceFunds, resp.InsuranceFunds)
 			}
 		})
 	}

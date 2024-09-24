@@ -5,6 +5,7 @@ import (
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -62,6 +63,29 @@ func (q Querier) UserInsuranceFund(goCtx context.Context, req *types.QueryUserIn
 		return nil, err
 	}
 	return &types.QueryUserInsuranceFundResponse{Amount: balance}, nil
+}
+
+// UserInsuranceFund implements types.QueryServer.
+func (q Querier) UserInsuranceFunds(goCtx context.Context, req *types.QueryUserInsuranceFundsRequest) (*types.QueryUserInsuranceFundsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
+	}
+
+	sdkCtx := sdk.UnwrapSDKContext(goCtx)
+
+	insuranceFunds, pagination, err := query.CollectionPaginate(sdkCtx, q.insuranceFunds, req.Pagination,
+		func(userAddress sdk.AccAddress, insuranceFund types.UserInsuranceFund) (types.UserInsuranceFundData, error) {
+			return types.NewUserInsuranceFundData(
+				userAddress.String(), insuranceFund.Balance), nil
+		})
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.QueryUserInsuranceFundsResponse{
+		InsuranceFunds: insuranceFunds,
+		Pagination:     pagination,
+	}, nil
 }
 
 // UserRestakableAssets implements types.QueryServer.

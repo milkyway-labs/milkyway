@@ -27,6 +27,12 @@ func (a AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Example:   fmt.Sprintf("$ %s query liquidvesting insurance-fund", version.AppName),
 				},
 				{
+					RpcMethod: "UserInsuranceFunds",
+					Use:       "user-insurance-funds",
+					Short:     "Query all the users' insurance fund",
+					Example:   fmt.Sprintf("$ %s query liquidvesting user-insurance-funds", version.AppName),
+				},
+				{
 					RpcMethod: "UserInsuranceFund",
 					Use:       "user-insurance-fund [user-address]",
 					Short:     "Query the assets deposited in the insurance fund by an user",

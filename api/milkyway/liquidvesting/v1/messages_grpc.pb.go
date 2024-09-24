@@ -30,10 +30,10 @@ const (
 //
 // Msg defines the services module's gRPC message service.
 type MsgClient interface {
-	// MintVestedRepresentation defines the operation to mint an user's staked
-	// vested tokens representation that can be used in the liquid staking module.
+	// MintVestedRepresentation defines the operation to mint a user's staked
+	// vested tokens representation that can be used in the liquid vesting module.
 	MintVestedRepresentation(ctx context.Context, in *MsgMintVestedRepresentation, opts ...grpc.CallOption) (*MsgMintVestedRepresentationResponse, error)
-	// BurnVestedRepresentation defines the operation to burn an user's staked
+	// BurnVestedRepresentation defines the operation to burn a user's staked
 	// vested tokens representation.
 	BurnVestedRepresentation(ctx context.Context, in *MsgBurnVestedRepresentation, opts ...grpc.CallOption) (*MsgBurnVestedRepresentationResponse, error)
 	// UpdateParams defines a (governance) operation for updating the module
@@ -86,10 +86,10 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 //
 // Msg defines the services module's gRPC message service.
 type MsgServer interface {
-	// MintVestedRepresentation defines the operation to mint an user's staked
-	// vested tokens representation that can be used in the liquid staking module.
+	// MintVestedRepresentation defines the operation to mint a user's staked
+	// vested tokens representation that can be used in the liquid vesting module.
 	MintVestedRepresentation(context.Context, *MsgMintVestedRepresentation) (*MsgMintVestedRepresentationResponse, error)
-	// BurnVestedRepresentation defines the operation to burn an user's staked
+	// BurnVestedRepresentation defines the operation to burn a user's staked
 	// vested tokens representation.
 	BurnVestedRepresentation(context.Context, *MsgBurnVestedRepresentation) (*MsgBurnVestedRepresentationResponse, error)
 	// UpdateParams defines a (governance) operation for updating the module
