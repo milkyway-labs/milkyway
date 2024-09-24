@@ -31,12 +31,11 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			ctx, _ := suite.ctx.CacheContext()
 			if tc.store != nil {
-				tc.store(ctx)
+				tc.store(suite.ctx)
 			}
 
-			genState, err := suite.k.ExportGenesis(ctx)
+			genState, err := suite.k.ExportGenesis(suite.ctx)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -105,8 +104,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			ctx, _ := suite.ctx.CacheContext()
-			err := suite.k.InitGenesis(ctx, tc.genesis)
+			err := suite.k.InitGenesis(suite.ctx, tc.genesis)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -114,7 +112,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			}
 
 			if tc.check != nil {
-				tc.check(ctx)
+				tc.check(suite.ctx)
 			}
 		})
 	}

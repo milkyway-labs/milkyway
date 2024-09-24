@@ -119,11 +119,10 @@ func (suite *KeeperTestSuite) TestBankHooks_TestPoolRestaking() {
 			suite.SetupTest()
 			suite.createPool(testPoolId, vestedDenom)
 
-			ctx, _ := suite.ctx.CacheContext()
 			tc.setup()
 			msgServer := restakingkeeper.NewMsgServer(suite.rk)
 
-			_, err := msgServer.DelegatePool(ctx, tc.msg)
+			_, err := msgServer.DelegatePool(suite.ctx, tc.msg)
 			if tc.shouldErr {
 				if tc.errorMsg == "" {
 					suite.Require().Error(err)
@@ -242,11 +241,10 @@ func (suite *KeeperTestSuite) TestBankHooks_TestServiceRestaking() {
 			suite.SetupTest()
 			suite.createService(testServiceId)
 
-			ctx, _ := suite.ctx.CacheContext()
 			tc.setup()
 			msgServer := restakingkeeper.NewMsgServer(suite.rk)
 
-			_, err := msgServer.DelegateService(ctx, tc.msg)
+			_, err := msgServer.DelegateService(suite.ctx, tc.msg)
 			if tc.shouldErr {
 				if tc.errorMsg == "" {
 					suite.Require().Error(err)
@@ -363,11 +361,10 @@ func (suite *KeeperTestSuite) TestBankHooks_TestOperatorRestaking() {
 			suite.SetupTest()
 			suite.createOperator(testOperatorId)
 
-			ctx, _ := suite.ctx.CacheContext()
 			tc.setup()
 			msgServer := restakingkeeper.NewMsgServer(suite.rk)
 
-			_, err := msgServer.DelegateOperator(ctx, tc.msg)
+			_, err := msgServer.DelegateOperator(suite.ctx, tc.msg)
 			if tc.shouldErr {
 				if tc.errorMsg == "" {
 					suite.Require().Error(err)

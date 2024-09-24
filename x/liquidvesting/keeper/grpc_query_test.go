@@ -46,14 +46,13 @@ func (suite *KeeperTestSuite) TestQuerier_InsuranceFund() {
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
-			ctx, _ := suite.ctx.CacheContext()
 
 			if tc.setup != nil {
-				tc.setup(ctx)
+				tc.setup(suite.ctx)
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			resp, err := querier.InsuranceFund(ctx, types.NewQueryInsuranceFundRequest())
+			resp, err := querier.InsuranceFund(suite.ctx, types.NewQueryInsuranceFundRequest())
 			suite.Assert().NoError(err)
 			suite.Assert().Equal(tc.expBalance, resp.Amount)
 		})
@@ -109,14 +108,13 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFund() {
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
-			ctx, _ := suite.ctx.CacheContext()
 
 			if tc.setup != nil {
-				tc.setup(ctx)
+				tc.setup(suite.ctx)
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			resp, err := querier.UserInsuranceFund(ctx, tc.request)
+			resp, err := querier.UserInsuranceFund(suite.ctx, tc.request)
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
@@ -179,14 +177,13 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFunds() {
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
-			ctx, _ := suite.ctx.CacheContext()
 
 			if tc.setup != nil {
-				tc.setup(ctx)
+				tc.setup(suite.ctx)
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			resp, err := querier.UserInsuranceFunds(ctx, tc.request)
+			resp, err := querier.UserInsuranceFunds(suite.ctx, tc.request)
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
@@ -246,14 +243,13 @@ func (suite *KeeperTestSuite) TestQuerier_UserRestakableAssets() {
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
-			ctx, _ := suite.ctx.CacheContext()
 
 			if tc.setup != nil {
-				tc.setup(ctx)
+				tc.setup(suite.ctx)
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			resp, err := querier.UserRestakableAssets(ctx, tc.request)
+			resp, err := querier.UserRestakableAssets(suite.ctx, tc.request)
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {

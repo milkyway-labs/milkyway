@@ -60,26 +60,24 @@ func (suite *KeeperTestSuite) TestMsgServer_MintVestedRepresentation() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			ctx, _ := suite.ctx.CacheContext()
-
-			suite.Assert().NoError(suite.k.SetParams(ctx, types.NewParams(
+			suite.Assert().NoError(suite.k.SetParams(suite.ctx, types.NewParams(
 				math.LegacyMustNewDecFromStr("2.0"),
 				[]string{burnerAccount},
 				[]string{minterAccount},
 			)))
 
 			msgServer := keeper.NewMsgServer(suite.k)
-			_, err := msgServer.MintVestedRepresentation(ctx, tc.msg)
+			_, err := msgServer.MintVestedRepresentation(suite.ctx, tc.msg)
 
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
 				suite.Assert().NoError(err)
 				for _, event := range tc.expEvents {
-					suite.Require().Contains(ctx.EventManager().Events(), event)
+					suite.Require().Contains(suite.ctx.EventManager().Events(), event)
 				}
 				if tc.check != nil {
-					tc.check(ctx)
+					tc.check(suite.ctx)
 				}
 			}
 		})
@@ -152,29 +150,28 @@ func (suite *KeeperTestSuite) TestMsgServer_BurnVestedRepresentation() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			ctx, _ := suite.ctx.CacheContext()
-			suite.Assert().NoError(suite.k.SetParams(ctx, types.NewParams(
+			suite.Assert().NoError(suite.k.SetParams(suite.ctx, types.NewParams(
 				math.LegacyMustNewDecFromStr("2.0"),
 				[]string{burnerAccount},
 				[]string{minterAccount},
 			)))
 
 			if tc.setup != nil {
-				tc.setup(ctx)
+				tc.setup(suite.ctx)
 			}
 
 			msgServer := keeper.NewMsgServer(suite.k)
-			_, err := msgServer.BurnVestedRepresentation(ctx, tc.msg)
+			_, err := msgServer.BurnVestedRepresentation(suite.ctx, tc.msg)
 
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
 				suite.Assert().NoError(err)
 				for _, event := range tc.expEvents {
-					suite.Require().Contains(ctx.EventManager().Events(), event)
+					suite.Require().Contains(suite.ctx.EventManager().Events(), event)
 				}
 				if tc.check != nil {
-					tc.check(ctx)
+					tc.check(suite.ctx)
 				}
 			}
 		})
@@ -218,24 +215,22 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateParams() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			ctx, _ := suite.ctx.CacheContext()
-
 			if tc.setup != nil {
-				tc.setup(ctx)
+				tc.setup(suite.ctx)
 			}
 
 			msgServer := keeper.NewMsgServer(suite.k)
-			_, err := msgServer.UpdateParams(ctx, tc.msg)
+			_, err := msgServer.UpdateParams(suite.ctx, tc.msg)
 
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
 				suite.Assert().NoError(err)
 				for _, event := range tc.expEvents {
-					suite.Require().Contains(ctx.EventManager().Events(), event)
+					suite.Require().Contains(suite.ctx.EventManager().Events(), event)
 				}
 				if tc.check != nil {
-					tc.check(ctx)
+					tc.check(suite.ctx)
 				}
 			}
 		})

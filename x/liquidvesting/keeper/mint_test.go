@@ -39,18 +39,17 @@ func (suite *KeeperTestSuite) TestKeepr_MintVestedRepresentation() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			ctx, _ := suite.ctx.CacheContext()
 			if tc.setup != nil {
 				tc.setup()
 			}
 			accAddr := sdk.MustAccAddressFromBech32(tc.to)
-			_, err := suite.k.MintVestedRepresentation(ctx, accAddr, tc.amount)
+			_, err := suite.k.MintVestedRepresentation(suite.ctx, accAddr, tc.amount)
 
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
 				suite.Require().NoError(err)
-				tc.check(ctx)
+				tc.check(suite.ctx)
 			}
 		})
 	}

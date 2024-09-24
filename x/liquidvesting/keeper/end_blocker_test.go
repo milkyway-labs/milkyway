@@ -145,7 +145,7 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
-			ctx, _ := suite.ctx.CacheContext()
+			ctx := suite.ctx
 
 			if tc.setupCtx != nil {
 				ctx = tc.setupCtx(ctx)

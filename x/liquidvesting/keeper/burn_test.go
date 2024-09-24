@@ -131,12 +131,11 @@ func (suite *KeeperTestSuite) TestKeeper_TestBurn() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			ctx, _ := suite.ctx.CacheContext()
 			if tc.setup != nil {
-				tc.setup(ctx)
+				tc.setup(suite.ctx)
 			}
 
-			err := suite.k.BurnVestedRepresentation(ctx,
+			err := suite.k.BurnVestedRepresentation(suite.ctx,
 				sdk.MustAccAddressFromBech32(tc.account), tc.amount)
 
 			if tc.shouldErr {
@@ -144,7 +143,7 @@ func (suite *KeeperTestSuite) TestKeeper_TestBurn() {
 			} else {
 				suite.Require().NoError(err)
 				if tc.check != nil {
-					tc.check(ctx)
+					tc.check(suite.ctx)
 				}
 			}
 		})
@@ -175,15 +174,14 @@ func (suite *KeeperTestSuite) TestKeeper_TestIsBurner() {
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
-			ctx, _ := suite.ctx.CacheContext()
 
 			suite.Assert().NoError(
-				suite.k.SetParams(ctx, types.NewParams(
+				suite.k.SetParams(suite.ctx, types.NewParams(
 					math.LegacyMustNewDecFromStr("2.0"),
 					[]string{burnerAccount},
 					nil)))
 
-			isBurner, err := suite.k.IsBurner(ctx, sdk.MustAccAddressFromBech32(tc.account))
+			isBurner, err := suite.k.IsBurner(suite.ctx, sdk.MustAccAddressFromBech32(tc.account))
 			suite.Assert().NoError(err)
 			suite.Assert().Equal(tc.isBurner, isBurner)
 		})
