@@ -4,6 +4,7 @@ import (
 	context "context"
 	"time"
 
+	"cosmossdk.io/core/address"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
@@ -12,6 +13,10 @@ import (
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
+
+type AccountKeeper interface {
+	AddressCodec() address.Codec
+}
 
 type BankKeeper interface {
 	MintCoins(ctx context.Context, moduleName string, amt sdk.Coins) error

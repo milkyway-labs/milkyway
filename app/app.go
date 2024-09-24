@@ -1028,6 +1028,7 @@ func NewMilkyWayApp(
 		app.appCodec,
 		keys[liquidvestingtypes.StoreKey],
 		runtime.NewKVStoreService(keys[liquidvestingtypes.StoreKey]),
+		app.AccountKeeper,
 		app.BankKeeper,
 		app.OperatorsKeeper,
 		app.PoolsKeeper,

@@ -167,6 +167,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 		suite.cdc,
 		keys[types.StoreKey],
 		runtime.NewKVStoreService(keys[types.StoreKey]),
+		suite.ak,
 		suite.bk,
 		suite.ok,
 		suite.pk,

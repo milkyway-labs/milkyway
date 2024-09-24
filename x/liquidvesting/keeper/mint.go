@@ -16,7 +16,12 @@ func (k *Keeper) IsMinter(ctx sdk.Context, user sdk.AccAddress) (bool, error) {
 		return false, err
 	}
 
-	return slices.Contains(params.Minters, user.String()), nil
+	stringAddr, err := k.accountKeeper.AddressCodec().BytesToString(user)
+	if err != nil {
+		return false, err
+	}
+
+	return slices.Contains(params.Minters, stringAddr), nil
 }
 
 // MintVestedRepresentation mints the vested staked representation of the provided

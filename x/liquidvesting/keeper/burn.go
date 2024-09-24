@@ -19,7 +19,12 @@ func (k *Keeper) IsBurner(ctx sdk.Context, user sdk.AccAddress) (bool, error) {
 		return false, err
 	}
 
-	return slices.Contains(params.Burners, user.String()), nil
+	stringAddr, err := k.accountKeeper.AddressCodec().BytesToString(user)
+	if err != nil {
+		return false, err
+	}
+
+	return slices.Contains(params.Burners, stringAddr), nil
 }
 
 // BurnVestedRepresentation burns the vested staking representation
@@ -69,9 +74,13 @@ func (k *Keeper) BurnVestedRepresentation(
 			return err
 		}
 
+		stringAddr, err := k.accountKeeper.AddressCodec().BytesToString(accAddress)
+		if err != nil {
+			return err
+		}
 		// Store in the burn coins queue that we have to burn those coins once
 		// they are undelegated.
-		k.InsertBurnCoinsQueue(ctx, types.NewBurnCoins(accAddress.String(), toUnbondCoins), completionTime)
+		k.InsertBurnCoinsQueue(ctx, types.NewBurnCoins(stringAddr, toUnbondCoins), completionTime)
 	}
 
 	if !liquidCoinsIsZero {

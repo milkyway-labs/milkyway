@@ -17,6 +17,7 @@ type Keeper struct {
 	storeService corestoretypes.KVStoreService
 
 	// Keepers
+	accountKeeper   types.AccountKeeper
 	bankKeeper      types.BankKeeper
 	operatorsKeeper types.OperatorsKeeper
 	poolsKeeper     types.PoolsKeeper
@@ -37,6 +38,7 @@ func NewKeeper(
 	cdc codec.Codec,
 	storeKey storetypes.StoreKey,
 	storeService corestoretypes.KVStoreService,
+	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
 	operatorsKeeper types.OperatorsKeeper,
 	poolsKeeper types.PoolsKeeper,
@@ -52,6 +54,7 @@ func NewKeeper(
 		storeKey:     storeKey,
 		storeService: storeService,
 
+		accountKeeper:   accountKeeper,
 		bankKeeper:      bankKeeper,
 		operatorsKeeper: operatorsKeeper,
 		poolsKeeper:     poolsKeeper,

@@ -75,8 +75,12 @@ func (q Querier) UserInsuranceFunds(goCtx context.Context, req *types.QueryUserI
 
 	insuranceFunds, pagination, err := query.CollectionPaginate(sdkCtx, q.insuranceFunds, req.Pagination,
 		func(userAddress sdk.AccAddress, insuranceFund types.UserInsuranceFund) (types.UserInsuranceFundData, error) {
-			return types.NewUserInsuranceFundData(
-				userAddress.String(), insuranceFund.Balance), nil
+			stringAddr, err := q.accountKeeper.AddressCodec().BytesToString(userAddress)
+			if err != nil {
+				return types.UserInsuranceFundData{}, err
+			}
+
+			return types.NewUserInsuranceFundData(stringAddr, insuranceFund.Balance), nil
 		})
 	if err != nil {
 		return nil, err
