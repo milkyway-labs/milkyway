@@ -22,15 +22,15 @@ func (a AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				},
 				{
 					RpcMethod: "InsuranceFund",
-					Use:       "assets",
+					Use:       "insurance-fund",
 					Short:     "Query all the assets in the insurance fund",
-					Example:   fmt.Sprintf("$ %s query insurancefund assets", version.AppName),
+					Example:   fmt.Sprintf("$ %s query liquidvesting insurance-fund", version.AppName),
 				},
 				{
 					RpcMethod: "UserInsuranceFund",
-					Use:       "user-assets [user-address]",
+					Use:       "user-insurance-fund [user-address]",
 					Short:     "Query the assets deposited in the insurance fund by an user",
-					Example:   fmt.Sprintf(`$ %s query liquidvesting user-assets init1....`, version.AppName),
+					Example:   fmt.Sprintf(`$ %s query liquidvesting user-insurance-fund init1....`, version.AppName),
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "user_address"},
 					},
@@ -39,7 +39,7 @@ func (a AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					RpcMethod: "UserRestakableAssets",
 					Use:       "user-restakable-assets [user-address]",
 					Short:     "Query the user's assets that are coverd by their insurance fund and that can be restaked",
-					Example:   fmt.Sprintf(`$ %s query assets asset umilk`, version.AppName),
+					Example:   fmt.Sprintf(`$ %s query liquidvesting user-restakable-assets init1...`, version.AppName),
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "user_address"},
 					},
