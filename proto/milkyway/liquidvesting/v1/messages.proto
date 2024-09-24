@@ -14,12 +14,12 @@ option go_package = "github.com/milkyway-labs/milkyway/x/liquidvesting/types";
 service Msg {
   option (cosmos.msg.v1.service) = true;
 
-  // MintVestedRepresentation defines the operation to mint an user's staked
-  // vested tokens representation that can be used in the liquid staking module.
+  // MintVestedRepresentation defines the operation to mint a user's staked
+  // vested tokens representation that can be used in the liquid vesting module.
   rpc MintVestedRepresentation(MsgMintVestedRepresentation)
       returns (MsgMintVestedRepresentationResponse);
 
-  // BurnVestedRepresentation defines the operation to burn an user's staked
+  // BurnVestedRepresentation defines the operation to burn a user's staked
   // vested tokens representation.
   rpc BurnVestedRepresentation(MsgBurnVestedRepresentation)
       returns (MsgBurnVestedRepresentationResponse);
@@ -32,8 +32,8 @@ service Msg {
 
 // MsgMintVestedRepresentation defines the message structure for the
 // MintVestedRepresentation gRPC service method. It allows an authorized
-// account to mint an user's staked vested tokens representation that can be
-// used in the liquid staking module.
+// account to mint a user's staked vested tokens representation that can be
+// used in the liquid vesting module.
 message MsgMintVestedRepresentation {
   option (cosmos.msg.v1.signer) = "sender";
   option (amino.name) = "milkyway/MsgMintVestedRepresentation";
@@ -58,7 +58,7 @@ message MsgMintVestedRepresentationResponse {}
 
 // MsgBurnVestedRepresentation defines the message structure for the
 // BurnVestedRepresentation gRPC service method. It allows an authorized
-// account to burn an user's staked vested tokens representation.
+// account to burn a user's staked vested tokens representation.
 message MsgBurnVestedRepresentation {
   option (cosmos.msg.v1.signer) = "sender";
   option (amino.name) = "milkyway/MsgBurnVestedRepresentation";

@@ -28,7 +28,7 @@ func IsVestedRepresentationDenom(denom string) bool {
 	return strings.HasPrefix(denom, VestedRepresentationDenomPrefix+"/")
 }
 
-// VestedDenomToNative convertes the denom of a vested token representation
+// VestedDenomToNative converts the denom of a vested token representation
 // to its native denom.
 func VestedDenomToNative(denom string) (string, error) {
 	if !strings.HasPrefix(denom, VestedRepresentationDenomPrefix+"/") {

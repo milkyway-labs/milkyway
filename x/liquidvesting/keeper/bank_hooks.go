@@ -80,7 +80,7 @@ func (h BankHooks) isCoveredByInsuranceFund(
 		return err
 	}
 
-	// Get the params that we later user to compute the amount of
+	// Get the params that we later use to compute the amount of
 	// tokens that are covered by the user's insurance fund
 	params, err := h.GetParams(ctx)
 	if err != nil {

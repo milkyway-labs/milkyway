@@ -27,7 +27,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// UserInsuranceFund defines an user's insurance fund.
+// UserInsuranceFund defines a user's insurance fund.
 type UserInsuranceFund struct {
 	// Amount of coins deposited into the user's insurance fund.
 	Balance github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,1,rep,name=balance,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"balance"`

@@ -8,7 +8,7 @@ import "cosmos_proto/cosmos.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/liquidvesting/types";
 
-// UserInsuranceFund defines an user's insurance fund.
+// UserInsuranceFund defines a user's insurance fund.
 message UserInsuranceFund {
   // Amount of coins deposited into the user's insurance fund.
   repeated cosmos.base.v1beta1.Coin balance = 1 [
