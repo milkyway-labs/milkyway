@@ -139,7 +139,7 @@ func (k *Keeper) InsertBurnCoinsQueue(ctx sdk.Context, burnCoins types.BurnCoins
 // UBDQueueIterator returns all the unbonding queue timeslices from time 0 until endTime.
 func (k *Keeper) BurnCoinsQueueIterator(ctx sdk.Context, endTime time.Time) storetypes.Iterator {
 	store := ctx.KVStore(k.storeKey)
-	return store.Iterator(types.BurnCoinsQueuKey, storetypes.InclusiveEndBytes(types.GetBurnCoinsQueueTimeKey(endTime)))
+	return store.Iterator(types.BurnCoinsQueueKey, storetypes.InclusiveEndBytes(types.GetBurnCoinsQueueTimeKey(endTime)))
 }
 
 // DequeueAllBurnCoins returns a concatenated list of all the timeslices inclusively previous to

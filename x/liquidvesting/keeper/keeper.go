@@ -62,7 +62,7 @@ func NewKeeper(
 		restakingKeeper: restakingKeeper,
 
 		params: collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
-		insuranceFunds: collections.NewMap[sdk.AccAddress, types.UserInsuranceFund](
+		insuranceFunds: collections.NewMap(
 			sb,
 			types.InsuranceFundKey,
 			"insurance_fund",
