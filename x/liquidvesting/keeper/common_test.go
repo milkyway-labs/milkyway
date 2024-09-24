@@ -176,7 +176,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 		authorityAddr,
 	)
 	// Set bank hooks
-	suite.bk.SetHooks(suite.k.BankHooks())
+	suite.bk.AppendSendRestriction(suite.k.SendRestrictionFn)
 	// Set ibc hooks
 
 	mockIBCMiddleware := mockIBCMiddleware{}

@@ -970,6 +970,8 @@ func NewMilkyWayApp(
 	app.TokenFactoryKeeper = &tokenfactoryKeeper
 	app.TokenFactoryKeeper.SetContractKeeper(contractKeeper)
 
+	app.BankKeeper.SetHooks(app.TokenFactoryKeeper.Hooks())
+
 	// Custom modules
 	app.ServicesKeeper = serviceskeeper.NewKeeper(
 		app.appCodec,
@@ -1034,9 +1036,7 @@ func NewMilkyWayApp(
 		authtypes.NewModuleAddress(liquidvestingtypes.ModuleName).String(),
 		authorityAddr)
 
-	app.BankKeeper.SetHooks(
-		bankkeeper.NewComposedBankHooks(app.TokenFactoryKeeper.Hooks(),
-			app.LiquidVestingKeeper.BankHooks()))
+	app.BankKeeper.AppendSendRestriction(app.LiquidVestingKeeper.SendRestrictionFn)
 
 	/****  Module Options ****/
 
