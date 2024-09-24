@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"cosmossdk.io/errors"
+	"cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -606,15 +607,8 @@ func (k *Keeper) UnbondRestakedAssets(ctx sdk.Context, user sdk.AccAddress, amou
 		toUndelegatedShares := sdk.NewDecCoins()
 		for _, share := range involvedShares {
 			delShareAmount := delegation.Shares.AmountOf(share.Denom)
-			if delShareAmount.GTE(share.Amount) {
-				// The share of this delegation covers for the amount to undelegate
-				// use the full share amount
-				toUndelegatedShares = toUndelegatedShares.Add(share)
-			} else {
-				// The share of this delegation don't cover the full amount to undelegate
-				// use the amount from the delegation
-				toUndelegatedShares = toUndelegatedShares.Add(sdk.NewDecCoinFromDec(share.Denom, delShareAmount))
-			}
+			toUndelegatedShares = toUndelegatedShares.Add(
+				sdk.NewDecCoinFromDec(share.Denom, math.LegacyMinDec(share.Amount, delShareAmount)))
 		}
 
 		// Update the coins to undelegate

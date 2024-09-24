@@ -28,12 +28,9 @@ type MsgDepositInsurance struct {
 }
 
 func (msg MsgDepositInsurance) ValidateBasic() error {
-	denoms := make([]string, 0)
-	for _, deposit := range msg.Amounts {
+	for i, deposit := range msg.Amounts {
 		// Ensure that the deposits have all the same denom
-		if len(denoms) == 0 {
-			denoms = append(denoms, deposit.Amount.Denom)
-		} else if denoms[0] != deposit.Amount.Denom {
+		if i > 0 && deposit.Amount.Denom != msg.Amounts[i].Amount.Denom {
 			return fmt.Errorf("can't deposit multiple coins")
 		}
 
@@ -50,13 +47,7 @@ func (msg MsgDepositInsurance) GetTotalDepositAmount() (*sdk.Coin, error) {
 	}
 
 	totalAmount := msg.Amounts[0].Amount
-	for i, deposit := range msg.Amounts {
-		// Skip the first deposit since we have initialized the total amount
-		// with the first deposit amount.
-		if i == 0 {
-			continue
-		}
-
+	for _, deposit := range msg.Amounts[1:] {
 		// Ensure that the deposits have all the same denom
 		if deposit.Amount.Denom != totalAmount.Denom {
 			return nil, fmt.Errorf("can't deposit multiple denoms")
