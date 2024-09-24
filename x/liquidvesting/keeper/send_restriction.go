@@ -129,11 +129,8 @@ func (h *Keeper) getUserDelegateAmount(ctx sdk.Context, user sdk.AccAddress, den
 		func(delegation restakingtypes.Delegation) (bool, error) {
 			service, found := h.servicesKeeper.GetService(ctx, delegation.TargetID)
 			if found {
-				for _, coin := range service.TokensFromShares(delegation.Shares) {
-					if coin.Denom == denom {
-						totalAmount = totalAmount.Add(coin.Amount)
-					}
-				}
+				totalAmount = totalAmount.Add(
+					service.TokensFromShares(delegation.Shares).AmountOf(denom))
 			}
 			return false, nil
 		})
@@ -146,11 +143,8 @@ func (h *Keeper) getUserDelegateAmount(ctx sdk.Context, user sdk.AccAddress, den
 		func(delegation restakingtypes.Delegation) (bool, error) {
 			operator, found := h.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
 			if found {
-				for _, coin := range operator.TokensFromShares(delegation.Shares) {
-					if coin.Denom == denom {
-						totalAmount = totalAmount.Add(coin.Amount)
-					}
-				}
+				totalAmount = totalAmount.Add(
+					operator.TokensFromShares(delegation.Shares).AmountOf(denom))
 			}
 			return false, nil
 		})
