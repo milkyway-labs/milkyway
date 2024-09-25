@@ -833,6 +833,8 @@ func NewMilkyWayApp(
 	queryAllowlist["/slinky.oracle.v1.Query/GetAllCurrencyPairs"] = &oracletypes.GetAllCurrencyPairsResponse{}
 	queryAllowlist["/slinky.oracle.v1.Query/GetPrice"] = &oracletypes.GetPriceResponse{}
 	queryAllowlist["/slinky.oracle.v1.Query/GetPrices"] = &oracletypes.GetPricesResponse{}
+	queryAllowlist["/milkyway.operators.v1.Query/Operator"] = &operatorstypes.QueryOperatorResponse{}
+	queryAllowlist["/milkyway.restaking.v1.Query/ServiceOperators"] = &restakingtypes.QueryServiceOperatorsResponse{}
 
 	// use accept list stargate querier
 	wasmOpts = append(wasmOpts, wasmkeeper.WithQueryPlugins(&wasmkeeper.QueryPlugins{
