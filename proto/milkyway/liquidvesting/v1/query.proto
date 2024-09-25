@@ -61,8 +61,15 @@ message QueryUserInsuranceFundRequest {
 // QueryUserInsuranceFundResponse is the response type for the
 // Query/UserInsuranceFund RPC method.
 message QueryUserInsuranceFundResponse {
-  // amount is the amount of tokens that is in the user's insurance fund.
-  repeated cosmos.base.v1beta1.Coin amount = 1 [
+  // balance is the amount of tokens that is in the user's insurance fund.
+  repeated cosmos.base.v1beta1.Coin balance = 1 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+
+  // used is the amount of tokens is being used to cover the user's
+  // restaked assets.
+  repeated cosmos.base.v1beta1.Coin used = 2 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false
   ];
@@ -82,6 +89,13 @@ message UserInsuranceFundData {
 
   // balance is the amount of tokens that is in the user's insurance fund.
   repeated cosmos.base.v1beta1.Coin balance = 2 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+
+  // used is the amount of tokens that is to cover the user's
+  // restaked assets.
+  repeated cosmos.base.v1beta1.Coin used = 3 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
     (gogoproto.nullable) = false
   ];

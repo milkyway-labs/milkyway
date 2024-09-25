@@ -58,11 +58,14 @@ func (q Querier) UserInsuranceFund(goCtx context.Context, req *types.QueryUserIn
 		return nil, err
 	}
 
-	balance, err := q.GetUserInsuranceFundBalance(sdkCtx, accAddr)
+	insuranceFund, err := q.GetUserInsuranceFund(sdkCtx, accAddr)
 	if err != nil {
 		return nil, err
 	}
-	return &types.QueryUserInsuranceFundResponse{Amount: balance}, nil
+	return &types.QueryUserInsuranceFundResponse{
+		Balance: insuranceFund.Balance,
+		Used:    insuranceFund.Used,
+	}, nil
 }
 
 // UserInsuranceFunds implements types.QueryServer.
@@ -80,7 +83,7 @@ func (q Querier) UserInsuranceFunds(goCtx context.Context, req *types.QueryUserI
 				return types.UserInsuranceFundData{}, err
 			}
 
-			return types.NewUserInsuranceFundData(stringAddr, insuranceFund.Balance), nil
+			return types.NewUserInsuranceFundData(stringAddr, insuranceFund), nil
 		})
 	if err != nil {
 		return nil, err

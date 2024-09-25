@@ -69,6 +69,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFund() {
 		shouldErr  bool
 		request    *types.QueryUserInsuranceFundRequest
 		expBalance sdk.Coins
+		expUsed    sdk.Coins
 	}{
 		{
 			name:      "empty request",
@@ -103,6 +104,30 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFund() {
 				sdk.NewInt64Coin("stake", 1000),
 			),
 		},
+		{
+			name: "with used amount",
+			setup: func(ctx sdk.Context) {
+				suite.fundAccountInsuranceFund(ctx, user1, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)))
+				suite.mintVestedRepresentation(user1, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)))
+
+				// Add other tokens
+				suite.fundAccountInsuranceFund(ctx, user2, sdk.NewCoins(
+					sdk.NewInt64Coin(IBCDenom, 1000), sdk.NewInt64Coin("stake", 1000)))
+
+				// Delegate to the pool
+				suite.createPool(1, vestedIBCDenom)
+				_, err := suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedIBCDenom, 1000), user1)
+				suite.Require().NoError(err)
+			},
+			request:   types.NewQueryUserInsuranceFundRequest(user1),
+			shouldErr: false,
+			expBalance: sdk.NewCoins(
+				sdk.NewInt64Coin(IBCDenom, 1000),
+			),
+			expUsed: sdk.NewCoins(
+				sdk.NewInt64Coin(IBCDenom, 20),
+			),
+		},
 	}
 
 	for _, tc := range testCases {
@@ -119,7 +144,8 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFund() {
 				suite.Assert().Error(err)
 			} else {
 				suite.Assert().NoError(err)
-				suite.Assert().Equal(tc.expBalance, resp.Amount)
+				suite.Assert().Equal(tc.expBalance, resp.Balance)
+				suite.Assert().Equal(tc.expUsed, resp.Used)
 			}
 		})
 	}
@@ -151,9 +177,10 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFunds() {
 			request:   types.NewQueryUserInsuranceFundsRequest(nil),
 			shouldErr: false,
 			expInsuranceFunds: []types.UserInsuranceFundData{
-				types.NewUserInsuranceFundData(user1, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000))),
-				types.NewUserInsuranceFundData(user2, sdk.NewCoins(
-					sdk.NewInt64Coin(IBCDenom, 1000), sdk.NewInt64Coin("stake", 1000))),
+				types.NewUserInsuranceFundData(user1, types.NewInsuranceFund(
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)), nil)),
+				types.NewUserInsuranceFundData(user2, types.NewInsuranceFund(
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000), sdk.NewInt64Coin("stake", 1000)), nil)),
 			},
 		},
 		{
@@ -169,7 +196,29 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFunds() {
 			}),
 			shouldErr: false,
 			expInsuranceFunds: []types.UserInsuranceFundData{
-				types.NewUserInsuranceFundData(user1, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000))),
+				types.NewUserInsuranceFundData(user1, types.NewInsuranceFund(
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)), nil)),
+			},
+		},
+		{
+			name: "with utilization",
+			setup: func(ctx sdk.Context) {
+				suite.fundAccountInsuranceFund(ctx, user1, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)))
+				suite.mintVestedRepresentation(user1, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)))
+
+				// Delegate to the pool
+				suite.createPool(1, vestedIBCDenom)
+				_, err := suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedIBCDenom, 1000), user1)
+				suite.Require().NoError(err)
+			},
+			request: types.NewQueryUserInsuranceFundsRequest(&query.PageRequest{
+				Offset: 0,
+				Limit:  1,
+			}),
+			shouldErr: false,
+			expInsuranceFunds: []types.UserInsuranceFundData{
+				types.NewUserInsuranceFundData(user1, types.NewInsuranceFund(
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)), sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 20)))),
 			},
 		},
 	}

@@ -1,7 +1,6 @@
 package types
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	query "github.com/cosmos/cosmos-sdk/types/query"
 )
 
@@ -19,10 +18,11 @@ func NewQueryUserInsuranceFundsRequest(pagination *query.PageRequest) *QueryUser
 	}
 }
 
-func NewUserInsuranceFundData(userAddress string, balance sdk.Coins) UserInsuranceFundData {
+func NewUserInsuranceFundData(userAddress string, insuranceFund UserInsuranceFund) UserInsuranceFundData {
 	return UserInsuranceFundData{
 		UserAddress: userAddress,
-		Balance:     balance,
+		Balance:     insuranceFund.Balance,
+		Used:        insuranceFund.Used,
 	}
 }
 
