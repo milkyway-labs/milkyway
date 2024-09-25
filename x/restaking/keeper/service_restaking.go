@@ -17,9 +17,9 @@ func (k *Keeper) SaveServiceParams(ctx sdk.Context, serviceID uint32, params typ
 
 // GetServiceParams returns the params for the given service, if any.
 // If not params are found, false is returned instead.
-func (k *Keeper) GetServiceParams(ctx sdk.Context, operatorID uint32) (params types.ServiceParams) {
+func (k *Keeper) GetServiceParams(ctx sdk.Context, serviceID uint32) (params types.ServiceParams) {
 	store := ctx.KVStore(k.storeKey)
-	bz := store.Get(types.ServiceParamsStoreKey(operatorID))
+	bz := store.Get(types.ServiceParamsStoreKey(serviceID))
 	if bz == nil {
 		return types.DefaultServiceParams()
 	}
