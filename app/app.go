@@ -905,6 +905,7 @@ func NewMilkyWayApp(
 		keys[operatorstypes.StoreKey],
 		app.AccountKeeper,
 		communityPoolKeeper,
+		app.MsgServiceRouter(),
 		authorityAddr,
 	)
 	app.PoolsKeeper = poolskeeper.NewKeeper(

@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 
@@ -143,6 +144,73 @@ func (k msgServer) DeactivateOperator(goCtx context.Context, msg *types.MsgDeact
 	})
 
 	return &types.MsgDeactivateOperatorResponse{}, nil
+}
+
+// ExecuteMessages defines the rpc method for Msg/ExecuteMessages
+func (k msgServer) ExecuteMessages(goCtx context.Context, msg *types.MsgExecuteMessages) (*types.MsgExecuteMessagesResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Check if the operator exists
+	operator, found := k.GetOperator(ctx, msg.OperatorID)
+	if !found {
+		return nil, types.ErrOperatorNotFound
+	}
+
+	// Make sure only the admin can execute messages
+	if operator.Admin != msg.Sender {
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can execute messages")
+	}
+
+	operatorAddr, err := k.accountKeeper.AddressCodec().StringToBytes(operator.Address)
+	if err != nil {
+		return nil, err
+	}
+
+	messages, err := msg.GetMsgs()
+	if err != nil {
+		return nil, err
+	}
+
+	events := sdk.EmptyEvents()
+	for _, msg := range messages {
+		// perform a basic validation of the message
+		if m, ok := msg.(sdk.HasValidateBasic); ok {
+			if err := m.ValidateBasic(); err != nil {
+				return nil, errors.Wrap(types.ErrInvalidExecuteMsg, err.Error())
+			}
+		}
+
+		signers, _, err := k.cdc.GetMsgV1Signers(msg)
+		if err != nil {
+			return nil, err
+		}
+		if len(signers) != 1 {
+			return nil, types.ErrInvalidExecuteMessagesSigner
+		}
+
+		// assert that the operator is the only signer for ExecuteMessages message
+		if !bytes.Equal(signers[0], operatorAddr) {
+			return nil, errors.Wrapf(types.ErrInvalidExecuteMessagesSigner, sdk.AccAddress(signers[0]).String())
+		}
+
+		handler := k.Router().Handler(msg)
+		if handler == nil {
+			return nil, errors.Wrap(types.ErrUnroutableExecuteMsg, sdk.MsgTypeURL(msg))
+		}
+
+		var res *sdk.Result
+		res, err = handler(ctx, msg)
+		if err != nil {
+			return nil, err
+		}
+
+		events = append(events, res.GetEvents()...)
+	}
+
+	// TODO - merge events of MsgExecuteMessages itself
+	ctx.EventManager().EmitEvents(events)
+
+	return &types.MsgExecuteMessagesResponse{}, nil
 }
 
 // TransferOperatorOwnership defines the rpc method for Msg/TransferOperatorOwnership

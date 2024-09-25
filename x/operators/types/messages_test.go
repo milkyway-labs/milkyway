@@ -5,7 +5,10 @@ import (
 	"time"
 
 	sdkmath "cosmossdk.io/math"
+	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdktx "github.com/cosmos/cosmos-sdk/types/tx"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/stretchr/testify/require"
 
 	"github.com/milkyway-labs/milkyway/x/operators/types"
@@ -229,6 +232,101 @@ func TestMsgDeactivateOperator_GetSignBytes(t *testing.T) {
 func TestMsgDeactivateOperator_GetSigners(t *testing.T) {
 	addr, _ := sdk.AccAddressFromBech32(msgDeactivateOperator.Sender)
 	require.Equal(t, []sdk.AccAddress{addr}, msgDeactivateOperator.GetSigners())
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+var msgExecuteMessages, _ = types.NewMsgExecuteMessages(
+	1,
+	[]sdk.Msg{
+		&banktypes.MsgSend{
+			FromAddress: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			ToAddress:   "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			Amount:      sdk.NewCoins(sdk.NewInt64Coin("umilk", 100000000)),
+		},
+	},
+	"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+)
+
+func TestMsgExecuteMessages_ValidateBasic(t *testing.T) {
+	testCases := []struct {
+		name      string
+		msgFn     func() (*types.MsgExecuteMessages, error)
+		shouldErr bool
+	}{
+		{
+			name: "invalid operator id returns error",
+			msgFn: func() (*types.MsgExecuteMessages, error) {
+				messages, err := sdktx.GetMsgs(msgExecuteMessages.Messages, "transaction")
+				if err != nil {
+					panic(err)
+				}
+				return types.NewMsgExecuteMessages(
+					0,
+					messages,
+					msgExecuteMessages.Sender,
+				)
+			},
+			shouldErr: true,
+		},
+		{
+			name: "empty messages returns error",
+			msgFn: func() (*types.MsgExecuteMessages, error) {
+				return types.NewMsgExecuteMessages(
+					msgExecuteMessages.OperatorID,
+					nil,
+					msgExecuteMessages.Sender,
+				)
+			},
+			shouldErr: true,
+		},
+		{
+			name: "invalid messages return error",
+			msgFn: func() (*types.MsgExecuteMessages, error) {
+				return types.NewMsgExecuteMessages(
+					msgExecuteMessages.OperatorID,
+					[]sdk.Msg{
+						&wasmtypes.MsgExecuteContract{
+							Sender:   "invalid",
+							Contract: "invalid",
+						},
+					},
+					msgExecuteMessages.Sender,
+				)
+			},
+			shouldErr: true,
+		},
+		{
+			name: "valid message returns no error",
+			msgFn: func() (*types.MsgExecuteMessages, error) {
+				return msgExecuteMessages, nil
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			msg, err := tc.msgFn()
+			require.NoError(t, err)
+			err = msg.ValidateBasic()
+			if tc.shouldErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestMsgExecuteMessages_GetSignBytes(t *testing.T) {
+	expected := `{"type":"milkyway/operators/MsgExecuteMessages","value":{"messages":[{"amount":[{"amount":"100000000","denom":"umilk"}],"from_address":"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4","to_address":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"}],"operator_id":1,"sender":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"}}`
+	require.Equal(t, expected, string(msgExecuteMessages.GetSignBytes()))
+}
+
+func TestMsgExecuteMessages_GetSigners(t *testing.T) {
+	addr, _ := sdk.AccAddressFromBech32(msgExecuteMessages.Sender)
+	require.Equal(t, []sdk.AccAddress{addr}, msgExecuteMessages.GetSigners())
 }
 
 // --------------------------------------------------------------------------------------------------------------------

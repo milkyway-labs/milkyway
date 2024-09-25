@@ -5,8 +5,10 @@ import (
 	"strings"
 
 	"cosmossdk.io/errors"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	sdktx "github.com/cosmos/cosmos-sdk/types/tx"
 )
 
 // NewMsgRegisterOperator creates a new MsgRegisterOperator instance
@@ -123,6 +125,73 @@ func (msg *MsgDeactivateOperator) GetSignBytes() []byte {
 func (msg *MsgDeactivateOperator) GetSigners() []sdk.AccAddress {
 	addr, _ := sdk.AccAddressFromBech32(msg.Sender)
 	return []sdk.AccAddress{addr}
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewMsgExecuteMessages creates a new MsgExecuteMessages instance
+func NewMsgExecuteMessages(operatorID uint32, messages []sdk.Msg, sender string) (*MsgExecuteMessages, error) {
+	anys, err := sdktx.SetMsgs(messages)
+	if err != nil {
+		return nil, err
+	}
+	return &MsgExecuteMessages{
+		OperatorID: operatorID,
+		Messages:   anys,
+		Sender:     sender,
+	}, nil
+}
+
+func (msg *MsgExecuteMessages) GetMsgs() ([]sdk.Msg, error) {
+	return sdktx.GetMsgs(msg.Messages, "transaction")
+}
+
+// ValidateBasic implements sdk.Msg
+func (msg *MsgExecuteMessages) ValidateBasic() error {
+	if msg.OperatorID == 0 {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid operator ID: %d", msg.OperatorID)
+	}
+
+	if len(msg.Messages) == 0 {
+		return errors.Wrap(sdkerrors.ErrInvalidRequest, "messages must not be empty")
+	}
+
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address")
+	}
+
+	msgs, err := msg.GetMsgs()
+	if err != nil {
+		return err
+	}
+	for _, msg := range msgs {
+		msg, ok := msg.(sdk.HasValidateBasic)
+		if ok {
+			err = msg.ValidateBasic()
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+// GetSignBytes implements sdk.Msg
+func (msg *MsgExecuteMessages) GetSignBytes() []byte {
+	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(msg))
+}
+
+// GetSigners implements sdk.Msg
+func (msg *MsgExecuteMessages) GetSigners() []sdk.AccAddress {
+	addr, _ := sdk.AccAddressFromBech32(msg.Sender)
+	return []sdk.AccAddress{addr}
+}
+
+// UnpackInterfaces implements UnpackInterfacesMessage.UnpackInterfaces
+func (msg MsgExecuteMessages) UnpackInterfaces(unpacker codectypes.AnyUnpacker) error {
+	return sdktx.UnpackInterfaces(unpacker, msg.Messages)
 }
 
 // --------------------------------------------------------------------------------------------------------------------
