@@ -31,7 +31,7 @@ func GetTxCmd() *cobra.Command {
 
 	txCmd.AddCommand(
 		GetCmdRegisterOperator(),
-		GetCmdEditOperator(),
+		GetCmdUpdateOperator(),
 		GetCmdDeactivateOperator(),
 		GetCmdExecuteMessages(),
 		GetCmdTransferOperatorOwnership(),
@@ -51,7 +51,7 @@ func GetCmdRegisterOperator() *cobra.Command {
 You can specify a website and a picture URL using the optional flags.
 The operator will be created with the sender as the admin.`,
 		Example: fmt.Sprintf(
-			`%s tx %s create MilkyWay --description "MilkyWay Operator" --website https://milkyway.zone --from alice`,
+			`%s tx %s register MilkyWay --website https://milkyway.zone --picture https://milkyway.zone/picture "--from alice`,
 			version.AppName, types.ModuleName,
 		),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -92,13 +92,13 @@ The operator will be created with the sender as the admin.`,
 	return cmd
 }
 
-// GetCmdEditOperator returns the command allowing to edit an existing operator
-func GetCmdEditOperator() *cobra.Command {
+// GetCmdUpdateOperator returns the command allowing to update an existing operator
+func GetCmdUpdateOperator() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "edit [id]",
+		Use:   "update [id]",
 		Args:  cobra.ExactArgs(1),
-		Short: "Edit an existing operator",
-		Long: `Edit an existing operator having the provided it. 
+		Short: "Update an existing operator",
+		Long: `Update an existing operator having the provided it.
 
 You can specify the moniker, website and picture URL using the optional flags.
 Only the fields that you provide will be updated`,

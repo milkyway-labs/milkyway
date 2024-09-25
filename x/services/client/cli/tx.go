@@ -34,6 +34,7 @@ func GetTxCmd() *cobra.Command {
 		GetCmdUpdateService(),
 		GetCmdActivateService(),
 		GetCmdDeactivateService(),
+		GetCmdTransferServiceOwnership(),
 	)
 
 	return txCmd
