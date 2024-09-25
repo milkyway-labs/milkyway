@@ -80,7 +80,7 @@ func (k *Keeper) BurnVestedRepresentation(
 		}
 		// Store in the burn coins queue that we have to burn those coins once
 		// they are undelegated.
-		k.InsertBurnCoinsQueue(ctx, types.NewBurnCoins(stringAddr, toUnbondCoins), completionTime)
+		k.InsertBurnCoinsQueue(ctx, types.NewBurnCoins(stringAddr, completionTime, toUnbondCoins), completionTime)
 	}
 
 	if !liquidCoinsIsZero {
@@ -159,6 +159,23 @@ func (k *Keeper) DequeueAllBurnCoinsQueue(ctx sdk.Context, currTime time.Time) (
 		burnCoins = append(burnCoins, timeslice.Data...)
 
 		store.Delete(bcTimesliceIterator.Key())
+	}
+
+	return burnCoins
+}
+
+// GetAllBurnCoins returns all the coins that are scheduled to be burned.
+func (k *Keeper) GetAllBurnCoins(ctx sdk.Context) []types.BurnCoins {
+	store := ctx.KVStore(k.storeKey)
+	iterator := storetypes.KVStorePrefixIterator(store, types.BurnCoinsQueueKey)
+	defer iterator.Close()
+
+	var burnCoins []types.BurnCoins
+	for ; iterator.Valid(); iterator.Next() {
+		var burnCoinsList types.BurnCoinsList
+		val := iterator.Value()
+		k.cdc.MustUnmarshal(val, &burnCoinsList)
+		burnCoins = append(burnCoins, burnCoinsList.Data...)
 	}
 
 	return burnCoins

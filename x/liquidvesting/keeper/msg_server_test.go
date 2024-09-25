@@ -24,32 +24,32 @@ func (suite *KeeperTestSuite) TestMsgServer_MintVestedRepresentation() {
 		{
 			name: "burner can't mint",
 			msg: types.NewMsgMintVestedRepresentation(burnerAccount, testAccount,
-				sdk.NewCoins(sdk.NewInt64Coin(iBCDenom, 1000))),
+				sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000))),
 			shouldErr: true,
 		},
 		{
 			name: "can't mint vested representation of vested representation coin",
 			msg: types.NewMsgMintVestedRepresentation(minterAccount, testAccount,
-				sdk.NewCoins(sdk.NewInt64Coin(vestedDenom, 1000))),
+				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 1000))),
 			shouldErr: true,
 		},
 		{
 			name: "mint properly",
 			msg: types.NewMsgMintVestedRepresentation(minterAccount, testAccount,
-				sdk.NewCoins(sdk.NewInt64Coin(iBCDenom, 1000))),
+				sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000))),
 			shouldErr: false,
 			expEvents: sdk.Events{
 				sdk.NewEvent(
 					types.EventTypeMintVestedRepresentation,
 					sdk.NewAttribute(sdk.AttributeKeySender, minterAccount),
-					sdk.NewAttribute(sdk.AttributeKeyAmount, "1000"+vestedDenom),
+					sdk.NewAttribute(sdk.AttributeKeyAmount, "1000"+vestedIBCDenom),
 					sdk.NewAttribute(types.AttributeKeyReceiver, testAccount),
 				),
 			},
 			check: func(ctx sdk.Context) {
 				balances := suite.bk.GetAllBalances(ctx, sdk.MustAccAddressFromBech32(testAccount))
 				suite.Assert().Equal(
-					sdk.NewCoins(sdk.NewInt64Coin(vestedDenom, 1000)),
+					sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 1000)),
 					balances,
 				)
 			},
@@ -100,39 +100,39 @@ func (suite *KeeperTestSuite) TestMsgServer_BurnVestedRepresentation() {
 		{
 			name: "minter can't burn",
 			msg: types.NewMsgBurnVestedRepresentation(minterAccount, testAccount,
-				sdk.NewCoins(sdk.NewInt64Coin(vestedDenom, 1000))),
+				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 1000))),
 			setup: func(ctx sdk.Context) {
 				suite.mintVestedRepresentation(testAccount,
-					sdk.NewCoins(sdk.NewInt64Coin(iBCDenom, 1000)))
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)))
 			},
 			shouldErr: true,
 		},
 		{
 			name: "can't burn normal coins",
 			msg: types.NewMsgBurnVestedRepresentation(burnerAccount, testAccount,
-				sdk.NewCoins(sdk.NewInt64Coin(iBCDenom, 1000))),
+				sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000))),
 			setup: func(ctx sdk.Context) {
 				suite.fundAccount(ctx, testAccount,
-					sdk.NewCoins(sdk.NewInt64Coin(iBCDenom, 1000)))
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)))
 				suite.mintVestedRepresentation(testAccount,
-					sdk.NewCoins(sdk.NewInt64Coin(iBCDenom, 1000)))
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)))
 			},
 			shouldErr: true,
 		},
 		{
 			name: "burn properly",
 			msg: types.NewMsgBurnVestedRepresentation(burnerAccount, testAccount,
-				sdk.NewCoins(sdk.NewInt64Coin(vestedDenom, 1000))),
+				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 1000))),
 			shouldErr: false,
 			setup: func(ctx sdk.Context) {
 				suite.mintVestedRepresentation(testAccount,
-					sdk.NewCoins(sdk.NewInt64Coin(iBCDenom, 1000)))
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)))
 			},
 			expEvents: sdk.Events{
 				sdk.NewEvent(
 					types.EventTypeBurnVestedRepresentation,
 					sdk.NewAttribute(sdk.AttributeKeySender, burnerAccount),
-					sdk.NewAttribute(sdk.AttributeKeyAmount, "1000"+vestedDenom),
+					sdk.NewAttribute(sdk.AttributeKeyAmount, "1000"+vestedIBCDenom),
 					sdk.NewAttribute(types.AttributeKeyUser, testAccount),
 				),
 			},

@@ -65,7 +65,7 @@ func (q Querier) UserInsuranceFund(goCtx context.Context, req *types.QueryUserIn
 	return &types.QueryUserInsuranceFundResponse{Amount: balance}, nil
 }
 
-// UserInsuranceFund implements types.QueryServer.
+// UserInsuranceFunds implements types.QueryServer.
 func (q Querier) UserInsuranceFunds(goCtx context.Context, req *types.QueryUserInsuranceFundsRequest) (*types.QueryUserInsuranceFundsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")

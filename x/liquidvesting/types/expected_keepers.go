@@ -58,4 +58,5 @@ type RestakingKeeper interface {
 	IterateUserServiceDelegations(ctx sdk.Context, userAddress string, cb func(restakingtypes.Delegation) (bool, error)) error
 	IterateUserOperatorDelegations(ctx sdk.Context, userAddress string, cb func(restakingtypes.Delegation) (bool, error)) error
 	UnbondRestakedAssets(ctx sdk.Context, user sdk.AccAddress, amount sdk.Coins) (time.Time, error)
+	GetAllUnbondingDelegations(ctx sdk.Context) []restakingtypes.UnbondingDelegation
 }

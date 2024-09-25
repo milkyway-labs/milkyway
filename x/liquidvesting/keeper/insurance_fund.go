@@ -19,7 +19,7 @@ func (k *Keeper) AddToUserInsuranceFund(
 	insuranceFund, err := k.insuranceFunds.Get(ctx, user)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
-			insuranceFund = types.NewInsuranceFund()
+			insuranceFund = types.NewEmptyInsuranceFund()
 		} else {
 			return err
 		}

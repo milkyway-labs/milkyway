@@ -47,6 +47,11 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
+const (
+	IBCDenom       = "ibc/D79E7D83AB399BFFF93433E54FAA480C191248FC556924A2A8351AE2638B3877"
+	vestedIBCDenom = "vested/" + IBCDenom
+)
+
 func TestKeeperTestSuite(t *testing.T) {
 	suite.Run(t, new(KeeperTestSuite))
 }
@@ -58,14 +63,15 @@ type KeeperTestSuite struct {
 	legacyAminoCdc *codec.LegacyAmino
 	ctx            sdk.Context
 
-	ak   authkeeper.AccountKeeper
-	bk   *bankkeeper.Keeper
-	ibck *ibchookskeeper.Keeper
-	ibcm ibchooks.IBCMiddleware
-	ok   *operatorskeeper.Keeper
-	pk   *poolskeeper.Keeper
-	sk   *serviceskeeper.Keeper
-	rk   *restakingkeeper.Keeper
+	liquidVestingModuleAddress sdk.AccAddress
+	ak                         authkeeper.AccountKeeper
+	bk                         *bankkeeper.Keeper
+	ibck                       *ibchookskeeper.Keeper
+	ibcm                       ibchooks.IBCMiddleware
+	ok                         *operatorskeeper.Keeper
+	pk                         *poolskeeper.Keeper
+	sk                         *serviceskeeper.Keeper
+	rk                         *restakingkeeper.Keeper
 
 	k *keeper.Keeper
 }
@@ -163,6 +169,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 		suite.sk,
 		authorityAddr,
 	)
+	suite.liquidVestingModuleAddress = authtypes.NewModuleAddress(types.ModuleName)
 	suite.k = keeper.NewKeeper(
 		suite.cdc,
 		keys[types.StoreKey],
@@ -173,7 +180,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 		suite.pk,
 		suite.sk,
 		suite.rk,
-		authtypes.NewModuleAddress(types.ModuleName).String(),
+		suite.liquidVestingModuleAddress.String(),
 		authorityAddr,
 	)
 	// Set bank hooks
