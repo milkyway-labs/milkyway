@@ -79,6 +79,16 @@ func (a AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					},
 				},
 				{
+					RpcMethod: "WithdrawInsuranceFund",
+					Use:       "withdraw-insurance-fund [sender] [amount]",
+					Short:     "Withdraws coins from the insurance fund",
+					Example:   fmt.Sprintf(`$ %s tx liquidvesting withdraw-insurance-fundh init1... 1000umilk`, version.AppName),
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "sender"},
+						{ProtoField: "amount"},
+					},
+				},
+				{
 					RpcMethod: "UpdateParams",
 					Skip:      true,
 				},

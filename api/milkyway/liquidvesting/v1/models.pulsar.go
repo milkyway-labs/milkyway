@@ -11,6 +11,7 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoiface "google.golang.org/protobuf/runtime/protoiface"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
 	reflect "reflect"
 	sync "sync"
@@ -67,15 +68,68 @@ func (x *_UserInsuranceFund_1_list) IsValid() bool {
 	return x.list != nil
 }
 
+var _ protoreflect.List = (*_UserInsuranceFund_2_list)(nil)
+
+type _UserInsuranceFund_2_list struct {
+	list *[]*v1beta1.Coin
+}
+
+func (x *_UserInsuranceFund_2_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_UserInsuranceFund_2_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_UserInsuranceFund_2_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_UserInsuranceFund_2_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_UserInsuranceFund_2_list) AppendMutable() protoreflect.Value {
+	v := new(v1beta1.Coin)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_UserInsuranceFund_2_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_UserInsuranceFund_2_list) NewElement() protoreflect.Value {
+	v := new(v1beta1.Coin)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_UserInsuranceFund_2_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
 	md_UserInsuranceFund         protoreflect.MessageDescriptor
 	fd_UserInsuranceFund_balance protoreflect.FieldDescriptor
+	fd_UserInsuranceFund_used    protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_milkyway_liquidvesting_v1_models_proto_init()
 	md_UserInsuranceFund = File_milkyway_liquidvesting_v1_models_proto.Messages().ByName("UserInsuranceFund")
 	fd_UserInsuranceFund_balance = md_UserInsuranceFund.Fields().ByName("balance")
+	fd_UserInsuranceFund_used = md_UserInsuranceFund.Fields().ByName("used")
 }
 
 var _ protoreflect.Message = (*fastReflection_UserInsuranceFund)(nil)
@@ -149,6 +203,12 @@ func (x *fastReflection_UserInsuranceFund) Range(f func(protoreflect.FieldDescri
 			return
 		}
 	}
+	if len(x.Used) != 0 {
+		value := protoreflect.ValueOfList(&_UserInsuranceFund_2_list{list: &x.Used})
+		if !f(fd_UserInsuranceFund_used, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -166,6 +226,8 @@ func (x *fastReflection_UserInsuranceFund) Has(fd protoreflect.FieldDescriptor) 
 	switch fd.FullName() {
 	case "milkyway.liquidvesting.v1.UserInsuranceFund.balance":
 		return len(x.Balance) != 0
+	case "milkyway.liquidvesting.v1.UserInsuranceFund.used":
+		return len(x.Used) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.UserInsuranceFund"))
@@ -184,6 +246,8 @@ func (x *fastReflection_UserInsuranceFund) Clear(fd protoreflect.FieldDescriptor
 	switch fd.FullName() {
 	case "milkyway.liquidvesting.v1.UserInsuranceFund.balance":
 		x.Balance = nil
+	case "milkyway.liquidvesting.v1.UserInsuranceFund.used":
+		x.Used = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.UserInsuranceFund"))
@@ -205,6 +269,12 @@ func (x *fastReflection_UserInsuranceFund) Get(descriptor protoreflect.FieldDesc
 			return protoreflect.ValueOfList(&_UserInsuranceFund_1_list{})
 		}
 		listValue := &_UserInsuranceFund_1_list{list: &x.Balance}
+		return protoreflect.ValueOfList(listValue)
+	case "milkyway.liquidvesting.v1.UserInsuranceFund.used":
+		if len(x.Used) == 0 {
+			return protoreflect.ValueOfList(&_UserInsuranceFund_2_list{})
+		}
+		listValue := &_UserInsuranceFund_2_list{list: &x.Used}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
@@ -230,6 +300,10 @@ func (x *fastReflection_UserInsuranceFund) Set(fd protoreflect.FieldDescriptor, 
 		lv := value.List()
 		clv := lv.(*_UserInsuranceFund_1_list)
 		x.Balance = *clv.list
+	case "milkyway.liquidvesting.v1.UserInsuranceFund.used":
+		lv := value.List()
+		clv := lv.(*_UserInsuranceFund_2_list)
+		x.Used = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.UserInsuranceFund"))
@@ -256,6 +330,12 @@ func (x *fastReflection_UserInsuranceFund) Mutable(fd protoreflect.FieldDescript
 		}
 		value := &_UserInsuranceFund_1_list{list: &x.Balance}
 		return protoreflect.ValueOfList(value)
+	case "milkyway.liquidvesting.v1.UserInsuranceFund.used":
+		if x.Used == nil {
+			x.Used = []*v1beta1.Coin{}
+		}
+		value := &_UserInsuranceFund_2_list{list: &x.Used}
+		return protoreflect.ValueOfList(value)
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.UserInsuranceFund"))
@@ -272,6 +352,9 @@ func (x *fastReflection_UserInsuranceFund) NewField(fd protoreflect.FieldDescrip
 	case "milkyway.liquidvesting.v1.UserInsuranceFund.balance":
 		list := []*v1beta1.Coin{}
 		return protoreflect.ValueOfList(&_UserInsuranceFund_1_list{list: &list})
+	case "milkyway.liquidvesting.v1.UserInsuranceFund.used":
+		list := []*v1beta1.Coin{}
+		return protoreflect.ValueOfList(&_UserInsuranceFund_2_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.UserInsuranceFund"))
@@ -347,6 +430,12 @@ func (x *fastReflection_UserInsuranceFund) ProtoMethods() *protoiface.Methods {
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
 		}
+		if len(x.Used) > 0 {
+			for _, e := range x.Used {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -375,6 +464,22 @@ func (x *fastReflection_UserInsuranceFund) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.Used) > 0 {
+			for iNdEx := len(x.Used) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.Used[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x12
+			}
 		}
 		if len(x.Balance) > 0 {
 			for iNdEx := len(x.Balance) - 1; iNdEx >= 0; iNdEx-- {
@@ -475,6 +580,40 @@ func (x *fastReflection_UserInsuranceFund) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Used", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Used = append(x.Used, &v1beta1.Coin{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Used[len(x.Used)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -510,60 +649,61 @@ func (x *fastReflection_UserInsuranceFund) ProtoMethods() *protoiface.Methods {
 	}
 }
 
-var _ protoreflect.List = (*_BurnCoins_2_list)(nil)
+var _ protoreflect.List = (*_BurnCoins_3_list)(nil)
 
-type _BurnCoins_2_list struct {
+type _BurnCoins_3_list struct {
 	list *[]*v1beta1.Coin
 }
 
-func (x *_BurnCoins_2_list) Len() int {
+func (x *_BurnCoins_3_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_BurnCoins_2_list) Get(i int) protoreflect.Value {
+func (x *_BurnCoins_3_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
 }
 
-func (x *_BurnCoins_2_list) Set(i int, value protoreflect.Value) {
+func (x *_BurnCoins_3_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_BurnCoins_2_list) Append(value protoreflect.Value) {
+func (x *_BurnCoins_3_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_BurnCoins_2_list) AppendMutable() protoreflect.Value {
+func (x *_BurnCoins_3_list) AppendMutable() protoreflect.Value {
 	v := new(v1beta1.Coin)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_BurnCoins_2_list) Truncate(n int) {
+func (x *_BurnCoins_3_list) Truncate(n int) {
 	for i := n; i < len(*x.list); i++ {
 		(*x.list)[i] = nil
 	}
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_BurnCoins_2_list) NewElement() protoreflect.Value {
+func (x *_BurnCoins_3_list) NewElement() protoreflect.Value {
 	v := new(v1beta1.Coin)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_BurnCoins_2_list) IsValid() bool {
+func (x *_BurnCoins_3_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
 	md_BurnCoins                   protoreflect.MessageDescriptor
 	fd_BurnCoins_delegator_address protoreflect.FieldDescriptor
+	fd_BurnCoins_completion_time   protoreflect.FieldDescriptor
 	fd_BurnCoins_amount            protoreflect.FieldDescriptor
 )
 
@@ -571,6 +711,7 @@ func init() {
 	file_milkyway_liquidvesting_v1_models_proto_init()
 	md_BurnCoins = File_milkyway_liquidvesting_v1_models_proto.Messages().ByName("BurnCoins")
 	fd_BurnCoins_delegator_address = md_BurnCoins.Fields().ByName("delegator_address")
+	fd_BurnCoins_completion_time = md_BurnCoins.Fields().ByName("completion_time")
 	fd_BurnCoins_amount = md_BurnCoins.Fields().ByName("amount")
 }
 
@@ -645,8 +786,14 @@ func (x *fastReflection_BurnCoins) Range(f func(protoreflect.FieldDescriptor, pr
 			return
 		}
 	}
+	if x.CompletionTime != nil {
+		value := protoreflect.ValueOfMessage(x.CompletionTime.ProtoReflect())
+		if !f(fd_BurnCoins_completion_time, value) {
+			return
+		}
+	}
 	if len(x.Amount) != 0 {
-		value := protoreflect.ValueOfList(&_BurnCoins_2_list{list: &x.Amount})
+		value := protoreflect.ValueOfList(&_BurnCoins_3_list{list: &x.Amount})
 		if !f(fd_BurnCoins_amount, value) {
 			return
 		}
@@ -668,6 +815,8 @@ func (x *fastReflection_BurnCoins) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	case "milkyway.liquidvesting.v1.BurnCoins.delegator_address":
 		return x.DelegatorAddress != ""
+	case "milkyway.liquidvesting.v1.BurnCoins.completion_time":
+		return x.CompletionTime != nil
 	case "milkyway.liquidvesting.v1.BurnCoins.amount":
 		return len(x.Amount) != 0
 	default:
@@ -688,6 +837,8 @@ func (x *fastReflection_BurnCoins) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "milkyway.liquidvesting.v1.BurnCoins.delegator_address":
 		x.DelegatorAddress = ""
+	case "milkyway.liquidvesting.v1.BurnCoins.completion_time":
+		x.CompletionTime = nil
 	case "milkyway.liquidvesting.v1.BurnCoins.amount":
 		x.Amount = nil
 	default:
@@ -709,11 +860,14 @@ func (x *fastReflection_BurnCoins) Get(descriptor protoreflect.FieldDescriptor) 
 	case "milkyway.liquidvesting.v1.BurnCoins.delegator_address":
 		value := x.DelegatorAddress
 		return protoreflect.ValueOfString(value)
+	case "milkyway.liquidvesting.v1.BurnCoins.completion_time":
+		value := x.CompletionTime
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	case "milkyway.liquidvesting.v1.BurnCoins.amount":
 		if len(x.Amount) == 0 {
-			return protoreflect.ValueOfList(&_BurnCoins_2_list{})
+			return protoreflect.ValueOfList(&_BurnCoins_3_list{})
 		}
-		listValue := &_BurnCoins_2_list{list: &x.Amount}
+		listValue := &_BurnCoins_3_list{list: &x.Amount}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
@@ -737,9 +891,11 @@ func (x *fastReflection_BurnCoins) Set(fd protoreflect.FieldDescriptor, value pr
 	switch fd.FullName() {
 	case "milkyway.liquidvesting.v1.BurnCoins.delegator_address":
 		x.DelegatorAddress = value.Interface().(string)
+	case "milkyway.liquidvesting.v1.BurnCoins.completion_time":
+		x.CompletionTime = value.Message().Interface().(*timestamppb.Timestamp)
 	case "milkyway.liquidvesting.v1.BurnCoins.amount":
 		lv := value.List()
-		clv := lv.(*_BurnCoins_2_list)
+		clv := lv.(*_BurnCoins_3_list)
 		x.Amount = *clv.list
 	default:
 		if fd.IsExtension() {
@@ -761,11 +917,16 @@ func (x *fastReflection_BurnCoins) Set(fd protoreflect.FieldDescriptor, value pr
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_BurnCoins) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
+	case "milkyway.liquidvesting.v1.BurnCoins.completion_time":
+		if x.CompletionTime == nil {
+			x.CompletionTime = new(timestamppb.Timestamp)
+		}
+		return protoreflect.ValueOfMessage(x.CompletionTime.ProtoReflect())
 	case "milkyway.liquidvesting.v1.BurnCoins.amount":
 		if x.Amount == nil {
 			x.Amount = []*v1beta1.Coin{}
 		}
-		value := &_BurnCoins_2_list{list: &x.Amount}
+		value := &_BurnCoins_3_list{list: &x.Amount}
 		return protoreflect.ValueOfList(value)
 	case "milkyway.liquidvesting.v1.BurnCoins.delegator_address":
 		panic(fmt.Errorf("field delegator_address of message milkyway.liquidvesting.v1.BurnCoins is not mutable"))
@@ -784,9 +945,12 @@ func (x *fastReflection_BurnCoins) NewField(fd protoreflect.FieldDescriptor) pro
 	switch fd.FullName() {
 	case "milkyway.liquidvesting.v1.BurnCoins.delegator_address":
 		return protoreflect.ValueOfString("")
+	case "milkyway.liquidvesting.v1.BurnCoins.completion_time":
+		m := new(timestamppb.Timestamp)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "milkyway.liquidvesting.v1.BurnCoins.amount":
 		list := []*v1beta1.Coin{}
-		return protoreflect.ValueOfList(&_BurnCoins_2_list{list: &list})
+		return protoreflect.ValueOfList(&_BurnCoins_3_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.BurnCoins"))
@@ -860,6 +1024,10 @@ func (x *fastReflection_BurnCoins) ProtoMethods() *protoiface.Methods {
 		if l > 0 {
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
+		if x.CompletionTime != nil {
+			l = options.Size(x.CompletionTime)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
 		if len(x.Amount) > 0 {
 			for _, e := range x.Amount {
 				l = options.Size(e)
@@ -908,8 +1076,22 @@ func (x *fastReflection_BurnCoins) ProtoMethods() *protoiface.Methods {
 				copy(dAtA[i:], encoded)
 				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
 				i--
-				dAtA[i] = 0x12
+				dAtA[i] = 0x1a
 			}
+		}
+		if x.CompletionTime != nil {
+			encoded, err := options.Marshal(x.CompletionTime)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x12
 		}
 		if len(x.DelegatorAddress) > 0 {
 			i -= len(x.DelegatorAddress)
@@ -1000,6 +1182,42 @@ func (x *fastReflection_BurnCoins) ProtoMethods() *protoiface.Methods {
 				x.DelegatorAddress = string(dAtA[iNdEx:postIndex])
 				iNdEx = postIndex
 			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field CompletionTime", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.CompletionTime == nil {
+					x.CompletionTime = &timestamppb.Timestamp{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.CompletionTime); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			case 3:
 				if wireType != 2 {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
 				}
@@ -1562,6 +1780,505 @@ func (x *fastReflection_BurnCoinsList) ProtoMethods() *protoiface.Methods {
 	}
 }
 
+var (
+	md_UserInsuranceFundState                protoreflect.MessageDescriptor
+	fd_UserInsuranceFundState_user_address   protoreflect.FieldDescriptor
+	fd_UserInsuranceFundState_insurance_fund protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_liquidvesting_v1_models_proto_init()
+	md_UserInsuranceFundState = File_milkyway_liquidvesting_v1_models_proto.Messages().ByName("UserInsuranceFundState")
+	fd_UserInsuranceFundState_user_address = md_UserInsuranceFundState.Fields().ByName("user_address")
+	fd_UserInsuranceFundState_insurance_fund = md_UserInsuranceFundState.Fields().ByName("insurance_fund")
+}
+
+var _ protoreflect.Message = (*fastReflection_UserInsuranceFundState)(nil)
+
+type fastReflection_UserInsuranceFundState UserInsuranceFundState
+
+func (x *UserInsuranceFundState) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_UserInsuranceFundState)(x)
+}
+
+func (x *UserInsuranceFundState) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_liquidvesting_v1_models_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_UserInsuranceFundState_messageType fastReflection_UserInsuranceFundState_messageType
+var _ protoreflect.MessageType = fastReflection_UserInsuranceFundState_messageType{}
+
+type fastReflection_UserInsuranceFundState_messageType struct{}
+
+func (x fastReflection_UserInsuranceFundState_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_UserInsuranceFundState)(nil)
+}
+func (x fastReflection_UserInsuranceFundState_messageType) New() protoreflect.Message {
+	return new(fastReflection_UserInsuranceFundState)
+}
+func (x fastReflection_UserInsuranceFundState_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_UserInsuranceFundState
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_UserInsuranceFundState) Descriptor() protoreflect.MessageDescriptor {
+	return md_UserInsuranceFundState
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_UserInsuranceFundState) Type() protoreflect.MessageType {
+	return _fastReflection_UserInsuranceFundState_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_UserInsuranceFundState) New() protoreflect.Message {
+	return new(fastReflection_UserInsuranceFundState)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_UserInsuranceFundState) Interface() protoreflect.ProtoMessage {
+	return (*UserInsuranceFundState)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_UserInsuranceFundState) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.UserAddress != "" {
+		value := protoreflect.ValueOfString(x.UserAddress)
+		if !f(fd_UserInsuranceFundState_user_address, value) {
+			return
+		}
+	}
+	if x.InsuranceFund != nil {
+		value := protoreflect.ValueOfMessage(x.InsuranceFund.ProtoReflect())
+		if !f(fd_UserInsuranceFundState_insurance_fund, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_UserInsuranceFundState) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.liquidvesting.v1.UserInsuranceFundState.user_address":
+		return x.UserAddress != ""
+	case "milkyway.liquidvesting.v1.UserInsuranceFundState.insurance_fund":
+		return x.InsuranceFund != nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.UserInsuranceFundState"))
+		}
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.UserInsuranceFundState does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_UserInsuranceFundState) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.liquidvesting.v1.UserInsuranceFundState.user_address":
+		x.UserAddress = ""
+	case "milkyway.liquidvesting.v1.UserInsuranceFundState.insurance_fund":
+		x.InsuranceFund = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.UserInsuranceFundState"))
+		}
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.UserInsuranceFundState does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_UserInsuranceFundState) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.liquidvesting.v1.UserInsuranceFundState.user_address":
+		value := x.UserAddress
+		return protoreflect.ValueOfString(value)
+	case "milkyway.liquidvesting.v1.UserInsuranceFundState.insurance_fund":
+		value := x.InsuranceFund
+		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.UserInsuranceFundState"))
+		}
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.UserInsuranceFundState does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_UserInsuranceFundState) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.liquidvesting.v1.UserInsuranceFundState.user_address":
+		x.UserAddress = value.Interface().(string)
+	case "milkyway.liquidvesting.v1.UserInsuranceFundState.insurance_fund":
+		x.InsuranceFund = value.Message().Interface().(*UserInsuranceFund)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.UserInsuranceFundState"))
+		}
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.UserInsuranceFundState does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_UserInsuranceFundState) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.liquidvesting.v1.UserInsuranceFundState.insurance_fund":
+		if x.InsuranceFund == nil {
+			x.InsuranceFund = new(UserInsuranceFund)
+		}
+		return protoreflect.ValueOfMessage(x.InsuranceFund.ProtoReflect())
+	case "milkyway.liquidvesting.v1.UserInsuranceFundState.user_address":
+		panic(fmt.Errorf("field user_address of message milkyway.liquidvesting.v1.UserInsuranceFundState is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.UserInsuranceFundState"))
+		}
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.UserInsuranceFundState does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_UserInsuranceFundState) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.liquidvesting.v1.UserInsuranceFundState.user_address":
+		return protoreflect.ValueOfString("")
+	case "milkyway.liquidvesting.v1.UserInsuranceFundState.insurance_fund":
+		m := new(UserInsuranceFund)
+		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.UserInsuranceFundState"))
+		}
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.UserInsuranceFundState does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_UserInsuranceFundState) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.liquidvesting.v1.UserInsuranceFundState", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_UserInsuranceFundState) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_UserInsuranceFundState) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_UserInsuranceFundState) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_UserInsuranceFundState) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*UserInsuranceFundState)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.UserAddress)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.InsuranceFund != nil {
+			l = options.Size(x.InsuranceFund)
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*UserInsuranceFundState)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.InsuranceFund != nil {
+			encoded, err := options.Marshal(x.InsuranceFund)
+			if err != nil {
+				return protoiface.MarshalOutput{
+					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+					Buf:               input.Buf,
+				}, err
+			}
+			i -= len(encoded)
+			copy(dAtA[i:], encoded)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i--
+			dAtA[i] = 0x12
+		}
+		if len(x.UserAddress) > 0 {
+			i -= len(x.UserAddress)
+			copy(dAtA[i:], x.UserAddress)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.UserAddress)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*UserInsuranceFundState)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: UserInsuranceFundState: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: UserInsuranceFundState: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field UserAddress", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.UserAddress = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field InsuranceFund", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if x.InsuranceFund == nil {
+					x.InsuranceFund = &UserInsuranceFund{}
+				}
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.InsuranceFund); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
 // Code generated by protoc-gen-go. DO NOT EDIT.
 // versions:
 // 	protoc-gen-go v1.27.0
@@ -1583,6 +2300,8 @@ type UserInsuranceFund struct {
 
 	// Amount of coins deposited into the user's insurance fund.
 	Balance []*v1beta1.Coin `protobuf:"bytes,1,rep,name=balance,proto3" json:"balance,omitempty"`
+	// Amount of coins that is currently being used to cover the restaking positions.
+	Used []*v1beta1.Coin `protobuf:"bytes,2,rep,name=used,proto3" json:"used,omitempty"`
 }
 
 func (x *UserInsuranceFund) Reset() {
@@ -1612,6 +2331,13 @@ func (x *UserInsuranceFund) GetBalance() []*v1beta1.Coin {
 	return nil
 }
 
+func (x *UserInsuranceFund) GetUsed() []*v1beta1.Coin {
+	if x != nil {
+		return x.Used
+	}
+	return nil
+}
+
 // BurnCoins is a struct that contains the information about the coins to burn
 // once the unbonding period of the vested representation tokens ends.
 type BurnCoins struct {
@@ -1621,8 +2347,10 @@ type BurnCoins struct {
 
 	// Address of who has delegated the coins.
 	DelegatorAddress string `protobuf:"bytes,1,opt,name=delegator_address,json=delegatorAddress,proto3" json:"delegator_address,omitempty"`
-	// Amount of to be burned from the delegator address.
-	Amount []*v1beta1.Coin `protobuf:"bytes,2,rep,name=amount,proto3" json:"amount,omitempty"`
+	// CompletionTime is the unix time for unbonding completion.
+	CompletionTime *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=completion_time,json=completionTime,proto3" json:"completion_time,omitempty"`
+	// Amount of coins to be burned from the delegator address.
+	Amount []*v1beta1.Coin `protobuf:"bytes,3,rep,name=amount,proto3" json:"amount,omitempty"`
 }
 
 func (x *BurnCoins) Reset() {
@@ -1650,6 +2378,13 @@ func (x *BurnCoins) GetDelegatorAddress() string {
 		return x.DelegatorAddress
 	}
 	return ""
+}
+
+func (x *BurnCoins) GetCompletionTime() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CompletionTime
+	}
+	return nil
 }
 
 func (x *BurnCoins) GetAmount() []*v1beta1.Coin {
@@ -1695,6 +2430,52 @@ func (x *BurnCoinsList) GetData() []*BurnCoins {
 	return nil
 }
 
+// UserInsuranceFundState represents a user's insurance fund.
+type UserInsuranceFundState struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// Address of who owns the insurance fund.
+	UserAddress string `protobuf:"bytes,1,opt,name=user_address,json=userAddress,proto3" json:"user_address,omitempty"`
+	// InsuranceFund represents the user's insurance fund.
+	InsuranceFund *UserInsuranceFund `protobuf:"bytes,2,opt,name=insurance_fund,json=insuranceFund,proto3" json:"insurance_fund,omitempty"`
+}
+
+func (x *UserInsuranceFundState) Reset() {
+	*x = UserInsuranceFundState{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_liquidvesting_v1_models_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UserInsuranceFundState) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserInsuranceFundState) ProtoMessage() {}
+
+// Deprecated: Use UserInsuranceFundState.ProtoReflect.Descriptor instead.
+func (*UserInsuranceFundState) Descriptor() ([]byte, []int) {
+	return file_milkyway_liquidvesting_v1_models_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *UserInsuranceFundState) GetUserAddress() string {
+	if x != nil {
+		return x.UserAddress
+	}
+	return ""
+}
+
+func (x *UserInsuranceFundState) GetInsuranceFund() *UserInsuranceFund {
+	if x != nil {
+		return x.InsuranceFund
+	}
+	return nil
+}
+
 var File_milkyway_liquidvesting_v1_models_proto protoreflect.FileDescriptor
 
 var file_milkyway_liquidvesting_v1_models_proto_rawDesc = []byte{
@@ -1705,52 +2486,77 @@ var file_milkyway_liquidvesting_v1_models_proto_rawDesc = []byte{
 	0x2e, 0x76, 0x31, 0x1a, 0x1e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x62, 0x61, 0x73, 0x65,
 	0x2f, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2f, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x70, 0x72,
 	0x6f, 0x74, 0x6f, 0x1a, 0x14, 0x67, 0x6f, 0x67, 0x6f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67,
-	0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x11, 0x61, 0x6d, 0x69, 0x6e, 0x6f,
-	0x2f, 0x61, 0x6d, 0x69, 0x6e, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x19, 0x63, 0x6f,
-	0x73, 0x6d, 0x6f, 0x73, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
-	0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x7a, 0x0a, 0x11, 0x55, 0x73, 0x65, 0x72, 0x49,
-	0x6e, 0x73, 0x75, 0x72, 0x61, 0x6e, 0x63, 0x65, 0x46, 0x75, 0x6e, 0x64, 0x12, 0x65, 0x0a, 0x07,
-	0x62, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e,
-	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65,
-	0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf,
-	0x1f, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73,
-	0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74,
-	0x79, 0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x07, 0x62, 0x61, 0x6c, 0x61,
-	0x6e, 0x63, 0x65, 0x22, 0xc1, 0x01, 0x0a, 0x09, 0x42, 0x75, 0x72, 0x6e, 0x43, 0x6f, 0x69, 0x6e,
-	0x73, 0x12, 0x45, 0x0a, 0x11, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x61,
-	0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4,
-	0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
-	0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x10, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f,
-	0x72, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x63, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75,
-	0x6e, 0x74, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
-	0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43,
-	0x6f, 0x69, 0x6e, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74,
-	0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63,
-	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e,
-	0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x3a, 0x08, 0x88,
-	0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f, 0x00, 0x22, 0x54, 0x0a, 0x0d, 0x42, 0x75, 0x72, 0x6e, 0x43,
-	0x6f, 0x69, 0x6e, 0x73, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x43, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61,
-	0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x24, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
-	0x79, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x2e,
-	0x76, 0x31, 0x2e, 0x42, 0x75, 0x72, 0x6e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x42, 0x09, 0xc8, 0xde,
-	0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x42, 0x83, 0x02,
-	0x0a, 0x1d, 0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x6c,
-	0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x42,
-	0x0b, 0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x4f,
-	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
-	0x77, 0x61, 0x79, 0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
-	0x79, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x6c,
-	0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x3b,
-	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x76, 0x31, 0xa2,
-	0x02, 0x03, 0x4d, 0x4c, 0x58, 0xaa, 0x02, 0x19, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
-	0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x2e, 0x56,
-	0x31, 0xca, 0x02, 0x19, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x4c, 0x69, 0x71,
-	0x75, 0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x25,
-	0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76,
-	0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74,
-	0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x1b, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
-	0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x3a,
-	0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6f, 0x67, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x1f, 0x67, 0x6f, 0x6f, 0x67, 0x6c,
+	0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74, 0x69, 0x6d, 0x65, 0x73,
+	0x74, 0x61, 0x6d, 0x70, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x11, 0x61, 0x6d, 0x69, 0x6e,
+	0x6f, 0x2f, 0x61, 0x6d, 0x69, 0x6e, 0x6f, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x19, 0x63,
+	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xdb, 0x01, 0x0a, 0x11, 0x55, 0x73, 0x65,
+	0x72, 0x49, 0x6e, 0x73, 0x75, 0x72, 0x61, 0x6e, 0x63, 0x65, 0x46, 0x75, 0x6e, 0x64, 0x12, 0x65,
+	0x0a, 0x07, 0x62, 0x61, 0x6c, 0x61, 0x6e, 0x63, 0x65, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32,
+	0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31,
+	0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00,
+	0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63,
+	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b,
+	0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x07, 0x62, 0x61,
+	0x6c, 0x61, 0x6e, 0x63, 0x65, 0x12, 0x5f, 0x0a, 0x04, 0x75, 0x73, 0x65, 0x64, 0x18, 0x02, 0x20,
+	0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73,
+	0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x30,
+	0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63,
+	0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
+	0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73,
+	0x52, 0x04, 0x75, 0x73, 0x65, 0x64, 0x22, 0x95, 0x02, 0x0a, 0x09, 0x42, 0x75, 0x72, 0x6e, 0x43,
+	0x6f, 0x69, 0x6e, 0x73, 0x12, 0x45, 0x0a, 0x11, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f,
+	0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42,
+	0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72,
+	0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x10, 0x64, 0x65, 0x6c, 0x65, 0x67,
+	0x61, 0x74, 0x6f, 0x72, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x52, 0x0a, 0x0f, 0x63,
+	0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70,
+	0x42, 0x0d, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52,
+	0x0e, 0x63, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x69, 0x6d, 0x65, 0x12,
+	0x63, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32,
+	0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31,
+	0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x30, 0xc8, 0xde, 0x1f, 0x00,
+	0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63,
+	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b,
+	0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x06, 0x61, 0x6d,
+	0x6f, 0x75, 0x6e, 0x74, 0x3a, 0x08, 0x88, 0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f, 0x00, 0x22, 0x54,
+	0x0a, 0x0d, 0x42, 0x75, 0x72, 0x6e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x4c, 0x69, 0x73, 0x74, 0x12,
+	0x43, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x24, 0x2e,
+	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76,
+	0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x42, 0x75, 0x72, 0x6e, 0x43, 0x6f,
+	0x69, 0x6e, 0x73, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x04,
+	0x64, 0x61, 0x74, 0x61, 0x22, 0xb0, 0x01, 0x0a, 0x16, 0x55, 0x73, 0x65, 0x72, 0x49, 0x6e, 0x73,
+	0x75, 0x72, 0x61, 0x6e, 0x63, 0x65, 0x46, 0x75, 0x6e, 0x64, 0x53, 0x74, 0x61, 0x74, 0x65, 0x12,
+	0x3b, 0x0a, 0x0c, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
+	0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52,
+	0x0b, 0x75, 0x73, 0x65, 0x72, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x59, 0x0a, 0x0e,
+	0x69, 0x6e, 0x73, 0x75, 0x72, 0x61, 0x6e, 0x63, 0x65, 0x5f, 0x66, 0x75, 0x6e, 0x64, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x2c, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
+	0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31,
+	0x2e, 0x55, 0x73, 0x65, 0x72, 0x49, 0x6e, 0x73, 0x75, 0x72, 0x61, 0x6e, 0x63, 0x65, 0x46, 0x75,
+	0x6e, 0x64, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0d, 0x69, 0x6e, 0x73, 0x75, 0x72, 0x61,
+	0x6e, 0x63, 0x65, 0x46, 0x75, 0x6e, 0x64, 0x42, 0x83, 0x02, 0x0a, 0x1d, 0x63, 0x6f, 0x6d, 0x2e,
+	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76,
+	0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x42, 0x0b, 0x4d, 0x6f, 0x64, 0x65, 0x6c,
+	0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x4f, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62,
+	0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2d, 0x6c, 0x61,
+	0x62, 0x73, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x61, 0x70, 0x69, 0x2f,
+	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76,
+	0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x3b, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64,
+	0x76, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x4d, 0x4c, 0x58, 0xaa,
+	0x02, 0x19, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69,
+	0x64, 0x76, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x19, 0x4d, 0x69,
+	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73,
+	0x74, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x25, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
+	0x61, 0x79, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67,
+	0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea,
+	0x02, 0x1b, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75,
+	0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1765,22 +2571,27 @@ func file_milkyway_liquidvesting_v1_models_proto_rawDescGZIP() []byte {
 	return file_milkyway_liquidvesting_v1_models_proto_rawDescData
 }
 
-var file_milkyway_liquidvesting_v1_models_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_milkyway_liquidvesting_v1_models_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_milkyway_liquidvesting_v1_models_proto_goTypes = []interface{}{
-	(*UserInsuranceFund)(nil), // 0: milkyway.liquidvesting.v1.UserInsuranceFund
-	(*BurnCoins)(nil),         // 1: milkyway.liquidvesting.v1.BurnCoins
-	(*BurnCoinsList)(nil),     // 2: milkyway.liquidvesting.v1.BurnCoinsList
-	(*v1beta1.Coin)(nil),      // 3: cosmos.base.v1beta1.Coin
+	(*UserInsuranceFund)(nil),      // 0: milkyway.liquidvesting.v1.UserInsuranceFund
+	(*BurnCoins)(nil),              // 1: milkyway.liquidvesting.v1.BurnCoins
+	(*BurnCoinsList)(nil),          // 2: milkyway.liquidvesting.v1.BurnCoinsList
+	(*UserInsuranceFundState)(nil), // 3: milkyway.liquidvesting.v1.UserInsuranceFundState
+	(*v1beta1.Coin)(nil),           // 4: cosmos.base.v1beta1.Coin
+	(*timestamppb.Timestamp)(nil),  // 5: google.protobuf.Timestamp
 }
 var file_milkyway_liquidvesting_v1_models_proto_depIdxs = []int32{
-	3, // 0: milkyway.liquidvesting.v1.UserInsuranceFund.balance:type_name -> cosmos.base.v1beta1.Coin
-	3, // 1: milkyway.liquidvesting.v1.BurnCoins.amount:type_name -> cosmos.base.v1beta1.Coin
-	1, // 2: milkyway.liquidvesting.v1.BurnCoinsList.data:type_name -> milkyway.liquidvesting.v1.BurnCoins
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	4, // 0: milkyway.liquidvesting.v1.UserInsuranceFund.balance:type_name -> cosmos.base.v1beta1.Coin
+	4, // 1: milkyway.liquidvesting.v1.UserInsuranceFund.used:type_name -> cosmos.base.v1beta1.Coin
+	5, // 2: milkyway.liquidvesting.v1.BurnCoins.completion_time:type_name -> google.protobuf.Timestamp
+	4, // 3: milkyway.liquidvesting.v1.BurnCoins.amount:type_name -> cosmos.base.v1beta1.Coin
+	1, // 4: milkyway.liquidvesting.v1.BurnCoinsList.data:type_name -> milkyway.liquidvesting.v1.BurnCoins
+	0, // 5: milkyway.liquidvesting.v1.UserInsuranceFundState.insurance_fund:type_name -> milkyway.liquidvesting.v1.UserInsuranceFund
+	6, // [6:6] is the sub-list for method output_type
+	6, // [6:6] is the sub-list for method input_type
+	6, // [6:6] is the sub-list for extension type_name
+	6, // [6:6] is the sub-list for extension extendee
+	0, // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_milkyway_liquidvesting_v1_models_proto_init() }
@@ -1825,6 +2636,18 @@ func file_milkyway_liquidvesting_v1_models_proto_init() {
 				return nil
 			}
 		}
+		file_milkyway_liquidvesting_v1_models_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UserInsuranceFundState); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -1832,7 +2655,7 @@ func file_milkyway_liquidvesting_v1_models_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_milkyway_liquidvesting_v1_models_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

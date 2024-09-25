@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	Msg_MintVestedRepresentation_FullMethodName = "/milkyway.liquidvesting.v1.Msg/MintVestedRepresentation"
 	Msg_BurnVestedRepresentation_FullMethodName = "/milkyway.liquidvesting.v1.Msg/BurnVestedRepresentation"
+	Msg_WithdrawInsuranceFund_FullMethodName    = "/milkyway.liquidvesting.v1.Msg/WithdrawInsuranceFund"
 	Msg_UpdateParams_FullMethodName             = "/milkyway.liquidvesting.v1.Msg/UpdateParams"
 )
 
@@ -36,6 +37,9 @@ type MsgClient interface {
 	// BurnVestedRepresentation defines the operation to burn a user's staked
 	// vested tokens representation.
 	BurnVestedRepresentation(ctx context.Context, in *MsgBurnVestedRepresentation, opts ...grpc.CallOption) (*MsgBurnVestedRepresentationResponse, error)
+	// WithdrawInsuranceFund defines the operation to withdraw an amount
+	// of tokens from the user's insurance fund.
+	WithdrawInsuranceFund(ctx context.Context, in *MsgWithdrawInsuranceFund, opts ...grpc.CallOption) (*MsgWithdrawInsuranceFundResponse, error)
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters.
 	// The authority defaults to the x/gov module account.
@@ -70,6 +74,16 @@ func (c *msgClient) BurnVestedRepresentation(ctx context.Context, in *MsgBurnVes
 	return out, nil
 }
 
+func (c *msgClient) WithdrawInsuranceFund(ctx context.Context, in *MsgWithdrawInsuranceFund, opts ...grpc.CallOption) (*MsgWithdrawInsuranceFundResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgWithdrawInsuranceFundResponse)
+	err := c.cc.Invoke(ctx, Msg_WithdrawInsuranceFund_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(MsgUpdateParamsResponse)
@@ -92,6 +106,9 @@ type MsgServer interface {
 	// BurnVestedRepresentation defines the operation to burn a user's staked
 	// vested tokens representation.
 	BurnVestedRepresentation(context.Context, *MsgBurnVestedRepresentation) (*MsgBurnVestedRepresentationResponse, error)
+	// WithdrawInsuranceFund defines the operation to withdraw an amount
+	// of tokens from the user's insurance fund.
+	WithdrawInsuranceFund(context.Context, *MsgWithdrawInsuranceFund) (*MsgWithdrawInsuranceFundResponse, error)
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters.
 	// The authority defaults to the x/gov module account.
@@ -111,6 +128,9 @@ func (UnimplementedMsgServer) MintVestedRepresentation(context.Context, *MsgMint
 }
 func (UnimplementedMsgServer) BurnVestedRepresentation(context.Context, *MsgBurnVestedRepresentation) (*MsgBurnVestedRepresentationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BurnVestedRepresentation not implemented")
+}
+func (UnimplementedMsgServer) WithdrawInsuranceFund(context.Context, *MsgWithdrawInsuranceFund) (*MsgWithdrawInsuranceFundResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WithdrawInsuranceFund not implemented")
 }
 func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
@@ -172,6 +192,24 @@ func _Msg_BurnVestedRepresentation_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_WithdrawInsuranceFund_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgWithdrawInsuranceFund)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).WithdrawInsuranceFund(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_WithdrawInsuranceFund_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).WithdrawInsuranceFund(ctx, req.(*MsgWithdrawInsuranceFund))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MsgUpdateParams)
 	if err := dec(in); err != nil {
@@ -204,6 +242,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "BurnVestedRepresentation",
 			Handler:    _Msg_BurnVestedRepresentation_Handler,
+		},
+		{
+			MethodName: "WithdrawInsuranceFund",
+			Handler:    _Msg_WithdrawInsuranceFund_Handler,
 		},
 		{
 			MethodName: "UpdateParams",
