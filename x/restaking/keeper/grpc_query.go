@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"slices"
 
 	"cosmossdk.io/collections"
 	"cosmossdk.io/store/prefix"
@@ -111,6 +112,53 @@ func (k Querier) ServiceSecuringPools(
 		PoolIds:    poolIDs,
 		Pagination: pageResponse,
 	}, nil
+}
+
+func (k Querier) ServiceOperators(goCtx context.Context, req *types.QueryServiceOperatorsRequest) (*types.QueryServiceOperatorsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
+	}
+
+	if req.ServiceId == 0 {
+		return nil, status.Error(codes.InvalidArgument, "service id cannot be 0")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	service, found := k.servicesKeeper.GetService(ctx, req.ServiceId)
+	if !found {
+		return nil, status.Error(codes.NotFound, "service not found")
+	}
+
+	operatorsJoinedServices, err := k.GetAllOperatorsJoinedServices(ctx)
+	if err != nil {
+		return nil, err
+	}
+	isWhitelistConfigured, err := k.IsServiceOpertorsAllowListConfigured(ctx, service.ID)
+	if err != nil {
+		return nil, err
+	}
+	allowedOperators, err := k.GetAllServiceAllowedOperators(ctx, service.ID)
+	if err != nil {
+		return nil, err
+	}
+	var eligibleOperators []operatorstypes.Operator
+	for _, operatorJoinedServices := range operatorsJoinedServices {
+		// If the operator has not joined the service, skip
+		if !slices.Contains(operatorJoinedServices.JoinedServices.ServiceIDs, service.ID) {
+			continue
+		}
+		if isWhitelistConfigured && !slices.Contains(allowedOperators, operatorJoinedServices.OperatorID) {
+			continue
+		}
+		operator, found := k.operatorsKeeper.GetOperator(ctx, operatorJoinedServices.OperatorID)
+		if !found {
+			return nil, operatorstypes.ErrOperatorNotFound
+		}
+		eligibleOperators = append(eligibleOperators, operator)
+	}
+
+	return &types.QueryServiceOperatorsResponse{Operators: eligibleOperators}, nil
 }
 
 // PoolDelegations queries the pool delegations for the given pool id
