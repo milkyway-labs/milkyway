@@ -7,7 +7,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
 // BlockBeforeSend implements keeper.BankHooks.
@@ -19,11 +18,11 @@ func (k *Keeper) SendRestrictionFn(
 ) (sdk.AccAddress, error) {
 	fromAddrStr, err := k.accountKeeper.AddressCodec().BytesToString(from)
 	if err != nil {
-		return sdk.AccAddress{}, err
+		return nil, err
 	}
 	toAddrStr, err := k.accountKeeper.AddressCodec().BytesToString(to)
 	if err != nil {
-		return sdk.AccAddress{}, err
+		return nil, err
 	}
 
 	// Don't check when transferring from or to the module account, this is to allow
@@ -33,33 +32,74 @@ func (k *Keeper) SendRestrictionFn(
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	isToRestakingModule, err := k.isRestakingModule(ctx, to)
+	if err != nil {
+		return nil, err
+	}
+	isFromRestakingModule, err := k.isRestakingModule(ctx, from)
+	if err != nil {
+		return nil, err
+	}
+
+	// Get the user insurance fund
+	var userInsuranceFund types.UserInsuranceFund
+	updateInsuranceFund := false
+	if isToRestakingModule {
+		userInsuranceFund, err = k.GetUserInsuranceFund(ctx, from)
+		if err != nil {
+			return nil, err
+		}
+	} else if isFromRestakingModule {
+		userInsuranceFund, err = k.GetUserInsuranceFund(ctx, to)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	for _, coin := range amount {
 		// Check if coin is a representation of a vested originalDenom
 		if types.IsVestedRepresentationDenom(coin.Denom) {
+			// Compute the coin to be available in the insurance fund
+			required, err := k.getRequiredAmountInInsuranceFund(ctx, coin)
+			if err != nil {
+				return nil, err
+			}
 			// Here we need to check if the coin are being sent from the user
 			// to a restaking module account or the other way around
 			// since we need to restrict to send only to the restaking module
-			isToModule, err := k.isRestakingModule(ctx, to)
-			if err != nil {
-				return sdk.AccAddress{}, err
-			}
-			if isToModule {
-				err := k.isCoveredByInsuranceFund(ctx, from, coin)
-				if err != nil {
-					return sdk.AccAddress{}, err
+			switch {
+			case isToRestakingModule:
+				if !userInsuranceFund.Unused().AmountOf(required.Denom).GTE(required.Amount) {
+					return nil, types.ErrInsufficientInsuranceFundBalance
+				} else {
+					userInsuranceFund.AddUsed(required)
+					updateInsuranceFund = true
 				}
-			} else {
-				isFromModule, err := k.isRestakingModule(ctx, from)
-				if err != nil {
-					return sdk.AccAddress{}, err
-				}
+			case isFromRestakingModule:
+				// From module to account, the user has undelegated their tokens.
+				userInsuranceFund.DecreaseUsed(required)
+				updateInsuranceFund = true
+			default:
 				// Neither the sender nor the receiver is a restaking module
 				// this means that the user is trying to send those tokens
 				// somewhere else. Block it since the vested representation
 				// can only be sent to the restaking module.
-				if !isFromModule {
-					return sdk.AccAddress{}, types.ErrVestedRepresentationCannoteBeTransferred.Wrapf("coin %s", coin.Denom)
-				}
+				return nil, types.ErrVestedRepresentationCannoteBeTransferred.Wrapf("coin %s", coin.Denom)
+			}
+		}
+	}
+
+	if updateInsuranceFund {
+		if isToRestakingModule {
+			err = k.insuranceFunds.Set(ctx, from, userInsuranceFund)
+			if err != nil {
+				return nil, err
+			}
+		} else if isFromRestakingModule {
+			err = k.insuranceFunds.Set(ctx, to, userInsuranceFund)
+			if err != nil {
+				return nil, err
 			}
 		}
 	}
@@ -79,104 +119,21 @@ func (k *Keeper) isRestakingModule(ctx sdk.Context, account sdk.AccAddress) (boo
 		k.operatorsKeeper.IsOperatorDelegationsAddress(ctx, accountString), nil
 }
 
-// isCoveredByInsuranceFund checks if the provided amount once restaked is
-// covered by the user's insurance fund.
-func (k *Keeper) isCoveredByInsuranceFund(
-	ctx sdk.Context,
-	user sdk.AccAddress,
-	restakedCoin sdk.Coin,
-) error {
-	totalDelegated, err := k.getUserDelegateAmount(ctx, user, restakedCoin.Denom)
+// getRequiredAmountInInsuranceFund returns the required coin that should
+// be available in the user's insurance fund in order to cover the provide amount.
+func (k *Keeper) getRequiredAmountInInsuranceFund(ctx sdk.Context, amount sdk.Coin) (sdk.Coin, error) {
+	nativeDenom, err := types.VestedDenomToNative(amount.Denom)
 	if err != nil {
-		return err
+		return sdk.Coin{}, err
 	}
 
-	// Get the params that we later use to compute the amount of
-	// tokens that are covered by the user's insurance fund
 	params, err := k.GetParams(ctx)
 	if err != nil {
-		return err
+		return sdk.Coin{}, err
 	}
 
-	insuranceFund, err := k.GetUserInsuranceFundBalance(ctx, user)
-	if err != nil {
-		return err
-	}
-	// Get the native denom from the vested representation
-	originalDenom, err := types.VestedDenomToNative(restakedCoin.Denom)
-	if err != nil {
-		return err
-	}
-
-	// Get the amount of native tokens stored inside the user's insurance fund
-	found, insuranceFundCoin := insuranceFund.Find(originalDenom)
-	if !found {
-		return types.ErrInsufficientInsuranceFundBalance
-	}
-
-	newDelegatedAmount := totalDelegated.Add(math.LegacyNewDecFromInt(restakedCoin.Amount))
-	// Compute the amount that should be present inside the insurance fund
-	// to cover the new delegated amount
-	requiredInsuranceFund := newDelegatedAmount.
+	requiredAmount := math.LegacyNewDecFromInt(amount.Amount).
 		Mul(params.InsurancePercentage).QuoInt64(100).Ceil().TruncateInt()
 
-	// Ensure that we have enough balance in the user's insurance fund to cover
-	// the new delegated amount
-	if insuranceFundCoin.Amount.LT(requiredInsuranceFund) {
-		return types.ErrInsufficientInsuranceFundBalance.
-			Wrapf("required: %s, current: %s", requiredInsuranceFund.String(), insuranceFundCoin.String())
-	}
-
-	return nil
-}
-
-func (k *Keeper) getUserDelegateAmount(ctx sdk.Context, user sdk.AccAddress, denom string) (math.LegacyDec, error) {
-	totalAmount := math.LegacyNewDec(0)
-	userString, err := k.accountKeeper.AddressCodec().BytesToString(user)
-	if err != nil {
-		return math.LegacyDec{}, err
-	}
-
-	// Get the amount from the pool delegation
-	pool, found := k.poolsKeeper.GetPoolByDenom(ctx, denom)
-	if found {
-		delegation, found := k.restakingKeeper.GetPoolDelegation(ctx, pool.GetID(), userString)
-		if found {
-			delegatedToPool := pool.TokensFromShares(delegation.Shares)
-			// Pool contains only a single asset
-			if len(delegatedToPool) > 0 {
-				totalAmount = totalAmount.Add(delegatedToPool[0].Amount)
-			}
-		}
-	}
-
-	// Process the user's service delegations
-	err = k.restakingKeeper.IterateUserServiceDelegations(ctx, userString,
-		func(delegation restakingtypes.Delegation) (bool, error) {
-			service, found := k.servicesKeeper.GetService(ctx, delegation.TargetID)
-			if found {
-				totalAmount = totalAmount.Add(
-					service.TokensFromShares(delegation.Shares).AmountOf(denom))
-			}
-			return false, nil
-		})
-	if err != nil {
-		return math.LegacyDec{}, err
-	}
-
-	// Process the user's operators delegations
-	err = k.restakingKeeper.IterateUserOperatorDelegations(ctx, userString,
-		func(delegation restakingtypes.Delegation) (bool, error) {
-			operator, found := k.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
-			if found {
-				totalAmount = totalAmount.Add(
-					operator.TokensFromShares(delegation.Shares).AmountOf(denom))
-			}
-			return false, nil
-		})
-	if err != nil {
-		return math.LegacyDec{}, err
-	}
-
-	return totalAmount, nil
+	return sdk.NewCoin(nativeDenom, requiredAmount), nil
 }

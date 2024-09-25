@@ -7,22 +7,47 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func NewInsuranceFund(balance sdk.Coins) UserInsuranceFund {
+func NewInsuranceFund(balance sdk.Coins, used sdk.Coins) UserInsuranceFund {
 	return UserInsuranceFund{
 		Balance: balance,
+		Used:    used,
 	}
 }
 
 func NewEmptyInsuranceFund() UserInsuranceFund {
-	return NewInsuranceFund(sdk.NewCoins())
+	return NewInsuranceFund(sdk.NewCoins(), sdk.NewCoins())
 }
 
 func (u *UserInsuranceFund) Add(amount sdk.Coins) {
-	u.Balance = u.Balance.Sort().Add(amount.Sort()...)
+	u.Balance = u.Balance.Add(amount...)
+}
+
+func (u *UserInsuranceFund) AddUsed(amount ...sdk.Coin) {
+	u.Used = u.Used.Add(amount...)
+}
+
+func (u *UserInsuranceFund) DecreaseUsed(amount ...sdk.Coin) {
+	u.Used = u.Used.Sub(amount...)
 }
 
 func (u *UserInsuranceFund) Validate() error {
-	return u.Balance.Validate()
+	if err := u.Balance.Validate(); err != nil {
+		return err
+	}
+	if err := u.Used.Validate(); err != nil {
+		return err
+	}
+	if !u.Balance.IsAllGTE(u.Used) {
+		return fmt.Errorf("used balance should be lower then total insurance fund balance")
+	}
+
+	return nil
+}
+
+// Unused returns the amount of coins that are not being used to
+// cover restaking positions
+func (u *UserInsuranceFund) Unused() sdk.Coins {
+	return u.Balance.Sub(u.Used...)
 }
 
 func NewBurnCoins(delegator string, completionTime time.Time, amount sdk.Coins) BurnCoins {

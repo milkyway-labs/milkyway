@@ -16,6 +16,12 @@ message UserInsuranceFund {
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
+
+  // Amount of coins that is currently being used to cover the restaking positions.
+  repeated cosmos.base.v1beta1.Coin used = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
 }
 
 // BurnCoins is a struct that contains the information about the coins to burn
@@ -35,7 +41,7 @@ message BurnCoins {
     (gogoproto.stdtime) = true
   ];
 
-  // Amount of to be burned from the delegator address.
+  // Amount of coins to be burned from the delegator address.
   repeated cosmos.base.v1beta1.Coin amount = 3 [
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"

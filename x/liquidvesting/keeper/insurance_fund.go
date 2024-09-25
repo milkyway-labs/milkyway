@@ -5,6 +5,7 @@ import (
 
 	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 )
 
@@ -68,17 +69,30 @@ func (k *Keeper) WithdrawFromUserInsuranceFund(
 }
 
 // GetUserInsuranceFundBalance returns the amount of coins in the user's insurance fund.
+func (k *Keeper) GetUserInsuranceFund(
+	ctx sdk.Context,
+	user sdk.AccAddress,
+) (types.UserInsuranceFund, error) {
+	insuranceFund, err := k.insuranceFunds.Get(ctx, user)
+	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			return types.NewEmptyInsuranceFund(), nil
+		} else {
+			return types.UserInsuranceFund{}, err
+		}
+	}
+
+	return insuranceFund, nil
+}
+
+// GetUserInsuranceFundBalance returns the amount of coins in the user's insurance fund.
 func (k *Keeper) GetUserInsuranceFundBalance(
 	ctx sdk.Context,
 	user sdk.AccAddress,
 ) (sdk.Coins, error) {
-	insuranceFund, err := k.insuranceFunds.Get(ctx, user)
+	insuranceFund, err := k.GetUserInsuranceFund(ctx, user)
 	if err != nil {
-		if errors.Is(err, collections.ErrNotFound) {
-			return sdk.NewCoins(), nil
-		} else {
-			return nil, err
-		}
+		return nil, err
 	}
 
 	return insuranceFund.Balance, nil
@@ -92,4 +106,15 @@ func (k *Keeper) GetInsuranceFundBalance(ctx sdk.Context) (sdk.Coins, error) {
 	}
 
 	return k.bankKeeper.GetAllBalances(ctx, accAddr), nil
+}
+
+// CanWithrawFromInsuranceFund returns true if the user can withdraw the provided amount
+// from their insurance fund.
+func (k *Keeper) CanWithrawFromInsuranceFund(ctx sdk.Context, user sdk.AccAddress, amount sdk.Coins) (bool, error) {
+	userInsuranceFund, err := k.GetUserInsuranceFund(ctx, user)
+	if err != nil {
+		return false, err
+	}
+
+	return userInsuranceFund.Unused().IsAllGTE(amount), nil
 }

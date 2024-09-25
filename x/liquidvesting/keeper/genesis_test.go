@@ -7,6 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
+	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
@@ -48,8 +49,8 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				Params:    types.DefaultParams(),
 				BurnCoins: nil,
 				UserInsuranceFunds: []types.UserInsuranceFundState{
-					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)))),
-					types.NewUserInsuranceFundState(user2, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin("stake", 2)))),
+					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)), sdk.Coins{})),
+					types.NewUserInsuranceFundState(user2, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin("stake", 2)), sdk.Coins{})),
 				},
 			},
 		},
@@ -95,8 +96,12 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					types.NewBurnCoins(user2, blockTime.Add(7*24*time.Hour), sdk.NewCoins(sdk.NewInt64Coin(vestedStake, 100))),
 				},
 				UserInsuranceFunds: []types.UserInsuranceFundState{
-					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)))),
-					types.NewUserInsuranceFundState(user2, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin("stake", 2)))),
+					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(
+						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)),
+						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)))),
+					types.NewUserInsuranceFundState(user2, types.NewInsuranceFund(
+						sdk.NewCoins(sdk.NewInt64Coin("stake", 2)),
+						sdk.NewCoins(sdk.NewInt64Coin("stake", 2)))),
 				},
 			},
 		},
@@ -206,9 +211,71 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 				types.DefaultParams(),
 				nil,
 				[]types.UserInsuranceFundState{
-					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)))),
+					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)), sdk.NewCoins())),
 				},
 			),
+			shouldErr: true,
+		},
+		{
+			name: "should block insurance fund initialization if user don't have delegations",
+			genesis: types.NewGenesisState(
+				types.DefaultParams(),
+				nil,
+				[]types.UserInsuranceFundState{
+					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(
+						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)),
+						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)))),
+				},
+			),
+			shouldErr: true,
+		},
+		{
+			name: "should block insurance fund initialization if insurance fund don't cover delegations and undelegations",
+			genesis: types.NewGenesisState(
+				types.DefaultParams(),
+				nil,
+				[]types.UserInsuranceFundState{
+					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(
+						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)),
+						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)))),
+				},
+			),
+			setup: func(ctx sdk.Context) {
+				// Send tokens to the liquid vesting module
+				suite.Assert().NoError(
+					suite.bk.MintCoins(ctx, types.ModuleName, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2))))
+
+				// Init the pools module
+				testPool := poolstypes.NewPool(1, vestedIBCDenom)
+				testPool.Tokens = math.NewIntFromUint64(50)
+				testPool.DelegatorShares = math.LegacyNewDecFromInt(math.NewIntFromUint64(50))
+				poolsKeeperGenesis := poolstypes.GenesisState{
+					Params:     poolstypes.DefaultParams(),
+					NextPoolID: 2,
+					Pools:      []poolstypes.Pool{testPool},
+				}
+				suite.pk.InitGenesis(ctx, &poolsKeeperGenesis)
+
+				// Init the restaking module
+				restakingKeeperGenesis := &restakingtypes.GenesisState{
+					Params: restakingtypes.DefaultParams(),
+					UnbondingDelegations: []restakingtypes.UnbondingDelegation{
+						restakingtypes.NewPoolUnbondingDelegation(
+							user1,
+							1,
+							10,
+							time.Date(2024, 1, 8, 12, 0o0, 0o0, 0o00, time.UTC),
+							sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 51)),
+							1,
+						),
+					},
+					Delegations: []restakingtypes.Delegation{
+						restakingtypes.NewPoolDelegation(1, user1,
+							sdk.NewDecCoins(sdk.NewInt64DecCoin(testPool.GetSharesDenom(vestedIBCDenom), 50))),
+					},
+				}
+				suite.rk.InitGenesis(ctx, restakingKeeperGenesis)
+			},
 			shouldErr: true,
 		},
 		{
@@ -217,7 +284,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 				types.DefaultParams(),
 				nil,
 				[]types.UserInsuranceFundState{
-					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)))),
+					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)), sdk.NewCoins())),
 				},
 			),
 			setup: func(ctx sdk.Context) {
@@ -230,6 +297,56 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 				suite.Assert().NoError(err)
 				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)), balance)
 			},
+		},
+		{
+			name: "should initialize insurance with delegations and undelegations",
+			genesis: types.NewGenesisState(
+				types.DefaultParams(),
+				nil,
+				[]types.UserInsuranceFundState{
+					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(
+						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)),
+						// Set 3 as used to cover the delegation and the undelegation
+						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 3)))),
+				},
+			),
+			setup: func(ctx sdk.Context) {
+				// Send tokens to the liquid vesting module
+				suite.Assert().NoError(
+					suite.bk.MintCoins(ctx, types.ModuleName, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10))))
+
+				// Init the pools module
+				testPool := poolstypes.NewPool(1, vestedIBCDenom)
+				testPool.Tokens = math.NewIntFromUint64(50)
+				testPool.DelegatorShares = math.LegacyNewDecFromInt(math.NewIntFromUint64(50))
+				poolsKeeperGenesis := poolstypes.GenesisState{
+					Params:     poolstypes.DefaultParams(),
+					NextPoolID: 2,
+					Pools:      []poolstypes.Pool{testPool},
+				}
+				suite.pk.InitGenesis(ctx, &poolsKeeperGenesis)
+
+				// Init the restaking module
+				restakingKeeperGenesis := &restakingtypes.GenesisState{
+					Params: restakingtypes.DefaultParams(),
+					UnbondingDelegations: []restakingtypes.UnbondingDelegation{
+						restakingtypes.NewPoolUnbondingDelegation(
+							user1,
+							1,
+							10,
+							time.Date(2024, 1, 8, 12, 0o0, 0o0, 0o00, time.UTC),
+							sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 100)),
+							1,
+						),
+					},
+					Delegations: []restakingtypes.Delegation{
+						restakingtypes.NewPoolDelegation(1, user1,
+							sdk.NewDecCoins(sdk.NewInt64DecCoin(testPool.GetSharesDenom(vestedIBCDenom), 50))),
+					},
+				}
+				suite.rk.InitGenesis(ctx, restakingKeeperGenesis)
+			},
+			shouldErr: false,
 		},
 		{
 			name: "should block burn coins initialization if the tokens are not unbonding",

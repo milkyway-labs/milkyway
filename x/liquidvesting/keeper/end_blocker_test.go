@@ -84,6 +84,12 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 				suite.Assert().Equal(
 					sdk.NewCoins(sdk.NewInt64Coin(vestedStake, 800)),
 					toBurnCoins[0].Amount)
+
+				// The user insurance fund signal that there are still 20 coins used
+				// to cover the restaking position
+				userInsuranceFund, err := suite.k.GetUserInsuranceFund(ctx, sdk.MustAccAddressFromBech32(testAccount))
+				suite.Assert().NoError(err)
+				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake", 16)), userInsuranceFund.Used)
 			},
 		},
 		{
@@ -124,7 +130,7 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 				// Burn all the coins
 				err = suite.k.BurnVestedRepresentation(ctx,
 					sdk.MustAccAddressFromBech32(testAccount),
-					sdk.NewCoins(sdk.NewInt64Coin(vestedStake, 1000)))
+					sdk.NewCoins(sdk.NewInt64Coin(vestedStake, 700)))
 				suite.Assert().NoError(err)
 			},
 			updateCtx: func(ctx sdk.Context) sdk.Context {
@@ -138,6 +144,11 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 
 				// The burn queue should be empty
 				suite.Assert().Len(suite.k.DequeueAllBurnCoinsQueue(ctx, ctx.BlockTime()), 0)
+
+				// The user insurance fund should update properly
+				userInsuranceFund, err := suite.k.GetUserInsuranceFund(ctx, sdk.MustAccAddressFromBech32(testAccount))
+				suite.Assert().NoError(err)
+				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake", 6)), userInsuranceFund.Used)
 			},
 		},
 	}

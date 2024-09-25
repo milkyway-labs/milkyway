@@ -15,11 +15,11 @@ const (
 
 func (suite *KeeperTestSuite) TestBankHooks_TestPoolRestaking() {
 	testCases := []struct {
-		name      string
-		setup     func()
-		msg       *restakingtypes.MsgDelegatePool
-		shouldErr bool
-		errorMsg  string
+		name          string
+		setup         func()
+		msg           *restakingtypes.MsgDelegatePool
+		expectedUsage sdk.Coins
+		shouldErr     bool
 	}{
 		{
 			name: "no insurance fund",
@@ -35,7 +35,6 @@ func (suite *KeeperTestSuite) TestBankHooks_TestPoolRestaking() {
 				restaker,
 			),
 			shouldErr: true,
-			errorMsg:  "insufficient insurance fund",
 		},
 		{
 			name: "insufficient insurance fund",
@@ -55,7 +54,6 @@ func (suite *KeeperTestSuite) TestBankHooks_TestPoolRestaking() {
 				restaker,
 			),
 			shouldErr: true,
-			errorMsg:  "required: 6",
 		},
 		{
 			name: "covered funds already restaked",
@@ -88,7 +86,6 @@ func (suite *KeeperTestSuite) TestBankHooks_TestPoolRestaking() {
 				restaker,
 			),
 			shouldErr: true,
-			errorMsg:  "required: 9",
 		},
 		{
 			name: "restake correctly",
@@ -107,7 +104,8 @@ func (suite *KeeperTestSuite) TestBankHooks_TestPoolRestaking() {
 				sdk.NewInt64Coin(vestedIBCDenom, 300),
 				restaker,
 			),
-			shouldErr: false,
+			expectedUsage: sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6)),
+			shouldErr:     false,
 		},
 	}
 
@@ -122,13 +120,12 @@ func (suite *KeeperTestSuite) TestBankHooks_TestPoolRestaking() {
 
 			_, err := msgServer.DelegatePool(suite.ctx, tc.msg)
 			if tc.shouldErr {
-				if tc.errorMsg == "" {
-					suite.Require().Error(err)
-				} else {
-					suite.Assert().ErrorContains(err, tc.errorMsg)
-				}
+				suite.Assert().Error(err)
 			} else {
 				suite.Assert().NoError(err)
+				insuranceFund, err := suite.k.GetUserInsuranceFund(suite.ctx, sdk.MustAccAddressFromBech32(restaker))
+				suite.Assert().NoError(err)
+				suite.Assert().Equal(tc.expectedUsage, insuranceFund.Used)
 			}
 		})
 	}
@@ -136,11 +133,11 @@ func (suite *KeeperTestSuite) TestBankHooks_TestPoolRestaking() {
 
 func (suite *KeeperTestSuite) TestBankHooks_TestServiceRestaking() {
 	testCases := []struct {
-		name      string
-		setup     func()
-		msg       *restakingtypes.MsgDelegateService
-		shouldErr bool
-		errorMsg  string
+		name          string
+		setup         func()
+		msg           *restakingtypes.MsgDelegateService
+		expectedUsage sdk.Coins
+		shouldErr     bool
 	}{
 		{
 			name: "no insurance fund",
@@ -157,7 +154,6 @@ func (suite *KeeperTestSuite) TestBankHooks_TestServiceRestaking() {
 				restaker,
 			),
 			shouldErr: true,
-			errorMsg:  "insufficient insurance fund",
 		},
 		{
 			name: "insufficient insurance fund",
@@ -178,7 +174,6 @@ func (suite *KeeperTestSuite) TestBankHooks_TestServiceRestaking() {
 				restaker,
 			),
 			shouldErr: true,
-			errorMsg:  "required: 6",
 		},
 		{
 			name: "covered funds already restaked",
@@ -211,7 +206,6 @@ func (suite *KeeperTestSuite) TestBankHooks_TestServiceRestaking() {
 				restaker,
 			),
 			shouldErr: true,
-			errorMsg:  "required: 9",
 		},
 		{
 			name: "restake correctly",
@@ -229,7 +223,8 @@ func (suite *KeeperTestSuite) TestBankHooks_TestServiceRestaking() {
 				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 300)),
 				restaker,
 			),
-			shouldErr: false,
+			expectedUsage: sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6)),
+			shouldErr:     false,
 		},
 	}
 
@@ -244,13 +239,12 @@ func (suite *KeeperTestSuite) TestBankHooks_TestServiceRestaking() {
 
 			_, err := msgServer.DelegateService(suite.ctx, tc.msg)
 			if tc.shouldErr {
-				if tc.errorMsg == "" {
-					suite.Require().Error(err)
-				} else {
-					suite.Assert().ErrorContains(err, tc.errorMsg)
-				}
+				suite.Assert().Error(err)
 			} else {
 				suite.Assert().NoError(err)
+				insuranceFund, err := suite.k.GetUserInsuranceFund(suite.ctx, sdk.MustAccAddressFromBech32(restaker))
+				suite.Assert().NoError(err)
+				suite.Assert().Equal(tc.expectedUsage, insuranceFund.Used)
 			}
 		})
 	}
@@ -258,11 +252,11 @@ func (suite *KeeperTestSuite) TestBankHooks_TestServiceRestaking() {
 
 func (suite *KeeperTestSuite) TestBankHooks_TestOperatorRestaking() {
 	testCases := []struct {
-		name      string
-		setup     func()
-		msg       *restakingtypes.MsgDelegateOperator
-		shouldErr bool
-		errorMsg  string
+		name          string
+		setup         func()
+		msg           *restakingtypes.MsgDelegateOperator
+		expectedUsage sdk.Coins
+		shouldErr     bool
 	}{
 		{
 			name: "no insurance fund",
@@ -279,7 +273,6 @@ func (suite *KeeperTestSuite) TestBankHooks_TestOperatorRestaking() {
 				restaker,
 			),
 			shouldErr: true,
-			errorMsg:  "insufficient insurance fund",
 		},
 		{
 			name: "insufficient insurance fund",
@@ -300,7 +293,6 @@ func (suite *KeeperTestSuite) TestBankHooks_TestOperatorRestaking() {
 				restaker,
 			),
 			shouldErr: true,
-			errorMsg:  "required: 6",
 		},
 		{
 			name: "covered funds already restaked",
@@ -332,7 +324,6 @@ func (suite *KeeperTestSuite) TestBankHooks_TestOperatorRestaking() {
 				restaker,
 			),
 			shouldErr: true,
-			errorMsg:  "required: 9",
 		},
 		{
 			name: "restake correctly",
@@ -350,7 +341,8 @@ func (suite *KeeperTestSuite) TestBankHooks_TestOperatorRestaking() {
 				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 300)),
 				restaker,
 			),
-			shouldErr: false,
+			expectedUsage: sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6)),
+			shouldErr:     false,
 		},
 	}
 
@@ -364,13 +356,12 @@ func (suite *KeeperTestSuite) TestBankHooks_TestOperatorRestaking() {
 
 			_, err := msgServer.DelegateOperator(suite.ctx, tc.msg)
 			if tc.shouldErr {
-				if tc.errorMsg == "" {
-					suite.Require().Error(err)
-				} else {
-					suite.Assert().ErrorContains(err, tc.errorMsg)
-				}
+				suite.Assert().Error(err)
 			} else {
 				suite.Assert().NoError(err)
+				insuranceFund, err := suite.k.GetUserInsuranceFund(suite.ctx, sdk.MustAccAddressFromBech32(restaker))
+				suite.Assert().NoError(err)
+				suite.Assert().Equal(tc.expectedUsage, insuranceFund.Used)
 			}
 		})
 	}

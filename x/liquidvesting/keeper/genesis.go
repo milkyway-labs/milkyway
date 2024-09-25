@@ -52,15 +52,55 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 	totalCoins := sdk.NewCoins()
 	for _, insuranceFund := range state.UserInsuranceFunds {
 		accAddr := sdk.MustAccAddressFromBech32(insuranceFund.UserAddress)
-		k.insuranceFunds.Set(ctx, accAddr, insuranceFund.InsuranceFund)
+		err = k.insuranceFunds.Set(ctx, accAddr, insuranceFund.InsuranceFund)
+		if err != nil {
+			return err
+		}
+		// Update the total coins in the insurance fund
 		totalCoins = totalCoins.Add(insuranceFund.InsuranceFund.Balance...)
+
+		// We compute the total amount of coins that should be used
+		// in the insurance fund based on the assets that the user has restaked
+		expectedUsed := sdk.NewCoins()
+		userRestakedCoins, err := k.restakingKeeper.GetAllUserRestakedCoins(ctx, insuranceFund.UserAddress)
+		if err != nil {
+			return err
+		}
+		// Update the user restaked amount with also the tokens that are
+		// in the unbonding state and will be received at completion
+		for _, undelegation := range k.restakingKeeper.GetAllUserUnbondingDelegations(ctx, insuranceFund.UserAddress) {
+			for _, entry := range undelegation.Entries {
+				userRestakedCoins = userRestakedCoins.Add(sdk.NewDecCoinsFromCoins(entry.Balance...)...)
+			}
+		}
+
+		for _, restakedCoin := range userRestakedCoins {
+			if types.IsVestedRepresentationDenom(restakedCoin.Denom) {
+				requiredAmount, err := k.getRequiredAmountInInsuranceFund(ctx,
+					sdk.NewCoin(restakedCoin.Denom, restakedCoin.Amount.RoundInt()))
+				if err != nil {
+					return err
+				}
+				expectedUsed = expectedUsed.Add(requiredAmount)
+			}
+		}
+
+		// Ensure that the amount that we have computed is the same as the
+		// used amount in the user's insurance fund
+		if !expectedUsed.Equal(insuranceFund.InsuranceFund.Used) {
+			return fmt.Errorf("user: %s insurance fund used amount is incorrect, expected %s, got %s",
+				insuranceFund.UserAddress, expectedUsed.String(), insuranceFund.InsuranceFund.Used.String())
+		}
 	}
+
+	// Ensure that the balance of the liquid vesting module that coins the
+	// insurance fund is equal to the sum of amount of the users' insurance fund
 	coins, err := k.GetInsuranceFundBalance(ctx)
 	if err != nil {
 		return err
 	}
 	if !coins.Equal(totalCoins) {
-		return fmt.Errorf("the liquid vesting module doesn't have same coins as genesis state")
+		return fmt.Errorf("the liquid vesting module doesn't have the coins specified in the users' insurance fund")
 	}
 
 	undelegateAmounts := make(map[string]sdk.Coins)

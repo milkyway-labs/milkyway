@@ -369,6 +369,21 @@ func (k *Keeper) GetAllDelegations(ctx sdk.Context) []types.Delegation {
 	return delegations
 }
 
+// GetAllUserRestakedCoins returns all the user's restaked coins
+func (k *Keeper) GetAllUserRestakedCoins(ctx sdk.Context, userAddress string) (sdk.DecCoins, error) {
+	totalDelegatedCoins := sdk.NewDecCoins()
+	k.IterateUserDelegations(ctx, userAddress, func(d types.Delegation) (bool, error) {
+		target, found := k.GetDelegationTargetFromDelegation(ctx, d)
+		if !found {
+			return true, fmt.Errorf("can't find target for delegation %d, target id: %d", d.Type, d.TargetID)
+		}
+		totalDelegatedCoins = totalDelegatedCoins.Add(target.TokensFromShares(d.Shares)...)
+		return false, nil
+	})
+
+	return totalDelegatedCoins, nil
+}
+
 // PerformDelegation performs a delegation of the given amount from the delegator to the receiver.
 // It sends the coins to the receiver address and updates the delegation object and returns the new
 // shares of the delegation.
@@ -705,10 +720,42 @@ func (k *Keeper) GetAllPoolUnbondingDelegations(ctx sdk.Context) []types.Unbondi
 	return unbondingDelegations
 }
 
+// GetAllUserPoolUnbondingDelegations returns all the user's unbonding delegations
+// from a pool
+func (k *Keeper) GetAllUserPoolUnbondingDelegations(ctx sdk.Context, userAddress string) []types.UnbondingDelegation {
+	store := ctx.KVStore(k.storeKey)
+	iterator := storetypes.KVStorePrefixIterator(store, types.PoolUnbondingDelegationsStorePrefix(userAddress))
+	defer iterator.Close()
+
+	var unbondingDelegations []types.UnbondingDelegation
+	for ; iterator.Valid(); iterator.Next() {
+		unbondingDelegation := types.MustUnmarshalUnbondingDelegation(k.cdc, iterator.Value())
+		unbondingDelegations = append(unbondingDelegations, unbondingDelegation)
+	}
+
+	return unbondingDelegations
+}
+
 // GetAllOperatorUnbondingDelegations returns all the operator unbonding delegations
 func (k *Keeper) GetAllOperatorUnbondingDelegations(ctx sdk.Context) []types.UnbondingDelegation {
 	store := ctx.KVStore(k.storeKey)
 	iterator := store.Iterator(types.OperatorUnbondingDelegationPrefix, storetypes.PrefixEndBytes(types.OperatorUnbondingDelegationPrefix))
+	defer iterator.Close()
+
+	var unbondingDelegations []types.UnbondingDelegation
+	for ; iterator.Valid(); iterator.Next() {
+		unbondingDelegation := types.MustUnmarshalUnbondingDelegation(k.cdc, iterator.Value())
+		unbondingDelegations = append(unbondingDelegations, unbondingDelegation)
+	}
+
+	return unbondingDelegations
+}
+
+// GetAllUserOperatorUnbondingDelegations returns all the user's unbonding delegations
+// from a operator
+func (k *Keeper) GetAllUserOperatorUnbondingDelegations(ctx sdk.Context, userAddress string) []types.UnbondingDelegation {
+	store := ctx.KVStore(k.storeKey)
+	iterator := storetypes.KVStorePrefixIterator(store, types.OperatorUnbondingDelegationsStorePrefix(userAddress))
 	defer iterator.Close()
 
 	var unbondingDelegations []types.UnbondingDelegation
@@ -735,6 +782,22 @@ func (k *Keeper) GetAllServiceUnbondingDelegations(ctx sdk.Context) []types.Unbo
 	return unbondingDelegations
 }
 
+// GetAllUserServiceUnbondingDelegations returns all the user's unbonding delegations
+// from a service
+func (k *Keeper) GetAllUserServiceUnbondingDelegations(ctx sdk.Context, userAddress string) []types.UnbondingDelegation {
+	store := ctx.KVStore(k.storeKey)
+	iterator := storetypes.KVStorePrefixIterator(store, types.ServiceUnbondingDelegationsStorePrefix(userAddress))
+	defer iterator.Close()
+
+	var unbondingDelegations []types.UnbondingDelegation
+	for ; iterator.Valid(); iterator.Next() {
+		unbondingDelegation := types.MustUnmarshalUnbondingDelegation(k.cdc, iterator.Value())
+		unbondingDelegations = append(unbondingDelegations, unbondingDelegation)
+	}
+
+	return unbondingDelegations
+}
+
 // GetAllUnbondingDelegations returns all the unbonding delegations
 func (k *Keeper) GetAllUnbondingDelegations(ctx sdk.Context) []types.UnbondingDelegation {
 	var unbondingDelegations []types.UnbondingDelegation
@@ -742,6 +805,17 @@ func (k *Keeper) GetAllUnbondingDelegations(ctx sdk.Context) []types.UnbondingDe
 	unbondingDelegations = append(unbondingDelegations, k.GetAllPoolUnbondingDelegations(ctx)...)
 	unbondingDelegations = append(unbondingDelegations, k.GetAllOperatorUnbondingDelegations(ctx)...)
 	unbondingDelegations = append(unbondingDelegations, k.GetAllServiceUnbondingDelegations(ctx)...)
+
+	return unbondingDelegations
+}
+
+// GetAllUserUnbondingDelegations returns all the user's unbonding delegations
+func (k *Keeper) GetAllUserUnbondingDelegations(ctx sdk.Context, userAddress string) []types.UnbondingDelegation {
+	var unbondingDelegations []types.UnbondingDelegation
+
+	unbondingDelegations = append(unbondingDelegations, k.GetAllUserPoolUnbondingDelegations(ctx, userAddress)...)
+	unbondingDelegations = append(unbondingDelegations, k.GetAllUserOperatorUnbondingDelegations(ctx, userAddress)...)
+	unbondingDelegations = append(unbondingDelegations, k.GetAllUserServiceUnbondingDelegations(ctx, userAddress)...)
 
 	return unbondingDelegations
 }
