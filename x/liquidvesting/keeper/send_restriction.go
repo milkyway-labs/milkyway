@@ -9,7 +9,8 @@ import (
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 )
 
-// BlockBeforeSend implements keeper.BankHooks.
+// SendRestrictionFn function that can be used in the x/bank module to block the
+// transfer of the vested representation tokens.
 func (k *Keeper) SendRestrictionFn(
 	goCtx context.Context,
 	from sdk.AccAddress,

@@ -100,9 +100,8 @@ func (k *Keeper) BurnVestedRepresentation(
 // --- BurnCoins queue operations
 // --------------------------------------------------------------------------------------------------------------------
 
-// GetUBDQueueTimeSlice gets a specific unbonding queue timeslice. A timeslice
-// is a slice of DVPairs corresponding to unbonding delegations that expire at a
-// certain time.
+// GetBurnCoinsQueueTimeSlice gets a specific burn coins queue timeslice. A timeslice
+// is a slice of BurnCoins corresponding to the BurnCoins that needs to be burned at a certain time.
 func (k *Keeper) GetBurnCoinsQueueTimeSlice(ctx sdk.Context, timestamp time.Time) (dvPairs []types.BurnCoins) {
 	store := ctx.KVStore(k.storeKey)
 
@@ -117,7 +116,7 @@ func (k *Keeper) GetBurnCoinsQueueTimeSlice(ctx sdk.Context, timestamp time.Time
 	return pairs.Data
 }
 
-// SetBurnCoinsTimeSlice sets a specific burn coins queue timeslice.
+// SetBurnCoinsQueueTimeSlice sets a specific burn coins queue timeslice.
 func (k *Keeper) SetBurnCoinsQueueTimeSlice(ctx sdk.Context, timestamp time.Time, keys []types.BurnCoins) {
 	store := ctx.KVStore(k.storeKey)
 	bz := k.cdc.MustMarshal(&types.BurnCoinsList{Data: keys})
@@ -136,13 +135,13 @@ func (k *Keeper) InsertBurnCoinsQueue(ctx sdk.Context, burnCoins types.BurnCoins
 	}
 }
 
-// UBDQueueIterator returns all the unbonding queue timeslices from time 0 until endTime.
+// BurnCoinsQueueIterator returns all the BurnCoins from time 0 until endTime.
 func (k *Keeper) BurnCoinsQueueIterator(ctx sdk.Context, endTime time.Time) storetypes.Iterator {
 	store := ctx.KVStore(k.storeKey)
 	return store.Iterator(types.BurnCoinsQueueKey, storetypes.InclusiveEndBytes(types.GetBurnCoinsQueueTimeKey(endTime)))
 }
 
-// DequeueAllBurnCoins returns a concatenated list of all the timeslices inclusively previous to
+// DequeueAllBurnCoinsQueue returns a concatenated list of all the timeslices inclusively previous to
 // currTime, and deletes the timeslices from the queue.
 func (k *Keeper) DequeueAllBurnCoinsQueue(ctx sdk.Context, currTime time.Time) (burnCoins []types.BurnCoins) {
 	store := ctx.KVStore(k.storeKey)

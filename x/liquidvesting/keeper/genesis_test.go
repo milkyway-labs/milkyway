@@ -49,8 +49,8 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				Params:    types.DefaultParams(),
 				BurnCoins: nil,
 				UserInsuranceFunds: []types.UserInsuranceFundState{
-					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)), sdk.Coins{})),
-					types.NewUserInsuranceFundState(user2, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin("stake", 2)), sdk.Coins{})),
+					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)), nil)),
+					types.NewUserInsuranceFundState(user2, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin("stake", 2)), nil)),
 				},
 			},
 		},

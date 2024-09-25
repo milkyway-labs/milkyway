@@ -68,7 +68,7 @@ func (k *Keeper) WithdrawFromUserInsuranceFund(
 	return nil
 }
 
-// GetUserInsuranceFundBalance returns the amount of coins in the user's insurance fund.
+// GetUserInsuranceFund returns the user's insurance fund.
 func (k *Keeper) GetUserInsuranceFund(
 	ctx sdk.Context,
 	user sdk.AccAddress,
@@ -108,9 +108,9 @@ func (k *Keeper) GetInsuranceFundBalance(ctx sdk.Context) (sdk.Coins, error) {
 	return k.bankKeeper.GetAllBalances(ctx, accAddr), nil
 }
 
-// CanWithrawFromInsuranceFund returns true if the user can withdraw the provided amount
+// CanWithdrawFromInsuranceFund returns true if the user can withdraw the provided amount
 // from their insurance fund.
-func (k *Keeper) CanWithrawFromInsuranceFund(ctx sdk.Context, user sdk.AccAddress, amount sdk.Coins) (bool, error) {
+func (k *Keeper) CanWithdrawFromInsuranceFund(ctx sdk.Context, user sdk.AccAddress, amount sdk.Coins) (bool, error) {
 	userInsuranceFund, err := k.GetUserInsuranceFund(ctx, user)
 	if err != nil {
 		return false, err
