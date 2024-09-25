@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"slices"
 
 	"cosmossdk.io/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -59,6 +60,38 @@ func (k Querier) ServiceParams(goCtx context.Context, req *types.QueryServicePar
 	params := k.GetServiceParams(ctx, req.ServiceId)
 
 	return &types.QueryServiceParamsResponse{ServiceParams: params}, nil
+}
+
+func (k Querier) ServiceOperators(goCtx context.Context, req *types.QueryServiceOperatorsRequest) (*types.QueryServiceOperatorsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
+	}
+
+	if req.ServiceId == 0 {
+		return nil, status.Error(codes.InvalidArgument, "service id cannot be 0")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	service, found := k.servicesKeeper.GetService(ctx, req.ServiceId)
+	if !found {
+		return nil, status.Error(codes.NotFound, "service not found")
+	}
+	serviceParams := k.GetServiceParams(ctx, service.ID)
+
+	operators := k.operatorsKeeper.GetOperators(ctx)
+	// TODO: can we optimize this? maybe by having a new index key
+	var eligibleOperators []operatorstypes.Operator
+	for _, operator := range operators {
+		operatorParams := k.GetOperatorParams(ctx, operator.ID)
+		if slices.Contains(operatorParams.JoinedServicesIDs, service.ID) &&
+			(len(serviceParams.WhitelistedOperatorsIDs) == 0 ||
+				slices.Contains(serviceParams.WhitelistedOperatorsIDs, operator.ID)) {
+			eligibleOperators = append(eligibleOperators, operator)
+		}
+	}
+
+	return &types.QueryServiceOperatorsResponse{Operators: eligibleOperators}, nil
 }
 
 // PoolDelegations queries the pool delegations for the given pool id

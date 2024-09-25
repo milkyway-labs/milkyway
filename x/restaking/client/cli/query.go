@@ -414,6 +414,7 @@ func GetServicesQueryCmd() *cobra.Command {
 
 	queryCmd.AddCommand(
 		getServiceParamsQueryCmd(),
+		getServiceOperatorsQueryCmd(),
 		getServiceDelegationsQueryCmd(),
 		getServiceDelegationQueryCmd(),
 		getServiceUnbondingDelegationsQueryCmd(),
@@ -443,6 +444,39 @@ func getServiceParamsQueryCmd() *cobra.Command {
 				return err
 			}
 			res, err := queryClient.ServiceParams(cmd.Context(), types.NewQueryServiceParamsRequest(serviceID))
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// getServiceOperatorsQueryCmd returns the command allowing to query operators
+// that has joined a service.
+func getServiceOperatorsQueryCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "operators [service-id]",
+		Short:   "Query operators that has joined a service",
+		Example: fmt.Sprintf(`%s query %s service operators 1`, version.AppName, types.ModuleName),
+		Args:    cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+
+			serviceID, err := servicestypes.ParseServiceID(args[0])
+			if err != nil {
+				return err
+			}
+			res, err := queryClient.ServiceOperators(cmd.Context(), types.NewQueryServiceOperatorsRequest(serviceID))
 			if err != nil {
 				return err
 			}

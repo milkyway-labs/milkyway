@@ -33,6 +33,13 @@ service Query {
         "/milkyway/restaking/v1/services/{service_id}/params";
   }
 
+  rpc ServiceOperators(QueryServiceOperatorsRequest)
+      returns (QueryServiceOperatorsResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get =
+        "/milkyway/restaking/v1/services/{service_id}/operators";
+  }
+
   // PoolDelegations queries the delegations info for the given pool.
   rpc PoolDelegations(QueryPoolDelegationsRequest)
       returns (QueryPoolDelegationsResponse) {
@@ -282,6 +289,21 @@ message QueryServiceParamsRequest {
 // RPC method.
 message QueryServiceParamsResponse {
   ServiceParams service_params = 1 [ (gogoproto.nullable) = false ];
+}
+
+// QueryServiceOperatorsRequest is request type for the Query/ServiceOperators
+// RPC method.
+message QueryServiceOperatorsRequest {
+  // ServiceId is the ID of the service to query
+  uint32 service_id = 1;
+}
+
+// QueryServiceOperatorsResponse is response type for the Query/ServiceOperators
+// RPC method.
+message QueryServiceOperatorsResponse {
+  // Operators is the list of operators
+  repeated milkyway.operators.v1.Operator operators = 1
+      [ (gogoproto.nullable) = false ];
 }
 
 // QueryPoolDelegationsRequest is request type for the Query/PoolDelegations RPC
