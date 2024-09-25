@@ -101,6 +101,40 @@ func (m msgServer) BurnVestedRepresentation(
 	return &types.MsgBurnVestedRepresentationResponse{}, nil
 }
 
+// WithdrawInsuranceFund implements types.MsgServer.
+func (m msgServer) WithdrawInsuranceFund(goCtx context.Context, msg *types.MsgWithdrawInsuranceFund) (*types.MsgWithdrawInsuranceFundResponse, error) {
+	sender, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	canWithdaw, err := m.CanWithdrawFromInsuranceFund(ctx, sender, msg.Amount)
+	if err != nil {
+		return nil, err
+	}
+	if !canWithdaw {
+		return nil, types.ErrInsufficientBalance
+	}
+
+	// Send the tokens back to the user
+	err = m.WithdrawFromUserInsuranceFund(ctx, sender, msg.Amount)
+	if err != nil {
+		return nil, err
+	}
+
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeWithdrawInsuranceFund,
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
+			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Amount.String()),
+		),
+	})
+
+	return &types.MsgWithdrawInsuranceFundResponse{}, nil
+}
+
 // UpdateParams implements types.MsgServer.
 func (m msgServer) UpdateParams(
 	goCtx context.Context,

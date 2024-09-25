@@ -178,6 +178,88 @@ func (suite *KeeperTestSuite) TestMsgServer_BurnVestedRepresentation() {
 	}
 }
 
+func (suite *KeeperTestSuite) TestMsgServer_WithdrawInsuranceFund() {
+	testAccount := "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn"
+
+	testCases := []struct {
+		name      string
+		setup     func(ctx sdk.Context)
+		msg       *types.MsgWithdrawInsuranceFund
+		shouldErr bool
+		check     func(ctx sdk.Context)
+		expEvents sdk.Events
+	}{
+		{
+			name:      "can't withdraw without deposits",
+			msg:       types.NewMsgWithdrawInsuranceFund(testAccount, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100))),
+			shouldErr: true,
+		},
+		{
+			name: "can't withdraw more then deposited",
+			setup: func(ctx sdk.Context) {
+				suite.fundAccountInsuranceFund(ctx, testAccount, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)))
+			},
+			msg:       types.NewMsgWithdrawInsuranceFund(testAccount, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100))),
+			shouldErr: true,
+		},
+		{
+			name: "can't withdraw more then available",
+			setup: func(ctx sdk.Context) {
+				suite.fundAccountInsuranceFund(ctx, testAccount, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)))
+				// Delegate to pool to simulate insurance fund utilization
+				suite.mintVestedRepresentation(testAccount, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)))
+				suite.createPool(1, vestedIBCDenom)
+				_, err := suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedIBCDenom, 500), testAccount)
+				suite.Assert().NoError(err)
+			},
+			msg:       types.NewMsgWithdrawInsuranceFund(testAccount, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10))),
+			shouldErr: true,
+		},
+		{
+			name: "withdraw correctly",
+			setup: func(ctx sdk.Context) {
+				suite.fundAccountInsuranceFund(ctx, testAccount, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)))
+			},
+			msg:       types.NewMsgWithdrawInsuranceFund(testAccount, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10))),
+			shouldErr: false,
+			check: func(ctx sdk.Context) {
+				balances := suite.bk.GetAllBalances(ctx, sdk.MustAccAddressFromBech32(testAccount))
+				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)), balances)
+			},
+			expEvents: sdk.Events{
+				sdk.NewEvent(
+					types.EventTypeWithdrawInsuranceFund,
+					sdk.NewAttribute(sdk.AttributeKeySender, testAccount),
+					sdk.NewAttribute(sdk.AttributeKeyAmount, "10"+IBCDenom),
+				),
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		suite.Run(tc.name, func() {
+			suite.SetupTest()
+
+			if tc.setup != nil {
+				tc.setup(suite.ctx)
+			}
+
+			msgServer := keeper.NewMsgServer(suite.k)
+			_, err := msgServer.WithdrawInsuranceFund(suite.ctx, tc.msg)
+
+			if tc.shouldErr {
+				suite.Assert().Error(err)
+			} else {
+				suite.Assert().NoError(err)
+				tc.check(suite.ctx)
+				for _, event := range tc.expEvents {
+					suite.Require().Contains(suite.ctx.EventManager().Events(), event)
+				}
+			}
+		})
+	}
+}
+
 func (suite *KeeperTestSuite) TestMsgServer_UpdateParams() {
 	testCases := []struct {
 		name      string

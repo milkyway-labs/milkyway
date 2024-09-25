@@ -76,6 +76,25 @@ func (msg *MsgBurnVestedRepresentation) ValidateBasic() error {
 	return nil
 }
 
+// NewMsgWithdrawInsuranceFund creates a new MsgWithdrawInsuranceFund instance.
+func NewMsgWithdrawInsuranceFund(
+	sender string,
+	amount sdk.Coins,
+) *MsgWithdrawInsuranceFund {
+	return &MsgWithdrawInsuranceFund{
+		Sender: sender,
+		Amount: amount,
+	}
+}
+
+func (msg *MsgWithdrawInsuranceFund) ValidateBasic() error {
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return err
+	}
+	return msg.Amount.Validate()
+}
+
 // NewMsgUpdateParams creates a new MsgUpdateParams instance
 func NewMsgUpdateParams(authority string, params Params) *MsgUpdateParams {
 	return &MsgUpdateParams{
