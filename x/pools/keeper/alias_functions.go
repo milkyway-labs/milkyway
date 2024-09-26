@@ -100,14 +100,6 @@ func (k *Keeper) CreateOrGetPoolByDenom(ctx sdk.Context, denom string) (types.Po
 
 // IsPoolDelegationsAddress returns true if the provided address is the address
 // where the users' asset are kept when they perform a pool restaking.
-func (k *Keeper) IsPoolDelegationsAddress(ctx sdk.Context, address string) bool {
-	isPoolAddress := false
-	k.IteratePools(ctx, func(pool types.Pool) bool {
-		if pool.GetAddress() == address {
-			isPoolAddress = true
-		}
-		return isPoolAddress
-	})
-
-	return isPoolAddress
+func (k *Keeper) IsPoolDelegationsAddress(ctx sdk.Context, address string) (bool, error) {
+	return k.poolAddressSet.Has(ctx, address)
 }

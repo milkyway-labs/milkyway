@@ -39,17 +39,17 @@ type BankKeeper interface {
 }
 
 type PoolsKeeper interface {
-	IsPoolDelegationsAddress(ctx sdk.Context, address string) bool
+	IsPoolDelegationsAddress(ctx sdk.Context, address string) (bool, error)
 	GetPoolByDenom(ctx sdk.Context, denom string) (poolstypes.Pool, bool)
 }
 
 type OperatorsKeeper interface {
-	IsOperatorDelegationsAddress(ctx sdk.Context, address string) bool
+	IsOperatorDelegationsAddress(ctx sdk.Context, address string) (bool, error)
 	GetOperator(ctx sdk.Context, operatorID uint32) (operatorstypes.Operator, bool)
 }
 
 type ServicesKeeper interface {
-	IsServiceDelegationsAddress(ctx sdk.Context, address string) bool
+	IsServiceDelegationsAddress(ctx sdk.Context, address string) (bool, error)
 	GetService(ctx sdk.Context, serviceID uint32) (servicestypes.Service, bool)
 }
 
