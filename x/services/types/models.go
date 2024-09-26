@@ -137,6 +137,15 @@ func (s Service) SharesFromTokensTruncated(tokens sdk.Coins) (sdk.DecCoins, erro
 	return utils.SharesFromTokensTruncated(tokens, s.GetSharesDenom, s.Tokens, s.DelegatorShares)
 }
 
+// SharesFromDecCoins returns the shares of a delegation given a bond amount. It
+// returns an error if the service has no tokens.
+func (s Service) SharesFromDecCoins(coins sdk.DecCoins) (sdk.DecCoins, error) {
+	if s.Tokens.IsZero() {
+		return sdk.NewDecCoins(), ErrInsufficientShares
+	}
+	return utils.SharesFromDecCoins(coins, s.GetSharesDenom, s.Tokens, s.DelegatorShares)
+}
+
 // AddTokensFromDelegation adds the given amount of tokens to the service's total tokens,
 // also updating the service's delegator shares.
 // It returns the updated service and the shares issued.

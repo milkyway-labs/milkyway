@@ -597,7 +597,7 @@ func (k *Keeper) PerformUndelegation(ctx sdk.Context, data types.UndelegationDat
 // until the token undelegated matches the provided amount.
 func (k *Keeper) UnbondRestakedAssets(ctx sdk.Context, user sdk.AccAddress, amount sdk.Coins) (time.Time, error) {
 	var undelegations []types.UndelegationData
-	toUndelegateTokens := amount
+	toUndelegateTokens := sdk.NewDecCoinsFromCoins(amount...)
 
 	err := k.IterateUserDelegations(ctx, user.String(), func(delegation types.Delegation) (bool, error) {
 		target, found := k.GetDelegationTargetFromDelegation(ctx, delegation)
@@ -607,7 +607,7 @@ func (k *Keeper) UnbondRestakedAssets(ctx sdk.Context, user sdk.AccAddress, amou
 
 		// Compute the shares that this delegation should have to undelegate
 		// all the remaining tokens
-		involvedShares, err := target.SharesFromTokens(toUndelegateTokens)
+		involvedShares, err := target.SharesFromDecCoins(toUndelegateTokens)
 		if err != nil {
 			return true, err
 		}
@@ -628,8 +628,7 @@ func (k *Keeper) UnbondRestakedAssets(ctx sdk.Context, user sdk.AccAddress, amou
 
 		// Update the coins to undelegate
 		coins := target.TokensFromShares(toUndelegatedShares)
-		truncatedCoins, _ := coins.TruncateDecimal()
-		toUndelegateTokens = toUndelegateTokens.Sub(truncatedCoins...)
+		toUndelegateTokens = toUndelegateTokens.Sub(coins)
 
 		// Update the list of undelegations to perform
 		var buildUnbondingDelegation types.UnbondingDelegationBuilder
@@ -662,6 +661,7 @@ func (k *Keeper) UnbondRestakedAssets(ctx sdk.Context, user sdk.AccAddress, amou
 		default:
 			return true, fmt.Errorf("unsupported delegation type: %s", delegation.Type.String())
 		}
+		truncatedCoins, _ := coins.TruncateDecimal()
 		undelegations = append(undelegations, types.UndelegationData{
 			Amount:                   truncatedCoins,
 			Delegator:                user.String(),
@@ -682,7 +682,8 @@ func (k *Keeper) UnbondRestakedAssets(ctx sdk.Context, user sdk.AccAddress, amou
 		return time.Time{}, err
 	}
 
-	if !toUndelegateTokens.IsZero() {
+	truncatedToUndalegateTokens, _ := toUndelegateTokens.TruncateDecimal()
+	if !truncatedToUndalegateTokens.IsZero() {
 		return time.Time{}, fmt.Errorf("user hasn't restaked the provided amount: %s", amount.String())
 	}
 
