@@ -54,7 +54,9 @@ func (k *Keeper) RegisterOperator(ctx sdk.Context, operator types.Operator) erro
 	k.createAccountIfNotExists(ctx, operatorAddress)
 
 	// Store the operator
-	k.SaveOperator(ctx, operator)
+	if err := k.SaveOperator(ctx, operator); err != nil {
+		return err
+	}
 
 	// Log and call the hooks
 	k.Logger(ctx).Info("operator created", "id", operator.ID)
@@ -77,35 +79,47 @@ func (k *Keeper) GetOperator(ctx sdk.Context, operatorID uint32) (operator types
 }
 
 // SaveOperator stores the given operator in the KVStore
-func (k *Keeper) SaveOperator(ctx sdk.Context, operator types.Operator) {
+func (k *Keeper) SaveOperator(ctx sdk.Context, operator types.Operator) error {
 	store := ctx.KVStore(k.storeKey)
 	store.Set(types.OperatorStoreKey(operator.ID), k.cdc.MustMarshal(&operator))
+	return k.operatorAddressSet.Set(ctx, operator.Address)
+	// return nil
 }
 
 // StartOperatorInactivation starts the inactivation process for the operator with the given ID
-func (k *Keeper) StartOperatorInactivation(ctx sdk.Context, operator types.Operator) {
+func (k *Keeper) StartOperatorInactivation(ctx sdk.Context, operator types.Operator) error {
 	// Update the operator status
 	operator.Status = types.OPERATOR_STATUS_INACTIVATING
-	k.SaveOperator(ctx, operator)
+	if err := k.SaveOperator(ctx, operator); err != nil {
+		return err
+	}
 
 	// Insert the operator into the inactivating queue
 	k.insertIntoInactivatingQueue(ctx, operator)
 
 	// Call the hook
 	k.AfterOperatorInactivatingStarted(ctx, operator.ID)
+
+	return nil
 }
 
 // CompleteOperatorInactivation completes the inactivation process for the operator with the given ID
-func (k *Keeper) CompleteOperatorInactivation(ctx sdk.Context, operator types.Operator) {
+func (k *Keeper) CompleteOperatorInactivation(ctx sdk.Context, operator types.Operator) error {
 	// Update the operator status
 	operator.Status = types.OPERATOR_STATUS_INACTIVE
-	k.SaveOperator(ctx, operator)
+	if err := k.SaveOperator(ctx, operator); err != nil {
+		return err
+	}
 
 	// Remove the operator from the inactivating queue
-	k.removeFromInactivatingQueue(ctx, operator.ID)
+	if err := k.removeFromInactivatingQueue(ctx, operator.ID); err != nil {
+		return err
+	}
 
 	// Call the hook
 	k.AfterOperatorInactivatingCompleted(ctx, operator.ID)
+
+	return nil
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -123,21 +137,25 @@ func (k *Keeper) insertIntoInactivatingQueue(ctx sdk.Context, operator types.Ope
 }
 
 // RemoveFromInactivatingQueue removes the operator from the inactivating queue
-func (k *Keeper) removeFromInactivatingQueue(ctx sdk.Context, operatorID uint32) {
+func (k *Keeper) removeFromInactivatingQueue(ctx sdk.Context, operatorID uint32) error {
 	store := ctx.KVStore(k.storeKey)
 
 	// Find the inactivating time for the operator
 	var inactivatingTime time.Time
-	k.iterateInactivatingOperatorsKeys(ctx, time.Time{}, func(key, _ []byte) (stop bool) {
+	err := k.iterateInactivatingOperatorsKeys(ctx, time.Time{}, func(key, _ []byte) (stop bool, err error) {
 		inactivatingOperatorID, endTime := types.SplitInactivatingOperatorQueueKey(key)
 		if inactivatingOperatorID == operatorID {
 			inactivatingTime = endTime
-			return true
+			return true, nil
 		}
 
-		return false
+		return false, nil
 	})
+	if err != nil {
+		return err
+	}
 
 	// Remove the operator from the inactivating queue
 	store.Delete(types.InactivatingOperatorQueueKey(operatorID, inactivatingTime))
+	return nil
 }

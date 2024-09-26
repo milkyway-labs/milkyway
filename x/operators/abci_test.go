@@ -10,6 +10,7 @@ import (
 	storetypes "cosmossdk.io/store/types"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	db "github.com/cosmos/cosmos-db"
+	"github.com/cosmos/cosmos-sdk/runtime"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
@@ -21,7 +22,7 @@ import (
 
 func TestBeginBlocker(t *testing.T) {
 	// Define store keys
-	keys := storetypes.NewMemoryStoreKeys(types.StoreKey)
+	keys := storetypes.NewKVStoreKeys(types.StoreKey)
 
 	// Create an in-memory db
 	memDB := db.NewMemDB()
@@ -36,7 +37,8 @@ func TestBeginBlocker(t *testing.T) {
 	ctx := sdk.NewContext(ms, tmproto.Header{ChainID: "test-chain"}, false, log.NewNopLogger())
 	cdc, _ := app.MakeCodecs()
 
-	operatorsKeeper := keeper.NewKeeper(cdc, keys[types.StoreKey], nil, nil, "")
+	operatorsKeeper := keeper.NewKeeper(cdc, keys[types.StoreKey],
+		runtime.NewKVStoreService(keys[types.StoreKey]), nil, nil, "")
 
 	testCases := []struct {
 		name      string
@@ -48,7 +50,7 @@ func TestBeginBlocker(t *testing.T) {
 		{
 			name: "operator inactivation is not completed before time",
 			setupCtx: func(ctx sdk.Context) sdk.Context {
-				return ctx.WithBlockTime(time.Date(2024, 1, 1, 12, 00, 00, 000, time.UTC))
+				return ctx.WithBlockTime(time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o00, time.UTC))
 			},
 			store: func(ctx sdk.Context) {
 				operatorsKeeper.SetParams(ctx, types.NewParams(nil, 6*time.Hour))
@@ -66,14 +68,14 @@ func TestBeginBlocker(t *testing.T) {
 			},
 			check: func(ctx sdk.Context) {
 				kvStore := ctx.KVStore(keys[types.StoreKey])
-				endTime := time.Date(2024, 1, 1, 18, 00, 00, 000, time.UTC)
+				endTime := time.Date(2024, 1, 1, 18, 0o0, 0o0, 0o00, time.UTC)
 				require.True(t, kvStore.Has(types.InactivatingOperatorQueueKey(1, endTime)))
 			},
 		},
 		{
 			name: "operator inactivation is completed at exact time",
 			setupCtx: func(ctx sdk.Context) sdk.Context {
-				return ctx.WithBlockTime(time.Date(2020, 1, 1, 12, 00, 00, 001, time.UTC))
+				return ctx.WithBlockTime(time.Date(2020, 1, 1, 12, 0o0, 0o0, 0o01, time.UTC))
 			},
 			store: func(ctx sdk.Context) {
 				operatorsKeeper.SetParams(ctx, types.NewParams(nil, 6*time.Hour))
@@ -87,7 +89,7 @@ func TestBeginBlocker(t *testing.T) {
 				))
 			},
 			updateCtx: func(ctx sdk.Context) sdk.Context {
-				return ctx.WithBlockTime(time.Date(2020, 1, 1, 18, 00, 00, 000, time.UTC))
+				return ctx.WithBlockTime(time.Date(2020, 1, 1, 18, 0o0, 0o0, 0o00, time.UTC))
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the operator is still inactivating
@@ -97,14 +99,14 @@ func TestBeginBlocker(t *testing.T) {
 
 				// Make sure the operator is still in the inactivating queue
 				kvStore := ctx.KVStore(keys[types.StoreKey])
-				endTime := time.Date(2020, 1, 1, 18, 00, 00, 000, time.UTC)
+				endTime := time.Date(2020, 1, 1, 18, 0o0, 0o0, 0o00, time.UTC)
 				require.False(t, kvStore.Has(types.InactivatingOperatorQueueKey(1, endTime)))
 			},
 		},
 		{
 			name: "operator inactivation is completed after time",
 			setupCtx: func(ctx sdk.Context) sdk.Context {
-				return ctx.WithBlockTime(time.Date(2020, 1, 1, 12, 00, 00, 001, time.UTC))
+				return ctx.WithBlockTime(time.Date(2020, 1, 1, 12, 0o0, 0o0, 0o01, time.UTC))
 			},
 			store: func(ctx sdk.Context) {
 				operatorsKeeper.SetParams(ctx, types.NewParams(nil, 6*time.Hour))
@@ -118,7 +120,7 @@ func TestBeginBlocker(t *testing.T) {
 				))
 			},
 			updateCtx: func(ctx sdk.Context) sdk.Context {
-				return ctx.WithBlockTime(time.Date(2020, 1, 1, 20, 00, 00, 000, time.UTC))
+				return ctx.WithBlockTime(time.Date(2020, 1, 1, 20, 0o0, 0o0, 0o00, time.UTC))
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the operator is inactive
@@ -128,7 +130,7 @@ func TestBeginBlocker(t *testing.T) {
 
 				// Make sure the operator is not in the inactivating queue
 				kvStore := ctx.KVStore(keys[types.StoreKey])
-				endTime := time.Date(2020, 1, 1, 18, 00, 00, 000, time.UTC)
+				endTime := time.Date(2020, 1, 1, 18, 0o0, 0o0, 0o00, time.UTC)
 				require.False(t, kvStore.Has(types.InactivatingOperatorQueueKey(1, endTime)))
 			},
 		},

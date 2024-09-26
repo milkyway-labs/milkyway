@@ -2,6 +2,8 @@ package types
 
 import (
 	"encoding/binary"
+
+	"cosmossdk.io/collections"
 )
 
 const (
@@ -14,8 +16,9 @@ const (
 var (
 	ParamsKey = []byte{0x01}
 
-	NextServiceIDKey = []byte{0xa1}
-	ServicePrefix    = []byte{0xa2}
+	NextServiceIDKey        = []byte{0xa1}
+	ServicePrefix           = []byte{0xa2}
+	ServiceAddressSetPrefix = collections.NewPrefix(0xa3)
 )
 
 // GetServiceIDBytes returns the byte representation of the service ID

@@ -47,12 +47,12 @@ func (k *Keeper) GetOperators(ctx sdk.Context) []types.Operator {
 
 // IterateInactivatingOperatorQueue iterates over all the operators that are set to be inactivated
 // by the given time and calls the given function.
-func (k *Keeper) IterateInactivatingOperatorQueue(ctx sdk.Context, endTime time.Time, fn func(operator types.Operator) (stop bool)) {
-	k.iterateInactivatingOperatorsKeys(ctx, endTime, func(key, value []byte) (stop bool) {
+func (k *Keeper) IterateInactivatingOperatorQueue(ctx sdk.Context, endTime time.Time, fn func(operator types.Operator) (stop bool, err error)) error {
+	return k.iterateInactivatingOperatorsKeys(ctx, endTime, func(key, value []byte) (stop bool, err error) {
 		operatorID, _ := types.SplitInactivatingOperatorQueueKey(key)
 		operator, found := k.GetOperator(ctx, operatorID)
 		if !found {
-			panic(fmt.Sprintf("operator %d does not exist", operatorID))
+			return true, fmt.Errorf("operator %d does not exist", operatorID)
 		}
 
 		return fn(operator)
@@ -62,34 +62,39 @@ func (k *Keeper) IterateInactivatingOperatorQueue(ctx sdk.Context, endTime time.
 // iterateInactivatingOperatorsKeys iterates over all the keys of the operators set to be inactivated
 // by the given time, and calls the given function.
 // If endTime is zero it iterates over all the keys.
-func (k *Keeper) iterateInactivatingOperatorsKeys(ctx sdk.Context, endTime time.Time, fn func(key, value []byte) (stop bool)) {
+func (k *Keeper) iterateInactivatingOperatorsKeys(ctx sdk.Context, endTime time.Time, fn func(key, value []byte) (stop bool, err error)) error {
 	store := ctx.KVStore(k.storeKey)
 
 	var iterator storetypes.Iterator
 	if endTime.IsZero() {
-		iterator = store.Iterator(types.InactivatingOperatorQueuePrefix, nil)
+		iterator = storetypes.KVStorePrefixIterator(store, types.InactivatingOperatorQueuePrefix)
 	} else {
 		iterator = store.Iterator(types.InactivatingOperatorQueuePrefix, storetypes.PrefixEndBytes(types.InactivatingOperatorByTime(endTime)))
 	}
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		stop := fn(iterator.Key(), iterator.Value())
+		stop, err := fn(iterator.Key(), iterator.Value())
+		if err != nil {
+			return err
+		}
 		if stop {
 			break
 		}
 	}
+	return nil
 }
 
 // GetInactivatingOperators returns the inactivating operators stored in the KVStore
-func (k *Keeper) GetInactivatingOperators(ctx sdk.Context) []types.UnbondingOperator {
+func (k *Keeper) GetInactivatingOperators(ctx sdk.Context) ([]types.UnbondingOperator, error) {
 	var operators []types.UnbondingOperator
-	k.iterateInactivatingOperatorsKeys(ctx, time.Time{}, func(key, value []byte) (stop bool) {
+
+	err := k.iterateInactivatingOperatorsKeys(ctx, time.Time{}, func(key, value []byte) (stop bool, err error) {
 		operatorID, endTime := types.SplitInactivatingOperatorQueueKey(key)
 		operators = append(operators, types.NewUnbondingOperator(operatorID, endTime))
-		return false
+		return false, nil
 	})
-	return operators
+	return operators, err
 }
 
 // IsOperatorDelegationsAddress returns true if the provided address is the address

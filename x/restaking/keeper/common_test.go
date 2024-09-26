@@ -109,11 +109,13 @@ func (suite *KeeperTestSuite) SetupTest() {
 	suite.pk = poolskeeper.NewKeeper(
 		suite.cdc,
 		keys[poolstypes.StoreKey],
+		runtime.NewKVStoreService(keys[poolstypes.StoreKey]),
 		suite.ak,
 	)
 	suite.ok = operatorskeeper.NewKeeper(
 		suite.cdc,
 		keys[operatorstypes.StoreKey],
+		runtime.NewKVStoreService(keys[operatorstypes.StoreKey]),
 		suite.ak,
 		communityPoolKeeper,
 		authorityAddr,
@@ -121,6 +123,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 	suite.sk = serviceskeeper.NewKeeper(
 		suite.cdc,
 		keys[servicestypes.StoreKey],
+		runtime.NewKVStoreService(keys[servicestypes.StoreKey]),
 		suite.ak,
 		communityPoolKeeper,
 		authorityAddr,

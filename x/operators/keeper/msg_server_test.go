@@ -406,7 +406,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 				), stored)
 
 				// Make sure the operator was added to the inactivating queue
-				inactivatingOperators := suite.k.GetInactivatingOperators(ctx)
+				inactivatingOperators, _ := suite.k.GetInactivatingOperators(ctx)
 				suite.Require().Len(inactivatingOperators, 1)
 				suite.Require().Equal(types.NewUnbondingOperator(
 					1,

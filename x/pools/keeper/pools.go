@@ -40,7 +40,7 @@ func (k *Keeper) SavePool(ctx sdk.Context, pool types.Pool) error {
 	}
 	k.createAccountIfNotExists(ctx, poolAddress)
 
-	return nil
+	return k.poolAddressSet.Set(ctx, pool.Address)
 }
 
 // GetPool retrieves the pool with the given ID from the store.

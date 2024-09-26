@@ -976,6 +976,7 @@ func NewMilkyWayApp(
 	app.ServicesKeeper = serviceskeeper.NewKeeper(
 		app.appCodec,
 		keys[servicestypes.StoreKey],
+		runtime.NewKVStoreService(keys[servicestypes.StoreKey]),
 		app.AccountKeeper,
 		communityPoolKeeper,
 		authorityAddr,
@@ -983,6 +984,7 @@ func NewMilkyWayApp(
 	app.OperatorsKeeper = operatorskeeper.NewKeeper(
 		app.appCodec,
 		keys[operatorstypes.StoreKey],
+		runtime.NewKVStoreService(keys[operatorstypes.StoreKey]),
 		app.AccountKeeper,
 		communityPoolKeeper,
 		authorityAddr,
@@ -990,6 +992,7 @@ func NewMilkyWayApp(
 	app.PoolsKeeper = poolskeeper.NewKeeper(
 		app.appCodec,
 		keys[poolstypes.StoreKey],
+		runtime.NewKVStoreService(keys[poolstypes.StoreKey]),
 		app.AccountKeeper,
 	)
 	app.RestakingKeeper = restakingkeeper.NewKeeper(

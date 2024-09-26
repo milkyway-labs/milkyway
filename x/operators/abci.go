@@ -13,10 +13,9 @@ import (
 //
 // It iterates over all the operators that are set to be inactivated by the current block time
 // and updates their status to inactive.
-func BeginBlocker(ctx sdk.Context, keeper *keeper.Keeper) {
+func BeginBlocker(ctx sdk.Context, keeper *keeper.Keeper) error {
 	// Iterate over all the operators that are set to be inactivated by the current block time
-	keeper.IterateInactivatingOperatorQueue(ctx, ctx.BlockTime(), func(operator types.Operator) (stop bool) {
-
+	return keeper.IterateInactivatingOperatorQueue(ctx, ctx.BlockTime(), func(operator types.Operator) (stop bool, err error) {
 		// Complete the operator inactivation process
 		keeper.CompleteOperatorInactivation(ctx, operator)
 
@@ -28,6 +27,6 @@ func BeginBlocker(ctx sdk.Context, keeper *keeper.Keeper) {
 			),
 		)
 
-		return false
+		return false, nil
 	})
 }
