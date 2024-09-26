@@ -96,12 +96,12 @@ func IsAnyLT(coins, coinsB sdk.DecCoins) bool {
 	return !IsAllGTE(coins, coinsB)
 }
 
-// IntersectCoinsByDenom returns the intersection of two coins.
+// FilterCoinsByDenom returns the intersection of two coins.
 // e.g.
-// IntersectCoinsByDenom({2A, 3B}, {A}) = {2A}
-// IntersectCoinsByDenom({2A, 3B}, {5C}) = {}
-// IntersectCoinsByDenom({2A, 3B}, {A, B}) = {2A, 3B}
-func IntersectCoinsByDenom(coins, coinsB sdk.Coins) sdk.Coins {
+// FilterCoinsByDenom({2A, 3B}, {A}) = {2A}
+// FilterCoinsByDenom({2A, 3B}, {5C}) = {}
+// FilterCoinsByDenom({2A, 3B}, {A, B}) = {2A, 3B}
+func FilterCoinsByDenom(coins, coinsB sdk.Coins) sdk.Coins {
 	res := sdk.NewCoins()
 	for _, coin := range coins {
 		amount := coinsB.AmountOf(coin.Denom)
@@ -112,12 +112,12 @@ func IntersectCoinsByDenom(coins, coinsB sdk.Coins) sdk.Coins {
 	return res
 }
 
-// IntersectDecCoinsByDenom returns the intersection of two coins.
+// FilterDecCoinsByDenom returns the intersection of two coins.
 // e.g.
-// IntersectDecCoinsByDenom{2A, 3B}, {A}) = {2A}
-// IntersectDecCoinsByDenom({2A, 3B}, {5C}) = {}
-// IntersectDecCoinsByDenom({2A, 3B}, {A, B}) = {2A, 3B}
-func IntersectDecCoinsByDenom(coins, coinsB sdk.DecCoins) sdk.DecCoins {
+// FilterDecCoinsByDenom{2A, 3B}, {A}) = {2A}
+// FilterDecCoinsByDenom({2A, 3B}, {5C}) = {}
+// FilterDecCoinsByDenom({2A, 3B}, {A, B}) = {2A, 3B}
+func FilterDecCoinsByDenom(coins, coinsB sdk.DecCoins) sdk.DecCoins {
 	res := sdk.NewDecCoins()
 	for _, coin := range coins {
 		amount := coinsB.AmountOf(coin.Denom)

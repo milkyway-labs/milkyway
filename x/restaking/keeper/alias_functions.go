@@ -613,7 +613,7 @@ func (k *Keeper) UnbondRestakedAssets(ctx sdk.Context, user sdk.AccAddress, amou
 		}
 		// Filter the shares to only the ones that can be removed from the current
 		// delegation
-		involvedShares = utils.IntersectDecCoinsByDenom(involvedShares, delegation.Shares)
+		involvedShares = utils.FilterDecCoinsByDenom(involvedShares, delegation.Shares)
 		// No shares, keep iterating
 		if len(involvedShares) == 0 {
 			return false, nil
