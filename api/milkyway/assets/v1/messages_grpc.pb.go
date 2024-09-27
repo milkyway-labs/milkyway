@@ -21,7 +21,6 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	Msg_RegisterAsset_FullMethodName   = "/milkyway.assets.v1.Msg/RegisterAsset"
 	Msg_DeregisterAsset_FullMethodName = "/milkyway.assets.v1.Msg/DeregisterAsset"
-	Msg_UpdateParams_FullMethodName    = "/milkyway.assets.v1.Msg/UpdateParams"
 )
 
 // MsgClient is the client API for Msg service.
@@ -35,10 +34,6 @@ type MsgClient interface {
 	// DeregisterAsset defines the operation for de-registering an asset with
 	// its denomination.
 	DeregisterAsset(ctx context.Context, in *MsgDeregisterAsset, opts ...grpc.CallOption) (*MsgDeregisterAssetResponse, error)
-	// UpdateParams defines a (governance) operation for updating the module
-	// parameters.
-	// The authority defaults to the x/gov module account.
-	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
 }
 
 type msgClient struct {
@@ -69,16 +64,6 @@ func (c *msgClient) DeregisterAsset(ctx context.Context, in *MsgDeregisterAsset,
 	return out, nil
 }
 
-func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(MsgUpdateParamsResponse)
-	err := c.cc.Invoke(ctx, Msg_UpdateParams_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility.
@@ -90,10 +75,6 @@ type MsgServer interface {
 	// DeregisterAsset defines the operation for de-registering an asset with
 	// its denomination.
 	DeregisterAsset(context.Context, *MsgDeregisterAsset) (*MsgDeregisterAssetResponse, error)
-	// UpdateParams defines a (governance) operation for updating the module
-	// parameters.
-	// The authority defaults to the x/gov module account.
-	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -109,9 +90,6 @@ func (UnimplementedMsgServer) RegisterAsset(context.Context, *MsgRegisterAsset) 
 }
 func (UnimplementedMsgServer) DeregisterAsset(context.Context, *MsgDeregisterAsset) (*MsgDeregisterAssetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeregisterAsset not implemented")
-}
-func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 func (UnimplementedMsgServer) testEmbeddedByValue()             {}
@@ -170,24 +148,6 @@ func _Msg_DeregisterAsset_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgUpdateParams)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).UpdateParams(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Msg_UpdateParams_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).UpdateParams(ctx, req.(*MsgUpdateParams))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -202,10 +162,6 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeregisterAsset",
 			Handler:    _Msg_DeregisterAsset_Handler,
-		},
-		{
-			MethodName: "UpdateParams",
-			Handler:    _Msg_UpdateParams_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

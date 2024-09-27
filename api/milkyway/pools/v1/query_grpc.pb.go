@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Query_PoolById_FullMethodName    = "/milkyway.pools.v1.Query/PoolById"
+	Query_PoolByID_FullMethodName    = "/milkyway.pools.v1.Query/PoolByID"
 	Query_PoolByDenom_FullMethodName = "/milkyway.pools.v1.Query/PoolByDenom"
 	Query_Pools_FullMethodName       = "/milkyway.pools.v1.Query/Pools"
 )
@@ -30,8 +30,8 @@ const (
 //
 // Query defines the gRPC querier service.
 type QueryClient interface {
-	// PoolById defines a gRPC query method that returns the pool by the given ID.
-	PoolById(ctx context.Context, in *QueryPoolByIdRequest, opts ...grpc.CallOption) (*QueryPoolResponse, error)
+	// PoolByID defines a gRPC query method that returns the pool by the given ID.
+	PoolByID(ctx context.Context, in *QueryPoolByIdRequest, opts ...grpc.CallOption) (*QueryPoolResponse, error)
 	// PoolByDenom defines a gRPC query method that returns the pool by the given
 	// denom.
 	PoolByDenom(ctx context.Context, in *QueryPoolByDenomRequest, opts ...grpc.CallOption) (*QueryPoolResponse, error)
@@ -47,10 +47,10 @@ func NewQueryClient(cc grpc.ClientConnInterface) QueryClient {
 	return &queryClient{cc}
 }
 
-func (c *queryClient) PoolById(ctx context.Context, in *QueryPoolByIdRequest, opts ...grpc.CallOption) (*QueryPoolResponse, error) {
+func (c *queryClient) PoolByID(ctx context.Context, in *QueryPoolByIdRequest, opts ...grpc.CallOption) (*QueryPoolResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(QueryPoolResponse)
-	err := c.cc.Invoke(ctx, Query_PoolById_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Query_PoolByID_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -83,8 +83,8 @@ func (c *queryClient) Pools(ctx context.Context, in *QueryPoolsRequest, opts ...
 //
 // Query defines the gRPC querier service.
 type QueryServer interface {
-	// PoolById defines a gRPC query method that returns the pool by the given ID.
-	PoolById(context.Context, *QueryPoolByIdRequest) (*QueryPoolResponse, error)
+	// PoolByID defines a gRPC query method that returns the pool by the given ID.
+	PoolByID(context.Context, *QueryPoolByIdRequest) (*QueryPoolResponse, error)
 	// PoolByDenom defines a gRPC query method that returns the pool by the given
 	// denom.
 	PoolByDenom(context.Context, *QueryPoolByDenomRequest) (*QueryPoolResponse, error)
@@ -100,8 +100,8 @@ type QueryServer interface {
 // pointer dereference when methods are called.
 type UnimplementedQueryServer struct{}
 
-func (UnimplementedQueryServer) PoolById(context.Context, *QueryPoolByIdRequest) (*QueryPoolResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method PoolById not implemented")
+func (UnimplementedQueryServer) PoolByID(context.Context, *QueryPoolByIdRequest) (*QueryPoolResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PoolByID not implemented")
 }
 func (UnimplementedQueryServer) PoolByDenom(context.Context, *QueryPoolByDenomRequest) (*QueryPoolResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PoolByDenom not implemented")
@@ -130,20 +130,20 @@ func RegisterQueryServer(s grpc.ServiceRegistrar, srv QueryServer) {
 	s.RegisterService(&Query_ServiceDesc, srv)
 }
 
-func _Query_PoolById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Query_PoolByID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryPoolByIdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).PoolById(ctx, in)
+		return srv.(QueryServer).PoolByID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_PoolById_FullMethodName,
+		FullMethod: Query_PoolByID_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).PoolById(ctx, req.(*QueryPoolByIdRequest))
+		return srv.(QueryServer).PoolByID(ctx, req.(*QueryPoolByIdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -192,8 +192,8 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*QueryServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "PoolById",
-			Handler:    _Query_PoolById_Handler,
+			MethodName: "PoolByID",
+			Handler:    _Query_PoolByID_Handler,
 		},
 		{
 			MethodName: "PoolByDenom",

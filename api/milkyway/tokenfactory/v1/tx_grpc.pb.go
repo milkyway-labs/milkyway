@@ -35,12 +35,23 @@ const (
 //
 // Msg defines the tokefactory module's gRPC message service.
 type MsgClient interface {
+	// CreateDenom defines a gRPC service method for creating a new denom.
 	CreateDenom(ctx context.Context, in *MsgCreateDenom, opts ...grpc.CallOption) (*MsgCreateDenomResponse, error)
+	// Mint defines a gRPC service method for minting more of a token.
 	Mint(ctx context.Context, in *MsgMint, opts ...grpc.CallOption) (*MsgMintResponse, error)
+	// Burn defines a gRPC service method for burning a token.
 	Burn(ctx context.Context, in *MsgBurn, opts ...grpc.CallOption) (*MsgBurnResponse, error)
+	// ChangeAdmin defines a gRPC service method for changing the admin of a
+	// denom.
 	ChangeAdmin(ctx context.Context, in *MsgChangeAdmin, opts ...grpc.CallOption) (*MsgChangeAdminResponse, error)
+	// SetDenomMetadata defines a gRPC service method for setting the metadata of
+	// a denom.
 	SetDenomMetadata(ctx context.Context, in *MsgSetDenomMetadata, opts ...grpc.CallOption) (*MsgSetDenomMetadataResponse, error)
+	// SetBeforeSendHook defines a gRPC service method for setting the before send
+	// hook of a denom.
 	SetBeforeSendHook(ctx context.Context, in *MsgSetBeforeSendHook, opts ...grpc.CallOption) (*MsgSetBeforeSendHookResponse, error)
+	// ForceTransfer defines a gRPC service method for transferring a token from
+	// one account to another.
 	ForceTransfer(ctx context.Context, in *MsgForceTransfer, opts ...grpc.CallOption) (*MsgForceTransferResponse, error)
 	// UpdateParams defines an operation for updating the x/tokenfactory module
 	// parameters.
@@ -141,12 +152,23 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 //
 // Msg defines the tokefactory module's gRPC message service.
 type MsgServer interface {
+	// CreateDenom defines a gRPC service method for creating a new denom.
 	CreateDenom(context.Context, *MsgCreateDenom) (*MsgCreateDenomResponse, error)
+	// Mint defines a gRPC service method for minting more of a token.
 	Mint(context.Context, *MsgMint) (*MsgMintResponse, error)
+	// Burn defines a gRPC service method for burning a token.
 	Burn(context.Context, *MsgBurn) (*MsgBurnResponse, error)
+	// ChangeAdmin defines a gRPC service method for changing the admin of a
+	// denom.
 	ChangeAdmin(context.Context, *MsgChangeAdmin) (*MsgChangeAdminResponse, error)
+	// SetDenomMetadata defines a gRPC service method for setting the metadata of
+	// a denom.
 	SetDenomMetadata(context.Context, *MsgSetDenomMetadata) (*MsgSetDenomMetadataResponse, error)
+	// SetBeforeSendHook defines a gRPC service method for setting the before send
+	// hook of a denom.
 	SetBeforeSendHook(context.Context, *MsgSetBeforeSendHook) (*MsgSetBeforeSendHookResponse, error)
+	// ForceTransfer defines a gRPC service method for transferring a token from
+	// one account to another.
 	ForceTransfer(context.Context, *MsgForceTransfer) (*MsgForceTransferResponse, error)
 	// UpdateParams defines an operation for updating the x/tokenfactory module
 	// parameters.

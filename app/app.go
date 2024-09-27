@@ -1228,7 +1228,7 @@ func NewMilkyWayApp(
 	/// lane end ///
 	////////////////
 
-	// At startup, after all modules have been registered, check that all prot
+	// At startup, after all modules have been registered, check that all proto
 	// annotations are correct.
 	protoFiles, err := proto.MergedRegistry()
 	if err != nil {
