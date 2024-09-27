@@ -50,7 +50,7 @@ func TestBeginBlocker(t *testing.T) {
 		{
 			name: "operator inactivation is not completed before time",
 			setupCtx: func(ctx sdk.Context) sdk.Context {
-				return ctx.WithBlockTime(time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o00, time.UTC))
+				return ctx.WithBlockTime(time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC))
 			},
 			store: func(ctx sdk.Context) {
 				operatorsKeeper.SetParams(ctx, types.NewParams(nil, 6*time.Hour))
@@ -68,14 +68,14 @@ func TestBeginBlocker(t *testing.T) {
 			},
 			check: func(ctx sdk.Context) {
 				kvStore := ctx.KVStore(keys[types.StoreKey])
-				endTime := time.Date(2024, 1, 1, 18, 0o0, 0o0, 0o00, time.UTC)
+				endTime := time.Date(2024, 1, 1, 18, 0, 0, 0, time.UTC)
 				require.True(t, kvStore.Has(types.InactivatingOperatorQueueKey(1, endTime)))
 			},
 		},
 		{
 			name: "operator inactivation is completed at exact time",
 			setupCtx: func(ctx sdk.Context) sdk.Context {
-				return ctx.WithBlockTime(time.Date(2020, 1, 1, 12, 0o0, 0o0, 0o01, time.UTC))
+				return ctx.WithBlockTime(time.Date(2020, 1, 1, 12, 0, 0, 1, time.UTC))
 			},
 			store: func(ctx sdk.Context) {
 				operatorsKeeper.SetParams(ctx, types.NewParams(nil, 6*time.Hour))
@@ -89,7 +89,7 @@ func TestBeginBlocker(t *testing.T) {
 				))
 			},
 			updateCtx: func(ctx sdk.Context) sdk.Context {
-				return ctx.WithBlockTime(time.Date(2020, 1, 1, 18, 0o0, 0o0, 0o00, time.UTC))
+				return ctx.WithBlockTime(time.Date(2020, 1, 1, 18, 0, 0, 0, time.UTC))
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the operator is still inactivating
@@ -99,14 +99,14 @@ func TestBeginBlocker(t *testing.T) {
 
 				// Make sure the operator is still in the inactivating queue
 				kvStore := ctx.KVStore(keys[types.StoreKey])
-				endTime := time.Date(2020, 1, 1, 18, 0o0, 0o0, 0o00, time.UTC)
+				endTime := time.Date(2020, 1, 1, 18, 0, 0, 0, time.UTC)
 				require.False(t, kvStore.Has(types.InactivatingOperatorQueueKey(1, endTime)))
 			},
 		},
 		{
 			name: "operator inactivation is completed after time",
 			setupCtx: func(ctx sdk.Context) sdk.Context {
-				return ctx.WithBlockTime(time.Date(2020, 1, 1, 12, 0o0, 0o0, 0o01, time.UTC))
+				return ctx.WithBlockTime(time.Date(2020, 1, 1, 12, 0, 0, 1, time.UTC))
 			},
 			store: func(ctx sdk.Context) {
 				operatorsKeeper.SetParams(ctx, types.NewParams(nil, 6*time.Hour))
@@ -120,7 +120,7 @@ func TestBeginBlocker(t *testing.T) {
 				))
 			},
 			updateCtx: func(ctx sdk.Context) sdk.Context {
-				return ctx.WithBlockTime(time.Date(2020, 1, 1, 20, 0o0, 0o0, 0o00, time.UTC))
+				return ctx.WithBlockTime(time.Date(2020, 1, 1, 20, 0, 0, 0, time.UTC))
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the operator is inactive
@@ -130,7 +130,7 @@ func TestBeginBlocker(t *testing.T) {
 
 				// Make sure the operator is not in the inactivating queue
 				kvStore := ctx.KVStore(keys[types.StoreKey])
-				endTime := time.Date(2020, 1, 1, 18, 0o0, 0o0, 0o00, time.UTC)
+				endTime := time.Date(2020, 1, 1, 18, 0, 0, 0, time.UTC)
 				require.False(t, kvStore.Has(types.InactivatingOperatorQueueKey(1, endTime)))
 			},
 		},

@@ -116,17 +116,17 @@ func (k *Keeper) isRestakingModule(ctx sdk.Context, account sdk.AccAddress) (boo
 		return false, err
 	}
 
-	isModule, err := k.poolsKeeper.IsPoolDelegationsAddress(ctx, accountString)
+	isModule, err := k.poolsKeeper.IsPoolAddress(ctx, accountString)
 	if err != nil || isModule {
 		return isModule, err
 	}
 
-	isModule, err = k.servicesKeeper.IsServiceDelegationsAddress(ctx, accountString)
+	isModule, err = k.servicesKeeper.IsServiceAddress(ctx, accountString)
 	if err != nil || isModule {
 		return isModule, err
 	}
 
-	return k.operatorsKeeper.IsOperatorDelegationsAddress(ctx, accountString)
+	return k.operatorsKeeper.IsOperatorAddress(ctx, accountString)
 }
 
 // getRequiredAmountInInsuranceFund returns the required coin that should

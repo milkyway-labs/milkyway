@@ -97,8 +97,8 @@ func (k *Keeper) GetInactivatingOperators(ctx sdk.Context) ([]types.UnbondingOpe
 	return operators, err
 }
 
-// IsOperatorDelegationsAddress returns true if the provided address is the address
+// IsOperatorAddress returns true if the provided address is the address
 // where the users' asset are kept when they restake toward an operator.
-func (k *Keeper) IsOperatorDelegationsAddress(ctx sdk.Context, address string) (bool, error) {
+func (k *Keeper) IsOperatorAddress(ctx sdk.Context, address string) (bool, error) {
 	return k.operatorAddressSet.Has(ctx, address)
 }
