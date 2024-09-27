@@ -17,7 +17,7 @@ service Query {
   rpc UserInsuranceFund(QueryUserInsuranceFundRequest)
       returns (QueryUserInsuranceFundResponse) {
     option (google.api.http).get =
-        "/milkyway/liquidvesting/v1/user_insurance_fund/{user_address}";
+        "/milkyway/liquidvesting/v1/user_insurance_funds/{user_address}";
   }
 
   // UserInsuranceFunds defines a gRPC query method that returns all user's

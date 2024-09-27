@@ -91,7 +91,7 @@ message MsgBurnVestedRepresentationResponse {}
 // WithdrawInsuranceFund gRPC service method.
 message MsgWithdrawInsuranceFund {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/MsgMintVestedRepresentation";
+  option (amino.name) = "milkyway/MsgWithdrawInsuranceFund";
 
   // User that want to withdraw the tokens.
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
