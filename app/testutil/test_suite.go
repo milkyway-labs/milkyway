@@ -36,7 +36,7 @@ type KeeperTestSuite struct {
 
 // SetupTest creates a new MilkyWayApp and context for the test.
 func (suite *KeeperTestSuite) SetupTest() {
-	suite.App = milkywayapp.Setup(false)
+	suite.App = milkywayapp.Setup(suite.T().TempDir(), false)
 	suite.Ctx = suite.App.NewContextLegacy(false, cmtproto.Header{
 		Height: 1,
 		Time:   time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),

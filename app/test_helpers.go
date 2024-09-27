@@ -52,7 +52,7 @@ func getOrCreateMemDB(db *dbm.DB) dbm.DB {
 	return dbm.NewMemDB()
 }
 
-func setup(db *dbm.DB, withGenesis bool) (*MilkyWayApp, GenesisState) {
+func setup(homeDir string, db *dbm.DB, withGenesis bool) (*MilkyWayApp, GenesisState) {
 	encCdc := MakeEncodingConfig()
 	app := NewMilkyWayApp(
 		log.NewNopLogger(),
@@ -60,7 +60,7 @@ func setup(db *dbm.DB, withGenesis bool) (*MilkyWayApp, GenesisState) {
 		nil,
 		true,
 		[]wasmkeeper.Option{},
-		EmptyAppOptions{},
+		EmptyAppOptions{homeDir: homeDir},
 	)
 
 	if withGenesis {
@@ -72,8 +72,8 @@ func setup(db *dbm.DB, withGenesis bool) (*MilkyWayApp, GenesisState) {
 
 // Setup initializes a new MilkyWayApp for testing.
 // A single validator will be created and registered in opchild module.
-func Setup(isCheckTx bool) *MilkyWayApp {
-	app, genState := setup(nil, true)
+func Setup(homeDir string, isCheckTx bool) *MilkyWayApp {
+	app, genState := setup(homeDir, nil, true)
 
 	// Create a validator which will be the admin of the chain as well as the
 	// bridge executor.
@@ -118,11 +118,12 @@ func Setup(isCheckTx bool) *MilkyWayApp {
 
 // SetupWithGenesisAccounts setup initiaapp with genesis account
 func SetupWithGenesisAccounts(
+	homeDir string,
 	valSet *tmtypes.ValidatorSet,
 	genAccs []authtypes.GenesisAccount,
 	balances ...banktypes.Balance,
 ) *MilkyWayApp {
-	app, genesisState := setup(nil, true)
+	app, genesisState := setup(homeDir, nil, true)
 
 	if len(genAccs) == 0 {
 		privAcc := secp256k1.GenPrivKey()

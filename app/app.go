@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 
 	"github.com/gorilla/mux"
@@ -858,7 +859,9 @@ func NewMilkyWayApp(
 		app.GRPCQueryRouter(),
 		wasmDir,
 		wasmConfig,
-		"iterator,stargate,cosmwasm_1_1,cosmwasm_1_2,cosmwasm_1_3,cosmwasm_1_4",
+		slices.DeleteFunc(wasmkeeper.BuiltInCapabilities(), func(s string) bool {
+			return s == "staking"
+		}),
 		authorityAddr,
 		wasmOpts...,
 	)
