@@ -28,7 +28,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type GenesisState struct {
 	// Params defines the parameters of the module.
 	Params Params `protobuf:"bytes,1,opt,name=params,proto3" json:"params"`
-	// BurnCoins represents the list of coins that should be burn from the
+	// BurnCoins represents the list of coins that should be burned from the
 	// users' balances
 	BurnCoins []BurnCoins `protobuf:"bytes,2,rep,name=burn_coins,json=burnCoins,proto3" json:"burn_coins"`
 	// UserInsuranceFunds represents the users' insurance fund.

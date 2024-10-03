@@ -512,6 +512,10 @@ type MsgClient interface {
 	BurnVestedRepresentation(ctx context.Context, in *MsgBurnVestedRepresentation, opts ...grpc.CallOption) (*MsgBurnVestedRepresentationResponse, error)
 	// WithdrawInsuranceFund defines the operation to withdraw an amount
 	// of tokens from the user's insurance fund.
+	// This can be used from the user to withdraw their funds after
+	// some of their staking representations have been burned or if the
+	// balance in the insurance fund is more than the required to cover all
+	// their staking representations.
 	WithdrawInsuranceFund(ctx context.Context, in *MsgWithdrawInsuranceFund, opts ...grpc.CallOption) (*MsgWithdrawInsuranceFundResponse, error)
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters.
@@ -573,6 +577,10 @@ type MsgServer interface {
 	BurnVestedRepresentation(context.Context, *MsgBurnVestedRepresentation) (*MsgBurnVestedRepresentationResponse, error)
 	// WithdrawInsuranceFund defines the operation to withdraw an amount
 	// of tokens from the user's insurance fund.
+	// This can be used from the user to withdraw their funds after
+	// some of their staking representations have been burned or if the
+	// balance in the insurance fund is more than the required to cover all
+	// their staking representations.
 	WithdrawInsuranceFund(context.Context, *MsgWithdrawInsuranceFund) (*MsgWithdrawInsuranceFundResponse, error)
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters.
