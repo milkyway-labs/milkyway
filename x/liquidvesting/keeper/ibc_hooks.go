@@ -11,6 +11,7 @@ import (
 	"github.com/cosmos/ibc-go/v8/modules/core/exported"
 	ibchooks "github.com/initia-labs/initia/x/ibc-hooks"
 
+	milkywaytypes "github.com/milkyway-labs/milkyway/types"
 	"github.com/milkyway-labs/milkyway/utils"
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 )
@@ -47,7 +48,7 @@ func (h IBCHooks) onRecvIcs20Packet(
 
 	// Ensure the receiver is the x/liquidvesting module account
 	if ics20Packet.Receiver != h.moduleAddress {
-		return utils.NewEmitErrorAcknowledgement(
+		return milkywaytypes.NewEmitErrorAcknowledgement(
 			fmt.Errorf("the receiver should be the module address, got: %s, expected: %s", ics20Packet.Receiver, h.moduleAddress),
 		)
 	}
@@ -55,35 +56,35 @@ func (h IBCHooks) onRecvIcs20Packet(
 	// Parse the message from the memo
 	bytes, err := json.Marshal(object[types.ModuleName])
 	if err != nil {
-		return utils.NewEmitErrorAcknowledgement(err)
+		return milkywaytypes.NewEmitErrorAcknowledgement(err)
 	}
 	var depositMsg types.MsgDepositInsurance
 	if err := json.Unmarshal(bytes, &depositMsg); err != nil {
-		return utils.NewEmitErrorAcknowledgement(err)
+		return milkywaytypes.NewEmitErrorAcknowledgement(err)
 	}
 
 	// Ensure that the message is valid
 	if err := depositMsg.ValidateBasic(); err != nil {
-		return utils.NewEmitErrorAcknowledgement(err)
+		return milkywaytypes.NewEmitErrorAcknowledgement(err)
 	}
 
 	// Get the total deposit amount from the message
 	totalDeposit, err := depositMsg.GetTotalDepositAmount()
 	if err != nil {
-		return utils.NewEmitErrorAcknowledgement(err)
+		return milkywaytypes.NewEmitErrorAcknowledgement(err)
 	}
 
 	// Parse the amount from the ics20Packet
 	amount, ok := math.NewIntFromString(ics20Packet.GetAmount())
 	if !ok {
-		return utils.NewEmitErrorAcknowledgement(fmt.Errorf("invalid ics20 amount"))
+		return milkywaytypes.NewEmitErrorAcknowledgement(fmt.Errorf("invalid ics20 amount"))
 	}
 	receivedAmount := sdk.NewCoin(ics20Packet.Denom, amount)
 
 	// Ensure that we have received the same amount of tokens
 	// as the ones that needs to be added to the users' insurance fund
 	if !receivedAmount.Equal(totalDeposit) {
-		return utils.NewEmitErrorAcknowledgement(
+		return milkywaytypes.NewEmitErrorAcknowledgement(
 			fmt.Errorf("amount received is not equal to the amounts to deposit in the users' insurance fund"),
 		)
 	}
@@ -92,11 +93,11 @@ func (h IBCHooks) onRecvIcs20Packet(
 	for _, deposit := range depositMsg.Amounts {
 		accountAddress, err := sdk.AccAddressFromBech32(deposit.Depositor)
 		if err != nil {
-			return utils.NewEmitErrorAcknowledgement(err)
+			return milkywaytypes.NewEmitErrorAcknowledgement(err)
 		}
 		err = h.AddToUserInsuranceFund(ctx, accountAddress, sdk.NewCoins(deposit.Amount))
 		if err != nil {
-			return utils.NewEmitErrorAcknowledgement(err)
+			return milkywaytypes.NewEmitErrorAcknowledgement(err)
 		}
 
 		// Dispatch the deposit event.

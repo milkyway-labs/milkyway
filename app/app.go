@@ -1038,7 +1038,8 @@ func NewMilkyWayApp(
 		app.ServicesKeeper,
 		app.RestakingKeeper,
 		authtypes.NewModuleAddress(liquidvestingtypes.ModuleName).String(),
-		authorityAddr)
+		authorityAddr,
+	)
 
 	app.BankKeeper.AppendSendRestriction(app.LiquidVestingKeeper.SendRestrictionFn)
 
