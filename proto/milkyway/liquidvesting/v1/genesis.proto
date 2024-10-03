@@ -13,7 +13,7 @@ message GenesisState {
   // Params defines the parameters of the module.
   Params params = 1 [ (gogoproto.nullable) = false ];
 
-  // BurnCoins represents the list of coins that should be burn from the
+  // BurnCoins represents the list of coins that should be burned from the
   // users' balances
   repeated BurnCoins burn_coins = 2
     [ (gogoproto.nullable) = false ];

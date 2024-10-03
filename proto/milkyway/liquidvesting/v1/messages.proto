@@ -26,6 +26,10 @@ service Msg {
 
   // WithdrawInsuranceFund defines the operation to withdraw an amount
   // of tokens from the user's insurance fund.
+  // This can be used from the user to withdraw their funds after
+  // some of their staking representations have been burned or if the
+  // balance in the insurance fund is more than the required to cover all
+  // their staking representations.
   rpc WithdrawInsuranceFund(MsgWithdrawInsuranceFund)
       returns (MsgWithdrawInsuranceFundResponse);
 

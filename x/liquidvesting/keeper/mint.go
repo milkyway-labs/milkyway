@@ -53,7 +53,7 @@ func (k *Keeper) MintVestedRepresentation(
 				Name:        vestedRepresentationDenom,
 				Symbol:      vestedRepresentationDenom,
 				Display:     vestedRepresentationDenom,
-				Description: "Vested representation of " + vestedRepresentationDenom,
+				Description: "Vested representation of " + coin.Denom,
 			}
 			k.bankKeeper.SetDenomMetaData(ctx, denomMetadata)
 		}
