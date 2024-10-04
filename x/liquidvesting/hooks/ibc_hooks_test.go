@@ -1,8 +1,9 @@
-package keeper_test
+package hooks_test
 
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"

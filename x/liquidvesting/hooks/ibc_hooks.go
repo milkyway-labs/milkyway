@@ -1,4 +1,4 @@
-package keeper
+package hooks
 
 import (
 	"encoding/json"
@@ -13,6 +13,7 @@ import (
 
 	milkywaytypes "github.com/milkyway-labs/milkyway/types"
 	"github.com/milkyway-labs/milkyway/utils"
+	"github.com/milkyway-labs/milkyway/x/liquidvesting/keeper"
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 )
 
@@ -22,14 +23,10 @@ var _ ibchooks.OnRecvPacketOverrideHooks = IBCHooks{}
 // ibc_hooks.OnRecvPacketOverrideHooks interface to execute
 // custom logic when an IBC token transfer packet is received.
 type IBCHooks struct {
-	*Keeper
+	*keeper.Keeper
 }
 
-func NewIBCHooks(k *Keeper) IBCHooks {
-	return IBCHooks{k}
-}
-
-func (k *Keeper) IBCHooks() IBCHooks {
+func NewIBCHooks(k *keeper.Keeper) IBCHooks {
 	return IBCHooks{k}
 }
 
@@ -47,9 +44,9 @@ func (h IBCHooks) onRecvIcs20Packet(
 	}
 
 	// Ensure the receiver is the x/liquidvesting module account
-	if ics20Packet.Receiver != h.moduleAddress {
+	if ics20Packet.Receiver != h.ModuleAddress {
 		return milkywaytypes.NewEmitErrorAcknowledgement(
-			fmt.Errorf("the receiver should be the module address, got: %s, expected: %s", ics20Packet.Receiver, h.moduleAddress),
+			fmt.Errorf("the receiver should be the module address, got: %s, expected: %s", ics20Packet.Receiver, h.ModuleAddress),
 		)
 	}
 

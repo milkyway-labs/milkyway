@@ -166,6 +166,7 @@ import (
 	icqkeeper "github.com/milkyway-labs/milkyway/x/interchainquery/keeper"
 	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
 	"github.com/milkyway-labs/milkyway/x/liquidvesting"
+	liquidvestinghooks "github.com/milkyway-labs/milkyway/x/liquidvesting/hooks"
 	liquidvestingkeeper "github.com/milkyway-labs/milkyway/x/liquidvesting/keeper"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 	"github.com/milkyway-labs/milkyway/x/operators"
@@ -478,9 +479,6 @@ func NewMilkyWayApp(
 	// add keepers
 	app.WasmKeeper = &wasmkeeper.Keeper{}
 
-	// add empty liquidvesting keeper
-	app.LiquidVestingKeeper = &liquidvestingkeeper.Keeper{}
-
 	accountKeeper := authkeeper.NewAccountKeeper(
 		appCodec,
 		runtime.NewKVStoreService(keys[authtypes.StoreKey]),
@@ -648,6 +646,75 @@ func NewMilkyWayApp(
 		app.IBCFeeKeeper,
 	)
 
+	// Custom modules
+	app.ServicesKeeper = serviceskeeper.NewKeeper(
+		app.appCodec,
+		keys[servicestypes.StoreKey],
+		runtime.NewKVStoreService(keys[servicestypes.StoreKey]),
+		app.AccountKeeper,
+		communityPoolKeeper,
+		authorityAddr,
+	)
+	app.OperatorsKeeper = operatorskeeper.NewKeeper(
+		app.appCodec,
+		keys[operatorstypes.StoreKey],
+		runtime.NewKVStoreService(keys[operatorstypes.StoreKey]),
+		app.AccountKeeper,
+		communityPoolKeeper,
+		authorityAddr,
+	)
+	app.PoolsKeeper = poolskeeper.NewKeeper(
+		app.appCodec,
+		keys[poolstypes.StoreKey],
+		runtime.NewKVStoreService(keys[poolstypes.StoreKey]),
+		app.AccountKeeper,
+	)
+	app.RestakingKeeper = restakingkeeper.NewKeeper(
+		app.appCodec,
+		keys[restakingtypes.StoreKey],
+		app.AccountKeeper,
+		app.BankKeeper,
+		app.PoolsKeeper,
+		app.OperatorsKeeper,
+		app.ServicesKeeper,
+		authorityAddr,
+	)
+	app.AssetsKeeper = assetskeeper.NewKeeper(
+		app.appCodec,
+		runtime.NewKVStoreService(keys[assetstypes.StoreKey]),
+		authorityAddr,
+	)
+	app.RewardsKeeper = rewardskeeper.NewKeeper(
+		app.appCodec,
+		runtime.NewKVStoreService(keys[rewardstypes.StoreKey]),
+		app.AccountKeeper,
+		app.BankKeeper,
+		communityPoolKeeper,
+		app.OracleKeeper,
+		app.PoolsKeeper,
+		app.OperatorsKeeper,
+		app.ServicesKeeper,
+		app.RestakingKeeper,
+		app.AssetsKeeper,
+		authorityAddr,
+	)
+	app.RestakingKeeper.SetHooks(app.RewardsKeeper.Hooks())
+
+	app.LiquidVestingKeeper = liquidvestingkeeper.NewKeeper(
+		app.appCodec,
+		keys[liquidvestingtypes.StoreKey],
+		runtime.NewKVStoreService(keys[liquidvestingtypes.StoreKey]),
+		app.AccountKeeper,
+		app.BankKeeper,
+		app.OperatorsKeeper,
+		app.PoolsKeeper,
+		app.ServicesKeeper,
+		app.RestakingKeeper,
+		authtypes.NewModuleAddress(liquidvestingtypes.ModuleName).String(),
+		authorityAddr,
+	)
+	app.BankKeeper.AppendSendRestriction(app.LiquidVestingKeeper.SendRestrictionFn)
+
 	hooksICS4Wrapper := ibchooks.NewICS4Middleware(
 		app.RateLimitKeeper,
 		ibcwasmhooks.NewWasmHooks(appCodec, ac, app.WasmKeeper),
@@ -655,7 +722,7 @@ func NewMilkyWayApp(
 
 	hooksICS4LiquidVesting := ibchooks.NewICS4Middleware(
 		hooksICS4Wrapper,
-		liquidvestingkeeper.NewIBCHooks(app.LiquidVestingKeeper),
+		liquidvestinghooks.NewIBCHooks(app.LiquidVestingKeeper),
 	)
 
 	app.InterchainQueryKeeper = icqkeeper.NewKeeper(appCodec, keys[icqtypes.StoreKey], app.IBCKeeper)
@@ -971,77 +1038,6 @@ func NewMilkyWayApp(
 	app.TokenFactoryKeeper.SetContractKeeper(contractKeeper)
 
 	app.BankKeeper.SetHooks(app.TokenFactoryKeeper.Hooks())
-
-	// Custom modules
-	app.ServicesKeeper = serviceskeeper.NewKeeper(
-		app.appCodec,
-		keys[servicestypes.StoreKey],
-		runtime.NewKVStoreService(keys[servicestypes.StoreKey]),
-		app.AccountKeeper,
-		communityPoolKeeper,
-		authorityAddr,
-	)
-	app.OperatorsKeeper = operatorskeeper.NewKeeper(
-		app.appCodec,
-		keys[operatorstypes.StoreKey],
-		runtime.NewKVStoreService(keys[operatorstypes.StoreKey]),
-		app.AccountKeeper,
-		communityPoolKeeper,
-		authorityAddr,
-	)
-	app.PoolsKeeper = poolskeeper.NewKeeper(
-		app.appCodec,
-		keys[poolstypes.StoreKey],
-		runtime.NewKVStoreService(keys[poolstypes.StoreKey]),
-		app.AccountKeeper,
-	)
-	app.RestakingKeeper = restakingkeeper.NewKeeper(
-		app.appCodec,
-		keys[restakingtypes.StoreKey],
-		app.AccountKeeper,
-		app.BankKeeper,
-		app.PoolsKeeper,
-		app.OperatorsKeeper,
-		app.ServicesKeeper,
-		authorityAddr,
-	)
-	app.AssetsKeeper = assetskeeper.NewKeeper(
-		app.appCodec,
-		runtime.NewKVStoreService(keys[assetstypes.StoreKey]),
-		authorityAddr,
-	)
-	app.RewardsKeeper = rewardskeeper.NewKeeper(
-		app.appCodec,
-		runtime.NewKVStoreService(keys[rewardstypes.StoreKey]),
-		app.AccountKeeper,
-		app.BankKeeper,
-		communityPoolKeeper,
-		app.OracleKeeper,
-		app.PoolsKeeper,
-		app.OperatorsKeeper,
-		app.ServicesKeeper,
-		app.RestakingKeeper,
-		app.AssetsKeeper,
-		authorityAddr,
-	)
-	app.RestakingKeeper.SetHooks(app.RewardsKeeper.Hooks())
-	// Here we do an object assign so that the pointer that we have
-	// used before to configure the IBC hooks don't change
-	*app.LiquidVestingKeeper = *liquidvestingkeeper.NewKeeper(
-		app.appCodec,
-		keys[liquidvestingtypes.StoreKey],
-		runtime.NewKVStoreService(keys[liquidvestingtypes.StoreKey]),
-		app.AccountKeeper,
-		app.BankKeeper,
-		app.OperatorsKeeper,
-		app.PoolsKeeper,
-		app.ServicesKeeper,
-		app.RestakingKeeper,
-		authtypes.NewModuleAddress(liquidvestingtypes.ModuleName).String(),
-		authorityAddr,
-	)
-
-	app.BankKeeper.AppendSendRestriction(app.LiquidVestingKeeper.SendRestrictionFn)
 
 	/****  Module Options ****/
 

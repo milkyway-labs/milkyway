@@ -28,7 +28,7 @@ func (k *Keeper) SendRestrictionFn(
 
 	// Don't check when transferring from or to the module account, this is to allow
 	// the minting and burning of the vested representations
-	if toAddrStr == k.moduleAddress || fromAddrStr == k.moduleAddress {
+	if toAddrStr == k.ModuleAddress || fromAddrStr == k.ModuleAddress {
 		return to, nil
 	}
 
