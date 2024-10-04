@@ -15,10 +15,9 @@ message GenesisState {
 
   // BurnCoins represents the list of coins that should be burned from the
   // users' balances
-  repeated BurnCoins burn_coins = 2
-    [ (gogoproto.nullable) = false ];
+  repeated BurnCoins burn_coins = 2 [ (gogoproto.nullable) = false ];
 
   // UserInsuranceFunds represents the users' insurance fund.
   repeated UserInsuranceFundState user_insurance_funds = 3
-    [ (gogoproto.nullable) = false ];
+      [ (gogoproto.nullable) = false ];
 }

@@ -35,7 +35,10 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type UserInsuranceFund struct {
 	// Amount of coins deposited into the user's insurance fund.
 	Balance github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,1,rep,name=balance,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"balance"`
-	// Amount of coins that is currently being used to cover the restaking positions.
+	// Amount the amount in the user's insurance that is being used to secure the restaked toknes.
+	// For example an user has 10 TIA in their insurance fund,
+	// the insurance percentage is 1% so they can restake 1000 TIA.
+	// The user restakes only 100 TIA, in this case the balance is 10 TIA and used is 1 TIA.
 	Used github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,2,rep,name=used,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"used"`
 }
 

@@ -90,7 +90,6 @@ message MsgBurnVestedRepresentation {
 // MsgBurnVestedRepresentation.
 message MsgBurnVestedRepresentationResponse {}
 
-
 // MsgWithdrawInsuranceFund defines the message structure for the
 // WithdrawInsuranceFund gRPC service method.
 message MsgWithdrawInsuranceFund {
