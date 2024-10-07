@@ -2,6 +2,7 @@ package keeper_test
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	restakingkeeper "github.com/milkyway-labs/milkyway/x/restaking/keeper"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 )

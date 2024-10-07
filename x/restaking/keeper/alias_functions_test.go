@@ -2,10 +2,12 @@ package keeper_test
 
 import (
 	"fmt"
+	"time"
+
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
-	"time"
 
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
