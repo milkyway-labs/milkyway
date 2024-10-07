@@ -147,7 +147,6 @@ import (
 
 	// local imports
 	appante "github.com/milkyway-labs/milkyway/app/ante"
-	apphook "github.com/milkyway-labs/milkyway/app/hook"
 	ibcwasmhooks "github.com/milkyway-labs/milkyway/app/ibc-hooks"
 	appkeepers "github.com/milkyway-labs/milkyway/app/keepers"
 	"github.com/milkyway-labs/milkyway/app/upgrades"
@@ -493,8 +492,9 @@ func NewMilkyWayApp(
 		runtime.NewKVStoreService(keys[opchildtypes.StoreKey]),
 		app.AccountKeeper,
 		app.BankKeeper,
-		apphook.NewWasmBridgeHook(ac, app.WasmKeeper).Hook,
 		app.OracleKeeper,
+		appante.CreateAnteHandlerForOPinit(app.AccountKeeper, txConfig.SignModeHandler()),
+		txConfig.TxDecoder(),
 		app.MsgServiceRouter(),
 		authorityAddr,
 		ac,
@@ -972,7 +972,7 @@ func NewMilkyWayApp(
 		auth.NewAppModule(appCodec, *app.AccountKeeper, nil, nil),
 		bank.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper, nil),
 		crisis.NewAppModule(app.CrisisKeeper, skipGenesisInvariants, nil),
-		opchild.NewAppModule(appCodec, *app.OPChildKeeper),
+		opchild.NewAppModule(appCodec, app.OPChildKeeper),
 		capability.NewAppModule(appCodec, *app.CapabilityKeeper, false),
 		feegrantmodule.NewAppModule(appCodec, app.AccountKeeper, app.BankKeeper, *app.FeeGrantKeeper, app.interfaceRegistry),
 		upgrade.NewAppModule(app.UpgradeKeeper, ac),
