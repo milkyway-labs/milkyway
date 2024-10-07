@@ -19,7 +19,7 @@ import (
 	"github.com/milkyway-labs/milkyway/app/keepers"
 	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
 	"github.com/milkyway-labs/milkyway/x/services/keeper"
-	"github.com/milkyway-labs/milkyway/x/services/testutil"
+	servicestestutil "github.com/milkyway-labs/milkyway/x/services/testutil"
 	"github.com/milkyway-labs/milkyway/x/services/types"
 
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
@@ -50,7 +50,7 @@ type KeeperTestSuite struct {
 	hooks *mockHooks
 
 	ctrl       *gomock.Controller
-	poolKeeper *testutil.MockCommunityPoolKeeper
+	poolKeeper *servicestestutil.MockCommunityPoolKeeper
 }
 
 func (suite *KeeperTestSuite) SetupTest() {
@@ -73,11 +73,11 @@ func (suite *KeeperTestSuite) SetupTest() {
 	}
 
 	suite.ctx = sdk.NewContext(ms, tmproto.Header{ChainID: "test-chain"}, false, log.NewNopLogger())
-	suite.cdc, suite.legacyAminoCdc = app.MakeCodecs()
+	suite.cdc, suite.legacyAminoCdc = app.MakeTestCodecs(suite.T())
 
 	// Mocks initializations
 	suite.ctrl = gomock.NewController(suite.T())
-	suite.poolKeeper = testutil.NewMockCommunityPoolKeeper(suite.ctrl)
+	suite.poolKeeper = servicestestutil.NewMockCommunityPoolKeeper(suite.ctrl)
 
 	// Authority address
 	authorityAddr := authtypes.NewModuleAddress(govtypes.ModuleName).String()

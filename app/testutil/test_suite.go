@@ -10,9 +10,9 @@ import (
 	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	slinkytypes "github.com/skip-mev/slinky/pkg/types"
-	marketmaptypes "github.com/skip-mev/slinky/x/marketmap/types"
-	oracletypes "github.com/skip-mev/slinky/x/oracle/types"
+	slinkytypes "github.com/skip-mev/connect/v2/pkg/types"
+	marketmaptypes "github.com/skip-mev/connect/v2/x/marketmap/types"
+	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
 
 	milkywayapp "github.com/milkyway-labs/milkyway/app"
 	assetstypes "github.com/milkyway-labs/milkyway/x/assets/types"
@@ -36,7 +36,7 @@ type KeeperTestSuite struct {
 
 // SetupTest creates a new MilkyWayApp and context for the test.
 func (suite *KeeperTestSuite) SetupTest() {
-	suite.App = milkywayapp.Setup(false)
+	suite.App = milkywayapp.Setup(suite.T(), false)
 	suite.Ctx = suite.App.NewContextLegacy(false, cmtproto.Header{
 		Height: 1,
 		Time:   time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),

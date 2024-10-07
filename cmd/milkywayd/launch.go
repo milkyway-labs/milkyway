@@ -11,10 +11,9 @@ import (
 	"github.com/initia-labs/OPinit/contrib/launchtools"
 	"github.com/initia-labs/OPinit/contrib/launchtools/steps"
 	"github.com/initia-labs/initia/app/params"
+	minitiaapp "github.com/initia-labs/miniwasm/app"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
-
-	milkywayapp "github.com/milkyway-labs/milkyway/app"
 )
 
 // DefaultLaunchStepFactories is a list of default launch step factories.
@@ -60,7 +59,7 @@ func LaunchCommand(ac *appCreator, enc params.EncodingConfig, mbm module.BasicMa
 	return launchtools.LaunchCmd(
 		ac,
 		func(denom string) map[string]json.RawMessage {
-			return milkywayapp.NewDefaultGenesisState(enc.Codec, mbm, denom)
+			return minitiaapp.NewDefaultGenesisState(enc.Codec, mbm, denom)
 		},
 		DefaultLaunchStepFactories,
 	)
@@ -83,18 +82,18 @@ func StoreAndInstantiateNFTContracts(input *launchtools.Config) launchtools.Laun
 
 		msgs := []sdk.Msg{
 			&wasmtypes.MsgStoreCode{
-				Sender:                input.SystemKeys.Validator.Address,
+				Sender:                input.SystemKeys.Validator.L2Address,
 				WASMByteCode:          cw721,
 				InstantiatePermission: nil,
 			},
 			&wasmtypes.MsgStoreCode{
-				Sender:                input.SystemKeys.Validator.Address,
+				Sender:                input.SystemKeys.Validator.L2Address,
 				WASMByteCode:          ics721,
 				InstantiatePermission: nil,
 			},
 			&wasmtypes.MsgInstantiateContract{
-				Sender: input.SystemKeys.Validator.Address,
-				Admin:  input.SystemKeys.Validator.Address,
+				Sender: input.SystemKeys.Validator.L2Address,
+				Admin:  input.SystemKeys.Validator.L2Address,
 				CodeID: 2,
 				Label:  "ics721",
 				Msg:    []byte(`{"cw721_base_code_id":1}`),
@@ -109,7 +108,7 @@ func StoreAndInstantiateNFTContracts(input *launchtools.Config) launchtools.Laun
 			)
 
 			res, err := ctx.GetRPCHelperL2().BroadcastTxAndWait(
-				input.SystemKeys.Validator.Address,
+				input.SystemKeys.Validator.L2Address,
 				input.SystemKeys.Validator.Mnemonic,
 				10000000,
 				sdk.NewCoins(),

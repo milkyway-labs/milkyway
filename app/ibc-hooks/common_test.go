@@ -2,6 +2,7 @@ package wasm_hooks_test
 
 import (
 	"encoding/binary"
+	"slices"
 	"testing"
 	"time"
 
@@ -41,7 +42,7 @@ import (
 
 	capabilitytypes "github.com/cosmos/ibc-go/modules/capability/types"
 	ibc "github.com/cosmos/ibc-go/v8/modules/core"
-	clienttypes "github.com/cosmos/ibc-go/v8/modules/core/02-client/types"
+	clienttypes "github.com/cosmos/ibc-go/v8/modules/core/02-client/types" //nolint:staticcheck
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 	porttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
@@ -53,8 +54,7 @@ import (
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
-
-	wasmhooks "github.com/milkyway-labs/milkyway/app/ibc-hooks"
+	wasmhooks "github.com/initia-labs/miniwasm/app/ibc-hooks"
 )
 
 var ModuleBasics = module.NewBasicManager(
@@ -277,7 +277,7 @@ func _createTestInput(
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 		ac,
 	)
-	require.NoError(t, ibcHooksKeeper.Params.Set(ctx, ibchookstypes.DefaultParams()))
+	ibcHooksKeeper.Params.Set(ctx, ibchookstypes.DefaultParams()) //nolint:errcheck
 
 	wasmKeeper := wasmkeeper.NewKeeper(
 		appCodec,
@@ -295,7 +295,9 @@ func _createTestInput(
 		nil,
 		t.TempDir(),
 		wasmtypes.DefaultWasmConfig(),
-		"iterator,stargate,cosmwasm_1_1,cosmwasm_1_2,cosmwasm_1_3,cosmwasm_1_4",
+		slices.DeleteFunc(wasmkeeper.BuiltInCapabilities(), func(s string) bool {
+			return s == "staking"
+		}),
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 	wasmParams := wasmtypes.DefaultParams()

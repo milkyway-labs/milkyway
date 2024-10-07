@@ -6,15 +6,18 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 
+	"cosmossdk.io/core/address"
 	"github.com/gorilla/mux"
 	"github.com/rakyll/statik/fs"
+	"github.com/skip-mev/connect/v2/x/marketmap"
+	"github.com/skip-mev/connect/v2/x/oracle"
 	"github.com/spf13/cast"
 
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 	reflectionv1 "cosmossdk.io/api/cosmos/reflection/v1"
-	"cosmossdk.io/core/address"
 	"cosmossdk.io/log"
 	"cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
@@ -103,7 +106,6 @@ import (
 	ibctm "github.com/cosmos/ibc-go/v8/modules/light-clients/07-tendermint"
 
 	// initia imports
-
 	initialanes "github.com/initia-labs/initia/app/lanes"
 	"github.com/initia-labs/initia/app/params"
 	ibchooks "github.com/initia-labs/initia/x/ibc-hooks"
@@ -113,6 +115,11 @@ import (
 	icaauth "github.com/initia-labs/initia/x/intertx"
 	icaauthkeeper "github.com/initia-labs/initia/x/intertx/keeper"
 	icaauthtypes "github.com/initia-labs/initia/x/intertx/types"
+	"github.com/initia-labs/miniwasm/app/ante"
+
+	// kvindexer
+	kvindexermodule "github.com/initia-labs/kvindexer/x/kvindexer"
+	kvindexerkeeper "github.com/initia-labs/kvindexer/x/kvindexer/keeper"
 
 	// OPinit imports
 	"github.com/initia-labs/OPinit/x/opchild"
@@ -131,12 +138,10 @@ import (
 	auctionante "github.com/skip-mev/block-sdk/v2/x/auction/ante"
 	auctionkeeper "github.com/skip-mev/block-sdk/v2/x/auction/keeper"
 	auctiontypes "github.com/skip-mev/block-sdk/v2/x/auction/types"
-	"github.com/skip-mev/slinky/x/marketmap"
-	marketmapkeeper "github.com/skip-mev/slinky/x/marketmap/keeper"
-	marketmaptypes "github.com/skip-mev/slinky/x/marketmap/types"
-	"github.com/skip-mev/slinky/x/oracle"
-	oraclekeeper "github.com/skip-mev/slinky/x/oracle/keeper"
-	oracletypes "github.com/skip-mev/slinky/x/oracle/types"
+	marketmapkeeper "github.com/skip-mev/connect/v2/x/marketmap/keeper"
+	marketmaptypes "github.com/skip-mev/connect/v2/x/marketmap/types"
+	oraclekeeper "github.com/skip-mev/connect/v2/x/oracle/keeper"
+	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
 
 	// CosmWasm imports
 	"github.com/CosmWasm/wasmd/x/wasm"
@@ -145,7 +150,6 @@ import (
 
 	// local imports
 	appante "github.com/milkyway-labs/milkyway/app/ante"
-	apphook "github.com/milkyway-labs/milkyway/app/hook"
 	ibcwasmhooks "github.com/milkyway-labs/milkyway/app/ibc-hooks"
 	appkeepers "github.com/milkyway-labs/milkyway/app/keepers"
 	"github.com/milkyway-labs/milkyway/app/upgrades"
@@ -194,16 +198,6 @@ import (
 	forwardingkeeper "github.com/noble-assets/forwarding/x/forwarding/keeper"
 	forwardingtypes "github.com/noble-assets/forwarding/x/forwarding/types"
 
-	// kvindexer
-	indexer "github.com/initia-labs/kvindexer"
-	indexerconfig "github.com/initia-labs/kvindexer/config"
-	blocksubmodule "github.com/initia-labs/kvindexer/submodules/block"
-	"github.com/initia-labs/kvindexer/submodules/tx"
-	nft "github.com/initia-labs/kvindexer/submodules/wasm-nft"
-	pair "github.com/initia-labs/kvindexer/submodules/wasm-pair"
-	indexermodule "github.com/initia-labs/kvindexer/x/kvindexer"
-	indexerkeeper "github.com/initia-labs/kvindexer/x/kvindexer/keeper"
-
 	// unnamed import of statik for swagger UI support
 	_ "github.com/milkyway-labs/milkyway/client/docs/statik"
 )
@@ -228,9 +222,6 @@ var (
 		stakeibctypes.RewardCollectorName: nil,
 		rewardstypes.RewardsPoolName:      nil,
 
-		// slinky oracle permissions
-		oracletypes.ModuleName: nil,
-
 		// this is only for testing
 		authtypes.Minter: {authtypes.Minter},
 	}
@@ -254,6 +245,9 @@ func init() {
 // capabilities aren't needed for testing.
 type MilkyWayApp struct {
 	*baseapp.BaseApp
+
+	// address codecs
+	ac, vc, cc address.Codec
 
 	legacyAmino       *codec.LegacyAmino
 	appCodec          codec.Codec
@@ -326,14 +320,15 @@ type MilkyWayApp struct {
 	checkTxHandler blockchecktx.CheckTx
 
 	// kvindexer
-	indexerKeeper *indexerkeeper.Keeper
-	indexerModule indexermodule.AppModuleBasic
+	kvIndexerKeeper *kvindexerkeeper.Keeper
+	kvIndexerModule *kvindexermodule.AppModuleBasic
 }
 
 // NewMilkyWayApp returns a reference to an initialized Initia.
 func NewMilkyWayApp(
 	logger log.Logger,
 	db dbm.DB,
+	kvindexerDB dbm.DB,
 	traceStore io.Writer,
 	loadLatest bool,
 	wasmOpts []wasmkeeper.Option,
@@ -388,14 +383,15 @@ func NewMilkyWayApp(
 		keys:              keys,
 		tkeys:             tkeys,
 		memKeys:           memKeys,
+
+		// codecs
+		ac: authcodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix()),
+		vc: authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix()),
+		cc: authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ConsensusAddrPrefix()),
 	}
 
-	ac := authcodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix())
-	vc := authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix())
-	cc := authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ConsensusAddrPrefix())
-
 	authorityAccAddr := authtypes.NewModuleAddress(opchildtypes.ModuleName)
-	authorityAddr, err := ac.BytesToString(authorityAccAddr)
+	authorityAddr, err := app.ac.BytesToString(authorityAccAddr)
 	if err != nil {
 		panic(err)
 	}
@@ -425,7 +421,7 @@ func NewMilkyWayApp(
 		runtime.NewKVStoreService(keys[authtypes.StoreKey]),
 		authtypes.ProtoBaseAccount,
 		maccPerms,
-		ac,
+		app.ac,
 		sdk.GetConfig().GetBech32AccountAddrPrefix(),
 		authorityAddr,
 	)
@@ -480,16 +476,17 @@ func NewMilkyWayApp(
 
 	app.OPChildKeeper = opchildkeeper.NewKeeper(
 		appCodec,
-		runtime.NewKVStoreService(keys[opchildtypes.StoreKey]),
+		runtime.NewKVStoreService(app.keys[opchildtypes.StoreKey]),
 		app.AccountKeeper,
 		app.BankKeeper,
-		apphook.NewWasmBridgeHook(ac, app.WasmKeeper).Hook,
 		app.OracleKeeper,
-		app.MsgServiceRouter(),
+		ante.CreateAnteHandlerForOPinit(app.AccountKeeper, txConfig.SignModeHandler()),
+		txConfig.TxDecoder(),
+		bApp.MsgServiceRouter(),
 		authorityAddr,
-		ac,
-		vc,
-		cc,
+		app.ac,
+		app.vc,
+		app.cc,
 		logger,
 	)
 
@@ -540,10 +537,6 @@ func NewMilkyWayApp(
 		authorityAddr,
 	)
 
-	app.IBCKeeper.ClientKeeper.SetPostUpdateHandler(
-		app.OPChildKeeper.UpdateHostValidatorSet,
-	)
-
 	ibcFeeKeeper := ibcfeekeeper.NewKeeper(
 		appCodec,
 		keys[ibcfeetypes.StoreKey],
@@ -559,7 +552,7 @@ func NewMilkyWayApp(
 		appCodec,
 		runtime.NewKVStoreService(keys[ibchookstypes.StoreKey]),
 		authorityAddr,
-		ac,
+		app.ac,
 	)
 
 	app.ForwardingKeeper = forwardingkeeper.NewKeeper(
@@ -585,7 +578,7 @@ func NewMilkyWayApp(
 
 	hooksICS4Wrapper := ibchooks.NewICS4Middleware(
 		app.RateLimitKeeper,
-		ibcwasmhooks.NewWasmHooks(appCodec, ac, app.WasmKeeper),
+		ibcwasmhooks.NewWasmHooks(appCodec, app.ac, app.WasmKeeper),
 	)
 
 	app.InterchainQueryKeeper = icqkeeper.NewKeeper(appCodec, keys[icqtypes.StoreKey], app.IBCKeeper)
@@ -704,6 +697,7 @@ func NewMilkyWayApp(
 			authorityAddr,
 		)
 		app.ICAHostKeeper = &icaHostKeeper
+		app.ICAHostKeeper.WithQueryRouter(app.GRPCQueryRouter())
 
 		icaControllerKeeper := icacontrollerkeeper.NewKeeper(
 			appCodec, keys[icacontrollertypes.StoreKey],
@@ -721,7 +715,7 @@ func NewMilkyWayApp(
 			appCodec,
 			*app.ICAControllerKeeper,
 			app.ScopedICAAuthKeeper,
-			ac,
+			app.ac,
 		)
 		app.ICAAuthKeeper = &icaAuthKeeper
 
@@ -843,7 +837,7 @@ func NewMilkyWayApp(
 	// if we want to allow any custom callbacks
 	*app.WasmKeeper = wasmkeeper.NewKeeper(
 		appCodec,
-		runtime.NewKVStoreService(keys[wasmtypes.StoreKey]),
+		runtime.NewKVStoreService(app.keys[wasmtypes.StoreKey]),
 		app.AccountKeeper,
 		app.BankKeeper,
 		// we do not support staking feature, so don't need to provide these keepers
@@ -854,11 +848,13 @@ func NewMilkyWayApp(
 		app.IBCKeeper.PortKeeper,
 		app.ScopedWasmKeeper,
 		app.TransferKeeper,
-		app.MsgServiceRouter(),
-		app.GRPCQueryRouter(),
+		bApp.MsgServiceRouter(),
+		bApp.GRPCQueryRouter(),
 		wasmDir,
 		wasmConfig,
-		"iterator,stargate,cosmwasm_1_1,cosmwasm_1_2,cosmwasm_1_3,cosmwasm_1_4",
+		slices.DeleteFunc(wasmkeeper.BuiltInCapabilities(), func(s string) bool {
+			return s == "staking"
+		}),
 		authorityAddr,
 		wasmOpts...,
 	)
@@ -879,7 +875,7 @@ func NewMilkyWayApp(
 	contractKeeper := wasmkeeper.NewDefaultPermissionKeeper(app.WasmKeeper)
 
 	tokenfactoryKeeper := tokenfactorykeeper.NewKeeper(
-		ac,
+		app.ac,
 		appCodec,
 		runtime.NewKVStoreService(keys[tokenfactorytypes.StoreKey]),
 		app.AccountKeeper,
@@ -956,16 +952,17 @@ func NewMilkyWayApp(
 		auth.NewAppModule(appCodec, *app.AccountKeeper, nil, nil),
 		bank.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper, nil),
 		crisis.NewAppModule(app.CrisisKeeper, skipGenesisInvariants, nil),
-		opchild.NewAppModule(appCodec, *app.OPChildKeeper),
+		opchild.NewAppModule(appCodec, app.OPChildKeeper),
 		capability.NewAppModule(appCodec, *app.CapabilityKeeper, false),
 		feegrantmodule.NewAppModule(appCodec, app.AccountKeeper, app.BankKeeper, *app.FeeGrantKeeper, app.interfaceRegistry),
-		upgrade.NewAppModule(app.UpgradeKeeper, ac),
+		upgrade.NewAppModule(app.UpgradeKeeper, app.ac),
 		authzmodule.NewAppModule(appCodec, *app.AuthzKeeper, app.AccountKeeper, app.BankKeeper, app.interfaceRegistry),
 		groupmodule.NewAppModule(appCodec, *app.GroupKeeper, app.AccountKeeper, app.BankKeeper, app.interfaceRegistry),
 		consensus.NewAppModule(appCodec, *app.ConsensusParamsKeeper),
 		wasm.NewAppModule(appCodec, app.WasmKeeper, nil /* unused */, app.AccountKeeper, app.BankKeeper, app.MsgServiceRouter(), nil),
 		auction.NewAppModule(app.appCodec, *app.AuctionKeeper),
 		tokenfactory.NewAppModule(appCodec, *app.TokenFactoryKeeper, *app.AccountKeeper, *app.BankKeeper),
+
 		// ibc modules
 		ibc.NewAppModule(app.IBCKeeper),
 		ibctransfer.NewAppModule(*app.TransferKeeper),
@@ -978,15 +975,18 @@ func NewMilkyWayApp(
 		ibchooks.NewAppModule(appCodec, *app.IBCHooksKeeper),
 		forwarding.NewAppModule(app.ForwardingKeeper),
 		ratelimit.NewAppModule(appCodec, app.RateLimitKeeper),
-		// slinky modules
-		oracle.NewAppModule(appCodec, *app.OracleKeeper),
-		marketmap.NewAppModule(appCodec, app.MarketMapKeeper),
+
+		// connect modules
+		oracle.NewAppModule(app.appCodec, *app.OracleKeeper),
+		marketmap.NewAppModule(app.appCodec, app.MarketMapKeeper),
+
 		// liquid staking modules
 		stakeibc.NewAppModule(appCodec, app.StakeIBCKeeper, app.AccountKeeper, app.BankKeeper),
 		epochs.NewAppModule(appCodec, app.EpochsKeeper),
 		interchainquery.NewAppModule(appCodec, app.InterchainQueryKeeper),
 		records.NewAppModule(appCodec, app.RecordsKeeper, app.AccountKeeper, app.BankKeeper),
 		icacallbacks.NewAppModule(appCodec, app.ICACallbacksKeeper, app.AccountKeeper, app.BankKeeper),
+
 		// custom modules
 		services.NewAppModule(appCodec, app.ServicesKeeper),
 		operators.NewAppModule(appCodec, app.OperatorsKeeper),
@@ -996,10 +996,16 @@ func NewMilkyWayApp(
 		rewards.NewAppModule(appCodec, app.RewardsKeeper),
 	)
 
-	if err := app.setupIndexer(appOpts, homePath, ac, vc, appCodec); err != nil {
-		panic(err)
-	}
+	// setup indexer
+	if kvIndexerKeeper, kvIndexerModule, streamingManager, err := setupIndexer(app, appOpts, kvindexerDB); err != nil {
+		tmos.Exit(err.Error())
+	} else if kvIndexerKeeper != nil && kvIndexerModule != nil && streamingManager != nil {
+		// register kvindexer keeper and module, and register services
+		app.SetKVIndexer(kvIndexerKeeper, kvIndexerModule)
 
+		// override base-app's streaming manager
+		app.SetStreamingManager(*streamingManager)
+	}
 	// BasicModuleManager defines the module BasicManager is in charge of setting up basic,
 	// non-dependant module elements, such as codec registration and genesis verification.
 	// By default it is composed of all the module from the module manager.
@@ -1091,8 +1097,6 @@ func NewMilkyWayApp(
 		panic(err)
 	}
 
-	app.indexerModule.RegisterServices(app.configurator)
-
 	// register upgrade handler for later use
 	app.RegisterUpgradeHandlers()
 
@@ -1147,7 +1151,7 @@ func NewMilkyWayApp(
 		MaxBlockSpace:   math.LegacyMustNewDecFromStr("0.2"),
 		MaxTxs:          100,
 		SignerExtractor: signerExtractor,
-	}, opchildlanes.NewFreeLaneMatchHandler(ac, app.OPChildKeeper).MatchHandler())
+	}, opchildlanes.NewFreeLaneMatchHandler(app.ac, app.OPChildKeeper).MatchHandler())
 
 	defaultLane := initialanes.NewDefaultLane(blockbase.LaneConfig{
 		Logger:          app.Logger(),
@@ -1329,6 +1333,13 @@ func (app *MilkyWayApp) setPostHandler() {
 	app.SetPostHandler(postHandler)
 }
 
+// SetKVIndexer sets the kvindexer keeper and module for the app and registers the services.
+func (app *MilkyWayApp) SetKVIndexer(kvIndexerKeeper *kvindexerkeeper.Keeper, kvIndexerModule *kvindexermodule.AppModuleBasic) {
+	app.kvIndexerKeeper = kvIndexerKeeper
+	app.kvIndexerModule = kvIndexerModule
+	app.kvIndexerModule.RegisterServices(app.configurator)
+}
+
 // Name returns the name of the App
 func (app *MilkyWayApp) Name() string { return app.BaseApp.Name() }
 
@@ -1447,7 +1458,7 @@ func (app *MilkyWayApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.A
 	app.BasicModuleManager.RegisterGRPCGatewayRoutes(clientCtx, apiSvr.GRPCGatewayRouter)
 
 	// Register grpc-gateway routes for indexer module.
-	app.indexerModule.RegisterGRPCGatewayRoutes(clientCtx, apiSvr.GRPCGatewayRouter)
+	app.kvIndexerModule.RegisterGRPCGatewayRoutes(clientCtx, apiSvr.GRPCGatewayRouter)
 
 	// register swagger API from root so that other applications can override easily
 	if apiConfig.Swagger {
@@ -1566,79 +1577,12 @@ func (app *MilkyWayApp) GetScopedIBCKeeper() capabilitykeeper.ScopedKeeper {
 func (app *MilkyWayApp) TxConfig() client.TxConfig {
 	return app.txConfig
 }
-func (app *MilkyWayApp) setupIndexer(appOpts servertypes.AppOptions, homePath string, ac, vc address.Codec, appCodec codec.Codec) error {
-	// initialize the indexer fake-keeper
-	indexerConfig, err := indexerconfig.NewConfig(appOpts)
-	if err != nil {
-		panic(err)
-	}
-	app.indexerKeeper = indexerkeeper.NewKeeper(
-		appCodec,
-		"wasm",
-		homePath,
-		indexerConfig,
-		ac,
-		vc,
-	)
-	smBlock, err := blocksubmodule.NewBlockSubmodule(appCodec, app.indexerKeeper, app.OPChildKeeper)
-	if err != nil {
-		panic(err)
-	}
-	smTx, err := tx.NewTxSubmodule(appCodec, app.indexerKeeper)
-	if err != nil {
-		panic(err)
-	}
-	smPair, err := pair.NewPairSubmodule(appCodec, app.indexerKeeper, app.IBCKeeper.ChannelKeeper, app.TransferKeeper)
-	if err != nil {
-		panic(err)
-	}
-	smNft, err := nft.NewWasmNFTSubmodule(ac, appCodec, app.indexerKeeper, app.WasmKeeper, smPair)
-	if err != nil {
-		panic(err)
-	}
-	err = app.indexerKeeper.RegisterSubmodules(smBlock, smTx, smPair, smNft)
-	if err != nil {
-		panic(err)
-	}
-
-	app.indexerModule = indexermodule.NewAppModuleBasic(app.indexerKeeper)
-	// Add your implementation here
-
-	indexer, err := indexer.NewIndexer(app.GetBaseApp().Logger(), app.indexerKeeper)
-	if err != nil || indexer == nil {
-		return nil
-	}
-
-	if err = indexer.Validate(); err != nil {
-		return err
-	}
-
-	if err = indexer.Prepare(nil); err != nil {
-		return err
-	}
-
-	if err = app.indexerKeeper.Seal(); err != nil {
-		return err
-	}
-
-	if err = indexer.Start(nil); err != nil {
-		return err
-	}
-
-	streamingManager := storetypes.StreamingManager{
-		ABCIListeners: []storetypes.ABCIListener{indexer},
-		StopNodeOnErr: true,
-	}
-	app.SetStreamingManager(streamingManager)
-
-	return nil
-}
 
 // Close closes the underlying baseapp, the oracle service, and the prometheus server if required.
 // This method blocks on the closure of both the prometheus server, and the oracle-service
 func (app *MilkyWayApp) Close() error {
-	if app.indexerKeeper != nil {
-		if err := app.indexerKeeper.Close(); err != nil {
+	if app.kvIndexerModule != nil {
+		if err := app.kvIndexerKeeper.Close(); err != nil {
 			return err
 		}
 	}

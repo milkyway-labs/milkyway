@@ -39,7 +39,7 @@ import (
 )
 
 func TestSimAppExportAndBlockedAddrs(t *testing.T) {
-	app := SetupWithGenesisAccounts(nil, nil)
+	app := SetupWithGenesisAccounts(t, nil, nil)
 
 	// BlockedAddresses returns a map of addresses in app v1 and a map of modules name in app v2.
 	for acc := range app.BlacklistedModuleAccountAddrs() {
@@ -67,7 +67,14 @@ func TestInitGenesisOnMigration(t *testing.T) {
 	db := dbm.NewMemDB()
 	logger := log.NewLogger(os.Stdout)
 	app := NewMilkyWayApp(
-		logger, db, nil, true, []wasmkeeper.Option{}, EmptyAppOptions{})
+		logger,
+		db,
+		getOrCreateMemDB(nil),
+		nil,
+		true,
+		[]wasmkeeper.Option{},
+		EmptyAppOptions{},
+	)
 	ctx := app.NewContextLegacy(true, cmtproto.Header{Height: app.LastBlockHeight()})
 
 	// Create a mock module. This module will serve as the new module we're
@@ -105,7 +112,7 @@ func TestInitGenesisOnMigration(t *testing.T) {
 }
 
 func TestUpgradeStateOnGenesis(t *testing.T) {
-	app := SetupWithGenesisAccounts(nil, nil)
+	app := SetupWithGenesisAccounts(t, nil, nil)
 
 	// make sure the upgrade keeper has version map in state
 	ctx := app.NewContext(true)
@@ -123,7 +130,13 @@ func TestGetKey(t *testing.T) {
 	db := dbm.NewMemDB()
 	app := NewMilkyWayApp(
 		log.NewLogger(os.Stdout),
-		db, nil, true, []wasmkeeper.Option{}, EmptyAppOptions{})
+		db,
+		getOrCreateMemDB(nil),
+		nil,
+		true,
+		[]wasmkeeper.Option{},
+		EmptyAppOptions{},
+	)
 
 	require.NotEmpty(t, app.GetKey(banktypes.StoreKey))
 	require.NotEmpty(t, app.GetMemKey(capabilitytypes.MemStoreKey))

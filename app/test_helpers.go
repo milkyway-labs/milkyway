@@ -4,6 +4,7 @@ package app
 
 import (
 	"encoding/json"
+	"testing"
 	"time"
 
 	"cosmossdk.io/log"
@@ -17,6 +18,7 @@ import (
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
+	simtestutil "github.com/cosmos/cosmos-sdk/testutil/sims"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
@@ -52,15 +54,16 @@ func getOrCreateMemDB(db *dbm.DB) dbm.DB {
 	return dbm.NewMemDB()
 }
 
-func setup(db *dbm.DB, withGenesis bool) (*MilkyWayApp, GenesisState) {
-	encCdc := MakeEncodingConfig()
+func setup(t *testing.T, db *dbm.DB, withGenesis bool) (*MilkyWayApp, GenesisState) {
+	encCdc := MakeTestEncodingConfig(t)
 	app := NewMilkyWayApp(
 		log.NewNopLogger(),
 		getOrCreateMemDB(db),
+		getOrCreateMemDB(nil),
 		nil,
 		true,
 		[]wasmkeeper.Option{},
-		EmptyAppOptions{},
+		simtestutil.NewAppOptionsWithFlagHome(t.TempDir()),
 	)
 
 	if withGenesis {
@@ -72,8 +75,10 @@ func setup(db *dbm.DB, withGenesis bool) (*MilkyWayApp, GenesisState) {
 
 // Setup initializes a new MilkyWayApp for testing.
 // A single validator will be created and registered in opchild module.
-func Setup(isCheckTx bool) *MilkyWayApp {
-	app, genState := setup(nil, true)
+func Setup(t *testing.T, isCheckTx bool) *MilkyWayApp {
+	t.Helper()
+
+	app, genState := setup(t, nil, true)
 
 	// Create a validator which will be the admin of the chain as well as the
 	// bridge executor.
@@ -94,7 +99,7 @@ func Setup(isCheckTx bool) *MilkyWayApp {
 	var opchildGenesis opchildtypes.GenesisState
 	app.AppCodec().MustUnmarshalJSON(genState[opchildtypes.ModuleName], &opchildGenesis)
 	opchildGenesis.Params.Admin = sdk.AccAddress(pubKey.Address().Bytes()).String()
-	opchildGenesis.Params.BridgeExecutor = sdk.AccAddress(pubKey.Address().Bytes()).String()
+	opchildGenesis.Params.BridgeExecutors = []string{sdk.AccAddress(pubKey.Address().Bytes()).String()}
 	opchildGenesis.Validators = []opchildtypes.Validator{validator}
 	genState[opchildtypes.ModuleName] = app.AppCodec().MustMarshalJSON(&opchildGenesis)
 
@@ -118,11 +123,14 @@ func Setup(isCheckTx bool) *MilkyWayApp {
 
 // SetupWithGenesisAccounts setup initiaapp with genesis account
 func SetupWithGenesisAccounts(
+	t *testing.T,
 	valSet *tmtypes.ValidatorSet,
 	genAccs []authtypes.GenesisAccount,
 	balances ...banktypes.Balance,
 ) *MilkyWayApp {
-	app, genesisState := setup(nil, true)
+	t.Helper()
+
+	app, genesisState := setup(t, nil, true)
 
 	if len(genAccs) == 0 {
 		privAcc := secp256k1.GenPrivKey()
