@@ -550,7 +550,7 @@ func NewMilkyWayApp(
 		authorityAddr,
 	)
 
-	app.IBCKeeper.ClientKeeper.SetPostUpdateHandler(
+	app.IBCKeeper.ClientKeeper.WithPostUpdateHandler(
 		app.OPChildKeeper.UpdateHostValidatorSet,
 	)
 
@@ -574,10 +574,11 @@ func NewMilkyWayApp(
 
 	app.ForwardingKeeper = forwardingkeeper.NewKeeper(
 		appCodec,
-		app.Logger(),
+		logger,
 		runtime.NewKVStoreService(keys[forwardingtypes.StoreKey]),
 		runtime.NewTransientStoreService(tkeys[forwardingtypes.TransientStoreKey]),
 		appheaderinfo.NewHeaderInfoService(),
+		runtime.ProvideEventService(),
 		authorityAddr,
 		app.AccountKeeper,
 		app.BankKeeper,
@@ -715,6 +716,7 @@ func NewMilkyWayApp(
 			app.MsgServiceRouter(),
 			authorityAddr,
 		)
+		icaHostKeeper.WithQueryRouter(bApp.GRPCQueryRouter())
 		app.ICAHostKeeper = &icaHostKeeper
 
 		icaControllerKeeper := icacontrollerkeeper.NewKeeper(
