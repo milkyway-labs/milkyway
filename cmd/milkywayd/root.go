@@ -48,22 +48,22 @@ import (
 	kvindexerstore "github.com/initia-labs/kvindexer/store"
 	kvindexerkeeper "github.com/initia-labs/kvindexer/x/kvindexer/keeper"
 
-	"github.com/milkyway-labs/milkyway/app"
+	milkywayapp "github.com/milkyway-labs/milkyway/app"
 )
 
 // NewRootCmd creates a new root command for initiad. It is called once in the
 // main function.
 func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 	sdkConfig := sdk.GetConfig()
-	sdkConfig.SetCoinType(app.CoinType)
+	sdkConfig.SetCoinType(milkywayapp.CoinType)
 
-	accountPubKeyPrefix := app.AccountAddressPrefix + "pub"
-	validatorAddressPrefix := app.AccountAddressPrefix + "valoper"
-	validatorPubKeyPrefix := app.AccountAddressPrefix + "valoperpub"
-	consNodeAddressPrefix := app.AccountAddressPrefix + "valcons"
-	consNodePubKeyPrefix := app.AccountAddressPrefix + "valconspub"
+	accountPubKeyPrefix := milkywayapp.AccountAddressPrefix + "pub"
+	validatorAddressPrefix := milkywayapp.AccountAddressPrefix + "valoper"
+	validatorPubKeyPrefix := milkywayapp.AccountAddressPrefix + "valoperpub"
+	consNodeAddressPrefix := milkywayapp.AccountAddressPrefix + "valcons"
+	consNodePubKeyPrefix := milkywayapp.AccountAddressPrefix + "valconspub"
 
-	sdkConfig.SetBech32PrefixForAccount(app.AccountAddressPrefix, accountPubKeyPrefix)
+	sdkConfig.SetBech32PrefixForAccount(milkywayapp.AccountAddressPrefix, accountPubKeyPrefix)
 	sdkConfig.SetBech32PrefixForValidator(validatorAddressPrefix, validatorPubKeyPrefix)
 	sdkConfig.SetBech32PrefixForConsensusNode(consNodeAddressPrefix, consNodePubKeyPrefix)
 	sdkConfig.SetAddressVerifier(wasmtypes.VerifyAddressLen())
@@ -71,8 +71,8 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 	// seal moved to post setup
 	// sdkConfig.Seal()
 
-	encodingConfig := app.MakeEncodingConfig()
-	basicManager := app.BasicManager()
+	encodingConfig := milkywayapp.MakeEncodingConfig()
+	basicManager := milkywayapp.BasicManager()
 
 	// Get the executable name and configure the viper instance so that environmental
 	// variables are checked based off that name. The underscore character is used
@@ -92,8 +92,8 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 		WithLegacyAmino(encodingConfig.Amino).
 		WithInput(os.Stdin).
 		WithAccountRetriever(types.AccountRetriever{}).
-		WithHomeDir(app.DefaultNodeHome).
-		WithViper(app.EnvPrefix)
+		WithHomeDir(milkywayapp.DefaultNodeHome).
+		WithViper(milkywayapp.EnvPrefix)
 
 	rootCmd := &cobra.Command{
 		Use:   basename,
@@ -143,7 +143,7 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 	initRootCmd(rootCmd, encodingConfig, basicManager)
 
 	// add keyring to autocli opts
-	autoCliOpts := app.AutoCliOpts()
+	autoCliOpts := milkywayapp.AutoCliOpts()
 	initClientCtx, _ = config.ReadFromClientConfig(initClientCtx)
 	autoCliOpts.ClientCtx = initClientCtx
 
@@ -158,14 +158,14 @@ func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig, b
 	a := &appCreator{}
 
 	rootCmd.AddCommand(
-		InitCmd(basicManager, app.DefaultNodeHome),
+		InitCmd(basicManager, milkywayapp.DefaultNodeHome),
 		debug.Cmd(),
 		confixcmd.ConfigCommand(),
-		pruning.Cmd(a.AppCreator(), app.DefaultNodeHome),
+		pruning.Cmd(a.AppCreator(), milkywayapp.DefaultNodeHome),
 		snapshot.Cmd(a.AppCreator()),
 	)
 
-	server.AddCommands(rootCmd, app.DefaultNodeHome, a.AppCreator(), a.appExport, addModuleInitFlags)
+	server.AddCommands(rootCmd, milkywayapp.DefaultNodeHome, a.AppCreator(), a.appExport, addModuleInitFlags)
 	wasmcli.ExtendUnsafeResetAllCmd(rootCmd)
 
 	// add keybase, auxiliary RPC, query, and tx child commands
@@ -198,11 +198,11 @@ func genesisCommand(encodingConfig params.EncodingConfig, basicManager module.Ba
 	ac := encodingConfig.TxConfig.SigningContext().AddressCodec()
 
 	cmd.AddCommand(
-		genutilcli.AddGenesisAccountCmd(app.DefaultNodeHome, ac),
-		opchildcli.AddGenesisValidatorCmd(basicManager, encodingConfig.TxConfig, banktypes.GenesisBalancesIterator{}, app.DefaultNodeHome),
-		opchildcli.AddFeeWhitelistCmd(app.DefaultNodeHome, ac),
+		genutilcli.AddGenesisAccountCmd(milkywayapp.DefaultNodeHome, ac),
+		opchildcli.AddGenesisValidatorCmd(basicManager, encodingConfig.TxConfig, banktypes.GenesisBalancesIterator{}, milkywayapp.DefaultNodeHome),
+		opchildcli.AddFeeWhitelistCmd(milkywayapp.DefaultNodeHome, ac),
 		genutilcli.ValidateGenesisCmd(basicManager),
-		genutilcli.GenTxCmd(basicManager, encodingConfig.TxConfig, banktypes.GenesisBalancesIterator{}, app.DefaultNodeHome, ac),
+		genutilcli.GenTxCmd(basicManager, encodingConfig.TxConfig, banktypes.GenesisBalancesIterator{}, milkywayapp.DefaultNodeHome, ac),
 	)
 
 	return cmd
@@ -274,7 +274,7 @@ func (a *appCreator) AppCreator() servertypes.AppCreator {
 			panic(err)
 		}
 
-		app := app.NewMilkyWayApp(
+		app := milkywayapp.NewMilkyWayApp(
 			logger, db, kvindexerDB, traceStore, true,
 			wasmOpts,
 			appOpts,
@@ -306,15 +306,15 @@ func (a appCreator) appExport(
 		return servertypes.ExportedApp{}, errors.New("application home not set")
 	}
 
-	var initiaApp *app.MilkyWayApp
+	var initiaApp *milkywayapp.MilkyWayApp
 	if height != -1 {
-		initiaApp = app.NewMilkyWayApp(logger, db, dbm.NewMemDB(), traceStore, false, []wasmkeeper.Option{}, appOpts)
+		initiaApp = milkywayapp.NewMilkyWayApp(logger, db, dbm.NewMemDB(), traceStore, false, []wasmkeeper.Option{}, appOpts)
 
 		if err := initiaApp.LoadHeight(height); err != nil {
 			return servertypes.ExportedApp{}, err
 		}
 	} else {
-		initiaApp = app.NewMilkyWayApp(logger, db, dbm.NewMemDB(), traceStore, true, []wasmkeeper.Option{}, appOpts)
+		initiaApp = milkywayapp.NewMilkyWayApp(logger, db, dbm.NewMemDB(), traceStore, true, []wasmkeeper.Option{}, appOpts)
 	}
 
 	return initiaApp.ExportAppStateAndValidators(forZeroHeight, jailAllowedAddrs, modulesToExport)
