@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	"cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -44,64 +45,58 @@ func (k *Keeper) SendRestrictionFn(
 	}
 
 	// Get the user insurance fund
-	var userInsuranceFund types.UserInsuranceFund
-	updateInsuranceFund := false
+	var userAddress sdk.AccAddress
 	if isToRestakingTarget {
-		userInsuranceFund, err = k.GetUserInsuranceFund(ctx, from)
-		if err != nil {
-			return nil, err
-		}
+		userAddress = from
 	} else if isFromRestakingTarget {
-		userInsuranceFund, err = k.GetUserInsuranceFund(ctx, to)
-		if err != nil {
-			return nil, err
-		}
+		userAddress = to
 	}
 
+	userInsuranceFund, err := k.GetUserInsuranceFund(ctx, userAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	updateInsuranceFund := false
 	for _, coin := range amount {
 		// Check if coin is a representation of a vested originalDenom
-		if types.IsVestedRepresentationDenom(coin.Denom) {
-			// Compute the coin to be available in the insurance fund
-			required, err := k.getRequiredAmountInInsuranceFund(ctx, coin)
-			if err != nil {
-				return nil, err
-			}
-			// Here we need to check if the coin are being sent from the user
-			// to a restaking module account or the other way around
-			// since we need to restrict to send only to the restaking module
-			switch {
-			case isToRestakingTarget:
-				if !userInsuranceFund.Unused().AmountOf(required.Denom).GTE(required.Amount) {
-					return nil, types.ErrInsufficientInsuranceFundBalance
-				} else {
-					userInsuranceFund.AddUsed(required)
-					updateInsuranceFund = true
-				}
-			case isFromRestakingTarget:
-				// From module to account, the user has undelegated their tokens.
-				userInsuranceFund.DecreaseUsed(required)
+		if !types.IsVestedRepresentationDenom(coin.Denom) {
+			continue
+		}
+
+		// Compute the coin to be available in the insurance fund
+		required, err := k.getRequiredAmountInInsuranceFund(ctx, coin)
+		if err != nil {
+			return nil, err
+		}
+		// Here we need to check if the coin are being sent from the user
+		// to a restaking module account or the other way around
+		// since we need to restrict to send only to the restaking module
+		switch {
+		case isToRestakingTarget:
+			if userInsuranceFund.Unused().AmountOf(required.Denom).LT(required.Amount) {
+				return nil, types.ErrInsufficientInsuranceFundBalance
+			} else {
+				userInsuranceFund.AddUsed(required)
 				updateInsuranceFund = true
-			default:
-				// Neither the sender nor the receiver is a restaking module
-				// this means that the user is trying to send those tokens
-				// somewhere else. Block it since the vested representation
-				// can only be sent to the restaking module.
-				return nil, types.ErrVestedRepresentationCannoteBeTransferred.Wrapf("coin %s", coin.Denom)
 			}
+		case isFromRestakingTarget:
+			// From module to account, the user has undelegated their tokens.
+			userInsuranceFund.DecreaseUsed(required)
+			updateInsuranceFund = true
+		default:
+			// Neither the sender nor the receiver is a restaking module
+			// this means that the user is trying to send those tokens
+			// somewhere else. Block it since the vested representation
+			// can only be sent to the restaking module.
+			return nil, errors.Wrapf(types.ErrVestedRepresentationCannoteBeTransferred, "coin %s", coin.Denom)
 		}
 	}
 
 	if updateInsuranceFund {
-		if isToRestakingTarget {
-			err = k.insuranceFunds.Set(ctx, from, userInsuranceFund)
-			if err != nil {
-				return nil, err
-			}
-		} else if isFromRestakingTarget {
-			err = k.insuranceFunds.Set(ctx, to, userInsuranceFund)
-			if err != nil {
-				return nil, err
-			}
+		err = k.insuranceFunds.Set(ctx, userAddress, userInsuranceFund)
+		if err != nil {
+			return nil, err
 		}
 	}
 
