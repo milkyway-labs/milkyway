@@ -140,12 +140,17 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 
 	initRootCmd(rootCmd, encodingConfig, basicManager)
 
-	// add keyring to autocli opts
-	autoCliOpts := milkywayapp.AutoCliOpts()
 	initClientCtx, _ = config.ReadFromClientConfig(initClientCtx)
+
+	// Add auto-generated CLI options
+	autoCliOpts, err := milkywayapp.AutoCLIOpts()
+	if err != nil {
+		panic(err)
+	}
 	autoCliOpts.ClientCtx = initClientCtx
 
-	if err := autoCliOpts.EnhanceRootCommand(rootCmd); err != nil {
+	err = autoCliOpts.EnhanceRootCommand(rootCmd)
+	if err != nil {
 		panic(err)
 	}
 

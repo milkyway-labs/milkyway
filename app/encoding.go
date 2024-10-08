@@ -1,11 +1,13 @@
 package app
 
 import (
+	"os"
 	"testing"
 
 	"cosmossdk.io/client/v2/autocli"
 	"cosmossdk.io/core/appmodule"
 	"cosmossdk.io/log"
+	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/codec"
 	runtimeservices "github.com/cosmos/cosmos-sdk/runtime/services"
@@ -14,8 +16,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	authcodec "github.com/cosmos/cosmos-sdk/x/auth/codec"
-
-	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 
 	"github.com/initia-labs/initia/app/params"
 )
@@ -64,8 +64,15 @@ func MakeTestCodecs(t *testing.T) (codec.Codec, *codec.LegacyAmino) {
 	})
 }
 
-func AutoCliOpts() autocli.AppOptions {
-	tempApp := NewMilkyWayApp(log.NewNopLogger(), dbm.NewMemDB(), dbm.NewMemDB(), nil, true, []wasmkeeper.Option{}, NewEmptyAppOptions())
+// AutoCLIOpts returns the options for the auto-generated CLI
+func AutoCLIOpts() (autocli.AppOptions, error) {
+	// Create a temp app with a temp home dir
+	tempDir, err := os.MkdirTemp(os.TempDir(), "milkyway-autocli-opts")
+	if err != nil {
+		return autocli.AppOptions{}, err
+	}
+
+	tempApp := NewMilkyWayApp(log.NewNopLogger(), dbm.NewMemDB(), dbm.NewMemDB(), nil, true, []wasmkeeper.Option{}, simtestutil.NewAppOptionsWithFlagHome(tempDir))
 	modules := make(map[string]appmodule.AppModule, 0)
 	for _, m := range tempApp.ModuleManager.Modules {
 		if moduleWithName, ok := m.(module.HasName); ok {
@@ -82,7 +89,7 @@ func AutoCliOpts() autocli.AppOptions {
 		AddressCodec:          authcodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix()),
 		ValidatorAddressCodec: authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix()),
 		ConsensusAddressCodec: authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ConsensusAddrPrefix()),
-	}
+	}, nil
 }
 
 func BasicManager() module.BasicManager {
