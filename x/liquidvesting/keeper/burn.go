@@ -130,13 +130,12 @@ func (k *Keeper) SetBurnCoinsQueueTimeSlice(ctx sdk.Context, timestamp time.Time
 // InsertBurnCoinsQueue inserts an BurnCoin to the appropriate timeslice
 // in the burn coins queue.
 func (k *Keeper) InsertBurnCoinsQueue(ctx sdk.Context, burnCoins types.BurnCoins) {
+	// Get the existing list of coins to be burned
 	timeSlice := k.GetBurnCoinsQueueTimeSlice(ctx, burnCoins.CompletionTime)
-	if len(timeSlice) == 0 {
-		k.SetBurnCoinsQueueTimeSlice(ctx, burnCoins.CompletionTime, []types.BurnCoins{burnCoins})
-	} else {
-		timeSlice = append(timeSlice, burnCoins)
-		k.SetBurnCoinsQueueTimeSlice(ctx, burnCoins.CompletionTime, timeSlice)
-	}
+
+	// Add the new coin
+	timeSlice = append(timeSlice, burnCoins)
+	k.SetBurnCoinsQueueTimeSlice(ctx, burnCoins.CompletionTime, timeSlice)
 }
 
 // BurnCoinsQueueIterator returns all the BurnCoins from time 0 until endTime.
