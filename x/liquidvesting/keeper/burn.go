@@ -80,7 +80,7 @@ func (k *Keeper) BurnVestedRepresentation(
 		}
 		// Store in the burn coins queue that we have to burn those coins once
 		// they are undelegated.
-		k.InsertBurnCoinsQueue(ctx, types.NewBurnCoins(stringAddr, completionTime, toUnbondCoins), completionTime)
+		k.InsertBurnCoinsQueue(ctx, types.NewBurnCoins(stringAddr, completionTime, toUnbondCoins))
 	}
 
 	if !liquidCoinsIsZero {
@@ -125,13 +125,13 @@ func (k *Keeper) SetBurnCoinsQueueTimeSlice(ctx sdk.Context, timestamp time.Time
 
 // InsertBurnCoinsQueue inserts an BurnCoin to the appropriate timeslice
 // in the burn coins queue.
-func (k *Keeper) InsertBurnCoinsQueue(ctx sdk.Context, burnCoins types.BurnCoins, completionTime time.Time) {
-	timeSlice := k.GetBurnCoinsQueueTimeSlice(ctx, completionTime)
+func (k *Keeper) InsertBurnCoinsQueue(ctx sdk.Context, burnCoins types.BurnCoins) {
+	timeSlice := k.GetBurnCoinsQueueTimeSlice(ctx, burnCoins.CompletionTime)
 	if len(timeSlice) == 0 {
-		k.SetBurnCoinsQueueTimeSlice(ctx, completionTime, []types.BurnCoins{burnCoins})
+		k.SetBurnCoinsQueueTimeSlice(ctx, burnCoins.CompletionTime, []types.BurnCoins{burnCoins})
 	} else {
 		timeSlice = append(timeSlice, burnCoins)
-		k.SetBurnCoinsQueueTimeSlice(ctx, completionTime, timeSlice)
+		k.SetBurnCoinsQueueTimeSlice(ctx, burnCoins.CompletionTime, timeSlice)
 	}
 }
 
