@@ -74,7 +74,7 @@ type EmptyAppOptions struct {
 
 func NewEmptyAppOptions() EmptyAppOptions {
 	return EmptyAppOptions{
-		homeDir: filepath.Join(os.TempDir(), strconv.Itoa(rand.Int())),
+		homeDir: filepath.Join(os.TempDir(), strconv.Itoa(rand.Int())), //nolint:gosec
 	}
 }
 
