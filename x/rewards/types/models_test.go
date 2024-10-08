@@ -131,7 +131,7 @@ func TestRewardsPlan_Validate(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			cdc, _ := app.MakeCodecs()
+			cdc, _ := app.MakeTestCodecs(t)
 			err := tc.plan.Validate(cdc)
 			if tc.shouldErr {
 				require.Error(t, err)

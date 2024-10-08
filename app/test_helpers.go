@@ -4,6 +4,7 @@ package app
 
 import (
 	"encoding/json"
+	"testing"
 	"time"
 
 	"cosmossdk.io/log"
@@ -17,6 +18,7 @@ import (
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
+	simtestutil "github.com/cosmos/cosmos-sdk/testutil/sims"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
@@ -52,7 +54,9 @@ func getOrCreateMemDB(db *dbm.DB) dbm.DB {
 	return dbm.NewMemDB()
 }
 
-func setup(homeDir string, db *dbm.DB, withGenesis bool) (*MilkyWayApp, GenesisState) {
+func setup(t *testing.T, db *dbm.DB, withGenesis bool) (*MilkyWayApp, GenesisState) {
+	t.Helper()
+
 	encCdc := MakeEncodingConfig()
 	app := NewMilkyWayApp(
 		log.NewNopLogger(),
@@ -61,7 +65,7 @@ func setup(homeDir string, db *dbm.DB, withGenesis bool) (*MilkyWayApp, GenesisS
 		nil,
 		true,
 		[]wasmkeeper.Option{},
-		EmptyAppOptions{homeDir: homeDir},
+		simtestutil.NewAppOptionsWithFlagHome(t.TempDir()),
 	)
 
 	if withGenesis {
@@ -73,8 +77,10 @@ func setup(homeDir string, db *dbm.DB, withGenesis bool) (*MilkyWayApp, GenesisS
 
 // Setup initializes a new MilkyWayApp for testing.
 // A single validator will be created and registered in opchild module.
-func Setup(homeDir string, isCheckTx bool) *MilkyWayApp {
-	app, genState := setup(homeDir, nil, true)
+func Setup(t *testing.T, isCheckTx bool) *MilkyWayApp {
+	t.Helper()
+
+	app, genState := setup(t, nil, true)
 
 	// Create a validator which will be the admin of the chain as well as the
 	// bridge executor.
@@ -119,12 +125,14 @@ func Setup(homeDir string, isCheckTx bool) *MilkyWayApp {
 
 // SetupWithGenesisAccounts setup initiaapp with genesis account
 func SetupWithGenesisAccounts(
-	homeDir string,
+	t *testing.T,
 	valSet *tmtypes.ValidatorSet,
 	genAccs []authtypes.GenesisAccount,
 	balances ...banktypes.Balance,
 ) *MilkyWayApp {
-	app, genesisState := setup(homeDir, nil, true)
+	t.Helper()
+
+	app, genesisState := setup(t, nil, true)
 
 	if len(genAccs) == 0 {
 		privAcc := secp256k1.GenPrivKey()
