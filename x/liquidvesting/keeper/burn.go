@@ -5,6 +5,7 @@ import (
 	"slices"
 	"time"
 
+	"cosmossdk.io/errors"
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -63,7 +64,7 @@ func (k *Keeper) BurnVestedRepresentation(
 	toUnbondCoinsIsZero := toUnbondCoins.IsZero()
 
 	if liquidCoinsIsZero && toUnbondCoinsIsZero {
-		return types.ErrInsufficientBalance.Wrap(amount.String())
+		return errors.Wrap(types.ErrInsufficientBalance, amount.String())
 	}
 
 	// The amount to burn is not in the user balance, check if we can remove that
