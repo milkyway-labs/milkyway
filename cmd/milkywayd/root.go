@@ -9,8 +9,6 @@ import (
 
 	tmcli "github.com/cometbft/cometbft/libs/cli"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/skip-mev/block-sdk/v2/tests/app"
-
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -161,7 +159,7 @@ func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig) {
 	a := &appCreator{}
 
 	rootCmd.AddCommand(
-		InitCmd(app.ModuleBasics, milkywayapp.DefaultNodeHome),
+		InitCmd(milkywayapp.ModuleBasics, milkywayapp.DefaultNodeHome),
 		debug.Cmd(),
 		confixcmd.ConfigCommand(),
 		pruning.Cmd(a.AppCreator(), milkywayapp.DefaultNodeHome),
@@ -174,14 +172,14 @@ func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig) {
 	// add keybase, auxiliary RPC, query, and tx child commands
 	rootCmd.AddCommand(
 		server.StatusCommand(),
-		genesisCommand(encodingConfig, app.ModuleBasics),
+		genesisCommand(encodingConfig, milkywayapp.ModuleBasics),
 		queryCommand(),
 		txCommand(),
 		keys.Commands(),
 	)
 
 	// add launch commands
-	rootCmd.AddCommand(LaunchCommand(a, encodingConfig, app.ModuleBasics))
+	rootCmd.AddCommand(LaunchCommand(a, encodingConfig, milkywayapp.ModuleBasics))
 	rootCmd.AddCommand(NewMultipleRollbackCmd(a.AppCreator()))
 }
 
