@@ -90,7 +90,7 @@ func (suite *KeeperTestSuite) TestKeeper_TestBurn() {
 				unbondingTim := suite.rk.GetParams(ctx).UnbondingTime
 				unbodnEnd := ctx.BlockHeader().Time.Add(unbondingTim)
 				// Deque the values
-				values := suite.k.DequeueAllBurnCoinsQueue(ctx, unbodnEnd)
+				values := suite.k.GetUnbondedCoinsFromQueue(ctx, unbodnEnd)
 				suite.Assert().Len(values, 1)
 				// Check that we are burning the coins that have been delegated
 				toBurnCoins := values[0].Amount

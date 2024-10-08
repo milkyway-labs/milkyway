@@ -81,7 +81,7 @@ func (k *Keeper) BurnVestedRepresentation(
 		}
 		// Store in the burn coins queue that we have to burn those coins once
 		// they are undelegated.
-		k.InsertBurnCoinsQueue(ctx, types.NewBurnCoins(stringAddr, completionTime, toUnbondCoins))
+		k.InsertBurnCoinsToUnbondingQueue(ctx, types.NewBurnCoins(stringAddr, completionTime, toUnbondCoins))
 	}
 
 	if !liquidCoinsIsZero {
@@ -127,9 +127,9 @@ func (k *Keeper) SetBurnCoinsQueueTimeSlice(ctx sdk.Context, timestamp time.Time
 	store.Set(types.GetBurnCoinsQueueTimeKey(timestamp), bz)
 }
 
-// InsertBurnCoinsQueue inserts an BurnCoin to the appropriate timeslice
+// InsertBurnCoinsToUnbondingQueue inserts an BurnCoin to the appropriate timeslice
 // in the burn coins queue.
-func (k *Keeper) InsertBurnCoinsQueue(ctx sdk.Context, burnCoins types.BurnCoins) {
+func (k *Keeper) InsertBurnCoinsToUnbondingQueue(ctx sdk.Context, burnCoins types.BurnCoins) {
 	// Get the existing list of coins to be burned
 	timeSlice := k.GetBurnCoinsQueueTimeSlice(ctx, burnCoins.CompletionTime)
 
@@ -139,28 +139,60 @@ func (k *Keeper) InsertBurnCoinsQueue(ctx sdk.Context, burnCoins types.BurnCoins
 }
 
 // BurnCoinsQueueIterator returns all the BurnCoins from time 0 until endTime.
-func (k *Keeper) BurnCoinsQueueIterator(ctx sdk.Context, endTime time.Time) storetypes.Iterator {
+func (k *Keeper) BurnCoinsUnbondingQueueIterator(ctx sdk.Context, endTime time.Time) storetypes.Iterator {
 	store := ctx.KVStore(k.storeKey)
 	return store.Iterator(types.BurnCoinsQueueKey, storetypes.InclusiveEndBytes(types.GetBurnCoinsQueueTimeKey(endTime)))
 }
 
-// DequeueAllBurnCoinsQueue returns a concatenated list of all the timeslices inclusively previous to
+// IterateBurnCoinsUnbondingQueue iterates all the BurnCoins from time 0 until endTime.
+func (k *Keeper) IterateBurnCoinsUnbondingQueue(ctx sdk.Context, endTime time.Time, iterF func(burnCoin types.BurnCoins) (bool, error)) error {
+	iter := k.BurnCoinsUnbondingQueueIterator(ctx, endTime)
+	defer iter.Close()
+
+	for ; iter.Valid(); iter.Next() {
+		timeslice := types.BurnCoinsList{}
+		value := iter.Value()
+		k.cdc.MustUnmarshal(value, &timeslice)
+		for _, burnCoin := range timeslice.Data {
+			stop, err := iterF(burnCoin)
+			if stop || err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+// GetUnbondedCoinsFromQueue returns a concatenated list of all the timeslices inclusively previous to
+// endTime.
+func (k *Keeper) GetUnbondedCoinsFromQueue(ctx sdk.Context, endTime time.Time) []types.BurnCoins {
+	var burnCoins []types.BurnCoins
+	k.IterateBurnCoinsUnbondingQueue(ctx, endTime, func(burnCoin types.BurnCoins) (bool, error) {
+		burnCoins = append(burnCoins, burnCoin)
+		return false, nil
+	})
+
+	return burnCoins
+}
+
+// DequeueAllBurnCoinsFromUnbondingQueue returns a concatenated list of all the timeslices inclusively previous to
 // currTime, and deletes the timeslices from the queue.
-func (k *Keeper) DequeueAllBurnCoinsQueue(ctx sdk.Context, currTime time.Time) (burnCoins []types.BurnCoins) {
+func (k *Keeper) DequeueAllBurnCoinsFromUnbondingQueue(ctx sdk.Context, currTime time.Time) (burnCoins []types.BurnCoins) {
 	store := ctx.KVStore(k.storeKey)
 
 	// Get an iterator for all timeslices from time 0 until the current BlockHeader time
-	bcTimesliceIterator := k.BurnCoinsQueueIterator(ctx, currTime)
-	defer bcTimesliceIterator.Close()
+	iter := k.BurnCoinsUnbondingQueueIterator(ctx, currTime)
+	defer iter.Close()
 
-	for ; bcTimesliceIterator.Valid(); bcTimesliceIterator.Next() {
+	for ; iter.Valid(); iter.Next() {
 		timeslice := types.BurnCoinsList{}
-		value := bcTimesliceIterator.Value()
+		value := iter.Value()
 		k.cdc.MustUnmarshal(value, &timeslice)
 
 		burnCoins = append(burnCoins, timeslice.Data...)
 
-		store.Delete(bcTimesliceIterator.Key())
+		store.Delete(iter.Key())
 	}
 
 	return burnCoins

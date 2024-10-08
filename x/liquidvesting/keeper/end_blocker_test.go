@@ -77,7 +77,7 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake2", 200)), userBalance)
 
 				// The burn queue should contain our record
-				toBurnCoins := suite.k.DequeueAllBurnCoinsQueue(ctx, ctx.BlockTime().Add(4*24*time.Hour))
+				toBurnCoins := suite.k.GetUnbondedCoinsFromQueue(ctx, ctx.BlockTime().Add(4*24*time.Hour))
 				suite.Assert().Len(toBurnCoins, 1)
 
 				suite.Assert().Equal(testAccount, toBurnCoins[0].DelegatorAddress)
@@ -143,7 +143,7 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake2", 200)), userBalance)
 
 				// The burn queue should be empty
-				suite.Assert().Len(suite.k.DequeueAllBurnCoinsQueue(ctx, ctx.BlockTime()), 0)
+				suite.Assert().Len(suite.k.GetUnbondedCoinsFromQueue(ctx, ctx.BlockTime()), 0)
 
 				// The user insurance fund should update properly
 				userInsuranceFund, err := suite.k.GetUserInsuranceFund(ctx, sdk.MustAccAddressFromBech32(testAccount))

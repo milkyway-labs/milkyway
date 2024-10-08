@@ -127,7 +127,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 		}
 		// Update the undelegate amounts that can be considered for this user
 		undelegateAmounts[burnCoins.DelegatorAddress] = userUndelegateAmount.Sub(burnCoins.Amount...)
-		k.InsertBurnCoinsQueue(ctx, burnCoins)
+		k.InsertBurnCoinsToUnbondingQueue(ctx, burnCoins)
 	}
 
 	return nil

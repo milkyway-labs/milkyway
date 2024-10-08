@@ -10,7 +10,7 @@ import (
 // undelegation completes.
 func (k *Keeper) CompleteBurnCoins(ctx sdk.Context) error {
 	// Remove all the information about the coins to burn.
-	coinsToBurn := k.DequeueAllBurnCoinsQueue(ctx, ctx.BlockHeader().Time)
+	coinsToBurn := k.DequeueAllBurnCoinsFromUnbondingQueue(ctx, ctx.BlockHeader().Time)
 	for _, data := range coinsToBurn {
 		accAddr, err := sdk.AccAddressFromBech32(data.DelegatorAddress)
 		if err != nil {
