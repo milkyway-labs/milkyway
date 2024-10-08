@@ -9,6 +9,7 @@ import (
 
 	tmcli "github.com/cometbft/cometbft/libs/cli"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/skip-mev/block-sdk/v2/tests/app"
 
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
@@ -70,7 +71,6 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 	// sdkConfig.Seal()
 
 	encodingConfig := milkywayapp.MakeEncodingConfig()
-	basicManager := milkywayapp.BasicManager()
 
 	// Get the executable name and configure the viper instance so that environmental
 	// variables are checked based off that name. The underscore character is used
@@ -138,7 +138,7 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 		},
 	}
 
-	initRootCmd(rootCmd, encodingConfig, basicManager)
+	initRootCmd(rootCmd, encodingConfig)
 
 	initClientCtx, _ = config.ReadFromClientConfig(initClientCtx)
 
@@ -157,11 +157,11 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 	return rootCmd, encodingConfig
 }
 
-func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig, basicManager module.BasicManager) {
+func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig) {
 	a := &appCreator{}
 
 	rootCmd.AddCommand(
-		InitCmd(basicManager, milkywayapp.DefaultNodeHome),
+		InitCmd(app.ModuleBasics, milkywayapp.DefaultNodeHome),
 		debug.Cmd(),
 		confixcmd.ConfigCommand(),
 		pruning.Cmd(a.AppCreator(), milkywayapp.DefaultNodeHome),
@@ -174,14 +174,14 @@ func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig, b
 	// add keybase, auxiliary RPC, query, and tx child commands
 	rootCmd.AddCommand(
 		server.StatusCommand(),
-		genesisCommand(encodingConfig, basicManager),
+		genesisCommand(encodingConfig, app.ModuleBasics),
 		queryCommand(),
 		txCommand(),
 		keys.Commands(),
 	)
 
 	// add launch commands
-	rootCmd.AddCommand(LaunchCommand(a, encodingConfig, basicManager))
+	rootCmd.AddCommand(LaunchCommand(a, encodingConfig, app.ModuleBasics))
 	rootCmd.AddCommand(NewMultipleRollbackCmd(a.AppCreator()))
 }
 

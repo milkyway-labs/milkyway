@@ -213,6 +213,50 @@ var (
 	// DefaultNodeHome default home directories for the application daemon
 	DefaultNodeHome string
 
+	ModuleBasics = module.NewBasicManager(
+		auth.AppModule{},
+		bank.AppModule{},
+		crisis.AppModule{},
+		opchild.AppModule{},
+		capability.AppModule{},
+		feegrantmodule.AppModule{},
+		upgrade.AppModule{},
+		authzmodule.AppModule{},
+		groupmodule.AppModule{},
+		consensus.AppModule{},
+		wasm.AppModule{},
+		auction.AppModule{},
+		tokenfactory.AppModule{},
+		// ibc modules
+		ibc.AppModule{},
+		ibctransfer.AppModule{},
+		ica.AppModule{},
+		icaauth.AppModule{},
+		ibcfee.AppModule{},
+		ibctm.AppModule{},
+		solomachine.AppModule{},
+		packetforward.AppModule{},
+		ibchooks.AppModule{},
+		forwarding.AppModule{},
+		ratelimit.AppModule{},
+		// connect modules
+		oracle.AppModule{},
+		marketmap.AppModule{},
+		// liquid staking modules
+		stakeibc.AppModule{},
+		epochs.AppModule{},
+		interchainquery.AppModule{},
+		records.AppModule{},
+		icacallbacks.AppModule{},
+		// custom modules
+		services.AppModule{},
+		operators.AppModule{},
+		pools.AppModule{},
+		restaking.AppModule{},
+		assets.AppModule{},
+		rewards.AppModule{},
+	)
+
 	// module account permissions
 	maccPerms = map[string][]string{
 		authtypes.FeeCollectorName:  nil,

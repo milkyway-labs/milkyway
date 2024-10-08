@@ -34,7 +34,7 @@ func TestBeginBlocker(t *testing.T) {
 	require.NoError(t, err)
 
 	ctx := sdk.NewContext(ms, tmproto.Header{ChainID: "test-chain"}, false, log.NewNopLogger())
-	cdc, _ := app.MakeTestCodecs(t)
+	cdc, _ := app.MakeCodecs()
 
 	operatorsKeeper := keeper.NewKeeper(cdc, keys[types.StoreKey], nil, nil, "")
 

@@ -2,66 +2,62 @@ package app
 
 import (
 	"os"
-	"testing"
 
 	"cosmossdk.io/client/v2/autocli"
 	"cosmossdk.io/core/appmodule"
 	"cosmossdk.io/log"
+	"cosmossdk.io/x/tx/signing"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/codec"
+	codecaddress "github.com/cosmos/cosmos-sdk/codec/address"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	runtimeservices "github.com/cosmos/cosmos-sdk/runtime/services"
-	"github.com/cosmos/cosmos-sdk/server/types"
+	"github.com/cosmos/cosmos-sdk/std"
 	simtestutil "github.com/cosmos/cosmos-sdk/testutil/sims"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	authcodec "github.com/cosmos/cosmos-sdk/x/auth/codec"
+	"github.com/cosmos/cosmos-sdk/x/auth/tx"
+	"github.com/cosmos/gogoproto/proto"
 
 	"github.com/initia-labs/initia/app/params"
 )
 
-type EncodingConfigCreator func() params.EncodingConfig
+// MakeEncodingConfig creates an EncodingConfig for testing
+func MakeEncodingConfig() params.EncodingConfig {
+	// Build the interface registry specifying the validator and address codec
+	interfaceRegistry, _ := codectypes.NewInterfaceRegistryWithOptions(codectypes.InterfaceRegistryOptions{
+		ProtoFiles: proto.HybridResolver,
+		SigningOptions: signing.Options{
+			AddressCodec:          codecaddress.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix()),
+			ValidatorAddressCodec: codecaddress.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix()),
+		},
+	})
+	cdc := codec.NewProtoCodec(interfaceRegistry)
+	amino := codec.NewLegacyAmino()
 
-// makeCodecs creates the necessary codecs for Amino and Protobuf using the provided EncodingConfigCreator
-func makeCodecs(createConfig EncodingConfigCreator) (codec.Codec, *codec.LegacyAmino) {
-	encodingConfig := createConfig()
-	return encodingConfig.Codec, encodingConfig.Amino
-}
-
-// MakeCodecs creates the necessary codecs for Amino and Protobuf
-func MakeCodecs() (codec.Codec, *codec.LegacyAmino) {
-	return makeCodecs(MakeEncodingConfig)
-}
-
-// makeEncodingConfig creates an EncodingConfig instance by creating a temporary app with the given options
-func makeEncodingConfig(appOptions types.AppOptions) params.EncodingConfig {
-	tempApp := NewMilkyWayApp(log.NewNopLogger(), dbm.NewMemDB(), dbm.NewMemDB(), nil, true, []wasmkeeper.Option{}, appOptions)
+	// Build the encoding config
 	encodingConfig := params.EncodingConfig{
-		InterfaceRegistry: tempApp.InterfaceRegistry(),
-		Codec:             tempApp.AppCodec(),
-		TxConfig:          tempApp.TxConfig(),
-		Amino:             tempApp.LegacyAmino(),
+		InterfaceRegistry: interfaceRegistry,
+		Codec:             cdc,
+		TxConfig:          tx.NewTxConfig(cdc, tx.DefaultSignModes),
+		Amino:             amino,
 	}
+
+	// Register the stdlib and module basics
+	std.RegisterLegacyAminoCodec(encodingConfig.Amino)
+	std.RegisterInterfaces(encodingConfig.InterfaceRegistry)
+	ModuleBasics.RegisterLegacyAminoCodec(encodingConfig.Amino)
+	ModuleBasics.RegisterInterfaces(encodingConfig.InterfaceRegistry)
+
 	return encodingConfig
 }
 
-// MakeEncodingConfig creates an EncodingConfig for testing
-func MakeEncodingConfig() params.EncodingConfig {
-	return makeEncodingConfig(EmptyAppOptions{})
-}
-
-// MakeTestEncodingConfig creates an EncodingConfig for testing
-func MakeTestEncodingConfig(t *testing.T) params.EncodingConfig {
-	t.Helper()
-	return makeEncodingConfig(simtestutil.NewAppOptionsWithFlagHome(t.TempDir()))
-}
-
-// MakeTestCodecs creates the necessary testing codecs for Amino and Protobuf
-func MakeTestCodecs(t *testing.T) (codec.Codec, *codec.LegacyAmino) {
-	t.Helper()
-	return makeCodecs(func() params.EncodingConfig {
-		return MakeTestEncodingConfig(t)
-	})
+// MakeCodecs creates the necessary testing codecs for Amino and Protobuf
+func MakeCodecs() (codec.Codec, *codec.LegacyAmino) {
+	encodingConfig := MakeEncodingConfig()
+	return encodingConfig.Codec, encodingConfig.Amino
 }
 
 // AutoCLIOpts returns the options for the auto-generated CLI
@@ -90,22 +86,4 @@ func AutoCLIOpts() (autocli.AppOptions, error) {
 		ValidatorAddressCodec: authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix()),
 		ConsensusAddressCodec: authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ConsensusAddrPrefix()),
 	}, nil
-}
-
-func BasicManager() module.BasicManager {
-	tempApp := NewMilkyWayApp(log.NewNopLogger(), dbm.NewMemDB(), dbm.NewMemDB(), nil, true, []wasmkeeper.Option{}, NewEmptyAppOptions())
-	return tempApp.BasicModuleManager
-}
-
-// EmptyAppOptions is a stub implementing AppOptions
-type EmptyAppOptions struct {
-}
-
-func NewEmptyAppOptions() EmptyAppOptions {
-	return EmptyAppOptions{}
-}
-
-// Get implements AppOptions
-func (ao EmptyAppOptions) Get(_ string) interface{} {
-	return nil
 }
