@@ -86,10 +86,13 @@ func (k *Keeper) BurnVestedRepresentation(
 
 	if !liquidCoinsIsZero {
 		// Burn the liquid coins
-		if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, accAddress, types.ModuleName, liquidCoins); err != nil {
+		err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, accAddress, types.ModuleName, liquidCoins)
+		if err != nil {
 			return err
 		}
-		if err := k.bankKeeper.BurnCoins(ctx, types.ModuleName, liquidCoins); err != nil {
+
+		err = k.bankKeeper.BurnCoins(ctx, types.ModuleName, liquidCoins)
+		if err != nil {
 			return err
 		}
 	}
