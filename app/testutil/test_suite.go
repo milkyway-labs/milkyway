@@ -10,9 +10,9 @@ import (
 	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	slinkytypes "github.com/skip-mev/slinky/pkg/types"
-	marketmaptypes "github.com/skip-mev/slinky/x/marketmap/types"
-	oracletypes "github.com/skip-mev/slinky/x/oracle/types"
+	connecttypes "github.com/skip-mev/connect/v2/pkg/types"
+	marketmaptypes "github.com/skip-mev/connect/v2/x/marketmap/types"
+	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
 
 	milkywayapp "github.com/milkyway-labs/milkyway/app"
 	assetstypes "github.com/milkyway-labs/milkyway/x/assets/types"
@@ -75,7 +75,7 @@ func (suite *KeeperTestSuite) RegisterCurrency(ctx sdk.Context, denom string, ti
 	// Set the price for the currency pair.
 	err = suite.App.OracleKeeper.SetPriceForCurrencyPair(
 		ctx,
-		slinkytypes.NewCurrencyPair(ticker, rewardstypes.USDTicker),
+		connecttypes.NewCurrencyPair(ticker, rewardstypes.USDTicker),
 		oracletypes.QuotePrice{
 			Price:          math.NewIntFromBigInt(price.BigInt()),
 			BlockTimestamp: ctx.BlockTime(),

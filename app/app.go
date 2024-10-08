@@ -133,12 +133,12 @@ import (
 	auctionante "github.com/skip-mev/block-sdk/v2/x/auction/ante"
 	auctionkeeper "github.com/skip-mev/block-sdk/v2/x/auction/keeper"
 	auctiontypes "github.com/skip-mev/block-sdk/v2/x/auction/types"
-	"github.com/skip-mev/slinky/x/marketmap"
-	marketmapkeeper "github.com/skip-mev/slinky/x/marketmap/keeper"
-	marketmaptypes "github.com/skip-mev/slinky/x/marketmap/types"
-	"github.com/skip-mev/slinky/x/oracle"
-	oraclekeeper "github.com/skip-mev/slinky/x/oracle/keeper"
-	oracletypes "github.com/skip-mev/slinky/x/oracle/types"
+	"github.com/skip-mev/connect/v2/x/marketmap"
+	marketmapkeeper "github.com/skip-mev/connect/v2/x/marketmap/keeper"
+	marketmaptypes "github.com/skip-mev/connect/v2/x/marketmap/types"
+	"github.com/skip-mev/connect/v2/x/oracle"
+	oraclekeeper "github.com/skip-mev/connect/v2/x/oracle/keeper"
+	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
 
 	// CosmWasm imports
 	"github.com/CosmWasm/wasmd/x/wasm"
@@ -229,7 +229,7 @@ var (
 		stakeibctypes.RewardCollectorName: nil,
 		rewardstypes.RewardsPoolName:      nil,
 
-		// slinky oracle permissions
+		// connect oracle permissions
 		oracletypes.ModuleName: nil,
 
 		// this is only for testing
@@ -287,7 +287,7 @@ type MilkyWayApp struct {
 	OPChildKeeper         *opchildkeeper.Keeper
 	AuctionKeeper         *auctionkeeper.Keeper // x/auction keeper used to process bids for POB auctions
 	PacketForwardKeeper   *packetforwardkeeper.Keeper
-	OracleKeeper          *oraclekeeper.Keeper // x/oracle keeper used for the slinky oracle
+	OracleKeeper          *oraclekeeper.Keeper // x/oracle keeper used for the connect oracle
 	MarketMapKeeper       *marketmapkeeper.Keeper
 	TokenFactoryKeeper    *tokenfactorykeeper.Keeper
 	IBCHooksKeeper        *ibchookskeeper.Keeper
@@ -842,11 +842,11 @@ func NewMilkyWayApp(
 		panic(fmt.Sprintf("error while reading wasm config: %s", err))
 	}
 
-	// allow slinky queries
+	// allow connect queries
 	queryAllowlist := make(map[string]proto.Message)
-	queryAllowlist["/slinky.oracle.v1.Query/GetAllCurrencyPairs"] = &oracletypes.GetAllCurrencyPairsResponse{}
-	queryAllowlist["/slinky.oracle.v1.Query/GetPrice"] = &oracletypes.GetPriceResponse{}
-	queryAllowlist["/slinky.oracle.v1.Query/GetPrices"] = &oracletypes.GetPricesResponse{}
+	queryAllowlist["/connect.oracle.v2.Query/GetAllCurrencyPairs"] = &oracletypes.GetAllCurrencyPairsResponse{}
+	queryAllowlist["/connect.oracle.v2.Query/GetPrice"] = &oracletypes.GetPriceResponse{}
+	queryAllowlist["/connect.oracle.v2.Query/GetPrices"] = &oracletypes.GetPricesResponse{}
 
 	// use accept list stargate querier
 	wasmOpts = append(wasmOpts, wasmkeeper.WithQueryPlugins(&wasmkeeper.QueryPlugins{
@@ -994,7 +994,7 @@ func NewMilkyWayApp(
 		ibchooks.NewAppModule(appCodec, *app.IBCHooksKeeper),
 		forwarding.NewAppModule(app.ForwardingKeeper),
 		ratelimit.NewAppModule(appCodec, app.RateLimitKeeper),
-		// slinky modules
+		// connect modules
 		oracle.NewAppModule(appCodec, *app.OracleKeeper),
 		marketmap.NewAppModule(appCodec, app.MarketMapKeeper),
 		// liquid staking modules

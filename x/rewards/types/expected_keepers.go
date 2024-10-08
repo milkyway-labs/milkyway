@@ -5,8 +5,8 @@ import (
 
 	"cosmossdk.io/core/address"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	slinkytypes "github.com/skip-mev/slinky/pkg/types"
-	oracletypes "github.com/skip-mev/slinky/x/oracle/types"
+	connecttypes "github.com/skip-mev/connect/v2/pkg/types"
+	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
 
 	assetstypes "github.com/milkyway-labs/milkyway/x/assets/types"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
@@ -38,8 +38,8 @@ type CommunityPoolKeeper interface {
 }
 
 type OracleKeeper interface {
-	GetPriceWithNonceForCurrencyPair(ctx sdk.Context, cp slinkytypes.CurrencyPair) (oracletypes.QuotePriceWithNonce, error)
-	GetDecimalsForCurrencyPair(ctx sdk.Context, cp slinkytypes.CurrencyPair) (decimals uint64, err error)
+	GetPriceWithNonceForCurrencyPair(ctx sdk.Context, cp connecttypes.CurrencyPair) (oracletypes.QuotePriceWithNonce, error)
+	GetDecimalsForCurrencyPair(ctx sdk.Context, cp connecttypes.CurrencyPair) (decimals uint64, err error)
 }
 
 type PoolsKeeper interface {
