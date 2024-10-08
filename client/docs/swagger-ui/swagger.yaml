@@ -30811,6 +30811,299 @@ paths:
                         }
       tags:
         - Query
+  /ibc/core/client/v1/verify_membership:
+    post:
+      summary: >-
+        VerifyMembership queries an IBC light client for proof verification of a
+        value at a given key path.
+      operationId: VerifyMembership
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                description: boolean indicating success or failure of proof verification.
+            title: >-
+              QueryVerifyMembershipResponse is the response type for the
+              Query/VerifyMembership RPC method
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type_url:
+                      type: string
+                      description: >-
+                        A URL/resource name that uniquely identifies the type of
+                        the serialized
+
+                        protocol buffer message. This string must contain at
+                        least
+
+                        one "/" character. The last segment of the URL's path
+                        must represent
+
+                        the fully qualified name of the type (as in
+
+                        `path/google.protobuf.Duration`). The name should be in
+                        a canonical form
+
+                        (e.g., leading "." is not accepted).
+
+
+                        In practice, teams usually precompile into the binary
+                        all types that they
+
+                        expect it to use in the context of Any. However, for
+                        URLs which use the
+
+                        scheme `http`, `https`, or no scheme, one can optionally
+                        set up a type
+
+                        server that maps type URLs to message definitions as
+                        follows:
+
+
+                        * If no scheme is provided, `https` is assumed.
+
+                        * An HTTP GET on the URL must yield a
+                        [google.protobuf.Type][]
+                          value in binary format, or produce an error.
+                        * Applications are allowed to cache lookup results based
+                        on the
+                          URL, or have them precompiled into a binary to avoid any
+                          lookup. Therefore, binary compatibility needs to be preserved
+                          on changes to types. (Use versioned type names to manage
+                          breaking changes.)
+
+                        Note: this functionality is not currently available in
+                        the official
+
+                        protobuf release, and it is not used for type URLs
+                        beginning with
+
+                        type.googleapis.com.
+
+
+                        Schemes other than `http`, `https` (or the empty scheme)
+                        might be
+
+                        used with implementation specific semantics.
+                    value:
+                      type: string
+                      format: byte
+                      description: >-
+                        Must be a valid serialized protocol buffer of the above
+                        specified type.
+                  description: >-
+                    `Any` contains an arbitrary serialized protocol buffer
+                    message along with a
+
+                    URL that describes the type of the serialized message.
+
+
+                    Protobuf library provides support to pack/unpack Any values
+                    in the form
+
+                    of utility functions or additional generated methods of the
+                    Any type.
+
+
+                    Example 1: Pack and unpack a message in C++.
+
+                        Foo foo = ...;
+                        Any any;
+                        any.PackFrom(foo);
+                        ...
+                        if (any.UnpackTo(&foo)) {
+                          ...
+                        }
+
+                    Example 2: Pack and unpack a message in Java.
+
+                        Foo foo = ...;
+                        Any any = Any.pack(foo);
+                        ...
+                        if (any.is(Foo.class)) {
+                          foo = any.unpack(Foo.class);
+                        }
+                        // or ...
+                        if (any.isSameTypeAs(Foo.getDefaultInstance())) {
+                          foo = any.unpack(Foo.getDefaultInstance());
+                        }
+
+                    Example 3: Pack and unpack a message in Python.
+
+                        foo = Foo(...)
+                        any = Any()
+                        any.Pack(foo)
+                        ...
+                        if any.Is(Foo.DESCRIPTOR):
+                          any.Unpack(foo)
+                          ...
+
+                    Example 4: Pack and unpack a message in Go
+
+                         foo := &pb.Foo{...}
+                         any, err := anypb.New(foo)
+                         if err != nil {
+                           ...
+                         }
+                         ...
+                         foo := &pb.Foo{}
+                         if err := any.UnmarshalTo(foo); err != nil {
+                           ...
+                         }
+
+                    The pack methods provided by protobuf library will by
+                    default use
+
+                    'type.googleapis.com/full.type.name' as the type URL and the
+                    unpack
+
+                    methods only use the fully qualified type name after the
+                    last '/'
+
+                    in the type URL, for example "foo.bar.com/x/y.z" will yield
+                    type
+
+                    name "y.z".
+
+
+                    JSON
+
+
+                    The JSON representation of an `Any` value uses the regular
+
+                    representation of the deserialized, embedded message, with
+                    an
+
+                    additional field `@type` which contains the type URL.
+                    Example:
+
+                        package google.profile;
+                        message Person {
+                          string first_name = 1;
+                          string last_name = 2;
+                        }
+
+                        {
+                          "@type": "type.googleapis.com/google.profile.Person",
+                          "firstName": <string>,
+                          "lastName": <string>
+                        }
+
+                    If the embedded message type is well-known and has a custom
+                    JSON
+
+                    representation, that representation will be embedded adding
+                    a field
+
+                    `value` which holds the custom JSON in addition to the
+                    `@type`
+
+                    field. Example (for message [google.protobuf.Duration][]):
+
+                        {
+                          "@type": "type.googleapis.com/google.protobuf.Duration",
+                          "value": "1.212s"
+                        }
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              client_id:
+                type: string
+                description: client unique identifier.
+              proof:
+                type: string
+                format: byte
+                description: the proof to be verified by the client.
+              proof_height:
+                type: object
+                properties:
+                  revision_number:
+                    type: string
+                    format: uint64
+                    title: the revision that the client is currently on
+                  revision_height:
+                    type: string
+                    format: uint64
+                    title: the height within the given revision
+                description: >-
+                  Normally the RevisionHeight is incremented at each height
+                  while keeping
+
+                  RevisionNumber the same. However some consensus algorithms may
+                  choose to
+
+                  reset the height in certain conditions e.g. hard forks,
+                  state-machine
+
+                  breaking changes In these cases, the RevisionNumber is
+                  incremented so that
+
+                  height continues to be monitonically increasing even as the
+                  RevisionHeight
+
+                  gets reset
+                title: >-
+                  Height is a monotonically increasing data type
+
+                  that can be compared against another Height for the purposes
+                  of updating and
+
+                  freezing clients
+              merkle_path:
+                description: the commitment key path.
+                type: object
+                properties:
+                  key_path:
+                    type: array
+                    items:
+                      type: string
+                title: >-
+                  MerklePath is the path used to verify commitment proofs, which
+                  can be an
+
+                  arbitrary structured object (defined by a commitment type).
+
+                  MerklePath is represented from root-to-leaf
+              value:
+                type: string
+                format: byte
+                description: the value which is proven.
+              time_delay:
+                type: string
+                format: uint64
+                title: optional time delay
+              block_delay:
+                type: string
+                format: uint64
+                title: optional block delay
+            title: >-
+              QueryVerifyMembershipRequest is the request type for the
+              Query/VerifyMembership RPC method
+      tags:
+        - Query
   /ibc/core/connection/v1/client_connections/{client_id}:
     get:
       summary: |-
@@ -36357,6 +36650,443 @@ paths:
           format: uint64
       tags:
         - Query
+  /initia/ibchooks/v1/acls:
+    get:
+      summary: ACLs gets ACL entries.
+      operationId: ACLs
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              acls:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    address:
+                      type: string
+                    allowed:
+                      type: boolean
+                  description: ACL defines the ACL entry of an address.
+              pagination:
+                description: pagination defines the pagination in the response.
+                type: object
+                properties:
+                  next_key:
+                    type: string
+                    format: byte
+                    description: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently. It will be empty if
+                      there are no more results.
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+            title: |-
+              QueryACLsResponse is the response type for the
+              Query/ACLAddrs RPC method
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type_url:
+                      type: string
+                    value:
+                      type: string
+                      format: byte
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.count_total
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          description: >-
+            reverse is set to true if results are to be returned in the
+            descending order.
+
+
+            Since: cosmos-sdk 0.43
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  /initia/ibchooks/v1/acls/{address}:
+    get:
+      summary: ACL gets ACL entry of an address.
+      operationId: ACL
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              acl:
+                type: object
+                properties:
+                  address:
+                    type: string
+                  allowed:
+                    type: boolean
+                description: ACL defines the ACL entry of an address.
+            title: |-
+              QueryACLResponse is the response type for the Query/ACL RPC
+              method
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type_url:
+                      type: string
+                    value:
+                      type: string
+                      format: byte
+      parameters:
+        - name: address
+          description: >-
+            Address is a contract address (wasm, evm) or a contract deployer
+            address (move).
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
+  /initia/ibchooks/v1/params:
+    get:
+      summary: Params queries all parameters.
+      operationId: IBCHooksParams
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              params:
+                description: params defines the parameters of the module.
+                type: object
+                properties:
+                  default_allowed:
+                    type: boolean
+                    description: |-
+                      if the ACL of a address is not set,
+                      then we use this value to decide the ACL.
+            description: >-
+              QueryParamsResponse is the response type for the Query/Params RPC
+              method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type_url:
+                      type: string
+                    value:
+                      type: string
+                      format: byte
+      tags:
+        - Query
+  /opinit/opchild/v1/base_denom/{denom}:
+    get:
+      operationId: BaseDenom
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              base_denom:
+                type: string
+            description: >-
+              QueryBaseDenomResponse is response type for the Query/BaseDenom
+              RPC method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type_url:
+                      type: string
+                      description: >-
+                        A URL/resource name that uniquely identifies the type of
+                        the serialized
+
+                        protocol buffer message. This string must contain at
+                        least
+
+                        one "/" character. The last segment of the URL's path
+                        must represent
+
+                        the fully qualified name of the type (as in
+
+                        `path/google.protobuf.Duration`). The name should be in
+                        a canonical form
+
+                        (e.g., leading "." is not accepted).
+
+
+                        In practice, teams usually precompile into the binary
+                        all types that they
+
+                        expect it to use in the context of Any. However, for
+                        URLs which use the
+
+                        scheme `http`, `https`, or no scheme, one can optionally
+                        set up a type
+
+                        server that maps type URLs to message definitions as
+                        follows:
+
+
+                        * If no scheme is provided, `https` is assumed.
+
+                        * An HTTP GET on the URL must yield a
+                        [google.protobuf.Type][]
+                          value in binary format, or produce an error.
+                        * Applications are allowed to cache lookup results based
+                        on the
+                          URL, or have them precompiled into a binary to avoid any
+                          lookup. Therefore, binary compatibility needs to be preserved
+                          on changes to types. (Use versioned type names to manage
+                          breaking changes.)
+
+                        Note: this functionality is not currently available in
+                        the official
+
+                        protobuf release, and it is not used for type URLs
+                        beginning with
+
+                        type.googleapis.com.
+
+
+                        Schemes other than `http`, `https` (or the empty scheme)
+                        might be
+
+                        used with implementation specific semantics.
+                    value:
+                      type: string
+                      format: byte
+                      description: >-
+                        Must be a valid serialized protocol buffer of the above
+                        specified type.
+                  description: >-
+                    `Any` contains an arbitrary serialized protocol buffer
+                    message along with a
+
+                    URL that describes the type of the serialized message.
+
+
+                    Protobuf library provides support to pack/unpack Any values
+                    in the form
+
+                    of utility functions or additional generated methods of the
+                    Any type.
+
+
+                    Example 1: Pack and unpack a message in C++.
+
+                        Foo foo = ...;
+                        Any any;
+                        any.PackFrom(foo);
+                        ...
+                        if (any.UnpackTo(&foo)) {
+                          ...
+                        }
+
+                    Example 2: Pack and unpack a message in Java.
+
+                        Foo foo = ...;
+                        Any any = Any.pack(foo);
+                        ...
+                        if (any.is(Foo.class)) {
+                          foo = any.unpack(Foo.class);
+                        }
+                        // or ...
+                        if (any.isSameTypeAs(Foo.getDefaultInstance())) {
+                          foo = any.unpack(Foo.getDefaultInstance());
+                        }
+
+                    Example 3: Pack and unpack a message in Python.
+
+                        foo = Foo(...)
+                        any = Any()
+                        any.Pack(foo)
+                        ...
+                        if any.Is(Foo.DESCRIPTOR):
+                          any.Unpack(foo)
+                          ...
+
+                    Example 4: Pack and unpack a message in Go
+
+                         foo := &pb.Foo{...}
+                         any, err := anypb.New(foo)
+                         if err != nil {
+                           ...
+                         }
+                         ...
+                         foo := &pb.Foo{}
+                         if err := any.UnmarshalTo(foo); err != nil {
+                           ...
+                         }
+
+                    The pack methods provided by protobuf library will by
+                    default use
+
+                    'type.googleapis.com/full.type.name' as the type URL and the
+                    unpack
+
+                    methods only use the fully qualified type name after the
+                    last '/'
+
+                    in the type URL, for example "foo.bar.com/x/y.z" will yield
+                    type
+
+                    name "y.z".
+
+
+                    JSON
+
+
+                    The JSON representation of an `Any` value uses the regular
+
+                    representation of the deserialized, embedded message, with
+                    an
+
+                    additional field `@type` which contains the type URL.
+                    Example:
+
+                        package google.profile;
+                        message Person {
+                          string first_name = 1;
+                          string last_name = 2;
+                        }
+
+                        {
+                          "@type": "type.googleapis.com/google.profile.Person",
+                          "firstName": <string>,
+                          "lastName": <string>
+                        }
+
+                    If the embedded message type is well-known and has a custom
+                    JSON
+
+                    representation, that representation will be embedded adding
+                    a field
+
+                    `value` which holds the custom JSON in addition to the
+                    `@type`
+
+                    field. Example (for message [google.protobuf.Duration][]):
+
+                        {
+                          "@type": "type.googleapis.com/google.protobuf.Duration",
+                          "value": "1.212s"
+                        }
+      parameters:
+        - name: denom
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
   /opinit/opchild/v1/bridge_info:
     get:
       summary: BridgeInfo queries the bridge information.
@@ -36408,9 +37138,14 @@ paths:
                           submitter:
                             type: string
                             description: The address of the batch submitter.
-                          chain:
+                          chain_type:
+                            description: The target chain type.
                             type: string
-                            title: The target chain
+                            enum:
+                              - CHAIN_TYPE_UNSPECIFIED
+                              - CHAIN_TYPE_INITIA
+                              - CHAIN_TYPE_CELESTIA
+                            default: CHAIN_TYPE_UNSPECIFIED
                       submission_interval:
                         type: string
                         description: >-
@@ -36424,14 +37159,13 @@ paths:
                         description: >-
                           The minium time duration that must elapse before a
                           withdrawal can be finalized.
-                      submission_start_time:
+                      submission_start_height:
                         type: string
-                        format: date-time
-                        description: >-
-                          The time of the first l2 block recorded.
-
-                          NOTE: this param is currently not used, but will be
-                          used for challenge in future.
+                        format: uint64
+                        description: The the first l2 block will be recorded on l1.
+                      oracle_enabled:
+                        type: boolean
+                        description: oracle_enabled is a flag to enable oracle.
                       metadata:
                         type: string
                         format: byte
@@ -36441,6 +37175,432 @@ paths:
             description: >-
               QueryBridgeInfoResponse is response type for the Query/BridgeInfo
               RPC method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type_url:
+                      type: string
+                      description: >-
+                        A URL/resource name that uniquely identifies the type of
+                        the serialized
+
+                        protocol buffer message. This string must contain at
+                        least
+
+                        one "/" character. The last segment of the URL's path
+                        must represent
+
+                        the fully qualified name of the type (as in
+
+                        `path/google.protobuf.Duration`). The name should be in
+                        a canonical form
+
+                        (e.g., leading "." is not accepted).
+
+
+                        In practice, teams usually precompile into the binary
+                        all types that they
+
+                        expect it to use in the context of Any. However, for
+                        URLs which use the
+
+                        scheme `http`, `https`, or no scheme, one can optionally
+                        set up a type
+
+                        server that maps type URLs to message definitions as
+                        follows:
+
+
+                        * If no scheme is provided, `https` is assumed.
+
+                        * An HTTP GET on the URL must yield a
+                        [google.protobuf.Type][]
+                          value in binary format, or produce an error.
+                        * Applications are allowed to cache lookup results based
+                        on the
+                          URL, or have them precompiled into a binary to avoid any
+                          lookup. Therefore, binary compatibility needs to be preserved
+                          on changes to types. (Use versioned type names to manage
+                          breaking changes.)
+
+                        Note: this functionality is not currently available in
+                        the official
+
+                        protobuf release, and it is not used for type URLs
+                        beginning with
+
+                        type.googleapis.com.
+
+
+                        Schemes other than `http`, `https` (or the empty scheme)
+                        might be
+
+                        used with implementation specific semantics.
+                    value:
+                      type: string
+                      format: byte
+                      description: >-
+                        Must be a valid serialized protocol buffer of the above
+                        specified type.
+                  description: >-
+                    `Any` contains an arbitrary serialized protocol buffer
+                    message along with a
+
+                    URL that describes the type of the serialized message.
+
+
+                    Protobuf library provides support to pack/unpack Any values
+                    in the form
+
+                    of utility functions or additional generated methods of the
+                    Any type.
+
+
+                    Example 1: Pack and unpack a message in C++.
+
+                        Foo foo = ...;
+                        Any any;
+                        any.PackFrom(foo);
+                        ...
+                        if (any.UnpackTo(&foo)) {
+                          ...
+                        }
+
+                    Example 2: Pack and unpack a message in Java.
+
+                        Foo foo = ...;
+                        Any any = Any.pack(foo);
+                        ...
+                        if (any.is(Foo.class)) {
+                          foo = any.unpack(Foo.class);
+                        }
+                        // or ...
+                        if (any.isSameTypeAs(Foo.getDefaultInstance())) {
+                          foo = any.unpack(Foo.getDefaultInstance());
+                        }
+
+                    Example 3: Pack and unpack a message in Python.
+
+                        foo = Foo(...)
+                        any = Any()
+                        any.Pack(foo)
+                        ...
+                        if any.Is(Foo.DESCRIPTOR):
+                          any.Unpack(foo)
+                          ...
+
+                    Example 4: Pack and unpack a message in Go
+
+                         foo := &pb.Foo{...}
+                         any, err := anypb.New(foo)
+                         if err != nil {
+                           ...
+                         }
+                         ...
+                         foo := &pb.Foo{}
+                         if err := any.UnmarshalTo(foo); err != nil {
+                           ...
+                         }
+
+                    The pack methods provided by protobuf library will by
+                    default use
+
+                    'type.googleapis.com/full.type.name' as the type URL and the
+                    unpack
+
+                    methods only use the fully qualified type name after the
+                    last '/'
+
+                    in the type URL, for example "foo.bar.com/x/y.z" will yield
+                    type
+
+                    name "y.z".
+
+
+                    JSON
+
+
+                    The JSON representation of an `Any` value uses the regular
+
+                    representation of the deserialized, embedded message, with
+                    an
+
+                    additional field `@type` which contains the type URL.
+                    Example:
+
+                        package google.profile;
+                        message Person {
+                          string first_name = 1;
+                          string last_name = 2;
+                        }
+
+                        {
+                          "@type": "type.googleapis.com/google.profile.Person",
+                          "firstName": <string>,
+                          "lastName": <string>
+                        }
+
+                    If the embedded message type is well-known and has a custom
+                    JSON
+
+                    representation, that representation will be embedded adding
+                    a field
+
+                    `value` which holds the custom JSON in addition to the
+                    `@type`
+
+                    field. Example (for message [google.protobuf.Duration][]):
+
+                        {
+                          "@type": "type.googleapis.com/google.protobuf.Duration",
+                          "value": "1.212s"
+                        }
+      tags:
+        - Query
+  /opinit/opchild/v1/next_l1_sequence:
+    get:
+      summary: NextL1Sequence queries the next l1 sequence number.
+      operationId: NextL1Sequence
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              next_l1_sequence:
+                type: string
+                format: uint64
+                description: next_l1_sequence holds the next l1 sequence number.
+            description: >-
+              QueryNextL1SequenceResponse is response type for the
+              Query/NextL1Sequence RPC method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type_url:
+                      type: string
+                      description: >-
+                        A URL/resource name that uniquely identifies the type of
+                        the serialized
+
+                        protocol buffer message. This string must contain at
+                        least
+
+                        one "/" character. The last segment of the URL's path
+                        must represent
+
+                        the fully qualified name of the type (as in
+
+                        `path/google.protobuf.Duration`). The name should be in
+                        a canonical form
+
+                        (e.g., leading "." is not accepted).
+
+
+                        In practice, teams usually precompile into the binary
+                        all types that they
+
+                        expect it to use in the context of Any. However, for
+                        URLs which use the
+
+                        scheme `http`, `https`, or no scheme, one can optionally
+                        set up a type
+
+                        server that maps type URLs to message definitions as
+                        follows:
+
+
+                        * If no scheme is provided, `https` is assumed.
+
+                        * An HTTP GET on the URL must yield a
+                        [google.protobuf.Type][]
+                          value in binary format, or produce an error.
+                        * Applications are allowed to cache lookup results based
+                        on the
+                          URL, or have them precompiled into a binary to avoid any
+                          lookup. Therefore, binary compatibility needs to be preserved
+                          on changes to types. (Use versioned type names to manage
+                          breaking changes.)
+
+                        Note: this functionality is not currently available in
+                        the official
+
+                        protobuf release, and it is not used for type URLs
+                        beginning with
+
+                        type.googleapis.com.
+
+
+                        Schemes other than `http`, `https` (or the empty scheme)
+                        might be
+
+                        used with implementation specific semantics.
+                    value:
+                      type: string
+                      format: byte
+                      description: >-
+                        Must be a valid serialized protocol buffer of the above
+                        specified type.
+                  description: >-
+                    `Any` contains an arbitrary serialized protocol buffer
+                    message along with a
+
+                    URL that describes the type of the serialized message.
+
+
+                    Protobuf library provides support to pack/unpack Any values
+                    in the form
+
+                    of utility functions or additional generated methods of the
+                    Any type.
+
+
+                    Example 1: Pack and unpack a message in C++.
+
+                        Foo foo = ...;
+                        Any any;
+                        any.PackFrom(foo);
+                        ...
+                        if (any.UnpackTo(&foo)) {
+                          ...
+                        }
+
+                    Example 2: Pack and unpack a message in Java.
+
+                        Foo foo = ...;
+                        Any any = Any.pack(foo);
+                        ...
+                        if (any.is(Foo.class)) {
+                          foo = any.unpack(Foo.class);
+                        }
+                        // or ...
+                        if (any.isSameTypeAs(Foo.getDefaultInstance())) {
+                          foo = any.unpack(Foo.getDefaultInstance());
+                        }
+
+                    Example 3: Pack and unpack a message in Python.
+
+                        foo = Foo(...)
+                        any = Any()
+                        any.Pack(foo)
+                        ...
+                        if any.Is(Foo.DESCRIPTOR):
+                          any.Unpack(foo)
+                          ...
+
+                    Example 4: Pack and unpack a message in Go
+
+                         foo := &pb.Foo{...}
+                         any, err := anypb.New(foo)
+                         if err != nil {
+                           ...
+                         }
+                         ...
+                         foo := &pb.Foo{}
+                         if err := any.UnmarshalTo(foo); err != nil {
+                           ...
+                         }
+
+                    The pack methods provided by protobuf library will by
+                    default use
+
+                    'type.googleapis.com/full.type.name' as the type URL and the
+                    unpack
+
+                    methods only use the fully qualified type name after the
+                    last '/'
+
+                    in the type URL, for example "foo.bar.com/x/y.z" will yield
+                    type
+
+                    name "y.z".
+
+
+                    JSON
+
+
+                    The JSON representation of an `Any` value uses the regular
+
+                    representation of the deserialized, embedded message, with
+                    an
+
+                    additional field `@type` which contains the type URL.
+                    Example:
+
+                        package google.profile;
+                        message Person {
+                          string first_name = 1;
+                          string last_name = 2;
+                        }
+
+                        {
+                          "@type": "type.googleapis.com/google.profile.Person",
+                          "firstName": <string>,
+                          "lastName": <string>
+                        }
+
+                    If the embedded message type is well-known and has a custom
+                    JSON
+
+                    representation, that representation will be embedded adding
+                    a field
+
+                    `value` which holds the custom JSON in addition to the
+                    `@type`
+
+                    field. Example (for message [google.protobuf.Duration][]):
+
+                        {
+                          "@type": "type.googleapis.com/google.protobuf.Duration",
+                          "value": "1.212s"
+                        }
+      tags:
+        - Query
+  /opinit/opchild/v1/next_l2_sequence:
+    get:
+      summary: NextL2Sequence queries the next l2 sequence number.
+      operationId: NextL2Sequence
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              next_l2_sequence:
+                type: string
+                format: uint64
+                description: next_l2_sequence holds the next l2 sequence number.
+            description: >-
+              QueryNextL2SequenceResponse is response type for the
+              Query/NextL2Sequence RPC method.
         default:
           description: An unexpected error response.
           schema:
@@ -36679,8 +37839,10 @@ paths:
                         custom method
 
                         signatures required by gogoproto.
-                  bridge_executor:
-                    type: string
+                  bridge_executors:
+                    type: array
+                    items:
+                      type: string
                     description: >-
                       the account address of bridge executor who can execute
                       permissioned bridge
@@ -39230,6 +40392,246 @@ paths:
           type: boolean
       tags:
         - Query
+  /cosmwasm/wasm/v1/contract/build_address:
+    get:
+      summary: BuildAddress builds a contract address
+      operationId: BuildAddress
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              address:
+                type: string
+                title: Address is the contract address
+            description: >-
+              QueryBuildAddressResponse is the response type for the
+              Query/BuildAddress RPC
+
+              method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type_url:
+                      type: string
+                      description: >-
+                        A URL/resource name that uniquely identifies the type of
+                        the serialized
+
+                        protocol buffer message. This string must contain at
+                        least
+
+                        one "/" character. The last segment of the URL's path
+                        must represent
+
+                        the fully qualified name of the type (as in
+
+                        `path/google.protobuf.Duration`). The name should be in
+                        a canonical form
+
+                        (e.g., leading "." is not accepted).
+
+
+                        In practice, teams usually precompile into the binary
+                        all types that they
+
+                        expect it to use in the context of Any. However, for
+                        URLs which use the
+
+                        scheme `http`, `https`, or no scheme, one can optionally
+                        set up a type
+
+                        server that maps type URLs to message definitions as
+                        follows:
+
+
+                        * If no scheme is provided, `https` is assumed.
+
+                        * An HTTP GET on the URL must yield a
+                        [google.protobuf.Type][]
+                          value in binary format, or produce an error.
+                        * Applications are allowed to cache lookup results based
+                        on the
+                          URL, or have them precompiled into a binary to avoid any
+                          lookup. Therefore, binary compatibility needs to be preserved
+                          on changes to types. (Use versioned type names to manage
+                          breaking changes.)
+
+                        Note: this functionality is not currently available in
+                        the official
+
+                        protobuf release, and it is not used for type URLs
+                        beginning with
+
+                        type.googleapis.com.
+
+
+                        Schemes other than `http`, `https` (or the empty scheme)
+                        might be
+
+                        used with implementation specific semantics.
+                    value:
+                      type: string
+                      format: byte
+                      description: >-
+                        Must be a valid serialized protocol buffer of the above
+                        specified type.
+                  description: >-
+                    `Any` contains an arbitrary serialized protocol buffer
+                    message along with a
+
+                    URL that describes the type of the serialized message.
+
+
+                    Protobuf library provides support to pack/unpack Any values
+                    in the form
+
+                    of utility functions or additional generated methods of the
+                    Any type.
+
+
+                    Example 1: Pack and unpack a message in C++.
+
+                        Foo foo = ...;
+                        Any any;
+                        any.PackFrom(foo);
+                        ...
+                        if (any.UnpackTo(&foo)) {
+                          ...
+                        }
+
+                    Example 2: Pack and unpack a message in Java.
+
+                        Foo foo = ...;
+                        Any any = Any.pack(foo);
+                        ...
+                        if (any.is(Foo.class)) {
+                          foo = any.unpack(Foo.class);
+                        }
+                        // or ...
+                        if (any.isSameTypeAs(Foo.getDefaultInstance())) {
+                          foo = any.unpack(Foo.getDefaultInstance());
+                        }
+
+                    Example 3: Pack and unpack a message in Python.
+
+                        foo = Foo(...)
+                        any = Any()
+                        any.Pack(foo)
+                        ...
+                        if any.Is(Foo.DESCRIPTOR):
+                          any.Unpack(foo)
+                          ...
+
+                    Example 4: Pack and unpack a message in Go
+
+                         foo := &pb.Foo{...}
+                         any, err := anypb.New(foo)
+                         if err != nil {
+                           ...
+                         }
+                         ...
+                         foo := &pb.Foo{}
+                         if err := any.UnmarshalTo(foo); err != nil {
+                           ...
+                         }
+
+                    The pack methods provided by protobuf library will by
+                    default use
+
+                    'type.googleapis.com/full.type.name' as the type URL and the
+                    unpack
+
+                    methods only use the fully qualified type name after the
+                    last '/'
+
+                    in the type URL, for example "foo.bar.com/x/y.z" will yield
+                    type
+
+                    name "y.z".
+
+
+                    JSON
+
+
+                    The JSON representation of an `Any` value uses the regular
+
+                    representation of the deserialized, embedded message, with
+                    an
+
+                    additional field `@type` which contains the type URL.
+                    Example:
+
+                        package google.profile;
+                        message Person {
+                          string first_name = 1;
+                          string last_name = 2;
+                        }
+
+                        {
+                          "@type": "type.googleapis.com/google.profile.Person",
+                          "firstName": <string>,
+                          "lastName": <string>
+                        }
+
+                    If the embedded message type is well-known and has a custom
+                    JSON
+
+                    representation, that representation will be embedded adding
+                    a field
+
+                    `value` which holds the custom JSON in addition to the
+                    `@type`
+
+                    field. Example (for message [google.protobuf.Duration][]):
+
+                        {
+                          "@type": "type.googleapis.com/google.protobuf.Duration",
+                          "value": "1.212s"
+                        }
+      parameters:
+        - name: code_hash
+          description: CodeHash is the hash of the code.
+          in: query
+          required: false
+          type: string
+        - name: creator_address
+          description: CreatorAddress is the address of the contract instantiator.
+          in: query
+          required: false
+          type: string
+        - name: salt
+          description: Salt is a hex encoded salt.
+          in: query
+          required: false
+          type: string
+        - name: init_args
+          description: >-
+            InitArgs are optional json encoded init args to be used in contract
+            address
+
+            building if provided.
+          in: query
+          required: false
+          type: string
+          format: byte
+      tags:
+        - Query
   /cosmwasm/wasm/v1/contract/{address}:
     get:
       summary: ContractInfo gets the contract meta data
@@ -41069,7 +42471,7 @@ paths:
                 properties:
                   admin:
                     type: string
-                    title: Can be empty for no admin, or a valid osmosis address
+                    title: Can be empty for no admin, or a valid address
                 description: >-
                   DenomAuthorityMetadata specifies metadata for addresses that
                   have specific
@@ -44351,7 +45753,7 @@ paths:
           type: boolean
       tags:
         - Query
-  /slinky/oracle/v1/get_all_tickers:
+  /connect/oracle/v2/get_all_tickers:
     get:
       summary: >-
         Get all the currency pairs the x/oracle module is tracking price-data
@@ -44406,7 +45808,7 @@ paths:
                       format: byte
       tags:
         - Query
-  /slinky/oracle/v1/get_currency_pair_mapping:
+  /connect/oracle/v2/get_currency_pair_mapping:
     get:
       summary: >-
         Get the mapping of currency pair ID -> currency pair. This is useful for
@@ -44468,7 +45870,7 @@ paths:
                       format: byte
       tags:
         - Query
-  /slinky/oracle/v1/get_price:
+  /connect/oracle/v2/get_price:
     get:
       summary: >-
         Given a CurrencyPair (or its identifier) return the latest QuotePrice
@@ -44521,10 +45923,8 @@ paths:
                   decimals represents the number of decimals that the
                   quote-price is
 
-                  represented in. For Pairs where ETHEREUM is the quote this
-                  will be 18,
-
-                  otherwise it will be 8.
+                  represented in. It is used to scale the QuotePrice to its
+                  proper value.
               id:
                 type: string
                 format: uint64
@@ -44557,17 +45957,14 @@ paths:
                       type: string
                       format: byte
       parameters:
-        - name: currency_pair.Base
-          in: query
-          required: false
-          type: string
-        - name: currency_pair.Quote
+        - name: currency_pair
+          description: CurrencyPair represents the pair that the user wishes to query.
           in: query
           required: false
           type: string
       tags:
         - Query
-  /slinky/oracle/v1/get_prices:
+  /connect/oracle/v2/get_prices:
     get:
       operationId: GetPrices
       responses:
@@ -44621,10 +46018,8 @@ paths:
                         decimals represents the number of decimals that the
                         quote-price is
 
-                        represented in. For Pairs where ETHEREUM is the quote
-                        this will be 18,
-
-                        otherwise it will be 8.
+                        represented in. It is used to scale the QuotePrice to
+                        its proper value.
                     id:
                       type: string
                       format: uint64
@@ -44671,7 +46066,7 @@ paths:
           collectionFormat: multi
       tags:
         - Query
-  /slinky/marketmap/v1/last_updated:
+  /connect/marketmap/v2/last_updated:
     get:
       summary: LastUpdated returns the last height the market map was updated at.
       operationId: LastUpdated
@@ -44713,7 +46108,7 @@ paths:
                       format: byte
       tags:
         - Query
-  /slinky/marketmap/v1/market:
+  /connect/marketmap/v2/market:
     get:
       summary: |-
         Market returns a market stored in the x/marketmap
@@ -44882,7 +46277,7 @@ paths:
           type: string
       tags:
         - Query
-  /slinky/marketmap/v1/marketmap:
+  /connect/marketmap/v2/marketmap:
     get:
       summary: |-
         MarketMap returns the full market map stored in the x/marketmap
@@ -45073,7 +46468,7 @@ paths:
                       format: byte
       tags:
         - Query
-  /slinky/marketmap/v1/params:
+  /connect/marketmap/v2/params:
     get:
       summary: Params returns the current x/marketmap module parameters.
       operationId: MarketMapParams
@@ -67108,6 +68503,100 @@ definitions:
     description: |-
       QueryUpgradedConsensusStateResponse is the response type for the
       Query/UpgradedConsensusState RPC method.
+  ibc.core.client.v1.QueryVerifyMembershipRequest:
+    type: object
+    properties:
+      client_id:
+        type: string
+        description: client unique identifier.
+      proof:
+        type: string
+        format: byte
+        description: the proof to be verified by the client.
+      proof_height:
+        type: object
+        properties:
+          revision_number:
+            type: string
+            format: uint64
+            title: the revision that the client is currently on
+          revision_height:
+            type: string
+            format: uint64
+            title: the height within the given revision
+        description: >-
+          Normally the RevisionHeight is incremented at each height while
+          keeping
+
+          RevisionNumber the same. However some consensus algorithms may choose
+          to
+
+          reset the height in certain conditions e.g. hard forks, state-machine
+
+          breaking changes In these cases, the RevisionNumber is incremented so
+          that
+
+          height continues to be monitonically increasing even as the
+          RevisionHeight
+
+          gets reset
+        title: >-
+          Height is a monotonically increasing data type
+
+          that can be compared against another Height for the purposes of
+          updating and
+
+          freezing clients
+      merkle_path:
+        description: the commitment key path.
+        type: object
+        properties:
+          key_path:
+            type: array
+            items:
+              type: string
+        title: >-
+          MerklePath is the path used to verify commitment proofs, which can be
+          an
+
+          arbitrary structured object (defined by a commitment type).
+
+          MerklePath is represented from root-to-leaf
+      value:
+        type: string
+        format: byte
+        description: the value which is proven.
+      time_delay:
+        type: string
+        format: uint64
+        title: optional time delay
+      block_delay:
+        type: string
+        format: uint64
+        title: optional block delay
+    title: >-
+      QueryVerifyMembershipRequest is the request type for the
+      Query/VerifyMembership RPC method
+  ibc.core.client.v1.QueryVerifyMembershipResponse:
+    type: object
+    properties:
+      success:
+        type: boolean
+        description: boolean indicating success or failure of proof verification.
+    title: >-
+      QueryVerifyMembershipResponse is the response type for the
+      Query/VerifyMembership RPC method
+  ibc.core.commitment.v1.MerklePath:
+    type: object
+    properties:
+      key_path:
+        type: array
+        items:
+          type: string
+    title: |-
+      MerklePath is the path used to verify commitment proofs, which can be an
+      arbitrary structured object (defined by a commitment type).
+      MerklePath is represented from root-to-leaf
   ibc.core.commitment.v1.MerklePrefix:
     type: object
     properties:
@@ -69114,6 +70603,85 @@ definitions:
       PacketId is an identifer for a unique Packet
       Source chains refer to packets by source port/channel
       Destination chains refer to packets by destination port/channel
+  initia.ibchooks.v1.ACL:
+    type: object
+    properties:
+      address:
+        type: string
+      allowed:
+        type: boolean
+    description: ACL defines the ACL entry of an address.
+  initia.ibchooks.v1.Params:
+    type: object
+    properties:
+      default_allowed:
+        type: boolean
+        description: |-
+          if the ACL of a address is not set,
+          then we use this value to decide the ACL.
+    description: Params defines the set of hook parameters.
+  initia.ibchooks.v1.QueryACLResponse:
+    type: object
+    properties:
+      acl:
+        type: object
+        properties:
+          address:
+            type: string
+          allowed:
+            type: boolean
+        description: ACL defines the ACL entry of an address.
+    title: |-
+      QueryACLResponse is the response type for the Query/ACL RPC
+      method
+  initia.ibchooks.v1.QueryACLsResponse:
+    type: object
+    properties:
+      acls:
+        type: array
+        items:
+          type: object
+          properties:
+            address:
+              type: string
+            allowed:
+              type: boolean
+          description: ACL defines the ACL entry of an address.
+      pagination:
+        description: pagination defines the pagination in the response.
+        type: object
+        properties:
+          next_key:
+            type: string
+            format: byte
+            description: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently. It will be empty if
+              there are no more results.
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+    title: |-
+      QueryACLsResponse is the response type for the
+      Query/ACLAddrs RPC method
+  initia.ibchooks.v1.QueryParamsResponse:
+    type: object
+    properties:
+      params:
+        description: params defines the parameters of the module.
+        type: object
+        properties:
+          default_allowed:
+            type: boolean
+            description: |-
+              if the ACL of a address is not set,
+              then we use this value to decide the ACL.
+    description: QueryParamsResponse is the response type for the Query/Params RPC method.
   cosmos.base.v1beta1.DecCoin:
     type: object
     properties:
@@ -69165,9 +70733,14 @@ definitions:
               submitter:
                 type: string
                 description: The address of the batch submitter.
-              chain:
+              chain_type:
+                description: The target chain type.
                 type: string
-                title: The target chain
+                enum:
+                  - CHAIN_TYPE_UNSPECIFIED
+                  - CHAIN_TYPE_INITIA
+                  - CHAIN_TYPE_CELESTIA
+                default: CHAIN_TYPE_UNSPECIFIED
           submission_interval:
             type: string
             description: >-
@@ -69180,14 +70753,13 @@ definitions:
             description: >-
               The minium time duration that must elapse before a withdrawal can
               be finalized.
-          submission_start_time:
+          submission_start_height:
             type: string
-            format: date-time
-            description: >-
-              The time of the first l2 block recorded.
-
-              NOTE: this param is currently not used, but will be used for
-              challenge in future.
+            format: uint64
+            description: The the first l2 block will be recorded on l1.
+          oracle_enabled:
+            type: boolean
+            description: oracle_enabled is a flag to enable oracle.
           metadata:
             type: string
             format: byte
@@ -69218,8 +70790,10 @@ definitions:
 
             NOTE: The amount field is an Dec which implements the custom method
             signatures required by gogoproto.
-      bridge_executor:
-        type: string
+      bridge_executors:
+        type: array
+        items:
+          type: string
         description: >-
           the account address of bridge executor who can execute permissioned
           bridge
@@ -69236,6 +70810,14 @@ definitions:
           type: string
         description: the list of addresses that are allowed to pay zero fee.
     description: Params defines the set of opchild parameters.
+  opinit.opchild.v1.QueryBaseDenomResponse:
+    type: object
+    properties:
+      base_denom:
+        type: string
+    description: >-
+      QueryBaseDenomResponse is response type for the Query/BaseDenom RPC
+      method.
   opinit.opchild.v1.QueryBridgeInfoResponse:
     type: object
     properties:
@@ -69280,9 +70862,14 @@ definitions:
                   submitter:
                     type: string
                     description: The address of the batch submitter.
-                  chain:
+                  chain_type:
+                    description: The target chain type.
                     type: string
-                    title: The target chain
+                    enum:
+                      - CHAIN_TYPE_UNSPECIFIED
+                      - CHAIN_TYPE_INITIA
+                      - CHAIN_TYPE_CELESTIA
+                    default: CHAIN_TYPE_UNSPECIFIED
               submission_interval:
                 type: string
                 description: >-
@@ -69295,14 +70882,13 @@ definitions:
                 description: >-
                   The minium time duration that must elapse before a withdrawal
                   can be finalized.
-              submission_start_time:
+              submission_start_height:
                 type: string
-                format: date-time
-                description: >-
-                  The time of the first l2 block recorded.
-
-                  NOTE: this param is currently not used, but will be used for
-                  challenge in future.
+                format: uint64
+                description: The the first l2 block will be recorded on l1.
+              oracle_enabled:
+                type: boolean
+                description: oracle_enabled is a flag to enable oracle.
               metadata:
                 type: string
                 format: byte
@@ -69310,6 +70896,26 @@ definitions:
     description: >-
       QueryBridgeInfoResponse is response type for the Query/BridgeInfo RPC
       method.
+  opinit.opchild.v1.QueryNextL1SequenceResponse:
+    type: object
+    properties:
+      next_l1_sequence:
+        type: string
+        format: uint64
+        description: next_l1_sequence holds the next l1 sequence number.
+    description: >-
+      QueryNextL1SequenceResponse is response type for the Query/NextL1Sequence
+      RPC method.
+  opinit.opchild.v1.QueryNextL2SequenceResponse:
+    type: object
+    properties:
+      next_l2_sequence:
+        type: string
+        format: uint64
+        description: next_l2_sequence holds the next l2 sequence number.
+    description: >-
+      QueryNextL2SequenceResponse is response type for the Query/NextL2Sequence
+      RPC method.
   opinit.opchild.v1.QueryParamsResponse:
     type: object
     properties:
@@ -69343,8 +70949,10 @@ definitions:
                 method
 
                 signatures required by gogoproto.
-          bridge_executor:
-            type: string
+          bridge_executors:
+            type: array
+            items:
+              type: string
             description: >-
               the account address of bridge executor who can execute
               permissioned bridge
@@ -69990,10 +71598,28 @@ definitions:
       submitter:
         type: string
         description: The address of the batch submitter.
-      chain:
+      chain_type:
+        description: The target chain type.
         type: string
-        title: The target chain
+        enum:
+          - CHAIN_TYPE_UNSPECIFIED
+          - CHAIN_TYPE_INITIA
+          - CHAIN_TYPE_CELESTIA
+        default: CHAIN_TYPE_UNSPECIFIED
     description: BatchInfo defines the set of batch information.
+  opinit.ophost.v1.BatchInfo.ChainType:
+    type: string
+    enum:
+      - CHAIN_TYPE_UNSPECIFIED
+      - CHAIN_TYPE_INITIA
+      - CHAIN_TYPE_CELESTIA
+    default: CHAIN_TYPE_UNSPECIFIED
+    description: |-
+      ChainType defines the type of chain.
+
+       - CHAIN_TYPE_UNSPECIFIED: Unspecified chain type.
+       - CHAIN_TYPE_INITIA: The chain type of the initia chain.
+       - CHAIN_TYPE_CELESTIA: The chain type of the celestia chain.
   opinit.ophost.v1.BridgeConfig:
     type: object
     properties:
@@ -70010,9 +71636,14 @@ definitions:
           submitter:
             type: string
             description: The address of the batch submitter.
-          chain:
+          chain_type:
+            description: The target chain type.
             type: string
-            title: The target chain
+            enum:
+              - CHAIN_TYPE_UNSPECIFIED
+              - CHAIN_TYPE_INITIA
+              - CHAIN_TYPE_CELESTIA
+            default: CHAIN_TYPE_UNSPECIFIED
       submission_interval:
         type: string
         description: >-
@@ -70025,14 +71656,13 @@ definitions:
         description: >-
           The minium time duration that must elapse before a withdrawal can be
           finalized.
-      submission_start_time:
+      submission_start_height:
         type: string
-        format: date-time
-        description: >-
-          The time of the first l2 block recorded.
-
-          NOTE: this param is currently not used, but will be used for challenge
-          in future.
+        format: uint64
+        description: The the first l2 block will be recorded on l1.
+      oracle_enabled:
+        type: boolean
+        description: oracle_enabled is a flag to enable oracle.
       metadata:
         type: string
         format: byte
@@ -70479,6 +72109,17 @@ definitions:
     title: |-
       QueryAllContractStateResponse is the response type for the
       Query/AllContractState RPC method
+  cosmwasm.wasm.v1.QueryBuildAddressResponse:
+    type: object
+    properties:
+      address:
+        type: string
+        title: Address is the contract address
+    description: >-
+      QueryBuildAddressResponse is the response type for the Query/BuildAddress
+      RPC
+
+      method.
   cosmwasm.wasm.v1.QueryCodeResponse:
     type: object
     properties:
@@ -71030,7 +72671,7 @@ definitions:
     properties:
       admin:
         type: string
-        title: Can be empty for no admin, or a valid osmosis address
+        title: Can be empty for no admin, or a valid address
     description: |-
       DenomAuthorityMetadata specifies metadata for addresses that have specific
       capabilities over a token factory denom. Right now there is only one Admin
@@ -71084,7 +72725,7 @@ definitions:
         properties:
           admin:
             type: string
-            title: Can be empty for no admin, or a valid osmosis address
+            title: Can be empty for no admin, or a valid address
         description: >-
           DenomAuthorityMetadata specifies metadata for addresses that have
           specific
@@ -72167,7 +73808,7 @@ definitions:
                    PageResponse page = 2;
            }
     title: QueryPairsResponse is the response type for the Query/Pairs RPC method
-  slinky.oracle.v1.GetAllCurrencyPairsResponse:
+  connect.oracle.v2.GetAllCurrencyPairsResponse:
     type: object
     properties:
       currency_pairs:
@@ -72187,7 +73828,7 @@ definitions:
     description: |-
       GetAllCurrencyPairsResponse returns all CurrencyPairs that the module is
       currently tracking.
-  slinky.oracle.v1.GetCurrencyPairMappingResponse:
+  connect.oracle.v2.GetCurrencyPairMappingResponse:
     type: object
     properties:
       currency_pair_mapping:
@@ -72212,7 +73853,7 @@ definitions:
     description: >-
       GetCurrencyPairMappingResponse is the GetCurrencyPairMapping response
       type.
-  slinky.oracle.v1.GetPriceResponse:
+  connect.oracle.v2.GetPriceResponse:
     type: object
     properties:
       price:
@@ -72245,10 +73886,11 @@ definitions:
       decimals:
         type: string
         format: uint64
-        description: |-
+        description: >-
           decimals represents the number of decimals that the quote-price is
-          represented in. For Pairs where ETHEREUM is the quote this will be 18,
-          otherwise it will be 8.
+
+          represented in. It is used to scale the QuotePrice to its proper
+          value.
       id:
         type: string
         format: uint64
@@ -72258,7 +73900,7 @@ definitions:
       from
 
       the x/oracle query service.
-  slinky.oracle.v1.GetPricesResponse:
+  connect.oracle.v2.GetPricesResponse:
     type: object
     properties:
       prices:
@@ -72305,10 +73947,8 @@ definitions:
                 decimals represents the number of decimals that the quote-price
                 is
 
-                represented in. For Pairs where ETHEREUM is the quote this will
-                be 18,
-
-                otherwise it will be 8.
+                represented in. It is used to scale the QuotePrice to its proper
+                value.
             id:
               type: string
               format: uint64
@@ -72323,7 +73963,7 @@ definitions:
       from
 
       the x/oracle query service.
-  slinky.oracle.v1.QuotePrice:
+  connect.oracle.v2.QuotePrice:
     type: object
     properties:
       price:
@@ -72347,7 +73987,7 @@ definitions:
       CurrencyPair,
 
       where price represents the price of Base in terms of Quote
-  slinky.types.v1.CurrencyPair:
+  connect.types.v2.CurrencyPair:
     type: object
     properties:
       Base:
@@ -72357,7 +73997,7 @@ definitions:
     title: |-
       CurrencyPair is the standard representation of a pair of assets, where one
       (Base) is priced in terms of the other (Quote)
-  slinky.marketmap.v1.LastUpdatedResponse:
+  connect.marketmap.v2.LastUpdatedResponse:
     type: object
     properties:
       last_updated:
@@ -72366,7 +74006,7 @@ definitions:
     description: |-
       LastUpdatedResponse is the response type for the Query/LastUpdated RPC
       method.
-  slinky.marketmap.v1.Market:
+  connect.marketmap.v2.Market:
     type: object
     properties:
       ticker:
@@ -72487,7 +74127,7 @@ definitions:
           ProviderConfigs is the list of provider-specific configs for this
           Market.
     description: Market encapsulates a Ticker and its provider-specific configuration.
-  slinky.marketmap.v1.MarketMap:
+  connect.marketmap.v2.MarketMap:
     type: object
     properties:
       markets:
@@ -72621,7 +74261,7 @@ definitions:
 
           to be stored on-chain.
     description: MarketMap maps ticker strings to their Markets.
-  slinky.marketmap.v1.MarketMapResponse:
+  connect.marketmap.v2.MarketMapResponse:
     type: object
     properties:
       market_map:
@@ -72776,7 +74416,7 @@ definitions:
         type: string
         description: ChainId is the chain identifier for the market map.
     description: MarketMapResponse is the query response for the MarketMap query.
-  slinky.marketmap.v1.MarketResponse:
+  connect.marketmap.v2.MarketResponse:
     type: object
     properties:
       market:
@@ -72903,7 +74543,7 @@ definitions:
               ProviderConfigs is the list of provider-specific configs for this
               Market.
     description: MarketResponse is the query response for the Market query.
-  slinky.marketmap.v1.Params:
+  connect.marketmap.v2.Params:
     type: object
     properties:
       market_authorities:
@@ -72922,7 +74562,7 @@ definitions:
           list. Only governance can add to the MarketAuthorities or change the
           Admin.
     description: Params defines the parameters for the x/marketmap module.
-  slinky.marketmap.v1.ParamsResponse:
+  connect.marketmap.v2.ParamsResponse:
     type: object
     properties:
       params:
@@ -72947,7 +74587,7 @@ definitions:
               the Admin.
         description: Params defines the parameters for the x/marketmap module.
     description: ParamsResponse is the response type for the Query/Params RPC method.
-  slinky.marketmap.v1.ProviderConfig:
+  connect.marketmap.v2.ProviderConfig:
     type: object
     properties:
       name:
@@ -73002,7 +74642,7 @@ definitions:
         description: |-
           MetadataJSON is a string of JSON that encodes any extra configuration
           for the given provider config.
-  slinky.marketmap.v1.Ticker:
+  connect.marketmap.v2.Ticker:
     type: object
     properties:
       currency_pair:

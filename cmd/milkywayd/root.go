@@ -1,15 +1,13 @@
 package main
 
 import (
-	"context"
 	"errors"
 	"io"
 	"os"
 	"path"
+	"path/filepath"
 
 	tmcli "github.com/cometbft/cometbft/libs/cli"
-	"golang.org/x/sync/errgroup"
-
 	"github.com/prometheus/client_golang/prometheus"
 
 	"github.com/spf13/cast"
@@ -28,7 +26,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/pruning"
 	"github.com/cosmos/cosmos-sdk/client/rpc"
 	"github.com/cosmos/cosmos-sdk/client/snapshot"
-	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"github.com/cosmos/cosmos-sdk/server"
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -45,6 +42,9 @@ import (
 
 	opchildcli "github.com/initia-labs/OPinit/x/opchild/client/cli"
 	"github.com/initia-labs/initia/app/params"
+	kvindexerconfig "github.com/initia-labs/kvindexer/config"
+	kvindexerstore "github.com/initia-labs/kvindexer/store"
+	kvindexerkeeper "github.com/initia-labs/kvindexer/x/kvindexer/keeper"
 
 	milkywayapp "github.com/milkyway-labs/milkyway/app"
 )
@@ -97,6 +97,11 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 		Use:   basename,
 		Short: "milkyway App",
 		PersistentPreRunE: func(cmd *cobra.Command, _ []string) error {
+			// except for launch command, seal the config
+			if cmd.Name() != "launch" {
+				sdk.GetConfig().Seal()
+			}
+
 			// set the default command outputs
 			cmd.SetOut(cmd.OutOrStdout())
 			cmd.SetErr(cmd.ErrOrStderr())
@@ -138,7 +143,6 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 	// add keyring to autocli opts
 	autoCliOpts := milkywayapp.AutoCliOpts()
 	initClientCtx, _ = config.ReadFromClientConfig(initClientCtx)
-	autoCliOpts.Keyring, _ = keyring.NewAutoCLIKeyring(initClientCtx.Keyring)
 	autoCliOpts.ClientCtx = initClientCtx
 
 	if err := autoCliOpts.EnhanceRootCommand(rootCmd); err != nil {
@@ -159,13 +163,7 @@ func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig, b
 		snapshot.Cmd(a.AppCreator()),
 	)
 
-	server.AddCommandsWithStartCmdOptions(rootCmd, milkywayapp.DefaultNodeHome, a.AppCreator(), a.appExport, server.StartCmdOptions{
-		AddFlags: addModuleInitFlags,
-		PostSetup: func(svrCtx *server.Context, clientCtx client.Context, ctx context.Context, g *errgroup.Group) error {
-			sdk.GetConfig().Seal()
-			return nil
-		},
-	})
+	server.AddCommands(rootCmd, milkywayapp.DefaultNodeHome, a.AppCreator(), a.appExport, addModuleInitFlags)
 	wasmcli.ExtendUnsafeResetAllCmd(rootCmd)
 
 	// add keybase, auxiliary RPC, query, and tx child commands
@@ -179,6 +177,7 @@ func initRootCmd(rootCmd *cobra.Command, encodingConfig params.EncodingConfig, b
 
 	// add launch commands
 	rootCmd.AddCommand(LaunchCommand(a, encodingConfig, basicManager))
+	rootCmd.AddCommand(NewMultipleRollbackCmd(a.AppCreator()))
 }
 
 func addModuleInitFlags(startCmd *cobra.Command) {
@@ -267,15 +266,20 @@ func (a *appCreator) AppCreator() servertypes.AppCreator {
 			wasmOpts = append(wasmOpts, wasmkeeper.WithVMCacheMetrics(prometheus.DefaultRegisterer))
 		}
 
+		dbDir, kvdbConfig := getDBConfig(appOpts)
+		kvindexerDB, err := kvindexerstore.OpenDB(dbDir, kvindexerkeeper.StoreName, kvdbConfig.BackendConfig)
+		if err != nil {
+			panic(err)
+		}
+
 		app := milkywayapp.NewMilkyWayApp(
-			logger, db, traceStore, true,
+			logger, db, kvindexerDB, traceStore, true,
 			wasmOpts,
 			appOpts,
 			baseappOptions...,
 		)
 
 		a.app = app
-
 		return app
 	}
 }
@@ -302,13 +306,13 @@ func (a appCreator) appExport(
 
 	var initiaApp *milkywayapp.MilkyWayApp
 	if height != -1 {
-		initiaApp = milkywayapp.NewMilkyWayApp(logger, db, traceStore, false, []wasmkeeper.Option{}, appOpts)
+		initiaApp = milkywayapp.NewMilkyWayApp(logger, db, dbm.NewMemDB(), traceStore, false, []wasmkeeper.Option{}, appOpts)
 
 		if err := initiaApp.LoadHeight(height); err != nil {
 			return servertypes.ExportedApp{}, err
 		}
 	} else {
-		initiaApp = milkywayapp.NewMilkyWayApp(logger, db, traceStore, true, []wasmkeeper.Option{}, appOpts)
+		initiaApp = milkywayapp.NewMilkyWayApp(logger, db, dbm.NewMemDB(), traceStore, true, []wasmkeeper.Option{}, appOpts)
 	}
 
 	return initiaApp.ExportAppStateAndValidators(forZeroHeight, jailAllowedAddrs, modulesToExport)
@@ -356,4 +360,24 @@ func readEnv(clientCtx client.Context) (client.Context, error) {
 	}
 
 	return clientCtx, nil
+}
+
+// getDBConfig returns the database configuration for the EVM indexer
+func getDBConfig(appOpts servertypes.AppOptions) (string, *kvindexerconfig.IndexerConfig) {
+	rootDir := cast.ToString(appOpts.Get("home"))
+	dbDir := cast.ToString(appOpts.Get("db_dir"))
+	dbBackend, err := kvindexerconfig.NewConfig(appOpts)
+	if err != nil {
+		panic(err)
+	}
+
+	return rootify(dbDir, rootDir), dbBackend
+}
+
+// helper function to make config creation independent of root dir
+func rootify(path, root string) string {
+	if filepath.IsAbs(path) {
+		return path
+	}
+	return filepath.Join(root, path)
 }
