@@ -155,7 +155,8 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				tc.store(ctx)
 			}
 
-			genesis := suite.k.ExportGenesis(ctx)
+			genesis, err := suite.k.ExportGenesis(ctx)
+			suite.Require().NoError(err)
 			suite.Require().Equal(tc.expGenesis, genesis)
 		})
 	}
@@ -244,7 +245,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				},
 			},
 			check: func(ctx sdk.Context) {
-				inactivatingOperators := suite.k.GetInactivatingOperators(ctx)
+				inactivatingOperators, _ := suite.k.GetInactivatingOperators(ctx)
 				suite.Require().Equal([]types.UnbondingOperator{
 					types.NewUnbondingOperator(
 						1,

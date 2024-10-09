@@ -29,9 +29,10 @@ func (k *Keeper) GetNextServiceID(ctx sdk.Context) (serviceID uint32, err error)
 // --------------------------------------------------------------------------------------------------------------------
 
 // SaveService stores a Service in the KVStore
-func (k *Keeper) SaveService(ctx sdk.Context, service types.Service) {
+func (k *Keeper) SaveService(ctx sdk.Context, service types.Service) error {
 	store := ctx.KVStore(k.storeKey)
 	store.Set(types.ServiceStoreKey(service.ID), k.cdc.MustMarshal(&service))
+	return k.serviceAddressSet.Set(ctx, service.Address)
 }
 
 // CreateService creates a new Service and stores it in the KVStore
@@ -58,7 +59,9 @@ func (k *Keeper) CreateService(ctx sdk.Context, service types.Service) error {
 	k.createAccountIfNotExists(ctx, serviceAddress)
 
 	// Store the service
-	k.SaveService(ctx, service)
+	if err := k.SaveService(ctx, service); err != nil {
+		return err
+	}
 
 	// Log and call the hooks
 	k.Logger(ctx).Debug("created service", "id", service.ID)
@@ -80,7 +83,9 @@ func (k *Keeper) ActivateService(ctx sdk.Context, serviceID uint32) error {
 	}
 
 	service.Status = types.SERVICE_STATUS_ACTIVE
-	k.SaveService(ctx, service)
+	if err := k.SaveService(ctx, service); err != nil {
+		return err
+	}
 
 	// Call the hook
 	k.AfterServiceActivated(ctx, serviceID)
@@ -104,7 +109,9 @@ func (k *Keeper) DeactivateService(ctx sdk.Context, serviceID uint32) error {
 	service.Status = types.SERVICE_STATUS_INACTIVE
 
 	// Update the service
-	k.SaveService(ctx, service)
+	if err := k.SaveService(ctx, service); err != nil {
+		return err
+	}
 
 	// Call the hook
 	k.AfterServiceDeactivated(ctx, service.ID)

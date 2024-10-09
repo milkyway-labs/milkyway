@@ -91,6 +91,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 	suite.k = keeper.NewKeeper(
 		suite.cdc,
 		suite.storeKey,
+		runtime.NewKVStoreService(keys[types.StoreKey]),
 		suite.ak,
 	)
 }

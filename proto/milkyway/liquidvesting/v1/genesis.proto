@@ -1,0 +1,23 @@
+syntax = "proto3";
+package milkyway.liquidvesting.v1;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+import "milkyway/liquidvesting/v1/params.proto";
+import "milkyway/liquidvesting/v1/models.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/liquidvesting/types";
+
+// GenesisState defines the liquidvesting module's genesis state.
+message GenesisState {
+  // Params defines the parameters of the module.
+  Params params = 1 [ (gogoproto.nullable) = false ];
+
+  // BurnCoins represents the list of coins that should be burned from the
+  // users' balances
+  repeated BurnCoins burn_coins = 2 [ (gogoproto.nullable) = false ];
+
+  // UserInsuranceFunds represents the users' insurance fund.
+  repeated UserInsuranceFundState user_insurance_funds = 3
+      [ (gogoproto.nullable) = false ];
+}

@@ -45,13 +45,12 @@ func (k *Keeper) GetServiceDelegation(ctx sdk.Context, serviceID uint32, userAdd
 func (k *Keeper) AddServiceTokensAndShares(
 	ctx sdk.Context, service servicestypes.Service, tokensToAdd sdk.Coins,
 ) (serviceOut servicestypes.Service, addedShares sdk.DecCoins, err error) {
-
 	// Update the service tokens and shares and get the added shares
 	service, addedShares = service.AddTokensFromDelegation(tokensToAdd)
 
 	// Save the service
-	k.servicesKeeper.SaveService(ctx, service)
-	return service, addedShares, nil
+	err = k.servicesKeeper.SaveService(ctx, service)
+	return service, addedShares, err
 }
 
 // RemoveServiceDelegation removes the given service delegation from the store

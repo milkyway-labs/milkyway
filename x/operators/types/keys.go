@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -21,6 +22,7 @@ var (
 	NextOperatorIDKey               = []byte{0xa1}
 	OperatorPrefix                  = []byte{0xa2}
 	InactivatingOperatorQueuePrefix = []byte{0xa3}
+	OperatorAddressSetPrefix        = collections.NewPrefix(0xa4)
 )
 
 // GetOperatorIDBytes returns the byte representation of the operator ID

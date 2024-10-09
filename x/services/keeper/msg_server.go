@@ -12,9 +12,7 @@ import (
 	"github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-var (
-	_ types.MsgServer = msgServer{}
-)
+var _ types.MsgServer = msgServer{}
 
 type msgServer struct {
 	*Keeper
@@ -98,7 +96,9 @@ func (k msgServer) UpdateService(goCtx context.Context, msg *types.MsgUpdateServ
 	}
 
 	// Save the service
-	k.Keeper.SaveService(ctx, updated)
+	if err := k.SaveService(ctx, updated); err != nil {
+		return nil, err
+	}
 
 	// Emit the event
 	ctx.EventManager().EmitEvents(sdk.Events{
@@ -191,7 +191,9 @@ func (k msgServer) TransferServiceOwnership(goCtx context.Context, msg *types.Ms
 
 	// Update the service admin
 	service.Admin = msg.NewAdmin
-	k.SaveService(ctx, service)
+	if err := k.SaveService(ctx, service); err != nil {
+		return nil, err
+	}
 
 	// Emit the event
 	ctx.EventManager().EmitEvents(sdk.Events{

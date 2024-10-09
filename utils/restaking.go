@@ -115,9 +115,30 @@ func SharesFromTokensTruncated(tokens sdk.Coins, getShareDenom ShareDenomGetter,
 	return shares, nil
 }
 
+// SharesFromDecCoins returns the shares of a delegation given a bond amount.
+func SharesFromDecCoins(tokens sdk.DecCoins, getShareDenom ShareDenomGetter, delegatedTokens sdk.Coins, delegatorsShares sdk.DecCoins) (sdk.DecCoins, error) {
+	shares := sdk.NewDecCoins()
+	for _, token := range tokens {
+		sharesDenom := getShareDenom(token.Denom)
+
+		delegatorTokenShares := delegatorsShares.AmountOf(sharesDenom)
+		operatorTokenAmount := delegatedTokens.AmountOf(token.Denom)
+
+		var sharesAmount sdkmath.LegacyDec
+		if operatorTokenAmount.IsZero() {
+			sharesAmount = token.Amount
+		} else {
+			sharesAmount = delegatorTokenShares.Mul(token.Amount).QuoTruncate(sdkmath.LegacyNewDecFromInt(operatorTokenAmount))
+		}
+
+		shares = shares.Add(sdk.NewDecCoinFromDec(sharesDenom, sharesAmount))
+	}
+
+	return shares, nil
+}
+
 // IssueShares calculates the shares to issue for a delegation of the given amount.
 func IssueShares(amount sdk.Coins, getShareDenom ShareDenomGetter, delegatedTokens sdk.Coins, delegatorsShares sdk.DecCoins) sdk.DecCoins {
-
 	issuedShares := sdk.NewDecCoins()
 	if delegatorsShares.IsZero() {
 		// The first delegation to an operator sets the exchange rate to one

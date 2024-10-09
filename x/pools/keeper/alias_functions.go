@@ -97,3 +97,9 @@ func (k *Keeper) CreateOrGetPoolByDenom(ctx sdk.Context, denom string) (types.Po
 
 	return pool, nil
 }
+
+// IsPoolAddress returns true if the provided address is the address
+// where the users' asset are kept when they perform a pool restaking.
+func (k *Keeper) IsPoolAddress(ctx sdk.Context, address string) (bool, error) {
+	return k.poolAddressSet.Has(ctx, address)
+}

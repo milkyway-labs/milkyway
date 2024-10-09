@@ -1,0 +1,152 @@
+syntax = "proto3";
+package milkyway.liquidvesting.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "milkyway/liquidvesting/v1/params.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/liquidvesting/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // UserInsuranceFund defines a gRPC query method that returns the user's
+  // insurance fund balance given their address.
+  rpc UserInsuranceFund(QueryUserInsuranceFundRequest)
+      returns (QueryUserInsuranceFundResponse) {
+    option (google.api.http).get =
+        "/milkyway/liquidvesting/v1/user_insurance_funds/{user_address}";
+  }
+
+  // UserInsuranceFunds defines a gRPC query method that returns all user's
+  // insurance fund balance.
+  rpc UserInsuranceFunds(QueryUserInsuranceFundsRequest)
+      returns (QueryUserInsuranceFundsResponse) {
+    option (google.api.http).get =
+        "/milkyway/liquidvesting/v1/user_insurance_funds";
+  }
+
+  // UserRestakableAssets defines a gRPC query method that returns
+  // the amount of assets that can be restaked from the one minted by this
+  // module.
+  rpc UserRestakableAssets(QueryUserRestakableAssetsRequest)
+      returns (QueryUserRestakableAssetsResponse) {
+    option (google.api.http).get =
+        "/milkyway/liquidvesting/v1/user_restakable_assets/{user_address}";
+  }
+
+  // InsuranceFund defines a gRPC query method that returns the amount of tokens
+  // that are in the insurance fund.
+  rpc InsuranceFund(QueryInsuranceFundRequest)
+      returns (QueryInsuranceFundResponse) {
+    option (google.api.http).get = "/milkyway/liquidvesting/v1/insurance_fund";
+  }
+
+  // Params defines a gRPC query method that returns the parameters of the
+  // module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/milkyway/liquidvesting/v1/params";
+  }
+}
+
+// QueryUserInsuranceFundRequest is the request type for the
+// Query/UserInsuranceFund RPC method.
+message QueryUserInsuranceFundRequest {
+  // user_address is the address of the user to query.
+  string user_address = 1;
+}
+
+// QueryUserInsuranceFundResponse is the response type for the
+// Query/UserInsuranceFund RPC method.
+message QueryUserInsuranceFundResponse {
+  // balance is the amount of tokens that is in the user's insurance fund.
+  repeated cosmos.base.v1beta1.Coin balance = 1 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+
+  // used is the amount of tokens is being used to cover the user's
+  // restaked assets.
+  repeated cosmos.base.v1beta1.Coin used = 2 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// QueryUserInsuranceFundsRequest is the request type for the
+// Query/UserInsuranceFunds RPC method.
+message QueryUserInsuranceFundsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// UserInsuranceFundData is the structure that contains the information about
+// a user's insurance fund.
+message UserInsuranceFundData {
+  // user_address is the address of who owns the insurance fund.
+  string user_address = 1;
+
+  // balance is the amount of tokens that is in the user's insurance fund.
+  repeated cosmos.base.v1beta1.Coin balance = 2 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+
+  // used is the amount of tokens that is to cover the user's
+  // restaked assets.
+  repeated cosmos.base.v1beta1.Coin used = 3 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// QueryUserInsuranceFundsResponse is the response type for the
+// Query/UserInsuranceFunds RPC method.
+message QueryUserInsuranceFundsResponse {
+  // insurance_funds is the list of users insurance funds.
+  repeated UserInsuranceFundData insurance_funds = 1
+      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+
+  // Pagination defines the pagination response
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryUserRestakableAssetsRequest is the request type for the
+// Query/UserRestakableAssets RPC method.
+message QueryUserRestakableAssetsRequest {
+  // user_address is the address of the user to query.
+  string user_address = 1;
+}
+
+// QueryUserRestakableAssetsResponse is the response type for the
+// Query/UserRestakableAssets RPC method.
+message QueryUserRestakableAssetsResponse {
+  // amount is the amount of tokens that the user can restake.
+  repeated cosmos.base.v1beta1.Coin amount = 1 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// QueryInsuranceFundRequest is the request type for the
+// Query/InsuranceFund RPC method.
+message QueryInsuranceFundRequest {}
+
+// QueryInsuranceFundResponse is the response type for the
+// Query/InsuranceFund RPC method.
+message QueryInsuranceFundResponse {
+  // amount is the amount of tokens that are in the insurance fund.
+  repeated cosmos.base.v1beta1.Coin amount = 1 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// QueryParamsRequest is the request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is the response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  Params params = 1 [ (gogoproto.nullable) = false ];
+}

@@ -3,20 +3,18 @@ package wasm_hooks
 import (
 	"encoding/json"
 	"fmt"
-	"strings"
 
 	"cosmossdk.io/errors"
+	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/address"
-
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
-
 	nfttransfertypes "github.com/initia-labs/initia/x/ibc/nft-transfer/types"
 
-	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
+	"github.com/milkyway-labs/milkyway/utils"
 )
 
 const senderPrefix = "ibc-wasm-hook-intermediary"
@@ -27,16 +25,6 @@ func DeriveIntermediateSender(channel, originalSender string) string {
 	senderStr := fmt.Sprintf("%s/%s", channel, originalSender)
 	senderAddr := sdk.AccAddress(address.Hash(senderPrefix, []byte(senderStr)))
 	return senderAddr.String()
-}
-
-func isIcs20Packet(packetData []byte) (isIcs20 bool, ics20data transfertypes.FungibleTokenPacketData) {
-	var data transfertypes.FungibleTokenPacketData
-	decoder := json.NewDecoder(strings.NewReader(string(packetData)))
-	decoder.DisallowUnknownFields()
-	if err := decoder.Decode(&data); err != nil {
-		return false, data
-	}
-	return true, data
 }
 
 const wasmPortPrefix = "wasm."
@@ -58,7 +46,7 @@ func validateAndParseMemo(memo string) (
 	hookData HookData,
 	err error,
 ) {
-	isWasmRouted, metadata := jsonStringHasKey(memo, wasmHookMemoKey)
+	isWasmRouted, metadata := utils.JSONStringHasKey(memo, wasmHookMemoKey)
 	if !isWasmRouted {
 		return
 	}
@@ -87,42 +75,6 @@ func validateReceiver(msg *wasmtypes.MsgExecuteContract, receiver string) error 
 	}
 
 	return nil
-}
-
-// jsonStringHasKey parses the memo as a json object and checks if it contains the key.
-func jsonStringHasKey(memo, key string) (found bool, jsonObject map[string]interface{}) {
-	jsonObject = make(map[string]interface{})
-
-	// If there is no memo, the packet was either sent with an earlier version of IBC, or the memo was
-	// intentionally left blank. Nothing to do here. Ignore the packet and pass it down the stack.
-	if len(memo) == 0 {
-		return false, jsonObject
-	}
-
-	// the jsonObject must be a valid JSON object
-	err := json.Unmarshal([]byte(memo), &jsonObject)
-	if err != nil {
-		return false, jsonObject
-	}
-
-	// If the key doesn't exist, there's nothing to do on this hook. Continue by passing the packet
-	// down the stack
-	_, ok := jsonObject[key]
-	if !ok {
-		return false, jsonObject
-	}
-
-	return true, jsonObject
-}
-
-// newEmitErrorAcknowledgement creates a new error acknowledgement after having emitted an event with the
-// details of the error.
-func newEmitErrorAcknowledgement(err error) channeltypes.Acknowledgement {
-	return channeltypes.Acknowledgement{
-		Response: &channeltypes.Acknowledgement_Error{
-			Error: fmt.Sprintf("ibc wasm hook error: %s", err.Error()),
-		},
-	}
 }
 
 // isAckError checks an IBC acknowledgement to see if it's an error.

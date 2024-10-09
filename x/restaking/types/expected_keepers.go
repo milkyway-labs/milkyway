@@ -32,14 +32,14 @@ type PoolsKeeper interface {
 
 type OperatorsKeeper interface {
 	GetOperator(ctx sdk.Context, operatorID uint32) (operatorstypes.Operator, bool)
-	SaveOperator(ctx sdk.Context, operator operatorstypes.Operator)
+	SaveOperator(ctx sdk.Context, operator operatorstypes.Operator) error
 	IterateOperators(ctx sdk.Context, cb func(operatorstypes.Operator) bool)
 	GetOperators(ctx sdk.Context) []operatorstypes.Operator
 }
 
 type ServicesKeeper interface {
 	GetService(ctx sdk.Context, serviceID uint32) (servicestypes.Service, bool)
-	SaveService(ctx sdk.Context, service servicestypes.Service)
+	SaveService(ctx sdk.Context, service servicestypes.Service) error
 	IterateServices(ctx sdk.Context, cb func(servicestypes.Service) bool)
 	GetServices(ctx sdk.Context) []servicestypes.Service
 }

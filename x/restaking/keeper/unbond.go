@@ -137,11 +137,15 @@ func (k *Keeper) RemoveTargetTokensAndShares(ctx sdk.Context, data types.Undeleg
 	switch target := data.Target.(type) {
 	case *operatorstypes.Operator:
 		operator, amount := target.RemoveDelShares(data.Shares)
-		k.operatorsKeeper.SaveOperator(ctx, operator)
+		if err := k.operatorsKeeper.SaveOperator(ctx, operator); err != nil {
+			return nil, err
+		}
 		issuedTokensAmount = amount
 	case *servicestypes.Service:
 		service, amount := target.RemoveDelShares(data.Shares)
-		k.servicesKeeper.SaveService(ctx, service)
+		if err := k.servicesKeeper.SaveService(ctx, service); err != nil {
+			return nil, err
+		}
 		issuedTokensAmount = amount
 	case *poolstypes.Pool:
 		pool, amount, err := target.RemoveDelShares(data.Shares)
