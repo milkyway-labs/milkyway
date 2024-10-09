@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"cosmossdk.io/math"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
-	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
@@ -68,7 +68,7 @@ func (h WasmHooks) onRecvIcs20Packet(
 	denom := MustExtractDenomFromPacketOnRecv(packet)
 	amount, ok := math.NewIntFromString(data.GetAmount())
 	if !ok {
-		return newEmitErrorAcknowledgement(fmt.Errorf("invalid amount: %s", data.GetAmount()))
+		return types.NewEmitErrorAcknowledgement(fmt.Errorf("invalid amount: %s", data.GetAmount()))
 	}
 
 	msg.Sender = intermediateSender

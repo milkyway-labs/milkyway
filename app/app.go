@@ -259,6 +259,7 @@ var (
 		restaking.AppModule{},
 		assets.AppModule{},
 		rewards.AppModule{},
+		liquidvesting.AppModule{},
 	)
 
 	// module account permissions

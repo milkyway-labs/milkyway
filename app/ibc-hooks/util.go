@@ -9,11 +9,12 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/address"
+	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 	nfttransfertypes "github.com/initia-labs/initia/x/ibc/nft-transfer/types"
 
-	utils "github.com/milkyway-labs/milkyway/utils"
+	"github.com/milkyway-labs/milkyway/utils"
 )
 
 const senderPrefix = "ibc-wasm-hook-intermediary"
