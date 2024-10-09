@@ -19,7 +19,6 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Query_Params_FullMethodName = "/milkyway.assets.v1.Query/Params"
 	Query_Assets_FullMethodName = "/milkyway.assets.v1.Query/Assets"
 	Query_Asset_FullMethodName  = "/milkyway.assets.v1.Query/Asset"
 )
@@ -30,9 +29,6 @@ const (
 //
 // Query defines the gRPC querier service.
 type QueryClient interface {
-	// Params defines a gRPC query method that returns the parameters of the
-	// module.
-	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 	// Assets defined a gRPC query method that returns all assets registered.
 	Assets(ctx context.Context, in *QueryAssetsRequest, opts ...grpc.CallOption) (*QueryAssetsResponse, error)
 	// Asset defines a gRPC query method that returns the asset associated with
@@ -46,16 +42,6 @@ type queryClient struct {
 
 func NewQueryClient(cc grpc.ClientConnInterface) QueryClient {
 	return &queryClient{cc}
-}
-
-func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(QueryParamsResponse)
-	err := c.cc.Invoke(ctx, Query_Params_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *queryClient) Assets(ctx context.Context, in *QueryAssetsRequest, opts ...grpc.CallOption) (*QueryAssetsResponse, error) {
@@ -84,9 +70,6 @@ func (c *queryClient) Asset(ctx context.Context, in *QueryAssetRequest, opts ...
 //
 // Query defines the gRPC querier service.
 type QueryServer interface {
-	// Params defines a gRPC query method that returns the parameters of the
-	// module.
-	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 	// Assets defined a gRPC query method that returns all assets registered.
 	Assets(context.Context, *QueryAssetsRequest) (*QueryAssetsResponse, error)
 	// Asset defines a gRPC query method that returns the asset associated with
@@ -102,9 +85,6 @@ type QueryServer interface {
 // pointer dereference when methods are called.
 type UnimplementedQueryServer struct{}
 
-func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
-}
 func (UnimplementedQueryServer) Assets(context.Context, *QueryAssetsRequest) (*QueryAssetsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Assets not implemented")
 }
@@ -130,24 +110,6 @@ func RegisterQueryServer(s grpc.ServiceRegistrar, srv QueryServer) {
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&Query_ServiceDesc, srv)
-}
-
-func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryParamsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).Params(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Query_Params_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Params(ctx, req.(*QueryParamsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _Query_Assets_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -193,10 +155,6 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "milkyway.assets.v1.Query",
 	HandlerType: (*QueryServer)(nil),
 	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "Params",
-			Handler:    _Query_Params_Handler,
-		},
 		{
 			MethodName: "Assets",
 			Handler:    _Query_Assets_Handler,

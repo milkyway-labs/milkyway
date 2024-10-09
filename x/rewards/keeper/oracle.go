@@ -8,7 +8,7 @@ import (
 	"cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	slinkytypes "github.com/skip-mev/slinky/pkg/types"
+	connecttypes "github.com/skip-mev/connect/v2/pkg/types"
 
 	assetstypes "github.com/milkyway-labs/milkyway/x/assets/types"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
@@ -25,7 +25,7 @@ func (k *Keeper) GetAssetAndPrice(ctx context.Context, denom string) (assetstype
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	cp := slinkytypes.NewCurrencyPair(asset.Ticker, types.USDTicker)
+	cp := connecttypes.NewCurrencyPair(asset.Ticker, types.USDTicker)
 	qpn, err := k.oracleKeeper.GetPriceWithNonceForCurrencyPair(sdkCtx, cp)
 	if err != nil {
 		// If currency pair is not found return 0 as well.

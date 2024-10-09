@@ -2,7 +2,7 @@ syntax = "proto3";
 package milkyway.tokenfactory.v1;
 
 import "gogoproto/gogo.proto";
-import "milkyway/tokenfactory/v1/authorityMetadata.proto";
+import "milkyway/tokenfactory/v1/authority_metadata.proto";
 import "milkyway/tokenfactory/v1/params.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/tokenfactory/types";

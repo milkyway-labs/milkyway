@@ -8,7 +8,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	wasmvmtypes "github.com/CosmWasm/wasmvm/types"
+	wasmvmtypes "github.com/CosmWasm/wasmvm/v2/types"
 
 	"github.com/milkyway-labs/milkyway/x/tokenfactory/types"
 
@@ -24,8 +24,7 @@ func (k Keeper) setBeforeSendHook(ctx context.Context, denom string, cosmwasmAdd
 
 	// delete the store for denom prefix store when cosmwasm address is nil
 	if cosmwasmAddress == "" {
-		k.DenomHookAddr.Remove(ctx, denom)
-		return nil
+		return k.DenomHookAddr.Remove(ctx, denom)
 	}
 
 	_, err = k.ac.StringToBytes(cosmwasmAddress)
@@ -33,9 +32,7 @@ func (k Keeper) setBeforeSendHook(ctx context.Context, denom string, cosmwasmAdd
 		return err
 	}
 
-	k.DenomHookAddr.Set(ctx, denom, cosmwasmAddress)
-
-	return nil
+	return k.DenomHookAddr.Set(ctx, denom, cosmwasmAddress)
 }
 
 func (k Keeper) GetBeforeSendHook(ctx context.Context, denom string) string {

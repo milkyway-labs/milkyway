@@ -10,6 +10,7 @@ import (
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 
 	ibchooks "github.com/initia-labs/initia/x/ibc-hooks"
+	"github.com/initia-labs/initia/x/ibc-hooks/types"
 	nfttransfertypes "github.com/initia-labs/initia/x/ibc/nft-transfer/types"
 )
 
@@ -29,19 +30,45 @@ func (h WasmHooks) onAckIcs20Packet(
 	if !isWasmRouted || hookData.AsyncCallback == "" {
 		return nil
 	} else if err != nil {
-		return err
+		h.wasmKeeper.Logger(ctx).Error("failed to parse memo", "error", err)
+		ctx.EventManager().EmitEvent(sdk.NewEvent(
+			types.EventTypeHookFailed,
+			sdk.NewAttribute(types.AttributeKeyReason, "failed to parse memo"),
+			sdk.NewAttribute(types.AttributeKeyError, err.Error()),
+		))
+
+		return nil
 	}
 
+	// create a new cache context to ignore errors during
+	// the execution of the callback
+	cacheCtx, write := ctx.CacheContext()
+
 	callback := hookData.AsyncCallback
-	if allowed, err := h.checkACL(im, ctx, callback); err != nil {
-		return err
+	if allowed, err := h.checkACL(im, cacheCtx, callback); err != nil {
+		h.wasmKeeper.Logger(cacheCtx).Error("failed to check ACL", "error", err)
+		ctx.EventManager().EmitEvent(sdk.NewEvent(
+			types.EventTypeHookFailed,
+			sdk.NewAttribute(types.AttributeKeyReason, "failed to check ACL"),
+			sdk.NewAttribute(types.AttributeKeyError, err.Error()),
+		))
+
+		return nil
 	} else if !allowed {
+		h.wasmKeeper.Logger(cacheCtx).Error("failed to check ACL", "not allowed")
+		ctx.EventManager().EmitEvent(sdk.NewEvent(
+			types.EventTypeHookFailed,
+			sdk.NewAttribute(types.AttributeKeyReason, "failed to check ACL"),
+			sdk.NewAttribute(types.AttributeKeyError, "not allowed"),
+		))
+
 		return nil
 	}
 
 	contractAddr, err := h.ac.StringToBytes(callback)
 	if err != nil {
-		return errorsmod.Wrap(err, "Ack callback error")
+		h.wasmKeeper.Logger(cacheCtx).Error("invalid contract address", "error", err)
+		return nil
 	}
 
 	success := "false"
@@ -52,17 +79,26 @@ func (h WasmHooks) onAckIcs20Packet(
 	// Notify the sender that the ack has been received
 	ackAsJson, err := json.Marshal(acknowledgement)
 	if err != nil {
-		// If the ack is not a json object, error
-		return err
+		h.wasmKeeper.Logger(cacheCtx).Error("ack is not json object", "error", err)
+		return nil
 	}
 
 	sudoMsg := []byte(fmt.Sprintf(
 		`{"ibc_lifecycle_complete": {"ibc_ack": {"channel": "%s", "sequence": %d, "ack": %s, "success": %s}}}`,
 		packet.SourceChannel, packet.Sequence, ackAsJson, success))
-	_, err = h.wasmKeeper.Sudo(ctx, contractAddr, sudoMsg)
+	_, err = h.wasmKeeper.Sudo(cacheCtx, contractAddr, sudoMsg)
 	if err != nil {
+		ctx.EventManager().EmitEvent(sdk.NewEvent(
+			types.EventTypeHookFailed,
+			sdk.NewAttribute(types.AttributeKeyReason, "failed to execute callback"),
+			sdk.NewAttribute(types.AttributeKeyError, err.Error()),
+		))
+
 		return errorsmod.Wrap(err, "Ack callback error")
 	}
+
+	// write the cache context only if the callback execution was successful
+	write()
 
 	return nil
 }
@@ -83,19 +119,45 @@ func (h WasmHooks) onAckIcs721Packet(
 	if !isWasmRouted || hookData.AsyncCallback == "" {
 		return nil
 	} else if err != nil {
-		return err
+		ctx.EventManager().EmitEvent(sdk.NewEvent(
+			types.EventTypeHookFailed,
+			sdk.NewAttribute(types.AttributeKeyReason, "failed to parse memo"),
+			sdk.NewAttribute(types.AttributeKeyError, err.Error()),
+		))
+
+		h.wasmKeeper.Logger(ctx).Error("failed to parse memo", "error", err)
+		return nil
 	}
 
+	// create a new cache context to ignore errors during
+	// the execution of the callback
+	cacheCtx, write := ctx.CacheContext()
+
 	callback := hookData.AsyncCallback
-	if allowed, err := h.checkACL(im, ctx, callback); err != nil {
-		return err
+	if allowed, err := h.checkACL(im, cacheCtx, callback); err != nil {
+		h.wasmKeeper.Logger(cacheCtx).Error("failed to check ACL", "error", err)
+		ctx.EventManager().EmitEvent(sdk.NewEvent(
+			types.EventTypeHookFailed,
+			sdk.NewAttribute(types.AttributeKeyReason, "failed to check ACL"),
+			sdk.NewAttribute(types.AttributeKeyError, err.Error()),
+		))
+
+		return nil
 	} else if !allowed {
+		h.wasmKeeper.Logger(cacheCtx).Error("failed to check ACL", "not allowed")
+		ctx.EventManager().EmitEvent(sdk.NewEvent(
+			types.EventTypeHookFailed,
+			sdk.NewAttribute(types.AttributeKeyReason, "failed to check ACL"),
+			sdk.NewAttribute(types.AttributeKeyError, "not allowed"),
+		))
+
 		return nil
 	}
 
 	contractAddr, err := h.ac.StringToBytes(callback)
 	if err != nil {
-		return errorsmod.Wrap(err, "Ack callback error")
+		h.wasmKeeper.Logger(cacheCtx).Error("invalid contract address", "error", err)
+		return nil
 	}
 
 	success := "false"
@@ -107,16 +169,27 @@ func (h WasmHooks) onAckIcs721Packet(
 	ackAsJson, err := json.Marshal(acknowledgement)
 	if err != nil {
 		// If the ack is not a json object, error
-		return err
+		h.wasmKeeper.Logger(cacheCtx).Error("ack is not json object", "error", err)
+		return nil
 	}
 
 	sudoMsg := []byte(fmt.Sprintf(
 		`{"ibc_lifecycle_complete": {"ibc_ack": {"channel": "%s", "sequence": %d, "ack": %s, "success": %s}}}`,
 		packet.SourceChannel, packet.Sequence, ackAsJson, success))
-	_, err = h.wasmKeeper.Sudo(ctx, contractAddr, sudoMsg)
+	_, err = h.wasmKeeper.Sudo(cacheCtx, contractAddr, sudoMsg)
 	if err != nil {
-		return errorsmod.Wrap(err, "Ack callback error")
+		ctx.EventManager().EmitEvent(sdk.NewEvent(
+			types.EventTypeHookFailed,
+			sdk.NewAttribute(types.AttributeKeyReason, "failed to execute callback"),
+			sdk.NewAttribute(types.AttributeKeyError, err.Error()),
+		))
+
+		h.wasmKeeper.Logger(cacheCtx).Error("failed to execute callback", "error", err)
+		return nil
 	}
+
+	// write the cache context only if the callback execution was successful
+	write()
 
 	return nil
 }
