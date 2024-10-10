@@ -24,7 +24,7 @@ func (k Keeper) BeginBlocker(ctx sdk.Context) {
 
 			// set rate limit on stAsset
 			stDenom := types.StAssetDenomFromHostZoneDenom(hz.HostDenom)
-			k.RatelimitKeeper.AddDenomToBlacklist(ctx, stDenom)
+			k.rateLimitKeeper.AddDenomToBlacklist(ctx, stDenom)
 
 			k.Logger(ctx).Error(fmt.Sprintf("[INVARIANT BROKEN!!!] %s's RR is %s. ERR: %v", hz.GetChainId(), hz.RedemptionRate.String(), err.Error()))
 			ctx.EventManager().EmitEvent(

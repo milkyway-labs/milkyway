@@ -123,7 +123,7 @@ func (k Keeper) UnregisterHostZone(ctx sdk.Context, chainId string) error {
 
 	// Burn all outstanding stTokens
 	stTokenDenom := utils.StAssetDenomFromHostZoneDenom(hostZone.HostDenom)
-	for _, account := range k.AccountKeeper.GetAllAccounts(ctx) {
+	for _, account := range k.accountKeeper.GetAllAccounts(ctx) {
 		stTokenBalance := k.bankKeeper.GetBalance(ctx, account.GetAddress(), stTokenDenom)
 		stTokensToBurn := sdk.NewCoins(stTokenBalance)
 		if err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, account.GetAddress(), types.ModuleName, stTokensToBurn); err != nil {
@@ -135,26 +135,26 @@ func (k Keeper) UnregisterHostZone(ctx sdk.Context, chainId string) error {
 	}
 
 	// Set the escrow'd tokens to 0 (all the escrowed tokens should have been burned from the above)
-	k.RecordsKeeper.TransferKeeper.SetTotalEscrowForDenom(ctx, sdk.NewCoin(stTokenDenom, sdkmath.ZeroInt()))
+	k.recordsKeeper.TransferKeeper.SetTotalEscrowForDenom(ctx, sdk.NewCoin(stTokenDenom, sdkmath.ZeroInt()))
 
 	// Remove module accounts
 	depositAddress := types.NewHostZoneDepositAddress(chainId)
 	communityPoolStakeAddress := types.NewHostZoneModuleAddress(chainId, CommunityPoolStakeHoldingAddressKey)
 	communityPoolRedeemAddress := types.NewHostZoneModuleAddress(chainId, CommunityPoolRedeemHoldingAddressKey)
 
-	k.AccountKeeper.RemoveAccount(ctx, k.AccountKeeper.GetAccount(ctx, depositAddress))
-	k.AccountKeeper.RemoveAccount(ctx, k.AccountKeeper.GetAccount(ctx, communityPoolStakeAddress))
-	k.AccountKeeper.RemoveAccount(ctx, k.AccountKeeper.GetAccount(ctx, communityPoolRedeemAddress))
+	k.accountKeeper.RemoveAccount(ctx, k.accountKeeper.GetAccount(ctx, depositAddress))
+	k.accountKeeper.RemoveAccount(ctx, k.accountKeeper.GetAccount(ctx, communityPoolStakeAddress))
+	k.accountKeeper.RemoveAccount(ctx, k.accountKeeper.GetAccount(ctx, communityPoolRedeemAddress))
 
 	// Remove all deposit records for the host zone
-	for _, depositRecord := range k.RecordsKeeper.GetAllDepositRecord(ctx) {
+	for _, depositRecord := range k.recordsKeeper.GetAllDepositRecord(ctx) {
 		if depositRecord.HostZoneId == chainId {
-			k.RecordsKeeper.RemoveDepositRecord(ctx, depositRecord.Id)
+			k.recordsKeeper.RemoveDepositRecord(ctx, depositRecord.Id)
 		}
 	}
 
 	// Remove all epoch unbonding records for the host zone
-	for _, epochUnbondingRecord := range k.RecordsKeeper.GetAllEpochUnbondingRecord(ctx) {
+	for _, epochUnbondingRecord := range k.recordsKeeper.GetAllEpochUnbondingRecord(ctx) {
 		updatedHostZoneUnbondings := []*recordstypes.HostZoneUnbonding{}
 		for _, hostZoneUnbonding := range epochUnbondingRecord.HostZoneUnbondings {
 			if hostZoneUnbonding.HostZoneId != chainId {
@@ -162,23 +162,23 @@ func (k Keeper) UnregisterHostZone(ctx sdk.Context, chainId string) error {
 			}
 		}
 		epochUnbondingRecord.HostZoneUnbondings = updatedHostZoneUnbondings
-		k.RecordsKeeper.SetEpochUnbondingRecord(ctx, epochUnbondingRecord)
+		k.recordsKeeper.SetEpochUnbondingRecord(ctx, epochUnbondingRecord)
 	}
 
 	// Remove all user redemption records for the host zone
-	for _, userRedemptionRecord := range k.RecordsKeeper.GetAllUserRedemptionRecord(ctx) {
+	for _, userRedemptionRecord := range k.recordsKeeper.GetAllUserRedemptionRecord(ctx) {
 		if userRedemptionRecord.HostZoneId == chainId {
-			k.RecordsKeeper.RemoveUserRedemptionRecord(ctx, userRedemptionRecord.Id)
+			k.recordsKeeper.RemoveUserRedemptionRecord(ctx, userRedemptionRecord.Id)
 		}
 	}
 
 	// Remove whitelisted address pairs from rate limit module
-	rewardCollectorAddress := k.AccountKeeper.GetModuleAccount(ctx, types.RewardCollectorName).GetAddress()
-	k.RatelimitKeeper.RemoveWhitelistedAddressPair(ctx, hostZone.DepositAddress, hostZone.DelegationIcaAddress)
-	k.RatelimitKeeper.RemoveWhitelistedAddressPair(ctx, hostZone.FeeIcaAddress, rewardCollectorAddress.String())
-	k.RatelimitKeeper.RemoveWhitelistedAddressPair(ctx, hostZone.CommunityPoolDepositIcaAddress, hostZone.CommunityPoolStakeHoldingAddress)
-	k.RatelimitKeeper.RemoveWhitelistedAddressPair(ctx, hostZone.CommunityPoolDepositIcaAddress, hostZone.CommunityPoolRedeemHoldingAddress)
-	k.RatelimitKeeper.RemoveWhitelistedAddressPair(ctx, hostZone.CommunityPoolStakeHoldingAddress, hostZone.CommunityPoolReturnIcaAddress)
+	rewardCollectorAddress := k.accountKeeper.GetModuleAccount(ctx, types.RewardCollectorName).GetAddress()
+	k.rateLimitKeeper.RemoveWhitelistedAddressPair(ctx, hostZone.DepositAddress, hostZone.DelegationIcaAddress)
+	k.rateLimitKeeper.RemoveWhitelistedAddressPair(ctx, hostZone.FeeIcaAddress, rewardCollectorAddress.String())
+	k.rateLimitKeeper.RemoveWhitelistedAddressPair(ctx, hostZone.CommunityPoolDepositIcaAddress, hostZone.CommunityPoolStakeHoldingAddress)
+	k.rateLimitKeeper.RemoveWhitelistedAddressPair(ctx, hostZone.CommunityPoolDepositIcaAddress, hostZone.CommunityPoolRedeemHoldingAddress)
+	k.rateLimitKeeper.RemoveWhitelistedAddressPair(ctx, hostZone.CommunityPoolStakeHoldingAddress, hostZone.CommunityPoolReturnIcaAddress)
 
 	// Finally, remove the host zone struct
 	k.RemoveHostZone(ctx, chainId)

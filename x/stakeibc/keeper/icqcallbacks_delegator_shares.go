@@ -80,7 +80,7 @@ func DelegatorSharesCallback(k Keeper, ctx sdk.Context, args []byte, query icqty
 		}
 		query.CallbackData = callbackDataBz
 
-		if err := k.InterchainQueryKeeper.RetryICQRequest(ctx, query); err != nil {
+		if err := k.interchainQueryKeeper.RetryICQRequest(ctx, query); err != nil {
 			return errorsmod.Wrapf(err, "unable to resubmit delegator shares query")
 		}
 		return nil
@@ -248,7 +248,7 @@ func (k Keeper) SlashValidatorOnHostZone(ctx sdk.Context, hostZone types.HostZon
 		"Delegation updated to: %v, Weight updated to: %v", validator.Delegation, validator.Weight))
 
 	// Update the redemption rate
-	depositRecords := k.RecordsKeeper.GetAllDepositRecord(ctx)
+	depositRecords := k.recordsKeeper.GetAllDepositRecord(ctx)
 	k.UpdateRedemptionRateForHostZone(ctx, hostZone, depositRecords)
 
 	return nil

@@ -40,7 +40,7 @@ func (k Keeper) ModuleAddress(goCtx context.Context, req *types.QueryModuleAddre
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	addr := k.AccountKeeper.GetModuleAccount(ctx, req.Name).GetAddress().String()
+	addr := k.accountKeeper.GetModuleAccount(ctx, req.Name).GetAddress().String()
 
 	return &types.QueryModuleAddressResponse{Addr: addr}, nil
 }
@@ -121,7 +121,7 @@ func (k Keeper) AddressUnbondings(c context.Context, req *types.QueryAddressUnbo
 	}
 	currentDay := dayEpochTracker.EpochNumber
 
-	epochUnbondingRecords := k.RecordsKeeper.GetAllEpochUnbondingRecord(ctx)
+	epochUnbondingRecords := k.recordsKeeper.GetAllEpochUnbondingRecord(ctx)
 
 	for _, epochUnbondingRecord := range epochUnbondingRecords {
 		for _, hostZoneUnbonding := range epochUnbondingRecord.GetHostZoneUnbondings() {
@@ -142,7 +142,7 @@ func (k Keeper) AddressUnbondings(c context.Context, req *types.QueryAddressUnbo
 					}
 				}
 				if targetAddress {
-					userRedemptionRecord, found := k.RecordsKeeper.GetUserRedemptionRecord(ctx, userRedemptionRecordId)
+					userRedemptionRecord, found := k.recordsKeeper.GetUserRedemptionRecord(ctx, userRedemptionRecordId)
 					if !found {
 						continue // the record has already been claimed
 					}
@@ -229,7 +229,7 @@ func (k Keeper) InterchainAccountFromAddress(goCtx context.Context, req *types.Q
 		return nil, status.Errorf(codes.InvalidArgument, "could not find account: %s", err)
 	}
 
-	addr, found := k.ICAControllerKeeper.GetInterchainAccountAddress(ctx, req.ConnectionId, portID)
+	addr, found := k.icaControllerKeeper.GetInterchainAccountAddress(ctx, req.ConnectionId, portID)
 	if !found {
 		return nil, status.Errorf(codes.NotFound, "no account found for portID %s", portID)
 	}
@@ -243,7 +243,7 @@ func (k Keeper) NextPacketSequence(c context.Context, req *types.QueryGetNextPac
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	sequence, found := k.IBCKeeper.ChannelKeeper.GetNextSequenceSend(ctx, req.PortId, req.ChannelId)
+	sequence, found := k.ibcKeeper.ChannelKeeper.GetNextSequenceSend(ctx, req.PortId, req.ChannelId)
 	if !found {
 		return nil, status.Error(codes.InvalidArgument, "channel and port combination not found")
 	}

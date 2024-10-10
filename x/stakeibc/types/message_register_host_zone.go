@@ -9,8 +9,6 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	ibctransfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
-
-	"github.com/milkyway-labs/milkyway/utils"
 )
 
 const TypeMsgRegisterHostZone = "register_host_zone"
@@ -72,9 +70,6 @@ func (msg *MsgRegisterHostZone) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
-	}
-	if err := utils.ValidateAdminAddress(msg.Creator); err != nil {
-		return err
 	}
 	// VALIDATE DENOMS
 	// host denom cannot be empty

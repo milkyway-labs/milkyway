@@ -31,17 +31,6 @@ func FilterDepositRecords(arr []recordstypes.DepositRecord, condition func(recor
 	return ret
 }
 
-func Int64ToCoinString(amount int64, denom string) string {
-	return strconv.FormatInt(amount, 10) + denom
-}
-
-func ValidateAdminAddress(address string) error {
-	if !Admins[address] {
-		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "address (%s) is not an admin", address)
-	}
-	return nil
-}
-
 func Min(a int, b int) int {
 	if a < b {
 		return a
@@ -55,15 +44,6 @@ func StringMapKeys[V any](m map[string]V) []string {
 		keys = append(keys, k)
 	}
 	sort.Strings(keys)
-	return keys
-}
-
-func Int32MapKeys[V any](m map[int32]V) []int32 {
-	keys := make([]int32, 0, len(m))
-	for k := range m {
-		keys = append(keys, k)
-	}
-	sort.Slice(keys, func(i, j int) bool { return keys[i] < keys[j] })
 	return keys
 }
 
