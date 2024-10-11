@@ -894,6 +894,7 @@ func NewMilkyWayApp(
 			app.RecordsKeeper,
 			app.ICACallbacksKeeper,
 			app.RateLimitKeeper,
+			app.OPChildKeeper,
 		)
 		app.StakeIBCKeeper.SetHooks(stakeibctypes.NewMultiStakeIBCHooks())
 		icaCallbacksStack = stakeibc.NewIBCMiddleware(icaCallbacksStack, app.StakeIBCKeeper)

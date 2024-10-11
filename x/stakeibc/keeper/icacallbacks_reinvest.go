@@ -98,7 +98,7 @@ func (k Keeper) ReinvestCallback(ctx sdk.Context, packet channeltypes.Packet, ac
 		Source:             recordstypes.DepositRecord_WITHDRAWAL_ICA,
 		DepositEpochNumber: strideEpochTracker.EpochNumber,
 	}
-	k.RecordsKeeper.AppendDepositRecord(ctx, record)
+	k.recordsKeeper.AppendDepositRecord(ctx, record)
 
 	// Encode the fee account address for the query request
 	// The query request consists of the fee account address and denom
@@ -132,7 +132,7 @@ func (k Keeper) ReinvestCallback(ctx sdk.Context, packet channeltypes.Packet, ac
 		TimeoutDuration: timeoutDuration,
 		TimeoutPolicy:   icqtypes.TimeoutPolicy_REJECT_QUERY_RESPONSE,
 	}
-	if err := k.InterchainQueryKeeper.SubmitICQRequest(ctx, query, false); err != nil {
+	if err := k.interchainQueryKeeper.SubmitICQRequest(ctx, query, false); err != nil {
 		k.Logger(ctx).Error(fmt.Sprintf("Error submitting ICQ for fee balance, error %s", err.Error()))
 		return err
 	}

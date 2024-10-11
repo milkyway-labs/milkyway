@@ -25,7 +25,7 @@ func (k Keeper) CreateDepositRecordsForEpoch(ctx sdk.Context, epochNumber uint64
 			Status:             recordstypes.DepositRecord_TRANSFER_QUEUE,
 			DepositEpochNumber: epochNumber,
 		}
-		k.RecordsKeeper.AppendDepositRecord(ctx, depositRecord)
+		k.recordsKeeper.AppendDepositRecord(ctx, depositRecord)
 	}
 }
 
@@ -52,7 +52,7 @@ func (k Keeper) CreateEpochUnbondingRecord(ctx sdk.Context, epochNumber uint64) 
 		EpochNumber:        cast.ToUint64(epochNumber),
 		HostZoneUnbondings: hostZoneUnbondings,
 	}
-	k.RecordsKeeper.SetEpochUnbondingRecord(ctx, epochUnbondingRecord)
+	k.recordsKeeper.SetEpochUnbondingRecord(ctx, epochUnbondingRecord)
 	return true
 }
 
@@ -60,7 +60,7 @@ func (k Keeper) CreateEpochUnbondingRecord(ctx sdk.Context, epochNumber uint64) 
 func (k Keeper) CleanupEpochUnbondingRecords(ctx sdk.Context, epochNumber uint64) bool {
 	k.Logger(ctx).Info("Cleaning Claimed Epoch Unbonding Records...")
 
-	for _, epochUnbondingRecord := range k.RecordsKeeper.GetAllEpochUnbondingRecord(ctx) {
+	for _, epochUnbondingRecord := range k.recordsKeeper.GetAllEpochUnbondingRecord(ctx) {
 		shouldDeleteEpochUnbondingRecord := true
 		hostZoneUnbondings := epochUnbondingRecord.HostZoneUnbondings
 
@@ -74,7 +74,7 @@ func (k Keeper) CleanupEpochUnbondingRecords(ctx sdk.Context, epochNumber uint64
 		}
 		if shouldDeleteEpochUnbondingRecord {
 			k.Logger(ctx).Info(fmt.Sprintf("  EpochUnbondingRecord %d - All unbondings claimed, removing record", epochUnbondingRecord.EpochNumber))
-			k.RecordsKeeper.RemoveEpochUnbondingRecord(ctx, epochUnbondingRecord.EpochNumber)
+			k.recordsKeeper.RemoveEpochUnbondingRecord(ctx, epochUnbondingRecord.EpochNumber)
 		} else {
 			k.Logger(ctx).Info(fmt.Sprintf("  EpochUnbondingRecord %d - Has unclaimed unbondings", epochUnbondingRecord.EpochNumber))
 		}

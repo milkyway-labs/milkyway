@@ -39,7 +39,7 @@ func (k Keeper) TransferExistingDepositsToHostZones(ctx sdk.Context, epochNumber
 		// if a TRANSFER_QUEUE record has 0 balance and was created in the previous epoch, it's safe to remove since it will never be updated or used
 		if depositRecord.Amount.LTE(sdkmath.ZeroInt()) && depositRecord.DepositEpochNumber < epochNumber {
 			k.Logger(ctx).Info(utils.LogWithHostZone(depositRecord.HostZoneId, "Empty deposit record - Removing."))
-			k.RecordsKeeper.RemoveDepositRecord(ctx, depositRecord.Id)
+			k.recordsKeeper.RemoveDepositRecord(ctx, depositRecord.Id)
 			continue
 		}
 
@@ -81,7 +81,7 @@ func (k Keeper) TransferExistingDepositsToHostZones(ctx sdk.Context, epochNumber
 		k.Logger(ctx).Info(utils.LogWithHostZone(depositRecord.HostZoneId, "Transfer Msg: %+v", msg))
 
 		// transfer the deposit record and update its status to TRANSFER_IN_PROGRESS
-		err := k.RecordsKeeper.IBCTransferNativeTokens(ctx, msg, depositRecord)
+		err := k.recordsKeeper.IBCTransferNativeTokens(ctx, msg, depositRecord)
 		if err != nil {
 			k.Logger(ctx).Error(fmt.Sprintf("[TransferExistingDepositsToHostZones] Failed to initiate IBC transfer to host zone, HostZone: %v, Channel: %v, Amount: %v, ModuleAddress: %v, DelegateAddress: %v, Timeout: %v",
 				hostZone.ChainId, hostZone.TransferChannelId, transferCoin, hostZone.DepositAddress, hostZone.DelegationIcaAddress, timeoutTimestamp))
@@ -102,7 +102,7 @@ func (k Keeper) TransferCommunityPoolDepositToHolding(ctx sdk.Context, hostZone 
 	}
 
 	// get the hostZone counterparty transfer channel for sending tokens from hostZone to Stride
-	transferChannel, found := k.IBCKeeper.ChannelKeeper.GetChannel(ctx, transfertypes.PortID, hostZone.TransferChannelId)
+	transferChannel, found := k.ibcKeeper.ChannelKeeper.GetChannel(ctx, transfertypes.PortID, hostZone.TransferChannelId)
 	if !found {
 		return errorsmod.Wrapf(channeltypes.ErrChannelNotFound, "transfer channel %s not found", hostZone.TransferChannelId)
 	}
@@ -189,7 +189,7 @@ func (k Keeper) TransferHoldingToCommunityPoolReturn(ctx sdk.Context, hostZone t
 		memo,
 	)
 
-	msgTransferResponse, err := k.RecordsKeeper.TransferKeeper.Transfer(sdk.WrapSDKContext(ctx), msg)
+	msgTransferResponse, err := k.recordsKeeper.TransferKeeper.Transfer(sdk.WrapSDKContext(ctx), msg)
 	if err != nil {
 		return errorsmod.Wrapf(err, "Error submitting ibc transfer for %+v", coin)
 	}
@@ -207,7 +207,7 @@ func (k Keeper) GetStIbcDenomOnHostZone(ctx sdk.Context, hostZone types.HostZone
 	stDenomOnStride := types.StAssetDenomFromHostZoneDenom(nativeDenom)
 
 	// use counterparty transfer channel because tokens come through this channel to hostZone
-	transferChannel, found := k.IBCKeeper.ChannelKeeper.GetChannel(ctx, transfertypes.PortID, hostZone.TransferChannelId)
+	transferChannel, found := k.ibcKeeper.ChannelKeeper.GetChannel(ctx, transfertypes.PortID, hostZone.TransferChannelId)
 	if !found {
 		return "", channeltypes.ErrChannelNotFound.Wrap(hostZone.TransferChannelId)
 	}

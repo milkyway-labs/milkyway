@@ -47,7 +47,7 @@ func (k Keeper) BeforeEpochStart(ctx sdk.Context, epochInfo epochstypes.EpochInf
 
 		// Create a new deposit record for each host zone and the grab all deposit records
 		k.CreateDepositRecordsForEpoch(ctx, epochNumber)
-		depositRecords := k.RecordsKeeper.GetAllDepositRecord(ctx)
+		depositRecords := k.recordsKeeper.GetAllDepositRecord(ctx)
 
 		// TODO: move this to an external function that anyone can call, so that we don't have to call it every epoch
 		k.SetWithdrawalAddress(ctx)

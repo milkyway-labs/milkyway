@@ -58,7 +58,7 @@ func (k Keeper) DelegateCallback(ctx sdk.Context, packet channeltypes.Packet, ac
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "host zone not found %s", chainId)
 	}
 	recordId := delegateCallback.DepositRecordId
-	depositRecord, found := k.RecordsKeeper.GetDepositRecord(ctx, recordId)
+	depositRecord, found := k.recordsKeeper.GetDepositRecord(ctx, recordId)
 	if !found {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidRequest, "deposit record not found %d", recordId)
 	}
@@ -87,7 +87,7 @@ func (k Keeper) DelegateCallback(ctx sdk.Context, packet channeltypes.Packet, ac
 
 		// Reset deposit record status
 		depositRecord.Status = recordstypes.DepositRecord_DELEGATION_QUEUE
-		k.RecordsKeeper.SetDepositRecord(ctx, depositRecord)
+		k.recordsKeeper.SetDepositRecord(ctx, depositRecord)
 		return nil
 	}
 
@@ -103,7 +103,7 @@ func (k Keeper) DelegateCallback(ctx sdk.Context, packet channeltypes.Packet, ac
 	}
 	k.SetHostZone(ctx, hostZone)
 
-	k.RecordsKeeper.RemoveDepositRecord(ctx, cast.ToUint64(recordId))
+	k.recordsKeeper.RemoveDepositRecord(ctx, cast.ToUint64(recordId))
 	k.Logger(ctx).Info(fmt.Sprintf("[DELEGATION] success on %s", chainId))
 	return nil
 }

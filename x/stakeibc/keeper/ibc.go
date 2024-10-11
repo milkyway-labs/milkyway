@@ -18,11 +18,11 @@ import (
 
 func (k Keeper) OnChanOpenAck(ctx sdk.Context, portID, channelID string) error {
 	// Lookup connection ID, counterparty chain ID, and ICA address from the channel ID
-	controllerConnectionId, _, err := k.IBCKeeper.ChannelKeeper.GetChannelConnection(ctx, portID, channelID)
+	controllerConnectionId, _, err := k.ibcKeeper.ChannelKeeper.GetChannelConnection(ctx, portID, channelID)
 	if err != nil {
 		return err
 	}
-	address, found := k.ICAControllerKeeper.GetInterchainAccountAddress(ctx, controllerConnectionId, portID)
+	address, found := k.icaControllerKeeper.GetInterchainAccountAddress(ctx, controllerConnectionId, portID)
 	if !found {
 		k.Logger(ctx).Info(fmt.Sprintf("No ICA address associated with connection %s and port %s", controllerConnectionId, portID))
 		return nil
@@ -117,7 +117,7 @@ func (k Keeper) StoreHostZoneIcaAddress(ctx sdk.Context, chainId, portId, addres
 	// Once the delegation channel is registered, whitelist epochly transfers so they're not rate limited
 	// Epochly transfers go from the deposit address to the delegation address
 	if portId == delegationPortID {
-		k.RatelimitKeeper.SetWhitelistedAddressPair(ctx, ratelimittypes.WhitelistedAddressPair{
+		k.rateLimitKeeper.SetWhitelistedAddressPair(ctx, ratelimittypes.WhitelistedAddressPair{
 			Sender:   hostZone.DepositAddress,
 			Receiver: hostZone.DelegationIcaAddress,
 		})
@@ -126,8 +126,8 @@ func (k Keeper) StoreHostZoneIcaAddress(ctx sdk.Context, chainId, portId, addres
 	// Once the fee channel is registered, whitelist reward transfers so they're not rate limited
 	// Reward transfers go from the fee address to the reward collector
 	if portId == feePortID {
-		rewardCollectorAddress := k.AccountKeeper.GetModuleAccount(ctx, types.RewardCollectorName).GetAddress()
-		k.RatelimitKeeper.SetWhitelistedAddressPair(ctx, ratelimittypes.WhitelistedAddressPair{
+		rewardCollectorAddress := k.accountKeeper.GetModuleAccount(ctx, types.RewardCollectorName).GetAddress()
+		k.rateLimitKeeper.SetWhitelistedAddressPair(ctx, ratelimittypes.WhitelistedAddressPair{
 			Sender:   hostZone.FeeIcaAddress,
 			Receiver: rewardCollectorAddress.String(),
 		})
@@ -136,11 +136,11 @@ func (k Keeper) StoreHostZoneIcaAddress(ctx sdk.Context, chainId, portId, addres
 	// Once the community pool deposit ICA is registered, whitelist epochly community pool transfers
 	// from the deposit ICA to the community pool holding accounts
 	if portId == communityPoolDepositPortID {
-		k.RatelimitKeeper.SetWhitelistedAddressPair(ctx, ratelimittypes.WhitelistedAddressPair{
+		k.rateLimitKeeper.SetWhitelistedAddressPair(ctx, ratelimittypes.WhitelistedAddressPair{
 			Sender:   hostZone.CommunityPoolDepositIcaAddress,
 			Receiver: hostZone.CommunityPoolStakeHoldingAddress,
 		})
-		k.RatelimitKeeper.SetWhitelistedAddressPair(ctx, ratelimittypes.WhitelistedAddressPair{
+		k.rateLimitKeeper.SetWhitelistedAddressPair(ctx, ratelimittypes.WhitelistedAddressPair{
 			Sender:   hostZone.CommunityPoolDepositIcaAddress,
 			Receiver: hostZone.CommunityPoolRedeemHoldingAddress,
 		})
@@ -149,7 +149,7 @@ func (k Keeper) StoreHostZoneIcaAddress(ctx sdk.Context, chainId, portId, addres
 	// Once the community pool return ICA is registered, whitelist epochly community pool transfers
 	// from the community pool stake holding account to the community pool return ICA
 	if portId == communityPoolReturnPortID {
-		k.RatelimitKeeper.SetWhitelistedAddressPair(ctx, ratelimittypes.WhitelistedAddressPair{
+		k.rateLimitKeeper.SetWhitelistedAddressPair(ctx, ratelimittypes.WhitelistedAddressPair{
 			Sender:   hostZone.CommunityPoolStakeHoldingAddress,
 			Receiver: hostZone.CommunityPoolReturnIcaAddress,
 		})
@@ -202,14 +202,14 @@ func (k Keeper) StoreTradeRouteIcaAddress(ctx sdk.Context, callbackChainId, call
 // Retrieves the light client time for a given connection
 func (k Keeper) GetLightClientTimeSafely(ctx sdk.Context, connectionID string) (uint64, error) {
 	// get light client's latest height
-	conn, found := k.IBCKeeper.ConnectionKeeper.GetConnection(ctx, connectionID)
+	conn, found := k.ibcKeeper.ConnectionKeeper.GetConnection(ctx, connectionID)
 	if !found {
 		errMsg := fmt.Sprintf("invalid connection id, %s not found", connectionID)
 		k.Logger(ctx).Error(errMsg)
 		return 0, fmt.Errorf(errMsg)
 	}
 	// TODO(TEST-112) make sure to update host LCs here!
-	latestConsensusClientState, found := k.IBCKeeper.ClientKeeper.GetLatestClientConsensusState(ctx, conn.ClientId)
+	latestConsensusClientState, found := k.ibcKeeper.ClientKeeper.GetLatestClientConsensusState(ctx, conn.ClientId)
 	if !found {
 		errMsg := fmt.Sprintf("client id %s not found for connection %s", conn.ClientId, connectionID)
 		k.Logger(ctx).Error(errMsg)
@@ -224,13 +224,13 @@ func (k Keeper) GetLightClientTimeSafely(ctx sdk.Context, connectionID string) (
 // Retrieves the light client time for a given connection
 func (k Keeper) GetLightClientHeightSafely(ctx sdk.Context, connectionID string) (uint64, error) {
 	// get light client's latest height
-	conn, found := k.IBCKeeper.ConnectionKeeper.GetConnection(ctx, connectionID)
+	conn, found := k.ibcKeeper.ConnectionKeeper.GetConnection(ctx, connectionID)
 	if !found {
 		errMsg := fmt.Sprintf("invalid connection id, %s not found", connectionID)
 		k.Logger(ctx).Error(errMsg)
 		return 0, fmt.Errorf(errMsg)
 	}
-	clientState, found := k.IBCKeeper.ClientKeeper.GetClientState(ctx, conn.ClientId)
+	clientState, found := k.ibcKeeper.ClientKeeper.GetClientState(ctx, conn.ClientId)
 	if !found {
 		errMsg := fmt.Sprintf("client id %s not found for connection %s", conn.ClientId, connectionID)
 		k.Logger(ctx).Error(errMsg)
@@ -248,11 +248,11 @@ func (k Keeper) GetLightClientHeightSafely(ctx sdk.Context, connectionID string)
 
 // Lookup a chain ID from a connection ID by looking up the client state
 func (k Keeper) GetChainIdFromConnectionId(ctx sdk.Context, connectionID string) (string, error) {
-	connection, found := k.IBCKeeper.ConnectionKeeper.GetConnection(ctx, connectionID)
+	connection, found := k.ibcKeeper.ConnectionKeeper.GetConnection(ctx, connectionID)
 	if !found {
 		return "", errorsmod.Wrapf(connectiontypes.ErrConnectionNotFound, "connection %s not found", connectionID)
 	}
-	clientState, found := k.IBCKeeper.ClientKeeper.GetClientState(ctx, connection.ClientId)
+	clientState, found := k.ibcKeeper.ClientKeeper.GetClientState(ctx, connection.ClientId)
 	if !found {
 		return "", errorsmod.Wrapf(clienttypes.ErrClientNotFound, "client %s not found", connection.ClientId)
 	}

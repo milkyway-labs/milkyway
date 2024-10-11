@@ -25,20 +25,20 @@ import (
 
 type (
 	Keeper struct {
-		// *cosmosibckeeper.Keeper
 		cdc                   codec.Codec
 		storeKey              storetypes.StoreKey
 		memKey                storetypes.StoreKey
 		authority             string
-		ICAControllerKeeper   icacontrollerkeeper.Keeper
-		IBCKeeper             ibckeeper.Keeper
+		icaControllerKeeper   icacontrollerkeeper.Keeper
+		ibcKeeper             ibckeeper.Keeper
 		bankKeeper            bankkeeper.Keeper
-		AccountKeeper         types.AccountKeeper
-		InterchainQueryKeeper icqkeeper.Keeper
-		RecordsKeeper         recordsmodulekeeper.Keeper
-		ICACallbacksKeeper    icacallbackskeeper.Keeper
+		accountKeeper         types.AccountKeeper
+		interchainQueryKeeper icqkeeper.Keeper
+		recordsKeeper         recordsmodulekeeper.Keeper
+		icaCallbacksKeeper    icacallbackskeeper.Keeper
 		hooks                 types.StakeIBCHooks
-		RatelimitKeeper       types.RatelimitKeeper
+		rateLimitKeeper       types.RatelimitKeeper
+		opChildKeeper         types.OPChildKeeper
 		params                collections.Item[types.Params]
 	}
 )
@@ -51,12 +51,13 @@ func NewKeeper(
 	authority string,
 	accountKeeper types.AccountKeeper,
 	bankKeeper bankkeeper.Keeper,
-	icacontrollerkeeper icacontrollerkeeper.Keeper,
+	icaControllerKeeper icacontrollerkeeper.Keeper,
 	ibcKeeper ibckeeper.Keeper,
 	interchainQueryKeeper icqkeeper.Keeper,
 	RecordsKeeper recordsmodulekeeper.Keeper,
-	ICACallbacksKeeper icacallbackskeeper.Keeper,
-	RatelimitKeeper types.RatelimitKeeper,
+	icaCallbacksKeeper icacallbackskeeper.Keeper,
+	rateLimitKeeper types.RatelimitKeeper,
+	opChildKeeper types.OPChildKeeper,
 ) Keeper {
 	sb := collections.NewSchemaBuilder(storeService)
 	return Keeper{
@@ -64,14 +65,15 @@ func NewKeeper(
 		storeKey:              storeKey,
 		memKey:                memKey,
 		authority:             authority,
-		AccountKeeper:         accountKeeper,
+		accountKeeper:         accountKeeper,
 		bankKeeper:            bankKeeper,
-		ICAControllerKeeper:   icacontrollerkeeper,
-		IBCKeeper:             ibcKeeper,
-		InterchainQueryKeeper: interchainQueryKeeper,
-		RecordsKeeper:         RecordsKeeper,
-		ICACallbacksKeeper:    ICACallbacksKeeper,
-		RatelimitKeeper:       RatelimitKeeper,
+		icaControllerKeeper:   icaControllerKeeper,
+		ibcKeeper:             ibcKeeper,
+		interchainQueryKeeper: interchainQueryKeeper,
+		recordsKeeper:         RecordsKeeper,
+		icaCallbacksKeeper:    icaCallbacksKeeper,
+		rateLimitKeeper:       rateLimitKeeper,
+		opChildKeeper:         opChildKeeper,
 		params:                collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 	}
 }
@@ -94,6 +96,26 @@ func (k *Keeper) SetHooks(gh types.StakeIBCHooks) *Keeper {
 // GetAuthority returns the x/stakeibc module's authority.
 func (k Keeper) GetAuthority() string {
 	return k.authority
+}
+
+// ValidateAdminAddress makes sure that the given address is the one of an account that can perform admin operations.
+func (k Keeper) ValidateAdminAddress(ctx sdk.Context, address string) error {
+	// The authority can always perform admin operations.
+	if k.GetAuthority() == address {
+		return nil
+	}
+
+	// The OpChild admin can always perform admin operations
+	opChildParams, err := k.opChildKeeper.GetParams(ctx)
+	if err != nil {
+		return err
+	}
+
+	if opChildParams.Admin == address {
+		return nil
+	}
+
+	return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "address (%s) is not an admin", address)
 }
 
 func (k Keeper) GetICATimeoutNanos(ctx sdk.Context, epochType string) (uint64, error) {

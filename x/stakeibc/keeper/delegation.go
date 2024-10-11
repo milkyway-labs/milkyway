@@ -81,7 +81,7 @@ func (k Keeper) DelegateOnHost(ctx sdk.Context, hostZone types.HostZone, amt sdk
 
 	// update the record state to DELEGATION_IN_PROGRESS
 	depositRecord.Status = recordstypes.DepositRecord_DELEGATION_IN_PROGRESS
-	k.RecordsKeeper.SetDepositRecord(ctx, depositRecord)
+	k.recordsKeeper.SetDepositRecord(ctx, depositRecord)
 
 	return nil
 }

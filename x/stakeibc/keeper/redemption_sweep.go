@@ -23,7 +23,7 @@ func (k Keeper) SweepAllUnbondedTokensForHostZone(ctx sdk.Context, hostZone type
 	for _, epochUnbondingRecord := range epochUnbondingRecords {
 
 		// Get all the unbondings associated with the epoch + host zone pair
-		hostZoneUnbonding, found := k.RecordsKeeper.GetHostZoneUnbondingByChainId(ctx, epochUnbondingRecord.EpochNumber, hostZone.ChainId)
+		hostZoneUnbonding, found := k.recordsKeeper.GetHostZoneUnbondingByChainId(ctx, epochUnbondingRecord.EpochNumber, hostZone.ChainId)
 		if !found {
 			continue
 		}
@@ -102,7 +102,7 @@ func (k Keeper) SweepAllUnbondedTokensForHostZone(ctx sdk.Context, hostZone type
 	k.Logger(ctx).Info(utils.LogWithHostZone(hostZone.ChainId, "ICA MsgSend Successfully Sent"))
 
 	// Update the host zone unbonding records to status IN_PROGRESS
-	err = k.RecordsKeeper.SetHostZoneUnbondingStatus(ctx, hostZone.ChainId, epochUnbondingRecordIds, recordstypes.HostZoneUnbonding_EXIT_TRANSFER_IN_PROGRESS)
+	err = k.recordsKeeper.SetHostZoneUnbondingStatus(ctx, hostZone.ChainId, epochUnbondingRecordIds, recordstypes.HostZoneUnbonding_EXIT_TRANSFER_IN_PROGRESS)
 	if err != nil {
 		k.Logger(ctx).Error(err.Error())
 		return false, sdkmath.ZeroInt()
@@ -128,7 +128,7 @@ func (k Keeper) SweepAllUnbondedTokens(ctx sdk.Context) (success bool, successfu
 	failedSweeps = []string{}
 	hostZones := k.GetAllActiveHostZone(ctx)
 
-	epochUnbondingRecords := k.RecordsKeeper.GetAllEpochUnbondingRecord(ctx)
+	epochUnbondingRecords := k.recordsKeeper.GetAllEpochUnbondingRecord(ctx)
 	for _, hostZone := range hostZones {
 		hostZoneSuccess, sweepAmount := k.SweepAllUnbondedTokensForHostZone(ctx, hostZone, epochUnbondingRecords)
 		if hostZoneSuccess {

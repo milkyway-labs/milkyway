@@ -59,7 +59,7 @@ func FeeBalanceCallback(k Keeper, ctx sdk.Context, args []byte, query icqtypes.Q
 	}
 
 	// get counterparty chain's transfer channel
-	transferChannel, found := k.IBCKeeper.ChannelKeeper.GetChannel(ctx, transfertypes.PortID, hostZone.TransferChannelId)
+	transferChannel, found := k.ibcKeeper.ChannelKeeper.GetChannel(ctx, transfertypes.PortID, hostZone.TransferChannelId)
 	if !found {
 		return errorsmod.Wrapf(channeltypes.ErrChannelNotFound, "transfer channel %s not found", hostZone.TransferChannelId)
 	}
@@ -67,7 +67,7 @@ func FeeBalanceCallback(k Keeper, ctx sdk.Context, args []byte, query icqtypes.Q
 
 	// Prepare a MsgTransfer from the fee account to the rewards collector account
 	rewardsCoin := sdk.NewCoin(hostZone.HostDenom, feeBalanceAmount)
-	rewardsCollectorAddress := k.AccountKeeper.GetModuleAccount(ctx, types.RewardCollectorName).GetAddress()
+	rewardsCollectorAddress := k.accountKeeper.GetModuleAccount(ctx, types.RewardCollectorName).GetAddress()
 	transferMsg := ibctypes.NewMsgTransfer(
 		transfertypes.PortID,
 		counterpartyChannelId,

@@ -85,7 +85,7 @@ func (k Keeper) RemoveValidatorFromHostZone(ctx sdk.Context, chainId string, val
 	}
 
 	// Check for LSMTokenDeposit records with this specific validator address
-	lsmTokenDeposits := k.RecordsKeeper.GetAllLSMTokenDeposit(ctx)
+	lsmTokenDeposits := k.recordsKeeper.GetAllLSMTokenDeposit(ctx)
 	for _, lsmTokenDeposit := range lsmTokenDeposits {
 		if lsmTokenDeposit.ValidatorAddress == validatorAddress {
 			return errorsmod.Wrapf(types.ErrUnableToRemoveValidator, "Validator (%s) still has at least one LSMTokenDeposit (%+v)", validatorAddress, lsmTokenDeposit)

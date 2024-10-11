@@ -49,8 +49,8 @@ func (k Keeper) GetQueuedHostZoneUnbondingRecords(
 	chainId string,
 ) (epochNumbers []uint64, epochToHostZoneUnbondingMap map[uint64]recordstypes.HostZoneUnbonding) {
 	epochToHostZoneUnbondingMap = map[uint64]recordstypes.HostZoneUnbonding{}
-	for _, epochUnbonding := range k.RecordsKeeper.GetAllEpochUnbondingRecord(ctx) {
-		hostZoneRecord, found := k.RecordsKeeper.GetHostZoneUnbondingByChainId(ctx, epochUnbonding.EpochNumber, chainId)
+	for _, epochUnbonding := range k.recordsKeeper.GetAllEpochUnbondingRecord(ctx) {
+		hostZoneRecord, found := k.recordsKeeper.GetHostZoneUnbondingByChainId(ctx, epochUnbonding.EpochNumber, chainId)
 		if !found {
 			continue
 		}
@@ -87,7 +87,7 @@ func (k Keeper) RefreshUserRedemptionRecordNativeAmounts(
 	// Loop and set the native amount for each record, keeping track of the total
 	totalNativeAmount = sdkmath.ZeroInt()
 	for _, userRedemptionRecordId := range userRedemptionRecordIds {
-		userRedemptionRecord, found := k.RecordsKeeper.GetUserRedemptionRecord(ctx, userRedemptionRecordId)
+		userRedemptionRecord, found := k.recordsKeeper.GetUserRedemptionRecord(ctx, userRedemptionRecordId)
 		if !found {
 			k.Logger(ctx).Error(utils.LogWithHostZone(chainId, "No user redemption record found for id %s", userRedemptionRecordId))
 			continue
@@ -99,7 +99,7 @@ func (k Keeper) RefreshUserRedemptionRecordNativeAmounts(
 
 		// Set the native amount on the record
 		userRedemptionRecord.NativeTokenAmount = nativeAmount
-		k.RecordsKeeper.SetUserRedemptionRecord(ctx, userRedemptionRecord)
+		k.recordsKeeper.SetUserRedemptionRecord(ctx, userRedemptionRecord)
 	}
 	return totalNativeAmount
 }
@@ -123,7 +123,7 @@ func (k Keeper) RefreshHostZoneUnbondingNativeTokenAmount(
 
 	// Then set the total on the host zone unbonding record
 	hostZoneUnbondingRecord.NativeTokenAmount = totalNativeAmount
-	return k.RecordsKeeper.SetHostZoneUnbondingRecord(ctx, epochNumber, chainId, hostZoneUnbondingRecord)
+	return k.recordsKeeper.SetHostZoneUnbondingRecord(ctx, epochNumber, chainId, hostZoneUnbondingRecord)
 }
 
 // Given a mapping of epoch unbonding record IDs to host zone unbonding records,
@@ -527,7 +527,7 @@ func (k Keeper) UnbondFromHostZone(ctx sdk.Context, hostZone types.HostZone) err
 	}
 
 	// Update the epoch unbonding record status
-	if err := k.RecordsKeeper.SetHostZoneUnbondingStatus(
+	if err := k.recordsKeeper.SetHostZoneUnbondingStatus(
 		ctx,
 		hostZone.ChainId,
 		epochUnbondingRecordIds,

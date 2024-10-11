@@ -177,7 +177,7 @@ func (k Keeper) SubmitTxs(
 		protoMsgs = append(protoMsgs, msg)
 	}
 
-	channelID, found := k.ICAControllerKeeper.GetActiveChannelID(ctx, connectionId, portID)
+	channelID, found := k.icaControllerKeeper.GetActiveChannelID(ctx, connectionId, portID)
 	if !found {
 		return 0, errorsmod.Wrapf(icatypes.ErrActiveChannelNotFound, "failed to retrieve active channel for port %s", portID)
 	}
@@ -193,7 +193,7 @@ func (k Keeper) SubmitTxs(
 	}
 
 	// Submit ICA tx
-	msgServer := icacontrollerkeeper.NewMsgServerImpl(&k.ICAControllerKeeper)
+	msgServer := icacontrollerkeeper.NewMsgServerImpl(&k.icaControllerKeeper)
 	relativeTimeoutOffset := timeoutTimestamp - uint64(ctx.BlockTime().UnixNano())
 	msgSendTx := icacontrollertypes.NewMsgSendTx(owner, connectionId, relativeTimeoutOffset, packetData)
 	res, err := msgServer.SendTx(ctx, msgSendTx)
@@ -213,7 +213,7 @@ func (k Keeper) SubmitTxs(
 			CallbackArgs: callbackArgs,
 		}
 		k.Logger(ctx).Info(utils.LogWithHostZone(chainId, "Storing callback data: %+v", callback))
-		k.ICACallbacksKeeper.SetCallbackData(ctx, callback)
+		k.icaCallbacksKeeper.SetCallbackData(ctx, callback)
 	}
 
 	return sequence, nil
@@ -238,7 +238,7 @@ func (k Keeper) SubmitICATxWithoutCallback(
 	relativeTimeoutOffset := timeoutTimestamp - uint64(ctx.BlockTime().UnixNano())
 
 	// Submit ICA, no need to store callback data or register callback function
-	icaMsgServer := icacontrollerkeeper.NewMsgServerImpl(&k.ICAControllerKeeper)
+	icaMsgServer := icacontrollerkeeper.NewMsgServerImpl(&k.icaControllerKeeper)
 	msgSendTx := icacontrollertypes.NewMsgSendTx(icaAccountOwner, connectionId, relativeTimeoutOffset, packetData)
 	_, err = icaMsgServer.SendTx(ctx, msgSendTx)
 	if err != nil {
@@ -261,7 +261,7 @@ func (k Keeper) RegisterTradeRouteICAAccount(
 	if err != nil {
 		return account, err
 	}
-	connection, found := k.IBCKeeper.ConnectionKeeper.GetConnection(ctx, connectionId)
+	connection, found := k.ibcKeeper.ConnectionKeeper.GetConnection(ctx, connectionId)
 	if !found {
 		return account, errorsmod.Wrap(connectiontypes.ErrConnectionNotFound, connectionId)
 	}
@@ -291,8 +291,8 @@ func (k Keeper) RegisterTradeRouteICAAccount(
 	// Check if an ICA account has already been created
 	// (in the event that this trade route was removed and then added back)
 	// If so, there's no need to register a new ICA
-	_, channelFound := k.ICAControllerKeeper.GetOpenActiveChannel(ctx, connectionId, portID)
-	icaAddress, icaFound := k.ICAControllerKeeper.GetInterchainAccountAddress(ctx, connectionId, portID)
+	_, channelFound := k.icaControllerKeeper.GetOpenActiveChannel(ctx, connectionId, portID)
+	icaAddress, icaFound := k.icaControllerKeeper.GetInterchainAccountAddress(ctx, connectionId, portID)
 	if channelFound && icaFound {
 		account = types.ICAAccount{
 			ChainId:      chainId,
@@ -304,7 +304,7 @@ func (k Keeper) RegisterTradeRouteICAAccount(
 	}
 
 	// Otherwise, if there's no account already, register a new one
-	if err := k.ICAControllerKeeper.RegisterInterchainAccount(ctx, connectionId, owner, appVersion); err != nil {
+	if err := k.icaControllerKeeper.RegisterInterchainAccount(ctx, connectionId, owner, appVersion); err != nil {
 		return account, err
 	}
 
