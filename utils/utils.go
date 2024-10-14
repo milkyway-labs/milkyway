@@ -222,6 +222,9 @@ func VerifyTxHash(txHash string) (err error) {
 }
 
 func ParseUint32Slice(s string) ([]uint32, error) {
+	if s == "" {
+		return nil, nil
+	}
 	ss := strings.Split(s, ",")
 	out := make([]uint32, len(ss))
 	for i, d := range ss {
