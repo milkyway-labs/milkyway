@@ -617,7 +617,7 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 
 				// Delegate to operator
 				err = suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
-					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "",
+					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "", operatorstypes.DefaultOperatorParams(),
 				))
 				suite.Assert().NoError(err)
 				_, err = suite.k.DelegateToOperator(ctx, 1,
@@ -673,7 +673,7 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 
 				// Delegate to operator
 				err = suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
-					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "",
+					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "", operatorstypes.DefaultOperatorParams(),
 				))
 				suite.Assert().NoError(err)
 				_, err = suite.k.DelegateToOperator(ctx, 1,
@@ -700,7 +700,7 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 				err := suite.sk.CreateService(ctx, servicestypes.NewService(1, servicestypes.SERVICE_STATUS_ACTIVE,
 					"", "", "", "", ""))
 				err = suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
-					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "",
+					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "", operatorstypes.DefaultOperatorParams(),
 				))
 
 				// Create delegators delegations

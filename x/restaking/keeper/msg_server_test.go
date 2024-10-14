@@ -43,6 +43,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperatorParams() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					operatorstypes.DefaultOperatorParams(),
 				))
 			},
 			msg: &types.MsgUpdateOperatorParams{
@@ -61,6 +62,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperatorParams() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					operatorstypes.DefaultOperatorParams(),
 				))
 			},
 			msg: &types.MsgUpdateOperatorParams{
@@ -79,6 +81,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperatorParams() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					operatorstypes.DefaultOperatorParams(),
 				))
 				suite.sk.SaveService(ctx, servicestypes.NewService(
 					1, servicestypes.SERVICE_STATUS_ACTIVE,
@@ -241,6 +244,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateServiceParams() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					operatorstypes.DefaultOperatorParams(),
 				))
 			},
 			msg: &types.MsgUpdateServiceParams{
@@ -506,7 +510,6 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegatePool() {
 			}
 		})
 	}
-
 }
 
 func (suite *KeeperTestSuite) TestMsgServer_DelegateOperator() {

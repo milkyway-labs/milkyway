@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
@@ -35,6 +36,7 @@ func NewOperator(
 	website string,
 	pictureURL string,
 	admin string,
+	params OperatorParams,
 ) Operator {
 	return Operator{
 		ID:         id,
@@ -44,6 +46,7 @@ func NewOperator(
 		Website:    website,
 		PictureURL: pictureURL,
 		Address:    GetOperatorAddress(id).String(),
+		Params:     params,
 	}
 }
 
@@ -85,6 +88,11 @@ func (o Operator) Validate() error {
 	_, err = sdk.AccAddressFromBech32(o.Address)
 	if err != nil {
 		return fmt.Errorf("invalid address: %s", o.Address)
+	}
+
+	err = o.Params.Validate()
+	if err != nil {
+		return fmt.Errorf("invalid params: %w", err)
 	}
 
 	return nil
@@ -226,5 +234,29 @@ func (o *Operator) Update(update OperatorUpdate) Operator {
 		update.Website,
 		update.PictureURL,
 		o.Admin,
+		o.Params,
 	)
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewOperatorParams creates a new OperatorParams instance
+func NewOperatorParams(commissionRate math.LegacyDec) OperatorParams {
+	return OperatorParams{
+		CommissionRate: commissionRate,
+	}
+}
+
+// DefaultOperatorParams returns the default operator params
+func DefaultOperatorParams() OperatorParams {
+	return NewOperatorParams(math.LegacyZeroDec())
+}
+
+// Validate validates the operator params
+func (p *OperatorParams) Validate() error {
+	if p.CommissionRate.IsNegative() || p.CommissionRate.GT(math.LegacyOneDec()) {
+		return fmt.Errorf("invalid commission rate: %s", p.CommissionRate.String())
+	}
+
+	return nil
 }

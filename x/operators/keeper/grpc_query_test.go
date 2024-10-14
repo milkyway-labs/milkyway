@@ -30,6 +30,7 @@ func (suite *KeeperTestSuite) TestQueryServer_Operator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					types.DefaultOperatorParams(),
 				))
 				suite.Require().NoError(err)
 			},
@@ -43,6 +44,7 @@ func (suite *KeeperTestSuite) TestQueryServer_Operator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					types.DefaultOperatorParams(),
 				),
 			},
 		},
@@ -84,6 +86,7 @@ func (suite *KeeperTestSuite) TestQueryServer_Operators() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					types.DefaultOperatorParams(),
 				))
 				suite.Require().NoError(err)
 
@@ -94,6 +97,7 @@ func (suite *KeeperTestSuite) TestQueryServer_Operators() {
 					"https://inertia.zone",
 					"",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.DefaultOperatorParams(),
 				))
 				suite.Require().NoError(err)
 			},
@@ -107,6 +111,7 @@ func (suite *KeeperTestSuite) TestQueryServer_Operators() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					types.DefaultOperatorParams(),
 				),
 				types.NewOperator(
 					2,
@@ -115,6 +120,7 @@ func (suite *KeeperTestSuite) TestQueryServer_Operators() {
 					"https://inertia.zone",
 					"",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.DefaultOperatorParams(),
 				),
 			},
 		},
@@ -128,6 +134,7 @@ func (suite *KeeperTestSuite) TestQueryServer_Operators() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					types.DefaultOperatorParams(),
 				))
 				suite.Require().NoError(err)
 
@@ -138,6 +145,7 @@ func (suite *KeeperTestSuite) TestQueryServer_Operators() {
 					"https://inertia.zone",
 					"",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.DefaultOperatorParams(),
 				))
 				suite.Require().NoError(err)
 			},
@@ -154,6 +162,7 @@ func (suite *KeeperTestSuite) TestQueryServer_Operators() {
 					"https://inertia.zone",
 					"",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.DefaultOperatorParams(),
 				),
 			},
 		},

@@ -80,6 +80,7 @@ func TestOperator_Validate(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/picture",
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				types.DefaultOperatorParams(),
 			),
 			shouldErr: true,
 		},
@@ -92,6 +93,7 @@ func TestOperator_Validate(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/picture",
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				types.DefaultOperatorParams(),
 			),
 			shouldErr: true,
 		},
@@ -104,6 +106,7 @@ func TestOperator_Validate(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/picture",
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				types.DefaultOperatorParams(),
 			),
 			shouldErr: true,
 		},
@@ -116,6 +119,7 @@ func TestOperator_Validate(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/picture",
 				"",
+				types.DefaultOperatorParams(),
 			),
 			shouldErr: true,
 		},
@@ -139,6 +143,7 @@ func TestOperator_Validate(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/picture",
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				types.DefaultOperatorParams(),
 			),
 			shouldErr: false,
 		},
@@ -173,6 +178,7 @@ func TestOperator_Update(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/picture",
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				types.DefaultOperatorParams(),
 			),
 			update: types.NewOperatorUpdate(
 				"MilkyWay2",
@@ -186,6 +192,7 @@ func TestOperator_Update(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/picture",
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				types.DefaultOperatorParams(),
 			),
 		},
 		{
@@ -197,6 +204,7 @@ func TestOperator_Update(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/picture",
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				types.DefaultOperatorParams(),
 			),
 			update: types.NewOperatorUpdate(
 				types.DoNotModify,
@@ -210,6 +218,7 @@ func TestOperator_Update(t *testing.T) {
 				"https://example.com",
 				"https://milkyway.com/picture",
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				types.DefaultOperatorParams(),
 			),
 		},
 		{
@@ -221,6 +230,7 @@ func TestOperator_Update(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/picture",
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				types.DefaultOperatorParams(),
 			),
 			update: types.NewOperatorUpdate(
 				types.DoNotModify,
@@ -234,6 +244,7 @@ func TestOperator_Update(t *testing.T) {
 				"https://milkyway.com",
 				"https://example.com/picture.jpg",
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				types.DefaultOperatorParams(),
 			),
 		},
 	}

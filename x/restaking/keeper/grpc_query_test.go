@@ -587,6 +587,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegations() {
 					DelegatorShares: sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
+					Params: operatorstypes.DefaultOperatorParams(),
 				})
 
 				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
@@ -2740,6 +2741,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperators() {
 					DelegatorShares: sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
+					Params: operatorstypes.DefaultOperatorParams(),
 				},
 				{
 					ID:      2,
@@ -2750,6 +2752,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperators() {
 					DelegatorShares: sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("operators/2/utia", sdkmath.LegacyNewDec(150)),
 					),
+					Params: operatorstypes.DefaultOperatorParams(),
 				},
 			},
 		},
@@ -2811,6 +2814,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperators() {
 					DelegatorShares: sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("operators/2/utia", sdkmath.LegacyNewDec(150)),
 					),
+					Params: operatorstypes.DefaultOperatorParams(),
 				},
 			},
 		},
@@ -2875,7 +2879,6 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperator() {
 			request:   types.NewQueryDelegatorOperatorRequest("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", 1),
 			shouldErr: false,
 			expOperator: operatorstypes.Operator{
-
 				ID:      1,
 				Address: operatorstypes.GetOperatorAddress(1).String(),
 				Tokens: sdk.NewCoins(
@@ -2884,6 +2887,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperator() {
 				DelegatorShares: sdk.NewDecCoins(
 					sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 				),
+				Params: operatorstypes.DefaultOperatorParams(),
 			},
 		},
 	}

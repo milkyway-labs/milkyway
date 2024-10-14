@@ -89,6 +89,7 @@ func (suite *KeeperTestSuite) TestMsgServer_RegisterOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					types.DefaultOperatorParams(),
 				), stored)
 
 				// Make sure the operator account has been created
@@ -179,6 +180,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					types.DefaultOperatorParams(),
 				))
 			},
 			msg: types.NewMsgUpdateOperator(
@@ -200,6 +202,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					types.DefaultOperatorParams(),
 				))
 			},
 			msg: types.NewMsgUpdateOperator(
@@ -221,6 +224,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					types.DefaultOperatorParams(),
 				))
 			},
 			msg: types.NewMsgUpdateOperator(
@@ -249,6 +253,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperator() {
 					"https://milkyway.zone",
 					"https://milkyway.zone/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					types.DefaultOperatorParams(),
 				), stored)
 			},
 		},
@@ -317,6 +322,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.DefaultOperatorParams(),
 				))
 			},
 			msg: types.NewMsgDeactivateOperator(
@@ -335,6 +341,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					types.DefaultOperatorParams(),
 				))
 			},
 			msg: types.NewMsgDeactivateOperator(
@@ -353,6 +360,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					types.DefaultOperatorParams(),
 				))
 			},
 			msg: types.NewMsgDeactivateOperator(
@@ -378,6 +386,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					types.DefaultOperatorParams(),
 				))
 			},
 			msg: types.NewMsgDeactivateOperator(
@@ -403,6 +412,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					types.DefaultOperatorParams(),
 				), stored)
 
 				// Make sure the operator was added to the inactivating queue
@@ -480,6 +490,7 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferOperatorOwnership() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					types.DefaultOperatorParams(),
 				))
 			},
 			msg: types.NewMsgTransferOperatorOwnership(
@@ -499,6 +510,7 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferOperatorOwnership() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					types.DefaultOperatorParams(),
 				))
 			},
 			msg: types.NewMsgTransferOperatorOwnership(
@@ -526,6 +538,7 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferOperatorOwnership() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+					types.DefaultOperatorParams(),
 				), stored)
 			},
 		},

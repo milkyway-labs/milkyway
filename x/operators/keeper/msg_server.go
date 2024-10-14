@@ -40,6 +40,7 @@ func (k msgServer) RegisterOperator(goCtx context.Context, msg *types.MsgRegiste
 		msg.Website,
 		msg.PictureURL,
 		msg.Sender,
+		types.DefaultOperatorParams(),
 	)
 
 	// Validate the operator before storing
@@ -177,6 +178,43 @@ func (k msgServer) TransferOperatorOwnership(goCtx context.Context, msg *types.M
 	})
 
 	return &types.MsgTransferOperatorOwnershipResponse{}, nil
+}
+
+// SetOperatorParams defines the rpc method for Msg/SetOperatorParams
+func (k msgServer) SetOperatorParams(goCtx context.Context, msg *types.MsgSetOperatorParams) (*types.MsgSetOperatorParamsResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	operator, found := k.GetOperator(ctx, msg.OperatorID)
+	if !found {
+		return nil, types.ErrOperatorNotFound
+	}
+
+	// Make sure only the admin can update the operator
+	if operator.Admin != msg.Sender {
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can update the operator")
+	}
+
+	// Update the operator params
+	operator.Params = msg.Params
+	err := operator.Validate()
+	if err != nil {
+		return nil, err
+	}
+
+	// Store the operator with the new params
+	if err := k.SaveOperator(ctx, operator); err != nil {
+		return nil, err
+	}
+
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeSetOperatorParams,
+			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", msg.OperatorID)),
+			sdk.NewAttribute(types.AttributeKeyNewCommissionRate, msg.Params.CommissionRate.String()),
+		),
+	})
+
+	return &types.MsgSetOperatorParamsResponse{}, nil
 }
 
 // UpdateParams defines the rpc method for Msg/UpdateParams

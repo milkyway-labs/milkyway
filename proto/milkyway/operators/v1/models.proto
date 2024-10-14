@@ -63,4 +63,18 @@ message Operator {
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
     (gogoproto.nullable) = false
   ];
+
+  // Params are the operator parameters
+  OperatorParams params = 10 [ (gogoproto.nullable) = false ];
+}
+
+// OperatorParams represent the params that have been set for an individual
+// operator.
+message OperatorParams {
+  // CommissionRate defines the commission rate charged to delegators, as a
+  // fraction.
+  string commission_rate = 1 [
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false
+  ];
 }
