@@ -232,7 +232,7 @@ Where proposal.json contains:
 				return err
 			}
 
-			msgs, err := parseExecuteMessages(clientCtx.Codec, args[0])
+			msgs, err := parseExecuteMessages(clientCtx.Codec, args[1])
 			if err != nil {
 				return err
 			}
