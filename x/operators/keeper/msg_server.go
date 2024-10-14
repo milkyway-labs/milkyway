@@ -191,7 +191,7 @@ func (k msgServer) ExecuteMessages(goCtx context.Context, msg *types.MsgExecuteM
 
 		// assert that the operator is the only signer for ExecuteMessages message
 		if !bytes.Equal(signers[0], operatorAddr) {
-			return nil, errors.Wrapf(types.ErrInvalidExecuteMessagesSigner, sdk.AccAddress(signers[0]).String())
+			return nil, errors.Wrap(types.ErrInvalidExecuteMessagesSigner, sdk.AccAddress(signers[0]).String())
 		}
 
 		handler := k.Router().Handler(msg)
