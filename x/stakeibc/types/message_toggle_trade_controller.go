@@ -7,8 +7,6 @@ import (
 
 	errorsmod "cosmossdk.io/errors"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	"github.com/milkyway-labs/milkyway/utils"
 )
 
 const TypeMsgToggleTradeController = "toggle_trade_controller"
@@ -49,9 +47,6 @@ func (msg *MsgToggleTradeController) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
-	}
-	if err := utils.ValidateAdminAddress(msg.Creator); err != nil {
-		return err
 	}
 	if msg.ChainId == "" {
 		return errors.New("chain ID must be specified")

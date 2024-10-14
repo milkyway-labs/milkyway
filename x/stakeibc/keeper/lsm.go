@@ -117,7 +117,7 @@ func (k Keeper) GetLSMTokenDenomTrace(ctx sdk.Context, denom string) (transferty
 	}
 
 	// Lookup the trace from the hash
-	denomTrace, found := k.RecordsKeeper.TransferKeeper.GetDenomTrace(ctx, hash)
+	denomTrace, found := k.recordsKeeper.TransferKeeper.GetDenomTrace(ctx, hash)
 	if !found {
 		return transfertypes.DenomTrace{}, errorsmod.Wrapf(types.ErrInvalidLSMToken, "denom trace not found for %s", denom)
 	}
@@ -255,7 +255,7 @@ func (k Keeper) StartLSMLiquidStake(ctx sdk.Context, msg types.MsgLSMLiquidStake
 	}
 
 	// Check if we already have tokens with this denom in records
-	_, found := k.RecordsKeeper.GetLSMTokenDeposit(ctx, hostZone.ChainId, lsmLiquidStake.Deposit.Denom)
+	_, found := k.recordsKeeper.GetLSMTokenDeposit(ctx, hostZone.ChainId, lsmLiquidStake.Deposit.Denom)
 	if found {
 		return types.LSMLiquidStake{}, errorsmod.Wrapf(sdkerrors.ErrInvalidRequest,
 			"there is already a previous record with this denom being processed: %s", lsmLiquidStake.Deposit.Denom)
@@ -273,7 +273,7 @@ func (k Keeper) StartLSMLiquidStake(ctx sdk.Context, msg types.MsgLSMLiquidStake
 
 	// Add the stToken to this deposit record
 	lsmLiquidStake.Deposit.StToken = stCoin
-	k.RecordsKeeper.SetLSMTokenDeposit(ctx, *lsmLiquidStake.Deposit)
+	k.recordsKeeper.SetLSMTokenDeposit(ctx, *lsmLiquidStake.Deposit)
 
 	return lsmLiquidStake, nil
 }
@@ -353,7 +353,7 @@ func (k Keeper) FinishLSMLiquidStake(ctx sdk.Context, lsmLiquidStake types.LSMLi
 	}
 
 	// Update the deposit status
-	k.RecordsKeeper.UpdateLSMTokenDepositStatus(ctx, lsmTokenDeposit, recordstypes.LSMTokenDeposit_TRANSFER_QUEUE)
+	k.recordsKeeper.UpdateLSMTokenDepositStatus(ctx, lsmTokenDeposit, recordstypes.LSMTokenDeposit_TRANSFER_QUEUE)
 
 	// Update the slash query progress on the validator
 	if err := k.IncrementValidatorSlashQueryProgress(
@@ -382,7 +382,7 @@ func (k Keeper) TransferAllLSMDeposits(ctx sdk.Context) {
 		}
 
 		// Submit an IBC transfer for all queued deposits
-		queuedDeposits := k.RecordsKeeper.GetLSMDepositsForHostZoneWithStatus(
+		queuedDeposits := k.recordsKeeper.GetLSMDepositsForHostZoneWithStatus(
 			ctx,
 			hostZone.ChainId,
 			recordstypes.LSMTokenDeposit_TRANSFER_QUEUE,
@@ -391,7 +391,7 @@ func (k Keeper) TransferAllLSMDeposits(ctx sdk.Context) {
 
 			// If the IBC transfer fails to get off the ground, flag the deposit as FAILED
 			// This is highly unlikely and would indicate a larger problem
-			if err := k.RecordsKeeper.IBCTransferLSMToken(
+			if err := k.recordsKeeper.IBCTransferLSMToken(
 				ctx,
 				deposit,
 				hostZone.TransferChannelId,
@@ -400,13 +400,13 @@ func (k Keeper) TransferAllLSMDeposits(ctx sdk.Context) {
 			); err != nil {
 				k.Logger(ctx).Error(fmt.Sprintf("Unable to submit IBC Transfer of LSMToken for %v%s on %s: %s",
 					deposit.Amount, deposit.Denom, hostZone.ChainId, err.Error()))
-				k.RecordsKeeper.UpdateLSMTokenDepositStatus(ctx, deposit, recordstypes.LSMTokenDeposit_TRANSFER_FAILED)
+				k.recordsKeeper.UpdateLSMTokenDepositStatus(ctx, deposit, recordstypes.LSMTokenDeposit_TRANSFER_FAILED)
 				continue
 			}
 			k.Logger(ctx).Info(fmt.Sprintf("Submitted IBC Transfer for LSM deposit %v%s on %s",
 				deposit.Amount, deposit.Denom, hostZone.ChainId))
 
-			k.RecordsKeeper.UpdateLSMTokenDepositStatus(ctx, deposit, recordstypes.LSMTokenDeposit_TRANSFER_IN_PROGRESS)
+			k.recordsKeeper.UpdateLSMTokenDepositStatus(ctx, deposit, recordstypes.LSMTokenDeposit_TRANSFER_IN_PROGRESS)
 		}
 	}
 }
@@ -456,7 +456,7 @@ func (k Keeper) DetokenizeLSMDeposit(ctx sdk.Context, hostZone types.HostZone, d
 	}
 
 	// Mark the deposit as IN_PROGRESS
-	k.RecordsKeeper.UpdateLSMTokenDepositStatus(ctx, deposit, recordstypes.LSMTokenDeposit_DETOKENIZATION_IN_PROGRESS)
+	k.recordsKeeper.UpdateLSMTokenDepositStatus(ctx, deposit, recordstypes.LSMTokenDeposit_DETOKENIZATION_IN_PROGRESS)
 
 	// Update the validator to say that it has a delegation change in progress
 	if err := k.IncrementValidatorDelegationChangesInProgress(&hostZone, deposit.ValidatorAddress); err != nil {
@@ -481,14 +481,14 @@ func (k Keeper) DetokenizeAllLSMDeposits(ctx sdk.Context) {
 		}
 
 		// If the delegation channel is not open, skip this host zone
-		_, isOpen := k.ICAControllerKeeper.GetOpenActiveChannel(ctx, hostZone.ConnectionId, delegationICAPortID)
+		_, isOpen := k.icaControllerKeeper.GetOpenActiveChannel(ctx, hostZone.ConnectionId, delegationICAPortID)
 		if !isOpen {
 			k.Logger(ctx).Error(fmt.Sprintf("Skipping detokenization ICAs for %s - Delegation ICA channel is closed", hostZone.ChainId))
 			continue
 		}
 
 		// If the delegation channel is open, submit the detokenize ICA
-		queuedDeposits := k.RecordsKeeper.GetLSMDepositsForHostZoneWithStatus(
+		queuedDeposits := k.recordsKeeper.GetLSMDepositsForHostZoneWithStatus(
 			ctx,
 			hostZone.ChainId,
 			recordstypes.LSMTokenDeposit_DETOKENIZATION_QUEUE,

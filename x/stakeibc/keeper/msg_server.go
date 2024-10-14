@@ -47,8 +47,13 @@ var _ types.MsgServer = msgServer{}
 func (k msgServer) RegisterHostZone(goCtx context.Context, msg *types.MsgRegisterHostZone) (*types.MsgRegisterHostZoneResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	// Validate the admin address
+	if err := k.ValidateAdminAddress(ctx, msg.Creator); err != nil {
+		return nil, err
+	}
+
 	// Get ConnectionEnd (for counterparty connection)
-	connectionEnd, found := k.IBCKeeper.ConnectionKeeper.GetConnection(ctx, msg.ConnectionId)
+	connectionEnd, found := k.ibcKeeper.ConnectionKeeper.GetConnection(ctx, msg.ConnectionId)
 	if !found {
 		errMsg := fmt.Sprintf("invalid connection id, %s not found", msg.ConnectionId)
 		k.Logger(ctx).Error(errMsg)
@@ -99,17 +104,17 @@ func (k msgServer) RegisterHostZone(goCtx context.Context, msg *types.MsgRegiste
 
 	// create and save the zones's module account
 	depositAddress := types.NewHostZoneDepositAddress(chainId)
-	if err := utils.CreateModuleAccount(ctx, k.AccountKeeper, depositAddress); err != nil {
+	if err := utils.CreateModuleAccount(ctx, k.accountKeeper, depositAddress); err != nil {
 		return nil, errorsmod.Wrapf(err, "unable to create deposit account for host zone %s", chainId)
 	}
 
 	// Create the host zone's community pool holding accounts
 	communityPoolStakeAddress := types.NewHostZoneModuleAddress(chainId, CommunityPoolStakeHoldingAddressKey)
 	communityPoolRedeemAddress := types.NewHostZoneModuleAddress(chainId, CommunityPoolRedeemHoldingAddressKey)
-	if err := utils.CreateModuleAccount(ctx, k.AccountKeeper, communityPoolStakeAddress); err != nil {
+	if err := utils.CreateModuleAccount(ctx, k.accountKeeper, communityPoolStakeAddress); err != nil {
 		return nil, errorsmod.Wrapf(err, "unable to create community pool stake account for host zone %s", chainId)
 	}
-	if err := utils.CreateModuleAccount(ctx, k.AccountKeeper, communityPoolRedeemAddress); err != nil {
+	if err := utils.CreateModuleAccount(ctx, k.accountKeeper, communityPoolRedeemAddress); err != nil {
 		return nil, errorsmod.Wrapf(err, "unable to create community pool redeem account for host zone %s", chainId)
 	}
 
@@ -173,7 +178,7 @@ func (k msgServer) RegisterHostZone(goCtx context.Context, msg *types.MsgRegiste
 	// generate delegate account
 	// NOTE: in the future, if we implement proxy governance, we'll need many more delegate accounts
 	delegateAccount := types.FormatHostZoneICAOwner(chainId, types.ICAAccountType_DELEGATION)
-	if err := k.ICAControllerKeeper.RegisterInterchainAccount(ctx, zone.ConnectionId, delegateAccount, appVersion); err != nil {
+	if err := k.icaControllerKeeper.RegisterInterchainAccount(ctx, zone.ConnectionId, delegateAccount, appVersion); err != nil {
 		errMsg := fmt.Sprintf("unable to register delegation account, err: %s", err.Error())
 		k.Logger(ctx).Error(errMsg)
 		return nil, errorsmod.Wrapf(types.ErrFailedToRegisterHostZone, errMsg)
@@ -181,7 +186,7 @@ func (k msgServer) RegisterHostZone(goCtx context.Context, msg *types.MsgRegiste
 
 	// generate fee account
 	feeAccount := types.FormatHostZoneICAOwner(chainId, types.ICAAccountType_FEE)
-	if err := k.ICAControllerKeeper.RegisterInterchainAccount(ctx, zone.ConnectionId, feeAccount, appVersion); err != nil {
+	if err := k.icaControllerKeeper.RegisterInterchainAccount(ctx, zone.ConnectionId, feeAccount, appVersion); err != nil {
 		errMsg := fmt.Sprintf("unable to register fee account, err: %s", err.Error())
 		k.Logger(ctx).Error(errMsg)
 		return nil, errorsmod.Wrapf(types.ErrFailedToRegisterHostZone, errMsg)
@@ -189,7 +194,7 @@ func (k msgServer) RegisterHostZone(goCtx context.Context, msg *types.MsgRegiste
 
 	// generate withdrawal account
 	withdrawalAccount := types.FormatHostZoneICAOwner(chainId, types.ICAAccountType_WITHDRAWAL)
-	if err := k.ICAControllerKeeper.RegisterInterchainAccount(ctx, zone.ConnectionId, withdrawalAccount, appVersion); err != nil {
+	if err := k.icaControllerKeeper.RegisterInterchainAccount(ctx, zone.ConnectionId, withdrawalAccount, appVersion); err != nil {
 		errMsg := fmt.Sprintf("unable to register withdrawal account, err: %s", err.Error())
 		k.Logger(ctx).Error(errMsg)
 		return nil, errorsmod.Wrapf(types.ErrFailedToRegisterHostZone, errMsg)
@@ -197,7 +202,7 @@ func (k msgServer) RegisterHostZone(goCtx context.Context, msg *types.MsgRegiste
 
 	// generate redemption account
 	redemptionAccount := types.FormatHostZoneICAOwner(chainId, types.ICAAccountType_REDEMPTION)
-	if err := k.ICAControllerKeeper.RegisterInterchainAccount(ctx, zone.ConnectionId, redemptionAccount, appVersion); err != nil {
+	if err := k.icaControllerKeeper.RegisterInterchainAccount(ctx, zone.ConnectionId, redemptionAccount, appVersion); err != nil {
 		errMsg := fmt.Sprintf("unable to register redemption account, err: %s", err.Error())
 		k.Logger(ctx).Error(errMsg)
 		return nil, errorsmod.Wrapf(types.ErrFailedToRegisterHostZone, errMsg)
@@ -205,13 +210,13 @@ func (k msgServer) RegisterHostZone(goCtx context.Context, msg *types.MsgRegiste
 
 	// create community pool deposit account
 	communityPoolDepositAccount := types.FormatHostZoneICAOwner(chainId, types.ICAAccountType_COMMUNITY_POOL_DEPOSIT)
-	if err := k.ICAControllerKeeper.RegisterInterchainAccount(ctx, zone.ConnectionId, communityPoolDepositAccount, appVersion); err != nil {
+	if err := k.icaControllerKeeper.RegisterInterchainAccount(ctx, zone.ConnectionId, communityPoolDepositAccount, appVersion); err != nil {
 		return nil, errorsmod.Wrapf(types.ErrFailedToRegisterHostZone, "failed to register community pool deposit ICA")
 	}
 
 	// create community pool return account
 	communityPoolReturnAccount := types.FormatHostZoneICAOwner(chainId, types.ICAAccountType_COMMUNITY_POOL_RETURN)
-	if err := k.ICAControllerKeeper.RegisterInterchainAccount(ctx, zone.ConnectionId, communityPoolReturnAccount, appVersion); err != nil {
+	if err := k.icaControllerKeeper.RegisterInterchainAccount(ctx, zone.ConnectionId, communityPoolReturnAccount, appVersion); err != nil {
 		return nil, errorsmod.Wrapf(types.ErrFailedToRegisterHostZone, "failed to register community pool return ICA")
 	}
 
@@ -221,7 +226,7 @@ func (k msgServer) RegisterHostZone(goCtx context.Context, msg *types.MsgRegiste
 	if !found {
 		return nil, errorsmod.Wrapf(types.ErrEpochNotFound, "epoch tracker (%s) not found", epochtypes.DAY_EPOCH)
 	}
-	epochUnbondingRecord, found := k.RecordsKeeper.GetEpochUnbondingRecord(ctx, dayEpochTracker.EpochNumber)
+	epochUnbondingRecord, found := k.recordsKeeper.GetEpochUnbondingRecord(ctx, dayEpochTracker.EpochNumber)
 	if !found {
 		errMsg := "unable to find latest epoch unbonding record"
 		k.Logger(ctx).Error(errMsg)
@@ -234,14 +239,14 @@ func (k msgServer) RegisterHostZone(goCtx context.Context, msg *types.MsgRegiste
 		HostZoneId:        zone.ChainId,
 		Status:            recordstypes.HostZoneUnbonding_UNBONDING_QUEUE,
 	}
-	updatedEpochUnbondingRecord, success := k.RecordsKeeper.AddHostZoneToEpochUnbondingRecord(ctx, epochUnbondingRecord.EpochNumber, chainId, hostZoneUnbonding)
+	updatedEpochUnbondingRecord, success := k.recordsKeeper.AddHostZoneToEpochUnbondingRecord(ctx, epochUnbondingRecord.EpochNumber, chainId, hostZoneUnbonding)
 	if !success {
 		errMsg := fmt.Sprintf("Failed to set host zone epoch unbonding record: epochNumber %d, chainId %s, hostZoneUnbonding %v",
 			epochUnbondingRecord.EpochNumber, chainId, hostZoneUnbonding)
 		k.Logger(ctx).Error(errMsg)
 		return nil, errorsmod.Wrapf(types.ErrEpochNotFound, errMsg)
 	}
-	k.RecordsKeeper.SetEpochUnbondingRecord(ctx, *updatedEpochUnbondingRecord)
+	k.recordsKeeper.SetEpochUnbondingRecord(ctx, *updatedEpochUnbondingRecord)
 
 	// create an empty deposit record for the host zone
 	strideEpochTracker, found := k.GetEpochTracker(ctx, epochtypes.STRIDE_EPOCH)
@@ -256,7 +261,7 @@ func (k msgServer) RegisterHostZone(goCtx context.Context, msg *types.MsgRegiste
 		Status:             recordstypes.DepositRecord_TRANSFER_QUEUE,
 		DepositEpochNumber: strideEpochTracker.EpochNumber,
 	}
-	k.RecordsKeeper.AppendDepositRecord(ctx, depositRecord)
+	k.recordsKeeper.AppendDepositRecord(ctx, depositRecord)
 
 	// register stToken to consumer reward denom whitelist so that
 	// stToken rewards can be distributed to provider validators
@@ -309,6 +314,11 @@ func (ms msgServer) UpdateHostZoneParams(goCtx context.Context, msg *types.MsgUp
 func (k msgServer) AddValidators(goCtx context.Context, msg *types.MsgAddValidators) (*types.MsgAddValidatorsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	// Validate the admin address
+	if err := k.ValidateAdminAddress(ctx, msg.Creator); err != nil {
+		return nil, err
+	}
+
 	for _, validator := range msg.Validators {
 		if err := k.AddValidatorToHostZone(ctx, msg.HostZone, *validator, false); err != nil {
 			return nil, err
@@ -331,6 +341,11 @@ func (k msgServer) AddValidators(goCtx context.Context, msg *types.MsgAddValidat
 func (k msgServer) DeleteValidator(goCtx context.Context, msg *types.MsgDeleteValidator) (*types.MsgDeleteValidatorResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	// Validate the admin address
+	if err := k.ValidateAdminAddress(ctx, msg.Creator); err != nil {
+		return nil, err
+	}
+
 	err := k.RemoveValidatorFromHostZone(ctx, msg.HostZone, msg.ValAddr)
 	if err != nil {
 		errMsg := fmt.Sprintf("Validator (%s) not removed from host zone (%s) | err: %s", msg.ValAddr, msg.HostZone, err.Error())
@@ -343,6 +358,11 @@ func (k msgServer) DeleteValidator(goCtx context.Context, msg *types.MsgDeleteVa
 
 func (k msgServer) ChangeValidatorWeight(goCtx context.Context, msg *types.MsgChangeValidatorWeights) (*types.MsgChangeValidatorWeightsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Validate the admin address
+	if err := k.ValidateAdminAddress(ctx, msg.Creator); err != nil {
+		return nil, err
+	}
 
 	hostZone, found := k.GetHostZone(ctx, msg.HostZone)
 	if !found {
@@ -377,6 +397,12 @@ func (k msgServer) ChangeValidatorWeight(goCtx context.Context, msg *types.MsgCh
 
 func (k msgServer) RebalanceValidators(goCtx context.Context, msg *types.MsgRebalanceValidators) (*types.MsgRebalanceValidatorsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Validate the admin address
+	if err := k.ValidateAdminAddress(ctx, msg.Creator); err != nil {
+		return nil, err
+	}
+
 	k.Logger(ctx).Info(fmt.Sprintf("RebalanceValidators executing %v", msg))
 
 	if err := k.RebalanceDelegationsForHostZone(ctx, msg.HostZone); err != nil {
@@ -387,6 +413,11 @@ func (k msgServer) RebalanceValidators(goCtx context.Context, msg *types.MsgReba
 
 func (k msgServer) ClearBalance(goCtx context.Context, msg *types.MsgClearBalance) (*types.MsgClearBalanceResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Validate the admin address
+	if err := k.ValidateAdminAddress(ctx, msg.Creator); err != nil {
+		return nil, err
+	}
 
 	zone, found := k.GetHostZone(ctx, msg.ChainId)
 	if !found {
@@ -478,7 +509,7 @@ func (k msgServer) LiquidStake(goCtx context.Context, msg *types.MsgLiquidStake)
 	if !found {
 		return nil, errorsmod.Wrapf(sdkerrors.ErrNotFound, "no epoch number for epoch (%s)", epochtypes.STRIDE_EPOCH)
 	}
-	depositRecord, found := k.RecordsKeeper.GetTransferDepositRecordByEpochAndChain(ctx, strideEpochTracker.EpochNumber, hostZone.ChainId)
+	depositRecord, found := k.recordsKeeper.GetTransferDepositRecordByEpochAndChain(ctx, strideEpochTracker.EpochNumber, hostZone.ChainId)
 	if !found {
 		return nil, errorsmod.Wrapf(sdkerrors.ErrNotFound, "no deposit record for epoch (%d)", strideEpochTracker.EpochNumber)
 	}
@@ -520,7 +551,7 @@ func (k msgServer) LiquidStake(goCtx context.Context, msg *types.MsgLiquidStake)
 
 	// Update the liquid staked amount on the deposit record
 	depositRecord.Amount = depositRecord.Amount.Add(msg.Amount)
-	k.RecordsKeeper.SetDepositRecord(ctx, *depositRecord)
+	k.recordsKeeper.SetDepositRecord(ctx, *depositRecord)
 
 	// Emit liquid stake event
 	EmitSuccessfulLiquidStakeEvent(ctx, msg, *hostZone, stAmount)
@@ -591,7 +622,7 @@ func (k msgServer) RedeemStake(goCtx context.Context, msg *types.MsgRedeemStake)
 	// ----------------- UNBONDING RECORD KEEPING -----------------
 	// Fetch the record
 	redemptionId := recordstypes.UserRedemptionRecordKeyFormatter(hostZone.ChainId, epochTracker.EpochNumber, msg.Receiver)
-	userRedemptionRecord, userHasRedeemedThisEpoch := k.RecordsKeeper.GetUserRedemptionRecord(ctx, redemptionId)
+	userRedemptionRecord, userHasRedeemedThisEpoch := k.recordsKeeper.GetUserRedemptionRecord(ctx, redemptionId)
 	if userHasRedeemedThisEpoch {
 		k.Logger(ctx).Info(fmt.Sprintf("UserRedemptionRecord found for %s", redemptionId))
 		// Add the unbonded amount to the UserRedemptionRecord
@@ -616,13 +647,13 @@ func (k msgServer) RedeemStake(goCtx context.Context, msg *types.MsgRedeemStake)
 	}
 
 	// then add undelegation amount to epoch unbonding records
-	epochUnbondingRecord, found := k.RecordsKeeper.GetEpochUnbondingRecord(ctx, epochTracker.EpochNumber)
+	epochUnbondingRecord, found := k.recordsKeeper.GetEpochUnbondingRecord(ctx, epochTracker.EpochNumber)
 	if !found {
 		k.Logger(ctx).Error("latest epoch unbonding record not found")
 		return nil, errorsmod.Wrapf(recordstypes.ErrEpochUnbondingRecordNotFound, "latest epoch unbonding record not found")
 	}
 	// get relevant host zone on this epoch unbonding record
-	hostZoneUnbonding, found := k.RecordsKeeper.GetHostZoneUnbondingByChainId(ctx, epochUnbondingRecord.EpochNumber, hostZone.ChainId)
+	hostZoneUnbonding, found := k.recordsKeeper.GetHostZoneUnbondingByChainId(ctx, epochUnbondingRecord.EpochNumber, hostZone.ChainId)
 	if !found {
 		return nil, errorsmod.Wrapf(types.ErrInvalidHostZone, "host zone not found in unbondings: %s", hostZone.ChainId)
 	}
@@ -648,7 +679,7 @@ func (k msgServer) RedeemStake(goCtx context.Context, msg *types.MsgRedeemStake)
 	hostZoneUnbonding.StTokenAmount = hostZoneUnbonding.StTokenAmount.Add(msg.Amount)
 
 	// Actually set the records, we wait until now to prevent any errors
-	k.RecordsKeeper.SetUserRedemptionRecord(ctx, userRedemptionRecord)
+	k.recordsKeeper.SetUserRedemptionRecord(ctx, userRedemptionRecord)
 
 	// Set the UserUnbondingRecords on the proper HostZoneUnbondingRecord
 	hostZoneUnbondings := epochUnbondingRecord.GetHostZoneUnbondings()
@@ -656,12 +687,12 @@ func (k msgServer) RedeemStake(goCtx context.Context, msg *types.MsgRedeemStake)
 		hostZoneUnbondings = []*recordstypes.HostZoneUnbonding{}
 		epochUnbondingRecord.HostZoneUnbondings = hostZoneUnbondings
 	}
-	updatedEpochUnbondingRecord, success := k.RecordsKeeper.AddHostZoneToEpochUnbondingRecord(ctx, epochUnbondingRecord.EpochNumber, hostZone.ChainId, hostZoneUnbonding)
+	updatedEpochUnbondingRecord, success := k.recordsKeeper.AddHostZoneToEpochUnbondingRecord(ctx, epochUnbondingRecord.EpochNumber, hostZone.ChainId, hostZoneUnbonding)
 	if !success {
 		k.Logger(ctx).Error(fmt.Sprintf("Failed to set host zone epoch unbonding record: epochNumber %d, chainId %s, hostZoneUnbonding %v", epochUnbondingRecord.EpochNumber, hostZone.ChainId, hostZoneUnbonding))
 		return nil, errorsmod.Wrapf(types.ErrEpochNotFound, "couldn't set host zone epoch unbonding record")
 	}
-	k.RecordsKeeper.SetEpochUnbondingRecord(ctx, *updatedEpochUnbondingRecord)
+	k.recordsKeeper.SetEpochUnbondingRecord(ctx, *updatedEpochUnbondingRecord)
 
 	k.Logger(ctx).Info(fmt.Sprintf("executed redeem stake: %s", msg.String()))
 	EmitSuccessfulRedeemStakeEvent(ctx, msg, hostZone, nativeAmount, msg.Amount)
@@ -942,7 +973,7 @@ func (k msgServer) RestoreInterchainAccount(goCtx context.Context, msg *types.Ms
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Get ConnectionEnd (for counterparty connection)
-	connectionEnd, found := k.IBCKeeper.ConnectionKeeper.GetConnection(ctx, msg.ConnectionId)
+	connectionEnd, found := k.ibcKeeper.ConnectionKeeper.GetConnection(ctx, msg.ConnectionId)
 	if !found {
 		return nil, errorsmod.Wrapf(connectiontypes.ErrConnectionNotFound, "connection %s not found", msg.ConnectionId)
 	}
@@ -953,7 +984,7 @@ func (k msgServer) RestoreInterchainAccount(goCtx context.Context, msg *types.Ms
 	if err != nil {
 		return nil, err
 	}
-	_, exists := k.ICAControllerKeeper.GetInterchainAccountAddress(ctx, msg.ConnectionId, portID)
+	_, exists := k.icaControllerKeeper.GetInterchainAccountAddress(ctx, msg.ConnectionId, portID)
 	if !exists {
 		return nil, errorsmod.Wrapf(types.ErrInvalidInterchainAccountAddress,
 			"ICA controller account address not found: %s", msg.AccountOwner)
@@ -967,7 +998,7 @@ func (k msgServer) RestoreInterchainAccount(goCtx context.Context, msg *types.Ms
 		TxType:                 icatypes.TxTypeSDKMultiMsg,
 	}))
 
-	if err := k.ICAControllerKeeper.RegisterInterchainAccount(ctx, msg.ConnectionId, msg.AccountOwner, appVersion); err != nil {
+	if err := k.icaControllerKeeper.RegisterInterchainAccount(ctx, msg.ConnectionId, msg.AccountOwner, appVersion); err != nil {
 		return nil, errorsmod.Wrapf(err, "unable to register account for owner %s", msg.AccountOwner)
 	}
 
@@ -986,23 +1017,23 @@ func (k msgServer) RestoreInterchainAccount(goCtx context.Context, msg *types.Ms
 		k.SetHostZone(ctx, hostZone)
 
 		// revert DELEGATION_IN_PROGRESS records for the closed ICA channel (so that they can be staked)
-		depositRecords := k.RecordsKeeper.GetAllDepositRecord(ctx)
+		depositRecords := k.recordsKeeper.GetAllDepositRecord(ctx)
 		for _, depositRecord := range depositRecords {
 			// only revert records for the select host zone
 			if depositRecord.HostZoneId == hostZone.ChainId && depositRecord.Status == recordtypes.DepositRecord_DELEGATION_IN_PROGRESS {
 				depositRecord.Status = recordtypes.DepositRecord_DELEGATION_QUEUE
 				k.Logger(ctx).Info(fmt.Sprintf("Setting DepositRecord %d to status DepositRecord_DELEGATION_IN_PROGRESS", depositRecord.Id))
-				k.RecordsKeeper.SetDepositRecord(ctx, depositRecord)
+				k.recordsKeeper.SetDepositRecord(ctx, depositRecord)
 			}
 		}
 
 		// revert epoch unbonding records for the closed ICA channel
-		epochUnbondingRecords := k.RecordsKeeper.GetAllEpochUnbondingRecord(ctx)
+		epochUnbondingRecords := k.recordsKeeper.GetAllEpochUnbondingRecord(ctx)
 		epochNumberForPendingUnbondingRecords := []uint64{}
 		epochNumberForPendingTransferRecords := []uint64{}
 		for _, epochUnbondingRecord := range epochUnbondingRecords {
 			// only revert records for the select host zone
-			hostZoneUnbonding, found := k.RecordsKeeper.GetHostZoneUnbondingByChainId(ctx, epochUnbondingRecord.EpochNumber, hostZone.ChainId)
+			hostZoneUnbonding, found := k.recordsKeeper.GetHostZoneUnbondingByChainId(ctx, epochUnbondingRecord.EpochNumber, hostZone.ChainId)
 			if !found {
 				k.Logger(ctx).Info(fmt.Sprintf("No HostZoneUnbonding found for chainId: %s, epoch: %d", hostZone.ChainId, epochUnbondingRecord.EpochNumber))
 				continue
@@ -1023,7 +1054,7 @@ func (k msgServer) RestoreInterchainAccount(goCtx context.Context, msg *types.Ms
 			}
 		}
 		// Revert UNBONDING_IN_PROGRESS records to UNBONDING_QUEUE
-		err := k.RecordsKeeper.SetHostZoneUnbondingStatus(ctx, hostZone.ChainId, epochNumberForPendingUnbondingRecords, recordtypes.HostZoneUnbonding_UNBONDING_QUEUE)
+		err := k.recordsKeeper.SetHostZoneUnbondingStatus(ctx, hostZone.ChainId, epochNumberForPendingUnbondingRecords, recordtypes.HostZoneUnbonding_UNBONDING_QUEUE)
 		if err != nil {
 			errMsg := fmt.Sprintf("unable to update host zone unbonding record status to %s for chainId: %s and epochUnbondingRecordIds: %v, err: %s",
 				recordtypes.HostZoneUnbonding_UNBONDING_QUEUE.String(), hostZone.ChainId, epochNumberForPendingUnbondingRecords, err)
@@ -1032,7 +1063,7 @@ func (k msgServer) RestoreInterchainAccount(goCtx context.Context, msg *types.Ms
 		}
 
 		// Revert EXIT_TRANSFER_IN_PROGRESS records to EXIT_TRANSFER_QUEUE
-		err = k.RecordsKeeper.SetHostZoneUnbondingStatus(ctx, hostZone.ChainId, epochNumberForPendingTransferRecords, recordtypes.HostZoneUnbonding_EXIT_TRANSFER_QUEUE)
+		err = k.recordsKeeper.SetHostZoneUnbondingStatus(ctx, hostZone.ChainId, epochNumberForPendingTransferRecords, recordtypes.HostZoneUnbonding_EXIT_TRANSFER_QUEUE)
 		if err != nil {
 			errMsg := fmt.Sprintf("unable to update host zone unbonding record status to %s for chainId: %s and epochUnbondingRecordIds: %v, err: %s",
 				recordtypes.HostZoneUnbonding_EXIT_TRANSFER_QUEUE.String(), hostZone.ChainId, epochNumberForPendingTransferRecords, err)
@@ -1041,10 +1072,10 @@ func (k msgServer) RestoreInterchainAccount(goCtx context.Context, msg *types.Ms
 		}
 
 		// Revert all pending LSM Detokenizations from status DETOKENIZATION_IN_PROGRESS to status DETOKENIZATION_QUEUE
-		pendingDeposits := k.RecordsKeeper.GetLSMDepositsForHostZoneWithStatus(ctx, hostZone.ChainId, recordtypes.LSMTokenDeposit_DETOKENIZATION_IN_PROGRESS)
+		pendingDeposits := k.recordsKeeper.GetLSMDepositsForHostZoneWithStatus(ctx, hostZone.ChainId, recordtypes.LSMTokenDeposit_DETOKENIZATION_IN_PROGRESS)
 		for _, lsmDeposit := range pendingDeposits {
 			k.Logger(ctx).Info(fmt.Sprintf("Setting LSMTokenDeposit %s to status DETOKENIZATION_QUEUE", lsmDeposit.Denom))
-			k.RecordsKeeper.UpdateLSMTokenDepositStatus(ctx, lsmDeposit, recordtypes.LSMTokenDeposit_DETOKENIZATION_QUEUE)
+			k.recordsKeeper.UpdateLSMTokenDepositStatus(ctx, lsmDeposit, recordtypes.LSMTokenDeposit_DETOKENIZATION_QUEUE)
 		}
 	}
 
@@ -1085,6 +1116,11 @@ func (k msgServer) CalibrateDelegation(goCtx context.Context, msg *types.MsgCali
 func (k msgServer) UpdateInnerRedemptionRateBounds(goCtx context.Context, msg *types.MsgUpdateInnerRedemptionRateBounds) (*types.MsgUpdateInnerRedemptionRateBoundsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	// Validate the admin address
+	if err := k.ValidateAdminAddress(ctx, msg.Creator); err != nil {
+		return nil, err
+	}
+
 	// Note: we're intentionally not checking the zone is halted
 	zone, found := k.GetHostZone(ctx, msg.ChainId)
 	if !found {
@@ -1123,6 +1159,11 @@ func (k msgServer) UpdateInnerRedemptionRateBounds(goCtx context.Context, msg *t
 func (k msgServer) ResumeHostZone(goCtx context.Context, msg *types.MsgResumeHostZone) (*types.MsgResumeHostZoneResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	// Validate the admin address
+	if err := k.ValidateAdminAddress(ctx, msg.Creator); err != nil {
+		return nil, err
+	}
+
 	// Get Host Zone
 	hostZone, found := k.GetHostZone(ctx, msg.ChainId)
 	if !found {
@@ -1140,7 +1181,7 @@ func (k msgServer) ResumeHostZone(goCtx context.Context, msg *types.MsgResumeHos
 
 	// remove from blacklist
 	stDenom := types.StAssetDenomFromHostZoneDenom(hostZone.HostDenom)
-	k.RatelimitKeeper.RemoveDenomFromBlacklist(ctx, stDenom)
+	k.rateLimitKeeper.RemoveDenomFromBlacklist(ctx, stDenom)
 
 	// Resume zone
 	hostZone.Halted = false
@@ -1155,6 +1196,11 @@ func (k msgServer) SetCommunityPoolRebate(
 	msg *types.MsgSetCommunityPoolRebate,
 ) (*types.MsgSetCommunityPoolRebateResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Validate the admin address
+	if err := k.ValidateAdminAddress(ctx, msg.Creator); err != nil {
+		return nil, err
+	}
 
 	hostZone, found := k.GetHostZone(ctx, msg.ChainId)
 	if !found {
@@ -1192,6 +1238,11 @@ func (k msgServer) ToggleTradeController(
 	msg *types.MsgToggleTradeController,
 ) (*types.MsgToggleTradeControllerResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Validate the admin address
+	if err := k.ValidateAdminAddress(ctx, msg.Creator); err != nil {
+		return nil, err
+	}
 
 	// Fetch the trade ICA which will be the granter
 	tradeRoute, found := k.GetTradeRouteFromTradeAccountChainId(ctx, msg.ChainId)

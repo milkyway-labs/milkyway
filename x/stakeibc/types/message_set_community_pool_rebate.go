@@ -8,8 +8,6 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdkmath "cosmossdk.io/math"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	"github.com/milkyway-labs/milkyway/utils"
 )
 
 const TypeMsgSetCommunityPoolRebate = "set_community_pool_rebate"
@@ -55,9 +53,6 @@ func (msg *MsgSetCommunityPoolRebate) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
 		return errorsmod.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
-	}
-	if err := utils.ValidateAdminAddress(msg.Creator); err != nil {
-		return err
 	}
 	if msg.ChainId == "" {
 		return errors.New("chain ID must be specified")

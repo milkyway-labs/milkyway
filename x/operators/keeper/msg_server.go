@@ -13,9 +13,7 @@ import (
 	"github.com/milkyway-labs/milkyway/x/operators/types"
 )
 
-var (
-	_ types.MsgServer = msgServer{}
-)
+var _ types.MsgServer = msgServer{}
 
 type msgServer struct {
 	*Keeper
@@ -71,7 +69,6 @@ func (k msgServer) RegisterOperator(goCtx context.Context, msg *types.MsgRegiste
 	return &types.MsgRegisterOperatorResponse{
 		NewOperatorID: operatorID,
 	}, nil
-
 }
 
 // UpdateOperator defines the rpc method for Msg/UpdateOperator
@@ -99,7 +96,9 @@ func (k msgServer) UpdateOperator(goCtx context.Context, msg *types.MsgUpdateOpe
 	}
 
 	// Store the updated operator
-	k.SaveOperator(ctx, updated)
+	if err := k.SaveOperator(ctx, updated); err != nil {
+		return nil, err
+	}
 
 	// Emit the event
 	ctx.EventManager().EmitEvents(sdk.Events{
@@ -133,7 +132,9 @@ func (k msgServer) DeactivateOperator(goCtx context.Context, msg *types.MsgDeact
 	}
 
 	// Start the operator inactivation
-	k.StartOperatorInactivation(ctx, operator)
+	if err := k.StartOperatorInactivation(ctx, operator); err != nil {
+		return nil, err
+	}
 
 	// Emit the event
 	ctx.EventManager().EmitEvents(sdk.Events{
@@ -230,7 +231,9 @@ func (k msgServer) TransferOperatorOwnership(goCtx context.Context, msg *types.M
 
 	// Update the operator admin
 	operator.Admin = msg.NewAdmin
-	k.SaveOperator(ctx, operator)
+	if err := k.SaveOperator(ctx, operator); err != nil {
+		return nil, err
+	}
 
 	// Emit the event
 	ctx.EventManager().EmitEvents(sdk.Events{

@@ -27,15 +27,19 @@ func (k *Keeper) exportNextServiceID(ctx sdk.Context) uint32 {
 // --------------------------------------------------------------------------------------------------------------------
 
 // InitGenesis initializes the state from a GenesisState
-func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) {
+func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 	// Set the next service ID
 	k.SetNextServiceID(ctx, state.NextServiceID)
 
 	// Store the services
 	for _, service := range state.Services {
-		k.SaveService(ctx, service)
+		if err := k.SaveService(ctx, service); err != nil {
+			return err
+		}
 	}
 
 	// Store params
 	k.SetParams(ctx, state.Params)
+
+	return nil
 }

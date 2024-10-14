@@ -130,13 +130,18 @@ func (am AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.RawMessage) []abci.ValidatorUpdate {
 	var genState types.GenesisState
 	cdc.MustUnmarshalJSON(gs, &genState)
-	am.keeper.InitGenesis(ctx, genState)
+	if err := am.keeper.InitGenesis(ctx, genState); err != nil {
+		panic(err)
+	}
 	return []abci.ValidatorUpdate{}
 }
 
 // ExportGenesis returns the operators module's exported genesis state as raw JSON bytes.
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
-	genState := am.keeper.ExportGenesis(ctx)
+	genState, err := am.keeper.ExportGenesis(ctx)
+	if err != nil {
+		panic(err)
+	}
 	return cdc.MustMarshalJSON(genState)
 }
 
@@ -145,8 +150,7 @@ func (AppModule) ConsensusVersion() uint64 { return consensusVersion }
 
 // BeginBlock executes all ABCI BeginBlock logic respective to the operators module.
 func (am AppModule) BeginBlock(ctx context.Context) error {
-	BeginBlocker(sdk.UnwrapSDKContext(ctx), am.keeper)
-	return nil
+	return BeginBlocker(sdk.UnwrapSDKContext(ctx), am.keeper)
 }
 
 func (am AppModule) IsOnePerModuleType() {}

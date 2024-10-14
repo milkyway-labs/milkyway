@@ -17,7 +17,7 @@ require (
 	cosmossdk.io/x/upgrade v0.1.4
 	// we also need to update `LIBWASMVM_VERSION` of images/private/Dockerfile#5
 	github.com/CosmWasm/wasmd v0.52.0
-	github.com/CosmWasm/wasmvm/v2 v2.1.2
+	github.com/CosmWasm/wasmvm/v2 v2.1.3
 	github.com/Stride-Labs/ibc-rate-limiting v0.0.0-00010101000000-000000000000
 	github.com/aptos-labs/serde-reflection/serde-generate/runtime/golang v0.0.0-20231213012317-73b6bbf74833
 	github.com/cometbft/cometbft v0.38.12
@@ -426,7 +426,7 @@ replace (
 // MilkyWay custom
 replace (
 	github.com/Stride-Labs/ibc-rate-limiting => github.com/milkyway-labs/ibc-rate-limiting v0.0.0-20240529144041-70ebeac5863b
-	github.com/cosmos/relayer/v2 => github.com/milkyway-labs/relayer/v2 v2.0.0-20240510185220-0492766a512d
+	github.com/cosmos/relayer/v2 => github.com/milkyway-labs/relayer/v2 v2.0.0-20241011165100-8ff2d878e8fc
 )
 
 retract v1.0.0-rc5 // Have two different versions with the same tag

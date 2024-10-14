@@ -390,7 +390,7 @@ func (suite *KeeperTestSuite) TestKeeper_StartOperatorInactivation() {
 				), stored)
 
 				// Make sure the operator has been inserted into the inactivating queue
-				inactivatingQueue := suite.k.GetInactivatingOperators(ctx)
+				inactivatingQueue, _ := suite.k.GetInactivatingOperators(ctx)
 				suite.Require().Len(inactivatingQueue, 1)
 				suite.Require().Equal(types.NewUnbondingOperator(
 					1,
@@ -467,7 +467,7 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteOperatorInactivation() {
 				), stored)
 
 				// Make sure the operator has been removed from the inactivating queue
-				inactivatingQueue := suite.k.GetInactivatingOperators(ctx)
+				inactivatingQueue, _ := suite.k.GetInactivatingOperators(ctx)
 				suite.Require().Len(inactivatingQueue, 0)
 
 				// Make sure the hook has been called

@@ -165,6 +165,10 @@ import (
 	"github.com/milkyway-labs/milkyway/x/interchainquery"
 	icqkeeper "github.com/milkyway-labs/milkyway/x/interchainquery/keeper"
 	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
+	"github.com/milkyway-labs/milkyway/x/liquidvesting"
+	liquidvestinghooks "github.com/milkyway-labs/milkyway/x/liquidvesting/hooks"
+	liquidvestingkeeper "github.com/milkyway-labs/milkyway/x/liquidvesting/keeper"
+	liquidvestingtypes "github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 	"github.com/milkyway-labs/milkyway/x/operators"
 	operatorskeeper "github.com/milkyway-labs/milkyway/x/operators/keeper"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
@@ -255,6 +259,7 @@ var (
 		restaking.AppModule{},
 		assets.AppModule{},
 		rewards.AppModule{},
+		liquidvesting.AppModule{},
 	)
 
 	// module account permissions
@@ -276,14 +281,15 @@ var (
 		// connect oracle permissions
 		oracletypes.ModuleName: nil,
 
+		// MilkyWay permissions
+		liquidvestingtypes.ModuleName: {authtypes.Minter, authtypes.Burner},
+
 		// this is only for testing
 		authtypes.Minter: {authtypes.Minter},
 	}
 )
 
-var (
-	_ servertypes.Application = (*MilkyWayApp)(nil)
-)
+var _ servertypes.Application = (*MilkyWayApp)(nil)
 
 func init() {
 	userHomeDir, err := os.UserHomeDir()
@@ -344,12 +350,13 @@ type MilkyWayApp struct {
 	RecordsKeeper         recordskeeper.Keeper
 	StakeIBCKeeper        stakeibckeeper.Keeper
 
-	ServicesKeeper  *serviceskeeper.Keeper
-	OperatorsKeeper *operatorskeeper.Keeper
-	PoolsKeeper     *poolskeeper.Keeper
-	RestakingKeeper *restakingkeeper.Keeper
-	AssetsKeeper    *assetskeeper.Keeper
-	RewardsKeeper   *rewardskeeper.Keeper
+	ServicesKeeper      *serviceskeeper.Keeper
+	OperatorsKeeper     *operatorskeeper.Keeper
+	PoolsKeeper         *poolskeeper.Keeper
+	RestakingKeeper     *restakingkeeper.Keeper
+	AssetsKeeper        *assetskeeper.Keeper
+	RewardsKeeper       *rewardskeeper.Keeper
+	LiquidVestingKeeper *liquidvestingkeeper.Keeper
 
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper           capabilitykeeper.ScopedKeeper
@@ -422,7 +429,7 @@ func NewMilkyWayApp(
 
 		// Custom modules
 		servicestypes.StoreKey, operatorstypes.StoreKey, poolstypes.StoreKey, restakingtypes.StoreKey,
-		assetstypes.StoreKey, rewardstypes.StoreKey,
+		assetstypes.StoreKey, rewardstypes.StoreKey, liquidvestingtypes.StoreKey,
 	)
 	tkeys := storetypes.NewTransientStoreKeys(forwardingtypes.TransientStoreKey)
 	memKeys := storetypes.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -640,9 +647,84 @@ func NewMilkyWayApp(
 		app.IBCFeeKeeper,
 	)
 
+	// Custom modules
+	app.ServicesKeeper = serviceskeeper.NewKeeper(
+		app.appCodec,
+		keys[servicestypes.StoreKey],
+		runtime.NewKVStoreService(keys[servicestypes.StoreKey]),
+		app.AccountKeeper,
+		communityPoolKeeper,
+		authorityAddr,
+	)
+	app.OperatorsKeeper = operatorskeeper.NewKeeper(
+		app.appCodec,
+		keys[operatorstypes.StoreKey],
+		runtime.NewKVStoreService(keys[operatorstypes.StoreKey]),
+		app.AccountKeeper,
+		communityPoolKeeper,
+		app.MsgServiceRouter(),
+		authorityAddr,
+	)
+	app.PoolsKeeper = poolskeeper.NewKeeper(
+		app.appCodec,
+		keys[poolstypes.StoreKey],
+		runtime.NewKVStoreService(keys[poolstypes.StoreKey]),
+		app.AccountKeeper,
+	)
+	app.RestakingKeeper = restakingkeeper.NewKeeper(
+		app.appCodec,
+		keys[restakingtypes.StoreKey],
+		app.AccountKeeper,
+		app.BankKeeper,
+		app.PoolsKeeper,
+		app.OperatorsKeeper,
+		app.ServicesKeeper,
+		authorityAddr,
+	)
+	app.AssetsKeeper = assetskeeper.NewKeeper(
+		app.appCodec,
+		runtime.NewKVStoreService(keys[assetstypes.StoreKey]),
+		authorityAddr,
+	)
+	app.RewardsKeeper = rewardskeeper.NewKeeper(
+		app.appCodec,
+		runtime.NewKVStoreService(keys[rewardstypes.StoreKey]),
+		app.AccountKeeper,
+		app.BankKeeper,
+		communityPoolKeeper,
+		app.OracleKeeper,
+		app.PoolsKeeper,
+		app.OperatorsKeeper,
+		app.ServicesKeeper,
+		app.RestakingKeeper,
+		app.AssetsKeeper,
+		authorityAddr,
+	)
+	app.RestakingKeeper.SetHooks(app.RewardsKeeper.Hooks())
+
+	app.LiquidVestingKeeper = liquidvestingkeeper.NewKeeper(
+		app.appCodec,
+		keys[liquidvestingtypes.StoreKey],
+		runtime.NewKVStoreService(keys[liquidvestingtypes.StoreKey]),
+		app.AccountKeeper,
+		app.BankKeeper,
+		app.OperatorsKeeper,
+		app.PoolsKeeper,
+		app.ServicesKeeper,
+		app.RestakingKeeper,
+		authtypes.NewModuleAddress(liquidvestingtypes.ModuleName).String(),
+		authorityAddr,
+	)
+	app.BankKeeper.AppendSendRestriction(app.LiquidVestingKeeper.SendRestrictionFn)
+
 	hooksICS4Wrapper := ibchooks.NewICS4Middleware(
 		app.RateLimitKeeper,
 		ibcwasmhooks.NewWasmHooks(appCodec, ac, app.WasmKeeper),
+	)
+
+	hooksICS4LiquidVesting := ibchooks.NewICS4Middleware(
+		hooksICS4Wrapper,
+		liquidvestinghooks.NewIBCHooks(app.LiquidVestingKeeper),
 	)
 
 	app.InterchainQueryKeeper = icqkeeper.NewKeeper(appCodec, keys[icqtypes.StoreKey], app.IBCKeeper)
@@ -716,6 +798,13 @@ func NewMilkyWayApp(
 			// receive: wasm -> packet forward -> forwarding -> transfer
 			transferStack,
 			hooksICS4Wrapper,
+			app.IBCHooksKeeper,
+		)
+
+		transferStack = ibchooks.NewIBCMiddleware(
+			// receive: liquidvesting -> wasm -> packet forward -> forwarding -> transfer
+			transferStack,
+			hooksICS4LiquidVesting,
 			app.IBCHooksKeeper,
 		)
 
@@ -806,6 +895,7 @@ func NewMilkyWayApp(
 			app.RecordsKeeper,
 			app.ICACallbacksKeeper,
 			app.RateLimitKeeper,
+			app.OPChildKeeper,
 		)
 		app.StakeIBCKeeper.SetHooks(stakeibctypes.NewMultiStakeIBCHooks())
 		icaCallbacksStack = stakeibc.NewIBCMiddleware(icaCallbacksStack, app.StakeIBCKeeper)
@@ -954,58 +1044,6 @@ func NewMilkyWayApp(
 
 	app.BankKeeper.SetHooks(app.TokenFactoryKeeper.Hooks())
 
-	// Custom modules
-	app.ServicesKeeper = serviceskeeper.NewKeeper(
-		app.appCodec,
-		keys[servicestypes.StoreKey],
-		app.AccountKeeper,
-		communityPoolKeeper,
-		authorityAddr,
-	)
-	app.OperatorsKeeper = operatorskeeper.NewKeeper(
-		app.appCodec,
-		keys[operatorstypes.StoreKey],
-		app.AccountKeeper,
-		communityPoolKeeper,
-		app.MsgServiceRouter(),
-		authorityAddr,
-	)
-	app.PoolsKeeper = poolskeeper.NewKeeper(
-		app.appCodec,
-		keys[poolstypes.StoreKey],
-		app.AccountKeeper,
-	)
-	app.RestakingKeeper = restakingkeeper.NewKeeper(
-		app.appCodec,
-		keys[restakingtypes.StoreKey],
-		app.AccountKeeper,
-		app.BankKeeper,
-		app.PoolsKeeper,
-		app.OperatorsKeeper,
-		app.ServicesKeeper,
-		authorityAddr,
-	)
-	app.AssetsKeeper = assetskeeper.NewKeeper(
-		app.appCodec,
-		runtime.NewKVStoreService(keys[assetstypes.StoreKey]),
-		authorityAddr,
-	)
-	app.RewardsKeeper = rewardskeeper.NewKeeper(
-		app.appCodec,
-		runtime.NewKVStoreService(keys[rewardstypes.StoreKey]),
-		app.AccountKeeper,
-		app.BankKeeper,
-		communityPoolKeeper,
-		app.OracleKeeper,
-		app.PoolsKeeper,
-		app.OperatorsKeeper,
-		app.ServicesKeeper,
-		app.RestakingKeeper,
-		app.AssetsKeeper,
-		authorityAddr,
-	)
-	app.RestakingKeeper.SetHooks(app.RewardsKeeper.Hooks())
-
 	/****  Module Options ****/
 
 	// NOTE: we may consider parsing `appOpts` inside module constructors. For the moment
@@ -1057,6 +1095,7 @@ func NewMilkyWayApp(
 		restaking.NewAppModule(appCodec, app.RestakingKeeper),
 		assets.NewAppModule(appCodec, app.AssetsKeeper),
 		rewards.NewAppModule(appCodec, app.RewardsKeeper),
+		liquidvesting.NewAppModule(appCodec, app.LiquidVestingKeeper),
 	)
 
 	if err := app.setupIndexer(kvindexerDB, appOpts, ac, vc, appCodec); err != nil {
@@ -1119,6 +1158,7 @@ func NewMilkyWayApp(
 		operatorstypes.ModuleName,
 		poolstypes.ModuleName,
 		restakingtypes.ModuleName,
+		liquidvestingtypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -1139,7 +1179,7 @@ func NewMilkyWayApp(
 		recordstypes.ModuleName, ratelimittypes.ModuleName, icacallbackstypes.ModuleName,
 
 		servicestypes.ModuleName, operatorstypes.ModuleName, poolstypes.ModuleName, restakingtypes.ModuleName,
-		assetstypes.ModuleName, rewardstypes.ModuleName,
+		assetstypes.ModuleName, rewardstypes.ModuleName, liquidvestingtypes.ModuleName,
 		crisistypes.ModuleName,
 	}
 

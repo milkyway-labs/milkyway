@@ -153,7 +153,7 @@ func (k Keeper) QueryCommunityPoolIcaBalance(
 		TimeoutDuration: timeoutDuration,
 		TimeoutPolicy:   icqtypes.TimeoutPolicy_REJECT_QUERY_RESPONSE,
 	}
-	if err := k.InterchainQueryKeeper.SubmitICQRequest(ctx, query, false); err != nil {
+	if err := k.interchainQueryKeeper.SubmitICQRequest(ctx, query, false); err != nil {
 		return errorsmod.Wrapf(err, "Error submitting query for pool ica balance")
 	}
 

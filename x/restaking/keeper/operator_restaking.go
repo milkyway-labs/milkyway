@@ -45,13 +45,12 @@ func (k *Keeper) GetOperatorDelegation(ctx sdk.Context, operatorID uint32, userA
 func (k *Keeper) AddOperatorTokensAndShares(
 	ctx sdk.Context, operator operatorstypes.Operator, tokensToAdd sdk.Coins,
 ) (operatorOut operatorstypes.Operator, addedShares sdk.DecCoins, err error) {
-
 	// Update the operator tokens and shares and get the added shares
 	operator, addedShares = operator.AddTokensFromDelegation(tokensToAdd)
 
 	// Save the operator
-	k.operatorsKeeper.SaveOperator(ctx, operator)
-	return operator, addedShares, nil
+	err = k.operatorsKeeper.SaveOperator(ctx, operator)
+	return operator, addedShares, err
 }
 
 // RemoveOperatorDelegation removes the given operator delegation from the store

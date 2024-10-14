@@ -7,13 +7,18 @@ import (
 )
 
 // ExportGenesis returns the GenesisState associated with the given context
-func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
+func (k *Keeper) ExportGenesis(ctx sdk.Context) (*types.GenesisState, error) {
+	inactiveOperators, err := k.GetInactivatingOperators(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return types.NewGenesisState(
 		k.exportNextOperatorID(ctx),
 		k.GetOperators(ctx),
-		k.GetInactivatingOperators(ctx),
+		inactiveOperators,
 		k.GetParams(ctx),
-	)
+	), nil
 }
 
 // exportNextOperatorID returns the next operator ID stored in the KVStore
@@ -28,13 +33,15 @@ func (k *Keeper) exportNextOperatorID(ctx sdk.Context) uint32 {
 // --------------------------------------------------------------------------------------------------------------------
 
 // InitGenesis initializes the state from a GenesisState
-func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) {
+func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) error {
 	// Set the next operator ID
 	k.SetNextOperatorID(ctx, state.NextOperatorID)
 
 	// Store the operators
 	for _, operator := range state.Operators {
-		k.SaveOperator(ctx, operator)
+		if err := k.SaveOperator(ctx, operator); err != nil {
+			return err
+		}
 	}
 
 	// Store the inactivating operators
@@ -44,4 +51,6 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) {
 
 	// Store params
 	k.SetParams(ctx, state.Params)
+
+	return nil
 }

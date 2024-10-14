@@ -95,3 +95,35 @@ func IsAnyGT(coins, coinsB sdk.DecCoins) bool {
 func IsAnyLT(coins, coinsB sdk.DecCoins) bool {
 	return !IsAllGTE(coins, coinsB)
 }
+
+// FilterCoinsByDenom returns the intersection of two coins.
+// e.g.
+// FilterCoinsByDenom({2A, 3B}, {A}) = {2A}
+// FilterCoinsByDenom({2A, 3B}, {5C}) = {}
+// FilterCoinsByDenom({2A, 3B}, {A, B}) = {2A, 3B}
+func FilterCoinsByDenom(coins, coinsB sdk.Coins) sdk.Coins {
+	res := sdk.NewCoins()
+	for _, coin := range coins {
+		amount := coinsB.AmountOf(coin.Denom)
+		if !amount.IsZero() {
+			res = res.Add(coin)
+		}
+	}
+	return res
+}
+
+// FilterDecCoinsByDenom returns the intersection of two coins.
+// e.g.
+// FilterDecCoinsByDenom{2A, 3B}, {A}) = {2A}
+// FilterDecCoinsByDenom({2A, 3B}, {5C}) = {}
+// FilterDecCoinsByDenom({2A, 3B}, {A, B}) = {2A, 3B}
+func FilterDecCoinsByDenom(coins, coinsB sdk.DecCoins) sdk.DecCoins {
+	res := sdk.NewDecCoins()
+	for _, coin := range coins {
+		amount := coinsB.AmountOf(coin.Denom)
+		if !amount.IsZero() {
+			res = res.Add(coin)
+		}
+	}
+	return res
+}

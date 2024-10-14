@@ -124,7 +124,7 @@ func (k Keeper) GetUndelegatedBalance(chainId string, depositRecords []recordsty
 // must be used to denominate it's value in native tokens
 func (k Keeper) GetTotalTokenizedDelegations(ctx sdk.Context, hostZone types.HostZone) sdkmath.LegacyDec {
 	total := sdkmath.ZeroInt()
-	for _, deposit := range k.RecordsKeeper.GetLSMDepositsForHostZone(ctx, hostZone.ChainId) {
+	for _, deposit := range k.recordsKeeper.GetLSMDepositsForHostZone(ctx, hostZone.ChainId) {
 		if deposit.Status != recordstypes.LSMTokenDeposit_DEPOSIT_PENDING {
 			validator, _, found := GetValidatorFromAddress(hostZone.Validators, deposit.ValidatorAddress)
 			if !found {

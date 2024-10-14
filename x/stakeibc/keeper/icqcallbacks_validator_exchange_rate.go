@@ -192,5 +192,5 @@ func (k Keeper) FailLSMLiquidStake(ctx sdk.Context, hostZone types.HostZone, lsm
 	k.Logger(ctx).Error(errorMessage)
 
 	// Remove the LSMTokenDeposit
-	k.RecordsKeeper.RemoveLSMTokenDeposit(ctx, lsmLiquidStake.Deposit.ChainId, lsmLiquidStake.Deposit.Denom)
+	k.recordsKeeper.RemoveLSMTokenDeposit(ctx, lsmLiquidStake.Deposit.ChainId, lsmLiquidStake.Deposit.Denom)
 }

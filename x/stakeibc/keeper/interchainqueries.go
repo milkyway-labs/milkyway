@@ -70,7 +70,7 @@ func (k Keeper) SubmitValidatorSharesToTokensRateICQ(
 		TimeoutDuration: timeoutDuration,
 		TimeoutPolicy:   timeoutPolicy,
 	}
-	if err := k.InterchainQueryKeeper.SubmitICQRequest(ctx, query, true); err != nil {
+	if err := k.interchainQueryKeeper.SubmitICQRequest(ctx, query, true); err != nil {
 		k.Logger(ctx).Error(fmt.Sprintf("Error submitting ICQ for validator sharesToTokens rate, error %s", err.Error()))
 		return err
 	}
@@ -137,7 +137,7 @@ func (k Keeper) SubmitDelegationICQ(ctx sdk.Context, hostZone types.HostZone, va
 		TimeoutDuration: time.Hour,
 		TimeoutPolicy:   icqtypes.TimeoutPolicy_RETRY_QUERY_REQUEST,
 	}
-	if err := k.InterchainQueryKeeper.SubmitICQRequest(ctx, query, false); err != nil {
+	if err := k.interchainQueryKeeper.SubmitICQRequest(ctx, query, false); err != nil {
 		k.Logger(ctx).Error(fmt.Sprintf("Error submitting ICQ for delegation, error : %s", err.Error()))
 		return err
 	}
@@ -185,7 +185,7 @@ func (k Keeper) SubmitCalibrationICQ(ctx sdk.Context, hostZone types.HostZone, v
 		TimeoutDuration: time.Hour,
 		TimeoutPolicy:   icqtypes.TimeoutPolicy_RETRY_QUERY_REQUEST,
 	}
-	if err := k.InterchainQueryKeeper.SubmitICQRequest(ctx, query, false); err != nil {
+	if err := k.interchainQueryKeeper.SubmitICQRequest(ctx, query, false); err != nil {
 		return err
 	}
 
@@ -233,7 +233,7 @@ func (k Keeper) SubmitWithdrawalHostBalanceICQ(ctx sdk.Context, hostZone types.H
 		TimeoutDuration: timeoutDuration,
 		TimeoutPolicy:   icqtypes.TimeoutPolicy_REJECT_QUERY_RESPONSE,
 	}
-	if err := k.InterchainQueryKeeper.SubmitICQRequest(ctx, query, false); err != nil {
+	if err := k.interchainQueryKeeper.SubmitICQRequest(ctx, query, false); err != nil {
 		k.Logger(ctx).Error(fmt.Sprintf("Error querying for withdrawal balance, error: %s", err.Error()))
 		return err
 	}

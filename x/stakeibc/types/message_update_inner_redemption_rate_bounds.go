@@ -5,8 +5,6 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	"github.com/milkyway-labs/milkyway/utils"
 )
 
 const TypeMsgUpdateInnerRedemptionRateBounds = "update_inner_redemption_rate_bounds"
@@ -51,9 +49,6 @@ func (msg *MsgUpdateInnerRedemptionRateBounds) ValidateBasic() error {
 	// Confirm the max is greater than the min
 	if msg.MaxInnerRedemptionRate.LTE(msg.MinInnerRedemptionRate) {
 		return errorsmod.Wrapf(ErrInvalidBounds, "Inner max safety threshold (%s) is less than inner min safety threshold (%s)", msg.MaxInnerRedemptionRate, msg.MinInnerRedemptionRate)
-	}
-	if err := utils.ValidateAdminAddress(msg.Creator); err != nil {
-		return err
 	}
 	return nil
 }

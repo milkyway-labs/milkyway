@@ -826,8 +826,8 @@ github.com/BurntSushi/toml v1.4.1-0.20240526193622-a339e1f7089c/go.mod h1:ukJfTF
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
 github.com/CosmWasm/wasmd v0.52.0 h1:VRylqes1AMXqIgz/jUH9EzhjBZKsRXrrjCTAni0ILRM=
 github.com/CosmWasm/wasmd v0.52.0/go.mod h1:hyy1wt7c589Cs4kOK2cYdtphzCd2Xo20q/t7tfby7oI=
-github.com/CosmWasm/wasmvm/v2 v2.1.2 h1:GkJ5bAsRlLHfIQVg/FY1VHwLyBwlCjAhDea0B8L+e20=
-github.com/CosmWasm/wasmvm/v2 v2.1.2/go.mod h1:bMhLQL4Yp9CzJi9A83aR7VO9wockOsSlZbT4ztOl6bg=
+github.com/CosmWasm/wasmvm/v2 v2.1.3 h1:CSJTauZqkHyb9yic6JVYCjiGUgxI2MJV2QzfSu8m49c=
+github.com/CosmWasm/wasmvm/v2 v2.1.3/go.mod h1:bMhLQL4Yp9CzJi9A83aR7VO9wockOsSlZbT4ztOl6bg=
 github.com/Crocmagnon/fatcontext v0.5.2 h1:vhSEg8Gqng8awhPju2w7MKHqMlg4/NI+gSDHtR3xgwA=
 github.com/Crocmagnon/fatcontext v0.5.2/go.mod h1:87XhRMaInHP44Q7Tlc7jkgKKB7kZAOPiDkFMdKCC+74=
 github.com/DataDog/datadog-go v3.2.0+incompatible h1:qSG2N4FghB1He/r2mFrWKCaL7dXCilEuNEeAn20fdD4=
@@ -1739,8 +1739,8 @@ github.com/mgechev/revive v1.3.9/go.mod h1:+uxEIr5UH0TjXWHTno3xh4u7eg6jDpXKzQccA
 github.com/miekg/dns v1.0.14/go.mod h1:W1PPwlIAgtquWBMBEV9nkV9Cazfe8ScdGz/Lj7v3Nrg=
 github.com/milkyway-labs/ibc-rate-limiting v0.0.0-20240529144041-70ebeac5863b h1:5OjDS9hKDyXPPd9XJwFcxrpFDUcaEZf9L14zj0fzbwo=
 github.com/milkyway-labs/ibc-rate-limiting v0.0.0-20240529144041-70ebeac5863b/go.mod h1:YAf80eEQ4bdg5qXP4EI8eCxzhhWfqwiy9DoP8JXXg60=
-github.com/milkyway-labs/relayer/v2 v2.0.0-20240510185220-0492766a512d h1:2nNoD9y1Ucp9swVydBI4JrW/pyGp5cbo5IXAlFzlmyc=
-github.com/milkyway-labs/relayer/v2 v2.0.0-20240510185220-0492766a512d/go.mod h1:h4Ng2QsVpxExIq5S+WvLr8slDb9MSBh82gQS4DeMwDo=
+github.com/milkyway-labs/relayer/v2 v2.0.0-20241011165100-8ff2d878e8fc h1:dxyCsdy6z7+PYI8hVTCvBinUa9G8In7d5y+hivfZbsw=
+github.com/milkyway-labs/relayer/v2 v2.0.0-20241011165100-8ff2d878e8fc/go.mod h1:h4Ng2QsVpxExIq5S+WvLr8slDb9MSBh82gQS4DeMwDo=
 github.com/minio/asm2plan9s v0.0.0-20200509001527-cdd76441f9d8/go.mod h1:mC1jAcsrzbxHt8iiaC+zU4b1ylILSosueou12R++wfY=
 github.com/minio/c2goasm v0.0.0-20190812172519-36a3d3bbc4f3/go.mod h1:RagcQ7I8IeTMnF8JTXieKnO4Z6JCsikNEzj0DwauVzE=
 github.com/minio/highwayhash v1.0.2 h1:Aak5U0nElisjDCfPSG79Tgzkn2gl66NxOMspRrKnA/g=

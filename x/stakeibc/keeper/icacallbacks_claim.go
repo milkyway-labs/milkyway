@@ -48,7 +48,7 @@ func (k Keeper) ClaimCallback(ctx sdk.Context, packet channeltypes.Packet, ackRe
 		"Starting claim callback for Redemption Record: %s", claimCallback.UserRedemptionRecordId))
 
 	// Grab the associated user redemption record
-	userRedemptionRecord, found := k.RecordsKeeper.GetUserRedemptionRecord(ctx, claimCallback.GetUserRedemptionRecordId())
+	userRedemptionRecord, found := k.recordsKeeper.GetUserRedemptionRecord(ctx, claimCallback.GetUserRedemptionRecordId())
 	if !found {
 		return errorsmod.Wrapf(types.ErrRecordNotFound, "user redemption record not found %s", claimCallback.GetUserRedemptionRecordId())
 	}
@@ -60,7 +60,7 @@ func (k Keeper) ClaimCallback(ctx sdk.Context, packet channeltypes.Packet, ackRe
 			icacallbackstypes.AckResponseStatus_TIMEOUT, packet))
 
 		userRedemptionRecord.ClaimIsPending = false
-		k.RecordsKeeper.SetUserRedemptionRecord(ctx, userRedemptionRecord)
+		k.recordsKeeper.SetUserRedemptionRecord(ctx, userRedemptionRecord)
 		return nil
 	}
 
@@ -72,7 +72,7 @@ func (k Keeper) ClaimCallback(ctx sdk.Context, packet channeltypes.Packet, ackRe
 
 		// after an error, a user should be able to retry the claim
 		userRedemptionRecord.ClaimIsPending = false
-		k.RecordsKeeper.SetUserRedemptionRecord(ctx, userRedemptionRecord)
+		k.recordsKeeper.SetUserRedemptionRecord(ctx, userRedemptionRecord)
 		return nil
 	}
 
@@ -80,7 +80,7 @@ func (k Keeper) ClaimCallback(ctx sdk.Context, packet channeltypes.Packet, ackRe
 		icacallbackstypes.AckResponseStatus_SUCCESS, packet))
 
 	// Upon success, remove the record and decrement the unbonded amount on the host zone unbonding record
-	k.RecordsKeeper.RemoveUserRedemptionRecord(ctx, claimCallback.GetUserRedemptionRecordId())
+	k.recordsKeeper.RemoveUserRedemptionRecord(ctx, claimCallback.GetUserRedemptionRecordId())
 	err = k.DecrementHostZoneUnbonding(ctx, userRedemptionRecord, *claimCallback)
 	if err != nil {
 		k.Logger(ctx).Error(fmt.Sprintf("ClaimCallback failed (DecrementHostZoneUnbonding), packet %v, err: %s", packet, err.Error()))
@@ -94,7 +94,7 @@ func (k Keeper) ClaimCallback(ctx sdk.Context, packet channeltypes.Packet, ackRe
 // After a user claims their unbonded tokens, the claim amount is decremented from the corresponding host zone unbonding record
 func (k Keeper) DecrementHostZoneUnbonding(ctx sdk.Context, userRedemptionRecord recordstypes.UserRedemptionRecord, callbackArgs types.ClaimCallback) error {
 	// fetch the hzu associated with the user unbonding record
-	hostZoneUnbonding, found := k.RecordsKeeper.GetHostZoneUnbondingByChainId(ctx, callbackArgs.EpochNumber, callbackArgs.ChainId)
+	hostZoneUnbonding, found := k.recordsKeeper.GetHostZoneUnbondingByChainId(ctx, callbackArgs.EpochNumber, callbackArgs.ChainId)
 	if !found {
 		return errorsmod.Wrapf(types.ErrRecordNotFound, "host zone unbonding not found %s", callbackArgs.ChainId)
 	}
@@ -103,10 +103,10 @@ func (k Keeper) DecrementHostZoneUnbonding(ctx sdk.Context, userRedemptionRecord
 	hostZoneUnbonding.NativeTokenAmount = hostZoneUnbonding.NativeTokenAmount.Sub(userRedemptionRecord.NativeTokenAmount)
 
 	// save the updated hzu on the epoch unbonding record
-	epochUnbondingRecord, success := k.RecordsKeeper.AddHostZoneToEpochUnbondingRecord(ctx, callbackArgs.EpochNumber, callbackArgs.ChainId, hostZoneUnbonding)
+	epochUnbondingRecord, success := k.recordsKeeper.AddHostZoneToEpochUnbondingRecord(ctx, callbackArgs.EpochNumber, callbackArgs.ChainId, hostZoneUnbonding)
 	if !success {
 		return errorsmod.Wrapf(types.ErrRecordNotFound, "epoch unbonding record not found %s", callbackArgs.ChainId)
 	}
-	k.RecordsKeeper.SetEpochUnbondingRecord(ctx, *epochUnbondingRecord)
+	k.recordsKeeper.SetEpochUnbondingRecord(ctx, *epochUnbondingRecord)
 	return nil
 }

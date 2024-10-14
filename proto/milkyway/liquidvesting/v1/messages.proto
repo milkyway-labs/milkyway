@@ -1,0 +1,132 @@
+syntax = "proto3";
+package milkyway.liquidvesting.v1;
+
+import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
+import "cosmos/msg/v1/msg.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+import "milkyway/liquidvesting/v1/params.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/x/liquidvesting/types";
+
+// Msg defines the services module's gRPC message service.
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+
+  // MintVestedRepresentation defines the operation to mint a user's staked
+  // vested tokens representation that can be used in the liquid vesting module.
+  rpc MintVestedRepresentation(MsgMintVestedRepresentation)
+      returns (MsgMintVestedRepresentationResponse);
+
+  // BurnVestedRepresentation defines the operation to burn a user's staked
+  // vested tokens representation.
+  rpc BurnVestedRepresentation(MsgBurnVestedRepresentation)
+      returns (MsgBurnVestedRepresentationResponse);
+
+  // WithdrawInsuranceFund defines the operation to withdraw an amount
+  // of tokens from the user's insurance fund.
+  // This can be used from the user to withdraw their funds after
+  // some of their staking representations have been burned or if the
+  // balance in the insurance fund is more than the required to cover all
+  // their staking representations.
+  rpc WithdrawInsuranceFund(MsgWithdrawInsuranceFund)
+      returns (MsgWithdrawInsuranceFundResponse);
+
+  // UpdateParams defines a (governance) operation for updating the module
+  // parameters.
+  // The authority defaults to the x/gov module account.
+  rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+}
+
+// MsgMintVestedRepresentation defines the message structure for the
+// MintVestedRepresentation gRPC service method. It allows an authorized
+// account to mint a user's staked vested tokens representation that can be
+// used in the liquid vesting module.
+message MsgMintVestedRepresentation {
+  option (cosmos.msg.v1.signer) = "sender";
+  option (amino.name) = "milkyway/MsgMintVestedRepresentation";
+
+  // User that want to triger the tokens mint.
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // User that will receive the minted tokens.
+  string receiver = 2 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // The amount of tokens that will be minted
+  repeated cosmos.base.v1beta1.Coin amount = 3 [
+    (amino.encoding) = "legacy_coins",
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// MsgMintVestedRepresentationResponse is the return value of
+// MsgMintVestedRepresentation.
+message MsgMintVestedRepresentationResponse {}
+
+// MsgBurnVestedRepresentation defines the message structure for the
+// BurnVestedRepresentation gRPC service method. It allows an authorized
+// account to burn a user's staked vested tokens representation.
+message MsgBurnVestedRepresentation {
+  option (cosmos.msg.v1.signer) = "sender";
+  option (amino.name) = "milkyway/MsgBurnVestedRepresentation";
+
+  // User that want to triger the tokens burn.
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // User from which we want to burn the tokens.
+  string user = 2 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // The amount of tokens that will be burned from the user's balance.
+  repeated cosmos.base.v1beta1.Coin amount = 3 [
+    (amino.encoding) = "legacy_coins",
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// MsgBurnVestedRepresentationResponse is the return value of
+// MsgBurnVestedRepresentation.
+message MsgBurnVestedRepresentationResponse {}
+
+// MsgWithdrawInsuranceFund defines the message structure for the
+// WithdrawInsuranceFund gRPC service method.
+message MsgWithdrawInsuranceFund {
+  option (cosmos.msg.v1.signer) = "sender";
+  option (amino.name) = "milkyway/MsgWithdrawInsuranceFund";
+
+  // User that want to withdraw the tokens.
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // The amount of tokens that will be withdrawn from the user's insurance fund.
+  repeated cosmos.base.v1beta1.Coin amount = 2 [
+    (amino.encoding) = "legacy_coins",
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+}
+
+message MsgWithdrawInsuranceFundResponse {}
+
+// MsgUpdateParams defines the message structure for the UpdateParams gRPC
+// service method. It allows the authority to update the module parameters.
+message MsgUpdateParams {
+  option (cosmos.msg.v1.signer) = "authority";
+  option (amino.name) = "milkyway/liquidvesting/MsgUpdateParams";
+
+  // Authority is the address that controls the module (defaults to x/gov unless
+  // overwritten).
+  string authority = 1 [
+    (gogoproto.moretags) = "yaml:\"authority\"",
+    (cosmos_proto.scalar) = "cosmos.AddressString"
+  ];
+
+  // Params define the parameters to update.
+  //
+  // NOTE: All parameters must be supplied.
+  Params params = 2 [ (gogoproto.nullable) = false ];
+}
+
+// MsgUpdateParamsResponse is the return value of MsgUpdateParams.
+message MsgUpdateParamsResponse {}

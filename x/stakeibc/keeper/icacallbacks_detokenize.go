@@ -53,7 +53,7 @@ func (k Keeper) DetokenizeCallback(ctx sdk.Context, packet channeltypes.Packet, 
 		k.Logger(ctx).Error(utils.LogICACallbackStatusWithHostZone(chainId, ICACallbackID_Detokenize,
 			icacallbackstypes.AckResponseStatus_FAILURE, packet))
 
-		k.RecordsKeeper.UpdateLSMTokenDepositStatus(ctx, *deposit, recordstypes.LSMTokenDeposit_DETOKENIZATION_FAILED)
+		k.recordsKeeper.UpdateLSMTokenDepositStatus(ctx, *deposit, recordstypes.LSMTokenDeposit_DETOKENIZATION_FAILED)
 		return nil
 	}
 
@@ -61,7 +61,7 @@ func (k Keeper) DetokenizeCallback(ctx sdk.Context, packet channeltypes.Packet, 
 		icacallbackstypes.AckResponseStatus_SUCCESS, packet))
 
 	// If the ICA succeeded, remove the token deposit
-	k.RecordsKeeper.RemoveLSMTokenDeposit(ctx, deposit.ChainId, deposit.Denom)
+	k.recordsKeeper.RemoveLSMTokenDeposit(ctx, deposit.ChainId, deposit.Denom)
 
 	// Determine the actual number of tokens that were turned to native stake
 	// (this can be slightly different than the amount initiated in the redeem tokens tx

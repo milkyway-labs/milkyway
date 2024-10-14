@@ -2,6 +2,8 @@ package types
 
 import (
 	"encoding/binary"
+
+	"cosmossdk.io/collections"
 )
 
 const (
@@ -12,8 +14,9 @@ const (
 var (
 	ParamsKey = []byte{0x01}
 
-	NextPoolIDKey = []byte{0xa1}
-	PoolPrefix    = []byte{0xa2}
+	NextPoolIDKey        = []byte{0xa1}
+	PoolPrefix           = []byte{0xa2}
+	PoolAddressSetPrefix = collections.NewPrefix(0xa3)
 )
 
 // GetPoolIDBytes returns the byte representation of the pool ID

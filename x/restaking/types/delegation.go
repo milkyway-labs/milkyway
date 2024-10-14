@@ -18,6 +18,7 @@ type DelegationTarget interface {
 	TokensFromSharesTruncated(shares sdk.DecCoins) sdk.DecCoins
 	SharesFromTokens(amt sdk.Coins) (sdk.DecCoins, error)
 	SharesFromTokensTruncated(tokens sdk.Coins) (sdk.DecCoins, error)
+	SharesFromDecCoins(amt sdk.DecCoins) (sdk.DecCoins, error)
 }
 
 // DelegationGetter represents a function that allows to retrieve an existing delegation
