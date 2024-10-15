@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	sdkmath "cosmossdk.io/math"
+	"github.com/cosmos/cosmos-sdk/baseapp"
 	distributiontypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	capabilitytypes "github.com/cosmos/ibc-go/modules/capability/types"
@@ -153,6 +154,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 		runtime.NewKVStoreService(keys[operatorstypes.StoreKey]),
 		suite.ak,
 		communityPoolKeeper,
+		baseapp.NewMsgServiceRouter(),
 		authorityAddr,
 	)
 	suite.sk = serviceskeeper.NewKeeper(
