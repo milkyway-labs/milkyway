@@ -119,11 +119,11 @@ func (k *Keeper) GetAllOperatorParamsRecords(ctx sdk.Context) ([]types.OperatorP
 			return nil, err
 		}
 		// Get the operator id from the map key
-		operatorId, err := iterator.Key()
+		operatorID, err := iterator.Key()
 		if err != nil {
 			return nil, err
 		}
-		records = append(records, types.NewOperatorParamsRecord(operatorId, params))
+		records = append(records, types.NewOperatorParamsRecord(operatorID, params))
 	}
 
 	return records, nil

@@ -203,10 +203,10 @@ func (msg *MsgUpdateParams) GetSigners() []sdk.AccAddress {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-func NewMsgSetOperatorParams(sender string, operatorId uint32, params OperatorParams) *MsgSetOperatorParams {
+func NewMsgSetOperatorParams(sender string, operatorID uint32, params OperatorParams) *MsgSetOperatorParams {
 	return &MsgSetOperatorParams{
 		Sender:     sender,
-		OperatorID: operatorId,
+		OperatorID: operatorID,
 		Params:     params,
 	}
 }
