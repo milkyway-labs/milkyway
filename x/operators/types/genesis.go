@@ -10,12 +10,14 @@ import (
 func NewGenesisState(
 	nextOperatorID uint32,
 	operators []Operator,
+	operatorParams []OperatorParamsRecord,
 	unbondingOperators []UnbondingOperator,
 	params Params,
 ) *GenesisState {
 	return &GenesisState{
 		NextOperatorID:     nextOperatorID,
 		Operators:          operators,
+		OperatorsParams:    operatorParams,
 		UnbondingOperators: unbondingOperators,
 		Params:             params,
 	}
@@ -23,7 +25,7 @@ func NewGenesisState(
 
 // DefaultGenesis returns the default genesis state.
 func DefaultGenesis() *GenesisState {
-	return NewGenesisState(1, nil, nil, DefaultParams())
+	return NewGenesisState(1, nil, nil, nil, DefaultParams())
 }
 
 // Validate checks that the genesis state is valid.
@@ -42,6 +44,19 @@ func (data *GenesisState) Validate() error {
 		err := operator.Validate()
 		if err != nil {
 			return fmt.Errorf("invalid operator with id %d: %s", operator.ID, err)
+		}
+	}
+
+	// Check for duplicate operator params
+	if duplicate := findDuplicateOperatorsParams(data.OperatorsParams); duplicate != nil {
+		return fmt.Errorf("duplicated operator params for operator: %d", duplicate.OperatorID)
+	}
+
+	// Validate the operator params
+	for _, operatorParams := range data.OperatorsParams {
+		err := operatorParams.Validate()
+		if err != nil {
+			return fmt.Errorf("invalid operator params for operator %d: %s", operatorParams.OperatorID, err)
 		}
 	}
 
@@ -75,6 +90,14 @@ func findDuplicateOperators(operators []Operator) *Operator {
 	})
 }
 
+// findDuplicateOperatorsParams returns the first duplicated operator params in the slice.
+// If no duplicates are found, it returns nil instead.
+func findDuplicateOperatorsParams(operators []OperatorParamsRecord) *OperatorParamsRecord {
+	return utils.FindDuplicateFunc(operators, func(a, b OperatorParamsRecord) bool {
+		return a.OperatorID == b.OperatorID
+	})
+}
+
 // findDuplicateUnbondingOperators returns the first duplicated unbonding operator in the slice.
 // If no duplicates are found, it returns nil instead.
 func findDuplicateUnbondingOperators(operators []UnbondingOperator) *UnbondingOperator {
@@ -104,4 +127,19 @@ func (o *UnbondingOperator) Validate() error {
 	}
 
 	return nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewOperatorParamsRecord creates a new OperatorParamsRecord instance.
+func NewOperatorParamsRecord(operatorID uint32, operatorParams OperatorParams) OperatorParamsRecord {
+	return OperatorParamsRecord{
+		OperatorID: operatorID,
+		Params:     operatorParams,
+	}
+}
+
+// Validate checks that the OperatorParamsRecord has valid values.
+func (o *OperatorParamsRecord) Validate() error {
+	return o.Params.Validate()
 }
