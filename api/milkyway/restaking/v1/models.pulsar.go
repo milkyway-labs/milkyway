@@ -5168,7 +5168,7 @@ type OperatorParams struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Deprecated: Now the operator's commission rate is strored inside the x/operators
+	// Deprecated: Now the operator's commission rate is stored inside the x/operators
 	// module.
 	// CommissionRate defines the commission rate charged to delegators, as a
 	// fraction.

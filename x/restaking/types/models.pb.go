@@ -67,7 +67,7 @@ func (DelegationType) EnumDescriptor() ([]byte, []int) {
 // OperatorParams represent the params that have been set for an individual
 // operator.
 type OperatorParams struct {
-	// Deprecated: Now the operator's commission rate is strored inside the x/operators
+	// Deprecated: Now the operator's commission rate is stored inside the x/operators
 	// module.
 	// CommissionRate defines the commission rate charged to delegators, as a
 	// fraction.

@@ -13,7 +13,7 @@ option go_package = "github.com/milkyway-labs/milkyway/x/restaking/types";
 // operator.
 message OperatorParams {
 
-  // Deprecated: Now the operator's commission rate is strored inside the x/operators
+  // Deprecated: Now the operator's commission rate is stored inside the x/operators
   // module.
   // CommissionRate defines the commission rate charged to delegators, as a
   // fraction.
