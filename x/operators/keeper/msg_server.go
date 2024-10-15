@@ -193,6 +193,7 @@ func (k msgServer) SetOperatorParams(goCtx context.Context, msg *types.MsgSetOpe
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can update the operator")
 	}
 
+	// Create the new operators params from the message
 	newParams := types.NewOperatorParams(msg.CommissionRate)
 
 	// Make sure that the received params are valid
