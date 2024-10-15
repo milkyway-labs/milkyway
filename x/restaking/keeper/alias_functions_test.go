@@ -367,7 +367,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllPoolUnbondingDelegations() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					1,
 					10,
-					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 					1,
 				))
@@ -377,7 +377,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllPoolUnbondingDelegations() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					2,
 					10,
-					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 					2,
 				))
@@ -387,7 +387,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllPoolUnbondingDelegations() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					2,
 					10,
-					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 					3,
 				))
@@ -398,7 +398,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllPoolUnbondingDelegations() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					1,
 					10,
-					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 					1,
 				),
@@ -443,7 +443,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllOperatorUnbondingDelegations() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					1,
 					10,
-					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 					1,
 				))
@@ -453,7 +453,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllOperatorUnbondingDelegations() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					2,
 					10,
-					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 					2,
 				))
@@ -463,7 +463,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllOperatorUnbondingDelegations() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					2,
 					10,
-					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 					3,
 				))
@@ -474,7 +474,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllOperatorUnbondingDelegations() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					2,
 					10,
-					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 					2,
 				),
@@ -519,7 +519,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServiceUnbondingDelegations() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					1,
 					10,
-					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 					1,
 				))
@@ -529,7 +529,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServiceUnbondingDelegations() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					2,
 					10,
-					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 					2,
 				))
@@ -539,7 +539,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServiceUnbondingDelegations() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					2,
 					10,
-					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 					3,
 				))
@@ -550,7 +550,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServiceUnbondingDelegations() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					2,
 					10,
-					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 					3,
 				),
@@ -617,7 +617,7 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 
 				// Delegate to operator
 				err = suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
-					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "", operatorstypes.DefaultOperatorParams(),
+					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "",
 				))
 				suite.Assert().NoError(err)
 				_, err = suite.k.DelegateToOperator(ctx, 1,
@@ -673,7 +673,7 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 
 				// Delegate to operator
 				err = suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
-					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "", operatorstypes.DefaultOperatorParams(),
+					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "",
 				))
 				suite.Assert().NoError(err)
 				_, err = suite.k.DelegateToOperator(ctx, 1,
@@ -700,7 +700,7 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 				err := suite.sk.CreateService(ctx, servicestypes.NewService(1, servicestypes.SERVICE_STATUS_ACTIVE,
 					"", "", "", "", ""))
 				err = suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
-					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "", operatorstypes.DefaultOperatorParams(),
+					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "",
 				))
 
 				// Create delegators delegations

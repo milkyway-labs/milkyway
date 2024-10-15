@@ -250,7 +250,6 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 					1,
 					operatorstypes.OPERATOR_STATUS_INACTIVE,
 					"moniker", "", "", "admin",
-					operatorstypes.DefaultOperatorParams(),
 				))
 			},
 			operatorID: 1,
@@ -265,7 +264,6 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 					1,
 					operatorstypes.OPERATOR_STATUS_ACTIVE,
 					"moniker", "", "", "admin",
-					operatorstypes.DefaultOperatorParams(),
 				))
 			},
 			operatorID: 1,
@@ -280,7 +278,6 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 					1,
 					operatorstypes.OPERATOR_STATUS_UNSPECIFIED,
 					"moniker", "", "", "admin",
-					operatorstypes.DefaultOperatorParams(),
 				))
 			},
 			operatorID: 1,
@@ -296,7 +293,6 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 					1,
 					operatorstypes.OPERATOR_STATUS_UNSPECIFIED,
 					"moniker", "", "", "admin",
-					operatorstypes.DefaultOperatorParams(),
 				))
 
 				// Set the next operator id
@@ -328,7 +324,6 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 					DelegatorShares: sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(100)),
 					),
-					Params: operatorstypes.DefaultOperatorParams(),
 				})
 
 				// Set the correct operator tokens amount
@@ -369,7 +364,6 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 					DelegatorShares: sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(600)),
 					),
-					Params: operatorstypes.DefaultOperatorParams(),
 				}, operator)
 
 				// Make sure the delegation exists
@@ -458,7 +452,6 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 						sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(125)),
 						sdk.NewDecCoinFromDec("operator/1/uinit", sdkmath.LegacyNewDec(100)),
 					),
-					Params: operatorstypes.DefaultOperatorParams(),
 				}, operator)
 
 				// Make sure the delegation has been updated properly
@@ -564,7 +557,6 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 						sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDecWithPrec(28125, 2)),
 						sdk.NewDecCoinFromDec("operator/1/uinit", sdkmath.LegacyNewDec(800)),
 					),
-					Params: operatorstypes.DefaultOperatorParams(),
 				}, operator)
 
 				// Make sure the delegation has been updated properly

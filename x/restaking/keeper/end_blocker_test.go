@@ -174,7 +174,6 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					operatorstypes.DefaultOperatorParams(),
 				))
 
 				// Create a service
