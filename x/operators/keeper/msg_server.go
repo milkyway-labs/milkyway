@@ -40,7 +40,6 @@ func (k msgServer) RegisterOperator(goCtx context.Context, msg *types.MsgRegiste
 		msg.Website,
 		msg.PictureURL,
 		msg.Sender,
-		types.DefaultOperatorParams(),
 	)
 
 	// Validate the operator before storing
@@ -194,15 +193,14 @@ func (k msgServer) SetOperatorParams(goCtx context.Context, msg *types.MsgSetOpe
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can update the operator")
 	}
 
-	// Update the operator params
-	operator.Params = msg.Params
-	err := operator.Validate()
-	if err != nil {
-		return nil, err
+	// Make sure that the received params are valid
+	if err := msg.Params.Validate(); err != nil {
+		return nil, errors.Wrap(types.ErrInvalidOperatorParams, err.Error())
 	}
 
-	// Store the operator with the new params
-	if err := k.SaveOperator(ctx, operator); err != nil {
+	// Update the operator params
+	err := k.SaveOperatorParams(ctx, msg.OperatorID, msg.Params)
+	if err != nil {
 		return nil, err
 	}
 

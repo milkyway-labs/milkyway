@@ -121,6 +121,97 @@ func (m *QueryOperatorResponse) GetOperator() Operator {
 	return Operator{}
 }
 
+// QueryOperatorParamsRequest is the request type for the Query/OperatorParams RPC method.
+type QueryOperatorParamsRequest struct {
+	// OperatorID is the ID of the operator for which to query the params
+	OperatorId uint32 `protobuf:"varint,1,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
+}
+
+func (m *QueryOperatorParamsRequest) Reset()         { *m = QueryOperatorParamsRequest{} }
+func (m *QueryOperatorParamsRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryOperatorParamsRequest) ProtoMessage()    {}
+func (*QueryOperatorParamsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d34b833547f80d63, []int{2}
+}
+func (m *QueryOperatorParamsRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryOperatorParamsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryOperatorParamsRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryOperatorParamsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryOperatorParamsRequest.Merge(m, src)
+}
+func (m *QueryOperatorParamsRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryOperatorParamsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryOperatorParamsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryOperatorParamsRequest proto.InternalMessageInfo
+
+func (m *QueryOperatorParamsRequest) GetOperatorId() uint32 {
+	if m != nil {
+		return m.OperatorId
+	}
+	return 0
+}
+
+// QueryOperatorParamsResponse is the response type for the Query/OperatorParams RPC method.
+type QueryOperatorParamsResponse struct {
+	OperatorParams OperatorParams `protobuf:"bytes,1,opt,name=operator_params,json=operatorParams,proto3" json:"operator_params"`
+}
+
+func (m *QueryOperatorParamsResponse) Reset()         { *m = QueryOperatorParamsResponse{} }
+func (m *QueryOperatorParamsResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryOperatorParamsResponse) ProtoMessage()    {}
+func (*QueryOperatorParamsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d34b833547f80d63, []int{3}
+}
+func (m *QueryOperatorParamsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryOperatorParamsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryOperatorParamsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryOperatorParamsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryOperatorParamsResponse.Merge(m, src)
+}
+func (m *QueryOperatorParamsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryOperatorParamsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryOperatorParamsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryOperatorParamsResponse proto.InternalMessageInfo
+
+func (m *QueryOperatorParamsResponse) GetOperatorParams() OperatorParams {
+	if m != nil {
+		return m.OperatorParams
+	}
+	return OperatorParams{}
+}
+
 // QueryOperatorsRequest is the request type for the Query/Operators RPC method.
 type QueryOperatorsRequest struct {
 	Pagination *query.PageRequest `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
@@ -130,7 +221,7 @@ func (m *QueryOperatorsRequest) Reset()         { *m = QueryOperatorsRequest{} }
 func (m *QueryOperatorsRequest) String() string { return proto.CompactTextString(m) }
 func (*QueryOperatorsRequest) ProtoMessage()    {}
 func (*QueryOperatorsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d34b833547f80d63, []int{2}
+	return fileDescriptor_d34b833547f80d63, []int{4}
 }
 func (m *QueryOperatorsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -179,7 +270,7 @@ func (m *QueryOperatorsResponse) Reset()         { *m = QueryOperatorsResponse{}
 func (m *QueryOperatorsResponse) String() string { return proto.CompactTextString(m) }
 func (*QueryOperatorsResponse) ProtoMessage()    {}
 func (*QueryOperatorsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d34b833547f80d63, []int{3}
+	return fileDescriptor_d34b833547f80d63, []int{5}
 }
 func (m *QueryOperatorsResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -230,7 +321,7 @@ func (m *QueryParamsRequest) Reset()         { *m = QueryParamsRequest{} }
 func (m *QueryParamsRequest) String() string { return proto.CompactTextString(m) }
 func (*QueryParamsRequest) ProtoMessage()    {}
 func (*QueryParamsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d34b833547f80d63, []int{4}
+	return fileDescriptor_d34b833547f80d63, []int{6}
 }
 func (m *QueryParamsRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -268,7 +359,7 @@ func (m *QueryParamsResponse) Reset()         { *m = QueryParamsResponse{} }
 func (m *QueryParamsResponse) String() string { return proto.CompactTextString(m) }
 func (*QueryParamsResponse) ProtoMessage()    {}
 func (*QueryParamsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d34b833547f80d63, []int{5}
+	return fileDescriptor_d34b833547f80d63, []int{7}
 }
 func (m *QueryParamsResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -307,6 +398,8 @@ func (m *QueryParamsResponse) GetParams() Params {
 func init() {
 	proto.RegisterType((*QueryOperatorRequest)(nil), "milkyway.operators.v1.QueryOperatorRequest")
 	proto.RegisterType((*QueryOperatorResponse)(nil), "milkyway.operators.v1.QueryOperatorResponse")
+	proto.RegisterType((*QueryOperatorParamsRequest)(nil), "milkyway.operators.v1.QueryOperatorParamsRequest")
+	proto.RegisterType((*QueryOperatorParamsResponse)(nil), "milkyway.operators.v1.QueryOperatorParamsResponse")
 	proto.RegisterType((*QueryOperatorsRequest)(nil), "milkyway.operators.v1.QueryOperatorsRequest")
 	proto.RegisterType((*QueryOperatorsResponse)(nil), "milkyway.operators.v1.QueryOperatorsResponse")
 	proto.RegisterType((*QueryParamsRequest)(nil), "milkyway.operators.v1.QueryParamsRequest")
@@ -316,39 +409,43 @@ func init() {
 func init() { proto.RegisterFile("milkyway/operators/v1/query.proto", fileDescriptor_d34b833547f80d63) }
 
 var fileDescriptor_d34b833547f80d63 = []byte{
-	// 508 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x94, 0x3f, 0x6f, 0xd3, 0x40,
-	0x18, 0xc6, 0x73, 0x2d, 0x44, 0xed, 0x5b, 0xb1, 0x1c, 0x29, 0xaa, 0x2c, 0xea, 0x04, 0x4b, 0x40,
-	0x29, 0xf4, 0x8e, 0xb4, 0x12, 0x0c, 0x4c, 0x14, 0x09, 0xc4, 0x80, 0x28, 0x1e, 0xbb, 0x54, 0xe7,
-	0xe6, 0x64, 0x2c, 0x62, 0x9f, 0xeb, 0x73, 0x02, 0x11, 0x62, 0x61, 0x60, 0x46, 0x30, 0xb3, 0xf2,
-	0x4d, 0x90, 0x3a, 0x56, 0x62, 0x61, 0x42, 0x28, 0xe1, 0x83, 0x54, 0xb9, 0x3f, 0xce, 0x1f, 0xb9,
-	0xa9, 0xb7, 0xc4, 0x79, 0x9e, 0xe7, 0xfd, 0xdd, 0xf3, 0x5e, 0x0c, 0xb7, 0xe2, 0xa8, 0xfb, 0x6e,
-	0xf0, 0x9e, 0x0d, 0xa8, 0x48, 0x79, 0xc6, 0x72, 0x91, 0x49, 0xda, 0x6f, 0xd3, 0x93, 0x1e, 0xcf,
-	0x06, 0x24, 0xcd, 0x44, 0x2e, 0xf0, 0xba, 0x95, 0x90, 0x42, 0x42, 0xfa, 0x6d, 0xa7, 0x11, 0x8a,
-	0x50, 0x28, 0x05, 0x1d, 0x7f, 0xd2, 0x62, 0xe7, 0x66, 0x28, 0x44, 0xd8, 0xe5, 0x94, 0xa5, 0x11,
-	0x65, 0x49, 0x22, 0x72, 0x96, 0x47, 0x22, 0x91, 0xe6, 0xd7, 0xed, 0x63, 0x21, 0x63, 0x21, 0x69,
-	0xc0, 0x24, 0xd7, 0x33, 0x68, 0xbf, 0x1d, 0xf0, 0x9c, 0xb5, 0x69, 0xca, 0xc2, 0x28, 0x51, 0x62,
-	0xa3, 0xf5, 0xca, 0xc9, 0x62, 0xd1, 0xe1, 0x5d, 0xb9, 0x58, 0x93, 0xb2, 0x8c, 0xc5, 0x46, 0xe3,
-	0x3d, 0x86, 0xc6, 0x9b, 0xf1, 0xa4, 0xd7, 0x46, 0xe1, 0xf3, 0x93, 0x1e, 0x97, 0x39, 0x6e, 0xc2,
-	0x9a, 0x35, 0x1d, 0x45, 0x9d, 0x0d, 0xd4, 0x42, 0x5b, 0xd7, 0x7c, 0xb0, 0x8f, 0x5e, 0x76, 0xbc,
-	0x43, 0x58, 0x9f, 0x33, 0xca, 0x54, 0x24, 0x92, 0xe3, 0xa7, 0xb0, 0x62, 0x65, 0xca, 0xb6, 0xb6,
-	0xdb, 0x24, 0xa5, 0x1d, 0x11, 0x6b, 0xdd, 0xbf, 0x72, 0xfa, 0xb7, 0x59, 0xf3, 0x0b, 0x9b, 0x77,
-	0x34, 0x97, 0x2d, 0x2d, 0xd5, 0x73, 0x80, 0x49, 0x13, 0x26, 0xfd, 0x0e, 0xd1, 0xb5, 0x91, 0x71,
-	0x6d, 0x44, 0xaf, 0xc6, 0xd4, 0x46, 0x0e, 0x58, 0xc8, 0x8d, 0xd7, 0x9f, 0x72, 0x7a, 0x3f, 0x11,
-	0xdc, 0x98, 0x9f, 0x60, 0xf0, 0x9f, 0xc1, 0x6a, 0x01, 0xb9, 0x81, 0x5a, 0xcb, 0xd5, 0xf9, 0x27,
-	0x3e, 0xfc, 0x62, 0x86, 0x73, 0x49, 0x71, 0xde, 0xbd, 0x94, 0x53, 0x13, 0xcc, 0x80, 0x36, 0x00,
-	0x2b, 0xce, 0x03, 0xb5, 0x33, 0x73, 0x14, 0xcf, 0x87, 0xeb, 0x33, 0x4f, 0x0d, 0xfa, 0x13, 0xa8,
-	0xeb, 0xdd, 0x9a, 0x66, 0x36, 0x2f, 0xe0, 0xd6, 0x36, 0x43, 0x6d, 0x2c, 0xbb, 0xbf, 0x96, 0xe1,
-	0xaa, 0x0a, 0xc5, 0x3f, 0x10, 0xac, 0xd8, 0xa3, 0xe1, 0xfb, 0x17, 0x64, 0x94, 0x5d, 0x1a, 0xe7,
-	0x41, 0x35, 0xb1, 0xc6, 0xf5, 0x1e, 0x7d, 0xfe, 0xfd, 0xff, 0xfb, 0xd2, 0x43, 0x4c, 0x68, 0xf9,
-	0x3d, 0x9d, 0x7c, 0xf9, 0x38, 0x75, 0x15, 0x3f, 0xe1, 0x6f, 0x08, 0x56, 0x8b, 0xbd, 0xe1, 0x4a,
-	0x33, 0x6d, 0x73, 0xce, 0x4e, 0x45, 0xb5, 0x41, 0xdc, 0x52, 0x88, 0x1e, 0x6e, 0x5d, 0x86, 0x88,
-	0xbf, 0x20, 0xa8, 0xeb, 0x5e, 0xf1, 0xbd, 0x45, 0x33, 0x66, 0x16, 0xe9, 0x6c, 0x57, 0x91, 0x1a,
-	0x96, 0xdb, 0x8a, 0xa5, 0x89, 0x37, 0xe9, 0xa2, 0xbf, 0xf5, 0xfe, 0xab, 0xd3, 0xa1, 0x8b, 0xce,
-	0x86, 0x2e, 0xfa, 0x37, 0x74, 0xd1, 0xd7, 0x91, 0x5b, 0x3b, 0x1b, 0xb9, 0xb5, 0x3f, 0x23, 0xb7,
-	0x76, 0xb8, 0x17, 0x46, 0xf9, 0xdb, 0x5e, 0x40, 0x8e, 0x45, 0x5c, 0x44, 0xec, 0x74, 0x59, 0x20,
-	0x27, 0x81, 0x1f, 0xa6, 0x22, 0xf3, 0x41, 0xca, 0x65, 0x50, 0x57, 0xaf, 0x89, 0xbd, 0xf3, 0x00,
-	0x00, 0x00, 0xff, 0xff, 0x19, 0x57, 0x15, 0xca, 0x0a, 0x05, 0x00, 0x00,
+	// 568 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x94, 0x41, 0x6b, 0x13, 0x41,
+	0x14, 0xc7, 0x33, 0xb5, 0x86, 0xf6, 0x15, 0x2b, 0x8c, 0xa9, 0x94, 0x68, 0x37, 0x71, 0xa1, 0x5a,
+	0xab, 0x9d, 0x31, 0x29, 0xda, 0x83, 0xf4, 0x60, 0x05, 0xc5, 0x83, 0x58, 0x83, 0xa7, 0x5e, 0xca,
+	0xa4, 0x19, 0xd6, 0xc5, 0xec, 0xce, 0x76, 0x67, 0x13, 0x0d, 0xe2, 0xc5, 0x83, 0x67, 0xd1, 0xb3,
+	0x57, 0x3f, 0x82, 0x9f, 0xa1, 0xc7, 0x82, 0x17, 0x4f, 0x22, 0x89, 0x9f, 0x43, 0x24, 0xb3, 0xb3,
+	0x9b, 0x4c, 0xd8, 0x26, 0xdb, 0x5b, 0x32, 0xf9, 0xff, 0xdf, 0xfb, 0xcd, 0xff, 0xbd, 0x0c, 0xdc,
+	0xf0, 0xdc, 0xf6, 0x9b, 0xde, 0x5b, 0xd6, 0xa3, 0x22, 0xe0, 0x21, 0x8b, 0x44, 0x28, 0x69, 0xb7,
+	0x46, 0x8f, 0x3b, 0x3c, 0xec, 0x91, 0x20, 0x14, 0x91, 0xc0, 0x2b, 0x89, 0x84, 0xa4, 0x12, 0xd2,
+	0xad, 0x95, 0x4b, 0x8e, 0x70, 0x84, 0x52, 0xd0, 0xe1, 0xa7, 0x58, 0x5c, 0xbe, 0xee, 0x08, 0xe1,
+	0xb4, 0x39, 0x65, 0x81, 0x4b, 0x99, 0xef, 0x8b, 0x88, 0x45, 0xae, 0xf0, 0xa5, 0xfe, 0x75, 0xf3,
+	0x48, 0x48, 0x4f, 0x48, 0xda, 0x64, 0x92, 0xc7, 0x3d, 0x68, 0xb7, 0xd6, 0xe4, 0x11, 0xab, 0xd1,
+	0x80, 0x39, 0xae, 0xaf, 0xc4, 0x5a, 0x6b, 0x67, 0x93, 0x79, 0xa2, 0xc5, 0xdb, 0x72, 0xba, 0x26,
+	0x60, 0x21, 0xf3, 0xb4, 0xc6, 0xde, 0x81, 0xd2, 0xcb, 0x61, 0xa7, 0x17, 0x5a, 0xd1, 0xe0, 0xc7,
+	0x1d, 0x2e, 0x23, 0x5c, 0x81, 0xa5, 0xc4, 0x74, 0xe8, 0xb6, 0x56, 0x51, 0x15, 0x6d, 0x5c, 0x6a,
+	0x40, 0x72, 0xf4, 0xac, 0x65, 0x1f, 0xc0, 0xca, 0x84, 0x51, 0x06, 0xc2, 0x97, 0x1c, 0x3f, 0x82,
+	0x85, 0x44, 0xa6, 0x6c, 0x4b, 0xf5, 0x0a, 0xc9, 0xcc, 0x88, 0x24, 0xd6, 0xbd, 0xf9, 0x93, 0xdf,
+	0x95, 0x42, 0x23, 0xb5, 0xd9, 0xbb, 0x50, 0x36, 0x6a, 0xef, 0x2b, 0xe2, 0xdc, 0x68, 0x12, 0xae,
+	0x65, 0xda, 0x35, 0xe0, 0x2b, 0xb8, 0x9c, 0xfa, 0xe3, 0x2c, 0x34, 0xe7, 0xfa, 0x0c, 0xce, 0xb8,
+	0x8e, 0xa6, 0x5d, 0x16, 0xc6, 0xa9, 0x7d, 0x38, 0x91, 0x47, 0x8a, 0xfb, 0x04, 0x60, 0x34, 0x3d,
+	0xdd, 0xe9, 0x26, 0x89, 0x47, 0x4d, 0x86, 0xa3, 0x26, 0xf1, 0x3a, 0xe9, 0x51, 0x93, 0x7d, 0xe6,
+	0x70, 0xed, 0x6d, 0x8c, 0x39, 0xed, 0xef, 0x08, 0xae, 0x4e, 0x76, 0xd0, 0x37, 0x7a, 0x0c, 0x8b,
+	0x29, 0xf0, 0x2a, 0xaa, 0x5e, 0xc8, 0x9f, 0xf9, 0xc8, 0x87, 0x9f, 0x1a, 0x9c, 0x73, 0x8a, 0xf3,
+	0xd6, 0x4c, 0xce, 0x98, 0xc0, 0x00, 0x2d, 0x01, 0x56, 0x9c, 0xc6, 0xd4, 0xec, 0x06, 0x5c, 0x31,
+	0x4e, 0x35, 0xfa, 0x43, 0x28, 0x1a, 0x33, 0x58, 0x3b, 0x83, 0xdb, 0xc8, 0x5e, 0x5b, 0xea, 0xff,
+	0xe6, 0xe1, 0xa2, 0x2a, 0x8a, 0xbf, 0x21, 0x58, 0x48, 0xae, 0x86, 0xef, 0x9c, 0x51, 0x23, 0x6b,
+	0xd1, 0xcb, 0x77, 0xf3, 0x89, 0x63, 0x5c, 0xfb, 0xc1, 0xc7, 0x9f, 0x7f, 0xbf, 0xce, 0xdd, 0xc3,
+	0x84, 0x66, 0xff, 0xb7, 0x46, 0x5f, 0xde, 0x8f, 0xed, 0xe8, 0x07, 0xfc, 0x03, 0xc1, 0xb2, 0xb9,
+	0x46, 0xb8, 0x96, 0xa7, 0xb1, 0x91, 0x61, 0xb9, 0x7e, 0x1e, 0x8b, 0x26, 0xde, 0x55, 0xc4, 0x3b,
+	0xf8, 0xfe, 0xf9, 0x88, 0xf5, 0x2b, 0x81, 0xbf, 0x20, 0x58, 0x4c, 0x17, 0x0e, 0xe7, 0x0a, 0x2b,
+	0xc5, 0xdd, 0xca, 0xa9, 0xd6, 0xa4, 0x1b, 0x8a, 0xd4, 0xc6, 0xd5, 0x59, 0xa4, 0xf8, 0x13, 0x82,
+	0xa2, 0x4e, 0xf1, 0xf6, 0xb4, 0x1e, 0x66, 0x7a, 0x9b, 0x79, 0xa4, 0x9a, 0x65, 0x5d, 0xb1, 0x54,
+	0xf0, 0x1a, 0x9d, 0xf6, 0x86, 0xee, 0x3d, 0x3f, 0xe9, 0x5b, 0xe8, 0xb4, 0x6f, 0xa1, 0x3f, 0x7d,
+	0x0b, 0x7d, 0x1e, 0x58, 0x85, 0xd3, 0x81, 0x55, 0xf8, 0x35, 0xb0, 0x0a, 0x07, 0xdb, 0x8e, 0x1b,
+	0xbd, 0xee, 0x34, 0xc9, 0x91, 0xf0, 0xd2, 0x12, 0x5b, 0x6d, 0xd6, 0x94, 0xa3, 0x82, 0xef, 0xc6,
+	0x4a, 0x46, 0xbd, 0x80, 0xcb, 0x66, 0x51, 0xbd, 0xc9, 0xdb, 0xff, 0x03, 0x00, 0x00, 0xff, 0xff,
+	0xeb, 0x15, 0x03, 0x0d, 0x77, 0x06, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -366,6 +463,9 @@ type QueryClient interface {
 	// Operator defines a gRPC query method that returns the operator by the given
 	// operator id.
 	Operator(ctx context.Context, in *QueryOperatorRequest, opts ...grpc.CallOption) (*QueryOperatorResponse, error)
+	// OperatorParams defines a gRPC query method that returns the operator's params
+	// by the given operator id.
+	OperatorParams(ctx context.Context, in *QueryOperatorParamsRequest, opts ...grpc.CallOption) (*QueryOperatorParamsResponse, error)
 	// Operators defines a gRPC query method that returns the list of operators.
 	Operators(ctx context.Context, in *QueryOperatorsRequest, opts ...grpc.CallOption) (*QueryOperatorsResponse, error)
 	// Params defines a gRPC query method that returns the parameters of the
@@ -384,6 +484,15 @@ func NewQueryClient(cc grpc1.ClientConn) QueryClient {
 func (c *queryClient) Operator(ctx context.Context, in *QueryOperatorRequest, opts ...grpc.CallOption) (*QueryOperatorResponse, error) {
 	out := new(QueryOperatorResponse)
 	err := c.cc.Invoke(ctx, "/milkyway.operators.v1.Query/Operator", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) OperatorParams(ctx context.Context, in *QueryOperatorParamsRequest, opts ...grpc.CallOption) (*QueryOperatorParamsResponse, error) {
+	out := new(QueryOperatorParamsResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.operators.v1.Query/OperatorParams", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -413,6 +522,9 @@ type QueryServer interface {
 	// Operator defines a gRPC query method that returns the operator by the given
 	// operator id.
 	Operator(context.Context, *QueryOperatorRequest) (*QueryOperatorResponse, error)
+	// OperatorParams defines a gRPC query method that returns the operator's params
+	// by the given operator id.
+	OperatorParams(context.Context, *QueryOperatorParamsRequest) (*QueryOperatorParamsResponse, error)
 	// Operators defines a gRPC query method that returns the list of operators.
 	Operators(context.Context, *QueryOperatorsRequest) (*QueryOperatorsResponse, error)
 	// Params defines a gRPC query method that returns the parameters of the
@@ -426,6 +538,9 @@ type UnimplementedQueryServer struct {
 
 func (*UnimplementedQueryServer) Operator(ctx context.Context, req *QueryOperatorRequest) (*QueryOperatorResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Operator not implemented")
+}
+func (*UnimplementedQueryServer) OperatorParams(ctx context.Context, req *QueryOperatorParamsRequest) (*QueryOperatorParamsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OperatorParams not implemented")
 }
 func (*UnimplementedQueryServer) Operators(ctx context.Context, req *QueryOperatorsRequest) (*QueryOperatorsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Operators not implemented")
@@ -452,6 +567,24 @@ func _Query_Operator_Handler(srv interface{}, ctx context.Context, dec func(inte
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).Operator(ctx, req.(*QueryOperatorRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_OperatorParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryOperatorParamsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).OperatorParams(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/milkyway.operators.v1.Query/OperatorParams",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).OperatorParams(ctx, req.(*QueryOperatorParamsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -499,6 +632,10 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Operator",
 			Handler:    _Query_Operator_Handler,
+		},
+		{
+			MethodName: "OperatorParams",
+			Handler:    _Query_OperatorParams_Handler,
 		},
 		{
 			MethodName: "Operators",
@@ -563,6 +700,67 @@ func (m *QueryOperatorResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = l
 	{
 		size, err := m.Operator.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintQuery(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryOperatorParamsRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryOperatorParamsRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryOperatorParamsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.OperatorId != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.OperatorId))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryOperatorParamsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryOperatorParamsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryOperatorParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.OperatorParams.MarshalToSizedBuffer(dAtA[:i])
 		if err != nil {
 			return 0, err
 		}
@@ -744,6 +942,29 @@ func (m *QueryOperatorResponse) Size() (n int) {
 	var l int
 	_ = l
 	l = m.Operator.Size()
+	n += 1 + l + sovQuery(uint64(l))
+	return n
+}
+
+func (m *QueryOperatorParamsRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.OperatorId != 0 {
+		n += 1 + sovQuery(uint64(m.OperatorId))
+	}
+	return n
+}
+
+func (m *QueryOperatorParamsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.OperatorParams.Size()
 	n += 1 + l + sovQuery(uint64(l))
 	return n
 }
@@ -934,6 +1155,158 @@ func (m *QueryOperatorResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if err := m.Operator.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryOperatorParamsRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryOperatorParamsRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryOperatorParamsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OperatorId", wireType)
+			}
+			m.OperatorId = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.OperatorId |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryOperatorParamsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryOperatorParamsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryOperatorParamsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OperatorParams", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.OperatorParams.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

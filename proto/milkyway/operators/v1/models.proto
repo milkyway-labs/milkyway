@@ -63,9 +63,6 @@ message Operator {
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
     (gogoproto.nullable) = false
   ];
-
-  // Params are the operator parameters
-  OperatorParams params = 10 [ (gogoproto.nullable) = false ];
 }
 
 // OperatorParams represent the params that have been set for an individual

@@ -1,6 +1,7 @@
 package keeper_test
 
 import (
+	"fmt"
 	"time"
 
 	sdkmath "cosmossdk.io/math"
@@ -89,12 +90,17 @@ func (suite *KeeperTestSuite) TestMsgServer_RegisterOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				), stored)
 
 				// Make sure the operator account has been created
 				hasAccount := suite.ak.HasAccount(ctx, types.GetOperatorAddress(2))
 				suite.Require().True(hasAccount)
+
+				// Make sure the newly registered operator has the default params
+				params, found, err := suite.k.GetOperatorParams(ctx, 2)
+				suite.Require().True(found)
+				suite.Require().NoError(err)
+				suite.Require().Equal(types.DefaultOperatorParams(), params)
 
 				// Make sure the next operator id has incremented
 				nextID, err := suite.k.GetNextOperatorID(ctx)
@@ -180,7 +186,6 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				))
 			},
 			msg: types.NewMsgUpdateOperator(
@@ -202,7 +207,6 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				))
 			},
 			msg: types.NewMsgUpdateOperator(
@@ -224,7 +228,6 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				))
 			},
 			msg: types.NewMsgUpdateOperator(
@@ -253,7 +256,6 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperator() {
 					"https://milkyway.zone",
 					"https://milkyway.zone/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				), stored)
 			},
 		},
@@ -322,7 +324,6 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-					types.DefaultOperatorParams(),
 				))
 			},
 			msg: types.NewMsgDeactivateOperator(
@@ -341,7 +342,6 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				))
 			},
 			msg: types.NewMsgDeactivateOperator(
@@ -360,7 +360,6 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				))
 			},
 			msg: types.NewMsgDeactivateOperator(
@@ -386,7 +385,6 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				))
 			},
 			msg: types.NewMsgDeactivateOperator(
@@ -412,7 +410,6 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				), stored)
 
 				// Make sure the operator was added to the inactivating queue
@@ -490,7 +487,6 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferOperatorOwnership() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-					types.DefaultOperatorParams(),
 				))
 			},
 			msg: types.NewMsgTransferOperatorOwnership(
@@ -510,7 +506,6 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferOperatorOwnership() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				))
 			},
 			msg: types.NewMsgTransferOperatorOwnership(
@@ -538,7 +533,6 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferOperatorOwnership() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
-					types.DefaultOperatorParams(),
 				), stored)
 			},
 		},
@@ -567,6 +561,103 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferOperatorOwnership() {
 				suite.Require().Equal(tc.expResponse, res)
 				for _, event := range tc.expEvents {
 					suite.Require().Contains(ctx.EventManager().Events(), event)
+				}
+
+				if tc.check != nil {
+					tc.check(ctx)
+				}
+			}
+		})
+	}
+}
+
+func (suite *KeeperTestSuite) TestMsgServer_SetOperatorParams() {
+	testOperatorId := uint32(2)
+	operatorAdmin := "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"
+
+	testCases := []struct {
+		name      string
+		store     func(ctx sdk.Context)
+		msg       *types.MsgSetOperatorParams
+		shouldErr bool
+		expEvents sdk.Events
+		check     func(ctx sdk.Context)
+	}{
+		{
+			name: "set invalid params fails",
+			msg: types.NewMsgSetOperatorParams(operatorAdmin, testOperatorId, types.NewOperatorParams(
+				sdkmath.LegacyNewDec(-1),
+			)),
+			shouldErr: true,
+		},
+		{
+			name: "not admin can't set params",
+			msg: types.NewMsgSetOperatorParams("cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn", testOperatorId, types.NewOperatorParams(
+				sdkmath.LegacyMustNewDecFromStr("0.2"),
+			)),
+			shouldErr: true,
+		},
+		{
+			name: "set params for not existing operator fails",
+			msg: types.NewMsgSetOperatorParams(operatorAdmin, 3, types.NewOperatorParams(
+				sdkmath.LegacyMustNewDecFromStr("0.2"),
+			)),
+			shouldErr: true,
+		},
+		{
+			name: "set params works properly",
+			msg: types.NewMsgSetOperatorParams(operatorAdmin, testOperatorId, types.NewOperatorParams(
+				sdkmath.LegacyMustNewDecFromStr("0.2"),
+			)),
+			expEvents: []sdk.Event{
+				sdk.NewEvent(
+					types.EventTypeSetOperatorParams,
+					sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", testOperatorId)),
+					sdk.NewAttribute(types.AttributeKeyNewCommissionRate, "0.200000000000000000"),
+				),
+			},
+			shouldErr: false,
+			check: func(ctx sdk.Context) {
+				params, found, err := suite.k.GetOperatorParams(ctx, testOperatorId)
+				suite.Require().Nil(err)
+				suite.Require().True(found)
+				suite.Require().Equal(types.NewOperatorParams(
+					sdkmath.LegacyMustNewDecFromStr("0.2"),
+				), params)
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			suite.SetupTest()
+			ctx := suite.ctx
+
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			// Register a test operator
+			err := suite.k.RegisterOperator(ctx, types.NewOperator(
+				testOperatorId,
+				types.OPERATOR_STATUS_ACTIVE,
+				"MilkyWay Operator",
+				"https://milkyway.com",
+				"https://milkyway.com/picture",
+				operatorAdmin,
+			))
+			suite.Require().NoError(err)
+
+			msgServer := keeper.NewMsgServer(suite.k)
+			res, err := msgServer.SetOperatorParams(ctx, tc.msg)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().NotNil(res)
+				for _, event := range tc.expEvents {
+					suite.Assert().Contains(ctx.EventManager().Events(), event)
 				}
 
 				if tc.check != nil {

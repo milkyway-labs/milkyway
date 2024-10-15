@@ -24,7 +24,6 @@ func (suite *KeeperTestSuite) TestValidOperatorsInvariant() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				))
 				suite.Require().NoError(err)
 
@@ -35,7 +34,6 @@ func (suite *KeeperTestSuite) TestValidOperatorsInvariant() {
 					"https://inertia.zone",
 					"",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-					types.DefaultOperatorParams(),
 				))
 				suite.Require().NoError(err)
 			},
@@ -52,7 +50,6 @@ func (suite *KeeperTestSuite) TestValidOperatorsInvariant() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				))
 				suite.Require().NoError(err)
 			},
@@ -69,7 +66,6 @@ func (suite *KeeperTestSuite) TestValidOperatorsInvariant() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				))
 				suite.Require().NoError(err)
 			},
@@ -86,7 +82,6 @@ func (suite *KeeperTestSuite) TestValidOperatorsInvariant() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				))
 				suite.Require().NoError(err)
 			},
@@ -103,7 +98,6 @@ func (suite *KeeperTestSuite) TestValidOperatorsInvariant() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				))
 				suite.Require().NoError(err)
 
@@ -114,7 +108,6 @@ func (suite *KeeperTestSuite) TestValidOperatorsInvariant() {
 					"https://inertia.zone",
 					"",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-					types.DefaultOperatorParams(),
 				))
 				suite.Require().NoError(err)
 			},

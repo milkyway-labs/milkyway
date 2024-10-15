@@ -36,7 +36,6 @@ func TestGenesisState_Validate(t *testing.T) {
 						"https://milkyway.com",
 						"https://milkyway.com/picture",
 						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-						types.DefaultOperatorParams(),
 					),
 					types.NewOperator(
 						1,
@@ -45,7 +44,6 @@ func TestGenesisState_Validate(t *testing.T) {
 						"https://milkyway.com",
 						"https://milkyway.com/picture",
 						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-						types.DefaultOperatorParams(),
 					),
 				},
 				Params: types.DefaultParams(),
@@ -64,7 +62,6 @@ func TestGenesisState_Validate(t *testing.T) {
 						"https://milkyway.com",
 						"https://milkyway.com/picture",
 						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-						types.DefaultOperatorParams(),
 					),
 				},
 				Params: types.DefaultParams(),
@@ -130,7 +127,6 @@ func TestGenesisState_Validate(t *testing.T) {
 						"https://milkyway.com",
 						"https://milkyway.com/picture",
 						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-						types.DefaultOperatorParams(),
 					),
 				},
 				UnbondingOperators: []types.UnbondingOperator{

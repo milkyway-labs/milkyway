@@ -22,6 +22,7 @@ type Keeper struct {
 	schema        collections.Schema
 	// Index to check if an address is an operator
 	operatorAddressSet collections.KeySet[string]
+	operatorParams     collections.Map[uint32, types.OperatorParams]
 
 	authority string
 }
@@ -48,6 +49,13 @@ func NewKeeper(
 			types.OperatorAddressSetPrefix,
 			"operators_address",
 			collections.StringKey,
+		),
+		operatorParams: collections.NewMap(
+			sb,
+			types.OperatorParamsMapPrefix,
+			"operator_params",
+			collections.Uint32Key,
+			codec.CollValue[types.OperatorParams](cdc),
 		),
 	}
 

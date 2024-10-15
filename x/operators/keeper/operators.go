@@ -1,8 +1,10 @@
 package keeper
 
 import (
+	goerrors "errors"
 	"time"
 
+	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -55,6 +57,11 @@ func (k *Keeper) RegisterOperator(ctx sdk.Context, operator types.Operator) erro
 
 	// Store the operator
 	if err := k.SaveOperator(ctx, operator); err != nil {
+		return err
+	}
+
+	// Store the default params for the newly created operator
+	if err := k.SaveOperatorParams(ctx, operator.ID, types.DefaultOperatorParams()); err != nil {
 		return err
 	}
 
@@ -120,6 +127,26 @@ func (k *Keeper) CompleteOperatorInactivation(ctx sdk.Context, operator types.Op
 	k.AfterOperatorInactivatingCompleted(ctx, operator.ID)
 
 	return nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// SaveOperatorParams stores the given operator params
+func (k *Keeper) SaveOperatorParams(ctx sdk.Context, operatorID uint32, params types.OperatorParams) error {
+	return k.operatorParams.Set(ctx, operatorID, params)
+}
+
+// GetOperatorParams returns the operator params
+func (k *Keeper) GetOperatorParams(ctx sdk.Context, operatorID uint32) (types.OperatorParams, bool, error) {
+	params, err := k.operatorParams.Get(ctx, operatorID)
+	if err != nil {
+		if goerrors.Is(err, collections.ErrNotFound) {
+			return types.OperatorParams{}, false, nil
+		} else {
+			return types.OperatorParams{}, false, err
+		}
+	}
+	return params, true, nil
 }
 
 // --------------------------------------------------------------------------------------------------------------------

@@ -36,7 +36,6 @@ func NewOperator(
 	website string,
 	pictureURL string,
 	admin string,
-	params OperatorParams,
 ) Operator {
 	return Operator{
 		ID:         id,
@@ -46,7 +45,6 @@ func NewOperator(
 		Website:    website,
 		PictureURL: pictureURL,
 		Address:    GetOperatorAddress(id).String(),
-		Params:     params,
 	}
 }
 
@@ -88,11 +86,6 @@ func (o Operator) Validate() error {
 	_, err = sdk.AccAddressFromBech32(o.Address)
 	if err != nil {
 		return fmt.Errorf("invalid address: %s", o.Address)
-	}
-
-	err = o.Params.Validate()
-	if err != nil {
-		return fmt.Errorf("invalid params: %w", err)
 	}
 
 	return nil
@@ -234,7 +227,6 @@ func (o *Operator) Update(update OperatorUpdate) Operator {
 		update.Website,
 		update.PictureURL,
 		o.Admin,
-		o.Params,
 	)
 }
 

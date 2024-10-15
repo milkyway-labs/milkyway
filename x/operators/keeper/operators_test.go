@@ -125,7 +125,6 @@ func (suite *KeeperTestSuite) TestKeeper_RegisterOperator() {
 				"https://milkyway.com",
 				"https://milkyway.com/picture",
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				types.DefaultOperatorParams(),
 			),
 			shouldErr: true,
 		},
@@ -148,7 +147,6 @@ func (suite *KeeperTestSuite) TestKeeper_RegisterOperator() {
 				"https://milkyway.com",
 				"https://milkyway.com/picture",
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				types.DefaultOperatorParams(),
 			),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
@@ -162,7 +160,6 @@ func (suite *KeeperTestSuite) TestKeeper_RegisterOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				), stored)
 
 				// Make sure the user has been charged
@@ -230,7 +227,6 @@ func (suite *KeeperTestSuite) TestKeeper_GetOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				))
 				suite.Require().NoError(err)
 			},
@@ -243,7 +239,6 @@ func (suite *KeeperTestSuite) TestKeeper_GetOperator() {
 				"https://milkyway.com",
 				"https://milkyway.com/picture",
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				types.DefaultOperatorParams(),
 			),
 		},
 	}
@@ -283,7 +278,6 @@ func (suite *KeeperTestSuite) TestKeeper_SaveOperator() {
 				"https://milkyway.com",
 				"https://milkyway.com/picture",
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				types.DefaultOperatorParams(),
 			),
 			check: func(ctx sdk.Context) {
 				stored, found := suite.k.GetOperator(ctx, 1)
@@ -295,7 +289,6 @@ func (suite *KeeperTestSuite) TestKeeper_SaveOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				), stored)
 			},
 		},
@@ -309,7 +302,6 @@ func (suite *KeeperTestSuite) TestKeeper_SaveOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				))
 				suite.Require().NoError(err)
 			},
@@ -320,7 +312,6 @@ func (suite *KeeperTestSuite) TestKeeper_SaveOperator() {
 				"https://milkyway.zone",
 				"https://milkyway.zone/picture",
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				types.DefaultOperatorParams(),
 			),
 			check: func(ctx sdk.Context) {
 				//
@@ -333,7 +324,6 @@ func (suite *KeeperTestSuite) TestKeeper_SaveOperator() {
 					"https://milkyway.zone",
 					"https://milkyway.zone/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				), stored)
 			},
 		},
@@ -385,7 +375,6 @@ func (suite *KeeperTestSuite) TestKeeper_StartOperatorInactivation() {
 				"https://milkyway.com",
 				"https://milkyway.com/picture",
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				types.DefaultOperatorParams(),
 			),
 			check: func(ctx sdk.Context) {
 				// Make sure the operator status has been updated
@@ -398,7 +387,6 @@ func (suite *KeeperTestSuite) TestKeeper_StartOperatorInactivation() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				), stored)
 
 				// Make sure the operator has been inserted into the inactivating queue
@@ -464,7 +452,6 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteOperatorInactivation() {
 				"https://milkyway.com",
 				"https://milkyway.com/picture",
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				types.DefaultOperatorParams(),
 			),
 			check: func(ctx sdk.Context) {
 				// Make sure the operator status has been updated
@@ -477,7 +464,6 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteOperatorInactivation() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				), stored)
 
 				// Make sure the operator has been removed from the inactivating queue

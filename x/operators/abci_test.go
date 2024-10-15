@@ -61,7 +61,6 @@ func TestBeginBlocker(t *testing.T) {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				))
 			},
 			updateCtx: func(ctx sdk.Context) sdk.Context {
@@ -87,7 +86,6 @@ func TestBeginBlocker(t *testing.T) {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				))
 			},
 			updateCtx: func(ctx sdk.Context) sdk.Context {
@@ -119,7 +117,6 @@ func TestBeginBlocker(t *testing.T) {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.DefaultOperatorParams(),
 				))
 			},
 			updateCtx: func(ctx sdk.Context) sdk.Context {

@@ -272,7 +272,6 @@ func (suite *KeeperTestSuite) createOperator(id uint32) {
 		"",
 		"",
 		fmt.Sprintf("operator-%d-admin", id),
-		operatorstypes.DefaultOperatorParams(),
 	)))
 }
 
