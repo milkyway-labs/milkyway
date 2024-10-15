@@ -585,30 +585,38 @@ func (suite *KeeperTestSuite) TestMsgServer_SetOperatorParams() {
 	}{
 		{
 			name: "set invalid params fails",
-			msg: types.NewMsgSetOperatorParams(operatorAdmin, testOperatorId, types.NewOperatorParams(
+			msg: types.NewMsgSetOperatorParams(
+				operatorAdmin,
+				testOperatorId,
 				sdkmath.LegacyNewDec(-1),
-			)),
+			),
 			shouldErr: true,
 		},
 		{
 			name: "not admin can't set params",
-			msg: types.NewMsgSetOperatorParams("cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn", testOperatorId, types.NewOperatorParams(
+			msg: types.NewMsgSetOperatorParams(
+				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+				testOperatorId,
 				sdkmath.LegacyMustNewDecFromStr("0.2"),
-			)),
+			),
 			shouldErr: true,
 		},
 		{
 			name: "set params for not existing operator fails",
-			msg: types.NewMsgSetOperatorParams(operatorAdmin, 3, types.NewOperatorParams(
+			msg: types.NewMsgSetOperatorParams(
+				operatorAdmin,
+				3,
 				sdkmath.LegacyMustNewDecFromStr("0.2"),
-			)),
+			),
 			shouldErr: true,
 		},
 		{
 			name: "set params works properly",
-			msg: types.NewMsgSetOperatorParams(operatorAdmin, testOperatorId, types.NewOperatorParams(
+			msg: types.NewMsgSetOperatorParams(
+				operatorAdmin,
+				testOperatorId,
 				sdkmath.LegacyMustNewDecFromStr("0.2"),
-			)),
+			),
 			expEvents: []sdk.Event{
 				sdk.NewEvent(
 					types.EventTypeSetOperatorParams,

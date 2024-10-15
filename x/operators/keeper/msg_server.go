@@ -193,13 +193,15 @@ func (k msgServer) SetOperatorParams(goCtx context.Context, msg *types.MsgSetOpe
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can update the operator")
 	}
 
+	newParams := types.NewOperatorParams(msg.CommissionRate)
+
 	// Make sure that the received params are valid
-	if err := msg.Params.Validate(); err != nil {
+	if err := newParams.Validate(); err != nil {
 		return nil, errors.Wrap(types.ErrInvalidOperatorParams, err.Error())
 	}
 
 	// Update the operator params
-	err := k.SaveOperatorParams(ctx, msg.OperatorID, msg.Params)
+	err := k.SaveOperatorParams(ctx, msg.OperatorID, newParams)
 	if err != nil {
 		return nil, err
 	}
@@ -208,7 +210,7 @@ func (k msgServer) SetOperatorParams(goCtx context.Context, msg *types.MsgSetOpe
 		sdk.NewEvent(
 			types.EventTypeSetOperatorParams,
 			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", msg.OperatorID)),
-			sdk.NewAttribute(types.AttributeKeyNewCommissionRate, msg.Params.CommissionRate.String()),
+			sdk.NewAttribute(types.AttributeKeyNewCommissionRate, newParams.CommissionRate.String()),
 		),
 	})
 

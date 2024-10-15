@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"cosmossdk.io/errors"
+	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -203,11 +204,11 @@ func (msg *MsgUpdateParams) GetSigners() []sdk.AccAddress {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-func NewMsgSetOperatorParams(sender string, operatorID uint32, params OperatorParams) *MsgSetOperatorParams {
+func NewMsgSetOperatorParams(sender string, operatorID uint32, commissionRate sdkmath.LegacyDec) *MsgSetOperatorParams {
 	return &MsgSetOperatorParams{
-		Sender:     sender,
-		OperatorID: operatorID,
-		Params:     params,
+		Sender:         sender,
+		OperatorID:     operatorID,
+		CommissionRate: commissionRate,
 	}
 }
 
@@ -222,7 +223,8 @@ func (msg *MsgSetOperatorParams) ValidateBasic() error {
 		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address")
 	}
 
-	err = msg.Params.Validate()
+	operatorParams := NewOperatorParams(msg.CommissionRate)
+	err = operatorParams.Validate()
 	if err != nil {
 		return fmt.Errorf("invalid operator params: %w", err)
 	}
