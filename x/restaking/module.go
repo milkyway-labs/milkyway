@@ -23,7 +23,7 @@ import (
 )
 
 const (
-	consensusVersion = 1
+	consensusVersion = 2
 )
 
 var (
@@ -118,6 +118,12 @@ func (am AppModule) Name() string {
 func (am AppModule) RegisterServices(cfg module.Configurator) {
 	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServer(am.keeper))
 	types.RegisterQueryServer(cfg.QueryServer(), keeper.NewQuerier(am.keeper))
+
+	m := keeper.NewMigrator(am.keeper)
+	err := cfg.RegisterMigration(types.ModuleName, 1, m.Migrate1To2)
+	if err != nil {
+		panic(err)
+	}
 }
 
 // RegisterInvariants registers the restaking module's invariants.

@@ -13,6 +13,14 @@ import (
 func (k *Keeper) SaveOperatorParams(ctx sdk.Context, operatorID uint32, params types.OperatorParams) {
 	store := ctx.KVStore(k.storeKey)
 	store.Set(types.OperatorParamsStoreKey(operatorID), k.cdc.MustMarshal(&params))
+
+	// Store the operator params in the x/opeators module.
+	// TODO: Once we have moved also the operator's joined services in a dedicated
+	// collection the whole SaveOperatorParams method should be removed.
+	err := k.operatorsKeeper.SaveOperatorParams(ctx, operatorID, operatorstypes.NewOperatorParams(params.CommissionRate))
+	if err != nil {
+		panic(err)
+	}
 }
 
 // GetOperatorParams returns the params for the given operator, if any.
@@ -21,9 +29,23 @@ func (k *Keeper) GetOperatorParams(ctx sdk.Context, operatorID uint32) (params t
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(types.OperatorParamsStoreKey(operatorID))
 	if bz == nil {
-		return types.DefaultOperatorParams()
+		params = types.DefaultOperatorParams()
+	} else {
+		k.cdc.MustUnmarshal(bz, &params)
 	}
-	k.cdc.MustUnmarshal(bz, &params)
+
+	// Get the commission rate from the x/opeators module.
+	// TODO: Once we have moved also the operator's joined services in a dedicated
+	// collection the whole GetOperatorParams method should be removed.
+	operatorParams, found, err := k.operatorsKeeper.GetOperatorParams(ctx, operatorID)
+	if err != nil {
+		panic(err)
+	}
+	if !found {
+		operatorParams = operatorstypes.DefaultOperatorParams()
+	}
+	params.CommissionRate = operatorParams.CommissionRate
+
 	return params
 }
 
