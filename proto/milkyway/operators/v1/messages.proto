@@ -133,7 +133,7 @@ message MsgDeactivateOperatorResponse {}
 // update the operator's parameters.
 message MsgSetOperatorParams {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/MsgUpdateOperatorParams";
+  option (amino.name) = "milkyway/MsgSetOperatorParams";
 
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
