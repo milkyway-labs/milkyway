@@ -123,6 +123,12 @@ func (k *Keeper) CompleteOperatorInactivation(ctx sdk.Context, operator types.Op
 		return err
 	}
 
+	// Remove the operator params when completed to avoid an invariant breaking.
+	err := k.operatorParams.Remove(ctx, operator.ID)
+	if err != nil {
+		return err
+	}
+
 	// Call the hook
 	k.AfterOperatorInactivatingCompleted(ctx, operator.ID)
 
