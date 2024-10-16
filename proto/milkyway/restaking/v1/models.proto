@@ -9,9 +9,13 @@ import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/restaking/types";
 
+// Deprecated: Now the operator's commission rate information have been
+// moved to the x/operator module and the joined service list is stored in
+// the x/restaking module as a map.
 // OperatorParams represent the params that have been set for an individual
 // operator.
 message OperatorParams {
+  option deprecated = true;
 
   // Deprecated: Now the operator's commission rate is stored inside the x/operators
   // module.
@@ -23,10 +27,14 @@ message OperatorParams {
     (gogoproto.nullable) = false
   ];
 
+  // Deprecated: Please use the MsgJoinService to update the operator's
+  // joined service list.
   // JoinedServicesIDs defines the list of service IDs that the operator has
   // joined.
-  repeated uint32 joined_services_ids = 2
-      [ (gogoproto.customname) = "JoinedServicesIDs" ];
+  repeated uint32 joined_services_ids = 2 [
+    deprecated = true,
+    (gogoproto.customname) = "JoinedServicesIDs"
+  ];
 }
 
 // OperatorSecuredServices represent the list of services that an operator is

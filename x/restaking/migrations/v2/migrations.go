@@ -27,6 +27,9 @@ func migateOperatorParams(
 
 	for ; iterator.Valid(); iterator.Next() {
 		// Get the operators params from the store
+		//nolint:staticcheck // SA1004
+		// We disable the deprecated lint error
+		// since we need to use this struct to perform the migration
 		var params types.OperatorParams
 		cdc.MustUnmarshal(iterator.Value(), &params)
 
@@ -42,21 +45,37 @@ func migateOperatorParams(
 			return fmt.Errorf("operator %d not found", operatorID)
 		}
 
-		// Update the operator params with the params readed from the
-		// restaking modeule
-		err = operatorsKeeper.SaveOperatorParams(ctx, operatorID, operatortypes.NewOperatorParams(params.CommissionRate))
+		// Update the operator params with the params retrieved from the
+		// restaking module
+		err = operatorsKeeper.SaveOperatorParams(ctx, operatorID,
+			//nolint:staticcheck // SA1004
+			// We disable the lint since we need to access a deprecated field in
+			// order to migrate the data with the old format.
+			operatortypes.NewOperatorParams(params.CommissionRate),
+		)
 		if err != nil {
 			return err
 		}
 
-		// Store the operator joined services
+		// Get the operators secured services.
 		securedServices, err := restakingKeeper.GetOperatorSecuredServices(ctx, operatorID)
+		if err != nil {
+			return err
+		}
+
+		// Update the operator secured services with the ones retrieved from
+		// the old params structure.
+		//nolint:staticcheck // SA1004
+		// We disable the deprecated lint error
+		// since we need to use this deprecated field to perform the migration
 		for _, serviceID := range params.JoinedServicesIDs {
 			err := securedServices.Add(serviceID)
 			if err != nil {
 				return err
 			}
 		}
+
+		// Store the services secured by the operator
 		err = restakingKeeper.SetOperatorSecuredServices(ctx, operatorID, securedServices)
 		if err != nil {
 			return err

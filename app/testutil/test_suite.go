@@ -146,7 +146,7 @@ func (suite *KeeperTestSuite) UpdateOperatorParams(
 	// Sets the operator commission rate
 	operatorsMsgService := operatorskeeper.NewMsgServer(suite.App.OperatorsKeeper)
 	_, err := operatorsMsgService.SetOperatorParams(ctx, operatorstypes.NewMsgSetOperatorParams(
-		operator.Admin, operatorID, commissionRate,
+		operator.Admin, operatorID, operatorstypes.NewOperatorParams(commissionRate),
 	))
 	suite.Require().NoError(err)
 
