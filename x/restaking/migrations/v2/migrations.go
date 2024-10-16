@@ -14,7 +14,13 @@ import (
 
 // migrateOperatorParams migrates all the operators commissions rates from the
 // restaking module to the operators module
-func migateOperatorParams(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Codec, operatorsKeeper types.OperatorsKeeper) error {
+func migateOperatorParams(
+	ctx sdk.Context,
+	storeKey storetypes.StoreKey,
+	cdc codec.Codec,
+	restakingKeeper RestakingKeeper,
+	operatorsKeeper OperatorsKeeper,
+) error {
 	store := ctx.KVStore(storeKey)
 	iterator := storetypes.KVStorePrefixIterator(store, types.OperatorParamsPrefix)
 	defer iterator.Close()
@@ -42,10 +48,32 @@ func migateOperatorParams(ctx sdk.Context, storeKey storetypes.StoreKey, cdc cod
 		if err != nil {
 			return err
 		}
+
+		// Store the operator joined services
+		securedServices, err := restakingKeeper.GetOperatorSecuredServices(ctx, operatorID)
+		for _, serviceID := range params.JoinedServicesIDs {
+			err := securedServices.Add(serviceID)
+			if err != nil {
+				return err
+			}
+		}
+		err = restakingKeeper.SetOperatorSecuredServices(ctx, operatorID, securedServices)
+		if err != nil {
+			return err
+		}
+
+		// Delete the params from the store
+		store.Delete(iterator.Key())
 	}
 	return nil
 }
 
-func Migrate1To2(ctx sdk.Context, storeKey storetypes.StoreKey, cdc codec.Codec, operatorsKeeper types.OperatorsKeeper) error {
-	return migateOperatorParams(ctx, storeKey, cdc, operatorsKeeper)
+func Migrate1To2(
+	ctx sdk.Context,
+	storeKey storetypes.StoreKey,
+	cdc codec.Codec,
+	restakingKeeper RestakingKeeper,
+	operatorsKeeper OperatorsKeeper,
+) error {
+	return migateOperatorParams(ctx, storeKey, cdc, restakingKeeper, operatorsKeeper)
 }
