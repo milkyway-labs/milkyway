@@ -19,15 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Msg_UpdateOperatorParams_FullMethodName = "/milkyway.restaking.v1.Msg/UpdateOperatorParams"
-	Msg_UpdateServiceParams_FullMethodName  = "/milkyway.restaking.v1.Msg/UpdateServiceParams"
-	Msg_DelegatePool_FullMethodName         = "/milkyway.restaking.v1.Msg/DelegatePool"
-	Msg_DelegateOperator_FullMethodName     = "/milkyway.restaking.v1.Msg/DelegateOperator"
-	Msg_DelegateService_FullMethodName      = "/milkyway.restaking.v1.Msg/DelegateService"
-	Msg_UpdateParams_FullMethodName         = "/milkyway.restaking.v1.Msg/UpdateParams"
-	Msg_UndelegatePool_FullMethodName       = "/milkyway.restaking.v1.Msg/UndelegatePool"
-	Msg_UndelegateOperator_FullMethodName   = "/milkyway.restaking.v1.Msg/UndelegateOperator"
-	Msg_UndelegateService_FullMethodName    = "/milkyway.restaking.v1.Msg/UndelegateService"
+	Msg_JoinService_FullMethodName         = "/milkyway.restaking.v1.Msg/JoinService"
+	Msg_UpdateServiceParams_FullMethodName = "/milkyway.restaking.v1.Msg/UpdateServiceParams"
+	Msg_DelegatePool_FullMethodName        = "/milkyway.restaking.v1.Msg/DelegatePool"
+	Msg_DelegateOperator_FullMethodName    = "/milkyway.restaking.v1.Msg/DelegateOperator"
+	Msg_DelegateService_FullMethodName     = "/milkyway.restaking.v1.Msg/DelegateService"
+	Msg_UpdateParams_FullMethodName        = "/milkyway.restaking.v1.Msg/UpdateParams"
+	Msg_UndelegatePool_FullMethodName      = "/milkyway.restaking.v1.Msg/UndelegatePool"
+	Msg_UndelegateOperator_FullMethodName  = "/milkyway.restaking.v1.Msg/UndelegateOperator"
+	Msg_UndelegateService_FullMethodName   = "/milkyway.restaking.v1.Msg/UndelegateService"
 )
 
 // MsgClient is the client API for Msg service.
@@ -36,9 +36,9 @@ const (
 //
 // Msg defines the restaking module's gRPC message service.
 type MsgClient interface {
-	// UpdateOperatorParams defines the operation that allows the operator admin
-	// to update the operator's parameters.
-	UpdateOperatorParams(ctx context.Context, in *MsgUpdateOperatorParams, opts ...grpc.CallOption) (*MsgUpdateOperatorParamsResponse, error)
+	// JoinService defines the operation that allows the operator admin
+	// to start securing an AVS
+	JoinService(ctx context.Context, in *MsgJoinService, opts ...grpc.CallOption) (*MsgJoinServiceResponse, error)
 	// UpdateServiceParams defines the operation that allows the service admin to
 	// update the service's parameters.
 	UpdateServiceParams(ctx context.Context, in *MsgUpdateServiceParams, opts ...grpc.CallOption) (*MsgUpdateServiceParamsResponse, error)
@@ -75,10 +75,10 @@ func NewMsgClient(cc grpc.ClientConnInterface) MsgClient {
 	return &msgClient{cc}
 }
 
-func (c *msgClient) UpdateOperatorParams(ctx context.Context, in *MsgUpdateOperatorParams, opts ...grpc.CallOption) (*MsgUpdateOperatorParamsResponse, error) {
+func (c *msgClient) JoinService(ctx context.Context, in *MsgJoinService, opts ...grpc.CallOption) (*MsgJoinServiceResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(MsgUpdateOperatorParamsResponse)
-	err := c.cc.Invoke(ctx, Msg_UpdateOperatorParams_FullMethodName, in, out, cOpts...)
+	out := new(MsgJoinServiceResponse)
+	err := c.cc.Invoke(ctx, Msg_JoinService_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -171,9 +171,9 @@ func (c *msgClient) UndelegateService(ctx context.Context, in *MsgUndelegateServ
 //
 // Msg defines the restaking module's gRPC message service.
 type MsgServer interface {
-	// UpdateOperatorParams defines the operation that allows the operator admin
-	// to update the operator's parameters.
-	UpdateOperatorParams(context.Context, *MsgUpdateOperatorParams) (*MsgUpdateOperatorParamsResponse, error)
+	// JoinService defines the operation that allows the operator admin
+	// to start securing an AVS
+	JoinService(context.Context, *MsgJoinService) (*MsgJoinServiceResponse, error)
 	// UpdateServiceParams defines the operation that allows the service admin to
 	// update the service's parameters.
 	UpdateServiceParams(context.Context, *MsgUpdateServiceParams) (*MsgUpdateServiceParamsResponse, error)
@@ -210,8 +210,8 @@ type MsgServer interface {
 // pointer dereference when methods are called.
 type UnimplementedMsgServer struct{}
 
-func (UnimplementedMsgServer) UpdateOperatorParams(context.Context, *MsgUpdateOperatorParams) (*MsgUpdateOperatorParamsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateOperatorParams not implemented")
+func (UnimplementedMsgServer) JoinService(context.Context, *MsgJoinService) (*MsgJoinServiceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method JoinService not implemented")
 }
 func (UnimplementedMsgServer) UpdateServiceParams(context.Context, *MsgUpdateServiceParams) (*MsgUpdateServiceParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateServiceParams not implemented")
@@ -258,20 +258,20 @@ func RegisterMsgServer(s grpc.ServiceRegistrar, srv MsgServer) {
 	s.RegisterService(&Msg_ServiceDesc, srv)
 }
 
-func _Msg_UpdateOperatorParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgUpdateOperatorParams)
+func _Msg_JoinService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgJoinService)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).UpdateOperatorParams(ctx, in)
+		return srv.(MsgServer).JoinService(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_UpdateOperatorParams_FullMethodName,
+		FullMethod: Msg_JoinService_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).UpdateOperatorParams(ctx, req.(*MsgUpdateOperatorParams))
+		return srv.(MsgServer).JoinService(ctx, req.(*MsgJoinService))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -428,8 +428,8 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*MsgServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "UpdateOperatorParams",
-			Handler:    _Msg_UpdateOperatorParams_Handler,
+			MethodName: "JoinService",
+			Handler:    _Msg_JoinService_Handler,
 		},
 		{
 			MethodName: "UpdateServiceParams",

@@ -16,10 +16,10 @@ option go_package = "github.com/milkyway-labs/milkyway/x/restaking/types";
 service Msg {
   option (cosmos.msg.v1.service) = true;
 
-  // UpdateOperatorParams defines the operation that allows the operator admin
-  // to update the operator's parameters.
-  rpc UpdateOperatorParams(MsgUpdateOperatorParams)
-      returns (MsgUpdateOperatorParamsResponse);
+  // JoinService defines the operation that allows the operator admin
+  // to start securing an AVS
+  rpc JoinService(MsgJoinService)
+    returns (MsgJoinServiceResponse);
 
   // UpdateServiceParams defines the operation that allows the service admin to
   // update the service's parameters.
@@ -58,23 +58,22 @@ service Msg {
   rpc UndelegateService(MsgUndelegateService) returns (MsgUndelegateResponse);
 }
 
-// MsgUpdateOperatorParams defines the message structure for the
-// UpdateOperatorParams gRPC service method. It allows the operator admin to
-// update the operator's parameters.
-message MsgUpdateOperatorParams {
+// MsgJoinService defines the message structure for the
+// JoinService gRPC service method. It allows the opeator admin to
+// start securing a AVS.
+message MsgJoinService {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/MsgUpdateOperatorParams";
+  option (amino.name) = "milkyway/MsgJoinService";
 
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
   uint32 operator_id = 2 [ (gogoproto.customname) = "OperatorID" ];
 
-  OperatorParams params = 3 [ (gogoproto.nullable) = false ];
+  uint32 service_id = 3 [ (gogoproto.customname) = "ServiceID" ];
 }
 
-// MsgUpdateOperatorParamsResponse is the return value of
-// MsgUpdateOperatorParams.
-message MsgUpdateOperatorParamsResponse {}
+// MsgJoinServiceResponse is the return value of MsgJoinService.
+message MsgJoinServiceResponse {}
 
 // MsgUpdateServiceParams defines the message structure for the
 // UpdateServiceParams gRPC service method. It allows the service admin to

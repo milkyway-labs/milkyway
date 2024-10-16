@@ -6,43 +6,31 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// NewMsgUpdateOperatorParams creates a new MsgUpdateOperatorParams instance
-func NewMsgUpdateOperatorParams(operatorID uint32, params OperatorParams, sender string) *MsgUpdateOperatorParams {
-	return &MsgUpdateOperatorParams{
+// NewMsgJoinService creates a new MsgJoinService instance
+func NewMsgJoinService(operatorID uint32, serviceID uint32, sender string) *MsgJoinService {
+	return &MsgJoinService{
 		OperatorID: operatorID,
-		Params:     params,
+		ServiceID:  serviceID,
 		Sender:     sender,
 	}
 }
 
 // ValidateBasic implements sdk.Msg
-func (msg *MsgUpdateOperatorParams) ValidateBasic() error {
+func (msg *MsgJoinService) ValidateBasic() error {
 	if msg.OperatorID == 0 {
 		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid operator ID: %d", msg.OperatorID)
 	}
 
-	err := msg.Params.Validate()
-	if err != nil {
-		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid operator params: %s", err)
+	if msg.ServiceID == 0 {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid service ID: %d", msg.ServiceID)
 	}
 
-	_, err = sdk.AccAddressFromBech32(msg.Sender)
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address")
 	}
 
 	return nil
-}
-
-// GetSignBytes implements sdk.Msg
-func (msg *MsgUpdateOperatorParams) GetSignBytes() []byte {
-	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(msg))
-}
-
-// GetSigners implements sdk.Msg
-func (msg *MsgUpdateOperatorParams) GetSigners() []sdk.AccAddress {
-	addr, _ := sdk.AccAddressFromBech32(msg.Sender)
-	return []sdk.AccAddress{addr}
 }
 
 // --------------------------------------------------------------------------------------------------------------------
