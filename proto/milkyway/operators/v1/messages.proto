@@ -139,12 +139,7 @@ message MsgSetOperatorParams {
 
   uint32 operator_id = 2 [ (gogoproto.customname) = "OperatorID" ];
 
-  // CommissionRate defines the commission rate charged to delegators, as a
-  // fraction.
-  string commission_rate = 3 [
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false
-  ];
+  OperatorParams params = 3 [ (gogoproto.nullable) = false ];
 }
 
 // MsgSetOperatorParamsResponse is the return value of

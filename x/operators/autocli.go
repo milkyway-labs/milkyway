@@ -103,18 +103,6 @@ Only the fields that you provide will be updated`,
 					},
 				},
 				{
-					RpcMethod: "SetOperatorParams",
-					Use:       "set-operator-params [id] [commission-rate]",
-					Short:     "Sets the parameters of the operator with the given id",
-					Example: fmt.Sprintf(
-						`%s tx %s set-operator-params 1 0.2 --from alice`,
-						version.AppName, types.ModuleName),
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						{ProtoField: "operator_id"},
-						{ProtoField: "commission_rate"},
-					},
-				},
-				{
 					RpcMethod: "UpdateParams",
 					Skip:      true,
 				},

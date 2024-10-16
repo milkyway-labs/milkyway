@@ -588,7 +588,7 @@ func (suite *KeeperTestSuite) TestMsgServer_SetOperatorParams() {
 			msg: types.NewMsgSetOperatorParams(
 				operatorAdmin,
 				testOperatorId,
-				sdkmath.LegacyNewDec(-1),
+				types.NewOperatorParams(sdkmath.LegacyNewDec(-1)),
 			),
 			shouldErr: true,
 		},
@@ -597,7 +597,7 @@ func (suite *KeeperTestSuite) TestMsgServer_SetOperatorParams() {
 			msg: types.NewMsgSetOperatorParams(
 				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 				testOperatorId,
-				sdkmath.LegacyMustNewDecFromStr("0.2"),
+				types.NewOperatorParams(sdkmath.LegacyMustNewDecFromStr("0.2")),
 			),
 			shouldErr: true,
 		},
@@ -606,7 +606,7 @@ func (suite *KeeperTestSuite) TestMsgServer_SetOperatorParams() {
 			msg: types.NewMsgSetOperatorParams(
 				operatorAdmin,
 				3,
-				sdkmath.LegacyMustNewDecFromStr("0.2"),
+				types.NewOperatorParams(sdkmath.LegacyMustNewDecFromStr("0.2")),
 			),
 			shouldErr: true,
 		},
@@ -615,7 +615,7 @@ func (suite *KeeperTestSuite) TestMsgServer_SetOperatorParams() {
 			msg: types.NewMsgSetOperatorParams(
 				operatorAdmin,
 				testOperatorId,
-				sdkmath.LegacyMustNewDecFromStr("0.2"),
+				types.NewOperatorParams(sdkmath.LegacyMustNewDecFromStr("0.2")),
 			),
 			expEvents: []sdk.Event{
 				sdk.NewEvent(
