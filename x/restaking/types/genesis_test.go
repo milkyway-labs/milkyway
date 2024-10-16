@@ -18,12 +18,28 @@ func TestGenesis_Validate(t *testing.T) {
 		shouldErr bool
 	}{
 		{
-			name: "invalid operator params record returns error",
+			name: "operator secured services record with invalid SecuredService returns error",
 			genesis: types.NewGenesis(
-				[]types.OperatorParamsRecord{
+				[]types.OperatorSecuredServicesRecord{
 					{
-						OperatorID: 1,
-						Params:     types.NewOperatorParams(sdkmath.LegacyNewDec(2), nil),
+						OperatorID:      1,
+						SecuredServices: types.NewOperatorSecuredServices([]uint32{0}),
+					},
+				},
+				nil,
+				nil,
+				nil,
+				types.DefaultParams(),
+			),
+			shouldErr: true,
+		},
+		{
+			name: "operator secured services record with invalid OperatorID returns error",
+			genesis: types.NewGenesis(
+				[]types.OperatorSecuredServicesRecord{
+					{
+						OperatorID:      0,
+						SecuredServices: types.NewOperatorSecuredServices([]uint32{1}),
 					},
 				},
 				nil,
@@ -139,10 +155,10 @@ func TestGenesis_Validate(t *testing.T) {
 		{
 			name: "valid genesis returns no error",
 			genesis: types.NewGenesis(
-				[]types.OperatorParamsRecord{
+				[]types.OperatorSecuredServicesRecord{
 					{
-						OperatorID: 1,
-						Params:     types.NewOperatorParams(sdkmath.LegacyNewDecWithPrec(1, 1), []uint32{2, 3, 5}),
+						OperatorID:      1,
+						SecuredServices: types.NewOperatorSecuredServices([]uint32{2, 3, 5}),
 					},
 				},
 				[]types.ServiceParamsRecord{

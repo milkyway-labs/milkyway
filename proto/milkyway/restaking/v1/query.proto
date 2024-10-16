@@ -17,12 +17,12 @@ option go_package = "github.com/milkyway-labs/milkyway/x/restaking/types";
 
 // Query defines the gRPC querier service.
 service Query {
-  // OperatorParams queries the operator params for the given operator.
-  rpc OperatorParams(QueryOperatorParamsRequest)
-      returns (QueryOperatorParamsResponse) {
+  // OperatorSecuredServices queries the services that an operator is securing.
+  rpc OperatorSecuredServices(QueryOperatorSecuredServicesRequest)
+      returns (QueryOperatorSecuredServicesResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
     option (google.api.http).get =
-        "/milkyway/restaking/v1/operators/{operator_id}/params";
+        "/milkyway/restaking/v1/operators/{operator_id}/secured_services";
   }
 
   // ServiceParams queries the service params for the given service.
@@ -258,17 +258,17 @@ service Query {
   }
 }
 
-// QueryOperatorParamsRequest is request type for the Query/OperatorParams
+// QueryOperatorSecuredServicesRequest is request type for the Query/OperatorSecuredServices
 // RPC method.
-message QueryOperatorParamsRequest {
-  // OperatorId is the ID of the operator to query
+message QueryOperatorSecuredServicesRequest {
+  // OperatorID is the ID of the operator to query
   uint32 operator_id = 1;
 }
 
-// QueryOperatorParamsResponse is response type for the Query/OperatorParams
+// QueryOperatorSecuredServicesResponse is response type for the Query/OperatorSecuredServices
 // RPC method.
-message QueryOperatorParamsResponse {
-  OperatorParams operator_params = 1 [ (gogoproto.nullable) = false ];
+message QueryOperatorSecuredServicesResponse {
+  repeated uint32 service_ids = 1;
 }
 
 // QueryServiceParamsRequest is request type for the Query/ServiceParams

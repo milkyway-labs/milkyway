@@ -12,7 +12,7 @@ const (
 	EventTypeUnbondService        = "unbond_service"
 
 	AttributeKeyCommissionRate         = "commission_rate"
-	AttributeKeyJoinedServiceIDs       = "joined_services_ids"
+	AttributeKeyJoinedServiceID        = "joined_services_id"
 	AttributeKeySlashFraction          = "slash_fraction"
 	AttributeKeyWhitelistedPoolIDs     = "whitelisted_pools_ids"
 	AttributeKeyWhitelistedOperatorIDs = "whitelisted_operators_ids"

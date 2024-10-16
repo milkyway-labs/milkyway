@@ -1,49 +1,54 @@
 package keeper
 
 import (
+	"errors"
 	"time"
 
+	"cosmossdk.io/collections"
+	sdkerrors "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
-// SaveOperatorParams stored the given params for the given operator
-func (k *Keeper) SaveOperatorParams(ctx sdk.Context, operatorID uint32, params types.OperatorParams) {
-	store := ctx.KVStore(k.storeKey)
-	store.Set(types.OperatorParamsStoreKey(operatorID), k.cdc.MustMarshal(&params))
-
-	// Store the operator params in the x/opeators module.
-	// TODO: Once we have moved also the operator's joined services in a dedicated
-	// collection the whole SaveOperatorParams method should be removed.
-	err := k.operatorsKeeper.SaveOperatorParams(ctx, operatorID, operatorstypes.NewOperatorParams(params.CommissionRate))
+// GetOperatorSecuredServices gets the services secured by the operator with the given ID.
+func (k *Keeper) GetOperatorSecuredServices(ctx sdk.Context, operatorID uint32) (types.OperatorSecuredServices, error) {
+	securedServices, err := k.operatorServices.Get(ctx, operatorID)
 	if err != nil {
-		panic(err)
+		if errors.Is(err, collections.ErrNotFound) {
+			return types.NewEmptyOperatorSecuredServices(), nil
+		} else {
+			return types.OperatorSecuredServices{}, err
+		}
 	}
+	return securedServices, nil
 }
 
-// GetOperatorParams returns the params for the given operator, if any.
-// If not params are found, false is returned instead.
-func (k *Keeper) GetOperatorParams(ctx sdk.Context, operatorID uint32) (params types.OperatorParams) {
-	store := ctx.KVStore(k.storeKey)
-	bz := store.Get(types.OperatorParamsStoreKey(operatorID))
-	if bz == nil {
-		params = types.DefaultOperatorParams()
-	} else {
-		k.cdc.MustUnmarshal(bz, &params)
-	}
+// SetOperatorSecuredServices sets the services secured by the operator with the
+// given ID.
+func (k *Keeper) SetOperatorSecuredServices(
+	ctx sdk.Context,
+	operatorID uint32,
+	securedServices types.OperatorSecuredServices,
+) error {
+	return k.operatorServices.Set(ctx, operatorID, securedServices)
+}
 
-	// Get the commission rate from the x/opeators module.
-	// TODO: Once we have moved also the operator's joined services in a dedicated
-	// collection the whole GetOperatorParams method should be removed.
-	operatorParams, err := k.operatorsKeeper.GetOperatorParams(ctx, operatorID)
+// AddServiceToOperator ad the given service to the list of services secure by
+// the operator with the given ID
+func (k *Keeper) AddServiceToOperator(ctx sdk.Context, operatorID uint32, serviceID uint32) error {
+	securedServices, err := k.GetOperatorSecuredServices(ctx, operatorID)
 	if err != nil {
-		panic(err)
+		return err
 	}
-	params.CommissionRate = operatorParams.CommissionRate
 
-	return params
+	err = securedServices.Add(serviceID)
+	if err != nil {
+		return sdkerrors.Wrap(types.ErrServiceAlreadySecuredByOperator, err.Error())
+	}
+
+	return k.SetOperatorSecuredServices(ctx, operatorID, securedServices)
 }
 
 // --------------------------------------------------------------------------------------------------------------------

@@ -164,7 +164,10 @@ func (k *Keeper) AllocateRewardsByPlan(
 		return err
 	}
 
-	eligibleOperators := k.getEligibleOperators(ctx, service, serviceParams, operators)
+	eligibleOperators, err := k.getEligibleOperators(ctx, service, serviceParams, operators)
+	if err != nil {
+		return err
+	}
 	operatorDistrInfos, totalOperatorsDelValues, err := k.getDistrInfos(ctx, eligibleOperators)
 	if err != nil {
 		return err
@@ -273,18 +276,21 @@ func (k *Keeper) getEligiblePools(
 func (k *Keeper) getEligibleOperators(
 	ctx context.Context, service servicestypes.Service,
 	serviceParams restakingtypes.ServiceParams, operators []operatorstypes.Operator,
-) (eligibleOperators []restakingtypes.DelegationTarget) {
+) (eligibleOperators []restakingtypes.DelegationTarget, err error) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	// TODO: can we optimize this? maybe by having a new index key
 	for _, operator := range operators {
-		operatorParams := k.restakingKeeper.GetOperatorParams(sdkCtx, operator.ID)
-		if slices.Contains(operatorParams.JoinedServicesIDs, service.ID) &&
+		operatorSecururedServices, err := k.restakingKeeper.GetOperatorSecuredServices(sdkCtx, operator.ID)
+		if err != nil {
+			return nil, err
+		}
+		if operatorSecururedServices.Contains(service.ID) &&
 			(len(serviceParams.WhitelistedOperatorsIDs) == 0 ||
 				slices.Contains(serviceParams.WhitelistedOperatorsIDs, operator.ID)) {
 			eligibleOperators = append(eligibleOperators, &operator)
 		}
 	}
-	return eligibleOperators
+	return eligibleOperators, nil
 }
 
 // getDistrInfos returns a list of DistributionInfo calculated based on each

@@ -166,6 +166,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 	suite.rk = restakingkeeper.NewKeeper(
 		suite.cdc,
 		keys[restakingtypes.StoreKey],
+		runtime.NewKVStoreService(keys[restakingtypes.StoreKey]),
 		suite.ak,
 		suite.bk,
 		suite.pk,

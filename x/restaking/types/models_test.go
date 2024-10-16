@@ -181,3 +181,93 @@ func TestOperatorDelegation_Validate(t *testing.T) {
 		})
 	}
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+func TestOperatorSecuredServices_Validate(t *testing.T) {
+	testCases := []struct {
+		name      string
+		entry     types.OperatorSecuredServices
+		shouldErr bool
+	}{
+		{
+			name:      "empty operator secured services is valid",
+			entry:     types.NewEmptyOperatorSecuredServices(),
+			shouldErr: false,
+		},
+		{
+			name:      "secured services with a service id equal to 0 is invalid",
+			entry:     types.NewOperatorSecuredServices([]uint32{0}),
+			shouldErr: true,
+		},
+		{
+			name:      "secured services with a duplicated service id is invalid",
+			entry:     types.NewOperatorSecuredServices([]uint32{1, 1}),
+			shouldErr: true,
+		},
+		{
+			name:      "secured services validates properly",
+			entry:     types.NewOperatorSecuredServices([]uint32{1, 2}),
+			shouldErr: false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			err := tc.entry.Validate()
+			if tc.shouldErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestOperatorSecuredServices_Add(t *testing.T) {
+	testCases := []struct {
+		name         string
+		entry        types.OperatorSecuredServices
+		newServiceID uint32
+		shouldErr    bool
+	}{
+		{
+			name:         "add 0 should fail",
+			entry:        types.NewEmptyOperatorSecuredServices(),
+			newServiceID: 0,
+			shouldErr:    true,
+		},
+		{
+			name:         "add already present service id should fail",
+			entry:        types.NewOperatorSecuredServices([]uint32{1}),
+			newServiceID: 1,
+			shouldErr:    true,
+		},
+		{
+			name:         "add correctly to empty",
+			entry:        types.NewEmptyOperatorSecuredServices(),
+			newServiceID: 1,
+			shouldErr:    false,
+		},
+		{
+			name:         "add correctly",
+			entry:        types.NewOperatorSecuredServices([]uint32{1, 2}),
+			newServiceID: 3,
+			shouldErr:    false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			err := tc.entry.Validate()
+			require.NoError(t, err)
+
+			err = tc.entry.Add(tc.newServiceID)
+			if tc.shouldErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}

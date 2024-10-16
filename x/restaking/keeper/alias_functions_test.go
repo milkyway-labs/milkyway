@@ -15,41 +15,35 @@ import (
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
-func (suite *KeeperTestSuite) TestKeeper_GetAllOperatorsParams() {
+func (suite *KeeperTestSuite) TestKeeper_GetAllOperatorsSecuredServicesRecord() {
 	testCases := []struct {
 		name       string
 		store      func(ctx sdk.Context)
 		shouldErr  bool
-		expRecords []types.OperatorParamsRecord
+		expRecords []types.OperatorSecuredServicesRecord
 	}{
 		{
 			name: "operators params are returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SaveOperatorParams(ctx, 1, types.NewOperatorParams(
-					sdkmath.LegacyNewDec(10),
+				suite.k.SetOperatorSecuredServices(ctx, 1, types.NewOperatorSecuredServices(
 					[]uint32{1, 2},
 				))
 
-				suite.k.SaveOperatorParams(ctx, 2, types.NewOperatorParams(
-					sdkmath.LegacyNewDec(3),
+				suite.k.SetOperatorSecuredServices(ctx, 2, types.NewOperatorSecuredServices(
 					[]uint32{3, 4},
 				))
 			},
-			expRecords: []types.OperatorParamsRecord{
-				{
-					OperatorID: 1,
-					Params: types.NewOperatorParams(
-						sdkmath.LegacyNewDec(10),
+			expRecords: []types.OperatorSecuredServicesRecord{
+				types.NewOperatorSecuredServicesRecord(1,
+					types.NewOperatorSecuredServices(
 						[]uint32{1, 2},
 					),
-				},
-				{
-					OperatorID: 2,
-					Params: types.NewOperatorParams(
-						sdkmath.LegacyNewDec(3),
+				),
+				types.NewOperatorSecuredServicesRecord(2,
+					types.NewOperatorSecuredServices(
 						[]uint32{3, 4},
 					),
-				},
+				),
 			},
 		},
 	}
@@ -62,8 +56,9 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllOperatorsParams() {
 				tc.store(ctx)
 			}
 
-			operators := suite.k.GetAllOperatorsParams(ctx)
-			suite.Require().Equal(tc.expRecords, operators)
+			records, err := suite.k.GetAllOperatorsSecuredServices(ctx)
+			suite.Require().NoError(err)
+			suite.Require().Equal(tc.expRecords, records)
 		})
 	}
 }

@@ -14,27 +14,27 @@ import (
 )
 
 var (
-	md_OperatorParamsRecord             protoreflect.MessageDescriptor
-	fd_OperatorParamsRecord_operator_id protoreflect.FieldDescriptor
-	fd_OperatorParamsRecord_params      protoreflect.FieldDescriptor
+	md_OperatorSecuredServicesRecord                  protoreflect.MessageDescriptor
+	fd_OperatorSecuredServicesRecord_operator_id      protoreflect.FieldDescriptor
+	fd_OperatorSecuredServicesRecord_secured_services protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_milkyway_restaking_v1_genesis_proto_init()
-	md_OperatorParamsRecord = File_milkyway_restaking_v1_genesis_proto.Messages().ByName("OperatorParamsRecord")
-	fd_OperatorParamsRecord_operator_id = md_OperatorParamsRecord.Fields().ByName("operator_id")
-	fd_OperatorParamsRecord_params = md_OperatorParamsRecord.Fields().ByName("params")
+	md_OperatorSecuredServicesRecord = File_milkyway_restaking_v1_genesis_proto.Messages().ByName("OperatorSecuredServicesRecord")
+	fd_OperatorSecuredServicesRecord_operator_id = md_OperatorSecuredServicesRecord.Fields().ByName("operator_id")
+	fd_OperatorSecuredServicesRecord_secured_services = md_OperatorSecuredServicesRecord.Fields().ByName("secured_services")
 }
 
-var _ protoreflect.Message = (*fastReflection_OperatorParamsRecord)(nil)
+var _ protoreflect.Message = (*fastReflection_OperatorSecuredServicesRecord)(nil)
 
-type fastReflection_OperatorParamsRecord OperatorParamsRecord
+type fastReflection_OperatorSecuredServicesRecord OperatorSecuredServicesRecord
 
-func (x *OperatorParamsRecord) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_OperatorParamsRecord)(x)
+func (x *OperatorSecuredServicesRecord) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_OperatorSecuredServicesRecord)(x)
 }
 
-func (x *OperatorParamsRecord) slowProtoReflect() protoreflect.Message {
+func (x *OperatorSecuredServicesRecord) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_restaking_v1_genesis_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -46,43 +46,43 @@ func (x *OperatorParamsRecord) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_OperatorParamsRecord_messageType fastReflection_OperatorParamsRecord_messageType
-var _ protoreflect.MessageType = fastReflection_OperatorParamsRecord_messageType{}
+var _fastReflection_OperatorSecuredServicesRecord_messageType fastReflection_OperatorSecuredServicesRecord_messageType
+var _ protoreflect.MessageType = fastReflection_OperatorSecuredServicesRecord_messageType{}
 
-type fastReflection_OperatorParamsRecord_messageType struct{}
+type fastReflection_OperatorSecuredServicesRecord_messageType struct{}
 
-func (x fastReflection_OperatorParamsRecord_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_OperatorParamsRecord)(nil)
+func (x fastReflection_OperatorSecuredServicesRecord_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_OperatorSecuredServicesRecord)(nil)
 }
-func (x fastReflection_OperatorParamsRecord_messageType) New() protoreflect.Message {
-	return new(fastReflection_OperatorParamsRecord)
+func (x fastReflection_OperatorSecuredServicesRecord_messageType) New() protoreflect.Message {
+	return new(fastReflection_OperatorSecuredServicesRecord)
 }
-func (x fastReflection_OperatorParamsRecord_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorParamsRecord
+func (x fastReflection_OperatorSecuredServicesRecord_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_OperatorSecuredServicesRecord
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_OperatorParamsRecord) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorParamsRecord
+func (x *fastReflection_OperatorSecuredServicesRecord) Descriptor() protoreflect.MessageDescriptor {
+	return md_OperatorSecuredServicesRecord
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_OperatorParamsRecord) Type() protoreflect.MessageType {
-	return _fastReflection_OperatorParamsRecord_messageType
+func (x *fastReflection_OperatorSecuredServicesRecord) Type() protoreflect.MessageType {
+	return _fastReflection_OperatorSecuredServicesRecord_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_OperatorParamsRecord) New() protoreflect.Message {
-	return new(fastReflection_OperatorParamsRecord)
+func (x *fastReflection_OperatorSecuredServicesRecord) New() protoreflect.Message {
+	return new(fastReflection_OperatorSecuredServicesRecord)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_OperatorParamsRecord) Interface() protoreflect.ProtoMessage {
-	return (*OperatorParamsRecord)(x)
+func (x *fastReflection_OperatorSecuredServicesRecord) Interface() protoreflect.ProtoMessage {
+	return (*OperatorSecuredServicesRecord)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -90,16 +90,16 @@ func (x *fastReflection_OperatorParamsRecord) Interface() protoreflect.ProtoMess
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_OperatorParamsRecord) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_OperatorSecuredServicesRecord) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.OperatorId != uint32(0) {
 		value := protoreflect.ValueOfUint32(x.OperatorId)
-		if !f(fd_OperatorParamsRecord_operator_id, value) {
+		if !f(fd_OperatorSecuredServicesRecord_operator_id, value) {
 			return
 		}
 	}
-	if x.Params != nil {
-		value := protoreflect.ValueOfMessage(x.Params.ProtoReflect())
-		if !f(fd_OperatorParamsRecord_params, value) {
+	if x.SecuredServices != nil {
+		value := protoreflect.ValueOfMessage(x.SecuredServices.ProtoReflect())
+		if !f(fd_OperatorSecuredServicesRecord_secured_services, value) {
 			return
 		}
 	}
@@ -116,17 +116,17 @@ func (x *fastReflection_OperatorParamsRecord) Range(f func(protoreflect.FieldDes
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_OperatorParamsRecord) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_OperatorSecuredServicesRecord) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.OperatorParamsRecord.operator_id":
+	case "milkyway.restaking.v1.OperatorSecuredServicesRecord.operator_id":
 		return x.OperatorId != uint32(0)
-	case "milkyway.restaking.v1.OperatorParamsRecord.params":
-		return x.Params != nil
+	case "milkyway.restaking.v1.OperatorSecuredServicesRecord.secured_services":
+		return x.SecuredServices != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorParamsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorSecuredServicesRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorParamsRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorSecuredServicesRecord does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -136,17 +136,17 @@ func (x *fastReflection_OperatorParamsRecord) Has(fd protoreflect.FieldDescripto
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorParamsRecord) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_OperatorSecuredServicesRecord) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.OperatorParamsRecord.operator_id":
+	case "milkyway.restaking.v1.OperatorSecuredServicesRecord.operator_id":
 		x.OperatorId = uint32(0)
-	case "milkyway.restaking.v1.OperatorParamsRecord.params":
-		x.Params = nil
+	case "milkyway.restaking.v1.OperatorSecuredServicesRecord.secured_services":
+		x.SecuredServices = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorParamsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorSecuredServicesRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorParamsRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorSecuredServicesRecord does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -156,19 +156,19 @@ func (x *fastReflection_OperatorParamsRecord) Clear(fd protoreflect.FieldDescrip
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_OperatorParamsRecord) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_OperatorSecuredServicesRecord) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "milkyway.restaking.v1.OperatorParamsRecord.operator_id":
+	case "milkyway.restaking.v1.OperatorSecuredServicesRecord.operator_id":
 		value := x.OperatorId
 		return protoreflect.ValueOfUint32(value)
-	case "milkyway.restaking.v1.OperatorParamsRecord.params":
-		value := x.Params
+	case "milkyway.restaking.v1.OperatorSecuredServicesRecord.secured_services":
+		value := x.SecuredServices
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorParamsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorSecuredServicesRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorParamsRecord does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorSecuredServicesRecord does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -182,17 +182,17 @@ func (x *fastReflection_OperatorParamsRecord) Get(descriptor protoreflect.FieldD
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorParamsRecord) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_OperatorSecuredServicesRecord) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.OperatorParamsRecord.operator_id":
+	case "milkyway.restaking.v1.OperatorSecuredServicesRecord.operator_id":
 		x.OperatorId = uint32(value.Uint())
-	case "milkyway.restaking.v1.OperatorParamsRecord.params":
-		x.Params = value.Message().Interface().(*OperatorParams)
+	case "milkyway.restaking.v1.OperatorSecuredServicesRecord.secured_services":
+		x.SecuredServices = value.Message().Interface().(*OperatorSecuredServices)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorParamsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorSecuredServicesRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorParamsRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorSecuredServicesRecord does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -206,48 +206,48 @@ func (x *fastReflection_OperatorParamsRecord) Set(fd protoreflect.FieldDescripto
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorParamsRecord) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_OperatorSecuredServicesRecord) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.OperatorParamsRecord.params":
-		if x.Params == nil {
-			x.Params = new(OperatorParams)
+	case "milkyway.restaking.v1.OperatorSecuredServicesRecord.secured_services":
+		if x.SecuredServices == nil {
+			x.SecuredServices = new(OperatorSecuredServices)
 		}
-		return protoreflect.ValueOfMessage(x.Params.ProtoReflect())
-	case "milkyway.restaking.v1.OperatorParamsRecord.operator_id":
-		panic(fmt.Errorf("field operator_id of message milkyway.restaking.v1.OperatorParamsRecord is not mutable"))
+		return protoreflect.ValueOfMessage(x.SecuredServices.ProtoReflect())
+	case "milkyway.restaking.v1.OperatorSecuredServicesRecord.operator_id":
+		panic(fmt.Errorf("field operator_id of message milkyway.restaking.v1.OperatorSecuredServicesRecord is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorParamsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorSecuredServicesRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorParamsRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorSecuredServicesRecord does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_OperatorParamsRecord) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_OperatorSecuredServicesRecord) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.OperatorParamsRecord.operator_id":
+	case "milkyway.restaking.v1.OperatorSecuredServicesRecord.operator_id":
 		return protoreflect.ValueOfUint32(uint32(0))
-	case "milkyway.restaking.v1.OperatorParamsRecord.params":
-		m := new(OperatorParams)
+	case "milkyway.restaking.v1.OperatorSecuredServicesRecord.secured_services":
+		m := new(OperatorSecuredServices)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorParamsRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorSecuredServicesRecord"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorParamsRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorSecuredServicesRecord does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_OperatorParamsRecord) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_OperatorSecuredServicesRecord) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.OperatorParamsRecord", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.OperatorSecuredServicesRecord", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -255,7 +255,7 @@ func (x *fastReflection_OperatorParamsRecord) WhichOneof(d protoreflect.OneofDes
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_OperatorParamsRecord) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_OperatorSecuredServicesRecord) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -266,7 +266,7 @@ func (x *fastReflection_OperatorParamsRecord) GetUnknown() protoreflect.RawField
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorParamsRecord) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_OperatorSecuredServicesRecord) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -278,7 +278,7 @@ func (x *fastReflection_OperatorParamsRecord) SetUnknown(fields protoreflect.Raw
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_OperatorParamsRecord) IsValid() bool {
+func (x *fastReflection_OperatorSecuredServicesRecord) IsValid() bool {
 	return x != nil
 }
 
@@ -288,9 +288,9 @@ func (x *fastReflection_OperatorParamsRecord) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_OperatorParamsRecord) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_OperatorSecuredServicesRecord) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*OperatorParamsRecord)
+		x := input.Message.Interface().(*OperatorSecuredServicesRecord)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -305,8 +305,8 @@ func (x *fastReflection_OperatorParamsRecord) ProtoMethods() *protoiface.Methods
 		if x.OperatorId != 0 {
 			n += 1 + runtime.Sov(uint64(x.OperatorId))
 		}
-		if x.Params != nil {
-			l = options.Size(x.Params)
+		if x.SecuredServices != nil {
+			l = options.Size(x.SecuredServices)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
 		if x.unknownFields != nil {
@@ -319,7 +319,7 @@ func (x *fastReflection_OperatorParamsRecord) ProtoMethods() *protoiface.Methods
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorParamsRecord)
+		x := input.Message.Interface().(*OperatorSecuredServicesRecord)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -338,8 +338,8 @@ func (x *fastReflection_OperatorParamsRecord) ProtoMethods() *protoiface.Methods
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if x.Params != nil {
-			encoded, err := options.Marshal(x.Params)
+		if x.SecuredServices != nil {
+			encoded, err := options.Marshal(x.SecuredServices)
 			if err != nil {
 				return protoiface.MarshalOutput{
 					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -368,7 +368,7 @@ func (x *fastReflection_OperatorParamsRecord) ProtoMethods() *protoiface.Methods
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorParamsRecord)
+		x := input.Message.Interface().(*OperatorSecuredServicesRecord)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -400,10 +400,10 @@ func (x *fastReflection_OperatorParamsRecord) ProtoMethods() *protoiface.Methods
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorParamsRecord: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorSecuredServicesRecord: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorParamsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorSecuredServicesRecord: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -427,7 +427,7 @@ func (x *fastReflection_OperatorParamsRecord) ProtoMethods() *protoiface.Methods
 				}
 			case 2:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Params", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field SecuredServices", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -454,10 +454,10 @@ func (x *fastReflection_OperatorParamsRecord) ProtoMethods() *protoiface.Methods
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				if x.Params == nil {
-					x.Params = &OperatorParams{}
+				if x.SecuredServices == nil {
+					x.SecuredServices = &OperatorSecuredServices{}
 				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Params); err != nil {
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.SecuredServices); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -982,7 +982,7 @@ func (x *fastReflection_ServiceParamsRecord) ProtoMethods() *protoiface.Methods 
 var _ protoreflect.List = (*_GenesisState_2_list)(nil)
 
 type _GenesisState_2_list struct {
-	list *[]*OperatorParamsRecord
+	list *[]*OperatorSecuredServicesRecord
 }
 
 func (x *_GenesisState_2_list) Len() int {
@@ -998,18 +998,18 @@ func (x *_GenesisState_2_list) Get(i int) protoreflect.Value {
 
 func (x *_GenesisState_2_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*OperatorParamsRecord)
+	concreteValue := valueUnwrapped.Interface().(*OperatorSecuredServicesRecord)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_GenesisState_2_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*OperatorParamsRecord)
+	concreteValue := valueUnwrapped.Interface().(*OperatorSecuredServicesRecord)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_GenesisState_2_list) AppendMutable() protoreflect.Value {
-	v := new(OperatorParamsRecord)
+	v := new(OperatorSecuredServicesRecord)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -1022,7 +1022,7 @@ func (x *_GenesisState_2_list) Truncate(n int) {
 }
 
 func (x *_GenesisState_2_list) NewElement() protoreflect.Value {
-	v := new(OperatorParamsRecord)
+	v := new(OperatorSecuredServicesRecord)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
@@ -1184,19 +1184,19 @@ func (x *_GenesisState_5_list) IsValid() bool {
 }
 
 var (
-	md_GenesisState                       protoreflect.MessageDescriptor
-	fd_GenesisState_params                protoreflect.FieldDescriptor
-	fd_GenesisState_operators_params      protoreflect.FieldDescriptor
-	fd_GenesisState_services_params       protoreflect.FieldDescriptor
-	fd_GenesisState_delegations           protoreflect.FieldDescriptor
-	fd_GenesisState_unbonding_delegations protoreflect.FieldDescriptor
+	md_GenesisState                            protoreflect.MessageDescriptor
+	fd_GenesisState_params                     protoreflect.FieldDescriptor
+	fd_GenesisState_operators_secured_services protoreflect.FieldDescriptor
+	fd_GenesisState_services_params            protoreflect.FieldDescriptor
+	fd_GenesisState_delegations                protoreflect.FieldDescriptor
+	fd_GenesisState_unbonding_delegations      protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_milkyway_restaking_v1_genesis_proto_init()
 	md_GenesisState = File_milkyway_restaking_v1_genesis_proto.Messages().ByName("GenesisState")
 	fd_GenesisState_params = md_GenesisState.Fields().ByName("params")
-	fd_GenesisState_operators_params = md_GenesisState.Fields().ByName("operators_params")
+	fd_GenesisState_operators_secured_services = md_GenesisState.Fields().ByName("operators_secured_services")
 	fd_GenesisState_services_params = md_GenesisState.Fields().ByName("services_params")
 	fd_GenesisState_delegations = md_GenesisState.Fields().ByName("delegations")
 	fd_GenesisState_unbonding_delegations = md_GenesisState.Fields().ByName("unbonding_delegations")
@@ -1273,9 +1273,9 @@ func (x *fastReflection_GenesisState) Range(f func(protoreflect.FieldDescriptor,
 			return
 		}
 	}
-	if len(x.OperatorsParams) != 0 {
-		value := protoreflect.ValueOfList(&_GenesisState_2_list{list: &x.OperatorsParams})
-		if !f(fd_GenesisState_operators_params, value) {
+	if len(x.OperatorsSecuredServices) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_2_list{list: &x.OperatorsSecuredServices})
+		if !f(fd_GenesisState_operators_secured_services, value) {
 			return
 		}
 	}
@@ -1314,8 +1314,8 @@ func (x *fastReflection_GenesisState) Has(fd protoreflect.FieldDescriptor) bool 
 	switch fd.FullName() {
 	case "milkyway.restaking.v1.GenesisState.params":
 		return x.Params != nil
-	case "milkyway.restaking.v1.GenesisState.operators_params":
-		return len(x.OperatorsParams) != 0
+	case "milkyway.restaking.v1.GenesisState.operators_secured_services":
+		return len(x.OperatorsSecuredServices) != 0
 	case "milkyway.restaking.v1.GenesisState.services_params":
 		return len(x.ServicesParams) != 0
 	case "milkyway.restaking.v1.GenesisState.delegations":
@@ -1340,8 +1340,8 @@ func (x *fastReflection_GenesisState) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	case "milkyway.restaking.v1.GenesisState.params":
 		x.Params = nil
-	case "milkyway.restaking.v1.GenesisState.operators_params":
-		x.OperatorsParams = nil
+	case "milkyway.restaking.v1.GenesisState.operators_secured_services":
+		x.OperatorsSecuredServices = nil
 	case "milkyway.restaking.v1.GenesisState.services_params":
 		x.ServicesParams = nil
 	case "milkyway.restaking.v1.GenesisState.delegations":
@@ -1367,11 +1367,11 @@ func (x *fastReflection_GenesisState) Get(descriptor protoreflect.FieldDescripto
 	case "milkyway.restaking.v1.GenesisState.params":
 		value := x.Params
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
-	case "milkyway.restaking.v1.GenesisState.operators_params":
-		if len(x.OperatorsParams) == 0 {
+	case "milkyway.restaking.v1.GenesisState.operators_secured_services":
+		if len(x.OperatorsSecuredServices) == 0 {
 			return protoreflect.ValueOfList(&_GenesisState_2_list{})
 		}
-		listValue := &_GenesisState_2_list{list: &x.OperatorsParams}
+		listValue := &_GenesisState_2_list{list: &x.OperatorsSecuredServices}
 		return protoreflect.ValueOfList(listValue)
 	case "milkyway.restaking.v1.GenesisState.services_params":
 		if len(x.ServicesParams) == 0 {
@@ -1413,10 +1413,10 @@ func (x *fastReflection_GenesisState) Set(fd protoreflect.FieldDescriptor, value
 	switch fd.FullName() {
 	case "milkyway.restaking.v1.GenesisState.params":
 		x.Params = value.Message().Interface().(*Params)
-	case "milkyway.restaking.v1.GenesisState.operators_params":
+	case "milkyway.restaking.v1.GenesisState.operators_secured_services":
 		lv := value.List()
 		clv := lv.(*_GenesisState_2_list)
-		x.OperatorsParams = *clv.list
+		x.OperatorsSecuredServices = *clv.list
 	case "milkyway.restaking.v1.GenesisState.services_params":
 		lv := value.List()
 		clv := lv.(*_GenesisState_3_list)
@@ -1454,11 +1454,11 @@ func (x *fastReflection_GenesisState) Mutable(fd protoreflect.FieldDescriptor) p
 			x.Params = new(Params)
 		}
 		return protoreflect.ValueOfMessage(x.Params.ProtoReflect())
-	case "milkyway.restaking.v1.GenesisState.operators_params":
-		if x.OperatorsParams == nil {
-			x.OperatorsParams = []*OperatorParamsRecord{}
+	case "milkyway.restaking.v1.GenesisState.operators_secured_services":
+		if x.OperatorsSecuredServices == nil {
+			x.OperatorsSecuredServices = []*OperatorSecuredServicesRecord{}
 		}
-		value := &_GenesisState_2_list{list: &x.OperatorsParams}
+		value := &_GenesisState_2_list{list: &x.OperatorsSecuredServices}
 		return protoreflect.ValueOfList(value)
 	case "milkyway.restaking.v1.GenesisState.services_params":
 		if x.ServicesParams == nil {
@@ -1494,8 +1494,8 @@ func (x *fastReflection_GenesisState) NewField(fd protoreflect.FieldDescriptor) 
 	case "milkyway.restaking.v1.GenesisState.params":
 		m := new(Params)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
-	case "milkyway.restaking.v1.GenesisState.operators_params":
-		list := []*OperatorParamsRecord{}
+	case "milkyway.restaking.v1.GenesisState.operators_secured_services":
+		list := []*OperatorSecuredServicesRecord{}
 		return protoreflect.ValueOfList(&_GenesisState_2_list{list: &list})
 	case "milkyway.restaking.v1.GenesisState.services_params":
 		list := []*ServiceParamsRecord{}
@@ -1579,8 +1579,8 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 			l = options.Size(x.Params)
 			n += 1 + l + runtime.Sov(uint64(l))
 		}
-		if len(x.OperatorsParams) > 0 {
-			for _, e := range x.OperatorsParams {
+		if len(x.OperatorsSecuredServices) > 0 {
+			for _, e := range x.OperatorsSecuredServices {
 				l = options.Size(e)
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
@@ -1680,9 +1680,9 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				dAtA[i] = 0x1a
 			}
 		}
-		if len(x.OperatorsParams) > 0 {
-			for iNdEx := len(x.OperatorsParams) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.OperatorsParams[iNdEx])
+		if len(x.OperatorsSecuredServices) > 0 {
+			for iNdEx := len(x.OperatorsSecuredServices) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.OperatorsSecuredServices[iNdEx])
 				if err != nil {
 					return protoiface.MarshalOutput{
 						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1797,7 +1797,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 2:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OperatorsParams", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field OperatorsSecuredServices", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -1824,8 +1824,8 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.OperatorsParams = append(x.OperatorsParams, &OperatorParamsRecord{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.OperatorsParams[len(x.OperatorsParams)-1]); err != nil {
+				x.OperatorsSecuredServices = append(x.OperatorsSecuredServices, &OperatorSecuredServicesRecord{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.OperatorsSecuredServices[len(x.OperatorsSecuredServices)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -1979,21 +1979,22 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// OperatorParamsRecord represents the params that have been set for an
+// OperatorSecuredServicesRecord represents the services that are secured by a
 // individual operator.
-type OperatorParamsRecord struct {
+type OperatorSecuredServicesRecord struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
 	// OperatorID is the ID of the operator.
 	OperatorId uint32 `protobuf:"varint,1,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
-	// Params defines the parameters for the operators module.
-	Params *OperatorParams `protobuf:"bytes,2,opt,name=params,proto3" json:"params,omitempty"`
+	// OperatorSecuredServices represents the services that are secured
+	// by the operator.
+	SecuredServices *OperatorSecuredServices `protobuf:"bytes,2,opt,name=secured_services,json=securedServices,proto3" json:"secured_services,omitempty"`
 }
 
-func (x *OperatorParamsRecord) Reset() {
-	*x = OperatorParamsRecord{}
+func (x *OperatorSecuredServicesRecord) Reset() {
+	*x = OperatorSecuredServicesRecord{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_restaking_v1_genesis_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2001,27 +2002,27 @@ func (x *OperatorParamsRecord) Reset() {
 	}
 }
 
-func (x *OperatorParamsRecord) String() string {
+func (x *OperatorSecuredServicesRecord) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*OperatorParamsRecord) ProtoMessage() {}
+func (*OperatorSecuredServicesRecord) ProtoMessage() {}
 
-// Deprecated: Use OperatorParamsRecord.ProtoReflect.Descriptor instead.
-func (*OperatorParamsRecord) Descriptor() ([]byte, []int) {
+// Deprecated: Use OperatorSecuredServicesRecord.ProtoReflect.Descriptor instead.
+func (*OperatorSecuredServicesRecord) Descriptor() ([]byte, []int) {
 	return file_milkyway_restaking_v1_genesis_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *OperatorParamsRecord) GetOperatorId() uint32 {
+func (x *OperatorSecuredServicesRecord) GetOperatorId() uint32 {
 	if x != nil {
 		return x.OperatorId
 	}
 	return 0
 }
 
-func (x *OperatorParamsRecord) GetParams() *OperatorParams {
+func (x *OperatorSecuredServicesRecord) GetSecuredServices() *OperatorSecuredServices {
 	if x != nil {
-		return x.Params
+		return x.SecuredServices
 	}
 	return nil
 }
@@ -2081,8 +2082,8 @@ type GenesisState struct {
 
 	// Params defines the parameters of the module.
 	Params *Params `protobuf:"bytes,1,opt,name=params,proto3" json:"params,omitempty"`
-	// OperatorsParams defines the list of operators parameters.
-	OperatorsParams []*OperatorParamsRecord `protobuf:"bytes,2,rep,name=operators_params,json=operatorsParams,proto3" json:"operators_params,omitempty"`
+	// OperatorsSecuredServices defines the list of operators secured services.
+	OperatorsSecuredServices []*OperatorSecuredServicesRecord `protobuf:"bytes,2,rep,name=operators_secured_services,json=operatorsSecuredServices,proto3" json:"operators_secured_services,omitempty"`
 	// ServicesParams defines the list of services parameters.
 	ServicesParams []*ServiceParamsRecord `protobuf:"bytes,3,rep,name=services_params,json=servicesParams,proto3" json:"services_params,omitempty"`
 	// Delegations represents the delegations.
@@ -2118,9 +2119,9 @@ func (x *GenesisState) GetParams() *Params {
 	return nil
 }
 
-func (x *GenesisState) GetOperatorsParams() []*OperatorParamsRecord {
+func (x *GenesisState) GetOperatorsSecuredServices() []*OperatorSecuredServicesRecord {
 	if x != nil {
-		return x.OperatorsParams
+		return x.OperatorsSecuredServices
 	}
 	return nil
 }
@@ -2158,67 +2159,71 @@ var file_milkyway_restaking_v1_genesis_proto_rawDesc = []byte{
 	0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x6d, 0x6f, 0x64, 0x65, 0x6c, 0x73,
 	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x22, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
 	0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x70, 0x61,
-	0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x8c, 0x01, 0x0a, 0x14, 0x4f,
-	0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x63,
-	0x6f, 0x72, 0x64, 0x12, 0x2f, 0x0a, 0x0b, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f,
-	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x0e, 0xe2, 0xde, 0x1f, 0x0a, 0x4f, 0x70,
-	0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x44, 0x52, 0x0a, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74,
-	0x6f, 0x72, 0x49, 0x64, 0x12, 0x43, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x25, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
-	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x70, 0x65,
-	0x72, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f,
-	0x00, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x87, 0x01, 0x0a, 0x13, 0x53, 0x65,
-	0x72, 0x76, 0x69, 0x63, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72,
-	0x64, 0x12, 0x2c, 0x0a, 0x0a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x0d, 0xe2, 0xde, 0x1f, 0x09, 0x53, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x49, 0x44, 0x52, 0x09, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x12,
-	0x42, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32,
-	0x24, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61,
-	0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x50,
-	0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x70, 0x61, 0x72,
-	0x61, 0x6d, 0x73, 0x22, 0xb6, 0x03, 0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x53,
-	0x74, 0x61, 0x74, 0x65, 0x12, 0x3b, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
-	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x61, 0x72,
-	0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d,
-	0x73, 0x12, 0x5c, 0x0a, 0x10, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x5f, 0x70,
-	0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2b, 0x2e, 0x6d, 0x69,
-	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67,
-	0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x61, 0x72, 0x61,
-	0x6d, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0f,
-	0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12,
-	0x59, 0x0a, 0x0f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x5f, 0x70, 0x61, 0x72, 0x61,
-	0x6d, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
-	0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31,
-	0x2e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65,
-	0x63, 0x6f, 0x72, 0x64, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0e, 0x73, 0x65, 0x72, 0x76,
-	0x69, 0x63, 0x65, 0x73, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x49, 0x0a, 0x0b, 0x64, 0x65,
-	0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0b, 0x32,
-	0x21, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61,
-	0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69,
-	0x6f, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x65, 0x0a, 0x15, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69,
-	0x6e, 0x67, 0x5f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x05,
-	0x20, 0x03, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
-	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x6e, 0x62,
-	0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e,
-	0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x14, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e,
-	0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x42, 0xe8, 0x01, 0x0a,
-	0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65,
-	0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65,
-	0x73, 0x69, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x47, 0x67, 0x69, 0x74, 0x68,
-	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2d,
-	0x6c, 0x61, 0x62, 0x73, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x61, 0x70,
-	0x69, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61,
-	0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x3b, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e,
-	0x67, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x4d, 0x52, 0x58, 0xaa, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b,
-	0x79, 0x77, 0x61, 0x79, 0x2e, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x56,
-	0x31, 0xca, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x73,
-	0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x21, 0x4d, 0x69, 0x6c, 0x6b,
-	0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56,
-	0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x17,
-	0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x3a, 0x3a, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b,
-	0x69, 0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xb1, 0x01, 0x0a, 0x1d, 0x4f,
+	0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x65, 0x63, 0x75, 0x72, 0x65, 0x64, 0x53, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x12, 0x2f, 0x0a, 0x0b,
+	0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0d, 0x42, 0x0e, 0xe2, 0xde, 0x1f, 0x0a, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49,
+	0x44, 0x52, 0x0a, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x64, 0x12, 0x5f, 0x0a,
+	0x10, 0x73, 0x65, 0x63, 0x75, 0x72, 0x65, 0x64, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2e, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
+	0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e,
+	0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x65, 0x63, 0x75, 0x72, 0x65, 0x64, 0x53,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0f, 0x73,
+	0x65, 0x63, 0x75, 0x72, 0x65, 0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x22, 0x87,
+	0x01, 0x0a, 0x13, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73,
+	0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x12, 0x2c, 0x0a, 0x0a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x0d, 0xe2, 0xde, 0x1f, 0x09,
+	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x44, 0x52, 0x09, 0x73, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x49, 0x64, 0x12, 0x42, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x24, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
+	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x65, 0x72,
+	0x76, 0x69, 0x63, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00,
+	0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0xd2, 0x03, 0x0a, 0x0c, 0x47, 0x65, 0x6e,
+	0x65, 0x73, 0x69, 0x73, 0x53, 0x74, 0x61, 0x74, 0x65, 0x12, 0x3b, 0x0a, 0x06, 0x70, 0x61, 0x72,
+	0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b,
+	0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76,
+	0x31, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06,
+	0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x78, 0x0a, 0x1a, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74,
+	0x6f, 0x72, 0x73, 0x5f, 0x73, 0x65, 0x63, 0x75, 0x72, 0x65, 0x64, 0x5f, 0x73, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x34, 0x2e, 0x6d, 0x69, 0x6c,
+	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e,
+	0x76, 0x31, 0x2e, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x65, 0x63, 0x75, 0x72,
+	0x65, 0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64,
+	0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x18, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
+	0x73, 0x53, 0x65, 0x63, 0x75, 0x72, 0x65, 0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73,
+	0x12, 0x59, 0x0a, 0x0f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x5f, 0x70, 0x61, 0x72,
+	0x61, 0x6d, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b,
+	0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76,
+	0x31, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52,
+	0x65, 0x63, 0x6f, 0x72, 0x64, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0e, 0x73, 0x65, 0x72,
+	0x76, 0x69, 0x63, 0x65, 0x73, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x49, 0x0a, 0x0b, 0x64,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0b,
+	0x32, 0x21, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74,
+	0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0b, 0x64, 0x65, 0x6c, 0x65, 0x67,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x65, 0x0a, 0x15, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64,
+	0x69, 0x6e, 0x67, 0x5f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18,
+	0x05, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
+	0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x6e,
+	0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x14, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69,
+	0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x42, 0xe8, 0x01,
+	0x0a, 0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72,
+	0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x42, 0x0c, 0x47, 0x65, 0x6e,
+	0x65, 0x73, 0x69, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x47, 0x67, 0x69, 0x74,
+	0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
+	0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x61,
+	0x70, 0x69, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74,
+	0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x3b, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69,
+	0x6e, 0x67, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x4d, 0x52, 0x58, 0xaa, 0x02, 0x15, 0x4d, 0x69, 0x6c,
+	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e,
+	0x56, 0x31, 0xca, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65,
+	0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x21, 0x4d, 0x69, 0x6c,
+	0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c,
+	0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02,
+	0x17, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x3a, 0x3a, 0x52, 0x65, 0x73, 0x74, 0x61,
+	0x6b, 0x69, 0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -2235,20 +2240,20 @@ func file_milkyway_restaking_v1_genesis_proto_rawDescGZIP() []byte {
 
 var file_milkyway_restaking_v1_genesis_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_milkyway_restaking_v1_genesis_proto_goTypes = []interface{}{
-	(*OperatorParamsRecord)(nil), // 0: milkyway.restaking.v1.OperatorParamsRecord
-	(*ServiceParamsRecord)(nil),  // 1: milkyway.restaking.v1.ServiceParamsRecord
-	(*GenesisState)(nil),         // 2: milkyway.restaking.v1.GenesisState
-	(*OperatorParams)(nil),       // 3: milkyway.restaking.v1.OperatorParams
-	(*ServiceParams)(nil),        // 4: milkyway.restaking.v1.ServiceParams
-	(*Params)(nil),               // 5: milkyway.restaking.v1.Params
-	(*Delegation)(nil),           // 6: milkyway.restaking.v1.Delegation
-	(*UnbondingDelegation)(nil),  // 7: milkyway.restaking.v1.UnbondingDelegation
+	(*OperatorSecuredServicesRecord)(nil), // 0: milkyway.restaking.v1.OperatorSecuredServicesRecord
+	(*ServiceParamsRecord)(nil),           // 1: milkyway.restaking.v1.ServiceParamsRecord
+	(*GenesisState)(nil),                  // 2: milkyway.restaking.v1.GenesisState
+	(*OperatorSecuredServices)(nil),       // 3: milkyway.restaking.v1.OperatorSecuredServices
+	(*ServiceParams)(nil),                 // 4: milkyway.restaking.v1.ServiceParams
+	(*Params)(nil),                        // 5: milkyway.restaking.v1.Params
+	(*Delegation)(nil),                    // 6: milkyway.restaking.v1.Delegation
+	(*UnbondingDelegation)(nil),           // 7: milkyway.restaking.v1.UnbondingDelegation
 }
 var file_milkyway_restaking_v1_genesis_proto_depIdxs = []int32{
-	3, // 0: milkyway.restaking.v1.OperatorParamsRecord.params:type_name -> milkyway.restaking.v1.OperatorParams
+	3, // 0: milkyway.restaking.v1.OperatorSecuredServicesRecord.secured_services:type_name -> milkyway.restaking.v1.OperatorSecuredServices
 	4, // 1: milkyway.restaking.v1.ServiceParamsRecord.params:type_name -> milkyway.restaking.v1.ServiceParams
 	5, // 2: milkyway.restaking.v1.GenesisState.params:type_name -> milkyway.restaking.v1.Params
-	0, // 3: milkyway.restaking.v1.GenesisState.operators_params:type_name -> milkyway.restaking.v1.OperatorParamsRecord
+	0, // 3: milkyway.restaking.v1.GenesisState.operators_secured_services:type_name -> milkyway.restaking.v1.OperatorSecuredServicesRecord
 	1, // 4: milkyway.restaking.v1.GenesisState.services_params:type_name -> milkyway.restaking.v1.ServiceParamsRecord
 	6, // 5: milkyway.restaking.v1.GenesisState.delegations:type_name -> milkyway.restaking.v1.Delegation
 	7, // 6: milkyway.restaking.v1.GenesisState.unbonding_delegations:type_name -> milkyway.restaking.v1.UnbondingDelegation
@@ -2268,7 +2273,7 @@ func file_milkyway_restaking_v1_genesis_proto_init() {
 	file_milkyway_restaking_v1_params_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_milkyway_restaking_v1_genesis_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*OperatorParamsRecord); i {
+			switch v := v.(*OperatorSecuredServicesRecord); i {
 			case 0:
 				return &v.state
 			case 1:

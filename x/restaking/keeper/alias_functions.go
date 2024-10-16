@@ -21,28 +21,29 @@ import (
 // --------------------------------------------------------------------------------------------------------------------
 
 // GetAllOperatorsParams returns all the operators params
-func (k *Keeper) GetAllOperatorsParams(ctx sdk.Context) []types.OperatorParamsRecord {
-	store := ctx.KVStore(k.storeKey)
-	iterator := storetypes.KVStorePrefixIterator(store, types.OperatorParamsPrefix)
+func (k *Keeper) GetAllOperatorsSecuredServices(ctx sdk.Context) ([]types.OperatorSecuredServicesRecord, error) {
+	iterator, err := k.operatorServices.Iterate(ctx, nil)
+	if err != nil {
+		return nil, err
+	}
 	defer iterator.Close()
 
-	var records []types.OperatorParamsRecord
+	var records []types.OperatorSecuredServicesRecord
 	for ; iterator.Valid(); iterator.Next() {
-		var params types.OperatorParams
-		k.cdc.MustUnmarshal(iterator.Value(), &params)
-
-		operatorID, err := types.ParseOperatorParamsKey(iterator.Key())
+		operatorID, err := iterator.Key()
 		if err != nil {
-			panic(err)
+			return nil, err
+		}
+		operatorSecuredServices, err := iterator.Value()
+		if err != nil {
+			return nil, err
 		}
 
-		records = append(records, types.OperatorParamsRecord{
-			OperatorID: operatorID,
-			Params:     params,
-		})
+		records = append(records, types.NewOperatorSecuredServicesRecord(
+			operatorID, operatorSecuredServices))
 	}
 
-	return records
+	return records, nil
 }
 
 // GetAllServicesParams returns all the services params

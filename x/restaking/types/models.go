@@ -379,3 +379,58 @@ func MustUnmarshalUnbondingDelegation(cdc codec.BinaryCodec, bz []byte) Unbondin
 	}
 	return unbondingDelegation
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewEmptyOperatorSecuredServices creates a new empty OperatorSecuredServices
+// instance.
+func NewEmptyOperatorSecuredServices() OperatorSecuredServices {
+	return OperatorSecuredServices{
+		ServiceIDs: make([]uint32, 0),
+	}
+}
+
+// NewOperatorSecuredServices creates a new OperatorSecuredServices instance.
+func NewOperatorSecuredServices(serviceIDs []uint32) OperatorSecuredServices {
+	return OperatorSecuredServices{
+		ServiceIDs: serviceIDs,
+	}
+}
+
+// Validate checks if the OperatorSecuredServices instance is valid.
+func (o *OperatorSecuredServices) Validate() error {
+	duplicate := utils.FindDuplicate(o.ServiceIDs)
+	if duplicate != nil {
+		return fmt.Errorf("duplicated service id: %d", *duplicate)
+	}
+	if utils.Contains(o.ServiceIDs, 0) {
+		return fmt.Errorf("the service id cannot be 0]")
+	}
+
+	return nil
+}
+
+// UnsafeAdd adds the serviceID to the list of secured services without
+// performing any check on the validity of the provided value and on the
+// resulting validity of OperatorSecuredServices.
+func (o *OperatorSecuredServices) UnsafeAdd(serviceID uint32) {
+	o.ServiceIDs = append(o.ServiceIDs, serviceID)
+}
+
+// Contains returns true if the serviceID is already present.
+func (o *OperatorSecuredServices) Contains(serviceID uint32) bool {
+	return utils.Contains(o.ServiceIDs, serviceID)
+}
+
+// Add adds the serviceID to the list of secured services and returns
+// true if the serviceID was added, false if was already in the list.
+func (o *OperatorSecuredServices) Add(serviceID uint32) error {
+	if serviceID == 0 {
+		return fmt.Errorf("service id cannot be 0")
+	}
+	if o.Contains(serviceID) {
+		return fmt.Errorf("service id %d already present", serviceID)
+	}
+	o.UnsafeAdd(serviceID)
+	return nil
+}

@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"cosmossdk.io/collections"
+	corestoretypes "cosmossdk.io/core/store"
 	"cosmossdk.io/log"
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -21,12 +23,17 @@ type Keeper struct {
 	operatorsKeeper types.OperatorsKeeper
 	servicesKeeper  types.ServicesKeeper
 
+	// Keeper data
+	schema           collections.Schema
+	operatorServices collections.Map[uint32, types.OperatorSecuredServices]
+
 	hooks types.RestakingHooks
 }
 
 func NewKeeper(
 	cdc codec.Codec,
 	storeKey storetypes.StoreKey,
+	storeService corestoretypes.KVStoreService,
 	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
 	poolsKeeper types.PoolsKeeper,
@@ -34,13 +41,14 @@ func NewKeeper(
 	servicesKeeper types.ServicesKeeper,
 	authority string,
 ) *Keeper {
-
 	// Ensure that authority is a valid AccAddress
 	if _, err := accountKeeper.AddressCodec().StringToBytes(authority); err != nil {
 		panic("authority is not a valid account address")
 	}
 
-	return &Keeper{
+	sb := collections.NewSchemaBuilder(storeService)
+
+	k := &Keeper{
 		storeKey: storeKey,
 		cdc:      cdc,
 
@@ -50,8 +58,22 @@ func NewKeeper(
 		operatorsKeeper: operatorsKeeper,
 		servicesKeeper:  servicesKeeper,
 
+		operatorServices: collections.NewMap(
+			sb, types.OperatorServicesPrefix,
+			"operator_services",
+			collections.Uint32Key,
+			codec.CollValue[types.OperatorSecuredServices](cdc),
+		),
 		authority: authority,
 	}
+
+	schema, err := sb.Build()
+	if err != nil {
+		panic(err)
+	}
+	k.schema = schema
+
+	return k
 }
 
 // Logger returns a module-specific logger.

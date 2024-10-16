@@ -14,13 +14,13 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-func (suite *KeeperTestSuite) TestQuerier_OperatorParams() {
+func (suite *KeeperTestSuite) TestQuerier_OperatorSecuredServices() {
 	testCases := []struct {
-		name      string
-		store     func(ctx sdk.Context)
-		request   *types.QueryOperatorParamsRequest
-		shouldErr bool
-		expParams types.OperatorParams
+		name        string
+		store       func(ctx sdk.Context)
+		request     *types.QueryOperatorSecuredServicesRequest
+		shouldErr   bool
+		expServices []uint32
 	}{
 		{
 			name:      "invalid request returns error",
@@ -29,29 +29,42 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorParams() {
 		},
 		{
 			name:      "invalid operator id returns error",
-			request:   types.NewQueryOperatorParamsRequest(0),
+			request:   types.NewQueryOperatorSecuredServicesRequest(0),
 			shouldErr: true,
 		},
 		{
-			name:      "not found operator params returns default value",
-			request:   types.NewQueryOperatorParamsRequest(1),
-			shouldErr: false,
-			expParams: types.DefaultOperatorParams(),
+			name:      "not found operator return error",
+			request:   types.NewQueryOperatorSecuredServicesRequest(1),
+			shouldErr: true,
 		},
 		{
-			name: "found operator params are returned properly",
+			name: "operator without secured services returns empty serviceIDs",
 			store: func(ctx sdk.Context) {
-				suite.k.SaveOperatorParams(ctx, 1, types.NewOperatorParams(
-					sdkmath.LegacyNewDecWithPrec(1, 2),
+				err := suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
+					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "",
+				))
+				suite.Require().NoError(err)
+			},
+			request:     types.NewQueryOperatorSecuredServicesRequest(1),
+			shouldErr:   false,
+			expServices: []uint32{},
+		},
+		{
+			name: "configured secured services are returned properly",
+			store: func(ctx sdk.Context) {
+				err := suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
+					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "",
+				))
+				suite.Require().NoError(err)
+
+				err = suite.k.SetOperatorSecuredServices(ctx, 1, types.NewOperatorSecuredServices(
 					[]uint32{1, 2},
 				))
+				suite.Require().NoError(err)
 			},
-			request:   types.NewQueryOperatorParamsRequest(1),
-			shouldErr: false,
-			expParams: types.NewOperatorParams(
-				sdkmath.LegacyNewDecWithPrec(1, 2),
-				[]uint32{1, 2},
-			),
+			request:     types.NewQueryOperatorSecuredServicesRequest(1),
+			shouldErr:   false,
+			expServices: []uint32{1, 2},
 		},
 	}
 
@@ -64,12 +77,12 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorParams() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.OperatorParams(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.OperatorSecuredServices(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
 				suite.Require().NoError(err)
-				suite.Require().Equal(tc.expParams, res.OperatorParams)
+				suite.Require().Equal(tc.expServices, res.ServiceIds)
 			}
 		})
 	}
@@ -366,7 +379,7 @@ func (suite *KeeperTestSuite) TestQuerier_PoolUnbondingDelegations() {
 						BuildUnbondingDelegation: types.NewPoolUnbondingDelegation,
 					},
 					10,
-					time.Date(2024, 1, 1, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 				)
 				suite.Require().NoError(err)
@@ -378,7 +391,7 @@ func (suite *KeeperTestSuite) TestQuerier_PoolUnbondingDelegations() {
 						BuildUnbondingDelegation: types.NewPoolUnbondingDelegation,
 					},
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(50))),
 				)
 				suite.Require().NoError(err)
@@ -390,7 +403,7 @@ func (suite *KeeperTestSuite) TestQuerier_PoolUnbondingDelegations() {
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					1,
 					10,
-					time.Date(2024, 1, 1, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 					1,
 				),
@@ -398,7 +411,7 @@ func (suite *KeeperTestSuite) TestQuerier_PoolUnbondingDelegations() {
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					1,
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(50))),
 					2,
 				),
@@ -424,7 +437,7 @@ func (suite *KeeperTestSuite) TestQuerier_PoolUnbondingDelegations() {
 						BuildUnbondingDelegation: types.NewPoolUnbondingDelegation,
 					},
 					10,
-					time.Date(2024, 1, 1, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 				)
 				suite.Require().NoError(err)
@@ -436,7 +449,7 @@ func (suite *KeeperTestSuite) TestQuerier_PoolUnbondingDelegations() {
 						BuildUnbondingDelegation: types.NewPoolUnbondingDelegation,
 					},
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(50))),
 				)
 				suite.Require().NoError(err)
@@ -451,7 +464,7 @@ func (suite *KeeperTestSuite) TestQuerier_PoolUnbondingDelegations() {
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					1,
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(50))),
 					2,
 				),
@@ -526,7 +539,7 @@ func (suite *KeeperTestSuite) TestQuerier_PoolUnbondingDelegation() {
 						BuildUnbondingDelegation: types.NewPoolUnbondingDelegation,
 					},
 					10,
-					time.Date(2024, 1, 1, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 				)
 				suite.Require().NoError(err)
@@ -540,7 +553,7 @@ func (suite *KeeperTestSuite) TestQuerier_PoolUnbondingDelegation() {
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				1,
 				10,
-				time.Date(2024, 1, 1, 12, 00, 00, 00, time.UTC),
+				time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o0, time.UTC),
 				sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 				1,
 			),
@@ -831,7 +844,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorUnbondingDelegations() {
 						BuildUnbondingDelegation: types.NewOperatorUnbondingDelegation,
 					},
 					10,
-					time.Date(2024, 1, 1, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 				)
 				suite.Require().NoError(err)
@@ -843,7 +856,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorUnbondingDelegations() {
 						BuildUnbondingDelegation: types.NewOperatorUnbondingDelegation,
 					},
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(50))),
 				)
 				suite.Require().NoError(err)
@@ -855,7 +868,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorUnbondingDelegations() {
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					1,
 					10,
-					time.Date(2024, 1, 1, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 					1,
 				),
@@ -863,7 +876,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorUnbondingDelegations() {
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					1,
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(50))),
 					2,
 				),
@@ -891,7 +904,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorUnbondingDelegations() {
 						BuildUnbondingDelegation: types.NewOperatorUnbondingDelegation,
 					},
 					10,
-					time.Date(2024, 1, 1, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 				)
 				suite.Require().NoError(err)
@@ -903,7 +916,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorUnbondingDelegations() {
 						BuildUnbondingDelegation: types.NewOperatorUnbondingDelegation,
 					},
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(50))),
 				)
 				suite.Require().NoError(err)
@@ -918,7 +931,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorUnbondingDelegations() {
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					1,
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(50))),
 					2,
 				),
@@ -997,7 +1010,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorUnbondingDelegation() {
 						BuildUnbondingDelegation: types.NewOperatorUnbondingDelegation,
 					},
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(50))),
 				)
 				suite.Require().NoError(err)
@@ -1011,7 +1024,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorUnbondingDelegation() {
 				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 				1,
 				20,
-				time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+				time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 				sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(50))),
 				1,
 			),
@@ -1302,7 +1315,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceUnbondingDelegations() {
 						BuildUnbondingDelegation: types.NewServiceUnbondingDelegation,
 					},
 					10,
-					time.Date(2024, 1, 1, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 				)
 				suite.Require().NoError(err)
@@ -1314,7 +1327,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceUnbondingDelegations() {
 						BuildUnbondingDelegation: types.NewServiceUnbondingDelegation,
 					},
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(50))),
 				)
 				suite.Require().NoError(err)
@@ -1326,7 +1339,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceUnbondingDelegations() {
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					1,
 					10,
-					time.Date(2024, 1, 1, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 					1,
 				),
@@ -1334,7 +1347,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceUnbondingDelegations() {
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					1,
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(50))),
 					2,
 				),
@@ -1362,7 +1375,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceUnbondingDelegations() {
 						BuildUnbondingDelegation: types.NewServiceUnbondingDelegation,
 					},
 					10,
-					time.Date(2024, 1, 1, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 				)
 				suite.Require().NoError(err)
@@ -1374,7 +1387,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceUnbondingDelegations() {
 						BuildUnbondingDelegation: types.NewServiceUnbondingDelegation,
 					},
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(50))),
 				)
 				suite.Require().NoError(err)
@@ -1389,7 +1402,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceUnbondingDelegations() {
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					1,
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(50))),
 					2,
 				),
@@ -1468,7 +1481,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceUnbondingDelegation() {
 						BuildUnbondingDelegation: types.NewServiceUnbondingDelegation,
 					},
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(50))),
 				)
 				suite.Require().NoError(err)
@@ -1482,7 +1495,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceUnbondingDelegation() {
 				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 				1,
 				20,
-				time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+				time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 				sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(50))),
 				1,
 			),
@@ -1674,7 +1687,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorPoolUnbondingDelegations() {
 						BuildUnbondingDelegation: types.NewPoolUnbondingDelegation,
 					},
 					10,
-					time.Date(2024, 1, 1, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 				)
 				suite.Require().NoError(err)
@@ -1696,7 +1709,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorPoolUnbondingDelegations() {
 						BuildUnbondingDelegation: types.NewPoolUnbondingDelegation,
 					},
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("utia", sdkmath.NewInt(50))),
 				)
 				suite.Require().NoError(err)
@@ -1708,7 +1721,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorPoolUnbondingDelegations() {
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					1,
 					10,
-					time.Date(2024, 1, 1, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 					1,
 				),
@@ -1716,7 +1729,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorPoolUnbondingDelegations() {
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					2,
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("utia", sdkmath.NewInt(50))),
 					2,
 				),
@@ -1742,7 +1755,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorPoolUnbondingDelegations() {
 						BuildUnbondingDelegation: types.NewPoolUnbondingDelegation,
 					},
 					10,
-					time.Date(2024, 1, 1, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 				)
 				suite.Require().NoError(err)
@@ -1764,7 +1777,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorPoolUnbondingDelegations() {
 						BuildUnbondingDelegation: types.NewPoolUnbondingDelegation,
 					},
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("utia", sdkmath.NewInt(50))),
 				)
 				suite.Require().NoError(err)
@@ -1779,7 +1792,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorPoolUnbondingDelegations() {
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					2,
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("utia", sdkmath.NewInt(50))),
 					2,
 				),
@@ -2002,7 +2015,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperatorUnbondingDelegations(
 						BuildUnbondingDelegation: types.NewOperatorUnbondingDelegation,
 					},
 					10,
-					time.Date(2024, 1, 1, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 				)
 				suite.Require().NoError(err)
@@ -2027,7 +2040,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperatorUnbondingDelegations(
 						BuildUnbondingDelegation: types.NewOperatorUnbondingDelegation,
 					},
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("utia", sdkmath.NewInt(50))),
 				)
 				suite.Require().NoError(err)
@@ -2039,7 +2052,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperatorUnbondingDelegations(
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					1,
 					10,
-					time.Date(2024, 1, 1, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 					1,
 				),
@@ -2047,7 +2060,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperatorUnbondingDelegations(
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					2,
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("utia", sdkmath.NewInt(50))),
 					2,
 				),
@@ -2075,7 +2088,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperatorUnbondingDelegations(
 						BuildUnbondingDelegation: types.NewOperatorUnbondingDelegation,
 					},
 					10,
-					time.Date(2024, 1, 1, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 				)
 				suite.Require().NoError(err)
@@ -2100,7 +2113,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperatorUnbondingDelegations(
 						BuildUnbondingDelegation: types.NewOperatorUnbondingDelegation,
 					},
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("utia", sdkmath.NewInt(50))),
 				)
 				suite.Require().NoError(err)
@@ -2115,7 +2128,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperatorUnbondingDelegations(
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					2,
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("utia", sdkmath.NewInt(50))),
 					2,
 				),
@@ -2338,7 +2351,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServiceUnbondingDelegations()
 						BuildUnbondingDelegation: types.NewServiceUnbondingDelegation,
 					},
 					10,
-					time.Date(2024, 1, 1, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 				)
 				suite.Require().NoError(err)
@@ -2363,7 +2376,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServiceUnbondingDelegations()
 						BuildUnbondingDelegation: types.NewServiceUnbondingDelegation,
 					},
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("utia", sdkmath.NewInt(50))),
 				)
 				suite.Require().NoError(err)
@@ -2375,7 +2388,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServiceUnbondingDelegations()
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					1,
 					10,
-					time.Date(2024, 1, 1, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 					1,
 				),
@@ -2383,7 +2396,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServiceUnbondingDelegations()
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					2,
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("utia", sdkmath.NewInt(50))),
 					2,
 				),
@@ -2411,7 +2424,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServiceUnbondingDelegations()
 						BuildUnbondingDelegation: types.NewServiceUnbondingDelegation,
 					},
 					10,
-					time.Date(2024, 1, 1, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 				)
 				suite.Require().NoError(err)
@@ -2436,7 +2449,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServiceUnbondingDelegations()
 						BuildUnbondingDelegation: types.NewServiceUnbondingDelegation,
 					},
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("utia", sdkmath.NewInt(50))),
 				)
 				suite.Require().NoError(err)
@@ -2451,7 +2464,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServiceUnbondingDelegations()
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					2,
 					20,
-					time.Date(2024, 1, 2, 12, 00, 00, 00, time.UTC),
+					time.Date(2024, 1, 2, 12, 0o0, 0o0, 0o0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("utia", sdkmath.NewInt(50))),
 					2,
 				),

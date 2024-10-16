@@ -29,6 +29,15 @@ message OperatorParams {
       [ (gogoproto.customname) = "JoinedServicesIDs" ];
 }
 
+// OperatorSecuredServices represent the list of services that an operator is
+// securing.
+message OperatorSecuredServices {
+    // ServiceIDs defines the list of service IDs that the operator is securing.
+    repeated uint32 service_ids = 1 [
+      (gogoproto.customname) = "ServiceIDs"
+    ];
+}
+
 // ServiceParams represent the params that have been set for an individual
 // service.
 message ServiceParams {

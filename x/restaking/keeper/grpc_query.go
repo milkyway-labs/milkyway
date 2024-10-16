@@ -26,7 +26,7 @@ func NewQuerier(keeper *Keeper) Querier {
 }
 
 // OperatorParams queries the operator params for the given operator id
-func (k Querier) OperatorParams(goCtx context.Context, req *types.QueryOperatorParamsRequest) (*types.QueryOperatorParamsResponse, error) {
+func (k Querier) OperatorSecuredServices(goCtx context.Context, req *types.QueryOperatorSecuredServicesRequest) (*types.QueryOperatorSecuredServicesResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -37,10 +37,18 @@ func (k Querier) OperatorParams(goCtx context.Context, req *types.QueryOperatorP
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// Get the operator params store
-	params := k.GetOperatorParams(ctx, req.OperatorId)
+	_, found := k.operatorsKeeper.GetOperator(ctx, req.OperatorId)
+	if !found {
+		return nil, status.Error(codes.InvalidArgument, "operator not found")
+	}
 
-	return &types.QueryOperatorParamsResponse{OperatorParams: params}, nil
+	// Get the operator secured services
+	securedServices, err := k.GetOperatorSecuredServices(ctx, req.OperatorId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.QueryOperatorSecuredServicesResponse{ServiceIds: securedServices.ServiceIDs}, nil
 }
 
 // ServiceParams queries the service params for the given service id
