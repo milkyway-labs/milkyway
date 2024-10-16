@@ -13,12 +13,6 @@ import (
 	"github.com/milkyway-labs/milkyway/x/operators/types"
 )
 
-const (
-	flagMoniker = "moniker"
-	flagWebsite = "website"
-	flagPicture = "picture"
-)
-
 // GetTxCmd returns a new command to perform operators transactions
 func GetTxCmd() *cobra.Command {
 	txCmd := &cobra.Command{
