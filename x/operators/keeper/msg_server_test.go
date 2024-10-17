@@ -1,7 +1,6 @@
 package keeper_test
 
 import (
-	"fmt"
 	"time"
 
 	sdkmath "cosmossdk.io/math"
@@ -619,8 +618,6 @@ func (suite *KeeperTestSuite) TestMsgServer_SetOperatorParams() {
 			expEvents: []sdk.Event{
 				sdk.NewEvent(
 					types.EventTypeSetOperatorParams,
-					sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", testOperatorId)),
-					sdk.NewAttribute(types.AttributeKeyNewCommissionRate, "0.200000000000000000"),
 				),
 			},
 			shouldErr: false,

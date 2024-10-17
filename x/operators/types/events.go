@@ -10,7 +10,6 @@ const (
 	EventTypeTransferOperatorOwnership    = "transfer_operator_ownership"
 	EventTypeSetOperatorParams            = "set_operator_params"
 
-	AttributeKeyOperatorID        = "operator_id"
-	AttributeKeyNewAdmin          = "new_admin"
-	AttributeKeyNewCommissionRate = "new_commission_rate"
+	AttributeKeyOperatorID = "operator_id"
+	AttributeKeyNewAdmin   = "new_admin"
 )

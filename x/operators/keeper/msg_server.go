@@ -205,11 +205,7 @@ func (k msgServer) SetOperatorParams(goCtx context.Context, msg *types.MsgSetOpe
 	}
 
 	ctx.EventManager().EmitEvents(sdk.Events{
-		sdk.NewEvent(
-			types.EventTypeSetOperatorParams,
-			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", msg.OperatorID)),
-			sdk.NewAttribute(types.AttributeKeyNewCommissionRate, msg.Params.CommissionRate.String()),
-		),
+		sdk.NewEvent(types.EventTypeSetOperatorParams),
 	})
 
 	return &types.MsgSetOperatorParamsResponse{}, nil
