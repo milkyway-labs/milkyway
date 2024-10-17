@@ -506,7 +506,6 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegatePool() {
 			}
 		})
 	}
-
 }
 
 func (suite *KeeperTestSuite) TestMsgServer_DelegateOperator() {

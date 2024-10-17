@@ -2300,7 +2300,7 @@ type UserInsuranceFund struct {
 
 	// Amount of coins deposited into the user's insurance fund.
 	Balance []*v1beta1.Coin `protobuf:"bytes,1,rep,name=balance,proto3" json:"balance,omitempty"`
-	// Amount the amount in the user's insurance that is being used to secure the
+	// Amount in the user's insurance that is being used to secure the
 	// restaked toknes. For example an user has 10 TIA in their insurance fund,
 	// the insurance percentage is 1% so they can restake 1000 TIA.
 	// The user restakes only 100 TIA, in this case the balance is 10 TIA and used

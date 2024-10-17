@@ -64,3 +64,14 @@ message Operator {
     (gogoproto.nullable) = false
   ];
 }
+
+// OperatorParams represent the params that have been set for an individual
+// operator.
+message OperatorParams {
+  // CommissionRate defines the commission rate charged to delegators, as a
+  // fraction.
+  string commission_rate = 1 [
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false
+  ];
+}

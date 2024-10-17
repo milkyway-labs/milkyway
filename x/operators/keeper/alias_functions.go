@@ -102,3 +102,29 @@ func (k *Keeper) GetInactivatingOperators(ctx sdk.Context) ([]types.UnbondingOpe
 func (k *Keeper) IsOperatorAddress(ctx sdk.Context, address string) (bool, error) {
 	return k.operatorAddressSet.Has(ctx, address)
 }
+
+// GetAllOperatorParamsRecords returns all the operator params records
+func (k *Keeper) GetAllOperatorParamsRecords(ctx sdk.Context) ([]types.OperatorParamsRecord, error) {
+	iterator, err := k.operatorParams.Iterate(ctx, nil)
+	if err != nil {
+		return nil, err
+	}
+	defer iterator.Close()
+
+	var records []types.OperatorParamsRecord
+	for ; iterator.Valid(); iterator.Next() {
+		// Get the operator params
+		params, err := iterator.Value()
+		if err != nil {
+			return nil, err
+		}
+		// Get the operator id from the map key
+		operatorID, err := iterator.Key()
+		if err != nil {
+			return nil, err
+		}
+		records = append(records, types.NewOperatorParamsRecord(operatorID, params))
+	}
+
+	return records, nil
+}

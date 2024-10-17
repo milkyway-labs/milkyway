@@ -246,13 +246,11 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 		{
 			name: "inactive operator returns error",
 			store: func(ctx sdk.Context) {
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
-					ID:              1,
-					Status:          operatorstypes.OPERATOR_STATUS_INACTIVE,
-					Address:         operatorstypes.GetOperatorAddress(1).String(),
-					Tokens:          sdk.NewCoins(),
-					DelegatorShares: sdk.NewDecCoins(),
-				})
+				suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
+					1,
+					operatorstypes.OPERATOR_STATUS_INACTIVE,
+					"moniker", "", "", "admin",
+				))
 			},
 			operatorID: 1,
 			amount:     sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
@@ -262,13 +260,11 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 		{
 			name: "invalid exchange rate operator returns error",
 			store: func(ctx sdk.Context) {
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
-					ID:              1,
-					Status:          operatorstypes.OPERATOR_STATUS_ACTIVE,
-					Address:         operatorstypes.GetOperatorAddress(1).String(),
-					Tokens:          sdk.NewCoins(),
-					DelegatorShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
-				})
+				suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
+					1,
+					operatorstypes.OPERATOR_STATUS_ACTIVE,
+					"moniker", "", "", "admin",
+				))
 			},
 			operatorID: 1,
 			amount:     sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
@@ -278,10 +274,11 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 		{
 			name: "invalid delegator address returns error",
 			store: func(ctx sdk.Context) {
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
-					ID:      1,
-					Address: operatorstypes.GetOperatorAddress(1).String(),
-				})
+				suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
+					1,
+					operatorstypes.OPERATOR_STATUS_UNSPECIFIED,
+					"moniker", "", "", "admin",
+				))
 			},
 			operatorID: 1,
 			amount:     sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
@@ -292,10 +289,11 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 			name: "insufficient funds return error",
 			store: func(ctx sdk.Context) {
 				// Create the operator
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
-					ID:      1,
-					Address: operatorstypes.GetOperatorAddress(1).String(),
-				})
+				suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
+					1,
+					operatorstypes.OPERATOR_STATUS_UNSPECIFIED,
+					"moniker", "", "", "admin",
+				))
 
 				// Set the next operator id
 				suite.ok.SetNextOperatorID(ctx, 2)

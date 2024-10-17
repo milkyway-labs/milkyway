@@ -1,8 +1,10 @@
 package keeper
 
 import (
+	goerrors "errors"
 	"time"
 
+	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -116,10 +118,42 @@ func (k *Keeper) CompleteOperatorInactivation(ctx sdk.Context, operator types.Op
 		return err
 	}
 
+	// Remove the operator params when completed to avoid an invariant breaking.
+	err := k.DeleteOperatorParams(ctx, operator.ID)
+	if err != nil {
+		return err
+	}
+
 	// Call the hook
 	k.AfterOperatorInactivatingCompleted(ctx, operator.ID)
 
 	return nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// SaveOperatorParams stores the given operator params
+func (k *Keeper) SaveOperatorParams(ctx sdk.Context, operatorID uint32, params types.OperatorParams) error {
+	return k.operatorParams.Set(ctx, operatorID, params)
+}
+
+// GetOperatorParams returns the operator params
+func (k *Keeper) GetOperatorParams(ctx sdk.Context, operatorID uint32) (types.OperatorParams, error) {
+	params, err := k.operatorParams.Get(ctx, operatorID)
+	if err != nil {
+		if goerrors.Is(err, collections.ErrNotFound) {
+			return types.DefaultOperatorParams(), nil
+		} else {
+			return types.OperatorParams{}, err
+		}
+	}
+	return params, nil
+}
+
+// Deletes the operator params associated to the operator with the provided ID.
+// If we don't have params associated to the provided operator ID no action will be performed.
+func (k *Keeper) DeleteOperatorParams(ctx sdk.Context, operatorID uint32) error {
+	return k.operatorParams.Remove(ctx, operatorID)
 }
 
 // --------------------------------------------------------------------------------------------------------------------

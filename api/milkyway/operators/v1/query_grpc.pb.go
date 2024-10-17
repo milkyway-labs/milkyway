@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Query_Operator_FullMethodName  = "/milkyway.operators.v1.Query/Operator"
-	Query_Operators_FullMethodName = "/milkyway.operators.v1.Query/Operators"
-	Query_Params_FullMethodName    = "/milkyway.operators.v1.Query/Params"
+	Query_Operator_FullMethodName       = "/milkyway.operators.v1.Query/Operator"
+	Query_OperatorParams_FullMethodName = "/milkyway.operators.v1.Query/OperatorParams"
+	Query_Operators_FullMethodName      = "/milkyway.operators.v1.Query/Operators"
+	Query_Params_FullMethodName         = "/milkyway.operators.v1.Query/Params"
 )
 
 // QueryClient is the client API for Query service.
@@ -33,6 +34,9 @@ type QueryClient interface {
 	// Operator defines a gRPC query method that returns the operator by the given
 	// operator id.
 	Operator(ctx context.Context, in *QueryOperatorRequest, opts ...grpc.CallOption) (*QueryOperatorResponse, error)
+	// OperatorParams defines a gRPC query method that returns the operator's params
+	// by the given operator id.
+	OperatorParams(ctx context.Context, in *QueryOperatorParamsRequest, opts ...grpc.CallOption) (*QueryOperatorParamsResponse, error)
 	// Operators defines a gRPC query method that returns the list of operators.
 	Operators(ctx context.Context, in *QueryOperatorsRequest, opts ...grpc.CallOption) (*QueryOperatorsResponse, error)
 	// Params defines a gRPC query method that returns the parameters of the
@@ -52,6 +56,16 @@ func (c *queryClient) Operator(ctx context.Context, in *QueryOperatorRequest, op
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(QueryOperatorResponse)
 	err := c.cc.Invoke(ctx, Query_Operator_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) OperatorParams(ctx context.Context, in *QueryOperatorParamsRequest, opts ...grpc.CallOption) (*QueryOperatorParamsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(QueryOperatorParamsResponse)
+	err := c.cc.Invoke(ctx, Query_OperatorParams_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -87,6 +101,9 @@ type QueryServer interface {
 	// Operator defines a gRPC query method that returns the operator by the given
 	// operator id.
 	Operator(context.Context, *QueryOperatorRequest) (*QueryOperatorResponse, error)
+	// OperatorParams defines a gRPC query method that returns the operator's params
+	// by the given operator id.
+	OperatorParams(context.Context, *QueryOperatorParamsRequest) (*QueryOperatorParamsResponse, error)
 	// Operators defines a gRPC query method that returns the list of operators.
 	Operators(context.Context, *QueryOperatorsRequest) (*QueryOperatorsResponse, error)
 	// Params defines a gRPC query method that returns the parameters of the
@@ -104,6 +121,9 @@ type UnimplementedQueryServer struct{}
 
 func (UnimplementedQueryServer) Operator(context.Context, *QueryOperatorRequest) (*QueryOperatorResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Operator not implemented")
+}
+func (UnimplementedQueryServer) OperatorParams(context.Context, *QueryOperatorParamsRequest) (*QueryOperatorParamsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OperatorParams not implemented")
 }
 func (UnimplementedQueryServer) Operators(context.Context, *QueryOperatorsRequest) (*QueryOperatorsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Operators not implemented")
@@ -146,6 +166,24 @@ func _Query_Operator_Handler(srv interface{}, ctx context.Context, dec func(inte
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).Operator(ctx, req.(*QueryOperatorRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_OperatorParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryOperatorParamsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).OperatorParams(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_OperatorParams_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).OperatorParams(ctx, req.(*QueryOperatorParamsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -196,6 +234,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Operator",
 			Handler:    _Query_Operator_Handler,
+		},
+		{
+			MethodName: "OperatorParams",
+			Handler:    _Query_OperatorParams_Handler,
 		},
 		{
 			MethodName: "Operators",

@@ -18,6 +18,13 @@ service Query {
         "/milkyway/operators/v1/operators/{operator_id}";
   }
 
+  // OperatorParams defines a gRPC query method that returns the operator's params
+  // by the given operator id.
+  rpc OperatorParams(QueryOperatorParamsRequest) returns (QueryOperatorParamsResponse) {
+    option (google.api.http).get =
+        "/milkyway/operators/v1/operators/{operator_id}/params";
+  }
+
   // Operators defines a gRPC query method that returns the list of operators.
   rpc Operators(QueryOperatorsRequest) returns (QueryOperatorsResponse) {
     option (google.api.http).get = "/milkyway/operators/v1/operators";
@@ -39,6 +46,18 @@ message QueryOperatorRequest {
 // QueryOperatorResponse is the response type for the Query/Operator RPC method.
 message QueryOperatorResponse {
   Operator operator = 1 [ (gogoproto.nullable) = false ];
+}
+
+
+// QueryOperatorParamsRequest is the request type for the Query/OperatorParams RPC method.
+message QueryOperatorParamsRequest {
+  // OperatorID is the ID of the operator for which to query the params
+  uint32 operator_id = 1;
+}
+
+// QueryOperatorParamsResponse is the response type for the Query/OperatorParams RPC method.
+message QueryOperatorParamsResponse {
+  OperatorParams operator_params = 1 [ (gogoproto.nullable) = false ];
 }
 
 // QueryOperatorsRequest is the request type for the Query/Operators RPC method.

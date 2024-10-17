@@ -11,4 +11,5 @@ var (
 	ErrInsufficientShares      = errors.Register(ModuleName, 2, "insufficient delegation shares")
 	ErrInvalidDeactivationTime = errors.Register(ModuleName, 3, "invalid deactivation time")
 	ErrOperatorNotActive       = errors.Register(ModuleName, 4, "operator not active")
+	ErrInvalidOperatorParams   = errors.Register(ModuleName, 5, "invalid operator params")
 )

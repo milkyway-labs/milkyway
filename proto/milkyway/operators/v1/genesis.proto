@@ -30,6 +30,12 @@ message GenesisState {
     (gogoproto.moretags) = "yaml:\"unbonding_operators\"",
     (gogoproto.nullable) = false
   ];
+
+  // OperatorsParams defines the list of operators params.
+  repeated OperatorParamsRecord operators_params = 5 [
+    (gogoproto.moretags) = "yaml:\"operators_params\"",
+    (gogoproto.nullable) = false
+  ];
 }
 
 // UnbondingOperator contains the data about an operator that is currently being
@@ -42,4 +48,14 @@ message UnbondingOperator {
   // will be completed
   google.protobuf.Timestamp unbonding_completion_time = 2
       [ (gogoproto.stdtime) = true, (gogoproto.nullable) = false ];
+}
+
+// OperatorParamsRecord represents the params that have been set for an
+// individual operator.
+message OperatorParamsRecord {
+  // OperatorID is the ID of the operator.
+  uint32 operator_id = 1 [ (gogoproto.customname) = "OperatorID" ];
+
+  // Params defines the parameters for the operators module.
+  OperatorParams params = 2 [ (gogoproto.nullable) = false ];
 }

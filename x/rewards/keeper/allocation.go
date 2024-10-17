@@ -470,8 +470,10 @@ func (k *Keeper) allocateRewardsPool(
 	shared := rewards
 	if _, ok := target.(*operatorstypes.Operator); ok {
 		// Split tokens between operator and delegators according to commission
-		// TODO: optimize this read operation? we already read operator params in getEligibleOperators
-		operatorParams := k.restakingKeeper.GetOperatorParams(sdkCtx, target.GetID())
+		operatorParams, err := k.operatorsKeeper.GetOperatorParams(sdkCtx, target.GetID())
+		if err != nil {
+			return err
+		}
 		commission := rewards.MulDec(operatorParams.CommissionRate)
 		shared = rewards.Sub(commission)
 

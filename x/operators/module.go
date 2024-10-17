@@ -18,7 +18,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 
 	"github.com/milkyway-labs/milkyway/x/operators/client/cli"
-
 	"github.com/milkyway-labs/milkyway/x/operators/keeper"
 	"github.com/milkyway-labs/milkyway/x/operators/types"
 )
@@ -84,11 +83,6 @@ func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *r
 // GetTxCmd returns the operators module's root tx command.
 func (a AppModuleBasic) GetTxCmd() *cobra.Command {
 	return cli.GetTxCmd()
-}
-
-// GetQueryCmd returns the operators module's root query command.
-func (AppModuleBasic) GetQueryCmd() *cobra.Command {
-	return cli.GetQueryCmd()
 }
 
 // ----------------------------------------------------------------------------

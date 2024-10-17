@@ -179,6 +179,38 @@ func (k msgServer) TransferOperatorOwnership(goCtx context.Context, msg *types.M
 	return &types.MsgTransferOperatorOwnershipResponse{}, nil
 }
 
+// SetOperatorParams defines the rpc method for Msg/SetOperatorParams
+func (k msgServer) SetOperatorParams(goCtx context.Context, msg *types.MsgSetOperatorParams) (*types.MsgSetOperatorParamsResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	operator, found := k.GetOperator(ctx, msg.OperatorID)
+	if !found {
+		return nil, types.ErrOperatorNotFound
+	}
+
+	// Make sure only the admin can update the operator
+	if operator.Admin != msg.Sender {
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can update the operator params")
+	}
+
+	// Make sure that the received params are valid
+	if err := msg.Params.Validate(); err != nil {
+		return nil, errors.Wrap(types.ErrInvalidOperatorParams, err.Error())
+	}
+
+	// Update the operator params
+	err := k.SaveOperatorParams(ctx, msg.OperatorID, msg.Params)
+	if err != nil {
+		return nil, err
+	}
+
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(types.EventTypeSetOperatorParams),
+	})
+
+	return &types.MsgSetOperatorParamsResponse{}, nil
+}
+
 // UpdateParams defines the rpc method for Msg/UpdateParams
 func (k msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
 	// Check the authority

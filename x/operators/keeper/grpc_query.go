@@ -43,7 +43,6 @@ func (k *Keeper) Operators(ctx context.Context, request *types.QueryOperatorsReq
 		operators = append(operators, operator)
 		return nil
 	})
-
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -52,6 +51,22 @@ func (k *Keeper) Operators(ctx context.Context, request *types.QueryOperatorsReq
 		Operators:  operators,
 		Pagination: pageRes,
 	}, nil
+}
+
+func (k *Keeper) OperatorParams(ctx context.Context, request *types.QueryOperatorParamsRequest) (*types.QueryOperatorParamsResponse, error) {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+
+	_, found := k.GetOperator(sdkCtx, request.OperatorId)
+	if !found {
+		return nil, types.ErrOperatorNotFound
+	}
+
+	params, err := k.GetOperatorParams(sdkCtx, request.OperatorId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.QueryOperatorParamsResponse{OperatorParams: params}, nil
 }
 
 // Params implements the Query/Params gRPC method

@@ -23,6 +23,7 @@ const (
 	Msg_UpdateOperator_FullMethodName            = "/milkyway.operators.v1.Msg/UpdateOperator"
 	Msg_DeactivateOperator_FullMethodName        = "/milkyway.operators.v1.Msg/DeactivateOperator"
 	Msg_TransferOperatorOwnership_FullMethodName = "/milkyway.operators.v1.Msg/TransferOperatorOwnership"
+	Msg_SetOperatorParams_FullMethodName         = "/milkyway.operators.v1.Msg/SetOperatorParams"
 	Msg_UpdateParams_FullMethodName              = "/milkyway.operators.v1.Msg/UpdateParams"
 )
 
@@ -44,6 +45,9 @@ type MsgClient interface {
 	// TransferOperatorOwnership defines the operation for transferring the
 	// ownership of an operator to another account.
 	TransferOperatorOwnership(ctx context.Context, in *MsgTransferOperatorOwnership, opts ...grpc.CallOption) (*MsgTransferOperatorOwnershipResponse, error)
+	// SetOperatorParams defines the operation for setting a operator's
+	// parameters.
+	SetOperatorParams(ctx context.Context, in *MsgSetOperatorParams, opts ...grpc.CallOption) (*MsgSetOperatorParamsResponse, error)
 	// UpdateParams defines a governance operation for updating the module
 	// parameters.
 	// The authority defaults to the x/gov module account.
@@ -98,6 +102,16 @@ func (c *msgClient) TransferOperatorOwnership(ctx context.Context, in *MsgTransf
 	return out, nil
 }
 
+func (c *msgClient) SetOperatorParams(ctx context.Context, in *MsgSetOperatorParams, opts ...grpc.CallOption) (*MsgSetOperatorParamsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgSetOperatorParamsResponse)
+	err := c.cc.Invoke(ctx, Msg_SetOperatorParams_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(MsgUpdateParamsResponse)
@@ -126,6 +140,9 @@ type MsgServer interface {
 	// TransferOperatorOwnership defines the operation for transferring the
 	// ownership of an operator to another account.
 	TransferOperatorOwnership(context.Context, *MsgTransferOperatorOwnership) (*MsgTransferOperatorOwnershipResponse, error)
+	// SetOperatorParams defines the operation for setting a operator's
+	// parameters.
+	SetOperatorParams(context.Context, *MsgSetOperatorParams) (*MsgSetOperatorParamsResponse, error)
 	// UpdateParams defines a governance operation for updating the module
 	// parameters.
 	// The authority defaults to the x/gov module account.
@@ -151,6 +168,9 @@ func (UnimplementedMsgServer) DeactivateOperator(context.Context, *MsgDeactivate
 }
 func (UnimplementedMsgServer) TransferOperatorOwnership(context.Context, *MsgTransferOperatorOwnership) (*MsgTransferOperatorOwnershipResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TransferOperatorOwnership not implemented")
+}
+func (UnimplementedMsgServer) SetOperatorParams(context.Context, *MsgSetOperatorParams) (*MsgSetOperatorParamsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetOperatorParams not implemented")
 }
 func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
@@ -248,6 +268,24 @@ func _Msg_TransferOperatorOwnership_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_SetOperatorParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSetOperatorParams)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SetOperatorParams(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_SetOperatorParams_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SetOperatorParams(ctx, req.(*MsgSetOperatorParams))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MsgUpdateParams)
 	if err := dec(in); err != nil {
@@ -288,6 +326,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "TransferOperatorOwnership",
 			Handler:    _Msg_TransferOperatorOwnership_Handler,
+		},
+		{
+			MethodName: "SetOperatorParams",
+			Handler:    _Msg_SetOperatorParams_Handler,
 		},
 		{
 			MethodName: "UpdateParams",

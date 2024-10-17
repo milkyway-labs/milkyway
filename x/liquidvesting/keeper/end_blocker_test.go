@@ -31,7 +31,7 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 			setupCtx: func(ctx sdk.Context) sdk.Context {
 				return ctx.
 					WithBlockHeight(10).
-					WithBlockTime(time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o00, time.UTC))
+					WithBlockTime(time.Date(2024, 1, 1, 12, 0, 0, 00, time.UTC))
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding delegation time to 7 days
@@ -97,7 +97,7 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 			setupCtx: func(ctx sdk.Context) sdk.Context {
 				return ctx.
 					WithBlockHeight(10).
-					WithBlockTime(time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o00, time.UTC))
+					WithBlockTime(time.Date(2024, 1, 1, 12, 0, 0, 00, time.UTC))
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding delegation time to 7 days

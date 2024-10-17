@@ -8,6 +8,7 @@ import "cosmos/bank/v1beta1/bank.proto";
 import "cosmos/msg/v1/msg.proto";
 import "gogoproto/gogo.proto";
 import "milkyway/operators/v1/params.proto";
+import "milkyway/operators/v1/models.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/operators/types";
 
@@ -33,6 +34,11 @@ service Msg {
   // ownership of an operator to another account.
   rpc TransferOperatorOwnership(MsgTransferOperatorOwnership)
       returns (MsgTransferOperatorOwnershipResponse);
+
+  // SetOperatorParams defines the operation for setting a operator's
+  // parameters.
+  rpc SetOperatorParams(MsgSetOperatorParams)
+      returns (MsgSetOperatorParamsResponse);
 
   // UpdateParams defines a governance operation for updating the module
   // parameters.
@@ -121,6 +127,24 @@ message MsgDeactivateOperator {
 
 // MsgDeactivateOperatorResponse is the return value of MsgDeactivateOperator.
 message MsgDeactivateOperatorResponse {}
+
+// MsgSetOperatorParams defines the message structure for the
+// SetOperatorParams gRPC service method. It allows the operator admin to
+// update the operator's parameters.
+message MsgSetOperatorParams {
+  option (cosmos.msg.v1.signer) = "sender";
+  option (amino.name) = "milkyway/MsgSetOperatorParams";
+
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  uint32 operator_id = 2 [ (gogoproto.customname) = "OperatorID" ];
+
+  OperatorParams params = 3 [ (gogoproto.nullable) = false ];
+}
+
+// MsgSetOperatorParamsResponse is the return value of
+// MsgSetOperatorParams.
+message MsgSetOperatorParamsResponse {}
 
 // MsgTransferOperatorOwnership defines the message structure for the
 // TransferOperatorOwnership gRPC service method. It allows an operator admin to

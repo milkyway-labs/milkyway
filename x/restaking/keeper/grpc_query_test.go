@@ -2875,7 +2875,6 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperator() {
 			request:   types.NewQueryDelegatorOperatorRequest("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", 1),
 			shouldErr: false,
 			expOperator: operatorstypes.Operator{
-
 				ID:      1,
 				Address: operatorstypes.GetOperatorAddress(1).String(),
 				Tokens: sdk.NewCoins(

@@ -200,3 +200,32 @@ func (msg *MsgUpdateParams) GetSigners() []sdk.AccAddress {
 	addr, _ := sdk.AccAddressFromBech32(msg.Authority)
 	return []sdk.AccAddress{addr}
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+func NewMsgSetOperatorParams(sender string, operatorID uint32, operatorParams OperatorParams) *MsgSetOperatorParams {
+	return &MsgSetOperatorParams{
+		Sender:     sender,
+		OperatorID: operatorID,
+		Params:     operatorParams,
+	}
+}
+
+// ValidateBasic implements sdk.Msg
+func (msg *MsgSetOperatorParams) ValidateBasic() error {
+	if msg.OperatorID == 0 {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid operator ID: %d", msg.OperatorID)
+	}
+
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address")
+	}
+
+	err = msg.Params.Validate()
+	if err != nil {
+		return fmt.Errorf("invalid operator params: %w", err)
+	}
+
+	return nil
+}
