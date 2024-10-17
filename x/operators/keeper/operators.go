@@ -119,7 +119,7 @@ func (k *Keeper) CompleteOperatorInactivation(ctx sdk.Context, operator types.Op
 	}
 
 	// Remove the operator params when completed to avoid an invariant breaking.
-	err := k.operatorParams.Remove(ctx, operator.ID)
+	err := k.DeleteOperatorParams(ctx, operator.ID)
 	if err != nil {
 		return err
 	}
@@ -148,6 +148,12 @@ func (k *Keeper) GetOperatorParams(ctx sdk.Context, operatorID uint32) (types.Op
 		}
 	}
 	return params, nil
+}
+
+// Deletes the operator params associated to the operator with the provided ID.
+// If we don't have params associated to the provided operator ID no action will be performed.
+func (k *Keeper) DeleteOperatorParams(ctx sdk.Context, operatorID uint32) error {
+	return k.operatorParams.Remove(ctx, operatorID)
 }
 
 // --------------------------------------------------------------------------------------------------------------------
