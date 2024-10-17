@@ -75,10 +75,6 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					),
 				},
-				OperatorsParams: []types.OperatorParamsRecord{
-					types.NewOperatorParamsRecord(1, types.DefaultOperatorParams()),
-					types.NewOperatorParamsRecord(2, types.DefaultOperatorParams()),
-				},
 				Params: types.DefaultParams(),
 			},
 		},
@@ -133,10 +129,6 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 						"",
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					),
-				},
-				OperatorsParams: []types.OperatorParamsRecord{
-					types.NewOperatorParamsRecord(1, types.DefaultOperatorParams()),
-					types.NewOperatorParamsRecord(2, types.DefaultOperatorParams()),
 				},
 				UnbondingOperators: []types.UnbondingOperator{
 					types.NewUnbondingOperator(
@@ -297,9 +289,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				), operator1)
 
 				// Ensure that the operator has the default params
-				params, found, err := suite.k.GetOperatorParams(ctx, 1)
-				suite.Require().True(found)
-				suite.Require().NoError(err)
+				params, err := suite.k.GetOperatorParams(ctx, 1)
 				suite.Require().Equal(types.DefaultOperatorParams(), params)
 
 				operator2, found := suite.k.GetOperator(ctx, 2)
@@ -314,8 +304,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				), operator2)
 
 				// Ensure that the operator has the default params
-				params, found, err = suite.k.GetOperatorParams(ctx, 2)
-				suite.Require().True(found)
+				params, err = suite.k.GetOperatorParams(ctx, 2)
 				suite.Require().NoError(err)
 				suite.Require().Equal(types.DefaultOperatorParams(), params)
 			},
@@ -403,8 +392,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				},
 			},
 			check: func(ctx sdk.Context) {
-				params, found, err := suite.k.GetOperatorParams(ctx, 1)
-				suite.Require().True(found)
+				params, err := suite.k.GetOperatorParams(ctx, 1)
 				suite.Require().NoError(err)
 				suite.Require().Equal(params, types.NewOperatorParams(
 					sdkmath.LegacyMustNewDecFromStr("0.2"),

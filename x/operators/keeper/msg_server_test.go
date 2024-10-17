@@ -97,8 +97,7 @@ func (suite *KeeperTestSuite) TestMsgServer_RegisterOperator() {
 				suite.Require().True(hasAccount)
 
 				// Make sure the newly registered operator has the default params
-				params, found, err := suite.k.GetOperatorParams(ctx, 2)
-				suite.Require().True(found)
+				params, err := suite.k.GetOperatorParams(ctx, 2)
 				suite.Require().NoError(err)
 				suite.Require().Equal(types.DefaultOperatorParams(), params)
 
@@ -626,9 +625,8 @@ func (suite *KeeperTestSuite) TestMsgServer_SetOperatorParams() {
 			},
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				params, found, err := suite.k.GetOperatorParams(ctx, testOperatorId)
+				params, err := suite.k.GetOperatorParams(ctx, testOperatorId)
 				suite.Require().Nil(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperatorParams(
 					sdkmath.LegacyMustNewDecFromStr("0.2"),
 				), params)

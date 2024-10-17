@@ -36,7 +36,7 @@ type OperatorsKeeper interface {
 	IterateOperators(ctx sdk.Context, cb func(operatorstypes.Operator) bool)
 	GetOperators(ctx sdk.Context) []operatorstypes.Operator
 	SaveOperatorParams(ctx sdk.Context, operatorID uint32, params operatorstypes.OperatorParams) error
-	GetOperatorParams(ctx sdk.Context, operatorID uint32) (operatorstypes.OperatorParams, bool, error)
+	GetOperatorParams(ctx sdk.Context, operatorID uint32) (operatorstypes.OperatorParams, error)
 }
 
 type ServicesKeeper interface {

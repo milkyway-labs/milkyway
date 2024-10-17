@@ -60,11 +60,6 @@ func (k *Keeper) RegisterOperator(ctx sdk.Context, operator types.Operator) erro
 		return err
 	}
 
-	// Store the default params for the newly created operator
-	if err := k.SaveOperatorParams(ctx, operator.ID, types.DefaultOperatorParams()); err != nil {
-		return err
-	}
-
 	// Log and call the hooks
 	k.Logger(ctx).Info("operator created", "id", operator.ID)
 	k.AfterOperatorRegistered(ctx, operator.ID)
@@ -143,16 +138,16 @@ func (k *Keeper) SaveOperatorParams(ctx sdk.Context, operatorID uint32, params t
 }
 
 // GetOperatorParams returns the operator params
-func (k *Keeper) GetOperatorParams(ctx sdk.Context, operatorID uint32) (types.OperatorParams, bool, error) {
+func (k *Keeper) GetOperatorParams(ctx sdk.Context, operatorID uint32) (types.OperatorParams, error) {
 	params, err := k.operatorParams.Get(ctx, operatorID)
 	if err != nil {
 		if goerrors.Is(err, collections.ErrNotFound) {
-			return types.OperatorParams{}, false, nil
+			return types.DefaultOperatorParams(), nil
 		} else {
-			return types.OperatorParams{}, false, err
+			return types.OperatorParams{}, err
 		}
 	}
-	return params, true, nil
+	return params, nil
 }
 
 // --------------------------------------------------------------------------------------------------------------------

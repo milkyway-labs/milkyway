@@ -56,12 +56,14 @@ func (k *Keeper) Operators(ctx context.Context, request *types.QueryOperatorsReq
 func (k *Keeper) OperatorParams(ctx context.Context, request *types.QueryOperatorParamsRequest) (*types.QueryOperatorParamsResponse, error) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
-	params, found, err := k.GetOperatorParams(sdkCtx, request.OperatorId)
+	_, found := k.GetOperator(sdkCtx, request.OperatorId)
+	if !found {
+		return nil, types.ErrOperatorNotFound
+	}
+
+	params, err := k.GetOperatorParams(sdkCtx, request.OperatorId)
 	if err != nil {
 		return nil, err
-	}
-	if !found {
-		return nil, status.Error(codes.NotFound, "operator params not found")
 	}
 
 	return &types.QueryOperatorParamsResponse{OperatorParams: params}, nil
