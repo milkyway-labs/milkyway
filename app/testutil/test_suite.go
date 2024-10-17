@@ -150,7 +150,7 @@ func (suite *KeeperTestSuite) UpdateOperatorParams(
 	))
 	suite.Require().NoError(err)
 
-	// Make the operator join the service and set its commission rate to 10%.
+	// Make the operator join the service.
 	restakingMsgServer := restakingkeeper.NewMsgServer(suite.App.RestakingKeeper)
 	for _, serviceID := range joinedServicesIDs {
 		_, err := restakingMsgServer.JoinService(ctx, restakingtypes.NewMsgJoinService(

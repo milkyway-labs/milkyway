@@ -261,7 +261,7 @@ service Query {
 // QueryOperatorSecuredServicesRequest is request type for the Query/OperatorSecuredServices
 // RPC method.
 message QueryOperatorSecuredServicesRequest {
-  // OperatorID is the ID of the operator to query
+  // OperatorId is the ID of the operator to query
   uint32 operator_id = 1;
 }
 

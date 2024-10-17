@@ -35,7 +35,7 @@ message GenesisState {
   // Params defines the parameters of the module.
   Params params = 1 [ (gogoproto.nullable) = false ];
 
-  // OperatorsSecuredServices defines the list of operators secured services.
+  // OperatorsSecuredServices defines the list of operator's secured services.
   repeated OperatorSecuredServicesRecord operators_secured_services = 2
       [ (gogoproto.nullable) = false ];
 

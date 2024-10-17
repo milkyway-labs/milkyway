@@ -26,7 +26,7 @@ var (
 
 	OperatorParamsPrefix   = []byte{0x11}
 	ServiceParamsPrefix    = []byte{0x12}
-	OperatorServicesPrefix = []byte{13}
+	OperatorServicesPrefix = []byte{0x13}
 
 	PoolDelegationPrefix          = []byte{0xa1}
 	PoolDelegationsByPoolIDPrefix = []byte{0xa2}
