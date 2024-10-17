@@ -383,6 +383,7 @@ func GetOperatorTxCmd() *cobra.Command {
 
 	txCmd.AddCommand(
 		GetJoinServiceCmd(),
+		GetLeaveServiceCmd(),
 	)
 
 	return txCmd
@@ -414,6 +415,45 @@ func GetJoinServiceCmd() *cobra.Command {
 
 			// Create and validate the message
 			msg := types.NewMsgJoinService(operatorID, serviceID, clientCtx.FromAddress.String())
+			if err = msg.ValidateBasic(); err != nil {
+				return fmt.Errorf("message validation failed: %w", err)
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// GetLeaveServiceCmd returns the command allowing to add a service to the
+// list of service secured by an operator.
+func GetLeaveServiceCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "leave-service [operator-id] [service-id]",
+		Args:    cobra.ExactArgs(2),
+		Short:   "Leave the service as a validator",
+		Example: fmt.Sprintf("%s tx %s operator leave-service 1 1 --from alice", version.AppName, types.ModuleName),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			operatorID, err := operatorstypes.ParseOperatorID(args[0])
+			if err != nil {
+				return err
+			}
+
+			serviceID, err := types.ParseServiceID(args[2])
+			if err != nil {
+				return fmt.Errorf("parse service id: %w", err)
+			}
+
+			// Create and validate the message
+			msg := types.NewMsgLeaveService(operatorID, serviceID, clientCtx.FromAddress.String())
 			if err = msg.ValidateBasic(); err != nil {
 				return fmt.Errorf("message validation failed: %w", err)
 			}
