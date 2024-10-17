@@ -11,6 +11,7 @@ import (
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgJoinService{}, "milkyway/MsgJoinService")
+	legacy.RegisterAminoMsg(cdc, &MsgLeaveService{}, "milkyway/MsgLeaveService")
 	legacy.RegisterAminoMsg(cdc, &MsgUpdateServiceParams{}, "milkyway/MsgUpdateServiceParams")
 
 	legacy.RegisterAminoMsg(cdc, &MsgDelegateService{}, "milkyway/MsgDelegateService")
@@ -26,6 +27,7 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 func RegisterInterfaces(registry types.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgJoinService{},
+		&MsgLeaveService{},
 		&MsgUpdateServiceParams{},
 		&MsgDelegatePool{},
 		&MsgUndelegatePool{},

@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	Msg_JoinService_FullMethodName         = "/milkyway.restaking.v1.Msg/JoinService"
+	Msg_LeaveService_FullMethodName        = "/milkyway.restaking.v1.Msg/LeaveService"
 	Msg_UpdateServiceParams_FullMethodName = "/milkyway.restaking.v1.Msg/UpdateServiceParams"
 	Msg_DelegatePool_FullMethodName        = "/milkyway.restaking.v1.Msg/DelegatePool"
 	Msg_DelegateOperator_FullMethodName    = "/milkyway.restaking.v1.Msg/DelegateOperator"
@@ -39,6 +40,9 @@ type MsgClient interface {
 	// JoinService defines the operation that allows the operator admin
 	// to start securing an AVS
 	JoinService(ctx context.Context, in *MsgJoinService, opts ...grpc.CallOption) (*MsgJoinServiceResponse, error)
+	// LeaveService defines the operation that allows the operator admin
+	// to stop securing an AVS
+	LeaveService(ctx context.Context, in *MsgLeaveService, opts ...grpc.CallOption) (*MsgLeaveServiceResponse, error)
 	// UpdateServiceParams defines the operation that allows the service admin to
 	// update the service's parameters.
 	UpdateServiceParams(ctx context.Context, in *MsgUpdateServiceParams, opts ...grpc.CallOption) (*MsgUpdateServiceParamsResponse, error)
@@ -79,6 +83,16 @@ func (c *msgClient) JoinService(ctx context.Context, in *MsgJoinService, opts ..
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(MsgJoinServiceResponse)
 	err := c.cc.Invoke(ctx, Msg_JoinService_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) LeaveService(ctx context.Context, in *MsgLeaveService, opts ...grpc.CallOption) (*MsgLeaveServiceResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgLeaveServiceResponse)
+	err := c.cc.Invoke(ctx, Msg_LeaveService_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -174,6 +188,9 @@ type MsgServer interface {
 	// JoinService defines the operation that allows the operator admin
 	// to start securing an AVS
 	JoinService(context.Context, *MsgJoinService) (*MsgJoinServiceResponse, error)
+	// LeaveService defines the operation that allows the operator admin
+	// to stop securing an AVS
+	LeaveService(context.Context, *MsgLeaveService) (*MsgLeaveServiceResponse, error)
 	// UpdateServiceParams defines the operation that allows the service admin to
 	// update the service's parameters.
 	UpdateServiceParams(context.Context, *MsgUpdateServiceParams) (*MsgUpdateServiceParamsResponse, error)
@@ -212,6 +229,9 @@ type UnimplementedMsgServer struct{}
 
 func (UnimplementedMsgServer) JoinService(context.Context, *MsgJoinService) (*MsgJoinServiceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method JoinService not implemented")
+}
+func (UnimplementedMsgServer) LeaveService(context.Context, *MsgLeaveService) (*MsgLeaveServiceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LeaveService not implemented")
 }
 func (UnimplementedMsgServer) UpdateServiceParams(context.Context, *MsgUpdateServiceParams) (*MsgUpdateServiceParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateServiceParams not implemented")
@@ -272,6 +292,24 @@ func _Msg_JoinService_Handler(srv interface{}, ctx context.Context, dec func(int
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).JoinService(ctx, req.(*MsgJoinService))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_LeaveService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgLeaveService)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).LeaveService(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_LeaveService_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).LeaveService(ctx, req.(*MsgLeaveService))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -430,6 +468,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "JoinService",
 			Handler:    _Msg_JoinService_Handler,
+		},
+		{
+			MethodName: "LeaveService",
+			Handler:    _Msg_LeaveService_Handler,
 		},
 		{
 			MethodName: "UpdateServiceParams",

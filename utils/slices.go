@@ -52,3 +52,19 @@ func Contains[T comparable](slice []T, value T) bool {
 	}
 	return false
 }
+
+// Remove removes the first instance of value from the provided slice.
+func Remove[T comparable](slice []T, value T) (newSlice []T, removed bool) {
+	index := -1
+	for i, v := range slice {
+		if v == value {
+			index = i
+		}
+	}
+
+	if index == -1 {
+		return slice, false
+	}
+
+	return append(slice[:index], slice[index+1:]...), true
+}
