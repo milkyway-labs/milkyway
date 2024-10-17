@@ -50,10 +50,6 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) error {
 		if err := k.SaveOperator(ctx, operator); err != nil {
 			return err
 		}
-		// Init the operator with the default params
-		if err := k.SaveOperatorParams(ctx, operator.ID, types.DefaultOperatorParams()); err != nil {
-			return err
-		}
 	}
 
 	// Store the operator params

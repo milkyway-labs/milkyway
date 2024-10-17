@@ -190,7 +190,7 @@ func (k msgServer) SetOperatorParams(goCtx context.Context, msg *types.MsgSetOpe
 
 	// Make sure only the admin can update the operator
 	if operator.Admin != msg.Sender {
-		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can update the operator")
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can update the operator params")
 	}
 
 	// Make sure that the received params are valid
