@@ -38,7 +38,7 @@ func (k msgServer) JoinService(goCtx context.Context, msg *types.MsgJoinService)
 	}
 
 	if operator.Admin != msg.Sender {
-		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can update the params")
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can join the service")
 	}
 
 	_, found = k.servicesKeeper.GetService(ctx, msg.ServiceID)
@@ -53,7 +53,7 @@ func (k msgServer) JoinService(goCtx context.Context, msg *types.MsgJoinService)
 
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeUpdateOperatorParams,
+			types.EventTypeJoinService,
 			sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, fmt.Sprint(msg.OperatorID)),
 			sdk.NewAttribute(types.AttributeKeyJoinedServiceID, fmt.Sprintf("%d", msg.ServiceID)),
 		),

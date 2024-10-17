@@ -105,7 +105,7 @@ func (suite *KeeperTestSuite) TestMsgServer_JoinService() {
 			shouldErr: false,
 			expEvents: sdk.Events{
 				sdk.NewEvent(
-					types.EventTypeUpdateOperatorParams,
+					types.EventTypeJoinService,
 					sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, "1"),
 					sdk.NewAttribute(
 						types.AttributeKeyJoinedServiceID, "1"),
