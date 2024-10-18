@@ -9,7 +9,7 @@ RUN set -eux; apk add --no-cache $PACKAGES;
 WORKDIR /code
 COPY go.mod go.sum .
 RUN --mount=type=cache,target=/root/.cache/go-build \
-    --mount=type=cache,target=/root/go/pkg/mod \
+    --mount=type=cache,target=/go/pkg/mod \
     go mod download
 
 # Add source files
@@ -27,7 +27,7 @@ RUN cp /lib/libwasmvm_muslc.${arch}.a /usr/local/lib/libwasmvm_muslc.a
 
 # force it to use static lib (from above) not standard libgo_cosmwasm.so file
 RUN --mount=type=cache,target=/root/.cache/go-build \
-    --mount=type=cache,target=/root/go/pkg/mod \
+    --mount=type=cache,target=/go/pkg/mod \
     BUILD_TAGS=muslc GOOS=linux GOARCH=amd64 LEDGER_ENABLED=true LINK_STATICALLY=true make build
 RUN echo "Ensuring binary is statically linked ..." \
   && (file ./build/milkywayd | grep "statically linked")
