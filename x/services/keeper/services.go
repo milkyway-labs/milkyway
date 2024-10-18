@@ -5,6 +5,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
+	"github.com/milkyway-labs/milkyway/utils"
 	"github.com/milkyway-labs/milkyway/x/services/types"
 )
 
@@ -130,4 +131,15 @@ func (k *Keeper) GetService(ctx sdk.Context, serviceID uint32) (service types.Se
 
 	k.cdc.MustUnmarshal(bz, &service)
 	return service, true
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// SaveServiceParams stores the params associated to the provided service ID.
+func (k *Keeper) SaveServiceParams(ctx sdk.Context, serviceID uint32, params types.ServiceParams) error {
+	return k.serviceParams.Set(ctx, serviceID, params)
+}
+
+func (k *Keeper) GetServiceParams(ctx sdk.Context, serviceID uint32) (types.ServiceParams, error) {
+	return utils.MapGetOrDefault(ctx, k.serviceParams, serviceID, types.NewDefaultServiceParams)
 }

@@ -110,13 +110,12 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceParams() {
 			name:      "not found service params returns default value",
 			request:   types.NewQueryServiceParamsRequest(1),
 			shouldErr: false,
-			expParams: types.DefaultServiceParams(),
+			expParams: types.NewDefaultServiceParams(),
 		},
 		{
 			name: "found service params are returned properly",
 			store: func(ctx sdk.Context) {
 				suite.k.SaveServiceParams(ctx, 1, types.NewServiceParams(
-					sdkmath.LegacyNewDecWithPrec(1, 2),
 					[]uint32{1, 2},
 					nil,
 				))
@@ -124,7 +123,6 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceParams() {
 			request:   types.NewQueryServiceParamsRequest(1),
 			shouldErr: false,
 			expParams: types.NewServiceParams(
-				sdkmath.LegacyNewDecWithPrec(1, 2),
 				[]uint32{1, 2},
 				nil,
 			),

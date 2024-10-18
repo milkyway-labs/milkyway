@@ -20,21 +20,14 @@ message OperatorJoinedServices {
 // ServiceParams represent the params that have been set for an individual
 // service.
 message ServiceParams {
-  // SlashFraction defines the fraction of the delegation that will be slashed
-  // in case of a misbehavior.
-  string slash_fraction = 1 [
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false
-  ];
-
   // WhitelistedPoolsIDs defines the list of pool IDs that are providing
   // cryptoeconomic security to the service.
-  repeated uint32 whitelisted_pools_ids = 2
+  repeated uint32 whitelisted_pools_ids = 1
       [ (gogoproto.customname) = "WhitelistedPoolsIDs" ];
 
   // WhitelistedOperatorsIDs defines the list of operator IDs that are allowed
   // to validate this service.
-  repeated uint32 whitelisted_operators_ids = 3
+  repeated uint32 whitelisted_operators_ids = 2
       [ (gogoproto.customname) = "WhitelistedOperatorsIDs" ];
 }
 

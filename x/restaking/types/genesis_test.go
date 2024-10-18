@@ -50,22 +50,6 @@ func TestGenesis_Validate(t *testing.T) {
 			shouldErr: true,
 		},
 		{
-			name: "invalid service params record returns error",
-			genesis: types.NewGenesis(
-				nil,
-				[]types.ServiceParamsRecord{
-					{
-						ServiceID: 1,
-						Params:    types.NewServiceParams(sdkmath.LegacyNewDec(2), nil, nil),
-					},
-				},
-				nil,
-				nil,
-				types.DefaultParams(),
-			),
-			shouldErr: true,
-		},
-		{
 			name: "invalid pool delegation entry returns error",
 			genesis: types.NewGenesis(
 				nil,
@@ -164,8 +148,7 @@ func TestGenesis_Validate(t *testing.T) {
 				[]types.ServiceParamsRecord{
 					{
 						ServiceID: 2,
-						Params: types.NewServiceParams(
-							sdkmath.LegacyNewDecWithPrec(1, 2), []uint32{1, 2, 3}, []uint32{1, 5}),
+						Params:    types.NewServiceParams([]uint32{1, 2, 3}, []uint32{1, 5}),
 					},
 				},
 				[]types.Delegation{

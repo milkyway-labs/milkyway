@@ -74,13 +74,11 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServicesParams() {
 			name: "services params are returned properly",
 			store: func(ctx sdk.Context) {
 				suite.k.SaveServiceParams(ctx, 1, types.NewServiceParams(
-					sdkmath.LegacyNewDec(10),
 					[]uint32{1, 2},
 					nil,
 				))
 
 				suite.k.SaveServiceParams(ctx, 2, types.NewServiceParams(
-					sdkmath.LegacyNewDec(3),
 					[]uint32{3, 4},
 					[]uint32{1, 2},
 				))
@@ -89,7 +87,6 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServicesParams() {
 				{
 					ServiceID: 1,
 					Params: types.NewServiceParams(
-						sdkmath.LegacyNewDec(10),
 						[]uint32{1, 2},
 						nil,
 					),
@@ -97,7 +94,6 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServicesParams() {
 				{
 					ServiceID: 2,
 					Params: types.NewServiceParams(
-						sdkmath.LegacyNewDec(3),
 						[]uint32{3, 4},
 						[]uint32{1, 2},
 					),
@@ -114,7 +110,8 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServicesParams() {
 				tc.store(ctx)
 			}
 
-			services := suite.k.GetAllServicesParams(ctx)
+			services, err := suite.k.GetAllServicesParams(ctx)
+			suite.Require().NoError(err)
 			suite.Require().Equal(tc.expRecords, services)
 		})
 	}

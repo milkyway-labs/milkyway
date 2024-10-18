@@ -24,9 +24,16 @@ var (
 	UnbondingIndexKey = []byte{0x03}
 	UnbondingTypeKey  = []byte{0x04}
 
-	OperatorParamsPrefix         = []byte{0x11}
-	ServiceParamsPrefix          = []byte{0x12}
+	// Deprecated: This has been replaced by OperatorServicesPrefix that is
+	// used to store the services secured by an operator, the operator params
+	// instead have been moved to the x/operators module.
+	OperatorParamsPrefix = []byte{0x11}
+	// Deprecated: Use the new ServiceParamsPrefix instead.
+	// We keep this to migrate the old ServiceParams to the new format.
+	LegacyServiceParamsPrefix = []byte{0x12}
+
 	OperatorJoinedServicesPrefix = []byte{0x13}
+	ServiceParamsPrefix          = []byte{0x14}
 
 	PoolDelegationPrefix          = []byte{0xa1}
 	PoolDelegationsByPoolIDPrefix = []byte{0xa2}
@@ -43,11 +50,15 @@ var (
 	UnbondingQueueKey = []byte{0xd1}
 )
 
+// Deprecated: The operator params are stored in the x/operator module, now
+// in this module we only keep the list of services secured by a operator.
 // OperatorParamsStoreKey returns the key used to store the operator params
 func OperatorParamsStoreKey(operatorID uint32) []byte {
 	return utils.CompositeKey(OperatorParamsPrefix, operatorstypes.GetOperatorIDBytes(operatorID))
 }
 
+// Deprecated: The operator params are stored in the x/operator module, now
+// in this module we only keep the list of services secured by a operator.
 // ParseOperatorParamsKey parses the operator ID from the given key
 func ParseOperatorParamsKey(bz []byte) (operatorID uint32, err error) {
 	bz = bytes.TrimPrefix(bz, OperatorParamsPrefix)
@@ -56,21 +67,6 @@ func ParseOperatorParamsKey(bz []byte) (operatorID uint32, err error) {
 	}
 
 	return operatorstypes.GetOperatorIDFromBytes(bz), nil
-}
-
-// ServiceParamsStoreKey returns the key used to store the service params
-func ServiceParamsStoreKey(serviceID uint32) []byte {
-	return utils.CompositeKey(ServiceParamsPrefix, servicestypes.GetServiceIDBytes(serviceID))
-}
-
-// ParseServiceParamsKey parses the service ID from the given key
-func ParseServiceParamsKey(bz []byte) (serviceID uint32, err error) {
-	bz = bytes.TrimPrefix(bz, ServiceParamsPrefix)
-	if len(bz) != 4 {
-		return 0, fmt.Errorf("invalid key length; expected: 4, got: %d", len(bz))
-	}
-
-	return servicestypes.GetServiceIDFromBytes(bz), nil
 }
 
 // --------------------------------------------------------------------------------------------------------------------

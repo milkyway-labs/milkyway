@@ -3,7 +3,6 @@ package cli
 import (
 	"fmt"
 
-	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -324,10 +323,10 @@ func GetUpdateTxCmd() *cobra.Command {
 // params.
 func GetUpdateServiceParamsCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "service-params [service-id] [slash-fraction] [whitelisted-pool-ids] [whitelisted-operator-ids]",
-		Args:    cobra.ExactArgs(4),
+		Use:     "service-params [service-id] [whitelisted-pool-ids] [whitelisted-operator-ids]",
+		Args:    cobra.ExactArgs(3),
 		Short:   "Update a service's params",
-		Example: fmt.Sprintf("%s tx %s update service-params 1 0.02 1,3,4 1,2,3,4,5 --from alice", version.AppName, types.ModuleName),
+		Example: fmt.Sprintf("%s tx %s update service-params 1 1,3,4 1,2,3,4,5 --from alice", version.AppName, types.ModuleName),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -339,22 +338,17 @@ func GetUpdateServiceParamsCmd() *cobra.Command {
 				return err
 			}
 
-			slashFraction, err := math.LegacyNewDecFromStr(args[1])
-			if err != nil {
-				return fmt.Errorf("invalid slash fraction: %w", err)
-			}
-
-			whitelistedPoolIDs, err := utils.ParseUint32Slice(args[2])
+			whitelistedPoolIDs, err := utils.ParseUint32Slice(args[1])
 			if err != nil {
 				return fmt.Errorf("parse whitelisted pool ids: %w", err)
 			}
 
-			whitelistedOperatorIDs, err := utils.ParseUint32Slice(args[3])
+			whitelistedOperatorIDs, err := utils.ParseUint32Slice(args[2])
 			if err != nil {
 				return fmt.Errorf("parse whitelisted operator ids: %w", err)
 			}
 
-			params := types.NewServiceParams(slashFraction, whitelistedPoolIDs, whitelistedOperatorIDs)
+			params := types.NewServiceParams(whitelistedPoolIDs, whitelistedOperatorIDs)
 
 			// Create and validate the message
 			msg := types.NewMsgUpdateServiceParams(serviceID, params, clientCtx.FromAddress.String())

@@ -114,3 +114,20 @@ func (o *OperatorJoinedServicesRecord) Validate() error {
 	}
 	return o.JoinedServices.Validate()
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewServiceParamsRecord creates a new instance of ServiceParamsRecord.
+func NewServiceParamsRecord(serviceID uint32, params ServiceParams) ServiceParamsRecord {
+	return ServiceParamsRecord{
+		ServiceID: serviceID,
+		Params:    params,
+	}
+}
+
+func (r *ServiceParamsRecord) Validate() error {
+	if r.ServiceID == 0 {
+		return fmt.Errorf("the service id must be greater than 0")
+	}
+	return r.Params.Validate()
+}

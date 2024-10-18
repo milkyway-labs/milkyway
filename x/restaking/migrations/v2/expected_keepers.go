@@ -5,6 +5,7 @@ import (
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
 type OperatorsKeeper interface {
@@ -12,7 +13,13 @@ type OperatorsKeeper interface {
 	SaveOperatorParams(ctx sdk.Context, operatorID uint32, params operatorstypes.OperatorParams) error
 }
 
+type ServicesKeeper interface {
+	GetService(ctx sdk.Context, serviceID uint32) (servicestypes.Service, bool)
+	SaveServiceParams(ctx sdk.Context, serviceID uint32, params servicestypes.ServiceParams) error
+}
+
 type RestakingKeeper interface {
 	GetOperatorJoinedServices(ctx sdk.Context, operatorID uint32) (types.OperatorJoinedServices, error)
 	SaveOperatorJoinedServices(ctx sdk.Context, operatorID uint32, joinedServices types.OperatorJoinedServices) error
+	SaveServiceParams(ctx sdk.Context, serviceID uint32, params types.ServiceParams) error
 }

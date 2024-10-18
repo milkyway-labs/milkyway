@@ -65,7 +65,10 @@ func (k Querier) ServiceParams(goCtx context.Context, req *types.QueryServicePar
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Get the service params store
-	params := k.GetServiceParams(ctx, req.ServiceId)
+	params, err := k.GetServiceParams(ctx, req.ServiceId)
+	if err != nil {
+		return nil, err
+	}
 
 	return &types.QueryServiceParamsResponse{ServiceParams: params}, nil
 }

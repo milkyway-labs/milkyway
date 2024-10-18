@@ -14,7 +14,6 @@ const (
 
 	AttributeKeyCommissionRate         = "commission_rate"
 	AttributeKeyJoinedServiceID        = "joined_services_id"
-	AttributeKeySlashFraction          = "slash_fraction"
 	AttributeKeyWhitelistedPoolIDs     = "whitelisted_pools_ids"
 	AttributeKeyWhitelistedOperatorIDs = "whitelisted_operators_ids"
 	AttributeKeyDelegator              = "delegator"

@@ -46,7 +46,6 @@ func (k *Keeper) Services(ctx context.Context, request *types.QueryServicesReque
 		services = append(services, service)
 		return nil
 	})
-
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -55,6 +54,28 @@ func (k *Keeper) Services(ctx context.Context, request *types.QueryServicesReque
 		Services:   services,
 		Pagination: pageRes,
 	}, nil
+}
+
+func (k *Keeper) ServiceParams(ctx context.Context, request *types.QueryServiceParamsRequest) (*types.QueryServiceParamsResponse, error) {
+	if request.ServiceId == 0 {
+		return nil, status.Error(codes.InvalidArgument, "invalid service ID")
+	}
+
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+
+	// Ensure that the service exists.
+	_, found := k.GetService(sdkCtx, request.ServiceId)
+	if !found {
+		return nil, status.Error(codes.NotFound, "service not found")
+	}
+
+	// Get the service's params
+	serviceParams, err := k.GetServiceParams(sdkCtx, request.ServiceId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.QueryServiceParamsResponse{Params: serviceParams}, nil
 }
 
 // Params implements the Query/Params gRPC method

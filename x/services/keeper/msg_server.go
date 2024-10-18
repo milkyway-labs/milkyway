@@ -207,6 +207,36 @@ func (k msgServer) TransferServiceOwnership(goCtx context.Context, msg *types.Ms
 	return &types.MsgTransferServiceOwnershipResponse{}, nil
 }
 
+// SetServiceParams defines the rpc method for Msg/SetServiceParams
+func (k msgServer) SetServiceParams(goCtx context.Context, msg *types.MsgSetServiceParams) (*types.MsgSetServiceParamsResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Check if the service exists
+	service, found := k.GetService(ctx, msg.ServiceID)
+	if !found {
+		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, "service with id %d not found", msg.ServiceID)
+	}
+
+	// Make sure the user that is updating the service is the admin
+	if service.Admin != msg.Sender {
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can update the service parameters")
+	}
+
+	// Save the new service params
+	if err := k.SaveServiceParams(ctx, msg.ServiceID, msg.Params); err != nil {
+		return nil, err
+	}
+
+	// Emit the event
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeSetServiceParams,
+		),
+	})
+
+	return &types.MsgSetServiceParamsResponse{}, nil
+}
+
 // UpdateParams defines the rpc method for Msg/UpdateParams
 func (k msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
 	// Check the authority

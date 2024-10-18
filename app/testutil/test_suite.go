@@ -170,11 +170,20 @@ func (suite *KeeperTestSuite) UpdateServiceParams(
 	service, found := suite.App.ServicesKeeper.GetService(ctx, serviceID)
 	suite.Require().True(found, "service must be found")
 
+	servicesMsgServer := serviceskeeper.NewMsgServer(suite.App.ServicesKeeper)
+	serviceParams := servicestypes.NewServiceParams(slashFraction)
+	_, err := servicesMsgServer.SetServiceParams(ctx, servicestypes.NewMsgSetServiceParams(
+		serviceID,
+		serviceParams,
+		service.Admin,
+	))
+	suite.Require().NoError(err)
+
 	// Make the operator join the service and set its commission rate to 10%.
 	restakingMsgServer := restakingkeeper.NewMsgServer(suite.App.RestakingKeeper)
-	_, err := restakingMsgServer.UpdateServiceParams(ctx, restakingtypes.NewMsgUpdateServiceParams(
+	_, err = restakingMsgServer.UpdateServiceParams(ctx, restakingtypes.NewMsgUpdateServiceParams(
 		service.ID,
-		restakingtypes.NewServiceParams(slashFraction, whitelistedPoolsIDs, whitelistedOperatorsIDs),
+		restakingtypes.NewServiceParams(whitelistedPoolsIDs, whitelistedOperatorsIDs),
 		service.Admin,
 	))
 	suite.Require().NoError(err)

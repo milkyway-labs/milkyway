@@ -6,7 +6,6 @@ import (
 	"strconv"
 	"time"
 
-	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -18,28 +17,22 @@ import (
 
 // NewServiceParams creates a new ServiceParams instance
 func NewServiceParams(
-	slashFraction math.LegacyDec,
 	whitelistedPoolsIDs []uint32,
 	whitelistedOperatorsIDs []uint32,
 ) ServiceParams {
 	return ServiceParams{
-		SlashFraction:           slashFraction,
 		WhitelistedPoolsIDs:     whitelistedPoolsIDs,
 		WhitelistedOperatorsIDs: whitelistedOperatorsIDs,
 	}
 }
 
-// DefaultServiceParams returns the default service params
-func DefaultServiceParams() ServiceParams {
-	return NewServiceParams(math.LegacyZeroDec(), nil, nil)
+// NewDefaultServiceParams returns the default service params
+func NewDefaultServiceParams() ServiceParams {
+	return NewServiceParams(nil, nil)
 }
 
 // Validate validates the service params
 func (p *ServiceParams) Validate() error {
-	if p.SlashFraction.IsNegative() || p.SlashFraction.GT(math.LegacyOneDec()) {
-		return fmt.Errorf("invalid slash fraction: %s", p.SlashFraction.String())
-	}
-
 	if duplicate := utils.FindDuplicate(p.WhitelistedPoolsIDs); duplicate != nil {
 		return fmt.Errorf("duplicated whitelisted pool id: %v", duplicate)
 	}

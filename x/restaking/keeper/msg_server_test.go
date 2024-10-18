@@ -303,7 +303,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateServiceParams() {
 			msg: &types.MsgUpdateServiceParams{
 				Sender:    "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				ServiceID: 1,
-				Params:    types.NewServiceParams(sdkmath.LegacyNewDecWithPrec(1, 2), nil, nil),
+				Params:    types.NewServiceParams(nil, nil),
 			},
 			shouldErr: true,
 		},
@@ -322,7 +322,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateServiceParams() {
 			msg: &types.MsgUpdateServiceParams{
 				Sender:    "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				ServiceID: 1,
-				Params:    types.NewServiceParams(sdkmath.LegacyNewDecWithPrec(1, 2), []uint32{1}, nil),
+				Params:    types.NewServiceParams([]uint32{1}, nil),
 			},
 			shouldErr: true,
 		},
@@ -341,7 +341,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateServiceParams() {
 			msg: &types.MsgUpdateServiceParams{
 				Sender:    "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				ServiceID: 1,
-				Params:    types.NewServiceParams(sdkmath.LegacyNewDecWithPrec(1, 2), nil, []uint32{1}),
+				Params:    types.NewServiceParams(nil, []uint32{1}),
 			},
 			shouldErr: true,
 		},
@@ -360,7 +360,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateServiceParams() {
 			msg: &types.MsgUpdateServiceParams{
 				Sender:    "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				ServiceID: 1,
-				Params:    types.NewServiceParams(sdkmath.LegacyNewDecWithPrec(1, 2), nil, nil),
+				Params:    types.NewServiceParams(nil, nil),
 			},
 			shouldErr: true,
 		},
@@ -394,14 +394,13 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateServiceParams() {
 			msg: &types.MsgUpdateServiceParams{
 				Sender:    "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				ServiceID: 1,
-				Params:    types.NewServiceParams(sdkmath.LegacyNewDecWithPrec(1, 2), []uint32{1}, []uint32{2}),
+				Params:    types.NewServiceParams([]uint32{1}, []uint32{2}),
 			},
 			shouldErr: false,
 			expEvents: sdk.Events{
 				sdk.NewEvent(
 					types.EventTypeUpdateServiceParams,
 					sdk.NewAttribute(servicestypes.AttributeKeyServiceID, "1"),
-					sdk.NewAttribute(types.AttributeKeySlashFraction, "0.010000000000000000"),
 					sdk.NewAttribute(types.AttributeKeyWhitelistedPoolIDs, "1"),
 					sdk.NewAttribute(types.AttributeKeyWhitelistedOperatorIDs, "2"),
 				),

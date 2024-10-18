@@ -22,3 +22,10 @@ func NewQueryServiceRequest(serviceID uint32) *QueryServiceRequest {
 		ServiceId: serviceID,
 	}
 }
+
+// NewQueryServiceParamsRequest creates a new QueryServiceParamsRequest instance
+func NewQueryServiceParamsRequest(serviceID uint32) *QueryServiceParamsRequest {
+	return &QueryServiceParamsRequest{
+		ServiceId: serviceID,
+	}
+}

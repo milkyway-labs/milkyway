@@ -13,9 +13,14 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		panic(err)
 	}
 
+	serviceParams, err := k.GetAllServicesParams(ctx)
+	if err != nil {
+		panic(err)
+	}
+
 	return types.NewGenesis(
 		operatorsJoinedServices,
-		k.GetAllServicesParams(ctx),
+		serviceParams,
 		k.GetAllDelegations(ctx),
 		k.GetAllUnbondingDelegations(ctx),
 		k.GetParams(ctx),

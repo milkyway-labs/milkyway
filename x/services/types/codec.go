@@ -14,6 +14,7 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgUpdateService{}, "milkyway/MsgUpdateService")
 	legacy.RegisterAminoMsg(cdc, &MsgActivateService{}, "milkyway/MsgActivateService")
 	legacy.RegisterAminoMsg(cdc, &MsgDeactivateService{}, "milkyway/MsgDeactivateService")
+	legacy.RegisterAminoMsg(cdc, &MsgSetServiceParams{}, "milkyway/MsgSetServiceParams")
 	legacy.RegisterAminoMsg(cdc, &MsgUpdateParams{}, "milkyway/services/MsgUpdateParams")
 }
 
@@ -23,21 +24,20 @@ func RegisterInterfaces(registry types.InterfaceRegistry) {
 		&MsgUpdateService{},
 		&MsgActivateService{},
 		&MsgDeactivateService{},
+		&MsgSetServiceParams{},
 		&MsgUpdateParams{},
 	)
 
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
 }
 
-var (
-	// AminoCdc references the global x/services module codec. Note, the codec should
-	// ONLY be used in certain instances of tests and for JSON encoding as Amino is
-	// still used for that purpose.
-	//
-	// The actual codec used for serialization should be provided to x/services and
-	// defined at the application level.
-	AminoCdc = codec.NewLegacyAmino()
-)
+// AminoCdc references the global x/services module codec. Note, the codec should
+// ONLY be used in certain instances of tests and for JSON encoding as Amino is
+// still used for that purpose.
+//
+// The actual codec used for serialization should be provided to x/services and
+// defined at the application level.
+var AminoCdc = codec.NewLegacyAmino()
 
 func init() {
 	RegisterLegacyAminoCodec(AminoCdc)

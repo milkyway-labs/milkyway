@@ -129,7 +129,6 @@ func (k msgServer) UpdateServiceParams(goCtx context.Context, msg *types.MsgUpda
 		sdk.NewEvent(
 			types.EventTypeUpdateServiceParams,
 			sdk.NewAttribute(servicestypes.AttributeKeyServiceID, fmt.Sprint(msg.ServiceID)),
-			sdk.NewAttribute(types.AttributeKeySlashFraction, msg.Params.SlashFraction.String()),
 			sdk.NewAttribute(
 				types.AttributeKeyWhitelistedPoolIDs,
 				utils.FormatUint32Slice(msg.Params.WhitelistedPoolsIDs),
@@ -155,7 +154,7 @@ func (k msgServer) DelegatePool(goCtx context.Context, msg *types.MsgDelegatePoo
 		)
 	}
 
-	newShares, err := k.Keeper.DelegateToPool(ctx, msg.Amount, msg.Delegator)
+	newShares, err := k.DelegateToPool(ctx, msg.Amount, msg.Delegator)
 	if err != nil {
 		return nil, err
 	}
@@ -189,7 +188,7 @@ func (k msgServer) UndelegatePool(goCtx context.Context, msg *types.MsgUndelegat
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Perform the undelegation
-	completionTime, err := k.Keeper.UndelegateFromPool(ctx, msg.Amount, msg.Delegator)
+	completionTime, err := k.UndelegateFromPool(ctx, msg.Amount, msg.Delegator)
 	if err != nil {
 		return nil, err
 	}

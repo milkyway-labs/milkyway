@@ -156,7 +156,10 @@ func (k *Keeper) AllocateRewardsByPlan(
 	// rewards allocation, along with each entity's total delegation value.
 	// If an entity's total delegation value is zero, then it won't be included
 	// in this block's rewards allocation.
-	serviceParams := k.restakingKeeper.GetServiceParams(sdkCtx, service.ID)
+	serviceParams, err := k.restakingKeeper.GetServiceParams(sdkCtx, service.ID)
+	if err != nil {
+		return err
+	}
 
 	eligiblePools := k.getEligiblePools(ctx, service, serviceParams, pools)
 	poolDistrInfos, totalPoolsDelValues, err := k.getDistrInfos(ctx, eligiblePools)

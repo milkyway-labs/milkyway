@@ -23,6 +23,9 @@ func migateOperatorParams(
 	operatorsKeeper OperatorsKeeper,
 ) error {
 	store := ctx.KVStore(storeKey)
+	//nolint:staticcheck // SA1004
+	// We disable the deprecated lint error
+	// since we need to use this key to perform the migration
 	iterator := storetypes.KVStorePrefixIterator(store, types.OperatorParamsPrefix)
 	defer iterator.Close()
 
@@ -31,6 +34,9 @@ func migateOperatorParams(
 		var params legacytypes.LegacyOperatorParams
 		cdc.MustUnmarshal(iterator.Value(), &params)
 
+		//nolint:staticcheck // SA1004
+		// We disable the deprecated lint error
+		// since we need to use this funcrion to perform the migration
 		// Parse the operator id from the iterator key
 		operatorID, err := types.ParseOperatorParamsKey(iterator.Key())
 		if err != nil {
@@ -85,6 +91,11 @@ func Migrate1To2(
 	cdc codec.Codec,
 	restakingKeeper RestakingKeeper,
 	operatorsKeeper OperatorsKeeper,
+	servicesKeeper ServicesKeeper,
 ) error {
-	return migateOperatorParams(ctx, storeKey, cdc, restakingKeeper, operatorsKeeper)
+	err := migateOperatorParams(ctx, storeKey, cdc, restakingKeeper, operatorsKeeper)
+	if err != nil {
+		return err
+	}
+	return migrateServiceParams(ctx, storeKey, cdc, restakingKeeper, servicesKeeper)
 }

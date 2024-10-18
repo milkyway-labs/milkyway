@@ -19,6 +19,7 @@ var (
 	NextServiceIDKey        = []byte{0xa1}
 	ServicePrefix           = []byte{0xa2}
 	ServiceAddressSetPrefix = collections.NewPrefix(0xa3)
+	ServiceParamsPrefix     = collections.NewPrefix(0xa4)
 )
 
 // GetServiceIDBytes returns the byte representation of the service ID

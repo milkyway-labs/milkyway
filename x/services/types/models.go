@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
@@ -237,4 +238,26 @@ func (s *Service) Update(update ServiceUpdate) Service {
 		update.PictureURL,
 		s.Admin,
 	)
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewServiceParams returns a new ServiceParams instance.
+func NewServiceParams(slashFraction math.LegacyDec) ServiceParams {
+	return ServiceParams{
+		SlashFraction: slashFraction,
+	}
+}
+
+// NewDefaultServiceParams returns a default ServiceParams.
+func NewDefaultServiceParams() ServiceParams {
+	return NewServiceParams(math.LegacyNewDec(0))
+}
+
+func (p *ServiceParams) Validate() error {
+	if p.SlashFraction.IsNegative() || p.SlashFraction.GT(math.LegacyOneDec()) {
+		return fmt.Errorf("invalid slash fraction %s", p.SlashFraction)
+	}
+
+	return nil
 }

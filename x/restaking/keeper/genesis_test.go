@@ -49,13 +49,11 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				suite.k.SetParams(ctx, types.DefaultParams())
 
 				suite.k.SaveServiceParams(ctx, 1, types.NewServiceParams(
-					sdkmath.LegacyNewDecWithPrec(1, 2),
 					[]uint32{1, 2},
 					nil,
 				))
 
 				suite.k.SaveServiceParams(ctx, 2, types.NewServiceParams(
-					sdkmath.LegacyNewDecWithPrec(5, 2),
 					[]uint32{3, 4},
 					[]uint32{5, 6},
 				))
@@ -66,7 +64,6 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					{
 						ServiceID: 1,
 						Params: types.NewServiceParams(
-							sdkmath.LegacyNewDecWithPrec(1, 2),
 							[]uint32{1, 2},
 							nil,
 						),
@@ -74,7 +71,6 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					{
 						ServiceID: 2,
 						Params: types.NewServiceParams(
-							sdkmath.LegacyNewDecWithPrec(5, 2),
 							[]uint32{3, 4},
 							[]uint32{5, 6},
 						),
@@ -367,7 +363,6 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 					{
 						ServiceID: 1,
 						Params: types.NewServiceParams(
-							sdkmath.LegacyNewDecWithPrec(1, 2),
 							[]uint32{1, 2},
 							nil,
 						),
@@ -375,7 +370,6 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 					{
 						ServiceID: 2,
 						Params: types.NewServiceParams(
-							sdkmath.LegacyNewDecWithPrec(5, 2),
 							[]uint32{3, 4},
 							[]uint32{5, 6},
 						),
@@ -383,16 +377,16 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				},
 			},
 			check: func(ctx sdk.Context) {
-				stored := suite.k.GetServiceParams(ctx, 1)
+				stored, err := suite.k.GetServiceParams(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().Equal(types.NewServiceParams(
-					sdkmath.LegacyNewDecWithPrec(1, 2),
 					[]uint32{1, 2},
 					nil,
 				), stored)
 
-				stored = suite.k.GetServiceParams(ctx, 2)
+				stored, err = suite.k.GetServiceParams(ctx, 2)
+				suite.Require().NoError(err)
 				suite.Require().Equal(types.NewServiceParams(
-					sdkmath.LegacyNewDecWithPrec(5, 2),
 					[]uint32{3, 4},
 					[]uint32{5, 6},
 				), stored)

@@ -5,26 +5,20 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/milkyway-labs/milkyway/utils"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
 // SaveServiceParams stored the given params for the given service
-func (k *Keeper) SaveServiceParams(ctx sdk.Context, serviceID uint32, params types.ServiceParams) {
-	store := ctx.KVStore(k.storeKey)
-	store.Set(types.ServiceParamsStoreKey(serviceID), k.cdc.MustMarshal(&params))
+func (k *Keeper) SaveServiceParams(ctx sdk.Context, serviceID uint32, params types.ServiceParams) error {
+	return k.serviceParams.Set(ctx, serviceID, params)
 }
 
 // GetServiceParams returns the params for the given service, if any.
 // If not params are found, false is returned instead.
-func (k *Keeper) GetServiceParams(ctx sdk.Context, operatorID uint32) (params types.ServiceParams) {
-	store := ctx.KVStore(k.storeKey)
-	bz := store.Get(types.ServiceParamsStoreKey(operatorID))
-	if bz == nil {
-		return types.DefaultServiceParams()
-	}
-	k.cdc.MustUnmarshal(bz, &params)
-	return params
+func (k *Keeper) GetServiceParams(ctx sdk.Context, serviceID uint32) (types.ServiceParams, error) {
+	return utils.MapGetOrDefault(ctx, k.serviceParams, serviceID, types.NewDefaultServiceParams)
 }
 
 // --------------------------------------------------------------------------------------------------------------------
