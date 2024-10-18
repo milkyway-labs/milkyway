@@ -13,13 +13,6 @@ import (
 	"github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-const (
-	flagName        = "name"
-	flagDescription = "description"
-	flagWebsite     = "website"
-	flagPicture     = "picture"
-)
-
 // GetTxCmd returns a new command to perform services transactions
 func GetTxCmd() *cobra.Command {
 	txCmd := &cobra.Command{
