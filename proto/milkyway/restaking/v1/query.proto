@@ -17,12 +17,12 @@ option go_package = "github.com/milkyway-labs/milkyway/x/restaking/types";
 
 // Query defines the gRPC querier service.
 service Query {
-  // OperatorSecuredServices queries the services that an operator is securing.
-  rpc OperatorSecuredServices(QueryOperatorSecuredServicesRequest)
-      returns (QueryOperatorSecuredServicesResponse) {
+  // OperatorJoinedServices queries the services that an operator has joined.
+  rpc OperatorJoinedServices(QueryOperatorJoinedServicesRequest)
+      returns (QueryOperatorJoinedServicesResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
     option (google.api.http).get =
-        "/milkyway/restaking/v1/operators/{operator_id}/secured_services";
+        "/milkyway/restaking/v1/operators/{operator_id}/joined_services";
   }
 
   // ServiceParams queries the service params for the given service.
@@ -258,16 +258,16 @@ service Query {
   }
 }
 
-// QueryOperatorSecuredServicesRequest is request type for the Query/OperatorSecuredServices
+// QueryOperatorJoinedServicesRequest is request type for the Query/OperatorJoinedServices
 // RPC method.
-message QueryOperatorSecuredServicesRequest {
+message QueryOperatorJoinedServicesRequest {
   // OperatorId is the ID of the operator to query
   uint32 operator_id = 1;
 }
 
-// QueryOperatorSecuredServicesResponse is response type for the Query/OperatorSecuredServices
+// QueryOperatorJoinedServicesResponse is response type for the Query/OperatorJoinedServices
 // RPC method.
-message QueryOperatorSecuredServicesResponse {
+message QueryOperatorJoinedServicesResponse {
   repeated uint32 service_ids = 1;
 }
 

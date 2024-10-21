@@ -8,18 +8,18 @@ import (
 
 // NewGenesis creates a new genesis state
 func NewGenesis(
-	operatorsParamsRecords []OperatorSecuredServicesRecord,
+	operatorsJoinedServices []OperatorJoinedServicesRecord,
 	servicesParamsRecords []ServiceParamsRecord,
 	delegations []Delegation,
 	unbondingDelegations []UnbondingDelegation,
 	params Params,
 ) *GenesisState {
 	return &GenesisState{
-		OperatorsSecuredServices: operatorsParamsRecords,
-		ServicesParams:           servicesParamsRecords,
-		Delegations:              delegations,
-		UnbondingDelegations:     unbondingDelegations,
-		Params:                   params,
+		OperatorsJoinedServices: operatorsJoinedServices,
+		ServicesParams:          servicesParamsRecords,
+		Delegations:             delegations,
+		UnbondingDelegations:    unbondingDelegations,
+		Params:                  params,
 	}
 }
 
@@ -36,18 +36,18 @@ func DefaultGenesis() *GenesisState {
 
 // Validate performs basic validation of genesis data
 func (g *GenesisState) Validate() error {
-	if duplicate := findDuplicateOperatorSecuredServiceRecords(g.OperatorsSecuredServices); duplicate != nil {
-		return fmt.Errorf("duplicated operator params: %d", duplicate.OperatorID)
+	if duplicate := findDuplicateOperatorJoinedServiceRecords(g.OperatorsJoinedServices); duplicate != nil {
+		return fmt.Errorf("duplicated operator joined services in: %d", duplicate.OperatorID)
 	}
 
 	if duplicate := findDuplicateServiceParamsRecords(g.ServicesParams); duplicate != nil {
 		return fmt.Errorf("duplicated service params: %d", duplicate.ServiceID)
 	}
 
-	for _, record := range g.OperatorsSecuredServices {
+	for _, record := range g.OperatorsJoinedServices {
 		err := record.Validate()
 		if err != nil {
-			return fmt.Errorf("invalid operator secured service record, operator id %d %s", record.OperatorID, err)
+			return fmt.Errorf("invalid operator joined service record, operator id %d %s", record.OperatorID, err)
 		}
 	}
 
@@ -86,8 +86,8 @@ func (g *GenesisState) Validate() error {
 	return nil
 }
 
-func findDuplicateOperatorSecuredServiceRecords(records []OperatorSecuredServicesRecord) *OperatorSecuredServicesRecord {
-	return utils.FindDuplicateFunc(records, func(a, b OperatorSecuredServicesRecord) bool {
+func findDuplicateOperatorJoinedServiceRecords(records []OperatorJoinedServicesRecord) *OperatorJoinedServicesRecord {
+	return utils.FindDuplicateFunc(records, func(a, b OperatorJoinedServicesRecord) bool {
 		return a.OperatorID == b.OperatorID
 	})
 }
@@ -100,17 +100,17 @@ func findDuplicateServiceParamsRecords(records []ServiceParamsRecord) *ServicePa
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// NewOperatorServiceIdRecord creates a new instance of OperatorServiceIdRecord.
-func NewOperatorSecuredServicesRecord(operatorID uint32, securedServices OperatorSecuredServices) OperatorSecuredServicesRecord {
-	return OperatorSecuredServicesRecord{
-		OperatorID:      operatorID,
-		SecuredServices: securedServices,
+// NewOperatorJoinedServicesRecord creates a new instance of OperatorServiceIdRecord.
+func NewOperatorJoinedServicesRecord(operatorID uint32, joinedServices OperatorJoinedServices) OperatorJoinedServicesRecord {
+	return OperatorJoinedServicesRecord{
+		OperatorID:     operatorID,
+		JoinedServices: joinedServices,
 	}
 }
 
-func (o *OperatorSecuredServicesRecord) Validate() error {
+func (o *OperatorJoinedServicesRecord) Validate() error {
 	if o.OperatorID == 0 {
 		return fmt.Errorf("the operator id must be greater than 0")
 	}
-	return o.SecuredServices.Validate()
+	return o.JoinedServices.Validate()
 }

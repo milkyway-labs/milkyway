@@ -383,23 +383,23 @@ func MustUnmarshalUnbondingDelegation(cdc codec.BinaryCodec, bz []byte) Unbondin
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// NewEmptyOperatorSecuredServices creates a new empty OperatorSecuredServices
+// NewEmptyOperatorJoinedServices creates a new empty OperatorJoinedServices
 // instance.
-func NewEmptyOperatorSecuredServices() OperatorSecuredServices {
-	return OperatorSecuredServices{
+func NewEmptyOperatorJoinedServices() OperatorJoinedServices {
+	return OperatorJoinedServices{
 		ServiceIDs: make([]uint32, 0),
 	}
 }
 
-// NewOperatorSecuredServices creates a new OperatorSecuredServices instance.
-func NewOperatorSecuredServices(serviceIDs []uint32) OperatorSecuredServices {
-	return OperatorSecuredServices{
+// NewOperatorJoinedServices creates a new OperatorJoinedServices instance.
+func NewOperatorJoinedServices(serviceIDs []uint32) OperatorJoinedServices {
+	return OperatorJoinedServices{
 		ServiceIDs: serviceIDs,
 	}
 }
 
-// Validate checks if the OperatorSecuredServices instance is valid.
-func (o *OperatorSecuredServices) Validate() error {
+// Validate checks if the OperatorJoinedServices instance is valid.
+func (o *OperatorJoinedServices) Validate() error {
 	duplicate := utils.FindDuplicate(o.ServiceIDs)
 	if duplicate != nil {
 		return fmt.Errorf("duplicated service id: %d", *duplicate)
@@ -411,21 +411,21 @@ func (o *OperatorSecuredServices) Validate() error {
 	return nil
 }
 
-// UnsafeAdd adds the serviceID to the list of secured services without
+// UnsafeAdd adds the serviceID to the list of joined services without
 // performing any check on the validity of the provided value and on the
-// resulting validity of OperatorSecuredServices.
-func (o *OperatorSecuredServices) UnsafeAdd(serviceID uint32) {
+// resulting validity of OperatorJoinedServices.
+func (o *OperatorJoinedServices) UnsafeAdd(serviceID uint32) {
 	o.ServiceIDs = append(o.ServiceIDs, serviceID)
 }
 
 // Contains returns true if the serviceID is already present.
-func (o *OperatorSecuredServices) Contains(serviceID uint32) bool {
+func (o *OperatorJoinedServices) Contains(serviceID uint32) bool {
 	return utils.Contains(o.ServiceIDs, serviceID)
 }
 
-// Add adds the serviceID to the list of secured services and returns
+// Add adds the serviceID to the list of joined services and returns
 // true if the serviceID was added, false if was already in the list.
-func (o *OperatorSecuredServices) Add(serviceID uint32) error {
+func (o *OperatorJoinedServices) Add(serviceID uint32) error {
 	if serviceID == 0 {
 		return fmt.Errorf("service id cannot be 0")
 	}

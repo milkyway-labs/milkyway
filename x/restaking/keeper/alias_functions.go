@@ -20,27 +20,27 @@ import (
 // --- Params operations
 // --------------------------------------------------------------------------------------------------------------------
 
-// GetAllOperatorsParams returns all the operators params
-func (k *Keeper) GetAllOperatorsSecuredServices(ctx sdk.Context) ([]types.OperatorSecuredServicesRecord, error) {
+// GetAllOperatorsJoinedServices returns all the operators joined services
+func (k *Keeper) GetAllOperatorsJoinedServices(ctx sdk.Context) ([]types.OperatorJoinedServicesRecord, error) {
 	iterator, err := k.operatorServices.Iterate(ctx, nil)
 	if err != nil {
 		return nil, err
 	}
 	defer iterator.Close()
 
-	var records []types.OperatorSecuredServicesRecord
+	var records []types.OperatorJoinedServicesRecord
 	for ; iterator.Valid(); iterator.Next() {
 		operatorID, err := iterator.Key()
 		if err != nil {
 			return nil, err
 		}
-		operatorSecuredServices, err := iterator.Value()
+		operatorJoinedServices, err := iterator.Value()
 		if err != nil {
 			return nil, err
 		}
 
-		records = append(records, types.NewOperatorSecuredServicesRecord(
-			operatorID, operatorSecuredServices))
+		records = append(records, types.NewOperatorJoinedServicesRecord(
+			operatorID, operatorJoinedServices))
 	}
 
 	return records, nil

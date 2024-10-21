@@ -57,26 +57,26 @@ func migateOperatorParams(
 			return err
 		}
 
-		// Get the operators secured services.
-		securedServices, err := restakingKeeper.GetOperatorSecuredServices(ctx, operatorID)
+		// Get the operator's joined services.
+		joinedServices, err := restakingKeeper.GetOperatorJoinedServices(ctx, operatorID)
 		if err != nil {
 			return err
 		}
 
-		// Update the operator secured services with the ones retrieved from
+		// Update the operator joined services with the ones retrieved from
 		// the old params structure.
 		//nolint:staticcheck // SA1004
 		// We disable the deprecated lint error
 		// since we need to use this deprecated field to perform the migration
 		for _, serviceID := range params.JoinedServicesIDs {
-			err := securedServices.Add(serviceID)
+			err := joinedServices.Add(serviceID)
 			if err != nil {
 				return err
 			}
 		}
 
-		// Store the services secured by the operator
-		err = restakingKeeper.SetOperatorSecuredServices(ctx, operatorID, securedServices)
+		// Store the services joined by the operator
+		err = restakingKeeper.SetOperatorJoinedServices(ctx, operatorID, joinedServices)
 		if err != nil {
 			return err
 		}

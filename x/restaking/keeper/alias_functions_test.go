@@ -15,32 +15,32 @@ import (
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
-func (suite *KeeperTestSuite) TestKeeper_GetAllOperatorsSecuredServicesRecord() {
+func (suite *KeeperTestSuite) TestKeeper_GetAllOperatorsJoinedServicesRecord() {
 	testCases := []struct {
 		name       string
 		store      func(ctx sdk.Context)
 		shouldErr  bool
-		expRecords []types.OperatorSecuredServicesRecord
+		expRecords []types.OperatorJoinedServicesRecord
 	}{
 		{
-			name: "operators params are returned properly",
+			name: "operators joined services are returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetOperatorSecuredServices(ctx, 1, types.NewOperatorSecuredServices(
+				suite.k.SetOperatorJoinedServices(ctx, 1, types.NewOperatorJoinedServices(
 					[]uint32{1, 2},
 				))
 
-				suite.k.SetOperatorSecuredServices(ctx, 2, types.NewOperatorSecuredServices(
+				suite.k.SetOperatorJoinedServices(ctx, 2, types.NewOperatorJoinedServices(
 					[]uint32{3, 4},
 				))
 			},
-			expRecords: []types.OperatorSecuredServicesRecord{
-				types.NewOperatorSecuredServicesRecord(1,
-					types.NewOperatorSecuredServices(
+			expRecords: []types.OperatorJoinedServicesRecord{
+				types.NewOperatorJoinedServicesRecord(1,
+					types.NewOperatorJoinedServices(
 						[]uint32{1, 2},
 					),
 				),
-				types.NewOperatorSecuredServicesRecord(2,
-					types.NewOperatorSecuredServices(
+				types.NewOperatorJoinedServicesRecord(2,
+					types.NewOperatorJoinedServices(
 						[]uint32{3, 4},
 					),
 				),
@@ -56,7 +56,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllOperatorsSecuredServicesRecord() 
 				tc.store(ctx)
 			}
 
-			records, err := suite.k.GetAllOperatorsSecuredServices(ctx)
+			records, err := suite.k.GetAllOperatorsJoinedServices(ctx)
 			suite.Require().NoError(err)
 			suite.Require().Equal(tc.expRecords, records)
 		})

@@ -18,12 +18,12 @@ func TestGenesis_Validate(t *testing.T) {
 		shouldErr bool
 	}{
 		{
-			name: "operator secured services record with invalid SecuredService returns error",
+			name: "operator joined services record with invalid JoinedService returns error",
 			genesis: types.NewGenesis(
-				[]types.OperatorSecuredServicesRecord{
+				[]types.OperatorJoinedServicesRecord{
 					{
-						OperatorID:      1,
-						SecuredServices: types.NewOperatorSecuredServices([]uint32{0}),
+						OperatorID:     1,
+						JoinedServices: types.NewOperatorJoinedServices([]uint32{0}),
 					},
 				},
 				nil,
@@ -34,12 +34,12 @@ func TestGenesis_Validate(t *testing.T) {
 			shouldErr: true,
 		},
 		{
-			name: "operator secured services record with invalid OperatorID returns error",
+			name: "operator joined services record with invalid OperatorID returns error",
 			genesis: types.NewGenesis(
-				[]types.OperatorSecuredServicesRecord{
+				[]types.OperatorJoinedServicesRecord{
 					{
-						OperatorID:      0,
-						SecuredServices: types.NewOperatorSecuredServices([]uint32{1}),
+						OperatorID:     0,
+						JoinedServices: types.NewOperatorJoinedServices([]uint32{1}),
 					},
 				},
 				nil,
@@ -155,10 +155,10 @@ func TestGenesis_Validate(t *testing.T) {
 		{
 			name: "valid genesis returns no error",
 			genesis: types.NewGenesis(
-				[]types.OperatorSecuredServicesRecord{
+				[]types.OperatorJoinedServicesRecord{
 					{
-						OperatorID:      1,
-						SecuredServices: types.NewOperatorSecuredServices([]uint32{2, 3, 5}),
+						OperatorID:     1,
+						JoinedServices: types.NewOperatorJoinedServices([]uint32{2, 3, 5}),
 					},
 				},
 				[]types.ServiceParamsRecord{

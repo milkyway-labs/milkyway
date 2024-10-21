@@ -389,7 +389,7 @@ func GetOperatorTxCmd() *cobra.Command {
 }
 
 // GetJoinServiceCmd returns the command allowing to add a service to the
-// list of service secured by an operator.
+// list of service joined by an operator.
 func GetJoinServiceCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "join-service [operator-id] [service-id]",

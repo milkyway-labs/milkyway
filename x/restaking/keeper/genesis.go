@@ -8,13 +8,13 @@ import (
 
 // ExportGenesis returns a new GenesisState instance containing the information currently present inside the store
 func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
-	operatorsSecuredServices, err := k.GetAllOperatorsSecuredServices(ctx)
+	operatorsJoinedServices, err := k.GetAllOperatorsJoinedServices(ctx)
 	if err != nil {
 		panic(err)
 	}
 
 	return types.NewGenesis(
-		operatorsSecuredServices,
+		operatorsJoinedServices,
 		k.GetAllServicesParams(ctx),
 		k.GetAllDelegations(ctx),
 		k.GetAllUnbondingDelegations(ctx),
@@ -24,9 +24,9 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 
 // InitGenesis initializes the genesis store using the provided data
 func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
-	// Store the services secured by the operators
-	for _, record := range data.OperatorsSecuredServices {
-		err := k.SetOperatorSecuredServices(ctx, record.OperatorID, record.SecuredServices)
+	// Store the services joined by the operators
+	for _, record := range data.OperatorsJoinedServices {
+		err := k.SetOperatorJoinedServices(ctx, record.OperatorID, record.JoinedServices)
 		if err != nil {
 			panic(err)
 		}

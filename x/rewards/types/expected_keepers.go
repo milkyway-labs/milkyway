@@ -62,7 +62,7 @@ type ServicesKeeper interface {
 }
 
 type RestakingKeeper interface {
-	GetOperatorSecuredServices(ctx sdk.Context, operatorID uint32) (restakingtypes.OperatorSecuredServices, error)
+	GetOperatorJoinedServices(ctx sdk.Context, operatorID uint32) (restakingtypes.OperatorJoinedServices, error)
 	GetServiceParams(ctx sdk.Context, serviceID uint32) restakingtypes.ServiceParams
 	GetPoolDelegation(ctx sdk.Context, poolID uint32, userAddress string) (restakingtypes.Delegation, bool)
 	GetOperatorDelegation(ctx sdk.Context, operatorID uint32, userAddress string) (restakingtypes.Delegation, bool)

@@ -241,7 +241,7 @@ func getOperatorJoinedServices() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			res, err := queryClient.OperatorSecuredServices(cmd.Context(), types.NewQueryOperatorSecuredServicesRequest(operatorID))
+			res, err := queryClient.OperatorJoinedServices(cmd.Context(), types.NewQueryOperatorJoinedServicesRequest(operatorID))
 			if err != nil {
 				return err
 			}

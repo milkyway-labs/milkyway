@@ -280,11 +280,11 @@ func (k *Keeper) getEligibleOperators(
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	// TODO: can we optimize this? maybe by having a new index key
 	for _, operator := range operators {
-		operatorSecururedServices, err := k.restakingKeeper.GetOperatorSecuredServices(sdkCtx, operator.ID)
+		operatorJoinedServices, err := k.restakingKeeper.GetOperatorJoinedServices(sdkCtx, operator.ID)
 		if err != nil {
 			return nil, err
 		}
-		if operatorSecururedServices.Contains(service.ID) &&
+		if operatorJoinedServices.Contains(service.ID) &&
 			(len(serviceParams.WhitelistedOperatorsIDs) == 0 ||
 				slices.Contains(serviceParams.WhitelistedOperatorsIDs, operator.ID)) {
 			eligibleOperators = append(eligibleOperators, &operator)

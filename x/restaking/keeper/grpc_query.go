@@ -25,8 +25,9 @@ func NewQuerier(keeper *Keeper) Querier {
 	return Querier{Keeper: keeper}
 }
 
-// OperatorParams queries the operator params for the given operator id
-func (k Querier) OperatorSecuredServices(goCtx context.Context, req *types.QueryOperatorSecuredServicesRequest) (*types.QueryOperatorSecuredServicesResponse, error) {
+// OperatorJoinedServices queries the services joined by the operator with the
+// given ID
+func (k Querier) OperatorJoinedServices(goCtx context.Context, req *types.QueryOperatorJoinedServicesRequest) (*types.QueryOperatorJoinedServicesResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -42,13 +43,13 @@ func (k Querier) OperatorSecuredServices(goCtx context.Context, req *types.Query
 		return nil, status.Error(codes.InvalidArgument, "operator not found")
 	}
 
-	// Get the operator secured services
-	securedServices, err := k.GetOperatorSecuredServices(ctx, req.OperatorId)
+	// Get the operator joined services
+	joinedServices, err := k.GetOperatorJoinedServices(ctx, req.OperatorId)
 	if err != nil {
 		return nil, err
 	}
 
-	return &types.QueryOperatorSecuredServicesResponse{ServiceIds: securedServices.ServiceIDs}, nil
+	return &types.QueryOperatorJoinedServicesResponse{ServiceIds: joinedServices.ServiceIDs}, nil
 }
 
 // ServiceParams queries the service params for the given service id

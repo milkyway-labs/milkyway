@@ -184,30 +184,30 @@ func TestOperatorDelegation_Validate(t *testing.T) {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-func TestOperatorSecuredServices_Validate(t *testing.T) {
+func TestOperatorJoinedServices_Validate(t *testing.T) {
 	testCases := []struct {
 		name      string
-		entry     types.OperatorSecuredServices
+		entry     types.OperatorJoinedServices
 		shouldErr bool
 	}{
 		{
-			name:      "empty operator secured services is valid",
-			entry:     types.NewEmptyOperatorSecuredServices(),
+			name:      "empty operator joined services is valid",
+			entry:     types.NewEmptyOperatorJoinedServices(),
 			shouldErr: false,
 		},
 		{
-			name:      "secured services with a service id equal to 0 is invalid",
-			entry:     types.NewOperatorSecuredServices([]uint32{0}),
+			name:      "joined services with a service id equal to 0 is invalid",
+			entry:     types.NewOperatorJoinedServices([]uint32{0}),
 			shouldErr: true,
 		},
 		{
-			name:      "secured services with a duplicated service id is invalid",
-			entry:     types.NewOperatorSecuredServices([]uint32{1, 1}),
+			name:      "joined services with a duplicated service id is invalid",
+			entry:     types.NewOperatorJoinedServices([]uint32{1, 1}),
 			shouldErr: true,
 		},
 		{
-			name:      "secured services validates properly",
-			entry:     types.NewOperatorSecuredServices([]uint32{1, 2}),
+			name:      "joined services validates properly",
+			entry:     types.NewOperatorJoinedServices([]uint32{1, 2}),
 			shouldErr: false,
 		},
 	}
@@ -224,34 +224,34 @@ func TestOperatorSecuredServices_Validate(t *testing.T) {
 	}
 }
 
-func TestOperatorSecuredServices_Add(t *testing.T) {
+func TestOperatorJoinedServices_Add(t *testing.T) {
 	testCases := []struct {
 		name         string
-		entry        types.OperatorSecuredServices
+		entry        types.OperatorJoinedServices
 		newServiceID uint32
 		shouldErr    bool
 	}{
 		{
 			name:         "add 0 should fail",
-			entry:        types.NewEmptyOperatorSecuredServices(),
+			entry:        types.NewEmptyOperatorJoinedServices(),
 			newServiceID: 0,
 			shouldErr:    true,
 		},
 		{
 			name:         "add already present service id should fail",
-			entry:        types.NewOperatorSecuredServices([]uint32{1}),
+			entry:        types.NewOperatorJoinedServices([]uint32{1}),
 			newServiceID: 1,
 			shouldErr:    true,
 		},
 		{
 			name:         "add correctly to empty",
-			entry:        types.NewEmptyOperatorSecuredServices(),
+			entry:        types.NewEmptyOperatorJoinedServices(),
 			newServiceID: 1,
 			shouldErr:    false,
 		},
 		{
 			name:         "add correctly",
-			entry:        types.NewOperatorSecuredServices([]uint32{1, 2}),
+			entry:        types.NewOperatorJoinedServices([]uint32{1, 2}),
 			newServiceID: 3,
 			shouldErr:    false,
 		},

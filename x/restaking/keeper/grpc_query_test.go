@@ -14,11 +14,11 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-func (suite *KeeperTestSuite) TestQuerier_OperatorSecuredServices() {
+func (suite *KeeperTestSuite) TestQuerier_OperatorJoinedServices() {
 	testCases := []struct {
 		name        string
 		store       func(ctx sdk.Context)
-		request     *types.QueryOperatorSecuredServicesRequest
+		request     *types.QueryOperatorJoinedServicesRequest
 		shouldErr   bool
 		expServices []uint32
 	}{
@@ -29,40 +29,40 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorSecuredServices() {
 		},
 		{
 			name:      "invalid operator id returns error",
-			request:   types.NewQueryOperatorSecuredServicesRequest(0),
+			request:   types.NewQueryOperatorJoinedServicesRequest(0),
 			shouldErr: true,
 		},
 		{
 			name:      "not found operator return error",
-			request:   types.NewQueryOperatorSecuredServicesRequest(1),
+			request:   types.NewQueryOperatorJoinedServicesRequest(1),
 			shouldErr: true,
 		},
 		{
-			name: "operator without secured services returns empty serviceIDs",
+			name: "operator without joined services returns empty serviceIDs",
 			store: func(ctx sdk.Context) {
 				err := suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
 					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "",
 				))
 				suite.Require().NoError(err)
 			},
-			request:     types.NewQueryOperatorSecuredServicesRequest(1),
+			request:     types.NewQueryOperatorJoinedServicesRequest(1),
 			shouldErr:   false,
 			expServices: []uint32{},
 		},
 		{
-			name: "configured secured services are returned properly",
+			name: "configured joined services are returned properly",
 			store: func(ctx sdk.Context) {
 				err := suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
 					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "",
 				))
 				suite.Require().NoError(err)
 
-				err = suite.k.SetOperatorSecuredServices(ctx, 1, types.NewOperatorSecuredServices(
+				err = suite.k.SetOperatorJoinedServices(ctx, 1, types.NewOperatorJoinedServices(
 					[]uint32{1, 2},
 				))
 				suite.Require().NoError(err)
 			},
-			request:     types.NewQueryOperatorSecuredServicesRequest(1),
+			request:     types.NewQueryOperatorJoinedServicesRequest(1),
 			shouldErr:   false,
 			expServices: []uint32{1, 2},
 		},
@@ -77,7 +77,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorSecuredServices() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.OperatorSecuredServices(ctx, tc.request)
+			res, err := querier.OperatorJoinedServices(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {

@@ -13,6 +13,6 @@ type OperatorsKeeper interface {
 }
 
 type RestakingKeeper interface {
-	GetOperatorSecuredServices(ctx sdk.Context, operatorID uint32) (types.OperatorSecuredServices, error)
-	SetOperatorSecuredServices(ctx sdk.Context, operatorID uint32, securedServices types.OperatorSecuredServices) error
+	GetOperatorJoinedServices(ctx sdk.Context, operatorID uint32) (types.OperatorJoinedServices, error)
+	SetOperatorJoinedServices(ctx sdk.Context, operatorID uint32, joinedServices types.OperatorJoinedServices) error
 }

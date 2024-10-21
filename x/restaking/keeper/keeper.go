@@ -25,7 +25,7 @@ type Keeper struct {
 
 	// Keeper data
 	schema           collections.Schema
-	operatorServices collections.Map[uint32, types.OperatorSecuredServices]
+	operatorServices collections.Map[uint32, types.OperatorJoinedServices]
 
 	hooks types.RestakingHooks
 }
@@ -62,7 +62,7 @@ func NewKeeper(
 			sb, types.OperatorServicesPrefix,
 			"operator_services",
 			collections.Uint32Key,
-			codec.CollValue[types.OperatorSecuredServices](cdc),
+			codec.CollValue[types.OperatorJoinedServices](cdc),
 		),
 		authority: authority,
 	}

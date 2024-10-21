@@ -12,43 +12,43 @@ import (
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
-// GetOperatorSecuredServices gets the services secured by the operator with the given ID.
-func (k *Keeper) GetOperatorSecuredServices(ctx sdk.Context, operatorID uint32) (types.OperatorSecuredServices, error) {
-	securedServices, err := k.operatorServices.Get(ctx, operatorID)
+// GetOperatorJoinedServices gets the services joined by the operator with the given ID.
+func (k *Keeper) GetOperatorJoinedServices(ctx sdk.Context, operatorID uint32) (types.OperatorJoinedServices, error) {
+	joinedServices, err := k.operatorServices.Get(ctx, operatorID)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
-			return types.NewEmptyOperatorSecuredServices(), nil
+			return types.NewEmptyOperatorJoinedServices(), nil
 		} else {
-			return types.OperatorSecuredServices{}, err
+			return types.OperatorJoinedServices{}, err
 		}
 	}
-	return securedServices, nil
+	return joinedServices, nil
 }
 
-// SetOperatorSecuredServices sets the services secured by the operator with the
+// SetOperatorJoinedServices sets the services joined by the operator with the
 // given ID.
-func (k *Keeper) SetOperatorSecuredServices(
+func (k *Keeper) SetOperatorJoinedServices(
 	ctx sdk.Context,
 	operatorID uint32,
-	securedServices types.OperatorSecuredServices,
+	joinedServices types.OperatorJoinedServices,
 ) error {
-	return k.operatorServices.Set(ctx, operatorID, securedServices)
+	return k.operatorServices.Set(ctx, operatorID, joinedServices)
 }
 
-// AddServiceToOperator ad the given service to the list of services secure by
+// AddServiceToOperator ad the given service to the list of services joined by
 // the operator with the given ID
 func (k *Keeper) AddServiceToOperator(ctx sdk.Context, operatorID uint32, serviceID uint32) error {
-	securedServices, err := k.GetOperatorSecuredServices(ctx, operatorID)
+	joinedServices, err := k.GetOperatorJoinedServices(ctx, operatorID)
 	if err != nil {
 		return err
 	}
 
-	err = securedServices.Add(serviceID)
+	err = joinedServices.Add(serviceID)
 	if err != nil {
-		return sdkerrors.Wrap(types.ErrServiceAlreadySecuredByOperator, err.Error())
+		return sdkerrors.Wrap(types.ErrServiceAlreadyJoinedByOperator, err.Error())
 	}
 
-	return k.SetOperatorSecuredServices(ctx, operatorID, securedServices)
+	return k.SetOperatorJoinedServices(ctx, operatorID, joinedServices)
 }
 
 // --------------------------------------------------------------------------------------------------------------------
