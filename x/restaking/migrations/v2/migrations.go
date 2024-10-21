@@ -27,10 +27,7 @@ func migateOperatorParams(
 
 	for ; iterator.Valid(); iterator.Next() {
 		// Get the operators params from the store
-		//nolint:staticcheck // SA1004
-		// We disable the deprecated lint error
-		// since we need to use this struct to perform the migration
-		var params types.OperatorParams
+		var params types.LegacyOperatorParams
 		cdc.MustUnmarshal(iterator.Value(), &params)
 
 		// Parse the operator id from the iterator key
@@ -48,9 +45,6 @@ func migateOperatorParams(
 		// Update the operator params with the params retrieved from the
 		// restaking module
 		err = operatorsKeeper.SaveOperatorParams(ctx, operatorID,
-			//nolint:staticcheck // SA1004
-			// We disable the lint since we need to access a deprecated field in
-			// order to migrate the data with the old format.
 			operatortypes.NewOperatorParams(params.CommissionRate),
 		)
 		if err != nil {
@@ -65,9 +59,6 @@ func migateOperatorParams(
 
 		// Update the operator joined services with the ones retrieved from
 		// the old params structure.
-		//nolint:staticcheck // SA1004
-		// We disable the deprecated lint error
-		// since we need to use this deprecated field to perform the migration
 		for _, serviceID := range params.JoinedServicesIDs {
 			err := joinedServices.Add(serviceID)
 			if err != nil {

@@ -16,39 +16,6 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-// NewOperatorParams creates a new OperatorParams instance
-func NewOperatorParams(commissionRate math.LegacyDec, joinedServicesIDs []uint32) OperatorParams {
-	return OperatorParams{
-		CommissionRate:    commissionRate,
-		JoinedServicesIDs: joinedServicesIDs,
-	}
-}
-
-// DefaultOperatorParams returns the default operator params
-func DefaultOperatorParams() OperatorParams {
-	return NewOperatorParams(math.LegacyZeroDec(), nil)
-}
-
-// Validate validates the operator params
-func (p *OperatorParams) Validate() error {
-	if p.CommissionRate.IsNegative() || p.CommissionRate.GT(math.LegacyOneDec()) {
-		return fmt.Errorf("invalid commission rate: %s", p.CommissionRate.String())
-	}
-
-	if duplicate := utils.FindDuplicate(p.JoinedServicesIDs); duplicate != nil {
-		return fmt.Errorf("duplicated joined service id: %v", duplicate)
-	}
-
-	for _, serviceID := range p.JoinedServicesIDs {
-		if serviceID == 0 {
-			return fmt.Errorf("invalid joined service id: %d", serviceID)
-		}
-	}
-	return nil
-}
-
-// --------------------------------------------------------------------------------------------------------------------
-
 // NewServiceParams creates a new ServiceParams instance
 func NewServiceParams(
 	slashFraction math.LegacyDec,

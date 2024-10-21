@@ -17,606 +17,6 @@ import (
 	sync "sync"
 )
 
-var _ protoreflect.List = (*_OperatorParams_2_list)(nil)
-
-type _OperatorParams_2_list struct {
-	list *[]uint32
-}
-
-func (x *_OperatorParams_2_list) Len() int {
-	if x.list == nil {
-		return 0
-	}
-	return len(*x.list)
-}
-
-func (x *_OperatorParams_2_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfUint32((*x.list)[i])
-}
-
-func (x *_OperatorParams_2_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.Uint()
-	concreteValue := (uint32)(valueUnwrapped)
-	(*x.list)[i] = concreteValue
-}
-
-func (x *_OperatorParams_2_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.Uint()
-	concreteValue := (uint32)(valueUnwrapped)
-	*x.list = append(*x.list, concreteValue)
-}
-
-func (x *_OperatorParams_2_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message OperatorParams at list field JoinedServicesIds as it is not of Message kind"))
-}
-
-func (x *_OperatorParams_2_list) Truncate(n int) {
-	*x.list = (*x.list)[:n]
-}
-
-func (x *_OperatorParams_2_list) NewElement() protoreflect.Value {
-	v := uint32(0)
-	return protoreflect.ValueOfUint32(v)
-}
-
-func (x *_OperatorParams_2_list) IsValid() bool {
-	return x.list != nil
-}
-
-var (
-	md_OperatorParams                     protoreflect.MessageDescriptor
-	fd_OperatorParams_commission_rate     protoreflect.FieldDescriptor
-	fd_OperatorParams_joined_services_ids protoreflect.FieldDescriptor
-)
-
-func init() {
-	file_milkyway_restaking_v1_models_proto_init()
-	md_OperatorParams = File_milkyway_restaking_v1_models_proto.Messages().ByName("OperatorParams")
-	fd_OperatorParams_commission_rate = md_OperatorParams.Fields().ByName("commission_rate")
-	fd_OperatorParams_joined_services_ids = md_OperatorParams.Fields().ByName("joined_services_ids")
-}
-
-var _ protoreflect.Message = (*fastReflection_OperatorParams)(nil)
-
-type fastReflection_OperatorParams OperatorParams
-
-func (x *OperatorParams) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_OperatorParams)(x)
-}
-
-func (x *OperatorParams) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_models_proto_msgTypes[0]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-var _fastReflection_OperatorParams_messageType fastReflection_OperatorParams_messageType
-var _ protoreflect.MessageType = fastReflection_OperatorParams_messageType{}
-
-type fastReflection_OperatorParams_messageType struct{}
-
-func (x fastReflection_OperatorParams_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_OperatorParams)(nil)
-}
-func (x fastReflection_OperatorParams_messageType) New() protoreflect.Message {
-	return new(fastReflection_OperatorParams)
-}
-func (x fastReflection_OperatorParams_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorParams
-}
-
-// Descriptor returns message descriptor, which contains only the protobuf
-// type information for the message.
-func (x *fastReflection_OperatorParams) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorParams
-}
-
-// Type returns the message type, which encapsulates both Go and protobuf
-// type information. If the Go type information is not needed,
-// it is recommended that the message descriptor be used instead.
-func (x *fastReflection_OperatorParams) Type() protoreflect.MessageType {
-	return _fastReflection_OperatorParams_messageType
-}
-
-// New returns a newly allocated and mutable empty message.
-func (x *fastReflection_OperatorParams) New() protoreflect.Message {
-	return new(fastReflection_OperatorParams)
-}
-
-// Interface unwraps the message reflection interface and
-// returns the underlying ProtoMessage interface.
-func (x *fastReflection_OperatorParams) Interface() protoreflect.ProtoMessage {
-	return (*OperatorParams)(x)
-}
-
-// Range iterates over every populated field in an undefined order,
-// calling f for each field descriptor and value encountered.
-// Range returns immediately if f returns false.
-// While iterating, mutating operations may only be performed
-// on the current field descriptor.
-func (x *fastReflection_OperatorParams) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.CommissionRate != "" {
-		value := protoreflect.ValueOfString(x.CommissionRate)
-		if !f(fd_OperatorParams_commission_rate, value) {
-			return
-		}
-	}
-	if len(x.JoinedServicesIds) != 0 {
-		value := protoreflect.ValueOfList(&_OperatorParams_2_list{list: &x.JoinedServicesIds})
-		if !f(fd_OperatorParams_joined_services_ids, value) {
-			return
-		}
-	}
-}
-
-// Has reports whether a field is populated.
-//
-// Some fields have the property of nullability where it is possible to
-// distinguish between the default value of a field and whether the field
-// was explicitly populated with the default value. Singular message fields,
-// member fields of a oneof, and proto2 scalar fields are nullable. Such
-// fields are populated only if explicitly set.
-//
-// In other cases (aside from the nullable cases above),
-// a proto3 scalar field is populated if it contains a non-zero value, and
-// a repeated field is populated if it is non-empty.
-func (x *fastReflection_OperatorParams) Has(fd protoreflect.FieldDescriptor) bool {
-	switch fd.FullName() {
-	case "milkyway.restaking.v1.OperatorParams.commission_rate":
-		return x.CommissionRate != ""
-	case "milkyway.restaking.v1.OperatorParams.joined_services_ids":
-		return len(x.JoinedServicesIds) != 0
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorParams"))
-		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorParams does not contain field %s", fd.FullName()))
-	}
-}
-
-// Clear clears the field such that a subsequent Has call reports false.
-//
-// Clearing an extension field clears both the extension type and value
-// associated with the given field number.
-//
-// Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorParams) Clear(fd protoreflect.FieldDescriptor) {
-	switch fd.FullName() {
-	case "milkyway.restaking.v1.OperatorParams.commission_rate":
-		x.CommissionRate = ""
-	case "milkyway.restaking.v1.OperatorParams.joined_services_ids":
-		x.JoinedServicesIds = nil
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorParams"))
-		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorParams does not contain field %s", fd.FullName()))
-	}
-}
-
-// Get retrieves the value for a field.
-//
-// For unpopulated scalars, it returns the default value, where
-// the default value of a bytes scalar is guaranteed to be a copy.
-// For unpopulated composite types, it returns an empty, read-only view
-// of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_OperatorParams) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
-	switch descriptor.FullName() {
-	case "milkyway.restaking.v1.OperatorParams.commission_rate":
-		value := x.CommissionRate
-		return protoreflect.ValueOfString(value)
-	case "milkyway.restaking.v1.OperatorParams.joined_services_ids":
-		if len(x.JoinedServicesIds) == 0 {
-			return protoreflect.ValueOfList(&_OperatorParams_2_list{})
-		}
-		listValue := &_OperatorParams_2_list{list: &x.JoinedServicesIds}
-		return protoreflect.ValueOfList(listValue)
-	default:
-		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorParams"))
-		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorParams does not contain field %s", descriptor.FullName()))
-	}
-}
-
-// Set stores the value for a field.
-//
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType.
-// When setting a composite type, it is unspecified whether the stored value
-// aliases the source's memory in any way. If the composite value is an
-// empty, read-only value, then it panics.
-//
-// Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorParams) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
-	switch fd.FullName() {
-	case "milkyway.restaking.v1.OperatorParams.commission_rate":
-		x.CommissionRate = value.Interface().(string)
-	case "milkyway.restaking.v1.OperatorParams.joined_services_ids":
-		lv := value.List()
-		clv := lv.(*_OperatorParams_2_list)
-		x.JoinedServicesIds = *clv.list
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorParams"))
-		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorParams does not contain field %s", fd.FullName()))
-	}
-}
-
-// Mutable returns a mutable reference to a composite type.
-//
-// If the field is unpopulated, it may allocate a composite value.
-// For a field belonging to a oneof, it implicitly clears any other field
-// that may be currently set within the same oneof.
-// For extension fields, it implicitly stores the provided ExtensionType
-// if not already stored.
-// It panics if the field does not contain a composite type.
-//
-// Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorParams) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.restaking.v1.OperatorParams.joined_services_ids":
-		if x.JoinedServicesIds == nil {
-			x.JoinedServicesIds = []uint32{}
-		}
-		value := &_OperatorParams_2_list{list: &x.JoinedServicesIds}
-		return protoreflect.ValueOfList(value)
-	case "milkyway.restaking.v1.OperatorParams.commission_rate":
-		panic(fmt.Errorf("field commission_rate of message milkyway.restaking.v1.OperatorParams is not mutable"))
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorParams"))
-		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorParams does not contain field %s", fd.FullName()))
-	}
-}
-
-// NewField returns a new value that is assignable to the field
-// for the given descriptor. For scalars, this returns the default value.
-// For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_OperatorParams) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
-	switch fd.FullName() {
-	case "milkyway.restaking.v1.OperatorParams.commission_rate":
-		return protoreflect.ValueOfString("")
-	case "milkyway.restaking.v1.OperatorParams.joined_services_ids":
-		list := []uint32{}
-		return protoreflect.ValueOfList(&_OperatorParams_2_list{list: &list})
-	default:
-		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorParams"))
-		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorParams does not contain field %s", fd.FullName()))
-	}
-}
-
-// WhichOneof reports which field within the oneof is populated,
-// returning nil if none are populated.
-// It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_OperatorParams) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
-	switch d.FullName() {
-	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.OperatorParams", d.FullName()))
-	}
-	panic("unreachable")
-}
-
-// GetUnknown retrieves the entire list of unknown fields.
-// The caller may only mutate the contents of the RawFields
-// if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_OperatorParams) GetUnknown() protoreflect.RawFields {
-	return x.unknownFields
-}
-
-// SetUnknown stores an entire list of unknown fields.
-// The raw fields must be syntactically valid according to the wire format.
-// An implementation may panic if this is not the case.
-// Once stored, the caller must not mutate the content of the RawFields.
-// An empty RawFields may be passed to clear the fields.
-//
-// SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorParams) SetUnknown(fields protoreflect.RawFields) {
-	x.unknownFields = fields
-}
-
-// IsValid reports whether the message is valid.
-//
-// An invalid message is an empty, read-only value.
-//
-// An invalid message often corresponds to a nil pointer of the concrete
-// message type, but the details are implementation dependent.
-// Validity is not part of the protobuf data model, and may not
-// be preserved in marshaling or other operations.
-func (x *fastReflection_OperatorParams) IsValid() bool {
-	return x != nil
-}
-
-// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
-// This method may return nil.
-//
-// The returned methods type is identical to
-// "google.golang.org/protobuf/runtime/protoiface".Methods.
-// Consult the protoiface package documentation for details.
-func (x *fastReflection_OperatorParams) ProtoMethods() *protoiface.Methods {
-	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*OperatorParams)
-		if x == nil {
-			return protoiface.SizeOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Size:              0,
-			}
-		}
-		options := runtime.SizeInputToOptions(input)
-		_ = options
-		var n int
-		var l int
-		_ = l
-		l = len(x.CommissionRate)
-		if l > 0 {
-			n += 1 + l + runtime.Sov(uint64(l))
-		}
-		if len(x.JoinedServicesIds) > 0 {
-			l = 0
-			for _, e := range x.JoinedServicesIds {
-				l += runtime.Sov(uint64(e))
-			}
-			n += 1 + runtime.Sov(uint64(l)) + l
-		}
-		if x.unknownFields != nil {
-			n += len(x.unknownFields)
-		}
-		return protoiface.SizeOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Size:              n,
-		}
-	}
-
-	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorParams)
-		if x == nil {
-			return protoiface.MarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Buf:               input.Buf,
-			}, nil
-		}
-		options := runtime.MarshalInputToOptions(input)
-		_ = options
-		size := options.Size(x)
-		dAtA := make([]byte, size)
-		i := len(dAtA)
-		_ = i
-		var l int
-		_ = l
-		if x.unknownFields != nil {
-			i -= len(x.unknownFields)
-			copy(dAtA[i:], x.unknownFields)
-		}
-		if len(x.JoinedServicesIds) > 0 {
-			var pksize2 int
-			for _, num := range x.JoinedServicesIds {
-				pksize2 += runtime.Sov(uint64(num))
-			}
-			i -= pksize2
-			j1 := i
-			for _, num := range x.JoinedServicesIds {
-				for num >= 1<<7 {
-					dAtA[j1] = uint8(uint64(num)&0x7f | 0x80)
-					num >>= 7
-					j1++
-				}
-				dAtA[j1] = uint8(num)
-				j1++
-			}
-			i = runtime.EncodeVarint(dAtA, i, uint64(pksize2))
-			i--
-			dAtA[i] = 0x12
-		}
-		if len(x.CommissionRate) > 0 {
-			i -= len(x.CommissionRate)
-			copy(dAtA[i:], x.CommissionRate)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.CommissionRate)))
-			i--
-			dAtA[i] = 0xa
-		}
-		if input.Buf != nil {
-			input.Buf = append(input.Buf, dAtA...)
-		} else {
-			input.Buf = dAtA
-		}
-		return protoiface.MarshalOutput{
-			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-			Buf:               input.Buf,
-		}, nil
-	}
-	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorParams)
-		if x == nil {
-			return protoiface.UnmarshalOutput{
-				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-				Flags:             input.Flags,
-			}, nil
-		}
-		options := runtime.UnmarshalInputToOptions(input)
-		_ = options
-		dAtA := input.Buf
-		l := len(dAtA)
-		iNdEx := 0
-		for iNdEx < l {
-			preIndex := iNdEx
-			var wire uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-				}
-				if iNdEx >= l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				wire |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			fieldNum := int32(wire >> 3)
-			wireType := int(wire & 0x7)
-			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorParams: wiretype end group for non-group")
-			}
-			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorParams: illegal tag %d (wire type %d)", fieldNum, wire)
-			}
-			switch fieldNum {
-			case 1:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field CommissionRate", wireType)
-				}
-				var stringLen uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					stringLen |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				intStringLen := int(stringLen)
-				if intStringLen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + intStringLen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				x.CommissionRate = string(dAtA[iNdEx:postIndex])
-				iNdEx = postIndex
-			case 2:
-				if wireType == 0 {
-					var v uint32
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-						}
-						if iNdEx >= l {
-							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						v |= uint32(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					x.JoinedServicesIds = append(x.JoinedServicesIds, v)
-				} else if wireType == 2 {
-					var packedLen int
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-						}
-						if iNdEx >= l {
-							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						packedLen |= int(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					if packedLen < 0 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-					}
-					postIndex := iNdEx + packedLen
-					if postIndex < 0 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-					}
-					if postIndex > l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					var elementCount int
-					var count int
-					for _, integer := range dAtA[iNdEx:postIndex] {
-						if integer < 128 {
-							count++
-						}
-					}
-					elementCount = count
-					if elementCount != 0 && len(x.JoinedServicesIds) == 0 {
-						x.JoinedServicesIds = make([]uint32, 0, elementCount)
-					}
-					for iNdEx < postIndex {
-						var v uint32
-						for shift := uint(0); ; shift += 7 {
-							if shift >= 64 {
-								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-							}
-							if iNdEx >= l {
-								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-							}
-							b := dAtA[iNdEx]
-							iNdEx++
-							v |= uint32(b&0x7F) << shift
-							if b < 0x80 {
-								break
-							}
-						}
-						x.JoinedServicesIds = append(x.JoinedServicesIds, v)
-					}
-				} else {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field JoinedServicesIds", wireType)
-				}
-			default:
-				iNdEx = preIndex
-				skippy, err := runtime.Skip(dAtA[iNdEx:])
-				if err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				if (skippy < 0) || (iNdEx+skippy) < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if (iNdEx + skippy) > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if !options.DiscardUnknown {
-					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
-				}
-				iNdEx += skippy
-			}
-		}
-
-		if iNdEx > l {
-			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-		}
-		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
-	}
-	return &protoiface.Methods{
-		NoUnkeyedLiterals: struct{}{},
-		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
-		Size:              size,
-		Marshal:           marshal,
-		Unmarshal:         unmarshal,
-		Merge:             nil,
-		CheckInitialized:  nil,
-	}
-}
-
 var _ protoreflect.List = (*_OperatorJoinedServices_1_list)(nil)
 
 type _OperatorJoinedServices_1_list struct {
@@ -683,7 +83,7 @@ func (x *OperatorJoinedServices) ProtoReflect() protoreflect.Message {
 }
 
 func (x *OperatorJoinedServices) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_models_proto_msgTypes[1]
+	mi := &file_milkyway_restaking_v1_models_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1269,7 +669,7 @@ func (x *ServiceParams) ProtoReflect() protoreflect.Message {
 }
 
 func (x *ServiceParams) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_models_proto_msgTypes[2]
+	mi := &file_milkyway_restaking_v1_models_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2010,7 +1410,7 @@ func (x *Delegation) ProtoReflect() protoreflect.Message {
 }
 
 func (x *Delegation) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_models_proto_msgTypes[3]
+	mi := &file_milkyway_restaking_v1_models_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2660,7 +2060,7 @@ func (x *DelegationResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *DelegationResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_models_proto_msgTypes[4]
+	mi := &file_milkyway_restaking_v1_models_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3237,7 +2637,7 @@ func (x *UnbondingDelegation) ProtoReflect() protoreflect.Message {
 }
 
 func (x *UnbondingDelegation) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_models_proto_msgTypes[5]
+	mi := &file_milkyway_restaking_v1_models_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3944,7 +3344,7 @@ func (x *UnbondingDelegationEntry) ProtoReflect() protoreflect.Message {
 }
 
 func (x *UnbondingDelegationEntry) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_models_proto_msgTypes[6]
+	mi := &file_milkyway_restaking_v1_models_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4645,7 +4045,7 @@ func (x *DTData) ProtoReflect() protoreflect.Message {
 }
 
 func (x *DTData) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_models_proto_msgTypes[7]
+	mi := &file_milkyway_restaking_v1_models_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5208,7 +4608,7 @@ func (x *DTDataList) ProtoReflect() protoreflect.Message {
 }
 
 func (x *DTDataList) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_models_proto_msgTypes[8]
+	mi := &file_milkyway_restaking_v1_models_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5697,70 +5097,6 @@ func (DelegationType) EnumDescriptor() ([]byte, []int) {
 	return file_milkyway_restaking_v1_models_proto_rawDescGZIP(), []int{0}
 }
 
-// Deprecated: Now the operator's commission rate information have been
-// moved to the x/operator module and the joined service list is stored in
-// the x/restaking module as a map.
-// OperatorParams represent the params that have been set for an individual
-// operator.
-//
-// Deprecated: Do not use.
-type OperatorParams struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	// Deprecated: Now the operator's commission rate is stored inside the x/operators
-	// module.
-	// CommissionRate defines the commission rate charged to delegators, as a
-	// fraction.
-	//
-	// Deprecated: Do not use.
-	CommissionRate string `protobuf:"bytes,1,opt,name=commission_rate,json=commissionRate,proto3" json:"commission_rate,omitempty"`
-	// Deprecated: Please use the MsgJoinService to update the operator's
-	// joined service list.
-	// JoinedServicesIDs defines the list of service IDs that the operator has
-	// joined.
-	//
-	// Deprecated: Do not use.
-	JoinedServicesIds []uint32 `protobuf:"varint,2,rep,packed,name=joined_services_ids,json=joinedServicesIds,proto3" json:"joined_services_ids,omitempty"`
-}
-
-func (x *OperatorParams) Reset() {
-	*x = OperatorParams{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_models_proto_msgTypes[0]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *OperatorParams) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*OperatorParams) ProtoMessage() {}
-
-// Deprecated: Use OperatorParams.ProtoReflect.Descriptor instead.
-func (*OperatorParams) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_models_proto_rawDescGZIP(), []int{0}
-}
-
-// Deprecated: Do not use.
-func (x *OperatorParams) GetCommissionRate() string {
-	if x != nil {
-		return x.CommissionRate
-	}
-	return ""
-}
-
-// Deprecated: Do not use.
-func (x *OperatorParams) GetJoinedServicesIds() []uint32 {
-	if x != nil {
-		return x.JoinedServicesIds
-	}
-	return nil
-}
-
 // OperatorJoinedServices represents the list of services the operator has joined.
 type OperatorJoinedServices struct {
 	state         protoimpl.MessageState
@@ -5774,7 +5110,7 @@ type OperatorJoinedServices struct {
 func (x *OperatorJoinedServices) Reset() {
 	*x = OperatorJoinedServices{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_models_proto_msgTypes[1]
+		mi := &file_milkyway_restaking_v1_models_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5788,7 +5124,7 @@ func (*OperatorJoinedServices) ProtoMessage() {}
 
 // Deprecated: Use OperatorJoinedServices.ProtoReflect.Descriptor instead.
 func (*OperatorJoinedServices) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_models_proto_rawDescGZIP(), []int{1}
+	return file_milkyway_restaking_v1_models_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *OperatorJoinedServices) GetServiceIds() []uint32 {
@@ -5819,7 +5155,7 @@ type ServiceParams struct {
 func (x *ServiceParams) Reset() {
 	*x = ServiceParams{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_models_proto_msgTypes[2]
+		mi := &file_milkyway_restaking_v1_models_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5833,7 +5169,7 @@ func (*ServiceParams) ProtoMessage() {}
 
 // Deprecated: Use ServiceParams.ProtoReflect.Descriptor instead.
 func (*ServiceParams) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_models_proto_rawDescGZIP(), []int{2}
+	return file_milkyway_restaking_v1_models_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *ServiceParams) GetSlashFraction() string {
@@ -5878,7 +5214,7 @@ type Delegation struct {
 func (x *Delegation) Reset() {
 	*x = Delegation{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_models_proto_msgTypes[3]
+		mi := &file_milkyway_restaking_v1_models_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5892,7 +5228,7 @@ func (*Delegation) ProtoMessage() {}
 
 // Deprecated: Use Delegation.ProtoReflect.Descriptor instead.
 func (*Delegation) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_models_proto_rawDescGZIP(), []int{3}
+	return file_milkyway_restaking_v1_models_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *Delegation) GetType_() DelegationType {
@@ -5938,7 +5274,7 @@ type DelegationResponse struct {
 func (x *DelegationResponse) Reset() {
 	*x = DelegationResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_models_proto_msgTypes[4]
+		mi := &file_milkyway_restaking_v1_models_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -5952,7 +5288,7 @@ func (*DelegationResponse) ProtoMessage() {}
 
 // Deprecated: Use DelegationResponse.ProtoReflect.Descriptor instead.
 func (*DelegationResponse) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_models_proto_rawDescGZIP(), []int{4}
+	return file_milkyway_restaking_v1_models_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *DelegationResponse) GetDelegation() *Delegation {
@@ -5990,7 +5326,7 @@ type UnbondingDelegation struct {
 func (x *UnbondingDelegation) Reset() {
 	*x = UnbondingDelegation{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_models_proto_msgTypes[5]
+		mi := &file_milkyway_restaking_v1_models_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6004,7 +5340,7 @@ func (*UnbondingDelegation) ProtoMessage() {}
 
 // Deprecated: Use UnbondingDelegation.ProtoReflect.Descriptor instead.
 func (*UnbondingDelegation) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_models_proto_rawDescGZIP(), []int{5}
+	return file_milkyway_restaking_v1_models_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *UnbondingDelegation) GetType_() DelegationType {
@@ -6057,7 +5393,7 @@ type UnbondingDelegationEntry struct {
 func (x *UnbondingDelegationEntry) Reset() {
 	*x = UnbondingDelegationEntry{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_models_proto_msgTypes[6]
+		mi := &file_milkyway_restaking_v1_models_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6071,7 +5407,7 @@ func (*UnbondingDelegationEntry) ProtoMessage() {}
 
 // Deprecated: Use UnbondingDelegationEntry.ProtoReflect.Descriptor instead.
 func (*UnbondingDelegationEntry) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_models_proto_rawDescGZIP(), []int{6}
+	return file_milkyway_restaking_v1_models_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *UnbondingDelegationEntry) GetCreationHeight() int64 {
@@ -6126,7 +5462,7 @@ type DTData struct {
 func (x *DTData) Reset() {
 	*x = DTData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_models_proto_msgTypes[7]
+		mi := &file_milkyway_restaking_v1_models_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6140,7 +5476,7 @@ func (*DTData) ProtoMessage() {}
 
 // Deprecated: Use DTData.ProtoReflect.Descriptor instead.
 func (*DTData) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_models_proto_rawDescGZIP(), []int{7}
+	return file_milkyway_restaking_v1_models_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *DTData) GetUnbondingDelegationType() DelegationType {
@@ -6176,7 +5512,7 @@ type DTDataList struct {
 func (x *DTDataList) Reset() {
 	*x = DTDataList{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_models_proto_msgTypes[8]
+		mi := &file_milkyway_restaking_v1_models_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -6190,7 +5526,7 @@ func (*DTDataList) ProtoMessage() {}
 
 // Deprecated: Use DTDataList.ProtoReflect.Descriptor instead.
 func (*DTDataList) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_models_proto_rawDescGZIP(), []int{8}
+	return file_milkyway_restaking_v1_models_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *DTDataList) GetData() []*DTData {
@@ -6215,17 +5551,6 @@ var file_milkyway_restaking_v1_models_proto_rawDesc = []byte{
 	0x6f, 0x74, 0x6f, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
 	0x1a, 0x1e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x62, 0x61, 0x73, 0x65, 0x2f, 0x76, 0x31,
 	0x62, 0x65, 0x74, 0x61, 0x31, 0x2f, 0x63, 0x6f, 0x69, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x22, 0xad, 0x01, 0x0a, 0x0e, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x50, 0x61, 0x72,
-	0x61, 0x6d, 0x73, 0x12, 0x4e, 0x0a, 0x0f, 0x63, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f,
-	0x6e, 0x5f, 0x72, 0x61, 0x74, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x25, 0xc8, 0xde,
-	0x1f, 0x00, 0xda, 0xde, 0x1f, 0x1b, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x73, 0x64, 0x6b, 0x2e,
-	0x69, 0x6f, 0x2f, 0x6d, 0x61, 0x74, 0x68, 0x2e, 0x4c, 0x65, 0x67, 0x61, 0x63, 0x79, 0x44, 0x65,
-	0x63, 0x18, 0x01, 0x52, 0x0e, 0x63, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x52,
-	0x61, 0x74, 0x65, 0x12, 0x47, 0x0a, 0x13, 0x6a, 0x6f, 0x69, 0x6e, 0x65, 0x64, 0x5f, 0x73, 0x65,
-	0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x5f, 0x69, 0x64, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0d,
-	0x42, 0x17, 0xe2, 0xde, 0x1f, 0x11, 0x4a, 0x6f, 0x69, 0x6e, 0x65, 0x64, 0x53, 0x65, 0x72, 0x76,
-	0x69, 0x63, 0x65, 0x73, 0x49, 0x44, 0x73, 0x18, 0x01, 0x52, 0x11, 0x6a, 0x6f, 0x69, 0x6e, 0x65,
-	0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x49, 0x64, 0x73, 0x3a, 0x02, 0x18, 0x01,
 	0x22, 0x49, 0x0a, 0x16, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x4a, 0x6f, 0x69, 0x6e,
 	0x65, 0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x12, 0x2f, 0x0a, 0x0b, 0x73, 0x65,
 	0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0d, 0x42,
@@ -6383,34 +5708,33 @@ func file_milkyway_restaking_v1_models_proto_rawDescGZIP() []byte {
 }
 
 var file_milkyway_restaking_v1_models_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_milkyway_restaking_v1_models_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_milkyway_restaking_v1_models_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_milkyway_restaking_v1_models_proto_goTypes = []interface{}{
 	(DelegationType)(0),              // 0: milkyway.restaking.v1.DelegationType
-	(*OperatorParams)(nil),           // 1: milkyway.restaking.v1.OperatorParams
-	(*OperatorJoinedServices)(nil),   // 2: milkyway.restaking.v1.OperatorJoinedServices
-	(*ServiceParams)(nil),            // 3: milkyway.restaking.v1.ServiceParams
-	(*Delegation)(nil),               // 4: milkyway.restaking.v1.Delegation
-	(*DelegationResponse)(nil),       // 5: milkyway.restaking.v1.DelegationResponse
-	(*UnbondingDelegation)(nil),      // 6: milkyway.restaking.v1.UnbondingDelegation
-	(*UnbondingDelegationEntry)(nil), // 7: milkyway.restaking.v1.UnbondingDelegationEntry
-	(*DTData)(nil),                   // 8: milkyway.restaking.v1.DTData
-	(*DTDataList)(nil),               // 9: milkyway.restaking.v1.DTDataList
-	(*v1beta1.DecCoin)(nil),          // 10: cosmos.base.v1beta1.DecCoin
-	(*v1beta1.Coin)(nil),             // 11: cosmos.base.v1beta1.Coin
-	(*timestamppb.Timestamp)(nil),    // 12: google.protobuf.Timestamp
+	(*OperatorJoinedServices)(nil),   // 1: milkyway.restaking.v1.OperatorJoinedServices
+	(*ServiceParams)(nil),            // 2: milkyway.restaking.v1.ServiceParams
+	(*Delegation)(nil),               // 3: milkyway.restaking.v1.Delegation
+	(*DelegationResponse)(nil),       // 4: milkyway.restaking.v1.DelegationResponse
+	(*UnbondingDelegation)(nil),      // 5: milkyway.restaking.v1.UnbondingDelegation
+	(*UnbondingDelegationEntry)(nil), // 6: milkyway.restaking.v1.UnbondingDelegationEntry
+	(*DTData)(nil),                   // 7: milkyway.restaking.v1.DTData
+	(*DTDataList)(nil),               // 8: milkyway.restaking.v1.DTDataList
+	(*v1beta1.DecCoin)(nil),          // 9: cosmos.base.v1beta1.DecCoin
+	(*v1beta1.Coin)(nil),             // 10: cosmos.base.v1beta1.Coin
+	(*timestamppb.Timestamp)(nil),    // 11: google.protobuf.Timestamp
 }
 var file_milkyway_restaking_v1_models_proto_depIdxs = []int32{
 	0,  // 0: milkyway.restaking.v1.Delegation.type:type_name -> milkyway.restaking.v1.DelegationType
-	10, // 1: milkyway.restaking.v1.Delegation.shares:type_name -> cosmos.base.v1beta1.DecCoin
-	4,  // 2: milkyway.restaking.v1.DelegationResponse.delegation:type_name -> milkyway.restaking.v1.Delegation
-	11, // 3: milkyway.restaking.v1.DelegationResponse.balance:type_name -> cosmos.base.v1beta1.Coin
+	9,  // 1: milkyway.restaking.v1.Delegation.shares:type_name -> cosmos.base.v1beta1.DecCoin
+	3,  // 2: milkyway.restaking.v1.DelegationResponse.delegation:type_name -> milkyway.restaking.v1.Delegation
+	10, // 3: milkyway.restaking.v1.DelegationResponse.balance:type_name -> cosmos.base.v1beta1.Coin
 	0,  // 4: milkyway.restaking.v1.UnbondingDelegation.type:type_name -> milkyway.restaking.v1.DelegationType
-	7,  // 5: milkyway.restaking.v1.UnbondingDelegation.entries:type_name -> milkyway.restaking.v1.UnbondingDelegationEntry
-	12, // 6: milkyway.restaking.v1.UnbondingDelegationEntry.completion_time:type_name -> google.protobuf.Timestamp
-	11, // 7: milkyway.restaking.v1.UnbondingDelegationEntry.initial_balance:type_name -> cosmos.base.v1beta1.Coin
-	11, // 8: milkyway.restaking.v1.UnbondingDelegationEntry.balance:type_name -> cosmos.base.v1beta1.Coin
+	6,  // 5: milkyway.restaking.v1.UnbondingDelegation.entries:type_name -> milkyway.restaking.v1.UnbondingDelegationEntry
+	11, // 6: milkyway.restaking.v1.UnbondingDelegationEntry.completion_time:type_name -> google.protobuf.Timestamp
+	10, // 7: milkyway.restaking.v1.UnbondingDelegationEntry.initial_balance:type_name -> cosmos.base.v1beta1.Coin
+	10, // 8: milkyway.restaking.v1.UnbondingDelegationEntry.balance:type_name -> cosmos.base.v1beta1.Coin
 	0,  // 9: milkyway.restaking.v1.DTData.unbonding_delegation_type:type_name -> milkyway.restaking.v1.DelegationType
-	8,  // 10: milkyway.restaking.v1.DTDataList.data:type_name -> milkyway.restaking.v1.DTData
+	7,  // 10: milkyway.restaking.v1.DTDataList.data:type_name -> milkyway.restaking.v1.DTData
 	11, // [11:11] is the sub-list for method output_type
 	11, // [11:11] is the sub-list for method input_type
 	11, // [11:11] is the sub-list for extension type_name
@@ -6425,18 +5749,6 @@ func file_milkyway_restaking_v1_models_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_milkyway_restaking_v1_models_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*OperatorParams); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_milkyway_restaking_v1_models_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*OperatorJoinedServices); i {
 			case 0:
 				return &v.state
@@ -6448,7 +5760,7 @@ func file_milkyway_restaking_v1_models_proto_init() {
 				return nil
 			}
 		}
-		file_milkyway_restaking_v1_models_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+		file_milkyway_restaking_v1_models_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ServiceParams); i {
 			case 0:
 				return &v.state
@@ -6460,7 +5772,7 @@ func file_milkyway_restaking_v1_models_proto_init() {
 				return nil
 			}
 		}
-		file_milkyway_restaking_v1_models_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+		file_milkyway_restaking_v1_models_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Delegation); i {
 			case 0:
 				return &v.state
@@ -6472,7 +5784,7 @@ func file_milkyway_restaking_v1_models_proto_init() {
 				return nil
 			}
 		}
-		file_milkyway_restaking_v1_models_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+		file_milkyway_restaking_v1_models_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DelegationResponse); i {
 			case 0:
 				return &v.state
@@ -6484,7 +5796,7 @@ func file_milkyway_restaking_v1_models_proto_init() {
 				return nil
 			}
 		}
-		file_milkyway_restaking_v1_models_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+		file_milkyway_restaking_v1_models_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UnbondingDelegation); i {
 			case 0:
 				return &v.state
@@ -6496,7 +5808,7 @@ func file_milkyway_restaking_v1_models_proto_init() {
 				return nil
 			}
 		}
-		file_milkyway_restaking_v1_models_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+		file_milkyway_restaking_v1_models_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UnbondingDelegationEntry); i {
 			case 0:
 				return &v.state
@@ -6508,7 +5820,7 @@ func file_milkyway_restaking_v1_models_proto_init() {
 				return nil
 			}
 		}
-		file_milkyway_restaking_v1_models_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+		file_milkyway_restaking_v1_models_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DTData); i {
 			case 0:
 				return &v.state
@@ -6520,7 +5832,7 @@ func file_milkyway_restaking_v1_models_proto_init() {
 				return nil
 			}
 		}
-		file_milkyway_restaking_v1_models_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+		file_milkyway_restaking_v1_models_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DTDataList); i {
 			case 0:
 				return &v.state
@@ -6539,7 +5851,7 @@ func file_milkyway_restaking_v1_models_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_milkyway_restaking_v1_models_proto_rawDesc,
 			NumEnums:      1,
-			NumMessages:   9,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
