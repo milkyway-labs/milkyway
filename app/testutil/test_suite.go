@@ -155,7 +155,7 @@ func (suite *KeeperTestSuite) UpdateOperatorParams(
 		err = joinedServices.Add(serviceID)
 		suite.Require().NoError(err)
 	}
-	suite.App.RestakingKeeper.SetOperatorJoinedServices(ctx, operatorID, joinedServices)
+	suite.App.RestakingKeeper.SaveOperatorJoinedServices(ctx, operatorID, joinedServices)
 }
 
 // UpdateServiceParams updates the service's params.

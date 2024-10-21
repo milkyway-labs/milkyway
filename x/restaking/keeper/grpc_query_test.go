@@ -57,7 +57,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorJoinedServices() {
 				))
 				suite.Require().NoError(err)
 
-				err = suite.k.SetOperatorJoinedServices(ctx, 1, types.NewOperatorJoinedServices(
+				err = suite.k.SaveOperatorJoinedServices(ctx, 1, types.NewOperatorJoinedServices(
 					[]uint32{1, 2},
 				))
 				suite.Require().NoError(err)

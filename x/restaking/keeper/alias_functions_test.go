@@ -25,11 +25,11 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllOperatorsJoinedServicesRecord() {
 		{
 			name: "operators joined services are returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetOperatorJoinedServices(ctx, 1, types.NewOperatorJoinedServices(
+				suite.k.SaveOperatorJoinedServices(ctx, 1, types.NewOperatorJoinedServices(
 					[]uint32{1, 2},
 				))
 
-				suite.k.SetOperatorJoinedServices(ctx, 2, types.NewOperatorJoinedServices(
+				suite.k.SaveOperatorJoinedServices(ctx, 2, types.NewOperatorJoinedServices(
 					[]uint32{3, 4},
 				))
 			},

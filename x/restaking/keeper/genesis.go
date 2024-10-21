@@ -26,7 +26,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
 	// Store the services joined by the operators
 	for _, record := range data.OperatorsJoinedServices {
-		err := k.SetOperatorJoinedServices(ctx, record.OperatorID, record.JoinedServices)
+		err := k.SaveOperatorJoinedServices(ctx, record.OperatorID, record.JoinedServices)
 		if err != nil {
 			panic(err)
 		}
