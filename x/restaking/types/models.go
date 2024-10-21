@@ -353,9 +353,7 @@ func MustUnmarshalUnbondingDelegation(cdc codec.BinaryCodec, bz []byte) Unbondin
 // NewEmptyOperatorJoinedServices creates a new empty OperatorJoinedServices
 // instance.
 func NewEmptyOperatorJoinedServices() OperatorJoinedServices {
-	return OperatorJoinedServices{
-		ServiceIDs: nil,
-	}
+	return OperatorJoinedServices{}
 }
 
 // NewOperatorJoinedServices creates a new OperatorJoinedServices instance.

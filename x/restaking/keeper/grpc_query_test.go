@@ -47,7 +47,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorJoinedServices() {
 			},
 			request:     types.NewQueryOperatorJoinedServicesRequest(1),
 			shouldErr:   false,
-			expServices: []uint32{},
+			expServices: []uint32(nil),
 		},
 		{
 			name: "configured joined services are returned properly",
