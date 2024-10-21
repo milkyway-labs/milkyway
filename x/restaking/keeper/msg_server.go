@@ -75,16 +75,16 @@ func (k msgServer) LeaveService(goCtx context.Context, msg *types.MsgLeaveServic
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can leave the service")
 	}
 
-	// Get the services secured by the operator
-	securedServices, err := k.GetOperatorSecuredServices(ctx, msg.OperatorID)
+	// Get the services joined by the operator
+	joinedServices, err := k.GetOperatorJoinedServices(ctx, msg.OperatorID)
 	if err != nil {
 		return nil, err
 	}
 
 	// Try to remove the service
-	removed := securedServices.Remove(msg.ServiceID)
+	removed := joinedServices.Remove(msg.ServiceID)
 	if !removed {
-		return nil, types.ErrServiceNotSecuredByOperator
+		return nil, types.ErrServiceNotJoinedByOperator
 	}
 
 	ctx.EventManager().EmitEvents(sdk.Events{

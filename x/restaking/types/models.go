@@ -401,7 +401,7 @@ func (o *OperatorJoinedServices) Add(serviceID uint32) error {
 	return nil
 }
 
-func (o *OperatorSecuredServices) Remove(serviceID uint32) bool {
+func (o *OperatorJoinedServices) Remove(serviceID uint32) bool {
 	newServices, removed := utils.Remove(o.ServiceIDs, serviceID)
 	o.ServiceIDs = newServices
 	return removed
