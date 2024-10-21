@@ -223,7 +223,7 @@ func GetOperatorsQueryCmd() *cobra.Command {
 }
 
 // getOperatorJoinedServices returns the command allowing to query an
-// operator's params.
+// operator's joined services.
 func getOperatorJoinedServices() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "joined-services [operator-id]",
