@@ -9,6 +9,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	operatortypes "github.com/milkyway-labs/milkyway/x/operators/types"
+	legacytypes "github.com/milkyway-labs/milkyway/x/restaking/legacy/types"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
@@ -27,7 +28,7 @@ func migateOperatorParams(
 
 	for ; iterator.Valid(); iterator.Next() {
 		// Get the operators params from the store
-		var params types.LegacyOperatorParams
+		var params legacytypes.LegacyOperatorParams
 		cdc.MustUnmarshal(iterator.Value(), &params)
 
 		// Parse the operator id from the iterator key
