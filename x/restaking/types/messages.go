@@ -35,6 +35,35 @@ func (msg *MsgJoinService) ValidateBasic() error {
 
 // --------------------------------------------------------------------------------------------------------------------
 
+// NewMsgLeaveService creates a new MsgLeaveService instance
+func NewMsgLeaveService(operatorID uint32, serviceID uint32, sender string) *MsgLeaveService {
+	return &MsgLeaveService{
+		OperatorID: operatorID,
+		ServiceID:  serviceID,
+		Sender:     sender,
+	}
+}
+
+// ValidateBasic implements sdk.Msg
+func (msg *MsgLeaveService) ValidateBasic() error {
+	if msg.OperatorID == 0 {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid operator ID: %d", msg.OperatorID)
+	}
+
+	if msg.ServiceID == 0 {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid service ID: %d", msg.ServiceID)
+	}
+
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address")
+	}
+
+	return nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
 // NewMsgUpdateServiceParams creates a new MsgUpdateServiceParams instance
 func NewMsgUpdateServiceParams(operatorID uint32, params ServiceParams, sender string) *MsgUpdateServiceParams {
 	return &MsgUpdateServiceParams{

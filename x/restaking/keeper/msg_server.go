@@ -62,6 +62,40 @@ func (k msgServer) JoinService(goCtx context.Context, msg *types.MsgJoinService)
 	return &types.MsgJoinServiceResponse{}, nil
 }
 
+// LeaveService defines the rpc method for Msg/LeaveService
+func (k msgServer) LeaveService(goCtx context.Context, msg *types.MsgLeaveService) (*types.MsgLeaveServiceResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	operator, found := k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
+	if !found {
+		return nil, operatorstypes.ErrOperatorNotFound
+	}
+
+	if operator.Admin != msg.Sender {
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can leave the service")
+	}
+
+	_, found = k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	if !found {
+		return nil, errors.Wrapf(sdkerrors.ErrNotFound, "service %d not found", msg.ServiceID)
+	}
+
+	err := k.RemoveServiceFromOperator(ctx, msg.OperatorID, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeLeaveService,
+			sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, fmt.Sprint(msg.OperatorID)),
+			sdk.NewAttribute(types.AttributeKeyJoinedServiceID, fmt.Sprint(msg.ServiceID)),
+		),
+	})
+
+	return &types.MsgLeaveServiceResponse{}, nil
+}
+
 // UpdateServiceParams defines the rpc method for Msg/UpdateServiceParams
 func (k msgServer) UpdateServiceParams(goCtx context.Context, msg *types.MsgUpdateServiceParams) (*types.MsgUpdateServiceParamsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)

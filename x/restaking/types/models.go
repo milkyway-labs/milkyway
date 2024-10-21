@@ -401,6 +401,12 @@ func (o *OperatorJoinedServices) Add(serviceID uint32) error {
 	return nil
 }
 
+func (o *OperatorJoinedServices) Remove(serviceID uint32) bool {
+	newServices, removed := utils.Remove(o.ServiceIDs, serviceID)
+	o.ServiceIDs = newServices
+	return removed
+}
+
 // ParseOperatorID tries parsing the given value as an service id
 func ParseServiceID(value string) (uint32, error) {
 	operatorID, err := strconv.ParseUint(value, 10, 32)

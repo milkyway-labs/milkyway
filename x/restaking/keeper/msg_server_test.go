@@ -146,6 +146,147 @@ func (suite *KeeperTestSuite) TestMsgServer_JoinService() {
 	}
 }
 
+func (suite *KeeperTestSuite) TestMsgServer_LeaveService() {
+	testCases := []struct {
+		name      string
+		setup     func()
+		store     func(ctx sdk.Context)
+		setupCtx  func(ctx sdk.Context) sdk.Context
+		msg       *types.MsgLeaveService
+		shouldErr bool
+		expEvents sdk.Events
+		check     func(ctx sdk.Context)
+	}{
+		{
+			name: "non-existent operator id returns an error",
+			msg: &types.MsgLeaveService{
+				Sender:     "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				OperatorID: 1,
+				ServiceID:  1,
+			},
+			shouldErr: true,
+		},
+		{
+			name: "non-existent service id returns an error",
+			store: func(ctx sdk.Context) {
+				suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
+					1, operatorstypes.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+			},
+			msg: &types.MsgLeaveService{
+				Sender:     "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				OperatorID: 1,
+				ServiceID:  1,
+			},
+			shouldErr: true,
+		},
+		{
+			name: "only operator admin can perform LeaveService",
+			store: func(ctx sdk.Context) {
+				suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
+					1, operatorstypes.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+				suite.sk.SaveService(ctx, servicestypes.NewService(
+					1, servicestypes.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+				err := suite.k.AddServiceToOperator(ctx, 1, 1)
+				suite.Require().NoError(err)
+			},
+			msg: &types.MsgLeaveService{
+				Sender:     "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				OperatorID: 1,
+				ServiceID:  1,
+			},
+			shouldErr: true,
+		},
+		{
+			name: "valid update is done properly",
+			store: func(ctx sdk.Context) {
+				suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
+					1, operatorstypes.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+				suite.sk.SaveService(ctx, servicestypes.NewService(
+					1, servicestypes.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+				err := suite.k.AddServiceToOperator(ctx, 1, 1)
+				suite.Require().NoError(err)
+			},
+			msg: &types.MsgLeaveService{
+				Sender:     "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				OperatorID: 1,
+				ServiceID:  1,
+			},
+			check: func(ctx sdk.Context) {
+				joinedServices, err := suite.k.GetOperatorJoinedServices(ctx, 1)
+				suite.Require().NoError(err)
+				suite.Require().Empty(joinedServices.ServiceIDs)
+			},
+			shouldErr: false,
+			expEvents: sdk.Events{
+				sdk.NewEvent(
+					types.EventTypeLeaveService,
+					sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, "1"),
+					sdk.NewAttribute(
+						types.AttributeKeyJoinedServiceID, "1"),
+				),
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.setup != nil {
+				tc.setup()
+			}
+			if tc.setupCtx != nil {
+				ctx = tc.setupCtx(ctx)
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			msgServer := keeper.NewMsgServer(suite.k)
+			_, err := msgServer.LeaveService(ctx, tc.msg)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				for _, event := range tc.expEvents {
+					suite.Require().Contains(ctx.EventManager().Events(), event)
+				}
+
+				if tc.check != nil {
+					tc.check(ctx)
+				}
+			}
+		})
+	}
+}
+
 func (suite *KeeperTestSuite) TestMsgServer_UpdateServiceParams() {
 	testCases := []struct {
 		name      string
