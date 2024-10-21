@@ -9,6 +9,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	legacytypes "github.com/milkyway-labs/milkyway/x/restaking/legacy/types"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
@@ -45,7 +46,7 @@ func migrateServiceParams(
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var legacyParams types.LegacyServiceParams
+		var legacyParams legacytypes.LegacyServiceParams
 		cdc.MustUnmarshal(iterator.Value(), &legacyParams)
 
 		serviceID, err := parseLegacyServiceParamsKey(iterator.Key())
