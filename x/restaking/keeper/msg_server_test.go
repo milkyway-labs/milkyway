@@ -238,6 +238,11 @@ func (suite *KeeperTestSuite) TestMsgServer_LeaveService() {
 				OperatorID: 1,
 				ServiceID:  1,
 			},
+			check: func(ctx sdk.Context) {
+				joinedServices, err := suite.k.GetOperatorJoinedServices(ctx, 1)
+				suite.Require().NoError(err)
+				suite.Require().Empty(joinedServices.ServiceIDs)
+			},
 			shouldErr: false,
 			expEvents: sdk.Events{
 				sdk.NewEvent(
