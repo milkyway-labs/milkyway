@@ -45,27 +45,19 @@ func migrateServiceParams(
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		//nolint:staticcheck // SA1004
-		// We disable the deprecated lint error
-		// since we need to use this struct to perform the migration
-		var params types.LegacyServiceParamsRecord
-		cdc.MustUnmarshal(iterator.Value(), &params)
+		var legacyParams types.LegacyServiceParams
+		cdc.MustUnmarshal(iterator.Value(), &legacyParams)
 
 		serviceID, err := parseLegacyServiceParamsKey(iterator.Key())
 		if err != nil {
 			return err
 		}
 
-		legacyParams := params.Params
-
 		_, found := servicesKeeper.GetService(ctx, serviceID)
 		if !found {
 			return fmt.Errorf("service %d not found", serviceID)
 		}
 
-		//nolint:staticcheck // SA1004
-		// We disable the deprecated lint error
-		// since we need to use this fields to perform the migration
 		// Store the new services params in the restaking module
 		newRestakinParams := types.NewServiceParams(legacyParams.WhitelistedPoolsIDs, legacyParams.WhitelistedOperatorsIDs)
 		err = restakingKeeper.SaveServiceParams(ctx, serviceID, newRestakinParams)
@@ -73,12 +65,8 @@ func migrateServiceParams(
 			return err
 		}
 
-		//nolint:staticcheck // SA1004
-		// We disable the deprecated lint error
-		// since we need to use this field to perform the migration
-		// Store the new services params in the restaking module
 		// Store the service params to the services module
-		newServicesParams := servicestypes.NewServiceParams(params.Params.SlashFraction)
+		newServicesParams := servicestypes.NewServiceParams(legacyParams.SlashFraction)
 		err = servicesKeeper.SaveServiceParams(ctx, serviceID, newServicesParams)
 		if err != nil {
 			return err
