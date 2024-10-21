@@ -24,8 +24,8 @@ type Keeper struct {
 	servicesKeeper  types.ServicesKeeper
 
 	// Keeper data
-	schema           collections.Schema
-	operatorServices collections.Map[uint32, types.OperatorJoinedServices]
+	schema                 collections.Schema
+	operatorJoinedServices collections.Map[uint32, types.OperatorJoinedServices]
 
 	hooks types.RestakingHooks
 }
@@ -58,9 +58,9 @@ func NewKeeper(
 		operatorsKeeper: operatorsKeeper,
 		servicesKeeper:  servicesKeeper,
 
-		operatorServices: collections.NewMap(
-			sb, types.OperatorServicesPrefix,
-			"operator_services",
+		operatorJoinedServices: collections.NewMap(
+			sb, types.OperatorJoinedServicesPrefix,
+			"operator_joined_services",
 			collections.Uint32Key,
 			codec.CollValue[types.OperatorJoinedServices](cdc),
 		),

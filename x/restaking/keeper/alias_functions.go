@@ -22,7 +22,7 @@ import (
 
 // GetAllOperatorsJoinedServices returns all the operators joined services
 func (k *Keeper) GetAllOperatorsJoinedServices(ctx sdk.Context) ([]types.OperatorJoinedServicesRecord, error) {
-	iterator, err := k.operatorServices.Iterate(ctx, nil)
+	iterator, err := k.operatorJoinedServices.Iterate(ctx, nil)
 	if err != nil {
 		return nil, err
 	}

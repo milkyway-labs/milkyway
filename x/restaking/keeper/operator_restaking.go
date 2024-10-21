@@ -14,7 +14,7 @@ import (
 
 // GetOperatorJoinedServices gets the services joined by the operator with the given ID.
 func (k *Keeper) GetOperatorJoinedServices(ctx sdk.Context, operatorID uint32) (types.OperatorJoinedServices, error) {
-	joinedServices, err := k.operatorServices.Get(ctx, operatorID)
+	joinedServices, err := k.operatorJoinedServices.Get(ctx, operatorID)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
 			return types.NewEmptyOperatorJoinedServices(), nil
@@ -32,7 +32,7 @@ func (k *Keeper) SetOperatorJoinedServices(
 	operatorID uint32,
 	joinedServices types.OperatorJoinedServices,
 ) error {
-	return k.operatorServices.Set(ctx, operatorID, joinedServices)
+	return k.operatorJoinedServices.Set(ctx, operatorID, joinedServices)
 }
 
 // AddServiceToOperator ad the given service to the list of services joined by
