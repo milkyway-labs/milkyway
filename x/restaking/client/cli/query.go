@@ -413,7 +413,8 @@ func GetServicesQueryCmd() *cobra.Command {
 	}
 
 	queryCmd.AddCommand(
-		getServiceParamsQueryCmd(),
+		getServiceWhitelistedOperatorsQueryCmd(),
+		getServiceWhitelistedPoolsQueryCmd(),
 		getServiceDelegationsQueryCmd(),
 		getServiceDelegationQueryCmd(),
 		getServiceUnbondingDelegationsQueryCmd(),
@@ -423,13 +424,13 @@ func GetServicesQueryCmd() *cobra.Command {
 	return queryCmd
 }
 
-// getServiceParamsQueryCmd returns the command allowing to query a service's
-// params.
-func getServiceParamsQueryCmd() *cobra.Command {
+// getServiceWhitelistedOperatorsQueryCmd returns the command allowing to query a service's
+// whitelisted operators.
+func getServiceWhitelistedOperatorsQueryCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "params [service-id]",
-		Short:   "Query a service's params",
-		Example: fmt.Sprintf(`%s query %s service params 1`, version.AppName, types.ModuleName),
+		Use:     "whitelisted-operators [service-id]",
+		Short:   "Query a service's whitelisted operators",
+		Example: fmt.Sprintf(`%s query %s service whitelisted-operators 1`, version.AppName, types.ModuleName),
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -442,7 +443,16 @@ func getServiceParamsQueryCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			res, err := queryClient.ServiceParams(cmd.Context(), types.NewQueryServiceParamsRequest(serviceID))
+
+			pageReq, err := client.ReadPageRequest(cmd.Flags())
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.ServiceWhitelistedOperators(
+				cmd.Context(),
+				types.NewQueryServiceWhitelistedOperatorsRequest(serviceID, pageReq),
+			)
 			if err != nil {
 				return err
 			}
@@ -452,6 +462,50 @@ func getServiceParamsQueryCmd() *cobra.Command {
 	}
 
 	flags.AddQueryFlagsToCmd(cmd)
+	flags.AddPaginationFlagsToCmd(cmd, "service whitelisted operators")
+
+	return cmd
+}
+
+// getServiceWhitelistedPoolsQueryCmd returns the command allowing to query a service's
+// whitelisted pools.
+func getServiceWhitelistedPoolsQueryCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "whitelisted-pools [service-id]",
+		Short:   "Query a service's whitelisted pools",
+		Example: fmt.Sprintf(`%s query %s service whitelisted-pools 1`, version.AppName, types.ModuleName),
+		Args:    cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+
+			serviceID, err := servicestypes.ParseServiceID(args[0])
+			if err != nil {
+				return err
+			}
+
+			pageReq, err := client.ReadPageRequest(cmd.Flags())
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.ServiceWhitelistedPools(
+				cmd.Context(),
+				types.NewQueryServiceWhitelistedPoolsRequest(serviceID, pageReq),
+			)
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+	flags.AddPaginationFlagsToCmd(cmd, "service whitelisted pools")
 
 	return cmd
 }

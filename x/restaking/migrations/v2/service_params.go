@@ -59,11 +59,20 @@ func migrateServiceParams(
 			return fmt.Errorf("service %d not found", serviceID)
 		}
 
-		// Store the new services params in the restaking module
-		newRestakinParams := types.NewServiceParams(legacyParams.WhitelistedPoolsIDs, legacyParams.WhitelistedOperatorsIDs)
-		err = restakingKeeper.SaveServiceParams(ctx, serviceID, newRestakinParams)
-		if err != nil {
-			return err
+		// Store the service's whitelisted operators in the restaking module
+		for _, operatorID := range legacyParams.WhitelistedOperatorsIDs {
+			err := restakingKeeper.ServiceWhitelistOperator(ctx, serviceID, operatorID)
+			if err != nil {
+				return err
+			}
+		}
+
+		// Store the service's whitelisted pools in the restaking module
+		for _, poolID := range legacyParams.WhitelistedPoolsIDs {
+			err := restakingKeeper.ServiceWhitelistPool(ctx, serviceID, poolID)
+			if err != nil {
+				return err
+			}
 		}
 
 		// Store the service params to the services module

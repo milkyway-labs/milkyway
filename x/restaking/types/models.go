@@ -15,46 +15,6 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-// NewServiceParams creates a new ServiceParams instance
-func NewServiceParams(
-	whitelistedPoolsIDs []uint32,
-	whitelistedOperatorsIDs []uint32,
-) ServiceParams {
-	return ServiceParams{
-		WhitelistedPoolsIDs:     whitelistedPoolsIDs,
-		WhitelistedOperatorsIDs: whitelistedOperatorsIDs,
-	}
-}
-
-// NewDefaultServiceParams returns the default service params
-func NewDefaultServiceParams() ServiceParams {
-	return NewServiceParams(nil, nil)
-}
-
-// Validate validates the service params
-func (p *ServiceParams) Validate() error {
-	if duplicate := utils.FindDuplicate(p.WhitelistedPoolsIDs); duplicate != nil {
-		return fmt.Errorf("duplicated whitelisted pool id: %v", duplicate)
-	}
-
-	if duplicate := utils.FindDuplicate(p.WhitelistedOperatorsIDs); duplicate != nil {
-		return fmt.Errorf("duplicated whitelisted operator id: %v", duplicate)
-	}
-
-	for _, poolID := range p.WhitelistedPoolsIDs {
-		if poolID == 0 {
-			return fmt.Errorf("invalid whitelisted pool id: %d", poolID)
-		}
-	}
-
-	for _, operatorID := range p.WhitelistedOperatorsIDs {
-		if operatorID == 0 {
-			return fmt.Errorf("invalid whitelisted operator id: %d", operatorID)
-		}
-	}
-	return nil
-}
-
 // --------------------------------------------------------------------------------------------------------------------
 
 // NewPoolDelegation creates a new Delegation instance representing a pool delegation

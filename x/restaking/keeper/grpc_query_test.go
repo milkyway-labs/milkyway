@@ -88,13 +88,13 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorJoinedServices() {
 	}
 }
 
-func (suite *KeeperTestSuite) TestQuerier_ServiceParams() {
+func (suite *KeeperTestSuite) TestQuerier_ServiceWhitelistedOperators() {
 	testCases := []struct {
-		name      string
-		store     func(ctx sdk.Context)
-		request   *types.QueryServiceParamsRequest
-		shouldErr bool
-		expParams types.ServiceParams
+		name         string
+		store        func(ctx sdk.Context)
+		request      *types.QueryServiceWhitelistedOperatorsRequest
+		shouldErr    bool
+		expOperators []uint32
 	}{
 		{
 			name:      "invalid request returns error",
@@ -103,47 +103,130 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceParams() {
 		},
 		{
 			name:      "invalid service id returns error",
-			request:   types.NewQueryServiceParamsRequest(0),
+			request:   types.NewQueryServiceWhitelistedOperatorsRequest(0, nil),
 			shouldErr: true,
 		},
 		{
-			name:      "not found service params returns default value",
-			request:   types.NewQueryServiceParamsRequest(1),
-			shouldErr: false,
-			expParams: types.NewDefaultServiceParams(),
+			name:         "not found service whitelist returns empty list",
+			request:      types.NewQueryServiceWhitelistedOperatorsRequest(1, nil),
+			shouldErr:    false,
+			expOperators: nil,
 		},
 		{
-			name: "found service params are returned properly",
+			name: "found service whitelist is returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SaveServiceParams(ctx, 1, types.NewServiceParams(
-					[]uint32{1, 2},
-					nil,
-				))
+				suite.k.ServiceWhitelistOperator(ctx, 1, 1)
+				suite.k.ServiceWhitelistOperator(ctx, 1, 2)
+				suite.k.ServiceWhitelistOperator(ctx, 2, 3)
 			},
-			request:   types.NewQueryServiceParamsRequest(1),
-			shouldErr: false,
-			expParams: types.NewServiceParams(
-				[]uint32{1, 2},
-				nil,
-			),
+			request:      types.NewQueryServiceWhitelistedOperatorsRequest(1, nil),
+			shouldErr:    false,
+			expOperators: []uint32{1, 2},
+		},
+		{
+			name: "pagination is handled properly ",
+			store: func(ctx sdk.Context) {
+				suite.k.ServiceWhitelistOperator(ctx, 1, 1)
+				suite.k.ServiceWhitelistOperator(ctx, 1, 2)
+				suite.k.ServiceWhitelistOperator(ctx, 2, 3)
+			},
+			request: types.NewQueryServiceWhitelistedOperatorsRequest(1, &query.PageRequest{
+				Offset: 0,
+				Limit:  1,
+			}),
+			shouldErr:    false,
+			expOperators: []uint32{1},
 		},
 	}
 
 	for _, tc := range testCases {
 		tc := tc
 		suite.Run(tc.name, func() {
-			ctx, _ := suite.ctx.CacheContext()
+			suite.SetupTest()
+			ctx := suite.ctx
 			if tc.store != nil {
 				tc.store(ctx)
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.ServiceParams(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.ServiceWhitelistedOperators(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
 				suite.Require().NoError(err)
-				suite.Require().Equal(tc.expParams, res.ServiceParams)
+				suite.Require().Equal(tc.expOperators, res.OperatorIds)
+			}
+		})
+	}
+}
+
+func (suite *KeeperTestSuite) TestQuerier_ServiceWhitelistedPools() {
+	testCases := []struct {
+		name      string
+		store     func(ctx sdk.Context)
+		request   *types.QueryServiceWhitelistedPoolsRequest
+		shouldErr bool
+		expPools  []uint32
+	}{
+		{
+			name:      "invalid request returns error",
+			request:   nil,
+			shouldErr: true,
+		},
+		{
+			name:      "invalid service id returns error",
+			request:   types.NewQueryServiceWhitelistedPoolsRequest(0, nil),
+			shouldErr: true,
+		},
+		{
+			name:      "not found service whitelist returns empty list",
+			request:   types.NewQueryServiceWhitelistedPoolsRequest(1, nil),
+			shouldErr: false,
+			expPools:  nil,
+		},
+		{
+			name: "found service whitelist is returned properly",
+			store: func(ctx sdk.Context) {
+				suite.k.ServiceWhitelistPool(ctx, 1, 1)
+				suite.k.ServiceWhitelistPool(ctx, 1, 2)
+				suite.k.ServiceWhitelistPool(ctx, 2, 3)
+			},
+			request:   types.NewQueryServiceWhitelistedPoolsRequest(1, nil),
+			shouldErr: false,
+			expPools:  []uint32{1, 2},
+		},
+		{
+			name: "pagination is handled properly ",
+			store: func(ctx sdk.Context) {
+				suite.k.ServiceWhitelistPool(ctx, 1, 1)
+				suite.k.ServiceWhitelistPool(ctx, 1, 2)
+				suite.k.ServiceWhitelistPool(ctx, 2, 3)
+			},
+			request: types.NewQueryServiceWhitelistedPoolsRequest(1, &query.PageRequest{
+				Offset: 0,
+				Limit:  1,
+			}),
+			shouldErr: false,
+			expPools:  []uint32{1},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			suite.SetupTest()
+			ctx := suite.ctx
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			querier := keeper.NewQuerier(suite.k)
+			res, err := querier.ServiceWhitelistedPools(ctx, tc.request)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expPools, res.PoolIds)
 			}
 		})
 	}

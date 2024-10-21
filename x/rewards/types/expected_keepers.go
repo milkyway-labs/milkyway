@@ -63,7 +63,10 @@ type ServicesKeeper interface {
 
 type RestakingKeeper interface {
 	GetOperatorJoinedServices(ctx sdk.Context, operatorID uint32) (restakingtypes.OperatorJoinedServices, error)
-	GetServiceParams(ctx sdk.Context, serviceID uint32) (restakingtypes.ServiceParams, error)
+	ServiceIsOpertorsWhitelistConfigured(ctx sdk.Context, serviceID uint32) (bool, error)
+	ServiceIsOperatorWhitelisted(ctx sdk.Context, serviceID uint32, operatorID uint32) (bool, error)
+	ServiceIsPoolsWhitelistConfigured(ctx sdk.Context, serviceID uint32) (bool, error)
+	ServiceIsPoolWhitelisted(ctx sdk.Context, serviceID uint32, operatorID uint32) (bool, error)
 	GetPoolDelegation(ctx sdk.Context, poolID uint32, userAddress string) (restakingtypes.Delegation, bool)
 	GetOperatorDelegation(ctx sdk.Context, operatorID uint32, userAddress string) (restakingtypes.Delegation, bool)
 	GetServiceDelegation(ctx sdk.Context, serviceID uint32, userAddress string) (restakingtypes.Delegation, bool)

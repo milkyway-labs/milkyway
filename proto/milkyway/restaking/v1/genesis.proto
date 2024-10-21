@@ -19,14 +19,24 @@ message OperatorJoinedServicesRecord {
   ];
 }
 
-// ServiceParamsRecord represents the params that have been set for an
-// individual service.
-message ServiceParamsRecord {
+// ServiceWhitelistedOperators represents the whitelisted operators for
+// a service.
+message ServiceWhitelistedOperators {
   // ServiceID is the ID of the service.
   uint32 service_id = 1 [ (gogoproto.customname) = "ServiceID" ];
 
-  // Params defines the parameters for the operators module.
-  ServiceParams params = 2 [ (gogoproto.nullable) = false ];
+  // OperatorIDs defines the whitelisted operator IDs.
+  repeated uint32 operator_ids = 2 [ (gogoproto.customname) = "OperatorIDs" ];
+}
+
+// ServiceWhitelistedPools represents the whitelisted pools for
+// a service.
+message ServiceWhitelistedPools {
+  // ServiceID is the ID of the service.
+  uint32 service_id = 1 [ (gogoproto.customname) = "ServiceID" ];
+
+  // PoolIDs defines the whitelisted operator IDs.
+  repeated uint32 pool_ids = 2 [ (gogoproto.customname) = "PoolIDs" ];
 }
 
 // GenesisState defines the restaking module's genesis state.
@@ -38,14 +48,18 @@ message GenesisState {
   repeated OperatorJoinedServicesRecord operators_joined_services = 2
       [ (gogoproto.nullable) = false ];
 
-  // ServicesParams defines the list of services parameters.
-  repeated ServiceParamsRecord services_params = 3
+  // ServicesWhitelistedOperators defines the whitelisted operators for each service.
+  repeated ServiceWhitelistedOperators services_whitelisted_operators = 3
+      [ (gogoproto.nullable) = false ];
+
+  // ServicesWhitelistedPools defines the whitelisted pools for each service.
+  repeated ServiceWhitelistedPools services_whitelisted_pools = 4
       [ (gogoproto.nullable) = false ];
 
   // Delegations represents the delegations.
-  repeated Delegation delegations = 4 [ (gogoproto.nullable) = false ];
+  repeated Delegation delegations = 5 [ (gogoproto.nullable) = false ];
 
   // UnbondingDelegations represents the unbonding delegations.
-  repeated UnbondingDelegation unbonding_delegations = 5
+  repeated UnbondingDelegation unbonding_delegations = 6
       [ (gogoproto.nullable) = false ];
 }

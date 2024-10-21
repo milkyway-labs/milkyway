@@ -17,20 +17,6 @@ message OperatorJoinedServices {
     ];
 }
 
-// ServiceParams represent the params that have been set for an individual
-// service.
-message ServiceParams {
-  // WhitelistedPoolsIDs defines the list of pool IDs that are providing
-  // cryptoeconomic security to the service.
-  repeated uint32 whitelisted_pools_ids = 1
-      [ (gogoproto.customname) = "WhitelistedPoolsIDs" ];
-
-  // WhitelistedOperatorsIDs defines the list of operator IDs that are allowed
-  // to validate this service.
-  repeated uint32 whitelisted_operators_ids = 2
-      [ (gogoproto.customname) = "WhitelistedOperatorsIDs" ];
-}
-
 // DelegationType defines the type of delegation.
 enum DelegationType {
   option (gogoproto.goproto_enum_prefix) = false;

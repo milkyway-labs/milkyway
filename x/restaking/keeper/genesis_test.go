@@ -44,37 +44,40 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			},
 		},
 		{
-			name: "service params are exported properly",
+			name: "services whitelisted operators are exported properly",
 			store: func(ctx sdk.Context) {
 				suite.k.SetParams(ctx, types.DefaultParams())
 
-				suite.k.SaveServiceParams(ctx, 1, types.NewServiceParams(
-					[]uint32{1, 2},
-					nil,
-				))
+				suite.k.ServiceWhitelistOperator(ctx, 1, 1)
+				suite.k.ServiceWhitelistOperator(ctx, 1, 2)
 
-				suite.k.SaveServiceParams(ctx, 2, types.NewServiceParams(
-					[]uint32{3, 4},
-					[]uint32{5, 6},
-				))
+				suite.k.ServiceWhitelistOperator(ctx, 2, 3)
+				suite.k.ServiceWhitelistOperator(ctx, 2, 4)
 			},
 			expGenesis: &types.GenesisState{
 				Params: types.DefaultParams(),
-				ServicesParams: []types.ServiceParamsRecord{
-					{
-						ServiceID: 1,
-						Params: types.NewServiceParams(
-							[]uint32{1, 2},
-							nil,
-						),
-					},
-					{
-						ServiceID: 2,
-						Params: types.NewServiceParams(
-							[]uint32{3, 4},
-							[]uint32{5, 6},
-						),
-					},
+				ServicesWhitelistedOperators: []types.ServiceWhitelistedOperators{
+					types.NewServiceWhitelistedOperators(1, []uint32{1, 2}),
+					types.NewServiceWhitelistedOperators(2, []uint32{3, 4}),
+				},
+			},
+		},
+		{
+			name: "services whitelisted pools are exported properly",
+			store: func(ctx sdk.Context) {
+				suite.k.SetParams(ctx, types.DefaultParams())
+
+				suite.k.ServiceWhitelistPool(ctx, 1, 1)
+				suite.k.ServiceWhitelistPool(ctx, 1, 2)
+
+				suite.k.ServiceWhitelistPool(ctx, 2, 3)
+				suite.k.ServiceWhitelistPool(ctx, 2, 4)
+			},
+			expGenesis: &types.GenesisState{
+				Params: types.DefaultParams(),
+				ServicesWhitelistedPools: []types.ServiceWhitelistedPools{
+					types.NewServiceWhitelistedPools(1, []uint32{1, 2}),
+					types.NewServiceWhitelistedPools(2, []uint32{3, 4}),
 				},
 			},
 		},
@@ -356,40 +359,41 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 			},
 		},
 		{
-			name: "service params are stored properly",
+			name: "services whitelisted operators are stored properly",
 			genesis: &types.GenesisState{
 				Params: types.DefaultParams(),
-				ServicesParams: []types.ServiceParamsRecord{
-					{
-						ServiceID: 1,
-						Params: types.NewServiceParams(
-							[]uint32{1, 2},
-							nil,
-						),
-					},
-					{
-						ServiceID: 2,
-						Params: types.NewServiceParams(
-							[]uint32{3, 4},
-							[]uint32{5, 6},
-						),
-					},
+				ServicesWhitelistedOperators: []types.ServiceWhitelistedOperators{
+					types.NewServiceWhitelistedOperators(1, []uint32{1, 2}),
+					types.NewServiceWhitelistedOperators(2, []uint32{3, 4}),
 				},
 			},
 			check: func(ctx sdk.Context) {
-				stored, err := suite.k.GetServiceParams(ctx, 1)
+				stored, err := suite.k.GetAllServiceWhitelistedOperators(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().Equal(types.NewServiceParams(
-					[]uint32{1, 2},
-					nil,
-				), stored)
+				suite.Require().Equal([]uint32{1, 2}, stored)
 
-				stored, err = suite.k.GetServiceParams(ctx, 2)
+				stored, err = suite.k.GetAllServiceWhitelistedOperators(ctx, 2)
 				suite.Require().NoError(err)
-				suite.Require().Equal(types.NewServiceParams(
-					[]uint32{3, 4},
-					[]uint32{5, 6},
-				), stored)
+				suite.Require().Equal([]uint32{3, 4}, stored)
+			},
+		},
+		{
+			name: "services whitelisted pools are stored properly",
+			genesis: &types.GenesisState{
+				Params: types.DefaultParams(),
+				ServicesWhitelistedPools: []types.ServiceWhitelistedPools{
+					types.NewServiceWhitelistedPools(1, []uint32{1, 2}),
+					types.NewServiceWhitelistedPools(2, []uint32{3, 4}),
+				},
+			},
+			check: func(ctx sdk.Context) {
+				stored, err := suite.k.GetAllServiceWhitelistedPools(ctx, 1)
+				suite.Require().NoError(err)
+				suite.Require().Equal([]uint32{1, 2}, stored)
+
+				stored, err = suite.k.GetAllServiceWhitelistedPools(ctx, 2)
+				suite.Require().NoError(err)
+				suite.Require().Equal([]uint32{3, 4}, stored)
 			},
 		},
 		{

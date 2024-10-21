@@ -3,22 +3,125 @@ package keeper
 import (
 	"time"
 
+	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/utils"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-// SaveServiceParams stored the given params for the given service
-func (k *Keeper) SaveServiceParams(ctx sdk.Context, serviceID uint32, params types.ServiceParams) error {
-	return k.serviceParams.Set(ctx, serviceID, params)
+// ServiceWhitelistedOperatorsIterator returns an iterator that iterates over all
+// operators whitelisted by a service
+func (k *Keeper) ServiceWhitelistedOperatorsIterator(ctx sdk.Context, serviceID uint32) (collections.KeySetIterator[collections.Pair[uint32, uint32]], error) {
+	return k.serviceWhitelistedOperators.Iterate(ctx, collections.NewPrefixedPairRange[uint32, uint32](serviceID))
 }
 
-// GetServiceParams returns the params for the given service, if any.
-// If not params are found, false is returned instead.
-func (k *Keeper) GetServiceParams(ctx sdk.Context, serviceID uint32) (types.ServiceParams, error) {
-	return utils.MapGetOrDefault(ctx, k.serviceParams, serviceID, types.NewDefaultServiceParams)
+// GetAllServiceWhitelistedOperators returns all operators that have been whitelisted
+// by a service
+func (k *Keeper) GetAllServiceWhitelistedOperators(ctx sdk.Context, serviceID uint32) ([]uint32, error) {
+	iteretor, err := k.ServiceWhitelistedOperatorsIterator(ctx, serviceID)
+	if err != nil {
+		return nil, err
+	}
+
+	defer iteretor.Close()
+	var operators []uint32
+	for ; iteretor.Valid(); iteretor.Next() {
+		serviceOperatorPair, err := iteretor.Key()
+		if err != nil {
+			return nil, err
+		}
+		operators = append(operators, serviceOperatorPair.K2())
+	}
+
+	return operators, nil
+}
+
+// ServiceWhitelistOperator adds an operator to the service's whitelist
+func (k *Keeper) ServiceWhitelistOperator(ctx sdk.Context, serviceID uint32, operatorID uint32) error {
+	key := collections.Join(serviceID, operatorID)
+	return k.serviceWhitelistedOperators.Set(ctx, key)
+}
+
+// ServiceIsOperatorWhitelisted returns true if the given operator has
+// been whitelisted for the given service
+func (k *Keeper) ServiceIsOperatorWhitelisted(ctx sdk.Context, serviceID uint32, operatorID uint32) (bool, error) {
+	key := collections.Join(serviceID, operatorID)
+	return k.serviceWhitelistedOperators.Has(ctx, key)
+}
+
+// ServiceIsOpertorsWhitelistConfigured returns true if the operators whitelist
+// has been configured for the given service
+func (k *Keeper) ServiceIsOpertorsWhitelistConfigured(ctx sdk.Context, serviceID uint32) (bool, error) {
+	iteretor, err := k.ServiceWhitelistedOperatorsIterator(ctx, serviceID)
+	if err != nil {
+		return false, err
+	}
+	defer iteretor.Close()
+
+	for ; iteretor.Valid(); iteretor.Next() {
+		return true, nil
+	}
+
+	return false, nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// ServiceWhitelistedPoolsIterator returns an iterator that iterates over all
+// pools whitelisted by a service.
+func (k *Keeper) ServiceWhitelistedPoolsIterator(ctx sdk.Context, serviceID uint32) (collections.KeySetIterator[collections.Pair[uint32, uint32]], error) {
+	return k.serviceWhitelistedPools.Iterate(ctx, collections.NewPrefixedPairRange[uint32, uint32](serviceID))
+}
+
+// GetAllServiceWhitelistedPools returns all pools that have been whitelisted
+// by a service
+func (k *Keeper) GetAllServiceWhitelistedPools(ctx sdk.Context, serviceID uint32) ([]uint32, error) {
+	iteretor, err := k.ServiceWhitelistedPoolsIterator(ctx, serviceID)
+	if err != nil {
+		return nil, err
+	}
+
+	defer iteretor.Close()
+	var pools []uint32
+	for ; iteretor.Valid(); iteretor.Next() {
+		servicePoolPair, err := iteretor.Key()
+		if err != nil {
+			return nil, err
+		}
+		pools = append(pools, servicePoolPair.K2())
+	}
+
+	return pools, nil
+}
+
+// ServiceWhitelistPool adds a pool to the service whitelist
+func (k *Keeper) ServiceWhitelistPool(ctx sdk.Context, serviceID uint32, poolID uint32) error {
+	key := collections.Join(serviceID, poolID)
+	return k.serviceWhitelistedPools.Set(ctx, key)
+}
+
+// ServiceIsPoolWhitelisted returns true if the given pool has
+// been whitelisted for the given service
+func (k *Keeper) ServiceIsPoolWhitelisted(ctx sdk.Context, serviceID uint32, poolID uint32) (bool, error) {
+	key := collections.Join(serviceID, poolID)
+	return k.serviceWhitelistedPools.Has(ctx, key)
+}
+
+// ServiceIsPoolsWhitelistConfigured returns true if the pool whitelist
+// has been configured for the given service
+func (k *Keeper) ServiceIsPoolsWhitelistConfigured(ctx sdk.Context, serviceID uint32) (bool, error) {
+	iteretor, err := k.ServiceWhitelistedPoolsIterator(ctx, serviceID)
+	if err != nil {
+		return false, err
+	}
+	defer iteretor.Close()
+
+	for ; iteretor.Valid(); iteretor.Next() {
+		return true, nil
+	}
+
+	return false, nil
 }
 
 // --------------------------------------------------------------------------------------------------------------------

@@ -29,6 +29,7 @@ func TestGenesis_Validate(t *testing.T) {
 				nil,
 				nil,
 				nil,
+				nil,
 				types.DefaultParams(),
 			),
 			shouldErr: true,
@@ -45,6 +46,93 @@ func TestGenesis_Validate(t *testing.T) {
 				nil,
 				nil,
 				nil,
+				nil,
+				types.DefaultParams(),
+			),
+			shouldErr: true,
+		},
+		{
+			name: "duplicated service whitelisted operator returns error",
+			genesis: types.NewGenesis(
+				nil,
+				[]types.ServiceWhitelistedOperators{
+					types.NewServiceWhitelistedOperators(1, []uint32{1, 2, 3}),
+					types.NewServiceWhitelistedOperators(1, []uint32{1, 2, 3}),
+				},
+				nil,
+				nil,
+				nil,
+				types.DefaultParams(),
+			),
+			shouldErr: true,
+		},
+		{
+			name: "service whitelisted operators with invalid service ID returns error",
+			genesis: types.NewGenesis(
+				nil,
+				[]types.ServiceWhitelistedOperators{
+					types.NewServiceWhitelistedOperators(0, []uint32{1, 2, 3}),
+				},
+				nil,
+				nil,
+				nil,
+				types.DefaultParams(),
+			),
+			shouldErr: true,
+		},
+		{
+			name: "service whitelisted operators with invalid list returns error",
+			genesis: types.NewGenesis(
+				nil,
+				[]types.ServiceWhitelistedOperators{
+					types.NewServiceWhitelistedOperators(1, []uint32{0, 1}),
+				},
+				nil,
+				nil,
+				nil,
+				types.DefaultParams(),
+			),
+			shouldErr: true,
+		},
+		{
+			name: "duplicated service whitelisted pool returns error",
+			genesis: types.NewGenesis(
+				nil,
+				nil,
+				[]types.ServiceWhitelistedPools{
+					types.NewServiceWhitelistedPools(1, []uint32{1, 2, 3}),
+					types.NewServiceWhitelistedPools(1, []uint32{1, 2, 3}),
+				},
+				nil,
+				nil,
+				types.DefaultParams(),
+			),
+			shouldErr: true,
+		},
+		{
+			name: "service whitelisted pools with invalid service ID returns error",
+			genesis: types.NewGenesis(
+				nil,
+				nil,
+				[]types.ServiceWhitelistedPools{
+					types.NewServiceWhitelistedPools(0, []uint32{1, 2, 3}),
+				},
+				nil,
+				nil,
+				types.DefaultParams(),
+			),
+			shouldErr: true,
+		},
+		{
+			name: "service whitelisted operators with invalid list returns error",
+			genesis: types.NewGenesis(
+				nil,
+				nil,
+				[]types.ServiceWhitelistedPools{
+					types.NewServiceWhitelistedPools(1, []uint32{0, 1}),
+				},
+				nil,
+				nil,
 				types.DefaultParams(),
 			),
 			shouldErr: true,
@@ -52,6 +140,7 @@ func TestGenesis_Validate(t *testing.T) {
 		{
 			name: "invalid pool delegation entry returns error",
 			genesis: types.NewGenesis(
+				nil,
 				nil,
 				nil,
 				[]types.Delegation{
@@ -71,6 +160,7 @@ func TestGenesis_Validate(t *testing.T) {
 			genesis: types.NewGenesis(
 				nil,
 				nil,
+				nil,
 				[]types.Delegation{
 					types.NewServiceDelegation(
 						0,
@@ -88,6 +178,7 @@ func TestGenesis_Validate(t *testing.T) {
 			genesis: types.NewGenesis(
 				nil,
 				nil,
+				nil,
 				[]types.Delegation{
 					types.NewOperatorDelegation(
 						0,
@@ -103,6 +194,7 @@ func TestGenesis_Validate(t *testing.T) {
 		{
 			name: "invalid unbonding delegation returns error",
 			genesis: types.NewGenesis(
+				nil,
 				nil,
 				nil,
 				nil,
@@ -127,6 +219,7 @@ func TestGenesis_Validate(t *testing.T) {
 				nil,
 				nil,
 				nil,
+				nil,
 				types.NewParams(0),
 			),
 			shouldErr: true,
@@ -145,11 +238,13 @@ func TestGenesis_Validate(t *testing.T) {
 						JoinedServices: types.NewOperatorJoinedServices([]uint32{2, 3, 5}),
 					},
 				},
-				[]types.ServiceParamsRecord{
-					{
-						ServiceID: 2,
-						Params:    types.NewServiceParams([]uint32{1, 2, 3}, []uint32{1, 5}),
-					},
+				[]types.ServiceWhitelistedOperators{
+					types.NewServiceWhitelistedOperators(1, []uint32{1, 2, 3}),
+					types.NewServiceWhitelistedOperators(2, []uint32{5, 6, 7}),
+				},
+				[]types.ServiceWhitelistedPools{
+					types.NewServiceWhitelistedPools(3, []uint32{1, 2, 3}),
+					types.NewServiceWhitelistedPools(4, []uint32{5, 6, 7}),
 				},
 				[]types.Delegation{
 					types.NewPoolDelegation(

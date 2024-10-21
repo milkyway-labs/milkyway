@@ -10,7 +10,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/version"
 	"github.com/spf13/cobra"
 
-	"github.com/milkyway-labs/milkyway/utils"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
@@ -29,7 +28,6 @@ func GetTxCmd() *cobra.Command {
 	txCmd.AddCommand(
 		GetDelegateTxCmd(),
 		GetUnbondTxCmd(),
-		GetUpdateTxCmd(),
 		GetOperatorTxCmd(),
 	)
 
@@ -289,69 +287,6 @@ func GetUnbondFromServiceCmd() *cobra.Command {
 
 			// Create and validate the message
 			msg := types.NewMsgUndelegateService(serviceID, amount, delegator)
-			if err = msg.ValidateBasic(); err != nil {
-				return fmt.Errorf("message validation failed: %w", err)
-			}
-
-			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
-		},
-	}
-
-	flags.AddTxFlagsToCmd(cmd)
-
-	return cmd
-}
-
-// --------------------------------------------------------------------------------------------------------------------
-
-// GetUpdateTxCmd returns the command allowing to update operator or service
-// params
-func GetUpdateTxCmd() *cobra.Command {
-	txCmd := &cobra.Command{
-		Use:   "update",
-		Short: "Update transactions subcommands",
-	}
-
-	txCmd.AddCommand(
-		GetUpdateServiceParamsCmd(),
-	)
-
-	return txCmd
-}
-
-// GetUpdateServiceParamsCmd returns the command allowing to update a service's
-// params.
-func GetUpdateServiceParamsCmd() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:     "service-params [service-id] [whitelisted-pool-ids] [whitelisted-operator-ids]",
-		Args:    cobra.ExactArgs(3),
-		Short:   "Update a service's params",
-		Example: fmt.Sprintf("%s tx %s update service-params 1 1,3,4 1,2,3,4,5 --from alice", version.AppName, types.ModuleName),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
-			}
-
-			serviceID, err := servicestypes.ParseServiceID(args[0])
-			if err != nil {
-				return err
-			}
-
-			whitelistedPoolIDs, err := utils.ParseUint32Slice(args[1])
-			if err != nil {
-				return fmt.Errorf("parse whitelisted pool ids: %w", err)
-			}
-
-			whitelistedOperatorIDs, err := utils.ParseUint32Slice(args[2])
-			if err != nil {
-				return fmt.Errorf("parse whitelisted operator ids: %w", err)
-			}
-
-			params := types.NewServiceParams(whitelistedPoolIDs, whitelistedOperatorIDs)
-
-			// Create and validate the message
-			msg := types.NewMsgUpdateServiceParams(serviceID, params, clientCtx.FromAddress.String())
 			if err = msg.ValidateBasic(); err != nil {
 				return fmt.Errorf("message validation failed: %w", err)
 			}

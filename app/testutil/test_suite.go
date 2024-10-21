@@ -179,14 +179,14 @@ func (suite *KeeperTestSuite) UpdateServiceParams(
 	))
 	suite.Require().NoError(err)
 
-	// Make the operator join the service and set its commission rate to 10%.
-	restakingMsgServer := restakingkeeper.NewMsgServer(suite.App.RestakingKeeper)
-	_, err = restakingMsgServer.UpdateServiceParams(ctx, restakingtypes.NewMsgUpdateServiceParams(
-		service.ID,
-		restakingtypes.NewServiceParams(whitelistedPoolsIDs, whitelistedOperatorsIDs),
-		service.Admin,
-	))
-	suite.Require().NoError(err)
+	for _, poolID := range whitelistedPoolsIDs {
+		err := suite.App.RestakingKeeper.ServiceWhitelistPool(ctx, serviceID, poolID)
+		suite.Require().NoError(err)
+	}
+	for _, operatorID := range whitelistedOperatorsIDs {
+		err := suite.App.RestakingKeeper.ServiceWhitelistOperator(ctx, serviceID, operatorID)
+		suite.Require().NoError(err)
+	}
 }
 
 // CreateRewardsPlan creates a rewards plan with the given parameters.

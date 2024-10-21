@@ -49,9 +49,14 @@ func NewQueryOperatorUnbondingDelegationRequest(operatorID uint32, delegatorAddr
 	return &QueryOperatorUnbondingDelegationRequest{OperatorId: operatorID, DelegatorAddress: delegatorAddress}
 }
 
-// NewQueryServiceParamsRequest creates a new QueryServiceParamsRequest instance
-func NewQueryServiceParamsRequest(serviceID uint32) *QueryServiceParamsRequest {
-	return &QueryServiceParamsRequest{ServiceId: serviceID}
+// NewQueryServiceWhitelistedOperatorsRequest creates a new QueryServiceWhitelistedOperatorsRequest instance
+func NewQueryServiceWhitelistedOperatorsRequest(serviceID uint32, pagination *query.PageRequest) *QueryServiceWhitelistedOperatorsRequest {
+	return &QueryServiceWhitelistedOperatorsRequest{ServiceId: serviceID, Pagination: pagination}
+}
+
+// NewQueryServiceWhitelistedPoolsRequest creates a new QueryServiceWhitelistedPoolsRequest instance
+func NewQueryServiceWhitelistedPoolsRequest(serviceID uint32, pagination *query.PageRequest) *QueryServiceWhitelistedPoolsRequest {
+	return &QueryServiceWhitelistedPoolsRequest{ServiceId: serviceID, Pagination: pagination}
 }
 
 // NewQueryServiceDelegationsRequest creates a new QueryServiceDelegationsRequest instance

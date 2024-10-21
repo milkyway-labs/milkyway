@@ -21,5 +21,6 @@ type ServicesKeeper interface {
 type RestakingKeeper interface {
 	GetOperatorJoinedServices(ctx sdk.Context, operatorID uint32) (types.OperatorJoinedServices, error)
 	SaveOperatorJoinedServices(ctx sdk.Context, operatorID uint32, joinedServices types.OperatorJoinedServices) error
-	SaveServiceParams(ctx sdk.Context, serviceID uint32, params types.ServiceParams) error
+	ServiceWhitelistOperator(ctx sdk.Context, serviceID uint32, operatorID uint32) error
+	ServiceWhitelistPool(ctx sdk.Context, serviceID uint32, poolID uint32) error
 }

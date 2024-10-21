@@ -63,40 +63,32 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllOperatorsJoinedServicesRecord() {
 	}
 }
 
-func (suite *KeeperTestSuite) TestKeeper_GetAllServicesParams() {
+// --------------------------------------------------------------------------------------------------------------------
+
+func (suite *KeeperTestSuite) TestKeeper_GetAllServicesWhitelistedOperators() {
 	testCases := []struct {
 		name       string
 		store      func(ctx sdk.Context)
 		shouldErr  bool
-		expRecords []types.ServiceParamsRecord
+		expRecords []types.ServiceWhitelistedOperators
 	}{
 		{
-			name: "services params are returned properly",
+			name: "services whitelisted operators are returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SaveServiceParams(ctx, 1, types.NewServiceParams(
-					[]uint32{1, 2},
-					nil,
-				))
+				suite.k.ServiceWhitelistOperator(ctx, 1, 1)
+				suite.k.ServiceWhitelistOperator(ctx, 1, 2)
 
-				suite.k.SaveServiceParams(ctx, 2, types.NewServiceParams(
-					[]uint32{3, 4},
-					[]uint32{1, 2},
-				))
+				suite.k.ServiceWhitelistOperator(ctx, 2, 3)
+				suite.k.ServiceWhitelistOperator(ctx, 2, 4)
 			},
-			expRecords: []types.ServiceParamsRecord{
+			expRecords: []types.ServiceWhitelistedOperators{
 				{
-					ServiceID: 1,
-					Params: types.NewServiceParams(
-						[]uint32{1, 2},
-						nil,
-					),
+					ServiceID:   1,
+					OperatorIDs: []uint32{1, 2},
 				},
 				{
-					ServiceID: 2,
-					Params: types.NewServiceParams(
-						[]uint32{3, 4},
-						[]uint32{1, 2},
-					),
+					ServiceID:   2,
+					OperatorIDs: []uint32{3, 4},
 				},
 			},
 		},
@@ -105,20 +97,67 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServicesParams() {
 	for _, tc := range testCases {
 		tc := tc
 		suite.Run(tc.name, func() {
-			ctx, _ := suite.ctx.CacheContext()
+			suite.SetupTest()
+			ctx := suite.ctx
 			if tc.store != nil {
 				tc.store(ctx)
 			}
 
-			services, err := suite.k.GetAllServicesParams(ctx)
+			whitelistedOperators, err := suite.k.GetAllServicesWhitelistedOperators(ctx)
 			suite.Require().NoError(err)
-			suite.Require().Equal(tc.expRecords, services)
+			suite.Require().Equal(tc.expRecords, whitelistedOperators)
 		})
 	}
 }
 
 // --------------------------------------------------------------------------------------------------------------------
 
+func (suite *KeeperTestSuite) TestKeeper_GetAllServicesWhitelistedPools() {
+	testCases := []struct {
+		name       string
+		store      func(ctx sdk.Context)
+		shouldErr  bool
+		expRecords []types.ServiceWhitelistedPools
+	}{
+		{
+			name: "services whitelisted pools are returned properly",
+			store: func(ctx sdk.Context) {
+				suite.k.ServiceWhitelistPool(ctx, 1, 1)
+				suite.k.ServiceWhitelistPool(ctx, 1, 2)
+
+				suite.k.ServiceWhitelistPool(ctx, 2, 3)
+				suite.k.ServiceWhitelistPool(ctx, 2, 4)
+			},
+			expRecords: []types.ServiceWhitelistedPools{
+				{
+					ServiceID: 1,
+					PoolIDs:   []uint32{1, 2},
+				},
+				{
+					ServiceID: 2,
+					PoolIDs:   []uint32{3, 4},
+				},
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			suite.SetupTest()
+			ctx := suite.ctx
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			whitelistedPools, err := suite.k.GetAllServicesWhitelistedPools(ctx)
+			suite.Require().NoError(err)
+			suite.Require().Equal(tc.expRecords, whitelistedPools)
+		})
+	}
+}
+
+// --------------------------------------------------------------------------------------------------------------------
 func (suite *KeeperTestSuite) TestKeeper_GetAllPoolDelegations() {
 	testCases := []struct {
 		name           string

@@ -152,22 +152,16 @@ func (k *Keeper) AllocateRewardsByPlan(
 		return servicestypes.ErrServiceNotFound
 	}
 
-	// Get pools and operators that are eligible for this rewards plan's
-	// rewards allocation, along with each entity's total delegation value.
-	// If an entity's total delegation value is zero, then it won't be included
-	// in this block's rewards allocation.
-	serviceParams, err := k.restakingKeeper.GetServiceParams(sdkCtx, service.ID)
+	eligiblePools, err := k.getEligiblePools(ctx, service, pools)
 	if err != nil {
 		return err
 	}
-
-	eligiblePools := k.getEligiblePools(ctx, service, serviceParams, pools)
 	poolDistrInfos, totalPoolsDelValues, err := k.getDistrInfos(ctx, eligiblePools)
 	if err != nil {
 		return err
 	}
 
-	eligibleOperators, err := k.getEligibleOperators(ctx, service, serviceParams, operators)
+	eligibleOperators, err := k.getEligibleOperators(ctx, service, operators)
 	if err != nil {
 		return err
 	}
@@ -247,29 +241,34 @@ func (k *Keeper) AllocateRewardsByPlan(
 // params, then no pools are eligible for rewards allocation.
 func (k *Keeper) getEligiblePools(
 	ctx context.Context, service servicestypes.Service,
-	serviceParams restakingtypes.ServiceParams, pools []poolstypes.Pool,
-) (eligiblePools []restakingtypes.DelegationTarget) {
+	pools []poolstypes.Pool,
+) (eligiblePools []restakingtypes.DelegationTarget, err error) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	poolsParams := k.poolsKeeper.GetParams(sdkCtx)
+	isWhitelistConfigured, err := k.restakingKeeper.ServiceIsPoolsWhitelistConfigured(sdkCtx, service.ID)
+	if err != nil {
+		return nil, err
+	}
+
 	if slices.Contains(poolsParams.AllowedServicesIDs, service.ID) {
 		// If there's no whitelisted pools, that means all pools.
-		if len(serviceParams.WhitelistedPoolsIDs) == 0 {
+		if !isWhitelistConfigured {
 			return utils.Map(pools, func(p poolstypes.Pool) restakingtypes.DelegationTarget {
 				return &p
-			})
-		}
-		whitelistedPoolIDs := map[uint32]struct{}{}
-		for _, poolID := range serviceParams.WhitelistedPoolsIDs {
-			whitelistedPoolIDs[poolID] = struct{}{}
+			}), nil
 		}
 		// Only include whitelisted pools.
 		for _, pool := range pools {
-			if _, ok := whitelistedPoolIDs[pool.ID]; ok {
+			whitelisted, err := k.restakingKeeper.ServiceIsPoolWhitelisted(sdkCtx, service.ID, pool.ID)
+			if err != nil {
+				return nil, err
+			}
+			if whitelisted {
 				eligiblePools = append(eligiblePools, &pool)
 			}
 		}
 	}
-	return eligiblePools
+	return eligiblePools, nil
 }
 
 // getEligibleOperators returns a list of operators that are eligible for rewards
@@ -278,19 +277,38 @@ func (k *Keeper) getEligiblePools(
 // have joined the service are eligible for rewards allocation.
 func (k *Keeper) getEligibleOperators(
 	ctx context.Context, service servicestypes.Service,
-	serviceParams restakingtypes.ServiceParams, operators []operatorstypes.Operator,
+	operators []operatorstypes.Operator,
 ) (eligibleOperators []restakingtypes.DelegationTarget, err error) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	isWhitelistConfigurd, err := k.restakingKeeper.ServiceIsOpertorsWhitelistConfigured(sdkCtx, service.ID)
+	if err != nil {
+		return nil, err
+	}
+
 	// TODO: can we optimize this? maybe by having a new index key
 	for _, operator := range operators {
 		operatorJoinedServices, err := k.restakingKeeper.GetOperatorJoinedServices(sdkCtx, operator.ID)
 		if err != nil {
 			return nil, err
 		}
-		if operatorJoinedServices.Contains(service.ID) &&
-			(len(serviceParams.WhitelistedOperatorsIDs) == 0 ||
-				slices.Contains(serviceParams.WhitelistedOperatorsIDs, operator.ID)) {
-			eligibleOperators = append(eligibleOperators, &operator)
+		if operatorJoinedServices.Contains(service.ID) {
+			// Whitelist not configured, set the operator as eligible
+			if !isWhitelistConfigurd {
+				eligibleOperators = append(eligibleOperators, &operator)
+				continue
+			}
+
+			// We have an operators whitelist for this service, ensure that
+			// the operator is whitelisted.
+			isOperatorWhitelisted, err := k.restakingKeeper.ServiceIsOperatorWhitelisted(
+				sdkCtx, service.ID, operator.ID)
+			if err != nil {
+				return nil, err
+			}
+
+			if isOperatorWhitelisted {
+				eligibleOperators = append(eligibleOperators, &operator)
+			}
 		}
 	}
 	return eligibleOperators, nil

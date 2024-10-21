@@ -25,12 +25,20 @@ service Query {
         "/milkyway/restaking/v1/operators/{operator_id}/joined_services";
   }
 
-  // ServiceParams queries the service params for the given service.
-  rpc ServiceParams(QueryServiceParamsRequest)
-      returns (QueryServiceParamsResponse) {
+  // ServiceWhitelistedOperators queries whitelisted operators for a given service.
+  rpc ServiceWhitelistedOperators(QueryServiceWhitelistedOperatorsRequest)
+      returns (QueryServiceWhitelistedOperatorsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
     option (google.api.http).get =
-        "/milkyway/restaking/v1/services/{service_id}/params";
+        "/milkyway/restaking/v1/services/{service_id}/whitelisted_operators";
+  }
+
+  // ServiceWhitelistedPools queries whitelisted pools for a given service.
+  rpc ServiceWhitelistedPools(QueryServiceWhitelistedPoolsRequest)
+      returns (QueryServiceWhitelistedPoolsResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get =
+        "/milkyway/restaking/v1/services/{service_id}/whitelisted_pools";
   }
 
   // PoolDelegations queries the delegations info for the given pool.
@@ -271,17 +279,45 @@ message QueryOperatorJoinedServicesResponse {
   repeated uint32 service_ids = 1;
 }
 
-// QueryServiceParamsRequest is request type for the Query/ServiceParams
+// QueryServiceWhitelistedOperatorsRequest is request type for the Query/ServiceWhitelistedOperators
 // RPC method.
-message QueryServiceParamsRequest {
+message QueryServiceWhitelistedOperatorsRequest {
   // ServiceId is the ID of the service to query
   uint32 service_id = 1;
+
+  // Pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
-// QueryServiceParamsResponse is response type for the Query/ServiceParams
+// QueryServiceWhitelistedOperatorsResponse is response type for the Query/ServiceWhitelistedOperators
 // RPC method.
-message QueryServiceParamsResponse {
-  ServiceParams service_params = 1 [ (gogoproto.nullable) = false ];
+message QueryServiceWhitelistedOperatorsResponse {
+  // OperatorIds is the list of operators in the service's whitelist
+  repeated uint32 operator_ids = 1;
+
+  // Pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+
+// QueryServiceWhitelistedPoolsRequest is request type for the Query/ServiceWhitelistedPools
+// RPC method.
+message QueryServiceWhitelistedPoolsRequest {
+  // ServiceId is the ID of the service to query
+  uint32 service_id = 1;
+
+  // Pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryServiceWhitelistedPoolsResponse is response type for the Query/ServiceWhitelistedPools
+// RPC method.
+message QueryServiceWhitelistedPoolsResponse {
+  // PoolIds is the list of pools in the service's whitelist
+  repeated uint32 pool_ids = 1;
+
+  // Pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // QueryPoolDelegationsRequest is request type for the Query/PoolDelegations RPC

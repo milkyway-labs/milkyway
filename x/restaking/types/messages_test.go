@@ -57,56 +57,6 @@ func TestMsgUpdateOperatorParams_ValidateBasic(t *testing.T) {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-var msgUpdateServiceParams = types.NewMsgUpdateServiceParams(
-	1, types.NewServiceParams([]uint32{1, 2, 3}, []uint32{4, 5, 6}),
-	"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd")
-
-func TestMsgUpdateServiceParams_ValidateBasic(t *testing.T) {
-	testCases := []struct {
-		name      string
-		msg       *types.MsgUpdateServiceParams
-		shouldErr bool
-	}{
-		{
-			name: "invalid service id returns error",
-			msg: types.NewMsgUpdateServiceParams(
-				0,
-				msgUpdateServiceParams.Params,
-				msgUpdateServiceParams.Sender,
-			),
-			shouldErr: true,
-		},
-		{
-			name: "valid message returns no error",
-			msg:  msgUpdateServiceParams,
-		},
-	}
-
-	for _, tc := range testCases {
-		tc := tc
-		t.Run(tc.name, func(t *testing.T) {
-			err := tc.msg.ValidateBasic()
-			if tc.shouldErr {
-				require.Error(t, err)
-			} else {
-				require.NoError(t, err)
-			}
-		})
-	}
-}
-
-func TestMsgUpdateServiceParams_GetSignBytes(t *testing.T) {
-	expected := `{"type":"milkyway/MsgUpdateServiceParams","value":{"params":{"whitelisted_operators_ids":[4,5,6],"whitelisted_pools_ids":[1,2,3]},"sender":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","service_id":1}}`
-	require.Equal(t, expected, string(msgUpdateServiceParams.GetSignBytes()))
-}
-
-func TestMsgUpdateServiceParams_GetSigners(t *testing.T) {
-	addr, _ := sdk.AccAddressFromBech32(msgUpdateServiceParams.Sender)
-	require.Equal(t, []sdk.AccAddress{addr}, msgUpdateServiceParams.GetSigners())
-}
-
-// --------------------------------------------------------------------------------------------------------------------
-
 var msgDelegatePool = types.NewMsgDelegatePool(
 	sdk.NewCoin("umilk", sdkmath.NewInt(100_000_000)),
 	"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",

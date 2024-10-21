@@ -9,23 +9,26 @@ import (
 // NewGenesis creates a new genesis state
 func NewGenesis(
 	operatorsJoinedServices []OperatorJoinedServicesRecord,
-	servicesParamsRecords []ServiceParamsRecord,
+	servicesWhitelistedOperators []ServiceWhitelistedOperators,
+	servicesWhitelistedPools []ServiceWhitelistedPools,
 	delegations []Delegation,
 	unbondingDelegations []UnbondingDelegation,
 	params Params,
 ) *GenesisState {
 	return &GenesisState{
-		OperatorsJoinedServices: operatorsJoinedServices,
-		ServicesParams:          servicesParamsRecords,
-		Delegations:             delegations,
-		UnbondingDelegations:    unbondingDelegations,
-		Params:                  params,
+		OperatorsJoinedServices:      operatorsJoinedServices,
+		ServicesWhitelistedOperators: servicesWhitelistedOperators,
+		ServicesWhitelistedPools:     servicesWhitelistedPools,
+		Delegations:                  delegations,
+		UnbondingDelegations:         unbondingDelegations,
+		Params:                       params,
 	}
 }
 
 // DefaultGenesis returns a default genesis state
 func DefaultGenesis() *GenesisState {
 	return NewGenesis(
+		nil,
 		nil,
 		nil,
 		nil,
@@ -40,8 +43,12 @@ func (g *GenesisState) Validate() error {
 		return fmt.Errorf("duplicated operator joined services in: %d", duplicate.OperatorID)
 	}
 
-	if duplicate := findDuplicateServiceParamsRecords(g.ServicesParams); duplicate != nil {
-		return fmt.Errorf("duplicated service params: %d", duplicate.ServiceID)
+	if duplicate := findDuplicateServiceWhitelistedOperators(g.ServicesWhitelistedOperators); duplicate != nil {
+		return fmt.Errorf("duplicated service whitelisted operators, service id: %d", duplicate.ServiceID)
+	}
+
+	if duplicate := findDuplicateServiceWhitelistedPools(g.ServicesWhitelistedPools); duplicate != nil {
+		return fmt.Errorf("duplicated service whitelisted pools, service id: %d", duplicate.ServiceID)
 	}
 
 	for _, record := range g.OperatorsJoinedServices {
@@ -51,13 +58,19 @@ func (g *GenesisState) Validate() error {
 		}
 	}
 
-	for _, record := range g.ServicesParams {
-		if record.ServiceID == 0 {
-			return fmt.Errorf("invalid service id: %d", record.ServiceID)
-		}
-		err := record.Params.Validate()
+	// Validate the whitelisted services operators
+	for _, entry := range g.ServicesWhitelistedOperators {
+		err := entry.Validate()
 		if err != nil {
-			return fmt.Errorf("invalid service params with id %d: %s", record.ServiceID, err)
+			return fmt.Errorf("invalid service whitelisted operators with id %d: %s", entry.ServiceID, err)
+		}
+	}
+
+	// Validate the whitelisted services pools
+	for _, entry := range g.ServicesWhitelistedPools {
+		err := entry.Validate()
+		if err != nil {
+			return fmt.Errorf("invalid service whitelisted pools with id %d: %s", entry.ServiceID, err)
 		}
 	}
 
@@ -92,8 +105,14 @@ func findDuplicateOperatorJoinedServiceRecords(records []OperatorJoinedServicesR
 	})
 }
 
-func findDuplicateServiceParamsRecords(records []ServiceParamsRecord) *ServiceParamsRecord {
-	return utils.FindDuplicateFunc(records, func(a, b ServiceParamsRecord) bool {
+func findDuplicateServiceWhitelistedOperators(records []ServiceWhitelistedOperators) *ServiceWhitelistedOperators {
+	return utils.FindDuplicateFunc(records, func(a, b ServiceWhitelistedOperators) bool {
+		return a.ServiceID == b.ServiceID
+	})
+}
+
+func findDuplicateServiceWhitelistedPools(records []ServiceWhitelistedPools) *ServiceWhitelistedPools {
+	return utils.FindDuplicateFunc(records, func(a, b ServiceWhitelistedPools) bool {
 		return a.ServiceID == b.ServiceID
 	})
 }
@@ -117,17 +136,48 @@ func (o *OperatorJoinedServicesRecord) Validate() error {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// NewServiceParamsRecord creates a new instance of ServiceParamsRecord.
-func NewServiceParamsRecord(serviceID uint32, params ServiceParams) ServiceParamsRecord {
-	return ServiceParamsRecord{
-		ServiceID: serviceID,
-		Params:    params,
+// NewServiceWhitelistedOperators creates a new instance of ServiceWhitelistedOperators.
+func NewServiceWhitelistedOperators(serviceID uint32, operatorIDs []uint32) ServiceWhitelistedOperators {
+	return ServiceWhitelistedOperators{
+		ServiceID:   serviceID,
+		OperatorIDs: operatorIDs,
 	}
 }
 
-func (r *ServiceParamsRecord) Validate() error {
+func (r *ServiceWhitelistedOperators) Validate() error {
 	if r.ServiceID == 0 {
 		return fmt.Errorf("the service id must be greater than 0")
 	}
-	return r.Params.Validate()
+
+	for _, operatorID := range r.OperatorIDs {
+		if operatorID == 0 {
+			return fmt.Errorf("the operator id must be greater than 0")
+		}
+	}
+
+	return nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewServiceWhitelistedPools creates a new instance of ServiceWhitelistedPools.
+func NewServiceWhitelistedPools(serviceID uint32, poolIDs []uint32) ServiceWhitelistedPools {
+	return ServiceWhitelistedPools{
+		ServiceID: serviceID,
+		PoolIDs:   poolIDs,
+	}
+}
+
+func (r *ServiceWhitelistedPools) Validate() error {
+	if r.ServiceID == 0 {
+		return fmt.Errorf("the service id must be greater than 0")
+	}
+
+	for _, poolID := range r.PoolIDs {
+		if poolID == 0 {
+			return fmt.Errorf("the pool id must be greater than 0")
+		}
+	}
+
+	return nil
 }
