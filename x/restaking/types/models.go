@@ -387,7 +387,7 @@ func MustUnmarshalUnbondingDelegation(cdc codec.BinaryCodec, bz []byte) Unbondin
 // instance.
 func NewEmptyOperatorJoinedServices() OperatorJoinedServices {
 	return OperatorJoinedServices{
-		ServiceIDs: make([]uint32, 0),
+		ServiceIDs: nil,
 	}
 }
 
