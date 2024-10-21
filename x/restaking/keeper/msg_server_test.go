@@ -14,23 +14,23 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-func (suite *KeeperTestSuite) TestMsgServer_UpdateOperatorParams() {
+func (suite *KeeperTestSuite) TestMsgServer_JoinService() {
 	testCases := []struct {
 		name      string
 		setup     func()
 		store     func(ctx sdk.Context)
 		setupCtx  func(ctx sdk.Context) sdk.Context
-		msg       *types.MsgUpdateOperatorParams
+		msg       *types.MsgJoinService
 		shouldErr bool
 		expEvents sdk.Events
 		check     func(ctx sdk.Context)
 	}{
 		{
 			name: "non-existent operator id returns an error",
-			msg: &types.MsgUpdateOperatorParams{
+			msg: &types.MsgJoinService{
 				Sender:     "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				OperatorID: 1,
-				Params:     types.NewOperatorParams(sdkmath.LegacyNewDecWithPrec(1, 1), nil),
+				ServiceID:  1,
 			},
 			shouldErr: true,
 		},
@@ -45,15 +45,15 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperatorParams() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				))
 			},
-			msg: &types.MsgUpdateOperatorParams{
+			msg: &types.MsgJoinService{
 				Sender:     "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				OperatorID: 1,
-				Params:     types.NewOperatorParams(sdkmath.LegacyNewDecWithPrec(1, 1), []uint32{1}),
+				ServiceID:  1,
 			},
 			shouldErr: true,
 		},
 		{
-			name: "only admin can update the params",
+			name: "only operator admin can perform JoinService",
 			store: func(ctx sdk.Context) {
 				suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
 					1, operatorstypes.OPERATOR_STATUS_ACTIVE,
@@ -62,11 +62,19 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperatorParams() {
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				))
+				suite.sk.SaveService(ctx, servicestypes.NewService(
+					1, servicestypes.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
 			},
-			msg: &types.MsgUpdateOperatorParams{
+			msg: &types.MsgJoinService{
 				Sender:     "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				OperatorID: 1,
-				Params:     types.NewOperatorParams(sdkmath.LegacyNewDecWithPrec(1, 1), []uint32{1}),
+				ServiceID:  1,
 			},
 			shouldErr: true,
 		},
@@ -89,19 +97,18 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperatorParams() {
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
 			},
-			msg: &types.MsgUpdateOperatorParams{
+			msg: &types.MsgJoinService{
 				Sender:     "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				OperatorID: 1,
-				Params:     types.NewOperatorParams(sdkmath.LegacyNewDecWithPrec(1, 1), []uint32{1}),
+				ServiceID:  1,
 			},
 			shouldErr: false,
 			expEvents: sdk.Events{
 				sdk.NewEvent(
-					types.EventTypeUpdateOperatorParams,
+					types.EventTypeJoinService,
 					sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, "1"),
-					sdk.NewAttribute(types.AttributeKeyCommissionRate, "0.100000000000000000"),
 					sdk.NewAttribute(
-						types.AttributeKeyJoinedServiceIDs, "1"),
+						types.AttributeKeyJoinedServiceID, "1"),
 				),
 			},
 		},
@@ -122,7 +129,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperatorParams() {
 			}
 
 			msgServer := keeper.NewMsgServer(suite.k)
-			_, err := msgServer.UpdateOperatorParams(ctx, tc.msg)
+			_, err := msgServer.JoinService(ctx, tc.msg)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {

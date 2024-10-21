@@ -20,29 +20,30 @@ import (
 // --- Params operations
 // --------------------------------------------------------------------------------------------------------------------
 
-// GetAllOperatorsParams returns all the operators params
-func (k *Keeper) GetAllOperatorsParams(ctx sdk.Context) []types.OperatorParamsRecord {
-	store := ctx.KVStore(k.storeKey)
-	iterator := storetypes.KVStorePrefixIterator(store, types.OperatorParamsPrefix)
+// GetAllOperatorsJoinedServices returns all the operators joined services
+func (k *Keeper) GetAllOperatorsJoinedServices(ctx sdk.Context) ([]types.OperatorJoinedServicesRecord, error) {
+	iterator, err := k.operatorJoinedServices.Iterate(ctx, nil)
+	if err != nil {
+		return nil, err
+	}
 	defer iterator.Close()
 
-	var records []types.OperatorParamsRecord
+	var records []types.OperatorJoinedServicesRecord
 	for ; iterator.Valid(); iterator.Next() {
-		var params types.OperatorParams
-		k.cdc.MustUnmarshal(iterator.Value(), &params)
-
-		operatorID, err := types.ParseOperatorParamsKey(iterator.Key())
+		operatorID, err := iterator.Key()
 		if err != nil {
-			panic(err)
+			return nil, err
+		}
+		operatorJoinedServices, err := iterator.Value()
+		if err != nil {
+			return nil, err
 		}
 
-		records = append(records, types.OperatorParamsRecord{
-			OperatorID: operatorID,
-			Params:     params,
-		})
+		records = append(records, types.NewOperatorJoinedServicesRecord(
+			operatorID, operatorJoinedServices))
 	}
 
-	return records
+	return records, nil
 }
 
 // GetAllServicesParams returns all the services params

@@ -18,9 +18,7 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-var (
-	_ types.MsgServer = msgServer{}
-)
+var _ types.MsgServer = msgServer{}
 
 type msgServer struct {
 	*Keeper
@@ -30,8 +28,8 @@ func NewMsgServer(keeper *Keeper) types.MsgServer {
 	return &msgServer{Keeper: keeper}
 }
 
-// UpdateOperatorParams defines the rpc method for Msg/UpdateOperatorParams
-func (k msgServer) UpdateOperatorParams(goCtx context.Context, msg *types.MsgUpdateOperatorParams) (*types.MsgUpdateOperatorParamsResponse, error) {
+// JoinService defines the rpc method for Msg/JoinService
+func (k msgServer) JoinService(goCtx context.Context, msg *types.MsgJoinService) (*types.MsgJoinServiceResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	operator, found := k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
@@ -40,28 +38,28 @@ func (k msgServer) UpdateOperatorParams(goCtx context.Context, msg *types.MsgUpd
 	}
 
 	if operator.Admin != msg.Sender {
-		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can update the params")
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can join the service")
 	}
 
-	for _, serviceID := range msg.Params.JoinedServicesIDs {
-		_, found = k.servicesKeeper.GetService(ctx, serviceID)
-		if !found {
-			return nil, errors.Wrapf(sdkerrors.ErrNotFound, "service %d not found", serviceID)
-		}
+	_, found = k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	if !found {
+		return nil, errors.Wrapf(sdkerrors.ErrNotFound, "service %d not found", msg.ServiceID)
 	}
 
-	k.SaveOperatorParams(ctx, msg.OperatorID, msg.Params)
+	err := k.AddServiceToOperator(ctx, msg.OperatorID, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
 
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeUpdateOperatorParams,
+			types.EventTypeJoinService,
 			sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, fmt.Sprint(msg.OperatorID)),
-			sdk.NewAttribute(types.AttributeKeyCommissionRate, msg.Params.CommissionRate.String()),
-			sdk.NewAttribute(types.AttributeKeyJoinedServiceIDs, utils.FormatUint32Slice(msg.Params.JoinedServicesIDs)),
+			sdk.NewAttribute(types.AttributeKeyJoinedServiceID, fmt.Sprintf("%d", msg.ServiceID)),
 		),
 	})
 
-	return &types.MsgUpdateOperatorParamsResponse{}, nil
+	return &types.MsgJoinServiceResponse{}, nil
 }
 
 // UpdateServiceParams defines the rpc method for Msg/UpdateServiceParams

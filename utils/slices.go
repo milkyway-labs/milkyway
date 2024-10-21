@@ -42,3 +42,13 @@ func RemoveDuplicates[T comparable](slice []T) []T {
 	}
 	return result
 }
+
+// Contains returns true if the slice contains the given value.
+func Contains[T comparable](slice []T, value T) bool {
+	for _, v := range slice {
+		if v == value {
+			return true
+		}
+	}
+	return false
+}

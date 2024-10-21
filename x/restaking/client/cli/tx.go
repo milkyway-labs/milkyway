@@ -31,6 +31,7 @@ func GetTxCmd() *cobra.Command {
 		GetDelegateTxCmd(),
 		GetUnbondTxCmd(),
 		GetUpdateTxCmd(),
+		GetOperatorTxCmd(),
 	)
 
 	return txCmd
@@ -313,57 +314,10 @@ func GetUpdateTxCmd() *cobra.Command {
 	}
 
 	txCmd.AddCommand(
-		GetUpdateOperatorParamsCmd(),
 		GetUpdateServiceParamsCmd(),
 	)
 
 	return txCmd
-}
-
-// GetUpdateOperatorParamsCmd returns the command allowing to update an
-// operator's params.
-func GetUpdateOperatorParamsCmd() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:     "operator-params [operator-id] [commission-rate] [joined-service-ids]",
-		Args:    cobra.ExactArgs(3),
-		Short:   "Update an operator's params",
-		Example: fmt.Sprintf("%s tx %s update operator-params 1 0.05 1,3,4 --from alice", version.AppName, types.ModuleName),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
-			}
-
-			operatorID, err := operatorstypes.ParseOperatorID(args[0])
-			if err != nil {
-				return err
-			}
-
-			commissionRate, err := math.LegacyNewDecFromStr(args[1])
-			if err != nil {
-				return fmt.Errorf("invalid commission rate: %w", err)
-			}
-
-			joinedServiceIDs, err := utils.ParseUint32Slice(args[2])
-			if err != nil {
-				return fmt.Errorf("parse joined service ids: %w", err)
-			}
-
-			params := types.NewOperatorParams(commissionRate, joinedServiceIDs)
-
-			// Create and validate the message
-			msg := types.NewMsgUpdateOperatorParams(operatorID, params, clientCtx.FromAddress.String())
-			if err = msg.ValidateBasic(); err != nil {
-				return fmt.Errorf("message validation failed: %w", err)
-			}
-
-			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
-		},
-	}
-
-	flags.AddTxFlagsToCmd(cmd)
-
-	return cmd
 }
 
 // GetUpdateServiceParamsCmd returns the command allowing to update a service's
@@ -404,6 +358,62 @@ func GetUpdateServiceParamsCmd() *cobra.Command {
 
 			// Create and validate the message
 			msg := types.NewMsgUpdateServiceParams(serviceID, params, clientCtx.FromAddress.String())
+			if err = msg.ValidateBasic(); err != nil {
+				return fmt.Errorf("message validation failed: %w", err)
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// GetUpdateTxCmd returns the command allowing to update operator or service
+// params
+func GetOperatorTxCmd() *cobra.Command {
+	txCmd := &cobra.Command{
+		Use:   "operator",
+		Short: "Restaking operator subcommands",
+	}
+
+	txCmd.AddCommand(
+		GetJoinServiceCmd(),
+	)
+
+	return txCmd
+}
+
+// GetJoinServiceCmd returns the command allowing to add a service to the
+// list of service joined by an operator.
+func GetJoinServiceCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "join-service [operator-id] [service-id]",
+		Args:    cobra.ExactArgs(2),
+		Short:   "Join a service as a validator",
+		Example: fmt.Sprintf("%s tx %s operator join-service 1 1 --from alice", version.AppName, types.ModuleName),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			operatorID, err := operatorstypes.ParseOperatorID(args[0])
+			if err != nil {
+				return err
+			}
+
+			serviceID, err := types.ParseServiceID(args[2])
+			if err != nil {
+				return fmt.Errorf("parse service id: %w", err)
+			}
+
+			// Create and validate the message
+			msg := types.NewMsgJoinService(operatorID, serviceID, clientCtx.FromAddress.String())
 			if err = msg.ValidateBasic(); err != nil {
 				return fmt.Errorf("message validation failed: %w", err)
 			}

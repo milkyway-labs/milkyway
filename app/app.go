@@ -673,6 +673,7 @@ func NewMilkyWayApp(
 	app.RestakingKeeper = restakingkeeper.NewKeeper(
 		app.appCodec,
 		keys[restakingtypes.StoreKey],
+		runtime.NewKVStoreService(keys[restakingtypes.StoreKey]),
 		app.AccountKeeper,
 		app.BankKeeper,
 		app.PoolsKeeper,
@@ -1668,6 +1669,7 @@ func (app *MilkyWayApp) GetScopedIBCKeeper() capabilitykeeper.ScopedKeeper {
 func (app *MilkyWayApp) TxConfig() client.TxConfig {
 	return app.txConfig
 }
+
 func (app *MilkyWayApp) setupIndexer(db dbm.DB, appOpts servertypes.AppOptions, ac, vc address.Codec, appCodec codec.Codec) error {
 	// initialize the indexer fake-keeper
 	indexerConfig, err := indexerconfig.NewConfig(appOpts)

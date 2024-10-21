@@ -24,9 +24,9 @@ func NewQueryPoolUnbondingDelegationRequest(poolID uint32, delegatorAddress stri
 	return &QueryPoolUnbondingDelegationRequest{PoolId: poolID, DelegatorAddress: delegatorAddress}
 }
 
-// NewQueryOperatorParamsRequest creates a new QueryOperatorParamsRequest instance
-func NewQueryOperatorParamsRequest(operatorID uint32) *QueryOperatorParamsRequest {
-	return &QueryOperatorParamsRequest{OperatorId: operatorID}
+// NewQueryOperatorJoinedServicesRequest creates a new QueryOperatorJoinedServicesRequest instance
+func NewQueryOperatorJoinedServicesRequest(operatorID uint32) *QueryOperatorJoinedServicesRequest {
+	return &QueryOperatorJoinedServicesRequest{OperatorId: operatorID}
 }
 
 // NewQueryOperatorDelegationsRequest creates a new QueryOperatorDelegationsRequest instance

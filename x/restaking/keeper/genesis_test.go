@@ -17,37 +17,29 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		expGenesis *types.GenesisState
 	}{
 		{
-			name: "operator params are exported properly",
+			name: "operator joined services are exported correctly",
 			store: func(ctx sdk.Context) {
 				suite.k.SetParams(ctx, types.DefaultParams())
 
-				suite.k.SaveOperatorParams(ctx, 1, types.NewOperatorParams(
-					sdkmath.LegacyNewDecWithPrec(1, 2),
-					[]uint32{1, 2},
-				))
+				err := suite.k.SaveOperatorJoinedServices(ctx, 1,
+					types.NewOperatorJoinedServices([]uint32{1, 2}))
+				suite.Require().NoError(err)
 
-				suite.k.SaveOperatorParams(ctx, 2, types.NewOperatorParams(
-					sdkmath.LegacyNewDecWithPrec(5, 2),
-					[]uint32{3, 4},
-				))
+				err = suite.k.SaveOperatorJoinedServices(ctx, 2,
+					types.NewOperatorJoinedServices([]uint32{3, 4}))
+				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				Params: types.DefaultParams(),
-				OperatorsParams: []types.OperatorParamsRecord{
-					{
-						OperatorID: 1,
-						Params: types.NewOperatorParams(
-							sdkmath.LegacyNewDecWithPrec(1, 2),
+				OperatorsJoinedServices: []types.OperatorJoinedServicesRecord{
+					types.NewOperatorJoinedServicesRecord(1,
+						types.NewOperatorJoinedServices(
 							[]uint32{1, 2},
-						),
-					},
-					{
-						OperatorID: 2,
-						Params: types.NewOperatorParams(
-							sdkmath.LegacyNewDecWithPrec(5, 2),
+						)),
+					types.NewOperatorJoinedServicesRecord(2,
+						types.NewOperatorJoinedServices(
 							[]uint32{3, 4},
-						),
-					},
+						)),
 				},
 			},
 		},
@@ -220,7 +212,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					1,
 					10,
-					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("pool/1/umilk", sdkmath.NewInt(100))),
 					1,
 				))
@@ -233,7 +225,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 						1,
 						10,
-						time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+						time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 						sdk.NewCoins(sdk.NewCoin("pool/1/umilk", sdkmath.NewInt(100))),
 						1,
 					),
@@ -249,7 +241,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					1,
 					10,
-					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("operator/1/umilk", sdkmath.NewInt(100))),
 					1,
 				))
@@ -262,7 +254,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 						1,
 						10,
-						time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+						time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 						sdk.NewCoins(sdk.NewCoin("operator/1/umilk", sdkmath.NewInt(100))),
 						1,
 					),
@@ -278,7 +270,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					1,
 					10,
-					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("service/1/umilk", sdkmath.NewInt(100))),
 					1,
 				))
@@ -291,7 +283,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 						1,
 						10,
-						time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+						time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 						sdk.NewCoins(sdk.NewCoin("service/1/umilk", sdkmath.NewInt(100))),
 						1,
 					),
@@ -340,33 +332,29 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 			name: "operator params are stored properly",
 			genesis: &types.GenesisState{
 				Params: types.DefaultParams(),
-				OperatorsParams: []types.OperatorParamsRecord{
-					{
-						OperatorID: 1,
-						Params: types.NewOperatorParams(
-							sdkmath.LegacyNewDecWithPrec(1, 2),
+				OperatorsJoinedServices: []types.OperatorJoinedServicesRecord{
+					types.NewOperatorJoinedServicesRecord(1,
+						types.NewOperatorJoinedServices(
 							[]uint32{1, 2},
 						),
-					},
-					{
-						OperatorID: 2,
-						Params: types.NewOperatorParams(
-							sdkmath.LegacyNewDecWithPrec(5, 2),
+					),
+					types.NewOperatorJoinedServicesRecord(2,
+						types.NewOperatorJoinedServices(
 							[]uint32{3, 4},
 						),
-					},
+					),
 				},
 			},
 			check: func(ctx sdk.Context) {
-				stored := suite.k.GetOperatorParams(ctx, 1)
-				suite.Require().Equal(types.NewOperatorParams(
-					sdkmath.LegacyNewDecWithPrec(1, 2),
+				stored, err := suite.k.GetOperatorJoinedServices(ctx, 1)
+				suite.Require().NoError(err)
+				suite.Require().Equal(types.NewOperatorJoinedServices(
 					[]uint32{1, 2},
 				), stored)
 
-				stored = suite.k.GetOperatorParams(ctx, 2)
-				suite.Require().Equal(types.NewOperatorParams(
-					sdkmath.LegacyNewDecWithPrec(5, 2),
+				stored, err = suite.k.GetOperatorJoinedServices(ctx, 2)
+				suite.Require().NoError(err)
+				suite.Require().Equal(types.NewOperatorJoinedServices(
 					[]uint32{3, 4},
 				), stored)
 			},
@@ -502,7 +490,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 						1,
 						10,
-						time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+						time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 						sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 						1,
 					),
@@ -516,7 +504,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					1,
 					10,
-					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 					1,
 				), stored)
@@ -531,7 +519,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 						1,
 						10,
-						time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+						time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 						sdk.NewCoins(sdk.NewCoin("operators/1/umilk", sdkmath.NewInt(100))),
 						1,
 					),
@@ -545,7 +533,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					1,
 					10,
-					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("operators/1/umilk", sdkmath.NewInt(100))),
 					1,
 				), stored)
@@ -560,7 +548,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 						1,
 						10,
-						time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+						time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 						sdk.NewCoins(sdk.NewCoin("services/1/umilk", sdkmath.NewInt(100))),
 						1,
 					),
@@ -574,7 +562,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					1,
 					10,
-					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("services/1/umilk", sdkmath.NewInt(100))),
 					1,
 				), stored)

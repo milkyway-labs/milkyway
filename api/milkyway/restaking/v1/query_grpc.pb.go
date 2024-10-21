@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Query_OperatorParams_FullMethodName                        = "/milkyway.restaking.v1.Query/OperatorParams"
+	Query_OperatorJoinedServices_FullMethodName                = "/milkyway.restaking.v1.Query/OperatorJoinedServices"
 	Query_ServiceParams_FullMethodName                         = "/milkyway.restaking.v1.Query/ServiceParams"
 	Query_PoolDelegations_FullMethodName                       = "/milkyway.restaking.v1.Query/PoolDelegations"
 	Query_PoolDelegation_FullMethodName                        = "/milkyway.restaking.v1.Query/PoolDelegation"
@@ -54,8 +54,8 @@ const (
 //
 // Query defines the gRPC querier service.
 type QueryClient interface {
-	// OperatorParams queries the operator params for the given operator.
-	OperatorParams(ctx context.Context, in *QueryOperatorParamsRequest, opts ...grpc.CallOption) (*QueryOperatorParamsResponse, error)
+	// OperatorJoinedServices queries the services that an operator has joined.
+	OperatorJoinedServices(ctx context.Context, in *QueryOperatorJoinedServicesRequest, opts ...grpc.CallOption) (*QueryOperatorJoinedServicesResponse, error)
 	// ServiceParams queries the service params for the given service.
 	ServiceParams(ctx context.Context, in *QueryServiceParamsRequest, opts ...grpc.CallOption) (*QueryServiceParamsResponse, error)
 	// PoolDelegations queries the delegations info for the given pool.
@@ -136,10 +136,10 @@ func NewQueryClient(cc grpc.ClientConnInterface) QueryClient {
 	return &queryClient{cc}
 }
 
-func (c *queryClient) OperatorParams(ctx context.Context, in *QueryOperatorParamsRequest, opts ...grpc.CallOption) (*QueryOperatorParamsResponse, error) {
+func (c *queryClient) OperatorJoinedServices(ctx context.Context, in *QueryOperatorJoinedServicesRequest, opts ...grpc.CallOption) (*QueryOperatorJoinedServicesResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(QueryOperatorParamsResponse)
-	err := c.cc.Invoke(ctx, Query_OperatorParams_FullMethodName, in, out, cOpts...)
+	out := new(QueryOperatorJoinedServicesResponse)
+	err := c.cc.Invoke(ctx, Query_OperatorJoinedServices_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -412,8 +412,8 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 //
 // Query defines the gRPC querier service.
 type QueryServer interface {
-	// OperatorParams queries the operator params for the given operator.
-	OperatorParams(context.Context, *QueryOperatorParamsRequest) (*QueryOperatorParamsResponse, error)
+	// OperatorJoinedServices queries the services that an operator has joined.
+	OperatorJoinedServices(context.Context, *QueryOperatorJoinedServicesRequest) (*QueryOperatorJoinedServicesResponse, error)
 	// ServiceParams queries the service params for the given service.
 	ServiceParams(context.Context, *QueryServiceParamsRequest) (*QueryServiceParamsResponse, error)
 	// PoolDelegations queries the delegations info for the given pool.
@@ -494,8 +494,8 @@ type QueryServer interface {
 // pointer dereference when methods are called.
 type UnimplementedQueryServer struct{}
 
-func (UnimplementedQueryServer) OperatorParams(context.Context, *QueryOperatorParamsRequest) (*QueryOperatorParamsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method OperatorParams not implemented")
+func (UnimplementedQueryServer) OperatorJoinedServices(context.Context, *QueryOperatorJoinedServicesRequest) (*QueryOperatorJoinedServicesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OperatorJoinedServices not implemented")
 }
 func (UnimplementedQueryServer) ServiceParams(context.Context, *QueryServiceParamsRequest) (*QueryServiceParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ServiceParams not implemented")
@@ -596,20 +596,20 @@ func RegisterQueryServer(s grpc.ServiceRegistrar, srv QueryServer) {
 	s.RegisterService(&Query_ServiceDesc, srv)
 }
 
-func _Query_OperatorParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryOperatorParamsRequest)
+func _Query_OperatorJoinedServices_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryOperatorJoinedServicesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).OperatorParams(ctx, in)
+		return srv.(QueryServer).OperatorJoinedServices(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_OperatorParams_FullMethodName,
+		FullMethod: Query_OperatorJoinedServices_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).OperatorParams(ctx, req.(*QueryOperatorParamsRequest))
+		return srv.(QueryServer).OperatorJoinedServices(ctx, req.(*QueryOperatorJoinedServicesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1090,8 +1090,8 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*QueryServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "OperatorParams",
-			Handler:    _Query_OperatorParams_Handler,
+			MethodName: "OperatorJoinedServices",
+			Handler:    _Query_OperatorJoinedServices_Handler,
 		},
 		{
 			MethodName: "ServiceParams",

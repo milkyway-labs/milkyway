@@ -212,7 +212,7 @@ func GetOperatorsQueryCmd() *cobra.Command {
 	}
 
 	queryCmd.AddCommand(
-		getOperatorParamsQueryCmd(),
+		getOperatorJoinedServices(),
 		getOperatorDelegationsQueryCmd(),
 		getOperatorDelegationQueryCmd(),
 		getOperatorUnbondingDelegationsQueryCmd(),
@@ -222,13 +222,13 @@ func GetOperatorsQueryCmd() *cobra.Command {
 	return queryCmd
 }
 
-// getOperatorParamsQueryCmd returns the command allowing to query an
-// operator's params.
-func getOperatorParamsQueryCmd() *cobra.Command {
+// getOperatorJoinedServices returns the command allowing to query an
+// operator's joined services.
+func getOperatorJoinedServices() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "params [operator-id]",
-		Short:   "Query an operator's params",
-		Example: fmt.Sprintf(`%s query %s operator params 1`, version.AppName, types.ModuleName),
+		Use:     "joined-services [operator-id]",
+		Short:   "Query an operator's joined services",
+		Example: fmt.Sprintf(`%s query %s operator joined-services 1`, version.AppName, types.ModuleName),
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -241,7 +241,7 @@ func getOperatorParamsQueryCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			res, err := queryClient.OperatorParams(cmd.Context(), types.NewQueryOperatorParamsRequest(operatorID))
+			res, err := queryClient.OperatorJoinedServices(cmd.Context(), types.NewQueryOperatorJoinedServicesRequest(operatorID))
 			if err != nil {
 				return err
 			}

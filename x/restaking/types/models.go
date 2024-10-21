@@ -3,6 +3,7 @@ package types
 import (
 	"fmt"
 	"sort"
+	"strconv"
 	"time"
 
 	"cosmossdk.io/math"
@@ -14,39 +15,6 @@ import (
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
-
-// NewOperatorParams creates a new OperatorParams instance
-func NewOperatorParams(commissionRate math.LegacyDec, joinedServicesIDs []uint32) OperatorParams {
-	return OperatorParams{
-		CommissionRate:    commissionRate,
-		JoinedServicesIDs: joinedServicesIDs,
-	}
-}
-
-// DefaultOperatorParams returns the default operator params
-func DefaultOperatorParams() OperatorParams {
-	return NewOperatorParams(math.LegacyZeroDec(), nil)
-}
-
-// Validate validates the operator params
-func (p *OperatorParams) Validate() error {
-	if p.CommissionRate.IsNegative() || p.CommissionRate.GT(math.LegacyOneDec()) {
-		return fmt.Errorf("invalid commission rate: %s", p.CommissionRate.String())
-	}
-
-	if duplicate := utils.FindDuplicate(p.JoinedServicesIDs); duplicate != nil {
-		return fmt.Errorf("duplicated joined service id: %v", duplicate)
-	}
-
-	for _, serviceID := range p.JoinedServicesIDs {
-		if serviceID == 0 {
-			return fmt.Errorf("invalid joined service id: %d", serviceID)
-		}
-	}
-	return nil
-}
-
-// --------------------------------------------------------------------------------------------------------------------
 
 // NewServiceParams creates a new ServiceParams instance
 func NewServiceParams(
@@ -378,4 +346,66 @@ func MustUnmarshalUnbondingDelegation(cdc codec.BinaryCodec, bz []byte) Unbondin
 		panic(err)
 	}
 	return unbondingDelegation
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewEmptyOperatorJoinedServices creates a new empty OperatorJoinedServices
+// instance.
+func NewEmptyOperatorJoinedServices() OperatorJoinedServices {
+	return OperatorJoinedServices{}
+}
+
+// NewOperatorJoinedServices creates a new OperatorJoinedServices instance.
+func NewOperatorJoinedServices(serviceIDs []uint32) OperatorJoinedServices {
+	return OperatorJoinedServices{
+		ServiceIDs: serviceIDs,
+	}
+}
+
+// Validate checks if the OperatorJoinedServices instance is valid.
+func (o *OperatorJoinedServices) Validate() error {
+	duplicate := utils.FindDuplicate(o.ServiceIDs)
+	if duplicate != nil {
+		return fmt.Errorf("duplicated service id: %d", *duplicate)
+	}
+	if utils.Contains(o.ServiceIDs, 0) {
+		return fmt.Errorf("the service id cannot be 0]")
+	}
+
+	return nil
+}
+
+// UnsafeAdd adds the serviceID to the list of joined services without
+// performing any check on the validity of the provided value and on the
+// resulting validity of OperatorJoinedServices.
+func (o *OperatorJoinedServices) UnsafeAdd(serviceID uint32) {
+	o.ServiceIDs = append(o.ServiceIDs, serviceID)
+}
+
+// Contains returns true if the serviceID is already present.
+func (o *OperatorJoinedServices) Contains(serviceID uint32) bool {
+	return utils.Contains(o.ServiceIDs, serviceID)
+}
+
+// Add adds the serviceID to the list of joined services and returns
+// true if the serviceID was added, false if was already in the list.
+func (o *OperatorJoinedServices) Add(serviceID uint32) error {
+	if serviceID == 0 {
+		return fmt.Errorf("service id cannot be 0")
+	}
+	if o.Contains(serviceID) {
+		return fmt.Errorf("service id %d already present", serviceID)
+	}
+	o.UnsafeAdd(serviceID)
+	return nil
+}
+
+// ParseOperatorID tries parsing the given value as an service id
+func ParseServiceID(value string) (uint32, error) {
+	operatorID, err := strconv.ParseUint(value, 10, 32)
+	if err != nil {
+		return 0, fmt.Errorf("invalid service ID: %s", value)
+	}
+	return uint32(operatorID), nil
 }

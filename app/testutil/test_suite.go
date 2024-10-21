@@ -140,17 +140,22 @@ func (suite *KeeperTestSuite) UpdateOperatorParams(
 	joinedServicesIDs []uint32,
 ) {
 	// Make sure the operator is found
-	operator, found := suite.App.OperatorsKeeper.GetOperator(ctx, operatorID)
+	_, found := suite.App.OperatorsKeeper.GetOperator(ctx, operatorID)
 	suite.Require().True(found, "operator must be found")
 
-	// Make the operator join the service and set its commission rate to 10%.
-	restakingMsgServer := restakingkeeper.NewMsgServer(suite.App.RestakingKeeper)
-	_, err := restakingMsgServer.UpdateOperatorParams(ctx, restakingtypes.NewMsgUpdateOperatorParams(
-		operator.ID,
-		restakingtypes.NewOperatorParams(commissionRate, joinedServicesIDs),
-		operator.Admin,
-	))
+	// Sets the operator commission rate
+	err := suite.App.OperatorsKeeper.SaveOperatorParams(ctx, operatorID,
+		operatorstypes.NewOperatorParams(commissionRate))
 	suite.Require().NoError(err)
+
+	// Make the operator join the service.
+	joinedServices, err := suite.App.RestakingKeeper.GetOperatorJoinedServices(ctx, operatorID)
+	suite.Require().NoError(err)
+	for _, serviceID := range joinedServicesIDs {
+		err = joinedServices.Add(serviceID)
+		suite.Require().NoError(err)
+	}
+	suite.App.RestakingKeeper.SaveOperatorJoinedServices(ctx, operatorID, joinedServices)
 }
 
 // UpdateServiceParams updates the service's params.

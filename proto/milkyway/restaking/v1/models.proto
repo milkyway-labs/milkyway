@@ -9,24 +9,12 @@ import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/restaking/types";
 
-// OperatorParams represent the params that have been set for an individual
-// operator.
-message OperatorParams {
-
-  // Deprecated: Now the operator's commission rate is stored inside the x/operators
-  // module.
-  // CommissionRate defines the commission rate charged to delegators, as a
-  // fraction.
-  string commission_rate = 1 [
-    deprecated = true,
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false
-  ];
-
-  // JoinedServicesIDs defines the list of service IDs that the operator has
-  // joined.
-  repeated uint32 joined_services_ids = 2
-      [ (gogoproto.customname) = "JoinedServicesIDs" ];
+// OperatorJoinedServices represents the list of services the operator has joined.
+message OperatorJoinedServices {
+    // ServiceIDs defines the list of service IDs the operator has joined.
+    repeated uint32 service_ids = 1 [
+      (gogoproto.customname) = "ServiceIDs"
+    ];
 }
 
 // ServiceParams represent the params that have been set for an individual
