@@ -303,8 +303,7 @@ func GetUnbondFromServiceCmd() *cobra.Command {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// GetUpdateTxCmd returns the command allowing to update operator or service
-// params
+// GetOperatorTxCmd returns the command to manage the operators.
 func GetOperatorTxCmd() *cobra.Command {
 	txCmd := &cobra.Command{
 		Use:   "operator",
@@ -335,10 +334,10 @@ func GetJoinServiceCmd() *cobra.Command {
 
 			operatorID, err := operatorstypes.ParseOperatorID(args[0])
 			if err != nil {
-				return err
+				return fmt.Errorf("parse operator id: %w", err)
 			}
 
-			serviceID, err := types.ParseServiceID(args[2])
+			serviceID, err := servicestypes.ParseServiceID(args[1])
 			if err != nil {
 				return fmt.Errorf("parse service id: %w", err)
 			}
@@ -374,10 +373,10 @@ func GetLeaveServiceCmd() *cobra.Command {
 
 			operatorID, err := operatorstypes.ParseOperatorID(args[0])
 			if err != nil {
-				return err
+				return fmt.Errorf("parse operator id: %w", err)
 			}
 
-			serviceID, err := types.ParseServiceID(args[2])
+			serviceID, err := servicestypes.ParseServiceID(args[1])
 			if err != nil {
 				return fmt.Errorf("parse service id: %w", err)
 			}
