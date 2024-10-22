@@ -25,7 +25,7 @@ service Query {
         "/milkyway/restaking/v1/operators/{operator_id}/joined_services";
   }
 
-  // ServiceWhitelistedOperators queries whitelisted operators for a given service.
+  // ServiceWhitelistedOperators queries the whitelisted operators for a given service.
   rpc ServiceWhitelistedOperators(QueryServiceWhitelistedOperatorsRequest)
       returns (QueryServiceWhitelistedOperatorsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
@@ -33,7 +33,7 @@ service Query {
         "/milkyway/restaking/v1/services/{service_id}/whitelisted_operators";
   }
 
-  // ServiceWhitelistedPools queries whitelisted pools for a given service.
+  // ServiceWhitelistedPools queries the whitelisted pools for a given service.
   rpc ServiceWhitelistedPools(QueryServiceWhitelistedPoolsRequest)
       returns (QueryServiceWhitelistedPoolsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
@@ -303,7 +303,7 @@ message QueryServiceWhitelistedOperatorsResponse {
 // QueryServiceWhitelistedPoolsRequest is request type for the Query/ServiceWhitelistedPools
 // RPC method.
 message QueryServiceWhitelistedPoolsRequest {
-  // ServiceId is the ID of the service to query
+  // ServiceId is the ID of the service to query.
   uint32 service_id = 1;
 
   // Pagination defines an optional pagination for the request.
@@ -313,7 +313,7 @@ message QueryServiceWhitelistedPoolsRequest {
 // QueryServiceWhitelistedPoolsResponse is response type for the Query/ServiceWhitelistedPools
 // RPC method.
 message QueryServiceWhitelistedPoolsResponse {
-  // PoolIds is the list of pools in the service's whitelist
+  // PoolIds is the list of pools in the service's whitelist.
   repeated uint32 pool_ids = 1;
 
   // Pagination defines the pagination in the response.
@@ -323,7 +323,7 @@ message QueryServiceWhitelistedPoolsResponse {
 // QueryPoolDelegationsRequest is request type for the Query/PoolDelegations RPC
 // method.
 message QueryPoolDelegationsRequest {
-  // PoolId is the ID of the pool to query
+  // PoolId is the ID of the pool to query.
   uint32 pool_id = 1;
 
   // Pagination defines an optional pagination for the request.
@@ -333,7 +333,7 @@ message QueryPoolDelegationsRequest {
 // QueryPoolDelegationsResponse is response type for the Query/PoolDelegations
 // RPC method.
 message QueryPoolDelegationsResponse {
-  // Delegations is the list of delegations
+  // Delegations is the list of delegations.
   repeated DelegationResponse delegations = 1 [ (gogoproto.nullable) = false ];
 
   // Pagination defines the pagination in the response.

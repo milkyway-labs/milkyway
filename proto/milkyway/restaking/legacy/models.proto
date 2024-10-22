@@ -27,7 +27,6 @@ message LegacyOperatorParams {
   ];
 }
 
-
 // LegacyServiceParams represent the previous format that we where using to store
 // the params that have been set for an individual service.
 message LegacyServiceParams {

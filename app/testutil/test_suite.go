@@ -167,16 +167,11 @@ func (suite *KeeperTestSuite) UpdateServiceParams(
 	whitelistedOperatorsIDs []uint32,
 ) {
 	// Make sure the service is found
-	service, found := suite.App.ServicesKeeper.GetService(ctx, serviceID)
+	_, found := suite.App.ServicesKeeper.GetService(ctx, serviceID)
 	suite.Require().True(found, "service must be found")
 
-	servicesMsgServer := serviceskeeper.NewMsgServer(suite.App.ServicesKeeper)
 	serviceParams := servicestypes.NewServiceParams(slashFraction)
-	_, err := servicesMsgServer.SetServiceParams(ctx, servicestypes.NewMsgSetServiceParams(
-		serviceID,
-		serviceParams,
-		service.Admin,
-	))
+	err := suite.App.ServicesKeeper.SaveServiceParams(ctx, serviceID, serviceParams)
 	suite.Require().NoError(err)
 
 	for _, poolID := range whitelistedPoolsIDs {

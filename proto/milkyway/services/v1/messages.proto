@@ -175,13 +175,13 @@ message MsgSetServiceParams {
   option (cosmos.msg.v1.signer) = "sender";
   option (amino.name) = "milkyway/MsgSetServiceParams";
 
-  // Sender is the address of the user updating the parameters
+  // Sender is the address of the user updating the parameters.
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
-  // ServiceID represents the ID of the service to update the parameters
+  // ServiceID represents the ID of the service to update the parameters.
   uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
 
-  // Params are the new parameters of the service
+  // Params are the new parameters of the service.
   ServiceParams params = 3 [ (gogoproto.nullable) = false ];
 }
 

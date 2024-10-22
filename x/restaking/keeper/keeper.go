@@ -24,10 +24,12 @@ type Keeper struct {
 	servicesKeeper  types.ServicesKeeper
 
 	// Keeper data
-	schema                      collections.Schema
-	operatorJoinedServices      collections.Map[uint32, types.OperatorJoinedServices]
+	schema                 collections.Schema
+	operatorJoinedServices collections.Map[uint32, types.OperatorJoinedServices]
+	// The represents the service ID and the operator ID
 	serviceWhitelistedOperators collections.KeySet[collections.Pair[uint32, uint32]]
-	serviceWhitelistedPools     collections.KeySet[collections.Pair[uint32, uint32]]
+	// The represents the service ID and the pool ID
+	serviceWhitelistedPools collections.KeySet[collections.Pair[uint32, uint32]]
 
 	hooks types.RestakingHooks
 }

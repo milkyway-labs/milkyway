@@ -71,10 +71,9 @@ message QueryServiceResponse {
   Service service = 1 [ (gogoproto.nullable) = false ];
 }
 
-
 // QueryServiceParamsRequest is the request type for the Query/ServiceParams RPC method.
 message QueryServiceParamsRequest {
-  // ServiceID is the ID of the service to query
+  // ServiceID is the ID of the service to query.
   uint32 service_id = 1;
 }
 
