@@ -20,8 +20,8 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	Query_OperatorJoinedServices_FullMethodName                = "/milkyway.restaking.v1.Query/OperatorJoinedServices"
-	Query_ServiceWhitelistedOperators_FullMethodName           = "/milkyway.restaking.v1.Query/ServiceWhitelistedOperators"
-	Query_ServiceWhitelistedPools_FullMethodName               = "/milkyway.restaking.v1.Query/ServiceWhitelistedPools"
+	Query_ServiceAllowedOperators_FullMethodName               = "/milkyway.restaking.v1.Query/ServiceAllowedOperators"
+	Query_ServiceAllowedPools_FullMethodName                   = "/milkyway.restaking.v1.Query/ServiceAllowedPools"
 	Query_PoolDelegations_FullMethodName                       = "/milkyway.restaking.v1.Query/PoolDelegations"
 	Query_PoolDelegation_FullMethodName                        = "/milkyway.restaking.v1.Query/PoolDelegation"
 	Query_PoolUnbondingDelegations_FullMethodName              = "/milkyway.restaking.v1.Query/PoolUnbondingDelegations"
@@ -57,10 +57,10 @@ const (
 type QueryClient interface {
 	// OperatorJoinedServices queries the services that an operator has joined.
 	OperatorJoinedServices(ctx context.Context, in *QueryOperatorJoinedServicesRequest, opts ...grpc.CallOption) (*QueryOperatorJoinedServicesResponse, error)
-	// ServiceWhitelistedOperators queries whitelisted operators for a given service.
-	ServiceWhitelistedOperators(ctx context.Context, in *QueryServiceWhitelistedOperatorsRequest, opts ...grpc.CallOption) (*QueryServiceWhitelistedOperatorsResponse, error)
-	// ServiceWhitelistedPools queries whitelisted pools for a given service.
-	ServiceWhitelistedPools(ctx context.Context, in *QueryServiceWhitelistedPoolsRequest, opts ...grpc.CallOption) (*QueryServiceWhitelistedPoolsResponse, error)
+	// ServiceAllowedOperators queries the allowed operators for a given service.
+	ServiceAllowedOperators(ctx context.Context, in *QueryServiceAllowedOperatorsRequest, opts ...grpc.CallOption) (*QueryServiceAllowedOperatorsResponse, error)
+	// ServiceAllowedPools queries the allowed pools for a given service.
+	ServiceAllowedPools(ctx context.Context, in *QueryServiceAllowedPoolsRequest, opts ...grpc.CallOption) (*QueryServiceAllowedPoolsResponse, error)
 	// PoolDelegations queries the delegations info for the given pool.
 	PoolDelegations(ctx context.Context, in *QueryPoolDelegationsRequest, opts ...grpc.CallOption) (*QueryPoolDelegationsResponse, error)
 	// PoolDelegation queries the delegation info for the given pool and
@@ -149,20 +149,20 @@ func (c *queryClient) OperatorJoinedServices(ctx context.Context, in *QueryOpera
 	return out, nil
 }
 
-func (c *queryClient) ServiceWhitelistedOperators(ctx context.Context, in *QueryServiceWhitelistedOperatorsRequest, opts ...grpc.CallOption) (*QueryServiceWhitelistedOperatorsResponse, error) {
+func (c *queryClient) ServiceAllowedOperators(ctx context.Context, in *QueryServiceAllowedOperatorsRequest, opts ...grpc.CallOption) (*QueryServiceAllowedOperatorsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(QueryServiceWhitelistedOperatorsResponse)
-	err := c.cc.Invoke(ctx, Query_ServiceWhitelistedOperators_FullMethodName, in, out, cOpts...)
+	out := new(QueryServiceAllowedOperatorsResponse)
+	err := c.cc.Invoke(ctx, Query_ServiceAllowedOperators_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *queryClient) ServiceWhitelistedPools(ctx context.Context, in *QueryServiceWhitelistedPoolsRequest, opts ...grpc.CallOption) (*QueryServiceWhitelistedPoolsResponse, error) {
+func (c *queryClient) ServiceAllowedPools(ctx context.Context, in *QueryServiceAllowedPoolsRequest, opts ...grpc.CallOption) (*QueryServiceAllowedPoolsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(QueryServiceWhitelistedPoolsResponse)
-	err := c.cc.Invoke(ctx, Query_ServiceWhitelistedPools_FullMethodName, in, out, cOpts...)
+	out := new(QueryServiceAllowedPoolsResponse)
+	err := c.cc.Invoke(ctx, Query_ServiceAllowedPools_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -427,10 +427,10 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 type QueryServer interface {
 	// OperatorJoinedServices queries the services that an operator has joined.
 	OperatorJoinedServices(context.Context, *QueryOperatorJoinedServicesRequest) (*QueryOperatorJoinedServicesResponse, error)
-	// ServiceWhitelistedOperators queries whitelisted operators for a given service.
-	ServiceWhitelistedOperators(context.Context, *QueryServiceWhitelistedOperatorsRequest) (*QueryServiceWhitelistedOperatorsResponse, error)
-	// ServiceWhitelistedPools queries whitelisted pools for a given service.
-	ServiceWhitelistedPools(context.Context, *QueryServiceWhitelistedPoolsRequest) (*QueryServiceWhitelistedPoolsResponse, error)
+	// ServiceAllowedOperators queries the allowed operators for a given service.
+	ServiceAllowedOperators(context.Context, *QueryServiceAllowedOperatorsRequest) (*QueryServiceAllowedOperatorsResponse, error)
+	// ServiceAllowedPools queries the allowed pools for a given service.
+	ServiceAllowedPools(context.Context, *QueryServiceAllowedPoolsRequest) (*QueryServiceAllowedPoolsResponse, error)
 	// PoolDelegations queries the delegations info for the given pool.
 	PoolDelegations(context.Context, *QueryPoolDelegationsRequest) (*QueryPoolDelegationsResponse, error)
 	// PoolDelegation queries the delegation info for the given pool and
@@ -512,11 +512,11 @@ type UnimplementedQueryServer struct{}
 func (UnimplementedQueryServer) OperatorJoinedServices(context.Context, *QueryOperatorJoinedServicesRequest) (*QueryOperatorJoinedServicesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OperatorJoinedServices not implemented")
 }
-func (UnimplementedQueryServer) ServiceWhitelistedOperators(context.Context, *QueryServiceWhitelistedOperatorsRequest) (*QueryServiceWhitelistedOperatorsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ServiceWhitelistedOperators not implemented")
+func (UnimplementedQueryServer) ServiceAllowedOperators(context.Context, *QueryServiceAllowedOperatorsRequest) (*QueryServiceAllowedOperatorsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ServiceAllowedOperators not implemented")
 }
-func (UnimplementedQueryServer) ServiceWhitelistedPools(context.Context, *QueryServiceWhitelistedPoolsRequest) (*QueryServiceWhitelistedPoolsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ServiceWhitelistedPools not implemented")
+func (UnimplementedQueryServer) ServiceAllowedPools(context.Context, *QueryServiceAllowedPoolsRequest) (*QueryServiceAllowedPoolsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ServiceAllowedPools not implemented")
 }
 func (UnimplementedQueryServer) PoolDelegations(context.Context, *QueryPoolDelegationsRequest) (*QueryPoolDelegationsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PoolDelegations not implemented")
@@ -632,38 +632,38 @@ func _Query_OperatorJoinedServices_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_ServiceWhitelistedOperators_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryServiceWhitelistedOperatorsRequest)
+func _Query_ServiceAllowedOperators_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryServiceAllowedOperatorsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).ServiceWhitelistedOperators(ctx, in)
+		return srv.(QueryServer).ServiceAllowedOperators(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_ServiceWhitelistedOperators_FullMethodName,
+		FullMethod: Query_ServiceAllowedOperators_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).ServiceWhitelistedOperators(ctx, req.(*QueryServiceWhitelistedOperatorsRequest))
+		return srv.(QueryServer).ServiceAllowedOperators(ctx, req.(*QueryServiceAllowedOperatorsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_ServiceWhitelistedPools_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryServiceWhitelistedPoolsRequest)
+func _Query_ServiceAllowedPools_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryServiceAllowedPoolsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).ServiceWhitelistedPools(ctx, in)
+		return srv.(QueryServer).ServiceAllowedPools(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Query_ServiceWhitelistedPools_FullMethodName,
+		FullMethod: Query_ServiceAllowedPools_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).ServiceWhitelistedPools(ctx, req.(*QueryServiceWhitelistedPoolsRequest))
+		return srv.(QueryServer).ServiceAllowedPools(ctx, req.(*QueryServiceAllowedPoolsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1130,12 +1130,12 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Query_OperatorJoinedServices_Handler,
 		},
 		{
-			MethodName: "ServiceWhitelistedOperators",
-			Handler:    _Query_ServiceWhitelistedOperators_Handler,
+			MethodName: "ServiceAllowedOperators",
+			Handler:    _Query_ServiceAllowedOperators_Handler,
 		},
 		{
-			MethodName: "ServiceWhitelistedPools",
-			Handler:    _Query_ServiceWhitelistedPools_Handler,
+			MethodName: "ServiceAllowedPools",
+			Handler:    _Query_ServiceAllowedPools_Handler,
 		},
 		{
 			MethodName: "PoolDelegations",

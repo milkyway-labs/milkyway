@@ -88,11 +88,11 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorJoinedServices() {
 	}
 }
 
-func (suite *KeeperTestSuite) TestQuerier_ServiceWhitelistedOperators() {
+func (suite *KeeperTestSuite) TestQuerier_ServiceAllowedOperators() {
 	testCases := []struct {
 		name         string
 		store        func(ctx sdk.Context)
-		request      *types.QueryServiceWhitelistedOperatorsRequest
+		request      *types.QueryServiceAllowedOperatorsRequest
 		shouldErr    bool
 		expOperators []uint32
 	}{
@@ -103,12 +103,12 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceWhitelistedOperators() {
 		},
 		{
 			name:      "invalid service id returns error",
-			request:   types.NewQueryServiceWhitelistedOperatorsRequest(0, nil),
+			request:   types.NewQueryServiceAllowedOperatorsRequest(0, nil),
 			shouldErr: true,
 		},
 		{
 			name:      "not found service whitelist returns empty list",
-			request:   types.NewQueryServiceWhitelistedOperatorsRequest(1, nil),
+			request:   types.NewQueryServiceAllowedOperatorsRequest(1, nil),
 			shouldErr: false,
 		},
 		{
@@ -118,7 +118,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceWhitelistedOperators() {
 				suite.k.ServiceWhitelistOperator(ctx, 1, 2)
 				suite.k.ServiceWhitelistOperator(ctx, 2, 3)
 			},
-			request:      types.NewQueryServiceWhitelistedOperatorsRequest(1, nil),
+			request:      types.NewQueryServiceAllowedOperatorsRequest(1, nil),
 			shouldErr:    false,
 			expOperators: []uint32{1, 2},
 		},
@@ -129,7 +129,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceWhitelistedOperators() {
 				suite.k.ServiceWhitelistOperator(ctx, 1, 2)
 				suite.k.ServiceWhitelistOperator(ctx, 2, 3)
 			},
-			request: types.NewQueryServiceWhitelistedOperatorsRequest(1, &query.PageRequest{
+			request: types.NewQueryServiceAllowedOperatorsRequest(1, &query.PageRequest{
 				Offset: 0,
 				Limit:  1,
 			}),
@@ -148,7 +148,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceWhitelistedOperators() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.ServiceWhitelistedOperators(ctx, tc.request)
+			res, err := querier.ServiceAllowedOperators(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -159,11 +159,11 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceWhitelistedOperators() {
 	}
 }
 
-func (suite *KeeperTestSuite) TestQuerier_ServiceWhitelistedPools() {
+func (suite *KeeperTestSuite) TestQuerier_ServiceAllowedPools() {
 	testCases := []struct {
 		name      string
 		store     func(ctx sdk.Context)
-		request   *types.QueryServiceWhitelistedPoolsRequest
+		request   *types.QueryServiceAllowedPoolsRequest
 		shouldErr bool
 		expPools  []uint32
 	}{
@@ -174,12 +174,12 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceWhitelistedPools() {
 		},
 		{
 			name:      "invalid service id returns error",
-			request:   types.NewQueryServiceWhitelistedPoolsRequest(0, nil),
+			request:   types.NewQueryServiceAllowedPoolsRequest(0, nil),
 			shouldErr: true,
 		},
 		{
 			name:      "not found service whitelist returns empty list",
-			request:   types.NewQueryServiceWhitelistedPoolsRequest(1, nil),
+			request:   types.NewQueryServiceAllowedPoolsRequest(1, nil),
 			shouldErr: false,
 		},
 		{
@@ -189,7 +189,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceWhitelistedPools() {
 				suite.k.ServiceWhitelistPool(ctx, 1, 2)
 				suite.k.ServiceWhitelistPool(ctx, 2, 3)
 			},
-			request:   types.NewQueryServiceWhitelistedPoolsRequest(1, nil),
+			request:   types.NewQueryServiceAllowedPoolsRequest(1, nil),
 			shouldErr: false,
 			expPools:  []uint32{1, 2},
 		},
@@ -200,7 +200,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceWhitelistedPools() {
 				suite.k.ServiceWhitelistPool(ctx, 1, 2)
 				suite.k.ServiceWhitelistPool(ctx, 2, 3)
 			},
-			request: types.NewQueryServiceWhitelistedPoolsRequest(1, &query.PageRequest{
+			request: types.NewQueryServiceAllowedPoolsRequest(1, &query.PageRequest{
 				Offset: 0,
 				Limit:  1,
 			}),
@@ -219,7 +219,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceWhitelistedPools() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.ServiceWhitelistedPools(ctx, tc.request)
+			res, err := querier.ServiceAllowedPools(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {

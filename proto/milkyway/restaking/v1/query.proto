@@ -25,20 +25,20 @@ service Query {
         "/milkyway/restaking/v1/operators/{operator_id}/joined_services";
   }
 
-  // ServiceWhitelistedOperators queries the whitelisted operators for a given service.
-  rpc ServiceWhitelistedOperators(QueryServiceWhitelistedOperatorsRequest)
-      returns (QueryServiceWhitelistedOperatorsResponse) {
+  // ServiceAllowedOperators queries the allowed operators for a given service.
+  rpc ServiceAllowedOperators(QueryServiceAllowedOperatorsRequest)
+      returns (QueryServiceAllowedOperatorsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
     option (google.api.http).get =
-        "/milkyway/restaking/v1/services/{service_id}/whitelisted_operators";
+        "/milkyway/restaking/v1/services/{service_id}/allowed_operators";
   }
 
-  // ServiceWhitelistedPools queries the whitelisted pools for a given service.
-  rpc ServiceWhitelistedPools(QueryServiceWhitelistedPoolsRequest)
-      returns (QueryServiceWhitelistedPoolsResponse) {
+  // ServiceAllowedPools queries the allowed pools for a given service.
+  rpc ServiceAllowedPools(QueryServiceAllowedPoolsRequest)
+      returns (QueryServiceAllowedPoolsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
     option (google.api.http).get =
-        "/milkyway/restaking/v1/services/{service_id}/whitelisted_pools";
+        "/milkyway/restaking/v1/services/{service_id}/allowed_pools";
   }
 
   // PoolDelegations queries the delegations info for the given pool.
@@ -279,9 +279,9 @@ message QueryOperatorJoinedServicesResponse {
   repeated uint32 service_ids = 1;
 }
 
-// QueryServiceWhitelistedOperatorsRequest is request type for the Query/ServiceWhitelistedOperators
+// QueryServiceAllowedOperatorsRequest is request type for the Query/ServiceAllowedOperators
 // RPC method.
-message QueryServiceWhitelistedOperatorsRequest {
+message QueryServiceAllowedOperatorsRequest {
   // ServiceId is the ID of the service to query
   uint32 service_id = 1;
 
@@ -289,9 +289,9 @@ message QueryServiceWhitelistedOperatorsRequest {
   cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
-// QueryServiceWhitelistedOperatorsResponse is response type for the Query/ServiceWhitelistedOperators
+// QueryServiceAllowedOperatorsResponse is response type for the Query/ServiceAllowedOperators
 // RPC method.
-message QueryServiceWhitelistedOperatorsResponse {
+message QueryServiceAllowedOperatorsResponse {
   // OperatorIds is the list of operators in the service's whitelist
   repeated uint32 operator_ids = 1;
 
@@ -300,9 +300,9 @@ message QueryServiceWhitelistedOperatorsResponse {
 }
 
 
-// QueryServiceWhitelistedPoolsRequest is request type for the Query/ServiceWhitelistedPools
+// QueryServiceAllowedPoolsRequest is request type for the Query/ServiceAllowedPools
 // RPC method.
-message QueryServiceWhitelistedPoolsRequest {
+message QueryServiceAllowedPoolsRequest {
   // ServiceId is the ID of the service to query.
   uint32 service_id = 1;
 
@@ -310,9 +310,9 @@ message QueryServiceWhitelistedPoolsRequest {
   cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
-// QueryServiceWhitelistedPoolsResponse is response type for the Query/ServiceWhitelistedPools
+// QueryServiceAllowedPoolsResponse is response type for the Query/ServiceAllowedPools
 // RPC method.
-message QueryServiceWhitelistedPoolsResponse {
+message QueryServiceAllowedPoolsResponse {
   // PoolIds is the list of pools in the service's whitelist.
   repeated uint32 pool_ids = 1;
 

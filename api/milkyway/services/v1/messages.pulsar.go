@@ -6953,11 +6953,11 @@ type MsgSetServiceParams struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Sender is the address of the user updating the parameters
+	// Sender is the address of the user updating the parameters.
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
-	// ServiceID represents the ID of the service to update the parameters
+	// ServiceID represents the ID of the service to update the parameters.
 	ServiceId uint32 `protobuf:"varint,2,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
-	// Params are the new parameters of the service
+	// Params are the new parameters of the service.
 	Params *ServiceParams `protobuf:"bytes,3,opt,name=params,proto3" json:"params,omitempty"`
 }
 

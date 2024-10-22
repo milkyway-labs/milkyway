@@ -962,27 +962,27 @@ func (x *fastReflection_QueryOperatorJoinedServicesResponse) ProtoMethods() *pro
 }
 
 var (
-	md_QueryServiceWhitelistedOperatorsRequest            protoreflect.MessageDescriptor
-	fd_QueryServiceWhitelistedOperatorsRequest_service_id protoreflect.FieldDescriptor
-	fd_QueryServiceWhitelistedOperatorsRequest_pagination protoreflect.FieldDescriptor
+	md_QueryServiceAllowedOperatorsRequest            protoreflect.MessageDescriptor
+	fd_QueryServiceAllowedOperatorsRequest_service_id protoreflect.FieldDescriptor
+	fd_QueryServiceAllowedOperatorsRequest_pagination protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_milkyway_restaking_v1_query_proto_init()
-	md_QueryServiceWhitelistedOperatorsRequest = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryServiceWhitelistedOperatorsRequest")
-	fd_QueryServiceWhitelistedOperatorsRequest_service_id = md_QueryServiceWhitelistedOperatorsRequest.Fields().ByName("service_id")
-	fd_QueryServiceWhitelistedOperatorsRequest_pagination = md_QueryServiceWhitelistedOperatorsRequest.Fields().ByName("pagination")
+	md_QueryServiceAllowedOperatorsRequest = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryServiceAllowedOperatorsRequest")
+	fd_QueryServiceAllowedOperatorsRequest_service_id = md_QueryServiceAllowedOperatorsRequest.Fields().ByName("service_id")
+	fd_QueryServiceAllowedOperatorsRequest_pagination = md_QueryServiceAllowedOperatorsRequest.Fields().ByName("pagination")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryServiceWhitelistedOperatorsRequest)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryServiceAllowedOperatorsRequest)(nil)
 
-type fastReflection_QueryServiceWhitelistedOperatorsRequest QueryServiceWhitelistedOperatorsRequest
+type fastReflection_QueryServiceAllowedOperatorsRequest QueryServiceAllowedOperatorsRequest
 
-func (x *QueryServiceWhitelistedOperatorsRequest) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryServiceWhitelistedOperatorsRequest)(x)
+func (x *QueryServiceAllowedOperatorsRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryServiceAllowedOperatorsRequest)(x)
 }
 
-func (x *QueryServiceWhitelistedOperatorsRequest) slowProtoReflect() protoreflect.Message {
+func (x *QueryServiceAllowedOperatorsRequest) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -994,43 +994,43 @@ func (x *QueryServiceWhitelistedOperatorsRequest) slowProtoReflect() protoreflec
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryServiceWhitelistedOperatorsRequest_messageType fastReflection_QueryServiceWhitelistedOperatorsRequest_messageType
-var _ protoreflect.MessageType = fastReflection_QueryServiceWhitelistedOperatorsRequest_messageType{}
+var _fastReflection_QueryServiceAllowedOperatorsRequest_messageType fastReflection_QueryServiceAllowedOperatorsRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryServiceAllowedOperatorsRequest_messageType{}
 
-type fastReflection_QueryServiceWhitelistedOperatorsRequest_messageType struct{}
+type fastReflection_QueryServiceAllowedOperatorsRequest_messageType struct{}
 
-func (x fastReflection_QueryServiceWhitelistedOperatorsRequest_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryServiceWhitelistedOperatorsRequest)(nil)
+func (x fastReflection_QueryServiceAllowedOperatorsRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryServiceAllowedOperatorsRequest)(nil)
 }
-func (x fastReflection_QueryServiceWhitelistedOperatorsRequest_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryServiceWhitelistedOperatorsRequest)
+func (x fastReflection_QueryServiceAllowedOperatorsRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryServiceAllowedOperatorsRequest)
 }
-func (x fastReflection_QueryServiceWhitelistedOperatorsRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryServiceWhitelistedOperatorsRequest
+func (x fastReflection_QueryServiceAllowedOperatorsRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryServiceAllowedOperatorsRequest
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryServiceWhitelistedOperatorsRequest
+func (x *fastReflection_QueryServiceAllowedOperatorsRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryServiceAllowedOperatorsRequest
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) Type() protoreflect.MessageType {
-	return _fastReflection_QueryServiceWhitelistedOperatorsRequest_messageType
+func (x *fastReflection_QueryServiceAllowedOperatorsRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryServiceAllowedOperatorsRequest_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) New() protoreflect.Message {
-	return new(fastReflection_QueryServiceWhitelistedOperatorsRequest)
+func (x *fastReflection_QueryServiceAllowedOperatorsRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryServiceAllowedOperatorsRequest)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) Interface() protoreflect.ProtoMessage {
-	return (*QueryServiceWhitelistedOperatorsRequest)(x)
+func (x *fastReflection_QueryServiceAllowedOperatorsRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryServiceAllowedOperatorsRequest)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -1038,16 +1038,16 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) Interface() pro
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryServiceAllowedOperatorsRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.ServiceId != uint32(0) {
 		value := protoreflect.ValueOfUint32(x.ServiceId)
-		if !f(fd_QueryServiceWhitelistedOperatorsRequest_service_id, value) {
+		if !f(fd_QueryServiceAllowedOperatorsRequest_service_id, value) {
 			return
 		}
 	}
 	if x.Pagination != nil {
 		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
-		if !f(fd_QueryServiceWhitelistedOperatorsRequest_pagination, value) {
+		if !f(fd_QueryServiceAllowedOperatorsRequest_pagination, value) {
 			return
 		}
 	}
@@ -1064,17 +1064,17 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) Range(f func(pr
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryServiceAllowedOperatorsRequest) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest.service_id":
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest.service_id":
 		return x.ServiceId != uint32(0)
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest.pagination":
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest.pagination":
 		return x.Pagination != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1084,17 +1084,17 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) Has(fd protoref
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryServiceAllowedOperatorsRequest) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest.service_id":
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest.service_id":
 		x.ServiceId = uint32(0)
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest.pagination":
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest.pagination":
 		x.Pagination = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1104,19 +1104,19 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) Clear(fd protor
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryServiceAllowedOperatorsRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest.service_id":
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest.service_id":
 		value := x.ServiceId
 		return protoreflect.ValueOfUint32(value)
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest.pagination":
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest.pagination":
 		value := x.Pagination
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1130,17 +1130,17 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) Get(descriptor 
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryServiceAllowedOperatorsRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest.service_id":
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest.service_id":
 		x.ServiceId = uint32(value.Uint())
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest.pagination":
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest.pagination":
 		x.Pagination = value.Message().Interface().(*v1beta1.PageRequest)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1154,48 +1154,48 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) Set(fd protoref
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryServiceAllowedOperatorsRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest.pagination":
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest.pagination":
 		if x.Pagination == nil {
 			x.Pagination = new(v1beta1.PageRequest)
 		}
 		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest.service_id":
-		panic(fmt.Errorf("field service_id of message milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest is not mutable"))
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest.service_id":
+		panic(fmt.Errorf("field service_id of message milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryServiceAllowedOperatorsRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest.service_id":
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest.service_id":
 		return protoreflect.ValueOfUint32(uint32(0))
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest.pagination":
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest.pagination":
 		m := new(v1beta1.PageRequest)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryServiceAllowedOperatorsRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1203,7 +1203,7 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) WhichOneof(d pr
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryServiceAllowedOperatorsRequest) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1214,7 +1214,7 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) GetUnknown() pr
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryServiceAllowedOperatorsRequest) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1226,7 +1226,7 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) SetUnknown(fiel
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) IsValid() bool {
+func (x *fastReflection_QueryServiceAllowedOperatorsRequest) IsValid() bool {
 	return x != nil
 }
 
@@ -1236,9 +1236,9 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) IsValid() bool 
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryServiceAllowedOperatorsRequest) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryServiceWhitelistedOperatorsRequest)
+		x := input.Message.Interface().(*QueryServiceAllowedOperatorsRequest)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1267,7 +1267,7 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) ProtoMethods() 
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryServiceWhitelistedOperatorsRequest)
+		x := input.Message.Interface().(*QueryServiceAllowedOperatorsRequest)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1316,7 +1316,7 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) ProtoMethods() 
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryServiceWhitelistedOperatorsRequest)
+		x := input.Message.Interface().(*QueryServiceAllowedOperatorsRequest)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1348,10 +1348,10 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) ProtoMethods() 
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceWhitelistedOperatorsRequest: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceAllowedOperatorsRequest: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceWhitelistedOperatorsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceAllowedOperatorsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -1444,74 +1444,74 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsRequest) ProtoMethods() 
 	}
 }
 
-var _ protoreflect.List = (*_QueryServiceWhitelistedOperatorsResponse_1_list)(nil)
+var _ protoreflect.List = (*_QueryServiceAllowedOperatorsResponse_1_list)(nil)
 
-type _QueryServiceWhitelistedOperatorsResponse_1_list struct {
+type _QueryServiceAllowedOperatorsResponse_1_list struct {
 	list *[]uint32
 }
 
-func (x *_QueryServiceWhitelistedOperatorsResponse_1_list) Len() int {
+func (x *_QueryServiceAllowedOperatorsResponse_1_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_QueryServiceWhitelistedOperatorsResponse_1_list) Get(i int) protoreflect.Value {
+func (x *_QueryServiceAllowedOperatorsResponse_1_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfUint32((*x.list)[i])
 }
 
-func (x *_QueryServiceWhitelistedOperatorsResponse_1_list) Set(i int, value protoreflect.Value) {
+func (x *_QueryServiceAllowedOperatorsResponse_1_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Uint()
 	concreteValue := (uint32)(valueUnwrapped)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_QueryServiceWhitelistedOperatorsResponse_1_list) Append(value protoreflect.Value) {
+func (x *_QueryServiceAllowedOperatorsResponse_1_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Uint()
 	concreteValue := (uint32)(valueUnwrapped)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_QueryServiceWhitelistedOperatorsResponse_1_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message QueryServiceWhitelistedOperatorsResponse at list field OperatorIds as it is not of Message kind"))
+func (x *_QueryServiceAllowedOperatorsResponse_1_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message QueryServiceAllowedOperatorsResponse at list field OperatorIds as it is not of Message kind"))
 }
 
-func (x *_QueryServiceWhitelistedOperatorsResponse_1_list) Truncate(n int) {
+func (x *_QueryServiceAllowedOperatorsResponse_1_list) Truncate(n int) {
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_QueryServiceWhitelistedOperatorsResponse_1_list) NewElement() protoreflect.Value {
+func (x *_QueryServiceAllowedOperatorsResponse_1_list) NewElement() protoreflect.Value {
 	v := uint32(0)
 	return protoreflect.ValueOfUint32(v)
 }
 
-func (x *_QueryServiceWhitelistedOperatorsResponse_1_list) IsValid() bool {
+func (x *_QueryServiceAllowedOperatorsResponse_1_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_QueryServiceWhitelistedOperatorsResponse              protoreflect.MessageDescriptor
-	fd_QueryServiceWhitelistedOperatorsResponse_operator_ids protoreflect.FieldDescriptor
-	fd_QueryServiceWhitelistedOperatorsResponse_pagination   protoreflect.FieldDescriptor
+	md_QueryServiceAllowedOperatorsResponse              protoreflect.MessageDescriptor
+	fd_QueryServiceAllowedOperatorsResponse_operator_ids protoreflect.FieldDescriptor
+	fd_QueryServiceAllowedOperatorsResponse_pagination   protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_milkyway_restaking_v1_query_proto_init()
-	md_QueryServiceWhitelistedOperatorsResponse = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryServiceWhitelistedOperatorsResponse")
-	fd_QueryServiceWhitelistedOperatorsResponse_operator_ids = md_QueryServiceWhitelistedOperatorsResponse.Fields().ByName("operator_ids")
-	fd_QueryServiceWhitelistedOperatorsResponse_pagination = md_QueryServiceWhitelistedOperatorsResponse.Fields().ByName("pagination")
+	md_QueryServiceAllowedOperatorsResponse = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryServiceAllowedOperatorsResponse")
+	fd_QueryServiceAllowedOperatorsResponse_operator_ids = md_QueryServiceAllowedOperatorsResponse.Fields().ByName("operator_ids")
+	fd_QueryServiceAllowedOperatorsResponse_pagination = md_QueryServiceAllowedOperatorsResponse.Fields().ByName("pagination")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryServiceWhitelistedOperatorsResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryServiceAllowedOperatorsResponse)(nil)
 
-type fastReflection_QueryServiceWhitelistedOperatorsResponse QueryServiceWhitelistedOperatorsResponse
+type fastReflection_QueryServiceAllowedOperatorsResponse QueryServiceAllowedOperatorsResponse
 
-func (x *QueryServiceWhitelistedOperatorsResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryServiceWhitelistedOperatorsResponse)(x)
+func (x *QueryServiceAllowedOperatorsResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryServiceAllowedOperatorsResponse)(x)
 }
 
-func (x *QueryServiceWhitelistedOperatorsResponse) slowProtoReflect() protoreflect.Message {
+func (x *QueryServiceAllowedOperatorsResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1523,43 +1523,43 @@ func (x *QueryServiceWhitelistedOperatorsResponse) slowProtoReflect() protorefle
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryServiceWhitelistedOperatorsResponse_messageType fastReflection_QueryServiceWhitelistedOperatorsResponse_messageType
-var _ protoreflect.MessageType = fastReflection_QueryServiceWhitelistedOperatorsResponse_messageType{}
+var _fastReflection_QueryServiceAllowedOperatorsResponse_messageType fastReflection_QueryServiceAllowedOperatorsResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryServiceAllowedOperatorsResponse_messageType{}
 
-type fastReflection_QueryServiceWhitelistedOperatorsResponse_messageType struct{}
+type fastReflection_QueryServiceAllowedOperatorsResponse_messageType struct{}
 
-func (x fastReflection_QueryServiceWhitelistedOperatorsResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryServiceWhitelistedOperatorsResponse)(nil)
+func (x fastReflection_QueryServiceAllowedOperatorsResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryServiceAllowedOperatorsResponse)(nil)
 }
-func (x fastReflection_QueryServiceWhitelistedOperatorsResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryServiceWhitelistedOperatorsResponse)
+func (x fastReflection_QueryServiceAllowedOperatorsResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryServiceAllowedOperatorsResponse)
 }
-func (x fastReflection_QueryServiceWhitelistedOperatorsResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryServiceWhitelistedOperatorsResponse
+func (x fastReflection_QueryServiceAllowedOperatorsResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryServiceAllowedOperatorsResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryServiceWhitelistedOperatorsResponse
+func (x *fastReflection_QueryServiceAllowedOperatorsResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryServiceAllowedOperatorsResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) Type() protoreflect.MessageType {
-	return _fastReflection_QueryServiceWhitelistedOperatorsResponse_messageType
+func (x *fastReflection_QueryServiceAllowedOperatorsResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryServiceAllowedOperatorsResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) New() protoreflect.Message {
-	return new(fastReflection_QueryServiceWhitelistedOperatorsResponse)
+func (x *fastReflection_QueryServiceAllowedOperatorsResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryServiceAllowedOperatorsResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) Interface() protoreflect.ProtoMessage {
-	return (*QueryServiceWhitelistedOperatorsResponse)(x)
+func (x *fastReflection_QueryServiceAllowedOperatorsResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryServiceAllowedOperatorsResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -1567,16 +1567,16 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) Interface() pr
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryServiceAllowedOperatorsResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if len(x.OperatorIds) != 0 {
-		value := protoreflect.ValueOfList(&_QueryServiceWhitelistedOperatorsResponse_1_list{list: &x.OperatorIds})
-		if !f(fd_QueryServiceWhitelistedOperatorsResponse_operator_ids, value) {
+		value := protoreflect.ValueOfList(&_QueryServiceAllowedOperatorsResponse_1_list{list: &x.OperatorIds})
+		if !f(fd_QueryServiceAllowedOperatorsResponse_operator_ids, value) {
 			return
 		}
 	}
 	if x.Pagination != nil {
 		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
-		if !f(fd_QueryServiceWhitelistedOperatorsResponse_pagination, value) {
+		if !f(fd_QueryServiceAllowedOperatorsResponse_pagination, value) {
 			return
 		}
 	}
@@ -1593,17 +1593,17 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) Range(f func(p
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryServiceAllowedOperatorsResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse.operator_ids":
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse.operator_ids":
 		return len(x.OperatorIds) != 0
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse.pagination":
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse.pagination":
 		return x.Pagination != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1613,17 +1613,17 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) Has(fd protore
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryServiceAllowedOperatorsResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse.operator_ids":
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse.operator_ids":
 		x.OperatorIds = nil
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse.pagination":
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse.pagination":
 		x.Pagination = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1633,22 +1633,22 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) Clear(fd proto
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryServiceAllowedOperatorsResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse.operator_ids":
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse.operator_ids":
 		if len(x.OperatorIds) == 0 {
-			return protoreflect.ValueOfList(&_QueryServiceWhitelistedOperatorsResponse_1_list{})
+			return protoreflect.ValueOfList(&_QueryServiceAllowedOperatorsResponse_1_list{})
 		}
-		listValue := &_QueryServiceWhitelistedOperatorsResponse_1_list{list: &x.OperatorIds}
+		listValue := &_QueryServiceAllowedOperatorsResponse_1_list{list: &x.OperatorIds}
 		return protoreflect.ValueOfList(listValue)
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse.pagination":
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse.pagination":
 		value := x.Pagination
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1662,19 +1662,19 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) Get(descriptor
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryServiceAllowedOperatorsResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse.operator_ids":
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse.operator_ids":
 		lv := value.List()
-		clv := lv.(*_QueryServiceWhitelistedOperatorsResponse_1_list)
+		clv := lv.(*_QueryServiceAllowedOperatorsResponse_1_list)
 		x.OperatorIds = *clv.list
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse.pagination":
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse.pagination":
 		x.Pagination = value.Message().Interface().(*v1beta1.PageResponse)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1688,53 +1688,53 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) Set(fd protore
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryServiceAllowedOperatorsResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse.operator_ids":
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse.operator_ids":
 		if x.OperatorIds == nil {
 			x.OperatorIds = []uint32{}
 		}
-		value := &_QueryServiceWhitelistedOperatorsResponse_1_list{list: &x.OperatorIds}
+		value := &_QueryServiceAllowedOperatorsResponse_1_list{list: &x.OperatorIds}
 		return protoreflect.ValueOfList(value)
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse.pagination":
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse.pagination":
 		if x.Pagination == nil {
 			x.Pagination = new(v1beta1.PageResponse)
 		}
 		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryServiceAllowedOperatorsResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse.operator_ids":
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse.operator_ids":
 		list := []uint32{}
-		return protoreflect.ValueOfList(&_QueryServiceWhitelistedOperatorsResponse_1_list{list: &list})
-	case "milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse.pagination":
+		return protoreflect.ValueOfList(&_QueryServiceAllowedOperatorsResponse_1_list{list: &list})
+	case "milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse.pagination":
 		m := new(v1beta1.PageResponse)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryServiceAllowedOperatorsResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1742,7 +1742,7 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) WhichOneof(d p
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryServiceAllowedOperatorsResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1753,7 +1753,7 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) GetUnknown() p
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryServiceAllowedOperatorsResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1765,7 +1765,7 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) SetUnknown(fie
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) IsValid() bool {
+func (x *fastReflection_QueryServiceAllowedOperatorsResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -1775,9 +1775,9 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) IsValid() bool
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryServiceAllowedOperatorsResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryServiceWhitelistedOperatorsResponse)
+		x := input.Message.Interface().(*QueryServiceAllowedOperatorsResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1810,7 +1810,7 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) ProtoMethods()
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryServiceWhitelistedOperatorsResponse)
+		x := input.Message.Interface().(*QueryServiceAllowedOperatorsResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1874,7 +1874,7 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) ProtoMethods()
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryServiceWhitelistedOperatorsResponse)
+		x := input.Message.Interface().(*QueryServiceAllowedOperatorsResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1906,10 +1906,10 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) ProtoMethods()
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceWhitelistedOperatorsResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceAllowedOperatorsResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceWhitelistedOperatorsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceAllowedOperatorsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -2060,27 +2060,27 @@ func (x *fastReflection_QueryServiceWhitelistedOperatorsResponse) ProtoMethods()
 }
 
 var (
-	md_QueryServiceWhitelistedPoolsRequest            protoreflect.MessageDescriptor
-	fd_QueryServiceWhitelistedPoolsRequest_service_id protoreflect.FieldDescriptor
-	fd_QueryServiceWhitelistedPoolsRequest_pagination protoreflect.FieldDescriptor
+	md_QueryServiceAllowedPoolsRequest            protoreflect.MessageDescriptor
+	fd_QueryServiceAllowedPoolsRequest_service_id protoreflect.FieldDescriptor
+	fd_QueryServiceAllowedPoolsRequest_pagination protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_milkyway_restaking_v1_query_proto_init()
-	md_QueryServiceWhitelistedPoolsRequest = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryServiceWhitelistedPoolsRequest")
-	fd_QueryServiceWhitelistedPoolsRequest_service_id = md_QueryServiceWhitelistedPoolsRequest.Fields().ByName("service_id")
-	fd_QueryServiceWhitelistedPoolsRequest_pagination = md_QueryServiceWhitelistedPoolsRequest.Fields().ByName("pagination")
+	md_QueryServiceAllowedPoolsRequest = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryServiceAllowedPoolsRequest")
+	fd_QueryServiceAllowedPoolsRequest_service_id = md_QueryServiceAllowedPoolsRequest.Fields().ByName("service_id")
+	fd_QueryServiceAllowedPoolsRequest_pagination = md_QueryServiceAllowedPoolsRequest.Fields().ByName("pagination")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryServiceWhitelistedPoolsRequest)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryServiceAllowedPoolsRequest)(nil)
 
-type fastReflection_QueryServiceWhitelistedPoolsRequest QueryServiceWhitelistedPoolsRequest
+type fastReflection_QueryServiceAllowedPoolsRequest QueryServiceAllowedPoolsRequest
 
-func (x *QueryServiceWhitelistedPoolsRequest) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryServiceWhitelistedPoolsRequest)(x)
+func (x *QueryServiceAllowedPoolsRequest) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryServiceAllowedPoolsRequest)(x)
 }
 
-func (x *QueryServiceWhitelistedPoolsRequest) slowProtoReflect() protoreflect.Message {
+func (x *QueryServiceAllowedPoolsRequest) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2092,43 +2092,43 @@ func (x *QueryServiceWhitelistedPoolsRequest) slowProtoReflect() protoreflect.Me
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryServiceWhitelistedPoolsRequest_messageType fastReflection_QueryServiceWhitelistedPoolsRequest_messageType
-var _ protoreflect.MessageType = fastReflection_QueryServiceWhitelistedPoolsRequest_messageType{}
+var _fastReflection_QueryServiceAllowedPoolsRequest_messageType fastReflection_QueryServiceAllowedPoolsRequest_messageType
+var _ protoreflect.MessageType = fastReflection_QueryServiceAllowedPoolsRequest_messageType{}
 
-type fastReflection_QueryServiceWhitelistedPoolsRequest_messageType struct{}
+type fastReflection_QueryServiceAllowedPoolsRequest_messageType struct{}
 
-func (x fastReflection_QueryServiceWhitelistedPoolsRequest_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryServiceWhitelistedPoolsRequest)(nil)
+func (x fastReflection_QueryServiceAllowedPoolsRequest_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryServiceAllowedPoolsRequest)(nil)
 }
-func (x fastReflection_QueryServiceWhitelistedPoolsRequest_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryServiceWhitelistedPoolsRequest)
+func (x fastReflection_QueryServiceAllowedPoolsRequest_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryServiceAllowedPoolsRequest)
 }
-func (x fastReflection_QueryServiceWhitelistedPoolsRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryServiceWhitelistedPoolsRequest
+func (x fastReflection_QueryServiceAllowedPoolsRequest_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryServiceAllowedPoolsRequest
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryServiceWhitelistedPoolsRequest
+func (x *fastReflection_QueryServiceAllowedPoolsRequest) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryServiceAllowedPoolsRequest
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) Type() protoreflect.MessageType {
-	return _fastReflection_QueryServiceWhitelistedPoolsRequest_messageType
+func (x *fastReflection_QueryServiceAllowedPoolsRequest) Type() protoreflect.MessageType {
+	return _fastReflection_QueryServiceAllowedPoolsRequest_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) New() protoreflect.Message {
-	return new(fastReflection_QueryServiceWhitelistedPoolsRequest)
+func (x *fastReflection_QueryServiceAllowedPoolsRequest) New() protoreflect.Message {
+	return new(fastReflection_QueryServiceAllowedPoolsRequest)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) Interface() protoreflect.ProtoMessage {
-	return (*QueryServiceWhitelistedPoolsRequest)(x)
+func (x *fastReflection_QueryServiceAllowedPoolsRequest) Interface() protoreflect.ProtoMessage {
+	return (*QueryServiceAllowedPoolsRequest)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -2136,16 +2136,16 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) Interface() protore
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryServiceAllowedPoolsRequest) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.ServiceId != uint32(0) {
 		value := protoreflect.ValueOfUint32(x.ServiceId)
-		if !f(fd_QueryServiceWhitelistedPoolsRequest_service_id, value) {
+		if !f(fd_QueryServiceAllowedPoolsRequest_service_id, value) {
 			return
 		}
 	}
 	if x.Pagination != nil {
 		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
-		if !f(fd_QueryServiceWhitelistedPoolsRequest_pagination, value) {
+		if !f(fd_QueryServiceAllowedPoolsRequest_pagination, value) {
 			return
 		}
 	}
@@ -2162,17 +2162,17 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) Range(f func(protor
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryServiceAllowedPoolsRequest) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest.service_id":
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsRequest.service_id":
 		return x.ServiceId != uint32(0)
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest.pagination":
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsRequest.pagination":
 		return x.Pagination != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedPoolsRequest"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedPoolsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2182,17 +2182,17 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) Has(fd protoreflect
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryServiceAllowedPoolsRequest) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest.service_id":
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsRequest.service_id":
 		x.ServiceId = uint32(0)
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest.pagination":
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsRequest.pagination":
 		x.Pagination = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedPoolsRequest"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedPoolsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2202,19 +2202,19 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) Clear(fd protorefle
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryServiceAllowedPoolsRequest) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest.service_id":
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsRequest.service_id":
 		value := x.ServiceId
 		return protoreflect.ValueOfUint32(value)
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest.pagination":
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsRequest.pagination":
 		value := x.Pagination
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedPoolsRequest"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedPoolsRequest does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -2228,17 +2228,17 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) Get(descriptor prot
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryServiceAllowedPoolsRequest) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest.service_id":
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsRequest.service_id":
 		x.ServiceId = uint32(value.Uint())
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest.pagination":
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsRequest.pagination":
 		x.Pagination = value.Message().Interface().(*v1beta1.PageRequest)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedPoolsRequest"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedPoolsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2252,48 +2252,48 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) Set(fd protoreflect
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryServiceAllowedPoolsRequest) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest.pagination":
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsRequest.pagination":
 		if x.Pagination == nil {
 			x.Pagination = new(v1beta1.PageRequest)
 		}
 		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest.service_id":
-		panic(fmt.Errorf("field service_id of message milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest is not mutable"))
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsRequest.service_id":
+		panic(fmt.Errorf("field service_id of message milkyway.restaking.v1.QueryServiceAllowedPoolsRequest is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedPoolsRequest"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedPoolsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryServiceAllowedPoolsRequest) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest.service_id":
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsRequest.service_id":
 		return protoreflect.ValueOfUint32(uint32(0))
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest.pagination":
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsRequest.pagination":
 		m := new(v1beta1.PageRequest)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedPoolsRequest"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedPoolsRequest does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryServiceAllowedPoolsRequest) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryServiceAllowedPoolsRequest", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -2301,7 +2301,7 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) WhichOneof(d protor
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryServiceAllowedPoolsRequest) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -2312,7 +2312,7 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) GetUnknown() protor
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryServiceAllowedPoolsRequest) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -2324,7 +2324,7 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) SetUnknown(fields p
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) IsValid() bool {
+func (x *fastReflection_QueryServiceAllowedPoolsRequest) IsValid() bool {
 	return x != nil
 }
 
@@ -2334,9 +2334,9 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryServiceAllowedPoolsRequest) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryServiceWhitelistedPoolsRequest)
+		x := input.Message.Interface().(*QueryServiceAllowedPoolsRequest)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2365,7 +2365,7 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) ProtoMethods() *pro
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryServiceWhitelistedPoolsRequest)
+		x := input.Message.Interface().(*QueryServiceAllowedPoolsRequest)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2414,7 +2414,7 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) ProtoMethods() *pro
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryServiceWhitelistedPoolsRequest)
+		x := input.Message.Interface().(*QueryServiceAllowedPoolsRequest)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2446,10 +2446,10 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) ProtoMethods() *pro
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceWhitelistedPoolsRequest: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceAllowedPoolsRequest: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceWhitelistedPoolsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceAllowedPoolsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -2542,74 +2542,74 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsRequest) ProtoMethods() *pro
 	}
 }
 
-var _ protoreflect.List = (*_QueryServiceWhitelistedPoolsResponse_1_list)(nil)
+var _ protoreflect.List = (*_QueryServiceAllowedPoolsResponse_1_list)(nil)
 
-type _QueryServiceWhitelistedPoolsResponse_1_list struct {
+type _QueryServiceAllowedPoolsResponse_1_list struct {
 	list *[]uint32
 }
 
-func (x *_QueryServiceWhitelistedPoolsResponse_1_list) Len() int {
+func (x *_QueryServiceAllowedPoolsResponse_1_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_QueryServiceWhitelistedPoolsResponse_1_list) Get(i int) protoreflect.Value {
+func (x *_QueryServiceAllowedPoolsResponse_1_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfUint32((*x.list)[i])
 }
 
-func (x *_QueryServiceWhitelistedPoolsResponse_1_list) Set(i int, value protoreflect.Value) {
+func (x *_QueryServiceAllowedPoolsResponse_1_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Uint()
 	concreteValue := (uint32)(valueUnwrapped)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_QueryServiceWhitelistedPoolsResponse_1_list) Append(value protoreflect.Value) {
+func (x *_QueryServiceAllowedPoolsResponse_1_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Uint()
 	concreteValue := (uint32)(valueUnwrapped)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_QueryServiceWhitelistedPoolsResponse_1_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message QueryServiceWhitelistedPoolsResponse at list field PoolIds as it is not of Message kind"))
+func (x *_QueryServiceAllowedPoolsResponse_1_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message QueryServiceAllowedPoolsResponse at list field PoolIds as it is not of Message kind"))
 }
 
-func (x *_QueryServiceWhitelistedPoolsResponse_1_list) Truncate(n int) {
+func (x *_QueryServiceAllowedPoolsResponse_1_list) Truncate(n int) {
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_QueryServiceWhitelistedPoolsResponse_1_list) NewElement() protoreflect.Value {
+func (x *_QueryServiceAllowedPoolsResponse_1_list) NewElement() protoreflect.Value {
 	v := uint32(0)
 	return protoreflect.ValueOfUint32(v)
 }
 
-func (x *_QueryServiceWhitelistedPoolsResponse_1_list) IsValid() bool {
+func (x *_QueryServiceAllowedPoolsResponse_1_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_QueryServiceWhitelistedPoolsResponse            protoreflect.MessageDescriptor
-	fd_QueryServiceWhitelistedPoolsResponse_pool_ids   protoreflect.FieldDescriptor
-	fd_QueryServiceWhitelistedPoolsResponse_pagination protoreflect.FieldDescriptor
+	md_QueryServiceAllowedPoolsResponse            protoreflect.MessageDescriptor
+	fd_QueryServiceAllowedPoolsResponse_pool_ids   protoreflect.FieldDescriptor
+	fd_QueryServiceAllowedPoolsResponse_pagination protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_milkyway_restaking_v1_query_proto_init()
-	md_QueryServiceWhitelistedPoolsResponse = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryServiceWhitelistedPoolsResponse")
-	fd_QueryServiceWhitelistedPoolsResponse_pool_ids = md_QueryServiceWhitelistedPoolsResponse.Fields().ByName("pool_ids")
-	fd_QueryServiceWhitelistedPoolsResponse_pagination = md_QueryServiceWhitelistedPoolsResponse.Fields().ByName("pagination")
+	md_QueryServiceAllowedPoolsResponse = File_milkyway_restaking_v1_query_proto.Messages().ByName("QueryServiceAllowedPoolsResponse")
+	fd_QueryServiceAllowedPoolsResponse_pool_ids = md_QueryServiceAllowedPoolsResponse.Fields().ByName("pool_ids")
+	fd_QueryServiceAllowedPoolsResponse_pagination = md_QueryServiceAllowedPoolsResponse.Fields().ByName("pagination")
 }
 
-var _ protoreflect.Message = (*fastReflection_QueryServiceWhitelistedPoolsResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_QueryServiceAllowedPoolsResponse)(nil)
 
-type fastReflection_QueryServiceWhitelistedPoolsResponse QueryServiceWhitelistedPoolsResponse
+type fastReflection_QueryServiceAllowedPoolsResponse QueryServiceAllowedPoolsResponse
 
-func (x *QueryServiceWhitelistedPoolsResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_QueryServiceWhitelistedPoolsResponse)(x)
+func (x *QueryServiceAllowedPoolsResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_QueryServiceAllowedPoolsResponse)(x)
 }
 
-func (x *QueryServiceWhitelistedPoolsResponse) slowProtoReflect() protoreflect.Message {
+func (x *QueryServiceAllowedPoolsResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_restaking_v1_query_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2621,43 +2621,43 @@ func (x *QueryServiceWhitelistedPoolsResponse) slowProtoReflect() protoreflect.M
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_QueryServiceWhitelistedPoolsResponse_messageType fastReflection_QueryServiceWhitelistedPoolsResponse_messageType
-var _ protoreflect.MessageType = fastReflection_QueryServiceWhitelistedPoolsResponse_messageType{}
+var _fastReflection_QueryServiceAllowedPoolsResponse_messageType fastReflection_QueryServiceAllowedPoolsResponse_messageType
+var _ protoreflect.MessageType = fastReflection_QueryServiceAllowedPoolsResponse_messageType{}
 
-type fastReflection_QueryServiceWhitelistedPoolsResponse_messageType struct{}
+type fastReflection_QueryServiceAllowedPoolsResponse_messageType struct{}
 
-func (x fastReflection_QueryServiceWhitelistedPoolsResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_QueryServiceWhitelistedPoolsResponse)(nil)
+func (x fastReflection_QueryServiceAllowedPoolsResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_QueryServiceAllowedPoolsResponse)(nil)
 }
-func (x fastReflection_QueryServiceWhitelistedPoolsResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_QueryServiceWhitelistedPoolsResponse)
+func (x fastReflection_QueryServiceAllowedPoolsResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_QueryServiceAllowedPoolsResponse)
 }
-func (x fastReflection_QueryServiceWhitelistedPoolsResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryServiceWhitelistedPoolsResponse
+func (x fastReflection_QueryServiceAllowedPoolsResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryServiceAllowedPoolsResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_QueryServiceWhitelistedPoolsResponse
+func (x *fastReflection_QueryServiceAllowedPoolsResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_QueryServiceAllowedPoolsResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) Type() protoreflect.MessageType {
-	return _fastReflection_QueryServiceWhitelistedPoolsResponse_messageType
+func (x *fastReflection_QueryServiceAllowedPoolsResponse) Type() protoreflect.MessageType {
+	return _fastReflection_QueryServiceAllowedPoolsResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) New() protoreflect.Message {
-	return new(fastReflection_QueryServiceWhitelistedPoolsResponse)
+func (x *fastReflection_QueryServiceAllowedPoolsResponse) New() protoreflect.Message {
+	return new(fastReflection_QueryServiceAllowedPoolsResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) Interface() protoreflect.ProtoMessage {
-	return (*QueryServiceWhitelistedPoolsResponse)(x)
+func (x *fastReflection_QueryServiceAllowedPoolsResponse) Interface() protoreflect.ProtoMessage {
+	return (*QueryServiceAllowedPoolsResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -2665,16 +2665,16 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) Interface() protor
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_QueryServiceAllowedPoolsResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if len(x.PoolIds) != 0 {
-		value := protoreflect.ValueOfList(&_QueryServiceWhitelistedPoolsResponse_1_list{list: &x.PoolIds})
-		if !f(fd_QueryServiceWhitelistedPoolsResponse_pool_ids, value) {
+		value := protoreflect.ValueOfList(&_QueryServiceAllowedPoolsResponse_1_list{list: &x.PoolIds})
+		if !f(fd_QueryServiceAllowedPoolsResponse_pool_ids, value) {
 			return
 		}
 	}
 	if x.Pagination != nil {
 		value := protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
-		if !f(fd_QueryServiceWhitelistedPoolsResponse_pagination, value) {
+		if !f(fd_QueryServiceAllowedPoolsResponse_pagination, value) {
 			return
 		}
 	}
@@ -2691,17 +2691,17 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) Range(f func(proto
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_QueryServiceAllowedPoolsResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse.pool_ids":
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsResponse.pool_ids":
 		return len(x.PoolIds) != 0
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse.pagination":
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsResponse.pagination":
 		return x.Pagination != nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedPoolsResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedPoolsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2711,17 +2711,17 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) Has(fd protoreflec
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_QueryServiceAllowedPoolsResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse.pool_ids":
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsResponse.pool_ids":
 		x.PoolIds = nil
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse.pagination":
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsResponse.pagination":
 		x.Pagination = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedPoolsResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedPoolsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2731,22 +2731,22 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) Clear(fd protorefl
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryServiceAllowedPoolsResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse.pool_ids":
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsResponse.pool_ids":
 		if len(x.PoolIds) == 0 {
-			return protoreflect.ValueOfList(&_QueryServiceWhitelistedPoolsResponse_1_list{})
+			return protoreflect.ValueOfList(&_QueryServiceAllowedPoolsResponse_1_list{})
 		}
-		listValue := &_QueryServiceWhitelistedPoolsResponse_1_list{list: &x.PoolIds}
+		listValue := &_QueryServiceAllowedPoolsResponse_1_list{list: &x.PoolIds}
 		return protoreflect.ValueOfList(listValue)
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse.pagination":
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsResponse.pagination":
 		value := x.Pagination
 		return protoreflect.ValueOfMessage(value.ProtoReflect())
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedPoolsResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedPoolsResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -2760,19 +2760,19 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) Get(descriptor pro
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_QueryServiceAllowedPoolsResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse.pool_ids":
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsResponse.pool_ids":
 		lv := value.List()
-		clv := lv.(*_QueryServiceWhitelistedPoolsResponse_1_list)
+		clv := lv.(*_QueryServiceAllowedPoolsResponse_1_list)
 		x.PoolIds = *clv.list
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse.pagination":
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsResponse.pagination":
 		x.Pagination = value.Message().Interface().(*v1beta1.PageResponse)
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedPoolsResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedPoolsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -2786,53 +2786,53 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) Set(fd protoreflec
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryServiceAllowedPoolsResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse.pool_ids":
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsResponse.pool_ids":
 		if x.PoolIds == nil {
 			x.PoolIds = []uint32{}
 		}
-		value := &_QueryServiceWhitelistedPoolsResponse_1_list{list: &x.PoolIds}
+		value := &_QueryServiceAllowedPoolsResponse_1_list{list: &x.PoolIds}
 		return protoreflect.ValueOfList(value)
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse.pagination":
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsResponse.pagination":
 		if x.Pagination == nil {
 			x.Pagination = new(v1beta1.PageResponse)
 		}
 		return protoreflect.ValueOfMessage(x.Pagination.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedPoolsResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedPoolsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_QueryServiceAllowedPoolsResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse.pool_ids":
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsResponse.pool_ids":
 		list := []uint32{}
-		return protoreflect.ValueOfList(&_QueryServiceWhitelistedPoolsResponse_1_list{list: &list})
-	case "milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse.pagination":
+		return protoreflect.ValueOfList(&_QueryServiceAllowedPoolsResponse_1_list{list: &list})
+	case "milkyway.restaking.v1.QueryServiceAllowedPoolsResponse.pagination":
 		m := new(v1beta1.PageResponse)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.QueryServiceAllowedPoolsResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.QueryServiceAllowedPoolsResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_QueryServiceAllowedPoolsResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.QueryServiceAllowedPoolsResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -2840,7 +2840,7 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) WhichOneof(d proto
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_QueryServiceAllowedPoolsResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -2851,7 +2851,7 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) GetUnknown() proto
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_QueryServiceAllowedPoolsResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -2863,7 +2863,7 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) SetUnknown(fields 
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) IsValid() bool {
+func (x *fastReflection_QueryServiceAllowedPoolsResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -2873,9 +2873,9 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_QueryServiceAllowedPoolsResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*QueryServiceWhitelistedPoolsResponse)
+		x := input.Message.Interface().(*QueryServiceAllowedPoolsResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2908,7 +2908,7 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) ProtoMethods() *pr
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*QueryServiceWhitelistedPoolsResponse)
+		x := input.Message.Interface().(*QueryServiceAllowedPoolsResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2972,7 +2972,7 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) ProtoMethods() *pr
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*QueryServiceWhitelistedPoolsResponse)
+		x := input.Message.Interface().(*QueryServiceAllowedPoolsResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -3004,10 +3004,10 @@ func (x *fastReflection_QueryServiceWhitelistedPoolsResponse) ProtoMethods() *pr
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceWhitelistedPoolsResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceAllowedPoolsResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceWhitelistedPoolsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: QueryServiceAllowedPoolsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -28147,9 +28147,9 @@ func (x *QueryOperatorJoinedServicesResponse) GetServiceIds() []uint32 {
 	return nil
 }
 
-// QueryServiceWhitelistedOperatorsRequest is request type for the Query/ServiceWhitelistedOperators
+// QueryServiceAllowedOperatorsRequest is request type for the Query/ServiceAllowedOperators
 // RPC method.
-type QueryServiceWhitelistedOperatorsRequest struct {
+type QueryServiceAllowedOperatorsRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -28160,8 +28160,8 @@ type QueryServiceWhitelistedOperatorsRequest struct {
 	Pagination *v1beta1.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (x *QueryServiceWhitelistedOperatorsRequest) Reset() {
-	*x = QueryServiceWhitelistedOperatorsRequest{}
+func (x *QueryServiceAllowedOperatorsRequest) Reset() {
+	*x = QueryServiceAllowedOperatorsRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -28169,34 +28169,34 @@ func (x *QueryServiceWhitelistedOperatorsRequest) Reset() {
 	}
 }
 
-func (x *QueryServiceWhitelistedOperatorsRequest) String() string {
+func (x *QueryServiceAllowedOperatorsRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryServiceWhitelistedOperatorsRequest) ProtoMessage() {}
+func (*QueryServiceAllowedOperatorsRequest) ProtoMessage() {}
 
-// Deprecated: Use QueryServiceWhitelistedOperatorsRequest.ProtoReflect.Descriptor instead.
-func (*QueryServiceWhitelistedOperatorsRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use QueryServiceAllowedOperatorsRequest.ProtoReflect.Descriptor instead.
+func (*QueryServiceAllowedOperatorsRequest) Descriptor() ([]byte, []int) {
 	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *QueryServiceWhitelistedOperatorsRequest) GetServiceId() uint32 {
+func (x *QueryServiceAllowedOperatorsRequest) GetServiceId() uint32 {
 	if x != nil {
 		return x.ServiceId
 	}
 	return 0
 }
 
-func (x *QueryServiceWhitelistedOperatorsRequest) GetPagination() *v1beta1.PageRequest {
+func (x *QueryServiceAllowedOperatorsRequest) GetPagination() *v1beta1.PageRequest {
 	if x != nil {
 		return x.Pagination
 	}
 	return nil
 }
 
-// QueryServiceWhitelistedOperatorsResponse is response type for the Query/ServiceWhitelistedOperators
+// QueryServiceAllowedOperatorsResponse is response type for the Query/ServiceAllowedOperators
 // RPC method.
-type QueryServiceWhitelistedOperatorsResponse struct {
+type QueryServiceAllowedOperatorsResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -28207,8 +28207,8 @@ type QueryServiceWhitelistedOperatorsResponse struct {
 	Pagination *v1beta1.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (x *QueryServiceWhitelistedOperatorsResponse) Reset() {
-	*x = QueryServiceWhitelistedOperatorsResponse{}
+func (x *QueryServiceAllowedOperatorsResponse) Reset() {
+	*x = QueryServiceAllowedOperatorsResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -28216,46 +28216,46 @@ func (x *QueryServiceWhitelistedOperatorsResponse) Reset() {
 	}
 }
 
-func (x *QueryServiceWhitelistedOperatorsResponse) String() string {
+func (x *QueryServiceAllowedOperatorsResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryServiceWhitelistedOperatorsResponse) ProtoMessage() {}
+func (*QueryServiceAllowedOperatorsResponse) ProtoMessage() {}
 
-// Deprecated: Use QueryServiceWhitelistedOperatorsResponse.ProtoReflect.Descriptor instead.
-func (*QueryServiceWhitelistedOperatorsResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use QueryServiceAllowedOperatorsResponse.ProtoReflect.Descriptor instead.
+func (*QueryServiceAllowedOperatorsResponse) Descriptor() ([]byte, []int) {
 	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *QueryServiceWhitelistedOperatorsResponse) GetOperatorIds() []uint32 {
+func (x *QueryServiceAllowedOperatorsResponse) GetOperatorIds() []uint32 {
 	if x != nil {
 		return x.OperatorIds
 	}
 	return nil
 }
 
-func (x *QueryServiceWhitelistedOperatorsResponse) GetPagination() *v1beta1.PageResponse {
+func (x *QueryServiceAllowedOperatorsResponse) GetPagination() *v1beta1.PageResponse {
 	if x != nil {
 		return x.Pagination
 	}
 	return nil
 }
 
-// QueryServiceWhitelistedPoolsRequest is request type for the Query/ServiceWhitelistedPools
+// QueryServiceAllowedPoolsRequest is request type for the Query/ServiceAllowedPools
 // RPC method.
-type QueryServiceWhitelistedPoolsRequest struct {
+type QueryServiceAllowedPoolsRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// ServiceId is the ID of the service to query
+	// ServiceId is the ID of the service to query.
 	ServiceId uint32 `protobuf:"varint,1,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
 	// Pagination defines an optional pagination for the request.
 	Pagination *v1beta1.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (x *QueryServiceWhitelistedPoolsRequest) Reset() {
-	*x = QueryServiceWhitelistedPoolsRequest{}
+func (x *QueryServiceAllowedPoolsRequest) Reset() {
+	*x = QueryServiceAllowedPoolsRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -28263,46 +28263,46 @@ func (x *QueryServiceWhitelistedPoolsRequest) Reset() {
 	}
 }
 
-func (x *QueryServiceWhitelistedPoolsRequest) String() string {
+func (x *QueryServiceAllowedPoolsRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryServiceWhitelistedPoolsRequest) ProtoMessage() {}
+func (*QueryServiceAllowedPoolsRequest) ProtoMessage() {}
 
-// Deprecated: Use QueryServiceWhitelistedPoolsRequest.ProtoReflect.Descriptor instead.
-func (*QueryServiceWhitelistedPoolsRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use QueryServiceAllowedPoolsRequest.ProtoReflect.Descriptor instead.
+func (*QueryServiceAllowedPoolsRequest) Descriptor() ([]byte, []int) {
 	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *QueryServiceWhitelistedPoolsRequest) GetServiceId() uint32 {
+func (x *QueryServiceAllowedPoolsRequest) GetServiceId() uint32 {
 	if x != nil {
 		return x.ServiceId
 	}
 	return 0
 }
 
-func (x *QueryServiceWhitelistedPoolsRequest) GetPagination() *v1beta1.PageRequest {
+func (x *QueryServiceAllowedPoolsRequest) GetPagination() *v1beta1.PageRequest {
 	if x != nil {
 		return x.Pagination
 	}
 	return nil
 }
 
-// QueryServiceWhitelistedPoolsResponse is response type for the Query/ServiceWhitelistedPools
+// QueryServiceAllowedPoolsResponse is response type for the Query/ServiceAllowedPools
 // RPC method.
-type QueryServiceWhitelistedPoolsResponse struct {
+type QueryServiceAllowedPoolsResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// PoolIds is the list of pools in the service's whitelist
+	// PoolIds is the list of pools in the service's whitelist.
 	PoolIds []uint32 `protobuf:"varint,1,rep,packed,name=pool_ids,json=poolIds,proto3" json:"pool_ids,omitempty"`
 	// Pagination defines the pagination in the response.
 	Pagination *v1beta1.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (x *QueryServiceWhitelistedPoolsResponse) Reset() {
-	*x = QueryServiceWhitelistedPoolsResponse{}
+func (x *QueryServiceAllowedPoolsResponse) Reset() {
+	*x = QueryServiceAllowedPoolsResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_restaking_v1_query_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -28310,25 +28310,25 @@ func (x *QueryServiceWhitelistedPoolsResponse) Reset() {
 	}
 }
 
-func (x *QueryServiceWhitelistedPoolsResponse) String() string {
+func (x *QueryServiceAllowedPoolsResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*QueryServiceWhitelistedPoolsResponse) ProtoMessage() {}
+func (*QueryServiceAllowedPoolsResponse) ProtoMessage() {}
 
-// Deprecated: Use QueryServiceWhitelistedPoolsResponse.ProtoReflect.Descriptor instead.
-func (*QueryServiceWhitelistedPoolsResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use QueryServiceAllowedPoolsResponse.ProtoReflect.Descriptor instead.
+func (*QueryServiceAllowedPoolsResponse) Descriptor() ([]byte, []int) {
 	return file_milkyway_restaking_v1_query_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *QueryServiceWhitelistedPoolsResponse) GetPoolIds() []uint32 {
+func (x *QueryServiceAllowedPoolsResponse) GetPoolIds() []uint32 {
 	if x != nil {
 		return x.PoolIds
 	}
 	return nil
 }
 
-func (x *QueryServiceWhitelistedPoolsResponse) GetPagination() *v1beta1.PageResponse {
+func (x *QueryServiceAllowedPoolsResponse) GetPagination() *v1beta1.PageResponse {
 	if x != nil {
 		return x.Pagination
 	}
@@ -28342,7 +28342,7 @@ type QueryPoolDelegationsRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// PoolId is the ID of the pool to query
+	// PoolId is the ID of the pool to query.
 	PoolId uint32 `protobuf:"varint,1,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
 	// Pagination defines an optional pagination for the request.
 	Pagination *v1beta1.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
@@ -28389,7 +28389,7 @@ type QueryPoolDelegationsResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Delegations is the list of delegations
+	// Delegations is the list of delegations.
 	Delegations []*DelegationResponse `protobuf:"bytes,1,rep,name=delegations,proto3" json:"delegations,omitempty"`
 	// Pagination defines the pagination in the response.
 	Pagination *v1beta1.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
@@ -30604,36 +30604,35 @@ var file_milkyway_restaking_v1_query_proto_rawDesc = []byte{
 	0x65, 0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
 	0x73, 0x65, 0x12, 0x1f, 0x0a, 0x0b, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64,
 	0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0d, 0x52, 0x0a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
-	0x49, 0x64, 0x73, 0x22, 0x90, 0x01, 0x0a, 0x27, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x57, 0x68, 0x69, 0x74, 0x65, 0x6c, 0x69, 0x73, 0x74, 0x65, 0x64, 0x4f,
-	0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
-	0x1d, 0x0a, 0x0a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x0d, 0x52, 0x09, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x12, 0x46,
+	0x49, 0x64, 0x73, 0x22, 0x8c, 0x01, 0x0a, 0x23, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72,
+	0x76, 0x69, 0x63, 0x65, 0x41, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x4f, 0x70, 0x65, 0x72, 0x61,
+	0x74, 0x6f, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x73,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52,
+	0x09, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x12, 0x46, 0x0a, 0x0a, 0x70, 0x61,
+	0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26,
+	0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65,
+	0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x22, 0x92, 0x01, 0x0a, 0x24, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x41, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74,
+	0x6f, 0x72, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x21, 0x0a, 0x0c, 0x6f,
+	0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x69, 0x64, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28,
+	0x0d, 0x52, 0x0b, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x64, 0x73, 0x12, 0x47,
 	0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65,
+	0x28, 0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65,
 	0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50,
-	0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69,
-	0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x96, 0x01, 0x0a, 0x28, 0x51, 0x75, 0x65, 0x72, 0x79,
-	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x57, 0x68, 0x69, 0x74, 0x65, 0x6c, 0x69, 0x73, 0x74,
-	0x65, 0x64, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x12, 0x21, 0x0a, 0x0c, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f,
-	0x69, 0x64, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0d, 0x52, 0x0b, 0x6f, 0x70, 0x65, 0x72, 0x61,
-	0x74, 0x6f, 0x72, 0x49, 0x64, 0x73, 0x12, 0x47, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x63, 0x6f, 0x73,
-	0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76,
-	0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22,
-	0x8c, 0x01, 0x0a, 0x23, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
-	0x57, 0x68, 0x69, 0x74, 0x65, 0x6c, 0x69, 0x73, 0x74, 0x65, 0x64, 0x50, 0x6f, 0x6f, 0x6c, 0x73,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x09, 0x73, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x12, 0x46, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61,
-	0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26, 0x2e, 0x63, 0x6f, 0x73,
-	0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65, 0x72, 0x79, 0x2e, 0x76,
-	0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x8a,
-	0x01, 0x0a, 0x24, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x57,
-	0x68, 0x69, 0x74, 0x65, 0x6c, 0x69, 0x73, 0x74, 0x65, 0x64, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x52,
+	0x61, 0x67, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x52, 0x0a, 0x70, 0x61, 0x67,
+	0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x88, 0x01, 0x0a, 0x1f, 0x51, 0x75, 0x65, 0x72,
+	0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x41, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x50,
+	0x6f, 0x6f, 0x6c, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x73,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52,
+	0x09, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x12, 0x46, 0x0a, 0x0a, 0x70, 0x61,
+	0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x26,
+	0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x71, 0x75, 0x65,
+	0x72, 0x79, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x50, 0x61, 0x67, 0x65, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x52, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x22, 0x86, 0x01, 0x0a, 0x20, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x41, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x52,
 	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x19, 0x0a, 0x08, 0x70, 0x6f, 0x6f, 0x6c, 0x5f,
 	0x69, 0x64, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0d, 0x52, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x49,
 	0x64, 0x73, 0x12, 0x47, 0x0a, 0x0a, 0x70, 0x61, 0x67, 0x69, 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e,
@@ -31137,7 +31136,7 @@ var file_milkyway_restaking_v1_query_proto_rawDesc = []byte{
 	0x1d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61,
 	0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x09,
 	0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d,
-	0x73, 0x32, 0xe5, 0x31, 0x0a, 0x05, 0x51, 0x75, 0x65, 0x72, 0x79, 0x12, 0xdc, 0x01, 0x0a, 0x16,
+	0x73, 0x32, 0xc5, 0x31, 0x0a, 0x05, 0x51, 0x75, 0x65, 0x72, 0x79, 0x12, 0xdc, 0x01, 0x0a, 0x16,
 	0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x4a, 0x6f, 0x69, 0x6e, 0x65, 0x64, 0x53, 0x65,
 	0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x12, 0x39, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
 	0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51,
@@ -31151,36 +31150,34 @@ var file_milkyway_restaking_v1_query_proto_rawDesc = []byte{
 	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f,
 	0x76, 0x31, 0x2f, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x2f, 0x7b, 0x6f, 0x70,
 	0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x6a, 0x6f, 0x69, 0x6e, 0x65,
-	0x64, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x12, 0xef, 0x01, 0x0a, 0x1b, 0x53,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x57, 0x68, 0x69, 0x74, 0x65, 0x6c, 0x69, 0x73, 0x74, 0x65,
-	0x64, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x12, 0x3e, 0x2e, 0x6d, 0x69, 0x6c,
-	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e,
-	0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x57,
-	0x68, 0x69, 0x74, 0x65, 0x6c, 0x69, 0x73, 0x74, 0x65, 0x64, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74,
-	0x6f, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x3f, 0x2e, 0x6d, 0x69, 0x6c,
-	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e,
-	0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x57,
-	0x68, 0x69, 0x74, 0x65, 0x6c, 0x69, 0x73, 0x74, 0x65, 0x64, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74,
-	0x6f, 0x72, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x4f, 0x88, 0xe7, 0xb0,
-	0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x44, 0x12, 0x42, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
-	0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31,
-	0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f, 0x7b, 0x73, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x77, 0x68, 0x69, 0x74, 0x65, 0x6c, 0x69, 0x73, 0x74,
-	0x65, 0x64, 0x5f, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x12, 0xdf, 0x01, 0x0a,
-	0x17, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x57, 0x68, 0x69, 0x74, 0x65, 0x6c, 0x69, 0x73,
-	0x74, 0x65, 0x64, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x12, 0x3a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
-	0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31,
-	0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x57, 0x68, 0x69,
-	0x74, 0x65, 0x6c, 0x69, 0x73, 0x74, 0x65, 0x64, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x1a, 0x3b, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
+	0x64, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x12, 0xdf, 0x01, 0x0a, 0x17, 0x53,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x41, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x4f, 0x70, 0x65,
+	0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x12, 0x3a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
+	0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51,
+	0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x41, 0x6c, 0x6c, 0x6f, 0x77,
+	0x65, 0x64, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x1a, 0x3b, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65,
+	0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
+	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x41, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x4f, 0x70,
+	0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
+	0x4b, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x40, 0x12, 0x3e, 0x2f, 0x6d,
+	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e,
+	0x67, 0x2f, 0x76, 0x31, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f, 0x7b, 0x73,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x61, 0x6c, 0x6c, 0x6f, 0x77,
+	0x65, 0x64, 0x5f, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x12, 0xcf, 0x01, 0x0a,
+	0x13, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x41, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x50,
+	0x6f, 0x6f, 0x6c, 0x73, 0x12, 0x36, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
 	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65,
-	0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x57, 0x68, 0x69, 0x74, 0x65, 0x6c, 0x69,
-	0x73, 0x74, 0x65, 0x64, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x22, 0x4b, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x40, 0x12, 0x3e,
-	0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b,
-	0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f,
-	0x7b, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x7d, 0x2f, 0x77, 0x68, 0x69,
-	0x74, 0x65, 0x6c, 0x69, 0x73, 0x74, 0x65, 0x64, 0x5f, 0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x12, 0xbb,
+	0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x41, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64,
+	0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x37, 0x2e, 0x6d,
+	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e,
+	0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x41, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x47, 0x88, 0xe7, 0xb0, 0x2a, 0x01, 0x82, 0xd3, 0xe4, 0x93,
+	0x02, 0x3c, 0x12, 0x3a, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65,
+	0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x73, 0x2f, 0x7b, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x7d,
+	0x2f, 0x61, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x5f, 0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x12, 0xbb,
 	0x01, 0x0a, 0x0f, 0x50, 0x6f, 0x6f, 0x6c, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f,
 	0x6e, 0x73, 0x12, 0x32, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65,
 	0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x51, 0x75, 0x65, 0x72, 0x79,
@@ -31569,10 +31566,10 @@ var file_milkyway_restaking_v1_query_proto_msgTypes = make([]protoimpl.MessageIn
 var file_milkyway_restaking_v1_query_proto_goTypes = []interface{}{
 	(*QueryOperatorJoinedServicesRequest)(nil),                 // 0: milkyway.restaking.v1.QueryOperatorJoinedServicesRequest
 	(*QueryOperatorJoinedServicesResponse)(nil),                // 1: milkyway.restaking.v1.QueryOperatorJoinedServicesResponse
-	(*QueryServiceWhitelistedOperatorsRequest)(nil),            // 2: milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest
-	(*QueryServiceWhitelistedOperatorsResponse)(nil),           // 3: milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse
-	(*QueryServiceWhitelistedPoolsRequest)(nil),                // 4: milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest
-	(*QueryServiceWhitelistedPoolsResponse)(nil),               // 5: milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse
+	(*QueryServiceAllowedOperatorsRequest)(nil),                // 2: milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest
+	(*QueryServiceAllowedOperatorsResponse)(nil),               // 3: milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse
+	(*QueryServiceAllowedPoolsRequest)(nil),                    // 4: milkyway.restaking.v1.QueryServiceAllowedPoolsRequest
+	(*QueryServiceAllowedPoolsResponse)(nil),                   // 5: milkyway.restaking.v1.QueryServiceAllowedPoolsResponse
 	(*QueryPoolDelegationsRequest)(nil),                        // 6: milkyway.restaking.v1.QueryPoolDelegationsRequest
 	(*QueryPoolDelegationsResponse)(nil),                       // 7: milkyway.restaking.v1.QueryPoolDelegationsResponse
 	(*QueryPoolDelegationRequest)(nil),                         // 8: milkyway.restaking.v1.QueryPoolDelegationRequest
@@ -31633,10 +31630,10 @@ var file_milkyway_restaking_v1_query_proto_goTypes = []interface{}{
 	(*Params)(nil),                                             // 63: milkyway.restaking.v1.Params
 }
 var file_milkyway_restaking_v1_query_proto_depIdxs = []int32{
-	56, // 0: milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
-	57, // 1: milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
-	56, // 2: milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
-	57, // 3: milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	56, // 0: milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	57, // 1: milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
+	56, // 2: milkyway.restaking.v1.QueryServiceAllowedPoolsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
+	57, // 3: milkyway.restaking.v1.QueryServiceAllowedPoolsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
 	56, // 4: milkyway.restaking.v1.QueryPoolDelegationsRequest.pagination:type_name -> cosmos.base.query.v1beta1.PageRequest
 	58, // 5: milkyway.restaking.v1.QueryPoolDelegationsResponse.delegations:type_name -> milkyway.restaking.v1.DelegationResponse
 	57, // 6: milkyway.restaking.v1.QueryPoolDelegationsResponse.pagination:type_name -> cosmos.base.query.v1beta1.PageResponse
@@ -31693,8 +31690,8 @@ var file_milkyway_restaking_v1_query_proto_depIdxs = []int32{
 	62, // 57: milkyway.restaking.v1.QueryDelegatorServiceResponse.service:type_name -> milkyway.services.v1.Service
 	63, // 58: milkyway.restaking.v1.QueryParamsResponse.params:type_name -> milkyway.restaking.v1.Params
 	0,  // 59: milkyway.restaking.v1.Query.OperatorJoinedServices:input_type -> milkyway.restaking.v1.QueryOperatorJoinedServicesRequest
-	2,  // 60: milkyway.restaking.v1.Query.ServiceWhitelistedOperators:input_type -> milkyway.restaking.v1.QueryServiceWhitelistedOperatorsRequest
-	4,  // 61: milkyway.restaking.v1.Query.ServiceWhitelistedPools:input_type -> milkyway.restaking.v1.QueryServiceWhitelistedPoolsRequest
+	2,  // 60: milkyway.restaking.v1.Query.ServiceAllowedOperators:input_type -> milkyway.restaking.v1.QueryServiceAllowedOperatorsRequest
+	4,  // 61: milkyway.restaking.v1.Query.ServiceAllowedPools:input_type -> milkyway.restaking.v1.QueryServiceAllowedPoolsRequest
 	6,  // 62: milkyway.restaking.v1.Query.PoolDelegations:input_type -> milkyway.restaking.v1.QueryPoolDelegationsRequest
 	8,  // 63: milkyway.restaking.v1.Query.PoolDelegation:input_type -> milkyway.restaking.v1.QueryPoolDelegationRequest
 	10, // 64: milkyway.restaking.v1.Query.PoolUnbondingDelegations:input_type -> milkyway.restaking.v1.QueryPoolUnbondingDelegationsRequest
@@ -31721,8 +31718,8 @@ var file_milkyway_restaking_v1_query_proto_depIdxs = []int32{
 	52, // 85: milkyway.restaking.v1.Query.DelegatorService:input_type -> milkyway.restaking.v1.QueryDelegatorServiceRequest
 	54, // 86: milkyway.restaking.v1.Query.Params:input_type -> milkyway.restaking.v1.QueryParamsRequest
 	1,  // 87: milkyway.restaking.v1.Query.OperatorJoinedServices:output_type -> milkyway.restaking.v1.QueryOperatorJoinedServicesResponse
-	3,  // 88: milkyway.restaking.v1.Query.ServiceWhitelistedOperators:output_type -> milkyway.restaking.v1.QueryServiceWhitelistedOperatorsResponse
-	5,  // 89: milkyway.restaking.v1.Query.ServiceWhitelistedPools:output_type -> milkyway.restaking.v1.QueryServiceWhitelistedPoolsResponse
+	3,  // 88: milkyway.restaking.v1.Query.ServiceAllowedOperators:output_type -> milkyway.restaking.v1.QueryServiceAllowedOperatorsResponse
+	5,  // 89: milkyway.restaking.v1.Query.ServiceAllowedPools:output_type -> milkyway.restaking.v1.QueryServiceAllowedPoolsResponse
 	7,  // 90: milkyway.restaking.v1.Query.PoolDelegations:output_type -> milkyway.restaking.v1.QueryPoolDelegationsResponse
 	9,  // 91: milkyway.restaking.v1.Query.PoolDelegation:output_type -> milkyway.restaking.v1.QueryPoolDelegationResponse
 	11, // 92: milkyway.restaking.v1.Query.PoolUnbondingDelegations:output_type -> milkyway.restaking.v1.QueryPoolUnbondingDelegationsResponse
@@ -31788,7 +31785,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryServiceWhitelistedOperatorsRequest); i {
+			switch v := v.(*QueryServiceAllowedOperatorsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -31800,7 +31797,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryServiceWhitelistedOperatorsResponse); i {
+			switch v := v.(*QueryServiceAllowedOperatorsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -31812,7 +31809,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryServiceWhitelistedPoolsRequest); i {
+			switch v := v.(*QueryServiceAllowedPoolsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -31824,7 +31821,7 @@ func file_milkyway_restaking_v1_query_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_query_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*QueryServiceWhitelistedPoolsResponse); i {
+			switch v := v.(*QueryServiceAllowedPoolsResponse); i {
 			case 0:
 				return &v.state
 			case 1:

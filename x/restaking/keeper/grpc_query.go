@@ -53,11 +53,11 @@ func (k Querier) OperatorJoinedServices(goCtx context.Context, req *types.QueryO
 	return &types.QueryOperatorJoinedServicesResponse{ServiceIds: joinedServices.ServiceIDs}, nil
 }
 
-// ServiceWhitelistedOperators queries the operators in the service's whitelist
-func (k Querier) ServiceWhitelistedOperators(
+// ServiceAllowedOperators queries the operators in the service's whitelist
+func (k Querier) ServiceAllowedOperators(
 	goCtx context.Context,
-	req *types.QueryServiceWhitelistedOperatorsRequest,
-) (*types.QueryServiceWhitelistedOperatorsResponse, error) {
+	req *types.QueryServiceAllowedOperatorsRequest,
+) (*types.QueryServiceAllowedOperatorsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -77,17 +77,17 @@ func (k Querier) ServiceWhitelistedOperators(
 		return nil, err
 	}
 
-	return &types.QueryServiceWhitelistedOperatorsResponse{
+	return &types.QueryServiceAllowedOperatorsResponse{
 		OperatorIds: operatorIDs,
 		Pagination:  pageResponse,
 	}, nil
 }
 
-// ServiceWhitelistedPools queries the pools in the service's whitelist
-func (k Querier) ServiceWhitelistedPools(
+// ServiceAllowedPools queries the pools in the service's whitelist
+func (k Querier) ServiceAllowedPools(
 	goCtx context.Context,
-	req *types.QueryServiceWhitelistedPoolsRequest,
-) (*types.QueryServiceWhitelistedPoolsResponse, error) {
+	req *types.QueryServiceAllowedPoolsRequest,
+) (*types.QueryServiceAllowedPoolsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -107,7 +107,7 @@ func (k Querier) ServiceWhitelistedPools(
 		return nil, err
 	}
 
-	return &types.QueryServiceWhitelistedPoolsResponse{
+	return &types.QueryServiceAllowedPoolsResponse{
 		PoolIds:    poolIDs,
 		Pagination: pageResponse,
 	}, nil
