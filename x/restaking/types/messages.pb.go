@@ -439,6 +439,209 @@ func (m *MsgRemoveAllowedOperatorResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgRemoveAllowedOperatorResponse proto.InternalMessageInfo
 
+// MsgBorrowPoolSecurity defines the message structure for the
+// BorrowPoolSecurity gRPC service method. It allows the service admin
+// to add a pool to the list of pools from which the service has chosen
+// to borrow security.
+type MsgBorrowPoolSecurity struct {
+	Sender    string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	ServiceID uint32 `protobuf:"varint,2,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
+	PoolID    uint32 `protobuf:"varint,3,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+}
+
+func (m *MsgBorrowPoolSecurity) Reset()         { *m = MsgBorrowPoolSecurity{} }
+func (m *MsgBorrowPoolSecurity) String() string { return proto.CompactTextString(m) }
+func (*MsgBorrowPoolSecurity) ProtoMessage()    {}
+func (*MsgBorrowPoolSecurity) Descriptor() ([]byte, []int) {
+	return fileDescriptor_9772be2b1a923bdb, []int{8}
+}
+func (m *MsgBorrowPoolSecurity) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgBorrowPoolSecurity) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgBorrowPoolSecurity.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgBorrowPoolSecurity) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgBorrowPoolSecurity.Merge(m, src)
+}
+func (m *MsgBorrowPoolSecurity) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgBorrowPoolSecurity) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgBorrowPoolSecurity.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgBorrowPoolSecurity proto.InternalMessageInfo
+
+func (m *MsgBorrowPoolSecurity) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+func (m *MsgBorrowPoolSecurity) GetServiceID() uint32 {
+	if m != nil {
+		return m.ServiceID
+	}
+	return 0
+}
+
+func (m *MsgBorrowPoolSecurity) GetPoolID() uint32 {
+	if m != nil {
+		return m.PoolID
+	}
+	return 0
+}
+
+// MsgBorrowPoolSecurityResponse is the return value of MsgBorrowPoolSecurity.
+type MsgBorrowPoolSecurityResponse struct {
+}
+
+func (m *MsgBorrowPoolSecurityResponse) Reset()         { *m = MsgBorrowPoolSecurityResponse{} }
+func (m *MsgBorrowPoolSecurityResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgBorrowPoolSecurityResponse) ProtoMessage()    {}
+func (*MsgBorrowPoolSecurityResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_9772be2b1a923bdb, []int{9}
+}
+func (m *MsgBorrowPoolSecurityResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgBorrowPoolSecurityResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgBorrowPoolSecurityResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgBorrowPoolSecurityResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgBorrowPoolSecurityResponse.Merge(m, src)
+}
+func (m *MsgBorrowPoolSecurityResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgBorrowPoolSecurityResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgBorrowPoolSecurityResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgBorrowPoolSecurityResponse proto.InternalMessageInfo
+
+// MsgCeasePoolSecurityBorrow defines the message structure for the
+// CeaseBorrowPoolSecurity gRPC service method. It allows the service admin
+// to remove a pool from the list of pools from which the service has chosen
+// to borrow security.
+type MsgCeasePoolSecurityBorrow struct {
+	Sender    string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	ServiceID uint32 `protobuf:"varint,2,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
+	PoolID    uint32 `protobuf:"varint,3,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+}
+
+func (m *MsgCeasePoolSecurityBorrow) Reset()         { *m = MsgCeasePoolSecurityBorrow{} }
+func (m *MsgCeasePoolSecurityBorrow) String() string { return proto.CompactTextString(m) }
+func (*MsgCeasePoolSecurityBorrow) ProtoMessage()    {}
+func (*MsgCeasePoolSecurityBorrow) Descriptor() ([]byte, []int) {
+	return fileDescriptor_9772be2b1a923bdb, []int{10}
+}
+func (m *MsgCeasePoolSecurityBorrow) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgCeasePoolSecurityBorrow) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgCeasePoolSecurityBorrow.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgCeasePoolSecurityBorrow) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCeasePoolSecurityBorrow.Merge(m, src)
+}
+func (m *MsgCeasePoolSecurityBorrow) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgCeasePoolSecurityBorrow) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCeasePoolSecurityBorrow.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgCeasePoolSecurityBorrow proto.InternalMessageInfo
+
+func (m *MsgCeasePoolSecurityBorrow) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+func (m *MsgCeasePoolSecurityBorrow) GetServiceID() uint32 {
+	if m != nil {
+		return m.ServiceID
+	}
+	return 0
+}
+
+func (m *MsgCeasePoolSecurityBorrow) GetPoolID() uint32 {
+	if m != nil {
+		return m.PoolID
+	}
+	return 0
+}
+
+// MsgCeasePoolSecurityBorrowResponse is the return value of
+// MsgCeasePoolSecurityBorrow.
+type MsgCeasePoolSecurityBorrowResponse struct {
+}
+
+func (m *MsgCeasePoolSecurityBorrowResponse) Reset()         { *m = MsgCeasePoolSecurityBorrowResponse{} }
+func (m *MsgCeasePoolSecurityBorrowResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgCeasePoolSecurityBorrowResponse) ProtoMessage()    {}
+func (*MsgCeasePoolSecurityBorrowResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_9772be2b1a923bdb, []int{11}
+}
+func (m *MsgCeasePoolSecurityBorrowResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgCeasePoolSecurityBorrowResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgCeasePoolSecurityBorrowResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgCeasePoolSecurityBorrowResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCeasePoolSecurityBorrowResponse.Merge(m, src)
+}
+func (m *MsgCeasePoolSecurityBorrowResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgCeasePoolSecurityBorrowResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCeasePoolSecurityBorrowResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgCeasePoolSecurityBorrowResponse proto.InternalMessageInfo
+
 // MsgDelegatePool defines the message structure for the DelegatePool gRPC
 // service method. It allows a user to put their assets into a restaking pool
 // that will later be used to provide cryptoeconomic security to services that
@@ -454,7 +657,7 @@ func (m *MsgDelegatePool) Reset()         { *m = MsgDelegatePool{} }
 func (m *MsgDelegatePool) String() string { return proto.CompactTextString(m) }
 func (*MsgDelegatePool) ProtoMessage()    {}
 func (*MsgDelegatePool) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9772be2b1a923bdb, []int{8}
+	return fileDescriptor_9772be2b1a923bdb, []int{12}
 }
 func (m *MsgDelegatePool) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -505,7 +708,7 @@ func (m *MsgDelegatePoolResponse) Reset()         { *m = MsgDelegatePoolResponse
 func (m *MsgDelegatePoolResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgDelegatePoolResponse) ProtoMessage()    {}
 func (*MsgDelegatePoolResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9772be2b1a923bdb, []int{9}
+	return fileDescriptor_9772be2b1a923bdb, []int{13}
 }
 func (m *MsgDelegatePoolResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -550,7 +753,7 @@ func (m *MsgDelegateOperator) Reset()         { *m = MsgDelegateOperator{} }
 func (m *MsgDelegateOperator) String() string { return proto.CompactTextString(m) }
 func (*MsgDelegateOperator) ProtoMessage()    {}
 func (*MsgDelegateOperator) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9772be2b1a923bdb, []int{10}
+	return fileDescriptor_9772be2b1a923bdb, []int{14}
 }
 func (m *MsgDelegateOperator) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -608,7 +811,7 @@ func (m *MsgDelegateOperatorResponse) Reset()         { *m = MsgDelegateOperator
 func (m *MsgDelegateOperatorResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgDelegateOperatorResponse) ProtoMessage()    {}
 func (*MsgDelegateOperatorResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9772be2b1a923bdb, []int{11}
+	return fileDescriptor_9772be2b1a923bdb, []int{15}
 }
 func (m *MsgDelegateOperatorResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -652,7 +855,7 @@ func (m *MsgDelegateService) Reset()         { *m = MsgDelegateService{} }
 func (m *MsgDelegateService) String() string { return proto.CompactTextString(m) }
 func (*MsgDelegateService) ProtoMessage()    {}
 func (*MsgDelegateService) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9772be2b1a923bdb, []int{12}
+	return fileDescriptor_9772be2b1a923bdb, []int{16}
 }
 func (m *MsgDelegateService) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -710,7 +913,7 @@ func (m *MsgDelegateServiceResponse) Reset()         { *m = MsgDelegateServiceRe
 func (m *MsgDelegateServiceResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgDelegateServiceResponse) ProtoMessage()    {}
 func (*MsgDelegateServiceResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9772be2b1a923bdb, []int{13}
+	return fileDescriptor_9772be2b1a923bdb, []int{17}
 }
 func (m *MsgDelegateServiceResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -755,7 +958,7 @@ func (m *MsgUpdateParams) Reset()         { *m = MsgUpdateParams{} }
 func (m *MsgUpdateParams) String() string { return proto.CompactTextString(m) }
 func (*MsgUpdateParams) ProtoMessage()    {}
 func (*MsgUpdateParams) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9772be2b1a923bdb, []int{14}
+	return fileDescriptor_9772be2b1a923bdb, []int{18}
 }
 func (m *MsgUpdateParams) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -806,7 +1009,7 @@ func (m *MsgUpdateParamsResponse) Reset()         { *m = MsgUpdateParamsResponse
 func (m *MsgUpdateParamsResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgUpdateParamsResponse) ProtoMessage()    {}
 func (*MsgUpdateParamsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9772be2b1a923bdb, []int{15}
+	return fileDescriptor_9772be2b1a923bdb, []int{19}
 }
 func (m *MsgUpdateParamsResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -848,7 +1051,7 @@ func (m *MsgUndelegatePool) Reset()         { *m = MsgUndelegatePool{} }
 func (m *MsgUndelegatePool) String() string { return proto.CompactTextString(m) }
 func (*MsgUndelegatePool) ProtoMessage()    {}
 func (*MsgUndelegatePool) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9772be2b1a923bdb, []int{16}
+	return fileDescriptor_9772be2b1a923bdb, []int{20}
 }
 func (m *MsgUndelegatePool) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -893,7 +1096,7 @@ func (m *MsgUndelegateOperator) Reset()         { *m = MsgUndelegateOperator{} }
 func (m *MsgUndelegateOperator) String() string { return proto.CompactTextString(m) }
 func (*MsgUndelegateOperator) ProtoMessage()    {}
 func (*MsgUndelegateOperator) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9772be2b1a923bdb, []int{17}
+	return fileDescriptor_9772be2b1a923bdb, []int{21}
 }
 func (m *MsgUndelegateOperator) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -938,7 +1141,7 @@ func (m *MsgUndelegateService) Reset()         { *m = MsgUndelegateService{} }
 func (m *MsgUndelegateService) String() string { return proto.CompactTextString(m) }
 func (*MsgUndelegateService) ProtoMessage()    {}
 func (*MsgUndelegateService) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9772be2b1a923bdb, []int{18}
+	return fileDescriptor_9772be2b1a923bdb, []int{22}
 }
 func (m *MsgUndelegateService) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -978,7 +1181,7 @@ func (m *MsgUndelegateResponse) Reset()         { *m = MsgUndelegateResponse{} }
 func (m *MsgUndelegateResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgUndelegateResponse) ProtoMessage()    {}
 func (*MsgUndelegateResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_9772be2b1a923bdb, []int{19}
+	return fileDescriptor_9772be2b1a923bdb, []int{23}
 }
 func (m *MsgUndelegateResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1023,6 +1226,10 @@ func init() {
 	proto.RegisterType((*MsgAllowOperatorResponse)(nil), "milkyway.restaking.v1.MsgAllowOperatorResponse")
 	proto.RegisterType((*MsgRemoveAllowedOperator)(nil), "milkyway.restaking.v1.MsgRemoveAllowedOperator")
 	proto.RegisterType((*MsgRemoveAllowedOperatorResponse)(nil), "milkyway.restaking.v1.MsgRemoveAllowedOperatorResponse")
+	proto.RegisterType((*MsgBorrowPoolSecurity)(nil), "milkyway.restaking.v1.MsgBorrowPoolSecurity")
+	proto.RegisterType((*MsgBorrowPoolSecurityResponse)(nil), "milkyway.restaking.v1.MsgBorrowPoolSecurityResponse")
+	proto.RegisterType((*MsgCeasePoolSecurityBorrow)(nil), "milkyway.restaking.v1.MsgCeasePoolSecurityBorrow")
+	proto.RegisterType((*MsgCeasePoolSecurityBorrowResponse)(nil), "milkyway.restaking.v1.MsgCeasePoolSecurityBorrowResponse")
 	proto.RegisterType((*MsgDelegatePool)(nil), "milkyway.restaking.v1.MsgDelegatePool")
 	proto.RegisterType((*MsgDelegatePoolResponse)(nil), "milkyway.restaking.v1.MsgDelegatePoolResponse")
 	proto.RegisterType((*MsgDelegateOperator)(nil), "milkyway.restaking.v1.MsgDelegateOperator")
@@ -1042,76 +1249,84 @@ func init() {
 }
 
 var fileDescriptor_9772be2b1a923bdb = []byte{
-	// 1101 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x57, 0xcf, 0x6f, 0xe3, 0x44,
-	0x14, 0x8e, 0x53, 0x88, 0x94, 0x57, 0x9a, 0xb6, 0xa6, 0xa5, 0xa9, 0x77, 0x1b, 0x17, 0x0b, 0xd8,
-	0x6c, 0xb7, 0xb5, 0x49, 0x57, 0xe5, 0x47, 0xe0, 0xd2, 0xd0, 0x4b, 0x57, 0x44, 0xa0, 0x2c, 0x5c,
-	0xb8, 0x54, 0x4e, 0x3c, 0xeb, 0x5a, 0xb5, 0x3d, 0x91, 0xc7, 0xcd, 0x92, 0x1b, 0x70, 0x42, 0x9c,
-	0xf6, 0xca, 0x05, 0xf5, 0x82, 0x84, 0x38, 0xf5, 0xc0, 0x85, 0x1b, 0xc7, 0x05, 0x21, 0xb4, 0x70,
-	0xe2, 0x94, 0x45, 0xe9, 0xa1, 0x9c, 0xf9, 0x0b, 0x90, 0xed, 0xf1, 0xd4, 0x76, 0x9c, 0xd4, 0xa9,
-	0x56, 0xd5, 0x5e, 0xda, 0xcc, 0x7b, 0xdf, 0xbc, 0x79, 0xdf, 0x37, 0x33, 0x6f, 0x9e, 0xe1, 0x35,
-	0xcb, 0x30, 0x8f, 0xfa, 0x0f, 0xd5, 0xbe, 0xe2, 0x20, 0xe2, 0xaa, 0x47, 0x86, 0xad, 0x2b, 0xbd,
-	0x9a, 0x62, 0x21, 0x42, 0x54, 0x1d, 0x11, 0xb9, 0xeb, 0x60, 0x17, 0xf3, 0xcb, 0x21, 0x4a, 0x66,
-	0x28, 0xb9, 0x57, 0x13, 0x44, 0x1d, 0x63, 0xdd, 0x44, 0x8a, 0x0f, 0x6a, 0x1f, 0x3f, 0x50, 0x5c,
-	0xc3, 0xf2, 0xfc, 0x56, 0x37, 0x98, 0x27, 0x2c, 0xaa, 0x96, 0x61, 0x63, 0xc5, 0xff, 0x4b, 0x4d,
-	0xab, 0x1d, 0x4c, 0x2c, 0x4c, 0x0e, 0xfc, 0x91, 0x12, 0x0c, 0xa8, 0xab, 0x12, 0x8c, 0x94, 0xb6,
-	0x4a, 0x90, 0xd2, 0xab, 0xb5, 0x91, 0xab, 0xd6, 0x94, 0x0e, 0x36, 0x6c, 0xea, 0x5f, 0xa1, 0x7e,
-	0x8b, 0x04, 0x39, 0x12, 0x9d, 0x3a, 0x96, 0x74, 0xac, 0xe3, 0x20, 0xa0, 0xf7, 0x8b, 0x5a, 0xa5,
-	0x74, 0x6a, 0x5d, 0xd5, 0x51, 0x2d, 0x32, 0x19, 0x63, 0x61, 0x0d, 0x99, 0x14, 0x23, 0xfd, 0xc6,
-	0x41, 0xa9, 0x49, 0xf4, 0x7b, 0xd8, 0xb0, 0xef, 0x23, 0xa7, 0x67, 0x74, 0x10, 0xff, 0x26, 0x14,
-	0x08, 0xb2, 0x35, 0xe4, 0x94, 0xb9, 0x75, 0xae, 0x5a, 0x6c, 0x94, 0xff, 0xfa, 0x69, 0x6b, 0x89,
-	0x72, 0xd9, 0xd5, 0x34, 0x07, 0x11, 0x72, 0xdf, 0x75, 0x0c, 0x5b, 0x6f, 0x51, 0x1c, 0xaf, 0xc0,
-	0x2c, 0xee, 0x22, 0x47, 0x75, 0xb1, 0x73, 0x60, 0x68, 0xe5, 0xfc, 0x3a, 0x57, 0x9d, 0x6b, 0x94,
-	0x86, 0x03, 0x11, 0x3e, 0xa2, 0xe6, 0xfd, 0xbd, 0x16, 0x84, 0x90, 0x7d, 0x8d, 0xdf, 0x04, 0x20,
-	0xc1, 0x6a, 0x1e, 0x7e, 0xc6, 0xc7, 0xcf, 0x0d, 0x07, 0x62, 0x91, 0xe6, 0xb0, 0xbf, 0xd7, 0x2a,
-	0x52, 0xc0, 0xbe, 0x56, 0xbf, 0xf5, 0xd5, 0xf9, 0xe9, 0x06, 0x5d, 0xeb, 0x9b, 0xf3, 0xd3, 0x8d,
-	0x15, 0xc6, 0x2b, 0x9e, 0xb9, 0x54, 0x86, 0x57, 0xe2, 0x96, 0x16, 0x22, 0x5d, 0x6c, 0x13, 0x24,
-	0xfd, 0xce, 0xc1, 0x7c, 0x93, 0xe8, 0x1f, 0x22, 0xb5, 0x87, 0x9e, 0x5b, 0x9e, 0xd5, 0x04, 0xcf,
-	0x72, 0x94, 0x67, 0x34, 0x75, 0x69, 0x15, 0x56, 0x12, 0x26, 0xc6, 0xf4, 0x0f, 0x0e, 0x16, 0x9a,
-	0x44, 0xdf, 0x35, 0x4d, 0xfc, 0x30, 0xcc, 0xea, 0x0a, 0x54, 0xe3, 0x99, 0xe7, 0x27, 0x67, 0x9e,
-	0x14, 0x66, 0xe6, 0x32, 0x61, 0xea, 0xb7, 0x13, 0x54, 0x57, 0xa3, 0x54, 0x63, 0xb9, 0x4b, 0x02,
-	0x94, 0x93, 0x36, 0x46, 0x76, 0xc0, 0xf9, 0xce, 0x16, 0xb2, 0x70, 0x0f, 0xf9, 0x10, 0xa4, 0x3d,
-	0xbf, 0xa4, 0x6b, 0x09, 0xd2, 0xaf, 0x46, 0x49, 0xa7, 0x72, 0x90, 0x24, 0x58, 0x1f, 0xe7, 0x63,
-	0x22, 0xfc, 0x1c, 0x9c, 0xed, 0x3d, 0x64, 0x22, 0x5d, 0x75, 0xd1, 0xc7, 0x18, 0x9b, 0xfc, 0x5b,
-	0x50, 0xd4, 0x82, 0x31, 0xbe, 0x9c, 0xfe, 0x05, 0x94, 0xdf, 0x85, 0x82, 0x6a, 0xe1, 0x63, 0xdb,
-	0xf5, 0xd9, 0xcf, 0x6e, 0xaf, 0xca, 0x74, 0x86, 0x57, 0xb6, 0x64, 0x5a, 0xb6, 0xe4, 0x0f, 0xb0,
-	0x61, 0x37, 0x4a, 0x8f, 0x07, 0x62, 0x6e, 0x38, 0x10, 0x0b, 0xbb, 0xfe, 0x84, 0x16, 0x9d, 0x58,
-	0xbf, 0xe3, 0xb1, 0xbc, 0x08, 0x39, 0x72, 0x90, 0xa3, 0x79, 0xd2, 0x83, 0x1c, 0x35, 0x31, 0x5a,
-	0xdf, 0xe5, 0xe1, 0xe5, 0x88, 0x8f, 0x6d, 0xeb, 0x55, 0xa9, 0x4d, 0x7d, 0x79, 0x2d, 0xa6, 0xc5,
-	0xcc, 0xfa, 0xcc, 0x64, 0x2d, 0xea, 0x71, 0x2d, 0x7e, 0x7c, 0x2a, 0x56, 0x75, 0xc3, 0x3d, 0x3c,
-	0x6e, 0xcb, 0x1d, 0x6c, 0xd1, 0x77, 0x80, 0xfe, 0xdb, 0x22, 0xda, 0x91, 0xe2, 0xf6, 0xbb, 0x88,
-	0xf8, 0x53, 0x09, 0xd3, 0x4d, 0x19, 0xd5, 0xed, 0x66, 0x9a, 0x6e, 0xec, 0x6c, 0xac, 0xc1, 0x8d,
-	0x14, 0x33, 0xd3, 0xef, 0xdb, 0x3c, 0xf0, 0x11, 0x7f, 0x58, 0xf5, 0xae, 0x2a, 0xdf, 0x74, 0x77,
-	0xe3, 0x9a, 0xb5, 0x93, 0x47, 0xb5, 0xbb, 0x91, 0xa6, 0x5d, 0x58, 0x3f, 0x6f, 0x82, 0x30, 0x6a,
-	0x65, 0xca, 0xfd, 0x19, 0x5c, 0xa8, 0x4f, 0xbb, 0x9a, 0x77, 0x26, 0xfd, 0x17, 0x95, 0xbf, 0x07,
-	0x45, 0xf5, 0xd8, 0x3d, 0xc4, 0x8e, 0xe1, 0xf6, 0xa9, 0x6c, 0x9b, 0xff, 0x0d, 0xc4, 0x85, 0xbe,
-	0x6a, 0x99, 0x75, 0x89, 0xb9, 0xa4, 0xf1, 0x52, 0x32, 0x0c, 0xff, 0x1e, 0x14, 0x82, 0x77, 0x9a,
-	0x5e, 0xb2, 0x35, 0x39, 0xb5, 0x03, 0x91, 0x83, 0xa5, 0x1b, 0x2f, 0x78, 0x02, 0xb5, 0xe8, 0x94,
-	0xfa, 0x8e, 0x4f, 0x95, 0x05, 0xf3, 0xa8, 0xa6, 0xbd, 0xf3, 0x89, 0xfc, 0xe9, 0x45, 0x8b, 0x9a,
-	0x18, 0xdd, 0x5f, 0x38, 0x58, 0xf4, 0x7c, 0xb6, 0xf6, 0x2c, 0x2a, 0xc8, 0xfb, 0xd9, 0x2b, 0x48,
-	0xd1, 0x23, 0xf6, 0xc3, 0xf9, 0xe9, 0x06, 0xc7, 0x36, 0x72, 0xe7, 0xeb, 0x13, 0x31, 0xf7, 0xef,
-	0x89, 0x98, 0x1b, 0xdd, 0x50, 0x21, 0xba, 0xa1, 0xf1, 0x64, 0xa5, 0xef, 0xf3, 0xb0, 0x1c, 0xb3,
-	0x5e, 0x7f, 0xb5, 0x38, 0xcc, 0x7e, 0xe2, 0x77, 0x3c, 0xde, 0xd3, 0x9c, 0xf3, 0xb8, 0x46, 0xef,
-	0x8e, 0xd7, 0xa8, 0x92, 0xae, 0x11, 0x2b, 0x19, 0x27, 0x79, 0x58, 0x8a, 0x79, 0xae, 0xb7, 0x2a,
-	0x5c, 0x9f, 0x46, 0xef, 0x8c, 0xd7, 0x68, 0x2d, 0x5d, 0xa3, 0xb0, 0x34, 0x1c, 0x25, 0x4e, 0x52,
-	0x78, 0x4d, 0xf8, 0x16, 0xcc, 0x77, 0xb0, 0xd5, 0x35, 0x91, 0x6b, 0x60, 0xfb, 0xc0, 0xfb, 0x18,
-	0xf0, 0x85, 0x9a, 0xdd, 0x16, 0xe4, 0xe0, 0x4b, 0x41, 0x0e, 0xbf, 0x14, 0xe4, 0x4f, 0xc2, 0x2f,
-	0x85, 0xc6, 0x9c, 0x47, 0xe3, 0xd1, 0x53, 0x91, 0x0b, 0xd2, 0x2b, 0x5d, 0x44, 0xf0, 0x30, 0xdb,
-	0xbf, 0x16, 0x61, 0xa6, 0x49, 0x74, 0xbe, 0x03, 0xb3, 0xd1, 0x0e, 0xfc, 0xf5, 0x31, 0x05, 0x21,
-	0xde, 0xdc, 0x0a, 0x5b, 0x99, 0x60, 0x8c, 0xc0, 0x03, 0x78, 0x29, 0xd6, 0xff, 0xbe, 0x31, 0x7e,
-	0x7a, 0x14, 0x27, 0xc8, 0xd9, 0x70, 0x6c, 0x1d, 0x03, 0xe6, 0xe2, 0xdd, 0xe7, 0xad, 0xf1, 0x01,
-	0x62, 0x40, 0x41, 0xc9, 0x08, 0x64, 0x4b, 0x7d, 0xc9, 0xc1, 0x72, 0x7a, 0xf3, 0x37, 0x21, 0x54,
-	0xea, 0x04, 0xe1, 0xed, 0x29, 0x27, 0x44, 0x65, 0x8d, 0xb5, 0x5e, 0x13, 0x64, 0x8d, 0xe2, 0x26,
-	0xc9, 0x9a, 0xd6, 0x0f, 0xf1, 0x0e, 0x2c, 0x8c, 0xf4, 0x42, 0x1b, 0x97, 0xc7, 0x60, 0x04, 0xb7,
-	0xb3, 0x63, 0xd9, 0x9a, 0x18, 0xe6, 0x93, 0xfd, 0xc3, 0xed, 0xcb, 0xc3, 0x84, 0x07, 0xa7, 0x96,
-	0x19, 0x1a, 0x15, 0x33, 0xf6, 0xec, 0x4e, 0x10, 0x33, 0x8a, 0x9b, 0x24, 0x66, 0xda, 0x9b, 0xc7,
-	0x1f, 0x42, 0x29, 0xf1, 0xde, 0x55, 0x27, 0x44, 0x88, 0x21, 0x85, 0xcd, 0x2c, 0x48, 0xb6, 0x52,
-	0x17, 0xf8, 0x94, 0x67, 0x29, 0x53, 0x0c, 0xb6, 0x75, 0xd3, 0xad, 0x68, 0xc3, 0xe2, 0x68, 0x81,
-	0xbf, 0x93, 0x25, 0x44, 0xb8, 0x71, 0x53, 0xad, 0x27, 0xbc, 0xf8, 0x85, 0x57, 0xdb, 0x1a, 0xcd,
-	0xc7, 0xc3, 0x0a, 0xf7, 0x64, 0x58, 0xe1, 0xfe, 0x19, 0x56, 0xb8, 0x47, 0x67, 0x95, 0xdc, 0x93,
-	0xb3, 0x4a, 0xee, 0xef, 0xb3, 0x4a, 0xee, 0xb3, 0xbb, 0x91, 0x1a, 0x1e, 0x06, 0xde, 0x32, 0xd5,
-	0x36, 0x61, 0x23, 0xe5, 0xf3, 0x48, 0xeb, 0xe2, 0x17, 0xf5, 0x76, 0xc1, 0xaf, 0xa6, 0x77, 0xff,
-	0x0f, 0x00, 0x00, 0xff, 0xff, 0xc5, 0x40, 0xec, 0xb9, 0xc4, 0x11, 0x00, 0x00,
+	// 1226 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x57, 0x31, 0x73, 0xe3, 0x44,
+	0x14, 0xb6, 0x1c, 0x30, 0xe3, 0x0d, 0xc9, 0x25, 0x22, 0x21, 0x8e, 0xee, 0x62, 0x05, 0xdd, 0xc1,
+	0xe5, 0x72, 0x89, 0x84, 0x13, 0x02, 0x9c, 0xa1, 0x89, 0x2f, 0x8d, 0x6f, 0xf0, 0xc0, 0x38, 0xd0,
+	0xd0, 0x64, 0x64, 0x6b, 0x4f, 0xd1, 0x44, 0xd2, 0x7a, 0xb4, 0x8a, 0x73, 0xe9, 0x80, 0x06, 0x86,
+	0xea, 0x5a, 0x1a, 0x26, 0x0d, 0x33, 0x0c, 0x55, 0x0a, 0x1a, 0x3a, 0xca, 0x1b, 0x06, 0x98, 0x83,
+	0x82, 0xa1, 0xf2, 0x31, 0x4e, 0x11, 0x6a, 0x7e, 0x01, 0x23, 0x69, 0xb5, 0x59, 0xc9, 0x92, 0x23,
+	0x67, 0x20, 0x93, 0x26, 0xb1, 0xf6, 0x7d, 0xfb, 0xf6, 0x7d, 0xdf, 0xee, 0xbe, 0xf7, 0x16, 0xdc,
+	0xb2, 0x0c, 0x73, 0xef, 0xf0, 0x40, 0x3d, 0x54, 0x1c, 0x88, 0x5d, 0x75, 0xcf, 0xb0, 0x75, 0xa5,
+	0x5b, 0x51, 0x2c, 0x88, 0xb1, 0xaa, 0x43, 0x2c, 0x77, 0x1c, 0xe4, 0x22, 0x7e, 0x36, 0x44, 0xc9,
+	0x14, 0x25, 0x77, 0x2b, 0x82, 0xa8, 0x23, 0xa4, 0x9b, 0x50, 0xf1, 0x41, 0xad, 0xfd, 0x87, 0x8a,
+	0x6b, 0x58, 0x9e, 0xdd, 0xea, 0x04, 0xf3, 0x84, 0x69, 0xd5, 0x32, 0x6c, 0xa4, 0xf8, 0x7f, 0xc9,
+	0xd0, 0x7c, 0x1b, 0x61, 0x0b, 0xe1, 0x1d, 0xff, 0x4b, 0x09, 0x3e, 0x88, 0xa9, 0x1c, 0x7c, 0x29,
+	0x2d, 0x15, 0x43, 0xa5, 0x5b, 0x69, 0x41, 0x57, 0xad, 0x28, 0x6d, 0x64, 0xd8, 0xc4, 0x3e, 0x47,
+	0xec, 0x16, 0x0e, 0x62, 0xc4, 0x3a, 0x31, 0xcc, 0xe8, 0x48, 0x47, 0x81, 0x43, 0xef, 0x17, 0x19,
+	0x95, 0x92, 0xa9, 0x75, 0x54, 0x47, 0xb5, 0xf0, 0x70, 0x8c, 0x85, 0x34, 0x68, 0x12, 0x8c, 0xf4,
+	0x13, 0x07, 0x26, 0x1b, 0x58, 0x7f, 0x80, 0x0c, 0x7b, 0x1b, 0x3a, 0x5d, 0xa3, 0x0d, 0xf9, 0xd7,
+	0x41, 0x01, 0x43, 0x5b, 0x83, 0x4e, 0x89, 0x5b, 0xe4, 0x96, 0x8a, 0xb5, 0xd2, 0xef, 0xdf, 0xaf,
+	0xce, 0x10, 0x2e, 0x9b, 0x9a, 0xe6, 0x40, 0x8c, 0xb7, 0x5d, 0xc7, 0xb0, 0xf5, 0x26, 0xc1, 0xf1,
+	0x0a, 0x18, 0x47, 0x1d, 0xe8, 0xa8, 0x2e, 0x72, 0x76, 0x0c, 0xad, 0x94, 0x5f, 0xe4, 0x96, 0x26,
+	0x6a, 0x93, 0xfd, 0x9e, 0x08, 0xde, 0x27, 0xc3, 0xf5, 0xad, 0x26, 0x08, 0x21, 0x75, 0x8d, 0x5f,
+	0x01, 0x00, 0x07, 0xab, 0x79, 0xf8, 0x31, 0x1f, 0x3f, 0xd1, 0xef, 0x89, 0x45, 0x12, 0x43, 0x7d,
+	0xab, 0x59, 0x24, 0x80, 0xba, 0x56, 0xbd, 0xfd, 0xd9, 0xe9, 0xf1, 0x32, 0x59, 0xeb, 0xcb, 0xd3,
+	0xe3, 0xe5, 0x39, 0xca, 0x2b, 0x1a, 0xb9, 0x54, 0x02, 0x2f, 0x47, 0x47, 0x9a, 0x10, 0x77, 0x90,
+	0x8d, 0xa1, 0xf4, 0x33, 0x07, 0xae, 0x35, 0xb0, 0xfe, 0x1e, 0x54, 0xbb, 0xf0, 0xca, 0xf2, 0x5c,
+	0x8a, 0xf1, 0x2c, 0xb1, 0x3c, 0xd9, 0xd0, 0xa5, 0x79, 0x30, 0x17, 0x1b, 0xa2, 0x4c, 0x7f, 0xe5,
+	0xc0, 0x54, 0x03, 0xeb, 0x9b, 0xa6, 0x89, 0x0e, 0xc2, 0xa8, 0x2e, 0x40, 0x35, 0x1a, 0x79, 0x7e,
+	0x78, 0xe4, 0x71, 0x61, 0xc6, 0xce, 0x13, 0xa6, 0x7a, 0x27, 0x46, 0x75, 0x9e, 0xa5, 0x1a, 0x89,
+	0x5d, 0x12, 0x40, 0x29, 0x3e, 0x46, 0xc9, 0xf6, 0x38, 0xdf, 0xd8, 0x84, 0x16, 0xea, 0x42, 0x1f,
+	0x02, 0xb5, 0xab, 0x4b, 0xba, 0x12, 0x23, 0xfd, 0x0a, 0x4b, 0x3a, 0x91, 0x83, 0x24, 0x81, 0xc5,
+	0x34, 0x1b, 0x7b, 0xb6, 0x67, 0x1b, 0x58, 0xaf, 0x21, 0xc7, 0x41, 0x07, 0x1f, 0x20, 0x64, 0x6e,
+	0xc3, 0xf6, 0xbe, 0x63, 0xb8, 0x87, 0xff, 0xbb, 0x02, 0x37, 0xc1, 0x0b, 0x1d, 0x84, 0xcc, 0x33,
+	0xf6, 0xa0, 0xdf, 0x13, 0x0b, 0x5e, 0x08, 0xf5, 0xad, 0x66, 0xc1, 0x33, 0xd5, 0xb5, 0xaa, 0x1c,
+	0x63, 0x5d, 0x66, 0x59, 0x0f, 0x06, 0x2d, 0x89, 0x60, 0x21, 0xd1, 0x40, 0xf9, 0xfe, 0xc1, 0x01,
+	0xa1, 0x81, 0xf5, 0xfb, 0x50, 0xc5, 0x90, 0x05, 0x04, 0x53, 0xae, 0x06, 0xe9, 0xf5, 0x18, 0xe9,
+	0x9b, 0x2c, 0xe9, 0x94, 0xc8, 0xa5, 0x5b, 0x40, 0x4a, 0xb7, 0x52, 0xfa, 0x3f, 0x04, 0xa9, 0x6c,
+	0x0b, 0x9a, 0x50, 0x57, 0x5d, 0x1f, 0xc9, 0xbf, 0x09, 0x8a, 0x5a, 0xf0, 0x8d, 0xce, 0xa7, 0x7d,
+	0x06, 0xe5, 0x37, 0x41, 0x41, 0xb5, 0xd0, 0xbe, 0xed, 0xfa, 0xac, 0xc7, 0xd7, 0xe6, 0x65, 0x32,
+	0xc3, 0xab, 0x52, 0x32, 0xa9, 0x52, 0xf2, 0x7d, 0x64, 0xd8, 0xb5, 0xc9, 0x27, 0x3d, 0x31, 0xe7,
+	0x31, 0xdd, 0xf4, 0x27, 0x34, 0xc9, 0xc4, 0xea, 0x5d, 0x8f, 0xe9, 0x99, 0xcb, 0x81, 0xbc, 0xc5,
+	0xc6, 0x49, 0xf2, 0x16, 0x3b, 0x44, 0x69, 0x7d, 0x9d, 0x07, 0x2f, 0x31, 0x36, 0x7a, 0x8b, 0x2f,
+	0x4a, 0x6d, 0xe4, 0x5c, 0x6d, 0x51, 0x2d, 0xc6, 0x16, 0xc7, 0x86, 0x6b, 0x51, 0x8d, 0x6a, 0xf1,
+	0xdd, 0x33, 0x71, 0x49, 0x37, 0xdc, 0xdd, 0xfd, 0x96, 0xdc, 0x46, 0x16, 0x29, 0xfb, 0xe4, 0xdf,
+	0x2a, 0xd6, 0xf6, 0x14, 0xf7, 0xb0, 0x03, 0xb1, 0x3f, 0x15, 0x53, 0xdd, 0x94, 0x41, 0xdd, 0x6e,
+	0x24, 0xe9, 0x46, 0x53, 0xc1, 0x02, 0xb8, 0x9e, 0x30, 0x4c, 0xf5, 0xfb, 0x2a, 0x0f, 0x78, 0xc6,
+	0x1e, 0x16, 0xb9, 0x8b, 0xca, 0x37, 0xda, 0x9d, 0xb8, 0x64, 0xed, 0xe4, 0x41, 0xed, 0xae, 0x27,
+	0x69, 0x17, 0x96, 0xcb, 0x1b, 0x7e, 0xc2, 0x88, 0x8d, 0x52, 0xe5, 0x7e, 0x0b, 0x2e, 0xd4, 0x47,
+	0x1d, 0xcd, 0x3b, 0x93, 0x7e, 0x03, 0xc5, 0x3f, 0x00, 0x45, 0x75, 0xdf, 0xdd, 0x45, 0xde, 0xfd,
+	0x23, 0xb2, 0xad, 0xfc, 0xd3, 0x13, 0xa7, 0x0e, 0x55, 0xcb, 0xac, 0x4a, 0xd4, 0x24, 0xa5, 0x4b,
+	0x49, 0x31, 0xfc, 0x3b, 0xa0, 0x10, 0xb4, 0x65, 0xe4, 0x92, 0x2d, 0xc8, 0x89, 0x0d, 0xa7, 0x1c,
+	0x2c, 0x5d, 0x7b, 0xce, 0x13, 0xa8, 0x49, 0xa6, 0x54, 0x37, 0x7c, 0xaa, 0xd4, 0x99, 0x47, 0x35,
+	0xa9, 0xad, 0x8b, 0xc5, 0x4f, 0x2e, 0x1a, 0x3b, 0x44, 0xe9, 0xfe, 0xc8, 0x81, 0x69, 0xcf, 0x66,
+	0x6b, 0xff, 0x45, 0x06, 0x79, 0x37, 0x7b, 0x06, 0x29, 0x7a, 0xc4, 0xbe, 0x3d, 0x3d, 0x5e, 0xe6,
+	0xe8, 0x46, 0x6e, 0x7c, 0x71, 0x24, 0xe6, 0xfe, 0x3e, 0x12, 0x73, 0x83, 0x1b, 0x2a, 0xb0, 0x1b,
+	0x1a, 0x0d, 0x56, 0xfa, 0x26, 0xef, 0x57, 0xbc, 0xb3, 0xd1, 0xcb, 0xcf, 0x16, 0xbb, 0xd9, 0x4f,
+	0xfc, 0x86, 0xc7, 0x7b, 0x94, 0x73, 0x1e, 0xd5, 0xe8, 0x5e, 0xba, 0x46, 0xe5, 0x64, 0x8d, 0x68,
+	0xca, 0x38, 0xca, 0x83, 0x99, 0x88, 0xe5, 0x72, 0xb3, 0xc2, 0xe5, 0x69, 0xf4, 0x76, 0xba, 0x46,
+	0x0b, 0xc9, 0x1a, 0x85, 0xa9, 0x61, 0x2f, 0x76, 0x92, 0xc2, 0x6b, 0xc2, 0x37, 0xc1, 0xb5, 0x36,
+	0xb2, 0x3a, 0x26, 0x74, 0x0d, 0x64, 0xef, 0x78, 0x6f, 0x3f, 0x5f, 0xa8, 0xf1, 0x35, 0x41, 0x0e,
+	0x1e, 0x86, 0x72, 0xf8, 0x30, 0x94, 0x3f, 0x0c, 0x1f, 0x86, 0xb5, 0x09, 0x8f, 0xc6, 0xe3, 0x67,
+	0x22, 0x17, 0x84, 0x37, 0x79, 0xe6, 0xc1, 0xc3, 0xac, 0xfd, 0x32, 0x0e, 0xc6, 0x1a, 0x58, 0xe7,
+	0xdb, 0x60, 0x9c, 0x7d, 0x70, 0xbd, 0x9a, 0x92, 0x10, 0xa2, 0x6f, 0x19, 0x61, 0x35, 0x13, 0x8c,
+	0x12, 0x78, 0x08, 0x5e, 0x8c, 0x3c, 0x77, 0x5e, 0x4b, 0x9f, 0xce, 0xe2, 0x04, 0x39, 0x1b, 0x8e,
+	0xae, 0x63, 0x80, 0x89, 0xe8, 0x63, 0xe3, 0x76, 0xba, 0x83, 0x08, 0x50, 0x50, 0x32, 0x02, 0xe9,
+	0x52, 0x9f, 0x72, 0x60, 0x36, 0xb9, 0xd7, 0x1f, 0xe2, 0x2a, 0x71, 0x82, 0xf0, 0xd6, 0x88, 0x13,
+	0x68, 0x0c, 0x8f, 0x00, 0x9f, 0xd0, 0x69, 0xaf, 0xa4, 0xbb, 0x1b, 0x44, 0x0b, 0x6f, 0x8c, 0x82,
+	0xa6, 0x2b, 0x7f, 0xce, 0x81, 0xb9, 0xb4, 0xa6, 0xb7, 0x92, 0xee, 0x31, 0x65, 0x8a, 0x70, 0x6f,
+	0xe4, 0x29, 0xec, 0xd1, 0x8a, 0xb4, 0x9f, 0x43, 0x8e, 0x16, 0x8b, 0x1b, 0x76, 0xb4, 0x92, 0x7a,
+	0x42, 0xde, 0x01, 0x53, 0x03, 0xfd, 0xe0, 0xf2, 0xf9, 0x3e, 0xe8, 0x26, 0xaf, 0x65, 0xc7, 0xd2,
+	0x35, 0x11, 0xb8, 0x16, 0xef, 0xa1, 0xee, 0x9c, 0xef, 0x26, 0xbc, 0x3c, 0x95, 0xcc, 0x50, 0x56,
+	0xcc, 0x48, 0xeb, 0x31, 0x44, 0x4c, 0x16, 0x37, 0x4c, 0xcc, 0xa4, 0xba, 0xcf, 0xef, 0x82, 0xc9,
+	0x58, 0xcd, 0x5f, 0x1a, 0xe2, 0x21, 0x82, 0x14, 0x56, 0xb2, 0x20, 0xe9, 0x4a, 0x1d, 0xc0, 0x27,
+	0x94, 0xe6, 0x4c, 0x3e, 0xe8, 0xd6, 0x8d, 0xb6, 0xa2, 0x0d, 0xa6, 0x07, 0x8b, 0xdc, 0xdd, 0x2c,
+	0x2e, 0xc2, 0x8d, 0x1b, 0x69, 0x3d, 0xe1, 0xf9, 0x4f, 0xbc, 0xfc, 0x5e, 0x6b, 0x3c, 0xe9, 0x97,
+	0xb9, 0xa7, 0xfd, 0x32, 0xf7, 0x57, 0xbf, 0xcc, 0x3d, 0x3e, 0x29, 0xe7, 0x9e, 0x9e, 0x94, 0x73,
+	0x7f, 0x9e, 0x94, 0x73, 0x1f, 0xaf, 0x33, 0x75, 0x2c, 0x74, 0xbc, 0x6a, 0xaa, 0x2d, 0x4c, 0xbf,
+	0x94, 0x47, 0x4c, 0xfb, 0xe6, 0x17, 0xb6, 0x56, 0xc1, 0xaf, 0x28, 0xeb, 0xff, 0x06, 0x00, 0x00,
+	0xff, 0xff, 0x55, 0xcf, 0x75, 0xaf, 0xb7, 0x14, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1139,6 +1354,14 @@ type MsgClient interface {
 	// to remove a previously added operator from the list of allowed operators
 	// to secure the service
 	RemoveAllowedOperator(ctx context.Context, in *MsgRemoveAllowedOperator, opts ...grpc.CallOption) (*MsgRemoveAllowedOperatorResponse, error)
+	// BorrowPoolSecurity defines the operation that allows the service admin
+	// to add a pool to the list of pools from which the service has chosen
+	// to borrow security.
+	BorrowPoolSecurity(ctx context.Context, in *MsgBorrowPoolSecurity, opts ...grpc.CallOption) (*MsgBorrowPoolSecurityResponse, error)
+	// CeasePoolSecurityBorrow defines the operation that allows the service admin
+	// to remove a pool from the list of pools from which the service has chosen
+	// to borrow security.
+	CeasePoolSecurityBorrow(ctx context.Context, in *MsgCeasePoolSecurityBorrow, opts ...grpc.CallOption) (*MsgCeasePoolSecurityBorrowResponse, error)
 	// DelegatePool defines the operation that allows users to delegate any amount
 	// of an asset to a pool that can then be used to provide services with
 	// cryptoeconomic security.
@@ -1202,6 +1425,24 @@ func (c *msgClient) AllowOperator(ctx context.Context, in *MsgAllowOperator, opt
 func (c *msgClient) RemoveAllowedOperator(ctx context.Context, in *MsgRemoveAllowedOperator, opts ...grpc.CallOption) (*MsgRemoveAllowedOperatorResponse, error) {
 	out := new(MsgRemoveAllowedOperatorResponse)
 	err := c.cc.Invoke(ctx, "/milkyway.restaking.v1.Msg/RemoveAllowedOperator", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) BorrowPoolSecurity(ctx context.Context, in *MsgBorrowPoolSecurity, opts ...grpc.CallOption) (*MsgBorrowPoolSecurityResponse, error) {
+	out := new(MsgBorrowPoolSecurityResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.restaking.v1.Msg/BorrowPoolSecurity", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) CeasePoolSecurityBorrow(ctx context.Context, in *MsgCeasePoolSecurityBorrow, opts ...grpc.CallOption) (*MsgCeasePoolSecurityBorrowResponse, error) {
+	out := new(MsgCeasePoolSecurityBorrowResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.restaking.v1.Msg/CeasePoolSecurityBorrow", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1286,6 +1527,14 @@ type MsgServer interface {
 	// to remove a previously added operator from the list of allowed operators
 	// to secure the service
 	RemoveAllowedOperator(context.Context, *MsgRemoveAllowedOperator) (*MsgRemoveAllowedOperatorResponse, error)
+	// BorrowPoolSecurity defines the operation that allows the service admin
+	// to add a pool to the list of pools from which the service has chosen
+	// to borrow security.
+	BorrowPoolSecurity(context.Context, *MsgBorrowPoolSecurity) (*MsgBorrowPoolSecurityResponse, error)
+	// CeasePoolSecurityBorrow defines the operation that allows the service admin
+	// to remove a pool from the list of pools from which the service has chosen
+	// to borrow security.
+	CeasePoolSecurityBorrow(context.Context, *MsgCeasePoolSecurityBorrow) (*MsgCeasePoolSecurityBorrowResponse, error)
 	// DelegatePool defines the operation that allows users to delegate any amount
 	// of an asset to a pool that can then be used to provide services with
 	// cryptoeconomic security.
@@ -1326,6 +1575,12 @@ func (*UnimplementedMsgServer) AllowOperator(ctx context.Context, req *MsgAllowO
 }
 func (*UnimplementedMsgServer) RemoveAllowedOperator(ctx context.Context, req *MsgRemoveAllowedOperator) (*MsgRemoveAllowedOperatorResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveAllowedOperator not implemented")
+}
+func (*UnimplementedMsgServer) BorrowPoolSecurity(ctx context.Context, req *MsgBorrowPoolSecurity) (*MsgBorrowPoolSecurityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BorrowPoolSecurity not implemented")
+}
+func (*UnimplementedMsgServer) CeasePoolSecurityBorrow(ctx context.Context, req *MsgCeasePoolSecurityBorrow) (*MsgCeasePoolSecurityBorrowResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CeasePoolSecurityBorrow not implemented")
 }
 func (*UnimplementedMsgServer) DelegatePool(ctx context.Context, req *MsgDelegatePool) (*MsgDelegatePoolResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelegatePool not implemented")
@@ -1421,6 +1676,42 @@ func _Msg_RemoveAllowedOperator_Handler(srv interface{}, ctx context.Context, de
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).RemoveAllowedOperator(ctx, req.(*MsgRemoveAllowedOperator))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_BorrowPoolSecurity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgBorrowPoolSecurity)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).BorrowPoolSecurity(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/milkyway.restaking.v1.Msg/BorrowPoolSecurity",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).BorrowPoolSecurity(ctx, req.(*MsgBorrowPoolSecurity))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_CeasePoolSecurityBorrow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCeasePoolSecurityBorrow)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CeasePoolSecurityBorrow(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/milkyway.restaking.v1.Msg/CeasePoolSecurityBorrow",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CeasePoolSecurityBorrow(ctx, req.(*MsgCeasePoolSecurityBorrow))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1570,6 +1861,14 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RemoveAllowedOperator",
 			Handler:    _Msg_RemoveAllowedOperator_Handler,
+		},
+		{
+			MethodName: "BorrowPoolSecurity",
+			Handler:    _Msg_BorrowPoolSecurity_Handler,
+		},
+		{
+			MethodName: "CeasePoolSecurityBorrow",
+			Handler:    _Msg_CeasePoolSecurityBorrow_Handler,
 		},
 		{
 			MethodName: "DelegatePool",
@@ -1849,6 +2148,132 @@ func (m *MsgRemoveAllowedOperatorResponse) MarshalTo(dAtA []byte) (int, error) {
 }
 
 func (m *MsgRemoveAllowedOperatorResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgBorrowPoolSecurity) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgBorrowPoolSecurity) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgBorrowPoolSecurity) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.PoolID != 0 {
+		i = encodeVarintMessages(dAtA, i, uint64(m.PoolID))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.ServiceID != 0 {
+		i = encodeVarintMessages(dAtA, i, uint64(m.ServiceID))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintMessages(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgBorrowPoolSecurityResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgBorrowPoolSecurityResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgBorrowPoolSecurityResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgCeasePoolSecurityBorrow) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgCeasePoolSecurityBorrow) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgCeasePoolSecurityBorrow) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.PoolID != 0 {
+		i = encodeVarintMessages(dAtA, i, uint64(m.PoolID))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.ServiceID != 0 {
+		i = encodeVarintMessages(dAtA, i, uint64(m.ServiceID))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintMessages(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgCeasePoolSecurityBorrowResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgCeasePoolSecurityBorrowResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgCeasePoolSecurityBorrowResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -2410,6 +2835,62 @@ func (m *MsgRemoveAllowedOperator) Size() (n int) {
 }
 
 func (m *MsgRemoveAllowedOperatorResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgBorrowPoolSecurity) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovMessages(uint64(l))
+	}
+	if m.ServiceID != 0 {
+		n += 1 + sovMessages(uint64(m.ServiceID))
+	}
+	if m.PoolID != 0 {
+		n += 1 + sovMessages(uint64(m.PoolID))
+	}
+	return n
+}
+
+func (m *MsgBorrowPoolSecurityResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgCeasePoolSecurityBorrow) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovMessages(uint64(l))
+	}
+	if m.ServiceID != 0 {
+		n += 1 + sovMessages(uint64(m.ServiceID))
+	}
+	if m.PoolID != 0 {
+		n += 1 + sovMessages(uint64(m.PoolID))
+	}
+	return n
+}
+
+func (m *MsgCeasePoolSecurityBorrowResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -3261,6 +3742,346 @@ func (m *MsgRemoveAllowedOperatorResponse) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: MsgRemoveAllowedOperatorResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipMessages(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgBorrowPoolSecurity) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowMessages
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgBorrowPoolSecurity: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgBorrowPoolSecurity: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessages
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMessages
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServiceID", wireType)
+			}
+			m.ServiceID = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessages
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ServiceID |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PoolID", wireType)
+			}
+			m.PoolID = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessages
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.PoolID |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipMessages(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgBorrowPoolSecurityResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowMessages
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgBorrowPoolSecurityResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgBorrowPoolSecurityResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipMessages(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgCeasePoolSecurityBorrow) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowMessages
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgCeasePoolSecurityBorrow: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgCeasePoolSecurityBorrow: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessages
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthMessages
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServiceID", wireType)
+			}
+			m.ServiceID = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessages
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ServiceID |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PoolID", wireType)
+			}
+			m.PoolID = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowMessages
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.PoolID |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipMessages(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthMessages
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgCeasePoolSecurityBorrowResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowMessages
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgCeasePoolSecurityBorrowResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgCeasePoolSecurityBorrowResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

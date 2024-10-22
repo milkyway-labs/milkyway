@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/cobra"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
@@ -407,6 +408,8 @@ func GetServiceTxCmd() *cobra.Command {
 	txCmd.AddCommand(
 		GetAllowOperatorTxCmd(),
 		GetRemoveAllowedOperatorTxCmd(),
+		GetBorrowPoolSecurityTxCmd(),
+		GetCeasePoolSecurityBorrowTxCmd(),
 	)
 
 	return txCmd
@@ -473,6 +476,80 @@ func GetRemoveAllowedOperatorTxCmd() *cobra.Command {
 
 			// Create and validate the message
 			msg := types.NewMsgRemoveAllowedOperator(serviceID, operatorID, clientCtx.FromAddress.String())
+			if err = msg.ValidateBasic(); err != nil {
+				return fmt.Errorf("message validation failed: %w", err)
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func GetBorrowPoolSecurityTxCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "borrow-pool-security [service-id] [pool-id]",
+		Args:    cobra.ExactArgs(2),
+		Short:   "Adds a pool to the list of pools from which the service has chosen to borrow security",
+		Example: fmt.Sprintf("%s tx %s service borrow-pool-security 1 1 --from alice", version.AppName, types.ModuleName),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			serviceID, err := servicestypes.ParseServiceID(args[0])
+			if err != nil {
+				return fmt.Errorf("parse service id: %w", err)
+			}
+
+			poolID, err := poolstypes.ParsePoolID(args[1])
+			if err != nil {
+				return fmt.Errorf("parse pool id: %w", err)
+			}
+
+			// Create and validate the message
+			msg := types.NewMsgBorrowPoolSecurity(serviceID, poolID, clientCtx.FromAddress.String())
+			if err = msg.ValidateBasic(); err != nil {
+				return fmt.Errorf("message validation failed: %w", err)
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func GetCeasePoolSecurityBorrowTxCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "cease-pool-security-borrow [service-id] [pool-id]",
+		Args:    cobra.ExactArgs(2),
+		Short:   "Removes a pool from the list of pools from which the service has chosen to borrow security",
+		Example: fmt.Sprintf("%s tx %s service borrow-pool-liquidity 1 1 --from alice", version.AppName, types.ModuleName),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			serviceID, err := servicestypes.ParseServiceID(args[0])
+			if err != nil {
+				return fmt.Errorf("parse service id: %w", err)
+			}
+
+			poolID, err := poolstypes.ParsePoolID(args[1])
+			if err != nil {
+				return fmt.Errorf("parse pool id: %w", err)
+			}
+
+			// Create and validate the message
+			msg := types.NewMsgBorrowPoolSecurity(serviceID, poolID, clientCtx.FromAddress.String())
 			if err = msg.ValidateBasic(); err != nil {
 				return fmt.Errorf("message validation failed: %w", err)
 			}

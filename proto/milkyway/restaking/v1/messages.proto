@@ -34,6 +34,18 @@ service Msg {
   rpc RemoveAllowedOperator(MsgRemoveAllowedOperator)
       returns (MsgRemoveAllowedOperatorResponse);
 
+  // BorrowPoolSecurity defines the operation that allows the service admin
+  // to add a pool to the list of pools from which the service has chosen
+  // to borrow security.
+  rpc BorrowPoolSecurity(MsgBorrowPoolSecurity)
+      returns (MsgBorrowPoolSecurityResponse);
+
+  // CeasePoolSecurityBorrow defines the operation that allows the service admin
+  // to remove a pool from the list of pools from which the service has chosen
+  // to borrow security.
+  rpc CeasePoolSecurityBorrow(MsgCeasePoolSecurityBorrow)
+      returns (MsgCeasePoolSecurityBorrowResponse);
+
   // DelegatePool defines the operation that allows users to delegate any amount
   // of an asset to a pool that can then be used to provide services with
   // cryptoeconomic security.
@@ -135,6 +147,43 @@ message MsgRemoveAllowedOperator {
 // MsgRemoveAllowedOperatorResponse is the return value of
 // MsgRemoveAllowedOperator.
 message MsgRemoveAllowedOperatorResponse {}
+
+// MsgBorrowPoolSecurity defines the message structure for the
+// BorrowPoolSecurity gRPC service method. It allows the service admin
+// to add a pool to the list of pools from which the service has chosen
+// to borrow security.
+message MsgBorrowPoolSecurity {
+  option (cosmos.msg.v1.signer) = "sender";
+  option (amino.name) = "milkyway/MsgBorrowPoolSecurity";
+
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
+
+  uint32 pool_id = 3 [ (gogoproto.customname) = "PoolID" ];
+}
+
+// MsgBorrowPoolSecurityResponse is the return value of MsgBorrowPoolSecurity.
+message MsgBorrowPoolSecurityResponse {}
+
+// MsgCeasePoolSecurityBorrow defines the message structure for the
+// CeaseBorrowPoolSecurity gRPC service method. It allows the service admin
+// to remove a pool from the list of pools from which the service has chosen
+// to borrow security.
+message MsgCeasePoolSecurityBorrow {
+  option (cosmos.msg.v1.signer) = "sender";
+  option (amino.name) = "milkyway/MsgCeasePoolSecurityBorrow";
+
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
+
+  uint32 pool_id = 3 [ (gogoproto.customname) = "PoolID" ];
+}
+
+// MsgCeasePoolSecurityBorrowResponse is the return value of
+// MsgCeasePoolSecurityBorrow.
+message MsgCeasePoolSecurityBorrowResponse {}
 
 // MsgDelegatePool defines the message structure for the DelegatePool gRPC
 // service method. It allows a user to put their assets into a restaking pool

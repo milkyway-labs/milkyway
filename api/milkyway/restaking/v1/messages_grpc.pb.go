@@ -19,17 +19,19 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Msg_JoinService_FullMethodName           = "/milkyway.restaking.v1.Msg/JoinService"
-	Msg_LeaveService_FullMethodName          = "/milkyway.restaking.v1.Msg/LeaveService"
-	Msg_AllowOperator_FullMethodName         = "/milkyway.restaking.v1.Msg/AllowOperator"
-	Msg_RemoveAllowedOperator_FullMethodName = "/milkyway.restaking.v1.Msg/RemoveAllowedOperator"
-	Msg_DelegatePool_FullMethodName          = "/milkyway.restaking.v1.Msg/DelegatePool"
-	Msg_DelegateOperator_FullMethodName      = "/milkyway.restaking.v1.Msg/DelegateOperator"
-	Msg_DelegateService_FullMethodName       = "/milkyway.restaking.v1.Msg/DelegateService"
-	Msg_UpdateParams_FullMethodName          = "/milkyway.restaking.v1.Msg/UpdateParams"
-	Msg_UndelegatePool_FullMethodName        = "/milkyway.restaking.v1.Msg/UndelegatePool"
-	Msg_UndelegateOperator_FullMethodName    = "/milkyway.restaking.v1.Msg/UndelegateOperator"
-	Msg_UndelegateService_FullMethodName     = "/milkyway.restaking.v1.Msg/UndelegateService"
+	Msg_JoinService_FullMethodName             = "/milkyway.restaking.v1.Msg/JoinService"
+	Msg_LeaveService_FullMethodName            = "/milkyway.restaking.v1.Msg/LeaveService"
+	Msg_AllowOperator_FullMethodName           = "/milkyway.restaking.v1.Msg/AllowOperator"
+	Msg_RemoveAllowedOperator_FullMethodName   = "/milkyway.restaking.v1.Msg/RemoveAllowedOperator"
+	Msg_BorrowPoolSecurity_FullMethodName      = "/milkyway.restaking.v1.Msg/BorrowPoolSecurity"
+	Msg_CeasePoolSecurityBorrow_FullMethodName = "/milkyway.restaking.v1.Msg/CeasePoolSecurityBorrow"
+	Msg_DelegatePool_FullMethodName            = "/milkyway.restaking.v1.Msg/DelegatePool"
+	Msg_DelegateOperator_FullMethodName        = "/milkyway.restaking.v1.Msg/DelegateOperator"
+	Msg_DelegateService_FullMethodName         = "/milkyway.restaking.v1.Msg/DelegateService"
+	Msg_UpdateParams_FullMethodName            = "/milkyway.restaking.v1.Msg/UpdateParams"
+	Msg_UndelegatePool_FullMethodName          = "/milkyway.restaking.v1.Msg/UndelegatePool"
+	Msg_UndelegateOperator_FullMethodName      = "/milkyway.restaking.v1.Msg/UndelegateOperator"
+	Msg_UndelegateService_FullMethodName       = "/milkyway.restaking.v1.Msg/UndelegateService"
 )
 
 // MsgClient is the client API for Msg service.
@@ -51,6 +53,14 @@ type MsgClient interface {
 	// to remove a previously added operator from the list of allowed operators
 	// to secure the service
 	RemoveAllowedOperator(ctx context.Context, in *MsgRemoveAllowedOperator, opts ...grpc.CallOption) (*MsgRemoveAllowedOperatorResponse, error)
+	// BorrowPoolSecurity defines the operation that allows the service admin
+	// to add a pool to the list of pools from which the service has chosen
+	// to borrow security.
+	BorrowPoolSecurity(ctx context.Context, in *MsgBorrowPoolSecurity, opts ...grpc.CallOption) (*MsgBorrowPoolSecurityResponse, error)
+	// CeasePoolSecurityBorrow defines the operation that allows the service admin
+	// to remove a pool from the list of pools from which the service has chosen
+	// to borrow security.
+	CeasePoolSecurityBorrow(ctx context.Context, in *MsgCeasePoolSecurityBorrow, opts ...grpc.CallOption) (*MsgCeasePoolSecurityBorrowResponse, error)
 	// DelegatePool defines the operation that allows users to delegate any amount
 	// of an asset to a pool that can then be used to provide services with
 	// cryptoeconomic security.
@@ -118,6 +128,26 @@ func (c *msgClient) RemoveAllowedOperator(ctx context.Context, in *MsgRemoveAllo
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(MsgRemoveAllowedOperatorResponse)
 	err := c.cc.Invoke(ctx, Msg_RemoveAllowedOperator_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) BorrowPoolSecurity(ctx context.Context, in *MsgBorrowPoolSecurity, opts ...grpc.CallOption) (*MsgBorrowPoolSecurityResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgBorrowPoolSecurityResponse)
+	err := c.cc.Invoke(ctx, Msg_BorrowPoolSecurity_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) CeasePoolSecurityBorrow(ctx context.Context, in *MsgCeasePoolSecurityBorrow, opts ...grpc.CallOption) (*MsgCeasePoolSecurityBorrowResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgCeasePoolSecurityBorrowResponse)
+	err := c.cc.Invoke(ctx, Msg_CeasePoolSecurityBorrow_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -213,6 +243,14 @@ type MsgServer interface {
 	// to remove a previously added operator from the list of allowed operators
 	// to secure the service
 	RemoveAllowedOperator(context.Context, *MsgRemoveAllowedOperator) (*MsgRemoveAllowedOperatorResponse, error)
+	// BorrowPoolSecurity defines the operation that allows the service admin
+	// to add a pool to the list of pools from which the service has chosen
+	// to borrow security.
+	BorrowPoolSecurity(context.Context, *MsgBorrowPoolSecurity) (*MsgBorrowPoolSecurityResponse, error)
+	// CeasePoolSecurityBorrow defines the operation that allows the service admin
+	// to remove a pool from the list of pools from which the service has chosen
+	// to borrow security.
+	CeasePoolSecurityBorrow(context.Context, *MsgCeasePoolSecurityBorrow) (*MsgCeasePoolSecurityBorrowResponse, error)
 	// DelegatePool defines the operation that allows users to delegate any amount
 	// of an asset to a pool that can then be used to provide services with
 	// cryptoeconomic security.
@@ -257,6 +295,12 @@ func (UnimplementedMsgServer) AllowOperator(context.Context, *MsgAllowOperator) 
 }
 func (UnimplementedMsgServer) RemoveAllowedOperator(context.Context, *MsgRemoveAllowedOperator) (*MsgRemoveAllowedOperatorResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveAllowedOperator not implemented")
+}
+func (UnimplementedMsgServer) BorrowPoolSecurity(context.Context, *MsgBorrowPoolSecurity) (*MsgBorrowPoolSecurityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BorrowPoolSecurity not implemented")
+}
+func (UnimplementedMsgServer) CeasePoolSecurityBorrow(context.Context, *MsgCeasePoolSecurityBorrow) (*MsgCeasePoolSecurityBorrowResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CeasePoolSecurityBorrow not implemented")
 }
 func (UnimplementedMsgServer) DelegatePool(context.Context, *MsgDelegatePool) (*MsgDelegatePoolResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelegatePool not implemented")
@@ -368,6 +412,42 @@ func _Msg_RemoveAllowedOperator_Handler(srv interface{}, ctx context.Context, de
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).RemoveAllowedOperator(ctx, req.(*MsgRemoveAllowedOperator))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_BorrowPoolSecurity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgBorrowPoolSecurity)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).BorrowPoolSecurity(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_BorrowPoolSecurity_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).BorrowPoolSecurity(ctx, req.(*MsgBorrowPoolSecurity))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_CeasePoolSecurityBorrow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCeasePoolSecurityBorrow)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CeasePoolSecurityBorrow(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_CeasePoolSecurityBorrow_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CeasePoolSecurityBorrow(ctx, req.(*MsgCeasePoolSecurityBorrow))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -520,6 +600,14 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RemoveAllowedOperator",
 			Handler:    _Msg_RemoveAllowedOperator_Handler,
+		},
+		{
+			MethodName: "BorrowPoolSecurity",
+			Handler:    _Msg_BorrowPoolSecurity_Handler,
+		},
+		{
+			MethodName: "CeasePoolSecurityBorrow",
+			Handler:    _Msg_CeasePoolSecurityBorrow_Handler,
 		},
 		{
 			MethodName: "DelegatePool",

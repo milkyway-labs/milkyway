@@ -666,6 +666,214 @@ func (suite *KeeperTestSuite) TestMsgServer_RemoveAllowedOperator() {
 	}
 }
 
+func (suite *KeeperTestSuite) TestMsgServer_BorrowPoolSecurity() {
+	testCases := []struct {
+		name      string
+		store     func(ctx sdk.Context)
+		msg       *types.MsgBorrowPoolSecurity
+		shouldErr bool
+		expEvents sdk.Events
+		check     func(ctx sdk.Context)
+	}{
+		{
+			name: "non existing service returns error",
+			store: func(ctx sdk.Context) {
+				suite.pk.SavePool(ctx, poolstypes.NewPool(1, "utia"))
+			},
+			msg:       types.NewMsgBorrowPoolSecurity(1, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+			shouldErr: true,
+		},
+		{
+			name: "non existing pool returns error",
+			store: func(ctx sdk.Context) {
+				suite.sk.SaveService(ctx, servicestypes.NewService(
+					1, servicestypes.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+			},
+			msg:       types.NewMsgBorrowPoolSecurity(1, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+			shouldErr: true,
+		},
+		{
+			name: "only service admin can allow borrow a security from a new pool",
+			store: func(ctx sdk.Context) {
+				suite.pk.SavePool(ctx, poolstypes.NewPool(1, "utia"))
+				suite.sk.SaveService(ctx, servicestypes.NewService(
+					1, servicestypes.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+			},
+			msg:       types.NewMsgBorrowPoolSecurity(1, 1, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"),
+			shouldErr: true,
+		},
+		{
+			name: "security is borrowed properly",
+			store: func(ctx sdk.Context) {
+				suite.pk.SavePool(ctx, poolstypes.NewPool(1, "utia"))
+				suite.sk.SaveService(ctx, servicestypes.NewService(
+					1, servicestypes.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+			},
+			msg:       types.NewMsgBorrowPoolSecurity(1, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+			shouldErr: false,
+			check: func(ctx sdk.Context) {
+				secured, err := suite.k.IsServiceSecuredByPool(ctx, 1, 1)
+				suite.Require().NoError(err)
+				suite.Require().True(secured)
+			},
+			expEvents: sdk.Events{
+				sdk.NewEvent(
+					types.EventTypeBorrowPoolSecurity,
+					sdk.NewAttribute(
+						servicestypes.AttributeKeyServiceID, "1"),
+					sdk.NewAttribute(types.AttributeKeyPoolID, "1"),
+				),
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			suite.SetupTest()
+			ctx := suite.ctx
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			msgServer := keeper.NewMsgServer(suite.k)
+			_, err := msgServer.BorrowPoolSecurity(ctx, tc.msg)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				for _, event := range tc.expEvents {
+					events := ctx.EventManager().Events()
+					suite.Require().Contains(events, event)
+				}
+
+				if tc.check != nil {
+					tc.check(ctx)
+				}
+			}
+		})
+	}
+}
+
+func (suite *KeeperTestSuite) TestMsgServer_CeasePoolSecurityBorrow() {
+	testCases := []struct {
+		name      string
+		store     func(ctx sdk.Context)
+		msg       *types.MsgCeasePoolSecurityBorrow
+		shouldErr bool
+		expEvents sdk.Events
+		check     func(ctx sdk.Context)
+	}{
+		{
+			name: "non existing service returns error",
+			store: func(ctx sdk.Context) {
+				suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
+					1, operatorstypes.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+			},
+			msg:       types.NewMsgCeasePoolSecurityBorrow(1, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+			shouldErr: true,
+		},
+		{
+			name: "only service admin can cease pool security borrow",
+			store: func(ctx sdk.Context) {
+				suite.pk.SavePool(ctx, poolstypes.NewPool(1, "utia"))
+				suite.sk.SaveService(ctx, servicestypes.NewService(
+					1, servicestypes.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+				suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
+			},
+			msg:       types.NewMsgCeasePoolSecurityBorrow(1, 1, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"),
+			shouldErr: true,
+		},
+		{
+			name: "security is ceased properly",
+			store: func(ctx sdk.Context) {
+				suite.pk.SavePool(ctx, poolstypes.NewPool(1, "utia"))
+				suite.sk.SaveService(ctx, servicestypes.NewService(
+					1, servicestypes.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+				suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
+				suite.k.AddPoolToServiceSecuringPools(ctx, 1, 2)
+			},
+			msg:       types.NewMsgCeasePoolSecurityBorrow(1, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+			shouldErr: false,
+			check: func(ctx sdk.Context) {
+				secured, err := suite.k.IsServiceSecuredByPool(ctx, 1, 1)
+				suite.Require().NoError(err)
+				suite.Require().False(secured)
+			},
+			expEvents: sdk.Events{
+				sdk.NewEvent(
+					types.EventTypeCeasePoolSecurityBorrow,
+					sdk.NewAttribute(
+						servicestypes.AttributeKeyServiceID, "1"),
+					sdk.NewAttribute(types.AttributeKeyPoolID, "1"),
+				),
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			suite.SetupTest()
+			ctx := suite.ctx
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			msgServer := keeper.NewMsgServer(suite.k)
+			_, err := msgServer.CeasePoolSecurityBorrow(ctx, tc.msg)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				for _, event := range tc.expEvents {
+					events := ctx.EventManager().Events()
+					suite.Require().Contains(events, event)
+				}
+
+				if tc.check != nil {
+					tc.check(ctx)
+				}
+			}
+		})
+	}
+}
+
 func (suite *KeeperTestSuite) TestMsgServer_DelegatePool() {
 	testCases := []struct {
 		name      string

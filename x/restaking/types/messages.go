@@ -122,6 +122,64 @@ func (msg *MsgRemoveAllowedOperator) ValidateBasic() error {
 
 // --------------------------------------------------------------------------------------------------------------------
 
+// NewMsgBorrowPoolSecurity creates a new MsgBorrowPoolSecurity instance
+func NewMsgBorrowPoolSecurity(serviceID uint32, poolID uint32, sender string) *MsgBorrowPoolSecurity {
+	return &MsgBorrowPoolSecurity{
+		ServiceID: serviceID,
+		PoolID:    poolID,
+		Sender:    sender,
+	}
+}
+
+// ValidateBasic implements sdk.Msg
+func (msg *MsgBorrowPoolSecurity) ValidateBasic() error {
+	if msg.ServiceID == 0 {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid service ID: %d", msg.ServiceID)
+	}
+
+	if msg.PoolID == 0 {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid pool ID: %d", msg.PoolID)
+	}
+
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address")
+	}
+
+	return nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewMsgCeasePoolSecurityBorrow creates a new MsgCeasePoolSecurityBorrow instance
+func NewMsgCeasePoolSecurityBorrow(serviceID uint32, poolID uint32, sender string) *MsgCeasePoolSecurityBorrow {
+	return &MsgCeasePoolSecurityBorrow{
+		ServiceID: serviceID,
+		PoolID:    poolID,
+		Sender:    sender,
+	}
+}
+
+// ValidateBasic implements sdk.Msg
+func (msg *MsgCeasePoolSecurityBorrow) ValidateBasic() error {
+	if msg.ServiceID == 0 {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid service ID: %d", msg.ServiceID)
+	}
+
+	if msg.PoolID == 0 {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid pool ID: %d", msg.PoolID)
+	}
+
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address")
+	}
+
+	return nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
 // NewMsgDelegatePool creates a new MsgDelegatePool instance
 func NewMsgDelegatePool(amount sdk.Coin, delegator string) *MsgDelegatePool {
 	return &MsgDelegatePool{

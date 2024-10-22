@@ -3507,6 +3507,1750 @@ func (x *fastReflection_MsgRemoveAllowedOperatorResponse) ProtoMethods() *protoi
 }
 
 var (
+	md_MsgBorrowPoolSecurity            protoreflect.MessageDescriptor
+	fd_MsgBorrowPoolSecurity_sender     protoreflect.FieldDescriptor
+	fd_MsgBorrowPoolSecurity_service_id protoreflect.FieldDescriptor
+	fd_MsgBorrowPoolSecurity_pool_id    protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_restaking_v1_messages_proto_init()
+	md_MsgBorrowPoolSecurity = File_milkyway_restaking_v1_messages_proto.Messages().ByName("MsgBorrowPoolSecurity")
+	fd_MsgBorrowPoolSecurity_sender = md_MsgBorrowPoolSecurity.Fields().ByName("sender")
+	fd_MsgBorrowPoolSecurity_service_id = md_MsgBorrowPoolSecurity.Fields().ByName("service_id")
+	fd_MsgBorrowPoolSecurity_pool_id = md_MsgBorrowPoolSecurity.Fields().ByName("pool_id")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgBorrowPoolSecurity)(nil)
+
+type fastReflection_MsgBorrowPoolSecurity MsgBorrowPoolSecurity
+
+func (x *MsgBorrowPoolSecurity) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgBorrowPoolSecurity)(x)
+}
+
+func (x *MsgBorrowPoolSecurity) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgBorrowPoolSecurity_messageType fastReflection_MsgBorrowPoolSecurity_messageType
+var _ protoreflect.MessageType = fastReflection_MsgBorrowPoolSecurity_messageType{}
+
+type fastReflection_MsgBorrowPoolSecurity_messageType struct{}
+
+func (x fastReflection_MsgBorrowPoolSecurity_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgBorrowPoolSecurity)(nil)
+}
+func (x fastReflection_MsgBorrowPoolSecurity_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgBorrowPoolSecurity)
+}
+func (x fastReflection_MsgBorrowPoolSecurity_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgBorrowPoolSecurity
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgBorrowPoolSecurity) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgBorrowPoolSecurity
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgBorrowPoolSecurity) Type() protoreflect.MessageType {
+	return _fastReflection_MsgBorrowPoolSecurity_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgBorrowPoolSecurity) New() protoreflect.Message {
+	return new(fastReflection_MsgBorrowPoolSecurity)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgBorrowPoolSecurity) Interface() protoreflect.ProtoMessage {
+	return (*MsgBorrowPoolSecurity)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgBorrowPoolSecurity) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Sender != "" {
+		value := protoreflect.ValueOfString(x.Sender)
+		if !f(fd_MsgBorrowPoolSecurity_sender, value) {
+			return
+		}
+	}
+	if x.ServiceId != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.ServiceId)
+		if !f(fd_MsgBorrowPoolSecurity_service_id, value) {
+			return
+		}
+	}
+	if x.PoolId != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.PoolId)
+		if !f(fd_MsgBorrowPoolSecurity_pool_id, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgBorrowPoolSecurity) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.MsgBorrowPoolSecurity.sender":
+		return x.Sender != ""
+	case "milkyway.restaking.v1.MsgBorrowPoolSecurity.service_id":
+		return x.ServiceId != uint32(0)
+	case "milkyway.restaking.v1.MsgBorrowPoolSecurity.pool_id":
+		return x.PoolId != uint32(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgBorrowPoolSecurity"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgBorrowPoolSecurity does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgBorrowPoolSecurity) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.MsgBorrowPoolSecurity.sender":
+		x.Sender = ""
+	case "milkyway.restaking.v1.MsgBorrowPoolSecurity.service_id":
+		x.ServiceId = uint32(0)
+	case "milkyway.restaking.v1.MsgBorrowPoolSecurity.pool_id":
+		x.PoolId = uint32(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgBorrowPoolSecurity"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgBorrowPoolSecurity does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgBorrowPoolSecurity) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.restaking.v1.MsgBorrowPoolSecurity.sender":
+		value := x.Sender
+		return protoreflect.ValueOfString(value)
+	case "milkyway.restaking.v1.MsgBorrowPoolSecurity.service_id":
+		value := x.ServiceId
+		return protoreflect.ValueOfUint32(value)
+	case "milkyway.restaking.v1.MsgBorrowPoolSecurity.pool_id":
+		value := x.PoolId
+		return protoreflect.ValueOfUint32(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgBorrowPoolSecurity"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgBorrowPoolSecurity does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgBorrowPoolSecurity) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.MsgBorrowPoolSecurity.sender":
+		x.Sender = value.Interface().(string)
+	case "milkyway.restaking.v1.MsgBorrowPoolSecurity.service_id":
+		x.ServiceId = uint32(value.Uint())
+	case "milkyway.restaking.v1.MsgBorrowPoolSecurity.pool_id":
+		x.PoolId = uint32(value.Uint())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgBorrowPoolSecurity"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgBorrowPoolSecurity does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgBorrowPoolSecurity) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.MsgBorrowPoolSecurity.sender":
+		panic(fmt.Errorf("field sender of message milkyway.restaking.v1.MsgBorrowPoolSecurity is not mutable"))
+	case "milkyway.restaking.v1.MsgBorrowPoolSecurity.service_id":
+		panic(fmt.Errorf("field service_id of message milkyway.restaking.v1.MsgBorrowPoolSecurity is not mutable"))
+	case "milkyway.restaking.v1.MsgBorrowPoolSecurity.pool_id":
+		panic(fmt.Errorf("field pool_id of message milkyway.restaking.v1.MsgBorrowPoolSecurity is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgBorrowPoolSecurity"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgBorrowPoolSecurity does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgBorrowPoolSecurity) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.MsgBorrowPoolSecurity.sender":
+		return protoreflect.ValueOfString("")
+	case "milkyway.restaking.v1.MsgBorrowPoolSecurity.service_id":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "milkyway.restaking.v1.MsgBorrowPoolSecurity.pool_id":
+		return protoreflect.ValueOfUint32(uint32(0))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgBorrowPoolSecurity"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgBorrowPoolSecurity does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgBorrowPoolSecurity) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.MsgBorrowPoolSecurity", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgBorrowPoolSecurity) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgBorrowPoolSecurity) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgBorrowPoolSecurity) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgBorrowPoolSecurity) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgBorrowPoolSecurity)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.Sender)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.ServiceId != 0 {
+			n += 1 + runtime.Sov(uint64(x.ServiceId))
+		}
+		if x.PoolId != 0 {
+			n += 1 + runtime.Sov(uint64(x.PoolId))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgBorrowPoolSecurity)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.PoolId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.PoolId))
+			i--
+			dAtA[i] = 0x18
+		}
+		if x.ServiceId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.ServiceId))
+			i--
+			dAtA[i] = 0x10
+		}
+		if len(x.Sender) > 0 {
+			i -= len(x.Sender)
+			copy(dAtA[i:], x.Sender)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Sender)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgBorrowPoolSecurity)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgBorrowPoolSecurity: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgBorrowPoolSecurity: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Sender = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ServiceId", wireType)
+				}
+				x.ServiceId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.ServiceId |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 3:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
+				}
+				x.PoolId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.PoolId |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_MsgBorrowPoolSecurityResponse protoreflect.MessageDescriptor
+)
+
+func init() {
+	file_milkyway_restaking_v1_messages_proto_init()
+	md_MsgBorrowPoolSecurityResponse = File_milkyway_restaking_v1_messages_proto.Messages().ByName("MsgBorrowPoolSecurityResponse")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgBorrowPoolSecurityResponse)(nil)
+
+type fastReflection_MsgBorrowPoolSecurityResponse MsgBorrowPoolSecurityResponse
+
+func (x *MsgBorrowPoolSecurityResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgBorrowPoolSecurityResponse)(x)
+}
+
+func (x *MsgBorrowPoolSecurityResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgBorrowPoolSecurityResponse_messageType fastReflection_MsgBorrowPoolSecurityResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgBorrowPoolSecurityResponse_messageType{}
+
+type fastReflection_MsgBorrowPoolSecurityResponse_messageType struct{}
+
+func (x fastReflection_MsgBorrowPoolSecurityResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgBorrowPoolSecurityResponse)(nil)
+}
+func (x fastReflection_MsgBorrowPoolSecurityResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgBorrowPoolSecurityResponse)
+}
+func (x fastReflection_MsgBorrowPoolSecurityResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgBorrowPoolSecurityResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgBorrowPoolSecurityResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgBorrowPoolSecurityResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgBorrowPoolSecurityResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgBorrowPoolSecurityResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgBorrowPoolSecurityResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgBorrowPoolSecurityResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgBorrowPoolSecurityResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgBorrowPoolSecurityResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgBorrowPoolSecurityResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgBorrowPoolSecurityResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgBorrowPoolSecurityResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgBorrowPoolSecurityResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgBorrowPoolSecurityResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgBorrowPoolSecurityResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgBorrowPoolSecurityResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgBorrowPoolSecurityResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgBorrowPoolSecurityResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgBorrowPoolSecurityResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgBorrowPoolSecurityResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgBorrowPoolSecurityResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgBorrowPoolSecurityResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgBorrowPoolSecurityResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgBorrowPoolSecurityResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgBorrowPoolSecurityResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgBorrowPoolSecurityResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgBorrowPoolSecurityResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgBorrowPoolSecurityResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgBorrowPoolSecurityResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.MsgBorrowPoolSecurityResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgBorrowPoolSecurityResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgBorrowPoolSecurityResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgBorrowPoolSecurityResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgBorrowPoolSecurityResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgBorrowPoolSecurityResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgBorrowPoolSecurityResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgBorrowPoolSecurityResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgBorrowPoolSecurityResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgBorrowPoolSecurityResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_MsgCeasePoolSecurityBorrow            protoreflect.MessageDescriptor
+	fd_MsgCeasePoolSecurityBorrow_sender     protoreflect.FieldDescriptor
+	fd_MsgCeasePoolSecurityBorrow_service_id protoreflect.FieldDescriptor
+	fd_MsgCeasePoolSecurityBorrow_pool_id    protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_restaking_v1_messages_proto_init()
+	md_MsgCeasePoolSecurityBorrow = File_milkyway_restaking_v1_messages_proto.Messages().ByName("MsgCeasePoolSecurityBorrow")
+	fd_MsgCeasePoolSecurityBorrow_sender = md_MsgCeasePoolSecurityBorrow.Fields().ByName("sender")
+	fd_MsgCeasePoolSecurityBorrow_service_id = md_MsgCeasePoolSecurityBorrow.Fields().ByName("service_id")
+	fd_MsgCeasePoolSecurityBorrow_pool_id = md_MsgCeasePoolSecurityBorrow.Fields().ByName("pool_id")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgCeasePoolSecurityBorrow)(nil)
+
+type fastReflection_MsgCeasePoolSecurityBorrow MsgCeasePoolSecurityBorrow
+
+func (x *MsgCeasePoolSecurityBorrow) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgCeasePoolSecurityBorrow)(x)
+}
+
+func (x *MsgCeasePoolSecurityBorrow) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[10]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgCeasePoolSecurityBorrow_messageType fastReflection_MsgCeasePoolSecurityBorrow_messageType
+var _ protoreflect.MessageType = fastReflection_MsgCeasePoolSecurityBorrow_messageType{}
+
+type fastReflection_MsgCeasePoolSecurityBorrow_messageType struct{}
+
+func (x fastReflection_MsgCeasePoolSecurityBorrow_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgCeasePoolSecurityBorrow)(nil)
+}
+func (x fastReflection_MsgCeasePoolSecurityBorrow_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgCeasePoolSecurityBorrow)
+}
+func (x fastReflection_MsgCeasePoolSecurityBorrow_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgCeasePoolSecurityBorrow
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgCeasePoolSecurityBorrow) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgCeasePoolSecurityBorrow
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgCeasePoolSecurityBorrow) Type() protoreflect.MessageType {
+	return _fastReflection_MsgCeasePoolSecurityBorrow_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgCeasePoolSecurityBorrow) New() protoreflect.Message {
+	return new(fastReflection_MsgCeasePoolSecurityBorrow)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgCeasePoolSecurityBorrow) Interface() protoreflect.ProtoMessage {
+	return (*MsgCeasePoolSecurityBorrow)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgCeasePoolSecurityBorrow) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.Sender != "" {
+		value := protoreflect.ValueOfString(x.Sender)
+		if !f(fd_MsgCeasePoolSecurityBorrow_sender, value) {
+			return
+		}
+	}
+	if x.ServiceId != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.ServiceId)
+		if !f(fd_MsgCeasePoolSecurityBorrow_service_id, value) {
+			return
+		}
+	}
+	if x.PoolId != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.PoolId)
+		if !f(fd_MsgCeasePoolSecurityBorrow_pool_id, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgCeasePoolSecurityBorrow) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.MsgCeasePoolSecurityBorrow.sender":
+		return x.Sender != ""
+	case "milkyway.restaking.v1.MsgCeasePoolSecurityBorrow.service_id":
+		return x.ServiceId != uint32(0)
+	case "milkyway.restaking.v1.MsgCeasePoolSecurityBorrow.pool_id":
+		return x.PoolId != uint32(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgCeasePoolSecurityBorrow"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgCeasePoolSecurityBorrow does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCeasePoolSecurityBorrow) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.MsgCeasePoolSecurityBorrow.sender":
+		x.Sender = ""
+	case "milkyway.restaking.v1.MsgCeasePoolSecurityBorrow.service_id":
+		x.ServiceId = uint32(0)
+	case "milkyway.restaking.v1.MsgCeasePoolSecurityBorrow.pool_id":
+		x.PoolId = uint32(0)
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgCeasePoolSecurityBorrow"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgCeasePoolSecurityBorrow does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgCeasePoolSecurityBorrow) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.restaking.v1.MsgCeasePoolSecurityBorrow.sender":
+		value := x.Sender
+		return protoreflect.ValueOfString(value)
+	case "milkyway.restaking.v1.MsgCeasePoolSecurityBorrow.service_id":
+		value := x.ServiceId
+		return protoreflect.ValueOfUint32(value)
+	case "milkyway.restaking.v1.MsgCeasePoolSecurityBorrow.pool_id":
+		value := x.PoolId
+		return protoreflect.ValueOfUint32(value)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgCeasePoolSecurityBorrow"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgCeasePoolSecurityBorrow does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCeasePoolSecurityBorrow) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.MsgCeasePoolSecurityBorrow.sender":
+		x.Sender = value.Interface().(string)
+	case "milkyway.restaking.v1.MsgCeasePoolSecurityBorrow.service_id":
+		x.ServiceId = uint32(value.Uint())
+	case "milkyway.restaking.v1.MsgCeasePoolSecurityBorrow.pool_id":
+		x.PoolId = uint32(value.Uint())
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgCeasePoolSecurityBorrow"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgCeasePoolSecurityBorrow does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCeasePoolSecurityBorrow) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.MsgCeasePoolSecurityBorrow.sender":
+		panic(fmt.Errorf("field sender of message milkyway.restaking.v1.MsgCeasePoolSecurityBorrow is not mutable"))
+	case "milkyway.restaking.v1.MsgCeasePoolSecurityBorrow.service_id":
+		panic(fmt.Errorf("field service_id of message milkyway.restaking.v1.MsgCeasePoolSecurityBorrow is not mutable"))
+	case "milkyway.restaking.v1.MsgCeasePoolSecurityBorrow.pool_id":
+		panic(fmt.Errorf("field pool_id of message milkyway.restaking.v1.MsgCeasePoolSecurityBorrow is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgCeasePoolSecurityBorrow"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgCeasePoolSecurityBorrow does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgCeasePoolSecurityBorrow) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.MsgCeasePoolSecurityBorrow.sender":
+		return protoreflect.ValueOfString("")
+	case "milkyway.restaking.v1.MsgCeasePoolSecurityBorrow.service_id":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "milkyway.restaking.v1.MsgCeasePoolSecurityBorrow.pool_id":
+		return protoreflect.ValueOfUint32(uint32(0))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgCeasePoolSecurityBorrow"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgCeasePoolSecurityBorrow does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgCeasePoolSecurityBorrow) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.MsgCeasePoolSecurityBorrow", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgCeasePoolSecurityBorrow) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCeasePoolSecurityBorrow) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgCeasePoolSecurityBorrow) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgCeasePoolSecurityBorrow) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgCeasePoolSecurityBorrow)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		l = len(x.Sender)
+		if l > 0 {
+			n += 1 + l + runtime.Sov(uint64(l))
+		}
+		if x.ServiceId != 0 {
+			n += 1 + runtime.Sov(uint64(x.ServiceId))
+		}
+		if x.PoolId != 0 {
+			n += 1 + runtime.Sov(uint64(x.PoolId))
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgCeasePoolSecurityBorrow)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if x.PoolId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.PoolId))
+			i--
+			dAtA[i] = 0x18
+		}
+		if x.ServiceId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.ServiceId))
+			i--
+			dAtA[i] = 0x10
+		}
+		if len(x.Sender) > 0 {
+			i -= len(x.Sender)
+			copy(dAtA[i:], x.Sender)
+			i = runtime.EncodeVarint(dAtA, i, uint64(len(x.Sender)))
+			i--
+			dAtA[i] = 0xa
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgCeasePoolSecurityBorrow)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCeasePoolSecurityBorrow: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCeasePoolSecurityBorrow: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+				}
+				var stringLen uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					stringLen |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				intStringLen := int(stringLen)
+				if intStringLen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + intStringLen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Sender = string(dAtA[iNdEx:postIndex])
+				iNdEx = postIndex
+			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ServiceId", wireType)
+				}
+				x.ServiceId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.ServiceId |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 3:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
+				}
+				x.PoolId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.PoolId |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
+	md_MsgCeasePoolSecurityBorrowResponse protoreflect.MessageDescriptor
+)
+
+func init() {
+	file_milkyway_restaking_v1_messages_proto_init()
+	md_MsgCeasePoolSecurityBorrowResponse = File_milkyway_restaking_v1_messages_proto.Messages().ByName("MsgCeasePoolSecurityBorrowResponse")
+}
+
+var _ protoreflect.Message = (*fastReflection_MsgCeasePoolSecurityBorrowResponse)(nil)
+
+type fastReflection_MsgCeasePoolSecurityBorrowResponse MsgCeasePoolSecurityBorrowResponse
+
+func (x *MsgCeasePoolSecurityBorrowResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgCeasePoolSecurityBorrowResponse)(x)
+}
+
+func (x *MsgCeasePoolSecurityBorrowResponse) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[11]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_MsgCeasePoolSecurityBorrowResponse_messageType fastReflection_MsgCeasePoolSecurityBorrowResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgCeasePoolSecurityBorrowResponse_messageType{}
+
+type fastReflection_MsgCeasePoolSecurityBorrowResponse_messageType struct{}
+
+func (x fastReflection_MsgCeasePoolSecurityBorrowResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgCeasePoolSecurityBorrowResponse)(nil)
+}
+func (x fastReflection_MsgCeasePoolSecurityBorrowResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgCeasePoolSecurityBorrowResponse)
+}
+func (x fastReflection_MsgCeasePoolSecurityBorrowResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgCeasePoolSecurityBorrowResponse
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_MsgCeasePoolSecurityBorrowResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgCeasePoolSecurityBorrowResponse
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_MsgCeasePoolSecurityBorrowResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgCeasePoolSecurityBorrowResponse_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_MsgCeasePoolSecurityBorrowResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgCeasePoolSecurityBorrowResponse)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_MsgCeasePoolSecurityBorrowResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgCeasePoolSecurityBorrowResponse)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_MsgCeasePoolSecurityBorrowResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_MsgCeasePoolSecurityBorrowResponse) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgCeasePoolSecurityBorrowResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgCeasePoolSecurityBorrowResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCeasePoolSecurityBorrowResponse) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgCeasePoolSecurityBorrowResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgCeasePoolSecurityBorrowResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_MsgCeasePoolSecurityBorrowResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgCeasePoolSecurityBorrowResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgCeasePoolSecurityBorrowResponse does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCeasePoolSecurityBorrowResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgCeasePoolSecurityBorrowResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgCeasePoolSecurityBorrowResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCeasePoolSecurityBorrowResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgCeasePoolSecurityBorrowResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgCeasePoolSecurityBorrowResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_MsgCeasePoolSecurityBorrowResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.MsgCeasePoolSecurityBorrowResponse"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.MsgCeasePoolSecurityBorrowResponse does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_MsgCeasePoolSecurityBorrowResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.MsgCeasePoolSecurityBorrowResponse", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_MsgCeasePoolSecurityBorrowResponse) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_MsgCeasePoolSecurityBorrowResponse) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_MsgCeasePoolSecurityBorrowResponse) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_MsgCeasePoolSecurityBorrowResponse) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*MsgCeasePoolSecurityBorrowResponse)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*MsgCeasePoolSecurityBorrowResponse)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*MsgCeasePoolSecurityBorrowResponse)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCeasePoolSecurityBorrowResponse: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgCeasePoolSecurityBorrowResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var (
 	md_MsgDelegatePool           protoreflect.MessageDescriptor
 	fd_MsgDelegatePool_delegator protoreflect.FieldDescriptor
 	fd_MsgDelegatePool_amount    protoreflect.FieldDescriptor
@@ -3528,7 +5272,7 @@ func (x *MsgDelegatePool) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgDelegatePool) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[8]
+	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4023,7 +5767,7 @@ func (x *MsgDelegatePoolResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgDelegatePoolResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[9]
+	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4436,7 +6180,7 @@ func (x *MsgDelegateOperator) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgDelegateOperator) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[10]
+	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4985,7 +6729,7 @@ func (x *MsgDelegateOperatorResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgDelegateOperatorResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[11]
+	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5398,7 +7142,7 @@ func (x *MsgDelegateService) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgDelegateService) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[12]
+	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[16]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5947,7 +7691,7 @@ func (x *MsgDelegateServiceResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgDelegateServiceResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[13]
+	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[17]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6307,7 +8051,7 @@ func (x *MsgUpdateParams) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgUpdateParams) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[14]
+	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[18]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6802,7 +8546,7 @@ func (x *MsgUpdateParamsResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgUpdateParamsResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[15]
+	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[19]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7162,7 +8906,7 @@ func (x *MsgUndelegatePool) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgUndelegatePool) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[16]
+	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[20]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7714,7 +9458,7 @@ func (x *MsgUndelegateOperator) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgUndelegateOperator) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[17]
+	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[21]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8320,7 +10064,7 @@ func (x *MsgUndelegateService) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgUndelegateService) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[18]
+	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[22]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8871,7 +10615,7 @@ func (x *MsgUndelegateResponse) ProtoReflect() protoreflect.Message {
 }
 
 func (x *MsgUndelegateResponse) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[19]
+	mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[23]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9625,6 +11369,171 @@ func (*MsgRemoveAllowedOperatorResponse) Descriptor() ([]byte, []int) {
 	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{7}
 }
 
+// MsgBorrowPoolSecurity defines the message structure for the
+// BorrowPoolSecurity gRPC service method. It allows the service admin
+// to add a pool to the list of pools from which the service has chosen
+// to borrow security.
+type MsgBorrowPoolSecurity struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Sender    string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	ServiceId uint32 `protobuf:"varint,2,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
+	PoolId    uint32 `protobuf:"varint,3,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+}
+
+func (x *MsgBorrowPoolSecurity) Reset() {
+	*x = MsgBorrowPoolSecurity{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgBorrowPoolSecurity) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgBorrowPoolSecurity) ProtoMessage() {}
+
+// Deprecated: Use MsgBorrowPoolSecurity.ProtoReflect.Descriptor instead.
+func (*MsgBorrowPoolSecurity) Descriptor() ([]byte, []int) {
+	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *MsgBorrowPoolSecurity) GetSender() string {
+	if x != nil {
+		return x.Sender
+	}
+	return ""
+}
+
+func (x *MsgBorrowPoolSecurity) GetServiceId() uint32 {
+	if x != nil {
+		return x.ServiceId
+	}
+	return 0
+}
+
+func (x *MsgBorrowPoolSecurity) GetPoolId() uint32 {
+	if x != nil {
+		return x.PoolId
+	}
+	return 0
+}
+
+// MsgBorrowPoolSecurityResponse is the return value of MsgBorrowPoolSecurity.
+type MsgBorrowPoolSecurityResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *MsgBorrowPoolSecurityResponse) Reset() {
+	*x = MsgBorrowPoolSecurityResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgBorrowPoolSecurityResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgBorrowPoolSecurityResponse) ProtoMessage() {}
+
+// Deprecated: Use MsgBorrowPoolSecurityResponse.ProtoReflect.Descriptor instead.
+func (*MsgBorrowPoolSecurityResponse) Descriptor() ([]byte, []int) {
+	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{9}
+}
+
+// MsgCeasePoolSecurityBorrow defines the message structure for the
+// CeaseBorrowPoolSecurity gRPC service method. It allows the service admin
+// to remove a pool from the list of pools from which the service has chosen
+// to borrow security.
+type MsgCeasePoolSecurityBorrow struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Sender    string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
+	ServiceId uint32 `protobuf:"varint,2,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
+	PoolId    uint32 `protobuf:"varint,3,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+}
+
+func (x *MsgCeasePoolSecurityBorrow) Reset() {
+	*x = MsgCeasePoolSecurityBorrow{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[10]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgCeasePoolSecurityBorrow) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgCeasePoolSecurityBorrow) ProtoMessage() {}
+
+// Deprecated: Use MsgCeasePoolSecurityBorrow.ProtoReflect.Descriptor instead.
+func (*MsgCeasePoolSecurityBorrow) Descriptor() ([]byte, []int) {
+	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *MsgCeasePoolSecurityBorrow) GetSender() string {
+	if x != nil {
+		return x.Sender
+	}
+	return ""
+}
+
+func (x *MsgCeasePoolSecurityBorrow) GetServiceId() uint32 {
+	if x != nil {
+		return x.ServiceId
+	}
+	return 0
+}
+
+func (x *MsgCeasePoolSecurityBorrow) GetPoolId() uint32 {
+	if x != nil {
+		return x.PoolId
+	}
+	return 0
+}
+
+// MsgCeasePoolSecurityBorrowResponse is the return value of
+// MsgCeasePoolSecurityBorrow.
+type MsgCeasePoolSecurityBorrowResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *MsgCeasePoolSecurityBorrowResponse) Reset() {
+	*x = MsgCeasePoolSecurityBorrowResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[11]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *MsgCeasePoolSecurityBorrowResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MsgCeasePoolSecurityBorrowResponse) ProtoMessage() {}
+
+// Deprecated: Use MsgCeasePoolSecurityBorrowResponse.ProtoReflect.Descriptor instead.
+func (*MsgCeasePoolSecurityBorrowResponse) Descriptor() ([]byte, []int) {
+	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{11}
+}
+
 // MsgDelegatePool defines the message structure for the DelegatePool gRPC
 // service method. It allows a user to put their assets into a restaking pool
 // that will later be used to provide cryptoeconomic security to services that
@@ -9643,7 +11552,7 @@ type MsgDelegatePool struct {
 func (x *MsgDelegatePool) Reset() {
 	*x = MsgDelegatePool{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[8]
+		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9657,7 +11566,7 @@ func (*MsgDelegatePool) ProtoMessage() {}
 
 // Deprecated: Use MsgDelegatePool.ProtoReflect.Descriptor instead.
 func (*MsgDelegatePool) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{8}
+	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *MsgDelegatePool) GetDelegator() string {
@@ -9684,7 +11593,7 @@ type MsgDelegatePoolResponse struct {
 func (x *MsgDelegatePoolResponse) Reset() {
 	*x = MsgDelegatePoolResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[9]
+		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9698,7 +11607,7 @@ func (*MsgDelegatePoolResponse) ProtoMessage() {}
 
 // Deprecated: Use MsgDelegatePoolResponse.ProtoReflect.Descriptor instead.
 func (*MsgDelegatePoolResponse) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{9}
+	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{13}
 }
 
 // MsgDelegateOperator defines the message structure for the DelegateOperator
@@ -9720,7 +11629,7 @@ type MsgDelegateOperator struct {
 func (x *MsgDelegateOperator) Reset() {
 	*x = MsgDelegateOperator{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[10]
+		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9734,7 +11643,7 @@ func (*MsgDelegateOperator) ProtoMessage() {}
 
 // Deprecated: Use MsgDelegateOperator.ProtoReflect.Descriptor instead.
 func (*MsgDelegateOperator) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{10}
+	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *MsgDelegateOperator) GetDelegator() string {
@@ -9768,7 +11677,7 @@ type MsgDelegateOperatorResponse struct {
 func (x *MsgDelegateOperatorResponse) Reset() {
 	*x = MsgDelegateOperatorResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[11]
+		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9782,7 +11691,7 @@ func (*MsgDelegateOperatorResponse) ProtoMessage() {}
 
 // Deprecated: Use MsgDelegateOperatorResponse.ProtoReflect.Descriptor instead.
 func (*MsgDelegateOperatorResponse) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{11}
+	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{15}
 }
 
 // MsgDelegateService defines the message structure for the DelegateService gRPC
@@ -9803,7 +11712,7 @@ type MsgDelegateService struct {
 func (x *MsgDelegateService) Reset() {
 	*x = MsgDelegateService{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[12]
+		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[16]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9817,7 +11726,7 @@ func (*MsgDelegateService) ProtoMessage() {}
 
 // Deprecated: Use MsgDelegateService.ProtoReflect.Descriptor instead.
 func (*MsgDelegateService) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{12}
+	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *MsgDelegateService) GetDelegator() string {
@@ -9851,7 +11760,7 @@ type MsgDelegateServiceResponse struct {
 func (x *MsgDelegateServiceResponse) Reset() {
 	*x = MsgDelegateServiceResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[13]
+		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[17]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9865,7 +11774,7 @@ func (*MsgDelegateServiceResponse) ProtoMessage() {}
 
 // Deprecated: Use MsgDelegateServiceResponse.ProtoReflect.Descriptor instead.
 func (*MsgDelegateServiceResponse) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{13}
+	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{17}
 }
 
 // MsgUpdateParams defines the message structure for the UpdateParams gRPC
@@ -9887,7 +11796,7 @@ type MsgUpdateParams struct {
 func (x *MsgUpdateParams) Reset() {
 	*x = MsgUpdateParams{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[14]
+		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[18]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9901,7 +11810,7 @@ func (*MsgUpdateParams) ProtoMessage() {}
 
 // Deprecated: Use MsgUpdateParams.ProtoReflect.Descriptor instead.
 func (*MsgUpdateParams) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{14}
+	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *MsgUpdateParams) GetAuthority() string {
@@ -9928,7 +11837,7 @@ type MsgUpdateParamsResponse struct {
 func (x *MsgUpdateParamsResponse) Reset() {
 	*x = MsgUpdateParamsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[15]
+		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[19]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9942,7 +11851,7 @@ func (*MsgUpdateParamsResponse) ProtoMessage() {}
 
 // Deprecated: Use MsgUpdateParamsResponse.ProtoReflect.Descriptor instead.
 func (*MsgUpdateParamsResponse) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{15}
+	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{19}
 }
 
 // MsgUndelegatePool the message structure for the UndelegatePool gRPC service
@@ -9961,7 +11870,7 @@ type MsgUndelegatePool struct {
 func (x *MsgUndelegatePool) Reset() {
 	*x = MsgUndelegatePool{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[16]
+		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[20]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9975,7 +11884,7 @@ func (*MsgUndelegatePool) ProtoMessage() {}
 
 // Deprecated: Use MsgUndelegatePool.ProtoReflect.Descriptor instead.
 func (*MsgUndelegatePool) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{16}
+	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *MsgUndelegatePool) GetDelegator() string {
@@ -10011,7 +11920,7 @@ type MsgUndelegateOperator struct {
 func (x *MsgUndelegateOperator) Reset() {
 	*x = MsgUndelegateOperator{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[17]
+		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[21]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -10025,7 +11934,7 @@ func (*MsgUndelegateOperator) ProtoMessage() {}
 
 // Deprecated: Use MsgUndelegateOperator.ProtoReflect.Descriptor instead.
 func (*MsgUndelegateOperator) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{17}
+	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *MsgUndelegateOperator) GetDelegator() string {
@@ -10068,7 +11977,7 @@ type MsgUndelegateService struct {
 func (x *MsgUndelegateService) Reset() {
 	*x = MsgUndelegateService{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[18]
+		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[22]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -10082,7 +11991,7 @@ func (*MsgUndelegateService) ProtoMessage() {}
 
 // Deprecated: Use MsgUndelegateService.ProtoReflect.Descriptor instead.
 func (*MsgUndelegateService) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{18}
+	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *MsgUndelegateService) GetDelegator() string {
@@ -10120,7 +12029,7 @@ type MsgUndelegateResponse struct {
 func (x *MsgUndelegateResponse) Reset() {
 	*x = MsgUndelegateResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[19]
+		mi := &file_milkyway_restaking_v1_messages_proto_msgTypes[23]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -10134,7 +12043,7 @@ func (*MsgUndelegateResponse) ProtoMessage() {}
 
 // Deprecated: Use MsgUndelegateResponse.ProtoReflect.Descriptor instead.
 func (*MsgUndelegateResponse) Descriptor() ([]byte, []int) {
-	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{19}
+	return file_milkyway_restaking_v1_messages_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *MsgUndelegateResponse) GetCompletionTime() *timestamppb.Timestamp {
@@ -10225,223 +12134,270 @@ var file_milkyway_restaking_v1_messages_proto_rawDesc = []byte{
 	0x6f, 0x76, 0x65, 0x41, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74,
 	0x6f, 0x72, 0x22, 0x22, 0x0a, 0x20, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x41,
 	0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xb9, 0x01, 0x0a, 0x0f, 0x4d, 0x73, 0x67, 0x44, 0x65,
-	0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x36, 0x0a, 0x09, 0x64, 0x65,
-	0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2,
-	0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73,
-	0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
-	0x6f, 0x72, 0x12, 0x41, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65,
-	0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x0e, 0xc8,
-	0xde, 0x1f, 0x00, 0xe2, 0xde, 0x1f, 0x06, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x06, 0x61,
-	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x3a, 0x2b, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x64, 0x65, 0x6c, 0x65,
-	0x67, 0x61, 0x74, 0x6f, 0x72, 0x8a, 0xe7, 0xb0, 0x2a, 0x18, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
-	0x61, 0x79, 0x2f, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x50, 0x6f,
-	0x6f, 0x6c, 0x22, 0x19, 0x0a, 0x17, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
-	0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x9e, 0x02,
-	0x0a, 0x13, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x4f, 0x70, 0x65,
-	0x72, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x36, 0x0a, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
-	0x6f, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f,
-	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69,
-	0x6e, 0x67, 0x52, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x2f, 0x0a,
-	0x0b, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x0d, 0x42, 0x0e, 0xe2, 0xde, 0x1f, 0x0a, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
-	0x49, 0x44, 0x52, 0x0a, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x64, 0x12, 0x6d,
-	0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x19,
-	0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62,
-	0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x3a, 0xc8, 0xde, 0x1f, 0x00, 0xe2,
-	0xde, 0x1f, 0x06, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74,
-	0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63,
-	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e,
-	0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x3a, 0x2f, 0x82,
-	0xe7, 0xb0, 0x2a, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x8a, 0xe7, 0xb0,
-	0x2a, 0x1c, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x4d, 0x73, 0x67, 0x44, 0x65,
-	0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x22, 0x1d,
-	0x0a, 0x1b, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x4f, 0x70, 0x65,
-	0x72, 0x61, 0x74, 0x6f, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x99, 0x02,
-	0x0a, 0x12, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x53, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x12, 0x36, 0x0a, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f,
-	0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73,
-	0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e,
-	0x67, 0x52, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x2c, 0x0a, 0x0a,
-	0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d,
-	0x42, 0x0d, 0xe2, 0xde, 0x1f, 0x09, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x44, 0x52,
-	0x09, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x12, 0x6d, 0x0a, 0x06, 0x61, 0x6d,
-	0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73,
-	0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31,
-	0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x3a, 0xc8, 0xde, 0x1f, 0x00, 0xe2, 0xde, 0x1f, 0x06, 0x41,
-	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e,
-	0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
-	0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e,
-	0x73, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x3a, 0x2e, 0x82, 0xe7, 0xb0, 0x2a, 0x09,
-	0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x8a, 0xe7, 0xb0, 0x2a, 0x1b, 0x6d, 0x69,
-	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61,
-	0x74, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x22, 0x1c, 0x0a, 0x1a, 0x4d, 0x73, 0x67,
-	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x52,
-	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xd1, 0x01, 0x0a, 0x0f, 0x4d, 0x73, 0x67, 0x55,
-	0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x4a, 0x0a, 0x09, 0x61,
-	0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x2c,
-	0xf2, 0xde, 0x1f, 0x10, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72,
-	0x69, 0x74, 0x79, 0x22, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41,
-	0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x09, 0x61, 0x75,
-	0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x3b, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d,
-	0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
-	0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e,
-	0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x70, 0x61,
-	0x72, 0x61, 0x6d, 0x73, 0x3a, 0x35, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f,
-	0x72, 0x69, 0x74, 0x79, 0x8a, 0xe7, 0xb0, 0x2a, 0x22, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
-	0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x4d, 0x73, 0x67, 0x55,
-	0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x19, 0x0a, 0x17, 0x4d,
-	0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xc0, 0x01, 0x0a, 0x11, 0x4d, 0x73, 0x67, 0x55, 0x6e,
-	0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x36, 0x0a, 0x09,
-	0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42,
-	0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72,
-	0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67,
-	0x61, 0x74, 0x6f, 0x72, 0x12, 0x3c, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02,
-	0x20, 0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61,
-	0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42,
-	0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75,
-	0x6e, 0x74, 0x3a, 0x35, 0x88, 0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f, 0x00, 0x82, 0xe7, 0xb0, 0x2a,
-	0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x8a, 0xe7, 0xb0, 0x2a, 0x1a, 0x6d,
-	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x4d, 0x73, 0x67, 0x55, 0x6e, 0x64, 0x65, 0x6c,
-	0x65, 0x67, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x22, 0xa5, 0x02, 0x0a, 0x15, 0x4d, 0x73,
-	0x67, 0x55, 0x6e, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61,
-	0x74, 0x6f, 0x72, 0x12, 0x36, 0x0a, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d,
-	0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67,
-	0x52, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x2f, 0x0a, 0x0b, 0x6f,
-	0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d,
-	0x42, 0x0e, 0xe2, 0xde, 0x1f, 0x0a, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x44,
-	0x52, 0x0a, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x64, 0x12, 0x68, 0x0a, 0x06,
-	0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63,
-	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74,
-	0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x35, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f,
-	0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d,
-	0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79,
-	0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06,
-	0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x3a, 0x39, 0x88, 0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f, 0x00,
-	0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x8a, 0xe7,
-	0xb0, 0x2a, 0x1e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x4d, 0x73, 0x67, 0x55,
-	0x6e, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f,
-	0x72, 0x22, 0xa0, 0x02, 0x0a, 0x14, 0x4d, 0x73, 0x67, 0x55, 0x6e, 0x64, 0x65, 0x6c, 0x65, 0x67,
-	0x61, 0x74, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x36, 0x0a, 0x09, 0x64, 0x65,
-	0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2,
-	0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73,
-	0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
-	0x6f, 0x72, 0x12, 0x2c, 0x0a, 0x0a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xcc, 0x01, 0x0a, 0x15, 0x4d, 0x73, 0x67, 0x42, 0x6f,
+	0x72, 0x72, 0x6f, 0x77, 0x50, 0x6f, 0x6f, 0x6c, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79,
+	0x12, 0x30, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
+	0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64,
+	0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x06, 0x73, 0x65, 0x6e, 0x64,
+	0x65, 0x72, 0x12, 0x2c, 0x0a, 0x0a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64,
 	0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x0d, 0xe2, 0xde, 0x1f, 0x09, 0x53, 0x65, 0x72, 0x76,
 	0x69, 0x63, 0x65, 0x49, 0x44, 0x52, 0x09, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64,
-	0x12, 0x68, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b,
-	0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76,
-	0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x35, 0xc8, 0xde, 0x1f,
-	0x00, 0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
-	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64,
-	0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0xa8, 0xe7, 0xb0,
-	0x2a, 0x01, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x3a, 0x38, 0x88, 0xa0, 0x1f, 0x00,
-	0xe8, 0xa0, 0x1f, 0x00, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
-	0x6f, 0x72, 0x8a, 0xe7, 0xb0, 0x2a, 0x1d, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f,
-	0x4d, 0x73, 0x67, 0x55, 0x6e, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x53, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x22, 0x6b, 0x0a, 0x15, 0x4d, 0x73, 0x67, 0x55, 0x6e, 0x64, 0x65, 0x6c,
-	0x65, 0x67, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x52, 0x0a,
-	0x0f, 0x63, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x69, 0x6d, 0x65,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61,
-	0x6d, 0x70, 0x42, 0x0d, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0xa8, 0xe7, 0xb0, 0x2a,
-	0x01, 0x52, 0x0e, 0x63, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x69, 0x6d,
-	0x65, 0x32, 0xc9, 0x09, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x63, 0x0a, 0x0b, 0x4a, 0x6f, 0x69,
-	0x6e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x25, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
-	0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31,
-	0x2e, 0x4d, 0x73, 0x67, 0x4a, 0x6f, 0x69, 0x6e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x1a,
-	0x2d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61,
-	0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4a, 0x6f, 0x69, 0x6e, 0x53,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x66,
-	0x0a, 0x0c, 0x4c, 0x65, 0x61, 0x76, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x26,
-	0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b,
-	0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4c, 0x65, 0x61, 0x76, 0x65, 0x53,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x1a, 0x2e, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
-	0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d,
-	0x73, 0x67, 0x4c, 0x65, 0x61, 0x76, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x69, 0x0a, 0x0d, 0x41, 0x6c, 0x6c, 0x6f, 0x77, 0x4f,
-	0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x27, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
+	0x12, 0x23, 0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28,
+	0x0d, 0x42, 0x0a, 0xe2, 0xde, 0x1f, 0x06, 0x50, 0x6f, 0x6f, 0x6c, 0x49, 0x44, 0x52, 0x06, 0x70,
+	0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x3a, 0x2e, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64,
+	0x65, 0x72, 0x8a, 0xe7, 0xb0, 0x2a, 0x1e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f,
+	0x4d, 0x73, 0x67, 0x42, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x50, 0x6f, 0x6f, 0x6c, 0x53, 0x65, 0x63,
+	0x75, 0x72, 0x69, 0x74, 0x79, 0x22, 0x1f, 0x0a, 0x1d, 0x4d, 0x73, 0x67, 0x42, 0x6f, 0x72, 0x72,
+	0x6f, 0x77, 0x50, 0x6f, 0x6f, 0x6c, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xd6, 0x01, 0x0a, 0x1a, 0x4d, 0x73, 0x67, 0x43, 0x65,
+	0x61, 0x73, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x42,
+	0x6f, 0x72, 0x72, 0x6f, 0x77, 0x12, 0x30, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
+	0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52,
+	0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x12, 0x2c, 0x0a, 0x0a, 0x73, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x0d, 0xe2, 0xde, 0x1f,
+	0x09, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x44, 0x52, 0x09, 0x73, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x49, 0x64, 0x12, 0x23, 0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x0a, 0xe2, 0xde, 0x1f, 0x06, 0x50, 0x6f, 0x6f, 0x6c,
+	0x49, 0x44, 0x52, 0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x3a, 0x33, 0x82, 0xe7, 0xb0, 0x2a,
+	0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x8a, 0xe7, 0xb0, 0x2a, 0x23, 0x6d, 0x69, 0x6c, 0x6b,
+	0x79, 0x77, 0x61, 0x79, 0x2f, 0x4d, 0x73, 0x67, 0x43, 0x65, 0x61, 0x73, 0x65, 0x50, 0x6f, 0x6f,
+	0x6c, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x42, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x22,
+	0x24, 0x0a, 0x22, 0x4d, 0x73, 0x67, 0x43, 0x65, 0x61, 0x73, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x53,
+	0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x42, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xb9, 0x01, 0x0a, 0x0f, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c,
+	0x65, 0x67, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x36, 0x0a, 0x09, 0x64, 0x65, 0x6c,
+	0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4,
+	0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
+	0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f,
+	0x72, 0x12, 0x41, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e,
+	0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x0e, 0xc8, 0xde,
+	0x1f, 0x00, 0xe2, 0xde, 0x1f, 0x06, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x06, 0x61, 0x6d,
+	0x6f, 0x75, 0x6e, 0x74, 0x3a, 0x2b, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67,
+	0x61, 0x74, 0x6f, 0x72, 0x8a, 0xe7, 0xb0, 0x2a, 0x18, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
+	0x79, 0x2f, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f,
+	0x6c, 0x22, 0x19, 0x0a, 0x17, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65,
+	0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x9e, 0x02, 0x0a,
+	0x13, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x4f, 0x70, 0x65, 0x72,
+	0x61, 0x74, 0x6f, 0x72, 0x12, 0x36, 0x0a, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f,
+	0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73,
+	0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e,
+	0x67, 0x52, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x2f, 0x0a, 0x0b,
+	0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x0d, 0x42, 0x0e, 0xe2, 0xde, 0x1f, 0x0a, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49,
+	0x44, 0x52, 0x0a, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x64, 0x12, 0x6d, 0x0a,
+	0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e,
+	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65,
+	0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x3a, 0xc8, 0xde, 0x1f, 0x00, 0xe2, 0xde,
+	0x1f, 0x06, 0x41, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74, 0x68,
+	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43,
+	0x6f, 0x69, 0x6e, 0x73, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x3a, 0x2f, 0x82, 0xe7,
+	0xb0, 0x2a, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x8a, 0xe7, 0xb0, 0x2a,
+	0x1c, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c,
+	0x65, 0x67, 0x61, 0x74, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x22, 0x1d, 0x0a,
+	0x1b, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x4f, 0x70, 0x65, 0x72,
+	0x61, 0x74, 0x6f, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x99, 0x02, 0x0a,
+	0x12, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x53, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x12, 0x36, 0x0a, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67,
+	0x52, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x2c, 0x0a, 0x0a, 0x73,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x42,
+	0x0d, 0xe2, 0xde, 0x1f, 0x09, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x44, 0x52, 0x09,
+	0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x12, 0x6d, 0x0a, 0x06, 0x61, 0x6d, 0x6f,
+	0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d,
+	0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e,
+	0x43, 0x6f, 0x69, 0x6e, 0x42, 0x3a, 0xc8, 0xde, 0x1f, 0x00, 0xe2, 0xde, 0x1f, 0x06, 0x41, 0x6d,
+	0x6f, 0x75, 0x6e, 0x74, 0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63,
+	0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
+	0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73,
+	0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x3a, 0x2e, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x64,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x8a, 0xe7, 0xb0, 0x2a, 0x1b, 0x6d, 0x69, 0x6c,
+	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
+	0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x22, 0x1c, 0x0a, 0x1a, 0x4d, 0x73, 0x67, 0x44,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xd1, 0x01, 0x0a, 0x0f, 0x4d, 0x73, 0x67, 0x55, 0x70,
+	0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x4a, 0x0a, 0x09, 0x61, 0x75,
+	0x74, 0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x2c, 0xf2,
+	0xde, 0x1f, 0x10, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69,
+	0x74, 0x79, 0x22, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64,
+	0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x09, 0x61, 0x75, 0x74,
+	0x68, 0x6f, 0x72, 0x69, 0x74, 0x79, 0x12, 0x3b, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
+	0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x50,
+	0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x70, 0x61, 0x72,
+	0x61, 0x6d, 0x73, 0x3a, 0x35, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72,
+	0x69, 0x74, 0x79, 0x8a, 0xe7, 0xb0, 0x2a, 0x22, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
+	0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x4d, 0x73, 0x67, 0x55, 0x70,
+	0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x22, 0x19, 0x0a, 0x17, 0x4d, 0x73,
+	0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xc0, 0x01, 0x0a, 0x11, 0x4d, 0x73, 0x67, 0x55, 0x6e, 0x64,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x36, 0x0a, 0x09, 0x64,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18,
+	0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65,
+	0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61,
+	0x74, 0x6f, 0x72, 0x12, 0x3c, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73,
+	0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x09,
+	0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e,
+	0x74, 0x3a, 0x35, 0x88, 0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f, 0x00, 0x82, 0xe7, 0xb0, 0x2a, 0x09,
+	0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x8a, 0xe7, 0xb0, 0x2a, 0x1a, 0x6d, 0x69,
+	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x4d, 0x73, 0x67, 0x55, 0x6e, 0x64, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x22, 0xa5, 0x02, 0x0a, 0x15, 0x4d, 0x73, 0x67,
+	0x55, 0x6e, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74,
+	0x6f, 0x72, 0x12, 0x36, 0x0a, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
+	0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52,
+	0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x2f, 0x0a, 0x0b, 0x6f, 0x70,
+	0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x42,
+	0x0e, 0xe2, 0xde, 0x1f, 0x0a, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x44, 0x52,
+	0x0a, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x64, 0x12, 0x68, 0x0a, 0x06, 0x61,
+	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x19, 0x2e, 0x63, 0x6f,
+	0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61,
+	0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x35, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x28,
+	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
+	0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70,
+	0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x61,
+	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x3a, 0x39, 0x88, 0xa0, 0x1f, 0x00, 0xe8, 0xa0, 0x1f, 0x00, 0x82,
+	0xe7, 0xb0, 0x2a, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x8a, 0xe7, 0xb0,
+	0x2a, 0x1e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x4d, 0x73, 0x67, 0x55, 0x6e,
+	0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
+	0x22, 0xa0, 0x02, 0x0a, 0x14, 0x4d, 0x73, 0x67, 0x55, 0x6e, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61,
+	0x74, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x36, 0x0a, 0x09, 0x64, 0x65, 0x6c,
+	0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4,
+	0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
+	0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f,
+	0x72, 0x12, 0x2c, 0x0a, 0x0a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x0d, 0xe2, 0xde, 0x1f, 0x09, 0x53, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x49, 0x44, 0x52, 0x09, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x12,
+	0x68, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32,
+	0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31,
+	0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x35, 0xc8, 0xde, 0x1f, 0x00,
+	0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63,
+	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b,
+	0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0xa8, 0xe7, 0xb0, 0x2a,
+	0x01, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x3a, 0x38, 0x88, 0xa0, 0x1f, 0x00, 0xe8,
+	0xa0, 0x1f, 0x00, 0x82, 0xe7, 0xb0, 0x2a, 0x09, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f,
+	0x72, 0x8a, 0xe7, 0xb0, 0x2a, 0x1d, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x4d,
+	0x73, 0x67, 0x55, 0x6e, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x53, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x22, 0x6b, 0x0a, 0x15, 0x4d, 0x73, 0x67, 0x55, 0x6e, 0x64, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x52, 0x0a, 0x0f,
+	0x63, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x74, 0x69, 0x6d, 0x65, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d,
+	0x70, 0x42, 0x0d, 0xc8, 0xde, 0x1f, 0x00, 0x90, 0xdf, 0x1f, 0x01, 0xa8, 0xe7, 0xb0, 0x2a, 0x01,
+	0x52, 0x0e, 0x63, 0x6f, 0x6d, 0x70, 0x6c, 0x65, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x69, 0x6d, 0x65,
+	0x32, 0xcd, 0x0b, 0x0a, 0x03, 0x4d, 0x73, 0x67, 0x12, 0x63, 0x0a, 0x0b, 0x4a, 0x6f, 0x69, 0x6e,
+	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x25, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
 	0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e,
-	0x4d, 0x73, 0x67, 0x41, 0x6c, 0x6c, 0x6f, 0x77, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
-	0x1a, 0x2f, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74,
-	0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x6c, 0x6c, 0x6f,
-	0x77, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x12, 0x81, 0x01, 0x0a, 0x15, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x41, 0x6c, 0x6c, 0x6f,
-	0x77, 0x65, 0x64, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x2f, 0x2e, 0x6d, 0x69,
+	0x4d, 0x73, 0x67, 0x4a, 0x6f, 0x69, 0x6e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x1a, 0x2d,
+	0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b,
+	0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4a, 0x6f, 0x69, 0x6e, 0x53, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x66, 0x0a,
+	0x0c, 0x4c, 0x65, 0x61, 0x76, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x26, 0x2e,
+	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69,
+	0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4c, 0x65, 0x61, 0x76, 0x65, 0x53, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x1a, 0x2e, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
+	0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73,
+	0x67, 0x4c, 0x65, 0x61, 0x76, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x69, 0x0a, 0x0d, 0x41, 0x6c, 0x6c, 0x6f, 0x77, 0x4f, 0x70,
+	0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x27, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
+	0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d,
+	0x73, 0x67, 0x41, 0x6c, 0x6c, 0x6f, 0x77, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x1a,
+	0x2f, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61,
+	0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x41, 0x6c, 0x6c, 0x6f, 0x77,
+	0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x81, 0x01, 0x0a, 0x15, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x41, 0x6c, 0x6c, 0x6f, 0x77,
+	0x65, 0x64, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x2f, 0x2e, 0x6d, 0x69, 0x6c,
+	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e,
+	0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x41, 0x6c, 0x6c, 0x6f,
+	0x77, 0x65, 0x64, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x1a, 0x37, 0x2e, 0x6d, 0x69,
 	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67,
 	0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x41, 0x6c, 0x6c,
-	0x6f, 0x77, 0x65, 0x64, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x1a, 0x37, 0x2e, 0x6d,
-	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e,
-	0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x52, 0x65, 0x6d, 0x6f, 0x76, 0x65, 0x41, 0x6c,
-	0x6c, 0x6f, 0x77, 0x65, 0x64, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x66, 0x0a, 0x0c, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
-	0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x26, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
-	0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73,
-	0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x1a, 0x2e, 0x2e,
-	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69,
-	0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
-	0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x72, 0x0a,
-	0x10, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f,
-	0x72, 0x12, 0x2a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73,
-	0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c,
-	0x65, 0x67, 0x61, 0x74, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x1a, 0x32, 0x2e,
-	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69,
-	0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
-	0x65, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x12, 0x6f, 0x0a, 0x0f, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x53, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x12, 0x29, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
-	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67,
-	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x1a,
-	0x31, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61,
-	0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67,
-	0x61, 0x74, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x12, 0x66, 0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61,
-	0x6d, 0x73, 0x12, 0x26, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65,
-	0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70,
-	0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x1a, 0x2e, 0x2e, 0x6d, 0x69, 0x6c,
+	0x6f, 0x77, 0x65, 0x64, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x78, 0x0a, 0x12, 0x42, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x50, 0x6f,
+	0x6f, 0x6c, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x12, 0x2c, 0x2e, 0x6d, 0x69, 0x6c,
 	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e,
-	0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61,
-	0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x68, 0x0a, 0x0e, 0x55, 0x6e,
-	0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x28, 0x2e, 0x6d,
-	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e,
-	0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x6e, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61,
-	0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x1a, 0x2c, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
-	0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d,
-	0x73, 0x67, 0x55, 0x6e, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x70, 0x0a, 0x12, 0x55, 0x6e, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61,
-	0x74, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x2c, 0x2e, 0x6d, 0x69, 0x6c,
-	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e,
-	0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x6e, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65,
-	0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x1a, 0x2c, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
+	0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x42, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x50, 0x6f, 0x6f, 0x6c,
+	0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x1a, 0x34, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
 	0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31,
-	0x2e, 0x4d, 0x73, 0x67, 0x55, 0x6e, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6e, 0x0a, 0x11, 0x55, 0x6e, 0x64, 0x65, 0x6c, 0x65,
-	0x67, 0x61, 0x74, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x2b, 0x2e, 0x6d, 0x69,
+	0x2e, 0x4d, 0x73, 0x67, 0x42, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x50, 0x6f, 0x6f, 0x6c, 0x53, 0x65,
+	0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x87,
+	0x01, 0x0a, 0x17, 0x43, 0x65, 0x61, 0x73, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x53, 0x65, 0x63, 0x75,
+	0x72, 0x69, 0x74, 0x79, 0x42, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x12, 0x31, 0x2e, 0x6d, 0x69, 0x6c,
+	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e,
+	0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x65, 0x61, 0x73, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x53,
+	0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x42, 0x6f, 0x72, 0x72, 0x6f, 0x77, 0x1a, 0x39, 0x2e,
+	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69,
+	0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x43, 0x65, 0x61, 0x73, 0x65, 0x50, 0x6f,
+	0x6f, 0x6c, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x74, 0x79, 0x42, 0x6f, 0x72, 0x72, 0x6f, 0x77,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x66, 0x0a, 0x0c, 0x44, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x26, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
+	0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31,
+	0x2e, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c,
+	0x1a, 0x2e, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74,
+	0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x72, 0x0a, 0x10, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x4f, 0x70, 0x65, 0x72,
+	0x61, 0x74, 0x6f, 0x72, 0x12, 0x2a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
+	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67,
+	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
+	0x1a, 0x32, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74,
+	0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6f, 0x0a, 0x0f, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65,
+	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x29, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
+	0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e,
+	0x4d, 0x73, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x1a, 0x31, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65,
+	0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x44, 0x65,
+	0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x66, 0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50,
+	0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x26, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
+	0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73,
+	0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x1a, 0x2e, 0x2e,
+	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69,
+	0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50,
+	0x61, 0x72, 0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x68, 0x0a,
+	0x0e, 0x55, 0x6e, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12,
+	0x28, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61,
+	0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x6e, 0x64, 0x65, 0x6c,
+	0x65, 0x67, 0x61, 0x74, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x1a, 0x2c, 0x2e, 0x6d, 0x69, 0x6c, 0x6b,
+	0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76,
+	0x31, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x6e, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x52,
+	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x70, 0x0a, 0x12, 0x55, 0x6e, 0x64, 0x65, 0x6c,
+	0x65, 0x67, 0x61, 0x74, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x12, 0x2c, 0x2e,
+	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69,
+	0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x6e, 0x64, 0x65, 0x6c, 0x65, 0x67,
+	0x61, 0x74, 0x65, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x1a, 0x2c, 0x2e, 0x6d, 0x69,
 	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67,
 	0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x6e, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
-	0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x1a, 0x2c, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
-	0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31,
-	0x2e, 0x4d, 0x73, 0x67, 0x55, 0x6e, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x52, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0, 0x2a, 0x01, 0x42, 0xe9, 0x01,
-	0x0a, 0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72,
-	0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x42, 0x0d, 0x4d, 0x65, 0x73,
-	0x73, 0x61, 0x67, 0x65, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x47, 0x67, 0x69,
-	0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
-	0x79, 0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f,
-	0x61, 0x70, 0x69, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73,
-	0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x3b, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b,
-	0x69, 0x6e, 0x67, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x4d, 0x52, 0x58, 0xaa, 0x02, 0x15, 0x4d, 0x69,
-	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67,
-	0x2e, 0x56, 0x31, 0xca, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52,
-	0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x21, 0x4d, 0x69,
-	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67,
-	0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea,
-	0x02, 0x17, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x3a, 0x3a, 0x52, 0x65, 0x73, 0x74,
-	0x61, 0x6b, 0x69, 0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x33,
+	0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x6e, 0x0a, 0x11, 0x55, 0x6e, 0x64,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x2b,
+	0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b,
+	0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x6e, 0x64, 0x65, 0x6c, 0x65,
+	0x67, 0x61, 0x74, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x1a, 0x2c, 0x2e, 0x6d, 0x69,
+	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67,
+	0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x6e, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
+	0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0, 0x2a, 0x01,
+	0x42, 0xe9, 0x01, 0x0a, 0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
+	0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x42, 0x0d,
+	0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a,
+	0x47, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x69, 0x6c, 0x6b,
+	0x79, 0x77, 0x61, 0x79, 0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
+	0x61, 0x79, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f,
+	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x3b, 0x72, 0x65, 0x73,
+	0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x4d, 0x52, 0x58, 0xaa, 0x02,
+	0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b,
+	0x69, 0x6e, 0x67, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
+	0x79, 0x5c, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0xe2, 0x02,
+	0x21, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b,
+	0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61,
+	0x74, 0x61, 0xea, 0x02, 0x17, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x3a, 0x3a, 0x52,
+	0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -10456,65 +12412,73 @@ func file_milkyway_restaking_v1_messages_proto_rawDescGZIP() []byte {
 	return file_milkyway_restaking_v1_messages_proto_rawDescData
 }
 
-var file_milkyway_restaking_v1_messages_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
+var file_milkyway_restaking_v1_messages_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
 var file_milkyway_restaking_v1_messages_proto_goTypes = []interface{}{
-	(*MsgJoinService)(nil),                   // 0: milkyway.restaking.v1.MsgJoinService
-	(*MsgJoinServiceResponse)(nil),           // 1: milkyway.restaking.v1.MsgJoinServiceResponse
-	(*MsgLeaveService)(nil),                  // 2: milkyway.restaking.v1.MsgLeaveService
-	(*MsgLeaveServiceResponse)(nil),          // 3: milkyway.restaking.v1.MsgLeaveServiceResponse
-	(*MsgAllowOperator)(nil),                 // 4: milkyway.restaking.v1.MsgAllowOperator
-	(*MsgAllowOperatorResponse)(nil),         // 5: milkyway.restaking.v1.MsgAllowOperatorResponse
-	(*MsgRemoveAllowedOperator)(nil),         // 6: milkyway.restaking.v1.MsgRemoveAllowedOperator
-	(*MsgRemoveAllowedOperatorResponse)(nil), // 7: milkyway.restaking.v1.MsgRemoveAllowedOperatorResponse
-	(*MsgDelegatePool)(nil),                  // 8: milkyway.restaking.v1.MsgDelegatePool
-	(*MsgDelegatePoolResponse)(nil),          // 9: milkyway.restaking.v1.MsgDelegatePoolResponse
-	(*MsgDelegateOperator)(nil),              // 10: milkyway.restaking.v1.MsgDelegateOperator
-	(*MsgDelegateOperatorResponse)(nil),      // 11: milkyway.restaking.v1.MsgDelegateOperatorResponse
-	(*MsgDelegateService)(nil),               // 12: milkyway.restaking.v1.MsgDelegateService
-	(*MsgDelegateServiceResponse)(nil),       // 13: milkyway.restaking.v1.MsgDelegateServiceResponse
-	(*MsgUpdateParams)(nil),                  // 14: milkyway.restaking.v1.MsgUpdateParams
-	(*MsgUpdateParamsResponse)(nil),          // 15: milkyway.restaking.v1.MsgUpdateParamsResponse
-	(*MsgUndelegatePool)(nil),                // 16: milkyway.restaking.v1.MsgUndelegatePool
-	(*MsgUndelegateOperator)(nil),            // 17: milkyway.restaking.v1.MsgUndelegateOperator
-	(*MsgUndelegateService)(nil),             // 18: milkyway.restaking.v1.MsgUndelegateService
-	(*MsgUndelegateResponse)(nil),            // 19: milkyway.restaking.v1.MsgUndelegateResponse
-	(*v1beta1.Coin)(nil),                     // 20: cosmos.base.v1beta1.Coin
-	(*Params)(nil),                           // 21: milkyway.restaking.v1.Params
-	(*timestamppb.Timestamp)(nil),            // 22: google.protobuf.Timestamp
+	(*MsgJoinService)(nil),                     // 0: milkyway.restaking.v1.MsgJoinService
+	(*MsgJoinServiceResponse)(nil),             // 1: milkyway.restaking.v1.MsgJoinServiceResponse
+	(*MsgLeaveService)(nil),                    // 2: milkyway.restaking.v1.MsgLeaveService
+	(*MsgLeaveServiceResponse)(nil),            // 3: milkyway.restaking.v1.MsgLeaveServiceResponse
+	(*MsgAllowOperator)(nil),                   // 4: milkyway.restaking.v1.MsgAllowOperator
+	(*MsgAllowOperatorResponse)(nil),           // 5: milkyway.restaking.v1.MsgAllowOperatorResponse
+	(*MsgRemoveAllowedOperator)(nil),           // 6: milkyway.restaking.v1.MsgRemoveAllowedOperator
+	(*MsgRemoveAllowedOperatorResponse)(nil),   // 7: milkyway.restaking.v1.MsgRemoveAllowedOperatorResponse
+	(*MsgBorrowPoolSecurity)(nil),              // 8: milkyway.restaking.v1.MsgBorrowPoolSecurity
+	(*MsgBorrowPoolSecurityResponse)(nil),      // 9: milkyway.restaking.v1.MsgBorrowPoolSecurityResponse
+	(*MsgCeasePoolSecurityBorrow)(nil),         // 10: milkyway.restaking.v1.MsgCeasePoolSecurityBorrow
+	(*MsgCeasePoolSecurityBorrowResponse)(nil), // 11: milkyway.restaking.v1.MsgCeasePoolSecurityBorrowResponse
+	(*MsgDelegatePool)(nil),                    // 12: milkyway.restaking.v1.MsgDelegatePool
+	(*MsgDelegatePoolResponse)(nil),            // 13: milkyway.restaking.v1.MsgDelegatePoolResponse
+	(*MsgDelegateOperator)(nil),                // 14: milkyway.restaking.v1.MsgDelegateOperator
+	(*MsgDelegateOperatorResponse)(nil),        // 15: milkyway.restaking.v1.MsgDelegateOperatorResponse
+	(*MsgDelegateService)(nil),                 // 16: milkyway.restaking.v1.MsgDelegateService
+	(*MsgDelegateServiceResponse)(nil),         // 17: milkyway.restaking.v1.MsgDelegateServiceResponse
+	(*MsgUpdateParams)(nil),                    // 18: milkyway.restaking.v1.MsgUpdateParams
+	(*MsgUpdateParamsResponse)(nil),            // 19: milkyway.restaking.v1.MsgUpdateParamsResponse
+	(*MsgUndelegatePool)(nil),                  // 20: milkyway.restaking.v1.MsgUndelegatePool
+	(*MsgUndelegateOperator)(nil),              // 21: milkyway.restaking.v1.MsgUndelegateOperator
+	(*MsgUndelegateService)(nil),               // 22: milkyway.restaking.v1.MsgUndelegateService
+	(*MsgUndelegateResponse)(nil),              // 23: milkyway.restaking.v1.MsgUndelegateResponse
+	(*v1beta1.Coin)(nil),                       // 24: cosmos.base.v1beta1.Coin
+	(*Params)(nil),                             // 25: milkyway.restaking.v1.Params
+	(*timestamppb.Timestamp)(nil),              // 26: google.protobuf.Timestamp
 }
 var file_milkyway_restaking_v1_messages_proto_depIdxs = []int32{
-	20, // 0: milkyway.restaking.v1.MsgDelegatePool.amount:type_name -> cosmos.base.v1beta1.Coin
-	20, // 1: milkyway.restaking.v1.MsgDelegateOperator.amount:type_name -> cosmos.base.v1beta1.Coin
-	20, // 2: milkyway.restaking.v1.MsgDelegateService.amount:type_name -> cosmos.base.v1beta1.Coin
-	21, // 3: milkyway.restaking.v1.MsgUpdateParams.params:type_name -> milkyway.restaking.v1.Params
-	20, // 4: milkyway.restaking.v1.MsgUndelegatePool.amount:type_name -> cosmos.base.v1beta1.Coin
-	20, // 5: milkyway.restaking.v1.MsgUndelegateOperator.amount:type_name -> cosmos.base.v1beta1.Coin
-	20, // 6: milkyway.restaking.v1.MsgUndelegateService.amount:type_name -> cosmos.base.v1beta1.Coin
-	22, // 7: milkyway.restaking.v1.MsgUndelegateResponse.completion_time:type_name -> google.protobuf.Timestamp
+	24, // 0: milkyway.restaking.v1.MsgDelegatePool.amount:type_name -> cosmos.base.v1beta1.Coin
+	24, // 1: milkyway.restaking.v1.MsgDelegateOperator.amount:type_name -> cosmos.base.v1beta1.Coin
+	24, // 2: milkyway.restaking.v1.MsgDelegateService.amount:type_name -> cosmos.base.v1beta1.Coin
+	25, // 3: milkyway.restaking.v1.MsgUpdateParams.params:type_name -> milkyway.restaking.v1.Params
+	24, // 4: milkyway.restaking.v1.MsgUndelegatePool.amount:type_name -> cosmos.base.v1beta1.Coin
+	24, // 5: milkyway.restaking.v1.MsgUndelegateOperator.amount:type_name -> cosmos.base.v1beta1.Coin
+	24, // 6: milkyway.restaking.v1.MsgUndelegateService.amount:type_name -> cosmos.base.v1beta1.Coin
+	26, // 7: milkyway.restaking.v1.MsgUndelegateResponse.completion_time:type_name -> google.protobuf.Timestamp
 	0,  // 8: milkyway.restaking.v1.Msg.JoinService:input_type -> milkyway.restaking.v1.MsgJoinService
 	2,  // 9: milkyway.restaking.v1.Msg.LeaveService:input_type -> milkyway.restaking.v1.MsgLeaveService
 	4,  // 10: milkyway.restaking.v1.Msg.AllowOperator:input_type -> milkyway.restaking.v1.MsgAllowOperator
 	6,  // 11: milkyway.restaking.v1.Msg.RemoveAllowedOperator:input_type -> milkyway.restaking.v1.MsgRemoveAllowedOperator
-	8,  // 12: milkyway.restaking.v1.Msg.DelegatePool:input_type -> milkyway.restaking.v1.MsgDelegatePool
-	10, // 13: milkyway.restaking.v1.Msg.DelegateOperator:input_type -> milkyway.restaking.v1.MsgDelegateOperator
-	12, // 14: milkyway.restaking.v1.Msg.DelegateService:input_type -> milkyway.restaking.v1.MsgDelegateService
-	14, // 15: milkyway.restaking.v1.Msg.UpdateParams:input_type -> milkyway.restaking.v1.MsgUpdateParams
-	16, // 16: milkyway.restaking.v1.Msg.UndelegatePool:input_type -> milkyway.restaking.v1.MsgUndelegatePool
-	17, // 17: milkyway.restaking.v1.Msg.UndelegateOperator:input_type -> milkyway.restaking.v1.MsgUndelegateOperator
-	18, // 18: milkyway.restaking.v1.Msg.UndelegateService:input_type -> milkyway.restaking.v1.MsgUndelegateService
-	1,  // 19: milkyway.restaking.v1.Msg.JoinService:output_type -> milkyway.restaking.v1.MsgJoinServiceResponse
-	3,  // 20: milkyway.restaking.v1.Msg.LeaveService:output_type -> milkyway.restaking.v1.MsgLeaveServiceResponse
-	5,  // 21: milkyway.restaking.v1.Msg.AllowOperator:output_type -> milkyway.restaking.v1.MsgAllowOperatorResponse
-	7,  // 22: milkyway.restaking.v1.Msg.RemoveAllowedOperator:output_type -> milkyway.restaking.v1.MsgRemoveAllowedOperatorResponse
-	9,  // 23: milkyway.restaking.v1.Msg.DelegatePool:output_type -> milkyway.restaking.v1.MsgDelegatePoolResponse
-	11, // 24: milkyway.restaking.v1.Msg.DelegateOperator:output_type -> milkyway.restaking.v1.MsgDelegateOperatorResponse
-	13, // 25: milkyway.restaking.v1.Msg.DelegateService:output_type -> milkyway.restaking.v1.MsgDelegateServiceResponse
-	15, // 26: milkyway.restaking.v1.Msg.UpdateParams:output_type -> milkyway.restaking.v1.MsgUpdateParamsResponse
-	19, // 27: milkyway.restaking.v1.Msg.UndelegatePool:output_type -> milkyway.restaking.v1.MsgUndelegateResponse
-	19, // 28: milkyway.restaking.v1.Msg.UndelegateOperator:output_type -> milkyway.restaking.v1.MsgUndelegateResponse
-	19, // 29: milkyway.restaking.v1.Msg.UndelegateService:output_type -> milkyway.restaking.v1.MsgUndelegateResponse
-	19, // [19:30] is the sub-list for method output_type
-	8,  // [8:19] is the sub-list for method input_type
+	8,  // 12: milkyway.restaking.v1.Msg.BorrowPoolSecurity:input_type -> milkyway.restaking.v1.MsgBorrowPoolSecurity
+	10, // 13: milkyway.restaking.v1.Msg.CeasePoolSecurityBorrow:input_type -> milkyway.restaking.v1.MsgCeasePoolSecurityBorrow
+	12, // 14: milkyway.restaking.v1.Msg.DelegatePool:input_type -> milkyway.restaking.v1.MsgDelegatePool
+	14, // 15: milkyway.restaking.v1.Msg.DelegateOperator:input_type -> milkyway.restaking.v1.MsgDelegateOperator
+	16, // 16: milkyway.restaking.v1.Msg.DelegateService:input_type -> milkyway.restaking.v1.MsgDelegateService
+	18, // 17: milkyway.restaking.v1.Msg.UpdateParams:input_type -> milkyway.restaking.v1.MsgUpdateParams
+	20, // 18: milkyway.restaking.v1.Msg.UndelegatePool:input_type -> milkyway.restaking.v1.MsgUndelegatePool
+	21, // 19: milkyway.restaking.v1.Msg.UndelegateOperator:input_type -> milkyway.restaking.v1.MsgUndelegateOperator
+	22, // 20: milkyway.restaking.v1.Msg.UndelegateService:input_type -> milkyway.restaking.v1.MsgUndelegateService
+	1,  // 21: milkyway.restaking.v1.Msg.JoinService:output_type -> milkyway.restaking.v1.MsgJoinServiceResponse
+	3,  // 22: milkyway.restaking.v1.Msg.LeaveService:output_type -> milkyway.restaking.v1.MsgLeaveServiceResponse
+	5,  // 23: milkyway.restaking.v1.Msg.AllowOperator:output_type -> milkyway.restaking.v1.MsgAllowOperatorResponse
+	7,  // 24: milkyway.restaking.v1.Msg.RemoveAllowedOperator:output_type -> milkyway.restaking.v1.MsgRemoveAllowedOperatorResponse
+	9,  // 25: milkyway.restaking.v1.Msg.BorrowPoolSecurity:output_type -> milkyway.restaking.v1.MsgBorrowPoolSecurityResponse
+	11, // 26: milkyway.restaking.v1.Msg.CeasePoolSecurityBorrow:output_type -> milkyway.restaking.v1.MsgCeasePoolSecurityBorrowResponse
+	13, // 27: milkyway.restaking.v1.Msg.DelegatePool:output_type -> milkyway.restaking.v1.MsgDelegatePoolResponse
+	15, // 28: milkyway.restaking.v1.Msg.DelegateOperator:output_type -> milkyway.restaking.v1.MsgDelegateOperatorResponse
+	17, // 29: milkyway.restaking.v1.Msg.DelegateService:output_type -> milkyway.restaking.v1.MsgDelegateServiceResponse
+	19, // 30: milkyway.restaking.v1.Msg.UpdateParams:output_type -> milkyway.restaking.v1.MsgUpdateParamsResponse
+	23, // 31: milkyway.restaking.v1.Msg.UndelegatePool:output_type -> milkyway.restaking.v1.MsgUndelegateResponse
+	23, // 32: milkyway.restaking.v1.Msg.UndelegateOperator:output_type -> milkyway.restaking.v1.MsgUndelegateResponse
+	23, // 33: milkyway.restaking.v1.Msg.UndelegateService:output_type -> milkyway.restaking.v1.MsgUndelegateResponse
+	21, // [21:34] is the sub-list for method output_type
+	8,  // [8:21] is the sub-list for method input_type
 	8,  // [8:8] is the sub-list for extension type_name
 	8,  // [8:8] is the sub-list for extension extendee
 	0,  // [0:8] is the sub-list for field type_name
@@ -10625,7 +12589,7 @@ func file_milkyway_restaking_v1_messages_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_messages_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgDelegatePool); i {
+			switch v := v.(*MsgBorrowPoolSecurity); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -10637,7 +12601,7 @@ func file_milkyway_restaking_v1_messages_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_messages_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgDelegatePoolResponse); i {
+			switch v := v.(*MsgBorrowPoolSecurityResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -10649,7 +12613,7 @@ func file_milkyway_restaking_v1_messages_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_messages_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgDelegateOperator); i {
+			switch v := v.(*MsgCeasePoolSecurityBorrow); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -10661,7 +12625,7 @@ func file_milkyway_restaking_v1_messages_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_messages_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgDelegateOperatorResponse); i {
+			switch v := v.(*MsgCeasePoolSecurityBorrowResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -10673,7 +12637,7 @@ func file_milkyway_restaking_v1_messages_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_messages_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgDelegateService); i {
+			switch v := v.(*MsgDelegatePool); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -10685,7 +12649,7 @@ func file_milkyway_restaking_v1_messages_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_messages_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgDelegateServiceResponse); i {
+			switch v := v.(*MsgDelegatePoolResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -10697,7 +12661,7 @@ func file_milkyway_restaking_v1_messages_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_messages_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgUpdateParams); i {
+			switch v := v.(*MsgDelegateOperator); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -10709,7 +12673,7 @@ func file_milkyway_restaking_v1_messages_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_messages_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgUpdateParamsResponse); i {
+			switch v := v.(*MsgDelegateOperatorResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -10721,7 +12685,7 @@ func file_milkyway_restaking_v1_messages_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_messages_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgUndelegatePool); i {
+			switch v := v.(*MsgDelegateService); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -10733,7 +12697,7 @@ func file_milkyway_restaking_v1_messages_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_messages_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgUndelegateOperator); i {
+			switch v := v.(*MsgDelegateServiceResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -10745,7 +12709,7 @@ func file_milkyway_restaking_v1_messages_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_messages_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgUndelegateService); i {
+			switch v := v.(*MsgUpdateParams); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -10757,6 +12721,54 @@ func file_milkyway_restaking_v1_messages_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_messages_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgUpdateParamsResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_restaking_v1_messages_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgUndelegatePool); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_restaking_v1_messages_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgUndelegateOperator); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_restaking_v1_messages_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*MsgUndelegateService); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_restaking_v1_messages_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*MsgUndelegateResponse); i {
 			case 0:
 				return &v.state
@@ -10775,7 +12787,7 @@ func file_milkyway_restaking_v1_messages_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_milkyway_restaking_v1_messages_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   20,
+			NumMessages:   24,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
