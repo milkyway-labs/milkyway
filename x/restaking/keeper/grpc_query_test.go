@@ -107,10 +107,9 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceWhitelistedOperators() {
 			shouldErr: true,
 		},
 		{
-			name:         "not found service whitelist returns empty list",
-			request:      types.NewQueryServiceWhitelistedOperatorsRequest(1, nil),
-			shouldErr:    false,
-			expOperators: nil,
+			name:      "not found service whitelist returns empty list",
+			request:   types.NewQueryServiceWhitelistedOperatorsRequest(1, nil),
+			shouldErr: false,
 		},
 		{
 			name: "found service whitelist is returned properly",
@@ -182,7 +181,6 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceWhitelistedPools() {
 			name:      "not found service whitelist returns empty list",
 			request:   types.NewQueryServiceWhitelistedPoolsRequest(1, nil),
 			shouldErr: false,
-			expPools:  nil,
 		},
 		{
 			name: "found service whitelist is returned properly",

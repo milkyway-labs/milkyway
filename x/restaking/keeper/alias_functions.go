@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"fmt"
+	"sort"
 	"time"
 
 	"cosmossdk.io/errors"
@@ -75,11 +76,20 @@ func (k *Keeper) GetAllServicesWhitelistedOperators(ctx sdk.Context) ([]types.Se
 		items[serviceID] = whitelistedPools
 	}
 
+	if len(items) == 0 {
+		return nil, nil
+	}
+
 	// Convert back to list
 	itemsList := make([]types.ServiceWhitelistedOperators, 0, len(items))
 	for _, v := range items {
 		itemsList = append(itemsList, v)
 	}
+	// Ensure that the items always maintain the same order,
+	// as iterating over the map may result in different item orders.
+	sort.Slice(itemsList, func(i, j int) bool {
+		return itemsList[i].ServiceID < itemsList[j].ServiceID
+	})
 	return itemsList, nil
 }
 
@@ -108,11 +118,21 @@ func (k *Keeper) GetAllServicesWhitelistedPools(ctx sdk.Context) ([]types.Servic
 		items[serviceID] = whitelistedPools
 	}
 
+	if len(items) == 0 {
+		return nil, nil
+	}
+
 	// Convert back to list
 	itemsList := make([]types.ServiceWhitelistedPools, 0, len(items))
 	for _, v := range items {
 		itemsList = append(itemsList, v)
 	}
+
+	// Ensure that the items always maintain the same order,
+	// as iterating over the map may result in different item orders.
+	sort.Slice(itemsList, func(i, j int) bool {
+		return itemsList[i].ServiceID < itemsList[j].ServiceID
+	})
 	return itemsList, nil
 }
 
