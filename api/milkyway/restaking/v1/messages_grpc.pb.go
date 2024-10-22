@@ -19,15 +19,17 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Msg_JoinService_FullMethodName        = "/milkyway.restaking.v1.Msg/JoinService"
-	Msg_LeaveService_FullMethodName       = "/milkyway.restaking.v1.Msg/LeaveService"
-	Msg_DelegatePool_FullMethodName       = "/milkyway.restaking.v1.Msg/DelegatePool"
-	Msg_DelegateOperator_FullMethodName   = "/milkyway.restaking.v1.Msg/DelegateOperator"
-	Msg_DelegateService_FullMethodName    = "/milkyway.restaking.v1.Msg/DelegateService"
-	Msg_UpdateParams_FullMethodName       = "/milkyway.restaking.v1.Msg/UpdateParams"
-	Msg_UndelegatePool_FullMethodName     = "/milkyway.restaking.v1.Msg/UndelegatePool"
-	Msg_UndelegateOperator_FullMethodName = "/milkyway.restaking.v1.Msg/UndelegateOperator"
-	Msg_UndelegateService_FullMethodName  = "/milkyway.restaking.v1.Msg/UndelegateService"
+	Msg_JoinService_FullMethodName           = "/milkyway.restaking.v1.Msg/JoinService"
+	Msg_LeaveService_FullMethodName          = "/milkyway.restaking.v1.Msg/LeaveService"
+	Msg_AllowOperator_FullMethodName         = "/milkyway.restaking.v1.Msg/AllowOperator"
+	Msg_RemoveAllowedOperator_FullMethodName = "/milkyway.restaking.v1.Msg/RemoveAllowedOperator"
+	Msg_DelegatePool_FullMethodName          = "/milkyway.restaking.v1.Msg/DelegatePool"
+	Msg_DelegateOperator_FullMethodName      = "/milkyway.restaking.v1.Msg/DelegateOperator"
+	Msg_DelegateService_FullMethodName       = "/milkyway.restaking.v1.Msg/DelegateService"
+	Msg_UpdateParams_FullMethodName          = "/milkyway.restaking.v1.Msg/UpdateParams"
+	Msg_UndelegatePool_FullMethodName        = "/milkyway.restaking.v1.Msg/UndelegatePool"
+	Msg_UndelegateOperator_FullMethodName    = "/milkyway.restaking.v1.Msg/UndelegateOperator"
+	Msg_UndelegateService_FullMethodName     = "/milkyway.restaking.v1.Msg/UndelegateService"
 )
 
 // MsgClient is the client API for Msg service.
@@ -42,6 +44,13 @@ type MsgClient interface {
 	// LeaveService defines the operation that allows the operator admin
 	// to stop securing an AVS
 	LeaveService(ctx context.Context, in *MsgLeaveService, opts ...grpc.CallOption) (*MsgLeaveServiceResponse, error)
+	// AllowOperator defines the operation that allows the service admin
+	// to add an operator to the list of allowed operator to secure the service
+	AllowOperator(ctx context.Context, in *MsgAllowOperator, opts ...grpc.CallOption) (*MsgAllowOperatorResponse, error)
+	// RemoveAllowedOperator defines the operation that allows the service admin
+	// to remove a previously added operator from the list of allowed operators
+	// to secure the service
+	RemoveAllowedOperator(ctx context.Context, in *MsgRemoveAllowedOperator, opts ...grpc.CallOption) (*MsgRemoveAllowedOperatorResponse, error)
 	// DelegatePool defines the operation that allows users to delegate any amount
 	// of an asset to a pool that can then be used to provide services with
 	// cryptoeconomic security.
@@ -89,6 +98,26 @@ func (c *msgClient) LeaveService(ctx context.Context, in *MsgLeaveService, opts 
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(MsgLeaveServiceResponse)
 	err := c.cc.Invoke(ctx, Msg_LeaveService_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) AllowOperator(ctx context.Context, in *MsgAllowOperator, opts ...grpc.CallOption) (*MsgAllowOperatorResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgAllowOperatorResponse)
+	err := c.cc.Invoke(ctx, Msg_AllowOperator_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) RemoveAllowedOperator(ctx context.Context, in *MsgRemoveAllowedOperator, opts ...grpc.CallOption) (*MsgRemoveAllowedOperatorResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgRemoveAllowedOperatorResponse)
+	err := c.cc.Invoke(ctx, Msg_RemoveAllowedOperator_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -177,6 +206,13 @@ type MsgServer interface {
 	// LeaveService defines the operation that allows the operator admin
 	// to stop securing an AVS
 	LeaveService(context.Context, *MsgLeaveService) (*MsgLeaveServiceResponse, error)
+	// AllowOperator defines the operation that allows the service admin
+	// to add an operator to the list of allowed operator to secure the service
+	AllowOperator(context.Context, *MsgAllowOperator) (*MsgAllowOperatorResponse, error)
+	// RemoveAllowedOperator defines the operation that allows the service admin
+	// to remove a previously added operator from the list of allowed operators
+	// to secure the service
+	RemoveAllowedOperator(context.Context, *MsgRemoveAllowedOperator) (*MsgRemoveAllowedOperatorResponse, error)
 	// DelegatePool defines the operation that allows users to delegate any amount
 	// of an asset to a pool that can then be used to provide services with
 	// cryptoeconomic security.
@@ -215,6 +251,12 @@ func (UnimplementedMsgServer) JoinService(context.Context, *MsgJoinService) (*Ms
 }
 func (UnimplementedMsgServer) LeaveService(context.Context, *MsgLeaveService) (*MsgLeaveServiceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LeaveService not implemented")
+}
+func (UnimplementedMsgServer) AllowOperator(context.Context, *MsgAllowOperator) (*MsgAllowOperatorResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AllowOperator not implemented")
+}
+func (UnimplementedMsgServer) RemoveAllowedOperator(context.Context, *MsgRemoveAllowedOperator) (*MsgRemoveAllowedOperatorResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveAllowedOperator not implemented")
 }
 func (UnimplementedMsgServer) DelegatePool(context.Context, *MsgDelegatePool) (*MsgDelegatePoolResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelegatePool not implemented")
@@ -290,6 +332,42 @@ func _Msg_LeaveService_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).LeaveService(ctx, req.(*MsgLeaveService))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_AllowOperator_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgAllowOperator)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).AllowOperator(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_AllowOperator_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).AllowOperator(ctx, req.(*MsgAllowOperator))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_RemoveAllowedOperator_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRemoveAllowedOperator)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).RemoveAllowedOperator(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_RemoveAllowedOperator_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).RemoveAllowedOperator(ctx, req.(*MsgRemoveAllowedOperator))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -434,6 +512,14 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "LeaveService",
 			Handler:    _Msg_LeaveService_Handler,
+		},
+		{
+			MethodName: "AllowOperator",
+			Handler:    _Msg_AllowOperator_Handler,
+		},
+		{
+			MethodName: "RemoveAllowedOperator",
+			Handler:    _Msg_RemoveAllowedOperator_Handler,
 		},
 		{
 			MethodName: "DelegatePool",

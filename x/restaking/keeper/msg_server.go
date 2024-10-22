@@ -95,6 +95,76 @@ func (k msgServer) LeaveService(goCtx context.Context, msg *types.MsgLeaveServic
 	return &types.MsgLeaveServiceResponse{}, nil
 }
 
+// AllowOperator defines the rpc method for Msg/AllowOperator
+func (k msgServer) AllowOperator(goCtx context.Context, msg *types.MsgAllowOperator) (*types.MsgAllowOperatorResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Ensure that the service exists
+	service, found := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	if !found {
+		return nil, servicestypes.ErrServiceNotFound
+	}
+
+	// Ensure that the operator exists
+	_, found = k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
+	if !found {
+		return nil, operatorstypes.ErrOperatorNotFound
+	}
+
+	// Ensure the service admin is performing this action
+	if service.Admin != msg.Sender {
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the service admin can allow an operator")
+	}
+
+	// Add the operator to the service's operators whitelist
+	err := k.AddOperatorToServiceAllowList(ctx, msg.ServiceID, msg.OperatorID)
+	if err != nil {
+		return nil, err
+	}
+
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeAllowOperator,
+			sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, fmt.Sprint(msg.OperatorID)),
+			sdk.NewAttribute(servicestypes.AttributeKeyServiceID, fmt.Sprint(msg.ServiceID)),
+		),
+	})
+
+	return &types.MsgAllowOperatorResponse{}, nil
+}
+
+// RemoveAllowedOperator defines the rpc method for Msg/RemoveAllowedOperator
+func (k msgServer) RemoveAllowedOperator(goCtx context.Context, msg *types.MsgRemoveAllowedOperator) (*types.MsgRemoveAllowedOperatorResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Ensure that the service exists
+	service, found := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	if !found {
+		return nil, servicestypes.ErrServiceNotFound
+	}
+
+	// Ensure the service admin is performing this action
+	if service.Admin != msg.Sender {
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the service admin can allow an operator")
+	}
+
+	// Remove the operator from the service's operators whitelist
+	err := k.ServiceRemoveOperatorFromWhitelist(ctx, msg.ServiceID, msg.OperatorID)
+	if err != nil {
+		return nil, err
+	}
+
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeRemoveAllowedOperator,
+			sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, fmt.Sprint(msg.OperatorID)),
+			sdk.NewAttribute(servicestypes.AttributeKeyServiceID, fmt.Sprint(msg.ServiceID)),
+		),
+	})
+
+	return &types.MsgRemoveAllowedOperatorResponse{}, nil
+}
+
 // DelegatePool defines the rpc method for Msg/DelegatePool
 func (k msgServer) DelegatePool(goCtx context.Context, msg *types.MsgDelegatePool) (*types.MsgDelegatePoolResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)

@@ -29,6 +29,7 @@ func GetTxCmd() *cobra.Command {
 		GetDelegateTxCmd(),
 		GetUnbondTxCmd(),
 		GetOperatorTxCmd(),
+		GetServiceTxCmd(),
 	)
 
 	return txCmd
@@ -383,6 +384,96 @@ func GetLeaveServiceCmd() *cobra.Command {
 
 			// Create and validate the message
 			msg := types.NewMsgLeaveService(operatorID, serviceID, clientCtx.FromAddress.String())
+			if err = msg.ValidateBasic(); err != nil {
+				return fmt.Errorf("message validation failed: %w", err)
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+func GetServiceTxCmd() *cobra.Command {
+	txCmd := &cobra.Command{
+		Use:   "service",
+		Short: "Restaking service subcommands",
+	}
+
+	txCmd.AddCommand(
+		GetAllowOperatorTxCmd(),
+		GetRemoveAllowedOperatorTxCmd(),
+	)
+
+	return txCmd
+}
+
+func GetAllowOperatorTxCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "allow-operator [service-id] [operator-id]",
+		Args:    cobra.ExactArgs(2),
+		Short:   "Adds a operator to the list of operators allowed to secure the service",
+		Example: fmt.Sprintf("%s tx %s service allow-operator 1 1 --from alice", version.AppName, types.ModuleName),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			serviceID, err := servicestypes.ParseServiceID(args[0])
+			if err != nil {
+				return fmt.Errorf("parse service id: %w", err)
+			}
+
+			operatorID, err := operatorstypes.ParseOperatorID(args[1])
+			if err != nil {
+				return fmt.Errorf("parse operator id: %w", err)
+			}
+
+			// Create and validate the message
+			msg := types.NewMsgAllowOperator(serviceID, operatorID, clientCtx.FromAddress.String())
+			if err = msg.ValidateBasic(); err != nil {
+				return fmt.Errorf("message validation failed: %w", err)
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func GetRemoveAllowedOperatorTxCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "remove-allowed-operator [service-id] [operator-id]",
+		Args:    cobra.ExactArgs(2),
+		Short:   "Removes a operator from the list of operators allowed to secure the service",
+		Example: fmt.Sprintf("%s tx %s service remove-allowed-operator 1 1 --from alice", version.AppName, types.ModuleName),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			serviceID, err := servicestypes.ParseServiceID(args[0])
+			if err != nil {
+				return fmt.Errorf("parse service id: %w", err)
+			}
+
+			operatorID, err := operatorstypes.ParseOperatorID(args[1])
+			if err != nil {
+				return fmt.Errorf("parse operator id: %w", err)
+			}
+
+			// Create and validate the message
+			msg := types.NewMsgRemoveAllowedOperator(serviceID, operatorID, clientCtx.FromAddress.String())
 			if err = msg.ValidateBasic(); err != nil {
 				return fmt.Errorf("message validation failed: %w", err)
 			}
