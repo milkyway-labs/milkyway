@@ -369,7 +369,10 @@ func (suite *KeeperTestSuite) TestMsgServer_AllowOperator() {
 			msg:       types.NewMsgAllowOperator(1, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				whitelisted, err := suite.k.ServiceIsOperatorWhitelisted(ctx, 1, 1)
+				configured, err := suite.k.IsServiceOpertorsAllowListConfigured(ctx, 1)
+				suite.Require().NoError(err)
+				suite.Require().True(configured)
+				whitelisted, err := suite.k.CanOperatorValidateService(ctx, 1, 1)
 				suite.Require().NoError(err)
 				suite.Require().True(whitelisted)
 			},
@@ -453,7 +456,7 @@ func (suite *KeeperTestSuite) TestMsgServer_RemoveAllowedOperator() {
 					"https://milkyway.com/logo.png",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				))
-				suite.k.ServiceWhitelistOperator(ctx, 1, 1)
+				suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
 			},
 			msg:       types.NewMsgRemoveAllowedOperator(1, 1, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"),
 			shouldErr: true,
@@ -476,14 +479,15 @@ func (suite *KeeperTestSuite) TestMsgServer_RemoveAllowedOperator() {
 					"https://milkyway.com/logo.png",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				))
-				suite.k.ServiceWhitelistOperator(ctx, 1, 1)
+				suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
+				suite.k.AddOperatorToServiceAllowList(ctx, 1, 2)
 			},
 			msg:       types.NewMsgRemoveAllowedOperator(1, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				whitelisted, err := suite.k.ServiceIsOperatorWhitelisted(ctx, 1, 1)
+				canValidate, err := suite.k.CanOperatorValidateService(ctx, 1, 1)
 				suite.Require().NoError(err)
-				suite.Require().False(whitelisted)
+				suite.Require().False(canValidate)
 			},
 			expEvents: sdk.Events{
 				sdk.NewEvent(
