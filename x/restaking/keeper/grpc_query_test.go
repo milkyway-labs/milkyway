@@ -159,11 +159,11 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceAllowedOperators() {
 	}
 }
 
-func (suite *KeeperTestSuite) TestQuerier_ServiceAllowedPools() {
+func (suite *KeeperTestSuite) TestQuerier_ServiceSecuringPools() {
 	testCases := []struct {
 		name      string
 		store     func(ctx sdk.Context)
-		request   *types.QueryServiceAllowedPoolsRequest
+		request   *types.QueryServiceSecuringPoolsRequest
 		shouldErr bool
 		expPools  []uint32
 	}{
@@ -174,22 +174,22 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceAllowedPools() {
 		},
 		{
 			name:      "invalid service id returns error",
-			request:   types.NewQueryServiceAllowedPoolsRequest(0, nil),
+			request:   types.NewQueryServiceSecuringPoolsRequest(0, nil),
 			shouldErr: true,
 		},
 		{
 			name:      "not found service whitelist returns empty list",
-			request:   types.NewQueryServiceAllowedPoolsRequest(1, nil),
+			request:   types.NewQueryServiceSecuringPoolsRequest(1, nil),
 			shouldErr: false,
 		},
 		{
-			name: "found service whitelist is returned properly",
+			name: "securing pools are returned properly",
 			store: func(ctx sdk.Context) {
 				suite.k.ServiceWhitelistPool(ctx, 1, 1)
 				suite.k.ServiceWhitelistPool(ctx, 1, 2)
 				suite.k.ServiceWhitelistPool(ctx, 2, 3)
 			},
-			request:   types.NewQueryServiceAllowedPoolsRequest(1, nil),
+			request:   types.NewQueryServiceSecuringPoolsRequest(1, nil),
 			shouldErr: false,
 			expPools:  []uint32{1, 2},
 		},
@@ -200,7 +200,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceAllowedPools() {
 				suite.k.ServiceWhitelistPool(ctx, 1, 2)
 				suite.k.ServiceWhitelistPool(ctx, 2, 3)
 			},
-			request: types.NewQueryServiceAllowedPoolsRequest(1, &query.PageRequest{
+			request: types.NewQueryServiceSecuringPoolsRequest(1, &query.PageRequest{
 				Offset: 0,
 				Limit:  1,
 			}),
@@ -219,7 +219,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceAllowedPools() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.ServiceAllowedPools(ctx, tc.request)
+			res, err := querier.ServiceSecuringPools(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {

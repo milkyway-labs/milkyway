@@ -54,9 +54,9 @@ func NewQueryServiceAllowedOperatorsRequest(serviceID uint32, pagination *query.
 	return &QueryServiceAllowedOperatorsRequest{ServiceId: serviceID, Pagination: pagination}
 }
 
-// NewQueryServiceAllowedPoolsRequest creates a new QueryServiceAllowedPoolsRequest instance
-func NewQueryServiceAllowedPoolsRequest(serviceID uint32, pagination *query.PageRequest) *QueryServiceAllowedPoolsRequest {
-	return &QueryServiceAllowedPoolsRequest{ServiceId: serviceID, Pagination: pagination}
+// NewQueryServiceSecuringPoolsRequest creates a new QueryServiceSecuringPoolsRequest instance
+func NewQueryServiceSecuringPoolsRequest(serviceID uint32, pagination *query.PageRequest) *QueryServiceSecuringPoolsRequest {
+	return &QueryServiceSecuringPoolsRequest{ServiceId: serviceID, Pagination: pagination}
 }
 
 // NewQueryServiceDelegationsRequest creates a new QueryServiceDelegationsRequest instance

@@ -53,7 +53,7 @@ func (k Querier) OperatorJoinedServices(goCtx context.Context, req *types.QueryO
 	return &types.QueryOperatorJoinedServicesResponse{ServiceIds: joinedServices.ServiceIDs}, nil
 }
 
-// ServiceAllowedOperators queries the operators in the service's whitelist
+// ServiceAllowedOperators queries the allowed operators for a given service.
 func (k Querier) ServiceAllowedOperators(
 	goCtx context.Context,
 	req *types.QueryServiceAllowedOperatorsRequest,
@@ -83,11 +83,11 @@ func (k Querier) ServiceAllowedOperators(
 	}, nil
 }
 
-// ServiceAllowedPools queries the pools in the service's whitelist
-func (k Querier) ServiceAllowedPools(
+// ServiceSecuringPools queries the pools that are securing a given service.
+func (k Querier) ServiceSecuringPools(
 	goCtx context.Context,
-	req *types.QueryServiceAllowedPoolsRequest,
-) (*types.QueryServiceAllowedPoolsResponse, error) {
+	req *types.QueryServiceSecuringPoolsRequest,
+) (*types.QueryServiceSecuringPoolsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -107,7 +107,7 @@ func (k Querier) ServiceAllowedPools(
 		return nil, err
 	}
 
-	return &types.QueryServiceAllowedPoolsResponse{
+	return &types.QueryServiceSecuringPoolsResponse{
 		PoolIds:    poolIDs,
 		Pagination: pageResponse,
 	}, nil

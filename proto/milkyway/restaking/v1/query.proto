@@ -33,12 +33,12 @@ service Query {
         "/milkyway/restaking/v1/services/{service_id}/allowed_operators";
   }
 
-  // ServiceAllowedPools queries the allowed pools for a given service.
-  rpc ServiceAllowedPools(QueryServiceAllowedPoolsRequest)
-      returns (QueryServiceAllowedPoolsResponse) {
+  // ServiceSecuringPools queries the pools that are securing a given service.
+  rpc ServiceSecuringPools(QueryServiceSecuringPoolsRequest)
+      returns (QueryServiceSecuringPoolsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
     option (google.api.http).get =
-        "/milkyway/restaking/v1/services/{service_id}/allowed_pools";
+        "/milkyway/restaking/v1/services/{service_id}/securing_pools";
   }
 
   // PoolDelegations queries the delegations info for the given pool.
@@ -297,9 +297,9 @@ message QueryServiceAllowedOperatorsResponse {
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
-// QueryServiceAllowedPoolsRequest is request type for the
-// Query/ServiceAllowedPools RPC method.
-message QueryServiceAllowedPoolsRequest {
+// QueryServiceSecuringPoolsRequest is request type for the
+// Query/ServiceSecuringPools RPC method.
+message QueryServiceSecuringPoolsRequest {
   // ServiceId is the ID of the service to query.
   uint32 service_id = 1;
 
@@ -307,9 +307,9 @@ message QueryServiceAllowedPoolsRequest {
   cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
-// QueryServiceAllowedPoolsResponse is response type for the
-// Query/ServiceAllowedPools RPC method.
-message QueryServiceAllowedPoolsResponse {
+// QueryServiceSecuringPoolsResponse is response type for the
+// Query/ServiceSecuringPools RPC method.
+message QueryServiceSecuringPoolsResponse {
   // PoolIds is the list of pools in the service's whitelist.
   repeated uint32 pool_ids = 1;
 

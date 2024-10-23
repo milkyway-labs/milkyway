@@ -414,7 +414,7 @@ func GetServicesQueryCmd() *cobra.Command {
 
 	queryCmd.AddCommand(
 		getServiceAllowedOperatorsQueryCmd(),
-		getServiceAllowedPoolsQueryCmd(),
+		getServiceSecuringPoolsQueryCmd(),
 		getServiceDelegationsQueryCmd(),
 		getServiceDelegationQueryCmd(),
 		getServiceUnbondingDelegationsQueryCmd(),
@@ -467,13 +467,13 @@ func getServiceAllowedOperatorsQueryCmd() *cobra.Command {
 	return cmd
 }
 
-// getServiceAllowedPoolsQueryCmd returns the command allowing to query the list
+// getServiceSecuringPoolsQueryCmd returns the command allowing to query the list
 // of pools from which a service is borrowing its security.
-func getServiceAllowedPoolsQueryCmd() *cobra.Command {
+func getServiceSecuringPoolsQueryCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "allowed-pools [service-id]",
+		Use:     "securing-pools [service-id]",
 		Short:   "Query the list of pools from which a service is borrowing its security",
-		Example: fmt.Sprintf(`%s query %s service whitelisted-pools 1`, version.AppName, types.ModuleName),
+		Example: fmt.Sprintf(`%s query %s service whitelisted-pools 1 --page 1 --limit 100`, version.AppName, types.ModuleName),
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -492,9 +492,9 @@ func getServiceAllowedPoolsQueryCmd() *cobra.Command {
 				return err
 			}
 
-			res, err := queryClient.ServiceAllowedPools(
+			res, err := queryClient.ServiceSecuringPools(
 				cmd.Context(),
-				types.NewQueryServiceAllowedPoolsRequest(serviceID, pageReq),
+				types.NewQueryServiceSecuringPoolsRequest(serviceID, pageReq),
 			)
 			if err != nil {
 				return err
