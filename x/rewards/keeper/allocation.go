@@ -13,7 +13,6 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	gogotypes "github.com/cosmos/gogoproto/types"
 
-	"github.com/milkyway-labs/milkyway/utils"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
@@ -245,25 +244,15 @@ func (k *Keeper) getEligiblePools(
 ) (eligiblePools []restakingtypes.DelegationTarget, err error) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	poolsParams := k.poolsKeeper.GetParams(sdkCtx)
-	isWhitelistConfigured, err := k.restakingKeeper.ServiceIsPoolsWhitelistConfigured(sdkCtx, service.ID)
-	if err != nil {
-		return nil, err
-	}
 
 	if slices.Contains(poolsParams.AllowedServicesIDs, service.ID) {
-		// If there's no whitelisted pools, that means all pools.
-		if !isWhitelistConfigured {
-			return utils.Map(pools, func(p poolstypes.Pool) restakingtypes.DelegationTarget {
-				return &p
-			}), nil
-		}
-		// Only include whitelisted pools.
+		// Only include pools from which the service is borrowing security.
 		for _, pool := range pools {
-			whitelisted, err := k.restakingKeeper.ServiceIsPoolWhitelisted(sdkCtx, service.ID, pool.ID)
+			isSecured, err := k.restakingKeeper.IsServiceSecuredByPool(sdkCtx, service.ID, pool.ID)
 			if err != nil {
 				return nil, err
 			}
-			if whitelisted {
+			if isSecured {
 				eligiblePools = append(eligiblePools, &pool)
 			}
 		}
@@ -280,11 +269,6 @@ func (k *Keeper) getEligibleOperators(
 	operators []operatorstypes.Operator,
 ) (eligibleOperators []restakingtypes.DelegationTarget, err error) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	isWhitelistConfigurd, err := k.restakingKeeper.ServiceIsOpertorsWhitelistConfigured(sdkCtx, service.ID)
-	if err != nil {
-		return nil, err
-	}
-
 	// TODO: can we optimize this? maybe by having a new index key
 	for _, operator := range operators {
 		operatorJoinedServices, err := k.restakingKeeper.GetOperatorJoinedServices(sdkCtx, operator.ID)
@@ -292,21 +276,13 @@ func (k *Keeper) getEligibleOperators(
 			return nil, err
 		}
 		if operatorJoinedServices.Contains(service.ID) {
-			// Whitelist not configured, set the operator as eligible
-			if !isWhitelistConfigurd {
-				eligibleOperators = append(eligibleOperators, &operator)
-				continue
-			}
-
-			// We have an operators whitelist for this service, ensure that
-			// the operator is whitelisted.
-			isOperatorWhitelisted, err := k.restakingKeeper.ServiceIsOperatorWhitelisted(
+			canValidateService, err := k.restakingKeeper.CanOperatorValidateService(
 				sdkCtx, service.ID, operator.ID)
 			if err != nil {
 				return nil, err
 			}
 
-			if isOperatorWhitelisted {
+			if canValidateService {
 				eligibleOperators = append(eligibleOperators, &operator)
 			}
 		}

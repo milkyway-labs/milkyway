@@ -430,7 +430,7 @@ func getServiceAllowedOperatorsQueryCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "allowed-operators [service-id]",
 		Short:   "Query the list of operators allowed to join a service",
-		Example: fmt.Sprintf(`%s query %s service whitelisted-operators 1`, version.AppName, types.ModuleName),
+		Example: fmt.Sprintf(`%s query %s service allowed-operators 1`, version.AppName, types.ModuleName),
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -462,7 +462,7 @@ func getServiceAllowedOperatorsQueryCmd() *cobra.Command {
 	}
 
 	flags.AddQueryFlagsToCmd(cmd)
-	flags.AddPaginationFlagsToCmd(cmd, "service whitelisted operators")
+	flags.AddPaginationFlagsToCmd(cmd, "service allowed operators")
 
 	return cmd
 }
@@ -472,8 +472,8 @@ func getServiceAllowedOperatorsQueryCmd() *cobra.Command {
 func getServiceSecuringPoolsQueryCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "securing-pools [service-id]",
-		Short:   "Query the list of pools from which a service is borrowing its security",
-		Example: fmt.Sprintf(`%s query %s service whitelisted-pools 1 --page 1 --limit 100`, version.AppName, types.ModuleName),
+		Short:   "Query the list of pools from which a service is borrowing security",
+		Example: fmt.Sprintf(`%s query %s service securing-pools 1 --page 1 --limit 100`, version.AppName, types.ModuleName),
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -505,7 +505,7 @@ func getServiceSecuringPoolsQueryCmd() *cobra.Command {
 	}
 
 	flags.AddQueryFlagsToCmd(cmd)
-	flags.AddPaginationFlagsToCmd(cmd, "service whitelisted pools")
+	flags.AddPaginationFlagsToCmd(cmd, "service securing pools")
 
 	return cmd
 }

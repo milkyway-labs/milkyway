@@ -27,9 +27,9 @@ type Keeper struct {
 	schema                 collections.Schema
 	operatorJoinedServices collections.Map[uint32, types.OperatorJoinedServices]
 	// The represents the service ID and the operator ID
-	serviceWhitelistedOperators collections.KeySet[collections.Pair[uint32, uint32]]
+	serviceOperatorsAllowList collections.KeySet[collections.Pair[uint32, uint32]]
 	// The represents the service ID and the pool ID
-	serviceWhitelistedPools collections.KeySet[collections.Pair[uint32, uint32]]
+	serviceSecuringPools collections.KeySet[collections.Pair[uint32, uint32]]
 
 	hooks types.RestakingHooks
 }
@@ -68,14 +68,14 @@ func NewKeeper(
 			collections.Uint32Key,
 			codec.CollValue[types.OperatorJoinedServices](cdc),
 		),
-		serviceWhitelistedOperators: collections.NewKeySet(
-			sb, types.ServiceWhitelistedOperatorsPrefix,
-			"service_whitelisted_operators",
+		serviceOperatorsAllowList: collections.NewKeySet(
+			sb, types.ServiceOperatorsAllowListPrefix,
+			"service_operators_allow_list",
 			collections.PairKeyCodec(collections.Uint32Key, collections.Uint32Key),
 		),
-		serviceWhitelistedPools: collections.NewKeySet(
-			sb, types.ServiceWhitelistedPoolsPrefix,
-			"service_whitelisted_pools",
+		serviceSecuringPools: collections.NewKeySet(
+			sb, types.ServiceSecuringPoolsPrefix,
+			"service_securing_pools",
 			collections.PairKeyCodec(collections.Uint32Key, collections.Uint32Key),
 		),
 		authority: authority,

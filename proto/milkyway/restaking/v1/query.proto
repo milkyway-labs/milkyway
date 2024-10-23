@@ -290,7 +290,7 @@ message QueryServiceAllowedOperatorsRequest {
 // QueryServiceAllowedOperatorsResponse is response type for the
 // Query/ServiceAllowedOperators RPC method.
 message QueryServiceAllowedOperatorsResponse {
-  // OperatorIds is the list of operators in the service's whitelist
+  // OperatorIds is the list of operators allowed to validate the service
   repeated uint32 operator_ids = 1;
 
   // Pagination defines the pagination in the response.
@@ -310,7 +310,8 @@ message QueryServiceSecuringPoolsRequest {
 // QueryServiceSecuringPoolsResponse is response type for the
 // Query/ServiceSecuringPools RPC method.
 message QueryServiceSecuringPoolsResponse {
-  // PoolIds is the list of pools in the service's whitelist.
+  // PoolIds is the list of pools from which the service is allowed to borrow
+  // security.
   repeated uint32 pool_ids = 1;
 
   // Pagination defines the pagination in the response.

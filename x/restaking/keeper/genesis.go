@@ -13,12 +13,12 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		panic(err)
 	}
 
-	servicesWhitelistedOperators, err := k.GetAllServicesWhitelistedOperators(ctx)
+	servicesWhitelistedOperators, err := k.GetAllServicesAllowedOperators(ctx)
 	if err != nil {
 		panic(err)
 	}
 
-	servicesWhitelistedPools, err := k.GetAllServicesWhitelistedPools(ctx)
+	servicesWhitelistedPools, err := k.GetAllServicesSecuringPools(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -44,9 +44,9 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
 	}
 
 	// Store the whitelisted operators for each service
-	for _, record := range data.ServicesWhitelistedOperators {
+	for _, record := range data.ServicesAllowedOperators {
 		for _, operatorID := range record.OperatorIDs {
-			err := k.ServiceWhitelistOperator(ctx, record.ServiceID, operatorID)
+			err := k.AddOperatorToServiceAllowList(ctx, record.ServiceID, operatorID)
 			if err != nil {
 				panic(err)
 			}
@@ -54,9 +54,9 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
 	}
 
 	// Store the whitelisted pools for each service
-	for _, record := range data.ServicesWhitelistedPools {
+	for _, record := range data.ServicesSecuringPools {
 		for _, poolID := range record.PoolIDs {
-			err := k.ServiceWhitelistPool(ctx, record.ServiceID, poolID)
+			err := k.AddPoolToServiceSecuringPools(ctx, record.ServiceID, poolID)
 			if err != nil {
 				panic(err)
 			}

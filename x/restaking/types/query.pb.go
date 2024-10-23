@@ -187,7 +187,7 @@ func (m *QueryServiceAllowedOperatorsRequest) GetPagination() *query.PageRequest
 // QueryServiceAllowedOperatorsResponse is response type for the
 // Query/ServiceAllowedOperators RPC method.
 type QueryServiceAllowedOperatorsResponse struct {
-	// OperatorIds is the list of operators in the service's whitelist
+	// OperatorIds is the list of operators allowed to validate the service
 	OperatorIds []uint32 `protobuf:"varint,1,rep,packed,name=operator_ids,json=operatorIds,proto3" json:"operator_ids,omitempty"`
 	// Pagination defines the pagination in the response.
 	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
@@ -299,7 +299,8 @@ func (m *QueryServiceSecuringPoolsRequest) GetPagination() *query.PageRequest {
 // QueryServiceSecuringPoolsResponse is response type for the
 // Query/ServiceSecuringPools RPC method.
 type QueryServiceSecuringPoolsResponse struct {
-	// PoolIds is the list of pools in the service's whitelist.
+	// PoolIds is the list of pools from which the service is allowed to borrow
+	// security.
 	PoolIds []uint32 `protobuf:"varint,1,rep,packed,name=pool_ids,json=poolIds,proto3" json:"pool_ids,omitempty"`
 	// Pagination defines the pagination in the response.
 	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`

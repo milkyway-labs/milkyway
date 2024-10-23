@@ -496,74 +496,74 @@ func (x *fastReflection_OperatorJoinedServicesRecord) ProtoMethods() *protoiface
 	}
 }
 
-var _ protoreflect.List = (*_ServiceWhitelistedOperators_2_list)(nil)
+var _ protoreflect.List = (*_ServiceAllowedOperators_2_list)(nil)
 
-type _ServiceWhitelistedOperators_2_list struct {
+type _ServiceAllowedOperators_2_list struct {
 	list *[]uint32
 }
 
-func (x *_ServiceWhitelistedOperators_2_list) Len() int {
+func (x *_ServiceAllowedOperators_2_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_ServiceWhitelistedOperators_2_list) Get(i int) protoreflect.Value {
+func (x *_ServiceAllowedOperators_2_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfUint32((*x.list)[i])
 }
 
-func (x *_ServiceWhitelistedOperators_2_list) Set(i int, value protoreflect.Value) {
+func (x *_ServiceAllowedOperators_2_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Uint()
 	concreteValue := (uint32)(valueUnwrapped)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_ServiceWhitelistedOperators_2_list) Append(value protoreflect.Value) {
+func (x *_ServiceAllowedOperators_2_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Uint()
 	concreteValue := (uint32)(valueUnwrapped)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_ServiceWhitelistedOperators_2_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message ServiceWhitelistedOperators at list field OperatorIds as it is not of Message kind"))
+func (x *_ServiceAllowedOperators_2_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message ServiceAllowedOperators at list field OperatorIds as it is not of Message kind"))
 }
 
-func (x *_ServiceWhitelistedOperators_2_list) Truncate(n int) {
+func (x *_ServiceAllowedOperators_2_list) Truncate(n int) {
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_ServiceWhitelistedOperators_2_list) NewElement() protoreflect.Value {
+func (x *_ServiceAllowedOperators_2_list) NewElement() protoreflect.Value {
 	v := uint32(0)
 	return protoreflect.ValueOfUint32(v)
 }
 
-func (x *_ServiceWhitelistedOperators_2_list) IsValid() bool {
+func (x *_ServiceAllowedOperators_2_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_ServiceWhitelistedOperators              protoreflect.MessageDescriptor
-	fd_ServiceWhitelistedOperators_service_id   protoreflect.FieldDescriptor
-	fd_ServiceWhitelistedOperators_operator_ids protoreflect.FieldDescriptor
+	md_ServiceAllowedOperators              protoreflect.MessageDescriptor
+	fd_ServiceAllowedOperators_service_id   protoreflect.FieldDescriptor
+	fd_ServiceAllowedOperators_operator_ids protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_milkyway_restaking_v1_genesis_proto_init()
-	md_ServiceWhitelistedOperators = File_milkyway_restaking_v1_genesis_proto.Messages().ByName("ServiceWhitelistedOperators")
-	fd_ServiceWhitelistedOperators_service_id = md_ServiceWhitelistedOperators.Fields().ByName("service_id")
-	fd_ServiceWhitelistedOperators_operator_ids = md_ServiceWhitelistedOperators.Fields().ByName("operator_ids")
+	md_ServiceAllowedOperators = File_milkyway_restaking_v1_genesis_proto.Messages().ByName("ServiceAllowedOperators")
+	fd_ServiceAllowedOperators_service_id = md_ServiceAllowedOperators.Fields().ByName("service_id")
+	fd_ServiceAllowedOperators_operator_ids = md_ServiceAllowedOperators.Fields().ByName("operator_ids")
 }
 
-var _ protoreflect.Message = (*fastReflection_ServiceWhitelistedOperators)(nil)
+var _ protoreflect.Message = (*fastReflection_ServiceAllowedOperators)(nil)
 
-type fastReflection_ServiceWhitelistedOperators ServiceWhitelistedOperators
+type fastReflection_ServiceAllowedOperators ServiceAllowedOperators
 
-func (x *ServiceWhitelistedOperators) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_ServiceWhitelistedOperators)(x)
+func (x *ServiceAllowedOperators) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_ServiceAllowedOperators)(x)
 }
 
-func (x *ServiceWhitelistedOperators) slowProtoReflect() protoreflect.Message {
+func (x *ServiceAllowedOperators) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_restaking_v1_genesis_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -575,43 +575,43 @@ func (x *ServiceWhitelistedOperators) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_ServiceWhitelistedOperators_messageType fastReflection_ServiceWhitelistedOperators_messageType
-var _ protoreflect.MessageType = fastReflection_ServiceWhitelistedOperators_messageType{}
+var _fastReflection_ServiceAllowedOperators_messageType fastReflection_ServiceAllowedOperators_messageType
+var _ protoreflect.MessageType = fastReflection_ServiceAllowedOperators_messageType{}
 
-type fastReflection_ServiceWhitelistedOperators_messageType struct{}
+type fastReflection_ServiceAllowedOperators_messageType struct{}
 
-func (x fastReflection_ServiceWhitelistedOperators_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_ServiceWhitelistedOperators)(nil)
+func (x fastReflection_ServiceAllowedOperators_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_ServiceAllowedOperators)(nil)
 }
-func (x fastReflection_ServiceWhitelistedOperators_messageType) New() protoreflect.Message {
-	return new(fastReflection_ServiceWhitelistedOperators)
+func (x fastReflection_ServiceAllowedOperators_messageType) New() protoreflect.Message {
+	return new(fastReflection_ServiceAllowedOperators)
 }
-func (x fastReflection_ServiceWhitelistedOperators_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_ServiceWhitelistedOperators
+func (x fastReflection_ServiceAllowedOperators_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_ServiceAllowedOperators
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_ServiceWhitelistedOperators) Descriptor() protoreflect.MessageDescriptor {
-	return md_ServiceWhitelistedOperators
+func (x *fastReflection_ServiceAllowedOperators) Descriptor() protoreflect.MessageDescriptor {
+	return md_ServiceAllowedOperators
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_ServiceWhitelistedOperators) Type() protoreflect.MessageType {
-	return _fastReflection_ServiceWhitelistedOperators_messageType
+func (x *fastReflection_ServiceAllowedOperators) Type() protoreflect.MessageType {
+	return _fastReflection_ServiceAllowedOperators_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_ServiceWhitelistedOperators) New() protoreflect.Message {
-	return new(fastReflection_ServiceWhitelistedOperators)
+func (x *fastReflection_ServiceAllowedOperators) New() protoreflect.Message {
+	return new(fastReflection_ServiceAllowedOperators)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_ServiceWhitelistedOperators) Interface() protoreflect.ProtoMessage {
-	return (*ServiceWhitelistedOperators)(x)
+func (x *fastReflection_ServiceAllowedOperators) Interface() protoreflect.ProtoMessage {
+	return (*ServiceAllowedOperators)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -619,16 +619,16 @@ func (x *fastReflection_ServiceWhitelistedOperators) Interface() protoreflect.Pr
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_ServiceWhitelistedOperators) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_ServiceAllowedOperators) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.ServiceId != uint32(0) {
 		value := protoreflect.ValueOfUint32(x.ServiceId)
-		if !f(fd_ServiceWhitelistedOperators_service_id, value) {
+		if !f(fd_ServiceAllowedOperators_service_id, value) {
 			return
 		}
 	}
 	if len(x.OperatorIds) != 0 {
-		value := protoreflect.ValueOfList(&_ServiceWhitelistedOperators_2_list{list: &x.OperatorIds})
-		if !f(fd_ServiceWhitelistedOperators_operator_ids, value) {
+		value := protoreflect.ValueOfList(&_ServiceAllowedOperators_2_list{list: &x.OperatorIds})
+		if !f(fd_ServiceAllowedOperators_operator_ids, value) {
 			return
 		}
 	}
@@ -645,17 +645,17 @@ func (x *fastReflection_ServiceWhitelistedOperators) Range(f func(protoreflect.F
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_ServiceWhitelistedOperators) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_ServiceAllowedOperators) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.ServiceWhitelistedOperators.service_id":
+	case "milkyway.restaking.v1.ServiceAllowedOperators.service_id":
 		return x.ServiceId != uint32(0)
-	case "milkyway.restaking.v1.ServiceWhitelistedOperators.operator_ids":
+	case "milkyway.restaking.v1.ServiceAllowedOperators.operator_ids":
 		return len(x.OperatorIds) != 0
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceWhitelistedOperators"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceAllowedOperators"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceWhitelistedOperators does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceAllowedOperators does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -665,17 +665,17 @@ func (x *fastReflection_ServiceWhitelistedOperators) Has(fd protoreflect.FieldDe
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceWhitelistedOperators) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_ServiceAllowedOperators) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.ServiceWhitelistedOperators.service_id":
+	case "milkyway.restaking.v1.ServiceAllowedOperators.service_id":
 		x.ServiceId = uint32(0)
-	case "milkyway.restaking.v1.ServiceWhitelistedOperators.operator_ids":
+	case "milkyway.restaking.v1.ServiceAllowedOperators.operator_ids":
 		x.OperatorIds = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceWhitelistedOperators"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceAllowedOperators"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceWhitelistedOperators does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceAllowedOperators does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -685,22 +685,22 @@ func (x *fastReflection_ServiceWhitelistedOperators) Clear(fd protoreflect.Field
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_ServiceWhitelistedOperators) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_ServiceAllowedOperators) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "milkyway.restaking.v1.ServiceWhitelistedOperators.service_id":
+	case "milkyway.restaking.v1.ServiceAllowedOperators.service_id":
 		value := x.ServiceId
 		return protoreflect.ValueOfUint32(value)
-	case "milkyway.restaking.v1.ServiceWhitelistedOperators.operator_ids":
+	case "milkyway.restaking.v1.ServiceAllowedOperators.operator_ids":
 		if len(x.OperatorIds) == 0 {
-			return protoreflect.ValueOfList(&_ServiceWhitelistedOperators_2_list{})
+			return protoreflect.ValueOfList(&_ServiceAllowedOperators_2_list{})
 		}
-		listValue := &_ServiceWhitelistedOperators_2_list{list: &x.OperatorIds}
+		listValue := &_ServiceAllowedOperators_2_list{list: &x.OperatorIds}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceWhitelistedOperators"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceAllowedOperators"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceWhitelistedOperators does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceAllowedOperators does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -714,19 +714,19 @@ func (x *fastReflection_ServiceWhitelistedOperators) Get(descriptor protoreflect
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceWhitelistedOperators) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_ServiceAllowedOperators) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.ServiceWhitelistedOperators.service_id":
+	case "milkyway.restaking.v1.ServiceAllowedOperators.service_id":
 		x.ServiceId = uint32(value.Uint())
-	case "milkyway.restaking.v1.ServiceWhitelistedOperators.operator_ids":
+	case "milkyway.restaking.v1.ServiceAllowedOperators.operator_ids":
 		lv := value.List()
-		clv := lv.(*_ServiceWhitelistedOperators_2_list)
+		clv := lv.(*_ServiceAllowedOperators_2_list)
 		x.OperatorIds = *clv.list
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceWhitelistedOperators"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceAllowedOperators"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceWhitelistedOperators does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceAllowedOperators does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -740,49 +740,49 @@ func (x *fastReflection_ServiceWhitelistedOperators) Set(fd protoreflect.FieldDe
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceWhitelistedOperators) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_ServiceAllowedOperators) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.ServiceWhitelistedOperators.operator_ids":
+	case "milkyway.restaking.v1.ServiceAllowedOperators.operator_ids":
 		if x.OperatorIds == nil {
 			x.OperatorIds = []uint32{}
 		}
-		value := &_ServiceWhitelistedOperators_2_list{list: &x.OperatorIds}
+		value := &_ServiceAllowedOperators_2_list{list: &x.OperatorIds}
 		return protoreflect.ValueOfList(value)
-	case "milkyway.restaking.v1.ServiceWhitelistedOperators.service_id":
-		panic(fmt.Errorf("field service_id of message milkyway.restaking.v1.ServiceWhitelistedOperators is not mutable"))
+	case "milkyway.restaking.v1.ServiceAllowedOperators.service_id":
+		panic(fmt.Errorf("field service_id of message milkyway.restaking.v1.ServiceAllowedOperators is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceWhitelistedOperators"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceAllowedOperators"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceWhitelistedOperators does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceAllowedOperators does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_ServiceWhitelistedOperators) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_ServiceAllowedOperators) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.ServiceWhitelistedOperators.service_id":
+	case "milkyway.restaking.v1.ServiceAllowedOperators.service_id":
 		return protoreflect.ValueOfUint32(uint32(0))
-	case "milkyway.restaking.v1.ServiceWhitelistedOperators.operator_ids":
+	case "milkyway.restaking.v1.ServiceAllowedOperators.operator_ids":
 		list := []uint32{}
-		return protoreflect.ValueOfList(&_ServiceWhitelistedOperators_2_list{list: &list})
+		return protoreflect.ValueOfList(&_ServiceAllowedOperators_2_list{list: &list})
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceWhitelistedOperators"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceAllowedOperators"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceWhitelistedOperators does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceAllowedOperators does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_ServiceWhitelistedOperators) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_ServiceAllowedOperators) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.ServiceWhitelistedOperators", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.ServiceAllowedOperators", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -790,7 +790,7 @@ func (x *fastReflection_ServiceWhitelistedOperators) WhichOneof(d protoreflect.O
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_ServiceWhitelistedOperators) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_ServiceAllowedOperators) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -801,7 +801,7 @@ func (x *fastReflection_ServiceWhitelistedOperators) GetUnknown() protoreflect.R
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceWhitelistedOperators) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_ServiceAllowedOperators) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -813,7 +813,7 @@ func (x *fastReflection_ServiceWhitelistedOperators) SetUnknown(fields protorefl
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_ServiceWhitelistedOperators) IsValid() bool {
+func (x *fastReflection_ServiceAllowedOperators) IsValid() bool {
 	return x != nil
 }
 
@@ -823,9 +823,9 @@ func (x *fastReflection_ServiceWhitelistedOperators) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_ServiceWhitelistedOperators) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_ServiceAllowedOperators) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*ServiceWhitelistedOperators)
+		x := input.Message.Interface().(*ServiceAllowedOperators)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -857,7 +857,7 @@ func (x *fastReflection_ServiceWhitelistedOperators) ProtoMethods() *protoiface.
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*ServiceWhitelistedOperators)
+		x := input.Message.Interface().(*ServiceAllowedOperators)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -912,7 +912,7 @@ func (x *fastReflection_ServiceWhitelistedOperators) ProtoMethods() *protoiface.
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*ServiceWhitelistedOperators)
+		x := input.Message.Interface().(*ServiceAllowedOperators)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -944,10 +944,10 @@ func (x *fastReflection_ServiceWhitelistedOperators) ProtoMethods() *protoiface.
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ServiceWhitelistedOperators: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ServiceAllowedOperators: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ServiceWhitelistedOperators: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ServiceAllowedOperators: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -1080,74 +1080,74 @@ func (x *fastReflection_ServiceWhitelistedOperators) ProtoMethods() *protoiface.
 	}
 }
 
-var _ protoreflect.List = (*_ServiceWhitelistedPools_2_list)(nil)
+var _ protoreflect.List = (*_ServiceSecuringPools_2_list)(nil)
 
-type _ServiceWhitelistedPools_2_list struct {
+type _ServiceSecuringPools_2_list struct {
 	list *[]uint32
 }
 
-func (x *_ServiceWhitelistedPools_2_list) Len() int {
+func (x *_ServiceSecuringPools_2_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_ServiceWhitelistedPools_2_list) Get(i int) protoreflect.Value {
+func (x *_ServiceSecuringPools_2_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfUint32((*x.list)[i])
 }
 
-func (x *_ServiceWhitelistedPools_2_list) Set(i int, value protoreflect.Value) {
+func (x *_ServiceSecuringPools_2_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Uint()
 	concreteValue := (uint32)(valueUnwrapped)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_ServiceWhitelistedPools_2_list) Append(value protoreflect.Value) {
+func (x *_ServiceSecuringPools_2_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Uint()
 	concreteValue := (uint32)(valueUnwrapped)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_ServiceWhitelistedPools_2_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message ServiceWhitelistedPools at list field PoolIds as it is not of Message kind"))
+func (x *_ServiceSecuringPools_2_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message ServiceSecuringPools at list field PoolIds as it is not of Message kind"))
 }
 
-func (x *_ServiceWhitelistedPools_2_list) Truncate(n int) {
+func (x *_ServiceSecuringPools_2_list) Truncate(n int) {
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_ServiceWhitelistedPools_2_list) NewElement() protoreflect.Value {
+func (x *_ServiceSecuringPools_2_list) NewElement() protoreflect.Value {
 	v := uint32(0)
 	return protoreflect.ValueOfUint32(v)
 }
 
-func (x *_ServiceWhitelistedPools_2_list) IsValid() bool {
+func (x *_ServiceSecuringPools_2_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_ServiceWhitelistedPools            protoreflect.MessageDescriptor
-	fd_ServiceWhitelistedPools_service_id protoreflect.FieldDescriptor
-	fd_ServiceWhitelistedPools_pool_ids   protoreflect.FieldDescriptor
+	md_ServiceSecuringPools            protoreflect.MessageDescriptor
+	fd_ServiceSecuringPools_service_id protoreflect.FieldDescriptor
+	fd_ServiceSecuringPools_pool_ids   protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_milkyway_restaking_v1_genesis_proto_init()
-	md_ServiceWhitelistedPools = File_milkyway_restaking_v1_genesis_proto.Messages().ByName("ServiceWhitelistedPools")
-	fd_ServiceWhitelistedPools_service_id = md_ServiceWhitelistedPools.Fields().ByName("service_id")
-	fd_ServiceWhitelistedPools_pool_ids = md_ServiceWhitelistedPools.Fields().ByName("pool_ids")
+	md_ServiceSecuringPools = File_milkyway_restaking_v1_genesis_proto.Messages().ByName("ServiceSecuringPools")
+	fd_ServiceSecuringPools_service_id = md_ServiceSecuringPools.Fields().ByName("service_id")
+	fd_ServiceSecuringPools_pool_ids = md_ServiceSecuringPools.Fields().ByName("pool_ids")
 }
 
-var _ protoreflect.Message = (*fastReflection_ServiceWhitelistedPools)(nil)
+var _ protoreflect.Message = (*fastReflection_ServiceSecuringPools)(nil)
 
-type fastReflection_ServiceWhitelistedPools ServiceWhitelistedPools
+type fastReflection_ServiceSecuringPools ServiceSecuringPools
 
-func (x *ServiceWhitelistedPools) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_ServiceWhitelistedPools)(x)
+func (x *ServiceSecuringPools) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_ServiceSecuringPools)(x)
 }
 
-func (x *ServiceWhitelistedPools) slowProtoReflect() protoreflect.Message {
+func (x *ServiceSecuringPools) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_restaking_v1_genesis_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1159,43 +1159,43 @@ func (x *ServiceWhitelistedPools) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_ServiceWhitelistedPools_messageType fastReflection_ServiceWhitelistedPools_messageType
-var _ protoreflect.MessageType = fastReflection_ServiceWhitelistedPools_messageType{}
+var _fastReflection_ServiceSecuringPools_messageType fastReflection_ServiceSecuringPools_messageType
+var _ protoreflect.MessageType = fastReflection_ServiceSecuringPools_messageType{}
 
-type fastReflection_ServiceWhitelistedPools_messageType struct{}
+type fastReflection_ServiceSecuringPools_messageType struct{}
 
-func (x fastReflection_ServiceWhitelistedPools_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_ServiceWhitelistedPools)(nil)
+func (x fastReflection_ServiceSecuringPools_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_ServiceSecuringPools)(nil)
 }
-func (x fastReflection_ServiceWhitelistedPools_messageType) New() protoreflect.Message {
-	return new(fastReflection_ServiceWhitelistedPools)
+func (x fastReflection_ServiceSecuringPools_messageType) New() protoreflect.Message {
+	return new(fastReflection_ServiceSecuringPools)
 }
-func (x fastReflection_ServiceWhitelistedPools_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_ServiceWhitelistedPools
+func (x fastReflection_ServiceSecuringPools_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_ServiceSecuringPools
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_ServiceWhitelistedPools) Descriptor() protoreflect.MessageDescriptor {
-	return md_ServiceWhitelistedPools
+func (x *fastReflection_ServiceSecuringPools) Descriptor() protoreflect.MessageDescriptor {
+	return md_ServiceSecuringPools
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_ServiceWhitelistedPools) Type() protoreflect.MessageType {
-	return _fastReflection_ServiceWhitelistedPools_messageType
+func (x *fastReflection_ServiceSecuringPools) Type() protoreflect.MessageType {
+	return _fastReflection_ServiceSecuringPools_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_ServiceWhitelistedPools) New() protoreflect.Message {
-	return new(fastReflection_ServiceWhitelistedPools)
+func (x *fastReflection_ServiceSecuringPools) New() protoreflect.Message {
+	return new(fastReflection_ServiceSecuringPools)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_ServiceWhitelistedPools) Interface() protoreflect.ProtoMessage {
-	return (*ServiceWhitelistedPools)(x)
+func (x *fastReflection_ServiceSecuringPools) Interface() protoreflect.ProtoMessage {
+	return (*ServiceSecuringPools)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -1203,16 +1203,16 @@ func (x *fastReflection_ServiceWhitelistedPools) Interface() protoreflect.ProtoM
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_ServiceWhitelistedPools) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_ServiceSecuringPools) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.ServiceId != uint32(0) {
 		value := protoreflect.ValueOfUint32(x.ServiceId)
-		if !f(fd_ServiceWhitelistedPools_service_id, value) {
+		if !f(fd_ServiceSecuringPools_service_id, value) {
 			return
 		}
 	}
 	if len(x.PoolIds) != 0 {
-		value := protoreflect.ValueOfList(&_ServiceWhitelistedPools_2_list{list: &x.PoolIds})
-		if !f(fd_ServiceWhitelistedPools_pool_ids, value) {
+		value := protoreflect.ValueOfList(&_ServiceSecuringPools_2_list{list: &x.PoolIds})
+		if !f(fd_ServiceSecuringPools_pool_ids, value) {
 			return
 		}
 	}
@@ -1229,17 +1229,17 @@ func (x *fastReflection_ServiceWhitelistedPools) Range(f func(protoreflect.Field
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_ServiceWhitelistedPools) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_ServiceSecuringPools) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.ServiceWhitelistedPools.service_id":
+	case "milkyway.restaking.v1.ServiceSecuringPools.service_id":
 		return x.ServiceId != uint32(0)
-	case "milkyway.restaking.v1.ServiceWhitelistedPools.pool_ids":
+	case "milkyway.restaking.v1.ServiceSecuringPools.pool_ids":
 		return len(x.PoolIds) != 0
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceWhitelistedPools"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceSecuringPools"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceWhitelistedPools does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceSecuringPools does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1249,17 +1249,17 @@ func (x *fastReflection_ServiceWhitelistedPools) Has(fd protoreflect.FieldDescri
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceWhitelistedPools) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_ServiceSecuringPools) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.ServiceWhitelistedPools.service_id":
+	case "milkyway.restaking.v1.ServiceSecuringPools.service_id":
 		x.ServiceId = uint32(0)
-	case "milkyway.restaking.v1.ServiceWhitelistedPools.pool_ids":
+	case "milkyway.restaking.v1.ServiceSecuringPools.pool_ids":
 		x.PoolIds = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceWhitelistedPools"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceSecuringPools"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceWhitelistedPools does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceSecuringPools does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1269,22 +1269,22 @@ func (x *fastReflection_ServiceWhitelistedPools) Clear(fd protoreflect.FieldDesc
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_ServiceWhitelistedPools) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_ServiceSecuringPools) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "milkyway.restaking.v1.ServiceWhitelistedPools.service_id":
+	case "milkyway.restaking.v1.ServiceSecuringPools.service_id":
 		value := x.ServiceId
 		return protoreflect.ValueOfUint32(value)
-	case "milkyway.restaking.v1.ServiceWhitelistedPools.pool_ids":
+	case "milkyway.restaking.v1.ServiceSecuringPools.pool_ids":
 		if len(x.PoolIds) == 0 {
-			return protoreflect.ValueOfList(&_ServiceWhitelistedPools_2_list{})
+			return protoreflect.ValueOfList(&_ServiceSecuringPools_2_list{})
 		}
-		listValue := &_ServiceWhitelistedPools_2_list{list: &x.PoolIds}
+		listValue := &_ServiceSecuringPools_2_list{list: &x.PoolIds}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceWhitelistedPools"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceSecuringPools"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceWhitelistedPools does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceSecuringPools does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1298,19 +1298,19 @@ func (x *fastReflection_ServiceWhitelistedPools) Get(descriptor protoreflect.Fie
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceWhitelistedPools) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_ServiceSecuringPools) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.ServiceWhitelistedPools.service_id":
+	case "milkyway.restaking.v1.ServiceSecuringPools.service_id":
 		x.ServiceId = uint32(value.Uint())
-	case "milkyway.restaking.v1.ServiceWhitelistedPools.pool_ids":
+	case "milkyway.restaking.v1.ServiceSecuringPools.pool_ids":
 		lv := value.List()
-		clv := lv.(*_ServiceWhitelistedPools_2_list)
+		clv := lv.(*_ServiceSecuringPools_2_list)
 		x.PoolIds = *clv.list
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceWhitelistedPools"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceSecuringPools"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceWhitelistedPools does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceSecuringPools does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1324,49 +1324,49 @@ func (x *fastReflection_ServiceWhitelistedPools) Set(fd protoreflect.FieldDescri
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceWhitelistedPools) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_ServiceSecuringPools) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.ServiceWhitelistedPools.pool_ids":
+	case "milkyway.restaking.v1.ServiceSecuringPools.pool_ids":
 		if x.PoolIds == nil {
 			x.PoolIds = []uint32{}
 		}
-		value := &_ServiceWhitelistedPools_2_list{list: &x.PoolIds}
+		value := &_ServiceSecuringPools_2_list{list: &x.PoolIds}
 		return protoreflect.ValueOfList(value)
-	case "milkyway.restaking.v1.ServiceWhitelistedPools.service_id":
-		panic(fmt.Errorf("field service_id of message milkyway.restaking.v1.ServiceWhitelistedPools is not mutable"))
+	case "milkyway.restaking.v1.ServiceSecuringPools.service_id":
+		panic(fmt.Errorf("field service_id of message milkyway.restaking.v1.ServiceSecuringPools is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceWhitelistedPools"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceSecuringPools"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceWhitelistedPools does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceSecuringPools does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_ServiceWhitelistedPools) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_ServiceSecuringPools) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.ServiceWhitelistedPools.service_id":
+	case "milkyway.restaking.v1.ServiceSecuringPools.service_id":
 		return protoreflect.ValueOfUint32(uint32(0))
-	case "milkyway.restaking.v1.ServiceWhitelistedPools.pool_ids":
+	case "milkyway.restaking.v1.ServiceSecuringPools.pool_ids":
 		list := []uint32{}
-		return protoreflect.ValueOfList(&_ServiceWhitelistedPools_2_list{list: &list})
+		return protoreflect.ValueOfList(&_ServiceSecuringPools_2_list{list: &list})
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceWhitelistedPools"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.ServiceSecuringPools"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceWhitelistedPools does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.ServiceSecuringPools does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_ServiceWhitelistedPools) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_ServiceSecuringPools) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.ServiceWhitelistedPools", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.ServiceSecuringPools", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1374,7 +1374,7 @@ func (x *fastReflection_ServiceWhitelistedPools) WhichOneof(d protoreflect.Oneof
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_ServiceWhitelistedPools) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_ServiceSecuringPools) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1385,7 +1385,7 @@ func (x *fastReflection_ServiceWhitelistedPools) GetUnknown() protoreflect.RawFi
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_ServiceWhitelistedPools) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_ServiceSecuringPools) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1397,7 +1397,7 @@ func (x *fastReflection_ServiceWhitelistedPools) SetUnknown(fields protoreflect.
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_ServiceWhitelistedPools) IsValid() bool {
+func (x *fastReflection_ServiceSecuringPools) IsValid() bool {
 	return x != nil
 }
 
@@ -1407,9 +1407,9 @@ func (x *fastReflection_ServiceWhitelistedPools) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_ServiceWhitelistedPools) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_ServiceSecuringPools) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*ServiceWhitelistedPools)
+		x := input.Message.Interface().(*ServiceSecuringPools)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1441,7 +1441,7 @@ func (x *fastReflection_ServiceWhitelistedPools) ProtoMethods() *protoiface.Meth
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*ServiceWhitelistedPools)
+		x := input.Message.Interface().(*ServiceSecuringPools)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1496,7 +1496,7 @@ func (x *fastReflection_ServiceWhitelistedPools) ProtoMethods() *protoiface.Meth
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*ServiceWhitelistedPools)
+		x := input.Message.Interface().(*ServiceSecuringPools)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1528,10 +1528,10 @@ func (x *fastReflection_ServiceWhitelistedPools) ProtoMethods() *protoiface.Meth
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ServiceWhitelistedPools: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ServiceSecuringPools: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ServiceWhitelistedPools: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ServiceSecuringPools: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -1718,7 +1718,7 @@ func (x *_GenesisState_2_list) IsValid() bool {
 var _ protoreflect.List = (*_GenesisState_3_list)(nil)
 
 type _GenesisState_3_list struct {
-	list *[]*ServiceWhitelistedOperators
+	list *[]*ServiceAllowedOperators
 }
 
 func (x *_GenesisState_3_list) Len() int {
@@ -1734,18 +1734,18 @@ func (x *_GenesisState_3_list) Get(i int) protoreflect.Value {
 
 func (x *_GenesisState_3_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*ServiceWhitelistedOperators)
+	concreteValue := valueUnwrapped.Interface().(*ServiceAllowedOperators)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_GenesisState_3_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*ServiceWhitelistedOperators)
+	concreteValue := valueUnwrapped.Interface().(*ServiceAllowedOperators)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_GenesisState_3_list) AppendMutable() protoreflect.Value {
-	v := new(ServiceWhitelistedOperators)
+	v := new(ServiceAllowedOperators)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -1758,7 +1758,7 @@ func (x *_GenesisState_3_list) Truncate(n int) {
 }
 
 func (x *_GenesisState_3_list) NewElement() protoreflect.Value {
-	v := new(ServiceWhitelistedOperators)
+	v := new(ServiceAllowedOperators)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
@@ -1769,7 +1769,7 @@ func (x *_GenesisState_3_list) IsValid() bool {
 var _ protoreflect.List = (*_GenesisState_4_list)(nil)
 
 type _GenesisState_4_list struct {
-	list *[]*ServiceWhitelistedPools
+	list *[]*ServiceSecuringPools
 }
 
 func (x *_GenesisState_4_list) Len() int {
@@ -1785,18 +1785,18 @@ func (x *_GenesisState_4_list) Get(i int) protoreflect.Value {
 
 func (x *_GenesisState_4_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*ServiceWhitelistedPools)
+	concreteValue := valueUnwrapped.Interface().(*ServiceSecuringPools)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_GenesisState_4_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*ServiceWhitelistedPools)
+	concreteValue := valueUnwrapped.Interface().(*ServiceSecuringPools)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_GenesisState_4_list) AppendMutable() protoreflect.Value {
-	v := new(ServiceWhitelistedPools)
+	v := new(ServiceSecuringPools)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -1809,7 +1809,7 @@ func (x *_GenesisState_4_list) Truncate(n int) {
 }
 
 func (x *_GenesisState_4_list) NewElement() protoreflect.Value {
-	v := new(ServiceWhitelistedPools)
+	v := new(ServiceSecuringPools)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
@@ -1920,13 +1920,13 @@ func (x *_GenesisState_6_list) IsValid() bool {
 }
 
 var (
-	md_GenesisState                                protoreflect.MessageDescriptor
-	fd_GenesisState_params                         protoreflect.FieldDescriptor
-	fd_GenesisState_operators_joined_services      protoreflect.FieldDescriptor
-	fd_GenesisState_services_whitelisted_operators protoreflect.FieldDescriptor
-	fd_GenesisState_services_whitelisted_pools     protoreflect.FieldDescriptor
-	fd_GenesisState_delegations                    protoreflect.FieldDescriptor
-	fd_GenesisState_unbonding_delegations          protoreflect.FieldDescriptor
+	md_GenesisState                            protoreflect.MessageDescriptor
+	fd_GenesisState_params                     protoreflect.FieldDescriptor
+	fd_GenesisState_operators_joined_services  protoreflect.FieldDescriptor
+	fd_GenesisState_services_allowed_operators protoreflect.FieldDescriptor
+	fd_GenesisState_services_securing_pools    protoreflect.FieldDescriptor
+	fd_GenesisState_delegations                protoreflect.FieldDescriptor
+	fd_GenesisState_unbonding_delegations      protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -1934,8 +1934,8 @@ func init() {
 	md_GenesisState = File_milkyway_restaking_v1_genesis_proto.Messages().ByName("GenesisState")
 	fd_GenesisState_params = md_GenesisState.Fields().ByName("params")
 	fd_GenesisState_operators_joined_services = md_GenesisState.Fields().ByName("operators_joined_services")
-	fd_GenesisState_services_whitelisted_operators = md_GenesisState.Fields().ByName("services_whitelisted_operators")
-	fd_GenesisState_services_whitelisted_pools = md_GenesisState.Fields().ByName("services_whitelisted_pools")
+	fd_GenesisState_services_allowed_operators = md_GenesisState.Fields().ByName("services_allowed_operators")
+	fd_GenesisState_services_securing_pools = md_GenesisState.Fields().ByName("services_securing_pools")
 	fd_GenesisState_delegations = md_GenesisState.Fields().ByName("delegations")
 	fd_GenesisState_unbonding_delegations = md_GenesisState.Fields().ByName("unbonding_delegations")
 }
@@ -2017,15 +2017,15 @@ func (x *fastReflection_GenesisState) Range(f func(protoreflect.FieldDescriptor,
 			return
 		}
 	}
-	if len(x.ServicesWhitelistedOperators) != 0 {
-		value := protoreflect.ValueOfList(&_GenesisState_3_list{list: &x.ServicesWhitelistedOperators})
-		if !f(fd_GenesisState_services_whitelisted_operators, value) {
+	if len(x.ServicesAllowedOperators) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_3_list{list: &x.ServicesAllowedOperators})
+		if !f(fd_GenesisState_services_allowed_operators, value) {
 			return
 		}
 	}
-	if len(x.ServicesWhitelistedPools) != 0 {
-		value := protoreflect.ValueOfList(&_GenesisState_4_list{list: &x.ServicesWhitelistedPools})
-		if !f(fd_GenesisState_services_whitelisted_pools, value) {
+	if len(x.ServicesSecuringPools) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_4_list{list: &x.ServicesSecuringPools})
+		if !f(fd_GenesisState_services_securing_pools, value) {
 			return
 		}
 	}
@@ -2060,10 +2060,10 @@ func (x *fastReflection_GenesisState) Has(fd protoreflect.FieldDescriptor) bool 
 		return x.Params != nil
 	case "milkyway.restaking.v1.GenesisState.operators_joined_services":
 		return len(x.OperatorsJoinedServices) != 0
-	case "milkyway.restaking.v1.GenesisState.services_whitelisted_operators":
-		return len(x.ServicesWhitelistedOperators) != 0
-	case "milkyway.restaking.v1.GenesisState.services_whitelisted_pools":
-		return len(x.ServicesWhitelistedPools) != 0
+	case "milkyway.restaking.v1.GenesisState.services_allowed_operators":
+		return len(x.ServicesAllowedOperators) != 0
+	case "milkyway.restaking.v1.GenesisState.services_securing_pools":
+		return len(x.ServicesSecuringPools) != 0
 	case "milkyway.restaking.v1.GenesisState.delegations":
 		return len(x.Delegations) != 0
 	case "milkyway.restaking.v1.GenesisState.unbonding_delegations":
@@ -2088,10 +2088,10 @@ func (x *fastReflection_GenesisState) Clear(fd protoreflect.FieldDescriptor) {
 		x.Params = nil
 	case "milkyway.restaking.v1.GenesisState.operators_joined_services":
 		x.OperatorsJoinedServices = nil
-	case "milkyway.restaking.v1.GenesisState.services_whitelisted_operators":
-		x.ServicesWhitelistedOperators = nil
-	case "milkyway.restaking.v1.GenesisState.services_whitelisted_pools":
-		x.ServicesWhitelistedPools = nil
+	case "milkyway.restaking.v1.GenesisState.services_allowed_operators":
+		x.ServicesAllowedOperators = nil
+	case "milkyway.restaking.v1.GenesisState.services_securing_pools":
+		x.ServicesSecuringPools = nil
 	case "milkyway.restaking.v1.GenesisState.delegations":
 		x.Delegations = nil
 	case "milkyway.restaking.v1.GenesisState.unbonding_delegations":
@@ -2121,17 +2121,17 @@ func (x *fastReflection_GenesisState) Get(descriptor protoreflect.FieldDescripto
 		}
 		listValue := &_GenesisState_2_list{list: &x.OperatorsJoinedServices}
 		return protoreflect.ValueOfList(listValue)
-	case "milkyway.restaking.v1.GenesisState.services_whitelisted_operators":
-		if len(x.ServicesWhitelistedOperators) == 0 {
+	case "milkyway.restaking.v1.GenesisState.services_allowed_operators":
+		if len(x.ServicesAllowedOperators) == 0 {
 			return protoreflect.ValueOfList(&_GenesisState_3_list{})
 		}
-		listValue := &_GenesisState_3_list{list: &x.ServicesWhitelistedOperators}
+		listValue := &_GenesisState_3_list{list: &x.ServicesAllowedOperators}
 		return protoreflect.ValueOfList(listValue)
-	case "milkyway.restaking.v1.GenesisState.services_whitelisted_pools":
-		if len(x.ServicesWhitelistedPools) == 0 {
+	case "milkyway.restaking.v1.GenesisState.services_securing_pools":
+		if len(x.ServicesSecuringPools) == 0 {
 			return protoreflect.ValueOfList(&_GenesisState_4_list{})
 		}
-		listValue := &_GenesisState_4_list{list: &x.ServicesWhitelistedPools}
+		listValue := &_GenesisState_4_list{list: &x.ServicesSecuringPools}
 		return protoreflect.ValueOfList(listValue)
 	case "milkyway.restaking.v1.GenesisState.delegations":
 		if len(x.Delegations) == 0 {
@@ -2171,14 +2171,14 @@ func (x *fastReflection_GenesisState) Set(fd protoreflect.FieldDescriptor, value
 		lv := value.List()
 		clv := lv.(*_GenesisState_2_list)
 		x.OperatorsJoinedServices = *clv.list
-	case "milkyway.restaking.v1.GenesisState.services_whitelisted_operators":
+	case "milkyway.restaking.v1.GenesisState.services_allowed_operators":
 		lv := value.List()
 		clv := lv.(*_GenesisState_3_list)
-		x.ServicesWhitelistedOperators = *clv.list
-	case "milkyway.restaking.v1.GenesisState.services_whitelisted_pools":
+		x.ServicesAllowedOperators = *clv.list
+	case "milkyway.restaking.v1.GenesisState.services_securing_pools":
 		lv := value.List()
 		clv := lv.(*_GenesisState_4_list)
-		x.ServicesWhitelistedPools = *clv.list
+		x.ServicesSecuringPools = *clv.list
 	case "milkyway.restaking.v1.GenesisState.delegations":
 		lv := value.List()
 		clv := lv.(*_GenesisState_5_list)
@@ -2218,17 +2218,17 @@ func (x *fastReflection_GenesisState) Mutable(fd protoreflect.FieldDescriptor) p
 		}
 		value := &_GenesisState_2_list{list: &x.OperatorsJoinedServices}
 		return protoreflect.ValueOfList(value)
-	case "milkyway.restaking.v1.GenesisState.services_whitelisted_operators":
-		if x.ServicesWhitelistedOperators == nil {
-			x.ServicesWhitelistedOperators = []*ServiceWhitelistedOperators{}
+	case "milkyway.restaking.v1.GenesisState.services_allowed_operators":
+		if x.ServicesAllowedOperators == nil {
+			x.ServicesAllowedOperators = []*ServiceAllowedOperators{}
 		}
-		value := &_GenesisState_3_list{list: &x.ServicesWhitelistedOperators}
+		value := &_GenesisState_3_list{list: &x.ServicesAllowedOperators}
 		return protoreflect.ValueOfList(value)
-	case "milkyway.restaking.v1.GenesisState.services_whitelisted_pools":
-		if x.ServicesWhitelistedPools == nil {
-			x.ServicesWhitelistedPools = []*ServiceWhitelistedPools{}
+	case "milkyway.restaking.v1.GenesisState.services_securing_pools":
+		if x.ServicesSecuringPools == nil {
+			x.ServicesSecuringPools = []*ServiceSecuringPools{}
 		}
-		value := &_GenesisState_4_list{list: &x.ServicesWhitelistedPools}
+		value := &_GenesisState_4_list{list: &x.ServicesSecuringPools}
 		return protoreflect.ValueOfList(value)
 	case "milkyway.restaking.v1.GenesisState.delegations":
 		if x.Delegations == nil {
@@ -2261,11 +2261,11 @@ func (x *fastReflection_GenesisState) NewField(fd protoreflect.FieldDescriptor) 
 	case "milkyway.restaking.v1.GenesisState.operators_joined_services":
 		list := []*OperatorJoinedServicesRecord{}
 		return protoreflect.ValueOfList(&_GenesisState_2_list{list: &list})
-	case "milkyway.restaking.v1.GenesisState.services_whitelisted_operators":
-		list := []*ServiceWhitelistedOperators{}
+	case "milkyway.restaking.v1.GenesisState.services_allowed_operators":
+		list := []*ServiceAllowedOperators{}
 		return protoreflect.ValueOfList(&_GenesisState_3_list{list: &list})
-	case "milkyway.restaking.v1.GenesisState.services_whitelisted_pools":
-		list := []*ServiceWhitelistedPools{}
+	case "milkyway.restaking.v1.GenesisState.services_securing_pools":
+		list := []*ServiceSecuringPools{}
 		return protoreflect.ValueOfList(&_GenesisState_4_list{list: &list})
 	case "milkyway.restaking.v1.GenesisState.delegations":
 		list := []*Delegation{}
@@ -2352,14 +2352,14 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
 		}
-		if len(x.ServicesWhitelistedOperators) > 0 {
-			for _, e := range x.ServicesWhitelistedOperators {
+		if len(x.ServicesAllowedOperators) > 0 {
+			for _, e := range x.ServicesAllowedOperators {
 				l = options.Size(e)
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
 		}
-		if len(x.ServicesWhitelistedPools) > 0 {
-			for _, e := range x.ServicesWhitelistedPools {
+		if len(x.ServicesSecuringPools) > 0 {
+			for _, e := range x.ServicesSecuringPools {
 				l = options.Size(e)
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
@@ -2437,9 +2437,9 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				dAtA[i] = 0x2a
 			}
 		}
-		if len(x.ServicesWhitelistedPools) > 0 {
-			for iNdEx := len(x.ServicesWhitelistedPools) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.ServicesWhitelistedPools[iNdEx])
+		if len(x.ServicesSecuringPools) > 0 {
+			for iNdEx := len(x.ServicesSecuringPools) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.ServicesSecuringPools[iNdEx])
 				if err != nil {
 					return protoiface.MarshalOutput{
 						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2453,9 +2453,9 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				dAtA[i] = 0x22
 			}
 		}
-		if len(x.ServicesWhitelistedOperators) > 0 {
-			for iNdEx := len(x.ServicesWhitelistedOperators) - 1; iNdEx >= 0; iNdEx-- {
-				encoded, err := options.Marshal(x.ServicesWhitelistedOperators[iNdEx])
+		if len(x.ServicesAllowedOperators) > 0 {
+			for iNdEx := len(x.ServicesAllowedOperators) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.ServicesAllowedOperators[iNdEx])
 				if err != nil {
 					return protoiface.MarshalOutput{
 						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -2620,7 +2620,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				iNdEx = postIndex
 			case 3:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ServicesWhitelistedOperators", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ServicesAllowedOperators", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -2647,14 +2647,14 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.ServicesWhitelistedOperators = append(x.ServicesWhitelistedOperators, &ServiceWhitelistedOperators{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.ServicesWhitelistedOperators[len(x.ServicesWhitelistedOperators)-1]); err != nil {
+				x.ServicesAllowedOperators = append(x.ServicesAllowedOperators, &ServiceAllowedOperators{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.ServicesAllowedOperators[len(x.ServicesAllowedOperators)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
 			case 4:
 				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ServicesWhitelistedPools", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ServicesSecuringPools", wireType)
 				}
 				var msglen int
 				for shift := uint(0); ; shift += 7 {
@@ -2681,8 +2681,8 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.ServicesWhitelistedPools = append(x.ServicesWhitelistedPools, &ServiceWhitelistedPools{})
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.ServicesWhitelistedPools[len(x.ServicesWhitelistedPools)-1]); err != nil {
+				x.ServicesSecuringPools = append(x.ServicesSecuringPools, &ServiceSecuringPools{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.ServicesSecuringPools[len(x.ServicesSecuringPools)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
@@ -2849,21 +2849,21 @@ func (x *OperatorJoinedServicesRecord) GetJoinedServices() *OperatorJoinedServic
 	return nil
 }
 
-// ServiceWhitelistedOperators represents the whitelisted operators for
+// ServiceAllowedOperators represents the operators allowed to secure a
 // a service.
-type ServiceWhitelistedOperators struct {
+type ServiceAllowedOperators struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
 	// ServiceID is the ID of the service.
 	ServiceId uint32 `protobuf:"varint,1,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
-	// OperatorIDs defines the whitelisted operator IDs.
+	// OperatorIDs defines the allowed operator IDs.
 	OperatorIds []uint32 `protobuf:"varint,2,rep,packed,name=operator_ids,json=operatorIds,proto3" json:"operator_ids,omitempty"`
 }
 
-func (x *ServiceWhitelistedOperators) Reset() {
-	*x = ServiceWhitelistedOperators{}
+func (x *ServiceAllowedOperators) Reset() {
+	*x = ServiceAllowedOperators{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_restaking_v1_genesis_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2871,46 +2871,47 @@ func (x *ServiceWhitelistedOperators) Reset() {
 	}
 }
 
-func (x *ServiceWhitelistedOperators) String() string {
+func (x *ServiceAllowedOperators) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ServiceWhitelistedOperators) ProtoMessage() {}
+func (*ServiceAllowedOperators) ProtoMessage() {}
 
-// Deprecated: Use ServiceWhitelistedOperators.ProtoReflect.Descriptor instead.
-func (*ServiceWhitelistedOperators) Descriptor() ([]byte, []int) {
+// Deprecated: Use ServiceAllowedOperators.ProtoReflect.Descriptor instead.
+func (*ServiceAllowedOperators) Descriptor() ([]byte, []int) {
 	return file_milkyway_restaking_v1_genesis_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *ServiceWhitelistedOperators) GetServiceId() uint32 {
+func (x *ServiceAllowedOperators) GetServiceId() uint32 {
 	if x != nil {
 		return x.ServiceId
 	}
 	return 0
 }
 
-func (x *ServiceWhitelistedOperators) GetOperatorIds() []uint32 {
+func (x *ServiceAllowedOperators) GetOperatorIds() []uint32 {
 	if x != nil {
 		return x.OperatorIds
 	}
 	return nil
 }
 
-// ServiceWhitelistedPools represents the whitelisted pools for
-// a service.
-type ServiceWhitelistedPools struct {
+// ServiceSecuringPools represents the list pools from which a service can
+// borrow security
+type ServiceSecuringPools struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
 	// ServiceID is the ID of the service.
 	ServiceId uint32 `protobuf:"varint,1,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
-	// PoolIDs defines the whitelisted operator IDs.
+	// PoolIDs defines the IDs of the pools from which the service can borrow
+	// security.
 	PoolIds []uint32 `protobuf:"varint,2,rep,packed,name=pool_ids,json=poolIds,proto3" json:"pool_ids,omitempty"`
 }
 
-func (x *ServiceWhitelistedPools) Reset() {
-	*x = ServiceWhitelistedPools{}
+func (x *ServiceSecuringPools) Reset() {
+	*x = ServiceSecuringPools{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_restaking_v1_genesis_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2918,25 +2919,25 @@ func (x *ServiceWhitelistedPools) Reset() {
 	}
 }
 
-func (x *ServiceWhitelistedPools) String() string {
+func (x *ServiceSecuringPools) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ServiceWhitelistedPools) ProtoMessage() {}
+func (*ServiceSecuringPools) ProtoMessage() {}
 
-// Deprecated: Use ServiceWhitelistedPools.ProtoReflect.Descriptor instead.
-func (*ServiceWhitelistedPools) Descriptor() ([]byte, []int) {
+// Deprecated: Use ServiceSecuringPools.ProtoReflect.Descriptor instead.
+func (*ServiceSecuringPools) Descriptor() ([]byte, []int) {
 	return file_milkyway_restaking_v1_genesis_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *ServiceWhitelistedPools) GetServiceId() uint32 {
+func (x *ServiceSecuringPools) GetServiceId() uint32 {
 	if x != nil {
 		return x.ServiceId
 	}
 	return 0
 }
 
-func (x *ServiceWhitelistedPools) GetPoolIds() []uint32 {
+func (x *ServiceSecuringPools) GetPoolIds() []uint32 {
 	if x != nil {
 		return x.PoolIds
 	}
@@ -2954,11 +2955,11 @@ type GenesisState struct {
 	// OperatorsJoinedServices defines the list of the services that each operator
 	// has joined.
 	OperatorsJoinedServices []*OperatorJoinedServicesRecord `protobuf:"bytes,2,rep,name=operators_joined_services,json=operatorsJoinedServices,proto3" json:"operators_joined_services,omitempty"`
-	// ServicesWhitelistedOperators defines the whitelisted operators for each
+	// ServiceAllowedOperators defines the operators allowed to secure each
 	// service.
-	ServicesWhitelistedOperators []*ServiceWhitelistedOperators `protobuf:"bytes,3,rep,name=services_whitelisted_operators,json=servicesWhitelistedOperators,proto3" json:"services_whitelisted_operators,omitempty"`
-	// ServicesWhitelistedPools defines the whitelisted pools for each service.
-	ServicesWhitelistedPools []*ServiceWhitelistedPools `protobuf:"bytes,4,rep,name=services_whitelisted_pools,json=servicesWhitelistedPools,proto3" json:"services_whitelisted_pools,omitempty"`
+	ServicesAllowedOperators []*ServiceAllowedOperators `protobuf:"bytes,3,rep,name=services_allowed_operators,json=servicesAllowedOperators,proto3" json:"services_allowed_operators,omitempty"`
+	// ServicesSecuringPools defines the whitelisted pools for each service.
+	ServicesSecuringPools []*ServiceSecuringPools `protobuf:"bytes,4,rep,name=services_securing_pools,json=servicesSecuringPools,proto3" json:"services_securing_pools,omitempty"`
 	// Delegations represents the delegations.
 	Delegations []*Delegation `protobuf:"bytes,5,rep,name=delegations,proto3" json:"delegations,omitempty"`
 	// UnbondingDelegations represents the unbonding delegations.
@@ -2999,16 +3000,16 @@ func (x *GenesisState) GetOperatorsJoinedServices() []*OperatorJoinedServicesRec
 	return nil
 }
 
-func (x *GenesisState) GetServicesWhitelistedOperators() []*ServiceWhitelistedOperators {
+func (x *GenesisState) GetServicesAllowedOperators() []*ServiceAllowedOperators {
 	if x != nil {
-		return x.ServicesWhitelistedOperators
+		return x.ServicesAllowedOperators
 	}
 	return nil
 }
 
-func (x *GenesisState) GetServicesWhitelistedPools() []*ServiceWhitelistedPools {
+func (x *GenesisState) GetServicesSecuringPools() []*ServiceSecuringPools {
 	if x != nil {
-		return x.ServicesWhitelistedPools
+		return x.ServicesSecuringPools
 	}
 	return nil
 }
@@ -3050,76 +3051,74 @@ var file_milkyway_restaking_v1_genesis_proto_rawDesc = []byte{
 	0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x70,
 	0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x4a, 0x6f, 0x69, 0x6e, 0x65, 0x64, 0x53, 0x65, 0x72, 0x76,
 	0x69, 0x63, 0x65, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0e, 0x6a, 0x6f, 0x69, 0x6e,
-	0x65, 0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x22, 0x7f, 0x0a, 0x1b, 0x53, 0x65,
-	0x72, 0x76, 0x69, 0x63, 0x65, 0x57, 0x68, 0x69, 0x74, 0x65, 0x6c, 0x69, 0x73, 0x74, 0x65, 0x64,
-	0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x12, 0x2c, 0x0a, 0x0a, 0x73, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x0d, 0xe2,
-	0xde, 0x1f, 0x09, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x44, 0x52, 0x09, 0x73, 0x65,
-	0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x12, 0x32, 0x0a, 0x0c, 0x6f, 0x70, 0x65, 0x72, 0x61,
-	0x74, 0x6f, 0x72, 0x5f, 0x69, 0x64, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0d, 0x42, 0x0f, 0xe2,
-	0xde, 0x1f, 0x0b, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x44, 0x73, 0x52, 0x0b,
-	0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x64, 0x73, 0x22, 0x6f, 0x0a, 0x17, 0x53,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x57, 0x68, 0x69, 0x74, 0x65, 0x6c, 0x69, 0x73, 0x74, 0x65,
-	0x64, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x12, 0x2c, 0x0a, 0x0a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
-	0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x0d, 0xe2, 0xde, 0x1f, 0x09,
-	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x44, 0x52, 0x09, 0x73, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x49, 0x64, 0x12, 0x26, 0x0a, 0x08, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x73,
-	0x18, 0x02, 0x20, 0x03, 0x28, 0x0d, 0x42, 0x0b, 0xe2, 0xde, 0x1f, 0x07, 0x50, 0x6f, 0x6f, 0x6c,
-	0x49, 0x44, 0x73, 0x52, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x73, 0x22, 0xe8, 0x04, 0x0a,
-	0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x53, 0x74, 0x61, 0x74, 0x65, 0x12, 0x3b, 0x0a,
-	0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e,
-	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69,
-	0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde,
-	0x1f, 0x00, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12, 0x75, 0x0a, 0x19, 0x6f, 0x70,
-	0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x5f, 0x6a, 0x6f, 0x69, 0x6e, 0x65, 0x64, 0x5f, 0x73,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x33, 0x2e,
-	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69,
-	0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x4a, 0x6f,
-	0x69, 0x6e, 0x65, 0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x52, 0x65, 0x63, 0x6f,
-	0x72, 0x64, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x17, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74,
-	0x6f, 0x72, 0x73, 0x4a, 0x6f, 0x69, 0x6e, 0x65, 0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
-	0x73, 0x12, 0x7e, 0x0a, 0x1e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x5f, 0x77, 0x68,
-	0x69, 0x74, 0x65, 0x6c, 0x69, 0x73, 0x74, 0x65, 0x64, 0x5f, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74,
-	0x6f, 0x72, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x32, 0x2e, 0x6d, 0x69, 0x6c, 0x6b,
-	0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76,
-	0x31, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x57, 0x68, 0x69, 0x74, 0x65, 0x6c, 0x69,
-	0x73, 0x74, 0x65, 0x64, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x42, 0x04, 0xc8,
-	0xde, 0x1f, 0x00, 0x52, 0x1c, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x57, 0x68, 0x69,
-	0x74, 0x65, 0x6c, 0x69, 0x73, 0x74, 0x65, 0x64, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
-	0x73, 0x12, 0x72, 0x0a, 0x1a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x5f, 0x77, 0x68,
-	0x69, 0x74, 0x65, 0x6c, 0x69, 0x73, 0x74, 0x65, 0x64, 0x5f, 0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x18,
-	0x04, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2e, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
-	0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x65,
-	0x72, 0x76, 0x69, 0x63, 0x65, 0x57, 0x68, 0x69, 0x74, 0x65, 0x6c, 0x69, 0x73, 0x74, 0x65, 0x64,
-	0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x18, 0x73, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x73, 0x57, 0x68, 0x69, 0x74, 0x65, 0x6c, 0x69, 0x73, 0x74, 0x65, 0x64,
-	0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x12, 0x49, 0x0a, 0x0b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x73, 0x18, 0x05, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x6d, 0x69, 0x6c,
-	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e,
-	0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x04, 0xc8,
-	0xde, 0x1f, 0x00, 0x52, 0x0b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73,
-	0x12, 0x65, 0x0a, 0x15, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x64, 0x65,
-	0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x06, 0x20, 0x03, 0x28, 0x0b, 0x32,
-	0x2a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61,
-	0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e,
-	0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f,
-	0x00, 0x52, 0x14, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65,
-	0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x42, 0xe8, 0x01, 0x0a, 0x19, 0x63, 0x6f, 0x6d, 0x2e,
-	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69,
-	0x6e, 0x67, 0x2e, 0x76, 0x31, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x50, 0x72,
-	0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x47, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f,
-	0x6d, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f,
-	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x6d, 0x69, 0x6c,
-	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f,
-	0x76, 0x31, 0x3b, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x76, 0x31, 0xa2, 0x02,
-	0x03, 0x4d, 0x52, 0x58, 0xaa, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
-	0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x15, 0x4d,
-	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e,
-	0x67, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x21, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c,
-	0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42,
-	0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x17, 0x4d, 0x69, 0x6c, 0x6b, 0x79,
-	0x77, 0x61, 0x79, 0x3a, 0x3a, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x3a, 0x3a,
-	0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x22, 0x7b, 0x0a, 0x17, 0x53, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x41, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x4f, 0x70, 0x65, 0x72,
+	0x61, 0x74, 0x6f, 0x72, 0x73, 0x12, 0x2c, 0x0a, 0x0a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x0d, 0xe2, 0xde, 0x1f, 0x09, 0x53,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x44, 0x52, 0x09, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x49, 0x64, 0x12, 0x32, 0x0a, 0x0c, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f,
+	0x69, 0x64, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0d, 0x42, 0x0f, 0xe2, 0xde, 0x1f, 0x0b, 0x4f,
+	0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x44, 0x73, 0x52, 0x0b, 0x6f, 0x70, 0x65, 0x72,
+	0x61, 0x74, 0x6f, 0x72, 0x49, 0x64, 0x73, 0x22, 0x6c, 0x0a, 0x14, 0x53, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x6e, 0x67, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x12,
+	0x2c, 0x0a, 0x0a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x0d, 0x42, 0x0d, 0xe2, 0xde, 0x1f, 0x09, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x49, 0x44, 0x52, 0x09, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x12, 0x26, 0x0a,
+	0x08, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0d, 0x42,
+	0x0b, 0xe2, 0xde, 0x1f, 0x07, 0x50, 0x6f, 0x6f, 0x6c, 0x49, 0x44, 0x73, 0x52, 0x07, 0x70, 0x6f,
+	0x6f, 0x6c, 0x49, 0x64, 0x73, 0x22, 0xd3, 0x04, 0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69,
+	0x73, 0x53, 0x74, 0x61, 0x74, 0x65, 0x12, 0x3b, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
+	0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x50,
+	0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x70, 0x61, 0x72,
+	0x61, 0x6d, 0x73, 0x12, 0x75, 0x0a, 0x19, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73,
+	0x5f, 0x6a, 0x6f, 0x69, 0x6e, 0x65, 0x64, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73,
+	0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x33, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
+	0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4f,
+	0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x4a, 0x6f, 0x69, 0x6e, 0x65, 0x64, 0x53, 0x65, 0x72,
+	0x76, 0x69, 0x63, 0x65, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x42, 0x04, 0xc8, 0xde, 0x1f,
+	0x00, 0x52, 0x17, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x4a, 0x6f, 0x69, 0x6e,
+	0x65, 0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x12, 0x72, 0x0a, 0x1a, 0x73, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x5f, 0x61, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x5f, 0x6f,
+	0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2e,
+	0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b,
+	0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x41, 0x6c,
+	0x6c, 0x6f, 0x77, 0x65, 0x64, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x42, 0x04,
+	0xc8, 0xde, 0x1f, 0x00, 0x52, 0x18, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x41, 0x6c,
+	0x6c, 0x6f, 0x77, 0x65, 0x64, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x12, 0x69,
+	0x0a, 0x17, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x5f, 0x73, 0x65, 0x63, 0x75, 0x72,
+	0x69, 0x6e, 0x67, 0x5f, 0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0b, 0x32,
+	0x2b, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61,
+	0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x53,
+	0x65, 0x63, 0x75, 0x72, 0x69, 0x6e, 0x67, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x42, 0x04, 0xc8, 0xde,
+	0x1f, 0x00, 0x52, 0x15, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x53, 0x65, 0x63, 0x75,
+	0x72, 0x69, 0x6e, 0x67, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x12, 0x49, 0x0a, 0x0b, 0x64, 0x65, 0x6c,
+	0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x05, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x21,
+	0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b,
+	0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x73, 0x12, 0x65, 0x0a, 0x15, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e,
+	0x67, 0x5f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x06, 0x20,
+	0x03, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72,
+	0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x6e, 0x62, 0x6f,
+	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42,
+	0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x14, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67,
+	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x42, 0xe8, 0x01, 0x0a, 0x19,
+	0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73,
+	0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73,
+	0x69, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x47, 0x67, 0x69, 0x74, 0x68, 0x75,
+	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2d, 0x6c,
+	0x61, 0x62, 0x73, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x61, 0x70, 0x69,
+	0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b,
+	0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x3b, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67,
+	0x76, 0x31, 0xa2, 0x02, 0x03, 0x4d, 0x52, 0x58, 0xaa, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79,
+	0x77, 0x61, 0x79, 0x2e, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x56, 0x31,
+	0xca, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x73, 0x74,
+	0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x21, 0x4d, 0x69, 0x6c, 0x6b, 0x79,
+	0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31,
+	0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x17, 0x4d,
+	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x3a, 0x3a, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69,
+	0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -3137,8 +3136,8 @@ func file_milkyway_restaking_v1_genesis_proto_rawDescGZIP() []byte {
 var file_milkyway_restaking_v1_genesis_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_milkyway_restaking_v1_genesis_proto_goTypes = []interface{}{
 	(*OperatorJoinedServicesRecord)(nil), // 0: milkyway.restaking.v1.OperatorJoinedServicesRecord
-	(*ServiceWhitelistedOperators)(nil),  // 1: milkyway.restaking.v1.ServiceWhitelistedOperators
-	(*ServiceWhitelistedPools)(nil),      // 2: milkyway.restaking.v1.ServiceWhitelistedPools
+	(*ServiceAllowedOperators)(nil),      // 1: milkyway.restaking.v1.ServiceAllowedOperators
+	(*ServiceSecuringPools)(nil),         // 2: milkyway.restaking.v1.ServiceSecuringPools
 	(*GenesisState)(nil),                 // 3: milkyway.restaking.v1.GenesisState
 	(*OperatorJoinedServices)(nil),       // 4: milkyway.restaking.v1.OperatorJoinedServices
 	(*Params)(nil),                       // 5: milkyway.restaking.v1.Params
@@ -3149,8 +3148,8 @@ var file_milkyway_restaking_v1_genesis_proto_depIdxs = []int32{
 	4, // 0: milkyway.restaking.v1.OperatorJoinedServicesRecord.joined_services:type_name -> milkyway.restaking.v1.OperatorJoinedServices
 	5, // 1: milkyway.restaking.v1.GenesisState.params:type_name -> milkyway.restaking.v1.Params
 	0, // 2: milkyway.restaking.v1.GenesisState.operators_joined_services:type_name -> milkyway.restaking.v1.OperatorJoinedServicesRecord
-	1, // 3: milkyway.restaking.v1.GenesisState.services_whitelisted_operators:type_name -> milkyway.restaking.v1.ServiceWhitelistedOperators
-	2, // 4: milkyway.restaking.v1.GenesisState.services_whitelisted_pools:type_name -> milkyway.restaking.v1.ServiceWhitelistedPools
+	1, // 3: milkyway.restaking.v1.GenesisState.services_allowed_operators:type_name -> milkyway.restaking.v1.ServiceAllowedOperators
+	2, // 4: milkyway.restaking.v1.GenesisState.services_securing_pools:type_name -> milkyway.restaking.v1.ServiceSecuringPools
 	6, // 5: milkyway.restaking.v1.GenesisState.delegations:type_name -> milkyway.restaking.v1.Delegation
 	7, // 6: milkyway.restaking.v1.GenesisState.unbonding_delegations:type_name -> milkyway.restaking.v1.UnbondingDelegation
 	7, // [7:7] is the sub-list for method output_type
@@ -3181,7 +3180,7 @@ func file_milkyway_restaking_v1_genesis_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_genesis_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ServiceWhitelistedOperators); i {
+			switch v := v.(*ServiceAllowedOperators); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -3193,7 +3192,7 @@ func file_milkyway_restaking_v1_genesis_proto_init() {
 			}
 		}
 		file_milkyway_restaking_v1_genesis_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ServiceWhitelistedPools); i {
+			switch v := v.(*ServiceSecuringPools); i {
 			case 0:
 				return &v.state
 			case 1:

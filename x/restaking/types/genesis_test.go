@@ -52,12 +52,12 @@ func TestGenesis_Validate(t *testing.T) {
 			shouldErr: true,
 		},
 		{
-			name: "duplicated service whitelisted operator returns error",
+			name: "duplicated service allowed operator returns error",
 			genesis: types.NewGenesis(
 				nil,
-				[]types.ServiceWhitelistedOperators{
-					types.NewServiceWhitelistedOperators(1, []uint32{1, 2, 3}),
-					types.NewServiceWhitelistedOperators(1, []uint32{1, 2, 3}),
+				[]types.ServiceAllowedOperators{
+					types.NewServiceAllowedOperators(1, []uint32{1, 2, 3}),
+					types.NewServiceAllowedOperators(1, []uint32{1, 2, 3}),
 				},
 				nil,
 				nil,
@@ -67,11 +67,11 @@ func TestGenesis_Validate(t *testing.T) {
 			shouldErr: true,
 		},
 		{
-			name: "service whitelisted operators with invalid service ID returns error",
+			name: "service allowed operators with invalid service ID returns error",
 			genesis: types.NewGenesis(
 				nil,
-				[]types.ServiceWhitelistedOperators{
-					types.NewServiceWhitelistedOperators(0, []uint32{1, 2, 3}),
+				[]types.ServiceAllowedOperators{
+					types.NewServiceAllowedOperators(0, []uint32{1, 2, 3}),
 				},
 				nil,
 				nil,
@@ -81,11 +81,11 @@ func TestGenesis_Validate(t *testing.T) {
 			shouldErr: true,
 		},
 		{
-			name: "service whitelisted operators with invalid list returns error",
+			name: "service allowed operators with invalid list returns error",
 			genesis: types.NewGenesis(
 				nil,
-				[]types.ServiceWhitelistedOperators{
-					types.NewServiceWhitelistedOperators(1, []uint32{0, 1}),
+				[]types.ServiceAllowedOperators{
+					types.NewServiceAllowedOperators(1, []uint32{0, 1}),
 				},
 				nil,
 				nil,
@@ -95,13 +95,13 @@ func TestGenesis_Validate(t *testing.T) {
 			shouldErr: true,
 		},
 		{
-			name: "duplicated service whitelisted pool returns error",
+			name: "duplicated service securing pool returns error",
 			genesis: types.NewGenesis(
 				nil,
 				nil,
-				[]types.ServiceWhitelistedPools{
-					types.NewServiceWhitelistedPools(1, []uint32{1, 2, 3}),
-					types.NewServiceWhitelistedPools(1, []uint32{1, 2, 3}),
+				[]types.ServiceSecuringPools{
+					types.NewServiceSecuringPools(1, []uint32{1, 2, 3}),
+					types.NewServiceSecuringPools(1, []uint32{1, 2, 3}),
 				},
 				nil,
 				nil,
@@ -110,12 +110,12 @@ func TestGenesis_Validate(t *testing.T) {
 			shouldErr: true,
 		},
 		{
-			name: "service whitelisted pools with invalid service ID returns error",
+			name: "service securing pools with invalid service ID returns error",
 			genesis: types.NewGenesis(
 				nil,
 				nil,
-				[]types.ServiceWhitelistedPools{
-					types.NewServiceWhitelistedPools(0, []uint32{1, 2, 3}),
+				[]types.ServiceSecuringPools{
+					types.NewServiceSecuringPools(0, []uint32{1, 2, 3}),
 				},
 				nil,
 				nil,
@@ -124,12 +124,12 @@ func TestGenesis_Validate(t *testing.T) {
 			shouldErr: true,
 		},
 		{
-			name: "service whitelisted operators with invalid list returns error",
+			name: "service securing pools with invalid list returns error",
 			genesis: types.NewGenesis(
 				nil,
 				nil,
-				[]types.ServiceWhitelistedPools{
-					types.NewServiceWhitelistedPools(1, []uint32{0, 1}),
+				[]types.ServiceSecuringPools{
+					types.NewServiceSecuringPools(1, []uint32{0, 1}),
 				},
 				nil,
 				nil,
@@ -238,13 +238,13 @@ func TestGenesis_Validate(t *testing.T) {
 						JoinedServices: types.NewOperatorJoinedServices([]uint32{2, 3, 5}),
 					},
 				},
-				[]types.ServiceWhitelistedOperators{
-					types.NewServiceWhitelistedOperators(1, []uint32{1, 2, 3}),
-					types.NewServiceWhitelistedOperators(2, []uint32{5, 6, 7}),
+				[]types.ServiceAllowedOperators{
+					types.NewServiceAllowedOperators(1, []uint32{1, 2, 3}),
+					types.NewServiceAllowedOperators(2, []uint32{5, 6, 7}),
 				},
-				[]types.ServiceWhitelistedPools{
-					types.NewServiceWhitelistedPools(3, []uint32{1, 2, 3}),
-					types.NewServiceWhitelistedPools(4, []uint32{5, 6, 7}),
+				[]types.ServiceSecuringPools{
+					types.NewServiceSecuringPools(3, []uint32{1, 2, 3}),
+					types.NewServiceSecuringPools(4, []uint32{5, 6, 7}),
 				},
 				[]types.Delegation{
 					types.NewPoolDelegation(

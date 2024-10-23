@@ -175,11 +175,11 @@ func (suite *KeeperTestSuite) UpdateServiceParams(
 	suite.Require().NoError(err)
 
 	for _, poolID := range whitelistedPoolsIDs {
-		err := suite.App.RestakingKeeper.ServiceWhitelistPool(ctx, serviceID, poolID)
+		err := suite.App.RestakingKeeper.AddPoolToServiceSecuringPools(ctx, serviceID, poolID)
 		suite.Require().NoError(err)
 	}
 	for _, operatorID := range whitelistedOperatorsIDs {
-		err := suite.App.RestakingKeeper.ServiceWhitelistOperator(ctx, serviceID, operatorID)
+		err := suite.App.RestakingKeeper.AddOperatorToServiceAllowList(ctx, serviceID, operatorID)
 		suite.Require().NoError(err)
 	}
 }

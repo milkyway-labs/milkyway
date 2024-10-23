@@ -18,9 +18,9 @@ func MapGetOrDefault[K, V any](
 	value, err := collectionMap.Get(ctx, key)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
-			return *new(V), nil
+			return defaultValueProvider(), nil
 		}
-		return defaultValueProvider(), err
+		return *new(V), err
 	}
 
 	return value, nil

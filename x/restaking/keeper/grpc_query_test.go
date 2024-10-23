@@ -114,9 +114,9 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceAllowedOperators() {
 		{
 			name: "found service whitelist is returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.ServiceWhitelistOperator(ctx, 1, 1)
-				suite.k.ServiceWhitelistOperator(ctx, 1, 2)
-				suite.k.ServiceWhitelistOperator(ctx, 2, 3)
+				suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
+				suite.k.AddOperatorToServiceAllowList(ctx, 1, 2)
+				suite.k.AddOperatorToServiceAllowList(ctx, 2, 3)
 			},
 			request:      types.NewQueryServiceAllowedOperatorsRequest(1, nil),
 			shouldErr:    false,
@@ -125,9 +125,9 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceAllowedOperators() {
 		{
 			name: "pagination is handled properly ",
 			store: func(ctx sdk.Context) {
-				suite.k.ServiceWhitelistOperator(ctx, 1, 1)
-				suite.k.ServiceWhitelistOperator(ctx, 1, 2)
-				suite.k.ServiceWhitelistOperator(ctx, 2, 3)
+				suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
+				suite.k.AddOperatorToServiceAllowList(ctx, 1, 2)
+				suite.k.AddOperatorToServiceAllowList(ctx, 2, 3)
 			},
 			request: types.NewQueryServiceAllowedOperatorsRequest(1, &query.PageRequest{
 				Offset: 0,
@@ -185,9 +185,9 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceSecuringPools() {
 		{
 			name: "securing pools are returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.ServiceWhitelistPool(ctx, 1, 1)
-				suite.k.ServiceWhitelistPool(ctx, 1, 2)
-				suite.k.ServiceWhitelistPool(ctx, 2, 3)
+				suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
+				suite.k.AddPoolToServiceSecuringPools(ctx, 1, 2)
+				suite.k.AddPoolToServiceSecuringPools(ctx, 2, 3)
 			},
 			request:   types.NewQueryServiceSecuringPoolsRequest(1, nil),
 			shouldErr: false,
@@ -196,9 +196,9 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceSecuringPools() {
 		{
 			name: "pagination is handled properly ",
 			store: func(ctx sdk.Context) {
-				suite.k.ServiceWhitelistPool(ctx, 1, 1)
-				suite.k.ServiceWhitelistPool(ctx, 1, 2)
-				suite.k.ServiceWhitelistPool(ctx, 2, 3)
+				suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
+				suite.k.AddPoolToServiceSecuringPools(ctx, 1, 2)
+				suite.k.AddPoolToServiceSecuringPools(ctx, 2, 3)
 			},
 			request: types.NewQueryServiceSecuringPoolsRequest(1, &query.PageRequest{
 				Offset: 0,

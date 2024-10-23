@@ -48,21 +48,21 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			store: func(ctx sdk.Context) {
 				suite.k.SetParams(ctx, types.DefaultParams())
 
-				err := suite.k.ServiceWhitelistOperator(ctx, 1, 1)
+				err := suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
 				suite.Require().NoError(err)
-				err = suite.k.ServiceWhitelistOperator(ctx, 1, 2)
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 1, 2)
 				suite.Require().NoError(err)
 
-				err = suite.k.ServiceWhitelistOperator(ctx, 2, 3)
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 2, 3)
 				suite.Require().NoError(err)
-				err = suite.k.ServiceWhitelistOperator(ctx, 2, 4)
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 2, 4)
 				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				Params: types.DefaultParams(),
-				ServicesWhitelistedOperators: []types.ServiceWhitelistedOperators{
-					types.NewServiceWhitelistedOperators(1, []uint32{1, 2}),
-					types.NewServiceWhitelistedOperators(2, []uint32{3, 4}),
+				ServicesAllowedOperators: []types.ServiceAllowedOperators{
+					types.NewServiceAllowedOperators(1, []uint32{1, 2}),
+					types.NewServiceAllowedOperators(2, []uint32{3, 4}),
 				},
 			},
 		},
@@ -71,21 +71,21 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			store: func(ctx sdk.Context) {
 				suite.k.SetParams(ctx, types.DefaultParams())
 
-				err := suite.k.ServiceWhitelistPool(ctx, 1, 1)
+				err := suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
 				suite.Require().NoError(err)
-				err = suite.k.ServiceWhitelistPool(ctx, 1, 2)
+				err = suite.k.AddPoolToServiceSecuringPools(ctx, 1, 2)
 				suite.Require().NoError(err)
 
-				err = suite.k.ServiceWhitelistPool(ctx, 2, 3)
+				err = suite.k.AddPoolToServiceSecuringPools(ctx, 2, 3)
 				suite.Require().NoError(err)
-				err = suite.k.ServiceWhitelistPool(ctx, 2, 4)
+				err = suite.k.AddPoolToServiceSecuringPools(ctx, 2, 4)
 				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				Params: types.DefaultParams(),
-				ServicesWhitelistedPools: []types.ServiceWhitelistedPools{
-					types.NewServiceWhitelistedPools(1, []uint32{1, 2}),
-					types.NewServiceWhitelistedPools(2, []uint32{3, 4}),
+				ServicesSecuringPools: []types.ServiceSecuringPools{
+					types.NewServiceSecuringPools(1, []uint32{1, 2}),
+					types.NewServiceSecuringPools(2, []uint32{3, 4}),
 				},
 			},
 		},
@@ -370,17 +370,17 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 			name: "services whitelisted operators are stored properly",
 			genesis: &types.GenesisState{
 				Params: types.DefaultParams(),
-				ServicesWhitelistedOperators: []types.ServiceWhitelistedOperators{
-					types.NewServiceWhitelistedOperators(1, []uint32{1, 2}),
-					types.NewServiceWhitelistedOperators(2, []uint32{3, 4}),
+				ServicesAllowedOperators: []types.ServiceAllowedOperators{
+					types.NewServiceAllowedOperators(1, []uint32{1, 2}),
+					types.NewServiceAllowedOperators(2, []uint32{3, 4}),
 				},
 			},
 			check: func(ctx sdk.Context) {
-				stored, err := suite.k.GetAllServiceWhitelistedOperators(ctx, 1)
+				stored, err := suite.k.GetAllServiceAllowedOperators(ctx, 1)
 				suite.Require().NoError(err)
 				suite.Require().Equal([]uint32{1, 2}, stored)
 
-				stored, err = suite.k.GetAllServiceWhitelistedOperators(ctx, 2)
+				stored, err = suite.k.GetAllServiceAllowedOperators(ctx, 2)
 				suite.Require().NoError(err)
 				suite.Require().Equal([]uint32{3, 4}, stored)
 			},
@@ -389,17 +389,17 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 			name: "services whitelisted pools are stored properly",
 			genesis: &types.GenesisState{
 				Params: types.DefaultParams(),
-				ServicesWhitelistedPools: []types.ServiceWhitelistedPools{
-					types.NewServiceWhitelistedPools(1, []uint32{1, 2}),
-					types.NewServiceWhitelistedPools(2, []uint32{3, 4}),
+				ServicesSecuringPools: []types.ServiceSecuringPools{
+					types.NewServiceSecuringPools(1, []uint32{1, 2}),
+					types.NewServiceSecuringPools(2, []uint32{3, 4}),
 				},
 			},
 			check: func(ctx sdk.Context) {
-				stored, err := suite.k.GetAllServiceWhitelistedPools(ctx, 1)
+				stored, err := suite.k.GetAllServiceSecuringPools(ctx, 1)
 				suite.Require().NoError(err)
 				suite.Require().Equal([]uint32{1, 2}, stored)
 
-				stored, err = suite.k.GetAllServiceWhitelistedPools(ctx, 2)
+				stored, err = suite.k.GetAllServiceSecuringPools(ctx, 2)
 				suite.Require().NoError(err)
 				suite.Require().Equal([]uint32{3, 4}, stored)
 			},

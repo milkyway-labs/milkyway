@@ -28201,7 +28201,7 @@ type QueryServiceAllowedOperatorsResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// OperatorIds is the list of operators in the service's whitelist
+	// OperatorIds is the list of operators allowed to validate the service
 	OperatorIds []uint32 `protobuf:"varint,1,rep,packed,name=operator_ids,json=operatorIds,proto3" json:"operator_ids,omitempty"`
 	// Pagination defines the pagination in the response.
 	Pagination *v1beta1.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
@@ -28295,7 +28295,8 @@ type QueryServiceSecuringPoolsResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// PoolIds is the list of pools in the service's whitelist.
+	// PoolIds is the list of pools from which the service is allowed to borrow
+	// security.
 	PoolIds []uint32 `protobuf:"varint,1,rep,packed,name=pool_ids,json=poolIds,proto3" json:"pool_ids,omitempty"`
 	// Pagination defines the pagination in the response.
 	Pagination *v1beta1.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`

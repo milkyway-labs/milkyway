@@ -61,7 +61,7 @@ func migrateServiceParams(
 
 		// Store the service's whitelisted operators in the restaking module
 		for _, operatorID := range legacyParams.WhitelistedOperatorsIDs {
-			err := restakingKeeper.ServiceWhitelistOperator(ctx, serviceID, operatorID)
+			err := restakingKeeper.AddOperatorToServiceAllowList(ctx, serviceID, operatorID)
 			if err != nil {
 				return err
 			}
@@ -69,7 +69,7 @@ func migrateServiceParams(
 
 		// Store the service's whitelisted pools in the restaking module
 		for _, poolID := range legacyParams.WhitelistedPoolsIDs {
-			err := restakingKeeper.ServiceWhitelistPool(ctx, serviceID, poolID)
+			err := restakingKeeper.AddPoolToServiceSecuringPools(ctx, serviceID, poolID)
 			if err != nil {
 				return err
 			}

@@ -48,18 +48,16 @@ func (k *Keeper) GetAllOperatorsJoinedServices(ctx sdk.Context) ([]types.Operato
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-// --- Whitelist operations
-// --------------------------------------------------------------------------------------------------------------------
 
-// GetAllServicesWhitelistedOperators returns all the services whitelisted operators
-func (k *Keeper) GetAllServicesWhitelistedOperators(ctx sdk.Context) ([]types.ServiceWhitelistedOperators, error) {
-	iterator, err := k.serviceWhitelistedOperators.Iterate(ctx, nil)
+// GetAllServicesAllowedOperators returns all the operators that are allowed to secure a service for all the services
+func (k *Keeper) GetAllServicesAllowedOperators(ctx sdk.Context) ([]types.ServiceAllowedOperators, error) {
+	iterator, err := k.serviceOperatorsAllowList.Iterate(ctx, nil)
 	if err != nil {
 		return nil, err
 	}
 	defer iterator.Close()
 
-	items := make(map[uint32]types.ServiceWhitelistedOperators)
+	items := make(map[uint32]types.ServiceAllowedOperators)
 	for ; iterator.Valid(); iterator.Next() {
 		serviceOperatorPair, err := iterator.Key()
 		if err != nil {
@@ -70,7 +68,7 @@ func (k *Keeper) GetAllServicesWhitelistedOperators(ctx sdk.Context) ([]types.Se
 
 		whitelistedPools, ok := items[serviceID]
 		if !ok {
-			whitelistedPools = types.NewServiceWhitelistedOperators(serviceID, nil)
+			whitelistedPools = types.NewServiceAllowedOperators(serviceID, nil)
 		}
 		whitelistedPools.OperatorIDs = append(whitelistedPools.OperatorIDs, operatorID)
 		items[serviceID] = whitelistedPools
@@ -81,7 +79,7 @@ func (k *Keeper) GetAllServicesWhitelistedOperators(ctx sdk.Context) ([]types.Se
 	}
 
 	// Convert back to list
-	itemsList := make([]types.ServiceWhitelistedOperators, 0, len(items))
+	itemsList := make([]types.ServiceAllowedOperators, 0, len(items))
 	for _, v := range items {
 		itemsList = append(itemsList, v)
 	}
@@ -93,15 +91,15 @@ func (k *Keeper) GetAllServicesWhitelistedOperators(ctx sdk.Context) ([]types.Se
 	return itemsList, nil
 }
 
-// GetAllServicesWhitelistedPools returns all the services whitelisted pools
-func (k *Keeper) GetAllServicesWhitelistedPools(ctx sdk.Context) ([]types.ServiceWhitelistedPools, error) {
-	iterator, err := k.serviceWhitelistedPools.Iterate(ctx, nil)
+// GetAllServicesSecuringPools returns all the pools from which the services are allowed to borrow security
+func (k *Keeper) GetAllServicesSecuringPools(ctx sdk.Context) ([]types.ServiceSecuringPools, error) {
+	iterator, err := k.serviceSecuringPools.Iterate(ctx, nil)
 	if err != nil {
 		return nil, err
 	}
 	defer iterator.Close()
 
-	items := make(map[uint32]types.ServiceWhitelistedPools)
+	items := make(map[uint32]types.ServiceSecuringPools)
 	for ; iterator.Valid(); iterator.Next() {
 		serviceOperatorPair, err := iterator.Key()
 		if err != nil {
@@ -112,7 +110,7 @@ func (k *Keeper) GetAllServicesWhitelistedPools(ctx sdk.Context) ([]types.Servic
 
 		whitelistedPools, ok := items[serviceID]
 		if !ok {
-			whitelistedPools = types.NewServiceWhitelistedPools(serviceID, nil)
+			whitelistedPools = types.NewServiceSecuringPools(serviceID, nil)
 		}
 		whitelistedPools.PoolIDs = append(whitelistedPools.PoolIDs, operatorID)
 		items[serviceID] = whitelistedPools
@@ -123,7 +121,7 @@ func (k *Keeper) GetAllServicesWhitelistedPools(ctx sdk.Context) ([]types.Servic
 	}
 
 	// Convert back to list
-	itemsList := make([]types.ServiceWhitelistedPools, 0, len(items))
+	itemsList := make([]types.ServiceSecuringPools, 0, len(items))
 	for _, v := range items {
 		itemsList = append(itemsList, v)
 	}

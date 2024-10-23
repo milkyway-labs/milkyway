@@ -17,23 +17,24 @@ message OperatorJoinedServicesRecord {
   OperatorJoinedServices joined_services = 2 [ (gogoproto.nullable) = false ];
 }
 
-// ServiceWhitelistedOperators represents the whitelisted operators for
+// ServiceAllowedOperators represents the operators allowed to secure a
 // a service.
-message ServiceWhitelistedOperators {
+message ServiceAllowedOperators {
   // ServiceID is the ID of the service.
   uint32 service_id = 1 [ (gogoproto.customname) = "ServiceID" ];
 
-  // OperatorIDs defines the whitelisted operator IDs.
+  // OperatorIDs defines the allowed operator IDs.
   repeated uint32 operator_ids = 2 [ (gogoproto.customname) = "OperatorIDs" ];
 }
 
-// ServiceWhitelistedPools represents the whitelisted pools for
-// a service.
-message ServiceWhitelistedPools {
+// ServiceSecuringPools represents the list pools from which a service can
+// borrow security
+message ServiceSecuringPools {
   // ServiceID is the ID of the service.
   uint32 service_id = 1 [ (gogoproto.customname) = "ServiceID" ];
 
-  // PoolIDs defines the whitelisted operator IDs.
+  // PoolIDs defines the IDs of the pools from which the service can borrow
+  // security.
   repeated uint32 pool_ids = 2 [ (gogoproto.customname) = "PoolIDs" ];
 }
 
@@ -47,13 +48,13 @@ message GenesisState {
   repeated OperatorJoinedServicesRecord operators_joined_services = 2
       [ (gogoproto.nullable) = false ];
 
-  // ServicesWhitelistedOperators defines the whitelisted operators for each
+  // ServiceAllowedOperators defines the operators allowed to secure each
   // service.
-  repeated ServiceWhitelistedOperators services_whitelisted_operators = 3
+  repeated ServiceAllowedOperators services_allowed_operators = 3
       [ (gogoproto.nullable) = false ];
 
-  // ServicesWhitelistedPools defines the whitelisted pools for each service.
-  repeated ServiceWhitelistedPools services_whitelisted_pools = 4
+  // ServicesSecuringPools defines the whitelisted pools for each service.
+  repeated ServiceSecuringPools services_securing_pools = 4
       [ (gogoproto.nullable) = false ];
 
   // Delegations represents the delegations.

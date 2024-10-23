@@ -69,7 +69,7 @@ func (k Querier) ServiceAllowedOperators(
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Get the service's whitelisted operators
-	operatorIDs, pageResponse, err := query.CollectionPaginate(ctx, k.serviceWhitelistedOperators, req.Pagination,
+	operatorIDs, pageResponse, err := query.CollectionPaginate(ctx, k.serviceOperatorsAllowList, req.Pagination,
 		func(key collections.Pair[uint32, uint32], _ collections.NoValue) (uint32, error) {
 			return key.K2(), nil
 		}, query.WithCollectionPaginationPairPrefix[uint32, uint32](req.ServiceId))
@@ -99,7 +99,7 @@ func (k Querier) ServiceSecuringPools(
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Get the service's whitelisted pools
-	poolIDs, pageResponse, err := query.CollectionPaginate(ctx, k.serviceWhitelistedPools, req.Pagination,
+	poolIDs, pageResponse, err := query.CollectionPaginate(ctx, k.serviceSecuringPools, req.Pagination,
 		func(key collections.Pair[uint32, uint32], _ collections.NoValue) (uint32, error) {
 			return key.K2(), nil
 		}, query.WithCollectionPaginationPairPrefix[uint32, uint32](req.ServiceId))
