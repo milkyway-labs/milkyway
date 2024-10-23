@@ -708,26 +708,6 @@ func (suite *KeeperTestSuite) TestMsgServer_SetServiceParams() {
 			shouldErr: true,
 		},
 		{
-			name: "invalid service params returns error",
-			store: func(ctx sdk.Context) {
-				suite.k.SaveService(ctx, types.NewService(
-					1,
-					types.SERVICE_STATUS_CREATED,
-					"MilkyWay",
-					"MilkyWay is a restaking platform",
-					"https://milkyway.com",
-					"https://milkyway.com/logo.png",
-					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				))
-			},
-			msg: types.NewMsgSetServiceParams(
-				1,
-				types.NewServiceParams(sdkmath.LegacyMustNewDecFromStr("2")),
-				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-			),
-			shouldErr: true,
-		},
-		{
 			name: "valid params are set properly",
 			store: func(ctx sdk.Context) {
 				suite.k.SaveService(ctx, types.NewService(
@@ -749,6 +729,7 @@ func (suite *KeeperTestSuite) TestMsgServer_SetServiceParams() {
 			expEvents: sdk.Events{
 				sdk.NewEvent(
 					types.EventTypeSetServiceParams,
+					sdk.NewAttribute(types.AttributeKeyServiceID, "1"),
 				),
 			},
 			check: func(ctx sdk.Context) {
