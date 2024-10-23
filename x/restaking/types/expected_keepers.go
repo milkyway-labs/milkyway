@@ -44,6 +44,4 @@ type ServicesKeeper interface {
 	SaveService(ctx sdk.Context, service servicestypes.Service) error
 	IterateServices(ctx sdk.Context, cb func(servicestypes.Service) bool)
 	GetServices(ctx sdk.Context) []servicestypes.Service
-	GetServiceParams(ctx sdk.Context, serviceID uint32) (servicestypes.ServiceParams, error)
-	SaveServiceParams(ctx sdk.Context, serviceID uint32, params servicestypes.ServiceParams) error
 }

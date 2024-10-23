@@ -24,14 +24,6 @@ service Query {
     option (google.api.http).get = "/milkyway/services/v1/services";
   }
 
-  // ServiceParams defines a gRPC query method that returns the parameters for
-  // the given service id.
-  rpc ServiceParams(QueryServiceParamsRequest)
-      returns (QueryServiceParamsResponse) {
-    option (google.api.http).get =
-        "/milkyway/services/v1/services/{service_id}/params";
-  }
-
   // Params defines a gRPC query method that returns the parameters of the
   // module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
@@ -70,17 +62,4 @@ message QueryServiceRequest {
 // QueryServiceResponse is the response type for the Query/Service RPC method.
 message QueryServiceResponse {
   Service service = 1 [ (gogoproto.nullable) = false ];
-}
-
-// QueryServiceParamsRequest is the request type for the Query/ServiceParams RPC
-// method.
-message QueryServiceParamsRequest {
-  // ServiceID is the ID of the service to query.
-  uint32 service_id = 1;
-}
-
-// QueryServiceParamsResponse is the response type for the Query/ServiceParams
-// RPC method.
-message QueryServiceParamsResponse {
-  ServiceParams params = 1 [ (gogoproto.nullable) = false ];
 }

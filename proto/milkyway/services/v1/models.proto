@@ -67,15 +67,3 @@ message Service {
     (gogoproto.nullable) = false
   ];
 }
-
-// ServiceParams represent the params that have been set for an individual
-// service.
-message ServiceParams {
-  // SlashFraction defines the fraction of the delegation that will be slashed
-  // in case of a misbehavior.
-  string slash_fraction = 1 [
-    deprecated = true,
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false
-  ];
-}

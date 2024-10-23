@@ -75,13 +75,6 @@ func migrateServiceParams(
 			}
 		}
 
-		// Store the service params to the services module
-		newServicesParams := servicestypes.NewServiceParams(legacyParams.SlashFraction)
-		err = servicesKeeper.SaveServiceParams(ctx, serviceID, newServicesParams)
-		if err != nil {
-			return err
-		}
-
 		// Delete the data after migration
 		store.Delete(iterator.Key())
 	}

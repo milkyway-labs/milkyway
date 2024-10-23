@@ -158,27 +158,35 @@ func (suite *KeeperTestSuite) UpdateOperatorParams(
 	suite.App.RestakingKeeper.SaveOperatorJoinedServices(ctx, operatorID, joinedServices)
 }
 
-// UpdateServiceParams updates the service's params.
-func (suite *KeeperTestSuite) UpdateServiceParams(
+// AddPoolsToServiceSecuringPools adds the provided pools the list of
+// pools from which the service can borrow security.
+func (suite *KeeperTestSuite) AddPoolsToServiceSecuringPools(
 	ctx sdk.Context,
 	serviceID uint32,
-	slashFraction math.LegacyDec,
 	whitelistedPoolsIDs []uint32,
-	whitelistedOperatorsIDs []uint32,
 ) {
 	// Make sure the service is found
 	_, found := suite.App.ServicesKeeper.GetService(ctx, serviceID)
 	suite.Require().True(found, "service must be found")
 
-	serviceParams := servicestypes.NewServiceParams(slashFraction)
-	err := suite.App.ServicesKeeper.SaveServiceParams(ctx, serviceID, serviceParams)
-	suite.Require().NoError(err)
-
 	for _, poolID := range whitelistedPoolsIDs {
 		err := suite.App.RestakingKeeper.AddPoolToServiceSecuringPools(ctx, serviceID, poolID)
 		suite.Require().NoError(err)
 	}
-	for _, operatorID := range whitelistedOperatorsIDs {
+}
+
+// AddOperatorsToServiceAllowList adds the given operators to the list of
+// operators allowed to secure the service.
+func (suite *KeeperTestSuite) AddOperatorsToServiceAllowList(
+	ctx sdk.Context,
+	serviceID uint32,
+	allowedOperatorsID []uint32,
+) {
+	// Make sure the service is found
+	_, found := suite.App.ServicesKeeper.GetService(ctx, serviceID)
+	suite.Require().True(found, "service must be found")
+
+	for _, operatorID := range allowedOperatorsID {
 		err := suite.App.RestakingKeeper.AddOperatorToServiceAllowList(ctx, serviceID, operatorID)
 		suite.Require().NoError(err)
 	}

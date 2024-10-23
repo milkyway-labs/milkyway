@@ -211,37 +211,6 @@ func (msg *MsgTransferServiceOwnership) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{addr}
 }
 
-// --------------------------------------------------------------------------------------------------------------------
-
-func NewMsgSetServiceParams(serviceID uint32, params ServiceParams, sender string) *MsgSetServiceParams {
-	return &MsgSetServiceParams{
-		ServiceID: serviceID,
-		Params:    params,
-		Sender:    sender,
-	}
-}
-
-// ValidateBasic implements sdk.Msg
-func (msg *MsgSetServiceParams) ValidateBasic() error {
-	if msg.ServiceID == 0 {
-		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid service ID: %d", msg.ServiceID)
-	}
-
-	err := msg.Params.Validate()
-	if err != nil {
-		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid params: %s", err.Error())
-	}
-
-	_, err = sdk.AccAddressFromBech32(msg.Sender)
-	if err != nil {
-		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address")
-	}
-
-	return nil
-}
-
-// --------------------------------------------------------------------------------------------------------------------
-
 func NewMsgUpdateParams(params Params, authority string) *MsgUpdateParams {
 	return &MsgUpdateParams{
 		Authority: authority,

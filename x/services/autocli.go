@@ -32,15 +32,6 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Example:   fmt.Sprintf(`%s query %s services --page-offset-100 --page-limit=100`, version.AppName, types.ModuleName),
 				},
 				{
-					RpcMethod: "ServiceParams",
-					Use:       "service-params [service-id]",
-					Short:     "Query the parameters of the service with the given id",
-					Example:   fmt.Sprintf(`%s query %s service 1`, version.AppName, types.ModuleName),
-					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
-						{ProtoField: "service_id"},
-					},
-				},
-				{
 					RpcMethod: "Params",
 					Use:       "params",
 					Short:     "Query the current services parameters",

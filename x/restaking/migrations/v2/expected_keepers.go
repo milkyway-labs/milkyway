@@ -15,7 +15,6 @@ type OperatorsKeeper interface {
 
 type ServicesKeeper interface {
 	GetService(ctx sdk.Context, serviceID uint32) (servicestypes.Service, bool)
-	SaveServiceParams(ctx sdk.Context, serviceID uint32, params servicestypes.ServiceParams) error
 }
 
 type RestakingKeeper interface {
