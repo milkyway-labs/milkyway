@@ -61,7 +61,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 You can specify a website and a picture URL using the optional flags.
 The operator will be created with the sender as the admin.`,
 					Example: fmt.Sprintf(
-						`%s tx %s create MilkyWay --website https://milkyway.zone --from alice`,
+						`%s tx %s register MilkyWay --website https://milkyway.zone --from alice`,
 						version.AppName, types.ModuleName,
 					),
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
@@ -74,9 +74,9 @@ The operator will be created with the sender as the admin.`,
 				},
 				{
 					RpcMethod: "UpdateOperator",
-					Use:       "edit [id]",
-					Short:     "Edit an existing operator",
-					Long: `Edit an existing operator having the provided it. 
+					Use:       "update [id]",
+					Short:     "Update an existing operator",
+					Long: `Update an existing operator having the provided it.
 
 You can specify the moniker, website and picture URL using the optional flags.
 Only the fields that you provide will be updated`,
@@ -100,6 +100,16 @@ Only the fields that you provide will be updated`,
 					Example:   fmt.Sprintf(`%s tx %s deactivate 1 --from alice`, version.AppName, types.ModuleName),
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "operator_id"},
+					},
+				},
+				{
+					RpcMethod: "TransferOperatorOwnership",
+					Use:       "transfer-ownership [id] [new-admin]",
+					Short:     "Transfer the ownership of an operator",
+					Example:   fmt.Sprintf(`%s tx %s transfer-ownership 1 init1... --from alice`, version.AppName, types.ModuleName),
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "operator_id"},
+						{ProtoField: "new_admin"},
 					},
 				},
 				{
