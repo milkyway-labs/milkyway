@@ -44,8 +44,9 @@ func (k *Keeper) AddOperatorToServiceAllowList(ctx sdk.Context, serviceID uint32
 	return k.serviceOperatorsAllowList.Set(ctx, key)
 }
 
-// ServiceRemoveOperatorFromWhitelist removes an operator from the service's whitelist
-func (k *Keeper) ServiceRemoveOperatorFromWhitelist(ctx sdk.Context, serviceID uint32, operatorID uint32) error {
+// RemoveOperatorFromServiceAllowList removes an operator from the list of operators
+// allowed to secure a service
+func (k *Keeper) RemoveOperatorFromServiceAllowList(ctx sdk.Context, serviceID uint32, operatorID uint32) error {
 	key := collections.Join(serviceID, operatorID)
 	return k.serviceOperatorsAllowList.Remove(ctx, key)
 }

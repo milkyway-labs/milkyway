@@ -149,7 +149,7 @@ func (k msgServer) RemoveAllowedOperator(goCtx context.Context, msg *types.MsgRe
 	}
 
 	// Remove the operator from the service's operators whitelist
-	err := k.ServiceRemoveOperatorFromWhitelist(ctx, msg.ServiceID, msg.OperatorID)
+	err := k.RemoveOperatorFromServiceAllowList(ctx, msg.ServiceID, msg.OperatorID)
 	if err != nil {
 		return nil, err
 	}
