@@ -12,7 +12,6 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/hashicorp/go-metrics"
 
-	"github.com/milkyway-labs/milkyway/utils"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
@@ -96,54 +95,6 @@ func (k msgServer) LeaveService(goCtx context.Context, msg *types.MsgLeaveServic
 	return &types.MsgLeaveServiceResponse{}, nil
 }
 
-// UpdateServiceParams defines the rpc method for Msg/UpdateServiceParams
-func (k msgServer) UpdateServiceParams(goCtx context.Context, msg *types.MsgUpdateServiceParams) (*types.MsgUpdateServiceParamsResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	service, found := k.servicesKeeper.GetService(ctx, msg.ServiceID)
-	if !found {
-		return nil, servicestypes.ErrServiceNotFound
-	}
-
-	if service.Admin != msg.Sender {
-		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can update the params")
-	}
-
-	for _, poolID := range msg.Params.WhitelistedPoolsIDs {
-		_, found = k.poolsKeeper.GetPool(ctx, poolID)
-		if !found {
-			return nil, errors.Wrapf(sdkerrors.ErrNotFound, "pool %d not found", poolID)
-		}
-	}
-
-	for _, operatorID := range msg.Params.WhitelistedOperatorsIDs {
-		_, found = k.operatorsKeeper.GetOperator(ctx, operatorID)
-		if !found {
-			return nil, errors.Wrapf(sdkerrors.ErrNotFound, "operator %d not found", operatorID)
-		}
-	}
-
-	k.SaveServiceParams(ctx, msg.ServiceID, msg.Params)
-
-	ctx.EventManager().EmitEvents(sdk.Events{
-		sdk.NewEvent(
-			types.EventTypeUpdateServiceParams,
-			sdk.NewAttribute(servicestypes.AttributeKeyServiceID, fmt.Sprint(msg.ServiceID)),
-			sdk.NewAttribute(types.AttributeKeySlashFraction, msg.Params.SlashFraction.String()),
-			sdk.NewAttribute(
-				types.AttributeKeyWhitelistedPoolIDs,
-				utils.FormatUint32Slice(msg.Params.WhitelistedPoolsIDs),
-			),
-			sdk.NewAttribute(
-				types.AttributeKeyWhitelistedOperatorIDs,
-				utils.FormatUint32Slice(msg.Params.WhitelistedOperatorsIDs),
-			),
-		),
-	})
-
-	return &types.MsgUpdateServiceParamsResponse{}, nil
-}
-
 // DelegatePool defines the rpc method for Msg/DelegatePool
 func (k msgServer) DelegatePool(goCtx context.Context, msg *types.MsgDelegatePool) (*types.MsgDelegatePoolResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
@@ -155,7 +106,7 @@ func (k msgServer) DelegatePool(goCtx context.Context, msg *types.MsgDelegatePoo
 		)
 	}
 
-	newShares, err := k.Keeper.DelegateToPool(ctx, msg.Amount, msg.Delegator)
+	newShares, err := k.DelegateToPool(ctx, msg.Amount, msg.Delegator)
 	if err != nil {
 		return nil, err
 	}
@@ -189,7 +140,7 @@ func (k msgServer) UndelegatePool(goCtx context.Context, msg *types.MsgUndelegat
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Perform the undelegation
-	completionTime, err := k.Keeper.UndelegateFromPool(ctx, msg.Amount, msg.Delegator)
+	completionTime, err := k.UndelegateFromPool(ctx, msg.Amount, msg.Delegator)
 	if err != nil {
 		return nil, err
 	}

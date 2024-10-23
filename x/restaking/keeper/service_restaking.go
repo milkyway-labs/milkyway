@@ -3,28 +3,145 @@ package keeper
 import (
 	"time"
 
+	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-// SaveServiceParams stored the given params for the given service
-func (k *Keeper) SaveServiceParams(ctx sdk.Context, serviceID uint32, params types.ServiceParams) {
-	store := ctx.KVStore(k.storeKey)
-	store.Set(types.ServiceParamsStoreKey(serviceID), k.cdc.MustMarshal(&params))
+// ServiceAllowedOperatorsIterator returns an iterator that iterates over all
+// operators allowed to secure a service
+func (k *Keeper) ServiceAllowedOperatorsIterator(ctx sdk.Context, serviceID uint32) (collections.KeySetIterator[collections.Pair[uint32, uint32]], error) {
+	return k.serviceOperatorsAllowList.Iterate(ctx, collections.NewPrefixedPairRange[uint32, uint32](serviceID))
 }
 
-// GetServiceParams returns the params for the given service, if any.
-// If not params are found, false is returned instead.
-func (k *Keeper) GetServiceParams(ctx sdk.Context, operatorID uint32) (params types.ServiceParams) {
-	store := ctx.KVStore(k.storeKey)
-	bz := store.Get(types.ServiceParamsStoreKey(operatorID))
-	if bz == nil {
-		return types.DefaultServiceParams()
+// GetAllServiceAllowedOperators returns all operators that have been whitelisted
+// by a service
+func (k *Keeper) GetAllServiceAllowedOperators(ctx sdk.Context, serviceID uint32) ([]uint32, error) {
+	iteretor, err := k.ServiceAllowedOperatorsIterator(ctx, serviceID)
+	if err != nil {
+		return nil, err
 	}
-	k.cdc.MustUnmarshal(bz, &params)
-	return params
+
+	defer iteretor.Close()
+	var operators []uint32
+	for ; iteretor.Valid(); iteretor.Next() {
+		serviceOperatorPair, err := iteretor.Key()
+		if err != nil {
+			return nil, err
+		}
+		operators = append(operators, serviceOperatorPair.K2())
+	}
+
+	return operators, nil
+}
+
+// AddOperatorToServiceAllowList adds an operator to the list of operators
+// allowed to secure a service
+func (k *Keeper) AddOperatorToServiceAllowList(ctx sdk.Context, serviceID uint32, operatorID uint32) error {
+	key := collections.Join(serviceID, operatorID)
+	return k.serviceOperatorsAllowList.Set(ctx, key)
+}
+
+// IsServiceOpertorsAllowListConfigured returns true if the operators allow list
+// has been configured for the given service
+func (k *Keeper) IsServiceOpertorsAllowListConfigured(ctx sdk.Context, serviceID uint32) (bool, error) {
+	iteretor, err := k.ServiceAllowedOperatorsIterator(ctx, serviceID)
+	if err != nil {
+		return false, err
+	}
+	defer iteretor.Close()
+
+	for ; iteretor.Valid(); iteretor.Next() {
+		return true, nil
+	}
+
+	return false, nil
+}
+
+// CanOpeartorValidateService returns true if the given operator can secure
+// the given service
+func (k *Keeper) CanOperatorValidateService(ctx sdk.Context, serviceID uint32, operatorID uint32) (bool, error) {
+	configured, err := k.IsServiceOpertorsAllowListConfigured(ctx, serviceID)
+	if err != nil {
+		return false, err
+	}
+	// Allow all when the list is empty
+	if !configured {
+		return true, nil
+	}
+
+	key := collections.Join(serviceID, operatorID)
+	return k.serviceOperatorsAllowList.Has(ctx, key)
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// ServiceSecuringPoolsIterator returns an iterator that iterates over all
+// pools allowed to secure the given service.
+func (k *Keeper) ServiceSecuringPoolsIterator(ctx sdk.Context, serviceID uint32) (collections.KeySetIterator[collections.Pair[uint32, uint32]], error) {
+	return k.serviceSecuringPools.Iterate(ctx, collections.NewPrefixedPairRange[uint32, uint32](serviceID))
+}
+
+// GetAllServiceSecuringPools returns all pools that have been allowed to
+// to secure the give service
+func (k *Keeper) GetAllServiceSecuringPools(ctx sdk.Context, serviceID uint32) ([]uint32, error) {
+	iteretor, err := k.ServiceSecuringPoolsIterator(ctx, serviceID)
+	if err != nil {
+		return nil, err
+	}
+
+	defer iteretor.Close()
+	var pools []uint32
+	for ; iteretor.Valid(); iteretor.Next() {
+		servicePoolPair, err := iteretor.Key()
+		if err != nil {
+			return nil, err
+		}
+		pools = append(pools, servicePoolPair.K2())
+	}
+
+	return pools, nil
+}
+
+// AddPoolToServiceSecuringPools adds a pool to the list of pools
+// permitted for securing the service
+func (k *Keeper) AddPoolToServiceSecuringPools(ctx sdk.Context, serviceID uint32, poolID uint32) error {
+	key := collections.Join(serviceID, poolID)
+	return k.serviceSecuringPools.Set(ctx, key)
+}
+
+// IsServiceSecuringPoolsConfigured returns true if the list of securing pools
+// has been configured for the given service
+func (k *Keeper) IsServiceSecuringPoolsConfigured(ctx sdk.Context, serviceID uint32) (bool, error) {
+	iteretor, err := k.ServiceSecuringPoolsIterator(ctx, serviceID)
+	if err != nil {
+		return false, err
+	}
+	defer iteretor.Close()
+
+	for ; iteretor.Valid(); iteretor.Next() {
+		return true, nil
+	}
+
+	return false, nil
+}
+
+// IsServiceSecuredByPool returns true if the service is being secured
+// by the given pool
+func (k *Keeper) IsServiceSecuredByPool(ctx sdk.Context, serviceID uint32, poolID uint32) (bool, error) {
+	configured, err := k.IsServiceSecuringPoolsConfigured(ctx, serviceID)
+	if err != nil {
+		return false, err
+	}
+	// Allow all when the list is empty
+	if !configured {
+		return true, nil
+	}
+
+	key := collections.Join(serviceID, poolID)
+	return k.serviceSecuringPools.Has(ctx, key)
 }
 
 // --------------------------------------------------------------------------------------------------------------------

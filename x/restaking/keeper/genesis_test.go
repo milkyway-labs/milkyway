@@ -44,41 +44,48 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			},
 		},
 		{
-			name: "service params are exported properly",
+			name: "services allowed operators are exported properly",
 			store: func(ctx sdk.Context) {
 				suite.k.SetParams(ctx, types.DefaultParams())
 
-				suite.k.SaveServiceParams(ctx, 1, types.NewServiceParams(
-					sdkmath.LegacyNewDecWithPrec(1, 2),
-					[]uint32{1, 2},
-					nil,
-				))
+				err := suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
+				suite.Require().NoError(err)
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 1, 2)
+				suite.Require().NoError(err)
 
-				suite.k.SaveServiceParams(ctx, 2, types.NewServiceParams(
-					sdkmath.LegacyNewDecWithPrec(5, 2),
-					[]uint32{3, 4},
-					[]uint32{5, 6},
-				))
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 2, 3)
+				suite.Require().NoError(err)
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 2, 4)
+				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				Params: types.DefaultParams(),
-				ServicesParams: []types.ServiceParamsRecord{
-					{
-						ServiceID: 1,
-						Params: types.NewServiceParams(
-							sdkmath.LegacyNewDecWithPrec(1, 2),
-							[]uint32{1, 2},
-							nil,
-						),
-					},
-					{
-						ServiceID: 2,
-						Params: types.NewServiceParams(
-							sdkmath.LegacyNewDecWithPrec(5, 2),
-							[]uint32{3, 4},
-							[]uint32{5, 6},
-						),
-					},
+				ServicesAllowedOperators: []types.ServiceAllowedOperators{
+					types.NewServiceAllowedOperators(1, []uint32{1, 2}),
+					types.NewServiceAllowedOperators(2, []uint32{3, 4}),
+				},
+			},
+		},
+		{
+			name: "services securing pools are exported properly",
+			store: func(ctx sdk.Context) {
+				suite.k.SetParams(ctx, types.DefaultParams())
+
+				err := suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
+				suite.Require().NoError(err)
+				err = suite.k.AddPoolToServiceSecuringPools(ctx, 1, 2)
+				suite.Require().NoError(err)
+
+				err = suite.k.AddPoolToServiceSecuringPools(ctx, 2, 3)
+				suite.Require().NoError(err)
+				err = suite.k.AddPoolToServiceSecuringPools(ctx, 2, 4)
+				suite.Require().NoError(err)
+			},
+			expGenesis: &types.GenesisState{
+				Params: types.DefaultParams(),
+				ServicesSecuringPools: []types.ServiceSecuringPools{
+					types.NewServiceSecuringPools(1, []uint32{1, 2}),
+					types.NewServiceSecuringPools(2, []uint32{3, 4}),
 				},
 			},
 		},
@@ -360,42 +367,41 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 			},
 		},
 		{
-			name: "service params are stored properly",
+			name: "services allowed operators are stored properly",
 			genesis: &types.GenesisState{
 				Params: types.DefaultParams(),
-				ServicesParams: []types.ServiceParamsRecord{
-					{
-						ServiceID: 1,
-						Params: types.NewServiceParams(
-							sdkmath.LegacyNewDecWithPrec(1, 2),
-							[]uint32{1, 2},
-							nil,
-						),
-					},
-					{
-						ServiceID: 2,
-						Params: types.NewServiceParams(
-							sdkmath.LegacyNewDecWithPrec(5, 2),
-							[]uint32{3, 4},
-							[]uint32{5, 6},
-						),
-					},
+				ServicesAllowedOperators: []types.ServiceAllowedOperators{
+					types.NewServiceAllowedOperators(1, []uint32{1, 2}),
+					types.NewServiceAllowedOperators(2, []uint32{3, 4}),
 				},
 			},
 			check: func(ctx sdk.Context) {
-				stored := suite.k.GetServiceParams(ctx, 1)
-				suite.Require().Equal(types.NewServiceParams(
-					sdkmath.LegacyNewDecWithPrec(1, 2),
-					[]uint32{1, 2},
-					nil,
-				), stored)
+				stored, err := suite.k.GetAllServiceAllowedOperators(ctx, 1)
+				suite.Require().NoError(err)
+				suite.Require().Equal([]uint32{1, 2}, stored)
 
-				stored = suite.k.GetServiceParams(ctx, 2)
-				suite.Require().Equal(types.NewServiceParams(
-					sdkmath.LegacyNewDecWithPrec(5, 2),
-					[]uint32{3, 4},
-					[]uint32{5, 6},
-				), stored)
+				stored, err = suite.k.GetAllServiceAllowedOperators(ctx, 2)
+				suite.Require().NoError(err)
+				suite.Require().Equal([]uint32{3, 4}, stored)
+			},
+		},
+		{
+			name: "services securing pools are stored properly",
+			genesis: &types.GenesisState{
+				Params: types.DefaultParams(),
+				ServicesSecuringPools: []types.ServiceSecuringPools{
+					types.NewServiceSecuringPools(1, []uint32{1, 2}),
+					types.NewServiceSecuringPools(2, []uint32{3, 4}),
+				},
+			},
+			check: func(ctx sdk.Context) {
+				stored, err := suite.k.GetAllServiceSecuringPools(ctx, 1)
+				suite.Require().NoError(err)
+				suite.Require().Equal([]uint32{1, 2}, stored)
+
+				stored, err = suite.k.GetAllServiceSecuringPools(ctx, 2)
+				suite.Require().NoError(err)
+				suite.Require().Equal([]uint32{3, 4}, stored)
 			},
 		},
 		{

@@ -49,9 +49,14 @@ func NewQueryOperatorUnbondingDelegationRequest(operatorID uint32, delegatorAddr
 	return &QueryOperatorUnbondingDelegationRequest{OperatorId: operatorID, DelegatorAddress: delegatorAddress}
 }
 
-// NewQueryServiceParamsRequest creates a new QueryServiceParamsRequest instance
-func NewQueryServiceParamsRequest(serviceID uint32) *QueryServiceParamsRequest {
-	return &QueryServiceParamsRequest{ServiceId: serviceID}
+// NewQueryServiceAllowedOperatorsRequest creates a new QueryServiceAllowedOperatorsRequest instance
+func NewQueryServiceAllowedOperatorsRequest(serviceID uint32, pagination *query.PageRequest) *QueryServiceAllowedOperatorsRequest {
+	return &QueryServiceAllowedOperatorsRequest{ServiceId: serviceID, Pagination: pagination}
+}
+
+// NewQueryServiceSecuringPoolsRequest creates a new QueryServiceSecuringPoolsRequest instance
+func NewQueryServiceSecuringPoolsRequest(serviceID uint32, pagination *query.PageRequest) *QueryServiceSecuringPoolsRequest {
+	return &QueryServiceSecuringPoolsRequest{ServiceId: serviceID, Pagination: pagination}
 }
 
 // NewQueryServiceDelegationsRequest creates a new QueryServiceDelegationsRequest instance

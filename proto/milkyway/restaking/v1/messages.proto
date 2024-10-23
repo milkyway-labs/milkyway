@@ -18,18 +18,11 @@ service Msg {
 
   // JoinService defines the operation that allows the operator admin
   // to start securing an AVS
-  rpc JoinService(MsgJoinService)
-    returns (MsgJoinServiceResponse);
+  rpc JoinService(MsgJoinService) returns (MsgJoinServiceResponse);
 
   // LeaveService defines the operation that allows the operator admin
   // to stop securing an AVS
-  rpc LeaveService(MsgLeaveService)
-    returns (MsgLeaveServiceResponse);
-
-  // UpdateServiceParams defines the operation that allows the service admin to
-  // update the service's parameters.
-  rpc UpdateServiceParams(MsgUpdateServiceParams)
-      returns (MsgUpdateServiceParamsResponse);
+  rpc LeaveService(MsgLeaveService) returns (MsgLeaveServiceResponse);
 
   // DelegatePool defines the operation that allows users to delegate any amount
   // of an asset to a pool that can then be used to provide services with
@@ -96,23 +89,6 @@ message MsgLeaveService {
 
 // MsgLeaveerviceResponse is the return value of MsgLeveService.
 message MsgLeaveServiceResponse {}
-
-// MsgUpdateServiceParams defines the message structure for the
-// UpdateServiceParams gRPC service method. It allows the service admin to
-// update the service's parameters.
-message MsgUpdateServiceParams {
-  option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/MsgUpdateServiceParams";
-
-  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
-
-  uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
-
-  ServiceParams params = 3 [ (gogoproto.nullable) = false ];
-}
-
-// MsgUpdateServiceParamsResponse is the return value of MsgUpdateServiceParams.
-message MsgUpdateServiceParamsResponse {}
 
 // MsgDelegatePool defines the message structure for the DelegatePool gRPC
 // service method. It allows a user to put their assets into a restaking pool

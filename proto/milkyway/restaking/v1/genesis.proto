@@ -14,19 +14,28 @@ message OperatorJoinedServicesRecord {
   uint32 operator_id = 1 [ (gogoproto.customname) = "OperatorID" ];
 
   // JoinedServices represents the services joined by the operator.
-  OperatorJoinedServices joined_services = 2 [
-    (gogoproto.nullable) = false
-  ];
+  OperatorJoinedServices joined_services = 2 [ (gogoproto.nullable) = false ];
 }
 
-// ServiceParamsRecord represents the params that have been set for an
-// individual service.
-message ServiceParamsRecord {
+// ServiceAllowedOperators represents the operators allowed to secure a
+// a service.
+message ServiceAllowedOperators {
   // ServiceID is the ID of the service.
   uint32 service_id = 1 [ (gogoproto.customname) = "ServiceID" ];
 
-  // Params defines the parameters for the operators module.
-  ServiceParams params = 2 [ (gogoproto.nullable) = false ];
+  // OperatorIDs defines the allowed operator IDs.
+  repeated uint32 operator_ids = 2 [ (gogoproto.customname) = "OperatorIDs" ];
+}
+
+// ServiceSecuringPools represents the list pools from which a service can
+// borrow security
+message ServiceSecuringPools {
+  // ServiceID is the ID of the service.
+  uint32 service_id = 1 [ (gogoproto.customname) = "ServiceID" ];
+
+  // PoolIDs defines the IDs of the pools from which the service can borrow
+  // security.
+  repeated uint32 pool_ids = 2 [ (gogoproto.customname) = "PoolIDs" ];
 }
 
 // GenesisState defines the restaking module's genesis state.
@@ -34,18 +43,24 @@ message GenesisState {
   // Params defines the parameters of the module.
   Params params = 1 [ (gogoproto.nullable) = false ];
 
-  // OperatorsJoinedServices defines the list of the services that each operator has joined.
+  // OperatorsJoinedServices defines the list of the services that each operator
+  // has joined.
   repeated OperatorJoinedServicesRecord operators_joined_services = 2
       [ (gogoproto.nullable) = false ];
 
-  // ServicesParams defines the list of services parameters.
-  repeated ServiceParamsRecord services_params = 3
+  // ServiceAllowedOperators defines the operators allowed to secure each
+  // service.
+  repeated ServiceAllowedOperators services_allowed_operators = 3
+      [ (gogoproto.nullable) = false ];
+
+  // ServicesSecuringPools defines the whitelisted pools for each service.
+  repeated ServiceSecuringPools services_securing_pools = 4
       [ (gogoproto.nullable) = false ];
 
   // Delegations represents the delegations.
-  repeated Delegation delegations = 4 [ (gogoproto.nullable) = false ];
+  repeated Delegation delegations = 5 [ (gogoproto.nullable) = false ];
 
   // UnbondingDelegations represents the unbonding delegations.
-  repeated UnbondingDelegation unbonding_delegations = 5
+  repeated UnbondingDelegation unbonding_delegations = 6
       [ (gogoproto.nullable) = false ];
 }

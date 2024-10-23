@@ -158,26 +158,38 @@ func (suite *KeeperTestSuite) UpdateOperatorParams(
 	suite.App.RestakingKeeper.SaveOperatorJoinedServices(ctx, operatorID, joinedServices)
 }
 
-// UpdateServiceParams updates the service's params.
-func (suite *KeeperTestSuite) UpdateServiceParams(
+// AddPoolsToServiceSecuringPools adds the provided pools the list of
+// pools from which the service can borrow security.
+func (suite *KeeperTestSuite) AddPoolsToServiceSecuringPools(
 	ctx sdk.Context,
 	serviceID uint32,
-	slashFraction math.LegacyDec,
 	whitelistedPoolsIDs []uint32,
-	whitelistedOperatorsIDs []uint32,
 ) {
 	// Make sure the service is found
-	service, found := suite.App.ServicesKeeper.GetService(ctx, serviceID)
+	_, found := suite.App.ServicesKeeper.GetService(ctx, serviceID)
 	suite.Require().True(found, "service must be found")
 
-	// Make the operator join the service and set its commission rate to 10%.
-	restakingMsgServer := restakingkeeper.NewMsgServer(suite.App.RestakingKeeper)
-	_, err := restakingMsgServer.UpdateServiceParams(ctx, restakingtypes.NewMsgUpdateServiceParams(
-		service.ID,
-		restakingtypes.NewServiceParams(slashFraction, whitelistedPoolsIDs, whitelistedOperatorsIDs),
-		service.Admin,
-	))
-	suite.Require().NoError(err)
+	for _, poolID := range whitelistedPoolsIDs {
+		err := suite.App.RestakingKeeper.AddPoolToServiceSecuringPools(ctx, serviceID, poolID)
+		suite.Require().NoError(err)
+	}
+}
+
+// AddOperatorsToServiceAllowList adds the given operators to the list of
+// operators allowed to secure the service.
+func (suite *KeeperTestSuite) AddOperatorsToServiceAllowList(
+	ctx sdk.Context,
+	serviceID uint32,
+	allowedOperatorsID []uint32,
+) {
+	// Make sure the service is found
+	_, found := suite.App.ServicesKeeper.GetService(ctx, serviceID)
+	suite.Require().True(found, "service must be found")
+
+	for _, operatorID := range allowedOperatorsID {
+		err := suite.App.RestakingKeeper.AddOperatorToServiceAllowList(ctx, serviceID, operatorID)
+		suite.Require().NoError(err)
+	}
 }
 
 // CreateRewardsPlan creates a rewards plan with the given parameters.

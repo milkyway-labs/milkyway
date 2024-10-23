@@ -46,7 +46,6 @@ func (k *Keeper) Services(ctx context.Context, request *types.QueryServicesReque
 		services = append(services, service)
 		return nil
 	})
-
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}

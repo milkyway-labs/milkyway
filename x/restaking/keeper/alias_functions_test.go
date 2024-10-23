@@ -63,45 +63,46 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllOperatorsJoinedServicesRecord() {
 	}
 }
 
-func (suite *KeeperTestSuite) TestKeeper_GetAllServicesParams() {
+// --------------------------------------------------------------------------------------------------------------------
+
+func (suite *KeeperTestSuite) TestKeeper_GetAllServicesAllowedOperators() {
 	testCases := []struct {
-		name       string
-		store      func(ctx sdk.Context)
-		shouldErr  bool
-		expRecords []types.ServiceParamsRecord
+		name                string
+		store               func(ctx sdk.Context)
+		shouldErr           bool
+		expectedWhitelisted []types.ServiceAllowedOperators
 	}{
 		{
-			name: "services params are returned properly",
+			name:      "no allowed operators returns nil",
+			shouldErr: false,
+		},
+		{
+			name: "securing pools are not returned",
 			store: func(ctx sdk.Context) {
-				suite.k.SaveServiceParams(ctx, 1, types.NewServiceParams(
-					sdkmath.LegacyNewDec(10),
-					[]uint32{1, 2},
-					nil,
-				))
-
-				suite.k.SaveServiceParams(ctx, 2, types.NewServiceParams(
-					sdkmath.LegacyNewDec(3),
-					[]uint32{3, 4},
-					[]uint32{1, 2},
-				))
+				err := suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
+				suite.Require().NoError(err)
+				err = suite.k.AddPoolToServiceSecuringPools(ctx, 1, 2)
+				suite.Require().NoError(err)
 			},
-			expRecords: []types.ServiceParamsRecord{
-				{
-					ServiceID: 1,
-					Params: types.NewServiceParams(
-						sdkmath.LegacyNewDec(10),
-						[]uint32{1, 2},
-						nil,
-					),
-				},
-				{
-					ServiceID: 2,
-					Params: types.NewServiceParams(
-						sdkmath.LegacyNewDec(3),
-						[]uint32{3, 4},
-						[]uint32{1, 2},
-					),
-				},
+			shouldErr: false,
+		},
+		{
+			name: "allowed operators are returned properly",
+			store: func(ctx sdk.Context) {
+				err := suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
+				suite.Require().NoError(err)
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 1, 2)
+				suite.Require().NoError(err)
+
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 2, 4)
+				suite.Require().NoError(err)
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 2, 5)
+				suite.Require().NoError(err)
+			},
+			shouldErr: false,
+			expectedWhitelisted: []types.ServiceAllowedOperators{
+				types.NewServiceAllowedOperators(1, []uint32{1, 2}),
+				types.NewServiceAllowedOperators(2, []uint32{4, 5}),
 			},
 		},
 	}
@@ -109,19 +110,94 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServicesParams() {
 	for _, tc := range testCases {
 		tc := tc
 		suite.Run(tc.name, func() {
-			ctx, _ := suite.ctx.CacheContext()
+			suite.SetupTest()
+			ctx := suite.ctx
+			if tc.store != nil {
+				tc.store(ctx)
+			}
 			if tc.store != nil {
 				tc.store(ctx)
 			}
 
-			services := suite.k.GetAllServicesParams(ctx)
-			suite.Require().Equal(tc.expRecords, services)
+			whitelistedOperators, err := suite.k.GetAllServicesAllowedOperators(ctx)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expectedWhitelisted, whitelistedOperators)
+			}
 		})
 	}
 }
 
 // --------------------------------------------------------------------------------------------------------------------
 
+func (suite *KeeperTestSuite) TestKeeper_GetAllServicesSecuringPools() {
+	testCases := []struct {
+		name                string
+		store               func(ctx sdk.Context)
+		shouldErr           bool
+		expectedWhitelisted []types.ServiceSecuringPools
+	}{
+		{
+			name:      "no securing pools returns nil",
+			shouldErr: false,
+		},
+		{
+			name: "allowed operators are not returned",
+			store: func(ctx sdk.Context) {
+				err := suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
+				suite.Require().NoError(err)
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 1, 2)
+				suite.Require().NoError(err)
+			},
+			shouldErr: false,
+		},
+		{
+			name: "securing pools are returned properly",
+			store: func(ctx sdk.Context) {
+				err := suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
+				suite.Require().NoError(err)
+				err = suite.k.AddPoolToServiceSecuringPools(ctx, 1, 2)
+				suite.Require().NoError(err)
+
+				err = suite.k.AddPoolToServiceSecuringPools(ctx, 2, 4)
+				suite.Require().NoError(err)
+				err = suite.k.AddPoolToServiceSecuringPools(ctx, 2, 5)
+				suite.Require().NoError(err)
+			},
+			shouldErr: false,
+			expectedWhitelisted: []types.ServiceSecuringPools{
+				types.NewServiceSecuringPools(1, []uint32{1, 2}),
+				types.NewServiceSecuringPools(2, []uint32{4, 5}),
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			suite.SetupTest()
+			ctx := suite.ctx
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			whitelistedOperators, err := suite.k.GetAllServicesSecuringPools(ctx)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expectedWhitelisted, whitelistedOperators)
+			}
+		})
+	}
+}
+
+// --------------------------------------------------------------------------------------------------------------------
 func (suite *KeeperTestSuite) TestKeeper_GetAllPoolDelegations() {
 	testCases := []struct {
 		name           string

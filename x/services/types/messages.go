@@ -211,8 +211,6 @@ func (msg *MsgTransferServiceOwnership) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{addr}
 }
 
-// --------------------------------------------------------------------------------------------------------------------
-
 func NewMsgUpdateParams(params Params, authority string) *MsgUpdateParams {
 	return &MsgUpdateParams{
 		Authority: authority,

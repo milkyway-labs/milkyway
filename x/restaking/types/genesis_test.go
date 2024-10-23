@@ -29,6 +29,7 @@ func TestGenesis_Validate(t *testing.T) {
 				nil,
 				nil,
 				nil,
+				nil,
 				types.DefaultParams(),
 			),
 			shouldErr: true,
@@ -45,19 +46,90 @@ func TestGenesis_Validate(t *testing.T) {
 				nil,
 				nil,
 				nil,
+				nil,
 				types.DefaultParams(),
 			),
 			shouldErr: true,
 		},
 		{
-			name: "invalid service params record returns error",
+			name: "duplicated service allowed operator returns error",
 			genesis: types.NewGenesis(
 				nil,
-				[]types.ServiceParamsRecord{
-					{
-						ServiceID: 1,
-						Params:    types.NewServiceParams(sdkmath.LegacyNewDec(2), nil, nil),
-					},
+				[]types.ServiceAllowedOperators{
+					types.NewServiceAllowedOperators(1, []uint32{1, 2, 3}),
+					types.NewServiceAllowedOperators(1, []uint32{1, 2, 3}),
+				},
+				nil,
+				nil,
+				nil,
+				types.DefaultParams(),
+			),
+			shouldErr: true,
+		},
+		{
+			name: "service allowed operators with invalid service ID returns error",
+			genesis: types.NewGenesis(
+				nil,
+				[]types.ServiceAllowedOperators{
+					types.NewServiceAllowedOperators(0, []uint32{1, 2, 3}),
+				},
+				nil,
+				nil,
+				nil,
+				types.DefaultParams(),
+			),
+			shouldErr: true,
+		},
+		{
+			name: "service allowed operators with invalid list returns error",
+			genesis: types.NewGenesis(
+				nil,
+				[]types.ServiceAllowedOperators{
+					types.NewServiceAllowedOperators(1, []uint32{0, 1}),
+				},
+				nil,
+				nil,
+				nil,
+				types.DefaultParams(),
+			),
+			shouldErr: true,
+		},
+		{
+			name: "duplicated service securing pool returns error",
+			genesis: types.NewGenesis(
+				nil,
+				nil,
+				[]types.ServiceSecuringPools{
+					types.NewServiceSecuringPools(1, []uint32{1, 2, 3}),
+					types.NewServiceSecuringPools(1, []uint32{1, 2, 3}),
+				},
+				nil,
+				nil,
+				types.DefaultParams(),
+			),
+			shouldErr: true,
+		},
+		{
+			name: "service securing pools with invalid service ID returns error",
+			genesis: types.NewGenesis(
+				nil,
+				nil,
+				[]types.ServiceSecuringPools{
+					types.NewServiceSecuringPools(0, []uint32{1, 2, 3}),
+				},
+				nil,
+				nil,
+				types.DefaultParams(),
+			),
+			shouldErr: true,
+		},
+		{
+			name: "service securing pools with invalid list returns error",
+			genesis: types.NewGenesis(
+				nil,
+				nil,
+				[]types.ServiceSecuringPools{
+					types.NewServiceSecuringPools(1, []uint32{0, 1}),
 				},
 				nil,
 				nil,
@@ -68,6 +140,7 @@ func TestGenesis_Validate(t *testing.T) {
 		{
 			name: "invalid pool delegation entry returns error",
 			genesis: types.NewGenesis(
+				nil,
 				nil,
 				nil,
 				[]types.Delegation{
@@ -87,6 +160,7 @@ func TestGenesis_Validate(t *testing.T) {
 			genesis: types.NewGenesis(
 				nil,
 				nil,
+				nil,
 				[]types.Delegation{
 					types.NewServiceDelegation(
 						0,
@@ -104,6 +178,7 @@ func TestGenesis_Validate(t *testing.T) {
 			genesis: types.NewGenesis(
 				nil,
 				nil,
+				nil,
 				[]types.Delegation{
 					types.NewOperatorDelegation(
 						0,
@@ -119,6 +194,7 @@ func TestGenesis_Validate(t *testing.T) {
 		{
 			name: "invalid unbonding delegation returns error",
 			genesis: types.NewGenesis(
+				nil,
 				nil,
 				nil,
 				nil,
@@ -143,6 +219,7 @@ func TestGenesis_Validate(t *testing.T) {
 				nil,
 				nil,
 				nil,
+				nil,
 				types.NewParams(0),
 			),
 			shouldErr: true,
@@ -161,12 +238,13 @@ func TestGenesis_Validate(t *testing.T) {
 						JoinedServices: types.NewOperatorJoinedServices([]uint32{2, 3, 5}),
 					},
 				},
-				[]types.ServiceParamsRecord{
-					{
-						ServiceID: 2,
-						Params: types.NewServiceParams(
-							sdkmath.LegacyNewDecWithPrec(1, 2), []uint32{1, 2, 3}, []uint32{1, 5}),
-					},
+				[]types.ServiceAllowedOperators{
+					types.NewServiceAllowedOperators(1, []uint32{1, 2, 3}),
+					types.NewServiceAllowedOperators(2, []uint32{5, 6, 7}),
+				},
+				[]types.ServiceSecuringPools{
+					types.NewServiceSecuringPools(3, []uint32{1, 2, 3}),
+					types.NewServiceSecuringPools(4, []uint32{5, 6, 7}),
 				},
 				[]types.Delegation{
 					types.NewPoolDelegation(

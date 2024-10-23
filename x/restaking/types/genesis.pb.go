@@ -79,27 +79,27 @@ func (m *OperatorJoinedServicesRecord) GetJoinedServices() OperatorJoinedService
 	return OperatorJoinedServices{}
 }
 
-// ServiceParamsRecord represents the params that have been set for an
-// individual service.
-type ServiceParamsRecord struct {
+// ServiceAllowedOperators represents the operators allowed to secure a
+// a service.
+type ServiceAllowedOperators struct {
 	// ServiceID is the ID of the service.
 	ServiceID uint32 `protobuf:"varint,1,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
-	// Params defines the parameters for the operators module.
-	Params ServiceParams `protobuf:"bytes,2,opt,name=params,proto3" json:"params"`
+	// OperatorIDs defines the allowed operator IDs.
+	OperatorIDs []uint32 `protobuf:"varint,2,rep,packed,name=operator_ids,json=operatorIds,proto3" json:"operator_ids,omitempty"`
 }
 
-func (m *ServiceParamsRecord) Reset()         { *m = ServiceParamsRecord{} }
-func (m *ServiceParamsRecord) String() string { return proto.CompactTextString(m) }
-func (*ServiceParamsRecord) ProtoMessage()    {}
-func (*ServiceParamsRecord) Descriptor() ([]byte, []int) {
+func (m *ServiceAllowedOperators) Reset()         { *m = ServiceAllowedOperators{} }
+func (m *ServiceAllowedOperators) String() string { return proto.CompactTextString(m) }
+func (*ServiceAllowedOperators) ProtoMessage()    {}
+func (*ServiceAllowedOperators) Descriptor() ([]byte, []int) {
 	return fileDescriptor_0378bd63cae7d256, []int{1}
 }
-func (m *ServiceParamsRecord) XXX_Unmarshal(b []byte) error {
+func (m *ServiceAllowedOperators) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *ServiceParamsRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *ServiceAllowedOperators) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_ServiceParamsRecord.Marshal(b, m, deterministic)
+		return xxx_messageInfo_ServiceAllowedOperators.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -109,51 +109,112 @@ func (m *ServiceParamsRecord) XXX_Marshal(b []byte, deterministic bool) ([]byte,
 		return b[:n], nil
 	}
 }
-func (m *ServiceParamsRecord) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ServiceParamsRecord.Merge(m, src)
+func (m *ServiceAllowedOperators) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ServiceAllowedOperators.Merge(m, src)
 }
-func (m *ServiceParamsRecord) XXX_Size() int {
+func (m *ServiceAllowedOperators) XXX_Size() int {
 	return m.Size()
 }
-func (m *ServiceParamsRecord) XXX_DiscardUnknown() {
-	xxx_messageInfo_ServiceParamsRecord.DiscardUnknown(m)
+func (m *ServiceAllowedOperators) XXX_DiscardUnknown() {
+	xxx_messageInfo_ServiceAllowedOperators.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_ServiceParamsRecord proto.InternalMessageInfo
+var xxx_messageInfo_ServiceAllowedOperators proto.InternalMessageInfo
 
-func (m *ServiceParamsRecord) GetServiceID() uint32 {
+func (m *ServiceAllowedOperators) GetServiceID() uint32 {
 	if m != nil {
 		return m.ServiceID
 	}
 	return 0
 }
 
-func (m *ServiceParamsRecord) GetParams() ServiceParams {
+func (m *ServiceAllowedOperators) GetOperatorIDs() []uint32 {
 	if m != nil {
-		return m.Params
+		return m.OperatorIDs
 	}
-	return ServiceParams{}
+	return nil
+}
+
+// ServiceSecuringPools represents the list pools from which a service can
+// borrow security
+type ServiceSecuringPools struct {
+	// ServiceID is the ID of the service.
+	ServiceID uint32 `protobuf:"varint,1,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
+	// PoolIDs defines the IDs of the pools from which the service can borrow
+	// security.
+	PoolIDs []uint32 `protobuf:"varint,2,rep,packed,name=pool_ids,json=poolIds,proto3" json:"pool_ids,omitempty"`
+}
+
+func (m *ServiceSecuringPools) Reset()         { *m = ServiceSecuringPools{} }
+func (m *ServiceSecuringPools) String() string { return proto.CompactTextString(m) }
+func (*ServiceSecuringPools) ProtoMessage()    {}
+func (*ServiceSecuringPools) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0378bd63cae7d256, []int{2}
+}
+func (m *ServiceSecuringPools) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ServiceSecuringPools) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ServiceSecuringPools.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ServiceSecuringPools) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ServiceSecuringPools.Merge(m, src)
+}
+func (m *ServiceSecuringPools) XXX_Size() int {
+	return m.Size()
+}
+func (m *ServiceSecuringPools) XXX_DiscardUnknown() {
+	xxx_messageInfo_ServiceSecuringPools.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ServiceSecuringPools proto.InternalMessageInfo
+
+func (m *ServiceSecuringPools) GetServiceID() uint32 {
+	if m != nil {
+		return m.ServiceID
+	}
+	return 0
+}
+
+func (m *ServiceSecuringPools) GetPoolIDs() []uint32 {
+	if m != nil {
+		return m.PoolIDs
+	}
+	return nil
 }
 
 // GenesisState defines the restaking module's genesis state.
 type GenesisState struct {
 	// Params defines the parameters of the module.
 	Params Params `protobuf:"bytes,1,opt,name=params,proto3" json:"params"`
-	// OperatorsJoinedServices defines the list of the services that each operator has joined.
+	// OperatorsJoinedServices defines the list of the services that each operator
+	// has joined.
 	OperatorsJoinedServices []OperatorJoinedServicesRecord `protobuf:"bytes,2,rep,name=operators_joined_services,json=operatorsJoinedServices,proto3" json:"operators_joined_services"`
-	// ServicesParams defines the list of services parameters.
-	ServicesParams []ServiceParamsRecord `protobuf:"bytes,3,rep,name=services_params,json=servicesParams,proto3" json:"services_params"`
+	// ServiceAllowedOperators defines the operators allowed to secure each
+	// service.
+	ServicesAllowedOperators []ServiceAllowedOperators `protobuf:"bytes,3,rep,name=services_allowed_operators,json=servicesAllowedOperators,proto3" json:"services_allowed_operators"`
+	// ServicesSecuringPools defines the whitelisted pools for each service.
+	ServicesSecuringPools []ServiceSecuringPools `protobuf:"bytes,4,rep,name=services_securing_pools,json=servicesSecuringPools,proto3" json:"services_securing_pools"`
 	// Delegations represents the delegations.
-	Delegations []Delegation `protobuf:"bytes,4,rep,name=delegations,proto3" json:"delegations"`
+	Delegations []Delegation `protobuf:"bytes,5,rep,name=delegations,proto3" json:"delegations"`
 	// UnbondingDelegations represents the unbonding delegations.
-	UnbondingDelegations []UnbondingDelegation `protobuf:"bytes,5,rep,name=unbonding_delegations,json=unbondingDelegations,proto3" json:"unbonding_delegations"`
+	UnbondingDelegations []UnbondingDelegation `protobuf:"bytes,6,rep,name=unbonding_delegations,json=unbondingDelegations,proto3" json:"unbonding_delegations"`
 }
 
 func (m *GenesisState) Reset()         { *m = GenesisState{} }
 func (m *GenesisState) String() string { return proto.CompactTextString(m) }
 func (*GenesisState) ProtoMessage()    {}
 func (*GenesisState) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0378bd63cae7d256, []int{2}
+	return fileDescriptor_0378bd63cae7d256, []int{3}
 }
 func (m *GenesisState) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -196,9 +257,16 @@ func (m *GenesisState) GetOperatorsJoinedServices() []OperatorJoinedServicesReco
 	return nil
 }
 
-func (m *GenesisState) GetServicesParams() []ServiceParamsRecord {
+func (m *GenesisState) GetServicesAllowedOperators() []ServiceAllowedOperators {
 	if m != nil {
-		return m.ServicesParams
+		return m.ServicesAllowedOperators
+	}
+	return nil
+}
+
+func (m *GenesisState) GetServicesSecuringPools() []ServiceSecuringPools {
+	if m != nil {
+		return m.ServicesSecuringPools
 	}
 	return nil
 }
@@ -219,7 +287,8 @@ func (m *GenesisState) GetUnbondingDelegations() []UnbondingDelegation {
 
 func init() {
 	proto.RegisterType((*OperatorJoinedServicesRecord)(nil), "milkyway.restaking.v1.OperatorJoinedServicesRecord")
-	proto.RegisterType((*ServiceParamsRecord)(nil), "milkyway.restaking.v1.ServiceParamsRecord")
+	proto.RegisterType((*ServiceAllowedOperators)(nil), "milkyway.restaking.v1.ServiceAllowedOperators")
+	proto.RegisterType((*ServiceSecuringPools)(nil), "milkyway.restaking.v1.ServiceSecuringPools")
 	proto.RegisterType((*GenesisState)(nil), "milkyway.restaking.v1.GenesisState")
 }
 
@@ -228,36 +297,41 @@ func init() {
 }
 
 var fileDescriptor_0378bd63cae7d256 = []byte{
-	// 453 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x93, 0xc1, 0x6e, 0xd3, 0x30,
-	0x1c, 0xc6, 0x6b, 0x3a, 0x26, 0xcd, 0x65, 0x9d, 0x64, 0x36, 0x51, 0x26, 0x48, 0x47, 0xe0, 0x50,
-	0x21, 0x96, 0x68, 0xeb, 0x91, 0x5b, 0x54, 0x09, 0x05, 0x09, 0x81, 0x32, 0x71, 0x00, 0x21, 0x45,
-	0x4e, 0x6d, 0x05, 0x6f, 0x49, 0x1c, 0xc5, 0x4e, 0xa1, 0x4f, 0xc0, 0x95, 0x17, 0xe1, 0x3d, 0x76,
-	0x63, 0x47, 0x4e, 0x15, 0x4a, 0x5f, 0x04, 0x91, 0xd8, 0xa1, 0x51, 0xd3, 0x8a, 0xdd, 0xea, 0xfe,
-	0xbf, 0xff, 0xef, 0xfb, 0xfc, 0x45, 0x86, 0x4f, 0x63, 0x16, 0x5d, 0xcd, 0xbf, 0xe0, 0xb9, 0x9d,
-	0x51, 0x21, 0xf1, 0x15, 0x4b, 0x42, 0x7b, 0x76, 0x66, 0x87, 0x34, 0xa1, 0x82, 0x09, 0x2b, 0xcd,
-	0xb8, 0xe4, 0xe8, 0x48, 0x8b, 0xac, 0x5a, 0x64, 0xcd, 0xce, 0x8e, 0x0f, 0x43, 0x1e, 0xf2, 0x52,
-	0x61, 0xff, 0xfd, 0x55, 0x89, 0x8f, 0xcd, 0x76, 0x62, 0xcc, 0x09, 0x8d, 0xc4, 0x76, 0x4d, 0x8a,
-	0x33, 0x1c, 0x2b, 0x8d, 0xf9, 0x03, 0xc0, 0x47, 0x6f, 0x53, 0x9a, 0x61, 0xc9, 0xb3, 0xd7, 0x9c,
-	0x25, 0x94, 0x5c, 0xd0, 0x6c, 0xc6, 0xa6, 0x54, 0x78, 0x74, 0xca, 0x33, 0x82, 0x6c, 0xd8, 0xe3,
-	0x6a, 0xee, 0x33, 0x32, 0x00, 0x27, 0x60, 0xb4, 0xef, 0xf4, 0x8b, 0xc5, 0x10, 0xea, 0x35, 0x77,
-	0xe2, 0x41, 0x2d, 0x71, 0x09, 0xfa, 0x04, 0x0f, 0x2e, 0x4b, 0x90, 0x2f, 0x14, 0x69, 0x70, 0xe7,
-	0x04, 0x8c, 0x7a, 0xe7, 0xa7, 0x56, 0xeb, 0x05, 0xad, 0x76, 0x7b, 0x67, 0xe7, 0x7a, 0x31, 0xec,
-	0x78, 0xfd, 0xcb, 0xc6, 0xbf, 0xe6, 0x37, 0x00, 0xef, 0xab, 0xc3, 0xbb, 0xf2, 0x1e, 0x2a, 0xe6,
-	0x0b, 0x08, 0x95, 0xdd, 0xbf, 0x94, 0xfb, 0xc5, 0x62, 0xb8, 0xa7, 0xc4, 0xee, 0xc4, 0xdb, 0x53,
-	0x02, 0x97, 0x20, 0x07, 0xee, 0x56, 0x2d, 0xa8, 0x68, 0xcf, 0x36, 0x44, 0x6b, 0x38, 0xa9, 0x44,
-	0x6a, 0xd3, 0xfc, 0xd9, 0x85, 0xf7, 0x5e, 0x55, 0x1f, 0xf0, 0x42, 0x62, 0x49, 0xd1, 0xcb, 0x1a,
-	0x0a, 0x4a, 0xe8, 0xe3, 0x0d, 0xd0, 0x36, 0x1a, 0xca, 0xe1, 0x43, 0xdd, 0xa1, 0xf0, 0xd7, 0xfb,
-	0xeb, 0x8e, 0x7a, 0xe7, 0xe3, 0x5b, 0xf5, 0x57, 0xf5, 0xa2, 0x5c, 0x1e, 0xd4, 0xec, 0xa6, 0x08,
-	0x7d, 0x80, 0x07, 0xda, 0xc5, 0x57, 0xe1, 0xbb, 0xa5, 0xd9, 0xf3, 0xff, 0x69, 0xa4, 0xe1, 0xd1,
-	0xd7, 0xa0, 0x6a, 0x86, 0x5c, 0xd8, 0x23, 0x34, 0xa2, 0x21, 0x96, 0x8c, 0x27, 0x62, 0xb0, 0x53,
-	0x62, 0x9f, 0x6c, 0xc0, 0x4e, 0x6a, 0xa5, 0xa2, 0xad, 0xee, 0x22, 0x0a, 0x8f, 0xf2, 0x24, 0xe0,
-	0x09, 0x61, 0x49, 0xe8, 0xaf, 0x42, 0xef, 0x6e, 0xcd, 0xfa, 0x5e, 0xef, 0xac, 0xd1, 0x0f, 0xf3,
-	0xf5, 0x91, 0x70, 0xde, 0x5c, 0x17, 0x06, 0xb8, 0x29, 0x0c, 0xf0, 0xbb, 0x30, 0xc0, 0xf7, 0xa5,
-	0xd1, 0xb9, 0x59, 0x1a, 0x9d, 0x5f, 0x4b, 0xa3, 0xf3, 0x71, 0x1c, 0x32, 0xf9, 0x39, 0x0f, 0xac,
-	0x29, 0x8f, 0x6d, 0xed, 0x75, 0x1a, 0xe1, 0x40, 0xd4, 0x27, 0xfb, 0xeb, 0xca, 0x23, 0x93, 0xf3,
-	0x94, 0x8a, 0x60, 0xb7, 0x7c, 0x61, 0xe3, 0x3f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x36, 0xc5, 0x13,
-	0xf0, 0xfd, 0x03, 0x00, 0x00,
+	// 538 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x94, 0xc1, 0x8a, 0xd3, 0x40,
+	0x18, 0xc7, 0x1b, 0xb7, 0x76, 0xdd, 0x2f, 0xdb, 0x5d, 0x08, 0x2d, 0x8d, 0x45, 0xd3, 0xb5, 0x82,
+	0x14, 0x75, 0x13, 0xb6, 0x3d, 0x7a, 0xb2, 0x14, 0x24, 0x82, 0xb8, 0xa4, 0x78, 0x11, 0x21, 0xa4,
+	0xcd, 0x10, 0x67, 0x37, 0xcd, 0x84, 0x4c, 0xd2, 0xb5, 0xf8, 0x12, 0xbe, 0x88, 0xef, 0xb1, 0xc7,
+	0x05, 0x2f, 0x9e, 0x82, 0xa4, 0x2f, 0x22, 0x49, 0x66, 0xd2, 0x94, 0x36, 0x0b, 0x7b, 0x4b, 0x3b,
+	0xff, 0xef, 0xf7, 0x9b, 0x6f, 0xbe, 0x61, 0xe0, 0xe5, 0x02, 0xbb, 0xd7, 0xab, 0x1b, 0x6b, 0xa5,
+	0x05, 0x88, 0x86, 0xd6, 0x35, 0xf6, 0x1c, 0x6d, 0x79, 0xa1, 0x39, 0xc8, 0x43, 0x14, 0x53, 0xd5,
+	0x0f, 0x48, 0x48, 0xa4, 0x36, 0x0f, 0xa9, 0x45, 0x48, 0x5d, 0x5e, 0x74, 0x5b, 0x0e, 0x71, 0x48,
+	0x96, 0xd0, 0xd2, 0xaf, 0x3c, 0xdc, 0xed, 0xef, 0x27, 0x2e, 0x88, 0x8d, 0x5c, 0x7a, 0x7f, 0xc6,
+	0xb7, 0x02, 0x6b, 0xc1, 0x32, 0xfd, 0xdf, 0x02, 0x3c, 0xfb, 0xec, 0xa3, 0xc0, 0x0a, 0x49, 0xf0,
+	0x91, 0x60, 0x0f, 0xd9, 0x53, 0x14, 0x2c, 0xf1, 0x1c, 0x51, 0x03, 0xcd, 0x49, 0x60, 0x4b, 0x1a,
+	0x88, 0x84, 0xad, 0x9b, 0xd8, 0x96, 0x85, 0x33, 0x61, 0xd0, 0x1c, 0x9f, 0x24, 0x71, 0x0f, 0x78,
+	0x99, 0x3e, 0x31, 0x80, 0x47, 0x74, 0x5b, 0xfa, 0x06, 0xa7, 0x57, 0x19, 0xc8, 0xa4, 0x8c, 0x24,
+	0x3f, 0x3a, 0x13, 0x06, 0xe2, 0xf0, 0x5c, 0xdd, 0xdb, 0xa0, 0xba, 0x5f, 0x3f, 0xae, 0xdf, 0xc6,
+	0xbd, 0x9a, 0x71, 0x72, 0xb5, 0xf5, 0x6f, 0xff, 0x27, 0x74, 0xd8, 0xf7, 0x7b, 0xd7, 0x25, 0x37,
+	0xc8, 0xe6, 0xd5, 0x54, 0x7a, 0x0b, 0xc0, 0x8c, 0x9b, 0x8d, 0x36, 0x93, 0xb8, 0x77, 0xc4, 0x0a,
+	0xf4, 0x89, 0x71, 0xc4, 0x02, 0xba, 0x2d, 0x0d, 0xe1, 0xb8, 0xd4, 0x57, 0xba, 0xc7, 0x83, 0x41,
+	0x73, 0x7c, 0x9a, 0xc4, 0x3d, 0x71, 0xd3, 0x18, 0x35, 0xc4, 0x4d, 0x67, 0xb4, 0xef, 0x42, 0x8b,
+	0xb1, 0xa6, 0x68, 0x1e, 0x05, 0xd8, 0x73, 0x2e, 0x09, 0x71, 0x1f, 0x6a, 0x7e, 0x05, 0x4f, 0x7c,
+	0x42, 0xdc, 0x92, 0x55, 0x4c, 0xe2, 0xde, 0x61, 0x8a, 0x4a, 0x8d, 0x87, 0xe9, 0x62, 0x6a, 0xfb,
+	0x53, 0x87, 0xe3, 0x0f, 0xf9, 0x0d, 0x99, 0x86, 0x56, 0x88, 0xa4, 0x77, 0xd0, 0xc8, 0x67, 0x97,
+	0x29, 0xc4, 0xe1, 0xf3, 0x8a, 0x03, 0xbd, 0xcc, 0x42, 0xec, 0x00, 0x59, 0x89, 0x14, 0xc1, 0x53,
+	0xde, 0x0a, 0x35, 0x77, 0x07, 0x74, 0x30, 0x10, 0x87, 0xa3, 0x07, 0x0d, 0x28, 0xbf, 0x1f, 0xcc,
+	0xd2, 0x29, 0xd8, 0xdb, 0x21, 0x29, 0x80, 0x2e, 0xb7, 0x98, 0x56, 0x3e, 0x31, 0xb3, 0xc8, 0xca,
+	0x07, 0x99, 0x57, 0xad, 0xf0, 0x56, 0x0c, 0x9a, 0x29, 0x65, 0xce, 0xdd, 0xb9, 0x08, 0x18, 0x3a,
+	0x85, 0x93, 0xb2, 0x41, 0x99, 0xe9, 0xa9, 0x52, 0xb9, 0x9e, 0x09, 0xdf, 0xdc, 0x2f, 0xdc, 0x1a,
+	0x2e, 0xb3, 0xb5, 0x39, 0x71, 0x7b, 0xf2, 0x3a, 0x88, 0x36, 0x72, 0x91, 0x63, 0x85, 0x98, 0x78,
+	0x54, 0x7e, 0x9c, 0xe1, 0x5f, 0x54, 0xe0, 0x27, 0x45, 0x92, 0x41, 0xcb, 0xb5, 0x12, 0x82, 0x76,
+	0xe4, 0xcd, 0x88, 0x67, 0xa7, 0xbb, 0x2d, 0x43, 0x1b, 0x19, 0xf4, 0x75, 0x05, 0xf4, 0x0b, 0xaf,
+	0xd9, 0xa1, 0xb7, 0xa2, 0xdd, 0x25, 0x3a, 0xfe, 0x74, 0x9b, 0x28, 0xc2, 0x5d, 0xa2, 0x08, 0xff,
+	0x12, 0x45, 0xf8, 0xb5, 0x56, 0x6a, 0x77, 0x6b, 0xa5, 0xf6, 0x77, 0xad, 0xd4, 0xbe, 0x8e, 0x1c,
+	0x1c, 0x7e, 0x8f, 0x66, 0xea, 0x9c, 0x2c, 0x34, 0xee, 0x3a, 0x77, 0xad, 0x19, 0x2d, 0x7e, 0x69,
+	0x3f, 0x4a, 0x2f, 0x49, 0xb8, 0xf2, 0x11, 0x9d, 0x35, 0xb2, 0x67, 0x64, 0xf4, 0x3f, 0x00, 0x00,
+	0xff, 0xff, 0x2d, 0x9f, 0xd4, 0x0f, 0xe2, 0x04, 0x00, 0x00,
 }
 
 func (m *OperatorJoinedServicesRecord) Marshal() (dAtA []byte, err error) {
@@ -298,7 +372,7 @@ func (m *OperatorJoinedServicesRecord) MarshalToSizedBuffer(dAtA []byte) (int, e
 	return len(dAtA) - i, nil
 }
 
-func (m *ServiceParamsRecord) Marshal() (dAtA []byte, err error) {
+func (m *ServiceAllowedOperators) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -308,26 +382,80 @@ func (m *ServiceParamsRecord) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *ServiceParamsRecord) MarshalTo(dAtA []byte) (int, error) {
+func (m *ServiceAllowedOperators) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *ServiceParamsRecord) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *ServiceAllowedOperators) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	{
-		size, err := m.Params.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
+	if len(m.OperatorIDs) > 0 {
+		dAtA3 := make([]byte, len(m.OperatorIDs)*10)
+		var j2 int
+		for _, num := range m.OperatorIDs {
+			for num >= 1<<7 {
+				dAtA3[j2] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j2++
+			}
+			dAtA3[j2] = uint8(num)
+			j2++
 		}
-		i -= size
-		i = encodeVarintGenesis(dAtA, i, uint64(size))
+		i -= j2
+		copy(dAtA[i:], dAtA3[:j2])
+		i = encodeVarintGenesis(dAtA, i, uint64(j2))
+		i--
+		dAtA[i] = 0x12
 	}
-	i--
-	dAtA[i] = 0x12
+	if m.ServiceID != 0 {
+		i = encodeVarintGenesis(dAtA, i, uint64(m.ServiceID))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ServiceSecuringPools) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ServiceSecuringPools) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ServiceSecuringPools) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.PoolIDs) > 0 {
+		dAtA5 := make([]byte, len(m.PoolIDs)*10)
+		var j4 int
+		for _, num := range m.PoolIDs {
+			for num >= 1<<7 {
+				dAtA5[j4] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j4++
+			}
+			dAtA5[j4] = uint8(num)
+			j4++
+		}
+		i -= j4
+		copy(dAtA[i:], dAtA5[:j4])
+		i = encodeVarintGenesis(dAtA, i, uint64(j4))
+		i--
+		dAtA[i] = 0x12
+	}
 	if m.ServiceID != 0 {
 		i = encodeVarintGenesis(dAtA, i, uint64(m.ServiceID))
 		i--
@@ -367,7 +495,7 @@ func (m *GenesisState) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				i = encodeVarintGenesis(dAtA, i, uint64(size))
 			}
 			i--
-			dAtA[i] = 0x2a
+			dAtA[i] = 0x32
 		}
 	}
 	if len(m.Delegations) > 0 {
@@ -381,13 +509,27 @@ func (m *GenesisState) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				i = encodeVarintGenesis(dAtA, i, uint64(size))
 			}
 			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if len(m.ServicesSecuringPools) > 0 {
+		for iNdEx := len(m.ServicesSecuringPools) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ServicesSecuringPools[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintGenesis(dAtA, i, uint64(size))
+			}
+			i--
 			dAtA[i] = 0x22
 		}
 	}
-	if len(m.ServicesParams) > 0 {
-		for iNdEx := len(m.ServicesParams) - 1; iNdEx >= 0; iNdEx-- {
+	if len(m.ServicesAllowedOperators) > 0 {
+		for iNdEx := len(m.ServicesAllowedOperators) - 1; iNdEx >= 0; iNdEx-- {
 			{
-				size, err := m.ServicesParams[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				size, err := m.ServicesAllowedOperators[iNdEx].MarshalToSizedBuffer(dAtA[:i])
 				if err != nil {
 					return 0, err
 				}
@@ -450,7 +592,7 @@ func (m *OperatorJoinedServicesRecord) Size() (n int) {
 	return n
 }
 
-func (m *ServiceParamsRecord) Size() (n int) {
+func (m *ServiceAllowedOperators) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -459,8 +601,32 @@ func (m *ServiceParamsRecord) Size() (n int) {
 	if m.ServiceID != 0 {
 		n += 1 + sovGenesis(uint64(m.ServiceID))
 	}
-	l = m.Params.Size()
-	n += 1 + l + sovGenesis(uint64(l))
+	if len(m.OperatorIDs) > 0 {
+		l = 0
+		for _, e := range m.OperatorIDs {
+			l += sovGenesis(uint64(e))
+		}
+		n += 1 + sovGenesis(uint64(l)) + l
+	}
+	return n
+}
+
+func (m *ServiceSecuringPools) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ServiceID != 0 {
+		n += 1 + sovGenesis(uint64(m.ServiceID))
+	}
+	if len(m.PoolIDs) > 0 {
+		l = 0
+		for _, e := range m.PoolIDs {
+			l += sovGenesis(uint64(e))
+		}
+		n += 1 + sovGenesis(uint64(l)) + l
+	}
 	return n
 }
 
@@ -478,8 +644,14 @@ func (m *GenesisState) Size() (n int) {
 			n += 1 + l + sovGenesis(uint64(l))
 		}
 	}
-	if len(m.ServicesParams) > 0 {
-		for _, e := range m.ServicesParams {
+	if len(m.ServicesAllowedOperators) > 0 {
+		for _, e := range m.ServicesAllowedOperators {
+			l = e.Size()
+			n += 1 + l + sovGenesis(uint64(l))
+		}
+	}
+	if len(m.ServicesSecuringPools) > 0 {
+		for _, e := range m.ServicesSecuringPools {
 			l = e.Size()
 			n += 1 + l + sovGenesis(uint64(l))
 		}
@@ -607,7 +779,7 @@ func (m *OperatorJoinedServicesRecord) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *ServiceParamsRecord) Unmarshal(dAtA []byte) error {
+func (m *ServiceAllowedOperators) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -630,10 +802,10 @@ func (m *ServiceParamsRecord) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: ServiceParamsRecord: wiretype end group for non-group")
+			return fmt.Errorf("proto: ServiceAllowedOperators: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ServiceParamsRecord: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: ServiceAllowedOperators: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -656,10 +828,136 @@ func (m *ServiceParamsRecord) Unmarshal(dAtA []byte) error {
 				}
 			}
 		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Params", wireType)
+			if wireType == 0 {
+				var v uint32
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowGenesis
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.OperatorIDs = append(m.OperatorIDs, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowGenesis
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthGenesis
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthGenesis
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				var count int
+				for _, integer := range dAtA[iNdEx:postIndex] {
+					if integer < 128 {
+						count++
+					}
+				}
+				elementCount = count
+				if elementCount != 0 && len(m.OperatorIDs) == 0 {
+					m.OperatorIDs = make([]uint32, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v uint32
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenesis
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= uint32(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.OperatorIDs = append(m.OperatorIDs, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field OperatorIDs", wireType)
 			}
-			var msglen int
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenesis(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthGenesis
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ServiceSecuringPools) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenesis
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ServiceSecuringPools: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ServiceSecuringPools: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServiceID", wireType)
+			}
+			m.ServiceID = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowGenesis
@@ -669,25 +967,87 @@ func (m *ServiceParamsRecord) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= int(b&0x7F) << shift
+				m.ServiceID |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if msglen < 0 {
-				return ErrInvalidLengthGenesis
+		case 2:
+			if wireType == 0 {
+				var v uint32
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowGenesis
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.PoolIDs = append(m.PoolIDs, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowGenesis
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthGenesis
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthGenesis
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				var count int
+				for _, integer := range dAtA[iNdEx:postIndex] {
+					if integer < 128 {
+						count++
+					}
+				}
+				elementCount = count
+				if elementCount != 0 && len(m.PoolIDs) == 0 {
+					m.PoolIDs = make([]uint32, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v uint32
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowGenesis
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= uint32(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.PoolIDs = append(m.PoolIDs, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field PoolIDs", wireType)
 			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Params.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGenesis(dAtA[iNdEx:])
@@ -807,7 +1167,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ServicesParams", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ServicesAllowedOperators", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -834,12 +1194,46 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ServicesParams = append(m.ServicesParams, ServiceParamsRecord{})
-			if err := m.ServicesParams[len(m.ServicesParams)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.ServicesAllowedOperators = append(m.ServicesAllowedOperators, ServiceAllowedOperators{})
+			if err := m.ServicesAllowedOperators[len(m.ServicesAllowedOperators)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
 		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServicesSecuringPools", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenesis
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenesis
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenesis
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ServicesSecuringPools = append(m.ServicesSecuringPools, ServiceSecuringPools{})
+			if err := m.ServicesSecuringPools[len(m.ServicesSecuringPools)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Delegations", wireType)
 			}
@@ -873,7 +1267,7 @@ func (m *GenesisState) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 5:
+		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field UnbondingDelegations", wireType)
 			}

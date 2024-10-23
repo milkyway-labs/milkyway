@@ -121,7 +121,8 @@ func (m *QueryOperatorResponse) GetOperator() Operator {
 	return Operator{}
 }
 
-// QueryOperatorParamsRequest is the request type for the Query/OperatorParams RPC method.
+// QueryOperatorParamsRequest is the request type for the Query/OperatorParams
+// RPC method.
 type QueryOperatorParamsRequest struct {
 	// OperatorID is the ID of the operator for which to query the params
 	OperatorId uint32 `protobuf:"varint,1,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
@@ -167,7 +168,8 @@ func (m *QueryOperatorParamsRequest) GetOperatorId() uint32 {
 	return 0
 }
 
-// QueryOperatorParamsResponse is the response type for the Query/OperatorParams RPC method.
+// QueryOperatorParamsResponse is the response type for the Query/OperatorParams
+// RPC method.
 type QueryOperatorParamsResponse struct {
 	OperatorParams OperatorParams `protobuf:"bytes,1,opt,name=operator_params,json=operatorParams,proto3" json:"operator_params"`
 }
@@ -463,8 +465,8 @@ type QueryClient interface {
 	// Operator defines a gRPC query method that returns the operator by the given
 	// operator id.
 	Operator(ctx context.Context, in *QueryOperatorRequest, opts ...grpc.CallOption) (*QueryOperatorResponse, error)
-	// OperatorParams defines a gRPC query method that returns the operator's params
-	// by the given operator id.
+	// OperatorParams defines a gRPC query method that returns the operator's
+	// params by the given operator id.
 	OperatorParams(ctx context.Context, in *QueryOperatorParamsRequest, opts ...grpc.CallOption) (*QueryOperatorParamsResponse, error)
 	// Operators defines a gRPC query method that returns the list of operators.
 	Operators(ctx context.Context, in *QueryOperatorsRequest, opts ...grpc.CallOption) (*QueryOperatorsResponse, error)
@@ -522,8 +524,8 @@ type QueryServer interface {
 	// Operator defines a gRPC query method that returns the operator by the given
 	// operator id.
 	Operator(context.Context, *QueryOperatorRequest) (*QueryOperatorResponse, error)
-	// OperatorParams defines a gRPC query method that returns the operator's params
-	// by the given operator id.
+	// OperatorParams defines a gRPC query method that returns the operator's
+	// params by the given operator id.
 	OperatorParams(context.Context, *QueryOperatorParamsRequest) (*QueryOperatorParamsResponse, error)
 	// Operators defines a gRPC query method that returns the list of operators.
 	Operators(context.Context, *QueryOperatorsRequest) (*QueryOperatorsResponse, error)

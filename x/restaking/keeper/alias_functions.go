@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"fmt"
+	"sort"
 	"time"
 
 	"cosmossdk.io/errors"
@@ -46,29 +47,91 @@ func (k *Keeper) GetAllOperatorsJoinedServices(ctx sdk.Context) ([]types.Operato
 	return records, nil
 }
 
-// GetAllServicesParams returns all the services params
-func (k *Keeper) GetAllServicesParams(ctx sdk.Context) []types.ServiceParamsRecord {
-	store := ctx.KVStore(k.storeKey)
-	iterator := storetypes.KVStorePrefixIterator(store, types.ServiceParamsPrefix)
+// --------------------------------------------------------------------------------------------------------------------
+
+// GetAllServicesAllowedOperators returns all the operators that are allowed to secure a service for all the services
+func (k *Keeper) GetAllServicesAllowedOperators(ctx sdk.Context) ([]types.ServiceAllowedOperators, error) {
+	iterator, err := k.serviceOperatorsAllowList.Iterate(ctx, nil)
+	if err != nil {
+		return nil, err
+	}
 	defer iterator.Close()
 
-	var records []types.ServiceParamsRecord
+	items := make(map[uint32]types.ServiceAllowedOperators)
 	for ; iterator.Valid(); iterator.Next() {
-		var params types.ServiceParams
-		k.cdc.MustUnmarshal(iterator.Value(), &params)
-
-		serviceID, err := types.ParseServiceParamsKey(iterator.Key())
+		serviceOperatorPair, err := iterator.Key()
 		if err != nil {
-			panic(err)
+			return nil, err
 		}
+		serviceID := serviceOperatorPair.K1()
+		operatorID := serviceOperatorPair.K2()
 
-		records = append(records, types.ServiceParamsRecord{
-			ServiceID: serviceID,
-			Params:    params,
-		})
+		allowedOperators, ok := items[serviceID]
+		if !ok {
+			allowedOperators = types.NewServiceAllowedOperators(serviceID, nil)
+		}
+		allowedOperators.OperatorIDs = append(allowedOperators.OperatorIDs, operatorID)
+		items[serviceID] = allowedOperators
 	}
 
-	return records
+	if len(items) == 0 {
+		return nil, nil
+	}
+
+	// Convert back to list
+	itemsList := make([]types.ServiceAllowedOperators, 0, len(items))
+	for _, v := range items {
+		itemsList = append(itemsList, v)
+	}
+	// Ensure that the items always maintain the same order,
+	// as iterating over the map may result in different item orders.
+	sort.Slice(itemsList, func(i, j int) bool {
+		return itemsList[i].ServiceID < itemsList[j].ServiceID
+	})
+	return itemsList, nil
+}
+
+// GetAllServicesSecuringPools returns all the pools from which the services are allowed to borrow security
+func (k *Keeper) GetAllServicesSecuringPools(ctx sdk.Context) ([]types.ServiceSecuringPools, error) {
+	iterator, err := k.serviceSecuringPools.Iterate(ctx, nil)
+	if err != nil {
+		return nil, err
+	}
+	defer iterator.Close()
+
+	items := make(map[uint32]types.ServiceSecuringPools)
+	for ; iterator.Valid(); iterator.Next() {
+		servicePoolPair, err := iterator.Key()
+		if err != nil {
+			return nil, err
+		}
+		serviceID := servicePoolPair.K1()
+		poolID := servicePoolPair.K2()
+
+		securingPools, ok := items[serviceID]
+		if !ok {
+			securingPools = types.NewServiceSecuringPools(serviceID, nil)
+		}
+		securingPools.PoolIDs = append(securingPools.PoolIDs, poolID)
+		items[serviceID] = securingPools
+	}
+
+	if len(items) == 0 {
+		return nil, nil
+	}
+
+	// Convert back to list
+	itemsList := make([]types.ServiceSecuringPools, 0, len(items))
+	for _, v := range items {
+		itemsList = append(itemsList, v)
+	}
+
+	// Ensure that the items always maintain the same order,
+	// as iterating over the map may result in different item orders.
+	sort.Slice(itemsList, func(i, j int) bool {
+		return itemsList[i].ServiceID < itemsList[j].ServiceID
+	})
+	return itemsList, nil
 }
 
 // --------------------------------------------------------------------------------------------------------------------

@@ -6,7 +6,6 @@ import (
 	"strconv"
 	"time"
 
-	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -15,52 +14,6 @@ import (
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
-
-// NewServiceParams creates a new ServiceParams instance
-func NewServiceParams(
-	slashFraction math.LegacyDec,
-	whitelistedPoolsIDs []uint32,
-	whitelistedOperatorsIDs []uint32,
-) ServiceParams {
-	return ServiceParams{
-		SlashFraction:           slashFraction,
-		WhitelistedPoolsIDs:     whitelistedPoolsIDs,
-		WhitelistedOperatorsIDs: whitelistedOperatorsIDs,
-	}
-}
-
-// DefaultServiceParams returns the default service params
-func DefaultServiceParams() ServiceParams {
-	return NewServiceParams(math.LegacyZeroDec(), nil, nil)
-}
-
-// Validate validates the service params
-func (p *ServiceParams) Validate() error {
-	if p.SlashFraction.IsNegative() || p.SlashFraction.GT(math.LegacyOneDec()) {
-		return fmt.Errorf("invalid slash fraction: %s", p.SlashFraction.String())
-	}
-
-	if duplicate := utils.FindDuplicate(p.WhitelistedPoolsIDs); duplicate != nil {
-		return fmt.Errorf("duplicated whitelisted pool id: %v", duplicate)
-	}
-
-	if duplicate := utils.FindDuplicate(p.WhitelistedOperatorsIDs); duplicate != nil {
-		return fmt.Errorf("duplicated whitelisted operator id: %v", duplicate)
-	}
-
-	for _, poolID := range p.WhitelistedPoolsIDs {
-		if poolID == 0 {
-			return fmt.Errorf("invalid whitelisted pool id: %d", poolID)
-		}
-	}
-
-	for _, operatorID := range p.WhitelistedOperatorsIDs {
-		if operatorID == 0 {
-			return fmt.Errorf("invalid whitelisted operator id: %d", operatorID)
-		}
-	}
-	return nil
-}
 
 // --------------------------------------------------------------------------------------------------------------------
 

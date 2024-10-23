@@ -9,33 +9,11 @@ import "cosmos/base/v1beta1/coin.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/restaking/types";
 
-// OperatorJoinedServices represents the list of services the operator has joined.
+// OperatorJoinedServices represents the list of services the operator has
+// joined.
 message OperatorJoinedServices {
-    // ServiceIDs defines the list of service IDs the operator has joined.
-    repeated uint32 service_ids = 1 [
-      (gogoproto.customname) = "ServiceIDs"
-    ];
-}
-
-// ServiceParams represent the params that have been set for an individual
-// service.
-message ServiceParams {
-  // SlashFraction defines the fraction of the delegation that will be slashed
-  // in case of a misbehavior.
-  string slash_fraction = 1 [
-    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
-    (gogoproto.nullable) = false
-  ];
-
-  // WhitelistedPoolsIDs defines the list of pool IDs that are providing
-  // cryptoeconomic security to the service.
-  repeated uint32 whitelisted_pools_ids = 2
-      [ (gogoproto.customname) = "WhitelistedPoolsIDs" ];
-
-  // WhitelistedOperatorsIDs defines the list of operator IDs that are allowed
-  // to validate this service.
-  repeated uint32 whitelisted_operators_ids = 3
-      [ (gogoproto.customname) = "WhitelistedOperatorsIDs" ];
+  // ServiceIDs defines the list of service IDs the operator has joined.
+  repeated uint32 service_ids = 1 [ (gogoproto.customname) = "ServiceIDs" ];
 }
 
 // DelegationType defines the type of delegation.

@@ -88,13 +88,13 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorJoinedServices() {
 	}
 }
 
-func (suite *KeeperTestSuite) TestQuerier_ServiceParams() {
+func (suite *KeeperTestSuite) TestQuerier_ServiceAllowedOperators() {
 	testCases := []struct {
-		name      string
-		store     func(ctx sdk.Context)
-		request   *types.QueryServiceParamsRequest
-		shouldErr bool
-		expParams types.ServiceParams
+		name         string
+		store        func(ctx sdk.Context)
+		request      *types.QueryServiceAllowedOperatorsRequest
+		shouldErr    bool
+		expOperators []uint32
 	}{
 		{
 			name:      "invalid request returns error",
@@ -103,49 +103,128 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceParams() {
 		},
 		{
 			name:      "invalid service id returns error",
-			request:   types.NewQueryServiceParamsRequest(0),
+			request:   types.NewQueryServiceAllowedOperatorsRequest(0, nil),
 			shouldErr: true,
 		},
 		{
-			name:      "not found service params returns default value",
-			request:   types.NewQueryServiceParamsRequest(1),
+			name:      "not configured service operator allow list returns empty list",
+			request:   types.NewQueryServiceAllowedOperatorsRequest(1, nil),
 			shouldErr: false,
-			expParams: types.DefaultServiceParams(),
 		},
 		{
-			name: "found service params are returned properly",
+			name: "configured service operator allow list is returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SaveServiceParams(ctx, 1, types.NewServiceParams(
-					sdkmath.LegacyNewDecWithPrec(1, 2),
-					[]uint32{1, 2},
-					nil,
-				))
+				suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
+				suite.k.AddOperatorToServiceAllowList(ctx, 1, 2)
+				suite.k.AddOperatorToServiceAllowList(ctx, 2, 3)
 			},
-			request:   types.NewQueryServiceParamsRequest(1),
-			shouldErr: false,
-			expParams: types.NewServiceParams(
-				sdkmath.LegacyNewDecWithPrec(1, 2),
-				[]uint32{1, 2},
-				nil,
-			),
+			request:      types.NewQueryServiceAllowedOperatorsRequest(1, nil),
+			shouldErr:    false,
+			expOperators: []uint32{1, 2},
+		},
+		{
+			name: "pagination is handled properly ",
+			store: func(ctx sdk.Context) {
+				suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
+				suite.k.AddOperatorToServiceAllowList(ctx, 1, 2)
+				suite.k.AddOperatorToServiceAllowList(ctx, 2, 3)
+			},
+			request: types.NewQueryServiceAllowedOperatorsRequest(1, &query.PageRequest{
+				Offset: 0,
+				Limit:  1,
+			}),
+			shouldErr:    false,
+			expOperators: []uint32{1},
 		},
 	}
 
 	for _, tc := range testCases {
 		tc := tc
 		suite.Run(tc.name, func() {
-			ctx, _ := suite.ctx.CacheContext()
+			suite.SetupTest()
+			ctx := suite.ctx
 			if tc.store != nil {
 				tc.store(ctx)
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.ServiceParams(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.ServiceAllowedOperators(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
 				suite.Require().NoError(err)
-				suite.Require().Equal(tc.expParams, res.ServiceParams)
+				suite.Require().Equal(tc.expOperators, res.OperatorIds)
+			}
+		})
+	}
+}
+
+func (suite *KeeperTestSuite) TestQuerier_ServiceSecuringPools() {
+	testCases := []struct {
+		name      string
+		store     func(ctx sdk.Context)
+		request   *types.QueryServiceSecuringPoolsRequest
+		shouldErr bool
+		expPools  []uint32
+	}{
+		{
+			name:      "invalid request returns error",
+			request:   nil,
+			shouldErr: true,
+		},
+		{
+			name:      "invalid service id returns error",
+			request:   types.NewQueryServiceSecuringPoolsRequest(0, nil),
+			shouldErr: true,
+		},
+		{
+			name:      "not configured service securing pools returns empty list",
+			request:   types.NewQueryServiceSecuringPoolsRequest(1, nil),
+			shouldErr: false,
+		},
+		{
+			name: "securing pools are returned properly",
+			store: func(ctx sdk.Context) {
+				suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
+				suite.k.AddPoolToServiceSecuringPools(ctx, 1, 2)
+				suite.k.AddPoolToServiceSecuringPools(ctx, 2, 3)
+			},
+			request:   types.NewQueryServiceSecuringPoolsRequest(1, nil),
+			shouldErr: false,
+			expPools:  []uint32{1, 2},
+		},
+		{
+			name: "pagination is handled properly ",
+			store: func(ctx sdk.Context) {
+				suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
+				suite.k.AddPoolToServiceSecuringPools(ctx, 1, 2)
+				suite.k.AddPoolToServiceSecuringPools(ctx, 2, 3)
+			},
+			request: types.NewQueryServiceSecuringPoolsRequest(1, &query.PageRequest{
+				Offset: 0,
+				Limit:  1,
+			}),
+			shouldErr: false,
+			expPools:  []uint32{1},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			suite.SetupTest()
+			ctx := suite.ctx
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			querier := keeper.NewQuerier(suite.k)
+			res, err := querier.ServiceSecuringPools(ctx, tc.request)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expPools, res.PoolIds)
 			}
 		})
 	}

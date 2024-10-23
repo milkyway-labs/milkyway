@@ -25,12 +25,20 @@ service Query {
         "/milkyway/restaking/v1/operators/{operator_id}/joined_services";
   }
 
-  // ServiceParams queries the service params for the given service.
-  rpc ServiceParams(QueryServiceParamsRequest)
-      returns (QueryServiceParamsResponse) {
+  // ServiceAllowedOperators queries the allowed operators for a given service.
+  rpc ServiceAllowedOperators(QueryServiceAllowedOperatorsRequest)
+      returns (QueryServiceAllowedOperatorsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
     option (google.api.http).get =
-        "/milkyway/restaking/v1/services/{service_id}/params";
+        "/milkyway/restaking/v1/services/{service_id}/allowed_operators";
+  }
+
+  // ServiceSecuringPools queries the pools that are securing a given service.
+  rpc ServiceSecuringPools(QueryServiceSecuringPoolsRequest)
+      returns (QueryServiceSecuringPoolsResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get =
+        "/milkyway/restaking/v1/services/{service_id}/securing_pools";
   }
 
   // PoolDelegations queries the delegations info for the given pool.
@@ -258,36 +266,62 @@ service Query {
   }
 }
 
-// QueryOperatorJoinedServicesRequest is request type for the Query/OperatorJoinedServices
-// RPC method.
+// QueryOperatorJoinedServicesRequest is request type for the
+// Query/OperatorJoinedServices RPC method.
 message QueryOperatorJoinedServicesRequest {
   // OperatorId is the ID of the operator to query
   uint32 operator_id = 1;
 }
 
-// QueryOperatorJoinedServicesResponse is response type for the Query/OperatorJoinedServices
-// RPC method.
-message QueryOperatorJoinedServicesResponse {
-  repeated uint32 service_ids = 1;
-}
+// QueryOperatorJoinedServicesResponse is response type for the
+// Query/OperatorJoinedServices RPC method.
+message QueryOperatorJoinedServicesResponse { repeated uint32 service_ids = 1; }
 
-// QueryServiceParamsRequest is request type for the Query/ServiceParams
-// RPC method.
-message QueryServiceParamsRequest {
+// QueryServiceAllowedOperatorsRequest is request type for the
+// Query/ServiceAllowedOperators RPC method.
+message QueryServiceAllowedOperatorsRequest {
   // ServiceId is the ID of the service to query
   uint32 service_id = 1;
+
+  // Pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
-// QueryServiceParamsResponse is response type for the Query/ServiceParams
-// RPC method.
-message QueryServiceParamsResponse {
-  ServiceParams service_params = 1 [ (gogoproto.nullable) = false ];
+// QueryServiceAllowedOperatorsResponse is response type for the
+// Query/ServiceAllowedOperators RPC method.
+message QueryServiceAllowedOperatorsResponse {
+  // OperatorIds is the list of operators allowed to validate the service
+  repeated uint32 operator_ids = 1;
+
+  // Pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+// QueryServiceSecuringPoolsRequest is request type for the
+// Query/ServiceSecuringPools RPC method.
+message QueryServiceSecuringPoolsRequest {
+  // ServiceId is the ID of the service to query.
+  uint32 service_id = 1;
+
+  // Pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+// QueryServiceSecuringPoolsResponse is response type for the
+// Query/ServiceSecuringPools RPC method.
+message QueryServiceSecuringPoolsResponse {
+  // PoolIds is the list of pools from which the service is allowed to borrow
+  // security.
+  repeated uint32 pool_ids = 1;
+
+  // Pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // QueryPoolDelegationsRequest is request type for the Query/PoolDelegations RPC
 // method.
 message QueryPoolDelegationsRequest {
-  // PoolId is the ID of the pool to query
+  // PoolId is the ID of the pool to query.
   uint32 pool_id = 1;
 
   // Pagination defines an optional pagination for the request.
@@ -297,7 +331,7 @@ message QueryPoolDelegationsRequest {
 // QueryPoolDelegationsResponse is response type for the Query/PoolDelegations
 // RPC method.
 message QueryPoolDelegationsResponse {
-  // Delegations is the list of delegations
+  // Delegations is the list of delegations.
   repeated DelegationResponse delegations = 1 [ (gogoproto.nullable) = false ];
 
   // Pagination defines the pagination in the response.

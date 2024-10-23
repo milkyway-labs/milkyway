@@ -29,15 +29,13 @@ func RegisterInterfaces(registry types.InterfaceRegistry) {
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
 }
 
-var (
-	// AminoCdc references the global x/services module codec. Note, the codec should
-	// ONLY be used in certain instances of tests and for JSON encoding as Amino is
-	// still used for that purpose.
-	//
-	// The actual codec used for serialization should be provided to x/services and
-	// defined at the application level.
-	AminoCdc = codec.NewLegacyAmino()
-)
+// AminoCdc references the global x/services module codec. Note, the codec should
+// ONLY be used in certain instances of tests and for JSON encoding as Amino is
+// still used for that purpose.
+//
+// The actual codec used for serialization should be provided to x/services and
+// defined at the application level.
+var AminoCdc = codec.NewLegacyAmino()
 
 func init() {
 	RegisterLegacyAminoCodec(AminoCdc)

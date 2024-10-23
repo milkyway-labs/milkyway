@@ -413,7 +413,8 @@ func GetServicesQueryCmd() *cobra.Command {
 	}
 
 	queryCmd.AddCommand(
-		getServiceParamsQueryCmd(),
+		getServiceAllowedOperatorsQueryCmd(),
+		getServiceSecuringPoolsQueryCmd(),
 		getServiceDelegationsQueryCmd(),
 		getServiceDelegationQueryCmd(),
 		getServiceUnbondingDelegationsQueryCmd(),
@@ -423,13 +424,13 @@ func GetServicesQueryCmd() *cobra.Command {
 	return queryCmd
 }
 
-// getServiceParamsQueryCmd returns the command allowing to query a service's
-// params.
-func getServiceParamsQueryCmd() *cobra.Command {
+// getServiceAllowedOperatorsQueryCmd returns the command allowing to query
+// the list of operators allowed to validate a service.
+func getServiceAllowedOperatorsQueryCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "params [service-id]",
-		Short:   "Query a service's params",
-		Example: fmt.Sprintf(`%s query %s service params 1`, version.AppName, types.ModuleName),
+		Use:     "allowed-operators [service-id]",
+		Short:   "Query the list of operators allowed to validate a service",
+		Example: fmt.Sprintf(`%s query %s service allowed-operators 1`, version.AppName, types.ModuleName),
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -442,7 +443,16 @@ func getServiceParamsQueryCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			res, err := queryClient.ServiceParams(cmd.Context(), types.NewQueryServiceParamsRequest(serviceID))
+
+			pageReq, err := client.ReadPageRequest(cmd.Flags())
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.ServiceAllowedOperators(
+				cmd.Context(),
+				types.NewQueryServiceAllowedOperatorsRequest(serviceID, pageReq),
+			)
 			if err != nil {
 				return err
 			}
@@ -452,6 +462,50 @@ func getServiceParamsQueryCmd() *cobra.Command {
 	}
 
 	flags.AddQueryFlagsToCmd(cmd)
+	flags.AddPaginationFlagsToCmd(cmd, "service allowed operators")
+
+	return cmd
+}
+
+// getServiceSecuringPoolsQueryCmd returns the command that allows querying the list
+// of pools from which a service is permitted to borrow its security.
+func getServiceSecuringPoolsQueryCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "securing-pools [service-id]",
+		Short:   "Query the list of pools from which a service is borrowing security",
+		Example: fmt.Sprintf(`%s query %s service securing-pools 1 --page 1 --limit 100`, version.AppName, types.ModuleName),
+		Args:    cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+
+			serviceID, err := servicestypes.ParseServiceID(args[0])
+			if err != nil {
+				return err
+			}
+
+			pageReq, err := client.ReadPageRequest(cmd.Flags())
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.ServiceSecuringPools(
+				cmd.Context(),
+				types.NewQueryServiceSecuringPoolsRequest(serviceID, pageReq),
+			)
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+	flags.AddPaginationFlagsToCmd(cmd, "service securing pools")
 
 	return cmd
 }

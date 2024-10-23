@@ -13,7 +13,6 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	gogotypes "github.com/cosmos/gogoproto/types"
 
-	"github.com/milkyway-labs/milkyway/utils"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
@@ -152,19 +151,16 @@ func (k *Keeper) AllocateRewardsByPlan(
 		return servicestypes.ErrServiceNotFound
 	}
 
-	// Get pools and operators that are eligible for this rewards plan's
-	// rewards allocation, along with each entity's total delegation value.
-	// If an entity's total delegation value is zero, then it won't be included
-	// in this block's rewards allocation.
-	serviceParams := k.restakingKeeper.GetServiceParams(sdkCtx, service.ID)
-
-	eligiblePools := k.getEligiblePools(ctx, service, serviceParams, pools)
+	eligiblePools, err := k.getEligiblePools(ctx, service, pools)
+	if err != nil {
+		return err
+	}
 	poolDistrInfos, totalPoolsDelValues, err := k.getDistrInfos(ctx, eligiblePools)
 	if err != nil {
 		return err
 	}
 
-	eligibleOperators, err := k.getEligibleOperators(ctx, service, serviceParams, operators)
+	eligibleOperators, err := k.getEligibleOperators(ctx, service, operators)
 	if err != nil {
 		return err
 	}
@@ -244,29 +240,24 @@ func (k *Keeper) AllocateRewardsByPlan(
 // params, then no pools are eligible for rewards allocation.
 func (k *Keeper) getEligiblePools(
 	ctx context.Context, service servicestypes.Service,
-	serviceParams restakingtypes.ServiceParams, pools []poolstypes.Pool,
-) (eligiblePools []restakingtypes.DelegationTarget) {
+	pools []poolstypes.Pool,
+) (eligiblePools []restakingtypes.DelegationTarget, err error) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	poolsParams := k.poolsKeeper.GetParams(sdkCtx)
+
 	if slices.Contains(poolsParams.AllowedServicesIDs, service.ID) {
-		// If there's no whitelisted pools, that means all pools.
-		if len(serviceParams.WhitelistedPoolsIDs) == 0 {
-			return utils.Map(pools, func(p poolstypes.Pool) restakingtypes.DelegationTarget {
-				return &p
-			})
-		}
-		whitelistedPoolIDs := map[uint32]struct{}{}
-		for _, poolID := range serviceParams.WhitelistedPoolsIDs {
-			whitelistedPoolIDs[poolID] = struct{}{}
-		}
-		// Only include whitelisted pools.
+		// Only include pools from which the service is borrowing security.
 		for _, pool := range pools {
-			if _, ok := whitelistedPoolIDs[pool.ID]; ok {
+			isSecured, err := k.restakingKeeper.IsServiceSecuredByPool(sdkCtx, service.ID, pool.ID)
+			if err != nil {
+				return nil, err
+			}
+			if isSecured {
 				eligiblePools = append(eligiblePools, &pool)
 			}
 		}
 	}
-	return eligiblePools
+	return eligiblePools, nil
 }
 
 // getEligibleOperators returns a list of operators that are eligible for rewards
@@ -275,7 +266,7 @@ func (k *Keeper) getEligiblePools(
 // have joined the service are eligible for rewards allocation.
 func (k *Keeper) getEligibleOperators(
 	ctx context.Context, service servicestypes.Service,
-	serviceParams restakingtypes.ServiceParams, operators []operatorstypes.Operator,
+	operators []operatorstypes.Operator,
 ) (eligibleOperators []restakingtypes.DelegationTarget, err error) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	// TODO: can we optimize this? maybe by having a new index key
@@ -284,10 +275,16 @@ func (k *Keeper) getEligibleOperators(
 		if err != nil {
 			return nil, err
 		}
-		if operatorJoinedServices.Contains(service.ID) &&
-			(len(serviceParams.WhitelistedOperatorsIDs) == 0 ||
-				slices.Contains(serviceParams.WhitelistedOperatorsIDs, operator.ID)) {
-			eligibleOperators = append(eligibleOperators, &operator)
+		if operatorJoinedServices.Contains(service.ID) {
+			canValidateService, err := k.restakingKeeper.CanOperatorValidateService(
+				sdkCtx, service.ID, operator.ID)
+			if err != nil {
+				return nil, err
+			}
+
+			if canValidateService {
+				eligibleOperators = append(eligibleOperators, &operator)
+			}
 		}
 	}
 	return eligibleOperators, nil

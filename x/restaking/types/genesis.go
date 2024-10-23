@@ -9,23 +9,26 @@ import (
 // NewGenesis creates a new genesis state
 func NewGenesis(
 	operatorsJoinedServices []OperatorJoinedServicesRecord,
-	servicesParamsRecords []ServiceParamsRecord,
+	servicesAllowedOperators []ServiceAllowedOperators,
+	servicesSecuringPools []ServiceSecuringPools,
 	delegations []Delegation,
 	unbondingDelegations []UnbondingDelegation,
 	params Params,
 ) *GenesisState {
 	return &GenesisState{
-		OperatorsJoinedServices: operatorsJoinedServices,
-		ServicesParams:          servicesParamsRecords,
-		Delegations:             delegations,
-		UnbondingDelegations:    unbondingDelegations,
-		Params:                  params,
+		OperatorsJoinedServices:  operatorsJoinedServices,
+		ServicesAllowedOperators: servicesAllowedOperators,
+		ServicesSecuringPools:    servicesSecuringPools,
+		Delegations:              delegations,
+		UnbondingDelegations:     unbondingDelegations,
+		Params:                   params,
 	}
 }
 
 // DefaultGenesis returns a default genesis state
 func DefaultGenesis() *GenesisState {
 	return NewGenesis(
+		nil,
 		nil,
 		nil,
 		nil,
@@ -40,8 +43,12 @@ func (g *GenesisState) Validate() error {
 		return fmt.Errorf("duplicated operator joined services in: %d", duplicate.OperatorID)
 	}
 
-	if duplicate := findDuplicateServiceParamsRecords(g.ServicesParams); duplicate != nil {
-		return fmt.Errorf("duplicated service params: %d", duplicate.ServiceID)
+	if duplicate := findDuplicateServiceAllowedOperators(g.ServicesAllowedOperators); duplicate != nil {
+		return fmt.Errorf("duplicated service allowed operators, service id: %d", duplicate.ServiceID)
+	}
+
+	if duplicate := findDuplicateServiceSecuringPools(g.ServicesSecuringPools); duplicate != nil {
+		return fmt.Errorf("duplicated service securing pools, service id: %d", duplicate.ServiceID)
 	}
 
 	for _, record := range g.OperatorsJoinedServices {
@@ -51,13 +58,19 @@ func (g *GenesisState) Validate() error {
 		}
 	}
 
-	for _, record := range g.ServicesParams {
-		if record.ServiceID == 0 {
-			return fmt.Errorf("invalid service id: %d", record.ServiceID)
-		}
-		err := record.Params.Validate()
+	// Validate the services allowed operators
+	for _, entry := range g.ServicesAllowedOperators {
+		err := entry.Validate()
 		if err != nil {
-			return fmt.Errorf("invalid service params with id %d: %s", record.ServiceID, err)
+			return fmt.Errorf("invalid service allowed operators with id %d: %s", entry.ServiceID, err)
+		}
+	}
+
+	// Validate the services securing pools
+	for _, entry := range g.ServicesSecuringPools {
+		err := entry.Validate()
+		if err != nil {
+			return fmt.Errorf("invalid service securing pools with id %d: %s", entry.ServiceID, err)
 		}
 	}
 
@@ -92,8 +105,14 @@ func findDuplicateOperatorJoinedServiceRecords(records []OperatorJoinedServicesR
 	})
 }
 
-func findDuplicateServiceParamsRecords(records []ServiceParamsRecord) *ServiceParamsRecord {
-	return utils.FindDuplicateFunc(records, func(a, b ServiceParamsRecord) bool {
+func findDuplicateServiceAllowedOperators(records []ServiceAllowedOperators) *ServiceAllowedOperators {
+	return utils.FindDuplicateFunc(records, func(a, b ServiceAllowedOperators) bool {
+		return a.ServiceID == b.ServiceID
+	})
+}
+
+func findDuplicateServiceSecuringPools(records []ServiceSecuringPools) *ServiceSecuringPools {
+	return utils.FindDuplicateFunc(records, func(a, b ServiceSecuringPools) bool {
 		return a.ServiceID == b.ServiceID
 	})
 }
@@ -113,4 +132,52 @@ func (o *OperatorJoinedServicesRecord) Validate() error {
 		return fmt.Errorf("the operator id must be greater than 0")
 	}
 	return o.JoinedServices.Validate()
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewServiceAllowedOperators creates a new instance of ServiceAllowedOperators.
+func NewServiceAllowedOperators(serviceID uint32, operatorIDs []uint32) ServiceAllowedOperators {
+	return ServiceAllowedOperators{
+		ServiceID:   serviceID,
+		OperatorIDs: operatorIDs,
+	}
+}
+
+func (r *ServiceAllowedOperators) Validate() error {
+	if r.ServiceID == 0 {
+		return fmt.Errorf("the service id must be greater than 0")
+	}
+
+	for _, operatorID := range r.OperatorIDs {
+		if operatorID == 0 {
+			return fmt.Errorf("the operator id must be greater than 0")
+		}
+	}
+
+	return nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewServiceSecuringPools creates a new instance of ServiceSecuringPools.
+func NewServiceSecuringPools(serviceID uint32, poolIDs []uint32) ServiceSecuringPools {
+	return ServiceSecuringPools{
+		ServiceID: serviceID,
+		PoolIDs:   poolIDs,
+	}
+}
+
+func (r *ServiceSecuringPools) Validate() error {
+	if r.ServiceID == 0 {
+		return fmt.Errorf("the service id must be greater than 0")
+	}
+
+	for _, poolID := range r.PoolIDs {
+		if poolID == 0 {
+			return fmt.Errorf("the pool id must be greater than 0")
+		}
+	}
+
+	return nil
 }

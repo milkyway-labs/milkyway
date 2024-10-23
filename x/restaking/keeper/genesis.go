@@ -13,9 +13,20 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		panic(err)
 	}
 
+	servicesAllowedOperators, err := k.GetAllServicesAllowedOperators(ctx)
+	if err != nil {
+		panic(err)
+	}
+
+	servicesSecuringPools, err := k.GetAllServicesSecuringPools(ctx)
+	if err != nil {
+		panic(err)
+	}
+
 	return types.NewGenesis(
 		operatorsJoinedServices,
-		k.GetAllServicesParams(ctx),
+		servicesAllowedOperators,
+		servicesSecuringPools,
 		k.GetAllDelegations(ctx),
 		k.GetAllUnbondingDelegations(ctx),
 		k.GetParams(ctx),
@@ -32,8 +43,24 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
 		}
 	}
 
-	for _, record := range data.ServicesParams {
-		k.SaveServiceParams(ctx, record.ServiceID, record.Params)
+	// Store the whitelisted operators for each service
+	for _, record := range data.ServicesAllowedOperators {
+		for _, operatorID := range record.OperatorIDs {
+			err := k.AddOperatorToServiceAllowList(ctx, record.ServiceID, operatorID)
+			if err != nil {
+				panic(err)
+			}
+		}
+	}
+
+	// Store the whitelisted pools for each service
+	for _, record := range data.ServicesSecuringPools {
+		for _, poolID := range record.PoolIDs {
+			err := k.AddPoolToServiceSecuringPools(ctx, record.ServiceID, poolID)
+			if err != nil {
+				panic(err)
+			}
+		}
 	}
 
 	// Store the delegations

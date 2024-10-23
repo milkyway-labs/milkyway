@@ -3,8 +3,6 @@ package keeper_test
 import (
 	"time"
 
-	"cosmossdk.io/math"
-
 	"github.com/milkyway-labs/milkyway/app/testutil"
 	"github.com/milkyway-labs/milkyway/utils"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
@@ -126,9 +124,9 @@ func (suite *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	suite.DelegatePool(ctx, utils.MustParseCoin("500_000000uusd"), aliceAddr.String(), true)  // $500
 
 	// Whitelist only $MILK and $MUSD pools.
-	suite.UpdateServiceParams(ctx, service2.ID, math.LegacyZeroDec(), []uint32{1, 3}, nil)
+	suite.AddPoolsToServiceSecuringPools(ctx, service2.ID, []uint32{1, 3})
 	// Whitelist only Operator2 and Operator3.
-	suite.UpdateServiceParams(ctx, service3.ID, math.LegacyZeroDec(), nil, []uint32{operator2.ID, operator3.ID})
+	suite.AddOperatorsToServiceAllowList(ctx, service3.ID, []uint32{operator2.ID, operator3.ID})
 
 	bobAddr := testutil.TestAddress(2)
 	suite.DelegateService(ctx, service1.ID, utils.MustParseCoins("100_000000uinit"), bobAddr.String(), true) // $300

@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	"cosmossdk.io/collections"
 	"cosmossdk.io/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
@@ -52,8 +53,11 @@ func (k Querier) OperatorJoinedServices(goCtx context.Context, req *types.QueryO
 	return &types.QueryOperatorJoinedServicesResponse{ServiceIds: joinedServices.ServiceIDs}, nil
 }
 
-// ServiceParams queries the service params for the given service id
-func (k Querier) ServiceParams(goCtx context.Context, req *types.QueryServiceParamsRequest) (*types.QueryServiceParamsResponse, error) {
+// ServiceAllowedOperators queries the allowed operators for a given service.
+func (k Querier) ServiceAllowedOperators(
+	goCtx context.Context,
+	req *types.QueryServiceAllowedOperatorsRequest,
+) (*types.QueryServiceAllowedOperatorsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -64,10 +68,49 @@ func (k Querier) ServiceParams(goCtx context.Context, req *types.QueryServicePar
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// Get the service params store
-	params := k.GetServiceParams(ctx, req.ServiceId)
+	// Get the service's allowed operators
+	operatorIDs, pageResponse, err := query.CollectionPaginate(ctx, k.serviceOperatorsAllowList, req.Pagination,
+		func(key collections.Pair[uint32, uint32], _ collections.NoValue) (uint32, error) {
+			return key.K2(), nil
+		}, query.WithCollectionPaginationPairPrefix[uint32, uint32](req.ServiceId))
+	if err != nil {
+		return nil, err
+	}
 
-	return &types.QueryServiceParamsResponse{ServiceParams: params}, nil
+	return &types.QueryServiceAllowedOperatorsResponse{
+		OperatorIds: operatorIDs,
+		Pagination:  pageResponse,
+	}, nil
+}
+
+// ServiceSecuringPools queries the pools that are securing a given service.
+func (k Querier) ServiceSecuringPools(
+	goCtx context.Context,
+	req *types.QueryServiceSecuringPoolsRequest,
+) (*types.QueryServiceSecuringPoolsResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
+	}
+
+	if req.ServiceId == 0 {
+		return nil, status.Error(codes.InvalidArgument, "service id cannot be 0")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Get the service securing pools
+	poolIDs, pageResponse, err := query.CollectionPaginate(ctx, k.serviceSecuringPools, req.Pagination,
+		func(key collections.Pair[uint32, uint32], _ collections.NoValue) (uint32, error) {
+			return key.K2(), nil
+		}, query.WithCollectionPaginationPairPrefix[uint32, uint32](req.ServiceId))
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.QueryServiceSecuringPoolsResponse{
+		PoolIds:    poolIDs,
+		Pagination: pageResponse,
+	}, nil
 }
 
 // PoolDelegations queries the pool delegations for the given pool id
