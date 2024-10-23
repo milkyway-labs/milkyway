@@ -26,14 +26,13 @@ service Msg {
 
   // AllowOperator defines the operation that allows the service admin
   // to add an operator to the list of allowed operator to secure the service
-  rpc AllowOperator(MsgAllowOperator)
-    returns (MsgAllowOperatorResponse);
+  rpc AllowOperator(MsgAllowOperator) returns (MsgAllowOperatorResponse);
 
   // RemoveAllowedOperator defines the operation that allows the service admin
   // to remove a previously added operator from the list of allowed operators
   // to secure the service
   rpc RemoveAllowedOperator(MsgRemoveAllowedOperator)
-    returns (MsgRemoveAllowedOperatorResponse);
+      returns (MsgRemoveAllowedOperatorResponse);
 
   // DelegatePool defines the operation that allows users to delegate any amount
   // of an asset to a pool that can then be used to provide services with
@@ -101,7 +100,6 @@ message MsgLeaveService {
 // MsgLeaveerviceResponse is the return value of MsgLeveService.
 message MsgLeaveServiceResponse {}
 
-
 // MsgAllowOperator defines the message structure for the
 // AllowOperator gRPC service method. It allows the service admin
 // to add an operator to the list of allowed operator to secure the service.
@@ -134,7 +132,8 @@ message MsgRemoveAllowedOperator {
   uint32 operator_id = 3 [ (gogoproto.customname) = "OperatorID" ];
 }
 
-// MsgRemoveAllowedOperatorResponse is the return value of MsgRemoveAllowedOperator.
+// MsgRemoveAllowedOperatorResponse is the return value of
+// MsgRemoveAllowedOperator.
 message MsgRemoveAllowedOperatorResponse {}
 
 // MsgDelegatePool defines the message structure for the DelegatePool gRPC

@@ -401,7 +401,8 @@ func (m *MsgRemoveAllowedOperator) GetOperatorID() uint32 {
 	return 0
 }
 
-// MsgRemoveAllowedOperatorResponse is the return value of MsgRemoveAllowedOperator.
+// MsgRemoveAllowedOperatorResponse is the return value of
+// MsgRemoveAllowedOperator.
 type MsgRemoveAllowedOperatorResponse struct {
 }
 

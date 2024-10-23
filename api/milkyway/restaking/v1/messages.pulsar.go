@@ -9597,7 +9597,8 @@ func (x *MsgRemoveAllowedOperator) GetOperatorId() uint32 {
 	return 0
 }
 
-// MsgRemoveAllowedOperatorResponse is the return value of MsgRemoveAllowedOperator.
+// MsgRemoveAllowedOperatorResponse is the return value of
+// MsgRemoveAllowedOperator.
 type MsgRemoveAllowedOperatorResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
