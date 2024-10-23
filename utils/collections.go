@@ -13,14 +13,14 @@ func MapGetOrDefault[K, V any](
 	ctx sdk.Context,
 	collectionMap collections.Map[K, V],
 	key K,
-	defaultValueProvide func() V,
+	defaultValueProvider func() V,
 ) (V, error) {
 	value, err := collectionMap.Get(ctx, key)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
-			return defaultValueProvide(), nil
+			return *new(V), nil
 		}
-		return defaultValueProvide(), err
+		return defaultValueProvider(), err
 	}
 
 	return value, nil
