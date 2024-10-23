@@ -22,13 +22,12 @@ message LegacyOperatorParams {
 
   // JoinedServicesIDs defines the list of service IDs that the operator has
   // joined.
-  repeated uint32 joined_services_ids = 2 [
-    (gogoproto.customname) = "JoinedServicesIDs"
-  ];
+  repeated uint32 joined_services_ids = 2
+      [ (gogoproto.customname) = "JoinedServicesIDs" ];
 }
 
-// LegacyServiceParams represent the previous format that we where using to store
-// the params that have been set for an individual service.
+// LegacyServiceParams represent the previous format that we where using to
+// store the params that have been set for an individual service.
 message LegacyServiceParams {
   // SlashFraction defines the fraction of the delegation that will be slashed
   // in case of a misbehavior.
@@ -39,14 +38,11 @@ message LegacyServiceParams {
 
   // WhitelistedPoolsIDs defines the list of pool IDs that are providing
   // cryptoeconomic security to the service.
-  repeated uint32 whitelisted_pools_ids = 2 [
-    (gogoproto.customname) = "WhitelistedPoolsIDs"
-  ];
+  repeated uint32 whitelisted_pools_ids = 2
+      [ (gogoproto.customname) = "WhitelistedPoolsIDs" ];
 
   // WhitelistedOperatorsIDs defines the list of operator IDs that are allowed
   // to validate this service.
-  repeated uint32 whitelisted_operators_ids = 3 [
-    (gogoproto.customname) = "WhitelistedOperatorsIDs"
-  ];
+  repeated uint32 whitelisted_operators_ids = 3
+      [ (gogoproto.customname) = "WhitelistedOperatorsIDs" ];
 }
-

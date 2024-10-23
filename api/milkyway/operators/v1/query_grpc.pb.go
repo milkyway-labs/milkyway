@@ -34,8 +34,8 @@ type QueryClient interface {
 	// Operator defines a gRPC query method that returns the operator by the given
 	// operator id.
 	Operator(ctx context.Context, in *QueryOperatorRequest, opts ...grpc.CallOption) (*QueryOperatorResponse, error)
-	// OperatorParams defines a gRPC query method that returns the operator's params
-	// by the given operator id.
+	// OperatorParams defines a gRPC query method that returns the operator's
+	// params by the given operator id.
 	OperatorParams(ctx context.Context, in *QueryOperatorParamsRequest, opts ...grpc.CallOption) (*QueryOperatorParamsResponse, error)
 	// Operators defines a gRPC query method that returns the list of operators.
 	Operators(ctx context.Context, in *QueryOperatorsRequest, opts ...grpc.CallOption) (*QueryOperatorsResponse, error)
@@ -101,8 +101,8 @@ type QueryServer interface {
 	// Operator defines a gRPC query method that returns the operator by the given
 	// operator id.
 	Operator(context.Context, *QueryOperatorRequest) (*QueryOperatorResponse, error)
-	// OperatorParams defines a gRPC query method that returns the operator's params
-	// by the given operator id.
+	// OperatorParams defines a gRPC query method that returns the operator's
+	// params by the given operator id.
 	OperatorParams(context.Context, *QueryOperatorParamsRequest) (*QueryOperatorParamsResponse, error)
 	// Operators defines a gRPC query method that returns the list of operators.
 	Operators(context.Context, *QueryOperatorsRequest) (*QueryOperatorsResponse, error)

@@ -2951,9 +2951,11 @@ type GenesisState struct {
 
 	// Params defines the parameters of the module.
 	Params *Params `protobuf:"bytes,1,opt,name=params,proto3" json:"params,omitempty"`
-	// OperatorsJoinedServices defines the list of the services that each operator has joined.
+	// OperatorsJoinedServices defines the list of the services that each operator
+	// has joined.
 	OperatorsJoinedServices []*OperatorJoinedServicesRecord `protobuf:"bytes,2,rep,name=operators_joined_services,json=operatorsJoinedServices,proto3" json:"operators_joined_services,omitempty"`
-	// ServicesWhitelistedOperators defines the whitelisted operators for each service.
+	// ServicesWhitelistedOperators defines the whitelisted operators for each
+	// service.
 	ServicesWhitelistedOperators []*ServiceWhitelistedOperators `protobuf:"bytes,3,rep,name=services_whitelisted_operators,json=servicesWhitelistedOperators,proto3" json:"services_whitelisted_operators,omitempty"`
 	// ServicesWhitelistedPools defines the whitelisted pools for each service.
 	ServicesWhitelistedPools []*ServiceWhitelistedPools `protobuf:"bytes,4,rep,name=services_whitelisted_pools,json=servicesWhitelistedPools,proto3" json:"services_whitelisted_pools,omitempty"`

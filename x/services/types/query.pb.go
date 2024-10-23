@@ -303,7 +303,8 @@ func (m *QueryServiceResponse) GetService() Service {
 	return Service{}
 }
 
-// QueryServiceParamsRequest is the request type for the Query/ServiceParams RPC method.
+// QueryServiceParamsRequest is the request type for the Query/ServiceParams RPC
+// method.
 type QueryServiceParamsRequest struct {
 	// ServiceID is the ID of the service to query.
 	ServiceId uint32 `protobuf:"varint,1,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
@@ -349,7 +350,8 @@ func (m *QueryServiceParamsRequest) GetServiceId() uint32 {
 	return 0
 }
 
-// QueryServiceParamsResponse is the response type for the Query/ServiceParams RPC method.
+// QueryServiceParamsResponse is the response type for the Query/ServiceParams
+// RPC method.
 type QueryServiceParamsResponse struct {
 	Params ServiceParams `protobuf:"bytes,1,opt,name=params,proto3" json:"params"`
 }

@@ -3723,7 +3723,8 @@ func (x *QueryServiceResponse) GetService() *Service {
 	return nil
 }
 
-// QueryServiceParamsRequest is the request type for the Query/ServiceParams RPC method.
+// QueryServiceParamsRequest is the request type for the Query/ServiceParams RPC
+// method.
 type QueryServiceParamsRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -3760,7 +3761,8 @@ func (x *QueryServiceParamsRequest) GetServiceId() uint32 {
 	return 0
 }
 
-// QueryServiceParamsResponse is the response type for the Query/ServiceParams RPC method.
+// QueryServiceParamsResponse is the response type for the Query/ServiceParams
+// RPC method.
 type QueryServiceParamsResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

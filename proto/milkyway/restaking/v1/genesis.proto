@@ -14,9 +14,7 @@ message OperatorJoinedServicesRecord {
   uint32 operator_id = 1 [ (gogoproto.customname) = "OperatorID" ];
 
   // JoinedServices represents the services joined by the operator.
-  OperatorJoinedServices joined_services = 2 [
-    (gogoproto.nullable) = false
-  ];
+  OperatorJoinedServices joined_services = 2 [ (gogoproto.nullable) = false ];
 }
 
 // ServiceWhitelistedOperators represents the whitelisted operators for
@@ -44,11 +42,13 @@ message GenesisState {
   // Params defines the parameters of the module.
   Params params = 1 [ (gogoproto.nullable) = false ];
 
-  // OperatorsJoinedServices defines the list of the services that each operator has joined.
+  // OperatorsJoinedServices defines the list of the services that each operator
+  // has joined.
   repeated OperatorJoinedServicesRecord operators_joined_services = 2
       [ (gogoproto.nullable) = false ];
 
-  // ServicesWhitelistedOperators defines the whitelisted operators for each service.
+  // ServicesWhitelistedOperators defines the whitelisted operators for each
+  // service.
   repeated ServiceWhitelistedOperators services_whitelisted_operators = 3
       [ (gogoproto.nullable) = false ];
 

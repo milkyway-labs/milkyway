@@ -79,8 +79,8 @@ func (m *LegacyOperatorParams) GetJoinedServicesIDs() []uint32 {
 	return nil
 }
 
-// LegacyServiceParams represent the previous format that we where using to store
-// the params that have been set for an individual service.
+// LegacyServiceParams represent the previous format that we where using to
+// store the params that have been set for an individual service.
 type LegacyServiceParams struct {
 	// SlashFraction defines the fraction of the delegation that will be slashed
 	// in case of a misbehavior.

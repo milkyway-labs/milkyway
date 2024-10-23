@@ -35,8 +35,8 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// QueryOperatorJoinedServicesRequest is request type for the Query/OperatorJoinedServices
-// RPC method.
+// QueryOperatorJoinedServicesRequest is request type for the
+// Query/OperatorJoinedServices RPC method.
 type QueryOperatorJoinedServicesRequest struct {
 	// OperatorId is the ID of the operator to query
 	OperatorId uint32 `protobuf:"varint,1,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
@@ -82,8 +82,8 @@ func (m *QueryOperatorJoinedServicesRequest) GetOperatorId() uint32 {
 	return 0
 }
 
-// QueryOperatorJoinedServicesResponse is response type for the Query/OperatorJoinedServices
-// RPC method.
+// QueryOperatorJoinedServicesResponse is response type for the
+// Query/OperatorJoinedServices RPC method.
 type QueryOperatorJoinedServicesResponse struct {
 	ServiceIds []uint32 `protobuf:"varint,1,rep,packed,name=service_ids,json=serviceIds,proto3" json:"service_ids,omitempty"`
 }
@@ -128,8 +128,8 @@ func (m *QueryOperatorJoinedServicesResponse) GetServiceIds() []uint32 {
 	return nil
 }
 
-// QueryServiceAllowedOperatorsRequest is request type for the Query/ServiceAllowedOperators
-// RPC method.
+// QueryServiceAllowedOperatorsRequest is request type for the
+// Query/ServiceAllowedOperators RPC method.
 type QueryServiceAllowedOperatorsRequest struct {
 	// ServiceId is the ID of the service to query
 	ServiceId uint32 `protobuf:"varint,1,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
@@ -184,8 +184,8 @@ func (m *QueryServiceAllowedOperatorsRequest) GetPagination() *query.PageRequest
 	return nil
 }
 
-// QueryServiceAllowedOperatorsResponse is response type for the Query/ServiceAllowedOperators
-// RPC method.
+// QueryServiceAllowedOperatorsResponse is response type for the
+// Query/ServiceAllowedOperators RPC method.
 type QueryServiceAllowedOperatorsResponse struct {
 	// OperatorIds is the list of operators in the service's whitelist
 	OperatorIds []uint32 `protobuf:"varint,1,rep,packed,name=operator_ids,json=operatorIds,proto3" json:"operator_ids,omitempty"`
@@ -240,8 +240,8 @@ func (m *QueryServiceAllowedOperatorsResponse) GetPagination() *query.PageRespon
 	return nil
 }
 
-// QueryServiceAllowedPoolsRequest is request type for the Query/ServiceAllowedPools
-// RPC method.
+// QueryServiceAllowedPoolsRequest is request type for the
+// Query/ServiceAllowedPools RPC method.
 type QueryServiceAllowedPoolsRequest struct {
 	// ServiceId is the ID of the service to query.
 	ServiceId uint32 `protobuf:"varint,1,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
@@ -296,8 +296,8 @@ func (m *QueryServiceAllowedPoolsRequest) GetPagination() *query.PageRequest {
 	return nil
 }
 
-// QueryServiceAllowedPoolsResponse is response type for the Query/ServiceAllowedPools
-// RPC method.
+// QueryServiceAllowedPoolsResponse is response type for the
+// Query/ServiceAllowedPools RPC method.
 type QueryServiceAllowedPoolsResponse struct {
 	// PoolIds is the list of pools in the service's whitelist.
 	PoolIds []uint32 `protobuf:"varint,1,rep,packed,name=pool_ids,json=poolIds,proto3" json:"pool_ids,omitempty"`

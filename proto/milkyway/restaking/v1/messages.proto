@@ -18,13 +18,11 @@ service Msg {
 
   // JoinService defines the operation that allows the operator admin
   // to start securing an AVS
-  rpc JoinService(MsgJoinService)
-    returns (MsgJoinServiceResponse);
+  rpc JoinService(MsgJoinService) returns (MsgJoinServiceResponse);
 
   // LeaveService defines the operation that allows the operator admin
   // to stop securing an AVS
-  rpc LeaveService(MsgLeaveService)
-    returns (MsgLeaveServiceResponse);
+  rpc LeaveService(MsgLeaveService) returns (MsgLeaveServiceResponse);
 
   // DelegatePool defines the operation that allows users to delegate any amount
   // of an asset to a pool that can then be used to provide services with

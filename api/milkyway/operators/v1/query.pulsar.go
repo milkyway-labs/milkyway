@@ -3578,7 +3578,8 @@ func (x *QueryOperatorResponse) GetOperator() *Operator {
 	return nil
 }
 
-// QueryOperatorParamsRequest is the request type for the Query/OperatorParams RPC method.
+// QueryOperatorParamsRequest is the request type for the Query/OperatorParams
+// RPC method.
 type QueryOperatorParamsRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -3615,7 +3616,8 @@ func (x *QueryOperatorParamsRequest) GetOperatorId() uint32 {
 	return 0
 }
 
-// QueryOperatorParamsResponse is the response type for the Query/OperatorParams RPC method.
+// QueryOperatorParamsResponse is the response type for the Query/OperatorParams
+// RPC method.
 type QueryOperatorParamsResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

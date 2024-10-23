@@ -1459,8 +1459,8 @@ func (x *LegacyOperatorParams) GetJoinedServicesIds() []uint32 {
 	return nil
 }
 
-// LegacyServiceParams represent the previous format that we where using to store
-// the params that have been set for an individual service.
+// LegacyServiceParams represent the previous format that we where using to
+// store the params that have been set for an individual service.
 type LegacyServiceParams struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

@@ -266,21 +266,19 @@ service Query {
   }
 }
 
-// QueryOperatorJoinedServicesRequest is request type for the Query/OperatorJoinedServices
-// RPC method.
+// QueryOperatorJoinedServicesRequest is request type for the
+// Query/OperatorJoinedServices RPC method.
 message QueryOperatorJoinedServicesRequest {
   // OperatorId is the ID of the operator to query
   uint32 operator_id = 1;
 }
 
-// QueryOperatorJoinedServicesResponse is response type for the Query/OperatorJoinedServices
-// RPC method.
-message QueryOperatorJoinedServicesResponse {
-  repeated uint32 service_ids = 1;
-}
+// QueryOperatorJoinedServicesResponse is response type for the
+// Query/OperatorJoinedServices RPC method.
+message QueryOperatorJoinedServicesResponse { repeated uint32 service_ids = 1; }
 
-// QueryServiceAllowedOperatorsRequest is request type for the Query/ServiceAllowedOperators
-// RPC method.
+// QueryServiceAllowedOperatorsRequest is request type for the
+// Query/ServiceAllowedOperators RPC method.
 message QueryServiceAllowedOperatorsRequest {
   // ServiceId is the ID of the service to query
   uint32 service_id = 1;
@@ -289,8 +287,8 @@ message QueryServiceAllowedOperatorsRequest {
   cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
-// QueryServiceAllowedOperatorsResponse is response type for the Query/ServiceAllowedOperators
-// RPC method.
+// QueryServiceAllowedOperatorsResponse is response type for the
+// Query/ServiceAllowedOperators RPC method.
 message QueryServiceAllowedOperatorsResponse {
   // OperatorIds is the list of operators in the service's whitelist
   repeated uint32 operator_ids = 1;
@@ -299,9 +297,8 @@ message QueryServiceAllowedOperatorsResponse {
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
-
-// QueryServiceAllowedPoolsRequest is request type for the Query/ServiceAllowedPools
-// RPC method.
+// QueryServiceAllowedPoolsRequest is request type for the
+// Query/ServiceAllowedPools RPC method.
 message QueryServiceAllowedPoolsRequest {
   // ServiceId is the ID of the service to query.
   uint32 service_id = 1;
@@ -310,8 +307,8 @@ message QueryServiceAllowedPoolsRequest {
   cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
-// QueryServiceAllowedPoolsResponse is response type for the Query/ServiceAllowedPools
-// RPC method.
+// QueryServiceAllowedPoolsResponse is response type for the
+// Query/ServiceAllowedPools RPC method.
 message QueryServiceAllowedPoolsResponse {
   // PoolIds is the list of pools in the service's whitelist.
   repeated uint32 pool_ids = 1;

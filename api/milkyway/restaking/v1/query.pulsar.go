@@ -28072,8 +28072,8 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// QueryOperatorJoinedServicesRequest is request type for the Query/OperatorJoinedServices
-// RPC method.
+// QueryOperatorJoinedServicesRequest is request type for the
+// Query/OperatorJoinedServices RPC method.
 type QueryOperatorJoinedServicesRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -28110,8 +28110,8 @@ func (x *QueryOperatorJoinedServicesRequest) GetOperatorId() uint32 {
 	return 0
 }
 
-// QueryOperatorJoinedServicesResponse is response type for the Query/OperatorJoinedServices
-// RPC method.
+// QueryOperatorJoinedServicesResponse is response type for the
+// Query/OperatorJoinedServices RPC method.
 type QueryOperatorJoinedServicesResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -28147,8 +28147,8 @@ func (x *QueryOperatorJoinedServicesResponse) GetServiceIds() []uint32 {
 	return nil
 }
 
-// QueryServiceAllowedOperatorsRequest is request type for the Query/ServiceAllowedOperators
-// RPC method.
+// QueryServiceAllowedOperatorsRequest is request type for the
+// Query/ServiceAllowedOperators RPC method.
 type QueryServiceAllowedOperatorsRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -28194,8 +28194,8 @@ func (x *QueryServiceAllowedOperatorsRequest) GetPagination() *v1beta1.PageReque
 	return nil
 }
 
-// QueryServiceAllowedOperatorsResponse is response type for the Query/ServiceAllowedOperators
-// RPC method.
+// QueryServiceAllowedOperatorsResponse is response type for the
+// Query/ServiceAllowedOperators RPC method.
 type QueryServiceAllowedOperatorsResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -28241,8 +28241,8 @@ func (x *QueryServiceAllowedOperatorsResponse) GetPagination() *v1beta1.PageResp
 	return nil
 }
 
-// QueryServiceAllowedPoolsRequest is request type for the Query/ServiceAllowedPools
-// RPC method.
+// QueryServiceAllowedPoolsRequest is request type for the
+// Query/ServiceAllowedPools RPC method.
 type QueryServiceAllowedPoolsRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -28288,8 +28288,8 @@ func (x *QueryServiceAllowedPoolsRequest) GetPagination() *v1beta1.PageRequest {
 	return nil
 }
 
-// QueryServiceAllowedPoolsResponse is response type for the Query/ServiceAllowedPools
-// RPC method.
+// QueryServiceAllowedPoolsResponse is response type for the
+// Query/ServiceAllowedPools RPC method.
 type QueryServiceAllowedPoolsResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
