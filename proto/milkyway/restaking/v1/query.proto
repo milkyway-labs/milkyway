@@ -258,18 +258,16 @@ service Query {
   }
 }
 
-// QueryOperatorJoinedServicesRequest is request type for the Query/OperatorJoinedServices
-// RPC method.
+// QueryOperatorJoinedServicesRequest is request type for the
+// Query/OperatorJoinedServices RPC method.
 message QueryOperatorJoinedServicesRequest {
   // OperatorId is the ID of the operator to query
   uint32 operator_id = 1;
 }
 
-// QueryOperatorJoinedServicesResponse is response type for the Query/OperatorJoinedServices
-// RPC method.
-message QueryOperatorJoinedServicesResponse {
-  repeated uint32 service_ids = 1;
-}
+// QueryOperatorJoinedServicesResponse is response type for the
+// Query/OperatorJoinedServices RPC method.
+message QueryOperatorJoinedServicesResponse { repeated uint32 service_ids = 1; }
 
 // QueryServiceParamsRequest is request type for the Query/ServiceParams
 // RPC method.

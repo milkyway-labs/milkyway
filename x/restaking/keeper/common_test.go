@@ -6,6 +6,7 @@ import (
 	"cosmossdk.io/log"
 	"cosmossdk.io/store"
 	"cosmossdk.io/store/metrics"
+	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	authcodec "github.com/cosmos/cosmos-sdk/x/auth/codec"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
@@ -118,6 +119,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 		runtime.NewKVStoreService(keys[operatorstypes.StoreKey]),
 		suite.ak,
 		communityPoolKeeper,
+		baseapp.NewMsgServiceRouter(),
 		authorityAddr,
 	)
 	suite.sk = serviceskeeper.NewKeeper(

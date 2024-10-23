@@ -10,6 +10,7 @@ import (
 	storetypes "cosmossdk.io/store/types"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	db "github.com/cosmos/cosmos-db"
+	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
@@ -38,7 +39,7 @@ func TestBeginBlocker(t *testing.T) {
 	cdc, _ := app.MakeCodecs()
 
 	operatorsKeeper := keeper.NewKeeper(cdc, keys[types.StoreKey],
-		runtime.NewKVStoreService(keys[types.StoreKey]), nil, nil, "")
+		runtime.NewKVStoreService(keys[types.StoreKey]), nil, nil, baseapp.NewMsgServiceRouter(), "")
 
 	testCases := []struct {
 		name      string

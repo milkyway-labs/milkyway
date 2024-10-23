@@ -35,8 +35,8 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// QueryOperatorJoinedServicesRequest is request type for the Query/OperatorJoinedServices
-// RPC method.
+// QueryOperatorJoinedServicesRequest is request type for the
+// Query/OperatorJoinedServices RPC method.
 type QueryOperatorJoinedServicesRequest struct {
 	// OperatorId is the ID of the operator to query
 	OperatorId uint32 `protobuf:"varint,1,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
@@ -82,8 +82,8 @@ func (m *QueryOperatorJoinedServicesRequest) GetOperatorId() uint32 {
 	return 0
 }
 
-// QueryOperatorJoinedServicesResponse is response type for the Query/OperatorJoinedServices
-// RPC method.
+// QueryOperatorJoinedServicesResponse is response type for the
+// Query/OperatorJoinedServices RPC method.
 type QueryOperatorJoinedServicesResponse struct {
 	ServiceIds []uint32 `protobuf:"varint,1,rep,packed,name=service_ids,json=serviceIds,proto3" json:"service_ids,omitempty"`
 }

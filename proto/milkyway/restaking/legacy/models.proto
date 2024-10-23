@@ -22,7 +22,6 @@ message LegacyOperatorParams {
 
   // JoinedServicesIDs defines the list of service IDs that the operator has
   // joined.
-  repeated uint32 joined_services_ids = 2 [
-    (gogoproto.customname) = "JoinedServicesIDs"
-  ];
+  repeated uint32 joined_services_ids = 2
+      [ (gogoproto.customname) = "JoinedServicesIDs" ];
 }

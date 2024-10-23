@@ -5,6 +5,7 @@ import (
 	corestoretypes "cosmossdk.io/core/store"
 	"cosmossdk.io/log"
 	storetypes "cosmossdk.io/store/types"
+	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -14,7 +15,7 @@ import (
 type Keeper struct {
 	storeKey     storetypes.StoreKey
 	storeService corestoretypes.KVStoreService
-	cdc          codec.BinaryCodec
+	cdc          codec.Codec
 	hooks        types.OperatorsHooks
 
 	accountKeeper types.AccountKeeper
@@ -24,15 +25,19 @@ type Keeper struct {
 	operatorAddressSet collections.KeySet[string]
 	operatorParams     collections.Map[uint32, types.OperatorParams]
 
+	// Msg server router
+	router *baseapp.MsgServiceRouter
+
 	authority string
 }
 
 func NewKeeper(
-	cdc codec.BinaryCodec,
+	cdc codec.Codec,
 	storeKey storetypes.StoreKey,
 	storeService corestoretypes.KVStoreService,
 	accountKeeper types.AccountKeeper,
 	poolKeeper types.CommunityPoolKeeper,
+	router *baseapp.MsgServiceRouter,
 	authority string,
 ) *Keeper {
 	sb := collections.NewSchemaBuilder(storeService)
@@ -57,6 +62,7 @@ func NewKeeper(
 			collections.Uint32Key,
 			codec.CollValue[types.OperatorParams](cdc),
 		),
+		router: router,
 	}
 
 	schema, err := sb.Build()
@@ -71,6 +77,11 @@ func NewKeeper(
 // Logger returns a module-specific logger.
 func (k *Keeper) Logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", "x/"+types.ModuleName)
+}
+
+// Router returns the gov keeper's router
+func (k Keeper) Router() *baseapp.MsgServiceRouter {
+	return k.router
 }
 
 // SetHooks allows to set the operators hooks

@@ -139,7 +139,8 @@ func (m *ServiceParamsRecord) GetParams() ServiceParams {
 type GenesisState struct {
 	// Params defines the parameters of the module.
 	Params Params `protobuf:"bytes,1,opt,name=params,proto3" json:"params"`
-	// OperatorsJoinedServices defines the list of the services that each operator has joined.
+	// OperatorsJoinedServices defines the list of the services that each operator
+	// has joined.
 	OperatorsJoinedServices []OperatorJoinedServicesRecord `protobuf:"bytes,2,rep,name=operators_joined_services,json=operatorsJoinedServices,proto3" json:"operators_joined_services"`
 	// ServicesParams defines the list of services parameters.
 	ServicesParams []ServiceParamsRecord `protobuf:"bytes,3,rep,name=services_params,json=servicesParams,proto3" json:"services_params"`

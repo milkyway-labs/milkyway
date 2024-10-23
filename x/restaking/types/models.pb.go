@@ -64,7 +64,8 @@ func (DelegationType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_86f4cd48423b1e2f, []int{0}
 }
 
-// OperatorJoinedServices represents the list of services the operator has joined.
+// OperatorJoinedServices represents the list of services the operator has
+// joined.
 type OperatorJoinedServices struct {
 	// ServiceIDs defines the list of service IDs the operator has joined.
 	ServiceIDs []uint32 `protobuf:"varint,1,rep,packed,name=service_ids,json=serviceIds,proto3" json:"service_ids,omitempty"`

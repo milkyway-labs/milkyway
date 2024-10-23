@@ -6,6 +6,7 @@ import (
 	"cosmossdk.io/log"
 	"cosmossdk.io/store"
 	"cosmossdk.io/store/metrics"
+	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	authcodec "github.com/cosmos/cosmos-sdk/x/auth/codec"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
@@ -70,7 +71,8 @@ func (suite *KeeperTestSuite) SetupTest() {
 	}
 
 	suite.ctx = sdk.NewContext(ms, tmproto.Header{ChainID: "test-chain"}, false, log.NewNopLogger())
-	suite.cdc, suite.legacyAminoCdc = app.MakeCodecs()
+	encodingConfig := app.MakeEncodingConfig()
+	suite.cdc, suite.legacyAminoCdc = encodingConfig.Codec, encodingConfig.Amino
 
 	// Mock initialization
 	suite.ctrl = gomock.NewController(suite.T())
@@ -96,12 +98,26 @@ func (suite *KeeperTestSuite) SetupTest() {
 		authorityAddr,
 		logger,
 	)
+	// Set default bank params cause params are not initialized.
+	// Without this, the default SendEnabled params is false so we can't send
+	// coins in tests.
+	err := suite.bk.SetParams(suite.ctx, banktypes.DefaultParams())
+	suite.Require().NoError(err)
+
+	// Create a new MsgServiceRouter.
+	msgRouter := baseapp.NewMsgServiceRouter()
+	msgRouter.SetInterfaceRegistry(encodingConfig.InterfaceRegistry)
+	// Register only the bank msg server since we're using bank module only
+	// in tests.
+	banktypes.RegisterMsgServer(msgRouter, bankkeeper.NewMsgServerImpl(&suite.bk))
+
 	suite.k = keeper.NewKeeper(
 		suite.cdc,
 		suite.storeKey,
 		runtime.NewKVStoreService(keys[types.StoreKey]),
 		suite.ak,
 		keepers.NewCommunityPoolKeeper(suite.bk, authtypes.FeeCollectorName),
+		msgRouter,
 		authorityAddr,
 	)
 

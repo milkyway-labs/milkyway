@@ -5097,7 +5097,8 @@ func (DelegationType) EnumDescriptor() ([]byte, []int) {
 	return file_milkyway_restaking_v1_models_proto_rawDescGZIP(), []int{0}
 }
 
-// OperatorJoinedServices represents the list of services the operator has joined.
+// OperatorJoinedServices represents the list of services the operator has
+// joined.
 type OperatorJoinedServices struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

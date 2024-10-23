@@ -6,6 +6,7 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
 	"github.com/milkyway-labs/milkyway/x/operators/keeper"
 	"github.com/milkyway-labs/milkyway/x/operators/types"
@@ -437,6 +438,153 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 
 			msgServer := keeper.NewMsgServer(suite.k)
 			res, err := msgServer.DeactivateOperator(sdk.WrapSDKContext(ctx), tc.msg)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expResponse, res)
+				for _, event := range tc.expEvents {
+					suite.Require().Contains(ctx.EventManager().Events(), event)
+				}
+
+				if tc.check != nil {
+					tc.check(ctx)
+				}
+			}
+		})
+	}
+}
+
+func (suite *KeeperTestSuite) TestMsgServer_ExecuteMessages() {
+	testCases := []struct {
+		name        string
+		setup       func()
+		store       func(ctx sdk.Context)
+		setupCtx    func(ctx sdk.Context) sdk.Context
+		msgFn       func() (*types.MsgExecuteMessages, error)
+		shouldErr   bool
+		expResponse *types.MsgExecuteMessagesResponse
+		expEvents   sdk.Events
+		check       func(ctx sdk.Context)
+	}{
+		{
+			name: "not found operator returns error",
+			msgFn: func() (*types.MsgExecuteMessages, error) {
+				return types.NewMsgExecuteMessages(
+					1,
+					[]sdk.Msg{
+						&banktypes.MsgSend{
+							FromAddress: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+							ToAddress:   "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+							Amount:      sdk.NewCoins(sdk.NewInt64Coin("umilk", 100000000)),
+						},
+					},
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				)
+			},
+			shouldErr: true,
+		},
+		{
+			name: "non admin sender returns error",
+			store: func(ctx sdk.Context) {
+				suite.k.SaveOperator(ctx, types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+			},
+			msgFn: func() (*types.MsgExecuteMessages, error) {
+				return types.NewMsgExecuteMessages(
+					1,
+					[]sdk.Msg{
+						&banktypes.MsgSend{
+							FromAddress: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+							ToAddress:   "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+							Amount:      sdk.NewCoins(sdk.NewInt64Coin("umilk", 100000000)),
+						},
+					},
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				)
+			},
+			shouldErr: true,
+		},
+		{
+			name: "execute messages successfully",
+			store: func(ctx sdk.Context) {
+				suite.k.SaveOperator(ctx, types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+
+				// Send funds to the operator
+				suite.fundAccount(
+					ctx,
+					types.GetOperatorAddress(1).String(),
+					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100000000))),
+				)
+			},
+			msgFn: func() (*types.MsgExecuteMessages, error) {
+				return types.NewMsgExecuteMessages(
+					1,
+					[]sdk.Msg{
+						&banktypes.MsgSend{
+							FromAddress: types.GetOperatorAddress(1).String(),
+							ToAddress:   "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+							Amount:      sdk.NewCoins(sdk.NewInt64Coin("umilk", 100000000)),
+						},
+					},
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				)
+			},
+			shouldErr:   false,
+			expResponse: &types.MsgExecuteMessagesResponse{},
+			expEvents: []sdk.Event{
+				sdk.NewEvent(
+					banktypes.EventTypeTransfer,
+					sdk.NewAttribute(banktypes.AttributeKeyRecipient, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+					sdk.NewAttribute(banktypes.AttributeKeySender, types.GetOperatorAddress(1).String()),
+					sdk.NewAttribute(sdk.AttributeKeyAmount, "100000000umilk"),
+				),
+			},
+			check: func(ctx sdk.Context) {
+				// Check that the operator has no funds
+				balances := suite.bk.GetAllBalances(ctx, types.GetOperatorAddress(1))
+				suite.Require().True(balances.IsZero())
+
+				// Check that the recipient has the funds
+				addr, err := suite.ak.AddressCodec().StringToBytes("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().NoError(err)
+				balances = suite.bk.GetAllBalances(ctx, addr)
+				suite.Require().Equal(sdk.NewCoins(sdk.NewInt64Coin("umilk", 100000000)), balances)
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.setup != nil {
+				tc.setup()
+			}
+			if tc.setupCtx != nil {
+				ctx = tc.setupCtx(ctx)
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			msgServer := keeper.NewMsgServer(suite.k)
+			msg, err := tc.msgFn()
+			suite.Require().NoError(err)
+			res, err := msgServer.ExecuteMessages(sdk.WrapSDKContext(ctx), msg)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
