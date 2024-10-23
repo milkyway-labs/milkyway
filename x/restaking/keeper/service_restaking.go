@@ -11,7 +11,7 @@ import (
 )
 
 // ServiceAllowedOperatorsIterator returns an iterator that iterates over all
-// operators allowed by a service
+// operators allowed to secure a service
 func (k *Keeper) ServiceAllowedOperatorsIterator(ctx sdk.Context, serviceID uint32) (collections.KeySetIterator[collections.Pair[uint32, uint32]], error) {
 	return k.serviceOperatorsAllowList.Iterate(ctx, collections.NewPrefixedPairRange[uint32, uint32](serviceID))
 }
@@ -44,9 +44,9 @@ func (k *Keeper) AddOperatorToServiceAllowList(ctx sdk.Context, serviceID uint32
 	return k.serviceOperatorsAllowList.Set(ctx, key)
 }
 
-// IsServiceOpertorsAlloListConfigured returns true if the operators allow list
+// IsServiceOpertorsAllowListConfigured returns true if the operators allow list
 // has been configured for the given service
-func (k *Keeper) IsServiceOpertorsAlloListConfigured(ctx sdk.Context, serviceID uint32) (bool, error) {
+func (k *Keeper) IsServiceOpertorsAllowListConfigured(ctx sdk.Context, serviceID uint32) (bool, error) {
 	iteretor, err := k.ServiceAllowedOperatorsIterator(ctx, serviceID)
 	if err != nil {
 		return false, err
@@ -60,10 +60,10 @@ func (k *Keeper) IsServiceOpertorsAlloListConfigured(ctx sdk.Context, serviceID 
 	return false, nil
 }
 
-// CanOpeartorValidateService returns true if the given operator has
-// been whitelisted for the given service
+// CanOpeartorValidateService returns true if the given operator can secure
+// the given service
 func (k *Keeper) CanOperatorValidateService(ctx sdk.Context, serviceID uint32, operatorID uint32) (bool, error) {
-	configured, err := k.IsServiceOpertorsAlloListConfigured(ctx, serviceID)
+	configured, err := k.IsServiceOpertorsAllowListConfigured(ctx, serviceID)
 	if err != nil {
 		return false, err
 	}
@@ -79,13 +79,13 @@ func (k *Keeper) CanOperatorValidateService(ctx sdk.Context, serviceID uint32, o
 // --------------------------------------------------------------------------------------------------------------------
 
 // ServiceSecuringPoolsIterator returns an iterator that iterates over all
-// pools allowed to secure a service.
+// pools allowed to secure the given service.
 func (k *Keeper) ServiceSecuringPoolsIterator(ctx sdk.Context, serviceID uint32) (collections.KeySetIterator[collections.Pair[uint32, uint32]], error) {
 	return k.serviceSecuringPools.Iterate(ctx, collections.NewPrefixedPairRange[uint32, uint32](serviceID))
 }
 
 // GetAllServiceSecuringPools returns all pools that have been allowed to
-// be used to secure a service
+// to secure the give service
 func (k *Keeper) GetAllServiceSecuringPools(ctx sdk.Context, serviceID uint32) ([]uint32, error) {
 	iteretor, err := k.ServiceSecuringPoolsIterator(ctx, serviceID)
 	if err != nil {
@@ -105,15 +105,16 @@ func (k *Keeper) GetAllServiceSecuringPools(ctx sdk.Context, serviceID uint32) (
 	return pools, nil
 }
 
-// AddPoolToServiceSecuringPools adds a pool to the service whitelist
+// AddPoolToServiceSecuringPools adds a pool to the list of pools
+// permitted for securing the service
 func (k *Keeper) AddPoolToServiceSecuringPools(ctx sdk.Context, serviceID uint32, poolID uint32) error {
 	key := collections.Join(serviceID, poolID)
 	return k.serviceSecuringPools.Set(ctx, key)
 }
 
-// IsServingSecuringPoolsConfigured returns true if the list of securing pools
+// IsServiceSecuringPoolsConfigured returns true if the list of securing pools
 // has been configured for the given service
-func (k *Keeper) IsServingSecuringPoolsConfigured(ctx sdk.Context, serviceID uint32) (bool, error) {
+func (k *Keeper) IsServiceSecuringPoolsConfigured(ctx sdk.Context, serviceID uint32) (bool, error) {
 	iteretor, err := k.ServiceSecuringPoolsIterator(ctx, serviceID)
 	if err != nil {
 		return false, err
@@ -127,10 +128,10 @@ func (k *Keeper) IsServingSecuringPoolsConfigured(ctx sdk.Context, serviceID uin
 	return false, nil
 }
 
-// IsServiceSecuredByPool returns true if the given pool has
-// been whitelisted for the given service
+// IsServiceSecuredByPool returns true if the service is being secured
+// by the given pool
 func (k *Keeper) IsServiceSecuredByPool(ctx sdk.Context, serviceID uint32, poolID uint32) (bool, error) {
-	configured, err := k.IsServingSecuringPoolsConfigured(ctx, serviceID)
+	configured, err := k.IsServiceSecuringPoolsConfigured(ctx, serviceID)
 	if err != nil {
 		return false, err
 	}

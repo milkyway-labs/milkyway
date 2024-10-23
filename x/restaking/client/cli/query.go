@@ -425,11 +425,11 @@ func GetServicesQueryCmd() *cobra.Command {
 }
 
 // getServiceAllowedOperatorsQueryCmd returns the command allowing to query
-// the list of operators allowed to join a service.
+// the list of operators allowed to validate a service.
 func getServiceAllowedOperatorsQueryCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "allowed-operators [service-id]",
-		Short:   "Query the list of operators allowed to join a service",
+		Short:   "Query the list of operators allowed to validate a service",
 		Example: fmt.Sprintf(`%s query %s service allowed-operators 1`, version.AppName, types.ModuleName),
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -467,8 +467,8 @@ func getServiceAllowedOperatorsQueryCmd() *cobra.Command {
 	return cmd
 }
 
-// getServiceSecuringPoolsQueryCmd returns the command allowing to query the list
-// of pools from which a service is borrowing its security.
+// getServiceSecuringPoolsQueryCmd returns the command that allows querying the list
+// of pools from which a service is permitted to borrow its security.
 func getServiceSecuringPoolsQueryCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "securing-pools [service-id]",

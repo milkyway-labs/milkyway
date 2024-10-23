@@ -18,7 +18,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServiceAllowedOperators() {
 		expected  []uint32
 	}{
 		{
-			name: "whitelisted pools are not returned",
+			name: "securing pools are not returned",
 			store: func(ctx sdk.Context) {
 				err := suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
 				suite.Require().NoError(err)
@@ -29,7 +29,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServiceAllowedOperators() {
 			serviceID: 1,
 		},
 		{
-			name: "whitelisted operators for different service are not returned",
+			name: "allowed operators for different service are not returned",
 			store: func(ctx sdk.Context) {
 				err := suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
 				suite.Require().NoError(err)
@@ -40,7 +40,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServiceAllowedOperators() {
 			serviceID: 2,
 		},
 		{
-			name: "whitelisted operators are returned properly",
+			name: "allowed operators are returned properly",
 			store: func(ctx sdk.Context) {
 				err := suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
 				suite.Require().NoError(err)
@@ -69,7 +69,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServiceAllowedOperators() {
 	}
 }
 
-func (suite *KeeperTestSuite) TestKeeper_ServiceIsOperatorWhitelisted() {
+func (suite *KeeperTestSuite) TestKeeper_CanOperatorValidateService() {
 	testCases := []struct {
 		name      string
 		store     func(ctx sdk.Context)
@@ -77,7 +77,7 @@ func (suite *KeeperTestSuite) TestKeeper_ServiceIsOperatorWhitelisted() {
 		expected  []uint32
 	}{
 		{
-			name: "whitelisted pools are not considered whitelisted",
+			name: "securing pools are not considered whitelisted",
 			store: func(ctx sdk.Context) {
 				err := suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
 				suite.Require().NoError(err)
@@ -88,7 +88,7 @@ func (suite *KeeperTestSuite) TestKeeper_ServiceIsOperatorWhitelisted() {
 			serviceID: 1,
 		},
 		{
-			name: "whitelisted operators for different service are not returned",
+			name: "allowed operators for different service are not considered allowed",
 			store: func(ctx sdk.Context) {
 				err := suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
 				suite.Require().NoError(err)
@@ -99,7 +99,7 @@ func (suite *KeeperTestSuite) TestKeeper_ServiceIsOperatorWhitelisted() {
 			serviceID: 2,
 		},
 		{
-			name: "whitelisted operators are returned properly",
+			name: "allowed operators are considered allowed",
 			store: func(ctx sdk.Context) {
 				err := suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
 				suite.Require().NoError(err)
@@ -130,7 +130,7 @@ func (suite *KeeperTestSuite) TestKeeper_ServiceIsOperatorWhitelisted() {
 	}
 }
 
-func (suite *KeeperTestSuite) TestKeeper_ServiceIsOpertorsWhitelistConfigured() {
+func (suite *KeeperTestSuite) TestKeeper_IsServiceOpertorsAllowListConfigured() {
 	testCases := []struct {
 		name          string
 		store         func(ctx sdk.Context)
@@ -138,12 +138,12 @@ func (suite *KeeperTestSuite) TestKeeper_ServiceIsOpertorsWhitelistConfigured() 
 		isInitialized bool
 	}{
 		{
-			name:          "no whitelisted operators means not initialized",
+			name:          "empty allow list means not initialized",
 			serviceID:     1,
 			isInitialized: false,
 		},
 		{
-			name: "no whitelisted operators for service means not initialized",
+			name: "with allow list for different service is not initialized",
 			store: func(ctx sdk.Context) {
 				err := suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
 				suite.Require().NoError(err)
@@ -155,7 +155,7 @@ func (suite *KeeperTestSuite) TestKeeper_ServiceIsOpertorsWhitelistConfigured() 
 			isInitialized: false,
 		},
 		{
-			name: "with whitelisted operator is initialized",
+			name: "with allowed operator is initialized",
 			store: func(ctx sdk.Context) {
 				err := suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
 				suite.Require().NoError(err)
@@ -174,7 +174,7 @@ func (suite *KeeperTestSuite) TestKeeper_ServiceIsOpertorsWhitelistConfigured() 
 				tc.store(ctx)
 			}
 
-			isInitialized, err := suite.k.IsServiceOpertorsAlloListConfigured(ctx, tc.serviceID)
+			isInitialized, err := suite.k.IsServiceOpertorsAllowListConfigured(ctx, tc.serviceID)
 			suite.Require().NoError(err)
 			suite.Require().Equal(tc.isInitialized, isInitialized)
 		})
@@ -191,7 +191,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServiceSecuringPools() {
 		expected  []uint32
 	}{
 		{
-			name: "whitelisted operators are not returned",
+			name: "allowed operators are not returned",
 			store: func(ctx sdk.Context) {
 				err := suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
 				suite.Require().NoError(err)
@@ -202,7 +202,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServiceSecuringPools() {
 			serviceID: 1,
 		},
 		{
-			name: "whitelisted pools for different service are not returned",
+			name: "securing pools for different service are not returned",
 			store: func(ctx sdk.Context) {
 				err := suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
 				suite.Require().NoError(err)
@@ -213,7 +213,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServiceSecuringPools() {
 			serviceID: 2,
 		},
 		{
-			name: "whitelisted pools are returned properly",
+			name: "securing pools are returned properly",
 			store: func(ctx sdk.Context) {
 				err := suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
 				suite.Require().NoError(err)
@@ -242,7 +242,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServiceSecuringPools() {
 	}
 }
 
-func (suite *KeeperTestSuite) TestKeeper_ServiceIsPoolWhitelisted() {
+func (suite *KeeperTestSuite) TestKeeper_IsServiceSecuredByPool() {
 	testCases := []struct {
 		name      string
 		store     func(ctx sdk.Context)
@@ -250,7 +250,7 @@ func (suite *KeeperTestSuite) TestKeeper_ServiceIsPoolWhitelisted() {
 		expected  []uint32
 	}{
 		{
-			name: "whitelisted operators are not considered whitelisted",
+			name: "allowed operators are not considered securing pools",
 			store: func(ctx sdk.Context) {
 				err := suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
 				suite.Require().NoError(err)
@@ -261,7 +261,7 @@ func (suite *KeeperTestSuite) TestKeeper_ServiceIsPoolWhitelisted() {
 			serviceID: 1,
 		},
 		{
-			name: "whitelisted pools for different service are not returned",
+			name: "securing pools for different service are not considered",
 			store: func(ctx sdk.Context) {
 				err := suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
 				suite.Require().NoError(err)
@@ -272,7 +272,7 @@ func (suite *KeeperTestSuite) TestKeeper_ServiceIsPoolWhitelisted() {
 			serviceID: 2,
 		},
 		{
-			name: "pools are whitelisted properly",
+			name: "securing pools are detected properly",
 			store: func(ctx sdk.Context) {
 				err := suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
 				suite.Require().NoError(err)
@@ -303,7 +303,7 @@ func (suite *KeeperTestSuite) TestKeeper_ServiceIsPoolWhitelisted() {
 	}
 }
 
-func (suite *KeeperTestSuite) TestKeeper_ServiceIsPoolWhitelistConfigured() {
+func (suite *KeeperTestSuite) TestKeeper_IsServiceSecuringPoolsConfigured() {
 	testCases := []struct {
 		name          string
 		store         func(ctx sdk.Context)
@@ -311,12 +311,12 @@ func (suite *KeeperTestSuite) TestKeeper_ServiceIsPoolWhitelistConfigured() {
 		isInitialized bool
 	}{
 		{
-			name:          "no whitelisted pools means not initialized",
+			name:          "no securing pools means not initialized",
 			serviceID:     1,
 			isInitialized: false,
 		},
 		{
-			name: "no whitelisted pools for service means not initialized",
+			name: "no securing pools for service means not initialized",
 			store: func(ctx sdk.Context) {
 				err := suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
 				suite.Require().NoError(err)
@@ -328,7 +328,7 @@ func (suite *KeeperTestSuite) TestKeeper_ServiceIsPoolWhitelistConfigured() {
 			isInitialized: false,
 		},
 		{
-			name: "with whitelisted pools is initialized",
+			name: "with securing pools is initialized",
 			store: func(ctx sdk.Context) {
 				err := suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
 				suite.Require().NoError(err)
@@ -347,7 +347,7 @@ func (suite *KeeperTestSuite) TestKeeper_ServiceIsPoolWhitelistConfigured() {
 				tc.store(ctx)
 			}
 
-			isInitialized, err := suite.k.IsServingSecuringPoolsConfigured(ctx, tc.serviceID)
+			isInitialized, err := suite.k.IsServiceSecuringPoolsConfigured(ctx, tc.serviceID)
 			suite.Require().NoError(err)
 			suite.Require().Equal(tc.isInitialized, isInitialized)
 		})

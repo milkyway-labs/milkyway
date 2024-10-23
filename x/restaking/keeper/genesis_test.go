@@ -44,7 +44,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			},
 		},
 		{
-			name: "services whitelisted operators are exported properly",
+			name: "services allowed operators are exported properly",
 			store: func(ctx sdk.Context) {
 				suite.k.SetParams(ctx, types.DefaultParams())
 
@@ -67,7 +67,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			},
 		},
 		{
-			name: "services whitelisted pools are exported properly",
+			name: "services securing pools are exported properly",
 			store: func(ctx sdk.Context) {
 				suite.k.SetParams(ctx, types.DefaultParams())
 
@@ -367,7 +367,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 			},
 		},
 		{
-			name: "services whitelisted operators are stored properly",
+			name: "services allowed operators are stored properly",
 			genesis: &types.GenesisState{
 				Params: types.DefaultParams(),
 				ServicesAllowedOperators: []types.ServiceAllowedOperators{
@@ -386,7 +386,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 			},
 		},
 		{
-			name: "services whitelisted pools are stored properly",
+			name: "services securing pools are stored properly",
 			genesis: &types.GenesisState{
 				Params: types.DefaultParams(),
 				ServicesSecuringPools: []types.ServiceSecuringPools{

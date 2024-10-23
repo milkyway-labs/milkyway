@@ -107,12 +107,12 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceAllowedOperators() {
 			shouldErr: true,
 		},
 		{
-			name:      "not found service whitelist returns empty list",
+			name:      "not configured service operator allow list returns empty list",
 			request:   types.NewQueryServiceAllowedOperatorsRequest(1, nil),
 			shouldErr: false,
 		},
 		{
-			name: "found service whitelist is returned properly",
+			name: "configured service operator allow list is returned properly",
 			store: func(ctx sdk.Context) {
 				suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
 				suite.k.AddOperatorToServiceAllowList(ctx, 1, 2)
@@ -178,7 +178,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceSecuringPools() {
 			shouldErr: true,
 		},
 		{
-			name:      "not found service whitelist returns empty list",
+			name:      "not configured service securing pools returns empty list",
 			request:   types.NewQueryServiceSecuringPoolsRequest(1, nil),
 			shouldErr: false,
 		},

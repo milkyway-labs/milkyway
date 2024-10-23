@@ -13,20 +13,20 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		panic(err)
 	}
 
-	servicesWhitelistedOperators, err := k.GetAllServicesAllowedOperators(ctx)
+	servicesAllowedOperators, err := k.GetAllServicesAllowedOperators(ctx)
 	if err != nil {
 		panic(err)
 	}
 
-	servicesWhitelistedPools, err := k.GetAllServicesSecuringPools(ctx)
+	servicesSecuringPools, err := k.GetAllServicesSecuringPools(ctx)
 	if err != nil {
 		panic(err)
 	}
 
 	return types.NewGenesis(
 		operatorsJoinedServices,
-		servicesWhitelistedOperators,
-		servicesWhitelistedPools,
+		servicesAllowedOperators,
+		servicesSecuringPools,
 		k.GetAllDelegations(ctx),
 		k.GetAllUnbondingDelegations(ctx),
 		k.GetParams(ctx),

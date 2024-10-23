@@ -65,7 +65,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllOperatorsJoinedServicesRecord() {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-func (suite *KeeperTestSuite) TestKeeper_GetAllServicesWhitelistedOperators() {
+func (suite *KeeperTestSuite) TestKeeper_GetAllServicesAllowedOperators() {
 	testCases := []struct {
 		name                string
 		store               func(ctx sdk.Context)
@@ -73,11 +73,11 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServicesWhitelistedOperators() {
 		expectedWhitelisted []types.ServiceAllowedOperators
 	}{
 		{
-			name:      "no whitelisted operators returns nil",
+			name:      "no allowed operators returns nil",
 			shouldErr: false,
 		},
 		{
-			name: "whitelisted pools are not returned",
+			name: "securing pools are not returned",
 			store: func(ctx sdk.Context) {
 				err := suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
 				suite.Require().NoError(err)
@@ -87,7 +87,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServicesWhitelistedOperators() {
 			shouldErr: false,
 		},
 		{
-			name: "whitelisted operators are returned properly",
+			name: "allowed operators are returned properly",
 			store: func(ctx sdk.Context) {
 				err := suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
 				suite.Require().NoError(err)
@@ -132,7 +132,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServicesWhitelistedOperators() {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-func (suite *KeeperTestSuite) TestKeeper_GetAllServicesWhitelistedPools() {
+func (suite *KeeperTestSuite) TestKeeper_GetAllServicesSecuringPools() {
 	testCases := []struct {
 		name                string
 		store               func(ctx sdk.Context)
@@ -140,11 +140,11 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServicesWhitelistedPools() {
 		expectedWhitelisted []types.ServiceSecuringPools
 	}{
 		{
-			name:      "no whitelisted pools returns nil",
+			name:      "no securing pools returns nil",
 			shouldErr: false,
 		},
 		{
-			name: "whitelisted operators are not returned",
+			name: "allowed operators are not returned",
 			store: func(ctx sdk.Context) {
 				err := suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
 				suite.Require().NoError(err)
@@ -154,7 +154,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServicesWhitelistedPools() {
 			shouldErr: false,
 		},
 		{
-			name: "whitelisted pools are returned properly",
+			name: "securing pools are returned properly",
 			store: func(ctx sdk.Context) {
 				err := suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
 				suite.Require().NoError(err)
