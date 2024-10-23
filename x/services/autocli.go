@@ -29,7 +29,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					RpcMethod: "Services",
 					Use:       "services",
 					Short:     "Query the services",
-					Example:   fmt.Sprintf(`%s query %s services --page=2 --limit=100`, version.AppName, types.ModuleName),
+					Example:   fmt.Sprintf(`%s query %s services --page-offset-100 --page-limit=100`, version.AppName, types.ModuleName),
 				},
 				{
 					RpcMethod: "ServiceParams",

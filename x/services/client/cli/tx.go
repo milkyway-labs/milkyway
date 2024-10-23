@@ -34,7 +34,7 @@ func GetTxCmd() *cobra.Command {
 // ownership of a service
 func GetCmdSetServiceParams() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "set-service-params [id] [commission-rate]",
+		Use:   "set-service-params [id] [slash-fraction]",
 		Args:  cobra.ExactArgs(2),
 		Short: "sets the parameters of the service with the given id",
 		Example: fmt.Sprintf(
@@ -51,12 +51,12 @@ func GetCmdSetServiceParams() *cobra.Command {
 				return err
 			}
 
-			commissionRate, err := math.LegacyNewDecFromStr(args[1])
+			slashFraction, err := math.LegacyNewDecFromStr(args[1])
 			if err != nil {
-				return fmt.Errorf("parse commission rate %w", err)
+				return fmt.Errorf("parse slash fraction: %w", err)
 			}
 
-			params := types.NewServiceParams(commissionRate)
+			params := types.NewServiceParams(slashFraction)
 
 			// Create and validate the message
 			msg := types.NewMsgSetServiceParams(serviceID, params, clientCtx.FromAddress.String())

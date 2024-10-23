@@ -222,11 +222,6 @@ func (k msgServer) SetServiceParams(goCtx context.Context, msg *types.MsgSetServ
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can update the service parameters")
 	}
 
-	// Make sure the params are valid
-	if err := msg.Params.Validate(); err != nil {
-		return nil, err
-	}
-
 	// Save the new service params
 	if err := k.SaveServiceParams(ctx, msg.ServiceID, msg.Params); err != nil {
 		return nil, err
@@ -236,6 +231,7 @@ func (k msgServer) SetServiceParams(goCtx context.Context, msg *types.MsgSetServ
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeSetServiceParams,
+			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
 		),
 	})
 
