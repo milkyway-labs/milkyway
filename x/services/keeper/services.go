@@ -65,9 +65,7 @@ func (k *Keeper) CreateService(ctx sdk.Context, service types.Service) error {
 
 	// Log and call the hooks
 	k.Logger(ctx).Debug("created service", "id", service.ID)
-	k.AfterServiceCreated(ctx, service.ID)
-
-	return nil
+	return k.AfterServiceCreated(ctx, service.ID)
 }
 
 // ActivateService activates the service with the given ID
@@ -88,9 +86,7 @@ func (k *Keeper) ActivateService(ctx sdk.Context, serviceID uint32) error {
 	}
 
 	// Call the hook
-	k.AfterServiceActivated(ctx, serviceID)
-
-	return nil
+	return k.AfterServiceActivated(ctx, serviceID)
 }
 
 // DeactivateService deactivates the service with the given ID
@@ -114,9 +110,7 @@ func (k *Keeper) DeactivateService(ctx sdk.Context, serviceID uint32) error {
 	}
 
 	// Call the hook
-	k.AfterServiceDeactivated(ctx, service.ID)
-
-	return nil
+	return k.AfterServiceDeactivated(ctx, service.ID)
 }
 
 // GetService returns an Service from the KVStore

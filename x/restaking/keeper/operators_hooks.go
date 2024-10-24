@@ -13,8 +13,6 @@ type OperatorsHooks struct {
 	*Keeper
 }
 
-// ------------------------------------------------------------------------------
-
 func (k *Keeper) OperatorsHooks() operatorstypes.OperatorsHooks {
 	return &OperatorsHooks{k}
 }

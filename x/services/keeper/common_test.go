@@ -1,7 +1,6 @@
 package keeper_test
 
 import (
-	"context"
 	"testing"
 
 	"cosmossdk.io/log"
@@ -147,14 +146,17 @@ func newMockHooks() *mockHooks {
 	return &mockHooks{CalledMap: make(map[string]bool)}
 }
 
-func (m mockHooks) AfterServiceCreated(_ context.Context, _ uint32) {
+func (m mockHooks) AfterServiceCreated(_ sdk.Context, _ uint32) error {
 	m.CalledMap["AfterServiceCreated"] = true
+	return nil
 }
 
-func (m mockHooks) AfterServiceActivated(_ context.Context, _ uint32) {
+func (m mockHooks) AfterServiceActivated(_ sdk.Context, _ uint32) error {
 	m.CalledMap["AfterServiceActivated"] = true
+	return nil
 }
 
-func (m mockHooks) AfterServiceDeactivated(_ context.Context, _ uint32) {
+func (m mockHooks) AfterServiceDeactivated(_ sdk.Context, _ uint32) error {
 	m.CalledMap["AfterServiceDeactivated"] = true
+	return nil
 }
