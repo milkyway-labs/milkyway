@@ -23,7 +23,7 @@ import (
 
 // IterateAllOperatorsJoinedServices iterates over all the operators and their joined services,
 // performing the given action. If the action returns true, the iteration will stop.
-func (k *Keeper) IterateAllOperatorsJoinedServices(ctx sdk.Context, action func(operatorID uint32, serviceID uint32) (stop bool)) error {
+func (k *Keeper) IterateAllOperatorsJoinedServices(ctx sdk.Context, action func(operatorID uint32, serviceID uint32) (stop bool, err error)) error {
 	iterator, err := k.operatorJoinedServices.Iterate(ctx, nil)
 	if err != nil {
 		return err
@@ -41,7 +41,12 @@ func (k *Keeper) IterateAllOperatorsJoinedServices(ctx sdk.Context, action func(
 		}
 
 		for _, serviceID := range operatorJoinedServices.ServiceIDs {
-			if action(operatorID, serviceID) {
+			stop, err := action(operatorID, serviceID)
+			if err != nil {
+				return err
+			}
+
+			if stop {
 				break
 			}
 		}
@@ -80,7 +85,7 @@ func (k *Keeper) GetAllOperatorsJoinedServices(ctx sdk.Context) ([]types.Operato
 
 // IterateAllServicesAllowedOperators iterates over all the services and their allowed operators,
 // performing the given action. If the action returns true, the iteration will stop.
-func (k *Keeper) IterateAllServicesAllowedOperators(ctx sdk.Context, action func(serviceID uint32, operatorID uint32) (stop bool)) error {
+func (k *Keeper) IterateAllServicesAllowedOperators(ctx sdk.Context, action func(serviceID uint32, operatorID uint32) (stop bool, err error)) error {
 	iterator, err := k.serviceOperatorsAllowList.Iterate(ctx, nil)
 	if err != nil {
 		return err
@@ -95,7 +100,12 @@ func (k *Keeper) IterateAllServicesAllowedOperators(ctx sdk.Context, action func
 		serviceID := serviceOperatorPair.K1()
 		operatorID := serviceOperatorPair.K2()
 
-		if action(serviceID, operatorID) {
+		stop, err := action(operatorID, serviceID)
+		if err != nil {
+			return err
+		}
+
+		if stop {
 			break
 		}
 	}
@@ -106,7 +116,7 @@ func (k *Keeper) IterateAllServicesAllowedOperators(ctx sdk.Context, action func
 // GetAllServicesAllowedOperators returns all the operators that are allowed to secure a service for all the services
 func (k *Keeper) GetAllServicesAllowedOperators(ctx sdk.Context) ([]types.ServiceAllowedOperators, error) {
 	var items = make(map[uint32]types.ServiceAllowedOperators)
-	err := k.IterateAllServicesAllowedOperators(ctx, func(serviceID uint32, operatorID uint32) (stop bool) {
+	err := k.IterateAllServicesAllowedOperators(ctx, func(serviceID uint32, operatorID uint32) (stop bool, err error) {
 		allowedOperators, ok := items[serviceID]
 		if !ok {
 			allowedOperators = types.NewServiceAllowedOperators(serviceID, nil)
@@ -114,7 +124,7 @@ func (k *Keeper) GetAllServicesAllowedOperators(ctx sdk.Context) ([]types.Servic
 		allowedOperators.OperatorIDs = append(allowedOperators.OperatorIDs, operatorID)
 		items[serviceID] = allowedOperators
 
-		return false
+		return false, nil
 	})
 	if err != nil {
 		return nil, err

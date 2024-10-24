@@ -308,13 +308,13 @@ func AllowedOperatorsExistInvariant(k *Keeper) sdk.Invariant {
 	return func(ctx sdk.Context) (string, bool) {
 		// Iterate over all the services joined by operators
 		var notFoundOperatorsIDs []uint32
-		err := k.IterateAllServicesAllowedOperators(ctx, func(serviceID uint32, operatorID uint32) (stop bool) {
+		err := k.IterateAllServicesAllowedOperators(ctx, func(serviceID uint32, operatorID uint32) (stop bool, err error) {
 			_, found := k.operatorsKeeper.GetOperator(ctx, serviceID)
 			if !found {
 				notFoundOperatorsIDs = append(notFoundOperatorsIDs, operatorID)
 			}
 
-			return false
+			return false, nil
 		})
 		if err != nil {
 			panic(err)
@@ -335,13 +335,13 @@ func OperatorsJoinedServicesExistInvariant(k *Keeper) sdk.Invariant {
 	return func(ctx sdk.Context) (string, bool) {
 		// Iterate over all the operators joined services
 		var notFoundServicesIDs []uint32
-		err := k.IterateAllOperatorsJoinedServices(ctx, func(operatorID uint32, serviceID uint32) (stop bool) {
+		err := k.IterateAllOperatorsJoinedServices(ctx, func(operatorID uint32, serviceID uint32) (stop bool, err error) {
 			_, found := k.servicesKeeper.GetService(ctx, serviceID)
 			if !found {
 				notFoundServicesIDs = append(notFoundServicesIDs, serviceID)
 			}
 
-			return false
+			return false, nil
 		})
 		if err != nil {
 			panic(err)

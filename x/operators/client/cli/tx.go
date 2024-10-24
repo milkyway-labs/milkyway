@@ -34,12 +34,10 @@ func GetTxCmd() *cobra.Command {
 // GetCmdSetOperatorParams returns the command allowing to edit an existing operator
 func GetCmdSetOperatorParams() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "set-operator-params [id] [commission-rate]",
-		Args:  cobra.ExactArgs(2),
-		Short: "Sets the parameters of the operator with the given id",
-		Example: fmt.Sprintf(
-			`%s tx %s set-operator-params 1 0.2 --from alice`,
-			version.AppName, types.ModuleName),
+		Use:     "set-operator-params [id] [commission-rate]",
+		Args:    cobra.ExactArgs(2),
+		Short:   "Sets the parameters of the operator with the given id",
+		Example: fmt.Sprintf(`%s tx %s set-operator-params 1 0.2 --from alice`, version.AppName, types.ModuleName),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
