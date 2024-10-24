@@ -66,6 +66,26 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorJoinedServices() {
 			shouldErr:   false,
 			expServices: []uint32{1, 2},
 		},
+		{
+			name: "pagination is handled properly",
+			store: func(ctx sdk.Context) {
+				err := suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
+					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "",
+				))
+				suite.Require().NoError(err)
+
+				err = suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 1)
+				suite.Require().NoError(err)
+				err = suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 2)
+				suite.Require().NoError(err)
+			},
+			request: types.NewQueryOperatorJoinedServicesRequest(1, &query.PageRequest{
+				Offset: 1,
+				Limit:  1,
+			}),
+			shouldErr:   false,
+			expServices: []uint32{2},
+		},
 	}
 
 	for _, tc := range testCases {

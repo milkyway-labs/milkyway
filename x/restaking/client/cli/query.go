@@ -525,7 +525,7 @@ func getServiceOperatorsQueryCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "operators [service-id]",
 		Short:   "Query operators that are validating a service",
-		Example: fmt.Sprintf(`%s query %s service operators 1`, version.AppName, types.ModuleName),
+		Example: fmt.Sprintf(`%s query %s service operators 1 --page=2 --limit=100`, version.AppName, types.ModuleName),
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -538,7 +538,13 @@ func getServiceOperatorsQueryCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			res, err := queryClient.ServiceOperators(cmd.Context(), types.NewQueryServiceOperatorsRequest(serviceID))
+
+			pageReq, err := client.ReadPageRequest(cmd.Flags())
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.ServiceOperators(cmd.Context(), types.NewQueryServiceOperatorsRequest(serviceID, pageReq))
 			if err != nil {
 				return err
 			}
@@ -548,6 +554,7 @@ func getServiceOperatorsQueryCmd() *cobra.Command {
 	}
 
 	flags.AddQueryFlagsToCmd(cmd)
+	flags.AddPaginationFlagsToCmd(cmd, "service operators")
 
 	return cmd
 }
