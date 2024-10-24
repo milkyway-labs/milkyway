@@ -263,11 +263,12 @@ func (suite *KeeperTestSuite) TestKeeper_GetOperator() {
 
 func (suite *KeeperTestSuite) TestKeeper_SaveOperator() {
 	testCases := []struct {
-		name     string
-		setup    func()
-		store    func(ctx sdk.Context)
-		operator types.Operator
-		check    func(ctx sdk.Context)
+		name      string
+		setup     func()
+		store     func(ctx sdk.Context)
+		operator  types.Operator
+		shouldErr bool
+		check     func(ctx sdk.Context)
 	}{
 		{
 			name: "non existing operator is stored properly",
@@ -279,6 +280,7 @@ func (suite *KeeperTestSuite) TestKeeper_SaveOperator() {
 				"https://milkyway.com/picture",
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			),
+			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				stored, found := suite.k.GetOperator(ctx, 1)
 				suite.Require().True(found)
@@ -313,8 +315,8 @@ func (suite *KeeperTestSuite) TestKeeper_SaveOperator() {
 				"https://milkyway.zone/picture",
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			),
+			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				//
 				stored, found := suite.k.GetOperator(ctx, 1)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
@@ -340,7 +342,13 @@ func (suite *KeeperTestSuite) TestKeeper_SaveOperator() {
 				tc.store(ctx)
 			}
 
-			suite.k.SaveOperator(ctx, tc.operator)
+			err := suite.k.SaveOperator(ctx, tc.operator)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+			}
+
 			if tc.check != nil {
 				tc.check(ctx)
 			}
@@ -350,13 +358,50 @@ func (suite *KeeperTestSuite) TestKeeper_SaveOperator() {
 
 func (suite *KeeperTestSuite) TestKeeper_StartOperatorInactivation() {
 	testCases := []struct {
-		name     string
-		setup    func()
-		setupCtx func(ctx sdk.Context) sdk.Context
-		store    func(ctx sdk.Context)
-		operator types.Operator
-		check    func(ctx sdk.Context)
+		name      string
+		setup     func()
+		setupCtx  func(ctx sdk.Context) sdk.Context
+		store     func(ctx sdk.Context)
+		operator  types.Operator
+		shouldErr bool
+		check     func(ctx sdk.Context)
 	}{
+		{
+			name: "inactivating operator returns error",
+			store: func(ctx sdk.Context) {
+				suite.k.SetParams(ctx, types.NewParams(
+					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),
+					12*time.Hour,
+				))
+			},
+			operator: types.NewOperator(
+				1,
+				types.OPERATOR_STATUS_INACTIVATING,
+				"MilkyWay Operator",
+				"https://milkyway.com",
+				"https://milkyway.com/picture",
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "inactive operator returns error",
+			store: func(ctx sdk.Context) {
+				suite.k.SetParams(ctx, types.NewParams(
+					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),
+					12*time.Hour,
+				))
+			},
+			operator: types.NewOperator(
+				1,
+				types.OPERATOR_STATUS_INACTIVE,
+				"MilkyWay Operator",
+				"https://milkyway.com",
+				"https://milkyway.com/picture",
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			shouldErr: true,
+		},
 		{
 			name: "operator inactivation is started properly",
 			setupCtx: func(ctx sdk.Context) sdk.Context {
@@ -417,7 +462,13 @@ func (suite *KeeperTestSuite) TestKeeper_StartOperatorInactivation() {
 				tc.store(ctx)
 			}
 
-			suite.k.StartOperatorInactivation(ctx, tc.operator)
+			err := suite.k.StartOperatorInactivation(ctx, tc.operator)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+			}
+
 			if tc.check != nil {
 				tc.check(ctx)
 			}
@@ -427,12 +478,13 @@ func (suite *KeeperTestSuite) TestKeeper_StartOperatorInactivation() {
 
 func (suite *KeeperTestSuite) TestKeeper_CompleteOperatorInactivation() {
 	testCases := []struct {
-		name     string
-		setup    func()
-		setupCtx func(ctx sdk.Context) sdk.Context
-		store    func(ctx sdk.Context)
-		operator types.Operator
-		check    func(ctx sdk.Context)
+		name      string
+		setup     func()
+		setupCtx  func(ctx sdk.Context) sdk.Context
+		store     func(ctx sdk.Context)
+		operator  types.Operator
+		shouldErr bool
+		check     func(ctx sdk.Context)
 	}{
 		{
 			name: "operator inactivation is completed properly",
@@ -444,6 +496,11 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteOperatorInactivation() {
 					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),
 					12*time.Hour,
 				))
+
+				err := suite.k.SaveOperatorParams(ctx, 1, types.NewOperatorParams(
+					sdkmath.LegacyNewDec(100),
+				))
+				suite.Require().NoError(err)
 			},
 			operator: types.NewOperator(
 				1,
@@ -470,6 +527,11 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteOperatorInactivation() {
 				inactivatingQueue, _ := suite.k.GetInactivatingOperators(ctx)
 				suite.Require().Len(inactivatingQueue, 0)
 
+				// Make sure the params are no longer there
+				operatorParams, err := suite.k.GetOperatorParams(ctx, 1)
+				suite.Require().NoError(err)
+				suite.Require().Equal(types.DefaultOperatorParams(), operatorParams)
+
 				// Make sure the hook has been called
 				suite.Require().True(suite.hooks.CalledMap["AfterOperatorInactivatingCompleted"])
 			},
@@ -490,7 +552,13 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteOperatorInactivation() {
 				tc.store(ctx)
 			}
 
-			suite.k.CompleteOperatorInactivation(ctx, tc.operator)
+			err := suite.k.CompleteOperatorInactivation(ctx, tc.operator)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+			}
+
 			if tc.check != nil {
 				tc.check(ctx)
 			}

@@ -56,7 +56,7 @@ func (suite *KeeperTestSuite) TestQueryServer_Operator() {
 				tc.store(suite.ctx)
 			}
 
-			res, err := suite.k.Operator(sdk.WrapSDKContext(suite.ctx), tc.request)
+			res, err := suite.k.Operator(suite.ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
