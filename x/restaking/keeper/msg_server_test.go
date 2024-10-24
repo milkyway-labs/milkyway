@@ -715,6 +715,23 @@ func (suite *KeeperTestSuite) TestMsgServer_BorrowPoolSecurity() {
 			shouldErr: true,
 		},
 		{
+			name: "borrow from already present pool fails",
+			store: func(ctx sdk.Context) {
+				suite.pk.SavePool(ctx, poolstypes.NewPool(1, "utia"))
+				suite.sk.SaveService(ctx, servicestypes.NewService(
+					1, servicestypes.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+				suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
+			},
+			msg:       types.NewMsgBorrowPoolSecurity(1, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+			shouldErr: true,
+		},
+		{
 			name: "security is borrowed properly",
 			store: func(ctx sdk.Context) {
 				suite.pk.SavePool(ctx, poolstypes.NewPool(1, "utia"))
@@ -811,6 +828,22 @@ func (suite *KeeperTestSuite) TestMsgServer_CeasePoolSecurityBorrow() {
 				suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
 			},
 			msg:       types.NewMsgCeasePoolSecurityBorrow(1, 1, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"),
+			shouldErr: true,
+		},
+		{
+			name: "cease from not borrowing pool fails",
+			store: func(ctx sdk.Context) {
+				suite.pk.SavePool(ctx, poolstypes.NewPool(1, "utia"))
+				suite.sk.SaveService(ctx, servicestypes.NewService(
+					1, servicestypes.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+			},
+			msg:       types.NewMsgCeasePoolSecurityBorrow(1, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
 			shouldErr: true,
 		},
 		{

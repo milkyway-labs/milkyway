@@ -16,4 +16,6 @@ var (
 	ErrServiceNotJoinedByOperator     = errors.Register(ModuleName, 9, "the service has not been joined by the operator")
 	ErrOperatorAlreadyAllowed         = errors.Register(ModuleName, 10, "operator already allowed")
 	ErrOperatorNotAllowed             = errors.Register(ModuleName, 11, "operator not allowed")
+	ErrPoolAlreadySecuringService     = errors.Register(ModuleName, 12, "pool already securing the service")
+	ErrPoolNotSecuringService         = errors.Register(ModuleName, 13, "pool not securing the service")
 )

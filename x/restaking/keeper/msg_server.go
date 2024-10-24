@@ -210,9 +210,18 @@ func (k msgServer) BorrowPoolSecurity(goCtx context.Context, msg *types.MsgBorro
 			"only the service admin can borrow the security from a new pool")
 	}
 
+	// Ensure the pool is not in the service securing pools list
+	isSecuring, err := k.IsPoolInServiceSecuringPools(ctx, msg.ServiceID, msg.PoolID)
+	if err != nil {
+		return nil, err
+	}
+	if isSecuring {
+		return nil, types.ErrPoolAlreadySecuringService
+	}
+
 	// Add the pool to the list of pools from which the service can borrow
 	// security from
-	err := k.AddPoolToServiceSecuringPools(ctx, msg.ServiceID, msg.PoolID)
+	err = k.AddPoolToServiceSecuringPools(ctx, msg.ServiceID, msg.PoolID)
 	if err != nil {
 		return nil, err
 	}
@@ -244,8 +253,17 @@ func (k msgServer) CeasePoolSecurityBorrow(goCtx context.Context, msg *types.Msg
 			"only the service admin can cease the pool security borrow")
 	}
 
+	// Ensure the pool is in the service securing pools list
+	isSecuring, err := k.IsPoolInServiceSecuringPools(ctx, msg.ServiceID, msg.PoolID)
+	if err != nil {
+		return nil, err
+	}
+	if !isSecuring {
+		return nil, types.ErrPoolNotSecuringService
+	}
+
 	// Remove the pool from the service's pools whitelist
-	err := k.RemovePoolFromServiceSecuringPools(ctx, msg.ServiceID, msg.PoolID)
+	err = k.RemovePoolFromServiceSecuringPools(ctx, msg.ServiceID, msg.PoolID)
 	if err != nil {
 		return nil, err
 	}

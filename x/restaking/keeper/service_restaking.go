@@ -149,6 +149,13 @@ func (k *Keeper) IsServiceSecuringPoolsConfigured(ctx sdk.Context, serviceID uin
 	return false, nil
 }
 
+// IsPoolInServiceSecuringPools returns true if the pool is in the list
+// of pools from which the service can borrow security
+func (k *Keeper) IsPoolInServiceSecuringPools(ctx sdk.Context, serviceID uint32, poolID uint32) (bool, error) {
+	key := collections.Join(serviceID, poolID)
+	return k.serviceSecuringPools.Has(ctx, key)
+}
+
 // IsServiceSecuredByPool returns true if the service is being secured
 // by the given pool
 func (k *Keeper) IsServiceSecuredByPool(ctx sdk.Context, serviceID uint32, poolID uint32) (bool, error) {
