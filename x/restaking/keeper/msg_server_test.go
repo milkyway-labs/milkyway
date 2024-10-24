@@ -348,6 +348,29 @@ func (suite *KeeperTestSuite) TestMsgServer_AllowOperator() {
 			shouldErr: true,
 		},
 		{
+			name: "allow already allowed operator fails",
+			store: func(ctx sdk.Context) {
+				suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
+					1, operatorstypes.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+				suite.sk.SaveService(ctx, servicestypes.NewService(
+					1, servicestypes.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+				suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
+			},
+			msg:       types.NewMsgAllowOperator(1, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+			shouldErr: true,
+		},
+		{
 			name: "operator is allowed properly",
 			store: func(ctx sdk.Context) {
 				suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
@@ -459,6 +482,28 @@ func (suite *KeeperTestSuite) TestMsgServer_RemoveAllowedOperator() {
 				suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
 			},
 			msg:       types.NewMsgRemoveAllowedOperator(1, 1, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"),
+			shouldErr: true,
+		},
+		{
+			name: "remove not allowed operator fails",
+			store: func(ctx sdk.Context) {
+				suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
+					1, operatorstypes.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+				suite.sk.SaveService(ctx, servicestypes.NewService(
+					1, servicestypes.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+			},
+			msg:       types.NewMsgRemoveAllowedOperator(1, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
 			shouldErr: true,
 		},
 		{

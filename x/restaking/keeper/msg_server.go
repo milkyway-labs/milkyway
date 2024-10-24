@@ -116,8 +116,17 @@ func (k msgServer) AllowOperator(goCtx context.Context, msg *types.MsgAllowOpera
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the service admin can allow an operator")
 	}
 
-	// Add the operator to the service's operators whitelist
-	err := k.AddOperatorToServiceAllowList(ctx, msg.ServiceID, msg.OperatorID)
+	// Ensure operator is not allowed before adding it
+	operatorAllowed, err := k.IsOperatorInServiceAllowList(ctx, msg.ServiceID, msg.OperatorID)
+	if err != nil {
+		return nil, err
+	}
+	if operatorAllowed {
+		return nil, types.ErrOperatorAlreadyAllowed
+	}
+
+	// Add the operator to the service's operators allow list
+	err = k.AddOperatorToServiceAllowList(ctx, msg.ServiceID, msg.OperatorID)
 	if err != nil {
 		return nil, err
 	}
@@ -148,8 +157,17 @@ func (k msgServer) RemoveAllowedOperator(goCtx context.Context, msg *types.MsgRe
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the service admin can allow an operator")
 	}
 
-	// Remove the operator from the service's operators whitelist
-	err := k.RemoveOperatorFromServiceAllowList(ctx, msg.ServiceID, msg.OperatorID)
+	// Ensure the operator is allowed before removing
+	operatorAllowed, err := k.IsOperatorInServiceAllowList(ctx, msg.ServiceID, msg.OperatorID)
+	if err != nil {
+		return nil, err
+	}
+	if !operatorAllowed {
+		return nil, types.ErrOperatorNotAllowed
+	}
+
+	// Remove the operator from the service's operators allow list
+	err = k.RemoveOperatorFromServiceAllowList(ctx, msg.ServiceID, msg.OperatorID)
 	if err != nil {
 		return nil, err
 	}

@@ -14,4 +14,6 @@ var (
 	ErrNoUnbondingDelegation          = errors.Register(ModuleName, 7, "no unbonding delegation found")
 	ErrServiceAlreadyJoinedByOperator = errors.Register(ModuleName, 8, "service already joined by operator")
 	ErrServiceNotJoinedByOperator     = errors.Register(ModuleName, 9, "the service has not been joined by the operator")
+	ErrOperatorAlreadyAllowed         = errors.Register(ModuleName, 10, "operator already allowed")
+	ErrOperatorNotAllowed             = errors.Register(ModuleName, 11, "operator not allowed")
 )
