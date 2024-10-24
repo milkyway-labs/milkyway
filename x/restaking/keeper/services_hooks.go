@@ -42,20 +42,40 @@ func (h *ServicesHooks) AfterServiceDeactivated(ctx sdk.Context, serviceID uint3
 		}
 	}
 
-	// We remove the allow list associated to this service
-	serviceAllowListIter, err := h.serviceOperatorsAllowList.Iterate(ctx, collections.NewPrefixedPairRange[uint32, uint32](serviceID))
+	// Wipe the service's operators allow list
+	serviceOperatorsAllowListIter, err := h.serviceOperatorsAllowList.Iterate(ctx, collections.NewPrefixedPairRange[uint32, uint32](serviceID))
 	if err != nil {
 		return err
 	}
-	defer serviceAllowListIter.Close()
+	defer serviceOperatorsAllowListIter.Close()
 
-	// Clear the service's operators allow list
-	for ; serviceAllowListIter.Valid(); serviceAllowListIter.Next() {
-		serviceOperatorPair, err := serviceAllowListIter.Key()
+	// Iterate over all the items and remove them from the KeySet
+	for ; serviceOperatorsAllowListIter.Valid(); serviceOperatorsAllowListIter.Next() {
+		serviceOperatorPair, err := serviceOperatorsAllowListIter.Key()
 		if err != nil {
 			return err
 		}
 		err = h.serviceOperatorsAllowList.Remove(ctx, serviceOperatorPair)
+		if err != nil {
+			return err
+		}
+	}
+
+	// Wipe the list of polls from which the service is allowed to
+	// borrow security
+	serviceSecuringPoolsIter, err := h.serviceSecuringPools.Iterate(ctx, collections.NewPrefixedPairRange[uint32, uint32](serviceID))
+	if err != nil {
+		return err
+	}
+	defer serviceSecuringPoolsIter.Close()
+
+	// Iterate over all the items and remove them from the KeySet
+	for ; serviceSecuringPoolsIter.Valid(); serviceSecuringPoolsIter.Next() {
+		servicePoolPair, err := serviceSecuringPoolsIter.Key()
+		if err != nil {
+			return err
+		}
+		err = h.serviceSecuringPools.Remove(ctx, servicePoolPair)
 		if err != nil {
 			return err
 		}

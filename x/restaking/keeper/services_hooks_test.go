@@ -60,6 +60,22 @@ func (suite *KeeperTestSuite) TestServicesHooks_AfterServiceDeactivated() {
 			serviceID: 1,
 			shouldErr: false,
 		},
+		{
+			name: "service's securing pools list is wiped",
+			store: func(ctx sdk.Context) {
+				err := suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
+				suite.Require().NoError(err)
+				err = suite.k.AddPoolToServiceSecuringPools(ctx, 1, 2)
+				suite.Require().NoError(err)
+			},
+			check: func(ctx sdk.Context) {
+				configured, err := suite.k.IsServiceSecuringPoolsConfigured(ctx, 1)
+				suite.Require().NoError(err)
+				suite.Require().False(configured)
+			},
+			serviceID: 1,
+			shouldErr: false,
+		},
 	}
 
 	for _, tc := range testCases {
