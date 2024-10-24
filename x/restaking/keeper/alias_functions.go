@@ -100,7 +100,7 @@ func (k *Keeper) IterateAllServicesAllowedOperators(ctx sdk.Context, action func
 		serviceID := serviceOperatorPair.K1()
 		operatorID := serviceOperatorPair.K2()
 
-		stop, err := action(operatorID, serviceID)
+		stop, err := action(serviceID, operatorID)
 		if err != nil {
 			return err
 		}

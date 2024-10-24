@@ -118,7 +118,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServicesAllowedOperators() {
 		tc := tc
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
-			ctx := suite.ctx
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
 			}
