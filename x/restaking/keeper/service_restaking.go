@@ -38,14 +38,22 @@ func (k *Keeper) GetAllServiceAllowedOperators(ctx sdk.Context, serviceID uint32
 }
 
 // AddOperatorToServiceAllowList adds an operator to the list of operators
-// allowed to secure a service
+// allowed to secure a service.
+// If the operator is already in the list, no action is taken.
 func (k *Keeper) AddOperatorToServiceAllowList(ctx sdk.Context, serviceID uint32, operatorID uint32) error {
 	key := collections.Join(serviceID, operatorID)
 	return k.serviceOperatorsAllowList.Set(ctx, key)
 }
 
+// RemoveOperatorFromServiceAllowList removes an operator from the list of operators
+// allowed to secure a service.
+// If the operator is not in the list, no action is taken.
+func (k *Keeper) RemoveOperatorFromServiceAllowList(ctx sdk.Context, serviceID uint32, operatorID uint32) error {
+	key := collections.Join(serviceID, operatorID)
+	return k.serviceOperatorsAllowList.Remove(ctx, key)
+}
+
 // IsServiceOpertorsAllowListConfigured returns true if the operators allow list
-// has been configured for the given service
 func (k *Keeper) IsServiceOpertorsAllowListConfigured(ctx sdk.Context, serviceID uint32) (bool, error) {
 	iteretor, err := k.ServiceAllowedOperatorsIterator(ctx, serviceID)
 	if err != nil {
@@ -60,6 +68,13 @@ func (k *Keeper) IsServiceOpertorsAllowListConfigured(ctx sdk.Context, serviceID
 	return false, nil
 }
 
+// IsOperatorInServiceAllowList returns true if the given operator is in the
+// service operators allow list
+func (k *Keeper) IsOperatorInServiceAllowList(ctx sdk.Context, serviceID uint32, operatorID uint32) (bool, error) {
+	key := collections.Join(serviceID, operatorID)
+	return k.serviceOperatorsAllowList.Has(ctx, key)
+}
+
 // CanOpeartorValidateService returns true if the given operator can secure
 // the given service
 func (k *Keeper) CanOperatorValidateService(ctx sdk.Context, serviceID uint32, operatorID uint32) (bool, error) {
@@ -72,8 +87,7 @@ func (k *Keeper) CanOperatorValidateService(ctx sdk.Context, serviceID uint32, o
 		return true, nil
 	}
 
-	key := collections.Join(serviceID, operatorID)
-	return k.serviceOperatorsAllowList.Has(ctx, key)
+	return k.IsOperatorInServiceAllowList(ctx, serviceID, operatorID)
 }
 
 // --------------------------------------------------------------------------------------------------------------------

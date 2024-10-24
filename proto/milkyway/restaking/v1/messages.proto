@@ -24,6 +24,16 @@ service Msg {
   // to stop securing an AVS
   rpc LeaveService(MsgLeaveService) returns (MsgLeaveServiceResponse);
 
+  // AllowOperator defines the operation that allows the service admin
+  // to add an operator to the list of allowed operator to secure the service
+  rpc AllowOperator(MsgAllowOperator) returns (MsgAllowOperatorResponse);
+
+  // RemoveAllowedOperator defines the operation that allows the service admin
+  // to remove a previously added operator from the list of allowed operators
+  // to secure the service
+  rpc RemoveAllowedOperator(MsgRemoveAllowedOperator)
+      returns (MsgRemoveAllowedOperatorResponse);
+
   // DelegatePool defines the operation that allows users to delegate any amount
   // of an asset to a pool that can then be used to provide services with
   // cryptoeconomic security.
@@ -89,6 +99,42 @@ message MsgLeaveService {
 
 // MsgLeaveerviceResponse is the return value of MsgLeveService.
 message MsgLeaveServiceResponse {}
+
+// MsgAllowOperator defines the message structure for the
+// AllowOperator gRPC service method. It allows the service admin
+// to add an operator to the list of allowed operator to secure the service.
+message MsgAllowOperator {
+  option (cosmos.msg.v1.signer) = "sender";
+  option (amino.name) = "milkyway/MsgAllowOperator";
+
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
+
+  uint32 operator_id = 3 [ (gogoproto.customname) = "OperatorID" ];
+}
+
+// MsgAllowOperatorResponse is the return value of MsgAllowOperator.
+message MsgAllowOperatorResponse {}
+
+// MsgRemoveAllowedOperator defines the message structure for the
+// RemoveAllowedOperator gRPC service method. It allows the service admin
+// to remove a previously added operator from the list of allowed operators
+// to secure the service.
+message MsgRemoveAllowedOperator {
+  option (cosmos.msg.v1.signer) = "sender";
+  option (amino.name) = "milkyway/MsgRemoveAllowedOperator";
+
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
+
+  uint32 operator_id = 3 [ (gogoproto.customname) = "OperatorID" ];
+}
+
+// MsgRemoveAllowedOperatorResponse is the return value of
+// MsgRemoveAllowedOperator.
+message MsgRemoveAllowedOperatorResponse {}
 
 // MsgDelegatePool defines the message structure for the DelegatePool gRPC
 // service method. It allows a user to put their assets into a restaking pool
