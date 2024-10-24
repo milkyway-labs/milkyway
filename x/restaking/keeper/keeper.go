@@ -25,12 +25,14 @@ type Keeper struct {
 	servicesKeeper  types.ServicesKeeper
 
 	// Keeper data
-	schema                 collections.Schema
+	schema collections.Schema
+	// Here we use a IndexMap with NoValue instead of a KeySet because the cosmos-sdk don't
+	// provide a KeySet with indexes that we need in order to get the list of operators
+	// that have joined a service given a serviceID.
 	operatorJoinedServices *collections.IndexedMap[collections.Pair[uint32, uint32], collections.NoValue, operatorServiceIndex]
-	// The represents the service ID and the operator ID
+	// The pair represents the service ID and the operator ID
 	serviceOperatorsAllowList collections.KeySet[collections.Pair[uint32, uint32]]
-
-	// The represents the service ID and the pool ID
+	// The pair represents the service ID and the pool ID
 	serviceSecuringPools collections.KeySet[collections.Pair[uint32, uint32]]
 
 	hooks types.RestakingHooks
