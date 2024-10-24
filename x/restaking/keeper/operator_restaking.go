@@ -25,16 +25,6 @@ func (k *Keeper) GetOperatorJoinedServices(ctx sdk.Context, operatorID uint32) (
 	return joinedServices, nil
 }
 
-// SaveOperatorJoinedServices sets the services joined by the operator with the
-// given ID.
-func (k *Keeper) SaveOperatorJoinedServices(
-	ctx sdk.Context,
-	operatorID uint32,
-	joinedServices types.OperatorJoinedServices,
-) error {
-	return k.operatorJoinedServices.Set(ctx, operatorID, joinedServices)
-}
-
 // AddServiceToOperator adds the given service to the list of services joined by
 // the operator with the given ID
 func (k *Keeper) AddServiceToOperator(ctx sdk.Context, operatorID uint32, serviceID uint32) error {
@@ -48,7 +38,7 @@ func (k *Keeper) AddServiceToOperator(ctx sdk.Context, operatorID uint32, servic
 		return sdkerrors.Wrap(types.ErrServiceAlreadyJoinedByOperator, err.Error())
 	}
 
-	return k.SaveOperatorJoinedServices(ctx, operatorID, joinedServices)
+	return k.operatorJoinedServices.Set(ctx, operatorID, joinedServices)
 }
 
 // RemoveServiceFromOperator removes the given service from the list of services joined by
@@ -66,7 +56,7 @@ func (k *Keeper) RemoveServiceFromOperator(ctx sdk.Context, operatorID uint32, s
 		return types.ErrServiceNotJoinedByOperator
 	}
 
-	return k.SaveOperatorJoinedServices(ctx, operatorID, joinedServices)
+	return k.operatorJoinedServices.Set(ctx, operatorID, joinedServices)
 }
 
 // --------------------------------------------------------------------------------------------------------------------

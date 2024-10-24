@@ -54,7 +54,7 @@ func (k msgServer) JoinService(goCtx context.Context, msg *types.MsgJoinService)
 		sdk.NewEvent(
 			types.EventTypeJoinService,
 			sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, fmt.Sprint(msg.OperatorID)),
-			sdk.NewAttribute(types.AttributeKeyJoinedServiceID, fmt.Sprintf("%d", msg.ServiceID)),
+			sdk.NewAttribute(servicestypes.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
 		),
 	})
 
@@ -88,7 +88,7 @@ func (k msgServer) LeaveService(goCtx context.Context, msg *types.MsgLeaveServic
 		sdk.NewEvent(
 			types.EventTypeLeaveService,
 			sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, fmt.Sprint(msg.OperatorID)),
-			sdk.NewAttribute(types.AttributeKeyJoinedServiceID, fmt.Sprint(msg.ServiceID)),
+			sdk.NewAttribute(servicestypes.AttributeKeyServiceID, fmt.Sprint(msg.ServiceID)),
 		),
 	})
 

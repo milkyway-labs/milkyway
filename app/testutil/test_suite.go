@@ -155,7 +155,11 @@ func (suite *KeeperTestSuite) UpdateOperatorParams(
 		err = joinedServices.Add(serviceID)
 		suite.Require().NoError(err)
 	}
-	suite.App.RestakingKeeper.SaveOperatorJoinedServices(ctx, operatorID, joinedServices)
+
+	for _, serviceID := range joinedServices.ServiceIDs {
+		err = suite.App.RestakingKeeper.AddServiceToOperator(ctx, operatorID, serviceID)
+		suite.Require().NoError(err)
+	}
 }
 
 // AddPoolsToServiceSecuringPools adds the provided pools the list of

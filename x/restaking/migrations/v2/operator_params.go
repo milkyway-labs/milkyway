@@ -74,9 +74,11 @@ func migateOperatorParams(
 		}
 
 		// Store the services joined by the operator
-		err = restakingKeeper.SaveOperatorJoinedServices(ctx, operatorID, joinedServices)
-		if err != nil {
-			return err
+		for _, serviceID := range joinedServices.ServiceIDs {
+			err = restakingKeeper.AddServiceToOperator(ctx, operatorID, serviceID)
+			if err != nil {
+				return err
+			}
 		}
 
 		// Delete the params from the store

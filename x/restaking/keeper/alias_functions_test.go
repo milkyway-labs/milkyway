@@ -23,15 +23,22 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllOperatorsJoinedServicesRecord() {
 		expRecords []types.OperatorJoinedServicesRecord
 	}{
 		{
+			name:       "operator without joined services returns nil",
+			shouldErr:  false,
+			expRecords: nil,
+		},
+		{
 			name: "operators joined services are returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SaveOperatorJoinedServices(ctx, 1, types.NewOperatorJoinedServices(
-					[]uint32{1, 2},
-				))
+				err := suite.k.AddServiceToOperator(ctx, 1, 1)
+				suite.Require().NoError(err)
+				err = suite.k.AddServiceToOperator(ctx, 1, 2)
+				suite.Require().NoError(err)
 
-				suite.k.SaveOperatorJoinedServices(ctx, 2, types.NewOperatorJoinedServices(
-					[]uint32{3, 4},
-				))
+				err = suite.k.AddServiceToOperator(ctx, 2, 3)
+				suite.Require().NoError(err)
+				err = suite.k.AddServiceToOperator(ctx, 2, 4)
+				suite.Require().NoError(err)
 			},
 			expRecords: []types.OperatorJoinedServicesRecord{
 				types.NewOperatorJoinedServicesRecord(1,
@@ -129,8 +136,6 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServicesAllowedOperators() {
 		})
 	}
 }
-
-// --------------------------------------------------------------------------------------------------------------------
 
 func (suite *KeeperTestSuite) TestKeeper_GetAllServicesSecuringPools() {
 	testCases := []struct {

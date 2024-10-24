@@ -26,8 +26,10 @@ type Keeper struct {
 	// Keeper data
 	schema                 collections.Schema
 	operatorJoinedServices collections.Map[uint32, types.OperatorJoinedServices]
+
 	// The represents the service ID and the operator ID
 	serviceOperatorsAllowList collections.KeySet[collections.Pair[uint32, uint32]]
+
 	// The represents the service ID and the pool ID
 	serviceSecuringPools collections.KeySet[collections.Pair[uint32, uint32]]
 

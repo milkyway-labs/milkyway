@@ -14,7 +14,6 @@ const (
 	EventTypeUnbondOperator        = "unbond_operator"
 	EventTypeUnbondService         = "unbond_service"
 
-	AttributeKeyJoinedServiceID      = "joined_services_id"
 	AttributeKeyDelegator            = "delegator"
 	AttributeKeyNewShares            = "new_shares"
 	AttributeKeyCompletionTime       = "completion_time"
