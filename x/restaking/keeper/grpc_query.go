@@ -2,9 +2,9 @@ package keeper
 
 import (
 	"context"
-	"slices"
 
 	"cosmossdk.io/collections"
+	"cosmossdk.io/errors"
 	"cosmossdk.io/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
@@ -46,12 +46,15 @@ func (k Querier) OperatorJoinedServices(goCtx context.Context, req *types.QueryO
 	}
 
 	// Get the operator joined services
-	joinedServices, err := k.GetOperatorJoinedServices(ctx, req.OperatorId)
+	serviceIDs, pageResponse, err := query.CollectionPaginate(ctx, k.operatorJoinedServices, req.Pagination,
+		func(key collections.Pair[uint32, uint32], _ collections.NoValue) (uint32, error) {
+			return key.K2(), nil
+		}, query.WithCollectionPaginationPairPrefix[uint32, uint32](req.OperatorId))
 	if err != nil {
 		return nil, err
 	}
 
-	return &types.QueryOperatorJoinedServicesResponse{ServiceIds: joinedServices.ServiceIDs}, nil
+	return &types.QueryOperatorJoinedServicesResponse{ServiceIds: serviceIDs, Pagination: pageResponse}, nil
 }
 
 // ServiceAllowedOperators queries the allowed operators for a given service.
@@ -125,40 +128,36 @@ func (k Querier) ServiceOperators(goCtx context.Context, req *types.QueryService
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	service, found := k.servicesKeeper.GetService(ctx, req.ServiceId)
+	_, found := k.servicesKeeper.GetService(ctx, req.ServiceId)
 	if !found {
 		return nil, status.Error(codes.NotFound, "service not found")
 	}
 
-	operatorsJoinedServices, err := k.GetAllOperatorsJoinedServices(ctx)
+	eligibleOperators, pageResponse, err := query.CollectionFilteredPaginate(ctx, k.operatorJoinedServices.Indexes.Service, req.Pagination,
+		// Filter to return only the operators that have joined the service and
+		// that are allowed to validate it
+		func(key collections.Pair[uint32, uint32], _ collections.NoValue) (bool, error) {
+			// Here is k2 the operator id since the Service index provides association
+			// between a service and the operator securing it
+			operatorID := key.K2()
+			return k.CanOperatorValidateService(ctx, operatorID, req.ServiceId)
+		},
+		func(key collections.Pair[uint32, uint32], _ collections.NoValue) (operatorstypes.Operator, error) {
+			// Here is k2 the operator id since the Service index provides association
+			// between a service and the operator securing it
+			operatorID := key.K2()
+			operator, found := k.operatorsKeeper.GetOperator(ctx, operatorID)
+			if !found {
+				return operatorstypes.Operator{}, errors.Wrapf(
+					operatorstypes.ErrOperatorNotFound, "operator %d not found", operatorID)
+			}
+			return operator, nil
+		}, query.WithCollectionPaginationPairPrefix[uint32, uint32](req.ServiceId))
 	if err != nil {
 		return nil, err
-	}
-	isWhitelistConfigured, err := k.IsServiceOpertorsAllowListConfigured(ctx, service.ID)
-	if err != nil {
-		return nil, err
-	}
-	allowedOperators, err := k.GetAllServiceAllowedOperators(ctx, service.ID)
-	if err != nil {
-		return nil, err
-	}
-	var eligibleOperators []operatorstypes.Operator
-	for _, operatorJoinedServices := range operatorsJoinedServices {
-		// If the operator has not joined the service, skip
-		if !slices.Contains(operatorJoinedServices.JoinedServices.ServiceIDs, service.ID) {
-			continue
-		}
-		if isWhitelistConfigured && !slices.Contains(allowedOperators, operatorJoinedServices.OperatorID) {
-			continue
-		}
-		operator, found := k.operatorsKeeper.GetOperator(ctx, operatorJoinedServices.OperatorID)
-		if !found {
-			return nil, operatorstypes.ErrOperatorNotFound
-		}
-		eligibleOperators = append(eligibleOperators, operator)
 	}
 
-	return &types.QueryServiceOperatorsResponse{Operators: eligibleOperators}, nil
+	return &types.QueryServiceOperatorsResponse{Operators: eligibleOperators, Pagination: pageResponse}, nil
 }
 
 // PoolDelegations queries the pool delegations for the given pool id

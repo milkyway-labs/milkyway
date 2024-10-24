@@ -62,9 +62,7 @@ func (k *Keeper) RegisterOperator(ctx sdk.Context, operator types.Operator) erro
 
 	// Log and call the hooks
 	k.Logger(ctx).Info("operator created", "id", operator.ID)
-	k.AfterOperatorRegistered(ctx, operator.ID)
-
-	return nil
+	return k.AfterOperatorRegistered(ctx, operator.ID)
 }
 
 // GetOperator returns the operator with the given ID.
@@ -104,9 +102,7 @@ func (k *Keeper) StartOperatorInactivation(ctx sdk.Context, operator types.Opera
 	k.insertIntoInactivatingQueue(ctx, operator)
 
 	// Call the hook
-	k.AfterOperatorInactivatingStarted(ctx, operator.ID)
-
-	return nil
+	return k.AfterOperatorInactivatingStarted(ctx, operator.ID)
 }
 
 // CompleteOperatorInactivation completes the inactivation process for the operator with the given ID
@@ -129,9 +125,7 @@ func (k *Keeper) CompleteOperatorInactivation(ctx sdk.Context, operator types.Op
 	}
 
 	// Call the hook
-	k.AfterOperatorInactivatingCompleted(ctx, operator.ID)
-
-	return nil
+	return k.AfterOperatorInactivatingCompleted(ctx, operator.ID)
 }
 
 // --------------------------------------------------------------------------------------------------------------------

@@ -13,28 +13,74 @@ import (
 	sync "sync"
 )
 
+var _ protoreflect.List = (*_OperatorJoinedServices_2_list)(nil)
+
+type _OperatorJoinedServices_2_list struct {
+	list *[]uint32
+}
+
+func (x *_OperatorJoinedServices_2_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_OperatorJoinedServices_2_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfUint32((*x.list)[i])
+}
+
+func (x *_OperatorJoinedServices_2_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Uint()
+	concreteValue := (uint32)(valueUnwrapped)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_OperatorJoinedServices_2_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Uint()
+	concreteValue := (uint32)(valueUnwrapped)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_OperatorJoinedServices_2_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message OperatorJoinedServices at list field ServiceIds as it is not of Message kind"))
+}
+
+func (x *_OperatorJoinedServices_2_list) Truncate(n int) {
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_OperatorJoinedServices_2_list) NewElement() protoreflect.Value {
+	v := uint32(0)
+	return protoreflect.ValueOfUint32(v)
+}
+
+func (x *_OperatorJoinedServices_2_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
-	md_OperatorJoinedServicesRecord                 protoreflect.MessageDescriptor
-	fd_OperatorJoinedServicesRecord_operator_id     protoreflect.FieldDescriptor
-	fd_OperatorJoinedServicesRecord_joined_services protoreflect.FieldDescriptor
+	md_OperatorJoinedServices             protoreflect.MessageDescriptor
+	fd_OperatorJoinedServices_operator_id protoreflect.FieldDescriptor
+	fd_OperatorJoinedServices_service_ids protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_milkyway_restaking_v1_genesis_proto_init()
-	md_OperatorJoinedServicesRecord = File_milkyway_restaking_v1_genesis_proto.Messages().ByName("OperatorJoinedServicesRecord")
-	fd_OperatorJoinedServicesRecord_operator_id = md_OperatorJoinedServicesRecord.Fields().ByName("operator_id")
-	fd_OperatorJoinedServicesRecord_joined_services = md_OperatorJoinedServicesRecord.Fields().ByName("joined_services")
+	md_OperatorJoinedServices = File_milkyway_restaking_v1_genesis_proto.Messages().ByName("OperatorJoinedServices")
+	fd_OperatorJoinedServices_operator_id = md_OperatorJoinedServices.Fields().ByName("operator_id")
+	fd_OperatorJoinedServices_service_ids = md_OperatorJoinedServices.Fields().ByName("service_ids")
 }
 
-var _ protoreflect.Message = (*fastReflection_OperatorJoinedServicesRecord)(nil)
+var _ protoreflect.Message = (*fastReflection_OperatorJoinedServices)(nil)
 
-type fastReflection_OperatorJoinedServicesRecord OperatorJoinedServicesRecord
+type fastReflection_OperatorJoinedServices OperatorJoinedServices
 
-func (x *OperatorJoinedServicesRecord) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_OperatorJoinedServicesRecord)(x)
+func (x *OperatorJoinedServices) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_OperatorJoinedServices)(x)
 }
 
-func (x *OperatorJoinedServicesRecord) slowProtoReflect() protoreflect.Message {
+func (x *OperatorJoinedServices) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_restaking_v1_genesis_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -46,43 +92,43 @@ func (x *OperatorJoinedServicesRecord) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_OperatorJoinedServicesRecord_messageType fastReflection_OperatorJoinedServicesRecord_messageType
-var _ protoreflect.MessageType = fastReflection_OperatorJoinedServicesRecord_messageType{}
+var _fastReflection_OperatorJoinedServices_messageType fastReflection_OperatorJoinedServices_messageType
+var _ protoreflect.MessageType = fastReflection_OperatorJoinedServices_messageType{}
 
-type fastReflection_OperatorJoinedServicesRecord_messageType struct{}
+type fastReflection_OperatorJoinedServices_messageType struct{}
 
-func (x fastReflection_OperatorJoinedServicesRecord_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_OperatorJoinedServicesRecord)(nil)
+func (x fastReflection_OperatorJoinedServices_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_OperatorJoinedServices)(nil)
 }
-func (x fastReflection_OperatorJoinedServicesRecord_messageType) New() protoreflect.Message {
-	return new(fastReflection_OperatorJoinedServicesRecord)
+func (x fastReflection_OperatorJoinedServices_messageType) New() protoreflect.Message {
+	return new(fastReflection_OperatorJoinedServices)
 }
-func (x fastReflection_OperatorJoinedServicesRecord_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorJoinedServicesRecord
+func (x fastReflection_OperatorJoinedServices_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_OperatorJoinedServices
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_OperatorJoinedServicesRecord) Descriptor() protoreflect.MessageDescriptor {
-	return md_OperatorJoinedServicesRecord
+func (x *fastReflection_OperatorJoinedServices) Descriptor() protoreflect.MessageDescriptor {
+	return md_OperatorJoinedServices
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_OperatorJoinedServicesRecord) Type() protoreflect.MessageType {
-	return _fastReflection_OperatorJoinedServicesRecord_messageType
+func (x *fastReflection_OperatorJoinedServices) Type() protoreflect.MessageType {
+	return _fastReflection_OperatorJoinedServices_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_OperatorJoinedServicesRecord) New() protoreflect.Message {
-	return new(fastReflection_OperatorJoinedServicesRecord)
+func (x *fastReflection_OperatorJoinedServices) New() protoreflect.Message {
+	return new(fastReflection_OperatorJoinedServices)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_OperatorJoinedServicesRecord) Interface() protoreflect.ProtoMessage {
-	return (*OperatorJoinedServicesRecord)(x)
+func (x *fastReflection_OperatorJoinedServices) Interface() protoreflect.ProtoMessage {
+	return (*OperatorJoinedServices)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -90,16 +136,16 @@ func (x *fastReflection_OperatorJoinedServicesRecord) Interface() protoreflect.P
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_OperatorJoinedServicesRecord) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_OperatorJoinedServices) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.OperatorId != uint32(0) {
 		value := protoreflect.ValueOfUint32(x.OperatorId)
-		if !f(fd_OperatorJoinedServicesRecord_operator_id, value) {
+		if !f(fd_OperatorJoinedServices_operator_id, value) {
 			return
 		}
 	}
-	if x.JoinedServices != nil {
-		value := protoreflect.ValueOfMessage(x.JoinedServices.ProtoReflect())
-		if !f(fd_OperatorJoinedServicesRecord_joined_services, value) {
+	if len(x.ServiceIds) != 0 {
+		value := protoreflect.ValueOfList(&_OperatorJoinedServices_2_list{list: &x.ServiceIds})
+		if !f(fd_OperatorJoinedServices_service_ids, value) {
 			return
 		}
 	}
@@ -116,17 +162,17 @@ func (x *fastReflection_OperatorJoinedServicesRecord) Range(f func(protoreflect.
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_OperatorJoinedServicesRecord) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_OperatorJoinedServices) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.OperatorJoinedServicesRecord.operator_id":
+	case "milkyway.restaking.v1.OperatorJoinedServices.operator_id":
 		return x.OperatorId != uint32(0)
-	case "milkyway.restaking.v1.OperatorJoinedServicesRecord.joined_services":
-		return x.JoinedServices != nil
+	case "milkyway.restaking.v1.OperatorJoinedServices.service_ids":
+		return len(x.ServiceIds) != 0
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorJoinedServicesRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorJoinedServices"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorJoinedServicesRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorJoinedServices does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -136,17 +182,17 @@ func (x *fastReflection_OperatorJoinedServicesRecord) Has(fd protoreflect.FieldD
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorJoinedServicesRecord) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_OperatorJoinedServices) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.OperatorJoinedServicesRecord.operator_id":
+	case "milkyway.restaking.v1.OperatorJoinedServices.operator_id":
 		x.OperatorId = uint32(0)
-	case "milkyway.restaking.v1.OperatorJoinedServicesRecord.joined_services":
-		x.JoinedServices = nil
+	case "milkyway.restaking.v1.OperatorJoinedServices.service_ids":
+		x.ServiceIds = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorJoinedServicesRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorJoinedServices"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorJoinedServicesRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorJoinedServices does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -156,19 +202,22 @@ func (x *fastReflection_OperatorJoinedServicesRecord) Clear(fd protoreflect.Fiel
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_OperatorJoinedServicesRecord) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_OperatorJoinedServices) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "milkyway.restaking.v1.OperatorJoinedServicesRecord.operator_id":
+	case "milkyway.restaking.v1.OperatorJoinedServices.operator_id":
 		value := x.OperatorId
 		return protoreflect.ValueOfUint32(value)
-	case "milkyway.restaking.v1.OperatorJoinedServicesRecord.joined_services":
-		value := x.JoinedServices
-		return protoreflect.ValueOfMessage(value.ProtoReflect())
+	case "milkyway.restaking.v1.OperatorJoinedServices.service_ids":
+		if len(x.ServiceIds) == 0 {
+			return protoreflect.ValueOfList(&_OperatorJoinedServices_2_list{})
+		}
+		listValue := &_OperatorJoinedServices_2_list{list: &x.ServiceIds}
+		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorJoinedServicesRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorJoinedServices"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorJoinedServicesRecord does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorJoinedServices does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -182,17 +231,19 @@ func (x *fastReflection_OperatorJoinedServicesRecord) Get(descriptor protoreflec
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorJoinedServicesRecord) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_OperatorJoinedServices) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.OperatorJoinedServicesRecord.operator_id":
+	case "milkyway.restaking.v1.OperatorJoinedServices.operator_id":
 		x.OperatorId = uint32(value.Uint())
-	case "milkyway.restaking.v1.OperatorJoinedServicesRecord.joined_services":
-		x.JoinedServices = value.Message().Interface().(*OperatorJoinedServices)
+	case "milkyway.restaking.v1.OperatorJoinedServices.service_ids":
+		lv := value.List()
+		clv := lv.(*_OperatorJoinedServices_2_list)
+		x.ServiceIds = *clv.list
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorJoinedServicesRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorJoinedServices"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorJoinedServicesRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorJoinedServices does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -206,48 +257,49 @@ func (x *fastReflection_OperatorJoinedServicesRecord) Set(fd protoreflect.FieldD
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorJoinedServicesRecord) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_OperatorJoinedServices) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.OperatorJoinedServicesRecord.joined_services":
-		if x.JoinedServices == nil {
-			x.JoinedServices = new(OperatorJoinedServices)
+	case "milkyway.restaking.v1.OperatorJoinedServices.service_ids":
+		if x.ServiceIds == nil {
+			x.ServiceIds = []uint32{}
 		}
-		return protoreflect.ValueOfMessage(x.JoinedServices.ProtoReflect())
-	case "milkyway.restaking.v1.OperatorJoinedServicesRecord.operator_id":
-		panic(fmt.Errorf("field operator_id of message milkyway.restaking.v1.OperatorJoinedServicesRecord is not mutable"))
+		value := &_OperatorJoinedServices_2_list{list: &x.ServiceIds}
+		return protoreflect.ValueOfList(value)
+	case "milkyway.restaking.v1.OperatorJoinedServices.operator_id":
+		panic(fmt.Errorf("field operator_id of message milkyway.restaking.v1.OperatorJoinedServices is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorJoinedServicesRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorJoinedServices"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorJoinedServicesRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorJoinedServices does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_OperatorJoinedServicesRecord) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_OperatorJoinedServices) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.OperatorJoinedServicesRecord.operator_id":
+	case "milkyway.restaking.v1.OperatorJoinedServices.operator_id":
 		return protoreflect.ValueOfUint32(uint32(0))
-	case "milkyway.restaking.v1.OperatorJoinedServicesRecord.joined_services":
-		m := new(OperatorJoinedServices)
-		return protoreflect.ValueOfMessage(m.ProtoReflect())
+	case "milkyway.restaking.v1.OperatorJoinedServices.service_ids":
+		list := []uint32{}
+		return protoreflect.ValueOfList(&_OperatorJoinedServices_2_list{list: &list})
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorJoinedServicesRecord"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.OperatorJoinedServices"))
 		}
-		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorJoinedServicesRecord does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.restaking.v1.OperatorJoinedServices does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_OperatorJoinedServicesRecord) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_OperatorJoinedServices) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.OperatorJoinedServicesRecord", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.OperatorJoinedServices", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -255,7 +307,7 @@ func (x *fastReflection_OperatorJoinedServicesRecord) WhichOneof(d protoreflect.
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_OperatorJoinedServicesRecord) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_OperatorJoinedServices) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -266,7 +318,7 @@ func (x *fastReflection_OperatorJoinedServicesRecord) GetUnknown() protoreflect.
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_OperatorJoinedServicesRecord) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_OperatorJoinedServices) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -278,7 +330,7 @@ func (x *fastReflection_OperatorJoinedServicesRecord) SetUnknown(fields protoref
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_OperatorJoinedServicesRecord) IsValid() bool {
+func (x *fastReflection_OperatorJoinedServices) IsValid() bool {
 	return x != nil
 }
 
@@ -288,9 +340,9 @@ func (x *fastReflection_OperatorJoinedServicesRecord) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_OperatorJoinedServicesRecord) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_OperatorJoinedServices) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*OperatorJoinedServicesRecord)
+		x := input.Message.Interface().(*OperatorJoinedServices)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -305,9 +357,12 @@ func (x *fastReflection_OperatorJoinedServicesRecord) ProtoMethods() *protoiface
 		if x.OperatorId != 0 {
 			n += 1 + runtime.Sov(uint64(x.OperatorId))
 		}
-		if x.JoinedServices != nil {
-			l = options.Size(x.JoinedServices)
-			n += 1 + l + runtime.Sov(uint64(l))
+		if len(x.ServiceIds) > 0 {
+			l = 0
+			for _, e := range x.ServiceIds {
+				l += runtime.Sov(uint64(e))
+			}
+			n += 1 + runtime.Sov(uint64(l)) + l
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -319,7 +374,7 @@ func (x *fastReflection_OperatorJoinedServicesRecord) ProtoMethods() *protoiface
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorJoinedServicesRecord)
+		x := input.Message.Interface().(*OperatorJoinedServices)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -338,17 +393,23 @@ func (x *fastReflection_OperatorJoinedServicesRecord) ProtoMethods() *protoiface
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if x.JoinedServices != nil {
-			encoded, err := options.Marshal(x.JoinedServices)
-			if err != nil {
-				return protoiface.MarshalOutput{
-					NoUnkeyedLiterals: input.NoUnkeyedLiterals,
-					Buf:               input.Buf,
-				}, err
+		if len(x.ServiceIds) > 0 {
+			var pksize2 int
+			for _, num := range x.ServiceIds {
+				pksize2 += runtime.Sov(uint64(num))
 			}
-			i -= len(encoded)
-			copy(dAtA[i:], encoded)
-			i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+			i -= pksize2
+			j1 := i
+			for _, num := range x.ServiceIds {
+				for num >= 1<<7 {
+					dAtA[j1] = uint8(uint64(num)&0x7f | 0x80)
+					num >>= 7
+					j1++
+				}
+				dAtA[j1] = uint8(num)
+				j1++
+			}
+			i = runtime.EncodeVarint(dAtA, i, uint64(pksize2))
 			i--
 			dAtA[i] = 0x12
 		}
@@ -368,7 +429,7 @@ func (x *fastReflection_OperatorJoinedServicesRecord) ProtoMethods() *protoiface
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*OperatorJoinedServicesRecord)
+		x := input.Message.Interface().(*OperatorJoinedServices)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -400,10 +461,10 @@ func (x *fastReflection_OperatorJoinedServicesRecord) ProtoMethods() *protoiface
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorJoinedServicesRecord: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorJoinedServices: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorJoinedServicesRecord: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: OperatorJoinedServices: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -426,41 +487,81 @@ func (x *fastReflection_OperatorJoinedServicesRecord) ProtoMethods() *protoiface
 					}
 				}
 			case 2:
-				if wireType != 2 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field JoinedServices", wireType)
-				}
-				var msglen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				if wireType == 0 {
+					var v uint32
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+						}
+						if iNdEx >= l {
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= uint32(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
 					}
-					if iNdEx >= l {
+					x.ServiceIds = append(x.ServiceIds, v)
+				} else if wireType == 2 {
+					var packedLen int
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+						}
+						if iNdEx >= l {
+							return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						packedLen |= int(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					if packedLen < 0 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+					}
+					postIndex := iNdEx + packedLen
+					if postIndex < 0 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+					}
+					if postIndex > l {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					msglen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
+					var elementCount int
+					var count int
+					for _, integer := range dAtA[iNdEx:postIndex] {
+						if integer < 128 {
+							count++
+						}
 					}
+					elementCount = count
+					if elementCount != 0 && len(x.ServiceIds) == 0 {
+						x.ServiceIds = make([]uint32, 0, elementCount)
+					}
+					for iNdEx < postIndex {
+						var v uint32
+						for shift := uint(0); ; shift += 7 {
+							if shift >= 64 {
+								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+							}
+							if iNdEx >= l {
+								return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+							}
+							b := dAtA[iNdEx]
+							iNdEx++
+							v |= uint32(b&0x7F) << shift
+							if b < 0x80 {
+								break
+							}
+						}
+						x.ServiceIds = append(x.ServiceIds, v)
+					}
+				} else {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ServiceIds", wireType)
 				}
-				if msglen < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				postIndex := iNdEx + msglen
-				if postIndex < 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
-				}
-				if postIndex > l {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-				}
-				if x.JoinedServices == nil {
-					x.JoinedServices = &OperatorJoinedServices{}
-				}
-				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.JoinedServices); err != nil {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
-				}
-				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -1667,7 +1768,7 @@ func (x *fastReflection_ServiceSecuringPools) ProtoMethods() *protoiface.Methods
 var _ protoreflect.List = (*_GenesisState_2_list)(nil)
 
 type _GenesisState_2_list struct {
-	list *[]*OperatorJoinedServicesRecord
+	list *[]*OperatorJoinedServices
 }
 
 func (x *_GenesisState_2_list) Len() int {
@@ -1683,18 +1784,18 @@ func (x *_GenesisState_2_list) Get(i int) protoreflect.Value {
 
 func (x *_GenesisState_2_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*OperatorJoinedServicesRecord)
+	concreteValue := valueUnwrapped.Interface().(*OperatorJoinedServices)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_GenesisState_2_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*OperatorJoinedServicesRecord)
+	concreteValue := valueUnwrapped.Interface().(*OperatorJoinedServices)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_GenesisState_2_list) AppendMutable() protoreflect.Value {
-	v := new(OperatorJoinedServicesRecord)
+	v := new(OperatorJoinedServices)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -1707,7 +1808,7 @@ func (x *_GenesisState_2_list) Truncate(n int) {
 }
 
 func (x *_GenesisState_2_list) NewElement() protoreflect.Value {
-	v := new(OperatorJoinedServicesRecord)
+	v := new(OperatorJoinedServices)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
@@ -2214,7 +2315,7 @@ func (x *fastReflection_GenesisState) Mutable(fd protoreflect.FieldDescriptor) p
 		return protoreflect.ValueOfMessage(x.Params.ProtoReflect())
 	case "milkyway.restaking.v1.GenesisState.operators_joined_services":
 		if x.OperatorsJoinedServices == nil {
-			x.OperatorsJoinedServices = []*OperatorJoinedServicesRecord{}
+			x.OperatorsJoinedServices = []*OperatorJoinedServices{}
 		}
 		value := &_GenesisState_2_list{list: &x.OperatorsJoinedServices}
 		return protoreflect.ValueOfList(value)
@@ -2259,7 +2360,7 @@ func (x *fastReflection_GenesisState) NewField(fd protoreflect.FieldDescriptor) 
 		m := new(Params)
 		return protoreflect.ValueOfMessage(m.ProtoReflect())
 	case "milkyway.restaking.v1.GenesisState.operators_joined_services":
-		list := []*OperatorJoinedServicesRecord{}
+		list := []*OperatorJoinedServices{}
 		return protoreflect.ValueOfList(&_GenesisState_2_list{list: &list})
 	case "milkyway.restaking.v1.GenesisState.services_allowed_operators":
 		list := []*ServiceAllowedOperators{}
@@ -2613,7 +2714,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.OperatorsJoinedServices = append(x.OperatorsJoinedServices, &OperatorJoinedServicesRecord{})
+				x.OperatorsJoinedServices = append(x.OperatorsJoinedServices, &OperatorJoinedServices{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.OperatorsJoinedServices[len(x.OperatorsJoinedServices)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
@@ -2804,19 +2905,19 @@ const (
 
 // OperatorJoinedServicesRecord represents the services joined by a
 // individual operator.
-type OperatorJoinedServicesRecord struct {
+type OperatorJoinedServices struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
 	// OperatorID is the ID of the operator.
 	OperatorId uint32 `protobuf:"varint,1,opt,name=operator_id,json=operatorId,proto3" json:"operator_id,omitempty"`
-	// JoinedServices represents the services joined by the operator.
-	JoinedServices *OperatorJoinedServices `protobuf:"bytes,2,opt,name=joined_services,json=joinedServices,proto3" json:"joined_services,omitempty"`
+	// ServiceIDs represents the list of services joined by the operator.
+	ServiceIds []uint32 `protobuf:"varint,2,rep,packed,name=service_ids,json=serviceIds,proto3" json:"service_ids,omitempty"`
 }
 
-func (x *OperatorJoinedServicesRecord) Reset() {
-	*x = OperatorJoinedServicesRecord{}
+func (x *OperatorJoinedServices) Reset() {
+	*x = OperatorJoinedServices{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_restaking_v1_genesis_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -2824,27 +2925,27 @@ func (x *OperatorJoinedServicesRecord) Reset() {
 	}
 }
 
-func (x *OperatorJoinedServicesRecord) String() string {
+func (x *OperatorJoinedServices) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*OperatorJoinedServicesRecord) ProtoMessage() {}
+func (*OperatorJoinedServices) ProtoMessage() {}
 
-// Deprecated: Use OperatorJoinedServicesRecord.ProtoReflect.Descriptor instead.
-func (*OperatorJoinedServicesRecord) Descriptor() ([]byte, []int) {
+// Deprecated: Use OperatorJoinedServices.ProtoReflect.Descriptor instead.
+func (*OperatorJoinedServices) Descriptor() ([]byte, []int) {
 	return file_milkyway_restaking_v1_genesis_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *OperatorJoinedServicesRecord) GetOperatorId() uint32 {
+func (x *OperatorJoinedServices) GetOperatorId() uint32 {
 	if x != nil {
 		return x.OperatorId
 	}
 	return 0
 }
 
-func (x *OperatorJoinedServicesRecord) GetJoinedServices() *OperatorJoinedServices {
+func (x *OperatorJoinedServices) GetServiceIds() []uint32 {
 	if x != nil {
-		return x.JoinedServices
+		return x.ServiceIds
 	}
 	return nil
 }
@@ -2954,7 +3055,7 @@ type GenesisState struct {
 	Params *Params `protobuf:"bytes,1,opt,name=params,proto3" json:"params,omitempty"`
 	// OperatorsJoinedServices defines the list of the services that each operator
 	// has joined.
-	OperatorsJoinedServices []*OperatorJoinedServicesRecord `protobuf:"bytes,2,rep,name=operators_joined_services,json=operatorsJoinedServices,proto3" json:"operators_joined_services,omitempty"`
+	OperatorsJoinedServices []*OperatorJoinedServices `protobuf:"bytes,2,rep,name=operators_joined_services,json=operatorsJoinedServices,proto3" json:"operators_joined_services,omitempty"`
 	// ServiceAllowedOperators defines the operators allowed to secure each
 	// service.
 	ServicesAllowedOperators []*ServiceAllowedOperators `protobuf:"bytes,3,rep,name=services_allowed_operators,json=servicesAllowedOperators,proto3" json:"services_allowed_operators,omitempty"`
@@ -2993,7 +3094,7 @@ func (x *GenesisState) GetParams() *Params {
 	return nil
 }
 
-func (x *GenesisState) GetOperatorsJoinedServices() []*OperatorJoinedServicesRecord {
+func (x *GenesisState) GetOperatorsJoinedServices() []*OperatorJoinedServices {
 	if x != nil {
 		return x.OperatorsJoinedServices
 	}
@@ -3040,85 +3141,82 @@ var file_milkyway_restaking_v1_genesis_proto_rawDesc = []byte{
 	0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x6d, 0x6f, 0x64, 0x65, 0x6c, 0x73,
 	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x22, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
 	0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x70, 0x61,
-	0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xad, 0x01, 0x0a, 0x1c, 0x4f,
-	0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x4a, 0x6f, 0x69, 0x6e, 0x65, 0x64, 0x53, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x12, 0x2f, 0x0a, 0x0b, 0x6f,
-	0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d,
-	0x42, 0x0e, 0xe2, 0xde, 0x1f, 0x0a, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x44,
-	0x52, 0x0a, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x64, 0x12, 0x5c, 0x0a, 0x0f,
-	0x6a, 0x6f, 0x69, 0x6e, 0x65, 0x64, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
-	0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x70,
+	0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x7a, 0x0a, 0x16, 0x4f, 0x70,
 	0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x4a, 0x6f, 0x69, 0x6e, 0x65, 0x64, 0x53, 0x65, 0x72, 0x76,
-	0x69, 0x63, 0x65, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0e, 0x6a, 0x6f, 0x69, 0x6e,
-	0x65, 0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x22, 0x7b, 0x0a, 0x17, 0x53, 0x65,
-	0x72, 0x76, 0x69, 0x63, 0x65, 0x41, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x4f, 0x70, 0x65, 0x72,
-	0x61, 0x74, 0x6f, 0x72, 0x73, 0x12, 0x2c, 0x0a, 0x0a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
-	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x0d, 0xe2, 0xde, 0x1f, 0x09, 0x53,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x44, 0x52, 0x09, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
-	0x65, 0x49, 0x64, 0x12, 0x32, 0x0a, 0x0c, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f,
-	0x69, 0x64, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0d, 0x42, 0x0f, 0xe2, 0xde, 0x1f, 0x0b, 0x4f,
-	0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x44, 0x73, 0x52, 0x0b, 0x6f, 0x70, 0x65, 0x72,
-	0x61, 0x74, 0x6f, 0x72, 0x49, 0x64, 0x73, 0x22, 0x6c, 0x0a, 0x14, 0x53, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x6e, 0x67, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x12,
-	0x2c, 0x0a, 0x0a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x0d, 0x42, 0x0d, 0xe2, 0xde, 0x1f, 0x09, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
-	0x49, 0x44, 0x52, 0x09, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x12, 0x26, 0x0a,
-	0x08, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0d, 0x42,
-	0x0b, 0xe2, 0xde, 0x1f, 0x07, 0x50, 0x6f, 0x6f, 0x6c, 0x49, 0x44, 0x73, 0x52, 0x07, 0x70, 0x6f,
-	0x6f, 0x6c, 0x49, 0x64, 0x73, 0x22, 0xd3, 0x04, 0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69,
-	0x73, 0x53, 0x74, 0x61, 0x74, 0x65, 0x12, 0x3b, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
-	0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x50,
-	0x61, 0x72, 0x61, 0x6d, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x70, 0x61, 0x72,
-	0x61, 0x6d, 0x73, 0x12, 0x75, 0x0a, 0x19, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73,
-	0x5f, 0x6a, 0x6f, 0x69, 0x6e, 0x65, 0x64, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73,
-	0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x33, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
-	0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4f,
-	0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x4a, 0x6f, 0x69, 0x6e, 0x65, 0x64, 0x53, 0x65, 0x72,
-	0x76, 0x69, 0x63, 0x65, 0x73, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x42, 0x04, 0xc8, 0xde, 0x1f,
-	0x00, 0x52, 0x17, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x4a, 0x6f, 0x69, 0x6e,
-	0x65, 0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x12, 0x72, 0x0a, 0x1a, 0x73, 0x65,
-	0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x5f, 0x61, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x5f, 0x6f,
-	0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2e,
-	0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b,
-	0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x41, 0x6c,
-	0x6c, 0x6f, 0x77, 0x65, 0x64, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x42, 0x04,
-	0xc8, 0xde, 0x1f, 0x00, 0x52, 0x18, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x41, 0x6c,
-	0x6c, 0x6f, 0x77, 0x65, 0x64, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x12, 0x69,
-	0x0a, 0x17, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x5f, 0x73, 0x65, 0x63, 0x75, 0x72,
-	0x69, 0x6e, 0x67, 0x5f, 0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0b, 0x32,
-	0x2b, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61,
-	0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x53,
-	0x65, 0x63, 0x75, 0x72, 0x69, 0x6e, 0x67, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x42, 0x04, 0xc8, 0xde,
-	0x1f, 0x00, 0x52, 0x15, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x53, 0x65, 0x63, 0x75,
-	0x72, 0x69, 0x6e, 0x67, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x12, 0x49, 0x0a, 0x0b, 0x64, 0x65, 0x6c,
-	0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x05, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x21,
-	0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b,
-	0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
-	0x69, 0x6f, 0x6e, 0x73, 0x12, 0x65, 0x0a, 0x15, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e,
-	0x67, 0x5f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x06, 0x20,
-	0x03, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72,
-	0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x6e, 0x62, 0x6f,
-	0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42,
-	0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x14, 0x75, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67,
-	0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x42, 0xe8, 0x01, 0x0a, 0x19,
-	0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73,
-	0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x42, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73,
-	0x69, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x47, 0x67, 0x69, 0x74, 0x68, 0x75,
-	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2d, 0x6c,
-	0x61, 0x62, 0x73, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x61, 0x70, 0x69,
-	0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b,
-	0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x3b, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67,
-	0x76, 0x31, 0xa2, 0x02, 0x03, 0x4d, 0x52, 0x58, 0xaa, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79,
-	0x77, 0x61, 0x79, 0x2e, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x56, 0x31,
-	0xca, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x73, 0x74,
-	0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x21, 0x4d, 0x69, 0x6c, 0x6b, 0x79,
-	0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31,
-	0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x17, 0x4d,
-	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x3a, 0x3a, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69,
-	0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x69, 0x63, 0x65, 0x73, 0x12, 0x2f, 0x0a, 0x0b, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
+	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x0e, 0xe2, 0xde, 0x1f, 0x0a, 0x4f,
+	0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x49, 0x44, 0x52, 0x0a, 0x6f, 0x70, 0x65, 0x72, 0x61,
+	0x74, 0x6f, 0x72, 0x49, 0x64, 0x12, 0x2f, 0x0a, 0x0b, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x5f, 0x69, 0x64, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0d, 0x42, 0x0e, 0xe2, 0xde, 0x1f, 0x0a,
+	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x44, 0x73, 0x52, 0x0a, 0x73, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x49, 0x64, 0x73, 0x22, 0x7b, 0x0a, 0x17, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x41, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x4f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
+	0x73, 0x12, 0x2c, 0x0a, 0x0a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x0d, 0xe2, 0xde, 0x1f, 0x09, 0x53, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x49, 0x44, 0x52, 0x09, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x12,
+	0x32, 0x0a, 0x0c, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x5f, 0x69, 0x64, 0x73, 0x18,
+	0x02, 0x20, 0x03, 0x28, 0x0d, 0x42, 0x0f, 0xe2, 0xde, 0x1f, 0x0b, 0x4f, 0x70, 0x65, 0x72, 0x61,
+	0x74, 0x6f, 0x72, 0x49, 0x44, 0x73, 0x52, 0x0b, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72,
+	0x49, 0x64, 0x73, 0x22, 0x6c, 0x0a, 0x14, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x53, 0x65,
+	0x63, 0x75, 0x72, 0x69, 0x6e, 0x67, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x12, 0x2c, 0x0a, 0x0a, 0x73,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x42,
+	0x0d, 0xe2, 0xde, 0x1f, 0x09, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x44, 0x52, 0x09,
+	0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x12, 0x26, 0x0a, 0x08, 0x70, 0x6f, 0x6f,
+	0x6c, 0x5f, 0x69, 0x64, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0d, 0x42, 0x0b, 0xe2, 0xde, 0x1f,
+	0x07, 0x50, 0x6f, 0x6f, 0x6c, 0x49, 0x44, 0x73, 0x52, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64,
+	0x73, 0x22, 0xcd, 0x04, 0x0a, 0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x53, 0x74, 0x61,
+	0x74, 0x65, 0x12, 0x3b, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65,
+	0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x61, 0x72, 0x61, 0x6d,
+	0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x06, 0x70, 0x61, 0x72, 0x61, 0x6d, 0x73, 0x12,
+	0x6f, 0x0a, 0x19, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x5f, 0x6a, 0x6f, 0x69,
+	0x6e, 0x65, 0x64, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03,
+	0x28, 0x0b, 0x32, 0x2d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65,
+	0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x70, 0x65, 0x72, 0x61,
+	0x74, 0x6f, 0x72, 0x4a, 0x6f, 0x69, 0x6e, 0x65, 0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x17, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f,
+	0x72, 0x73, 0x4a, 0x6f, 0x69, 0x6e, 0x65, 0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73,
+	0x12, 0x72, 0x0a, 0x1a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x5f, 0x61, 0x6c, 0x6c,
+	0x6f, 0x77, 0x65, 0x64, 0x5f, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x73, 0x18, 0x03,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x2e, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
+	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x65, 0x72,
+	0x76, 0x69, 0x63, 0x65, 0x41, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x4f, 0x70, 0x65, 0x72, 0x61,
+	0x74, 0x6f, 0x72, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x18, 0x73, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x73, 0x41, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x64, 0x4f, 0x70, 0x65, 0x72, 0x61,
+	0x74, 0x6f, 0x72, 0x73, 0x12, 0x69, 0x0a, 0x17, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73,
+	0x5f, 0x73, 0x65, 0x63, 0x75, 0x72, 0x69, 0x6e, 0x67, 0x5f, 0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x18,
+	0x04, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2b, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
+	0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x6e, 0x67, 0x50, 0x6f, 0x6f,
+	0x6c, 0x73, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x15, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x73, 0x53, 0x65, 0x63, 0x75, 0x72, 0x69, 0x6e, 0x67, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x12,
+	0x49, 0x0a, 0x0b, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x05,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
+	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x6c,
+	0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x0b, 0x64,
+	0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x65, 0x0a, 0x15, 0x75, 0x6e,
+	0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x5f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x73, 0x18, 0x06, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b,
+	0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76,
+	0x31, 0x2e, 0x55, 0x6e, 0x62, 0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52, 0x14, 0x75, 0x6e, 0x62,
+	0x6f, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e,
+	0x73, 0x42, 0xe8, 0x01, 0x0a, 0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
+	0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x42,
+	0x0c, 0x47, 0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a,
+	0x47, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x69, 0x6c, 0x6b,
+	0x79, 0x77, 0x61, 0x79, 0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
+	0x61, 0x79, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f,
+	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x3b, 0x72, 0x65, 0x73,
+	0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x4d, 0x52, 0x58, 0xaa, 0x02,
+	0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b,
+	0x69, 0x6e, 0x67, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
+	0x79, 0x5c, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0xe2, 0x02,
+	0x21, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b,
+	0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61,
+	0x74, 0x61, 0xea, 0x02, 0x17, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x3a, 0x3a, 0x52,
+	0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -3135,28 +3233,26 @@ func file_milkyway_restaking_v1_genesis_proto_rawDescGZIP() []byte {
 
 var file_milkyway_restaking_v1_genesis_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_milkyway_restaking_v1_genesis_proto_goTypes = []interface{}{
-	(*OperatorJoinedServicesRecord)(nil), // 0: milkyway.restaking.v1.OperatorJoinedServicesRecord
-	(*ServiceAllowedOperators)(nil),      // 1: milkyway.restaking.v1.ServiceAllowedOperators
-	(*ServiceSecuringPools)(nil),         // 2: milkyway.restaking.v1.ServiceSecuringPools
-	(*GenesisState)(nil),                 // 3: milkyway.restaking.v1.GenesisState
-	(*OperatorJoinedServices)(nil),       // 4: milkyway.restaking.v1.OperatorJoinedServices
-	(*Params)(nil),                       // 5: milkyway.restaking.v1.Params
-	(*Delegation)(nil),                   // 6: milkyway.restaking.v1.Delegation
-	(*UnbondingDelegation)(nil),          // 7: milkyway.restaking.v1.UnbondingDelegation
+	(*OperatorJoinedServices)(nil),  // 0: milkyway.restaking.v1.OperatorJoinedServices
+	(*ServiceAllowedOperators)(nil), // 1: milkyway.restaking.v1.ServiceAllowedOperators
+	(*ServiceSecuringPools)(nil),    // 2: milkyway.restaking.v1.ServiceSecuringPools
+	(*GenesisState)(nil),            // 3: milkyway.restaking.v1.GenesisState
+	(*Params)(nil),                  // 4: milkyway.restaking.v1.Params
+	(*Delegation)(nil),              // 5: milkyway.restaking.v1.Delegation
+	(*UnbondingDelegation)(nil),     // 6: milkyway.restaking.v1.UnbondingDelegation
 }
 var file_milkyway_restaking_v1_genesis_proto_depIdxs = []int32{
-	4, // 0: milkyway.restaking.v1.OperatorJoinedServicesRecord.joined_services:type_name -> milkyway.restaking.v1.OperatorJoinedServices
-	5, // 1: milkyway.restaking.v1.GenesisState.params:type_name -> milkyway.restaking.v1.Params
-	0, // 2: milkyway.restaking.v1.GenesisState.operators_joined_services:type_name -> milkyway.restaking.v1.OperatorJoinedServicesRecord
-	1, // 3: milkyway.restaking.v1.GenesisState.services_allowed_operators:type_name -> milkyway.restaking.v1.ServiceAllowedOperators
-	2, // 4: milkyway.restaking.v1.GenesisState.services_securing_pools:type_name -> milkyway.restaking.v1.ServiceSecuringPools
-	6, // 5: milkyway.restaking.v1.GenesisState.delegations:type_name -> milkyway.restaking.v1.Delegation
-	7, // 6: milkyway.restaking.v1.GenesisState.unbonding_delegations:type_name -> milkyway.restaking.v1.UnbondingDelegation
-	7, // [7:7] is the sub-list for method output_type
-	7, // [7:7] is the sub-list for method input_type
-	7, // [7:7] is the sub-list for extension type_name
-	7, // [7:7] is the sub-list for extension extendee
-	0, // [0:7] is the sub-list for field type_name
+	4, // 0: milkyway.restaking.v1.GenesisState.params:type_name -> milkyway.restaking.v1.Params
+	0, // 1: milkyway.restaking.v1.GenesisState.operators_joined_services:type_name -> milkyway.restaking.v1.OperatorJoinedServices
+	1, // 2: milkyway.restaking.v1.GenesisState.services_allowed_operators:type_name -> milkyway.restaking.v1.ServiceAllowedOperators
+	2, // 3: milkyway.restaking.v1.GenesisState.services_securing_pools:type_name -> milkyway.restaking.v1.ServiceSecuringPools
+	5, // 4: milkyway.restaking.v1.GenesisState.delegations:type_name -> milkyway.restaking.v1.Delegation
+	6, // 5: milkyway.restaking.v1.GenesisState.unbonding_delegations:type_name -> milkyway.restaking.v1.UnbondingDelegation
+	6, // [6:6] is the sub-list for method output_type
+	6, // [6:6] is the sub-list for method input_type
+	6, // [6:6] is the sub-list for extension type_name
+	6, // [6:6] is the sub-list for extension extendee
+	0, // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_milkyway_restaking_v1_genesis_proto_init() }
@@ -3168,7 +3264,7 @@ func file_milkyway_restaking_v1_genesis_proto_init() {
 	file_milkyway_restaking_v1_params_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_milkyway_restaking_v1_genesis_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*OperatorJoinedServicesRecord); i {
+			switch v := v.(*OperatorJoinedServices); i {
 			case 0:
 				return &v.state
 			case 1:

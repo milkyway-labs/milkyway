@@ -50,7 +50,7 @@ func (k msgServer) JoinService(goCtx context.Context, msg *types.MsgJoinService)
 		return nil, errors.Wrapf(servicestypes.ErrServiceNotActive, "service %d is not active", msg.ServiceID)
 	}
 
-	err := k.AddServiceToOperator(ctx, msg.OperatorID, msg.ServiceID)
+	err := k.AddServiceToOperatorJoinedServices(ctx, msg.OperatorID, msg.ServiceID)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +84,7 @@ func (k msgServer) LeaveService(goCtx context.Context, msg *types.MsgLeaveServic
 		return nil, errors.Wrapf(sdkerrors.ErrNotFound, "service %d not found", msg.ServiceID)
 	}
 
-	err := k.RemoveServiceFromOperator(ctx, msg.OperatorID, msg.ServiceID)
+	err := k.RemoveServiceFromOperatorJoinedServices(ctx, msg.OperatorID, msg.ServiceID)
 	if err != nil {
 		return nil, err
 	}

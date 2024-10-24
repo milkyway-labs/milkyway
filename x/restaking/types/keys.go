@@ -32,9 +32,10 @@ var (
 	// We keep this to migrate the old ServiceParams to the new format.
 	LegacyServiceParamsPrefix = []byte{0x12}
 
-	OperatorJoinedServicesPrefix    = []byte{0x13}
-	ServiceOperatorsAllowListPrefix = []byte{0x14}
-	ServiceSecuringPoolsPrefix      = []byte{0x15}
+	OperatorJoinedServicesPrefix       = []byte{0x13}
+	ServiceOperatorsAllowListPrefix    = []byte{0x14}
+	ServiceSecuringPoolsPrefix         = []byte{0x15}
+	ServiceJoinedByOperatorIndexPrefix = []byte{0x16}
 
 	PoolDelegationPrefix          = []byte{0xa1}
 	PoolDelegationsByPoolIDPrefix = []byte{0xa2}

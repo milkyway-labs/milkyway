@@ -20,7 +20,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllOperatorsJoinedServicesRecord() {
 		name       string
 		store      func(ctx sdk.Context)
 		shouldErr  bool
-		expRecords []types.OperatorJoinedServicesRecord
+		expRecords []types.OperatorJoinedServices
 	}{
 		{
 			name:       "operator without joined services returns nil",
@@ -30,27 +30,15 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllOperatorsJoinedServicesRecord() {
 		{
 			name: "operators joined services are returned properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.AddServiceToOperator(ctx, 1, 1)
-				suite.Require().NoError(err)
-				err = suite.k.AddServiceToOperator(ctx, 1, 2)
-				suite.Require().NoError(err)
+				suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 1)
+				suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 2)
 
-				err = suite.k.AddServiceToOperator(ctx, 2, 3)
-				suite.Require().NoError(err)
-				err = suite.k.AddServiceToOperator(ctx, 2, 4)
-				suite.Require().NoError(err)
+				suite.k.AddServiceToOperatorJoinedServices(ctx, 2, 3)
+				suite.k.AddServiceToOperatorJoinedServices(ctx, 2, 4)
 			},
-			expRecords: []types.OperatorJoinedServicesRecord{
-				types.NewOperatorJoinedServicesRecord(1,
-					types.NewOperatorJoinedServices(
-						[]uint32{1, 2},
-					),
-				),
-				types.NewOperatorJoinedServicesRecord(2,
-					types.NewOperatorJoinedServices(
-						[]uint32{3, 4},
-					),
-				),
+			expRecords: []types.OperatorJoinedServices{
+				types.NewOperatorJoinedServices(1, []uint32{1, 2}),
+				types.NewOperatorJoinedServices(2, []uint32{3, 4}),
 			},
 		},
 	}

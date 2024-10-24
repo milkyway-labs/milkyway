@@ -20,11 +20,8 @@ func TestGenesis_Validate(t *testing.T) {
 		{
 			name: "operator joined services record with invalid JoinedService returns error",
 			genesis: types.NewGenesis(
-				[]types.OperatorJoinedServicesRecord{
-					{
-						OperatorID:     1,
-						JoinedServices: types.NewOperatorJoinedServices([]uint32{0}),
-					},
+				[]types.OperatorJoinedServices{
+					types.NewOperatorJoinedServices(1, []uint32{0}),
 				},
 				nil,
 				nil,
@@ -37,11 +34,8 @@ func TestGenesis_Validate(t *testing.T) {
 		{
 			name: "operator joined services record with invalid OperatorID returns error",
 			genesis: types.NewGenesis(
-				[]types.OperatorJoinedServicesRecord{
-					{
-						OperatorID:     0,
-						JoinedServices: types.NewOperatorJoinedServices([]uint32{1}),
-					},
+				[]types.OperatorJoinedServices{
+					types.NewOperatorJoinedServices(0, []uint32{1}),
 				},
 				nil,
 				nil,
@@ -232,11 +226,8 @@ func TestGenesis_Validate(t *testing.T) {
 		{
 			name: "valid genesis returns no error",
 			genesis: types.NewGenesis(
-				[]types.OperatorJoinedServicesRecord{
-					{
-						OperatorID:     1,
-						JoinedServices: types.NewOperatorJoinedServices([]uint32{2, 3, 5}),
-					},
+				[]types.OperatorJoinedServices{
+					types.NewOperatorJoinedServices(1, []uint32{2, 3, 5}),
 				},
 				[]types.ServiceAllowedOperators{
 					types.NewServiceAllowedOperators(1, []uint32{1, 2, 3}),

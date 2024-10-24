@@ -9,12 +9,12 @@ option go_package = "github.com/milkyway-labs/milkyway/x/restaking/types";
 
 // OperatorJoinedServicesRecord represents the services joined by a
 // individual operator.
-message OperatorJoinedServicesRecord {
+message OperatorJoinedServices {
   // OperatorID is the ID of the operator.
   uint32 operator_id = 1 [ (gogoproto.customname) = "OperatorID" ];
 
-  // JoinedServices represents the services joined by the operator.
-  OperatorJoinedServices joined_services = 2 [ (gogoproto.nullable) = false ];
+  // ServiceIDs represents the list of services joined by the operator.
+  repeated uint32 service_ids = 2 [ (gogoproto.customname) = "ServiceIDs" ];
 }
 
 // ServiceAllowedOperators represents the operators allowed to secure a
@@ -45,7 +45,7 @@ message GenesisState {
 
   // OperatorsJoinedServices defines the list of the services that each operator
   // has joined.
-  repeated OperatorJoinedServicesRecord operators_joined_services = 2
+  repeated OperatorJoinedServices operators_joined_services = 2
       [ (gogoproto.nullable) = false ];
 
   // ServiceAllowedOperators defines the operators allowed to secure each

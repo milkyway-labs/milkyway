@@ -149,15 +149,8 @@ func (suite *KeeperTestSuite) UpdateOperatorParams(
 	suite.Require().NoError(err)
 
 	// Make the operator join the service.
-	joinedServices, err := suite.App.RestakingKeeper.GetOperatorJoinedServices(ctx, operatorID)
-	suite.Require().NoError(err)
 	for _, serviceID := range joinedServicesIDs {
-		err = joinedServices.Add(serviceID)
-		suite.Require().NoError(err)
-	}
-
-	for _, serviceID := range joinedServices.ServiceIDs {
-		err = suite.App.RestakingKeeper.AddServiceToOperator(ctx, operatorID, serviceID)
+		err = suite.App.RestakingKeeper.AddServiceToOperatorJoinedServices(ctx, operatorID, serviceID)
 		suite.Require().NoError(err)
 	}
 }

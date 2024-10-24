@@ -8,7 +8,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/utils"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
@@ -298,63 +297,4 @@ func MustUnmarshalUnbondingDelegation(cdc codec.BinaryCodec, bz []byte) Unbondin
 		panic(err)
 	}
 	return unbondingDelegation
-}
-
-// --------------------------------------------------------------------------------------------------------------------
-
-// NewEmptyOperatorJoinedServices creates a new empty OperatorJoinedServices
-// instance.
-func NewEmptyOperatorJoinedServices() OperatorJoinedServices {
-	return OperatorJoinedServices{}
-}
-
-// NewOperatorJoinedServices creates a new OperatorJoinedServices instance.
-func NewOperatorJoinedServices(serviceIDs []uint32) OperatorJoinedServices {
-	return OperatorJoinedServices{
-		ServiceIDs: serviceIDs,
-	}
-}
-
-// Validate checks if the OperatorJoinedServices instance is valid.
-func (o *OperatorJoinedServices) Validate() error {
-	duplicate := utils.FindDuplicate(o.ServiceIDs)
-	if duplicate != nil {
-		return fmt.Errorf("duplicated service id: %d", *duplicate)
-	}
-	if utils.Contains(o.ServiceIDs, 0) {
-		return fmt.Errorf("the service id cannot be 0]")
-	}
-
-	return nil
-}
-
-// UnsafeAdd adds the serviceID to the list of joined services without
-// performing any check on the validity of the provided value and on the
-// resulting validity of OperatorJoinedServices.
-func (o *OperatorJoinedServices) UnsafeAdd(serviceID uint32) {
-	o.ServiceIDs = append(o.ServiceIDs, serviceID)
-}
-
-// Contains returns true if the serviceID is already present.
-func (o *OperatorJoinedServices) Contains(serviceID uint32) bool {
-	return utils.Contains(o.ServiceIDs, serviceID)
-}
-
-// Add adds the serviceID to the list of joined services and returns
-// true if the serviceID was added, false if was already in the list.
-func (o *OperatorJoinedServices) Add(serviceID uint32) error {
-	if serviceID == 0 {
-		return fmt.Errorf("service id cannot be 0")
-	}
-	if o.Contains(serviceID) {
-		return fmt.Errorf("service id %d already present", serviceID)
-	}
-	o.UnsafeAdd(serviceID)
-	return nil
-}
-
-func (o *OperatorJoinedServices) Remove(serviceID uint32) bool {
-	newServices, removed := utils.Remove(o.ServiceIDs, serviceID)
-	o.ServiceIDs = newServices
-	return removed
 }

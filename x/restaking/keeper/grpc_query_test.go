@@ -29,12 +29,12 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorJoinedServices() {
 		},
 		{
 			name:      "invalid operator id returns error",
-			request:   types.NewQueryOperatorJoinedServicesRequest(0),
+			request:   types.NewQueryOperatorJoinedServicesRequest(0, nil),
 			shouldErr: true,
 		},
 		{
 			name:      "not found operator return error",
-			request:   types.NewQueryOperatorJoinedServicesRequest(1),
+			request:   types.NewQueryOperatorJoinedServicesRequest(1, nil),
 			shouldErr: true,
 		},
 		{
@@ -45,7 +45,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorJoinedServices() {
 				))
 				suite.Require().NoError(err)
 			},
-			request:     types.NewQueryOperatorJoinedServicesRequest(1),
+			request:     types.NewQueryOperatorJoinedServicesRequest(1, nil),
 			shouldErr:   false,
 			expServices: []uint32(nil),
 		},
@@ -57,12 +57,12 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorJoinedServices() {
 				))
 				suite.Require().NoError(err)
 
-				err = suite.k.AddServiceToOperator(ctx, 1, 1)
+				err = suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 1)
 				suite.Require().NoError(err)
-				err = suite.k.AddServiceToOperator(ctx, 1, 2)
+				err = suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 2)
 				suite.Require().NoError(err)
 			},
-			request:     types.NewQueryOperatorJoinedServicesRequest(1),
+			request:     types.NewQueryOperatorJoinedServicesRequest(1, nil),
 			shouldErr:   false,
 			expServices: []uint32{1, 2},
 		},

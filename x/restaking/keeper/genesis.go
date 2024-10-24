@@ -37,8 +37,8 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
 	// Store the services joined by the operators
 	for _, record := range data.OperatorsJoinedServices {
-		for _, serviceID := range record.JoinedServices.ServiceIDs {
-			err := k.AddServiceToOperator(ctx, record.OperatorID, serviceID)
+		for _, serviceID := range record.ServiceIDs {
+			err := k.AddServiceToOperatorJoinedServices(ctx, record.OperatorID, serviceID)
 			if err != nil {
 				panic(err)
 			}

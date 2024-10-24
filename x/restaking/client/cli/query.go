@@ -228,7 +228,7 @@ func getOperatorJoinedServices() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "joined-services [operator-id]",
 		Short:   "Query an operator's joined services",
-		Example: fmt.Sprintf(`%s query %s operator joined-services 1`, version.AppName, types.ModuleName),
+		Example: fmt.Sprintf(`%s query %s operator joined-services 1 --page=2 --limit=100`, version.AppName, types.ModuleName),
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -241,7 +241,14 @@ func getOperatorJoinedServices() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			res, err := queryClient.OperatorJoinedServices(cmd.Context(), types.NewQueryOperatorJoinedServicesRequest(operatorID))
+
+			pageReq, err := client.ReadPageRequest(cmd.Flags())
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.OperatorJoinedServices(cmd.Context(),
+				types.NewQueryOperatorJoinedServicesRequest(operatorID, pageReq))
 			if err != nil {
 				return err
 			}
@@ -251,6 +258,7 @@ func getOperatorJoinedServices() *cobra.Command {
 	}
 
 	flags.AddQueryFlagsToCmd(cmd)
+	flags.AddPaginationFlagsToCmd(cmd, "operator joined services")
 
 	return cmd
 }
