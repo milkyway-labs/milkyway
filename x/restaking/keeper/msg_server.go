@@ -40,9 +40,13 @@ func (k msgServer) JoinService(goCtx context.Context, msg *types.MsgJoinService)
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can join the service")
 	}
 
-	_, found = k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	service, found := k.servicesKeeper.GetService(ctx, msg.ServiceID)
 	if !found {
 		return nil, errors.Wrapf(sdkerrors.ErrNotFound, "service %d not found", msg.ServiceID)
+	}
+
+	if !service.IsActive() {
+		return nil, errors.Wrapf(servicestypes.ErrServiceNotActive, "service %d is not active", msg.ServiceID)
 	}
 
 	err := k.AddServiceToOperator(ctx, msg.OperatorID, msg.ServiceID)
