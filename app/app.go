@@ -681,6 +681,7 @@ func NewMilkyWayApp(
 		app.ServicesKeeper,
 		authorityAddr,
 	)
+	app.OperatorsKeeper.SetHooks(app.RestakingKeeper.OperatorsHooks())
 	app.AssetsKeeper = assetskeeper.NewKeeper(
 		app.appCodec,
 		runtime.NewKVStoreService(keys[assetstypes.StoreKey]),
