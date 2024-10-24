@@ -22,9 +22,10 @@ func (k *Keeper) OperatorsHooks() operatorstypes.OperatorsHooks {
 // AfterOperatorInactivatingCompleted implements types.OperatorsHooks.
 func (o *OperatorsHooks) AfterOperatorInactivatingCompleted(ctx sdk.Context, operatorID uint32) error {
 	// After the operator has completed its inactivation
-	// we remove the data that we keep in the x/restaking module that is linked
+	// we remove the data that we keep in the x/restaking module that are linked
 	// to the operator.
 
+	// Wipe the list of services that this operator has joined
 	iter, err := o.operatorJoinedServices.Iterate(ctx, collections.NewPrefixedPairRange[uint32, uint32](operatorID))
 	if err != nil {
 		return err

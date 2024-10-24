@@ -23,13 +23,15 @@ func (h *ServicesHooks) AfterServiceDeactivated(ctx sdk.Context, serviceID uint3
 	// we remove the data that we keep in the x/restaking
 	// associated to this service.
 
+	// Get the iterator to iterate over the operators that have joined this
+	// service
 	serviceValidatingOperatorsIter, err := h.operatorJoinedServices.Indexes.Service.Iterate(ctx, collections.NewPrefixedPairRange[uint32, uint32](serviceID))
 	if err != nil {
 		return err
 	}
 	defer serviceValidatingOperatorsIter.Close()
 
-	// Iterate over the operator that have joined this service
+	// Iterate over the operators that have joined this service
 	// and remove the participation
 	for ; serviceValidatingOperatorsIter.Valid(); serviceValidatingOperatorsIter.Next() {
 		operatorServicePair, err := serviceValidatingOperatorsIter.PrimaryKey()
@@ -42,7 +44,8 @@ func (h *ServicesHooks) AfterServiceDeactivated(ctx sdk.Context, serviceID uint3
 		}
 	}
 
-	// Wipe the service's operators allow list
+	// Get the iterator to iterate over the operators that are
+	// allowed to secure this service
 	serviceOperatorsAllowListIter, err := h.serviceOperatorsAllowList.Iterate(ctx, collections.NewPrefixedPairRange[uint32, uint32](serviceID))
 	if err != nil {
 		return err
@@ -61,8 +64,8 @@ func (h *ServicesHooks) AfterServiceDeactivated(ctx sdk.Context, serviceID uint3
 		}
 	}
 
-	// Wipe the list of polls from which the service is allowed to
-	// borrow security
+	// Get the iterator to iterate over the list of pools from
+	// which the service is allowed to borrow security
 	serviceSecuringPoolsIter, err := h.serviceSecuringPools.Iterate(ctx, collections.NewPrefixedPairRange[uint32, uint32](serviceID))
 	if err != nil {
 		return err

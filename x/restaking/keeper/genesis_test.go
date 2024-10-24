@@ -21,11 +21,15 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			store: func(ctx sdk.Context) {
 				suite.k.SetParams(ctx, types.DefaultParams())
 
-				suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 1)
-				suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 2)
+				err := suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 1)
+				suite.Require().NoError(err)
+				err = suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 2)
+				suite.Require().NoError(err)
 
-				suite.k.AddServiceToOperatorJoinedServices(ctx, 2, 3)
-				suite.k.AddServiceToOperatorJoinedServices(ctx, 2, 4)
+				err = suite.k.AddServiceToOperatorJoinedServices(ctx, 2, 3)
+				suite.Require().NoError(err)
+				err = suite.k.AddServiceToOperatorJoinedServices(ctx, 2, 4)
+				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				Params: types.DefaultParams(),

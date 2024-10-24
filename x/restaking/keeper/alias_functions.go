@@ -49,7 +49,7 @@ func (k *Keeper) IterateAllOperatorsJoinedServices(ctx sdk.Context, action func(
 	return nil
 }
 
-// GetAllOperatorsJoinedServices returns all the operators joined services
+// GetAllOperatorsJoinedServices returns all services that each operator has joined
 func (k *Keeper) GetAllOperatorsJoinedServices(ctx sdk.Context) ([]types.OperatorJoinedServices, error) {
 	iterator, err := k.operatorJoinedServices.Iterate(ctx, nil)
 	if err != nil {
