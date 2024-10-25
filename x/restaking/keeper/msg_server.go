@@ -110,6 +110,11 @@ func (k msgServer) AllowOperator(goCtx context.Context, msg *types.MsgAllowOpera
 		return nil, servicestypes.ErrServiceNotFound
 	}
 
+	// Ensure the service is active
+	if !service.IsActive() {
+		return nil, errors.Wrapf(servicestypes.ErrServiceNotActive, "service %d is not active", msg.ServiceID)
+	}
+
 	// Ensure that the operator exists
 	_, found = k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
 	if !found {
@@ -196,6 +201,11 @@ func (k msgServer) BorrowPoolSecurity(goCtx context.Context, msg *types.MsgBorro
 	service, found := k.servicesKeeper.GetService(ctx, msg.ServiceID)
 	if !found {
 		return nil, servicestypes.ErrServiceNotFound
+	}
+
+	// Ensure the service is active
+	if !service.IsActive() {
+		return nil, errors.Wrapf(servicestypes.ErrServiceNotActive, "service %d is not active", msg.ServiceID)
 	}
 
 	// Ensure that the pool exists
