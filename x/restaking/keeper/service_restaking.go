@@ -126,6 +126,13 @@ func (k *Keeper) AddPoolToServiceSecuringPools(ctx sdk.Context, serviceID uint32
 	return k.serviceSecuringPools.Set(ctx, key)
 }
 
+// RemovePoolFromServiceSecuringPools removes a pool from the list of pools from which the
+// service is borrowing the security from
+func (k *Keeper) RemovePoolFromServiceSecuringPools(ctx sdk.Context, serviceID uint32, poolID uint32) error {
+	key := collections.Join(serviceID, poolID)
+	return k.serviceSecuringPools.Remove(ctx, key)
+}
+
 // IsServiceSecuringPoolsConfigured returns true if the list of securing pools
 // has been configured for the given service
 func (k *Keeper) IsServiceSecuringPoolsConfigured(ctx sdk.Context, serviceID uint32) (bool, error) {
@@ -140,6 +147,13 @@ func (k *Keeper) IsServiceSecuringPoolsConfigured(ctx sdk.Context, serviceID uin
 	}
 
 	return false, nil
+}
+
+// IsPoolInServiceSecuringPools returns true if the pool is in the list
+// of pools from which the service can borrow security
+func (k *Keeper) IsPoolInServiceSecuringPools(ctx sdk.Context, serviceID uint32, poolID uint32) (bool, error) {
+	key := collections.Join(serviceID, poolID)
+	return k.serviceSecuringPools.Has(ctx, key)
 }
 
 // IsServiceSecuredByPool returns true if the service is being secured

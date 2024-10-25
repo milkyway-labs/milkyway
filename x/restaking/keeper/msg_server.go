@@ -13,6 +13,7 @@ import (
 	"github.com/hashicorp/go-metrics"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
@@ -185,6 +186,102 @@ func (k msgServer) RemoveAllowedOperator(goCtx context.Context, msg *types.MsgRe
 	})
 
 	return &types.MsgRemoveAllowedOperatorResponse{}, nil
+}
+
+// BorrowPoolSecurity defines the rpc method for Msg/BorrowPoolSecurity
+func (k msgServer) BorrowPoolSecurity(goCtx context.Context, msg *types.MsgBorrowPoolSecurity) (*types.MsgBorrowPoolSecurityResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Ensure that the service exists
+	service, found := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	if !found {
+		return nil, servicestypes.ErrServiceNotFound
+	}
+
+	// Ensure the service is active
+	if !service.IsActive() {
+		return nil, errors.Wrapf(servicestypes.ErrServiceNotActive, "service %d is not active", msg.ServiceID)
+	}
+
+	// Ensure that the pool exists
+	_, found = k.poolsKeeper.GetPool(ctx, msg.PoolID)
+	if !found {
+		return nil, poolstypes.ErrPoolNotFound
+	}
+
+	// Ensure the service admin is performing this action
+	if service.Admin != msg.Sender {
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized,
+			"only the service admin can borrow the security from a new pool")
+	}
+
+	// Ensure the pool is not in the service securing pools list
+	isSecuring, err := k.IsPoolInServiceSecuringPools(ctx, msg.ServiceID, msg.PoolID)
+	if err != nil {
+		return nil, err
+	}
+	if isSecuring {
+		return nil, types.ErrPoolAlreadySecuringService
+	}
+
+	// Add the pool to the list of pools from which the service can borrow
+	// security from
+	err = k.AddPoolToServiceSecuringPools(ctx, msg.ServiceID, msg.PoolID)
+	if err != nil {
+		return nil, err
+	}
+
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeBorrowPoolSecurity,
+			sdk.NewAttribute(servicestypes.AttributeKeyServiceID, fmt.Sprint(msg.ServiceID)),
+			sdk.NewAttribute(poolstypes.AttributeKeyPoolID, fmt.Sprint(msg.PoolID)),
+		),
+	})
+
+	return &types.MsgBorrowPoolSecurityResponse{}, nil
+}
+
+// CeasePoolSecurityBorrow defines the rpc method for Msg/CeasePoolSecurityBorrow
+func (k msgServer) CeasePoolSecurityBorrow(goCtx context.Context, msg *types.MsgCeasePoolSecurityBorrow) (*types.MsgCeasePoolSecurityBorrowResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Ensure that the service exists
+	service, found := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	if !found {
+		return nil, servicestypes.ErrServiceNotFound
+	}
+
+	// Ensure the service admin is performing this action
+	if service.Admin != msg.Sender {
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized,
+			"only the service admin can cease the pool security borrow")
+	}
+
+	// Ensure the pool is in the service securing pools list
+	isSecuring, err := k.IsPoolInServiceSecuringPools(ctx, msg.ServiceID, msg.PoolID)
+	if err != nil {
+		return nil, err
+	}
+	if !isSecuring {
+		return nil, types.ErrPoolNotSecuringService
+	}
+
+	// Remove the pool from the service's pools whitelist
+	err = k.RemovePoolFromServiceSecuringPools(ctx, msg.ServiceID, msg.PoolID)
+	if err != nil {
+		return nil, err
+	}
+
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeCeasePoolSecurityBorrow,
+			sdk.NewAttribute(servicestypes.AttributeKeyServiceID, fmt.Sprint(msg.ServiceID)),
+			sdk.NewAttribute(poolstypes.AttributeKeyPoolID, fmt.Sprint(msg.PoolID)),
+		),
+	})
+
+	return &types.MsgCeasePoolSecurityBorrowResponse{}, nil
 }
 
 // DelegatePool defines the rpc method for Msg/DelegatePool
