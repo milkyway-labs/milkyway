@@ -31,14 +31,13 @@ func (h *ServicesHooks) AfterServiceDeactivated(ctx sdk.Context, serviceID uint3
 	}
 	defer serviceValidatingOperatorsIter.Close()
 
-	// Iterate over the operators that have joined this service
-	// and remove the participation
-	for ; serviceValidatingOperatorsIter.Valid(); serviceValidatingOperatorsIter.Next() {
-		operatorServicePair, err := serviceValidatingOperatorsIter.PrimaryKey()
-		if err != nil {
-			return err
-		}
-		err = h.operatorJoinedServices.Remove(ctx, operatorServicePair)
+	// Get all the keys to remove
+	toRemoveOperatorJoinedServices, err := serviceValidatingOperatorsIter.PrimaryKeys()
+	if err != nil {
+		return err
+	}
+	for _, key := range toRemoveOperatorJoinedServices {
+		err = h.operatorJoinedServices.Remove(ctx, key)
 		if err != nil {
 			return err
 		}
@@ -52,13 +51,13 @@ func (h *ServicesHooks) AfterServiceDeactivated(ctx sdk.Context, serviceID uint3
 	}
 	defer serviceOperatorsAllowListIter.Close()
 
-	// Iterate over all the items and remove them from the KeySet
-	for ; serviceOperatorsAllowListIter.Valid(); serviceOperatorsAllowListIter.Next() {
-		serviceOperatorPair, err := serviceOperatorsAllowListIter.Key()
-		if err != nil {
-			return err
-		}
-		err = h.serviceOperatorsAllowList.Remove(ctx, serviceOperatorPair)
+	// Get all the keys to remove
+	toRemoveServiceAllowedOperators, err := serviceOperatorsAllowListIter.Keys()
+	if err != nil {
+		return err
+	}
+	for _, key := range toRemoveServiceAllowedOperators {
+		err = h.serviceOperatorsAllowList.Remove(ctx, key)
 		if err != nil {
 			return err
 		}
@@ -72,13 +71,13 @@ func (h *ServicesHooks) AfterServiceDeactivated(ctx sdk.Context, serviceID uint3
 	}
 	defer serviceSecuringPoolsIter.Close()
 
-	// Iterate over all the items and remove them from the KeySet
-	for ; serviceSecuringPoolsIter.Valid(); serviceSecuringPoolsIter.Next() {
-		servicePoolPair, err := serviceSecuringPoolsIter.Key()
-		if err != nil {
-			return err
-		}
-		err = h.serviceSecuringPools.Remove(ctx, servicePoolPair)
+	// Get all the keys to remove
+	toRemoveServiceSecuringPools, err := serviceSecuringPoolsIter.Keys()
+	if err != nil {
+		return err
+	}
+	for _, key := range toRemoveServiceSecuringPools {
+		err = h.serviceSecuringPools.Remove(ctx, key)
 		if err != nil {
 			return err
 		}

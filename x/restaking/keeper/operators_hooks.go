@@ -32,13 +32,12 @@ func (o *OperatorsHooks) AfterOperatorInactivatingCompleted(ctx sdk.Context, ope
 	}
 	defer iter.Close()
 
-	// Iterate over the operator's joined service and remove all records
-	for ; iter.Valid(); iter.Next() {
-		operatorServicePair, err := iter.Key()
-		if err != nil {
-			return err
-		}
-		err = o.operatorJoinedServices.Remove(ctx, operatorServicePair)
+	toRemoveOperatorJoinedServices, err := iter.Keys()
+	if err != nil {
+		return err
+	}
+	for _, key := range toRemoveOperatorJoinedServices {
+		err = o.operatorJoinedServices.Remove(ctx, key)
 		if err != nil {
 			return err
 		}
