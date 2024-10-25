@@ -21,5 +21,4 @@ const (
 	AttributeKeyCompletionTime       = "completion_time"
 	AttributeUnbondingDelegationType = "unbonding_delegation"
 	AttributeTargetID                = "target_id"
-	AttributeKeyPoolID               = "pool_id"
 )

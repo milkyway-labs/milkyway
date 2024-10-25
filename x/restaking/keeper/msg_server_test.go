@@ -765,7 +765,7 @@ func (suite *KeeperTestSuite) TestMsgServer_BorrowPoolSecurity() {
 					types.EventTypeBorrowPoolSecurity,
 					sdk.NewAttribute(
 						servicestypes.AttributeKeyServiceID, "1"),
-					sdk.NewAttribute(types.AttributeKeyPoolID, "1"),
+					sdk.NewAttribute(poolstypes.AttributeKeyPoolID, "1"),
 				),
 			},
 		},
@@ -892,7 +892,7 @@ func (suite *KeeperTestSuite) TestMsgServer_CeasePoolSecurityBorrow() {
 					types.EventTypeCeasePoolSecurityBorrow,
 					sdk.NewAttribute(
 						servicestypes.AttributeKeyServiceID, "1"),
-					sdk.NewAttribute(types.AttributeKeyPoolID, "1"),
+					sdk.NewAttribute(poolstypes.AttributeKeyPoolID, "1"),
 				),
 			},
 		},

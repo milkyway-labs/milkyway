@@ -531,7 +531,7 @@ func GetCeasePoolSecurityBorrowTxCmd() *cobra.Command {
 		Use:     "cease-pool-security-borrow [service-id] [pool-id]",
 		Args:    cobra.ExactArgs(2),
 		Short:   "Removes a pool from the list of pools from which the service has chosen to borrow security",
-		Example: fmt.Sprintf("%s tx %s service borrow-pool-liquidity 1 1 --from alice", version.AppName, types.ModuleName),
+		Example: fmt.Sprintf("%s tx %s service cease-pool-security-borrow 1 1 --from alice", version.AppName, types.ModuleName),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -549,7 +549,7 @@ func GetCeasePoolSecurityBorrowTxCmd() *cobra.Command {
 			}
 
 			// Create and validate the message
-			msg := types.NewMsgBorrowPoolSecurity(serviceID, poolID, clientCtx.FromAddress.String())
+			msg := types.NewMsgCeasePoolSecurityBorrow(serviceID, poolID, clientCtx.FromAddress.String())
 			if err = msg.ValidateBasic(); err != nil {
 				return fmt.Errorf("message validation failed: %w", err)
 			}

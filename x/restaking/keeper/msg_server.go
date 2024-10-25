@@ -230,7 +230,7 @@ func (k msgServer) BorrowPoolSecurity(goCtx context.Context, msg *types.MsgBorro
 		sdk.NewEvent(
 			types.EventTypeBorrowPoolSecurity,
 			sdk.NewAttribute(servicestypes.AttributeKeyServiceID, fmt.Sprint(msg.ServiceID)),
-			sdk.NewAttribute(types.AttributeKeyPoolID, fmt.Sprint(msg.PoolID)),
+			sdk.NewAttribute(poolstypes.AttributeKeyPoolID, fmt.Sprint(msg.PoolID)),
 		),
 	})
 
@@ -272,7 +272,7 @@ func (k msgServer) CeasePoolSecurityBorrow(goCtx context.Context, msg *types.Msg
 		sdk.NewEvent(
 			types.EventTypeCeasePoolSecurityBorrow,
 			sdk.NewAttribute(servicestypes.AttributeKeyServiceID, fmt.Sprint(msg.ServiceID)),
-			sdk.NewAttribute(types.AttributeKeyPoolID, fmt.Sprint(msg.PoolID)),
+			sdk.NewAttribute(poolstypes.AttributeKeyPoolID, fmt.Sprint(msg.PoolID)),
 		),
 	})
 
