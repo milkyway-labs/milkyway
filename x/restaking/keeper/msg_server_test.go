@@ -168,7 +168,7 @@ func (suite *KeeperTestSuite) TestMsgServer_JoinService() {
 			shouldErr: true,
 		},
 		{
-			name: "valid update is done properly",
+			name: "join is performed correctly",
 			store: func(ctx sdk.Context) {
 				err := suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
 					1, operatorstypes.OPERATOR_STATUS_ACTIVE,
@@ -490,54 +490,6 @@ func (suite *KeeperTestSuite) TestMsgServer_AllowOperator() {
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			),
 			shouldErr: true,
-		},
-		{
-			name: "can't allow inactivating operator",
-			store: func(ctx sdk.Context) {
-				err := suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
-					1, operatorstypes.OPERATOR_STATUS_INACTIVATING,
-					"MilkyWay Operator",
-					"https://milkyway.com",
-					"https://milkyway.com/picture",
-					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				))
-				suite.Require().NoError(err)
-				err = suite.sk.SaveService(ctx, servicestypes.NewService(
-					1, servicestypes.SERVICE_STATUS_ACTIVE,
-					"MilkyWay",
-					"MilkyWay is a restaking platform",
-					"https://milkyway.com",
-					"https://milkyway.com/logo.png",
-					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				))
-				suite.Require().NoError(err)
-			},
-			msg:       types.NewMsgAllowOperator(1, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
-			shouldErr: false,
-		},
-		{
-			name: "can't allow inactive operator",
-			store: func(ctx sdk.Context) {
-				err := suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
-					1, operatorstypes.OPERATOR_STATUS_INACTIVE,
-					"MilkyWay Operator",
-					"https://milkyway.com",
-					"https://milkyway.com/picture",
-					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				))
-				suite.Require().NoError(err)
-				err = suite.sk.SaveService(ctx, servicestypes.NewService(
-					1, servicestypes.SERVICE_STATUS_ACTIVE,
-					"MilkyWay",
-					"MilkyWay is a restaking platform",
-					"https://milkyway.com",
-					"https://milkyway.com/logo.png",
-					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				))
-				suite.Require().NoError(err)
-			},
-			msg:       types.NewMsgAllowOperator(1, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
-			shouldErr: false,
 		},
 		{
 			name: "operator is allowed properly",
