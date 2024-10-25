@@ -22,6 +22,7 @@ const (
 	Query_OperatorJoinedServices_FullMethodName                = "/milkyway.restaking.v1.Query/OperatorJoinedServices"
 	Query_ServiceAllowedOperators_FullMethodName               = "/milkyway.restaking.v1.Query/ServiceAllowedOperators"
 	Query_ServiceSecuringPools_FullMethodName                  = "/milkyway.restaking.v1.Query/ServiceSecuringPools"
+	Query_ServiceOperators_FullMethodName                      = "/milkyway.restaking.v1.Query/ServiceOperators"
 	Query_PoolDelegations_FullMethodName                       = "/milkyway.restaking.v1.Query/PoolDelegations"
 	Query_PoolDelegation_FullMethodName                        = "/milkyway.restaking.v1.Query/PoolDelegation"
 	Query_PoolUnbondingDelegations_FullMethodName              = "/milkyway.restaking.v1.Query/PoolUnbondingDelegations"
@@ -61,6 +62,7 @@ type QueryClient interface {
 	ServiceAllowedOperators(ctx context.Context, in *QueryServiceAllowedOperatorsRequest, opts ...grpc.CallOption) (*QueryServiceAllowedOperatorsResponse, error)
 	// ServiceSecuringPools queries the pools that are securing a given service.
 	ServiceSecuringPools(ctx context.Context, in *QueryServiceSecuringPoolsRequest, opts ...grpc.CallOption) (*QueryServiceSecuringPoolsResponse, error)
+	ServiceOperators(ctx context.Context, in *QueryServiceOperatorsRequest, opts ...grpc.CallOption) (*QueryServiceOperatorsResponse, error)
 	// PoolDelegations queries the delegations info for the given pool.
 	PoolDelegations(ctx context.Context, in *QueryPoolDelegationsRequest, opts ...grpc.CallOption) (*QueryPoolDelegationsResponse, error)
 	// PoolDelegation queries the delegation info for the given pool and
@@ -163,6 +165,16 @@ func (c *queryClient) ServiceSecuringPools(ctx context.Context, in *QueryService
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(QueryServiceSecuringPoolsResponse)
 	err := c.cc.Invoke(ctx, Query_ServiceSecuringPools_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) ServiceOperators(ctx context.Context, in *QueryServiceOperatorsRequest, opts ...grpc.CallOption) (*QueryServiceOperatorsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(QueryServiceOperatorsResponse)
+	err := c.cc.Invoke(ctx, Query_ServiceOperators_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -431,6 +443,7 @@ type QueryServer interface {
 	ServiceAllowedOperators(context.Context, *QueryServiceAllowedOperatorsRequest) (*QueryServiceAllowedOperatorsResponse, error)
 	// ServiceSecuringPools queries the pools that are securing a given service.
 	ServiceSecuringPools(context.Context, *QueryServiceSecuringPoolsRequest) (*QueryServiceSecuringPoolsResponse, error)
+	ServiceOperators(context.Context, *QueryServiceOperatorsRequest) (*QueryServiceOperatorsResponse, error)
 	// PoolDelegations queries the delegations info for the given pool.
 	PoolDelegations(context.Context, *QueryPoolDelegationsRequest) (*QueryPoolDelegationsResponse, error)
 	// PoolDelegation queries the delegation info for the given pool and
@@ -517,6 +530,9 @@ func (UnimplementedQueryServer) ServiceAllowedOperators(context.Context, *QueryS
 }
 func (UnimplementedQueryServer) ServiceSecuringPools(context.Context, *QueryServiceSecuringPoolsRequest) (*QueryServiceSecuringPoolsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ServiceSecuringPools not implemented")
+}
+func (UnimplementedQueryServer) ServiceOperators(context.Context, *QueryServiceOperatorsRequest) (*QueryServiceOperatorsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ServiceOperators not implemented")
 }
 func (UnimplementedQueryServer) PoolDelegations(context.Context, *QueryPoolDelegationsRequest) (*QueryPoolDelegationsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PoolDelegations not implemented")
@@ -664,6 +680,24 @@ func _Query_ServiceSecuringPools_Handler(srv interface{}, ctx context.Context, d
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).ServiceSecuringPools(ctx, req.(*QueryServiceSecuringPoolsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_ServiceOperators_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryServiceOperatorsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ServiceOperators(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_ServiceOperators_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ServiceOperators(ctx, req.(*QueryServiceOperatorsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1136,6 +1170,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ServiceSecuringPools",
 			Handler:    _Query_ServiceSecuringPools_Handler,
+		},
+		{
+			MethodName: "ServiceOperators",
+			Handler:    _Query_ServiceOperators_Handler,
 		},
 		{
 			MethodName: "PoolDelegations",
