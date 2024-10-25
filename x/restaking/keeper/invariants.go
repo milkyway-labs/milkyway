@@ -29,6 +29,11 @@ func RegisterInvariants(ir sdk.InvariantRegistry, k *Keeper) {
 		PositiveServicesDelegationsInvariant(k))
 	ir.RegisterRoute(types.ModuleName, "services-delegators-shares",
 		ServicesDelegatorsSharesInvariant(k))
+
+	ir.RegisterRoute(types.ModuleName, "allowed-operators-exist",
+		AllowedOperatorsExistInvariant(k))
+	ir.RegisterRoute(types.ModuleName, "operators-joined-services-exist",
+		OperatorsJoinedServicesExistInvariant(k))
 }
 
 // AccountsBalancesInvariants checks that the pools, operators and services accounts have the correct balance
@@ -295,5 +300,59 @@ func ServicesDelegatorsSharesInvariant(k *Keeper) sdk.Invariant {
 
 		return sdk.FormatInvariant(types.ModuleName, "services delegators shares", fmt.Sprintf(
 			"services delegators shares invariant broken\n%s", msg)), broken
+	}
+}
+
+// AllowedOperatorsExistInvariant checks that all the operators that are allowed to join a service exist
+func AllowedOperatorsExistInvariant(k *Keeper) sdk.Invariant {
+	return func(ctx sdk.Context) (string, bool) {
+		// Iterate over all the services joined by operators
+		var notFoundOperatorsIDs []uint32
+		err := k.IterateAllServicesAllowedOperators(ctx, func(serviceID uint32, operatorID uint32) (stop bool, err error) {
+			_, found := k.operatorsKeeper.GetOperator(ctx, serviceID)
+			if !found {
+				notFoundOperatorsIDs = append(notFoundOperatorsIDs, operatorID)
+			}
+
+			return false, nil
+		})
+		if err != nil {
+			panic(err)
+		}
+
+		var msg string
+		if len(notFoundOperatorsIDs) > 0 {
+			msg = fmt.Sprintf("operators not found: %v\n", notFoundOperatorsIDs)
+		}
+
+		return sdk.FormatInvariant(types.ModuleName, "allowed operators exist", fmt.Sprintf(
+			"allowed operators exist invariant broken\n%s", msg)), len(notFoundOperatorsIDs) > 0
+	}
+}
+
+// OperatorsJoinedServicesExistInvariant checks that all the services that are joined by operators exist
+func OperatorsJoinedServicesExistInvariant(k *Keeper) sdk.Invariant {
+	return func(ctx sdk.Context) (string, bool) {
+		// Iterate over all the operators joined services
+		var notFoundServicesIDs []uint32
+		err := k.IterateAllOperatorsJoinedServices(ctx, func(operatorID uint32, serviceID uint32) (stop bool, err error) {
+			_, found := k.servicesKeeper.GetService(ctx, serviceID)
+			if !found {
+				notFoundServicesIDs = append(notFoundServicesIDs, serviceID)
+			}
+
+			return false, nil
+		})
+		if err != nil {
+			panic(err)
+		}
+
+		var msg string
+		if len(notFoundServicesIDs) > 0 {
+			msg = fmt.Sprintf("services not found: %v\n", notFoundServicesIDs)
+		}
+
+		return sdk.FormatInvariant(types.ModuleName, "joined services exist", fmt.Sprintf(
+			"joined services exist invariant broken\n%s", msg)), len(notFoundServicesIDs) > 0
 	}
 }

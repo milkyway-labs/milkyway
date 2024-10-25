@@ -75,7 +75,7 @@ func (k *Keeper) IsOperatorInServiceAllowList(ctx sdk.Context, serviceID uint32,
 	return k.serviceOperatorsAllowList.Has(ctx, key)
 }
 
-// CanOpeartorValidateService returns true if the given operator can secure
+// CanOperatorValidateService returns true if the given operator can secure
 // the given service
 func (k *Keeper) CanOperatorValidateService(ctx sdk.Context, serviceID uint32, operatorID uint32) (bool, error) {
 	configured, err := k.IsServiceOpertorsAllowListConfigured(ctx, serviceID)

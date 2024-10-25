@@ -57,9 +57,9 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorJoinedServices() {
 				))
 				suite.Require().NoError(err)
 
-				err = suite.k.SaveOperatorJoinedServices(ctx, 1, types.NewOperatorJoinedServices(
-					[]uint32{1, 2},
-				))
+				err = suite.k.AddServiceToOperator(ctx, 1, 1)
+				suite.Require().NoError(err)
+				err = suite.k.AddServiceToOperator(ctx, 1, 2)
 				suite.Require().NoError(err)
 			},
 			request:     types.NewQueryOperatorJoinedServicesRequest(1),
@@ -114,9 +114,12 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceAllowedOperators() {
 		{
 			name: "configured service operator allow list is returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
-				suite.k.AddOperatorToServiceAllowList(ctx, 1, 2)
-				suite.k.AddOperatorToServiceAllowList(ctx, 2, 3)
+				err := suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
+				suite.Require().NoError(err)
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 1, 2)
+				suite.Require().NoError(err)
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 2, 3)
+				suite.Require().NoError(err)
 			},
 			request:      types.NewQueryServiceAllowedOperatorsRequest(1, nil),
 			shouldErr:    false,
@@ -125,9 +128,12 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceAllowedOperators() {
 		{
 			name: "pagination is handled properly ",
 			store: func(ctx sdk.Context) {
-				suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
-				suite.k.AddOperatorToServiceAllowList(ctx, 1, 2)
-				suite.k.AddOperatorToServiceAllowList(ctx, 2, 3)
+				err := suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
+				suite.Require().NoError(err)
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 1, 2)
+				suite.Require().NoError(err)
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 2, 3)
+				suite.Require().NoError(err)
 			},
 			request: types.NewQueryServiceAllowedOperatorsRequest(1, &query.PageRequest{
 				Offset: 0,
@@ -185,9 +191,12 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceSecuringPools() {
 		{
 			name: "securing pools are returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
-				suite.k.AddPoolToServiceSecuringPools(ctx, 1, 2)
-				suite.k.AddPoolToServiceSecuringPools(ctx, 2, 3)
+				err := suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
+				suite.Require().NoError(err)
+				err = suite.k.AddPoolToServiceSecuringPools(ctx, 1, 2)
+				suite.Require().NoError(err)
+				err = suite.k.AddPoolToServiceSecuringPools(ctx, 2, 3)
+				suite.Require().NoError(err)
 			},
 			request:   types.NewQueryServiceSecuringPoolsRequest(1, nil),
 			shouldErr: false,
@@ -196,9 +205,12 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceSecuringPools() {
 		{
 			name: "pagination is handled properly ",
 			store: func(ctx sdk.Context) {
-				suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
-				suite.k.AddPoolToServiceSecuringPools(ctx, 1, 2)
-				suite.k.AddPoolToServiceSecuringPools(ctx, 2, 3)
+				err := suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
+				suite.Require().NoError(err)
+				err = suite.k.AddPoolToServiceSecuringPools(ctx, 1, 2)
+				suite.Require().NoError(err)
+				err = suite.k.AddPoolToServiceSecuringPools(ctx, 2, 3)
+				suite.Require().NoError(err)
 			},
 			request: types.NewQueryServiceSecuringPoolsRequest(1, &query.PageRequest{
 				Offset: 0,
@@ -338,7 +350,7 @@ func (suite *KeeperTestSuite) TestQuerier_PoolDelegations() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.PoolDelegations(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.PoolDelegations(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -419,7 +431,7 @@ func (suite *KeeperTestSuite) TestQuerier_PoolDelegation() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.PoolDelegation(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.PoolDelegation(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -560,7 +572,7 @@ func (suite *KeeperTestSuite) TestQuerier_PoolUnbondingDelegations() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.PoolUnbondingDelegations(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.PoolUnbondingDelegations(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -648,7 +660,7 @@ func (suite *KeeperTestSuite) TestQuerier_PoolUnbondingDelegation() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.PoolUnbondingDelegation(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.PoolUnbondingDelegation(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -791,7 +803,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegations() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.OperatorDelegations(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.OperatorDelegations(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -882,7 +894,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegation() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.OperatorDelegation(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.OperatorDelegation(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -1027,7 +1039,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorUnbondingDelegations() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.OperatorUnbondingDelegations(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.OperatorUnbondingDelegations(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -1119,7 +1131,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorUnbondingDelegation() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.OperatorUnbondingDelegation(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.OperatorUnbondingDelegation(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -1262,7 +1274,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceDelegations() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.ServiceDelegations(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.ServiceDelegations(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -1353,7 +1365,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceDelegation() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.ServiceDelegation(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.ServiceDelegation(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -1498,7 +1510,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceUnbondingDelegations() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.ServiceUnbondingDelegations(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.ServiceUnbondingDelegations(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -1590,7 +1602,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceUnbondingDelegation() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.ServiceUnbondingDelegation(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.ServiceUnbondingDelegation(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -1727,7 +1739,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorPoolDelegations() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.DelegatorPoolDelegations(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.DelegatorPoolDelegations(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -1888,7 +1900,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorPoolUnbondingDelegations() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.DelegatorPoolUnbondingDelegations(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.DelegatorPoolUnbondingDelegations(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -2053,7 +2065,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperatorDelegations() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.DelegatorOperatorDelegations(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.DelegatorOperatorDelegations(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -2224,7 +2236,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperatorUnbondingDelegations(
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.DelegatorOperatorUnbondingDelegations(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.DelegatorOperatorUnbondingDelegations(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -2389,7 +2401,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServiceDelegations() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.DelegatorServiceDelegations(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.DelegatorServiceDelegations(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -2560,7 +2572,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServiceUnbondingDelegations()
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.DelegatorServiceUnbondingDelegations(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.DelegatorServiceUnbondingDelegations(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -2694,7 +2706,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorPools() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.DelegatorPools(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.DelegatorPools(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -2758,7 +2770,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorPool() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.DelegatorPool(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.DelegatorPool(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -2917,7 +2929,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperators() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.DelegatorOperators(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.DelegatorOperators(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -2988,7 +3000,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperator() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.DelegatorOperator(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.DelegatorOperator(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -3147,7 +3159,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServices() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.DelegatorServices(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.DelegatorServices(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -3218,7 +3230,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorService() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.DelegatorService(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.DelegatorService(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -3258,7 +3270,7 @@ func (suite *KeeperTestSuite) TestQuerier_Params() {
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			res, err := querier.Params(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := querier.Params(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {

@@ -32,7 +32,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				suite.k.SetNextServiceID(ctx, 1)
 				suite.k.SetParams(ctx, types.DefaultParams())
 
-				suite.k.SaveService(ctx, types.NewService(
+				err := suite.k.SaveService(ctx, types.NewService(
 					1,
 					types.SERVICE_STATUS_ACTIVE,
 					"MilkyWay",
@@ -41,8 +41,9 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
+				suite.Require().NoError(err)
 
-				suite.k.SaveService(ctx, types.NewService(
+				err = suite.k.SaveService(ctx, types.NewService(
 					2,
 					types.SERVICE_STATUS_INACTIVE,
 					"Inertia",
@@ -51,6 +52,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					"https://inertia.zone/logo.png",
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 				))
+				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				NextServiceID: 1,
@@ -114,9 +116,10 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 
 func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 	testCases := []struct {
-		name    string
-		genesis *types.GenesisState
-		check   func(ctx sdk.Context)
+		name      string
+		genesis   *types.GenesisState
+		shouldErr bool
+		check     func(ctx sdk.Context)
 	}{
 		{
 			name: "next service id is initialized properly",
@@ -125,6 +128,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				nil,
 				types.DefaultParams(),
 			),
+			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				nextServiceID, err := suite.k.GetNextServiceID(ctx)
 				suite.Require().NoError(err)
@@ -148,6 +152,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				},
 				types.DefaultParams(),
 			),
+			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				var services []types.Service
 				suite.k.IterateServices(ctx, func(service types.Service) (stop bool) {
@@ -190,7 +195,12 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 		suite.Run(tc.name, func() {
 			ctx, _ := suite.ctx.CacheContext()
 
-			suite.k.InitGenesis(ctx, tc.genesis)
+			err := suite.k.InitGenesis(ctx, tc.genesis)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+			}
 
 			if tc.check != nil {
 				tc.check(ctx)

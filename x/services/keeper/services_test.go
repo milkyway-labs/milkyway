@@ -226,7 +226,7 @@ func (suite *KeeperTestSuite) TestKeeper_ActivateService() {
 		{
 			name: "already active service returns error",
 			store: func(ctx sdk.Context) {
-				suite.k.SaveService(ctx, types.NewService(
+				err := suite.k.SaveService(ctx, types.NewService(
 					1,
 					types.SERVICE_STATUS_ACTIVE,
 					"MilkyWay",
@@ -235,6 +235,7 @@ func (suite *KeeperTestSuite) TestKeeper_ActivateService() {
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
+				suite.Require().NoError(err)
 			},
 			serviceID: 1,
 			shouldErr: true,
@@ -242,7 +243,7 @@ func (suite *KeeperTestSuite) TestKeeper_ActivateService() {
 		{
 			name: "service is activated properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SaveService(ctx, types.NewService(
+				err := suite.k.SaveService(ctx, types.NewService(
 					1,
 					types.SERVICE_STATUS_CREATED,
 					"MilkyWay",
@@ -251,6 +252,7 @@ func (suite *KeeperTestSuite) TestKeeper_ActivateService() {
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
+				suite.Require().NoError(err)
 			},
 			serviceID: 1,
 			shouldErr: false,
@@ -315,7 +317,7 @@ func (suite *KeeperTestSuite) TestKeeper_DeactivateService() {
 		{
 			name: "inactive service returns error",
 			store: func(ctx sdk.Context) {
-				suite.k.SaveService(ctx, types.NewService(
+				err := suite.k.SaveService(ctx, types.NewService(
 					1,
 					types.SERVICE_STATUS_CREATED,
 					"MilkyWay",
@@ -324,6 +326,7 @@ func (suite *KeeperTestSuite) TestKeeper_DeactivateService() {
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
+				suite.Require().NoError(err)
 			},
 			serviceID: 1,
 			shouldErr: true,
@@ -331,7 +334,7 @@ func (suite *KeeperTestSuite) TestKeeper_DeactivateService() {
 		{
 			name: "service is deactivated properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SaveService(ctx, types.NewService(
+				err := suite.k.SaveService(ctx, types.NewService(
 					1,
 					types.SERVICE_STATUS_ACTIVE,
 					"MilkyWay",
@@ -340,6 +343,7 @@ func (suite *KeeperTestSuite) TestKeeper_DeactivateService() {
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
+				suite.Require().NoError(err)
 			},
 			serviceID: 1,
 			shouldErr: false,
@@ -403,7 +407,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetService() {
 		{
 			name: "service is returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SaveService(ctx, types.NewService(
+				err := suite.k.SaveService(ctx, types.NewService(
 					1,
 					types.SERVICE_STATUS_ACTIVE,
 					"MilkyWay",
@@ -412,6 +416,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetService() {
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
+				suite.Require().NoError(err)
 			},
 			serviceID: 1,
 			expFound:  true,

@@ -130,7 +130,7 @@ func (suite *KeeperTestSuite) TestKeeper_CanOperatorValidateService() {
 	}
 }
 
-func (suite *KeeperTestSuite) TestKeeper_IsServiceOpertorsAllowListConfigured() {
+func (suite *KeeperTestSuite) TestKeeper_IsServiceOperatorsAllowListConfigured() {
 	testCases := []struct {
 		name          string
 		store         func(ctx sdk.Context)

@@ -85,11 +85,15 @@ func (k *Keeper) SaveOperator(ctx sdk.Context, operator types.Operator) error {
 	store := ctx.KVStore(k.storeKey)
 	store.Set(types.OperatorStoreKey(operator.ID), k.cdc.MustMarshal(&operator))
 	return k.operatorAddressSet.Set(ctx, operator.Address)
-	// return nil
 }
 
 // StartOperatorInactivation starts the inactivation process for the operator with the given ID
 func (k *Keeper) StartOperatorInactivation(ctx sdk.Context, operator types.Operator) error {
+	// Make sure the operator is not already inactive or inactivating
+	if operator.Status == types.OPERATOR_STATUS_INACTIVATING || operator.Status == types.OPERATOR_STATUS_INACTIVE {
+		return types.ErrOperatorNotActive
+	}
+
 	// Update the operator status
 	operator.Status = types.OPERATOR_STATUS_INACTIVATING
 	if err := k.SaveOperator(ctx, operator); err != nil {
@@ -150,7 +154,7 @@ func (k *Keeper) GetOperatorParams(ctx sdk.Context, operatorID uint32) (types.Op
 	return params, nil
 }
 
-// Deletes the operator params associated to the operator with the provided ID.
+// DeleteOperatorParams the operator params associated to the operator with the provided ID.
 // If we don't have params associated to the provided operator ID no action will be performed.
 func (k *Keeper) DeleteOperatorParams(ctx sdk.Context, operatorID uint32) error {
 	return k.operatorParams.Remove(ctx, operatorID)

@@ -217,7 +217,7 @@ func (suite *KeeperTestSuite) TestQueryServer_Params() {
 				tc.store(ctx)
 			}
 
-			res, err := suite.k.Params(sdk.WrapSDKContext(ctx), tc.request)
+			res, err := suite.k.Params(ctx, tc.request)
 			suite.Require().NoError(err)
 			suite.Require().Equal(tc.expParams, res.Params)
 		})

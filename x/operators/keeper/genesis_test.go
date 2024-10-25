@@ -98,7 +98,8 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				err := suite.k.RegisterOperator(ctx, activeValidator)
 				suite.Require().NoError(err)
 
-				suite.k.StartOperatorInactivation(ctx, activeValidator)
+				err = suite.k.StartOperatorInactivation(ctx, activeValidator)
+				suite.Require().NoError(err)
 
 				err = suite.k.RegisterOperator(ctx, types.NewOperator(
 					2,

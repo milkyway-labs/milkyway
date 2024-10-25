@@ -133,7 +133,7 @@ func (suite *KeeperTestSuite) TestMsgServer_RegisterOperator() {
 			}
 
 			msgServer := keeper.NewMsgServer(suite.k)
-			res, err := msgServer.RegisterOperator(sdk.WrapSDKContext(ctx), tc.msg)
+			res, err := msgServer.RegisterOperator(ctx, tc.msg)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -177,7 +177,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperator() {
 		{
 			name: "non admin sender returns error",
 			store: func(ctx sdk.Context) {
-				suite.k.SaveOperator(ctx, types.NewOperator(
+				err := suite.k.SaveOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -185,6 +185,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperator() {
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				))
+				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgUpdateOperator(
 				1,
@@ -198,7 +199,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperator() {
 		{
 			name: "invalid operator returns error",
 			store: func(ctx sdk.Context) {
-				suite.k.SaveOperator(ctx, types.NewOperator(
+				err := suite.k.SaveOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -206,6 +207,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperator() {
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				))
+				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgUpdateOperator(
 				1,
@@ -219,7 +221,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperator() {
 		{
 			name: "operator updated successfully",
 			store: func(ctx sdk.Context) {
-				suite.k.SaveOperator(ctx, types.NewOperator(
+				err := suite.k.SaveOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -227,6 +229,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperator() {
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				))
+				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgUpdateOperator(
 				1,
@@ -274,7 +277,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperator() {
 			}
 
 			msgServer := keeper.NewMsgServer(suite.k)
-			res, err := msgServer.UpdateOperator(sdk.WrapSDKContext(ctx), tc.msg)
+			res, err := msgServer.UpdateOperator(ctx, tc.msg)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -315,7 +318,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 		{
 			name: "non admin sender returns error",
 			store: func(ctx sdk.Context) {
-				suite.k.SaveOperator(ctx, types.NewOperator(
+				err := suite.k.SaveOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -323,6 +326,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 					"https://milkyway.com/picture",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
+				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgDeactivateOperator(
 				1,
@@ -333,7 +337,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 		{
 			name: "already inactivating operator returns error",
 			store: func(ctx sdk.Context) {
-				suite.k.SaveOperator(ctx, types.NewOperator(
+				err := suite.k.SaveOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_INACTIVATING,
 					"MilkyWay Operator",
@@ -341,6 +345,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				))
+				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgDeactivateOperator(
 				1,
@@ -351,7 +356,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 		{
 			name: "already inactive operator returns error",
 			store: func(ctx sdk.Context) {
-				suite.k.SaveOperator(ctx, types.NewOperator(
+				err := suite.k.SaveOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_INACTIVE,
 					"MilkyWay Operator",
@@ -359,6 +364,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				))
+				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgDeactivateOperator(
 				1,
@@ -376,7 +382,8 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),
 					6*time.Hour,
 				))
-				suite.k.SaveOperator(ctx, types.NewOperator(
+
+				err := suite.k.SaveOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -384,6 +391,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				))
+				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgDeactivateOperator(
 				1,
@@ -436,7 +444,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 			}
 
 			msgServer := keeper.NewMsgServer(suite.k)
-			res, err := msgServer.DeactivateOperator(sdk.WrapSDKContext(ctx), tc.msg)
+			res, err := msgServer.DeactivateOperator(ctx, tc.msg)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -478,7 +486,7 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferOperatorOwnership() {
 		{
 			name: "non admin sender returns error",
 			store: func(ctx sdk.Context) {
-				suite.k.SaveOperator(ctx, types.NewOperator(
+				err := suite.k.SaveOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -486,6 +494,7 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferOperatorOwnership() {
 					"https://milkyway.com/picture",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
+				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgTransferOperatorOwnership(
 				1,
@@ -497,7 +506,7 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferOperatorOwnership() {
 		{
 			name: "operator ownership transferred successfully",
 			store: func(ctx sdk.Context) {
-				suite.k.SaveOperator(ctx, types.NewOperator(
+				err := suite.k.SaveOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -505,6 +514,7 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferOperatorOwnership() {
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				))
+				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgTransferOperatorOwnership(
 				1,
@@ -551,7 +561,7 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferOperatorOwnership() {
 			}
 
 			msgServer := keeper.NewMsgServer(suite.k)
-			res, err := msgServer.TransferOperatorOwnership(sdk.WrapSDKContext(ctx), tc.msg)
+			res, err := msgServer.TransferOperatorOwnership(ctx, tc.msg)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -722,7 +732,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateParams() {
 			}
 
 			msgServer := keeper.NewMsgServer(suite.k)
-			res, err := msgServer.UpdateParams(sdk.WrapSDKContext(ctx), tc.msg)
+			res, err := msgServer.UpdateParams(ctx, tc.msg)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {

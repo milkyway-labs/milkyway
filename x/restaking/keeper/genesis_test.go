@@ -21,25 +21,25 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			store: func(ctx sdk.Context) {
 				suite.k.SetParams(ctx, types.DefaultParams())
 
-				err := suite.k.SaveOperatorJoinedServices(ctx, 1,
-					types.NewOperatorJoinedServices([]uint32{1, 2}))
+				err := suite.k.AddServiceToOperator(ctx, 1, 1)
+				suite.Require().NoError(err)
+				err = suite.k.AddServiceToOperator(ctx, 1, 2)
 				suite.Require().NoError(err)
 
-				err = suite.k.SaveOperatorJoinedServices(ctx, 2,
-					types.NewOperatorJoinedServices([]uint32{3, 4}))
+				err = suite.k.AddServiceToOperator(ctx, 2, 3)
+				suite.Require().NoError(err)
+				err = suite.k.AddServiceToOperator(ctx, 2, 4)
 				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				Params: types.DefaultParams(),
 				OperatorsJoinedServices: []types.OperatorJoinedServicesRecord{
-					types.NewOperatorJoinedServicesRecord(1,
-						types.NewOperatorJoinedServices(
-							[]uint32{1, 2},
-						)),
-					types.NewOperatorJoinedServicesRecord(2,
-						types.NewOperatorJoinedServices(
-							[]uint32{3, 4},
-						)),
+					types.NewOperatorJoinedServicesRecord(1, types.NewOperatorJoinedServices(
+						[]uint32{1, 2},
+					)),
+					types.NewOperatorJoinedServicesRecord(2, types.NewOperatorJoinedServices(
+						[]uint32{3, 4},
+					)),
 				},
 			},
 		},
