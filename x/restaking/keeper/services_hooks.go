@@ -18,7 +18,7 @@ func (k *Keeper) ServicesHooks() servicestypes.ServicesHooks {
 // ------------------------------------------------------------------------------
 
 // AfterServiceDeactivated implements types.ServicesHooks.
-func (h *ServicesHooks) AfterServiceDeactivated(ctx sdk.Context, serviceID uint32) error {
+func (h *ServicesHooks) AfterServiceDeleted(ctx sdk.Context, serviceID uint32) error {
 	// After the service has been deactivated
 	// we remove the data that we keep in the x/restaking
 	// associated to this service.
@@ -83,6 +83,11 @@ func (h *ServicesHooks) AfterServiceDeactivated(ctx sdk.Context, serviceID uint3
 		}
 	}
 
+	return nil
+}
+
+// AfterServiceDeactivated implements types.ServicesHooks.
+func (h *ServicesHooks) AfterServiceDeactivated(ctx sdk.Context, serviceID uint32) error {
 	return nil
 }
 

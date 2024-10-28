@@ -4,7 +4,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func (suite *KeeperTestSuite) TestServicesHooks_AfterServiceDeactivated() {
+func (suite *KeeperTestSuite) TestServicesHooks_AfterServiceDeleted() {
 	testCases := []struct {
 		name      string
 		store     func(ctx sdk.Context)
@@ -88,7 +88,7 @@ func (suite *KeeperTestSuite) TestServicesHooks_AfterServiceDeactivated() {
 			}
 
 			hooks := suite.k.ServicesHooks()
-			err := hooks.AfterServiceDeactivated(ctx, tc.serviceID)
+			err := hooks.AfterServiceDeleted(ctx, tc.serviceID)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
