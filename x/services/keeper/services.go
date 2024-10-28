@@ -35,6 +35,13 @@ func (k *Keeper) SaveService(ctx sdk.Context, service types.Service) error {
 	return k.serviceAddressSet.Set(ctx, service.Address)
 }
 
+// RemoveService removes the service from the KVStore
+func (k *Keeper) RemoveService(ctx sdk.Context, service types.Service) error {
+	store := ctx.KVStore(k.storeKey)
+	store.Delete(types.ServiceStoreKey(service.ID))
+	return k.serviceAddressSet.Remove(ctx, service.Address)
+}
+
 // CreateService creates a new Service and stores it in the KVStore
 func (k *Keeper) CreateService(ctx sdk.Context, service types.Service) error {
 	// Charge for the creation
@@ -111,6 +118,27 @@ func (k *Keeper) DeactivateService(ctx sdk.Context, serviceID uint32) error {
 
 	// Call the hook
 	return k.AfterServiceDeactivated(ctx, service.ID)
+}
+
+// DeactivateService deactivates the service with the given ID
+func (k *Keeper) DeleteService(ctx sdk.Context, serviceID uint32) error {
+	service, existed := k.GetService(ctx, serviceID)
+	if !existed {
+		return types.ErrServiceNotFound
+	}
+
+	// Make sure the service is inactive
+	if service.Status != types.SERVICE_STATUS_INACTIVE {
+		return types.ErrServiceNotActive
+	}
+
+	// Remove the service the service
+	if err := k.RemoveService(ctx, service); err != nil {
+		return err
+	}
+
+	// Call the hook
+	return k.AfterServiceDeleted(ctx, service.ID)
 }
 
 // GetService returns an Service from the KVStore

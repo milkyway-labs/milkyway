@@ -160,3 +160,8 @@ func (m mockHooks) AfterServiceDeactivated(_ sdk.Context, _ uint32) error {
 	m.CalledMap["AfterServiceDeactivated"] = true
 	return nil
 }
+
+func (m mockHooks) AfterServiceDeleted(_ sdk.Context, _ uint32) error {
+	m.CalledMap["AfterServiceDeleted"] = true
+	return nil
+}

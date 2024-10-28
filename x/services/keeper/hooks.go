@@ -32,3 +32,11 @@ func (k *Keeper) AfterServiceDeactivated(ctx sdk.Context, serviceID uint32) erro
 	}
 	return nil
 }
+
+// AfterServiceDeleted implements ServicesHooks
+func (k *Keeper) AfterServiceDeleted(ctx sdk.Context, serviceID uint32) error {
+	if k.hooks != nil {
+		return k.hooks.AfterServiceDeleted(ctx, serviceID)
+	}
+	return nil
+}

@@ -99,6 +99,15 @@ Only the fields that you provide will be updated`,
 					},
 				},
 				{
+					RpcMethod: "DeleteService",
+					Use:       "delete [id]",
+					Short:     "Delete a deactivated service",
+					Example:   fmt.Sprintf(`%s tx %s delete 1 --from alice`, version.AppName, types.ModuleName),
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "service_id"},
+					},
+				},
+				{
 					RpcMethod: "TransferServiceOwnership",
 					Use:       "transfer-ownership [id] [new-admin]",
 					Short:     "transfer the ownership of a service",

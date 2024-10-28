@@ -174,6 +174,37 @@ func (k msgServer) DeactivateService(goCtx context.Context, msg *types.MsgDeacti
 	return &types.MsgDeactivateServiceResponse{}, nil
 }
 
+func (k msgServer) DeleteService(goCtx context.Context, msg *types.MsgDeleteService) (*types.MsgDeleteServiceResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Check if the service exists
+	service, found := k.GetService(ctx, msg.ServiceID)
+	if !found {
+		return nil, errors.Wrapf(types.ErrServiceNotFound, "service with id %d not found", msg.ServiceID)
+	}
+
+	// Make sure the user that is deactivating the service is the admin
+	if service.Admin != msg.Sender {
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can delete the service")
+	}
+
+	// Delete the service from the store
+	err := k.Keeper.DeleteService(ctx, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+
+	// Emit the event
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeDeleteService,
+			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
+		),
+	})
+
+	return &types.MsgDeleteServiceResponse{}, nil
+}
+
 // TransferServiceOwnership defines the rpc method for Msg/TransferServiceOwnership
 func (k msgServer) TransferServiceOwnership(goCtx context.Context, msg *types.MsgTransferServiceOwnership) (*types.MsgTransferServiceOwnershipResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)

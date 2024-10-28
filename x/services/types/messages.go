@@ -243,3 +243,26 @@ func (msg *MsgUpdateParams) GetSigners() []sdk.AccAddress {
 	addr, _ := sdk.AccAddressFromBech32(msg.Authority)
 	return []sdk.AccAddress{addr}
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewMsgDeleteService creates a new MsgDeleteService instance.
+func NewMsgDeleteService(serviceID uint32, sender string) *MsgDeleteService {
+	return &MsgDeleteService{
+		ServiceID: serviceID,
+		Sender:    sender,
+	}
+}
+
+func (msg *MsgDeleteService) ValidateBasic() error {
+	if msg.ServiceID == 0 {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid service id: %d", msg.ServiceID)
+	}
+
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address")
+	}
+
+	return nil
+}
