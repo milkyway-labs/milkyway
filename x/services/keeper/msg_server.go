@@ -183,7 +183,7 @@ func (k msgServer) DeleteService(goCtx context.Context, msg *types.MsgDeleteServ
 		return nil, errors.Wrapf(types.ErrServiceNotFound, "service with id %d not found", msg.ServiceID)
 	}
 
-	// Make sure the user that is deactivating the service is the admin
+	// Make sure the user that is deleting the service is the admin
 	if service.Admin != msg.Sender {
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can delete the service")
 	}

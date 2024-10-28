@@ -151,7 +151,7 @@ func (k msgServer) DeleteOperator(goCtx context.Context, msg *types.MsgDeleteOpe
 		return nil, types.ErrOperatorNotFound
 	}
 
-	// Make sure only the admin can deactivate the operator
+	// Make sure only the admin can delete the operator
 	if operator.Admin != msg.Sender {
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can deactivate the operator")
 	}

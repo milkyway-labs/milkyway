@@ -132,7 +132,7 @@ func (k *Keeper) DeleteService(ctx sdk.Context, serviceID uint32) error {
 		return types.ErrServiceNotActive
 	}
 
-	// Remove the service the service
+	// Remove the service from the store
 	if err := k.RemoveService(ctx, service); err != nil {
 		return err
 	}

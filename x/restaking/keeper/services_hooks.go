@@ -19,7 +19,7 @@ func (k *Keeper) ServicesHooks() servicestypes.ServicesHooks {
 
 // AfterServiceDeactivated implements types.ServicesHooks.
 func (h *ServicesHooks) AfterServiceDeleted(ctx sdk.Context, serviceID uint32) error {
-	// After the service has been deactivated
+	// After the service has been deleted
 	// we remove the data that we keep in the x/restaking
 	// associated to this service.
 
