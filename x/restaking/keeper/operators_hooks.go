@@ -19,8 +19,8 @@ func (k *Keeper) OperatorsHooks() operatorstypes.OperatorsHooks {
 
 // ------------------------------------------------------------------------------
 
-// AfterOperatorInactivatingCompleted implements types.OperatorsHooks.
-func (o *OperatorsHooks) AfterOperatorInactivatingCompleted(ctx sdk.Context, operatorID uint32) error {
+// AfterOperatorDeleted implements types.OperatorsHooks.
+func (o *OperatorsHooks) AfterOperatorDeleted(ctx sdk.Context, operatorID uint32) error {
 	// After the operator has completed its inactivation
 	// we remove the data that we keep in the x/restaking module that are linked
 	// to the operator.
@@ -42,6 +42,11 @@ func (o *OperatorsHooks) AfterOperatorInactivatingCompleted(ctx sdk.Context, ope
 			return err
 		}
 	}
+	return nil
+}
+
+// AfterOperatorInactivatingCompleted implements types.OperatorsHooks.
+func (o *OperatorsHooks) AfterOperatorInactivatingCompleted(ctx sdk.Context, operatorID uint32) error {
 	return nil
 }
 

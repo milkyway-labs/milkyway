@@ -57,7 +57,7 @@ func (suite *KeeperTestSuite) TestOperatorHooks_AfterOperatorInactivatingComplet
 			}
 
 			hooks := suite.k.OperatorsHooks()
-			err := hooks.AfterOperatorInactivatingCompleted(ctx, tc.operatorID)
+			err := hooks.AfterOperatorDeleted(ctx, tc.operatorID)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
