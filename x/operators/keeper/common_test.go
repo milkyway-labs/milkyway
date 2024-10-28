@@ -157,3 +157,8 @@ func (m mockHooks) AfterOperatorInactivatingCompleted(ctx sdk.Context, operatorI
 	m.CalledMap["AfterOperatorInactivatingCompleted"] = true
 	return nil
 }
+
+func (m mockHooks) AfterOperatorDeleted(ctx sdk.Context, operatorID uint32) error {
+	m.CalledMap["AfterOperatorDeleted"] = true
+	return nil
+}

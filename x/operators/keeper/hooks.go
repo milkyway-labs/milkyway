@@ -31,3 +31,11 @@ func (k *Keeper) AfterOperatorInactivatingCompleted(ctx sdk.Context, operatorID 
 	}
 	return nil
 }
+
+// AfterOperatorDeleted implements OperatorsHooks
+func (k *Keeper) AfterOperatorDeleted(ctx sdk.Context, operatorID uint32) error {
+	if k.hooks != nil {
+		return k.hooks.AfterOperatorDeleted(ctx, operatorID)
+	}
+	return nil
+}

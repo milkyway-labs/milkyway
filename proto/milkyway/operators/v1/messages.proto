@@ -30,6 +30,9 @@ service Msg {
   rpc DeactivateOperator(MsgDeactivateOperator)
       returns (MsgDeactivateOperatorResponse);
 
+  // DeleteOperator defines the operation for deleting a deactivated operator.
+  rpc DeleteOperator(MsgDeleteOperator) returns (MsgDeleteOperatorResponse);
+
   // TransferOperatorOwnership defines the operation for transferring the
   // ownership of an operator to another account.
   rpc TransferOperatorOwnership(MsgTransferOperatorOwnership)
@@ -127,6 +130,23 @@ message MsgDeactivateOperator {
 
 // MsgDeactivateOperatorResponse is the return value of MsgDeactivateOperator.
 message MsgDeactivateOperatorResponse {}
+
+// MsgDeleteOperator defines the message structure for the
+// DeleteOperator gRPC service method. It allows the operator owner to
+// delete a deactivated operator.
+message MsgDeleteOperator {
+  option (cosmos.msg.v1.signer) = "sender";
+  option (amino.name) = "milkyway/MsgDeleteOperator";
+
+  // Sender is the address of the user deleting the operator
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // OperatorID represents the ID of the operator to be deleted
+  uint32 operator_id = 2 [ (gogoproto.customname) = "OperatorID" ];
+}
+
+// MsgDeleteOperatorResponse is the return value of MsgDeleteOperator.
+message MsgDeleteOperatorResponse {}
 
 // MsgSetOperatorParams defines the message structure for the
 // SetOperatorParams gRPC service method. It allows the operator admin to

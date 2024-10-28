@@ -85,6 +85,13 @@ func (k *Keeper) SaveOperator(ctx sdk.Context, operator types.Operator) error {
 	return k.operatorAddressSet.Set(ctx, operator.Address)
 }
 
+// RemoveOperator removes the operator from the KVStore
+func (k *Keeper) RemoveOperator(ctx sdk.Context, operator types.Operator) error {
+	store := ctx.KVStore(k.storeKey)
+	store.Delete(types.OperatorStoreKey(operator.ID))
+	return k.operatorAddressSet.Remove(ctx, operator.Address)
+}
+
 // StartOperatorInactivation starts the inactivation process for the operator with the given ID
 func (k *Keeper) StartOperatorInactivation(ctx sdk.Context, operator types.Operator) error {
 	// Make sure the operator is not already inactive or inactivating
@@ -103,6 +110,22 @@ func (k *Keeper) StartOperatorInactivation(ctx sdk.Context, operator types.Opera
 
 	// Call the hook
 	return k.AfterOperatorInactivatingStarted(ctx, operator.ID)
+}
+
+// DeleteOperator deletes the operator with the given ID
+func (k *Keeper) DeleteOperator(ctx sdk.Context, operator types.Operator) error {
+	// Make sure the operator is inactive
+	if operator.Status != types.OPERATOR_STATUS_INACTIVE {
+		return types.ErrOperatorNotInactive
+	}
+
+	// Removes the operator
+	if err := k.RemoveOperator(ctx, operator); err != nil {
+		return err
+	}
+
+	// Call the hook
+	return k.AfterOperatorDeleted(ctx, operator.ID)
 }
 
 // CompleteOperatorInactivation completes the inactivation process for the operator with the given ID
