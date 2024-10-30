@@ -3,7 +3,7 @@ package move
 var (
 	VMStorePrefix = []byte{0x21} // prefix for vm
 
-	ResourceSeparator = byte(2)
+	ResourceSeparator = byte(1)
 )
 
 // GetResourceKey returns the store key of the Move resource
