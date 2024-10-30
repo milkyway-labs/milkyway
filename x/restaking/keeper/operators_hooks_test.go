@@ -2,9 +2,11 @@ package keeper_test
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-func (suite *KeeperTestSuite) TestOperatorHooks_AfterOperatorInactivatingCompleted() {
+func (suite *KeeperTestSuite) TestOperatorHooks_AfterOperatorDeleted() {
 	testCases := []struct {
 		name       string
 		store      func(ctx sdk.Context)
@@ -41,6 +43,129 @@ func (suite *KeeperTestSuite) TestOperatorHooks_AfterOperatorInactivatingComplet
 				joined, err = suite.k.HasOperatorJoinedService(ctx, 2, 2)
 				suite.Assert().NoError(err)
 				suite.Assert().True(joined)
+			},
+			operatorID: 1,
+			shouldErr:  false,
+		},
+		{
+			name: "service is deactivated once last operator is removed from allow list",
+			store: func(ctx sdk.Context) {
+				err := suite.sk.SaveService(ctx, servicestypes.NewService(
+					1,
+					servicestypes.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+				suite.Require().NoError(err)
+
+				// Add the operator to the service allow list
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
+				suite.Require().NoError(err)
+			},
+			check: func(ctx sdk.Context) {
+				joined, err := suite.k.HasOperatorJoinedService(ctx, 1, 1)
+				suite.Assert().NoError(err)
+				suite.Assert().False(joined)
+				// Ensure that the service is now inactive
+				service, found := suite.sk.GetService(ctx, 1)
+				suite.Require().True(found)
+				suite.Require().Equal(servicestypes.SERVICE_STATUS_INACTIVE, service.Status)
+			},
+			operatorID: 1,
+			shouldErr:  false,
+		},
+		{
+			name: "service is not deactivated if an operator is still present in its allow list",
+			store: func(ctx sdk.Context) {
+				err := suite.sk.SaveService(ctx, servicestypes.NewService(
+					1,
+					servicestypes.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+				suite.Require().NoError(err)
+
+				// Add the operator to the service allow list
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
+				suite.Require().NoError(err)
+				// Add a second operator to service the allow list
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 1, 2)
+				suite.Require().NoError(err)
+			},
+			check: func(ctx sdk.Context) {
+				joined, err := suite.k.HasOperatorJoinedService(ctx, 1, 1)
+				suite.Assert().NoError(err)
+				suite.Assert().False(joined)
+				// Ensure that the service is now inactive
+				service, found := suite.sk.GetService(ctx, 1)
+				suite.Require().True(found)
+				suite.Require().Equal(servicestypes.SERVICE_STATUS_ACTIVE, service.Status)
+			},
+			operatorID: 1,
+			shouldErr:  false,
+		},
+		{
+			name: "service status don't change when removing last operator if service status is created",
+			store: func(ctx sdk.Context) {
+				err := suite.sk.SaveService(ctx, servicestypes.NewService(
+					1,
+					servicestypes.SERVICE_STATUS_CREATED,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+				suite.Require().NoError(err)
+
+				// Add the operator to the service allow list
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
+				suite.Require().NoError(err)
+			},
+			check: func(ctx sdk.Context) {
+				joined, err := suite.k.HasOperatorJoinedService(ctx, 1, 1)
+				suite.Assert().NoError(err)
+				suite.Assert().False(joined)
+				// Ensure the service status has not changed
+				service, found := suite.sk.GetService(ctx, 1)
+				suite.Require().True(found)
+				suite.Require().Equal(servicestypes.SERVICE_STATUS_CREATED, service.Status)
+			},
+			operatorID: 1,
+			shouldErr:  false,
+		},
+		{
+			name: "service status don't change when removing last operator if service status is inactive",
+			store: func(ctx sdk.Context) {
+				err := suite.sk.SaveService(ctx, servicestypes.NewService(
+					1,
+					servicestypes.SERVICE_STATUS_INACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+				suite.Require().NoError(err)
+
+				// Add the operator to the service allow list
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
+				suite.Require().NoError(err)
+			},
+			check: func(ctx sdk.Context) {
+				joined, err := suite.k.HasOperatorJoinedService(ctx, 1, 1)
+				suite.Assert().NoError(err)
+				suite.Assert().False(joined)
+				// Ensure the service status has not changed
+				service, found := suite.sk.GetService(ctx, 1)
+				suite.Require().True(found)
+				suite.Require().Equal(servicestypes.SERVICE_STATUS_INACTIVE, service.Status)
 			},
 			operatorID: 1,
 			shouldErr:  false,
