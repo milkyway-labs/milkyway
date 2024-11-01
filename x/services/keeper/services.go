@@ -35,13 +35,6 @@ func (k *Keeper) SaveService(ctx sdk.Context, service types.Service) error {
 	return k.serviceAddressSet.Set(ctx, service.Address)
 }
 
-// RemoveService removes the service from the KVStore
-func (k *Keeper) RemoveService(ctx sdk.Context, service types.Service) error {
-	store := ctx.KVStore(k.storeKey)
-	store.Delete(types.ServiceStoreKey(service.ID))
-	return k.serviceAddressSet.Remove(ctx, service.Address)
-}
-
 // CreateService creates a new Service and stores it in the KVStore
 func (k *Keeper) CreateService(ctx sdk.Context, service types.Service) error {
 	// Charge for the creation
@@ -133,7 +126,10 @@ func (k *Keeper) DeleteService(ctx sdk.Context, serviceID uint32) error {
 	}
 
 	// Remove the service from the store
-	if err := k.RemoveService(ctx, service); err != nil {
+	store := ctx.KVStore(k.storeKey)
+	store.Delete(types.ServiceStoreKey(service.ID))
+	err := k.serviceAddressSet.Remove(ctx, service.Address)
+	if err != nil {
 		return err
 	}
 
