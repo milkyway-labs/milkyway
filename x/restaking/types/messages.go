@@ -64,9 +64,9 @@ func (msg *MsgLeaveService) ValidateBasic() error {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// NewMsgAllowOperator creates a new MsgAllowOperator instance
-func NewMsgAllowOperator(serviceID uint32, operatorID uint32, sender string) *MsgAllowOperator {
-	return &MsgAllowOperator{
+// NewMsgAddOperatorToAllowList creates a new MsgAddOperatorToAllowList instance
+func NewMsgAddOperatorToAllowList(serviceID uint32, operatorID uint32, sender string) *MsgAddOperatorToAllowList {
+	return &MsgAddOperatorToAllowList{
 		ServiceID:  serviceID,
 		OperatorID: operatorID,
 		Sender:     sender,
@@ -74,7 +74,7 @@ func NewMsgAllowOperator(serviceID uint32, operatorID uint32, sender string) *Ms
 }
 
 // ValidateBasic implements sdk.Msg
-func (msg *MsgAllowOperator) ValidateBasic() error {
+func (msg *MsgAddOperatorToAllowList) ValidateBasic() error {
 	if msg.ServiceID == 0 {
 		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid service ID: %d", msg.ServiceID)
 	}
@@ -93,9 +93,9 @@ func (msg *MsgAllowOperator) ValidateBasic() error {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// NewMsgRemoveAllowedOperator creates a new MsgRemoveAllowedOperator instance
-func NewMsgRemoveAllowedOperator(serviceID uint32, operatorID uint32, sender string) *MsgRemoveAllowedOperator {
-	return &MsgRemoveAllowedOperator{
+// NewMsgRemoveOperatorFromAllowList creates a new MsgRemoveOperatorFromAllowlist instance
+func NewMsgRemoveOperatorFromAllowList(serviceID uint32, operatorID uint32, sender string) *MsgRemoveOperatorFromAllowlist {
+	return &MsgRemoveOperatorFromAllowlist{
 		ServiceID:  serviceID,
 		OperatorID: operatorID,
 		Sender:     sender,
@@ -103,7 +103,7 @@ func NewMsgRemoveAllowedOperator(serviceID uint32, operatorID uint32, sender str
 }
 
 // ValidateBasic implements sdk.Msg
-func (msg *MsgRemoveAllowedOperator) ValidateBasic() error {
+func (msg *MsgRemoveOperatorFromAllowlist) ValidateBasic() error {
 	if msg.ServiceID == 0 {
 		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid service ID: %d", msg.ServiceID)
 	}

@@ -12,8 +12,8 @@ import (
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgJoinService{}, "milkyway/MsgJoinService")
 	legacy.RegisterAminoMsg(cdc, &MsgLeaveService{}, "milkyway/MsgLeaveService")
-	legacy.RegisterAminoMsg(cdc, &MsgAllowOperator{}, "milkyway/MsgAllowOperator")
-	legacy.RegisterAminoMsg(cdc, &MsgRemoveAllowedOperator{}, "milkyway/MsgRemoveAllowedOperator")
+	legacy.RegisterAminoMsg(cdc, &MsgAddOperatorToAllowList{}, "milkyway/MsgAddOperatorToAllowList")
+	legacy.RegisterAminoMsg(cdc, &MsgRemoveOperatorFromAllowlist{}, "milkyway/MsgRemoveOperatorFromAllowlist")
 	legacy.RegisterAminoMsg(cdc, &MsgBorrowPoolSecurity{}, "milkyway/MsgBorrowPoolSecurity")
 	legacy.RegisterAminoMsg(cdc, &MsgCeasePoolSecurityBorrow{}, "milkyway/MsgCeasePoolSecurityBorrow")
 	legacy.RegisterAminoMsg(cdc, &MsgDelegateService{}, "milkyway/MsgDelegateService")
@@ -30,8 +30,8 @@ func RegisterInterfaces(registry types.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgJoinService{},
 		&MsgLeaveService{},
-		&MsgAllowOperator{},
-		&MsgRemoveAllowedOperator{},
+		&MsgAddOperatorToAllowList{},
+		&MsgRemoveOperatorFromAllowlist{},
 		&MsgBorrowPoolSecurity{},
 		&MsgCeasePoolSecurityBorrow{},
 		&MsgDelegatePool{},
