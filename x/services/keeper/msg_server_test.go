@@ -596,26 +596,6 @@ func (suite *KeeperTestSuite) TestMsgServer_DeleteService() {
 			shouldErr: true,
 		},
 		{
-			name: "created service can't be deleted",
-			store: func(ctx sdk.Context) {
-				err := suite.k.SaveService(ctx, types.NewService(
-					1,
-					types.SERVICE_STATUS_CREATED,
-					"MilkyWay",
-					"MilkyWay is a restaking platform",
-					"https://milkyway.com",
-					"https://milkyway.com/logo.png",
-					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				))
-				suite.Require().NoError(err)
-			},
-			msg: types.NewMsgDeleteService(
-				1,
-				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-			),
-			shouldErr: true,
-		},
-		{
 			name: "active service can't be deleted",
 			store: func(ctx sdk.Context) {
 				err := suite.k.SaveService(ctx, types.NewService(
@@ -634,6 +614,37 @@ func (suite *KeeperTestSuite) TestMsgServer_DeleteService() {
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 			),
 			shouldErr: true,
+		},
+		{
+			name: "created service can be deleted",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SaveService(ctx, types.NewService(
+					1,
+					types.SERVICE_STATUS_CREATED,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgDeleteService(
+				1,
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr: false,
+			expEvents: sdk.Events{
+				sdk.NewEvent(
+					types.EventTypeDeleteService,
+					sdk.NewAttribute(types.AttributeKeyServiceID, "1"),
+				),
+			},
+			check: func(ctx sdk.Context) {
+				// Make sure the service was removed
+				_, found := suite.k.GetService(ctx, 1)
+				suite.Require().False(found)
+			},
 		},
 		{
 			name: "inactive service is deleted properly",

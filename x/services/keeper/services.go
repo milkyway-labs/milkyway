@@ -120,9 +120,9 @@ func (k *Keeper) DeleteService(ctx sdk.Context, serviceID uint32) error {
 		return types.ErrServiceNotFound
 	}
 
-	// Make sure the service is inactive
-	if service.Status != types.SERVICE_STATUS_INACTIVE {
-		return types.ErrServiceNotActive
+	// Make sure the service is not active
+	if service.Status == types.SERVICE_STATUS_ACTIVE {
+		return types.ErrServiceIsActive
 	}
 
 	// Remove the service from the store

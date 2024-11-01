@@ -11,5 +11,5 @@ var (
 	ErrInsufficientShares   = errors.Register(ModuleName, 2, "insufficient delegation shares")
 	ErrServiceAlreadyActive = errors.Register(ModuleName, 3, "service is already active")
 	ErrServiceNotActive     = errors.Register(ModuleName, 4, "service is not active")
-	ErrServiceNotInactive   = errors.Register(ModuleName, 5, "service is not inactive")
+	ErrServiceIsActive      = errors.Register(ModuleName, 5, "service is active")
 )
