@@ -13,7 +13,7 @@ func (suite *KeeperTestSuite) TestServicesHooks_AfterServiceDeleted() {
 		shouldErr bool
 	}{
 		{
-			name: "service participation is removed",
+			name: "operator participation is removed",
 			store: func(ctx sdk.Context) {
 				err := suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 1)
 				suite.Require().NoError(err)
