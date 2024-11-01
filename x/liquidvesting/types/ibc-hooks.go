@@ -21,9 +21,19 @@ func (i *InsuranceDeposit) ValidateBasic() error {
 	return i.Amount.Validate()
 }
 
-// IsZero returns true if the amount in the InsuranceDeposit is zero
+// IsZero returns true if the amount is zero and false otherwise.
 func (i *InsuranceDeposit) IsZero() bool {
 	return i.Amount.IsZero()
+}
+
+// IsPositive returns true if the amount is positive and false otherwise.
+func (i *InsuranceDeposit) IsPositive() bool {
+	return i.Amount.IsPositive()
+}
+
+// IsNegative returns true if the amount is negative and false otherwise.
+func (i *InsuranceDeposit) IsNegative() bool {
+	return i.Amount.IsNegative()
 }
 
 // MsgDepositInsurance defines a struct for depositing tokens
