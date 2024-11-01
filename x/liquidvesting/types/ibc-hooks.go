@@ -14,11 +14,16 @@ type InsuranceDeposit struct {
 	Amount sdk.Coin `json:"amount"`
 }
 
-func (i InsuranceDeposit) ValidateBasic() error {
+func (i *InsuranceDeposit) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(i.Depositor); err != nil {
 		return fmt.Errorf("invalid depositor address: %s", err)
 	}
 	return i.Amount.Validate()
+}
+
+// IsZero returns true if the amount in the InsuranceDeposit is zero
+func (i *InsuranceDeposit) IsZero() bool {
+	return i.Amount.IsZero()
 }
 
 // MsgDepositInsurance defines a struct for depositing tokens
@@ -27,7 +32,7 @@ type MsgDepositInsurance struct {
 	Amounts []InsuranceDeposit `json:"amounts"`
 }
 
-func (msg MsgDepositInsurance) ValidateBasic() error {
+func (msg *MsgDepositInsurance) ValidateBasic() error {
 	for i, deposit := range msg.Amounts {
 		// Ensure that the deposits have all the same denom
 		if i > 0 && deposit.Amount.Denom != msg.Amounts[i].Amount.Denom {
@@ -41,7 +46,7 @@ func (msg MsgDepositInsurance) ValidateBasic() error {
 	return nil
 }
 
-func (msg MsgDepositInsurance) GetTotalDepositAmount() (*sdk.Coin, error) {
+func (msg *MsgDepositInsurance) GetTotalDepositAmount() (*sdk.Coin, error) {
 	if len(msg.Amounts) == 0 {
 		return nil, fmt.Errorf("no coins to deposit")
 	}
