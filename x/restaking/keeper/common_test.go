@@ -21,6 +21,7 @@ import (
 	poolskeeper "github.com/milkyway-labs/milkyway/x/pools/keeper"
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	"github.com/milkyway-labs/milkyway/x/restaking/keeper"
+	"github.com/milkyway-labs/milkyway/x/restaking/testutils"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 	serviceskeeper "github.com/milkyway-labs/milkyway/x/services/keeper"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
@@ -138,7 +139,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 		suite.ok,
 		suite.sk,
 		authorityAddr,
-	).SetHooks(newMockHooks())
+	).SetHooks(testutils.NewMockHooks())
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -159,78 +160,3 @@ func (suite *KeeperTestSuite) fundAccount(ctx sdk.Context, address string, amoun
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-
-var _ types.RestakingHooks = &mockHooks{}
-
-type mockHooks struct {
-	CalledMap map[string]bool
-}
-
-func newMockHooks() *mockHooks {
-	return &mockHooks{CalledMap: make(map[string]bool)}
-}
-
-func (m mockHooks) BeforePoolDelegationCreated(sdk.Context, uint32, string) error {
-	m.CalledMap["BeforePoolDelegationCreated"] = true
-	return nil
-}
-
-func (m mockHooks) BeforePoolDelegationSharesModified(sdk.Context, uint32, string) error {
-	m.CalledMap["BeforePoolDelegationSharesModified"] = true
-	return nil
-}
-
-func (m mockHooks) AfterPoolDelegationModified(sdk.Context, uint32, string) error {
-	m.CalledMap["AfterPoolDelegationModified"] = true
-	return nil
-}
-
-func (m mockHooks) BeforeOperatorDelegationCreated(sdk.Context, uint32, string) error {
-	m.CalledMap["BeforeOperatorDelegationCreated"] = true
-	return nil
-}
-
-func (m mockHooks) BeforeOperatorDelegationSharesModified(sdk.Context, uint32, string) error {
-	m.CalledMap["BeforeOperatorDelegationSharesModified"] = true
-	return nil
-}
-
-func (m mockHooks) AfterOperatorDelegationModified(sdk.Context, uint32, string) error {
-	m.CalledMap["AfterOperatorDelegationModified"] = true
-	return nil
-}
-
-func (m mockHooks) BeforeServiceDelegationCreated(sdk.Context, uint32, string) error {
-	m.CalledMap["BeforeServiceDelegationCreated"] = true
-	return nil
-}
-
-func (m mockHooks) BeforeServiceDelegationSharesModified(sdk.Context, uint32, string) error {
-	m.CalledMap["BeforeServiceDelegationSharesModified"] = true
-	return nil
-}
-
-func (m mockHooks) AfterServiceDelegationModified(sdk.Context, uint32, string) error {
-	m.CalledMap["AfterServiceDelegationModified"] = true
-	return nil
-}
-
-func (m mockHooks) BeforePoolDelegationRemoved(ctx sdk.Context, poolID uint32, delegator string) error {
-	m.CalledMap["BeforePoolDelegationRemoved"] = true
-	return nil
-}
-
-func (m mockHooks) BeforeOperatorDelegationRemoved(ctx sdk.Context, operatorID uint32, delegator string) error {
-	m.CalledMap["BeforeOperatorDelegationRemoved"] = true
-	return nil
-}
-
-func (m mockHooks) BeforeServiceDelegationRemoved(ctx sdk.Context, serviceID uint32, delegator string) error {
-	m.CalledMap["BeforeServiceDelegationRemoved"] = true
-	return nil
-}
-
-func (m mockHooks) AfterUnbondingInitiated(ctx sdk.Context, unbondingDelegationID uint64) error {
-	m.CalledMap["AfterUnbondingInitiated"] = true
-	return nil
-}

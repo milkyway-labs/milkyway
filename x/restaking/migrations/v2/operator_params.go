@@ -1,8 +1,6 @@
 package v2
 
 import (
-	"fmt"
-
 	storetypes "cosmossdk.io/store/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -10,7 +8,6 @@ import (
 
 	operatortypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	legacytypes "github.com/milkyway-labs/milkyway/x/restaking/legacy/types"
-	"github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
 // migrateOperatorParams migrates all the operators commissions rates from the
@@ -23,10 +20,7 @@ func migateOperatorParams(
 	operatorsKeeper OperatorsKeeper,
 ) error {
 	store := ctx.KVStore(storeKey)
-	//nolint:staticcheck // SA1004
-	// We disable the deprecated lint error
-	// since we need to use this key to perform the migration
-	iterator := storetypes.KVStorePrefixIterator(store, types.OperatorParamsPrefix)
+	iterator := storetypes.KVStorePrefixIterator(store, legacytypes.OperatorParamsPrefix)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
@@ -34,37 +28,30 @@ func migateOperatorParams(
 		var params legacytypes.LegacyOperatorParams
 		cdc.MustUnmarshal(iterator.Value(), &params)
 
-		//nolint:staticcheck // SA1004
-		// We disable the deprecated lint error
-		// since we need to use this funcrion to perform the migration
 		// Parse the operator id from the iterator key
-		operatorID, err := types.ParseOperatorParamsKey(iterator.Key())
+		operatorID, err := legacytypes.ParseOperatorParamsKey(iterator.Key())
 		if err != nil {
 			return err
 		}
 
 		// Get the operator from the operators keeper
 		_, found := operatorsKeeper.GetOperator(ctx, operatorID)
-		if !found {
-			return fmt.Errorf("operator %d not found", operatorID)
-		}
-
-		// Update the operator params with the params retrieved from the
-		// restaking module
-		err = operatorsKeeper.SaveOperatorParams(ctx, operatorID,
-			operatortypes.NewOperatorParams(params.CommissionRate),
-		)
-		if err != nil {
-			return err
-		}
-
-		// Get the operator's joined services.
-		// Update the operator joined services with the ones retrieved from
-		// the old params structure.
-		for _, serviceID := range params.JoinedServicesIDs {
-			err := restakingKeeper.AddServiceToOperatorJoinedServices(ctx, operatorID, serviceID)
+		if found {
+			// Update the operator params with the params retrieved from the
+			// restaking module
+			err = operatorsKeeper.SaveOperatorParams(ctx, operatorID, operatortypes.NewOperatorParams(params.CommissionRate))
 			if err != nil {
 				return err
+			}
+
+			// Get the operator's joined services.
+			// Update the operator joined services with the ones retrieved from
+			// the old params structure.
+			for _, serviceID := range params.JoinedServicesIDs {
+				err = restakingKeeper.AddServiceToOperatorJoinedServices(ctx, operatorID, serviceID)
+				if err != nil {
+					return err
+				}
 			}
 		}
 
