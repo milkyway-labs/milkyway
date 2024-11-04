@@ -384,11 +384,11 @@ func (suite *KeeperTestSuite) TestMsgServer_LeaveService() {
 	}
 }
 
-func (suite *KeeperTestSuite) TestMsgServer_AllowOperator() {
+func (suite *KeeperTestSuite) TestMsgServer_AddOperatorToAllowList() {
 	testCases := []struct {
 		name      string
 		store     func(ctx sdk.Context)
-		msg       *types.MsgAllowOperator
+		msg       *types.MsgAddOperatorToAllowList
 		shouldErr bool
 		expEvents sdk.Events
 		check     func(ctx sdk.Context)
@@ -405,7 +405,7 @@ func (suite *KeeperTestSuite) TestMsgServer_AllowOperator() {
 				))
 				suite.Require().NoError(err)
 			},
-			msg: types.NewMsgAllowOperator(
+			msg: types.NewMsgAddOperatorToAllowList(
 				1,
 				1,
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -425,7 +425,7 @@ func (suite *KeeperTestSuite) TestMsgServer_AllowOperator() {
 				))
 				suite.Require().NoError(err)
 			},
-			msg: types.NewMsgAllowOperator(
+			msg: types.NewMsgAddOperatorToAllowList(
 				1,
 				1,
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -454,7 +454,7 @@ func (suite *KeeperTestSuite) TestMsgServer_AllowOperator() {
 				))
 				suite.Require().NoError(err)
 			},
-			msg:       types.NewMsgAllowOperator(1, 1, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"),
+			msg:       types.NewMsgAddOperatorToAllowList(1, 1, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"),
 			shouldErr: true,
 		},
 		{
@@ -482,7 +482,7 @@ func (suite *KeeperTestSuite) TestMsgServer_AllowOperator() {
 				err = suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
 				suite.Require().NoError(err)
 			},
-			msg: types.NewMsgAllowOperator(
+			msg: types.NewMsgAddOperatorToAllowList(
 				1,
 				1,
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -511,7 +511,7 @@ func (suite *KeeperTestSuite) TestMsgServer_AllowOperator() {
 				))
 				suite.Require().NoError(err)
 			},
-			msg: types.NewMsgAllowOperator(
+			msg: types.NewMsgAddOperatorToAllowList(
 				1,
 				1,
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -545,7 +545,7 @@ func (suite *KeeperTestSuite) TestMsgServer_AllowOperator() {
 			}
 
 			msgServer := keeper.NewMsgServer(suite.k)
-			_, err := msgServer.AllowOperator(ctx, tc.msg)
+			_, err := msgServer.AddOperatorToAllowList(ctx, tc.msg)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -567,7 +567,7 @@ func (suite *KeeperTestSuite) TestMsgServer_RemoveAllowedOperator() {
 	testCases := []struct {
 		name      string
 		store     func(ctx sdk.Context)
-		msg       *types.MsgRemoveAllowedOperator
+		msg       *types.MsgRemoveOperatorFromAllowlist
 		shouldErr bool
 		expEvents sdk.Events
 		check     func(ctx sdk.Context)
@@ -584,7 +584,7 @@ func (suite *KeeperTestSuite) TestMsgServer_RemoveAllowedOperator() {
 				))
 				suite.Require().NoError(err)
 			},
-			msg: types.NewMsgRemoveAllowedOperator(
+			msg: types.NewMsgRemoveOperatorFromAllowList(
 				1,
 				1,
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -616,7 +616,7 @@ func (suite *KeeperTestSuite) TestMsgServer_RemoveAllowedOperator() {
 				err = suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
 				suite.Require().NoError(err)
 			},
-			msg:       types.NewMsgRemoveAllowedOperator(1, 1, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"),
+			msg:       types.NewMsgRemoveOperatorFromAllowList(1, 1, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"),
 			shouldErr: true,
 		},
 		{
@@ -641,7 +641,7 @@ func (suite *KeeperTestSuite) TestMsgServer_RemoveAllowedOperator() {
 				))
 				suite.Require().NoError(err)
 			},
-			msg: types.NewMsgRemoveAllowedOperator(
+			msg: types.NewMsgRemoveOperatorFromAllowList(
 				1,
 				1,
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -675,7 +675,7 @@ func (suite *KeeperTestSuite) TestMsgServer_RemoveAllowedOperator() {
 				err = suite.k.AddOperatorToServiceAllowList(ctx, 1, 2)
 				suite.Require().NoError(err)
 			},
-			msg:       types.NewMsgRemoveAllowedOperator(1, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+			msg:       types.NewMsgRemoveOperatorFromAllowList(1, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				canValidate, err := suite.k.CanOperatorValidateService(ctx, 1, 1)
@@ -702,7 +702,7 @@ func (suite *KeeperTestSuite) TestMsgServer_RemoveAllowedOperator() {
 			}
 
 			msgServer := keeper.NewMsgServer(suite.k)
-			_, err := msgServer.RemoveAllowedOperator(ctx, tc.msg)
+			_, err := msgServer.RemoveOperatorFromAllowlist(ctx, tc.msg)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {

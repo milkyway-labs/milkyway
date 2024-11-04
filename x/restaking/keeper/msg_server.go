@@ -100,8 +100,8 @@ func (k msgServer) LeaveService(goCtx context.Context, msg *types.MsgLeaveServic
 	return &types.MsgLeaveServiceResponse{}, nil
 }
 
-// AllowOperator defines the rpc method for Msg/AllowOperator
-func (k msgServer) AllowOperator(goCtx context.Context, msg *types.MsgAllowOperator) (*types.MsgAllowOperatorResponse, error) {
+// AddOperatorToAllowList defines the rpc method for Msg/AddOperatorToAllowList
+func (k msgServer) AddOperatorToAllowList(goCtx context.Context, msg *types.MsgAddOperatorToAllowList) (*types.MsgAddOperatorToAllowListResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Ensure that the service exists
@@ -144,11 +144,11 @@ func (k msgServer) AllowOperator(goCtx context.Context, msg *types.MsgAllowOpera
 		),
 	})
 
-	return &types.MsgAllowOperatorResponse{}, nil
+	return &types.MsgAddOperatorToAllowListResponse{}, nil
 }
 
-// RemoveAllowedOperator defines the rpc method for Msg/RemoveAllowedOperator
-func (k msgServer) RemoveAllowedOperator(goCtx context.Context, msg *types.MsgRemoveAllowedOperator) (*types.MsgRemoveAllowedOperatorResponse, error) {
+// RemoveOperatorFromAllowlist defines the rpc method for Msg/RemoveOperatorFromAllowlist
+func (k msgServer) RemoveOperatorFromAllowlist(goCtx context.Context, msg *types.MsgRemoveOperatorFromAllowlist) (*types.MsgRemoveOperatorFromAllowlistResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Ensure that the service exists
@@ -185,7 +185,7 @@ func (k msgServer) RemoveAllowedOperator(goCtx context.Context, msg *types.MsgRe
 		),
 	})
 
-	return &types.MsgRemoveAllowedOperatorResponse{}, nil
+	return &types.MsgRemoveOperatorFromAllowlistResponse{}, nil
 }
 
 // BorrowPoolSecurity defines the rpc method for Msg/BorrowPoolSecurity

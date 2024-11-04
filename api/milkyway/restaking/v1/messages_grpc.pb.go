@@ -19,19 +19,19 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Msg_JoinService_FullMethodName             = "/milkyway.restaking.v1.Msg/JoinService"
-	Msg_LeaveService_FullMethodName            = "/milkyway.restaking.v1.Msg/LeaveService"
-	Msg_AllowOperator_FullMethodName           = "/milkyway.restaking.v1.Msg/AllowOperator"
-	Msg_RemoveAllowedOperator_FullMethodName   = "/milkyway.restaking.v1.Msg/RemoveAllowedOperator"
-	Msg_BorrowPoolSecurity_FullMethodName      = "/milkyway.restaking.v1.Msg/BorrowPoolSecurity"
-	Msg_CeasePoolSecurityBorrow_FullMethodName = "/milkyway.restaking.v1.Msg/CeasePoolSecurityBorrow"
-	Msg_DelegatePool_FullMethodName            = "/milkyway.restaking.v1.Msg/DelegatePool"
-	Msg_DelegateOperator_FullMethodName        = "/milkyway.restaking.v1.Msg/DelegateOperator"
-	Msg_DelegateService_FullMethodName         = "/milkyway.restaking.v1.Msg/DelegateService"
-	Msg_UpdateParams_FullMethodName            = "/milkyway.restaking.v1.Msg/UpdateParams"
-	Msg_UndelegatePool_FullMethodName          = "/milkyway.restaking.v1.Msg/UndelegatePool"
-	Msg_UndelegateOperator_FullMethodName      = "/milkyway.restaking.v1.Msg/UndelegateOperator"
-	Msg_UndelegateService_FullMethodName       = "/milkyway.restaking.v1.Msg/UndelegateService"
+	Msg_JoinService_FullMethodName                 = "/milkyway.restaking.v1.Msg/JoinService"
+	Msg_LeaveService_FullMethodName                = "/milkyway.restaking.v1.Msg/LeaveService"
+	Msg_AddOperatorToAllowList_FullMethodName      = "/milkyway.restaking.v1.Msg/AddOperatorToAllowList"
+	Msg_RemoveOperatorFromAllowlist_FullMethodName = "/milkyway.restaking.v1.Msg/RemoveOperatorFromAllowlist"
+	Msg_BorrowPoolSecurity_FullMethodName          = "/milkyway.restaking.v1.Msg/BorrowPoolSecurity"
+	Msg_CeasePoolSecurityBorrow_FullMethodName     = "/milkyway.restaking.v1.Msg/CeasePoolSecurityBorrow"
+	Msg_DelegatePool_FullMethodName                = "/milkyway.restaking.v1.Msg/DelegatePool"
+	Msg_DelegateOperator_FullMethodName            = "/milkyway.restaking.v1.Msg/DelegateOperator"
+	Msg_DelegateService_FullMethodName             = "/milkyway.restaking.v1.Msg/DelegateService"
+	Msg_UpdateParams_FullMethodName                = "/milkyway.restaking.v1.Msg/UpdateParams"
+	Msg_UndelegatePool_FullMethodName              = "/milkyway.restaking.v1.Msg/UndelegatePool"
+	Msg_UndelegateOperator_FullMethodName          = "/milkyway.restaking.v1.Msg/UndelegateOperator"
+	Msg_UndelegateService_FullMethodName           = "/milkyway.restaking.v1.Msg/UndelegateService"
 )
 
 // MsgClient is the client API for Msg service.
@@ -46,13 +46,13 @@ type MsgClient interface {
 	// LeaveService defines the operation that allows the operator admin
 	// to stop securing an AVS
 	LeaveService(ctx context.Context, in *MsgLeaveService, opts ...grpc.CallOption) (*MsgLeaveServiceResponse, error)
-	// AllowOperator defines the operation that allows the service admin
+	// AddOperatorToAllowList defines the operation that allows the service admin
 	// to add an operator to the list of allowed operator to secure the service
-	AllowOperator(ctx context.Context, in *MsgAllowOperator, opts ...grpc.CallOption) (*MsgAllowOperatorResponse, error)
-	// RemoveAllowedOperator defines the operation that allows the service admin
-	// to remove a previously added operator from the list of allowed operators
-	// to secure the service
-	RemoveAllowedOperator(ctx context.Context, in *MsgRemoveAllowedOperator, opts ...grpc.CallOption) (*MsgRemoveAllowedOperatorResponse, error)
+	AddOperatorToAllowList(ctx context.Context, in *MsgAddOperatorToAllowList, opts ...grpc.CallOption) (*MsgAddOperatorToAllowListResponse, error)
+	// RemoveOperatorFromAllowlist defines the operation that allows the service
+	// admin to remove a previously added operator from the list of allowed
+	// operators to secure the service
+	RemoveOperatorFromAllowlist(ctx context.Context, in *MsgRemoveOperatorFromAllowlist, opts ...grpc.CallOption) (*MsgRemoveOperatorFromAllowlistResponse, error)
 	// BorrowPoolSecurity defines the operation that allows the service admin
 	// to add a pool to the list of pools from which the service has chosen
 	// to borrow security.
@@ -114,20 +114,20 @@ func (c *msgClient) LeaveService(ctx context.Context, in *MsgLeaveService, opts 
 	return out, nil
 }
 
-func (c *msgClient) AllowOperator(ctx context.Context, in *MsgAllowOperator, opts ...grpc.CallOption) (*MsgAllowOperatorResponse, error) {
+func (c *msgClient) AddOperatorToAllowList(ctx context.Context, in *MsgAddOperatorToAllowList, opts ...grpc.CallOption) (*MsgAddOperatorToAllowListResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(MsgAllowOperatorResponse)
-	err := c.cc.Invoke(ctx, Msg_AllowOperator_FullMethodName, in, out, cOpts...)
+	out := new(MsgAddOperatorToAllowListResponse)
+	err := c.cc.Invoke(ctx, Msg_AddOperatorToAllowList_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *msgClient) RemoveAllowedOperator(ctx context.Context, in *MsgRemoveAllowedOperator, opts ...grpc.CallOption) (*MsgRemoveAllowedOperatorResponse, error) {
+func (c *msgClient) RemoveOperatorFromAllowlist(ctx context.Context, in *MsgRemoveOperatorFromAllowlist, opts ...grpc.CallOption) (*MsgRemoveOperatorFromAllowlistResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(MsgRemoveAllowedOperatorResponse)
-	err := c.cc.Invoke(ctx, Msg_RemoveAllowedOperator_FullMethodName, in, out, cOpts...)
+	out := new(MsgRemoveOperatorFromAllowlistResponse)
+	err := c.cc.Invoke(ctx, Msg_RemoveOperatorFromAllowlist_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -236,13 +236,13 @@ type MsgServer interface {
 	// LeaveService defines the operation that allows the operator admin
 	// to stop securing an AVS
 	LeaveService(context.Context, *MsgLeaveService) (*MsgLeaveServiceResponse, error)
-	// AllowOperator defines the operation that allows the service admin
+	// AddOperatorToAllowList defines the operation that allows the service admin
 	// to add an operator to the list of allowed operator to secure the service
-	AllowOperator(context.Context, *MsgAllowOperator) (*MsgAllowOperatorResponse, error)
-	// RemoveAllowedOperator defines the operation that allows the service admin
-	// to remove a previously added operator from the list of allowed operators
-	// to secure the service
-	RemoveAllowedOperator(context.Context, *MsgRemoveAllowedOperator) (*MsgRemoveAllowedOperatorResponse, error)
+	AddOperatorToAllowList(context.Context, *MsgAddOperatorToAllowList) (*MsgAddOperatorToAllowListResponse, error)
+	// RemoveOperatorFromAllowlist defines the operation that allows the service
+	// admin to remove a previously added operator from the list of allowed
+	// operators to secure the service
+	RemoveOperatorFromAllowlist(context.Context, *MsgRemoveOperatorFromAllowlist) (*MsgRemoveOperatorFromAllowlistResponse, error)
 	// BorrowPoolSecurity defines the operation that allows the service admin
 	// to add a pool to the list of pools from which the service has chosen
 	// to borrow security.
@@ -290,11 +290,11 @@ func (UnimplementedMsgServer) JoinService(context.Context, *MsgJoinService) (*Ms
 func (UnimplementedMsgServer) LeaveService(context.Context, *MsgLeaveService) (*MsgLeaveServiceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LeaveService not implemented")
 }
-func (UnimplementedMsgServer) AllowOperator(context.Context, *MsgAllowOperator) (*MsgAllowOperatorResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AllowOperator not implemented")
+func (UnimplementedMsgServer) AddOperatorToAllowList(context.Context, *MsgAddOperatorToAllowList) (*MsgAddOperatorToAllowListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddOperatorToAllowList not implemented")
 }
-func (UnimplementedMsgServer) RemoveAllowedOperator(context.Context, *MsgRemoveAllowedOperator) (*MsgRemoveAllowedOperatorResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RemoveAllowedOperator not implemented")
+func (UnimplementedMsgServer) RemoveOperatorFromAllowlist(context.Context, *MsgRemoveOperatorFromAllowlist) (*MsgRemoveOperatorFromAllowlistResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveOperatorFromAllowlist not implemented")
 }
 func (UnimplementedMsgServer) BorrowPoolSecurity(context.Context, *MsgBorrowPoolSecurity) (*MsgBorrowPoolSecurityResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BorrowPoolSecurity not implemented")
@@ -380,38 +380,38 @@ func _Msg_LeaveService_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_AllowOperator_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgAllowOperator)
+func _Msg_AddOperatorToAllowList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgAddOperatorToAllowList)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).AllowOperator(ctx, in)
+		return srv.(MsgServer).AddOperatorToAllowList(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_AllowOperator_FullMethodName,
+		FullMethod: Msg_AddOperatorToAllowList_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).AllowOperator(ctx, req.(*MsgAllowOperator))
+		return srv.(MsgServer).AddOperatorToAllowList(ctx, req.(*MsgAddOperatorToAllowList))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_RemoveAllowedOperator_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgRemoveAllowedOperator)
+func _Msg_RemoveOperatorFromAllowlist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRemoveOperatorFromAllowlist)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).RemoveAllowedOperator(ctx, in)
+		return srv.(MsgServer).RemoveOperatorFromAllowlist(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_RemoveAllowedOperator_FullMethodName,
+		FullMethod: Msg_RemoveOperatorFromAllowlist_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).RemoveAllowedOperator(ctx, req.(*MsgRemoveAllowedOperator))
+		return srv.(MsgServer).RemoveOperatorFromAllowlist(ctx, req.(*MsgRemoveOperatorFromAllowlist))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -594,12 +594,12 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_LeaveService_Handler,
 		},
 		{
-			MethodName: "AllowOperator",
-			Handler:    _Msg_AllowOperator_Handler,
+			MethodName: "AddOperatorToAllowList",
+			Handler:    _Msg_AddOperatorToAllowList_Handler,
 		},
 		{
-			MethodName: "RemoveAllowedOperator",
-			Handler:    _Msg_RemoveAllowedOperator_Handler,
+			MethodName: "RemoveOperatorFromAllowlist",
+			Handler:    _Msg_RemoveOperatorFromAllowlist_Handler,
 		},
 		{
 			MethodName: "BorrowPoolSecurity",

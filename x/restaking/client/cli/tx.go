@@ -438,7 +438,7 @@ func GetAllowOperatorTxCmd() *cobra.Command {
 			}
 
 			// Create and validate the message
-			msg := types.NewMsgAllowOperator(serviceID, operatorID, clientCtx.FromAddress.String())
+			msg := types.NewMsgAddOperatorToAllowList(serviceID, operatorID, clientCtx.FromAddress.String())
 			if err = msg.ValidateBasic(); err != nil {
 				return fmt.Errorf("message validation failed: %w", err)
 			}
@@ -475,7 +475,7 @@ func GetRemoveAllowedOperatorTxCmd() *cobra.Command {
 			}
 
 			// Create and validate the message
-			msg := types.NewMsgRemoveAllowedOperator(serviceID, operatorID, clientCtx.FromAddress.String())
+			msg := types.NewMsgRemoveOperatorFromAllowList(serviceID, operatorID, clientCtx.FromAddress.String())
 			if err = msg.ValidateBasic(); err != nil {
 				return fmt.Errorf("message validation failed: %w", err)
 			}
