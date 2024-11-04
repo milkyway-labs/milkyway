@@ -19,5 +19,11 @@ func Migrate1To2(
 	if err != nil {
 		return err
 	}
-	return migrateServiceParams(ctx, storeKey, cdc, restakingKeeper, servicesKeeper)
+
+	err = migrateServiceParams(ctx, storeKey, cdc, restakingKeeper, servicesKeeper)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

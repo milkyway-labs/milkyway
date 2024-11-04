@@ -58,7 +58,7 @@ func (k *Keeper) GetAllOperatorsJoinedServices(ctx sdk.Context) ([]types.Operato
 	defer iterator.Close()
 
 	items := make(map[uint32]types.OperatorJoinedServices)
-	k.IterateAllOperatorsJoinedServices(ctx, func(operatorID uint32, serviceID uint32) (stop bool, err error) {
+	err = k.IterateAllOperatorsJoinedServices(ctx, func(operatorID uint32, serviceID uint32) (stop bool, err error) {
 		joinedServicesRecord, ok := items[operatorID]
 		if !ok {
 			joinedServicesRecord = types.NewOperatorJoinedServices(operatorID, nil)
@@ -67,6 +67,9 @@ func (k *Keeper) GetAllOperatorsJoinedServices(ctx sdk.Context) ([]types.Operato
 		items[operatorID] = joinedServicesRecord
 		return false, nil
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	if len(items) == 0 {
 		return nil, nil

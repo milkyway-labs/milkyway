@@ -7,7 +7,6 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/utils"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
@@ -23,14 +22,6 @@ var (
 	UnbondingIDKey    = []byte{0x02}
 	UnbondingIndexKey = []byte{0x03}
 	UnbondingTypeKey  = []byte{0x04}
-
-	// Deprecated: This has been replaced by OperatorServicesPrefix that is
-	// used to store the services secured by an operator, the operator params
-	// instead have been moved to the x/operators module.
-	OperatorParamsPrefix = []byte{0x11}
-	// Deprecated: Use the new ServiceParamsPrefix instead.
-	// We keep this to migrate the old ServiceParams to the new format.
-	LegacyServiceParamsPrefix = []byte{0x12}
 
 	OperatorJoinedServicesPrefix       = []byte{0x13}
 	ServiceOperatorsAllowListPrefix    = []byte{0x14}
@@ -51,25 +42,6 @@ var (
 
 	UnbondingQueueKey = []byte{0xd1}
 )
-
-// Deprecated: The operator params are stored in the x/operator module, now
-// in this module we only keep the list of services secured by a operator.
-// OperatorParamsStoreKey returns the key used to store the operator params
-func OperatorParamsStoreKey(operatorID uint32) []byte {
-	return utils.CompositeKey(OperatorParamsPrefix, operatorstypes.GetOperatorIDBytes(operatorID))
-}
-
-// Deprecated: The operator params are stored in the x/operator module, now
-// in this module we only keep the list of services secured by a operator.
-// ParseOperatorParamsKey parses the operator ID from the given key
-func ParseOperatorParamsKey(bz []byte) (operatorID uint32, err error) {
-	bz = bytes.TrimPrefix(bz, OperatorParamsPrefix)
-	if len(bz) != 4 {
-		return 0, fmt.Errorf("invalid key length; expected: 4, got: %d", len(bz))
-	}
-
-	return operatorstypes.GetOperatorIDFromBytes(bz), nil
-}
 
 // --------------------------------------------------------------------------------------------------------------------
 
