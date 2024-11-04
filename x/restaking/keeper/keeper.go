@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"cosmossdk.io/collections"
+	"cosmossdk.io/collections/indexes"
 	corestoretypes "cosmossdk.io/core/store"
 	"cosmossdk.io/log"
 	storetypes "cosmossdk.io/store/types"
@@ -24,13 +25,14 @@ type Keeper struct {
 	servicesKeeper  types.ServicesKeeper
 
 	// Keeper data
-	schema                 collections.Schema
-	operatorJoinedServices collections.Map[uint32, types.OperatorJoinedServices]
-
-	// The represents the service ID and the operator ID
+	schema collections.Schema
+	// Here we use a IndexMap with NoValue instead of a KeySet because the cosmos-sdk don't
+	// provide a KeySet with indexes that we need in order to get the list of operators
+	// that have joined a service given a serviceID.
+	operatorJoinedServices *collections.IndexedMap[collections.Pair[uint32, uint32], collections.NoValue, operatorServiceIndex]
+	// The pair represents the service ID and the operator ID
 	serviceOperatorsAllowList collections.KeySet[collections.Pair[uint32, uint32]]
-
-	// The represents the service ID and the pool ID
+	// The pair represents the service ID and the pool ID
 	serviceSecuringPools collections.KeySet[collections.Pair[uint32, uint32]]
 
 	hooks types.RestakingHooks
@@ -64,11 +66,12 @@ func NewKeeper(
 		operatorsKeeper: operatorsKeeper,
 		servicesKeeper:  servicesKeeper,
 
-		operatorJoinedServices: collections.NewMap(
+		operatorJoinedServices: collections.NewIndexedMap(
 			sb, types.OperatorJoinedServicesPrefix,
 			"operator_joined_services",
-			collections.Uint32Key,
-			codec.CollValue[types.OperatorJoinedServices](cdc),
+			collections.PairKeyCodec(collections.Uint32Key, collections.Uint32Key),
+			collections.NoValue{},
+			newOperatorServiceIndex(sb),
 		),
 		serviceOperatorsAllowList: collections.NewKeySet(
 			sb, types.ServiceOperatorsAllowListPrefix,
@@ -105,4 +108,28 @@ func (k *Keeper) SetHooks(rs types.RestakingHooks) *Keeper {
 
 	k.hooks = rs
 	return k
+}
+
+// ------------------------------------------------------------------------------
+
+type operatorServiceIndex struct {
+	// Index that allows to perform a reverse lookup where given a service ID
+	// we retrieve all the operators that have joined it
+	Service *indexes.ReversePair[uint32, uint32, collections.NoValue]
+}
+
+func (i operatorServiceIndex) IndexesList() []collections.Index[collections.Pair[uint32, uint32], collections.NoValue] {
+	return []collections.Index[collections.Pair[uint32, uint32], collections.NoValue]{i.Service}
+}
+
+func newOperatorServiceIndex(sb *collections.SchemaBuilder) operatorServiceIndex {
+	return operatorServiceIndex{
+		Service: indexes.NewReversePair[collections.NoValue](
+			sb,
+			types.ServiceJoinedByOperatorIndexPrefix,
+			"service_joined_by_operator",
+			collections.PairKeyCodec(collections.Uint32Key, collections.Uint32Key),
+			indexes.WithReversePairUncheckedValue(),
+		),
+	}
 }

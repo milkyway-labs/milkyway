@@ -127,6 +127,30 @@ func (msg *MsgDeactivateOperator) GetSigners() []sdk.AccAddress {
 
 // --------------------------------------------------------------------------------------------------------------------
 
+// NewMsgDeleteOperator creates a new MsgDeleteOperator instance
+func NewMsgDeleteOperator(operatorID uint32, sender string) *MsgDeleteOperator {
+	return &MsgDeleteOperator{
+		OperatorID: operatorID,
+		Sender:     sender,
+	}
+}
+
+// ValidateBasic implements sdk.Msg
+func (msg *MsgDeleteOperator) ValidateBasic() error {
+	if msg.OperatorID == 0 {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid operator ID: %d", msg.OperatorID)
+	}
+
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address")
+	}
+
+	return nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
 // NewMsgTransferOperatorOwnership creates a new MsgTransferOperatorOwnership instance
 func NewMsgTransferOperatorOwnership(operatorID uint32, newAdmin, sender string) *MsgTransferOperatorOwnership {
 	return &MsgTransferOperatorOwnership{

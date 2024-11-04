@@ -1,62 +1,34 @@
 package keeper
 
 import (
-	"errors"
 	"time"
 
 	"cosmossdk.io/collections"
-	sdkerrors "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
-// GetOperatorJoinedServices gets the services joined by the operator with the given ID.
-func (k *Keeper) GetOperatorJoinedServices(ctx sdk.Context, operatorID uint32) (types.OperatorJoinedServices, error) {
-	joinedServices, err := k.operatorJoinedServices.Get(ctx, operatorID)
-	if err != nil {
-		if errors.Is(err, collections.ErrNotFound) {
-			return types.NewEmptyOperatorJoinedServices(), nil
-		} else {
-			return types.OperatorJoinedServices{}, err
-		}
-	}
-	return joinedServices, nil
+// AddServiceToOperatorJoinedServices adds the given service to the list of services joined by
+// the operator with the given ID
+func (k *Keeper) AddServiceToOperatorJoinedServices(ctx sdk.Context, operatorID uint32, serviceID uint32) error {
+	operatorServicePair := collections.Join(operatorID, serviceID)
+	return k.operatorJoinedServices.Set(ctx, operatorServicePair, collections.NoValue{})
 }
 
-// AddServiceToOperator adds the given service to the list of services joined by
+// RemoveServiceFromOperatorJoinedServices removes the given service from the list of services joined by
 // the operator with the given ID
-func (k *Keeper) AddServiceToOperator(ctx sdk.Context, operatorID uint32, serviceID uint32) error {
-	joinedServices, err := k.GetOperatorJoinedServices(ctx, operatorID)
-	if err != nil {
-		return err
-	}
-
-	err = joinedServices.Add(serviceID)
-	if err != nil {
-		return sdkerrors.Wrap(types.ErrServiceAlreadyJoinedByOperator, err.Error())
-	}
-
-	return k.operatorJoinedServices.Set(ctx, operatorID, joinedServices)
+func (k *Keeper) RemoveServiceFromOperatorJoinedServices(ctx sdk.Context, operatorID uint32, serviceID uint32) error {
+	operatorServicePair := collections.Join(operatorID, serviceID)
+	return k.operatorJoinedServices.Remove(ctx, operatorServicePair)
 }
 
-// RemoveServiceFromOperator removes the given service from the list of services joined by
-// the operator with the given ID
-func (k *Keeper) RemoveServiceFromOperator(ctx sdk.Context, operatorID uint32, serviceID uint32) error {
-	// Get the operator's joined services
-	joinedServices, err := k.GetOperatorJoinedServices(ctx, operatorID)
-	if err != nil {
-		return err
-	}
-
-	// Try to remove the service
-	removed := joinedServices.Remove(serviceID)
-	if !removed {
-		return types.ErrServiceNotJoinedByOperator
-	}
-
-	return k.operatorJoinedServices.Set(ctx, operatorID, joinedServices)
+// HasOperatorJoinedService returns whether the operator with the given ID has
+// joined the provided service
+func (k *Keeper) HasOperatorJoinedService(ctx sdk.Context, operatorID uint32, serviceID uint32) (bool, error) {
+	operatorServicePair := collections.Join(operatorID, serviceID)
+	return k.operatorJoinedServices.Has(ctx, operatorServicePair)
 }
 
 // --------------------------------------------------------------------------------------------------------------------

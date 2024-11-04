@@ -8,7 +8,7 @@ import (
 
 // NewGenesis creates a new genesis state
 func NewGenesis(
-	operatorsJoinedServices []OperatorJoinedServicesRecord,
+	operatorsJoinedServices []OperatorJoinedServices,
 	servicesAllowedOperators []ServiceAllowedOperators,
 	servicesSecuringPools []ServiceSecuringPools,
 	delegations []Delegation,
@@ -99,8 +99,8 @@ func (g *GenesisState) Validate() error {
 	return nil
 }
 
-func findDuplicateOperatorJoinedServiceRecords(records []OperatorJoinedServicesRecord) *OperatorJoinedServicesRecord {
-	return utils.FindDuplicateFunc(records, func(a, b OperatorJoinedServicesRecord) bool {
+func findDuplicateOperatorJoinedServiceRecords(records []OperatorJoinedServices) *OperatorJoinedServices {
+	return utils.FindDuplicateFunc(records, func(a, b OperatorJoinedServices) bool {
 		return a.OperatorID == b.OperatorID
 	})
 }
@@ -119,19 +119,25 @@ func findDuplicateServiceSecuringPools(records []ServiceSecuringPools) *ServiceS
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// NewOperatorJoinedServicesRecord creates a new instance of OperatorServiceIdRecord.
-func NewOperatorJoinedServicesRecord(operatorID uint32, joinedServices OperatorJoinedServices) OperatorJoinedServicesRecord {
-	return OperatorJoinedServicesRecord{
-		OperatorID:     operatorID,
-		JoinedServices: joinedServices,
+// NewOperatorJoinedServices creates a new instance of OperatorServiceIdRecord.
+func NewOperatorJoinedServices(operatorID uint32, serviceIDs []uint32) OperatorJoinedServices {
+	return OperatorJoinedServices{
+		OperatorID: operatorID,
+		ServiceIDs: serviceIDs,
 	}
 }
 
-func (o *OperatorJoinedServicesRecord) Validate() error {
+func (o *OperatorJoinedServices) Validate() error {
 	if o.OperatorID == 0 {
 		return fmt.Errorf("the operator id must be greater than 0")
 	}
-	return o.JoinedServices.Validate()
+
+	for _, serviceID := range o.ServiceIDs {
+		if serviceID == 0 {
+			return fmt.Errorf("the service id must be greater than 0")
+		}
+	}
+	return nil
 }
 
 // --------------------------------------------------------------------------------------------------------------------

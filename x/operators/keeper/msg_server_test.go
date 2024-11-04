@@ -579,6 +579,141 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferOperatorOwnership() {
 	}
 }
 
+func (suite *KeeperTestSuite) TestMsgServer_DeleteOperator() {
+	testCases := []struct {
+		name      string
+		store     func(ctx sdk.Context)
+		msg       *types.MsgDeleteOperator
+		shouldErr bool
+		expEvents sdk.Events
+		check     func(ctx sdk.Context)
+	}{
+		{
+			name: "not found operator returns error",
+			msg: types.NewMsgDeleteOperator(
+				1,
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "non admin sender returns error",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SaveOperator(ctx, types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_INACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgDeleteOperator(
+				1,
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "active operator returns error",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SaveOperator(ctx, types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgDeleteOperator(
+				1,
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "inactivating operator returns error",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SaveOperator(ctx, types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_INACTIVATING,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgDeleteOperator(
+				1,
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "operator deleted successfully",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SaveOperator(ctx, types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_INACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgDeleteOperator(
+				1,
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			shouldErr: false,
+			expEvents: []sdk.Event{
+				sdk.NewEvent(
+					types.EventTypeDeleteOperator,
+					sdk.NewAttribute(types.AttributeKeyOperatorID, "1"),
+				),
+			},
+			check: func(ctx sdk.Context) {
+				// Make sure the operator was updated
+				_, found := suite.k.GetOperator(ctx, 1)
+				suite.Require().False(found)
+				// Ensure the hook has been called
+				suite.Require().True(suite.hooks.CalledMap["AfterOperatorDeleted"])
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			msgServer := keeper.NewMsgServer(suite.k)
+			res, err := msgServer.DeleteOperator(ctx, tc.msg)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().NotNil(res)
+				for _, event := range tc.expEvents {
+					suite.Require().Contains(ctx.EventManager().Events(), event)
+				}
+
+				if tc.check != nil {
+					tc.check(ctx)
+				}
+			}
+		})
+	}
+}
+
 func (suite *KeeperTestSuite) TestMsgServer_SetOperatorParams() {
 	testOperatorId := uint32(2)
 	operatorAdmin := "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"

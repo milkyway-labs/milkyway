@@ -21,25 +21,21 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			store: func(ctx sdk.Context) {
 				suite.k.SetParams(ctx, types.DefaultParams())
 
-				err := suite.k.AddServiceToOperator(ctx, 1, 1)
+				err := suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 1)
 				suite.Require().NoError(err)
-				err = suite.k.AddServiceToOperator(ctx, 1, 2)
+				err = suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 2)
 				suite.Require().NoError(err)
 
-				err = suite.k.AddServiceToOperator(ctx, 2, 3)
+				err = suite.k.AddServiceToOperatorJoinedServices(ctx, 2, 3)
 				suite.Require().NoError(err)
-				err = suite.k.AddServiceToOperator(ctx, 2, 4)
+				err = suite.k.AddServiceToOperatorJoinedServices(ctx, 2, 4)
 				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				Params: types.DefaultParams(),
-				OperatorsJoinedServices: []types.OperatorJoinedServicesRecord{
-					types.NewOperatorJoinedServicesRecord(1, types.NewOperatorJoinedServices(
-						[]uint32{1, 2},
-					)),
-					types.NewOperatorJoinedServicesRecord(2, types.NewOperatorJoinedServices(
-						[]uint32{3, 4},
-					)),
+				OperatorsJoinedServices: []types.OperatorJoinedServices{
+					types.NewOperatorJoinedServices(1, []uint32{1, 2}),
+					types.NewOperatorJoinedServices(2, []uint32{3, 4}),
 				},
 			},
 		},
@@ -339,31 +335,27 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 			name: "operator params are stored properly",
 			genesis: &types.GenesisState{
 				Params: types.DefaultParams(),
-				OperatorsJoinedServices: []types.OperatorJoinedServicesRecord{
-					types.NewOperatorJoinedServicesRecord(1,
-						types.NewOperatorJoinedServices(
-							[]uint32{1, 2},
-						),
-					),
-					types.NewOperatorJoinedServicesRecord(2,
-						types.NewOperatorJoinedServices(
-							[]uint32{3, 4},
-						),
-					),
+				OperatorsJoinedServices: []types.OperatorJoinedServices{
+					types.NewOperatorJoinedServices(1, []uint32{1, 2}),
+					types.NewOperatorJoinedServices(2, []uint32{3, 4}),
 				},
 			},
 			check: func(ctx sdk.Context) {
-				stored, err := suite.k.GetOperatorJoinedServices(ctx, 1)
+				joined, err := suite.k.HasOperatorJoinedService(ctx, 1, 1)
 				suite.Require().NoError(err)
-				suite.Require().Equal(types.NewOperatorJoinedServices(
-					[]uint32{1, 2},
-				), stored)
+				suite.Require().True(joined)
 
-				stored, err = suite.k.GetOperatorJoinedServices(ctx, 2)
+				joined, err = suite.k.HasOperatorJoinedService(ctx, 1, 2)
 				suite.Require().NoError(err)
-				suite.Require().Equal(types.NewOperatorJoinedServices(
-					[]uint32{3, 4},
-				), stored)
+				suite.Require().True(joined)
+
+				joined, err = suite.k.HasOperatorJoinedService(ctx, 2, 3)
+				suite.Require().NoError(err)
+				suite.Require().True(joined)
+
+				joined, err = suite.k.HasOperatorJoinedService(ctx, 2, 4)
+				suite.Require().NoError(err)
+				suite.Require().True(joined)
 			},
 		},
 		{

@@ -278,11 +278,20 @@ service Query {
 message QueryOperatorJoinedServicesRequest {
   // OperatorId is the ID of the operator to query
   uint32 operator_id = 1;
+
+  // Pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
 // QueryOperatorJoinedServicesResponse is response type for the
 // Query/OperatorJoinedServices RPC method.
-message QueryOperatorJoinedServicesResponse { repeated uint32 service_ids = 1; }
+message QueryOperatorJoinedServicesResponse {
+  // ServiceIds is the list of services joined by the operator.
+  repeated uint32 service_ids = 1;
+
+  // Pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
 
 // QueryServiceAllowedOperatorsRequest is request type for the
 // Query/ServiceAllowedOperators RPC method.
@@ -330,6 +339,9 @@ message QueryServiceSecuringPoolsResponse {
 message QueryServiceOperatorsRequest {
   // ServiceId is the ID of the service to query
   uint32 service_id = 1;
+
+  // Pagination defines an optional pagination for the request.
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
 // QueryServiceOperatorsResponse is response type for the Query/ServiceOperators
@@ -338,6 +350,9 @@ message QueryServiceOperatorsResponse {
   // Operators is the list of operators
   repeated milkyway.operators.v1.Operator operators = 1
       [ (gogoproto.nullable) = false ];
+
+  // Pagination defines the pagination in the response.
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // QueryPoolDelegationsRequest is request type for the Query/PoolDelegations RPC

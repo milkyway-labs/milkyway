@@ -271,11 +271,11 @@ func (k *Keeper) getEligibleOperators(
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	// TODO: can we optimize this? maybe by having a new index key
 	for _, operator := range operators {
-		operatorJoinedServices, err := k.restakingKeeper.GetOperatorJoinedServices(sdkCtx, operator.ID)
+		operatorJoinedServices, err := k.restakingKeeper.HasOperatorJoinedService(sdkCtx, operator.ID, service.ID)
 		if err != nil {
 			return nil, err
 		}
-		if operatorJoinedServices.Contains(service.ID) {
+		if operatorJoinedServices {
 			canValidateService, err := k.restakingKeeper.CanOperatorValidateService(
 				sdkCtx, service.ID, operator.ID)
 			if err != nil {

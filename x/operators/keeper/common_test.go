@@ -143,14 +143,22 @@ func newMockHooks() *mockHooks {
 	return &mockHooks{CalledMap: make(map[string]bool)}
 }
 
-func (m mockHooks) AfterOperatorRegistered(ctx sdk.Context, operatorID uint32) {
+func (m mockHooks) AfterOperatorRegistered(ctx sdk.Context, operatorID uint32) error {
 	m.CalledMap["AfterOperatorRegistered"] = true
+	return nil
 }
 
-func (m mockHooks) AfterOperatorInactivatingStarted(ctx sdk.Context, operatorID uint32) {
+func (m mockHooks) AfterOperatorInactivatingStarted(ctx sdk.Context, operatorID uint32) error {
 	m.CalledMap["AfterOperatorInactivatingStarted"] = true
+	return nil
 }
 
-func (m mockHooks) AfterOperatorInactivatingCompleted(ctx sdk.Context, operatorID uint32) {
+func (m mockHooks) AfterOperatorInactivatingCompleted(ctx sdk.Context, operatorID uint32) error {
 	m.CalledMap["AfterOperatorInactivatingCompleted"] = true
+	return nil
+}
+
+func (m mockHooks) AfterOperatorDeleted(ctx sdk.Context, operatorID uint32) error {
+	m.CalledMap["AfterOperatorDeleted"] = true
+	return nil
 }

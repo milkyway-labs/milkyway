@@ -62,9 +62,7 @@ func (k *Keeper) RegisterOperator(ctx sdk.Context, operator types.Operator) erro
 
 	// Log and call the hooks
 	k.Logger(ctx).Info("operator created", "id", operator.ID)
-	k.AfterOperatorRegistered(ctx, operator.ID)
-
-	return nil
+	return k.AfterOperatorRegistered(ctx, operator.ID)
 }
 
 // GetOperator returns the operator with the given ID.
@@ -104,9 +102,26 @@ func (k *Keeper) StartOperatorInactivation(ctx sdk.Context, operator types.Opera
 	k.insertIntoInactivatingQueue(ctx, operator)
 
 	// Call the hook
-	k.AfterOperatorInactivatingStarted(ctx, operator.ID)
+	return k.AfterOperatorInactivatingStarted(ctx, operator.ID)
+}
 
-	return nil
+// DeleteOperator deletes the operator with the given ID
+func (k *Keeper) DeleteOperator(ctx sdk.Context, operator types.Operator) error {
+	// Make sure the operator is inactive
+	if operator.Status != types.OPERATOR_STATUS_INACTIVE {
+		return types.ErrOperatorNotInactive
+	}
+
+	// Removes the operator
+	store := ctx.KVStore(k.storeKey)
+	store.Delete(types.OperatorStoreKey(operator.ID))
+	err := k.operatorAddressSet.Remove(ctx, operator.Address)
+	if err != nil {
+		return err
+	}
+
+	// Call the hook
+	return k.AfterOperatorDeleted(ctx, operator.ID)
 }
 
 // CompleteOperatorInactivation completes the inactivation process for the operator with the given ID
@@ -129,9 +144,7 @@ func (k *Keeper) CompleteOperatorInactivation(ctx sdk.Context, operator types.Op
 	}
 
 	// Call the hook
-	k.AfterOperatorInactivatingCompleted(ctx, operator.ID)
-
-	return nil
+	return k.AfterOperatorInactivatingCompleted(ctx, operator.ID)
 }
 
 // --------------------------------------------------------------------------------------------------------------------

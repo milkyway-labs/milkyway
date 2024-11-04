@@ -103,6 +103,15 @@ Only the fields that you provide will be updated`,
 					},
 				},
 				{
+					RpcMethod: "DeleteOperator",
+					Use:       "delete [id]",
+					Short:     "Delete an inactive operator",
+					Example:   fmt.Sprintf(`%s tx %s delete 1 --from alice`, version.AppName, types.ModuleName),
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "operator_id"},
+					},
+				},
+				{
 					RpcMethod: "UpdateParams",
 					Skip:      true,
 				},

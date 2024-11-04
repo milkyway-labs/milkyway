@@ -296,9 +296,7 @@ func (suite *KeeperTestSuite) TestMsgServer_LeaveService() {
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
-				suite.Require().NoError(err)
-
-				err = suite.k.AddServiceToOperator(ctx, 1, 1)
+				err = suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 1)
 				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgLeaveService(
@@ -330,7 +328,7 @@ func (suite *KeeperTestSuite) TestMsgServer_LeaveService() {
 				))
 				suite.Require().NoError(err)
 
-				err = suite.k.AddServiceToOperator(ctx, 1, 1)
+				err = suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 1)
 				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgLeaveService(
@@ -339,9 +337,9 @@ func (suite *KeeperTestSuite) TestMsgServer_LeaveService() {
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			),
 			check: func(ctx sdk.Context) {
-				joinedServices, err := suite.k.GetOperatorJoinedServices(ctx, 1)
+				joinedServices, err := suite.k.HasOperatorJoinedService(ctx, 1, 1)
 				suite.Require().NoError(err)
-				suite.Require().Empty(joinedServices.ServiceIDs)
+				suite.Require().False(joinedServices)
 			},
 			shouldErr: false,
 			expEvents: sdk.Events{

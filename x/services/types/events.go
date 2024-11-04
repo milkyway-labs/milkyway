@@ -7,6 +7,7 @@ const (
 	EventTypeUpdateService            = "update_service"
 	EventTypeActivateService          = "activate_service"
 	EventTypeDeactivateService        = "deactivate_service"
+	EventTypeDeleteService            = "delete_service"
 	EventTypeTransferServiceOwnership = "transfer_service_ownership"
 	EventTypeSetServiceParams         = "set_service_params"
 

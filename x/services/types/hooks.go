@@ -3,7 +3,7 @@ package types
 // DONTCOVER
 
 import (
-	"context"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // Event Hooks
@@ -14,9 +14,10 @@ import (
 
 // ServicesHooks event hooks for services objects (noalias)
 type ServicesHooks interface {
-	AfterServiceCreated(ctx context.Context, serviceID uint32)     // Must be called after a service is created
-	AfterServiceActivated(ctx context.Context, serviceID uint32)   // Must be called after a service is registered
-	AfterServiceDeactivated(ctx context.Context, serviceID uint32) // Must be called after a service is deregistered
+	AfterServiceCreated(ctx sdk.Context, serviceID uint32) error     // Must be called after a service is created
+	AfterServiceActivated(ctx sdk.Context, serviceID uint32) error   // Must be called after a service is registered
+	AfterServiceDeactivated(ctx sdk.Context, serviceID uint32) error // Must be called after a service is deregistered
+	AfterServiceDeleted(ctx sdk.Context, serviceID uint32) error     // Must be called after a service is deleted
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -32,22 +33,41 @@ func NewMultiServicesHooks(hooks ...ServicesHooks) MultiServicesHooks {
 }
 
 // AfterServiceCreated implements ServicesHooks
-func (m MultiServicesHooks) AfterServiceCreated(ctx context.Context, serviceID uint32) {
+func (m MultiServicesHooks) AfterServiceCreated(ctx sdk.Context, serviceID uint32) error {
 	for _, hook := range m {
-		hook.AfterServiceCreated(ctx, serviceID)
+		if err := hook.AfterServiceCreated(ctx, serviceID); err != nil {
+			return err
+		}
 	}
+	return nil
 }
 
 // AfterServiceActivated implements ServicesHooks
-func (m MultiServicesHooks) AfterServiceActivated(ctx context.Context, serviceID uint32) {
+func (m MultiServicesHooks) AfterServiceActivated(ctx sdk.Context, serviceID uint32) error {
 	for _, hook := range m {
-		hook.AfterServiceActivated(ctx, serviceID)
+		if err := hook.AfterServiceActivated(ctx, serviceID); err != nil {
+			return err
+		}
 	}
+	return nil
 }
 
 // AfterServiceDeactivated implements ServicesHooks
-func (m MultiServicesHooks) AfterServiceDeactivated(ctx context.Context, serviceID uint32) {
+func (m MultiServicesHooks) AfterServiceDeactivated(ctx sdk.Context, serviceID uint32) error {
 	for _, hook := range m {
-		hook.AfterServiceDeactivated(ctx, serviceID)
+		if err := hook.AfterServiceDeactivated(ctx, serviceID); err != nil {
+			return err
+		}
 	}
+	return nil
+}
+
+// AfterServiceDeleted implements ServicesHooks
+func (m MultiServicesHooks) AfterServiceDeleted(ctx sdk.Context, serviceID uint32) error {
+	for _, hook := range m {
+		if err := hook.AfterServiceDeleted(ctx, serviceID); err != nil {
+			return err
+		}
+	}
+	return nil
 }

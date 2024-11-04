@@ -31,54 +31,58 @@ func (k *Keeper) IterateAllOperatorsJoinedServices(ctx sdk.Context, action func(
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		operatorID, err := iterator.Key()
-		if err != nil {
-			return err
-		}
-		operatorJoinedServices, err := iterator.Value()
+		operatorServicePair, err := iterator.Key()
 		if err != nil {
 			return err
 		}
 
-		for _, serviceID := range operatorJoinedServices.ServiceIDs {
-			stop, err := action(operatorID, serviceID)
-			if err != nil {
-				return err
-			}
+		stop, err := action(operatorServicePair.K1(), operatorServicePair.K2())
+		if err != nil {
+			return err
+		}
 
-			if stop {
-				break
-			}
+		if stop {
+			break
 		}
 	}
 
 	return nil
 }
 
-// GetAllOperatorsJoinedServices returns all the operators joined services
-func (k *Keeper) GetAllOperatorsJoinedServices(ctx sdk.Context) ([]types.OperatorJoinedServicesRecord, error) {
+// GetAllOperatorsJoinedServices returns all services that each operator has joined
+func (k *Keeper) GetAllOperatorsJoinedServices(ctx sdk.Context) ([]types.OperatorJoinedServices, error) {
 	iterator, err := k.operatorJoinedServices.Iterate(ctx, nil)
 	if err != nil {
 		return nil, err
 	}
 	defer iterator.Close()
 
-	var records []types.OperatorJoinedServicesRecord
-	for ; iterator.Valid(); iterator.Next() {
-		operatorID, err := iterator.Key()
-		if err != nil {
-			return nil, err
+	items := make(map[uint32]types.OperatorJoinedServices)
+	k.IterateAllOperatorsJoinedServices(ctx, func(operatorID uint32, serviceID uint32) (stop bool, err error) {
+		joinedServicesRecord, ok := items[operatorID]
+		if !ok {
+			joinedServicesRecord = types.NewOperatorJoinedServices(operatorID, nil)
 		}
-		operatorJoinedServices, err := iterator.Value()
-		if err != nil {
-			return nil, err
-		}
+		joinedServicesRecord.ServiceIDs = append(joinedServicesRecord.ServiceIDs, serviceID)
+		items[operatorID] = joinedServicesRecord
+		return false, nil
+	})
 
-		records = append(records, types.NewOperatorJoinedServicesRecord(
-			operatorID, operatorJoinedServices))
+	if len(items) == 0 {
+		return nil, nil
 	}
 
-	return records, nil
+	// Convert back to list
+	itemsList := make([]types.OperatorJoinedServices, 0, len(items))
+	for _, v := range items {
+		itemsList = append(itemsList, v)
+	}
+	// Ensure that the items always maintain the same order,
+	// as iterating over the map may result in different item orders.
+	sort.Slice(itemsList, func(i, j int) bool {
+		return itemsList[i].OperatorID < itemsList[j].OperatorID
+	})
+	return itemsList, nil
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -115,7 +119,7 @@ func (k *Keeper) IterateAllServicesAllowedOperators(ctx sdk.Context, action func
 
 // GetAllServicesAllowedOperators returns all the operators that are allowed to secure a service for all the services
 func (k *Keeper) GetAllServicesAllowedOperators(ctx sdk.Context) ([]types.ServiceAllowedOperators, error) {
-	var items = make(map[uint32]types.ServiceAllowedOperators)
+	items := make(map[uint32]types.ServiceAllowedOperators)
 	err := k.IterateAllServicesAllowedOperators(ctx, func(serviceID uint32, operatorID uint32) (stop bool, err error) {
 		allowedOperators, ok := items[serviceID]
 		if !ok {

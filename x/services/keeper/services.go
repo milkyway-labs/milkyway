@@ -65,9 +65,7 @@ func (k *Keeper) CreateService(ctx sdk.Context, service types.Service) error {
 
 	// Log and call the hooks
 	k.Logger(ctx).Debug("created service", "id", service.ID)
-	k.AfterServiceCreated(ctx, service.ID)
-
-	return nil
+	return k.AfterServiceCreated(ctx, service.ID)
 }
 
 // ActivateService activates the service with the given ID
@@ -88,9 +86,7 @@ func (k *Keeper) ActivateService(ctx sdk.Context, serviceID uint32) error {
 	}
 
 	// Call the hook
-	k.AfterServiceActivated(ctx, serviceID)
-
-	return nil
+	return k.AfterServiceActivated(ctx, serviceID)
 }
 
 // DeactivateService deactivates the service with the given ID
@@ -114,9 +110,31 @@ func (k *Keeper) DeactivateService(ctx sdk.Context, serviceID uint32) error {
 	}
 
 	// Call the hook
-	k.AfterServiceDeactivated(ctx, service.ID)
+	return k.AfterServiceDeactivated(ctx, service.ID)
+}
 
-	return nil
+// DeactivateService deactivates the service with the given ID
+func (k *Keeper) DeleteService(ctx sdk.Context, serviceID uint32) error {
+	service, existed := k.GetService(ctx, serviceID)
+	if !existed {
+		return types.ErrServiceNotFound
+	}
+
+	// Make sure the service is not active
+	if service.Status == types.SERVICE_STATUS_ACTIVE {
+		return types.ErrServiceIsActive
+	}
+
+	// Remove the service from the store
+	store := ctx.KVStore(k.storeKey)
+	store.Delete(types.ServiceStoreKey(service.ID))
+	err := k.serviceAddressSet.Remove(ctx, service.Address)
+	if err != nil {
+		return err
+	}
+
+	// Call the hook
+	return k.AfterServiceDeleted(ctx, service.ID)
 }
 
 // GetService returns an Service from the KVStore

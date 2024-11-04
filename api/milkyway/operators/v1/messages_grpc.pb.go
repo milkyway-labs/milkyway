@@ -22,6 +22,7 @@ const (
 	Msg_RegisterOperator_FullMethodName          = "/milkyway.operators.v1.Msg/RegisterOperator"
 	Msg_UpdateOperator_FullMethodName            = "/milkyway.operators.v1.Msg/UpdateOperator"
 	Msg_DeactivateOperator_FullMethodName        = "/milkyway.operators.v1.Msg/DeactivateOperator"
+	Msg_DeleteOperator_FullMethodName            = "/milkyway.operators.v1.Msg/DeleteOperator"
 	Msg_TransferOperatorOwnership_FullMethodName = "/milkyway.operators.v1.Msg/TransferOperatorOwnership"
 	Msg_SetOperatorParams_FullMethodName         = "/milkyway.operators.v1.Msg/SetOperatorParams"
 	Msg_UpdateParams_FullMethodName              = "/milkyway.operators.v1.Msg/UpdateParams"
@@ -42,6 +43,8 @@ type MsgClient interface {
 	// operator. Operators will require some time in order to be deactivated.
 	// This time is defined by the governance parameters.
 	DeactivateOperator(ctx context.Context, in *MsgDeactivateOperator, opts ...grpc.CallOption) (*MsgDeactivateOperatorResponse, error)
+	// DeleteOperator defines the operation for deleting a deactivated operator.
+	DeleteOperator(ctx context.Context, in *MsgDeleteOperator, opts ...grpc.CallOption) (*MsgDeleteOperatorResponse, error)
 	// TransferOperatorOwnership defines the operation for transferring the
 	// ownership of an operator to another account.
 	TransferOperatorOwnership(ctx context.Context, in *MsgTransferOperatorOwnership, opts ...grpc.CallOption) (*MsgTransferOperatorOwnershipResponse, error)
@@ -86,6 +89,16 @@ func (c *msgClient) DeactivateOperator(ctx context.Context, in *MsgDeactivateOpe
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(MsgDeactivateOperatorResponse)
 	err := c.cc.Invoke(ctx, Msg_DeactivateOperator_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) DeleteOperator(ctx context.Context, in *MsgDeleteOperator, opts ...grpc.CallOption) (*MsgDeleteOperatorResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgDeleteOperatorResponse)
+	err := c.cc.Invoke(ctx, Msg_DeleteOperator_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -137,6 +150,8 @@ type MsgServer interface {
 	// operator. Operators will require some time in order to be deactivated.
 	// This time is defined by the governance parameters.
 	DeactivateOperator(context.Context, *MsgDeactivateOperator) (*MsgDeactivateOperatorResponse, error)
+	// DeleteOperator defines the operation for deleting a deactivated operator.
+	DeleteOperator(context.Context, *MsgDeleteOperator) (*MsgDeleteOperatorResponse, error)
 	// TransferOperatorOwnership defines the operation for transferring the
 	// ownership of an operator to another account.
 	TransferOperatorOwnership(context.Context, *MsgTransferOperatorOwnership) (*MsgTransferOperatorOwnershipResponse, error)
@@ -165,6 +180,9 @@ func (UnimplementedMsgServer) UpdateOperator(context.Context, *MsgUpdateOperator
 }
 func (UnimplementedMsgServer) DeactivateOperator(context.Context, *MsgDeactivateOperator) (*MsgDeactivateOperatorResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeactivateOperator not implemented")
+}
+func (UnimplementedMsgServer) DeleteOperator(context.Context, *MsgDeleteOperator) (*MsgDeleteOperatorResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteOperator not implemented")
 }
 func (UnimplementedMsgServer) TransferOperatorOwnership(context.Context, *MsgTransferOperatorOwnership) (*MsgTransferOperatorOwnershipResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TransferOperatorOwnership not implemented")
@@ -250,6 +268,24 @@ func _Msg_DeactivateOperator_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_DeleteOperator_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgDeleteOperator)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).DeleteOperator(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_DeleteOperator_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).DeleteOperator(ctx, req.(*MsgDeleteOperator))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_TransferOperatorOwnership_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MsgTransferOperatorOwnership)
 	if err := dec(in); err != nil {
@@ -322,6 +358,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeactivateOperator",
 			Handler:    _Msg_DeactivateOperator_Handler,
+		},
+		{
+			MethodName: "DeleteOperator",
+			Handler:    _Msg_DeleteOperator_Handler,
 		},
 		{
 			MethodName: "TransferOperatorOwnership",

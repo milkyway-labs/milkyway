@@ -4,7 +4,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
-	"github.com/milkyway-labs/milkyway/x/restaking/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
@@ -18,8 +17,7 @@ type ServicesKeeper interface {
 }
 
 type RestakingKeeper interface {
-	GetOperatorJoinedServices(ctx sdk.Context, operatorID uint32) (types.OperatorJoinedServices, error)
-	AddServiceToOperator(ctx sdk.Context, operatorID uint32, serviceID uint32) error
+	AddServiceToOperatorJoinedServices(ctx sdk.Context, operatorID uint32, serviceID uint32) error
 	AddOperatorToServiceAllowList(ctx sdk.Context, serviceID uint32, operatorID uint32) error
 	AddPoolToServiceSecuringPools(ctx sdk.Context, serviceID uint32, poolID uint32) error
 }
