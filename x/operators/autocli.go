@@ -127,6 +127,15 @@ Only the fields that you provide will be updated`,
 					},
 				},
 				{
+					RpcMethod: "ReactivateOperator",
+					Use:       "reactivate [operator-id]",
+					Short:     "Reactivate an operator that has been deactivated",
+					Example:   fmt.Sprintf(`%s tx %s reactivate 1 --from alice`, version.AppName, types.ModuleName),
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "operator_id"},
+					},
+				},
+				{
 					RpcMethod: "UpdateParams",
 					Skip:      true,
 				},
