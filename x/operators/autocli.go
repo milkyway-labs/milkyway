@@ -56,7 +56,7 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					RpcMethod: "RegisterOperator",
 					Use:       "register [moniker]",
 					Short:     "Register a new operator",
-					Long: `Register a new operator having the given name. 
+					Long: `Register a new operator having the given name.
 
 You can specify a website and a picture URL using the optional flags.
 The operator will be created with the sender as the admin.`,
@@ -68,15 +68,15 @@ The operator will be created with the sender as the admin.`,
 						{ProtoField: "moniker"},
 					},
 					FlagOptions: map[string]*autocliv1.FlagOptions{
-						"website":     {DefaultValue: types.DoNotModify},
-						"picture_url": {DefaultValue: types.DoNotModify},
+						"website":     {Usage: "website URL of the operator"},
+						"picture_url": {Usage: "picture URL of the operator"},
 					},
 				},
 				{
 					RpcMethod: "UpdateOperator",
-					Use:       "edit [operator-id]",
-					Short:     "Edit an existing operator",
-					Long: `Edit an existing operator having the provided it. 
+					Use:       "update [operator-id]",
+					Short:     "Update an existing operator",
+					Long: `Update an existing operator having the provided it.
 
 You can specify the moniker, website and picture URL using the optional flags.
 Only the fields that you provide will be updated`,
@@ -88,9 +88,18 @@ Only the fields that you provide will be updated`,
 						{ProtoField: "operator_id"},
 					},
 					FlagOptions: map[string]*autocliv1.FlagOptions{
-						"moniker":     {DefaultValue: types.DoNotModify},
-						"website":     {DefaultValue: types.DoNotModify},
-						"picture_url": {DefaultValue: types.DoNotModify},
+						"moniker": {
+							Usage:        "moniker of the operator",
+							DefaultValue: types.DoNotModify,
+						},
+						"website": {
+							Usage:        "website URL of the operator",
+							DefaultValue: types.DoNotModify,
+						},
+						"picture_url": {
+							Usage:        "picture URL of the operator",
+							DefaultValue: types.DoNotModify,
+						},
 					},
 				},
 				{
