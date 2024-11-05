@@ -483,7 +483,7 @@ func (suite *KeeperTestSuite) TestMsgServer_ReactivateOperator() {
 			store: func(ctx sdk.Context) {
 				err := suite.k.SaveOperator(ctx, types.NewOperator(
 					1,
-					types.OPERATOR_STATUS_ACTIVE,
+					types.OPERATOR_STATUS_INACTIVE,
 					"MilkyWay Operator",
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
