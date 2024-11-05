@@ -566,7 +566,7 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteOperatorInactivation() {
 	}
 }
 
-func (suite *KeeperTestSuite) TestKeeper_ReactiveInactiveOperator() {
+func (suite *KeeperTestSuite) TestKeeper_ReactivateInactiveOperator() {
 	testCases := []struct {
 		name       string
 		store      func(ctx sdk.Context)
@@ -652,7 +652,7 @@ func (suite *KeeperTestSuite) TestKeeper_ReactiveInactiveOperator() {
 			if !found {
 				suite.Fail("operator not found")
 			}
-			err := suite.k.ReactiveInactiveOperator(ctx, operator)
+			err := suite.k.ReactivateInactiveOperator(ctx, operator)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {

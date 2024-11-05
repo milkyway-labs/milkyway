@@ -157,7 +157,7 @@ func (k msgServer) ReactivateOperator(goCtx context.Context, msg *types.MsgReact
 	}
 
 	// Reactivate the operator
-	if err := k.ReactiveInactiveOperator(ctx, operator); err != nil {
+	if err := k.ReactivateInactiveOperator(ctx, operator); err != nil {
 		return nil, err
 	}
 
