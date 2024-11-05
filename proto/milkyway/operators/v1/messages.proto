@@ -30,6 +30,11 @@ service Msg {
   rpc DeactivateOperator(MsgDeactivateOperator)
       returns (MsgDeactivateOperatorResponse);
 
+  // ReactivateOperator defines the operation for reactivating an
+  // inactive operator.
+  rpc ReactivateOperator(MsgReactivateOperator)
+      returns (MsgReactivateOperatorResponse);
+
   // DeleteOperator defines the operation for deleting a deactivated operator.
   rpc DeleteOperator(MsgDeleteOperator) returns (MsgDeleteOperatorResponse);
 
@@ -130,6 +135,23 @@ message MsgDeactivateOperator {
 
 // MsgDeactivateOperatorResponse is the return value of MsgDeactivateOperator.
 message MsgDeactivateOperatorResponse {}
+
+// MsgReactivateOperator defines the message structure for the
+// ReactivateOperator gRPC service method. It allows the operator owner to
+// reactivate an inactive operator.
+message MsgReactivateOperator {
+  option (cosmos.msg.v1.signer) = "sender";
+  option (amino.name) = "milkyway/MsgReactivateOperator";
+
+  // Sender is the address of the user reactivating the operator
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // OperatorID represents the ID of the operator to be reactivated
+  uint32 operator_id = 2 [ (gogoproto.customname) = "OperatorID" ];
+}
+
+// MsgReactivateOperatorResponse is the return value of MsgReactivateOperator.
+message MsgReactivateOperatorResponse {}
 
 // MsgDeleteOperator defines the message structure for the
 // DeleteOperator gRPC service method. It allows the operator owner to

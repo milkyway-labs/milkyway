@@ -17,6 +17,7 @@ type OperatorsHooks interface {
 	AfterOperatorRegistered(ctx sdk.Context, operatorID uint32) error            // Must be called after an operator is registered
 	AfterOperatorInactivatingStarted(ctx sdk.Context, operatorID uint32) error   // Must be called after an operator has started inactivating
 	AfterOperatorInactivatingCompleted(ctx sdk.Context, operatorID uint32) error // Must be called after an operator has completed inactivating
+	AfterOperatorReactivated(ctx sdk.Context, operatorID uint32) error           // Must be called after an operator has been reactivated
 	AfterOperatorDeleted(ctx sdk.Context, operatorID uint32) error               // Must be called after an operator has been deleted
 }
 
@@ -56,6 +57,16 @@ func (h MultiOperatorsHooks) AfterOperatorInactivatingStarted(ctx sdk.Context, o
 func (h MultiOperatorsHooks) AfterOperatorInactivatingCompleted(ctx sdk.Context, operatorID uint32) error {
 	for _, hook := range h {
 		if err := hook.AfterOperatorInactivatingCompleted(ctx, operatorID); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// AfterOperatorReactivated implements OperatorsHooks
+func (h MultiOperatorsHooks) AfterOperatorReactivated(ctx sdk.Context, operatorID uint32) error {
+	for _, hook := range h {
+		if err := hook.AfterOperatorReactivated(ctx, operatorID); err != nil {
 			return err
 		}
 	}
