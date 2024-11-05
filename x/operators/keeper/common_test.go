@@ -162,3 +162,8 @@ func (m mockHooks) AfterOperatorDeleted(ctx sdk.Context, operatorID uint32) erro
 	m.CalledMap["AfterOperatorDeleted"] = true
 	return nil
 }
+
+func (m mockHooks) AfterOperatorReactivated(ctx sdk.Context, operatorID uint32) error {
+	m.CalledMap["AfterOperatorReactivated"] = true
+	return nil
+}

@@ -141,6 +141,37 @@ func (k msgServer) DeactivateOperator(goCtx context.Context, msg *types.MsgDeact
 	return &types.MsgDeactivateOperatorResponse{}, nil
 }
 
+// ReactivateOperator defines the rpc method for Msg/ReactivateOperator
+func (k msgServer) ReactivateOperator(goCtx context.Context, msg *types.MsgReactivateOperator) (*types.MsgReactivateOperatorResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Check if the operator exists
+	operator, found := k.GetOperator(ctx, msg.OperatorID)
+	if !found {
+		return nil, types.ErrOperatorNotFound
+	}
+
+	// Make sure only the admin can reactivate the operator
+	if operator.Admin != msg.Sender {
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can deactivate the operator")
+	}
+
+	// Reactivate the operator
+	if err := k.ReactivateInactiveOperator(ctx, operator); err != nil {
+		return nil, err
+	}
+
+	// Emit the event
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeReactivateOperator,
+			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", msg.OperatorID)),
+		),
+	})
+
+	return &types.MsgReactivateOperatorResponse{}, nil
+}
+
 // DeleteOperator defines the rpc method for Msg/DeleteOperator
 func (k msgServer) DeleteOperator(goCtx context.Context, msg *types.MsgDeleteOperator) (*types.MsgDeleteOperatorResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
