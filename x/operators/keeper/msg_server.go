@@ -151,12 +151,12 @@ func (k msgServer) ReactivateOperator(goCtx context.Context, msg *types.MsgReact
 		return nil, types.ErrOperatorNotFound
 	}
 
-	// Make sure only the admin can deactivate the operator
+	// Make sure only the admin can reactivate the operator
 	if operator.Admin != msg.Sender {
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can deactivate the operator")
 	}
 
-	// Start the operator inactivation
+	// Reactivate the operator
 	if err := k.ReactiveInactiveOperator(ctx, operator); err != nil {
 		return nil, err
 	}

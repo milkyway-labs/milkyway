@@ -107,7 +107,7 @@ func (k *Keeper) StartOperatorInactivation(ctx sdk.Context, operator types.Opera
 
 // ReactiveInactiveOperator reactivates an operator in inactive state
 func (k *Keeper) ReactiveInactiveOperator(ctx sdk.Context, operator types.Operator) error {
-	// Make sure the operator is not already inactive or inactivating
+	// Make sure the operator is inactive
 	if operator.Status != types.OPERATOR_STATUS_INACTIVE {
 		return types.ErrOperatorNotInactive
 	}
