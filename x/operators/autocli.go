@@ -74,7 +74,7 @@ The operator will be created with the sender as the admin.`,
 				},
 				{
 					RpcMethod: "UpdateOperator",
-					Use:       "edit [id]",
+					Use:       "edit [operator-id]",
 					Short:     "Edit an existing operator",
 					Long: `Edit an existing operator having the provided it. 
 
@@ -94,8 +94,23 @@ Only the fields that you provide will be updated`,
 					},
 				},
 				{
+					RpcMethod: "SetOperatorParams",
+					Skip:      true,
+				},
+				{
+					RpcMethod: "TransferOperatorOwnership",
+					Use:       "transfer-ownership [operator-id] [new-owner]",
+					Short:     "Transfer the ownership of an operator to another user",
+					Example: fmt.Sprintf(`%s tx %s transfer-ownership 1 cosmos1example --from alice`,
+						version.AppName, types.ModuleName,
+					),
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "operator_id"},
+					},
+				},
+				{
 					RpcMethod: "DeactivateOperator",
-					Use:       "deactivate [id]",
+					Use:       "deactivate [operator-id]",
 					Short:     "Deactivate an existing operator",
 					Example:   fmt.Sprintf(`%s tx %s deactivate 1 --from alice`, version.AppName, types.ModuleName),
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
@@ -104,7 +119,7 @@ Only the fields that you provide will be updated`,
 				},
 				{
 					RpcMethod: "DeleteOperator",
-					Use:       "delete [id]",
+					Use:       "delete [operator-id]",
 					Short:     "Delete an inactive operator",
 					Example:   fmt.Sprintf(`%s tx %s delete 1 --from alice`, version.AppName, types.ModuleName),
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
