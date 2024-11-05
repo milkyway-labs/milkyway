@@ -31,7 +31,8 @@ func GetTxCmd() *cobra.Command {
 	return txCmd
 }
 
-// GetCmdSetOperatorParams returns the command allowing to edit an existing operator
+// GetCmdSetOperatorParams returns the command allowing to set an existing operator's
+// parameters
 func GetCmdSetOperatorParams() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "set-params [operator-id] [commission-rate]",

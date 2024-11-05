@@ -57,6 +57,11 @@ The service will be created with the sender as the owner.`,
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "name"},
 					},
+					FlagOptions: map[string]*autocliv1.FlagOptions{
+						"description": {Usage: "description of the service"},
+						"website":     {Usage: "website URL of the service"},
+						"picture_url": {Usage: "picture URL of the service"},
+					},
 				},
 				{
 					RpcMethod: "UpdateService",
@@ -64,7 +69,7 @@ The service will be created with the sender as the owner.`,
 					Short:     "Update an existing service",
 					Long: `Update an existing service having the provided it. 
 
-You can specify a description, website and a picture URL using the optional flags.
+You can specify a name, description, website and a picture URL using the optional flags.
 Only the fields that you provide will be updated`,
 					Example: fmt.Sprintf(
 						`%s tx %s update 1 --description "My new description" --from alice`,
@@ -74,10 +79,22 @@ Only the fields that you provide will be updated`,
 						{ProtoField: "service_id"},
 					},
 					FlagOptions: map[string]*autocliv1.FlagOptions{
-						"name":        {DefaultValue: types.DoNotModify},
-						"description": {DefaultValue: types.DoNotModify},
-						"website":     {DefaultValue: types.DoNotModify},
-						"picture_url": {DefaultValue: types.DoNotModify},
+						"name": {
+							Usage:        "name of the service",
+							DefaultValue: types.DoNotModify,
+						},
+						"description": {
+							Usage:        "description of the service",
+							DefaultValue: types.DoNotModify,
+						},
+						"website": {
+							Usage:        "website URL of the service",
+							DefaultValue: types.DoNotModify,
+						},
+						"picture_url": {
+							Usage:        "picture URL of the service",
+							DefaultValue: types.DoNotModify,
+						},
 					},
 				},
 				{
