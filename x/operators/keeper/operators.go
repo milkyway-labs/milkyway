@@ -105,6 +105,23 @@ func (k *Keeper) StartOperatorInactivation(ctx sdk.Context, operator types.Opera
 	return k.AfterOperatorInactivatingStarted(ctx, operator.ID)
 }
 
+// ReactiveInactiveOperator reactivates an operator in inactive state
+func (k *Keeper) ReactiveInactiveOperator(ctx sdk.Context, operator types.Operator) error {
+	// Make sure the operator is not already inactive or inactivating
+	if operator.Status != types.OPERATOR_STATUS_INACTIVE {
+		return types.ErrOperatorNotInactive
+	}
+
+	// Update the operator status
+	operator.Status = types.OPERATOR_STATUS_ACTIVE
+	if err := k.SaveOperator(ctx, operator); err != nil {
+		return err
+	}
+
+	// Call the hook
+	return k.AfterOperatorReactivated(ctx, operator.ID)
+}
+
 // DeleteOperator deletes the operator with the given ID
 func (k *Keeper) DeleteOperator(ctx sdk.Context, operator types.Operator) error {
 	// Make sure the operator is inactive

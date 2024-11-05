@@ -462,6 +462,154 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 	}
 }
 
+func (suite *KeeperTestSuite) TestMsgServer_ReactivateOperator() {
+	testCases := []struct {
+		name        string
+		setup       func()
+		store       func(ctx sdk.Context)
+		msg         *types.MsgReactivateOperator
+		shouldErr   bool
+		expResponse *types.MsgReactivateOperatorResponse
+		expEvents   sdk.Events
+		check       func(ctx sdk.Context)
+	}{
+		{
+			name:      "not found operator returns error",
+			msg:       types.NewMsgReactivateOperator(1, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"),
+			shouldErr: true,
+		},
+		{
+			name: "non admin sender returns error",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SaveOperator(ctx, types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgReactivateOperator(
+				1,
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "active operator can't be reactivated",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SaveOperator(ctx, types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgReactivateOperator(
+				1,
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "inactivating operator can't be reactivated",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SaveOperator(ctx, types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_INACTIVATING,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgReactivateOperator(
+				1,
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "operator reactivated successfully",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SaveOperator(ctx, types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_INACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgReactivateOperator(
+				1,
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr:   false,
+			expResponse: &types.MsgReactivateOperatorResponse{},
+			expEvents: []sdk.Event{
+				sdk.NewEvent(
+					types.EventTypeReactivateOperator,
+					sdk.NewAttribute(types.AttributeKeyOperatorID, "1"),
+				),
+			},
+			check: func(ctx sdk.Context) {
+				operator, found := suite.k.GetOperator(ctx, 1)
+				suite.Require().True(found)
+				suite.Require().Equal(types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				), operator)
+
+				// Check hook called
+				called := suite.hooks.CalledMap["AfterOperatorReactivated"]
+				suite.Require().True(called)
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			suite.SetupTest()
+			ctx := suite.ctx
+			if tc.setup != nil {
+				tc.setup()
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			msgServer := keeper.NewMsgServer(suite.k)
+			res, err := msgServer.ReactivateOperator(ctx, tc.msg)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expResponse, res)
+				for _, event := range tc.expEvents {
+					suite.Require().Contains(ctx.EventManager().Events(), event)
+				}
+
+				if tc.check != nil {
+					tc.check(ctx)
+				}
+			}
+		})
+	}
+}
+
 func (suite *KeeperTestSuite) TestMsgServer_TransferOperatorOwnership() {
 	testCases := []struct {
 		name        string

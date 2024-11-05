@@ -116,6 +116,11 @@ func (o *OperatorsHooks) AfterOperatorInactivatingStarted(ctx sdk.Context, opera
 	return nil
 }
 
+// AfterOperatorReactivated implements types.OperatorsHooks.
+func (o *OperatorsHooks) AfterOperatorReactivated(ctx sdk.Context, operatorID uint32) error {
+	return nil
+}
+
 // AfterOperatorRegistered implements types.OperatorsHooks.
 func (o *OperatorsHooks) AfterOperatorRegistered(ctx sdk.Context, operatorID uint32) error {
 	return nil

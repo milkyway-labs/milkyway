@@ -565,3 +565,102 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteOperatorInactivation() {
 		})
 	}
 }
+
+func (suite *KeeperTestSuite) TestKeeper_ReactiveInactiveOperator() {
+	testCases := []struct {
+		name       string
+		store      func(ctx sdk.Context)
+		operatorID uint32
+		shouldErr  bool
+		check      func(ctx sdk.Context)
+	}{
+		{
+			name: "reactivate active operator fails",
+			store: func(ctx sdk.Context) {
+				err := suite.k.RegisterOperator(ctx, types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+				suite.Require().NoError(err)
+			},
+			operatorID: 1,
+			shouldErr:  true,
+		},
+		{
+			name: "reactivate inactivating operator fails",
+			store: func(ctx sdk.Context) {
+				err := suite.k.RegisterOperator(ctx, types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_INACTIVATING,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+				suite.Require().NoError(err)
+			},
+			operatorID: 1,
+			shouldErr:  true,
+		},
+		{
+			name: "reactivate inactive operator works properly",
+			store: func(ctx sdk.Context) {
+				err := suite.k.RegisterOperator(ctx, types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_INACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+				suite.Require().NoError(err)
+			},
+			operatorID: 1,
+			shouldErr:  false,
+			check: func(ctx sdk.Context) {
+				operator, found := suite.k.GetOperator(ctx, 1)
+				suite.Require().True(found)
+				suite.Require().Equal(types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				), operator)
+
+				// Check hook called
+				called := suite.hooks.CalledMap["AfterOperatorReactivated"]
+				suite.Require().True(called)
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			suite.SetupTest()
+			ctx := suite.ctx
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+			operator, found := suite.k.GetOperator(ctx, tc.operatorID)
+			if !found {
+				suite.Fail("operator not found")
+			}
+			err := suite.k.ReactiveInactiveOperator(ctx, operator)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				if tc.check != nil {
+					tc.check(ctx)
+				}
+			}
+		})
+	}
+}
