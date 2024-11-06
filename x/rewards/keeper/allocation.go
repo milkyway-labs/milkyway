@@ -88,7 +88,7 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 	// Filter the pool to only include the ones with restakable assets
 	var pools []poolstypes.Pool
 	for _, pool := range k.poolsKeeper.GetPools(sdkCtx) {
-		isRestakble, err := k.restakingKeeper.IsAssetRestakable(sdkCtx, pool.Denom)
+		isRestakble, err := k.restakingKeeper.IsDenomRestakable(sdkCtx, pool.Denom)
 		if err != nil {
 			return err
 		}
@@ -312,7 +312,7 @@ func (k *Keeper) getDistrInfos(
 		var targetTokens sdk.Coins
 		// Filter out the coins that are not allowed to be restaked
 		for _, coin := range target.GetTokens() {
-			isRestakable, err := k.restakingKeeper.IsAssetRestakable(sdkCtx, coin.Denom)
+			isRestakable, err := k.restakingKeeper.IsDenomRestakable(sdkCtx, coin.Denom)
 			if err != nil {
 				return nil, math.LegacyDec{}, err
 			}
@@ -320,7 +320,7 @@ func (k *Keeper) getDistrInfos(
 				targetTokens = append(targetTokens, coin)
 			}
 		}
-		delValue, err := k.GetCoinsValue(ctx, target.GetTokens())
+		delValue, err := k.GetCoinsValue(ctx, targetTokens)
 		if err != nil {
 			return nil, math.LegacyDec{}, err
 		}

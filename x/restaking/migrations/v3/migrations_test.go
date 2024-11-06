@@ -168,7 +168,7 @@ func (suite *MigrationsTestSuite) TestMigrateV1To2() {
 			},
 		},
 		{
-			name: "no legacy params are migrated to default params",
+			name: "not stored legacy params are migrated to default params",
 			check: func(ctx sdk.Context) {
 				params, err := suite.restakingKeeper.GetParams(ctx)
 				suite.Require().NoError(err)

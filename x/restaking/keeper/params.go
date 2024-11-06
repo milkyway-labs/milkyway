@@ -28,8 +28,8 @@ func (k *Keeper) SetUnbondingTime(ctx sdk.Context, unbondingTime time.Duration) 
 	return k.unbondingTimeNanos.Set(ctx, unbondingTime.Nanoseconds())
 }
 
-// GetAllRestakbleAssets returns all the restakable assets.
-func (k *Keeper) GetAllRestakbleAssets(ctx sdk.Context) ([]string, error) {
+// GetAllRestakbleDenoms returns all the denoms that are allowed to be restaked.
+func (k *Keeper) GetAllRestakbleDenoms(ctx sdk.Context) ([]string, error) {
 	var restakableAssets []string
 	err := k.allowedRestakableDenoms.Walk(ctx, nil, func(denom string) (stop bool, err error) {
 		restakableAssets = append(restakableAssets, denom)
@@ -41,8 +41,8 @@ func (k *Keeper) GetAllRestakbleAssets(ctx sdk.Context) ([]string, error) {
 	return restakableAssets, nil
 }
 
-// SetAllowedRestakableDenoms sets the denoms that are allowed to be restaked.
-func (k *Keeper) SetAllowedRestakableDenoms(ctx sdk.Context, denoms []string) error {
+// SetRestakableDenoms sets the denoms that are allowed to be restaked.
+func (k *Keeper) SetRestakableDenoms(ctx sdk.Context, denoms []string) error {
 	// Remove all the allowed restakable denoms from the store
 	err := k.allowedRestakableDenoms.Clear(ctx, nil)
 	if err != nil {
@@ -59,9 +59,9 @@ func (k *Keeper) SetAllowedRestakableDenoms(ctx sdk.Context, denoms []string) er
 	return nil
 }
 
-// IsAssetRestakable checks if the asset with the provided denom is allowed
+// IsDenomRestakable checks if the asset with the provided denom is allowed
 // to be restaked.
-func (k *Keeper) IsAssetRestakable(ctx sdk.Context, denom string) (bool, error) {
+func (k *Keeper) IsDenomRestakable(ctx sdk.Context, denom string) (bool, error) {
 	isEmpty, err := utils.IsKeySetEmpty(ctx, k.allowedRestakableDenoms, nil)
 	if err != nil {
 		return false, err
@@ -80,7 +80,7 @@ func (k *Keeper) SetParams(ctx sdk.Context, params types.Params) error {
 		return err
 	}
 
-	err = k.SetAllowedRestakableDenoms(ctx, params.AllowedDenoms)
+	err = k.SetRestakableDenoms(ctx, params.AllowedDenoms)
 	if err != nil {
 		return err
 	}
@@ -94,7 +94,7 @@ func (k *Keeper) GetParams(ctx sdk.Context) (types.Params, error) {
 	if err != nil {
 		return types.Params{}, err
 	}
-	restakableAssets, err := k.GetAllRestakbleAssets(ctx)
+	restakableAssets, err := k.GetAllRestakbleDenoms(ctx)
 	if err != nil {
 		return types.Params{}, nil
 	}

@@ -13,6 +13,7 @@ message Params {
   // types of restaking: pool, operator and service restaking.
   int64 unbonding_time = 1 [ (gogoproto.stdduration) = true ];
 
-  // AllowedDenoms represents a list of denoms that can be restaked.
-  repeated string allowed_denoms = 2 [ (gogoproto.nullable) = false ];
+  // AllowedDenoms represents the list of denoms allowed for restaking
+  // and that will be considered when computing rewards.
+  repeated string allowed_denoms = 2;
 }

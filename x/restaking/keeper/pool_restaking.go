@@ -48,7 +48,7 @@ func (k *Keeper) RemovePoolDelegation(ctx sdk.Context, delegation types.Delegati
 // DelegateToPool sends the given amount to the pool account and saves the delegation for the given user
 func (k *Keeper) DelegateToPool(ctx sdk.Context, amount sdk.Coin, delegator string) (sdk.DecCoins, error) {
 	// Ensure the provided amount can be restaked
-	isRestakable, err := k.IsAssetRestakable(ctx, amount.Denom)
+	isRestakable, err := k.IsDenomRestakable(ctx, amount.Denom)
 	if err != nil {
 		return nil, err
 	}

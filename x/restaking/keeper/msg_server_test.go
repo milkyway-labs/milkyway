@@ -1079,8 +1079,8 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegatePool() {
 		{
 			name: "not allowed denom returns error",
 			store: func(ctx sdk.Context) {
-				// Set the allowed restakable denoms to "uinit"
-				err := suite.k.SetAllowedRestakableDenoms(ctx, []string{"uinit"})
+				// Configure the allowed restakable denoms
+				err := suite.k.SetRestakableDenoms(ctx, []string{"uinit"})
 				suite.Require().NoError(err)
 				// Create the pool
 				err = suite.pk.SavePool(ctx, poolstypes.Pool{
@@ -1142,8 +1142,8 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegatePool() {
 		{
 			name: "allowed denom is delegated properly",
 			store: func(ctx sdk.Context) {
-				// Set the allowed restakable denoms to "umilk"
-				err := suite.k.SetAllowedRestakableDenoms(ctx, []string{"umilk"})
+				// Configure the allowed restakable denoms
+				err := suite.k.SetRestakableDenoms(ctx, []string{"umilk"})
 				suite.Require().NoError(err)
 
 				// Create the pool
@@ -1367,8 +1367,8 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateOperator() {
 		{
 			name: "not allowed denom returns error",
 			store: func(ctx sdk.Context) {
-				// Set the allowed restakable denoms to "uinit"
-				err := suite.k.SetAllowedRestakableDenoms(ctx, []string{"uinit"})
+				// Configure the allowed restakable denoms
+				err := suite.k.SetRestakableDenoms(ctx, []string{"uinit"})
 				suite.Require().NoError(err)
 
 				// Create the operator
@@ -1441,8 +1441,8 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateOperator() {
 		{
 			name: "allowed denom is delegated properly",
 			store: func(ctx sdk.Context) {
-				// Set the allowed restakable denoms to "umilk"
-				err := suite.k.SetAllowedRestakableDenoms(ctx, []string{"umilk"})
+				// Configure the allowed restakable denoms
+				err := suite.k.SetRestakableDenoms(ctx, []string{"umilk"})
 				suite.Require().NoError(err)
 
 				// Create the operator
@@ -1676,7 +1676,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateService() {
 			name: "not allowed denom returns error",
 			store: func(ctx sdk.Context) {
 				// Configure the allowed restakable denoms
-				err := suite.k.SetAllowedRestakableDenoms(ctx, []string{"uinit"})
+				err := suite.k.SetRestakableDenoms(ctx, []string{"uinit"})
 				suite.Require().NoError(err)
 
 				// Create the service
@@ -1749,7 +1749,8 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateService() {
 		{
 			name: "allowed denom is delegated properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.SetAllowedRestakableDenoms(ctx, []string{"umilk"})
+				// Configure the allowed restakable denoms
+				err := suite.k.SetRestakableDenoms(ctx, []string{"umilk"})
 				suite.Require().NoError(err)
 
 				// Create the service

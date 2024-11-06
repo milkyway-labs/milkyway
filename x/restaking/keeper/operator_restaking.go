@@ -78,7 +78,7 @@ func (k *Keeper) DelegateToOperator(ctx sdk.Context, operatorID uint32, amount s
 
 	// Ensure the provided amount can be restaked
 	for _, coin := range amount {
-		isRestakable, err := k.IsAssetRestakable(ctx, coin.Denom)
+		isRestakable, err := k.IsDenomRestakable(ctx, coin.Denom)
 		if err != nil {
 			return sdk.NewDecCoins(), err
 		}
@@ -87,7 +87,7 @@ func (k *Keeper) DelegateToOperator(ctx sdk.Context, operatorID uint32, amount s
 		}
 	}
 
-	// MAke sure the operator is active
+	// Make sure the operator is active
 	if !operator.IsActive() {
 		return sdk.NewDecCoins(), operatorstypes.ErrOperatorNotActive
 	}

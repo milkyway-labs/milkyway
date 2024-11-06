@@ -219,7 +219,7 @@ func (k *Keeper) DelegateToService(ctx sdk.Context, serviceID uint32, amount sdk
 
 	// Ensure the provided amount can be restaked
 	for _, coin := range amount {
-		isRestakable, err := k.IsAssetRestakable(ctx, coin.Denom)
+		isRestakable, err := k.IsDenomRestakable(ctx, coin.Denom)
 		if err != nil {
 			return sdk.NewDecCoins(), err
 		}

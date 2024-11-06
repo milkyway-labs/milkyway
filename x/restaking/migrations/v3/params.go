@@ -29,6 +29,8 @@ func migrateParams(ctx sdk.Context,
 		return err
 	}
 
+	// Create a new Params instance with the same unbonding time
+	// and an empty allowed denoms list to allow all denoms.
 	newParams := types.NewParams(legacyParams.UnbondingTime, nil)
 	return restakingKeeper.SetParams(ctx, newParams)
 }
