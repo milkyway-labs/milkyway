@@ -4,7 +4,9 @@ import (
 	"time"
 
 	"cosmossdk.io/collections"
+	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
@@ -72,6 +74,17 @@ func (k *Keeper) DelegateToOperator(ctx sdk.Context, operatorID uint32, amount s
 	operator, found := k.operatorsKeeper.GetOperator(ctx, operatorID)
 	if !found {
 		return sdk.NewDecCoins(), operatorstypes.ErrOperatorNotFound
+	}
+
+	// Ensure the provided amount can be restaked
+	for _, coin := range amount {
+		isRestakable, err := k.IsAssetRestakable(ctx, coin.Denom)
+		if err != nil {
+			return sdk.NewDecCoins(), err
+		}
+		if !isRestakable {
+			return sdk.NewDecCoins(), errors.Wrapf(sdkerrors.ErrInvalidRequest, "restaking is not allowed for %s", coin.Denom)
+		}
 	}
 
 	// MAke sure the operator is active

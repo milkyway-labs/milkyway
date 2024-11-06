@@ -4,7 +4,9 @@ import (
 	"time"
 
 	"cosmossdk.io/collections"
+	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
@@ -213,6 +215,17 @@ func (k *Keeper) DelegateToService(ctx sdk.Context, serviceID uint32, amount sdk
 	service, found := k.servicesKeeper.GetService(ctx, serviceID)
 	if !found {
 		return sdk.NewDecCoins(), servicestypes.ErrServiceNotFound
+	}
+
+	// Ensure the provided amount can be restaked
+	for _, coin := range amount {
+		isRestakable, err := k.IsAssetRestakable(ctx, coin.Denom)
+		if err != nil {
+			return sdk.NewDecCoins(), err
+		}
+		if !isRestakable {
+			return sdk.NewDecCoins(), errors.Wrapf(sdkerrors.ErrInvalidRequest, "restaking is not allowed for %s", coin.Denom)
+		}
 	}
 
 	// Make sure the service is active

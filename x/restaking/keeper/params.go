@@ -41,8 +41,8 @@ func (k *Keeper) GetAllRestakbleAssets(ctx sdk.Context) ([]string, error) {
 	return restakableAssets, nil
 }
 
-// SetRestakableDenoms sets the denoms that are allowed to be restaked.
-func (k *Keeper) SetRestakableDenoms(ctx sdk.Context, denoms []string) error {
+// SetAllowedRestakableDenoms sets the denoms that are allowed to be restaked.
+func (k *Keeper) SetAllowedRestakableDenoms(ctx sdk.Context, denoms []string) error {
 	// Remove all the allowed restakable denoms from the store
 	err := k.allowedRestakableDenoms.Clear(ctx, nil)
 	if err != nil {
@@ -80,7 +80,7 @@ func (k *Keeper) SetParams(ctx sdk.Context, params types.Params) error {
 		return err
 	}
 
-	err = k.SetRestakableDenoms(ctx, params.AllowedDenoms)
+	err = k.SetAllowedRestakableDenoms(ctx, params.AllowedDenoms)
 	if err != nil {
 		return err
 	}
