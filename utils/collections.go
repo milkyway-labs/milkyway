@@ -36,10 +36,10 @@ func IsMapEmpty[K, V any](ctx sdk.Context, collectionMap collections.Map[K, V], 
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		return true, nil
+		return false, nil
 	}
 
-	return false, nil
+	return true, nil
 }
 
 // IsKeySetEmpty checks if the given key set with the given ranger is empty.
@@ -52,8 +52,8 @@ func IsKeySetEmpty[K any](ctx sdk.Context, collectionMap collections.KeySet[K], 
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		return true, nil
+		return false, nil
 	}
 
-	return false, nil
+	return true, nil
 }
