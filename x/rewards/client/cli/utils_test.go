@@ -28,7 +28,6 @@ func TestCliUtils_parseRewardsPlan(t *testing.T) {
 		shouldErr bool
 		expected  cli.RewardsPlan
 	}{
-
 		{
 			name: "parse basic distribution json",
 			jsonFile: testutil.WriteToNewTempFile(t, `{
@@ -158,12 +157,6 @@ func TestCliUtils_parseRewardsPlan(t *testing.T) {
 				require.Error(t, err)
 			} else {
 				require.NoError(t, err)
-				require.Equal(t, tc.expected.StartTime, plan.StartTime)
-				require.Equal(t, tc.expected.EndTime, plan.EndTime)
-				require.Equal(t, tc.expected.AmountPerDay, plan.AmountPerDay)
-				require.Equal(t, tc.expected.PoolsDistribution, plan.PoolsDistribution)
-				require.Equal(t, tc.expected.OperatorsDistribution, plan.OperatorsDistribution)
-				require.Equal(t, tc.expected.UsersDistribution, plan.UsersDistribution)
 				require.Equal(t, tc.expected, plan)
 			}
 		})
