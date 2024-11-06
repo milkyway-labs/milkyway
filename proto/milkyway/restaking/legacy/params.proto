@@ -1,9 +1,9 @@
 syntax = "proto3";
-package milkyway.restaking.v1;
+package milkyway.restaking.legacy;
 
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/x/restaking/types";
+option go_package = "github.com/milkyway-labs/milkyway/x/restaking/legacy/types";
 
 // Params defines the parameters for the module.
 message Params {
@@ -12,7 +12,4 @@ message Params {
   // after the user initiates an unbonding request. This will be applied to all
   // types of restaking: pool, operator and service restaking.
   int64 unbonding_time = 1 [ (gogoproto.stdduration) = true ];
-
-  // AllowedDenoms represents a list of denoms that can be restaked.
-  repeated string allowed_denoms = 2 [ (gogoproto.nullable) = false ];
 }

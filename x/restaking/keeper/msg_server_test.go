@@ -1170,10 +1170,11 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegatePool() {
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding time to 1 week
-				suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour))
+				err := suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour, nil))
+				suite.Require().NoError(err)
 
 				// Create the pool
-				err := suite.pk.SavePool(ctx, poolstypes.Pool{
+				err = suite.pk.SavePool(ctx, poolstypes.Pool{
 					ID:      1,
 					Denom:   "umilk",
 					Address: poolstypes.GetPoolAddress(1).String(),
@@ -1395,7 +1396,8 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegateOperator() {
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding time to 1 week
-				suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour))
+				err := suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour, nil))
+				suite.Require().NoError(err)
 
 				// Create the operator
 				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
@@ -1413,7 +1415,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegateOperator() {
 
 				// Delegate some funds
 				msgServer := keeper.NewMsgServer(suite.k)
-				_, err := msgServer.DelegateOperator(ctx, &types.MsgDelegateOperator{
+				_, err = msgServer.DelegateOperator(ctx, &types.MsgDelegateOperator{
 					OperatorID: 1,
 					Delegator:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					Amount:     sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
@@ -1622,7 +1624,8 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegateService() {
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding time to 1 week
-				suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour))
+				err := suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour, nil))
+				suite.Require().NoError(err)
 
 				// Create the service
 				suite.sk.SaveService(ctx, servicestypes.Service{
@@ -1640,7 +1643,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegateService() {
 
 				// Delegate some funds
 				msgServer := keeper.NewMsgServer(suite.k)
-				_, err := msgServer.DelegateService(ctx, &types.MsgDelegateService{
+				_, err = msgServer.DelegateService(ctx, &types.MsgDelegateService{
 					ServiceID: 1,
 					Delegator: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					Amount:    sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
@@ -1900,7 +1903,8 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateParams() {
 			shouldErr: false,
 			expEvents: sdk.Events{},
 			check: func(ctx sdk.Context) {
-				params := suite.k.GetParams(ctx)
+				params, err := suite.k.GetParams(ctx)
+				suite.Require().NoError(err)
 				suite.Require().Equal(types.DefaultParams(), params)
 			},
 		},

@@ -26,19 +26,20 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 			setupCtx: func(ctx sdk.Context) sdk.Context {
 				return ctx.
 					WithBlockHeight(10).
-					WithBlockTime(time.Date(2024, 1, 1, 12, 00, 00, 000, time.UTC))
+					WithBlockTime(time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o00, time.UTC))
 			},
 			store: func(ctx sdk.Context) {
 				delegationAmount := sdk.NewCoin("umilk", sdkmath.NewInt(100))
 				delegatorAddress := "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"
 
 				// Set the unbonding delegation time to 7 days
-				suite.k.SetParams(ctx, types.Params{
+				err := suite.k.SetParams(ctx, types.Params{
 					UnbondingTime: 7 * 24 * time.Hour,
 				})
+				suite.Require().NoError(err)
 
 				// Create a pool
-				err := suite.pk.SavePool(ctx, poolstypes.NewPool(1, delegationAmount.Denom))
+				err = suite.pk.SavePool(ctx, poolstypes.NewPool(1, delegationAmount.Denom))
 				suite.Require().NoError(err)
 
 				// Send some tokens to the user
@@ -77,7 +78,7 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					1,
 					10,
-					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					time.Date(2024, 1, 8, 12, 0o0, 0o0, 0o00, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 					1,
 				), ubd)
@@ -88,19 +89,20 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 			setupCtx: func(ctx sdk.Context) sdk.Context {
 				return ctx.
 					WithBlockHeight(10).
-					WithBlockTime(time.Date(2024, 1, 1, 12, 00, 00, 000, time.UTC))
+					WithBlockTime(time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o00, time.UTC))
 			},
 			store: func(ctx sdk.Context) {
 				delegationAmount := sdk.NewCoin("umilk", sdkmath.NewInt(100))
 				delegatorAddress := "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"
 
 				// Set the unbonding delegation time to 7 days
-				suite.k.SetParams(ctx, types.Params{
+				err := suite.k.SetParams(ctx, types.Params{
 					UnbondingTime: 7 * 24 * time.Hour,
 				})
+				suite.Require().NoError(err)
 
 				// Create a pool
-				err := suite.pk.SavePool(ctx, poolstypes.NewPool(1, delegationAmount.Denom))
+				err = suite.pk.SavePool(ctx, poolstypes.NewPool(1, delegationAmount.Denom))
 				suite.Require().NoError(err)
 
 				// Send some tokens to the user
@@ -151,19 +153,20 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 			setupCtx: func(ctx sdk.Context) sdk.Context {
 				return ctx.
 					WithBlockHeight(10).
-					WithBlockTime(time.Date(2024, 1, 1, 12, 00, 00, 000, time.UTC))
+					WithBlockTime(time.Date(2024, 1, 1, 12, 0o0, 0o0, 0o00, time.UTC))
 			},
 			store: func(ctx sdk.Context) {
 				milkBalance := sdk.NewCoin("umilk", sdkmath.NewInt(1_000))
 				delegatorAddress := "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"
 
 				// Set the unbonding delegation time to 7 days
-				suite.k.SetParams(ctx, types.Params{
+				err := suite.k.SetParams(ctx, types.Params{
 					UnbondingTime: 7 * 24 * time.Hour,
 				})
+				suite.Require().NoError(err)
 
 				// Create a pool
-				err := suite.pk.SavePool(ctx, poolstypes.NewPool(1, milkBalance.Denom))
+				err = suite.pk.SavePool(ctx, poolstypes.NewPool(1, milkBalance.Denom))
 				suite.Require().NoError(err)
 
 				// Create an operator

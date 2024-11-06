@@ -31,13 +31,14 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 			setupCtx: func(ctx sdk.Context) sdk.Context {
 				return ctx.
 					WithBlockHeight(10).
-					WithBlockTime(time.Date(2024, 1, 1, 12, 0, 0, 00, time.UTC))
+					WithBlockTime(time.Date(2024, 1, 1, 12, 0, 0, 0o0, time.UTC))
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding delegation time to 7 days
-				suite.rk.SetParams(ctx, restakingtypes.Params{
+				err := suite.rk.SetParams(ctx, restakingtypes.Params{
 					UnbondingTime: 7 * 24 * time.Hour,
 				})
+				suite.Require().NoError(err)
 
 				// Add some tokens to the user's insurance fund so they can restake
 				// the vested representation
@@ -48,7 +49,7 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 
 				// Delegate some vested representation to pool, service and operator
 				suite.createPool(1, vestedStake)
-				_, err := suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedStake, 200), testAccount)
+				_, err = suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedStake, 200), testAccount)
 				suite.Assert().NoError(err)
 
 				suite.createService(1)
@@ -97,13 +98,14 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 			setupCtx: func(ctx sdk.Context) sdk.Context {
 				return ctx.
 					WithBlockHeight(10).
-					WithBlockTime(time.Date(2024, 1, 1, 12, 0, 0, 00, time.UTC))
+					WithBlockTime(time.Date(2024, 1, 1, 12, 0, 0, 0o0, time.UTC))
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding delegation time to 7 days
-				suite.rk.SetParams(ctx, restakingtypes.Params{
+				err := suite.rk.SetParams(ctx, restakingtypes.Params{
 					UnbondingTime: 7 * 24 * time.Hour,
 				})
+				suite.Require().NoError(err)
 
 				// Add some tokens to the user's insurance fund so they can restake
 				// the vested representation
@@ -114,7 +116,7 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 
 				// Delegate some vested representation to pool, service and operator
 				suite.createPool(1, vestedStake)
-				_, err := suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedStake, 200), testAccount)
+				_, err = suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedStake, 200), testAccount)
 				suite.Assert().NoError(err)
 
 				suite.createService(1)

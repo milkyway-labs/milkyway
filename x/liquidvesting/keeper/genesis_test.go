@@ -16,7 +16,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 	user2 := "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"
 	vestedStake, err := types.GetVestedRepresentationDenom("stake")
 	suite.Assert().NoError(err)
-	blockTime := time.Date(2024, 1, 1, 12, 0, 0, 000, time.UTC)
+	blockTime := time.Date(2024, 1, 1, 12, 0, 0, 0o00, time.UTC)
 
 	testCases := []struct {
 		name       string
@@ -63,9 +63,10 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding delegation time to 7 days
-				suite.rk.SetParams(ctx, restakingtypes.Params{
+				err := suite.rk.SetParams(ctx, restakingtypes.Params{
 					UnbondingTime: 7 * 24 * time.Hour,
 				})
+				suite.Require().NoError(err)
 
 				// Fund the users' insurance fund
 				suite.fundAccountInsuranceFund(ctx, user1, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)))
@@ -78,7 +79,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				// Delegate the tokens so that they will be scheduled for burn after the
 				// unbonding period
 				suite.createPool(1, vestedIBCDenom)
-				_, err := suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedIBCDenom, 100), user1)
+				_, err = suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedIBCDenom, 100), user1)
 				suite.Assert().NoError(err)
 
 				suite.createPool(2, vestedStake)
@@ -264,7 +265,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 							user1,
 							1,
 							10,
-							time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+							time.Date(2024, 1, 8, 12, 0o0, 0o0, 0o00, time.UTC),
 							sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 51)),
 							1,
 						),
@@ -334,7 +335,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 							user1,
 							1,
 							10,
-							time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+							time.Date(2024, 1, 8, 12, 0o0, 0o0, 0o00, time.UTC),
 							sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 100)),
 							1,
 						),
@@ -369,7 +370,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 							user1,
 							1,
 							10,
-							time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+							time.Date(2024, 1, 8, 12, 0o0, 0o0, 0o00, time.UTC),
 							sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 2)),
 							1,
 						),

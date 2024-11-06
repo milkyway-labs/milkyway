@@ -19,9 +19,7 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-var (
-	_ upgrades.Upgrade = &Upgrade{}
-)
+var _ upgrades.Upgrade = &Upgrade{}
 
 // Upgrade represents the v1.1.0 upgrade
 type Upgrade struct {
@@ -73,7 +71,7 @@ func (u *Upgrade) Handler() upgradetypes.UpgradeHandler {
 		// Set the restaking params
 		store = sdkCtx.KVStore(u.keys[restakingtypes.ModuleName])
 		restakingParams := restakingtypes.DefaultParams()
-		store.Set(restakingtypes.ParamsKey, u.cdc.MustMarshal(&restakingParams))
+		store.Set(restakingtypes.LegacyParamsKey, u.cdc.MustMarshal(&restakingParams))
 
 		// Set the rewards params
 		if err := u.rewardsKeeper.Params.Set(ctx, rewardstypes.DefaultParams()); err != nil {

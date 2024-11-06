@@ -17,7 +17,17 @@ func TestParams_Validate(t *testing.T) {
 	}{
 		{
 			name:      "invalid unbonding time returns error",
-			params:    types.NewParams(0),
+			params:    types.NewParams(0, nil),
+			shouldErr: true,
+		},
+		{
+			name:      "invalid denom returns error",
+			params:    types.NewParams(5, []string{"1denom"}),
+			shouldErr: true,
+		},
+		{
+			name:      "empty denom returns error",
+			params:    types.NewParams(5, []string{""}),
 			shouldErr: true,
 		},
 		{
@@ -27,7 +37,7 @@ func TestParams_Validate(t *testing.T) {
 		},
 		{
 			name:      "valid params return no error",
-			params:    types.NewParams(5 * time.Hour),
+			params:    types.NewParams(5*time.Hour, nil),
 			shouldErr: false,
 		},
 	}

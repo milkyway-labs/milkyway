@@ -269,7 +269,7 @@ func TestMsgUpdateParams_ValidateBasic(t *testing.T) {
 		{
 			name: "invalid params return error",
 			msg: types.NewMsgUpdateParams(
-				types.NewParams(0),
+				types.NewParams(0, nil),
 				msgUpdateParams.Authority,
 			),
 			shouldErr: true,
