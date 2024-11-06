@@ -1,6 +1,7 @@
 module github.com/milkyway-labs/milkyway
 
 go 1.22.5
+toolchain go1.22.8
 
 require (
 	cosmossdk.io/api v0.7.6
@@ -28,7 +29,7 @@ require (
 	github.com/cosmos/gogoproto v1.7.0
 	github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8 v8.0.2
 	github.com/cosmos/ibc-go/modules/capability v1.0.1
-	github.com/cosmos/ibc-go/v8 v8.5.0
+	github.com/cosmos/ibc-go/v8 v8.5.1
 	github.com/cosmos/ics23/go v0.11.0
 	github.com/golang/mock v1.6.0
 	github.com/golang/protobuf v1.5.4
@@ -43,7 +44,6 @@ require (
 	github.com/initia-labs/kvindexer/submodules/tx v0.1.0
 	github.com/initia-labs/kvindexer/submodules/wasm-nft v0.1.5
 	github.com/initia-labs/kvindexer/submodules/wasm-pair v0.1.0
-	github.com/noble-assets/forwarding/v2 v2.0.0-20240521090705-86712c4c9e43
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.20.5
 	github.com/rakyll/statik v0.1.7
