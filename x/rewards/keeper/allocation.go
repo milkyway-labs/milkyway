@@ -85,7 +85,17 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 		return nil
 	}
 
-	pools := k.poolsKeeper.GetPools(sdkCtx)
+	// Filter the pool to only include the ones with restakable assets
+	var pools []poolstypes.Pool
+	for _, pool := range k.poolsKeeper.GetPools(sdkCtx) {
+		isRestakble, err := k.restakingKeeper.IsAssetRestakable(sdkCtx, pool.Denom)
+		if err != nil {
+			return err
+		}
+		if isRestakble {
+			pools = append(pools, pool)
+		}
+	}
 	operators := k.operatorsKeeper.GetOperators(sdkCtx)
 
 	// Iterate all rewards plan stored and allocate rewards by plan if it's
@@ -296,8 +306,20 @@ func (k *Keeper) getEligibleOperators(
 func (k *Keeper) getDistrInfos(
 	ctx context.Context, targets []restakingtypes.DelegationTarget,
 ) (distrInfos []DistributionInfo, totalDelValues math.LegacyDec, err error) {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	totalDelValues = math.LegacyZeroDec()
 	for _, target := range targets {
+		var targetTokens sdk.Coins
+		// Filter out the coins that are not allowed to be restaked
+		for _, coin := range target.GetTokens() {
+			isRestakable, err := k.restakingKeeper.IsAssetRestakable(sdkCtx, coin.Denom)
+			if err != nil {
+				return nil, math.LegacyDec{}, err
+			}
+			if isRestakable {
+				targetTokens = append(targetTokens, coin)
+			}
+		}
 		delValue, err := k.GetCoinsValue(ctx, target.GetTokens())
 		if err != nil {
 			return nil, math.LegacyDec{}, err
