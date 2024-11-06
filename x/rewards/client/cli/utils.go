@@ -42,66 +42,13 @@ type RewardsPlan struct {
 }
 
 func (plan *RewardsPlan) Validate(unpacker codectypes.AnyUnpacker) error {
-	if len(plan.Description) > types.MaxRewardsPlanDescriptionLength {
-		return fmt.Errorf("too long description")
-	}
+	// Create a dummy rewards plan to reuse its validation logic
+	rewardsPlan := types.NewRewardsPlan(1,
+		plan.Description, plan.ServiceID, plan.AmountPerDay,
+		plan.StartTime, plan.EndTime, plan.PoolsDistribution,
+		plan.OperatorsDistribution, plan.UsersDistribution)
 
-	if plan.ServiceID == 0 {
-		return fmt.Errorf("invalid service ID: %d", plan.ServiceID)
-	}
-
-	err := plan.AmountPerDay.Validate()
-	if err != nil {
-		return fmt.Errorf("invalid amount per day: %w", err)
-	}
-
-	if !plan.EndTime.After(plan.StartTime) {
-		return fmt.Errorf(
-			"end time must be after start time: %s <= %s",
-			plan.EndTime.Format(time.RFC3339),
-			plan.StartTime.Format(time.RFC3339),
-		)
-	}
-
-	if plan.PoolsDistribution.DelegationType != restakingtypes.DELEGATION_TYPE_POOL {
-		return fmt.Errorf("pools distribution has invalid delegation type: %v", plan.PoolsDistribution.DelegationType)
-	}
-
-	poolsDistrType, err := types.GetDistributionType(unpacker, plan.PoolsDistribution)
-	if err != nil {
-		return fmt.Errorf("get pools distribution type: %w", err)
-	}
-
-	err = poolsDistrType.Validate()
-	if err != nil {
-		return fmt.Errorf("invalid pools distribution type: %w", err)
-	}
-
-	if plan.OperatorsDistribution.DelegationType != restakingtypes.DELEGATION_TYPE_OPERATOR {
-		return fmt.Errorf("operators distribution has invalid delegation type: %v", plan.OperatorsDistribution.DelegationType)
-	}
-
-	operatorsDistrType, err := types.GetDistributionType(unpacker, plan.OperatorsDistribution)
-	if err != nil {
-		return fmt.Errorf("get operators distribution type: %w", err)
-	}
-
-	err = operatorsDistrType.Validate()
-	if err != nil {
-		return fmt.Errorf("invalid operators distribution type: %w", err)
-	}
-
-	usersDistrType, err := types.GetUsersDistributionType(unpacker, plan.UsersDistribution)
-	if err != nil {
-		return fmt.Errorf("get users distribution type: %w", err)
-	}
-
-	err = usersDistrType.Validate()
-	if err != nil {
-		return fmt.Errorf("invalid users distribution type: %w", err)
-	}
-
-	return nil
+	return rewardsPlan.Validate(unpacker)
 }
 
 // ParseRewardsPlan parse a RewardsPlan from a json file.
