@@ -63,3 +63,15 @@ func (k *Keeper) IsDenomAllowedByService(ctx sdk.Context, serviceID uint32, deno
 
 	return slices.Contains(params.AllowedDenoms, denom), nil
 }
+
+// GetAllServicesParams returns the parameters that have been configured for all
+// services.
+func (k *Keeper) GetAllServicesParams(ctx sdk.Context) ([]types.ServiceParamsRecord, error) {
+	var records []types.ServiceParamsRecord
+	err := k.serviceParams.Walk(ctx, nil, func(serviceID uint32, params types.ServiceParams) (bool, error) {
+		records = append(records, types.NewServiceParamsRecord(serviceID, params))
+		return false, nil
+	})
+
+	return records, err
+}

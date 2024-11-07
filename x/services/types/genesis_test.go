@@ -86,6 +86,18 @@ func TestValidateGenesis(t *testing.T) {
 			shouldErr: true,
 		},
 		{
+			name: "invalid service params returns error",
+			genesis: &types.GenesisState{
+				NextServiceID: 1,
+				Services:      nil,
+				ServicesParams: []types.ServiceParamsRecord{
+					types.NewServiceParamsRecord(0, types.NewServiceParams([]string{"umilk"})),
+				},
+				Params: types.DefaultParams(),
+			},
+			shouldErr: true,
+		},
+		{
 			name: "invalid params returns error",
 			genesis: &types.GenesisState{
 				NextServiceID: 1,
