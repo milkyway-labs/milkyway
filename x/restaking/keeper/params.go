@@ -21,6 +21,12 @@ func (k *Keeper) SetRestakableDenoms(ctx sdk.Context, denoms []string) {
 	k.SetParams(ctx, params)
 }
 
+// GetAllowedDenoms gets the list of denoms that are allowed to be restaked.
+// If the list is empty, all denoms are allowed.
+func (k *Keeper) GetAllowedDenoms(ctx sdk.Context) []string {
+	return k.GetParams(ctx).AllowedDenoms
+}
+
 // IsDenomRestakable checks if the asset with the provided denom is allowed
 // to be restaked.
 func (k *Keeper) IsDenomRestakable(ctx sdk.Context, denom string) bool {
