@@ -566,7 +566,7 @@ func TestMsgSetUserPreferences_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgSetUserPreferences_GetSignBytes(t *testing.T) {
-	expected := `{"type":"milkyway/MsgSetUserPreferences","value":{"preferences":{"trust_all_services":true,"trusted_services_ids":[1,2,3]},"user":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"}}`
+	expected := `{"type":"milkyway/MsgSetUserPreferences","value":{"preferences":{"trust_non_accredited_services":true,"trusted_services_ids":[1,2,3]},"user":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"}}`
 	require.Equal(t, expected, string(msgSetUserPreferences.GetSignBytes()))
 }
 

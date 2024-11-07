@@ -266,6 +266,14 @@ service Query {
                                    "{delegator_address}/services/{service_id}";
   }
 
+  // UserPreferences queries the user preferences.
+  rpc UserPreferences(QueryUserPreferencesRequest)
+      returns (QueryUserPreferencesResponse) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get =
+        "/milkyway/restaking/v1/users/{user_address}/preferences";
+  }
+
   // Params queries the restaking parameters.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
@@ -822,6 +830,20 @@ message QueryDelegatorServiceRequest {
 message QueryDelegatorServiceResponse {
   // Service is the service
   milkyway.services.v1.Service service = 1 [ (gogoproto.nullable) = false ];
+}
+
+// QueryUserPreferences is request type for the Query/UserPreferences RPC
+// method.
+message QueryUserPreferencesRequest {
+  // UserAddress is the address of the user to query the preferences for
+  string user_address = 1;
+}
+
+// QueryUserPreferencesResponse is response type for the Query/UserPreferences
+// RPC method.
+message QueryUserPreferencesResponse {
+  // Preferences is the user preferences
+  UserPreferences preferences = 1 [ (gogoproto.nullable) = false ];
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.

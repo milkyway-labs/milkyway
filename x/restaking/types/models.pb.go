@@ -386,7 +386,8 @@ func (m *DTDataList) GetData() []DTData {
 // UserPreferences is a struct that contains a user's preferences for
 // restaking.
 type UserPreferences struct {
-	// TrustNonAccreditedServices tells whether the user trusts all non-accredited services present on the platform.
+	// TrustNonAccreditedServices tells whether the user trusts all non-accredited
+	// services present on the platform.
 	TrustNonAccreditedServices bool `protobuf:"varint,1,opt,name=trust_non_accredited_services,json=trustNonAccreditedServices,proto3" json:"trust_non_accredited_services,omitempty"`
 	// TrustAllAccreditedServices tells whether the user trusts all accredited
 	// services present on the platform.

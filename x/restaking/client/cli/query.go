@@ -29,6 +29,7 @@ func GetQueryCmd() *cobra.Command {
 		GetOperatorsQueryCmd(),
 		GetServicesQueryCmd(),
 		GetDelegatorQueryCmd(),
+		GetUsersQueryCmd(),
 		GetParamsQueryCmd(),
 	)
 
@@ -1147,6 +1148,49 @@ func getDelegatorServiceQueryCmd() *cobra.Command {
 			}
 
 			res, err := queryClient.DelegatorService(cmd.Context(), types.NewQueryDelegatorServiceRequest(delegatorAddress, serviceID))
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
+
+	flags.AddQueryFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// GetUsersQueryCmd returns the command allowing to perform queries for users
+func GetUsersQueryCmd() *cobra.Command {
+	queryCmd := &cobra.Command{
+		Use:   "user",
+		Short: "Querying commands for a user service",
+	}
+
+	queryCmd.AddCommand(
+		getUserPreferencesQueryCmd(),
+	)
+
+	return queryCmd
+}
+
+func getUserPreferencesQueryCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:     "preferences [user-address]",
+		Short:   "Query the preferences for the given user",
+		Example: fmt.Sprintf(`%s query %s user preferences init1yu5vratzjspgtd0rnrc0d5a79kkqy0n57rhfyh`, version.AppName, types.ModuleName),
+		Args:    cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+			queryClient := types.NewQueryClient(clientCtx)
+
+			res, err := queryClient.UserPreferences(cmd.Context(), types.NewQueryUserPreferencesRequest(args[1]))
 			if err != nil {
 				return err
 			}

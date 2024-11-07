@@ -141,7 +141,8 @@ message DTDataList {
 // UserPreferences is a struct that contains a user's preferences for
 // restaking.
 message UserPreferences {
-  // TrustNonAccreditedServices tells whether the user trusts all non-accredited services present on the platform.
+  // TrustNonAccreditedServices tells whether the user trusts all non-accredited
+  // services present on the platform.
   bool trust_non_accredited_services = 1;
 
   // TrustAllAccreditedServices tells whether the user trusts all accredited

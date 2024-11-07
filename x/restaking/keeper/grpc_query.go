@@ -1039,6 +1039,28 @@ func (k Querier) DelegatorService(goCtx context.Context, req *types.QueryDelegat
 	}, nil
 }
 
+// UserPreferences queries the user preferences for the given user address
+func (k Querier) UserPreferences(goCtx context.Context, req *types.QueryUserPreferencesRequest) (*types.QueryUserPreferencesResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
+	}
+
+	if req.UserAddress == "" {
+		return nil, status.Error(codes.InvalidArgument, "user address cannot be empty")
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	preferences, err := k.GetUserPreferences(ctx, req.UserAddress)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &types.QueryUserPreferencesResponse{
+		Preferences: preferences,
+	}, nil
+}
+
 // Params queries the restaking module parameters
 func (k Querier) Params(goCtx context.Context, _ *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
