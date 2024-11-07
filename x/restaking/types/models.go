@@ -306,7 +306,7 @@ func NewUserPreferences(trustAllServices bool, trustAllAccreditedServices bool, 
 	return UserPreferences{
 		TrustAllServices:           trustAllServices,
 		TrustAllAccreditedServices: trustAllAccreditedServices,
-		TrustedServicesIds:         trustedServiceIDs,
+		TrustedServicesIDs:         trustedServiceIDs,
 	}
 }
 
@@ -317,11 +317,7 @@ func DefaultUserPreferences() UserPreferences {
 
 // Validate validates the user preferences
 func (p UserPreferences) Validate() error {
-	if p.TrustAllServices && p.TrustAllAccreditedServices {
-		return fmt.Errorf("cannot trust all services and all accredited services at the same time")
-	}
-
-	for _, serviceID := range p.TrustedServicesIds {
+	for _, serviceID := range p.TrustedServicesIDs {
 		if serviceID == 0 {
 			return fmt.Errorf("invalid service id")
 		}

@@ -508,3 +508,69 @@ func TestMsgUndelegateService_GetSigners(t *testing.T) {
 	addr, _ := sdk.AccAddressFromBech32(msgUndelegateService.Delegator)
 	require.Equal(t, []sdk.AccAddress{addr}, msgDelegateOperator.GetSigners())
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+var msgSetUserPreferences = types.NewMsgSetUserPreferences(
+	types.NewUserPreferences(
+		true,
+		false,
+		[]uint32{1, 2, 3},
+	),
+	"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+)
+
+func TestMsgSetUserPreferences_ValidateBasic(t *testing.T) {
+	testCases := []struct {
+		name      string
+		msg       *types.MsgSetUserPreferences
+		shouldErr bool
+	}{
+		{
+			name: "invalid preferences returns error",
+			msg: types.NewMsgSetUserPreferences(
+				types.NewUserPreferences(
+					false,
+					true,
+					[]uint32{0},
+				),
+				msgSetUserPreferences.User,
+			),
+			shouldErr: true,
+		},
+		{
+			name: "invalid user address returns error",
+			msg: types.NewMsgSetUserPreferences(
+				msgSetUserPreferences.Preferences,
+				"invalid",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "valid message returns no error",
+			msg:  msgSetUserPreferences,
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			err := tc.msg.ValidateBasic()
+			if tc.shouldErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestMsgSetUserPreferences_GetSignBytes(t *testing.T) {
+	expected := `{"type":"milkyway/MsgSetUserPreferences","value":{"preferences":{"trust_all_services":true,"trusted_services_ids":[1,2,3]},"user":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"}}`
+	require.Equal(t, expected, string(msgSetUserPreferences.GetSignBytes()))
+}
+
+func TestMsgSetUserPreferences_GetSigners(t *testing.T) {
+	addr, _ := sdk.AccAddressFromBech32(msgSetUserPreferences.User)
+	require.Equal(t, []sdk.AccAddress{addr}, msgSetUserPreferences.GetSigners())
+}

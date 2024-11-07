@@ -15,10 +15,12 @@ const (
 	EventTypeUnbondPool              = "unbond_pool"
 	EventTypeUnbondOperator          = "unbond_operator"
 	EventTypeUnbondService           = "unbond_service"
+	EventTypeSetUserPreferences      = "set_user_preferences"
 
 	AttributeKeyDelegator            = "delegator"
 	AttributeKeyNewShares            = "new_shares"
 	AttributeKeyCompletionTime       = "completion_time"
 	AttributeUnbondingDelegationType = "unbonding_delegation"
 	AttributeTargetID                = "target_id"
+	AttributeKeyUser                 = "user"
 )

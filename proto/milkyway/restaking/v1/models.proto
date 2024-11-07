@@ -151,5 +151,6 @@ message UserPreferences {
 
   // TrustedServicesIDs is a list of service IDs that the user trusts (both
   // accredited and non-accredited).
-  repeated uint32 trusted_services_ids = 3;
+  repeated uint32 trusted_services_ids = 3
+      [ (gogoproto.customname) = "TrustedServicesIDs" ];
 }

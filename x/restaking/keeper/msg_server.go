@@ -539,6 +539,38 @@ func (k msgServer) UndelegateService(goCtx context.Context, msg *types.MsgUndele
 	}, nil
 }
 
+// SetUserPreferences defines the rpc method for Msg/SetUserPreferences
+func (k msgServer) SetUserPreferences(goCtx context.Context, msg *types.MsgSetUserPreferences) (*types.MsgSetUserPreferencesResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	err := msg.Preferences.Validate()
+	if err != nil {
+		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid preferences: %s", err)
+	}
+
+	// Make sure that each service exists
+	for _, serviceID := range msg.Preferences.TrustedServicesIDs {
+		if !k.servicesKeeper.HasService(ctx, serviceID) {
+			return nil, errors.Wrapf(servicestypes.ErrServiceNotFound, "service %d does not exist", serviceID)
+		}
+	}
+
+	err = k.Keeper.SetUserPreferences(ctx, msg.User, msg.Preferences)
+	if err != nil {
+		return nil, err
+	}
+
+	// Emit the event
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeSetUserPreferences,
+			sdk.NewAttribute(types.AttributeKeyUser, msg.User),
+		),
+	})
+
+	return &types.MsgSetUserPreferencesResponse{}, nil
+}
+
 // UpdateParams defines the rpc method for Msg/UpdateParams
 func (k msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
 	// Check the authority

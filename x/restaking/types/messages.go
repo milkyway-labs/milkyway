@@ -443,3 +443,39 @@ func (msg *MsgUndelegateService) GetSigners() []sdk.AccAddress {
 	addr, _ := sdk.AccAddressFromBech32(msg.Delegator)
 	return []sdk.AccAddress{addr}
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewMsgSetUserPreferences creates a new MsgSetUserPreferences instance
+func NewMsgSetUserPreferences(preferences UserPreferences, userAddress string) *MsgSetUserPreferences {
+	return &MsgSetUserPreferences{
+		Preferences: preferences,
+		User:        userAddress,
+	}
+}
+
+// ValidateBasic implements sdk.Msg
+func (msg *MsgSetUserPreferences) ValidateBasic() error {
+	err := msg.Preferences.Validate()
+	if err != nil {
+		return err
+	}
+
+	_, err = sdk.AccAddressFromBech32(msg.User)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid user address")
+	}
+
+	return nil
+}
+
+// GetSignBytes implements sdk.Msg
+func (msg *MsgSetUserPreferences) GetSignBytes() []byte {
+	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(msg))
+}
+
+// GetSigners implements sdk.Msg
+func (msg *MsgSetUserPreferences) GetSigners() []sdk.AccAddress {
+	addr, _ := sdk.AccAddressFromBech32(msg.User)
+	return []sdk.AccAddress{addr}
+}

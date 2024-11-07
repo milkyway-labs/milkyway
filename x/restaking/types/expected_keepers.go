@@ -40,6 +40,7 @@ type OperatorsKeeper interface {
 }
 
 type ServicesKeeper interface {
+	HasService(ctx sdk.Context, serviceID uint32) bool
 	GetService(ctx sdk.Context, serviceID uint32) (servicestypes.Service, bool)
 	SaveService(ctx sdk.Context, service servicestypes.Service) error
 	IterateServices(ctx sdk.Context, cb func(servicestypes.Service) bool)

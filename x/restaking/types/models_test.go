@@ -193,7 +193,7 @@ func TestUserPreferences_Validate(t *testing.T) {
 		{
 			name: "invalid service id returns error",
 			preferences: types.UserPreferences{
-				TrustedServicesIds: []uint32{0},
+				TrustedServicesIDs: []uint32{0},
 			},
 			shouldErr: true,
 		},
