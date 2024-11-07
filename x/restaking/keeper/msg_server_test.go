@@ -1705,6 +1705,14 @@ func (suite *KeeperTestSuite) TestMsgServer_SetUserPreferences() {
 			shouldErr: true,
 		},
 		{
+			name: "invalid user preferences return error",
+			msg: types.NewMsgSetUserPreferences(
+				types.NewUserPreferences(true, true, []uint32{0}),
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			shouldErr: true,
+		},
+		{
 			name: "new user preferences are set properly",
 			store: func(ctx sdk.Context) {
 				// Store the services
