@@ -205,7 +205,7 @@ func (k *Keeper) EditRewardsPlan(
 	}
 
 	// Prevent edit of a completed rewards plan
-	if !rewardsPlan.IsActiveAt(ctx.BlockTime()) {
+	if !ctx.BlockTime().Before(rewardsPlan.EndTime) {
 		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "rewards plan is completed")
 	}
 
