@@ -1092,7 +1092,7 @@ func NewMilkyWayApp(
 		records.NewAppModule(appCodec, app.RecordsKeeper, app.AccountKeeper, app.BankKeeper),
 		icacallbacks.NewAppModule(appCodec, app.ICACallbacksKeeper, app.AccountKeeper, app.BankKeeper),
 		// custom modules
-		services.NewAppModule(appCodec, app.ServicesKeeper),
+		services.NewAppModule(appCodec, app.ServicesKeeper, app.PoolsKeeper),
 		operators.NewAppModule(appCodec, app.OperatorsKeeper),
 		pools.NewAppModule(appCodec, app.PoolsKeeper),
 		restaking.NewAppModule(appCodec, app.RestakingKeeper),

@@ -7,7 +7,7 @@
 //
 
 // Package testutil is a generated GoMock package.
-package testutil
+package testutils
 
 import (
 	context "context"

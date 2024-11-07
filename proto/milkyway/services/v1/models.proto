@@ -66,4 +66,13 @@ message Service {
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
     (gogoproto.nullable) = false
   ];
+
+  // Accredited defines if the service is accredited.
+  // Note: We use this term instead of "trusted" of "verified" in order to
+  // represent something more generic.
+  // Initially, services will be accredited by the on-chain governance process.
+  // In the future, we may add more ways to accredit services (e.g. automatic
+  // ones based on the operators that decide to run the service, or the amount
+  // of cryptoeconomic security that the service was able to capture).
+  bool accredited = 11;
 }

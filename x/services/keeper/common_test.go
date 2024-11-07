@@ -3,31 +3,18 @@ package keeper_test
 import (
 	"testing"
 
-	"cosmossdk.io/log"
-	"cosmossdk.io/store"
-	"cosmossdk.io/store/metrics"
-	"github.com/cosmos/cosmos-sdk/runtime"
-	authcodec "github.com/cosmos/cosmos-sdk/x/auth/codec"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"go.uber.org/mock/gomock"
 
-	"github.com/milkyway-labs/milkyway/app"
-	"github.com/milkyway-labs/milkyway/app/keepers"
-	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
-	"github.com/milkyway-labs/milkyway/x/services/keeper"
-	"github.com/milkyway-labs/milkyway/x/services/testutil"
-	"github.com/milkyway-labs/milkyway/x/services/types"
-
-	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
-
 	storetypes "cosmossdk.io/store/types"
-	db "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/suite"
+
+	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
+	"github.com/milkyway-labs/milkyway/x/services/keeper"
+	"github.com/milkyway-labs/milkyway/x/services/testutils"
 )
 
 func TestKeeperTestSuite(t *testing.T) {
@@ -46,71 +33,30 @@ type KeeperTestSuite struct {
 	ak    authkeeper.AccountKeeper
 	bk    bankkeeper.Keeper
 	k     *keeper.Keeper
-	hooks *mockHooks
+	hooks *testutils.MockHooks
 
 	ctrl       *gomock.Controller
-	poolKeeper *testutil.MockCommunityPoolKeeper
+	poolKeeper *testutils.MockCommunityPoolKeeper
 }
 
 func (suite *KeeperTestSuite) SetupTest() {
-	// Define store keys
-	keys := storetypes.NewKVStoreKeys(types.StoreKey, authtypes.StoreKey, banktypes.StoreKey)
-	suite.storeKey = keys[types.StoreKey]
+	data := testutils.SetupKeeperTest(suite.T())
 
-	// Create logger
-	logger := log.NewNopLogger()
+	suite.storeKey = data.StoreKey
 
-	// Create an in-memory db
-	memDB := db.NewMemDB()
-	ms := store.NewCommitMultiStore(memDB, logger, metrics.NewNoOpMetrics())
-	for _, key := range keys {
-		ms.MountStoreWithDB(key, storetypes.StoreTypeIAVL, memDB)
-	}
+	suite.ctx = data.Context
+	suite.cdc, suite.legacyAminoCdc = data.Cdc, data.LegacyAmino
 
-	if err := ms.LoadLatestVersion(); err != nil {
-		panic(err)
-	}
-
-	suite.ctx = sdk.NewContext(ms, tmproto.Header{ChainID: "test-chain"}, false, log.NewNopLogger())
-	suite.cdc, suite.legacyAminoCdc = app.MakeCodecs()
-
-	// Mocks initializations
-	suite.ctrl = gomock.NewController(suite.T())
-	suite.poolKeeper = testutil.NewMockCommunityPoolKeeper(suite.ctrl)
-
-	// Authority address
-	authorityAddr := authtypes.NewModuleAddress(govtypes.ModuleName).String()
+	suite.ctrl = data.MockCtrl
 
 	// Build keepers
-	suite.ak = authkeeper.NewAccountKeeper(
-		suite.cdc,
-		runtime.NewKVStoreService(keys[authtypes.StoreKey]),
-		authtypes.ProtoBaseAccount,
-		app.GetMaccPerms(),
-		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix()),
-		sdk.GetConfig().GetBech32AccountAddrPrefix(),
-		authorityAddr,
-	)
-	suite.bk = bankkeeper.NewKeeper(
-		suite.cdc,
-		runtime.NewKVStoreService(keys[banktypes.StoreKey]),
-		suite.ak,
-		nil,
-		authorityAddr,
-		logger,
-	)
-	suite.k = keeper.NewKeeper(
-		suite.cdc,
-		suite.storeKey,
-		runtime.NewKVStoreService(keys[types.StoreKey]),
-		suite.ak,
-		keepers.NewCommunityPoolKeeper(suite.bk, authtypes.FeeCollectorName),
-		authorityAddr,
-	)
+	suite.ak = data.AccountKeeper
+	suite.bk = data.BankKeeper
+	suite.k = data.Keeper
+	suite.poolKeeper = data.PoolKeeper
 
 	// Set hooks
-	suite.hooks = newMockHooks()
-	suite.k = suite.k.SetHooks(suite.hooks)
+	suite.hooks = data.Hooks
 }
 
 func (suite *KeeperTestSuite) TearDownTest() {
@@ -132,36 +78,4 @@ func (suite *KeeperTestSuite) fundAccount(ctx sdk.Context, address string, amoun
 	suite.Require().NoError(err)
 	err = suite.bk.SendCoinsFromModuleToAccount(ctx, moduleAcc.GetName(), userAddress, amount)
 	suite.Require().NoError(err)
-}
-
-// --------------------------------------------------------------------------------------------------------------------
-
-var _ types.ServicesHooks = &mockHooks{}
-
-type mockHooks struct {
-	CalledMap map[string]bool
-}
-
-func newMockHooks() *mockHooks {
-	return &mockHooks{CalledMap: make(map[string]bool)}
-}
-
-func (m mockHooks) AfterServiceCreated(_ sdk.Context, _ uint32) error {
-	m.CalledMap["AfterServiceCreated"] = true
-	return nil
-}
-
-func (m mockHooks) AfterServiceActivated(_ sdk.Context, _ uint32) error {
-	m.CalledMap["AfterServiceActivated"] = true
-	return nil
-}
-
-func (m mockHooks) AfterServiceDeactivated(_ sdk.Context, _ uint32) error {
-	m.CalledMap["AfterServiceDeactivated"] = true
-	return nil
-}
-
-func (m mockHooks) AfterServiceDeleted(_ sdk.Context, _ uint32) error {
-	m.CalledMap["AfterServiceDeleted"] = true
-	return nil
 }
