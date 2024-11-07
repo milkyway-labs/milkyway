@@ -302,10 +302,10 @@ func MustUnmarshalUnbondingDelegation(cdc codec.BinaryCodec, bz []byte) Unbondin
 // --------------------------------------------------------------------------------------------------------------------
 
 // NewUserPreferences creates a new UserPreferences instance
-func NewUserPreferences(trustAllServices bool, trustAllAccreditedServices bool, trustedServiceIDs []uint32) UserPreferences {
+func NewUserPreferences(trustNonAccreditedServices bool, trustAccreditedServices bool, trustedServiceIDs []uint32) UserPreferences {
 	return UserPreferences{
-		TrustAllServices:           trustAllServices,
-		TrustAllAccreditedServices: trustAllAccreditedServices,
+		TrustNonAccreditedServices: trustNonAccreditedServices,
+		TrustAccreditedServices:    trustAccreditedServices,
 		TrustedServicesIDs:         trustedServiceIDs,
 	}
 }
