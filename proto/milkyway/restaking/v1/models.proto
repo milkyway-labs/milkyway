@@ -114,6 +114,8 @@ message UnbondingDelegationEntry {
   uint64 unbonding_id = 5 [ (gogoproto.customname) = "UnbondingID" ];
 }
 
+// --------------------------------------------------------------------------------------------------------------------
+
 // DTData is a struct that contains the basic information about an unbonding
 // delegation. It is intended to be used as a marshalable pointer. For example,
 // a DTData can be used to construct the key to getting an UnbondingDelegation
@@ -132,4 +134,22 @@ message DTData {
 message DTDataList {
   repeated DTData data = 1
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// UserPreferences is a struct that contains a user's preferences for
+// restaking.
+message UserPreferences {
+  // TrustAllServices tells whether the user trusts all services (both
+  // accredited and non-accredited) present on the platform.
+  bool trust_all_services = 1;
+
+  // TrustAllAccreditedServices tells whether the user trusts all accredited
+  // services present on the platform.
+  bool trust_all_accredited_services = 2;
+
+  // TrustedServicesIDs is a list of service IDs that the user trusts (both
+  // accredited and non-accredited).
+  repeated uint32 trusted_services_ids = 3;
 }

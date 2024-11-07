@@ -181,3 +181,42 @@ func TestOperatorDelegation_Validate(t *testing.T) {
 		})
 	}
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+func TestUserPreferences_Validate(t *testing.T) {
+	testCases := []struct {
+		name        string
+		preferences types.UserPreferences
+		shouldErr   bool
+	}{
+		{
+			name: "invalid service id returns error",
+			preferences: types.UserPreferences{
+				TrustedServicesIds: []uint32{0},
+			},
+			shouldErr: true,
+		},
+		{
+			name: "valid preferences returns no error",
+			preferences: types.NewUserPreferences(
+				false,
+				true,
+				[]uint32{1, 2, 6, 7},
+			),
+			shouldErr: false,
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			err := tc.preferences.Validate()
+			if tc.shouldErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}
