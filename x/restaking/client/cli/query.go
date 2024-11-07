@@ -1190,7 +1190,7 @@ func getUserPreferencesQueryCmd() *cobra.Command {
 			}
 			queryClient := types.NewQueryClient(clientCtx)
 
-			res, err := queryClient.UserPreferences(cmd.Context(), types.NewQueryUserPreferencesRequest(args[1]))
+			res, err := queryClient.UserPreferences(cmd.Context(), types.NewQueryUserPreferencesRequest(args[0]))
 			if err != nil {
 				return err
 			}
