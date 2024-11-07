@@ -3,6 +3,8 @@ package types
 import (
 	"fmt"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/milkyway-labs/milkyway/utils"
 )
 
@@ -13,6 +15,7 @@ func NewGenesis(
 	servicesSecuringPools []ServiceSecuringPools,
 	delegations []Delegation,
 	unbondingDelegations []UnbondingDelegation,
+	usersPreferencesEntries []UserPreferencesEntry,
 	params Params,
 ) *GenesisState {
 	return &GenesisState{
@@ -21,6 +24,7 @@ func NewGenesis(
 		ServicesSecuringPools:    servicesSecuringPools,
 		Delegations:              delegations,
 		UnbondingDelegations:     unbondingDelegations,
+		UsersPreferences:         usersPreferencesEntries,
 		Params:                   params,
 	}
 }
@@ -28,6 +32,7 @@ func NewGenesis(
 // DefaultGenesis returns a default genesis state
 func DefaultGenesis() *GenesisState {
 	return NewGenesis(
+		nil,
 		nil,
 		nil,
 		nil,
@@ -87,6 +92,13 @@ func (g *GenesisState) Validate() error {
 		err := entry.Validate()
 		if err != nil {
 			return fmt.Errorf("invalid unbonding delegation: %w", err)
+		}
+	}
+
+	for _, entry := range g.UsersPreferences {
+		err := entry.Validate()
+		if err != nil {
+			return fmt.Errorf("invalid user preferences entry: %w", err)
 		}
 	}
 
@@ -186,4 +198,24 @@ func (r *ServiceSecuringPools) Validate() error {
 	}
 
 	return nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewUserPreferencesEntry creates a new instance of UserPreferenceEntry.
+func NewUserPreferencesEntry(userAddress string, preferences UserPreferences) UserPreferencesEntry {
+	return UserPreferencesEntry{
+		UserAddress: userAddress,
+		Preferences: preferences,
+	}
+}
+
+// Validate checks if the UserPreferenceEntry is valid
+func (u *UserPreferencesEntry) Validate() error {
+	_, err := sdk.AccAddressFromBech32(u.UserAddress)
+	if err != nil {
+		return fmt.Errorf("invalid user address: %w", err)
+	}
+
+	return u.Preferences.Validate()
 }

@@ -22,6 +22,7 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	legacy.RegisterAminoMsg(cdc, &MsgUndelegateService{}, "milkyway/MsgUndelegateService")
 	legacy.RegisterAminoMsg(cdc, &MsgDelegateOperator{}, "milkyway/MsgDelegateOperator")
 	legacy.RegisterAminoMsg(cdc, &MsgUndelegateOperator{}, "milkyway/MsgUndelegateOperator")
+	legacy.RegisterAminoMsg(cdc, &MsgSetUserPreferences{}, "milkyway/MsgSetUserPreferences")
 
 	legacy.RegisterAminoMsg(cdc, &MsgUpdateParams{}, "milkyway/restaking/MsgUpdateParams")
 }
@@ -40,6 +41,7 @@ func RegisterInterfaces(registry types.InterfaceRegistry) {
 		&MsgUndelegateService{},
 		&MsgDelegateOperator{},
 		&MsgUndelegateOperator{},
+		&MsgSetUserPreferences{},
 		&MsgUpdateParams{},
 	)
 

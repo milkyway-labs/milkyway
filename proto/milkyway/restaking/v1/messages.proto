@@ -77,6 +77,11 @@ service Msg {
   // UndelegateService defines the operation that allows users to undelegate
   // their assets from a specific service.
   rpc UndelegateService(MsgUndelegateService) returns (MsgUndelegateResponse);
+
+  // SetUserPreferences defines the operation that allows users to set their
+  // preferences for the restaking module.
+  rpc SetUserPreferences(MsgSetUserPreferences)
+      returns (MsgSetUserPreferencesResponse);
 }
 
 // MsgJoinService defines the message structure for the
@@ -350,3 +355,20 @@ message MsgUndelegateResponse {
     (gogoproto.stdtime) = true
   ];
 }
+
+// MsgSetUserPreferences is the message structure for the SetUserPreferences
+// gRPC service method. It allows a user to set their preferences for the
+// restaking module.
+message MsgSetUserPreferences {
+  option (cosmos.msg.v1.signer) = "user";
+  option (amino.name) = "milkyway/MsgSetUserPreferences";
+
+  // User is the address of the user setting their preferences
+  string user = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // Preferences is the user's preferences
+  UserPreferences preferences = 2 [ (gogoproto.nullable) = false ];
+}
+
+// MsgSetUserPreferencesResponse is the return value of MsgSetUserPreferences.
+message MsgSetUserPreferencesResponse {}

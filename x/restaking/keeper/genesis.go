@@ -23,12 +23,18 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		panic(err)
 	}
 
+	preferences, err := k.GetUserPreferencesEntries(ctx)
+	if err != nil {
+		panic(err)
+	}
+
 	return types.NewGenesis(
 		operatorsJoinedServices,
 		servicesAllowedOperators,
 		servicesSecuringPools,
 		k.GetAllDelegations(ctx),
 		k.GetAllUnbondingDelegations(ctx),
+		preferences,
 		k.GetParams(ctx),
 	)
 }
@@ -82,6 +88,14 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
 
 		for _, entry := range ubd.Entries {
 			k.InsertUBDQueue(ctx, ubd, entry.CompletionTime)
+		}
+	}
+
+	// Store the user preferences
+	for _, entry := range data.UsersPreferences {
+		err := k.SetUserPreferences(ctx, entry.UserAddress, entry.Preferences)
+		if err != nil {
+			panic(err)
 		}
 	}
 

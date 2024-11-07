@@ -38,6 +38,9 @@ type Keeper struct {
 	// The pair represents the service ID and the pool ID
 	serviceSecuringPools collections.KeySet[collections.Pair[uint32, uint32]]
 
+	// The map stores user address -> UsersPreferences associations
+	usersPreferences collections.Map[string, types.UserPreferences]
+
 	hooks types.RestakingHooks
 }
 
@@ -85,6 +88,12 @@ func NewKeeper(
 			sb, types.ServiceSecuringPoolsPrefix,
 			"service_securing_pools",
 			collections.PairKeyCodec(collections.Uint32Key, collections.Uint32Key),
+		),
+		usersPreferences: collections.NewMap(
+			sb, types.UserPreferencesPrefix,
+			"users_preferences",
+			collections.StringKey,
+			codec.CollValue[types.UserPreferences](cdc),
 		),
 		authority: authority,
 	}

@@ -10,6 +10,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/version"
 	"github.com/spf13/cobra"
 
+	"github.com/milkyway-labs/milkyway/utils"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
@@ -31,6 +32,7 @@ func GetTxCmd() *cobra.Command {
 		GetUnbondTxCmd(),
 		GetOperatorTxCmd(),
 		GetServiceTxCmd(),
+		GetUserTxCmd(),
 	)
 
 	return txCmd
@@ -550,6 +552,80 @@ func GetCeasePoolSecurityBorrowTxCmd() *cobra.Command {
 
 			// Create and validate the message
 			msg := types.NewMsgCeasePoolSecurityBorrow(serviceID, poolID, clientCtx.FromAddress.String())
+			if err = msg.ValidateBasic(); err != nil {
+				return fmt.Errorf("message validation failed: %w", err)
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+//nolint:gosec // This is not a hardcoded credential
+const (
+	trustNonAccreditedServicesFlags = "trust-non-accredited-services"
+	trustAccreditedServicesFlag     = "trust-accredited-services"
+	trustedServicesIDsFlag          = "trusted-services-ids"
+)
+
+func GetUserTxCmd() *cobra.Command {
+	txCmd := &cobra.Command{
+		Use:   "user",
+		Short: "Restaking user subcommands",
+	}
+
+	txCmd.AddCommand(
+		GetSetUserPreferencesCmd(),
+	)
+
+	return txCmd
+}
+
+func GetSetUserPreferencesCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "set-preferences",
+		Args:  cobra.NoArgs,
+		Short: "Set your user preferences regarding the restaking module",
+		Long: `Set your user preferences regarding the restaking module.
+
+If you are updating your preferences, you must provide all the flags that you want to set 
+(i.e. the values you provide will completely override the existing ones)`,
+		Example: fmt.Sprintf(`%s tx %s user set-preferences \
+--trust-accredited-services \
+--trust-non-accredited-services \
+--trusted-services-ids 1,2,3 \
+--from alice`, version.AppName, types.ModuleName),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			trustAccreditedServices, err := cmd.Flags().GetBool(trustAccreditedServicesFlag)
+			if err != nil {
+				return err
+			}
+
+			trustNonAccreditedServices, err := cmd.Flags().GetBool(trustNonAccreditedServicesFlags)
+			if err != nil {
+				return err
+			}
+
+			trustedServices, err := cmd.Flags().GetUintSlice(trustedServicesIDsFlag)
+			if err != nil {
+				return err
+			}
+			trustedServicesIDs := utils.Map(trustedServices, func(t uint) uint32 { return uint32(t) })
+
+			// Create and validate the message
+			preferences := types.NewUserPreferences(trustNonAccreditedServices, trustAccreditedServices, trustedServicesIDs)
+			msg := types.NewMsgSetUserPreferences(preferences, clientCtx.FromAddress.String())
 			if err = msg.ValidateBasic(); err != nil {
 				return fmt.Errorf("message validation failed: %w", err)
 			}

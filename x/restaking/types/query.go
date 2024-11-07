@@ -144,6 +144,11 @@ func NewQueryDelegatorServiceRequest(delegatorAddress string, serviceID uint32) 
 	return &QueryDelegatorServiceRequest{DelegatorAddress: delegatorAddress, ServiceId: serviceID}
 }
 
+// NewQueryUserPreferencesRequest creates a new QueryUserPreferencesRequest instance
+func NewQueryUserPreferencesRequest(userAddress string) *QueryUserPreferencesRequest {
+	return &QueryUserPreferencesRequest{UserAddress: userAddress}
+}
+
 // NewQueryParamsRequest creates a new QueryParamsRequest instance
 func NewQueryParamsRequest() *QueryParamsRequest {
 	return &QueryParamsRequest{}

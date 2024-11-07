@@ -1708,6 +1708,170 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegateService() {
 	}
 }
 
+func (suite *KeeperTestSuite) TestMsgServer_SetUserPreferences() {
+	testCases := []struct {
+		name      string
+		setup     func()
+		store     func(ctx sdk.Context)
+		setupCtx  func(ctx sdk.Context) sdk.Context
+		msg       *types.MsgSetUserPreferences
+		shouldErr bool
+		expEvents sdk.Events
+		check     func(ctx sdk.Context)
+	}{
+		{
+			name: "not found services return error",
+			msg: types.NewMsgSetUserPreferences(
+				types.NewUserPreferences(true, true, []uint32{1, 2}),
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "invalid user preferences return error",
+			msg: types.NewMsgSetUserPreferences(
+				types.NewUserPreferences(true, true, []uint32{0}),
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "new user preferences are set properly",
+			store: func(ctx sdk.Context) {
+				// Store the services
+				err := suite.sk.SaveService(ctx, servicestypes.NewService(
+					1,
+					servicestypes.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is an AVS of a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+				suite.Require().NoError(err)
+
+				err = suite.sk.SaveService(ctx, servicestypes.Service{
+					ID:      2,
+					Address: servicestypes.GetServiceAddress(2).String(),
+					Tokens: sdk.NewCoins(
+						sdk.NewCoin("utia", sdkmath.NewInt(150)),
+					),
+					DelegatorShares: sdk.NewDecCoins(
+						sdk.NewDecCoinFromDec("services/2/utia", sdkmath.LegacyNewDec(150)),
+					),
+				})
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgSetUserPreferences(
+				types.NewUserPreferences(true, true, []uint32{1, 2}),
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			shouldErr: false,
+			expEvents: sdk.Events{
+				sdk.NewEvent(
+					types.EventTypeSetUserPreferences,
+					sdk.NewAttribute(types.AttributeKeyUser, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+				),
+			},
+			check: func(ctx sdk.Context) {
+				// Make sure the preferences are stored properly
+				stored, err := suite.k.GetUserPreferences(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().NoError(err)
+				suite.Require().Equal(types.NewUserPreferences(
+					true,
+					true,
+					[]uint32{1, 2},
+				), stored)
+			},
+		},
+		{
+			name: "existing user preferences are updated properly",
+			store: func(ctx sdk.Context) {
+				// Store the services
+				err := suite.sk.SaveService(ctx, servicestypes.NewService(
+					1,
+					servicestypes.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is an AVS of a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+				suite.Require().NoError(err)
+
+				err = suite.sk.SaveService(ctx, servicestypes.Service{
+					ID:      2,
+					Address: servicestypes.GetServiceAddress(2).String(),
+					Tokens: sdk.NewCoins(
+						sdk.NewCoin("utia", sdkmath.NewInt(150)),
+					),
+					DelegatorShares: sdk.NewDecCoins(
+						sdk.NewDecCoinFromDec("services/2/utia", sdkmath.LegacyNewDec(150)),
+					),
+				})
+				suite.Require().NoError(err)
+
+				// Set the user preferences
+				preferences := types.NewUserPreferences(true, true, []uint32{1, 2})
+				err = suite.k.SetUserPreferences(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", preferences)
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgSetUserPreferences(
+				types.NewUserPreferences(false, false, nil),
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			shouldErr: false,
+			expEvents: sdk.Events{
+				sdk.NewEvent(
+					types.EventTypeSetUserPreferences,
+					sdk.NewAttribute(types.AttributeKeyUser, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+				),
+			},
+			check: func(ctx sdk.Context) {
+				// Make sure the preferences are stored properly
+				stored, err := suite.k.GetUserPreferences(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().NoError(err)
+				suite.Require().Equal(types.NewUserPreferences(
+					false,
+					false,
+					nil,
+				), stored)
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.setup != nil {
+				tc.setup()
+			}
+			if tc.setupCtx != nil {
+				ctx = tc.setupCtx(ctx)
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			msgServer := keeper.NewMsgServer(suite.k)
+			_, err := msgServer.SetUserPreferences(ctx, tc.msg)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				for _, event := range tc.expEvents {
+					suite.Require().Contains(ctx.EventManager().Events(), event)
+				}
+
+				if tc.check != nil {
+					tc.check(ctx)
+				}
+			}
+		})
+	}
+}
+
 func (suite *KeeperTestSuite) TestMsgServer_UpdateParams() {
 	testCases := []struct {
 		name      string

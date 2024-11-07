@@ -113,7 +113,7 @@ func (k *Keeper) DeactivateService(ctx sdk.Context, serviceID uint32) error {
 	return k.AfterServiceDeactivated(ctx, service.ID)
 }
 
-// DeactivateService deactivates the service with the given ID
+// DeleteService deactivates the service with the given ID
 func (k *Keeper) DeleteService(ctx sdk.Context, serviceID uint32) error {
 	service, existed := k.GetService(ctx, serviceID)
 	if !existed {
@@ -135,6 +135,12 @@ func (k *Keeper) DeleteService(ctx sdk.Context, serviceID uint32) error {
 
 	// Call the hook
 	return k.AfterServiceDeleted(ctx, service.ID)
+}
+
+// HasService checks if a Service with the given ID exists in the KVStore
+func (k *Keeper) HasService(ctx sdk.Context, serviceID uint32) bool {
+	store := ctx.KVStore(k.storeKey)
+	return store.Has(types.ServiceStoreKey(serviceID))
 }
 
 // GetService returns an Service from the KVStore

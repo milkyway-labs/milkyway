@@ -948,3 +948,19 @@ func (k *Keeper) GetAllUserUnbondingDelegations(ctx sdk.Context, userAddress str
 
 	return unbondingDelegations
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// GetUserPreferencesEntries returns all the user preferences entries
+func (k *Keeper) GetUserPreferencesEntries(ctx sdk.Context) ([]types.UserPreferencesEntry, error) {
+	var entries []types.UserPreferencesEntry
+	err := k.usersPreferences.Walk(ctx, nil, func(userAddress string, preferences types.UserPreferences) (stop bool, err error) {
+		entries = append(entries, types.NewUserPreferencesEntry(userAddress, preferences))
+		return false, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return entries, nil
+}

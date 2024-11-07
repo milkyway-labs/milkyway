@@ -294,6 +294,32 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			},
 		},
 		{
+			name: "user preferences are exporter properly",
+			store: func(ctx sdk.Context) {
+				suite.k.SetParams(ctx, types.DefaultParams())
+
+				err := suite.k.SetUserPreferences(ctx, "cosmos1jseuux3pktht0kkhlcsv4kqff3mql65udqs4jw", types.NewUserPreferences(
+					true,
+					false,
+					[]uint32{1, 2, 3},
+				))
+				suite.Require().NoError(err)
+			},
+			expGenesis: &types.GenesisState{
+				Params: types.DefaultParams(),
+				UsersPreferences: []types.UserPreferencesEntry{
+					types.NewUserPreferencesEntry(
+						"cosmos1jseuux3pktht0kkhlcsv4kqff3mql65udqs4jw",
+						types.NewUserPreferences(
+							true,
+							false,
+							[]uint32{1, 2, 3},
+						),
+					),
+				},
+			},
+		},
+		{
 			name: "params are exported properly",
 			store: func(ctx sdk.Context) {
 				suite.k.SetParams(ctx, types.NewParams(
@@ -564,6 +590,36 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 					sdk.NewCoins(sdk.NewCoin("services/1/umilk", sdkmath.NewInt(100))),
 					1,
 				), stored)
+			},
+		},
+		{
+			name: "user preferences are exported properly",
+			genesis: &types.GenesisState{
+				Params: types.DefaultParams(),
+				UsersPreferences: []types.UserPreferencesEntry{
+					types.NewUserPreferencesEntry(
+						"cosmos1jseuux3pktht0kkhlcsv4kqff3mql65udqs4jw",
+						types.NewUserPreferences(
+							true,
+							false,
+							[]uint32{1, 2, 3},
+						),
+					),
+				},
+			},
+			check: func(ctx sdk.Context) {
+				stored, err := suite.k.GetUserPreferencesEntries(ctx)
+				suite.Require().NoError(err)
+				suite.Require().Equal([]types.UserPreferencesEntry{
+					types.NewUserPreferencesEntry(
+						"cosmos1jseuux3pktht0kkhlcsv4kqff3mql65udqs4jw",
+						types.NewUserPreferences(
+							true,
+							false,
+							[]uint32{1, 2, 3},
+						),
+					),
+				}, stored)
 			},
 		},
 		{

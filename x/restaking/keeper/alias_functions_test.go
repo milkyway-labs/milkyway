@@ -854,3 +854,74 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 		})
 	}
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+func (suite *KeeperTestSuite) TestKeeper_GetUserPreferencesEntries() {
+	testCases := []struct {
+		name       string
+		store      func(ctx sdk.Context)
+		shouldErr  bool
+		expEntries []types.UserPreferencesEntry
+	}{
+		{
+			name:       "empty store returns empty entries",
+			store:      func(ctx sdk.Context) {},
+			expEntries: []types.UserPreferencesEntry(nil),
+		},
+		{
+			name: "entries are returned properly",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SetUserPreferences(ctx, "cosmos1y54exmx84cqtasvjnskf9f63djuuj68p7hqf47", types.NewUserPreferences(
+					true,
+					false,
+					[]uint32{1, 2, 3},
+				))
+				suite.Require().NoError(err)
+
+				err = suite.k.SetUserPreferences(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", types.NewUserPreferences(
+					false,
+					true,
+					[]uint32{4, 5},
+				))
+				suite.Require().NoError(err)
+			},
+			expEntries: []types.UserPreferencesEntry{
+				types.NewUserPreferencesEntry(
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					types.NewUserPreferences(
+						false,
+						true,
+						[]uint32{4, 5},
+					),
+				),
+				types.NewUserPreferencesEntry(
+					"cosmos1y54exmx84cqtasvjnskf9f63djuuj68p7hqf47",
+					types.NewUserPreferences(
+						true,
+						false,
+						[]uint32{1, 2, 3},
+					),
+				),
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			entries, err := suite.k.GetUserPreferencesEntries(ctx)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expEntries, entries)
+			}
+		})
+	}
+}
