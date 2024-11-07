@@ -320,7 +320,7 @@ func (suite *KeeperTestSuite) TestMsgEditRewardsPlan() {
 			shouldErr: true,
 		},
 		{
-			name: "setting start time before end time returns error",
+			name: "end time before start time returns error",
 			setupCtx: func(ctx sdk.Context) sdk.Context {
 				return ctx.WithBlockTime(time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC))
 			},

@@ -86,7 +86,7 @@ func (k msgServer) CreateRewardsPlan(goCtx context.Context, msg *types.MsgCreate
 	return &types.MsgCreateRewardsPlanResponse{NewRewardsPlanID: plan.ID}, nil
 }
 
-// CreateRewardsPlan defines the rpc method for Msg/EditRewardsPlan
+// EditRewardsPlan defines the rpc method for Msg/EditRewardsPlan
 func (k msgServer) EditRewardsPlan(goCtx context.Context, msg *types.MsgEditRewardsPlan) (*types.MsgEditRewardsPlanResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
@@ -96,6 +96,7 @@ func (k msgServer) EditRewardsPlan(goCtx context.Context, msg *types.MsgEditRewa
 		return nil, err
 	}
 
+	// Get the service to which the rewards is associated
 	service, found := k.servicesKeeper.GetService(ctx, rewardsPlan.ServiceID)
 	if !found {
 		return nil, servicestypes.ErrServiceNotFound

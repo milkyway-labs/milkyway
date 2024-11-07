@@ -69,7 +69,7 @@ func NewMsgWithdrawOperatorCommission(operatorID uint32, senderAddress string) *
 func NewMsgEditRewardsPlan(
 	id uint64,
 	description string,
-	amt sdk.Coins,
+	amount sdk.Coins,
 	startTime,
 	endTime time.Time,
 	poolsDistribution Distribution,
@@ -81,7 +81,7 @@ func NewMsgEditRewardsPlan(
 		ID:                    id,
 		Sender:                sender,
 		Description:           description,
-		Amount:                amt,
+		Amount:                amount,
 		StartTime:             startTime,
 		EndTime:               endTime,
 		PoolsDistribution:     poolsDistribution,

@@ -184,7 +184,7 @@ Where rewards_plan.json contains:
 				return fmt.Errorf("invalid rewards plan json: %w", err)
 			}
 
-			creator := clientCtx.FromAddress.String()
+			sender := clientCtx.FromAddress.String()
 			msg := types.NewMsgEditRewardsPlan(
 				planID,
 				rewardsPlan.Description,
@@ -194,7 +194,7 @@ Where rewards_plan.json contains:
 				rewardsPlan.PoolsDistribution,
 				rewardsPlan.OperatorsDistribution,
 				rewardsPlan.UsersDistribution,
-				creator,
+				sender,
 			)
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
