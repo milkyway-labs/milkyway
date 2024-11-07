@@ -778,7 +778,7 @@ func (m *MsgUpdateParamsResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 
 // MsgAccreditService defines the message structure for the AccreditService gRPC
-// service method. It allows a user to accredit a service.
+// service method. It allows the authority to accredit a service.
 type MsgAccreditService struct {
 	// Authority is the address that controls the module (defaults to x/gov unless
 	// overwritten).
@@ -872,8 +872,8 @@ func (m *MsgAccreditServiceResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgAccreditServiceResponse proto.InternalMessageInfo
 
 // MsgRevokeServiceAccreditation defines the message structure for the
-// RevokeServiceAccreditation gRPC service method. It allows a user to revoke a
-// service's accreditation.
+// RevokeServiceAccreditation gRPC service method. It allows the authority to
+// revoke a service's accreditation.
 type MsgRevokeServiceAccreditation struct {
 	// Authority is the address that controls the module (defaults to x/gov unless
 	// overwritten).

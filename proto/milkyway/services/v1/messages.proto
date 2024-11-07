@@ -215,7 +215,7 @@ message MsgUpdateParams {
 message MsgUpdateParamsResponse {}
 
 // MsgAccreditService defines the message structure for the AccreditService gRPC
-// service method. It allows a user to accredit a service.
+// service method. It allows the authority to accredit a service.
 message MsgAccreditService {
   option (cosmos.msg.v1.signer) = "authority";
   option (amino.name) = "milkyway/MsgAccreditService";
@@ -235,8 +235,8 @@ message MsgAccreditService {
 message MsgAccreditServiceResponse {}
 
 // MsgRevokeServiceAccreditation defines the message structure for the
-// RevokeServiceAccreditation gRPC service method. It allows a user to revoke a
-// service's accreditation.
+// RevokeServiceAccreditation gRPC service method. It allows the authority to
+// revoke a service's accreditation.
 message MsgRevokeServiceAccreditation {
   option (cosmos.msg.v1.signer) = "authority";
   option (amino.name) = "milkyway/MsgRevokeServiceAccreditation";
