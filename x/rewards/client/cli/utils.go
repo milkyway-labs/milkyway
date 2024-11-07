@@ -30,44 +30,23 @@ type distributionJSON struct {
 	Type   json.RawMessage `json:"type"`
 }
 
-type RewardsPlan struct {
-	Description           string
-	ServiceID             uint32
-	AmountPerDay          sdk.Coins
-	StartTime             time.Time
-	EndTime               time.Time
-	PoolsDistribution     types.Distribution
-	OperatorsDistribution types.Distribution
-	UsersDistribution     types.UsersDistribution
-}
-
-func (plan *RewardsPlan) Validate(unpacker codectypes.AnyUnpacker) error {
-	// Create a dummy rewards plan to reuse its validation logic
-	rewardsPlan := types.NewRewardsPlan(1,
-		plan.Description, plan.ServiceID, plan.AmountPerDay,
-		plan.StartTime, plan.EndTime, plan.PoolsDistribution,
-		plan.OperatorsDistribution, plan.UsersDistribution)
-
-	return rewardsPlan.Validate(unpacker)
-}
-
 // ParseRewardsPlan parse a RewardsPlan from a json file.
-func ParseRewardsPlan(cdc codec.Codec, path string) (RewardsPlan, error) {
+func ParseRewardsPlan(cdc codec.Codec, path string) (types.RewardsPlan, error) {
 	contents, err := os.ReadFile(path)
 	if err != nil {
-		return RewardsPlan{}, err
+		return types.RewardsPlan{}, err
 	}
 
 	var rewardsPlanJSON rewardsPlanJSON
 	err = json.Unmarshal(contents, &rewardsPlanJSON)
 	if err != nil {
-		return RewardsPlan{}, err
+		return types.RewardsPlan{}, err
 	}
 
 	// Parse the pools distribution types
 	poolsDistributionType, err := parseDistributionType(cdc, rewardsPlanJSON.PoolsDistribution.Type)
 	if err != nil {
-		return RewardsPlan{}, fmt.Errorf("invalid pool distribution type %w", err)
+		return types.RewardsPlan{}, fmt.Errorf("invalid pool distribution type %w", err)
 	}
 	poolsDistribution := types.Distribution{
 		DelegationType: restakingtypes.DELEGATION_TYPE_POOL,
@@ -78,7 +57,7 @@ func ParseRewardsPlan(cdc codec.Codec, path string) (RewardsPlan, error) {
 	// Parse the operators distribution type
 	operatorsDistributionType, err := parseDistributionType(cdc, rewardsPlanJSON.OperatorsDistribution.Type)
 	if err != nil {
-		return RewardsPlan{}, fmt.Errorf("invalid operator distribution type: %w", err)
+		return types.RewardsPlan{}, fmt.Errorf("invalid operator distribution type: %w", err)
 	}
 	operatorsDistribution := types.Distribution{
 		DelegationType: restakingtypes.DELEGATION_TYPE_OPERATOR,
@@ -89,7 +68,7 @@ func ParseRewardsPlan(cdc codec.Codec, path string) (RewardsPlan, error) {
 	// Parse the users distribution type
 	usersDistributionType, err := parseUserDistributionType(cdc, rewardsPlanJSON.UsersDistribution.Type)
 	if err != nil {
-		return RewardsPlan{}, fmt.Errorf("invalid user distribution type: %w", err)
+		return types.RewardsPlan{}, fmt.Errorf("invalid user distribution type: %w", err)
 	}
 	usersDistribution := types.UsersDistribution{
 		Type:   usersDistributionType,
@@ -98,19 +77,19 @@ func ParseRewardsPlan(cdc codec.Codec, path string) (RewardsPlan, error) {
 
 	amountPerDay, err := sdk.ParseCoinsNormalized(rewardsPlanJSON.AmountPerDay)
 	if err != nil {
-		return RewardsPlan{}, fmt.Errorf("invalid amount per day: %w", err)
+		return types.RewardsPlan{}, fmt.Errorf("invalid amount per day: %w", err)
 	}
 
-	return RewardsPlan{
-		Description:           rewardsPlanJSON.Description,
-		ServiceID:             rewardsPlanJSON.ServiceID,
-		AmountPerDay:          amountPerDay,
-		StartTime:             rewardsPlanJSON.StartTime,
-		EndTime:               rewardsPlanJSON.EndTime,
-		PoolsDistribution:     poolsDistribution,
-		OperatorsDistribution: operatorsDistribution,
-		UsersDistribution:     usersDistribution,
-	}, nil
+	return types.NewRewardsPlan(1,
+		rewardsPlanJSON.Description,
+		rewardsPlanJSON.ServiceID,
+		amountPerDay,
+		rewardsPlanJSON.StartTime,
+		rewardsPlanJSON.EndTime,
+		poolsDistribution,
+		operatorsDistribution,
+		usersDistribution,
+	), nil
 }
 
 // parseDistributionType parses a types.DistributionType from a json.RawMessage.
