@@ -1064,10 +1064,7 @@ func (k Querier) UserPreferences(goCtx context.Context, req *types.QueryUserPref
 // Params queries the restaking module parameters
 func (k Querier) Params(goCtx context.Context, _ *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	params, err := k.GetParams(ctx)
-	if err != nil {
-		return nil, err
-	}
+	params := k.GetParams(ctx)
 	return &types.QueryParamsResponse{Params: params}, nil
 }
 

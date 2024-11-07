@@ -124,10 +124,6 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 	if err != nil {
 		panic(err)
 	}
-	err = cfg.RegisterMigration(types.ModuleName, 2, m.Migrate2To3)
-	if err != nil {
-		panic(err)
-	}
 }
 
 // RegisterInvariants registers the restaking module's invariants.

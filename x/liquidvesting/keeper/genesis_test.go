@@ -63,10 +63,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding delegation time to 7 days
-				err := suite.rk.SetParams(ctx, restakingtypes.Params{
-					UnbondingTime: 7 * 24 * time.Hour,
-				})
-				suite.Require().NoError(err)
+				suite.rk.SetParams(ctx, restakingtypes.NewParams(7*24*time.Hour, nil))
 
 				// Fund the users' insurance fund
 				suite.fundAccountInsuranceFund(ctx, user1, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)))

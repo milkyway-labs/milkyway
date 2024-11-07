@@ -5,7 +5,6 @@ import (
 
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
@@ -48,12 +47,9 @@ func (k *Keeper) RemovePoolDelegation(ctx sdk.Context, delegation types.Delegati
 // DelegateToPool sends the given amount to the pool account and saves the delegation for the given user
 func (k *Keeper) DelegateToPool(ctx sdk.Context, amount sdk.Coin, delegator string) (sdk.DecCoins, error) {
 	// Ensure the provided amount can be restaked
-	isRestakable, err := k.IsDenomRestakable(ctx, amount.Denom)
-	if err != nil {
-		return nil, err
-	}
+	isRestakable := k.IsDenomRestakable(ctx, amount.Denom)
 	if !isRestakable {
-		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, "restaking is not allowed for %s", amount.Denom)
+		return sdk.NewDecCoins(), errors.Wrapf(types.ErrDenomNotRestakable, "%s cannot be restaked", amount.Denom)
 	}
 
 	// Get or create the pool for the given amount denom

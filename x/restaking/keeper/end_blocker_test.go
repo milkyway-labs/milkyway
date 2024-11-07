@@ -33,13 +33,12 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 				delegatorAddress := "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"
 
 				// Set the unbonding delegation time to 7 days
-				err := suite.k.SetParams(ctx, types.Params{
+				suite.k.SetParams(ctx, types.Params{
 					UnbondingTime: 7 * 24 * time.Hour,
 				})
-				suite.Require().NoError(err)
 
 				// Create a pool
-				err = suite.pk.SavePool(ctx, poolstypes.NewPool(1, delegationAmount.Denom))
+				err := suite.pk.SavePool(ctx, poolstypes.NewPool(1, delegationAmount.Denom))
 				suite.Require().NoError(err)
 
 				// Send some tokens to the user
@@ -96,13 +95,12 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 				delegatorAddress := "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"
 
 				// Set the unbonding delegation time to 7 days
-				err := suite.k.SetParams(ctx, types.Params{
+				suite.k.SetParams(ctx, types.Params{
 					UnbondingTime: 7 * 24 * time.Hour,
 				})
-				suite.Require().NoError(err)
 
 				// Create a pool
-				err = suite.pk.SavePool(ctx, poolstypes.NewPool(1, delegationAmount.Denom))
+				err := suite.pk.SavePool(ctx, poolstypes.NewPool(1, delegationAmount.Denom))
 				suite.Require().NoError(err)
 
 				// Send some tokens to the user
@@ -160,13 +158,12 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 				delegatorAddress := "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"
 
 				// Set the unbonding delegation time to 7 days
-				err := suite.k.SetParams(ctx, types.Params{
+				suite.k.SetParams(ctx, types.Params{
 					UnbondingTime: 7 * 24 * time.Hour,
 				})
-				suite.Require().NoError(err)
 
 				// Create a pool
-				err = suite.pk.SavePool(ctx, poolstypes.NewPool(1, milkBalance.Denom))
+				err := suite.pk.SavePool(ctx, poolstypes.NewPool(1, milkBalance.Denom))
 				suite.Require().NoError(err)
 
 				// Create an operator

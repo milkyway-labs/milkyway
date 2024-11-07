@@ -42,10 +42,6 @@ type Keeper struct {
 	usersPreferences collections.Map[string, types.UserPreferences]
 
 	hooks types.RestakingHooks
-
-	// Module params
-	unbondingTimeNanos      collections.Item[int64]
-	allowedRestakableDenoms collections.KeySet[string]
 }
 
 func NewKeeper(
@@ -100,15 +96,6 @@ func NewKeeper(
 			codec.CollValue[types.UserPreferences](cdc),
 		),
 		authority: authority,
-
-		unbondingTimeNanos: collections.NewItem(
-			sb, types.UnbondingTimePrefix,
-			"unbonding_time",
-			collections.Int64Value),
-		allowedRestakableDenoms: collections.NewKeySet(
-			sb, types.AllowedDenomsPrefix,
-			"allowed_denoms",
-			collections.StringKey),
 	}
 
 	schema, err := sb.Build()

@@ -27,12 +27,6 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	if err != nil {
 		panic(err)
 	}
-
-	params, err := k.GetParams(ctx)
-	if err != nil {
-		panic(err)
-	}
-
 	return types.NewGenesis(
 		operatorsJoinedServices,
 		servicesAllowedOperators,
@@ -40,7 +34,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		k.GetAllDelegations(ctx),
 		k.GetAllUnbondingDelegations(ctx),
 		preferences,
-		params,
+		k.GetParams(ctx),
 	)
 }
 
@@ -105,8 +99,5 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
 	}
 
 	// Store the params
-	err := k.SetParams(ctx, data.Params)
-	if err != nil {
-		panic(err)
-	}
+	k.SetParams(ctx, data.Params)
 }

@@ -846,8 +846,7 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 
 			if !tc.shouldErr {
 				suite.Assert().NoError(err)
-				unbondingTime, err := suite.k.UnbondingTime(ctx)
-				suite.Require().NoError(err)
+				unbondingTime := suite.k.UnbondingTime(ctx)
 				expectedCompletion := ctx.BlockHeader().Time.Add(unbondingTime)
 				suite.Assert().Equal(expectedCompletion, completionTime)
 			} else {

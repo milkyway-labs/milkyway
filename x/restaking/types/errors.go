@@ -18,4 +18,5 @@ var (
 	ErrOperatorNotAllowed             = errors.Register(ModuleName, 11, "operator not allowed")
 	ErrPoolAlreadySecuringService     = errors.Register(ModuleName, 12, "pool already securing the service")
 	ErrPoolNotSecuringService         = errors.Register(ModuleName, 13, "pool not securing the service")
+	ErrDenomNotRestakable             = errors.Register(ModuleName, 14, "denom not restakable")
 )

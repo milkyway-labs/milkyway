@@ -1080,10 +1080,10 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegatePool() {
 			name: "not allowed denom returns error",
 			store: func(ctx sdk.Context) {
 				// Configure the allowed restakable denoms
-				err := suite.k.SetRestakableDenoms(ctx, []string{"uinit"})
-				suite.Require().NoError(err)
+				suite.k.SetRestakableDenoms(ctx, []string{"uinit"})
+
 				// Create the pool
-				err = suite.pk.SavePool(ctx, poolstypes.Pool{
+				err := suite.pk.SavePool(ctx, poolstypes.Pool{
 					ID:              1,
 					Denom:           "umilk",
 					Address:         poolstypes.GetPoolAddress(1).String(),
@@ -1101,7 +1101,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegatePool() {
 			},
 			msg: &types.MsgDelegatePool{
 				Delegator: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				Amount:    sdk.NewCoin("umilk", sdkmath.NewInt(0)),
+				Amount:    sdk.NewCoin("umilk", sdkmath.NewInt(10)),
 			},
 			shouldErr: true,
 		},
@@ -1143,11 +1143,10 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegatePool() {
 			name: "allowed denom is delegated properly",
 			store: func(ctx sdk.Context) {
 				// Configure the allowed restakable denoms
-				err := suite.k.SetRestakableDenoms(ctx, []string{"umilk"})
-				suite.Require().NoError(err)
+				suite.k.SetRestakableDenoms(ctx, []string{"umilk"})
 
 				// Create the pool
-				err = suite.pk.SavePool(ctx, poolstypes.Pool{
+				err := suite.pk.SavePool(ctx, poolstypes.Pool{
 					ID:              1,
 					Denom:           "umilk",
 					Address:         poolstypes.GetPoolAddress(1).String(),
@@ -1238,11 +1237,10 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegatePool() {
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding time to 1 week
-				err := suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour, nil))
-				suite.Require().NoError(err)
+				suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour, nil))
 
 				// Create the pool
-				err = suite.pk.SavePool(ctx, poolstypes.Pool{
+				err := suite.pk.SavePool(ctx, poolstypes.Pool{
 					ID:      1,
 					Denom:   "umilk",
 					Address: poolstypes.GetPoolAddress(1).String(),
@@ -1368,11 +1366,10 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateOperator() {
 			name: "not allowed denom returns error",
 			store: func(ctx sdk.Context) {
 				// Configure the allowed restakable denoms
-				err := suite.k.SetRestakableDenoms(ctx, []string{"uinit"})
-				suite.Require().NoError(err)
+				suite.k.SetRestakableDenoms(ctx, []string{"uinit"})
 
 				// Create the operator
-				err = suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err := suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      1,
 					Status:  operatorstypes.OPERATOR_STATUS_ACTIVE,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
@@ -1442,11 +1439,10 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateOperator() {
 			name: "allowed denom is delegated properly",
 			store: func(ctx sdk.Context) {
 				// Configure the allowed restakable denoms
-				err := suite.k.SetRestakableDenoms(ctx, []string{"umilk"})
-				suite.Require().NoError(err)
+				suite.k.SetRestakableDenoms(ctx, []string{"umilk"})
 
 				// Create the operator
-				err = suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err := suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      1,
 					Status:  operatorstypes.OPERATOR_STATUS_ACTIVE,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
@@ -1544,8 +1540,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegateOperator() {
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding time to 1 week
-				err := suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour, nil))
-				suite.Require().NoError(err)
+				suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour, nil))
 
 				// Create the operator
 				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
@@ -1563,7 +1558,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegateOperator() {
 
 				// Delegate some funds
 				msgServer := keeper.NewMsgServer(suite.k)
-				_, err = msgServer.DelegateOperator(ctx, &types.MsgDelegateOperator{
+				_, err := msgServer.DelegateOperator(ctx, &types.MsgDelegateOperator{
 					OperatorID: 1,
 					Delegator:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					Amount:     sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
@@ -1676,11 +1671,10 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateService() {
 			name: "not allowed denom returns error",
 			store: func(ctx sdk.Context) {
 				// Configure the allowed restakable denoms
-				err := suite.k.SetRestakableDenoms(ctx, []string{"uinit"})
-				suite.Require().NoError(err)
+				suite.k.SetRestakableDenoms(ctx, []string{"uinit"})
 
 				// Create the service
-				err = suite.sk.SaveService(ctx, servicestypes.Service{
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      1,
 					Status:  servicestypes.SERVICE_STATUS_ACTIVE,
 					Address: servicestypes.GetServiceAddress(1).String(),
@@ -1750,11 +1744,10 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateService() {
 			name: "allowed denom is delegated properly",
 			store: func(ctx sdk.Context) {
 				// Configure the allowed restakable denoms
-				err := suite.k.SetRestakableDenoms(ctx, []string{"umilk"})
-				suite.Require().NoError(err)
+				suite.k.SetRestakableDenoms(ctx, []string{"umilk"})
 
 				// Create the service
-				err = suite.sk.SaveService(ctx, servicestypes.Service{
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      1,
 					Status:  servicestypes.SERVICE_STATUS_ACTIVE,
 					Address: servicestypes.GetServiceAddress(1).String(),
@@ -1852,8 +1845,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegateService() {
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding time to 1 week
-				err := suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour, nil))
-				suite.Require().NoError(err)
+				suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour, nil))
 
 				// Create the service
 				suite.sk.SaveService(ctx, servicestypes.Service{
@@ -1871,7 +1863,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegateService() {
 
 				// Delegate some funds
 				msgServer := keeper.NewMsgServer(suite.k)
-				_, err = msgServer.DelegateService(ctx, &types.MsgDelegateService{
+				_, err := msgServer.DelegateService(ctx, &types.MsgDelegateService{
 					ServiceID: 1,
 					Delegator: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					Amount:    sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
@@ -2131,8 +2123,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateParams() {
 			shouldErr: false,
 			expEvents: sdk.Events{},
 			check: func(ctx sdk.Context) {
-				params, err := suite.k.GetParams(ctx)
-				suite.Require().NoError(err)
+				params := suite.k.GetParams(ctx)
 				suite.Require().Equal(types.DefaultParams(), params)
 			},
 		},

@@ -19,10 +19,9 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "operator joined services are exported correctly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.SetParams(ctx, types.DefaultParams())
-				suite.Require().NoError(err)
+				suite.k.SetParams(ctx, types.DefaultParams())
 
-				err = suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 1)
+				err := suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 1)
 				suite.Require().NoError(err)
 				err = suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 2)
 				suite.Require().NoError(err)
@@ -43,10 +42,9 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "services allowed operators are exported properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.SetParams(ctx, types.DefaultParams())
-				suite.Require().NoError(err)
+				suite.k.SetParams(ctx, types.DefaultParams())
 
-				err = suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
+				err := suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
 				suite.Require().NoError(err)
 				err = suite.k.AddOperatorToServiceAllowList(ctx, 1, 2)
 				suite.Require().NoError(err)
@@ -67,10 +65,9 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "services securing pools are exported properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.SetParams(ctx, types.DefaultParams())
-				suite.Require().NoError(err)
+				suite.k.SetParams(ctx, types.DefaultParams())
 
-				err = suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
+				err := suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
 				suite.Require().NoError(err)
 				err = suite.k.AddPoolToServiceSecuringPools(ctx, 1, 2)
 				suite.Require().NoError(err)
@@ -91,10 +88,9 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "pool delegations are exported properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.SetParams(ctx, types.DefaultParams())
-				suite.Require().NoError(err)
+				suite.k.SetParams(ctx, types.DefaultParams())
 
-				err = suite.k.SetDelegation(ctx, types.NewPoolDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(100))),
@@ -127,10 +123,9 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "service delegations are exported properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.SetParams(ctx, types.DefaultParams())
-				suite.Require().NoError(err)
+				suite.k.SetParams(ctx, types.DefaultParams())
 
-				err = suite.k.SetDelegation(ctx, types.NewServiceDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(
@@ -171,10 +166,9 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "operators delegations are exported properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.SetParams(ctx, types.DefaultParams())
-				suite.Require().NoError(err)
+				suite.k.SetParams(ctx, types.DefaultParams())
 
-				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
+				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(
@@ -215,10 +209,9 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "pool unbonding delegations are exported properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.SetParams(ctx, types.DefaultParams())
-				suite.Require().NoError(err)
+				suite.k.SetParams(ctx, types.DefaultParams())
 
-				_, err = suite.k.SetUnbondingDelegation(ctx, types.NewPoolUnbondingDelegation(
+				_, err := suite.k.SetUnbondingDelegation(ctx, types.NewPoolUnbondingDelegation(
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					1,
 					10,
@@ -245,10 +238,9 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "operator unbonding delegations are exported properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.SetParams(ctx, types.DefaultParams())
-				suite.Require().NoError(err)
+				suite.k.SetParams(ctx, types.DefaultParams())
 
-				_, err = suite.k.SetUnbondingDelegation(ctx, types.NewOperatorUnbondingDelegation(
+				_, err := suite.k.SetUnbondingDelegation(ctx, types.NewOperatorUnbondingDelegation(
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					1,
 					10,
@@ -275,10 +267,9 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "service unbonding delegations are exported properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.SetParams(ctx, types.DefaultParams())
-				suite.Require().NoError(err)
+				suite.k.SetParams(ctx, types.DefaultParams())
 
-				_, err = suite.k.SetUnbondingDelegation(ctx, types.NewServiceUnbondingDelegation(
+				_, err := suite.k.SetUnbondingDelegation(ctx, types.NewServiceUnbondingDelegation(
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					1,
 					10,
@@ -331,11 +322,10 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "params are exported properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.SetParams(ctx, types.NewParams(
+				suite.k.SetParams(ctx, types.NewParams(
 					30*24*time.Hour,
 					nil,
 				))
-				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				Params: types.NewParams(
@@ -643,8 +633,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				),
 			},
 			check: func(ctx sdk.Context) {
-				params, err := suite.k.GetParams(ctx)
-				suite.Require().NoError(err)
+				params := suite.k.GetParams(ctx)
 				suite.Require().Equal(types.NewParams(
 					30*24*time.Hour,
 					nil,

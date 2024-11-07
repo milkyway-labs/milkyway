@@ -706,11 +706,7 @@ func (k *Keeper) PerformUndelegation(ctx sdk.Context, data types.UndelegationDat
 	}
 
 	// Compute the time at which the unbonding delegation should end
-	unbondingTime, err := k.UnbondingTime(ctx)
-	if err != nil {
-		return time.Time{}, err
-	}
-	completionTime := ctx.BlockHeader().Time.Add(unbondingTime)
+	completionTime := ctx.BlockHeader().Time.Add(k.UnbondingTime(ctx))
 
 	// Store the unbonding delegation entry inside the store
 	ubd, err := k.SetUnbondingDelegationEntry(ctx, data, ctx.BlockHeight(), completionTime, returnAmount)

@@ -71,7 +71,7 @@ func (u *Upgrade) Handler() upgradetypes.UpgradeHandler {
 		// Set the restaking params
 		store = sdkCtx.KVStore(u.keys[restakingtypes.ModuleName])
 		restakingParams := restakingtypes.DefaultParams()
-		store.Set(restakingtypes.LegacyParamsKey, u.cdc.MustMarshal(&restakingParams))
+		store.Set(restakingtypes.ParamsKey, u.cdc.MustMarshal(&restakingParams))
 
 		// Set the rewards params
 		if err := u.rewardsKeeper.Params.Set(ctx, rewardstypes.DefaultParams()); err != nil {

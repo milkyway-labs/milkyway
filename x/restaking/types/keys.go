@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
@@ -19,7 +18,7 @@ const (
 )
 
 var (
-	LegacyParamsKey   = []byte{0x01}
+	ParamsKey         = []byte{0x01}
 	UnbondingIDKey    = []byte{0x02}
 	UnbondingIndexKey = []byte{0x03}
 	UnbondingTypeKey  = []byte{0x04}
@@ -28,10 +27,6 @@ var (
 	ServiceOperatorsAllowListPrefix    = []byte{0x14}
 	ServiceSecuringPoolsPrefix         = []byte{0x15}
 	ServiceJoinedByOperatorIndexPrefix = []byte{0x16}
-
-	// Params prefixes
-	UnbondingTimePrefix = collections.NewPrefix(0x21)
-	AllowedDenomsPrefix = collections.NewPrefix(0x22)
 
 	PoolDelegationPrefix          = []byte{0xa1}
 	PoolDelegationsByPoolIDPrefix = []byte{0xa2}
