@@ -205,22 +205,8 @@ func (k *Keeper) EditRewardsPlan(
 	}
 
 	// Prevent edit of a completed rewards plan
-	if !ctx.BlockTime().Before(rewardsPlan.EndTime) {
+	if !rewardsPlan.IsActiveAt(ctx.BlockTime()) {
 		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "rewards plan is completed")
-	}
-
-	// Ensure start time is not in the past if the user changes it
-	if !rewardsPlan.StartTime.Equal(newStartTime) {
-		if newStartTime.Before(ctx.BlockTime()) {
-			return errors.Wrapf(sdkerrors.ErrInvalidRequest, "start time must be in the future")
-		}
-	}
-
-	// Ensure end time is not in the past if the user changes it
-	if !rewardsPlan.EndTime.Equal(newEndTime) {
-		if newEndTime.Before(ctx.BlockTime()) {
-			return errors.Wrapf(sdkerrors.ErrInvalidRequest, "end time must be in the future")
-		}
 	}
 
 	// Validate the pools distribution

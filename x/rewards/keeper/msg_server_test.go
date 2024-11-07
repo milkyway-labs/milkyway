@@ -240,86 +240,6 @@ func (suite *KeeperTestSuite) TestMsgEditRewardsPlan() {
 			shouldErr: true,
 		},
 		{
-			name: "changing start time in the past returns error",
-			setupCtx: func(ctx sdk.Context) sdk.Context {
-				return ctx.WithBlockTime(time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC))
-			},
-			store: func(ctx sdk.Context) {
-				// Create a service
-				_, _ = suite.setupSampleServiceAndOperator(ctx)
-
-				// Set the next plan id
-				err := suite.keeper.NextRewardsPlanID.Set(ctx, 1)
-				suite.Require().NoError(err)
-
-				// Create a rewards plan
-				_, err = suite.keeper.CreateRewardsPlan(
-					ctx,
-					"Rewards Plan",
-					1,
-					utils.MustParseCoins("100_000000service"),
-					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
-					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-					types.NewBasicPoolsDistribution(0),
-					types.NewBasicOperatorsDistribution(0),
-					types.NewBasicUsersDistribution(0),
-				)
-				suite.Require().NoError(err)
-			},
-			msg: types.NewMsgEditRewardsPlan(
-				1,
-				"Rewards Plan",
-				utils.MustParseCoins("100_000000service"),
-				time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
-				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-				types.NewBasicPoolsDistribution(0),
-				types.NewBasicOperatorsDistribution(0),
-				types.NewBasicUsersDistribution(0),
-				testutil.TestAddress(10000).String(),
-			),
-			shouldErr: true,
-		},
-		{
-			name: "changing end time in the past returns error",
-			setupCtx: func(ctx sdk.Context) sdk.Context {
-				return ctx.WithBlockTime(time.Date(2024, 1, 3, 0, 0, 0, 0, time.UTC))
-			},
-			store: func(ctx sdk.Context) {
-				// Create a service
-				_, _ = suite.setupSampleServiceAndOperator(ctx)
-
-				// Set the next plan id
-				err := suite.keeper.NextRewardsPlanID.Set(ctx, 1)
-				suite.Require().NoError(err)
-
-				// Create a rewards plan
-				_, err = suite.keeper.CreateRewardsPlan(
-					ctx,
-					"Rewards Plan",
-					1,
-					utils.MustParseCoins("100_000000service"),
-					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
-					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-					types.NewBasicPoolsDistribution(0),
-					types.NewBasicOperatorsDistribution(0),
-					types.NewBasicUsersDistribution(0),
-				)
-				suite.Require().NoError(err)
-			},
-			msg: types.NewMsgEditRewardsPlan(
-				1,
-				"Rewards Plan",
-				utils.MustParseCoins("100_000000service"),
-				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
-				time.Date(2024, 1, 2, 0, 0, 0, 0, time.UTC),
-				types.NewBasicPoolsDistribution(0),
-				types.NewBasicOperatorsDistribution(0),
-				types.NewBasicUsersDistribution(0),
-				testutil.TestAddress(10000).String(),
-			),
-			shouldErr: true,
-		},
-		{
 			name: "end time before start time returns error",
 			setupCtx: func(ctx sdk.Context) sdk.Context {
 				return ctx.WithBlockTime(time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC))
@@ -360,7 +280,7 @@ func (suite *KeeperTestSuite) TestMsgEditRewardsPlan() {
 			shouldErr: true,
 		},
 		{
-			name: "edit completed rewards plan returns error",
+			name: "edit inactive rewards plan returns error",
 			setupCtx: func(ctx sdk.Context) sdk.Context {
 				return ctx.WithBlockTime(time.Date(2025, 1, 2, 0, 0, 0, 0, time.UTC))
 			},
