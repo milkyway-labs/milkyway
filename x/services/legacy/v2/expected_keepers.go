@@ -8,7 +8,7 @@ import (
 )
 
 type ServicesKeeper interface {
-	GetService(ctx sdk.Context, serviceID uint32) (types.Service, bool)
+	IterateServices(ctx sdk.Context, cb func(service types.Service) (stop bool))
 	SaveService(ctx sdk.Context, service types.Service) error
 }
 
