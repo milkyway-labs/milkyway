@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"slices"
+
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -46,4 +48,18 @@ func (k *Keeper) GetServices(ctx sdk.Context) []types.Service {
 // where the users' asset are kept when they restake toward a service.
 func (k *Keeper) IsServiceAddress(ctx sdk.Context, address string) (bool, error) {
 	return k.serviceAddressSet.Has(ctx, address)
+}
+
+// IsDenomAllowedByService returns true if the provided denom has been allowed
+// from the service with the given ID.
+func (k *Keeper) IsDenomAllowedByService(ctx sdk.Context, serviceID uint32, denom string) (bool, error) {
+	params, err := k.GetServiceParams(ctx, serviceID)
+	if err != nil {
+		return false, err
+	}
+	if len(params.AllowedDenoms) == 0 {
+		return true, nil
+	}
+
+	return slices.Contains(params.AllowedDenoms, denom), nil
 }

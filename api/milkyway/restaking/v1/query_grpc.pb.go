@@ -47,6 +47,7 @@ const (
 	Query_DelegatorOperator_FullMethodName                     = "/milkyway.restaking.v1.Query/DelegatorOperator"
 	Query_DelegatorServices_FullMethodName                     = "/milkyway.restaking.v1.Query/DelegatorServices"
 	Query_DelegatorService_FullMethodName                      = "/milkyway.restaking.v1.Query/DelegatorService"
+	Query_UserPreferences_FullMethodName                       = "/milkyway.restaking.v1.Query/UserPreferences"
 	Query_Params_FullMethodName                                = "/milkyway.restaking.v1.Query/Params"
 )
 
@@ -129,6 +130,8 @@ type QueryClient interface {
 	// DelegatorService queries the service info for given delegator and service
 	// id.
 	DelegatorService(ctx context.Context, in *QueryDelegatorServiceRequest, opts ...grpc.CallOption) (*QueryDelegatorServiceResponse, error)
+	// UserPreferences queries the user preferences.
+	UserPreferences(ctx context.Context, in *QueryUserPreferencesRequest, opts ...grpc.CallOption) (*QueryUserPreferencesResponse, error)
 	// Params queries the restaking parameters.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
 }
@@ -421,6 +424,16 @@ func (c *queryClient) DelegatorService(ctx context.Context, in *QueryDelegatorSe
 	return out, nil
 }
 
+func (c *queryClient) UserPreferences(ctx context.Context, in *QueryUserPreferencesRequest, opts ...grpc.CallOption) (*QueryUserPreferencesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(QueryUserPreferencesResponse)
+	err := c.cc.Invoke(ctx, Query_UserPreferences_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(QueryParamsResponse)
@@ -510,6 +523,8 @@ type QueryServer interface {
 	// DelegatorService queries the service info for given delegator and service
 	// id.
 	DelegatorService(context.Context, *QueryDelegatorServiceRequest) (*QueryDelegatorServiceResponse, error)
+	// UserPreferences queries the user preferences.
+	UserPreferences(context.Context, *QueryUserPreferencesRequest) (*QueryUserPreferencesResponse, error)
 	// Params queries the restaking parameters.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
 	mustEmbedUnimplementedQueryServer()
@@ -605,6 +620,9 @@ func (UnimplementedQueryServer) DelegatorServices(context.Context, *QueryDelegat
 }
 func (UnimplementedQueryServer) DelegatorService(context.Context, *QueryDelegatorServiceRequest) (*QueryDelegatorServiceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DelegatorService not implemented")
+}
+func (UnimplementedQueryServer) UserPreferences(context.Context, *QueryUserPreferencesRequest) (*QueryUserPreferencesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserPreferences not implemented")
 }
 func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
@@ -1134,6 +1152,24 @@ func _Query_DelegatorService_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_UserPreferences_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryUserPreferencesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).UserPreferences(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_UserPreferences_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).UserPreferences(ctx, req.(*QueryUserPreferencesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryParamsRequest)
 	if err := dec(in); err != nil {
@@ -1270,6 +1306,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DelegatorService",
 			Handler:    _Query_DelegatorService_Handler,
+		},
+		{
+			MethodName: "UserPreferences",
+			Handler:    _Query_UserPreferences_Handler,
 		},
 		{
 			MethodName: "Params",

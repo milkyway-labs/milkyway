@@ -241,3 +241,28 @@ func (s *Service) Update(update ServiceUpdate) Service {
 		s.Accredited,
 	)
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewServiceParams returns a new ServiceParams instance.
+func NewServiceParams(allowedDenoms []string) ServiceParams {
+	return ServiceParams{
+		AllowedDenoms: allowedDenoms,
+	}
+}
+
+// DefaultServiceParams returns the default ServiceParams instance.
+func DefaultServiceParams() ServiceParams {
+	return NewServiceParams(nil)
+}
+
+func (p *ServiceParams) Validate() error {
+	for _, denom := range p.AllowedDenoms {
+		err := sdk.ValidateDenom(denom)
+		if err != nil {
+			return fmt.Errorf("invalid denom: %s, %w", denom, err)
+		}
+	}
+
+	return nil
+}

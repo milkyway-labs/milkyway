@@ -239,6 +239,12 @@ func (k msgServer) TransferServiceOwnership(goCtx context.Context, msg *types.Ms
 	return &types.MsgTransferServiceOwnershipResponse{}, nil
 }
 
+// SetServiceParams define the rpc method for Msg/SetServiceParams
+func (k msgServer) SetServiceParams(goCtx context.Context, msg *types.MsgSetServiceParams) (*types.MsgSetServiceParamsResponse, error) {
+	// TODO: Implement me
+	return &types.MsgSetServiceParamsResponse{}, nil
+}
+
 // UpdateParams defines the rpc method for Msg/UpdateParams
 func (k msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
 	// Check the authority

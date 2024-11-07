@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Query_Service_FullMethodName  = "/milkyway.services.v1.Query/Service"
-	Query_Services_FullMethodName = "/milkyway.services.v1.Query/Services"
-	Query_Params_FullMethodName   = "/milkyway.services.v1.Query/Params"
+	Query_Service_FullMethodName       = "/milkyway.services.v1.Query/Service"
+	Query_Services_FullMethodName      = "/milkyway.services.v1.Query/Services"
+	Query_ServiceParams_FullMethodName = "/milkyway.services.v1.Query/ServiceParams"
+	Query_Params_FullMethodName        = "/milkyway.services.v1.Query/Params"
 )
 
 // QueryClient is the client API for Query service.
@@ -36,6 +37,9 @@ type QueryClient interface {
 	// Services defines a gRPC query method that returns the actively validates
 	// services currently registered in the module.
 	Services(ctx context.Context, in *QueryServicesRequest, opts ...grpc.CallOption) (*QueryServicesResponse, error)
+	// ServiceParams defines a gRPC query method that returns the parameters of
+	// service.
+	ServiceParams(ctx context.Context, in *QueryServiceParamsRequest, opts ...grpc.CallOption) (*QueryServiceParamsResponse, error)
 	// Params defines a gRPC query method that returns the parameters of the
 	// module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
@@ -69,6 +73,16 @@ func (c *queryClient) Services(ctx context.Context, in *QueryServicesRequest, op
 	return out, nil
 }
 
+func (c *queryClient) ServiceParams(ctx context.Context, in *QueryServiceParamsRequest, opts ...grpc.CallOption) (*QueryServiceParamsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(QueryServiceParamsResponse)
+	err := c.cc.Invoke(ctx, Query_ServiceParams_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(QueryParamsResponse)
@@ -91,6 +105,9 @@ type QueryServer interface {
 	// Services defines a gRPC query method that returns the actively validates
 	// services currently registered in the module.
 	Services(context.Context, *QueryServicesRequest) (*QueryServicesResponse, error)
+	// ServiceParams defines a gRPC query method that returns the parameters of
+	// service.
+	ServiceParams(context.Context, *QueryServiceParamsRequest) (*QueryServiceParamsResponse, error)
 	// Params defines a gRPC query method that returns the parameters of the
 	// module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
@@ -109,6 +126,9 @@ func (UnimplementedQueryServer) Service(context.Context, *QueryServiceRequest) (
 }
 func (UnimplementedQueryServer) Services(context.Context, *QueryServicesRequest) (*QueryServicesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Services not implemented")
+}
+func (UnimplementedQueryServer) ServiceParams(context.Context, *QueryServiceParamsRequest) (*QueryServiceParamsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ServiceParams not implemented")
 }
 func (UnimplementedQueryServer) Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
@@ -170,6 +190,24 @@ func _Query_Services_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_ServiceParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryServiceParamsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).ServiceParams(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_ServiceParams_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).ServiceParams(ctx, req.(*QueryServiceParamsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryParamsRequest)
 	if err := dec(in); err != nil {
@@ -202,6 +240,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Services",
 			Handler:    _Query_Services_Handler,
+		},
+		{
+			MethodName: "ServiceParams",
+			Handler:    _Query_ServiceParams_Handler,
 		},
 		{
 			MethodName: "Params",

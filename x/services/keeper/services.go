@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -154,4 +155,28 @@ func (k *Keeper) GetService(ctx sdk.Context, serviceID uint32) (service types.Se
 
 	k.cdc.MustUnmarshal(bz, &service)
 	return service, true
+}
+
+// GetServiceParams returns the params for the service with the given ID
+func (k *Keeper) GetServiceParams(ctx sdk.Context, serviceID uint32) (types.ServiceParams, error) {
+	params, err := k.serviceParams.Get(ctx, serviceID)
+	if err != nil {
+		if errors.IsOf(collections.ErrNotFound) {
+			return types.DefaultServiceParams(), nil
+		}
+		return types.ServiceParams{}, err
+	}
+
+	return params, nil
+}
+
+// SetServiceParams sets the params for the service with the given ID
+func (k *Keeper) SetServiceParams(ctx sdk.Context, serviceID uint32, params types.ServiceParams) error {
+	// Validate the new params
+	err := params.Validate()
+	if err != nil {
+		return err
+	}
+
+	return k.serviceParams.Set(ctx, serviceID, params)
 }

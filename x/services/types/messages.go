@@ -350,3 +350,27 @@ func (msg *MsgRevokeServiceAccreditation) GetSigners() []sdk.AccAddress {
 	addr, _ := sdk.AccAddressFromBech32(msg.Authority)
 	return []sdk.AccAddress{addr}
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewMsgSetServiceParams creates a new MsgSetServiceParams instance.
+func NewMsgSetServiceParams(params ServiceParams, sender string) *MsgSetServiceParams {
+	return &MsgSetServiceParams{
+		ServiceParams: params,
+		Sender:        sender,
+	}
+}
+
+func (msg *MsgSetServiceParams) ValidateBasic() error {
+	err := msg.ServiceParams.Validate()
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid params: %s", err.Error())
+	}
+
+	_, err = sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address")
+	}
+
+	return nil
+}

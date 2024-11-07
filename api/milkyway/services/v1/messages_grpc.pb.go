@@ -19,13 +19,16 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Msg_CreateService_FullMethodName            = "/milkyway.services.v1.Msg/CreateService"
-	Msg_UpdateService_FullMethodName            = "/milkyway.services.v1.Msg/UpdateService"
-	Msg_ActivateService_FullMethodName          = "/milkyway.services.v1.Msg/ActivateService"
-	Msg_DeactivateService_FullMethodName        = "/milkyway.services.v1.Msg/DeactivateService"
-	Msg_DeleteService_FullMethodName            = "/milkyway.services.v1.Msg/DeleteService"
-	Msg_TransferServiceOwnership_FullMethodName = "/milkyway.services.v1.Msg/TransferServiceOwnership"
-	Msg_UpdateParams_FullMethodName             = "/milkyway.services.v1.Msg/UpdateParams"
+	Msg_CreateService_FullMethodName              = "/milkyway.services.v1.Msg/CreateService"
+	Msg_UpdateService_FullMethodName              = "/milkyway.services.v1.Msg/UpdateService"
+	Msg_ActivateService_FullMethodName            = "/milkyway.services.v1.Msg/ActivateService"
+	Msg_DeactivateService_FullMethodName          = "/milkyway.services.v1.Msg/DeactivateService"
+	Msg_DeleteService_FullMethodName              = "/milkyway.services.v1.Msg/DeleteService"
+	Msg_TransferServiceOwnership_FullMethodName   = "/milkyway.services.v1.Msg/TransferServiceOwnership"
+	Msg_SetServiceParams_FullMethodName           = "/milkyway.services.v1.Msg/SetServiceParams"
+	Msg_UpdateParams_FullMethodName               = "/milkyway.services.v1.Msg/UpdateParams"
+	Msg_AccreditService_FullMethodName            = "/milkyway.services.v1.Msg/AccreditService"
+	Msg_RevokeServiceAccreditation_FullMethodName = "/milkyway.services.v1.Msg/RevokeServiceAccreditation"
 )
 
 // MsgClient is the client API for Msg service.
@@ -50,10 +53,19 @@ type MsgClient interface {
 	// TransferServiceOwnership defines the operation for transferring the
 	// ownership of a service to another account.
 	TransferServiceOwnership(ctx context.Context, in *MsgTransferServiceOwnership, opts ...grpc.CallOption) (*MsgTransferServiceOwnershipResponse, error)
+	// SetServiceParams defines the operation for setting a service's
+	// parameters.
+	SetServiceParams(ctx context.Context, in *MsgSetServiceParams, opts ...grpc.CallOption) (*MsgSetServiceParamsResponse, error)
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters.
 	// The authority defaults to the x/gov module account.
 	UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error)
+	// AccreditService defines a (governance) operation for accrediting a service.
+	// Since: v1.4.0
+	AccreditService(ctx context.Context, in *MsgAccreditService, opts ...grpc.CallOption) (*MsgAccreditServiceResponse, error)
+	// RevokeServiceAccreditation defines a (governance) operation for revoking a
+	// service's accreditation. Since: v1.4.0
+	RevokeServiceAccreditation(ctx context.Context, in *MsgRevokeServiceAccreditation, opts ...grpc.CallOption) (*MsgRevokeServiceAccreditationResponse, error)
 }
 
 type msgClient struct {
@@ -124,10 +136,40 @@ func (c *msgClient) TransferServiceOwnership(ctx context.Context, in *MsgTransfe
 	return out, nil
 }
 
+func (c *msgClient) SetServiceParams(ctx context.Context, in *MsgSetServiceParams, opts ...grpc.CallOption) (*MsgSetServiceParamsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgSetServiceParamsResponse)
+	err := c.cc.Invoke(ctx, Msg_SetServiceParams_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts ...grpc.CallOption) (*MsgUpdateParamsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(MsgUpdateParamsResponse)
 	err := c.cc.Invoke(ctx, Msg_UpdateParams_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) AccreditService(ctx context.Context, in *MsgAccreditService, opts ...grpc.CallOption) (*MsgAccreditServiceResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgAccreditServiceResponse)
+	err := c.cc.Invoke(ctx, Msg_AccreditService_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) RevokeServiceAccreditation(ctx context.Context, in *MsgRevokeServiceAccreditation, opts ...grpc.CallOption) (*MsgRevokeServiceAccreditationResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgRevokeServiceAccreditationResponse)
+	err := c.cc.Invoke(ctx, Msg_RevokeServiceAccreditation_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -156,10 +198,19 @@ type MsgServer interface {
 	// TransferServiceOwnership defines the operation for transferring the
 	// ownership of a service to another account.
 	TransferServiceOwnership(context.Context, *MsgTransferServiceOwnership) (*MsgTransferServiceOwnershipResponse, error)
+	// SetServiceParams defines the operation for setting a service's
+	// parameters.
+	SetServiceParams(context.Context, *MsgSetServiceParams) (*MsgSetServiceParamsResponse, error)
 	// UpdateParams defines a (governance) operation for updating the module
 	// parameters.
 	// The authority defaults to the x/gov module account.
 	UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error)
+	// AccreditService defines a (governance) operation for accrediting a service.
+	// Since: v1.4.0
+	AccreditService(context.Context, *MsgAccreditService) (*MsgAccreditServiceResponse, error)
+	// RevokeServiceAccreditation defines a (governance) operation for revoking a
+	// service's accreditation. Since: v1.4.0
+	RevokeServiceAccreditation(context.Context, *MsgRevokeServiceAccreditation) (*MsgRevokeServiceAccreditationResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -188,8 +239,17 @@ func (UnimplementedMsgServer) DeleteService(context.Context, *MsgDeleteService) 
 func (UnimplementedMsgServer) TransferServiceOwnership(context.Context, *MsgTransferServiceOwnership) (*MsgTransferServiceOwnershipResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TransferServiceOwnership not implemented")
 }
+func (UnimplementedMsgServer) SetServiceParams(context.Context, *MsgSetServiceParams) (*MsgSetServiceParamsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetServiceParams not implemented")
+}
 func (UnimplementedMsgServer) UpdateParams(context.Context, *MsgUpdateParams) (*MsgUpdateParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateParams not implemented")
+}
+func (UnimplementedMsgServer) AccreditService(context.Context, *MsgAccreditService) (*MsgAccreditServiceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AccreditService not implemented")
+}
+func (UnimplementedMsgServer) RevokeServiceAccreditation(context.Context, *MsgRevokeServiceAccreditation) (*MsgRevokeServiceAccreditationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RevokeServiceAccreditation not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 func (UnimplementedMsgServer) testEmbeddedByValue()             {}
@@ -320,6 +380,24 @@ func _Msg_TransferServiceOwnership_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_SetServiceParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSetServiceParams)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SetServiceParams(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_SetServiceParams_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SetServiceParams(ctx, req.(*MsgSetServiceParams))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MsgUpdateParams)
 	if err := dec(in); err != nil {
@@ -334,6 +412,42 @@ func _Msg_UpdateParams_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).UpdateParams(ctx, req.(*MsgUpdateParams))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_AccreditService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgAccreditService)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).AccreditService(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_AccreditService_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).AccreditService(ctx, req.(*MsgAccreditService))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_RevokeServiceAccreditation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRevokeServiceAccreditation)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).RevokeServiceAccreditation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_RevokeServiceAccreditation_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).RevokeServiceAccreditation(ctx, req.(*MsgRevokeServiceAccreditation))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -370,8 +484,20 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_TransferServiceOwnership_Handler,
 		},
 		{
+			MethodName: "SetServiceParams",
+			Handler:    _Msg_SetServiceParams_Handler,
+		},
+		{
 			MethodName: "UpdateParams",
 			Handler:    _Msg_UpdateParams_Handler,
+		},
+		{
+			MethodName: "AccreditService",
+			Handler:    _Msg_AccreditService_Handler,
+		},
+		{
+			MethodName: "RevokeServiceAccreditation",
+			Handler:    _Msg_RevokeServiceAccreditation_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
