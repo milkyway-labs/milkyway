@@ -41,6 +41,8 @@ var (
 	ServiceUnbondingDelegationPrefix   = []byte{0xc3}
 
 	UnbondingQueueKey = []byte{0xd1}
+
+	UserPreferencesPrefix = []byte{0xe1}
 )
 
 // --------------------------------------------------------------------------------------------------------------------
