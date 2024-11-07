@@ -124,6 +124,7 @@ func (suite *KeeperTestSuite) TestKeeper_CreateService() {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				false,
 			),
 			shouldErr: true,
 		},
@@ -147,6 +148,7 @@ func (suite *KeeperTestSuite) TestKeeper_CreateService() {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				false,
 			),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
@@ -176,6 +178,7 @@ func (suite *KeeperTestSuite) TestKeeper_CreateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				), service)
 
 				// Make sure the hook was called
@@ -234,6 +237,7 @@ func (suite *KeeperTestSuite) TestKeeper_ActivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -251,6 +255,7 @@ func (suite *KeeperTestSuite) TestKeeper_ActivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -267,6 +272,7 @@ func (suite *KeeperTestSuite) TestKeeper_ActivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				), service)
 
 				// Make sure the hook was called
@@ -325,6 +331,7 @@ func (suite *KeeperTestSuite) TestKeeper_DeactivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -342,6 +349,7 @@ func (suite *KeeperTestSuite) TestKeeper_DeactivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -358,6 +366,7 @@ func (suite *KeeperTestSuite) TestKeeper_DeactivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				), service)
 
 				// Make sure the hook was called
@@ -415,6 +424,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -428,6 +438,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetService() {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				false,
 			),
 		},
 	}

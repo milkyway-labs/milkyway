@@ -261,6 +261,7 @@ func (suite *KeeperTestSuite) createService(id uint32) {
 		"",
 		"",
 		fmt.Sprintf("service-%d-admin", id),
+		false,
 	))
 	suite.Assert().NoError(err)
 }

@@ -38,13 +38,13 @@ func (suite *MigrateStoreTestSuite) SetupTest() {
 func (suite *MigrateStoreTestSuite) TestMigrateStore() {
 	testCases := []struct {
 		name      string
-		setup     func(ctx sdk.Context)
+		store     func(ctx sdk.Context)
 		shouldErr bool
 		check     func(ctx sdk.Context)
 	}{
 		{
 			name: "no services to set as accredited",
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				// Create a service
 				err := suite.keeper.SaveService(ctx, servicestypes.NewService(
 					1,
@@ -54,6 +54,7 @@ func (suite *MigrateStoreTestSuite) TestMigrateStore() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 
@@ -72,7 +73,7 @@ func (suite *MigrateStoreTestSuite) TestMigrateStore() {
 		},
 		{
 			name: "non existing service is skipped",
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				// Set the default params (empty list of allowed services)
 				suite.poolsKeeper.SetParams(ctx, poolstypes.Params{
 					AllowedServicesIDs: []uint32{1},
@@ -87,7 +88,7 @@ func (suite *MigrateStoreTestSuite) TestMigrateStore() {
 		},
 		{
 			name: "service is set as accredited",
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				// Create a service
 				err := suite.keeper.SaveService(ctx, servicestypes.NewService(
 					1,
@@ -97,6 +98,7 @@ func (suite *MigrateStoreTestSuite) TestMigrateStore() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 
@@ -121,8 +123,8 @@ func (suite *MigrateStoreTestSuite) TestMigrateStore() {
 		tc := tc
 		suite.Run(tc.name, func() {
 			ctx, _ := suite.ctx.CacheContext()
-			if tc.setup != nil {
-				tc.setup(ctx)
+			if tc.store != nil {
+				tc.store(ctx)
 			}
 
 			err := v2.MigrateStore(ctx, suite.keeper, suite.poolsKeeper)

@@ -72,6 +72,7 @@ func (suite *KeeperTestSuite) TestMsgServer_JoinService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -101,6 +102,7 @@ func (suite *KeeperTestSuite) TestMsgServer_JoinService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -129,6 +131,7 @@ func (suite *KeeperTestSuite) TestMsgServer_JoinService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -157,6 +160,7 @@ func (suite *KeeperTestSuite) TestMsgServer_JoinService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -186,6 +190,7 @@ func (suite *KeeperTestSuite) TestMsgServer_JoinService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -295,6 +300,7 @@ func (suite *KeeperTestSuite) TestMsgServer_LeaveService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				err = suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 1)
 				suite.Require().NoError(err)
@@ -325,6 +331,7 @@ func (suite *KeeperTestSuite) TestMsgServer_LeaveService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 
@@ -422,6 +429,7 @@ func (suite *KeeperTestSuite) TestMsgServer_AddOperatorToAllowList() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -451,6 +459,7 @@ func (suite *KeeperTestSuite) TestMsgServer_AddOperatorToAllowList() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -476,6 +485,7 @@ func (suite *KeeperTestSuite) TestMsgServer_AddOperatorToAllowList() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					false,
 				))
 				suite.Require().NoError(err)
 
@@ -508,6 +518,7 @@ func (suite *KeeperTestSuite) TestMsgServer_AddOperatorToAllowList() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -610,6 +621,7 @@ func (suite *KeeperTestSuite) TestMsgServer_RemoveAllowedOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					false,
 				))
 				suite.Require().NoError(err)
 
@@ -638,6 +650,7 @@ func (suite *KeeperTestSuite) TestMsgServer_RemoveAllowedOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -667,6 +680,7 @@ func (suite *KeeperTestSuite) TestMsgServer_RemoveAllowedOperator() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					false,
 				))
 				suite.Require().NoError(err)
 
@@ -748,6 +762,7 @@ func (suite *KeeperTestSuite) TestMsgServer_BorrowPoolSecurity() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -766,6 +781,7 @@ func (suite *KeeperTestSuite) TestMsgServer_BorrowPoolSecurity() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -784,6 +800,7 @@ func (suite *KeeperTestSuite) TestMsgServer_BorrowPoolSecurity() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					false,
 				))
 				suite.Require().NoError(err)
 				err = suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
@@ -804,6 +821,7 @@ func (suite *KeeperTestSuite) TestMsgServer_BorrowPoolSecurity() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -822,6 +840,7 @@ func (suite *KeeperTestSuite) TestMsgServer_BorrowPoolSecurity() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -840,6 +859,7 @@ func (suite *KeeperTestSuite) TestMsgServer_BorrowPoolSecurity() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -925,6 +945,7 @@ func (suite *KeeperTestSuite) TestMsgServer_CeasePoolSecurityBorrow() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					false,
 				))
 				suite.Require().NoError(err)
 				err = suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
@@ -945,6 +966,7 @@ func (suite *KeeperTestSuite) TestMsgServer_CeasePoolSecurityBorrow() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -963,6 +985,7 @@ func (suite *KeeperTestSuite) TestMsgServer_CeasePoolSecurityBorrow() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					false,
 				))
 				suite.Require().NoError(err)
 				err = suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)

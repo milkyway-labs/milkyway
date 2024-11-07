@@ -41,6 +41,15 @@ service Msg {
   // parameters.
   // The authority defaults to the x/gov module account.
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+
+  // AccreditService defines a (governance) operation for accrediting a service.
+  // Since: v1.4.0
+  rpc AccreditService(MsgAccreditService) returns (MsgAccreditServiceResponse);
+
+  // RevokeServiceAccreditation defines a (governance) operation for revoking a
+  // service's accreditation. Since: v1.4.0
+  rpc RevokeServiceAccreditation(MsgRevokeServiceAccreditation)
+      returns (MsgRevokeServiceAccreditationResponse);
 }
 
 // MsgCreateServiceResponse defines the message structure for the
@@ -204,3 +213,46 @@ message MsgUpdateParams {
 
 // MsgDeactivateServiceResponse is the return value of MsgUpdateParams.
 message MsgUpdateParamsResponse {}
+
+// MsgAccreditService defines the message structure for the AccreditService gRPC
+// service method. It allows a user to accredit a service.
+message MsgAccreditService {
+  option (cosmos.msg.v1.signer) = "authority";
+  option (amino.name) = "milkyway/MsgAccreditService";
+
+  // Authority is the address that controls the module (defaults to x/gov unless
+  // overwritten).
+  string authority = 1 [
+    (gogoproto.moretags) = "yaml:\"authority\"",
+    (cosmos_proto.scalar) = "cosmos.AddressString"
+  ];
+
+  // ServiceID represents the ID of the service to be accredited
+  uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
+}
+
+// MsgAccreditServiceResponse is the return value of MsgAccreditService.
+message MsgAccreditServiceResponse {}
+
+// MsgRevokeServiceAccreditation defines the message structure for the
+// RevokeServiceAccreditation gRPC service method. It allows a user to revoke a
+// service's accreditation.
+message MsgRevokeServiceAccreditation {
+  option (cosmos.msg.v1.signer) = "authority";
+  option (amino.name) = "milkyway/MsgRevokeServiceAccreditation";
+
+  // Authority is the address that controls the module (defaults to x/gov unless
+  // overwritten).
+  string authority = 1 [
+    (gogoproto.moretags) = "yaml:\"authority\"",
+    (cosmos_proto.scalar) = "cosmos.AddressString"
+  ];
+
+  // ServiceID represents the ID of the service to have its accreditation
+  // revoked
+  uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
+}
+
+// MsgRevokeServiceAccreditationResponse is the return value of
+// MsgRevokeServiceAccreditation.
+message MsgRevokeServiceAccreditationResponse {}

@@ -211,6 +211,43 @@ func (msg *MsgTransferServiceOwnership) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{addr}
 }
 
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewMsgDeleteService creates a new MsgDeleteService instance.
+func NewMsgDeleteService(serviceID uint32, sender string) *MsgDeleteService {
+	return &MsgDeleteService{
+		ServiceID: serviceID,
+		Sender:    sender,
+	}
+}
+
+// ValidateBasic implements sdk.Msg
+func (msg *MsgDeleteService) ValidateBasic() error {
+	if msg.ServiceID == 0 {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid service id: %d", msg.ServiceID)
+	}
+
+	_, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address")
+	}
+
+	return nil
+}
+
+// GetSignBytes implements sdk.Msg
+func (msg *MsgDeleteService) GetSignBytes() []byte {
+	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(msg))
+}
+
+// GetSigners implements sdk.Msg
+func (msg *MsgDeleteService) GetSigners() []sdk.AccAddress {
+	addr, _ := sdk.AccAddressFromBech32(msg.Sender)
+	return []sdk.AccAddress{addr}
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
 func NewMsgUpdateParams(params Params, authority string) *MsgUpdateParams {
 	return &MsgUpdateParams{
 		Authority: authority,
@@ -246,23 +283,70 @@ func (msg *MsgUpdateParams) GetSigners() []sdk.AccAddress {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// NewMsgDeleteService creates a new MsgDeleteService instance.
-func NewMsgDeleteService(serviceID uint32, sender string) *MsgDeleteService {
-	return &MsgDeleteService{
+// NewMsgAccreditService creates a new MsgAccreditService instance
+func NewMsgAccreditService(serviceID uint32, authority string) *MsgAccreditService {
+	return &MsgAccreditService{
 		ServiceID: serviceID,
-		Sender:    sender,
+		Authority: authority,
 	}
 }
 
-func (msg *MsgDeleteService) ValidateBasic() error {
+// ValidateBasic implements sdk.Msg
+func (msg *MsgAccreditService) ValidateBasic() error {
 	if msg.ServiceID == 0 {
-		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid service id: %d", msg.ServiceID)
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid service ID: %d", msg.ServiceID)
 	}
 
-	_, err := sdk.AccAddressFromBech32(msg.Sender)
+	_, err := sdk.AccAddressFromBech32(msg.Authority)
 	if err != nil {
-		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address")
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid authority address")
 	}
 
 	return nil
+}
+
+// GetSignBytes implements sdk.Msg
+func (msg *MsgAccreditService) GetSignBytes() []byte {
+	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(msg))
+}
+
+// GetSigners implements sdk.Msg
+func (msg *MsgAccreditService) GetSigners() []sdk.AccAddress {
+	addr, _ := sdk.AccAddressFromBech32(msg.Authority)
+	return []sdk.AccAddress{addr}
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewMsgRevokeServiceAccreditation creates a new MsgRevokeServiceAccreditation instance
+func NewMsgRevokeServiceAccreditation(serviceID uint32, authority string) *MsgRevokeServiceAccreditation {
+	return &MsgRevokeServiceAccreditation{
+		ServiceID: serviceID,
+		Authority: authority,
+	}
+}
+
+// ValidateBasic implements sdk.Msg
+func (msg *MsgRevokeServiceAccreditation) ValidateBasic() error {
+	if msg.ServiceID == 0 {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid service ID: %d", msg.ServiceID)
+	}
+
+	_, err := sdk.AccAddressFromBech32(msg.Authority)
+	if err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid authority address")
+	}
+
+	return nil
+}
+
+// GetSignBytes implements sdk.Msg
+func (msg *MsgRevokeServiceAccreditation) GetSignBytes() []byte {
+	return sdk.MustSortJSON(AminoCdc.MustMarshalJSON(msg))
+}
+
+// GetSigners implements sdk.Msg
+func (msg *MsgRevokeServiceAccreditation) GetSigners() []sdk.AccAddress {
+	addr, _ := sdk.AccAddressFromBech32(msg.Authority)
+	return []sdk.AccAddress{addr}
 }

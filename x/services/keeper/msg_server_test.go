@@ -109,6 +109,7 @@ func (suite *KeeperTestSuite) TestMsgServer_CreateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				), stored)
 
 				// Make sure the service account has been created properly
@@ -201,6 +202,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -225,6 +227,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -249,6 +252,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -280,6 +284,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				), stored)
 			},
 		},
@@ -349,6 +354,7 @@ func (suite *KeeperTestSuite) TestMsgServer_ActivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -369,6 +375,7 @@ func (suite *KeeperTestSuite) TestMsgServer_ActivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -389,6 +396,7 @@ func (suite *KeeperTestSuite) TestMsgServer_ActivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -472,6 +480,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -492,6 +501,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -519,6 +529,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				), stored)
 			},
 		},
@@ -586,6 +597,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeleteService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -606,6 +618,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeleteService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -626,6 +639,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeleteService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -657,6 +671,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeleteService() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -741,6 +756,7 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferServiceOwnership() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -762,6 +778,7 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferServiceOwnership() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -791,6 +808,7 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferServiceOwnership() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+					false,
 				), stored)
 			},
 		},
@@ -881,6 +899,198 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateParams() {
 
 			msgServer := keeper.NewMsgServer(suite.k)
 			res, err := msgServer.UpdateParams(ctx, tc.msg)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expResponse, res)
+				for _, event := range tc.expEvents {
+					suite.Require().Contains(ctx.EventManager().Events(), event)
+				}
+
+				if tc.check != nil {
+					tc.check(ctx)
+				}
+			}
+		})
+	}
+}
+
+func (suite *KeeperTestSuite) TestMsgServer_AccreditService() {
+	testCases := []struct {
+		name        string
+		setup       func()
+		store       func(ctx sdk.Context)
+		setupCtx    func(ctx sdk.Context) sdk.Context
+		msg         *types.MsgAccreditService
+		shouldErr   bool
+		expResponse *types.MsgAccreditServiceResponse
+		expEvents   sdk.Events
+		check       func(ctx sdk.Context)
+	}{
+		{
+			name: "invalid authority return error",
+			msg: types.NewMsgAccreditService(
+				1,
+				"invalid",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "not found service returns error",
+			msg: types.NewMsgAccreditService(
+				1,
+				authtypes.NewModuleAddress("gov").String(),
+			),
+			shouldErr: true,
+		},
+		{
+			name: "valid data returns no error",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SaveService(ctx, types.NewService(
+					1,
+					types.SERVICE_STATUS_CREATED,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"",
+					false,
+				))
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgAccreditService(
+				1,
+				authtypes.NewModuleAddress("gov").String(),
+			),
+			shouldErr:   false,
+			expResponse: &types.MsgAccreditServiceResponse{},
+			expEvents: sdk.Events{
+				sdk.NewEvent(
+					types.EventTypeAccreditService,
+					sdk.NewAttribute(types.AttributeKeyServiceID, "1"),
+				),
+			},
+			check: func(ctx sdk.Context) {
+				service, found := suite.k.GetService(ctx, 1)
+				suite.Require().True(found)
+				suite.Require().True(service.Accredited)
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.setup != nil {
+				tc.setup()
+			}
+			if tc.setupCtx != nil {
+				ctx = tc.setupCtx(ctx)
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			msgServer := keeper.NewMsgServer(suite.k)
+			res, err := msgServer.AccreditService(ctx, tc.msg)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expResponse, res)
+				for _, event := range tc.expEvents {
+					suite.Require().Contains(ctx.EventManager().Events(), event)
+				}
+
+				if tc.check != nil {
+					tc.check(ctx)
+				}
+			}
+		})
+	}
+}
+
+func (suite *KeeperTestSuite) TestMsgService_RevokeServiceAccreditation() {
+	testCases := []struct {
+		name        string
+		setup       func()
+		store       func(ctx sdk.Context)
+		setupCtx    func(ctx sdk.Context) sdk.Context
+		msg         *types.MsgRevokeServiceAccreditation
+		shouldErr   bool
+		expResponse *types.MsgRevokeServiceAccreditationResponse
+		expEvents   sdk.Events
+		check       func(ctx sdk.Context)
+	}{
+		{
+			name: "invalid authority return error",
+			msg: types.NewMsgRevokeServiceAccreditation(
+				1,
+				"invalid",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "not found service returns error",
+			msg: types.NewMsgRevokeServiceAccreditation(
+				1,
+				authtypes.NewModuleAddress("gov").String(),
+			),
+			shouldErr: true,
+		},
+		{
+			name: "valid data returns no error",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SaveService(ctx, types.NewService(
+					1,
+					types.SERVICE_STATUS_CREATED,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"",
+					true,
+				))
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgRevokeServiceAccreditation(
+				1,
+				authtypes.NewModuleAddress("gov").String(),
+			),
+			shouldErr:   false,
+			expResponse: &types.MsgRevokeServiceAccreditationResponse{},
+			expEvents: sdk.Events{
+				sdk.NewEvent(
+					types.EventTypeRevokeServiceAccreditation,
+					sdk.NewAttribute(types.AttributeKeyServiceID, "1"),
+				),
+			},
+			check: func(ctx sdk.Context) {
+				service, found := suite.k.GetService(ctx, 1)
+				suite.Require().True(found)
+				suite.Require().False(service.Accredited)
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.setup != nil {
+				tc.setup()
+			}
+			if tc.setupCtx != nil {
+				ctx = tc.setupCtx(ctx)
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			msgServer := keeper.NewMsgServer(suite.k)
+			res, err := msgServer.RevokeServiceAccreditation(ctx, tc.msg)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
