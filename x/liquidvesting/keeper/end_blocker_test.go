@@ -46,7 +46,7 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 
 				// Delegate some vested representation to pool, service and operator
 				suite.createPool(1, vestedStake)
-				_, err = suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedStake, 200), testAccount)
+				_, err := suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedStake, 200), testAccount)
 				suite.Assert().NoError(err)
 
 				suite.createService(1)
@@ -110,7 +110,7 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 
 				// Delegate some vested representation to pool, service and operator
 				suite.createPool(1, vestedStake)
-				_, err = suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedStake, 200), testAccount)
+				_, err := suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedStake, 200), testAccount)
 				suite.Assert().NoError(err)
 
 				suite.createService(1)

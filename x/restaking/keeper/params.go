@@ -14,11 +14,6 @@ func (k *Keeper) UnbondingTime(ctx sdk.Context) time.Duration {
 	return k.GetParams(ctx).UnbondingTime
 }
 
-// GetAllRestakableDenoms returns all the denoms that are allowed to be restaked.
-func (k *Keeper) GetAllRestakableDenoms(ctx sdk.Context) []string {
-	return k.GetParams(ctx).AllowedDenoms
-}
-
 // SetRestakableDenoms sets the denoms that are allowed to be restaked.
 func (k *Keeper) SetRestakableDenoms(ctx sdk.Context, denoms []string) {
 	params := k.GetParams(ctx)

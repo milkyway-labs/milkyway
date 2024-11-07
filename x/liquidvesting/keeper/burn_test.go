@@ -88,7 +88,6 @@ func (suite *KeeperTestSuite) TestKeeper_TestBurn() {
 
 				// Compute when the unbond will end
 				unbondingTime := suite.rk.UnbondingTime(ctx)
-				suite.Require().NoError(err)
 				unbodnEnd := ctx.BlockHeader().Time.Add(unbondingTime)
 				// Deque the values
 				values := suite.k.GetUnbondedCoinsFromQueue(ctx, unbodnEnd)

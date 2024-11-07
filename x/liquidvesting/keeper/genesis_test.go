@@ -76,7 +76,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				// Delegate the tokens so that they will be scheduled for burn after the
 				// unbonding period
 				suite.createPool(1, vestedIBCDenom)
-				_, err = suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedIBCDenom, 100), user1)
+				_, err := suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedIBCDenom, 100), user1)
 				suite.Assert().NoError(err)
 
 				suite.createPool(2, vestedStake)
