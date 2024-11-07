@@ -150,6 +150,45 @@ func TestCliUtils_parseRewardsPlan(t *testing.T) {
 				types.NewBasicUsersDistribution(3),
 			),
 		},
+		{
+			name: "parse edit rewards plan json",
+			jsonFile: testutil.WriteToNewTempFile(t, `{
+	    "description": "test plan",
+	    "amount_per_day": "1000uinit",
+	    "start_time": "2024-01-01T00:00:00Z",
+	    "end_time": "2024-12-31T23:59:59Z",
+	    "pools_distribution": {
+	        "weight": 1,
+	        "type": {
+	            "@type":"/milkyway.rewards.v1.DistributionTypeBasic"
+	        }
+	    },
+	    "operators_distribution": {
+	        "weight": 2,
+	        "type": {
+	            "@type": "/milkyway.rewards.v1.DistributionTypeBasic"
+	        }
+	    },
+	    "users_distribution": {
+	        "weight": 3,
+	        "type": {
+	            "@type": "/milkyway.rewards.v1.UsersDistributionTypeBasic"
+	        }
+	    }
+	}`),
+			shouldErr: false,
+			expected: types.NewRewardsPlan(
+				1,
+				"test plan",
+				0,
+				sdk.NewCoins(sdk.NewCoin("uinit", math.NewInt(1000))),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2024, 12, 31, 23, 59, 59, 0, time.UTC),
+				types.NewBasicPoolsDistribution(1),
+				types.NewBasicOperatorsDistribution(2),
+				types.NewBasicUsersDistribution(3),
+			),
+		},
 	}
 
 	for _, tc := range testCases {

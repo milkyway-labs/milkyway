@@ -86,6 +86,53 @@ func (k msgServer) CreateRewardsPlan(goCtx context.Context, msg *types.MsgCreate
 	return &types.MsgCreateRewardsPlanResponse{NewRewardsPlanID: plan.ID}, nil
 }
 
+// CreateRewardsPlan defines the rpc method for Msg/EditRewardsPlan
+func (k msgServer) EditRewardsPlan(goCtx context.Context, msg *types.MsgEditRewardsPlan) (*types.MsgEditRewardsPlanResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Get the rewards plan to edit
+	rewardsPlan, err := k.GetRewardsPlan(ctx, msg.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	service, found := k.servicesKeeper.GetService(ctx, rewardsPlan.ServiceID)
+	if !found {
+		return nil, servicestypes.ErrServiceNotFound
+	}
+
+	// Make sure the editor is the admin of the service
+	if msg.Sender != service.Admin {
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only service admin can create rewards plan")
+	}
+
+	// Edit the rewards plan
+	err = k.Keeper.EditRewardsPlan(
+		ctx,
+		msg.ID,
+		msg.Description,
+		msg.Amount,
+		msg.StartTime,
+		msg.EndTime,
+		msg.PoolsDistribution,
+		msg.OperatorsDistribution,
+		msg.UsersDistribution,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeEditRewardsPlan,
+			sdk.NewAttribute(types.AttributeKeyRewardsPlanID, fmt.Sprint(rewardsPlan.ID)),
+			sdk.NewAttribute(servicestypes.AttributeKeyServiceID, fmt.Sprint(rewardsPlan.ServiceID)),
+		),
+	})
+
+	return &types.MsgEditRewardsPlanResponse{}, nil
+}
+
 // SetWithdrawAddress sets the withdraw address for a delegator(or an operator
 // when withdrawing commission). The default withdraw address if not set
 // specified is the delegator(or an operator) address.
