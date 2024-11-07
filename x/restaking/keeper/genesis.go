@@ -27,6 +27,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	if err != nil {
 		panic(err)
 	}
+
 	return types.NewGenesis(
 		operatorsJoinedServices,
 		servicesAllowedOperators,
