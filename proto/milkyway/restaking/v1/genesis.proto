@@ -38,6 +38,15 @@ message ServiceSecuringPools {
   repeated uint32 pool_ids = 2 [ (gogoproto.customname) = "PoolIDs" ];
 }
 
+// UserPreferencesEntry represents the user preferences.
+message UserPreferencesEntry {
+  // UserAddress is the encoded address of the user.
+  string user_address = 1;
+
+  // Preferences is the user preferences.
+  UserPreferences preferences = 2 [ (gogoproto.nullable) = false ];
+}
+
 // GenesisState defines the restaking module's genesis state.
 message GenesisState {
   // Params defines the parameters of the module.
@@ -62,5 +71,9 @@ message GenesisState {
 
   // UnbondingDelegations represents the unbonding delegations.
   repeated UnbondingDelegation unbonding_delegations = 6
+      [ (gogoproto.nullable) = false ];
+
+  // UserPreferences represents the user preferences.
+  repeated UserPreferencesEntry users_preferences = 7
       [ (gogoproto.nullable) = false ];
 }
