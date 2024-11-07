@@ -4,13 +4,21 @@ import (
 	"context"
 	"errors"
 
+	cosmoserrors "cosmossdk.io/errors"
+
 	"cosmossdk.io/collections"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
 // SetUserPreferences sets the given preferences for the user having the given address
 func (k *Keeper) SetUserPreferences(ctx context.Context, userAddress string, preferences types.UserPreferences) error {
+	err := preferences.Validate()
+	if err != nil {
+		return cosmoserrors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid preferences: %s", err)
+	}
+
 	return k.usersPreferences.Set(ctx, userAddress, preferences)
 }
 

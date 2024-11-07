@@ -543,11 +543,6 @@ func (k msgServer) UndelegateService(goCtx context.Context, msg *types.MsgUndele
 func (k msgServer) SetUserPreferences(goCtx context.Context, msg *types.MsgSetUserPreferences) (*types.MsgSetUserPreferencesResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	err := msg.Preferences.Validate()
-	if err != nil {
-		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid preferences: %s", err)
-	}
-
 	// Make sure that each service exists
 	for _, serviceID := range msg.Preferences.TrustedServicesIDs {
 		if !k.servicesKeeper.HasService(ctx, serviceID) {
@@ -555,7 +550,7 @@ func (k msgServer) SetUserPreferences(goCtx context.Context, msg *types.MsgSetUs
 		}
 	}
 
-	err = k.Keeper.SetUserPreferences(ctx, msg.User, msg.Preferences)
+	err := k.Keeper.SetUserPreferences(ctx, msg.User, msg.Preferences)
 	if err != nil {
 		return nil, err
 	}
