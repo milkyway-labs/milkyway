@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"slices"
 	"time"
 
 	"cosmossdk.io/collections"
@@ -216,11 +217,15 @@ func (k *Keeper) DelegateToService(ctx sdk.Context, serviceID uint32, amount sdk
 		return sdk.NewDecCoins(), servicestypes.ErrServiceNotFound
 	}
 
+	restakableDenoms := k.GetRestakableDenoms(ctx)
+
 	// Ensure the provided amount can be restaked
-	for _, coin := range amount {
-		isRestakable := k.IsDenomRestakable(ctx, coin.Denom)
-		if !isRestakable {
-			return sdk.NewDecCoins(), errors.Wrapf(types.ErrDenomNotRestakable, "%s cannot be restaked", coin.Denom)
+	if len(restakableDenoms) > 0 {
+		for _, coin := range amount {
+			isRestakable := slices.Contains(restakableDenoms, coin.Denom)
+			if !isRestakable {
+				return sdk.NewDecCoins(), errors.Wrapf(types.ErrDenomNotRestakable, "%s cannot be restaked", coin.Denom)
+			}
 		}
 	}
 

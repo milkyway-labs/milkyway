@@ -65,7 +65,7 @@ type RestakingKeeper interface {
 	HasOperatorJoinedService(ctx sdk.Context, operatorID uint32, serviceID uint32) (bool, error)
 	CanOperatorValidateService(ctx sdk.Context, serviceID uint32, operatorID uint32) (bool, error)
 	IsServiceSecuredByPool(ctx sdk.Context, serviceID uint32, operatorID uint32) (bool, error)
-	GetAllowedDenoms(ctx sdk.Context) []string
+	GetRestakableDenoms(ctx sdk.Context) []string
 	GetPoolDelegation(ctx sdk.Context, poolID uint32, userAddress string) (restakingtypes.Delegation, bool)
 	GetOperatorDelegation(ctx sdk.Context, operatorID uint32, userAddress string) (restakingtypes.Delegation, bool)
 	GetServiceDelegation(ctx sdk.Context, serviceID uint32, userAddress string) (restakingtypes.Delegation, bool)

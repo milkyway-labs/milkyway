@@ -86,7 +86,7 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 	}
 
 	var pools []poolstypes.Pool
-	restakableDenoms := k.restakingKeeper.GetAllowedDenoms(sdkCtx)
+	restakableDenoms := k.restakingKeeper.GetRestakableDenoms(sdkCtx)
 	// The list is empty all pools are allowed
 	if len(restakableDenoms) == 0 {
 		pools = k.poolsKeeper.GetPools(sdkCtx)
