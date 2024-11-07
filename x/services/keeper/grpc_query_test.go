@@ -27,6 +27,7 @@ func (suite *KeeperTestSuite) TestKeeper_Services() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 
@@ -38,6 +39,7 @@ func (suite *KeeperTestSuite) TestKeeper_Services() {
 					"https://inertia.zone",
 					"https://inertia.zone/logo.png",
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -52,6 +54,7 @@ func (suite *KeeperTestSuite) TestKeeper_Services() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				),
 				types.NewService(
 					2,
@@ -61,6 +64,7 @@ func (suite *KeeperTestSuite) TestKeeper_Services() {
 					"https://inertia.zone",
 					"https://inertia.zone/logo.png",
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+					false,
 				),
 			},
 		},
@@ -75,6 +79,7 @@ func (suite *KeeperTestSuite) TestKeeper_Services() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 
@@ -86,6 +91,7 @@ func (suite *KeeperTestSuite) TestKeeper_Services() {
 					"https://inertia.zone",
 					"https://inertia.zone/logo.png",
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -103,6 +109,7 @@ func (suite *KeeperTestSuite) TestKeeper_Services() {
 					"https://inertia.zone",
 					"https://inertia.zone/logo.png",
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+					false,
 				),
 			},
 		},
@@ -156,6 +163,7 @@ func (suite *KeeperTestSuite) TestKeeper_Service() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 			},
@@ -169,6 +177,7 @@ func (suite *KeeperTestSuite) TestKeeper_Service() {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				false,
 			),
 		},
 	}

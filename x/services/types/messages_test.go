@@ -377,6 +377,64 @@ func TestMsgTransferServiceOwnership_GetSigners(t *testing.T) {
 
 // --------------------------------------------------------------------------------------------------------------------
 
+var msgDeleteService = types.NewMsgDeleteService(
+	1,
+	"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+)
+
+func TestMsgDeleteService_ValidateBasic(t *testing.T) {
+	testCases := []struct {
+		name      string
+		msg       *types.MsgDeleteService
+		shouldErr bool
+	}{
+		{
+			name: "invalid service id returns error",
+			msg: types.NewMsgDeleteService(
+				0,
+				msgDeleteService.Sender,
+			),
+			shouldErr: true,
+		},
+		{
+			name: "invalid sender address returns error",
+			msg: types.NewMsgDeleteService(
+				msgDeleteService.ServiceID,
+				"invalid",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "valid message returns no error",
+			msg:  msgDeleteService,
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			err := tc.msg.ValidateBasic()
+			if tc.shouldErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestMsgDeleteService_GetSignBytes(t *testing.T) {
+	expected := `{"type":"milkyway/MsgDeleteService","value":{"sender":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","service_id":1}}`
+	require.Equal(t, expected, string(msgDeleteService.GetSignBytes()))
+}
+
+func TestMsgDeleteService_GetSigners(t *testing.T) {
+	addr, _ := sdk.AccAddressFromBech32(msgDeleteService.Sender)
+	require.Equal(t, []sdk.AccAddress{addr}, msgDeleteService.GetSigners())
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
 var msgUpdateParams = types.NewMsgUpdateParams(
 	types.DefaultParams(),
 	"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
@@ -431,4 +489,120 @@ func TestMsgUpdateParams_GetSignBytes(t *testing.T) {
 func TestMsgUpdateParams_GetSigners(t *testing.T) {
 	addr, _ := sdk.AccAddressFromBech32(msgUpdateParams.Authority)
 	require.Equal(t, []sdk.AccAddress{addr}, msgDeactivateService.GetSigners())
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+var msgAccreditService = types.NewMsgAccreditService(
+	1,
+	"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+)
+
+func TestMsgAccreditService_ValidateBasic(t *testing.T) {
+	testCases := []struct {
+		name      string
+		msg       *types.MsgAccreditService
+		shouldErr bool
+	}{
+		{
+			name: "invalid service id returns error",
+			msg: types.NewMsgAccreditService(
+				0,
+				msgAccreditService.Authority,
+			),
+			shouldErr: true,
+		},
+		{
+			name: "invalid authority address returns error",
+			msg: types.NewMsgAccreditService(
+				msgAccreditService.ServiceID,
+				"invalid",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "valid message returns no error",
+			msg:  msgAccreditService,
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			err := tc.msg.ValidateBasic()
+			if tc.shouldErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestMsgAccreditService_GetSignBytes(t *testing.T) {
+	expected := `{"type":"milkyway/MsgAccreditService","value":{"authority":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","service_id":1}}`
+	require.Equal(t, expected, string(msgAccreditService.GetSignBytes()))
+}
+
+func TestMsgAccreditService_GetSigners(t *testing.T) {
+	addr, _ := sdk.AccAddressFromBech32(msgAccreditService.Authority)
+	require.Equal(t, []sdk.AccAddress{addr}, msgAccreditService.GetSigners())
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+var msgRevokeServiceAccreditation = types.NewMsgRevokeServiceAccreditation(
+	1,
+	"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+)
+
+func TestMsgRevokeServiceAccreditation_ValidateBasic(t *testing.T) {
+	testCases := []struct {
+		name      string
+		msg       *types.MsgRevokeServiceAccreditation
+		shouldErr bool
+	}{
+		{
+			name: "invalid service id returns error",
+			msg: types.NewMsgRevokeServiceAccreditation(
+				0,
+				msgRevokeServiceAccreditation.Authority,
+			),
+			shouldErr: true,
+		},
+		{
+			name: "invalid authority address returns error",
+			msg: types.NewMsgRevokeServiceAccreditation(
+				msgRevokeServiceAccreditation.ServiceID,
+				"invalid",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "valid message returns no error",
+			msg:  msgRevokeServiceAccreditation,
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			err := tc.msg.ValidateBasic()
+			if tc.shouldErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestMsgRevokeServiceAccreditation_GetSignBytes(t *testing.T) {
+	expected := `{"type":"milkyway/MsgRevokeServiceAccreditation","value":{"authority":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","service_id":1}}`
+	require.Equal(t, expected, string(msgRevokeServiceAccreditation.GetSignBytes()))
+}
+
+func TestMsgRevokeServiceAccreditation_GetSigners(t *testing.T) {
+	addr, _ := sdk.AccAddressFromBech32(msgRevokeServiceAccreditation.Authority)
+	require.Equal(t, []sdk.AccAddress{addr}, msgRevokeServiceAccreditation.GetSigners())
 }

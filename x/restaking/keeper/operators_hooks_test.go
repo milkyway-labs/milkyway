@@ -58,6 +58,7 @@ func (suite *KeeperTestSuite) TestOperatorHooks_AfterOperatorDeleted() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 				err = suite.sk.SaveService(ctx, servicestypes.NewService(
@@ -68,6 +69,7 @@ func (suite *KeeperTestSuite) TestOperatorHooks_AfterOperatorDeleted() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 
@@ -98,6 +100,7 @@ func (suite *KeeperTestSuite) TestOperatorHooks_AfterOperatorDeleted() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 				err = suite.sk.SaveService(ctx, servicestypes.NewService(
@@ -108,6 +111,7 @@ func (suite *KeeperTestSuite) TestOperatorHooks_AfterOperatorDeleted() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 
@@ -144,6 +148,7 @@ func (suite *KeeperTestSuite) TestOperatorHooks_AfterOperatorDeleted() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 
@@ -174,6 +179,7 @@ func (suite *KeeperTestSuite) TestOperatorHooks_AfterOperatorDeleted() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 
@@ -207,6 +213,7 @@ func (suite *KeeperTestSuite) TestOperatorHooks_AfterOperatorDeleted() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 
@@ -237,6 +244,7 @@ func (suite *KeeperTestSuite) TestOperatorHooks_AfterOperatorDeleted() {
 					"https://milkyway.com",
 					"https://milkyway.com/logo.png",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
 				))
 				suite.Require().NoError(err)
 

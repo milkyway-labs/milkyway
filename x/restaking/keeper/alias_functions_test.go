@@ -676,8 +676,16 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 				suite.Assert().NoError(err)
 
 				// Delegate to service
-				err = suite.sk.CreateService(ctx, servicestypes.NewService(1, servicestypes.SERVICE_STATUS_ACTIVE,
-					"", "", "", "", ""))
+				err = suite.sk.CreateService(ctx, servicestypes.NewService(
+					1,
+					servicestypes.SERVICE_STATUS_ACTIVE,
+					"",
+					"",
+					"",
+					"",
+					"",
+					false,
+				))
 				suite.Assert().NoError(err)
 				_, err = suite.k.DelegateToService(ctx, 1,
 					sdk.NewCoins(sdk.NewInt64Coin("stake", 350)), delegator)
@@ -732,8 +740,16 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 				suite.Assert().NoError(err)
 
 				// Delegate to service
-				err = suite.sk.CreateService(ctx, servicestypes.NewService(1, servicestypes.SERVICE_STATUS_ACTIVE,
-					"", "", "", "", ""))
+				err = suite.sk.CreateService(ctx, servicestypes.NewService(
+					1,
+					servicestypes.SERVICE_STATUS_ACTIVE,
+					"",
+					"",
+					"",
+					"",
+					"",
+					false,
+				))
 				suite.Assert().NoError(err)
 				_, err = suite.k.DelegateToService(ctx, 1,
 					sdk.NewCoins(sdk.NewInt64Coin("stake", 350)), delegator)
@@ -765,8 +781,16 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 			setup: func(ctx sdk.Context) {
 				// Prepare pool, service and operator
 				suite.pk.SetNextPoolID(ctx, 1)
-				err := suite.sk.CreateService(ctx, servicestypes.NewService(1, servicestypes.SERVICE_STATUS_ACTIVE,
-					"", "", "", "", ""))
+				err := suite.sk.CreateService(ctx, servicestypes.NewService(
+					1,
+					servicestypes.SERVICE_STATUS_ACTIVE,
+					"",
+					"",
+					"",
+					"",
+					"",
+					false,
+				))
 				err = suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
 					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "",
 				))

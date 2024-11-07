@@ -41,6 +41,7 @@ func (k msgServer) CreateService(goCtx context.Context, msg *types.MsgCreateServ
 		msg.Website,
 		msg.PictureURL,
 		msg.Sender,
+		false,
 	)
 
 	// Validate the service before storing
@@ -241,9 +242,8 @@ func (k msgServer) TransferServiceOwnership(goCtx context.Context, msg *types.Ms
 // UpdateParams defines the rpc method for Msg/UpdateParams
 func (k msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
 	// Check the authority
-	authority := k.authority
-	if authority != msg.Authority {
-		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", authority, msg.Authority)
+	if k.authority != msg.Authority {
+		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", k.authority, msg.Authority)
 	}
 
 	// Update the params
@@ -251,4 +251,68 @@ func (k msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParam
 	k.SetParams(ctx, msg.Params)
 
 	return &types.MsgUpdateParamsResponse{}, nil
+}
+
+// AccreditService defines the rpc method for Msg/AccreditService
+func (k msgServer) AccreditService(goCtx context.Context, msg *types.MsgAccreditService) (*types.MsgAccreditServiceResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Check the authority
+	if k.authority != msg.Authority {
+		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", k.authority, msg.Authority)
+	}
+
+	// Check if the service exists
+	service, found := k.GetService(ctx, msg.ServiceID)
+	if !found {
+		return nil, errors.Wrapf(types.ErrServiceNotFound, "service with id %d not found", msg.ServiceID)
+	}
+
+	// Accredit the service
+	service.Accredited = true
+	if err := k.SaveService(ctx, service); err != nil {
+		return nil, err
+	}
+
+	// Emit the event
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeAccreditService,
+			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
+		),
+	})
+
+	return &types.MsgAccreditServiceResponse{}, nil
+}
+
+// RevokeServiceAccreditation defines the rpc method for Msg/RevokeServiceAccreditation
+func (k msgServer) RevokeServiceAccreditation(goCtx context.Context, msg *types.MsgRevokeServiceAccreditation) (*types.MsgRevokeServiceAccreditationResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	// Check the authority
+	if k.authority != msg.Authority {
+		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", k.authority, msg.Authority)
+	}
+
+	// Check if the service exists
+	service, found := k.GetService(ctx, msg.ServiceID)
+	if !found {
+		return nil, errors.Wrapf(types.ErrServiceNotFound, "service with id %d not found", msg.ServiceID)
+	}
+
+	// Revoke the service accreditation
+	service.Accredited = false
+	if err := k.SaveService(ctx, service); err != nil {
+		return nil, err
+	}
+
+	// Emit the event
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeRevokeServiceAccreditation,
+			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
+		),
+	})
+
+	return &types.MsgRevokeServiceAccreditationResponse{}, nil
 }

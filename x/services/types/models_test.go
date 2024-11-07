@@ -81,6 +81,7 @@ func TestService_Validate(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				false,
 			),
 			shouldErr: true,
 		},
@@ -94,6 +95,7 @@ func TestService_Validate(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				false,
 			),
 			shouldErr: true,
 		},
@@ -107,6 +109,7 @@ func TestService_Validate(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				false,
 			),
 			shouldErr: true,
 		},
@@ -120,6 +123,7 @@ func TestService_Validate(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"",
+				false,
 			),
 			shouldErr: true,
 		},
@@ -144,6 +148,7 @@ func TestService_Validate(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				false,
 			),
 			shouldErr: false,
 		},
@@ -179,6 +184,7 @@ func TestService_Update(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				false,
 			),
 			update: types.NewServiceUpdate(
 				"MilkyWay2",
@@ -194,6 +200,7 @@ func TestService_Update(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				false,
 			),
 		},
 		{
@@ -206,6 +213,7 @@ func TestService_Update(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				false,
 			),
 			update: types.NewServiceUpdate(
 				types.DoNotModify,
@@ -221,6 +229,7 @@ func TestService_Update(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				false,
 			),
 		},
 		{
@@ -233,6 +242,7 @@ func TestService_Update(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				false,
 			),
 			update: types.NewServiceUpdate(
 				types.DoNotModify,
@@ -248,6 +258,7 @@ func TestService_Update(t *testing.T) {
 				"https://example.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				false,
 			),
 		},
 		{
@@ -260,6 +271,7 @@ func TestService_Update(t *testing.T) {
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				false,
 			),
 			update: types.NewServiceUpdate(
 				types.DoNotModify,
@@ -275,6 +287,7 @@ func TestService_Update(t *testing.T) {
 				"https://milkyway.com",
 				"https://example.com/picture.jpg",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				false,
 			),
 		},
 	}
