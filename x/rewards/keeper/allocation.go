@@ -13,6 +13,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	gogotypes "github.com/cosmos/gogoproto/types"
 
+	"github.com/milkyway-labs/milkyway/utils"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
@@ -109,7 +110,35 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 			return false, nil
 		}
 
-		err = k.AllocateRewardsByPlan(ctx, plan, timeSinceLastAllocation, pools, operators, restakableDenoms)
+		// Get the service params to filter out the restakable denoms
+		// and pools
+		serviceParams, err := k.servicesKeeper.GetServiceParams(sdkCtx, plan.ServiceID)
+		if err != nil {
+			return false, err
+		}
+
+		var serviceRestakableDenoms []string
+		if len(restakableDenoms) == 0 {
+			// The global restakable denoms are not set use the one configured
+			// in the service params
+			serviceRestakableDenoms = serviceParams.AllowedDenoms
+		} else if len(serviceParams.AllowedDenoms) > 0 {
+			// We have both the global restakable denoms and the service denoms,
+			// intersect them to have the list of restakable denoms
+			serviceRestakableDenoms = utils.Intersect(restakableDenoms, serviceParams.AllowedDenoms)
+			if len(serviceRestakableDenoms) == 0 {
+				// The intersection between what the service's allowed denoms
+				// and the global allowed denoms is empty, skip distribution
+				// for this plan.
+				sdkCtx.Logger().Info(
+					"Skipping rewards plan because its allowed restakable denoms list is empty",
+					"plan_id", plan.ID,
+				)
+				return false, nil
+			}
+		}
+
+		err = k.AllocateRewardsByPlan(ctx, plan, timeSinceLastAllocation, pools, operators, serviceRestakableDenoms)
 		if err != nil {
 			return false, err
 		}
@@ -182,7 +211,18 @@ func (k *Keeper) AllocateRewardsByPlan(
 		return err
 	}
 
-	totalUsersDelValues, err := k.GetCoinsValue(ctx, service.Tokens)
+	// Filter out the not allowed denoms from the tokens that have been
+	// delegated toward a service.
+	tokensDelegatedToService := service.Tokens
+	if len(restakableDenoms) > 0 {
+		tokensDelegatedToService := sdk.NewCoins()
+		for _, coin := range service.Tokens {
+			if slices.Contains(restakableDenoms, coin.Denom) {
+				tokensDelegatedToService = tokensDelegatedToService.Add(coin)
+			}
+		}
+	}
+	totalUsersDelValues, err := k.GetCoinsValue(ctx, tokensDelegatedToService)
 	if err != nil {
 		return err
 	}
