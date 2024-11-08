@@ -12,4 +12,8 @@ message Params {
   // after the user initiates an unbonding request. This will be applied to all
   // types of restaking: pool, operator and service restaking.
   int64 unbonding_time = 1 [ (gogoproto.stdduration) = true ];
+
+  // AllowedDenoms represents the list of denoms allowed for restaking
+  // and that will be considered when computing rewards.
+  repeated string allowed_denoms = 2;
 }

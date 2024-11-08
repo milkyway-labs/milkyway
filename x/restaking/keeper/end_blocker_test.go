@@ -26,7 +26,7 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 			setupCtx: func(ctx sdk.Context) sdk.Context {
 				return ctx.
 					WithBlockHeight(10).
-					WithBlockTime(time.Date(2024, 1, 1, 12, 00, 00, 000, time.UTC))
+					WithBlockTime(time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC))
 			},
 			store: func(ctx sdk.Context) {
 				delegationAmount := sdk.NewCoin("umilk", sdkmath.NewInt(100))
@@ -77,7 +77,7 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					1,
 					10,
-					time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+					time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
 					1,
 				), ubd)
@@ -88,7 +88,7 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 			setupCtx: func(ctx sdk.Context) sdk.Context {
 				return ctx.
 					WithBlockHeight(10).
-					WithBlockTime(time.Date(2024, 1, 1, 12, 00, 00, 000, time.UTC))
+					WithBlockTime(time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC))
 			},
 			store: func(ctx sdk.Context) {
 				delegationAmount := sdk.NewCoin("umilk", sdkmath.NewInt(100))
@@ -151,7 +151,7 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 			setupCtx: func(ctx sdk.Context) sdk.Context {
 				return ctx.
 					WithBlockHeight(10).
-					WithBlockTime(time.Date(2024, 1, 1, 12, 00, 00, 000, time.UTC))
+					WithBlockTime(time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC))
 			},
 			store: func(ctx sdk.Context) {
 				milkBalance := sdk.NewCoin("umilk", sdkmath.NewInt(1_000))

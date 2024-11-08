@@ -1,9 +1,11 @@
 package keeper
 
 import (
+	"slices"
 	"time"
 
 	"cosmossdk.io/collections"
+	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
@@ -74,7 +76,18 @@ func (k *Keeper) DelegateToOperator(ctx sdk.Context, operatorID uint32, amount s
 		return sdk.NewDecCoins(), operatorstypes.ErrOperatorNotFound
 	}
 
-	// MAke sure the operator is active
+	restakableDenoms := k.GetRestakableDenoms(ctx)
+	if len(restakableDenoms) > 0 {
+		// Ensure the provided amount can be restaked
+		for _, coin := range amount {
+			isRestakable := slices.Contains(restakableDenoms, coin.Denom)
+			if !isRestakable {
+				return sdk.NewDecCoins(), errors.Wrapf(types.ErrDenomNotRestakable, "%s cannot be restaked", coin.Denom)
+			}
+		}
+	}
+
+	// Make sure the operator is active
 	if !operator.IsActive() {
 		return sdk.NewDecCoins(), operatorstypes.ErrOperatorNotActive
 	}

@@ -19,9 +19,7 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-var (
-	_ upgrades.Upgrade = &Upgrade{}
-)
+var _ upgrades.Upgrade = &Upgrade{}
 
 // Upgrade represents the v1.1.0 upgrade
 type Upgrade struct {

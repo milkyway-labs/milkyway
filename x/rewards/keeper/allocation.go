@@ -85,7 +85,20 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 		return nil
 	}
 
-	pools := k.poolsKeeper.GetPools(sdkCtx)
+	var pools []poolstypes.Pool
+	restakableDenoms := k.restakingKeeper.GetRestakableDenoms(sdkCtx)
+	// The list is empty all pools are allowed
+	if len(restakableDenoms) == 0 {
+		pools = k.poolsKeeper.GetPools(sdkCtx)
+	} else {
+		// Filter the pools to only include the ones with restakable assets
+		for _, pool := range k.poolsKeeper.GetPools(sdkCtx) {
+			isRestakble := slices.Contains(restakableDenoms, pool.Denom)
+			if isRestakble {
+				pools = append(pools, pool)
+			}
+		}
+	}
 	operators := k.operatorsKeeper.GetOperators(sdkCtx)
 
 	// Iterate all rewards plan stored and allocate rewards by plan if it's
@@ -96,7 +109,7 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 			return false, nil
 		}
 
-		err = k.AllocateRewardsByPlan(ctx, plan, timeSinceLastAllocation, pools, operators)
+		err = k.AllocateRewardsByPlan(ctx, plan, timeSinceLastAllocation, pools, operators, restakableDenoms)
 		if err != nil {
 			return false, err
 		}
@@ -111,7 +124,7 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 // AllocateRewardsByPlan allocates rewards by a specific rewards plan.
 func (k *Keeper) AllocateRewardsByPlan(
 	ctx context.Context, plan types.RewardsPlan, timeSinceLastAllocation time.Duration,
-	pools []poolstypes.Pool, operators []operatorstypes.Operator,
+	pools []poolstypes.Pool, operators []operatorstypes.Operator, restakableDenoms []string,
 ) error {
 	// Calculate rewards amount for this block by following formula:
 	// amountPerDay * timeSinceLastAllocation(ms) / 1 day(ms)
@@ -155,7 +168,7 @@ func (k *Keeper) AllocateRewardsByPlan(
 	if err != nil {
 		return err
 	}
-	poolDistrInfos, totalPoolsDelValues, err := k.getDistrInfos(ctx, eligiblePools)
+	poolDistrInfos, totalPoolsDelValues, err := k.getDistrInfos(ctx, eligiblePools, restakableDenoms)
 	if err != nil {
 		return err
 	}
@@ -164,7 +177,7 @@ func (k *Keeper) AllocateRewardsByPlan(
 	if err != nil {
 		return err
 	}
-	operatorDistrInfos, totalOperatorsDelValues, err := k.getDistrInfos(ctx, eligibleOperators)
+	operatorDistrInfos, totalOperatorsDelValues, err := k.getDistrInfos(ctx, eligibleOperators, restakableDenoms)
 	if err != nil {
 		return err
 	}
@@ -294,11 +307,21 @@ func (k *Keeper) getEligibleOperators(
 // delegation target's delegation values. getDistrInfos also returns the total
 // delegation values of all targets.
 func (k *Keeper) getDistrInfos(
-	ctx context.Context, targets []restakingtypes.DelegationTarget,
+	ctx context.Context,
+	targets []restakingtypes.DelegationTarget,
+	restakableDenoms []string,
 ) (distrInfos []DistributionInfo, totalDelValues math.LegacyDec, err error) {
 	totalDelValues = math.LegacyZeroDec()
 	for _, target := range targets {
-		delValue, err := k.GetCoinsValue(ctx, target.GetTokens())
+		var targetTokens sdk.Coins
+		// Filter out the coins that are not allowed to be restaked
+		for _, coin := range target.GetTokens() {
+			isRestakable := len(restakableDenoms) == 0 || slices.Contains(restakableDenoms, coin.Denom)
+			if isRestakable {
+				targetTokens = append(targetTokens, coin)
+			}
+		}
+		delValue, err := k.GetCoinsValue(ctx, targetTokens)
 		if err != nil {
 			return nil, math.LegacyDec{}, err
 		}

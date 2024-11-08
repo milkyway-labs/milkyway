@@ -25,3 +25,35 @@ func MapGetOrDefault[K, V any](
 
 	return value, nil
 }
+
+// IsMapEmpty checks if the given map with the given ranger is empty.
+func IsMapEmpty[K, V any](ctx sdk.Context, collectionMap collections.Map[K, V], ranger collections.Ranger[K]) (bool, error) {
+	iterator, err := collectionMap.Iterate(ctx, ranger)
+	if err != nil {
+		return false, err
+	}
+
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		return false, nil
+	}
+
+	return true, nil
+}
+
+// IsKeySetEmpty checks if the given key set with the given ranger is empty.
+func IsKeySetEmpty[K any](ctx sdk.Context, collectionMap collections.KeySet[K], ranger collections.Ranger[K]) (bool, error) {
+	iterator, err := collectionMap.Iterate(ctx, ranger)
+	if err != nil {
+		return false, err
+	}
+
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		return false, nil
+	}
+
+	return true, nil
+}

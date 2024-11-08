@@ -324,11 +324,13 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			store: func(ctx sdk.Context) {
 				suite.k.SetParams(ctx, types.NewParams(
 					30*24*time.Hour,
+					nil,
 				))
 			},
 			expGenesis: &types.GenesisState{
 				Params: types.NewParams(
-					30 * 24 * time.Hour,
+					30*24*time.Hour,
+					nil,
 				),
 			},
 		},
@@ -626,13 +628,15 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 			name: "params are stored properly",
 			genesis: &types.GenesisState{
 				Params: types.NewParams(
-					30 * 24 * time.Hour,
+					30*24*time.Hour,
+					nil,
 				),
 			},
 			check: func(ctx sdk.Context) {
 				params := suite.k.GetParams(ctx)
 				suite.Require().Equal(types.NewParams(
 					30*24*time.Hour,
+					nil,
 				), params)
 			},
 		},

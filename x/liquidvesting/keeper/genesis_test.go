@@ -16,7 +16,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 	user2 := "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"
 	vestedStake, err := types.GetVestedRepresentationDenom("stake")
 	suite.Assert().NoError(err)
-	blockTime := time.Date(2024, 1, 1, 12, 0, 0, 000, time.UTC)
+	blockTime := time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC)
 
 	testCases := []struct {
 		name       string
@@ -63,9 +63,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding delegation time to 7 days
-				suite.rk.SetParams(ctx, restakingtypes.Params{
-					UnbondingTime: 7 * 24 * time.Hour,
-				})
+				suite.rk.SetParams(ctx, restakingtypes.NewParams(7*24*time.Hour, nil))
 
 				// Fund the users' insurance fund
 				suite.fundAccountInsuranceFund(ctx, user1, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)))
@@ -264,7 +262,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 							user1,
 							1,
 							10,
-							time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+							time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 							sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 51)),
 							1,
 						),
@@ -334,7 +332,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 							user1,
 							1,
 							10,
-							time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+							time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 							sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 100)),
 							1,
 						),
@@ -369,7 +367,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 							user1,
 							1,
 							10,
-							time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+							time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 							sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 2)),
 							1,
 						),

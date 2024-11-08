@@ -31,13 +31,11 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 			setupCtx: func(ctx sdk.Context) sdk.Context {
 				return ctx.
 					WithBlockHeight(10).
-					WithBlockTime(time.Date(2024, 1, 1, 12, 0, 0, 00, time.UTC))
+					WithBlockTime(time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC))
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding delegation time to 7 days
-				suite.rk.SetParams(ctx, restakingtypes.Params{
-					UnbondingTime: 7 * 24 * time.Hour,
-				})
+				suite.rk.SetParams(ctx, restakingtypes.NewParams(7*24*time.Hour, nil))
 
 				// Add some tokens to the user's insurance fund so they can restake
 				// the vested representation
@@ -97,13 +95,11 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 			setupCtx: func(ctx sdk.Context) sdk.Context {
 				return ctx.
 					WithBlockHeight(10).
-					WithBlockTime(time.Date(2024, 1, 1, 12, 0, 0, 00, time.UTC))
+					WithBlockTime(time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC))
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding delegation time to 7 days
-				suite.rk.SetParams(ctx, restakingtypes.Params{
-					UnbondingTime: 7 * 24 * time.Hour,
-				})
+				suite.rk.SetParams(ctx, restakingtypes.NewParams(7*24*time.Hour, nil))
 
 				// Add some tokens to the user's insurance fund so they can restake
 				// the vested representation
