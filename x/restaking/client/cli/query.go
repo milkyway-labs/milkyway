@@ -29,7 +29,7 @@ func GetQueryCmd() *cobra.Command {
 		GetOperatorsQueryCmd(),
 		GetServicesQueryCmd(),
 		GetDelegatorQueryCmd(),
-		GetUsersQueryCmd(),
+		GetUserQueryCmd(),
 		GetParamsQueryCmd(),
 	)
 
@@ -1163,8 +1163,8 @@ func getDelegatorServiceQueryCmd() *cobra.Command {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// GetUsersQueryCmd returns the command allowing to perform queries for users
-func GetUsersQueryCmd() *cobra.Command {
+// GetUserQueryCmd returns the command allowing to perform queries for users
+func GetUserQueryCmd() *cobra.Command {
 	queryCmd := &cobra.Command{
 		Use:   "user",
 		Short: "Querying commands for a user service",

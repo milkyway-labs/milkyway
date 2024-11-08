@@ -294,7 +294,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			},
 		},
 		{
-			name: "user preferences are exporter properly",
+			name: "user preferences are exported properly",
 			store: func(ctx sdk.Context) {
 				suite.k.SetParams(ctx, types.DefaultParams())
 

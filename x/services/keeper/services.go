@@ -113,7 +113,7 @@ func (k *Keeper) DeactivateService(ctx sdk.Context, serviceID uint32) error {
 	return k.AfterServiceDeactivated(ctx, service.ID)
 }
 
-// DeleteService deactivates the service with the given ID
+// DeleteService deletes the service with the given ID
 func (k *Keeper) DeleteService(ctx sdk.Context, serviceID uint32) error {
 	service, existed := k.GetService(ctx, serviceID)
 	if !existed {

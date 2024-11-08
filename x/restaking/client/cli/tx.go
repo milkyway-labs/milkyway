@@ -569,9 +569,9 @@ func GetCeasePoolSecurityBorrowTxCmd() *cobra.Command {
 
 //nolint:gosec // This is not a hardcoded credential
 const (
-	trustNonAccreditedServicesFlags = "trust-non-accredited-services"
-	trustAccreditedServicesFlag     = "trust-accredited-services"
-	trustedServicesIDsFlag          = "trusted-services-ids"
+	trustNonAccreditedServicesFlag = "trust-non-accredited-services"
+	trustAccreditedServicesFlag    = "trust-accredited-services"
+	trustedServicesIDsFlag         = "trusted-services-ids"
 )
 
 func GetUserTxCmd() *cobra.Command {
@@ -612,7 +612,7 @@ If you are updating your preferences, you must provide all the flags that you wa
 				return err
 			}
 
-			trustNonAccreditedServices, err := cmd.Flags().GetBool(trustNonAccreditedServicesFlags)
+			trustNonAccreditedServices, err := cmd.Flags().GetBool(trustNonAccreditedServicesFlag)
 			if err != nil {
 				return err
 			}
@@ -633,6 +633,10 @@ If you are updating your preferences, you must provide all the flags that you wa
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
+
+	cmd.Flags().Bool(trustNonAccreditedServicesFlag, false, "Trust non-accredited services")
+	cmd.Flags().Bool(trustAccreditedServicesFlag, false, "Trust accredited services")
+	cmd.Flags().UintSlice(trustedServicesIDsFlag, nil, "List of IDs of the services you trust")
 
 	flags.AddTxFlagsToCmd(cmd)
 

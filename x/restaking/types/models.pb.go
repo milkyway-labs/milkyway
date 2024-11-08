@@ -389,7 +389,7 @@ type UserPreferences struct {
 	// TrustNonAccreditedServices tells whether the user trusts all non-accredited
 	// services present on the platform.
 	TrustNonAccreditedServices bool `protobuf:"varint,1,opt,name=trust_non_accredited_services,json=trustNonAccreditedServices,proto3" json:"trust_non_accredited_services,omitempty"`
-	// TrustAllAccreditedServices tells whether the user trusts all accredited
+	// TrustAccreditedServices tells whether the user trusts all accredited
 	// services present on the platform.
 	TrustAccreditedServices bool `protobuf:"varint,2,opt,name=trust_accredited_services,json=trustAccreditedServices,proto3" json:"trust_accredited_services,omitempty"`
 	// TrustedServicesIDs is a list of service IDs that the user trusts (both

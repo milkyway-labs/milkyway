@@ -145,7 +145,7 @@ message UserPreferences {
   // services present on the platform.
   bool trust_non_accredited_services = 1;
 
-  // TrustAllAccreditedServices tells whether the user trusts all accredited
+  // TrustAccreditedServices tells whether the user trusts all accredited
   // services present on the platform.
   bool trust_accredited_services = 2;
 
