@@ -1702,6 +1702,79 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateService() {
 			shouldErr: true,
 		},
 		{
+			name: "not allowed service denom returns error",
+			store: func(ctx sdk.Context) {
+				// Create the service
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
+					ID:      1,
+					Status:  servicestypes.SERVICE_STATUS_ACTIVE,
+					Address: servicestypes.GetServiceAddress(1).String(),
+					Tokens: sdk.NewCoins(
+						sdk.NewCoin("umilk", sdkmath.NewInt(20)),
+					),
+					DelegatorShares: sdk.NewDecCoins(
+						sdk.NewDecCoinFromDec("service/1/umilk", sdkmath.LegacyNewDec(100)),
+					),
+				})
+				suite.Require().NoError(err)
+
+				// Configure the service parameters
+				err = suite.sk.SetServiceParams(ctx, 1, servicestypes.NewServiceParams([]string{"uinit"}))
+				suite.Require().NoError(err)
+
+				// Send some funds to the user
+				suite.fundAccount(
+					ctx,
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
+				)
+			},
+			msg: &types.MsgDelegateService{
+				ServiceID: 1,
+				Delegator: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				Amount:    sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
+			},
+			shouldErr: true,
+		},
+		{
+			name: "not allowed service denom when intersecting allowed denoms returns error",
+			store: func(ctx sdk.Context) {
+				// Configure the allowed restakable denoms
+				suite.k.SetRestakableDenoms(ctx, []string{"uinit", "umilk"})
+
+				// Create the service
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
+					ID:      1,
+					Status:  servicestypes.SERVICE_STATUS_ACTIVE,
+					Address: servicestypes.GetServiceAddress(1).String(),
+					Tokens: sdk.NewCoins(
+						sdk.NewCoin("umilk", sdkmath.NewInt(20)),
+					),
+					DelegatorShares: sdk.NewDecCoins(
+						sdk.NewDecCoinFromDec("service/1/umilk", sdkmath.LegacyNewDec(100)),
+					),
+				})
+				suite.Require().NoError(err)
+
+				// Configure the service parameters
+				err = suite.sk.SetServiceParams(ctx, 1, servicestypes.NewServiceParams([]string{"uinit"}))
+				suite.Require().NoError(err)
+
+				// Send some funds to the user
+				suite.fundAccount(
+					ctx,
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
+				)
+			},
+			msg: &types.MsgDelegateService{
+				ServiceID: 1,
+				Delegator: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				Amount:    sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
+			},
+			shouldErr: true,
+		},
+		{
 			name: "valid amount is delegated properly",
 			store: func(ctx sdk.Context) {
 				// Create the service
@@ -1758,6 +1831,97 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateService() {
 						sdk.NewDecCoinFromDec("service/1/umilk", sdkmath.LegacyNewDec(100)),
 					),
 				})
+				suite.Require().NoError(err)
+
+				// Send some funds to the user
+				suite.fundAccount(
+					ctx,
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
+				)
+			},
+			msg: &types.MsgDelegateService{
+				ServiceID: 1,
+				Delegator: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				Amount:    sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
+			},
+			shouldErr: false,
+			expEvents: sdk.Events{
+				sdk.NewEvent(
+					types.EventTypeDelegateService,
+					sdk.NewAttribute(types.AttributeKeyDelegator, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+					sdk.NewAttribute(servicestypes.AttributeKeyServiceID, "1"),
+					sdk.NewAttribute(sdk.AttributeKeyAmount, "100umilk"),
+					sdk.NewAttribute(types.AttributeKeyNewShares, "500.000000000000000000service/1/umilk"),
+				),
+			},
+		},
+		{
+			name: "allowed service denom is delegated properly",
+			store: func(ctx sdk.Context) {
+				// Create the service
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
+					ID:      1,
+					Status:  servicestypes.SERVICE_STATUS_ACTIVE,
+					Address: servicestypes.GetServiceAddress(1).String(),
+					Tokens: sdk.NewCoins(
+						sdk.NewCoin("umilk", sdkmath.NewInt(20)),
+					),
+					DelegatorShares: sdk.NewDecCoins(
+						sdk.NewDecCoinFromDec("service/1/umilk", sdkmath.LegacyNewDec(100)),
+					),
+				})
+				suite.Require().NoError(err)
+
+				// Configure the service's allowed restakable denoms
+				err = suite.sk.SetServiceParams(ctx, 1, servicestypes.NewServiceParams([]string{"umilk"}))
+				suite.Require().NoError(err)
+
+				// Send some funds to the user
+				suite.fundAccount(
+					ctx,
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
+				)
+			},
+			msg: &types.MsgDelegateService{
+				ServiceID: 1,
+				Delegator: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				Amount:    sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
+			},
+			shouldErr: false,
+			expEvents: sdk.Events{
+				sdk.NewEvent(
+					types.EventTypeDelegateService,
+					sdk.NewAttribute(types.AttributeKeyDelegator, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+					sdk.NewAttribute(servicestypes.AttributeKeyServiceID, "1"),
+					sdk.NewAttribute(sdk.AttributeKeyAmount, "100umilk"),
+					sdk.NewAttribute(types.AttributeKeyNewShares, "500.000000000000000000service/1/umilk"),
+				),
+			},
+		},
+		{
+			name: "allowed denom after intersecting allowed denoms is delegated properly",
+			store: func(ctx sdk.Context) {
+				// Configure the allowed restakable denoms
+				suite.k.SetRestakableDenoms(ctx, []string{"umilk", "uinit"})
+
+				// Create the service
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
+					ID:      1,
+					Status:  servicestypes.SERVICE_STATUS_ACTIVE,
+					Address: servicestypes.GetServiceAddress(1).String(),
+					Tokens: sdk.NewCoins(
+						sdk.NewCoin("umilk", sdkmath.NewInt(20)),
+					),
+					DelegatorShares: sdk.NewDecCoins(
+						sdk.NewDecCoinFromDec("service/1/umilk", sdkmath.LegacyNewDec(100)),
+					),
+				})
+				suite.Require().NoError(err)
+
+				// Configure the service's allowed restakable denoms
+				err = suite.sk.SetServiceParams(ctx, 1, servicestypes.NewServiceParams([]string{"umilk"}))
 				suite.Require().NoError(err)
 
 				// Send some funds to the user
