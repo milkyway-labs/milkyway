@@ -63,7 +63,7 @@ func NewBaseKeeperTestData(t *testing.T, keys []string) BaseKeeperTestData {
 		data.Cdc,
 		runtime.NewKVStoreService(data.Keys[banktypes.StoreKey]),
 		data.AccountKeeper,
-		nil,
+		app.BlacklistedModuleAccountAddrs(),
 		data.AuthorityAddress,
 		log.NewNopLogger(),
 	)
