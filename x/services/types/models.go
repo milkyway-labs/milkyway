@@ -2,6 +2,7 @@ package types
 
 import (
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -265,4 +266,14 @@ func (p *ServiceParams) Validate() error {
 	}
 
 	return nil
+}
+
+// IsDenomAllowed returns true if the provided denom is allowed to be
+// used to secure the service.
+func (p *ServiceParams) IsDenomAllowed(denom string) bool {
+	if len(p.AllowedDenoms) == 0 {
+		return true
+	}
+
+	return slices.Contains(p.AllowedDenoms, denom)
 }
