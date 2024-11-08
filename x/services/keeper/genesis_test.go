@@ -230,6 +230,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 						"https://milkyway.com",
 						"https://milkyway.com/logo.png",
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+						false,
 					),
 					types.NewService(
 						2,
@@ -239,6 +240,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 						"https://inertia.zone",
 						"https://inertia.zone/logo.png",
 						"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+						false,
 					),
 				},
 				[]types.ServiceParamsRecord{
