@@ -8,6 +8,7 @@ import (
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/milkyway-labs/milkyway/utils"
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
@@ -218,6 +219,25 @@ func (k *Keeper) DelegateToService(ctx sdk.Context, serviceID uint32, amount sdk
 	}
 
 	restakableDenoms := k.GetRestakableDenoms(ctx)
+
+	// Update restakable denoms with the ones allowed by the service
+	serviceParams, err := k.servicesKeeper.GetServiceParams(ctx, serviceID)
+	if err != nil {
+		return sdk.NewDecCoins(), err
+	}
+	// Intersect the service's allowed denoms with the
+	// allowed denoms configured in the x/restaking module
+	if len(serviceParams.AllowedDenoms) > 0 {
+		if len(restakableDenoms) == 0 {
+			// x/restaking allowed denoms is empty, consider the
+			// service's allowed denoms
+			restakableDenoms = serviceParams.AllowedDenoms
+		} else {
+			// We have a global configured list of allowed denoms,
+			// intersect it with the service's allowed denoms
+			restakableDenoms = utils.Intersect(restakableDenoms, serviceParams.AllowedDenoms)
+		}
+	}
 
 	// Ensure the provided amount can be restaked
 	if len(restakableDenoms) > 0 {

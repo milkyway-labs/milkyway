@@ -68,3 +68,15 @@ func Remove[T comparable](slice []T, value T) (newSlice []T, removed bool) {
 
 	return append(slice[:index], slice[index+1:]...), true
 }
+
+// Intersect returns the intersection of two slices.
+func Intersect[T comparable](a, b []T) []T {
+	var result []T
+	for _, v := range a {
+		if Contains(b, v) {
+			result = append(result, v)
+		}
+	}
+
+	return result
+}
