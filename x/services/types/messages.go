@@ -354,14 +354,19 @@ func (msg *MsgRevokeServiceAccreditation) GetSigners() []sdk.AccAddress {
 // --------------------------------------------------------------------------------------------------------------------
 
 // NewMsgSetServiceParams creates a new MsgSetServiceParams instance.
-func NewMsgSetServiceParams(params ServiceParams, sender string) *MsgSetServiceParams {
+func NewMsgSetServiceParams(serviceID uint32, params ServiceParams, sender string) *MsgSetServiceParams {
 	return &MsgSetServiceParams{
+		ServiceID:     serviceID,
 		ServiceParams: params,
 		Sender:        sender,
 	}
 }
 
 func (msg *MsgSetServiceParams) ValidateBasic() error {
+	if msg.ServiceID == 0 {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid service id: %d", msg.ServiceID)
+	}
+
 	err := msg.ServiceParams.Validate()
 	if err != nil {
 		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid params: %s", err.Error())

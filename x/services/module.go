@@ -7,6 +7,7 @@ import (
 
 	"cosmossdk.io/core/appmodule"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/spf13/cobra"
 
 	abci "github.com/cometbft/cometbft/abci/types"
 
@@ -16,6 +17,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
+	"github.com/milkyway-labs/milkyway/x/services/client/cli"
 	"github.com/milkyway-labs/milkyway/x/services/keeper"
 	"github.com/milkyway-labs/milkyway/x/services/types"
 )
@@ -76,6 +78,11 @@ func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *r
 	if err != nil {
 		panic(err)
 	}
+}
+
+// GetTxCmd returns the operators module's root tx command.
+func (a AppModuleBasic) GetTxCmd() *cobra.Command {
+	return cli.GetTxCmd()
 }
 
 // ----------------------------------------------------------------------------

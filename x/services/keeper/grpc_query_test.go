@@ -201,6 +201,84 @@ func (suite *KeeperTestSuite) TestKeeper_Service() {
 	}
 }
 
+func (suite *KeeperTestSuite) TestKeeper_ServiceParams() {
+	testCases := []struct {
+		name      string
+		store     func(ctx sdk.Context)
+		request   *types.QueryServiceParamsRequest
+		shouldErr bool
+		expParams types.ServiceParams
+	}{
+		{
+			name:      "invalid service id returns error",
+			request:   types.NewQueryServiceParamsRequest(0),
+			shouldErr: true,
+		},
+		{
+			name:      "not found service returns error",
+			request:   types.NewQueryServiceParamsRequest(1),
+			shouldErr: true,
+		},
+		{
+			name: "default params are returned properly",
+			store: func(ctx sdk.Context) {
+				err := suite.k.CreateService(ctx, types.NewService(
+					1,
+					types.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is an AVS of a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+				suite.Require().NoError(err)
+			},
+			request:   types.NewQueryServiceParamsRequest(1),
+			shouldErr: false,
+			expParams: types.DefaultServiceParams(),
+		},
+		{
+			name: "found params are returned properly",
+			store: func(ctx sdk.Context) {
+				err := suite.k.CreateService(ctx, types.NewService(
+					1,
+					types.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is an AVS of a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				))
+				suite.Require().NoError(err)
+				// Set some custom parameters
+				err = suite.k.SetServiceParams(ctx, 1, types.NewServiceParams([]string{"umilk"}))
+				suite.Require().NoError(err)
+			},
+			request:   types.NewQueryServiceParamsRequest(1),
+			shouldErr: false,
+			expParams: types.NewServiceParams([]string{"umilk"}),
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			res, err := suite.k.ServiceParams(ctx, tc.request)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expParams, res.ServiceParams)
+			}
+		})
+	}
+}
+
 func (suite *KeeperTestSuite) TestQueryServer_Params() {
 	testCases := []struct {
 		name      string

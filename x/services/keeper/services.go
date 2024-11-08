@@ -161,7 +161,7 @@ func (k *Keeper) GetService(ctx sdk.Context, serviceID uint32) (service types.Se
 func (k *Keeper) GetServiceParams(ctx sdk.Context, serviceID uint32) (types.ServiceParams, error) {
 	params, err := k.serviceParams.Get(ctx, serviceID)
 	if err != nil {
-		if errors.IsOf(collections.ErrNotFound) {
+		if errors.IsOf(err, collections.ErrNotFound) {
 			return types.DefaultServiceParams(), nil
 		}
 		return types.ServiceParams{}, err

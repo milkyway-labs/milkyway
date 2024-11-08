@@ -32,6 +32,15 @@ func (am AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					Example:   fmt.Sprintf(`%s query %s services --page-offset-100 --page-limit=100`, version.AppName, types.ModuleName),
 				},
 				{
+					RpcMethod: "ServiceParams",
+					Use:       "service-params [service-id]",
+					Short:     "Query the parameters of the service with the given id",
+					Example:   fmt.Sprintf(`%s query %s service-params 1`, version.AppName, types.ModuleName),
+					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
+						{ProtoField: "service_id"},
+					},
+				},
+				{
 					RpcMethod: "Params",
 					Use:       "params",
 					Short:     "Query the current services parameters",
@@ -127,7 +136,7 @@ Only the fields that you provide will be updated`,
 				{
 					RpcMethod: "TransferServiceOwnership",
 					Use:       "transfer-ownership [id] [new-admin]",
-					Short:     "transfer the ownership of a service",
+					Short:     "Transfer the ownership of a service",
 					Example: fmt.Sprintf(
 						`%s tx %s transfer-ownership 1 cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4 --from alice`,
 						version.AppName, types.ModuleName),
@@ -135,6 +144,10 @@ Only the fields that you provide will be updated`,
 						{ProtoField: "service_id"},
 						{ProtoField: "new_admin"},
 					},
+				},
+				{
+					RpcMethod: "SetServiceParams",
+					Skip:      true,
 				},
 				{
 					RpcMethod: "UpdateParams",

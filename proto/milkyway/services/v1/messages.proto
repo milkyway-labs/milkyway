@@ -208,8 +208,11 @@ message MsgSetServiceParams {
   // Sender is the address of the user transferring the ownership
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
-  // ServiceParams defines the new parameters of the service.
-  ServiceParams service_params = 2 [ (gogoproto.nullable) = false ];
+  // ServiceID is the ID of the service whose parameters are being set
+  uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
+
+  // ServiceParams defines the new parameters of the service
+  ServiceParams service_params = 3 [ (gogoproto.nullable) = false ];
 }
 
 // MsgSetServiceParamsResponse is the return value of MsgSetServiceParams.
