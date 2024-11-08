@@ -205,7 +205,7 @@ message MsgSetServiceParams {
   option (cosmos.msg.v1.signer) = "sender";
   option (amino.name) = "milkyway/MsgSetServiceParams";
 
-  // Sender is the address of the user transferring the ownership
+  // Sender is the address of the user setting the parameters
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
   // ServiceID is the ID of the service whose parameters are being set

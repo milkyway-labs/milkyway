@@ -79,7 +79,7 @@ message Service {
 
 // ServiceParams defines the parameters of a service
 message ServiceParams {
-  // AllowedDenoms defines the list of denoms that can be used to
-  // secure the service. If the list is empty, any denom can be used.
+  // AllowedDenoms defines the list of denoms that can be restaked toward
+  // the service. If the list is empty, any denom can be used.
   repeated string allowed_denoms = 1;
 }

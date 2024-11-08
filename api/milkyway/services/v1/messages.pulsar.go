@@ -9500,7 +9500,7 @@ type MsgSetServiceParams struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// Sender is the address of the user transferring the ownership
+	// Sender is the address of the user setting the parameters
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
 	// ServiceID is the ID of the service whose parameters are being set
 	ServiceId uint32 `protobuf:"varint,2,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`

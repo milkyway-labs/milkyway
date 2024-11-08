@@ -220,12 +220,13 @@ func (k *Keeper) DelegateToService(ctx sdk.Context, serviceID uint32, amount sdk
 
 	restakableDenoms := k.GetRestakableDenoms(ctx)
 
-	// Update restakable denoms with the ones allowed by the service
+	// Get the service parameters
 	serviceParams, err := k.servicesKeeper.GetServiceParams(ctx, serviceID)
 	if err != nil {
 		return sdk.NewDecCoins(), err
 	}
 
+	// Update restakable denoms with the ones allowed by the service
 	if len(restakableDenoms) == 0 {
 		// No restakable denoms configured, use the service restakable denoms
 		restakableDenoms = serviceParams.AllowedDenoms

@@ -13,7 +13,7 @@ import (
 	"github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-// GetTxCmd returns a new command to perform operators transactions
+// GetTxCmd returns a new command to perform services transactions
 func GetTxCmd() *cobra.Command {
 	txCmd := &cobra.Command{
 		Use:                        types.ModuleName,
@@ -31,7 +31,7 @@ func GetTxCmd() *cobra.Command {
 	return txCmd
 }
 
-// GetCmdSetServiceParams returns the command allowing to set an existing operator's
+// GetCmdSetServiceParams returns the command allowing to set an existing service's
 // parameters
 func GetCmdSetServiceParams() *cobra.Command {
 	cmd := &cobra.Command{

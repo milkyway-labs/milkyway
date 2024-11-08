@@ -133,8 +133,8 @@ var xxx_messageInfo_Service proto.InternalMessageInfo
 
 // ServiceParams defines the parameters of a service
 type ServiceParams struct {
-	// AllowedDenoms defines the list of denoms that can be used to
-	// secure the service. If the list is empty, any denom can be used.
+	// AllowedDenoms defines the list of denoms that can be restaked toward
+	// the service. If the list is empty, any denom can be used.
 	AllowedDenoms []string `protobuf:"bytes,1,rep,name=allowed_denoms,json=allowedDenoms,proto3" json:"allowed_denoms,omitempty"`
 }
 

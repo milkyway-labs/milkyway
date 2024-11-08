@@ -111,7 +111,7 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 		}
 
 		// Get the service params to filter out the restakable denoms
-		// and pools
+		// that are not allowed by the service
 		serviceParams, err := k.servicesKeeper.GetServiceParams(sdkCtx, plan.ServiceID)
 		if err != nil {
 			return false, err
@@ -127,7 +127,7 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 			// intersect them to have the list of restakable denoms
 			serviceRestakableDenoms = utils.Intersect(restakableDenoms, serviceParams.AllowedDenoms)
 			if len(serviceRestakableDenoms) == 0 {
-				// The intersection between what the service's allowed denoms
+				// The intersection between the service's allowed denoms
 				// and the global allowed denoms is empty, skip distribution
 				// for this plan.
 				sdkCtx.Logger().Info(

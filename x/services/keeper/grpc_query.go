@@ -62,7 +62,6 @@ func (k *Keeper) ServiceParams(ctx context.Context, request *types.QueryServiceP
 		return nil, status.Error(codes.InvalidArgument, "invalid service ID")
 	}
 
-	// Return the service parameters
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
 	// Ensure the service exists
