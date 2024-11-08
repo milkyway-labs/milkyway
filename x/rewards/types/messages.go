@@ -1,6 +1,7 @@
 package types
 
 import (
+	"fmt"
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -60,4 +61,48 @@ func NewMsgWithdrawOperatorCommission(operatorID uint32, senderAddress string) *
 		Sender:     senderAddress,
 		OperatorID: operatorID,
 	}
+}
+
+// -------------------------------------------------------------------------------
+
+// NewMsgEditRewardsPlan creates a new MsgEditRewardsPlan instance.
+func NewMsgEditRewardsPlan(
+	id uint64,
+	description string,
+	amount sdk.Coins,
+	startTime,
+	endTime time.Time,
+	poolsDistribution Distribution,
+	operatorsDistribution Distribution,
+	usersDistribution UsersDistribution,
+	sender string,
+) *MsgEditRewardsPlan {
+	return &MsgEditRewardsPlan{
+		ID:                    id,
+		Sender:                sender,
+		Description:           description,
+		Amount:                amount,
+		StartTime:             startTime,
+		EndTime:               endTime,
+		PoolsDistribution:     poolsDistribution,
+		OperatorsDistribution: operatorsDistribution,
+		UsersDistribution:     usersDistribution,
+	}
+}
+
+// ValidateBasic implements sdk.Msg
+func (m *MsgEditRewardsPlan) ValidateBasic() error {
+	if m.ID == 0 {
+		return fmt.Errorf("invalid ID: %d", m.ID)
+	}
+
+	_, err := sdk.AccAddressFromBech32(m.Sender)
+	if err != nil {
+		return fmt.Errorf("invalid sender address: %s, %w", m.Sender, err)
+	}
+
+	// We need a codec to properly validate the rewards plan, we do that
+	// when handling the message.
+
+	return nil
 }

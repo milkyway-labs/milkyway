@@ -175,6 +175,262 @@ func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 	}
 }
 
+func (suite *KeeperTestSuite) TestMsgEditRewardsPlan() {
+	testCases := []struct {
+		name        string
+		setup       func()
+		store       func(ctx sdk.Context)
+		setupCtx    func(ctx sdk.Context) sdk.Context
+		msg         *types.MsgEditRewardsPlan
+		shouldErr   bool
+		expResponse *types.MsgEditRewardsPlanResponse
+		expEvents   sdk.Events
+		check       func(ctx sdk.Context)
+	}{
+		{
+			name: "service not found returns error",
+			msg: types.NewMsgEditRewardsPlan(
+				1,
+				"Rewards Plan",
+				utils.MustParseCoins("100_000000service"),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+				types.NewBasicPoolsDistribution(0),
+				types.NewBasicOperatorsDistribution(0),
+				types.NewBasicUsersDistribution(0),
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "sender different from service admin returns error",
+			store: func(ctx sdk.Context) {
+				// Create a service
+				_, _ = suite.setupSampleServiceAndOperator(ctx)
+
+				// Set the next plan id
+				err := suite.keeper.NextRewardsPlanID.Set(ctx, 1)
+				suite.Require().NoError(err)
+
+				// Create a rewards plan
+				_, err = suite.keeper.CreateRewardsPlan(
+					ctx,
+					"Rewards Plan",
+					1,
+					utils.MustParseCoins("100_000000service"),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+					types.NewBasicPoolsDistribution(0),
+					types.NewBasicOperatorsDistribution(0),
+					types.NewBasicUsersDistribution(0),
+				)
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgEditRewardsPlan(
+				1,
+				"Rewards Plan",
+				utils.MustParseCoins("100_000000service"),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+				types.NewBasicPoolsDistribution(0),
+				types.NewBasicOperatorsDistribution(0),
+				types.NewBasicUsersDistribution(0),
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "end time before start time returns error",
+			setupCtx: func(ctx sdk.Context) sdk.Context {
+				return ctx.WithBlockTime(time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC))
+			},
+			store: func(ctx sdk.Context) {
+				// Create a service
+				_, _ = suite.setupSampleServiceAndOperator(ctx)
+
+				// Set the next plan id
+				err := suite.keeper.NextRewardsPlanID.Set(ctx, 1)
+				suite.Require().NoError(err)
+
+				// Create a rewards plan
+				_, err = suite.keeper.CreateRewardsPlan(
+					ctx,
+					"Rewards Plan",
+					1,
+					utils.MustParseCoins("100_000000service"),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+					types.NewBasicPoolsDistribution(0),
+					types.NewBasicOperatorsDistribution(0),
+					types.NewBasicUsersDistribution(0),
+				)
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgEditRewardsPlan(
+				1,
+				"Rewards Plan",
+				utils.MustParseCoins("100_000000service"),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2023, 12, 1, 0, 0, 0, 0, time.UTC),
+				types.NewBasicPoolsDistribution(0),
+				types.NewBasicOperatorsDistribution(0),
+				types.NewBasicUsersDistribution(0),
+				testutil.TestAddress(10000).String(),
+			),
+			shouldErr: true,
+		},
+		{
+			name: "edit inactive rewards plan returns error",
+			setupCtx: func(ctx sdk.Context) sdk.Context {
+				return ctx.WithBlockTime(time.Date(2025, 1, 2, 0, 0, 0, 0, time.UTC))
+			},
+			store: func(ctx sdk.Context) {
+				// Create a service
+				_, _ = suite.setupSampleServiceAndOperator(ctx)
+
+				// Set the next plan id
+				err := suite.keeper.NextRewardsPlanID.Set(ctx, 1)
+				suite.Require().NoError(err)
+
+				// Create a rewards plan
+				_, err = suite.keeper.CreateRewardsPlan(
+					ctx,
+					"Rewards Plan",
+					1,
+					utils.MustParseCoins("100_000000service"),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+					types.NewBasicPoolsDistribution(0),
+					types.NewBasicOperatorsDistribution(0),
+					types.NewBasicUsersDistribution(0),
+				)
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgEditRewardsPlan(
+				1,
+				"Rewards Plan - Edited",
+				utils.MustParseCoins("100_000000service"),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+				types.NewBasicPoolsDistribution(0),
+				types.NewBasicOperatorsDistribution(0),
+				types.NewBasicUsersDistribution(0),
+				testutil.TestAddress(10000).String(),
+			),
+			shouldErr: true,
+		},
+		{
+			name: "edit rewards plan successfully",
+			setupCtx: func(ctx sdk.Context) sdk.Context {
+				return ctx.WithBlockTime(time.Date(2024, 1, 2, 0, 0, 0, 0, time.UTC))
+			},
+			store: func(ctx sdk.Context) {
+				// Create a service
+				_, _ = suite.setupSampleServiceAndOperator(ctx)
+
+				// Set the next plan id
+				err := suite.keeper.NextRewardsPlanID.Set(ctx, 1)
+				suite.Require().NoError(err)
+
+				// Create a rewards plan
+				_, err = suite.keeper.CreateRewardsPlan(
+					ctx,
+					"Rewards Plan",
+					1,
+					utils.MustParseCoins("100_000000service"),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+					types.NewBasicPoolsDistribution(0),
+					types.NewBasicOperatorsDistribution(0),
+					types.NewBasicUsersDistribution(0),
+				)
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgEditRewardsPlan(
+				1,
+				"Rewards Plan - Edited",
+				utils.MustParseCoins("200_000000service"),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC),
+				types.NewBasicPoolsDistribution(1),
+				types.NewBasicOperatorsDistribution(2),
+				types.NewBasicUsersDistribution(3),
+				testutil.TestAddress(10000).String(),
+			),
+			shouldErr:   false,
+			expResponse: &types.MsgEditRewardsPlanResponse{},
+			expEvents: []sdk.Event{
+				sdk.NewEvent(
+					types.EventTypeEditRewardsPlan,
+					sdk.NewAttribute(types.AttributeKeyRewardsPlanID, "1"),
+					sdk.NewAttribute(servicestypes.AttributeKeyServiceID, "1"),
+				),
+			},
+			check: func(ctx sdk.Context) {
+				// Make sure the rewards plan has been edited
+				plan, err := suite.keeper.GetRewardsPlan(ctx, 1)
+				suite.Require().NoError(err)
+				suite.Require().Equal(utils.MustParseCoins("200_000000service"), plan.AmountPerDay)
+				suite.Require().Equal(
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					plan.StartTime,
+				)
+				suite.Require().Equal(
+					time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC),
+					plan.EndTime,
+				)
+				// Check pools distribution
+				poolsDistributionType, err := types.GetDistributionType(
+					suite.App.AppCodec(), plan.PoolsDistribution)
+				suite.Require().IsType(&types.DistributionTypeBasic{}, poolsDistributionType)
+				suite.Require().Equal(uint32(1), plan.PoolsDistribution.Weight)
+
+				// Check operators distribution
+				operatorsDistributionType, err := types.GetDistributionType(
+					suite.App.AppCodec(), plan.OperatorsDistribution)
+				suite.Require().IsType(&types.DistributionTypeBasic{}, operatorsDistributionType)
+				suite.Require().Equal(uint32(2), plan.OperatorsDistribution.Weight)
+
+				// Check users distribution
+				suite.Require().Equal(uint32(3), plan.UsersDistribution.Weight)
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			suite.SetupTest()
+			ctx := suite.Ctx
+			if tc.setup != nil {
+				tc.setup()
+			}
+			if tc.setupCtx != nil {
+				ctx = tc.setupCtx(ctx)
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			msgServer := keeper.NewMsgServer(suite.keeper)
+			res, err := msgServer.EditRewardsPlan(ctx, tc.msg)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expResponse, res)
+				for _, event := range tc.expEvents {
+					suite.Require().Contains(ctx.EventManager().Events(), event)
+				}
+
+				if tc.check != nil {
+					tc.check(ctx)
+				}
+			}
+		})
+	}
+}
+
 func (suite *KeeperTestSuite) TestMsgSetWithdrawAddress() {
 	testCases := []struct {
 		name        string

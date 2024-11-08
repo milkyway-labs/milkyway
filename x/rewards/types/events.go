@@ -2,6 +2,7 @@ package types
 
 const (
 	EventTypeCreateRewardsPlan    = "create_rewards_plan"
+	EventTypeEditRewardsPlan      = "edit_rewards_plan"
 	EventTypeSetWithdrawAddress   = "set_withdraw_address"
 	EventTypeRewards              = "rewards"
 	EventTypeCommission           = "commission"
