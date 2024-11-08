@@ -12,7 +12,9 @@ import (
 )
 
 func BuildContext(
-	keys map[string]*storetypes.KVStoreKey, tKeys map[string]*storetypes.TransientStoreKey, memKeys map[string]*storetypes.MemoryStoreKey,
+	keys map[string]*storetypes.KVStoreKey,
+	tKeys map[string]*storetypes.TransientStoreKey,
+	memKeys map[string]*storetypes.MemoryStoreKey,
 ) sdk.Context {
 	logger := log.NewNopLogger()
 	db := dbm.NewMemDB()

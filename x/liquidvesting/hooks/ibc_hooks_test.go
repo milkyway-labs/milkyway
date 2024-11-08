@@ -12,7 +12,7 @@ import (
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 )
 
-func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
+func (suite *IBCHooksTestSuite) TestKeeper_IBCHooks() {
 	user1 := authtypes.NewModuleAddress("user1")
 	user2 := authtypes.NewModuleAddress("user2")
 	moduleAddress := authtypes.NewModuleAddress(types.ModuleName).String()

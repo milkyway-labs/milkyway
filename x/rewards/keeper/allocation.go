@@ -85,16 +85,18 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 		return nil
 	}
 
-	var pools []poolstypes.Pool
+	// Get the list of restakable denoms
 	restakableDenoms := k.restakingKeeper.GetRestakableDenoms(sdkCtx)
+
 	// The list is empty all pools are allowed
+	var pools []poolstypes.Pool
 	if len(restakableDenoms) == 0 {
 		pools = k.poolsKeeper.GetPools(sdkCtx)
 	} else {
 		// Filter the pools to only include the ones with restakable assets
 		for _, pool := range k.poolsKeeper.GetPools(sdkCtx) {
-			isRestakble := slices.Contains(restakableDenoms, pool.Denom)
-			if isRestakble {
+			isRestakable := slices.Contains(restakableDenoms, pool.Denom)
+			if isRestakable {
 				pools = append(pools, pool)
 			}
 		}
@@ -153,6 +155,7 @@ func (k *Keeper) AllocateRewardsByPlan(
 		)
 		return nil
 	}
+
 	// Send the current block's rewards to the global rewards pool.
 	err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, planRewardsPoolAddr, types.RewardsPoolName, rewardsTruncated)
 	if err != nil {

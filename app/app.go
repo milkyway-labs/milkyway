@@ -495,7 +495,7 @@ func NewMilkyWayApp(
 		appCodec,
 		runtime.NewKVStoreService(keys[banktypes.StoreKey]),
 		app.AccountKeeper,
-		app.BlacklistedModuleAccountAddrs(),
+		BlacklistedModuleAccountAddrs(),
 		authorityAddr,
 		logger,
 	)
@@ -1471,7 +1471,7 @@ func (app *MilkyWayApp) LoadHeight(height int64) error {
 }
 
 // ModuleAccountAddrs returns all the app's module account addresses.
-func (app *MilkyWayApp) ModuleAccountAddrs() map[string]bool {
+func ModuleAccountAddrs() map[string]bool {
 	modAccAddrs := make(map[string]bool)
 	for acc := range maccPerms {
 		modAccAddrs[authtypes.NewModuleAddress(acc).String()] = true
@@ -1480,8 +1480,8 @@ func (app *MilkyWayApp) ModuleAccountAddrs() map[string]bool {
 	return modAccAddrs
 }
 
-// ModuleAccountAddrs returns all the app's module account addresses.
-func (app *MilkyWayApp) BlacklistedModuleAccountAddrs() map[string]bool {
+// BlacklistedModuleAccountAddrs returns all the app's blacklisted module account addresses.
+func BlacklistedModuleAccountAddrs() map[string]bool {
 	modAccAddrs := make(map[string]bool)
 	// DO NOT REMOVE: StringMapKeys fixes non-deterministic map iteration
 	for _, acc := range utils.StringMapKeys(maccPerms) {
@@ -1566,6 +1566,9 @@ func (app *MilkyWayApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.A
 // Simulate customize gas simulation to add fee deduction gas amount.
 func (app *MilkyWayApp) Simulate(txBytes []byte) (sdk.GasInfo, *sdk.Result, error) {
 	gasInfo, result, err := app.BaseApp.Simulate(txBytes)
+	if err != nil {
+		return gasInfo, result, err
+	}
 	gasInfo.GasUsed += FeeDeductionGasAmount
 	return gasInfo, result, err
 }

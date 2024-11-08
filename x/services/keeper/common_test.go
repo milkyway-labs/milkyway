@@ -40,7 +40,7 @@ type KeeperTestSuite struct {
 }
 
 func (suite *KeeperTestSuite) SetupTest() {
-	data := testutils.SetupKeeperTest(suite.T())
+	data := testutils.NewKeeperTestData(suite.T())
 
 	suite.storeKey = data.StoreKey
 
