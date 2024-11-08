@@ -1487,7 +1487,9 @@ func (app *MilkyWayApp) BlacklistedModuleAccountAddrs() map[string]bool {
 	for _, acc := range utils.StringMapKeys(maccPerms) {
 		// don't blacklist stakeibc module account, so that it can ibc transfer tokens
 		if acc == stakeibctypes.ModuleName ||
-			acc == stakeibctypes.RewardCollectorName {
+			acc == stakeibctypes.RewardCollectorName ||
+			// don't blacklist liquidvesting module account, so that it can receive ibc transfers
+			acc == liquidvestingtypes.ModuleName {
 			continue
 		}
 		modAccAddrs[authtypes.NewModuleAddress(acc).String()] = true
