@@ -2,6 +2,7 @@ package types
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 
 	coreaddress "cosmossdk.io/core/address"
@@ -143,6 +144,15 @@ func (plan RewardsPlan) Validate(unpacker codectypes.AnyUnpacker) error {
 	}
 
 	return nil
+}
+
+// ParseRewardsPlanID tries parsing the given value as an rewards plan id
+func ParseRewardsPlanID(value string) (uint64, error) {
+	planID, err := strconv.ParseUint(value, 10, 64)
+	if err != nil {
+		return 0, fmt.Errorf("invalid rewards plan ID: %s", value)
+	}
+	return planID, nil
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -359,7 +369,8 @@ func NewDelegatorStartingInfo(previousPeriod uint64, stakes sdk.DecCoins, height
 
 // NewDelegationDelegatorReward creates a new delegation delegator reward
 func NewDelegationDelegatorReward(
-	delType restakingtypes.DelegationType, targetID uint32, rewards DecPools) DelegationDelegatorReward {
+	delType restakingtypes.DelegationType, targetID uint32, rewards DecPools,
+) DelegationDelegatorReward {
 	return DelegationDelegatorReward{
 		DelegationType:     delType,
 		DelegationTargetID: targetID,

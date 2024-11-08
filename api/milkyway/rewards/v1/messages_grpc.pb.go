@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	Msg_CreateRewardsPlan_FullMethodName          = "/milkyway.rewards.v1.Msg/CreateRewardsPlan"
+	Msg_EditRewardsPlan_FullMethodName            = "/milkyway.rewards.v1.Msg/EditRewardsPlan"
 	Msg_SetWithdrawAddress_FullMethodName         = "/milkyway.rewards.v1.Msg/SetWithdrawAddress"
 	Msg_WithdrawDelegatorReward_FullMethodName    = "/milkyway.rewards.v1.Msg/WithdrawDelegatorReward"
 	Msg_WithdrawOperatorCommission_FullMethodName = "/milkyway.rewards.v1.Msg/WithdrawOperatorCommission"
@@ -35,6 +36,9 @@ type MsgClient interface {
 	// CreateRewardsPlan defines the operation for creating a new
 	// rewards plan.
 	CreateRewardsPlan(ctx context.Context, in *MsgCreateRewardsPlan, opts ...grpc.CallOption) (*MsgCreateRewardsPlanResponse, error)
+	// EditRewardsPlan defines the operation to edit an existing
+	// rewards plan.
+	EditRewardsPlan(ctx context.Context, in *MsgEditRewardsPlan, opts ...grpc.CallOption) (*MsgEditRewardsPlanResponse, error)
 	// SetWithdrawAddress defines a method to change the withdraw address
 	// for a delegator(or an operator, when withdrawing commission).
 	SetWithdrawAddress(ctx context.Context, in *MsgSetWithdrawAddress, opts ...grpc.CallOption) (*MsgSetWithdrawAddressResponse, error)
@@ -62,6 +66,16 @@ func (c *msgClient) CreateRewardsPlan(ctx context.Context, in *MsgCreateRewardsP
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(MsgCreateRewardsPlanResponse)
 	err := c.cc.Invoke(ctx, Msg_CreateRewardsPlan_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) EditRewardsPlan(ctx context.Context, in *MsgEditRewardsPlan, opts ...grpc.CallOption) (*MsgEditRewardsPlanResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgEditRewardsPlanResponse)
+	err := c.cc.Invoke(ctx, Msg_EditRewardsPlan_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -117,6 +131,9 @@ type MsgServer interface {
 	// CreateRewardsPlan defines the operation for creating a new
 	// rewards plan.
 	CreateRewardsPlan(context.Context, *MsgCreateRewardsPlan) (*MsgCreateRewardsPlanResponse, error)
+	// EditRewardsPlan defines the operation to edit an existing
+	// rewards plan.
+	EditRewardsPlan(context.Context, *MsgEditRewardsPlan) (*MsgEditRewardsPlanResponse, error)
 	// SetWithdrawAddress defines a method to change the withdraw address
 	// for a delegator(or an operator, when withdrawing commission).
 	SetWithdrawAddress(context.Context, *MsgSetWithdrawAddress) (*MsgSetWithdrawAddressResponse, error)
@@ -142,6 +159,9 @@ type UnimplementedMsgServer struct{}
 
 func (UnimplementedMsgServer) CreateRewardsPlan(context.Context, *MsgCreateRewardsPlan) (*MsgCreateRewardsPlanResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateRewardsPlan not implemented")
+}
+func (UnimplementedMsgServer) EditRewardsPlan(context.Context, *MsgEditRewardsPlan) (*MsgEditRewardsPlanResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EditRewardsPlan not implemented")
 }
 func (UnimplementedMsgServer) SetWithdrawAddress(context.Context, *MsgSetWithdrawAddress) (*MsgSetWithdrawAddressResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetWithdrawAddress not implemented")
@@ -190,6 +210,24 @@ func _Msg_CreateRewardsPlan_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).CreateRewardsPlan(ctx, req.(*MsgCreateRewardsPlan))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_EditRewardsPlan_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgEditRewardsPlan)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).EditRewardsPlan(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_EditRewardsPlan_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).EditRewardsPlan(ctx, req.(*MsgEditRewardsPlan))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -276,6 +314,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateRewardsPlan",
 			Handler:    _Msg_CreateRewardsPlan_Handler,
+		},
+		{
+			MethodName: "EditRewardsPlan",
+			Handler:    _Msg_EditRewardsPlan_Handler,
 		},
 		{
 			MethodName: "SetWithdrawAddress",

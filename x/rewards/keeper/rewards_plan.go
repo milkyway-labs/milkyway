@@ -7,6 +7,7 @@ import (
 
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
@@ -178,5 +179,75 @@ func (k *Keeper) TerminateEndedRewardsPlans(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+// EditRewardsPlan edits an existing rewards plan.
+func (k *Keeper) EditRewardsPlan(
+	ctx sdk.Context,
+	planID uint64,
+	newDescription string,
+	newAmountPerDay sdk.Coins,
+	newStartTime,
+	newEndTime time.Time,
+	newPoolsDistribution types.Distribution,
+	newOperatorsDistribution types.Distribution,
+	newUsersDistribution types.UsersDistribution,
+) error {
+	// Ensure the plan ID is valid
+	if planID == 0 {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid plan ID")
+	}
+
+	rewardsPlan, err := k.GetRewardsPlan(ctx, planID)
+	if err != nil {
+		return err
+	}
+
+	// Prevent edit of a completed rewards plan
+	if !ctx.BlockTime().Before(rewardsPlan.EndTime) {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "rewards plan is completed")
+	}
+
+	// Validate the pools distribution
+	err = k.validateDistributionDelegationTargets(ctx, newPoolsDistribution)
+	if err != nil {
+		return err
+	}
+
+	// Validate the operators distribution
+	err = k.validateDistributionDelegationTargets(ctx, newOperatorsDistribution)
+	if err != nil {
+		return err
+	}
+
+	// We don't need to validate users distribution since there's
+	// types.UsersDistributionTypeBasic only which doesn't need a validation.
+
+	// Create a new rewards plan with the changes
+	editedPlan := types.NewRewardsPlan(
+		planID,
+		newDescription,
+		rewardsPlan.ServiceID,
+		newAmountPerDay,
+		newStartTime,
+		newEndTime,
+		newPoolsDistribution,
+		newOperatorsDistribution,
+		newUsersDistribution,
+	)
+
+	// Validate the plan
+	err = editedPlan.Validate(k.cdc)
+	if err != nil {
+		return err
+	}
+
+	// Update the rewards plan
+	err = k.RewardsPlans.Set(ctx, planID, editedPlan)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
