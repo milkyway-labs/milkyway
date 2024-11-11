@@ -66,7 +66,7 @@ func setup(t *testing.T, db *dbm.DB, withGenesis bool) (*MilkyWayApp, GenesisSta
 		log.NewNopLogger(),
 		getOrCreateMemDB(db),
 		nil,
-		false,
+		true,
 		map[int64]bool{},
 		t.TempDir(),
 		simtestutil.NewAppOptionsWithFlagHome(t.TempDir()),
@@ -75,7 +75,7 @@ func setup(t *testing.T, db *dbm.DB, withGenesis bool) (*MilkyWayApp, GenesisSta
 	)
 
 	if withGenesis {
-		return app, NewDefaultGenesisState(encCdc.Marshaler, app.ModuleBasics)
+		return app, NewDefaultGenesisStateWithValidator(encCdc.Marshaler, app.ModuleBasics)
 	}
 
 	return app, GenesisState{}
