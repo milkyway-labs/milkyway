@@ -330,8 +330,8 @@ start-localnet-ci: build
 	./build/milkywayd config set client chain-id liveness --home ~/.milkywayd-liveness
 	./build/milkywayd config set client keyring-backend test --home ~/.milkywayd-liveness
 	./build/milkywayd keys add val --home ~/.milkywayd-liveness --keyring-backend test
-	./build/milkywayd genesis add-genesis-account val 10000000000000000000000000milk --home ~/.milkywayd-liveness --keyring-backend test
-	./build/milkywayd genesis gentx val 1000000000milk --home ~/.milkywayd-liveness --chain-id liveness --keyring-backend test
+	./build/milkywayd genesis add-genesis-account val 10000000000000000000000000stake --home ~/.milkywayd-liveness --keyring-backend test
+	./build/milkywayd genesis gentx val 1000000000stake --home ~/.milkywayd-liveness --chain-id liveness --keyring-backend test
 	./build/milkywayd genesis collect-gentxs --home ~/.milkywayd-liveness
 	sed -i.bak'' 's/minimum-gas-prices = ""/minimum-gas-prices = "0uatom"/' ~/.milkywayd-liveness/config/app.toml
 	./build/milkywayd start --home ~/.milkywayd-liveness --x-crisis-skip-assert-invariants
