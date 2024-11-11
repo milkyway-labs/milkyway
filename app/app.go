@@ -10,7 +10,20 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
+	"github.com/initia-labs/OPinit/x/opchild"
+	opchildtypes "github.com/initia-labs/OPinit/x/opchild/types"
+	ibchooks "github.com/initia-labs/initia/x/ibc-hooks"
+	ibchookstypes "github.com/initia-labs/initia/x/ibc-hooks/types"
 	"github.com/rakyll/statik/fs"
+	"github.com/skip-mev/block-sdk/v2/block"
+	"github.com/skip-mev/block-sdk/v2/x/auction"
+	auctionante "github.com/skip-mev/block-sdk/v2/x/auction/ante"
+	auctionkeeper "github.com/skip-mev/block-sdk/v2/x/auction/keeper"
+	auctiontypes "github.com/skip-mev/block-sdk/v2/x/auction/types"
+	"github.com/skip-mev/connect/v2/x/marketmap"
+	marketmaptypes "github.com/skip-mev/connect/v2/x/marketmap/types"
+	"github.com/skip-mev/connect/v2/x/oracle"
+	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
 	"github.com/spf13/cast"
 
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
@@ -20,10 +33,8 @@ import (
 	"cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
 	"cosmossdk.io/x/feegrant"
-	feegrantkeeper "cosmossdk.io/x/feegrant/keeper"
 	feegrantmodule "cosmossdk.io/x/feegrant/module"
 	"cosmossdk.io/x/upgrade"
-	upgradekeeper "cosmossdk.io/x/upgrade/keeper"
 	upgradetypes "cosmossdk.io/x/upgrade/types"
 	abci "github.com/cometbft/cometbft/abci/types"
 	tmjson "github.com/cometbft/cometbft/libs/json"
@@ -32,7 +43,6 @@ import (
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/grpc/cmtservice"
 	nodeservice "github.com/cosmos/cosmos-sdk/client/grpc/node"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -56,25 +66,20 @@ import (
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/cosmos/cosmos-sdk/x/authz"
-	authzkeeper "github.com/cosmos/cosmos-sdk/x/authz/keeper"
 	authzmodule "github.com/cosmos/cosmos-sdk/x/authz/module"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/cosmos/cosmos-sdk/x/consensus"
-	consensusparamkeeper "github.com/cosmos/cosmos-sdk/x/consensus/keeper"
 	consensusparamtypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
 	"github.com/cosmos/cosmos-sdk/x/crisis"
-	crisiskeeper "github.com/cosmos/cosmos-sdk/x/crisis/keeper"
 	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	"github.com/cosmos/cosmos-sdk/x/group"
-	groupkeeper "github.com/cosmos/cosmos-sdk/x/group/keeper"
 	groupmodule "github.com/cosmos/cosmos-sdk/x/group/module"
 	"github.com/cosmos/gogoproto/proto"
 
 	// ibc imports
 	"github.com/Stride-Labs/ibc-rate-limiting/ratelimit"
-	ratelimitkeeper "github.com/Stride-Labs/ibc-rate-limiting/ratelimit/keeper"
 	ratelimittypes "github.com/Stride-Labs/ibc-rate-limiting/ratelimit/types"
 	"github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward"
 	packetforwardkeeper "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/keeper"
@@ -91,7 +96,6 @@ import (
 	icahosttypes "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/host/types"
 	icatypes "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/types"
 	ibcfee "github.com/cosmos/ibc-go/v8/modules/apps/29-fee"
-	ibcfeekeeper "github.com/cosmos/ibc-go/v8/modules/apps/29-fee/keeper"
 	ibcfeetypes "github.com/cosmos/ibc-go/v8/modules/apps/29-fee/types"
 	ibctransfer "github.com/cosmos/ibc-go/v8/modules/apps/transfer"
 	ibctransferkeeper "github.com/cosmos/ibc-go/v8/modules/apps/transfer/keeper"
@@ -105,41 +109,20 @@ import (
 
 	// initia imports
 
-	appheaderinfo "github.com/initia-labs/initia/app/header_info"
 	initialanes "github.com/initia-labs/initia/app/lanes"
 	"github.com/initia-labs/initia/app/params"
-	ibchooks "github.com/initia-labs/initia/x/ibc-hooks"
-	ibchookskeeper "github.com/initia-labs/initia/x/ibc-hooks/keeper"
-	ibchookstypes "github.com/initia-labs/initia/x/ibc-hooks/types"
 	ibctestingtypes "github.com/initia-labs/initia/x/ibc/testing/types"
 	icaauth "github.com/initia-labs/initia/x/intertx"
 	icaauthkeeper "github.com/initia-labs/initia/x/intertx/keeper"
 	icaauthtypes "github.com/initia-labs/initia/x/intertx/types"
 
-	// OPinit imports
-	"github.com/initia-labs/OPinit/x/opchild"
-	opchildkeeper "github.com/initia-labs/OPinit/x/opchild/keeper"
 	opchildlanes "github.com/initia-labs/OPinit/x/opchild/lanes"
-	opchildtypes "github.com/initia-labs/OPinit/x/opchild/types"
-
 	// skip imports
 	mevabci "github.com/skip-mev/block-sdk/v2/abci"
 	blockchecktx "github.com/skip-mev/block-sdk/v2/abci/checktx"
 	signer_extraction "github.com/skip-mev/block-sdk/v2/adapters/signer_extraction_adapter"
-	"github.com/skip-mev/block-sdk/v2/block"
 	blockbase "github.com/skip-mev/block-sdk/v2/block/base"
 	mevlane "github.com/skip-mev/block-sdk/v2/lanes/mev"
-	"github.com/skip-mev/block-sdk/v2/x/auction"
-	auctionante "github.com/skip-mev/block-sdk/v2/x/auction/ante"
-	auctionkeeper "github.com/skip-mev/block-sdk/v2/x/auction/keeper"
-	auctiontypes "github.com/skip-mev/block-sdk/v2/x/auction/types"
-	"github.com/skip-mev/connect/v2/x/marketmap"
-	marketmapkeeper "github.com/skip-mev/connect/v2/x/marketmap/keeper"
-	marketmaptypes "github.com/skip-mev/connect/v2/x/marketmap/types"
-	"github.com/skip-mev/connect/v2/x/oracle"
-	oraclekeeper "github.com/skip-mev/connect/v2/x/oracle/keeper"
-	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
-
 	// CosmWasm imports
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
@@ -148,44 +131,32 @@ import (
 	// local imports
 	appante "github.com/milkyway-labs/milkyway/app/ante"
 	ibcwasmhooks "github.com/milkyway-labs/milkyway/app/ibc-hooks"
-	appkeepers "github.com/milkyway-labs/milkyway/app/keepers"
 	"github.com/milkyway-labs/milkyway/app/upgrades"
 	"github.com/milkyway-labs/milkyway/utils"
 	"github.com/milkyway-labs/milkyway/x/assets"
-	assetskeeper "github.com/milkyway-labs/milkyway/x/assets/keeper"
 	assetstypes "github.com/milkyway-labs/milkyway/x/assets/types"
 	"github.com/milkyway-labs/milkyway/x/bank"
-	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
 	"github.com/milkyway-labs/milkyway/x/epochs"
-	epochskeeper "github.com/milkyway-labs/milkyway/x/epochs/keeper"
 	epochstypes "github.com/milkyway-labs/milkyway/x/epochs/types"
 	"github.com/milkyway-labs/milkyway/x/icacallbacks"
-	icacallbackskeeper "github.com/milkyway-labs/milkyway/x/icacallbacks/keeper"
 	icacallbackstypes "github.com/milkyway-labs/milkyway/x/icacallbacks/types"
 	"github.com/milkyway-labs/milkyway/x/interchainquery"
-	icqkeeper "github.com/milkyway-labs/milkyway/x/interchainquery/keeper"
 	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
 	"github.com/milkyway-labs/milkyway/x/liquidvesting"
 	liquidvestinghooks "github.com/milkyway-labs/milkyway/x/liquidvesting/hooks"
-	liquidvestingkeeper "github.com/milkyway-labs/milkyway/x/liquidvesting/keeper"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 	"github.com/milkyway-labs/milkyway/x/operators"
-	operatorskeeper "github.com/milkyway-labs/milkyway/x/operators/keeper"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	"github.com/milkyway-labs/milkyway/x/pools"
-	poolskeeper "github.com/milkyway-labs/milkyway/x/pools/keeper"
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	"github.com/milkyway-labs/milkyway/x/records"
 	recordskeeper "github.com/milkyway-labs/milkyway/x/records/keeper"
 	recordstypes "github.com/milkyway-labs/milkyway/x/records/types"
 	"github.com/milkyway-labs/milkyway/x/restaking"
-	restakingkeeper "github.com/milkyway-labs/milkyway/x/restaking/keeper"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 	"github.com/milkyway-labs/milkyway/x/rewards"
-	rewardskeeper "github.com/milkyway-labs/milkyway/x/rewards/keeper"
 	rewardstypes "github.com/milkyway-labs/milkyway/x/rewards/types"
 	"github.com/milkyway-labs/milkyway/x/services"
-	serviceskeeper "github.com/milkyway-labs/milkyway/x/services/keeper"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 	"github.com/milkyway-labs/milkyway/x/stakeibc"
 	stakeibckeeper "github.com/milkyway-labs/milkyway/x/stakeibc/keeper"
@@ -196,7 +167,6 @@ import (
 
 	// noble forwarding keeper
 	"github.com/noble-assets/forwarding/v2/x/forwarding"
-	forwardingkeeper "github.com/noble-assets/forwarding/v2/x/forwarding/keeper"
 	forwardingtypes "github.com/noble-assets/forwarding/v2/x/forwarding/types"
 
 	// kvindexer
@@ -231,6 +201,7 @@ var (
 		wasm.AppModule{},
 		auction.AppModule{},
 		tokenfactory.AppModule{},
+
 		// ibc modules
 		ibc.AppModule{},
 		ibctransfer.AppModule{},
@@ -243,15 +214,18 @@ var (
 		ibchooks.AppModule{},
 		forwarding.AppModule{},
 		ratelimit.AppModule{},
+
 		// connect modules
 		oracle.AppModule{},
 		marketmap.AppModule{},
+
 		// liquid staking modules
 		stakeibc.AppModule{},
 		epochs.AppModule{},
 		interchainquery.AppModule{},
 		records.AppModule{},
 		icacallbacks.AppModule{},
+
 		// custom modules
 		services.AppModule{},
 		operators.AppModule{},
@@ -318,54 +292,6 @@ type MilkyWayApp struct {
 
 	// keepers
 	// TODO: add gov keeper
-	AccountKeeper         *authkeeper.AccountKeeper
-	BankKeeper            *bankkeeper.Keeper
-	CapabilityKeeper      *capabilitykeeper.Keeper
-	UpgradeKeeper         *upgradekeeper.Keeper
-	GroupKeeper           *groupkeeper.Keeper
-	ConsensusParamsKeeper *consensusparamkeeper.Keeper
-	CrisisKeeper          *crisiskeeper.Keeper
-	IBCKeeper             *ibckeeper.Keeper // IBC Keeper must be a pointer in the app, so we can SetRouter on it correctly
-	TransferKeeper        *ibctransferkeeper.Keeper
-	AuthzKeeper           *authzkeeper.Keeper
-	FeeGrantKeeper        *feegrantkeeper.Keeper
-	ICAHostKeeper         *icahostkeeper.Keeper
-	ICAControllerKeeper   *icacontrollerkeeper.Keeper
-	ICAAuthKeeper         *icaauthkeeper.Keeper
-	IBCFeeKeeper          *ibcfeekeeper.Keeper
-	WasmKeeper            *wasmkeeper.Keeper
-	OPChildKeeper         *opchildkeeper.Keeper
-	AuctionKeeper         *auctionkeeper.Keeper // x/auction keeper used to process bids for POB auctions
-	PacketForwardKeeper   *packetforwardkeeper.Keeper
-	OracleKeeper          *oraclekeeper.Keeper // x/oracle keeper used for the connect oracle
-	MarketMapKeeper       *marketmapkeeper.Keeper
-	TokenFactoryKeeper    *tokenfactorykeeper.Keeper
-	IBCHooksKeeper        *ibchookskeeper.Keeper
-	ForwardingKeeper      *forwardingkeeper.Keeper
-	RateLimitKeeper       ratelimitkeeper.Keeper
-
-	EpochsKeeper          epochskeeper.Keeper
-	InterchainQueryKeeper icqkeeper.Keeper
-	ICACallbacksKeeper    icacallbackskeeper.Keeper
-	RecordsKeeper         recordskeeper.Keeper
-	StakeIBCKeeper        stakeibckeeper.Keeper
-
-	ServicesKeeper      *serviceskeeper.Keeper
-	OperatorsKeeper     *operatorskeeper.Keeper
-	PoolsKeeper         *poolskeeper.Keeper
-	RestakingKeeper     *restakingkeeper.Keeper
-	AssetsKeeper        *assetskeeper.Keeper
-	RewardsKeeper       *rewardskeeper.Keeper
-	LiquidVestingKeeper *liquidvestingkeeper.Keeper
-
-	// make scoped keepers public for test purposes
-	ScopedIBCKeeper           capabilitykeeper.ScopedKeeper
-	ScopedTransferKeeper      capabilitykeeper.ScopedKeeper
-	ScopedICAHostKeeper       capabilitykeeper.ScopedKeeper
-	ScopedICAControllerKeeper capabilitykeeper.ScopedKeeper
-	ScopedICAAuthKeeper       capabilitykeeper.ScopedKeeper
-	ScopedWasmKeeper          capabilitykeeper.ScopedKeeper
-	ScopedFetchPriceKeeper    capabilitykeeper.ScopedKeeper
 
 	// the module manager
 	ModuleManager      *module.Manager
@@ -415,22 +341,7 @@ func NewMilkyWayApp(
 	bApp.SetInterfaceRegistry(interfaceRegistry)
 	bApp.SetTxEncoder(txConfig.TxEncoder())
 
-	keys := storetypes.NewKVStoreKeys(
-		authtypes.StoreKey, banktypes.StoreKey, group.StoreKey, consensusparamtypes.StoreKey, crisistypes.StoreKey,
-		ibcexported.StoreKey, upgradetypes.StoreKey, ibctransfertypes.StoreKey,
-		capabilitytypes.StoreKey, authzkeeper.StoreKey, feegrant.StoreKey,
-		icahosttypes.StoreKey, icacontrollertypes.StoreKey, icaauthtypes.StoreKey,
-		ibcfeetypes.StoreKey, wasmtypes.StoreKey, opchildtypes.StoreKey,
-		auctiontypes.StoreKey, packetforwardtypes.StoreKey, oracletypes.StoreKey,
-		tokenfactorytypes.StoreKey, ibchookstypes.StoreKey, forwardingtypes.StoreKey,
-		marketmaptypes.StoreKey,
-		ratelimittypes.StoreKey, epochstypes.StoreKey, icqtypes.StoreKey,
-		icacallbackstypes.StoreKey, recordstypes.StoreKey, stakeibctypes.StoreKey,
-
-		// Custom modules
-		servicestypes.StoreKey, operatorstypes.StoreKey, poolstypes.StoreKey, restakingtypes.StoreKey,
-		assetstypes.StoreKey, rewardstypes.StoreKey, liquidvestingtypes.StoreKey,
-	)
+	keys := storetypes.NewKVStoreKeys()
 	tkeys := storetypes.NewTransientStoreKeys(forwardingtypes.TransientStoreKey)
 	memKeys := storetypes.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
 
@@ -460,266 +371,6 @@ func NewMilkyWayApp(
 		panic(err)
 	}
 
-	// set the BaseApp's parameter store
-	consensusParamsKeeper := consensusparamkeeper.NewKeeper(appCodec, runtime.NewKVStoreService(keys[consensusparamtypes.StoreKey]), authorityAddr, runtime.EventService{})
-	app.ConsensusParamsKeeper = &consensusParamsKeeper
-	bApp.SetParamStore(app.ConsensusParamsKeeper.ParamsStore)
-
-	// add capability keeper and ScopeToModule for ibc module
-	app.CapabilityKeeper = capabilitykeeper.NewKeeper(appCodec, keys[capabilitytypes.StoreKey], memKeys[capabilitytypes.MemStoreKey])
-
-	// grant capabilities for the ibc and ibc-transfer modules
-	app.ScopedIBCKeeper = app.CapabilityKeeper.ScopeToModule(ibcexported.ModuleName)
-	app.ScopedTransferKeeper = app.CapabilityKeeper.ScopeToModule(ibctransfertypes.ModuleName)
-	app.ScopedICAHostKeeper = app.CapabilityKeeper.ScopeToModule(icahosttypes.SubModuleName)
-	app.ScopedICAControllerKeeper = app.CapabilityKeeper.ScopeToModule(icacontrollertypes.SubModuleName)
-	app.ScopedICAAuthKeeper = app.CapabilityKeeper.ScopeToModule(icaauthtypes.ModuleName)
-	app.ScopedWasmKeeper = app.CapabilityKeeper.ScopeToModule(wasmtypes.ModuleName)
-	app.CapabilityKeeper.Seal()
-
-	// add keepers
-	app.WasmKeeper = &wasmkeeper.Keeper{}
-
-	accountKeeper := authkeeper.NewAccountKeeper(
-		appCodec,
-		runtime.NewKVStoreService(keys[authtypes.StoreKey]),
-		authtypes.ProtoBaseAccount,
-		maccPerms,
-		ac,
-		sdk.GetConfig().GetBech32AccountAddrPrefix(),
-		authorityAddr,
-	)
-	app.AccountKeeper = &accountKeeper
-
-	bankKeeper := bankkeeper.NewKeeper(
-		appCodec,
-		runtime.NewKVStoreService(keys[banktypes.StoreKey]),
-		app.AccountKeeper,
-		BlacklistedModuleAccountAddrs(),
-		authorityAddr,
-		logger,
-	)
-	app.BankKeeper = &bankKeeper
-
-	communityPoolKeeper := appkeepers.NewCommunityPoolKeeper(app.BankKeeper, authtypes.FeeCollectorName)
-
-	invCheckPeriod := cast.ToUint(appOpts.Get(server.FlagInvCheckPeriod))
-	app.CrisisKeeper = crisiskeeper.NewKeeper(
-		appCodec,
-		runtime.NewKVStoreService(keys[crisistypes.StoreKey]),
-		invCheckPeriod,
-		app.BankKeeper,
-		authtypes.FeeCollectorName,
-		authorityAddr,
-		app.AccountKeeper.AddressCodec(),
-	)
-
-	////////////////////////////////
-	// OPChildKeeper Configuration //
-	////////////////////////////////
-
-	// initialize oracle keeper
-	marketMapKeeper := marketmapkeeper.NewKeeper(
-		runtime.NewKVStoreService(keys[marketmaptypes.StoreKey]),
-		appCodec,
-		authorityAccAddr,
-	)
-	app.MarketMapKeeper = marketMapKeeper
-
-	oracleKeeper := oraclekeeper.NewKeeper(
-		runtime.NewKVStoreService(keys[oracletypes.StoreKey]),
-		appCodec,
-		marketMapKeeper,
-		authorityAccAddr,
-	)
-	app.OracleKeeper = &oracleKeeper
-
-	// Add the oracle keeper as a hook to market map keeper so new market map entries can be created
-	// and propogated to the oracle keeper.
-	app.MarketMapKeeper.SetHooks(app.OracleKeeper.Hooks())
-
-	app.OPChildKeeper = opchildkeeper.NewKeeper(
-		appCodec,
-		runtime.NewKVStoreService(keys[opchildtypes.StoreKey]),
-		app.AccountKeeper,
-		app.BankKeeper,
-		app.OracleKeeper,
-		appante.CreateAnteHandlerForOPinit(app.AccountKeeper, txConfig.SignModeHandler()),
-		txConfig.TxDecoder(),
-		app.MsgServiceRouter(),
-		authorityAddr,
-		ac,
-		vc,
-		cc,
-		logger,
-	)
-
-	err = app.RegisterExecutorChangePlans()
-	if err != nil {
-		panic(err)
-	}
-
-	// get skipUpgradeHeights from the app options
-	skipUpgradeHeights := map[int64]bool{}
-	for _, h := range cast.ToIntSlice(appOpts.Get(server.FlagUnsafeSkipUpgrades)) {
-		skipUpgradeHeights[int64(h)] = true
-	}
-	homePath := cast.ToString(appOpts.Get(flags.FlagHome))
-	app.UpgradeKeeper = upgradekeeper.NewKeeper(
-		skipUpgradeHeights,
-		runtime.NewKVStoreService(keys[upgradetypes.StoreKey]),
-		appCodec,
-		homePath,
-		app.BaseApp,
-		authorityAddr,
-	)
-
-	feeGrantKeeper := feegrantkeeper.NewKeeper(appCodec, runtime.NewKVStoreService(keys[feegrant.StoreKey]), app.AccountKeeper)
-	app.FeeGrantKeeper = &feeGrantKeeper
-
-	authzKeeper := authzkeeper.NewKeeper(runtime.NewKVStoreService(keys[authzkeeper.StoreKey]), appCodec, app.BaseApp.MsgServiceRouter(), app.AccountKeeper)
-	app.AuthzKeeper = &authzKeeper
-
-	groupConfig := group.DefaultConfig()
-	groupKeeper := groupkeeper.NewKeeper(
-		keys[group.StoreKey],
-		appCodec,
-		app.MsgServiceRouter(),
-		app.AccountKeeper,
-		groupConfig,
-	)
-	app.GroupKeeper = &groupKeeper
-
-	// Create IBC Keeper
-	app.IBCKeeper = ibckeeper.NewKeeper(
-		appCodec,
-		keys[ibcexported.StoreKey],
-		nil, // we don't need migration
-		app.OPChildKeeper,
-		app.UpgradeKeeper,
-		app.ScopedIBCKeeper,
-		authorityAddr,
-	)
-
-	app.IBCKeeper.ClientKeeper.WithPostUpdateHandler(
-		app.OPChildKeeper.UpdateHostValidatorSet,
-	)
-
-	ibcFeeKeeper := ibcfeekeeper.NewKeeper(
-		appCodec,
-		keys[ibcfeetypes.StoreKey],
-		app.IBCKeeper.ChannelKeeper,
-		app.IBCKeeper.ChannelKeeper,
-		app.IBCKeeper.PortKeeper,
-		app.AccountKeeper,
-		app.BankKeeper,
-	)
-	app.IBCFeeKeeper = &ibcFeeKeeper
-
-	app.IBCHooksKeeper = ibchookskeeper.NewKeeper(
-		appCodec,
-		runtime.NewKVStoreService(keys[ibchookstypes.StoreKey]),
-		authorityAddr,
-		ac,
-	)
-
-	app.ForwardingKeeper = forwardingkeeper.NewKeeper(
-		appCodec,
-		logger,
-		runtime.NewKVStoreService(keys[forwardingtypes.StoreKey]),
-		runtime.NewTransientStoreService(tkeys[forwardingtypes.TransientStoreKey]),
-		appheaderinfo.NewHeaderInfoService(),
-		runtime.ProvideEventService(),
-		authorityAddr,
-		app.AccountKeeper,
-		app.BankKeeper,
-		app.IBCKeeper.ChannelKeeper,
-		app.TransferKeeper,
-	)
-	app.BankKeeper.AppendSendRestriction(app.ForwardingKeeper.SendRestrictionFn)
-
-	app.RateLimitKeeper = *ratelimitkeeper.NewKeeper(
-		appCodec,
-		keys[ratelimittypes.StoreKey],
-		authorityAddr,
-		app.BankKeeper,
-		app.IBCKeeper.ChannelKeeper,
-		app.IBCFeeKeeper,
-	)
-
-	// Custom modules
-	app.ServicesKeeper = serviceskeeper.NewKeeper(
-		app.appCodec,
-		keys[servicestypes.StoreKey],
-		runtime.NewKVStoreService(keys[servicestypes.StoreKey]),
-		app.AccountKeeper,
-		communityPoolKeeper,
-		authorityAddr,
-	)
-	app.OperatorsKeeper = operatorskeeper.NewKeeper(
-		app.appCodec,
-		keys[operatorstypes.StoreKey],
-		runtime.NewKVStoreService(keys[operatorstypes.StoreKey]),
-		app.AccountKeeper,
-		communityPoolKeeper,
-		authorityAddr,
-	)
-	app.PoolsKeeper = poolskeeper.NewKeeper(
-		app.appCodec,
-		keys[poolstypes.StoreKey],
-		runtime.NewKVStoreService(keys[poolstypes.StoreKey]),
-		app.AccountKeeper,
-	)
-	app.RestakingKeeper = restakingkeeper.NewKeeper(
-		app.appCodec,
-		keys[restakingtypes.StoreKey],
-		runtime.NewKVStoreService(keys[restakingtypes.StoreKey]),
-		app.AccountKeeper,
-		app.BankKeeper,
-		app.PoolsKeeper,
-		app.OperatorsKeeper,
-		app.ServicesKeeper,
-		authorityAddr,
-	)
-	app.OperatorsKeeper.SetHooks(app.RestakingKeeper.OperatorsHooks())
-	app.ServicesKeeper.SetHooks(app.RestakingKeeper.ServicesHooks())
-
-	app.AssetsKeeper = assetskeeper.NewKeeper(
-		app.appCodec,
-		runtime.NewKVStoreService(keys[assetstypes.StoreKey]),
-		authorityAddr,
-	)
-	app.RewardsKeeper = rewardskeeper.NewKeeper(
-		app.appCodec,
-		runtime.NewKVStoreService(keys[rewardstypes.StoreKey]),
-		app.AccountKeeper,
-		app.BankKeeper,
-		communityPoolKeeper,
-		app.OracleKeeper,
-		app.PoolsKeeper,
-		app.OperatorsKeeper,
-		app.ServicesKeeper,
-		app.RestakingKeeper,
-		app.AssetsKeeper,
-		authorityAddr,
-	)
-	app.RestakingKeeper.SetHooks(app.RewardsKeeper.Hooks())
-
-	app.LiquidVestingKeeper = liquidvestingkeeper.NewKeeper(
-		app.appCodec,
-		keys[liquidvestingtypes.StoreKey],
-		runtime.NewKVStoreService(keys[liquidvestingtypes.StoreKey]),
-		app.AccountKeeper,
-		app.BankKeeper,
-		app.OperatorsKeeper,
-		app.PoolsKeeper,
-		app.ServicesKeeper,
-		app.RestakingKeeper,
-		authtypes.NewModuleAddress(liquidvestingtypes.ModuleName).String(),
-		authorityAddr,
-	)
-	app.BankKeeper.AppendSendRestriction(app.LiquidVestingKeeper.SendRestrictionFn)
-
 	hooksICS4Wrapper := ibchooks.NewICS4Middleware(
 		app.RateLimitKeeper,
 		ibcwasmhooks.NewWasmHooks(appCodec, ac, app.WasmKeeper),
@@ -728,15 +379,6 @@ func NewMilkyWayApp(
 	hooksICS4LiquidVesting := ibchooks.NewICS4Middleware(
 		hooksICS4Wrapper,
 		liquidvestinghooks.NewIBCHooks(app.LiquidVestingKeeper),
-	)
-
-	app.InterchainQueryKeeper = icqkeeper.NewKeeper(appCodec, keys[icqtypes.StoreKey], app.IBCKeeper)
-
-	app.ICACallbacksKeeper = *icacallbackskeeper.NewKeeper(
-		appCodec,
-		keys[icacallbackstypes.StoreKey],
-		keys[icacallbackstypes.MemStoreKey],
-		*app.IBCKeeper,
 	)
 
 	////////////////////////////
@@ -948,27 +590,6 @@ func NewMilkyWayApp(
 		AddRoute(wasmtypes.ModuleName, wasmIBCStack)
 
 	app.IBCKeeper.SetRouter(ibcRouter)
-
-	epochsKeeper := epochskeeper.NewKeeper(appCodec, keys[epochstypes.StoreKey])
-	app.EpochsKeeper = *epochsKeeper.SetHooks(
-		epochstypes.NewMultiEpochHooks(
-			app.StakeIBCKeeper.Hooks(),
-		),
-	)
-
-	// Register ICQ callbacks
-	err = app.InterchainQueryKeeper.SetCallbackHandler(stakeibctypes.ModuleName, app.StakeIBCKeeper.ICQCallbackHandler())
-	if err != nil {
-		panic(err)
-	}
-
-	// Register IBC callbacks
-	if err := app.ICACallbacksKeeper.SetICACallbacks(
-		app.StakeIBCKeeper.Callbacks(),
-		app.RecordsKeeper.Callbacks(),
-	); err != nil {
-		panic(err)
-	}
 
 	//////////////////////////////
 	// WasmKeeper Configuration //
@@ -1471,7 +1092,7 @@ func (app *MilkyWayApp) LoadHeight(height int64) error {
 }
 
 // ModuleAccountAddrs returns all the app's module account addresses.
-func ModuleAccountAddrs() map[string]bool {
+func (app *MilkyWayApp) ModuleAccountAddrs() map[string]bool {
 	modAccAddrs := make(map[string]bool)
 	for acc := range maccPerms {
 		modAccAddrs[authtypes.NewModuleAddress(acc).String()] = true
@@ -1480,8 +1101,8 @@ func ModuleAccountAddrs() map[string]bool {
 	return modAccAddrs
 }
 
-// BlacklistedModuleAccountAddrs returns all the app's blacklisted module account addresses.
-func BlacklistedModuleAccountAddrs() map[string]bool {
+// ModuleAccountAddrs returns all the app's module account addresses.
+func (app *MilkyWayApp) BlacklistedModuleAccountAddrs() map[string]bool {
 	modAccAddrs := make(map[string]bool)
 	// DO NOT REMOVE: StringMapKeys fixes non-deterministic map iteration
 	for _, acc := range utils.StringMapKeys(maccPerms) {
@@ -1568,9 +1189,6 @@ func (app *MilkyWayApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.A
 // Simulate customize gas simulation to add fee deduction gas amount.
 func (app *MilkyWayApp) Simulate(txBytes []byte) (sdk.GasInfo, *sdk.Result, error) {
 	gasInfo, result, err := app.BaseApp.Simulate(txBytes)
-	if err != nil {
-		return gasInfo, result, err
-	}
 	gasInfo.GasUsed += FeeDeductionGasAmount
 	return gasInfo, result, err
 }

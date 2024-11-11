@@ -3,9 +3,8 @@ package types
 import (
 	"context"
 
-	ratelimittypes "github.com/Stride-Labs/ibc-rate-limiting/ratelimit/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	opchildtypes "github.com/initia-labs/OPinit/x/opchild/types"
+	ratelimittypes "github.com/cosmos/ibc-apps/modules/rate-limiting/v8/types"
 )
 
 // AccountKeeper defines the expected account keeper used for simulations (noalias)
@@ -46,8 +45,4 @@ type RatelimitKeeper interface {
 	RemoveDenomFromBlacklist(ctx sdk.Context, denom string)
 	SetWhitelistedAddressPair(ctx sdk.Context, whitelist ratelimittypes.WhitelistedAddressPair)
 	RemoveWhitelistedAddressPair(ctx sdk.Context, sender, receiver string)
-}
-
-type OPChildKeeper interface {
-	GetParams(ctx context.Context) (opchildtypes.Params, error)
 }

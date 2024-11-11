@@ -38,7 +38,6 @@ type (
 		icaCallbacksKeeper    icacallbackskeeper.Keeper
 		hooks                 types.StakeIBCHooks
 		rateLimitKeeper       types.RatelimitKeeper
-		opChildKeeper         types.OPChildKeeper
 		params                collections.Item[types.Params]
 	}
 )
@@ -57,7 +56,6 @@ func NewKeeper(
 	RecordsKeeper recordsmodulekeeper.Keeper,
 	icaCallbacksKeeper icacallbackskeeper.Keeper,
 	rateLimitKeeper types.RatelimitKeeper,
-	opChildKeeper types.OPChildKeeper,
 ) Keeper {
 	sb := collections.NewSchemaBuilder(storeService)
 	return Keeper{
@@ -73,7 +71,6 @@ func NewKeeper(
 		recordsKeeper:         RecordsKeeper,
 		icaCallbacksKeeper:    icaCallbacksKeeper,
 		rateLimitKeeper:       rateLimitKeeper,
-		opChildKeeper:         opChildKeeper,
 		params:                collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 	}
 }
@@ -102,16 +99,6 @@ func (k Keeper) GetAuthority() string {
 func (k Keeper) ValidateAdminAddress(ctx sdk.Context, address string) error {
 	// The authority can always perform admin operations.
 	if k.GetAuthority() == address {
-		return nil
-	}
-
-	// The OpChild admin can always perform admin operations
-	opChildParams, err := k.opChildKeeper.GetParams(ctx)
-	if err != nil {
-		return err
-	}
-
-	if opChildParams.Admin == address {
 		return nil
 	}
 
