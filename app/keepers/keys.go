@@ -2,8 +2,6 @@ package keepers
 
 import (
 	"github.com/cosmos/cosmos-sdk/x/group"
-	feemarkettypes "github.com/skip-mev/feemarket/x/feemarket/types"
-
 	routertypes "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/types"
 	ratelimittypes "github.com/cosmos/ibc-apps/modules/rate-limiting/v8/types"
 	capabilitytypes "github.com/cosmos/ibc-go/modules/capability/types"
@@ -13,6 +11,9 @@ import (
 	ibctransfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 	providertypes "github.com/cosmos/interchain-security/v6/x/ccv/provider/types"
+	marketmaptypes "github.com/skip-mev/connect/v2/x/marketmap/types"
+	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
+	feemarkettypes "github.com/skip-mev/feemarket/x/feemarket/types"
 
 	storetypes "cosmossdk.io/store/types"
 	evidencetypes "cosmossdk.io/x/evidence/types"
@@ -75,10 +76,14 @@ func (appKeepers *AppKeepers) GenerateKeys() {
 		ratelimittypes.StoreKey,
 		providertypes.StoreKey,
 		consensusparamtypes.StoreKey,
-		feemarkettypes.StoreKey,
 		wasmtypes.StoreKey,
 		tokenfactorytypes.StoreKey,
 		group.StoreKey,
+
+		// Skip
+		marketmaptypes.StoreKey,
+		oracletypes.StoreKey,
+		feemarkettypes.StoreKey,
 
 		// Stride
 		epochstypes.StoreKey,

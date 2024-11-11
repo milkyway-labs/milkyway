@@ -8,7 +8,7 @@ import (
 	nfttransfertypes "github.com/initia-labs/initia/x/ibc/nft-transfer/types"
 	"github.com/stretchr/testify/require"
 
-	utils "github.com/milkyway-labs/milkyway/utils"
+	"github.com/milkyway-labs/milkyway/utils"
 )
 
 func Test_isIcs20Packet(t *testing.T) {
@@ -16,7 +16,7 @@ func Test_isIcs20Packet(t *testing.T) {
 	bz, err := json.Marshal(transferMsg)
 	require.NoError(t, err)
 
-	ok, _transferMsg := utils.IsIcs20Packet(bz)
+	ok, _transferMsg := utils.DeserializeFungibleTokenPacketData(bz)
 	require.True(t, ok)
 	require.Equal(t, transferMsg, _transferMsg)
 
@@ -24,6 +24,6 @@ func Test_isIcs20Packet(t *testing.T) {
 	bz, err = json.Marshal(nftTransferMsg)
 	require.NoError(t, err)
 
-	ok, _ = utils.IsIcs20Packet(bz)
+	ok, _ = utils.DeserializeFungibleTokenPacketData(bz)
 	require.False(t, ok)
 }

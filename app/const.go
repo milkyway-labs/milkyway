@@ -1,14 +1,14 @@
-package app
+package milkyway
 
 const (
 	// FeeDeductionGasAmount is a estimated gas amount of fee payment
 	FeeDeductionGasAmount = 50_000
 
 	// AccountAddressPrefix is the prefix of bech32 encoded address
-	AccountAddressPrefix = "init"
+	AccountAddressPrefix = "milk"
 
-	// AppName is the application name
-	AppName = "milkyway"
+	// appName is the application name
+	appName = "milkyway"
 
 	// EnvPrefix is environment variable prefix for the app
 	EnvPrefix = "MILKYWAY"
@@ -41,7 +41,4 @@ const (
 	moveMsgPublishModuleBundle           = "/initia.move.v1.MsgPublish"
 	moveMsgExecuteEntryFunction          = "/initia.move.v1.MsgExecute"
 	moveMsgExecuteScript                 = "/initia.move.v1.MsgScript"
-
-	// UpgradeName gov proposal name
-	UpgradeName = "0.0.0"
 )

@@ -14,12 +14,12 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/app"
+	milkyway "github.com/milkyway-labs/milkyway/app"
 	"github.com/milkyway-labs/milkyway/x/rewards/client/cli"
 )
 
 func TestCliUtils_parseRewardsPlan(t *testing.T) {
-	encodingConfig := app.MakeEncodingConfig()
+	encodingConfig := milkyway.MakeEncodingConfig()
 	codec := encodingConfig.Codec
 
 	testCases := []struct {

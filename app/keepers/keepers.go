@@ -5,6 +5,11 @@ import (
 	"os"
 
 	"github.com/cosmos/cosmos-sdk/x/group"
+	"github.com/cosmos/gogoproto/proto"
+	marketmapkeeper "github.com/skip-mev/connect/v2/x/marketmap/keeper"
+	marketmaptypes "github.com/skip-mev/connect/v2/x/marketmap/types"
+	oraclekeeper "github.com/skip-mev/connect/v2/x/oracle/keeper"
+	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
 	feemarketkeeper "github.com/skip-mev/feemarket/x/feemarket/keeper"
 	feemarkettypes "github.com/skip-mev/feemarket/x/feemarket/types"
 
@@ -92,6 +97,7 @@ import (
 	icacallbackstypes "github.com/milkyway-labs/milkyway/x/icacallbacks/types"
 	icqkeeper "github.com/milkyway-labs/milkyway/x/interchainquery/keeper"
 	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
+	"github.com/milkyway-labs/milkyway/x/liquidvesting"
 	liquidvestingkeeper "github.com/milkyway-labs/milkyway/x/liquidvesting/keeper"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 	operatorskeeper "github.com/milkyway-labs/milkyway/x/operators/keeper"
@@ -111,6 +117,7 @@ import (
 	stakeibckeeper "github.com/milkyway-labs/milkyway/x/stakeibc/keeper"
 	stakeibctypes "github.com/milkyway-labs/milkyway/x/stakeibc/types"
 	tokenfactorykeeper "github.com/milkyway-labs/milkyway/x/tokenfactory/keeper"
+	tokenfactorytypes "github.com/milkyway-labs/milkyway/x/tokenfactory/types"
 )
 
 type AppKeepers struct {
@@ -121,7 +128,7 @@ type AppKeepers struct {
 
 	// keepers
 	AccountKeeper         authkeeper.AccountKeeper
-	BankKeeper            bankkeeper.Keeper
+	BankKeeper            bankkeeper.BaseKeeper
 	CapabilityKeeper      *capabilitykeeper.Keeper
 	StakingKeeper         *stakingkeeper.Keeper
 	SlashingKeeper        slashingkeeper.Keeper
@@ -136,9 +143,13 @@ type AppKeepers struct {
 	EvidenceKeeper        evidencekeeper.Keeper
 	AuthzKeeper           authzkeeper.Keeper
 	ConsensusParamsKeeper consensusparamkeeper.Keeper
-	FeeMarketKeeper       *feemarketkeeper.Keeper
-	TokenFactoryKeeper    *tokenfactorykeeper.Keeper
+	TokenFactoryKeeper    tokenfactorykeeper.Keeper
 	FeeGrantKeeper        feegrantkeeper.Keeper
+
+	// Skip
+	MarketMapKeeper *marketmapkeeper.Keeper
+	OracleKeeper    oraclekeeper.Keeper
+	FeeMarketKeeper *feemarketkeeper.Keeper
 
 	// IBC
 	IBCKeeper           *ibckeeper.Keeper
@@ -146,17 +157,16 @@ type AppKeepers struct {
 	ICAControllerKeeper icacontrollerkeeper.Keeper
 	TransferKeeper      ibctransferkeeper.Keeper
 	PFMRouterKeeper     *pfmrouterkeeper.Keeper
-	RatelimitKeeper     ratelimitkeeper.Keeper
+	RateLimitKeeper     *ratelimitkeeper.Keeper
 
 	// ICS
 	ProviderKeeper icsproviderkeeper.Keeper
 
 	// Stride
-	RateLimitKeeper       ratelimitkeeper.Keeper
 	EpochsKeeper          *epochskeeper.Keeper
 	InterchainQueryKeeper icqkeeper.Keeper
-	ICACallbacksKeeper    icacallbackskeeper.Keeper
-	RecordsKeeper         recordskeeper.Keeper
+	ICACallbacksKeeper    *icacallbackskeeper.Keeper
+	RecordsKeeper         *recordskeeper.Keeper
 	StakeIBCKeeper        stakeibckeeper.Keeper
 
 	// Custom
@@ -183,7 +193,6 @@ type AppKeepers struct {
 	ScopedICAControllerKeeper capabilitykeeper.ScopedKeeper
 	ScopedICSproviderkeeper   capabilitykeeper.ScopedKeeper
 	scopedWasmKeeper          capabilitykeeper.ScopedKeeper
-	ScopedFetchPriceKeeper    capabilitykeeper.ScopedKeeper
 }
 
 func NewAppKeeper(
@@ -201,6 +210,9 @@ func NewAppKeeper(
 	wasmOpts []wasmkeeper.Option,
 ) AppKeepers {
 	appKeepers := AppKeepers{}
+
+	// Create codecs
+	addressCodec := address.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix())
 
 	// Set keys KVStoreKey, TransientStoreKey, MemoryStoreKey
 	appKeepers.GenerateKeys()
@@ -250,7 +262,7 @@ func NewAppKeeper(
 		runtime.NewKVStoreService(appKeepers.keys[authtypes.StoreKey]),
 		authtypes.ProtoBaseAccount,
 		maccPerms,
-		address.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix()),
+		addressCodec,
 		sdk.GetConfig().GetBech32AccountAddrPrefix(),
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
@@ -335,6 +347,23 @@ func NewAppKeeper(
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 
+	appKeepers.MarketMapKeeper = marketmapkeeper.NewKeeper(
+		runtime.NewKVStoreService(appKeepers.keys[marketmaptypes.StoreKey]),
+		appCodec,
+		authtypes.NewModuleAddress(govtypes.ModuleName),
+	)
+
+	appKeepers.OracleKeeper = oraclekeeper.NewKeeper(
+		runtime.NewKVStoreService(appKeepers.keys[oracletypes.StoreKey]),
+		appCodec,
+		appKeepers.MarketMapKeeper,
+		authtypes.NewModuleAddress(govtypes.ModuleName),
+	)
+
+	// Add the oracle keeper as a hook to market map keeper so new market map entries can be created
+	// and propagated to the oracle keeper.
+	appKeepers.MarketMapKeeper.SetHooks(appKeepers.OracleKeeper.Hooks())
+
 	// UpgradeKeeper must be created before IBCKeeper
 	appKeepers.UpgradeKeeper = upgradekeeper.NewKeeper(
 		skipUpgradeHeights,
@@ -343,6 +372,14 @@ func NewAppKeeper(
 		homePath,
 		bApp,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+	)
+
+	appKeepers.GroupKeeper = groupkeeper.NewKeeper(
+		appKeepers.keys[group.StoreKey],
+		appCodec,
+		bApp.MsgServiceRouter(),
+		appKeepers.AccountKeeper,
+		group.DefaultConfig(),
 	)
 
 	// UpgradeKeeper must be created before IBCKeeper
@@ -376,6 +413,21 @@ func NewAppKeeper(
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ConsensusAddrPrefix()),
 		authtypes.FeeCollectorName,
 	)
+
+	contractKeeper := wasmkeeper.NewDefaultPermissionKeeper(appKeepers.WasmKeeper)
+	appKeepers.TokenFactoryKeeper = tokenfactorykeeper.NewKeeper(
+		addressCodec,
+		appCodec,
+		runtime.NewKVStoreService(appKeepers.keys[tokenfactorytypes.StoreKey]),
+		appKeepers.AccountKeeper,
+		appKeepers.BankKeeper,
+		communityPoolKeeper,
+		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+	)
+	appKeepers.TokenFactoryKeeper.SetContractKeeper(contractKeeper)
+
+	// Set the hooks based on the token factory keeper
+	appKeepers.BankKeeper.SetHooks(appKeepers.TokenFactoryKeeper.Hooks())
 
 	// gov depends on provider, so needs to be set after
 	govConfig := govtypes.DefaultConfig()
@@ -470,7 +522,7 @@ func NewAppKeeper(
 	govAuthority := authtypes.NewModuleAddress(govtypes.ModuleName).String()
 
 	// Create RateLimit keeper
-	appKeepers.RatelimitKeeper = *ratelimitkeeper.NewKeeper(
+	appKeepers.RateLimitKeeper = ratelimitkeeper.NewKeeper(
 		appCodec, // BinaryCodec
 		runtime.NewKVStoreService(appKeepers.keys[ratelimittypes.StoreKey]), // StoreKey
 		appKeepers.GetSubspace(ratelimittypes.ModuleName),                   // param Subspace
@@ -501,7 +553,7 @@ func NewAppKeeper(
 		appKeepers.IBCKeeper.ChannelKeeper,
 		appKeepers.DistrKeeper,
 		appKeepers.BankKeeper,
-		appKeepers.RatelimitKeeper, // ICS4Wrapper
+		appKeepers.RateLimitKeeper, // ICS4Wrapper
 		govAuthority,
 	)
 
@@ -516,14 +568,6 @@ func NewAppKeeper(
 		appKeepers.BankKeeper,
 		appKeepers.ScopedTransferKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
-	)
-
-	appKeepers.GroupKeeper = groupkeeper.NewKeeper(
-		appKeepers.keys[group.StoreKey],
-		appCodec,
-		bApp.MsgServiceRouter(),
-		appKeepers.AccountKeeper,
-		group.DefaultConfig(),
 	)
 
 	// ----------------------
@@ -580,7 +624,7 @@ func NewAppKeeper(
 		appKeepers.AccountKeeper,
 		appKeepers.BankKeeper,
 		communityPoolKeeper,
-		appKeepers.OracleKeeper,
+		&appKeepers.OracleKeeper,
 		appKeepers.PoolsKeeper,
 		appKeepers.OperatorsKeeper,
 		appKeepers.ServicesKeeper,
@@ -619,21 +663,21 @@ func NewAppKeeper(
 		appKeepers.IBCKeeper,
 	)
 
-	appKeepers.ICACallbacksKeeper = *icacallbackskeeper.NewKeeper(
+	appKeepers.ICACallbacksKeeper = icacallbackskeeper.NewKeeper(
 		appCodec,
 		appKeepers.keys[icacallbackstypes.StoreKey],
 		appKeepers.keys[icacallbackstypes.MemStoreKey],
 		*appKeepers.IBCKeeper,
 	)
 
-	appKeepers.RecordsKeeper = *recordskeeper.NewKeeper(
+	appKeepers.RecordsKeeper = recordskeeper.NewKeeper(
 		appCodec,
 		appKeepers.keys[recordstypes.StoreKey],
 		appKeepers.keys[recordstypes.MemStoreKey],
 		appKeepers.AccountKeeper,
 		appKeepers.TransferKeeper,
 		*appKeepers.IBCKeeper,
-		appKeepers.ICACallbacksKeeper,
+		*appKeepers.ICACallbacksKeeper,
 	)
 
 	appKeepers.StakeIBCKeeper = stakeibckeeper.NewKeeper(
@@ -647,10 +691,11 @@ func NewAppKeeper(
 		appKeepers.ICAControllerKeeper,
 		*appKeepers.IBCKeeper,
 		appKeepers.InterchainQueryKeeper,
-		appKeepers.RecordsKeeper,
-		appKeepers.ICACallbacksKeeper,
+		*appKeepers.RecordsKeeper,
+		*appKeepers.ICACallbacksKeeper,
 		appKeepers.RateLimitKeeper,
 	)
+	appKeepers.StakeIBCKeeper.SetHooks(stakeibctypes.NewMultiStakeIBCHooks())
 
 	appKeepers.EpochsKeeper = epochskeeper.NewKeeper(appCodec, appKeepers.keys[epochstypes.StoreKey])
 
@@ -662,6 +707,19 @@ func NewAppKeeper(
 	if err != nil {
 		panic("error while reading wasm config: " + err.Error())
 	}
+
+	// allow connect queries
+	queryAllowlist := make(map[string]proto.Message)
+	queryAllowlist["/connect.oracle.v2.Query/GetAllCurrencyPairs"] = &oracletypes.GetAllCurrencyPairsResponse{}
+	queryAllowlist["/connect.oracle.v2.Query/GetPrice"] = &oracletypes.GetPriceResponse{}
+	queryAllowlist["/connect.oracle.v2.Query/GetPrices"] = &oracletypes.GetPricesResponse{}
+	queryAllowlist["/milkyway.operators.v1.Query/Operator"] = &operatorstypes.QueryOperatorResponse{}
+	queryAllowlist["/milkyway.restaking.v1.Query/ServiceOperators"] = &restakingtypes.QueryServiceOperatorsResponse{}
+
+	// use accept list stargate querier
+	wasmOpts = append(wasmOpts, wasmkeeper.WithQueryPlugins(&wasmkeeper.QueryPlugins{
+		Stargate: wasmkeeper.AcceptListStargateQuerier(queryAllowlist, bApp.GRPCQueryRouter(), appCodec),
+	}))
 
 	appKeepers.WasmKeeper = wasmkeeper.NewKeeper(
 		appCodec,
@@ -688,7 +746,7 @@ func NewAppKeeper(
 	appKeepers.ICAModule = ica.NewAppModule(&appKeepers.ICAControllerKeeper, &appKeepers.ICAHostKeeper)
 	appKeepers.TransferModule = transfer.NewAppModule(appKeepers.TransferKeeper)
 	appKeepers.PFMRouterModule = pfmrouter.NewAppModule(appKeepers.PFMRouterKeeper, appKeepers.GetSubspace(pfmroutertypes.ModuleName))
-	appKeepers.RateLimitModule = ratelimit.NewAppModule(appCodec, appKeepers.RatelimitKeeper)
+	appKeepers.RateLimitModule = ratelimit.NewAppModule(appCodec, *appKeepers.RateLimitKeeper)
 
 	// Create Transfer Stack (from bottom to top of stack)
 	// - core IBC
@@ -704,7 +762,10 @@ func NewAppKeeper(
 
 	var transferStack porttypes.IBCModule
 	transferStack = transfer.NewIBCModule(appKeepers.TransferKeeper)
-	transferStack = icsprovider.NewIBCMiddleware(transferStack, appKeepers.ProviderKeeper)
+	transferStack = icsprovider.NewIBCMiddleware(
+		transferStack,
+		appKeepers.ProviderKeeper,
+	)
 	transferStack = pfmrouter.NewIBCMiddleware(
 		transferStack,
 		appKeepers.PFMRouterKeeper,
@@ -712,15 +773,28 @@ func NewAppKeeper(
 		pfmrouterkeeper.DefaultForwardTransferPacketTimeoutTimestamp,
 		pfmrouterkeeper.DefaultRefundTransferPacketTimeoutTimestamp,
 	)
-	transferStack = ratelimit.NewIBCMiddleware(appKeepers.RatelimitKeeper, transferStack)
-	transferStack = records.NewIBCModule(appKeepers.RecordsKeeper, transferStack)
-	transferStack = ibcfee.NewIBCMiddleware(transferStack, appKeepers.IBCFeeKeeper)
+	transferStack = liquidvesting.NewIBCModule(
+		transferStack,
+		appKeepers.LiquidVestingKeeper,
+	)
+	transferStack = ratelimit.NewIBCMiddleware(
+		*appKeepers.RateLimitKeeper,
+		transferStack,
+	)
+	transferStack = records.NewIBCModule(
+		*appKeepers.RecordsKeeper,
+		transferStack,
+	)
+	transferStack = ibcfee.NewIBCMiddleware(
+		transferStack,
+		appKeepers.IBCFeeKeeper,
+	)
 
 	// Create ICAHost Stack
 	var icaHostStack porttypes.IBCModule = icahost.NewIBCModule(appKeepers.ICAHostKeeper)
 
 	// Create InterChain Callbacks Stack
-	var icaCallbacksStack porttypes.IBCModule = icacallbacks.NewIBCModule(appKeepers.ICACallbacksKeeper)
+	var icaCallbacksStack porttypes.IBCModule = icacallbacks.NewIBCModule(*appKeepers.ICACallbacksKeeper)
 	appKeepers.StakeIBCKeeper.SetHooks(stakeibctypes.NewMultiStakeIBCHooks())
 	icaCallbacksStack = stakeibc.NewIBCMiddleware(icaCallbacksStack, appKeepers.StakeIBCKeeper)
 	icaCallbacksStack = icacontroller.NewIBCMiddleware(icaCallbacksStack, appKeepers.ICAControllerKeeper)

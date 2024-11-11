@@ -13,7 +13,7 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
-	"github.com/milkyway-labs/milkyway/app"
+	milkyway "github.com/milkyway-labs/milkyway/app"
 	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
 	"github.com/milkyway-labs/milkyway/x/pools/keeper"
 	"github.com/milkyway-labs/milkyway/x/pools/types"
@@ -65,7 +65,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 	}
 
 	suite.ctx = sdk.NewContext(ms, tmproto.Header{ChainID: "test-chain"}, false, log.NewNopLogger())
-	suite.cdc, suite.legacyAminoCdc = app.MakeCodecs()
+	suite.cdc, suite.legacyAminoCdc = milkyway.MakeCodecs()
 
 	// Authority address
 	authorityAddr := authtypes.NewModuleAddress(govtypes.ModuleName).String()
@@ -75,7 +75,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 		suite.cdc,
 		runtime.NewKVStoreService(keys[authtypes.StoreKey]),
 		authtypes.ProtoBaseAccount,
-		app.GetMaccPerms(),
+		milkyway.GetMaccPerms(),
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix()),
 		sdk.GetConfig().GetBech32AccountAddrPrefix(),
 		authorityAddr,

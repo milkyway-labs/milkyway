@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/app"
+	milkyway "github.com/milkyway-labs/milkyway/app"
 	"github.com/milkyway-labs/milkyway/utils"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 )
@@ -49,7 +49,7 @@ func TestGenesisState_Validate(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			cdc, _ := app.MakeCodecs()
+			cdc, _ := milkyway.MakeCodecs()
 			err := tc.genesis.Validate(cdc)
 			if tc.shouldErr {
 				require.Error(t, err)
