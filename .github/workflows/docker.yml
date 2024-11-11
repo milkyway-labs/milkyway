@@ -39,7 +39,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Create the builder
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ./contrib/images/milkyway-builder/Dockerfile
@@ -60,7 +60,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
 
       - name: Build and push
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           file: Dockerfile
           push: ${{ startsWith(github.ref, 'refs/tags') }} # push image only for tags
