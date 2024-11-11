@@ -83,7 +83,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 		suite.cdc,
 		runtime.NewKVStoreService(keys[authtypes.StoreKey]),
 		authtypes.ProtoBaseAccount,
-		milkyway.GetMaccPerms(),
+		milkyway.MaccPerms,
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix()),
 		sdk.GetConfig().GetBech32AccountAddrPrefix(),
 		authorityAddr,
@@ -104,6 +104,11 @@ func (suite *KeeperTestSuite) SetupTest() {
 		keepers.NewCommunityPoolKeeper(suite.bk, authtypes.FeeCollectorName),
 		authorityAddr,
 	)
+
+	// Setup the accounts
+	account := suite.ak.GetModuleAccount(suite.ctx, authtypes.Minter)
+	suite.Assert().NotNil(account)
+	suite.ak.SetModuleAccount(suite.ctx, account)
 
 	// Set hooks
 	suite.hooks = newMockHooks()

@@ -27,8 +27,6 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
 	opchildtypes "github.com/initia-labs/OPinit/x/opchild/types"
-
-	"github.com/milkyway-labs/milkyway/app/params"
 )
 
 // defaultConsensusParams defines the default Tendermint consensus params used in
@@ -63,14 +61,14 @@ func setup(t *testing.T, db *dbm.DB, withGenesis bool) (*MilkyWayApp, GenesisSta
 	appOptions := make(simtestutil.AppOptionsMap, 0)
 	appOptions[server.FlagInvCheckPeriod] = simcli.FlagPeriodValue
 
-	encCdc := params.MakeEncodingConfig()
+	encCdc := MakeEncodingConfig()
 	app := NewMilkyWayApp(
 		log.NewNopLogger(),
 		getOrCreateMemDB(db),
 		nil,
 		false,
 		map[int64]bool{},
-		DefaultNodeHome,
+		t.TempDir(),
 		simtestutil.NewAppOptionsWithFlagHome(t.TempDir()),
 		[]wasmkeeper.Option{},
 		baseapp.SetChainID("milkyway-app"),
@@ -89,36 +87,13 @@ func Setup(t *testing.T, isCheckTx bool) *MilkyWayApp {
 	t.Helper()
 
 	app, genState := setup(t, nil, true)
-
-	// Create a validator which will be the admin of the chain as well as the
-	// bridge executor.
-	privVal := ed25519.GenPrivKey() // TODO: make it deterministic?
-	pubKey := privVal.PubKey()
-	pubKeyAny, err := codectypes.NewAnyWithValue(privVal.PubKey())
-	if err != nil {
-		panic(err)
-	}
-	validator := opchildtypes.Validator{
-		Moniker:         "test-validator",
-		OperatorAddress: sdk.ValAddress(privVal.PubKey().Address()).String(),
-		ConsensusPubkey: pubKeyAny,
-		ConsPower:       1,
-	}
-
-	// set validators and delegations
-	var opchildGenesis opchildtypes.GenesisState
-	app.AppCodec().MustUnmarshalJSON(genState[opchildtypes.ModuleName], &opchildGenesis)
-	opchildGenesis.Params.Admin = sdk.AccAddress(pubKey.Address().Bytes()).String()
-	opchildGenesis.Params.BridgeExecutors = []string{sdk.AccAddress(pubKey.Address().Bytes()).String()}
-	opchildGenesis.Validators = []opchildtypes.Validator{validator}
-	genState[opchildtypes.ModuleName] = app.AppCodec().MustMarshalJSON(&opchildGenesis)
-
 	if !isCheckTx {
 		genStateBytes, err := json.Marshal(genState)
 		if err != nil {
 			panic(err)
 		}
 		_, err = app.InitChain(&abci.RequestInitChain{
+			ChainId:         "milkyway-app",
 			Validators:      []abci.ValidatorUpdate{},
 			ConsensusParams: defaultConsensusParams,
 			AppStateBytes:   genStateBytes,

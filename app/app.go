@@ -62,7 +62,6 @@ import (
 	"github.com/spf13/cast"
 
 	milkywayante "github.com/milkyway-labs/milkyway/ante"
-
 	"github.com/milkyway-labs/milkyway/app/keepers"
 	"github.com/milkyway-labs/milkyway/app/upgrades"
 	_ "github.com/milkyway-labs/milkyway/client/docs/statik"
@@ -140,8 +139,10 @@ func NewMilkyWayApp(
 	if err != nil {
 		panic(err)
 	}
-	appCodec := codec.NewProtoCodec(interfaceRegistry)
-	txConfig := authtx.NewTxConfig(appCodec, authtx.DefaultSignModes)
+
+	encodingCfg := MakeEncodingConfig()
+	appCodec := encodingCfg.Marshaler
+	txConfig := encodingCfg.TxConfig
 
 	std.RegisterLegacyAminoCodec(legacyAmino)
 	std.RegisterInterfaces(interfaceRegistry)

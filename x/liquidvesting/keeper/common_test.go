@@ -112,7 +112,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 		suite.cdc,
 		runtime.NewKVStoreService(keys[authtypes.StoreKey]),
 		authtypes.ProtoBaseAccount,
-		milkyway.GetMaccPerms(),
+		milkyway.MaccPerms,
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix()),
 		sdk.GetConfig().GetBech32AccountAddrPrefix(),
 		authorityAddr,

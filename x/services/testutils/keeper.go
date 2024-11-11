@@ -17,7 +17,6 @@ import (
 
 	milkyway "github.com/milkyway-labs/milkyway/app"
 	"github.com/milkyway-labs/milkyway/app/keepers"
-	"github.com/milkyway-labs/milkyway/app/params"
 	"github.com/milkyway-labs/milkyway/testutils/storetesting"
 	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
 	poolskeeper "github.com/milkyway-labs/milkyway/x/pools/keeper"
@@ -55,7 +54,8 @@ func SetupKeeperTest(t *testing.T) KeeperTestData {
 	data.Context = storetesting.BuildContext(keys, nil, nil)
 
 	// Setup the codecs
-	data.Cdc, data.LegacyAmino = params.MakeCodecs()
+	encodingConfig := milkyway.MakeEncodingConfig()
+	data.Cdc, data.LegacyAmino = encodingConfig.Marshaler, encodingConfig.Amino
 
 	// Mocks initializations
 	data.MockCtrl = gomock.NewController(t)

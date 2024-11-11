@@ -18,7 +18,7 @@ func TestConvertBech32Prefix(t *testing.T) {
 		{
 			name:      "Convert valid bech 32 address",
 			address:   "akash1a6zlyvpnksx8wr6wz8wemur2xe8zyh0ytz6d88",
-			converted: "milk1a6zlyvpnksx8wr6wz8wemur2xe8zyh0yxeh27a",
+			converted: "milk1a6zlyvpnksx8wr6wz8wemur2xe8zyh0yg235k0",
 			prefix:    "milk",
 		},
 		{

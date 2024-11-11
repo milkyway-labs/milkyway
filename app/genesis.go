@@ -11,8 +11,6 @@ import (
 	icatypes "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/types"
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 	ibctypes "github.com/cosmos/ibc-go/v8/modules/core/types"
-
-	opchildtypes "github.com/initia-labs/OPinit/x/opchild/types"
 )
 
 // GenesisState - The genesis state of the blockchain is represented here as a map of raw json
@@ -27,21 +25,9 @@ type GenesisState map[string]json.RawMessage
 // NewDefaultGenesisState generates the default state for the application.
 func NewDefaultGenesisState(cdc codec.Codec, mbm module.BasicManager) GenesisState {
 	return GenesisState(mbm.DefaultGenesis(cdc)).
-		ConfigureMinGasPrices(cdc).
 		ConfigureICA(cdc).
 		ConfigureIBCAllowedClients(cdc)
 }
-
-// ConfigureMinGasPrices generates the default state for the application.
-func (genState GenesisState) ConfigureMinGasPrices(cdc codec.JSONCodec) GenesisState {
-	var opChildGenState opchildtypes.GenesisState
-	cdc.MustUnmarshalJSON(genState[opchildtypes.ModuleName], &opChildGenState)
-	opChildGenState.Params.MinGasPrices = nil
-	genState[opchildtypes.ModuleName] = cdc.MustMarshalJSON(&opChildGenState)
-
-	return genState
-}
-
 func (genState GenesisState) ConfigureICA(cdc codec.JSONCodec) GenesisState {
 	// create ICS27 Controller submodule params
 	controllerParams := icacontrollertypes.Params{
