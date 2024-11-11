@@ -695,7 +695,6 @@ func NewAppKeeper(
 		*appKeepers.ICACallbacksKeeper,
 		appKeepers.RateLimitKeeper,
 	)
-	appKeepers.StakeIBCKeeper.SetHooks(stakeibctypes.NewMultiStakeIBCHooks())
 
 	appKeepers.EpochsKeeper = epochskeeper.NewKeeper(appCodec, appKeepers.keys[epochstypes.StoreKey])
 
