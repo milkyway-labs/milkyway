@@ -119,7 +119,7 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 
 		var serviceRestakableDenoms []string
 		if len(restakableDenoms) == 0 {
-			// The global restakable denoms are not set use the one configured
+			// The global restakable denoms are not set: use the one configured
 			// in the service params
 			serviceRestakableDenoms = serviceParams.AllowedDenoms
 		} else if len(serviceParams.AllowedDenoms) > 0 {
@@ -131,7 +131,7 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 				// and the global allowed denoms is empty, skip distribution
 				// for this plan.
 				sdkCtx.Logger().Info(
-					"Skipping rewards plan because its allowed restakable denoms list is empty",
+					"Skipping rewards plan because none of the service's allowed denoms are allowed to be restaked",
 					"plan_id", plan.ID,
 				)
 				return false, nil
@@ -215,12 +215,7 @@ func (k *Keeper) AllocateRewardsByPlan(
 	// delegated toward a service.
 	tokensDelegatedToService := service.Tokens
 	if len(restakableDenoms) > 0 {
-		tokensDelegatedToService := sdk.NewCoins()
-		for _, coin := range service.Tokens {
-			if slices.Contains(restakableDenoms, coin.Denom) {
-				tokensDelegatedToService = tokensDelegatedToService.Add(coin)
-			}
-		}
+		tokensDelegatedToService = service.GetAllowedTokens(restakableDenoms)
 	}
 	totalUsersDelValues, err := k.GetCoinsValue(ctx, tokensDelegatedToService)
 	if err != nil {

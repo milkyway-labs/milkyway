@@ -235,7 +235,7 @@ func (k *Keeper) DelegateToService(ctx sdk.Context, serviceID uint32, amount sdk
 		// restakable denoms, intersect them
 		restakableDenoms = utils.Intersect(restakableDenoms, serviceParams.AllowedDenoms)
 		if len(restakableDenoms) == 0 {
-			// The intersection is empty, this service don't allow any delegation
+			// The intersection is empty, this service doesn't allow any delegation
 			return sdk.NewDecCoins(), errors.Wrapf(types.ErrDenomNotRestakable, "tokens cannot be restaked")
 		}
 	}
