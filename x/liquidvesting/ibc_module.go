@@ -80,14 +80,14 @@ func (im IBCModule) OnChanOpenAck(
 	ctx sdk.Context,
 	portID,
 	channelID string,
-	counterpartyChannelId string,
+	counterpartyChannelID string,
 	counterpartyVersion string,
 ) error {
 	// core/04-channel/types contains a helper function to split middleware and underlying app version
 	// _, _ := channeltypes.SplitChannelVersion(counterpartyVersion)
 	// doCustomLogic()
 	// call the underlying applications OnChanOpenTry callback
-	return im.app.OnChanOpenAck(ctx, portID, channelID, counterpartyChannelId, counterpartyVersion)
+	return im.app.OnChanOpenAck(ctx, portID, channelID, counterpartyChannelID, counterpartyVersion)
 }
 
 // OnChanOpenConfirm implements the IBCModule interface

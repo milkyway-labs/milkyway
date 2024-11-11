@@ -12,6 +12,9 @@ import (
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	tmtypes "github.com/cometbft/cometbft/types"
 	dbm "github.com/cosmos/cosmos-db"
+	"github.com/cosmos/cosmos-sdk/baseapp"
+	"github.com/cosmos/cosmos-sdk/server"
+	simcli "github.com/cosmos/cosmos-sdk/x/simulation/client/cli"
 
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -25,7 +28,7 @@ import (
 
 	opchildtypes "github.com/initia-labs/OPinit/x/opchild/types"
 
-	"github.com/milkyway-labs/milkyway/types"
+	"github.com/milkyway-labs/milkyway/app/params"
 )
 
 // defaultConsensusParams defines the default Tendermint consensus params used in
@@ -57,19 +60,24 @@ func getOrCreateMemDB(db *dbm.DB) dbm.DB {
 func setup(t *testing.T, db *dbm.DB, withGenesis bool) (*MilkyWayApp, GenesisState) {
 	t.Helper()
 
-	encCdc := MakeEncodingConfig()
+	appOptions := make(simtestutil.AppOptionsMap, 0)
+	appOptions[server.FlagInvCheckPeriod] = simcli.FlagPeriodValue
+
+	encCdc := params.MakeEncodingConfig()
 	app := NewMilkyWayApp(
 		log.NewNopLogger(),
 		getOrCreateMemDB(db),
-		getOrCreateMemDB(nil),
 		nil,
-		true,
-		[]wasmkeeper.Option{},
+		false,
+		map[int64]bool{},
+		DefaultNodeHome,
 		simtestutil.NewAppOptionsWithFlagHome(t.TempDir()),
+		[]wasmkeeper.Option{},
+		baseapp.SetChainID("milkyway-app"),
 	)
 
 	if withGenesis {
-		return app, NewDefaultGenesisState(encCdc.Codec, app.BasicModuleManager, types.BaseDenom)
+		return app, NewDefaultGenesisState(encCdc.Marshaler, app.ModuleBasics)
 	}
 
 	return app, GenesisState{}

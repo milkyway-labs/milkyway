@@ -38,3 +38,9 @@ func MakeEncodingConfig() EncodingConfig {
 		Amino:             amino,
 	}
 }
+
+// MakeCodecs creates the necessary testing codecs for Amino and Protobuf
+func MakeCodecs() (codec.Codec, *codec.LegacyAmino) {
+	encodingConfig := MakeEncodingConfig()
+	return encodingConfig.Marshaler, encodingConfig.Amino
+}

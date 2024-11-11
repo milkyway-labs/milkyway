@@ -212,8 +212,6 @@ cosmossdk.io/simapp v0.0.0-20231211060251-d8fb76d4c267 h1:fLJ+ng4SiuEK7NhKPIAn7Q
 cosmossdk.io/simapp v0.0.0-20231211060251-d8fb76d4c267/go.mod h1:ril3K+x7sdvOTVZsBv0PGDePO54m64HLDq1AmVEREl8=
 cosmossdk.io/tools/confix v0.1.2 h1:2hoM1oFCNisd0ltSAAZw2i4ponARPmlhuNu3yy0VwI4=
 cosmossdk.io/tools/confix v0.1.2/go.mod h1:7XfcbK9sC/KNgVGxgLM0BrFbVcR/+6Dg7MFfpx7duYo=
-cosmossdk.io/tools/rosetta v0.2.1 h1:ddOMatOH+pbxWbrGJKRAawdBkPYLfKXutK9IETnjYxw=
-cosmossdk.io/tools/rosetta v0.2.1/go.mod h1:Pqdc1FdvkNV3LcNIkYWt2RQY6IP1ge6YWZk8MhhO9Hw=
 cosmossdk.io/x/circuit v0.1.1 h1:KPJCnLChWrxD4jLwUiuQaf5mFD/1m7Omyo7oooefBVQ=
 cosmossdk.io/x/circuit v0.1.1/go.mod h1:B6f/urRuQH8gjt4eLIXfZJucrbreuYrKh5CSjaOxr+Q=
 cosmossdk.io/x/evidence v0.1.1 h1:Ks+BLTa3uftFpElLTDp9L76t2b58htjVbSZ86aoK/E4=
@@ -275,6 +273,10 @@ github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5/go.mod h1:lmUJ/7eu/Q8
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/OpenPeeDeeP/depguard/v2 v2.2.0 h1:vDfG60vDtIuf0MEOhmLlLLSzqaRM8EMcgJPdp74zmpA=
 github.com/OpenPeeDeeP/depguard/v2 v2.2.0/go.mod h1:CIzddKRvLBC4Au5aYP/i3nyaWQ+ClszLIuVocRiCYFQ=
+github.com/PuerkitoBio/purell v1.1.1 h1:WEQqlqaGbrPkxLJWfBwQmfEAE1Z7ONdDLqrN38tNFfI=
+github.com/PuerkitoBio/purell v1.1.1/go.mod h1:c11w/QuzBsJSee3cPx9rAFu61PvFxuPbtSwDGJws/X0=
+github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 h1:d+Bc7a5rLufV/sSk/8dngufqelfh6jnri85riMAaF/M=
+github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578/go.mod h1:uGdkoq3SwY9Y+13GIhn11/XLaGBb4BfwItxLd5jeuXE=
 github.com/Shopify/sarama v1.19.0/go.mod h1:FVkBWblsNy7DGZRfXLU0O9RCGt5g3g3yEuWXgklEdEo=
 github.com/Shopify/toxiproxy v2.1.4+incompatible/go.mod h1:OXgGpZ6Cli1/URJOF1DMxUHB2q5Ap20/P/eIdh4G0pI=
 github.com/VividCortex/gohistogram v1.0.0 h1:6+hBz+qvs0JOrrNhhmR7lFxo5sINxBCGXrdtl/UvroE=
@@ -454,6 +456,8 @@ github.com/cosmos/interchain-security/v6 v6.3.0 h1:AIsfxLUDtUGVfaqJ1WPwnYIOT5Axo
 github.com/cosmos/interchain-security/v6 v6.3.0/go.mod h1:6DSiV2w+DuPkxP1KGFtaxpiwf8Xt2iusj8O53KCx96Q=
 github.com/cosmos/ledger-cosmos-go v0.13.3 h1:7ehuBGuyIytsXbd4MP43mLeoN2LTOEnk5nvue4rK+yM=
 github.com/cosmos/ledger-cosmos-go v0.13.3/go.mod h1:HENcEP+VtahZFw38HZ3+LS3Iv5XV6svsnkk9vdJtLr8=
+github.com/cosmos/rosetta v0.50.10 h1:JML9H+TYnpiUn1TucVmV5XVH9YF/Nd/GJqesaIpXq0c=
+github.com/cosmos/rosetta v0.50.10/go.mod h1:x7LfYPXzDkS3/8idE+ASifOokJacOiJGdrlj6/r8Bz0=
 github.com/cosmos/rosetta-sdk-go v0.10.0 h1:E5RhTruuoA7KTIXUcMicL76cffyeoyvNybzUGSKFTcM=
 github.com/cosmos/rosetta-sdk-go v0.10.0/go.mod h1:SImAZkb96YbwvoRkzSMQB6noNJXFgWl/ENIznEoYQI4=
 github.com/cpuguy83/go-md2man/v2 v2.0.0-20190314233015-f79a8a8ca69d/go.mod h1:maD7wRr/U5Z6m/iR4s+kqSMx2CaBsrgA7czyZG/E6dU=
@@ -812,6 +816,8 @@ github.com/gostaticanalysis/nilerr v0.1.1/go.mod h1:wZYb6YI5YAxxq0i1+VJbY0s2YONW
 github.com/gostaticanalysis/testutil v0.3.1-0.20210208050101-bfb5c8eec0e4/go.mod h1:D+FIZ+7OahH3ePw/izIEeH5I06eKs1IKI4Xr64/Am3M=
 github.com/gostaticanalysis/testutil v0.4.0 h1:nhdCmubdmDF6VEatUNjgUZBJKWRqugoISdUv3PPQgHY=
 github.com/gostaticanalysis/testutil v0.4.0/go.mod h1:bLIoPefWXrRi/ssLFWX1dx7Repi5x3CuviD3dgAZaBU=
+github.com/goware/urlx v0.3.2 h1:gdoo4kBHlkqZNaf6XlQ12LGtQOmpKJrR04Rc3RnpJEo=
+github.com/goware/urlx v0.3.2/go.mod h1:h8uwbJy68o+tQXCGZNa9D73WN8n0r9OBae5bUnLcgjw=
 github.com/grpc-ecosystem/go-grpc-middleware v1.0.1-0.20190118093823-f849b5445de4/go.mod h1:FiyG127CGDf3tlThmgyCl78X/SZQqEOJBCDaAfeWzPs=
 github.com/grpc-ecosystem/go-grpc-middleware v1.2.2/go.mod h1:EaizFBKfUKtMIF5iaDEhniwNedqGo9FuLFzppDr3uwI=
 github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 h1:UH//fgunKIs4JdUbpDl1VZCDaL56wXCB/5+wF6uHfaI=

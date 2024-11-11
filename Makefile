@@ -249,22 +249,29 @@ mockgen:
 ###                           Tests & Simulation                            ###
 ###############################################################################
 
+include sims.mk
+
 test: test-unit
 test-all: test-unit test-ledger-mock test-race test-cover
 
+PACKAGES_UNIT=$(shell go list ./... | grep -v -e '/tests/e2e')
+PACKAGES_E2E=$(shell cd tests/e2e && go list ./... | grep '/e2e')
 TEST_PACKAGES=./...
-TEST_TARGETS := test-unit test-unit-amino test-unit-proto test-ledger-mock test-race test-ledger test-race
+TEST_TARGETS := test-unit test-unit-cover test-race test-e2e
 
 # Test runs-specific rules. To add a new test target, just add
 # a new rule, customise ARGS or TEST_PACKAGES ad libitum, and
 # append the new rule to the TEST_TARGETS list.
-test-unit: test_tags += cgo ledger test_ledger_mock norace
-test-unit-amino: test_tags += ledger test_ledger_mock test_amino norace
+test-unit: ARGS=-timeout=5m -tags='norace'
+test-unit: TEST_PACKAGES=$(PACKAGES_UNIT)
+test-unit-cover: ARGS=-timeout=5m -tags='norace' -coverprofile=coverage.txt -covermode=atomic
+test-unit-cover: TEST_PACKAGES=$(PACKAGES_UNIT)
 test-ledger: test_tags += cgo ledger norace
 test-ledger-mock: test_tags += ledger test_ledger_mock norace
-test-race: test_tags += cgo ledger test_ledger_mock
-test-race: ARGS=-race
-test-race: TEST_PACKAGES=$(PACKAGES_NOSIMULATION)
+test-race: ARGS=-timeout=5m -race
+test-race: TEST_PACKAGES=$(PACKAGES_UNIT)
+test-e2e: ARGS=-timeout=35m -v
+test-e2e: TEST_PACKAGES=$(PACKAGES_E2E)
 $(TEST_TARGETS): run-tests
 
 ARGS += -tags "$(test_tags)"
@@ -273,12 +280,14 @@ CURRENT_DIR = $(shell pwd)
 
 run-tests:
 ifneq (,$(shell which tparse 2>/dev/null))
-	go test -mod=readonly -json $(ARGS) $(TEST_PACKAGES) | tparse
+	@echo "--> Running tests"
+	@go test -mod=readonly -json $(ARGS) $(TEST_PACKAGES) | tparse
 else
-	go test -mod=readonly $(ARGS) $(TEST_PACKAGES)
+	@echo "--> Running tests"
+	@go test -mod=readonly $(ARGS) $(TEST_PACKAGES)
 endif
 
-.PHONY: run-tests test test-all $(TEST_TARGETS)
+.PHONY: run-tests $(TEST_TARGETS)
 
 ###############################################################################
 ###                                Benchmark                                ###
@@ -310,3 +319,21 @@ format:
 	find . -name '*.go' -type f -not -path "*.git*" -not -path "./client/docs/statik/statik.go" -not -name "*_mocks.go" -not -name '*.pb.go' -not -name '*.pulsar.go' | xargs misspell -w
 	find . -name '*.go' -type f -not -path "*.git*" -not -path "./client/docs/statik/statik.go" -not -name "*_mocks.go" -not -name '*.pb.go' -not -name '*.pulsar.go' | xargs goimports -w -local github.com/milkyway-labs/milkyway
 .PHONY: format
+
+###############################################################################
+###                                Localnet                                 ###
+###############################################################################
+
+start-localnet-ci: build
+	rm -rf ~/.milkywayd-liveness
+	./build/milkywayd init liveness --chain-id liveness --home ~/.milkywayd-liveness
+	./build/milkywayd config set client chain-id liveness --home ~/.milkywayd-liveness
+	./build/milkywayd config set client keyring-backend test --home ~/.milkywayd-liveness
+	./build/milkywayd keys add val --home ~/.milkywayd-liveness --keyring-backend test
+	./build/milkywayd genesis add-genesis-account val 10000000000000000000000000milk --home ~/.milkywayd-liveness --keyring-backend test
+	./build/milkywayd genesis gentx val 1000000000milk --home ~/.milkywayd-liveness --chain-id liveness --keyring-backend test
+	./build/milkywayd genesis collect-gentxs --home ~/.milkywayd-liveness
+	sed -i.bak'' 's/minimum-gas-prices = ""/minimum-gas-prices = "0uatom"/' ~/.milkywayd-liveness/config/app.toml
+	./build/milkywayd start --home ~/.milkywayd-liveness --x-crisis-skip-assert-invariants
+
+.PHONY: start-localnet-ci

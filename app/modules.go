@@ -93,7 +93,7 @@ import (
 	tokenfactorytypes "github.com/milkyway-labs/milkyway/x/tokenfactory/types"
 )
 
-var maccPerms = map[string][]string{
+var MaccPerms = map[string][]string{
 	authtypes.FeeCollectorName:        nil,
 	distrtypes.ModuleName:             nil,
 	icatypes.ModuleName:               nil,

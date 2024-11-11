@@ -17,6 +17,7 @@ import (
 
 	milkyway "github.com/milkyway-labs/milkyway/app"
 	"github.com/milkyway-labs/milkyway/app/keepers"
+	"github.com/milkyway-labs/milkyway/app/params"
 	"github.com/milkyway-labs/milkyway/testutils/storetesting"
 	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
 	poolskeeper "github.com/milkyway-labs/milkyway/x/pools/keeper"
@@ -54,7 +55,7 @@ func SetupKeeperTest(t *testing.T) KeeperTestData {
 	data.Context = storetesting.BuildContext(keys, nil, nil)
 
 	// Setup the codecs
-	data.Cdc, data.LegacyAmino = milkyway.MakeCodecs()
+	data.Cdc, data.LegacyAmino = params.MakeCodecs()
 
 	// Mocks initializations
 	data.MockCtrl = gomock.NewController(t)
@@ -68,7 +69,7 @@ func SetupKeeperTest(t *testing.T) KeeperTestData {
 		data.Cdc,
 		runtime.NewKVStoreService(keys[authtypes.StoreKey]),
 		authtypes.ProtoBaseAccount,
-		milkyway.GetMaccPerms(),
+		milkyway.MaccPerms,
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix()),
 		sdk.GetConfig().GetBech32AccountAddrPrefix(),
 		authorityAddr,

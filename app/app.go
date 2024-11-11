@@ -178,7 +178,7 @@ func NewMilkyWayApp(
 		appCodec,
 		bApp,
 		legacyAmino,
-		maccPerms,
+		MaccPerms,
 		moduleAccountAddresses,
 		app.BlockedModuleAccountAddrs(moduleAccountAddresses),
 		skipUpgradeHeights,
@@ -396,7 +396,7 @@ func (app *MilkyWayApp) LoadHeight(height int64) error {
 // ModuleAccountAddrs returns all the app's module account addresses.
 func (app *MilkyWayApp) ModuleAccountAddrs() map[string]bool {
 	modAccAddrs := make(map[string]bool)
-	for acc := range maccPerms {
+	for acc := range MaccPerms {
 		modAccAddrs[authtypes.NewModuleAddress(acc).String()] = true
 	}
 
@@ -494,7 +494,6 @@ func (app *MilkyWayApp) setupUpgradeStoreLoaders() {
 	}
 
 	for _, upgrade := range Upgrades {
-		upgrade := upgrade
 		if upgradeInfo.Name == upgrade.UpgradeName {
 			storeUpgrades := upgrade.StoreUpgrades
 			app.SetStoreLoader(upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, &storeUpgrades))

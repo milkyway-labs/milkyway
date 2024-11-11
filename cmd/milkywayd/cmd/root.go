@@ -24,7 +24,7 @@ import (
 	snapshottypes "cosmossdk.io/store/snapshots/types"
 	storetypes "cosmossdk.io/store/types"
 	confixcmd "cosmossdk.io/tools/confix/cmd"
-	rosettaCmd "cosmossdk.io/tools/rosetta/cmd"
+	rosettaCmd "github.com/cosmos/rosetta/cmd"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
