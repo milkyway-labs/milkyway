@@ -107,6 +107,7 @@ func (k *Keeper) IncrementDelegationTargetPeriod(ctx context.Context, target res
 	if err != nil {
 		return 0, err
 	}
+
 	// Since we sent only truncated coins, subtract that amount from outstanding
 	// rewards, too.
 	outstanding.Rewards = outstanding.Rewards.Sub(types.NewDecPoolsFromPools(communityFundingCoins))

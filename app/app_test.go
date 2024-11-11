@@ -43,7 +43,7 @@ func TestSimAppExportAndBlockedAddrs(t *testing.T) {
 	app := SetupWithGenesisAccounts(t, nil, nil)
 
 	// BlockedAddresses returns a map of addresses in app v1 and a map of modules name in app v2.
-	for acc := range app.BlacklistedModuleAccountAddrs() {
+	for acc := range BlacklistedModuleAccountAddrs() {
 		var addr sdk.AccAddress
 		if modAddr, err := sdk.AccAddressFromBech32(acc); err == nil {
 			addr = modAddr

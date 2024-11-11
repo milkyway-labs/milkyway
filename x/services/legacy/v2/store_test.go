@@ -28,7 +28,7 @@ type MigrateStoreTestSuite struct {
 }
 
 func (suite *MigrateStoreTestSuite) SetupTest() {
-	data := testutils.SetupKeeperTest(suite.T())
+	data := testutils.NewKeeperTestData(suite.T())
 
 	suite.ctx = data.Context
 	suite.keeper = data.Keeper
