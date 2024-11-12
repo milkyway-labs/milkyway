@@ -117,7 +117,7 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 
 	// Set ibc hooks
 	var ibcStack porttypes.IBCModule = mockIBCMiddleware{}
-	data.IBCMiddleware = liquidvesting.NewIBCModule(ibcStack, data.Keeper)
+	data.IBCMiddleware = liquidvesting.NewIBCMiddleware(ibcStack, data.Keeper)
 
 	account := data.AccountKeeper.GetModuleAccount(data.Context, types.ModuleName)
 	require.NotNil(t, account)

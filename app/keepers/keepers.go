@@ -772,7 +772,7 @@ func NewAppKeeper(
 		pfmrouterkeeper.DefaultForwardTransferPacketTimeoutTimestamp,
 		pfmrouterkeeper.DefaultRefundTransferPacketTimeoutTimestamp,
 	)
-	transferStack = liquidvesting.NewIBCModule(
+	transferStack = liquidvesting.NewIBCMiddleware(
 		transferStack,
 		appKeepers.LiquidVestingKeeper,
 	)

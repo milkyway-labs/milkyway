@@ -21,8 +21,8 @@ type IBCModule struct {
 	app    porttypes.IBCModule
 }
 
-// NewIBCModule creates a new IBCModule given the keeper
-func NewIBCModule(app porttypes.IBCModule, k *keeper.Keeper) IBCModule {
+// NewIBCMiddleware creates a new IBCModule given the keeper
+func NewIBCMiddleware(app porttypes.IBCModule, k *keeper.Keeper) IBCModule {
 	return IBCModule{
 		keeper: k,
 		app:    app,

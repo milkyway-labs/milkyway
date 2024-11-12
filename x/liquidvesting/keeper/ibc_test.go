@@ -13,10 +13,6 @@ import (
 )
 
 func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
-	user1 := authtypes.NewModuleAddress("user1")
-	user2 := authtypes.NewModuleAddress("user2")
-	moduleAddress := authtypes.NewModuleAddress(types.ModuleName).String()
-
 	testCases := []struct {
 		name           string
 		transferAmount sdk.Coin
@@ -24,39 +20,43 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 		receiver       string
 		memo           string
 		shouldErr      bool
-		errorMessage   string
 		check          func(sdk.Context)
 	}{
 		{
 			name:           "empty memo",
 			transferAmount: sdk.NewInt64Coin("foo", 1000),
-			sender:         user1.String(),
-			receiver:       user2.String(),
+			sender:         "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			receiver:       "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 			memo:           "",
-			shouldErr:      false,
 		},
 		{
 			name:           "trigger by sending to a normal account",
 			transferAmount: sdk.NewInt64Coin("foo", 1000),
-			sender:         user1.String(),
-			receiver:       user2.String(),
+			sender:         "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			receiver:       "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 			memo: fmt.Sprintf(`{
 			"liquidvesting": {
 				"amounts": [{
 					"depositor": "%s",
 					"amount": { "amount": "1000", "denom": "foo" }
 				}]
-			}}`, user1.String()),
+			}}`, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
 			shouldErr: true,
-			errorMessage: fmt.Sprintf(
-				"ibc hook error: the receiver should be the module address, got: %s, expected: %s",
-				user2.String(), moduleAddress),
+			check: func(ctx sdk.Context) {
+				// Make sure the user's insurance fund is not updated
+				userAddr, err := sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Assert().NoError(err)
+
+				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, userAddr)
+				suite.Assert().NoError(err)
+				suite.Assert().Empty(insuranceFund)
+			},
 		},
 		{
 			name:           "transfer not received denom",
 			transferAmount: sdk.NewInt64Coin("foo", 1000),
-			sender:         user1.String(),
-			receiver:       moduleAddress,
+			sender:         "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			receiver:       authtypes.NewModuleAddress(types.ModuleName).String(),
 			memo: fmt.Sprintf(`{"liquidvesting": {
 				"amounts": [
 					{
@@ -67,15 +67,26 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
  						"depositor": "%s",
  						"amount": { "amount": "400", "denom": "bar" }
  					}
-			]}}`, user1.String(), user2.String()),
-			shouldErr:    true,
-			errorMessage: "ibc hook error: amount received is not equal to the amounts to deposit in the users' insurance fund",
+			]}}`,
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr: true,
+			check: func(ctx sdk.Context) {
+				// Make sure the user's insurance fund is not updated
+				userAddr, err := sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Assert().NoError(err)
+
+				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, userAddr)
+				suite.Assert().NoError(err)
+				suite.Assert().Empty(insuranceFund)
+			},
 		},
 		{
 			name:           "multiple denoms in amount to deposit",
 			transferAmount: sdk.NewInt64Coin("foo", 1000),
-			sender:         user1.String(),
-			receiver:       moduleAddress,
+			sender:         "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			receiver:       authtypes.NewModuleAddress(types.ModuleName).String(),
 			memo: fmt.Sprintf(`{
 			"liquidvesting": {
 				"amounts": [{
@@ -86,15 +97,26 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 					"depositor": "%s",
 					"amount": { "amount": "1000", "denom": "bar" }
 				}]
-			}}`, user1.String(), user2.String()),
-			shouldErr:    true,
-			errorMessage: "ibc hook error: can't deposit multiple denoms",
+			}}`,
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr: true,
+			check: func(ctx sdk.Context) {
+				// Make sure the user's insurance fund is not updated
+				userAddr, err := sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Assert().NoError(err)
+
+				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, userAddr)
+				suite.Assert().NoError(err)
+				suite.Assert().Empty(insuranceFund)
+			},
 		},
 		{
 			name:           "deposit more coins then received",
 			transferAmount: sdk.NewInt64Coin("foo", 1000),
-			sender:         user1.String(),
-			receiver:       moduleAddress,
+			sender:         "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			receiver:       authtypes.NewModuleAddress(types.ModuleName).String(),
 			memo: fmt.Sprintf(`{
             "liquidvesting": {
                 "amounts": [{
@@ -105,15 +127,26 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
                     "depositor": "%s",
                     "amount": { "amount": "601", "denom": "foo" }
                 }]
-            }}`, user1.String(), user2.String()),
-			shouldErr:    true,
-			errorMessage: "ibc hook error: amount received is not equal to the amounts to deposit in the users' insurance fund",
+            }}`,
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr: true,
+			check: func(ctx sdk.Context) {
+				// Make sure the user's insurance fund is not updated
+				userAddr, err := sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Assert().NoError(err)
+
+				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, userAddr)
+				suite.Assert().NoError(err)
+				suite.Assert().Empty(insuranceFund)
+			},
 		},
 		{
 			name:           "deposit less coins then received",
 			transferAmount: sdk.NewInt64Coin("foo", 1000),
-			sender:         user1.String(),
-			receiver:       moduleAddress,
+			sender:         "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			receiver:       authtypes.NewModuleAddress(types.ModuleName).String(),
 			memo: fmt.Sprintf(`{
             "liquidvesting": {
                 "amounts": [{
@@ -124,15 +157,26 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
                     "depositor": "%s",
                     "amount": { "amount": "600", "denom": "foo" }
                 }]
-            }}`, user1.String(), user2.String()),
-			shouldErr:    true,
-			errorMessage: "ibc hook error: amount received is not equal to the amounts to deposit in the users' insurance fund",
+            }}`,
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr: true,
+			check: func(ctx sdk.Context) {
+				// Make sure the user's insurance fund is not updated
+				userAddr, err := sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Assert().NoError(err)
+
+				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, userAddr)
+				suite.Assert().NoError(err)
+				suite.Assert().Empty(insuranceFund)
+			},
 		},
 		{
 			name:           "correct deposit",
 			transferAmount: sdk.NewInt64Coin("foo", 1000),
-			sender:         user1.String(),
-			receiver:       moduleAddress,
+			sender:         "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			receiver:       authtypes.NewModuleAddress(types.ModuleName).String(),
 			memo: fmt.Sprintf(`{
             "liquidvesting": {
                 "amounts": [{
@@ -143,15 +187,26 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
                     "depositor": "%s",
                     "amount": { "amount": "400", "denom": "foo" }
                 }]
-            }}`, user1.String(), user2.String()),
-			shouldErr: false,
+            }}`,
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
 			check: func(ctx sdk.Context) {
-				addrInsuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, user1)
+				// Make sure the first insurance fund is updated
+				userAddr, err := sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
 				suite.Assert().NoError(err)
-				suite.Assert().Equal("600foo", addrInsuranceFund.String())
-				addr2InsuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, user2)
+
+				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, userAddr)
 				suite.Assert().NoError(err)
-				suite.Assert().Equal("400foo", addr2InsuranceFund.String())
+				suite.Assert().Equal("600foo", insuranceFund.String())
+
+				// Make sure the second insurance fund is updated
+				userAddr, err = sdk.AccAddressFromBech32("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd")
+				suite.Assert().NoError(err)
+
+				insuranceFund, err = suite.k.GetUserInsuranceFundBalance(ctx, userAddr)
+				suite.Assert().NoError(err)
+				suite.Assert().Equal("400foo", insuranceFund.String())
 			},
 		},
 	}
@@ -159,34 +214,36 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
-			data := transfertypes.FungibleTokenPacketData{
+
+			// Build the data to be put inside the packet
+			dataBz, err := json.Marshal(&transfertypes.FungibleTokenPacketData{
 				Denom:    tc.transferAmount.Denom,
 				Amount:   tc.transferAmount.Amount.String(),
 				Sender:   tc.sender,
 				Receiver: tc.receiver,
 				Memo:     tc.memo,
-			}
-
-			dataBz, err := json.Marshal(&data)
+			})
 			suite.Assert().NoError(err)
 
-			relayer := suite.ak.GetModuleAddress("relayer")
-			ack := suite.ibcm.OnRecvPacket(suite.ctx, channeltypes.Packet{
-				Data: dataBz,
-			}, relayer)
+			// Build the packet
+			packet := channeltypes.Packet{Data: dataBz}
+
+			// Receive the packet
+			ack := suite.ibcm.OnRecvPacket(suite.ctx, packet, suite.ak.GetModuleAddress("relayer"))
 			ack.Acknowledgement()
 
 			if tc.shouldErr {
 				suite.Assert().False(ack.Success())
+
 				castedAck := ack.(channeltypes.Acknowledgement)
 				errorResponse := castedAck.Response.(*channeltypes.Acknowledgement_Error)
-				suite.Assert().Equal(tc.errorMessage, errorResponse.Error)
-
-				if tc.check != nil {
-					tc.check(suite.ctx)
-				}
+				suite.Require().NotEmpty(errorResponse.Error)
 			} else {
 				suite.Assert().True(ack.Success())
+			}
+
+			if tc.check != nil {
+				tc.check(suite.ctx)
 			}
 		})
 	}

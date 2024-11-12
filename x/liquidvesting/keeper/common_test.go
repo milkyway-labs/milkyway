@@ -192,7 +192,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 
 	// Set ibc hooks
 	var transferStack porttypes.IBCModule = mockIBCMiddleware{}
-	transferStack = liquidvesting.NewIBCModule(transferStack, suite.k)
+	transferStack = liquidvesting.NewIBCMiddleware(transferStack, suite.k)
 	suite.ibcm = transferStack
 
 	account := suite.ak.GetModuleAccount(suite.ctx, types.ModuleName)
