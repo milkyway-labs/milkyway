@@ -5,7 +5,6 @@ import (
 
 	"cosmossdk.io/log"
 	storetypes "cosmossdk.io/store/types"
-	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authcodec "github.com/cosmos/cosmos-sdk/x/auth/codec"
@@ -26,32 +25,30 @@ import (
 )
 
 type KeeperTestData struct {
+	storetesting.BaseKeeperTestData
+
 	StoreKey storetypes.StoreKey
-	Context  sdk.Context
-
-	Cdc         codec.Codec
-	LegacyAmino *codec.LegacyAmino
-
 	MockCtrl *gomock.Controller
 
-	AccountKeeper authkeeper.AccountKeeper
-	BankKeeper    bankkeeper.Keeper
-	PoolKeeper    *MockCommunityPoolKeeper
-	PoolsKeeper   *poolskeeper.Keeper
+	PoolKeeper  *MockCommunityPoolKeeper
+	PoolsKeeper *poolskeeper.Keeper
 
 	Keeper *keeper.Keeper
 	Hooks  *MockHooks
 }
 
 func NewKeeperTestData(t *testing.T) KeeperTestData {
-	var data KeeperTestData
+	var data = KeeperTestData{
+		BaseKeeperTestData: storetesting.NewBaseKeeperTestData(t, []string{
+			authtypes.StoreKey,
+			banktypes.StoreKey,
+			servicestypes.StoreKey,
+			poolstypes.StoreKey,
+		}),
+	}
 
 	// Define store keys
-	keys := storetypes.NewKVStoreKeys(authtypes.StoreKey, banktypes.StoreKey, servicestypes.StoreKey, poolstypes.StoreKey)
-	data.StoreKey = keys[servicestypes.StoreKey]
-
-	// Setup the context
-	data.Context = storetesting.BuildContext(keys, nil, nil)
+	data.StoreKey = data.Keys[servicestypes.StoreKey]
 
 	// Setup the codecs
 	encodingConfig := milkyway.MakeEncodingConfig()
@@ -67,7 +64,7 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	// Build keepers
 	data.AccountKeeper = authkeeper.NewAccountKeeper(
 		data.Cdc,
-		runtime.NewKVStoreService(keys[authtypes.StoreKey]),
+		runtime.NewKVStoreService(data.Keys[authtypes.StoreKey]),
 		authtypes.ProtoBaseAccount,
 		milkyway.MaccPerms,
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix()),
@@ -76,7 +73,7 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	)
 	data.BankKeeper = bankkeeper.NewKeeper(
 		data.Cdc,
-		runtime.NewKVStoreService(keys[banktypes.StoreKey]),
+		runtime.NewKVStoreService(data.Keys[banktypes.StoreKey]),
 		data.AccountKeeper,
 		nil,
 		authorityAddr,
@@ -84,14 +81,14 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	)
 	data.PoolsKeeper = poolskeeper.NewKeeper(
 		data.Cdc,
-		keys[poolstypes.StoreKey],
-		runtime.NewKVStoreService(keys[poolstypes.StoreKey]),
+		data.Keys[poolstypes.StoreKey],
+		runtime.NewKVStoreService(data.Keys[poolstypes.StoreKey]),
 		data.AccountKeeper,
 	)
 	data.Keeper = keeper.NewKeeper(
 		data.Cdc,
 		data.StoreKey,
-		runtime.NewKVStoreService(keys[servicestypes.StoreKey]),
+		runtime.NewKVStoreService(data.Keys[servicestypes.StoreKey]),
 		data.AccountKeeper,
 		keepers.NewCommunityPoolKeeper(data.BankKeeper, authtypes.FeeCollectorName),
 		authorityAddr,

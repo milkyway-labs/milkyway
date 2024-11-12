@@ -12,7 +12,7 @@ import (
 func (suite *KeeperTestSuite) TestQuerier_InsuranceFund() {
 	testCases := []struct {
 		name       string
-		setup      func(ctx sdk.Context)
+		store      func(ctx sdk.Context)
 		expBalance sdk.Coins
 	}{
 		{
@@ -21,7 +21,7 @@ func (suite *KeeperTestSuite) TestQuerier_InsuranceFund() {
 		},
 		{
 			name: "single deposit",
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				suite.fundAccountInsuranceFund(ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
@@ -31,7 +31,7 @@ func (suite *KeeperTestSuite) TestQuerier_InsuranceFund() {
 		},
 		{
 			name: "multiple deposits",
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				suite.fundAccountInsuranceFund(ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
@@ -52,12 +52,13 @@ func (suite *KeeperTestSuite) TestQuerier_InsuranceFund() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			if tc.setup != nil {
-				tc.setup(suite.ctx)
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			resp, err := querier.InsuranceFund(suite.ctx, types.NewQueryInsuranceFundRequest())
+			resp, err := querier.InsuranceFund(ctx, types.NewQueryInsuranceFundRequest())
 			suite.Assert().NoError(err)
 			suite.Assert().Equal(tc.expBalance, resp.Amount)
 		})
@@ -67,7 +68,7 @@ func (suite *KeeperTestSuite) TestQuerier_InsuranceFund() {
 func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFund() {
 	testCases := []struct {
 		name       string
-		setup      func(ctx sdk.Context)
+		store      func(ctx sdk.Context)
 		shouldErr  bool
 		request    *types.QueryUserInsuranceFundRequest
 		expBalance sdk.Coins
@@ -85,7 +86,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFund() {
 		},
 		{
 			name: "single deposit",
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				suite.fundAccountInsuranceFund(ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
@@ -97,7 +98,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFund() {
 		},
 		{
 			name: "multiple deposits",
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				suite.fundAccountInsuranceFund(ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
@@ -116,12 +117,12 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFund() {
 		},
 		{
 			name: "with used amount",
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				suite.fundAccountInsuranceFund(ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
 				)
-				suite.mintVestedRepresentation(
+				suite.mintVestedRepresentation(ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
 				)
@@ -133,7 +134,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFund() {
 				)
 
 				// Delegate to the pool
-				suite.createPool(1, vestedIBCDenom)
+				suite.createPool(ctx, 1, vestedIBCDenom)
 				_, err := suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedIBCDenom, 1000), "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre")
 				suite.Require().NoError(err)
 			},
@@ -152,12 +153,13 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFund() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			if tc.setup != nil {
-				tc.setup(suite.ctx)
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			resp, err := querier.UserInsuranceFund(suite.ctx, tc.request)
+			resp, err := querier.UserInsuranceFund(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
@@ -172,7 +174,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFund() {
 func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFunds() {
 	testCases := []struct {
 		name              string
-		setup             func(ctx sdk.Context)
+		store             func(ctx sdk.Context)
 		shouldErr         bool
 		request           *types.QueryUserInsuranceFundsRequest
 		expInsuranceFunds []types.UserInsuranceFundData
@@ -184,7 +186,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFunds() {
 		},
 		{
 			name: "no pagination",
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				suite.fundAccountInsuranceFund(ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
@@ -218,7 +220,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFunds() {
 		},
 		{
 			name: "respects handle pagination",
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				suite.fundAccountInsuranceFund(ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
@@ -245,19 +247,22 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFunds() {
 		},
 		{
 			name: "with utilization",
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				suite.fundAccountInsuranceFund(ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
 				)
-				suite.mintVestedRepresentation(
+				suite.mintVestedRepresentation(ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
 				)
 
 				// Delegate to the pool
-				suite.createPool(1, vestedIBCDenom)
-				_, err := suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedIBCDenom, 1000), "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre")
+				suite.createPool(ctx, 1, vestedIBCDenom)
+				_, err := suite.rk.DelegateToPool(ctx,
+					sdk.NewInt64Coin(vestedIBCDenom, 1000),
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+				)
 				suite.Require().NoError(err)
 			},
 			request: types.NewQueryUserInsuranceFundsRequest(&query.PageRequest{
@@ -281,12 +286,13 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFunds() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			if tc.setup != nil {
-				tc.setup(suite.ctx)
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			resp, err := querier.UserInsuranceFunds(suite.ctx, tc.request)
+			resp, err := querier.UserInsuranceFunds(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
@@ -300,7 +306,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFunds() {
 func (suite *KeeperTestSuite) TestQuerier_UserRestakableAssets() {
 	testCases := []struct {
 		name       string
-		setup      func(ctx sdk.Context)
+		store      func(ctx sdk.Context)
 		shouldErr  bool
 		request    *types.QueryUserRestakableAssetsRequest
 		expBalance sdk.Coins
@@ -317,7 +323,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserRestakableAssets() {
 		},
 		{
 			name: "1% insurance fund",
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				suite.Assert().NoError(suite.k.SetParams(ctx, types.NewParams(
 					math.LegacyMustNewDecFromStr("1"), nil, nil,
 				)))
@@ -332,7 +338,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserRestakableAssets() {
 		},
 		{
 			name: "5% insurance fund",
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				suite.Assert().NoError(suite.k.SetParams(ctx, types.NewParams(
 					math.LegacyMustNewDecFromStr("5"), nil, nil,
 				)))
@@ -351,12 +357,13 @@ func (suite *KeeperTestSuite) TestQuerier_UserRestakableAssets() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			if tc.setup != nil {
-				tc.setup(suite.ctx)
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
 			}
 
 			querier := keeper.NewQuerier(suite.k)
-			resp, err := querier.UserRestakableAssets(suite.ctx, tc.request)
+			resp, err := querier.UserRestakableAssets(ctx, tc.request)
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {

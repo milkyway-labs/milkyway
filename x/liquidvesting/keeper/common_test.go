@@ -17,7 +17,6 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
-	"github.com/milkyway-labs/milkyway/x/liquidvesting"
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/keeper"
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/testutils"
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
@@ -46,21 +45,25 @@ type KeeperTestSuite struct {
 	ctx sdk.Context
 
 	liquidVestingModuleAddress sdk.AccAddress
-	ak                         authkeeper.AccountKeeper
-	bk                         *bankkeeper.Keeper
-	ibcm                       porttypes.IBCModule
-	ok                         *operatorskeeper.Keeper
-	pk                         *poolskeeper.Keeper
-	sk                         *serviceskeeper.Keeper
-	rk                         *restakingkeeper.Keeper
+
+	ak authkeeper.AccountKeeper
+	bk *bankkeeper.Keeper
+	ok *operatorskeeper.Keeper
+	pk *poolskeeper.Keeper
+	sk *serviceskeeper.Keeper
+	rk *restakingkeeper.Keeper
 
 	k *keeper.Keeper
+
+	ibcm porttypes.IBCModule
 }
 
 func (suite *KeeperTestSuite) SetupTest() {
 	data := testutils.NewKeeperTestData(suite.T())
 	suite.ctx = data.Context
 	suite.cdc = data.Cdc
+
+	suite.liquidVestingModuleAddress = authtypes.NewModuleAddress(types.ModuleName)
 
 	suite.ak = data.AccountKeeper
 	suite.bk = &data.BankKeeper
@@ -70,20 +73,13 @@ func (suite *KeeperTestSuite) SetupTest() {
 	suite.ok = data.OperatorsKeeper
 	suite.sk = data.ServicesKeeper
 	suite.rk = data.RestakingKeeper
-	suite.liquidVestingModuleAddress = authtypes.NewModuleAddress(types.ModuleName)
 	suite.k = data.Keeper
 
 	// Set bank hooks
 	suite.bk.AppendSendRestriction(suite.k.SendRestrictionFn)
 
 	// Setup IBC
-	var transferStack porttypes.IBCModule = mockIBCMiddleware{}
-	transferStack = liquidvesting.NewIBCMiddleware(transferStack, suite.k)
-	suite.ibcm = transferStack
-
-	account := suite.ak.GetModuleAccount(suite.ctx, types.ModuleName)
-	suite.Assert().NotNil(account)
-	suite.ak.SetModuleAccount(suite.ctx, account)
+	suite.ibcm = data.IBCMiddleware
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -100,34 +96,31 @@ func (suite *KeeperTestSuite) fundAccount(ctx sdk.Context, address string, amoun
 
 // mintVestedRepresentation mints the vested representation of the provided amount to
 // the user balance
-func (suite *KeeperTestSuite) mintVestedRepresentation(address string, amount sdk.Coins) {
+func (suite *KeeperTestSuite) mintVestedRepresentation(ctx sdk.Context, address string, amount sdk.Coins) {
 	accAddress, err := sdk.AccAddressFromBech32(address)
 	suite.Assert().NoError(err)
 
-	_, err = suite.k.MintVestedRepresentation(
-		suite.ctx, accAddress, amount,
-	)
+	_, err = suite.k.MintVestedRepresentation(ctx, accAddress, amount)
 	suite.Assert().NoError(err)
 }
 
 // fundAccountInsuranceFund add the given amount of coins to the account's insurance fund
 func (suite *KeeperTestSuite) fundAccountInsuranceFund(ctx sdk.Context, address string, amount sdk.Coins) {
 	// Mint the tokens in the insurance fund.
-	suite.Assert().NoError(suite.bk.MintCoins(suite.ctx, types.ModuleName, amount))
+	err := suite.bk.MintCoins(ctx, types.ModuleName, amount)
+	suite.Assert().NoError(err)
 
 	// Assign those tokens to the user insurance fund
 	userAddress, err := sdk.AccAddressFromBech32(address)
 	suite.Assert().NoError(err)
-	suite.Assert().NoError(suite.k.AddToUserInsuranceFund(
-		ctx,
-		userAddress,
-		amount,
-	))
+
+	err = suite.k.AddToUserInsuranceFund(ctx, userAddress, amount)
+	suite.Assert().NoError(err)
 }
 
 // createPool creates a test pool with the given id and denom
-func (suite *KeeperTestSuite) createPool(id uint32, denom string) {
-	err := suite.pk.SavePool(suite.ctx, poolstypes.Pool{
+func (suite *KeeperTestSuite) createPool(ctx sdk.Context, id uint32, denom string) {
+	err := suite.pk.SavePool(ctx, poolstypes.Pool{
 		ID:              id,
 		Denom:           denom,
 		Address:         poolstypes.GetPoolAddress(id).String(),
@@ -138,8 +131,8 @@ func (suite *KeeperTestSuite) createPool(id uint32, denom string) {
 }
 
 // createService creates a test service with the provided id
-func (suite *KeeperTestSuite) createService(id uint32) {
-	err := suite.sk.CreateService(suite.ctx, servicestypes.NewService(
+func (suite *KeeperTestSuite) createService(ctx sdk.Context, id uint32) {
+	err := suite.sk.CreateService(ctx, servicestypes.NewService(
 		id,
 		servicestypes.SERVICE_STATUS_ACTIVE,
 		fmt.Sprintf("test %d", id),
@@ -152,14 +145,16 @@ func (suite *KeeperTestSuite) createService(id uint32) {
 	suite.Assert().NoError(err)
 }
 
-func (suite *KeeperTestSuite) createOperator(id uint32) {
-	suite.Assert().NoError(suite.ok.RegisterOperator(suite.ctx, operatorstypes.NewOperator(
+func (suite *KeeperTestSuite) createOperator(ctx sdk.Context, id uint32) {
+	err := suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
 		id,
 		operatorstypes.OPERATOR_STATUS_ACTIVE,
 		fmt.Sprintf("operator-%d", id),
 		"",
 		"",
-		fmt.Sprintf("operator-%d-admin", id))))
+		fmt.Sprintf("operator-%d-admin", id),
+	))
+	suite.Assert().NoError(err)
 }
 
 // ---------------------------------------------

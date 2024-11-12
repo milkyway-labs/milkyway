@@ -108,6 +108,8 @@ func (suite *KeeperTestSuite) TestValidServicesInvariant() {
 	for _, tc := range testCases {
 		tc := tc
 		suite.Run(tc.name, func() {
+			suite.SetupTest()
+
 			ctx, _ := suite.ctx.CacheContext()
 			if tc.setup != nil {
 				tc.setup()

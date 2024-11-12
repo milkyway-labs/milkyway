@@ -24,23 +24,32 @@ func (suite *KeeperTestSuite) TestKeeper_AddToInsuranceFund() {
 
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
+			suite.SetupTest()
+
+			// Cache the context
+			ctx, _ := suite.ctx.CacheContext()
+
 			for address, amount := range tc.deposits {
 				// Mint the coins that should be in the module
-				suite.Assert().NoError(
-					suite.bk.MintCoins(suite.ctx, types.ModuleName, amount))
-				accAddress := sdk.MustAccAddressFromBech32(address)
-				suite.Assert().NoError(
-					suite.k.AddToUserInsuranceFund(suite.ctx, accAddress, amount))
+				err := suite.bk.MintCoins(ctx, types.ModuleName, amount)
+				suite.Assert().NoError(err)
+
+				accAddress, err := sdk.AccAddressFromBech32(address)
+				suite.Require().NoError(err)
+				err = suite.k.AddToUserInsuranceFund(ctx, accAddress, amount)
+				suite.Assert().NoError(err)
 			}
 
 			for address, expectedAmount := range tc.deposits {
-				accAddress := sdk.MustAccAddressFromBech32(address)
-				amount, err := suite.k.GetUserInsuranceFundBalance(suite.ctx, accAddress)
+				accAddress, err := sdk.AccAddressFromBech32(address)
+				suite.Require().NoError(err)
+
+				amount, err := suite.k.GetUserInsuranceFundBalance(ctx, accAddress)
 				suite.Assert().NoError(err)
 				suite.Assert().Equal(expectedAmount, amount)
 			}
 
-			balance, err := suite.k.GetInsuranceFundBalance(suite.ctx)
+			balance, err := suite.k.GetInsuranceFundBalance(ctx)
 			suite.Assert().NoError(err)
 			suite.Assert().Equal(tc.expectedTotalAmount, balance)
 		})
@@ -52,7 +61,7 @@ func (suite *KeeperTestSuite) TestKeeper_WithdrawFromInsuranceFund() {
 		name      string
 		from      string
 		amount    sdk.Coins
-		setup     func()
+		store     func(ctx sdk.Context)
 		shouldErr bool
 	}{
 		{
@@ -62,8 +71,8 @@ func (suite *KeeperTestSuite) TestKeeper_WithdrawFromInsuranceFund() {
 				sdk.NewInt64Coin("stake", 100),
 				sdk.NewInt64Coin("stake2", 50),
 			),
-			setup: func() {
-				suite.fundAccountInsuranceFund(suite.ctx,
+			store: func(ctx sdk.Context) {
+				suite.fundAccountInsuranceFund(ctx,
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					sdk.NewCoins(
 						sdk.NewInt64Coin("stake", 50),
@@ -79,13 +88,14 @@ func (suite *KeeperTestSuite) TestKeeper_WithdrawFromInsuranceFund() {
 				sdk.NewInt64Coin("stake", 200),
 				sdk.NewInt64Coin("stake2", 100),
 			),
-			setup: func() {
-				suite.fundAccountInsuranceFund(suite.ctx,
+			store: func(ctx sdk.Context) {
+				suite.fundAccountInsuranceFund(ctx,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewCoins(
 						sdk.NewInt64Coin("stake", 200),
 						sdk.NewInt64Coin("stake2", 100),
-					))
+					),
+				)
 			},
 			shouldErr: false,
 		},
@@ -94,9 +104,16 @@ func (suite *KeeperTestSuite) TestKeeper_WithdrawFromInsuranceFund() {
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
-			tc.setup()
-			accAddr := sdk.MustAccAddressFromBech32(tc.from)
-			err := suite.k.WithdrawFromUserInsuranceFund(suite.ctx, accAddr, tc.amount)
+
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			userAddr, err := sdk.AccAddressFromBech32(tc.from)
+			suite.Require().NoError(err)
+
+			err = suite.k.WithdrawFromUserInsuranceFund(ctx, userAddr, tc.amount)
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {

@@ -215,6 +215,9 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
+			// Cache the context
+			ctx, _ := suite.ctx.CacheContext()
+
 			// Build the data to be put inside the packet
 			dataBz, err := json.Marshal(&transfertypes.FungibleTokenPacketData{
 				Denom:    tc.transferAmount.Denom,
@@ -229,7 +232,7 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			packet := channeltypes.Packet{Data: dataBz}
 
 			// Receive the packet
-			ack := suite.ibcm.OnRecvPacket(suite.ctx, packet, suite.ak.GetModuleAddress("relayer"))
+			ack := suite.ibcm.OnRecvPacket(ctx, packet, suite.ak.GetModuleAddress("relayer"))
 			ack.Acknowledgement()
 
 			if tc.shouldErr {
@@ -243,7 +246,7 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			}
 
 			if tc.check != nil {
-				tc.check(suite.ctx)
+				tc.check(ctx)
 			}
 		})
 	}

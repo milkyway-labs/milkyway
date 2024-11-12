@@ -112,6 +112,7 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		data.LiquidVestingModuleAddress.String(),
 		data.AuthorityAddress,
 	)
+
 	// Set bank hooks
 	data.BankKeeper.AppendSendRestriction(data.Keeper.SendRestrictionFn)
 

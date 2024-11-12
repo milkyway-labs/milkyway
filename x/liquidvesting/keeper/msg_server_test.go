@@ -10,12 +10,9 @@ import (
 )
 
 func (suite *KeeperTestSuite) TestMsgServer_MintVestedRepresentation() {
-	burnerAccount := "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"
-	minterAccount := "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"
-	testAccount := "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn"
-
 	testCases := []struct {
 		name      string
+		store     func(ctx sdk.Context)
 		msg       *types.MsgMintVestedRepresentation
 		shouldErr bool
 		expEvents sdk.Events
@@ -23,31 +20,67 @@ func (suite *KeeperTestSuite) TestMsgServer_MintVestedRepresentation() {
 	}{
 		{
 			name: "burner can't mint",
-			msg: types.NewMsgMintVestedRepresentation(burnerAccount, testAccount,
-				sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000))),
+			store: func(ctx sdk.Context) {
+				// Store the params
+				err := suite.k.SetParams(ctx, types.NewParams(
+					math.LegacyMustNewDecFromStr("2.0"),
+					[]string{"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"},
+					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
+				))
+				suite.Assert().NoError(err)
+			},
+			msg: types.NewMsgMintVestedRepresentation(
+				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+				sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
+			),
 			shouldErr: true,
 		},
 		{
 			name: "can't mint vested representation of vested representation coin",
-			msg: types.NewMsgMintVestedRepresentation(minterAccount, testAccount,
-				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 1000))),
+			store: func(ctx sdk.Context) {
+				// Store the params
+				err := suite.k.SetParams(ctx, types.NewParams(
+					math.LegacyMustNewDecFromStr("2.0"),
+					[]string{"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"},
+					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
+				))
+				suite.Assert().NoError(err)
+			},
+			msg: types.NewMsgMintVestedRepresentation(
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 1000)),
+			),
 			shouldErr: true,
 		},
 		{
 			name: "mint properly",
-			msg: types.NewMsgMintVestedRepresentation(minterAccount, testAccount,
-				sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000))),
+			store: func(ctx sdk.Context) {
+				// Store the params
+				err := suite.k.SetParams(ctx, types.NewParams(
+					math.LegacyMustNewDecFromStr("2.0"),
+					[]string{"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"},
+					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
+				))
+				suite.Assert().NoError(err)
+			},
+			msg: types.NewMsgMintVestedRepresentation(
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+				sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
+			),
 			shouldErr: false,
 			expEvents: sdk.Events{
 				sdk.NewEvent(
 					types.EventTypeMintVestedRepresentation,
-					sdk.NewAttribute(sdk.AttributeKeySender, minterAccount),
+					sdk.NewAttribute(sdk.AttributeKeySender, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
 					sdk.NewAttribute(sdk.AttributeKeyAmount, "1000"+vestedIBCDenom),
-					sdk.NewAttribute(types.AttributeKeyReceiver, testAccount),
+					sdk.NewAttribute(types.AttributeKeyReceiver, "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn"),
 				),
 			},
 			check: func(ctx sdk.Context) {
-				balances := suite.bk.GetAllBalances(ctx, sdk.MustAccAddressFromBech32(testAccount))
+				balances := suite.bk.GetAllBalances(ctx, sdk.MustAccAddressFromBech32("cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn"))
 				suite.Assert().Equal(
 					sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 1000)),
 					balances,
@@ -60,24 +93,24 @@ func (suite *KeeperTestSuite) TestMsgServer_MintVestedRepresentation() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			suite.Assert().NoError(suite.k.SetParams(suite.ctx, types.NewParams(
-				math.LegacyMustNewDecFromStr("2.0"),
-				[]string{burnerAccount},
-				[]string{minterAccount},
-			)))
+			// Cache the context
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
 
 			msgServer := keeper.NewMsgServer(suite.k)
-			_, err := msgServer.MintVestedRepresentation(suite.ctx, tc.msg)
+			_, err := msgServer.MintVestedRepresentation(ctx, tc.msg)
 
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
 				suite.Assert().NoError(err)
 				for _, event := range tc.expEvents {
-					suite.Require().Contains(suite.ctx.EventManager().Events(), event)
+					suite.Require().Contains(ctx.EventManager().Events(), event)
 				}
 				if tc.check != nil {
-					tc.check(suite.ctx)
+					tc.check(ctx)
 				}
 			}
 		})
@@ -85,13 +118,9 @@ func (suite *KeeperTestSuite) TestMsgServer_MintVestedRepresentation() {
 }
 
 func (suite *KeeperTestSuite) TestMsgServer_BurnVestedRepresentation() {
-	burnerAccount := "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"
-	minterAccount := "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"
-	testAccount := "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn"
-
 	testCases := []struct {
 		name      string
-		setup     func(ctx sdk.Context)
+		store     func(ctx sdk.Context)
 		msg       *types.MsgBurnVestedRepresentation
 		shouldErr bool
 		expEvents sdk.Events
@@ -99,49 +128,88 @@ func (suite *KeeperTestSuite) TestMsgServer_BurnVestedRepresentation() {
 	}{
 		{
 			name: "minter can't burn",
-			msg: types.NewMsgBurnVestedRepresentation(minterAccount, testAccount,
-				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 1000))),
-			setup: func(ctx sdk.Context) {
-				suite.mintVestedRepresentation(testAccount,
-					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)))
+			store: func(ctx sdk.Context) {
+				err := suite.k.SetParams(ctx, types.NewParams(
+					math.LegacyMustNewDecFromStr("2.0"),
+					[]string{"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"},
+					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
+				))
+				suite.Assert().NoError(err)
+
+				suite.mintVestedRepresentation(ctx,
+					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
+				)
 			},
+			msg: types.NewMsgBurnVestedRepresentation(
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 1000)),
+			),
+
 			shouldErr: true,
 		},
 		{
 			name: "can't burn normal coins",
-			msg: types.NewMsgBurnVestedRepresentation(burnerAccount, testAccount,
-				sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000))),
-			setup: func(ctx sdk.Context) {
-				suite.fundAccount(ctx, testAccount,
-					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)))
-				suite.mintVestedRepresentation(testAccount,
-					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)))
+			store: func(ctx sdk.Context) {
+				err := suite.k.SetParams(ctx, types.NewParams(
+					math.LegacyMustNewDecFromStr("2.0"),
+					[]string{"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"},
+					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
+				))
+				suite.Assert().NoError(err)
+
+				suite.fundAccount(ctx,
+					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
+				)
+				suite.mintVestedRepresentation(ctx,
+					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
+				)
 			},
+			msg: types.NewMsgBurnVestedRepresentation(
+				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+				sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
+			),
 			shouldErr: true,
 		},
 		{
 			name: "burn properly",
-			msg: types.NewMsgBurnVestedRepresentation(burnerAccount, testAccount,
-				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 1000))),
-			shouldErr: false,
-			setup: func(ctx sdk.Context) {
-				suite.mintVestedRepresentation(testAccount,
-					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)))
+			store: func(ctx sdk.Context) {
+				err := suite.k.SetParams(ctx, types.NewParams(
+					math.LegacyMustNewDecFromStr("2.0"),
+					[]string{"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"},
+					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
+				))
+				suite.Assert().NoError(err)
+
+				suite.mintVestedRepresentation(ctx,
+					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
+				)
 			},
+			msg: types.NewMsgBurnVestedRepresentation(
+				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 1000)),
+			),
+			shouldErr: false,
 			expEvents: sdk.Events{
 				sdk.NewEvent(
 					types.EventTypeBurnVestedRepresentation,
-					sdk.NewAttribute(sdk.AttributeKeySender, burnerAccount),
+					sdk.NewAttribute(sdk.AttributeKeySender, "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"),
 					sdk.NewAttribute(sdk.AttributeKeyAmount, "1000"+vestedIBCDenom),
-					sdk.NewAttribute(types.AttributeKeyUser, testAccount),
+					sdk.NewAttribute(types.AttributeKeyUser, "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn"),
 				),
 			},
 			check: func(ctx sdk.Context) {
-				balances := suite.bk.GetAllBalances(ctx, sdk.MustAccAddressFromBech32(testAccount))
-				suite.Assert().Equal(
-					sdk.NewCoins(),
-					balances,
-				)
+				userAddr, err := sdk.AccAddressFromBech32("cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn")
+				suite.Require().NoError(err)
+
+				userBalance := suite.bk.GetAllBalances(ctx, userAddr)
+				suite.Assert().Empty(userBalance)
 			},
 		},
 	}
@@ -150,28 +218,27 @@ func (suite *KeeperTestSuite) TestMsgServer_BurnVestedRepresentation() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			suite.Assert().NoError(suite.k.SetParams(suite.ctx, types.NewParams(
-				math.LegacyMustNewDecFromStr("2.0"),
-				[]string{burnerAccount},
-				[]string{minterAccount},
-			)))
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
 
-			if tc.setup != nil {
-				tc.setup(suite.ctx)
+			if tc.store != nil {
+				tc.store(ctx)
 			}
 
 			msgServer := keeper.NewMsgServer(suite.k)
-			_, err := msgServer.BurnVestedRepresentation(suite.ctx, tc.msg)
+			_, err := msgServer.BurnVestedRepresentation(ctx, tc.msg)
 
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
 				suite.Assert().NoError(err)
 				for _, event := range tc.expEvents {
-					suite.Require().Contains(suite.ctx.EventManager().Events(), event)
+					suite.Require().Contains(ctx.EventManager().Events(), event)
 				}
 				if tc.check != nil {
-					tc.check(suite.ctx)
+					tc.check(ctx)
 				}
 			}
 		})
@@ -179,57 +246,79 @@ func (suite *KeeperTestSuite) TestMsgServer_BurnVestedRepresentation() {
 }
 
 func (suite *KeeperTestSuite) TestMsgServer_WithdrawInsuranceFund() {
-	testAccount := "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn"
-
 	testCases := []struct {
 		name      string
-		setup     func(ctx sdk.Context)
+		store     func(ctx sdk.Context)
 		msg       *types.MsgWithdrawInsuranceFund
 		shouldErr bool
 		check     func(ctx sdk.Context)
 		expEvents sdk.Events
 	}{
 		{
-			name:      "can't withdraw without deposits",
-			msg:       types.NewMsgWithdrawInsuranceFund(testAccount, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100))),
+			name: "can't withdraw without deposits",
+			msg: types.NewMsgWithdrawInsuranceFund(
+				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+				sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)),
+			),
 			shouldErr: true,
 		},
 		{
 			name: "can't withdraw more then deposited",
-			setup: func(ctx sdk.Context) {
-				suite.fundAccountInsuranceFund(ctx, testAccount, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)))
+			store: func(ctx sdk.Context) {
+				suite.fundAccountInsuranceFund(ctx, "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn", sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)))
 			},
-			msg:       types.NewMsgWithdrawInsuranceFund(testAccount, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100))),
+			msg:       types.NewMsgWithdrawInsuranceFund("cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn", sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100))),
 			shouldErr: true,
 		},
 		{
 			name: "can't withdraw more then available",
-			setup: func(ctx sdk.Context) {
-				suite.fundAccountInsuranceFund(ctx, testAccount, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)))
+			store: func(ctx sdk.Context) {
+				suite.fundAccountInsuranceFund(ctx,
+					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)),
+				)
+
 				// Delegate to pool to simulate insurance fund utilization
-				suite.mintVestedRepresentation(testAccount, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)))
-				suite.createPool(1, vestedIBCDenom)
-				_, err := suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedIBCDenom, 500), testAccount)
+				suite.mintVestedRepresentation(ctx,
+					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
+				)
+
+				suite.createPool(ctx, 1, vestedIBCDenom)
+
+				_, err := suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedIBCDenom, 500), "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn")
 				suite.Assert().NoError(err)
 			},
-			msg:       types.NewMsgWithdrawInsuranceFund(testAccount, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10))),
+			msg: types.NewMsgWithdrawInsuranceFund(
+				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+				sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)),
+			),
 			shouldErr: true,
 		},
 		{
 			name: "withdraw correctly",
-			setup: func(ctx sdk.Context) {
-				suite.fundAccountInsuranceFund(ctx, testAccount, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)))
+			store: func(ctx sdk.Context) {
+				suite.fundAccountInsuranceFund(ctx,
+					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)),
+				)
 			},
-			msg:       types.NewMsgWithdrawInsuranceFund(testAccount, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10))),
+			msg: types.NewMsgWithdrawInsuranceFund(
+				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+				sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)),
+			),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				balances := suite.bk.GetAllBalances(ctx, sdk.MustAccAddressFromBech32(testAccount))
+				userAddr, err := sdk.AccAddressFromBech32("cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn")
+				suite.Require().NoError(err)
+
+				balances := suite.bk.GetAllBalances(ctx, userAddr)
 				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)), balances)
 			},
 			expEvents: sdk.Events{
 				sdk.NewEvent(
 					types.EventTypeWithdrawInsuranceFund,
-					sdk.NewAttribute(sdk.AttributeKeySender, testAccount),
+					sdk.NewAttribute(sdk.AttributeKeySender, "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn"),
 					sdk.NewAttribute(sdk.AttributeKeyAmount, "10"+IBCDenom),
 				),
 			},
@@ -240,21 +329,25 @@ func (suite *KeeperTestSuite) TestMsgServer_WithdrawInsuranceFund() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			if tc.setup != nil {
-				tc.setup(suite.ctx)
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
 			}
 
 			msgServer := keeper.NewMsgServer(suite.k)
-			_, err := msgServer.WithdrawInsuranceFund(suite.ctx, tc.msg)
+			_, err := msgServer.WithdrawInsuranceFund(ctx, tc.msg)
 
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
 				suite.Assert().NoError(err)
-				tc.check(suite.ctx)
 				for _, event := range tc.expEvents {
-					suite.Require().Contains(suite.ctx.EventManager().Events(), event)
+					suite.Require().Contains(ctx.EventManager().Events(), event)
 				}
+			}
+
+			if tc.check != nil {
+				tc.check(ctx)
 			}
 		})
 	}
@@ -297,22 +390,23 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateParams() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.setup != nil {
-				tc.setup(suite.ctx)
+				tc.setup(ctx)
 			}
 
 			msgServer := keeper.NewMsgServer(suite.k)
-			_, err := msgServer.UpdateParams(suite.ctx, tc.msg)
+			_, err := msgServer.UpdateParams(ctx, tc.msg)
 
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
 				suite.Assert().NoError(err)
 				for _, event := range tc.expEvents {
-					suite.Require().Contains(suite.ctx.EventManager().Events(), event)
+					suite.Require().Contains(ctx.EventManager().Events(), event)
 				}
 				if tc.check != nil {
-					tc.check(suite.ctx)
+					tc.check(ctx)
 				}
 			}
 		})
