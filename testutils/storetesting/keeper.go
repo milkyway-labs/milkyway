@@ -35,6 +35,12 @@ type BaseKeeperTestData struct {
 func NewBaseKeeperTestData(t *testing.T, keys []string) BaseKeeperTestData {
 	t.Helper()
 
+	// Set the Cosmos SDK configuration to use another Bech32 prefix
+	config := sdk.GetConfig()
+	config.SetBech32PrefixForAccount("cosmos", "cosmospub")
+	config.SetBech32PrefixForValidator("cosmosvaloper", "cosmosvaloperpub")
+	config.SetBech32PrefixForConsensusNode("cosmosvalcons", "cosmosvalconspub")
+
 	var data BaseKeeperTestData
 
 	// Define store keys

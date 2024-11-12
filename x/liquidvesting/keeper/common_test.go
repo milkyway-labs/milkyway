@@ -5,44 +5,27 @@ import (
 	"testing"
 
 	sdkmath "cosmossdk.io/math"
-	distributiontypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	"github.com/cosmos/cosmos-sdk/codec"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	capabilitytypes "github.com/cosmos/ibc-go/modules/capability/types"
 	clienttypes "github.com/cosmos/ibc-go/v8/modules/core/02-client/types"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 	porttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
-	ibchookskeeper "github.com/initia-labs/initia/x/ibc-hooks/keeper"
-	ibchookstypes "github.com/initia-labs/initia/x/ibc-hooks/types"
-
-	"cosmossdk.io/log"
-	"cosmossdk.io/store"
-	"cosmossdk.io/store/metrics"
-	storetypes "cosmossdk.io/store/types"
-	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
-	db "github.com/cosmos/cosmos-db"
-	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/runtime"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	authcodec "github.com/cosmos/cosmos-sdk/x/auth/codec"
-	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/stretchr/testify/suite"
 
-	milkyway "github.com/milkyway-labs/milkyway/app"
-	appkeepers "github.com/milkyway-labs/milkyway/app/keepers"
 	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
 	"github.com/milkyway-labs/milkyway/x/liquidvesting"
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/keeper"
+	"github.com/milkyway-labs/milkyway/x/liquidvesting/testutils"
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 	operatorskeeper "github.com/milkyway-labs/milkyway/x/operators/keeper"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	poolskeeper "github.com/milkyway-labs/milkyway/x/pools/keeper"
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	restakingkeeper "github.com/milkyway-labs/milkyway/x/restaking/keeper"
-	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 	serviceskeeper "github.com/milkyway-labs/milkyway/x/services/keeper"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
@@ -59,14 +42,12 @@ func TestKeeperTestSuite(t *testing.T) {
 type KeeperTestSuite struct {
 	suite.Suite
 
-	cdc            codec.Codec
-	legacyAminoCdc *codec.LegacyAmino
-	ctx            sdk.Context
+	cdc codec.Codec
+	ctx sdk.Context
 
 	liquidVestingModuleAddress sdk.AccAddress
 	ak                         authkeeper.AccountKeeper
 	bk                         *bankkeeper.Keeper
-	ibck                       *ibchookskeeper.Keeper
 	ibcm                       porttypes.IBCModule
 	ok                         *operatorskeeper.Keeper
 	pk                         *poolskeeper.Keeper
@@ -77,120 +58,25 @@ type KeeperTestSuite struct {
 }
 
 func (suite *KeeperTestSuite) SetupTest() {
-	// Define store keys
-	keys := storetypes.NewKVStoreKeys(
-		types.StoreKey, authtypes.StoreKey, banktypes.StoreKey,
-		operatorstypes.StoreKey, poolstypes.StoreKey, servicestypes.StoreKey,
-		restakingtypes.StoreKey, stakingtypes.StoreKey,
-		distributiontypes.StoreKey, ibchookstypes.StoreKey,
-	)
+	data := testutils.NewKeeperTestData(suite.T())
+	suite.ctx = data.Context
+	suite.cdc = data.Cdc
 
-	// Create logger
-	logger := log.NewNopLogger()
+	suite.ak = data.AccountKeeper
+	suite.bk = &data.BankKeeper
+	suite.ibcm = data.IBCMiddleware
+	suite.pk = data.PoolsKeeper
 
-	// Create an in-memory db
-	memDB := db.NewMemDB()
-	ms := store.NewCommitMultiStore(memDB, logger, metrics.NewNoOpMetrics())
-	for _, key := range keys {
-		ms.MountStoreWithDB(key, storetypes.StoreTypeIAVL, memDB)
-	}
-
-	if err := ms.LoadLatestVersion(); err != nil {
-		panic(err)
-	}
-
-	suite.ctx = sdk.NewContext(ms, tmproto.Header{ChainID: "test-chain"}, false, log.NewNopLogger())
-	suite.cdc, suite.legacyAminoCdc = milkyway.MakeCodecs()
-
-	ac := authcodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix())
-
-	// Authority address
-	authorityAddr := authtypes.NewModuleAddress(govtypes.ModuleName).String()
-
-	// Build keepers
-	suite.ak = authkeeper.NewAccountKeeper(
-		suite.cdc,
-		runtime.NewKVStoreService(keys[authtypes.StoreKey]),
-		authtypes.ProtoBaseAccount,
-		milkyway.MaccPerms,
-		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix()),
-		sdk.GetConfig().GetBech32AccountAddrPrefix(),
-		authorityAddr,
-	)
-	bk := bankkeeper.NewKeeper(
-		suite.cdc,
-		runtime.NewKVStoreService(keys[banktypes.StoreKey]),
-		suite.ak,
-		nil,
-		authorityAddr,
-		logger,
-	)
-	suite.bk = &bk
-	suite.ibck = ibchookskeeper.NewKeeper(
-		suite.cdc,
-		runtime.NewKVStoreService(keys[ibchookstypes.StoreKey]),
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
-		ac,
-	)
-	if err := suite.ibck.Params.Set(suite.ctx, ibchookstypes.DefaultParams()); err != nil {
-		panic(err)
-	}
-
-	suite.pk = poolskeeper.NewKeeper(
-		suite.cdc,
-		keys[poolstypes.StoreKey],
-		runtime.NewKVStoreService(keys[poolstypes.StoreKey]),
-		suite.ak,
-	)
-	communityPoolKeeper := appkeepers.NewCommunityPoolKeeper(
-		suite.bk,
-		authtypes.FeeCollectorName,
-	)
-	suite.ok = operatorskeeper.NewKeeper(
-		suite.cdc,
-		keys[operatorstypes.StoreKey],
-		runtime.NewKVStoreService(keys[operatorstypes.StoreKey]),
-		suite.ak,
-		communityPoolKeeper,
-		authorityAddr,
-	)
-	suite.sk = serviceskeeper.NewKeeper(
-		suite.cdc,
-		keys[servicestypes.StoreKey],
-		runtime.NewKVStoreService(keys[servicestypes.StoreKey]),
-		suite.ak,
-		communityPoolKeeper,
-		authorityAddr,
-	)
-	suite.rk = restakingkeeper.NewKeeper(
-		suite.cdc,
-		keys[restakingtypes.StoreKey],
-		runtime.NewKVStoreService(keys[restakingtypes.StoreKey]),
-		suite.ak,
-		suite.bk,
-		suite.pk,
-		suite.ok,
-		suite.sk,
-		authorityAddr,
-	)
+	suite.ok = data.OperatorsKeeper
+	suite.sk = data.ServicesKeeper
+	suite.rk = data.RestakingKeeper
 	suite.liquidVestingModuleAddress = authtypes.NewModuleAddress(types.ModuleName)
-	suite.k = keeper.NewKeeper(
-		suite.cdc,
-		keys[types.StoreKey],
-		runtime.NewKVStoreService(keys[types.StoreKey]),
-		suite.ak,
-		suite.bk,
-		suite.ok,
-		suite.pk,
-		suite.sk,
-		suite.rk,
-		suite.liquidVestingModuleAddress.String(),
-		authorityAddr,
-	)
+	suite.k = data.Keeper
+
 	// Set bank hooks
 	suite.bk.AppendSendRestriction(suite.k.SendRestrictionFn)
 
-	// Set ibc hooks
+	// Setup IBC
 	var transferStack porttypes.IBCModule = mockIBCMiddleware{}
 	transferStack = liquidvesting.NewIBCMiddleware(transferStack, suite.k)
 	suite.ibcm = transferStack
@@ -205,10 +91,11 @@ func (suite *KeeperTestSuite) SetupTest() {
 // fundAccount add the given amount of coins to the account's balance
 func (suite *KeeperTestSuite) fundAccount(ctx sdk.Context, address string, amount sdk.Coins) {
 	// Mint the tokens in the insurance fund.
-	suite.Assert().NoError(suite.bk.MintCoins(ctx, types.ModuleName, amount))
+	err := suite.bk.MintCoins(ctx, types.ModuleName, amount)
+	suite.Assert().NoError(err)
 
-	suite.Assert().NoError(suite.bk.SendCoinsFromModuleToAccount(
-		ctx, types.ModuleName, sdk.MustAccAddressFromBech32(address), amount))
+	err = suite.bk.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(address), amount)
+	suite.Assert().NoError(err)
 }
 
 // mintVestedRepresentation mints the vested representation of the provided amount to
