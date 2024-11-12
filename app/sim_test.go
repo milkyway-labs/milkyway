@@ -7,6 +7,7 @@ import (
 	"os"
 	"testing"
 
+	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	"github.com/stretchr/testify/require"
 
 	dbm "github.com/cosmos/cosmos-db"
@@ -98,7 +99,7 @@ func TestAppStateDeterminism(t *testing.T) {
 				map[int64]bool{},
 				dir,
 				appOptions,
-				emptyWasmOption,
+				[]wasmkeeper.Option{},
 				interBlockCacheOpt(),
 				baseapp.SetChainID(AppChainID),
 			)
@@ -116,7 +117,7 @@ func TestAppStateDeterminism(t *testing.T) {
 				config.Seed, i+1, numSeeds, j+1, numTimesToRunPerSeed,
 			)
 
-			blockedAddresses := app.BlockedModuleAccountAddrs(app.ModuleAccountAddrs())
+			blockedAddresses := milkyway.BlockedModuleAccountAddrs(milkyway.ModuleAccountAddrs())
 
 			_, _, err = simulation.SimulateFromSeed(
 				t,

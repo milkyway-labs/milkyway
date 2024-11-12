@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"time"
 
+	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	"github.com/stretchr/testify/suite"
 
 	"cosmossdk.io/math"
 	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	connecttypes "github.com/skip-mev/connect/v2/pkg/types"
 	marketmaptypes "github.com/skip-mev/connect/v2/x/marketmap/types"
 	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
@@ -45,9 +45,9 @@ func (suite *KeeperTestSuite) SetupTest() {
 
 // FundAccount adds the given amount of coins to the account with the given address
 func (suite *KeeperTestSuite) FundAccount(ctx sdk.Context, addr string, amt sdk.Coins) {
-	// Mint the coins
-	moduleAcc := suite.App.AccountKeeper.GetModuleAccount(ctx, authtypes.Minter)
+	moduleAcc := suite.App.AccountKeeper.GetModuleAccount(ctx, minttypes.ModuleName)
 
+	// Mint the coins
 	err := suite.App.BankKeeper.MintCoins(ctx, moduleAcc.GetName(), amt)
 	suite.Require().NoError(err)
 

@@ -14,7 +14,7 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
-	"github.com/milkyway-labs/milkyway/app"
+	milkyway "github.com/milkyway-labs/milkyway/app"
 	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
 )
 
@@ -44,7 +44,7 @@ func NewBaseKeeperTestData(t *testing.T, keys []string) BaseKeeperTestData {
 	data.Context = BuildContext(data.Keys, nil, nil)
 
 	// Setup the codecs
-	data.Cdc, data.LegacyAmino = app.MakeCodecs()
+	data.Cdc, data.LegacyAmino = milkyway.MakeCodecs()
 
 	// Authority address
 	data.AuthorityAddress = authtypes.NewModuleAddress(govtypes.ModuleName).String()
@@ -54,7 +54,7 @@ func NewBaseKeeperTestData(t *testing.T, keys []string) BaseKeeperTestData {
 		data.Cdc,
 		runtime.NewKVStoreService(data.Keys[authtypes.StoreKey]),
 		authtypes.ProtoBaseAccount,
-		app.GetMaccPerms(),
+		milkyway.MaccPerms,
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix()),
 		sdk.GetConfig().GetBech32AccountAddrPrefix(),
 		data.AuthorityAddress,
@@ -63,7 +63,7 @@ func NewBaseKeeperTestData(t *testing.T, keys []string) BaseKeeperTestData {
 		data.Cdc,
 		runtime.NewKVStoreService(data.Keys[banktypes.StoreKey]),
 		data.AccountKeeper,
-		app.BlacklistedModuleAccountAddrs(),
+		milkyway.BlockedModuleAccountAddrs(milkyway.ModuleAccountAddrs()),
 		data.AuthorityAddress,
 		log.NewNopLogger(),
 	)

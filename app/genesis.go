@@ -1,9 +1,10 @@
 package milkyway
 
 import (
-	sdkmath "cosmossdk.io/math"
 	"encoding/json"
-	abci "github.com/cometbft/cometbft/abci/types"
+	"time"
+
+	sdkmath "cosmossdk.io/math"
 	"github.com/cometbft/cometbft/crypto/secp256k1"
 	tmtypes "github.com/cometbft/cometbft/types"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -13,7 +14,6 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	"time"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/types/module"
@@ -117,7 +117,7 @@ func NewDefaultGenesisStateWithValidator(cdc codec.Codec, mbm module.BasicManage
 	acc := authtypes.NewBaseAccountWithAddress(senderPrivKey.PubKey().Address().Bytes())
 
 	//////////////////////
-	balances := []banktypes.Balance{}
+	var balances []banktypes.Balance
 	genesisState := NewDefaultGenesisState(cdc, mbm)
 	genAccs := []authtypes.GenesisAccount{acc}
 	authGenesis := authtypes.NewGenesisState(authtypes.DefaultParams(), genAccs)
@@ -127,7 +127,6 @@ func NewDefaultGenesisStateWithValidator(cdc codec.Codec, mbm module.BasicManage
 	delegations := make([]stakingtypes.Delegation, 0, len(valSet.Validators))
 
 	bondAmt := sdk.DefaultPowerReduction
-	initValPowers := []abci.ValidatorUpdate{}
 
 	for _, val := range valSet.Validators {
 		pk, _ := cryptocodec.FromCmtPubKeyInterface(val.PubKey)
@@ -147,13 +146,6 @@ func NewDefaultGenesisStateWithValidator(cdc codec.Codec, mbm module.BasicManage
 		}
 		validators = append(validators, validator)
 		delegations = append(delegations, stakingtypes.NewDelegation(genAccs[0].GetAddress().String(), sdk.ValAddress(val.Address).String(), sdkmath.LegacyNewDec(1)))
-
-		// add initial validator powers so consumer InitGenesis runs correctly
-		pub, _ := val.ToProto()
-		initValPowers = append(initValPowers, abci.ValidatorUpdate{
-			Power:  val.VotingPower,
-			PubKey: pub.PubKey,
-		})
 	}
 	// set validators and delegations
 	stakingGenesis := stakingtypes.NewGenesisState(stakingtypes.DefaultParams(), validators, delegations)

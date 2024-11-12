@@ -43,7 +43,7 @@ type KeeperTestData struct {
 	Hooks  *MockHooks
 }
 
-func SetupKeeperTest(t *testing.T) KeeperTestData {
+func NewKeeperTestData(t *testing.T) KeeperTestData {
 	var data KeeperTestData
 
 	// Define store keys

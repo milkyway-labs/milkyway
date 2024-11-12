@@ -3,7 +3,7 @@ package keeper
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	v2 "github.com/milkyway-labs/milkyway/x/restaking/migrations/v2"
+	v2 "github.com/milkyway-labs/milkyway/x/restaking/legacy/v2"
 )
 
 type Migrator struct {

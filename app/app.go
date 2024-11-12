@@ -172,7 +172,7 @@ func NewMilkyWayApp(
 		invCheckPeriod:    invCheckPeriod,
 	}
 
-	moduleAccountAddresses := app.ModuleAccountAddrs()
+	moduleAccountAddresses := ModuleAccountAddrs()
 
 	// Setup keepers
 	app.AppKeepers = keepers.NewAppKeeper(
@@ -181,7 +181,7 @@ func NewMilkyWayApp(
 		legacyAmino,
 		MaccPerms,
 		moduleAccountAddresses,
-		app.BlockedModuleAccountAddrs(moduleAccountAddresses),
+		BlockedModuleAccountAddrs(moduleAccountAddresses),
 		skipUpgradeHeights,
 		homePath,
 		invCheckPeriod,
@@ -395,7 +395,7 @@ func (app *MilkyWayApp) LoadHeight(height int64) error {
 }
 
 // ModuleAccountAddrs returns all the app's module account addresses.
-func (app *MilkyWayApp) ModuleAccountAddrs() map[string]bool {
+func ModuleAccountAddrs() map[string]bool {
 	modAccAddrs := make(map[string]bool)
 	for acc := range MaccPerms {
 		modAccAddrs[authtypes.NewModuleAddress(acc).String()] = true
@@ -406,7 +406,7 @@ func (app *MilkyWayApp) ModuleAccountAddrs() map[string]bool {
 
 // BlockedModuleAccountAddrs returns all the app's blocked module account
 // addresses.
-func (app *MilkyWayApp) BlockedModuleAccountAddrs(modAccAddrs map[string]bool) map[string]bool {
+func BlockedModuleAccountAddrs(modAccAddrs map[string]bool) map[string]bool {
 	// remove module accounts that are ALLOWED to received funds
 	delete(modAccAddrs, authtypes.NewModuleAddress(govtypes.ModuleName).String())
 
