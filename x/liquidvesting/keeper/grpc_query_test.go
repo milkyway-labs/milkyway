@@ -130,12 +130,18 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFund() {
 				// Add other tokens
 				suite.fundAccountInsuranceFund(ctx,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000), sdk.NewInt64Coin("stake", 1000)),
+					sdk.NewCoins(
+						sdk.NewInt64Coin(IBCDenom, 1000),
+						sdk.NewInt64Coin("stake", 1000),
+					),
 				)
 
 				// Delegate to the pool
 				suite.createPool(ctx, 1, vestedIBCDenom)
-				_, err := suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedIBCDenom, 1000), "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre")
+				_, err := suite.rk.DelegateToPool(ctx,
+					sdk.NewInt64Coin(vestedIBCDenom, 1000),
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+				)
 				suite.Require().NoError(err)
 			},
 			request:   types.NewQueryUserInsuranceFundRequest("cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"),
@@ -283,6 +289,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFunds() {
 	}
 
 	for _, tc := range testCases {
+		tc := tc
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 

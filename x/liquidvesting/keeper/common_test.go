@@ -75,9 +75,6 @@ func (suite *KeeperTestSuite) SetupTest() {
 	suite.rk = data.RestakingKeeper
 	suite.k = data.Keeper
 
-	// Set bank hooks
-	suite.bk.AppendSendRestriction(suite.k.SendRestrictionFn)
-
 	// Setup IBC
 	suite.ibcm = data.IBCMiddleware
 }

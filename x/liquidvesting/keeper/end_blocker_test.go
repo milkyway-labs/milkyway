@@ -47,11 +47,17 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)),
 				)
-				suite.fundAccount(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", sdk.NewCoins(sdk.NewInt64Coin("stake2", 200)))
+				suite.fundAccount(ctx,
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					sdk.NewCoins(sdk.NewInt64Coin("stake2", 200)),
+				)
 
 				// Delegate some vested representation to pool, service and operator
 				suite.createPool(ctx, 1, vestedStakeDenom)
-				_, err = suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedStakeDenom, 200), "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				_, err = suite.rk.DelegateToPool(ctx,
+					sdk.NewInt64Coin(vestedStakeDenom, 200),
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				)
 				suite.Assert().NoError(err)
 
 				suite.createService(ctx, 1)
@@ -179,8 +185,8 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
-			ctx, _ := suite.ctx.CacheContext()
 
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.setupCtx != nil {
 				ctx = tc.setupCtx(ctx)
 			}
@@ -194,11 +200,11 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 			}
 
 			// run the restaking keep end block logic
-			suite.Assert().NoError(suite.rk.CompleteMatureUnbondingDelegations(ctx))
+			err = suite.rk.CompleteMatureUnbondingDelegations(ctx)
+			suite.Assert().NoError(err)
 
 			// run our end block logic
-			err := suite.k.CompleteBurnCoins(ctx)
-
+			err = suite.k.CompleteBurnCoins(ctx)
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {

@@ -215,14 +215,11 @@ func (suite *KeeperTestSuite) TestMsgServer_BurnVestedRepresentation() {
 	}
 
 	for _, tc := range testCases {
+		tc := tc
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
 			ctx, _ := suite.ctx.CacheContext()
-			if tc.store != nil {
-				tc.store(ctx)
-			}
-
 			if tc.store != nil {
 				tc.store(ctx)
 			}
@@ -286,7 +283,10 @@ func (suite *KeeperTestSuite) TestMsgServer_WithdrawInsuranceFund() {
 
 				suite.createPool(ctx, 1, vestedIBCDenom)
 
-				_, err := suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedIBCDenom, 500), "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn")
+				_, err := suite.rk.DelegateToPool(ctx,
+					sdk.NewInt64Coin(vestedIBCDenom, 500),
+					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+				)
 				suite.Assert().NoError(err)
 			},
 			msg: types.NewMsgWithdrawInsuranceFund(

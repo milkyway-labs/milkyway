@@ -418,10 +418,10 @@ func (suite *KeeperTestSuite) TestBankHooks_TestOperatorRestaking() {
 			),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				userAddrr, err := sdk.AccAddressFromBech32("cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre")
+				userAddr, err := sdk.AccAddressFromBech32("cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre")
 				suite.Assert().NoError(err)
 
-				insuranceFund, err := suite.k.GetUserInsuranceFund(ctx, userAddrr)
+				insuranceFund, err := suite.k.GetUserInsuranceFund(ctx, userAddr)
 				suite.Assert().NoError(err)
 				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6)), insuranceFund.Used)
 			},
@@ -429,6 +429,7 @@ func (suite *KeeperTestSuite) TestBankHooks_TestOperatorRestaking() {
 	}
 
 	for _, tc := range testCases {
+		tc := tc
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
