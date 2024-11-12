@@ -1,6 +1,7 @@
 package storetesting
 
 import (
+	"slices"
 	"testing"
 
 	"cosmossdk.io/log"
@@ -44,7 +45,10 @@ func NewBaseKeeperTestData(t *testing.T, keys []string) BaseKeeperTestData {
 	var data BaseKeeperTestData
 
 	// Define store keys
-	data.Keys = storetypes.NewKVStoreKeys(keys...)
+	storeKeys := append(keys, []string{authtypes.StoreKey, banktypes.StoreKey}...)
+	slices.Sort(storeKeys)
+	storeKeys = slices.Compact(storeKeys)
+	data.Keys = storetypes.NewKVStoreKeys(storeKeys...)
 
 	// Setup the context
 	data.Context = BuildContext(data.Keys, nil, nil)

@@ -3,21 +3,20 @@ package keeper_test
 import (
 	"testing"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/milkyway-labs/milkyway/app/testutil"
 	"github.com/milkyway-labs/milkyway/x/assets/keeper"
-	"github.com/milkyway-labs/milkyway/x/assets/types"
+	"github.com/milkyway-labs/milkyway/x/assets/testutils"
 )
 
 type KeeperTestSuite struct {
-	testutil.KeeperTestSuite
+	suite.Suite
 
 	authority string
 
-	keeper      *keeper.Keeper
-	msgServer   types.MsgServer
-	queryServer types.QueryServer
+	ctx    sdk.Context
+	keeper *keeper.Keeper
 }
 
 func TestKeeperTestSuite(t *testing.T) {
@@ -25,10 +24,10 @@ func TestKeeperTestSuite(t *testing.T) {
 }
 
 func (suite *KeeperTestSuite) SetupTest() {
-	suite.KeeperTestSuite.SetupTest()
-	suite.authority = suite.App.AssetsKeeper.GetAuthority()
+	data := testutils.NewKeeperTestData(suite.T())
 
-	suite.keeper = suite.App.AssetsKeeper
-	suite.msgServer = keeper.NewMsgServer(suite.App.AssetsKeeper)
-	suite.queryServer = keeper.NewQueryServer(suite.App.AssetsKeeper)
+	suite.authority = data.AuthorityAddress
+	suite.ctx = data.Context
+
+	suite.keeper = data.Keeper
 }

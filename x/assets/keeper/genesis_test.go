@@ -40,7 +40,7 @@ func (suite *KeeperTestSuite) TestExportGenesis() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
 			}
@@ -94,7 +94,7 @@ func (suite *KeeperTestSuite) TestInitGenesis() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			err := suite.keeper.InitGenesis(ctx, tc.genesis)
 			if tc.shouldErr {
 				suite.Require().Error(err)

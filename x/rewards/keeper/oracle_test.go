@@ -6,7 +6,7 @@ import (
 
 func (suite *KeeperTestSuite) TestGetAssetAndPrice() {
 	// Cache the context to avoid issues
-	ctx, _ := suite.Ctx.CacheContext()
+	ctx, _ := suite.ctx.CacheContext()
 
 	suite.RegisterCurrency(ctx, "umilk", "MILK", 6, utils.MustParseDec("2"))
 
@@ -21,7 +21,7 @@ func (suite *KeeperTestSuite) TestGetAssetAndPrice() {
 
 func (suite *KeeperTestSuite) TestGetCoinValue() {
 	// Cache the context to avoid issues
-	ctx, _ := suite.Ctx.CacheContext()
+	ctx, _ := suite.ctx.CacheContext()
 
 	suite.RegisterCurrency(ctx, "umilk", "MILK", 6, utils.MustParseDec("2"))
 	suite.RegisterCurrency(ctx, "afoo", "FOO", 18, utils.MustParseDec("0.53"))
@@ -41,7 +41,7 @@ func (suite *KeeperTestSuite) TestGetCoinValue() {
 
 func (suite *KeeperTestSuite) TestGetCoinsValue() {
 	// Cache the context to avoid issues
-	ctx, _ := suite.Ctx.CacheContext()
+	ctx, _ := suite.ctx.CacheContext()
 
 	suite.RegisterCurrency(ctx, "umilk", "MILK", 6, utils.MustParseDec("2"))
 	suite.RegisterCurrency(ctx, "uinit", "INIT", 6, utils.MustParseDec("3"))

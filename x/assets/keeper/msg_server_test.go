@@ -51,7 +51,7 @@ func (suite *KeeperTestSuite) TestMsgServer_RegisterAsset() {
 	for _, tc := range testCases {
 		tc := tc
 		suite.Run(tc.name, func() {
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.setup != nil {
 				tc.setup()
 			}
@@ -103,8 +103,8 @@ func (suite *KeeperTestSuite) TestMsgServer_DeregisterAsset() {
 		},
 		{
 			name: "valid asset is deregistered properly",
-			setup: func() {
-				err := suite.keeper.SetAsset(suite.Ctx, types.NewAsset("umilk", "MILK", 6))
+			store: func(ctx sdk.Context) {
+				err := suite.keeper.SetAsset(ctx, types.NewAsset("umilk", "MILK", 6))
 				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgDeregisterAsset(suite.authority, "umilk"),
@@ -125,7 +125,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeregisterAsset() {
 	for _, tc := range testCases {
 		tc := tc
 		suite.Run(tc.name, func() {
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.setup != nil {
 				tc.setup()
 			}

@@ -87,7 +87,7 @@ func (suite *KeeperTestSuite) TestQuerier_Assets() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
 			}
@@ -140,7 +140,7 @@ func (suite *KeeperTestSuite) TestQuerier_Asset() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
 			}

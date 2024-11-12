@@ -43,7 +43,7 @@ func (suite *KeeperTestSuite) TestKeeper_SetAsset() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
 			}
@@ -91,7 +91,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAsset() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
 			}
@@ -139,7 +139,7 @@ func (suite *KeeperTestSuite) TestRemoveAsset() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
 			}

@@ -9,6 +9,7 @@ import (
 	"github.com/milkyway-labs/milkyway/app/testutil"
 	"github.com/milkyway-labs/milkyway/utils"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/x/rewards/keeper"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 )
 
@@ -128,12 +129,13 @@ func (suite *KeeperTestSuite) TestQuerier_RewardsPlans() {
 
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
 			}
 
-			res, err := suite.queryServer.RewardsPlans(ctx, tc.req)
+			queryServer := keeper.NewQueryServer(suite.keeper)
+			res, err := queryServer.RewardsPlans(ctx, tc.req)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -198,12 +200,13 @@ func (suite *KeeperTestSuite) TestQuerier_RewardsPlan() {
 
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
 			}
 
-			res, err := suite.queryServer.RewardsPlan(ctx, tc.req)
+			queryServer := keeper.NewQueryServer(suite.keeper)
+			res, err := queryServer.RewardsPlan(ctx, tc.req)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -270,7 +273,7 @@ func (suite *KeeperTestSuite) TestQuerier_PoolOutstandingRewards() {
 
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
 			}
@@ -278,7 +281,8 @@ func (suite *KeeperTestSuite) TestQuerier_PoolOutstandingRewards() {
 				ctx = tc.updateCtx(ctx)
 			}
 
-			res, err := suite.queryServer.PoolOutstandingRewards(ctx, tc.req)
+			queryServer := keeper.NewQueryServer(suite.keeper)
+			res, err := queryServer.PoolOutstandingRewards(ctx, tc.req)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -345,7 +349,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorOutstandingRewards() {
 
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
 			}
@@ -353,7 +357,8 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorOutstandingRewards() {
 				ctx = tc.updateCtx(ctx)
 			}
 
-			res, err := suite.queryServer.OperatorOutstandingRewards(ctx, tc.req)
+			queryServer := keeper.NewQueryServer(suite.keeper)
+			res, err := queryServer.OperatorOutstandingRewards(ctx, tc.req)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -420,7 +425,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceOutstandingRewards() {
 
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
 			}
@@ -428,7 +433,8 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceOutstandingRewards() {
 				ctx = tc.updateCtx(ctx)
 			}
 
-			res, err := suite.queryServer.ServiceOutstandingRewards(ctx, tc.req)
+			queryServer := keeper.NewQueryServer(suite.keeper)
+			res, err := queryServer.ServiceOutstandingRewards(ctx, tc.req)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -496,7 +502,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorCommission() {
 
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
 			}
@@ -504,7 +510,8 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorCommission() {
 				ctx = tc.updateCtx(ctx)
 			}
 
-			res, err := suite.queryServer.OperatorCommission(ctx, tc.req)
+			queryServer := keeper.NewQueryServer(suite.keeper)
+			res, err := queryServer.OperatorCommission(ctx, tc.req)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -576,7 +583,7 @@ func (suite *KeeperTestSuite) TestQuerier_PoolDelegationRewards() {
 
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
 			}
@@ -584,7 +591,8 @@ func (suite *KeeperTestSuite) TestQuerier_PoolDelegationRewards() {
 				ctx = tc.updateCtx(ctx)
 			}
 
-			res, err := suite.queryServer.PoolDelegationRewards(ctx, tc.req)
+			queryServer := keeper.NewQueryServer(suite.keeper)
+			res, err := queryServer.PoolDelegationRewards(ctx, tc.req)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -654,7 +662,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegationRewards() {
 
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
 			}
@@ -662,7 +670,8 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegationRewards() {
 				ctx = tc.updateCtx(ctx)
 			}
 
-			res, err := suite.queryServer.OperatorDelegationRewards(ctx, tc.req)
+			queryServer := keeper.NewQueryServer(suite.keeper)
+			res, err := queryServer.OperatorDelegationRewards(ctx, tc.req)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -732,7 +741,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceDelegationRewards() {
 
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
 			}
@@ -740,7 +749,8 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceDelegationRewards() {
 				ctx = tc.updateCtx(ctx)
 			}
 
-			res, err := suite.queryServer.ServiceDelegationRewards(ctx, tc.req)
+			queryServer := keeper.NewQueryServer(suite.keeper)
+			res, err := queryServer.ServiceDelegationRewards(ctx, tc.req)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -842,7 +852,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorTotalRewards() {
 
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
 			}
@@ -850,7 +860,8 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorTotalRewards() {
 				ctx = tc.updateCtx(ctx)
 			}
 
-			res, err := suite.queryServer.DelegatorTotalRewards(ctx, tc.req)
+			queryServer := keeper.NewQueryServer(suite.keeper)
+			res, err := queryServer.DelegatorTotalRewards(ctx, tc.req)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -885,7 +896,8 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorWithdrawAddress() {
 		{
 			name: "delegator with different withdraw address set returns proper value",
 			store: func(ctx sdk.Context) {
-				_, err := suite.msgServer.SetWithdrawAddress(ctx, types.NewMsgSetWithdrawAddress(
+				msgServer := keeper.NewMsgServer(suite.keeper)
+				_, err := msgServer.SetWithdrawAddress(ctx, types.NewMsgSetWithdrawAddress(
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				))
@@ -901,12 +913,13 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorWithdrawAddress() {
 
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
 			}
 
-			res, err := suite.queryServer.DelegatorWithdrawAddress(ctx, tc.req)
+			queryServer := keeper.NewQueryServer(suite.keeper)
+			res, err := queryServer.DelegatorWithdrawAddress(ctx, tc.req)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
