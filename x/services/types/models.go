@@ -2,6 +2,7 @@ package types
 
 import (
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -61,6 +62,16 @@ func (s Service) GetAddress() string {
 
 func (s Service) GetTokens() sdk.Coins {
 	return s.Tokens
+}
+
+func (s Service) GetAllowedTokens(allowedDenoms []string) sdk.Coins {
+	allowedCoins := sdk.NewCoins()
+	for _, coin := range s.Tokens {
+		if slices.Contains(allowedDenoms, coin.Denom) {
+			allowedCoins = allowedCoins.Add(coin)
+		}
+	}
+	return allowedCoins
 }
 
 func (s Service) GetDelegatorShares() sdk.DecCoins {
@@ -240,4 +251,29 @@ func (s *Service) Update(update ServiceUpdate) Service {
 		s.Admin,
 		s.Accredited,
 	)
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewServiceParams returns a new ServiceParams instance.
+func NewServiceParams(allowedDenoms []string) ServiceParams {
+	return ServiceParams{
+		AllowedDenoms: allowedDenoms,
+	}
+}
+
+// DefaultServiceParams returns the default ServiceParams instance.
+func DefaultServiceParams() ServiceParams {
+	return NewServiceParams(nil)
+}
+
+func (p *ServiceParams) Validate() error {
+	for _, denom := range p.AllowedDenoms {
+		err := sdk.ValidateDenom(denom)
+		if err != nil {
+			return fmt.Errorf("invalid denom: %s, %w", denom, err)
+		}
+	}
+
+	return nil
 }

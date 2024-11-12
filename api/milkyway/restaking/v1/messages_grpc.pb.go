@@ -32,6 +32,7 @@ const (
 	Msg_UndelegatePool_FullMethodName              = "/milkyway.restaking.v1.Msg/UndelegatePool"
 	Msg_UndelegateOperator_FullMethodName          = "/milkyway.restaking.v1.Msg/UndelegateOperator"
 	Msg_UndelegateService_FullMethodName           = "/milkyway.restaking.v1.Msg/UndelegateService"
+	Msg_SetUserPreferences_FullMethodName          = "/milkyway.restaking.v1.Msg/SetUserPreferences"
 )
 
 // MsgClient is the client API for Msg service.
@@ -84,6 +85,9 @@ type MsgClient interface {
 	// UndelegateService defines the operation that allows users to undelegate
 	// their assets from a specific service.
 	UndelegateService(ctx context.Context, in *MsgUndelegateService, opts ...grpc.CallOption) (*MsgUndelegateResponse, error)
+	// SetUserPreferences defines the operation that allows users to set their
+	// preferences for the restaking module.
+	SetUserPreferences(ctx context.Context, in *MsgSetUserPreferences, opts ...grpc.CallOption) (*MsgSetUserPreferencesResponse, error)
 }
 
 type msgClient struct {
@@ -224,6 +228,16 @@ func (c *msgClient) UndelegateService(ctx context.Context, in *MsgUndelegateServ
 	return out, nil
 }
 
+func (c *msgClient) SetUserPreferences(ctx context.Context, in *MsgSetUserPreferences, opts ...grpc.CallOption) (*MsgSetUserPreferencesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgSetUserPreferencesResponse)
+	err := c.cc.Invoke(ctx, Msg_SetUserPreferences_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MsgServer is the server API for Msg service.
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility.
@@ -274,6 +288,9 @@ type MsgServer interface {
 	// UndelegateService defines the operation that allows users to undelegate
 	// their assets from a specific service.
 	UndelegateService(context.Context, *MsgUndelegateService) (*MsgUndelegateResponse, error)
+	// SetUserPreferences defines the operation that allows users to set their
+	// preferences for the restaking module.
+	SetUserPreferences(context.Context, *MsgSetUserPreferences) (*MsgSetUserPreferencesResponse, error)
 	mustEmbedUnimplementedMsgServer()
 }
 
@@ -322,6 +339,9 @@ func (UnimplementedMsgServer) UndelegateOperator(context.Context, *MsgUndelegate
 }
 func (UnimplementedMsgServer) UndelegateService(context.Context, *MsgUndelegateService) (*MsgUndelegateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UndelegateService not implemented")
+}
+func (UnimplementedMsgServer) SetUserPreferences(context.Context, *MsgSetUserPreferences) (*MsgSetUserPreferencesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetUserPreferences not implemented")
 }
 func (UnimplementedMsgServer) mustEmbedUnimplementedMsgServer() {}
 func (UnimplementedMsgServer) testEmbeddedByValue()             {}
@@ -578,6 +598,24 @@ func _Msg_UndelegateService_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Msg_SetUserPreferences_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgSetUserPreferences)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).SetUserPreferences(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_SetUserPreferences_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).SetUserPreferences(ctx, req.(*MsgSetUserPreferences))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Msg_ServiceDesc is the grpc.ServiceDesc for Msg service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -636,6 +674,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UndelegateService",
 			Handler:    _Msg_UndelegateService_Handler,
+		},
+		{
+			MethodName: "SetUserPreferences",
+			Handler:    _Msg_SetUserPreferences_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

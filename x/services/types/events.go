@@ -11,6 +11,7 @@ const (
 	EventTypeTransferServiceOwnership   = "transfer_service_ownership"
 	EventTypeAccreditService            = "accredit_service"
 	EventTypeRevokeServiceAccreditation = "revoke_service_accreditation"
+	EventTypeSetServiceParams           = "set_service_params"
 
 	AttributeKeyServiceID = "service_id"
 	AttributeKeyNewAdmin  = "new_admin"

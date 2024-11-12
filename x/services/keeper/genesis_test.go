@@ -84,6 +84,26 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			},
 		},
 		{
+			name: "services params are exported properly",
+			store: func(ctx sdk.Context) {
+				suite.k.SetNextServiceID(ctx, 1)
+				err := suite.k.SetServiceParams(ctx, 1, types.NewServiceParams([]string{"umilk"}))
+				suite.Require().NoError(err)
+				err = suite.k.SetServiceParams(ctx, 2, types.NewServiceParams([]string{"uinit"}))
+				suite.Require().NoError(err)
+				suite.k.SetParams(ctx, types.DefaultParams())
+			},
+			expGenesis: &types.GenesisState{
+				NextServiceID: 1,
+				Services:      nil,
+				ServicesParams: []types.ServiceParamsRecord{
+					types.NewServiceParamsRecord(1, types.NewServiceParams([]string{"umilk"})),
+					types.NewServiceParamsRecord(2, types.NewServiceParams([]string{"uinit"})),
+				},
+				Params: types.DefaultParams(),
+			},
+		},
+		{
 			name: "params are exported properly",
 			store: func(ctx sdk.Context) {
 				suite.k.SetNextServiceID(ctx, 1)
@@ -130,6 +150,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 			genesis: types.NewGenesisState(
 				10,
 				nil,
+				nil,
 				types.DefaultParams(),
 			),
 			shouldErr: false,
@@ -155,6 +176,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 						false,
 					),
 				},
+				nil,
 				types.DefaultParams(),
 			),
 			shouldErr: false,
@@ -183,6 +205,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 			genesis: types.NewGenesisState(
 				1,
 				nil,
+				nil,
 				types.NewParams(
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(1_000_000_000))),
 				),
@@ -192,6 +215,52 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				suite.Require().Equal(types.NewParams(
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(1_000_000_000))),
 				), params)
+			},
+		},
+		{
+			name: "services params are initialized properly",
+			genesis: types.NewGenesisState(
+				1,
+				[]types.Service{
+					types.NewService(
+						1,
+						types.SERVICE_STATUS_ACTIVE,
+						"MilkyWay",
+						"MilkyWay is an AVS of a restaking platform",
+						"https://milkyway.com",
+						"https://milkyway.com/logo.png",
+						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+						false,
+					),
+					types.NewService(
+						2,
+						types.SERVICE_STATUS_INACTIVE,
+						"Inertia",
+						"AVS-based Liquid Restaking Platform",
+						"https://inertia.zone",
+						"https://inertia.zone/logo.png",
+						"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+						false,
+					),
+				},
+				[]types.ServiceParamsRecord{
+					types.NewServiceParamsRecord(1, types.NewServiceParams([]string{"umilk"})),
+					types.NewServiceParamsRecord(2, types.NewServiceParams([]string{"uinit"})),
+				},
+				types.NewParams(
+					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(1_000_000_000))),
+				),
+			),
+			check: func(ctx sdk.Context) {
+				// Check the first one
+				serviceParams, err := suite.k.GetServiceParams(ctx, 1)
+				suite.Require().NoError(err)
+				suite.Require().Equal(types.NewServiceParams([]string{"umilk"}), serviceParams)
+
+				// Check the second one
+				serviceParams, err = suite.k.GetServiceParams(ctx, 2)
+				suite.Require().NoError(err)
+				suite.Require().Equal(types.NewServiceParams([]string{"uinit"}), serviceParams)
 			},
 		},
 	}

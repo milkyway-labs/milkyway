@@ -847,6 +847,144 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferServiceOwnership() {
 	}
 }
 
+func (suite *KeeperTestSuite) TestMsgServer_SetServiceParams() {
+	testCases := []struct {
+		name        string
+		setup       func()
+		store       func(ctx sdk.Context)
+		setupCtx    func(ctx sdk.Context) sdk.Context
+		msg         *types.MsgSetServiceParams
+		shouldErr   bool
+		expResponse *types.MsgSetServiceParamsResponse
+		expEvents   sdk.Events
+		check       func(ctx sdk.Context)
+	}{
+		{
+			name: "not found service returns error",
+			msg: types.NewMsgSetServiceParams(
+				1,
+				types.DefaultServiceParams(),
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "non admin sender returns error",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SaveService(ctx, types.NewService(
+					1,
+					types.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
+				))
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgSetServiceParams(
+				1,
+				types.DefaultServiceParams(),
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "set invalid params returns error",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SaveService(ctx, types.NewService(
+					1,
+					types.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
+				))
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgSetServiceParams(
+				1,
+				types.NewServiceParams([]string{"1stake"}),
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "service params updated successfully",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SaveService(ctx, types.NewService(
+					1,
+					types.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
+				))
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgSetServiceParams(
+				1,
+				types.NewServiceParams([]string{"umilk"}),
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr:   false,
+			expResponse: &types.MsgSetServiceParamsResponse{},
+			expEvents: []sdk.Event{
+				sdk.NewEvent(
+					types.EventTypeSetServiceParams,
+					sdk.NewAttribute(types.AttributeKeyServiceID, "1"),
+				),
+			},
+			check: func(ctx sdk.Context) {
+				// Make sure the service was updated
+				stored, err := suite.k.GetServiceParams(ctx, 1)
+				suite.Require().NoError(err)
+				suite.Require().Equal(
+					types.NewServiceParams([]string{"umilk"}),
+					stored,
+				)
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.setup != nil {
+				tc.setup()
+			}
+			if tc.setupCtx != nil {
+				ctx = tc.setupCtx(ctx)
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			msgServer := keeper.NewMsgServer(suite.k)
+			res, err := msgServer.SetServiceParams(ctx, tc.msg)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expResponse, res)
+				for _, event := range tc.expEvents {
+					suite.Require().Contains(ctx.EventManager().Events(), event)
+				}
+
+				if tc.check != nil {
+					tc.check(ctx)
+				}
+			}
+		})
+	}
+}
+
 func (suite *KeeperTestSuite) TestMsgServer_UpdateParams() {
 	testCases := []struct {
 		name        string

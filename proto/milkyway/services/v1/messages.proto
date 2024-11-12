@@ -6,6 +6,7 @@ import "cosmos_proto/cosmos.proto";
 import "cosmos/msg/v1/msg.proto";
 import "gogoproto/gogo.proto";
 import "milkyway/services/v1/params.proto";
+import "milkyway/services/v1/models.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/services/types";
 
@@ -36,6 +37,11 @@ service Msg {
   // ownership of a service to another account.
   rpc TransferServiceOwnership(MsgTransferServiceOwnership)
       returns (MsgTransferServiceOwnershipResponse);
+
+  // SetServiceParams defines the operation for setting a service's
+  // parameters.
+  rpc SetServiceParams(MsgSetServiceParams)
+      returns (MsgSetServiceParamsResponse);
 
   // UpdateParams defines a (governance) operation for updating the module
   // parameters.
@@ -191,6 +197,26 @@ message MsgTransferServiceOwnership {
 // MsgTransferServiceOwnershipResponse is the return value of
 // MsgTransferServiceOwnership.
 message MsgTransferServiceOwnershipResponse {}
+
+// MsgSetServiceParams defines the message structure for the
+// SetServiceParams gRPC service method. It allows a service admin to
+// update the parameters of a service.
+message MsgSetServiceParams {
+  option (cosmos.msg.v1.signer) = "sender";
+  option (amino.name) = "milkyway/MsgSetServiceParams";
+
+  // Sender is the address of the user setting the parameters
+  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // ServiceID is the ID of the service whose parameters are being set
+  uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
+
+  // ServiceParams defines the new parameters of the service
+  ServiceParams service_params = 3 [ (gogoproto.nullable) = false ];
+}
+
+// MsgSetServiceParamsResponse is the return value of MsgSetServiceParams.
+message MsgSetServiceParamsResponse {}
 
 // MsgDeactivateService defines the message structure for the UpdateParams gRPC
 // service method. It allows the authority to update the module parameters.

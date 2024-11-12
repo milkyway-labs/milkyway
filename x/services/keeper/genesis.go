@@ -8,9 +8,15 @@ import (
 
 // ExportGenesis returns the GenesisState associated with the given context
 func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
+	servicesParams, err := k.GetAllServicesParams(ctx)
+	if err != nil {
+		panic(err)
+	}
+
 	return types.NewGenesisState(
 		k.exportNextServiceID(ctx),
 		k.GetServices(ctx),
+		servicesParams,
 		k.GetParams(ctx),
 	)
 }
@@ -34,6 +40,13 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 	// Store the services
 	for _, service := range state.Services {
 		if err := k.SaveService(ctx, service); err != nil {
+			return err
+		}
+	}
+
+	for _, serviceParams := range state.ServicesParams {
+		err := k.SetServiceParams(ctx, serviceParams.ServiceID, serviceParams.Params)
+		if err != nil {
 			return err
 		}
 	}

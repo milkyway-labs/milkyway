@@ -47,3 +47,15 @@ func (k *Keeper) GetServices(ctx sdk.Context) []types.Service {
 func (k *Keeper) IsServiceAddress(ctx sdk.Context, address string) (bool, error) {
 	return k.serviceAddressSet.Has(ctx, address)
 }
+
+// GetAllServicesParams returns the parameters that have been configured for all
+// services.
+func (k *Keeper) GetAllServicesParams(ctx sdk.Context) ([]types.ServiceParamsRecord, error) {
+	var records []types.ServiceParamsRecord
+	err := k.serviceParams.Walk(ctx, nil, func(serviceID uint32, params types.ServiceParams) (bool, error) {
+		records = append(records, types.NewServiceParamsRecord(serviceID, params))
+		return false, nil
+	})
+
+	return records, err
+}

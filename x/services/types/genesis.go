@@ -7,17 +7,18 @@ import (
 )
 
 // NewGenesisState returns a new GenesisState instance
-func NewGenesisState(nextServiceID uint32, services []Service, params Params) *GenesisState {
+func NewGenesisState(nextServiceID uint32, services []Service, servicesParams []ServiceParamsRecord, params Params) *GenesisState {
 	return &GenesisState{
-		NextServiceID: nextServiceID,
-		Services:      services,
-		Params:        params,
+		NextServiceID:  nextServiceID,
+		Services:       services,
+		ServicesParams: servicesParams,
+		Params:         params,
 	}
 }
 
 // DefaultGenesis returns a default GenesisState
 func DefaultGenesis() *GenesisState {
-	return NewGenesisState(1, nil, DefaultParams())
+	return NewGenesisState(1, nil, nil, DefaultParams())
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -42,6 +43,19 @@ func (data *GenesisState) Validate() error {
 		}
 	}
 
+	// Check for duplicated service params
+	if duplicate := findDuplicatedServiceParamsRecord(data.ServicesParams); duplicate != nil {
+		return fmt.Errorf("duplicated service params record: %d", duplicate.ServiceID)
+	}
+
+	// Validate the service params
+	for _, serviceParams := range data.ServicesParams {
+		err := serviceParams.Validate()
+		if err != nil {
+			return fmt.Errorf("invalid service params record for service %d: %w", serviceParams.ServiceID, err)
+		}
+	}
+
 	// Validate params
 	err := data.Params.Validate()
 	if err != nil {
@@ -57,4 +71,30 @@ func findDuplicatedService(services []Service) *Service {
 	return utils.FindDuplicateFunc(services, func(a, b Service) bool {
 		return a.ID == b.ID
 	})
+}
+
+// findDuplicatedServiceParamsRecord returns the first duplicated ServiceParamsRecord in the slice.
+// If no duplicates are found, it returns nil instead.
+func findDuplicatedServiceParamsRecord(records []ServiceParamsRecord) *ServiceParamsRecord {
+	return utils.FindDuplicateFunc(records, func(a, b ServiceParamsRecord) bool {
+		return a.ServiceID == b.ServiceID
+	})
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewServiceParamsRecord returns a new ServiceParamsRecord instance.
+func NewServiceParamsRecord(serviceID uint32, params ServiceParams) ServiceParamsRecord {
+	return ServiceParamsRecord{
+		ServiceID: serviceID,
+		Params:    params,
+	}
+}
+
+func (r *ServiceParamsRecord) Validate() error {
+	if r.ServiceID == 0 {
+		return fmt.Errorf("invalid service ID: %d", r.ServiceID)
+	}
+
+	return r.Params.Validate()
 }

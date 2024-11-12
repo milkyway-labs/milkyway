@@ -23,6 +23,8 @@ type Keeper struct {
 	storeService      corestoretypes.KVStoreService
 	schema            collections.Schema
 	serviceAddressSet collections.KeySet[string]
+	// serviceParams associated a service ID with its parameters
+	serviceParams collections.Map[uint32, types.ServiceParams]
 
 	// authority represents the address capable of executing a MsgUpdateParams message.
 	// Typically, this should be the x/gov module account.
@@ -52,6 +54,13 @@ func NewKeeper(
 			types.ServiceAddressSetPrefix,
 			"service_address_set",
 			collections.StringKey,
+		),
+		serviceParams: collections.NewMap(
+			sb,
+			types.ServiceParamsPrefix,
+			"service_params",
+			collections.Uint32Key,
+			codec.CollValue[types.ServiceParams](cdc),
 		),
 	}
 

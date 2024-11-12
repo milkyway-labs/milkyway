@@ -58,6 +58,7 @@ type OperatorsKeeper interface {
 
 type ServicesKeeper interface {
 	GetService(ctx sdk.Context, serviceID uint32) (servicestypes.Service, bool)
+	GetServiceParams(ctx sdk.Context, serviceID uint32) (servicestypes.ServiceParams, error)
 	IterateServices(ctx sdk.Context, cb func(service servicestypes.Service) (stop bool))
 }
 

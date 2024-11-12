@@ -46,4 +46,5 @@ type ServicesKeeper interface {
 	IterateServices(ctx sdk.Context, cb func(servicestypes.Service) bool)
 	GetServices(ctx sdk.Context) []servicestypes.Service
 	DeactivateService(ctx sdk.Context, serviceID uint32) error
+	GetServiceParams(ctx sdk.Context, serviceID uint32) (servicestypes.ServiceParams, error)
 }
