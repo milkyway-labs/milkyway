@@ -19,7 +19,7 @@ func NewDecPoolsFromPools(pools Pools) DecPools {
 		decPools = append(decPools, NewDecPool(p.Denom, sdk.NewDecCoinsFromCoins(p.Coins...)))
 	}
 
-	return decPools
+	return decPools.Sort()
 }
 
 // Sum returns sum of pool tokens
@@ -38,6 +38,13 @@ func (pools DecPools) Add(poolsB ...DecPool) DecPools {
 
 // Add will perform addition of two DecPools sets.
 func (pools DecPools) safeAdd(poolsB DecPools) DecPools {
+	if !pools.isSorted() {
+		panic("Pools (self) must be sorted")
+	}
+	if !poolsB.isSorted() {
+		panic("Wrong argument: Pools must be sorted")
+	}
+
 	sum := ([]DecPool)(nil)
 	indexA, indexB := 0, 0
 	lenA, lenB := len(pools), len(poolsB)
@@ -256,8 +263,22 @@ var _ sort.Interface = DecPools{}
 
 // Sort is a helper function to sort the set of p in-place
 func (pools DecPools) Sort() DecPools {
-	sort.Sort(pools)
+	// sort.Sort does a costly runtime copy as part of `runtime.convTSlice`
+	// So we avoid this heap allocation if len(dec pools) <= 1. In the future, we should hopefully find
+	// a strategy to always avoid this.
+	if len(pools) > 1 {
+		sort.Sort(pools)
+	}
 	return pools
+}
+
+func (pools DecPools) isSorted() bool {
+	for i := 1; i < len(pools); i++ {
+		if pools[i-1].Denom > pools[i].Denom {
+			return false
+		}
+	}
+	return true
 }
 
 //-----------------------------------------------------------------------------
@@ -265,7 +286,7 @@ func (pools DecPools) Sort() DecPools {
 
 // NewDecPool return new pool instance
 func NewDecPool(denom string, coins sdk.DecCoins) DecPool {
-	return DecPool{denom, coins}
+	return DecPool{denom, sdk.NewDecCoins(coins...)}
 }
 
 // IsEmpty returns wether the pool coins are empty or not
@@ -301,7 +322,7 @@ func (pool DecPool) TruncateDecimal() (Pool, DecPool) {
 }
 
 func removeZeroDecPools(pools DecPools) DecPools {
-	result := make([]DecPool, 0, len(pools))
+	result := make(DecPools, 0, len(pools))
 
 	for _, pool := range pools {
 		if !pool.IsEmpty() {
@@ -315,7 +336,7 @@ func removeZeroDecPools(pools DecPools) DecPools {
 // IsEqual returns true if the two sets of DecPools have the same value.
 func (pool DecPool) IsEqual(other DecPool) bool {
 	if pool.Denom != other.Denom {
-		panic(fmt.Sprintf("invalid pool denominations; %s, %s", pool.Denom, other.Denom))
+		return false
 	}
 
 	return pool.DecCoins.Equal(other.DecCoins)
