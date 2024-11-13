@@ -88,9 +88,9 @@ func (k *Keeper) IncrementDelegationTargetPeriod(ctx context.Context, target res
 			// can't calculate ratio for zero-token targets
 			// ergo we instead add to the community pool
 			communityFunding = communityFunding.Add(types.NewDecPool(token.Denom, rewardCoins))
-			current = append(current, types.NewDecPool(token.Denom, sdk.DecCoins{}))
+			current = current.Add(types.NewDecPool(token.Denom, sdk.DecCoins{}))
 		} else {
-			current = append(current,
+			current = current.Add(
 				types.NewDecPool(token.Denom, rewardCoins.QuoDecTruncate(math.LegacyNewDecFromInt(token.Amount))))
 		}
 	}
