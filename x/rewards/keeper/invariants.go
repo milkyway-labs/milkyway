@@ -252,9 +252,11 @@ func ReferenceCountInvariant(k *Keeper) sdk.Invariant {
 		// TODO: handle slash events
 		expected := targetCount + delCount
 		count := uint64(0)
+		elements := 0
 		err := k.PoolHistoricalRewards.Walk(
 			ctx, nil, func(key collections.Pair[uint32, uint64], rewards types.HistoricalRewards) (stop bool, err error) {
 				count += uint64(rewards.ReferenceCount)
+				elements += 1
 				return false, nil
 			},
 		)
@@ -262,7 +264,7 @@ func ReferenceCountInvariant(k *Keeper) sdk.Invariant {
 			panic(err)
 		}
 
-		broken := count != expected
+		broken := elements > 0 && count != expected
 
 		return sdk.FormatInvariant(types.ModuleName, "reference count",
 			fmt.Sprintf("expected historical reference count: %d = %v delegation targets + %v delegations\n"+
