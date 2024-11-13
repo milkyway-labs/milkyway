@@ -77,7 +77,7 @@ func (k *Keeper) calculateDelegationRewardsBetween(
 	}
 
 	for _, diff := range differences {
-		rewards = append(rewards, types.NewDecPool(
+		rewards = rewards.Add(types.NewDecPool(
 			diff.Denom,
 			diff.DecCoins.MulDecTruncate(stakes.AmountOf(diff.Denom)),
 		))
