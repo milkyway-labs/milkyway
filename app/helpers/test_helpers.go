@@ -6,6 +6,7 @@ import (
 	"testing"
 	"time"
 
+	oracleconfig "github.com/skip-mev/connect/v2/oracle/config"
 	"github.com/stretchr/testify/require"
 
 	abci "github.com/cometbft/cometbft/abci/types"
@@ -143,6 +144,7 @@ func setup() (*milkyway.MilkyWayApp, milkyway.GenesisState) {
 		true,
 		map[int64]bool{},
 		dir,
+		oracleconfig.NewDefaultAppConfig(),
 		appOptions,
 		emptyWasmOpts,
 	)

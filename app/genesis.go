@@ -14,6 +14,9 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	"github.com/initia-labs/initia/app/genesis_markets"
+	marketmaptypes "github.com/skip-mev/connect/v2/x/marketmap/types"
+	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/types/module"
@@ -38,8 +41,46 @@ type GenesisState map[string]json.RawMessage
 func NewDefaultGenesisState(cdc codec.Codec, mbm module.BasicManager) GenesisState {
 	return GenesisState(mbm.DefaultGenesis(cdc)).
 		ConfigureICA(cdc).
-		ConfigureIBCAllowedClients(cdc)
+		ConfigureIBCAllowedClients(cdc).
+		AddMarketData(cdc)
 }
+
+func (genState GenesisState) AddMarketData(cdc codec.JSONCodec) GenesisState {
+	var oracleGenState oracletypes.GenesisState
+	cdc.MustUnmarshalJSON(genState[oracletypes.ModuleName], &oracleGenState)
+
+	var marketGenState marketmaptypes.GenesisState
+	cdc.MustUnmarshalJSON(genState[marketmaptypes.ModuleName], &marketGenState)
+
+	// Load initial markets
+	markets, err := genesis_markets.ReadMarketsFromFile(genesis_markets.GenesisMarkets)
+	if err != nil {
+		panic(err)
+	}
+	marketGenState.MarketMap = genesis_markets.ToMarketMap(markets)
+
+	// Initialize all markets
+	var id uint64
+	currencyPairGenesis := make([]oracletypes.CurrencyPairGenesis, len(markets))
+	for i, market := range markets {
+		currencyPairGenesis[i] = oracletypes.CurrencyPairGenesis{
+			CurrencyPair:      market.Ticker.CurrencyPair,
+			CurrencyPairPrice: nil,
+			Nonce:             0,
+			Id:                id,
+		}
+		id++
+	}
+
+	oracleGenState.CurrencyPairGenesis = currencyPairGenesis
+	oracleGenState.NextId = id
+
+	// write the updates to genState
+	genState[marketmaptypes.ModuleName] = cdc.MustMarshalJSON(&marketGenState)
+	genState[oracletypes.ModuleName] = cdc.MustMarshalJSON(&oracleGenState)
+	return genState
+}
+
 func (genState GenesisState) ConfigureICA(cdc codec.JSONCodec) GenesisState {
 	// create ICS27 Controller submodule params
 	controllerParams := icacontrollertypes.Params{

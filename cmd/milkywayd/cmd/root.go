@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -11,6 +12,7 @@ import (
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"golang.org/x/sync/errgroup"
 
 	tmcfg "github.com/cometbft/cometbft/config"
 	tmcli "github.com/cometbft/cometbft/libs/cli"
@@ -50,8 +52,11 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/cosmos/cosmos-sdk/x/crisis"
-	genutilcli "github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
+	cosmosgenutilcli "github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
+	oracleconfig "github.com/skip-mev/connect/v2/oracle/config"
+
+	genutilcli "github.com/milkyway-labs/milkyway/x/genutil/client/cli"
 
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
@@ -74,6 +79,7 @@ func NewRootCmd() *cobra.Command {
 		true,
 		map[int64]bool{},
 		tempDir,
+		oracleconfig.NewDefaultAppConfig(),
 		initAppOptions,
 		milkyway.EmptyWasmOptions,
 	)
@@ -179,7 +185,8 @@ func initAppConfig() (string, interface{}) {
 	type CustomAppConfig struct {
 		serverconfig.Config
 
-		Wasm wasmtypes.WasmConfig `mapstructure:"wasm"`
+		Wasm   wasmtypes.WasmConfig   `mapstructure:"wasm"`
+		Oracle oracleconfig.AppConfig `mapstructure:"oracle" json:"oracle"`
 	}
 
 	// Can optionally overwrite the SDK's default server config.
@@ -190,9 +197,12 @@ func initAppConfig() (string, interface{}) {
 	customAppConfig := CustomAppConfig{
 		Config: *srvCfg,
 		Wasm:   wasmtypes.DefaultWasmConfig(),
+		Oracle: oracleconfig.NewDefaultAppConfig(),
 	}
 
-	defaultAppTemplate := serverconfig.DefaultConfigTemplate + wasmtypes.DefaultConfigTemplate()
+	defaultAppTemplate := serverconfig.DefaultConfigTemplate +
+		wasmtypes.DefaultConfigTemplate() +
+		oracleconfig.DefaultConfigTemplate
 
 	return defaultAppTemplate, customAppConfig
 }
@@ -218,7 +228,33 @@ func initRootCmd(rootCmd *cobra.Command,
 		snapshot.Cmd(ac.newApp),
 	)
 
-	server.AddCommands(rootCmd, milkyway.DefaultNodeHome, ac.newApp, ac.appExport, addModuleInitFlags)
+	server.AddCommandsWithStartCmdOptions(
+		rootCmd,
+		milkyway.DefaultNodeHome,
+		ac.newApp,
+		ac.appExport,
+		server.StartCmdOptions{
+			AddFlags: addModuleInitFlags,
+			PostSetup: func(svrCtx *server.Context, clientCtx client.Context, ctx context.Context, g *errgroup.Group) error {
+				g.Go(func() error {
+					errCh := make(chan error, 1)
+					go func() {
+						err := ac.app.StartOracleClient(ctx)
+						errCh <- err
+					}()
+
+					select {
+					case err := <-errCh:
+						return err
+					case <-ctx.Done():
+						return nil
+					}
+				})
+
+				return nil
+			},
+		},
+	)
 
 	// add keybase, auxiliary RPC, query, and tx child commands
 	rootCmd.AddCommand(
@@ -240,7 +276,7 @@ func addModuleInitFlags(startCmd *cobra.Command) {
 
 // genesisCommand builds genesis-related `simd genesis` command. Users may provide application specific commands as a parameter
 func genesisCommand(txConfig client.TxConfig, basicManager module.BasicManager, cmds ...*cobra.Command) *cobra.Command {
-	cmd := genutilcli.Commands(txConfig, basicManager, milkyway.DefaultNodeHome)
+	cmd := cosmosgenutilcli.Commands(txConfig, basicManager, milkyway.DefaultNodeHome)
 
 	for _, subCmd := range cmds {
 		cmd.AddCommand(subCmd)
@@ -302,9 +338,11 @@ func txCommand(basicManager module.BasicManager) *cobra.Command {
 	return cmd
 }
 
-type appCreator struct{}
+type appCreator struct {
+	app *milkyway.MilkyWayApp
+}
 
-func (a appCreator) newApp(
+func (a *appCreator) newApp(
 	logger log.Logger,
 	db dbm.DB,
 	traceStore io.Writer,
@@ -373,17 +411,26 @@ func (a appCreator) newApp(
 		baseapp.SetIAVLCacheSize(cast.ToInt(appOpts.Get(server.FlagIAVLCacheSize))),
 	}
 
-	return milkyway.NewMilkyWayApp(
+	oracleConfig, err := oracleconfig.ReadConfigFromAppOpts(appOpts)
+	if err != nil {
+		logger.Error("failed to read oracle config", "error", err)
+		os.Exit(-1)
+	}
+
+	a.app = milkyway.NewMilkyWayApp(
 		logger,
 		db,
 		traceStore,
 		true,
 		skipUpgradeHeights,
 		cast.ToString(appOpts.Get(flags.FlagHome)),
+		oracleConfig,
 		appOpts,
 		wasmOpts,
 		baseappOptions...,
 	)
+
+	return a.app
 }
 
 func (a appCreator) appExport(
@@ -425,6 +472,7 @@ func (a appCreator) appExport(
 		loadLatest,
 		map[int64]bool{},
 		homePath,
+		oracleconfig.NewDefaultAppConfig(),
 		appOpts,
 		emptyWasmOpts,
 	)

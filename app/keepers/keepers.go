@@ -148,7 +148,7 @@ type AppKeepers struct {
 
 	// Skip
 	MarketMapKeeper *marketmapkeeper.Keeper
-	OracleKeeper    oraclekeeper.Keeper
+	OracleKeeper    *oraclekeeper.Keeper
 	FeeMarketKeeper *feemarketkeeper.Keeper
 
 	// IBC
@@ -200,7 +200,6 @@ func NewAppKeeper(
 	bApp *baseapp.BaseApp,
 	legacyAmino *codec.LegacyAmino,
 	maccPerms map[string][]string,
-	modAccAddrs map[string]bool,
 	blockedAddress map[string]bool,
 	skipUpgradeHeights map[int64]bool,
 	homePath string,
@@ -353,12 +352,13 @@ func NewAppKeeper(
 		authtypes.NewModuleAddress(govtypes.ModuleName),
 	)
 
-	appKeepers.OracleKeeper = oraclekeeper.NewKeeper(
+	oracleKeeper := oraclekeeper.NewKeeper(
 		runtime.NewKVStoreService(appKeepers.keys[oracletypes.StoreKey]),
 		appCodec,
 		appKeepers.MarketMapKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName),
 	)
+	appKeepers.OracleKeeper = &oracleKeeper
 
 	// Add the oracle keeper as a hook to market map keeper so new market map entries can be created
 	// and propagated to the oracle keeper.
@@ -624,7 +624,7 @@ func NewAppKeeper(
 		appKeepers.AccountKeeper,
 		appKeepers.BankKeeper,
 		communityPoolKeeper,
-		&appKeepers.OracleKeeper,
+		appKeepers.OracleKeeper,
 		appKeepers.PoolsKeeper,
 		appKeepers.OperatorsKeeper,
 		appKeepers.ServicesKeeper,

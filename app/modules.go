@@ -157,7 +157,7 @@ func appModules(
 
 		// Skip modules
 		feemarket.NewAppModule(appCodec, *app.FeeMarketKeeper),
-		oracle.NewAppModule(appCodec, app.OracleKeeper),
+		oracle.NewAppModule(appCodec, *app.OracleKeeper),
 		marketmap.NewAppModule(appCodec, app.MarketMapKeeper),
 
 		// IBC Modules
@@ -376,8 +376,8 @@ func orderInitBlockers() []string {
 		vestingtypes.ModuleName,
 
 		// Skip modules
-		marketmaptypes.ModuleName,
 		oracletypes.ModuleName,
+		marketmaptypes.ModuleName,
 
 		// Stride modules
 		stakeibctypes.ModuleName,

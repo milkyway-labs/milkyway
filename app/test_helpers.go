@@ -15,6 +15,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/server"
 	simcli "github.com/cosmos/cosmos-sdk/x/simulation/client/cli"
+	oracleconfig "github.com/skip-mev/connect/v2/oracle/config"
 
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -69,6 +70,7 @@ func setup(t *testing.T, db *dbm.DB, withGenesis bool) (*MilkyWayApp, GenesisSta
 		true,
 		map[int64]bool{},
 		t.TempDir(),
+		oracleconfig.NewDefaultAppConfig(),
 		simtestutil.NewAppOptionsWithFlagHome(t.TempDir()),
 		[]wasmkeeper.Option{},
 		baseapp.SetChainID("milkyway-app"),

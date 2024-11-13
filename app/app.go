@@ -1,6 +1,7 @@
 package milkyway
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"net/http"
@@ -58,10 +59,13 @@ import (
 	providertypes "github.com/cosmos/interchain-security/v6/x/ccv/provider/types"
 	"github.com/gorilla/mux"
 	"github.com/rakyll/statik/fs"
+	oracleconfig "github.com/skip-mev/connect/v2/oracle/config"
+	oracleclient "github.com/skip-mev/connect/v2/service/clients/oracle"
 	feemarketkeeper "github.com/skip-mev/feemarket/x/feemarket/keeper"
 	"github.com/spf13/cast"
 
 	milkywayante "github.com/milkyway-labs/milkyway/ante"
+	milkywayabci "github.com/milkyway-labs/milkyway/app/abci"
 	"github.com/milkyway-labs/milkyway/app/keepers"
 	"github.com/milkyway-labs/milkyway/app/upgrades"
 	_ "github.com/milkyway-labs/milkyway/client/docs/statik"
@@ -95,6 +99,9 @@ type MilkyWayApp struct {
 
 	invCheckPeriod uint
 
+	// external fields
+	oracleClient oracleclient.OracleClient
+
 	// the module manager
 	mm           *module.Manager
 	ModuleBasics module.BasicManager
@@ -121,6 +128,7 @@ func NewMilkyWayApp(
 	loadLatest bool,
 	skipUpgradeHeights map[int64]bool,
 	homePath string,
+	oracleConfig oracleconfig.AppConfig,
 	appOpts servertypes.AppOptions,
 	wasmOpts []wasmkeeper.Option,
 	baseAppOptions ...func(*baseapp.BaseApp),
@@ -157,7 +165,8 @@ func NewMilkyWayApp(
 		logger,
 		db,
 		txConfig.TxDecoder(),
-		baseAppOptions...)
+		baseAppOptions...,
+	)
 
 	bApp.SetCommitMultiStoreTracer(traceStore)
 	bApp.SetVersion(version.Version)
@@ -181,7 +190,6 @@ func NewMilkyWayApp(
 		bApp,
 		legacyAmino,
 		MaccPerms,
-		moduleAccountAddresses,
 		BlockedModuleAccountAddrs(moduleAccountAddresses),
 		skipUpgradeHeights,
 		homePath,
@@ -310,10 +318,29 @@ func NewMilkyWayApp(
 	app.SetAnteHandler(anteHandler)
 	app.SetPostHandler(postHandler)
 
+	// Initialize the ABCI extensions
+	data := milkywayabci.InitializeOracleABCIExtensions(milkywayabci.SetupData{
+		ChainID:       app.ChainID(),
+		Logger:        app.Logger(),
+		Keepers:       app.AppKeepers,
+		ModuleManager: app.mm,
+		OracleConfig:  oracleConfig,
+	})
+
+	// Set the oracle client
+	app.SetOracleClient(data.OracleClient)
+
+	// Set the standard callbacks
 	app.SetInitChainer(app.InitChainer)
-	app.SetPreBlocker(app.PreBlocker)
 	app.SetBeginBlocker(app.BeginBlocker)
 	app.SetEndBlocker(app.EndBlocker)
+
+	// Set the callbacks used by ABCI vote extensions
+	app.SetPrepareProposal(data.PrepareProposalHandler)
+	app.SetProcessProposal(data.ProcessProposalHandler)
+	app.SetPreBlocker(data.PreBlockHandler)
+	app.SetExtendVoteHandler(data.ExtendVoteHandler)
+	app.SetVerifyVoteExtensionHandler(data.VerifyVoteExtensionHandler)
 
 	if manager := app.SnapshotManager(); manager != nil {
 		err = manager.RegisterExtensions(wasmkeeper.NewWasmSnapshotter(app.CommitMultiStore(), &app.AppKeepers.WasmKeeper))
@@ -353,13 +380,13 @@ func NewMilkyWayApp(
 	return app
 }
 
+// SetOracleClient sets the oracle client
+func (app *MilkyWayApp) SetOracleClient(oracleClient oracleclient.OracleClient) {
+	app.oracleClient = oracleClient
+}
+
 // Name returns the name of the App
 func (app *MilkyWayApp) Name() string { return app.BaseApp.Name() }
-
-// PreBlocker application updates every pre block
-func (app *MilkyWayApp) PreBlocker(ctx sdk.Context, _ *abci.RequestFinalizeBlock) (*sdk.ResponsePreBlock, error) {
-	return app.mm.PreBlock(ctx)
-}
 
 // BeginBlocker application updates every begin block
 func (app *MilkyWayApp) BeginBlocker(ctx sdk.Context) (sdk.BeginBlock, error) {
@@ -621,4 +648,30 @@ func minTxFeesChecker(ctx sdk.Context, tx sdk.Tx, feemarketKp feemarketkeeper.Ke
 	}
 
 	return feeTx.GetFee(), 0, nil
+}
+
+// Close closes the underlying baseapp, the oracle service, and the prometheus server if required.
+// This method blocks on the closure of both the prometheus server, and the oracle-service
+func (app *MilkyWayApp) Close() error {
+	if err := app.BaseApp.Close(); err != nil {
+		return err
+	}
+
+	// Close the oracle service
+	if app.oracleClient != nil {
+		if err := app.oracleClient.Stop(); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// StartOracleClient starts the oracle client
+func (app *MilkyWayApp) StartOracleClient(ctx context.Context) error {
+	if app.oracleClient != nil {
+		return app.oracleClient.Start(ctx)
+	}
+
+	return nil
 }

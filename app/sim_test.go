@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
+	oracleconfig "github.com/skip-mev/connect/v2/oracle/config"
 	"github.com/stretchr/testify/require"
 
 	dbm "github.com/cosmos/cosmos-db"
@@ -98,6 +99,7 @@ func TestAppStateDeterminism(t *testing.T) {
 				true,
 				map[int64]bool{},
 				dir,
+				oracleconfig.NewDefaultAppConfig(),
 				appOptions,
 				[]wasmkeeper.Option{},
 				interBlockCacheOpt(),
