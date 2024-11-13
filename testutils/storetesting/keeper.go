@@ -45,10 +45,10 @@ func NewBaseKeeperTestData(t *testing.T, keys []string) BaseKeeperTestData {
 	var data BaseKeeperTestData
 
 	// Define store keys
-	storeKeys := append(keys, []string{authtypes.StoreKey, banktypes.StoreKey}...)
-	slices.Sort(storeKeys)
-	storeKeys = slices.Compact(storeKeys)
-	data.Keys = storetypes.NewKVStoreKeys(storeKeys...)
+	keys = append(keys, []string{authtypes.StoreKey, banktypes.StoreKey}...)
+	slices.Sort(keys)
+	keys = slices.Compact(keys)
+	data.Keys = storetypes.NewKVStoreKeys(keys...)
 
 	// Setup the context
 	data.Context = BuildContext(data.Keys, nil, nil)
