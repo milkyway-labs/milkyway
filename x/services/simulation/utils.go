@@ -12,9 +12,14 @@ import (
 )
 
 func RandomServiceStatus(r *rand.Rand) types.ServiceStatus {
-	value := (int32(r.Uint64())) % 3
-	// Here we add 1 since 0 is SERVICE_STATUS_UNSPECIFIED.
-	return types.ServiceStatus(value + 1)
+	switch r.Intn(2) {
+	case 0:
+		return types.SERVICE_STATUS_INACTIVE
+	case 1:
+		return types.SERVICE_STATUS_CREATED
+	default:
+		return types.SERVICE_STATUS_ACTIVE
+	}
 }
 
 func RandomService(r *rand.Rand, id uint32, admin string) types.Service {

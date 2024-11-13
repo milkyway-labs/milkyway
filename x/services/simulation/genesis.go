@@ -3,7 +3,6 @@ package simulation
 import (
 	"math/rand"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/cosmos/cosmos-sdk/types/simulation"
 
@@ -17,17 +16,12 @@ const (
 	keyServicesParams          = "services_params"
 )
 
-func getServiceRegistrationFees(r *rand.Rand) sdk.Coins {
-	amount := int64(r.Intn(10_000_000) + 1)
-	return sdk.NewCoins(sdk.NewInt64Coin("umilk", amount))
-}
-
 func getServices(r *rand.Rand) []types.Service {
 	count := r.Intn(10) + 1
 	var services []types.Service
 	for i := 0; i < count; i++ {
 		adminAccount := simulation.RandomAccounts(r, 1)[0]
-		service := RandomService(r, uint32(i), adminAccount.Address.String())
+		service := RandomService(r, uint32(i)+1, adminAccount.Address.String())
 		services = append(services, service)
 	}
 
@@ -51,14 +45,9 @@ func getServiceParams(r *rand.Rand, services []types.Service) []types.ServicePar
 // RandomizedGenState generates a random GenesisState for the services module
 func RandomizedGenState(simState *module.SimulationState) {
 	var (
-		serviceRegistrationFees sdk.Coins
-		services                []types.Service
-		servicesParams          []types.ServiceParamsRecord
+		services       []types.Service
+		servicesParams []types.ServiceParamsRecord
 	)
-
-	simState.AppParams.GetOrGenerate(keyServiceRegistrationFees, &serviceRegistrationFees, simState.Rand, func(r *rand.Rand) {
-		serviceRegistrationFees = getServiceRegistrationFees(r)
-	})
 
 	simState.AppParams.GetOrGenerate(keyServices, &services, simState.Rand, func(r *rand.Rand) {
 		services = getServices(r)
@@ -68,7 +57,7 @@ func RandomizedGenState(simState *module.SimulationState) {
 		servicesParams = getServiceParams(r, services)
 	})
 
-	params := types.NewParams(serviceRegistrationFees)
+	params := types.DefaultParams()
 	nextServiceId := uint32(len(services)) + 1
 
 	servicesGenesis := types.NewGenesisState(nextServiceId, services, servicesParams, params)
