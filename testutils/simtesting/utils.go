@@ -51,3 +51,13 @@ func SendMsg(
 	}
 	return simulation.GenAndDeliverTxWithRandFees(txCtx)
 }
+
+// GetSimAccount gets the Account with the given address
+func GetSimAccount(address sdk.Address, accs []simtypes.Account) (simtypes.Account, bool) {
+	for _, acc := range accs {
+		if acc.Address.Equals(address) {
+			return acc, true
+		}
+	}
+	return simtypes.Account{}, false
+}

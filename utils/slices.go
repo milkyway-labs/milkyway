@@ -80,3 +80,14 @@ func Intersect[T comparable](a, b []T) []T {
 
 	return result
 }
+
+// Filter returns the elements of the slice that satisfy the given predicate.
+func Filter[T any](slice []T, f func(T) bool) []T {
+	var result []T
+	for _, v := range slice {
+		if f(v) {
+			result = append(result, v)
+		}
+	}
+	return result
+}
