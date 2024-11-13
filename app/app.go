@@ -65,6 +65,7 @@ import (
 	"github.com/milkyway-labs/milkyway/app/keepers"
 	"github.com/milkyway-labs/milkyway/app/upgrades"
 	_ "github.com/milkyway-labs/milkyway/client/docs/statik"
+	liquidvestingtypes "github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 )
 
 var (
@@ -409,6 +410,7 @@ func ModuleAccountAddrs() map[string]bool {
 func BlockedModuleAccountAddrs(modAccAddrs map[string]bool) map[string]bool {
 	// remove module accounts that are ALLOWED to received funds
 	delete(modAccAddrs, authtypes.NewModuleAddress(govtypes.ModuleName).String())
+	delete(modAccAddrs, authtypes.NewModuleAddress(liquidvestingtypes.ModuleName).String())
 
 	// Remove the ConsumerRewardsPool from the group of blocked recipient addresses in bank
 	delete(modAccAddrs, authtypes.NewModuleAddress(providertypes.ConsumerRewardsPool).String())
