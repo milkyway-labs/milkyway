@@ -58,8 +58,8 @@ func RandomizedGenState(simState *module.SimulationState) {
 	})
 
 	params := types.DefaultParams()
-	nextServiceId := uint32(len(services)) + 1
+	nextServiceID := uint32(len(services)) + 1
 
-	servicesGenesis := types.NewGenesisState(nextServiceId, services, servicesParams, params)
+	servicesGenesis := types.NewGenesisState(nextServiceID, services, servicesParams, params)
 	simState.GenState[types.ModuleName] = simState.Cdc.MustMarshalJSON(servicesGenesis)
 }

@@ -27,13 +27,13 @@ const (
 	DefaultWeightMsgDeleteService            int = 100
 	DefaultWeightMsgSetServiceParams         int = 100
 
-	OpWeightMsgCreateService            = "op_weight_msg_create_service"
-	OpWeightMsgUpdateService            = "op_weight_msg_update_service"
-	OpWeightMsgActivateService          = "op_weight_msg_activate_service"
-	OpWeightMsgDeactivateService        = "op_weight_msg_deactivate_service"
-	OpWeightMsgTransferServiceOwnership = "op_weight_msg_transfer_service_ownership"
-	OpWeightMsgDeleteService            = "op_weight_msg_delete_service"
-	OpWeightMsgSetServiceParams         = "op_weight_msg_set_service_params"
+	OperationWeightMsgCreateService            = "op_weight_msg_create_service"
+	OperationWeightMsgUpdateService            = "op_weight_msg_update_service"
+	OperationWeightMsgActivateService          = "op_weight_msg_activate_service"
+	OperationWeightMsgDeactivateService        = "op_weight_msg_deactivate_service"
+	OperationWeightMsgTransferServiceOwnership = "op_weight_msg_transfer_service_ownership"
+	OperationWeightMsgDeleteService            = "op_weight_msg_delete_service"
+	OperationWeightMsgSetServiceParams         = "op_weight_msg_set_service_params"
 )
 
 // WeightedOperations returns all the operations from the module with their respective weights
@@ -56,31 +56,31 @@ func WeightedOperations(
 	)
 
 	// Generate the weights
-	appParams.GetOrGenerate(OpWeightMsgCreateService, &weightMsgCreateService, nil, func(_ *rand.Rand) {
+	appParams.GetOrGenerate(OperationWeightMsgCreateService, &weightMsgCreateService, nil, func(_ *rand.Rand) {
 		weightMsgCreateService = DefaultWeightMsgCreateService
 	})
 
-	appParams.GetOrGenerate(OpWeightMsgUpdateService, &weightMsgUpdateService, nil, func(_ *rand.Rand) {
+	appParams.GetOrGenerate(OperationWeightMsgUpdateService, &weightMsgUpdateService, nil, func(_ *rand.Rand) {
 		weightMsgUpdateService = DefaultWeightMsgUpdateService
 	})
 
-	appParams.GetOrGenerate(OpWeightMsgActivateService, &weightMsgActivateService, nil, func(_ *rand.Rand) {
+	appParams.GetOrGenerate(OperationWeightMsgActivateService, &weightMsgActivateService, nil, func(_ *rand.Rand) {
 		weightMsgActivateService = DefaultWeightMsgActivateService
 	})
 
-	appParams.GetOrGenerate(OpWeightMsgDeactivateService, &weightMsgDeactivateService, nil, func(_ *rand.Rand) {
+	appParams.GetOrGenerate(OperationWeightMsgDeactivateService, &weightMsgDeactivateService, nil, func(_ *rand.Rand) {
 		weightMsgDeactivateService = DefaultWeightMsgDeactivateService
 	})
 
-	appParams.GetOrGenerate(OpWeightMsgTransferServiceOwnership, &weightMsgTransferServiceOwnership, nil, func(_ *rand.Rand) {
+	appParams.GetOrGenerate(OperationWeightMsgTransferServiceOwnership, &weightMsgTransferServiceOwnership, nil, func(_ *rand.Rand) {
 		weightMsgTransferServiceOwnership = DefaultWeightMsgTransferServiceOwnership
 	})
 
-	appParams.GetOrGenerate(OpWeightMsgDeleteService, &weightMsgDeleteService, nil, func(_ *rand.Rand) {
+	appParams.GetOrGenerate(OperationWeightMsgDeleteService, &weightMsgDeleteService, nil, func(_ *rand.Rand) {
 		weightMsgDeleteService = DefaultWeightMsgDeleteService
 	})
 
-	appParams.GetOrGenerate(OpWeightMsgSetServiceParams, &weightMsgSetServiceParams, nil, func(_ *rand.Rand) {
+	appParams.GetOrGenerate(OperationWeightMsgSetServiceParams, &weightMsgSetServiceParams, nil, func(_ *rand.Rand) {
 		weightMsgSetServiceParams = DefaultWeightMsgSetServiceParams
 	})
 

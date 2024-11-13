@@ -168,7 +168,7 @@ func (am AppModule) IsAppModule() {}
 
 // AppModuleSimulation functions
 
-// GenerateGenesisState creates a randomized GenState of the staking module.
+// GenerateGenesisState creates a randomized GenState of the services module.
 func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 	simulation.RandomizedGenState(simState)
 }
@@ -178,12 +178,12 @@ func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.Wei
 	return simulation.ProposalMsgs(am.keeper)
 }
 
-// RegisterStoreDecoder registers a decoder for staking module's types
+// RegisterStoreDecoder registers a decoder for services module's types.
 func (am AppModule) RegisterStoreDecoder(sdr simtypes.StoreDecoderRegistry) {
 	sdr[types.StoreKey] = simulation.NewDecodeStore(am.cdc, am.keeper)
 }
 
-// WeightedOperations returns the all the staking module operations with their respective weights.
+// WeightedOperations returns the all the services module operations with their respective weights.
 func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
 	return simulation.WeightedOperations(
 		simState.AppParams, simState.Cdc, simState.TxConfig,

@@ -19,26 +19,28 @@ const (
 	DefaultWeightMsgAccreditService            int = 50
 	DefaultWeightMsgRevokeServiceAccreditation int = 50
 
-	OpWeightMsgUpdateParams               = "op_weight_msg_update_params"
-	OpWeightMsgAccreditService            = "op_weight_msg_accredit_service"
-	OpWeightMsgRevokeServiceAccreditation = "op_weight_msg_revoke_service_accreditation"
+	OperationWeightMsgUpdateParams = "op_weight_msg_update_params"
+	//nolint:gosec
+	OperationWeightMsgAccreditService = "op_weight_msg_accredit_service"
+	//nolint:gosec
+	OperationWeightMsgRevokeServiceAccreditation = "op_weight_msg_revoke_service_accreditation"
 )
 
 // ProposalMsgs defines the module weighted proposals' contents
 func ProposalMsgs(keeper *keeper.Keeper) []simtypes.WeightedProposalMsg {
 	return []simtypes.WeightedProposalMsg{
 		simulation.NewWeightedProposalMsg(
-			OpWeightMsgUpdateParams,
+			OperationWeightMsgUpdateParams,
 			DefaultWeightMsgUpdateParams,
 			SimulateMsgUpdateParams,
 		),
 		simulation.NewWeightedProposalMsg(
-			OpWeightMsgAccreditService,
+			OperationWeightMsgAccreditService,
 			DefaultWeightMsgAccreditService,
 			SimulateMsgAccreditService(keeper),
 		),
 		simulation.NewWeightedProposalMsg(
-			OpWeightMsgRevokeServiceAccreditation,
+			OperationWeightMsgRevokeServiceAccreditation,
 			DefaultWeightMsgRevokeServiceAccreditation,
 			SimulateMsgRevokeServiceAccreditation(keeper),
 		),
