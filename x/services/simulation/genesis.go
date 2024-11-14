@@ -16,11 +16,11 @@ const (
 	keyServicesParams          = "services_params"
 )
 
-func getServices(r *rand.Rand) []types.Service {
+func getServices(r *rand.Rand, simState *module.SimulationState) []types.Service {
 	count := r.Intn(10) + 1
 	var services []types.Service
 	for i := 0; i < count; i++ {
-		adminAccount := simulation.RandomAccounts(r, 1)[0]
+		adminAccount, _ := simulation.RandomAcc(r, simState.Accounts)
 		service := RandomService(r, uint32(i)+1, adminAccount.Address.String())
 		services = append(services, service)
 	}
@@ -50,7 +50,7 @@ func RandomizedGenState(simState *module.SimulationState) {
 	)
 
 	simState.AppParams.GetOrGenerate(keyServices, &services, simState.Rand, func(r *rand.Rand) {
-		services = getServices(r)
+		services = getServices(r, simState)
 	})
 
 	simState.AppParams.GetOrGenerate(keyServicesParams, &servicesParams, simState.Rand, func(r *rand.Rand) {
