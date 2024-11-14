@@ -13,7 +13,7 @@ import (
 
 func (suite *KeeperTestSuite) TestCreateRewardsPlan_PoolOrOperatorNotFound() {
 	// Cache the context to avoid errors
-	ctx, _ := suite.Ctx.CacheContext()
+	ctx, _ := suite.ctx.CacheContext()
 
 	service, _ := suite.setupSampleServiceAndOperator(ctx)
 
@@ -22,7 +22,7 @@ func (suite *KeeperTestSuite) TestCreateRewardsPlan_PoolOrOperatorNotFound() {
 	planStartTime := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
 	planEndTime := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
 
-	rewardsMsgServer := rewardskeeper.NewMsgServer(suite.App.RewardsKeeper)
+	rewardsMsgServer := rewardskeeper.NewMsgServer(suite.keeper)
 
 	// There's no pool 1 yet.
 	_, err := rewardsMsgServer.CreateRewardsPlan(ctx, types.NewMsgCreateRewardsPlan(
@@ -71,7 +71,7 @@ func (suite *KeeperTestSuite) TestCreateRewardsPlan_PoolOrOperatorNotFound() {
 
 func (suite *KeeperTestSuite) TestTerminateEndedRewardsPlans() {
 	// Cache the context to avoid errors
-	ctx, _ := suite.Ctx.CacheContext()
+	ctx, _ := suite.ctx.CacheContext()
 
 	service, _ := suite.setupSampleServiceAndOperator(ctx)
 
@@ -85,8 +85,8 @@ func (suite *KeeperTestSuite) TestTerminateEndedRewardsPlans() {
 		utils.MustParseCoins("10000_000000service"),
 	)
 
-	rewardsPoolAddr := plan.MustGetRewardsPoolAddress(suite.App.AccountKeeper.AddressCodec())
-	remaining := suite.App.BankKeeper.GetAllBalances(ctx, rewardsPoolAddr)
+	rewardsPoolAddr := plan.MustGetRewardsPoolAddress(suite.accountKeeper.AddressCodec())
+	remaining := suite.bankKeeper.GetAllBalances(ctx, rewardsPoolAddr)
 	suite.Require().Equal("10000000000service", remaining.String())
 
 	// Change the block time so that the plan becomes no more active.
@@ -101,12 +101,12 @@ func (suite *KeeperTestSuite) TestTerminateEndedRewardsPlans() {
 	suite.Require().ErrorIs(err, collections.ErrNotFound)
 
 	// All remaining rewards are transferred to the service's address.
-	remaining = suite.App.BankKeeper.GetAllBalances(ctx, rewardsPoolAddr)
+	remaining = suite.bankKeeper.GetAllBalances(ctx, rewardsPoolAddr)
 	suite.Require().True(remaining.IsZero())
 
 	// Check the service's address balances.
-	serviceAddr, err := suite.App.AccountKeeper.AddressCodec().StringToBytes(service.Address)
+	serviceAddr, err := suite.accountKeeper.AddressCodec().StringToBytes(service.Address)
 	suite.Require().NoError(err)
-	serviceBalances := suite.App.BankKeeper.GetAllBalances(ctx, serviceAddr)
+	serviceBalances := suite.bankKeeper.GetAllBalances(ctx, serviceAddr)
 	suite.Require().Equal("10000000000service", serviceBalances.String())
 }

@@ -3,13 +3,10 @@ package keeper_test
 import (
 	"testing"
 
-	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	"go.uber.org/mock/gomock"
-
 	storetypes "cosmossdk.io/store/types"
-	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
+	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	"github.com/stretchr/testify/suite"
 
 	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
@@ -24,9 +21,7 @@ func TestKeeperTestSuite(t *testing.T) {
 type KeeperTestSuite struct {
 	suite.Suite
 
-	cdc            codec.Codec
-	legacyAminoCdc *codec.LegacyAmino
-	ctx            sdk.Context
+	ctx sdk.Context
 
 	storeKey storetypes.StoreKey
 
@@ -34,42 +29,29 @@ type KeeperTestSuite struct {
 	bk    bankkeeper.Keeper
 	k     *keeper.Keeper
 	hooks *testutils.MockHooks
-
-	ctrl       *gomock.Controller
-	poolKeeper *testutils.MockCommunityPoolKeeper
 }
 
 func (suite *KeeperTestSuite) SetupTest() {
 	data := testutils.NewKeeperTestData(suite.T())
-
-	suite.storeKey = data.StoreKey
-
 	suite.ctx = data.Context
-	suite.cdc, suite.legacyAminoCdc = data.Cdc, data.LegacyAmino
-
-	suite.ctrl = data.MockCtrl
+	suite.storeKey = data.StoreKey
 
 	// Build keepers
 	suite.ak = data.AccountKeeper
 	suite.bk = data.BankKeeper
 	suite.k = data.Keeper
-	suite.poolKeeper = data.PoolKeeper
 
 	// Set hooks
 	suite.hooks = data.Hooks
-}
-
-func (suite *KeeperTestSuite) TearDownTest() {
-	suite.ctrl.Finish()
 }
 
 // --------------------------------------------------------------------------------------------------------------------
 
 // fundAccount adds the given amount of coins to the account with the given address
 func (suite *KeeperTestSuite) fundAccount(ctx sdk.Context, address string, amount sdk.Coins) {
-	// Mint the coins
-	moduleAcc := suite.ak.GetModuleAccount(ctx, authtypes.Minter)
+	moduleAcc := suite.ak.GetModuleAccount(ctx, minttypes.ModuleName)
 
+	// Mint the coins
 	err := suite.bk.MintCoins(ctx, moduleAcc.GetName(), amount)
 	suite.Require().NoError(err)
 

@@ -12,11 +12,8 @@ import (
 )
 
 func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
-	user1 := "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"
-	user2 := "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"
-	vestedStake, err := types.GetVestedRepresentationDenom("stake")
+	vestedStakeDenom, err := types.GetVestedRepresentationDenom("stake")
 	suite.Assert().NoError(err)
-	blockTime := time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC)
 
 	testCases := []struct {
 		name       string
@@ -42,15 +39,15 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			name: "insurance funds are exported correctly",
 			store: func(ctx sdk.Context) {
 				// Fund the users' insurance fund
-				suite.fundAccountInsuranceFund(ctx, user1, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)))
-				suite.fundAccountInsuranceFund(ctx, user2, sdk.NewCoins(sdk.NewInt64Coin("stake", 2)))
+				suite.fundAccountInsuranceFund(ctx, "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre", sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)))
+				suite.fundAccountInsuranceFund(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", sdk.NewCoins(sdk.NewInt64Coin("stake", 2)))
 			},
 			expGenesis: &types.GenesisState{
 				Params:    types.DefaultParams(),
 				BurnCoins: nil,
 				UserInsuranceFunds: []types.UserInsuranceFundState{
-					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)), nil)),
-					types.NewUserInsuranceFundState(user2, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin("stake", 2)), nil)),
+					types.NewUserInsuranceFundState("cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre", types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)), nil)),
+					types.NewUserInsuranceFundState("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin("stake", 2)), nil)),
 				},
 			},
 		},
@@ -59,47 +56,88 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			setupCtx: func(ctx sdk.Context) sdk.Context {
 				return ctx.
 					WithBlockHeight(10).
-					WithBlockTime(blockTime)
+					WithBlockTime(time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC))
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding delegation time to 7 days
 				suite.rk.SetParams(ctx, restakingtypes.NewParams(7*24*time.Hour, nil))
 
 				// Fund the users' insurance fund
-				suite.fundAccountInsuranceFund(ctx, user1, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)))
-				suite.fundAccountInsuranceFund(ctx, user2, sdk.NewCoins(sdk.NewInt64Coin("stake", 2)))
+				suite.fundAccountInsuranceFund(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)),
+				)
+				suite.fundAccountInsuranceFund(ctx,
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					sdk.NewCoins(sdk.NewInt64Coin("stake", 2)),
+				)
 
 				// Mint the staked representations
-				suite.mintVestedRepresentation(user1, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)))
-				suite.mintVestedRepresentation(user2, sdk.NewCoins(sdk.NewInt64Coin("stake", 100)))
+				suite.mintVestedRepresentation(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)),
+				)
+				suite.mintVestedRepresentation(ctx,
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					sdk.NewCoins(sdk.NewInt64Coin("stake", 100)),
+				)
 
 				// Delegate the tokens so that they will be scheduled for burn after the
 				// unbonding period
-				suite.createPool(1, vestedIBCDenom)
-				_, err := suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedIBCDenom, 100), user1)
+				suite.createPool(ctx, 1, vestedIBCDenom)
+				_, err = suite.rk.DelegateToPool(ctx,
+					sdk.NewInt64Coin(vestedIBCDenom, 100),
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+				)
 				suite.Assert().NoError(err)
 
-				suite.createPool(2, vestedStake)
-				_, err = suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedStake, 100), user2)
+				suite.createPool(ctx, 2, vestedStakeDenom)
+				_, err = suite.rk.DelegateToPool(ctx,
+					sdk.NewInt64Coin(vestedStakeDenom, 100),
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				)
 				suite.Assert().NoError(err)
 
 				// Burn the coins
-				suite.Assert().NoError(suite.k.BurnVestedRepresentation(ctx, sdk.MustAccAddressFromBech32(user1), sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 100))))
-				suite.Assert().NoError(suite.k.BurnVestedRepresentation(ctx, sdk.MustAccAddressFromBech32(user2), sdk.NewCoins(sdk.NewInt64Coin(vestedStake, 100))))
+				userAddr, err := sdk.AccAddressFromBech32("cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre")
+				suite.Assert().NoError(err)
+				err = suite.k.BurnVestedRepresentation(ctx, userAddr, sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 100)))
+				suite.Assert().NoError(err)
+
+				userAddr, err = sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Assert().NoError(err)
+				err = suite.k.BurnVestedRepresentation(ctx, userAddr, sdk.NewCoins(sdk.NewInt64Coin(vestedStakeDenom, 100)))
+				suite.Assert().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				Params: types.DefaultParams(),
 				BurnCoins: []types.BurnCoins{
-					types.NewBurnCoins(user1, blockTime.Add(7*24*time.Hour), sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 100))),
-					types.NewBurnCoins(user2, blockTime.Add(7*24*time.Hour), sdk.NewCoins(sdk.NewInt64Coin(vestedStake, 100))),
+					types.NewBurnCoins(
+						"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+						time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC).Add(7*24*time.Hour),
+						sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 100)),
+					),
+					types.NewBurnCoins(
+						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+						time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC).Add(7*24*time.Hour),
+						sdk.NewCoins(sdk.NewInt64Coin(vestedStakeDenom, 100)),
+					),
 				},
 				UserInsuranceFunds: []types.UserInsuranceFundState{
-					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(
-						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)),
-						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)))),
-					types.NewUserInsuranceFundState(user2, types.NewInsuranceFund(
-						sdk.NewCoins(sdk.NewInt64Coin("stake", 2)),
-						sdk.NewCoins(sdk.NewInt64Coin("stake", 2)))),
+					types.NewUserInsuranceFundState(
+						"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+						types.NewInsuranceFund(
+							sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)),
+							sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)),
+						),
+					),
+					types.NewUserInsuranceFundState(
+						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+						types.NewInsuranceFund(
+							sdk.NewCoins(sdk.NewInt64Coin("stake", 2)),
+							sdk.NewCoins(sdk.NewInt64Coin("stake", 2)),
+						),
+					),
 				},
 			},
 		},
@@ -109,7 +147,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			ctx := suite.ctx
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.setupCtx != nil {
 				ctx = tc.setupCtx(ctx)
 			}
@@ -130,10 +168,9 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 }
 
 func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
-	user1 := "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"
 	testCases := []struct {
 		name      string
-		setup     func(ctx sdk.Context)
+		store     func(ctx sdk.Context)
 		genesis   *types.GenesisState
 		shouldErr bool
 		check     func(ctx sdk.Context)
@@ -155,7 +192,8 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			name: "should block negative insurance fund percentage",
 			genesis: types.NewGenesisState(
 				types.NewParams(math.LegacyNewDec(-1), nil, nil),
-				nil, nil,
+				nil,
+				nil,
 			),
 			shouldErr: true,
 		},
@@ -163,7 +201,8 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			name: "should block 0 insurance fund percentage",
 			genesis: types.NewGenesisState(
 				types.NewParams(math.LegacyNewDec(0), nil, nil),
-				nil, nil,
+				nil,
+				nil,
 			),
 			shouldErr: true,
 		},
@@ -171,7 +210,8 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			name: "should allow 100 insurance fund percentage",
 			genesis: types.NewGenesisState(
 				types.NewParams(math.LegacyNewDec(100), nil, nil),
-				nil, nil,
+				nil,
+				nil,
 			),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
@@ -183,7 +223,8 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			name: "should block > 100 insurance fund percentage",
 			genesis: types.NewGenesisState(
 				types.NewParams(math.LegacyNewDec(101), nil, nil),
-				nil, nil,
+				nil,
+				nil,
 			),
 			shouldErr: true,
 		},
@@ -191,7 +232,8 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			name: "should block invalid minter address",
 			genesis: types.NewGenesisState(
 				types.NewParams(math.LegacyNewDec(2), nil, []string{"cosmos1fdsfd"}),
-				nil, nil,
+				nil,
+				nil,
 			),
 			shouldErr: true,
 		},
@@ -199,7 +241,8 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			name: "should block invalid burners address",
 			genesis: types.NewGenesisState(
 				types.NewParams(math.LegacyNewDec(2), []string{"cosmos1fdsfd"}, nil),
-				nil, nil,
+				nil,
+				nil,
 			),
 			shouldErr: true,
 		},
@@ -209,7 +252,10 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 				types.DefaultParams(),
 				nil,
 				[]types.UserInsuranceFundState{
-					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)), sdk.NewCoins())),
+					types.NewUserInsuranceFundState(
+						"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+						types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)), sdk.NewCoins()),
+					),
 				},
 			),
 			shouldErr: true,
@@ -220,28 +266,23 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 				types.DefaultParams(),
 				nil,
 				[]types.UserInsuranceFundState{
-					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(
-						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)),
-						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)))),
+					types.NewUserInsuranceFundState(
+						"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+						types.NewInsuranceFund(
+							sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)),
+							sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)),
+						),
+					),
 				},
 			),
 			shouldErr: true,
 		},
 		{
 			name: "should block insurance fund initialization if insurance fund don't cover delegations and undelegations",
-			genesis: types.NewGenesisState(
-				types.DefaultParams(),
-				nil,
-				[]types.UserInsuranceFundState{
-					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(
-						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)),
-						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)))),
-				},
-			),
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				// Send tokens to the liquid vesting module
-				suite.Assert().NoError(
-					suite.bk.MintCoins(ctx, types.ModuleName, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2))))
+				err := suite.bk.MintCoins(ctx, types.ModuleName, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)))
+				suite.Assert().NoError(err)
 
 				// Init the pools module
 				testPool := poolstypes.NewPool(1, vestedIBCDenom)
@@ -259,7 +300,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 					Params: restakingtypes.DefaultParams(),
 					UnbondingDelegations: []restakingtypes.UnbondingDelegation{
 						restakingtypes.NewPoolUnbondingDelegation(
-							user1,
+							"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 							1,
 							10,
 							time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
@@ -268,50 +309,65 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 						),
 					},
 					Delegations: []restakingtypes.Delegation{
-						restakingtypes.NewPoolDelegation(1, user1,
-							sdk.NewDecCoins(sdk.NewInt64DecCoin(testPool.GetSharesDenom(vestedIBCDenom), 50))),
+						restakingtypes.NewPoolDelegation(
+							1,
+							"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+							sdk.NewDecCoins(sdk.NewInt64DecCoin(testPool.GetSharesDenom(vestedIBCDenom), 50)),
+						),
 					},
 				}
 				suite.rk.InitGenesis(ctx, restakingKeeperGenesis)
 			},
-			shouldErr: true,
-		},
-		{
-			name: "should initialize insurance fund properly",
 			genesis: types.NewGenesisState(
 				types.DefaultParams(),
 				nil,
 				[]types.UserInsuranceFundState{
-					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)), sdk.NewCoins())),
+					types.NewUserInsuranceFundState(
+						"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+						types.NewInsuranceFund(
+							sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)),
+							sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)),
+						),
+					),
 				},
 			),
-			setup: func(ctx sdk.Context) {
+			shouldErr: true,
+		},
+		{
+			name: "should initialize insurance fund properly",
+			store: func(ctx sdk.Context) {
 				err := suite.bk.MintCoins(ctx, types.ModuleName, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)))
 				suite.Assert().NoError(err)
 			},
+			genesis: types.NewGenesisState(
+				types.DefaultParams(),
+				nil,
+				[]types.UserInsuranceFundState{
+					types.NewUserInsuranceFundState(
+						"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+						types.NewInsuranceFund(
+							sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)),
+							sdk.NewCoins(),
+						),
+					),
+				},
+			),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				balance, err := suite.k.GetUserInsuranceFundBalance(ctx, sdk.MustAccAddressFromBech32(user1))
+				userAddr, err := sdk.AccAddressFromBech32("cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre")
+				suite.Assert().NoError(err)
+
+				balance, err := suite.k.GetUserInsuranceFundBalance(ctx, userAddr)
 				suite.Assert().NoError(err)
 				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)), balance)
 			},
 		},
 		{
 			name: "should initialize insurance with delegations and undelegations",
-			genesis: types.NewGenesisState(
-				types.DefaultParams(),
-				nil,
-				[]types.UserInsuranceFundState{
-					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(
-						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)),
-						// Set 3 as used to cover the delegation and the undelegation
-						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 3)))),
-				},
-			),
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				// Send tokens to the liquid vesting module
-				suite.Assert().NoError(
-					suite.bk.MintCoins(ctx, types.ModuleName, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10))))
+				err := suite.bk.MintCoins(ctx, types.ModuleName, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)))
+				suite.Assert().NoError(err)
 
 				// Init the pools module
 				testPool := poolstypes.NewPool(1, vestedIBCDenom)
@@ -329,7 +385,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 					Params: restakingtypes.DefaultParams(),
 					UnbondingDelegations: []restakingtypes.UnbondingDelegation{
 						restakingtypes.NewPoolUnbondingDelegation(
-							user1,
+							"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 							1,
 							10,
 							time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
@@ -338,12 +394,29 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 						),
 					},
 					Delegations: []restakingtypes.Delegation{
-						restakingtypes.NewPoolDelegation(1, user1,
-							sdk.NewDecCoins(sdk.NewInt64DecCoin(testPool.GetSharesDenom(vestedIBCDenom), 50))),
+						restakingtypes.NewPoolDelegation(
+							1,
+							"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+							sdk.NewDecCoins(sdk.NewInt64DecCoin(testPool.GetSharesDenom(vestedIBCDenom), 50)),
+						),
 					},
 				}
 				suite.rk.InitGenesis(ctx, restakingKeeperGenesis)
 			},
+			genesis: types.NewGenesisState(
+				types.DefaultParams(),
+				nil,
+				[]types.UserInsuranceFundState{
+					types.NewUserInsuranceFundState(
+						"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+						types.NewInsuranceFund(
+							sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)),
+							// Set 3 as used to cover the delegation and the undelegation
+							sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 3)),
+						),
+					),
+				},
+			),
 			shouldErr: false,
 		},
 		{
@@ -351,7 +424,11 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			genesis: types.NewGenesisState(
 				types.DefaultParams(),
 				[]types.BurnCoins{
-					types.NewBurnCoins(user1, time.Now(), sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 2))),
+					types.NewBurnCoins(
+						"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+						time.Now(),
+						sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 2)),
+					),
 				},
 				nil,
 			),
@@ -359,12 +436,12 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 		},
 		{
 			name: "should initialize burn coins properly",
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				restakingKeeperGenesis := &restakingtypes.GenesisState{
 					Params: restakingtypes.DefaultParams(),
 					UnbondingDelegations: []restakingtypes.UnbondingDelegation{
 						restakingtypes.NewPoolUnbondingDelegation(
-							user1,
+							"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 							1,
 							10,
 							time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
@@ -378,7 +455,11 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			genesis: types.NewGenesisState(
 				types.DefaultParams(),
 				[]types.BurnCoins{
-					types.NewBurnCoins(user1, time.Now(), sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 2))),
+					types.NewBurnCoins(
+						"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+						time.Now(),
+						sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 2)),
+					),
 				},
 				nil,
 			),
@@ -386,8 +467,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			check: func(ctx sdk.Context) {
 				burnCoins := suite.k.GetAllBurnCoins(ctx)
 				suite.Assert().Len(burnCoins, 1)
-				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 2)),
-					burnCoins[0].Amount)
+				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 2)), burnCoins[0].Amount)
 			},
 		},
 	}
@@ -396,10 +476,12 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			if tc.setup != nil {
-				tc.setup(suite.ctx)
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
 			}
-			err := suite.k.InitGenesis(suite.ctx, tc.genesis)
+
+			err := suite.k.InitGenesis(ctx, tc.genesis)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -407,7 +489,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			}
 
 			if tc.check != nil {
-				tc.check(suite.ctx)
+				tc.check(ctx)
 			}
 		})
 	}

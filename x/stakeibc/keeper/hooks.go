@@ -2,13 +2,10 @@ package keeper
 
 import (
 	"fmt"
-	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/gogoproto/proto"
 
 	epochstypes "github.com/milkyway-labs/milkyway/x/epochs/types"
-	"github.com/milkyway-labs/milkyway/x/stakeibc/types"
 )
 
 const StrideEpochsPerDayEpoch = uint64(4)
@@ -105,7 +102,6 @@ func (k Keeper) Hooks() Hooks {
 	return Hooks{k}
 }
 
-// epochs hooks
 func (h Hooks) BeforeEpochStart(ctx sdk.Context, epochInfo epochstypes.EpochInfo) {
 	h.k.BeforeEpochStart(ctx, epochInfo)
 }
@@ -114,7 +110,7 @@ func (h Hooks) AfterEpochEnd(ctx sdk.Context, epochInfo epochstypes.EpochInfo) {
 	h.k.AfterEpochEnd(ctx, epochInfo)
 }
 
-// Set the withdrawal account address for each host zone
+// SetWithdrawalAddress sets the withdrawal account address for each host zone
 func (k Keeper) SetWithdrawalAddress(ctx sdk.Context) {
 	k.Logger(ctx).Info("Setting Withdrawal Addresses...")
 
@@ -126,7 +122,7 @@ func (k Keeper) SetWithdrawalAddress(ctx sdk.Context) {
 	}
 }
 
-// Claim staking rewards for each host zone
+// ClaimAccruedStakingRewards allows to claim staking rewards for each host zone
 func (k Keeper) ClaimAccruedStakingRewards(ctx sdk.Context) {
 	k.Logger(ctx).Info("Claiming Accrued Staking Rewards...")
 
@@ -135,32 +131,5 @@ func (k Keeper) ClaimAccruedStakingRewards(ctx sdk.Context) {
 		if err != nil {
 			k.Logger(ctx).Error(fmt.Sprintf("Unable to claim accrued staking rewards on %s, err: %s", hostZone.ChainId, err))
 		}
-	}
-}
-
-// TODO [cleanup]: Remove after v17 upgrade
-func (k Keeper) DisableHubTokenization(ctx sdk.Context) {
-	k.Logger(ctx).Info("Disabling the ability to tokenize Gaia delegations")
-
-	chainId := "cosmoshub-4"
-	hostZone, found := k.GetHostZone(ctx, chainId)
-	if !found {
-		k.Logger(ctx).Error("Gaia host zone not found, unable to disable tokenization")
-		return
-	}
-
-	// Build the msg for the disable tokenization ICA tx
-	var msgs []proto.Message
-	msgs = append(msgs, &types.MsgDisableTokenizeShares{
-		DelegatorAddress: hostZone.DelegationIcaAddress,
-	})
-
-	// Send the ICA tx to disable tokenization
-	timeoutTimestamp := uint64(ctx.BlockTime().Add(24 * time.Hour).UnixNano())
-	delegationOwner := types.FormatHostZoneICAOwner(hostZone.ChainId, types.ICAAccountType_DELEGATION)
-	err := k.SubmitICATxWithoutCallback(ctx, hostZone.ConnectionId, delegationOwner, msgs, timeoutTimestamp)
-	if err != nil {
-		k.Logger(ctx).Error(fmt.Sprintf("Failed to submit ICA tx to disable tokenization for gaia: %s", err.Error()))
-		return
 	}
 }

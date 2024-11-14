@@ -7,13 +7,13 @@ import (
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 )
 
-// IsIcs20Packet checks if the data is a ICS20 packet.
-func IsIcs20Packet(packetData []byte) (isIcs20 bool, ics20data transfertypes.FungibleTokenPacketData) {
+// DeserializeFungibleTokenPacketData deserializes the packet data and returns the FungibleTokenPacketData
+func DeserializeFungibleTokenPacketData(packetData []byte) (ics20data transfertypes.FungibleTokenPacketData, isIcs20 bool) {
 	var data transfertypes.FungibleTokenPacketData
 	decoder := json.NewDecoder(strings.NewReader(string(packetData)))
 	decoder.DisallowUnknownFields()
 	if err := decoder.Decode(&data); err != nil {
-		return false, data
+		return data, false
 	}
-	return true, data
+	return data, true
 }

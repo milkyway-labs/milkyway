@@ -7,106 +7,125 @@ import (
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
-const (
-	restaker       = "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"
-	testServiceId  = 1
-	testPoolId     = 1
-	testOperatorId = 1
-)
-
 func (suite *KeeperTestSuite) TestBankHooks_TestPoolRestaking() {
 	testCases := []struct {
-		name          string
-		setup         func()
-		msg           *restakingtypes.MsgDelegatePool
-		expectedUsage sdk.Coins
-		shouldErr     bool
+		name      string
+		store     func(ctx sdk.Context)
+		msg       *restakingtypes.MsgDelegatePool
+		shouldErr bool
+		check     func(ctx sdk.Context)
 	}{
 		{
 			name: "no insurance fund",
-			setup: func() {
+			store: func(ctx sdk.Context) {
+				suite.createPool(ctx, 1, vestedIBCDenom)
+
 				// Simulate the minting of the staking representation
-				suite.mintVestedRepresentation(
-					restaker,
+				suite.mintVestedRepresentation(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
 				)
 			},
 			msg: restakingtypes.NewMsgDelegatePool(
 				sdk.NewInt64Coin(vestedIBCDenom, 300),
-				restaker,
+				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
 			shouldErr: true,
 		},
 		{
 			name: "insufficient insurance fund",
-			setup: func() {
+			store: func(ctx sdk.Context) {
+				suite.createPool(ctx, 1, vestedIBCDenom)
+
 				// Fund the user's insurance fund
-				insuranceFundCoins := sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1))
-				suite.fundAccountInsuranceFund(suite.ctx, restaker, insuranceFundCoins)
+				suite.fundAccountInsuranceFund(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1)),
+				)
 
 				// Simulate the minting of the staking representation
-				suite.mintVestedRepresentation(
-					restaker,
+				suite.mintVestedRepresentation(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
 				)
 			},
 			msg: restakingtypes.NewMsgDelegatePool(
 				sdk.NewInt64Coin(vestedIBCDenom, 300),
-				restaker,
+				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
 			shouldErr: true,
 		},
 		{
 			name: "covered funds already restaked",
-			setup: func() {
-				// Create a test service and operator
-				suite.createService(testServiceId)
-				suite.createOperator(testOperatorId)
+			store: func(ctx sdk.Context) {
+				suite.createPool(ctx, 1, vestedIBCDenom)
 
-				insuranceFundCoins := sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6))
-				suite.fundAccountInsuranceFund(suite.ctx, restaker, insuranceFundCoins)
+				// Create a test service and operator
+				suite.createService(ctx, 1)
+				suite.createOperator(ctx, 1)
+
+				suite.fundAccountInsuranceFund(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6)),
+				)
+
 				// Mint the staked representation
-				suite.mintVestedRepresentation(
-					restaker,
+				suite.mintVestedRepresentation(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
 				)
 
 				// Delegates the funds covered by the insurance fund to the service and the operator
 				msgSrv := restakingkeeper.NewMsgServer(suite.rk)
-				_, err := msgSrv.DelegateService(suite.ctx, restakingtypes.NewMsgDelegateService(
-					testServiceId, sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 150)), restaker),
-				)
+				_, err := msgSrv.DelegateService(ctx, restakingtypes.NewMsgDelegateService(
+					1,
+					sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 150)),
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+				))
 				suite.Assert().NoError(err)
-				_, err = msgSrv.DelegateOperator(suite.ctx, restakingtypes.NewMsgDelegateOperator(
-					testOperatorId, sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 150)), restaker),
-				)
+				_, err = msgSrv.DelegateOperator(ctx, restakingtypes.NewMsgDelegateOperator(
+					1,
+					sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 150)),
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+				))
 				suite.Assert().NoError(err)
 			},
 			msg: restakingtypes.NewMsgDelegatePool(
 				sdk.NewInt64Coin(vestedIBCDenom, 150),
-				restaker,
+				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
 			shouldErr: true,
 		},
 		{
 			name: "restake correctly",
-			setup: func() {
+			store: func(ctx sdk.Context) {
+				suite.createPool(ctx, 1, vestedIBCDenom)
+
 				// Add the 2% to the insurance fund
-				insuranceFundCoins := sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6))
-				suite.fundAccountInsuranceFund(suite.ctx, restaker, insuranceFundCoins)
+				suite.fundAccountInsuranceFund(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6)),
+				)
 
 				// Simulate the minting of the staking representation
-				suite.mintVestedRepresentation(
-					restaker,
+				suite.mintVestedRepresentation(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
 				)
 			},
 			msg: restakingtypes.NewMsgDelegatePool(
 				sdk.NewInt64Coin(vestedIBCDenom, 300),
-				restaker,
+				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
-			expectedUsage: sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6)),
-			shouldErr:     false,
+			shouldErr: false,
+			check: func(ctx sdk.Context) {
+				userAddr, err := sdk.AccAddressFromBech32("cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre")
+				suite.Assert().NoError(err)
+
+				insuranceFund, err := suite.k.GetUserInsuranceFund(ctx, userAddr)
+				suite.Assert().NoError(err)
+				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6)), insuranceFund.Used)
+			},
 		},
 	}
 
@@ -114,19 +133,22 @@ func (suite *KeeperTestSuite) TestBankHooks_TestPoolRestaking() {
 		tc := tc
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
-			suite.createPool(testPoolId, vestedIBCDenom)
 
-			tc.setup()
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
 			msgServer := restakingkeeper.NewMsgServer(suite.rk)
-
-			_, err := msgServer.DelegatePool(suite.ctx, tc.msg)
+			_, err := msgServer.DelegatePool(ctx, tc.msg)
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
 				suite.Assert().NoError(err)
-				insuranceFund, err := suite.k.GetUserInsuranceFund(suite.ctx, sdk.MustAccAddressFromBech32(restaker))
-				suite.Assert().NoError(err)
-				suite.Assert().Equal(tc.expectedUsage, insuranceFund.Used)
+			}
+
+			if tc.check != nil {
+				tc.check(ctx)
 			}
 		})
 	}
@@ -134,98 +156,126 @@ func (suite *KeeperTestSuite) TestBankHooks_TestPoolRestaking() {
 
 func (suite *KeeperTestSuite) TestBankHooks_TestServiceRestaking() {
 	testCases := []struct {
-		name          string
-		setup         func()
-		msg           *restakingtypes.MsgDelegateService
-		expectedUsage sdk.Coins
-		shouldErr     bool
+		name      string
+		store     func(ctx sdk.Context)
+		msg       *restakingtypes.MsgDelegateService
+		shouldErr bool
+		check     func(ctx sdk.Context)
 	}{
 		{
 			name: "no insurance fund",
-			setup: func() {
+			store: func(ctx sdk.Context) {
+				suite.createService(ctx, 1)
+
 				// Simulate the minting of the staking representation
-				suite.mintVestedRepresentation(
-					restaker,
+				suite.mintVestedRepresentation(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
 				)
 			},
 			msg: restakingtypes.NewMsgDelegateService(
-				testServiceId,
+				1,
 				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 300)),
-				restaker,
+				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
 			shouldErr: true,
 		},
 		{
 			name: "insufficient insurance fund",
-			setup: func() {
+			store: func(ctx sdk.Context) {
+				suite.createService(ctx, 1)
+
 				// Fund the user's insurance fund
-				insuranceFundCoins := sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1))
-				suite.fundAccountInsuranceFund(suite.ctx, restaker, insuranceFundCoins)
+				suite.fundAccountInsuranceFund(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1)),
+				)
 
 				// Simulate the minting of the staked representation
-				suite.mintVestedRepresentation(
-					restaker,
+				suite.mintVestedRepresentation(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
 				)
 			},
 			msg: restakingtypes.NewMsgDelegateService(
-				testServiceId,
+				1,
 				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 300)),
-				restaker,
+				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
 			shouldErr: true,
 		},
 		{
 			name: "covered funds already restaked",
-			setup: func() {
-				// Create a test pool and operator
-				suite.createPool(testPoolId, vestedIBCDenom)
-				suite.createOperator(testOperatorId)
+			store: func(ctx sdk.Context) {
+				suite.createService(ctx, 1)
 
-				insuranceFundCoins := sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6))
-				suite.fundAccountInsuranceFund(suite.ctx, restaker, insuranceFundCoins)
+				// Create a test pool and operator
+				suite.createPool(ctx, 1, vestedIBCDenom)
+				suite.createOperator(ctx, 1)
+
+				suite.fundAccountInsuranceFund(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6)),
+				)
+
 				// Mint the staked representation
-				suite.mintVestedRepresentation(
-					restaker,
+				suite.mintVestedRepresentation(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
 				)
 
 				// Delegates the funds covered by the insurance fund to a pool and an operator
 				msgSrv := restakingkeeper.NewMsgServer(suite.rk)
-				_, err := msgSrv.DelegatePool(suite.ctx, restakingtypes.NewMsgDelegatePool(
-					sdk.NewInt64Coin(vestedIBCDenom, 150), restaker))
+				_, err := msgSrv.DelegatePool(ctx, restakingtypes.NewMsgDelegatePool(
+					sdk.NewInt64Coin(vestedIBCDenom, 150),
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+				))
 				suite.Assert().NoError(err)
-				_, err = msgSrv.DelegateOperator(suite.ctx, restakingtypes.NewMsgDelegateOperator(
-					testOperatorId, sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 150)), restaker),
-				)
+
+				_, err = msgSrv.DelegateOperator(ctx, restakingtypes.NewMsgDelegateOperator(
+					1,
+					sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 150)),
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+				))
 				suite.Assert().NoError(err)
 			},
 			msg: restakingtypes.NewMsgDelegateService(
-				testServiceId,
+				1,
 				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 150)),
-				restaker,
+				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
 			shouldErr: true,
 		},
 		{
 			name: "restake correctly",
-			setup: func() {
-				insuranceFundCoins := sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6))
-				suite.fundAccountInsuranceFund(suite.ctx, restaker, insuranceFundCoins)
+			store: func(ctx sdk.Context) {
+				suite.createService(ctx, 1)
+
+				suite.fundAccountInsuranceFund(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6)),
+				)
+
 				// Mint the staked representation
-				suite.mintVestedRepresentation(
-					restaker,
+				suite.mintVestedRepresentation(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
 				)
 			},
 			msg: restakingtypes.NewMsgDelegateService(
-				testServiceId,
+				1,
 				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 300)),
-				restaker,
+				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
-			expectedUsage: sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6)),
-			shouldErr:     false,
+			shouldErr: false,
+			check: func(ctx sdk.Context) {
+				userAddr, err := sdk.AccAddressFromBech32("cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre")
+				suite.Assert().NoError(err)
+
+				insuranceFund, err := suite.k.GetUserInsuranceFund(ctx, userAddr)
+				suite.Assert().NoError(err)
+				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6)), insuranceFund.Used)
+			},
 		},
 	}
 
@@ -233,19 +283,22 @@ func (suite *KeeperTestSuite) TestBankHooks_TestServiceRestaking() {
 		tc := tc
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
-			suite.createService(testServiceId)
 
-			tc.setup()
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
 			msgServer := restakingkeeper.NewMsgServer(suite.rk)
-
-			_, err := msgServer.DelegateService(suite.ctx, tc.msg)
+			_, err := msgServer.DelegateService(ctx, tc.msg)
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
 				suite.Assert().NoError(err)
-				insuranceFund, err := suite.k.GetUserInsuranceFund(suite.ctx, sdk.MustAccAddressFromBech32(restaker))
-				suite.Assert().NoError(err)
-				suite.Assert().Equal(tc.expectedUsage, insuranceFund.Used)
+			}
+
+			if tc.check != nil {
+				tc.check(ctx)
 			}
 		})
 	}
@@ -253,116 +306,148 @@ func (suite *KeeperTestSuite) TestBankHooks_TestServiceRestaking() {
 
 func (suite *KeeperTestSuite) TestBankHooks_TestOperatorRestaking() {
 	testCases := []struct {
-		name          string
-		setup         func()
-		msg           *restakingtypes.MsgDelegateOperator
-		expectedUsage sdk.Coins
-		shouldErr     bool
+		name      string
+		store     func(ctx sdk.Context)
+		msg       *restakingtypes.MsgDelegateOperator
+		shouldErr bool
+		check     func(ctx sdk.Context)
 	}{
 		{
 			name: "no insurance fund",
-			setup: func() {
+			store: func(ctx sdk.Context) {
+				suite.createOperator(ctx, 1)
+
 				// Simulate the minting of the staking representation
-				suite.mintVestedRepresentation(
-					restaker,
+				suite.mintVestedRepresentation(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
 				)
 			},
 			msg: restakingtypes.NewMsgDelegateOperator(
-				testOperatorId,
+				1,
 				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 300)),
-				restaker,
+				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
 			shouldErr: true,
 		},
 		{
 			name: "insufficient insurance fund",
-			setup: func() {
+			store: func(ctx sdk.Context) {
+				suite.createOperator(ctx, 1)
+
 				// Fund the user's insurance fund
-				insuranceFundCoins := sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1))
-				suite.fundAccountInsuranceFund(suite.ctx, restaker, insuranceFundCoins)
+				suite.fundAccountInsuranceFund(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1)),
+				)
 
 				// Simulate the minting of the staked representation
-				suite.mintVestedRepresentation(
-					restaker,
+				suite.mintVestedRepresentation(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
 				)
 			},
 			msg: restakingtypes.NewMsgDelegateOperator(
-				testOperatorId,
+				1,
 				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 300)),
-				restaker,
+				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
 			shouldErr: true,
 		},
 		{
 			name: "covered funds already restaked",
-			setup: func() {
-				suite.createPool(testPoolId, vestedIBCDenom)
-				suite.createService(testServiceId)
+			store: func(ctx sdk.Context) {
+				suite.createOperator(ctx, 1)
 
-				insuranceFundCoins := sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6))
-				suite.fundAccountInsuranceFund(suite.ctx, restaker, insuranceFundCoins)
+				suite.createPool(ctx, 1, vestedIBCDenom)
+				suite.createService(ctx, 1)
+
+				suite.fundAccountInsuranceFund(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6)),
+				)
+
 				// Mint the staked representation
-				suite.mintVestedRepresentation(
-					restaker,
+				suite.mintVestedRepresentation(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
 				)
 
 				// Delegates the funds covered by the insurance fund to a pool and an operator
 				msgSrv := restakingkeeper.NewMsgServer(suite.rk)
-				_, err := msgSrv.DelegatePool(suite.ctx, restakingtypes.NewMsgDelegatePool(
-					sdk.NewInt64Coin(vestedIBCDenom, 150), restaker))
+				_, err := msgSrv.DelegatePool(ctx, restakingtypes.NewMsgDelegatePool(
+					sdk.NewInt64Coin(vestedIBCDenom, 150),
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+				))
 				suite.Assert().NoError(err)
-				_, err = msgSrv.DelegateService(suite.ctx, restakingtypes.NewMsgDelegateService(
-					testServiceId, sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 150)), restaker),
-				)
+
+				_, err = msgSrv.DelegateService(ctx, restakingtypes.NewMsgDelegateService(
+					1,
+					sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 150)),
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+				))
 				suite.Assert().NoError(err)
 			},
 			msg: restakingtypes.NewMsgDelegateOperator(
-				testOperatorId,
+				1,
 				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 150)),
-				restaker,
+				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
 			shouldErr: true,
 		},
 		{
 			name: "restake correctly",
-			setup: func() {
-				insuranceFundCoins := sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6))
-				suite.fundAccountInsuranceFund(suite.ctx, restaker, insuranceFundCoins)
+			store: func(ctx sdk.Context) {
+				suite.createOperator(ctx, 1)
+
+				suite.fundAccountInsuranceFund(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6)),
+				)
+
 				// Mint the staked representation
-				suite.mintVestedRepresentation(
-					restaker,
+				suite.mintVestedRepresentation(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
 				)
 			},
 			msg: restakingtypes.NewMsgDelegateOperator(
-				testOperatorId,
+				1,
 				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 300)),
-				restaker,
+				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
-			expectedUsage: sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6)),
-			shouldErr:     false,
+			shouldErr: false,
+			check: func(ctx sdk.Context) {
+				userAddr, err := sdk.AccAddressFromBech32("cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre")
+				suite.Assert().NoError(err)
+
+				insuranceFund, err := suite.k.GetUserInsuranceFund(ctx, userAddr)
+				suite.Assert().NoError(err)
+				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6)), insuranceFund.Used)
+			},
 		},
 	}
 
 	for _, tc := range testCases {
+		tc := tc
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
-			suite.createOperator(testOperatorId)
 
-			tc.setup()
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
 			msgServer := restakingkeeper.NewMsgServer(suite.rk)
-
-			_, err := msgServer.DelegateOperator(suite.ctx, tc.msg)
+			_, err := msgServer.DelegateOperator(ctx, tc.msg)
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
 				suite.Assert().NoError(err)
-				insuranceFund, err := suite.k.GetUserInsuranceFund(suite.ctx, sdk.MustAccAddressFromBech32(restaker))
-				suite.Assert().NoError(err)
-				suite.Assert().Equal(tc.expectedUsage, insuranceFund.Used)
+			}
+
+			if tc.check != nil {
+				tc.check(ctx)
 			}
 		})
 	}

@@ -136,7 +136,7 @@ func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 				senderAddr, err := sdk.AccAddressFromBech32(testutil.TestAddress(10000).String())
 				suite.Require().NoError(err)
 
-				balances := suite.App.BankKeeper.GetAllBalances(ctx, senderAddr)
+				balances := suite.bankKeeper.GetAllBalances(ctx, senderAddr)
 				suite.Require().Equal("400000000umilk", balances.String())
 			},
 		},
@@ -145,7 +145,7 @@ func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 	for _, tc := range testCases {
 		tc := tc
 		suite.Run(tc.name, func() {
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.setup != nil {
 				tc.setup()
 			}
@@ -380,14 +380,12 @@ func (suite *KeeperTestSuite) TestMsgEditRewardsPlan() {
 					plan.EndTime,
 				)
 				// Check pools distribution
-				poolsDistributionType, err := types.GetDistributionType(
-					suite.App.AppCodec(), plan.PoolsDistribution)
+				poolsDistributionType, err := types.GetDistributionType(suite.cdc, plan.PoolsDistribution)
 				suite.Require().IsType(&types.DistributionTypeBasic{}, poolsDistributionType)
 				suite.Require().Equal(uint32(1), plan.PoolsDistribution.Weight)
 
 				// Check operators distribution
-				operatorsDistributionType, err := types.GetDistributionType(
-					suite.App.AppCodec(), plan.OperatorsDistribution)
+				operatorsDistributionType, err := types.GetDistributionType(suite.cdc, plan.OperatorsDistribution)
 				suite.Require().IsType(&types.DistributionTypeBasic{}, operatorsDistributionType)
 				suite.Require().Equal(uint32(2), plan.OperatorsDistribution.Weight)
 
@@ -401,7 +399,7 @@ func (suite *KeeperTestSuite) TestMsgEditRewardsPlan() {
 		tc := tc
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
-			ctx := suite.Ctx
+			ctx := suite.ctx
 			if tc.setup != nil {
 				tc.setup()
 			}
@@ -489,7 +487,7 @@ func (suite *KeeperTestSuite) TestMsgSetWithdrawAddress() {
 	for _, tc := range testCases {
 		tc := tc
 		suite.Run(tc.name, func() {
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.setup != nil {
 				tc.setup()
 			}
@@ -627,7 +625,7 @@ func (suite *KeeperTestSuite) TestMsgWithdrawDelegatorReward() {
 				delegatorAddress, err := sdk.AccAddressFromBech32("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd")
 				suite.Require().NoError(err)
 
-				balances := suite.App.BankKeeper.GetAllBalances(ctx, delegatorAddress)
+				balances := suite.bankKeeper.GetAllBalances(ctx, delegatorAddress)
 				suite.Require().Equal("11574service", balances.String())
 			},
 		},
@@ -636,7 +634,7 @@ func (suite *KeeperTestSuite) TestMsgWithdrawDelegatorReward() {
 	for _, tc := range testCases {
 		tc := tc
 		suite.Run(tc.name, func() {
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.setup != nil {
 				tc.setup()
 			}
@@ -768,7 +766,7 @@ func (suite *KeeperTestSuite) TestMsgWithdrawOperatorCommission() {
 			check: func(ctx sdk.Context) {
 				// Make sure the funds have been sent to the admin
 				adminAddress := testutil.TestAddress(10001)
-				balances := suite.App.BankKeeper.GetAllBalances(ctx, adminAddress)
+				balances := suite.bankKeeper.GetAllBalances(ctx, adminAddress)
 				suite.Require().Equal("1157service", balances.String())
 			},
 			shouldErr: false,
@@ -778,7 +776,7 @@ func (suite *KeeperTestSuite) TestMsgWithdrawOperatorCommission() {
 	for _, tc := range testCases {
 		tc := tc
 		suite.Run(tc.name, func() {
-			ctx, _ := suite.Ctx.CacheContext()
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.setup != nil {
 				tc.setup()
 			}

@@ -11,7 +11,7 @@ import (
 
 func (suite *KeeperTestSuite) TestAllocateRewards_InactivePlan() {
 	// Cache the context to avoid test conflicts
-	ctx, _ := suite.Ctx.CacheContext()
+	ctx, _ := suite.ctx.CacheContext()
 
 	// Inactive plans(current block time is out of their date range) don't allocate rewards.
 
@@ -44,7 +44,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_InactivePlan() {
 
 func (suite *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	// Cache the context to avoid test conflicts
-	ctx, _ := suite.Ctx.CacheContext()
+	ctx, _ := suite.ctx.CacheContext()
 
 	// - x/pools whitelists Service1, Service2
 	// - Service3 whitelists Operator2, Operator3
@@ -70,9 +70,9 @@ func (suite *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	service3 := suite.CreateService(ctx, "Service3", serviceAdmin3.String())
 
 	// Add only Service1 and Service2 to the pools module's allowed list.
-	poolsParams := suite.App.PoolsKeeper.GetParams(ctx)
+	poolsParams := suite.poolsKeeper.GetParams(ctx)
 	poolsParams.AllowedServicesIDs = []uint32{service1.ID, service2.ID}
-	suite.App.PoolsKeeper.SetParams(ctx, poolsParams)
+	suite.poolsKeeper.SetParams(ctx, poolsParams)
 
 	// Create operators.
 	operatorAdmin1 := testutil.TestAddress(10004)
@@ -256,7 +256,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 
 func (suite *KeeperTestSuite) TestAllocateRewards_MovingPrice() {
 	// Cache the context to avoid test conflicts
-	ctx, _ := suite.Ctx.CacheContext()
+	ctx, _ := suite.ctx.CacheContext()
 
 	// $MILK is $2 and $INIT is $3.
 	service, _ := suite.setupSampleServiceAndOperator(ctx)
@@ -312,7 +312,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_MovingPrice() {
 
 func (suite *KeeperTestSuite) TestAllocateRewards_ZeroDelegations() {
 	// Cache the context to avoid test conflicts
-	ctx, _ := suite.Ctx.CacheContext()
+	ctx, _ := suite.ctx.CacheContext()
 
 	// Test if AllocateRewards handles pool/operator/service distribution
 	// correctly when the distribution info has weight specified but there's
@@ -325,9 +325,9 @@ func (suite *KeeperTestSuite) TestAllocateRewards_ZeroDelegations() {
 	service := suite.CreateService(ctx, "Service", serviceAdmin.String())
 
 	// Add the created service ID to the pools module's allowed list.
-	poolsParams := suite.App.PoolsKeeper.GetParams(ctx)
+	poolsParams := suite.poolsKeeper.GetParams(ctx)
 	poolsParams.AllowedServicesIDs = []uint32{service.ID}
-	suite.App.PoolsKeeper.SetParams(ctx, poolsParams)
+	suite.poolsKeeper.SetParams(ctx, poolsParams)
 
 	// Create an active rewards plan.
 	planStartTime := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
@@ -399,7 +399,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_ZeroDelegations() {
 
 func (suite *KeeperTestSuite) TestAllocateRewards_WeightedDistributions() {
 	// Cache the context to avoid test conflicts
-	ctx, _ := suite.Ctx.CacheContext()
+	ctx, _ := suite.ctx.CacheContext()
 
 	// Register $MILK and $INIT. For simple calculation, set both currencies'
 	// price $1.
@@ -411,9 +411,9 @@ func (suite *KeeperTestSuite) TestAllocateRewards_WeightedDistributions() {
 	service := suite.CreateService(ctx, "Service", serviceAdmin.String())
 
 	// Add the created service ID to the pools module's allowed list.
-	poolsParams := suite.App.PoolsKeeper.GetParams(ctx)
+	poolsParams := suite.poolsKeeper.GetParams(ctx)
 	poolsParams.AllowedServicesIDs = []uint32{service.ID}
-	suite.App.PoolsKeeper.SetParams(ctx, poolsParams)
+	suite.poolsKeeper.SetParams(ctx, poolsParams)
 
 	// Create operators.
 	operatorAdmin1 := testutil.TestAddress(10001)
@@ -516,7 +516,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_WeightedDistributions() {
 
 func (suite *KeeperTestSuite) TestAllocateRewards_EgalitarianDistributions() {
 	// Cache the context to avoid test conflicts
-	ctx, _ := suite.Ctx.CacheContext()
+	ctx, _ := suite.ctx.CacheContext()
 
 	// Register $MILK and $INIT. For simple calculation, set both currencies'
 	// price $1.
@@ -528,9 +528,9 @@ func (suite *KeeperTestSuite) TestAllocateRewards_EgalitarianDistributions() {
 	service := suite.CreateService(ctx, "Service", serviceAdmin.String())
 
 	// Add the created service ID to the pools module's allowed list.
-	poolsParams := suite.App.PoolsKeeper.GetParams(ctx)
+	poolsParams := suite.poolsKeeper.GetParams(ctx)
 	poolsParams.AllowedServicesIDs = []uint32{service.ID}
-	suite.App.PoolsKeeper.SetParams(ctx, poolsParams)
+	suite.poolsKeeper.SetParams(ctx, poolsParams)
 
 	// Create operators.
 	operatorAdmin1 := testutil.TestAddress(10001)

@@ -10,8 +10,7 @@ import (
 )
 
 func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
-	testAccount := "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"
-	vestedStake, err := types.GetVestedRepresentationDenom("stake")
+	vestedStakeDenom, err := types.GetVestedRepresentationDenom("stake")
 	suite.Assert().NoError(err)
 
 	testCases := []struct {
@@ -37,32 +36,51 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 				// Set the unbonding delegation time to 7 days
 				suite.rk.SetParams(ctx, restakingtypes.NewParams(7*24*time.Hour, nil))
 
-				// Add some tokens to the user's insurance fund so they can restake
-				// the vested representation
-				suite.fundAccountInsuranceFund(ctx, testAccount, sdk.NewCoins(sdk.NewInt64Coin("stake", 100)))
+				// Add some tokens to the user's insurance fund so they can restake the vested representation
+				suite.fundAccountInsuranceFund(ctx,
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					sdk.NewCoins(sdk.NewInt64Coin("stake", 100)),
+				)
+
 				// Fund the account
-				suite.mintVestedRepresentation(testAccount, sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)))
-				suite.fundAccount(ctx, testAccount, sdk.NewCoins(sdk.NewInt64Coin("stake2", 200)))
+				suite.mintVestedRepresentation(ctx,
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)),
+				)
+				suite.fundAccount(ctx,
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					sdk.NewCoins(sdk.NewInt64Coin("stake2", 200)),
+				)
 
 				// Delegate some vested representation to pool, service and operator
-				suite.createPool(1, vestedStake)
-				_, err := suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedStake, 200), testAccount)
+				suite.createPool(ctx, 1, vestedStakeDenom)
+				_, err = suite.rk.DelegateToPool(ctx,
+					sdk.NewInt64Coin(vestedStakeDenom, 200),
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				)
 				suite.Assert().NoError(err)
 
-				suite.createService(1)
-				_, err = suite.rk.DelegateToService(ctx, 1,
-					sdk.NewCoins(sdk.NewInt64Coin(vestedStake, 300)), testAccount)
+				suite.createService(ctx, 1)
+				_, err = suite.rk.DelegateToService(ctx,
+					1,
+					sdk.NewCoins(sdk.NewInt64Coin(vestedStakeDenom, 300)),
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				)
 				suite.Assert().NoError(err)
 
-				suite.createOperator(1)
-				_, err = suite.rk.DelegateToOperator(ctx, 1,
-					sdk.NewCoins(sdk.NewInt64Coin(vestedStake, 300)), testAccount)
+				suite.createOperator(ctx, 1)
+				_, err = suite.rk.DelegateToOperator(ctx,
+					1,
+					sdk.NewCoins(sdk.NewInt64Coin(vestedStakeDenom, 300)),
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				)
 				suite.Assert().NoError(err)
 
 				// Burn all the coins
 				err = suite.k.BurnVestedRepresentation(ctx,
-					sdk.MustAccAddressFromBech32(testAccount),
-					sdk.NewCoins(sdk.NewInt64Coin(vestedStake, 1000)))
+					sdk.MustAccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+					sdk.NewCoins(sdk.NewInt64Coin(vestedStakeDenom, 1000)),
+				)
 				suite.Assert().NoError(err)
 			},
 			updateCtx: func(ctx sdk.Context) sdk.Context {
@@ -71,21 +89,19 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				// The user shouldn't have the vested representation
-				userBalance := suite.bk.GetAllBalances(ctx, sdk.MustAccAddressFromBech32(testAccount))
+				userBalance := suite.bk.GetAllBalances(ctx, sdk.MustAccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"))
 				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake2", 200)), userBalance)
 
 				// The burn queue should contain our record
 				toBurnCoins := suite.k.GetUnbondedCoinsFromQueue(ctx, ctx.BlockTime().Add(4*24*time.Hour))
 				suite.Assert().Len(toBurnCoins, 1)
 
-				suite.Assert().Equal(testAccount, toBurnCoins[0].DelegatorAddress)
-				suite.Assert().Equal(
-					sdk.NewCoins(sdk.NewInt64Coin(vestedStake, 800)),
-					toBurnCoins[0].Amount)
+				suite.Assert().Equal("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", toBurnCoins[0].DelegatorAddress)
+				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin(vestedStakeDenom, 800)), toBurnCoins[0].Amount)
 
 				// The user insurance fund signal that there are still 20 coins used
 				// to cover the restaking position
-				userInsuranceFund, err := suite.k.GetUserInsuranceFund(ctx, sdk.MustAccAddressFromBech32(testAccount))
+				userInsuranceFund, err := suite.k.GetUserInsuranceFund(ctx, sdk.MustAccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"))
 				suite.Assert().NoError(err)
 				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake", 16)), userInsuranceFund.Used)
 			},
@@ -103,30 +119,47 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 
 				// Add some tokens to the user's insurance fund so they can restake
 				// the vested representation
-				suite.fundAccountInsuranceFund(ctx, testAccount, sdk.NewCoins(sdk.NewInt64Coin("stake", 100)))
+				suite.fundAccountInsuranceFund(ctx,
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					sdk.NewCoins(sdk.NewInt64Coin("stake", 100)),
+				)
+
 				// Fund the account
-				suite.mintVestedRepresentation(testAccount, sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)))
-				suite.fundAccount(ctx, testAccount, sdk.NewCoins(sdk.NewInt64Coin("stake2", 200)))
+				suite.mintVestedRepresentation(ctx,
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)),
+				)
+				suite.fundAccount(ctx,
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					sdk.NewCoins(sdk.NewInt64Coin("stake2", 200)),
+				)
 
 				// Delegate some vested representation to pool, service and operator
-				suite.createPool(1, vestedStake)
-				_, err := suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedStake, 200), testAccount)
+				suite.createPool(ctx, 1, vestedStakeDenom)
+				_, err = suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(vestedStakeDenom, 200), "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
 				suite.Assert().NoError(err)
 
-				suite.createService(1)
-				_, err = suite.rk.DelegateToService(ctx, 1,
-					sdk.NewCoins(sdk.NewInt64Coin(vestedStake, 300)), testAccount)
+				suite.createService(ctx, 1)
+				_, err = suite.rk.DelegateToService(ctx,
+					1,
+					sdk.NewCoins(sdk.NewInt64Coin(vestedStakeDenom, 300)),
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				)
 				suite.Assert().NoError(err)
 
-				suite.createOperator(1)
-				_, err = suite.rk.DelegateToOperator(ctx, 1,
-					sdk.NewCoins(sdk.NewInt64Coin(vestedStake, 300)), testAccount)
+				suite.createOperator(ctx, 1)
+				_, err = suite.rk.DelegateToOperator(ctx,
+					1,
+					sdk.NewCoins(sdk.NewInt64Coin(vestedStakeDenom, 300)),
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				)
 				suite.Assert().NoError(err)
 
 				// Burn all the coins
 				err = suite.k.BurnVestedRepresentation(ctx,
-					sdk.MustAccAddressFromBech32(testAccount),
-					sdk.NewCoins(sdk.NewInt64Coin(vestedStake, 700)))
+					sdk.MustAccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+					sdk.NewCoins(sdk.NewInt64Coin(vestedStakeDenom, 700)),
+				)
 				suite.Assert().NoError(err)
 			},
 			updateCtx: func(ctx sdk.Context) sdk.Context {
@@ -135,14 +168,14 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				// The user shouldn't have the vested representation
-				userBalance := suite.bk.GetAllBalances(ctx, sdk.MustAccAddressFromBech32(testAccount))
+				userBalance := suite.bk.GetAllBalances(ctx, sdk.MustAccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"))
 				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake2", 200)), userBalance)
 
 				// The burn queue should be empty
 				suite.Assert().Len(suite.k.GetUnbondedCoinsFromQueue(ctx, ctx.BlockTime()), 0)
 
 				// The user insurance fund should update properly
-				userInsuranceFund, err := suite.k.GetUserInsuranceFund(ctx, sdk.MustAccAddressFromBech32(testAccount))
+				userInsuranceFund, err := suite.k.GetUserInsuranceFund(ctx, sdk.MustAccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"))
 				suite.Assert().NoError(err)
 				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake", 6)), userInsuranceFund.Used)
 			},
@@ -152,8 +185,8 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 	for _, tc := range testCases {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
-			ctx := suite.ctx
 
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.setupCtx != nil {
 				ctx = tc.setupCtx(ctx)
 			}
@@ -167,11 +200,11 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 			}
 
 			// run the restaking keep end block logic
-			suite.Assert().NoError(suite.rk.CompleteMatureUnbondingDelegations(ctx))
+			err = suite.rk.CompleteMatureUnbondingDelegations(ctx)
+			suite.Assert().NoError(err)
 
 			// run our end block logic
-			err := suite.k.CompleteBurnCoins(ctx)
-
+			err = suite.k.CompleteBurnCoins(ctx)
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {

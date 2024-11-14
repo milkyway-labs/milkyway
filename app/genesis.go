@@ -1,10 +1,23 @@
-package app
+package milkyway
 
 import (
-	"encoding/hex"
 	"encoding/json"
+	"time"
 
-	"cosmossdk.io/core/address"
+	sdkmath "cosmossdk.io/math"
+	"github.com/cometbft/cometbft/crypto/secp256k1"
+	tmtypes "github.com/cometbft/cometbft/types"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
+	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
+	"github.com/cosmos/cosmos-sdk/testutil/mock"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	"github.com/initia-labs/initia/app/genesis_markets"
+	marketmaptypes "github.com/skip-mev/connect/v2/x/marketmap/types"
+	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
+
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	icacontrollertypes "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/controller/types"
@@ -13,15 +26,6 @@ import (
 	icatypes "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/types"
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 	ibctypes "github.com/cosmos/ibc-go/v8/modules/core/types"
-
-	l2connect "github.com/initia-labs/OPinit/x/opchild/l2connect"
-	opchildtypes "github.com/initia-labs/OPinit/x/opchild/types"
-	"github.com/initia-labs/initia/app/genesis_markets"
-
-	auctiontypes "github.com/skip-mev/block-sdk/v2/x/auction/types"
-	connecttypes "github.com/skip-mev/connect/v2/pkg/types"
-	marketmaptypes "github.com/skip-mev/connect/v2/x/marketmap/types"
-	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
 )
 
 // GenesisState - The genesis state of the blockchain is represented here as a map of raw json
@@ -34,16 +38,14 @@ import (
 type GenesisState map[string]json.RawMessage
 
 // NewDefaultGenesisState generates the default state for the application.
-func NewDefaultGenesisState(cdc codec.Codec, mbm module.BasicManager, denom string) GenesisState {
+func NewDefaultGenesisState(cdc codec.Codec, mbm module.BasicManager) GenesisState {
 	return GenesisState(mbm.DefaultGenesis(cdc)).
-		ConfigureMinGasPrices(cdc).
 		ConfigureICA(cdc).
 		ConfigureIBCAllowedClients(cdc).
-		ConfigureAuctionFee(cdc, denom).
-		AddMarketData(cdc, cdc.InterfaceRegistry().SigningContext().AddressCodec())
+		AddMarketData(cdc)
 }
 
-func (genState GenesisState) AddMarketData(cdc codec.JSONCodec, ac address.Codec) GenesisState {
+func (genState GenesisState) AddMarketData(cdc codec.JSONCodec) GenesisState {
 	var oracleGenState oracletypes.GenesisState
 	cdc.MustUnmarshalJSON(genState[oracletypes.ModuleName], &oracleGenState)
 
@@ -57,37 +59,11 @@ func (genState GenesisState) AddMarketData(cdc codec.JSONCodec, ac address.Codec
 	}
 	marketGenState.MarketMap = genesis_markets.ToMarketMap(markets)
 
-	// Skip Admin account.
-	adminAddrBz, err := hex.DecodeString("51B89E89D58FFB3F9DB66263FF10A216CF388A0E")
-	if err != nil {
-		panic(err)
-	}
-
-	adminAddr, err := ac.BytesToString(adminAddrBz)
-	if err != nil {
-		panic(err)
-	}
-
-	marketGenState.Params.MarketAuthorities = []string{adminAddr}
-	marketGenState.Params.Admin = adminAddr
-
+	// Initialize all markets
 	var id uint64
-
-	// Initialize all markets plus ReservedCPTimestamp
-	currencyPairGenesis := make([]oracletypes.CurrencyPairGenesis, len(markets)+1)
-	cp, err := connecttypes.CurrencyPairFromString(l2connect.ReservedCPTimestamp)
-	if err != nil {
-		panic(err)
-	}
-	currencyPairGenesis[id] = oracletypes.CurrencyPairGenesis{
-		CurrencyPair:      cp,
-		CurrencyPairPrice: nil,
-		Nonce:             0,
-		Id:                id,
-	}
-	id++
+	currencyPairGenesis := make([]oracletypes.CurrencyPairGenesis, len(markets))
 	for i, market := range markets {
-		currencyPairGenesis[i+1] = oracletypes.CurrencyPairGenesis{
+		currencyPairGenesis[i] = oracletypes.CurrencyPairGenesis{
 			CurrencyPair:      market.Ticker.CurrencyPair,
 			CurrencyPairPrice: nil,
 			Nonce:             0,
@@ -102,26 +78,6 @@ func (genState GenesisState) AddMarketData(cdc codec.JSONCodec, ac address.Codec
 	// write the updates to genState
 	genState[marketmaptypes.ModuleName] = cdc.MustMarshalJSON(&marketGenState)
 	genState[oracletypes.ModuleName] = cdc.MustMarshalJSON(&oracleGenState)
-	return genState
-}
-
-func (genState GenesisState) ConfigureAuctionFee(cdc codec.JSONCodec, denom string) GenesisState {
-	var auctionGenState auctiontypes.GenesisState
-	cdc.MustUnmarshalJSON(genState[auctiontypes.ModuleName], &auctionGenState)
-	auctionGenState.Params.ReserveFee.Denom = denom
-	auctionGenState.Params.MinBidIncrement.Denom = denom
-	genState[auctiontypes.ModuleName] = cdc.MustMarshalJSON(&auctionGenState)
-
-	return genState
-}
-
-// ConfigureMinGasPrices generates the default state for the application.
-func (genState GenesisState) ConfigureMinGasPrices(cdc codec.JSONCodec) GenesisState {
-	var opChildGenState opchildtypes.GenesisState
-	cdc.MustUnmarshalJSON(genState[opchildtypes.ModuleName], &opChildGenState)
-	opChildGenState.Params.MinGasPrices = nil
-	genState[opchildtypes.ModuleName] = cdc.MustMarshalJSON(&opChildGenState)
-
 	return genState
 }
 
@@ -187,4 +143,81 @@ func (genState GenesisState) ConfigureIBCAllowedClients(cdc codec.JSONCodec) Gen
 	genState[ibcexported.ModuleName] = cdc.MustMarshalJSON(&ibcGenesis)
 
 	return genState
+}
+
+// NewDefaultGenesisStateWithValidator generates the default application state with a validator.
+func NewDefaultGenesisStateWithValidator(cdc codec.Codec, mbm module.BasicManager) GenesisState {
+	privVal := mock.NewPV()
+	pubKey, _ := privVal.GetPubKey()
+	validator := tmtypes.NewValidator(pubKey, 1)
+	valSet := tmtypes.NewValidatorSet([]*tmtypes.Validator{validator})
+
+	// generate genesis account
+	senderPrivKey := secp256k1.GenPrivKey()
+	senderPrivKey.PubKey().Address()
+	acc := authtypes.NewBaseAccountWithAddress(senderPrivKey.PubKey().Address().Bytes())
+
+	//////////////////////
+	var balances []banktypes.Balance
+	genesisState := NewDefaultGenesisState(cdc, mbm)
+	genAccs := []authtypes.GenesisAccount{acc}
+	authGenesis := authtypes.NewGenesisState(authtypes.DefaultParams(), genAccs)
+	genesisState[authtypes.ModuleName] = cdc.MustMarshalJSON(authGenesis)
+
+	validators := make([]stakingtypes.Validator, 0, len(valSet.Validators))
+	delegations := make([]stakingtypes.Delegation, 0, len(valSet.Validators))
+
+	bondAmt := sdk.DefaultPowerReduction
+
+	for _, val := range valSet.Validators {
+		pk, _ := cryptocodec.FromCmtPubKeyInterface(val.PubKey)
+		pkAny, _ := codectypes.NewAnyWithValue(pk)
+		validator := stakingtypes.Validator{
+			OperatorAddress:   sdk.ValAddress(val.Address).String(),
+			ConsensusPubkey:   pkAny,
+			Jailed:            false,
+			Status:            stakingtypes.Bonded,
+			Tokens:            bondAmt,
+			DelegatorShares:   sdkmath.LegacyNewDec(1),
+			Description:       stakingtypes.Description{},
+			UnbondingHeight:   int64(0),
+			UnbondingTime:     time.Unix(0, 0).UTC(),
+			Commission:        stakingtypes.NewCommission(sdkmath.LegacyZeroDec(), sdkmath.LegacyZeroDec(), sdkmath.LegacyZeroDec()),
+			MinSelfDelegation: sdkmath.ZeroInt(),
+		}
+		validators = append(validators, validator)
+		delegations = append(delegations, stakingtypes.NewDelegation(genAccs[0].GetAddress().String(), sdk.ValAddress(val.Address).String(), sdkmath.LegacyNewDec(1)))
+	}
+	// set validators and delegations
+	stakingGenesis := stakingtypes.NewGenesisState(stakingtypes.DefaultParams(), validators, delegations)
+	genesisState[stakingtypes.ModuleName] = cdc.MustMarshalJSON(stakingGenesis)
+
+	totalSupply := sdk.NewCoins()
+	for _, b := range balances {
+		// add genesis acc tokens to total supply
+		totalSupply = totalSupply.Add(b.Coins...)
+	}
+
+	for range delegations {
+		// add delegated tokens to total supply
+		totalSupply = totalSupply.Add(sdk.NewCoin(sdk.DefaultBondDenom, bondAmt))
+	}
+
+	// add bonded amount to bonded pool module account
+	balances = append(balances, banktypes.Balance{
+		Address: authtypes.NewModuleAddress(stakingtypes.BondedPoolName).String(),
+		Coins:   sdk.Coins{sdk.NewCoin(sdk.DefaultBondDenom, bondAmt)},
+	})
+
+	// update total supply
+	bankGenesis := banktypes.NewGenesisState(
+		banktypes.DefaultGenesisState().Params,
+		balances,
+		totalSupply,
+		[]banktypes.Metadata{},
+		[]banktypes.SendEnabled{},
+	)
+	genesisState[banktypes.ModuleName] = cdc.MustMarshalJSON(bankGenesis)
+
+	return genesisState
 }

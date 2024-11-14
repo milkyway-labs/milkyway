@@ -5,7 +5,15 @@ import (
 	"testing"
 
 	sdkmath "cosmossdk.io/math"
+	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	capabilitytypes "github.com/cosmos/ibc-go/modules/capability/types"
+	clienttypes "github.com/cosmos/ibc-go/v8/modules/core/02-client/types"
+	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
+	porttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
+	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 	"github.com/stretchr/testify/suite"
 
 	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
@@ -33,8 +41,12 @@ func TestKeeperTestSuite(t *testing.T) {
 type KeeperTestSuite struct {
 	suite.Suite
 
+	cdc codec.Codec
 	ctx sdk.Context
 
+	liquidVestingModuleAddress sdk.AccAddress
+
+	ak authkeeper.AccountKeeper
 	bk *bankkeeper.Keeper
 	ok *operatorskeeper.Keeper
 	pk *poolskeeper.Keeper
@@ -42,21 +54,29 @@ type KeeperTestSuite struct {
 	rk *restakingkeeper.Keeper
 
 	k *keeper.Keeper
+
+	ibcm porttypes.IBCModule
 }
 
 func (suite *KeeperTestSuite) SetupTest() {
 	data := testutils.NewKeeperTestData(suite.T())
-
-	// Context and codecs
 	suite.ctx = data.Context
+	suite.cdc = data.Cdc
 
-	// Keepers
+	suite.liquidVestingModuleAddress = authtypes.NewModuleAddress(types.ModuleName)
+
+	suite.ak = data.AccountKeeper
 	suite.bk = &data.BankKeeper
+	suite.ibcm = data.IBCMiddleware
 	suite.pk = data.PoolsKeeper
+
 	suite.ok = data.OperatorsKeeper
 	suite.sk = data.ServicesKeeper
 	suite.rk = data.RestakingKeeper
 	suite.k = data.Keeper
+
+	// Setup IBC
+	suite.ibcm = data.IBCMiddleware
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -64,42 +84,40 @@ func (suite *KeeperTestSuite) SetupTest() {
 // fundAccount add the given amount of coins to the account's balance
 func (suite *KeeperTestSuite) fundAccount(ctx sdk.Context, address string, amount sdk.Coins) {
 	// Mint the tokens in the insurance fund.
-	suite.Assert().NoError(suite.bk.MintCoins(ctx, types.ModuleName, amount))
+	err := suite.bk.MintCoins(ctx, types.ModuleName, amount)
+	suite.Assert().NoError(err)
 
-	suite.Assert().NoError(suite.bk.SendCoinsFromModuleToAccount(
-		ctx, types.ModuleName, sdk.MustAccAddressFromBech32(address), amount))
+	err = suite.bk.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(address), amount)
+	suite.Assert().NoError(err)
 }
 
 // mintVestedRepresentation mints the vested representation of the provided amount to
 // the user balance
-func (suite *KeeperTestSuite) mintVestedRepresentation(address string, amount sdk.Coins) {
+func (suite *KeeperTestSuite) mintVestedRepresentation(ctx sdk.Context, address string, amount sdk.Coins) {
 	accAddress, err := sdk.AccAddressFromBech32(address)
 	suite.Assert().NoError(err)
 
-	_, err = suite.k.MintVestedRepresentation(
-		suite.ctx, accAddress, amount,
-	)
+	_, err = suite.k.MintVestedRepresentation(ctx, accAddress, amount)
 	suite.Assert().NoError(err)
 }
 
 // fundAccountInsuranceFund add the given amount of coins to the account's insurance fund
 func (suite *KeeperTestSuite) fundAccountInsuranceFund(ctx sdk.Context, address string, amount sdk.Coins) {
 	// Mint the tokens in the insurance fund.
-	suite.Assert().NoError(suite.bk.MintCoins(suite.ctx, types.ModuleName, amount))
+	err := suite.bk.MintCoins(ctx, types.ModuleName, amount)
+	suite.Assert().NoError(err)
 
 	// Assign those tokens to the user insurance fund
 	userAddress, err := sdk.AccAddressFromBech32(address)
 	suite.Assert().NoError(err)
-	suite.Assert().NoError(suite.k.AddToUserInsuranceFund(
-		ctx,
-		userAddress,
-		amount,
-	))
+
+	err = suite.k.AddToUserInsuranceFund(ctx, userAddress, amount)
+	suite.Assert().NoError(err)
 }
 
 // createPool creates a test pool with the given id and denom
-func (suite *KeeperTestSuite) createPool(id uint32, denom string) {
-	err := suite.pk.SavePool(suite.ctx, poolstypes.Pool{
+func (suite *KeeperTestSuite) createPool(ctx sdk.Context, id uint32, denom string) {
+	err := suite.pk.SavePool(ctx, poolstypes.Pool{
 		ID:              id,
 		Denom:           denom,
 		Address:         poolstypes.GetPoolAddress(id).String(),
@@ -110,8 +128,8 @@ func (suite *KeeperTestSuite) createPool(id uint32, denom string) {
 }
 
 // createService creates a test service with the provided id
-func (suite *KeeperTestSuite) createService(id uint32) {
-	err := suite.sk.CreateService(suite.ctx, servicestypes.NewService(
+func (suite *KeeperTestSuite) createService(ctx sdk.Context, id uint32) {
+	err := suite.sk.CreateService(ctx, servicestypes.NewService(
 		id,
 		servicestypes.SERVICE_STATUS_ACTIVE,
 		fmt.Sprintf("test %d", id),
@@ -124,12 +142,85 @@ func (suite *KeeperTestSuite) createService(id uint32) {
 	suite.Assert().NoError(err)
 }
 
-func (suite *KeeperTestSuite) createOperator(id uint32) {
-	suite.Assert().NoError(suite.ok.RegisterOperator(suite.ctx, operatorstypes.NewOperator(
+func (suite *KeeperTestSuite) createOperator(ctx sdk.Context, id uint32) {
+	err := suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
 		id,
 		operatorstypes.OPERATOR_STATUS_ACTIVE,
 		fmt.Sprintf("operator-%d", id),
 		"",
 		"",
-		fmt.Sprintf("operator-%d-admin", id))))
+		fmt.Sprintf("operator-%d-admin", id),
+	))
+	suite.Assert().NoError(err)
+}
+
+// ---------------------------------------------
+// ------------ IBC Mocks -----------------------
+// ---------------------------------------------
+// do nothing ibc middleware
+var (
+	_ porttypes.IBCModule   = mockIBCMiddleware{}
+	_ porttypes.ICS4Wrapper = mockIBCMiddleware{}
+)
+
+type mockIBCMiddleware struct{}
+
+// GetAppVersion implements types.ICS4Wrapper.
+func (m mockIBCMiddleware) GetAppVersion(ctx sdk.Context, portID string, channelID string) (string, bool) {
+	return "", false
+}
+
+// SendPacket implements types.ICS4Wrapper.
+func (m mockIBCMiddleware) SendPacket(ctx sdk.Context, chanCap *capabilitytypes.Capability, sourcePort string, sourceChannel string, timeoutHeight clienttypes.Height, timeoutTimestamp uint64, data []byte) (sequence uint64, err error) {
+	return 0, nil
+}
+
+// WriteAcknowledgement implements types.ICS4Wrapper.
+func (m mockIBCMiddleware) WriteAcknowledgement(ctx sdk.Context, chanCap *capabilitytypes.Capability, packet ibcexported.PacketI, ack ibcexported.Acknowledgement) error {
+	return nil
+}
+
+// OnAcknowledgementPacket implements types.IBCModule.
+func (m mockIBCMiddleware) OnAcknowledgementPacket(ctx sdk.Context, packet channeltypes.Packet, acknowledgement []byte, relayer sdk.AccAddress) error {
+	return nil
+}
+
+// OnChanCloseConfirm implements types.IBCModule.
+func (m mockIBCMiddleware) OnChanCloseConfirm(ctx sdk.Context, portID string, channelID string) error {
+	return nil
+}
+
+// OnChanCloseInit implements types.IBCModule.
+func (m mockIBCMiddleware) OnChanCloseInit(ctx sdk.Context, portID string, channelID string) error {
+	return nil
+}
+
+// OnChanOpenAck implements types.IBCModule.
+func (m mockIBCMiddleware) OnChanOpenAck(ctx sdk.Context, portID string, channelID string, counterpartyChannelID string, counterpartyVersion string) error {
+	return nil
+}
+
+// OnChanOpenConfirm implements types.IBCModule.
+func (m mockIBCMiddleware) OnChanOpenConfirm(ctx sdk.Context, portID string, channelID string) error {
+	return nil
+}
+
+// OnChanOpenInit implements types.IBCModule.
+func (m mockIBCMiddleware) OnChanOpenInit(ctx sdk.Context, order channeltypes.Order, connectionHops []string, portID string, channelID string, channelCap *capabilitytypes.Capability, counterparty channeltypes.Counterparty, version string) (string, error) {
+	return "", nil
+}
+
+// OnChanOpenTry implements types.IBCModule.
+func (m mockIBCMiddleware) OnChanOpenTry(ctx sdk.Context, order channeltypes.Order, connectionHops []string, portID string, channelID string, channelCap *capabilitytypes.Capability, counterparty channeltypes.Counterparty, counterpartyVersion string) (version string, err error) {
+	return "", nil
+}
+
+// OnRecvPacket implements types.IBCModule.
+func (m mockIBCMiddleware) OnRecvPacket(ctx sdk.Context, packet channeltypes.Packet, relayer sdk.AccAddress) ibcexported.Acknowledgement {
+	return channeltypes.NewResultAcknowledgement([]byte{byte(1)})
+}
+
+// OnTimeoutPacket implements types.IBCModule.
+func (m mockIBCMiddleware) OnTimeoutPacket(ctx sdk.Context, packet channeltypes.Packet, relayer sdk.AccAddress) error {
+	return nil
 }

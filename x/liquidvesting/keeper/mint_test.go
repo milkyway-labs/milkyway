@@ -9,7 +9,7 @@ import (
 func (suite *KeeperTestSuite) TestKeepr_MintVestedRepresentation() {
 	testCases := []struct {
 		name      string
-		setup     func()
+		store     func(ctx sdk.Context)
 		to        string
 		amount    sdk.Coins
 		shouldErr bool
@@ -40,17 +40,20 @@ func (suite *KeeperTestSuite) TestKeepr_MintVestedRepresentation() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 
-			if tc.setup != nil {
-				tc.setup()
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
 			}
-			accAddr := sdk.MustAccAddressFromBech32(tc.to)
-			_, err := suite.k.MintVestedRepresentation(suite.ctx, accAddr, tc.amount)
 
+			userAddr, err := sdk.AccAddressFromBech32(tc.to)
+			suite.Require().NoError(err)
+
+			_, err = suite.k.MintVestedRepresentation(ctx, userAddr, tc.amount)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
 				suite.Require().NoError(err)
-				tc.check(suite.ctx)
+				tc.check(ctx)
 			}
 		})
 	}

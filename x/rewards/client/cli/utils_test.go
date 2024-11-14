@@ -10,17 +10,17 @@ import (
 
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 
-	testutil "github.com/cosmos/cosmos-sdk/testutil"
+	"github.com/cosmos/cosmos-sdk/testutil"
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/app"
+	milkyway "github.com/milkyway-labs/milkyway/app"
 	"github.com/milkyway-labs/milkyway/x/rewards/client/cli"
 )
 
 func TestCliUtils_parseRewardsPlan(t *testing.T) {
-	encodingConfig := app.MakeEncodingConfig()
-	codec := encodingConfig.Codec
+	encodingConfig := milkyway.MakeEncodingConfig()
+	codec := encodingConfig.Marshaler
 
 	testCases := []struct {
 		name      string

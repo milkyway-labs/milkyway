@@ -7,7 +7,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	"github.com/stretchr/testify/suite"
 
 	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
@@ -39,15 +39,10 @@ type KeeperTestSuite struct {
 }
 
 func (suite *KeeperTestSuite) SetupTest() {
-	// Build the base data
 	data := testutils.NewKeeperTestData(suite.T())
-
-	// Define store keys
-	suite.storeKey = data.StoreKey
-
-	// Define the codec and context
 	suite.ctx = data.Context
 	suite.cdc = data.Cdc
+	suite.storeKey = data.StoreKey
 
 	// Build keepers
 	suite.ak = data.AccountKeeper
@@ -62,9 +57,9 @@ func (suite *KeeperTestSuite) SetupTest() {
 
 // fundAccount adds the given amount of coins to the account with the given address
 func (suite *KeeperTestSuite) fundAccount(ctx sdk.Context, address string, amount sdk.Coins) {
-	// Mint the coins
-	moduleAcc := suite.ak.GetModuleAccount(ctx, authtypes.Minter)
+	moduleAcc := suite.ak.GetModuleAccount(ctx, minttypes.ModuleName)
 
+	// Mint the coins
 	err := suite.bk.MintCoins(ctx, moduleAcc.GetName(), amount)
 	suite.Require().NoError(err)
 
@@ -74,5 +69,3 @@ func (suite *KeeperTestSuite) fundAccount(ctx sdk.Context, address string, amoun
 	err = suite.bk.SendCoinsFromModuleToAccount(ctx, moduleAcc.GetName(), userAddress, amount)
 	suite.Require().NoError(err)
 }
-
-// --------------------------------------------------------------------------------------------------------------------

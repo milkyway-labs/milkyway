@@ -1,4 +1,4 @@
-package app
+package milkyway
 
 // DONTCOVER
 
@@ -12,6 +12,10 @@ import (
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	tmtypes "github.com/cometbft/cometbft/types"
 	dbm "github.com/cosmos/cosmos-db"
+	"github.com/cosmos/cosmos-sdk/baseapp"
+	"github.com/cosmos/cosmos-sdk/server"
+	simcli "github.com/cosmos/cosmos-sdk/x/simulation/client/cli"
+	oracleconfig "github.com/skip-mev/connect/v2/oracle/config"
 
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -24,8 +28,6 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
 	opchildtypes "github.com/initia-labs/OPinit/x/opchild/types"
-
-	"github.com/milkyway-labs/milkyway/types"
 )
 
 // defaultConsensusParams defines the default Tendermint consensus params used in
@@ -57,19 +59,25 @@ func getOrCreateMemDB(db *dbm.DB) dbm.DB {
 func setup(t *testing.T, db *dbm.DB, withGenesis bool) (*MilkyWayApp, GenesisState) {
 	t.Helper()
 
+	appOptions := make(simtestutil.AppOptionsMap, 0)
+	appOptions[server.FlagInvCheckPeriod] = simcli.FlagPeriodValue
+
 	encCdc := MakeEncodingConfig()
 	app := NewMilkyWayApp(
 		log.NewNopLogger(),
 		getOrCreateMemDB(db),
-		getOrCreateMemDB(nil),
 		nil,
 		true,
-		[]wasmkeeper.Option{},
+		map[int64]bool{},
+		t.TempDir(),
+		oracleconfig.NewDefaultAppConfig(),
 		simtestutil.NewAppOptionsWithFlagHome(t.TempDir()),
+		[]wasmkeeper.Option{},
+		baseapp.SetChainID("milkyway-app"),
 	)
 
 	if withGenesis {
-		return app, NewDefaultGenesisState(encCdc.Codec, app.BasicModuleManager, types.BaseDenom)
+		return app, NewDefaultGenesisStateWithValidator(encCdc.Marshaler, app.ModuleBasics)
 	}
 
 	return app, GenesisState{}
@@ -81,36 +89,13 @@ func Setup(t *testing.T, isCheckTx bool) *MilkyWayApp {
 	t.Helper()
 
 	app, genState := setup(t, nil, true)
-
-	// Create a validator which will be the admin of the chain as well as the
-	// bridge executor.
-	privVal := ed25519.GenPrivKey() // TODO: make it deterministic?
-	pubKey := privVal.PubKey()
-	pubKeyAny, err := codectypes.NewAnyWithValue(privVal.PubKey())
-	if err != nil {
-		panic(err)
-	}
-	validator := opchildtypes.Validator{
-		Moniker:         "test-validator",
-		OperatorAddress: sdk.ValAddress(privVal.PubKey().Address()).String(),
-		ConsensusPubkey: pubKeyAny,
-		ConsPower:       1,
-	}
-
-	// set validators and delegations
-	var opchildGenesis opchildtypes.GenesisState
-	app.AppCodec().MustUnmarshalJSON(genState[opchildtypes.ModuleName], &opchildGenesis)
-	opchildGenesis.Params.Admin = sdk.AccAddress(pubKey.Address().Bytes()).String()
-	opchildGenesis.Params.BridgeExecutors = []string{sdk.AccAddress(pubKey.Address().Bytes()).String()}
-	opchildGenesis.Validators = []opchildtypes.Validator{validator}
-	genState[opchildtypes.ModuleName] = app.AppCodec().MustMarshalJSON(&opchildGenesis)
-
 	if !isCheckTx {
 		genStateBytes, err := json.Marshal(genState)
 		if err != nil {
 			panic(err)
 		}
 		_, err = app.InitChain(&abci.RequestInitChain{
+			ChainId:         "milkyway-app",
 			Validators:      []abci.ValidatorUpdate{},
 			ConsensusParams: defaultConsensusParams,
 			AppStateBytes:   genStateBytes,

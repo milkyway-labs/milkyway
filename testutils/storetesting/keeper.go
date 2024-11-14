@@ -1,6 +1,7 @@
 package storetesting
 
 import (
+	"slices"
 	"testing"
 
 	"cosmossdk.io/log"
@@ -14,7 +15,7 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
-	"github.com/milkyway-labs/milkyway/app"
+	milkyway "github.com/milkyway-labs/milkyway/app"
 	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
 )
 
@@ -35,16 +36,25 @@ type BaseKeeperTestData struct {
 func NewBaseKeeperTestData(t *testing.T, keys []string) BaseKeeperTestData {
 	t.Helper()
 
+	// Set the Cosmos SDK configuration to use another Bech32 prefix
+	config := sdk.GetConfig()
+	config.SetBech32PrefixForAccount("cosmos", "cosmospub")
+	config.SetBech32PrefixForValidator("cosmosvaloper", "cosmosvaloperpub")
+	config.SetBech32PrefixForConsensusNode("cosmosvalcons", "cosmosvalconspub")
+
 	var data BaseKeeperTestData
 
 	// Define store keys
+	keys = append(keys, []string{authtypes.StoreKey, banktypes.StoreKey}...)
+	slices.Sort(keys)
+	keys = slices.Compact(keys)
 	data.Keys = storetypes.NewKVStoreKeys(keys...)
 
 	// Setup the context
 	data.Context = BuildContext(data.Keys, nil, nil)
 
 	// Setup the codecs
-	data.Cdc, data.LegacyAmino = app.MakeCodecs()
+	data.Cdc, data.LegacyAmino = milkyway.MakeCodecs()
 
 	// Authority address
 	data.AuthorityAddress = authtypes.NewModuleAddress(govtypes.ModuleName).String()
@@ -54,7 +64,7 @@ func NewBaseKeeperTestData(t *testing.T, keys []string) BaseKeeperTestData {
 		data.Cdc,
 		runtime.NewKVStoreService(data.Keys[authtypes.StoreKey]),
 		authtypes.ProtoBaseAccount,
-		app.GetMaccPerms(),
+		milkyway.MaccPerms,
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix()),
 		sdk.GetConfig().GetBech32AccountAddrPrefix(),
 		data.AuthorityAddress,
@@ -63,7 +73,7 @@ func NewBaseKeeperTestData(t *testing.T, keys []string) BaseKeeperTestData {
 		data.Cdc,
 		runtime.NewKVStoreService(data.Keys[banktypes.StoreKey]),
 		data.AccountKeeper,
-		app.BlacklistedModuleAccountAddrs(),
+		milkyway.BlockedModuleAccountAddrs(milkyway.ModuleAccountAddrs()),
 		data.AuthorityAddress,
 		log.NewNopLogger(),
 	)
