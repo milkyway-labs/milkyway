@@ -216,62 +216,94 @@ func CanWithdrawInvariant(k *Keeper) sdk.Invariant {
 	}
 }
 
+// --------------------------------------------------------------------------------------------------------------------
+
 // ReferenceCountInvariant checks that the number of historical rewards records is correct
 func ReferenceCountInvariant(k *Keeper) sdk.Invariant {
 	return func(ctx sdk.Context) (string, bool) {
-		targetCount := uint64(0)
-		k.poolsKeeper.IteratePools(ctx, func(_ poolstypes.Pool) (stop bool) {
-			targetCount++
-			return false
-		})
-		k.operatorsKeeper.IterateOperators(ctx, func(_ operatorstypes.Operator) (stop bool) {
-			targetCount++
-			return false
-		})
-		k.servicesKeeper.IterateServices(ctx, func(_ servicestypes.Service) (stop bool) {
-			targetCount++
-			return false
-		})
-
-		delCount := uint64(0)
-		k.restakingKeeper.IterateAllPoolDelegations(ctx, func(_ restakingtypes.Delegation) (stop bool) {
-			delCount++
-			return false
-		})
-		k.restakingKeeper.IterateAllOperatorDelegations(ctx, func(_ restakingtypes.Delegation) (stop bool) {
-			delCount++
-			return false
-		})
-		k.restakingKeeper.IterateAllServiceDelegations(ctx, func(_ restakingtypes.Delegation) (stop bool) {
-			delCount++
-			return false
-		})
-
-		// one record per delegation target (last tracked period), one record per
-		// delegation (previous period)
-		// TODO: handle slash events
-		expected := targetCount + delCount
-		count := uint64(0)
-		elements := 0
-		err := k.PoolHistoricalRewards.Walk(
-			ctx, nil, func(key collections.Pair[uint32, uint64], rewards types.HistoricalRewards) (stop bool, err error) {
-				count += uint64(rewards.ReferenceCount)
-				elements += 1
-				return false, nil
-			},
+		// Check the reference count for pools
+		msg, broken := checkReferencesCount(
+			ctx,
+			restakingtypes.DELEGATION_TYPE_POOL,
+			k.poolsKeeper.IteratePools,
+			k.restakingKeeper.IterateAllPoolDelegations,
+			k.PoolHistoricalRewards,
 		)
-		if err != nil {
-			panic(err)
+		if broken {
+			return sdk.FormatInvariant(types.ModuleName, "reference count", msg), broken
 		}
 
-		broken := elements > 0 && count != expected
+		// Check the reference count for operators
+		msg, broken = checkReferencesCount(
+			ctx,
+			restakingtypes.DELEGATION_TYPE_OPERATOR,
+			k.operatorsKeeper.IterateOperators,
+			k.restakingKeeper.IterateAllOperatorDelegations,
+			k.OperatorHistoricalRewards,
+		)
+		if broken {
+			return sdk.FormatInvariant(types.ModuleName, "reference count", msg), broken
+		}
 
-		return sdk.FormatInvariant(types.ModuleName, "reference count",
-			fmt.Sprintf("expected historical reference count: %d = %v delegation targets + %v delegations\n"+
-				"total validator historical reference count: %d\n",
-				expected, targetCount, delCount, count)), broken
+		// Check the reference count for services
+		msg, broken = checkReferencesCount(
+			ctx,
+			restakingtypes.DELEGATION_TYPE_SERVICE,
+			k.servicesKeeper.IterateServices,
+			k.restakingKeeper.IterateAllServiceDelegations,
+			k.ServiceHistoricalRewards,
+		)
+		if broken {
+			return sdk.FormatInvariant(types.ModuleName, "reference count", msg), broken
+		}
+
+		return "", false
 	}
 }
+
+// checkReferencesCount checks the reference count for a given delegation target type
+func checkReferencesCount[T any](
+	ctx sdk.Context,
+	delegationTargetType restakingtypes.DelegationType,
+	targetsIterator func(ctx sdk.Context, fn func(T) bool),
+	delegationsIterator func(ctx sdk.Context, fn func(restakingtypes.Delegation) bool),
+	historicalRewardsCollection collections.Map[collections.Pair[uint32, uint64], types.HistoricalRewards],
+) (msg string, broken bool) {
+
+	targetCount := uint64(0)
+	targetsIterator(ctx, func(_ T) bool {
+		targetCount++
+		return false
+	})
+
+	delegationsCount := uint64(0)
+	delegationsIterator(ctx, func(_ restakingtypes.Delegation) bool {
+		delegationsCount++
+		return false
+	})
+
+	referencesCount := uint64(0)
+	err := historicalRewardsCollection.Walk(ctx, nil, func(key collections.Pair[uint32, uint64], value types.HistoricalRewards) (stop bool, err error) {
+		referencesCount += uint64(value.ReferenceCount)
+		return false, nil
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	// Make sure we have one record per delegation target (last tracked period) and
+	// one record per delegation (previous period)
+	expected := targetCount + delegationsCount
+
+	broken = referencesCount != expected
+
+	return fmt.Sprintf("expected historical reference count: %d = %v delegation targets + %v delegations\n"+
+		"total %s historical reference count: %d\n",
+		expected, targetCount, delegationsCount, delegationTargetType, referencesCount,
+	), broken
+}
+
+// --------------------------------------------------------------------------------------------------------------------
 
 // ModuleAccountInvariant checks that the coins held by the global rewards pool
 // is consistent with the sum of outstanding rewards
