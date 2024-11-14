@@ -64,6 +64,7 @@ func (suite *KeeperTestSuite) TestMsgServer_MintVestedRepresentation() {
 				math.LegacyMustNewDecFromStr("2.0"),
 				[]string{burnerAccount},
 				[]string{minterAccount},
+				nil,
 			)))
 
 			msgServer := keeper.NewMsgServer(suite.k)
@@ -154,6 +155,7 @@ func (suite *KeeperTestSuite) TestMsgServer_BurnVestedRepresentation() {
 				math.LegacyMustNewDecFromStr("2.0"),
 				[]string{burnerAccount},
 				[]string{minterAccount},
+				nil,
 			)))
 
 			if tc.setup != nil {
