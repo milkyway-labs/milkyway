@@ -76,7 +76,7 @@ func (k *Keeper) Logger(ctx sdk.Context) log.Logger {
 // SetHooks allows to set the operators hooks
 func (k *Keeper) SetHooks(rs types.OperatorsHooks) *Keeper {
 	if k.hooks != nil {
-		panic("cannot set avs hooks twice")
+		panic("cannot set operators hooks twice")
 	}
 
 	k.hooks = rs

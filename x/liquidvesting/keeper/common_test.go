@@ -143,7 +143,7 @@ func (suite *KeeperTestSuite) createService(ctx sdk.Context, id uint32) {
 }
 
 func (suite *KeeperTestSuite) createOperator(ctx sdk.Context, id uint32) {
-	err := suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
+	err := suite.ok.CreateOperator(ctx, operatorstypes.NewOperator(
 		id,
 		operatorstypes.OPERATOR_STATUS_ACTIVE,
 		fmt.Sprintf("operator-%d", id),

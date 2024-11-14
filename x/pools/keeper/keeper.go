@@ -15,6 +15,7 @@ type Keeper struct {
 	storeKey     storetypes.StoreKey
 	cdc          codec.Codec
 	storeService corestoretypes.KVStoreService
+	hooks        types.PoolsHooks
 
 	accountKeeper types.AccountKeeper
 
@@ -55,4 +56,14 @@ func NewKeeper(cdc codec.Codec,
 // Logger returns a module-specific logger.
 func (k *Keeper) Logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", "x/"+types.ModuleName)
+}
+
+// SetHooks allows to set the pools hooks
+func (k *Keeper) SetHooks(rs types.PoolsHooks) *Keeper {
+	if k.hooks != nil {
+		panic("cannot set pools hooks twice")
+	}
+
+	k.hooks = rs
+	return k
 }

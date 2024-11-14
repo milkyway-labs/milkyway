@@ -39,5 +39,11 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
 		if err != nil {
 			panic(err)
 		}
+
+		// Call the hook
+		err = k.AfterPoolCreated(ctx, pool.ID)
+		if err != nil {
+			panic(err)
+		}
 	}
 }

@@ -47,7 +47,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) error {
 
 	// Store the operators
 	for _, operator := range state.Operators {
-		if err := k.SaveOperator(ctx, operator); err != nil {
+		if err := k.CreateOperator(ctx, operator); err != nil {
 			return err
 		}
 	}

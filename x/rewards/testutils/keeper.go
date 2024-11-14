@@ -13,7 +13,6 @@ import (
 	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/app/keepers"
 	"github.com/milkyway-labs/milkyway/testutils/storetesting"
 	assetskeeper "github.com/milkyway-labs/milkyway/x/assets/keeper"
 	assetstypes "github.com/milkyway-labs/milkyway/x/assets/types"
@@ -61,8 +60,6 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		WithBlockHeight(1).
 		WithBlockTime(time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC))
 
-	communityPoolKeeper := keepers.NewCommunityPoolKeeper(data.BankKeeper, authtypes.FeeCollectorName)
-
 	data.MarketMapKeeper = marketmapkeeper.NewKeeper(
 		runtime.NewKVStoreService(data.Keys[marketmaptypes.StoreKey]),
 		data.Cdc,
@@ -87,7 +84,7 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		data.Keys[operatorstypes.StoreKey],
 		runtime.NewKVStoreService(data.Keys[operatorstypes.StoreKey]),
 		data.AccountKeeper,
-		communityPoolKeeper,
+		data.DistributionKeeper,
 		data.AuthorityAddress,
 	)
 	data.ServicesKeeper = serviceskeeper.NewKeeper(
@@ -95,7 +92,7 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		data.Keys[servicestypes.StoreKey],
 		runtime.NewKVStoreService(data.Keys[servicestypes.StoreKey]),
 		data.AccountKeeper,
-		communityPoolKeeper,
+		data.DistributionKeeper,
 		data.AuthorityAddress,
 	)
 	data.RestakingKeeper = restakingkeeper.NewKeeper(
@@ -120,7 +117,7 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		runtime.NewKVStoreService(data.Keys[rewardstypes.StoreKey]),
 		data.AccountKeeper,
 		data.BankKeeper,
-		communityPoolKeeper,
+		data.DistributionKeeper,
 		&data.OracleKeeper,
 		data.PoolsKeeper,
 		data.OperatorsKeeper,
@@ -131,9 +128,16 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	)
 
 	// Set the hooks
-	data.OperatorsKeeper.SetHooks(data.RestakingKeeper.OperatorsHooks())
-	data.ServicesKeeper.SetHooks(data.RestakingKeeper.ServicesHooks())
-	data.RestakingKeeper.SetHooks(data.Keeper.Hooks())
+	data.PoolsKeeper.SetHooks(data.Keeper.PoolsHooks())
+	data.OperatorsKeeper.SetHooks(operatorstypes.NewMultiOperatorsHooks(
+		data.RestakingKeeper.OperatorsHooks(),
+		data.Keeper.OperatorsHooks(),
+	))
+	data.ServicesKeeper.SetHooks(servicestypes.NewMultiServicesHooks(
+		data.RestakingKeeper.ServicesHooks(),
+		data.Keeper.ServicesHooks(),
+	))
+	data.RestakingKeeper.SetHooks(data.Keeper.RestakingHooks())
 
 	// Set the base params
 	data.PoolsKeeper.SetNextPoolID(data.Context, 1)

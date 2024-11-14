@@ -39,7 +39,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 
 	// Store the services
 	for _, service := range state.Services {
-		if err := k.SaveService(ctx, service); err != nil {
+		if err := k.CreateService(ctx, service); err != nil {
 			return err
 		}
 	}

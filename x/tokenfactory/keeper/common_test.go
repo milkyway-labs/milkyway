@@ -5,7 +5,8 @@ import (
 	"testing"
 	"time"
 
-	appkeepers "github.com/milkyway-labs/milkyway/app/keepers"
+	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
+	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 
 	"cosmossdk.io/core/address"
 	"cosmossdk.io/log"
@@ -197,7 +198,7 @@ type TestKeepers struct {
 	ContractKeeper      *wasmkeeper.PermissionedKeeper
 	WasmKeeper          *wasmkeeper.Keeper
 	TokenFactoryKeeper  *tokenfactorykeeper.Keeper
-	CommunityPoolKeeper *appkeepers.CommunityPoolKeeper
+	CommunityPoolKeeper *distrkeeper.Keeper
 	EncodingConfig      initiaappparams.EncodingConfig
 	Faucet              *TestFaucet
 	MultiStore          storetypes.CommitMultiStore
@@ -237,7 +238,12 @@ func _createTestInput(
 	db dbm.DB,
 ) (sdk.Context, TestKeepers) {
 	keys := storetypes.NewKVStoreKeys(
-		authtypes.StoreKey, banktypes.StoreKey, tokenfactorytypes.StoreKey, govtypes.StoreKey, wasmtypes.StoreKey,
+		authtypes.StoreKey,
+		banktypes.StoreKey,
+		distrtypes.StoreKey,
+		tokenfactorytypes.StoreKey,
+		govtypes.StoreKey,
+		wasmtypes.StoreKey,
 	)
 	ms := store.NewCommitMultiStore(db, log.NewNopLogger(), metrics.NewNoOpMetrics())
 	for _, v := range keys {
@@ -260,6 +266,7 @@ func _createTestInput(
 
 	maccPerms := map[string][]string{ // module account permissions
 		authtypes.FeeCollectorName:   nil,
+		distrtypes.ModuleName:        nil,
 		govtypes.ModuleName:          {authtypes.Burner},
 		authtypes.Minter:             {authtypes.Minter, authtypes.Burner},
 		tokenfactorytypes.ModuleName: {authtypes.Minter, authtypes.Burner},
@@ -291,7 +298,17 @@ func _createTestInput(
 	)
 	require.NoError(t, bankKeeper.SetParams(ctx, banktypes.DefaultParams()))
 
-	communityPoolKeeper := appkeepers.NewCommunityPoolKeeper(bankKeeper, authtypes.FeeCollectorName)
+	distrKeeper := distrkeeper.NewKeeper(
+		appCodec,
+		runtime.NewKVStoreService(keys[distrtypes.StoreKey]),
+		accountKeeper,
+		bankKeeper,
+		nil,
+		authtypes.FeeCollectorName,
+		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+	)
+	distrKeeper.InitGenesis(ctx, *distrtypes.DefaultGenesisState())
+
 	faucet := NewTestFaucet(t, ctx, bankKeeper, authtypes.Minter, initialTotalSupply()...)
 	msgRouter := baseapp.NewMsgServiceRouter()
 	msgRouter.SetInterfaceRegistry(encodingConfig.InterfaceRegistry)
@@ -299,7 +316,7 @@ func _createTestInput(
 	keepers := TestKeepers{
 		AccountKeeper:       &accountKeeper,
 		BankKeeper:          &bankKeeper,
-		CommunityPoolKeeper: &communityPoolKeeper,
+		CommunityPoolKeeper: &distrKeeper,
 		EncodingConfig:      encodingConfig,
 		Faucet:              faucet,
 		MultiStore:          ms,

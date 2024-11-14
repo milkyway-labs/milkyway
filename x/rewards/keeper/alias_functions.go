@@ -163,6 +163,20 @@ func (k *Keeper) GetCurrentRewards(ctx context.Context, target restakingtypes.De
 	}
 }
 
+// DeleteCurrentRewards deletes the current rewards for a target
+func (k *Keeper) DeleteCurrentRewards(ctx context.Context, target restakingtypes.DelegationTarget) error {
+	switch target.(type) {
+	case *poolstypes.Pool:
+		return k.PoolCurrentRewards.Remove(ctx, target.GetID())
+	case *operatorstypes.Operator:
+		return k.OperatorCurrentRewards.Remove(ctx, target.GetID())
+	case *servicestypes.Service:
+		return k.ServiceCurrentRewards.Remove(ctx, target.GetID())
+	default:
+		return errors.Wrapf(restakingtypes.ErrInvalidDelegationType, "invalid delegation target type %T", target)
+	}
+}
+
 // --------------------------------------------------------------------------------------------------------------------
 
 // SetHistoricalRewards sets the historical rewards for a target and period
@@ -216,6 +230,43 @@ func (k *Keeper) RemoveHistoricalRewards(
 	}
 }
 
+// DeleteHistoricalRewards deletes all historical rewards for a target
+func (k *Keeper) DeleteHistoricalRewards(ctx context.Context, target restakingtypes.DelegationTarget) error {
+	var collection collections.Map[collections.Pair[uint32, uint64], types.HistoricalRewards]
+	switch target.(type) {
+	case *poolstypes.Pool:
+		collection = k.PoolHistoricalRewards
+	case *operatorstypes.Operator:
+		collection = k.OperatorHistoricalRewards
+	case *servicestypes.Service:
+		collection = k.ServiceHistoricalRewards
+	default:
+		return errors.Wrapf(restakingtypes.ErrInvalidDelegationType, "invalid delegation target type %T", target)
+	}
+
+	// Walk over the collection and get the list of keys to be deleted
+	// TODO: Find a more efficient way of doing this by using rangers
+	var keys []collections.Pair[uint32, uint64]
+	err := collection.Walk(ctx, nil, func(key collections.Pair[uint32, uint64], value types.HistoricalRewards) (stop bool, err error) {
+		if key.K1() == target.GetID() {
+			keys = append(keys, key)
+		}
+		return false, nil
+	})
+	if err != nil {
+		return err
+	}
+
+	// Delete all the keys from the collection
+	for _, key := range keys {
+		if err := collection.Remove(ctx, key); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 // --------------------------------------------------------------------------------------------------------------------
 
 // GetOutstandingRewardsCoins returns the outstanding rewards coins for a target
@@ -240,6 +291,20 @@ func (k *Keeper) GetOutstandingRewardsCoins(ctx context.Context, target restakin
 	return rewards.Rewards, nil
 }
 
+// DeleteOutstandingRewards deletes the outstanding rewards for a target
+func (k *Keeper) DeleteOutstandingRewards(ctx context.Context, target restakingtypes.DelegationTarget) error {
+	switch target.(type) {
+	case *poolstypes.Pool:
+		return k.PoolOutstandingRewards.Remove(ctx, target.GetID())
+	case *operatorstypes.Operator:
+		return k.OperatorOutstandingRewards.Remove(ctx, target.GetID())
+	case *servicestypes.Service:
+		return k.ServiceOutstandingRewards.Remove(ctx, target.GetID())
+	default:
+		return errors.Wrapf(restakingtypes.ErrInvalidDelegationType, "invalid delegation target type %T", target)
+	}
+}
+
 // GetOperatorAccumulatedCommission returns the accumulated commission for an operator.
 func (k *Keeper) GetOperatorAccumulatedCommission(ctx context.Context, operatorID uint32) (commission types.AccumulatedCommission, err error) {
 	commission, err = k.OperatorAccumulatedCommissions.Get(ctx, operatorID)
@@ -250,6 +315,37 @@ func (k *Keeper) GetOperatorAccumulatedCommission(ctx context.Context, operatorI
 		return types.AccumulatedCommission{}, err
 	}
 	return
+}
+
+// DeleteOperatorAccumulatedCommission deletes the accumulated commission for an operator.
+func (k *Keeper) DeleteOperatorAccumulatedCommission(ctx context.Context, operatorID uint32) error {
+	return k.OperatorAccumulatedCommissions.Remove(ctx, operatorID)
+}
+
+// GetOperatorWithdrawAddr returns the outstanding rewards coins for an operator
+func (k *Keeper) GetOperatorWithdrawAddr(ctx context.Context, operator *operatorstypes.Operator) (sdk.AccAddress, error) {
+	// Try getting a custom withdraw address
+	operatorAddr, err := sdk.AccAddressFromBech32(operator.Address)
+	if err != nil {
+		return nil, err
+	}
+
+	withdrawAddr, err := k.GetDelegatorWithdrawAddr(ctx, operatorAddr)
+	if err != nil {
+		return nil, err
+	}
+
+	if withdrawAddr != nil {
+		return withdrawAddr, nil
+	}
+
+	// By default, use the operator admin address as the withdraw address
+	adminAddress, err := sdk.AccAddressFromBech32(operator.Admin)
+	if err != nil {
+		return nil, err
+	}
+
+	return adminAddress, nil
 }
 
 // GetDelegatorWithdrawAddr returns the delegator's withdraw address if set, otherwise the delegator address is returned.

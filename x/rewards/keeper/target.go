@@ -69,7 +69,7 @@ func (k *Keeper) initializeDelegationTarget(ctx context.Context, target restakin
 	return err
 }
 
-// increment period, returning the period just ended
+// IncrementDelegationTargetPeriod increments the period, returning the period that just ended
 func (k *Keeper) IncrementDelegationTargetPeriod(ctx context.Context, target restakingtypes.DelegationTarget) (uint64, error) {
 	// fetch current rewards
 	rewards, err := k.GetCurrentRewards(ctx, target)
@@ -175,4 +175,117 @@ func (k *Keeper) decrementReferenceCount(ctx context.Context, target restakingty
 	}
 
 	return k.SetHistoricalRewards(ctx, target, period, historical)
+}
+
+// clearDelegateTarget clears all rewards for a delegation target
+func (k *Keeper) clearDelegationTarget(ctx sdk.Context, target restakingtypes.DelegationTarget) error {
+	// fetch outstanding
+	outstandingCoins, err := k.GetOutstandingRewardsCoins(ctx, target)
+	if err != nil {
+		return err
+	}
+
+	outstanding := outstandingCoins.CoinsAmount()
+
+	// Clear data related to an operator
+	if operator, ok := target.(*operatorstypes.Operator); ok {
+		outstanding, err = k.clearOperator(ctx, outstanding, operator)
+		if err != nil {
+			return err
+		}
+	}
+
+	// Add outstanding to community pool
+	// The target is removed only after it has no more delegations.
+	// This operation sends only the remaining dust to the community pool.
+	operatorAddr, err := sdk.AccAddressFromBech32(target.GetAddress())
+	if err != nil {
+		return err
+	}
+
+	// We truncate the outstanding to be able to send it to the community pool
+	// The remainder will be just be removed
+	outstandingTruncated, _ := outstanding.TruncateDecimal()
+	err = k.communityPoolKeeper.FundCommunityPool(ctx, outstandingTruncated, operatorAddr)
+	if err != nil {
+		return err
+	}
+
+	// Delete outstanding rewards
+	err = k.DeleteOutstandingRewards(ctx, target)
+	if err != nil {
+		return err
+	}
+
+	// Remove the commission record
+	if operator, ok := target.(*operatorstypes.Operator); ok {
+		err = k.DeleteOperatorAccumulatedCommission(ctx, operator.ID)
+		if err != nil {
+			return err
+		}
+	}
+
+	// TODO: Clear slash events when we introduce slashing
+
+	// Clear historical rewards
+	err = k.DeleteHistoricalRewards(ctx, target)
+	if err != nil {
+		return err
+	}
+
+	// Clear current rewards
+	err = k.DeleteCurrentRewards(ctx, target)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (k *Keeper) clearOperator(ctx context.Context, outstanding sdk.DecCoins, operator *operatorstypes.Operator) (outstandingLeftOver sdk.DecCoins, err error) {
+	// Force-withdraw commission
+	valCommission, err := k.GetOperatorAccumulatedCommission(ctx, operator.ID)
+	if err != nil {
+		return outstanding, err
+	}
+
+	commission := valCommission.Commissions.CoinsAmount()
+
+	if !commission.IsZero() {
+		// Subtract from outstanding
+		outstanding = outstanding.Sub(commission)
+
+		// Split into integral & remainder
+		coins, remainder := commission.TruncateDecimal()
+
+		// Send remainder to community pool
+		operatorAddress, err := sdk.AccAddressFromBech32(operator.Address)
+		if err != nil {
+			return outstanding, err
+		}
+
+		// We truncate the remainder to be able to send it to the community pool
+		// The remainder will be just be removed
+		remainderTruncated, _ := remainder.TruncateDecimal()
+
+		err = k.communityPoolKeeper.FundCommunityPool(ctx, remainderTruncated, operatorAddress)
+		if err != nil {
+			return outstanding, err
+		}
+
+		// Add to operator account
+		if !coins.IsZero() {
+			withdrawAddr, err := k.GetOperatorWithdrawAddr(ctx, operator)
+			if err != nil {
+				return outstanding, err
+			}
+
+			err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, withdrawAddr, coins)
+			if err != nil {
+				return outstanding, err
+			}
+		}
+	}
+
+	return outstanding, nil
 }

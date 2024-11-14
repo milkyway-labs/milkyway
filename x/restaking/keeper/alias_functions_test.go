@@ -692,7 +692,7 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 				suite.Assert().NoError(err)
 
 				// Delegate to operator
-				err = suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
+				err = suite.ok.CreateOperator(ctx, operatorstypes.NewOperator(
 					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "",
 				))
 				suite.Assert().NoError(err)
@@ -756,7 +756,7 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 				suite.Assert().NoError(err)
 
 				// Delegate to operator
-				err = suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
+				err = suite.ok.CreateOperator(ctx, operatorstypes.NewOperator(
 					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "",
 				))
 				suite.Assert().NoError(err)
@@ -791,7 +791,7 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 					"",
 					false,
 				))
-				err = suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
+				err = suite.ok.CreateOperator(ctx, operatorstypes.NewOperator(
 					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "",
 				))
 
