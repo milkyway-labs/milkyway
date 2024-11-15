@@ -78,8 +78,12 @@ func (k *Keeper) ActivateService(ctx context.Context, serviceID uint32) error {
 		return types.ErrServiceAlreadyActive
 	}
 
+	// Update the status
 	service.Status = types.SERVICE_STATUS_ACTIVE
-	if err := k.SaveService(ctx, service); err != nil {
+
+	// Update the service
+	err = k.SaveService(ctx, service)
+	if err != nil {
 		return err
 	}
 

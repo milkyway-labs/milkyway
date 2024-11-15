@@ -46,9 +46,12 @@ func TestBeginBlocker(t *testing.T) {
 				return ctx.WithBlockTime(time.Date(2024, 1, 1, 17, 59, 59, 999, time.UTC))
 			},
 			check: func(ctx sdk.Context) {
-				kvStore := ctx.KVStore(data.Keys[types.StoreKey])
+				kvStore := data.StoreService.OpenKVStore(ctx)
 				endTime := time.Date(2024, 1, 1, 18, 0, 0, 0, time.UTC)
-				require.True(t, kvStore.Has(types.InactivatingOperatorQueueKey(1, endTime)))
+
+				hasKey, err := kvStore.Has(types.InactivatingOperatorQueueKey(1, endTime))
+				require.NoError(t, err)
+				require.True(t, hasKey)
 			},
 		},
 		{
@@ -81,9 +84,12 @@ func TestBeginBlocker(t *testing.T) {
 				require.Equal(t, types.OPERATOR_STATUS_INACTIVATING, operator.Status)
 
 				// Make sure the operator is still in the inactivating queue
-				kvStore := ctx.KVStore(data.Keys[types.StoreKey])
+				kvStore := data.StoreService.OpenKVStore(ctx)
 				endTime := time.Date(2020, 1, 1, 18, 0, 0, 0, time.UTC)
-				require.False(t, kvStore.Has(types.InactivatingOperatorQueueKey(1, endTime)))
+
+				hasKey, err := kvStore.Has(types.InactivatingOperatorQueueKey(1, endTime))
+				require.NoError(t, err)
+				require.False(t, hasKey)
 			},
 		},
 		{
@@ -116,9 +122,12 @@ func TestBeginBlocker(t *testing.T) {
 				require.Equal(t, types.OPERATOR_STATUS_INACTIVE, operator.Status)
 
 				// Make sure the operator is not in the inactivating queue
-				kvStore := ctx.KVStore(data.Keys[types.StoreKey])
+				kvStore := data.StoreService.OpenKVStore(ctx)
 				endTime := time.Date(2020, 1, 1, 18, 0, 0, 0, time.UTC)
-				require.False(t, kvStore.Has(types.InactivatingOperatorQueueKey(1, endTime)))
+
+				hasKey, err := kvStore.Has(types.InactivatingOperatorQueueKey(1, endTime))
+				require.NoError(t, err)
+				require.False(t, hasKey)
 			},
 		},
 	}

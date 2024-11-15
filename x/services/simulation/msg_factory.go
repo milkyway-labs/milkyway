@@ -142,6 +142,7 @@ func SimulateMsgUpdateService(ak authkeeper.AccountKeeper, bk bankkeeper.Keeper,
 
 		// Generate the new service fields
 		newService := RandomService(r, service.ID, service.Admin)
+
 		// Create the msg
 		msg := types.NewMsgUpdateService(
 			service.ID,
@@ -271,7 +272,7 @@ func SimulateMsgDeleteService(ak authkeeper.AccountKeeper, bk bankkeeper.Keeper,
 		adminAddr := sdk.MustAccAddressFromBech32(service.Admin)
 		simAccount, found := simtesting.GetSimAccount(adminAddr, accs)
 		if !found {
-			return simtypes.NoOpMsg(types.ModuleName, "service admin not found", "skip"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, "MsgDeleteService", "service admin not found"), nil, nil
 		}
 
 		// Create the msg
