@@ -24,7 +24,7 @@ func (suite *KeeperTestSuite) TestQueryServer_Operator() {
 		{
 			name: "existing operator is returned properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.RegisterOperator(ctx, types.NewOperator(
+				err := suite.k.CreateOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -83,7 +83,7 @@ func (suite *KeeperTestSuite) TestQueryServer_OperatorParams() {
 		{
 			name: "default operator params are returned properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.RegisterOperator(ctx, types.NewOperator(
+				err := suite.k.CreateOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -102,7 +102,7 @@ func (suite *KeeperTestSuite) TestQueryServer_OperatorParams() {
 		{
 			name: "updated operator params are returned properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.RegisterOperator(ctx, types.NewOperator(
+				err := suite.k.CreateOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -155,7 +155,7 @@ func (suite *KeeperTestSuite) TestQueryServer_Operators() {
 		{
 			name: "query without pagination returns data properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.RegisterOperator(ctx, types.NewOperator(
+				err := suite.k.CreateOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -165,7 +165,7 @@ func (suite *KeeperTestSuite) TestQueryServer_Operators() {
 				))
 				suite.Require().NoError(err)
 
-				err = suite.k.RegisterOperator(ctx, types.NewOperator(
+				err = suite.k.CreateOperator(ctx, types.NewOperator(
 					2,
 					types.OPERATOR_STATUS_INACTIVATING,
 					"Inertia",
@@ -199,7 +199,7 @@ func (suite *KeeperTestSuite) TestQueryServer_Operators() {
 		{
 			name: "query with pagination returns data properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.RegisterOperator(ctx, types.NewOperator(
+				err := suite.k.CreateOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -209,7 +209,7 @@ func (suite *KeeperTestSuite) TestQueryServer_Operators() {
 				))
 				suite.Require().NoError(err)
 
-				err = suite.k.RegisterOperator(ctx, types.NewOperator(
+				err = suite.k.CreateOperator(ctx, types.NewOperator(
 					2,
 					types.OPERATOR_STATUS_INACTIVATING,
 					"Inertia",

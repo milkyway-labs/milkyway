@@ -4,6 +4,7 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 
 	"github.com/milkyway-labs/milkyway/x/services/keeper"
 	"github.com/milkyway-labs/milkyway/x/services/types"
@@ -128,7 +129,7 @@ func (suite *KeeperTestSuite) TestMsgServer_CreateService() {
 				suite.Require().Equal(sdk.NewCoin("uatom", sdkmath.NewInt(100_000)), balance)
 
 				// Make sure the fee was transferred to the module account
-				poolBalance := suite.bk.GetBalance(ctx, authtypes.NewModuleAddress(authtypes.FeeCollectorName), "uatom")
+				poolBalance := suite.bk.GetBalance(ctx, authtypes.NewModuleAddress(distrtypes.ModuleName), "uatom")
 				suite.Require().Equal(sdk.NewCoin("uatom", sdkmath.NewInt(100_000)), poolBalance)
 			},
 		},

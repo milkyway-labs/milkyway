@@ -40,7 +40,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorJoinedServices() {
 		{
 			name: "operator without joined services returns empty serviceIDs",
 			store: func(ctx sdk.Context) {
-				err := suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
+				err := suite.ok.CreateOperator(ctx, operatorstypes.NewOperator(
 					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "",
 				))
 				suite.Require().NoError(err)
@@ -52,7 +52,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorJoinedServices() {
 		{
 			name: "configured joined services are returned properly",
 			store: func(ctx sdk.Context) {
-				err := suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
+				err := suite.ok.CreateOperator(ctx, operatorstypes.NewOperator(
 					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "",
 				))
 				suite.Require().NoError(err)
@@ -69,7 +69,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorJoinedServices() {
 		{
 			name: "pagination is handled properly",
 			store: func(ctx sdk.Context) {
-				err := suite.ok.RegisterOperator(ctx, operatorstypes.NewOperator(
+				err := suite.ok.CreateOperator(ctx, operatorstypes.NewOperator(
 					1, operatorstypes.OPERATOR_STATUS_ACTIVE, "", "", "", "",
 				))
 				suite.Require().NoError(err)

@@ -8,7 +8,6 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
-	appkeepers "github.com/milkyway-labs/milkyway/app/keepers"
 	"github.com/milkyway-labs/milkyway/testutils/storetesting"
 	operatorskeeper "github.com/milkyway-labs/milkyway/x/operators/keeper"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
@@ -45,8 +44,6 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	data.StoreKey = data.Keys[types.StoreKey]
 
 	// Build the keepers
-	communityPoolKeeper := appkeepers.NewCommunityPoolKeeper(data.BankKeeper, authtypes.FeeCollectorName)
-
 	data.PoolsKeeper = poolskeeper.NewKeeper(
 		data.Cdc,
 		data.Keys[poolstypes.StoreKey],
@@ -58,7 +55,7 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		data.Keys[operatorstypes.StoreKey],
 		runtime.NewKVStoreService(data.Keys[operatorstypes.StoreKey]),
 		data.AccountKeeper,
-		communityPoolKeeper,
+		data.DistributionKeeper,
 		data.AuthorityAddress,
 	)
 	data.ServicesKeeper = serviceskeeper.NewKeeper(
@@ -66,7 +63,7 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		data.Keys[servicestypes.StoreKey],
 		runtime.NewKVStoreService(data.Keys[servicestypes.StoreKey]),
 		data.AccountKeeper,
-		communityPoolKeeper,
+		data.DistributionKeeper,
 		data.AuthorityAddress,
 	)
 	data.Keeper = keeper.NewKeeper(

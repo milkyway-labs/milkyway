@@ -5,7 +5,6 @@ import (
 
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
 	"github.com/milkyway-labs/milkyway/x/operators/types"
 )
@@ -97,7 +96,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetNextOperatorID() {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-func (suite *KeeperTestSuite) TestKeeper_RegisterOperator() {
+func (suite *KeeperTestSuite) TestKeeper_CreateOperator() {
 	testCases := []struct {
 		name      string
 		setup     func()
@@ -106,28 +105,6 @@ func (suite *KeeperTestSuite) TestKeeper_RegisterOperator() {
 		shouldErr bool
 		check     func(ctx sdk.Context)
 	}{
-		{
-			name: "user without enough funds to pay for registration fee returns erorr",
-			store: func(ctx sdk.Context) {
-				// Set the registration fee
-				suite.k.SetParams(ctx, types.NewParams(
-					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(200_000_000))),
-					24*time.Hour,
-				))
-
-				// Fund the user account
-				suite.fundAccount(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))))
-			},
-			operator: types.NewOperator(
-				1,
-				types.OPERATOR_STATUS_ACTIVE,
-				"MilkyWay Operator",
-				"https://milkyway.com",
-				"https://milkyway.com/picture",
-				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-			),
-			shouldErr: true,
-		},
 		{
 			name: "operator is registered correctly",
 			store: func(ctx sdk.Context) {
@@ -162,16 +139,6 @@ func (suite *KeeperTestSuite) TestKeeper_RegisterOperator() {
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				), stored)
 
-				// Make sure the user has been charged
-				userAddress, err := sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
-				suite.Require().NoError(err)
-				userBalance := suite.bk.GetBalance(ctx, userAddress, "uatom")
-				suite.Require().Equal(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000)), userBalance)
-
-				// Make sure the community pool has been funded
-				poolBalance := suite.bk.GetBalance(ctx, authtypes.NewModuleAddress(authtypes.FeeCollectorName), "uatom")
-				suite.Require().Equal(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000)), poolBalance)
-
 				// Make sure the hook has been called
 				suite.Require().True(suite.hooks.CalledMap["AfterOperatorRegistered"])
 			},
@@ -189,7 +156,7 @@ func (suite *KeeperTestSuite) TestKeeper_RegisterOperator() {
 				tc.store(ctx)
 			}
 
-			err := suite.k.RegisterOperator(ctx, tc.operator)
+			err := suite.k.CreateOperator(ctx, tc.operator)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
@@ -220,7 +187,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetOperator() {
 		{
 			name: "existing operator is returned properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.RegisterOperator(ctx, types.NewOperator(
+				err := suite.k.CreateOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -297,7 +264,7 @@ func (suite *KeeperTestSuite) TestKeeper_SaveOperator() {
 		{
 			name: "existing operator is returned properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.RegisterOperator(ctx, types.NewOperator(
+				err := suite.k.CreateOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -577,7 +544,7 @@ func (suite *KeeperTestSuite) TestKeeper_ReactivateInactiveOperator() {
 		{
 			name: "reactivate active operator fails",
 			store: func(ctx sdk.Context) {
-				err := suite.k.RegisterOperator(ctx, types.NewOperator(
+				err := suite.k.CreateOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -593,7 +560,7 @@ func (suite *KeeperTestSuite) TestKeeper_ReactivateInactiveOperator() {
 		{
 			name: "reactivate inactivating operator fails",
 			store: func(ctx sdk.Context) {
-				err := suite.k.RegisterOperator(ctx, types.NewOperator(
+				err := suite.k.CreateOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_INACTIVATING,
 					"MilkyWay Operator",
@@ -609,7 +576,7 @@ func (suite *KeeperTestSuite) TestKeeper_ReactivateInactiveOperator() {
 		{
 			name: "reactivate inactive operator works properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.RegisterOperator(ctx, types.NewOperator(
+				err := suite.k.CreateOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_INACTIVE,
 					"MilkyWay Operator",

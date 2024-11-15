@@ -35,7 +35,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				suite.k.SetNextOperatorID(ctx, 10)
 				suite.k.SetParams(ctx, types.DefaultParams())
 
-				err := suite.k.RegisterOperator(ctx, types.NewOperator(
+				err := suite.k.CreateOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -45,7 +45,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				))
 				suite.Require().NoError(err)
 
-				err = suite.k.RegisterOperator(ctx, types.NewOperator(
+				err = suite.k.CreateOperator(ctx, types.NewOperator(
 					2,
 					types.OPERATOR_STATUS_INACTIVATING,
 					"Inertia",
@@ -95,13 +95,13 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				)
-				err := suite.k.RegisterOperator(ctx, activeValidator)
+				err := suite.k.CreateOperator(ctx, activeValidator)
 				suite.Require().NoError(err)
 
 				err = suite.k.StartOperatorInactivation(ctx, activeValidator)
 				suite.Require().NoError(err)
 
-				err = suite.k.RegisterOperator(ctx, types.NewOperator(
+				err = suite.k.CreateOperator(ctx, types.NewOperator(
 					2,
 					types.OPERATOR_STATUS_ACTIVE,
 					"Inertia",
@@ -146,7 +146,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				suite.k.SetNextOperatorID(ctx, 10)
 				suite.k.SetParams(ctx, types.DefaultParams())
 
-				err := suite.k.RegisterOperator(ctx, types.NewOperator(
+				err := suite.k.CreateOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -162,7 +162,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				))
 				suite.Require().NoError(err)
 
-				err = suite.k.RegisterOperator(ctx, types.NewOperator(
+				err = suite.k.CreateOperator(ctx, types.NewOperator(
 					2,
 					types.OPERATOR_STATUS_INACTIVATING,
 					"Inertia",

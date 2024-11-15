@@ -7,73 +7,38 @@ import (
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
-var _ restakingtypes.RestakingHooks = Hooks{}
+// AfterDelegationTargetCreated is called after a delegation target is created
+func (k *Keeper) AfterDelegationTargetCreated(ctx sdk.Context, delType restakingtypes.DelegationType, targetID uint32) error {
+	target, err := k.GetDelegationTarget(ctx, delType, targetID)
+	if err != nil {
+		return err
+	}
 
-type Hooks struct {
-	k *Keeper
+	return k.initializeDelegationTarget(ctx, target)
 }
 
-func (k *Keeper) Hooks() Hooks {
-	return Hooks{k}
+// AfterDelegationTargetRemoved is called after a delegation target is removed
+func (k *Keeper) AfterDelegationTargetRemoved(ctx sdk.Context, delType restakingtypes.DelegationType, targetID uint32) error {
+	target, err := k.GetDelegationTarget(ctx, delType, targetID)
+	if err != nil {
+		return err
+	}
+
+	return k.clearDelegationTarget(ctx, target)
 }
 
-func (h Hooks) BeforePoolDelegationCreated(ctx sdk.Context, poolID uint32, delegator string) error {
-	return h.k.BeforeDelegationCreated(ctx, restakingtypes.DELEGATION_TYPE_POOL, poolID)
-}
-
-func (h Hooks) BeforePoolDelegationSharesModified(ctx sdk.Context, poolID uint32, delegator string) error {
-	return h.k.BeforeDelegationSharesModified(ctx, restakingtypes.DELEGATION_TYPE_POOL, poolID, delegator)
-}
-
-func (h Hooks) AfterPoolDelegationModified(ctx sdk.Context, poolID uint32, delegator string) error {
-	return h.k.AfterDelegationModified(ctx, restakingtypes.DELEGATION_TYPE_POOL, poolID, delegator)
-}
-
-func (h Hooks) BeforeOperatorDelegationCreated(ctx sdk.Context, operatorID uint32, delegator string) error {
-	return h.k.BeforeDelegationCreated(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, operatorID)
-}
-
-func (h Hooks) BeforeOperatorDelegationSharesModified(ctx sdk.Context, operatorID uint32, delegator string) error {
-	return h.k.BeforeDelegationSharesModified(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, operatorID, delegator)
-}
-
-func (h Hooks) AfterOperatorDelegationModified(ctx sdk.Context, operatorID uint32, delegator string) error {
-	return h.k.AfterDelegationModified(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, operatorID, delegator)
-}
-
-func (h Hooks) BeforeServiceDelegationCreated(ctx sdk.Context, serviceID uint32, delegator string) error {
-	return h.k.BeforeDelegationCreated(ctx, restakingtypes.DELEGATION_TYPE_SERVICE, serviceID)
-}
-
-func (h Hooks) BeforeServiceDelegationSharesModified(ctx sdk.Context, serviceID uint32, delegator string) error {
-	return h.k.BeforeDelegationSharesModified(ctx, restakingtypes.DELEGATION_TYPE_SERVICE, serviceID, delegator)
-}
-
-func (h Hooks) AfterServiceDelegationModified(ctx sdk.Context, serviceID uint32, delegator string) error {
-	return h.k.AfterDelegationModified(ctx, restakingtypes.DELEGATION_TYPE_SERVICE, serviceID, delegator)
-}
-
+// BeforeDelegationCreated is called before a delegation to a target is created
 func (k *Keeper) BeforeDelegationCreated(ctx sdk.Context, delType restakingtypes.DelegationType, targetID uint32) error {
 	target, err := k.GetDelegationTarget(ctx, delType, targetID)
 	if err != nil {
 		return err
 	}
 
-	// Initialize target if it doesn't exist yet.
-	exists, err := k.HasCurrentRewards(ctx, target)
-	if err != nil {
-		return err
-	}
-	if !exists {
-		if err := k.initializeDelegationTarget(ctx, target); err != nil {
-			return err
-		}
-	}
-
 	_, err = k.IncrementDelegationTargetPeriod(ctx, target)
 	return err
 }
 
+// BeforeDelegationSharesModified is called before a delegation to a target is modified
 func (k *Keeper) BeforeDelegationSharesModified(ctx sdk.Context, delType restakingtypes.DelegationType, targetID uint32, delegator string) error {
 	target, err := k.GetDelegationTarget(ctx, delType, targetID)
 	if err != nil {
@@ -88,37 +53,21 @@ func (k *Keeper) BeforeDelegationSharesModified(ctx sdk.Context, delType restaki
 		return sdkerrors.ErrNotFound.Wrapf("delegation not found: %d, %s", target.GetID(), delegator)
 	}
 
-	if _, err := k.withdrawDelegationRewards(ctx, target, del); err != nil {
-		return err
-	}
-
-	return nil
+	_, err = k.withdrawDelegationRewards(ctx, target, del)
+	return err
 }
 
+// AfterDelegationModified is called after a delegation to a target is modified
 func (k *Keeper) AfterDelegationModified(ctx sdk.Context, delType restakingtypes.DelegationType, targetID uint32, delegator string) error {
-	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(delegator)
-	if err != nil {
-		return err
-	}
 	target, err := k.GetDelegationTarget(ctx, delType, targetID)
 	if err != nil {
 		return err
 	}
+
+	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(delegator)
+	if err != nil {
+		return err
+	}
+
 	return k.initializeDelegation(ctx, target, delAddr)
-}
-
-func (h Hooks) BeforePoolDelegationRemoved(_ sdk.Context, _ uint32, _ string) error {
-	return nil
-}
-
-func (h Hooks) BeforeOperatorDelegationRemoved(_ sdk.Context, _ uint32, _ string) error {
-	return nil
-}
-
-func (h Hooks) BeforeServiceDelegationRemoved(_ sdk.Context, _ uint32, _ string) error {
-	return nil
-}
-
-func (h Hooks) AfterUnbondingInitiated(_ sdk.Context, _ uint64) error {
-	return nil
 }

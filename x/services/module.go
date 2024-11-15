@@ -16,9 +16,13 @@ import (
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
+	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
+	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 
 	"github.com/milkyway-labs/milkyway/x/services/client/cli"
 	"github.com/milkyway-labs/milkyway/x/services/keeper"
+	"github.com/milkyway-labs/milkyway/x/services/simulation"
 	"github.com/milkyway-labs/milkyway/x/services/types"
 )
 
@@ -37,10 +41,10 @@ var (
 
 // AppModuleBasic implements the AppModuleBasic interface for the capability module.
 type AppModuleBasic struct {
-	cdc codec.BinaryCodec
+	cdc codec.Codec
 }
 
-func NewAppModuleBasic(cdc codec.BinaryCodec) AppModuleBasic {
+func NewAppModuleBasic(cdc codec.Codec) AppModuleBasic {
 	return AppModuleBasic{cdc: cdc}
 }
 
@@ -97,14 +101,23 @@ type AppModule struct {
 	keeper *keeper.Keeper
 
 	pk types.PoolsKeeper
+	bk bankkeeper.Keeper
+	ak authkeeper.AccountKeeper
 }
 
-func NewAppModule(cdc codec.Codec, keeper *keeper.Keeper, pk types.PoolsKeeper) AppModule {
+func NewAppModule(cdc codec.Codec,
+	keeper *keeper.Keeper,
+	pk types.PoolsKeeper,
+	ak authkeeper.AccountKeeper,
+	bk bankkeeper.Keeper,
+) AppModule {
 	return AppModule{
 		AppModuleBasic: NewAppModuleBasic(cdc),
 		keeper:         keeper,
 
 		pk: pk,
+		ak: ak,
+		bk: bk,
 	}
 }
 
@@ -152,3 +165,28 @@ func (AppModule) ConsensusVersion() uint64 { return consensusVersion }
 func (am AppModule) IsOnePerModuleType() {}
 
 func (am AppModule) IsAppModule() {}
+
+// AppModuleSimulation functions
+
+// GenerateGenesisState creates a randomized GenState of the services module.
+func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
+	simulation.RandomizedGenState(simState)
+}
+
+// ProposalMsgs returns msgs used for governance proposals for simulations.
+func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.WeightedProposalMsg {
+	return simulation.ProposalMsgs(am.keeper)
+}
+
+// RegisterStoreDecoder registers a decoder for services module's types.
+func (am AppModule) RegisterStoreDecoder(sdr simtypes.StoreDecoderRegistry) {
+	sdr[types.StoreKey] = simulation.NewDecodeStore(am.cdc, am.keeper)
+}
+
+// WeightedOperations returns the all the services module operations with their respective weights.
+func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
+	return simulation.WeightedOperations(
+		simState.AppParams, simState.Cdc, simState.TxConfig,
+		am.ak, am.bk, am.keeper,
+	)
+}

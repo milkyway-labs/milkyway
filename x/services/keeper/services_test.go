@@ -3,7 +3,6 @@ package keeper_test
 import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
 	"github.com/milkyway-labs/milkyway/x/services/types"
 )
@@ -105,30 +104,6 @@ func (suite *KeeperTestSuite) TestKeeper_CreateService() {
 		check     func(ctx sdk.Context)
 	}{
 		{
-			name: "user without enough funds to pay for registration fees returns error",
-			store: func(ctx sdk.Context) {
-				// Set the params
-				suite.k.SetParams(ctx, types.NewParams(
-					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),
-				))
-
-				// Fund the user account
-				userBalance := sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(50_000_000)))
-				suite.fundAccount(ctx, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", userBalance)
-			},
-			service: types.NewService(
-				1,
-				types.SERVICE_STATUS_ACTIVE,
-				"MilkyWay",
-				"MilkyWay is an AVS of a restaking platform",
-				"https://milkyway.com",
-				"https://milkyway.com/logo.png",
-				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				false,
-			),
-			shouldErr: true,
-		},
-		{
 			name: "service is created properly",
 			store: func(ctx sdk.Context) {
 				// Set the params
@@ -152,17 +127,6 @@ func (suite *KeeperTestSuite) TestKeeper_CreateService() {
 			),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				// Make sure the user balance has been reduced
-				userAddress, err := sdk.AccAddressFromBech32("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd")
-				suite.Require().NoError(err)
-
-				userBalance := suite.bk.GetBalance(ctx, userAddress, "uatom")
-				suite.Require().Equal(sdk.NewCoin("uatom", sdkmath.NewInt(50_000_000)), userBalance)
-
-				// Make sure the community pool has been funded
-				poolBalance := suite.bk.GetBalance(ctx, authtypes.NewModuleAddress(authtypes.FeeCollectorName), "uatom")
-				suite.Require().Equal(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000)), poolBalance)
-
 				// Make sure the service account has been created
 				hasAccount := suite.ak.HasAccount(ctx, types.GetServiceAddress(1))
 				suite.Require().True(hasAccount)

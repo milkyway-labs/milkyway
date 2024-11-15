@@ -32,22 +32,8 @@ func (k *Keeper) GetNextOperatorID(ctx sdk.Context) (operatorID uint32, err erro
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// RegisterOperator creates a new Operator and stores it in the KVStore
-func (k *Keeper) RegisterOperator(ctx sdk.Context, operator types.Operator) error {
-	// Charge for the creation
-	registrationFees := k.GetParams(ctx).OperatorRegistrationFee
-	if !registrationFees.IsZero() {
-		userAddress, err := sdk.AccAddressFromBech32(operator.Admin)
-		if err != nil {
-			return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid operator admin address: %s", operator.Admin)
-		}
-
-		err = k.poolKeeper.FundCommunityPool(ctx, registrationFees, userAddress)
-		if err != nil {
-			return err
-		}
-	}
-
+// CreateOperator creates a new Operator and stores it in the KVStore
+func (k *Keeper) CreateOperator(ctx sdk.Context, operator types.Operator) error {
 	// Create the operator account if it does not exist
 	operatorAddress, err := sdk.AccAddressFromBech32(operator.Address)
 	if err != nil {

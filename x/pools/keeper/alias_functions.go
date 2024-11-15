@@ -95,6 +95,12 @@ func (k *Keeper) CreateOrGetPoolByDenom(ctx sdk.Context, denom string) (types.Po
 	// Log the event
 	k.Logger(ctx).Debug("created pool", "id", poolID, "denom", denom)
 
+	// Call the hook
+	err = k.AfterPoolCreated(ctx, pool.ID)
+	if err != nil {
+		return pool, err
+	}
+
 	return pool, nil
 }
 

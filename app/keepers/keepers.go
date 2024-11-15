@@ -275,8 +275,6 @@ func NewAppKeeper(
 		logger,
 	)
 
-	communityPoolKeeper := NewCommunityPoolKeeper(appKeepers.BankKeeper, authtypes.FeeCollectorName)
-
 	appKeepers.CrisisKeeper = crisiskeeper.NewKeeper(
 		appCodec,
 		runtime.NewKVStoreService(appKeepers.keys[crisistypes.StoreKey]),
@@ -421,7 +419,7 @@ func NewAppKeeper(
 		runtime.NewKVStoreService(appKeepers.keys[tokenfactorytypes.StoreKey]),
 		appKeepers.AccountKeeper,
 		appKeepers.BankKeeper,
-		communityPoolKeeper,
+		appKeepers.DistrKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 	appKeepers.TokenFactoryKeeper.SetContractKeeper(contractKeeper)
@@ -580,7 +578,7 @@ func NewAppKeeper(
 		appKeepers.keys[servicestypes.StoreKey],
 		runtime.NewKVStoreService(appKeepers.keys[servicestypes.StoreKey]),
 		appKeepers.AccountKeeper,
-		communityPoolKeeper,
+		appKeepers.DistrKeeper,
 		govAuthority,
 	)
 	appKeepers.OperatorsKeeper = operatorskeeper.NewKeeper(
@@ -588,7 +586,7 @@ func NewAppKeeper(
 		appKeepers.keys[operatorstypes.StoreKey],
 		runtime.NewKVStoreService(appKeepers.keys[operatorstypes.StoreKey]),
 		appKeepers.AccountKeeper,
-		communityPoolKeeper,
+		appKeepers.DistrKeeper,
 		govAuthority,
 	)
 	appKeepers.PoolsKeeper = poolskeeper.NewKeeper(
@@ -608,11 +606,6 @@ func NewAppKeeper(
 		appKeepers.ServicesKeeper,
 		govAuthority,
 	)
-
-	// Set hooks based on the restaking keeper
-	appKeepers.OperatorsKeeper.SetHooks(appKeepers.RestakingKeeper.OperatorsHooks())
-	appKeepers.ServicesKeeper.SetHooks(appKeepers.RestakingKeeper.ServicesHooks())
-
 	appKeepers.AssetsKeeper = assetskeeper.NewKeeper(
 		appCodec,
 		runtime.NewKVStoreService(appKeepers.keys[assetstypes.StoreKey]),
@@ -623,7 +616,7 @@ func NewAppKeeper(
 		runtime.NewKVStoreService(appKeepers.keys[rewardstypes.StoreKey]),
 		appKeepers.AccountKeeper,
 		appKeepers.BankKeeper,
-		communityPoolKeeper,
+		appKeepers.DistrKeeper,
 		appKeepers.OracleKeeper,
 		appKeepers.PoolsKeeper,
 		appKeepers.OperatorsKeeper,
@@ -634,8 +627,6 @@ func NewAppKeeper(
 	)
 
 	// Set hooks based on the rewards keeper
-	appKeepers.RestakingKeeper.SetHooks(appKeepers.RewardsKeeper.Hooks())
-
 	appKeepers.LiquidVestingKeeper = liquidvestingkeeper.NewKeeper(
 		appCodec,
 		appKeepers.keys[liquidvestingtypes.StoreKey],
@@ -650,8 +641,24 @@ func NewAppKeeper(
 		govAuthority,
 	)
 
-	// Set hooks based on the liquid vesting keeper
+	// Set the restrictions on sending tokens
 	appKeepers.BankKeeper.AppendSendRestriction(appKeepers.LiquidVestingKeeper.SendRestrictionFn)
+
+	// Set the hooks up to this point
+	appKeepers.PoolsKeeper.SetHooks(
+		appKeepers.RewardsKeeper.PoolsHooks(),
+	)
+	appKeepers.OperatorsKeeper.SetHooks(operatorstypes.NewMultiOperatorsHooks(
+		appKeepers.RestakingKeeper.OperatorsHooks(),
+		appKeepers.RewardsKeeper.OperatorsHooks(),
+	))
+	appKeepers.ServicesKeeper.SetHooks(servicestypes.NewMultiServicesHooks(
+		appKeepers.RestakingKeeper.ServicesHooks(),
+		appKeepers.RewardsKeeper.ServicesHooks(),
+	))
+	appKeepers.RestakingKeeper.SetHooks(
+		appKeepers.RewardsKeeper.RestakingHooks(),
+	)
 
 	// ---------------------- //
 	// --- Stride Keepers --- //

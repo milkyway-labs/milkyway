@@ -176,7 +176,7 @@ func appModules(
 		icacallbacks.NewAppModule(appCodec, *app.ICACallbacksKeeper, app.AccountKeeper, app.BankKeeper),
 
 		// MilkyWay modules
-		services.NewAppModule(appCodec, app.ServicesKeeper, app.PoolsKeeper),
+		services.NewAppModule(appCodec, app.ServicesKeeper, app.PoolsKeeper, app.AccountKeeper, app.BankKeeper),
 		operators.NewAppModule(appCodec, app.OperatorsKeeper),
 		pools.NewAppModule(appCodec, app.PoolsKeeper),
 		restaking.NewAppModule(appCodec, app.RestakingKeeper),
@@ -229,6 +229,9 @@ func simulationModules(
 		ibc.NewAppModule(app.IBCKeeper),
 		app.TransferModule,
 		app.ICAModule,
+
+		// MilkyWay modules
+		services.NewAppModule(appCodec, app.ServicesKeeper, app.PoolsKeeper, app.AccountKeeper, app.BankKeeper),
 	}
 }
 

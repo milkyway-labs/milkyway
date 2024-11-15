@@ -21,7 +21,7 @@ type Keeper struct {
 
 	// Data
 	storeService      corestoretypes.KVStoreService
-	schema            collections.Schema
+	Schema            collections.Schema
 	serviceAddressSet collections.KeySet[string]
 	// serviceParams associated a service ID with its parameters
 	serviceParams collections.Map[uint32, types.ServiceParams]
@@ -68,7 +68,7 @@ func NewKeeper(
 	if err != nil {
 		panic(err)
 	}
-	k.schema = schema
+	k.Schema = schema
 
 	return k
 }

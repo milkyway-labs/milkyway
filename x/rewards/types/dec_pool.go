@@ -215,6 +215,15 @@ func (pools DecPools) TruncateDecimal() (truncatedDecPools Pools, changeDecPools
 	return truncatedDecPools, changeDecPools
 }
 
+// CoinsAmount returns the total amount of coins in the DecPools
+func (pools DecPools) CoinsAmount() sdk.DecCoins {
+	coins := sdk.NewDecCoins()
+	for _, pool := range pools {
+		coins = coins.Add(pool.DecCoins...)
+	}
+	return coins
+}
+
 // Intersect will return a new set of pools which contains the minimum pool Coins
 // for common denoms found in both `pools` and `poolsB`. For denoms not common
 // to both `pools` and `poolsB` the minimum is considered to be 0, thus they

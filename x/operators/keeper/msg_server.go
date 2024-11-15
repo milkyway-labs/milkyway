@@ -22,7 +22,7 @@ func NewMsgServer(k *Keeper) types.MsgServer {
 	return &msgServer{Keeper: k}
 }
 
-// RegisterOperator defines the rpc method for Msg/RegisterOperator
+// RegisterOperator defines the rpc method for Msg/CreateOperator
 func (k msgServer) RegisterOperator(goCtx context.Context, msg *types.MsgRegisterOperator) (*types.MsgRegisterOperatorResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
@@ -48,8 +48,22 @@ func (k msgServer) RegisterOperator(goCtx context.Context, msg *types.MsgRegiste
 		return nil, errors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
+	// Charge for the creation
+	registrationFees := k.GetParams(ctx).OperatorRegistrationFee
+	if !registrationFees.IsZero() {
+		userAddress, err := sdk.AccAddressFromBech32(operator.Admin)
+		if err != nil {
+			return nil, errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid operator admin address: %s", operator.Admin)
+		}
+
+		err = k.poolKeeper.FundCommunityPool(ctx, registrationFees, userAddress)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	// Store the operator
-	err = k.Keeper.RegisterOperator(ctx, operator)
+	err = k.Keeper.CreateOperator(ctx, operator)
 	if err != nil {
 		return nil, err
 	}

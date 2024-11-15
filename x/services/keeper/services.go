@@ -38,20 +38,6 @@ func (k *Keeper) SaveService(ctx sdk.Context, service types.Service) error {
 
 // CreateService creates a new Service and stores it in the KVStore
 func (k *Keeper) CreateService(ctx sdk.Context, service types.Service) error {
-	// Charge for the creation
-	registrationFees := k.GetParams(ctx).ServiceRegistrationFee
-	if !registrationFees.IsZero() {
-		userAddress, err := sdk.AccAddressFromBech32(service.Admin)
-		if err != nil {
-			return err
-		}
-
-		err = k.poolKeeper.FundCommunityPool(ctx, registrationFees, userAddress)
-		if err != nil {
-			return err
-		}
-	}
-
 	// Create the service account
 	serviceAddress, err := sdk.AccAddressFromBech32(service.Address)
 	if err != nil {

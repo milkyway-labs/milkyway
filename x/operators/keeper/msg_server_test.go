@@ -6,6 +6,7 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 
 	"github.com/milkyway-labs/milkyway/x/operators/keeper"
 	"github.com/milkyway-labs/milkyway/x/operators/types"
@@ -112,7 +113,7 @@ func (suite *KeeperTestSuite) TestMsgServer_RegisterOperator() {
 				suite.Require().Equal(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000)), balance)
 
 				// Make sure the community pool was funded
-				poolBalance := suite.bk.GetBalance(ctx, authtypes.NewModuleAddress(authtypes.FeeCollectorName), "uatom")
+				poolBalance := suite.bk.GetBalance(ctx, authtypes.NewModuleAddress(distrtypes.ModuleName), "uatom")
 				suite.Require().Equal(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000)), poolBalance)
 			},
 		},
@@ -935,7 +936,7 @@ func (suite *KeeperTestSuite) TestMsgServer_SetOperatorParams() {
 			}
 
 			// Register a test operator
-			err := suite.k.RegisterOperator(ctx, types.NewOperator(
+			err := suite.k.CreateOperator(ctx, types.NewOperator(
 				testOperatorId,
 				types.OPERATOR_STATUS_ACTIVE,
 				"MilkyWay Operator",

@@ -13,6 +13,8 @@ import (
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
+	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
 	milkyway "github.com/milkyway-labs/milkyway/app"
@@ -28,8 +30,9 @@ type BaseKeeperTestData struct {
 
 	AuthorityAddress string
 
-	AccountKeeper authkeeper.AccountKeeper
-	BankKeeper    bankkeeper.Keeper
+	AccountKeeper      authkeeper.AccountKeeper
+	BankKeeper         bankkeeper.Keeper
+	DistributionKeeper distrkeeper.Keeper
 }
 
 // NewBaseKeeperTestData returns a new BaseKeeperTestData
@@ -45,7 +48,7 @@ func NewBaseKeeperTestData(t *testing.T, keys []string) BaseKeeperTestData {
 	var data BaseKeeperTestData
 
 	// Define store keys
-	keys = append(keys, []string{authtypes.StoreKey, banktypes.StoreKey}...)
+	keys = append(keys, []string{authtypes.StoreKey, banktypes.StoreKey, distrtypes.StoreKey}...)
 	slices.Sort(keys)
 	keys = slices.Compact(keys)
 	data.Keys = storetypes.NewKVStoreKeys(keys...)
@@ -77,6 +80,20 @@ func NewBaseKeeperTestData(t *testing.T, keys []string) BaseKeeperTestData {
 		data.AuthorityAddress,
 		log.NewNopLogger(),
 	)
+	data.DistributionKeeper = distrkeeper.NewKeeper(
+		data.Cdc,
+		runtime.NewKVStoreService(data.Keys[distrtypes.StoreKey]),
+		data.AccountKeeper,
+		data.BankKeeper,
+		nil,
+		authtypes.FeeCollectorName,
+		data.AuthorityAddress,
+	)
+
+	// Init the module's genesis state as the default ones
+	data.AccountKeeper.InitGenesis(data.Context, *authtypes.DefaultGenesisState())
+	data.BankKeeper.InitGenesis(data.Context, banktypes.DefaultGenesisState())
+	data.DistributionKeeper.InitGenesis(data.Context, *distrtypes.DefaultGenesisState())
 
 	return data
 }

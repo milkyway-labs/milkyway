@@ -15,7 +15,6 @@ import (
 	"go.uber.org/mock/gomock"
 
 	milkyway "github.com/milkyway-labs/milkyway/app"
-	"github.com/milkyway-labs/milkyway/app/keepers"
 	"github.com/milkyway-labs/milkyway/testutils/storetesting"
 	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
 	poolskeeper "github.com/milkyway-labs/milkyway/x/pools/keeper"
@@ -90,7 +89,7 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		data.StoreKey,
 		runtime.NewKVStoreService(data.Keys[servicestypes.StoreKey]),
 		data.AccountKeeper,
-		keepers.NewCommunityPoolKeeper(data.BankKeeper, authtypes.FeeCollectorName),
+		data.DistributionKeeper,
 		authorityAddr,
 	)
 
