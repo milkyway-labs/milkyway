@@ -46,7 +46,9 @@ func (suite *KeeperTestSuite) TestInvariants_ReferenceCountInvariant() {
 				suite.NoError(err)
 
 				// Create an invalid number of historical rewards
-				historicalRewards := types.NewHistoricalRewards([]types.DecPool{types.NewDecPool("umilk", nil)}, 1)
+				historicalRewards := types.NewHistoricalRewards(types.ServicePools{
+					types.NewServicePool(1, types.NewDecPool("umilk", nil)),
+				}, 1)
 				err = suite.keeper.PoolHistoricalRewards.Set(ctx, collections.Join[uint32, uint64](pool.ID, 1), historicalRewards)
 				err = suite.keeper.PoolHistoricalRewards.Set(ctx, collections.Join[uint32, uint64](pool.ID, 2), historicalRewards)
 				err = suite.keeper.PoolHistoricalRewards.Set(ctx, collections.Join[uint32, uint64](pool.ID, 3), historicalRewards)
@@ -60,7 +62,9 @@ func (suite *KeeperTestSuite) TestInvariants_ReferenceCountInvariant() {
 				service := suite.CreateService(ctx, "MilkyWay AVS", "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
 
 				// Create an invalid number of historical rewards
-				historicalRewards := types.NewHistoricalRewards([]types.DecPool{types.NewDecPool("umilk", nil)}, 1)
+				historicalRewards := types.NewHistoricalRewards(types.ServicePools{
+					types.NewServicePool(1, types.NewDecPool("umilk", nil)),
+				}, 1)
 				err := suite.keeper.ServiceHistoricalRewards.Set(ctx, collections.Join[uint32, uint64](service.ID, 1), historicalRewards)
 				err = suite.keeper.ServiceHistoricalRewards.Set(ctx, collections.Join[uint32, uint64](service.ID, 2), historicalRewards)
 				err = suite.keeper.ServiceHistoricalRewards.Set(ctx, collections.Join[uint32, uint64](service.ID, 3), historicalRewards)
@@ -74,7 +78,9 @@ func (suite *KeeperTestSuite) TestInvariants_ReferenceCountInvariant() {
 				service := suite.CreateOperator(ctx, "MilkyWay", "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
 
 				// Create an invalid number of historical rewards
-				historicalRewards := types.NewHistoricalRewards([]types.DecPool{types.NewDecPool("umilk", nil)}, 1)
+				historicalRewards := types.NewHistoricalRewards(types.ServicePools{
+					types.NewServicePool(1, types.NewDecPool("umilk", nil)),
+				}, 1)
 				err := suite.keeper.OperatorHistoricalRewards.Set(ctx, collections.Join[uint32, uint64](service.ID, 1), historicalRewards)
 				err = suite.keeper.OperatorHistoricalRewards.Set(ctx, collections.Join[uint32, uint64](service.ID, 2), historicalRewards)
 				err = suite.keeper.OperatorHistoricalRewards.Set(ctx, collections.Join[uint32, uint64](service.ID, 3), historicalRewards)

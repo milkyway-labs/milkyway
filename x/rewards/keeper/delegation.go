@@ -72,15 +72,14 @@ func (k *Keeper) calculateDelegationRewardsBetween(
 	}
 
 	differences := ending.CumulativeRewardRatios.Sub(starting.CumulativeRewardRatios)
-	if differences.IsAnyNegative() {
-		panic("negative rewards should not be possible")
-	}
 
 	for _, diff := range differences {
-		rewards = rewards.Add(types.NewDecPool(
-			diff.Denom,
-			diff.DecCoins.MulDecTruncate(stakes.AmountOf(diff.Denom)),
-		))
+		for _, decPool := range diff.DecPools {
+			rewards = rewards.Add(types.NewDecPool(
+				decPool.Denom,
+				decPool.DecCoins.MulDecTruncate(stakes.AmountOf(decPool.Denom)),
+			))
+		}
 	}
 
 	return rewards, nil

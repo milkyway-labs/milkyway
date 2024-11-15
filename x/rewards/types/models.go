@@ -343,7 +343,7 @@ func InitialAccumulatedCommission() AccumulatedCommission {
 }
 
 // NewHistoricalRewards creates a new historical rewards
-func NewHistoricalRewards(cumulativeRewardRatios DecPools, referenceCount uint32) HistoricalRewards {
+func NewHistoricalRewards(cumulativeRewardRatios ServicePools, referenceCount uint32) HistoricalRewards {
 	return HistoricalRewards{
 		CumulativeRewardRatios: cumulativeRewardRatios,
 		ReferenceCount:         referenceCount,
@@ -351,7 +351,7 @@ func NewHistoricalRewards(cumulativeRewardRatios DecPools, referenceCount uint32
 }
 
 // NewCurrentRewards creates a new current rewards
-func NewCurrentRewards(rewards DecPools, period uint64) CurrentRewards {
+func NewCurrentRewards(rewards ServicePools, period uint64) CurrentRewards {
 	return CurrentRewards{
 		Rewards: rewards,
 		Period:  period,

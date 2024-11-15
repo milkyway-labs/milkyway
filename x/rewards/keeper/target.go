@@ -45,13 +45,13 @@ func (k *Keeper) GetDelegationTarget(
 // initialize rewards for a new delegation target
 func (k *Keeper) initializeDelegationTarget(ctx context.Context, target restakingtypes.DelegationTarget) error {
 	// set initial historical rewards (period 0) with reference count of 1
-	err := k.SetHistoricalRewards(ctx, target, uint64(0), types.NewHistoricalRewards(types.DecPools{}, 1))
+	err := k.SetHistoricalRewards(ctx, target, uint64(0), types.NewHistoricalRewards(types.ServicePools{}, 1))
 	if err != nil {
 		return err
 	}
 
 	// set current rewards (starting at period 1)
-	err = k.SetCurrentRewards(ctx, target, types.NewCurrentRewards(types.DecPools{}, 1))
+	err = k.SetCurrentRewards(ctx, target, types.NewCurrentRewards(types.ServicePools{}, 1))
 	if err != nil {
 		return err
 	}
@@ -78,20 +78,29 @@ func (k *Keeper) IncrementDelegationTargetPeriod(ctx context.Context, target res
 	}
 
 	// calculate current ratio
-	var current types.DecPools
+	var current types.ServicePools
 
 	tokens := target.GetTokens()
 	communityFunding := types.DecPools{}
-	for _, token := range tokens {
-		rewardCoins := rewards.Rewards.CoinsOf(token.Denom)
-		if token.IsZero() {
-			// can't calculate ratio for zero-token targets
-			// ergo we instead add to the community pool
-			communityFunding = communityFunding.Add(types.NewDecPool(token.Denom, rewardCoins))
-			current = current.Add(types.NewDecPool(token.Denom, sdk.DecCoins{}))
-		} else {
-			current = current.Add(
-				types.NewDecPool(token.Denom, rewardCoins.QuoDecTruncate(math.LegacyNewDecFromInt(token.Amount))))
+	for _, reward := range rewards.Rewards {
+		for _, token := range tokens {
+			rewardCoins := reward.DecPools.CoinsOf(token.Denom)
+			if token.IsZero() {
+				// can't calculate ratio for zero-token targets
+				// ergo we instead add to the community pool
+				communityFunding = communityFunding.Add(types.NewDecPool(token.Denom, rewardCoins))
+				current = current.Add(
+					types.NewServicePool(reward.ServiceID, types.NewDecPool(token.Denom, sdk.DecCoins{})),
+				)
+			} else {
+				// TODO: handle pool service pairs
+				current = current.Add(
+					types.NewServicePool(
+						reward.ServiceID,
+						types.NewDecPool(token.Denom, rewardCoins.QuoDecTruncate(math.LegacyNewDecFromInt(token.Amount))),
+					),
+				)
+			}
 		}
 	}
 
@@ -138,7 +147,7 @@ func (k *Keeper) IncrementDelegationTargetPeriod(ctx context.Context, target res
 	}
 
 	// set current rewards, incrementing period by 1
-	err = k.SetCurrentRewards(ctx, target, types.NewCurrentRewards(types.DecPools{}, rewards.Period+1))
+	err = k.SetCurrentRewards(ctx, target, types.NewCurrentRewards(types.ServicePools{}, rewards.Period+1))
 	if err != nil {
 		return 0, err
 	}

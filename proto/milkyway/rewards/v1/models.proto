@@ -148,9 +148,9 @@ message UsersDistributionTypeBasic {
 //  read that record)
 //  + one per validator for the zeroeth period, set on initialization
 message HistoricalRewards {
-  repeated DecPool cumulative_reward_ratios = 1 [
+  repeated ServicePool cumulative_reward_ratios = 1 [
     (gogoproto.moretags) = "yaml:\"cumulative_reward_ratios\"",
-    (gogoproto.castrepeated) = "DecPools",
+    (gogoproto.castrepeated) = "ServicePools",
     (gogoproto.nullable) = false
   ];
   uint32 reference_count = 2
@@ -161,9 +161,9 @@ message HistoricalRewards {
 // period for a delegation target kept as a running counter and incremented
 // each block as long as the delegation target's tokens remain constant.
 message CurrentRewards {
-  repeated DecPool rewards = 1 [
+  repeated ServicePool rewards = 1 [
     (gogoproto.moretags) = "yaml:\"rewards\"",
-    (gogoproto.castrepeated) = "DecPools",
+    (gogoproto.castrepeated) = "ServicePools",
     (gogoproto.nullable) = false
   ];
   uint64 period = 2;
@@ -255,4 +255,11 @@ message DecPool {
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
     (gogoproto.nullable) = false
   ];
+}
+
+// ServicePool represents the rewards pool for a service.
+message ServicePool {
+  uint32 service_id = 1 [ (gogoproto.customname) = "ServiceID" ];
+  repeated DecPool dec_pools = 2
+      [ (gogoproto.castrepeated) = "DecPools", (gogoproto.nullable) = false ];
 }
