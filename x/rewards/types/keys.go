@@ -22,10 +22,11 @@ var (
 	LastRewardsAllocationTimeKey   = collections.NewPrefix(0xa3)
 	DelegatorWithdrawAddrKeyPrefix = collections.NewPrefix(0xa4)
 
-	PoolDelegatorStartingInfoKeyPrefix = collections.NewPrefix(0xb1)
-	PoolHistoricalRewardsKeyPrefix     = collections.NewPrefix(0xb2)
-	PoolCurrentRewardsKeyPrefix        = collections.NewPrefix(0xb3)
-	PoolOutstandingRewardsKeyPrefix    = collections.NewPrefix(0xb4)
+	PoolDelegatorStartingInfoKeyPrefix       = collections.NewPrefix(0xb1)
+	PoolHistoricalRewardsKeyPrefix           = collections.NewPrefix(0xb2)
+	PoolCurrentRewardsKeyPrefix              = collections.NewPrefix(0xb3)
+	PoolOutstandingRewardsKeyPrefix          = collections.NewPrefix(0xb4)
+	PoolServiceTotalDelegatorSharesKeyPrefix = collections.NewPrefix(0xb5)
 
 	OperatorAccumulatedCommissionKeyPrefix = collections.NewPrefix(0xc1)
 	OperatorDelegatorStartingInfoKeyPrefix = collections.NewPrefix(0xc2)

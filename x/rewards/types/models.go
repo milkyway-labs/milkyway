@@ -377,3 +377,12 @@ func NewDelegationDelegatorReward(
 		Reward:             rewards,
 	}
 }
+
+// NewPoolServiceTotalDelegatorShares creates a new pool service total delegator shares
+func NewPoolServiceTotalDelegatorShares(poolID, serviceID uint32, shares sdk.DecCoins) PoolServiceTotalDelegatorShares {
+	return PoolServiceTotalDelegatorShares{
+		PoolID:    poolID,
+		ServiceID: serviceID,
+		Shares:    shares,
+	}
+}

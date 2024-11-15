@@ -230,6 +230,19 @@ message DelegationDelegatorReward {
 
 // ---------------------------------------------------------------------------
 
+// PoolServiceTotalDelegatorShares represents the total delegator shares for a
+// pool-service pair.
+message PoolServiceTotalDelegatorShares {
+  uint32 pool_id = 1 [ (gogoproto.customname) = "PoolID" ];
+  uint32 service_id = 2 [ (gogoproto.customname) = "ServiceID" ];
+  repeated cosmos.base.v1beta1.DecCoin shares = 3 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// ---------------------------------------------------------------------------
+
 // Types below are taken from Initia's modified version of x/distribution.
 // See
 // https://github.com/initia-labs/initia/blob/v0.2.10/proto/initia/distribution/v1/distribution.proto#L38-L56

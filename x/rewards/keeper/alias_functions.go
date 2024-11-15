@@ -410,3 +410,48 @@ func (k *Keeper) GetServiceDelegationRewards(
 ) (types.DecPools, error) {
 	return k.GetDelegationRewards(ctx, delAddr, restakingtypes.DELEGATION_TYPE_SERVICE, serviceID)
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// GetPoolServiceTotalDelegatorShares returns the total delegator shares for a pool-service pair.
+func (k *Keeper) GetPoolServiceTotalDelegatorShares(ctx context.Context, poolID, serviceID uint32) (sdk.DecCoins, error) {
+	shares, err := k.PoolServiceTotalDelegatorShares.Get(ctx, collections.Join(poolID, serviceID))
+	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return shares.Shares, nil
+}
+
+// SetPoolServiceTotalDelegatorShares sets the total delegator shares for a pool-service pair.
+func (k *Keeper) SetPoolServiceTotalDelegatorShares(ctx context.Context, poolID, serviceID uint32, shares sdk.DecCoins) error {
+	return k.PoolServiceTotalDelegatorShares.Set(
+		ctx,
+		collections.Join(poolID, serviceID),
+		types.NewPoolServiceTotalDelegatorShares(poolID, serviceID, shares),
+	)
+}
+
+// IncrementPoolServiceTotalDelegatorShares increments the total delegator shares for a pool-service pair.
+func (k *Keeper) IncrementPoolServiceTotalDelegatorShares(
+	ctx context.Context, poolID, serviceID uint32, shares sdk.DecCoins,
+) error {
+	prevShares, err := k.GetPoolServiceTotalDelegatorShares(ctx, poolID, serviceID)
+	if err != nil {
+		return err
+	}
+	return k.SetPoolServiceTotalDelegatorShares(ctx, poolID, serviceID, prevShares.Add(shares...))
+}
+
+// DecrementPoolServiceTotalDelegatorShares decrements the total delegator shares for a pool-service pair.
+func (k *Keeper) DecrementPoolServiceTotalDelegatorShares(
+	ctx context.Context, poolID, serviceID uint32, shares sdk.DecCoins,
+) error {
+	prevShares, err := k.GetPoolServiceTotalDelegatorShares(ctx, poolID, serviceID)
+	if err != nil {
+		return err
+	}
+	return k.SetPoolServiceTotalDelegatorShares(ctx, poolID, serviceID, prevShares.Sub(shares))
+}

@@ -36,10 +36,11 @@ type Keeper struct {
 	LastRewardsAllocationTime collections.Item[gogotypes.Timestamp]
 	DelegatorWithdrawAddrs    collections.Map[sdk.AccAddress, sdk.AccAddress]
 
-	PoolDelegatorStartingInfos collections.Map[collections.Pair[uint32, sdk.AccAddress], types.DelegatorStartingInfo]
-	PoolHistoricalRewards      collections.Map[collections.Pair[uint32, uint64], types.HistoricalRewards]
-	PoolCurrentRewards         collections.Map[uint32, types.CurrentRewards]
-	PoolOutstandingRewards     collections.Map[uint32, types.OutstandingRewards]
+	PoolDelegatorStartingInfos      collections.Map[collections.Pair[uint32, sdk.AccAddress], types.DelegatorStartingInfo]
+	PoolHistoricalRewards           collections.Map[collections.Pair[uint32, uint64], types.HistoricalRewards]
+	PoolCurrentRewards              collections.Map[uint32, types.CurrentRewards]
+	PoolOutstandingRewards          collections.Map[uint32, types.OutstandingRewards]
+	PoolServiceTotalDelegatorShares collections.Map[collections.Pair[uint32, uint32], types.PoolServiceTotalDelegatorShares]
 
 	OperatorAccumulatedCommissions collections.Map[uint32, types.AccumulatedCommission]
 	OperatorDelegatorStartingInfos collections.Map[collections.Pair[uint32, sdk.AccAddress], types.DelegatorStartingInfo]
@@ -141,6 +142,13 @@ func NewKeeper(
 			"pool_outstanding_rewards",
 			collections.Uint32Key,
 			codec.CollValue[types.OutstandingRewards](cdc),
+		),
+		PoolServiceTotalDelegatorShares: collections.NewMap(
+			sb,
+			types.PoolServiceTotalDelegatorSharesKeyPrefix,
+			"pool_service_total_delegator_shares",
+			collections.PairKeyCodec(collections.Uint32Key, collections.Uint32Key),
+			codec.CollValue[types.PoolServiceTotalDelegatorShares](cdc),
 		),
 		OperatorAccumulatedCommissions: collections.NewMap(
 			sb,
