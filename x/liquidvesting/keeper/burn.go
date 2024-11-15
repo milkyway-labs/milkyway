@@ -183,8 +183,8 @@ func (k *Keeper) DequeueAllBurnCoinsFromUnbondingQueue(ctx sdk.Context, currTime
 
 	// Get an iterator for all timeslices from time 0 until the current BlockHeader time
 	iter := k.BurnCoinsUnbondingQueueIterator(ctx, currTime)
-	defer iter.Close()
 
+	var toDeleteKeys [][]byte
 	for ; iter.Valid(); iter.Next() {
 		timeslice := types.BurnCoinsList{}
 		value := iter.Value()
@@ -192,7 +192,13 @@ func (k *Keeper) DequeueAllBurnCoinsFromUnbondingQueue(ctx sdk.Context, currTime
 
 		burnCoins = append(burnCoins, timeslice.Data...)
 
-		store.Delete(iter.Key())
+		toDeleteKeys = append(toDeleteKeys, iter.Key())
+	}
+	iter.Close()
+
+	// Delete all the keys
+	for _, key := range toDeleteKeys {
+		store.Delete(key)
 	}
 
 	return burnCoins
