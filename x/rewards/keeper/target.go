@@ -198,15 +198,12 @@ func (k *Keeper) clearDelegationTarget(ctx sdk.Context, target restakingtypes.De
 	// Add outstanding to community pool
 	// The target is removed only after it has no more delegations.
 	// This operation sends only the remaining dust to the community pool.
-	operatorAddr, err := sdk.AccAddressFromBech32(target.GetAddress())
-	if err != nil {
-		return err
-	}
+	rewardsPoolAddr := k.accountKeeper.GetModuleAddress(types.RewardsPoolName)
 
 	// We truncate the outstanding to be able to send it to the community pool
 	// The remainder will be just be removed
 	outstandingTruncated, _ := outstanding.TruncateDecimal()
-	err = k.communityPoolKeeper.FundCommunityPool(ctx, outstandingTruncated, operatorAddr)
+	err = k.communityPoolKeeper.FundCommunityPool(ctx, outstandingTruncated, rewardsPoolAddr)
 	if err != nil {
 		return err
 	}
@@ -258,17 +255,13 @@ func (k *Keeper) clearOperator(ctx context.Context, outstanding sdk.DecCoins, op
 		// Split into integral & remainder
 		coins, remainder := commission.TruncateDecimal()
 
-		// Send remainder to community pool
-		operatorAddress, err := sdk.AccAddressFromBech32(operator.Address)
-		if err != nil {
-			return outstanding, err
-		}
-
 		// We truncate the remainder to be able to send it to the community pool
 		// The remainder will be just be removed
 		remainderTruncated, _ := remainder.TruncateDecimal()
 
-		err = k.communityPoolKeeper.FundCommunityPool(ctx, remainderTruncated, operatorAddress)
+		// Send remainder to community pool
+		rewardsPoolAddr := k.accountKeeper.GetModuleAddress(types.RewardsPoolName)
+		err = k.communityPoolKeeper.FundCommunityPool(ctx, remainderTruncated, rewardsPoolAddr)
 		if err != nil {
 			return outstanding, err
 		}
