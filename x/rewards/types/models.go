@@ -386,3 +386,18 @@ func NewPoolServiceTotalDelegatorShares(poolID, serviceID uint32, shares sdk.Dec
 		Shares:    shares,
 	}
 }
+
+// Validate validates the pool service total delegator shares
+func (shares PoolServiceTotalDelegatorShares) Validate() error {
+	if shares.PoolID == 0 {
+		return fmt.Errorf("pool ID must not be 0")
+	}
+	if shares.ServiceID == 0 {
+		return fmt.Errorf("service ID must not be 0")
+	}
+	err := shares.Shares.Validate()
+	if err != nil {
+		return fmt.Errorf("invalid pool service total delegator shares: %w", err)
+	}
+	return nil
+}

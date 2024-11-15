@@ -41,6 +41,26 @@ func TestGenesisState_Validate(t *testing.T) {
 			shouldErr: true,
 		},
 		{
+			name: "invalid pool service total delegator shares pool ID returns error",
+			genesis: &types.GenesisState{
+				NextRewardsPlanID: 1,
+				PoolServiceTotalDelegatorShares: []types.PoolServiceTotalDelegatorShares{
+					types.NewPoolServiceTotalDelegatorShares(0, 1, utils.MustParseDecCoins("10_000000umilk")),
+				},
+			},
+			shouldErr: true,
+		},
+		{
+			name: "invalid pool service total delegator shares service ID returns error",
+			genesis: &types.GenesisState{
+				NextRewardsPlanID: 1,
+				PoolServiceTotalDelegatorShares: []types.PoolServiceTotalDelegatorShares{
+					types.NewPoolServiceTotalDelegatorShares(1, 0, utils.MustParseDecCoins("10_000000umilk")),
+				},
+			},
+			shouldErr: true,
+		},
+		{
 			name:      "default genesis returns no error",
 			genesis:   types.DefaultGenesis(),
 			shouldErr: false,

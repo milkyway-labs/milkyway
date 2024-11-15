@@ -19,17 +19,19 @@ func NewGenesisState(
 	operatorsRecords,
 	servicesRecords DelegationTypeRecords,
 	operatorAccumulatedCommissionRecords []OperatorAccumulatedCommissionRecord,
+	poolServiceTotalDelShares []PoolServiceTotalDelegatorShares,
 ) *GenesisState {
 	return &GenesisState{
-		Params:                         params,
-		NextRewardsPlanID:              nextRewardsPlanID,
-		RewardsPlans:                   rewardsPlans,
-		LastRewardsAllocationTime:      lastRewardsAllocationTime,
-		DelegatorWithdrawInfos:         delegatorWithdrawInfos,
-		PoolsRecords:                   poolsRecords,
-		OperatorsRecords:               operatorsRecords,
-		ServicesRecords:                servicesRecords,
-		OperatorAccumulatedCommissions: operatorAccumulatedCommissionRecords,
+		Params:                          params,
+		NextRewardsPlanID:               nextRewardsPlanID,
+		RewardsPlans:                    rewardsPlans,
+		LastRewardsAllocationTime:       lastRewardsAllocationTime,
+		DelegatorWithdrawInfos:          delegatorWithdrawInfos,
+		PoolsRecords:                    poolsRecords,
+		OperatorsRecords:                operatorsRecords,
+		ServicesRecords:                 servicesRecords,
+		OperatorAccumulatedCommissions:  operatorAccumulatedCommissionRecords,
+		PoolServiceTotalDelegatorShares: poolServiceTotalDelShares,
 	}
 }
 
@@ -47,6 +49,7 @@ func DefaultGenesis() *GenesisState {
 			[]OutstandingRewardsRecord{}, []HistoricalRewardsRecord{}, []CurrentRewardsRecord{},
 			[]DelegatorStartingInfoRecord{}),
 		[]OperatorAccumulatedCommissionRecord{},
+		[]PoolServiceTotalDelegatorShares{},
 	)
 }
 
@@ -71,6 +74,13 @@ func (genState *GenesisState) Validate(unpacker codectypes.AnyUnpacker) error {
 		err = plan.Validate(unpacker)
 		if err != nil {
 			return fmt.Errorf("invalid rewards plan at index %d: %w", i, err)
+		}
+	}
+
+	for _, shares := range genState.PoolServiceTotalDelegatorShares {
+		err = shares.Validate()
+		if err != nil {
+			return fmt.Errorf("invalid pool service total delegator shares: %w", err)
 		}
 	}
 	return nil

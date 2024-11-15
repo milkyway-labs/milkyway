@@ -107,6 +107,15 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) (*types.GenesisState, error) {
 		return nil, err
 	}
 
+	var totalShares []types.PoolServiceTotalDelegatorShares
+	err = k.PoolServiceTotalDelegatorShares.Walk(ctx, nil, func(_ collections.Pair[uint32, uint32], shares types.PoolServiceTotalDelegatorShares) (stop bool, err error) {
+		totalShares = append(totalShares, shares)
+		return false, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
 	return types.NewGenesisState(
 		params,
 		nextRewardsPlanID,
@@ -117,6 +126,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) (*types.GenesisState, error) {
 		operatorRecords,
 		serviceRecords,
 		operatorAccumulatedCommissions,
+		totalShares,
 	), nil
 }
 
@@ -316,6 +326,13 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) error {
 		return fmt.Errorf("rewards pool module balance does not match the module holdings: %s < %s",
 			rewardsPoolBalances,
 			totalOutstandingRewardsTruncated)
+	}
+
+	for _, delShares := range state.PoolServiceTotalDelegatorShares {
+		err = k.SetPoolServiceTotalDelegatorShares(ctx, delShares.PoolID, delShares.ServiceID, delShares.Shares)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

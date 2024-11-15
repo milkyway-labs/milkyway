@@ -36,10 +36,11 @@ type Keeper struct {
 	LastRewardsAllocationTime collections.Item[gogotypes.Timestamp]
 	DelegatorWithdrawAddrs    collections.Map[sdk.AccAddress, sdk.AccAddress]
 
-	PoolDelegatorStartingInfos      collections.Map[collections.Pair[uint32, sdk.AccAddress], types.DelegatorStartingInfo]
-	PoolHistoricalRewards           collections.Map[collections.Pair[uint32, uint64], types.HistoricalRewards]
-	PoolCurrentRewards              collections.Map[uint32, types.CurrentRewards]
-	PoolOutstandingRewards          collections.Map[uint32, types.OutstandingRewards]
+	PoolDelegatorStartingInfos collections.Map[collections.Pair[uint32, sdk.AccAddress], types.DelegatorStartingInfo]
+	PoolHistoricalRewards      collections.Map[collections.Pair[uint32, uint64], types.HistoricalRewards]
+	PoolCurrentRewards         collections.Map[uint32, types.CurrentRewards]
+	PoolOutstandingRewards     collections.Map[uint32, types.OutstandingRewards]
+	// (poolID, serviceID) -> total delegator shares
 	PoolServiceTotalDelegatorShares collections.Map[collections.Pair[uint32, uint32], types.PoolServiceTotalDelegatorShares]
 
 	OperatorAccumulatedCommissions collections.Map[uint32, types.AccumulatedCommission]
