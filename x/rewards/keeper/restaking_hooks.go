@@ -3,7 +3,6 @@ package keeper
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
@@ -97,9 +96,9 @@ func (h RestakingHooks) AfterUserTrustedServiceUpdated(ctx sdk.Context, userAddr
 			return false, nil
 		}
 
-		pool, found := h.k.poolsKeeper.GetPool(ctx, del.TargetID)
-		if !found {
-			return true, poolstypes.ErrPoolNotFound
+		pool, err := h.k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_POOL, del.TargetID)
+		if err != nil {
+			return true, err
 		}
 
 		// Calling these two methods has same effect as calling

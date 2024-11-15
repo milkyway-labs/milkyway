@@ -3,11 +3,13 @@ package keeper
 import (
 	"context"
 	"fmt"
+	"slices"
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
+	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 )
@@ -48,7 +50,11 @@ func (k *Keeper) initializeDelegation(ctx context.Context, target restakingtypes
 
 // calculateDelegationRewardsBetween calculates the rewards accrued by a delegation between two periods
 func (k *Keeper) calculateDelegationRewardsBetween(
-	ctx context.Context, target restakingtypes.DelegationTarget, startingPeriod, endingPeriod uint64, stakes sdk.DecCoins,
+	ctx context.Context,
+	target restakingtypes.DelegationTarget,
+	delegator string,
+	startingPeriod, endingPeriod uint64,
+	stakes sdk.DecCoins,
 ) (rewards types.DecPools, err error) {
 	// Sanity check
 	if startingPeriod > endingPeriod {
@@ -72,14 +78,31 @@ func (k *Keeper) calculateDelegationRewardsBetween(
 	}
 
 	differences := ending.CumulativeRewardRatios.Sub(starting.CumulativeRewardRatios)
+	var decPools types.DecPools
 
-	for _, diff := range differences {
-		for _, decPool := range diff.DecPools {
-			rewards = rewards.Add(types.NewDecPool(
-				decPool.Denom,
-				decPool.DecCoins.MulDecTruncate(stakes.AmountOf(decPool.Denom)),
-			))
+	if _, ok := target.(*poolstypes.Pool); ok {
+		sdkCtx := sdk.UnwrapSDKContext(ctx)
+		servicesIDs, err := k.restakingKeeper.GetUserTrustedServicesIDs(sdkCtx, delegator)
+		if err != nil {
+			return nil, err
 		}
+
+		for _, diff := range differences {
+			if slices.Contains(servicesIDs, diff.ServiceID) {
+				decPools = decPools.Add(diff.DecPools...)
+			}
+		}
+	} else {
+		for _, diff := range differences {
+			decPools = decPools.Add(diff.DecPools...)
+		}
+	}
+
+	for _, decPool := range decPools {
+		rewards = rewards.Add(types.NewDecPool(
+			decPool.Denom,
+			decPool.DecCoins.MulDecTruncate(stakes.AmountOf(decPool.Denom)),
+		))
 	}
 
 	return rewards, nil
@@ -161,7 +184,14 @@ func (k *Keeper) CalculateDelegationRewards(
 	}
 
 	// Calculate the rewards for the final period
-	delRewards, err := k.calculateDelegationRewardsBetween(ctx, target, startingPeriod, endingPeriod, stakes)
+	delRewards, err := k.calculateDelegationRewardsBetween(
+		ctx,
+		target,
+		del.UserAddress,
+		startingPeriod,
+		endingPeriod,
+		stakes,
+	)
 	if err != nil {
 		return nil, err
 	}
