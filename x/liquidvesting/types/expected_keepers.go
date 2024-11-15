@@ -1,7 +1,7 @@
 package types
 
 import (
-	context "context"
+	"context"
 	"time"
 
 	"cosmossdk.io/core/address"
@@ -9,9 +9,7 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
 type AccountKeeper interface {
@@ -39,8 +37,7 @@ type BankKeeper interface {
 }
 
 type PoolsKeeper interface {
-	IsPoolAddress(ctx sdk.Context, address string) (bool, error)
-	GetPoolByDenom(ctx sdk.Context, denom string) (poolstypes.Pool, bool)
+	IsPoolAddress(ctx context.Context, address string) (bool, error)
 }
 
 type OperatorsKeeper interface {
@@ -49,8 +46,7 @@ type OperatorsKeeper interface {
 }
 
 type ServicesKeeper interface {
-	IsServiceAddress(ctx sdk.Context, address string) (bool, error)
-	GetService(ctx sdk.Context, serviceID uint32) (servicestypes.Service, bool)
+	IsServiceAddress(ctx context.Context, address string) (bool, error)
 }
 
 type RestakingKeeper interface {

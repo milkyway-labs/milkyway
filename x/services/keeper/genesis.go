@@ -8,26 +8,32 @@ import (
 
 // ExportGenesis returns the GenesisState associated with the given context
 func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
+	nextServiceID, err := k.GetNextServiceID(ctx)
+	if err != nil {
+		panic(err)
+	}
+
+	services, err := k.GetServices(ctx)
+	if err != nil {
+		panic(err)
+	}
+
 	servicesParams, err := k.GetAllServicesParams(ctx)
 	if err != nil {
 		panic(err)
 	}
 
-	return types.NewGenesisState(
-		k.exportNextServiceID(ctx),
-		k.GetServices(ctx),
-		servicesParams,
-		k.GetParams(ctx),
-	)
-}
-
-// exportNextServiceID returns the next Service ID stored in the KVStore
-func (k *Keeper) exportNextServiceID(ctx sdk.Context) uint32 {
-	nextServiceID, err := k.GetNextServiceID(ctx)
+	params, err := k.GetParams(ctx)
 	if err != nil {
 		panic(err)
 	}
-	return nextServiceID
+
+	return types.NewGenesisState(
+		nextServiceID,
+		services,
+		servicesParams,
+		params,
+	)
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -35,24 +41,31 @@ func (k *Keeper) exportNextServiceID(ctx sdk.Context) uint32 {
 // InitGenesis initializes the state from a GenesisState
 func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 	// Set the next service ID
-	k.SetNextServiceID(ctx, state.NextServiceID)
+	err := k.SetNextServiceID(ctx, state.NextServiceID)
+	if err != nil {
+		return err
+	}
 
 	// Store the services
 	for _, service := range state.Services {
-		if err := k.CreateService(ctx, service); err != nil {
+		err = k.CreateService(ctx, service)
+		if err != nil {
 			return err
 		}
 	}
 
 	for _, serviceParams := range state.ServicesParams {
-		err := k.SetServiceParams(ctx, serviceParams.ServiceID, serviceParams.Params)
+		err = k.SetServiceParams(ctx, serviceParams.ServiceID, serviceParams.Params)
 		if err != nil {
 			return err
 		}
 	}
 
 	// Store params
-	k.SetParams(ctx, state.Params)
+	err = k.SetParams(ctx, state.Params)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

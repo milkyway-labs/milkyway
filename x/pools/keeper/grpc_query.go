@@ -21,7 +21,11 @@ func (k *Keeper) PoolByID(ctx context.Context, request *types.QueryPoolByIdReque
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	pool, found := k.GetPool(sdkCtx, request.PoolId)
+	pool, found, err := k.GetPool(sdkCtx, request.PoolId)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
 	if !found {
 		return nil, status.Error(codes.NotFound, "pool not found")
 	}
@@ -36,7 +40,11 @@ func (k *Keeper) PoolByDenom(ctx context.Context, request *types.QueryPoolByDeno
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	pool, found := k.GetPoolByDenom(sdkCtx, request.Denom)
+	pool, found, err := k.GetPoolByDenom(sdkCtx, request.Denom)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
 	if !found {
 		return nil, status.Error(codes.NotFound, "pool not found")
 	}

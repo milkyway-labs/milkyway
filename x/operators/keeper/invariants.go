@@ -28,7 +28,7 @@ func ValidOperatorsInvariant(k *Keeper) sdk.Invariant {
 		}
 
 		var invalidOperators []types.Operator
-		k.IterateOperators(ctx, func(operator types.Operator) (stop bool) {
+		err = k.IterateOperators(ctx, func(operator types.Operator) (stop bool, err error) {
 			invalid := false
 
 			// Make sure the operator ID is never greater or equal to the next operator ID
@@ -46,8 +46,11 @@ func ValidOperatorsInvariant(k *Keeper) sdk.Invariant {
 				invalidOperators = append(invalidOperators, operator)
 			}
 
-			return false
+			return false, nil
 		})
+		if err != nil {
+			panic(err)
+		}
 
 		return sdk.FormatInvariant(types.ModuleName, "invalid operators",
 			fmt.Sprintf("the following operators are invalid:\n %s", formatOutputOperators(invalidOperators)),

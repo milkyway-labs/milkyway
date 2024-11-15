@@ -9,14 +9,16 @@ import (
 
 func (suite *KeeperTestSuite) TestKeeper_SetNextServiceID() {
 	testCases := []struct {
-		name  string
-		store func(ctx sdk.Context)
-		id    uint32
-		check func(ctx sdk.Context)
+		name      string
+		store     func(ctx sdk.Context)
+		id        uint32
+		shouldErr bool
+		check     func(ctx sdk.Context)
 	}{
 		{
-			name: "next service id is saved correctly",
-			id:   1,
+			name:      "next service id is saved correctly",
+			id:        1,
+			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				store := ctx.KVStore(suite.storeKey)
 				serviceIDBz := store.Get(types.NextServiceIDKey)
@@ -26,9 +28,11 @@ func (suite *KeeperTestSuite) TestKeeper_SetNextServiceID() {
 		{
 			name: "next service id is overridden properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextServiceID(ctx, 1)
+				err := suite.k.SetNextServiceID(ctx, 1)
+				suite.Require().NoError(err)
 			},
-			id: 2,
+			id:        2,
+			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				store := ctx.KVStore(suite.storeKey)
 				serviceIDBz := store.Get(types.NextServiceIDKey)
@@ -45,7 +49,13 @@ func (suite *KeeperTestSuite) TestKeeper_SetNextServiceID() {
 				tc.store(ctx)
 			}
 
-			suite.k.SetNextServiceID(ctx, tc.id)
+			err := suite.k.SetNextServiceID(ctx, tc.id)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+			}
+
 			if tc.check != nil {
 				tc.check(ctx)
 			}
@@ -61,13 +71,15 @@ func (suite *KeeperTestSuite) TestKeeper_GetNextServiceID() {
 		expNext   uint32
 	}{
 		{
-			name:      "non existing next service returns error",
-			shouldErr: true,
+			name:      "non existing next service returns 1",
+			shouldErr: false,
+			expNext:   1,
 		},
 		{
 			name: "exiting next service id is returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextServiceID(ctx, 1)
+				err := suite.k.SetNextServiceID(ctx, 1)
+				suite.Require().NoError(err)
 			},
 			expNext: 1,
 		},
@@ -107,9 +119,10 @@ func (suite *KeeperTestSuite) TestKeeper_CreateService() {
 			name: "service is created properly",
 			store: func(ctx sdk.Context) {
 				// Set the params
-				suite.k.SetParams(ctx, types.NewParams(
+				err := suite.k.SetParams(ctx, types.NewParams(
 					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),
 				))
+				suite.Require().NoError(err)
 
 				// Fund the user account
 				userBalance := sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(150_000_000)))
@@ -132,7 +145,8 @@ func (suite *KeeperTestSuite) TestKeeper_CreateService() {
 				suite.Require().True(hasAccount)
 
 				// Make sure the service has been created
-				service, found := suite.k.GetService(ctx, 1)
+				service, found, err := suite.k.GetService(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewService(
 					1,
@@ -226,7 +240,8 @@ func (suite *KeeperTestSuite) TestKeeper_ActivateService() {
 			serviceID: 1,
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				service, found := suite.k.GetService(ctx, 1)
+				service, found, err := suite.k.GetService(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewService(
 					1,
@@ -320,7 +335,8 @@ func (suite *KeeperTestSuite) TestKeeper_DeactivateService() {
 			serviceID: 1,
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				service, found := suite.k.GetService(ctx, 1)
+				service, found, err := suite.k.GetService(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewService(
 					1,
@@ -467,12 +483,14 @@ func (suite *KeeperTestSuite) TestKeeper_GetService() {
 		name       string
 		store      func(ctx sdk.Context)
 		serviceID  uint32
+		shouldErr  bool
 		expFound   bool
 		expService types.Service
 	}{
 		{
 			name:      "service not found returns false",
 			serviceID: 1,
+			shouldErr: false,
 			expFound:  false,
 		},
 		{
@@ -491,6 +509,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetService() {
 				suite.Require().NoError(err)
 			},
 			serviceID: 1,
+			shouldErr: false,
 			expFound:  true,
 			expService: types.NewService(
 				1,
@@ -513,12 +532,18 @@ func (suite *KeeperTestSuite) TestKeeper_GetService() {
 				tc.store(ctx)
 			}
 
-			service, found := suite.k.GetService(ctx, tc.serviceID)
-			if !tc.expFound {
-				suite.Require().False(found)
+			service, found, err := suite.k.GetService(ctx, tc.serviceID)
+			if tc.shouldErr {
+				suite.Require().Error(err)
 			} else {
-				suite.Require().True(found)
-				suite.Require().Equal(tc.expService, service)
+				suite.Require().NoError(err)
+
+				if !tc.expFound {
+					suite.Require().False(found)
+				} else {
+					suite.Require().True(found)
+					suite.Require().Equal(tc.expService, service)
+				}
 			}
 		})
 	}

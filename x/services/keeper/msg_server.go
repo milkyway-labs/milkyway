@@ -23,9 +23,7 @@ func NewMsgServer(k *Keeper) types.MsgServer {
 }
 
 // CreateService defines the rpc method for Msg/CreateService
-func (k msgServer) CreateService(goCtx context.Context, msg *types.MsgCreateService) (*types.MsgCreateServiceResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) CreateService(ctx context.Context, msg *types.MsgCreateService) (*types.MsgCreateServiceResponse, error) {
 	// Get the next service id
 	serviceID, err := k.GetNextServiceID(ctx)
 	if err != nil {
@@ -53,14 +51,18 @@ func (k msgServer) CreateService(goCtx context.Context, msg *types.MsgCreateServ
 	// Charge for the creation
 	// We do not place this inside the CreateService method to avoid charging fees during genesis
 	// init and other places that use that method
-	registrationFees := k.GetParams(ctx).ServiceRegistrationFee
-	if !registrationFees.IsZero() {
+	params, err := k.GetParams(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if !params.ServiceRegistrationFee.IsZero() {
 		userAddress, err := sdk.AccAddressFromBech32(service.Admin)
 		if err != nil {
 			return nil, errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid service admin address: %s", service.Admin)
 		}
 
-		err = k.poolKeeper.FundCommunityPool(ctx, registrationFees, userAddress)
+		err = k.poolKeeper.FundCommunityPool(ctx, params.ServiceRegistrationFee, userAddress)
 		if err != nil {
 			return nil, err
 		}
@@ -73,10 +75,14 @@ func (k msgServer) CreateService(goCtx context.Context, msg *types.MsgCreateServ
 	}
 
 	// Update the ID for the next service
-	k.SetNextServiceID(ctx, service.ID+1)
+	err = k.SetNextServiceID(ctx, service.ID+1)
+	if err != nil {
+		return nil, err
+	}
 
 	// Emit the event
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeCreateService,
 			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", service.ID)),
@@ -89,11 +95,13 @@ func (k msgServer) CreateService(goCtx context.Context, msg *types.MsgCreateServ
 }
 
 // UpdateService defines the rpc method for Msg/UpdateService
-func (k msgServer) UpdateService(goCtx context.Context, msg *types.MsgUpdateService) (*types.MsgUpdateServiceResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) UpdateService(ctx context.Context, msg *types.MsgUpdateService) (*types.MsgUpdateServiceResponse, error) {
 	// Check if the service exists
-	service, found := k.GetService(ctx, msg.ServiceID)
+	service, found, err := k.GetService(ctx, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, "service with id %d not found", msg.ServiceID)
 	}
@@ -107,7 +115,7 @@ func (k msgServer) UpdateService(goCtx context.Context, msg *types.MsgUpdateServ
 	updated := service.Update(types.NewServiceUpdate(msg.Name, msg.Description, msg.Website, msg.PictureURL))
 
 	// Validate the updated service
-	err := updated.Validate()
+	err = updated.Validate()
 	if err != nil {
 		return nil, errors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
@@ -118,7 +126,8 @@ func (k msgServer) UpdateService(goCtx context.Context, msg *types.MsgUpdateServ
 	}
 
 	// Emit the event
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeUpdateService,
 			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
@@ -128,11 +137,13 @@ func (k msgServer) UpdateService(goCtx context.Context, msg *types.MsgUpdateServ
 	return &types.MsgUpdateServiceResponse{}, nil
 }
 
-func (k msgServer) ActivateService(goCtx context.Context, msg *types.MsgActivateService) (*types.MsgActivateServiceResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) ActivateService(ctx context.Context, msg *types.MsgActivateService) (*types.MsgActivateServiceResponse, error) {
 	// Check if the service exists
-	service, found := k.GetService(ctx, msg.ServiceID)
+	service, found, err := k.GetService(ctx, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, errors.Wrapf(types.ErrServiceNotFound, "service with id %d not found", msg.ServiceID)
 	}
@@ -143,13 +154,14 @@ func (k msgServer) ActivateService(goCtx context.Context, msg *types.MsgActivate
 	}
 
 	// Activate the service
-	err := k.Keeper.ActivateService(ctx, msg.ServiceID)
+	err = k.Keeper.ActivateService(ctx, msg.ServiceID)
 	if err != nil {
 		return nil, err
 	}
 
 	// Emit the event
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeActivateService,
 			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
@@ -160,11 +172,13 @@ func (k msgServer) ActivateService(goCtx context.Context, msg *types.MsgActivate
 }
 
 // DeactivateService defines the rpc method for Msg/DeactivateService
-func (k msgServer) DeactivateService(goCtx context.Context, msg *types.MsgDeactivateService) (*types.MsgDeactivateServiceResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) DeactivateService(ctx context.Context, msg *types.MsgDeactivateService) (*types.MsgDeactivateServiceResponse, error) {
 	// Check if the service exists
-	service, found := k.GetService(ctx, msg.ServiceID)
+	service, found, err := k.GetService(ctx, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, errors.Wrapf(types.ErrServiceNotFound, "service with id %d not found", msg.ServiceID)
 	}
@@ -175,13 +189,14 @@ func (k msgServer) DeactivateService(goCtx context.Context, msg *types.MsgDeacti
 	}
 
 	// Deactivate the service
-	err := k.Keeper.DeactivateService(ctx, msg.ServiceID)
+	err = k.Keeper.DeactivateService(ctx, msg.ServiceID)
 	if err != nil {
 		return nil, err
 	}
 
 	// Emit the event
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeDeactivateService,
 			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
@@ -191,11 +206,13 @@ func (k msgServer) DeactivateService(goCtx context.Context, msg *types.MsgDeacti
 	return &types.MsgDeactivateServiceResponse{}, nil
 }
 
-func (k msgServer) DeleteService(goCtx context.Context, msg *types.MsgDeleteService) (*types.MsgDeleteServiceResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) DeleteService(ctx context.Context, msg *types.MsgDeleteService) (*types.MsgDeleteServiceResponse, error) {
 	// Check if the service exists
-	service, found := k.GetService(ctx, msg.ServiceID)
+	service, found, err := k.GetService(ctx, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, errors.Wrapf(types.ErrServiceNotFound, "service with id %d not found", msg.ServiceID)
 	}
@@ -206,13 +223,14 @@ func (k msgServer) DeleteService(goCtx context.Context, msg *types.MsgDeleteServ
 	}
 
 	// Delete the service from the store
-	err := k.Keeper.DeleteService(ctx, msg.ServiceID)
+	err = k.Keeper.DeleteService(ctx, msg.ServiceID)
 	if err != nil {
 		return nil, err
 	}
 
 	// Emit the event
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeDeleteService,
 			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
@@ -223,11 +241,13 @@ func (k msgServer) DeleteService(goCtx context.Context, msg *types.MsgDeleteServ
 }
 
 // TransferServiceOwnership defines the rpc method for Msg/TransferServiceOwnership
-func (k msgServer) TransferServiceOwnership(goCtx context.Context, msg *types.MsgTransferServiceOwnership) (*types.MsgTransferServiceOwnershipResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) TransferServiceOwnership(ctx context.Context, msg *types.MsgTransferServiceOwnership) (*types.MsgTransferServiceOwnershipResponse, error) {
 	// Check if the service exists
-	service, found := k.GetService(ctx, msg.ServiceID)
+	service, found, err := k.GetService(ctx, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, types.ErrServiceNotFound
 	}
@@ -244,7 +264,8 @@ func (k msgServer) TransferServiceOwnership(goCtx context.Context, msg *types.Ms
 	}
 
 	// Emit the event
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeTransferServiceOwnership,
 			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
@@ -256,11 +277,13 @@ func (k msgServer) TransferServiceOwnership(goCtx context.Context, msg *types.Ms
 }
 
 // SetServiceParams define the rpc method for Msg/SetServiceParams
-func (k msgServer) SetServiceParams(goCtx context.Context, msg *types.MsgSetServiceParams) (*types.MsgSetServiceParamsResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) SetServiceParams(ctx context.Context, msg *types.MsgSetServiceParams) (*types.MsgSetServiceParamsResponse, error) {
 	// Get the service whose params are being set
-	service, found := k.GetService(ctx, msg.ServiceID)
+	service, found, err := k.GetService(ctx, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, types.ErrServiceNotFound
 	}
@@ -271,13 +294,14 @@ func (k msgServer) SetServiceParams(goCtx context.Context, msg *types.MsgSetServ
 	}
 
 	// Set the service params
-	err := k.Keeper.SetServiceParams(ctx, service.ID, msg.ServiceParams)
+	err = k.Keeper.SetServiceParams(ctx, service.ID, msg.ServiceParams)
 	if err != nil {
 		return nil, err
 	}
 
 	// Emit the event
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeSetServiceParams,
 			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
@@ -288,35 +312,47 @@ func (k msgServer) SetServiceParams(goCtx context.Context, msg *types.MsgSetServ
 }
 
 // UpdateParams defines the rpc method for Msg/UpdateParams
-func (k msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
+func (k msgServer) UpdateParams(ctx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
 	// Check the authority
 	if k.authority != msg.Authority {
 		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", k.authority, msg.Authority)
 	}
 
 	// Update the params
-	ctx := sdk.UnwrapSDKContext(goCtx)
-	k.SetParams(ctx, msg.Params)
+	err := k.SetParams(ctx, msg.Params)
+	if err != nil {
+		return nil, err
+	}
 
 	return &types.MsgUpdateParamsResponse{}, nil
 }
 
 // AccreditService defines the rpc method for Msg/AccreditService
-func (k msgServer) AccreditService(goCtx context.Context, msg *types.MsgAccreditService) (*types.MsgAccreditServiceResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) AccreditService(ctx context.Context, msg *types.MsgAccreditService) (*types.MsgAccreditServiceResponse, error) {
 	// Check the authority
 	if k.authority != msg.Authority {
 		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", k.authority, msg.Authority)
 	}
 
-	err := k.Keeper.SetServiceAccreditation(ctx, msg.ServiceID, true)
+	// Check if the service exists
+	service, found, err := k.GetService(ctx, msg.ServiceID)
 	if err != nil {
 		return nil, err
 	}
 
+	if !found {
+		return nil, errors.Wrapf(types.ErrServiceNotFound, "service with id %d not found", msg.ServiceID)
+	}
+
+	// Accredit the service
+	service.Accredited = true
+	if err := k.SaveService(ctx, service); err != nil {
+		return nil, err
+	}
+
 	// Emit the event
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeAccreditService,
 			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
@@ -327,21 +363,31 @@ func (k msgServer) AccreditService(goCtx context.Context, msg *types.MsgAccredit
 }
 
 // RevokeServiceAccreditation defines the rpc method for Msg/RevokeServiceAccreditation
-func (k msgServer) RevokeServiceAccreditation(goCtx context.Context, msg *types.MsgRevokeServiceAccreditation) (*types.MsgRevokeServiceAccreditationResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) RevokeServiceAccreditation(ctx context.Context, msg *types.MsgRevokeServiceAccreditation) (*types.MsgRevokeServiceAccreditationResponse, error) {
 	// Check the authority
 	if k.authority != msg.Authority {
 		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", k.authority, msg.Authority)
 	}
 
-	err := k.Keeper.SetServiceAccreditation(ctx, msg.ServiceID, false)
+	// Check if the service exists
+	service, found, err := k.GetService(ctx, msg.ServiceID)
 	if err != nil {
 		return nil, err
 	}
 
+	if !found {
+		return nil, errors.Wrapf(types.ErrServiceNotFound, "service with id %d not found", msg.ServiceID)
+	}
+
+	// Revoke the service accreditation
+	service.Accredited = false
+	if err := k.SaveService(ctx, service); err != nil {
+		return nil, err
+	}
+
 	// Emit the event
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeRevokeServiceAccreditation,
 			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),

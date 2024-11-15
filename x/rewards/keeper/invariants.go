@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"context"
 	"fmt"
 
 	"cosmossdk.io/collections"
@@ -130,11 +131,12 @@ func CanWithdrawInvariant(k *Keeper) sdk.Invariant {
 		})
 
 		// iterate over all pools
-		k.poolsKeeper.IteratePools(ctx, func(pool poolstypes.Pool) (stop bool) {
+		err := k.poolsKeeper.IteratePools(ctx, func(pool poolstypes.Pool) (stop bool, err error) {
 			target, err := k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_POOL, pool.ID)
 			if err != nil {
-				panic(err)
+				return true, err
 			}
+
 			delegationAddrs, ok := poolDelegationAddrs[pool.ID]
 			if ok {
 				for _, delAddr := range delegationAddrs {
@@ -145,13 +147,19 @@ func CanWithdrawInvariant(k *Keeper) sdk.Invariant {
 			}
 			remaining, err = k.GetOutstandingRewardsCoins(ctx, target)
 			if err != nil {
-				panic(err)
+				return true, err
 			}
+
 			if remaining.IsAnyNegative() {
-				return true
+				return true, nil
 			}
-			return false
+
+			return false, nil
 		})
+		if err != nil {
+			panic(err)
+		}
+
 		broken := remaining.IsAnyNegative()
 		if broken {
 			return sdk.FormatInvariant(types.ModuleName, "can withdraw",
@@ -159,11 +167,12 @@ func CanWithdrawInvariant(k *Keeper) sdk.Invariant {
 		}
 
 		// iterate over all operators
-		k.operatorsKeeper.IterateOperators(ctx, func(operator operatorstypes.Operator) (stop bool) {
+		err := k.operatorsKeeper.IterateOperators(ctx, func(operator operatorstypes.Operator) (stop bool, err error) {
 			target, err := k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, operator.ID)
 			if err != nil {
-				panic(err)
+				return true, err
 			}
+
 			delegationAddrs, ok := operatorDelegationAddrs[operator.ID]
 			if ok {
 				for _, delAddr := range delegationAddrs {
@@ -172,15 +181,22 @@ func CanWithdrawInvariant(k *Keeper) sdk.Invariant {
 					}
 				}
 			}
+
 			remaining, err = k.GetOutstandingRewardsCoins(ctx, target)
 			if err != nil {
-				panic(err)
+				return true, err
 			}
+
 			if remaining.IsAnyNegative() {
-				return true
+				return true, nil
 			}
-			return false
+
+			return false, nil
 		})
+		if err != nil {
+			panic(err)
+		}
+
 		broken = remaining.IsAnyNegative()
 		if broken {
 			return sdk.FormatInvariant(types.ModuleName, "can withdraw",
@@ -188,11 +204,12 @@ func CanWithdrawInvariant(k *Keeper) sdk.Invariant {
 		}
 
 		// iterate over all services
-		k.servicesKeeper.IterateServices(ctx, func(service servicestypes.Service) (stop bool) {
+		err = k.servicesKeeper.IterateServices(ctx, func(service servicestypes.Service) (stop bool, err error) {
 			target, err := k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_SERVICE, service.ID)
 			if err != nil {
-				panic(err)
+				return true, err
 			}
+
 			delegationAddrs, ok := serviceDelegationAddrs[service.ID]
 			if ok {
 				for _, delAddr := range delegationAddrs {
@@ -203,13 +220,19 @@ func CanWithdrawInvariant(k *Keeper) sdk.Invariant {
 			}
 			remaining, err = k.GetOutstandingRewardsCoins(ctx, target)
 			if err != nil {
-				panic(err)
+				return true, err
 			}
+
 			if remaining.IsAnyNegative() {
-				return true
+				return true, nil
 			}
-			return false
+
+			return false, nil
 		})
+		if err != nil {
+			panic(err)
+		}
+
 		broken = remaining.IsAnyNegative()
 		return sdk.FormatInvariant(types.ModuleName, "can withdraw",
 			fmt.Sprintf("services remaining coins: %v\n", remaining)), broken
@@ -265,16 +288,19 @@ func ReferenceCountInvariant(k *Keeper) sdk.Invariant {
 func checkReferencesCount[T any](
 	ctx sdk.Context,
 	delegationTargetType restakingtypes.DelegationType,
-	targetsIterator func(ctx sdk.Context, fn func(T) bool),
+	targetsIterator func(ctx context.Context, fn func(T) (bool, error)) error,
 	delegationsIterator func(ctx sdk.Context, fn func(restakingtypes.Delegation) bool),
 	historicalRewardsCollection collections.Map[collections.Pair[uint32, uint64], types.HistoricalRewards],
 ) (msg string, broken bool) {
 
 	targetCount := uint64(0)
-	targetsIterator(ctx, func(_ T) bool {
+	err := targetsIterator(ctx, func(_ T) (bool, error) {
 		targetCount++
-		return false
+		return false, nil
 	})
+	if err != nil {
+		panic(err)
+	}
 
 	delegationsCount := uint64(0)
 	delegationsIterator(ctx, func(_ restakingtypes.Delegation) bool {
@@ -283,7 +309,7 @@ func checkReferencesCount[T any](
 	})
 
 	referencesCount := uint64(0)
-	err := historicalRewardsCollection.Walk(ctx, nil, func(key collections.Pair[uint32, uint64], value types.HistoricalRewards) (stop bool, err error) {
+	err = historicalRewardsCollection.Walk(ctx, nil, func(key collections.Pair[uint32, uint64], value types.HistoricalRewards) (stop bool, err error) {
 		referencesCount += uint64(value.ReferenceCount)
 		return false, nil
 	})

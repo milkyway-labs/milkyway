@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"context"
+
 	"cosmossdk.io/collections"
 	corestoretypes "cosmossdk.io/core/store"
 	"cosmossdk.io/log"
@@ -20,10 +22,15 @@ type Keeper struct {
 	accountKeeper types.AccountKeeper
 	poolKeeper    types.CommunityPoolKeeper
 	schema        collections.Schema
-	// Index to check if an address is an operator
-	operatorAddressSet collections.KeySet[string]
-	operatorParams     collections.Map[uint32, types.OperatorParams]
 
+	nextOperatorID     collections.Sequence                          // Next operator ID
+	operators          collections.Map[uint32, types.Operator]       // operator ID -> operator
+	operatorAddressSet collections.KeySet[string]                    // Set of operator addresses
+	operatorParams     collections.Map[uint32, types.OperatorParams] // operator ID -> parameters
+	params             collections.Item[types.Params]                // global parameters
+
+	// authority represents the address capable of executing a MsgUpdateParams message.
+	// Typically, this should be the x/gov module account.
 	authority string
 }
 
@@ -44,18 +51,37 @@ func NewKeeper(
 		authority:     authority,
 		accountKeeper: accountKeeper,
 		poolKeeper:    poolKeeper,
+
+		nextOperatorID: collections.NewSequence(
+			sb,
+			types.NextOperatorIDKey,
+			"next_operator_id",
+		),
+		operators: collections.NewMap(
+			sb,
+			types.OperatorPrefix,
+			"operators",
+			collections.Uint32Key,
+			codec.CollValue[types.Operator](cdc),
+		),
 		operatorAddressSet: collections.NewKeySet(
 			sb,
 			types.OperatorAddressSetPrefix,
-			"operators_address",
+			"operators_addresses",
 			collections.StringKey,
 		),
 		operatorParams: collections.NewMap(
 			sb,
 			types.OperatorParamsMapPrefix,
-			"operator_params",
+			"operators_params",
 			collections.Uint32Key,
 			codec.CollValue[types.OperatorParams](cdc),
+		),
+		params: collections.NewItem(
+			sb,
+			types.ParamsKey,
+			"params",
+			codec.CollValue[types.Params](cdc),
 		),
 	}
 
@@ -69,8 +95,9 @@ func NewKeeper(
 }
 
 // Logger returns a module-specific logger.
-func (k *Keeper) Logger(ctx sdk.Context) log.Logger {
-	return ctx.Logger().With("module", "x/"+types.ModuleName)
+func (k *Keeper) Logger(ctx context.Context) log.Logger {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	return sdkCtx.Logger().With("module", "x/"+types.ModuleName)
 }
 
 // SetHooks allows to set the operators hooks

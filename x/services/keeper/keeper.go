@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"context"
+
 	"cosmossdk.io/collections"
 	corestoretypes "cosmossdk.io/core/store"
 	"cosmossdk.io/log"
@@ -19,12 +21,14 @@ type Keeper struct {
 	accountKeeper types.AccountKeeper
 	poolKeeper    types.CommunityPoolKeeper
 
-	// Data
-	storeService      corestoretypes.KVStoreService
-	Schema            collections.Schema
-	serviceAddressSet collections.KeySet[string]
-	// serviceParams associated a service ID with its parameters
-	serviceParams collections.Map[uint32, types.ServiceParams]
+	storeService corestoretypes.KVStoreService
+	Schema       collections.Schema
+
+	nextServiceID     collections.Sequence
+	services          collections.Map[uint32, types.Service]
+	serviceAddressSet collections.KeySet[string]                   // Set of service addresses
+	serviceParams     collections.Map[uint32, types.ServiceParams] // service ID -> parameters
+	params            collections.Item[types.Params]
 
 	// authority represents the address capable of executing a MsgUpdateParams message.
 	// Typically, this should be the x/gov module account.
@@ -49,18 +53,37 @@ func NewKeeper(
 		poolKeeper:    poolKeeper,
 		authority:     authority,
 		storeService:  storeService,
+
+		nextServiceID: collections.NewSequence(
+			sb,
+			types.NextServiceIDKey,
+			"next_service_id",
+		),
+		services: collections.NewMap(
+			sb,
+			types.ServicePrefix,
+			"services",
+			collections.Uint32Key,
+			codec.CollValue[types.Service](cdc),
+		),
 		serviceAddressSet: collections.NewKeySet(
 			sb,
 			types.ServiceAddressSetPrefix,
-			"service_address_set",
+			"services_address_set",
 			collections.StringKey,
 		),
 		serviceParams: collections.NewMap(
 			sb,
 			types.ServiceParamsPrefix,
-			"service_params",
+			"services_params",
 			collections.Uint32Key,
 			codec.CollValue[types.ServiceParams](cdc),
+		),
+		params: collections.NewItem(
+			sb,
+			types.ParamsKey,
+			"params",
+			codec.CollValue[types.Params](cdc),
 		),
 	}
 
@@ -74,8 +97,9 @@ func NewKeeper(
 }
 
 // Logger returns a module-specific logger.
-func (k *Keeper) Logger(ctx sdk.Context) log.Logger {
-	return ctx.Logger().With("module", "x/"+types.ModuleName)
+func (k *Keeper) Logger(ctx context.Context) log.Logger {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	return sdkCtx.Logger().With("module", "x/"+types.ModuleName)
 }
 
 // SetHooks allows to set the reactions hooks

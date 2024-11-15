@@ -594,13 +594,14 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 		{
 			name: "inactive service returns error",
 			store: func(ctx sdk.Context) {
-				suite.sk.SaveService(ctx, servicestypes.Service{
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:              1,
 					Status:          servicestypes.SERVICE_STATUS_INACTIVE,
 					Address:         servicestypes.GetServiceAddress(1).String(),
 					Tokens:          sdk.NewCoins(),
 					DelegatorShares: sdk.NewDecCoins(),
 				})
+				suite.Require().NoError(err)
 			},
 			serviceID: 1,
 			amount:    sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
@@ -610,13 +611,14 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 		{
 			name: "invalid exchange rate service returns error",
 			store: func(ctx sdk.Context) {
-				suite.sk.SaveService(ctx, servicestypes.Service{
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:              1,
 					Status:          servicestypes.SERVICE_STATUS_ACTIVE,
 					Address:         servicestypes.GetServiceAddress(1).String(),
 					Tokens:          sdk.NewCoins(),
 					DelegatorShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 				})
+				suite.Require().NoError(err)
 			},
 			serviceID: 1,
 			amount:    sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
@@ -626,10 +628,11 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 		{
 			name: "invalid delegator address returns error",
 			store: func(ctx sdk.Context) {
-				suite.sk.SaveService(ctx, servicestypes.Service{
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      1,
 					Address: servicestypes.GetServiceAddress(1).String(),
 				})
+				suite.Require().NoError(err)
 			},
 			serviceID: 1,
 			amount:    sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
@@ -640,13 +643,15 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 			name: "insufficient funds return error",
 			store: func(ctx sdk.Context) {
 				// Create the service
-				suite.sk.SaveService(ctx, servicestypes.Service{
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      1,
 					Address: servicestypes.GetServiceAddress(1).String(),
 				})
+				suite.Require().NoError(err)
 
 				// Set the next service id
-				suite.sk.SetNextServiceID(ctx, 2)
+				err = suite.sk.SetNextServiceID(ctx, 2)
+				suite.Require().NoError(err)
 
 				// Send some funds to the user
 				suite.fundAccount(
@@ -664,7 +669,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 			name: "delegating to an existing service works properly",
 			store: func(ctx sdk.Context) {
 				// Create the service
-				suite.sk.SaveService(ctx, servicestypes.Service{
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      1,
 					Status:  servicestypes.SERVICE_STATUS_ACTIVE,
 					Address: servicestypes.GetServiceAddress(1).String(),
@@ -675,6 +680,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 						sdk.NewDecCoinFromDec("service/1/umilk", sdkmath.LegacyNewDec(100)),
 					),
 				})
+				suite.Require().NoError(err)
 
 				// Set the correct service tokens amount
 				suite.fundAccount(
@@ -684,7 +690,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 				)
 
 				// Set the next service id
-				suite.sk.SetNextServiceID(ctx, 2)
+				err = suite.sk.SetNextServiceID(ctx, 2)
+				suite.Require().NoError(err)
 
 				// Send some funds to the user
 				suite.fundAccount(
@@ -700,7 +707,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 			expShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("service/1/umilk", sdkmath.LegacyNewDec(500))),
 			check: func(ctx sdk.Context) {
 				// Make sure the service now exists
-				service, found := suite.sk.GetService(ctx, 1)
+				service, found, err := suite.sk.GetService(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(servicestypes.Service{
 					ID:      1,
@@ -738,7 +746,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 			name: "delegating another token denom works properly",
 			store: func(ctx sdk.Context) {
 				// Create the service
-				suite.sk.SaveService(ctx, servicestypes.Service{
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      1,
 					Status:  servicestypes.SERVICE_STATUS_ACTIVE,
 					Address: servicestypes.GetServiceAddress(1).String(),
@@ -758,18 +766,19 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 				)
 
 				// Set the next service id
-				suite.sk.SetNextServiceID(ctx, 2)
+				err = suite.sk.SetNextServiceID(ctx, 2)
+				suite.Require().NoError(err)
 
 				// Save the existing delegation
-				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(
 						sdk.NewDecCoinFromDec("service/1/umilk", sdkmath.LegacyNewDec(125)),
 					),
 				))
-
 				suite.Require().NoError(err)
+
 				// Send some funds to the user
 				suite.fundAccount(
 					ctx,
@@ -784,7 +793,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 			expShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("service/1/uinit", sdkmath.LegacyNewDec(100))),
 			check: func(ctx sdk.Context) {
 				// Make sure the service now exists
-				service, found := suite.sk.GetService(ctx, 1)
+				service, found, err := suite.sk.GetService(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(servicestypes.Service{
 					ID:      1,
@@ -828,7 +838,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 			name: "delegating more tokens works properly",
 			store: func(ctx sdk.Context) {
 				// Create the service
-				suite.sk.SaveService(ctx, servicestypes.Service{
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      1,
 					Status:  servicestypes.SERVICE_STATUS_ACTIVE,
 					Address: servicestypes.GetServiceAddress(1).String(),
@@ -853,10 +863,11 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 				)
 
 				// Set the next service id
-				suite.sk.SetNextServiceID(ctx, 2)
+				err = suite.sk.SetNextServiceID(ctx, 2)
+				suite.Require().NoError(err)
 
 				// Save the existing delegation
-				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(
@@ -889,7 +900,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 			),
 			check: func(ctx sdk.Context) {
 				// Make sure the service now exists
-				service, found := suite.sk.GetService(ctx, 1)
+				service, found, err := suite.sk.GetService(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(servicestypes.Service{
 					ID:      1,

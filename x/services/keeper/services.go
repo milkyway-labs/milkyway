@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"context"
+
 	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -10,34 +12,33 @@ import (
 )
 
 // SetNextServiceID sets the next service ID to be used when registering a new Service
-func (k *Keeper) SetNextServiceID(ctx sdk.Context, serviceID uint32) {
-	store := ctx.KVStore(k.storeKey)
-	store.Set(types.NextServiceIDKey, types.GetServiceIDBytes(serviceID))
+func (k *Keeper) SetNextServiceID(ctx context.Context, serviceID uint32) error {
+	return k.nextServiceID.Set(ctx, uint64(serviceID))
 }
 
 // GetNextServiceID returns the next service ID to be used when registering a new Service
-func (k *Keeper) GetNextServiceID(ctx sdk.Context) (serviceID uint32, err error) {
-	store := ctx.KVStore(k.storeKey)
-	bz := store.Get(types.NextServiceIDKey)
-	if bz == nil {
-		return 0, errors.Wrapf(types.ErrInvalidGenesis, "initial service id not set")
+func (k *Keeper) GetNextServiceID(ctx context.Context) (serviceID uint32, err error) {
+	nextServiceID, err := k.nextServiceID.Next(ctx)
+	if err != nil {
+		return 0, err
 	}
-
-	serviceID = types.GetServiceIDFromBytes(bz)
-	return serviceID, nil
+	return uint32(nextServiceID), nil
 }
 
 // --------------------------------------------------------------------------------------------------------------------
 
 // SaveService stores a Service in the KVStore
-func (k *Keeper) SaveService(ctx sdk.Context, service types.Service) error {
-	store := ctx.KVStore(k.storeKey)
-	store.Set(types.ServiceStoreKey(service.ID), k.cdc.MustMarshal(&service))
+func (k *Keeper) SaveService(ctx context.Context, service types.Service) error {
+	err := k.services.Set(ctx, service.ID, service)
+	if err != nil {
+		return err
+	}
+
 	return k.serviceAddressSet.Set(ctx, service.Address)
 }
 
 // CreateService creates a new Service and stores it in the KVStore
-func (k *Keeper) CreateService(ctx sdk.Context, service types.Service) error {
+func (k *Keeper) CreateService(ctx context.Context, service types.Service) error {
 	// Create the service account
 	serviceAddress, err := sdk.AccAddressFromBech32(service.Address)
 	if err != nil {
@@ -56,8 +57,12 @@ func (k *Keeper) CreateService(ctx sdk.Context, service types.Service) error {
 }
 
 // ActivateService activates the service with the given ID
-func (k *Keeper) ActivateService(ctx sdk.Context, serviceID uint32) error {
-	service, found := k.GetService(ctx, serviceID)
+func (k *Keeper) ActivateService(ctx context.Context, serviceID uint32) error {
+	service, found, err := k.GetService(ctx, serviceID)
+	if err != nil {
+		return err
+	}
+
 	if !found {
 		return types.ErrServiceNotFound
 	}
@@ -77,9 +82,13 @@ func (k *Keeper) ActivateService(ctx sdk.Context, serviceID uint32) error {
 }
 
 // DeactivateService deactivates the service with the given ID
-func (k *Keeper) DeactivateService(ctx sdk.Context, serviceID uint32) error {
-	service, existed := k.GetService(ctx, serviceID)
-	if !existed {
+func (k *Keeper) DeactivateService(ctx context.Context, serviceID uint32) error {
+	service, exists, err := k.GetService(ctx, serviceID)
+	if err != nil {
+		return err
+	}
+
+	if !exists {
 		return types.ErrServiceNotFound
 	}
 
@@ -101,9 +110,13 @@ func (k *Keeper) DeactivateService(ctx sdk.Context, serviceID uint32) error {
 }
 
 // DeleteService deletes the service with the given ID
-func (k *Keeper) DeleteService(ctx sdk.Context, serviceID uint32) error {
-	service, existed := k.GetService(ctx, serviceID)
-	if !existed {
+func (k *Keeper) DeleteService(ctx context.Context, serviceID uint32) error {
+	service, exists, err := k.GetService(ctx, serviceID)
+	if err != nil {
+		return err
+	}
+
+	if !exists {
 		return types.ErrServiceNotFound
 	}
 
@@ -113,9 +126,12 @@ func (k *Keeper) DeleteService(ctx sdk.Context, serviceID uint32) error {
 	}
 
 	// Remove the service from the store
-	store := ctx.KVStore(k.storeKey)
-	store.Delete(types.ServiceStoreKey(service.ID))
-	err := k.serviceAddressSet.Remove(ctx, service.Address)
+	err = k.services.Remove(ctx, serviceID)
+	if err != nil {
+		return err
+	}
+
+	err = k.serviceAddressSet.Remove(ctx, service.Address)
 	if err != nil {
 		return err
 	}
@@ -149,26 +165,24 @@ func (k *Keeper) SetServiceAccreditation(ctx sdk.Context, serviceID uint32, accr
 }
 
 // HasService checks if a Service with the given ID exists in the KVStore
-func (k *Keeper) HasService(ctx sdk.Context, serviceID uint32) bool {
-	store := ctx.KVStore(k.storeKey)
-	return store.Has(types.ServiceStoreKey(serviceID))
+func (k *Keeper) HasService(ctx context.Context, serviceID uint32) (bool, error) {
+	return k.services.Has(ctx, serviceID)
 }
 
 // GetService returns an Service from the KVStore
-func (k *Keeper) GetService(ctx sdk.Context, serviceID uint32) (service types.Service, found bool) {
-	store := ctx.KVStore(k.storeKey)
-
-	bz := store.Get(types.ServiceStoreKey(serviceID))
-	if bz == nil {
-		return service, false
+func (k *Keeper) GetService(ctx context.Context, serviceID uint32) (service types.Service, found bool, err error) {
+	service, err = k.services.Get(ctx, serviceID)
+	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return service, false, nil
+		}
+		return service, false, err
 	}
-
-	k.cdc.MustUnmarshal(bz, &service)
-	return service, true
+	return service, true, nil
 }
 
 // GetServiceParams returns the params for the service with the given ID
-func (k *Keeper) GetServiceParams(ctx sdk.Context, serviceID uint32) (types.ServiceParams, error) {
+func (k *Keeper) GetServiceParams(ctx context.Context, serviceID uint32) (types.ServiceParams, error) {
 	params, err := k.serviceParams.Get(ctx, serviceID)
 	if err != nil {
 		if errors.IsOf(err, collections.ErrNotFound) {
@@ -181,8 +195,7 @@ func (k *Keeper) GetServiceParams(ctx sdk.Context, serviceID uint32) (types.Serv
 }
 
 // SetServiceParams sets the params for the service with the given ID
-func (k *Keeper) SetServiceParams(ctx sdk.Context, serviceID uint32, params types.ServiceParams) error {
-	// Validate the new params
+func (k *Keeper) SetServiceParams(ctx context.Context, serviceID uint32, params types.ServiceParams) error {
 	err := params.Validate()
 	if err != nil {
 		return err

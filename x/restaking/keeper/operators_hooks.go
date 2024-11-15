@@ -85,10 +85,15 @@ func (o *OperatorsHooks) removeOperatorFromServicesAllowList(ctx sdk.Context, op
 			return err
 		}
 		if !isConfigured {
-			service, found := o.servicesKeeper.GetService(ctx, serviceID)
+			service, found, err := o.servicesKeeper.GetService(ctx, serviceID)
+			if err != nil {
+				return err
+			}
+
 			if !found {
 				return fmt.Errorf("service %d not found", serviceID)
 			}
+
 			if !service.IsActive() {
 				// The service is not active, nothing to do
 				continue
@@ -96,7 +101,7 @@ func (o *OperatorsHooks) removeOperatorFromServicesAllowList(ctx sdk.Context, op
 
 			// The service is active and its operators allow list has become
 			// empty, deactivate the service.
-			err := o.servicesKeeper.DeactivateService(ctx, serviceID)
+			err = o.servicesKeeper.DeactivateService(ctx, serviceID)
 			if err != nil {
 				return err
 			}

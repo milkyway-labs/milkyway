@@ -1,8 +1,6 @@
 package types
 
 import (
-	"bytes"
-	"fmt"
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -93,26 +91,6 @@ func DelegationByPoolIDStoreKey(poolID uint32, delegatorAddress string) []byte {
 	return append(DelegationsByPoolIDStorePrefix(poolID), []byte(delegatorAddress)...)
 }
 
-// ParseDelegationsByPoolIDKey parses the pool ID and delegator address from the given key
-func ParseDelegationsByPoolIDKey(bz []byte) (poolID uint32, delegatorAddress string, err error) {
-	prefixLength := len(PoolDelegationsByPoolIDPrefix)
-	if prefix := bz[:prefixLength]; !bytes.Equal(prefix, PoolDelegationsByPoolIDPrefix) {
-		return 0, "", fmt.Errorf("invalid prefix; expected: %X, got: %x", PoolDelegationsByPoolIDPrefix, prefix)
-	}
-
-	// Remove the prefix
-	bz = bz[prefixLength:]
-
-	// Read the pool ID
-	poolID = poolstypes.GetPoolIDFromBytes(bz[:4])
-	bz = bz[4:]
-
-	// Read the delegator address
-	delegatorAddress = string(bz)
-
-	return poolID, delegatorAddress, nil
-}
-
 // PoolUnbondingDelegationsStorePrefix returns the prefix used to store all the unbonding delegations to a given pool
 func PoolUnbondingDelegationsStorePrefix(delegatorAddress string) []byte {
 	return append(PoolUnbondingDelegationPrefix, []byte(delegatorAddress)...)
@@ -145,26 +123,6 @@ func DelegationByOperatorIDStoreKey(operatorID uint32, delegatorAddress string) 
 	return append(DelegationsByOperatorIDStorePrefix(operatorID), []byte(delegatorAddress)...)
 }
 
-// ParseDelegationsByOperatorIDKey parses the operator ID and delegator address from the given key
-func ParseDelegationsByOperatorIDKey(bz []byte) (operatorID uint32, delegatorAddress string, err error) {
-	prefixLength := len(OperatorDelegationPrefix)
-	if prefix := bz[:prefixLength]; !bytes.Equal(prefix, OperatorDelegationPrefix) {
-		return 0, "", fmt.Errorf("invalid prefix; expected: %X, got: %x", OperatorDelegationPrefix, prefix)
-	}
-
-	// Remove the prefix
-	bz = bz[prefixLength:]
-
-	// Read the operator ID
-	operatorID = operatorstypes.GetOperatorIDFromBytes(bz[:4])
-	bz = bz[4:]
-
-	// Read the delegator address
-	delegatorAddress = string(bz)
-
-	return operatorID, delegatorAddress, nil
-}
-
 // OperatorUnbondingDelegationsStorePrefix returns the prefix used to store all the unbonding delegations to a given pool
 func OperatorUnbondingDelegationsStorePrefix(delegatorAddress string) []byte {
 	return append(OperatorUnbondingDelegationPrefix, []byte(delegatorAddress)...)
@@ -195,26 +153,6 @@ func DelegationsByServiceIDStorePrefix(serviceID uint32) []byte {
 // DelegationByServiceIDStoreKey returns the key used to store the service -> user delegation association
 func DelegationByServiceIDStoreKey(serviceID uint32, delegatorAddress string) []byte {
 	return append(DelegationsByServiceIDStorePrefix(serviceID), []byte(delegatorAddress)...)
-}
-
-// ParseDelegationsByServiceIDKey parses the service ID and delegator address from the given key
-func ParseDelegationsByServiceIDKey(bz []byte) (serviceID uint32, delegatorAddress string, err error) {
-	prefixLength := len(ServiceDelegationPrefix)
-	if prefix := bz[:prefixLength]; !bytes.Equal(prefix, ServiceDelegationPrefix) {
-		return 0, "", fmt.Errorf("invalid prefix; expected: %X, got: %x", ServiceDelegationPrefix, prefix)
-	}
-
-	// Remove the prefix
-	bz = bz[prefixLength:]
-
-	// Read the service ID
-	serviceID = servicestypes.GetServiceIDFromBytes(bz[:4])
-	bz = bz[4:]
-
-	// Read the delegator address
-	delegatorAddress = string(bz)
-
-	return serviceID, delegatorAddress, nil
 }
 
 // ServiceUnbondingDelegationsStorePrefix returns the prefix used to store all the unbonding delegations to a given pool

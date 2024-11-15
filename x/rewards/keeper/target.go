@@ -19,19 +19,28 @@ func (k *Keeper) GetDelegationTarget(
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	switch delType {
 	case restakingtypes.DELEGATION_TYPE_POOL:
-		pool, found := k.poolsKeeper.GetPool(sdkCtx, targetID)
+		pool, found, err := k.poolsKeeper.GetPool(sdkCtx, targetID)
+		if err != nil {
+			return nil, err
+		}
 		if !found {
 			return nil, poolstypes.ErrPoolNotFound
 		}
 		return &pool, nil
 	case restakingtypes.DELEGATION_TYPE_OPERATOR:
-		operator, found := k.operatorsKeeper.GetOperator(sdkCtx, targetID)
+		operator, found, err := k.operatorsKeeper.GetOperator(sdkCtx, targetID)
+		if err != nil {
+			return nil, err
+		}
 		if !found {
 			return nil, operatorstypes.ErrOperatorNotFound
 		}
 		return &operator, nil
 	case restakingtypes.DELEGATION_TYPE_SERVICE:
-		service, found := k.servicesKeeper.GetService(sdkCtx, targetID)
+		service, found, err := k.servicesKeeper.GetService(sdkCtx, targetID)
+		if err != nil {
+			return nil, err
+		}
 		if !found {
 			return nil, servicestypes.ErrServiceNotFound
 		}
@@ -195,7 +204,7 @@ func (k *Keeper) decrementReferenceCount(ctx context.Context, target restakingty
 }
 
 // clearDelegateTarget clears all rewards for a delegation target
-func (k *Keeper) clearDelegationTarget(ctx sdk.Context, target restakingtypes.DelegationTarget) error {
+func (k *Keeper) clearDelegationTarget(ctx context.Context, target restakingtypes.DelegationTarget) error {
 	// fetch outstanding
 	outstandingCoins, err := k.GetOutstandingRewardsCoins(ctx, target)
 	if err != nil {

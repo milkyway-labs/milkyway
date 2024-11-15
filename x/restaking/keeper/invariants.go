@@ -43,7 +43,7 @@ func AccountsBalancesInvariants(k *Keeper) sdk.Invariant {
 		// Get all the pools balances and tokens
 		poolsBalances := sdk.NewCoins()
 		poolsTokens := sdk.NewCoins()
-		k.poolsKeeper.IteratePools(ctx, func(pool poolstypes.Pool) (stop bool) {
+		err := k.poolsKeeper.IteratePools(ctx, func(pool poolstypes.Pool) (stop bool, errr error) {
 			poolAddress, err := sdk.AccAddressFromBech32(pool.GetAddress())
 			if err != nil {
 				panic(err)
@@ -54,8 +54,11 @@ func AccountsBalancesInvariants(k *Keeper) sdk.Invariant {
 
 			poolsTokens = poolsTokens.Add(sdk.NewCoin(pool.GetDenom(), pool.Tokens))
 
-			return false
+			return false, nil
 		})
+		if err != nil {
+			panic(err)
+		}
 
 		// Get all the operators balances and tokens
 		operatorsBalances := sdk.NewCoins()
@@ -77,7 +80,7 @@ func AccountsBalancesInvariants(k *Keeper) sdk.Invariant {
 		// Get all the services balances and tokens
 		servicesBalances := sdk.NewCoins()
 		servicesTokens := sdk.NewCoins()
-		k.servicesKeeper.IterateServices(ctx, func(service servicestypes.Service) (stop bool) {
+		err = k.servicesKeeper.IterateServices(ctx, func(service servicestypes.Service) (stop bool, err error) {
 			serviceAddress, err := sdk.AccAddressFromBech32(service.GetAddress())
 			if err != nil {
 				panic(err)
@@ -88,8 +91,11 @@ func AccountsBalancesInvariants(k *Keeper) sdk.Invariant {
 
 			servicesTokens = servicesTokens.Add(service.Tokens...)
 
-			return false
+			return false, nil
 		})
+		if err != nil {
+			panic(err)
+		}
 
 		// We use IsAllGTE to check that the balances are greater or equal to the tokens
 		// This is used because users might have sent tokens to the accounts and if we check using Equals
@@ -143,8 +149,13 @@ func PoolsDelegatorsSharesInvariant(k *Keeper) sdk.Invariant {
 		var broken bool
 
 		// Initialize a map: pool id -> its delegators shares
+		pools, err := k.poolsKeeper.GetPools(ctx)
+		if err != nil {
+			panic(err)
+		}
+
 		poolsDelegatorsShares := map[uint32]sdk.DecCoins{}
-		for _, pool := range k.poolsKeeper.GetPools(ctx) {
+		for _, pool := range pools {
 			poolsDelegatorsShares[pool.ID] = sdk.NewDecCoins()
 		}
 
@@ -158,7 +169,11 @@ func PoolsDelegatorsSharesInvariant(k *Keeper) sdk.Invariant {
 		}
 
 		for poolID, delegatorsShares := range poolsDelegatorsShares {
-			pool, found := k.poolsKeeper.GetPool(ctx, poolID)
+			pool, found, err := k.poolsKeeper.GetPool(ctx, poolID)
+			if err != nil {
+				panic(err)
+			}
+
 			if !found {
 				panic(fmt.Errorf("pool with id %d not found", poolID))
 			}
@@ -273,7 +288,11 @@ func ServicesDelegatorsSharesInvariant(k *Keeper) sdk.Invariant {
 
 		// Initialize a map: service id -> its delegators shares
 		servicesDelegatorsShares := map[uint32]sdk.DecCoins{}
-		for _, service := range k.servicesKeeper.GetServices(ctx) {
+		services, err := k.servicesKeeper.GetServices(ctx)
+		if err != nil {
+			panic(err)
+		}
+		for _, service := range services {
 			servicesDelegatorsShares[service.ID] = sdk.NewDecCoins()
 		}
 
@@ -287,7 +306,11 @@ func ServicesDelegatorsSharesInvariant(k *Keeper) sdk.Invariant {
 		}
 
 		for serviceID, delegatorsShares := range servicesDelegatorsShares {
-			service, found := k.servicesKeeper.GetService(ctx, serviceID)
+			service, found, err := k.servicesKeeper.GetService(ctx, serviceID)
+			if err != nil {
+				panic(err)
+			}
+
 			if !found {
 				panic(fmt.Errorf("service with id %d not found", serviceID))
 			}
@@ -336,7 +359,11 @@ func OperatorsJoinedServicesExistInvariant(k *Keeper) sdk.Invariant {
 		// Iterate over all the operators joined services
 		var notFoundServicesIDs []uint32
 		err := k.IterateAllOperatorsJoinedServices(ctx, func(operatorID uint32, serviceID uint32) (stop bool, err error) {
-			_, found := k.servicesKeeper.GetService(ctx, serviceID)
+			_, found, err := k.servicesKeeper.GetService(ctx, serviceID)
+			if err != nil {
+				return false, err
+			}
+
 			if !found {
 				notFoundServicesIDs = append(notFoundServicesIDs, serviceID)
 			}

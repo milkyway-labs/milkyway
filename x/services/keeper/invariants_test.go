@@ -34,8 +34,10 @@ func (suite *KeeperTestSuite) TestValidServicesInvariant() {
 		{
 			name: "service with id equals to next service id breaks invariant",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextServiceID(ctx, 1)
-				err := suite.k.SaveService(ctx, types.NewService(
+				err := suite.k.SetNextServiceID(ctx, 1)
+				suite.Require().NoError(err)
+
+				err = suite.k.SaveService(ctx, types.NewService(
 					1,
 					types.SERVICE_STATUS_ACTIVE,
 					"MilkyWay",
@@ -52,8 +54,10 @@ func (suite *KeeperTestSuite) TestValidServicesInvariant() {
 		{
 			name: "service with id higher than next service id breaks invariant",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextServiceID(ctx, 1)
-				err := suite.k.SaveService(ctx, types.NewService(
+				err := suite.k.SetNextServiceID(ctx, 1)
+				suite.Require().NoError(err)
+
+				err = suite.k.SaveService(ctx, types.NewService(
 					2,
 					types.SERVICE_STATUS_ACTIVE,
 					"MilkyWay",
@@ -70,8 +74,10 @@ func (suite *KeeperTestSuite) TestValidServicesInvariant() {
 		{
 			name: "invalid service breaks invariant",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextServiceID(ctx, 1)
-				err := suite.k.SaveService(ctx, types.NewService(
+				err := suite.k.SetNextServiceID(ctx, 1)
+				suite.Require().NoError(err)
+
+				err = suite.k.SaveService(ctx, types.NewService(
 					1,
 					types.SERVICE_STATUS_UNSPECIFIED,
 					"MilkyWay",
@@ -88,8 +94,10 @@ func (suite *KeeperTestSuite) TestValidServicesInvariant() {
 		{
 			name: "valid data does not break invariant",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextServiceID(ctx, 2)
-				err := suite.k.SaveService(ctx, types.NewService(
+				err := suite.k.SetNextServiceID(ctx, 2)
+				suite.Require().NoError(err)
+
+				err = suite.k.SaveService(ctx, types.NewService(
 					1,
 					types.SERVICE_STATUS_ACTIVE,
 					"MilkyWay",

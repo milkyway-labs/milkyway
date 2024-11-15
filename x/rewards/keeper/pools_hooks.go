@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"context"
 
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
@@ -20,6 +20,6 @@ func (k *Keeper) PoolsHooks() PoolsHooks {
 }
 
 // AfterPoolCreated implements poolstypes.PoolsHooks
-func (h PoolsHooks) AfterPoolCreated(ctx sdk.Context, poolID uint32) error {
+func (h PoolsHooks) AfterPoolCreated(ctx context.Context, poolID uint32) error {
 	return h.k.AfterDelegationTargetCreated(ctx, restakingtypes.DELEGATION_TYPE_POOL, poolID)
 }

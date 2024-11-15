@@ -17,11 +17,11 @@ const (
 )
 
 var (
-	ParamsKey = []byte{0x01}
+	ParamsKey = collections.NewPrefix(0x01)
 
-	NextOperatorIDKey               = []byte{0xa1}
-	OperatorPrefix                  = []byte{0xa2}
-	InactivatingOperatorQueuePrefix = []byte{0xa3}
+	NextOperatorIDKey               = collections.NewPrefix(0xa1)
+	OperatorPrefix                  = collections.NewPrefix(0xa2)
+	InactivatingOperatorQueuePrefix = collections.NewPrefix(0xa3)
 	OperatorAddressSetPrefix        = collections.NewPrefix(0xa4)
 	OperatorParamsMapPrefix         = collections.NewPrefix(0xa5)
 )
@@ -38,10 +38,7 @@ func GetOperatorIDFromBytes(bz []byte) (operatorID uint32) {
 	return binary.BigEndian.Uint32(bz)
 }
 
-// OperatorStoreKey returns a operator ID into a key used to store a operator in the KVStore
-func OperatorStoreKey(operatorID uint32) []byte {
-	return append(OperatorPrefix, GetOperatorIDBytes(operatorID)...)
-}
+// --------------------------------------------------------------------------------------------------------------------
 
 var (
 	lenTime   = len(sdk.FormatTimeBytes(time.Now()))

@@ -1336,7 +1336,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateOperator() {
 			name: "invalid amount returns error",
 			store: func(ctx sdk.Context) {
 				// Create the operator
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err := suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      1,
 					Status:  operatorstypes.OPERATOR_STATUS_ACTIVE,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
@@ -1347,6 +1347,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateOperator() {
 						sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(100)),
 					),
 				})
+				suite.Require().NoError(err)
 
 				// Send some funds to the user
 				suite.fundAccount(
@@ -1400,7 +1401,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateOperator() {
 			name: "valid amount is delegated properly",
 			store: func(ctx sdk.Context) {
 				// Create the operator
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err := suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      1,
 					Status:  operatorstypes.OPERATOR_STATUS_ACTIVE,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
@@ -1411,6 +1412,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateOperator() {
 						sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(100)),
 					),
 				})
+				suite.Require().NoError(err)
 
 				// Send some funds to the user
 				suite.fundAccount(
@@ -1543,11 +1545,12 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegateOperator() {
 				suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour, nil))
 
 				// Create the operator
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err := suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      1,
 					Status:  operatorstypes.OPERATOR_STATUS_ACTIVE,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
 				})
+				suite.Require().NoError(err)
 
 				// Send some funds to the user
 				suite.fundAccount(
@@ -1558,7 +1561,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegateOperator() {
 
 				// Delegate some funds
 				msgServer := keeper.NewMsgServer(suite.k)
-				_, err := msgServer.DelegateOperator(ctx, &types.MsgDelegateOperator{
+				_, err = msgServer.DelegateOperator(ctx, &types.MsgDelegateOperator{
 					OperatorID: 1,
 					Delegator:  "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					Amount:     sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
@@ -1641,7 +1644,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateService() {
 			name: "invalid amount returns error",
 			store: func(ctx sdk.Context) {
 				// Create the service
-				suite.sk.SaveService(ctx, servicestypes.Service{
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      1,
 					Status:  servicestypes.SERVICE_STATUS_ACTIVE,
 					Address: servicestypes.GetServiceAddress(1).String(),
@@ -1652,6 +1655,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateService() {
 						sdk.NewDecCoinFromDec("service/1/umilk", sdkmath.LegacyNewDec(100)),
 					),
 				})
+				suite.Require().NoError(err)
 
 				// Send some funds to the user
 				suite.fundAccount(
@@ -1778,7 +1782,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateService() {
 			name: "valid amount is delegated properly",
 			store: func(ctx sdk.Context) {
 				// Create the service
-				suite.sk.SaveService(ctx, servicestypes.Service{
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      1,
 					Status:  servicestypes.SERVICE_STATUS_ACTIVE,
 					Address: servicestypes.GetServiceAddress(1).String(),
@@ -1789,6 +1793,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateService() {
 						sdk.NewDecCoinFromDec("service/1/umilk", sdkmath.LegacyNewDec(100)),
 					),
 				})
+				suite.Require().NoError(err)
 
 				// Send some funds to the user
 				suite.fundAccount(
@@ -2012,11 +2017,12 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegateService() {
 				suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour, nil))
 
 				// Create the service
-				suite.sk.SaveService(ctx, servicestypes.Service{
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      1,
 					Status:  servicestypes.SERVICE_STATUS_ACTIVE,
 					Address: servicestypes.GetServiceAddress(1).String(),
 				})
+				suite.Require().NoError(err)
 
 				// Send some funds to the user
 				suite.fundAccount(
@@ -2027,7 +2033,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegateService() {
 
 				// Delegate some funds
 				msgServer := keeper.NewMsgServer(suite.k)
-				_, err := msgServer.DelegateService(ctx, &types.MsgDelegateService{
+				_, err = msgServer.DelegateService(ctx, &types.MsgDelegateService{
 					ServiceID: 1,
 					Delegator: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					Amount:    sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),

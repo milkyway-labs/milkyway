@@ -702,7 +702,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegations() {
 		{
 			name: "query without pagination returns data properly",
 			store: func(ctx sdk.Context) {
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err := suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      1,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
 					Tokens: sdk.NewCoins(
@@ -712,8 +712,9 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegations() {
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
@@ -763,7 +764,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegations() {
 		{
 			name: "query with pagination returns data properly",
 			store: func(ctx sdk.Context) {
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err := suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      1,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
 					Tokens: sdk.NewCoins(
@@ -773,8 +774,9 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegations() {
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
@@ -845,7 +847,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegation() {
 		{
 			name: "not found delegation returns error",
 			store: func(ctx sdk.Context) {
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err := suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      1,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
 					Tokens: sdk.NewCoins(
@@ -855,6 +857,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegation() {
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 			},
 			request: types.NewQueryOperatorDelegationRequest(
 				1,
@@ -865,7 +868,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegation() {
 		{
 			name: "found delegation is returned properly",
 			store: func(ctx sdk.Context) {
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err := suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      1,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
 					Tokens: sdk.NewCoins(
@@ -875,8 +878,9 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegation() {
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					sdk.NewDecCoins(
@@ -946,9 +950,11 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorUnbondingDelegations() {
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				}
-				suite.ok.SaveOperator(ctx, operator)
 
-				_, err := suite.k.SetUnbondingDelegationEntry(ctx,
+				err := suite.ok.SaveOperator(ctx, operator)
+				suite.Require().NoError(err)
+
+				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
 						Target:                   &operator,
 						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
@@ -1006,9 +1012,11 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorUnbondingDelegations() {
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				}
-				suite.ok.SaveOperator(ctx, operator)
 
-				_, err := suite.k.SetUnbondingDelegationEntry(ctx,
+				err := suite.ok.SaveOperator(ctx, operator)
+				suite.Require().NoError(err)
+
+				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
 						Target:                   &operator,
 						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",

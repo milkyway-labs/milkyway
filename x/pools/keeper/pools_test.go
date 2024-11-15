@@ -8,14 +8,16 @@ import (
 
 func (suite *KeeperTestSuite) TestKeeper_SetNextPoolID() {
 	testCases := []struct {
-		name  string
-		store func(ctx sdk.Context)
-		id    uint32
-		check func(ctx sdk.Context)
+		name      string
+		store     func(ctx sdk.Context)
+		id        uint32
+		shouldErr bool
+		check     func(ctx sdk.Context)
 	}{
 		{
-			name: "next pool id is saved correctly",
-			id:   1,
+			name:      "next pool id is saved correctly",
+			id:        1,
+			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				store := ctx.KVStore(suite.storeKey)
 				serviceIDBz := store.Get(types.NextPoolIDKey)
@@ -25,9 +27,11 @@ func (suite *KeeperTestSuite) TestKeeper_SetNextPoolID() {
 		{
 			name: "next pool id is overridden properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextPoolID(ctx, 1)
+				err := suite.k.SetNextPoolID(ctx, 1)
+				suite.Require().NoError(err)
 			},
-			id: 2,
+			id:        2,
+			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				store := ctx.KVStore(suite.storeKey)
 				serviceIDBz := store.Get(types.NextPoolIDKey)
@@ -44,7 +48,13 @@ func (suite *KeeperTestSuite) TestKeeper_SetNextPoolID() {
 				tc.store(ctx)
 			}
 
-			suite.k.SetNextPoolID(ctx, tc.id)
+			err := suite.k.SetNextPoolID(ctx, tc.id)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+			}
+
 			if tc.check != nil {
 				tc.check(ctx)
 			}
@@ -66,7 +76,8 @@ func (suite *KeeperTestSuite) TestKeeper_GetNextPoolID() {
 		{
 			name: "exiting next pool id is returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextPoolID(ctx, 1)
+				err := suite.k.SetNextPoolID(ctx, 1)
+				suite.Require().NoError(err)
 			},
 			expNext: 1,
 		},
@@ -105,13 +116,15 @@ func (suite *KeeperTestSuite) TestKeeper_SavePool() {
 		{
 			name: "non existing pool is saved properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextPoolID(ctx, 1)
+				err := suite.k.SetNextPoolID(ctx, 1)
+				suite.Require().NoError(err)
 			},
 			shouldErr: false,
 			pool:      types.NewPool(1, "uatom"),
 			check: func(ctx sdk.Context) {
 				// Make sure the pool is saved properly
-				pool, found := suite.k.GetPool(ctx, 1)
+				pool, found, err := suite.k.GetPool(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewPool(1, "uatom"), pool)
 
@@ -123,15 +136,18 @@ func (suite *KeeperTestSuite) TestKeeper_SavePool() {
 		{
 			name: "existing pool is overridden properly",
 			setup: func() {
-				suite.k.SetNextPoolID(suite.ctx, 1)
-				err := suite.k.SavePool(suite.ctx, types.NewPool(1, "uatom"))
+				err := suite.k.SetNextPoolID(suite.ctx, 1)
+				suite.Require().NoError(err)
+
+				err = suite.k.SavePool(suite.ctx, types.NewPool(1, "uatom"))
 				suite.Require().NoError(err)
 			},
 			pool:      types.NewPool(1, "usdt"),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				// Make sure the pool is saved properly
-				pool, found := suite.k.GetPool(ctx, 1)
+				pool, found, err := suite.k.GetPool(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewPool(1, "usdt"), pool)
 
@@ -169,13 +185,14 @@ func (suite *KeeperTestSuite) TestKeeper_SavePool() {
 
 func (suite *KeeperTestSuite) TestKeeper_GetPool() {
 	testCases := []struct {
-		name     string
-		setup    func()
-		store    func(ctx sdk.Context)
-		poolID   uint32
-		expFound bool
-		expPool  types.Pool
-		check    func(ctx sdk.Context)
+		name      string
+		setup     func()
+		store     func(ctx sdk.Context)
+		poolID    uint32
+		shouldErr bool
+		expFound  bool
+		expPool   types.Pool
+		check     func(ctx sdk.Context)
 	}{
 		{
 			name:     "not found pool returns error",
@@ -205,10 +222,15 @@ func (suite *KeeperTestSuite) TestKeeper_GetPool() {
 				tc.store(ctx)
 			}
 
-			pool, found := suite.k.GetPool(ctx, tc.poolID)
-			suite.Require().Equal(tc.expFound, found)
-			if tc.expFound {
-				suite.Require().Equal(tc.expPool, pool)
+			pool, found, err := suite.k.GetPool(ctx, tc.poolID)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expFound, found)
+				if tc.expFound {
+					suite.Require().Equal(tc.expPool, pool)
+				}
 			}
 
 			if tc.check != nil {

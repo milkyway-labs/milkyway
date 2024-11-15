@@ -8,42 +8,56 @@ import (
 
 // ExportGenesis returns a new GenesisState instance containing the information currently present inside the store
 func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
-	return types.NewGenesis(
-		k.GetParams(ctx),
-		k.exportNextPoolID(ctx),
-		k.GetPools(ctx),
-	)
-}
-
-// exportNextPoolID exports the next pool id stored inside the store
-func (k *Keeper) exportNextPoolID(ctx sdk.Context) uint32 {
 	nextPoolID, err := k.GetNextPoolID(ctx)
 	if err != nil {
 		panic(err)
 	}
-	return nextPoolID
+
+	pools, err := k.GetPools(ctx)
+	if err != nil {
+		panic(err)
+	}
+
+	params, err := k.GetParams(ctx)
+	if err != nil {
+		panic(err)
+	}
+
+	return types.NewGenesis(
+		nextPoolID,
+		pools,
+		params,
+	)
 }
 
 // --------------------------------------------------------------------------------------------------------------------
 
 // InitGenesis initializes the genesis store using the provided data
-func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
-	k.SetParams(ctx, data.Params)
+func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) error {
+	err := k.SetParams(ctx, data.Params)
+	if err != nil {
+		return err
+	}
 
 	// Set the next pool id
-	k.SetNextPoolID(ctx, data.NextPoolID)
+	err = k.SetNextPoolID(ctx, data.NextPoolID)
+	if err != nil {
+		return err
+	}
 
 	// Store the pools
 	for _, pool := range data.Pools {
-		err := k.SavePool(ctx, pool)
+		err = k.SavePool(ctx, pool)
 		if err != nil {
-			panic(err)
+			return err
 		}
 
 		// Call the hook
 		err = k.AfterPoolCreated(ctx, pool.ID)
 		if err != nil {
-			panic(err)
+			return err
 		}
 	}
+
+	return nil
 }

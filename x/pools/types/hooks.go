@@ -1,9 +1,9 @@
 package types
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"context"
 )
 
 type PoolsHooks interface {
-	AfterPoolCreated(ctx sdk.Context, poolID uint32) error
+	AfterPoolCreated(ctx context.Context, poolID uint32) error
 }

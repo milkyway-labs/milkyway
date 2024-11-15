@@ -25,7 +25,11 @@ func (k *Keeper) CreateRewardsPlan(
 	usersDistribution types.UsersDistribution,
 ) (types.RewardsPlan, error) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	_, found := k.servicesKeeper.GetService(sdkCtx, serviceID)
+	_, found, err := k.servicesKeeper.GetService(sdkCtx, serviceID)
+	if err != nil {
+		return types.RewardsPlan{}, err
+	}
+
 	if !found {
 		return types.RewardsPlan{}, servicestypes.ErrServiceNotFound
 	}
@@ -126,10 +130,15 @@ func (k *Keeper) terminateRewardsPlan(ctx context.Context, plan types.RewardsPla
 	remaining := k.bankKeeper.GetAllBalances(ctx, rewardsPoolAddr)
 	if remaining.IsAllPositive() {
 		// Get the service's address.
-		service, found := k.servicesKeeper.GetService(sdkCtx, plan.ServiceID)
+		service, found, err := k.servicesKeeper.GetService(sdkCtx, plan.ServiceID)
+		if err != nil {
+			return err
+		}
+
 		if !found {
 			return servicestypes.ErrServiceNotFound
 		}
+
 		serviceAddr, err := k.accountKeeper.AddressCodec().StringToBytes(service.Address)
 		if err != nil {
 			return err
@@ -184,7 +193,7 @@ func (k *Keeper) TerminateEndedRewardsPlans(ctx context.Context) error {
 
 // EditRewardsPlan edits an existing rewards plan.
 func (k *Keeper) EditRewardsPlan(
-	ctx sdk.Context,
+	ctx context.Context,
 	planID uint64,
 	newDescription string,
 	newAmountPerDay sdk.Coins,
@@ -194,6 +203,8 @@ func (k *Keeper) EditRewardsPlan(
 	newOperatorsDistribution types.Distribution,
 	newUsersDistribution types.UsersDistribution,
 ) error {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+
 	// Ensure the plan ID is valid
 	if planID == 0 {
 		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid plan ID")
@@ -205,7 +216,7 @@ func (k *Keeper) EditRewardsPlan(
 	}
 
 	// Prevent edit of a completed rewards plan
-	if !ctx.BlockTime().Before(rewardsPlan.EndTime) {
+	if !sdkCtx.BlockTime().Before(rewardsPlan.EndTime) {
 		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "rewards plan is completed")
 	}
 

@@ -23,9 +23,7 @@ func NewMsgServer(k *Keeper) types.MsgServer {
 }
 
 // RegisterOperator defines the rpc method for Msg/CreateOperator
-func (k msgServer) RegisterOperator(goCtx context.Context, msg *types.MsgRegisterOperator) (*types.MsgRegisterOperatorResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) RegisterOperator(ctx context.Context, msg *types.MsgRegisterOperator) (*types.MsgRegisterOperatorResponse, error) {
 	// Get the operator id
 	operatorID, err := k.GetNextOperatorID(ctx)
 	if err != nil {
@@ -49,14 +47,18 @@ func (k msgServer) RegisterOperator(goCtx context.Context, msg *types.MsgRegiste
 	}
 
 	// Charge for the creation
-	registrationFees := k.GetParams(ctx).OperatorRegistrationFee
-	if !registrationFees.IsZero() {
+	params, err := k.GetParams(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if !params.OperatorRegistrationFee.IsZero() {
 		userAddress, err := sdk.AccAddressFromBech32(operator.Admin)
 		if err != nil {
 			return nil, errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid operator admin address: %s", operator.Admin)
 		}
 
-		err = k.poolKeeper.FundCommunityPool(ctx, registrationFees, userAddress)
+		err = k.poolKeeper.FundCommunityPool(ctx, params.OperatorRegistrationFee, userAddress)
 		if err != nil {
 			return nil, err
 		}
@@ -69,10 +71,14 @@ func (k msgServer) RegisterOperator(goCtx context.Context, msg *types.MsgRegiste
 	}
 
 	// Update the ID for the next operator
-	k.SetNextOperatorID(ctx, operator.ID+1)
+	err = k.SetNextOperatorID(ctx, operator.ID+1)
+	if err != nil {
+		return nil, err
+	}
 
 	// Emit the event
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeRegisterOperator,
 			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", operator.ID)),
@@ -85,9 +91,7 @@ func (k msgServer) RegisterOperator(goCtx context.Context, msg *types.MsgRegiste
 }
 
 // UpdateOperator defines the rpc method for Msg/UpdateOperator
-func (k msgServer) UpdateOperator(goCtx context.Context, msg *types.MsgUpdateOperator) (*types.MsgUpdateOperatorResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) UpdateOperator(ctx context.Context, msg *types.MsgUpdateOperator) (*types.MsgUpdateOperatorResponse, error) {
 	// Check if the operator exists
 	operator, found := k.GetOperator(ctx, msg.OperatorID)
 	if !found {
@@ -114,7 +118,8 @@ func (k msgServer) UpdateOperator(goCtx context.Context, msg *types.MsgUpdateOpe
 	}
 
 	// Emit the event
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeUpdateOperator,
 			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", operator.ID)),
@@ -125,9 +130,7 @@ func (k msgServer) UpdateOperator(goCtx context.Context, msg *types.MsgUpdateOpe
 }
 
 // DeactivateOperator defines the rpc method for Msg/DeactivateOperator
-func (k msgServer) DeactivateOperator(goCtx context.Context, msg *types.MsgDeactivateOperator) (*types.MsgDeactivateOperatorResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) DeactivateOperator(ctx context.Context, msg *types.MsgDeactivateOperator) (*types.MsgDeactivateOperatorResponse, error) {
 	// Check if the operator exists
 	operator, found := k.GetOperator(ctx, msg.OperatorID)
 	if !found {
@@ -145,7 +148,8 @@ func (k msgServer) DeactivateOperator(goCtx context.Context, msg *types.MsgDeact
 	}
 
 	// Emit the event
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeStartOperatorInactivation,
 			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", msg.OperatorID)),
@@ -156,9 +160,7 @@ func (k msgServer) DeactivateOperator(goCtx context.Context, msg *types.MsgDeact
 }
 
 // ReactivateOperator defines the rpc method for Msg/ReactivateOperator
-func (k msgServer) ReactivateOperator(goCtx context.Context, msg *types.MsgReactivateOperator) (*types.MsgReactivateOperatorResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) ReactivateOperator(ctx context.Context, msg *types.MsgReactivateOperator) (*types.MsgReactivateOperatorResponse, error) {
 	// Check if the operator exists
 	operator, found := k.GetOperator(ctx, msg.OperatorID)
 	if !found {
@@ -176,7 +178,8 @@ func (k msgServer) ReactivateOperator(goCtx context.Context, msg *types.MsgReact
 	}
 
 	// Emit the event
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeReactivateOperator,
 			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", msg.OperatorID)),
@@ -187,9 +190,7 @@ func (k msgServer) ReactivateOperator(goCtx context.Context, msg *types.MsgReact
 }
 
 // DeleteOperator defines the rpc method for Msg/DeleteOperator
-func (k msgServer) DeleteOperator(goCtx context.Context, msg *types.MsgDeleteOperator) (*types.MsgDeleteOperatorResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) DeleteOperator(ctx context.Context, msg *types.MsgDeleteOperator) (*types.MsgDeleteOperatorResponse, error) {
 	// Check if the operator exists
 	operator, found := k.GetOperator(ctx, msg.OperatorID)
 	if !found {
@@ -207,7 +208,8 @@ func (k msgServer) DeleteOperator(goCtx context.Context, msg *types.MsgDeleteOpe
 	}
 
 	// Emit the event
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeDeleteOperator,
 			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", msg.OperatorID)),
@@ -218,9 +220,7 @@ func (k msgServer) DeleteOperator(goCtx context.Context, msg *types.MsgDeleteOpe
 }
 
 // TransferOperatorOwnership defines the rpc method for Msg/TransferOperatorOwnership
-func (k msgServer) TransferOperatorOwnership(goCtx context.Context, msg *types.MsgTransferOperatorOwnership) (*types.MsgTransferOperatorOwnershipResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) TransferOperatorOwnership(ctx context.Context, msg *types.MsgTransferOperatorOwnership) (*types.MsgTransferOperatorOwnershipResponse, error) {
 	// Check if the operator exists
 	operator, found := k.GetOperator(ctx, msg.OperatorID)
 	if !found {
@@ -239,7 +239,8 @@ func (k msgServer) TransferOperatorOwnership(goCtx context.Context, msg *types.M
 	}
 
 	// Emit the event
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeTransferOperatorOwnership,
 			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", msg.OperatorID)),
@@ -251,9 +252,7 @@ func (k msgServer) TransferOperatorOwnership(goCtx context.Context, msg *types.M
 }
 
 // SetOperatorParams defines the rpc method for Msg/SetOperatorParams
-func (k msgServer) SetOperatorParams(goCtx context.Context, msg *types.MsgSetOperatorParams) (*types.MsgSetOperatorParamsResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) SetOperatorParams(ctx context.Context, msg *types.MsgSetOperatorParams) (*types.MsgSetOperatorParamsResponse, error) {
 	operator, found := k.GetOperator(ctx, msg.OperatorID)
 	if !found {
 		return nil, types.ErrOperatorNotFound
@@ -275,7 +274,9 @@ func (k msgServer) SetOperatorParams(goCtx context.Context, msg *types.MsgSetOpe
 		return nil, err
 	}
 
-	ctx.EventManager().EmitEvents(sdk.Events{
+	// Emit the event
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(types.EventTypeSetOperatorParams),
 	})
 
@@ -283,7 +284,7 @@ func (k msgServer) SetOperatorParams(goCtx context.Context, msg *types.MsgSetOpe
 }
 
 // UpdateParams defines the rpc method for Msg/UpdateParams
-func (k msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
+func (k msgServer) UpdateParams(ctx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
 	// Check the authority
 	authority := k.authority
 	if authority != msg.Authority {
@@ -291,8 +292,10 @@ func (k msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParam
 	}
 
 	// Update the params
-	ctx := sdk.UnwrapSDKContext(goCtx)
-	k.SetParams(ctx, msg.Params)
+	err := k.SetParams(ctx, msg.Params)
+	if err != nil {
+		return nil, err
+	}
 
 	return &types.MsgUpdateParamsResponse{}, nil
 }

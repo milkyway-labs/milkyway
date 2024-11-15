@@ -14,10 +14,10 @@ const (
 )
 
 var (
-	ParamsKey = []byte{0x01}
+	ParamsKey = collections.NewPrefix(0x01)
 
-	NextServiceIDKey        = []byte{0xa1}
-	ServicePrefix           = []byte{0xa2}
+	NextServiceIDKey        = collections.NewPrefix(0xa1)
+	ServicePrefix           = collections.NewPrefix(0xa2)
 	ServiceAddressSetPrefix = collections.NewPrefix(0xa3)
 	ServiceParamsPrefix     = collections.NewPrefix(0xa4)
 )
@@ -32,9 +32,4 @@ func GetServiceIDBytes(serviceID uint32) (serviceIDBz []byte) {
 // GetServiceIDFromBytes returns the service ID from a byte array
 func GetServiceIDFromBytes(bz []byte) (serviceID uint32) {
 	return binary.BigEndian.Uint32(bz)
-}
-
-// ServiceStoreKey turns a service ID into a key used to store a service in the KVStore
-func ServiceStoreKey(serviceID uint32) []byte {
-	return append(ServicePrefix, GetServiceIDBytes(serviceID)...)
 }

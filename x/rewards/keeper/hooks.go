@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"context"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -9,7 +11,7 @@ import (
 )
 
 // AfterDelegationTargetCreated is called after a delegation target is created
-func (k *Keeper) AfterDelegationTargetCreated(ctx sdk.Context, delType restakingtypes.DelegationType, targetID uint32) error {
+func (k *Keeper) AfterDelegationTargetCreated(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32) error {
 	target, err := k.GetDelegationTarget(ctx, delType, targetID)
 	if err != nil {
 		return err
@@ -19,7 +21,7 @@ func (k *Keeper) AfterDelegationTargetCreated(ctx sdk.Context, delType restaking
 }
 
 // AfterDelegationTargetRemoved is called after a delegation target is removed
-func (k *Keeper) AfterDelegationTargetRemoved(ctx sdk.Context, delType restakingtypes.DelegationType, targetID uint32) error {
+func (k *Keeper) AfterDelegationTargetRemoved(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32) error {
 	target, err := k.GetDelegationTarget(ctx, delType, targetID)
 	if err != nil {
 		return err
@@ -29,7 +31,7 @@ func (k *Keeper) AfterDelegationTargetRemoved(ctx sdk.Context, delType restaking
 }
 
 // BeforeDelegationCreated is called before a delegation to a target is created
-func (k *Keeper) BeforeDelegationCreated(ctx sdk.Context, delType restakingtypes.DelegationType, targetID uint32) error {
+func (k *Keeper) BeforeDelegationCreated(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32) error {
 	target, err := k.GetDelegationTarget(ctx, delType, targetID)
 	if err != nil {
 		return err
@@ -40,7 +42,7 @@ func (k *Keeper) BeforeDelegationCreated(ctx sdk.Context, delType restakingtypes
 }
 
 // BeforeDelegationSharesModified is called before a delegation to a target is modified
-func (k *Keeper) BeforeDelegationSharesModified(ctx sdk.Context, delType restakingtypes.DelegationType, targetID uint32, delegator string) error {
+func (k *Keeper) BeforeDelegationSharesModified(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32, delegator string) error {
 	target, err := k.GetDelegationTarget(ctx, delType, targetID)
 	if err != nil {
 		return err
@@ -49,7 +51,8 @@ func (k *Keeper) BeforeDelegationSharesModified(ctx sdk.Context, delType restaki
 	// We don't have to initialize target here because we can assume BeforeDelegationCreated
 	// has already been called when delegation shares are being modified.
 
-	del, found := k.restakingKeeper.GetDelegationForTarget(ctx, target, delegator)
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	del, found := k.restakingKeeper.GetDelegationForTarget(sdkCtx, target, delegator)
 	if !found {
 		return sdkerrors.ErrNotFound.Wrapf("delegation not found: %d, %s", target.GetID(), delegator)
 	}
@@ -79,7 +82,7 @@ func (k *Keeper) BeforeDelegationSharesModified(ctx sdk.Context, delType restaki
 }
 
 // AfterDelegationModified is called after a delegation to a target is modified
-func (k *Keeper) AfterDelegationModified(ctx sdk.Context, delType restakingtypes.DelegationType, targetID uint32, delegator string) error {
+func (k *Keeper) AfterDelegationModified(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32, delegator string) error {
 	target, err := k.GetDelegationTarget(ctx, delType, targetID)
 	if err != nil {
 		return err

@@ -180,7 +180,7 @@ func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.Wei
 
 // RegisterStoreDecoder registers a decoder for services module's types.
 func (am AppModule) RegisterStoreDecoder(sdr simtypes.StoreDecoderRegistry) {
-	sdr[types.StoreKey] = simulation.NewDecodeStore(am.cdc, am.keeper)
+	sdr[types.StoreKey] = simulation.NewDecodeStore(am.keeper)
 }
 
 // WeightedOperations returns the all the services module operations with their respective weights.

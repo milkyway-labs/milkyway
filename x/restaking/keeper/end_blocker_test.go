@@ -167,7 +167,7 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 				suite.Require().NoError(err)
 
 				// Create an operator
-				suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
+				err = suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
 					1,
 					operatorstypes.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -175,9 +175,10 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				))
+				suite.Require().NoError(err)
 
 				// Create a service
-				suite.sk.SaveService(ctx, servicestypes.NewService(
+				err = suite.sk.SaveService(ctx, servicestypes.NewService(
 					1,
 					servicestypes.SERVICE_STATUS_ACTIVE,
 					"MilkyWay",
@@ -187,6 +188,7 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					false,
 				))
+				suite.Require().NoError(err)
 
 				// Send some tokens to the user
 				suite.fundAccount(ctx, delegatorAddress, sdk.NewCoins(milkBalance))

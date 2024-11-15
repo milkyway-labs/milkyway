@@ -90,19 +90,21 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 	restakableDenoms := k.restakingKeeper.GetRestakableDenoms(sdkCtx)
 
 	// The list is empty all pools are allowed
-	var pools []poolstypes.Pool
-	if len(restakableDenoms) == 0 {
-		pools = k.poolsKeeper.GetPools(sdkCtx)
-	} else {
-		// Filter the pools to only include the ones with restakable assets
-		for _, pool := range k.poolsKeeper.GetPools(sdkCtx) {
-			isRestakable := slices.Contains(restakableDenoms, pool.Denom)
-			if isRestakable {
-				pools = append(pools, pool)
-			}
-		}
+	pools, err := k.poolsKeeper.GetPools(sdkCtx)
+	if err != nil {
+		return err
 	}
-	operators := k.operatorsKeeper.GetOperators(sdkCtx)
+
+	// Filter out the pools that are not allowed to be restaked
+	// If there are no restakable denoms, all pools are allowed
+	pools = utils.Filter(pools, func(pool poolstypes.Pool) bool {
+		return len(restakableDenoms) == 0 || slices.Contains(restakableDenoms, pool.Denom)
+	})
+
+	operators, err := k.operatorsKeeper.GetOperators(sdkCtx)
+	if err != nil {
+		return err
+	}
 
 	// Iterate all rewards plan stored and allocate rewards by plan if it's
 	// active(plan's start time <= current block time < plans' end time).
@@ -191,7 +193,11 @@ func (k *Keeper) AllocateRewardsByPlan(
 		return err
 	}
 
-	service, found := k.servicesKeeper.GetService(sdkCtx, plan.ServiceID)
+	service, found, err := k.servicesKeeper.GetService(sdkCtx, plan.ServiceID)
+	if err != nil {
+		return err
+	}
+
 	if !found {
 		return servicestypes.ErrServiceNotFound
 	}
@@ -296,11 +302,16 @@ func (k *Keeper) AllocateRewardsByPlan(
 // for rewards allocation. Also, if the service is not whitelisted in the pools
 // params, then no pools are eligible for rewards allocation.
 func (k *Keeper) getEligiblePools(
-	ctx context.Context, service servicestypes.Service,
+	ctx context.Context,
+	service servicestypes.Service,
 	pools []poolstypes.Pool,
 ) (eligiblePools []restakingtypes.DelegationTarget, err error) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	poolsParams := k.poolsKeeper.GetParams(sdkCtx)
+
+	poolsParams, err := k.poolsKeeper.GetParams(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	if slices.Contains(poolsParams.AllowedServicesIDs, service.ID) {
 		// Only include pools from which the service is borrowing security.

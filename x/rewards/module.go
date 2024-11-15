@@ -122,7 +122,8 @@ func (am AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.RawMessage) {
 	var genState types.GenesisState
 	cdc.MustUnmarshalJSON(gs, &genState)
-	err := am.keeper.InitGenesis(ctx, genState)
+
+	err := am.keeper.InitGenesis(ctx, &genState)
 	if err != nil {
 		panic(err)
 	}

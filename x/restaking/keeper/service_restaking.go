@@ -213,7 +213,11 @@ func (k *Keeper) RemoveServiceDelegation(ctx sdk.Context, delegation types.Deleg
 // DelegateToService sends the given amount to the service account and saves the delegation for the given user
 func (k *Keeper) DelegateToService(ctx sdk.Context, serviceID uint32, amount sdk.Coins, delegator string) (sdk.DecCoins, error) {
 	// Get the service
-	service, found := k.servicesKeeper.GetService(ctx, serviceID)
+	service, found, err := k.servicesKeeper.GetService(ctx, serviceID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return sdk.NewDecCoins(), servicestypes.ErrServiceNotFound
 	}
@@ -304,7 +308,11 @@ func (k *Keeper) GetServiceUnbondingDelegation(ctx sdk.Context, serviceID uint32
 // unbonding delegation for the given user
 func (k *Keeper) UndelegateFromService(ctx sdk.Context, serviceID uint32, amount sdk.Coins, delegator string) (time.Time, error) {
 	// Find the service
-	service, found := k.servicesKeeper.GetService(ctx, serviceID)
+	service, found, err := k.servicesKeeper.GetService(ctx, serviceID)
+	if err != nil {
+		return time.Time{}, err
+	}
+
 	if !found {
 		return time.Time{}, servicestypes.ErrServiceNotFound
 	}

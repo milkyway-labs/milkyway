@@ -1,6 +1,8 @@
 package v2
 
 import (
+	"context"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
@@ -13,7 +15,7 @@ type OperatorsKeeper interface {
 }
 
 type ServicesKeeper interface {
-	GetService(ctx sdk.Context, serviceID uint32) (servicestypes.Service, bool)
+	GetService(ctx context.Context, serviceID uint32) (servicestypes.Service, bool, error)
 }
 
 type RestakingKeeper interface {

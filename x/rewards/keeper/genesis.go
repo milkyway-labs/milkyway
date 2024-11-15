@@ -214,7 +214,7 @@ func (k *Keeper) exportDelegationsRecords(
 // --------------------------------------------------------------------------------------------------------------------
 
 // InitGenesis initializes the state from a GenesisState
-func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) error {
+func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 	var totalOutstandingRewards sdk.DecCoins
 
 	// Store params

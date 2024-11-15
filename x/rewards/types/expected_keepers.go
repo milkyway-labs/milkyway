@@ -43,23 +43,23 @@ type OracleKeeper interface {
 }
 
 type PoolsKeeper interface {
-	GetParams(ctx sdk.Context) poolstypes.Params
-	GetPool(ctx sdk.Context, poolID uint32) (poolstypes.Pool, bool)
-	GetPools(ctx sdk.Context) []poolstypes.Pool
-	IteratePools(ctx sdk.Context, cb func(pool poolstypes.Pool) (stop bool))
+	GetParams(ctx context.Context) (poolstypes.Params, error)
+	GetPool(ctx context.Context, poolID uint32) (poolstypes.Pool, bool, error)
+	GetPools(ctx context.Context) ([]poolstypes.Pool, error)
+	IteratePools(ctx context.Context, cb func(pool poolstypes.Pool) (stop bool, err error)) error
 }
 
 type OperatorsKeeper interface {
-	GetOperator(ctx sdk.Context, operatorID uint32) (operatorstypes.Operator, bool)
-	GetOperators(ctx sdk.Context) []operatorstypes.Operator
-	IterateOperators(ctx sdk.Context, cb func(operator operatorstypes.Operator) (stop bool))
-	GetOperatorParams(ctx sdk.Context, operatorID uint32) (operatorstypes.OperatorParams, error)
+	GetOperator(ctx context.Context, operatorID uint32) (operatorstypes.Operator, bool, error)
+	GetOperators(ctx context.Context) ([]operatorstypes.Operator, error)
+	IterateOperators(ctx context.Context, cb func(operator operatorstypes.Operator) (stop bool, err error)) error
+	GetOperatorParams(ctx context.Context, operatorID uint32) (operatorstypes.OperatorParams, error)
 }
 
 type ServicesKeeper interface {
-	GetService(ctx sdk.Context, serviceID uint32) (servicestypes.Service, bool)
-	GetServiceParams(ctx sdk.Context, serviceID uint32) (servicestypes.ServiceParams, error)
-	IterateServices(ctx sdk.Context, cb func(service servicestypes.Service) (stop bool))
+	GetService(ctx context.Context, serviceID uint32) (servicestypes.Service, bool, error)
+	GetServiceParams(ctx context.Context, serviceID uint32) (servicestypes.ServiceParams, error)
+	IterateServices(ctx context.Context, cb func(service servicestypes.Service) (stop bool, err error)) error
 }
 
 type RestakingKeeper interface {

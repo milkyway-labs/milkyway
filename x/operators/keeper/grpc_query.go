@@ -16,9 +16,7 @@ var _ types.QueryServer = &Keeper{}
 
 // Operator implements the Query/Operator gRPC method
 func (k *Keeper) Operator(ctx context.Context, request *types.QueryOperatorRequest) (*types.QueryOperatorResponse, error) {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-
-	operator, found := k.GetOperator(sdkCtx, request.OperatorId)
+	operator, found := k.GetOperator(ctx, request.OperatorId)
 	if !found {
 		return nil, status.Error(codes.NotFound, "operator not found")
 	}
@@ -54,14 +52,12 @@ func (k *Keeper) Operators(ctx context.Context, request *types.QueryOperatorsReq
 }
 
 func (k *Keeper) OperatorParams(ctx context.Context, request *types.QueryOperatorParamsRequest) (*types.QueryOperatorParamsResponse, error) {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-
-	_, found := k.GetOperator(sdkCtx, request.OperatorId)
+	_, found := k.GetOperator(ctx, request.OperatorId)
 	if !found {
 		return nil, types.ErrOperatorNotFound
 	}
 
-	params, err := k.GetOperatorParams(sdkCtx, request.OperatorId)
+	params, err := k.GetOperatorParams(ctx, request.OperatorId)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +67,9 @@ func (k *Keeper) OperatorParams(ctx context.Context, request *types.QueryOperato
 
 // Params implements the Query/Params gRPC method
 func (k *Keeper) Params(ctx context.Context, _ *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	params := k.GetParams(sdkCtx)
+	params, err := k.GetParams(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 	return &types.QueryParamsResponse{Params: params}, nil
 }

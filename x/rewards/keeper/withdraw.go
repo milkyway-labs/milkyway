@@ -62,8 +62,11 @@ func (k *Keeper) WithdrawDelegationRewards(
 
 // WithdrawOperatorCommission withdraws the operator's accumulated commission
 func (k *Keeper) WithdrawOperatorCommission(ctx context.Context, operatorID uint32) (types.Pools, error) {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	operator, found := k.operatorsKeeper.GetOperator(sdkCtx, operatorID)
+	operator, found, err := k.operatorsKeeper.GetOperator(ctx, operatorID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, operatorstypes.ErrOperatorNotFound
 	}
@@ -118,6 +121,8 @@ func (k *Keeper) WithdrawOperatorCommission(ctx context.Context, operatorID uint
 		}
 	}
 
+	// Emit the event
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sdkCtx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeWithdrawCommission,

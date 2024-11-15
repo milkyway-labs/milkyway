@@ -64,7 +64,8 @@ func (suite *MigrateStoreTestSuite) TestMigrateStore() {
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				// Get the service
-				service, found := suite.keeper.GetService(ctx, 1)
+				service, found, err := suite.keeper.GetService(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 
 				// Check that the service has not been set as accredited
@@ -82,7 +83,8 @@ func (suite *MigrateStoreTestSuite) TestMigrateStore() {
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				// Get the service
-				_, found := suite.keeper.GetService(ctx, 1)
+				_, found, err := suite.keeper.GetService(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().False(found)
 			},
 		},
@@ -110,7 +112,8 @@ func (suite *MigrateStoreTestSuite) TestMigrateStore() {
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				// Get the service
-				service, found := suite.keeper.GetService(ctx, 1)
+				service, found, err := suite.keeper.GetService(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 
 				// Check that the service has been set as accredited

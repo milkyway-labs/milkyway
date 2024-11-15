@@ -246,11 +246,12 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 		{
 			name: "inactive operator returns error",
 			store: func(ctx sdk.Context) {
-				suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
+				err := suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
 					1,
 					operatorstypes.OPERATOR_STATUS_INACTIVE,
 					"moniker", "", "", "admin",
 				))
+				suite.Require().NoError(err)
 			},
 			operatorID: 1,
 			amount:     sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
@@ -260,11 +261,12 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 		{
 			name: "invalid exchange rate operator returns error",
 			store: func(ctx sdk.Context) {
-				suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
+				err := suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
 					1,
 					operatorstypes.OPERATOR_STATUS_ACTIVE,
 					"moniker", "", "", "admin",
 				))
+				suite.Require().NoError(err)
 			},
 			operatorID: 1,
 			amount:     sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
@@ -274,11 +276,12 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 		{
 			name: "invalid delegator address returns error",
 			store: func(ctx sdk.Context) {
-				suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
+				err := suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
 					1,
 					operatorstypes.OPERATOR_STATUS_UNSPECIFIED,
 					"moniker", "", "", "admin",
 				))
+				suite.Require().NoError(err)
 			},
 			operatorID: 1,
 			amount:     sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
@@ -289,11 +292,12 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 			name: "insufficient funds return error",
 			store: func(ctx sdk.Context) {
 				// Create the operator
-				suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
+				err := suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
 					1,
 					operatorstypes.OPERATOR_STATUS_UNSPECIFIED,
 					"moniker", "", "", "admin",
 				))
+				suite.Require().NoError(err)
 
 				// Set the next operator id
 				suite.ok.SetNextOperatorID(ctx, 2)
@@ -314,7 +318,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 			name: "delegating to an existing operator works properly",
 			store: func(ctx sdk.Context) {
 				// Create the operator
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err := suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      1,
 					Status:  operatorstypes.OPERATOR_STATUS_ACTIVE,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
@@ -325,6 +329,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 						sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(100)),
 					),
 				})
+				suite.Require().NoError(err)
 
 				// Set the correct operator tokens amount
 				suite.fundAccount(
@@ -390,7 +395,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 			name: "delegating another token denom works properly",
 			store: func(ctx sdk.Context) {
 				// Create the operator
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err := suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      1,
 					Status:  operatorstypes.OPERATOR_STATUS_ACTIVE,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
@@ -413,7 +418,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 				suite.ok.SetNextOperatorID(ctx, 2)
 
 				// Save the existing delegation
-				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(
@@ -482,7 +487,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 			name: "delegating more tokens works properly",
 			store: func(ctx sdk.Context) {
 				// Create the operator
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err := suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      1,
 					Status:  operatorstypes.OPERATOR_STATUS_ACTIVE,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
@@ -510,7 +515,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 				suite.ok.SetNextOperatorID(ctx, 2)
 
 				// Save the existing delegation
-				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(

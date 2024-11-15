@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"context"
 
 	"github.com/milkyway-labs/milkyway/x/services/types"
 )
@@ -10,7 +10,7 @@ import (
 var _ types.ServicesHooks = &Keeper{}
 
 // AfterServiceCreated implements ServicesHooks
-func (k *Keeper) AfterServiceCreated(ctx sdk.Context, serviceID uint32) error {
+func (k *Keeper) AfterServiceCreated(ctx context.Context, serviceID uint32) error {
 	if k.hooks != nil {
 		return k.hooks.AfterServiceCreated(ctx, serviceID)
 	}
@@ -18,7 +18,7 @@ func (k *Keeper) AfterServiceCreated(ctx sdk.Context, serviceID uint32) error {
 }
 
 // AfterServiceActivated implements ServicesHooks
-func (k *Keeper) AfterServiceActivated(ctx sdk.Context, serviceID uint32) error {
+func (k *Keeper) AfterServiceActivated(ctx context.Context, serviceID uint32) error {
 	if k.hooks != nil {
 		return k.hooks.AfterServiceActivated(ctx, serviceID)
 	}
@@ -26,7 +26,7 @@ func (k *Keeper) AfterServiceActivated(ctx sdk.Context, serviceID uint32) error 
 }
 
 // AfterServiceDeactivated implements ServicesHooks
-func (k *Keeper) AfterServiceDeactivated(ctx sdk.Context, serviceID uint32) error {
+func (k *Keeper) AfterServiceDeactivated(ctx context.Context, serviceID uint32) error {
 	if k.hooks != nil {
 		return k.hooks.AfterServiceDeactivated(ctx, serviceID)
 	}
@@ -34,7 +34,7 @@ func (k *Keeper) AfterServiceDeactivated(ctx sdk.Context, serviceID uint32) erro
 }
 
 // AfterServiceDeleted implements ServicesHooks
-func (k *Keeper) AfterServiceDeleted(ctx sdk.Context, serviceID uint32) error {
+func (k *Keeper) AfterServiceDeleted(ctx context.Context, serviceID uint32) error {
 	if k.hooks != nil {
 		return k.hooks.AfterServiceDeleted(ctx, serviceID)
 	}

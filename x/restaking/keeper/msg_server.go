@@ -41,7 +41,11 @@ func (k msgServer) JoinService(goCtx context.Context, msg *types.MsgJoinService)
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can join the service")
 	}
 
-	service, found := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	service, found, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, errors.Wrapf(sdkerrors.ErrNotFound, "service %d not found", msg.ServiceID)
 	}
@@ -50,7 +54,7 @@ func (k msgServer) JoinService(goCtx context.Context, msg *types.MsgJoinService)
 		return nil, errors.Wrapf(servicestypes.ErrServiceNotActive, "service %d is not active", msg.ServiceID)
 	}
 
-	err := k.AddServiceToOperatorJoinedServices(ctx, msg.OperatorID, msg.ServiceID)
+	err = k.AddServiceToOperatorJoinedServices(ctx, msg.OperatorID, msg.ServiceID)
 	if err != nil {
 		return nil, err
 	}
@@ -79,12 +83,16 @@ func (k msgServer) LeaveService(goCtx context.Context, msg *types.MsgLeaveServic
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can leave the service")
 	}
 
-	_, found = k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	_, found, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, errors.Wrapf(sdkerrors.ErrNotFound, "service %d not found", msg.ServiceID)
 	}
 
-	err := k.RemoveServiceFromOperatorJoinedServices(ctx, msg.OperatorID, msg.ServiceID)
+	err = k.RemoveServiceFromOperatorJoinedServices(ctx, msg.OperatorID, msg.ServiceID)
 	if err != nil {
 		return nil, err
 	}
@@ -105,7 +113,11 @@ func (k msgServer) AddOperatorToAllowList(goCtx context.Context, msg *types.MsgA
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Ensure that the service exists
-	service, found := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	service, found, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, servicestypes.ErrServiceNotFound
 	}
@@ -152,7 +164,11 @@ func (k msgServer) RemoveOperatorFromAllowlist(goCtx context.Context, msg *types
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Ensure that the service exists
-	service, found := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	service, found, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, servicestypes.ErrServiceNotFound
 	}
@@ -193,7 +209,11 @@ func (k msgServer) BorrowPoolSecurity(goCtx context.Context, msg *types.MsgBorro
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Ensure that the service exists
-	service, found := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	service, found, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, servicestypes.ErrServiceNotFound
 	}
@@ -204,7 +224,11 @@ func (k msgServer) BorrowPoolSecurity(goCtx context.Context, msg *types.MsgBorro
 	}
 
 	// Ensure that the pool exists
-	_, found = k.poolsKeeper.GetPool(ctx, msg.PoolID)
+	_, found, err = k.poolsKeeper.GetPool(ctx, msg.PoolID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, poolstypes.ErrPoolNotFound
 	}
@@ -247,7 +271,11 @@ func (k msgServer) CeasePoolSecurityBorrow(goCtx context.Context, msg *types.Msg
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Ensure that the service exists
-	service, found := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	service, found, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, servicestypes.ErrServiceNotFound
 	}
@@ -545,7 +573,12 @@ func (k msgServer) SetUserPreferences(goCtx context.Context, msg *types.MsgSetUs
 
 	// Make sure that each service exists
 	for _, serviceID := range msg.Preferences.TrustedServicesIDs {
-		if !k.servicesKeeper.HasService(ctx, serviceID) {
+		hasService, err := k.servicesKeeper.HasService(ctx, serviceID)
+		if err != nil {
+			return nil, err
+		}
+
+		if !hasService {
 			return nil, errors.Wrapf(servicestypes.ErrServiceNotFound, "service %d does not exist", serviceID)
 		}
 	}

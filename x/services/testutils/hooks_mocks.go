@@ -1,7 +1,7 @@
 package testutils
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"context"
 
 	"github.com/milkyway-labs/milkyway/x/services/types"
 )
@@ -16,22 +16,22 @@ func NewMockHooks() *MockHooks {
 	return &MockHooks{CalledMap: make(map[string]bool)}
 }
 
-func (m MockHooks) AfterServiceCreated(_ sdk.Context, _ uint32) error {
+func (m MockHooks) AfterServiceCreated(_ context.Context, _ uint32) error {
 	m.CalledMap["AfterServiceCreated"] = true
 	return nil
 }
 
-func (m MockHooks) AfterServiceActivated(_ sdk.Context, _ uint32) error {
+func (m MockHooks) AfterServiceActivated(_ context.Context, _ uint32) error {
 	m.CalledMap["AfterServiceActivated"] = true
 	return nil
 }
 
-func (m MockHooks) AfterServiceDeactivated(_ sdk.Context, _ uint32) error {
+func (m MockHooks) AfterServiceDeactivated(_ context.Context, _ uint32) error {
 	m.CalledMap["AfterServiceDeactivated"] = true
 	return nil
 }
 
-func (m MockHooks) AfterServiceDeleted(_ sdk.Context, _ uint32) error {
+func (m MockHooks) AfterServiceDeleted(_ context.Context, _ uint32) error {
 	m.CalledMap["AfterServiceDeleted"] = true
 	return nil
 }

@@ -1,7 +1,8 @@
 package keeper
 
 import (
-	storetypes "cosmossdk.io/store/types"
+	"context"
+
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -9,7 +10,7 @@ import (
 )
 
 // createAccountIfNotExists creates an account if it does not exist
-func (k *Keeper) createAccountIfNotExists(ctx sdk.Context, address sdk.AccAddress) {
+func (k *Keeper) createAccountIfNotExists(ctx context.Context, address sdk.AccAddress) {
 	if !k.accountKeeper.HasAccount(ctx, address) {
 		defer telemetry.IncrCounter(1, "new", "account")
 		k.accountKeeper.SetAccount(ctx, k.accountKeeper.NewAccountWithAddress(ctx, address))
@@ -17,40 +18,51 @@ func (k *Keeper) createAccountIfNotExists(ctx sdk.Context, address sdk.AccAddres
 }
 
 // IterateServices iterates over the services in the store and performs a callback function
-func (k *Keeper) IterateServices(ctx sdk.Context, cb func(service types.Service) (stop bool)) {
-	store := ctx.KVStore(k.storeKey)
-	iterator := storetypes.KVStorePrefixIterator(store, types.ServicePrefix)
+func (k *Keeper) IterateServices(ctx context.Context, cb func(service types.Service) (stop bool, err error)) error {
+	iterator, err := k.services.Iterate(ctx, nil)
+	if err != nil {
+		return err
+	}
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var service types.Service
-		k.cdc.MustUnmarshal(iterator.Value(), &service)
+		service, err := iterator.Value()
+		if err != nil {
+			return err
+		}
 
-		if cb(service) {
+		stop, err := cb(service)
+		if err != nil {
+			return err
+		}
+
+		if stop {
 			break
 		}
 	}
+
+	return nil
 }
 
 // GetServices returns the services stored in the KVStore
-func (k *Keeper) GetServices(ctx sdk.Context) []types.Service {
+func (k *Keeper) GetServices(ctx context.Context) ([]types.Service, error) {
 	var services []types.Service
-	k.IterateServices(ctx, func(service types.Service) (stop bool) {
+	err := k.IterateServices(ctx, func(service types.Service) (stop bool, err error) {
 		services = append(services, service)
-		return false
+		return false, nil
 	})
-	return services
+	return services, err
 }
 
 // IsServiceAddress returns true if the provided address is the address
 // where the users' asset are kept when they restake toward a service.
-func (k *Keeper) IsServiceAddress(ctx sdk.Context, address string) (bool, error) {
+func (k *Keeper) IsServiceAddress(ctx context.Context, address string) (bool, error) {
 	return k.serviceAddressSet.Has(ctx, address)
 }
 
 // GetAllServicesParams returns the parameters that have been configured for all
 // services.
-func (k *Keeper) GetAllServicesParams(ctx sdk.Context) ([]types.ServiceParamsRecord, error) {
+func (k *Keeper) GetAllServicesParams(ctx context.Context) ([]types.ServiceParamsRecord, error) {
 	var records []types.ServiceParamsRecord
 	err := k.serviceParams.Walk(ctx, nil, func(serviceID uint32, params types.ServiceParams) (bool, error) {
 		records = append(records, types.NewServiceParamsRecord(serviceID, params))

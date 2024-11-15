@@ -40,7 +40,11 @@ func (k Querier) OperatorJoinedServices(goCtx context.Context, req *types.QueryO
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	_, found := k.operatorsKeeper.GetOperator(ctx, req.OperatorId)
+	_, found, err := k.operatorsKeeper.GetOperator(ctx, req.OperatorId)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
 	if !found {
 		return nil, status.Error(codes.InvalidArgument, "operator not found")
 	}
@@ -128,7 +132,11 @@ func (k Querier) ServiceOperators(goCtx context.Context, req *types.QueryService
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	_, found := k.servicesKeeper.GetService(ctx, req.ServiceId)
+	_, found, err := k.servicesKeeper.GetService(ctx, req.ServiceId)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
 	if !found {
 		return nil, status.Error(codes.NotFound, "service not found")
 	}
@@ -146,7 +154,11 @@ func (k Querier) ServiceOperators(goCtx context.Context, req *types.QueryService
 			// Here is k2 the operator id since the Service index provides association
 			// between a service and the operator securing it
 			operatorID := key.K2()
-			operator, found := k.operatorsKeeper.GetOperator(ctx, operatorID)
+			operator, found, err := k.operatorsKeeper.GetOperator(ctx, operatorID)
+			if err != nil {
+				return operatorstypes.Operator{}, err
+			}
+
 			if !found {
 				return operatorstypes.Operator{}, errors.Wrapf(
 					operatorstypes.ErrOperatorNotFound, "operator %d not found", operatorID)
@@ -844,7 +856,11 @@ func (k Querier) DelegatorPools(goCtx context.Context, req *types.QueryDelegator
 			return err
 		}
 
-		pool, found := k.poolsKeeper.GetPool(ctx, delegation.TargetID)
+		pool, found, err := k.poolsKeeper.GetPool(ctx, delegation.TargetID)
+		if err != nil {
+			return err
+		}
+
 		if !found {
 			return poolstypes.ErrPoolNotFound
 		}
@@ -883,7 +899,11 @@ func (k Querier) DelegatorPool(goCtx context.Context, req *types.QueryDelegatorP
 		return nil, status.Error(codes.NotFound, "pool delegation not found")
 	}
 
-	pool, found := k.poolsKeeper.GetPool(ctx, delegation.TargetID)
+	pool, found, err := k.poolsKeeper.GetPool(ctx, delegation.TargetID)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
 	if !found {
 		return nil, status.Error(codes.NotFound, "pool not found")
 	}
@@ -917,7 +937,11 @@ func (k Querier) DelegatorOperators(goCtx context.Context, req *types.QueryDeleg
 			return err
 		}
 
-		operator, found := k.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
+		operator, found, err := k.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
+		if err != nil {
+			return err
+		}
+
 		if !found {
 			return operatorstypes.ErrOperatorNotFound
 		}
@@ -956,7 +980,11 @@ func (k Querier) DelegatorOperator(goCtx context.Context, req *types.QueryDelega
 		return nil, status.Error(codes.NotFound, "operator delegation not found")
 	}
 
-	operator, found := k.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
+	operator, found, err := k.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
 	if !found {
 		return nil, status.Error(codes.NotFound, "operator not found")
 	}
@@ -990,7 +1018,11 @@ func (k Querier) DelegatorServices(goCtx context.Context, req *types.QueryDelega
 			return err
 		}
 
-		pool, found := k.servicesKeeper.GetService(ctx, delegation.TargetID)
+		pool, found, err := k.servicesKeeper.GetService(ctx, delegation.TargetID)
+		if err != nil {
+			return err
+		}
+
 		if !found {
 			return servicestypes.ErrServiceNotFound
 		}
@@ -1029,7 +1061,11 @@ func (k Querier) DelegatorService(goCtx context.Context, req *types.QueryDelegat
 		return nil, status.Error(codes.NotFound, "service delegation not found")
 	}
 
-	service, found := k.servicesKeeper.GetService(ctx, delegation.TargetID)
+	service, found, err := k.servicesKeeper.GetService(ctx, delegation.TargetID)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
 	if !found {
 		return nil, status.Error(codes.NotFound, "service not found")
 	}
@@ -1072,7 +1108,11 @@ func (k Querier) Params(goCtx context.Context, _ *types.QueryParamsRequest) (*ty
 
 // PoolDelegationToPoolDelegationResponse converts a PoolDelegation to a PoolDelegationResponse
 func PoolDelegationToPoolDelegationResponse(ctx sdk.Context, k *Keeper, delegation types.Delegation) (types.DelegationResponse, error) {
-	pool, found := k.poolsKeeper.GetPool(ctx, delegation.TargetID)
+	pool, found, err := k.poolsKeeper.GetPool(ctx, delegation.TargetID)
+	if err != nil {
+		return types.DelegationResponse{}, err
+	}
+
 	if !found {
 		return types.DelegationResponse{}, poolstypes.ErrPoolNotFound
 	}
@@ -1083,7 +1123,11 @@ func PoolDelegationToPoolDelegationResponse(ctx sdk.Context, k *Keeper, delegati
 
 // OperatorDelegationToOperatorDelegationResponse converts a OperatorDelegation to a OperatorDelegationResponse
 func OperatorDelegationToOperatorDelegationResponse(ctx sdk.Context, k *Keeper, delegation types.Delegation) (types.DelegationResponse, error) {
-	operator, found := k.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
+	operator, found, err := k.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
+	if err != nil {
+		return types.DelegationResponse{}, err
+	}
+
 	if !found {
 		return types.DelegationResponse{}, operatorstypes.ErrOperatorNotFound
 	}
@@ -1094,7 +1138,11 @@ func OperatorDelegationToOperatorDelegationResponse(ctx sdk.Context, k *Keeper, 
 
 // ServiceDelegationToServiceDelegationResponse converts a ServiceDelegation to a ServiceDelegationResponse
 func ServiceDelegationToServiceDelegationResponse(ctx sdk.Context, k *Keeper, delegation types.Delegation) (types.DelegationResponse, error) {
-	service, found := k.servicesKeeper.GetService(ctx, delegation.TargetID)
+	service, found, err := k.servicesKeeper.GetService(ctx, delegation.TargetID)
+	if err != nil {
+		return types.DelegationResponse{}, err
+	}
+
 	if !found {
 		return types.DelegationResponse{}, servicestypes.ErrServiceNotFound
 	}

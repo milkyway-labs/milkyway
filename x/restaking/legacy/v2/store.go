@@ -103,7 +103,11 @@ func migrateServiceParams(
 			return err
 		}
 
-		_, found := servicesKeeper.GetService(ctx, serviceID)
+		_, found, err := servicesKeeper.GetService(ctx, serviceID)
+		if err != nil {
+			return err
+		}
+
 		if found {
 			// Store the service's whitelisted operators in the restaking module
 			for _, operatorID := range legacyParams.WhitelistedOperatorsIDs {

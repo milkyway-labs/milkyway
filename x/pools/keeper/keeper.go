@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"context"
+
 	"cosmossdk.io/collections"
 	corestoretypes "cosmossdk.io/core/store"
 	"cosmossdk.io/log"
@@ -19,9 +21,11 @@ type Keeper struct {
 
 	accountKeeper types.AccountKeeper
 
-	// Data
 	schema         collections.Schema
-	poolAddressSet collections.KeySet[string]
+	nextPoolID     collections.Sequence                // Sequence for pool IDs
+	pools          collections.Map[uint32, types.Pool] // Map of pool ID to pool
+	poolAddressSet collections.KeySet[string]          // Set of pool addresses
+	params         collections.Item[types.Params]      // Module parameters
 }
 
 func NewKeeper(cdc codec.Codec,
@@ -36,11 +40,30 @@ func NewKeeper(cdc codec.Codec,
 		cdc:           cdc,
 		storeService:  storeService,
 		accountKeeper: accountKeeper,
+
+		nextPoolID: collections.NewSequence(
+			sb,
+			types.NextPoolIDKey,
+			"next_pool_id",
+		),
+		pools: collections.NewMap(
+			sb,
+			types.PoolPrefix,
+			"pools",
+			collections.Uint32Key,
+			codec.CollValue[types.Pool](cdc),
+		),
 		poolAddressSet: collections.NewKeySet(
 			sb,
 			types.PoolAddressSetPrefix,
-			"pool_address_set",
+			"pools_addresses_set",
 			collections.StringKey,
+		),
+		params: collections.NewItem(
+			sb,
+			types.ParamsKey,
+			"params",
+			codec.CollValue[types.Params](cdc),
 		),
 	}
 
@@ -54,8 +77,9 @@ func NewKeeper(cdc codec.Codec,
 }
 
 // Logger returns a module-specific logger.
-func (k *Keeper) Logger(ctx sdk.Context) log.Logger {
-	return ctx.Logger().With("module", "x/"+types.ModuleName)
+func (k *Keeper) Logger(ctx context.Context) log.Logger {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	return sdkCtx.Logger().With("module", "x/"+types.ModuleName)
 }
 
 // SetHooks allows to set the pools hooks

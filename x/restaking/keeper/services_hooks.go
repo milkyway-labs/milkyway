@@ -1,8 +1,9 @@
 package keeper
 
 import (
+	"context"
+
 	"cosmossdk.io/collections"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
@@ -17,8 +18,8 @@ func (k *Keeper) ServicesHooks() servicestypes.ServicesHooks {
 
 // ------------------------------------------------------------------------------
 
-// AfterServiceDeactivated implements types.ServicesHooks.
-func (h *ServicesHooks) AfterServiceDeleted(ctx sdk.Context, serviceID uint32) error {
+// AfterServiceDeleted implements types.ServicesHooks.
+func (h *ServicesHooks) AfterServiceDeleted(ctx context.Context, serviceID uint32) error {
 	// After the service has been deleted
 	// we remove the data that we keep in the x/restaking
 	// associated to this service.
@@ -87,17 +88,17 @@ func (h *ServicesHooks) AfterServiceDeleted(ctx sdk.Context, serviceID uint32) e
 }
 
 // AfterServiceDeactivated implements types.ServicesHooks.
-func (h *ServicesHooks) AfterServiceDeactivated(ctx sdk.Context, serviceID uint32) error {
+func (h *ServicesHooks) AfterServiceDeactivated(ctx context.Context, serviceID uint32) error {
 	return nil
 }
 
 // AfterServiceActivated implements types.ServicesHooks.
-func (h *ServicesHooks) AfterServiceActivated(ctx sdk.Context, serviceID uint32) error {
+func (h *ServicesHooks) AfterServiceActivated(ctx context.Context, serviceID uint32) error {
 	return nil
 }
 
 // AfterServiceCreated implements types.ServicesHooks.
-func (h *ServicesHooks) AfterServiceCreated(ctx sdk.Context, serviceID uint32) error {
+func (h *ServicesHooks) AfterServiceCreated(ctx context.Context, serviceID uint32) error {
 	return nil
 }
 

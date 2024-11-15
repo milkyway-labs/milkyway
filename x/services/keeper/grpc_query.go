@@ -20,8 +20,11 @@ func (k *Keeper) Service(ctx context.Context, request *types.QueryServiceRequest
 		return nil, status.Error(codes.InvalidArgument, "invalid service ID")
 	}
 
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	service, found := k.GetService(sdkCtx, request.ServiceId)
+	service, found, err := k.GetService(ctx, request.ServiceId)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
 	if !found {
 		return nil, status.Error(codes.NotFound, "service not found")
 	}
@@ -30,10 +33,10 @@ func (k *Keeper) Service(ctx context.Context, request *types.QueryServiceRequest
 }
 
 // Services implements the Query/Services gRPC method
-func (k *Keeper) Services(ctx context.Context, request *types.QueryServicesRequest) (*types.QueryServicesResponse, error) {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
+func (k *Keeper) Services(goCtx context.Context, request *types.QueryServicesRequest) (*types.QueryServicesResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	store := sdkCtx.KVStore(k.storeKey)
+	store := ctx.KVStore(k.storeKey)
 	servicesStore := prefix.NewStore(store, types.ServicePrefix)
 
 	var services []types.Service
@@ -62,16 +65,18 @@ func (k *Keeper) ServiceParams(ctx context.Context, request *types.QueryServiceP
 		return nil, status.Error(codes.InvalidArgument, "invalid service ID")
 	}
 
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-
 	// Ensure the service exists
-	_, found := k.GetService(sdkCtx, request.ServiceId)
+	_, found, err := k.GetService(ctx, request.ServiceId)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
 	if !found {
 		return nil, status.Error(codes.NotFound, "service not found")
 	}
 
 	// Get the service params
-	serviceParams, err := k.GetServiceParams(sdkCtx, request.ServiceId)
+	serviceParams, err := k.GetServiceParams(ctx, request.ServiceId)
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +86,10 @@ func (k *Keeper) ServiceParams(ctx context.Context, request *types.QueryServiceP
 
 // Params implements the Query/Params gRPC method
 func (k *Keeper) Params(ctx context.Context, _ *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	params := k.GetParams(sdkCtx)
+	params, err := k.GetParams(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
 	return &types.QueryParamsResponse{Params: params}, nil
 }

@@ -36,10 +36,15 @@ func RandomService(r *rand.Rand, id uint32, admin string) types.Service {
 }
 
 func GetRandomExistingService(r *rand.Rand, ctx sdk.Context, k *keeper.Keeper, filter func(s types.Service) bool) (types.Service, bool) {
-	services := k.GetServices(ctx)
+	services, err := k.GetServices(ctx)
+	if err != nil {
+		panic(err)
+	}
+
 	if len(services) == 0 {
 		return types.Service{}, false
 	}
+
 	if filter != nil {
 		services = utils.Filter(services, filter)
 		if len(services) == 0 {

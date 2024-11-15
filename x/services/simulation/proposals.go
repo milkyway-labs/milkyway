@@ -14,15 +14,15 @@ import (
 )
 
 // Simulation operation weights constants
+//
+//nolint:gosec // The followings are not sensitive information
 const (
 	DefaultWeightMsgUpdateParams               int = 50
 	DefaultWeightMsgAccreditService            int = 50
 	DefaultWeightMsgRevokeServiceAccreditation int = 50
 
-	OperationWeightMsgUpdateParams = "op_weight_msg_update_params"
-	//nolint:gosec
-	OperationWeightMsgAccreditService = "op_weight_msg_accredit_service"
-	//nolint:gosec
+	OperationWeightMsgUpdateParams               = "op_weight_msg_update_params"
+	OperationWeightMsgAccreditService            = "op_weight_msg_accredit_service"
 	OperationWeightMsgRevokeServiceAccreditation = "op_weight_msg_revoke_service_accreditation"
 )
 

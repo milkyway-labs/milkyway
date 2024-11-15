@@ -1,6 +1,9 @@
 package keeper
 
 import (
+	"context"
+
+	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -9,29 +12,27 @@ import (
 )
 
 // SetNextPoolID sets the next pool ID to be used when registering a new Pool
-func (k *Keeper) SetNextPoolID(ctx sdk.Context, poolID uint32) {
-	store := ctx.KVStore(k.storeKey)
-	store.Set(types.NextPoolIDKey, types.GetPoolIDBytes(poolID))
+func (k *Keeper) SetNextPoolID(ctx context.Context, poolID uint32) error {
+	return k.nextPoolID.Set(ctx, uint64(poolID))
 }
 
 // GetNextPoolID returns the next pool ID to be used when registering a new Pool
-func (k *Keeper) GetNextPoolID(ctx sdk.Context) (poolID uint32, err error) {
-	store := ctx.KVStore(k.storeKey)
-	bz := store.Get(types.NextPoolIDKey)
-	if bz == nil {
-		return 0, errors.Wrapf(types.ErrInvalidGenesis, "initial pool id not set")
+func (k *Keeper) GetNextPoolID(ctx context.Context) (poolID uint32, err error) {
+	nextPoolID, err := k.nextPoolID.Next(ctx)
+	if err != nil {
+		return 0, errors.Wrap(err, "failed to get next pool ID")
 	}
-
-	poolID = types.GetPoolIDFromBytes(bz)
-	return poolID, nil
+	return uint32(nextPoolID), nil
 }
 
 // --------------------------------------------------------------------------------------------------------------------
 
 // SavePool stores the given pool inside the store
-func (k *Keeper) SavePool(ctx sdk.Context, pool types.Pool) error {
-	store := ctx.KVStore(k.storeKey)
-	store.Set(types.GetPoolStoreKey(pool.ID), k.cdc.MustMarshal(&pool))
+func (k *Keeper) SavePool(ctx context.Context, pool types.Pool) error {
+	err := k.pools.Set(ctx, pool.ID, pool)
+	if err != nil {
+		return err
+	}
 
 	// Create the pool account if it does not exist
 	poolAddress, err := sdk.AccAddressFromBech32(pool.Address)
@@ -45,14 +46,13 @@ func (k *Keeper) SavePool(ctx sdk.Context, pool types.Pool) error {
 
 // GetPool retrieves the pool with the given ID from the store.
 // If the pool does not exist, false is returned instead
-func (k *Keeper) GetPool(ctx sdk.Context, id uint32) (types.Pool, bool) {
-	store := ctx.KVStore(k.storeKey)
-	bz := store.Get(types.GetPoolStoreKey(id))
-	if bz == nil {
-		return types.Pool{}, false
+func (k *Keeper) GetPool(ctx context.Context, id uint32) (types.Pool, bool, error) {
+	pool, err := k.pools.Get(ctx, id)
+	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return types.Pool{}, false, nil
+		}
+		return types.Pool{}, false, err
 	}
-
-	var pool types.Pool
-	k.cdc.MustUnmarshal(bz, &pool)
-	return pool, true
+	return pool, true, nil
 }

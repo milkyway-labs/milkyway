@@ -45,7 +45,7 @@ func ValidPoolsInvariant(k *Keeper) sdk.Invariant {
 		}
 
 		var invalidPools []types.Pool
-		k.IteratePools(ctx, func(pool types.Pool) (stop bool) {
+		err = k.IteratePools(ctx, func(pool types.Pool) (stop bool, err error) {
 			invalid := false
 
 			// Make sure the pool ID is never greater or equal to the next pool ID
@@ -63,8 +63,11 @@ func ValidPoolsInvariant(k *Keeper) sdk.Invariant {
 				invalidPools = append(invalidPools, pool)
 			}
 
-			return false
+			return false, nil
 		})
+		if err != nil {
+			panic(err)
+		}
 
 		return sdk.FormatInvariant(types.ModuleName, "invalid pools",
 			fmt.Sprintf("the following pools are invalid:\n %s", formatOutputPools(invalidPools)),
@@ -77,13 +80,20 @@ func UniquePoolsInvariant(k *Keeper) sdk.Invariant {
 	return func(ctx sdk.Context) (message string, broken bool) {
 
 		var invalidPools []types.Pool
-		k.IteratePools(ctx, func(pool types.Pool) (stop bool) {
-			otherPool, found := k.GetPoolByDenom(ctx, pool.Denom)
+		err := k.IteratePools(ctx, func(pool types.Pool) (stop bool, err error) {
+			otherPool, found, err := k.GetPoolByDenom(ctx, pool.Denom)
+			if err != nil {
+				return false, err
+			}
+
 			if found && otherPool.ID != pool.ID {
 				invalidPools = append(invalidPools, pool)
 			}
-			return false
+			return false, nil
 		})
+		if err != nil {
+			panic(err)
+		}
 
 		return sdk.FormatInvariant(types.ModuleName, "invalid pools",
 			fmt.Sprintf("the following pools have the same denoms:\n %s", formatOutputPools(invalidPools)),

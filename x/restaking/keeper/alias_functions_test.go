@@ -671,8 +671,10 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 				// Fund the account
 				suite.fundAccount(ctx, delegator, sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)))
 
-				suite.pk.SetNextPoolID(ctx, 1)
-				_, err := suite.k.DelegateToPool(ctx, sdk.NewInt64Coin("stake", 300), delegator)
+				err := suite.pk.SetNextPoolID(ctx, 1)
+				suite.Require().NoError(err)
+
+				_, err = suite.k.DelegateToPool(ctx, sdk.NewInt64Coin("stake", 300), delegator)
 				suite.Assert().NoError(err)
 
 				// Delegate to service
@@ -713,7 +715,8 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 				suite.fundAccount(ctx, delegator, sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)))
 
 				// Set the first pool id
-				suite.pk.SetNextPoolID(ctx, 1)
+				err := suite.pk.SetNextPoolID(ctx, 1)
+				suite.Require().NoError(err)
 
 				// Create delegators delegations
 				for i := 0; i < 100; i++ {
@@ -725,7 +728,7 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 				}
 
 				// Delegate to pool
-				_, err := suite.k.DelegateToPool(ctx, sdk.NewInt64Coin("stake", 300), delegator)
+				_, err = suite.k.DelegateToPool(ctx, sdk.NewInt64Coin("stake", 300), delegator)
 				suite.Assert().NoError(err)
 			},
 		},
@@ -735,8 +738,10 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 				// Fund the account
 				suite.fundAccount(ctx, delegator, sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)))
 
-				suite.pk.SetNextPoolID(ctx, 1)
-				_, err := suite.k.DelegateToPool(ctx, sdk.NewInt64Coin("stake", 300), delegator)
+				err := suite.pk.SetNextPoolID(ctx, 1)
+				suite.Require().NoError(err)
+
+				_, err = suite.k.DelegateToPool(ctx, sdk.NewInt64Coin("stake", 300), delegator)
 				suite.Assert().NoError(err)
 
 				// Delegate to service
@@ -770,7 +775,8 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 				del, found := suite.k.GetServiceDelegation(ctx, 1, delegator)
 				suite.Assert().True(found)
 				suite.Assert().Equal(types.DELEGATION_TYPE_OPERATOR, del.Type)
-				operator, _ := suite.ok.GetOperator(ctx, 1)
+				operator, _, err := suite.ok.GetOperator(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Assert().Equal(
 					sdk.NewDecCoins(sdk.NewInt64DecCoin("stake", 50)),
 					operator.TokensFromSharesTruncated(del.Shares))
@@ -780,8 +786,10 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 			name: "undelegate  with amounts shared between pool, service and operator",
 			setup: func(ctx sdk.Context) {
 				// Prepare pool, service and operator
-				suite.pk.SetNextPoolID(ctx, 1)
-				err := suite.sk.CreateService(ctx, servicestypes.NewService(
+				err := suite.pk.SetNextPoolID(ctx, 1)
+				suite.Require().NoError(err)
+
+				err = suite.sk.CreateService(ctx, servicestypes.NewService(
 					1,
 					servicestypes.SERVICE_STATUS_ACTIVE,
 					"",

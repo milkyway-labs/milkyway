@@ -144,7 +144,8 @@ func (suite *KeeperTestSuite) CreateService(ctx sdk.Context, name string, admin 
 	_, err = servicesMsgServer.ActivateService(ctx, servicestypes.NewMsgActivateService(resp.NewServiceID, admin))
 	suite.Require().NoError(err)
 
-	service, found := suite.servicesKeeper.GetService(ctx, resp.NewServiceID)
+	service, found, err := suite.servicesKeeper.GetService(ctx, resp.NewServiceID)
+	suite.Require().NoError(err)
 	suite.Require().True(found, "service must be found")
 	return service
 }
@@ -164,7 +165,8 @@ func (suite *KeeperTestSuite) CreateOperator(ctx sdk.Context, name string, admin
 	suite.Require().NoError(err)
 
 	// Make sure the operator is found
-	operator, found := suite.operatorsKeeper.GetOperator(ctx, resp.NewOperatorID)
+	operator, found, err := suite.operatorsKeeper.GetOperator(ctx, resp.NewOperatorID)
+	suite.Require().NoError(err)
 	suite.Require().True(found, "operator must be found")
 	return operator
 }
@@ -178,12 +180,12 @@ func (suite *KeeperTestSuite) UpdateOperatorParams(
 	joinedServicesIDs []uint32,
 ) {
 	// Make sure the operator is found
-	_, found := suite.operatorsKeeper.GetOperator(ctx, operatorID)
+	_, found, err := suite.operatorsKeeper.GetOperator(ctx, operatorID)
+	suite.Require().NoError(err)
 	suite.Require().True(found, "operator must be found")
 
 	// Sets the operator commission rate
-	err := suite.operatorsKeeper.SaveOperatorParams(ctx, operatorID,
-		operatorstypes.NewOperatorParams(commissionRate))
+	err = suite.operatorsKeeper.SaveOperatorParams(ctx, operatorID, operatorstypes.NewOperatorParams(commissionRate))
 	suite.Require().NoError(err)
 
 	// Make the operator join the service.
@@ -217,7 +219,8 @@ func (suite *KeeperTestSuite) AddPoolsToServiceSecuringPools(
 	whitelistedPoolsIDs []uint32,
 ) {
 	// Make sure the service is found
-	_, found := suite.servicesKeeper.GetService(ctx, serviceID)
+	_, found, err := suite.servicesKeeper.GetService(ctx, serviceID)
+	suite.Require().NoError(err)
 	suite.Require().True(found, "service must be found")
 
 	for _, poolID := range whitelistedPoolsIDs {
@@ -234,7 +237,8 @@ func (suite *KeeperTestSuite) AddOperatorsToServiceAllowList(
 	allowedOperatorsID []uint32,
 ) {
 	// Make sure the service is found
-	_, found := suite.servicesKeeper.GetService(ctx, serviceID)
+	_, found, err := suite.servicesKeeper.GetService(ctx, serviceID)
+	suite.Require().NoError(err)
 	suite.Require().True(found, "service must be found")
 
 	for _, operatorID := range allowedOperatorsID {
@@ -257,7 +261,8 @@ func (suite *KeeperTestSuite) CreateRewardsPlan(
 	usersDistr rewardstypes.UsersDistribution,
 	initialRewards sdk.Coins,
 ) rewardstypes.RewardsPlan {
-	service, found := suite.servicesKeeper.GetService(ctx, serviceID)
+	service, found, err := suite.servicesKeeper.GetService(ctx, serviceID)
+	suite.Require().NoError(err)
 	suite.Require().True(found, "service must be found")
 
 	rewardsMsgServer := keeper.NewMsgServer(suite.keeper)
@@ -392,9 +397,12 @@ func (suite *KeeperTestSuite) setupSampleServiceAndOperator(ctx sdk.Context) (se
 	service := suite.CreateService(ctx, "Service", serviceAdmin.String())
 
 	// Add the created service ID to the pools module's allowed list.
-	poolsParams := suite.poolsKeeper.GetParams(ctx)
+	poolsParams, err := suite.poolsKeeper.GetParams(ctx)
+	suite.Require().NoError(err)
+
 	poolsParams.AllowedServicesIDs = []uint32{service.ID}
-	suite.poolsKeeper.SetParams(ctx, poolsParams)
+	err = suite.poolsKeeper.SetParams(ctx, poolsParams)
+	suite.Require().NoError(err)
 
 	// Create an operator.
 	operatorAdmin := testutil.TestAddress(10001)
@@ -404,7 +412,7 @@ func (suite *KeeperTestSuite) setupSampleServiceAndOperator(ctx sdk.Context) (se
 	suite.UpdateOperatorParams(ctx, operator.ID, utils.MustParseDec("0.1"), []uint32{service.ID})
 
 	// Call AllocateRewards to set last rewards allocation time.
-	err := suite.keeper.AllocateRewards(ctx)
+	err = suite.keeper.AllocateRewards(ctx)
 	suite.Require().NoError(err)
 
 	return service, operator

@@ -258,28 +258,16 @@ func (k *Keeper) GetDelegationForTarget(
 // GetDelegationTargetFromDelegation returns the target of the given delegation.
 func (k *Keeper) GetDelegationTargetFromDelegation(
 	ctx sdk.Context, delegation types.Delegation,
-) (types.DelegationTarget, bool) {
+) (types.DelegationTarget, bool, error) {
 	switch delegation.Type {
 	case types.DELEGATION_TYPE_POOL:
-		if t, found := k.poolsKeeper.GetPool(ctx, delegation.TargetID); found {
-			return &t, true
-		} else {
-			return nil, false
-		}
+		return k.poolsKeeper.GetPool(ctx, delegation.TargetID)
 	case types.DELEGATION_TYPE_SERVICE:
-		if t, found := k.servicesKeeper.GetService(ctx, delegation.TargetID); found {
-			return &t, true
-		} else {
-			return nil, false
-		}
+		return k.servicesKeeper.GetService(ctx, delegation.TargetID)
 	case types.DELEGATION_TYPE_OPERATOR:
-		if t, found := k.operatorsKeeper.GetOperator(ctx, delegation.TargetID); found {
-			return &t, true
-		} else {
-			return nil, false
-		}
+		return k.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
 	default:
-		return nil, false
+		return nil, false, nil
 	}
 }
 
@@ -520,14 +508,22 @@ func (k *Keeper) GetAllDelegations(ctx sdk.Context) []types.Delegation {
 // GetAllUserRestakedCoins returns all the user's restaked coins
 func (k *Keeper) GetAllUserRestakedCoins(ctx sdk.Context, userAddress string) (sdk.DecCoins, error) {
 	totalDelegatedCoins := sdk.NewDecCoins()
-	k.IterateUserDelegations(ctx, userAddress, func(d types.Delegation) (bool, error) {
-		target, found := k.GetDelegationTargetFromDelegation(ctx, d)
+	err := k.IterateUserDelegations(ctx, userAddress, func(d types.Delegation) (bool, error) {
+		target, found, err := k.GetDelegationTargetFromDelegation(ctx, d)
+		if err != nil {
+			return true, err
+		}
+
 		if !found {
 			return true, fmt.Errorf("can't find target for delegation %d, target id: %d", d.Type, d.TargetID)
 		}
+
 		totalDelegatedCoins = totalDelegatedCoins.Add(target.TokensFromShares(d.Shares)...)
 		return false, nil
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	return totalDelegatedCoins, nil
 }
@@ -607,21 +603,30 @@ func (k *Keeper) PerformDelegation(ctx sdk.Context, data types.DelegationData) (
 func (k *Keeper) getUnbondingDelegationTarget(ctx sdk.Context, ubd types.UnbondingDelegation) (types.DelegationTarget, error) {
 	switch ubd.Type {
 	case types.DELEGATION_TYPE_POOL:
-		pool, found := k.poolsKeeper.GetPool(ctx, ubd.TargetID)
+		pool, found, err := k.poolsKeeper.GetPool(ctx, ubd.TargetID)
+		if err != nil {
+			return nil, err
+		}
 		if !found {
 			return nil, poolstypes.ErrPoolNotFound
 		}
 		return &pool, nil
 
 	case types.DELEGATION_TYPE_OPERATOR:
-		operator, found := k.operatorsKeeper.GetOperator(ctx, ubd.TargetID)
+		operator, found, err := k.operatorsKeeper.GetOperator(ctx, ubd.TargetID)
+		if err != nil {
+			return nil, err
+		}
 		if !found {
 			return nil, operatorstypes.ErrOperatorNotFound
 		}
 		return &operator, nil
 
 	case types.DELEGATION_TYPE_SERVICE:
-		service, found := k.servicesKeeper.GetService(ctx, ubd.TargetID)
+		service, found, err := k.servicesKeeper.GetService(ctx, ubd.TargetID)
+		if err != nil {
+			return nil, err
+		}
 		if !found {
 			return nil, servicestypes.ErrServiceNotFound
 		}
@@ -748,7 +753,11 @@ func (k *Keeper) UnbondRestakedAssets(ctx sdk.Context, user sdk.AccAddress, amou
 	toUndelegateTokens := sdk.NewDecCoinsFromCoins(amount...)
 
 	err := k.IterateUserDelegations(ctx, user.String(), func(delegation types.Delegation) (bool, error) {
-		target, found := k.GetDelegationTargetFromDelegation(ctx, delegation)
+		target, found, err := k.GetDelegationTargetFromDelegation(ctx, delegation)
+		if err != nil {
+			return true, err
+		}
+
 		if !found {
 			return false, nil
 		}

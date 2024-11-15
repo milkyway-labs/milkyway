@@ -110,7 +110,11 @@ func (k *Keeper) GetPoolUnbondingDelegation(ctx sdk.Context, poolID uint32, dele
 // unbonding delegation for the given user
 func (k *Keeper) UndelegateFromPool(ctx sdk.Context, amount sdk.Coin, delegator string) (time.Time, error) {
 	// Find the pool
-	pool, found := k.poolsKeeper.GetPoolByDenom(ctx, amount.Denom)
+	pool, found, err := k.poolsKeeper.GetPoolByDenom(ctx, amount.Denom)
+	if err != nil {
+		return time.Time{}, err
+	}
+
 	if !found {
 		return time.Time{}, poolstypes.ErrPoolNotFound
 	}

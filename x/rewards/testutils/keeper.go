@@ -140,17 +140,10 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	data.RestakingKeeper.SetHooks(data.Keeper.RestakingHooks())
 
 	// Set the base params
-	data.PoolsKeeper.SetNextPoolID(data.Context, 1)
-	data.PoolsKeeper.SetParams(data.Context, poolstypes.DefaultParams())
-
-	data.ServicesKeeper.SetNextServiceID(data.Context, 1)
-	data.ServicesKeeper.SetParams(data.Context, servicestypes.DefaultParams())
-
-	data.OperatorsKeeper.SetNextOperatorID(data.Context, 1)
-	data.OperatorsKeeper.SetParams(data.Context, operatorstypes.DefaultParams())
-
-	require.NoError(t, data.Keeper.NextRewardsPlanID.Set(data.Context, 1))
-	require.NoError(t, data.Keeper.Params.Set(data.Context, rewardstypes.DefaultParams()))
+	require.NoError(t, data.PoolsKeeper.InitGenesis(data.Context, poolstypes.DefaultGenesis()))
+	require.NoError(t, data.ServicesKeeper.InitGenesis(data.Context, servicestypes.DefaultGenesis()))
+	require.NoError(t, data.OperatorsKeeper.InitGenesis(data.Context, operatorstypes.DefaultGenesis()))
+	require.NoError(t, data.Keeper.InitGenesis(data.Context, rewardstypes.DefaultGenesis()))
 
 	return data
 }

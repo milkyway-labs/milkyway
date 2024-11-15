@@ -1,25 +1,17 @@
 package keeper
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"context"
 
 	"github.com/milkyway-labs/milkyway/x/operators/types"
 )
 
 // SetParams sets module parameters
-func (k *Keeper) SetParams(ctx sdk.Context, params types.Params) {
-	store := ctx.KVStore(k.storeKey)
-	bz := k.cdc.MustMarshal(&params)
-	store.Set(types.ParamsKey, bz)
+func (k *Keeper) SetParams(ctx context.Context, params types.Params) error {
+	return k.params.Set(ctx, params)
 }
 
 // GetParams returns the module parameters
-func (k *Keeper) GetParams(ctx sdk.Context) (p types.Params) {
-	store := ctx.KVStore(k.storeKey)
-	bz := store.Get(types.ParamsKey)
-	if bz == nil {
-		return p
-	}
-	k.cdc.MustUnmarshal(bz, &p)
-	return p
+func (k *Keeper) GetParams(ctx context.Context) (types.Params, error) {
+	return k.params.Get(ctx)
 }
