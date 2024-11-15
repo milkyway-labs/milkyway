@@ -52,7 +52,11 @@ func (k *Keeper) BeforeDelegationSharesModified(ctx context.Context, delType res
 	// has already been called when delegation shares are being modified.
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	del, found := k.restakingKeeper.GetDelegationForTarget(sdkCtx, target, delegator)
+	del, found, err := k.restakingKeeper.GetDelegationForTarget(sdkCtx, target, delegator)
+	if err != nil {
+		return err
+	}
+
 	if !found {
 		return sdkerrors.ErrNotFound.Wrapf("delegation not found: %d, %s", target.GetID(), delegator)
 	}

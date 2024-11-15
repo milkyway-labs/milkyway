@@ -24,10 +24,11 @@ func (suite *KeeperTestSuite) TestKeeper_SavePoolDelegation() {
 				sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 			),
 			check: func(ctx sdk.Context) {
-				store := ctx.KVStore(suite.storeKey)
+				store := suite.storeService.OpenKVStore(ctx)
 
 				// Make sure the user-pool delegation key exists and contains the delegation
-				delegationBz := store.Get(types.UserPoolDelegationStoreKey("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", 1))
+				delegationBz, err := store.Get(types.UserPoolDelegationStoreKey("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", 1))
+				suite.Require().NoError(err)
 				suite.Require().NotNil(delegationBz)
 
 				delegation, err := types.UnmarshalDelegation(suite.cdc, delegationBz)
@@ -40,7 +41,8 @@ func (suite *KeeperTestSuite) TestKeeper_SavePoolDelegation() {
 				), delegation)
 
 				// Make sure the pool-user delegation key exists
-				hasDelegationsByPoolKey := store.Has(types.DelegationByPoolIDStoreKey(1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"))
+				hasDelegationsByPoolKey, err := store.Has(types.DelegationByPoolIDStoreKey(1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"))
+				suite.Require().NoError(err)
 				suite.Require().True(hasDelegationsByPoolKey)
 			},
 		},
@@ -75,6 +77,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetPoolDelegation() {
 		store         func(ctx sdk.Context)
 		poolID        uint32
 		userAddress   string
+		shouldErr     bool
 		expFound      bool
 		expDelegation types.Delegation
 		check         func(ctx sdk.Context)
@@ -83,6 +86,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetPoolDelegation() {
 			name:        "not found delegation returns false",
 			poolID:      1,
 			userAddress: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			shouldErr:   false,
 			expFound:    false,
 		},
 		{
@@ -98,6 +102,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetPoolDelegation() {
 			poolID:      1,
 			userAddress: "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 			expFound:    true,
+			shouldErr:   false,
 			expDelegation: types.NewPoolDelegation(
 				1,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
@@ -117,12 +122,17 @@ func (suite *KeeperTestSuite) TestKeeper_GetPoolDelegation() {
 				tc.store(ctx)
 			}
 
-			delegation, found := suite.k.GetPoolDelegation(ctx, tc.poolID, tc.userAddress)
-			if !tc.expFound {
-				suite.Require().False(found)
+			delegation, found, err := suite.k.GetPoolDelegation(ctx, tc.poolID, tc.userAddress)
+			if tc.shouldErr {
+				suite.Require().Error(err)
 			} else {
-				suite.Require().True(found)
-				suite.Require().Equal(tc.expDelegation, delegation)
+				suite.Require().NoError(err)
+				if !tc.expFound {
+					suite.Require().False(found)
+				} else {
+					suite.Require().True(found)
+					suite.Require().Equal(tc.expDelegation, delegation)
+				}
 			}
 
 			if tc.check != nil {
@@ -298,7 +308,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 			expShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(100))),
 			check: func(ctx sdk.Context) {
 				// Make sure the pool now exists
-				pool, found := suite.pk.GetPool(ctx, 1)
+				pool, found, err := suite.pk.GetPool(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(poolstypes.Pool{
 					ID:              1,
@@ -309,7 +320,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 				}, pool)
 
 				// Make sure the delegation exists
-				delegation, found := suite.k.GetPoolDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				delegation, found, err := suite.k.GetPoolDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewPoolDelegation(
 					1,
@@ -362,7 +374,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 			expShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(500))),
 			check: func(ctx sdk.Context) {
 				// Make sure the pool now exists
-				pool, found := suite.pk.GetPool(ctx, 1)
+				pool, found, err := suite.pk.GetPool(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(poolstypes.Pool{
 					ID:              1,
@@ -373,7 +386,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 				}, pool)
 
 				// Make sure the delegation exists
-				delegation, found := suite.k.GetPoolDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				delegation, found, err := suite.k.GetPoolDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewPoolDelegation(
 					1,
@@ -434,7 +448,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 			expShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDecWithPrec(15625, 2))),
 			check: func(ctx sdk.Context) {
 				// Make sure the pool now exists
-				pool, found := suite.pk.GetPool(ctx, 1)
+				pool, found, err := suite.pk.GetPool(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(poolstypes.Pool{
 					ID:              1,
@@ -445,7 +460,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 				}, pool)
 
 				// Make sure the delegation has been updated properly
-				delegation, found := suite.k.GetPoolDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				delegation, found, err := suite.k.GetPoolDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewPoolDelegation(
 					1,

@@ -33,12 +33,13 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 				delegatorAddress := "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"
 
 				// Set the unbonding delegation time to 7 days
-				suite.k.SetParams(ctx, types.Params{
+				err := suite.k.SetParams(ctx, types.Params{
 					UnbondingTime: 7 * 24 * time.Hour,
 				})
+				suite.Require().NoError(err)
 
 				// Create a pool
-				err := suite.pk.SavePool(ctx, poolstypes.NewPool(1, delegationAmount.Denom))
+				err = suite.pk.SavePool(ctx, poolstypes.NewPool(1, delegationAmount.Denom))
 				suite.Require().NoError(err)
 
 				// Send some tokens to the user
@@ -66,12 +67,13 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				// Make sure the delegation is still there and unbonding
-				ubd, found := suite.k.GetUnbondingDelegation(
+				ubd, found, err := suite.k.GetUnbondingDelegation(
 					ctx,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					types.DELEGATION_TYPE_POOL,
 					1,
 				)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewPoolUnbondingDelegation(
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -95,12 +97,13 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 				delegatorAddress := "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"
 
 				// Set the unbonding delegation time to 7 days
-				suite.k.SetParams(ctx, types.Params{
+				err := suite.k.SetParams(ctx, types.Params{
 					UnbondingTime: 7 * 24 * time.Hour,
 				})
+				suite.Require().NoError(err)
 
 				// Create a pool
-				err := suite.pk.SavePool(ctx, poolstypes.NewPool(1, delegationAmount.Denom))
+				err = suite.pk.SavePool(ctx, poolstypes.NewPool(1, delegationAmount.Denom))
 				suite.Require().NoError(err)
 
 				// Send some tokens to the user
@@ -130,12 +133,13 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				// Make sure the delegation is no longer unbonding
-				_, found := suite.k.GetUnbondingDelegation(
+				_, found, err := suite.k.GetUnbondingDelegation(
 					ctx,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					types.DELEGATION_TYPE_POOL,
 					1,
 				)
+				suite.Require().NoError(err)
 				suite.Require().False(found)
 
 				// Make sure the user has the tokens
@@ -158,12 +162,13 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 				delegatorAddress := "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"
 
 				// Set the unbonding delegation time to 7 days
-				suite.k.SetParams(ctx, types.Params{
+				err := suite.k.SetParams(ctx, types.Params{
 					UnbondingTime: 7 * 24 * time.Hour,
 				})
+				suite.Require().NoError(err)
 
 				// Create a pool
-				err := suite.pk.SavePool(ctx, poolstypes.NewPool(1, milkBalance.Denom))
+				err = suite.pk.SavePool(ctx, poolstypes.NewPool(1, milkBalance.Denom))
 				suite.Require().NoError(err)
 
 				// Create an operator
@@ -237,28 +242,31 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				// Make sure the delegations are no longer unbonding
-				_, found := suite.k.GetUnbondingDelegation(
+				_, found, err := suite.k.GetUnbondingDelegation(
 					ctx,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					types.DELEGATION_TYPE_POOL,
 					1,
 				)
+				suite.Require().NoError(err)
 				suite.Require().False(found)
 
-				_, found = suite.k.GetUnbondingDelegation(
+				_, found, err = suite.k.GetUnbondingDelegation(
 					ctx,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					types.DELEGATION_TYPE_OPERATOR,
 					1,
 				)
+				suite.Require().NoError(err)
 				suite.Require().False(found)
 
-				_, found = suite.k.GetUnbondingDelegation(
+				_, found, err = suite.k.GetUnbondingDelegation(
 					ctx,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					types.DELEGATION_TYPE_SERVICE,
 					1,
 				)
+				suite.Require().NoError(err)
 				suite.Require().False(found)
 
 				// Make sure the user has the tokens

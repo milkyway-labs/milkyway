@@ -12,11 +12,11 @@ import (
 // GetDelegationTargetType returns the delegation target's type.
 func GetDelegationTargetType(target restakingtypes.DelegationTarget) (restakingtypes.DelegationType, error) {
 	switch target.(type) {
-	case *poolstypes.Pool:
+	case poolstypes.Pool:
 		return restakingtypes.DELEGATION_TYPE_POOL, nil
-	case *operatorstypes.Operator:
+	case operatorstypes.Operator:
 		return restakingtypes.DELEGATION_TYPE_OPERATOR, nil
-	case *servicestypes.Service:
+	case servicestypes.Service:
 		return restakingtypes.DELEGATION_TYPE_SERVICE, nil
 	default:
 		return restakingtypes.DELEGATION_TYPE_UNSPECIFIED, errors.Wrapf(

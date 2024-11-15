@@ -22,6 +22,12 @@ func (k *Keeper) GetNextServiceID(ctx context.Context) (serviceID uint32, err er
 	if err != nil {
 		return 0, err
 	}
+
+	// If the next service ID is 0, we need to increment it
+	if nextServiceID == 0 {
+		return k.GetNextServiceID(ctx)
+	}
+
 	return uint32(nextServiceID), nil
 }
 

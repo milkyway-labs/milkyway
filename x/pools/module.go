@@ -137,7 +137,7 @@ func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.Ra
 // ExportGenesis returns the pools module's exported genesis state as raw JSON bytes.
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
 	genState := am.keeper.ExportGenesis(ctx)
-	return cdc.MustMarshalJSON(&genState)
+	return cdc.MustMarshalJSON(genState)
 }
 
 // ConsensusVersion implements ConsensusVersion.

@@ -19,9 +19,10 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "operator joined services are exported correctly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetParams(ctx, types.DefaultParams())
+				err := suite.k.SetParams(ctx, types.DefaultParams())
+				suite.Require().NoError(err)
 
-				err := suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 1)
+				err = suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 1)
 				suite.Require().NoError(err)
 				err = suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 2)
 				suite.Require().NoError(err)
@@ -42,9 +43,10 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "services allowed operators are exported properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetParams(ctx, types.DefaultParams())
+				err := suite.k.SetParams(ctx, types.DefaultParams())
+				suite.Require().NoError(err)
 
-				err := suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
 				suite.Require().NoError(err)
 				err = suite.k.AddOperatorToServiceAllowList(ctx, 1, 2)
 				suite.Require().NoError(err)
@@ -65,9 +67,10 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "services securing pools are exported properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetParams(ctx, types.DefaultParams())
+				err := suite.k.SetParams(ctx, types.DefaultParams())
+				suite.Require().NoError(err)
 
-				err := suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
+				err = suite.k.AddPoolToServiceSecuringPools(ctx, 1, 1)
 				suite.Require().NoError(err)
 				err = suite.k.AddPoolToServiceSecuringPools(ctx, 1, 2)
 				suite.Require().NoError(err)
@@ -88,9 +91,10 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "pool delegations are exported properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetParams(ctx, types.DefaultParams())
+				err := suite.k.SetParams(ctx, types.DefaultParams())
+				suite.Require().NoError(err)
 
-				err := suite.k.SetDelegation(ctx, types.NewPoolDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewPoolDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(100))),
@@ -123,9 +127,10 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "service delegations are exported properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetParams(ctx, types.DefaultParams())
+				err := suite.k.SetParams(ctx, types.DefaultParams())
+				suite.Require().NoError(err)
 
-				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(
@@ -166,9 +171,10 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "operators delegations are exported properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetParams(ctx, types.DefaultParams())
+				err := suite.k.SetParams(ctx, types.DefaultParams())
+				suite.Require().NoError(err)
 
-				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewDecCoins(
@@ -209,9 +215,10 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "pool unbonding delegations are exported properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetParams(ctx, types.DefaultParams())
+				err := suite.k.SetParams(ctx, types.DefaultParams())
+				suite.Require().NoError(err)
 
-				_, err := suite.k.SetUnbondingDelegation(ctx, types.NewPoolUnbondingDelegation(
+				_, err = suite.k.SetUnbondingDelegation(ctx, types.NewPoolUnbondingDelegation(
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					1,
 					10,
@@ -238,9 +245,10 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "operator unbonding delegations are exported properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetParams(ctx, types.DefaultParams())
+				err := suite.k.SetParams(ctx, types.DefaultParams())
+				suite.Require().NoError(err)
 
-				_, err := suite.k.SetUnbondingDelegation(ctx, types.NewOperatorUnbondingDelegation(
+				_, err = suite.k.SetUnbondingDelegation(ctx, types.NewOperatorUnbondingDelegation(
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					1,
 					10,
@@ -267,9 +275,10 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "service unbonding delegations are exported properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetParams(ctx, types.DefaultParams())
+				err := suite.k.SetParams(ctx, types.DefaultParams())
+				suite.Require().NoError(err)
 
-				_, err := suite.k.SetUnbondingDelegation(ctx, types.NewServiceUnbondingDelegation(
+				_, err = suite.k.SetUnbondingDelegation(ctx, types.NewServiceUnbondingDelegation(
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					1,
 					10,
@@ -296,9 +305,10 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "user preferences are exported properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetParams(ctx, types.DefaultParams())
+				err := suite.k.SetParams(ctx, types.DefaultParams())
+				suite.Require().NoError(err)
 
-				err := suite.k.SetUserPreferences(ctx, "cosmos1jseuux3pktht0kkhlcsv4kqff3mql65udqs4jw", types.NewUserPreferences(
+				err = suite.k.SetUserPreferences(ctx, "cosmos1jseuux3pktht0kkhlcsv4kqff3mql65udqs4jw", types.NewUserPreferences(
 					true,
 					false,
 					[]uint32{1, 2, 3},
@@ -322,10 +332,11 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "params are exported properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetParams(ctx, types.NewParams(
+				err := suite.k.SetParams(ctx, types.NewParams(
 					30*24*time.Hour,
 					nil,
 				))
+				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				Params: types.NewParams(
@@ -355,9 +366,10 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 
 func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 	testCases := []struct {
-		name    string
-		genesis *types.GenesisState
-		check   func(ctx sdk.Context)
+		name      string
+		genesis   *types.GenesisState
+		shouldErr bool
+		check     func(ctx sdk.Context)
 	}{
 		{
 			name: "operator params are stored properly",
@@ -368,6 +380,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 					types.NewOperatorJoinedServices(2, []uint32{3, 4}),
 				},
 			},
+			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				joined, err := suite.k.HasOperatorJoinedService(ctx, 1, 1)
 				suite.Require().NoError(err)
@@ -395,6 +408,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 					types.NewServiceAllowedOperators(2, []uint32{3, 4}),
 				},
 			},
+			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				stored, err := suite.k.GetAllServiceAllowedOperators(ctx, 1)
 				suite.Require().NoError(err)
@@ -414,6 +428,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 					types.NewServiceSecuringPools(2, []uint32{3, 4}),
 				},
 			},
+			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				stored, err := suite.k.GetAllServiceSecuringPools(ctx, 1)
 				suite.Require().NoError(err)
@@ -441,12 +456,15 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 					),
 				},
 			},
+			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				_, pool1DelegationFound := suite.k.GetPoolDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
-				suite.Require().True(pool1DelegationFound)
+				_, found, err := suite.k.GetPoolDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().NoError(err)
+				suite.Require().True(found)
 
-				_, pool2DelegationFound := suite.k.GetPoolDelegation(ctx, 2, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
-				suite.Require().True(pool2DelegationFound)
+				_, found, err = suite.k.GetPoolDelegation(ctx, 2, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().NoError(err)
+				suite.Require().True(found)
 			},
 		},
 		{
@@ -471,11 +489,13 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				},
 			},
 			check: func(ctx sdk.Context) {
-				_, service1DelegationFound := suite.k.GetServiceDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
-				suite.Require().True(service1DelegationFound)
+				_, found, err := suite.k.GetServiceDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().NoError(err)
+				suite.Require().True(found)
 
-				_, service2DelegationFound := suite.k.GetServiceDelegation(ctx, 2, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
-				suite.Require().True(service2DelegationFound)
+				_, found, err = suite.k.GetServiceDelegation(ctx, 2, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().NoError(err)
+				suite.Require().True(found)
 			},
 		},
 		{
@@ -500,11 +520,13 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				},
 			},
 			check: func(ctx sdk.Context) {
-				_, operator1DelegationFound := suite.k.GetOperatorDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
-				suite.Require().True(operator1DelegationFound)
+				_, found, err := suite.k.GetOperatorDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().NoError(err)
+				suite.Require().True(found)
 
-				_, operator2DelegationFound := suite.k.GetOperatorDelegation(ctx, 2, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
-				suite.Require().True(operator2DelegationFound)
+				_, found, err = suite.k.GetOperatorDelegation(ctx, 2, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().NoError(err)
+				suite.Require().True(found)
 			},
 		},
 		{
@@ -523,8 +545,9 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				},
 			},
 			check: func(ctx sdk.Context) {
-				stored, poolUnbondingDelegationFound := suite.k.GetPoolUnbondingDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
-				suite.Require().True(poolUnbondingDelegationFound)
+				stored, found, err := suite.k.GetPoolUnbondingDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().NoError(err)
+				suite.Require().True(found)
 
 				suite.Require().Equal(types.NewPoolUnbondingDelegation(
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -552,8 +575,9 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				},
 			},
 			check: func(ctx sdk.Context) {
-				stored, operatorUnbondingDelegationFound := suite.k.GetOperatorUnbondingDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
-				suite.Require().True(operatorUnbondingDelegationFound)
+				stored, found, err := suite.k.GetOperatorUnbondingDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().NoError(err)
+				suite.Require().True(found)
 
 				suite.Require().Equal(types.NewOperatorUnbondingDelegation(
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -581,8 +605,9 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				},
 			},
 			check: func(ctx sdk.Context) {
-				stored, serviceUnbondingDelegationFound := suite.k.GetServiceUnbondingDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
-				suite.Require().True(serviceUnbondingDelegationFound)
+				stored, found, err := suite.k.GetServiceUnbondingDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().NoError(err)
+				suite.Require().True(found)
 
 				suite.Require().Equal(types.NewServiceUnbondingDelegation(
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -633,7 +658,8 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				),
 			},
 			check: func(ctx sdk.Context) {
-				params := suite.k.GetParams(ctx)
+				params, err := suite.k.GetParams(ctx)
+				suite.Require().NoError(err)
 				suite.Require().Equal(types.NewParams(
 					30*24*time.Hour,
 					nil,
@@ -647,7 +673,12 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 		suite.Run(tc.name, func() {
 			ctx, _ := suite.ctx.CacheContext()
 
-			suite.k.InitGenesis(ctx, tc.genesis)
+			err := suite.k.InitGenesis(ctx, tc.genesis)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+			}
 
 			if tc.check != nil {
 				tc.check(ctx)

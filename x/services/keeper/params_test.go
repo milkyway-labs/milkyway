@@ -81,9 +81,8 @@ func (suite *KeeperTestSuite) TestKeeper_GetParams() {
 		expParams types.Params
 	}{
 		{
-			name:      "non existing params are returned properly",
-			shouldErr: false,
-			expParams: types.Params{},
+			name:      "non existing params return an error",
+			shouldErr: true,
 		},
 		{
 			name: "existing params are returned properly",

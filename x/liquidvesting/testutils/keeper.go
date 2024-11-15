@@ -9,11 +9,9 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	distributiontypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	porttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
 	ibchookstypes "github.com/initia-labs/initia/x/ibc-hooks/types"
-	"github.com/stretchr/testify/require"
-
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"github.com/milkyway-labs/milkyway/testutils/storetesting"
 	"github.com/milkyway-labs/milkyway/x/liquidvesting"
@@ -63,13 +61,11 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	// Build keepers
 	data.PoolsKeeper = poolskeeper.NewKeeper(
 		data.Cdc,
-		data.Keys[poolstypes.StoreKey],
 		runtime.NewKVStoreService(data.Keys[poolstypes.StoreKey]),
 		data.AccountKeeper,
 	)
 	data.OperatorsKeeper = operatorskeeper.NewKeeper(
 		data.Cdc,
-		data.Keys[operatorstypes.StoreKey],
 		runtime.NewKVStoreService(data.Keys[operatorstypes.StoreKey]),
 		data.AccountKeeper,
 		data.DistributionKeeper,
@@ -77,7 +73,6 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	)
 	data.ServicesKeeper = serviceskeeper.NewKeeper(
 		data.Cdc,
-		data.Keys[servicestypes.StoreKey],
 		runtime.NewKVStoreService(data.Keys[servicestypes.StoreKey]),
 		data.AccountKeeper,
 		data.DistributionKeeper,
@@ -85,7 +80,6 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	)
 	data.RestakingKeeper = restakingkeeper.NewKeeper(
 		data.Cdc,
-		data.Keys[restakingtypes.StoreKey],
 		runtime.NewKVStoreService(data.Keys[restakingtypes.StoreKey]),
 		data.AccountKeeper,
 		data.BankKeeper,
@@ -96,7 +90,6 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	)
 	data.Keeper = keeper.NewKeeper(
 		data.Cdc,
-		data.Keys[types.StoreKey],
 		runtime.NewKVStoreService(data.Keys[types.StoreKey]),
 		data.AccountKeeper,
 		data.BankKeeper,
@@ -114,10 +107,6 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	// Set ibc hooks
 	var ibcStack porttypes.IBCModule = mockIBCMiddleware{}
 	data.IBCMiddleware = liquidvesting.NewIBCMiddleware(ibcStack, data.Keeper)
-
-	account := data.AccountKeeper.GetModuleAccount(data.Context, types.ModuleName)
-	require.NotNil(t, account)
-	data.AccountKeeper.SetModuleAccount(data.Context, account)
 
 	return data
 }

@@ -372,10 +372,11 @@ func (suite *KeeperTestSuite) TestKeeper_SaveServiceDelegation() {
 				sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 			),
 			check: func(ctx sdk.Context) {
-				store := ctx.KVStore(suite.storeKey)
+				store := suite.storeService.OpenKVStore(ctx)
 
 				// Make sure the user-service delegation key exists and contains the delegation
-				delegationBz := store.Get(types.UserServiceDelegationStoreKey("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", 1))
+				delegationBz, err := store.Get(types.UserServiceDelegationStoreKey("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", 1))
+				suite.Require().NoError(err)
 				suite.Require().NotNil(delegationBz)
 
 				delegation, err := types.UnmarshalDelegation(suite.cdc, delegationBz)
@@ -388,7 +389,8 @@ func (suite *KeeperTestSuite) TestKeeper_SaveServiceDelegation() {
 				), delegation)
 
 				// Make sure the service-user delegation key exists
-				hasDelegationsByServiceKey := store.Has(types.DelegationByServiceIDStoreKey(1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"))
+				hasDelegationsByServiceKey, err := store.Has(types.DelegationByServiceIDStoreKey(1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"))
+				suite.Require().NoError(err)
 				suite.Require().True(hasDelegationsByServiceKey)
 			},
 		},
@@ -422,6 +424,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetServiceDelegation() {
 		store         func(ctx sdk.Context)
 		serviceID     uint32
 		userAddress   string
+		shouldErr     bool
 		expFound      bool
 		expDelegation types.Delegation
 		check         func(ctx sdk.Context)
@@ -430,6 +433,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetServiceDelegation() {
 			name:        "not found delegation returns false",
 			serviceID:   1,
 			userAddress: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			shouldErr:   false,
 			expFound:    false,
 		},
 		{
@@ -444,6 +448,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetServiceDelegation() {
 			},
 			serviceID:   1,
 			userAddress: "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			shouldErr:   false,
 			expFound:    true,
 			expDelegation: types.NewServiceDelegation(
 				1,
@@ -464,12 +469,17 @@ func (suite *KeeperTestSuite) TestKeeper_GetServiceDelegation() {
 				tc.store(ctx)
 			}
 
-			delegation, found := suite.k.GetServiceDelegation(ctx, tc.serviceID, tc.userAddress)
-			if !tc.expFound {
-				suite.Require().False(found)
+			delegation, found, err := suite.k.GetServiceDelegation(ctx, tc.serviceID, tc.userAddress)
+			if tc.shouldErr {
+				suite.Require().Error(err)
 			} else {
-				suite.Require().True(found)
-				suite.Require().Equal(tc.expDelegation, delegation)
+				suite.Require().NoError(err)
+				if !tc.expFound {
+					suite.Require().False(found)
+				} else {
+					suite.Require().True(found)
+					suite.Require().Equal(tc.expDelegation, delegation)
+				}
 			}
 
 			if tc.check != nil {
@@ -723,7 +733,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 				}, service)
 
 				// Make sure the delegation exists
-				delegation, found := suite.k.GetServiceDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				delegation, found, err := suite.k.GetServiceDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewServiceDelegation(
 					1,
@@ -811,7 +822,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 				}, service)
 
 				// Make sure the delegation has been updated properly
-				delegation, found := suite.k.GetServiceDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				delegation, found, err := suite.k.GetServiceDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewServiceDelegation(
 					1,
@@ -918,7 +930,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 				}, service)
 
 				// Make sure the delegation has been updated properly
-				delegation, found := suite.k.GetServiceDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				delegation, found, err := suite.k.GetServiceDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewServiceDelegation(
 					1,

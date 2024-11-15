@@ -6,7 +6,6 @@ import (
 	"cosmossdk.io/collections"
 	corestoretypes "cosmossdk.io/core/store"
 	"cosmossdk.io/log"
-	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -14,7 +13,6 @@ import (
 )
 
 type Keeper struct {
-	storeKey     storetypes.StoreKey
 	storeService corestoretypes.KVStoreService
 	cdc          codec.BinaryCodec
 	hooks        types.OperatorsHooks
@@ -36,7 +34,6 @@ type Keeper struct {
 
 func NewKeeper(
 	cdc codec.BinaryCodec,
-	storeKey storetypes.StoreKey,
 	storeService corestoretypes.KVStoreService,
 	accountKeeper types.AccountKeeper,
 	poolKeeper types.CommunityPoolKeeper,
@@ -45,7 +42,6 @@ func NewKeeper(
 	sb := collections.NewSchemaBuilder(storeService)
 
 	k := &Keeper{
-		storeKey:      storeKey,
 		storeService:  storeService,
 		cdc:           cdc,
 		authority:     authority,

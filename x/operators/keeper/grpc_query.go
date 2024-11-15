@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"cosmossdk.io/store/prefix"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/runtime"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -16,7 +16,11 @@ var _ types.QueryServer = &Keeper{}
 
 // Operator implements the Query/Operator gRPC method
 func (k *Keeper) Operator(ctx context.Context, request *types.QueryOperatorRequest) (*types.QueryOperatorResponse, error) {
-	operator, found := k.GetOperator(ctx, request.OperatorId)
+	operator, found, err := k.GetOperator(ctx, request.OperatorId)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
 	if !found {
 		return nil, status.Error(codes.NotFound, "operator not found")
 	}
@@ -26,10 +30,8 @@ func (k *Keeper) Operator(ctx context.Context, request *types.QueryOperatorReque
 
 // Operators implements the Query/Operators gRPC method
 func (k *Keeper) Operators(ctx context.Context, request *types.QueryOperatorsRequest) (*types.QueryOperatorsResponse, error) {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-
-	store := sdkCtx.KVStore(k.storeKey)
-	operatorsStore := prefix.NewStore(store, types.OperatorPrefix)
+	store := k.storeService.OpenKVStore(ctx)
+	operatorsStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.OperatorPrefix)
 
 	var operators []types.Operator
 	pageRes, err := query.Paginate(operatorsStore, request.Pagination, func(key []byte, value []byte) error {
@@ -52,7 +54,11 @@ func (k *Keeper) Operators(ctx context.Context, request *types.QueryOperatorsReq
 }
 
 func (k *Keeper) OperatorParams(ctx context.Context, request *types.QueryOperatorParamsRequest) (*types.QueryOperatorParamsResponse, error) {
-	_, found := k.GetOperator(ctx, request.OperatorId)
+	_, found, err := k.GetOperator(ctx, request.OperatorId)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
 	if !found {
 		return nil, types.ErrOperatorNotFound
 	}

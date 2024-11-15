@@ -15,8 +15,7 @@ const (
 var (
 	ParamsKey = collections.NewPrefix(0x01)
 
-	InsuranceFundKey = collections.NewPrefix(0x10)
-
+	InsuranceFundKey  = collections.NewPrefix(0x10)
 	BurnCoinsQueueKey = collections.NewPrefix(0x20)
 )
 

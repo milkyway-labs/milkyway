@@ -24,6 +24,12 @@ func (k *Keeper) GetNextOperatorID(ctx context.Context) (operatorID uint32, err 
 	if err != nil {
 		return 0, err
 	}
+
+	// If the next operator ID is 0, we need to increment it
+	if nextOperatorID == 0 {
+		return k.GetNextOperatorID(ctx)
+	}
+
 	return uint32(nextOperatorID), nil
 }
 
@@ -185,11 +191,9 @@ func (k *Keeper) DeleteOperatorParams(ctx context.Context, operatorID uint32) er
 // --------------------------------------------------------------------------------------------------------------------
 
 // setOperatorAsInactivating sets the operator as inactivating in the KVStore
-func (k *Keeper) setOperatorAsInactivating(ctx context.Context, operatorID uint32, endTime time.Time) {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-
-	store := sdkCtx.KVStore(k.storeKey)
-	store.Set(types.InactivatingOperatorQueueKey(operatorID, endTime), types.GetOperatorIDBytes(operatorID))
+func (k *Keeper) setOperatorAsInactivating(ctx context.Context, operatorID uint32, endTime time.Time) error {
+	store := k.storeService.OpenKVStore(ctx)
+	return store.Set(types.InactivatingOperatorQueueKey(operatorID, endTime), types.GetOperatorIDBytes(operatorID))
 }
 
 // insertIntoInactivatingQueue inserts the operator into the inactivating queue
@@ -202,15 +206,12 @@ func (k *Keeper) insertIntoInactivatingQueue(ctx context.Context, operator types
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
 	endTime := sdkCtx.BlockTime().Add(params.DeactivationTime)
-	k.setOperatorAsInactivating(ctx, operator.ID, endTime)
-
-	return nil
+	return k.setOperatorAsInactivating(ctx, operator.ID, endTime)
 }
 
 // RemoveFromInactivatingQueue removes the operator from the inactivating queue
 func (k *Keeper) removeFromInactivatingQueue(ctx context.Context, operatorID uint32) error {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	store := sdkCtx.KVStore(k.storeKey)
+	store := k.storeService.OpenKVStore(ctx)
 
 	// Find the inactivating time for the operator
 	var inactivatingTime time.Time
@@ -228,7 +229,5 @@ func (k *Keeper) removeFromInactivatingQueue(ctx context.Context, operatorID uin
 	}
 
 	// Remove the operator from the inactivating queue
-	store.Delete(types.InactivatingOperatorQueueKey(operatorID, inactivatingTime))
-
-	return nil
+	return store.Delete(types.InactivatingOperatorQueueKey(operatorID, inactivatingTime))
 }

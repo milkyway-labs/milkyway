@@ -1,7 +1,9 @@
 package v2
 
 import (
+	corestoretypes "cosmossdk.io/core/store"
 	storetypes "cosmossdk.io/store/types"
+	"github.com/cosmos/cosmos-sdk/runtime"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -11,18 +13,18 @@ import (
 
 func Migrate1To2(
 	ctx sdk.Context,
-	storeKey storetypes.StoreKey,
+	storeService corestoretypes.KVStoreService,
 	cdc codec.Codec,
 	restakingKeeper RestakingKeeper,
 	operatorsKeeper OperatorsKeeper,
 	servicesKeeper ServicesKeeper,
 ) error {
-	err := migrateOperatorParams(ctx, storeKey, cdc, restakingKeeper, operatorsKeeper)
+	err := migrateOperatorParams(ctx, storeService, cdc, restakingKeeper, operatorsKeeper)
 	if err != nil {
 		return err
 	}
 
-	err = migrateServiceParams(ctx, storeKey, cdc, restakingKeeper, servicesKeeper)
+	err = migrateServiceParams(ctx, storeService, cdc, restakingKeeper, servicesKeeper)
 	if err != nil {
 		return err
 	}
@@ -34,13 +36,14 @@ func Migrate1To2(
 // restaking module to the operators module
 func migrateOperatorParams(
 	ctx sdk.Context,
-	storeKey storetypes.StoreKey,
+	storeService corestoretypes.KVStoreService,
 	cdc codec.Codec,
 	restakingKeeper RestakingKeeper,
 	operatorsKeeper OperatorsKeeper,
 ) error {
-	store := ctx.KVStore(storeKey)
-	iterator := storetypes.KVStorePrefixIterator(store, OperatorParamsPrefix)
+	store := storeService.OpenKVStore(ctx)
+
+	iterator := storetypes.KVStorePrefixIterator(runtime.KVStoreAdapter(store), OperatorParamsPrefix)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
@@ -55,7 +58,11 @@ func migrateOperatorParams(
 		}
 
 		// Get the operator from the operators keeper
-		_, found := operatorsKeeper.GetOperator(ctx, operatorID)
+		_, found, err := operatorsKeeper.GetOperator(ctx, operatorID)
+		if err != nil {
+			return err
+		}
+
 		if found {
 			// Update the operator params with the params retrieved from the
 			// restaking module
@@ -76,7 +83,10 @@ func migrateOperatorParams(
 		}
 
 		// Delete the params from the store
-		store.Delete(iterator.Key())
+		err = store.Delete(iterator.Key())
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -85,13 +95,14 @@ func migrateOperatorParams(
 // moving the data contained inside the LegacyServiceParams to the restaking module
 func migrateServiceParams(
 	ctx sdk.Context,
-	storeKey storetypes.StoreKey,
+	storeService corestoretypes.KVStoreService,
 	cdc codec.Codec,
 	restakingKeeper RestakingKeeper,
 	servicesKeeper ServicesKeeper,
 ) error {
-	store := ctx.KVStore(storeKey)
-	iterator := storetypes.KVStorePrefixIterator(store, ServiceParamsPrefix)
+	store := storeService.OpenKVStore(ctx)
+
+	iterator := storetypes.KVStorePrefixIterator(runtime.KVStoreAdapter(store), ServiceParamsPrefix)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
@@ -127,7 +138,10 @@ func migrateServiceParams(
 		}
 
 		// Delete the data after migration
-		store.Delete(iterator.Key())
+		err = store.Delete(iterator.Key())
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

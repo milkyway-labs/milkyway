@@ -3,8 +3,6 @@ package keeper
 import (
 	"context"
 
-	"cosmossdk.io/store/prefix"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -33,24 +31,14 @@ func (k *Keeper) Service(ctx context.Context, request *types.QueryServiceRequest
 }
 
 // Services implements the Query/Services gRPC method
-func (k *Keeper) Services(goCtx context.Context, request *types.QueryServicesRequest) (*types.QueryServicesResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	store := ctx.KVStore(k.storeKey)
-	servicesStore := prefix.NewStore(store, types.ServicePrefix)
-
-	var services []types.Service
-	pageRes, err := query.Paginate(servicesStore, request.Pagination, func(key []byte, value []byte) error {
-		var service types.Service
-		if err := k.cdc.Unmarshal(value, &service); err != nil {
-			return status.Error(codes.Internal, err.Error())
-		}
-
-		services = append(services, service)
-		return nil
-	})
+func (k *Keeper) Services(ctx context.Context, request *types.QueryServicesRequest) (*types.QueryServicesResponse, error) {
+	services, pageRes, err := query.CollectionPaginate(ctx, k.services, request.Pagination,
+		func(key uint32, value types.Service) (types.Service, error) {
+			return value, nil
+		},
+	)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	return &types.QueryServicesResponse{

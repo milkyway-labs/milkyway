@@ -22,6 +22,12 @@ func (k *Keeper) GetNextPoolID(ctx context.Context) (poolID uint32, err error) {
 	if err != nil {
 		return 0, errors.Wrap(err, "failed to get next pool ID")
 	}
+
+	// If the next pool ID is 0, we need to increment it to 1
+	if nextPoolID == 0 {
+		return k.GetNextPoolID(ctx)
+	}
+
 	return uint32(nextPoolID), nil
 }
 

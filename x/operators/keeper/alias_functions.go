@@ -6,6 +6,7 @@ import (
 	"time"
 
 	storetypes "cosmossdk.io/store/types"
+	"github.com/cosmos/cosmos-sdk/runtime"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -62,7 +63,11 @@ func (k *Keeper) GetOperators(ctx context.Context) ([]types.Operator, error) {
 func (k *Keeper) IterateInactivatingOperatorQueue(ctx context.Context, endTime time.Time, fn func(operator types.Operator) (stop bool, err error)) error {
 	return k.iterateInactivatingOperatorsKeys(ctx, endTime, func(key, value []byte) (stop bool, err error) {
 		operatorID, _ := types.SplitInactivatingOperatorQueueKey(key)
-		operator, found := k.GetOperator(ctx, operatorID)
+		operator, found, err := k.GetOperator(ctx, operatorID)
+		if err != nil {
+			return true, err
+		}
+
 		if !found {
 			return true, fmt.Errorf("operator %d does not exist", operatorID)
 		}
@@ -75,14 +80,17 @@ func (k *Keeper) IterateInactivatingOperatorQueue(ctx context.Context, endTime t
 // by the given time, and calls the given function.
 // If endTime is zero it iterates over all the keys.
 func (k *Keeper) iterateInactivatingOperatorsKeys(ctx context.Context, endTime time.Time, fn func(key, value []byte) (stop bool, err error)) error {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	store := sdkCtx.KVStore(k.storeKey)
+	store := k.storeService.OpenKVStore(ctx)
 
 	var iterator storetypes.Iterator
 	if endTime.IsZero() {
-		iterator = storetypes.KVStorePrefixIterator(store, types.InactivatingOperatorQueuePrefix)
+		iterator = storetypes.KVStorePrefixIterator(runtime.KVStoreAdapter(store), types.InactivatingOperatorQueuePrefix)
 	} else {
-		iterator = store.Iterator(types.InactivatingOperatorQueuePrefix, storetypes.PrefixEndBytes(types.InactivatingOperatorByTime(endTime)))
+		storeIterator, err := store.Iterator(types.InactivatingOperatorQueuePrefix, storetypes.PrefixEndBytes(types.InactivatingOperatorByTime(endTime)))
+		if err != nil {
+			return err
+		}
+		iterator = storeIterator
 	}
 	defer iterator.Close()
 

@@ -43,7 +43,7 @@ func AccountsBalancesInvariants(k *Keeper) sdk.Invariant {
 		// Get all the pools balances and tokens
 		poolsBalances := sdk.NewCoins()
 		poolsTokens := sdk.NewCoins()
-		err := k.poolsKeeper.IteratePools(ctx, func(pool poolstypes.Pool) (stop bool, errr error) {
+		err := k.poolsKeeper.IteratePools(ctx, func(pool poolstypes.Pool) (stop bool, err error) {
 			poolAddress, err := sdk.AccAddressFromBech32(pool.GetAddress())
 			if err != nil {
 				panic(err)
@@ -63,10 +63,10 @@ func AccountsBalancesInvariants(k *Keeper) sdk.Invariant {
 		// Get all the operators balances and tokens
 		operatorsBalances := sdk.NewCoins()
 		operatorsTokens := sdk.NewCoins()
-		k.operatorsKeeper.IterateOperators(ctx, func(operator operatorstypes.Operator) (stop bool) {
+		err = k.operatorsKeeper.IterateOperators(ctx, func(operator operatorstypes.Operator) (stop bool, err error) {
 			operatorAddress, err := sdk.AccAddressFromBech32(operator.GetAddress())
 			if err != nil {
-				panic(err)
+				return true, err
 			}
 
 			operatorBalance := k.bankKeeper.GetAllBalances(ctx, operatorAddress)
@@ -74,8 +74,11 @@ func AccountsBalancesInvariants(k *Keeper) sdk.Invariant {
 
 			operatorsTokens = operatorsTokens.Add(operator.Tokens...)
 
-			return false
+			return false, nil
 		})
+		if err != nil {
+			panic(err)
+		}
 
 		// Get all the services balances and tokens
 		servicesBalances := sdk.NewCoins()
@@ -122,7 +125,12 @@ func PositivePoolsDelegationsInvariant(k *Keeper) sdk.Invariant {
 		var msg string
 		var count int
 
-		for _, delegation := range k.GetAllPoolDelegations(ctx) {
+		poolDelegations, err := k.GetAllPoolDelegations(ctx)
+		if err != nil {
+			panic(err)
+		}
+
+		for _, delegation := range poolDelegations {
 			if delegation.Shares.IsAnyNegative() {
 				count++
 				msg += fmt.Sprintf("pool delegation with negative shares: %v\n", delegation)
@@ -160,7 +168,12 @@ func PoolsDelegatorsSharesInvariant(k *Keeper) sdk.Invariant {
 		}
 
 		// Iterate through all the pool delegations to calculate the total delegators shares for each pool
-		for _, delegation := range k.GetAllPoolDelegations(ctx) {
+		poolDelegations, err := k.GetAllPoolDelegations(ctx)
+		if err != nil {
+			panic(err)
+		}
+
+		for _, delegation := range poolDelegations {
 			if _, ok := poolsDelegatorsShares[delegation.TargetID]; !ok {
 				poolsDelegatorsShares[delegation.TargetID] = sdk.NewDecCoins()
 			}
@@ -196,7 +209,12 @@ func PositiveOperatorsDelegationsInvariant(k *Keeper) sdk.Invariant {
 		var msg string
 		var count int
 
-		for _, delegation := range k.GetAllOperatorDelegations(ctx) {
+		operatorDelegations, err := k.GetAllOperatorDelegations(ctx)
+		if err != nil {
+			panic(err)
+		}
+
+		for _, delegation := range operatorDelegations {
 			if delegation.Shares.IsAnyNegative() {
 				count++
 				msg += fmt.Sprintf("operator delegation with negative shares: %v\n", delegation)
@@ -223,13 +241,23 @@ func OperatorsDelegatorsSharesInvariant(k *Keeper) sdk.Invariant {
 		var broken bool
 
 		// Initialize a map: operator id -> its delegators shares
+		operators, err := k.operatorsKeeper.GetOperators(ctx)
+		if err != nil {
+			panic(err)
+		}
+
 		operatorsDelegatorsShares := map[uint32]sdk.DecCoins{}
-		for _, operator := range k.operatorsKeeper.GetOperators(ctx) {
+		for _, operator := range operators {
 			operatorsDelegatorsShares[operator.ID] = sdk.NewDecCoins()
 		}
 
 		// Iterate through all the operator delegations to calculate the total delegators shares for each operator
-		for _, delegation := range k.GetAllOperatorDelegations(ctx) {
+		operatorDelegations, err := k.GetAllOperatorDelegations(ctx)
+		if err != nil {
+			panic(err)
+		}
+
+		for _, delegation := range operatorDelegations {
 			if _, ok := operatorsDelegatorsShares[delegation.TargetID]; !ok {
 				operatorsDelegatorsShares[delegation.TargetID] = sdk.NewDecCoins()
 			}
@@ -238,7 +266,11 @@ func OperatorsDelegatorsSharesInvariant(k *Keeper) sdk.Invariant {
 		}
 
 		for operatorID, delegatorsShares := range operatorsDelegatorsShares {
-			operator, found := k.operatorsKeeper.GetOperator(ctx, operatorID)
+			operator, found, err := k.operatorsKeeper.GetOperator(ctx, operatorID)
+			if err != nil {
+				panic(err)
+			}
+
 			if !found {
 				panic(fmt.Errorf("operator with id %d not found", operatorID))
 			}
@@ -260,7 +292,12 @@ func PositiveServicesDelegationsInvariant(k *Keeper) sdk.Invariant {
 		var msg string
 		var count int
 
-		for _, delegation := range k.GetAllServiceDelegations(ctx) {
+		serviceDelegations, err := k.GetAllServiceDelegations(ctx)
+		if err != nil {
+			panic(err)
+		}
+
+		for _, delegation := range serviceDelegations {
 			if delegation.Shares.IsAnyNegative() {
 				count++
 				msg += fmt.Sprintf("service delegation with negative shares: %v\n", delegation)
@@ -297,7 +334,12 @@ func ServicesDelegatorsSharesInvariant(k *Keeper) sdk.Invariant {
 		}
 
 		// Iterate through all the service delegations to calculate the total delegators shares for each service
-		for _, delegation := range k.GetAllServiceDelegations(ctx) {
+		serviceDelegations, err := k.GetAllServiceDelegations(ctx)
+		if err != nil {
+			panic(err)
+		}
+
+		for _, delegation := range serviceDelegations {
 			if _, ok := servicesDelegatorsShares[delegation.TargetID]; !ok {
 				servicesDelegatorsShares[delegation.TargetID] = sdk.NewDecCoins()
 			}
@@ -332,7 +374,11 @@ func AllowedOperatorsExistInvariant(k *Keeper) sdk.Invariant {
 		// Iterate over all the services joined by operators
 		var notFoundOperatorsIDs []uint32
 		err := k.IterateAllServicesAllowedOperators(ctx, func(serviceID uint32, operatorID uint32) (stop bool, err error) {
-			_, found := k.operatorsKeeper.GetOperator(ctx, serviceID)
+			_, found, err := k.operatorsKeeper.GetOperator(ctx, serviceID)
+			if err != nil {
+				return true, err
+			}
+
 			if !found {
 				notFoundOperatorsIDs = append(notFoundOperatorsIDs, operatorID)
 			}

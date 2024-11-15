@@ -1,34 +1,33 @@
 package types
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"context"
 )
 
 type RestakingHooks interface {
 	PoolRestakingHooks
 	OperatorRestakingHooks
 	ServiceRestakingHooks
-	AfterUnbondingInitiated(ctx sdk.Context, unbondingDelegationID uint64) error
-	AfterUserPreferencesModified(ctx sdk.Context, userAddress string, oldPreferences, newPreferences UserPreferences) error
+	AfterUnbondingInitiated(ctx context.Context, unbondingDelegationID uint64) error
 }
 
 type PoolRestakingHooks interface {
-	BeforePoolDelegationCreated(ctx sdk.Context, poolID uint32, delegator string) error
-	BeforePoolDelegationSharesModified(ctx sdk.Context, poolID uint32, delegator string) error
-	AfterPoolDelegationModified(ctx sdk.Context, poolID uint32, delegator string) error
-	BeforePoolDelegationRemoved(ctx sdk.Context, poolID uint32, delegator string) error
+	BeforePoolDelegationCreated(ctx context.Context, poolID uint32, delegator string) error
+	BeforePoolDelegationSharesModified(ctx context.Context, poolID uint32, delegator string) error
+	AfterPoolDelegationModified(ctx context.Context, poolID uint32, delegator string) error
+	BeforePoolDelegationRemoved(ctx context.Context, poolID uint32, delegator string) error
 }
 
 type OperatorRestakingHooks interface {
-	BeforeOperatorDelegationCreated(ctx sdk.Context, operatorID uint32, delegator string) error
-	BeforeOperatorDelegationSharesModified(ctx sdk.Context, operatorID uint32, delegator string) error
-	AfterOperatorDelegationModified(ctx sdk.Context, operatorID uint32, delegator string) error
-	BeforeOperatorDelegationRemoved(ctx sdk.Context, operatorID uint32, delegator string) error
+	BeforeOperatorDelegationCreated(ctx context.Context, operatorID uint32, delegator string) error
+	BeforeOperatorDelegationSharesModified(ctx context.Context, operatorID uint32, delegator string) error
+	AfterOperatorDelegationModified(ctx context.Context, operatorID uint32, delegator string) error
+	BeforeOperatorDelegationRemoved(ctx context.Context, operatorID uint32, delegator string) error
 }
 
 type ServiceRestakingHooks interface {
-	BeforeServiceDelegationCreated(ctx sdk.Context, serviceID uint32, delegator string) error
-	BeforeServiceDelegationSharesModified(ctx sdk.Context, serviceID uint32, delegator string) error
-	AfterServiceDelegationModified(ctx sdk.Context, serviceID uint32, delegator string) error
-	BeforeServiceDelegationRemoved(ctx sdk.Context, serviceID uint32, delegator string) error
+	BeforeServiceDelegationCreated(ctx context.Context, serviceID uint32, delegator string) error
+	BeforeServiceDelegationSharesModified(ctx context.Context, serviceID uint32, delegator string) error
+	AfterServiceDelegationModified(ctx context.Context, serviceID uint32, delegator string) error
+	BeforeServiceDelegationRemoved(ctx context.Context, serviceID uint32, delegator string) error
 }

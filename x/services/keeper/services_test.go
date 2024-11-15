@@ -20,9 +20,9 @@ func (suite *KeeperTestSuite) TestKeeper_SetNextServiceID() {
 			id:        1,
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				store := ctx.KVStore(suite.storeKey)
-				serviceIDBz := store.Get(types.NextServiceIDKey)
-				suite.Require().Equal(uint32(1), types.GetServiceIDFromBytes(serviceIDBz))
+				nextServiceID, err := suite.k.GetNextServiceID(ctx)
+				suite.Require().NoError(err)
+				suite.Require().EqualValues(1, nextServiceID)
 			},
 		},
 		{
@@ -34,9 +34,9 @@ func (suite *KeeperTestSuite) TestKeeper_SetNextServiceID() {
 			id:        2,
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				store := ctx.KVStore(suite.storeKey)
-				serviceIDBz := store.Get(types.NextServiceIDKey)
-				suite.Require().Equal(uint32(2), types.GetServiceIDFromBytes(serviceIDBz))
+				nextServiceID, err := suite.k.GetNextServiceID(ctx)
+				suite.Require().NoError(err)
+				suite.Require().EqualValues(2, nextServiceID)
 			},
 		},
 	}

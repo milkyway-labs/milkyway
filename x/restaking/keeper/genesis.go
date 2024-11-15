@@ -23,7 +23,22 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		panic(err)
 	}
 
+	delegations, err := k.GetAllDelegations(ctx)
+	if err != nil {
+		panic(err)
+	}
+
+	unbondingDelegations, err := k.GetAllUnbondingDelegations(ctx)
+	if err != nil {
+		panic(err)
+	}
+
 	preferences, err := k.GetUserPreferencesEntries(ctx)
+	if err != nil {
+		panic(err)
+	}
+
+	params, err := k.GetParams(ctx)
 	if err != nil {
 		panic(err)
 	}
@@ -32,21 +47,21 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		operatorsJoinedServices,
 		servicesAllowedOperators,
 		servicesSecuringPools,
-		k.GetAllDelegations(ctx),
-		k.GetAllUnbondingDelegations(ctx),
+		delegations,
+		unbondingDelegations,
 		preferences,
-		k.GetParams(ctx),
+		params,
 	)
 }
 
 // InitGenesis initializes the genesis store using the provided data
-func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
+func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) error {
 	// Store the services joined by the operators
 	for _, record := range data.OperatorsJoinedServices {
 		for _, serviceID := range record.ServiceIDs {
 			err := k.AddServiceToOperatorJoinedServices(ctx, record.OperatorID, serviceID)
 			if err != nil {
-				panic(err)
+				return err
 			}
 		}
 	}
@@ -56,7 +71,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
 		for _, operatorID := range record.OperatorIDs {
 			err := k.AddOperatorToServiceAllowList(ctx, record.ServiceID, operatorID)
 			if err != nil {
-				panic(err)
+				return err
 			}
 		}
 	}
@@ -66,7 +81,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
 		for _, poolID := range record.PoolIDs {
 			err := k.AddPoolToServiceSecuringPools(ctx, record.ServiceID, poolID)
 			if err != nil {
-				panic(err)
+				return err
 			}
 		}
 	}
@@ -75,7 +90,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
 	for _, delegation := range data.Delegations {
 		err := k.SetDelegation(ctx, delegation)
 		if err != nil {
-			panic(err)
+			return err
 		}
 	}
 
@@ -83,11 +98,14 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
 	for _, ubd := range data.UnbondingDelegations {
 		_, err := k.SetUnbondingDelegation(ctx, ubd)
 		if err != nil {
-			panic(err)
+			return err
 		}
 
 		for _, entry := range ubd.Entries {
-			k.InsertUBDQueue(ctx, ubd, entry.CompletionTime)
+			err = k.InsertUBDQueue(ctx, ubd, entry.CompletionTime)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
@@ -95,10 +113,10 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) {
 	for _, entry := range data.UsersPreferences {
 		err := k.SetUserPreferences(ctx, entry.UserAddress, entry.Preferences)
 		if err != nil {
-			panic(err)
+			return err
 		}
 	}
 
 	// Store the params
-	k.SetParams(ctx, data.Params)
+	return k.SetParams(ctx, data.Params)
 }

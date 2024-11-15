@@ -75,13 +75,11 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 
 	data.PoolsKeeper = poolskeeper.NewKeeper(
 		data.Cdc,
-		data.Keys[poolstypes.StoreKey],
 		runtime.NewKVStoreService(data.Keys[poolstypes.StoreKey]),
 		data.AccountKeeper,
 	)
 	data.OperatorsKeeper = operatorskeeper.NewKeeper(
 		data.Cdc,
-		data.Keys[operatorstypes.StoreKey],
 		runtime.NewKVStoreService(data.Keys[operatorstypes.StoreKey]),
 		data.AccountKeeper,
 		data.DistributionKeeper,
@@ -89,7 +87,6 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	)
 	data.ServicesKeeper = serviceskeeper.NewKeeper(
 		data.Cdc,
-		data.Keys[servicestypes.StoreKey],
 		runtime.NewKVStoreService(data.Keys[servicestypes.StoreKey]),
 		data.AccountKeeper,
 		data.DistributionKeeper,
@@ -97,7 +94,6 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	)
 	data.RestakingKeeper = restakingkeeper.NewKeeper(
 		data.Cdc,
-		data.Keys[restakingtypes.StoreKey],
 		runtime.NewKVStoreService(data.Keys[restakingtypes.StoreKey]),
 		data.AccountKeeper,
 		data.BankKeeper,

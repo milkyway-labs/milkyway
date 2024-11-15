@@ -93,7 +93,11 @@ func (k msgServer) RegisterOperator(ctx context.Context, msg *types.MsgRegisterO
 // UpdateOperator defines the rpc method for Msg/UpdateOperator
 func (k msgServer) UpdateOperator(ctx context.Context, msg *types.MsgUpdateOperator) (*types.MsgUpdateOperatorResponse, error) {
 	// Check if the operator exists
-	operator, found := k.GetOperator(ctx, msg.OperatorID)
+	operator, found, err := k.GetOperator(ctx, msg.OperatorID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, types.ErrOperatorNotFound
 	}
@@ -107,7 +111,7 @@ func (k msgServer) UpdateOperator(ctx context.Context, msg *types.MsgUpdateOpera
 	updated := operator.Update(types.NewOperatorUpdate(msg.Moniker, msg.Website, msg.PictureURL))
 
 	// Validate the updated operator before storing
-	err := updated.Validate()
+	err = updated.Validate()
 	if err != nil {
 		return nil, errors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
@@ -132,7 +136,11 @@ func (k msgServer) UpdateOperator(ctx context.Context, msg *types.MsgUpdateOpera
 // DeactivateOperator defines the rpc method for Msg/DeactivateOperator
 func (k msgServer) DeactivateOperator(ctx context.Context, msg *types.MsgDeactivateOperator) (*types.MsgDeactivateOperatorResponse, error) {
 	// Check if the operator exists
-	operator, found := k.GetOperator(ctx, msg.OperatorID)
+	operator, found, err := k.GetOperator(ctx, msg.OperatorID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, types.ErrOperatorNotFound
 	}
@@ -162,7 +170,11 @@ func (k msgServer) DeactivateOperator(ctx context.Context, msg *types.MsgDeactiv
 // ReactivateOperator defines the rpc method for Msg/ReactivateOperator
 func (k msgServer) ReactivateOperator(ctx context.Context, msg *types.MsgReactivateOperator) (*types.MsgReactivateOperatorResponse, error) {
 	// Check if the operator exists
-	operator, found := k.GetOperator(ctx, msg.OperatorID)
+	operator, found, err := k.GetOperator(ctx, msg.OperatorID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, types.ErrOperatorNotFound
 	}
@@ -192,7 +204,11 @@ func (k msgServer) ReactivateOperator(ctx context.Context, msg *types.MsgReactiv
 // DeleteOperator defines the rpc method for Msg/DeleteOperator
 func (k msgServer) DeleteOperator(ctx context.Context, msg *types.MsgDeleteOperator) (*types.MsgDeleteOperatorResponse, error) {
 	// Check if the operator exists
-	operator, found := k.GetOperator(ctx, msg.OperatorID)
+	operator, found, err := k.GetOperator(ctx, msg.OperatorID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, types.ErrOperatorNotFound
 	}
@@ -222,7 +238,11 @@ func (k msgServer) DeleteOperator(ctx context.Context, msg *types.MsgDeleteOpera
 // TransferOperatorOwnership defines the rpc method for Msg/TransferOperatorOwnership
 func (k msgServer) TransferOperatorOwnership(ctx context.Context, msg *types.MsgTransferOperatorOwnership) (*types.MsgTransferOperatorOwnershipResponse, error) {
 	// Check if the operator exists
-	operator, found := k.GetOperator(ctx, msg.OperatorID)
+	operator, found, err := k.GetOperator(ctx, msg.OperatorID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, types.ErrOperatorNotFound
 	}
@@ -253,7 +273,11 @@ func (k msgServer) TransferOperatorOwnership(ctx context.Context, msg *types.Msg
 
 // SetOperatorParams defines the rpc method for Msg/SetOperatorParams
 func (k msgServer) SetOperatorParams(ctx context.Context, msg *types.MsgSetOperatorParams) (*types.MsgSetOperatorParamsResponse, error) {
-	operator, found := k.GetOperator(ctx, msg.OperatorID)
+	operator, found, err := k.GetOperator(ctx, msg.OperatorID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, types.ErrOperatorNotFound
 	}
@@ -269,7 +293,7 @@ func (k msgServer) SetOperatorParams(ctx context.Context, msg *types.MsgSetOpera
 	}
 
 	// Update the operator params
-	err := k.SaveOperatorParams(ctx, msg.OperatorID, msg.Params)
+	err = k.SaveOperatorParams(ctx, msg.OperatorID, msg.Params)
 	if err != nil {
 		return nil, err
 	}

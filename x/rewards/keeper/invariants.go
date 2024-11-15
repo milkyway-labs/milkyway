@@ -100,38 +100,49 @@ func CanWithdrawInvariant(k *Keeper) sdk.Invariant {
 		var remaining types.DecPools
 
 		poolDelegationAddrs := make(map[uint32][]sdk.AccAddress)
-		k.restakingKeeper.IterateAllPoolDelegations(ctx, func(del restakingtypes.Delegation) (stop bool) {
+		err := k.restakingKeeper.IterateAllPoolDelegations(ctx, func(del restakingtypes.Delegation) (stop bool, err error) {
 			delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(del.UserAddress)
 			if err != nil {
-				panic(err)
+				return true, err
 			}
-			poolID := del.TargetID
-			poolDelegationAddrs[poolID] = append(poolDelegationAddrs[poolID], delAddr)
-			return false
+
+			poolDelegationAddrs[del.TargetID] = append(poolDelegationAddrs[del.TargetID], delAddr)
+			return false, nil
 		})
+		if err != nil {
+			panic(err)
+		}
+
 		operatorDelegationAddrs := make(map[uint32][]sdk.AccAddress)
-		k.restakingKeeper.IterateAllOperatorDelegations(ctx, func(del restakingtypes.Delegation) (stop bool) {
+		err = k.restakingKeeper.IterateAllOperatorDelegations(ctx, func(del restakingtypes.Delegation) (stop bool, err error) {
 			delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(del.UserAddress)
 			if err != nil {
-				panic(err)
+				return true, err
 			}
-			operatorID := del.TargetID
-			operatorDelegationAddrs[operatorID] = append(operatorDelegationAddrs[operatorID], delAddr)
-			return false
+
+			operatorDelegationAddrs[del.TargetID] = append(operatorDelegationAddrs[del.TargetID], delAddr)
+			return false, nil
 		})
+		if err != nil {
+			panic(err)
+		}
+
 		serviceDelegationAddrs := make(map[uint32][]sdk.AccAddress)
-		k.restakingKeeper.IterateAllServiceDelegations(ctx, func(del restakingtypes.Delegation) (stop bool) {
+		err = k.restakingKeeper.IterateAllServiceDelegations(ctx, func(del restakingtypes.Delegation) (stop bool, err error) {
 			delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(del.UserAddress)
 			if err != nil {
-				panic(err)
+				return true, err
 			}
-			serviceID := del.TargetID
-			serviceDelegationAddrs[serviceID] = append(serviceDelegationAddrs[serviceID], delAddr)
-			return false
+
+			serviceDelegationAddrs[del.TargetID] = append(serviceDelegationAddrs[del.TargetID], delAddr)
+			return false, nil
 		})
+		if err != nil {
+			panic(err)
+		}
 
 		// iterate over all pools
-		err := k.poolsKeeper.IteratePools(ctx, func(pool poolstypes.Pool) (stop bool, err error) {
+		err = k.poolsKeeper.IteratePools(ctx, func(pool poolstypes.Pool) (stop bool, err error) {
 			target, err := k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_POOL, pool.ID)
 			if err != nil {
 				return true, err
@@ -167,7 +178,7 @@ func CanWithdrawInvariant(k *Keeper) sdk.Invariant {
 		}
 
 		// iterate over all operators
-		err := k.operatorsKeeper.IterateOperators(ctx, func(operator operatorstypes.Operator) (stop bool, err error) {
+		err = k.operatorsKeeper.IterateOperators(ctx, func(operator operatorstypes.Operator) (stop bool, err error) {
 			target, err := k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, operator.ID)
 			if err != nil {
 				return true, err
@@ -289,7 +300,7 @@ func checkReferencesCount[T any](
 	ctx sdk.Context,
 	delegationTargetType restakingtypes.DelegationType,
 	targetsIterator func(ctx context.Context, fn func(T) (bool, error)) error,
-	delegationsIterator func(ctx sdk.Context, fn func(restakingtypes.Delegation) bool),
+	delegationsIterator func(ctx context.Context, fn func(restakingtypes.Delegation) (bool, error)) error,
 	historicalRewardsCollection collections.Map[collections.Pair[uint32, uint64], types.HistoricalRewards],
 ) (msg string, broken bool) {
 
@@ -303,10 +314,13 @@ func checkReferencesCount[T any](
 	}
 
 	delegationsCount := uint64(0)
-	delegationsIterator(ctx, func(_ restakingtypes.Delegation) bool {
+	err = delegationsIterator(ctx, func(_ restakingtypes.Delegation) (bool, error) {
 		delegationsCount++
-		return false
+		return false, nil
 	})
+	if err != nil {
+		panic(err)
+	}
 
 	referencesCount := uint64(0)
 	err = historicalRewardsCollection.Walk(ctx, nil, func(key collections.Pair[uint32, uint64], value types.HistoricalRewards) (stop bool, err error) {

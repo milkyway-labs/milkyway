@@ -289,7 +289,8 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				Params: types.DefaultParams(),
 			},
 			check: func(ctx sdk.Context) {
-				operator1, found := suite.k.GetOperator(ctx, 1)
+				operator, found, err := suite.k.GetOperator(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
@@ -298,13 +299,14 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				), operator1)
+				), operator)
 
 				// Ensure that the operator has the default params
 				params, err := suite.k.GetOperatorParams(ctx, 1)
 				suite.Require().Equal(types.DefaultOperatorParams(), params)
 
-				operator2, found := suite.k.GetOperator(ctx, 2)
+				operator, found, err = suite.k.GetOperator(ctx, 2)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					2,
@@ -313,7 +315,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 					"https://inertia.zone",
 					"",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				), operator2)
+				), operator)
 
 				// Ensure that the operator has the default params
 				params, err = suite.k.GetOperatorParams(ctx, 2)

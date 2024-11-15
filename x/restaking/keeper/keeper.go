@@ -1,11 +1,12 @@
 package keeper
 
 import (
+	"context"
+
 	"cosmossdk.io/collections"
 	"cosmossdk.io/collections/indexes"
 	corestoretypes "cosmossdk.io/core/store"
 	"cosmossdk.io/log"
-	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -13,8 +14,8 @@ import (
 )
 
 type Keeper struct {
-	storeKey storetypes.StoreKey
-	cdc      codec.Codec
+	storeService corestoretypes.KVStoreService
+	cdc          codec.Codec
 
 	authority string
 
@@ -46,7 +47,6 @@ type Keeper struct {
 
 func NewKeeper(
 	cdc codec.Codec,
-	storeKey storetypes.StoreKey,
 	storeService corestoretypes.KVStoreService,
 	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
@@ -63,8 +63,8 @@ func NewKeeper(
 	sb := collections.NewSchemaBuilder(storeService)
 
 	k := &Keeper{
-		storeKey: storeKey,
-		cdc:      cdc,
+		cdc:          cdc,
+		storeService: storeService,
 
 		accountKeeper:   accountKeeper,
 		bankKeeper:      bankKeeper,
@@ -108,8 +108,9 @@ func NewKeeper(
 }
 
 // Logger returns a module-specific logger.
-func (k *Keeper) Logger(ctx sdk.Context) log.Logger {
-	return ctx.Logger().With("module", "x/"+types.ModuleName)
+func (k *Keeper) Logger(ctx context.Context) log.Logger {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	return sdkCtx.Logger().With("module", "x/"+types.ModuleName)
 }
 
 // SetHooks allows to set the reactions hooks

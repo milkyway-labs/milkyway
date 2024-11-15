@@ -3,8 +3,8 @@ package v2_test
 import (
 	"testing"
 
+	corestoretypes "cosmossdk.io/core/store"
 	sdkmath "cosmossdk.io/math"
-	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/suite"
@@ -26,9 +26,9 @@ func TestMigrationsTestSuite(t *testing.T) {
 type MigrationsTestSuite struct {
 	suite.Suite
 
-	ctx      sdk.Context
-	storeKey storetypes.StoreKey
-	cdc      codec.Codec
+	ctx          sdk.Context
+	storeService corestoretypes.KVStoreService
+	cdc          codec.Codec
 
 	restakingKeeper *restakingkeeper.Keeper
 	operatorsKeeper *operatorskeeper.Keeper
@@ -37,7 +37,7 @@ type MigrationsTestSuite struct {
 
 func (suite *MigrationsTestSuite) SetupTest() {
 	data := testutils.NewKeeperTestData(suite.T())
-	suite.storeKey = data.StoreKey
+	suite.storeService = data.StoreService
 	suite.ctx = data.Context
 	suite.cdc = data.Cdc
 
@@ -58,7 +58,7 @@ func (suite *MigrationsTestSuite) TestMigrateV1To2() {
 		{
 			name: "non existing operators have their params deleted",
 			setup: func(ctx sdk.Context) {
-				sdkStore := ctx.KVStore(suite.storeKey)
+				sdkStore := suite.storeService.OpenKVStore(ctx)
 
 				// Set the operator params
 				paramsBz, err := suite.cdc.Marshal(&v2.LegacyOperatorParams{
@@ -66,14 +66,16 @@ func (suite *MigrationsTestSuite) TestMigrateV1To2() {
 					JoinedServicesIDs: []uint32{1, 2, 3},
 				})
 				suite.Require().NoError(err)
-				sdkStore.Set(v2.OperatorParamsStoreKey(1), paramsBz)
+				err = sdkStore.Set(v2.OperatorParamsStoreKey(1), paramsBz)
+				suite.Require().NoError(err)
 
 				paramsBz, err = suite.cdc.Marshal(&v2.LegacyOperatorParams{
 					CommissionRate:    sdkmath.LegacyNewDec(200),
 					JoinedServicesIDs: []uint32{4, 5, 6},
 				})
 				suite.Require().NoError(err)
-				sdkStore.Set(v2.OperatorParamsStoreKey(2), paramsBz)
+				err = sdkStore.Set(v2.OperatorParamsStoreKey(2), paramsBz)
+				suite.Require().NoError(err)
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the params are deleted
@@ -94,7 +96,7 @@ func (suite *MigrationsTestSuite) TestMigrateV1To2() {
 		{
 			name: "existing operators params are migrated properly",
 			setup: func(ctx sdk.Context) {
-				sdkStore := ctx.KVStore(suite.storeKey)
+				sdkStore := suite.storeService.OpenKVStore(ctx)
 
 				// Store the operators
 				err := suite.operatorsKeeper.SaveOperator(ctx, operatorstypes.NewOperator(
@@ -117,14 +119,16 @@ func (suite *MigrationsTestSuite) TestMigrateV1To2() {
 					JoinedServicesIDs: []uint32{1, 2, 3},
 				})
 				suite.Require().NoError(err)
-				sdkStore.Set(v2.OperatorParamsStoreKey(1), paramsBz)
+				err = sdkStore.Set(v2.OperatorParamsStoreKey(1), paramsBz)
+				suite.Require().NoError(err)
 
 				paramsBz, err = suite.cdc.Marshal(&v2.LegacyOperatorParams{
 					CommissionRate:    sdkmath.LegacyNewDec(200),
 					JoinedServicesIDs: []uint32{4, 5, 6},
 				})
 				suite.Require().NoError(err)
-				sdkStore.Set(v2.OperatorParamsStoreKey(2), paramsBz)
+				err = sdkStore.Set(v2.OperatorParamsStoreKey(2), paramsBz)
+				suite.Require().NoError(err)
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the params are upgraded properly
@@ -152,22 +156,23 @@ func (suite *MigrationsTestSuite) TestMigrateV1To2() {
 		{
 			name: "non existing services have their params deleted",
 			setup: func(ctx sdk.Context) {
-				sdkStore := ctx.KVStore(suite.storeKey)
-
+				sdkStore := suite.storeService.OpenKVStore(ctx)
 				// Set the service params
 				paramsBz, err := suite.cdc.Marshal(&v2.LegacyServiceParams{
 					WhitelistedOperatorsIDs: []uint32{1, 2, 3},
 					WhitelistedPoolsIDs:     []uint32{4, 5, 6},
 				})
 				suite.Require().NoError(err)
-				sdkStore.Set(v2.ServiceParamsStoreKey(1), paramsBz)
+				err = sdkStore.Set(v2.ServiceParamsStoreKey(1), paramsBz)
+				suite.Require().NoError(err)
 
 				paramsBz, err = suite.cdc.Marshal(&v2.LegacyServiceParams{
 					WhitelistedOperatorsIDs: []uint32{7, 8, 9},
 					WhitelistedPoolsIDs:     []uint32{10, 11, 12},
 				})
 				suite.Require().NoError(err)
-				sdkStore.Set(v2.ServiceParamsStoreKey(2), paramsBz)
+				err = sdkStore.Set(v2.ServiceParamsStoreKey(2), paramsBz)
+				suite.Require().NoError(err)
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the list of whitelisted operators and pools has been moved to the restaking keeper
@@ -183,7 +188,7 @@ func (suite *MigrationsTestSuite) TestMigrateV1To2() {
 		{
 			name: "existing services params are migrated properly",
 			setup: func(ctx sdk.Context) {
-				sdkStore := ctx.KVStore(suite.storeKey)
+				sdkStore := suite.storeService.OpenKVStore(ctx)
 
 				// Store the services
 				err := suite.servicesKeeper.SaveService(ctx, servicestypes.NewService(
@@ -216,14 +221,16 @@ func (suite *MigrationsTestSuite) TestMigrateV1To2() {
 					WhitelistedPoolsIDs:     []uint32{4, 5, 6},
 				})
 				suite.Require().NoError(err)
-				sdkStore.Set(v2.ServiceParamsStoreKey(1), paramsBz)
+				err = sdkStore.Set(v2.ServiceParamsStoreKey(1), paramsBz)
+				suite.Require().NoError(err)
 
 				paramsBz, err = suite.cdc.Marshal(&v2.LegacyServiceParams{
 					WhitelistedOperatorsIDs: []uint32{7, 8, 9},
 					WhitelistedPoolsIDs:     []uint32{10, 11, 12},
 				})
 				suite.Require().NoError(err)
-				sdkStore.Set(v2.ServiceParamsStoreKey(2), paramsBz)
+				err = sdkStore.Set(v2.ServiceParamsStoreKey(2), paramsBz)
+				suite.Require().NoError(err)
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the params are upgraded properly
@@ -254,7 +261,7 @@ func (suite *MigrationsTestSuite) TestMigrateV1To2() {
 				tc.setup(ctx)
 			}
 
-			err := v2.Migrate1To2(ctx, suite.storeKey, suite.cdc, suite.restakingKeeper, suite.operatorsKeeper, suite.servicesKeeper)
+			err := v2.Migrate1To2(ctx, suite.storeService, suite.cdc, suite.restakingKeeper, suite.operatorsKeeper, suite.servicesKeeper)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {

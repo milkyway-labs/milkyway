@@ -76,11 +76,6 @@ func (suite *KeeperTestSuite) TestKeeper_CreateOrGetPoolByDenom() {
 		check     func(ctx sdk.Context)
 	}{
 		{
-			name:      "invalid next pool id returns error",
-			denom:     "umilk",
-			shouldErr: true,
-		},
-		{
 			name: "invalid pool returns error",
 			store: func(ctx sdk.Context) {
 				err := suite.k.SetNextPoolID(ctx, 1)

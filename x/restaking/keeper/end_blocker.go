@@ -11,7 +11,11 @@ import (
 // CompleteMatureUnbondingDelegations runs the endblocker logic for delegations
 func (k *Keeper) CompleteMatureUnbondingDelegations(ctx sdk.Context) error {
 	// Remove all mature unbonding delegations from the ubd queue.
-	matureUnbonds := k.DequeueAllMatureUBDQueue(ctx, ctx.BlockHeader().Time)
+	matureUnbonds, err := k.DequeueAllMatureUBDQueue(ctx, ctx.BlockHeader().Time)
+	if err != nil {
+		return err
+	}
+
 	for _, data := range matureUnbonds {
 
 		balances, err := k.CompleteUnbonding(ctx, data)

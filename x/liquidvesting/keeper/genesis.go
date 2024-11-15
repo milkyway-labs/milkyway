@@ -103,8 +103,13 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 		return fmt.Errorf("the liquid vesting module doesn't have the coins specified in the users' insurance fund")
 	}
 
+	unbondingDelegations, err := k.restakingKeeper.GetAllUnbondingDelegations(ctx)
+	if err != nil {
+		return err
+	}
+
 	undelegateAmounts := make(map[string]sdk.Coins)
-	for _, ud := range k.restakingKeeper.GetAllUnbondingDelegations(ctx) {
+	for _, ud := range unbondingDelegations {
 		balance, found := undelegateAmounts[ud.DelegatorAddress]
 		if !found {
 			balance = sdk.NewCoins()
@@ -127,7 +132,10 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 		}
 		// Update the undelegate amounts that can be considered for this user
 		undelegateAmounts[burnCoins.DelegatorAddress] = userUndelegateAmount.Sub(burnCoins.Amount...)
-		k.InsertBurnCoinsToUnbondingQueue(ctx, burnCoins)
+		err = k.InsertBurnCoinsToUnbondingQueue(ctx, burnCoins)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

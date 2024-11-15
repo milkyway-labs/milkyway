@@ -17,7 +17,10 @@ func MigrateStore(ctx sdk.Context, k ServicesKeeper, pk PoolsKeeper) error {
 // setAccreditedServices sets all the services that have been allowed to use pool-restaking as accredited.
 func setAccreditedServices(ctx sdk.Context, k ServicesKeeper, pk PoolsKeeper) error {
 	// Get the pool's params
-	poolsParams := pk.GetParams(ctx)
+	poolsParams, err := pk.GetParams(ctx)
+	if err != nil {
+		return err
+	}
 
 	// Iterate over all the services to update their accreditation status
 	return k.IterateServices(ctx, func(service servicestypes.Service) (stop bool, err error) {

@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"context"
 	"fmt"
 
 	"cosmossdk.io/collections"
@@ -22,7 +23,7 @@ func (k *Keeper) OperatorsHooks() operatorstypes.OperatorsHooks {
 // ------------------------------------------------------------------------------
 
 // AfterOperatorDeleted implements types.OperatorsHooks.
-func (o *OperatorsHooks) AfterOperatorDeleted(ctx sdk.Context, operatorID uint32) error {
+func (o *OperatorsHooks) AfterOperatorDeleted(ctx context.Context, operatorID uint32) error {
 	// After the operator has been deleted
 	// we remove the data that we keep in the x/restaking module that are linked
 	// to the operator.
@@ -55,10 +56,10 @@ func (o *OperatorsHooks) AfterOperatorDeleted(ctx sdk.Context, operatorID uint32
 	return nil
 }
 
-func (o *OperatorsHooks) removeOperatorFromServicesAllowList(ctx sdk.Context, operatorID uint32) error {
+func (o *OperatorsHooks) removeOperatorFromServicesAllowList(ctx context.Context, operatorID uint32) error {
 	// Get all the keys to remove
 	var toRemoveKeys []collections.Pair[uint32, uint32]
-	err := o.IterateAllServicesAllowedOperators(ctx, func(serviceID uint32, oID uint32) (stop bool, err error) {
+	err := o.IterateAllServicesAllowedOperators(sdk.UnwrapSDKContext(ctx), func(serviceID uint32, oID uint32) (stop bool, err error) {
 		if oID == operatorID {
 			toRemoveKeys = append(toRemoveKeys, collections.Join(serviceID, oID))
 		}
@@ -112,21 +113,21 @@ func (o *OperatorsHooks) removeOperatorFromServicesAllowList(ctx sdk.Context, op
 }
 
 // AfterOperatorInactivatingCompleted implements types.OperatorsHooks.
-func (o *OperatorsHooks) AfterOperatorInactivatingCompleted(ctx sdk.Context, operatorID uint32) error {
+func (o *OperatorsHooks) AfterOperatorInactivatingCompleted(ctx context.Context, operatorID uint32) error {
 	return nil
 }
 
 // AfterOperatorInactivatingStarted implements types.OperatorsHooks.
-func (o *OperatorsHooks) AfterOperatorInactivatingStarted(ctx sdk.Context, operatorID uint32) error {
+func (o *OperatorsHooks) AfterOperatorInactivatingStarted(ctx context.Context, operatorID uint32) error {
 	return nil
 }
 
 // AfterOperatorReactivated implements types.OperatorsHooks.
-func (o *OperatorsHooks) AfterOperatorReactivated(ctx sdk.Context, operatorID uint32) error {
+func (o *OperatorsHooks) AfterOperatorReactivated(ctx context.Context, operatorID uint32) error {
 	return nil
 }
 
 // AfterOperatorRegistered implements types.OperatorsHooks.
-func (o *OperatorsHooks) AfterOperatorRegistered(ctx sdk.Context, operatorID uint32) error {
+func (o *OperatorsHooks) AfterOperatorRegistered(ctx context.Context, operatorID uint32) error {
 	return nil
 }

@@ -1,15 +1,15 @@
 package keeper
 
 import (
+	"context"
 	"errors"
 
 	"cosmossdk.io/collections"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 )
 
-func (k *Keeper) SetParams(ctx sdk.Context, params types.Params) error {
+func (k *Keeper) SetParams(ctx context.Context, params types.Params) error {
 	err := params.Validate()
 	if err != nil {
 		return err
@@ -18,7 +18,7 @@ func (k *Keeper) SetParams(ctx sdk.Context, params types.Params) error {
 	return k.params.Set(ctx, params)
 }
 
-func (k *Keeper) GetParams(ctx sdk.Context) (types.Params, error) {
+func (k *Keeper) GetParams(ctx context.Context) (types.Params, error) {
 	params, err := k.params.Get(ctx)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {

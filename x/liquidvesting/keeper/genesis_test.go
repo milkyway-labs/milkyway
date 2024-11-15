@@ -293,7 +293,9 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 					NextPoolID: 2,
 					Pools:      []poolstypes.Pool{testPool},
 				}
-				suite.pk.InitGenesis(ctx, &poolsKeeperGenesis)
+
+				err = suite.pk.InitGenesis(ctx, &poolsKeeperGenesis)
+				suite.Assert().NoError(err)
 
 				// Init the restaking module
 				restakingKeeperGenesis := &restakingtypes.GenesisState{
@@ -316,7 +318,8 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 						),
 					},
 				}
-				suite.rk.InitGenesis(ctx, restakingKeeperGenesis)
+				err = suite.rk.InitGenesis(ctx, restakingKeeperGenesis)
+				suite.Assert().NoError(err)
 			},
 			genesis: types.NewGenesisState(
 				types.DefaultParams(),
@@ -378,7 +381,9 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 					NextPoolID: 2,
 					Pools:      []poolstypes.Pool{testPool},
 				}
-				suite.pk.InitGenesis(ctx, &poolsKeeperGenesis)
+
+				err = suite.pk.InitGenesis(ctx, &poolsKeeperGenesis)
+				suite.Assert().NoError(err)
 
 				// Init the restaking module
 				restakingKeeperGenesis := &restakingtypes.GenesisState{
@@ -401,7 +406,8 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 						),
 					},
 				}
-				suite.rk.InitGenesis(ctx, restakingKeeperGenesis)
+				err = suite.rk.InitGenesis(ctx, restakingKeeperGenesis)
+				suite.Assert().NoError(err)
 			},
 			genesis: types.NewGenesisState(
 				types.DefaultParams(),
@@ -450,7 +456,8 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 						),
 					},
 				}
-				suite.rk.InitGenesis(ctx, restakingKeeperGenesis)
+				err := suite.rk.InitGenesis(ctx, restakingKeeperGenesis)
+				suite.Assert().NoError(err)
 			},
 			genesis: types.NewGenesisState(
 				types.DefaultParams(),

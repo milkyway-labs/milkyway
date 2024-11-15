@@ -10,16 +10,22 @@ import (
 // undelegation completes.
 func (k *Keeper) CompleteBurnCoins(ctx sdk.Context) error {
 	// Remove all the information about the coins to burn.
-	coinsToBurn := k.DequeueAllBurnCoinsFromUnbondingQueue(ctx, ctx.BlockHeader().Time)
+	coinsToBurn, err := k.DequeueAllBurnCoinsFromUnbondingQueue(ctx, ctx.BlockHeader().Time)
+	if err != nil {
+		return err
+	}
+
 	for _, data := range coinsToBurn {
 		accAddr, err := sdk.AccAddressFromBech32(data.DelegatorAddress)
 		if err != nil {
 			return err
 		}
+
 		err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, accAddr, types.ModuleName, data.Amount)
 		if err != nil {
 			return err
 		}
+
 		err = k.bankKeeper.BurnCoins(ctx, types.ModuleName, data.Amount)
 		if err != nil {
 			return err

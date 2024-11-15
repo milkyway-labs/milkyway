@@ -91,7 +91,8 @@ func (suite *KeeperTestSuite) TestMsgServer_RegisterOperator() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the operator was stored
-				stored, found := suite.k.GetOperator(ctx, 2)
+				stored, found, err := suite.k.GetOperator(ctx, 2)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					2,
@@ -259,7 +260,8 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperator() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the operator was updated
-				stored, found := suite.k.GetOperator(ctx, 1)
+				stored, found, err := suite.k.GetOperator(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
@@ -419,7 +421,8 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the operator was updated
-				stored, found := suite.k.GetOperator(ctx, 1)
+				stored, found, err := suite.k.GetOperator(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
@@ -573,7 +576,8 @@ func (suite *KeeperTestSuite) TestMsgServer_ReactivateOperator() {
 				),
 			},
 			check: func(ctx sdk.Context) {
-				operator, found := suite.k.GetOperator(ctx, 1)
+				operator, found, err := suite.k.GetOperator(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
@@ -692,7 +696,8 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferOperatorOwnership() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the operator was updated
-				stored, found := suite.k.GetOperator(ctx, 1)
+				stored, found, err := suite.k.GetOperator(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
@@ -839,8 +844,10 @@ func (suite *KeeperTestSuite) TestMsgServer_DeleteOperator() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the operator was updated
-				_, found := suite.k.GetOperator(ctx, 1)
+				_, found, err := suite.k.GetOperator(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().False(found)
+
 				// Ensure the hook has been called
 				suite.Require().True(suite.hooks.CalledMap["AfterOperatorDeleted"])
 			},

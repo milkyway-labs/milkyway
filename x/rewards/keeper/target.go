@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"cosmossdk.io/errors"
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
@@ -26,7 +27,7 @@ func (k *Keeper) GetDelegationTarget(
 		if !found {
 			return nil, poolstypes.ErrPoolNotFound
 		}
-		return &pool, nil
+		return pool, nil
 	case restakingtypes.DELEGATION_TYPE_OPERATOR:
 		operator, found, err := k.operatorsKeeper.GetOperator(sdkCtx, targetID)
 		if err != nil {
@@ -35,7 +36,7 @@ func (k *Keeper) GetDelegationTarget(
 		if !found {
 			return nil, operatorstypes.ErrOperatorNotFound
 		}
-		return &operator, nil
+		return operator, nil
 	case restakingtypes.DELEGATION_TYPE_SERVICE:
 		service, found, err := k.servicesKeeper.GetService(sdkCtx, targetID)
 		if err != nil {
@@ -44,7 +45,7 @@ func (k *Keeper) GetDelegationTarget(
 		if !found {
 			return nil, servicestypes.ErrServiceNotFound
 		}
-		return &service, nil
+		return service, nil
 	default:
 		return nil, errors.Wrapf(restakingtypes.ErrInvalidDelegationType, "invalid delegation type: %s", delType)
 	}
@@ -53,19 +54,19 @@ func (k *Keeper) GetDelegationTarget(
 // initialize rewards for a new delegation target
 func (k *Keeper) initializeDelegationTarget(ctx context.Context, target restakingtypes.DelegationTarget) error {
 	// set initial historical rewards (period 0) with reference count of 1
-	err := k.SetHistoricalRewards(ctx, target, uint64(0), types.NewHistoricalRewards(types.ServicePools{}, 1))
+	err := k.SetHistoricalRewards(ctx, target, uint64(0), types.NewHistoricalRewards(types.DecPools{}, 1))
 	if err != nil {
 		return err
 	}
 
 	// set current rewards (starting at period 1)
-	err = k.SetCurrentRewards(ctx, target, types.NewCurrentRewards(types.ServicePools{}, 1))
+	err = k.SetCurrentRewards(ctx, target, types.NewCurrentRewards(types.DecPools{}, 1))
 	if err != nil {
 		return err
 	}
 
 	// set accumulated commission only if target is an operator
-	if _, ok := target.(*operatorstypes.Operator); ok {
+	if _, ok := target.(operatorstypes.Operator); ok {
 		err = k.OperatorAccumulatedCommissions.Set(ctx, target.GetID(), types.InitialAccumulatedCommission())
 		if err != nil {
 			return err
@@ -86,38 +87,20 @@ func (k *Keeper) IncrementDelegationTargetPeriod(ctx context.Context, target res
 	}
 
 	// calculate current ratio
-	var current types.ServicePools
+	var current types.DecPools
 
+	tokens := target.GetTokens()
 	communityFunding := types.DecPools{}
-	for _, reward := range rewards.Rewards {
-		var tokens sdk.DecCoins
-		if pool, ok := target.(*poolstypes.Pool); ok {
-			totalShares, err := k.GetPoolServiceTotalDelegatorShares(ctx, pool.ID, reward.ServiceID)
-			if err != nil {
-				return 0, err
-			}
-			tokens = pool.TokensFromSharesTruncated(totalShares)
+	for _, token := range tokens {
+		rewardCoins := rewards.Rewards.CoinsOf(token.Denom)
+		if token.IsZero() {
+			// can't calculate ratio for zero-token targets
+			// ergo we instead add to the community pool
+			communityFunding = communityFunding.Add(types.NewDecPool(token.Denom, rewardCoins))
+			current = current.Add(types.NewDecPool(token.Denom, sdk.DecCoins{}))
 		} else {
-			tokens = sdk.NewDecCoinsFromCoins(target.GetTokens()...)
-		}
-
-		for _, token := range tokens {
-			rewardCoins := reward.DecPools.CoinsOf(token.Denom)
-			if token.IsZero() {
-				// can't calculate ratio for zero-token targets
-				// ergo we instead add to the community pool
-				communityFunding = communityFunding.Add(types.NewDecPool(token.Denom, rewardCoins))
-				current = current.Add(
-					types.NewServicePool(reward.ServiceID, types.NewDecPool(token.Denom, sdk.DecCoins{})),
-				)
-			} else {
-				current = current.Add(
-					types.NewServicePool(
-						reward.ServiceID,
-						types.NewDecPool(token.Denom, rewardCoins.QuoDecTruncate(token.Amount)),
-					),
-				)
-			}
+			current = current.Add(
+				types.NewDecPool(token.Denom, rewardCoins.QuoDecTruncate(math.LegacyNewDecFromInt(token.Amount))))
 		}
 	}
 
@@ -164,7 +147,7 @@ func (k *Keeper) IncrementDelegationTargetPeriod(ctx context.Context, target res
 	}
 
 	// set current rewards, incrementing period by 1
-	err = k.SetCurrentRewards(ctx, target, types.NewCurrentRewards(types.ServicePools{}, rewards.Period+1))
+	err = k.SetCurrentRewards(ctx, target, types.NewCurrentRewards(types.DecPools{}, rewards.Period+1))
 	if err != nil {
 		return 0, err
 	}
@@ -213,16 +196,9 @@ func (k *Keeper) clearDelegationTarget(ctx context.Context, target restakingtype
 
 	outstanding := outstandingCoins.CoinsAmount()
 
-	switch target := target.(type) {
-	case *operatorstypes.Operator:
-		// Clear data related to an operator
-		outstanding, err = k.clearOperator(ctx, outstanding, target)
-		if err != nil {
-			return err
-		}
-	case *servicestypes.Service:
-		// Clear data related to a service
-		err = k.DeleteAllPoolServiceTotalDelegatorSharesByService(ctx, target.ID)
+	// Clear data related to an operator
+	if operator, ok := target.(operatorstypes.Operator); ok {
+		outstanding, err = k.clearOperator(ctx, outstanding, operator)
 		if err != nil {
 			return err
 		}
@@ -231,12 +207,15 @@ func (k *Keeper) clearDelegationTarget(ctx context.Context, target restakingtype
 	// Add outstanding to community pool
 	// The target is removed only after it has no more delegations.
 	// This operation sends only the remaining dust to the community pool.
-	rewardsPoolAddr := k.accountKeeper.GetModuleAddress(types.RewardsPoolName)
+	operatorAddr, err := sdk.AccAddressFromBech32(target.GetAddress())
+	if err != nil {
+		return err
+	}
 
 	// We truncate the outstanding to be able to send it to the community pool
 	// The remainder will be just be removed
 	outstandingTruncated, _ := outstanding.TruncateDecimal()
-	err = k.communityPoolKeeper.FundCommunityPool(ctx, outstandingTruncated, rewardsPoolAddr)
+	err = k.communityPoolKeeper.FundCommunityPool(ctx, outstandingTruncated, operatorAddr)
 	if err != nil {
 		return err
 	}
@@ -248,7 +227,7 @@ func (k *Keeper) clearDelegationTarget(ctx context.Context, target restakingtype
 	}
 
 	// Remove the commission record
-	if operator, ok := target.(*operatorstypes.Operator); ok {
+	if operator, ok := target.(operatorstypes.Operator); ok {
 		err = k.DeleteOperatorAccumulatedCommission(ctx, operator.ID)
 		if err != nil {
 			return err
@@ -272,7 +251,7 @@ func (k *Keeper) clearDelegationTarget(ctx context.Context, target restakingtype
 	return nil
 }
 
-func (k *Keeper) clearOperator(ctx context.Context, outstanding sdk.DecCoins, operator *operatorstypes.Operator) (outstandingLeftOver sdk.DecCoins, err error) {
+func (k *Keeper) clearOperator(ctx context.Context, outstanding sdk.DecCoins, operator operatorstypes.Operator) (outstandingLeftOver sdk.DecCoins, err error) {
 	// Force-withdraw commission
 	valCommission, err := k.GetOperatorAccumulatedCommission(ctx, operator.ID)
 	if err != nil {
@@ -288,13 +267,17 @@ func (k *Keeper) clearOperator(ctx context.Context, outstanding sdk.DecCoins, op
 		// Split into integral & remainder
 		coins, remainder := commission.TruncateDecimal()
 
+		// Send remainder to community pool
+		operatorAddress, err := sdk.AccAddressFromBech32(operator.Address)
+		if err != nil {
+			return outstanding, err
+		}
+
 		// We truncate the remainder to be able to send it to the community pool
 		// The remainder will be just be removed
 		remainderTruncated, _ := remainder.TruncateDecimal()
 
-		// Send remainder to community pool
-		rewardsPoolAddr := k.accountKeeper.GetModuleAddress(types.RewardsPoolName)
-		err = k.communityPoolKeeper.FundCommunityPool(ctx, remainderTruncated, rewardsPoolAddr)
+		err = k.communityPoolKeeper.FundCommunityPool(ctx, remainderTruncated, operatorAddress)
 		if err != nil {
 			return outstanding, err
 		}

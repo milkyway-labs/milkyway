@@ -21,9 +21,9 @@ func (suite *KeeperTestSuite) TestKeeper_SetNextOperatorID() {
 			name: "next operator id is saved correctly",
 			id:   1,
 			check: func(ctx sdk.Context) {
-				store := ctx.KVStore(suite.storeKey)
-				operatorIDBz := store.Get(types.NextOperatorIDKey)
-				suite.Require().Equal(uint32(1), types.GetOperatorIDFromBytes(operatorIDBz))
+				nextOperatorID, err := suite.k.GetNextOperatorID(ctx)
+				suite.Require().NoError(err)
+				suite.Require().EqualValues(1, nextOperatorID)
 			},
 		},
 		{
@@ -34,9 +34,9 @@ func (suite *KeeperTestSuite) TestKeeper_SetNextOperatorID() {
 			},
 			id: 2,
 			check: func(ctx sdk.Context) {
-				store := ctx.KVStore(suite.storeKey)
-				operatorIDBz := store.Get(types.NextOperatorIDKey)
-				suite.Require().Equal(uint32(2), types.GetOperatorIDFromBytes(operatorIDBz))
+				nextOperatorID, err := suite.k.GetNextOperatorID(ctx)
+				suite.Require().NoError(err)
+				suite.Require().EqualValues(2, nextOperatorID)
 			},
 		},
 	}
@@ -73,16 +73,17 @@ func (suite *KeeperTestSuite) TestKeeper_GetNextOperatorID() {
 		expNext   uint32
 	}{
 		{
-			name:      "non existing next operator returns error",
-			shouldErr: true,
+			name:      "non existing next service returns 1",
+			shouldErr: false,
+			expNext:   1,
 		},
 		{
 			name: "exiting next operator id is returned properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.SetNextOperatorID(ctx, 1)
+				err := suite.k.SetNextOperatorID(ctx, 2)
 				suite.Require().NoError(err)
 			},
-			expNext: 1,
+			expNext: 2,
 		},
 	}
 

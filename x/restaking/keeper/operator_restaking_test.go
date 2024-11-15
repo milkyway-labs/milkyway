@@ -24,10 +24,11 @@ func (suite *KeeperTestSuite) TestKeeper_SaveOperatorDelegation() {
 				sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
 			),
 			check: func(ctx sdk.Context) {
-				store := ctx.KVStore(suite.storeKey)
+				store := suite.storeService.OpenKVStore(ctx)
 
 				// Make sure the user-operator delegation key exists and contains the delegation
-				delegationBz := store.Get(types.UserOperatorDelegationStoreKey("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", 1))
+				delegationBz, err := store.Get(types.UserOperatorDelegationStoreKey("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", 1))
+				suite.Require().NoError(err)
 				suite.Require().NotNil(delegationBz)
 
 				delegation, err := types.UnmarshalDelegation(suite.cdc, delegationBz)
@@ -40,7 +41,8 @@ func (suite *KeeperTestSuite) TestKeeper_SaveOperatorDelegation() {
 				), delegation)
 
 				// Make sure the operator-user delegation key exists
-				hasDelegationsByOperatorKey := store.Has(types.DelegationByOperatorIDStoreKey(1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"))
+				hasDelegationsByOperatorKey, err := store.Has(types.DelegationByOperatorIDStoreKey(1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"))
+				suite.Require().NoError(err)
 				suite.Require().True(hasDelegationsByOperatorKey)
 			},
 		},
@@ -74,6 +76,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetOperatorDelegation() {
 		store         func(ctx sdk.Context)
 		operatorID    uint32
 		userAddress   string
+		shouldErr     bool
 		expFound      bool
 		expDelegation types.Delegation
 		check         func(ctx sdk.Context)
@@ -82,6 +85,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetOperatorDelegation() {
 			name:        "not found delegation returns false",
 			operatorID:  1,
 			userAddress: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			shouldErr:   false,
 			expFound:    false,
 		},
 		{
@@ -96,6 +100,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetOperatorDelegation() {
 			},
 			operatorID:  1,
 			userAddress: "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			shouldErr:   false,
 			expFound:    true,
 			expDelegation: types.NewOperatorDelegation(
 				1,
@@ -116,12 +121,17 @@ func (suite *KeeperTestSuite) TestKeeper_GetOperatorDelegation() {
 				tc.store(ctx)
 			}
 
-			delegation, found := suite.k.GetOperatorDelegation(ctx, tc.operatorID, tc.userAddress)
-			if !tc.expFound {
-				suite.Require().False(found)
+			delegation, found, err := suite.k.GetOperatorDelegation(ctx, tc.operatorID, tc.userAddress)
+			if tc.shouldErr {
+				suite.Require().Error(err)
 			} else {
-				suite.Require().True(found)
-				suite.Require().Equal(tc.expDelegation, delegation)
+				suite.Require().NoError(err)
+				if !tc.expFound {
+					suite.Require().False(found)
+				} else {
+					suite.Require().True(found)
+					suite.Require().Equal(tc.expDelegation, delegation)
+				}
 			}
 
 			if tc.check != nil {
@@ -357,7 +367,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 			),
 			check: func(ctx sdk.Context) {
 				// Make sure the operator now exists
-				operator, found := suite.ok.GetOperator(ctx, 1)
+				operator, found, err := suite.ok.GetOperator(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(operatorstypes.Operator{
 					ID:      1,
@@ -372,7 +383,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 				}, operator)
 
 				// Make sure the delegation exists
-				delegation, found := suite.k.GetOperatorDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				delegation, found, err := suite.k.GetOperatorDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperatorDelegation(
 					1,
@@ -443,7 +455,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 			),
 			check: func(ctx sdk.Context) {
 				// Make sure the operator now exists
-				operator, found := suite.ok.GetOperator(ctx, 1)
+				operator, found, err := suite.ok.GetOperator(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(operatorstypes.Operator{
 					ID:      1,
@@ -460,7 +473,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 				}, operator)
 
 				// Make sure the delegation has been updated properly
-				delegation, found := suite.k.GetOperatorDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				delegation, found, err := suite.k.GetOperatorDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperatorDelegation(
 					1,
@@ -548,7 +562,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 			),
 			check: func(ctx sdk.Context) {
 				// Make sure the operator now exists
-				operator, found := suite.ok.GetOperator(ctx, 1)
+				operator, found, err := suite.ok.GetOperator(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(operatorstypes.Operator{
 					ID:      1,
@@ -565,7 +580,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 				}, operator)
 
 				// Make sure the delegation has been updated properly
-				delegation, found := suite.k.GetOperatorDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				delegation, found, err := suite.k.GetOperatorDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperatorDelegation(
 					1,

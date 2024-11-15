@@ -19,9 +19,9 @@ func (suite *KeeperTestSuite) TestKeeper_SetNextPoolID() {
 			id:        1,
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				store := ctx.KVStore(suite.storeKey)
-				serviceIDBz := store.Get(types.NextPoolIDKey)
-				suite.Require().Equal(uint32(1), types.GetPoolIDFromBytes(serviceIDBz))
+				nextPoolID, err := suite.k.GetNextPoolID(ctx)
+				suite.Require().NoError(err)
+				suite.Require().EqualValues(1, nextPoolID)
 			},
 		},
 		{
@@ -33,9 +33,9 @@ func (suite *KeeperTestSuite) TestKeeper_SetNextPoolID() {
 			id:        2,
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				store := ctx.KVStore(suite.storeKey)
-				serviceIDBz := store.Get(types.NextPoolIDKey)
-				suite.Require().Equal(uint32(2), types.GetPoolIDFromBytes(serviceIDBz))
+				nextPoolID, err := suite.k.GetNextPoolID(ctx)
+				suite.Require().NoError(err)
+				suite.Require().EqualValues(2, nextPoolID)
 			},
 		},
 	}
@@ -70,16 +70,17 @@ func (suite *KeeperTestSuite) TestKeeper_GetNextPoolID() {
 		expNext   uint32
 	}{
 		{
-			name:      "non existing next pool id returns error",
-			shouldErr: true,
+			name:      "non existing next pool id does not error",
+			shouldErr: false,
+			expNext:   1,
 		},
 		{
 			name: "exiting next pool id is returned properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.SetNextPoolID(ctx, 1)
+				err := suite.k.SetNextPoolID(ctx, 2)
 				suite.Require().NoError(err)
 			},
-			expNext: 1,
+			expNext: 2,
 		},
 	}
 

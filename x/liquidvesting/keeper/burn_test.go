@@ -125,11 +125,14 @@ func (suite *KeeperTestSuite) TestKeeper_TestBurn() {
 				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake2", 200)), coins)
 
 				// Compute when the unbond will end
-				unbondingTime := suite.rk.UnbondingTime(ctx)
+				unbondingTime, err := suite.rk.UnbondingTime(ctx)
+				suite.Require().NoError(err)
+
 				unbondEnd := ctx.BlockHeader().Time.Add(unbondingTime)
 
 				// Deque the values
-				values := suite.k.GetUnbondedCoinsFromQueue(ctx, unbondEnd)
+				values, err := suite.k.GetUnbondedCoinsFromQueue(ctx, unbondEnd)
+				suite.Require().NoError(err)
 				suite.Assert().Len(values, 1)
 
 				// Check that we are burning the coins that have been delegated

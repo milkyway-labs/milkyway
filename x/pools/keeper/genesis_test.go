@@ -16,17 +16,24 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "next pool id is exported properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.SetNextPoolID(ctx, 10)
+				err := suite.k.SetParams(ctx, types.DefaultParams())
+				suite.Require().NoError(err)
+
+				err = suite.k.SetNextPoolID(ctx, 10)
 				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				NextPoolID: 10,
+				Params:     types.DefaultParams(),
 			},
 		},
 		{
 			name: "pools are exported properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.SetNextPoolID(ctx, 1)
+				err := suite.k.SetParams(ctx, types.DefaultParams())
+				suite.Require().NoError(err)
+
+				err = suite.k.SetNextPoolID(ctx, 1)
 				suite.Require().NoError(err)
 
 				err = suite.k.SavePool(ctx, types.NewPool(1, "umilk"))
@@ -40,6 +47,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					types.NewPool(1, "umilk"),
 					types.NewPool(2, "uatom"),
 				},
+				Params: types.DefaultParams(),
 			},
 		},
 	}

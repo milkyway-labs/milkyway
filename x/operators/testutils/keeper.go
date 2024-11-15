@@ -37,7 +37,6 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	// Build keepers
 	data.Keeper = keeper.NewKeeper(
 		data.Cdc,
-		data.StoreKey,
 		runtime.NewKVStoreService(data.Keys[types.StoreKey]),
 		data.AccountKeeper,
 		data.DistributionKeeper,

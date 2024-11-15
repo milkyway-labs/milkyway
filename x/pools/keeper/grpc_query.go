@@ -3,7 +3,6 @@ package keeper
 import (
 	"context"
 
-	"cosmossdk.io/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
@@ -54,22 +53,9 @@ func (k *Keeper) PoolByDenom(ctx context.Context, request *types.QueryPoolByDeno
 
 // Pools implements the Query/Pools gRPC method
 func (k *Keeper) Pools(ctx context.Context, request *types.QueryPoolsRequest) (*types.QueryPoolsResponse, error) {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-
-	store := sdkCtx.KVStore(k.storeKey)
-	poolsStore := prefix.NewStore(store, types.PoolPrefix)
-
-	var pools []types.Pool
-	pageRes, err := query.Paginate(poolsStore, request.Pagination, func(key []byte, value []byte) error {
-		var pool types.Pool
-		if err := k.cdc.Unmarshal(value, &pool); err != nil {
-			return status.Error(codes.Internal, err.Error())
-		}
-
-		pools = append(pools, pool)
-		return nil
+	pools, pageRes, err := query.CollectionPaginate(ctx, k.pools, request.Pagination, func(key uint32, value types.Pool) (types.Pool, error) {
+		return value, nil
 	})
-
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}

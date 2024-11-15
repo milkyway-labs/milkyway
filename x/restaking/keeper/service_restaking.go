@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"context"
 	"slices"
 	"time"
 
@@ -15,13 +16,13 @@ import (
 
 // ServiceAllowedOperatorsIterator returns an iterator that iterates over all
 // operators allowed to secure a service
-func (k *Keeper) ServiceAllowedOperatorsIterator(ctx sdk.Context, serviceID uint32) (collections.KeySetIterator[collections.Pair[uint32, uint32]], error) {
+func (k *Keeper) ServiceAllowedOperatorsIterator(ctx context.Context, serviceID uint32) (collections.KeySetIterator[collections.Pair[uint32, uint32]], error) {
 	return k.serviceOperatorsAllowList.Iterate(ctx, collections.NewPrefixedPairRange[uint32, uint32](serviceID))
 }
 
 // GetAllServiceAllowedOperators returns all operators that have been whitelisted
 // by a service
-func (k *Keeper) GetAllServiceAllowedOperators(ctx sdk.Context, serviceID uint32) ([]uint32, error) {
+func (k *Keeper) GetAllServiceAllowedOperators(ctx context.Context, serviceID uint32) ([]uint32, error) {
 	iteretor, err := k.ServiceAllowedOperatorsIterator(ctx, serviceID)
 	if err != nil {
 		return nil, err
@@ -43,7 +44,7 @@ func (k *Keeper) GetAllServiceAllowedOperators(ctx sdk.Context, serviceID uint32
 // AddOperatorToServiceAllowList adds an operator to the list of operators
 // allowed to secure a service.
 // If the operator is already in the list, no action is taken.
-func (k *Keeper) AddOperatorToServiceAllowList(ctx sdk.Context, serviceID uint32, operatorID uint32) error {
+func (k *Keeper) AddOperatorToServiceAllowList(ctx context.Context, serviceID uint32, operatorID uint32) error {
 	key := collections.Join(serviceID, operatorID)
 	return k.serviceOperatorsAllowList.Set(ctx, key)
 }
@@ -51,13 +52,13 @@ func (k *Keeper) AddOperatorToServiceAllowList(ctx sdk.Context, serviceID uint32
 // RemoveOperatorFromServiceAllowList removes an operator from the list of operators
 // allowed to secure a service.
 // If the operator is not in the list, no action is taken.
-func (k *Keeper) RemoveOperatorFromServiceAllowList(ctx sdk.Context, serviceID uint32, operatorID uint32) error {
+func (k *Keeper) RemoveOperatorFromServiceAllowList(ctx context.Context, serviceID uint32, operatorID uint32) error {
 	key := collections.Join(serviceID, operatorID)
 	return k.serviceOperatorsAllowList.Remove(ctx, key)
 }
 
 // IsServiceOpertorsAllowListConfigured returns true if the operators allow list
-func (k *Keeper) IsServiceOpertorsAllowListConfigured(ctx sdk.Context, serviceID uint32) (bool, error) {
+func (k *Keeper) IsServiceOpertorsAllowListConfigured(ctx context.Context, serviceID uint32) (bool, error) {
 	iteretor, err := k.ServiceAllowedOperatorsIterator(ctx, serviceID)
 	if err != nil {
 		return false, err
@@ -73,14 +74,14 @@ func (k *Keeper) IsServiceOpertorsAllowListConfigured(ctx sdk.Context, serviceID
 
 // IsOperatorInServiceAllowList returns true if the given operator is in the
 // service operators allow list
-func (k *Keeper) IsOperatorInServiceAllowList(ctx sdk.Context, serviceID uint32, operatorID uint32) (bool, error) {
+func (k *Keeper) IsOperatorInServiceAllowList(ctx context.Context, serviceID uint32, operatorID uint32) (bool, error) {
 	key := collections.Join(serviceID, operatorID)
 	return k.serviceOperatorsAllowList.Has(ctx, key)
 }
 
 // CanOperatorValidateService returns true if the given operator can secure
 // the given service
-func (k *Keeper) CanOperatorValidateService(ctx sdk.Context, serviceID uint32, operatorID uint32) (bool, error) {
+func (k *Keeper) CanOperatorValidateService(ctx context.Context, serviceID uint32, operatorID uint32) (bool, error) {
 	configured, err := k.IsServiceOpertorsAllowListConfigured(ctx, serviceID)
 	if err != nil {
 		return false, err
@@ -97,22 +98,22 @@ func (k *Keeper) CanOperatorValidateService(ctx sdk.Context, serviceID uint32, o
 
 // ServiceSecuringPoolsIterator returns an iterator that iterates over all
 // pools allowed to secure the given service.
-func (k *Keeper) ServiceSecuringPoolsIterator(ctx sdk.Context, serviceID uint32) (collections.KeySetIterator[collections.Pair[uint32, uint32]], error) {
+func (k *Keeper) ServiceSecuringPoolsIterator(ctx context.Context, serviceID uint32) (collections.KeySetIterator[collections.Pair[uint32, uint32]], error) {
 	return k.serviceSecuringPools.Iterate(ctx, collections.NewPrefixedPairRange[uint32, uint32](serviceID))
 }
 
 // GetAllServiceSecuringPools returns all pools that have been allowed to
 // to secure the give service
-func (k *Keeper) GetAllServiceSecuringPools(ctx sdk.Context, serviceID uint32) ([]uint32, error) {
-	iteretor, err := k.ServiceSecuringPoolsIterator(ctx, serviceID)
+func (k *Keeper) GetAllServiceSecuringPools(ctx context.Context, serviceID uint32) ([]uint32, error) {
+	iterator, err := k.ServiceSecuringPoolsIterator(ctx, serviceID)
 	if err != nil {
 		return nil, err
 	}
+	defer iterator.Close()
 
-	defer iteretor.Close()
 	var pools []uint32
-	for ; iteretor.Valid(); iteretor.Next() {
-		servicePoolPair, err := iteretor.Key()
+	for ; iterator.Valid(); iterator.Next() {
+		servicePoolPair, err := iterator.Key()
 		if err != nil {
 			return nil, err
 		}
@@ -124,28 +125,28 @@ func (k *Keeper) GetAllServiceSecuringPools(ctx sdk.Context, serviceID uint32) (
 
 // AddPoolToServiceSecuringPools adds a pool to the list of pools
 // permitted for securing the service
-func (k *Keeper) AddPoolToServiceSecuringPools(ctx sdk.Context, serviceID uint32, poolID uint32) error {
+func (k *Keeper) AddPoolToServiceSecuringPools(ctx context.Context, serviceID uint32, poolID uint32) error {
 	key := collections.Join(serviceID, poolID)
 	return k.serviceSecuringPools.Set(ctx, key)
 }
 
 // RemovePoolFromServiceSecuringPools removes a pool from the list of pools from which the
 // service is borrowing the security from
-func (k *Keeper) RemovePoolFromServiceSecuringPools(ctx sdk.Context, serviceID uint32, poolID uint32) error {
+func (k *Keeper) RemovePoolFromServiceSecuringPools(ctx context.Context, serviceID uint32, poolID uint32) error {
 	key := collections.Join(serviceID, poolID)
 	return k.serviceSecuringPools.Remove(ctx, key)
 }
 
 // IsServiceSecuringPoolsConfigured returns true if the list of securing pools
 // has been configured for the given service
-func (k *Keeper) IsServiceSecuringPoolsConfigured(ctx sdk.Context, serviceID uint32) (bool, error) {
-	iteretor, err := k.ServiceSecuringPoolsIterator(ctx, serviceID)
+func (k *Keeper) IsServiceSecuringPoolsConfigured(ctx context.Context, serviceID uint32) (bool, error) {
+	iterator, err := k.ServiceSecuringPoolsIterator(ctx, serviceID)
 	if err != nil {
 		return false, err
 	}
-	defer iteretor.Close()
+	defer iterator.Close()
 
-	for ; iteretor.Valid(); iteretor.Next() {
+	for ; iterator.Valid(); iterator.Next() {
 		return true, nil
 	}
 
@@ -154,14 +155,14 @@ func (k *Keeper) IsServiceSecuringPoolsConfigured(ctx sdk.Context, serviceID uin
 
 // IsPoolInServiceSecuringPools returns true if the pool is in the list
 // of pools from which the service can borrow security
-func (k *Keeper) IsPoolInServiceSecuringPools(ctx sdk.Context, serviceID uint32, poolID uint32) (bool, error) {
+func (k *Keeper) IsPoolInServiceSecuringPools(ctx context.Context, serviceID uint32, poolID uint32) (bool, error) {
 	key := collections.Join(serviceID, poolID)
 	return k.serviceSecuringPools.Has(ctx, key)
 }
 
 // IsServiceSecuredByPool returns true if the service is being secured
 // by the given pool
-func (k *Keeper) IsServiceSecuredByPool(ctx sdk.Context, serviceID uint32, poolID uint32) (bool, error) {
+func (k *Keeper) IsServiceSecuredByPool(ctx context.Context, serviceID uint32, poolID uint32) (bool, error) {
 	configured, err := k.IsServiceSecuringPoolsConfigured(ctx, serviceID)
 	if err != nil {
 		return false, err
@@ -179,19 +180,24 @@ func (k *Keeper) IsServiceSecuredByPool(ctx sdk.Context, serviceID uint32, poolI
 
 // GetServiceDelegation retrieves the delegation for the given user and service
 // If the delegation does not exist, false is returned instead
-func (k *Keeper) GetServiceDelegation(ctx sdk.Context, serviceID uint32, userAddress string) (types.Delegation, bool) {
-	store := ctx.KVStore(k.storeKey)
-	delegationBz := store.Get(types.UserServiceDelegationStoreKey(userAddress, serviceID))
-	if delegationBz == nil {
-		return types.Delegation{}, false
+func (k *Keeper) GetServiceDelegation(ctx context.Context, serviceID uint32, userAddress string) (types.Delegation, bool, error) {
+	store := k.storeService.OpenKVStore(ctx)
+
+	delegationBz, err := store.Get(types.UserServiceDelegationStoreKey(userAddress, serviceID))
+	if err != nil {
+		return types.Delegation{}, false, err
 	}
 
-	return types.MustUnmarshalDelegation(k.cdc, delegationBz), true
+	if delegationBz == nil {
+		return types.Delegation{}, false, nil
+	}
+
+	return types.MustUnmarshalDelegation(k.cdc, delegationBz), true, nil
 }
 
 // AddServiceTokensAndShares adds the given amount of tokens to the service and returns the added shares
 func (k *Keeper) AddServiceTokensAndShares(
-	ctx sdk.Context, service servicestypes.Service, tokensToAdd sdk.Coins,
+	ctx context.Context, service servicestypes.Service, tokensToAdd sdk.Coins,
 ) (serviceOut servicestypes.Service, addedShares sdk.DecCoins, err error) {
 	// Update the service tokens and shares and get the added shares
 	service, addedShares = service.AddTokensFromDelegation(tokensToAdd)
@@ -202,16 +208,21 @@ func (k *Keeper) AddServiceTokensAndShares(
 }
 
 // RemoveServiceDelegation removes the given service delegation from the store
-func (k *Keeper) RemoveServiceDelegation(ctx sdk.Context, delegation types.Delegation) {
-	store := ctx.KVStore(k.storeKey)
-	store.Delete(types.UserServiceDelegationStoreKey(delegation.UserAddress, delegation.TargetID))
-	store.Delete(types.DelegationByServiceIDStoreKey(delegation.TargetID, delegation.UserAddress))
+func (k *Keeper) RemoveServiceDelegation(ctx context.Context, delegation types.Delegation) error {
+	store := k.storeService.OpenKVStore(ctx)
+
+	err := store.Delete(types.UserServiceDelegationStoreKey(delegation.UserAddress, delegation.TargetID))
+	if err != nil {
+		return err
+	}
+
+	return store.Delete(types.DelegationByServiceIDStoreKey(delegation.TargetID, delegation.UserAddress))
 }
 
 // --------------------------------------------------------------------------------------------------------------------
 
 // DelegateToService sends the given amount to the service account and saves the delegation for the given user
-func (k *Keeper) DelegateToService(ctx sdk.Context, serviceID uint32, amount sdk.Coins, delegator string) (sdk.DecCoins, error) {
+func (k *Keeper) DelegateToService(ctx context.Context, serviceID uint32, amount sdk.Coins, delegator string) (sdk.DecCoins, error) {
 	// Get the service
 	service, found, err := k.servicesKeeper.GetService(ctx, serviceID)
 	if err != nil {
@@ -222,7 +233,10 @@ func (k *Keeper) DelegateToService(ctx sdk.Context, serviceID uint32, amount sdk
 		return sdk.NewDecCoins(), servicestypes.ErrServiceNotFound
 	}
 
-	restakableDenoms := k.GetRestakableDenoms(ctx)
+	restakableDenoms, err := k.GetRestakableDenoms(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	// Get the service parameters
 	serviceParams, err := k.servicesKeeper.GetServiceParams(ctx, serviceID)
@@ -262,9 +276,9 @@ func (k *Keeper) DelegateToService(ctx sdk.Context, serviceID uint32, amount sdk
 	return k.PerformDelegation(ctx, types.DelegationData{
 		Amount:          amount,
 		Delegator:       delegator,
-		Target:          &service,
+		Target:          service,
 		BuildDelegation: types.NewServiceDelegation,
-		UpdateDelegation: func(ctx sdk.Context, delegation types.Delegation) (newShares sdk.DecCoins, err error) {
+		UpdateDelegation: func(ctx context.Context, delegation types.Delegation) (newShares sdk.DecCoins, err error) {
 			// Calculate the new shares and add the tokens to the service
 			_, newShares, err = k.AddServiceTokensAndShares(ctx, service, amount)
 			if err != nil {
@@ -294,19 +308,24 @@ func (k *Keeper) DelegateToService(ctx sdk.Context, serviceID uint32, amount sdk
 
 // GetServiceUnbondingDelegation returns the unbonding delegation for the given delegator address and service id.
 // If no unbonding delegation is found, false is returned instead.
-func (k *Keeper) GetServiceUnbondingDelegation(ctx sdk.Context, serviceID uint32, delegator string) (types.UnbondingDelegation, bool) {
-	store := ctx.KVStore(k.storeKey)
-	ubdBz := store.Get(types.UserServiceUnbondingDelegationKey(delegator, serviceID))
-	if ubdBz == nil {
-		return types.UnbondingDelegation{}, false
+func (k *Keeper) GetServiceUnbondingDelegation(ctx context.Context, serviceID uint32, delegator string) (types.UnbondingDelegation, bool, error) {
+	store := k.storeService.OpenKVStore(ctx)
+
+	ubdBz, err := store.Get(types.UserServiceUnbondingDelegationKey(delegator, serviceID))
+	if err != nil {
+		return types.UnbondingDelegation{}, false, err
 	}
 
-	return types.MustUnmarshalUnbondingDelegation(k.cdc, ubdBz), true
+	if ubdBz == nil {
+		return types.UnbondingDelegation{}, false, nil
+	}
+
+	return types.MustUnmarshalUnbondingDelegation(k.cdc, ubdBz), true, nil
 }
 
 // UndelegateFromService removes the given amount from the service account and saves the
 // unbonding delegation for the given user
-func (k *Keeper) UndelegateFromService(ctx sdk.Context, serviceID uint32, amount sdk.Coins, delegator string) (time.Time, error) {
+func (k *Keeper) UndelegateFromService(ctx context.Context, serviceID uint32, amount sdk.Coins, delegator string) (time.Time, error) {
 	// Find the service
 	service, found, err := k.servicesKeeper.GetService(ctx, serviceID)
 	if err != nil {
@@ -318,7 +337,7 @@ func (k *Keeper) UndelegateFromService(ctx sdk.Context, serviceID uint32, amount
 	}
 
 	// Get the shares
-	shares, err := k.ValidateUnbondAmount(ctx, delegator, &service, amount)
+	shares, err := k.ValidateUnbondAmount(ctx, delegator, service, amount)
 	if err != nil {
 		return time.Time{}, err
 	}
@@ -326,7 +345,7 @@ func (k *Keeper) UndelegateFromService(ctx sdk.Context, serviceID uint32, amount
 	return k.PerformUndelegation(ctx, types.UndelegationData{
 		Amount:                   amount,
 		Delegator:                delegator,
-		Target:                   &service,
+		Target:                   service,
 		BuildUnbondingDelegation: types.NewServiceUnbondingDelegation,
 		Hooks: types.DelegationHooks{
 			BeforeDelegationSharesModified: k.BeforeServiceDelegationSharesModified,

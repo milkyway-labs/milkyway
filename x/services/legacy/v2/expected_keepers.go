@@ -3,8 +3,6 @@ package v2
 import (
 	"context"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	"github.com/milkyway-labs/milkyway/x/services/types"
 )
@@ -15,5 +13,5 @@ type ServicesKeeper interface {
 }
 
 type PoolsKeeper interface {
-	GetParams(ctx sdk.Context) (params poolstypes.Params)
+	GetParams(ctx context.Context) (poolstypes.Params, error)
 }

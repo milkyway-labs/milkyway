@@ -32,7 +32,11 @@ func NewMsgServer(keeper *Keeper) types.MsgServer {
 func (k msgServer) JoinService(goCtx context.Context, msg *types.MsgJoinService) (*types.MsgJoinServiceResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	operator, found := k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
+	operator, found, err := k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, operatorstypes.ErrOperatorNotFound
 	}
@@ -74,7 +78,11 @@ func (k msgServer) JoinService(goCtx context.Context, msg *types.MsgJoinService)
 func (k msgServer) LeaveService(goCtx context.Context, msg *types.MsgLeaveService) (*types.MsgLeaveServiceResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	operator, found := k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
+	operator, found, err := k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, operatorstypes.ErrOperatorNotFound
 	}
@@ -83,7 +91,7 @@ func (k msgServer) LeaveService(goCtx context.Context, msg *types.MsgLeaveServic
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can leave the service")
 	}
 
-	_, found, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	_, found, err = k.servicesKeeper.GetService(ctx, msg.ServiceID)
 	if err != nil {
 		return nil, err
 	}
@@ -123,7 +131,11 @@ func (k msgServer) AddOperatorToAllowList(goCtx context.Context, msg *types.MsgA
 	}
 
 	// Ensure that the operator exists
-	_, found = k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
+	_, found, err = k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, operatorstypes.ErrOperatorNotFound
 	}

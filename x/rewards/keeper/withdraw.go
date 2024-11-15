@@ -40,7 +40,11 @@ func (k *Keeper) WithdrawDelegationRewards(
 		return nil, err
 	}
 
-	delegation, found := k.restakingKeeper.GetDelegationForTarget(sdkCtx, target, delegator)
+	delegation, found, err := k.restakingKeeper.GetDelegationForTarget(sdkCtx, target, delegator)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, sdkerrors.ErrNotFound.Wrapf("delegation not found: %d, %s", target.GetID(), delAddr.String())
 	}

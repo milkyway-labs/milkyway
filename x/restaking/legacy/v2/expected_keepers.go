@@ -3,15 +3,13 @@ package v2
 import (
 	"context"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
 type OperatorsKeeper interface {
-	GetOperator(ctx sdk.Context, operatorID uint32) (operatorstypes.Operator, bool)
-	SaveOperatorParams(ctx sdk.Context, operatorID uint32, params operatorstypes.OperatorParams) error
+	GetOperator(ctx context.Context, operatorID uint32) (operatorstypes.Operator, bool, error)
+	SaveOperatorParams(ctx context.Context, operatorID uint32, params operatorstypes.OperatorParams) error
 }
 
 type ServicesKeeper interface {
@@ -19,7 +17,7 @@ type ServicesKeeper interface {
 }
 
 type RestakingKeeper interface {
-	AddServiceToOperatorJoinedServices(ctx sdk.Context, operatorID uint32, serviceID uint32) error
-	AddOperatorToServiceAllowList(ctx sdk.Context, serviceID uint32, operatorID uint32) error
-	AddPoolToServiceSecuringPools(ctx sdk.Context, serviceID uint32, poolID uint32) error
+	AddServiceToOperatorJoinedServices(ctx context.Context, operatorID uint32, serviceID uint32) error
+	AddOperatorToServiceAllowList(ctx context.Context, serviceID uint32, operatorID uint32) error
+	AddPoolToServiceSecuringPools(ctx context.Context, serviceID uint32, poolID uint32) error
 }

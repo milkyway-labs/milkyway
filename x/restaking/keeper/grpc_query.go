@@ -6,7 +6,7 @@ import (
 	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
 	"cosmossdk.io/store/prefix"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/runtime"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -29,7 +29,7 @@ func NewQuerier(keeper *Keeper) Querier {
 
 // OperatorJoinedServices queries the services joined by the operator with the
 // given ID
-func (k Querier) OperatorJoinedServices(goCtx context.Context, req *types.QueryOperatorJoinedServicesRequest) (*types.QueryOperatorJoinedServicesResponse, error) {
+func (k Querier) OperatorJoinedServices(ctx context.Context, req *types.QueryOperatorJoinedServicesRequest) (*types.QueryOperatorJoinedServicesResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -37,8 +37,6 @@ func (k Querier) OperatorJoinedServices(goCtx context.Context, req *types.QueryO
 	if req.OperatorId == 0 {
 		return nil, status.Error(codes.InvalidArgument, "operator id cannot be 0")
 	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	_, found, err := k.operatorsKeeper.GetOperator(ctx, req.OperatorId)
 	if err != nil {
@@ -63,7 +61,7 @@ func (k Querier) OperatorJoinedServices(goCtx context.Context, req *types.QueryO
 
 // ServiceAllowedOperators queries the allowed operators for a given service.
 func (k Querier) ServiceAllowedOperators(
-	goCtx context.Context,
+	ctx context.Context,
 	req *types.QueryServiceAllowedOperatorsRequest,
 ) (*types.QueryServiceAllowedOperatorsResponse, error) {
 	if req == nil {
@@ -73,8 +71,6 @@ func (k Querier) ServiceAllowedOperators(
 	if req.ServiceId == 0 {
 		return nil, status.Error(codes.InvalidArgument, "service id cannot be 0")
 	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Get the service's allowed operators
 	operatorIDs, pageResponse, err := query.CollectionPaginate(ctx, k.serviceOperatorsAllowList, req.Pagination,
@@ -93,7 +89,7 @@ func (k Querier) ServiceAllowedOperators(
 
 // ServiceSecuringPools queries the pools that are securing a given service.
 func (k Querier) ServiceSecuringPools(
-	goCtx context.Context,
+	ctx context.Context,
 	req *types.QueryServiceSecuringPoolsRequest,
 ) (*types.QueryServiceSecuringPoolsResponse, error) {
 	if req == nil {
@@ -103,8 +99,6 @@ func (k Querier) ServiceSecuringPools(
 	if req.ServiceId == 0 {
 		return nil, status.Error(codes.InvalidArgument, "service id cannot be 0")
 	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Get the service securing pools
 	poolIDs, pageResponse, err := query.CollectionPaginate(ctx, k.serviceSecuringPools, req.Pagination,
@@ -121,7 +115,7 @@ func (k Querier) ServiceSecuringPools(
 	}, nil
 }
 
-func (k Querier) ServiceOperators(goCtx context.Context, req *types.QueryServiceOperatorsRequest) (*types.QueryServiceOperatorsResponse, error) {
+func (k Querier) ServiceOperators(ctx context.Context, req *types.QueryServiceOperatorsRequest) (*types.QueryServiceOperatorsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -129,8 +123,6 @@ func (k Querier) ServiceOperators(goCtx context.Context, req *types.QueryService
 	if req.ServiceId == 0 {
 		return nil, status.Error(codes.InvalidArgument, "service id cannot be 0")
 	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	_, found, err := k.servicesKeeper.GetService(ctx, req.ServiceId)
 	if err != nil {
@@ -173,7 +165,7 @@ func (k Querier) ServiceOperators(goCtx context.Context, req *types.QueryService
 }
 
 // PoolDelegations queries the pool delegations for the given pool id
-func (k Querier) PoolDelegations(goCtx context.Context, req *types.QueryPoolDelegationsRequest) (*types.QueryPoolDelegationsResponse, error) {
+func (k Querier) PoolDelegations(ctx context.Context, req *types.QueryPoolDelegationsRequest) (*types.QueryPoolDelegationsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -182,11 +174,9 @@ func (k Querier) PoolDelegations(goCtx context.Context, req *types.QueryPoolDele
 		return nil, status.Error(codes.InvalidArgument, "pool id cannot be 0")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
 	// Get the pool delegations store
-	store := ctx.KVStore(k.storeKey)
-	delegationsStore := prefix.NewStore(store, types.PoolDelegationPrefix)
+	store := k.storeService.OpenKVStore(ctx)
+	delegationsStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.PoolDelegationPrefix)
 
 	// Query the pool delegations for the given pool id
 	delegations, pageRes, err := query.GenericFilteredPaginate(k.cdc, delegationsStore, req.Pagination, func(key []byte, delegation *types.Delegation) (*types.Delegation, error) {
@@ -217,7 +207,7 @@ func (k Querier) PoolDelegations(goCtx context.Context, req *types.QueryPoolDele
 }
 
 // PoolDelegation queries the pool delegation for the given pool id and user address
-func (k Querier) PoolDelegation(goCtx context.Context, req *types.QueryPoolDelegationRequest) (*types.QueryPoolDelegationResponse, error) {
+func (k Querier) PoolDelegation(ctx context.Context, req *types.QueryPoolDelegationRequest) (*types.QueryPoolDelegationResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -229,9 +219,11 @@ func (k Querier) PoolDelegation(goCtx context.Context, req *types.QueryPoolDeleg
 		return nil, status.Error(codes.InvalidArgument, "pool id cannot be zero")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
+	poolDelegation, found, err := k.GetPoolDelegation(ctx, req.PoolId, req.DelegatorAddress)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 
-	poolDelegation, found := k.GetPoolDelegation(ctx, req.PoolId, req.DelegatorAddress)
 	if !found {
 		return nil, status.Error(codes.NotFound, "pool delegation not found")
 	}
@@ -247,7 +239,7 @@ func (k Querier) PoolDelegation(goCtx context.Context, req *types.QueryPoolDeleg
 }
 
 // PoolUnbondingDelegations queries the pool unbonding delegations for the given pool id
-func (k Querier) PoolUnbondingDelegations(goCtx context.Context, req *types.QueryPoolUnbondingDelegationsRequest) (*types.QueryPoolUnbondingDelegationsResponse, error) {
+func (k Querier) PoolUnbondingDelegations(ctx context.Context, req *types.QueryPoolUnbondingDelegationsRequest) (*types.QueryPoolUnbondingDelegationsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -256,11 +248,9 @@ func (k Querier) PoolUnbondingDelegations(goCtx context.Context, req *types.Quer
 		return nil, status.Error(codes.InvalidArgument, "pool id cannot be 0")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
 	// Get the pool unbonding delegations store
-	store := ctx.KVStore(k.storeKey)
-	delegationsStore := prefix.NewStore(store, types.PoolUnbondingDelegationPrefix)
+	store := k.storeService.OpenKVStore(ctx)
+	delegationsStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.PoolUnbondingDelegationPrefix)
 
 	// Query the pool unbonding delegations for the given pool id
 	var unbondingDelegations []types.UnbondingDelegation
@@ -283,7 +273,7 @@ func (k Querier) PoolUnbondingDelegations(goCtx context.Context, req *types.Quer
 }
 
 // PoolUnbondingDelegation queries the pool unbonding delegation for the given pool id and user address
-func (k Querier) PoolUnbondingDelegation(goCtx context.Context, req *types.QueryPoolUnbondingDelegationRequest) (*types.QueryPoolUnbondingDelegationResponse, error) {
+func (k Querier) PoolUnbondingDelegation(ctx context.Context, req *types.QueryPoolUnbondingDelegationRequest) (*types.QueryPoolUnbondingDelegationResponse, error) {
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
 	}
@@ -295,9 +285,11 @@ func (k Querier) PoolUnbondingDelegation(goCtx context.Context, req *types.Query
 		return nil, status.Errorf(codes.InvalidArgument, "pool id cannot be zero")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
+	unbond, found, err := k.GetPoolUnbondingDelegation(ctx, req.PoolId, req.DelegatorAddress)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 
-	unbond, found := k.GetPoolUnbondingDelegation(ctx, req.PoolId, req.DelegatorAddress)
 	if !found {
 		return nil, status.Errorf(
 			codes.NotFound,
@@ -312,7 +304,7 @@ func (k Querier) PoolUnbondingDelegation(goCtx context.Context, req *types.Query
 }
 
 // OperatorDelegations queries the operator delegations for the given operator id
-func (k Querier) OperatorDelegations(goCtx context.Context, req *types.QueryOperatorDelegationsRequest) (*types.QueryOperatorDelegationsResponse, error) {
+func (k Querier) OperatorDelegations(ctx context.Context, req *types.QueryOperatorDelegationsRequest) (*types.QueryOperatorDelegationsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -321,11 +313,9 @@ func (k Querier) OperatorDelegations(goCtx context.Context, req *types.QueryOper
 		return nil, status.Error(codes.InvalidArgument, "operator id cannot be 0")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
 	// Get the operator delegations store
-	store := ctx.KVStore(k.storeKey)
-	delegationsStore := prefix.NewStore(store, types.OperatorDelegationPrefix)
+	store := k.storeService.OpenKVStore(ctx)
+	delegationsStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.OperatorDelegationPrefix)
 
 	// Query the operator delegations for the given pool id
 	delegations, pageRes, err := query.GenericFilteredPaginate(k.cdc, delegationsStore, req.Pagination, func(key []byte, delegation *types.Delegation) (*types.Delegation, error) {
@@ -356,7 +346,7 @@ func (k Querier) OperatorDelegations(goCtx context.Context, req *types.QueryOper
 }
 
 // OperatorDelegation queries the operator delegation for the given operator id and user address
-func (k Querier) OperatorDelegation(goCtx context.Context, req *types.QueryOperatorDelegationRequest) (*types.QueryOperatorDelegationResponse, error) {
+func (k Querier) OperatorDelegation(ctx context.Context, req *types.QueryOperatorDelegationRequest) (*types.QueryOperatorDelegationResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -368,9 +358,11 @@ func (k Querier) OperatorDelegation(goCtx context.Context, req *types.QueryOpera
 		return nil, status.Error(codes.InvalidArgument, "operator id cannot be zero")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
+	operatorDelegation, found, err := k.GetOperatorDelegation(ctx, req.OperatorId, req.DelegatorAddress)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 
-	operatorDelegation, found := k.GetOperatorDelegation(ctx, req.OperatorId, req.DelegatorAddress)
 	if !found {
 		return nil, status.Error(codes.NotFound, "operator delegation not found")
 	}
@@ -386,7 +378,7 @@ func (k Querier) OperatorDelegation(goCtx context.Context, req *types.QueryOpera
 }
 
 // OperatorUnbondingDelegations queries the operator unbonding delegations for the given operator id
-func (k Querier) OperatorUnbondingDelegations(goCtx context.Context, req *types.QueryOperatorUnbondingDelegationsRequest) (*types.QueryOperatorUnbondingDelegationsResponse, error) {
+func (k Querier) OperatorUnbondingDelegations(ctx context.Context, req *types.QueryOperatorUnbondingDelegationsRequest) (*types.QueryOperatorUnbondingDelegationsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -395,11 +387,9 @@ func (k Querier) OperatorUnbondingDelegations(goCtx context.Context, req *types.
 		return nil, status.Error(codes.InvalidArgument, "operator id cannot be 0")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
 	// Get the operator unbonding delegations store
-	store := ctx.KVStore(k.storeKey)
-	delegationsStore := prefix.NewStore(store, types.OperatorUnbondingDelegationPrefix)
+	store := k.storeService.OpenKVStore(ctx)
+	delegationsStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.OperatorUnbondingDelegationPrefix)
 
 	// Query the operator unbonding delegations for the given pool id
 	var unbondingDelegations []types.UnbondingDelegation
@@ -422,7 +412,7 @@ func (k Querier) OperatorUnbondingDelegations(goCtx context.Context, req *types.
 }
 
 // OperatorUnbondingDelegation queries the operator unbonding delegation for the given operator id and user address
-func (k Querier) OperatorUnbondingDelegation(goCtx context.Context, req *types.QueryOperatorUnbondingDelegationRequest) (*types.QueryOperatorUnbondingDelegationResponse, error) {
+func (k Querier) OperatorUnbondingDelegation(ctx context.Context, req *types.QueryOperatorUnbondingDelegationRequest) (*types.QueryOperatorUnbondingDelegationResponse, error) {
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
 	}
@@ -434,9 +424,11 @@ func (k Querier) OperatorUnbondingDelegation(goCtx context.Context, req *types.Q
 		return nil, status.Errorf(codes.InvalidArgument, "operator id cannot be zero")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
+	unbond, found, err := k.GetOperatorUnbondingDelegation(ctx, req.OperatorId, req.DelegatorAddress)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 
-	unbond, found := k.GetOperatorUnbondingDelegation(ctx, req.OperatorId, req.DelegatorAddress)
 	if !found {
 		return nil, status.Errorf(
 			codes.NotFound,
@@ -451,7 +443,7 @@ func (k Querier) OperatorUnbondingDelegation(goCtx context.Context, req *types.Q
 }
 
 // ServiceDelegations queries the service delegations for the given service id
-func (k Querier) ServiceDelegations(goCtx context.Context, req *types.QueryServiceDelegationsRequest) (*types.QueryServiceDelegationsResponse, error) {
+func (k Querier) ServiceDelegations(ctx context.Context, req *types.QueryServiceDelegationsRequest) (*types.QueryServiceDelegationsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -460,11 +452,9 @@ func (k Querier) ServiceDelegations(goCtx context.Context, req *types.QueryServi
 		return nil, status.Error(codes.InvalidArgument, "service id cannot be 0")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
 	// Get the service delegations store
-	store := ctx.KVStore(k.storeKey)
-	delegationsStore := prefix.NewStore(store, types.ServiceDelegationPrefix)
+	store := k.storeService.OpenKVStore(ctx)
+	delegationsStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.ServiceDelegationPrefix)
 
 	// Query the service delegations for the given pool id
 	delegations, pageRes, err := query.GenericFilteredPaginate(k.cdc, delegationsStore, req.Pagination, func(key []byte, delegation *types.Delegation) (*types.Delegation, error) {
@@ -495,7 +485,7 @@ func (k Querier) ServiceDelegations(goCtx context.Context, req *types.QueryServi
 }
 
 // ServiceDelegation queries the service delegation for the given service id and user address
-func (k Querier) ServiceDelegation(goCtx context.Context, req *types.QueryServiceDelegationRequest) (*types.QueryServiceDelegationResponse, error) {
+func (k Querier) ServiceDelegation(ctx context.Context, req *types.QueryServiceDelegationRequest) (*types.QueryServiceDelegationResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -507,9 +497,11 @@ func (k Querier) ServiceDelegation(goCtx context.Context, req *types.QueryServic
 		return nil, status.Error(codes.InvalidArgument, "service id cannot be zero")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
+	serviceDelegation, found, err := k.GetServiceDelegation(ctx, req.ServiceId, req.DelegatorAddress)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 
-	serviceDelegation, found := k.GetServiceDelegation(ctx, req.ServiceId, req.DelegatorAddress)
 	if !found {
 		return nil, status.Error(codes.NotFound, "pool delegation not found")
 	}
@@ -525,7 +517,7 @@ func (k Querier) ServiceDelegation(goCtx context.Context, req *types.QueryServic
 }
 
 // ServiceUnbondingDelegations queries the service unbonding delegations for the given service id
-func (k Querier) ServiceUnbondingDelegations(goCtx context.Context, req *types.QueryServiceUnbondingDelegationsRequest) (*types.QueryServiceUnbondingDelegationsResponse, error) {
+func (k Querier) ServiceUnbondingDelegations(ctx context.Context, req *types.QueryServiceUnbondingDelegationsRequest) (*types.QueryServiceUnbondingDelegationsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -534,11 +526,9 @@ func (k Querier) ServiceUnbondingDelegations(goCtx context.Context, req *types.Q
 		return nil, status.Error(codes.InvalidArgument, "service id cannot be 0")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
 	// Get the service unbonding delegations store
-	store := ctx.KVStore(k.storeKey)
-	delegationsStore := prefix.NewStore(store, types.ServiceUnbondingDelegationPrefix)
+	store := k.storeService.OpenKVStore(ctx)
+	delegationsStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.ServiceUnbondingDelegationPrefix)
 
 	// Query the service unbonding delegations for the given pool id
 	var unbondingDelegations []types.UnbondingDelegation
@@ -561,7 +551,7 @@ func (k Querier) ServiceUnbondingDelegations(goCtx context.Context, req *types.Q
 }
 
 // ServiceUnbondingDelegation queries the service unbonding delegation for the given service id and user address
-func (k Querier) ServiceUnbondingDelegation(goCtx context.Context, req *types.QueryServiceUnbondingDelegationRequest) (*types.QueryServiceUnbondingDelegationResponse, error) {
+func (k Querier) ServiceUnbondingDelegation(ctx context.Context, req *types.QueryServiceUnbondingDelegationRequest) (*types.QueryServiceUnbondingDelegationResponse, error) {
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
 	}
@@ -573,9 +563,11 @@ func (k Querier) ServiceUnbondingDelegation(goCtx context.Context, req *types.Qu
 		return nil, status.Errorf(codes.InvalidArgument, "service id cannot be zero")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
+	unbond, found, err := k.GetServiceUnbondingDelegation(ctx, req.ServiceId, req.DelegatorAddress)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 
-	unbond, found := k.GetServiceUnbondingDelegation(ctx, req.ServiceId, req.DelegatorAddress)
 	if !found {
 		return nil, status.Errorf(
 			codes.NotFound,
@@ -590,7 +582,7 @@ func (k Querier) ServiceUnbondingDelegation(goCtx context.Context, req *types.Qu
 }
 
 // DelegatorPoolDelegations queries the pool delegations for the given delegator address
-func (k Querier) DelegatorPoolDelegations(goCtx context.Context, req *types.QueryDelegatorPoolDelegationsRequest) (*types.QueryDelegatorPoolDelegationsResponse, error) {
+func (k Querier) DelegatorPoolDelegations(ctx context.Context, req *types.QueryDelegatorPoolDelegationsRequest) (*types.QueryDelegatorPoolDelegationsResponse, error) {
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
 	}
@@ -599,11 +591,9 @@ func (k Querier) DelegatorPoolDelegations(goCtx context.Context, req *types.Quer
 		return nil, status.Error(codes.InvalidArgument, "delegator address cannot be empty")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
 	// Get the user pool delegations store
-	store := ctx.KVStore(k.storeKey)
-	delStore := prefix.NewStore(store, types.UserPoolDelegationsStorePrefix(req.DelegatorAddress))
+	store := k.storeService.OpenKVStore(ctx)
+	delStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.UserPoolDelegationsStorePrefix(req.DelegatorAddress))
 
 	// Get the delegations
 	var delegations []types.Delegation
@@ -635,7 +625,7 @@ func (k Querier) DelegatorPoolDelegations(goCtx context.Context, req *types.Quer
 }
 
 // DelegatorPoolUnbondingDelegations queries the pool unbonding delegations for the given delegator address
-func (k Querier) DelegatorPoolUnbondingDelegations(goCtx context.Context, req *types.QueryDelegatorPoolUnbondingDelegationsRequest) (*types.QueryDelegatorPoolUnbondingDelegationsResponse, error) {
+func (k Querier) DelegatorPoolUnbondingDelegations(ctx context.Context, req *types.QueryDelegatorPoolUnbondingDelegationsRequest) (*types.QueryDelegatorPoolUnbondingDelegationsResponse, error) {
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
 	}
@@ -644,11 +634,9 @@ func (k Querier) DelegatorPoolUnbondingDelegations(goCtx context.Context, req *t
 		return nil, status.Error(codes.InvalidArgument, "delegator address cannot be empty")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
 	// Get the user pool unbonding delegations store
-	store := ctx.KVStore(k.storeKey)
-	delStore := prefix.NewStore(store, types.PoolUnbondingDelegationsStorePrefix(req.DelegatorAddress))
+	store := k.storeService.OpenKVStore(ctx)
+	delStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.PoolUnbondingDelegationsStorePrefix(req.DelegatorAddress))
 
 	// Get the unbonding delegations
 	var unbondingDelegations []types.UnbondingDelegation
@@ -671,7 +659,7 @@ func (k Querier) DelegatorPoolUnbondingDelegations(goCtx context.Context, req *t
 }
 
 // DelegatorOperatorDelegations queries the operator delegations for the given delegator address
-func (k Querier) DelegatorOperatorDelegations(goCtx context.Context, req *types.QueryDelegatorOperatorDelegationsRequest) (*types.QueryDelegatorOperatorDelegationsResponse, error) {
+func (k Querier) DelegatorOperatorDelegations(ctx context.Context, req *types.QueryDelegatorOperatorDelegationsRequest) (*types.QueryDelegatorOperatorDelegationsResponse, error) {
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
 	}
@@ -680,11 +668,9 @@ func (k Querier) DelegatorOperatorDelegations(goCtx context.Context, req *types.
 		return nil, status.Error(codes.InvalidArgument, "delegator address cannot be empty")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
 	// Get the user operator delegations store
-	store := ctx.KVStore(k.storeKey)
-	delStore := prefix.NewStore(store, types.UserOperatorDelegationsStorePrefix(req.DelegatorAddress))
+	store := k.storeService.OpenKVStore(ctx)
+	delStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.UserOperatorDelegationsStorePrefix(req.DelegatorAddress))
 
 	// Get the delegations
 	var delegations []types.Delegation
@@ -716,7 +702,7 @@ func (k Querier) DelegatorOperatorDelegations(goCtx context.Context, req *types.
 }
 
 // DelegatorOperatorUnbondingDelegations queries the operator unbonding delegations for the given delegator address
-func (k Querier) DelegatorOperatorUnbondingDelegations(goCtx context.Context, req *types.QueryDelegatorOperatorUnbondingDelegationsRequest) (*types.QueryDelegatorOperatorUnbondingDelegationsResponse, error) {
+func (k Querier) DelegatorOperatorUnbondingDelegations(ctx context.Context, req *types.QueryDelegatorOperatorUnbondingDelegationsRequest) (*types.QueryDelegatorOperatorUnbondingDelegationsResponse, error) {
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
 	}
@@ -725,11 +711,9 @@ func (k Querier) DelegatorOperatorUnbondingDelegations(goCtx context.Context, re
 		return nil, status.Error(codes.InvalidArgument, "delegator address cannot be empty")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
 	// Get the user operator unbonding delegations store
-	store := ctx.KVStore(k.storeKey)
-	delStore := prefix.NewStore(store, types.OperatorUnbondingDelegationsStorePrefix(req.DelegatorAddress))
+	store := k.storeService.OpenKVStore(ctx)
+	delStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.OperatorUnbondingDelegationsStorePrefix(req.DelegatorAddress))
 
 	// Get the unbonding delegations
 	var unbondingDelegations []types.UnbondingDelegation
@@ -752,7 +736,7 @@ func (k Querier) DelegatorOperatorUnbondingDelegations(goCtx context.Context, re
 }
 
 // DelegatorServiceDelegations queries the service delegations for the given delegator address
-func (k Querier) DelegatorServiceDelegations(goCtx context.Context, req *types.QueryDelegatorServiceDelegationsRequest) (*types.QueryDelegatorServiceDelegationsResponse, error) {
+func (k Querier) DelegatorServiceDelegations(ctx context.Context, req *types.QueryDelegatorServiceDelegationsRequest) (*types.QueryDelegatorServiceDelegationsResponse, error) {
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
 	}
@@ -761,11 +745,9 @@ func (k Querier) DelegatorServiceDelegations(goCtx context.Context, req *types.Q
 		return nil, status.Error(codes.InvalidArgument, "delegator address cannot be empty")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
 	// Get the user services delegations store
-	store := ctx.KVStore(k.storeKey)
-	delStore := prefix.NewStore(store, types.UserServiceDelegationsStorePrefix(req.DelegatorAddress))
+	store := k.storeService.OpenKVStore(ctx)
+	delStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.UserServiceDelegationsStorePrefix(req.DelegatorAddress))
 
 	// Get the delegations
 	var delegations []types.Delegation
@@ -797,7 +779,7 @@ func (k Querier) DelegatorServiceDelegations(goCtx context.Context, req *types.Q
 }
 
 // DelegatorServiceUnbondingDelegations queries the service unbonding delegations for the given delegator address
-func (k Querier) DelegatorServiceUnbondingDelegations(goCtx context.Context, req *types.QueryDelegatorServiceUnbondingDelegationsRequest) (*types.QueryDelegatorServiceUnbondingDelegationsResponse, error) {
+func (k Querier) DelegatorServiceUnbondingDelegations(ctx context.Context, req *types.QueryDelegatorServiceUnbondingDelegationsRequest) (*types.QueryDelegatorServiceUnbondingDelegationsResponse, error) {
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
 	}
@@ -806,11 +788,9 @@ func (k Querier) DelegatorServiceUnbondingDelegations(goCtx context.Context, req
 		return nil, status.Error(codes.InvalidArgument, "delegator address cannot be empty")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
 	// Get the user services unbonding delegations store
-	store := ctx.KVStore(k.storeKey)
-	delStore := prefix.NewStore(store, types.ServiceUnbondingDelegationsStorePrefix(req.DelegatorAddress))
+	store := k.storeService.OpenKVStore(ctx)
+	delStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.ServiceUnbondingDelegationsStorePrefix(req.DelegatorAddress))
 
 	// Get the unbonding delegations
 	var unbondingDelegations []types.UnbondingDelegation
@@ -833,7 +813,7 @@ func (k Querier) DelegatorServiceUnbondingDelegations(goCtx context.Context, req
 }
 
 // DelegatorPools queries the pools for the given delegator address
-func (k Querier) DelegatorPools(goCtx context.Context, req *types.QueryDelegatorPoolsRequest) (*types.QueryDelegatorPoolsResponse, error) {
+func (k Querier) DelegatorPools(ctx context.Context, req *types.QueryDelegatorPoolsRequest) (*types.QueryDelegatorPoolsResponse, error) {
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
 	}
@@ -842,11 +822,9 @@ func (k Querier) DelegatorPools(goCtx context.Context, req *types.QueryDelegator
 		return nil, status.Error(codes.InvalidArgument, "delegator address cannot be empty")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
 	// Get the user pools delegations store
-	store := ctx.KVStore(k.storeKey)
-	delStore := prefix.NewStore(store, types.UserPoolDelegationsStorePrefix(req.DelegatorAddress))
+	store := k.storeService.OpenKVStore(ctx)
+	delStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.UserPoolDelegationsStorePrefix(req.DelegatorAddress))
 
 	// Get the pools
 	var pools []poolstypes.Pool
@@ -880,7 +858,7 @@ func (k Querier) DelegatorPools(goCtx context.Context, req *types.QueryDelegator
 }
 
 // DelegatorPool queries the pool for the given delegator address and pool id
-func (k Querier) DelegatorPool(goCtx context.Context, req *types.QueryDelegatorPoolRequest) (*types.QueryDelegatorPoolResponse, error) {
+func (k Querier) DelegatorPool(ctx context.Context, req *types.QueryDelegatorPoolRequest) (*types.QueryDelegatorPoolResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -892,9 +870,11 @@ func (k Querier) DelegatorPool(goCtx context.Context, req *types.QueryDelegatorP
 		return nil, status.Error(codes.InvalidArgument, "pool id cannot be zero")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
+	delegation, found, err := k.GetPoolDelegation(ctx, req.PoolId, req.DelegatorAddress)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 
-	delegation, found := k.GetPoolDelegation(ctx, req.PoolId, req.DelegatorAddress)
 	if !found {
 		return nil, status.Error(codes.NotFound, "pool delegation not found")
 	}
@@ -914,7 +894,7 @@ func (k Querier) DelegatorPool(goCtx context.Context, req *types.QueryDelegatorP
 }
 
 // DelegatorOperators queries the operators for the given delegator address
-func (k Querier) DelegatorOperators(goCtx context.Context, req *types.QueryDelegatorOperatorsRequest) (*types.QueryDelegatorOperatorsResponse, error) {
+func (k Querier) DelegatorOperators(ctx context.Context, req *types.QueryDelegatorOperatorsRequest) (*types.QueryDelegatorOperatorsResponse, error) {
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
 	}
@@ -923,11 +903,9 @@ func (k Querier) DelegatorOperators(goCtx context.Context, req *types.QueryDeleg
 		return nil, status.Error(codes.InvalidArgument, "delegator address cannot be empty")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
 	// Get the user operators delegations store
-	store := ctx.KVStore(k.storeKey)
-	delStore := prefix.NewStore(store, types.UserOperatorDelegationsStorePrefix(req.DelegatorAddress))
+	store := k.storeService.OpenKVStore(ctx)
+	delStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.UserOperatorDelegationsStorePrefix(req.DelegatorAddress))
 
 	// Get the operators
 	var operators []operatorstypes.Operator
@@ -961,7 +939,7 @@ func (k Querier) DelegatorOperators(goCtx context.Context, req *types.QueryDeleg
 }
 
 // DelegatorOperator queries the operator for the given delegator address and operator id
-func (k Querier) DelegatorOperator(goCtx context.Context, req *types.QueryDelegatorOperatorRequest) (*types.QueryDelegatorOperatorResponse, error) {
+func (k Querier) DelegatorOperator(ctx context.Context, req *types.QueryDelegatorOperatorRequest) (*types.QueryDelegatorOperatorResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -973,9 +951,11 @@ func (k Querier) DelegatorOperator(goCtx context.Context, req *types.QueryDelega
 		return nil, status.Error(codes.InvalidArgument, "operator id cannot be zero")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
+	delegation, found, err := k.GetOperatorDelegation(ctx, req.OperatorId, req.DelegatorAddress)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 
-	delegation, found := k.GetOperatorDelegation(ctx, req.OperatorId, req.DelegatorAddress)
 	if !found {
 		return nil, status.Error(codes.NotFound, "operator delegation not found")
 	}
@@ -995,7 +975,7 @@ func (k Querier) DelegatorOperator(goCtx context.Context, req *types.QueryDelega
 }
 
 // DelegatorServices queries the services for the given delegator address
-func (k Querier) DelegatorServices(goCtx context.Context, req *types.QueryDelegatorServicesRequest) (*types.QueryDelegatorServicesResponse, error) {
+func (k Querier) DelegatorServices(ctx context.Context, req *types.QueryDelegatorServicesRequest) (*types.QueryDelegatorServicesResponse, error) {
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
 	}
@@ -1004,11 +984,9 @@ func (k Querier) DelegatorServices(goCtx context.Context, req *types.QueryDelega
 		return nil, status.Error(codes.InvalidArgument, "delegator address cannot be empty")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
 	// Get the user services delegations store
-	store := ctx.KVStore(k.storeKey)
-	delStore := prefix.NewStore(store, types.UserServiceDelegationsStorePrefix(req.DelegatorAddress))
+	store := k.storeService.OpenKVStore(ctx)
+	delStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.UserServiceDelegationsStorePrefix(req.DelegatorAddress))
 
 	// Get the services
 	var services []servicestypes.Service
@@ -1042,7 +1020,7 @@ func (k Querier) DelegatorServices(goCtx context.Context, req *types.QueryDelega
 }
 
 // DelegatorService queries the service for the given delegator address and service id
-func (k Querier) DelegatorService(goCtx context.Context, req *types.QueryDelegatorServiceRequest) (*types.QueryDelegatorServiceResponse, error) {
+func (k Querier) DelegatorService(ctx context.Context, req *types.QueryDelegatorServiceRequest) (*types.QueryDelegatorServiceResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -1054,9 +1032,11 @@ func (k Querier) DelegatorService(goCtx context.Context, req *types.QueryDelegat
 		return nil, status.Error(codes.InvalidArgument, "service id cannot be zero")
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
+	delegation, found, err := k.GetServiceDelegation(ctx, req.ServiceId, req.DelegatorAddress)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 
-	delegation, found := k.GetServiceDelegation(ctx, req.ServiceId, req.DelegatorAddress)
 	if !found {
 		return nil, status.Error(codes.NotFound, "service delegation not found")
 	}
@@ -1076,7 +1056,7 @@ func (k Querier) DelegatorService(goCtx context.Context, req *types.QueryDelegat
 }
 
 // UserPreferences queries the user preferences for the given user address
-func (k Querier) UserPreferences(goCtx context.Context, req *types.QueryUserPreferencesRequest) (*types.QueryUserPreferencesResponse, error) {
+func (k Querier) UserPreferences(ctx context.Context, req *types.QueryUserPreferencesRequest) (*types.QueryUserPreferencesResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
@@ -1084,8 +1064,6 @@ func (k Querier) UserPreferences(goCtx context.Context, req *types.QueryUserPref
 	if req.UserAddress == "" {
 		return nil, status.Error(codes.InvalidArgument, "user address cannot be empty")
 	}
-
-	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	preferences, err := k.GetUserPreferences(ctx, req.UserAddress)
 	if err != nil {
@@ -1098,16 +1076,19 @@ func (k Querier) UserPreferences(goCtx context.Context, req *types.QueryUserPref
 }
 
 // Params queries the restaking module parameters
-func (k Querier) Params(goCtx context.Context, _ *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-	params := k.GetParams(ctx)
+func (k Querier) Params(ctx context.Context, _ *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
+	params, err := k.GetParams(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
 	return &types.QueryParamsResponse{Params: params}, nil
 }
 
 // --------------------------------------------------------------------------------------------------------------------
 
 // PoolDelegationToPoolDelegationResponse converts a PoolDelegation to a PoolDelegationResponse
-func PoolDelegationToPoolDelegationResponse(ctx sdk.Context, k *Keeper, delegation types.Delegation) (types.DelegationResponse, error) {
+func PoolDelegationToPoolDelegationResponse(ctx context.Context, k *Keeper, delegation types.Delegation) (types.DelegationResponse, error) {
 	pool, found, err := k.poolsKeeper.GetPool(ctx, delegation.TargetID)
 	if err != nil {
 		return types.DelegationResponse{}, err
@@ -1122,7 +1103,7 @@ func PoolDelegationToPoolDelegationResponse(ctx sdk.Context, k *Keeper, delegati
 }
 
 // OperatorDelegationToOperatorDelegationResponse converts a OperatorDelegation to a OperatorDelegationResponse
-func OperatorDelegationToOperatorDelegationResponse(ctx sdk.Context, k *Keeper, delegation types.Delegation) (types.DelegationResponse, error) {
+func OperatorDelegationToOperatorDelegationResponse(ctx context.Context, k *Keeper, delegation types.Delegation) (types.DelegationResponse, error) {
 	operator, found, err := k.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
 	if err != nil {
 		return types.DelegationResponse{}, err
@@ -1137,7 +1118,7 @@ func OperatorDelegationToOperatorDelegationResponse(ctx sdk.Context, k *Keeper, 
 }
 
 // ServiceDelegationToServiceDelegationResponse converts a ServiceDelegation to a ServiceDelegationResponse
-func ServiceDelegationToServiceDelegationResponse(ctx sdk.Context, k *Keeper, delegation types.Delegation) (types.DelegationResponse, error) {
+func ServiceDelegationToServiceDelegationResponse(ctx context.Context, k *Keeper, delegation types.Delegation) (types.DelegationResponse, error) {
 	service, found, err := k.servicesKeeper.GetService(ctx, delegation.TargetID)
 	if err != nil {
 		return types.DelegationResponse{}, err
