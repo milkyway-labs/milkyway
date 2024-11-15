@@ -35,3 +35,8 @@ func (m MockHooks) AfterServiceDeleted(_ sdk.Context, _ uint32) error {
 	m.CalledMap["AfterServiceDeleted"] = true
 	return nil
 }
+
+func (m MockHooks) AfterServiceAccreditationModified(_ sdk.Context, _ uint32, _ bool) error {
+	m.CalledMap["AfterServiceAccreditationModified"] = true
+	return nil
+}
