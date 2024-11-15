@@ -18,6 +18,7 @@ type ServicesHooks interface {
 	AfterServiceActivated(ctx sdk.Context, serviceID uint32) error   // Must be called after a service is registered
 	AfterServiceDeactivated(ctx sdk.Context, serviceID uint32) error // Must be called after a service is deregistered
 	AfterServiceDeleted(ctx sdk.Context, serviceID uint32) error     // Must be called after a service is deleted
+	AfterServiceAccreditationModified(ctx sdk.Context, serviceID uint32, accredited bool) error
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -66,6 +67,16 @@ func (m MultiServicesHooks) AfterServiceDeactivated(ctx sdk.Context, serviceID u
 func (m MultiServicesHooks) AfterServiceDeleted(ctx sdk.Context, serviceID uint32) error {
 	for _, hook := range m {
 		if err := hook.AfterServiceDeleted(ctx, serviceID); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// AfterServiceAccreditationModified implements ServicesHooks
+func (m MultiServicesHooks) AfterServiceAccreditationModified(ctx sdk.Context, serviceID uint32, accredited bool) error {
+	for _, hook := range m {
+		if err := hook.AfterServiceAccreditationModified(ctx, serviceID, accredited); err != nil {
 			return err
 		}
 	}

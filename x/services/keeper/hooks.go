@@ -40,3 +40,11 @@ func (k *Keeper) AfterServiceDeleted(ctx sdk.Context, serviceID uint32) error {
 	}
 	return nil
 }
+
+// AfterServiceAccreditationModified implements ServicesHooks
+func (k *Keeper) AfterServiceAccreditationModified(ctx sdk.Context, serviceID uint32, accredited bool) error {
+	if k.hooks != nil {
+		return k.hooks.AfterServiceAccreditationModified(ctx, serviceID, accredited)
+	}
+	return nil
+}

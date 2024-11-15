@@ -2,8 +2,10 @@ package keeper
 
 import (
 	"cosmossdk.io/collections"
+	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/milkyway-labs/milkyway/x/restaking/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
@@ -98,5 +100,31 @@ func (h *ServicesHooks) AfterServiceActivated(ctx sdk.Context, serviceID uint32)
 
 // AfterServiceCreated implements types.ServicesHooks.
 func (h *ServicesHooks) AfterServiceCreated(ctx sdk.Context, serviceID uint32) error {
+	return nil
+}
+
+// AfterServiceAccreditationModified implements types.ServicesHooks.
+func (h *ServicesHooks) AfterServiceAccreditationModified(ctx sdk.Context, serviceID uint32, accredited bool) error {
+	store := ctx.KVStore(h.storeKey)
+	iter := storetypes.KVStorePrefixIterator(store, types.DelegationsByServiceIDStorePrefix(serviceID))
+	defer iter.Close()
+	for iter.Valid() {
+		_, delegator, err := types.ParseDelegationsByServiceIDKey(iter.Key())
+		if err != nil {
+			return err
+		}
+		preferences, err := h.GetUserPreferences(ctx, delegator)
+		if err != nil {
+			return err
+		}
+		trustedBefore := preferences.IsServiceTrusted(serviceID, !accredited)
+		trustedAfter := preferences.IsServiceTrusted(serviceID, accredited)
+		if trustedBefore != trustedAfter {
+			err = h.AfterUserTrustedServiceUpdated(ctx, delegator, serviceID, trustedAfter)
+			if err != nil {
+				return err
+			}
+		}
+	}
 	return nil
 }

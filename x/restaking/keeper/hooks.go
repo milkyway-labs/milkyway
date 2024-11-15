@@ -117,3 +117,11 @@ func (k *Keeper) AfterUnbondingInitiated(ctx sdk.Context, unbondingDelegationID 
 	}
 	return nil
 }
+
+// AfterUserTrustedServiceUpdated implements types.RestakingHooks
+func (k *Keeper) AfterUserTrustedServiceUpdated(ctx sdk.Context, userAddress string, serviceID uint32, trusted bool) error {
+	if k.hooks != nil {
+		return k.hooks.AfterUserTrustedServiceUpdated(ctx, userAddress, serviceID, trusted)
+	}
+	return nil
+}

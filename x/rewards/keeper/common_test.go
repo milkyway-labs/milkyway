@@ -170,6 +170,7 @@ func (suite *KeeperTestSuite) CreateOperator(ctx sdk.Context, name string, admin
 }
 
 // UpdateOperatorParams updates the operator's params.
+// TODO: split functionalites
 func (suite *KeeperTestSuite) UpdateOperatorParams(
 	ctx sdk.Context,
 	operatorID uint32,
@@ -190,6 +191,22 @@ func (suite *KeeperTestSuite) UpdateOperatorParams(
 		err = suite.restakingKeeper.AddServiceToOperatorJoinedServices(ctx, operatorID, serviceID)
 		suite.Require().NoError(err)
 	}
+}
+
+// SetUserPreferences sets the user's preferences.
+func (suite *KeeperTestSuite) SetUserPreferences(
+	ctx sdk.Context,
+	userAddress string,
+	trustNonAccreditedServices,
+	trustAccreditedServices bool,
+	trustedServicesIDs []uint32,
+) {
+	err := suite.restakingKeeper.SetUserPreferences(
+		ctx,
+		userAddress,
+		restakingtypes.NewUserPreferences(trustNonAccreditedServices, trustAccreditedServices, trustedServicesIDs),
+	)
+	suite.Require().NoError(err)
 }
 
 // AddPoolsToServiceSecuringPools adds the provided pools the list of

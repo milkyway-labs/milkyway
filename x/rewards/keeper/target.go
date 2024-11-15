@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"cosmossdk.io/errors"
-	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
@@ -80,9 +79,19 @@ func (k *Keeper) IncrementDelegationTargetPeriod(ctx context.Context, target res
 	// calculate current ratio
 	var current types.ServicePools
 
-	tokens := target.GetTokens()
 	communityFunding := types.DecPools{}
 	for _, reward := range rewards.Rewards {
+		var tokens sdk.DecCoins
+		if pool, ok := target.(*poolstypes.Pool); ok {
+			totalShares, err := k.GetPoolServiceTotalDelegatorShares(ctx, pool.ID, reward.ServiceID)
+			if err != nil {
+				return 0, err
+			}
+			tokens = pool.TokensFromSharesTruncated(totalShares)
+		} else {
+			tokens = sdk.NewDecCoinsFromCoins(target.GetTokens()...)
+		}
+
 		for _, token := range tokens {
 			rewardCoins := reward.DecPools.CoinsOf(token.Denom)
 			if token.IsZero() {
@@ -93,11 +102,10 @@ func (k *Keeper) IncrementDelegationTargetPeriod(ctx context.Context, target res
 					types.NewServicePool(reward.ServiceID, types.NewDecPool(token.Denom, sdk.DecCoins{})),
 				)
 			} else {
-				// TODO: handle pool service pairs
 				current = current.Add(
 					types.NewServicePool(
 						reward.ServiceID,
-						types.NewDecPool(token.Denom, rewardCoins.QuoDecTruncate(math.LegacyNewDecFromInt(token.Amount))),
+						types.NewDecPool(token.Denom, rewardCoins.QuoDecTruncate(token.Amount)),
 					),
 				)
 			}

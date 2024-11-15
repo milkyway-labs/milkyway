@@ -119,6 +119,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	suite.Require().NoError(err)
 
 	aliceAddr := testutil.TestAddress(1)
+	suite.SetUserPreferences(ctx, aliceAddr.String(), true, true, nil)
 	suite.DelegatePool(ctx, utils.MustParseCoin("100_000000umilk"), aliceAddr.String(), true) // $300
 	suite.DelegatePool(ctx, utils.MustParseCoin("100_000000uinit"), aliceAddr.String(), true) // $200
 	suite.DelegatePool(ctx, utils.MustParseCoin("500_000000uusd"), aliceAddr.String(), true)  // $500
@@ -140,6 +141,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	suite.DelegateOperator(ctx, operator3.ID, utils.MustParseCoins("500_000000uusd"), charlieAddr.String(), true)  // $500
 
 	davidAddr := testutil.TestAddress(4)
+	suite.SetUserPreferences(ctx, davidAddr.String(), true, true, nil)
 	suite.DelegatePool(ctx, utils.MustParseCoin("200_000000umilk"), davidAddr.String(), true)                    // $400
 	suite.DelegatePool(ctx, utils.MustParseCoin("200_000000uinit"), davidAddr.String(), true)                    // $600
 	suite.DelegatePool(ctx, utils.MustParseCoin("200_000000uusd"), davidAddr.String(), true)                     // $200
@@ -373,6 +375,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_ZeroDelegations() {
 
 	// Two users delegate the same amount of $MILK to a pool and the service.
 	delAddr1 := testutil.TestAddress(1)
+	suite.SetUserPreferences(ctx, delAddr1.String(), true, true, nil)
 	suite.DelegatePool(ctx, utils.MustParseCoin("10_000000umilk"), delAddr1.String(), true)
 	delAddr2 := testutil.TestAddress(2)
 	suite.DelegateService(ctx, service.ID, utils.MustParseCoins("10_000000umilk"), delAddr2.String(), true)
@@ -429,13 +432,17 @@ func (suite *KeeperTestSuite) TestAllocateRewards_WeightedDistributions() {
 
 	// Delegate to $MILK pool.
 	delAddr1 := testutil.TestAddress(1)
+	suite.SetUserPreferences(ctx, delAddr1.String(), true, true, nil)
 	suite.DelegatePool(ctx, utils.MustParseCoin("300_000000umilk"), delAddr1.String(), true)
 	delAddr2 := testutil.TestAddress(2)
+	suite.SetUserPreferences(ctx, delAddr2.String(), true, true, nil)
 	suite.DelegatePool(ctx, utils.MustParseCoin("200_000000umilk"), delAddr2.String(), true)
 	// Delegate to $INIT pool.
 	delAddr3 := testutil.TestAddress(3)
+	suite.SetUserPreferences(ctx, delAddr3.String(), true, true, nil)
 	suite.DelegatePool(ctx, utils.MustParseCoin("200_000000uinit"), delAddr3.String(), true)
 	delAddr4 := testutil.TestAddress(4)
+	suite.SetUserPreferences(ctx, delAddr4.String(), true, true, nil)
 	suite.DelegatePool(ctx, utils.MustParseCoin("300_000000uinit"), delAddr4.String(), true)
 	// Delegate to Operator1.
 	delAddr5 := testutil.TestAddress(5)
@@ -561,14 +568,18 @@ func (suite *KeeperTestSuite) TestAllocateRewards_EgalitarianDistributions() {
 
 	// Delegate to $MILK pool.
 	delAddr1 := testutil.TestAddress(1)
+	suite.SetUserPreferences(ctx, delAddr1.String(), true, true, nil)
 	suite.DelegatePool(ctx, utils.MustParseCoin("300_000000umilk"), delAddr1.String(), true)
 	delAddr2 := testutil.TestAddress(2)
+	suite.SetUserPreferences(ctx, delAddr2.String(), true, true, nil)
 	suite.DelegatePool(ctx, utils.MustParseCoin("200_000000umilk"), delAddr2.String(), true)
 
 	// Delegate to $INIT pool.
 	delAddr3 := testutil.TestAddress(3)
+	suite.SetUserPreferences(ctx, delAddr3.String(), true, true, nil)
 	suite.DelegatePool(ctx, utils.MustParseCoin("200_000000uinit"), delAddr3.String(), true)
 	delAddr4 := testutil.TestAddress(4)
+	suite.SetUserPreferences(ctx, delAddr4.String(), true, true, nil)
 	suite.DelegatePool(ctx, utils.MustParseCoin("300_000000uinit"), delAddr4.String(), true)
 
 	// Delegate to Operator1.

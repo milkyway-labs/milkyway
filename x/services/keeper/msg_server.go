@@ -322,6 +322,11 @@ func (k msgServer) AccreditService(goCtx context.Context, msg *types.MsgAccredit
 		return nil, err
 	}
 
+	err := k.AfterServiceAccreditationModified(ctx, service.ID, true)
+	if err != nil {
+		return nil, err
+	}
+
 	// Emit the event
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
@@ -351,6 +356,11 @@ func (k msgServer) RevokeServiceAccreditation(goCtx context.Context, msg *types.
 	// Revoke the service accreditation
 	service.Accredited = false
 	if err := k.SaveService(ctx, service); err != nil {
+		return nil, err
+	}
+
+	err := k.AfterServiceAccreditationModified(ctx, service.ID, true)
+	if err != nil {
 		return nil, err
 	}
 

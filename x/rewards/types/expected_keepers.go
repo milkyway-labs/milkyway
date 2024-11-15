@@ -65,7 +65,7 @@ type ServicesKeeper interface {
 type RestakingKeeper interface {
 	HasOperatorJoinedService(ctx sdk.Context, operatorID uint32, serviceID uint32) (bool, error)
 	CanOperatorValidateService(ctx sdk.Context, serviceID uint32, operatorID uint32) (bool, error)
-	IsServiceSecuredByPool(ctx sdk.Context, serviceID uint32, operatorID uint32) (bool, error)
+	IsServiceSecuredByPool(ctx sdk.Context, serviceID uint32, poolID uint32) (bool, error)
 	GetRestakableDenoms(ctx sdk.Context) []string
 	GetPoolDelegation(ctx sdk.Context, poolID uint32, userAddress string) (restakingtypes.Delegation, bool)
 	GetOperatorDelegation(ctx sdk.Context, operatorID uint32, userAddress string) (restakingtypes.Delegation, bool)
@@ -79,6 +79,7 @@ type RestakingKeeper interface {
 	IterateAllPoolDelegations(ctx sdk.Context, cb func(del restakingtypes.Delegation) (stop bool))
 	IterateAllOperatorDelegations(ctx sdk.Context, cb func(del restakingtypes.Delegation) (stop bool))
 	IterateAllServiceDelegations(ctx sdk.Context, cb func(del restakingtypes.Delegation) (stop bool))
+	GetUserTrustedServicesIDs(ctx sdk.Context, userAddress string) ([]uint32, error)
 }
 
 type AssetsKeeper interface {

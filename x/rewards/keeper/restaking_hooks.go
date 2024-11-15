@@ -3,6 +3,7 @@ package keeper
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 )
 
@@ -78,5 +79,52 @@ func (h RestakingHooks) BeforeServiceDelegationRemoved(_ sdk.Context, _ uint32, 
 
 // AfterUnbondingInitiated implements restakingtypes.RestakingHooks
 func (h RestakingHooks) AfterUnbondingInitiated(_ sdk.Context, _ uint64) error {
+	return nil
+}
+
+func (h RestakingHooks) AfterUserTrustedServiceUpdated(ctx sdk.Context, userAddress string, serviceID uint32, trusted bool) error {
+	delAddr, err := h.k.accountKeeper.AddressCodec().StringToBytes(userAddress)
+	if err != nil {
+		return err
+	}
+
+	err = h.k.restakingKeeper.IterateUserPoolDelegations(ctx, userAddress, func(del restakingtypes.Delegation) (stop bool, err error) {
+		isSecured, err := h.k.restakingKeeper.IsServiceSecuredByPool(ctx, serviceID, del.TargetID)
+		if err != nil {
+			return true, err
+		}
+		if !isSecured {
+			return false, nil
+		}
+
+		pool, found := h.k.poolsKeeper.GetPool(ctx, del.TargetID)
+		if !found {
+			return true, poolstypes.ErrPoolNotFound
+		}
+
+		// Calling these two methods has same effect as calling
+		// BeforePoolDelegationSharesModified and then AfterPoolDelegationModified.
+		_, err = h.k.withdrawDelegationRewards(ctx, pool, del)
+		if err != nil {
+			return true, err
+		}
+		err = h.k.initializeDelegation(ctx, pool, delAddr)
+		if err != nil {
+			return true, err
+		}
+
+		if trusted {
+			err = h.k.IncrementPoolServiceTotalDelegatorShares(ctx, del.TargetID, serviceID, del.Shares)
+		} else {
+			err = h.k.DecrementPoolServiceTotalDelegatorShares(ctx, del.TargetID, serviceID, del.Shares)
+		}
+		if err != nil {
+			return true, err
+		}
+		return false, nil
+	})
+	if err != nil {
+		return err
+	}
 	return nil
 }

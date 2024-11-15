@@ -54,7 +54,23 @@ func (k *Keeper) BeforeDelegationSharesModified(ctx sdk.Context, delType restaki
 	}
 
 	_, err = k.withdrawDelegationRewards(ctx, target, del)
-	return err
+	if err != nil {
+		return err
+	}
+
+	if delType == restakingtypes.DELEGATION_TYPE_POOL {
+		servicesIDs, err := k.restakingKeeper.GetUserTrustedServicesIDs(ctx, delegator)
+		if err != nil {
+			return err
+		}
+		for _, serviceID := range servicesIDs {
+			err = k.DecrementPoolServiceTotalDelegatorShares(ctx, targetID, serviceID, del.Shares)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 // AfterDelegationModified is called after a delegation to a target is modified
@@ -69,5 +85,26 @@ func (k *Keeper) AfterDelegationModified(ctx sdk.Context, delType restakingtypes
 		return err
 	}
 
-	return k.initializeDelegation(ctx, target, delAddr)
+	err = k.initializeDelegation(ctx, target, delAddr)
+	if err != nil {
+		return err
+	}
+	if delType == restakingtypes.DELEGATION_TYPE_POOL {
+		del, found := k.restakingKeeper.GetPoolDelegation(ctx, targetID, delegator)
+		if !found {
+			return sdkerrors.ErrNotFound.Wrapf("pool delegation not found: %d, %s", targetID, delegator)
+		}
+
+		servicesIDs, err := k.restakingKeeper.GetUserTrustedServicesIDs(ctx, delegator)
+		if err != nil {
+			return err
+		}
+		for _, serviceID := range servicesIDs {
+			err = k.IncrementPoolServiceTotalDelegatorShares(ctx, targetID, serviceID, del.Shares)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
