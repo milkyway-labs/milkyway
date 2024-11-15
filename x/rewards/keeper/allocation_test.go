@@ -808,4 +808,30 @@ func (suite *KeeperTestSuite) TestAllocateRewards_UserTrustedServiceUpdated() {
 	rewards, err = suite.keeper.GetPoolDelegationRewards(ctx, bobAddr, 1)
 	suite.Require().NoError(err)
 	suite.Require().Equal("231481.200000000000000000service2", rewards.Sum().String())
+
+	charlieAddr := testutil.TestAddress(3)
+	suite.DelegatePool(ctx, utils.MustParseCoin("200_000000umilk"), charlieAddr.String(), true)
+
+	// Withdraw all rewards to make calculation easier.
+	_, err = keeper.NewMsgServer(suite.keeper).WithdrawDelegatorReward(
+		ctx,
+		types.NewMsgWithdrawDelegatorReward(restakingtypes.DELEGATION_TYPE_POOL, 1, aliceAddr.String()),
+	)
+	suite.Require().NoError(err)
+	_, err = keeper.NewMsgServer(suite.keeper).WithdrawDelegatorReward(
+		ctx,
+		types.NewMsgWithdrawDelegatorReward(restakingtypes.DELEGATION_TYPE_POOL, 1, bobAddr.String()),
+	)
+	suite.Require().NoError(err)
+
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+
+	// Rewards amount must not be changed since Charlie doesn't trust any services,
+	// thus receives no rewards.
+	rewards, err = suite.keeper.GetPoolDelegationRewards(ctx, aliceAddr, 1)
+	suite.Require().NoError(err)
+	suite.Require().Equal("115740.000000000000000000service1,347221.800000000000000000service2", rewards.Sum().String())
+	rewards, err = suite.keeper.GetPoolDelegationRewards(ctx, bobAddr, 1)
+	suite.Require().NoError(err)
+	suite.Require().Equal("231481.200000000000000000service2", rewards.Sum().String())
 }

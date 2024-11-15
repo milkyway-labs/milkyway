@@ -1116,6 +1116,7 @@ func (suite *KeeperTestSuite) TestMsgServer_AccreditService() {
 				service, found := suite.k.GetService(ctx, 1)
 				suite.Require().True(found)
 				suite.Require().True(service.Accredited)
+				suite.Require().True(suite.hooks.CalledMap["AfterServiceAccreditationModified"])
 			},
 		},
 	}
@@ -1212,6 +1213,7 @@ func (suite *KeeperTestSuite) TestMsgService_RevokeServiceAccreditation() {
 				service, found := suite.k.GetService(ctx, 1)
 				suite.Require().True(found)
 				suite.Require().False(service.Accredited)
+				suite.Require().True(suite.hooks.CalledMap["AfterServiceAccreditationModified"])
 			},
 		},
 	}
