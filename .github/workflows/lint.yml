@@ -27,7 +27,7 @@ jobs:
       - name: Setup Go 🧰
         uses: actions/setup-go@v5
         with:
-          go-version: '1.22'
+          go-version: '1.23'
 
       - name: Setup GOPRIVATE 🛡️
         run: git config --global url.https://$GH_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
