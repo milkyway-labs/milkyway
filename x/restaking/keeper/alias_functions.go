@@ -964,3 +964,22 @@ func (k *Keeper) GetUserPreferencesEntries(ctx sdk.Context) ([]types.UserPrefere
 
 	return entries, nil
 }
+
+// GetUserTrustedServicesIDs returns the IDs of the services that the user trusts
+// based on the user preferences and the services' status.
+func (k *Keeper) GetUserTrustedServicesIDs(ctx sdk.Context, userAddress string) ([]uint32, error) {
+	preferences, err := k.GetUserPreferences(ctx, userAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	var trustedServicesIDs []uint32
+	k.servicesKeeper.IterateServices(ctx, func(service servicestypes.Service) (stop bool) {
+		if preferences.IsServiceTrusted(service.ID, service.Accredited) {
+			trustedServicesIDs = append(trustedServicesIDs, service.ID)
+		}
+		return false
+	})
+
+	return trustedServicesIDs, nil
+}
