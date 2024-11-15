@@ -420,6 +420,26 @@ func (k *Keeper) IterateAllServiceDelegations(ctx sdk.Context, cb func(del types
 	}
 }
 
+// IterateServiceDelegations iterates all the delegations of a service and
+// performs the given callback function
+func (k *Keeper) IterateServiceDelegations(ctx sdk.Context, serviceID uint32, cb func(del types.Delegation) (stop bool, err error)) error {
+	store := ctx.KVStore(k.storeKey)
+	iterator := storetypes.KVStorePrefixIterator(store, types.DelegationsByServiceIDStorePrefix(serviceID))
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		delegation := types.MustUnmarshalDelegation(k.cdc, iterator.Value())
+		stop, err := cb(delegation)
+		if err != nil {
+			return err
+		}
+		if stop {
+			break
+		}
+	}
+	return nil
+}
+
 // GetAllServiceDelegations returns all the service delegations
 func (k *Keeper) GetAllServiceDelegations(ctx sdk.Context) []types.Delegation {
 	var delegations []types.Delegation

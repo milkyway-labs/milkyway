@@ -68,8 +68,6 @@ type RestakingKeeper interface {
 	IsServiceSecuredByPool(ctx sdk.Context, serviceID uint32, poolID uint32) (bool, error)
 	GetRestakableDenoms(ctx sdk.Context) []string
 	GetPoolDelegation(ctx sdk.Context, poolID uint32, userAddress string) (restakingtypes.Delegation, bool)
-	GetOperatorDelegation(ctx sdk.Context, operatorID uint32, userAddress string) (restakingtypes.Delegation, bool)
-	GetServiceDelegation(ctx sdk.Context, serviceID uint32, userAddress string) (restakingtypes.Delegation, bool)
 	GetDelegationForTarget(ctx sdk.Context, target restakingtypes.DelegationTarget, delegator string) (restakingtypes.Delegation, bool)
 	IterateUserPoolDelegations(ctx sdk.Context, userAddress string, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
 	IterateUserOperatorDelegations(
@@ -79,7 +77,9 @@ type RestakingKeeper interface {
 	IterateAllPoolDelegations(ctx sdk.Context, cb func(del restakingtypes.Delegation) (stop bool))
 	IterateAllOperatorDelegations(ctx sdk.Context, cb func(del restakingtypes.Delegation) (stop bool))
 	IterateAllServiceDelegations(ctx sdk.Context, cb func(del restakingtypes.Delegation) (stop bool))
+	IterateServiceDelegations(ctx sdk.Context, serviceID uint32, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
 	GetUserTrustedServicesIDs(ctx sdk.Context, userAddress string) ([]uint32, error)
+	GetUserPreferences(ctx context.Context, userAddress string) (restakingtypes.UserPreferences, error)
 }
 
 type AssetsKeeper interface {

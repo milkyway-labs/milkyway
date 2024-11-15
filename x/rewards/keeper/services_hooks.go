@@ -39,5 +39,23 @@ func (h ServicesHooks) AfterServiceDeleted(ctx sdk.Context, serviceID uint32) er
 
 // AfterServiceAccreditationModified implements servicestypes.ServicesHooks
 func (h ServicesHooks) AfterServiceAccreditationModified(ctx sdk.Context, serviceID uint32, accredited bool) error {
+	err := h.k.restakingKeeper.IterateServiceDelegations(ctx, serviceID, func(del restakingtypes.Delegation) (stop bool, err error) {
+		preferences, err := h.k.restakingKeeper.GetUserPreferences(ctx, del.UserAddress)
+		if err != nil {
+			return true, err
+		}
+		trustedBefore := preferences.IsServiceTrusted(serviceID, !accredited)
+		trustedAfter := preferences.IsServiceTrusted(serviceID, accredited)
+		if trustedBefore != trustedAfter {
+			err = h.k.AfterUserTrustedServiceUpdated(ctx, del.UserAddress, serviceID, trustedAfter)
+			if err != nil {
+				return true, err
+			}
+		}
+		return false, nil
+	})
+	if err != nil {
+		return err
+	}
 	return nil
 }
