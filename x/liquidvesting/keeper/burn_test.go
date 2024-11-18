@@ -234,6 +234,7 @@ func (suite *KeeperTestSuite) TestKeeper_TestIsBurner() {
 					math.LegacyMustNewDecFromStr("2.0"),
 					[]string{"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"},
 					nil,
+					nil,
 				))
 				suite.Assert().NoError(err)
 			},

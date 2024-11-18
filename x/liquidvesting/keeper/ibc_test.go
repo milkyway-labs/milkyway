@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 
+	sdkmath "cosmossdk.io/math"
+
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -15,6 +17,7 @@ import (
 func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 	testCases := []struct {
 		name           string
+		store          func(ctx sdk.Context)
 		transferAmount sdk.Coin
 		sender         string
 		receiver       string
@@ -23,14 +26,15 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 		check          func(sdk.Context)
 	}{
 		{
-			name:           "empty memo",
+			name:           "empty memo works as normal transfer",
 			transferAmount: sdk.NewInt64Coin("foo", 1000),
 			sender:         "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			receiver:       "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 			memo:           "",
+			shouldErr:      false,
 		},
 		{
-			name:           "trigger by sending to a normal account",
+			name:           "sending to a normal account returns error",
 			transferAmount: sdk.NewInt64Coin("foo", 1000),
 			sender:         "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			receiver:       "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
@@ -53,7 +57,7 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			},
 		},
 		{
-			name:           "transfer not received denom",
+			name:           "trying to transfer not received denom returns error",
 			transferAmount: sdk.NewInt64Coin("foo", 1000),
 			sender:         "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			receiver:       authtypes.NewModuleAddress(types.ModuleName).String(),
@@ -83,7 +87,7 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			},
 		},
 		{
-			name:           "multiple denoms in amount to deposit",
+			name:           "multiple denoms in amount to deposit returns error if one has not been sent",
 			transferAmount: sdk.NewInt64Coin("foo", 1000),
 			sender:         "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			receiver:       authtypes.NewModuleAddress(types.ModuleName).String(),
@@ -113,7 +117,7 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			},
 		},
 		{
-			name:           "deposit more coins then received",
+			name:           "depositing more coins then received returns error",
 			transferAmount: sdk.NewInt64Coin("foo", 1000),
 			sender:         "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			receiver:       authtypes.NewModuleAddress(types.ModuleName).String(),
@@ -143,7 +147,7 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			},
 		},
 		{
-			name:           "deposit less coins then received",
+			name:           "deposit less coins then received returns error",
 			transferAmount: sdk.NewInt64Coin("foo", 1000),
 			sender:         "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			receiver:       authtypes.NewModuleAddress(types.ModuleName).String(),
@@ -173,9 +177,9 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			},
 		},
 		{
-			name:           "correct deposit",
+			name:           "unauthorized depositor can't deposit",
 			transferAmount: sdk.NewInt64Coin("foo", 1000),
-			sender:         "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			sender:         "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			receiver:       authtypes.NewModuleAddress(types.ModuleName).String(),
 			memo: fmt.Sprintf(`{
             "liquidvesting": {
@@ -191,6 +195,45 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 			),
+			shouldErr: true,
+			check: func(ctx sdk.Context) {
+				// Make sure the user's insurance fund is not updated
+				userAddr, err := sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Assert().NoError(err)
+
+				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, userAddr)
+				suite.Assert().NoError(err)
+				suite.Assert().Empty(insuranceFund)
+			},
+		},
+		{
+			name: "correct deposit works properly",
+			store: func(ctx sdk.Context) {
+				// Set the sender as an allowed depositor
+				err := suite.k.SetParams(ctx, types.Params{
+					InsurancePercentage: sdkmath.LegacyNewDec(2),
+					TrustedDelegates:    []string{"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"},
+				})
+				suite.Require().NoError(err)
+			},
+			transferAmount: sdk.NewInt64Coin("foo", 1000),
+			sender:         "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+			receiver:       authtypes.NewModuleAddress(types.ModuleName).String(),
+			memo: fmt.Sprintf(`{
+            "liquidvesting": {
+                "amounts": [{
+                    "depositor": "%s",
+                    "amount": { "amount": "600", "denom": "foo" }
+                },
+                {
+                    "depositor": "%s",
+                    "amount": { "amount": "400", "denom": "foo" }
+                }]
+            }}`,
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				// Make sure the first insurance fund is updated
 				userAddr, err := sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
@@ -217,6 +260,9 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 
 			// Cache the context
 			ctx, _ := suite.ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
 
 			// Build the data to be put inside the packet
 			dataBz, err := json.Marshal(&transfertypes.FungibleTokenPacketData{

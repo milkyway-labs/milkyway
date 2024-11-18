@@ -215,7 +215,7 @@ func (k *Keeper) DequeueAllBurnCoinsFromUnbondingQueue(ctx context.Context, curr
 	}
 
 	// Close the iterator
-	err = iter.Close();
+	err = iter.Close()
 	if err != nil {
 		return nil, err
 	}
