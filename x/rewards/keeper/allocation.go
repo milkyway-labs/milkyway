@@ -278,7 +278,6 @@ func (k *Keeper) AllocateRewardsByPlan(
 	if usersRewards.IsAllPositive() {
 		err = k.allocateRewardsToUsers(
 			ctx,
-			plan.ServiceID,
 			plan.UsersDistribution,
 			service,
 			totalUsersDelValues,
@@ -493,7 +492,6 @@ func (k *Keeper) allocateRewardsEgalitarian(
 // then an error is returned.
 func (k *Keeper) allocateRewardsToUsers(
 	ctx context.Context,
-	serviceID uint32,
 	distr types.UsersDistribution,
 	service servicestypes.Service,
 	totalDelValues math.LegacyDec,
@@ -506,7 +504,7 @@ func (k *Keeper) allocateRewardsToUsers(
 
 	switch distrType.(type) {
 	case *types.UsersDistributionTypeBasic:
-		return k.allocateDelegationTargetRewards(ctx, serviceID, DistributionInfo{
+		return k.allocateDelegationTargetRewards(ctx, service.ID, DistributionInfo{
 			DelegationTarget: &service,
 			DelegationsValue: totalDelValues,
 		}, rewards)
