@@ -415,7 +415,8 @@ func (suite *KeeperTestSuite) TestKeeper_SetServiceAccreditation() {
 			shouldErr:  false,
 			check: func(ctx sdk.Context) {
 				// Accreditation didn't change
-				service, found := suite.k.GetService(ctx, 1)
+				service, found, err := suite.k.GetService(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().False(service.Accredited)
 
@@ -443,7 +444,8 @@ func (suite *KeeperTestSuite) TestKeeper_SetServiceAccreditation() {
 			shouldErr:  false,
 			check: func(ctx sdk.Context) {
 				// Accreditation changed
-				service, found := suite.k.GetService(ctx, 1)
+				service, found, err := suite.k.GetService(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().True(service.Accredited)
 
@@ -464,7 +466,7 @@ func (suite *KeeperTestSuite) TestKeeper_SetServiceAccreditation() {
 				tc.store(ctx)
 			}
 
-			err := suite.k.SetServiceAccreditation(ctx, tc.serviceID, tc.accredited)
+			err := suite.k.SetServiceAccredited(ctx, tc.serviceID, tc.accredited)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {

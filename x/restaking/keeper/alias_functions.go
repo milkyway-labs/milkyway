@@ -459,9 +459,10 @@ func (k *Keeper) IterateAllServiceDelegations(ctx context.Context, cb func(del t
 
 // IterateServiceDelegations iterates all the delegations of a service and
 // performs the given callback function
-func (k *Keeper) IterateServiceDelegations(ctx sdk.Context, serviceID uint32, cb func(del types.Delegation) (stop bool, err error)) error {
-	store := ctx.KVStore(k.storeKey)
-	iterator := storetypes.KVStorePrefixIterator(store, types.DelegationsByServiceIDStorePrefix(serviceID))
+func (k *Keeper) IterateServiceDelegations(ctx context.Context, serviceID uint32, cb func(del types.Delegation) (stop bool, err error)) error {
+	store := k.storeService.OpenKVStore(ctx)
+
+	iterator := storetypes.KVStorePrefixIterator(runtime.KVStoreAdapter(store), types.DelegationsByServiceIDStorePrefix(serviceID))
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
@@ -1106,19 +1107,22 @@ func (k *Keeper) GetUserPreferencesEntries(ctx context.Context) ([]types.UserPre
 
 // GetUserTrustedServicesIDs returns the IDs of the services that the user trusts
 // based on the user preferences and the services' status.
-func (k *Keeper) GetUserTrustedServicesIDs(ctx sdk.Context, userAddress string) ([]uint32, error) {
+func (k *Keeper) GetUserTrustedServicesIDs(ctx context.Context, userAddress string) ([]uint32, error) {
 	preferences, err := k.GetUserPreferences(ctx, userAddress)
 	if err != nil {
 		return nil, err
 	}
 
 	var trustedServicesIDs []uint32
-	k.servicesKeeper.IterateServices(ctx, func(service servicestypes.Service) (stop bool) {
+	err = k.servicesKeeper.IterateServices(ctx, func(service servicestypes.Service) (stop bool, err error) {
 		if preferences.IsServiceTrusted(service) {
 			trustedServicesIDs = append(trustedServicesIDs, service.ID)
 		}
-		return false
+		return false, nil
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	return trustedServicesIDs, nil
 }

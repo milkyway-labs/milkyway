@@ -87,8 +87,7 @@ func (k *Keeper) calculateDelegationRewardsBetween(
 	var decPools types.DecPools
 
 	if _, ok := target.(*poolstypes.Pool); ok {
-		sdkCtx := sdk.UnwrapSDKContext(ctx)
-		servicesIDs, err := k.restakingKeeper.GetUserTrustedServicesIDs(sdkCtx, delegator)
+		servicesIDs, err := k.restakingKeeper.GetUserTrustedServicesIDs(ctx, delegator)
 		if err != nil {
 			return nil, err
 		}

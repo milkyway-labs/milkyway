@@ -369,14 +369,12 @@ func (k *Keeper) GetDelegationRewards(
 		return nil, err
 	}
 
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-
 	delegator, err := k.accountKeeper.AddressCodec().BytesToString(delAddr)
 	if err != nil {
 		return nil, err
 	}
 
-	delegation, found, err := k.restakingKeeper.GetDelegationForTarget(sdkCtx, target, delegator)
+	delegation, found, err := k.restakingKeeper.GetDelegationForTarget(ctx, target, delegator)
 	if err != nil {
 		return nil, err
 	}
@@ -385,6 +383,7 @@ func (k *Keeper) GetDelegationRewards(
 		return nil, errors.Wrap(sdkerrors.ErrNotFound, "delegation not found")
 	}
 
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	cacheCtx, _ := sdkCtx.CacheContext()
 	endingPeriod, err := k.IncrementDelegationTargetPeriod(cacheCtx, target)
 	if err != nil {

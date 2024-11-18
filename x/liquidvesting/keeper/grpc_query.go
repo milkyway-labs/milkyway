@@ -23,10 +23,8 @@ func NewQuerier(keeper *Keeper) Querier {
 }
 
 // InsuranceFund implements types.QueryServer.
-func (q Querier) InsuranceFund(goCtx context.Context, _ *types.QueryInsuranceFundRequest) (*types.QueryInsuranceFundResponse, error) {
-	sdkCtx := sdk.UnwrapSDKContext(goCtx)
-
-	balance, err := q.GetInsuranceFundBalance(sdkCtx)
+func (q Querier) InsuranceFund(ctx context.Context, _ *types.QueryInsuranceFundRequest) (*types.QueryInsuranceFundResponse, error) {
+	balance, err := q.GetInsuranceFundBalance(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -34,10 +32,8 @@ func (q Querier) InsuranceFund(goCtx context.Context, _ *types.QueryInsuranceFun
 }
 
 // Params implements types.QueryServer.
-func (q Querier) Params(goCtx context.Context, _ *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
-	sdkCtx := sdk.UnwrapSDKContext(goCtx)
-
-	params, err := q.GetParams(sdkCtx)
+func (q Querier) Params(ctx context.Context, _ *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
+	params, err := q.GetParams(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -46,19 +42,17 @@ func (q Querier) Params(goCtx context.Context, _ *types.QueryParamsRequest) (*ty
 }
 
 // UserInsuranceFund implements types.QueryServer.
-func (q Querier) UserInsuranceFund(goCtx context.Context, req *types.QueryUserInsuranceFundRequest) (*types.QueryUserInsuranceFundResponse, error) {
+func (q Querier) UserInsuranceFund(ctx context.Context, req *types.QueryUserInsuranceFundRequest) (*types.QueryUserInsuranceFundResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
-
-	sdkCtx := sdk.UnwrapSDKContext(goCtx)
 
 	accAddr, err := sdk.AccAddressFromBech32(req.UserAddress)
 	if err != nil {
 		return nil, err
 	}
 
-	insuranceFund, err := q.GetUserInsuranceFund(sdkCtx, accAddr)
+	insuranceFund, err := q.GetUserInsuranceFund(ctx, accAddr)
 	if err != nil {
 		return nil, err
 	}
@@ -69,14 +63,12 @@ func (q Querier) UserInsuranceFund(goCtx context.Context, req *types.QueryUserIn
 }
 
 // UserInsuranceFunds implements types.QueryServer.
-func (q Querier) UserInsuranceFunds(goCtx context.Context, req *types.QueryUserInsuranceFundsRequest) (*types.QueryUserInsuranceFundsResponse, error) {
+func (q Querier) UserInsuranceFunds(ctx context.Context, req *types.QueryUserInsuranceFundsRequest) (*types.QueryUserInsuranceFundsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
-	sdkCtx := sdk.UnwrapSDKContext(goCtx)
-
-	insuranceFunds, pagination, err := query.CollectionPaginate(sdkCtx, q.insuranceFunds, req.Pagination,
+	insuranceFunds, pagination, err := query.CollectionPaginate(ctx, q.insuranceFunds, req.Pagination,
 		func(userAddress sdk.AccAddress, insuranceFund types.UserInsuranceFund) (types.UserInsuranceFundData, error) {
 			stringAddr, err := q.accountKeeper.AddressCodec().BytesToString(userAddress)
 			if err != nil {
@@ -96,23 +88,21 @@ func (q Querier) UserInsuranceFunds(goCtx context.Context, req *types.QueryUserI
 }
 
 // UserRestakableAssets implements types.QueryServer.
-func (q Querier) UserRestakableAssets(goCtx context.Context, req *types.QueryUserRestakableAssetsRequest) (*types.QueryUserRestakableAssetsResponse, error) {
+func (q Querier) UserRestakableAssets(ctx context.Context, req *types.QueryUserRestakableAssetsRequest) (*types.QueryUserRestakableAssetsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
-
-	sdkCtx := sdk.UnwrapSDKContext(goCtx)
 
 	accAddr, err := sdk.AccAddressFromBech32(req.UserAddress)
 	if err != nil {
 		return nil, err
 	}
 
-	balance, err := q.GetUserInsuranceFundBalance(sdkCtx, accAddr)
+	balance, err := q.GetUserInsuranceFundBalance(ctx, accAddr)
 	if err != nil {
 		return nil, err
 	}
-	params, err := q.GetParams(sdkCtx)
+	params, err := q.GetParams(ctx)
 	if err != nil {
 		return nil, err
 	}

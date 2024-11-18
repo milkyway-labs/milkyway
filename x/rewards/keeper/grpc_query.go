@@ -8,7 +8,6 @@ import (
 
 	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
@@ -38,14 +37,13 @@ func (q queryServer) RewardsPlans(ctx context.Context, req *types.QueryRewardsPl
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
-	plans, pageRes, err := query.CollectionPaginate(
-		ctx, q.k.RewardsPlans, req.Pagination,
-		func(_ uint64, plan types.RewardsPlan) (types.RewardsPlan, error) {
-			return plan, nil
-		})
+	plans, pageRes, err := query.CollectionPaginate(ctx, q.k.RewardsPlans, req.Pagination, func(_ uint64, plan types.RewardsPlan) (types.RewardsPlan, error) {
+		return plan, nil
+	})
 	if err != nil {
 		return nil, err
 	}
+
 	return &types.QueryRewardsPlansResponse{RewardsPlans: plans, Pagination: pageRes}, nil
 }
 
@@ -53,6 +51,7 @@ func (q queryServer) RewardsPlan(ctx context.Context, req *types.QueryRewardsPla
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
+
 	if req.PlanId == 0 {
 		return nil, status.Error(codes.InvalidArgument, "invalid plan id")
 	}
@@ -64,6 +63,7 @@ func (q queryServer) RewardsPlan(ctx context.Context, req *types.QueryRewardsPla
 		}
 		return nil, err
 	}
+
 	return &types.QueryRewardsPlanResponse{RewardsPlan: plan}, nil
 }
 
@@ -71,6 +71,7 @@ func (q queryServer) PoolOutstandingRewards(ctx context.Context, req *types.Quer
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
+
 	if req.PoolId == 0 {
 		return nil, status.Error(codes.InvalidArgument, "invalid pool id")
 	}
@@ -84,6 +85,7 @@ func (q queryServer) PoolOutstandingRewards(ctx context.Context, req *types.Quer
 	if err != nil && !errors.IsOf(err, collections.ErrNotFound) {
 		return nil, err
 	}
+
 	return &types.QueryPoolOutstandingRewardsResponse{Rewards: rewards}, nil
 }
 
@@ -91,6 +93,7 @@ func (q queryServer) OperatorOutstandingRewards(ctx context.Context, req *types.
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
+
 	if req.OperatorId == 0 {
 		return nil, status.Error(codes.InvalidArgument, "invalid operator id")
 	}
@@ -104,6 +107,7 @@ func (q queryServer) OperatorOutstandingRewards(ctx context.Context, req *types.
 	if err != nil && !errors.IsOf(err, collections.ErrNotFound) {
 		return nil, err
 	}
+
 	return &types.QueryOperatorOutstandingRewardsResponse{Rewards: rewards}, nil
 }
 
@@ -111,6 +115,7 @@ func (q queryServer) ServiceOutstandingRewards(ctx context.Context, req *types.Q
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
+
 	if req.ServiceId == 0 {
 		return nil, status.Error(codes.InvalidArgument, "invalid service id")
 	}
@@ -124,6 +129,7 @@ func (q queryServer) ServiceOutstandingRewards(ctx context.Context, req *types.Q
 	if err != nil && !errors.IsOf(err, collections.ErrNotFound) {
 		return nil, err
 	}
+
 	return &types.QueryServiceOutstandingRewardsResponse{Rewards: rewards}, nil
 }
 
@@ -131,6 +137,7 @@ func (q queryServer) OperatorCommission(ctx context.Context, req *types.QueryOpe
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
+
 	if req.OperatorId == 0 {
 		return nil, status.Error(codes.InvalidArgument, "invalid operator id")
 	}
@@ -139,6 +146,7 @@ func (q queryServer) OperatorCommission(ctx context.Context, req *types.QueryOpe
 	if err != nil {
 		return nil, err
 	}
+
 	return &types.QueryOperatorCommissionResponse{Commission: commission}, nil
 }
 
@@ -146,10 +154,12 @@ func (q queryServer) PoolDelegationRewards(ctx context.Context, req *types.Query
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
+
 	delAddr, err := q.k.accountKeeper.AddressCodec().StringToBytes(req.DelegatorAddress)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "invalid delegator address: %s", err)
 	}
+
 	if req.PoolId == 0 {
 		return nil, status.Error(codes.InvalidArgument, "invalid pool id")
 	}
@@ -158,6 +168,7 @@ func (q queryServer) PoolDelegationRewards(ctx context.Context, req *types.Query
 	if err != nil {
 		return nil, err
 	}
+
 	return &types.QueryPoolDelegationRewardsResponse{Rewards: rewards}, nil
 }
 
@@ -165,10 +176,12 @@ func (q queryServer) OperatorDelegationRewards(ctx context.Context, req *types.Q
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
+
 	delAddr, err := q.k.accountKeeper.AddressCodec().StringToBytes(req.DelegatorAddress)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "invalid delegator address: %s", err)
 	}
+
 	if req.OperatorId == 0 {
 		return nil, status.Error(codes.InvalidArgument, "invalid operator id")
 	}
@@ -177,6 +190,7 @@ func (q queryServer) OperatorDelegationRewards(ctx context.Context, req *types.Q
 	if err != nil {
 		return nil, err
 	}
+
 	return &types.QueryOperatorDelegationRewardsResponse{Rewards: rewards}, nil
 }
 
@@ -184,10 +198,12 @@ func (q queryServer) ServiceDelegationRewards(ctx context.Context, req *types.Qu
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
+
 	delAddr, err := q.k.accountKeeper.AddressCodec().StringToBytes(req.DelegatorAddress)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "invalid delegator address: %s", err)
 	}
+
 	if req.ServiceId == 0 {
 		return nil, status.Error(codes.InvalidArgument, "invalid service id")
 	}
@@ -196,6 +212,7 @@ func (q queryServer) ServiceDelegationRewards(ctx context.Context, req *types.Qu
 	if err != nil {
 		return nil, err
 	}
+
 	return &types.QueryServiceDelegationRewardsResponse{Rewards: rewards}, nil
 }
 
@@ -203,15 +220,16 @@ func (q queryServer) DelegatorTotalRewards(ctx context.Context, req *types.Query
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
+
 	delAddr, err := q.k.accountKeeper.AddressCodec().StringToBytes(req.DelegatorAddress)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "invalid delegator address: %s", err)
 	}
 
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	total := types.DecPools{}
+	var total = types.DecPools{}
 	var delRewards []types.DelegationDelegatorReward
-	err = q.k.restakingKeeper.IterateUserPoolDelegations(sdkCtx, req.DelegatorAddress, func(del restakingtypes.Delegation) (stop bool, err error) {
+
+	err = q.k.restakingKeeper.IterateUserPoolDelegations(ctx, req.DelegatorAddress, func(del restakingtypes.Delegation) (stop bool, err error) {
 		delReward, err := q.k.GetPoolDelegationRewards(ctx, delAddr, del.TargetID)
 		if err != nil {
 			return false, err
@@ -223,7 +241,8 @@ func (q queryServer) DelegatorTotalRewards(ctx context.Context, req *types.Query
 	if err != nil {
 		return nil, err
 	}
-	err = q.k.restakingKeeper.IterateUserOperatorDelegations(sdkCtx, req.DelegatorAddress, func(del restakingtypes.Delegation) (stop bool, err error) {
+
+	err = q.k.restakingKeeper.IterateUserOperatorDelegations(ctx, req.DelegatorAddress, func(del restakingtypes.Delegation) (stop bool, err error) {
 		delReward, err := q.k.GetOperatorDelegationRewards(ctx, delAddr, del.TargetID)
 		if err != nil {
 			return false, err
@@ -235,7 +254,8 @@ func (q queryServer) DelegatorTotalRewards(ctx context.Context, req *types.Query
 	if err != nil {
 		return nil, err
 	}
-	err = q.k.restakingKeeper.IterateUserServiceDelegations(sdkCtx, req.DelegatorAddress, func(del restakingtypes.Delegation) (stop bool, err error) {
+
+	err = q.k.restakingKeeper.IterateUserServiceDelegations(ctx, req.DelegatorAddress, func(del restakingtypes.Delegation) (stop bool, err error) {
 		delReward, err := q.k.GetServiceDelegationRewards(ctx, delAddr, del.TargetID)
 		if err != nil {
 			return false, err
@@ -255,6 +275,7 @@ func (q queryServer) DelegatorWithdrawAddress(ctx context.Context, req *types.Qu
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
+
 	delAddr, err := q.k.accountKeeper.AddressCodec().StringToBytes(req.DelegatorAddress)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "invalid delegator address: %s", err)
@@ -264,6 +285,7 @@ func (q queryServer) DelegatorWithdrawAddress(ctx context.Context, req *types.Qu
 	if err != nil {
 		return nil, err
 	}
+
 	withdrawAddrStr, err := q.k.accountKeeper.AddressCodec().BytesToString(withdrawAddr)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "invalid withdraw address: %s", err)

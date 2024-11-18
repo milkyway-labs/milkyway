@@ -38,6 +38,6 @@ func (h ServicesHooks) AfterServiceDeleted(ctx context.Context, serviceID uint32
 }
 
 // AfterServiceAccreditationModified implements servicestypes.ServicesHooks
-func (h ServicesHooks) AfterServiceAccreditationModified(ctx sdk.Context, serviceID uint32) error {
+func (h ServicesHooks) AfterServiceAccreditationModified(ctx context.Context, serviceID uint32) error {
 	return h.k.AfterServiceAccreditationModified(ctx, serviceID)
 }

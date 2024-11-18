@@ -65,20 +65,25 @@ type ServicesKeeper interface {
 type RestakingKeeper interface {
 	HasOperatorJoinedService(ctx context.Context, operatorID uint32, serviceID uint32) (bool, error)
 	CanOperatorValidateService(ctx context.Context, serviceID uint32, operatorID uint32) (bool, error)
-	IsServiceSecuredByPool(ctx context.Context, serviceID uint32, operatorID uint32) (bool, error)
+	IsServiceSecuredByPool(ctx context.Context, serviceID uint32, poolID uint32) (bool, error)
 	GetRestakableDenoms(ctx context.Context) ([]string, error)
 	GetPoolDelegation(ctx context.Context, poolID uint32, userAddress string) (restakingtypes.Delegation, bool, error)
 	GetOperatorDelegation(ctx context.Context, operatorID uint32, userAddress string) (restakingtypes.Delegation, bool, error)
 	GetServiceDelegation(ctx context.Context, serviceID uint32, userAddress string) (restakingtypes.Delegation, bool, error)
 	GetDelegationForTarget(ctx context.Context, target restakingtypes.DelegationTarget, delegator string) (restakingtypes.Delegation, bool, error)
+
 	IterateUserPoolDelegations(ctx context.Context, userAddress string, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
-	IterateUserOperatorDelegations(
-		ctx context.Context, userAddress string, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
-	IterateUserServiceDelegations(
-		ctx context.Context, userAddress string, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
 	IterateAllPoolDelegations(ctx context.Context, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
+
+	IterateUserOperatorDelegations(ctx context.Context, userAddress string, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
 	IterateAllOperatorDelegations(ctx context.Context, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
+
+	IterateUserServiceDelegations(ctx context.Context, userAddress string, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
+	IterateServiceDelegations(ctx context.Context, serviceID uint32, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
 	IterateAllServiceDelegations(ctx context.Context, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
+
+	GetUserPreferences(ctx context.Context, userAddress string) (restakingtypes.UserPreferences, error)
+	GetUserTrustedServicesIDs(ctx context.Context, userAddress string) ([]uint32, error)
 }
 
 type AssetsKeeper interface {

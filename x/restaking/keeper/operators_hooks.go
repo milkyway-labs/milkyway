@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"cosmossdk.io/collections"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 )
@@ -59,7 +58,7 @@ func (o *OperatorsHooks) AfterOperatorDeleted(ctx context.Context, operatorID ui
 func (o *OperatorsHooks) removeOperatorFromServicesAllowList(ctx context.Context, operatorID uint32) error {
 	// Get all the keys to remove
 	var toRemoveKeys []collections.Pair[uint32, uint32]
-	err := o.IterateAllServicesAllowedOperators(sdk.UnwrapSDKContext(ctx), func(serviceID uint32, oID uint32) (stop bool, err error) {
+	err := o.IterateAllServicesAllowedOperators(ctx, func(serviceID uint32, oID uint32) (stop bool, err error) {
 		if oID == operatorID {
 			toRemoveKeys = append(toRemoveKeys, collections.Join(serviceID, oID))
 		}

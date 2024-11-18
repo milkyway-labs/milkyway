@@ -653,7 +653,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_EgalitarianDistributions() {
 }
 
 func (suite *KeeperTestSuite) TestAllocateRewards_TrustedServices() {
-	ctx := suite.ctx
+	ctx, _ := suite.ctx.CacheContext()
 
 	suite.RegisterCurrency(ctx, "umilk", "MILK", 6, utils.MustParseDec("2"))
 
@@ -664,12 +664,15 @@ func (suite *KeeperTestSuite) TestAllocateRewards_TrustedServices() {
 	service2 := suite.CreateService(ctx, "Service2", serviceAdmin2.String())
 
 	// Add Service1 and Service2 to the pools module's allowed list.
-	poolsParams := suite.poolsKeeper.GetParams(ctx)
+	poolsParams, err := suite.poolsKeeper.GetParams(ctx)
+	suite.Require().NoError(err)
+
 	poolsParams.AllowedServicesIDs = []uint32{service1.ID, service2.ID}
-	suite.poolsKeeper.SetParams(ctx, poolsParams)
+	err = suite.poolsKeeper.SetParams(ctx, poolsParams)
+	suite.Require().NoError(err)
 
 	// Call AllocateRewards to set last rewards allocation time.
-	err := suite.keeper.AllocateRewards(ctx)
+	err = suite.keeper.AllocateRewards(ctx)
 	suite.Require().NoError(err)
 
 	// Create active rewards plans.
@@ -710,6 +713,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_TrustedServices() {
 	rewards, err := suite.keeper.GetPoolDelegationRewards(ctx, aliceAddr, 1)
 	suite.Require().NoError(err)
 	suite.Require().Equal("115740.000000000000000000service1,347221.800000000000000000service2", rewards.Sum().String())
+
 	// Bob receives:
 	// - $400 / $1000 * 0.578704 ~= 0.231482 $SERVICE2
 	rewards, err = suite.keeper.GetPoolDelegationRewards(ctx, bobAddr, 1)
@@ -741,6 +745,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_TrustedServices() {
 	rewards, err = suite.keeper.GetPoolDelegationRewards(ctx, aliceAddr, 1)
 	suite.Require().NoError(err)
 	suite.Require().Equal("69444.000000000000000000service1,347221.800000000000000000service2", rewards.Sum().String())
+
 	// Bob receives:
 	// - $400 / $1000 * 0.115741 ~= 0.046296 $SERVICE1
 	// - $400 / $1000 * 0.578704 ~= 0.231482 $SERVICE2
@@ -758,7 +763,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_TrustedServices() {
 }
 
 func (suite *KeeperTestSuite) TestAllocateRewards_UserTrustedServiceUpdated() {
-	ctx := suite.ctx
+	ctx, _ := suite.ctx.CacheContext()
 
 	suite.RegisterCurrency(ctx, "umilk", "MILK", 6, utils.MustParseDec("2"))
 
@@ -769,12 +774,15 @@ func (suite *KeeperTestSuite) TestAllocateRewards_UserTrustedServiceUpdated() {
 	service2 := suite.CreateService(ctx, "Service2", serviceAdmin2.String())
 
 	// Add Service1 and Service2 to the pools module's allowed list.
-	poolsParams := suite.poolsKeeper.GetParams(ctx)
+	poolsParams, err := suite.poolsKeeper.GetParams(ctx)
+	suite.Require().NoError(err)
+
 	poolsParams.AllowedServicesIDs = []uint32{service1.ID, service2.ID}
-	suite.poolsKeeper.SetParams(ctx, poolsParams)
+	err = suite.poolsKeeper.SetParams(ctx, poolsParams)
+	suite.Require().NoError(err)
 
 	// Call AllocateRewards to set last rewards allocation time.
-	err := suite.keeper.AllocateRewards(ctx)
+	err = suite.keeper.AllocateRewards(ctx)
 	suite.Require().NoError(err)
 
 	// Create active rewards plans.
@@ -815,6 +823,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_UserTrustedServiceUpdated() {
 	rewards, err := suite.keeper.GetPoolDelegationRewards(ctx, aliceAddr, 1)
 	suite.Require().NoError(err)
 	suite.Require().Equal("115740.000000000000000000service1,347221.800000000000000000service2", rewards.Sum().String())
+
 	// Bob receives:
 	// - $400 / $1000 * 0.578704 ~= 0.231482 $SERVICE2
 	rewards, err = suite.keeper.GetPoolDelegationRewards(ctx, bobAddr, 1)

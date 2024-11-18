@@ -150,28 +150,32 @@ func (k *Keeper) DeleteService(ctx context.Context, serviceID uint32) error {
 	return k.AfterServiceDeleted(ctx, service.ID)
 }
 
-// SetServiceAccreditation sets the accreditation of the service with the
-// given ID
-func (k *Keeper) SetServiceAccreditation(ctx sdk.Context, serviceID uint32, accredited bool) error {
+// SetServiceAccredited sets the accreditation of the service with the given ID
+func (k *Keeper) SetServiceAccredited(ctx context.Context, serviceID uint32, accredited bool) error {
 	// Check if the service exists
-	service, found := k.GetService(ctx, serviceID)
+	service, found, err := k.GetService(ctx, serviceID)
+	if err != nil {
+		return err
+	}
+
 	if !found {
 		return errors.Wrapf(types.ErrServiceNotFound, "service with id %d not found", serviceID)
 	}
 
-	// Update the service only if the accreditation is changed.
-	if service.Accredited != accredited {
-		service.Accredited = accredited
-		if err := k.SaveService(ctx, service); err != nil {
-			return err
-		}
-
-		err := k.AfterServiceAccreditationModified(ctx, service.ID)
-		if err != nil {
-			return err
-		}
+	// Skip any operation if the service accreditation status does not change
+	if service.Accredited == accredited {
+		return nil
 	}
-	return nil
+
+	// Update the service accreditation status
+	service.Accredited = accredited
+	err = k.SaveService(ctx, service)
+	if err != nil {
+		return err
+	}
+
+	// Call the hook
+	return k.AfterServiceAccreditationModified(ctx, service.ID)
 }
 
 // HasService checks if a Service with the given ID exists in the KVStore

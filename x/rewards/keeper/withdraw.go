@@ -32,15 +32,13 @@ func (k *Keeper) SetWithdrawAddress(ctx context.Context, addr, withdrawAddr sdk.
 func (k *Keeper) WithdrawDelegationRewards(
 	ctx context.Context, delAddr sdk.AccAddress, target restakingtypes.DelegationTarget,
 ) (types.Pools, error) {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-
 	// Get the delegation
 	delegator, err := k.accountKeeper.AddressCodec().BytesToString(delAddr)
 	if err != nil {
 		return nil, err
 	}
 
-	delegation, found, err := k.restakingKeeper.GetDelegationForTarget(sdkCtx, target, delegator)
+	delegation, found, err := k.restakingKeeper.GetDelegationForTarget(ctx, target, delegator)
 	if err != nil {
 		return nil, err
 	}

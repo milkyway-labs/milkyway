@@ -3,7 +3,6 @@ package keeper
 import (
 	"context"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
@@ -50,9 +49,7 @@ func (k *Keeper) BeforeDelegationSharesModified(ctx context.Context, delType res
 
 	// We don't have to initialize target here because we can assume BeforeDelegationCreated
 	// has already been called when delegation shares are being modified.
-
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	del, found, err := k.restakingKeeper.GetDelegationForTarget(sdkCtx, target, delegator)
+	del, found, err := k.restakingKeeper.GetDelegationForTarget(ctx, target, delegator)
 	if err != nil {
 		return err
 	}
@@ -71,6 +68,7 @@ func (k *Keeper) BeforeDelegationSharesModified(ctx context.Context, delType res
 		if err != nil {
 			return err
 		}
+
 		for _, serviceID := range servicesIDs {
 			// We decrement the amount of shares within the pool-service pair here so that we
 			// can later increment those shares again within the AfterDelegationModified
@@ -82,6 +80,7 @@ func (k *Keeper) BeforeDelegationSharesModified(ctx context.Context, delType res
 			}
 		}
 	}
+
 	return nil
 }
 
@@ -101,8 +100,13 @@ func (k *Keeper) AfterDelegationModified(ctx context.Context, delType restakingt
 	if err != nil {
 		return err
 	}
+
 	if delType == restakingtypes.DELEGATION_TYPE_POOL {
-		del, found := k.restakingKeeper.GetPoolDelegation(ctx, targetID, delegator)
+		delegation, found, err := k.restakingKeeper.GetPoolDelegation(ctx, targetID, delegator)
+		if err != nil {
+			return err
+		}
+
 		if !found {
 			return sdkerrors.ErrNotFound.Wrapf("pool delegation not found: %d, %s", targetID, delegator)
 		}
@@ -111,28 +115,34 @@ func (k *Keeper) AfterDelegationModified(ctx context.Context, delType restakingt
 		if err != nil {
 			return err
 		}
+
 		for _, serviceID := range servicesIDs {
 			// We decremented the amount of shares within the pool-service pair in the
 			// BeforeDelegationSharesModified hook. We increment the shares here again
 			// to keep consistency if the shares change due to a new delegation or an
 			// undelegation
-			err = k.IncrementPoolServiceTotalDelegatorShares(ctx, targetID, serviceID, del.Shares)
+			err = k.IncrementPoolServiceTotalDelegatorShares(ctx, targetID, serviceID, delegation.Shares)
 			if err != nil {
 				return err
 			}
 		}
 	}
+
 	return nil
 }
 
 // AfterServiceAccreditationModified implements servicestypes.ServicesHooks
-func (k *Keeper) AfterServiceAccreditationModified(ctx sdk.Context, serviceID uint32) error {
-	service, found := k.servicesKeeper.GetService(ctx, serviceID)
+func (k *Keeper) AfterServiceAccreditationModified(ctx context.Context, serviceID uint32) error {
+	service, found, err := k.servicesKeeper.GetService(ctx, serviceID)
+	if err != nil {
+		return err
+	}
+
 	if !found {
 		return servicestypes.ErrServiceNotFound
 	}
 
-	err := k.restakingKeeper.IterateServiceDelegations(ctx, serviceID, func(del restakingtypes.Delegation) (stop bool, err error) {
+	err = k.restakingKeeper.IterateServiceDelegations(ctx, serviceID, func(del restakingtypes.Delegation) (stop bool, err error) {
 		preferences, err := k.restakingKeeper.GetUserPreferences(ctx, del.UserAddress)
 		if err != nil {
 			return true, err
@@ -163,24 +173,19 @@ func (k *Keeper) AfterServiceAccreditationModified(ctx sdk.Context, serviceID ui
 // updated. It updates the total delegator shares for the service in all pools
 // where the user has a delegation.
 func (k *Keeper) AfterUserPreferencesModified(
-	ctx sdk.Context,
+	ctx context.Context,
 	userAddress string,
 	oldPreferences, newPreferences restakingtypes.UserPreferences,
 ) error {
-	var err error
-	k.servicesKeeper.IterateServices(ctx, func(service servicestypes.Service) bool {
+	return k.servicesKeeper.IterateServices(ctx, func(service servicestypes.Service) (bool, error) {
 		trustedBefore := oldPreferences.IsServiceTrusted(service)
 		trustedAfter := newPreferences.IsServiceTrusted(service)
 		if trustedBefore != trustedAfter {
-			err = k.AfterUserTrustedServiceUpdated(ctx, userAddress, service.ID, trustedAfter)
+			err := k.AfterUserTrustedServiceUpdated(ctx, userAddress, service.ID, trustedAfter)
 			if err != nil {
-				return true
+				return true, err
 			}
 		}
-		return false
+		return false, nil
 	})
-	if err != nil {
-		return err
-	}
-	return nil
 }

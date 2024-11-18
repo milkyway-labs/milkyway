@@ -204,8 +204,8 @@ func (k *Keeper) insertIntoInactivatingQueue(ctx context.Context, operator types
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-
 	endTime := sdkCtx.BlockTime().Add(params.DeactivationTime)
+
 	return k.setOperatorAsInactivating(ctx, operator.ID, endTime)
 }
 

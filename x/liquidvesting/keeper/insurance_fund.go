@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"context"
 	"errors"
 
 	"cosmossdk.io/collections"
@@ -12,11 +13,7 @@ import (
 // AddToUserInsuranceFund adds the provided amount to the user's insurance fund.
 // NOTE: We assume that the amount that will be added to the user's insurance fund
 // is already present in the module account balance.
-func (k *Keeper) AddToUserInsuranceFund(
-	ctx sdk.Context,
-	user sdk.AccAddress,
-	amount sdk.Coins,
-) error {
+func (k *Keeper) AddToUserInsuranceFund(ctx context.Context, user sdk.AccAddress, amount sdk.Coins) error {
 	insuranceFund, err := k.insuranceFunds.Get(ctx, user)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
@@ -34,11 +31,7 @@ func (k *Keeper) AddToUserInsuranceFund(
 
 // WithdrawFromUserInsuranceFund withdraws coins from the user's insurance fund
 // and sends them to the user.
-func (k *Keeper) WithdrawFromUserInsuranceFund(
-	ctx sdk.Context,
-	user sdk.AccAddress,
-	amount sdk.Coins,
-) error {
+func (k *Keeper) WithdrawFromUserInsuranceFund(ctx context.Context, user sdk.AccAddress, amount sdk.Coins) error {
 	insuranceFund, err := k.insuranceFunds.Get(ctx, user)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
@@ -69,10 +62,7 @@ func (k *Keeper) WithdrawFromUserInsuranceFund(
 }
 
 // GetUserInsuranceFund returns the user's insurance fund.
-func (k *Keeper) GetUserInsuranceFund(
-	ctx sdk.Context,
-	user sdk.AccAddress,
-) (types.UserInsuranceFund, error) {
+func (k *Keeper) GetUserInsuranceFund(ctx context.Context, user sdk.AccAddress) (types.UserInsuranceFund, error) {
 	insuranceFund, err := k.insuranceFunds.Get(ctx, user)
 	if err != nil {
 		if errors.Is(err, collections.ErrNotFound) {
@@ -86,10 +76,7 @@ func (k *Keeper) GetUserInsuranceFund(
 }
 
 // GetUserInsuranceFundBalance returns the amount of coins in the user's insurance fund.
-func (k *Keeper) GetUserInsuranceFundBalance(
-	ctx sdk.Context,
-	user sdk.AccAddress,
-) (sdk.Coins, error) {
+func (k *Keeper) GetUserInsuranceFundBalance(ctx context.Context, user sdk.AccAddress) (sdk.Coins, error) {
 	insuranceFund, err := k.GetUserInsuranceFund(ctx, user)
 	if err != nil {
 		return nil, err
@@ -99,7 +86,7 @@ func (k *Keeper) GetUserInsuranceFundBalance(
 }
 
 // GetInsuranceFundBalance returns the amount of coins in the insurance fund.
-func (k *Keeper) GetInsuranceFundBalance(ctx sdk.Context) (sdk.Coins, error) {
+func (k *Keeper) GetInsuranceFundBalance(ctx context.Context) (sdk.Coins, error) {
 	accAddr, err := sdk.AccAddressFromBech32(k.ModuleAddress)
 	if err != nil {
 		return nil, err
@@ -110,7 +97,7 @@ func (k *Keeper) GetInsuranceFundBalance(ctx sdk.Context) (sdk.Coins, error) {
 
 // CanWithdrawFromInsuranceFund returns true if the user can withdraw the provided amount
 // from their insurance fund.
-func (k *Keeper) CanWithdrawFromInsuranceFund(ctx sdk.Context, user sdk.AccAddress, amount sdk.Coins) (bool, error) {
+func (k *Keeper) CanWithdrawFromInsuranceFund(ctx context.Context, user sdk.AccAddress, amount sdk.Coins) (bool, error) {
 	userInsuranceFund, err := k.GetUserInsuranceFund(ctx, user)
 	if err != nil {
 		return false, err

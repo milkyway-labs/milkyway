@@ -1,9 +1,10 @@
 package v2
 
 import (
+	"slices"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/utils"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
@@ -24,7 +25,7 @@ func setAccreditedServices(ctx sdk.Context, k ServicesKeeper, pk PoolsKeeper) er
 
 	// Iterate over all the services to update their accreditation status
 	return k.IterateServices(ctx, func(service servicestypes.Service) (stop bool, err error) {
-		service.Accredited = utils.Contains(poolsParams.AllowedServicesIDs, service.ID)
+		service.Accredited = slices.Contains(poolsParams.AllowedServicesIDs, service.ID)
 
 		// Save the service
 		err = k.SaveService(ctx, service)

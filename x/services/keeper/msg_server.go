@@ -23,7 +23,9 @@ func NewMsgServer(k *Keeper) types.MsgServer {
 }
 
 // CreateService defines the rpc method for Msg/CreateService
-func (k msgServer) CreateService(ctx context.Context, msg *types.MsgCreateService) (*types.MsgCreateServiceResponse, error) {
+func (k msgServer) CreateService(goCtx context.Context, msg *types.MsgCreateService) (*types.MsgCreateServiceResponse, error) {
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
 	// Get the next service id
 	serviceID, err := k.GetNextServiceID(ctx)
 	if err != nil {
@@ -334,19 +336,8 @@ func (k msgServer) AccreditService(ctx context.Context, msg *types.MsgAccreditSe
 		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", k.authority, msg.Authority)
 	}
 
-	// Check if the service exists
-	service, found, err := k.GetService(ctx, msg.ServiceID)
+	err := k.Keeper.SetServiceAccredited(ctx, msg.ServiceID, true)
 	if err != nil {
-		return nil, err
-	}
-
-	if !found {
-		return nil, errors.Wrapf(types.ErrServiceNotFound, "service with id %d not found", msg.ServiceID)
-	}
-
-	// Accredit the service
-	service.Accredited = true
-	if err := k.SaveService(ctx, service); err != nil {
 		return nil, err
 	}
 
@@ -369,19 +360,8 @@ func (k msgServer) RevokeServiceAccreditation(ctx context.Context, msg *types.Ms
 		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", k.authority, msg.Authority)
 	}
 
-	// Check if the service exists
-	service, found, err := k.GetService(ctx, msg.ServiceID)
+	err := k.Keeper.SetServiceAccredited(ctx, msg.ServiceID, false)
 	if err != nil {
-		return nil, err
-	}
-
-	if !found {
-		return nil, errors.Wrapf(types.ErrServiceNotFound, "service with id %d not found", msg.ServiceID)
-	}
-
-	// Revoke the service accreditation
-	service.Accredited = false
-	if err := k.SaveService(ctx, service); err != nil {
 		return nil, err
 	}
 

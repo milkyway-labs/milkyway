@@ -82,10 +82,6 @@ func (h RestakingHooks) AfterUnbondingInitiated(_ context.Context, _ uint64) err
 }
 
 // AfterUserPreferencesModified implements restakingtypes.RestakingHooks
-func (h RestakingHooks) AfterUserPreferencesModified(
-	ctx sdk.Context,
-	userAddress string,
-	oldPreferences, newPreferences restakingtypes.UserPreferences,
-) error {
+func (h RestakingHooks) AfterUserPreferencesModified(ctx context.Context, userAddress string, oldPreferences, newPreferences restakingtypes.UserPreferences) error {
 	return h.k.AfterUserPreferencesModified(ctx, userAddress, oldPreferences, newPreferences)
 }
