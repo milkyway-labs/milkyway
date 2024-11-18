@@ -204,9 +204,16 @@ func (k *Keeper) clearDelegationTarget(ctx sdk.Context, target restakingtypes.De
 
 	outstanding := outstandingCoins.CoinsAmount()
 
-	// Clear data related to an operator
-	if operator, ok := target.(*operatorstypes.Operator); ok {
-		outstanding, err = k.clearOperator(ctx, outstanding, operator)
+	switch target := target.(type) {
+	case *operatorstypes.Operator:
+		// Clear data related to an operator
+		outstanding, err = k.clearOperator(ctx, outstanding, target)
+		if err != nil {
+			return err
+		}
+	case *servicestypes.Service:
+		// Clear data related to a service
+		err = k.DeleteAllPoolServiceTotalDelegatorSharesByService(ctx, target.ID)
 		if err != nil {
 			return err
 		}
