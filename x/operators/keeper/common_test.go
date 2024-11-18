@@ -3,7 +3,6 @@ package keeper_test
 import (
 	"testing"
 
-	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
@@ -25,8 +24,6 @@ type KeeperTestSuite struct {
 	cdc codec.Codec
 	ctx sdk.Context
 
-	storeKey storetypes.StoreKey
-
 	ak    authkeeper.AccountKeeper
 	bk    bankkeeper.Keeper
 	k     *keeper.Keeper
@@ -35,7 +32,6 @@ type KeeperTestSuite struct {
 
 func (suite *KeeperTestSuite) SetupTest() {
 	data := testutils.NewKeeperTestData(suite.T())
-	suite.storeKey = data.StoreKey
 	suite.ctx = data.Context
 	suite.cdc = data.Cdc
 
