@@ -245,14 +245,15 @@ func (k *Keeper) DeleteHistoricalRewards(ctx context.Context, target restakingty
 	}
 
 	// Walk over the collection and get the list of keys to be deleted
-	// TODO: Find a more efficient way of doing this by using rangers
 	var keys []collections.Pair[uint32, uint64]
-	err := collection.Walk(ctx, nil, func(key collections.Pair[uint32, uint64], value types.HistoricalRewards) (stop bool, err error) {
-		if key.K1() == target.GetID() {
+	err := collection.Walk(
+		ctx,
+		collections.NewPrefixedPairRange[uint32, uint64](target.GetID()),
+		func(key collections.Pair[uint32, uint64], value types.HistoricalRewards) (stop bool, err error) {
 			keys = append(keys, key)
-		}
-		return false, nil
-	})
+			return false, nil
+		},
+	)
 	if err != nil {
 		return err
 	}
