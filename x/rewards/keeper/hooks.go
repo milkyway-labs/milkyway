@@ -64,6 +64,10 @@ func (k *Keeper) BeforeDelegationSharesModified(ctx sdk.Context, delType restaki
 			return err
 		}
 		for _, serviceID := range servicesIDs {
+			// We decrement the amount of shares within the pool-service pair here so that we
+			// can later increment those shares again within the AfterDelegationModified
+			// hook. This is due in order to keep consistency if the shares change due to a
+			// new delegation or an undelegation
 			err = k.DecrementPoolServiceTotalDelegatorShares(ctx, targetID, serviceID, del.Shares)
 			if err != nil {
 				return err
@@ -100,6 +104,10 @@ func (k *Keeper) AfterDelegationModified(ctx sdk.Context, delType restakingtypes
 			return err
 		}
 		for _, serviceID := range servicesIDs {
+			// We decremented the amount of shares within the pool-service pair in the
+			// BeforeDelegationSharesModified hook. We increment the shares here again
+			// to keep consistency if the shares change due to a new delegation or an
+			// undelegation
 			err = k.IncrementPoolServiceTotalDelegatorShares(ctx, targetID, serviceID, del.Shares)
 			if err != nil {
 				return err
