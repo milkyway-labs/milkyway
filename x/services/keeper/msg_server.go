@@ -310,19 +310,7 @@ func (k msgServer) AccreditService(goCtx context.Context, msg *types.MsgAccredit
 		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", k.authority, msg.Authority)
 	}
 
-	// Check if the service exists
-	service, found := k.GetService(ctx, msg.ServiceID)
-	if !found {
-		return nil, errors.Wrapf(types.ErrServiceNotFound, "service with id %d not found", msg.ServiceID)
-	}
-
-	// Accredit the service
-	service.Accredited = true
-	if err := k.SaveService(ctx, service); err != nil {
-		return nil, err
-	}
-
-	err := k.AfterServiceAccreditationModified(ctx, service.ID, true)
+	err := k.Keeper.SetServiceAccreditation(ctx, msg.ServiceID, true)
 	if err != nil {
 		return nil, err
 	}
@@ -347,19 +335,7 @@ func (k msgServer) RevokeServiceAccreditation(goCtx context.Context, msg *types.
 		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", k.authority, msg.Authority)
 	}
 
-	// Check if the service exists
-	service, found := k.GetService(ctx, msg.ServiceID)
-	if !found {
-		return nil, errors.Wrapf(types.ErrServiceNotFound, "service with id %d not found", msg.ServiceID)
-	}
-
-	// Revoke the service accreditation
-	service.Accredited = false
-	if err := k.SaveService(ctx, service); err != nil {
-		return nil, err
-	}
-
-	err := k.AfterServiceAccreditationModified(ctx, service.ID, true)
+	err := k.Keeper.SetServiceAccreditation(ctx, msg.ServiceID, false)
 	if err != nil {
 		return nil, err
 	}

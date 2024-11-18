@@ -995,7 +995,7 @@ func (k *Keeper) GetUserTrustedServicesIDs(ctx sdk.Context, userAddress string) 
 
 	var trustedServicesIDs []uint32
 	k.servicesKeeper.IterateServices(ctx, func(service servicestypes.Service) (stop bool) {
-		if preferences.IsServiceTrusted(service.ID, service.Accredited) {
+		if preferences.IsServiceTrusted(service) {
 			trustedServicesIDs = append(trustedServicesIDs, service.ID)
 		}
 		return false

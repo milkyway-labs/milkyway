@@ -329,7 +329,9 @@ func (p UserPreferences) Validate() error {
 	return nil
 }
 
-func (p UserPreferences) IsServiceTrusted(serviceID uint32, accredited bool) bool {
-	return slices.Contains(p.TrustedServicesIDs, serviceID) ||
-		(accredited && p.TrustAccreditedServices) || (!accredited && p.TrustNonAccreditedServices)
+// IsServiceTrusted returns whether the user trusts the given service
+func (p UserPreferences) IsServiceTrusted(service servicestypes.Service) bool {
+	return slices.Contains(p.TrustedServicesIDs, service.ID) ||
+		(service.Accredited && p.TrustAccreditedServices) ||
+		(!service.Accredited && p.TrustNonAccreditedServices)
 }

@@ -27,8 +27,8 @@ func (k *Keeper) SetUserPreferences(ctx context.Context, userAddress string, pre
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	k.servicesKeeper.IterateServices(sdkCtx, func(service servicestypes.Service) bool {
-		trustedBefore := oldPreferences.IsServiceTrusted(service.ID, service.Accredited)
-		trustedAfter := preferences.IsServiceTrusted(service.ID, service.Accredited)
+		trustedBefore := oldPreferences.IsServiceTrusted(service)
+		trustedAfter := preferences.IsServiceTrusted(service)
 		if trustedBefore != trustedAfter {
 			err = k.AfterUserTrustedServiceUpdated(sdkCtx, userAddress, service.ID, trustedAfter)
 			if err != nil {

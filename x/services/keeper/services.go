@@ -124,6 +124,30 @@ func (k *Keeper) DeleteService(ctx sdk.Context, serviceID uint32) error {
 	return k.AfterServiceDeleted(ctx, service.ID)
 }
 
+// SetServiceAccreditation sets the accreditation of the service with the
+// given ID
+func (k *Keeper) SetServiceAccreditation(ctx sdk.Context, serviceID uint32, accredited bool) error {
+	// Check if the service exists
+	service, found := k.GetService(ctx, serviceID)
+	if !found {
+		return errors.Wrapf(types.ErrServiceNotFound, "service with id %d not found", serviceID)
+	}
+
+	// Update the service only if the accreditation is changed.
+	if service.Accredited != accredited {
+		service.Accredited = accredited
+		if err := k.SaveService(ctx, service); err != nil {
+			return err
+		}
+
+		err := k.AfterServiceAccreditationModified(ctx, service)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // HasService checks if a Service with the given ID exists in the KVStore
 func (k *Keeper) HasService(ctx sdk.Context, serviceID uint32) bool {
 	store := ctx.KVStore(k.storeKey)

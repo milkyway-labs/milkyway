@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
 func TestPoolDelegation_Validate(t *testing.T) {
@@ -225,99 +226,194 @@ func TestUserPreferences_IsServiceTrusted(t *testing.T) {
 	testCases := []struct {
 		name        string
 		preferences types.UserPreferences
-		serviceID   uint32
-		accredited  bool
+		service     servicestypes.Service
 		trusted     bool
 	}{
 		{
 			name:        "user does not trust any services - accredited service",
 			preferences: types.NewUserPreferences(false, false, nil),
-			serviceID:   1,
-			accredited:  true,
-			trusted:     false,
+			service: servicestypes.NewService(
+				1,
+				servicestypes.SERVICE_STATUS_ACTIVE,
+				"MilkyWay",
+				"MilkyWay is an AVS of a restaking platform",
+				"https://milkyway.com",
+				"https://milkyway.com/logo.png",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				true,
+			),
+			trusted: false,
 		},
 		{
 			name:        "user does not trust any services - non-accredited service",
 			preferences: types.NewUserPreferences(false, false, nil),
-			serviceID:   1,
-			accredited:  false,
-			trusted:     false,
+			service: servicestypes.NewService(
+				1,
+				servicestypes.SERVICE_STATUS_ACTIVE,
+				"MilkyWay",
+				"MilkyWay is an AVS of a restaking platform",
+				"https://milkyway.com",
+				"https://milkyway.com/logo.png",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				false,
+			),
+			trusted: false,
 		},
 		{
 			name:        "user only trusts accredited services - accredited service",
 			preferences: types.NewUserPreferences(false, true, nil),
-			serviceID:   1,
-			accredited:  true,
-			trusted:     true,
+			service: servicestypes.NewService(
+				1,
+				servicestypes.SERVICE_STATUS_ACTIVE,
+				"MilkyWay",
+				"MilkyWay is an AVS of a restaking platform",
+				"https://milkyway.com",
+				"https://milkyway.com/logo.png",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				true,
+			),
+			trusted: true,
 		},
 		{
 			name:        "user only trusts accredited services - non-accredited service",
 			preferences: types.NewUserPreferences(false, true, nil),
-			serviceID:   1,
-			accredited:  false,
-			trusted:     false,
+			service: servicestypes.NewService(
+				1,
+				servicestypes.SERVICE_STATUS_ACTIVE,
+				"MilkyWay",
+				"MilkyWay is an AVS of a restaking platform",
+				"https://milkyway.com",
+				"https://milkyway.com/logo.png",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				false,
+			),
+			trusted: false,
 		},
 		{
 			name:        "user only trusts non-accredited services - accredited service",
 			preferences: types.NewUserPreferences(true, false, nil),
-			serviceID:   1,
-			accredited:  true,
-			trusted:     false,
+			service: servicestypes.NewService(
+				1,
+				servicestypes.SERVICE_STATUS_ACTIVE,
+				"MilkyWay",
+				"MilkyWay is an AVS of a restaking platform",
+				"https://milkyway.com",
+				"https://milkyway.com/logo.png",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				true,
+			),
+			trusted: false,
 		},
 		{
 			name:        "user only trusts non-accredited services - non-accredited service",
 			preferences: types.NewUserPreferences(true, false, nil),
-			serviceID:   1,
-			accredited:  false,
-			trusted:     true,
+			service: servicestypes.NewService(
+				1,
+				servicestypes.SERVICE_STATUS_ACTIVE,
+				"MilkyWay",
+				"MilkyWay is an AVS of a restaking platform",
+				"https://milkyway.com",
+				"https://milkyway.com/logo.png",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				false,
+			),
+			trusted: true,
 		},
 		{
 			name:        "user trusts both accredited and non-accredited services - accredited service",
 			preferences: types.NewUserPreferences(true, true, nil),
-			serviceID:   1,
-			accredited:  true,
-			trusted:     true,
+			service: servicestypes.NewService(
+				1,
+				servicestypes.SERVICE_STATUS_ACTIVE,
+				"MilkyWay",
+				"MilkyWay is an AVS of a restaking platform",
+				"https://milkyway.com",
+				"https://milkyway.com/logo.png",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				true,
+			),
+			trusted: true,
 		},
 		{
 			name:        "user trusts both accredited and non-accredited services - non-accredited service",
 			preferences: types.NewUserPreferences(true, true, nil),
-			serviceID:   1,
-			accredited:  false,
-			trusted:     true,
+			service: servicestypes.NewService(
+				1,
+				servicestypes.SERVICE_STATUS_ACTIVE,
+				"MilkyWay",
+				"MilkyWay is an AVS of a restaking platform",
+				"https://milkyway.com",
+				"https://milkyway.com/logo.png",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				false,
+			),
+			trusted: true,
 		},
 		{
 			name:        "user trusts only specified services - specified and accredited service",
 			preferences: types.NewUserPreferences(false, false, []uint32{1}),
-			serviceID:   1,
-			accredited:  true,
-			trusted:     true,
+			service: servicestypes.NewService(
+				1,
+				servicestypes.SERVICE_STATUS_ACTIVE,
+				"MilkyWay",
+				"MilkyWay is an AVS of a restaking platform",
+				"https://milkyway.com",
+				"https://milkyway.com/logo.png",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				true,
+			),
+			trusted: true,
 		},
 		{
 			name:        "user trusts only specified services - specified and non-accredited service",
 			preferences: types.NewUserPreferences(false, false, []uint32{1}),
-			serviceID:   1,
-			accredited:  false,
-			trusted:     true,
+			service: servicestypes.NewService(
+				1,
+				servicestypes.SERVICE_STATUS_ACTIVE,
+				"MilkyWay",
+				"MilkyWay is an AVS of a restaking platform",
+				"https://milkyway.com",
+				"https://milkyway.com/logo.png",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				false,
+			),
+			trusted: true,
 		},
 		{
 			name:        "user trusts only specified services - not specified and accredited service",
 			preferences: types.NewUserPreferences(false, false, []uint32{1}),
-			serviceID:   2,
-			accredited:  true,
-			trusted:     false,
+			service: servicestypes.NewService(
+				2,
+				servicestypes.SERVICE_STATUS_ACTIVE,
+				"MilkyWay",
+				"MilkyWay is an AVS of a restaking platform",
+				"https://milkyway.com",
+				"https://milkyway.com/logo.png",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				true,
+			),
+			trusted: false,
 		},
 		{
 			name:        "user trusts only specified services - not specified and non-accredited service",
 			preferences: types.NewUserPreferences(false, false, []uint32{1}),
-			serviceID:   2,
-			accredited:  false,
-			trusted:     false,
+			service: servicestypes.NewService(
+				2,
+				servicestypes.SERVICE_STATUS_ACTIVE,
+				"MilkyWay",
+				"MilkyWay is an AVS of a restaking platform",
+				"https://milkyway.com",
+				"https://milkyway.com/logo.png",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				false,
+			),
+			trusted: false,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			trusted := tc.preferences.IsServiceTrusted(tc.serviceID, tc.accredited)
+			trusted := tc.preferences.IsServiceTrusted(tc.service)
 			require.Equal(t, tc.trusted, trusted)
 		})
 	}
