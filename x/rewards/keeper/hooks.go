@@ -5,6 +5,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
 // AfterDelegationTargetCreated is called after a delegation target is created
@@ -54,7 +55,27 @@ func (k *Keeper) BeforeDelegationSharesModified(ctx sdk.Context, delType restaki
 	}
 
 	_, err = k.withdrawDelegationRewards(ctx, target, del)
-	return err
+	if err != nil {
+		return err
+	}
+
+	if delType == restakingtypes.DELEGATION_TYPE_POOL {
+		servicesIDs, err := k.restakingKeeper.GetUserTrustedServicesIDs(ctx, delegator)
+		if err != nil {
+			return err
+		}
+		for _, serviceID := range servicesIDs {
+			// We decrement the amount of shares within the pool-service pair here so that we
+			// can later increment those shares again within the AfterDelegationModified
+			// hook. This is due in order to keep consistency if the shares change due to a
+			// new delegation or an undelegation
+			err = k.DecrementPoolServiceTotalDelegatorShares(ctx, targetID, serviceID, del.Shares)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 // AfterDelegationModified is called after a delegation to a target is modified
@@ -69,5 +90,90 @@ func (k *Keeper) AfterDelegationModified(ctx sdk.Context, delType restakingtypes
 		return err
 	}
 
-	return k.initializeDelegation(ctx, target, delAddr)
+	err = k.initializeDelegation(ctx, target, delAddr)
+	if err != nil {
+		return err
+	}
+	if delType == restakingtypes.DELEGATION_TYPE_POOL {
+		del, found := k.restakingKeeper.GetPoolDelegation(ctx, targetID, delegator)
+		if !found {
+			return sdkerrors.ErrNotFound.Wrapf("pool delegation not found: %d, %s", targetID, delegator)
+		}
+
+		servicesIDs, err := k.restakingKeeper.GetUserTrustedServicesIDs(ctx, delegator)
+		if err != nil {
+			return err
+		}
+		for _, serviceID := range servicesIDs {
+			// We decremented the amount of shares within the pool-service pair in the
+			// BeforeDelegationSharesModified hook. We increment the shares here again
+			// to keep consistency if the shares change due to a new delegation or an
+			// undelegation
+			err = k.IncrementPoolServiceTotalDelegatorShares(ctx, targetID, serviceID, del.Shares)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// AfterServiceAccreditationModified implements servicestypes.ServicesHooks
+func (k *Keeper) AfterServiceAccreditationModified(ctx sdk.Context, serviceID uint32) error {
+	service, found := k.servicesKeeper.GetService(ctx, serviceID)
+	if !found {
+		return servicestypes.ErrServiceNotFound
+	}
+
+	err := k.restakingKeeper.IterateServiceDelegations(ctx, serviceID, func(del restakingtypes.Delegation) (stop bool, err error) {
+		preferences, err := k.restakingKeeper.GetUserPreferences(ctx, del.UserAddress)
+		if err != nil {
+			return true, err
+		}
+
+		// Clone the service and invert the accreditation status to get the
+		// previous state
+		serviceBefore := service
+		serviceBefore.Accredited = !serviceBefore.Accredited
+
+		trustedBefore := preferences.IsServiceTrusted(serviceBefore)
+		trustedAfter := preferences.IsServiceTrusted(service)
+		if trustedBefore != trustedAfter {
+			err = k.AfterUserTrustedServiceUpdated(ctx, del.UserAddress, service.ID, trustedAfter)
+			if err != nil {
+				return true, err
+			}
+		}
+		return false, nil
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// AfterUserPreferencesModified is called after a user's trust in a service is
+// updated. It updates the total delegator shares for the service in all pools
+// where the user has a delegation.
+func (k *Keeper) AfterUserPreferencesModified(
+	ctx sdk.Context,
+	userAddress string,
+	oldPreferences, newPreferences restakingtypes.UserPreferences,
+) error {
+	var err error
+	k.servicesKeeper.IterateServices(ctx, func(service servicestypes.Service) bool {
+		trustedBefore := oldPreferences.IsServiceTrusted(service)
+		trustedAfter := newPreferences.IsServiceTrusted(service)
+		if trustedBefore != trustedAfter {
+			err = k.AfterUserTrustedServiceUpdated(ctx, userAddress, service.ID, trustedAfter)
+			if err != nil {
+				return true
+			}
+		}
+		return false
+	})
+	if err != nil {
+		return err
+	}
+	return nil
 }

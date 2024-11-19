@@ -4148,17 +4148,69 @@ func (x *_GenesisState_9_list) IsValid() bool {
 	return x.list != nil
 }
 
+var _ protoreflect.List = (*_GenesisState_10_list)(nil)
+
+type _GenesisState_10_list struct {
+	list *[]*PoolServiceTotalDelegatorShares
+}
+
+func (x *_GenesisState_10_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_GenesisState_10_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_GenesisState_10_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*PoolServiceTotalDelegatorShares)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_GenesisState_10_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*PoolServiceTotalDelegatorShares)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_GenesisState_10_list) AppendMutable() protoreflect.Value {
+	v := new(PoolServiceTotalDelegatorShares)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_10_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_GenesisState_10_list) NewElement() protoreflect.Value {
+	v := new(PoolServiceTotalDelegatorShares)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_GenesisState_10_list) IsValid() bool {
+	return x.list != nil
+}
+
 var (
-	md_GenesisState                                  protoreflect.MessageDescriptor
-	fd_GenesisState_params                           protoreflect.FieldDescriptor
-	fd_GenesisState_next_rewards_plan_id             protoreflect.FieldDescriptor
-	fd_GenesisState_rewards_plans                    protoreflect.FieldDescriptor
-	fd_GenesisState_last_rewards_allocation_time     protoreflect.FieldDescriptor
-	fd_GenesisState_delegator_withdraw_infos         protoreflect.FieldDescriptor
-	fd_GenesisState_pools_records                    protoreflect.FieldDescriptor
-	fd_GenesisState_operators_records                protoreflect.FieldDescriptor
-	fd_GenesisState_services_records                 protoreflect.FieldDescriptor
-	fd_GenesisState_operator_accumulated_commissions protoreflect.FieldDescriptor
+	md_GenesisState                                     protoreflect.MessageDescriptor
+	fd_GenesisState_params                              protoreflect.FieldDescriptor
+	fd_GenesisState_next_rewards_plan_id                protoreflect.FieldDescriptor
+	fd_GenesisState_rewards_plans                       protoreflect.FieldDescriptor
+	fd_GenesisState_last_rewards_allocation_time        protoreflect.FieldDescriptor
+	fd_GenesisState_delegator_withdraw_infos            protoreflect.FieldDescriptor
+	fd_GenesisState_pools_records                       protoreflect.FieldDescriptor
+	fd_GenesisState_operators_records                   protoreflect.FieldDescriptor
+	fd_GenesisState_services_records                    protoreflect.FieldDescriptor
+	fd_GenesisState_operator_accumulated_commissions    protoreflect.FieldDescriptor
+	fd_GenesisState_pool_service_total_delegator_shares protoreflect.FieldDescriptor
 )
 
 func init() {
@@ -4173,6 +4225,7 @@ func init() {
 	fd_GenesisState_operators_records = md_GenesisState.Fields().ByName("operators_records")
 	fd_GenesisState_services_records = md_GenesisState.Fields().ByName("services_records")
 	fd_GenesisState_operator_accumulated_commissions = md_GenesisState.Fields().ByName("operator_accumulated_commissions")
+	fd_GenesisState_pool_service_total_delegator_shares = md_GenesisState.Fields().ByName("pool_service_total_delegator_shares")
 }
 
 var _ protoreflect.Message = (*fastReflection_GenesisState)(nil)
@@ -4294,6 +4347,12 @@ func (x *fastReflection_GenesisState) Range(f func(protoreflect.FieldDescriptor,
 			return
 		}
 	}
+	if len(x.PoolServiceTotalDelegatorShares) != 0 {
+		value := protoreflect.ValueOfList(&_GenesisState_10_list{list: &x.PoolServiceTotalDelegatorShares})
+		if !f(fd_GenesisState_pool_service_total_delegator_shares, value) {
+			return
+		}
+	}
 }
 
 // Has reports whether a field is populated.
@@ -4327,6 +4386,8 @@ func (x *fastReflection_GenesisState) Has(fd protoreflect.FieldDescriptor) bool 
 		return x.ServicesRecords != nil
 	case "milkyway.rewards.v1.GenesisState.operator_accumulated_commissions":
 		return len(x.OperatorAccumulatedCommissions) != 0
+	case "milkyway.rewards.v1.GenesisState.pool_service_total_delegator_shares":
+		return len(x.PoolServiceTotalDelegatorShares) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.GenesisState"))
@@ -4361,6 +4422,8 @@ func (x *fastReflection_GenesisState) Clear(fd protoreflect.FieldDescriptor) {
 		x.ServicesRecords = nil
 	case "milkyway.rewards.v1.GenesisState.operator_accumulated_commissions":
 		x.OperatorAccumulatedCommissions = nil
+	case "milkyway.rewards.v1.GenesisState.pool_service_total_delegator_shares":
+		x.PoolServiceTotalDelegatorShares = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.GenesisState"))
@@ -4413,6 +4476,12 @@ func (x *fastReflection_GenesisState) Get(descriptor protoreflect.FieldDescripto
 		}
 		listValue := &_GenesisState_9_list{list: &x.OperatorAccumulatedCommissions}
 		return protoreflect.ValueOfList(listValue)
+	case "milkyway.rewards.v1.GenesisState.pool_service_total_delegator_shares":
+		if len(x.PoolServiceTotalDelegatorShares) == 0 {
+			return protoreflect.ValueOfList(&_GenesisState_10_list{})
+		}
+		listValue := &_GenesisState_10_list{list: &x.PoolServiceTotalDelegatorShares}
+		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.GenesisState"))
@@ -4457,6 +4526,10 @@ func (x *fastReflection_GenesisState) Set(fd protoreflect.FieldDescriptor, value
 		lv := value.List()
 		clv := lv.(*_GenesisState_9_list)
 		x.OperatorAccumulatedCommissions = *clv.list
+	case "milkyway.rewards.v1.GenesisState.pool_service_total_delegator_shares":
+		lv := value.List()
+		clv := lv.(*_GenesisState_10_list)
+		x.PoolServiceTotalDelegatorShares = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.GenesisState"))
@@ -4520,6 +4593,12 @@ func (x *fastReflection_GenesisState) Mutable(fd protoreflect.FieldDescriptor) p
 		}
 		value := &_GenesisState_9_list{list: &x.OperatorAccumulatedCommissions}
 		return protoreflect.ValueOfList(value)
+	case "milkyway.rewards.v1.GenesisState.pool_service_total_delegator_shares":
+		if x.PoolServiceTotalDelegatorShares == nil {
+			x.PoolServiceTotalDelegatorShares = []*PoolServiceTotalDelegatorShares{}
+		}
+		value := &_GenesisState_10_list{list: &x.PoolServiceTotalDelegatorShares}
+		return protoreflect.ValueOfList(value)
 	case "milkyway.rewards.v1.GenesisState.next_rewards_plan_id":
 		panic(fmt.Errorf("field next_rewards_plan_id of message milkyway.rewards.v1.GenesisState is not mutable"))
 	default:
@@ -4561,6 +4640,9 @@ func (x *fastReflection_GenesisState) NewField(fd protoreflect.FieldDescriptor) 
 	case "milkyway.rewards.v1.GenesisState.operator_accumulated_commissions":
 		list := []*OperatorAccumulatedCommissionRecord{}
 		return protoreflect.ValueOfList(&_GenesisState_9_list{list: &list})
+	case "milkyway.rewards.v1.GenesisState.pool_service_total_delegator_shares":
+		list := []*PoolServiceTotalDelegatorShares{}
+		return protoreflect.ValueOfList(&_GenesisState_10_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.GenesisState"))
@@ -4671,6 +4753,12 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				n += 1 + l + runtime.Sov(uint64(l))
 			}
 		}
+		if len(x.PoolServiceTotalDelegatorShares) > 0 {
+			for _, e := range x.PoolServiceTotalDelegatorShares {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
 		}
@@ -4699,6 +4787,22 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 		if x.unknownFields != nil {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.PoolServiceTotalDelegatorShares) > 0 {
+			for iNdEx := len(x.PoolServiceTotalDelegatorShares) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.PoolServiceTotalDelegatorShares[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x52
+			}
 		}
 		if len(x.OperatorAccumulatedCommissions) > 0 {
 			for iNdEx := len(x.OperatorAccumulatedCommissions) - 1; iNdEx >= 0; iNdEx-- {
@@ -5173,6 +5277,40 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
 				iNdEx = postIndex
+			case 10:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PoolServiceTotalDelegatorShares", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.PoolServiceTotalDelegatorShares = append(x.PoolServiceTotalDelegatorShares, &PoolServiceTotalDelegatorShares{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.PoolServiceTotalDelegatorShares[len(x.PoolServiceTotalDelegatorShares)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
 			default:
 				iNdEx = preIndex
 				skippy, err := runtime.Skip(dAtA[iNdEx:])
@@ -5614,6 +5752,9 @@ type GenesisState struct {
 	// operator_accumulated_commissions defines the accumulated commissions of all
 	// operators at genesis.
 	OperatorAccumulatedCommissions []*OperatorAccumulatedCommissionRecord `protobuf:"bytes,9,rep,name=operator_accumulated_commissions,json=operatorAccumulatedCommissions,proto3" json:"operator_accumulated_commissions,omitempty"`
+	// pool_service_total_delegator_shares defines the total delegator shares at
+	// genesis.
+	PoolServiceTotalDelegatorShares []*PoolServiceTotalDelegatorShares `protobuf:"bytes,10,rep,name=pool_service_total_delegator_shares,json=poolServiceTotalDelegatorShares,proto3" json:"pool_service_total_delegator_shares,omitempty"`
 }
 
 func (x *GenesisState) Reset() {
@@ -5695,6 +5836,13 @@ func (x *GenesisState) GetServicesRecords() *DelegationTypeRecords {
 func (x *GenesisState) GetOperatorAccumulatedCommissions() []*OperatorAccumulatedCommissionRecord {
 	if x != nil {
 		return x.OperatorAccumulatedCommissions
+	}
+	return nil
+}
+
+func (x *GenesisState) GetPoolServiceTotalDelegatorShares() []*PoolServiceTotalDelegatorShares {
+	if x != nil {
+		return x.PoolServiceTotalDelegatorShares
 	}
 	return nil
 }
@@ -5824,7 +5972,7 @@ var file_milkyway_rewards_v1_genesis_proto_rawDesc = []byte{
 	0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x74, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x66,
 	0x6f, 0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0,
 	0x2a, 0x01, 0x52, 0x16, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x74, 0x61,
-	0x72, 0x74, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x66, 0x6f, 0x73, 0x22, 0xe4, 0x06, 0x0a, 0x0c, 0x47,
+	0x72, 0x74, 0x69, 0x6e, 0x67, 0x49, 0x6e, 0x66, 0x6f, 0x73, 0x22, 0xf4, 0x07, 0x0a, 0x0c, 0x47,
 	0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x53, 0x74, 0x61, 0x74, 0x65, 0x12, 0x39, 0x0a, 0x06, 0x70,
 	0x61, 0x72, 0x61, 0x6d, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x6d, 0x69,
 	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76,
@@ -5879,6 +6027,15 @@ var file_milkyway_rewards_v1_genesis_proto_rawDesc = []byte{
 	0x52, 0x65, 0x63, 0x6f, 0x72, 0x64, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a,
 	0x01, 0x52, 0x1e, 0x6f, 0x70, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x41, 0x63, 0x63, 0x75, 0x6d,
 	0x75, 0x6c, 0x61, 0x74, 0x65, 0x64, 0x43, 0x6f, 0x6d, 0x6d, 0x69, 0x73, 0x73, 0x69, 0x6f, 0x6e,
+	0x73, 0x12, 0x8d, 0x01, 0x0a, 0x23, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x5f, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x5f, 0x64, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74,
+	0x6f, 0x72, 0x5f, 0x73, 0x68, 0x61, 0x72, 0x65, 0x73, 0x18, 0x0a, 0x20, 0x03, 0x28, 0x0b, 0x32,
+	0x34, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72,
+	0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x6f, 0x6f, 0x6c, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x54, 0x6f, 0x74, 0x61, 0x6c, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53,
+	0x68, 0x61, 0x72, 0x65, 0x73, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01,
+	0x52, 0x1f, 0x70, 0x6f, 0x6f, 0x6c, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x54, 0x6f, 0x74,
+	0x61, 0x6c, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x68, 0x61, 0x72, 0x65,
 	0x73, 0x42, 0xda, 0x01, 0x0a, 0x17, 0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
 	0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x42, 0x0c, 0x47,
 	0x65, 0x6e, 0x65, 0x73, 0x69, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x43, 0x67,
@@ -5926,6 +6083,7 @@ var file_milkyway_rewards_v1_genesis_proto_goTypes = []interface{}{
 	(*Params)(nil),                              // 13: milkyway.rewards.v1.Params
 	(*RewardsPlan)(nil),                         // 14: milkyway.rewards.v1.RewardsPlan
 	(*timestamppb.Timestamp)(nil),               // 15: google.protobuf.Timestamp
+	(*PoolServiceTotalDelegatorShares)(nil),     // 16: milkyway.rewards.v1.PoolServiceTotalDelegatorShares
 }
 var file_milkyway_rewards_v1_genesis_proto_depIdxs = []int32{
 	8,  // 0: milkyway.rewards.v1.OutstandingRewardsRecord.outstanding_rewards:type_name -> milkyway.rewards.v1.DecPool
@@ -5945,11 +6103,12 @@ var file_milkyway_rewards_v1_genesis_proto_depIdxs = []int32{
 	6,  // 14: milkyway.rewards.v1.GenesisState.operators_records:type_name -> milkyway.rewards.v1.DelegationTypeRecords
 	6,  // 15: milkyway.rewards.v1.GenesisState.services_records:type_name -> milkyway.rewards.v1.DelegationTypeRecords
 	5,  // 16: milkyway.rewards.v1.GenesisState.operator_accumulated_commissions:type_name -> milkyway.rewards.v1.OperatorAccumulatedCommissionRecord
-	17, // [17:17] is the sub-list for method output_type
-	17, // [17:17] is the sub-list for method input_type
-	17, // [17:17] is the sub-list for extension type_name
-	17, // [17:17] is the sub-list for extension extendee
-	0,  // [0:17] is the sub-list for field type_name
+	16, // 17: milkyway.rewards.v1.GenesisState.pool_service_total_delegator_shares:type_name -> milkyway.rewards.v1.PoolServiceTotalDelegatorShares
+	18, // [18:18] is the sub-list for method output_type
+	18, // [18:18] is the sub-list for method input_type
+	18, // [18:18] is the sub-list for extension type_name
+	18, // [18:18] is the sub-list for extension extendee
+	0,  // [0:18] is the sub-list for field type_name
 }
 
 func init() { file_milkyway_rewards_v1_genesis_proto_init() }

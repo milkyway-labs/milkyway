@@ -2,6 +2,7 @@ package types
 
 import (
 	"fmt"
+	"slices"
 	"sort"
 	"time"
 
@@ -323,5 +324,14 @@ func (p UserPreferences) Validate() error {
 		}
 	}
 
+	// TODO: check duplicate service IDs
+
 	return nil
+}
+
+// IsServiceTrusted returns whether the user trusts the given service
+func (p UserPreferences) IsServiceTrusted(service servicestypes.Service) bool {
+	return slices.Contains(p.TrustedServicesIDs, service.ID) ||
+		(service.Accredited && p.TrustAccreditedServices) ||
+		(!service.Accredited && p.TrustNonAccreditedServices)
 }

@@ -4163,7 +4163,7 @@ func (x *fastReflection_UsersDistributionTypeBasic) ProtoMethods() *protoiface.M
 var _ protoreflect.List = (*_HistoricalRewards_1_list)(nil)
 
 type _HistoricalRewards_1_list struct {
-	list *[]*DecPool
+	list *[]*ServicePool
 }
 
 func (x *_HistoricalRewards_1_list) Len() int {
@@ -4179,18 +4179,18 @@ func (x *_HistoricalRewards_1_list) Get(i int) protoreflect.Value {
 
 func (x *_HistoricalRewards_1_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*DecPool)
+	concreteValue := valueUnwrapped.Interface().(*ServicePool)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_HistoricalRewards_1_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*DecPool)
+	concreteValue := valueUnwrapped.Interface().(*ServicePool)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_HistoricalRewards_1_list) AppendMutable() protoreflect.Value {
-	v := new(DecPool)
+	v := new(ServicePool)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -4203,7 +4203,7 @@ func (x *_HistoricalRewards_1_list) Truncate(n int) {
 }
 
 func (x *_HistoricalRewards_1_list) NewElement() protoreflect.Value {
-	v := new(DecPool)
+	v := new(ServicePool)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
@@ -4413,7 +4413,7 @@ func (x *fastReflection_HistoricalRewards) Mutable(fd protoreflect.FieldDescript
 	switch fd.FullName() {
 	case "milkyway.rewards.v1.HistoricalRewards.cumulative_reward_ratios":
 		if x.CumulativeRewardRatios == nil {
-			x.CumulativeRewardRatios = []*DecPool{}
+			x.CumulativeRewardRatios = []*ServicePool{}
 		}
 		value := &_HistoricalRewards_1_list{list: &x.CumulativeRewardRatios}
 		return protoreflect.ValueOfList(value)
@@ -4433,7 +4433,7 @@ func (x *fastReflection_HistoricalRewards) Mutable(fd protoreflect.FieldDescript
 func (x *fastReflection_HistoricalRewards) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "milkyway.rewards.v1.HistoricalRewards.cumulative_reward_ratios":
-		list := []*DecPool{}
+		list := []*ServicePool{}
 		return protoreflect.ValueOfList(&_HistoricalRewards_1_list{list: &list})
 	case "milkyway.rewards.v1.HistoricalRewards.reference_count":
 		return protoreflect.ValueOfUint32(uint32(0))
@@ -4643,7 +4643,7 @@ func (x *fastReflection_HistoricalRewards) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.CumulativeRewardRatios = append(x.CumulativeRewardRatios, &DecPool{})
+				x.CumulativeRewardRatios = append(x.CumulativeRewardRatios, &ServicePool{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.CumulativeRewardRatios[len(x.CumulativeRewardRatios)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
@@ -4705,7 +4705,7 @@ func (x *fastReflection_HistoricalRewards) ProtoMethods() *protoiface.Methods {
 var _ protoreflect.List = (*_CurrentRewards_1_list)(nil)
 
 type _CurrentRewards_1_list struct {
-	list *[]*DecPool
+	list *[]*ServicePool
 }
 
 func (x *_CurrentRewards_1_list) Len() int {
@@ -4721,18 +4721,18 @@ func (x *_CurrentRewards_1_list) Get(i int) protoreflect.Value {
 
 func (x *_CurrentRewards_1_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*DecPool)
+	concreteValue := valueUnwrapped.Interface().(*ServicePool)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_CurrentRewards_1_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*DecPool)
+	concreteValue := valueUnwrapped.Interface().(*ServicePool)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_CurrentRewards_1_list) AppendMutable() protoreflect.Value {
-	v := new(DecPool)
+	v := new(ServicePool)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -4745,7 +4745,7 @@ func (x *_CurrentRewards_1_list) Truncate(n int) {
 }
 
 func (x *_CurrentRewards_1_list) NewElement() protoreflect.Value {
-	v := new(DecPool)
+	v := new(ServicePool)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
@@ -4955,7 +4955,7 @@ func (x *fastReflection_CurrentRewards) Mutable(fd protoreflect.FieldDescriptor)
 	switch fd.FullName() {
 	case "milkyway.rewards.v1.CurrentRewards.rewards":
 		if x.Rewards == nil {
-			x.Rewards = []*DecPool{}
+			x.Rewards = []*ServicePool{}
 		}
 		value := &_CurrentRewards_1_list{list: &x.Rewards}
 		return protoreflect.ValueOfList(value)
@@ -4975,7 +4975,7 @@ func (x *fastReflection_CurrentRewards) Mutable(fd protoreflect.FieldDescriptor)
 func (x *fastReflection_CurrentRewards) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	case "milkyway.rewards.v1.CurrentRewards.rewards":
-		list := []*DecPool{}
+		list := []*ServicePool{}
 		return protoreflect.ValueOfList(&_CurrentRewards_1_list{list: &list})
 	case "milkyway.rewards.v1.CurrentRewards.period":
 		return protoreflect.ValueOfUint64(uint64(0))
@@ -5185,7 +5185,7 @@ func (x *fastReflection_CurrentRewards) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.Rewards = append(x.Rewards, &DecPool{})
+				x.Rewards = append(x.Rewards, &ServicePool{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Rewards[len(x.Rewards)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
@@ -7412,6 +7412,596 @@ func (x *fastReflection_DelegationDelegatorReward) ProtoMethods() *protoiface.Me
 	}
 }
 
+var _ protoreflect.List = (*_PoolServiceTotalDelegatorShares_3_list)(nil)
+
+type _PoolServiceTotalDelegatorShares_3_list struct {
+	list *[]*v1beta1.DecCoin
+}
+
+func (x *_PoolServiceTotalDelegatorShares_3_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_PoolServiceTotalDelegatorShares_3_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_PoolServiceTotalDelegatorShares_3_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*v1beta1.DecCoin)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_PoolServiceTotalDelegatorShares_3_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*v1beta1.DecCoin)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_PoolServiceTotalDelegatorShares_3_list) AppendMutable() protoreflect.Value {
+	v := new(v1beta1.DecCoin)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_PoolServiceTotalDelegatorShares_3_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_PoolServiceTotalDelegatorShares_3_list) NewElement() protoreflect.Value {
+	v := new(v1beta1.DecCoin)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_PoolServiceTotalDelegatorShares_3_list) IsValid() bool {
+	return x.list != nil
+}
+
+var (
+	md_PoolServiceTotalDelegatorShares            protoreflect.MessageDescriptor
+	fd_PoolServiceTotalDelegatorShares_pool_id    protoreflect.FieldDescriptor
+	fd_PoolServiceTotalDelegatorShares_service_id protoreflect.FieldDescriptor
+	fd_PoolServiceTotalDelegatorShares_shares     protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_rewards_v1_models_proto_init()
+	md_PoolServiceTotalDelegatorShares = File_milkyway_rewards_v1_models_proto.Messages().ByName("PoolServiceTotalDelegatorShares")
+	fd_PoolServiceTotalDelegatorShares_pool_id = md_PoolServiceTotalDelegatorShares.Fields().ByName("pool_id")
+	fd_PoolServiceTotalDelegatorShares_service_id = md_PoolServiceTotalDelegatorShares.Fields().ByName("service_id")
+	fd_PoolServiceTotalDelegatorShares_shares = md_PoolServiceTotalDelegatorShares.Fields().ByName("shares")
+}
+
+var _ protoreflect.Message = (*fastReflection_PoolServiceTotalDelegatorShares)(nil)
+
+type fastReflection_PoolServiceTotalDelegatorShares PoolServiceTotalDelegatorShares
+
+func (x *PoolServiceTotalDelegatorShares) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_PoolServiceTotalDelegatorShares)(x)
+}
+
+func (x *PoolServiceTotalDelegatorShares) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[14]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_PoolServiceTotalDelegatorShares_messageType fastReflection_PoolServiceTotalDelegatorShares_messageType
+var _ protoreflect.MessageType = fastReflection_PoolServiceTotalDelegatorShares_messageType{}
+
+type fastReflection_PoolServiceTotalDelegatorShares_messageType struct{}
+
+func (x fastReflection_PoolServiceTotalDelegatorShares_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_PoolServiceTotalDelegatorShares)(nil)
+}
+func (x fastReflection_PoolServiceTotalDelegatorShares_messageType) New() protoreflect.Message {
+	return new(fastReflection_PoolServiceTotalDelegatorShares)
+}
+func (x fastReflection_PoolServiceTotalDelegatorShares_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_PoolServiceTotalDelegatorShares
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_PoolServiceTotalDelegatorShares) Descriptor() protoreflect.MessageDescriptor {
+	return md_PoolServiceTotalDelegatorShares
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_PoolServiceTotalDelegatorShares) Type() protoreflect.MessageType {
+	return _fastReflection_PoolServiceTotalDelegatorShares_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_PoolServiceTotalDelegatorShares) New() protoreflect.Message {
+	return new(fastReflection_PoolServiceTotalDelegatorShares)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_PoolServiceTotalDelegatorShares) Interface() protoreflect.ProtoMessage {
+	return (*PoolServiceTotalDelegatorShares)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_PoolServiceTotalDelegatorShares) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.PoolId != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.PoolId)
+		if !f(fd_PoolServiceTotalDelegatorShares_pool_id, value) {
+			return
+		}
+	}
+	if x.ServiceId != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.ServiceId)
+		if !f(fd_PoolServiceTotalDelegatorShares_service_id, value) {
+			return
+		}
+	}
+	if len(x.Shares) != 0 {
+		value := protoreflect.ValueOfList(&_PoolServiceTotalDelegatorShares_3_list{list: &x.Shares})
+		if !f(fd_PoolServiceTotalDelegatorShares_shares, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_PoolServiceTotalDelegatorShares) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.rewards.v1.PoolServiceTotalDelegatorShares.pool_id":
+		return x.PoolId != uint32(0)
+	case "milkyway.rewards.v1.PoolServiceTotalDelegatorShares.service_id":
+		return x.ServiceId != uint32(0)
+	case "milkyway.rewards.v1.PoolServiceTotalDelegatorShares.shares":
+		return len(x.Shares) != 0
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolServiceTotalDelegatorShares"))
+		}
+		panic(fmt.Errorf("message milkyway.rewards.v1.PoolServiceTotalDelegatorShares does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_PoolServiceTotalDelegatorShares) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.rewards.v1.PoolServiceTotalDelegatorShares.pool_id":
+		x.PoolId = uint32(0)
+	case "milkyway.rewards.v1.PoolServiceTotalDelegatorShares.service_id":
+		x.ServiceId = uint32(0)
+	case "milkyway.rewards.v1.PoolServiceTotalDelegatorShares.shares":
+		x.Shares = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolServiceTotalDelegatorShares"))
+		}
+		panic(fmt.Errorf("message milkyway.rewards.v1.PoolServiceTotalDelegatorShares does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_PoolServiceTotalDelegatorShares) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.rewards.v1.PoolServiceTotalDelegatorShares.pool_id":
+		value := x.PoolId
+		return protoreflect.ValueOfUint32(value)
+	case "milkyway.rewards.v1.PoolServiceTotalDelegatorShares.service_id":
+		value := x.ServiceId
+		return protoreflect.ValueOfUint32(value)
+	case "milkyway.rewards.v1.PoolServiceTotalDelegatorShares.shares":
+		if len(x.Shares) == 0 {
+			return protoreflect.ValueOfList(&_PoolServiceTotalDelegatorShares_3_list{})
+		}
+		listValue := &_PoolServiceTotalDelegatorShares_3_list{list: &x.Shares}
+		return protoreflect.ValueOfList(listValue)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolServiceTotalDelegatorShares"))
+		}
+		panic(fmt.Errorf("message milkyway.rewards.v1.PoolServiceTotalDelegatorShares does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_PoolServiceTotalDelegatorShares) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.rewards.v1.PoolServiceTotalDelegatorShares.pool_id":
+		x.PoolId = uint32(value.Uint())
+	case "milkyway.rewards.v1.PoolServiceTotalDelegatorShares.service_id":
+		x.ServiceId = uint32(value.Uint())
+	case "milkyway.rewards.v1.PoolServiceTotalDelegatorShares.shares":
+		lv := value.List()
+		clv := lv.(*_PoolServiceTotalDelegatorShares_3_list)
+		x.Shares = *clv.list
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolServiceTotalDelegatorShares"))
+		}
+		panic(fmt.Errorf("message milkyway.rewards.v1.PoolServiceTotalDelegatorShares does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_PoolServiceTotalDelegatorShares) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.rewards.v1.PoolServiceTotalDelegatorShares.shares":
+		if x.Shares == nil {
+			x.Shares = []*v1beta1.DecCoin{}
+		}
+		value := &_PoolServiceTotalDelegatorShares_3_list{list: &x.Shares}
+		return protoreflect.ValueOfList(value)
+	case "milkyway.rewards.v1.PoolServiceTotalDelegatorShares.pool_id":
+		panic(fmt.Errorf("field pool_id of message milkyway.rewards.v1.PoolServiceTotalDelegatorShares is not mutable"))
+	case "milkyway.rewards.v1.PoolServiceTotalDelegatorShares.service_id":
+		panic(fmt.Errorf("field service_id of message milkyway.rewards.v1.PoolServiceTotalDelegatorShares is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolServiceTotalDelegatorShares"))
+		}
+		panic(fmt.Errorf("message milkyway.rewards.v1.PoolServiceTotalDelegatorShares does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_PoolServiceTotalDelegatorShares) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.rewards.v1.PoolServiceTotalDelegatorShares.pool_id":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "milkyway.rewards.v1.PoolServiceTotalDelegatorShares.service_id":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "milkyway.rewards.v1.PoolServiceTotalDelegatorShares.shares":
+		list := []*v1beta1.DecCoin{}
+		return protoreflect.ValueOfList(&_PoolServiceTotalDelegatorShares_3_list{list: &list})
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.PoolServiceTotalDelegatorShares"))
+		}
+		panic(fmt.Errorf("message milkyway.rewards.v1.PoolServiceTotalDelegatorShares does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_PoolServiceTotalDelegatorShares) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.PoolServiceTotalDelegatorShares", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_PoolServiceTotalDelegatorShares) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_PoolServiceTotalDelegatorShares) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_PoolServiceTotalDelegatorShares) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_PoolServiceTotalDelegatorShares) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*PoolServiceTotalDelegatorShares)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.PoolId != 0 {
+			n += 1 + runtime.Sov(uint64(x.PoolId))
+		}
+		if x.ServiceId != 0 {
+			n += 1 + runtime.Sov(uint64(x.ServiceId))
+		}
+		if len(x.Shares) > 0 {
+			for _, e := range x.Shares {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*PoolServiceTotalDelegatorShares)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.Shares) > 0 {
+			for iNdEx := len(x.Shares) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.Shares[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x1a
+			}
+		}
+		if x.ServiceId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.ServiceId))
+			i--
+			dAtA[i] = 0x10
+		}
+		if x.PoolId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.PoolId))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*PoolServiceTotalDelegatorShares)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: PoolServiceTotalDelegatorShares: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: PoolServiceTotalDelegatorShares: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PoolId", wireType)
+				}
+				x.PoolId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.PoolId |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ServiceId", wireType)
+				}
+				x.ServiceId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.ServiceId |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 3:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field Shares", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.Shares = append(x.Shares, &v1beta1.DecCoin{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.Shares[len(x.Shares)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
 var _ protoreflect.List = (*_Pool_2_list)(nil)
 
 type _Pool_2_list struct {
@@ -7485,7 +8075,7 @@ func (x *Pool) ProtoReflect() protoreflect.Message {
 }
 
 func (x *Pool) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[14]
+	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8043,7 +8633,7 @@ func (x *DecPool) ProtoReflect() protoreflect.Message {
 }
 
 func (x *DecPool) slowProtoReflect() protoreflect.Message {
-	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[15]
+	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[16]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8528,6 +9118,548 @@ func (x *fastReflection_DecPool) ProtoMethods() *protoiface.Methods {
 	}
 }
 
+var _ protoreflect.List = (*_ServicePool_2_list)(nil)
+
+type _ServicePool_2_list struct {
+	list *[]*DecPool
+}
+
+func (x *_ServicePool_2_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_ServicePool_2_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
+}
+
+func (x *_ServicePool_2_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*DecPool)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_ServicePool_2_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*DecPool)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_ServicePool_2_list) AppendMutable() protoreflect.Value {
+	v := new(DecPool)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_ServicePool_2_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_ServicePool_2_list) NewElement() protoreflect.Value {
+	v := new(DecPool)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
+}
+
+func (x *_ServicePool_2_list) IsValid() bool {
+	return x.list != nil
+}
+
+var (
+	md_ServicePool            protoreflect.MessageDescriptor
+	fd_ServicePool_service_id protoreflect.FieldDescriptor
+	fd_ServicePool_dec_pools  protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_rewards_v1_models_proto_init()
+	md_ServicePool = File_milkyway_rewards_v1_models_proto.Messages().ByName("ServicePool")
+	fd_ServicePool_service_id = md_ServicePool.Fields().ByName("service_id")
+	fd_ServicePool_dec_pools = md_ServicePool.Fields().ByName("dec_pools")
+}
+
+var _ protoreflect.Message = (*fastReflection_ServicePool)(nil)
+
+type fastReflection_ServicePool ServicePool
+
+func (x *ServicePool) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_ServicePool)(x)
+}
+
+func (x *ServicePool) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_rewards_v1_models_proto_msgTypes[17]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_ServicePool_messageType fastReflection_ServicePool_messageType
+var _ protoreflect.MessageType = fastReflection_ServicePool_messageType{}
+
+type fastReflection_ServicePool_messageType struct{}
+
+func (x fastReflection_ServicePool_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_ServicePool)(nil)
+}
+func (x fastReflection_ServicePool_messageType) New() protoreflect.Message {
+	return new(fastReflection_ServicePool)
+}
+func (x fastReflection_ServicePool_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_ServicePool
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_ServicePool) Descriptor() protoreflect.MessageDescriptor {
+	return md_ServicePool
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_ServicePool) Type() protoreflect.MessageType {
+	return _fastReflection_ServicePool_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_ServicePool) New() protoreflect.Message {
+	return new(fastReflection_ServicePool)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_ServicePool) Interface() protoreflect.ProtoMessage {
+	return (*ServicePool)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_ServicePool) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.ServiceId != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.ServiceId)
+		if !f(fd_ServicePool_service_id, value) {
+			return
+		}
+	}
+	if len(x.DecPools) != 0 {
+		value := protoreflect.ValueOfList(&_ServicePool_2_list{list: &x.DecPools})
+		if !f(fd_ServicePool_dec_pools, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_ServicePool) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.rewards.v1.ServicePool.service_id":
+		return x.ServiceId != uint32(0)
+	case "milkyway.rewards.v1.ServicePool.dec_pools":
+		return len(x.DecPools) != 0
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServicePool"))
+		}
+		panic(fmt.Errorf("message milkyway.rewards.v1.ServicePool does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_ServicePool) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.rewards.v1.ServicePool.service_id":
+		x.ServiceId = uint32(0)
+	case "milkyway.rewards.v1.ServicePool.dec_pools":
+		x.DecPools = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServicePool"))
+		}
+		panic(fmt.Errorf("message milkyway.rewards.v1.ServicePool does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_ServicePool) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.rewards.v1.ServicePool.service_id":
+		value := x.ServiceId
+		return protoreflect.ValueOfUint32(value)
+	case "milkyway.rewards.v1.ServicePool.dec_pools":
+		if len(x.DecPools) == 0 {
+			return protoreflect.ValueOfList(&_ServicePool_2_list{})
+		}
+		listValue := &_ServicePool_2_list{list: &x.DecPools}
+		return protoreflect.ValueOfList(listValue)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServicePool"))
+		}
+		panic(fmt.Errorf("message milkyway.rewards.v1.ServicePool does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_ServicePool) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.rewards.v1.ServicePool.service_id":
+		x.ServiceId = uint32(value.Uint())
+	case "milkyway.rewards.v1.ServicePool.dec_pools":
+		lv := value.List()
+		clv := lv.(*_ServicePool_2_list)
+		x.DecPools = *clv.list
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServicePool"))
+		}
+		panic(fmt.Errorf("message milkyway.rewards.v1.ServicePool does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_ServicePool) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.rewards.v1.ServicePool.dec_pools":
+		if x.DecPools == nil {
+			x.DecPools = []*DecPool{}
+		}
+		value := &_ServicePool_2_list{list: &x.DecPools}
+		return protoreflect.ValueOfList(value)
+	case "milkyway.rewards.v1.ServicePool.service_id":
+		panic(fmt.Errorf("field service_id of message milkyway.rewards.v1.ServicePool is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServicePool"))
+		}
+		panic(fmt.Errorf("message milkyway.rewards.v1.ServicePool does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_ServicePool) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.rewards.v1.ServicePool.service_id":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "milkyway.rewards.v1.ServicePool.dec_pools":
+		list := []*DecPool{}
+		return protoreflect.ValueOfList(&_ServicePool_2_list{list: &list})
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.rewards.v1.ServicePool"))
+		}
+		panic(fmt.Errorf("message milkyway.rewards.v1.ServicePool does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_ServicePool) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.rewards.v1.ServicePool", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_ServicePool) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_ServicePool) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_ServicePool) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_ServicePool) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*ServicePool)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.ServiceId != 0 {
+			n += 1 + runtime.Sov(uint64(x.ServiceId))
+		}
+		if len(x.DecPools) > 0 {
+			for _, e := range x.DecPools {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
+			}
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*ServicePool)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.DecPools) > 0 {
+			for iNdEx := len(x.DecPools) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.DecPools[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
+				}
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x12
+			}
+		}
+		if x.ServiceId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.ServiceId))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*ServicePool)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ServicePool: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: ServicePool: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
+			case 1:
+				if wireType != 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ServiceId", wireType)
+				}
+				x.ServiceId = 0
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					x.ServiceId |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+			case 2:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field DecPools", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.DecPools = append(x.DecPools, &DecPool{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.DecPools[len(x.DecPools)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
 // Code generated by protoc-gen-go. DO NOT EDIT.
 // versions:
 // 	protoc-gen-go v1.27.0
@@ -8960,8 +10092,8 @@ type HistoricalRewards struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	CumulativeRewardRatios []*DecPool `protobuf:"bytes,1,rep,name=cumulative_reward_ratios,json=cumulativeRewardRatios,proto3" json:"cumulative_reward_ratios,omitempty"`
-	ReferenceCount         uint32     `protobuf:"varint,2,opt,name=reference_count,json=referenceCount,proto3" json:"reference_count,omitempty"`
+	CumulativeRewardRatios []*ServicePool `protobuf:"bytes,1,rep,name=cumulative_reward_ratios,json=cumulativeRewardRatios,proto3" json:"cumulative_reward_ratios,omitempty"`
+	ReferenceCount         uint32         `protobuf:"varint,2,opt,name=reference_count,json=referenceCount,proto3" json:"reference_count,omitempty"`
 }
 
 func (x *HistoricalRewards) Reset() {
@@ -8984,7 +10116,7 @@ func (*HistoricalRewards) Descriptor() ([]byte, []int) {
 	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *HistoricalRewards) GetCumulativeRewardRatios() []*DecPool {
+func (x *HistoricalRewards) GetCumulativeRewardRatios() []*ServicePool {
 	if x != nil {
 		return x.CumulativeRewardRatios
 	}
@@ -9006,8 +10138,8 @@ type CurrentRewards struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Rewards []*DecPool `protobuf:"bytes,1,rep,name=rewards,proto3" json:"rewards,omitempty"`
-	Period  uint64     `protobuf:"varint,2,opt,name=period,proto3" json:"period,omitempty"`
+	Rewards []*ServicePool `protobuf:"bytes,1,rep,name=rewards,proto3" json:"rewards,omitempty"`
+	Period  uint64         `protobuf:"varint,2,opt,name=period,proto3" json:"period,omitempty"`
 }
 
 func (x *CurrentRewards) Reset() {
@@ -9030,7 +10162,7 @@ func (*CurrentRewards) Descriptor() ([]byte, []int) {
 	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *CurrentRewards) GetRewards() []*DecPool {
+func (x *CurrentRewards) GetRewards() []*ServicePool {
 	if x != nil {
 		return x.Rewards
 	}
@@ -9230,6 +10362,59 @@ func (x *DelegationDelegatorReward) GetReward() []*DecPool {
 	return nil
 }
 
+// PoolServiceTotalDelegatorShares represents the total delegator shares for a
+// pool-service pair.
+type PoolServiceTotalDelegatorShares struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	PoolId    uint32             `protobuf:"varint,1,opt,name=pool_id,json=poolId,proto3" json:"pool_id,omitempty"`
+	ServiceId uint32             `protobuf:"varint,2,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
+	Shares    []*v1beta1.DecCoin `protobuf:"bytes,3,rep,name=shares,proto3" json:"shares,omitempty"`
+}
+
+func (x *PoolServiceTotalDelegatorShares) Reset() {
+	*x = PoolServiceTotalDelegatorShares{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[14]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *PoolServiceTotalDelegatorShares) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PoolServiceTotalDelegatorShares) ProtoMessage() {}
+
+// Deprecated: Use PoolServiceTotalDelegatorShares.ProtoReflect.Descriptor instead.
+func (*PoolServiceTotalDelegatorShares) Descriptor() ([]byte, []int) {
+	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *PoolServiceTotalDelegatorShares) GetPoolId() uint32 {
+	if x != nil {
+		return x.PoolId
+	}
+	return 0
+}
+
+func (x *PoolServiceTotalDelegatorShares) GetServiceId() uint32 {
+	if x != nil {
+		return x.ServiceId
+	}
+	return 0
+}
+
+func (x *PoolServiceTotalDelegatorShares) GetShares() []*v1beta1.DecCoin {
+	if x != nil {
+		return x.Shares
+	}
+	return nil
+}
+
 // Pool is a Coins wrapper with denom which represents the rewards pool for the
 // given denom. It is used to represent the rewards associated with the denom.
 type Pool struct {
@@ -9244,7 +10429,7 @@ type Pool struct {
 func (x *Pool) Reset() {
 	*x = Pool{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[14]
+		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9258,7 +10443,7 @@ func (*Pool) ProtoMessage() {}
 
 // Deprecated: Use Pool.ProtoReflect.Descriptor instead.
 func (*Pool) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{14}
+	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *Pool) GetDenom() string {
@@ -9290,7 +10475,7 @@ type DecPool struct {
 func (x *DecPool) Reset() {
 	*x = DecPool{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[15]
+		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[16]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -9304,7 +10489,7 @@ func (*DecPool) ProtoMessage() {}
 
 // Deprecated: Use DecPool.ProtoReflect.Descriptor instead.
 func (*DecPool) Descriptor() ([]byte, []int) {
-	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{15}
+	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *DecPool) GetDenom() string {
@@ -9317,6 +10502,50 @@ func (x *DecPool) GetDenom() string {
 func (x *DecPool) GetDecCoins() []*v1beta1.DecCoin {
 	if x != nil {
 		return x.DecCoins
+	}
+	return nil
+}
+
+// ServicePool represents the rewards pool for a service.
+type ServicePool struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ServiceId uint32     `protobuf:"varint,1,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
+	DecPools  []*DecPool `protobuf:"bytes,2,rep,name=dec_pools,json=decPools,proto3" json:"dec_pools,omitempty"`
+}
+
+func (x *ServicePool) Reset() {
+	*x = ServicePool{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_rewards_v1_models_proto_msgTypes[17]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ServicePool) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ServicePool) ProtoMessage() {}
+
+// Deprecated: Use ServicePool.ProtoReflect.Descriptor instead.
+func (*ServicePool) Descriptor() ([]byte, []int) {
+	return file_milkyway_rewards_v1_models_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *ServicePool) GetServiceId() uint32 {
+	if x != nil {
+		return x.ServiceId
+	}
+	return 0
+}
+
+func (x *ServicePool) GetDecPools() []*DecPool {
+	if x != nil {
+		return x.DecPools
 	}
 	return nil
 }
@@ -9436,27 +10665,28 @@ var file_milkyway_rewards_v1_models_proto_rawDesc = []byte{
 	0x65, 0x42, 0x61, 0x73, 0x69, 0x63, 0x3a, 0x2d, 0xca, 0xb4, 0x2d, 0x29, 0x6d, 0x69, 0x6c, 0x6b,
 	0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e,
 	0x55, 0x73, 0x65, 0x72, 0x73, 0x44, 0x69, 0x73, 0x74, 0x72, 0x69, 0x62, 0x75, 0x74, 0x69, 0x6f,
-	0x6e, 0x54, 0x79, 0x70, 0x65, 0x22, 0xe6, 0x01, 0x0a, 0x11, 0x48, 0x69, 0x73, 0x74, 0x6f, 0x72,
-	0x69, 0x63, 0x61, 0x6c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x12, 0x8b, 0x01, 0x0a, 0x18,
+	0x6e, 0x54, 0x79, 0x70, 0x65, 0x22, 0xee, 0x01, 0x0a, 0x11, 0x48, 0x69, 0x73, 0x74, 0x6f, 0x72,
+	0x69, 0x63, 0x61, 0x6c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x12, 0x93, 0x01, 0x0a, 0x18,
 	0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x69, 0x76, 0x65, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72,
-	0x64, 0x5f, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c,
+	0x64, 0x5f, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x20,
 	0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64,
-	0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x42, 0x33, 0xc8, 0xde,
-	0x1f, 0x00, 0xf2, 0xde, 0x1f, 0x1f, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x63, 0x75, 0x6d, 0x75,
-	0x6c, 0x61, 0x74, 0x69, 0x76, 0x65, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x5f, 0x72, 0x61,
-	0x74, 0x69, 0x6f, 0x73, 0x22, 0xaa, 0xdf, 0x1f, 0x08, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c,
-	0x73, 0x52, 0x16, 0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x69, 0x76, 0x65, 0x52, 0x65, 0x77,
-	0x61, 0x72, 0x64, 0x52, 0x61, 0x74, 0x69, 0x6f, 0x73, 0x12, 0x43, 0x0a, 0x0f, 0x72, 0x65, 0x66,
-	0x65, 0x72, 0x65, 0x6e, 0x63, 0x65, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01,
-	0x28, 0x0d, 0x42, 0x1a, 0xf2, 0xde, 0x1f, 0x16, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x72, 0x65,
-	0x66, 0x65, 0x72, 0x65, 0x6e, 0x63, 0x65, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x52, 0x0e,
-	0x72, 0x65, 0x66, 0x65, 0x72, 0x65, 0x6e, 0x63, 0x65, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x84,
-	0x01, 0x0a, 0x0e, 0x43, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64,
-	0x73, 0x12, 0x5a, 0x0a, 0x07, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x18, 0x01, 0x20, 0x03,
-	0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65,
-	0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c,
-	0x42, 0x22, 0xc8, 0xde, 0x1f, 0x00, 0xf2, 0xde, 0x1f, 0x0e, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22,
-	0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x22, 0xaa, 0xdf, 0x1f, 0x08, 0x44, 0x65, 0x63, 0x50,
+	0x73, 0x2e, 0x76, 0x31, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x50, 0x6f, 0x6f, 0x6c,
+	0x42, 0x37, 0xc8, 0xde, 0x1f, 0x00, 0xf2, 0xde, 0x1f, 0x1f, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22,
+	0x63, 0x75, 0x6d, 0x75, 0x6c, 0x61, 0x74, 0x69, 0x76, 0x65, 0x5f, 0x72, 0x65, 0x77, 0x61, 0x72,
+	0x64, 0x5f, 0x72, 0x61, 0x74, 0x69, 0x6f, 0x73, 0x22, 0xaa, 0xdf, 0x1f, 0x0c, 0x53, 0x65, 0x72,
+	0x76, 0x69, 0x63, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x52, 0x16, 0x63, 0x75, 0x6d, 0x75, 0x6c,
+	0x61, 0x74, 0x69, 0x76, 0x65, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x52, 0x61, 0x74, 0x69, 0x6f,
+	0x73, 0x12, 0x43, 0x0a, 0x0f, 0x72, 0x65, 0x66, 0x65, 0x72, 0x65, 0x6e, 0x63, 0x65, 0x5f, 0x63,
+	0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x1a, 0xf2, 0xde, 0x1f, 0x16,
+	0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x72, 0x65, 0x66, 0x65, 0x72, 0x65, 0x6e, 0x63, 0x65, 0x5f,
+	0x63, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x52, 0x0e, 0x72, 0x65, 0x66, 0x65, 0x72, 0x65, 0x6e, 0x63,
+	0x65, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x8c, 0x01, 0x0a, 0x0e, 0x43, 0x75, 0x72, 0x72, 0x65,
+	0x6e, 0x74, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x12, 0x62, 0x0a, 0x07, 0x72, 0x65, 0x77,
+	0x61, 0x72, 0x64, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x20, 0x2e, 0x6d, 0x69, 0x6c,
+	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31,
+	0x2e, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x42, 0x26, 0xc8, 0xde,
+	0x1f, 0x00, 0xf2, 0xde, 0x1f, 0x0e, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x72, 0x65, 0x77, 0x61,
+	0x72, 0x64, 0x73, 0x22, 0xaa, 0xdf, 0x1f, 0x0c, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x50,
 	0x6f, 0x6f, 0x6c, 0x73, 0x52, 0x07, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x12, 0x16, 0x0a,
 	0x06, 0x70, 0x65, 0x72, 0x69, 0x6f, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x70,
 	0x65, 0x72, 0x69, 0x6f, 0x64, 0x22, 0x70, 0x0a, 0x12, 0x4f, 0x75, 0x74, 0x73, 0x74, 0x61, 0x6e,
@@ -9507,44 +10737,66 @@ var file_milkyway_rewards_v1_models_proto_rawDesc = []byte{
 	0x0b, 0x32, 0x1c, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77,
 	0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x42,
 	0x15, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x08, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c,
-	0x73, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x22, 0xa1,
-	0x01, 0x0a, 0x04, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x26, 0x0a, 0x05, 0x64, 0x65, 0x6e, 0x6f, 0x6d,
-	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x10, 0xf2, 0xde, 0x1f, 0x0c, 0x79, 0x61, 0x6d, 0x6c,
-	0x3a, 0x22, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x22, 0x52, 0x05, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x12,
-	0x71, 0x0a, 0x05, 0x63, 0x6f, 0x69, 0x6e, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x19,
-	0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62,
-	0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x40, 0xc8, 0xde, 0x1f, 0x00, 0xf2,
-	0xde, 0x1f, 0x0c, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x63, 0x6f, 0x69, 0x6e, 0x73, 0x22, 0xaa,
-	0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f,
-	0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f,
-	0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x05, 0x63, 0x6f, 0x69,
-	0x6e, 0x73, 0x22, 0xb6, 0x01, 0x0a, 0x07, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x26,
-	0x0a, 0x05, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x10, 0xf2,
-	0xde, 0x1f, 0x0c, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x22, 0x52,
-	0x05, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x12, 0x82, 0x01, 0x0a, 0x09, 0x64, 0x65, 0x63, 0x5f, 0x63,
-	0x6f, 0x69, 0x6e, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x63, 0x6f, 0x73,
-	0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31,
-	0x2e, 0x44, 0x65, 0x63, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x47, 0xc8, 0xde, 0x1f, 0x00, 0xf2, 0xde,
-	0x1f, 0x10, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x64, 0x65, 0x63, 0x5f, 0x63, 0x6f, 0x69, 0x6e,
-	0x73, 0x22, 0xaa, 0xdf, 0x1f, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
-	0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73,
-	0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x44, 0x65, 0x63, 0x43, 0x6f, 0x69, 0x6e,
-	0x73, 0x52, 0x08, 0x64, 0x65, 0x63, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x42, 0xdd, 0x01, 0xc8, 0xe1,
-	0x1e, 0x00, 0x0a, 0x17, 0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
-	0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x42, 0x0b, 0x4d, 0x6f, 0x64,
-	0x65, 0x6c, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x43, 0x67, 0x69, 0x74, 0x68,
-	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2d,
-	0x6c, 0x61, 0x62, 0x73, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x61, 0x70,
-	0x69, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x77, 0x61, 0x72,
-	0x64, 0x73, 0x2f, 0x76, 0x31, 0x3b, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x76, 0x31, 0xa2,
-	0x02, 0x03, 0x4d, 0x52, 0x58, 0xaa, 0x02, 0x13, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
-	0x2e, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x13, 0x4d, 0x69,
-	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x5c, 0x56,
-	0x31, 0xe2, 0x02, 0x1f, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x77,
-	0x61, 0x72, 0x64, 0x73, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64,
-	0x61, 0x74, 0x61, 0xea, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x3a, 0x3a,
-	0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x73, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52, 0x06, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x22, 0xdf,
+	0x01, 0x0a, 0x1f, 0x50, 0x6f, 0x6f, 0x6c, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x54, 0x6f,
+	0x74, 0x61, 0x6c, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x6f, 0x72, 0x53, 0x68, 0x61, 0x72,
+	0x65, 0x73, 0x12, 0x23, 0x0a, 0x07, 0x70, 0x6f, 0x6f, 0x6c, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x0d, 0x42, 0x0a, 0xe2, 0xde, 0x1f, 0x06, 0x50, 0x6f, 0x6f, 0x6c, 0x49, 0x44, 0x52,
+	0x06, 0x70, 0x6f, 0x6f, 0x6c, 0x49, 0x64, 0x12, 0x2c, 0x0a, 0x0a, 0x73, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x0d, 0xe2, 0xde, 0x1f,
+	0x09, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x44, 0x52, 0x09, 0x73, 0x65, 0x72, 0x76,
+	0x69, 0x63, 0x65, 0x49, 0x64, 0x12, 0x69, 0x0a, 0x06, 0x73, 0x68, 0x61, 0x72, 0x65, 0x73, 0x18,
+	0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62,
+	0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x44, 0x65, 0x63, 0x43,
+	0x6f, 0x69, 0x6e, 0x42, 0x33, 0xc8, 0xde, 0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x2b, 0x67, 0x69, 0x74,
+	0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63,
+	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e,
+	0x44, 0x65, 0x63, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x06, 0x73, 0x68, 0x61, 0x72, 0x65, 0x73,
+	0x22, 0xa1, 0x01, 0x0a, 0x04, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x26, 0x0a, 0x05, 0x64, 0x65, 0x6e,
+	0x6f, 0x6d, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x10, 0xf2, 0xde, 0x1f, 0x0c, 0x79, 0x61,
+	0x6d, 0x6c, 0x3a, 0x22, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x22, 0x52, 0x05, 0x64, 0x65, 0x6e, 0x6f,
+	0x6d, 0x12, 0x71, 0x0a, 0x05, 0x63, 0x6f, 0x69, 0x6e, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b,
+	0x32, 0x19, 0x2e, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76,
+	0x31, 0x62, 0x65, 0x74, 0x61, 0x31, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x40, 0xc8, 0xde, 0x1f,
+	0x00, 0xf2, 0xde, 0x1f, 0x0c, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x63, 0x6f, 0x69, 0x6e, 0x73,
+	0x22, 0xaa, 0xdf, 0x1f, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
+	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2d, 0x73, 0x64,
+	0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x52, 0x05, 0x63,
+	0x6f, 0x69, 0x6e, 0x73, 0x22, 0xb6, 0x01, 0x0a, 0x07, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c,
+	0x12, 0x26, 0x0a, 0x05, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42,
+	0x10, 0xf2, 0xde, 0x1f, 0x0c, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x64, 0x65, 0x6e, 0x6f, 0x6d,
+	0x22, 0x52, 0x05, 0x64, 0x65, 0x6e, 0x6f, 0x6d, 0x12, 0x82, 0x01, 0x0a, 0x09, 0x64, 0x65, 0x63,
+	0x5f, 0x63, 0x6f, 0x69, 0x6e, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x63,
+	0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x62, 0x61, 0x73, 0x65, 0x2e, 0x76, 0x31, 0x62, 0x65, 0x74,
+	0x61, 0x31, 0x2e, 0x44, 0x65, 0x63, 0x43, 0x6f, 0x69, 0x6e, 0x42, 0x47, 0xc8, 0xde, 0x1f, 0x00,
+	0xf2, 0xde, 0x1f, 0x10, 0x79, 0x61, 0x6d, 0x6c, 0x3a, 0x22, 0x64, 0x65, 0x63, 0x5f, 0x63, 0x6f,
+	0x69, 0x6e, 0x73, 0x22, 0xaa, 0xdf, 0x1f, 0x2b, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63,
+	0x6f, 0x6d, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2f, 0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73,
+	0x2d, 0x73, 0x64, 0x6b, 0x2f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x44, 0x65, 0x63, 0x43, 0x6f,
+	0x69, 0x6e, 0x73, 0x52, 0x08, 0x64, 0x65, 0x63, 0x43, 0x6f, 0x69, 0x6e, 0x73, 0x22, 0x88, 0x01,
+	0x0a, 0x0b, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x50, 0x6f, 0x6f, 0x6c, 0x12, 0x2c, 0x0a,
+	0x0a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x0d, 0x42, 0x0d, 0xe2, 0xde, 0x1f, 0x09, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x44,
+	0x52, 0x09, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x64, 0x12, 0x4b, 0x0a, 0x09, 0x64,
+	0x65, 0x63, 0x5f, 0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1c,
+	0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64,
+	0x73, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x42, 0x10, 0xc8, 0xde,
+	0x1f, 0x00, 0xaa, 0xdf, 0x1f, 0x08, 0x44, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x52, 0x08,
+	0x64, 0x65, 0x63, 0x50, 0x6f, 0x6f, 0x6c, 0x73, 0x42, 0xdd, 0x01, 0xc8, 0xe1, 0x1e, 0x00, 0x0a,
+	0x17, 0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72, 0x65,
+	0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x76, 0x31, 0x42, 0x0b, 0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x73,
+	0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x43, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e,
+	0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2d, 0x6c, 0x61, 0x62,
+	0x73, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x6d,
+	0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x2f,
+	0x76, 0x31, 0x3b, 0x72, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x4d,
+	0x52, 0x58, 0xaa, 0x02, 0x13, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x52, 0x65,
+	0x77, 0x61, 0x72, 0x64, 0x73, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x13, 0x4d, 0x69, 0x6c, 0x6b, 0x79,
+	0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64, 0x73, 0x5c, 0x56, 0x31, 0xe2, 0x02,
+	0x1f, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x77, 0x61, 0x72, 0x64,
+	0x73, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61,
+	0xea, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x3a, 0x3a, 0x52, 0x65, 0x77,
+	0x61, 0x72, 0x64, 0x73, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -9559,55 +10811,59 @@ func file_milkyway_rewards_v1_models_proto_rawDescGZIP() []byte {
 	return file_milkyway_rewards_v1_models_proto_rawDescData
 }
 
-var file_milkyway_rewards_v1_models_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_milkyway_rewards_v1_models_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_milkyway_rewards_v1_models_proto_goTypes = []interface{}{
-	(*RewardsPlan)(nil),                 // 0: milkyway.rewards.v1.RewardsPlan
-	(*Distribution)(nil),                // 1: milkyway.rewards.v1.Distribution
-	(*DistributionTypeBasic)(nil),       // 2: milkyway.rewards.v1.DistributionTypeBasic
-	(*DistributionTypeWeighted)(nil),    // 3: milkyway.rewards.v1.DistributionTypeWeighted
-	(*DistributionWeight)(nil),          // 4: milkyway.rewards.v1.DistributionWeight
-	(*DistributionTypeEgalitarian)(nil), // 5: milkyway.rewards.v1.DistributionTypeEgalitarian
-	(*UsersDistribution)(nil),           // 6: milkyway.rewards.v1.UsersDistribution
-	(*UsersDistributionTypeBasic)(nil),  // 7: milkyway.rewards.v1.UsersDistributionTypeBasic
-	(*HistoricalRewards)(nil),           // 8: milkyway.rewards.v1.HistoricalRewards
-	(*CurrentRewards)(nil),              // 9: milkyway.rewards.v1.CurrentRewards
-	(*OutstandingRewards)(nil),          // 10: milkyway.rewards.v1.OutstandingRewards
-	(*AccumulatedCommission)(nil),       // 11: milkyway.rewards.v1.AccumulatedCommission
-	(*DelegatorStartingInfo)(nil),       // 12: milkyway.rewards.v1.DelegatorStartingInfo
-	(*DelegationDelegatorReward)(nil),   // 13: milkyway.rewards.v1.DelegationDelegatorReward
-	(*Pool)(nil),                        // 14: milkyway.rewards.v1.Pool
-	(*DecPool)(nil),                     // 15: milkyway.rewards.v1.DecPool
-	(*v1beta1.Coin)(nil),                // 16: cosmos.base.v1beta1.Coin
-	(*timestamppb.Timestamp)(nil),       // 17: google.protobuf.Timestamp
-	(v1.DelegationType)(0),              // 18: milkyway.restaking.v1.DelegationType
-	(*anypb.Any)(nil),                   // 19: google.protobuf.Any
-	(*v1beta1.DecCoin)(nil),             // 20: cosmos.base.v1beta1.DecCoin
+	(*RewardsPlan)(nil),                     // 0: milkyway.rewards.v1.RewardsPlan
+	(*Distribution)(nil),                    // 1: milkyway.rewards.v1.Distribution
+	(*DistributionTypeBasic)(nil),           // 2: milkyway.rewards.v1.DistributionTypeBasic
+	(*DistributionTypeWeighted)(nil),        // 3: milkyway.rewards.v1.DistributionTypeWeighted
+	(*DistributionWeight)(nil),              // 4: milkyway.rewards.v1.DistributionWeight
+	(*DistributionTypeEgalitarian)(nil),     // 5: milkyway.rewards.v1.DistributionTypeEgalitarian
+	(*UsersDistribution)(nil),               // 6: milkyway.rewards.v1.UsersDistribution
+	(*UsersDistributionTypeBasic)(nil),      // 7: milkyway.rewards.v1.UsersDistributionTypeBasic
+	(*HistoricalRewards)(nil),               // 8: milkyway.rewards.v1.HistoricalRewards
+	(*CurrentRewards)(nil),                  // 9: milkyway.rewards.v1.CurrentRewards
+	(*OutstandingRewards)(nil),              // 10: milkyway.rewards.v1.OutstandingRewards
+	(*AccumulatedCommission)(nil),           // 11: milkyway.rewards.v1.AccumulatedCommission
+	(*DelegatorStartingInfo)(nil),           // 12: milkyway.rewards.v1.DelegatorStartingInfo
+	(*DelegationDelegatorReward)(nil),       // 13: milkyway.rewards.v1.DelegationDelegatorReward
+	(*PoolServiceTotalDelegatorShares)(nil), // 14: milkyway.rewards.v1.PoolServiceTotalDelegatorShares
+	(*Pool)(nil),                            // 15: milkyway.rewards.v1.Pool
+	(*DecPool)(nil),                         // 16: milkyway.rewards.v1.DecPool
+	(*ServicePool)(nil),                     // 17: milkyway.rewards.v1.ServicePool
+	(*v1beta1.Coin)(nil),                    // 18: cosmos.base.v1beta1.Coin
+	(*timestamppb.Timestamp)(nil),           // 19: google.protobuf.Timestamp
+	(v1.DelegationType)(0),                  // 20: milkyway.restaking.v1.DelegationType
+	(*anypb.Any)(nil),                       // 21: google.protobuf.Any
+	(*v1beta1.DecCoin)(nil),                 // 22: cosmos.base.v1beta1.DecCoin
 }
 var file_milkyway_rewards_v1_models_proto_depIdxs = []int32{
-	16, // 0: milkyway.rewards.v1.RewardsPlan.amount_per_day:type_name -> cosmos.base.v1beta1.Coin
-	17, // 1: milkyway.rewards.v1.RewardsPlan.start_time:type_name -> google.protobuf.Timestamp
-	17, // 2: milkyway.rewards.v1.RewardsPlan.end_time:type_name -> google.protobuf.Timestamp
+	18, // 0: milkyway.rewards.v1.RewardsPlan.amount_per_day:type_name -> cosmos.base.v1beta1.Coin
+	19, // 1: milkyway.rewards.v1.RewardsPlan.start_time:type_name -> google.protobuf.Timestamp
+	19, // 2: milkyway.rewards.v1.RewardsPlan.end_time:type_name -> google.protobuf.Timestamp
 	1,  // 3: milkyway.rewards.v1.RewardsPlan.pools_distribution:type_name -> milkyway.rewards.v1.Distribution
 	1,  // 4: milkyway.rewards.v1.RewardsPlan.operators_distribution:type_name -> milkyway.rewards.v1.Distribution
 	6,  // 5: milkyway.rewards.v1.RewardsPlan.users_distribution:type_name -> milkyway.rewards.v1.UsersDistribution
-	18, // 6: milkyway.rewards.v1.Distribution.delegation_type:type_name -> milkyway.restaking.v1.DelegationType
-	19, // 7: milkyway.rewards.v1.Distribution.type:type_name -> google.protobuf.Any
+	20, // 6: milkyway.rewards.v1.Distribution.delegation_type:type_name -> milkyway.restaking.v1.DelegationType
+	21, // 7: milkyway.rewards.v1.Distribution.type:type_name -> google.protobuf.Any
 	4,  // 8: milkyway.rewards.v1.DistributionTypeWeighted.weights:type_name -> milkyway.rewards.v1.DistributionWeight
-	19, // 9: milkyway.rewards.v1.UsersDistribution.type:type_name -> google.protobuf.Any
-	15, // 10: milkyway.rewards.v1.HistoricalRewards.cumulative_reward_ratios:type_name -> milkyway.rewards.v1.DecPool
-	15, // 11: milkyway.rewards.v1.CurrentRewards.rewards:type_name -> milkyway.rewards.v1.DecPool
-	15, // 12: milkyway.rewards.v1.OutstandingRewards.rewards:type_name -> milkyway.rewards.v1.DecPool
-	15, // 13: milkyway.rewards.v1.AccumulatedCommission.commissions:type_name -> milkyway.rewards.v1.DecPool
-	20, // 14: milkyway.rewards.v1.DelegatorStartingInfo.stakes:type_name -> cosmos.base.v1beta1.DecCoin
-	18, // 15: milkyway.rewards.v1.DelegationDelegatorReward.delegation_type:type_name -> milkyway.restaking.v1.DelegationType
-	15, // 16: milkyway.rewards.v1.DelegationDelegatorReward.reward:type_name -> milkyway.rewards.v1.DecPool
-	16, // 17: milkyway.rewards.v1.Pool.coins:type_name -> cosmos.base.v1beta1.Coin
-	20, // 18: milkyway.rewards.v1.DecPool.dec_coins:type_name -> cosmos.base.v1beta1.DecCoin
-	19, // [19:19] is the sub-list for method output_type
-	19, // [19:19] is the sub-list for method input_type
-	19, // [19:19] is the sub-list for extension type_name
-	19, // [19:19] is the sub-list for extension extendee
-	0,  // [0:19] is the sub-list for field type_name
+	21, // 9: milkyway.rewards.v1.UsersDistribution.type:type_name -> google.protobuf.Any
+	17, // 10: milkyway.rewards.v1.HistoricalRewards.cumulative_reward_ratios:type_name -> milkyway.rewards.v1.ServicePool
+	17, // 11: milkyway.rewards.v1.CurrentRewards.rewards:type_name -> milkyway.rewards.v1.ServicePool
+	16, // 12: milkyway.rewards.v1.OutstandingRewards.rewards:type_name -> milkyway.rewards.v1.DecPool
+	16, // 13: milkyway.rewards.v1.AccumulatedCommission.commissions:type_name -> milkyway.rewards.v1.DecPool
+	22, // 14: milkyway.rewards.v1.DelegatorStartingInfo.stakes:type_name -> cosmos.base.v1beta1.DecCoin
+	20, // 15: milkyway.rewards.v1.DelegationDelegatorReward.delegation_type:type_name -> milkyway.restaking.v1.DelegationType
+	16, // 16: milkyway.rewards.v1.DelegationDelegatorReward.reward:type_name -> milkyway.rewards.v1.DecPool
+	22, // 17: milkyway.rewards.v1.PoolServiceTotalDelegatorShares.shares:type_name -> cosmos.base.v1beta1.DecCoin
+	18, // 18: milkyway.rewards.v1.Pool.coins:type_name -> cosmos.base.v1beta1.Coin
+	22, // 19: milkyway.rewards.v1.DecPool.dec_coins:type_name -> cosmos.base.v1beta1.DecCoin
+	16, // 20: milkyway.rewards.v1.ServicePool.dec_pools:type_name -> milkyway.rewards.v1.DecPool
+	21, // [21:21] is the sub-list for method output_type
+	21, // [21:21] is the sub-list for method input_type
+	21, // [21:21] is the sub-list for extension type_name
+	21, // [21:21] is the sub-list for extension extendee
+	0,  // [0:21] is the sub-list for field type_name
 }
 
 func init() { file_milkyway_rewards_v1_models_proto_init() }
@@ -9785,7 +11041,7 @@ func file_milkyway_rewards_v1_models_proto_init() {
 			}
 		}
 		file_milkyway_rewards_v1_models_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Pool); i {
+			switch v := v.(*PoolServiceTotalDelegatorShares); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9797,7 +11053,31 @@ func file_milkyway_rewards_v1_models_proto_init() {
 			}
 		}
 		file_milkyway_rewards_v1_models_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Pool); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_rewards_v1_models_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DecPool); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_milkyway_rewards_v1_models_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ServicePool); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -9815,7 +11095,7 @@ func file_milkyway_rewards_v1_models_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_milkyway_rewards_v1_models_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   16,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

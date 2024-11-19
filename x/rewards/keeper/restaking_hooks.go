@@ -80,3 +80,12 @@ func (h RestakingHooks) BeforeServiceDelegationRemoved(_ sdk.Context, _ uint32, 
 func (h RestakingHooks) AfterUnbondingInitiated(_ sdk.Context, _ uint64) error {
 	return nil
 }
+
+// AfterUserPreferencesModified implements restakingtypes.RestakingHooks
+func (h RestakingHooks) AfterUserPreferencesModified(
+	ctx sdk.Context,
+	userAddress string,
+	oldPreferences, newPreferences restakingtypes.UserPreferences,
+) error {
+	return h.k.AfterUserPreferencesModified(ctx, userAddress, oldPreferences, newPreferences)
+}

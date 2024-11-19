@@ -170,4 +170,9 @@ message GenesisState {
   repeated OperatorAccumulatedCommissionRecord
       operator_accumulated_commissions = 9
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+
+  // pool_service_total_delegator_shares defines the total delegator shares at
+  // genesis.
+  repeated PoolServiceTotalDelegatorShares pool_service_total_delegator_shares =
+      10 [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 }

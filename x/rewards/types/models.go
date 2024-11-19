@@ -343,7 +343,7 @@ func InitialAccumulatedCommission() AccumulatedCommission {
 }
 
 // NewHistoricalRewards creates a new historical rewards
-func NewHistoricalRewards(cumulativeRewardRatios DecPools, referenceCount uint32) HistoricalRewards {
+func NewHistoricalRewards(cumulativeRewardRatios ServicePools, referenceCount uint32) HistoricalRewards {
 	return HistoricalRewards{
 		CumulativeRewardRatios: cumulativeRewardRatios,
 		ReferenceCount:         referenceCount,
@@ -351,7 +351,7 @@ func NewHistoricalRewards(cumulativeRewardRatios DecPools, referenceCount uint32
 }
 
 // NewCurrentRewards creates a new current rewards
-func NewCurrentRewards(rewards DecPools, period uint64) CurrentRewards {
+func NewCurrentRewards(rewards ServicePools, period uint64) CurrentRewards {
 	return CurrentRewards{
 		Rewards: rewards,
 		Period:  period,
@@ -376,4 +376,28 @@ func NewDelegationDelegatorReward(
 		DelegationTargetID: targetID,
 		Reward:             rewards,
 	}
+}
+
+// NewPoolServiceTotalDelegatorShares creates a new pool service total delegator shares
+func NewPoolServiceTotalDelegatorShares(poolID, serviceID uint32, shares sdk.DecCoins) PoolServiceTotalDelegatorShares {
+	return PoolServiceTotalDelegatorShares{
+		PoolID:    poolID,
+		ServiceID: serviceID,
+		Shares:    shares,
+	}
+}
+
+// Validate validates the pool service total delegator shares
+func (shares PoolServiceTotalDelegatorShares) Validate() error {
+	if shares.PoolID == 0 {
+		return fmt.Errorf("pool ID must not be 0")
+	}
+	if shares.ServiceID == 0 {
+		return fmt.Errorf("service ID must not be 0")
+	}
+	err := shares.Shares.Validate()
+	if err != nil {
+		return fmt.Errorf("invalid pool service total delegator shares: %w", err)
+	}
+	return nil
 }

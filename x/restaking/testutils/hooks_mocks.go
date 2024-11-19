@@ -95,3 +95,9 @@ func (m MockHooks) AfterUnbondingInitiated(ctx sdk.Context, unbondingDelegationI
 	m.CalledMap["AfterUnbondingInitiated"] = true
 	return nil
 }
+
+// AfterUserPreferencesModified implements restakingtypes.Hooks
+func (m MockHooks) AfterUserPreferencesModified(ctx sdk.Context, userAddress string, oldPreferences, newPreferences types.UserPreferences) error {
+	m.CalledMap["AfterUserPreferencesModified"] = true
+	return nil
+}

@@ -1,5 +1,9 @@
 package utils
 
+import (
+	"slices"
+)
+
 // FindDuplicate returns the first duplicate element in the slice.
 // If no duplicates are found, it returns nil instead.
 func FindDuplicate[T comparable](slice []T) *T {
@@ -43,16 +47,6 @@ func RemoveDuplicates[T comparable](slice []T) []T {
 	return result
 }
 
-// Contains returns true if the slice contains the given value.
-func Contains[T comparable](slice []T, value T) bool {
-	for _, v := range slice {
-		if v == value {
-			return true
-		}
-	}
-	return false
-}
-
 // Remove removes the first instance of value from the provided slice.
 func Remove[T comparable](slice []T, value T) (newSlice []T, removed bool) {
 	index := -1
@@ -73,7 +67,7 @@ func Remove[T comparable](slice []T, value T) (newSlice []T, removed bool) {
 func Intersect[T comparable](a, b []T) []T {
 	var result []T
 	for _, v := range a {
-		if Contains(b, v) {
+		if slices.Contains(b, v) {
 			result = append(result, v)
 		}
 	}

@@ -245,14 +245,15 @@ func (k *Keeper) DeleteHistoricalRewards(ctx context.Context, target restakingty
 	}
 
 	// Walk over the collection and get the list of keys to be deleted
-	// TODO: Find a more efficient way of doing this by using rangers
 	var keys []collections.Pair[uint32, uint64]
-	err := collection.Walk(ctx, nil, func(key collections.Pair[uint32, uint64], value types.HistoricalRewards) (stop bool, err error) {
-		if key.K1() == target.GetID() {
+	err := collection.Walk(
+		ctx,
+		collections.NewPrefixedPairRange[uint32, uint64](target.GetID()),
+		func(key collections.Pair[uint32, uint64], value types.HistoricalRewards) (stop bool, err error) {
 			keys = append(keys, key)
-		}
-		return false, nil
-	})
+			return false, nil
+		},
+	)
 	if err != nil {
 		return err
 	}
@@ -409,4 +410,91 @@ func (k *Keeper) GetServiceDelegationRewards(
 	ctx context.Context, delAddr sdk.AccAddress, serviceID uint32,
 ) (types.DecPools, error) {
 	return k.GetDelegationRewards(ctx, delAddr, restakingtypes.DELEGATION_TYPE_SERVICE, serviceID)
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// GetPoolServiceTotalDelegatorShares returns the total delegator shares for a
+// pool-service pair.
+func (k *Keeper) GetPoolServiceTotalDelegatorShares(ctx context.Context, poolID, serviceID uint32) (sdk.DecCoins, error) {
+	shares, err := k.PoolServiceTotalDelegatorShares.Get(ctx, collections.Join(poolID, serviceID))
+	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return shares.Shares, nil
+}
+
+// SetPoolServiceTotalDelegatorShares sets the total delegator shares for a
+// pool-service pair.
+func (k *Keeper) SetPoolServiceTotalDelegatorShares(ctx context.Context, poolID, serviceID uint32, shares sdk.DecCoins) error {
+	return k.PoolServiceTotalDelegatorShares.Set(
+		ctx,
+		collections.Join(poolID, serviceID),
+		types.NewPoolServiceTotalDelegatorShares(poolID, serviceID, shares),
+	)
+}
+
+// DeletePoolServiceTotalDelegatorShares deletes the total delegator shares for a
+// pool-service pair.
+func (k *Keeper) DeletePoolServiceTotalDelegatorShares(ctx context.Context, poolID, serviceID uint32) error {
+	return k.PoolServiceTotalDelegatorShares.Remove(ctx, collections.Join(poolID, serviceID))
+}
+
+// DeleteAllPoolServiceTotalDelegatorSharesByService deletes all total delegator
+// shares for a pool.
+func (k *Keeper) DeleteAllPoolServiceTotalDelegatorSharesByService(ctx context.Context, serviceID uint32) error {
+	// Walk over the collection and get the list of keys to be deleted
+	var keys []collections.Pair[uint32, uint32]
+	err := k.PoolServiceTotalDelegatorShares.Walk(
+		ctx,
+		nil, // TODO: is there a better way to do this?
+		func(key collections.Pair[uint32, uint32], value types.PoolServiceTotalDelegatorShares) (stop bool, err error) {
+			if key.K2() == serviceID {
+				keys = append(keys, key)
+			}
+			return false, nil
+		},
+	)
+	if err != nil {
+		return err
+	}
+	for _, key := range keys {
+		err = k.PoolServiceTotalDelegatorShares.Remove(ctx, key)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// IncrementPoolServiceTotalDelegatorShares increments the total delegator shares
+// for a pool-service pair.
+func (k *Keeper) IncrementPoolServiceTotalDelegatorShares(
+	ctx context.Context, poolID, serviceID uint32, shares sdk.DecCoins,
+) error {
+	prevShares, err := k.GetPoolServiceTotalDelegatorShares(ctx, poolID, serviceID)
+	if err != nil {
+		return err
+	}
+	return k.SetPoolServiceTotalDelegatorShares(ctx, poolID, serviceID, prevShares.Add(shares...))
+}
+
+// DecrementPoolServiceTotalDelegatorShares decrements the total delegator shares
+// for a pool-service pair.
+func (k *Keeper) DecrementPoolServiceTotalDelegatorShares(
+	ctx context.Context, poolID, serviceID uint32, shares sdk.DecCoins,
+) error {
+	prevShares, err := k.GetPoolServiceTotalDelegatorShares(ctx, poolID, serviceID)
+	if err != nil {
+		return err
+	}
+	newShares := prevShares.Sub(shares)
+	// Delete the pool-service total delegator shares record if it becomes zero
+	if newShares.IsZero() {
+		return k.DeletePoolServiceTotalDelegatorShares(ctx, poolID, serviceID)
+	}
+	return k.SetPoolServiceTotalDelegatorShares(ctx, poolID, serviceID, newShares)
 }

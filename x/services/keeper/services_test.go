@@ -364,6 +364,104 @@ func (suite *KeeperTestSuite) TestKeeper_DeactivateService() {
 	}
 }
 
+func (suite *KeeperTestSuite) TestKeeper_SetServiceAccreditation() {
+	testCases := []struct {
+		name       string
+		setup      func()
+		store      func(ctx sdk.Context)
+		serviceID  uint32
+		accredited bool
+		shouldErr  bool
+		check      func(ctx sdk.Context)
+	}{
+		{
+			name:      "service not found returns error",
+			serviceID: 1,
+			shouldErr: true,
+		},
+		{
+			name: "service's accreditation doesn't change",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SaveService(ctx, types.NewService(
+					1,
+					types.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is an AVS of a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
+				))
+				suite.Require().NoError(err)
+			},
+			serviceID:  1,
+			accredited: false,
+			shouldErr:  false,
+			check: func(ctx sdk.Context) {
+				// Accreditation didn't change
+				service, found := suite.k.GetService(ctx, 1)
+				suite.Require().True(found)
+				suite.Require().False(service.Accredited)
+
+				// Make sure the hook wasn't called
+				suite.Require().False(suite.hooks.CalledMap["AfterServiceAccreditationModified"])
+			},
+		},
+		{
+			name: "service's accreditation changes properly",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SaveService(ctx, types.NewService(
+					1,
+					types.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is an AVS of a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
+				))
+				suite.Require().NoError(err)
+			},
+			serviceID:  1,
+			accredited: true,
+			shouldErr:  false,
+			check: func(ctx sdk.Context) {
+				// Accreditation changed
+				service, found := suite.k.GetService(ctx, 1)
+				suite.Require().True(found)
+				suite.Require().True(service.Accredited)
+
+				// Make sure the hook was called
+				suite.Require().True(suite.hooks.CalledMap["AfterServiceAccreditationModified"])
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.setup != nil {
+				tc.setup()
+			}
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+
+			err := suite.k.SetServiceAccreditation(ctx, tc.serviceID, tc.accredited)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+			}
+
+			if tc.check != nil {
+				tc.check(ctx)
+			}
+		})
+	}
+}
+
 func (suite *KeeperTestSuite) TestKeeper_GetService() {
 	testCases := []struct {
 		name       string

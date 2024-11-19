@@ -6,6 +6,7 @@ import (
 	"github.com/milkyway-labs/milkyway/app/testutil"
 	"github.com/milkyway-labs/milkyway/utils"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/x/rewards/keeper"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 )
 
@@ -119,6 +120,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	suite.Require().NoError(err)
 
 	aliceAddr := testutil.TestAddress(1)
+	suite.SetUserPreferences(ctx, aliceAddr.String(), true, true, nil)
 	suite.DelegatePool(ctx, utils.MustParseCoin("100_000000umilk"), aliceAddr.String(), true) // $300
 	suite.DelegatePool(ctx, utils.MustParseCoin("100_000000uinit"), aliceAddr.String(), true) // $200
 	suite.DelegatePool(ctx, utils.MustParseCoin("500_000000uusd"), aliceAddr.String(), true)  // $500
@@ -140,6 +142,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	suite.DelegateOperator(ctx, operator3.ID, utils.MustParseCoins("500_000000uusd"), charlieAddr.String(), true)  // $500
 
 	davidAddr := testutil.TestAddress(4)
+	suite.SetUserPreferences(ctx, davidAddr.String(), true, true, nil)
 	suite.DelegatePool(ctx, utils.MustParseCoin("200_000000umilk"), davidAddr.String(), true)                    // $400
 	suite.DelegatePool(ctx, utils.MustParseCoin("200_000000uinit"), davidAddr.String(), true)                    // $600
 	suite.DelegatePool(ctx, utils.MustParseCoin("200_000000uusd"), davidAddr.String(), true)                     // $200
@@ -373,6 +376,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_ZeroDelegations() {
 
 	// Two users delegate the same amount of $MILK to a pool and the service.
 	delAddr1 := testutil.TestAddress(1)
+	suite.SetUserPreferences(ctx, delAddr1.String(), true, true, nil)
 	suite.DelegatePool(ctx, utils.MustParseCoin("10_000000umilk"), delAddr1.String(), true)
 	delAddr2 := testutil.TestAddress(2)
 	suite.DelegateService(ctx, service.ID, utils.MustParseCoins("10_000000umilk"), delAddr2.String(), true)
@@ -429,13 +433,17 @@ func (suite *KeeperTestSuite) TestAllocateRewards_WeightedDistributions() {
 
 	// Delegate to $MILK pool.
 	delAddr1 := testutil.TestAddress(1)
+	suite.SetUserPreferences(ctx, delAddr1.String(), true, true, nil)
 	suite.DelegatePool(ctx, utils.MustParseCoin("300_000000umilk"), delAddr1.String(), true)
 	delAddr2 := testutil.TestAddress(2)
+	suite.SetUserPreferences(ctx, delAddr2.String(), true, true, nil)
 	suite.DelegatePool(ctx, utils.MustParseCoin("200_000000umilk"), delAddr2.String(), true)
 	// Delegate to $INIT pool.
 	delAddr3 := testutil.TestAddress(3)
+	suite.SetUserPreferences(ctx, delAddr3.String(), true, true, nil)
 	suite.DelegatePool(ctx, utils.MustParseCoin("200_000000uinit"), delAddr3.String(), true)
 	delAddr4 := testutil.TestAddress(4)
+	suite.SetUserPreferences(ctx, delAddr4.String(), true, true, nil)
 	suite.DelegatePool(ctx, utils.MustParseCoin("300_000000uinit"), delAddr4.String(), true)
 	// Delegate to Operator1.
 	delAddr5 := testutil.TestAddress(5)
@@ -561,14 +569,18 @@ func (suite *KeeperTestSuite) TestAllocateRewards_EgalitarianDistributions() {
 
 	// Delegate to $MILK pool.
 	delAddr1 := testutil.TestAddress(1)
+	suite.SetUserPreferences(ctx, delAddr1.String(), true, true, nil)
 	suite.DelegatePool(ctx, utils.MustParseCoin("300_000000umilk"), delAddr1.String(), true)
 	delAddr2 := testutil.TestAddress(2)
+	suite.SetUserPreferences(ctx, delAddr2.String(), true, true, nil)
 	suite.DelegatePool(ctx, utils.MustParseCoin("200_000000umilk"), delAddr2.String(), true)
 
 	// Delegate to $INIT pool.
 	delAddr3 := testutil.TestAddress(3)
+	suite.SetUserPreferences(ctx, delAddr3.String(), true, true, nil)
 	suite.DelegatePool(ctx, utils.MustParseCoin("200_000000uinit"), delAddr3.String(), true)
 	delAddr4 := testutil.TestAddress(4)
+	suite.SetUserPreferences(ctx, delAddr4.String(), true, true, nil)
 	suite.DelegatePool(ctx, utils.MustParseCoin("300_000000uinit"), delAddr4.String(), true)
 
 	// Delegate to Operator1.
@@ -626,4 +638,200 @@ func (suite *KeeperTestSuite) TestAllocateRewards_EgalitarianDistributions() {
 	rewards, err = suite.keeper.GetOperatorDelegationRewards(ctx, delAddr8, operator2.ID)
 	suite.Require().NoError(err)
 	suite.Require().Equal("434.025000000000000000service", rewards.Sum().String())
+}
+
+func (suite *KeeperTestSuite) TestAllocateRewards_TrustedServices() {
+	ctx := suite.ctx
+
+	suite.RegisterCurrency(ctx, "umilk", "MILK", 6, utils.MustParseDec("2"))
+
+	// Create services.
+	serviceAdmin1 := testutil.TestAddress(10000)
+	service1 := suite.CreateService(ctx, "Service1", serviceAdmin1.String())
+	serviceAdmin2 := testutil.TestAddress(10001)
+	service2 := suite.CreateService(ctx, "Service2", serviceAdmin2.String())
+
+	// Add Service1 and Service2 to the pools module's allowed list.
+	poolsParams := suite.poolsKeeper.GetParams(ctx)
+	poolsParams.AllowedServicesIDs = []uint32{service1.ID, service2.ID}
+	suite.poolsKeeper.SetParams(ctx, poolsParams)
+
+	// Call AllocateRewards to set last rewards allocation time.
+	err := suite.keeper.AllocateRewards(ctx)
+	suite.Require().NoError(err)
+
+	// Create active rewards plans.
+	planStartTime := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
+	planEndTime := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
+	suite.CreateBasicRewardsPlan(
+		ctx,
+		service1.ID,
+		utils.MustParseCoins("1000_000000service1"),
+		planStartTime,
+		planEndTime,
+		utils.MustParseCoins("100000_000000service1"),
+	)
+	suite.CreateBasicRewardsPlan(
+		ctx,
+		service2.ID,
+		utils.MustParseCoins("5000_000000service2"),
+		planStartTime,
+		planEndTime,
+		utils.MustParseCoins("100000_000000service2"),
+	)
+
+	// Delegate to $MILK pool.
+	aliceAddr := testutil.TestAddress(1)
+	suite.SetUserPreferences(ctx, aliceAddr.String(), false, false, []uint32{service1.ID, service2.ID})
+	suite.DelegatePool(ctx, utils.MustParseCoin("300_000000umilk"), aliceAddr.String(), true)
+	bobAddr := testutil.TestAddress(2)
+	suite.SetUserPreferences(ctx, bobAddr.String(), false, false, []uint32{service2.ID})
+	suite.DelegatePool(ctx, utils.MustParseCoin("200_000000umilk"), bobAddr.String(), true)
+
+	// Rewards plan 1 allocates 1000 * 10 / 86400 ~= 0.115741 $SERVICE1
+	// Rewards plan 2 allocates 5000 * 10 / 86400 ~= 0.578704 $SERVICE1
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+
+	// Alice receives:
+	// - $600 / $600 * 0.115741 ~= 0.115741 $SERVICE1
+	// - $600 / $1000 * 0.578704 ~= 0.347222 $SERVICE2
+	rewards, err := suite.keeper.GetPoolDelegationRewards(ctx, aliceAddr, 1)
+	suite.Require().NoError(err)
+	suite.Require().Equal("115740.000000000000000000service1,347221.800000000000000000service2", rewards.Sum().String())
+	// Bob receives:
+	// - $400 / $1000 * 0.578704 ~= 0.231482 $SERVICE2
+	rewards, err = suite.keeper.GetPoolDelegationRewards(ctx, bobAddr, 1)
+	suite.Require().NoError(err)
+	suite.Require().Equal("231481.200000000000000000service2", rewards.Sum().String())
+
+	// By trusting all services, service 1 will be trusted by Bob as well.
+	suite.SetUserPreferences(ctx, bobAddr.String(), true, true, nil)
+
+	// Withdraw all rewards to make calculation easier.
+	_, err = keeper.NewMsgServer(suite.keeper).WithdrawDelegatorReward(
+		ctx,
+		types.NewMsgWithdrawDelegatorReward(restakingtypes.DELEGATION_TYPE_POOL, 1, aliceAddr.String()),
+	)
+	suite.Require().NoError(err)
+	_, err = keeper.NewMsgServer(suite.keeper).WithdrawDelegatorReward(
+		ctx,
+		types.NewMsgWithdrawDelegatorReward(restakingtypes.DELEGATION_TYPE_POOL, 1, bobAddr.String()),
+	)
+	suite.Require().NoError(err)
+
+	// Rewards plan 1 allocates 1000 * 10 / 86400 ~= 0.115741 $SERVICE1
+	// Rewards plan 2 allocates 5000 * 10 / 86400 ~= 0.578704 $SERVICE1
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+
+	// Alice receives:
+	// - $600 / $1000 * 0.115741 ~= 0.069445 $SERVICE1
+	// - $600 / $1000 * 0.578704 ~= 0.347222 $SERVICE2
+	rewards, err = suite.keeper.GetPoolDelegationRewards(ctx, aliceAddr, 1)
+	suite.Require().NoError(err)
+	suite.Require().Equal("69444.000000000000000000service1,347221.800000000000000000service2", rewards.Sum().String())
+	// Bob receives:
+	// - $400 / $1000 * 0.115741 ~= 0.046296 $SERVICE1
+	// - $400 / $1000 * 0.578704 ~= 0.231482 $SERVICE2
+	rewards, err = suite.keeper.GetPoolDelegationRewards(ctx, bobAddr, 1)
+	suite.Require().NoError(err)
+	suite.Require().Equal("46296.000000000000000000service1,231481.200000000000000000service2", rewards.Sum().String())
+
+	// Now Alice decides to not trust service 2.
+	// This will make Alice's rewards for the pool to be withdrawn automatically.
+	suite.SetUserPreferences(ctx, aliceAddr.String(), false, false, []uint32{service1.ID})
+
+	rewards, err = suite.keeper.GetPoolDelegationRewards(ctx, aliceAddr, 1)
+	suite.Require().NoError(err)
+	suite.Require().Equal("", rewards.Sum().String())
+}
+
+func (suite *KeeperTestSuite) TestAllocateRewards_UserTrustedServiceUpdated() {
+	ctx := suite.ctx
+
+	suite.RegisterCurrency(ctx, "umilk", "MILK", 6, utils.MustParseDec("2"))
+
+	// Create services.
+	serviceAdmin1 := testutil.TestAddress(10000)
+	service1 := suite.CreateService(ctx, "Service1", serviceAdmin1.String())
+	serviceAdmin2 := testutil.TestAddress(10001)
+	service2 := suite.CreateService(ctx, "Service2", serviceAdmin2.String())
+
+	// Add Service1 and Service2 to the pools module's allowed list.
+	poolsParams := suite.poolsKeeper.GetParams(ctx)
+	poolsParams.AllowedServicesIDs = []uint32{service1.ID, service2.ID}
+	suite.poolsKeeper.SetParams(ctx, poolsParams)
+
+	// Call AllocateRewards to set last rewards allocation time.
+	err := suite.keeper.AllocateRewards(ctx)
+	suite.Require().NoError(err)
+
+	// Create active rewards plans.
+	planStartTime := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
+	planEndTime := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
+	suite.CreateBasicRewardsPlan(
+		ctx,
+		service1.ID,
+		utils.MustParseCoins("1000_000000service1"),
+		planStartTime,
+		planEndTime,
+		utils.MustParseCoins("100000_000000service1"),
+	)
+	suite.CreateBasicRewardsPlan(
+		ctx,
+		service2.ID,
+		utils.MustParseCoins("5000_000000service2"),
+		planStartTime,
+		planEndTime,
+		utils.MustParseCoins("100000_000000service2"),
+	)
+
+	// Delegate to $MILK pool.
+	aliceAddr := testutil.TestAddress(1)
+	suite.SetUserPreferences(ctx, aliceAddr.String(), false, false, []uint32{service1.ID, service2.ID})
+	suite.DelegatePool(ctx, utils.MustParseCoin("300_000000umilk"), aliceAddr.String(), true)
+	bobAddr := testutil.TestAddress(2)
+	suite.SetUserPreferences(ctx, bobAddr.String(), false, false, []uint32{service2.ID})
+	suite.DelegatePool(ctx, utils.MustParseCoin("200_000000umilk"), bobAddr.String(), true)
+
+	// Rewards plan 1 allocates 1000 * 10 / 86400 ~= 0.115741 $SERVICE1
+	// Rewards plan 2 allocates 5000 * 10 / 86400 ~= 0.578704 $SERVICE1
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+
+	// Alice receives:
+	// - $600 / $600 * 0.115741 ~= 0.115741 $SERVICE1
+	// - $600 / $1000 * 0.578704 ~= 0.347222 $SERVICE2
+	rewards, err := suite.keeper.GetPoolDelegationRewards(ctx, aliceAddr, 1)
+	suite.Require().NoError(err)
+	suite.Require().Equal("115740.000000000000000000service1,347221.800000000000000000service2", rewards.Sum().String())
+	// Bob receives:
+	// - $400 / $1000 * 0.578704 ~= 0.231482 $SERVICE2
+	rewards, err = suite.keeper.GetPoolDelegationRewards(ctx, bobAddr, 1)
+	suite.Require().NoError(err)
+	suite.Require().Equal("231481.200000000000000000service2", rewards.Sum().String())
+
+	charlieAddr := testutil.TestAddress(3)
+	suite.DelegatePool(ctx, utils.MustParseCoin("200_000000umilk"), charlieAddr.String(), true)
+
+	// Withdraw all rewards to make calculation easier.
+	_, err = keeper.NewMsgServer(suite.keeper).WithdrawDelegatorReward(
+		ctx,
+		types.NewMsgWithdrawDelegatorReward(restakingtypes.DELEGATION_TYPE_POOL, 1, aliceAddr.String()),
+	)
+	suite.Require().NoError(err)
+	_, err = keeper.NewMsgServer(suite.keeper).WithdrawDelegatorReward(
+		ctx,
+		types.NewMsgWithdrawDelegatorReward(restakingtypes.DELEGATION_TYPE_POOL, 1, bobAddr.String()),
+	)
+	suite.Require().NoError(err)
+
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+
+	// Rewards amount must not be changed since Charlie doesn't trust any services,
+	// thus receives no rewards.
+	rewards, err = suite.keeper.GetPoolDelegationRewards(ctx, aliceAddr, 1)
+	suite.Require().NoError(err)
+	suite.Require().Equal("115740.000000000000000000service1,347221.800000000000000000service2", rewards.Sum().String())
+	rewards, err = suite.keeper.GetPoolDelegationRewards(ctx, bobAddr, 1)
+	suite.Require().NoError(err)
+	suite.Require().Equal("231481.200000000000000000service2", rewards.Sum().String())
 }
