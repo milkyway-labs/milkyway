@@ -181,7 +181,7 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 
 			// Allowed the depositor to deposit coins
 			params := types.DefaultParams()
-			params.AllowedDepositors = []string{allowedDepositor.String()}
+			params.TrustedDelegates = []string{allowedDepositor.String()}
 			err := suite.k.SetParams(suite.ctx, params)
 			suite.Require().NoError(err)
 

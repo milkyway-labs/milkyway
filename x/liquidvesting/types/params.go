@@ -10,13 +10,13 @@ func NewParams(
 	insurancePercentage math.LegacyDec,
 	burners []string,
 	minters []string,
-	allowedDepositors []string,
+	trustedDelegates []string,
 ) Params {
 	return Params{
 		InsurancePercentage: insurancePercentage,
 		Burners:             burners,
 		Minters:             minters,
-		AllowedDepositors:   allowedDepositors,
+		TrustedDelegates:    trustedDelegates,
 	}
 }
 
@@ -42,7 +42,7 @@ func (p *Params) Validate() error {
 			return err
 		}
 	}
-	for _, address := range p.AllowedDepositors {
+	for _, address := range p.TrustedDelegates {
 		_, err := sdk.AccAddressFromBech32(address)
 		if err != nil {
 			return err

@@ -142,5 +142,5 @@ func (h IBCHooks) isAllowedDepositor(ctx sdk.Context, address string) (bool, err
 		return false, err
 	}
 
-	return slices.Contains(params.AllowedDepositors, address), nil
+	return slices.Contains(params.TrustedDelegates, address), nil
 }

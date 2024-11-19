@@ -28,8 +28,8 @@ message Params {
   repeated string minters = 3
       [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
-  // AllowedDepositors represents the list of users who are allowed to
+  // TrustedDelegates represents the list of users who are allowed to deposit
   // on the insurance fund.
-  repeated string allowed_depositors = 4
+  repeated string trusted_delegates = 4
       [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 }
