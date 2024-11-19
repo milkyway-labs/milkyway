@@ -10,7 +10,6 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
 // SetUserPreferences sets the given preferences for the user having the given address
@@ -26,17 +25,7 @@ func (k *Keeper) SetUserPreferences(ctx context.Context, userAddress string, pre
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	k.servicesKeeper.IterateServices(sdkCtx, func(service servicestypes.Service) bool {
-		trustedBefore := oldPreferences.IsServiceTrusted(service)
-		trustedAfter := preferences.IsServiceTrusted(service)
-		if trustedBefore != trustedAfter {
-			err = k.AfterUserTrustedServiceUpdated(sdkCtx, userAddress, service.ID, trustedAfter)
-			if err != nil {
-				return true
-			}
-		}
-		return false
-	})
+	err = k.AfterUserPreferencesModified(sdkCtx, userAddress, oldPreferences, preferences)
 	if err != nil {
 		return err
 	}

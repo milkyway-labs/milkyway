@@ -96,8 +96,8 @@ func (m MockHooks) AfterUnbondingInitiated(ctx sdk.Context, unbondingDelegationI
 	return nil
 }
 
-// AfterUserTrustedServiceUpdated implements restakingtypes.Hooks
-func (m MockHooks) AfterUserTrustedServiceUpdated(ctx sdk.Context, userAddress string, serviceID uint32, trusted bool) error {
-	m.CalledMap["AfterUserTrustedServiceUpdated"] = true
+// AfterUserPreferencesModified implements restakingtypes.Hooks
+func (m MockHooks) AfterUserPreferencesModified(ctx sdk.Context, userAddress string, oldPreferences, newPreferences types.UserPreferences) error {
+	m.CalledMap["AfterUserPreferencesModified"] = true
 	return nil
 }

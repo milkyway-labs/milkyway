@@ -81,7 +81,11 @@ func (h RestakingHooks) AfterUnbondingInitiated(_ sdk.Context, _ uint64) error {
 	return nil
 }
 
-// AfterUserTrustedServiceUpdated implements restakingtypes.RestakingHooks
-func (h RestakingHooks) AfterUserTrustedServiceUpdated(ctx sdk.Context, userAddress string, serviceID uint32, trusted bool) error {
-	return h.k.AfterUserTrustedServiceUpdated(ctx, userAddress, serviceID, trusted)
+// AfterUserPreferencesModified implements restakingtypes.RestakingHooks
+func (h RestakingHooks) AfterUserPreferencesModified(
+	ctx sdk.Context,
+	userAddress string,
+	oldPreferences, newPreferences restakingtypes.UserPreferences,
+) error {
+	return h.k.AfterUserPreferencesModified(ctx, userAddress, oldPreferences, newPreferences)
 }

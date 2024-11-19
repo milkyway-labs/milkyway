@@ -5,6 +5,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
 // AfterDelegationTargetCreated is called after a delegation target is created
@@ -117,49 +118,59 @@ func (k *Keeper) AfterDelegationModified(ctx sdk.Context, delType restakingtypes
 	return nil
 }
 
-// AfterUserTrustedServiceUpdated is called after a user's trust in a service is
-// updated. It updates the total delegator shares for the service in all pools
-// where the user has a delegation.
-func (k *Keeper) AfterUserTrustedServiceUpdated(ctx sdk.Context, userAddress string, serviceID uint32, trusted bool) error {
-	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(userAddress)
+// AfterServiceAccreditationModified implements servicestypes.ServicesHooks
+func (k *Keeper) AfterServiceAccreditationModified(ctx sdk.Context, serviceID uint32) error {
+	service, found := k.servicesKeeper.GetService(ctx, serviceID)
+	if !found {
+		return servicestypes.ErrServiceNotFound
+	}
+
+	err := k.restakingKeeper.IterateServiceDelegations(ctx, serviceID, func(del restakingtypes.Delegation) (stop bool, err error) {
+		preferences, err := k.restakingKeeper.GetUserPreferences(ctx, del.UserAddress)
+		if err != nil {
+			return true, err
+		}
+
+		// Clone the service and invert the accreditation status to get the
+		// previous state
+		serviceBefore := service
+		serviceBefore.Accredited = !serviceBefore.Accredited
+
+		trustedBefore := preferences.IsServiceTrusted(serviceBefore)
+		trustedAfter := preferences.IsServiceTrusted(service)
+		if trustedBefore != trustedAfter {
+			err = k.AfterUserTrustedServiceUpdated(ctx, del.UserAddress, service.ID, trustedAfter)
+			if err != nil {
+				return true, err
+			}
+		}
+		return false, nil
+	})
 	if err != nil {
 		return err
 	}
+	return nil
+}
 
-	err = k.restakingKeeper.IterateUserPoolDelegations(ctx, userAddress, func(del restakingtypes.Delegation) (stop bool, err error) {
-		isSecured, err := k.restakingKeeper.IsServiceSecuredByPool(ctx, serviceID, del.TargetID)
-		if err != nil {
-			return true, err
+// AfterUserPreferencesModified is called after a user's trust in a service is
+// updated. It updates the total delegator shares for the service in all pools
+// where the user has a delegation.
+func (k *Keeper) AfterUserPreferencesModified(
+	ctx sdk.Context,
+	userAddress string,
+	oldPreferences, newPreferences restakingtypes.UserPreferences,
+) error {
+	var err error
+	k.servicesKeeper.IterateServices(ctx, func(service servicestypes.Service) bool {
+		trustedBefore := oldPreferences.IsServiceTrusted(service)
+		trustedAfter := newPreferences.IsServiceTrusted(service)
+		if trustedBefore != trustedAfter {
+			err = k.AfterUserTrustedServiceUpdated(ctx, userAddress, service.ID, trustedAfter)
+			if err != nil {
+				return true
+			}
 		}
-		if !isSecured {
-			return false, nil
-		}
-
-		pool, err := k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_POOL, del.TargetID)
-		if err != nil {
-			return true, err
-		}
-
-		// Calling these two methods has same effect as calling
-		// BeforePoolDelegationSharesModified and then AfterPoolDelegationModified.
-		_, err = k.withdrawDelegationRewards(ctx, pool, del)
-		if err != nil {
-			return true, err
-		}
-		err = k.initializeDelegation(ctx, pool, delAddr)
-		if err != nil {
-			return true, err
-		}
-
-		if trusted {
-			err = k.IncrementPoolServiceTotalDelegatorShares(ctx, del.TargetID, serviceID, del.Shares)
-		} else {
-			err = k.DecrementPoolServiceTotalDelegatorShares(ctx, del.TargetID, serviceID, del.Shares)
-		}
-		if err != nil {
-			return true, err
-		}
-		return false, nil
+		return false
 	})
 	if err != nil {
 		return err

@@ -9,7 +9,7 @@ type RestakingHooks interface {
 	OperatorRestakingHooks
 	ServiceRestakingHooks
 	AfterUnbondingInitiated(ctx sdk.Context, unbondingDelegationID uint64) error
-	AfterUserTrustedServiceUpdated(ctx sdk.Context, userAddress string, serviceID uint32, trusted bool) error
+	AfterUserPreferencesModified(ctx sdk.Context, userAddress string, oldPreferences, newPreferences UserPreferences) error
 }
 
 type PoolRestakingHooks interface {
