@@ -37,6 +37,10 @@ func (k *Keeper) SendRestrictionFn(ctx context.Context, from sdk.AccAddress, to 
 		return nil, err
 	}
 
+	if isFromRestakingTarget && isToRestakingTarget {
+		return nil, types.ErrTransferBetweenTargetsNotAllowed
+	}
+
 	// Get the user insurance fund
 	var userAddress sdk.AccAddress
 	if isToRestakingTarget {
