@@ -81,7 +81,7 @@ func (q queryServer) PoolOutstandingRewards(ctx context.Context, req *types.Quer
 		return nil, err
 	}
 
-	rewards, err := q.k.GetOutstandingRewards(ctx, target)
+	rewards, err := target.OutstandingRewards.Get(ctx, target.GetID())
 	if err != nil && !errors.IsOf(err, collections.ErrNotFound) {
 		return nil, err
 	}
@@ -103,7 +103,7 @@ func (q queryServer) OperatorOutstandingRewards(ctx context.Context, req *types.
 		return nil, err
 	}
 
-	rewards, err := q.k.GetOutstandingRewards(ctx, target)
+	rewards, err := target.OutstandingRewards.Get(ctx, target.GetID())
 	if err != nil && !errors.IsOf(err, collections.ErrNotFound) {
 		return nil, err
 	}
@@ -125,7 +125,7 @@ func (q queryServer) ServiceOutstandingRewards(ctx context.Context, req *types.Q
 		return nil, err
 	}
 
-	rewards, err := q.k.GetOutstandingRewards(ctx, target)
+	rewards, err := target.OutstandingRewards.Get(ctx, target.GetID())
 	if err != nil && !errors.IsOf(err, collections.ErrNotFound) {
 		return nil, err
 	}

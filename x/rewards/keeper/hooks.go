@@ -49,7 +49,7 @@ func (k *Keeper) BeforeDelegationSharesModified(ctx context.Context, delType res
 
 	// We don't have to initialize target here because we can assume BeforeDelegationCreated
 	// has already been called when delegation shares are being modified.
-	del, found, err := k.restakingKeeper.GetDelegationForTarget(ctx, target, delegator)
+	del, found, err := k.restakingKeeper.GetDelegationForTarget(ctx, target.DelegationTarget, delegator)
 	if err != nil {
 		return err
 	}
