@@ -86,7 +86,7 @@ func (k *Keeper) calculateDelegationRewardsBetween(
 	differences := ending.CumulativeRewardRatios.Sub(starting.CumulativeRewardRatios)
 	var decPools types.DecPools
 
-	if _, ok := target.(*poolstypes.Pool); ok {
+	if _, ok := target.(poolstypes.Pool); ok {
 		servicesIDs, err := k.restakingKeeper.GetUserTrustedServicesIDs(ctx, delegator)
 		if err != nil {
 			return nil, err

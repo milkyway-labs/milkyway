@@ -89,7 +89,7 @@ func (k *Keeper) IncrementDelegationTargetPeriod(ctx context.Context, target res
 	communityFunding := types.DecPools{}
 	for _, reward := range rewards.Rewards {
 		var tokens sdk.DecCoins
-		if pool, ok := target.(*poolstypes.Pool); ok {
+		if pool, ok := target.(poolstypes.Pool); ok {
 			totalShares, err := k.GetPoolServiceTotalDelegatorShares(ctx, pool.ID, reward.ServiceID)
 			if err != nil {
 				return 0, err
