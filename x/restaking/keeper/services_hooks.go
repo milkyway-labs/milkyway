@@ -102,6 +102,6 @@ func (h *ServicesHooks) AfterServiceCreated(ctx sdk.Context, serviceID uint32) e
 }
 
 // AfterServiceAccreditationModified implements types.ServicesHooks.
-func (h *ServicesHooks) AfterServiceAccreditationModified(ctx sdk.Context, service servicestypes.Service) error {
+func (h *ServicesHooks) AfterServiceAccreditationModified(ctx sdk.Context, serviceID uint32) error {
 	return nil
 }

@@ -140,7 +140,7 @@ func (k *Keeper) SetServiceAccreditation(ctx sdk.Context, serviceID uint32, accr
 			return err
 		}
 
-		err := k.AfterServiceAccreditationModified(ctx, service)
+		err := k.AfterServiceAccreditationModified(ctx, service.ID)
 		if err != nil {
 			return err
 		}

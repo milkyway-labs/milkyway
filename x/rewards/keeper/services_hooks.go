@@ -38,8 +38,13 @@ func (h ServicesHooks) AfterServiceDeleted(ctx sdk.Context, serviceID uint32) er
 }
 
 // AfterServiceAccreditationModified implements servicestypes.ServicesHooks
-func (h ServicesHooks) AfterServiceAccreditationModified(ctx sdk.Context, service servicestypes.Service) error {
-	err := h.k.restakingKeeper.IterateServiceDelegations(ctx, service.ID, func(del restakingtypes.Delegation) (stop bool, err error) {
+func (h ServicesHooks) AfterServiceAccreditationModified(ctx sdk.Context, serviceID uint32) error {
+	service, found := h.k.servicesKeeper.GetService(ctx, serviceID)
+	if !found {
+		return servicestypes.ErrServiceNotFound
+	}
+
+	err := h.k.restakingKeeper.IterateServiceDelegations(ctx, serviceID, func(del restakingtypes.Delegation) (stop bool, err error) {
 		preferences, err := h.k.restakingKeeper.GetUserPreferences(ctx, del.UserAddress)
 		if err != nil {
 			return true, err
