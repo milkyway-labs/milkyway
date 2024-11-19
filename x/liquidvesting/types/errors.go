@@ -13,4 +13,5 @@ var (
 	ErrVestedRepresentationCannoteBeTransferred = errors.Register(ModuleName, 6, "vested representation can't be transferred")
 	ErrInsufficientInsuranceFundBalance         = errors.Register(ModuleName, 7, "insufficient insurance fund balance")
 	ErrInsufficientBalance                      = errors.Register(ModuleName, 8, "insufficient balance")
+	ErrTransferBetweenTargetsNotAllowed         = errors.Register(ModuleName, 9, "transfer between restaking targets is not allowed")
 )
