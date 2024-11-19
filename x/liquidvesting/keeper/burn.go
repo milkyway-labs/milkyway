@@ -202,8 +202,8 @@ func (k *Keeper) DequeueAllBurnCoinsFromUnbondingQueue(ctx context.Context, curr
 	if err != nil {
 		return nil, err
 	}
-	defer iter.Close()
 
+	var toDeleteKeys [][]byte
 	for ; iter.Valid(); iter.Next() {
 		timeslice := types.BurnCoinsList{}
 		value := iter.Value()
@@ -211,7 +211,18 @@ func (k *Keeper) DequeueAllBurnCoinsFromUnbondingQueue(ctx context.Context, curr
 
 		burnCoins = append(burnCoins, timeslice.Data...)
 
-		err = store.Delete(iter.Key())
+		toDeleteKeys = append(toDeleteKeys, iter.Key())
+	}
+
+	// Close the iterator
+	err = iter.Close();
+	if err != nil {
+		return nil, err
+	}
+
+	// Delete all the keys
+	for _, key := range toDeleteKeys {
+		err = store.Delete(key)
 		if err != nil {
 			return nil, err
 		}
