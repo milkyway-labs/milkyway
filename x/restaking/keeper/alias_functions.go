@@ -530,6 +530,12 @@ func (k *Keeper) PerformDelegation(ctx sdk.Context, data types.DelegationData) (
 		return nil, types.ErrDelegatorShareExRateInvalid
 	}
 
+	// Check if the restake operation is allowed
+	restakeAllowed := k.IsRestakeAllowed(ctx, delegator, data.Amount, data.Target)
+	if restakeAllowed != nil {
+		return nil, restakeAllowed
+	}
+
 	// Get or create the delegation object and call the appropriate hook if present
 	delegation, found := k.GetDelegationForTarget(ctx, receiver, delegator)
 

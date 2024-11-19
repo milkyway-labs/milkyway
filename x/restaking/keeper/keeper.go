@@ -38,7 +38,8 @@ type Keeper struct {
 	// The pair represents the service ID and the pool ID
 	serviceSecuringPools collections.KeySet[collections.Pair[uint32, uint32]]
 
-	hooks types.RestakingHooks
+	hooks              types.RestakingHooks
+	restakeRestriction types.RestakeRestrictionFn
 }
 
 func NewKeeper(

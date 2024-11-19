@@ -16,7 +16,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 	user2 := "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"
 	vestedStake, err := types.GetVestedRepresentationDenom("stake")
 	suite.Assert().NoError(err)
-	blockTime := time.Date(2024, 1, 1, 12, 0, 0, 000, time.UTC)
+	blockTime := time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC)
 
 	testCases := []struct {
 		name       string
@@ -49,8 +49,8 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				Params:    types.DefaultParams(),
 				BurnCoins: nil,
 				UserInsuranceFunds: []types.UserInsuranceFundState{
-					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)), nil)),
-					types.NewUserInsuranceFundState(user2, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin("stake", 2)), nil)),
+					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)))),
+					types.NewUserInsuranceFundState(user2, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin("stake", 2)))),
 				},
 			},
 		},
@@ -97,10 +97,8 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				},
 				UserInsuranceFunds: []types.UserInsuranceFundState{
 					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(
-						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)),
 						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)))),
 					types.NewUserInsuranceFundState(user2, types.NewInsuranceFund(
-						sdk.NewCoins(sdk.NewInt64Coin("stake", 2)),
 						sdk.NewCoins(sdk.NewInt64Coin("stake", 2)))),
 				},
 			},
@@ -219,7 +217,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 				types.DefaultParams(),
 				nil,
 				[]types.UserInsuranceFundState{
-					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)), sdk.NewCoins())),
+					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)))),
 				},
 			),
 			shouldErr: true,
@@ -231,8 +229,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 				nil,
 				[]types.UserInsuranceFundState{
 					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(
-						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)),
-						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)))),
+						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)))),
 				},
 			),
 			shouldErr: true,
@@ -244,7 +241,6 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 				nil,
 				[]types.UserInsuranceFundState{
 					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(
-						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)),
 						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)))),
 				},
 			),
@@ -272,7 +268,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 							user1,
 							1,
 							10,
-							time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+							time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 							sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 51)),
 							1,
 						),
@@ -292,7 +288,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 				types.DefaultParams(),
 				nil,
 				[]types.UserInsuranceFundState{
-					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)), sdk.NewCoins())),
+					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)))),
 				},
 			),
 			setup: func(ctx sdk.Context) {
@@ -301,7 +297,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			},
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				balance, err := suite.k.GetUserInsuranceFundBalance(ctx, sdk.MustAccAddressFromBech32(user1))
+				balance, err := suite.k.GetUserInsuranceFundBalance(ctx, user1)
 				suite.Assert().NoError(err)
 				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)), balance)
 			},
@@ -313,9 +309,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 				nil,
 				[]types.UserInsuranceFundState{
 					types.NewUserInsuranceFundState(user1, types.NewInsuranceFund(
-						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)),
-						// Set 3 as used to cover the delegation and the undelegation
-						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 3)))),
+						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)))),
 				},
 			),
 			setup: func(ctx sdk.Context) {
@@ -342,7 +336,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 							user1,
 							1,
 							10,
-							time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+							time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 							sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 100)),
 							1,
 						),
@@ -377,7 +371,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 							user1,
 							1,
 							10,
-							time.Date(2024, 1, 8, 12, 00, 00, 000, time.UTC),
+							time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
 							sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 2)),
 							1,
 						),

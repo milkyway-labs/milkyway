@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"cosmossdk.io/collections"
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
@@ -88,9 +89,14 @@ func (k *Keeper) GetUserInsuranceFund(
 // GetUserInsuranceFundBalance returns the amount of coins in the user's insurance fund.
 func (k *Keeper) GetUserInsuranceFundBalance(
 	ctx sdk.Context,
-	user sdk.AccAddress,
+	user string,
 ) (sdk.Coins, error) {
-	insuranceFund, err := k.GetUserInsuranceFund(ctx, user)
+	accAddr, err := sdk.AccAddressFromBech32(user)
+	if err != nil {
+		return nil, err
+	}
+
+	insuranceFund, err := k.GetUserInsuranceFund(ctx, accAddr)
 	if err != nil {
 		return nil, err
 	}
@@ -108,6 +114,50 @@ func (k *Keeper) GetInsuranceFundBalance(ctx sdk.Context) (sdk.Coins, error) {
 	return k.bankKeeper.GetAllBalances(ctx, accAddr), nil
 }
 
+// GetUserUsedInsuranceFund returns the amount of coins that are used
+// to cover the user's vested representation tokens that have been restaked.
+func (k *Keeper) GetUserUsedInsuranceFund(ctx sdk.Context, userAddress string) (sdk.Coins, error) {
+	// Get vested representations that the insurance fund covers
+	vestedRepresentations, err := k.GetAllUserActiveVestedRepresentations(ctx, userAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	// No vested representation tokens were restaked, the used
+	// insurance fund is zero
+	if vestedRepresentations.IsZero() {
+		return sdk.NewCoins(), nil
+	}
+
+	params, err := k.GetParams(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	userInsuranceFund, err := k.GetUserInsuranceFundBalance(ctx, userAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	// Compute the used insurance fund
+	usedInsuranceFund := sdk.NewCoins()
+	for _, coin := range vestedRepresentations {
+		nativeDenom, err := types.VestedDenomToNative(coin.Denom)
+		if err != nil {
+			return nil, err
+		}
+		requiredAmount := params.InsurancePercentage.Mul(coin.Amount).QuoInt64(100).Ceil().TruncateInt()
+		usedInsuranceFund = usedInsuranceFund.Add(sdk.NewCoin(
+			nativeDenom,
+			// Pick the minimum between the required amount and the amount
+			// in the insurance fund to avoid incorrect values.
+			math.MinInt(requiredAmount, userInsuranceFund.AmountOf(nativeDenom)),
+		))
+	}
+
+	return usedInsuranceFund, nil
+}
+
 // CanWithdrawFromInsuranceFund returns true if the user can withdraw the provided amount
 // from their insurance fund.
 func (k *Keeper) CanWithdrawFromInsuranceFund(ctx sdk.Context, user sdk.AccAddress, amount sdk.Coins) (bool, error) {
@@ -115,6 +165,32 @@ func (k *Keeper) CanWithdrawFromInsuranceFund(ctx sdk.Context, user sdk.AccAddre
 	if err != nil {
 		return false, err
 	}
+	// Ensure that the user has enough coins in the insurance fund
+	if !userInsuranceFund.Balance.IsAllGTE(amount) {
+		return false, nil
+	}
 
-	return userInsuranceFund.Unused().IsAllGTE(amount), nil
+	params, err := k.GetParams(ctx)
+	if err != nil {
+		return false, err
+	}
+
+	userAddress, err := k.accountKeeper.AddressCodec().BytesToString(user)
+	if err != nil {
+		return false, err
+	}
+
+	// Get all the vested representations that are currently being
+	// covered by the user's insurance fund.
+	vestedRepresentations, err := k.GetAllUserActiveVestedRepresentations(ctx, userAddress)
+	if err != nil {
+		return false, err
+	}
+
+	// Ensure that the user's insurance fund can cover the user's restaked
+	// vested representations after the withdrawal.
+	userInsuranceFund.Balance = userInsuranceFund.Balance.Sub(amount...)
+	canCover, _, err := userInsuranceFund.CanCoverDecCoins(params.InsurancePercentage, vestedRepresentations)
+
+	return canCover, err
 }

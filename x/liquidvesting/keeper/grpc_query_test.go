@@ -89,6 +89,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFund() {
 			request:    types.NewQueryUserInsuranceFundRequest(user1),
 			shouldErr:  false,
 			expBalance: sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
+			expUsed:    sdk.NewCoins(),
 		},
 		{
 			name: "multiple deposits",
@@ -103,6 +104,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFund() {
 				sdk.NewInt64Coin(IBCDenom, 1000),
 				sdk.NewInt64Coin("stake", 1000),
 			),
+			expUsed: sdk.NewCoins(),
 		},
 		{
 			name: "with used amount",
@@ -177,10 +179,9 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFunds() {
 			request:   types.NewQueryUserInsuranceFundsRequest(nil),
 			shouldErr: false,
 			expInsuranceFunds: []types.UserInsuranceFundData{
-				types.NewUserInsuranceFundData(user1, types.NewInsuranceFund(
-					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)), nil)),
-				types.NewUserInsuranceFundData(user2, types.NewInsuranceFund(
-					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000), sdk.NewInt64Coin("stake", 1000)), nil)),
+				types.NewUserInsuranceFundData(user1, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)), sdk.NewCoins()),
+				types.NewUserInsuranceFundData(user2,
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000), sdk.NewInt64Coin("stake", 1000)), sdk.NewCoins()),
 			},
 		},
 		{
@@ -196,8 +197,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFunds() {
 			}),
 			shouldErr: false,
 			expInsuranceFunds: []types.UserInsuranceFundData{
-				types.NewUserInsuranceFundData(user1, types.NewInsuranceFund(
-					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)), nil)),
+				types.NewUserInsuranceFundData(user1, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)), sdk.NewCoins()),
 			},
 		},
 		{
@@ -217,8 +217,8 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFunds() {
 			}),
 			shouldErr: false,
 			expInsuranceFunds: []types.UserInsuranceFundData{
-				types.NewUserInsuranceFundData(user1, types.NewInsuranceFund(
-					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)), sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 20)))),
+				types.NewUserInsuranceFundData(user1,
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)), sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 20))),
 			},
 		},
 	}
