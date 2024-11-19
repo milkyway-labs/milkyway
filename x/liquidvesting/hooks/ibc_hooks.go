@@ -3,6 +3,7 @@ package hooks
 import (
 	"encoding/json"
 	"fmt"
+	"slices"
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -48,6 +49,16 @@ func (h IBCHooks) onRecvIcs20Packet(
 		return milkywaytypes.NewEmitErrorAcknowledgement(
 			fmt.Errorf("the receiver should be the module address, got: %s, expected: %s", ics20Packet.Receiver, h.ModuleAddress),
 		)
+	}
+
+	// Ensure that the sender is allowed to deposit
+	canDeposit, err := h.isAllowedDepositor(ctx, ics20Packet.Sender)
+	if err != nil {
+		return milkywaytypes.NewEmitErrorAcknowledgement(err)
+	}
+	if !canDeposit {
+		return milkywaytypes.NewEmitErrorAcknowledgement(
+			fmt.Errorf("the sender %s is not allowed to deposit", ics20Packet.Sender))
 	}
 
 	// Parse the message from the memo
@@ -121,4 +132,15 @@ func (h IBCHooks) OnRecvPacketOverride(
 	}
 
 	return im.App.OnRecvPacket(ctx, packet, relayer)
+}
+
+// IsAllowedDepositor checks if the provided address is allowed to deposit funds
+// to the insurance fund.
+func (h IBCHooks) isAllowedDepositor(ctx sdk.Context, address string) (bool, error) {
+	params, err := h.GetParams(ctx)
+	if err != nil {
+		return false, err
+	}
+
+	return slices.Contains(params.TrustedDelegates, address), nil
 }

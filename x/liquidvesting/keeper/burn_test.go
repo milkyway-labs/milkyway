@@ -180,7 +180,9 @@ func (suite *KeeperTestSuite) TestKeeper_TestIsBurner() {
 				suite.k.SetParams(suite.ctx, types.NewParams(
 					math.LegacyMustNewDecFromStr("2.0"),
 					[]string{burnerAccount},
-					nil)))
+					nil,
+					nil,
+				)))
 
 			isBurner, err := suite.k.IsBurner(suite.ctx, sdk.MustAccAddressFromBech32(tc.account))
 			suite.Assert().NoError(err)
