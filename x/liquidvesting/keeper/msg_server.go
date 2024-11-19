@@ -105,12 +105,12 @@ func (m msgServer) WithdrawInsuranceFund(ctx context.Context, msg *types.MsgWith
 		return nil, err
 	}
 
-	canWithdaw, err := m.CanWithdrawFromInsuranceFund(ctx, sender, msg.Amount)
+	canWithdraw, err := m.CanWithdrawFromInsuranceFund(ctx, sender, msg.Amount)
 	if err != nil {
 		return nil, err
 	}
 
-	if !canWithdaw {
+	if !canWithdraw {
 		return nil, types.ErrInsufficientBalance
 	}
 
