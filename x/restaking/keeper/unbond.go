@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"context"
 	"encoding/binary"
 	"time"
 
@@ -16,9 +17,13 @@ import (
 )
 
 // IncrementUnbondingID increments and returns a unique ID for an unbonding operation
-func (k *Keeper) IncrementUnbondingID(ctx sdk.Context) (unbondingID uint64) {
-	store := ctx.KVStore(k.storeKey)
-	bz := store.Get(types.UnbondingIDKey)
+func (k *Keeper) IncrementUnbondingID(ctx context.Context) (unbondingID uint64, err error) {
+	store := k.storeService.OpenKVStore(ctx)
+	bz, err := store.Get(types.UnbondingIDKey)
+	if err != nil {
+		return 0, err
+	}
+
 	if bz != nil {
 		unbondingID = binary.BigEndian.Uint64(bz)
 	}
@@ -31,25 +36,32 @@ func (k *Keeper) IncrementUnbondingID(ctx sdk.Context) (unbondingID uint64) {
 	binary.BigEndian.PutUint64(bz, unbondingID)
 
 	// Store the new unbonding id
-	store.Set(types.UnbondingIDKey, bz)
+	err = store.Set(types.UnbondingIDKey, bz)
+	if err != nil {
+		return 0, err
+	}
 
-	return unbondingID
+	return unbondingID, nil
 }
 
 // DeleteUnbondingIndex removes a mapping from UnbondingId to unbonding operation
-func (k *Keeper) DeleteUnbondingIndex(ctx sdk.Context, id uint64) {
-	store := ctx.KVStore(k.storeKey)
-	store.Delete(types.GetUnbondingIndexKey(id))
+func (k *Keeper) DeleteUnbondingIndex(ctx context.Context, id uint64) error {
+	store := k.storeService.OpenKVStore(ctx)
+	return store.Delete(types.GetUnbondingIndexKey(id))
 }
 
 // ValidateUnbondAmount validates that a given unbond or redelegation amount is valid based on upon the
 // converted shares. If the amount is valid, the total amount of respective shares is returned,
 // otherwise an error is returned.
 func (k *Keeper) ValidateUnbondAmount(
-	ctx sdk.Context, delAddr string, target types.DelegationTarget, amt sdk.Coins,
+	ctx context.Context, delAddr string, target types.DelegationTarget, amt sdk.Coins,
 ) (shares sdk.DecCoins, err error) {
 	// Get the delegation
-	delegation, found := k.GetDelegationForTarget(ctx, target, delAddr)
+	delegation, found, err := k.GetDelegationForTarget(ctx, target, delAddr)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return shares, types.ErrDelegationNotFound
 	}
@@ -82,9 +94,13 @@ func (k *Keeper) ValidateUnbondAmount(
 }
 
 // Unbond unbonds a particular delegation and perform associated store operations.
-func (k *Keeper) Unbond(ctx sdk.Context, data types.UndelegationData) (amount sdk.Coins, err error) {
+func (k *Keeper) Unbond(ctx context.Context, data types.UndelegationData) (amount sdk.Coins, err error) {
 	// Check if a delegation object exists in the store
-	delegation, found := k.GetDelegationForTarget(ctx, data.Target, data.Delegator)
+	delegation, found, err := k.GetDelegationForTarget(ctx, data.Target, data.Delegator)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return sdk.NewCoins(), types.ErrDelegationNotFound
 	}
@@ -111,7 +127,10 @@ func (k *Keeper) Unbond(ctx sdk.Context, data types.UndelegationData) (amount sd
 		}
 
 		// Remove the delegation
-		k.RemoveDelegation(ctx, delegation)
+		err = k.RemoveDelegation(ctx, delegation)
+		if err != nil {
+			return amount, err
+		}
 	} else {
 		// Store the updated delegation
 		err = k.SetDelegation(ctx, delegation)
@@ -131,23 +150,23 @@ func (k *Keeper) Unbond(ctx sdk.Context, data types.UndelegationData) (amount sd
 }
 
 // RemoveTargetTokensAndShares removes the given amount of tokens and shares from the target.
-func (k *Keeper) RemoveTargetTokensAndShares(ctx sdk.Context, data types.UndelegationData) (sdk.Coins, error) {
+func (k *Keeper) RemoveTargetTokensAndShares(ctx context.Context, data types.UndelegationData) (sdk.Coins, error) {
 	var issuedTokensAmount sdk.Coins
 
 	switch target := data.Target.(type) {
-	case *operatorstypes.Operator:
+	case operatorstypes.Operator:
 		operator, amount := target.RemoveDelShares(data.Shares)
 		if err := k.operatorsKeeper.SaveOperator(ctx, operator); err != nil {
 			return nil, err
 		}
 		issuedTokensAmount = amount
-	case *servicestypes.Service:
+	case servicestypes.Service:
 		service, amount := target.RemoveDelShares(data.Shares)
 		if err := k.servicesKeeper.SaveService(ctx, service); err != nil {
 			return nil, err
 		}
 		issuedTokensAmount = amount
-	case *poolstypes.Pool:
+	case poolstypes.Pool:
 		pool, amount, err := target.RemoveDelShares(data.Shares)
 		if err != nil {
 			return nil, err
@@ -166,10 +185,13 @@ func (k *Keeper) RemoveTargetTokensAndShares(ctx sdk.Context, data types.Undeleg
 // SetUnbondingDelegationEntry adds an entry to the unbonding delegation at
 // the given addresses. It creates the unbonding delegation if it does not exist.
 func (k *Keeper) SetUnbondingDelegationEntry(
-	ctx sdk.Context, data types.UndelegationData, creationHeight int64, minTime time.Time, balance sdk.Coins,
+	ctx context.Context, data types.UndelegationData, creationHeight int64, minTime time.Time, balance sdk.Coins,
 ) (types.UnbondingDelegation, error) {
 	// Get the ID of the next unbonding delegation entry
-	id := k.IncrementUnbondingID(ctx)
+	id, err := k.IncrementUnbondingID(ctx)
+	if err != nil {
+		return types.UnbondingDelegation{}, err
+	}
 
 	// Either get the existing unbonding delegation, or create a new one
 	ubdType, err := types.GetDelegationTypeFromTarget(data.Target)
@@ -178,7 +200,11 @@ func (k *Keeper) SetUnbondingDelegationEntry(
 	}
 
 	isNewUbdEntry := true
-	ubd, found := k.GetUnbondingDelegation(ctx, data.Delegator, ubdType, data.Target.GetID())
+	ubd, found, err := k.GetUnbondingDelegation(ctx, data.Delegator, ubdType, data.Target.GetID())
+	if err != nil {
+		return types.UnbondingDelegation{}, err
+	}
+
 	if found {
 		isNewUbdEntry = ubd.AddEntry(creationHeight, minTime, balance, id)
 	} else {
@@ -193,7 +219,10 @@ func (k *Keeper) SetUnbondingDelegationEntry(
 	// Only call the hook for new entries since calls to AfterUnbondingInitiated are not idempotent
 	if isNewUbdEntry {
 		// Add to the UBDByUnbondingOp index to look up the UBD by the UBDE ID
-		k.SetUnbondingDelegationByUnbondingID(ctx, ubd, unbondingDelegationKey, id)
+		err = k.SetUnbondingDelegationByUnbondingID(ctx, ubd, unbondingDelegationKey, id)
+		if err != nil {
+			return types.UnbondingDelegation{}, err
+		}
 
 		// Call the hook after the unbonding has been initiated
 		err = k.AfterUnbondingInitiated(ctx, id)
@@ -208,9 +237,13 @@ func (k *Keeper) SetUnbondingDelegationEntry(
 // CompleteUnbonding completes the unbonding of all mature entries in the
 // retrieved unbonding delegation object and returns the total unbonding balance
 // or an error upon failure.
-func (k *Keeper) CompleteUnbonding(ctx sdk.Context, data types.DTData) (sdk.Coins, error) {
+func (k *Keeper) CompleteUnbonding(ctx context.Context, data types.DTData) (sdk.Coins, error) {
 	// Get the unbonding delegation entry
-	ubd, found := k.GetUnbondingDelegation(ctx, data.DelegatorAddress, data.UnbondingDelegationType, data.TargetID)
+	ubd, found, err := k.GetUnbondingDelegation(ctx, data.DelegatorAddress, data.UnbondingDelegationType, data.TargetID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, types.ErrNoUnbondingDelegation
 	}
@@ -233,10 +266,11 @@ func (k *Keeper) CompleteUnbonding(ctx sdk.Context, data types.DTData) (sdk.Coin
 		return nil, err
 	}
 
-	balances := sdk.NewCoins()
-	ctxTime := ctx.BlockHeader().Time
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	ctxTime := sdkCtx.BlockHeader().Time
 
 	// Loop through all the entries and complete unbonding mature entries
+	balances := sdk.NewCoins()
 	for i := 0; i < len(ubd.Entries); i++ {
 		entry := ubd.Entries[i]
 		if entry.IsMature(ctxTime) {
@@ -245,7 +279,10 @@ func (k *Keeper) CompleteUnbonding(ctx sdk.Context, data types.DTData) (sdk.Coin
 			i--
 
 			// Delete the index
-			k.DeleteUnbondingIndex(ctx, entry.UnbondingID)
+			err = k.DeleteUnbondingIndex(ctx, entry.UnbondingID)
+			if err != nil {
+				return nil, err
+			}
 
 			// Track undelegation only when remaining or truncated shares are non-zero
 			if !entry.Balance.IsZero() {
@@ -285,58 +322,70 @@ func (k *Keeper) CompleteUnbonding(ctx sdk.Context, data types.DTData) (sdk.Coin
 // GetUBDQueueTimeSlice gets a specific unbonding queue timeslice. A timeslice
 // is a slice of DVPairs corresponding to unbonding delegations that expire at a
 // certain time.
-func (k *Keeper) GetUBDQueueTimeSlice(ctx sdk.Context, timestamp time.Time) (dvPairs []types.DTData) {
-	store := ctx.KVStore(k.storeKey)
+func (k *Keeper) GetUBDQueueTimeSlice(ctx context.Context, timestamp time.Time) (dvPairs []types.DTData, err error) {
+	store := k.storeService.OpenKVStore(ctx)
 
-	bz := store.Get(types.GetUnbondingDelegationTimeKey(timestamp))
+	bz, err := store.Get(types.GetUnbondingDelegationTimeKey(timestamp))
+	if err != nil {
+		return nil, err
+	}
+
 	if bz == nil {
-		return []types.DTData{}
+		return []types.DTData{}, nil
 	}
 
 	pairs := types.DTDataList{}
 	k.cdc.MustUnmarshal(bz, &pairs)
 
-	return pairs.Data
+	return pairs.Data, nil
 }
 
 // SetUBDQueueTimeSlice sets a specific unbonding queue timeslice.
-func (k *Keeper) SetUBDQueueTimeSlice(ctx sdk.Context, timestamp time.Time, keys []types.DTData) {
-	store := ctx.KVStore(k.storeKey)
+func (k *Keeper) SetUBDQueueTimeSlice(ctx context.Context, timestamp time.Time, keys []types.DTData) error {
+	store := k.storeService.OpenKVStore(ctx)
 	bz := k.cdc.MustMarshal(&types.DTDataList{Data: keys})
-	store.Set(types.GetUnbondingDelegationTimeKey(timestamp), bz)
+	return store.Set(types.GetUnbondingDelegationTimeKey(timestamp), bz)
 }
 
 // InsertUBDQueue inserts an unbonding delegation to the appropriate timeslice
 // in the unbonding queue.
-func (k *Keeper) InsertUBDQueue(ctx sdk.Context, ubd types.UnbondingDelegation, completionTime time.Time) {
+func (k *Keeper) InsertUBDQueue(ctx context.Context, ubd types.UnbondingDelegation, completionTime time.Time) error {
 	dvPair := types.DTData{
 		UnbondingDelegationType: ubd.Type,
 		DelegatorAddress:        ubd.DelegatorAddress,
 		TargetID:                ubd.TargetID,
 	}
 
-	timeSlice := k.GetUBDQueueTimeSlice(ctx, completionTime)
-	if len(timeSlice) == 0 {
-		k.SetUBDQueueTimeSlice(ctx, completionTime, []types.DTData{dvPair})
-	} else {
-		timeSlice = append(timeSlice, dvPair)
-		k.SetUBDQueueTimeSlice(ctx, completionTime, timeSlice)
+	timeSlice, err := k.GetUBDQueueTimeSlice(ctx, completionTime)
+	if err != nil {
+		return err
 	}
+
+	if len(timeSlice) == 0 {
+		return k.SetUBDQueueTimeSlice(ctx, completionTime, []types.DTData{dvPair})
+
+	}
+
+	timeSlice = append(timeSlice, dvPair)
+	return k.SetUBDQueueTimeSlice(ctx, completionTime, timeSlice)
 }
 
 // UBDQueueIterator returns all the unbonding queue timeslices from time 0 until endTime.
-func (k *Keeper) UBDQueueIterator(ctx sdk.Context, endTime time.Time) storetypes.Iterator {
-	store := ctx.KVStore(k.storeKey)
+func (k *Keeper) UBDQueueIterator(ctx context.Context, endTime time.Time) (storetypes.Iterator, error) {
+	store := k.storeService.OpenKVStore(ctx)
 	return store.Iterator(types.UnbondingQueueKey, storetypes.InclusiveEndBytes(types.GetUnbondingDelegationTimeKey(endTime)))
 }
 
 // DequeueAllMatureUBDQueue returns a concatenated list of all the timeslices inclusively previous to
 // currTime, and deletes the timeslices from the queue.
-func (k *Keeper) DequeueAllMatureUBDQueue(ctx sdk.Context, currTime time.Time) (matureUnbonds []types.DTData) {
-	store := ctx.KVStore(k.storeKey)
+func (k *Keeper) DequeueAllMatureUBDQueue(ctx context.Context, currTime time.Time) (matureUnbonds []types.DTData, err error) {
+	store := k.storeService.OpenKVStore(ctx)
 
 	// Get an iterator for all timeslices from time 0 until the current BlockHeader time
-	unbondingTimesliceIterator := k.UBDQueueIterator(ctx, currTime)
+	unbondingTimesliceIterator, err := k.UBDQueueIterator(ctx, currTime)
+	if err != nil {
+		return nil, err
+	}
 	defer unbondingTimesliceIterator.Close()
 
 	for ; unbondingTimesliceIterator.Valid(); unbondingTimesliceIterator.Next() {
@@ -346,8 +395,11 @@ func (k *Keeper) DequeueAllMatureUBDQueue(ctx sdk.Context, currTime time.Time) (
 
 		matureUnbonds = append(matureUnbonds, timeslice.Data...)
 
-		store.Delete(unbondingTimesliceIterator.Key())
+		err = store.Delete(unbondingTimesliceIterator.Key())
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	return matureUnbonds
+	return matureUnbonds, nil
 }

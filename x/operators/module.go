@@ -124,18 +124,18 @@ func (am AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.RawMessage) []abci.ValidatorUpdate {
 	var genState types.GenesisState
 	cdc.MustUnmarshalJSON(gs, &genState)
-	if err := am.keeper.InitGenesis(ctx, genState); err != nil {
+
+	err := am.keeper.InitGenesis(ctx, &genState)
+	if err != nil {
 		panic(err)
 	}
+
 	return []abci.ValidatorUpdate{}
 }
 
 // ExportGenesis returns the operators module's exported genesis state as raw JSON bytes.
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
-	genState, err := am.keeper.ExportGenesis(ctx)
-	if err != nil {
-		panic(err)
-	}
+	genState := am.keeper.ExportGenesis(ctx)
 	return cdc.MustMarshalJSON(genState)
 }
 

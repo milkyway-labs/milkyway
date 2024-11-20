@@ -16,17 +16,17 @@ func TestGenesis_Validate(t *testing.T) {
 	}{
 		{
 			name:      "invalid next pool id returns error",
-			genesis:   types.NewGenesis(types.DefaultParams(), 0, nil),
+			genesis:   types.NewGenesis(0, nil, types.DefaultParams()),
 			shouldErr: true,
 		},
 		{
 			name: "invalid pool returns error",
 			genesis: types.NewGenesis(
-				types.DefaultParams(),
 				1,
 				[]types.Pool{
 					types.NewPool(0, "uatom"),
 				},
+				types.DefaultParams(),
 			),
 			shouldErr: true,
 		},
@@ -38,11 +38,11 @@ func TestGenesis_Validate(t *testing.T) {
 		{
 			name: "valid genesis does not return errors",
 			genesis: types.NewGenesis(
-				types.DefaultParams(),
 				1,
 				[]types.Pool{
 					types.NewPool(1, "uatom"),
 				},
+				types.DefaultParams(),
 			),
 			shouldErr: false,
 		},

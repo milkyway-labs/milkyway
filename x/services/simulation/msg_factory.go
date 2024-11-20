@@ -85,22 +85,17 @@ func WeightedOperations(
 	})
 
 	return simulation.WeightedOperations{
-		simulation.NewWeightedOperation(weightMsgCreateService, SimulateMsgCreateService(txGen, ak, bk, k)),
-		simulation.NewWeightedOperation(weightMsgUpdateService, SimulateMsgUpdateService(txGen, ak, bk, k)),
-		simulation.NewWeightedOperation(weightMsgActivateService, SimulateMsgActivateService(txGen, ak, bk, k)),
-		simulation.NewWeightedOperation(weightMsgDeactivateService, SimulateMsgDeactivateService(txGen, ak, bk, k)),
-		simulation.NewWeightedOperation(weightMsgTransferServiceOwnership, SimulateMsgTransferServiceOwnership(txGen, ak, bk, k)),
-		simulation.NewWeightedOperation(weightMsgDeleteService, SimulateMsgDeleteService(txGen, ak, bk, k)),
-		simulation.NewWeightedOperation(weightMsgSetServiceParams, SimulateMsgSetServiceParams(txGen, ak, bk, k)),
+		simulation.NewWeightedOperation(weightMsgCreateService, SimulateMsgCreateService(ak, bk)),
+		simulation.NewWeightedOperation(weightMsgUpdateService, SimulateMsgUpdateService(ak, bk, k)),
+		simulation.NewWeightedOperation(weightMsgActivateService, SimulateMsgActivateService(ak, bk, k)),
+		simulation.NewWeightedOperation(weightMsgDeactivateService, SimulateMsgDeactivateService(ak, bk, k)),
+		simulation.NewWeightedOperation(weightMsgTransferServiceOwnership, SimulateMsgTransferServiceOwnership(ak, bk, k)),
+		simulation.NewWeightedOperation(weightMsgDeleteService, SimulateMsgDeleteService(ak, bk, k)),
+		simulation.NewWeightedOperation(weightMsgSetServiceParams, SimulateMsgSetServiceParams(ak, bk, k)),
 	}
 }
 
-func SimulateMsgCreateService(
-	txGen client.TxConfig,
-	ak authkeeper.AccountKeeper,
-	bk bankkeeper.Keeper,
-	k *keeper.Keeper,
-) simtypes.Operation {
+func SimulateMsgCreateService(ak authkeeper.AccountKeeper, bk bankkeeper.Keeper) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
@@ -123,12 +118,7 @@ func SimulateMsgCreateService(
 	}
 }
 
-func SimulateMsgUpdateService(
-	txGen client.TxConfig,
-	ak authkeeper.AccountKeeper,
-	bk bankkeeper.Keeper,
-	k *keeper.Keeper,
-) simtypes.Operation {
+func SimulateMsgUpdateService(ak authkeeper.AccountKeeper, bk bankkeeper.Keeper, k *keeper.Keeper) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
@@ -152,6 +142,7 @@ func SimulateMsgUpdateService(
 
 		// Generate the new service fields
 		newService := RandomService(r, service.ID, service.Admin)
+
 		// Create the msg
 		msg := types.NewMsgUpdateService(
 			service.ID,
@@ -166,12 +157,7 @@ func SimulateMsgUpdateService(
 	}
 }
 
-func SimulateMsgActivateService(
-	txGen client.TxConfig,
-	ak authkeeper.AccountKeeper,
-	bk bankkeeper.Keeper,
-	k *keeper.Keeper,
-) simtypes.Operation {
+func SimulateMsgActivateService(ak authkeeper.AccountKeeper, bk bankkeeper.Keeper, k *keeper.Keeper) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
@@ -202,12 +188,7 @@ func SimulateMsgActivateService(
 	}
 }
 
-func SimulateMsgDeactivateService(
-	txGen client.TxConfig,
-	ak authkeeper.AccountKeeper,
-	bk bankkeeper.Keeper,
-	k *keeper.Keeper,
-) simtypes.Operation {
+func SimulateMsgDeactivateService(ak authkeeper.AccountKeeper, bk bankkeeper.Keeper, k *keeper.Keeper) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
@@ -238,12 +219,7 @@ func SimulateMsgDeactivateService(
 	}
 }
 
-func SimulateMsgTransferServiceOwnership(
-	txGen client.TxConfig,
-	ak authkeeper.AccountKeeper,
-	bk bankkeeper.Keeper,
-	k *keeper.Keeper,
-) simtypes.Operation {
+func SimulateMsgTransferServiceOwnership(ak authkeeper.AccountKeeper, bk bankkeeper.Keeper, k *keeper.Keeper) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
@@ -275,12 +251,7 @@ func SimulateMsgTransferServiceOwnership(
 	}
 }
 
-func SimulateMsgDeleteService(
-	txGen client.TxConfig,
-	ak authkeeper.AccountKeeper,
-	bk bankkeeper.Keeper,
-	k *keeper.Keeper,
-) simtypes.Operation {
+func SimulateMsgDeleteService(ak authkeeper.AccountKeeper, bk bankkeeper.Keeper, k *keeper.Keeper) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
@@ -301,7 +272,7 @@ func SimulateMsgDeleteService(
 		adminAddr := sdk.MustAccAddressFromBech32(service.Admin)
 		simAccount, found := simtesting.GetSimAccount(adminAddr, accs)
 		if !found {
-			return simtypes.NoOpMsg(types.ModuleName, "service admin not found", "skip"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, "MsgDeleteService", "service admin not found"), nil, nil
 		}
 
 		// Create the msg
@@ -311,12 +282,7 @@ func SimulateMsgDeleteService(
 	}
 }
 
-func SimulateMsgSetServiceParams(
-	txGen client.TxConfig,
-	ak authkeeper.AccountKeeper,
-	bk bankkeeper.Keeper,
-	k *keeper.Keeper,
-) simtypes.Operation {
+func SimulateMsgSetServiceParams(ak authkeeper.AccountKeeper, bk bankkeeper.Keeper, k *keeper.Keeper) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {

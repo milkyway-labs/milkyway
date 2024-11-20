@@ -228,6 +228,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllPoolDelegations() {
 				))
 				suite.Require().NoError(err)
 			},
+			shouldErr: false,
 			expDelegations: []types.Delegation{
 				types.NewPoolDelegation(
 					1,
@@ -259,8 +260,13 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllPoolDelegations() {
 				tc.store(ctx)
 			}
 
-			delegations := suite.k.GetAllPoolDelegations(ctx)
-			suite.Require().Equal(tc.expDelegations, delegations)
+			delegations, err := suite.k.GetAllPoolDelegations(ctx)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expDelegations, delegations)
+			}
 
 			if tc.check != nil {
 				tc.check(ctx)
@@ -302,6 +308,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllOperatorDelegations() {
 				))
 				suite.Require().NoError(err)
 			},
+			shouldErr: false,
 			expDelegations: []types.Delegation{
 				types.NewOperatorDelegation(
 					1,
@@ -333,8 +340,13 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllOperatorDelegations() {
 				tc.store(ctx)
 			}
 
-			delegations := suite.k.GetAllOperatorDelegations(ctx)
-			suite.Require().Equal(tc.expDelegations, delegations)
+			delegations, err := suite.k.GetAllOperatorDelegations(ctx)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expDelegations, delegations)
+			}
 
 			if tc.check != nil {
 				tc.check(ctx)
@@ -376,6 +388,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServiceDelegations() {
 				))
 				suite.Require().NoError(err)
 			},
+			shouldErr: false,
 			expDelegations: []types.Delegation{
 				types.NewServiceDelegation(
 					1,
@@ -407,8 +420,13 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServiceDelegations() {
 				tc.store(ctx)
 			}
 
-			delegations := suite.k.GetAllServiceDelegations(ctx)
-			suite.Require().Equal(tc.expDelegations, delegations)
+			delegations, err := suite.k.GetAllServiceDelegations(ctx)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expDelegations, delegations)
+			}
 
 			if tc.check != nil {
 				tc.check(ctx)
@@ -461,6 +479,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllPoolUnbondingDelegations() {
 				))
 				suite.Require().NoError(err)
 			},
+			shouldErr: false,
 			expUnbonding: []types.UnbondingDelegation{
 				types.NewPoolUnbondingDelegation(
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -485,8 +504,13 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllPoolUnbondingDelegations() {
 				tc.store(ctx)
 			}
 
-			unbonding := suite.k.GetAllPoolUnbondingDelegations(ctx)
-			suite.Require().Equal(tc.expUnbonding, unbonding)
+			unbonding, err := suite.k.GetAllPoolUnbondingDelegations(ctx)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expUnbonding, unbonding)
+			}
 
 			if tc.check != nil {
 				tc.check(ctx)
@@ -537,6 +561,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllOperatorUnbondingDelegations() {
 				))
 				suite.Require().NoError(err)
 			},
+			shouldErr: false,
 			expUnbonding: []types.UnbondingDelegation{
 				types.NewOperatorUnbondingDelegation(
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -561,8 +586,13 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllOperatorUnbondingDelegations() {
 				tc.store(ctx)
 			}
 
-			unbonding := suite.k.GetAllOperatorUnbondingDelegations(ctx)
-			suite.Require().Equal(tc.expUnbonding, unbonding)
+			unbonding, err := suite.k.GetAllOperatorUnbondingDelegations(ctx)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expUnbonding, unbonding)
+			}
 
 			if tc.check != nil {
 				tc.check(ctx)
@@ -613,6 +643,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServiceUnbondingDelegations() {
 				))
 				suite.Require().NoError(err)
 			},
+			shouldErr: false,
 			expUnbonding: []types.UnbondingDelegation{
 				types.NewServiceUnbondingDelegation(
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -637,8 +668,13 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllServiceUnbondingDelegations() {
 				tc.store(ctx)
 			}
 
-			unbonding := suite.k.GetAllServiceUnbondingDelegations(ctx)
-			suite.Require().Equal(tc.expUnbonding, unbonding)
+			unbonding, err := suite.k.GetAllServiceUnbondingDelegations(ctx)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expUnbonding, unbonding)
+			}
 
 			if tc.check != nil {
 				tc.check(ctx)
@@ -671,8 +707,10 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 				// Fund the account
 				suite.fundAccount(ctx, delegator, sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)))
 
-				suite.pk.SetNextPoolID(ctx, 1)
-				_, err := suite.k.DelegateToPool(ctx, sdk.NewInt64Coin("stake", 300), delegator)
+				err := suite.pk.SetNextPoolID(ctx, 1)
+				suite.Require().NoError(err)
+
+				_, err = suite.k.DelegateToPool(ctx, sdk.NewInt64Coin("stake", 300), delegator)
 				suite.Assert().NoError(err)
 
 				// Delegate to service
@@ -713,19 +751,20 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 				suite.fundAccount(ctx, delegator, sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)))
 
 				// Set the first pool id
-				suite.pk.SetNextPoolID(ctx, 1)
+				err := suite.pk.SetNextPoolID(ctx, 1)
+				suite.Require().NoError(err)
 
 				// Create delegators delegations
 				for i := 0; i < 100; i++ {
 					amount := int64(i*5 + 300)
 					d := authtypes.NewModuleAddress(fmt.Sprintf("delegator-%d", i)).String()
 					suite.fundAccount(ctx, d, sdk.NewCoins(sdk.NewInt64Coin("stake", amount)))
-					_, err := suite.k.DelegateToPool(ctx, sdk.NewInt64Coin("stake", amount), d)
+					_, err = suite.k.DelegateToPool(ctx, sdk.NewInt64Coin("stake", amount), d)
 					suite.Assert().NoError(err)
 				}
 
 				// Delegate to pool
-				_, err := suite.k.DelegateToPool(ctx, sdk.NewInt64Coin("stake", 300), delegator)
+				_, err = suite.k.DelegateToPool(ctx, sdk.NewInt64Coin("stake", 300), delegator)
 				suite.Assert().NoError(err)
 			},
 		},
@@ -735,8 +774,10 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 				// Fund the account
 				suite.fundAccount(ctx, delegator, sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)))
 
-				suite.pk.SetNextPoolID(ctx, 1)
-				_, err := suite.k.DelegateToPool(ctx, sdk.NewInt64Coin("stake", 300), delegator)
+				err := suite.pk.SetNextPoolID(ctx, 1)
+				suite.Require().NoError(err)
+
+				_, err = suite.k.DelegateToPool(ctx, sdk.NewInt64Coin("stake", 300), delegator)
 				suite.Assert().NoError(err)
 
 				// Delegate to service
@@ -767,10 +808,12 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 			account: delegator,
 			amount:  sdk.NewCoins(sdk.NewInt64Coin("stake", 950)),
 			check: func(ctx sdk.Context) {
-				del, found := suite.k.GetServiceDelegation(ctx, 1, delegator)
+				del, found, err := suite.k.GetServiceDelegation(ctx, 1, delegator)
+				suite.Require().NoError(err)
 				suite.Assert().True(found)
 				suite.Assert().Equal(types.DELEGATION_TYPE_OPERATOR, del.Type)
-				operator, _ := suite.ok.GetOperator(ctx, 1)
+				operator, _, err := suite.ok.GetOperator(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Assert().Equal(
 					sdk.NewDecCoins(sdk.NewInt64DecCoin("stake", 50)),
 					operator.TokensFromSharesTruncated(del.Shares))
@@ -780,8 +823,10 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 			name: "undelegate  with amounts shared between pool, service and operator",
 			setup: func(ctx sdk.Context) {
 				// Prepare pool, service and operator
-				suite.pk.SetNextPoolID(ctx, 1)
-				err := suite.sk.CreateService(ctx, servicestypes.NewService(
+				err := suite.pk.SetNextPoolID(ctx, 1)
+				suite.Require().NoError(err)
+
+				err = suite.sk.CreateService(ctx, servicestypes.NewService(
 					1,
 					servicestypes.SERVICE_STATUS_ACTIVE,
 					"",
@@ -846,7 +891,11 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 
 			if !tc.shouldErr {
 				suite.Assert().NoError(err)
-				expectedCompletion := ctx.BlockHeader().Time.Add(suite.k.UnbondingTime(ctx))
+
+				unbondingTime, err := suite.k.UnbondingTime(ctx)
+				suite.Require().NoError(err)
+
+				expectedCompletion := ctx.BlockHeader().Time.Add(unbondingTime)
 				suite.Assert().Equal(expectedCompletion, completionTime)
 			} else {
 				suite.Assert().Error(err)

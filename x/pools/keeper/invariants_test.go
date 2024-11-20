@@ -25,8 +25,10 @@ func (suite *KeeperTestSuite) TestValidPoolsInvariant() {
 		{
 			name: "service with id equals to next service id breaks invariant",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextPoolID(ctx, 1)
-				err := suite.k.SavePool(ctx, types.NewPool(1, "umilk"))
+				err := suite.k.SetNextPoolID(ctx, 1)
+				suite.Require().NoError(err)
+
+				err = suite.k.SavePool(ctx, types.NewPool(1, "umilk"))
 				suite.Require().NoError(err)
 			},
 			expBroken: true,
@@ -34,8 +36,10 @@ func (suite *KeeperTestSuite) TestValidPoolsInvariant() {
 		{
 			name: "service with id higher than next service id breaks invariant",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextPoolID(ctx, 1)
-				err := suite.k.SavePool(ctx, types.NewPool(2, "umilk"))
+				err := suite.k.SetNextPoolID(ctx, 1)
+				suite.Require().NoError(err)
+
+				err = suite.k.SavePool(ctx, types.NewPool(2, "umilk"))
 				suite.Require().NoError(err)
 			},
 			expBroken: true,
@@ -43,8 +47,10 @@ func (suite *KeeperTestSuite) TestValidPoolsInvariant() {
 		{
 			name: "invalid service breaks invariant",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextPoolID(ctx, 2)
-				err := suite.k.SavePool(ctx, types.NewPool(1, "invalid!"))
+				err := suite.k.SetNextPoolID(ctx, 2)
+				suite.Require().NoError(err)
+
+				err = suite.k.SavePool(ctx, types.NewPool(1, "invalid!"))
 				suite.Require().NoError(err)
 			},
 			expBroken: true,
@@ -52,9 +58,10 @@ func (suite *KeeperTestSuite) TestValidPoolsInvariant() {
 		{
 			name: "valid data does not break invariant",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextPoolID(ctx, 3)
+				err := suite.k.SetNextPoolID(ctx, 3)
+				suite.Require().NoError(err)
 
-				err := suite.k.SavePool(ctx, types.NewPool(1, "umilk"))
+				err = suite.k.SavePool(ctx, types.NewPool(1, "umilk"))
 				suite.Require().NoError(err)
 				err = suite.k.SavePool(ctx, types.NewPool(2, "unit"))
 				suite.Require().NoError(err)

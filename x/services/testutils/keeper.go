@@ -80,13 +80,11 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	)
 	data.PoolsKeeper = poolskeeper.NewKeeper(
 		data.Cdc,
-		data.Keys[poolstypes.StoreKey],
 		runtime.NewKVStoreService(data.Keys[poolstypes.StoreKey]),
 		data.AccountKeeper,
 	)
 	data.Keeper = keeper.NewKeeper(
 		data.Cdc,
-		data.StoreKey,
 		runtime.NewKVStoreService(data.Keys[servicestypes.StoreKey]),
 		data.AccountKeeper,
 		data.DistributionKeeper,

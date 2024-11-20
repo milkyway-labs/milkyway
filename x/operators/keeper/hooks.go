@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"context"
 
 	"github.com/milkyway-labs/milkyway/x/operators/types"
 )
@@ -9,7 +9,7 @@ import (
 var _ types.OperatorsHooks = &Keeper{}
 
 // AfterOperatorRegistered implements OperatorsHooks
-func (k *Keeper) AfterOperatorRegistered(ctx sdk.Context, operatorID uint32) error {
+func (k *Keeper) AfterOperatorRegistered(ctx context.Context, operatorID uint32) error {
 	if k.hooks != nil {
 		return k.hooks.AfterOperatorRegistered(ctx, operatorID)
 	}
@@ -17,7 +17,7 @@ func (k *Keeper) AfterOperatorRegistered(ctx sdk.Context, operatorID uint32) err
 }
 
 // AfterOperatorInactivatingStarted implements OperatorsHooks
-func (k *Keeper) AfterOperatorInactivatingStarted(ctx sdk.Context, operatorID uint32) error {
+func (k *Keeper) AfterOperatorInactivatingStarted(ctx context.Context, operatorID uint32) error {
 	if k.hooks != nil {
 		return k.hooks.AfterOperatorInactivatingStarted(ctx, operatorID)
 	}
@@ -25,7 +25,7 @@ func (k *Keeper) AfterOperatorInactivatingStarted(ctx sdk.Context, operatorID ui
 }
 
 // AfterOperatorInactivatingCompleted implements OperatorsHooks
-func (k *Keeper) AfterOperatorInactivatingCompleted(ctx sdk.Context, operatorID uint32) error {
+func (k *Keeper) AfterOperatorInactivatingCompleted(ctx context.Context, operatorID uint32) error {
 	if k.hooks != nil {
 		return k.hooks.AfterOperatorInactivatingCompleted(ctx, operatorID)
 	}
@@ -33,7 +33,7 @@ func (k *Keeper) AfterOperatorInactivatingCompleted(ctx sdk.Context, operatorID 
 }
 
 // AfterOperatorReactivated implements OperatorsHooks
-func (k *Keeper) AfterOperatorReactivated(ctx sdk.Context, operatorID uint32) error {
+func (k *Keeper) AfterOperatorReactivated(ctx context.Context, operatorID uint32) error {
 	if k.hooks != nil {
 		return k.hooks.AfterOperatorReactivated(ctx, operatorID)
 	}
@@ -41,7 +41,7 @@ func (k *Keeper) AfterOperatorReactivated(ctx sdk.Context, operatorID uint32) er
 }
 
 // AfterOperatorDeleted implements OperatorsHooks
-func (k *Keeper) AfterOperatorDeleted(ctx sdk.Context, operatorID uint32) error {
+func (k *Keeper) AfterOperatorDeleted(ctx context.Context, operatorID uint32) error {
 	if k.hooks != nil {
 		return k.hooks.AfterOperatorDeleted(ctx, operatorID)
 	}

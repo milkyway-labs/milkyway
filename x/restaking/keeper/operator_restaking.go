@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"context"
 	"slices"
 	"time"
 
@@ -14,21 +15,21 @@ import (
 
 // AddServiceToOperatorJoinedServices adds the given service to the list of services joined by
 // the operator with the given ID
-func (k *Keeper) AddServiceToOperatorJoinedServices(ctx sdk.Context, operatorID uint32, serviceID uint32) error {
+func (k *Keeper) AddServiceToOperatorJoinedServices(ctx context.Context, operatorID uint32, serviceID uint32) error {
 	operatorServicePair := collections.Join(operatorID, serviceID)
 	return k.operatorJoinedServices.Set(ctx, operatorServicePair, collections.NoValue{})
 }
 
 // RemoveServiceFromOperatorJoinedServices removes the given service from the list of services joined by
 // the operator with the given ID
-func (k *Keeper) RemoveServiceFromOperatorJoinedServices(ctx sdk.Context, operatorID uint32, serviceID uint32) error {
+func (k *Keeper) RemoveServiceFromOperatorJoinedServices(ctx context.Context, operatorID uint32, serviceID uint32) error {
 	operatorServicePair := collections.Join(operatorID, serviceID)
 	return k.operatorJoinedServices.Remove(ctx, operatorServicePair)
 }
 
 // HasOperatorJoinedService returns whether the operator with the given ID has
 // joined the provided service
-func (k *Keeper) HasOperatorJoinedService(ctx sdk.Context, operatorID uint32, serviceID uint32) (bool, error) {
+func (k *Keeper) HasOperatorJoinedService(ctx context.Context, operatorID uint32, serviceID uint32) (bool, error) {
 	operatorServicePair := collections.Join(operatorID, serviceID)
 	return k.operatorJoinedServices.Has(ctx, operatorServicePair)
 }
@@ -37,19 +38,23 @@ func (k *Keeper) HasOperatorJoinedService(ctx sdk.Context, operatorID uint32, se
 
 // GetOperatorDelegation retrieves the delegation for the given user and operator
 // If the delegation does not exist, false is returned instead
-func (k *Keeper) GetOperatorDelegation(ctx sdk.Context, operatorID uint32, userAddress string) (types.Delegation, bool) {
-	store := ctx.KVStore(k.storeKey)
-	delegationBz := store.Get(types.UserOperatorDelegationStoreKey(userAddress, operatorID))
-	if delegationBz == nil {
-		return types.Delegation{}, false
+func (k *Keeper) GetOperatorDelegation(ctx context.Context, operatorID uint32, userAddress string) (types.Delegation, bool, error) {
+	store := k.storeService.OpenKVStore(ctx)
+	delegationBz, err := store.Get(types.UserOperatorDelegationStoreKey(userAddress, operatorID))
+	if err != nil {
+		return types.Delegation{}, false, err
 	}
 
-	return types.MustUnmarshalDelegation(k.cdc, delegationBz), true
+	if delegationBz == nil {
+		return types.Delegation{}, false, nil
+	}
+
+	return types.MustUnmarshalDelegation(k.cdc, delegationBz), true, nil
 }
 
 // AddOperatorTokensAndShares adds the given amount of tokens to the operator and returns the added shares
 func (k *Keeper) AddOperatorTokensAndShares(
-	ctx sdk.Context, operator operatorstypes.Operator, tokensToAdd sdk.Coins,
+	ctx context.Context, operator operatorstypes.Operator, tokensToAdd sdk.Coins,
 ) (operatorOut operatorstypes.Operator, addedShares sdk.DecCoins, err error) {
 	// Update the operator tokens and shares and get the added shares
 	operator, addedShares = operator.AddTokensFromDelegation(tokensToAdd)
@@ -60,23 +65,36 @@ func (k *Keeper) AddOperatorTokensAndShares(
 }
 
 // RemoveOperatorDelegation removes the given operator delegation from the store
-func (k *Keeper) RemoveOperatorDelegation(ctx sdk.Context, delegation types.Delegation) {
-	store := ctx.KVStore(k.storeKey)
-	store.Delete(types.UserOperatorDelegationStoreKey(delegation.UserAddress, delegation.TargetID))
-	store.Delete(types.DelegationByOperatorIDStoreKey(delegation.TargetID, delegation.UserAddress))
+func (k *Keeper) RemoveOperatorDelegation(ctx context.Context, delegation types.Delegation) error {
+	store := k.storeService.OpenKVStore(ctx)
+
+	err := store.Delete(types.UserOperatorDelegationStoreKey(delegation.UserAddress, delegation.TargetID))
+	if err != nil {
+		return err
+	}
+
+	return store.Delete(types.DelegationByOperatorIDStoreKey(delegation.TargetID, delegation.UserAddress))
 }
 
 // --------------------------------------------------------------------------------------------------------------------
 
 // DelegateToOperator sends the given amount to the operator account and saves the delegation for the given user
-func (k *Keeper) DelegateToOperator(ctx sdk.Context, operatorID uint32, amount sdk.Coins, delegator string) (sdk.DecCoins, error) {
+func (k *Keeper) DelegateToOperator(ctx context.Context, operatorID uint32, amount sdk.Coins, delegator string) (sdk.DecCoins, error) {
 	// Get the operator
-	operator, found := k.operatorsKeeper.GetOperator(ctx, operatorID)
+	operator, found, err := k.operatorsKeeper.GetOperator(ctx, operatorID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return sdk.NewDecCoins(), operatorstypes.ErrOperatorNotFound
 	}
 
-	restakableDenoms := k.GetRestakableDenoms(ctx)
+	restakableDenoms, err := k.GetRestakableDenoms(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	if len(restakableDenoms) > 0 {
 		// Ensure the provided amount can be restaked
 		for _, coin := range amount {
@@ -95,9 +113,9 @@ func (k *Keeper) DelegateToOperator(ctx sdk.Context, operatorID uint32, amount s
 	return k.PerformDelegation(ctx, types.DelegationData{
 		Amount:          amount,
 		Delegator:       delegator,
-		Target:          &operator,
+		Target:          operator,
 		BuildDelegation: types.NewOperatorDelegation,
-		UpdateDelegation: func(ctx sdk.Context, delegation types.Delegation) (newShares sdk.DecCoins, err error) {
+		UpdateDelegation: func(ctx context.Context, delegation types.Delegation) (newShares sdk.DecCoins, err error) {
 			// Calculate the new shares and add the tokens to the operator
 			_, newShares, err = k.AddOperatorTokensAndShares(ctx, operator, amount)
 			if err != nil {
@@ -127,27 +145,36 @@ func (k *Keeper) DelegateToOperator(ctx sdk.Context, operatorID uint32, amount s
 
 // GetOperatorUnbondingDelegation returns the unbonding delegation for the given delegator address and operator id.
 // If no unbonding delegation is found, false is returned instead.
-func (k *Keeper) GetOperatorUnbondingDelegation(ctx sdk.Context, operatorID uint32, delegatorAddress string) (types.UnbondingDelegation, bool) {
-	store := ctx.KVStore(k.storeKey)
-	ubdBz := store.Get(types.UserOperatorUnbondingDelegationKey(delegatorAddress, operatorID))
-	if ubdBz == nil {
-		return types.UnbondingDelegation{}, false
+func (k *Keeper) GetOperatorUnbondingDelegation(ctx context.Context, operatorID uint32, delegatorAddress string) (types.UnbondingDelegation, bool, error) {
+	store := k.storeService.OpenKVStore(ctx)
+
+	ubdBz, err := store.Get(types.UserOperatorUnbondingDelegationKey(delegatorAddress, operatorID))
+	if err != nil {
+		return types.UnbondingDelegation{}, false, err
 	}
 
-	return types.MustUnmarshalUnbondingDelegation(k.cdc, ubdBz), true
+	if ubdBz == nil {
+		return types.UnbondingDelegation{}, false, nil
+	}
+
+	return types.MustUnmarshalUnbondingDelegation(k.cdc, ubdBz), true, nil
 }
 
 // UndelegateFromOperator removes the given amount from the operator account and saves the
 // unbonding delegation for the given user
-func (k *Keeper) UndelegateFromOperator(ctx sdk.Context, operatorID uint32, amount sdk.Coins, delegator string) (time.Time, error) {
+func (k *Keeper) UndelegateFromOperator(ctx context.Context, operatorID uint32, amount sdk.Coins, delegator string) (time.Time, error) {
 	// Find the operator
-	operator, found := k.operatorsKeeper.GetOperator(ctx, operatorID)
+	operator, found, err := k.operatorsKeeper.GetOperator(ctx, operatorID)
+	if err != nil {
+		return time.Time{}, err
+	}
+
 	if !found {
 		return time.Time{}, operatorstypes.ErrOperatorNotFound
 	}
 
 	// Get the shares
-	shares, err := k.ValidateUnbondAmount(ctx, delegator, &operator, amount)
+	shares, err := k.ValidateUnbondAmount(ctx, delegator, operator, amount)
 	if err != nil {
 		return time.Time{}, err
 	}
@@ -155,7 +182,7 @@ func (k *Keeper) UndelegateFromOperator(ctx sdk.Context, operatorID uint32, amou
 	return k.PerformUndelegation(ctx, types.UndelegationData{
 		Amount:                   amount,
 		Delegator:                delegator,
-		Target:                   &operator,
+		Target:                   operator,
 		BuildUnbondingDelegation: types.NewOperatorUnbondingDelegation,
 		Hooks: types.DelegationHooks{
 			BeforeDelegationSharesModified: k.BeforeOperatorDelegationSharesModified,

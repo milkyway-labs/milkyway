@@ -1,10 +1,12 @@
 package keeper
 
 import (
+	"context"
 	"fmt"
 	"time"
 
 	storetypes "cosmossdk.io/store/types"
+	"github.com/cosmos/cosmos-sdk/runtime"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -12,7 +14,7 @@ import (
 )
 
 // createAccountIfNotExists creates an account if it does not exist
-func (k *Keeper) createAccountIfNotExists(ctx sdk.Context, address sdk.AccAddress) {
+func (k *Keeper) createAccountIfNotExists(ctx context.Context, address sdk.AccAddress) {
 	if !k.accountKeeper.HasAccount(ctx, address) {
 		defer telemetry.IncrCounter(1, "new", "account")
 		k.accountKeeper.SetAccount(ctx, k.accountKeeper.NewAccountWithAddress(ctx, address))
@@ -20,37 +22,52 @@ func (k *Keeper) createAccountIfNotExists(ctx sdk.Context, address sdk.AccAddres
 }
 
 // IterateOperators iterates over the operators in the store and performs a callback function
-func (k *Keeper) IterateOperators(ctx sdk.Context, cb func(operator types.Operator) (stop bool)) {
-	store := ctx.KVStore(k.storeKey)
-	iterator := storetypes.KVStorePrefixIterator(store, types.OperatorPrefix)
+func (k *Keeper) IterateOperators(ctx context.Context, cb func(operator types.Operator) (stop bool, err error)) error {
+	iterator, err := k.operators.Iterate(ctx, nil)
+	if err != nil {
+		return err
+	}
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var operator types.Operator
-		k.cdc.MustUnmarshal(iterator.Value(), &operator)
+		operator, err := iterator.Value()
+		if err != nil {
+			return err
+		}
 
-		if cb(operator) {
+		stop, err := cb(operator)
+		if err != nil {
+			return err
+		}
+
+		if stop {
 			break
 		}
 	}
+
+	return nil
 }
 
 // GetOperators returns the operators stored in the KVStore
-func (k *Keeper) GetOperators(ctx sdk.Context) []types.Operator {
+func (k *Keeper) GetOperators(ctx context.Context) ([]types.Operator, error) {
 	var operators []types.Operator
-	k.IterateOperators(ctx, func(operator types.Operator) (stop bool) {
+	err := k.IterateOperators(ctx, func(operator types.Operator) (stop bool, err error) {
 		operators = append(operators, operator)
-		return false
+		return false, nil
 	})
-	return operators
+	return operators, err
 }
 
 // IterateInactivatingOperatorQueue iterates over all the operators that are set to be inactivated
 // by the given time and calls the given function.
-func (k *Keeper) IterateInactivatingOperatorQueue(ctx sdk.Context, endTime time.Time, fn func(operator types.Operator) (stop bool, err error)) error {
+func (k *Keeper) IterateInactivatingOperatorQueue(ctx context.Context, endTime time.Time, fn func(operator types.Operator) (stop bool, err error)) error {
 	return k.iterateInactivatingOperatorsKeys(ctx, endTime, func(key, value []byte) (stop bool, err error) {
 		operatorID, _ := types.SplitInactivatingOperatorQueueKey(key)
-		operator, found := k.GetOperator(ctx, operatorID)
+		operator, found, err := k.GetOperator(ctx, operatorID)
+		if err != nil {
+			return true, err
+		}
+
 		if !found {
 			return true, fmt.Errorf("operator %d does not exist", operatorID)
 		}
@@ -62,14 +79,18 @@ func (k *Keeper) IterateInactivatingOperatorQueue(ctx sdk.Context, endTime time.
 // iterateInactivatingOperatorsKeys iterates over all the keys of the operators set to be inactivated
 // by the given time, and calls the given function.
 // If endTime is zero it iterates over all the keys.
-func (k *Keeper) iterateInactivatingOperatorsKeys(ctx sdk.Context, endTime time.Time, fn func(key, value []byte) (stop bool, err error)) error {
-	store := ctx.KVStore(k.storeKey)
+func (k *Keeper) iterateInactivatingOperatorsKeys(ctx context.Context, endTime time.Time, fn func(key, value []byte) (stop bool, err error)) error {
+	store := k.storeService.OpenKVStore(ctx)
 
 	var iterator storetypes.Iterator
 	if endTime.IsZero() {
-		iterator = storetypes.KVStorePrefixIterator(store, types.InactivatingOperatorQueuePrefix)
+		iterator = storetypes.KVStorePrefixIterator(runtime.KVStoreAdapter(store), types.InactivatingOperatorQueuePrefix)
 	} else {
-		iterator = store.Iterator(types.InactivatingOperatorQueuePrefix, storetypes.PrefixEndBytes(types.InactivatingOperatorByTime(endTime)))
+		storeIterator, err := store.Iterator(types.InactivatingOperatorQueuePrefix, storetypes.PrefixEndBytes(types.InactivatingOperatorByTime(endTime)))
+		if err != nil {
+			return err
+		}
+		iterator = storeIterator
 	}
 	defer iterator.Close()
 
@@ -86,7 +107,7 @@ func (k *Keeper) iterateInactivatingOperatorsKeys(ctx sdk.Context, endTime time.
 }
 
 // GetInactivatingOperators returns the inactivating operators stored in the KVStore
-func (k *Keeper) GetInactivatingOperators(ctx sdk.Context) ([]types.UnbondingOperator, error) {
+func (k *Keeper) GetInactivatingOperators(ctx context.Context) ([]types.UnbondingOperator, error) {
 	var operators []types.UnbondingOperator
 
 	err := k.iterateInactivatingOperatorsKeys(ctx, time.Time{}, func(key, value []byte) (stop bool, err error) {
@@ -99,12 +120,12 @@ func (k *Keeper) GetInactivatingOperators(ctx sdk.Context) ([]types.UnbondingOpe
 
 // IsOperatorAddress returns true if the provided address is the address
 // where the users' asset are kept when they restake toward an operator.
-func (k *Keeper) IsOperatorAddress(ctx sdk.Context, address string) (bool, error) {
+func (k *Keeper) IsOperatorAddress(ctx context.Context, address string) (bool, error) {
 	return k.operatorAddressSet.Has(ctx, address)
 }
 
 // GetAllOperatorParamsRecords returns all the operator params records
-func (k *Keeper) GetAllOperatorParamsRecords(ctx sdk.Context) ([]types.OperatorParamsRecord, error) {
+func (k *Keeper) GetAllOperatorParamsRecords(ctx context.Context) ([]types.OperatorParamsRecord, error) {
 	iterator, err := k.operatorParams.Iterate(ctx, nil)
 	if err != nil {
 		return nil, err

@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"context"
 	"slices"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -10,7 +11,7 @@ import (
 )
 
 // IsMinter tells if a user have the permissions to mint tokens.
-func (k *Keeper) IsMinter(ctx sdk.Context, user sdk.AccAddress) (bool, error) {
+func (k *Keeper) IsMinter(ctx context.Context, user sdk.AccAddress) (bool, error) {
 	params, err := k.GetParams(ctx)
 	if err != nil {
 		return false, err
@@ -26,11 +27,7 @@ func (k *Keeper) IsMinter(ctx sdk.Context, user sdk.AccAddress) (bool, error) {
 
 // MintVestedRepresentation mints the vested staked representation of the provided
 // amount to the user.
-func (k *Keeper) MintVestedRepresentation(
-	ctx sdk.Context,
-	user sdk.AccAddress,
-	amount sdk.Coins,
-) (sdk.Coins, error) {
+func (k *Keeper) MintVestedRepresentation(ctx context.Context, user sdk.AccAddress, amount sdk.Coins) (sdk.Coins, error) {
 	var toMintTokens sdk.Coins
 	for _, coin := range amount {
 		// Create the vested representation for the received denom

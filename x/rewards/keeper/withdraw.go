@@ -32,15 +32,17 @@ func (k *Keeper) SetWithdrawAddress(ctx context.Context, addr, withdrawAddr sdk.
 func (k *Keeper) WithdrawDelegationRewards(
 	ctx context.Context, delAddr sdk.AccAddress, target restakingtypes.DelegationTarget,
 ) (types.Pools, error) {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-
 	// Get the delegation
 	delegator, err := k.accountKeeper.AddressCodec().BytesToString(delAddr)
 	if err != nil {
 		return nil, err
 	}
 
-	delegation, found := k.restakingKeeper.GetDelegationForTarget(sdkCtx, target, delegator)
+	delegation, found, err := k.restakingKeeper.GetDelegationForTarget(ctx, target, delegator)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, sdkerrors.ErrNotFound.Wrapf("delegation not found: %d, %s", target.GetID(), delAddr.String())
 	}
@@ -62,8 +64,11 @@ func (k *Keeper) WithdrawDelegationRewards(
 
 // WithdrawOperatorCommission withdraws the operator's accumulated commission
 func (k *Keeper) WithdrawOperatorCommission(ctx context.Context, operatorID uint32) (types.Pools, error) {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	operator, found := k.operatorsKeeper.GetOperator(sdkCtx, operatorID)
+	operator, found, err := k.operatorsKeeper.GetOperator(ctx, operatorID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, operatorstypes.ErrOperatorNotFound
 	}
@@ -118,6 +123,8 @@ func (k *Keeper) WithdrawOperatorCommission(ctx context.Context, operatorID uint
 		}
 	}
 
+	// Emit the event
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sdkCtx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeWithdrawCommission,

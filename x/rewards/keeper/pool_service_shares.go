@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"context"
 
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 )
@@ -10,7 +10,7 @@ import (
 // updated. AfterUserTrustedServiceUpdated updates the total delegator shares for
 // the service in all pools where the user has a delegation.
 func (k *Keeper) AfterUserTrustedServiceUpdated(
-	ctx sdk.Context,
+	ctx context.Context,
 	userAddress string,
 	serviceID uint32,
 	trusted bool,
@@ -20,11 +20,12 @@ func (k *Keeper) AfterUserTrustedServiceUpdated(
 		return err
 	}
 
-	err = k.restakingKeeper.IterateUserPoolDelegations(ctx, userAddress, func(del restakingtypes.Delegation) (stop bool, err error) {
+	return k.restakingKeeper.IterateUserPoolDelegations(ctx, userAddress, func(del restakingtypes.Delegation) (stop bool, err error) {
 		isSecured, err := k.restakingKeeper.IsServiceSecuredByPool(ctx, serviceID, del.TargetID)
 		if err != nil {
 			return true, err
 		}
+
 		if !isSecured {
 			return false, nil
 		}
@@ -40,6 +41,7 @@ func (k *Keeper) AfterUserTrustedServiceUpdated(
 		if err != nil {
 			return true, err
 		}
+
 		err = k.initializeDelegation(ctx, pool, delAddr)
 		if err != nil {
 			return true, err
@@ -53,10 +55,7 @@ func (k *Keeper) AfterUserTrustedServiceUpdated(
 		if err != nil {
 			return true, err
 		}
+
 		return false, nil
 	})
-	if err != nil {
-		return err
-	}
-	return nil
 }

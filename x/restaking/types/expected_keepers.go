@@ -22,29 +22,29 @@ type BankKeeper interface {
 }
 
 type PoolsKeeper interface {
-	GetPoolByDenom(ctx sdk.Context, denom string) (poolstypes.Pool, bool)
-	CreateOrGetPoolByDenom(ctx sdk.Context, denom string) (poolstypes.Pool, error)
-	GetPool(ctx sdk.Context, poolID uint32) (poolstypes.Pool, bool)
-	SavePool(ctx sdk.Context, pool poolstypes.Pool) error
-	IteratePools(ctx sdk.Context, cb func(poolstypes.Pool) bool)
-	GetPools(ctx sdk.Context) []poolstypes.Pool
+	GetPoolByDenom(ctx context.Context, denom string) (poolstypes.Pool, bool, error)
+	CreateOrGetPoolByDenom(ctx context.Context, denom string) (poolstypes.Pool, error)
+	GetPool(ctx context.Context, poolID uint32) (poolstypes.Pool, bool, error)
+	SavePool(ctx context.Context, pool poolstypes.Pool) error
+	IteratePools(ctx context.Context, cb func(poolstypes.Pool) (bool, error)) error
+	GetPools(ctx context.Context) ([]poolstypes.Pool, error)
 }
 
 type OperatorsKeeper interface {
-	GetOperator(ctx sdk.Context, operatorID uint32) (operatorstypes.Operator, bool)
-	SaveOperator(ctx sdk.Context, operator operatorstypes.Operator) error
-	IterateOperators(ctx sdk.Context, cb func(operatorstypes.Operator) bool)
-	GetOperators(ctx sdk.Context) []operatorstypes.Operator
-	SaveOperatorParams(ctx sdk.Context, operatorID uint32, params operatorstypes.OperatorParams) error
-	GetOperatorParams(ctx sdk.Context, operatorID uint32) (operatorstypes.OperatorParams, error)
+	GetOperator(ctx context.Context, operatorID uint32) (operatorstypes.Operator, bool, error)
+	SaveOperator(ctx context.Context, operator operatorstypes.Operator) error
+	IterateOperators(ctx context.Context, cb func(operatorstypes.Operator) (bool, error)) error
+	GetOperators(ctx context.Context) ([]operatorstypes.Operator, error)
+	SaveOperatorParams(ctx context.Context, operatorID uint32, params operatorstypes.OperatorParams) error
+	GetOperatorParams(ctx context.Context, operatorID uint32) (operatorstypes.OperatorParams, error)
 }
 
 type ServicesKeeper interface {
-	HasService(ctx sdk.Context, serviceID uint32) bool
-	GetService(ctx sdk.Context, serviceID uint32) (servicestypes.Service, bool)
-	SaveService(ctx sdk.Context, service servicestypes.Service) error
-	IterateServices(ctx sdk.Context, cb func(servicestypes.Service) bool)
-	GetServices(ctx sdk.Context) []servicestypes.Service
-	DeactivateService(ctx sdk.Context, serviceID uint32) error
-	GetServiceParams(ctx sdk.Context, serviceID uint32) (servicestypes.ServiceParams, error)
+	HasService(ctx context.Context, serviceID uint32) (bool, error)
+	GetService(ctx context.Context, serviceID uint32) (servicestypes.Service, bool, error)
+	SaveService(ctx context.Context, service servicestypes.Service) error
+	IterateServices(ctx context.Context, cb func(servicestypes.Service) (bool, error)) error
+	GetServices(ctx context.Context) ([]servicestypes.Service, error)
+	DeactivateService(ctx context.Context, serviceID uint32) error
+	GetServiceParams(ctx context.Context, serviceID uint32) (servicestypes.ServiceParams, error)
 }

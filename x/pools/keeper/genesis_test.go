@@ -16,18 +16,27 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "next pool id is exported properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextPoolID(ctx, 10)
+				err := suite.k.SetParams(ctx, types.DefaultParams())
+				suite.Require().NoError(err)
+
+				err = suite.k.SetNextPoolID(ctx, 10)
+				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				NextPoolID: 10,
+				Params:     types.DefaultParams(),
 			},
 		},
 		{
 			name: "pools are exported properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextPoolID(ctx, 1)
+				err := suite.k.SetParams(ctx, types.DefaultParams())
+				suite.Require().NoError(err)
 
-				err := suite.k.SavePool(ctx, types.NewPool(1, "umilk"))
+				err = suite.k.SetNextPoolID(ctx, 1)
+				suite.Require().NoError(err)
+
+				err = suite.k.SavePool(ctx, types.NewPool(1, "umilk"))
 				suite.Require().NoError(err)
 				err = suite.k.SavePool(ctx, types.NewPool(2, "uatom"))
 				suite.Require().NoError(err)
@@ -38,6 +47,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					types.NewPool(1, "umilk"),
 					types.NewPool(2, "uatom"),
 				},
+				Params: types.DefaultParams(),
 			},
 		},
 	}
@@ -61,13 +71,15 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 
 func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 	testCases := []struct {
-		name    string
-		genesis *types.GenesisState
-		check   func(ctx sdk.Context)
+		name      string
+		genesis   *types.GenesisState
+		shouldErr bool
+		check     func(ctx sdk.Context)
 	}{
 		{
-			name:    "default genesis is initialized properly",
-			genesis: types.DefaultGenesis(),
+			name:      "default genesis is initialized properly",
+			genesis:   types.DefaultGenesis(),
+			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				nextPoolID, err := suite.k.GetNextPoolID(ctx)
 				suite.Require().NoError(err)
@@ -77,23 +89,26 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 		{
 			name: "genesis with pools is initialized properly",
 			genesis: types.NewGenesis(
-				types.DefaultParams(),
 				10,
 				[]types.Pool{
 					types.NewPool(1, "umilk"),
 					types.NewPool(2, "uatom"),
 				},
+				types.DefaultParams(),
 			),
+			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				nextPoolID, err := suite.k.GetNextPoolID(ctx)
 				suite.Require().NoError(err)
 				suite.Require().Equal(uint32(10), nextPoolID)
 
-				pool, found := suite.k.GetPoolByDenom(ctx, "umilk")
+				pool, found, err := suite.k.GetPoolByDenom(ctx, "umilk")
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewPool(1, "umilk"), pool)
 
-				pool, found = suite.k.GetPoolByDenom(ctx, "uatom")
+				pool, found, err = suite.k.GetPoolByDenom(ctx, "uatom")
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewPool(2, "uatom"), pool)
 			},
@@ -104,7 +119,13 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 		tc := tc
 		suite.Run(tc.name, func() {
 			ctx, _ := suite.ctx.CacheContext()
-			suite.k.InitGenesis(ctx, tc.genesis)
+
+			err := suite.k.InitGenesis(ctx, tc.genesis)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+			}
 
 			if tc.check != nil {
 				tc.check(ctx)

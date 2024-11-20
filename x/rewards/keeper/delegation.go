@@ -29,12 +29,16 @@ func (k *Keeper) initializeDelegation(ctx context.Context, target restakingtypes
 		return err
 	}
 
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	delegator, err := k.accountKeeper.AddressCodec().BytesToString(delAddr)
 	if err != nil {
 		return err
 	}
-	delegation, found := k.restakingKeeper.GetDelegationForTarget(sdkCtx, target, delegator)
+
+	delegation, found, err := k.restakingKeeper.GetDelegationForTarget(ctx, target, delegator)
+	if err != nil {
+		return err
+	}
+
 	if !found {
 		return sdkerrors.ErrNotFound.Wrapf("delegation not found: %d, %s", target.GetID(), delAddr.String())
 	}
@@ -42,10 +46,12 @@ func (k *Keeper) initializeDelegation(ctx context.Context, target restakingtypes
 	// Calculate delegation stake in tokens.
 	// We don't store directly, so multiply delegation shares * (tokens per share)
 	// NOTE: it's necessary to truncate so we don't allow withdrawing more rewards than owed
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	stake := target.TokensFromSharesTruncated(delegation.Shares)
 	return k.SetDelegatorStartingInfo(
 		ctx, target, delAddr,
-		types.NewDelegatorStartingInfo(previousPeriod, stake, uint64(sdkCtx.BlockHeight())))
+		types.NewDelegatorStartingInfo(previousPeriod, stake, uint64(sdkCtx.BlockHeight())),
+	)
 }
 
 // calculateDelegationRewardsBetween calculates the rewards accrued by a delegation between two periods
@@ -80,9 +86,8 @@ func (k *Keeper) calculateDelegationRewardsBetween(
 	differences := ending.CumulativeRewardRatios.Sub(starting.CumulativeRewardRatios)
 	var decPools types.DecPools
 
-	if _, ok := target.(*poolstypes.Pool); ok {
-		sdkCtx := sdk.UnwrapSDKContext(ctx)
-		servicesIDs, err := k.restakingKeeper.GetUserTrustedServicesIDs(sdkCtx, delegator)
+	if _, ok := target.(poolstypes.Pool); ok {
+		servicesIDs, err := k.restakingKeeper.GetUserTrustedServicesIDs(ctx, delegator)
 		if err != nil {
 			return nil, err
 		}

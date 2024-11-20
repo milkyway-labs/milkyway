@@ -34,7 +34,8 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding delegation time to 7 days
-				suite.rk.SetParams(ctx, restakingtypes.NewParams(7*24*time.Hour, nil))
+				err = suite.rk.SetParams(ctx, restakingtypes.NewParams(7*24*time.Hour, nil))
+				suite.Require().NoError(err)
 
 				// Add some tokens to the user's insurance fund so they can restake the vested representation
 				suite.fundAccountInsuranceFund(ctx,
@@ -93,7 +94,8 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake2", 200)), userBalance)
 
 				// The burn queue should contain our record
-				toBurnCoins := suite.k.GetUnbondedCoinsFromQueue(ctx, ctx.BlockTime().Add(4*24*time.Hour))
+				toBurnCoins, err := suite.k.GetUnbondedCoinsFromQueue(ctx, ctx.BlockTime().Add(4*24*time.Hour))
+				suite.Require().NoError(err)
 				suite.Assert().Len(toBurnCoins, 1)
 
 				suite.Assert().Equal("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", toBurnCoins[0].DelegatorAddress)
@@ -115,7 +117,8 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding delegation time to 7 days
-				suite.rk.SetParams(ctx, restakingtypes.NewParams(7*24*time.Hour, nil))
+				err = suite.rk.SetParams(ctx, restakingtypes.NewParams(7*24*time.Hour, nil))
+				suite.Require().NoError(err)
 
 				// Add some tokens to the user's insurance fund so they can restake
 				// the vested representation
@@ -172,7 +175,9 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake2", 200)), userBalance)
 
 				// The burn queue should be empty
-				suite.Assert().Len(suite.k.GetUnbondedCoinsFromQueue(ctx, ctx.BlockTime()), 0)
+				unbondingQueue, err := suite.k.GetUnbondedCoinsFromQueue(ctx, ctx.BlockTime())
+				suite.Require().NoError(err)
+				suite.Assert().Len(unbondingQueue, 0)
 
 				// The user insurance fund should update properly
 				userInsuranceFund, err := suite.k.GetUserInsuranceFund(ctx, sdk.MustAccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"))

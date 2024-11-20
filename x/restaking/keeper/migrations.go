@@ -18,7 +18,7 @@ func NewMigrator(k *Keeper) Migrator {
 
 func (m *Migrator) Migrate1To2(ctx sdk.Context) error {
 	return v2.Migrate1To2(ctx,
-		m.k.storeKey,
+		m.k.storeService,
 		m.k.cdc,
 		m.k,
 		m.k.operatorsKeeper,

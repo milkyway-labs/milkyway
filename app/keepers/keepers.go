@@ -575,7 +575,6 @@ func NewAppKeeper(
 	// Custom modules
 	appKeepers.ServicesKeeper = serviceskeeper.NewKeeper(
 		appCodec,
-		appKeepers.keys[servicestypes.StoreKey],
 		runtime.NewKVStoreService(appKeepers.keys[servicestypes.StoreKey]),
 		appKeepers.AccountKeeper,
 		appKeepers.DistrKeeper,
@@ -583,7 +582,6 @@ func NewAppKeeper(
 	)
 	appKeepers.OperatorsKeeper = operatorskeeper.NewKeeper(
 		appCodec,
-		appKeepers.keys[operatorstypes.StoreKey],
 		runtime.NewKVStoreService(appKeepers.keys[operatorstypes.StoreKey]),
 		appKeepers.AccountKeeper,
 		appKeepers.DistrKeeper,
@@ -591,13 +589,11 @@ func NewAppKeeper(
 	)
 	appKeepers.PoolsKeeper = poolskeeper.NewKeeper(
 		appCodec,
-		appKeepers.keys[poolstypes.StoreKey],
 		runtime.NewKVStoreService(appKeepers.keys[poolstypes.StoreKey]),
 		appKeepers.AccountKeeper,
 	)
 	appKeepers.RestakingKeeper = restakingkeeper.NewKeeper(
 		appCodec,
-		appKeepers.keys[restakingtypes.StoreKey],
 		runtime.NewKVStoreService(appKeepers.keys[restakingtypes.StoreKey]),
 		appKeepers.AccountKeeper,
 		appKeepers.BankKeeper,
@@ -629,7 +625,6 @@ func NewAppKeeper(
 	// Set hooks based on the rewards keeper
 	appKeepers.LiquidVestingKeeper = liquidvestingkeeper.NewKeeper(
 		appCodec,
-		appKeepers.keys[liquidvestingtypes.StoreKey],
 		runtime.NewKVStoreService(appKeepers.keys[liquidvestingtypes.StoreKey]),
 		appKeepers.AccountKeeper,
 		appKeepers.BankKeeper,

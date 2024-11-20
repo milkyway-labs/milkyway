@@ -16,26 +16,34 @@ import (
 func (k *Keeper) GetDelegationTarget(
 	ctx context.Context, delType restakingtypes.DelegationType, targetID uint32,
 ) (restakingtypes.DelegationTarget, error) {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	switch delType {
 	case restakingtypes.DELEGATION_TYPE_POOL:
-		pool, found := k.poolsKeeper.GetPool(sdkCtx, targetID)
+		pool, found, err := k.poolsKeeper.GetPool(ctx, targetID)
+		if err != nil {
+			return nil, err
+		}
 		if !found {
 			return nil, poolstypes.ErrPoolNotFound
 		}
-		return &pool, nil
+		return pool, nil
 	case restakingtypes.DELEGATION_TYPE_OPERATOR:
-		operator, found := k.operatorsKeeper.GetOperator(sdkCtx, targetID)
+		operator, found, err := k.operatorsKeeper.GetOperator(ctx, targetID)
+		if err != nil {
+			return nil, err
+		}
 		if !found {
 			return nil, operatorstypes.ErrOperatorNotFound
 		}
-		return &operator, nil
+		return operator, nil
 	case restakingtypes.DELEGATION_TYPE_SERVICE:
-		service, found := k.servicesKeeper.GetService(sdkCtx, targetID)
+		service, found, err := k.servicesKeeper.GetService(ctx, targetID)
+		if err != nil {
+			return nil, err
+		}
 		if !found {
 			return nil, servicestypes.ErrServiceNotFound
 		}
-		return &service, nil
+		return service, nil
 	default:
 		return nil, errors.Wrapf(restakingtypes.ErrInvalidDelegationType, "invalid delegation type: %s", delType)
 	}
@@ -56,7 +64,7 @@ func (k *Keeper) initializeDelegationTarget(ctx context.Context, target restakin
 	}
 
 	// set accumulated commission only if target is an operator
-	if _, ok := target.(*operatorstypes.Operator); ok {
+	if _, ok := target.(operatorstypes.Operator); ok {
 		err = k.OperatorAccumulatedCommissions.Set(ctx, target.GetID(), types.InitialAccumulatedCommission())
 		if err != nil {
 			return err
@@ -64,8 +72,7 @@ func (k *Keeper) initializeDelegationTarget(ctx context.Context, target restakin
 	}
 
 	// set outstanding rewards
-	err = k.SetOutstandingRewards(ctx, target, types.OutstandingRewards{Rewards: types.DecPools{}})
-	return err
+	return k.SetOutstandingRewards(ctx, target, types.OutstandingRewards{Rewards: types.DecPools{}})
 }
 
 // IncrementDelegationTargetPeriod increments the period, returning the period that just ended
@@ -82,7 +89,7 @@ func (k *Keeper) IncrementDelegationTargetPeriod(ctx context.Context, target res
 	communityFunding := types.DecPools{}
 	for _, reward := range rewards.Rewards {
 		var tokens sdk.DecCoins
-		if pool, ok := target.(*poolstypes.Pool); ok {
+		if pool, ok := target.(poolstypes.Pool); ok {
 			totalShares, err := k.GetPoolServiceTotalDelegatorShares(ctx, pool.ID, reward.ServiceID)
 			if err != nil {
 				return 0, err
@@ -169,9 +176,11 @@ func (k *Keeper) incrementReferenceCount(ctx context.Context, target restakingty
 	if err != nil {
 		return err
 	}
+
 	if historical.ReferenceCount > 2 {
 		panic("reference count should never exceed 2")
 	}
+
 	historical.ReferenceCount++
 	return k.SetHistoricalRewards(ctx, target, period, historical)
 }
@@ -186,7 +195,9 @@ func (k *Keeper) decrementReferenceCount(ctx context.Context, target restakingty
 	if historical.ReferenceCount == 0 {
 		panic("cannot set negative reference count")
 	}
+
 	historical.ReferenceCount--
+
 	if historical.ReferenceCount == 0 {
 		return k.RemoveHistoricalRewards(ctx, target, period)
 	}
@@ -195,7 +206,7 @@ func (k *Keeper) decrementReferenceCount(ctx context.Context, target restakingty
 }
 
 // clearDelegateTarget clears all rewards for a delegation target
-func (k *Keeper) clearDelegationTarget(ctx sdk.Context, target restakingtypes.DelegationTarget) error {
+func (k *Keeper) clearDelegationTarget(ctx context.Context, target restakingtypes.DelegationTarget) error {
 	// fetch outstanding
 	outstandingCoins, err := k.GetOutstandingRewardsCoins(ctx, target)
 	if err != nil {
@@ -204,14 +215,15 @@ func (k *Keeper) clearDelegationTarget(ctx sdk.Context, target restakingtypes.De
 
 	outstanding := outstandingCoins.CoinsAmount()
 
+	// Clear data related to an operator or service
 	switch target := target.(type) {
-	case *operatorstypes.Operator:
+	case operatorstypes.Operator:
 		// Clear data related to an operator
 		outstanding, err = k.clearOperator(ctx, outstanding, target)
 		if err != nil {
 			return err
 		}
-	case *servicestypes.Service:
+	case servicestypes.Service:
 		// Clear data related to a service
 		err = k.DeleteAllPoolServiceTotalDelegatorSharesByService(ctx, target.ID)
 		if err != nil {
@@ -239,7 +251,7 @@ func (k *Keeper) clearDelegationTarget(ctx sdk.Context, target restakingtypes.De
 	}
 
 	// Remove the commission record
-	if operator, ok := target.(*operatorstypes.Operator); ok {
+	if operator, ok := target.(operatorstypes.Operator); ok {
 		err = k.DeleteOperatorAccumulatedCommission(ctx, operator.ID)
 		if err != nil {
 			return err
@@ -255,15 +267,10 @@ func (k *Keeper) clearDelegationTarget(ctx sdk.Context, target restakingtypes.De
 	}
 
 	// Clear current rewards
-	err = k.DeleteCurrentRewards(ctx, target)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return k.DeleteCurrentRewards(ctx, target)
 }
 
-func (k *Keeper) clearOperator(ctx context.Context, outstanding sdk.DecCoins, operator *operatorstypes.Operator) (outstandingLeftOver sdk.DecCoins, err error) {
+func (k *Keeper) clearOperator(ctx context.Context, outstanding sdk.DecCoins, operator operatorstypes.Operator) (outstandingLeftOver sdk.DecCoins, err error) {
 	// Force-withdraw commission
 	valCommission, err := k.GetOperatorAccumulatedCommission(ctx, operator.ID)
 	if err != nil {

@@ -37,11 +37,14 @@ func (suite *KeeperTestSuite) TestMsgServer_RegisterOperator() {
 		{
 			name: "invalid operator returns error",
 			setup: func() {
-				suite.k.SetNextOperatorID(suite.ctx, 1)
-				suite.k.SetParams(suite.ctx, types.NewParams(
+				err := suite.k.SetNextOperatorID(suite.ctx, 1)
+				suite.Require().NoError(err)
+
+				err = suite.k.SetParams(suite.ctx, types.NewParams(
 					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),
 					6*time.Hour,
 				))
+				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgRegisterOperator(
 				types.DoNotModify,
@@ -54,14 +57,21 @@ func (suite *KeeperTestSuite) TestMsgServer_RegisterOperator() {
 		{
 			name: "operator registered successfully",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextOperatorID(suite.ctx, 2)
-				suite.k.SetParams(suite.ctx, types.NewParams(
+				err := suite.k.SetNextOperatorID(suite.ctx, 2)
+				suite.Require().NoError(err)
+
+				err = suite.k.SetParams(suite.ctx, types.NewParams(
 					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),
 					6*time.Hour,
 				))
+				suite.Require().NoError(err)
 
 				// Send funds to the user
-				suite.fundAccount(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(200_000_000))))
+				suite.fundAccount(
+					ctx,
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(200_000_000))),
+				)
 			},
 			msg: types.NewMsgRegisterOperator(
 				"MilkyWay Operator",
@@ -81,7 +91,8 @@ func (suite *KeeperTestSuite) TestMsgServer_RegisterOperator() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the operator was stored
-				stored, found := suite.k.GetOperator(ctx, 2)
+				stored, found, err := suite.k.GetOperator(ctx, 2)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					2,
@@ -249,7 +260,8 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperator() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the operator was updated
-				stored, found := suite.k.GetOperator(ctx, 1)
+				stored, found, err := suite.k.GetOperator(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
@@ -379,12 +391,13 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 				return ctx.WithBlockTime(time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC))
 			},
 			store: func(ctx sdk.Context) {
-				suite.k.SetParams(ctx, types.NewParams(
+				err := suite.k.SetParams(ctx, types.NewParams(
 					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),
 					6*time.Hour,
 				))
+				suite.Require().NoError(err)
 
-				err := suite.k.SaveOperator(ctx, types.NewOperator(
+				err = suite.k.SaveOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -408,7 +421,8 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the operator was updated
-				stored, found := suite.k.GetOperator(ctx, 1)
+				stored, found, err := suite.k.GetOperator(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
@@ -562,7 +576,8 @@ func (suite *KeeperTestSuite) TestMsgServer_ReactivateOperator() {
 				),
 			},
 			check: func(ctx sdk.Context) {
-				operator, found := suite.k.GetOperator(ctx, 1)
+				operator, found, err := suite.k.GetOperator(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
@@ -681,7 +696,8 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferOperatorOwnership() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the operator was updated
-				stored, found := suite.k.GetOperator(ctx, 1)
+				stored, found, err := suite.k.GetOperator(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
@@ -828,8 +844,10 @@ func (suite *KeeperTestSuite) TestMsgServer_DeleteOperator() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the operator was updated
-				_, found := suite.k.GetOperator(ctx, 1)
+				_, found, err := suite.k.GetOperator(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().False(found)
+
 				// Ensure the hook has been called
 				suite.Require().True(suite.hooks.CalledMap["AfterOperatorDeleted"])
 			},
@@ -995,7 +1013,8 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateParams() {
 			expResponse: &types.MsgUpdateParamsResponse{},
 			expEvents:   sdk.Events{},
 			check: func(ctx sdk.Context) {
-				params := suite.k.GetParams(ctx)
+				params, err := suite.k.GetParams(ctx)
+				suite.Require().NoError(err)
 				suite.Require().Equal(types.DefaultParams(), params)
 			},
 		},

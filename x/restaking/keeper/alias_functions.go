@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"context"
 	"fmt"
 	"sort"
 	"time"
@@ -8,6 +9,7 @@ import (
 	"cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
+	"github.com/cosmos/cosmos-sdk/runtime"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/utils"
@@ -23,7 +25,7 @@ import (
 
 // IterateAllOperatorsJoinedServices iterates over all the operators and their joined services,
 // performing the given action. If the action returns true, the iteration will stop.
-func (k *Keeper) IterateAllOperatorsJoinedServices(ctx sdk.Context, action func(operatorID uint32, serviceID uint32) (stop bool, err error)) error {
+func (k *Keeper) IterateAllOperatorsJoinedServices(ctx context.Context, action func(operatorID uint32, serviceID uint32) (stop bool, err error)) error {
 	iterator, err := k.operatorJoinedServices.Iterate(ctx, nil)
 	if err != nil {
 		return err
@@ -50,7 +52,7 @@ func (k *Keeper) IterateAllOperatorsJoinedServices(ctx sdk.Context, action func(
 }
 
 // GetAllOperatorsJoinedServices returns all services that each operator has joined
-func (k *Keeper) GetAllOperatorsJoinedServices(ctx sdk.Context) ([]types.OperatorJoinedServices, error) {
+func (k *Keeper) GetAllOperatorsJoinedServices(ctx context.Context) ([]types.OperatorJoinedServices, error) {
 	iterator, err := k.operatorJoinedServices.Iterate(ctx, nil)
 	if err != nil {
 		return nil, err
@@ -92,7 +94,7 @@ func (k *Keeper) GetAllOperatorsJoinedServices(ctx sdk.Context) ([]types.Operato
 
 // IterateAllServicesAllowedOperators iterates over all the services and their allowed operators,
 // performing the given action. If the action returns true, the iteration will stop.
-func (k *Keeper) IterateAllServicesAllowedOperators(ctx sdk.Context, action func(serviceID uint32, operatorID uint32) (stop bool, err error)) error {
+func (k *Keeper) IterateAllServicesAllowedOperators(ctx context.Context, action func(serviceID uint32, operatorID uint32) (stop bool, err error)) error {
 	iterator, err := k.serviceOperatorsAllowList.Iterate(ctx, nil)
 	if err != nil {
 		return err
@@ -121,7 +123,7 @@ func (k *Keeper) IterateAllServicesAllowedOperators(ctx sdk.Context, action func
 }
 
 // GetAllServicesAllowedOperators returns all the operators that are allowed to secure a service for all the services
-func (k *Keeper) GetAllServicesAllowedOperators(ctx sdk.Context) ([]types.ServiceAllowedOperators, error) {
+func (k *Keeper) GetAllServicesAllowedOperators(ctx context.Context) ([]types.ServiceAllowedOperators, error) {
 	items := make(map[uint32]types.ServiceAllowedOperators)
 	err := k.IterateAllServicesAllowedOperators(ctx, func(serviceID uint32, operatorID uint32) (stop bool, err error) {
 		allowedOperators, ok := items[serviceID]
@@ -156,7 +158,7 @@ func (k *Keeper) GetAllServicesAllowedOperators(ctx sdk.Context) ([]types.Servic
 }
 
 // GetAllServicesSecuringPools returns all the pools from which the services are allowed to borrow security
-func (k *Keeper) GetAllServicesSecuringPools(ctx sdk.Context) ([]types.ServiceSecuringPools, error) {
+func (k *Keeper) GetAllServicesSecuringPools(ctx context.Context) ([]types.ServiceSecuringPools, error) {
 	iterator, err := k.serviceSecuringPools.Iterate(ctx, nil)
 	if err != nil {
 		return nil, err
@@ -220,8 +222,8 @@ func (k *Keeper) getDelegationKeyBuilders(delegation types.Delegation) (types.De
 }
 
 // SetDelegation stores the given delegation in the store
-func (k *Keeper) SetDelegation(ctx sdk.Context, delegation types.Delegation) error {
-	store := ctx.KVStore(k.storeKey)
+func (k *Keeper) SetDelegation(ctx context.Context, delegation types.Delegation) error {
+	store := k.storeService.OpenKVStore(ctx)
 
 	// Get the keys builders
 	getDelegationKey, getDelegationByTargetID, err := k.getDelegationKeyBuilders(delegation)
@@ -231,67 +233,63 @@ func (k *Keeper) SetDelegation(ctx sdk.Context, delegation types.Delegation) err
 
 	// Marshal and store the delegation
 	delegationBz := types.MustMarshalDelegation(k.cdc, delegation)
-	store.Set(getDelegationKey(delegation.UserAddress, delegation.TargetID), delegationBz)
+	err = store.Set(getDelegationKey(delegation.UserAddress, delegation.TargetID), delegationBz)
+	if err != nil {
+		return err
+	}
 
 	// Store the delegation in the delegations by pool ID store
-	store.Set(getDelegationByTargetID(delegation.TargetID, delegation.UserAddress), []byte{})
+	err = store.Set(getDelegationByTargetID(delegation.TargetID, delegation.UserAddress), []byte{})
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
 
 // GetDelegationForTarget returns the delegation for the given delegator and target.
 func (k *Keeper) GetDelegationForTarget(
-	ctx sdk.Context, target types.DelegationTarget, delegator string,
-) (types.Delegation, bool) {
+	ctx context.Context, target types.DelegationTarget, delegator string,
+) (types.Delegation, bool, error) {
 	switch target.(type) {
-	case *poolstypes.Pool:
+	case poolstypes.Pool:
 		return k.GetPoolDelegation(ctx, target.GetID(), delegator)
-	case *operatorstypes.Operator:
+	case operatorstypes.Operator:
 		return k.GetOperatorDelegation(ctx, target.GetID(), delegator)
-	case *servicestypes.Service:
+	case servicestypes.Service:
 		return k.GetServiceDelegation(ctx, target.GetID(), delegator)
 	default:
-		return types.Delegation{}, false
+		return types.Delegation{}, false, fmt.Errorf("invalid target type %T", target)
 	}
 }
 
 // GetDelegationTargetFromDelegation returns the target of the given delegation.
 func (k *Keeper) GetDelegationTargetFromDelegation(
-	ctx sdk.Context, delegation types.Delegation,
-) (types.DelegationTarget, bool) {
+	ctx context.Context, delegation types.Delegation,
+) (types.DelegationTarget, bool, error) {
 	switch delegation.Type {
 	case types.DELEGATION_TYPE_POOL:
-		if t, found := k.poolsKeeper.GetPool(ctx, delegation.TargetID); found {
-			return &t, true
-		} else {
-			return nil, false
-		}
+		return k.poolsKeeper.GetPool(ctx, delegation.TargetID)
 	case types.DELEGATION_TYPE_SERVICE:
-		if t, found := k.servicesKeeper.GetService(ctx, delegation.TargetID); found {
-			return &t, true
-		} else {
-			return nil, false
-		}
+		return k.servicesKeeper.GetService(ctx, delegation.TargetID)
 	case types.DELEGATION_TYPE_OPERATOR:
-		if t, found := k.operatorsKeeper.GetOperator(ctx, delegation.TargetID); found {
-			return &t, true
-		} else {
-			return nil, false
-		}
+		return k.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
 	default:
-		return nil, false
+		return nil, false, nil
 	}
 }
 
 // RemoveDelegation removes the given delegation from the store
-func (k *Keeper) RemoveDelegation(ctx sdk.Context, delegation types.Delegation) {
+func (k *Keeper) RemoveDelegation(ctx context.Context, delegation types.Delegation) error {
 	switch delegation.Type {
 	case types.DELEGATION_TYPE_POOL:
-		k.RemovePoolDelegation(ctx, delegation)
+		return k.RemovePoolDelegation(ctx, delegation)
 	case types.DELEGATION_TYPE_OPERATOR:
-		k.RemoveOperatorDelegation(ctx, delegation)
+		return k.RemoveOperatorDelegation(ctx, delegation)
 	case types.DELEGATION_TYPE_SERVICE:
-		k.RemoveServiceDelegation(ctx, delegation)
+		return k.RemoveServiceDelegation(ctx, delegation)
+	default:
+		return errors.Wrapf(types.ErrInvalidDelegationType, "invalid delegation type %v", delegation.Type)
 	}
 }
 
@@ -300,9 +298,10 @@ func (k *Keeper) RemoveDelegation(ctx sdk.Context, delegation types.Delegation) 
 // --------------------------------------------------------------------------------------------------------------------
 
 // IterateUserPoolDelegations iterates all the pool delegations of a user and performs the given callback function
-func (k *Keeper) IterateUserPoolDelegations(ctx sdk.Context, userAddress string, cb func(del types.Delegation) (stop bool, err error)) error {
-	store := ctx.KVStore(k.storeKey)
-	iterator := storetypes.KVStorePrefixIterator(store, types.UserPoolDelegationsStorePrefix(userAddress))
+func (k *Keeper) IterateUserPoolDelegations(ctx context.Context, userAddress string, cb func(del types.Delegation) (stop bool, err error)) error {
+	store := k.storeService.OpenKVStore(ctx)
+
+	iterator := storetypes.KVStorePrefixIterator(runtime.KVStoreAdapter(store), types.UserPoolDelegationsStorePrefix(userAddress))
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
@@ -319,42 +318,56 @@ func (k *Keeper) IterateUserPoolDelegations(ctx sdk.Context, userAddress string,
 }
 
 // IterateAllPoolDelegations iterates all the pool delegations and performs the given callback function
-func (k *Keeper) IterateAllPoolDelegations(ctx sdk.Context, cb func(del types.Delegation) (stop bool)) {
-	store := ctx.KVStore(k.storeKey)
-	iterator := store.Iterator(types.PoolDelegationPrefix, storetypes.PrefixEndBytes(types.PoolDelegationPrefix))
-	defer iterator.Close()
+func (k *Keeper) IterateAllPoolDelegations(ctx context.Context, cb func(del types.Delegation) (stop bool, err error)) error {
+	store := k.storeService.OpenKVStore(ctx)
 
-	for ; iterator.Valid(); iterator.Next() {
-		delegation := types.MustUnmarshalDelegation(k.cdc, iterator.Value())
-		if cb(delegation) {
-			break
-		}
+	iterator, err := store.Iterator(types.PoolDelegationPrefix, storetypes.PrefixEndBytes(types.PoolDelegationPrefix))
+	if err != nil {
+		return err
 	}
-}
-
-// GetAllPoolDelegations returns all the pool delegations
-func (k *Keeper) GetAllPoolDelegations(ctx sdk.Context) []types.Delegation {
-	var delegations []types.Delegation
-	k.IterateAllPoolDelegations(ctx, func(del types.Delegation) (stop bool) {
-		delegations = append(delegations, del)
-		return false
-	})
-
-	return delegations
-}
-
-// IterateUserOperatorDelegations iterates all the operator delegations of a user and performs the given callback function
-func (k *Keeper) IterateUserOperatorDelegations(ctx sdk.Context, userAddress string, cb func(del types.Delegation) (stop bool, err error)) error {
-	store := ctx.KVStore(k.storeKey)
-	iterator := storetypes.KVStorePrefixIterator(store, types.UserOperatorDelegationsStorePrefix(userAddress))
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
 		delegation := types.MustUnmarshalDelegation(k.cdc, iterator.Value())
+
 		stop, err := cb(delegation)
 		if err != nil {
 			return err
 		}
+
+		if stop {
+			break
+		}
+	}
+
+	return nil
+}
+
+// GetAllPoolDelegations returns all the pool delegations
+func (k *Keeper) GetAllPoolDelegations(ctx context.Context) ([]types.Delegation, error) {
+	var delegations []types.Delegation
+	err := k.IterateAllPoolDelegations(ctx, func(del types.Delegation) (stop bool, err error) {
+		delegations = append(delegations, del)
+		return false, nil
+	})
+	return delegations, err
+}
+
+// IterateUserOperatorDelegations iterates all the operator delegations of a user and performs the given callback function
+func (k *Keeper) IterateUserOperatorDelegations(ctx context.Context, userAddress string, cb func(del types.Delegation) (stop bool, err error)) error {
+	store := k.storeService.OpenKVStore(ctx)
+
+	iterator := storetypes.KVStorePrefixIterator(runtime.KVStoreAdapter(store), types.UserOperatorDelegationsStorePrefix(userAddress))
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		delegation := types.MustUnmarshalDelegation(k.cdc, iterator.Value())
+
+		stop, err := cb(delegation)
+		if err != nil {
+			return err
+		}
+
 		if stop {
 			break
 		}
@@ -363,34 +376,46 @@ func (k *Keeper) IterateUserOperatorDelegations(ctx sdk.Context, userAddress str
 }
 
 // IterateAllOperatorDelegations iterates all the operator delegations and performs the given callback function
-func (k *Keeper) IterateAllOperatorDelegations(ctx sdk.Context, cb func(del types.Delegation) (stop bool)) {
-	store := ctx.KVStore(k.storeKey)
-	iterator := store.Iterator(types.OperatorDelegationPrefix, storetypes.PrefixEndBytes(types.OperatorDelegationPrefix))
+func (k *Keeper) IterateAllOperatorDelegations(ctx context.Context, cb func(del types.Delegation) (stop bool, err error)) error {
+	store := k.storeService.OpenKVStore(ctx)
+
+	iterator, err := store.Iterator(types.OperatorDelegationPrefix, storetypes.PrefixEndBytes(types.OperatorDelegationPrefix))
+	if err != nil {
+		return err
+	}
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
 		delegation := types.MustUnmarshalDelegation(k.cdc, iterator.Value())
-		if cb(delegation) {
+
+		stop, err := cb(delegation)
+		if err != nil {
+			return err
+		}
+
+		if stop {
 			break
 		}
 	}
+
+	return nil
 }
 
 // GetAllOperatorDelegations returns all the operator delegations
-func (k *Keeper) GetAllOperatorDelegations(ctx sdk.Context) []types.Delegation {
+func (k *Keeper) GetAllOperatorDelegations(ctx context.Context) ([]types.Delegation, error) {
 	var delegations []types.Delegation
-	k.IterateAllOperatorDelegations(ctx, func(del types.Delegation) (stop bool) {
+	err := k.IterateAllOperatorDelegations(ctx, func(del types.Delegation) (stop bool, err error) {
 		delegations = append(delegations, del)
-		return false
+		return false, nil
 	})
-
-	return delegations
+	return delegations, err
 }
 
 // IterateUserServiceDelegations iterates all the service delegations of a user and performs the given callback function
-func (k *Keeper) IterateUserServiceDelegations(ctx sdk.Context, userAddress string, cb func(del types.Delegation) (stop bool, err error)) error {
-	store := ctx.KVStore(k.storeKey)
-	iterator := storetypes.KVStorePrefixIterator(store, types.UserServiceDelegationsStorePrefix(userAddress))
+func (k *Keeper) IterateUserServiceDelegations(ctx context.Context, userAddress string, cb func(del types.Delegation) (stop bool, err error)) error {
+	store := k.storeService.OpenKVStore(ctx)
+
+	iterator := storetypes.KVStorePrefixIterator(runtime.KVStoreAdapter(store), types.UserServiceDelegationsStorePrefix(userAddress))
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
@@ -407,24 +432,37 @@ func (k *Keeper) IterateUserServiceDelegations(ctx sdk.Context, userAddress stri
 }
 
 // IterateAllServiceDelegations iterates all the service delegations and performs the given callback function
-func (k *Keeper) IterateAllServiceDelegations(ctx sdk.Context, cb func(del types.Delegation) (stop bool)) {
-	store := ctx.KVStore(k.storeKey)
-	iterator := store.Iterator(types.ServiceDelegationPrefix, storetypes.PrefixEndBytes(types.ServiceDelegationPrefix))
+func (k *Keeper) IterateAllServiceDelegations(ctx context.Context, cb func(del types.Delegation) (stop bool, err error)) error {
+	store := k.storeService.OpenKVStore(ctx)
+
+	iterator, err := store.Iterator(types.ServiceDelegationPrefix, storetypes.PrefixEndBytes(types.ServiceDelegationPrefix))
+	if err != nil {
+		return err
+	}
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
 		delegation := types.MustUnmarshalDelegation(k.cdc, iterator.Value())
-		if cb(delegation) {
+
+		stop, err := cb(delegation)
+		if err != nil {
+			return err
+		}
+
+		if stop {
 			break
 		}
 	}
+
+	return nil
 }
 
 // IterateServiceDelegations iterates all the delegations of a service and
 // performs the given callback function
-func (k *Keeper) IterateServiceDelegations(ctx sdk.Context, serviceID uint32, cb func(del types.Delegation) (stop bool, err error)) error {
-	store := ctx.KVStore(k.storeKey)
-	iterator := storetypes.KVStorePrefixIterator(store, types.DelegationsByServiceIDStorePrefix(serviceID))
+func (k *Keeper) IterateServiceDelegations(ctx context.Context, serviceID uint32, cb func(del types.Delegation) (stop bool, err error)) error {
+	store := k.storeService.OpenKVStore(ctx)
+
+	iterator := storetypes.KVStorePrefixIterator(runtime.KVStoreAdapter(store), types.DelegationsByServiceIDStorePrefix(serviceID))
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
@@ -441,14 +479,13 @@ func (k *Keeper) IterateServiceDelegations(ctx sdk.Context, serviceID uint32, cb
 }
 
 // GetAllServiceDelegations returns all the service delegations
-func (k *Keeper) GetAllServiceDelegations(ctx sdk.Context) []types.Delegation {
+func (k *Keeper) GetAllServiceDelegations(ctx context.Context) ([]types.Delegation, error) {
 	var delegations []types.Delegation
-	k.IterateAllServiceDelegations(ctx, func(del types.Delegation) (stop bool) {
+	err := k.IterateAllServiceDelegations(ctx, func(del types.Delegation) (stop bool, err error) {
 		delegations = append(delegations, del)
-		return false
+		return false, nil
 	})
-
-	return delegations
+	return delegations, err
 }
 
 // IterateUserDelegations iterates over the user's delegations.
@@ -457,10 +494,11 @@ func (k *Keeper) GetAllServiceDelegations(ctx sdk.Context) []types.Delegation {
 // 2. Service delegations
 // 3. Operator delegations
 func (k *Keeper) IterateUserDelegations(
-	ctx sdk.Context, userAddress string, cb func(del types.Delegation) (stop bool, err error),
+	ctx context.Context, userAddress string, cb func(del types.Delegation) (stop bool, err error),
 ) error {
-	store := ctx.KVStore(k.storeKey)
-	poolIterator := storetypes.KVStorePrefixIterator(store, types.UserPoolDelegationsStorePrefix(userAddress))
+	store := k.storeService.OpenKVStore(ctx)
+
+	poolIterator := storetypes.KVStorePrefixIterator(runtime.KVStoreAdapter(store), types.UserPoolDelegationsStorePrefix(userAddress))
 	defer poolIterator.Close()
 
 	// Iterate pools delegations
@@ -476,7 +514,7 @@ func (k *Keeper) IterateUserDelegations(
 	}
 
 	// Iterate service delegations
-	servicesIterator := storetypes.KVStorePrefixIterator(store, types.UserServiceDelegationsStorePrefix(userAddress))
+	servicesIterator := storetypes.KVStorePrefixIterator(runtime.KVStoreAdapter(store), types.UserServiceDelegationsStorePrefix(userAddress))
 	defer servicesIterator.Close()
 	for ; servicesIterator.Valid(); servicesIterator.Next() {
 		delegation := types.MustUnmarshalDelegation(k.cdc, servicesIterator.Value())
@@ -490,7 +528,7 @@ func (k *Keeper) IterateUserDelegations(
 	}
 
 	// Iterate operators delegations
-	operatorsIterator := storetypes.KVStorePrefixIterator(store, types.UserOperatorDelegationsStorePrefix(userAddress))
+	operatorsIterator := storetypes.KVStorePrefixIterator(runtime.KVStoreAdapter(store), types.UserOperatorDelegationsStorePrefix(userAddress))
 	defer operatorsIterator.Close()
 	for ; operatorsIterator.Valid(); operatorsIterator.Next() {
 		delegation := types.MustUnmarshalDelegation(k.cdc, operatorsIterator.Value())
@@ -507,27 +545,50 @@ func (k *Keeper) IterateUserDelegations(
 }
 
 // GetAllDelegations returns all the delegations
-func (k *Keeper) GetAllDelegations(ctx sdk.Context) []types.Delegation {
+func (k *Keeper) GetAllDelegations(ctx context.Context) ([]types.Delegation, error) {
+
 	var delegations []types.Delegation
 
-	delegations = append(delegations, k.GetAllPoolDelegations(ctx)...)
-	delegations = append(delegations, k.GetAllOperatorDelegations(ctx)...)
-	delegations = append(delegations, k.GetAllServiceDelegations(ctx)...)
+	poolsDelegations, err := k.GetAllPoolDelegations(ctx)
+	if err != nil {
+		return nil, err
+	}
+	delegations = append(delegations, poolsDelegations...)
 
-	return delegations
+	operatorDelegations, err := k.GetAllOperatorDelegations(ctx)
+	if err != nil {
+		return nil, err
+	}
+	delegations = append(delegations, operatorDelegations...)
+
+	serviceDelegations, err := k.GetAllServiceDelegations(ctx)
+	if err != nil {
+		return nil, err
+	}
+	delegations = append(delegations, serviceDelegations...)
+
+	return delegations, nil
 }
 
 // GetAllUserRestakedCoins returns all the user's restaked coins
-func (k *Keeper) GetAllUserRestakedCoins(ctx sdk.Context, userAddress string) (sdk.DecCoins, error) {
+func (k *Keeper) GetAllUserRestakedCoins(ctx context.Context, userAddress string) (sdk.DecCoins, error) {
 	totalDelegatedCoins := sdk.NewDecCoins()
-	k.IterateUserDelegations(ctx, userAddress, func(d types.Delegation) (bool, error) {
-		target, found := k.GetDelegationTargetFromDelegation(ctx, d)
+	err := k.IterateUserDelegations(ctx, userAddress, func(d types.Delegation) (bool, error) {
+		target, found, err := k.GetDelegationTargetFromDelegation(ctx, d)
+		if err != nil {
+			return true, err
+		}
+
 		if !found {
 			return true, fmt.Errorf("can't find target for delegation %d, target id: %d", d.Type, d.TargetID)
 		}
+
 		totalDelegatedCoins = totalDelegatedCoins.Add(target.TokensFromShares(d.Shares)...)
 		return false, nil
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	return totalDelegatedCoins, nil
 }
@@ -537,7 +598,7 @@ func (k *Keeper) GetAllUserRestakedCoins(ctx sdk.Context, userAddress string) (s
 // shares of the delegation.
 // NOTE: This is done so that if we implement other delegation types in the future we can have a single
 // function that performs common operations for all of them.
-func (k *Keeper) PerformDelegation(ctx sdk.Context, data types.DelegationData) (sdk.DecCoins, error) {
+func (k *Keeper) PerformDelegation(ctx context.Context, data types.DelegationData) (sdk.DecCoins, error) {
 	// Get the data
 	receiver := data.Target
 	delegator := data.Delegator
@@ -551,18 +612,21 @@ func (k *Keeper) PerformDelegation(ctx sdk.Context, data types.DelegationData) (
 	}
 
 	// Get or create the delegation object and call the appropriate hook if present
-	delegation, found := k.GetDelegationForTarget(ctx, receiver, delegator)
+	delegation, found, err := k.GetDelegationForTarget(ctx, receiver, delegator)
+	if err != nil {
+		return nil, err
+	}
 
 	if found {
 		// Delegation was found
-		err := hooks.BeforeDelegationSharesModified(ctx, receiver.GetID(), delegator)
+		err = hooks.BeforeDelegationSharesModified(ctx, receiver.GetID(), delegator)
 		if err != nil {
 			return nil, err
 		}
 	} else {
 		// Delegation was not found
 		delegation = data.BuildDelegation(receiver.GetID(), delegator, sdk.NewDecCoins())
-		err := hooks.BeforeDelegationCreated(ctx, receiver.GetID(), delegator)
+		err = hooks.BeforeDelegationCreated(ctx, receiver.GetID(), delegator)
 		if err != nil {
 			return nil, err
 		}
@@ -604,28 +668,37 @@ func (k *Keeper) PerformDelegation(ctx sdk.Context, data types.DelegationData) (
 // --------------------------------------------------------------------------------------------------------------------
 
 // getUnbondingDelegationTarget returns the target of the given unbonding delegation
-func (k *Keeper) getUnbondingDelegationTarget(ctx sdk.Context, ubd types.UnbondingDelegation) (types.DelegationTarget, error) {
+func (k *Keeper) getUnbondingDelegationTarget(ctx context.Context, ubd types.UnbondingDelegation) (types.DelegationTarget, error) {
 	switch ubd.Type {
 	case types.DELEGATION_TYPE_POOL:
-		pool, found := k.poolsKeeper.GetPool(ctx, ubd.TargetID)
+		pool, found, err := k.poolsKeeper.GetPool(ctx, ubd.TargetID)
+		if err != nil {
+			return nil, err
+		}
 		if !found {
 			return nil, poolstypes.ErrPoolNotFound
 		}
-		return &pool, nil
+		return pool, nil
 
 	case types.DELEGATION_TYPE_OPERATOR:
-		operator, found := k.operatorsKeeper.GetOperator(ctx, ubd.TargetID)
+		operator, found, err := k.operatorsKeeper.GetOperator(ctx, ubd.TargetID)
+		if err != nil {
+			return nil, err
+		}
 		if !found {
 			return nil, operatorstypes.ErrOperatorNotFound
 		}
-		return &operator, nil
+		return operator, nil
 
 	case types.DELEGATION_TYPE_SERVICE:
-		service, found := k.servicesKeeper.GetService(ctx, ubd.TargetID)
+		service, found, err := k.servicesKeeper.GetService(ctx, ubd.TargetID)
+		if err != nil {
+			return nil, err
+		}
 		if !found {
 			return nil, servicestypes.ErrServiceNotFound
 		}
-		return &service, nil
+		return service, nil
 
 	default:
 		return nil, errors.Wrapf(types.ErrInvalidDelegationType, "invalid delegation type %v", ubd.Type)
@@ -650,7 +723,7 @@ func (k *Keeper) getUnbondingDelegationKeyBuilder(ud types.UnbondingDelegation) 
 }
 
 // SetUnbondingDelegation stores the given unbonding delegation in the store
-func (k *Keeper) SetUnbondingDelegation(ctx sdk.Context, ud types.UnbondingDelegation) ([]byte, error) {
+func (k *Keeper) SetUnbondingDelegation(ctx context.Context, ud types.UnbondingDelegation) ([]byte, error) {
 	// Get the key to be used to store the unbonding delegation
 	getUnbondingDelegation, err := k.getUnbondingDelegationKeyBuilder(ud)
 	if err != nil {
@@ -659,8 +732,11 @@ func (k *Keeper) SetUnbondingDelegation(ctx sdk.Context, ud types.UnbondingDeleg
 	unbondingDelegationKey := getUnbondingDelegation(ud.DelegatorAddress, ud.TargetID)
 
 	// Store the unbonding delegation
-	store := ctx.KVStore(k.storeKey)
-	store.Set(unbondingDelegationKey, types.MustMarshalUnbondingDelegation(k.cdc, ud))
+	store := k.storeService.OpenKVStore(ctx)
+	err = store.Set(unbondingDelegationKey, types.MustMarshalUnbondingDelegation(k.cdc, ud))
+	if err != nil {
+		return nil, err
+	}
 
 	return unbondingDelegationKey, nil
 }
@@ -668,20 +744,23 @@ func (k *Keeper) SetUnbondingDelegation(ctx sdk.Context, ud types.UnbondingDeleg
 // SetUnbondingDelegationByUnbondingID sets an index to look up an UnbondingDelegation
 // by the unbondingID of an UnbondingDelegationEntry that it contains Note, it does not
 // set the unbonding delegation itself, use SetUnbondingDelegation(ctx, ubd) for that
-func (k *Keeper) SetUnbondingDelegationByUnbondingID(ctx sdk.Context, ubd types.UnbondingDelegation, ubdKey []byte, id uint64) {
+func (k *Keeper) SetUnbondingDelegationByUnbondingID(ctx context.Context, ubd types.UnbondingDelegation, ubdKey []byte, id uint64) error {
 	// Set the index allowing to lookup the UnbondingDelegation by the unbondingID of an
 	// UnbondingDelegationEntry that it contains
-	store := ctx.KVStore(k.storeKey)
-	store.Set(types.GetUnbondingIndexKey(id), ubdKey)
+	store := k.storeService.OpenKVStore(ctx)
+	err := store.Set(types.GetUnbondingIndexKey(id), ubdKey)
+	if err != nil {
+		return err
+	}
 
 	// Set the type of the unbonding delegation so that we know how to deserialize id
-	store.Set(types.GetUnbondingTypeKey(id), utils.Uint32ToBigEndian(ubd.TargetID))
+	return store.Set(types.GetUnbondingTypeKey(id), utils.Uint32ToBigEndian(ubd.TargetID))
 }
 
 // GetUnbondingDelegation returns the unbonding delegation for the given delegator and target.
 func (k *Keeper) GetUnbondingDelegation(
-	ctx sdk.Context, delegatorAddress string, ubdType types.DelegationType, targetID uint32,
-) (types.UnbondingDelegation, bool) {
+	ctx context.Context, delegatorAddress string, ubdType types.DelegationType, targetID uint32,
+) (types.UnbondingDelegation, bool, error) {
 	switch ubdType {
 	case types.DELEGATION_TYPE_POOL:
 		return k.GetPoolUnbondingDelegation(ctx, targetID, delegatorAddress)
@@ -690,12 +769,12 @@ func (k *Keeper) GetUnbondingDelegation(
 	case types.DELEGATION_TYPE_SERVICE:
 		return k.GetServiceUnbondingDelegation(ctx, targetID, delegatorAddress)
 	default:
-		return types.UnbondingDelegation{}, false
+		return types.UnbondingDelegation{}, false, fmt.Errorf("invalid delegation type %v", ubdType)
 	}
 }
 
 // RemoveUnbondingDelegation removes the unbonding delegation object and associated index.
-func (k *Keeper) RemoveUnbondingDelegation(ctx sdk.Context, ubd types.UnbondingDelegation) error {
+func (k *Keeper) RemoveUnbondingDelegation(ctx context.Context, ubd types.UnbondingDelegation) error {
 	// Get the key to be used to store the unbonding delegation
 	getUnbondingDelegation, err := k.getUnbondingDelegationKeyBuilder(ubd)
 	if err != nil {
@@ -703,9 +782,8 @@ func (k *Keeper) RemoveUnbondingDelegation(ctx sdk.Context, ubd types.UnbondingD
 	}
 	unbondingDelegationKey := getUnbondingDelegation(ubd.DelegatorAddress, ubd.TargetID)
 
-	store := ctx.KVStore(k.storeKey)
-	store.Delete(unbondingDelegationKey)
-	return nil
+	store := k.storeService.OpenKVStore(ctx)
+	return store.Delete(unbondingDelegationKey)
 }
 
 // PerformUndelegation unbonds an amount of delegator shares from a given validator. It
@@ -713,7 +791,7 @@ func (k *Keeper) RemoveUnbondingDelegation(ctx sdk.Context, ubd types.UnbondingD
 // are not exceeded and unbond the staked tokens (based on shares) by creating
 // an unbonding object and inserting it into the unbonding queue which will be
 // processed during the staking EndBlocker.
-func (k *Keeper) PerformUndelegation(ctx sdk.Context, data types.UndelegationData) (time.Time, error) {
+func (k *Keeper) PerformUndelegation(ctx context.Context, data types.UndelegationData) (time.Time, error) {
 	// TODO: Probably we should implement this as well
 	// if k.HasMaxUnbondingDelegationEntries(ctx, delAddr, valAddr) {
 	//	 return time.Time{}, types.ErrMaxUnbondingDelegationEntries
@@ -726,16 +804,25 @@ func (k *Keeper) PerformUndelegation(ctx sdk.Context, data types.UndelegationDat
 	}
 
 	// Compute the time at which the unbonding delegation should end
-	completionTime := ctx.BlockHeader().Time.Add(k.UnbondingTime(ctx))
+	unbondingTime, err := k.UnbondingTime(ctx)
+	if err != nil {
+		return time.Time{}, err
+	}
+
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	completionTime := sdkCtx.BlockHeader().Time.Add(unbondingTime)
 
 	// Store the unbonding delegation entry inside the store
-	ubd, err := k.SetUnbondingDelegationEntry(ctx, data, ctx.BlockHeight(), completionTime, returnAmount)
+	ubd, err := k.SetUnbondingDelegationEntry(ctx, data, sdkCtx.BlockHeight(), completionTime, returnAmount)
 	if err != nil {
 		return time.Time{}, err
 	}
 
 	// Insert the unbonding delegation into the unbonding queue
-	k.InsertUBDQueue(ctx, ubd, completionTime)
+	err = k.InsertUBDQueue(ctx, ubd, completionTime)
+	if err != nil {
+		return time.Time{}, err
+	}
 
 	return completionTime, nil
 }
@@ -743,12 +830,16 @@ func (k *Keeper) PerformUndelegation(ctx sdk.Context, data types.UndelegationDat
 // UnbondRestakedAssets unbonds the provided amount from the user's delegations.
 // The algorithm will go over the user's delegation in the following order: pools, services and operators
 // until the token undelegated matches the provided amount.
-func (k *Keeper) UnbondRestakedAssets(ctx sdk.Context, user sdk.AccAddress, amount sdk.Coins) (time.Time, error) {
+func (k *Keeper) UnbondRestakedAssets(ctx context.Context, user sdk.AccAddress, amount sdk.Coins) (time.Time, error) {
 	var undelegations []types.UndelegationData
 	toUndelegateTokens := sdk.NewDecCoinsFromCoins(amount...)
 
 	err := k.IterateUserDelegations(ctx, user.String(), func(delegation types.Delegation) (bool, error) {
-		target, found := k.GetDelegationTargetFromDelegation(ctx, delegation)
+		target, found, err := k.GetDelegationTargetFromDelegation(ctx, delegation)
+		if err != nil {
+			return true, err
+		}
+
 		if !found {
 			return false, nil
 		}
@@ -855,9 +946,13 @@ func (k *Keeper) UnbondRestakedAssets(ctx sdk.Context, user sdk.AccAddress, amou
 // --------------------------------------------------------------------------------------------------------------------
 
 // GetAllPoolUnbondingDelegations returns all the pool unbonding delegations
-func (k *Keeper) GetAllPoolUnbondingDelegations(ctx sdk.Context) []types.UnbondingDelegation {
-	store := ctx.KVStore(k.storeKey)
-	iterator := store.Iterator(types.PoolUnbondingDelegationPrefix, storetypes.PrefixEndBytes(types.PoolUnbondingDelegationPrefix))
+func (k *Keeper) GetAllPoolUnbondingDelegations(ctx context.Context) ([]types.UnbondingDelegation, error) {
+	store := k.storeService.OpenKVStore(ctx)
+
+	iterator, err := store.Iterator(types.PoolUnbondingDelegationPrefix, storetypes.PrefixEndBytes(types.PoolUnbondingDelegationPrefix))
+	if err != nil {
+		return nil, err
+	}
 	defer iterator.Close()
 
 	var unbondingDelegations []types.UnbondingDelegation
@@ -866,14 +961,15 @@ func (k *Keeper) GetAllPoolUnbondingDelegations(ctx sdk.Context) []types.Unbondi
 		unbondingDelegations = append(unbondingDelegations, unbondingDelegation)
 	}
 
-	return unbondingDelegations
+	return unbondingDelegations, nil
 }
 
 // GetAllUserPoolUnbondingDelegations returns all the user's unbonding delegations
 // from a pool
-func (k *Keeper) GetAllUserPoolUnbondingDelegations(ctx sdk.Context, userAddress string) []types.UnbondingDelegation {
-	store := ctx.KVStore(k.storeKey)
-	iterator := storetypes.KVStorePrefixIterator(store, types.PoolUnbondingDelegationsStorePrefix(userAddress))
+func (k *Keeper) GetAllUserPoolUnbondingDelegations(ctx context.Context, userAddress string) []types.UnbondingDelegation {
+	store := k.storeService.OpenKVStore(ctx)
+
+	iterator := storetypes.KVStorePrefixIterator(runtime.KVStoreAdapter(store), types.PoolUnbondingDelegationsStorePrefix(userAddress))
 	defer iterator.Close()
 
 	var unbondingDelegations []types.UnbondingDelegation
@@ -886,9 +982,13 @@ func (k *Keeper) GetAllUserPoolUnbondingDelegations(ctx sdk.Context, userAddress
 }
 
 // GetAllOperatorUnbondingDelegations returns all the operator unbonding delegations
-func (k *Keeper) GetAllOperatorUnbondingDelegations(ctx sdk.Context) []types.UnbondingDelegation {
-	store := ctx.KVStore(k.storeKey)
-	iterator := store.Iterator(types.OperatorUnbondingDelegationPrefix, storetypes.PrefixEndBytes(types.OperatorUnbondingDelegationPrefix))
+func (k *Keeper) GetAllOperatorUnbondingDelegations(ctx context.Context) ([]types.UnbondingDelegation, error) {
+	store := k.storeService.OpenKVStore(ctx)
+
+	iterator, err := store.Iterator(types.OperatorUnbondingDelegationPrefix, storetypes.PrefixEndBytes(types.OperatorUnbondingDelegationPrefix))
+	if err != nil {
+		return nil, err
+	}
 	defer iterator.Close()
 
 	var unbondingDelegations []types.UnbondingDelegation
@@ -897,14 +997,15 @@ func (k *Keeper) GetAllOperatorUnbondingDelegations(ctx sdk.Context) []types.Unb
 		unbondingDelegations = append(unbondingDelegations, unbondingDelegation)
 	}
 
-	return unbondingDelegations
+	return unbondingDelegations, nil
 }
 
 // GetAllUserOperatorUnbondingDelegations returns all the user's unbonding delegations
 // from a operator
-func (k *Keeper) GetAllUserOperatorUnbondingDelegations(ctx sdk.Context, userAddress string) []types.UnbondingDelegation {
-	store := ctx.KVStore(k.storeKey)
-	iterator := storetypes.KVStorePrefixIterator(store, types.OperatorUnbondingDelegationsStorePrefix(userAddress))
+func (k *Keeper) GetAllUserOperatorUnbondingDelegations(ctx context.Context, userAddress string) []types.UnbondingDelegation {
+	store := k.storeService.OpenKVStore(ctx)
+
+	iterator := storetypes.KVStorePrefixIterator(runtime.KVStoreAdapter(store), types.OperatorUnbondingDelegationsStorePrefix(userAddress))
 	defer iterator.Close()
 
 	var unbondingDelegations []types.UnbondingDelegation
@@ -917,9 +1018,13 @@ func (k *Keeper) GetAllUserOperatorUnbondingDelegations(ctx sdk.Context, userAdd
 }
 
 // GetAllServiceUnbondingDelegations returns all the service unbonding delegations
-func (k *Keeper) GetAllServiceUnbondingDelegations(ctx sdk.Context) []types.UnbondingDelegation {
-	store := ctx.KVStore(k.storeKey)
-	iterator := store.Iterator(types.ServiceUnbondingDelegationPrefix, storetypes.PrefixEndBytes(types.ServiceUnbondingDelegationPrefix))
+func (k *Keeper) GetAllServiceUnbondingDelegations(ctx context.Context) ([]types.UnbondingDelegation, error) {
+	store := k.storeService.OpenKVStore(ctx)
+
+	iterator, err := store.Iterator(types.ServiceUnbondingDelegationPrefix, storetypes.PrefixEndBytes(types.ServiceUnbondingDelegationPrefix))
+	if err != nil {
+		return nil, err
+	}
 	defer iterator.Close()
 
 	var unbondingDelegations []types.UnbondingDelegation
@@ -928,14 +1033,15 @@ func (k *Keeper) GetAllServiceUnbondingDelegations(ctx sdk.Context) []types.Unbo
 		unbondingDelegations = append(unbondingDelegations, unbondingDelegation)
 	}
 
-	return unbondingDelegations
+	return unbondingDelegations, nil
 }
 
 // GetAllUserServiceUnbondingDelegations returns all the user's unbonding delegations
 // from a service
-func (k *Keeper) GetAllUserServiceUnbondingDelegations(ctx sdk.Context, userAddress string) []types.UnbondingDelegation {
-	store := ctx.KVStore(k.storeKey)
-	iterator := storetypes.KVStorePrefixIterator(store, types.ServiceUnbondingDelegationsStorePrefix(userAddress))
+func (k *Keeper) GetAllUserServiceUnbondingDelegations(ctx context.Context, userAddress string) []types.UnbondingDelegation {
+	store := k.storeService.OpenKVStore(ctx)
+
+	iterator := storetypes.KVStorePrefixIterator(runtime.KVStoreAdapter(store), types.ServiceUnbondingDelegationsStorePrefix(userAddress))
 	defer iterator.Close()
 
 	var unbondingDelegations []types.UnbondingDelegation
@@ -948,18 +1054,32 @@ func (k *Keeper) GetAllUserServiceUnbondingDelegations(ctx sdk.Context, userAddr
 }
 
 // GetAllUnbondingDelegations returns all the unbonding delegations
-func (k *Keeper) GetAllUnbondingDelegations(ctx sdk.Context) []types.UnbondingDelegation {
+func (k *Keeper) GetAllUnbondingDelegations(ctx context.Context) ([]types.UnbondingDelegation, error) {
 	var unbondingDelegations []types.UnbondingDelegation
 
-	unbondingDelegations = append(unbondingDelegations, k.GetAllPoolUnbondingDelegations(ctx)...)
-	unbondingDelegations = append(unbondingDelegations, k.GetAllOperatorUnbondingDelegations(ctx)...)
-	unbondingDelegations = append(unbondingDelegations, k.GetAllServiceUnbondingDelegations(ctx)...)
+	unbondingPoolDelegations, err := k.GetAllPoolUnbondingDelegations(ctx)
+	if err != nil {
+		return nil, err
+	}
+	unbondingDelegations = append(unbondingDelegations, unbondingPoolDelegations...)
 
-	return unbondingDelegations
+	unbondingOperatorDelegations, err := k.GetAllOperatorUnbondingDelegations(ctx)
+	if err != nil {
+		return nil, err
+	}
+	unbondingDelegations = append(unbondingDelegations, unbondingOperatorDelegations...)
+
+	unbondingServiceDelegations, err := k.GetAllServiceUnbondingDelegations(ctx)
+	if err != nil {
+		return nil, err
+	}
+	unbondingDelegations = append(unbondingDelegations, unbondingServiceDelegations...)
+
+	return unbondingDelegations, nil
 }
 
 // GetAllUserUnbondingDelegations returns all the user's unbonding delegations
-func (k *Keeper) GetAllUserUnbondingDelegations(ctx sdk.Context, userAddress string) []types.UnbondingDelegation {
+func (k *Keeper) GetAllUserUnbondingDelegations(ctx context.Context, userAddress string) []types.UnbondingDelegation {
 	var unbondingDelegations []types.UnbondingDelegation
 
 	unbondingDelegations = append(unbondingDelegations, k.GetAllUserPoolUnbondingDelegations(ctx, userAddress)...)
@@ -972,7 +1092,7 @@ func (k *Keeper) GetAllUserUnbondingDelegations(ctx sdk.Context, userAddress str
 // --------------------------------------------------------------------------------------------------------------------
 
 // GetUserPreferencesEntries returns all the user preferences entries
-func (k *Keeper) GetUserPreferencesEntries(ctx sdk.Context) ([]types.UserPreferencesEntry, error) {
+func (k *Keeper) GetUserPreferencesEntries(ctx context.Context) ([]types.UserPreferencesEntry, error) {
 	var entries []types.UserPreferencesEntry
 	err := k.usersPreferences.Walk(ctx, nil, func(userAddress string, preferences types.UserPreferences) (stop bool, err error) {
 		entries = append(entries, types.NewUserPreferencesEntry(userAddress, preferences))
@@ -987,19 +1107,22 @@ func (k *Keeper) GetUserPreferencesEntries(ctx sdk.Context) ([]types.UserPrefere
 
 // GetUserTrustedServicesIDs returns the IDs of the services that the user trusts
 // based on the user preferences and the services' status.
-func (k *Keeper) GetUserTrustedServicesIDs(ctx sdk.Context, userAddress string) ([]uint32, error) {
+func (k *Keeper) GetUserTrustedServicesIDs(ctx context.Context, userAddress string) ([]uint32, error) {
 	preferences, err := k.GetUserPreferences(ctx, userAddress)
 	if err != nil {
 		return nil, err
 	}
 
 	var trustedServicesIDs []uint32
-	k.servicesKeeper.IterateServices(ctx, func(service servicestypes.Service) (stop bool) {
+	err = k.servicesKeeper.IterateServices(ctx, func(service servicestypes.Service) (stop bool, err error) {
 		if preferences.IsServiceTrusted(service) {
 			trustedServicesIDs = append(trustedServicesIDs, service.ID)
 		}
-		return false
+		return false, nil
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	return trustedServicesIDs, nil
 }

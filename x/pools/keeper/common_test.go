@@ -3,6 +3,7 @@ package keeper_test
 import (
 	"testing"
 
+	corestoretypes "cosmossdk.io/core/store"
 	"cosmossdk.io/log"
 	"cosmossdk.io/store"
 	"cosmossdk.io/store/metrics"
@@ -38,7 +39,7 @@ type KeeperTestSuite struct {
 	legacyAminoCdc *codec.LegacyAmino
 	ctx            sdk.Context
 
-	storeKey storetypes.StoreKey
+	storeService corestoretypes.KVStoreService
 
 	ak authkeeper.AccountKeeper
 	bk bankkeeper.Keeper
@@ -48,7 +49,6 @@ type KeeperTestSuite struct {
 func (suite *KeeperTestSuite) SetupTest() {
 	// Define store keys
 	keys := storetypes.NewKVStoreKeys(types.StoreKey, authtypes.StoreKey, banktypes.StoreKey)
-	suite.storeKey = keys[types.StoreKey]
 
 	// Create logger
 	logger := log.NewNopLogger()
@@ -88,10 +88,11 @@ func (suite *KeeperTestSuite) SetupTest() {
 		authorityAddr,
 		logger,
 	)
+
+	suite.storeService = runtime.NewKVStoreService(keys[types.StoreKey])
 	suite.k = keeper.NewKeeper(
 		suite.cdc,
-		suite.storeKey,
-		runtime.NewKVStoreService(keys[types.StoreKey]),
+		suite.storeService,
 		suite.ak,
 	)
 }

@@ -34,6 +34,7 @@ func (k *Keeper) GetAssetAndPrice(ctx context.Context, denom string) (assetstype
 		}
 		return asset, math.LegacyDec{}, err
 	}
+
 	decimals, err := k.oracleKeeper.GetDecimalsForCurrencyPair(sdkCtx, cp)
 	if err != nil {
 		return asset, math.LegacyDec{}, err
@@ -49,9 +50,11 @@ func (k *Keeper) GetCoinValue(ctx context.Context, coin sdk.Coin) (math.LegacyDe
 	if err != nil {
 		return math.LegacyDec{}, err
 	}
+
 	if price.IsZero() {
 		return math.LegacyZeroDec(), nil
 	}
+
 	return price.MulInt(coin.Amount).QuoInt64(int64(stdmath.Pow10(int(asset.Exponent)))), nil
 }
 

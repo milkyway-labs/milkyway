@@ -75,13 +75,11 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 
 	data.PoolsKeeper = poolskeeper.NewKeeper(
 		data.Cdc,
-		data.Keys[poolstypes.StoreKey],
 		runtime.NewKVStoreService(data.Keys[poolstypes.StoreKey]),
 		data.AccountKeeper,
 	)
 	data.OperatorsKeeper = operatorskeeper.NewKeeper(
 		data.Cdc,
-		data.Keys[operatorstypes.StoreKey],
 		runtime.NewKVStoreService(data.Keys[operatorstypes.StoreKey]),
 		data.AccountKeeper,
 		data.DistributionKeeper,
@@ -89,7 +87,6 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	)
 	data.ServicesKeeper = serviceskeeper.NewKeeper(
 		data.Cdc,
-		data.Keys[servicestypes.StoreKey],
 		runtime.NewKVStoreService(data.Keys[servicestypes.StoreKey]),
 		data.AccountKeeper,
 		data.DistributionKeeper,
@@ -97,7 +94,6 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	)
 	data.RestakingKeeper = restakingkeeper.NewKeeper(
 		data.Cdc,
-		data.Keys[restakingtypes.StoreKey],
 		runtime.NewKVStoreService(data.Keys[restakingtypes.StoreKey]),
 		data.AccountKeeper,
 		data.BankKeeper,
@@ -140,17 +136,10 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	data.RestakingKeeper.SetHooks(data.Keeper.RestakingHooks())
 
 	// Set the base params
-	data.PoolsKeeper.SetNextPoolID(data.Context, 1)
-	data.PoolsKeeper.SetParams(data.Context, poolstypes.DefaultParams())
-
-	data.ServicesKeeper.SetNextServiceID(data.Context, 1)
-	data.ServicesKeeper.SetParams(data.Context, servicestypes.DefaultParams())
-
-	data.OperatorsKeeper.SetNextOperatorID(data.Context, 1)
-	data.OperatorsKeeper.SetParams(data.Context, operatorstypes.DefaultParams())
-
-	require.NoError(t, data.Keeper.NextRewardsPlanID.Set(data.Context, 1))
-	require.NoError(t, data.Keeper.Params.Set(data.Context, rewardstypes.DefaultParams()))
+	require.NoError(t, data.PoolsKeeper.InitGenesis(data.Context, poolstypes.DefaultGenesis()))
+	require.NoError(t, data.ServicesKeeper.InitGenesis(data.Context, servicestypes.DefaultGenesis()))
+	require.NoError(t, data.OperatorsKeeper.InitGenesis(data.Context, operatorstypes.DefaultGenesis()))
+	require.NoError(t, data.Keeper.InitGenesis(data.Context, rewardstypes.DefaultGenesis()))
 
 	return data
 }

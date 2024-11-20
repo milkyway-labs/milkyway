@@ -17,8 +17,11 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "next service id is exported properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextServiceID(ctx, 10)
-				suite.k.SetParams(ctx, types.DefaultParams())
+				err := suite.k.SetNextServiceID(ctx, 10)
+				suite.Require().NoError(err)
+
+				err = suite.k.SetParams(ctx, types.DefaultParams())
+				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				NextServiceID: 10,
@@ -29,10 +32,13 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "services data are exported properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextServiceID(ctx, 1)
-				suite.k.SetParams(ctx, types.DefaultParams())
+				err := suite.k.SetNextServiceID(ctx, 1)
+				suite.Require().NoError(err)
 
-				err := suite.k.SaveService(ctx, types.NewService(
+				err = suite.k.SetParams(ctx, types.DefaultParams())
+				suite.Require().NoError(err)
+
+				err = suite.k.SaveService(ctx, types.NewService(
 					1,
 					types.SERVICE_STATUS_ACTIVE,
 					"MilkyWay",
@@ -86,12 +92,17 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "services params are exported properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextServiceID(ctx, 1)
-				err := suite.k.SetServiceParams(ctx, 1, types.NewServiceParams([]string{"umilk"}))
+				err := suite.k.SetNextServiceID(ctx, 1)
 				suite.Require().NoError(err)
+
+				err = suite.k.SetServiceParams(ctx, 1, types.NewServiceParams([]string{"umilk"}))
+				suite.Require().NoError(err)
+
 				err = suite.k.SetServiceParams(ctx, 2, types.NewServiceParams([]string{"uinit"}))
 				suite.Require().NoError(err)
-				suite.k.SetParams(ctx, types.DefaultParams())
+
+				err = suite.k.SetParams(ctx, types.DefaultParams())
+				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				NextServiceID: 1,
@@ -106,10 +117,13 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "params are exported properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextServiceID(ctx, 1)
-				suite.k.SetParams(ctx, types.NewParams(
+				err := suite.k.SetNextServiceID(ctx, 1)
+				suite.Require().NoError(err)
+
+				err = suite.k.SetParams(ctx, types.NewParams(
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(1_000_000_000))),
 				))
+				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				NextServiceID: 1,
@@ -183,11 +197,8 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 			),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				var services []types.Service
-				suite.k.IterateServices(ctx, func(service types.Service) (stop bool) {
-					services = append(services, service)
-					return false
-				})
+				services, err := suite.k.GetServices(ctx)
+				suite.Require().NoError(err)
 
 				suite.Require().Len(services, 1)
 				suite.Require().Equal(types.NewService(
@@ -213,7 +224,8 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				),
 			),
 			check: func(ctx sdk.Context) {
-				params := suite.k.GetParams(ctx)
+				params, err := suite.k.GetParams(ctx)
+				suite.Require().NoError(err)
 				suite.Require().Equal(types.NewParams(
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(1_000_000_000))),
 				), params)

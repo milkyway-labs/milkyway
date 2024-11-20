@@ -19,5 +19,5 @@ type CommunityPoolKeeper interface {
 }
 
 type PoolsKeeper interface {
-	GetParams(ctx sdk.Context) (params poolstypes.Params)
+	GetParams(ctx context.Context) (poolstypes.Params, error)
 }

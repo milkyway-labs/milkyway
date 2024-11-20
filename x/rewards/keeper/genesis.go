@@ -45,14 +45,17 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) (*types.GenesisState, error) {
 		if err != nil {
 			return false, err
 		}
+
 		withdraw, err := k.accountKeeper.AddressCodec().BytesToString(withdrawAddr)
 		if err != nil {
 			return false, err
 		}
+
 		delegatorWithdrawInfos = append(delegatorWithdrawInfos, types.DelegatorWithdrawInfo{
 			DelegatorAddress: delegator,
 			WithdrawAddress:  withdraw,
 		})
+
 		return false, nil
 	})
 	if err != nil {
@@ -214,7 +217,7 @@ func (k *Keeper) exportDelegationsRecords(
 // --------------------------------------------------------------------------------------------------------------------
 
 // InitGenesis initializes the state from a GenesisState
-func (k *Keeper) InitGenesis(ctx sdk.Context, state types.GenesisState) error {
+func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 	var totalOutstandingRewards sdk.DecCoins
 
 	// Store params

@@ -3,7 +3,7 @@ package types
 // DONTCOVER
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"context"
 )
 
 // Event Hooks
@@ -14,11 +14,11 @@ import (
 
 // OperatorsHooks event hooks for operators objects (noalias)
 type OperatorsHooks interface {
-	AfterOperatorRegistered(ctx sdk.Context, operatorID uint32) error            // Must be called after an operator is registered
-	AfterOperatorInactivatingStarted(ctx sdk.Context, operatorID uint32) error   // Must be called after an operator has started inactivating
-	AfterOperatorInactivatingCompleted(ctx sdk.Context, operatorID uint32) error // Must be called after an operator has completed inactivating
-	AfterOperatorReactivated(ctx sdk.Context, operatorID uint32) error           // Must be called after an operator has been reactivated
-	AfterOperatorDeleted(ctx sdk.Context, operatorID uint32) error               // Must be called after an operator has been deleted
+	AfterOperatorRegistered(ctx context.Context, operatorID uint32) error            // Must be called after an operator is registered
+	AfterOperatorInactivatingStarted(ctx context.Context, operatorID uint32) error   // Must be called after an operator has started inactivating
+	AfterOperatorInactivatingCompleted(ctx context.Context, operatorID uint32) error // Must be called after an operator has completed inactivating
+	AfterOperatorReactivated(ctx context.Context, operatorID uint32) error           // Must be called after an operator has been reactivated
+	AfterOperatorDeleted(ctx context.Context, operatorID uint32) error               // Must be called after an operator has been deleted
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -34,7 +34,7 @@ func NewMultiOperatorsHooks(hooks ...OperatorsHooks) MultiOperatorsHooks {
 }
 
 // AfterOperatorRegistered implements OperatorsHooks
-func (h MultiOperatorsHooks) AfterOperatorRegistered(ctx sdk.Context, operatorID uint32) error {
+func (h MultiOperatorsHooks) AfterOperatorRegistered(ctx context.Context, operatorID uint32) error {
 	for _, hook := range h {
 		if err := hook.AfterOperatorRegistered(ctx, operatorID); err != nil {
 			return err
@@ -44,7 +44,7 @@ func (h MultiOperatorsHooks) AfterOperatorRegistered(ctx sdk.Context, operatorID
 }
 
 // AfterOperatorInactivatingStarted implements OperatorsHooks
-func (h MultiOperatorsHooks) AfterOperatorInactivatingStarted(ctx sdk.Context, operatorID uint32) error {
+func (h MultiOperatorsHooks) AfterOperatorInactivatingStarted(ctx context.Context, operatorID uint32) error {
 	for _, hook := range h {
 		if err := hook.AfterOperatorInactivatingStarted(ctx, operatorID); err != nil {
 			return err
@@ -54,7 +54,7 @@ func (h MultiOperatorsHooks) AfterOperatorInactivatingStarted(ctx sdk.Context, o
 }
 
 // AfterOperatorInactivatingCompleted implements OperatorsHooks
-func (h MultiOperatorsHooks) AfterOperatorInactivatingCompleted(ctx sdk.Context, operatorID uint32) error {
+func (h MultiOperatorsHooks) AfterOperatorInactivatingCompleted(ctx context.Context, operatorID uint32) error {
 	for _, hook := range h {
 		if err := hook.AfterOperatorInactivatingCompleted(ctx, operatorID); err != nil {
 			return err
@@ -64,7 +64,7 @@ func (h MultiOperatorsHooks) AfterOperatorInactivatingCompleted(ctx sdk.Context,
 }
 
 // AfterOperatorReactivated implements OperatorsHooks
-func (h MultiOperatorsHooks) AfterOperatorReactivated(ctx sdk.Context, operatorID uint32) error {
+func (h MultiOperatorsHooks) AfterOperatorReactivated(ctx context.Context, operatorID uint32) error {
 	for _, hook := range h {
 		if err := hook.AfterOperatorReactivated(ctx, operatorID); err != nil {
 			return err
@@ -74,7 +74,7 @@ func (h MultiOperatorsHooks) AfterOperatorReactivated(ctx sdk.Context, operatorI
 }
 
 // AfterOperatorDeleted implements OperatorsHooks
-func (h MultiOperatorsHooks) AfterOperatorDeleted(ctx sdk.Context, operatorID uint32) error {
+func (h MultiOperatorsHooks) AfterOperatorDeleted(ctx context.Context, operatorID uint32) error {
 	for _, hook := range h {
 		if err := hook.AfterOperatorDeleted(ctx, operatorID); err != nil {
 			return err

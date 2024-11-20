@@ -485,7 +485,7 @@ func (suite *KeeperTestSuite) TestQuerier_PoolUnbondingDelegations() {
 
 				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &pool,
+						Target:                   pool,
 						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 						BuildUnbondingDelegation: types.NewPoolUnbondingDelegation,
 					},
@@ -497,7 +497,7 @@ func (suite *KeeperTestSuite) TestQuerier_PoolUnbondingDelegations() {
 
 				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &pool,
+						Target:                   pool,
 						Delegator:                "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 						BuildUnbondingDelegation: types.NewPoolUnbondingDelegation,
 					},
@@ -543,7 +543,7 @@ func (suite *KeeperTestSuite) TestQuerier_PoolUnbondingDelegations() {
 
 				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &pool,
+						Target:                   pool,
 						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 						BuildUnbondingDelegation: types.NewPoolUnbondingDelegation,
 					},
@@ -555,7 +555,7 @@ func (suite *KeeperTestSuite) TestQuerier_PoolUnbondingDelegations() {
 
 				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &pool,
+						Target:                   pool,
 						Delegator:                "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 						BuildUnbondingDelegation: types.NewPoolUnbondingDelegation,
 					},
@@ -645,7 +645,7 @@ func (suite *KeeperTestSuite) TestQuerier_PoolUnbondingDelegation() {
 
 				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &pool,
+						Target:                   pool,
 						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 						BuildUnbondingDelegation: types.NewPoolUnbondingDelegation,
 					},
@@ -702,7 +702,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegations() {
 		{
 			name: "query without pagination returns data properly",
 			store: func(ctx sdk.Context) {
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err := suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      1,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
 					Tokens: sdk.NewCoins(
@@ -712,8 +712,9 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegations() {
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
@@ -763,7 +764,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegations() {
 		{
 			name: "query with pagination returns data properly",
 			store: func(ctx sdk.Context) {
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err := suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      1,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
 					Tokens: sdk.NewCoins(
@@ -773,8 +774,9 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegations() {
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
@@ -845,7 +847,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegation() {
 		{
 			name: "not found delegation returns error",
 			store: func(ctx sdk.Context) {
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err := suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      1,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
 					Tokens: sdk.NewCoins(
@@ -855,6 +857,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegation() {
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 			},
 			request: types.NewQueryOperatorDelegationRequest(
 				1,
@@ -865,7 +868,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegation() {
 		{
 			name: "found delegation is returned properly",
 			store: func(ctx sdk.Context) {
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err := suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      1,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
 					Tokens: sdk.NewCoins(
@@ -875,8 +878,9 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorDelegation() {
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					sdk.NewDecCoins(
@@ -946,11 +950,13 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorUnbondingDelegations() {
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				}
-				suite.ok.SaveOperator(ctx, operator)
 
-				_, err := suite.k.SetUnbondingDelegationEntry(ctx,
+				err := suite.ok.SaveOperator(ctx, operator)
+				suite.Require().NoError(err)
+
+				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &operator,
+						Target:                   operator,
 						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 						BuildUnbondingDelegation: types.NewOperatorUnbondingDelegation,
 					},
@@ -962,7 +968,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorUnbondingDelegations() {
 
 				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &operator,
+						Target:                   operator,
 						Delegator:                "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 						BuildUnbondingDelegation: types.NewOperatorUnbondingDelegation,
 					},
@@ -1006,11 +1012,13 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorUnbondingDelegations() {
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				}
-				suite.ok.SaveOperator(ctx, operator)
 
-				_, err := suite.k.SetUnbondingDelegationEntry(ctx,
+				err := suite.ok.SaveOperator(ctx, operator)
+				suite.Require().NoError(err)
+
+				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &operator,
+						Target:                   operator,
 						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 						BuildUnbondingDelegation: types.NewOperatorUnbondingDelegation,
 					},
@@ -1022,7 +1030,7 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorUnbondingDelegations() {
 
 				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &operator,
+						Target:                   operator,
 						Delegator:                "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 						BuildUnbondingDelegation: types.NewOperatorUnbondingDelegation,
 					},
@@ -1091,7 +1099,8 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorUnbondingDelegation() {
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				}
-				suite.ok.SaveOperator(ctx, operator)
+				err := suite.ok.SaveOperator(ctx, operator)
+				suite.Require().NoError(err)
 			},
 			request: types.NewQueryOperatorUnbondingDelegationRequest(
 				1,
@@ -1112,11 +1121,12 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorUnbondingDelegation() {
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				}
-				suite.ok.SaveOperator(ctx, operator)
+				err := suite.ok.SaveOperator(ctx, operator)
+				suite.Require().NoError(err)
 
-				_, err := suite.k.SetUnbondingDelegationEntry(ctx,
+				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &operator,
+						Target:                   operator,
 						Delegator:                "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 						BuildUnbondingDelegation: types.NewOperatorUnbondingDelegation,
 					},
@@ -1173,7 +1183,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceDelegations() {
 		{
 			name: "query without pagination returns data properly",
 			store: func(ctx sdk.Context) {
-				suite.sk.SaveService(ctx, servicestypes.Service{
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      1,
 					Address: servicestypes.GetServiceAddress(1).String(),
 					Tokens: sdk.NewCoins(
@@ -1183,8 +1193,9 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceDelegations() {
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
@@ -1234,7 +1245,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceDelegations() {
 		{
 			name: "query with pagination returns data properly",
 			store: func(ctx sdk.Context) {
-				suite.sk.SaveService(ctx, servicestypes.Service{
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      1,
 					Address: servicestypes.GetServiceAddress(1).String(),
 					Tokens: sdk.NewCoins(
@@ -1244,8 +1255,9 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceDelegations() {
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
@@ -1316,7 +1328,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceDelegation() {
 		{
 			name: "not found delegation returns error",
 			store: func(ctx sdk.Context) {
-				suite.sk.SaveService(ctx, servicestypes.Service{
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      1,
 					Address: servicestypes.GetServiceAddress(1).String(),
 					Tokens: sdk.NewCoins(
@@ -1326,6 +1338,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceDelegation() {
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 			},
 			request: types.NewQueryServiceDelegationRequest(
 				1,
@@ -1336,7 +1349,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceDelegation() {
 		{
 			name: "found delegation is returned properly",
 			store: func(ctx sdk.Context) {
-				suite.sk.SaveService(ctx, servicestypes.Service{
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      1,
 					Address: servicestypes.GetServiceAddress(1).String(),
 					Tokens: sdk.NewCoins(
@@ -1346,8 +1359,9 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceDelegation() {
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					sdk.NewDecCoins(
@@ -1417,11 +1431,12 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceUnbondingDelegations() {
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				}
-				suite.sk.SaveService(ctx, service)
+				err := suite.sk.SaveService(ctx, service)
+				suite.Require().NoError(err)
 
-				_, err := suite.k.SetUnbondingDelegationEntry(ctx,
+				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &service,
+						Target:                   service,
 						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 						BuildUnbondingDelegation: types.NewServiceUnbondingDelegation,
 					},
@@ -1433,7 +1448,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceUnbondingDelegations() {
 
 				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &service,
+						Target:                   service,
 						Delegator:                "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 						BuildUnbondingDelegation: types.NewServiceUnbondingDelegation,
 					},
@@ -1477,11 +1492,12 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceUnbondingDelegations() {
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				}
-				suite.sk.SaveService(ctx, service)
+				err := suite.sk.SaveService(ctx, service)
+				suite.Require().NoError(err)
 
-				_, err := suite.k.SetUnbondingDelegationEntry(ctx,
+				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &service,
+						Target:                   service,
 						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 						BuildUnbondingDelegation: types.NewServiceUnbondingDelegation,
 					},
@@ -1493,7 +1509,7 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceUnbondingDelegations() {
 
 				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &service,
+						Target:                   service,
 						Delegator:                "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 						BuildUnbondingDelegation: types.NewServiceUnbondingDelegation,
 					},
@@ -1562,7 +1578,8 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceUnbondingDelegation() {
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				}
-				suite.sk.SaveService(ctx, service)
+				err := suite.sk.SaveService(ctx, service)
+				suite.Require().NoError(err)
 			},
 			request: types.NewQueryServiceUnbondingDelegationRequest(
 				1,
@@ -1583,11 +1600,12 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceUnbondingDelegation() {
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				}
-				suite.sk.SaveService(ctx, service)
+				err := suite.sk.SaveService(ctx, service)
+				suite.Require().NoError(err)
 
-				_, err := suite.k.SetUnbondingDelegationEntry(ctx,
+				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &service,
+						Target:                   service,
 						Delegator:                "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 						BuildUnbondingDelegation: types.NewServiceUnbondingDelegation,
 					},
@@ -1793,7 +1811,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorPoolUnbondingDelegations() {
 
 				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &firstPool,
+						Target:                   firstPool,
 						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 						BuildUnbondingDelegation: types.NewPoolUnbondingDelegation,
 					},
@@ -1815,7 +1833,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorPoolUnbondingDelegations() {
 
 				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &secondPool,
+						Target:                   secondPool,
 						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 						BuildUnbondingDelegation: types.NewPoolUnbondingDelegation,
 					},
@@ -1861,7 +1879,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorPoolUnbondingDelegations() {
 
 				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &firstPool,
+						Target:                   firstPool,
 						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 						BuildUnbondingDelegation: types.NewPoolUnbondingDelegation,
 					},
@@ -1883,7 +1901,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorPoolUnbondingDelegations() {
 
 				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &secondPool,
+						Target:                   secondPool,
 						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 						BuildUnbondingDelegation: types.NewPoolUnbondingDelegation,
 					},
@@ -1942,7 +1960,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperatorDelegations() {
 		{
 			name: "query without pagination returns data properly",
 			store: func(ctx sdk.Context) {
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err := suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      1,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
 					Tokens: sdk.NewCoins(
@@ -1952,8 +1970,9 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperatorDelegations() {
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err = suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      2,
 					Address: operatorstypes.GetOperatorAddress(2).String(),
 					Tokens: sdk.NewCoins(
@@ -1963,8 +1982,9 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperatorDelegations() {
 						sdk.NewDecCoinFromDec("operators/2/utia", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
@@ -2014,7 +2034,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperatorDelegations() {
 		{
 			name: "query with pagination returns data properly",
 			store: func(ctx sdk.Context) {
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err := suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      1,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
 					Tokens: sdk.NewCoins(
@@ -2024,8 +2044,9 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperatorDelegations() {
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err = suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      2,
 					Address: operatorstypes.GetOperatorAddress(2).String(),
 					Tokens: sdk.NewCoins(
@@ -2035,8 +2056,9 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperatorDelegations() {
 						sdk.NewDecCoinFromDec("operators/2/utia", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
@@ -2117,11 +2139,12 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperatorUnbondingDelegations(
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				}
-				suite.ok.SaveOperator(ctx, firstOperator)
+				err := suite.ok.SaveOperator(ctx, firstOperator)
+				suite.Require().NoError(err)
 
-				_, err := suite.k.SetUnbondingDelegationEntry(ctx,
+				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &firstOperator,
+						Target:                   firstOperator,
 						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 						BuildUnbondingDelegation: types.NewOperatorUnbondingDelegation,
 					},
@@ -2141,12 +2164,12 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperatorUnbondingDelegations(
 						sdk.NewDecCoinFromDec("operators/2/utia", sdkmath.LegacyNewDec(150)),
 					),
 				}
-				suite.ok.SaveOperator(ctx, secondOperator)
+				err = suite.ok.SaveOperator(ctx, secondOperator)
 				suite.Require().NoError(err)
 
 				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &secondOperator,
+						Target:                   secondOperator,
 						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 						BuildUnbondingDelegation: types.NewOperatorUnbondingDelegation,
 					},
@@ -2190,11 +2213,12 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperatorUnbondingDelegations(
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				}
-				suite.ok.SaveOperator(ctx, firstOperator)
+				err := suite.ok.SaveOperator(ctx, firstOperator)
+				suite.Require().NoError(err)
 
-				_, err := suite.k.SetUnbondingDelegationEntry(ctx,
+				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &firstOperator,
+						Target:                   firstOperator,
 						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 						BuildUnbondingDelegation: types.NewOperatorUnbondingDelegation,
 					},
@@ -2214,12 +2238,12 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperatorUnbondingDelegations(
 						sdk.NewDecCoinFromDec("operators/2/utia", sdkmath.LegacyNewDec(150)),
 					),
 				}
-				suite.ok.SaveOperator(ctx, secondOperator)
+				err = suite.ok.SaveOperator(ctx, secondOperator)
 				suite.Require().NoError(err)
 
 				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &secondOperator,
+						Target:                   secondOperator,
 						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 						BuildUnbondingDelegation: types.NewOperatorUnbondingDelegation,
 					},
@@ -2278,7 +2302,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServiceDelegations() {
 		{
 			name: "query without pagination returns data properly",
 			store: func(ctx sdk.Context) {
-				suite.sk.SaveService(ctx, servicestypes.Service{
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      1,
 					Address: servicestypes.GetServiceAddress(1).String(),
 					Tokens: sdk.NewCoins(
@@ -2288,8 +2312,9 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServiceDelegations() {
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				suite.sk.SaveService(ctx, servicestypes.Service{
+				err = suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      2,
 					Address: servicestypes.GetServiceAddress(2).String(),
 					Tokens: sdk.NewCoins(
@@ -2299,8 +2324,9 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServiceDelegations() {
 						sdk.NewDecCoinFromDec("services/2/utia", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
@@ -2350,7 +2376,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServiceDelegations() {
 		{
 			name: "query with pagination returns data properly",
 			store: func(ctx sdk.Context) {
-				suite.sk.SaveService(ctx, servicestypes.Service{
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      1,
 					Address: servicestypes.GetServiceAddress(1).String(),
 					Tokens: sdk.NewCoins(
@@ -2360,8 +2386,9 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServiceDelegations() {
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				suite.sk.SaveService(ctx, servicestypes.Service{
+				err = suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      2,
 					Address: servicestypes.GetServiceAddress(2).String(),
 					Tokens: sdk.NewCoins(
@@ -2371,8 +2398,9 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServiceDelegations() {
 						sdk.NewDecCoinFromDec("services/2/utia", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
@@ -2453,11 +2481,12 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServiceUnbondingDelegations()
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				}
-				suite.sk.SaveService(ctx, firstService)
+				err := suite.sk.SaveService(ctx, firstService)
+				suite.Require().NoError(err)
 
-				_, err := suite.k.SetUnbondingDelegationEntry(ctx,
+				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &firstService,
+						Target:                   firstService,
 						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 						BuildUnbondingDelegation: types.NewServiceUnbondingDelegation,
 					},
@@ -2477,12 +2506,12 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServiceUnbondingDelegations()
 						sdk.NewDecCoinFromDec("operators/2/utia", sdkmath.LegacyNewDec(150)),
 					),
 				}
-				suite.sk.SaveService(ctx, secondService)
+				err = suite.sk.SaveService(ctx, secondService)
 				suite.Require().NoError(err)
 
 				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &secondService,
+						Target:                   secondService,
 						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 						BuildUnbondingDelegation: types.NewServiceUnbondingDelegation,
 					},
@@ -2526,11 +2555,12 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServiceUnbondingDelegations()
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				}
-				suite.sk.SaveService(ctx, firstService)
+				err := suite.sk.SaveService(ctx, firstService)
+				suite.Require().NoError(err)
 
-				_, err := suite.k.SetUnbondingDelegationEntry(ctx,
+				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &firstService,
+						Target:                   firstService,
 						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 						BuildUnbondingDelegation: types.NewServiceUnbondingDelegation,
 					},
@@ -2550,12 +2580,12 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServiceUnbondingDelegations()
 						sdk.NewDecCoinFromDec("operators/2/utia", sdkmath.LegacyNewDec(150)),
 					),
 				}
-				suite.sk.SaveService(ctx, secondService)
+				err = suite.sk.SaveService(ctx, secondService)
 				suite.Require().NoError(err)
 
 				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
 					types.UndelegationData{
-						Target:                   &secondService,
+						Target:                   secondService,
 						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 						BuildUnbondingDelegation: types.NewServiceUnbondingDelegation,
 					},
@@ -2812,7 +2842,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperators() {
 		{
 			name: "query without pagination returns data properly",
 			store: func(ctx sdk.Context) {
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err := suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      1,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
 					Tokens: sdk.NewCoins(
@@ -2822,8 +2852,9 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperators() {
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err = suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      2,
 					Address: operatorstypes.GetOperatorAddress(2).String(),
 					Tokens: sdk.NewCoins(
@@ -2833,8 +2864,9 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperators() {
 						sdk.NewDecCoinFromDec("operators/2/utia", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
@@ -2880,7 +2912,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperators() {
 		{
 			name: "query with pagination returns data properly",
 			store: func(ctx sdk.Context) {
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err := suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      1,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
 					Tokens: sdk.NewCoins(
@@ -2890,8 +2922,9 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperators() {
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err = suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      2,
 					Address: operatorstypes.GetOperatorAddress(2).String(),
 					Tokens: sdk.NewCoins(
@@ -2901,8 +2934,9 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperators() {
 						sdk.NewDecCoinFromDec("operators/2/utia", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
@@ -2976,7 +3010,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperator() {
 		{
 			name: "existing operator is returned properly",
 			store: func(ctx sdk.Context) {
-				suite.ok.SaveOperator(ctx, operatorstypes.Operator{
+				err := suite.ok.SaveOperator(ctx, operatorstypes.Operator{
 					ID:      1,
 					Address: operatorstypes.GetOperatorAddress(1).String(),
 					Tokens: sdk.NewCoins(
@@ -2986,8 +3020,9 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorOperator() {
 						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				err := suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
@@ -3042,7 +3077,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServices() {
 		{
 			name: "query without pagination returns data properly",
 			store: func(ctx sdk.Context) {
-				suite.sk.SaveService(ctx, servicestypes.Service{
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      1,
 					Address: servicestypes.GetServiceAddress(1).String(),
 					Tokens: sdk.NewCoins(
@@ -3052,8 +3087,9 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServices() {
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				suite.sk.SaveService(ctx, servicestypes.Service{
+				err = suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      2,
 					Address: servicestypes.GetServiceAddress(2).String(),
 					Tokens: sdk.NewCoins(
@@ -3063,8 +3099,9 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServices() {
 						sdk.NewDecCoinFromDec("services/2/utia", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
@@ -3110,7 +3147,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServices() {
 		{
 			name: "query with pagination returns data properly",
 			store: func(ctx sdk.Context) {
-				suite.sk.SaveService(ctx, servicestypes.Service{
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      1,
 					Address: servicestypes.GetServiceAddress(1).String(),
 					Tokens: sdk.NewCoins(
@@ -3120,8 +3157,9 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServices() {
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				suite.sk.SaveService(ctx, servicestypes.Service{
+				err = suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      2,
 					Address: servicestypes.GetServiceAddress(2).String(),
 					Tokens: sdk.NewCoins(
@@ -3131,8 +3169,9 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorServices() {
 						sdk.NewDecCoinFromDec("services/2/utia", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
@@ -3206,7 +3245,7 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorService() {
 		{
 			name: "existing service is returned properly",
 			store: func(ctx sdk.Context) {
-				suite.sk.SaveService(ctx, servicestypes.Service{
+				err := suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      1,
 					Address: servicestypes.GetServiceAddress(1).String(),
 					Tokens: sdk.NewCoins(
@@ -3216,8 +3255,9 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorService() {
 						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(150)),
 					),
 				})
+				suite.Require().NoError(err)
 
-				err := suite.k.SetDelegation(ctx, types.NewServiceDelegation(
+				err = suite.k.SetDelegation(ctx, types.NewServiceDelegation(
 					1,
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					sdk.NewDecCoins(
@@ -3273,7 +3313,8 @@ func (suite *KeeperTestSuite) TestQuerier_Params() {
 			name: "params are returned properly",
 			store: func(ctx sdk.Context) {
 				params := types.NewParams(30*24*time.Hour, []string{"uinit", "umilk"})
-				suite.k.SetParams(ctx, params)
+				err := suite.k.SetParams(ctx, params)
+				suite.Require().NoError(err)
 			},
 			request:   types.NewQueryParamsRequest(),
 			shouldErr: false,

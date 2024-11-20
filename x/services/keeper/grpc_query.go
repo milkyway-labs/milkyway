@@ -3,8 +3,6 @@ package keeper
 import (
 	"context"
 
-	"cosmossdk.io/store/prefix"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -20,8 +18,11 @@ func (k *Keeper) Service(ctx context.Context, request *types.QueryServiceRequest
 		return nil, status.Error(codes.InvalidArgument, "invalid service ID")
 	}
 
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	service, found := k.GetService(sdkCtx, request.ServiceId)
+	service, found, err := k.GetService(ctx, request.ServiceId)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
 	if !found {
 		return nil, status.Error(codes.NotFound, "service not found")
 	}
@@ -31,23 +32,13 @@ func (k *Keeper) Service(ctx context.Context, request *types.QueryServiceRequest
 
 // Services implements the Query/Services gRPC method
 func (k *Keeper) Services(ctx context.Context, request *types.QueryServicesRequest) (*types.QueryServicesResponse, error) {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-
-	store := sdkCtx.KVStore(k.storeKey)
-	servicesStore := prefix.NewStore(store, types.ServicePrefix)
-
-	var services []types.Service
-	pageRes, err := query.Paginate(servicesStore, request.Pagination, func(key []byte, value []byte) error {
-		var service types.Service
-		if err := k.cdc.Unmarshal(value, &service); err != nil {
-			return status.Error(codes.Internal, err.Error())
-		}
-
-		services = append(services, service)
-		return nil
-	})
+	services, pageRes, err := query.CollectionPaginate(ctx, k.services, request.Pagination,
+		func(key uint32, value types.Service) (types.Service, error) {
+			return value, nil
+		},
+	)
 	if err != nil {
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 	}
 
 	return &types.QueryServicesResponse{
@@ -62,16 +53,18 @@ func (k *Keeper) ServiceParams(ctx context.Context, request *types.QueryServiceP
 		return nil, status.Error(codes.InvalidArgument, "invalid service ID")
 	}
 
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-
 	// Ensure the service exists
-	_, found := k.GetService(sdkCtx, request.ServiceId)
+	_, found, err := k.GetService(ctx, request.ServiceId)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
 	if !found {
 		return nil, status.Error(codes.NotFound, "service not found")
 	}
 
 	// Get the service params
-	serviceParams, err := k.GetServiceParams(sdkCtx, request.ServiceId)
+	serviceParams, err := k.GetServiceParams(ctx, request.ServiceId)
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +74,10 @@ func (k *Keeper) ServiceParams(ctx context.Context, request *types.QueryServiceP
 
 // Params implements the Query/Params gRPC method
 func (k *Keeper) Params(ctx context.Context, _ *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	params := k.GetParams(sdkCtx)
+	params, err := k.GetParams(ctx)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
 	return &types.QueryParamsResponse{Params: params}, nil
 }

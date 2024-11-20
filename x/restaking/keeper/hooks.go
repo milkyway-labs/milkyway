@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"context"
 
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 )
@@ -9,7 +9,7 @@ import (
 var _ types.RestakingHooks = &Keeper{}
 
 // BeforePoolDelegationCreated implements types.RestakingHooks
-func (k *Keeper) BeforePoolDelegationCreated(ctx sdk.Context, poolID uint32, delegator string) error {
+func (k *Keeper) BeforePoolDelegationCreated(ctx context.Context, poolID uint32, delegator string) error {
 	if k.hooks != nil {
 		return k.hooks.BeforePoolDelegationCreated(ctx, poolID, delegator)
 	}
@@ -17,7 +17,7 @@ func (k *Keeper) BeforePoolDelegationCreated(ctx sdk.Context, poolID uint32, del
 }
 
 // BeforePoolDelegationSharesModified implements types.RestakingHooks
-func (k *Keeper) BeforePoolDelegationSharesModified(ctx sdk.Context, poolID uint32, delegator string) error {
+func (k *Keeper) BeforePoolDelegationSharesModified(ctx context.Context, poolID uint32, delegator string) error {
 	if k.hooks != nil {
 		return k.hooks.BeforePoolDelegationSharesModified(ctx, poolID, delegator)
 	}
@@ -25,7 +25,7 @@ func (k *Keeper) BeforePoolDelegationSharesModified(ctx sdk.Context, poolID uint
 }
 
 // AfterPoolDelegationModified implements types.RestakingHooks
-func (k *Keeper) AfterPoolDelegationModified(ctx sdk.Context, poolID uint32, delegator string) error {
+func (k *Keeper) AfterPoolDelegationModified(ctx context.Context, poolID uint32, delegator string) error {
 	if k.hooks != nil {
 		return k.hooks.AfterPoolDelegationModified(ctx, poolID, delegator)
 	}
@@ -35,7 +35,7 @@ func (k *Keeper) AfterPoolDelegationModified(ctx sdk.Context, poolID uint32, del
 // --------------------------------------------------------------------------------------------------------------------
 
 // BeforeOperatorDelegationCreated implements types.RestakingHooks
-func (k *Keeper) BeforeOperatorDelegationCreated(ctx sdk.Context, operatorID uint32, delegator string) error {
+func (k *Keeper) BeforeOperatorDelegationCreated(ctx context.Context, operatorID uint32, delegator string) error {
 	if k.hooks != nil {
 		return k.hooks.BeforeOperatorDelegationCreated(ctx, operatorID, delegator)
 	}
@@ -43,7 +43,7 @@ func (k *Keeper) BeforeOperatorDelegationCreated(ctx sdk.Context, operatorID uin
 }
 
 // BeforeOperatorDelegationSharesModified implements types.RestakingHooks
-func (k *Keeper) BeforeOperatorDelegationSharesModified(ctx sdk.Context, operatorID uint32, delegator string) error {
+func (k *Keeper) BeforeOperatorDelegationSharesModified(ctx context.Context, operatorID uint32, delegator string) error {
 	if k.hooks != nil {
 		return k.hooks.BeforeOperatorDelegationSharesModified(ctx, operatorID, delegator)
 	}
@@ -51,7 +51,7 @@ func (k *Keeper) BeforeOperatorDelegationSharesModified(ctx sdk.Context, operato
 }
 
 // AfterOperatorDelegationModified implements types.RestakingHooks
-func (k *Keeper) AfterOperatorDelegationModified(ctx sdk.Context, operatorID uint32, delegator string) error {
+func (k *Keeper) AfterOperatorDelegationModified(ctx context.Context, operatorID uint32, delegator string) error {
 	if k.hooks != nil {
 		return k.hooks.AfterOperatorDelegationModified(ctx, operatorID, delegator)
 	}
@@ -61,7 +61,7 @@ func (k *Keeper) AfterOperatorDelegationModified(ctx sdk.Context, operatorID uin
 // --------------------------------------------------------------------------------------------------------------------
 
 // BeforeServiceDelegationCreated implements types.RestakingHooks
-func (k *Keeper) BeforeServiceDelegationCreated(ctx sdk.Context, serviceID uint32, delegator string) error {
+func (k *Keeper) BeforeServiceDelegationCreated(ctx context.Context, serviceID uint32, delegator string) error {
 	if k.hooks != nil {
 		return k.hooks.BeforeServiceDelegationCreated(ctx, serviceID, delegator)
 	}
@@ -69,7 +69,7 @@ func (k *Keeper) BeforeServiceDelegationCreated(ctx sdk.Context, serviceID uint3
 }
 
 // BeforeServiceDelegationSharesModified implements types.RestakingHooks
-func (k *Keeper) BeforeServiceDelegationSharesModified(ctx sdk.Context, serviceID uint32, delegator string) error {
+func (k *Keeper) BeforeServiceDelegationSharesModified(ctx context.Context, serviceID uint32, delegator string) error {
 	if k.hooks != nil {
 		return k.hooks.BeforeServiceDelegationSharesModified(ctx, serviceID, delegator)
 	}
@@ -77,7 +77,7 @@ func (k *Keeper) BeforeServiceDelegationSharesModified(ctx sdk.Context, serviceI
 }
 
 // AfterServiceDelegationModified implements types.RestakingHooks
-func (k *Keeper) AfterServiceDelegationModified(ctx sdk.Context, serviceID uint32, delegator string) error {
+func (k *Keeper) AfterServiceDelegationModified(ctx context.Context, serviceID uint32, delegator string) error {
 	if k.hooks != nil {
 		return k.hooks.AfterServiceDelegationModified(ctx, serviceID, delegator)
 	}
@@ -87,7 +87,7 @@ func (k *Keeper) AfterServiceDelegationModified(ctx sdk.Context, serviceID uint3
 // --------------------------------------------------------------------------------------------------------------------
 
 // BeforePoolDelegationRemoved implements types.RestakingHooks
-func (k *Keeper) BeforePoolDelegationRemoved(ctx sdk.Context, poolID uint32, delegator string) error {
+func (k *Keeper) BeforePoolDelegationRemoved(ctx context.Context, poolID uint32, delegator string) error {
 	if k.hooks != nil {
 		return k.hooks.BeforePoolDelegationRemoved(ctx, poolID, delegator)
 	}
@@ -95,7 +95,7 @@ func (k *Keeper) BeforePoolDelegationRemoved(ctx sdk.Context, poolID uint32, del
 }
 
 // BeforeOperatorDelegationRemoved implements types.RestakingHooks
-func (k *Keeper) BeforeOperatorDelegationRemoved(ctx sdk.Context, operatorID uint32, delegator string) error {
+func (k *Keeper) BeforeOperatorDelegationRemoved(ctx context.Context, operatorID uint32, delegator string) error {
 	if k.hooks != nil {
 		return k.hooks.BeforeOperatorDelegationRemoved(ctx, operatorID, delegator)
 	}
@@ -103,7 +103,7 @@ func (k *Keeper) BeforeOperatorDelegationRemoved(ctx sdk.Context, operatorID uin
 }
 
 // BeforeServiceDelegationRemoved implements types.RestakingHooks
-func (k *Keeper) BeforeServiceDelegationRemoved(ctx sdk.Context, serviceID uint32, delegator string) error {
+func (k *Keeper) BeforeServiceDelegationRemoved(ctx context.Context, serviceID uint32, delegator string) error {
 	if k.hooks != nil {
 		return k.hooks.BeforeServiceDelegationRemoved(ctx, serviceID, delegator)
 	}
@@ -111,7 +111,7 @@ func (k *Keeper) BeforeServiceDelegationRemoved(ctx sdk.Context, serviceID uint3
 }
 
 // AfterUnbondingInitiated implements types.RestakingHooks
-func (k *Keeper) AfterUnbondingInitiated(ctx sdk.Context, unbondingDelegationID uint64) error {
+func (k *Keeper) AfterUnbondingInitiated(ctx context.Context, unbondingDelegationID uint64) error {
 	if k.hooks != nil {
 		return k.hooks.AfterUnbondingInitiated(ctx, unbondingDelegationID)
 	}
@@ -119,7 +119,7 @@ func (k *Keeper) AfterUnbondingInitiated(ctx sdk.Context, unbondingDelegationID 
 }
 
 // AfterUserPreferencesModified implements types.RestakingHooks
-func (k *Keeper) AfterUserPreferencesModified(ctx sdk.Context, userAddress string, oldPreferences, newPreferences types.UserPreferences) error {
+func (k *Keeper) AfterUserPreferencesModified(ctx context.Context, userAddress string, oldPreferences, newPreferences types.UserPreferences) error {
 	if k.hooks != nil {
 		return k.hooks.AfterUserPreferencesModified(ctx, userAddress, oldPreferences, newPreferences)
 	}

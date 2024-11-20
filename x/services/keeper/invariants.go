@@ -27,7 +27,7 @@ func ValidServicesInvariant(k *Keeper) sdk.Invariant {
 		}
 
 		var invalidServices []types.Service
-		k.IterateServices(ctx, func(service types.Service) (stop bool) {
+		err = k.IterateServices(ctx, func(service types.Service) (stop bool, err error) {
 			invalid := false
 
 			// Make sure the service ID is never greater or equal to the next service ID
@@ -45,8 +45,11 @@ func ValidServicesInvariant(k *Keeper) sdk.Invariant {
 				invalidServices = append(invalidServices, service)
 			}
 
-			return false
+			return false, nil
 		})
+		if err != nil {
+			panic(err)
+		}
 
 		return sdk.FormatInvariant(types.ModuleName, "invalid services",
 			fmt.Sprintf("the following services are invalid:\n %s", formatOutputServices(invalidServices)),

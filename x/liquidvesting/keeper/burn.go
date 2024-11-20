@@ -1,12 +1,14 @@
 package keeper
 
 import (
+	"context"
 	"fmt"
 	"slices"
 	"time"
 
 	"cosmossdk.io/errors"
 	storetypes "cosmossdk.io/store/types"
+	"github.com/cosmos/cosmos-sdk/runtime"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
@@ -14,7 +16,7 @@ import (
 
 // IsBurner tells if a user have the permissions to burn tokens
 // from a user's balance.
-func (k *Keeper) IsBurner(ctx sdk.Context, user sdk.AccAddress) (bool, error) {
+func (k *Keeper) IsBurner(ctx context.Context, user sdk.AccAddress) (bool, error) {
 	params, err := k.GetParams(ctx)
 	if err != nil {
 		return false, err
@@ -32,7 +34,7 @@ func (k *Keeper) IsBurner(ctx sdk.Context, user sdk.AccAddress) (bool, error) {
 // from the user's balance.
 // NOTE: If the coins are restaked they will be unstaked first.
 func (k *Keeper) BurnVestedRepresentation(
-	ctx sdk.Context,
+	ctx context.Context,
 	accAddress sdk.AccAddress,
 	amount sdk.Coins,
 ) error {
@@ -79,9 +81,13 @@ func (k *Keeper) BurnVestedRepresentation(
 		if err != nil {
 			return err
 		}
+
 		// Store in the burn coins queue that we have to burn those coins once
 		// they are undelegated.
-		k.InsertBurnCoinsToUnbondingQueue(ctx, types.NewBurnCoins(stringAddr, completionTime, toUnbondCoins))
+		err = k.InsertBurnCoinsToUnbondingQueue(ctx, types.NewBurnCoins(stringAddr, completionTime, toUnbondCoins))
+		if err != nil {
+			return err
+		}
 	}
 
 	if !liquidCoinsIsZero {
@@ -106,47 +112,58 @@ func (k *Keeper) BurnVestedRepresentation(
 
 // GetBurnCoinsQueueTimeSlice gets a specific burn coins queue timeslice. A timeslice
 // is a slice of BurnCoins corresponding to the BurnCoins that needs to be burned at a certain time.
-func (k *Keeper) GetBurnCoinsQueueTimeSlice(ctx sdk.Context, timestamp time.Time) (dvPairs []types.BurnCoins) {
-	store := ctx.KVStore(k.storeKey)
+func (k *Keeper) GetBurnCoinsQueueTimeSlice(ctx context.Context, timestamp time.Time) (dvPairs []types.BurnCoins, err error) {
+	store := k.storeService.OpenKVStore(ctx)
 
-	bz := store.Get(types.GetBurnCoinsQueueTimeKey(timestamp))
+	bz, err := store.Get(types.GetBurnCoinsQueueTimeKey(timestamp))
+	if err != nil {
+		return nil, err
+	}
+
 	if bz == nil {
-		return []types.BurnCoins{}
+		return []types.BurnCoins{}, nil
 	}
 
 	pairs := types.BurnCoinsList{}
 	k.cdc.MustUnmarshal(bz, &pairs)
 
-	return pairs.Data
+	return pairs.Data, nil
 }
 
 // SetBurnCoinsQueueTimeSlice sets a specific burn coins queue timeslice.
-func (k *Keeper) SetBurnCoinsQueueTimeSlice(ctx sdk.Context, timestamp time.Time, keys []types.BurnCoins) {
-	store := ctx.KVStore(k.storeKey)
+func (k *Keeper) SetBurnCoinsQueueTimeSlice(ctx context.Context, timestamp time.Time, keys []types.BurnCoins) error {
+	store := k.storeService.OpenKVStore(ctx)
 	bz := k.cdc.MustMarshal(&types.BurnCoinsList{Data: keys})
-	store.Set(types.GetBurnCoinsQueueTimeKey(timestamp), bz)
+	return store.Set(types.GetBurnCoinsQueueTimeKey(timestamp), bz)
 }
 
 // InsertBurnCoinsToUnbondingQueue inserts an BurnCoin to the appropriate timeslice
 // in the burn coins queue.
-func (k *Keeper) InsertBurnCoinsToUnbondingQueue(ctx sdk.Context, burnCoins types.BurnCoins) {
+func (k *Keeper) InsertBurnCoinsToUnbondingQueue(ctx context.Context, burnCoins types.BurnCoins) error {
 	// Get the existing list of coins to be burned
-	timeSlice := k.GetBurnCoinsQueueTimeSlice(ctx, burnCoins.CompletionTime)
+	timeSlice, err := k.GetBurnCoinsQueueTimeSlice(ctx, burnCoins.CompletionTime)
+	if err != nil {
+		return err
+	}
 
 	// Add the new coin
 	timeSlice = append(timeSlice, burnCoins)
-	k.SetBurnCoinsQueueTimeSlice(ctx, burnCoins.CompletionTime, timeSlice)
+	return k.SetBurnCoinsQueueTimeSlice(ctx, burnCoins.CompletionTime, timeSlice)
 }
 
 // BurnCoinsQueueIterator returns all the BurnCoins from time 0 until endTime.
-func (k *Keeper) BurnCoinsUnbondingQueueIterator(ctx sdk.Context, endTime time.Time) storetypes.Iterator {
-	store := ctx.KVStore(k.storeKey)
+func (k *Keeper) BurnCoinsUnbondingQueueIterator(ctx context.Context, endTime time.Time) (storetypes.Iterator, error) {
+	store := k.storeService.OpenKVStore(ctx)
 	return store.Iterator(types.BurnCoinsQueueKey, storetypes.InclusiveEndBytes(types.GetBurnCoinsQueueTimeKey(endTime)))
 }
 
 // IterateBurnCoinsUnbondingQueue iterates all the BurnCoins from time 0 until endTime.
-func (k *Keeper) IterateBurnCoinsUnbondingQueue(ctx sdk.Context, endTime time.Time, iterF func(burnCoin types.BurnCoins) (bool, error)) error {
-	iter := k.BurnCoinsUnbondingQueueIterator(ctx, endTime)
+func (k *Keeper) IterateBurnCoinsUnbondingQueue(ctx context.Context, endTime time.Time, iterF func(burnCoin types.BurnCoins) (bool, error)) error {
+	iter, err := k.BurnCoinsUnbondingQueueIterator(ctx, endTime)
+	if err != nil {
+		return err
+	}
+
 	defer iter.Close()
 
 	for ; iter.Valid(); iter.Next() {
@@ -166,23 +183,25 @@ func (k *Keeper) IterateBurnCoinsUnbondingQueue(ctx sdk.Context, endTime time.Ti
 
 // GetUnbondedCoinsFromQueue returns a concatenated list of all the timeslices inclusively previous to
 // endTime.
-func (k *Keeper) GetUnbondedCoinsFromQueue(ctx sdk.Context, endTime time.Time) []types.BurnCoins {
+func (k *Keeper) GetUnbondedCoinsFromQueue(ctx context.Context, endTime time.Time) ([]types.BurnCoins, error) {
 	var burnCoins []types.BurnCoins
-	k.IterateBurnCoinsUnbondingQueue(ctx, endTime, func(burnCoin types.BurnCoins) (bool, error) {
+	err := k.IterateBurnCoinsUnbondingQueue(ctx, endTime, func(burnCoin types.BurnCoins) (bool, error) {
 		burnCoins = append(burnCoins, burnCoin)
 		return false, nil
 	})
-
-	return burnCoins
+	return burnCoins, err
 }
 
 // DequeueAllBurnCoinsFromUnbondingQueue returns a concatenated list of all the timeslices inclusively previous to
 // currTime, and deletes the timeslices from the queue.
-func (k *Keeper) DequeueAllBurnCoinsFromUnbondingQueue(ctx sdk.Context, currTime time.Time) (burnCoins []types.BurnCoins) {
-	store := ctx.KVStore(k.storeKey)
+func (k *Keeper) DequeueAllBurnCoinsFromUnbondingQueue(ctx context.Context, currTime time.Time) (burnCoins []types.BurnCoins, err error) {
+	store := k.storeService.OpenKVStore(ctx)
 
 	// Get an iterator for all timeslices from time 0 until the current BlockHeader time
-	iter := k.BurnCoinsUnbondingQueueIterator(ctx, currTime)
+	iter, err := k.BurnCoinsUnbondingQueueIterator(ctx, currTime)
+	if err != nil {
+		return nil, err
+	}
 	defer iter.Close()
 
 	for ; iter.Valid(); iter.Next() {
@@ -192,16 +211,20 @@ func (k *Keeper) DequeueAllBurnCoinsFromUnbondingQueue(ctx sdk.Context, currTime
 
 		burnCoins = append(burnCoins, timeslice.Data...)
 
-		store.Delete(iter.Key())
+		err = store.Delete(iter.Key())
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	return burnCoins
+	return burnCoins, nil
 }
 
 // GetAllBurnCoins returns all the coins that are scheduled to be burned.
-func (k *Keeper) GetAllBurnCoins(ctx sdk.Context) []types.BurnCoins {
-	store := ctx.KVStore(k.storeKey)
-	iterator := storetypes.KVStorePrefixIterator(store, types.BurnCoinsQueueKey)
+func (k *Keeper) GetAllBurnCoins(ctx context.Context) []types.BurnCoins {
+	store := k.storeService.OpenKVStore(ctx)
+
+	iterator := storetypes.KVStorePrefixIterator(runtime.KVStoreAdapter(store), types.BurnCoinsQueueKey)
 	defer iterator.Close()
 
 	var burnCoins []types.BurnCoins

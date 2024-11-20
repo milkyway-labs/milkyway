@@ -1,10 +1,10 @@
 package keeper
 
 import (
+	"context"
 	"fmt"
 
 	"cosmossdk.io/collections"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 )
@@ -22,7 +22,7 @@ func (k *Keeper) OperatorsHooks() operatorstypes.OperatorsHooks {
 // ------------------------------------------------------------------------------
 
 // AfterOperatorDeleted implements types.OperatorsHooks.
-func (o *OperatorsHooks) AfterOperatorDeleted(ctx sdk.Context, operatorID uint32) error {
+func (o *OperatorsHooks) AfterOperatorDeleted(ctx context.Context, operatorID uint32) error {
 	// After the operator has been deleted
 	// we remove the data that we keep in the x/restaking module that are linked
 	// to the operator.
@@ -55,7 +55,7 @@ func (o *OperatorsHooks) AfterOperatorDeleted(ctx sdk.Context, operatorID uint32
 	return nil
 }
 
-func (o *OperatorsHooks) removeOperatorFromServicesAllowList(ctx sdk.Context, operatorID uint32) error {
+func (o *OperatorsHooks) removeOperatorFromServicesAllowList(ctx context.Context, operatorID uint32) error {
 	// Get all the keys to remove
 	var toRemoveKeys []collections.Pair[uint32, uint32]
 	err := o.IterateAllServicesAllowedOperators(ctx, func(serviceID uint32, oID uint32) (stop bool, err error) {
@@ -85,10 +85,15 @@ func (o *OperatorsHooks) removeOperatorFromServicesAllowList(ctx sdk.Context, op
 			return err
 		}
 		if !isConfigured {
-			service, found := o.servicesKeeper.GetService(ctx, serviceID)
+			service, found, err := o.servicesKeeper.GetService(ctx, serviceID)
+			if err != nil {
+				return err
+			}
+
 			if !found {
 				return fmt.Errorf("service %d not found", serviceID)
 			}
+
 			if !service.IsActive() {
 				// The service is not active, nothing to do
 				continue
@@ -96,7 +101,7 @@ func (o *OperatorsHooks) removeOperatorFromServicesAllowList(ctx sdk.Context, op
 
 			// The service is active and its operators allow list has become
 			// empty, deactivate the service.
-			err := o.servicesKeeper.DeactivateService(ctx, serviceID)
+			err = o.servicesKeeper.DeactivateService(ctx, serviceID)
 			if err != nil {
 				return err
 			}
@@ -107,21 +112,21 @@ func (o *OperatorsHooks) removeOperatorFromServicesAllowList(ctx sdk.Context, op
 }
 
 // AfterOperatorInactivatingCompleted implements types.OperatorsHooks.
-func (o *OperatorsHooks) AfterOperatorInactivatingCompleted(ctx sdk.Context, operatorID uint32) error {
+func (o *OperatorsHooks) AfterOperatorInactivatingCompleted(ctx context.Context, operatorID uint32) error {
 	return nil
 }
 
 // AfterOperatorInactivatingStarted implements types.OperatorsHooks.
-func (o *OperatorsHooks) AfterOperatorInactivatingStarted(ctx sdk.Context, operatorID uint32) error {
+func (o *OperatorsHooks) AfterOperatorInactivatingStarted(ctx context.Context, operatorID uint32) error {
 	return nil
 }
 
 // AfterOperatorReactivated implements types.OperatorsHooks.
-func (o *OperatorsHooks) AfterOperatorReactivated(ctx sdk.Context, operatorID uint32) error {
+func (o *OperatorsHooks) AfterOperatorReactivated(ctx context.Context, operatorID uint32) error {
 	return nil
 }
 
 // AfterOperatorRegistered implements types.OperatorsHooks.
-func (o *OperatorsHooks) AfterOperatorRegistered(ctx sdk.Context, operatorID uint32) error {
+func (o *OperatorsHooks) AfterOperatorRegistered(ctx context.Context, operatorID uint32) error {
 	return nil
 }

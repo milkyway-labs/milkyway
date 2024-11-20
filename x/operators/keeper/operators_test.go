@@ -11,30 +11,32 @@ import (
 
 func (suite *KeeperTestSuite) TestKeeper_SetNextOperatorID() {
 	testCases := []struct {
-		name  string
-		store func(ctx sdk.Context)
-		id    uint32
-		check func(ctx sdk.Context)
+		name      string
+		store     func(ctx sdk.Context)
+		id        uint32
+		shouldErr bool
+		check     func(ctx sdk.Context)
 	}{
 		{
 			name: "next operator id is saved correctly",
 			id:   1,
 			check: func(ctx sdk.Context) {
-				store := ctx.KVStore(suite.storeKey)
-				operatorIDBz := store.Get(types.NextOperatorIDKey)
-				suite.Require().Equal(uint32(1), types.GetOperatorIDFromBytes(operatorIDBz))
+				nextOperatorID, err := suite.k.GetNextOperatorID(ctx)
+				suite.Require().NoError(err)
+				suite.Require().EqualValues(1, nextOperatorID)
 			},
 		},
 		{
 			name: "next operator id is overridden properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextOperatorID(ctx, 1)
+				err := suite.k.SetNextOperatorID(ctx, 1)
+				suite.Require().NoError(err)
 			},
 			id: 2,
 			check: func(ctx sdk.Context) {
-				store := ctx.KVStore(suite.storeKey)
-				operatorIDBz := store.Get(types.NextOperatorIDKey)
-				suite.Require().Equal(uint32(2), types.GetOperatorIDFromBytes(operatorIDBz))
+				nextOperatorID, err := suite.k.GetNextOperatorID(ctx)
+				suite.Require().NoError(err)
+				suite.Require().EqualValues(2, nextOperatorID)
 			},
 		},
 	}
@@ -42,12 +44,20 @@ func (suite *KeeperTestSuite) TestKeeper_SetNextOperatorID() {
 	for _, tc := range testCases {
 		tc := tc
 		suite.Run(tc.name, func() {
+			suite.SetupTest()
+
 			ctx, _ := suite.ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
 			}
 
-			suite.k.SetNextOperatorID(ctx, tc.id)
+			err := suite.k.SetNextOperatorID(ctx, tc.id)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+			}
+
 			if tc.check != nil {
 				tc.check(ctx)
 			}
@@ -63,21 +73,25 @@ func (suite *KeeperTestSuite) TestKeeper_GetNextOperatorID() {
 		expNext   uint32
 	}{
 		{
-			name:      "non existing next operator returns error",
-			shouldErr: true,
+			name:      "non existing next service returns 1",
+			shouldErr: false,
+			expNext:   1,
 		},
 		{
 			name: "exiting next operator id is returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextOperatorID(ctx, 1)
+				err := suite.k.SetNextOperatorID(ctx, 2)
+				suite.Require().NoError(err)
 			},
-			expNext: 1,
+			expNext: 2,
 		},
 	}
 
 	for _, tc := range testCases {
 		tc := tc
 		suite.Run(tc.name, func() {
+			suite.SetupTest()
+
 			ctx, _ := suite.ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
@@ -109,13 +123,18 @@ func (suite *KeeperTestSuite) TestKeeper_CreateOperator() {
 			name: "operator is registered correctly",
 			store: func(ctx sdk.Context) {
 				// Set the registration fee
-				suite.k.SetParams(ctx, types.NewParams(
+				err := suite.k.SetParams(ctx, types.NewParams(
 					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),
 					24*time.Hour,
 				))
+				suite.Require().NoError(err)
 
 				// Fund the user account
-				suite.fundAccount(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(200_000_000))))
+				suite.fundAccount(
+					ctx,
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(200_000_000))),
+				)
 			},
 			operator: types.NewOperator(
 				1,
@@ -128,7 +147,8 @@ func (suite *KeeperTestSuite) TestKeeper_CreateOperator() {
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				// Make sure the operator has been stored
-				stored, found := suite.k.GetOperator(ctx, 1)
+				stored, found, err := suite.k.GetOperator(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
@@ -148,6 +168,8 @@ func (suite *KeeperTestSuite) TestKeeper_CreateOperator() {
 	for _, tc := range testCases {
 		tc := tc
 		suite.Run(tc.name, func() {
+			suite.SetupTest()
+
 			ctx, _ := suite.ctx.CacheContext()
 			if tc.setup != nil {
 				tc.setup()
@@ -176,12 +198,14 @@ func (suite *KeeperTestSuite) TestKeeper_GetOperator() {
 		setup       func()
 		store       func(ctx sdk.Context)
 		operatorID  uint32
+		shouldErr   bool
 		expFound    bool
 		expOperator types.Operator
 	}{
 		{
 			name:       "non existing operator returns false",
 			operatorID: 1,
+			shouldErr:  false,
 			expFound:   false,
 		},
 		{
@@ -199,6 +223,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetOperator() {
 			},
 			operatorID: 1,
 			expFound:   true,
+			shouldErr:  false,
 			expOperator: types.NewOperator(
 				1,
 				types.OPERATOR_STATUS_ACTIVE,
@@ -213,6 +238,8 @@ func (suite *KeeperTestSuite) TestKeeper_GetOperator() {
 	for _, tc := range testCases {
 		tc := tc
 		suite.Run(tc.name, func() {
+			suite.SetupTest()
+
 			ctx, _ := suite.ctx.CacheContext()
 			if tc.setup != nil {
 				tc.setup()
@@ -221,9 +248,16 @@ func (suite *KeeperTestSuite) TestKeeper_GetOperator() {
 				tc.store(ctx)
 			}
 
-			operator, found := suite.k.GetOperator(ctx, tc.operatorID)
-			suite.Require().Equal(tc.expFound, found)
-			suite.Require().Equal(tc.expOperator, operator)
+			operator, found, err := suite.k.GetOperator(ctx, tc.operatorID)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expFound, found)
+				if tc.expFound {
+					suite.Require().Equal(tc.expOperator, operator)
+				}
+			}
 		})
 	}
 }
@@ -249,7 +283,8 @@ func (suite *KeeperTestSuite) TestKeeper_SaveOperator() {
 			),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				stored, found := suite.k.GetOperator(ctx, 1)
+				stored, found, err := suite.k.GetOperator(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
@@ -284,7 +319,8 @@ func (suite *KeeperTestSuite) TestKeeper_SaveOperator() {
 			),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				stored, found := suite.k.GetOperator(ctx, 1)
+				stored, found, err := suite.k.GetOperator(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
@@ -301,6 +337,8 @@ func (suite *KeeperTestSuite) TestKeeper_SaveOperator() {
 	for _, tc := range testCases {
 		tc := tc
 		suite.Run(tc.name, func() {
+			suite.SetupTest()
+
 			ctx, _ := suite.ctx.CacheContext()
 			if tc.setup != nil {
 				tc.setup()
@@ -336,10 +374,11 @@ func (suite *KeeperTestSuite) TestKeeper_StartOperatorInactivation() {
 		{
 			name: "inactivating operator returns error",
 			store: func(ctx sdk.Context) {
-				suite.k.SetParams(ctx, types.NewParams(
+				err := suite.k.SetParams(ctx, types.NewParams(
 					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),
 					12*time.Hour,
 				))
+				suite.Require().NoError(err)
 			},
 			operator: types.NewOperator(
 				1,
@@ -354,10 +393,11 @@ func (suite *KeeperTestSuite) TestKeeper_StartOperatorInactivation() {
 		{
 			name: "inactive operator returns error",
 			store: func(ctx sdk.Context) {
-				suite.k.SetParams(ctx, types.NewParams(
+				err := suite.k.SetParams(ctx, types.NewParams(
 					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),
 					12*time.Hour,
 				))
+				suite.Require().NoError(err)
 			},
 			operator: types.NewOperator(
 				1,
@@ -375,10 +415,11 @@ func (suite *KeeperTestSuite) TestKeeper_StartOperatorInactivation() {
 				return ctx.WithBlockTime(time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC))
 			},
 			store: func(ctx sdk.Context) {
-				suite.k.SetParams(ctx, types.NewParams(
+				err := suite.k.SetParams(ctx, types.NewParams(
 					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),
 					12*time.Hour,
 				))
+				suite.Require().NoError(err)
 			},
 			operator: types.NewOperator(
 				1,
@@ -390,7 +431,8 @@ func (suite *KeeperTestSuite) TestKeeper_StartOperatorInactivation() {
 			),
 			check: func(ctx sdk.Context) {
 				// Make sure the operator status has been updated
-				stored, found := suite.k.GetOperator(ctx, 1)
+				stored, found, err := suite.k.GetOperator(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
@@ -418,6 +460,8 @@ func (suite *KeeperTestSuite) TestKeeper_StartOperatorInactivation() {
 	for _, tc := range testCases {
 		tc := tc
 		suite.Run(tc.name, func() {
+			suite.SetupTest()
+
 			ctx, _ := suite.ctx.CacheContext()
 			if tc.setup != nil {
 				tc.setup()
@@ -459,12 +503,13 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteOperatorInactivation() {
 				return ctx.WithBlockTime(time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC))
 			},
 			store: func(ctx sdk.Context) {
-				suite.k.SetParams(ctx, types.NewParams(
+				err := suite.k.SetParams(ctx, types.NewParams(
 					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),
 					12*time.Hour,
 				))
+				suite.Require().NoError(err)
 
-				err := suite.k.SaveOperatorParams(ctx, 1, types.NewOperatorParams(
+				err = suite.k.SaveOperatorParams(ctx, 1, types.NewOperatorParams(
 					sdkmath.LegacyNewDec(100),
 				))
 				suite.Require().NoError(err)
@@ -479,7 +524,8 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteOperatorInactivation() {
 			),
 			check: func(ctx sdk.Context) {
 				// Make sure the operator status has been updated
-				stored, found := suite.k.GetOperator(ctx, 1)
+				stored, found, err := suite.k.GetOperator(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
@@ -508,6 +554,8 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteOperatorInactivation() {
 	for _, tc := range testCases {
 		tc := tc
 		suite.Run(tc.name, func() {
+			suite.SetupTest()
+
 			ctx, _ := suite.ctx.CacheContext()
 			if tc.setup != nil {
 				tc.setup()
@@ -589,7 +637,8 @@ func (suite *KeeperTestSuite) TestKeeper_ReactivateInactiveOperator() {
 			operatorID: 1,
 			shouldErr:  false,
 			check: func(ctx sdk.Context) {
-				operator, found := suite.k.GetOperator(ctx, 1)
+				operator, found, err := suite.k.GetOperator(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
@@ -611,15 +660,18 @@ func (suite *KeeperTestSuite) TestKeeper_ReactivateInactiveOperator() {
 		tc := tc
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
-			ctx := suite.ctx
+
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
 			}
-			operator, found := suite.k.GetOperator(ctx, tc.operatorID)
+			operator, found, err := suite.k.GetOperator(ctx, tc.operatorID)
+			suite.Require().NoError(err)
 			if !found {
 				suite.Fail("operator not found")
 			}
-			err := suite.k.ReactivateInactiveOperator(ctx, operator)
+
+			err = suite.k.ReactivateInactiveOperator(ctx, operator)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {

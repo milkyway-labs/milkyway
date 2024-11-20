@@ -29,10 +29,12 @@ func NewMsgServer(keeper *Keeper) types.MsgServer {
 }
 
 // JoinService defines the rpc method for Msg/JoinService
-func (k msgServer) JoinService(goCtx context.Context, msg *types.MsgJoinService) (*types.MsgJoinServiceResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
+func (k msgServer) JoinService(ctx context.Context, msg *types.MsgJoinService) (*types.MsgJoinServiceResponse, error) {
+	operator, found, err := k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
+	if err != nil {
+		return nil, err
+	}
 
-	operator, found := k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
 	if !found {
 		return nil, operatorstypes.ErrOperatorNotFound
 	}
@@ -41,7 +43,11 @@ func (k msgServer) JoinService(goCtx context.Context, msg *types.MsgJoinService)
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can join the service")
 	}
 
-	service, found := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	service, found, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, errors.Wrapf(sdkerrors.ErrNotFound, "service %d not found", msg.ServiceID)
 	}
@@ -50,12 +56,13 @@ func (k msgServer) JoinService(goCtx context.Context, msg *types.MsgJoinService)
 		return nil, errors.Wrapf(servicestypes.ErrServiceNotActive, "service %d is not active", msg.ServiceID)
 	}
 
-	err := k.AddServiceToOperatorJoinedServices(ctx, msg.OperatorID, msg.ServiceID)
+	err = k.AddServiceToOperatorJoinedServices(ctx, msg.OperatorID, msg.ServiceID)
 	if err != nil {
 		return nil, err
 	}
 
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeJoinService,
 			sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, fmt.Sprint(msg.OperatorID)),
@@ -67,10 +74,12 @@ func (k msgServer) JoinService(goCtx context.Context, msg *types.MsgJoinService)
 }
 
 // LeaveService defines the rpc method for Msg/LeaveService
-func (k msgServer) LeaveService(goCtx context.Context, msg *types.MsgLeaveService) (*types.MsgLeaveServiceResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
+func (k msgServer) LeaveService(ctx context.Context, msg *types.MsgLeaveService) (*types.MsgLeaveServiceResponse, error) {
+	operator, found, err := k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
+	if err != nil {
+		return nil, err
+	}
 
-	operator, found := k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
 	if !found {
 		return nil, operatorstypes.ErrOperatorNotFound
 	}
@@ -79,17 +88,22 @@ func (k msgServer) LeaveService(goCtx context.Context, msg *types.MsgLeaveServic
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can leave the service")
 	}
 
-	_, found = k.servicesKeeper.GetService(ctx, msg.ServiceID)
-	if !found {
-		return nil, errors.Wrapf(sdkerrors.ErrNotFound, "service %d not found", msg.ServiceID)
-	}
-
-	err := k.RemoveServiceFromOperatorJoinedServices(ctx, msg.OperatorID, msg.ServiceID)
+	_, found, err = k.servicesKeeper.GetService(ctx, msg.ServiceID)
 	if err != nil {
 		return nil, err
 	}
 
-	ctx.EventManager().EmitEvents(sdk.Events{
+	if !found {
+		return nil, errors.Wrapf(sdkerrors.ErrNotFound, "service %d not found", msg.ServiceID)
+	}
+
+	err = k.RemoveServiceFromOperatorJoinedServices(ctx, msg.OperatorID, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeLeaveService,
 			sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, fmt.Sprint(msg.OperatorID)),
@@ -101,17 +115,23 @@ func (k msgServer) LeaveService(goCtx context.Context, msg *types.MsgLeaveServic
 }
 
 // AddOperatorToAllowList defines the rpc method for Msg/AddOperatorToAllowList
-func (k msgServer) AddOperatorToAllowList(goCtx context.Context, msg *types.MsgAddOperatorToAllowList) (*types.MsgAddOperatorToAllowListResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) AddOperatorToAllowList(ctx context.Context, msg *types.MsgAddOperatorToAllowList) (*types.MsgAddOperatorToAllowListResponse, error) {
 	// Ensure that the service exists
-	service, found := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	service, found, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, servicestypes.ErrServiceNotFound
 	}
 
 	// Ensure that the operator exists
-	_, found = k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
+	_, found, err = k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, operatorstypes.ErrOperatorNotFound
 	}
@@ -136,7 +156,8 @@ func (k msgServer) AddOperatorToAllowList(goCtx context.Context, msg *types.MsgA
 		return nil, err
 	}
 
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeAllowOperator,
 			sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, fmt.Sprint(msg.OperatorID)),
@@ -148,11 +169,13 @@ func (k msgServer) AddOperatorToAllowList(goCtx context.Context, msg *types.MsgA
 }
 
 // RemoveOperatorFromAllowlist defines the rpc method for Msg/RemoveOperatorFromAllowlist
-func (k msgServer) RemoveOperatorFromAllowlist(goCtx context.Context, msg *types.MsgRemoveOperatorFromAllowlist) (*types.MsgRemoveOperatorFromAllowlistResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) RemoveOperatorFromAllowlist(ctx context.Context, msg *types.MsgRemoveOperatorFromAllowlist) (*types.MsgRemoveOperatorFromAllowlistResponse, error) {
 	// Ensure that the service exists
-	service, found := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	service, found, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, servicestypes.ErrServiceNotFound
 	}
@@ -177,7 +200,8 @@ func (k msgServer) RemoveOperatorFromAllowlist(goCtx context.Context, msg *types
 		return nil, err
 	}
 
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeRemoveAllowedOperator,
 			sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, fmt.Sprint(msg.OperatorID)),
@@ -189,11 +213,13 @@ func (k msgServer) RemoveOperatorFromAllowlist(goCtx context.Context, msg *types
 }
 
 // BorrowPoolSecurity defines the rpc method for Msg/BorrowPoolSecurity
-func (k msgServer) BorrowPoolSecurity(goCtx context.Context, msg *types.MsgBorrowPoolSecurity) (*types.MsgBorrowPoolSecurityResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) BorrowPoolSecurity(ctx context.Context, msg *types.MsgBorrowPoolSecurity) (*types.MsgBorrowPoolSecurityResponse, error) {
 	// Ensure that the service exists
-	service, found := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	service, found, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, servicestypes.ErrServiceNotFound
 	}
@@ -204,7 +230,11 @@ func (k msgServer) BorrowPoolSecurity(goCtx context.Context, msg *types.MsgBorro
 	}
 
 	// Ensure that the pool exists
-	_, found = k.poolsKeeper.GetPool(ctx, msg.PoolID)
+	_, found, err = k.poolsKeeper.GetPool(ctx, msg.PoolID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, poolstypes.ErrPoolNotFound
 	}
@@ -231,7 +261,8 @@ func (k msgServer) BorrowPoolSecurity(goCtx context.Context, msg *types.MsgBorro
 		return nil, err
 	}
 
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeBorrowPoolSecurity,
 			sdk.NewAttribute(servicestypes.AttributeKeyServiceID, fmt.Sprint(msg.ServiceID)),
@@ -243,11 +274,13 @@ func (k msgServer) BorrowPoolSecurity(goCtx context.Context, msg *types.MsgBorro
 }
 
 // CeasePoolSecurityBorrow defines the rpc method for Msg/CeasePoolSecurityBorrow
-func (k msgServer) CeasePoolSecurityBorrow(goCtx context.Context, msg *types.MsgCeasePoolSecurityBorrow) (*types.MsgCeasePoolSecurityBorrowResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) CeasePoolSecurityBorrow(ctx context.Context, msg *types.MsgCeasePoolSecurityBorrow) (*types.MsgCeasePoolSecurityBorrowResponse, error) {
 	// Ensure that the service exists
-	service, found := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	service, found, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, servicestypes.ErrServiceNotFound
 	}
@@ -273,7 +306,8 @@ func (k msgServer) CeasePoolSecurityBorrow(goCtx context.Context, msg *types.Msg
 		return nil, err
 	}
 
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeCeasePoolSecurityBorrow,
 			sdk.NewAttribute(servicestypes.AttributeKeyServiceID, fmt.Sprint(msg.ServiceID)),
@@ -285,9 +319,7 @@ func (k msgServer) CeasePoolSecurityBorrow(goCtx context.Context, msg *types.Msg
 }
 
 // DelegatePool defines the rpc method for Msg/DelegatePool
-func (k msgServer) DelegatePool(goCtx context.Context, msg *types.MsgDelegatePool) (*types.MsgDelegatePoolResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) DelegatePool(ctx context.Context, msg *types.MsgDelegatePool) (*types.MsgDelegatePoolResponse, error) {
 	if !msg.Amount.IsValid() || !msg.Amount.Amount.IsPositive() {
 		return nil, errors.Wrap(
 			sdkerrors.ErrInvalidRequest,
@@ -325,9 +357,7 @@ func (k msgServer) DelegatePool(goCtx context.Context, msg *types.MsgDelegatePoo
 }
 
 // UndelegatePool defines the rpc method for Msg/UndelegatePool
-func (k msgServer) UndelegatePool(goCtx context.Context, msg *types.MsgUndelegatePool) (*types.MsgUndelegateResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) UndelegatePool(ctx context.Context, msg *types.MsgUndelegatePool) (*types.MsgUndelegateResponse, error) {
 	// Perform the undelegation
 	completionTime, err := k.UndelegateFromPool(ctx, msg.Amount, msg.Delegator)
 	if err != nil {
@@ -347,7 +377,8 @@ func (k msgServer) UndelegatePool(goCtx context.Context, msg *types.MsgUndelegat
 	}
 
 	// Emit the undelegation event
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeUnbondPool,
 			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Amount.String()),
@@ -362,9 +393,7 @@ func (k msgServer) UndelegatePool(goCtx context.Context, msg *types.MsgUndelegat
 }
 
 // DelegateOperator defines the rpc method for Msg/DelegateOperator
-func (k msgServer) DelegateOperator(goCtx context.Context, msg *types.MsgDelegateOperator) (*types.MsgDelegateOperatorResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) DelegateOperator(ctx context.Context, msg *types.MsgDelegateOperator) (*types.MsgDelegateOperatorResponse, error) {
 	if !msg.Amount.IsValid() || !msg.Amount.IsAllPositive() {
 		return nil, errors.Wrap(
 			sdkerrors.ErrInvalidRequest,
@@ -408,9 +437,7 @@ func (k msgServer) DelegateOperator(goCtx context.Context, msg *types.MsgDelegat
 }
 
 // UndelegateOperator defines the rpc method for Msg/UndelegateOperator
-func (k msgServer) UndelegateOperator(goCtx context.Context, msg *types.MsgUndelegateOperator) (*types.MsgUndelegateResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) UndelegateOperator(ctx context.Context, msg *types.MsgUndelegateOperator) (*types.MsgUndelegateResponse, error) {
 	// Perform the undelegation
 	completionTime, err := k.Keeper.UndelegateFromOperator(ctx, msg.OperatorID, msg.Amount, msg.Delegator)
 	if err != nil {
@@ -435,7 +462,8 @@ func (k msgServer) UndelegateOperator(goCtx context.Context, msg *types.MsgUndel
 	}
 
 	// Emit the undelegation event
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeUnbondOperator,
 			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Amount.String()),
@@ -451,9 +479,7 @@ func (k msgServer) UndelegateOperator(goCtx context.Context, msg *types.MsgUndel
 }
 
 // DelegateService defines the rpc method for Msg/DelegateService
-func (k msgServer) DelegateService(goCtx context.Context, msg *types.MsgDelegateService) (*types.MsgDelegateServiceResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) DelegateService(ctx context.Context, msg *types.MsgDelegateService) (*types.MsgDelegateServiceResponse, error) {
 	if !msg.Amount.IsValid() || !msg.Amount.IsAllPositive() {
 		return nil, errors.Wrap(
 			sdkerrors.ErrInvalidRequest,
@@ -497,9 +523,7 @@ func (k msgServer) DelegateService(goCtx context.Context, msg *types.MsgDelegate
 }
 
 // UndelegateService defines the rpc method for Msg/UndelegateService
-func (k msgServer) UndelegateService(goCtx context.Context, msg *types.MsgUndelegateService) (*types.MsgUndelegateResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) UndelegateService(ctx context.Context, msg *types.MsgUndelegateService) (*types.MsgUndelegateResponse, error) {
 	// Perform the undelegation
 	completionTime, err := k.Keeper.UndelegateFromService(ctx, msg.ServiceID, msg.Amount, msg.Delegator)
 	if err != nil {
@@ -524,7 +548,8 @@ func (k msgServer) UndelegateService(goCtx context.Context, msg *types.MsgUndele
 	}
 
 	// Emit the undelegation event
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeUnbondService,
 			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Amount.String()),
@@ -540,12 +565,15 @@ func (k msgServer) UndelegateService(goCtx context.Context, msg *types.MsgUndele
 }
 
 // SetUserPreferences defines the rpc method for Msg/SetUserPreferences
-func (k msgServer) SetUserPreferences(goCtx context.Context, msg *types.MsgSetUserPreferences) (*types.MsgSetUserPreferencesResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) SetUserPreferences(ctx context.Context, msg *types.MsgSetUserPreferences) (*types.MsgSetUserPreferencesResponse, error) {
 	// Make sure that each service exists
 	for _, serviceID := range msg.Preferences.TrustedServicesIDs {
-		if !k.servicesKeeper.HasService(ctx, serviceID) {
+		hasService, err := k.servicesKeeper.HasService(ctx, serviceID)
+		if err != nil {
+			return nil, err
+		}
+
+		if !hasService {
 			return nil, errors.Wrapf(servicestypes.ErrServiceNotFound, "service %d does not exist", serviceID)
 		}
 	}
@@ -556,7 +584,8 @@ func (k msgServer) SetUserPreferences(goCtx context.Context, msg *types.MsgSetUs
 	}
 
 	// Emit the event
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeSetUserPreferences,
 			sdk.NewAttribute(types.AttributeKeyUser, msg.User),
@@ -567,7 +596,7 @@ func (k msgServer) SetUserPreferences(goCtx context.Context, msg *types.MsgSetUs
 }
 
 // UpdateParams defines the rpc method for Msg/UpdateParams
-func (k msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
+func (k msgServer) UpdateParams(ctx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
 	// Check the authority
 	authority := k.authority
 	if authority != msg.Authority {
@@ -575,8 +604,10 @@ func (k msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParam
 	}
 
 	// Update the params
-	ctx := sdk.UnwrapSDKContext(goCtx)
-	k.SetParams(ctx, msg.Params)
+	err := k.SetParams(ctx, msg.Params)
+	if err != nil {
+		return nil, err
+	}
 
 	return &types.MsgUpdateParamsResponse{}, nil
 }

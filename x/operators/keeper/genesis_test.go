@@ -20,8 +20,11 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "next operator id is exported properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextOperatorID(ctx, 10)
-				suite.k.SetParams(ctx, types.DefaultParams())
+				err := suite.k.SetNextOperatorID(ctx, 10)
+				suite.Require().NoError(err)
+
+				err = suite.k.SetParams(ctx, types.DefaultParams())
+				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				NextOperatorID: 10,
@@ -32,10 +35,13 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "operators data are exported properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextOperatorID(ctx, 10)
-				suite.k.SetParams(ctx, types.DefaultParams())
+				err := suite.k.SetNextOperatorID(ctx, 10)
+				suite.Require().NoError(err)
 
-				err := suite.k.CreateOperator(ctx, types.NewOperator(
+				err = suite.k.SetParams(ctx, types.DefaultParams())
+				suite.Require().NoError(err)
+
+				err = suite.k.CreateOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -84,8 +90,11 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				return ctx.WithBlockTime(time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC))
 			},
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextOperatorID(ctx, 10)
-				suite.k.SetParams(ctx, types.DefaultParams())
+				err := suite.k.SetNextOperatorID(ctx, 10)
+				suite.Require().NoError(err)
+
+				err = suite.k.SetParams(ctx, types.DefaultParams())
+				suite.Require().NoError(err)
 
 				activeValidator := types.NewOperator(
 					1,
@@ -95,7 +104,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				)
-				err := suite.k.CreateOperator(ctx, activeValidator)
+				err = suite.k.CreateOperator(ctx, activeValidator)
 				suite.Require().NoError(err)
 
 				err = suite.k.StartOperatorInactivation(ctx, activeValidator)
@@ -143,10 +152,13 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 		{
 			name: "operators params are exported properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextOperatorID(ctx, 10)
-				suite.k.SetParams(ctx, types.DefaultParams())
+				err := suite.k.SetNextOperatorID(ctx, 10)
+				suite.Require().NoError(err)
 
-				err := suite.k.CreateOperator(ctx, types.NewOperator(
+				err = suite.k.SetParams(ctx, types.DefaultParams())
+				suite.Require().NoError(err)
+
+				err = suite.k.CreateOperator(ctx, types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
@@ -225,8 +237,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				tc.store(ctx)
 			}
 
-			genesis, err := suite.k.ExportGenesis(ctx)
-			suite.Require().NoError(err)
+			genesis := suite.k.ExportGenesis(ctx)
 			suite.Require().Equal(tc.expGenesis, genesis)
 		})
 	}
@@ -278,7 +289,8 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				Params: types.DefaultParams(),
 			},
 			check: func(ctx sdk.Context) {
-				operator1, found := suite.k.GetOperator(ctx, 1)
+				operator, found, err := suite.k.GetOperator(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
@@ -287,13 +299,14 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				), operator1)
+				), operator)
 
 				// Ensure that the operator has the default params
 				params, err := suite.k.GetOperatorParams(ctx, 1)
 				suite.Require().Equal(types.DefaultOperatorParams(), params)
 
-				operator2, found := suite.k.GetOperator(ctx, 2)
+				operator, found, err = suite.k.GetOperator(ctx, 2)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					2,
@@ -302,7 +315,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 					"https://inertia.zone",
 					"",
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				), operator2)
+				), operator)
 
 				// Ensure that the operator has the default params
 				params, err = suite.k.GetOperatorParams(ctx, 2)
@@ -347,7 +360,8 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				),
 			},
 			check: func(ctx sdk.Context) {
-				params := suite.k.GetParams(ctx)
+				params, err := suite.k.GetParams(ctx)
+				suite.Require().NoError(err)
 				suite.Require().Equal(types.NewParams(
 					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),
 					10*time.Hour,
@@ -408,6 +422,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 			if tc.setup != nil {
 				tc.setup()
 			}
+
 			ctx, _ := suite.ctx.CacheContext()
 			if tc.setupCtx != nil {
 				tc.setupCtx(ctx)
@@ -416,7 +431,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				tc.store(ctx)
 			}
 
-			err := suite.k.InitGenesis(ctx, *tc.genesis)
+			err := suite.k.InitGenesis(ctx, tc.genesis)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {

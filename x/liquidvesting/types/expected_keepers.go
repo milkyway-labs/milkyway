@@ -1,17 +1,14 @@
 package types
 
 import (
-	context "context"
+	"context"
 	"time"
 
 	"cosmossdk.io/core/address"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
 type AccountKeeper interface {
@@ -39,26 +36,23 @@ type BankKeeper interface {
 }
 
 type PoolsKeeper interface {
-	IsPoolAddress(ctx sdk.Context, address string) (bool, error)
-	GetPoolByDenom(ctx sdk.Context, denom string) (poolstypes.Pool, bool)
+	IsPoolAddress(ctx context.Context, address string) (bool, error)
 }
 
 type OperatorsKeeper interface {
-	IsOperatorAddress(ctx sdk.Context, address string) (bool, error)
-	GetOperator(ctx sdk.Context, operatorID uint32) (operatorstypes.Operator, bool)
+	IsOperatorAddress(ctx context.Context, address string) (bool, error)
 }
 
 type ServicesKeeper interface {
-	IsServiceAddress(ctx sdk.Context, address string) (bool, error)
-	GetService(ctx sdk.Context, serviceID uint32) (servicestypes.Service, bool)
+	IsServiceAddress(ctx context.Context, address string) (bool, error)
 }
 
 type RestakingKeeper interface {
-	GetPoolDelegation(ctx sdk.Context, poolID uint32, userAddress string) (restakingtypes.Delegation, bool)
-	IterateUserServiceDelegations(ctx sdk.Context, userAddress string, cb func(restakingtypes.Delegation) (bool, error)) error
-	IterateUserOperatorDelegations(ctx sdk.Context, userAddress string, cb func(restakingtypes.Delegation) (bool, error)) error
-	UnbondRestakedAssets(ctx sdk.Context, user sdk.AccAddress, amount sdk.Coins) (time.Time, error)
-	GetAllUnbondingDelegations(ctx sdk.Context) []restakingtypes.UnbondingDelegation
-	GetAllUserRestakedCoins(ctx sdk.Context, userAddress string) (sdk.DecCoins, error)
-	GetAllUserUnbondingDelegations(ctx sdk.Context, userAddress string) []restakingtypes.UnbondingDelegation
+	GetPoolDelegation(ctx context.Context, poolID uint32, userAddress string) (restakingtypes.Delegation, bool, error)
+	IterateUserServiceDelegations(ctx context.Context, userAddress string, cb func(restakingtypes.Delegation) (bool, error)) error
+	IterateUserOperatorDelegations(ctx context.Context, userAddress string, cb func(restakingtypes.Delegation) (bool, error)) error
+	UnbondRestakedAssets(ctx context.Context, user sdk.AccAddress, amount sdk.Coins) (time.Time, error)
+	GetAllUnbondingDelegations(ctx context.Context) ([]restakingtypes.UnbondingDelegation, error)
+	GetAllUserRestakedCoins(ctx context.Context, userAddress string) (sdk.DecCoins, error)
+	GetAllUserUnbondingDelegations(ctx context.Context, userAddress string) []restakingtypes.UnbondingDelegation
 }

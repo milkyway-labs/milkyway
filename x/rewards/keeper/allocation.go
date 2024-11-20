@@ -38,10 +38,12 @@ func (k *Keeper) GetLastRewardsAllocationTime(ctx context.Context) (*time.Time, 
 		}
 		return nil, err
 	}
+
 	t, err := gogotypes.TimestampFromProto(&ts)
 	if err != nil {
 		return nil, err
 	}
+
 	return &t, nil
 }
 
@@ -65,6 +67,7 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
+
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	if err := k.SetLastRewardsAllocationTime(ctx, sdkCtx.BlockTime()); err != nil {
 		return err
@@ -87,26 +90,31 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 	}
 
 	// Get the list of restakable denoms
-	restakableDenoms := k.restakingKeeper.GetRestakableDenoms(sdkCtx)
+	restakableDenoms, err := k.restakingKeeper.GetRestakableDenoms(ctx)
+	if err != nil {
+		return err
+	}
 
 	// The list is empty all pools are allowed
-	var pools []poolstypes.Pool
-	if len(restakableDenoms) == 0 {
-		pools = k.poolsKeeper.GetPools(sdkCtx)
-	} else {
-		// Filter the pools to only include the ones with restakable assets
-		for _, pool := range k.poolsKeeper.GetPools(sdkCtx) {
-			isRestakable := slices.Contains(restakableDenoms, pool.Denom)
-			if isRestakable {
-				pools = append(pools, pool)
-			}
-		}
+	pools, err := k.poolsKeeper.GetPools(ctx)
+	if err != nil {
+		return err
 	}
-	operators := k.operatorsKeeper.GetOperators(sdkCtx)
+
+	// Filter out the pools that are not allowed to be restaked
+	// If there are no restakable denoms, all pools are allowed
+	pools = utils.Filter(pools, func(pool poolstypes.Pool) bool {
+		return len(restakableDenoms) == 0 || slices.Contains(restakableDenoms, pool.Denom)
+	})
+
+	operators, err := k.operatorsKeeper.GetOperators(ctx)
+	if err != nil {
+		return err
+	}
 
 	// Iterate all rewards plan stored and allocate rewards by plan if it's
 	// active(plan's start time <= current block time < plans' end time).
-	err = k.RewardsPlans.Walk(ctx, nil, func(planID uint64, plan types.RewardsPlan) (stop bool, err error) {
+	return k.RewardsPlans.Walk(ctx, nil, func(planID uint64, plan types.RewardsPlan) (stop bool, err error) {
 		// Skip if the plan is not active at the current block time.
 		if !plan.IsActiveAt(sdkCtx.BlockTime()) {
 			return false, nil
@@ -114,7 +122,7 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 
 		// Get the service params to filter out the restakable denoms
 		// that are not allowed by the service
-		serviceParams, err := k.servicesKeeper.GetServiceParams(sdkCtx, plan.ServiceID)
+		serviceParams, err := k.servicesKeeper.GetServiceParams(ctx, plan.ServiceID)
 		if err != nil {
 			return false, err
 		}
@@ -144,12 +152,9 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 		if err != nil {
 			return false, err
 		}
+
 		return false, nil
 	})
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 // AllocateRewardsByPlan allocates rewards by a specific rewards plan.
@@ -174,6 +179,7 @@ func (k *Keeper) AllocateRewardsByPlan(
 	// Check if the rewards pool has enough coins to allocate rewards.
 	planRewardsPoolAddr := plan.MustGetRewardsPoolAddress(k.accountKeeper.AddressCodec())
 	balances := k.bankKeeper.GetAllBalances(ctx, planRewardsPoolAddr)
+
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	if !balances.IsAllGTE(rewardsTruncated) {
 		sdkCtx.Logger().Info(
@@ -191,7 +197,11 @@ func (k *Keeper) AllocateRewardsByPlan(
 		return err
 	}
 
-	service, found := k.servicesKeeper.GetService(sdkCtx, plan.ServiceID)
+	service, found, err := k.servicesKeeper.GetService(ctx, plan.ServiceID)
+	if err != nil {
+		return err
+	}
+
 	if !found {
 		return servicestypes.ErrServiceNotFound
 	}
@@ -296,21 +306,24 @@ func (k *Keeper) AllocateRewardsByPlan(
 // for rewards allocation. Also, if the service is not whitelisted in the pools
 // params, then no pools are eligible for rewards allocation.
 func (k *Keeper) getEligiblePools(
-	ctx context.Context, service servicestypes.Service,
+	ctx context.Context,
+	service servicestypes.Service,
 	pools []poolstypes.Pool,
 ) (eligiblePools []restakingtypes.DelegationTarget, err error) {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	poolsParams := k.poolsKeeper.GetParams(sdkCtx)
+	poolsParams, err := k.poolsKeeper.GetParams(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	if slices.Contains(poolsParams.AllowedServicesIDs, service.ID) {
 		// Only include pools from which the service is borrowing security.
 		for _, pool := range pools {
-			isSecured, err := k.restakingKeeper.IsServiceSecuredByPool(sdkCtx, service.ID, pool.ID)
+			isSecured, err := k.restakingKeeper.IsServiceSecuredByPool(ctx, service.ID, pool.ID)
 			if err != nil {
 				return nil, err
 			}
 			if isSecured {
-				eligiblePools = append(eligiblePools, &pool)
+				eligiblePools = append(eligiblePools, pool)
 			}
 		}
 	}
@@ -325,22 +338,21 @@ func (k *Keeper) getEligibleOperators(
 	ctx context.Context, service servicestypes.Service,
 	operators []operatorstypes.Operator,
 ) (eligibleOperators []restakingtypes.DelegationTarget, err error) {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	// TODO: can we optimize this? maybe by having a new index key
 	for _, operator := range operators {
-		operatorJoinedServices, err := k.restakingKeeper.HasOperatorJoinedService(sdkCtx, operator.ID, service.ID)
+		operatorJoinedServices, err := k.restakingKeeper.HasOperatorJoinedService(ctx, operator.ID, service.ID)
 		if err != nil {
 			return nil, err
 		}
+
 		if operatorJoinedServices {
-			canValidateService, err := k.restakingKeeper.CanOperatorValidateService(
-				sdkCtx, service.ID, operator.ID)
+			canValidateService, err := k.restakingKeeper.CanOperatorValidateService(ctx, service.ID, operator.ID)
 			if err != nil {
 				return nil, err
 			}
 
 			if canValidateService {
-				eligibleOperators = append(eligibleOperators, &operator)
+				eligibleOperators = append(eligibleOperators, operator)
 			}
 		}
 	}
@@ -358,6 +370,7 @@ func (k *Keeper) getDistrInfos(
 	totalDelValues = math.LegacyZeroDec()
 	for _, target := range targets {
 		var targetTokens sdk.Coins
+
 		// Filter out the coins that are not allowed to be restaked
 		for _, coin := range target.GetTokens() {
 			isRestakable := len(restakableDenoms) == 0 || slices.Contains(restakableDenoms, coin.Denom)
@@ -365,16 +378,19 @@ func (k *Keeper) getDistrInfos(
 				targetTokens = append(targetTokens, coin)
 			}
 		}
+
 		delValue, err := k.GetCoinsValue(ctx, targetTokens)
 		if err != nil {
 			return nil, math.LegacyDec{}, err
 		}
+
 		// Skip if there's no delegations value. This can happen when there's
 		// no tokens delegated at all or there's no price associated with the
 		// delegated tokens.
 		if delValue.IsZero() {
 			continue
 		}
+
 		distrInfos = append(distrInfos, DistributionInfo{
 			DelegationTarget: target,
 			DelegationsValue: delValue,
@@ -423,6 +439,7 @@ func (k *Keeper) allocateRewardsBasic(
 	for _, distrInfo := range distrInfos {
 		totalDelValues = totalDelValues.Add(distrInfo.DelegationsValue)
 	}
+
 	for _, distrInfo := range distrInfos {
 		targetRewards := rewards.MulDecTruncate(distrInfo.DelegationsValue).QuoDecTruncate(totalDelValues)
 		err := k.allocateDelegationTargetRewards(ctx, serviceID, distrInfo, targetRewards)
@@ -430,6 +447,7 @@ func (k *Keeper) allocateRewardsBasic(
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -466,6 +484,7 @@ func (k *Keeper) allocateRewardsWeighted(
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -483,6 +502,7 @@ func (k *Keeper) allocateRewardsEgalitarian(
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -505,7 +525,7 @@ func (k *Keeper) allocateRewardsToUsers(
 	switch distrType.(type) {
 	case *types.UsersDistributionTypeBasic:
 		return k.allocateDelegationTargetRewards(ctx, service.ID, DistributionInfo{
-			DelegationTarget: &service,
+			DelegationTarget: service,
 			DelegationsValue: totalDelValues,
 		}, rewards)
 	default:
@@ -522,6 +542,7 @@ func (k *Keeper) allocateDelegationTargetRewards(
 		if err != nil {
 			return err
 		}
+
 		if tokenValue.IsZero() {
 			continue
 		}
@@ -539,12 +560,10 @@ func (k *Keeper) allocateDelegationTargetRewards(
 func (k *Keeper) allocateRewardsPool(
 	ctx context.Context, serviceID uint32, target restakingtypes.DelegationTarget, denom string, rewards sdk.DecCoins,
 ) error {
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-
 	shared := rewards
-	if _, ok := target.(*operatorstypes.Operator); ok {
+	if _, ok := target.(operatorstypes.Operator); ok {
 		// Split tokens between operator and delegators according to commission
-		operatorParams, err := k.operatorsKeeper.GetOperatorParams(sdkCtx, target.GetID())
+		operatorParams, err := k.operatorsKeeper.GetOperatorParams(ctx, target.GetID())
 		if err != nil {
 			return err
 		}
@@ -552,6 +571,7 @@ func (k *Keeper) allocateRewardsPool(
 		shared = rewards.Sub(commission)
 
 		// update current commission
+		sdkCtx := sdk.UnwrapSDKContext(ctx)
 		sdkCtx.EventManager().EmitEvent(
 			sdk.NewEvent(
 				types.EventTypeCommission,
@@ -602,6 +622,7 @@ func (k *Keeper) allocateRewardsPool(
 		return err
 	}
 
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sdkCtx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeRewards,

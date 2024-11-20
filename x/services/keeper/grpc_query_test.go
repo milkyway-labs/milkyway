@@ -291,7 +291,10 @@ func (suite *KeeperTestSuite) TestQueryServer_Params() {
 		{
 			name: "params are returned properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetParams(ctx, types.NewParams(sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(1000)))))
+				err := suite.k.SetParams(ctx, types.NewParams(
+					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(1000)))),
+				)
+				suite.Require().NoError(err)
 			},
 			request:   types.NewQueryParamsRequest(),
 			expParams: types.NewParams(sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(1000)))),

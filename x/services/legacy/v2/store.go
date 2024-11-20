@@ -12,25 +12,27 @@ import (
 // It takes care of iterating through all the services that have been set as allowed to use pool-restaking,
 // and setting them as accredited.
 func MigrateStore(ctx sdk.Context, k ServicesKeeper, pk PoolsKeeper) error {
-	setAccreditedServices(ctx, k, pk)
-	return nil
+	return setAccreditedServices(ctx, k, pk)
 }
 
 // setAccreditedServices sets all the services that have been allowed to use pool-restaking as accredited.
-func setAccreditedServices(ctx sdk.Context, k ServicesKeeper, pk PoolsKeeper) {
+func setAccreditedServices(ctx sdk.Context, k ServicesKeeper, pk PoolsKeeper) error {
 	// Get the pool's params
-	poolsParams := pk.GetParams(ctx)
+	poolsParams, err := pk.GetParams(ctx)
+	if err != nil {
+		return err
+	}
 
 	// Iterate over all the services to update their accreditation status
-	k.IterateServices(ctx, func(service servicestypes.Service) (stop bool) {
+	return k.IterateServices(ctx, func(service servicestypes.Service) (stop bool, err error) {
 		service.Accredited = slices.Contains(poolsParams.AllowedServicesIDs, service.ID)
 
 		// Save the service
-		err := k.SaveService(ctx, service)
+		err = k.SaveService(ctx, service)
 		if err != nil {
-			panic(err)
+			return true, err
 		}
 
-		return false
+		return false, nil
 	})
 }

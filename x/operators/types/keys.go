@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -22,8 +21,8 @@ var (
 	NextOperatorIDKey               = []byte{0xa1}
 	OperatorPrefix                  = []byte{0xa2}
 	InactivatingOperatorQueuePrefix = []byte{0xa3}
-	OperatorAddressSetPrefix        = collections.NewPrefix(0xa4)
-	OperatorParamsMapPrefix         = collections.NewPrefix(0xa5)
+	OperatorAddressSetPrefix        = []byte{0xa4}
+	OperatorParamsMapPrefix         = []byte{0xa5}
 )
 
 // GetOperatorIDBytes returns the byte representation of the operator ID
@@ -38,10 +37,7 @@ func GetOperatorIDFromBytes(bz []byte) (operatorID uint32) {
 	return binary.BigEndian.Uint32(bz)
 }
 
-// OperatorStoreKey returns a operator ID into a key used to store a operator in the KVStore
-func OperatorStoreKey(operatorID uint32) []byte {
-	return append(OperatorPrefix, GetOperatorIDBytes(operatorID)...)
-}
+// --------------------------------------------------------------------------------------------------------------------
 
 var (
 	lenTime   = len(sdk.FormatTimeBytes(time.Now()))

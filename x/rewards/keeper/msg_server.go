@@ -25,11 +25,13 @@ func NewMsgServer(k *Keeper) types.MsgServer {
 }
 
 // CreateRewardsPlan defines the rpc method for Msg/CreateRewardsPlan
-func (k msgServer) CreateRewardsPlan(goCtx context.Context, msg *types.MsgCreateRewardsPlan) (*types.MsgCreateRewardsPlanResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) CreateRewardsPlan(ctx context.Context, msg *types.MsgCreateRewardsPlan) (*types.MsgCreateRewardsPlanResponse, error) {
 	// Make sure the creator is the admin of the service
-	service, found := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	service, found, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, servicestypes.ErrServiceNotFound
 	}
@@ -75,7 +77,9 @@ func (k msgServer) CreateRewardsPlan(goCtx context.Context, msg *types.MsgCreate
 		}
 	}
 
-	ctx.EventManager().EmitEvents(sdk.Events{
+	// Emit the event
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeCreateRewardsPlan,
 			sdk.NewAttribute(types.AttributeKeyRewardsPlanID, fmt.Sprint(plan.ID)),
@@ -87,9 +91,7 @@ func (k msgServer) CreateRewardsPlan(goCtx context.Context, msg *types.MsgCreate
 }
 
 // EditRewardsPlan defines the rpc method for Msg/EditRewardsPlan
-func (k msgServer) EditRewardsPlan(goCtx context.Context, msg *types.MsgEditRewardsPlan) (*types.MsgEditRewardsPlanResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) EditRewardsPlan(ctx context.Context, msg *types.MsgEditRewardsPlan) (*types.MsgEditRewardsPlanResponse, error) {
 	// Get the rewards plan to edit
 	rewardsPlan, err := k.GetRewardsPlan(ctx, msg.ID)
 	if err != nil {
@@ -97,7 +99,11 @@ func (k msgServer) EditRewardsPlan(goCtx context.Context, msg *types.MsgEditRewa
 	}
 
 	// Get the service to which the rewards is associated
-	service, found := k.servicesKeeper.GetService(ctx, rewardsPlan.ServiceID)
+	service, found, err := k.servicesKeeper.GetService(ctx, rewardsPlan.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+
 	if !found {
 		return nil, servicestypes.ErrServiceNotFound
 	}
@@ -123,7 +129,9 @@ func (k msgServer) EditRewardsPlan(goCtx context.Context, msg *types.MsgEditRewa
 		return nil, err
 	}
 
-	ctx.EventManager().EmitEvents(sdk.Events{
+	// Emit the event
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeEditRewardsPlan,
 			sdk.NewAttribute(types.AttributeKeyRewardsPlanID, fmt.Sprint(rewardsPlan.ID)),
@@ -137,9 +145,7 @@ func (k msgServer) EditRewardsPlan(goCtx context.Context, msg *types.MsgEditRewa
 // SetWithdrawAddress sets the withdraw address for a delegator(or an operator
 // when withdrawing commission). The default withdraw address if not set
 // specified is the delegator(or an operator) address.
-func (k msgServer) SetWithdrawAddress(goCtx context.Context, msg *types.MsgSetWithdrawAddress) (*types.MsgSetWithdrawAddressResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (k msgServer) SetWithdrawAddress(ctx context.Context, msg *types.MsgSetWithdrawAddress) (*types.MsgSetWithdrawAddressResponse, error) {
 	// Parse the addresses
 	senderAddr, err := k.accountKeeper.AddressCodec().StringToBytes(msg.Sender)
 	if err != nil {
@@ -158,7 +164,9 @@ func (k msgServer) SetWithdrawAddress(goCtx context.Context, msg *types.MsgSetWi
 	}
 
 	// Emit an event
-	ctx.EventManager().EmitEvent(
+	// Emit the event
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeSetWithdrawAddress,
 			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
@@ -169,6 +177,7 @@ func (k msgServer) SetWithdrawAddress(goCtx context.Context, msg *types.MsgSetWi
 	return &types.MsgSetWithdrawAddressResponse{}, nil
 }
 
+// WithdrawDelegatorReward defines the rpc method Msg/WithdrawDelegatorReward
 func (k msgServer) WithdrawDelegatorReward(ctx context.Context, msg *types.MsgWithdrawDelegatorReward) (*types.MsgWithdrawDelegatorRewardResponse, error) {
 	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(msg.DelegatorAddress)
 	if err != nil {
@@ -192,15 +201,18 @@ func (k msgServer) WithdrawDelegatorReward(ctx context.Context, msg *types.MsgWi
 	return &types.MsgWithdrawDelegatorRewardResponse{Amount: rewards.Sum()}, nil
 }
 
+// WithdrawOperatorCommission defines the rpc method Msg/WithdrawOperatorCommission
 func (k msgServer) WithdrawOperatorCommission(ctx context.Context, msg *types.MsgWithdrawOperatorCommission) (*types.MsgWithdrawOperatorCommissionResponse, error) {
 	_, err := k.accountKeeper.AddressCodec().StringToBytes(msg.Sender)
 	if err != nil {
 		return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid sender address: %s", err)
 	}
 
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	operator, found, err := k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
+	if err != nil {
+		return nil, err
+	}
 
-	operator, found := k.operatorsKeeper.GetOperator(sdkCtx, msg.OperatorID)
 	if !found {
 		return nil, operatorstypes.ErrOperatorNotFound
 	}

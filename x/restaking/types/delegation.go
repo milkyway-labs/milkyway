@@ -1,6 +1,7 @@
 package types
 
 import (
+	"context"
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -22,20 +23,20 @@ type DelegationTarget interface {
 }
 
 // DelegationGetter represents a function that allows to retrieve an existing delegation
-type DelegationGetter func(ctx sdk.Context, receiverID uint32, delegator string) (Delegation, bool)
+type DelegationGetter func(ctx context.Context, receiverID uint32, delegator string) (Delegation, bool)
 
 // DelegationBuilder represents a function that allows to build a new delegation
 type DelegationBuilder func(targetID uint32, delegator string, shares sdk.DecCoins) Delegation
 
 // DelegationUpdater represents a function that allows to update an existing delegation
-type DelegationUpdater func(ctx sdk.Context, delegation Delegation) (newShares sdk.DecCoins, err error)
+type DelegationUpdater func(ctx context.Context, delegation Delegation) (newShares sdk.DecCoins, err error)
 
 // DelegationHooks contains the hooks that can be called before and after a delegation is modified.
 type DelegationHooks struct {
-	BeforeDelegationSharesModified func(ctx sdk.Context, receiverID uint32, delegator string) error
-	BeforeDelegationCreated        func(ctx sdk.Context, receiverID uint32, delegator string) error
-	AfterDelegationModified        func(ctx sdk.Context, receiverID uint32, delegator string) error
-	BeforeDelegationRemoved        func(ctx sdk.Context, receiverID uint32, delegator string) error
+	BeforeDelegationSharesModified func(ctx context.Context, receiverID uint32, delegator string) error
+	BeforeDelegationCreated        func(ctx context.Context, receiverID uint32, delegator string) error
+	AfterDelegationModified        func(ctx context.Context, receiverID uint32, delegator string) error
+	BeforeDelegationRemoved        func(ctx context.Context, receiverID uint32, delegator string) error
 }
 
 // DelegationData contains the data required to perform a delegation.

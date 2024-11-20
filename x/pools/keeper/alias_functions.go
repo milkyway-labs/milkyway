@@ -1,7 +1,8 @@
 package keeper
 
 import (
-	storetypes "cosmossdk.io/store/types"
+	"context"
+
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -9,7 +10,7 @@ import (
 )
 
 // createAccountIfNotExists creates an account if it does not exist
-func (k *Keeper) createAccountIfNotExists(ctx sdk.Context, address sdk.AccAddress) {
+func (k *Keeper) createAccountIfNotExists(ctx context.Context, address sdk.AccAddress) {
 	if !k.accountKeeper.HasAccount(ctx, address) {
 		defer telemetry.IncrCounter(1, "new", "account")
 		k.accountKeeper.SetAccount(ctx, k.accountKeeper.NewAccountWithAddress(ctx, address))
@@ -17,56 +18,76 @@ func (k *Keeper) createAccountIfNotExists(ctx sdk.Context, address sdk.AccAddres
 }
 
 // IteratePools iterates over the pools in the store and performs a callback function
-func (k *Keeper) IteratePools(ctx sdk.Context, cb func(pool types.Pool) (stop bool)) {
-	store := ctx.KVStore(k.storeKey)
-	iterator := storetypes.KVStorePrefixIterator(store, types.PoolPrefix)
+func (k *Keeper) IteratePools(ctx context.Context, cb func(pool types.Pool) (stop bool, err error)) error {
+	iterator, err := k.pools.Iterate(ctx, nil)
+	if err != nil {
+		return err
+	}
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var pool types.Pool
-		k.cdc.MustUnmarshal(iterator.Value(), &pool)
+		pool, err := iterator.Value()
+		if err != nil {
+			return err
+		}
 
-		if cb(pool) {
+		stop, err := cb(pool)
+		if err != nil {
+			return err
+		}
+
+		if stop {
 			break
 		}
 	}
+
+	return nil
 }
 
 // GetPools returns the list of stored pools
-func (k *Keeper) GetPools(ctx sdk.Context) []types.Pool {
+func (k *Keeper) GetPools(ctx context.Context) ([]types.Pool, error) {
 	var pools []types.Pool
-	k.IteratePools(ctx, func(pool types.Pool) (stop bool) {
+	err := k.IteratePools(ctx, func(pool types.Pool) (stop bool, err error) {
 		pools = append(pools, pool)
-		return false
+		return false, nil
 	})
-	return pools
+	return pools, err
 }
 
 // GetPoolByDenom returns the pool for the given denom if it exists.
 // If the pool does not exist, false is returned instead
-func (k *Keeper) GetPoolByDenom(ctx sdk.Context, denom string) (types.Pool, bool) {
-	store := ctx.KVStore(k.storeKey)
-	iterator := storetypes.KVStorePrefixIterator(store, types.PoolPrefix)
+func (k *Keeper) GetPoolByDenom(ctx context.Context, denom string) (types.Pool, bool, error) {
+	iterator, err := k.pools.Iterate(ctx, nil)
+	if err != nil {
+		return types.Pool{}, false, err
+	}
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var pool types.Pool
-		k.cdc.MustUnmarshal(iterator.Value(), &pool)
+		pool, err := iterator.Value()
+		if err != nil {
+			return types.Pool{}, false, err
+		}
 
 		if pool.Denom == denom {
-			return pool, true
+			return pool, true, nil
 		}
 	}
 
-	return types.Pool{}, false
+	return types.Pool{}, false, nil
 }
 
 // CreateOrGetPoolByDenom creates a new pool for the given denom if it does not exist.
 // If the pool already exists, no action is taken.
 // In both cases, the pool is returned.
-func (k *Keeper) CreateOrGetPoolByDenom(ctx sdk.Context, denom string) (types.Pool, error) {
+func (k *Keeper) CreateOrGetPoolByDenom(ctx context.Context, denom string) (types.Pool, error) {
 	// If the pool already exists, just return
-	if pool, found := k.GetPoolByDenom(ctx, denom); found {
+	pool, found, err := k.GetPoolByDenom(ctx, denom)
+	if err != nil {
+		return types.Pool{}, err
+	}
+
+	if found {
 		return pool, nil
 	}
 
@@ -77,7 +98,7 @@ func (k *Keeper) CreateOrGetPoolByDenom(ctx sdk.Context, denom string) (types.Po
 	}
 
 	// Create the pool and validate it
-	pool := types.NewPool(poolID, denom)
+	pool = types.NewPool(poolID, denom)
 	err = pool.Validate()
 	if err != nil {
 		return types.Pool{}, err
@@ -90,7 +111,10 @@ func (k *Keeper) CreateOrGetPoolByDenom(ctx sdk.Context, denom string) (types.Po
 	}
 
 	// Increment the pool id
-	k.SetNextPoolID(ctx, poolID+1)
+	err = k.SetNextPoolID(ctx, poolID+1)
+	if err != nil {
+		return types.Pool{}, err
+	}
 
 	// Log the event
 	k.Logger(ctx).Debug("created pool", "id", poolID, "denom", denom)
@@ -106,6 +130,6 @@ func (k *Keeper) CreateOrGetPoolByDenom(ctx sdk.Context, denom string) (types.Po
 
 // IsPoolAddress returns true if the provided address is the address
 // where the users' asset are kept when they perform a pool restaking.
-func (k *Keeper) IsPoolAddress(ctx sdk.Context, address string) (bool, error) {
+func (k *Keeper) IsPoolAddress(ctx context.Context, address string) (bool, error) {
 	return k.poolAddressSet.Has(ctx, address)
 }

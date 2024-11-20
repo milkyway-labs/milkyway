@@ -5,7 +5,7 @@ import (
 )
 
 // NewGenesis creates a new GenesisState instance
-func NewGenesis(params Params, nextPoolID uint32, pools []Pool) *GenesisState {
+func NewGenesis(nextPoolID uint32, pools []Pool, params Params) *GenesisState {
 	return &GenesisState{
 		Params:     params,
 		NextPoolID: nextPoolID,
@@ -15,7 +15,7 @@ func NewGenesis(params Params, nextPoolID uint32, pools []Pool) *GenesisState {
 
 // DefaultGenesis returns the default GenesisState
 func DefaultGenesis() *GenesisState {
-	return NewGenesis(DefaultParams(), 1, nil)
+	return NewGenesis(1, nil, DefaultParams())
 }
 
 // Validate checks if the GenesisState is valid

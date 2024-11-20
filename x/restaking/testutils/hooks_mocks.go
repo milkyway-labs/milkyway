@@ -1,7 +1,7 @@
 package testutils
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"context"
 
 	"github.com/milkyway-labs/milkyway/x/restaking/types"
 )
@@ -19,85 +19,85 @@ func NewMockHooks() *MockHooks {
 }
 
 // BeforePoolDelegationCreated implements restakingtypes.Hooks
-func (m MockHooks) BeforePoolDelegationCreated(sdk.Context, uint32, string) error {
+func (m MockHooks) BeforePoolDelegationCreated(context.Context, uint32, string) error {
 	m.CalledMap["BeforePoolDelegationCreated"] = true
 	return nil
 }
 
 // BeforePoolDelegationSharesModified implements restakingtypes.Hooks
-func (m MockHooks) BeforePoolDelegationSharesModified(sdk.Context, uint32, string) error {
+func (m MockHooks) BeforePoolDelegationSharesModified(context.Context, uint32, string) error {
 	m.CalledMap["BeforePoolDelegationSharesModified"] = true
 	return nil
 }
 
 // AfterPoolDelegationModified implements restakingtypes.Hooks
-func (m MockHooks) AfterPoolDelegationModified(sdk.Context, uint32, string) error {
+func (m MockHooks) AfterPoolDelegationModified(context.Context, uint32, string) error {
 	m.CalledMap["AfterPoolDelegationModified"] = true
 	return nil
 }
 
 // BeforeOperatorDelegationCreated implements restakingtypes.Hooks
-func (m MockHooks) BeforeOperatorDelegationCreated(sdk.Context, uint32, string) error {
+func (m MockHooks) BeforeOperatorDelegationCreated(context.Context, uint32, string) error {
 	m.CalledMap["BeforeOperatorDelegationCreated"] = true
 	return nil
 }
 
 // BeforeOperatorDelegationSharesModified implements restakingtypes.Hooks
-func (m MockHooks) BeforeOperatorDelegationSharesModified(sdk.Context, uint32, string) error {
+func (m MockHooks) BeforeOperatorDelegationSharesModified(context.Context, uint32, string) error {
 	m.CalledMap["BeforeOperatorDelegationSharesModified"] = true
 	return nil
 }
 
 // AfterOperatorDelegationModified implements restakingtypes.Hooks
-func (m MockHooks) AfterOperatorDelegationModified(sdk.Context, uint32, string) error {
+func (m MockHooks) AfterOperatorDelegationModified(context.Context, uint32, string) error {
 	m.CalledMap["AfterOperatorDelegationModified"] = true
 	return nil
 }
 
 // BeforeServiceDelegationCreated implements restakingtypes.Hooks
-func (m MockHooks) BeforeServiceDelegationCreated(sdk.Context, uint32, string) error {
+func (m MockHooks) BeforeServiceDelegationCreated(context.Context, uint32, string) error {
 	m.CalledMap["BeforeServiceDelegationCreated"] = true
 	return nil
 }
 
 // BeforeServiceDelegationSharesModified implements restakingtypes.Hooks
-func (m MockHooks) BeforeServiceDelegationSharesModified(sdk.Context, uint32, string) error {
+func (m MockHooks) BeforeServiceDelegationSharesModified(context.Context, uint32, string) error {
 	m.CalledMap["BeforeServiceDelegationSharesModified"] = true
 	return nil
 }
 
 // AfterServiceDelegationModified implements restakingtypes.Hooks
-func (m MockHooks) AfterServiceDelegationModified(sdk.Context, uint32, string) error {
+func (m MockHooks) AfterServiceDelegationModified(context.Context, uint32, string) error {
 	m.CalledMap["AfterServiceDelegationModified"] = true
 	return nil
 }
 
 // BeforePoolDelegationRemoved implements restakingtypes.Hooks
-func (m MockHooks) BeforePoolDelegationRemoved(ctx sdk.Context, poolID uint32, delegator string) error {
+func (m MockHooks) BeforePoolDelegationRemoved(ctx context.Context, poolID uint32, delegator string) error {
 	m.CalledMap["BeforePoolDelegationRemoved"] = true
 	return nil
 }
 
 // BeforeOperatorDelegationRemoved implements restakingtypes.Hooks
-func (m MockHooks) BeforeOperatorDelegationRemoved(ctx sdk.Context, operatorID uint32, delegator string) error {
+func (m MockHooks) BeforeOperatorDelegationRemoved(ctx context.Context, operatorID uint32, delegator string) error {
 	m.CalledMap["BeforeOperatorDelegationRemoved"] = true
 	return nil
 }
 
 // BeforeServiceDelegationRemoved implements restakingtypes.Hooks
-func (m MockHooks) BeforeServiceDelegationRemoved(ctx sdk.Context, serviceID uint32, delegator string) error {
+func (m MockHooks) BeforeServiceDelegationRemoved(ctx context.Context, serviceID uint32, delegator string) error {
 	m.CalledMap["BeforeServiceDelegationRemoved"] = true
 	return nil
 }
 
 // AfterUnbondingInitiated implements restakingtypes.Hooks
-func (m MockHooks) AfterUnbondingInitiated(ctx sdk.Context, unbondingDelegationID uint64) error {
+func (m MockHooks) AfterUnbondingInitiated(ctx context.Context, unbondingDelegationID uint64) error {
 	m.CalledMap["AfterUnbondingInitiated"] = true
 	return nil
 }
 
 // AfterUserPreferencesModified implements restakingtypes.Hooks
-func (m MockHooks) AfterUserPreferencesModified(ctx sdk.Context, userAddress string, oldPreferences, newPreferences types.UserPreferences) error {
+func (m MockHooks) AfterUserPreferencesModified(ctx context.Context, userAddress string, oldPreferences, newPreferences types.UserPreferences) error {
 	m.CalledMap["AfterUserPreferencesModified"] = true
 	return nil
 }

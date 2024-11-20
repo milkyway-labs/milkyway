@@ -25,9 +25,10 @@ func (suite *KeeperTestSuite) TestMsgServer_CreateService() {
 		{
 			name: "non existing next service id returns error",
 			store: func(ctx sdk.Context) {
-				suite.k.SetParams(ctx, types.NewParams(
+				err := suite.k.SetParams(ctx, types.NewParams(
 					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000))),
 				))
+				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgCreateService(
 				"MilkyWay",
@@ -41,10 +42,13 @@ func (suite *KeeperTestSuite) TestMsgServer_CreateService() {
 		{
 			name: "invalid service returns error",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextServiceID(ctx, 1)
-				suite.k.SetParams(ctx, types.NewParams(
+				err := suite.k.SetNextServiceID(ctx, 1)
+				suite.Require().NoError(err)
+
+				err = suite.k.SetParams(ctx, types.NewParams(
 					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000))),
 				))
+				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgCreateService(
 				"MilkyWay",
@@ -58,10 +62,13 @@ func (suite *KeeperTestSuite) TestMsgServer_CreateService() {
 		{
 			name: "user without enough funds return error",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextServiceID(ctx, 1)
-				suite.k.SetParams(ctx, types.NewParams(
+				err := suite.k.SetNextServiceID(ctx, 1)
+				suite.Require().NoError(err)
+
+				err = suite.k.SetParams(ctx, types.NewParams(
 					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000))),
 				))
+				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgCreateService(
 				"MilkyWay",
@@ -75,11 +82,18 @@ func (suite *KeeperTestSuite) TestMsgServer_CreateService() {
 		{
 			name: "valid service is created properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextServiceID(ctx, 1)
-				suite.k.SetParams(ctx, types.NewParams(
+				err := suite.k.SetNextServiceID(ctx, 1)
+				suite.Require().NoError(err)
+
+				err = suite.k.SetParams(ctx, types.NewParams(
 					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000))),
 				))
-				suite.fundAccount(ctx, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(200_000))))
+				suite.Require().NoError(err)
+
+				suite.fundAccount(ctx,
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(200_000))),
+				)
 			},
 			msg: types.NewMsgCreateService(
 				"MilkyWay",
@@ -100,7 +114,8 @@ func (suite *KeeperTestSuite) TestMsgServer_CreateService() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the service has been stored
-				stored, found := suite.k.GetService(ctx, 1)
+				stored, found, err := suite.k.GetService(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewService(
 					1,
@@ -277,7 +292,8 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateService() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the service was updated
-				stored, found := suite.k.GetService(ctx, 1)
+				stored, found, err := suite.k.GetService(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewService(
 					1,
@@ -522,7 +538,8 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateService() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the service was deactivated
-				stored, found := suite.k.GetService(ctx, 1)
+				stored, found, err := suite.k.GetService(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewService(
 					1,
@@ -659,7 +676,8 @@ func (suite *KeeperTestSuite) TestMsgServer_DeleteService() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the service was removed
-				_, found := suite.k.GetService(ctx, 1)
+				_, found, err := suite.k.GetService(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().False(found)
 			},
 		},
@@ -691,7 +709,8 @@ func (suite *KeeperTestSuite) TestMsgServer_DeleteService() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the service was removed
-				_, found := suite.k.GetService(ctx, 1)
+				_, found, err := suite.k.GetService(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().False(found)
 			},
 		},
@@ -801,7 +820,8 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferServiceOwnership() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the service was updated
-				stored, found := suite.k.GetService(ctx, 1)
+				stored, found, err := suite.k.GetService(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewService(
 					1,
@@ -1018,7 +1038,8 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateParams() {
 			expResponse: &types.MsgUpdateParamsResponse{},
 			expEvents:   sdk.Events{},
 			check: func(ctx sdk.Context) {
-				params := suite.k.GetParams(ctx)
+				params, err := suite.k.GetParams(ctx)
+				suite.Require().NoError(err)
 				suite.Require().Equal(types.DefaultParams(), params)
 			},
 		},
@@ -1113,7 +1134,8 @@ func (suite *KeeperTestSuite) TestMsgServer_AccreditService() {
 				),
 			},
 			check: func(ctx sdk.Context) {
-				service, found := suite.k.GetService(ctx, 1)
+				service, found, err := suite.k.GetService(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().True(service.Accredited)
 			},
@@ -1209,7 +1231,8 @@ func (suite *KeeperTestSuite) TestMsgService_RevokeServiceAccreditation() {
 				),
 			},
 			check: func(ctx sdk.Context) {
-				service, found := suite.k.GetService(ctx, 1)
+				service, found, err := suite.k.GetService(ctx, 1)
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().False(service.Accredited)
 			},

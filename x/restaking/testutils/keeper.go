@@ -3,7 +3,7 @@ package testutils
 import (
 	"testing"
 
-	storetypes "cosmossdk.io/store/types"
+	corestoretypes "cosmossdk.io/core/store"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
@@ -22,7 +22,7 @@ import (
 type KeeperTestData struct {
 	storetesting.BaseKeeperTestData
 
-	StoreKey storetypes.StoreKey
+	StoreService corestoretypes.KVStoreService
 
 	PoolsKeeper     *poolskeeper.Keeper
 	OperatorsKeeper *operatorskeeper.Keeper
@@ -41,18 +41,16 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	}
 
 	// Setup the keys
-	data.StoreKey = data.Keys[types.StoreKey]
+	data.StoreService = runtime.NewKVStoreService(data.Keys[types.StoreKey])
 
 	// Build the keepers
 	data.PoolsKeeper = poolskeeper.NewKeeper(
 		data.Cdc,
-		data.Keys[poolstypes.StoreKey],
 		runtime.NewKVStoreService(data.Keys[poolstypes.StoreKey]),
 		data.AccountKeeper,
 	)
 	data.OperatorsKeeper = operatorskeeper.NewKeeper(
 		data.Cdc,
-		data.Keys[operatorstypes.StoreKey],
 		runtime.NewKVStoreService(data.Keys[operatorstypes.StoreKey]),
 		data.AccountKeeper,
 		data.DistributionKeeper,
@@ -60,7 +58,6 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	)
 	data.ServicesKeeper = serviceskeeper.NewKeeper(
 		data.Cdc,
-		data.Keys[servicestypes.StoreKey],
 		runtime.NewKVStoreService(data.Keys[servicestypes.StoreKey]),
 		data.AccountKeeper,
 		data.DistributionKeeper,
@@ -68,8 +65,7 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	)
 	data.Keeper = keeper.NewKeeper(
 		data.Cdc,
-		data.StoreKey,
-		runtime.NewKVStoreService(data.Keys[types.StoreKey]),
+		data.StoreService,
 		data.AccountKeeper,
 		data.BankKeeper,
 		data.PoolsKeeper,

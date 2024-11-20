@@ -8,18 +8,20 @@ import (
 
 func (suite *KeeperTestSuite) TestKeeper_GetPoolForDenom() {
 	testCases := []struct {
-		name     string
-		setup    func()
-		store    func(ctx sdk.Context)
-		denom    string
-		expFound bool
-		expPool  types.Pool
-		check    func(ctx sdk.Context)
+		name      string
+		setup     func()
+		store     func(ctx sdk.Context)
+		denom     string
+		shouldErr bool
+		expFound  bool
+		expPool   types.Pool
+		check     func(ctx sdk.Context)
 	}{
 		{
-			name:     "non exiting pool returns error",
-			denom:    "denom",
-			expFound: false,
+			name:      "non exiting pool returns error",
+			denom:     "denom",
+			expFound:  false,
+			shouldErr: false,
 		},
 		{
 			name: "existing pool is returned properly",
@@ -27,9 +29,10 @@ func (suite *KeeperTestSuite) TestKeeper_GetPoolForDenom() {
 				err := suite.k.SavePool(ctx, types.NewPool(1, "umilk"))
 				suite.Require().NoError(err)
 			},
-			denom:    "umilk",
-			expFound: true,
-			expPool:  types.NewPool(1, "umilk"),
+			denom:     "umilk",
+			shouldErr: false,
+			expFound:  true,
+			expPool:   types.NewPool(1, "umilk"),
 		},
 	}
 
@@ -44,14 +47,19 @@ func (suite *KeeperTestSuite) TestKeeper_GetPoolForDenom() {
 				tc.store(ctx)
 			}
 
-			pool, found := suite.k.GetPoolByDenom(ctx, tc.denom)
-			suite.Require().Equal(tc.expFound, found)
-			if tc.expFound {
-				suite.Require().Equal(tc.expPool, pool)
-			}
+			pool, found, err := suite.k.GetPoolByDenom(ctx, tc.denom)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expFound, found)
+				if tc.expFound {
+					suite.Require().Equal(tc.expPool, pool)
+				}
 
-			if tc.check != nil {
-				tc.check(ctx)
+				if tc.check != nil {
+					tc.check(ctx)
+				}
 			}
 		})
 	}
@@ -68,14 +76,10 @@ func (suite *KeeperTestSuite) TestKeeper_CreateOrGetPoolByDenom() {
 		check     func(ctx sdk.Context)
 	}{
 		{
-			name:      "invalid next pool id returns error",
-			denom:     "umilk",
-			shouldErr: true,
-		},
-		{
 			name: "invalid pool returns error",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextPoolID(ctx, 1)
+				err := suite.k.SetNextPoolID(ctx, 1)
+				suite.Require().NoError(err)
 			},
 			denom:     "invalid!",
 			shouldErr: true,
@@ -93,8 +97,10 @@ func (suite *KeeperTestSuite) TestKeeper_CreateOrGetPoolByDenom() {
 		{
 			name: "non existing pool is created properly",
 			store: func(ctx sdk.Context) {
-				suite.k.SetNextPoolID(ctx, 2)
-				err := suite.k.SavePool(ctx, types.NewPool(1, "unit"))
+				err := suite.k.SetNextPoolID(ctx, 2)
+				suite.Require().NoError(err)
+
+				err = suite.k.SavePool(ctx, types.NewPool(1, "unit"))
 				suite.Require().NoError(err)
 			},
 			denom:     "umilk",
@@ -102,7 +108,8 @@ func (suite *KeeperTestSuite) TestKeeper_CreateOrGetPoolByDenom() {
 			expPool:   types.NewPool(2, "umilk"),
 			check: func(ctx sdk.Context) {
 				// Make sure the pool is stored properly
-				pool, found := suite.k.GetPoolByDenom(ctx, "umilk")
+				pool, found, err := suite.k.GetPoolByDenom(ctx, "umilk")
+				suite.Require().NoError(err)
 				suite.Require().True(found)
 				suite.Require().Equal(types.NewPool(2, "umilk"), pool)
 

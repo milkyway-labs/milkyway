@@ -21,16 +21,12 @@ func NewMsgServer(k *Keeper) types.MsgServer {
 }
 
 // MintVestedRepresentation implements types.MsgServer.
-func (m msgServer) MintVestedRepresentation(
-	goCtx context.Context,
-	msg *types.MsgMintVestedRepresentation,
-) (*types.MsgMintVestedRepresentationResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
+func (m msgServer) MintVestedRepresentation(ctx context.Context, msg *types.MsgMintVestedRepresentation) (*types.MsgMintVestedRepresentationResponse, error) {
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return nil, err
 	}
+
 	receiver, err := sdk.AccAddressFromBech32(msg.Receiver)
 	if err != nil {
 		return nil, err
@@ -40,6 +36,7 @@ func (m msgServer) MintVestedRepresentation(
 	if err != nil {
 		return nil, err
 	}
+
 	if !isMinter {
 		return nil, types.ErrNotMinter
 	}
@@ -49,7 +46,8 @@ func (m msgServer) MintVestedRepresentation(
 		return nil, err
 	}
 
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeMintVestedRepresentation,
 			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
@@ -62,24 +60,22 @@ func (m msgServer) MintVestedRepresentation(
 }
 
 // BurnVestedRepresentation implements types.MsgServer.
-func (m msgServer) BurnVestedRepresentation(
-	goCtx context.Context,
-	msg *types.MsgBurnVestedRepresentation,
-) (*types.MsgBurnVestedRepresentationResponse, error) {
+func (m msgServer) BurnVestedRepresentation(ctx context.Context, msg *types.MsgBurnVestedRepresentation) (*types.MsgBurnVestedRepresentationResponse, error) {
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return nil, err
 	}
+
 	user, err := sdk.AccAddressFromBech32(msg.User)
 	if err != nil {
 		return nil, err
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
 	isBurner, err := m.IsBurner(ctx, sender)
 	if err != nil {
 		return nil, err
 	}
+
 	if !isBurner {
 		return nil, types.ErrNotBurner
 	}
@@ -89,7 +85,8 @@ func (m msgServer) BurnVestedRepresentation(
 		return nil, err
 	}
 
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeBurnVestedRepresentation,
 			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
@@ -102,18 +99,17 @@ func (m msgServer) BurnVestedRepresentation(
 }
 
 // WithdrawInsuranceFund implements types.MsgServer.
-func (m msgServer) WithdrawInsuranceFund(goCtx context.Context, msg *types.MsgWithdrawInsuranceFund) (*types.MsgWithdrawInsuranceFundResponse, error) {
+func (m msgServer) WithdrawInsuranceFund(ctx context.Context, msg *types.MsgWithdrawInsuranceFund) (*types.MsgWithdrawInsuranceFundResponse, error) {
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return nil, err
 	}
 
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
 	canWithdaw, err := m.CanWithdrawFromInsuranceFund(ctx, sender, msg.Amount)
 	if err != nil {
 		return nil, err
 	}
+
 	if !canWithdaw {
 		return nil, types.ErrInsufficientBalance
 	}
@@ -124,7 +120,8 @@ func (m msgServer) WithdrawInsuranceFund(goCtx context.Context, msg *types.MsgWi
 		return nil, err
 	}
 
-	ctx.EventManager().EmitEvents(sdk.Events{
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeWithdrawInsuranceFund,
 			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
@@ -136,22 +133,14 @@ func (m msgServer) WithdrawInsuranceFund(goCtx context.Context, msg *types.MsgWi
 }
 
 // UpdateParams implements types.MsgServer.
-func (m msgServer) UpdateParams(
-	goCtx context.Context,
-	msg *types.MsgUpdateParams,
-) (*types.MsgUpdateParamsResponse, error) {
+func (m msgServer) UpdateParams(ctx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
 	// Check the authority
 	authority := m.authority
 	if authority != msg.Authority {
-		return nil, errors.Wrapf(
-			govtypes.ErrInvalidSigner,
-			"invalid authority; expected %s, got %s",
-			authority, msg.Authority,
-		)
+		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", authority, msg.Authority)
 	}
 
 	// Update the params
-	ctx := sdk.UnwrapSDKContext(goCtx)
 	err := m.SetParams(ctx, msg.Params)
 	if err != nil {
 		return nil, err

@@ -21,12 +21,13 @@ func (suite *KeeperTestSuite) TestInvariants_ReferenceCountInvariant() {
 			name: "default genesis does not return errors",
 			store: func(ctx sdk.Context) {
 				// Store the genesis data for all the modules involved
-				suite.poolsKeeper.InitGenesis(ctx, poolstypes.DefaultGenesis())
-				err := suite.servicesKeeper.InitGenesis(ctx, servicestypes.DefaultGenesis())
+				err := suite.poolsKeeper.InitGenesis(ctx, poolstypes.DefaultGenesis())
+				suite.Require().NoError(err)
+				err = suite.servicesKeeper.InitGenesis(ctx, servicestypes.DefaultGenesis())
 				suite.NoError(err)
-				err = suite.operatorsKeeper.InitGenesis(ctx, *operatorstypes.DefaultGenesis())
+				err = suite.operatorsKeeper.InitGenesis(ctx, operatorstypes.DefaultGenesis())
 				suite.NoError(err)
-				err = suite.keeper.InitGenesis(ctx, *types.DefaultGenesis())
+				err = suite.keeper.InitGenesis(ctx, types.DefaultGenesis())
 				suite.NoError(err)
 			},
 			expBroken: false,
