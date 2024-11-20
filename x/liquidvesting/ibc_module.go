@@ -146,7 +146,7 @@ func (im IBCModule) OnRecvPacket(
 	}
 
 	// Handle the MsgDepositInsurance
-	if err := im.keeper.OnRecvPacket(ctx, data, msgDepositInsurance); err != nil {
+	if err := im.keeper.OnRecvPacket(ctx, packet, data, msgDepositInsurance); err != nil {
 		return channeltypes.NewErrorAcknowledgement(err)
 	}
 
