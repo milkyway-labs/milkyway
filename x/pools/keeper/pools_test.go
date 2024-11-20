@@ -136,11 +136,11 @@ func (suite *KeeperTestSuite) TestKeeper_SavePool() {
 		},
 		{
 			name: "existing pool is overridden properly",
-			setup: func() {
-				err := suite.k.SetNextPoolID(suite.ctx, 1)
+			store: func(ctx sdk.Context) {
+				err := suite.k.SetNextPoolID(ctx, 1)
 				suite.Require().NoError(err)
 
-				err = suite.k.SavePool(suite.ctx, types.NewPool(1, "uatom"))
+				err = suite.k.SavePool(ctx, types.NewPool(1, "uatom"))
 				suite.Require().NoError(err)
 			},
 			pool:      types.NewPool(1, "usdt"),

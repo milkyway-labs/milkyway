@@ -36,11 +36,11 @@ func (suite *KeeperTestSuite) TestMsgServer_RegisterOperator() {
 		},
 		{
 			name: "invalid operator returns error",
-			setup: func() {
-				err := suite.k.SetNextOperatorID(suite.ctx, 1)
+			store: func(ctx sdk.Context) {
+				err := suite.k.SetNextOperatorID(ctx, 1)
 				suite.Require().NoError(err)
 
-				err = suite.k.SetParams(suite.ctx, types.NewParams(
+				err = suite.k.SetParams(ctx, types.NewParams(
 					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),
 					6*time.Hour,
 				))
@@ -57,10 +57,10 @@ func (suite *KeeperTestSuite) TestMsgServer_RegisterOperator() {
 		{
 			name: "operator registered successfully",
 			store: func(ctx sdk.Context) {
-				err := suite.k.SetNextOperatorID(suite.ctx, 2)
+				err := suite.k.SetNextOperatorID(ctx, 2)
 				suite.Require().NoError(err)
 
-				err = suite.k.SetParams(suite.ctx, types.NewParams(
+				err = suite.k.SetParams(ctx, types.NewParams(
 					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),
 					6*time.Hour,
 				))

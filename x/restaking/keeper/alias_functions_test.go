@@ -689,7 +689,7 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 	delegator := "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"
 	testCases := []struct {
 		name      string
-		setup     func(ctx sdk.Context)
+		store     func(ctx sdk.Context)
 		account   string
 		amount    sdk.Coins
 		shouldErr bool
@@ -703,7 +703,7 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 		},
 		{
 			name: "undelegate more then delegated fails",
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				// Fund the account
 				suite.fundAccount(ctx, delegator, sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)))
 
@@ -746,7 +746,7 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 			name:    "undelegate with multiple delegations torward a pool",
 			account: delegator,
 			amount:  sdk.NewCoins(sdk.NewInt64Coin("stake", 300)),
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				// Fund the delegator account
 				suite.fundAccount(ctx, delegator, sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)))
 
@@ -770,7 +770,7 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 		},
 		{
 			name: "partial undelegate leaves balances to operator",
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				// Fund the account
 				suite.fundAccount(ctx, delegator, sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)))
 
@@ -821,7 +821,7 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 		},
 		{
 			name: "undelegate  with amounts shared between pool, service and operator",
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				// Prepare pool, service and operator
 				err := suite.pk.SetNextPoolID(ctx, 1)
 				suite.Require().NoError(err)
@@ -882,8 +882,8 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
 			ctx, _ := suite.ctx.CacheContext()
-			if tc.setup != nil {
-				tc.setup(ctx)
+			if tc.store != nil {
+				tc.store(ctx)
 			}
 
 			accAddr := sdk.MustAccAddressFromBech32(tc.account)
