@@ -9,240 +9,13 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
-	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-// SetDelegatorStartingInfo sets the delegator starting info for a delegator.
-func (k *Keeper) SetDelegatorStartingInfo(
-	ctx context.Context, target restakingtypes.DelegationTarget, del sdk.AccAddress, info types.DelegatorStartingInfo,
-) error {
-	switch target.(type) {
-	case poolstypes.Pool:
-		return k.PoolDelegatorStartingInfos.Set(ctx, collections.Join(target.GetID(), del), info)
-	case operatorstypes.Operator:
-		return k.OperatorDelegatorStartingInfos.Set(ctx, collections.Join(target.GetID(), del), info)
-	case servicestypes.Service:
-		return k.ServiceDelegatorStartingInfos.Set(ctx, collections.Join(target.GetID(), del), info)
-	default:
-		return errors.Wrapf(restakingtypes.ErrInvalidDelegationType, "invalid delegation target type %T", target)
-	}
-}
-
-// HasDelegatorStartingInfo returns true if the delegator starting info exists for a delegator and target
-func (k *Keeper) HasDelegatorStartingInfo(
-	ctx context.Context, target restakingtypes.DelegationTarget, delegator sdk.AccAddress,
-) (bool, error) {
-	switch target.(type) {
-	case poolstypes.Pool:
-		return k.PoolDelegatorStartingInfos.Has(ctx, collections.Join(target.GetID(), delegator))
-	case operatorstypes.Operator:
-		return k.OperatorDelegatorStartingInfos.Has(ctx, collections.Join(target.GetID(), delegator))
-	case servicestypes.Service:
-		return k.ServiceDelegatorStartingInfos.Has(ctx, collections.Join(target.GetID(), delegator))
-	default:
-		return false, errors.Wrapf(restakingtypes.ErrInvalidDelegationType, "invalid delegation target type %T", target)
-	}
-}
-
-// GetDelegatorStartingInfo returns the delegator starting info for a delegator and target
-func (k *Keeper) GetDelegatorStartingInfo(
-	ctx context.Context, target restakingtypes.DelegationTarget, delegator sdk.AccAddress,
-) (types.DelegatorStartingInfo, error) {
-	switch target.(type) {
-	case poolstypes.Pool:
-		return k.PoolDelegatorStartingInfos.Get(ctx, collections.Join(target.GetID(), delegator))
-	case operatorstypes.Operator:
-		return k.OperatorDelegatorStartingInfos.Get(ctx, collections.Join(target.GetID(), delegator))
-	case servicestypes.Service:
-		return k.ServiceDelegatorStartingInfos.Get(ctx, collections.Join(target.GetID(), delegator))
-	default:
-		return types.DelegatorStartingInfo{}, errors.Wrapf(
-			restakingtypes.ErrInvalidDelegationType, "invalid delegation target type %T", target,
-		)
-	}
-}
-
-// RemoveDelegatorStartingInfo removes the delegator starting info for a delegator and target
-func (k *Keeper) RemoveDelegatorStartingInfo(
-	ctx context.Context, target restakingtypes.DelegationTarget, delegator sdk.AccAddress,
-) error {
-	switch target.(type) {
-	case poolstypes.Pool:
-		return k.PoolDelegatorStartingInfos.Remove(ctx, collections.Join(target.GetID(), delegator))
-	case operatorstypes.Operator:
-		return k.OperatorDelegatorStartingInfos.Remove(ctx, collections.Join(target.GetID(), delegator))
-	case servicestypes.Service:
-		return k.ServiceDelegatorStartingInfos.Remove(ctx, collections.Join(target.GetID(), delegator))
-	default:
-		return errors.Wrapf(restakingtypes.ErrInvalidDelegationType, "invalid delegation target type %T", target)
-	}
-}
-
-// --------------------------------------------------------------------------------------------------------------------
-
-// SetOutstandingRewards sets the outstanding rewards for a target.
-func (k *Keeper) SetOutstandingRewards(
-	ctx context.Context, target restakingtypes.DelegationTarget, rewards types.OutstandingRewards,
-) error {
-	switch target.(type) {
-	case poolstypes.Pool:
-		return k.PoolOutstandingRewards.Set(ctx, target.GetID(), rewards)
-	case operatorstypes.Operator:
-		return k.OperatorOutstandingRewards.Set(ctx, target.GetID(), rewards)
-	case servicestypes.Service:
-		return k.ServiceOutstandingRewards.Set(ctx, target.GetID(), rewards)
-	default:
-		return errors.Wrapf(restakingtypes.ErrInvalidDelegationType, "invalid delegation target type %T", target)
-	}
-}
-
-// GetOutstandingRewards returns the outstanding rewards for a target
-func (k *Keeper) GetOutstandingRewards(ctx context.Context, target restakingtypes.DelegationTarget) (types.OutstandingRewards, error) {
-	switch target.(type) {
-	case poolstypes.Pool:
-		return k.PoolOutstandingRewards.Get(ctx, target.GetID())
-	case operatorstypes.Operator:
-		return k.OperatorOutstandingRewards.Get(ctx, target.GetID())
-	case servicestypes.Service:
-		return k.ServiceOutstandingRewards.Get(ctx, target.GetID())
-	default:
-		return types.OutstandingRewards{}, errors.Wrapf(
-			restakingtypes.ErrInvalidDelegationType, "invalid delegation target type %T", target,
-		)
-	}
-}
-
-// --------------------------------------------------------------------------------------------------------------------
-
-// SetCurrentRewards sets the current rewards for a target
-func (k *Keeper) SetCurrentRewards(
-	ctx context.Context, target restakingtypes.DelegationTarget, rewards types.CurrentRewards,
-) error {
-	switch target.(type) {
-	case poolstypes.Pool:
-		return k.PoolCurrentRewards.Set(ctx, target.GetID(), rewards)
-	case operatorstypes.Operator:
-		return k.OperatorCurrentRewards.Set(ctx, target.GetID(), rewards)
-	case servicestypes.Service:
-		return k.ServiceCurrentRewards.Set(ctx, target.GetID(), rewards)
-	default:
-		return errors.Wrapf(restakingtypes.ErrInvalidDelegationType, "invalid delegation target type %T", target)
-	}
-}
-
-// HasCurrentRewards returns true if the current rewards exist for a target
-func (k *Keeper) HasCurrentRewards(ctx context.Context, target restakingtypes.DelegationTarget) (bool, error) {
-	switch target.(type) {
-	case poolstypes.Pool:
-		return k.PoolCurrentRewards.Has(ctx, target.GetID())
-	case operatorstypes.Operator:
-		return k.OperatorCurrentRewards.Has(ctx, target.GetID())
-	case servicestypes.Service:
-		return k.ServiceCurrentRewards.Has(ctx, target.GetID())
-	default:
-		return false, errors.Wrapf(restakingtypes.ErrInvalidDelegationType, "invalid delegation target type %T", target)
-	}
-}
-
-// GetCurrentRewards returns the current rewards for a target
-func (k *Keeper) GetCurrentRewards(ctx context.Context, target restakingtypes.DelegationTarget) (types.CurrentRewards, error) {
-	switch target.(type) {
-	case poolstypes.Pool:
-		return k.PoolCurrentRewards.Get(ctx, target.GetID())
-	case operatorstypes.Operator:
-		return k.OperatorCurrentRewards.Get(ctx, target.GetID())
-	case servicestypes.Service:
-		return k.ServiceCurrentRewards.Get(ctx, target.GetID())
-	default:
-		return types.CurrentRewards{}, errors.Wrapf(
-			restakingtypes.ErrInvalidDelegationType, "invalid delegation target type %T", target,
-		)
-	}
-}
-
-// DeleteCurrentRewards deletes the current rewards for a target
-func (k *Keeper) DeleteCurrentRewards(ctx context.Context, target restakingtypes.DelegationTarget) error {
-	switch target.(type) {
-	case poolstypes.Pool:
-		return k.PoolCurrentRewards.Remove(ctx, target.GetID())
-	case operatorstypes.Operator:
-		return k.OperatorCurrentRewards.Remove(ctx, target.GetID())
-	case servicestypes.Service:
-		return k.ServiceCurrentRewards.Remove(ctx, target.GetID())
-	default:
-		return errors.Wrapf(restakingtypes.ErrInvalidDelegationType, "invalid delegation target type %T", target)
-	}
-}
-
-// --------------------------------------------------------------------------------------------------------------------
-
-// SetHistoricalRewards sets the historical rewards for a target and period
-func (k *Keeper) SetHistoricalRewards(
-	ctx context.Context, target restakingtypes.DelegationTarget, period uint64,
-	rewards types.HistoricalRewards,
-) error {
-	switch target.(type) {
-	case poolstypes.Pool:
-		return k.PoolHistoricalRewards.Set(ctx, collections.Join(target.GetID(), period), rewards)
-	case operatorstypes.Operator:
-		return k.OperatorHistoricalRewards.Set(ctx, collections.Join(target.GetID(), period), rewards)
-	case servicestypes.Service:
-		return k.ServiceHistoricalRewards.Set(ctx, collections.Join(target.GetID(), period), rewards)
-	default:
-		return errors.Wrapf(restakingtypes.ErrInvalidDelegationType, "invalid delegation target type %T", target)
-	}
-}
-
-// GetHistoricalRewards returns the historical rewards for a target and period
-func (k *Keeper) GetHistoricalRewards(
-	ctx context.Context, target restakingtypes.DelegationTarget, period uint64,
-) (types.HistoricalRewards, error) {
-	switch target.(type) {
-	case poolstypes.Pool:
-		return k.PoolHistoricalRewards.Get(ctx, collections.Join(target.GetID(), period))
-	case operatorstypes.Operator:
-		return k.OperatorHistoricalRewards.Get(ctx, collections.Join(target.GetID(), period))
-	case servicestypes.Service:
-		return k.ServiceHistoricalRewards.Get(ctx, collections.Join(target.GetID(), period))
-	default:
-		return types.HistoricalRewards{}, errors.Wrapf(
-			restakingtypes.ErrInvalidDelegationType, "invalid delegation target type %T", target,
-		)
-	}
-}
-
-// RemoveHistoricalRewards removes the historical rewards for a target and period
-func (k *Keeper) RemoveHistoricalRewards(
-	ctx context.Context, target restakingtypes.DelegationTarget, period uint64,
-) error {
-	switch target.(type) {
-	case poolstypes.Pool:
-		return k.PoolHistoricalRewards.Remove(ctx, collections.Join(target.GetID(), period))
-	case operatorstypes.Operator:
-		return k.OperatorHistoricalRewards.Remove(ctx, collections.Join(target.GetID(), period))
-	case servicestypes.Service:
-		return k.ServiceHistoricalRewards.Remove(ctx, collections.Join(target.GetID(), period))
-	default:
-		return errors.Wrapf(restakingtypes.ErrInvalidDelegationType, "invalid delegation target type %T", target)
-	}
-}
-
 // DeleteHistoricalRewards deletes all historical rewards for a target
-func (k *Keeper) DeleteHistoricalRewards(ctx context.Context, target restakingtypes.DelegationTarget) error {
-	var collection collections.Map[collections.Pair[uint32, uint64], types.HistoricalRewards]
-	switch target.(type) {
-	case poolstypes.Pool:
-		collection = k.PoolHistoricalRewards
-	case operatorstypes.Operator:
-		collection = k.OperatorHistoricalRewards
-	case servicestypes.Service:
-		collection = k.ServiceHistoricalRewards
-	default:
-		return errors.Wrapf(restakingtypes.ErrInvalidDelegationType, "invalid delegation target type %T", target)
-	}
+func (k *Keeper) DeleteHistoricalRewards(ctx context.Context, target DelegationTarget) error {
+	collection := target.HistoricalRewards
 
 	// Walk over the collection and get the list of keys to be deleted
 	var keys []collections.Pair[uint32, uint64]
@@ -271,39 +44,12 @@ func (k *Keeper) DeleteHistoricalRewards(ctx context.Context, target restakingty
 // --------------------------------------------------------------------------------------------------------------------
 
 // GetOutstandingRewardsCoins returns the outstanding rewards coins for a target
-func (k *Keeper) GetOutstandingRewardsCoins(ctx context.Context, target restakingtypes.DelegationTarget) (types.DecPools, error) {
-	var (
-		rewards types.OutstandingRewards
-		err     error
-	)
-	switch target.(type) {
-	case poolstypes.Pool:
-		rewards, err = k.PoolOutstandingRewards.Get(ctx, target.GetID())
-	case operatorstypes.Operator:
-		rewards, err = k.OperatorOutstandingRewards.Get(ctx, target.GetID())
-	case servicestypes.Service:
-		rewards, err = k.ServiceOutstandingRewards.Get(ctx, target.GetID())
-	default:
-		return nil, errors.Wrapf(restakingtypes.ErrInvalidDelegationType, "invalid delegation target type %T", target)
-	}
+func (k *Keeper) GetOutstandingRewardsCoins(ctx context.Context, target DelegationTarget) (types.DecPools, error) {
+	rewards, err := target.OutstandingRewards.Get(ctx, target.GetID())
 	if err != nil && !errors.IsOf(err, collections.ErrNotFound) {
 		return nil, err
 	}
 	return rewards.Rewards, nil
-}
-
-// DeleteOutstandingRewards deletes the outstanding rewards for a target
-func (k *Keeper) DeleteOutstandingRewards(ctx context.Context, target restakingtypes.DelegationTarget) error {
-	switch target.(type) {
-	case poolstypes.Pool:
-		return k.PoolOutstandingRewards.Remove(ctx, target.GetID())
-	case operatorstypes.Operator:
-		return k.OperatorOutstandingRewards.Remove(ctx, target.GetID())
-	case servicestypes.Service:
-		return k.ServiceOutstandingRewards.Remove(ctx, target.GetID())
-	default:
-		return errors.Wrapf(restakingtypes.ErrInvalidDelegationType, "invalid delegation target type %T", target)
-	}
 }
 
 // GetOperatorAccumulatedCommission returns the accumulated commission for an operator.
@@ -374,7 +120,7 @@ func (k *Keeper) GetDelegationRewards(
 		return nil, err
 	}
 
-	delegation, found, err := k.restakingKeeper.GetDelegationForTarget(ctx, target, delegator)
+	delegation, found, err := k.restakingKeeper.GetDelegationForTarget(ctx, target.DelegationTarget, delegator)
 	if err != nil {
 		return nil, err
 	}

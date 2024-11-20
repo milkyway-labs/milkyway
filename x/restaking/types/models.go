@@ -106,7 +106,7 @@ func NewDelegationResponse(delegation Delegation, balance sdk.Coins) DelegationR
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// GetDelegationTypeFromTarget returns the unbonding delegation type based on the target
+// GetDelegationTypeFromTarget returns the delegation type based on the target
 func GetDelegationTypeFromTarget(target DelegationTarget) (DelegationType, error) {
 	switch target.(type) {
 	case poolstypes.Pool:
@@ -116,7 +116,7 @@ func GetDelegationTypeFromTarget(target DelegationTarget) (DelegationType, error
 	case servicestypes.Service:
 		return DELEGATION_TYPE_SERVICE, nil
 	default:
-		return DELEGATION_TYPE_UNSPECIFIED, fmt.Errorf("invalid unbonding target type : %T", target)
+		return DELEGATION_TYPE_UNSPECIFIED, fmt.Errorf("invalid delegation target type : %T", target)
 	}
 }
 

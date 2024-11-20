@@ -9,7 +9,6 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 )
 
@@ -30,7 +29,7 @@ func (k *Keeper) SetWithdrawAddress(ctx context.Context, addr, withdrawAddr sdk.
 
 // WithdrawDelegationRewards withdraws the rewards from the delegation and reinitializes it
 func (k *Keeper) WithdrawDelegationRewards(
-	ctx context.Context, delAddr sdk.AccAddress, target restakingtypes.DelegationTarget,
+	ctx context.Context, delAddr sdk.AccAddress, target DelegationTarget,
 ) (types.Pools, error) {
 	// Get the delegation
 	delegator, err := k.accountKeeper.AddressCodec().BytesToString(delAddr)
@@ -38,7 +37,7 @@ func (k *Keeper) WithdrawDelegationRewards(
 		return nil, err
 	}
 
-	delegation, found, err := k.restakingKeeper.GetDelegationForTarget(ctx, target, delegator)
+	delegation, found, err := k.restakingKeeper.GetDelegationForTarget(ctx, target.DelegationTarget, delegator)
 	if err != nil {
 		return nil, err
 	}
