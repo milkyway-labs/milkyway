@@ -103,6 +103,7 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 
 	// Set bank hooks
 	data.BankKeeper.AppendSendRestriction(data.Keeper.SendRestrictionFn)
+	data.RestakingKeeper.SetRestakeRestriction(data.Keeper.RestakeRestrictionFn)
 
 	// Set ibc hooks
 	var ibcStack porttypes.IBCModule = mockIBCMiddleware{}

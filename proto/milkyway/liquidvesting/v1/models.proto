@@ -16,16 +16,6 @@ message UserInsuranceFund {
     (gogoproto.nullable) = false,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
-
-  // Amount in the user's insurance that is being used to secure the
-  // restaked toknes. For example an user has 10 TIA in their insurance fund,
-  // the insurance percentage is 1% so they can restake 1000 TIA.
-  // The user restakes only 100 TIA, in this case the balance is 10 TIA and used
-  // is 1 TIA.
-  repeated cosmos.base.v1beta1.Coin used = 2 [
-    (gogoproto.nullable) = false,
-    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
-  ];
 }
 
 // BurnCoins is a struct that contains the information about the coins to burn
@@ -58,11 +48,15 @@ message BurnCoinsList {
       [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
 }
 
-// UserInsuranceFundState represents a user's insurance fund.
-message UserInsuranceFundState {
+// UserInsuranceFundEntry represents an entry containing the data of a user
+// insurance fund.
+message UserInsuranceFundEntry {
   // Address of who owns the insurance fund.
   string user_address = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
-  // InsuranceFund represents the user's insurance fund.
-  UserInsuranceFund insurance_fund = 2 [ (gogoproto.nullable) = false ];
+  // Amount of coins deposited into the user's insurance fund.
+  repeated cosmos.base.v1beta1.Coin balance = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
 }

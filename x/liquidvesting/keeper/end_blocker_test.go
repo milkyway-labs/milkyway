@@ -103,9 +103,9 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 
 				// The user insurance fund signal that there are still 20 coins used
 				// to cover the restaking position
-				userInsuranceFund, err := suite.k.GetUserInsuranceFund(ctx, sdk.MustAccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"))
+				usedUserInsuranceFund, err := suite.k.GetUserUsedInsuranceFund(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
 				suite.Assert().NoError(err)
-				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake", 16)), userInsuranceFund.Used)
+				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake", 16)), usedUserInsuranceFund)
 			},
 		},
 		{
@@ -180,9 +180,9 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 				suite.Assert().Len(unbondingQueue, 0)
 
 				// The user insurance fund should update properly
-				userInsuranceFund, err := suite.k.GetUserInsuranceFund(ctx, sdk.MustAccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"))
+				userUsedInsuranceFund, err := suite.k.GetUserUsedInsuranceFund(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
 				suite.Assert().NoError(err)
-				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake", 6)), userInsuranceFund.Used)
+				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake", 6)), userUsedInsuranceFund)
 			},
 		},
 	}

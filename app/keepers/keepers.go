@@ -654,6 +654,9 @@ func NewAppKeeper(
 	appKeepers.RestakingKeeper.SetHooks(
 		appKeepers.RewardsKeeper.RestakingHooks(),
 	)
+	appKeepers.RestakingKeeper.SetRestakeRestriction(
+		appKeepers.LiquidVestingKeeper.RestakeRestrictionFn,
+	)
 
 	// ---------------------- //
 	// --- Stride Keepers --- //

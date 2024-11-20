@@ -18,6 +18,6 @@ message GenesisState {
   repeated BurnCoins burn_coins = 2 [ (gogoproto.nullable) = false ];
 
   // UserInsuranceFunds represents the users' insurance fund.
-  repeated UserInsuranceFundState user_insurance_funds = 3
+  repeated UserInsuranceFundEntry user_insurance_funds = 3
       [ (gogoproto.nullable) = false ];
 }

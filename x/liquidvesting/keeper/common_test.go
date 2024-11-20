@@ -108,10 +108,7 @@ func (suite *KeeperTestSuite) fundAccountInsuranceFund(ctx sdk.Context, address 
 	suite.Assert().NoError(err)
 
 	// Assign those tokens to the user insurance fund
-	userAddress, err := sdk.AccAddressFromBech32(address)
-	suite.Assert().NoError(err)
-
-	err = suite.k.AddToUserInsuranceFund(ctx, userAddress, amount)
+	err = suite.k.AddToUserInsuranceFund(ctx, address, amount)
 	suite.Assert().NoError(err)
 }
 

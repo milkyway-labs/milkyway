@@ -42,7 +42,8 @@ type Keeper struct {
 	// The map stores user address -> UsersPreferences associations
 	usersPreferences collections.Map[string, types.UserPreferences]
 
-	hooks types.RestakingHooks
+	hooks              types.RestakingHooks
+	restakeRestriction types.RestakeRestrictionFn
 }
 
 func NewKeeper(

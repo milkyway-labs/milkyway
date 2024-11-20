@@ -35,7 +35,8 @@ func (k *Keeper) OnRecvPacket(
 	}
 
 	// Ensure that the message is valid
-	if err := msgDepositInsurance.ValidateBasic(); err != nil {
+	err = msgDepositInsurance.ValidateBasic()
+	if err != nil {
 		return err
 	}
 

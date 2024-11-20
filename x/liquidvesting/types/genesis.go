@@ -1,15 +1,11 @@
 package types
 
 // NewGenesisState creates a new GenesisState instance.
-func NewGenesisState(
-	params Params,
-	burnCoins []BurnCoins,
-	userInsuUserInsuranceFundItems []UserInsuranceFundState,
-) *GenesisState {
+func NewGenesisState(params Params, burnCoins []BurnCoins, usersInsuranceFunds []UserInsuranceFundEntry) *GenesisState {
 	return &GenesisState{
 		Params:             params,
 		BurnCoins:          burnCoins,
-		UserInsuranceFunds: userInsuUserInsuranceFundItems,
+		UserInsuranceFunds: usersInsuranceFunds,
 	}
 }
 

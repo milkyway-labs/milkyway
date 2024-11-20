@@ -48,10 +48,7 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			shouldErr: true,
 			check: func(ctx sdk.Context) {
 				// Make sure the user's insurance fund is not updated
-				userAddr, err := sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
-				suite.Assert().NoError(err)
-
-				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, userAddr)
+				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
 				suite.Assert().NoError(err)
 				suite.Assert().Empty(insuranceFund)
 			},
@@ -78,10 +75,7 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			shouldErr: true,
 			check: func(ctx sdk.Context) {
 				// Make sure the user's insurance fund is not updated
-				userAddr, err := sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
-				suite.Assert().NoError(err)
-
-				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, userAddr)
+				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
 				suite.Assert().NoError(err)
 				suite.Assert().Empty(insuranceFund)
 			},
@@ -108,10 +102,7 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			shouldErr: true,
 			check: func(ctx sdk.Context) {
 				// Make sure the user's insurance fund is not updated
-				userAddr, err := sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
-				suite.Assert().NoError(err)
-
-				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, userAddr)
+				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
 				suite.Assert().NoError(err)
 				suite.Assert().Empty(insuranceFund)
 			},
@@ -138,10 +129,7 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			shouldErr: true,
 			check: func(ctx sdk.Context) {
 				// Make sure the user's insurance fund is not updated
-				userAddr, err := sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
-				suite.Assert().NoError(err)
-
-				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, userAddr)
+				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
 				suite.Assert().NoError(err)
 				suite.Assert().Empty(insuranceFund)
 			},
@@ -168,10 +156,7 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			shouldErr: true,
 			check: func(ctx sdk.Context) {
 				// Make sure the user's insurance fund is not updated
-				userAddr, err := sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
-				suite.Assert().NoError(err)
-
-				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, userAddr)
+				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
 				suite.Assert().NoError(err)
 				suite.Assert().Empty(insuranceFund)
 			},
@@ -198,10 +183,7 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			shouldErr: true,
 			check: func(ctx sdk.Context) {
 				// Make sure the user's insurance fund is not updated
-				userAddr, err := sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
-				suite.Assert().NoError(err)
-
-				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, userAddr)
+				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
 				suite.Assert().NoError(err)
 				suite.Assert().Empty(insuranceFund)
 			},
@@ -236,18 +218,12 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				// Make sure the first insurance fund is updated
-				userAddr, err := sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
-				suite.Assert().NoError(err)
-
-				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, userAddr)
+				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
 				suite.Assert().NoError(err)
 				suite.Assert().Equal("600ibc/EB7094899ACFB7A6F2A67DB084DEE2E9A83DEFAA5DEF92D9A9814FFD9FF673FA", insuranceFund.String())
 
 				// Make sure the second insurance fund is updated
-				userAddr, err = sdk.AccAddressFromBech32("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd")
-				suite.Assert().NoError(err)
-
-				insuranceFund, err = suite.k.GetUserInsuranceFundBalance(ctx, userAddr)
+				insuranceFund, err = suite.k.GetUserInsuranceFundBalance(ctx, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd")
 				suite.Assert().NoError(err)
 				suite.Assert().Equal("400ibc/EB7094899ACFB7A6F2A67DB084DEE2E9A83DEFAA5DEF92D9A9814FFD9FF673FA", insuranceFund.String())
 			},
