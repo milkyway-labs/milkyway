@@ -15,8 +15,8 @@ func (k *Keeper) SetRestakeRestriction(restriction types.RestakeRestrictionFn) {
 	k.restakeRestriction = restriction
 }
 
-// IsRestakeAllowed returns nil if the restake operation is allowed, otherwise returns an error.
-func (k *Keeper) IsRestakeAllowed(ctx sdk.Context, restakerAddrees string, restakedAmount sdk.Coins, target types.DelegationTarget) error {
+// ValidateRestake returns nil if the restake operation is allowed, otherwise returns an error.
+func (k *Keeper) ValidateRestake(ctx sdk.Context, restakerAddrees string, restakedAmount sdk.Coins, target types.DelegationTarget) error {
 	if k.restakeRestriction == nil {
 		return nil
 	}
