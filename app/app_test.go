@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	simtestutil "github.com/cosmos/cosmos-sdk/testutil/sims"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/cosmos/cosmos-sdk/x/crisis"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
@@ -37,7 +38,16 @@ import (
 
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
+
+	liquidvestingtypes "github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 )
+
+func TestBlockedAddrs(t *testing.T) {
+	app := SetupWithGenesisAccounts(t, nil, nil)
+
+	blockedAddresses := app.BlacklistedModuleAccountAddrs()
+	require.False(t, blockedAddresses[authtypes.NewModuleAddress(liquidvestingtypes.ModuleName).String()])
+}
 
 func TestSimAppExportAndBlockedAddrs(t *testing.T) {
 	app := SetupWithGenesisAccounts(t, nil, nil)
