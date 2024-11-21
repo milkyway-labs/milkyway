@@ -42,63 +42,9 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			"liquidvesting": {
 				"amounts": [{
 					"depositor": "%s",
-					"amount": { "amount": "1000", "denom": "foo" }
+					"amount": "1000"
 				}]
 			}}`, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
-			shouldErr: true,
-			check: func(ctx sdk.Context) {
-				// Make sure the user's insurance fund is not updated
-				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
-				suite.Assert().NoError(err)
-				suite.Assert().Empty(insuranceFund)
-			},
-		},
-		{
-			name:           "trying to transfer not received denom returns error",
-			transferAmount: sdk.NewInt64Coin("foo", 1000),
-			sender:         "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-			receiver:       authtypes.NewModuleAddress(types.ModuleName).String(),
-			memo: fmt.Sprintf(`{"liquidvesting": {
-				"amounts": [
-					{
- 						"depositor": "%s",
- 						"amount": { "amount": "600", "denom": "bar" }
- 					},
- 					{
- 						"depositor": "%s",
- 						"amount": { "amount": "400", "denom": "bar" }
- 					}
-			]}}`,
-				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-			),
-			shouldErr: true,
-			check: func(ctx sdk.Context) {
-				// Make sure the user's insurance fund is not updated
-				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
-				suite.Assert().NoError(err)
-				suite.Assert().Empty(insuranceFund)
-			},
-		},
-		{
-			name:           "multiple denoms in amount to deposit returns error if one has not been sent",
-			transferAmount: sdk.NewInt64Coin("foo", 1000),
-			sender:         "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-			receiver:       authtypes.NewModuleAddress(types.ModuleName).String(),
-			memo: fmt.Sprintf(`{
-			"liquidvesting": {
-				"amounts": [{
-					"depositor": "%s",
-					"amount": { "amount": "1000", "denom": "foo" }
-				},
-				{
-					"depositor": "%s",
-					"amount": { "amount": "1000", "denom": "bar" }
-				}]
-			}}`,
-				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-			),
 			shouldErr: true,
 			check: func(ctx sdk.Context) {
 				// Make sure the user's insurance fund is not updated
@@ -116,11 +62,11 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
             "liquidvesting": {
                 "amounts": [{
                     "depositor": "%s",
-                    "amount": { "amount": "400", "denom": "foo" }
+                    "amount": "400"
                 },
                 {
                     "depositor": "%s",
-                    "amount": { "amount": "601", "denom": "foo" }
+                    "amount": "601"
                 }]
             }}`,
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -143,11 +89,11 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
             "liquidvesting": {
                 "amounts": [{
                     "depositor": "%s",
-                    "amount": { "amount": "300", "denom": "foo" }
+                    "amount": "300"
                 },
                 {
                     "depositor": "%s",
-                    "amount": { "amount": "600", "denom": "foo" }
+                    "amount": "600"
                 }]
             }}`,
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -170,11 +116,11 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
             "liquidvesting": {
                 "amounts": [{
                     "depositor": "%s",
-                    "amount": { "amount": "600", "denom": "foo" }
+                    "amount": "600"
                 },
                 {
                     "depositor": "%s",
-                    "amount": { "amount": "400", "denom": "foo" }
+                    "amount": "400"
                 }]
             }}`,
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -205,11 +151,11 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
             "liquidvesting": {
                 "amounts": [{
                     "depositor": "%s",
-                    "amount": { "amount": "600", "denom": "foo" }
+                    "amount": "600"
                 },
                 {
                     "depositor": "%s",
-                    "amount": { "amount": "400", "denom": "foo" }
+                    "amount": "400"
                 }]
             }}`,
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
