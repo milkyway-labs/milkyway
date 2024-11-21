@@ -6,6 +6,7 @@ import (
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
+	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 )
@@ -13,10 +14,10 @@ import (
 // OnRecvPacket processes the packet received from the IBC handler
 func (k *Keeper) OnRecvPacket(
 	ctx sdk.Context,
+	packet channeltypes.Packet,
 	data transfertypes.FungibleTokenPacketData,
 	msgDepositInsurance types.MsgDepositInsurance,
 ) error {
-
 	// Ensure the receiver is the x/liquidvesting module account
 	if data.Receiver != k.ModuleAddress {
 		return fmt.Errorf("the receiver should be the module address, got: %s, expected: %s", data.Receiver, k.ModuleAddress)
@@ -52,7 +53,17 @@ func (k *Keeper) OnRecvPacket(
 		if err != nil {
 			return err
 		}
-		err = k.AddToUserInsuranceFund(ctx, accountAddress, sdk.NewCoins(deposit.Amount))
+
+		// Convert the coin denom to its IBC representation
+		sourcePrefix := transfertypes.GetDenomPrefix(packet.GetDestPort(), packet.GetDestChannel())
+		// NOTE: sourcePrefix contains the trailing "/"
+		prefixedDenom := sourcePrefix + deposit.Amount.Denom
+		// construct the denomination trace from the full raw denomination
+		denomTrace := transfertypes.ParseDenomTrace(prefixedDenom)
+		// Convert the insurance deposit to its IBC representation
+		ibcCoin := sdk.NewCoin(denomTrace.IBCDenom(), deposit.Amount.Amount)
+
+		err = k.AddToUserInsuranceFund(ctx, accountAddress, sdk.NewCoins(ibcCoin))
 		if err != nil {
 			return err
 		}

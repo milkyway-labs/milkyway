@@ -198,7 +198,7 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 
 				insuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, userAddr)
 				suite.Assert().NoError(err)
-				suite.Assert().Equal("600foo", insuranceFund.String())
+				suite.Assert().Equal("600ibc/EB7094899ACFB7A6F2A67DB084DEE2E9A83DEFAA5DEF92D9A9814FFD9FF673FA", insuranceFund.String())
 
 				// Make sure the second insurance fund is updated
 				userAddr, err = sdk.AccAddressFromBech32("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd")
@@ -206,7 +206,7 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 
 				insuranceFund, err = suite.k.GetUserInsuranceFundBalance(ctx, userAddr)
 				suite.Assert().NoError(err)
-				suite.Assert().Equal("400foo", insuranceFund.String())
+				suite.Assert().Equal("400ibc/EB7094899ACFB7A6F2A67DB084DEE2E9A83DEFAA5DEF92D9A9814FFD9FF673FA", insuranceFund.String())
 			},
 		},
 	}
@@ -229,7 +229,11 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			suite.Assert().NoError(err)
 
 			// Build the packet
-			packet := channeltypes.Packet{Data: dataBz}
+			packet := channeltypes.Packet{
+				Data:               dataBz,
+				DestinationChannel: "channel-0",
+				DestinationPort:    "transfer",
+			}
 
 			// Receive the packet
 			ack := suite.ibcm.OnRecvPacket(ctx, packet, suite.ak.GetModuleAddress("relayer"))
