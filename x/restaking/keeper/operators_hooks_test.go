@@ -6,7 +6,7 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-func (suite *KeeperTestSuite) TestOperatorHooks_AfterOperatorDeleted() {
+func (suite *KeeperTestSuite) TestOperatorHooks_BeforeOperatorDeleted() {
 	testCases := []struct {
 		name       string
 		store      func(ctx sdk.Context)
@@ -286,7 +286,7 @@ func (suite *KeeperTestSuite) TestOperatorHooks_AfterOperatorDeleted() {
 			}
 
 			hooks := suite.k.OperatorsHooks()
-			err := hooks.AfterOperatorDeleted(ctx, tc.operatorID)
+			err := hooks.BeforeOperatorDeleted(ctx, tc.operatorID)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {

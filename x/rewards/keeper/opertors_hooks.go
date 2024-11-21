@@ -37,7 +37,7 @@ func (h OperatorsHooks) AfterOperatorReactivated(context.Context, uint32) error 
 	return nil
 }
 
-// AfterOperatorDeleted implements operatorstypes.OperatorsHooks
-func (h OperatorsHooks) AfterOperatorDeleted(ctx context.Context, operatorID uint32) error {
-	return h.k.AfterDelegationTargetRemoved(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, operatorID)
+// BeforeOperatorDeleted implements operatorstypes.OperatorsHooks
+func (h OperatorsHooks) BeforeOperatorDeleted(ctx context.Context, operatorID uint32) error {
+	return h.k.BeforeDelegationTargetRemoved(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, operatorID)
 }

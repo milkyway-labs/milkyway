@@ -18,8 +18,8 @@ func (k *Keeper) ServicesHooks() servicestypes.ServicesHooks {
 
 // ------------------------------------------------------------------------------
 
-// AfterServiceDeleted implements types.ServicesHooks.
-func (h *ServicesHooks) AfterServiceDeleted(ctx context.Context, serviceID uint32) error {
+// BeforeServiceDeleted implements types.ServicesHooks.
+func (h *ServicesHooks) BeforeServiceDeleted(ctx context.Context, serviceID uint32) error {
 	// After the service has been deleted
 	// we remove the data that we keep in the x/restaking
 	// associated to this service.

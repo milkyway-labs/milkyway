@@ -33,10 +33,10 @@ func (k *Keeper) AfterServiceDeactivated(ctx context.Context, serviceID uint32) 
 	return nil
 }
 
-// AfterServiceDeleted implements ServicesHooks
-func (k *Keeper) AfterServiceDeleted(ctx context.Context, serviceID uint32) error {
+// BeforeServiceDeleted implements ServicesHooks
+func (k *Keeper) BeforeServiceDeleted(ctx context.Context, serviceID uint32) error {
 	if k.hooks != nil {
-		return k.hooks.AfterServiceDeleted(ctx, serviceID)
+		return k.hooks.BeforeServiceDeleted(ctx, serviceID)
 	}
 	return nil
 }
