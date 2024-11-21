@@ -88,7 +88,7 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 				}]
 			}}`, allowedDepositor.String(), user2.String()),
 			shouldErr:    true,
-			errorMessage: "ibc hook error: can't deposit multiple denoms",
+			errorMessage: "ibc hook error: can't deposit multiple coins",
 		},
 		{
 			name:           "deposit more coins then received",

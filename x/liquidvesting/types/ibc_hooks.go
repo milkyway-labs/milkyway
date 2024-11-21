@@ -42,10 +42,15 @@ type MsgDepositInsurance struct {
 	Amounts []InsuranceDeposit `json:"amounts"`
 }
 
+// NewMsgDepositInsurance creates a new MsgDepositInsurance instance.
+func NewMsgDepositInsurance(amounts []InsuranceDeposit) *MsgDepositInsurance {
+	return &MsgDepositInsurance{Amounts: amounts}
+}
+
 func (msg *MsgDepositInsurance) ValidateBasic() error {
 	for i, deposit := range msg.Amounts {
 		// Ensure that the deposits have all the same denom
-		if i > 0 && deposit.Amount.Denom != msg.Amounts[i].Amount.Denom {
+		if i > 0 && deposit.Amount.Denom != msg.Amounts[0].Amount.Denom {
 			return fmt.Errorf("can't deposit multiple coins")
 		}
 
