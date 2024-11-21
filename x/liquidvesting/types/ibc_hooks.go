@@ -19,6 +19,11 @@ func (i *InsuranceDeposit) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(i.Depositor); err != nil {
 		return fmt.Errorf("invalid depositor address: %s", err)
 	}
+
+	if i.Amount.IsNegative() {
+		return fmt.Errorf("amount cannot be negative")
+	}
+
 	return nil
 }
 
