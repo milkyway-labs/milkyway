@@ -135,19 +135,19 @@ func (k *Keeper) DeleteService(ctx context.Context, serviceID uint32) error {
 		return types.ErrServiceIsActive
 	}
 
+	// Call the hook
+	err = k.BeforeServiceDeleted(ctx, service.ID)
+	if err != nil {
+		return err
+	}
+
 	// Remove the service from the store
 	err = k.services.Remove(ctx, serviceID)
 	if err != nil {
 		return err
 	}
 
-	err = k.serviceAddressSet.Remove(ctx, service.Address)
-	if err != nil {
-		return err
-	}
-
-	// Call the hook
-	return k.AfterServiceDeleted(ctx, service.ID)
+	return k.serviceAddressSet.Remove(ctx, service.Address)
 }
 
 // SetServiceAccredited sets the accreditation of the service with the given ID

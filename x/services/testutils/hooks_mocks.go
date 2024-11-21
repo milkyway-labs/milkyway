@@ -31,8 +31,8 @@ func (m MockHooks) AfterServiceDeactivated(_ context.Context, _ uint32) error {
 	return nil
 }
 
-func (m MockHooks) AfterServiceDeleted(_ context.Context, _ uint32) error {
-	m.CalledMap["AfterServiceDeleted"] = true
+func (m MockHooks) BeforeServiceDeleted(_ context.Context, _ uint32) error {
+	m.CalledMap["BeforeServiceDeleted"] = true
 	return nil
 }
 

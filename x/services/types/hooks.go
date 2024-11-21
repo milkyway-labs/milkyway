@@ -17,8 +17,8 @@ type ServicesHooks interface {
 	AfterServiceCreated(ctx context.Context, serviceID uint32) error               // Must be called after a service is created
 	AfterServiceActivated(ctx context.Context, serviceID uint32) error             // Must be called after a service is registered
 	AfterServiceDeactivated(ctx context.Context, serviceID uint32) error           // Must be called after a service is deregistered
-	AfterServiceDeleted(ctx context.Context, serviceID uint32) error               // Must be called after a service is deleted
 	AfterServiceAccreditationModified(ctx context.Context, serviceID uint32) error // Must be called after a service accreditation is changed
+	BeforeServiceDeleted(ctx context.Context, serviceID uint32) error              // Must be called before a service is deleted
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -63,20 +63,20 @@ func (m MultiServicesHooks) AfterServiceDeactivated(ctx context.Context, service
 	return nil
 }
 
-// AfterServiceDeleted implements ServicesHooks
-func (m MultiServicesHooks) AfterServiceDeleted(ctx context.Context, serviceID uint32) error {
+// AfterServiceAccreditationModified implements ServicesHooks
+func (m MultiServicesHooks) AfterServiceAccreditationModified(ctx context.Context, serviceID uint32) error {
 	for _, hook := range m {
-		if err := hook.AfterServiceDeleted(ctx, serviceID); err != nil {
+		if err := hook.AfterServiceAccreditationModified(ctx, serviceID); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-// AfterServiceAccreditationModified implements ServicesHooks
-func (m MultiServicesHooks) AfterServiceAccreditationModified(ctx context.Context, serviceID uint32) error {
+// BeforeServiceDeleted implements ServicesHooks
+func (m MultiServicesHooks) BeforeServiceDeleted(ctx context.Context, serviceID uint32) error {
 	for _, hook := range m {
-		if err := hook.AfterServiceAccreditationModified(ctx, serviceID); err != nil {
+		if err := hook.BeforeServiceDeleted(ctx, serviceID); err != nil {
 			return err
 		}
 	}
