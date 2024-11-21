@@ -856,3 +856,173 @@ func (suite *KeeperTestSuite) TestAllocateRewards_UserTrustedServiceUpdated() {
 	suite.Require().NoError(err)
 	suite.Require().Equal("231481.200000000000000000service2", rewards.Sum().String())
 }
+
+func (suite *KeeperTestSuite) TestAllocateRewards_InactiveService() {
+	ctx, _ := suite.ctx.CacheContext()
+
+	suite.RegisterCurrency(ctx, "umilk", "MILK", 6, utils.MustParseDec("2"))
+
+	// Create services. They are active by default because CreateService helper
+	// activated them automatically.
+	serviceAdmin1 := testutil.TestAddress(10001)
+	service1 := suite.CreateService(ctx, "Service1", serviceAdmin1.String())
+	serviceAdmin2 := testutil.TestAddress(10002)
+	service2 := suite.CreateService(ctx, "Service2", serviceAdmin2.String())
+
+	// Create rewards plans.
+	planStartTime := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
+	planEndTime := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
+	suite.CreateBasicRewardsPlan(
+		ctx,
+		service1.ID,
+		utils.MustParseCoins("1000_000000service1"),
+		planStartTime,
+		planEndTime,
+		utils.MustParseCoins("100000_000000service1"),
+	)
+	suite.CreateBasicRewardsPlan(
+		ctx,
+		service2.ID,
+		utils.MustParseCoins("2000_000000service2"),
+		planStartTime,
+		planEndTime,
+		utils.MustParseCoins("100000_000000service2"),
+	)
+
+	// Call AllocateRewards to set last rewards allocation time.
+	err := suite.keeper.AllocateRewards(ctx)
+	suite.Require().NoError(err)
+
+	// Alice delegates to the services.
+	aliceAddr := testutil.TestAddress(1)
+	suite.DelegateService(ctx, service1.ID, utils.MustParseCoins("300_000000umilk"), aliceAddr.String(), true)
+	suite.DelegateService(ctx, service2.ID, utils.MustParseCoins("100_000000umilk"), aliceAddr.String(), true)
+
+	// Try allocating rewards.
+	// Service 1 allocates 1000 * 10 / 86400 ~= 0.115741 $SERVICE1
+	// Service 2 allocates 2000 * 10 / 86400 ~= 0.231481 $SERVICE2
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+
+	// Both services allocated rewards.
+	rewards, err := suite.keeper.GetDelegationRewards(ctx, aliceAddr, restakingtypes.DELEGATION_TYPE_SERVICE, service1.ID)
+	suite.Require().NoError(err)
+	suite.Require().Equal("115740.000000000000000000service1", rewards.Sum().String())
+	rewards, err = suite.keeper.GetDelegationRewards(ctx, aliceAddr, restakingtypes.DELEGATION_TYPE_SERVICE, service2.ID)
+	suite.Require().NoError(err)
+	suite.Require().Equal("231481.000000000000000000service2", rewards.Sum().String())
+
+	// Withdraw rewards from services to make calculation easier.
+	_, err = keeper.NewMsgServer(suite.keeper).WithdrawDelegatorReward(
+		ctx,
+		types.NewMsgWithdrawDelegatorReward(restakingtypes.DELEGATION_TYPE_SERVICE, service1.ID, aliceAddr.String()),
+	)
+	suite.Require().NoError(err)
+	_, err = keeper.NewMsgServer(suite.keeper).WithdrawDelegatorReward(
+		ctx,
+		types.NewMsgWithdrawDelegatorReward(restakingtypes.DELEGATION_TYPE_SERVICE, service2.ID, aliceAddr.String()),
+	)
+	suite.Require().NoError(err)
+
+	// Service 1 becomes inactive.
+	err = suite.servicesKeeper.DeactivateService(ctx, service1.ID)
+	suite.Require().NoError(err)
+
+	// Try allocating rewards again.
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+
+	// There's no rewards allocated by service 1 because it was inactive,
+	rewards, err = suite.keeper.GetDelegationRewards(ctx, aliceAddr, restakingtypes.DELEGATION_TYPE_SERVICE, service1.ID)
+	suite.Require().NoError(err)
+	suite.Require().True(rewards.IsEmpty())
+	// but service 2 allocated rewards.
+	rewards, err = suite.keeper.GetDelegationRewards(ctx, aliceAddr, restakingtypes.DELEGATION_TYPE_SERVICE, service2.ID)
+	suite.Require().NoError(err)
+	suite.Require().Equal("231481.000000000000000000service2", rewards.Sum().String())
+}
+
+func (suite *KeeperTestSuite) TestAllocateRewards_InactiveOperator() {
+	ctx, _ := suite.ctx.CacheContext()
+
+	suite.RegisterCurrency(ctx, "umilk", "MILK", 6, utils.MustParseDec("2"))
+
+	// Create a service.
+	serviceAdmin := testutil.TestAddress(10001)
+	service := suite.CreateService(ctx, "Service", serviceAdmin.String())
+
+	// Create operators. They are active by default when creating.
+	operatorAdmin1 := testutil.TestAddress(10002)
+	operator1 := suite.CreateOperator(ctx, "Operator1", operatorAdmin1.String())
+	operatorAdmin2 := testutil.TestAddress(10003)
+	operator2 := suite.CreateOperator(ctx, "Operator2", operatorAdmin2.String())
+
+	// Operators set their commission rate to 10% and join the service.
+	suite.UpdateOperatorParams(ctx, operator1.ID, utils.MustParseDec("0.1"), []uint32{service.ID})
+	suite.UpdateOperatorParams(ctx, operator2.ID, utils.MustParseDec("0.1"), []uint32{service.ID})
+
+	// Create a rewards plan.
+	planStartTime := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
+	planEndTime := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
+	suite.CreateBasicRewardsPlan(
+		ctx,
+		service.ID,
+		utils.MustParseCoins("1000_000000service"),
+		planStartTime,
+		planEndTime,
+		utils.MustParseCoins("100000_000000service"),
+	)
+
+	// Call AllocateRewards to set last rewards allocation time.
+	err := suite.keeper.AllocateRewards(ctx)
+	suite.Require().NoError(err)
+
+	// Alice delegates to both operators.
+	aliceAddr := testutil.TestAddress(1)
+	suite.DelegateOperator(ctx, operator1.ID, utils.MustParseCoins("300_000000umilk"), aliceAddr.String(), true)
+	suite.DelegateOperator(ctx, operator2.ID, utils.MustParseCoins("100_000000umilk"), aliceAddr.String(), true)
+
+	// Try allocating rewards.
+	// The service allocates 1000 * 10 / 86400 ~= 0.115741 $SERVICE
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+
+	// Both operators received rewards.
+	// Alice receives $600 / $800 * 0.115741 * 0.9 ~= 0.078125 $SERVICE from operator 1.
+	rewards, err := suite.keeper.GetDelegationRewards(ctx, aliceAddr, restakingtypes.DELEGATION_TYPE_OPERATOR, operator1.ID)
+	suite.Require().NoError(err)
+	suite.Assert().Equal("78124.500000000000000000service", rewards.Sum().String())
+	// Alice receives $200 / $800 * 0.115741 * 0.9 ~= 0.026042 $SERVICE from operator 1.
+	rewards, err = suite.keeper.GetDelegationRewards(ctx, aliceAddr, restakingtypes.DELEGATION_TYPE_OPERATOR, operator2.ID)
+	suite.Require().NoError(err)
+	suite.Assert().Equal("26041.500000000000000000service", rewards.Sum().String())
+
+	// Withdraw rewards from operators to make calculation easier.
+	_, err = keeper.NewMsgServer(suite.keeper).WithdrawDelegatorReward(
+		ctx,
+		types.NewMsgWithdrawDelegatorReward(restakingtypes.DELEGATION_TYPE_OPERATOR, operator1.ID, aliceAddr.String()),
+	)
+	suite.Require().NoError(err)
+	_, err = keeper.NewMsgServer(suite.keeper).WithdrawDelegatorReward(
+		ctx,
+		types.NewMsgWithdrawDelegatorReward(restakingtypes.DELEGATION_TYPE_OPERATOR, operator2.ID, aliceAddr.String()),
+	)
+	suite.Require().NoError(err)
+
+	// Refresh the updated state of operator 2.
+	operator2, _, err = suite.operatorsKeeper.GetOperator(ctx, operator2.ID)
+	suite.Require().NoError(err)
+	// Operator 2 becomes inactive.
+	err = suite.operatorsKeeper.StartOperatorInactivation(ctx, operator2)
+	suite.Require().NoError(err)
+
+	// Try allocating rewards again.
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+
+	// This time Alice receives $600 / $600 * 0.115741 * 0.9 ~= 0.104167 $SERVICE
+	// from operator 1.
+	rewards, err = suite.keeper.GetDelegationRewards(ctx, aliceAddr, restakingtypes.DELEGATION_TYPE_OPERATOR, operator1.ID)
+	suite.Require().NoError(err)
+	suite.Assert().Equal("104166.000000000000000000service", rewards.Sum().String())
+	// There's no rewards allocated to operator 2 because it was inactive.
+	rewards, err = suite.keeper.GetDelegationRewards(ctx, aliceAddr, restakingtypes.DELEGATION_TYPE_OPERATOR, operator2.ID)
+	suite.Require().NoError(err)
+	suite.Assert().True(rewards.IsEmpty())
+}
