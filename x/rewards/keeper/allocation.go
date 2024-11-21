@@ -310,27 +310,22 @@ func (k *Keeper) getEligiblePools(
 	service servicestypes.Service,
 	pools []poolstypes.Pool,
 ) (eligiblePools []DelegationTarget, err error) {
-	poolsParams, err := k.poolsKeeper.GetParams(ctx)
-	if err != nil {
-		return nil, err
-	}
+	// Only include pools from which the service is borrowing security.
+	for _, pool := range pools {
+		isSecured, err := k.restakingKeeper.IsServiceSecuredByPool(ctx, service.ID, pool.ID)
+		if err != nil {
+			return nil, err
+		}
 
-	if slices.Contains(poolsParams.AllowedServicesIDs, service.ID) {
-		// Only include pools from which the service is borrowing security.
-		for _, pool := range pools {
-			isSecured, err := k.restakingKeeper.IsServiceSecuredByPool(ctx, service.ID, pool.ID)
+		if isSecured {
+			target, err := k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_POOL, pool.ID)
 			if err != nil {
 				return nil, err
 			}
-			if isSecured {
-				target, err := k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_POOL, pool.ID)
-				if err != nil {
-					return nil, err
-				}
-				eligiblePools = append(eligiblePools, target)
-			}
+			eligiblePools = append(eligiblePools, target)
 		}
 	}
+
 	return eligiblePools, nil
 }
 

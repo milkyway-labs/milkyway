@@ -396,14 +396,6 @@ func (suite *KeeperTestSuite) setupSampleServiceAndOperator(ctx sdk.Context) (se
 	serviceAdmin := testutil.TestAddress(10000)
 	service := suite.CreateService(ctx, "Service", serviceAdmin.String())
 
-	// Add the created service ID to the pools module's allowed list.
-	poolsParams, err := suite.poolsKeeper.GetParams(ctx)
-	suite.Require().NoError(err)
-
-	poolsParams.AllowedServicesIDs = []uint32{service.ID}
-	err = suite.poolsKeeper.SetParams(ctx, poolsParams)
-	suite.Require().NoError(err)
-
 	// Create an operator.
 	operatorAdmin := testutil.TestAddress(10001)
 	operator := suite.CreateOperator(ctx, "Operator", operatorAdmin.String())
@@ -412,7 +404,7 @@ func (suite *KeeperTestSuite) setupSampleServiceAndOperator(ctx sdk.Context) (se
 	suite.UpdateOperatorParams(ctx, operator.ID, utils.MustParseDec("0.1"), []uint32{service.ID})
 
 	// Call AllocateRewards to set last rewards allocation time.
-	err = suite.keeper.AllocateRewards(ctx)
+	err := suite.keeper.AllocateRewards(ctx)
 	suite.Require().NoError(err)
 
 	return service, operator

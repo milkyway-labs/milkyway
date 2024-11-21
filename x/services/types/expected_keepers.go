@@ -4,8 +4,6 @@ import (
 	"context"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
 )
 
 type AccountKeeper interface {
@@ -16,8 +14,4 @@ type AccountKeeper interface {
 
 type CommunityPoolKeeper interface {
 	FundCommunityPool(ctx context.Context, amount sdk.Coins, sender sdk.AccAddress) error
-}
-
-type PoolsKeeper interface {
-	GetParams(ctx context.Context) (poolstypes.Params, error)
 }

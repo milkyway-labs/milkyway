@@ -23,7 +23,6 @@ type Keeper struct {
 	nextPoolID     collections.Sequence                // Sequence for pool IDs
 	pools          collections.Map[uint32, types.Pool] // Map of pool ID to pool
 	poolAddressSet collections.KeySet[string]          // Set of pool addresses
-	params         collections.Item[types.Params]      // Module parameters
 }
 
 func NewKeeper(cdc codec.Codec,
@@ -54,12 +53,6 @@ func NewKeeper(cdc codec.Codec,
 			types.PoolAddressSetPrefix,
 			"pools_addresses_set",
 			collections.StringKey,
-		),
-		params: collections.NewItem(
-			sb,
-			types.ParamsKey,
-			"params",
-			codec.CollValue[types.Params](cdc),
 		),
 	}
 

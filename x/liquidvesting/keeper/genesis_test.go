@@ -296,7 +296,6 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 				testPool.Tokens = math.NewIntFromUint64(50)
 				testPool.DelegatorShares = math.LegacyNewDecFromInt(math.NewIntFromUint64(50))
 				poolsKeeperGenesis := poolstypes.GenesisState{
-					Params:     poolstypes.DefaultParams(),
 					NextPoolID: 2,
 					Pools:      []poolstypes.Pool{testPool},
 				}
@@ -375,7 +374,6 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 				testPool.Tokens = math.NewIntFromUint64(50)
 				testPool.DelegatorShares = math.LegacyNewDecFromInt(math.NewIntFromUint64(50))
 				poolsKeeperGenesis := poolstypes.GenesisState{
-					Params:     poolstypes.DefaultParams(),
 					NextPoolID: 2,
 					Pools:      []poolstypes.Pool{testPool},
 				}
