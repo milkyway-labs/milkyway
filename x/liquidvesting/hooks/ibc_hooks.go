@@ -77,10 +77,7 @@ func (h IBCHooks) onRecvIcs20Packet(
 	}
 
 	// Get the total deposit amount from the message
-	totalDeposit, err := depositMsg.GetTotalDepositAmount()
-	if err != nil {
-		return milkywaytypes.NewEmitErrorAcknowledgement(err)
-	}
+	totalDeposit := depositMsg.GetTotalDepositAmount()
 
 	// Parse the amount from the ics20Packet
 	amount, ok := math.NewIntFromString(ics20Packet.GetAmount())
@@ -91,7 +88,7 @@ func (h IBCHooks) onRecvIcs20Packet(
 
 	// Ensure that we have received the same amount of tokens
 	// as the ones that needs to be added to the users' insurance fund
-	if !receivedAmount.Equal(totalDeposit) {
+	if !receivedAmount.Amount.Equal(totalDeposit) {
 		return milkywaytypes.NewEmitErrorAcknowledgement(
 			fmt.Errorf("amount received is not equal to the amounts to deposit in the users' insurance fund"),
 		)
@@ -103,7 +100,7 @@ func (h IBCHooks) onRecvIcs20Packet(
 		if err != nil {
 			return milkywaytypes.NewEmitErrorAcknowledgement(err)
 		}
-		err = h.AddToUserInsuranceFund(ctx, accountAddress, sdk.NewCoins(deposit.Amount))
+		err = h.AddToUserInsuranceFund(ctx, accountAddress, sdk.NewCoins(sdk.NewCoin(ics20Packet.Denom, deposit.Amount)))
 		if err != nil {
 			return milkywaytypes.NewEmitErrorAcknowledgement(err)
 		}

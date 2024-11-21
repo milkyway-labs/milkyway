@@ -44,51 +44,13 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			"liquidvesting": {
 				"amounts": [{
 					"depositor": "%s",
-					"amount": { "amount": "1000", "denom": "foo" }
+					"amount": "1000"
 				}]
 			}}`, allowedDepositor.String()),
 			shouldErr: true,
 			errorMessage: fmt.Sprintf(
 				"ibc hook error: the receiver should be the module address, got: %s, expected: %s",
 				user2.String(), moduleAddress),
-		},
-		{
-			name:           "transfer not received denom",
-			transferAmount: sdk.NewInt64Coin("foo", 1000),
-			sender:         allowedDepositor.String(),
-			receiver:       moduleAddress,
-			memo: fmt.Sprintf(`{"liquidvesting": {
-				"amounts": [
-					{
- 						"depositor": "%s",
- 						"amount": { "amount": "600", "denom": "bar" }
- 					},
- 					{
- 						"depositor": "%s",
- 						"amount": { "amount": "400", "denom": "bar" }
- 					}
-			]}}`, allowedDepositor.String(), user2.String()),
-			shouldErr:    true,
-			errorMessage: "ibc hook error: amount received is not equal to the amounts to deposit in the users' insurance fund",
-		},
-		{
-			name:           "multiple denoms in amount to deposit",
-			transferAmount: sdk.NewInt64Coin("foo", 1000),
-			sender:         allowedDepositor.String(),
-			receiver:       moduleAddress,
-			memo: fmt.Sprintf(`{
-			"liquidvesting": {
-				"amounts": [{
-					"depositor": "%s",
-					"amount": { "amount": "1000", "denom": "foo" }
-				},
-				{
-					"depositor": "%s",
-					"amount": { "amount": "1000", "denom": "bar" }
-				}]
-			}}`, allowedDepositor.String(), user2.String()),
-			shouldErr:    true,
-			errorMessage: "ibc hook error: can't deposit multiple coins",
 		},
 		{
 			name:           "deposit more coins then received",
@@ -99,11 +61,11 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
             "liquidvesting": {
                 "amounts": [{
                     "depositor": "%s",
-                    "amount": { "amount": "400", "denom": "foo" }
+                    "amount": "400"
                 },
                 {
                     "depositor": "%s",
-                    "amount": { "amount": "601", "denom": "foo" }
+                    "amount": "601"
                 }]
             }}`, allowedDepositor.String(), user2.String()),
 			shouldErr:    true,
@@ -118,11 +80,11 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
             "liquidvesting": {
                 "amounts": [{
                     "depositor": "%s",
-                    "amount": { "amount": "300", "denom": "foo" }
+                    "amount": "300"
                 },
                 {
                     "depositor": "%s",
-                    "amount": { "amount": "600", "denom": "foo" }
+                    "amount": "600"
                 }]
             }}`, allowedDepositor.String(), user2.String()),
 			shouldErr:    true,
@@ -137,11 +99,11 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
             "liquidvesting": {
                 "amounts": [{
                     "depositor": "%s",
-                    "amount": { "amount": "600", "denom": "foo" }
+                    "amount": "600"
                 },
                 {
                     "depositor": "%s",
-                    "amount": { "amount": "400", "denom": "foo" }
+                    "amount": "400"
                 }]
             }}`, allowedDepositor.String(), user2.String()),
 			shouldErr:    true,
@@ -156,11 +118,11 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
             "liquidvesting": {
                 "amounts": [{
                     "depositor": "%s",
-                    "amount": { "amount": "600", "denom": "foo" }
+                    "amount": "600"
                 },
                 {
                     "depositor": "%s",
-                    "amount": { "amount": "400", "denom": "foo" }
+                    "amount": "400"
                 }]
             }}`, allowedDepositor.String(), user2.String()),
 			shouldErr: false,
@@ -194,7 +156,7 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			}
 
 			dataBz, err := json.Marshal(&data)
-			suite.Assert().NoError(err)
+			suite.Require().NoError(err)
 
 			relayer := suite.ak.GetModuleAddress("relayer")
 			ack := suite.ibcm.OnRecvPacket(suite.ctx, channeltypes.Packet{
@@ -203,10 +165,10 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			ack.Acknowledgement()
 
 			if tc.shouldErr {
-				suite.Assert().False(ack.Success())
+				suite.Require().False(ack.Success())
 				castedAck := ack.(channeltypes.Acknowledgement)
 				errorResponse := castedAck.Response.(*channeltypes.Acknowledgement_Error)
-				suite.Assert().Equal(tc.errorMessage, errorResponse.Error)
+				suite.Require().Equal(tc.errorMessage, errorResponse.Error)
 
 				if tc.check != nil {
 					tc.check(suite.ctx)
