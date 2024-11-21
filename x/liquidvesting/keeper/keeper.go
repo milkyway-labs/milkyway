@@ -25,7 +25,7 @@ type Keeper struct {
 	// Keeper data
 	schema         collections.Schema
 	params         collections.Item[types.Params]
-	insuranceFunds collections.Map[sdk.AccAddress, types.UserInsuranceFund]
+	insuranceFunds collections.Map[string, types.UserInsuranceFund] // User address -> UserInsuranceFund
 
 	// Addresses
 	ModuleAddress string
@@ -67,7 +67,7 @@ func NewKeeper(
 			sb,
 			types.InsuranceFundKey,
 			"insurance_fund",
-			sdk.AccAddressKey,
+			collections.StringKey,
 			codec.CollValue[types.UserInsuranceFund](cdc),
 		),
 

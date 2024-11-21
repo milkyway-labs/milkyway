@@ -51,13 +51,13 @@ func (suite *MigrationsTestSuite) SetupTest() {
 func (suite *MigrationsTestSuite) TestMigrateV1To2() {
 	testCases := []struct {
 		name      string
-		setup     func(ctx sdk.Context)
+		store     func(ctx sdk.Context)
 		shouldErr bool
 		check     func(ctx sdk.Context)
 	}{
 		{
 			name: "non existing operators have their params deleted",
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				sdkStore := suite.storeService.OpenKVStore(ctx)
 
 				// Set the operator params
@@ -95,7 +95,7 @@ func (suite *MigrationsTestSuite) TestMigrateV1To2() {
 		},
 		{
 			name: "existing operators params are migrated properly",
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				sdkStore := suite.storeService.OpenKVStore(ctx)
 
 				// Store the operators
@@ -155,7 +155,7 @@ func (suite *MigrationsTestSuite) TestMigrateV1To2() {
 		},
 		{
 			name: "non existing services have their params deleted",
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				sdkStore := suite.storeService.OpenKVStore(ctx)
 				// Set the service params
 				paramsBz, err := suite.cdc.Marshal(&v2.LegacyServiceParams{
@@ -187,7 +187,7 @@ func (suite *MigrationsTestSuite) TestMigrateV1To2() {
 		},
 		{
 			name: "existing services params are migrated properly",
-			setup: func(ctx sdk.Context) {
+			store: func(ctx sdk.Context) {
 				sdkStore := suite.storeService.OpenKVStore(ctx)
 
 				// Store the services
@@ -257,8 +257,8 @@ func (suite *MigrationsTestSuite) TestMigrateV1To2() {
 			suite.SetupTest()
 
 			ctx, _ := suite.ctx.CacheContext()
-			if tc.setup != nil {
-				tc.setup(ctx)
+			if tc.store != nil {
+				tc.store(ctx)
 			}
 
 			err := v2.Migrate1To2(ctx, suite.storeService, suite.cdc, suite.restakingKeeper, suite.operatorsKeeper, suite.servicesKeeper)

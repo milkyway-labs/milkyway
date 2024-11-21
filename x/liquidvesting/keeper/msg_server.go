@@ -100,22 +100,17 @@ func (m msgServer) BurnVestedRepresentation(ctx context.Context, msg *types.MsgB
 
 // WithdrawInsuranceFund implements types.MsgServer.
 func (m msgServer) WithdrawInsuranceFund(ctx context.Context, msg *types.MsgWithdrawInsuranceFund) (*types.MsgWithdrawInsuranceFundResponse, error) {
-	sender, err := sdk.AccAddressFromBech32(msg.Sender)
+	canWithdraw, err := m.CanWithdrawFromInsuranceFund(ctx, msg.Sender, msg.Amount)
 	if err != nil {
 		return nil, err
 	}
 
-	canWithdaw, err := m.CanWithdrawFromInsuranceFund(ctx, sender, msg.Amount)
-	if err != nil {
-		return nil, err
-	}
-
-	if !canWithdaw {
+	if !canWithdraw {
 		return nil, types.ErrInsufficientBalance
 	}
 
 	// Send the tokens back to the user
-	err = m.WithdrawFromUserInsuranceFund(ctx, sender, msg.Amount)
+	err = m.WithdrawFromUserInsuranceFund(ctx, msg.Sender, msg.Amount)
 	if err != nil {
 		return nil, err
 	}

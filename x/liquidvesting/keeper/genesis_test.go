@@ -45,9 +45,15 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			expGenesis: &types.GenesisState{
 				Params:    types.DefaultParams(),
 				BurnCoins: nil,
-				UserInsuranceFunds: []types.UserInsuranceFundState{
-					types.NewUserInsuranceFundState("cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre", types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)), nil)),
-					types.NewUserInsuranceFundState("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin("stake", 2)), nil)),
+				UserInsuranceFunds: []types.UserInsuranceFundEntry{
+					types.NewUserInsuranceFundEntry(
+						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+						sdk.NewCoins(sdk.NewInt64Coin("stake", 2)),
+					),
+					types.NewUserInsuranceFundEntry(
+						"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)),
+					),
 				},
 			},
 		},
@@ -60,7 +66,8 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding delegation time to 7 days
-				suite.rk.SetParams(ctx, restakingtypes.NewParams(7*24*time.Hour, nil))
+				err = suite.rk.SetParams(ctx, restakingtypes.NewParams(7*24*time.Hour, nil))
+				suite.Require().NoError(err)
 
 				// Fund the users' insurance fund
 				suite.fundAccountInsuranceFund(ctx,
@@ -99,44 +106,38 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				suite.Assert().NoError(err)
 
 				// Burn the coins
-				userAddr, err := sdk.AccAddressFromBech32("cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre")
-				suite.Assert().NoError(err)
-				err = suite.k.BurnVestedRepresentation(ctx, userAddr, sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 100)))
-				suite.Assert().NoError(err)
-
-				userAddr, err = sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				userAddr, err := sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
 				suite.Assert().NoError(err)
 				err = suite.k.BurnVestedRepresentation(ctx, userAddr, sdk.NewCoins(sdk.NewInt64Coin(vestedStakeDenom, 100)))
+				suite.Assert().NoError(err)
+
+				userAddr, err = sdk.AccAddressFromBech32("cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre")
+				suite.Assert().NoError(err)
+				err = suite.k.BurnVestedRepresentation(ctx, userAddr, sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 100)))
 				suite.Assert().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				Params: types.DefaultParams(),
 				BurnCoins: []types.BurnCoins{
 					types.NewBurnCoins(
-						"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-						time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC).Add(7*24*time.Hour),
-						sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 100)),
-					),
-					types.NewBurnCoins(
 						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 						time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC).Add(7*24*time.Hour),
 						sdk.NewCoins(sdk.NewInt64Coin(vestedStakeDenom, 100)),
 					),
-				},
-				UserInsuranceFunds: []types.UserInsuranceFundState{
-					types.NewUserInsuranceFundState(
+					types.NewBurnCoins(
 						"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-						types.NewInsuranceFund(
-							sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)),
-							sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)),
-						),
+						time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC).Add(7*24*time.Hour),
+						sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 100)),
 					),
-					types.NewUserInsuranceFundState(
+				},
+				UserInsuranceFunds: []types.UserInsuranceFundEntry{
+					types.NewUserInsuranceFundEntry(
 						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-						types.NewInsuranceFund(
-							sdk.NewCoins(sdk.NewInt64Coin("stake", 2)),
-							sdk.NewCoins(sdk.NewInt64Coin("stake", 2)),
-						),
+						sdk.NewCoins(sdk.NewInt64Coin("stake", 2)),
+					),
+					types.NewUserInsuranceFundEntry(
+						"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)),
 					),
 				},
 			},
@@ -191,7 +192,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 		{
 			name: "should block negative insurance fund percentage",
 			genesis: types.NewGenesisState(
-				types.NewParams(math.LegacyNewDec(-1), nil, nil),
+				types.NewParams(math.LegacyNewDec(-1), nil, nil, nil),
 				nil,
 				nil,
 			),
@@ -200,7 +201,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 		{
 			name: "should block 0 insurance fund percentage",
 			genesis: types.NewGenesisState(
-				types.NewParams(math.LegacyNewDec(0), nil, nil),
+				types.NewParams(math.LegacyNewDec(0), nil, nil, nil),
 				nil,
 				nil,
 			),
@@ -209,7 +210,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 		{
 			name: "should allow 100 insurance fund percentage",
 			genesis: types.NewGenesisState(
-				types.NewParams(math.LegacyNewDec(100), nil, nil),
+				types.NewParams(math.LegacyNewDec(100), nil, nil, nil),
 				nil,
 				nil,
 			),
@@ -222,7 +223,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 		{
 			name: "should block > 100 insurance fund percentage",
 			genesis: types.NewGenesisState(
-				types.NewParams(math.LegacyNewDec(101), nil, nil),
+				types.NewParams(math.LegacyNewDec(101), nil, nil, nil),
 				nil,
 				nil,
 			),
@@ -231,7 +232,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 		{
 			name: "should block invalid minter address",
 			genesis: types.NewGenesisState(
-				types.NewParams(math.LegacyNewDec(2), nil, []string{"cosmos1fdsfd"}),
+				types.NewParams(math.LegacyNewDec(2), nil, []string{"cosmos1fdsfd"}, nil),
 				nil,
 				nil,
 			),
@@ -240,7 +241,16 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 		{
 			name: "should block invalid burners address",
 			genesis: types.NewGenesisState(
-				types.NewParams(math.LegacyNewDec(2), []string{"cosmos1fdsfd"}, nil),
+				types.NewParams(math.LegacyNewDec(2), []string{"cosmos1fdsfd"}, nil, nil),
+				nil,
+				nil,
+			),
+			shouldErr: true,
+		},
+		{
+			name: "should block invalid allowed depositors address",
+			genesis: types.NewGenesisState(
+				types.NewParams(math.LegacyNewDec(2), nil, nil, []string{"cosmos1fdsfd"}),
 				nil,
 				nil,
 			),
@@ -251,10 +261,10 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			genesis: types.NewGenesisState(
 				types.DefaultParams(),
 				nil,
-				[]types.UserInsuranceFundState{
-					types.NewUserInsuranceFundState(
+				[]types.UserInsuranceFundEntry{
+					types.NewUserInsuranceFundEntry(
 						"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-						types.NewInsuranceFund(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)), sdk.NewCoins()),
+						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)),
 					),
 				},
 			),
@@ -265,13 +275,10 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			genesis: types.NewGenesisState(
 				types.DefaultParams(),
 				nil,
-				[]types.UserInsuranceFundState{
-					types.NewUserInsuranceFundState(
+				[]types.UserInsuranceFundEntry{
+					types.NewUserInsuranceFundEntry(
 						"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-						types.NewInsuranceFund(
-							sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)),
-							sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)),
-						),
+						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)),
 					),
 				},
 			),
@@ -324,13 +331,10 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			genesis: types.NewGenesisState(
 				types.DefaultParams(),
 				nil,
-				[]types.UserInsuranceFundState{
-					types.NewUserInsuranceFundState(
+				[]types.UserInsuranceFundEntry{
+					types.NewUserInsuranceFundEntry(
 						"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-						types.NewInsuranceFund(
-							sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)),
-							sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)),
-						),
+						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)),
 					),
 				},
 			),
@@ -345,22 +349,16 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			genesis: types.NewGenesisState(
 				types.DefaultParams(),
 				nil,
-				[]types.UserInsuranceFundState{
-					types.NewUserInsuranceFundState(
+				[]types.UserInsuranceFundEntry{
+					types.NewUserInsuranceFundEntry(
 						"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-						types.NewInsuranceFund(
-							sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)),
-							sdk.NewCoins(),
-						),
+						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)),
 					),
 				},
 			),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				userAddr, err := sdk.AccAddressFromBech32("cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre")
-				suite.Assert().NoError(err)
-
-				balance, err := suite.k.GetUserInsuranceFundBalance(ctx, userAddr)
+				balance, err := suite.k.GetUserInsuranceFundBalance(ctx, "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre")
 				suite.Assert().NoError(err)
 				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)), balance)
 			},
@@ -412,14 +410,10 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			genesis: types.NewGenesisState(
 				types.DefaultParams(),
 				nil,
-				[]types.UserInsuranceFundState{
-					types.NewUserInsuranceFundState(
+				[]types.UserInsuranceFundEntry{
+					types.NewUserInsuranceFundEntry(
 						"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-						types.NewInsuranceFund(
-							sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)),
-							// Set 3 as used to cover the delegation and the undelegation
-							sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 3)),
-						),
+						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)),
 					),
 				},
 			),

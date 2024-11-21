@@ -26,6 +26,7 @@ func (suite *KeeperTestSuite) TestMsgServer_MintVestedRepresentation() {
 					math.LegacyMustNewDecFromStr("2.0"),
 					[]string{"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"},
 					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
+					nil,
 				))
 				suite.Assert().NoError(err)
 			},
@@ -44,6 +45,7 @@ func (suite *KeeperTestSuite) TestMsgServer_MintVestedRepresentation() {
 					math.LegacyMustNewDecFromStr("2.0"),
 					[]string{"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"},
 					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
+					nil,
 				))
 				suite.Assert().NoError(err)
 			},
@@ -62,6 +64,7 @@ func (suite *KeeperTestSuite) TestMsgServer_MintVestedRepresentation() {
 					math.LegacyMustNewDecFromStr("2.0"),
 					[]string{"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"},
 					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
+					nil,
 				))
 				suite.Assert().NoError(err)
 			},
@@ -133,6 +136,7 @@ func (suite *KeeperTestSuite) TestMsgServer_BurnVestedRepresentation() {
 					math.LegacyMustNewDecFromStr("2.0"),
 					[]string{"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"},
 					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
+					nil,
 				))
 				suite.Assert().NoError(err)
 
@@ -156,6 +160,7 @@ func (suite *KeeperTestSuite) TestMsgServer_BurnVestedRepresentation() {
 					math.LegacyMustNewDecFromStr("2.0"),
 					[]string{"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"},
 					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
+					nil,
 				))
 				suite.Assert().NoError(err)
 
@@ -182,6 +187,7 @@ func (suite *KeeperTestSuite) TestMsgServer_BurnVestedRepresentation() {
 					math.LegacyMustNewDecFromStr("2.0"),
 					[]string{"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"},
 					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
+					nil,
 				))
 				suite.Assert().NoError(err)
 

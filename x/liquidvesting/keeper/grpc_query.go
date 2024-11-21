@@ -47,18 +47,19 @@ func (q Querier) UserInsuranceFund(ctx context.Context, req *types.QueryUserInsu
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
-	accAddr, err := sdk.AccAddressFromBech32(req.UserAddress)
+	insuranceFund, err := q.GetUserInsuranceFund(ctx, req.UserAddress)
 	if err != nil {
 		return nil, err
 	}
 
-	insuranceFund, err := q.GetUserInsuranceFund(ctx, accAddr)
+	usedInsuranceFund, err := q.GetUserUsedInsuranceFund(ctx, req.UserAddress)
 	if err != nil {
 		return nil, err
 	}
+
 	return &types.QueryUserInsuranceFundResponse{
 		Balance: insuranceFund.Balance,
-		Used:    insuranceFund.Used,
+		Used:    usedInsuranceFund,
 	}, nil
 }
 
@@ -69,13 +70,13 @@ func (q Querier) UserInsuranceFunds(ctx context.Context, req *types.QueryUserIns
 	}
 
 	insuranceFunds, pagination, err := query.CollectionPaginate(ctx, q.insuranceFunds, req.Pagination,
-		func(userAddress sdk.AccAddress, insuranceFund types.UserInsuranceFund) (types.UserInsuranceFundData, error) {
-			stringAddr, err := q.accountKeeper.AddressCodec().BytesToString(userAddress)
+		func(userAddress string, insuranceFund types.UserInsuranceFund) (types.UserInsuranceFundData, error) {
+			usedInsuranceFund, err := q.GetUserUsedInsuranceFund(ctx, userAddress)
 			if err != nil {
 				return types.UserInsuranceFundData{}, err
 			}
 
-			return types.NewUserInsuranceFundData(stringAddr, insuranceFund), nil
+			return types.NewUserInsuranceFundData(userAddress, insuranceFund.Balance, usedInsuranceFund), nil
 		})
 	if err != nil {
 		return nil, err
@@ -93,15 +94,11 @@ func (q Querier) UserRestakableAssets(ctx context.Context, req *types.QueryUserR
 		return nil, status.Error(codes.InvalidArgument, "empty request")
 	}
 
-	accAddr, err := sdk.AccAddressFromBech32(req.UserAddress)
+	balance, err := q.GetUserInsuranceFundBalance(ctx, req.UserAddress)
 	if err != nil {
 		return nil, err
 	}
 
-	balance, err := q.GetUserInsuranceFundBalance(ctx, accAddr)
-	if err != nil {
-		return nil, err
-	}
 	params, err := q.GetParams(ctx)
 	if err != nil {
 		return nil, err
@@ -110,13 +107,13 @@ func (q Querier) UserRestakableAssets(ctx context.Context, req *types.QueryUserR
 	// Compute the amount of tokens that the user can restake
 	restakableCoins := sdk.NewCoins()
 	for _, coin := range balance {
-		restakableAmount := math.LegacyNewDecFromInt(coin.Amount).
-			MulInt64(100).
-			QuoTruncate(params.InsurancePercentage).TruncateInt()
+		restakableAmount := math.LegacyNewDecFromInt(coin.Amount).MulInt64(100).QuoTruncate(params.InsurancePercentage).TruncateInt()
+
 		vestedDenom, err := types.GetVestedRepresentationDenom(coin.Denom)
 		if err != nil {
 			return nil, err
 		}
+
 		restakableCoins = restakableCoins.Add(sdk.NewCoin(vestedDenom, restakableAmount))
 	}
 

@@ -80,11 +80,6 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFund() {
 			shouldErr: true,
 		},
 		{
-			name:      "invalid address",
-			request:   types.NewQueryUserInsuranceFundRequest("invalid"),
-			shouldErr: true,
-		},
-		{
 			name: "single deposit",
 			store: func(ctx sdk.Context) {
 				suite.fundAccountInsuranceFund(ctx,
@@ -95,6 +90,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFund() {
 			request:    types.NewQueryUserInsuranceFundRequest("cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"),
 			shouldErr:  false,
 			expBalance: sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
+			expUsed:    sdk.NewCoins(),
 		},
 		{
 			name: "multiple deposits",
@@ -114,6 +110,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFund() {
 				sdk.NewInt64Coin(IBCDenom, 1000),
 				sdk.NewInt64Coin("stake", 1000),
 			),
+			expUsed: sdk.NewCoins(),
 		},
 		{
 			name: "with used amount",
@@ -194,33 +191,29 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFunds() {
 			name: "no pagination",
 			store: func(ctx sdk.Context) {
 				suite.fundAccountInsuranceFund(ctx,
-					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
-				)
-				suite.fundAccountInsuranceFund(ctx,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000), sdk.NewInt64Coin("stake", 1000)),
+				)
+				suite.fundAccountInsuranceFund(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
 				)
 			},
 			request:   types.NewQueryUserInsuranceFundsRequest(nil),
 			shouldErr: false,
 			expInsuranceFunds: []types.UserInsuranceFundData{
 				types.NewUserInsuranceFundData(
-					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-					types.NewInsuranceFund(
-						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
-						nil,
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					sdk.NewCoins(
+						sdk.NewInt64Coin(IBCDenom, 1000),
+						sdk.NewInt64Coin("stake", 1000),
 					),
+					sdk.NewCoins(),
 				),
 				types.NewUserInsuranceFundData(
-					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.NewInsuranceFund(
-						sdk.NewCoins(
-							sdk.NewInt64Coin(IBCDenom, 1000),
-							sdk.NewInt64Coin("stake", 1000),
-						),
-						nil,
-					),
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
+					sdk.NewCoins(),
 				),
 			},
 		},
@@ -228,12 +221,12 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFunds() {
 			name: "respects handle pagination",
 			store: func(ctx sdk.Context) {
 				suite.fundAccountInsuranceFund(ctx,
-					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
-				)
-				suite.fundAccountInsuranceFund(ctx,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000), sdk.NewInt64Coin("stake", 1000)),
+				)
+				suite.fundAccountInsuranceFund(ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
 				)
 			},
 			request: types.NewQueryUserInsuranceFundsRequest(&query.PageRequest{
@@ -243,11 +236,12 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFunds() {
 			shouldErr: false,
 			expInsuranceFunds: []types.UserInsuranceFundData{
 				types.NewUserInsuranceFundData(
-					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-					types.NewInsuranceFund(
-						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
-						nil,
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					sdk.NewCoins(
+						sdk.NewInt64Coin(IBCDenom, 1000),
+						sdk.NewInt64Coin("stake", 1000),
 					),
+					sdk.NewCoins(),
 				),
 			},
 		},
@@ -279,10 +273,8 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFunds() {
 			expInsuranceFunds: []types.UserInsuranceFundData{
 				types.NewUserInsuranceFundData(
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-					types.NewInsuranceFund(
-						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
-						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 20)),
-					),
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
+					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 20)),
 				),
 			},
 		},
@@ -324,15 +316,10 @@ func (suite *KeeperTestSuite) TestQuerier_UserRestakableAssets() {
 			shouldErr: true,
 		},
 		{
-			name:      "invalid address",
-			request:   types.NewQueryUserRestakableAssetsRequest("invalid"),
-			shouldErr: true,
-		},
-		{
 			name: "1% insurance fund",
 			store: func(ctx sdk.Context) {
 				suite.Assert().NoError(suite.k.SetParams(ctx, types.NewParams(
-					math.LegacyMustNewDecFromStr("1"), nil, nil,
+					math.LegacyMustNewDecFromStr("1"), nil, nil, nil,
 				)))
 				suite.fundAccountInsuranceFund(ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
@@ -347,7 +334,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserRestakableAssets() {
 			name: "5% insurance fund",
 			store: func(ctx sdk.Context) {
 				suite.Assert().NoError(suite.k.SetParams(ctx, types.NewParams(
-					math.LegacyMustNewDecFromStr("5"), nil, nil,
+					math.LegacyMustNewDecFromStr("5"), nil, nil, nil,
 				)))
 				suite.fundAccountInsuranceFund(ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
