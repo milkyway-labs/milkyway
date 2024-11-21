@@ -19,8 +19,8 @@ func (k *Keeper) AfterDelegationTargetCreated(ctx context.Context, delType resta
 	return k.initializeDelegationTarget(ctx, target)
 }
 
-// AfterDelegationTargetRemoved is called after a delegation target is removed
-func (k *Keeper) AfterDelegationTargetRemoved(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32) error {
+// BeforeDelegationTargetRemoved is called before a delegation target is removed
+func (k *Keeper) BeforeDelegationTargetRemoved(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32) error {
 	target, err := k.GetDelegationTarget(ctx, delType, targetID)
 	if err != nil {
 		return err

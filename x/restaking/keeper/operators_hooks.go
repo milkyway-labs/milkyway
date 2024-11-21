@@ -21,8 +21,8 @@ func (k *Keeper) OperatorsHooks() operatorstypes.OperatorsHooks {
 
 // ------------------------------------------------------------------------------
 
-// AfterOperatorDeleted implements types.OperatorsHooks.
-func (o *OperatorsHooks) AfterOperatorDeleted(ctx context.Context, operatorID uint32) error {
+// BeforeOperatorDeleted implements types.OperatorsHooks.
+func (o *OperatorsHooks) BeforeOperatorDeleted(ctx context.Context, operatorID uint32) error {
 	// After the operator has been deleted
 	// we remove the data that we keep in the x/restaking module that are linked
 	// to the operator.

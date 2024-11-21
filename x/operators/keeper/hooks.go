@@ -40,10 +40,10 @@ func (k *Keeper) AfterOperatorReactivated(ctx context.Context, operatorID uint32
 	return nil
 }
 
-// AfterOperatorDeleted implements OperatorsHooks
-func (k *Keeper) AfterOperatorDeleted(ctx context.Context, operatorID uint32) error {
+// BeforeOperatorDeleted implements OperatorsHooks
+func (k *Keeper) BeforeOperatorDeleted(ctx context.Context, operatorID uint32) error {
 	if k.hooks != nil {
-		return k.hooks.AfterOperatorDeleted(ctx, operatorID)
+		return k.hooks.BeforeOperatorDeleted(ctx, operatorID)
 	}
 	return nil
 }

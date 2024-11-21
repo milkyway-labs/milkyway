@@ -18,7 +18,7 @@ type OperatorsHooks interface {
 	AfterOperatorInactivatingStarted(ctx context.Context, operatorID uint32) error   // Must be called after an operator has started inactivating
 	AfterOperatorInactivatingCompleted(ctx context.Context, operatorID uint32) error // Must be called after an operator has completed inactivating
 	AfterOperatorReactivated(ctx context.Context, operatorID uint32) error           // Must be called after an operator has been reactivated
-	AfterOperatorDeleted(ctx context.Context, operatorID uint32) error               // Must be called after an operator has been deleted
+	BeforeOperatorDeleted(ctx context.Context, operatorID uint32) error              // Must be called before an operator is deleted
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -73,10 +73,10 @@ func (h MultiOperatorsHooks) AfterOperatorReactivated(ctx context.Context, opera
 	return nil
 }
 
-// AfterOperatorDeleted implements OperatorsHooks
-func (h MultiOperatorsHooks) AfterOperatorDeleted(ctx context.Context, operatorID uint32) error {
+// BeforeOperatorDeleted implements OperatorsHooks
+func (h MultiOperatorsHooks) BeforeOperatorDeleted(ctx context.Context, operatorID uint32) error {
 	for _, hook := range h {
-		if err := hook.AfterOperatorDeleted(ctx, operatorID); err != nil {
+		if err := hook.BeforeOperatorDeleted(ctx, operatorID); err != nil {
 			return err
 		}
 	}

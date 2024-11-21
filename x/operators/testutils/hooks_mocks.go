@@ -31,8 +31,8 @@ func (m MockHooks) AfterOperatorInactivatingCompleted(ctx context.Context, opera
 	return nil
 }
 
-func (m MockHooks) AfterOperatorDeleted(ctx context.Context, operatorID uint32) error {
-	m.CalledMap["AfterOperatorDeleted"] = true
+func (m MockHooks) BeforeOperatorDeleted(ctx context.Context, operatorID uint32) error {
+	m.CalledMap["BeforeOperatorDeleted"] = true
 	return nil
 }
 

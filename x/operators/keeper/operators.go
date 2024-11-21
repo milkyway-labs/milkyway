@@ -124,19 +124,19 @@ func (k *Keeper) DeleteOperator(ctx context.Context, operator types.Operator) er
 		return types.ErrOperatorNotInactive
 	}
 
-	// Removes the operator
-	err := k.operators.Remove(ctx, operator.ID)
-	if err != nil {
-		return err
-	}
-
-	err = k.operatorAddressSet.Remove(ctx, operator.Address)
-	if err != nil {
-		return err
-	}
-
 	// Call the hook
-	return k.AfterOperatorDeleted(ctx, operator.ID)
+	err := k.BeforeOperatorDeleted(ctx, operator.ID)
+	if err != nil {
+		return err
+	}
+
+	// Delete the operator
+	err = k.operators.Remove(ctx, operator.ID)
+	if err != nil {
+		return err
+	}
+
+	return k.operatorAddressSet.Remove(ctx, operator.Address)
 }
 
 // CompleteOperatorInactivation completes the inactivation process for the operator with the given ID

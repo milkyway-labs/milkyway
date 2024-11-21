@@ -849,7 +849,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeleteOperator() {
 				suite.Require().False(found)
 
 				// Ensure the hook has been called
-				suite.Require().True(suite.hooks.CalledMap["AfterOperatorDeleted"])
+				suite.Require().True(suite.hooks.CalledMap["BeforeOperatorDeleted"])
 			},
 		},
 	}
