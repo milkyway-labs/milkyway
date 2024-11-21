@@ -190,8 +190,10 @@ func (suite *KeeperTestSuite) SetupTest() {
 	)
 	// Set bank hooks
 	suite.bk.AppendSendRestriction(suite.k.SendRestrictionFn)
-	// Set ibc hooks
+	// Set restaking hooks
+	suite.rk.SetRestakeRestriction(suite.k.RestakeRestrictionFn)
 
+	// Set ibc hooks
 	mockIBCMiddleware := mockIBCMiddleware{}
 	middleware := ibchooks.NewICS4Middleware(mockIBCMiddleware, hooks.NewIBCHooks(suite.k))
 	suite.ibcm = ibchooks.NewIBCMiddleware(mockIBCMiddleware, middleware, suite.ibck)

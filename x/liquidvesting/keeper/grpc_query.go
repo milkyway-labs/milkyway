@@ -62,9 +62,13 @@ func (q Querier) UserInsuranceFund(goCtx context.Context, req *types.QueryUserIn
 	if err != nil {
 		return nil, err
 	}
+	usedInsuranceFund, err := q.GetUserUsedInsuranceFund(sdkCtx, req.UserAddress)
+	if err != nil {
+		return nil, err
+	}
 	return &types.QueryUserInsuranceFundResponse{
 		Balance: insuranceFund.Balance,
-		Used:    insuranceFund.Used,
+		Used:    usedInsuranceFund,
 	}, nil
 }
 
@@ -83,7 +87,12 @@ func (q Querier) UserInsuranceFunds(goCtx context.Context, req *types.QueryUserI
 				return types.UserInsuranceFundData{}, err
 			}
 
-			return types.NewUserInsuranceFundData(stringAddr, insuranceFund), nil
+			usedInsuranceFund, err := q.GetUserUsedInsuranceFund(sdkCtx, stringAddr)
+			if err != nil {
+				return types.UserInsuranceFundData{}, err
+			}
+
+			return types.NewUserInsuranceFundData(stringAddr, insuranceFund.Balance, usedInsuranceFund), nil
 		})
 	if err != nil {
 		return nil, err
@@ -103,12 +112,7 @@ func (q Querier) UserRestakableAssets(goCtx context.Context, req *types.QueryUse
 
 	sdkCtx := sdk.UnwrapSDKContext(goCtx)
 
-	accAddr, err := sdk.AccAddressFromBech32(req.UserAddress)
-	if err != nil {
-		return nil, err
-	}
-
-	balance, err := q.GetUserInsuranceFundBalance(sdkCtx, accAddr)
+	balance, err := q.GetUserInsuranceFundBalance(sdkCtx, req.UserAddress)
 	if err != nil {
 		return nil, err
 	}

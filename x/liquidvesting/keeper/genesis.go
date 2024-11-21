@@ -59,42 +59,27 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 		// Update the total coins in the insurance fund
 		totalCoins = totalCoins.Add(insuranceFund.InsuranceFund.Balance...)
 
-		// We compute the total amount of coins that should be used
-		// in the insurance fund based on the assets that the user has restaked
-		expectedUsed := sdk.NewCoins()
-		userRestakedCoins, err := k.restakingKeeper.GetAllUserRestakedCoins(ctx, insuranceFund.UserAddress)
+		// Get the total vested representation that should be covered by the
+		// insurance fund
+		totalVestedRepresentations, err := k.GetAllUserActiveVestedRepresentations(ctx, insuranceFund.UserAddress)
 		if err != nil {
 			return err
 		}
-		// Update the user restaked amount with also the tokens that are
-		// in the unbonding state and will be received at completion
-		for _, undelegation := range k.restakingKeeper.GetAllUserUnbondingDelegations(ctx, insuranceFund.UserAddress) {
-			for _, entry := range undelegation.Entries {
-				userRestakedCoins = userRestakedCoins.Add(sdk.NewDecCoinsFromCoins(entry.Balance...)...)
-			}
+
+		// Check if the insurance fund can cover the restaked coins
+		canCover, required, err := insuranceFund.InsuranceFund.CanCoverDecCoins(state.Params.InsurancePercentage, totalVestedRepresentations)
+		if err != nil {
+			return err
 		}
 
-		for _, restakedCoin := range userRestakedCoins {
-			if types.IsVestedRepresentationDenom(restakedCoin.Denom) {
-				requiredAmount, err := k.getRequiredAmountInInsuranceFund(ctx,
-					sdk.NewCoin(restakedCoin.Denom, restakedCoin.Amount.RoundInt()))
-				if err != nil {
-					return err
-				}
-				expectedUsed = expectedUsed.Add(requiredAmount)
-			}
-		}
-
-		// Ensure that the amount that we have computed is the same as the
-		// used amount in the user's insurance fund
-		if !expectedUsed.Equal(insuranceFund.InsuranceFund.Used) {
-			return fmt.Errorf("user: %s insurance fund used amount is incorrect, expected %s, got %s",
-				insuranceFund.UserAddress, expectedUsed.String(), insuranceFund.InsuranceFund.Used.String())
+		if !canCover {
+			return fmt.Errorf("user: %s insurance fund amount is too low, expected %s, got %s",
+				insuranceFund.UserAddress, required.String(), insuranceFund.InsuranceFund.Balance.String())
 		}
 	}
 
-	// Ensure that the balance of the liquid vesting module that coins the
-	// insurance fund is equal to the sum of amount of the users' insurance fund
+	// Ensure that the balance of the liquid vesting module is equal to the
+	// sum of the users' insurance fund
 	coins, err := k.GetInsuranceFundBalance(ctx)
 	if err != nil {
 		return err

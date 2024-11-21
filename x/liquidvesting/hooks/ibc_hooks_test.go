@@ -165,10 +165,10 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
             }}`, allowedDepositor.String(), user2.String()),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				addrInsuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, allowedDepositor)
+				addrInsuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, allowedDepositor.String())
 				suite.Assert().NoError(err)
 				suite.Assert().Equal("600foo", addrInsuranceFund.String())
-				addr2InsuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, user2)
+				addr2InsuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, user2.String())
 				suite.Assert().NoError(err)
 				suite.Assert().Equal("400foo", addr2InsuranceFund.String())
 			},

@@ -87,9 +87,9 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 
 				// The user insurance fund signal that there are still 20 coins used
 				// to cover the restaking position
-				userInsuranceFund, err := suite.k.GetUserInsuranceFund(ctx, sdk.MustAccAddressFromBech32(testAccount))
+				usedUserinsurancefund, err := suite.k.GetUserUsedInsuranceFund(ctx, testAccount)
 				suite.Assert().NoError(err)
-				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake", 16)), userInsuranceFund.Used)
+				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake", 16)), usedUserinsurancefund)
 			},
 		},
 		{
@@ -146,9 +146,9 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 				suite.Assert().Len(suite.k.GetUnbondedCoinsFromQueue(ctx, ctx.BlockTime()), 0)
 
 				// The user insurance fund should update properly
-				userInsuranceFund, err := suite.k.GetUserInsuranceFund(ctx, sdk.MustAccAddressFromBech32(testAccount))
+				userUsedInsuranceFund, err := suite.k.GetUserUsedInsuranceFund(ctx, testAccount)
 				suite.Assert().NoError(err)
-				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake", 6)), userInsuranceFund.Used)
+				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake", 6)), userUsedInsuranceFund)
 			},
 		},
 	}

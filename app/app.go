@@ -719,6 +719,7 @@ func NewMilkyWayApp(
 		authorityAddr,
 	)
 	app.BankKeeper.AppendSendRestriction(app.LiquidVestingKeeper.SendRestrictionFn)
+	app.RestakingKeeper.SetRestakeRestriction(app.LiquidVestingKeeper.RestakeRestrictionFn)
 
 	hooksICS4Wrapper := ibchooks.NewICS4Middleware(
 		app.RateLimitKeeper,
