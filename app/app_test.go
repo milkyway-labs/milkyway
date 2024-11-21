@@ -9,12 +9,14 @@ import (
 
 	milkyway "github.com/milkyway-labs/milkyway/app"
 	milkywayhelpers "github.com/milkyway-labs/milkyway/app/helpers"
+	liquidvestingtypes "github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 )
 
 func TestMilkyWayApp_BlockedModuleAccountAddrs(t *testing.T) {
 	moduleAccountAddresses := milkyway.ModuleAccountAddrs()
 	blockedAddrs := milkyway.BlockedModuleAccountAddrs(moduleAccountAddresses)
 
+	require.NotContains(t, blockedAddrs, authtypes.NewModuleAddress(liquidvestingtypes.ModuleName).String())
 	require.NotContains(t, blockedAddrs, authtypes.NewModuleAddress(govtypes.ModuleName).String())
 }
 
