@@ -28,6 +28,18 @@ func TestMsgDepositInsurance_Validate(t *testing.T) {
 			shouldErr: true,
 		},
 		{
+			name: "negative amount returns error",
+			msg: types.NewMsgDepositInsurance(
+				[]types.InsuranceDeposit{
+					{
+						Depositor: "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+						Amount:    math.NewInt(-1000),
+					},
+				},
+			),
+			shouldErr: true,
+		},
+		{
 			name: "validates correctly",
 			msg: types.NewMsgDepositInsurance(
 				[]types.InsuranceDeposit{
