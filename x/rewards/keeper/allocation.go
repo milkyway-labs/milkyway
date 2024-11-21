@@ -317,6 +317,16 @@ func (k *Keeper) getEligiblePools(
 			return nil, err
 		}
 
+		// If the service has zero total delegator shares for this pool which means no
+		// users trust the service, then skip it.
+		shares, err := k.GetPoolServiceTotalDelegatorShares(ctx, pool.ID, service.ID)
+		if err != nil {
+			return nil, err
+		}
+		if !shares.IsAllPositive() {
+			continue
+		}
+
 		if isSecured {
 			target, err := k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_POOL, pool.ID)
 			if err != nil {
@@ -605,7 +615,9 @@ func (k *Keeper) allocateRewardsPool(
 		return err
 	}
 
-	currentRewards.Rewards = currentRewards.Rewards.Add(types.NewServicePool(serviceID, types.NewDecPool(denom, shared)))
+	currentRewards.Rewards = currentRewards.Rewards.Add(
+		types.NewServicePool(serviceID, types.DecPools{types.NewDecPool(denom, shared)}),
+	)
 	err = target.CurrentRewards.Set(ctx, target.GetID(), currentRewards)
 	if err != nil {
 		return err

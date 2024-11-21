@@ -86,6 +86,11 @@ func (suite *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	operatorAdmin3 := testutil.TestAddress(10006)
 	operator3 := suite.CreateOperator(ctx, "Operator3", operatorAdmin3.String())
 
+	// Whitelist only $MILK and $MUSD pools.
+	suite.AddPoolsToServiceSecuringPools(ctx, service2.ID, []uint32{1, 3})
+	// Whitelist only Operator2 and Operator3.
+	suite.AddOperatorsToServiceAllowList(ctx, service3.ID, []uint32{operator2.ID, operator3.ID})
+
 	suite.UpdateOperatorParams(ctx, operator1.ID, utils.MustParseDec("0.1"), []uint32{service1.ID, service2.ID, service3.ID})
 	suite.UpdateOperatorParams(ctx, operator2.ID, utils.MustParseDec("0.05"), []uint32{service1.ID, service3.ID})
 	suite.UpdateOperatorParams(ctx, operator3.ID, utils.MustParseDec("0.02"), []uint32{service2.ID, service3.ID})
@@ -123,15 +128,10 @@ func (suite *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	suite.Require().NoError(err)
 
 	aliceAddr := testutil.TestAddress(1)
-	suite.SetUserPreferences(ctx, aliceAddr.String(), true, true, nil)
-	suite.DelegatePool(ctx, utils.MustParseCoin("100_000000umilk"), aliceAddr.String(), true) // $300
-	suite.DelegatePool(ctx, utils.MustParseCoin("100_000000uinit"), aliceAddr.String(), true) // $200
+	suite.SetUserPreferences(ctx, aliceAddr.String(), false, true, nil)
+	suite.DelegatePool(ctx, utils.MustParseCoin("100_000000umilk"), aliceAddr.String(), true) // $200
+	suite.DelegatePool(ctx, utils.MustParseCoin("100_000000uinit"), aliceAddr.String(), true) // $300
 	suite.DelegatePool(ctx, utils.MustParseCoin("500_000000uusd"), aliceAddr.String(), true)  // $500
-
-	// Whitelist only $MILK and $MUSD pools.
-	suite.AddPoolsToServiceSecuringPools(ctx, service2.ID, []uint32{1, 3})
-	// Whitelist only Operator2 and Operator3.
-	suite.AddOperatorsToServiceAllowList(ctx, service3.ID, []uint32{operator2.ID, operator3.ID})
 
 	bobAddr := testutil.TestAddress(2)
 	suite.SetUserPreferences(ctx, bobAddr.String(), false, true, nil)

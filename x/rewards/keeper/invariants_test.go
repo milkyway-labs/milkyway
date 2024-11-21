@@ -48,7 +48,7 @@ func (suite *KeeperTestSuite) TestInvariants_ReferenceCountInvariant() {
 
 				// Create an invalid number of historical rewards
 				historicalRewards := types.NewHistoricalRewards(types.ServicePools{
-					types.NewServicePool(1, types.NewDecPool("umilk", nil)),
+					types.NewServicePool(1, types.DecPools{types.NewDecPool("umilk", nil)}),
 				}, 1)
 				err = suite.keeper.PoolHistoricalRewards.Set(ctx, collections.Join[uint32, uint64](pool.ID, 1), historicalRewards)
 				err = suite.keeper.PoolHistoricalRewards.Set(ctx, collections.Join[uint32, uint64](pool.ID, 2), historicalRewards)
@@ -64,7 +64,7 @@ func (suite *KeeperTestSuite) TestInvariants_ReferenceCountInvariant() {
 
 				// Create an invalid number of historical rewards
 				historicalRewards := types.NewHistoricalRewards(types.ServicePools{
-					types.NewServicePool(1, types.NewDecPool("umilk", nil)),
+					types.NewServicePool(1, types.DecPools{types.NewDecPool("umilk", nil)}),
 				}, 1)
 				err := suite.keeper.ServiceHistoricalRewards.Set(ctx, collections.Join[uint32, uint64](service.ID, 1), historicalRewards)
 				err = suite.keeper.ServiceHistoricalRewards.Set(ctx, collections.Join[uint32, uint64](service.ID, 2), historicalRewards)
@@ -80,7 +80,7 @@ func (suite *KeeperTestSuite) TestInvariants_ReferenceCountInvariant() {
 
 				// Create an invalid number of historical rewards
 				historicalRewards := types.NewHistoricalRewards(types.ServicePools{
-					types.NewServicePool(1, types.NewDecPool("umilk", nil)),
+					types.NewServicePool(1, types.DecPools{types.NewDecPool("umilk", nil)}),
 				}, 1)
 				err := suite.keeper.OperatorHistoricalRewards.Set(ctx, collections.Join[uint32, uint64](service.ID, 1), historicalRewards)
 				err = suite.keeper.OperatorHistoricalRewards.Set(ctx, collections.Join[uint32, uint64](service.ID, 2), historicalRewards)
