@@ -25,7 +25,6 @@ echo "Generating gogo proto code"
 cd proto
 
 generate_proto "./milkyway"
-generate_proto "./stride"
 
 cd ..
 
