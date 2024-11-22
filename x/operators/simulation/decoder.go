@@ -12,7 +12,7 @@ import (
 )
 
 // NewDecodeStore returns a decoder function closure that unmarshals the KVPair's
-// Value to the corresponding services type.
+// Value to the corresponding operators type.
 func NewDecodeStore(keeper *keeper.Keeper) func(kvA kv.Pair, kvB kv.Pair) string {
 	collectionsDecoder := simtypes.NewStoreDecoderFuncFromCollectionsSchema(keeper.Schema)
 
