@@ -11899,7 +11899,7 @@ const (
 )
 
 // MsgJoinService defines the message structure for the
-// JoinService gRPC service method. It allows the opeator admin to
+// JoinService gRPC service method. It allows the operator admin to
 // start securing a AVS.
 type MsgJoinService struct {
 	state         protoimpl.MessageState
@@ -11980,7 +11980,7 @@ func (*MsgJoinServiceResponse) Descriptor() ([]byte, []int) {
 }
 
 // MsgLeaveService defines the message structure for the
-// LeaveService gRPC service method. It allows the opeator admin to
+// LeaveService gRPC service method. It allows the operator admin to
 // stop securing a AVS.
 type MsgLeaveService struct {
 	state         protoimpl.MessageState
@@ -12033,7 +12033,7 @@ func (x *MsgLeaveService) GetServiceId() uint32 {
 	return 0
 }
 
-// MsgLeaveerviceResponse is the return value of MsgLeveService.
+// MsgLeaveServiceResponse is the return value of MsgLeaveService.
 type MsgLeaveServiceResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

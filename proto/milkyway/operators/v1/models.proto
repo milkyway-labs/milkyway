@@ -15,7 +15,7 @@ enum OperatorStatus {
   // OPERATOR_STATUS_UNSPECIFIED defines an unspecified status
   OPERATOR_STATUS_UNSPECIFIED = 0;
 
-  // OPERATOR_STATUS_ACTIVE identifies an active validator which is providing
+  // OPERATOR_STATUS_ACTIVE identifies an active operator which is providing
   // services
   OPERATOR_STATUS_ACTIVE = 1;
 

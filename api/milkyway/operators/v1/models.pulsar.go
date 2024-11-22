@@ -1502,7 +1502,7 @@ type OperatorStatus int32
 const (
 	// OPERATOR_STATUS_UNSPECIFIED defines an unspecified status
 	OperatorStatus_OPERATOR_STATUS_UNSPECIFIED OperatorStatus = 0
-	// OPERATOR_STATUS_ACTIVE identifies an active validator which is providing
+	// OPERATOR_STATUS_ACTIVE identifies an active operator which is providing
 	// services
 	OperatorStatus_OPERATOR_STATUS_ACTIVE OperatorStatus = 1
 	// OPERATOR_STATUS_INACTIVATING identifies an operator that is in the process

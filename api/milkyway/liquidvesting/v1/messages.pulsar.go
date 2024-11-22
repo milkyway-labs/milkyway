@@ -3764,7 +3764,7 @@ type MsgMintVestedRepresentation struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// User that want to triger the tokens mint.
+	// User that want to trigger the tokens mint.
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
 	// User that will receive the minted tokens.
 	Receiver string `protobuf:"bytes,2,opt,name=receiver,proto3" json:"receiver,omitempty"`
@@ -3849,7 +3849,7 @@ type MsgBurnVestedRepresentation struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// User that want to triger the tokens burn.
+	// User that want to trigger the tokens burn.
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
 	// User from which we want to burn the tokens.
 	User string `protobuf:"bytes,2,opt,name=user,proto3" json:"user,omitempty"`

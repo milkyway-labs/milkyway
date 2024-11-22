@@ -68,7 +68,7 @@ func (x *_GenesisState_2_list) IsValid() bool {
 var _ protoreflect.List = (*_GenesisState_3_list)(nil)
 
 type _GenesisState_3_list struct {
-	list *[]*UserInsuranceFundState
+	list *[]*UserInsuranceFundEntry
 }
 
 func (x *_GenesisState_3_list) Len() int {
@@ -84,18 +84,18 @@ func (x *_GenesisState_3_list) Get(i int) protoreflect.Value {
 
 func (x *_GenesisState_3_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*UserInsuranceFundState)
+	concreteValue := valueUnwrapped.Interface().(*UserInsuranceFundEntry)
 	(*x.list)[i] = concreteValue
 }
 
 func (x *_GenesisState_3_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
-	concreteValue := valueUnwrapped.Interface().(*UserInsuranceFundState)
+	concreteValue := valueUnwrapped.Interface().(*UserInsuranceFundEntry)
 	*x.list = append(*x.list, concreteValue)
 }
 
 func (x *_GenesisState_3_list) AppendMutable() protoreflect.Value {
-	v := new(UserInsuranceFundState)
+	v := new(UserInsuranceFundEntry)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
@@ -108,7 +108,7 @@ func (x *_GenesisState_3_list) Truncate(n int) {
 }
 
 func (x *_GenesisState_3_list) NewElement() protoreflect.Value {
-	v := new(UserInsuranceFundState)
+	v := new(UserInsuranceFundEntry)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
@@ -351,7 +351,7 @@ func (x *fastReflection_GenesisState) Mutable(fd protoreflect.FieldDescriptor) p
 		return protoreflect.ValueOfList(value)
 	case "milkyway.liquidvesting.v1.GenesisState.user_insurance_funds":
 		if x.UserInsuranceFunds == nil {
-			x.UserInsuranceFunds = []*UserInsuranceFundState{}
+			x.UserInsuranceFunds = []*UserInsuranceFundEntry{}
 		}
 		value := &_GenesisState_3_list{list: &x.UserInsuranceFunds}
 		return protoreflect.ValueOfList(value)
@@ -375,7 +375,7 @@ func (x *fastReflection_GenesisState) NewField(fd protoreflect.FieldDescriptor) 
 		list := []*BurnCoins{}
 		return protoreflect.ValueOfList(&_GenesisState_2_list{list: &list})
 	case "milkyway.liquidvesting.v1.GenesisState.user_insurance_funds":
-		list := []*UserInsuranceFundState{}
+		list := []*UserInsuranceFundEntry{}
 		return protoreflect.ValueOfList(&_GenesisState_3_list{list: &list})
 	default:
 		if fd.IsExtension() {
@@ -685,7 +685,7 @@ func (x *fastReflection_GenesisState) ProtoMethods() *protoiface.Methods {
 				if postIndex > l {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
 				}
-				x.UserInsuranceFunds = append(x.UserInsuranceFunds, &UserInsuranceFundState{})
+				x.UserInsuranceFunds = append(x.UserInsuranceFunds, &UserInsuranceFundEntry{})
 				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.UserInsuranceFunds[len(x.UserInsuranceFunds)-1]); err != nil {
 					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
 				}
@@ -750,7 +750,7 @@ type GenesisState struct {
 	// users' balances
 	BurnCoins []*BurnCoins `protobuf:"bytes,2,rep,name=burn_coins,json=burnCoins,proto3" json:"burn_coins,omitempty"`
 	// UserInsuranceFunds represents the users' insurance fund.
-	UserInsuranceFunds []*UserInsuranceFundState `protobuf:"bytes,3,rep,name=user_insurance_funds,json=userInsuranceFunds,proto3" json:"user_insurance_funds,omitempty"`
+	UserInsuranceFunds []*UserInsuranceFundEntry `protobuf:"bytes,3,rep,name=user_insurance_funds,json=userInsuranceFunds,proto3" json:"user_insurance_funds,omitempty"`
 }
 
 func (x *GenesisState) Reset() {
@@ -787,7 +787,7 @@ func (x *GenesisState) GetBurnCoins() []*BurnCoins {
 	return nil
 }
 
-func (x *GenesisState) GetUserInsuranceFunds() []*UserInsuranceFundState {
+func (x *GenesisState) GetUserInsuranceFunds() []*UserInsuranceFundEntry {
 	if x != nil {
 		return x.UserInsuranceFunds
 	}
@@ -824,7 +824,7 @@ var file_milkyway_liquidvesting_v1_genesis_proto_rawDesc = []byte{
 	0x18, 0x03, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x31, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
 	0x79, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x2e,
 	0x76, 0x31, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x49, 0x6e, 0x73, 0x75, 0x72, 0x61, 0x6e, 0x63, 0x65,
-	0x46, 0x75, 0x6e, 0x64, 0x53, 0x74, 0x61, 0x74, 0x65, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52,
+	0x46, 0x75, 0x6e, 0x64, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x42, 0x04, 0xc8, 0xde, 0x1f, 0x00, 0x52,
 	0x12, 0x75, 0x73, 0x65, 0x72, 0x49, 0x6e, 0x73, 0x75, 0x72, 0x61, 0x6e, 0x63, 0x65, 0x46, 0x75,
 	0x6e, 0x64, 0x73, 0x42, 0x84, 0x02, 0x0a, 0x1d, 0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b,
 	0x79, 0x77, 0x61, 0x79, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69,
@@ -863,12 +863,12 @@ var file_milkyway_liquidvesting_v1_genesis_proto_goTypes = []interface{}{
 	(*GenesisState)(nil),           // 0: milkyway.liquidvesting.v1.GenesisState
 	(*Params)(nil),                 // 1: milkyway.liquidvesting.v1.Params
 	(*BurnCoins)(nil),              // 2: milkyway.liquidvesting.v1.BurnCoins
-	(*UserInsuranceFundState)(nil), // 3: milkyway.liquidvesting.v1.UserInsuranceFundState
+	(*UserInsuranceFundEntry)(nil), // 3: milkyway.liquidvesting.v1.UserInsuranceFundEntry
 }
 var file_milkyway_liquidvesting_v1_genesis_proto_depIdxs = []int32{
 	1, // 0: milkyway.liquidvesting.v1.GenesisState.params:type_name -> milkyway.liquidvesting.v1.Params
 	2, // 1: milkyway.liquidvesting.v1.GenesisState.burn_coins:type_name -> milkyway.liquidvesting.v1.BurnCoins
-	3, // 2: milkyway.liquidvesting.v1.GenesisState.user_insurance_funds:type_name -> milkyway.liquidvesting.v1.UserInsuranceFundState
+	3, // 2: milkyway.liquidvesting.v1.GenesisState.user_insurance_funds:type_name -> milkyway.liquidvesting.v1.UserInsuranceFundEntry
 	3, // [3:3] is the sub-list for method output_type
 	3, // [3:3] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name
