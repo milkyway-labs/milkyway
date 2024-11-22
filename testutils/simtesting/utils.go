@@ -3,6 +3,7 @@ package simtesting
 import (
 	"math/rand"
 
+	sdkmath "cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -60,4 +61,12 @@ func GetSimAccount(address sdk.Address, accs []simtypes.Account) (simtypes.Accou
 		}
 	}
 	return simtypes.Account{}, false
+}
+
+// RandomCoin returns a random coin having the specified denomination and the max given amount
+func RandomCoin(r *rand.Rand, denom string, maxAmount int) sdk.Coin {
+	return sdk.NewCoin(
+		denom,
+		sdkmath.NewInt(int64(r.Intn(maxAmount*1e6))),
+	)
 }

@@ -1,64 +1,43 @@
 package simulation
 
 import (
-	"math/rand"
-
 	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/cosmos/cosmos-sdk/types/simulation"
 
 	"github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-// Simulation parameter constants
-const (
-	keyServiceRegistrationFees = "operators_count"
-	keyServices                = "services"
-	keyServicesParams          = "services_params"
-)
-
-func getServices(r *rand.Rand, simState *module.SimulationState) []types.Service {
-	count := r.Intn(10) + 1
+// RandomizedGenState generates a random GenesisState for the services module
+func RandomizedGenState(simState *module.SimulationState) {
+	// Generate a list of random services
 	var services []types.Service
-	for i := 0; i < count; i++ {
-		adminAccount, _ := simulation.RandomAcc(r, simState.Accounts)
-		service := RandomService(r, uint32(i)+1, adminAccount.Address.String())
-		services = append(services, service)
+	for i := 0; i < simState.Rand.Intn(100); i++ {
+		services = append(services, RandomService(simState.Rand, simState.Accounts))
 	}
 
-	return services
-}
-
-func getServiceParams(r *rand.Rand, services []types.Service) []types.ServiceParamsRecord {
-	var params []types.ServiceParamsRecord
+	// Get the next service ID
+	var nextServiceID uint32
 	for _, service := range services {
-		generate := (r.Uint64() % 2) == 0
-		if !generate {
+		if service.ID >= nextServiceID {
+			nextServiceID = service.ID + 1
+		}
+	}
+
+	// Generate a list of random service params
+	var servicesParams []types.ServiceParamsRecord
+	for _, service := range services {
+		// 50% of chance of not having custom params
+		if simState.Rand.Intn(2) == 0 {
 			continue
 		}
 
-		serviceParams := types.NewServiceParams([]string{"umilk"})
-		params = append(params, types.NewServiceParamsRecord(service.ID, serviceParams))
+		servicesParams = append(servicesParams, types.NewServiceParamsRecord(
+			service.ID,
+			RandomServiceParams(simState.Rand),
+		))
 	}
-	return params
-}
 
-// RandomizedGenState generates a random GenesisState for the services module
-func RandomizedGenState(simState *module.SimulationState) {
-	var (
-		services       []types.Service
-		servicesParams []types.ServiceParamsRecord
-	)
-
-	simState.AppParams.GetOrGenerate(keyServices, &services, simState.Rand, func(r *rand.Rand) {
-		services = getServices(r, simState)
-	})
-
-	simState.AppParams.GetOrGenerate(keyServicesParams, &servicesParams, simState.Rand, func(r *rand.Rand) {
-		servicesParams = getServiceParams(r, services)
-	})
-
-	params := types.DefaultParams()
-	nextServiceID := uint32(len(services)) + 1
+	// Generate random params
+	params := RandomParams(simState.Rand, simState.BondDenom)
 
 	servicesGenesis := types.NewGenesisState(nextServiceID, services, servicesParams, params)
 	simState.GenState[types.ModuleName] = simState.Cdc.MustMarshalJSON(servicesGenesis)
