@@ -112,24 +112,6 @@
       }
     },
     {
-      "url": "./tmp-swagger-gen/ibc/applications/interchain_accounts/controller/v1/query.swagger.json",
-      "operationIds": {
-        "rename": {
-          "Params": "IBCInterChainAccountsControllerParams",
-          "InterchainAccount": "IBCInterChainAccountsControllerInterChainAccount"
-        }
-      }
-    },
-    {
-      "url": "./tmp-swagger-gen/ibc/applications/interchain_accounts/host/v1/query.swagger.json",
-      "operationIds": {
-        "rename": {
-          "Params": "IBCInterChainAccountsHostParams",
-          "InterchainAccount": "IBCInterChainAccountsHostInterChainAccount"
-        }
-      }
-    },
-    {
       "url": "./tmp-swagger-gen/ibc/applications/fee/v1/query.swagger.json",
       "operationIds": {
         "rename": {

@@ -12,7 +12,6 @@ import (
 	ratelimittypes "github.com/cosmos/ibc-apps/modules/rate-limiting/v8/types"
 	"github.com/cosmos/ibc-go/modules/capability"
 	capabilitytypes "github.com/cosmos/ibc-go/modules/capability/types"
-	icatypes "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/types"
 	ibcfee "github.com/cosmos/ibc-go/v8/modules/apps/29-fee"
 	ibcfeetypes "github.com/cosmos/ibc-go/v8/modules/apps/29-fee/types"
 	ibctransfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
@@ -86,7 +85,6 @@ import (
 var MaccPerms = map[string][]string{
 	authtypes.FeeCollectorName:        nil,
 	distrtypes.ModuleName:             nil,
-	icatypes.ModuleName:               nil,
 	minttypes.ModuleName:              {authtypes.Minter},
 	stakingtypes.BondedPoolName:       {authtypes.Burner, authtypes.Staking},
 	stakingtypes.NotBondedPoolName:    {authtypes.Burner, authtypes.Staking},
@@ -148,7 +146,6 @@ func appModules(
 		// IBC Modules
 		ibcfee.NewAppModule(app.IBCFeeKeeper),
 		app.TransferModule,
-		app.ICAModule,
 		app.PFMRouterModule,
 		app.RateLimitModule,
 		app.ProviderModule,
@@ -206,7 +203,6 @@ func simulationModules(
 		wasm.NewAppModule(appCodec, &app.AppKeepers.WasmKeeper, app.AppKeepers.StakingKeeper, app.AppKeepers.AccountKeeper, app.AppKeepers.BankKeeper, app.MsgServiceRouter(), app.GetSubspace(wasmtypes.ModuleName)),
 		ibc.NewAppModule(app.IBCKeeper),
 		app.TransferModule,
-		app.ICAModule,
 
 		// MilkyWay modules
 		services.NewAppModule(appCodec, app.ServicesKeeper, app.AccountKeeper, app.BankKeeper),
@@ -238,7 +234,6 @@ func orderBeginBlockers() []string {
 		crisistypes.ModuleName,
 		ibcexported.ModuleName,
 		ibctransfertypes.ModuleName,
-		icatypes.ModuleName,
 		pfmroutertypes.ModuleName,
 		ratelimittypes.ModuleName,
 		ibcfeetypes.ModuleName,
@@ -281,7 +276,6 @@ func orderEndBlockers() []string {
 		stakingtypes.ModuleName,
 		ibcexported.ModuleName,
 		ibctransfertypes.ModuleName,
-		icatypes.ModuleName,
 		pfmroutertypes.ModuleName,
 		ratelimittypes.ModuleName,
 		capabilitytypes.ModuleName,
@@ -337,7 +331,6 @@ func orderInitBlockers() []string {
 		genutiltypes.ModuleName,
 		ibctransfertypes.ModuleName,
 		ibcexported.ModuleName,
-		icatypes.ModuleName,
 		ibcfeetypes.ModuleName,
 		evidencetypes.ModuleName,
 		authz.ModuleName,
