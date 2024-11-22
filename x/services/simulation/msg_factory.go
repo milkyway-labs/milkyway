@@ -1,11 +1,10 @@
 package simulation
 
 import (
+	"bytes"
 	"math/rand"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
@@ -19,13 +18,13 @@ import (
 
 // Simulation operation weights constants
 const (
-	DefaultWeightMsgCreateService            int = 100
-	DefaultWeightMsgUpdateService            int = 100
-	DefaultWeightMsgActivateService          int = 100
-	DefaultWeightMsgDeactivateService        int = 100
-	DefaultWeightMsgTransferServiceOwnership int = 100
-	DefaultWeightMsgDeleteService            int = 100
-	DefaultWeightMsgSetServiceParams         int = 100
+	DefaultWeightMsgCreateService            int = 80
+	DefaultWeightMsgUpdateService            int = 30
+	DefaultWeightMsgActivateService          int = 60
+	DefaultWeightMsgDeactivateService        int = 20
+	DefaultWeightMsgTransferServiceOwnership int = 15
+	DefaultWeightMsgDeleteService            int = 10
+	DefaultWeightMsgSetServiceParams         int = 40
 
 	OperationWeightMsgCreateService            = "op_weight_msg_create_service"
 	OperationWeightMsgUpdateService            = "op_weight_msg_update_service"
@@ -39,8 +38,6 @@ const (
 // WeightedOperations returns all the operations from the module with their respective weights
 func WeightedOperations(
 	appParams simtypes.AppParams,
-	cdc codec.JSONCodec,
-	txGen client.TxConfig,
 	ak authkeeper.AccountKeeper,
 	bk bankkeeper.Keeper,
 	k *keeper.Keeper,
@@ -85,7 +82,7 @@ func WeightedOperations(
 	})
 
 	return simulation.WeightedOperations{
-		simulation.NewWeightedOperation(weightMsgCreateService, SimulateMsgCreateService(ak, bk)),
+		simulation.NewWeightedOperation(weightMsgCreateService, SimulateMsgCreateService(ak, bk, k)),
 		simulation.NewWeightedOperation(weightMsgUpdateService, SimulateMsgUpdateService(ak, bk, k)),
 		simulation.NewWeightedOperation(weightMsgActivateService, SimulateMsgActivateService(ak, bk, k)),
 		simulation.NewWeightedOperation(weightMsgDeactivateService, SimulateMsgDeactivateService(ak, bk, k)),
@@ -95,25 +92,50 @@ func WeightedOperations(
 	}
 }
 
-func SimulateMsgCreateService(ak authkeeper.AccountKeeper, bk bankkeeper.Keeper) simtypes.Operation {
+func SimulateMsgCreateService(ak authkeeper.AccountKeeper, bk bankkeeper.Keeper, k *keeper.Keeper) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
+		var msg = &types.MsgCreateService{}
+
 		// No account skipping
 		if len(accs) == 0 {
-			return simtypes.NoOpMsg(types.ModuleName, "MsgCreateService", "skip"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "no accounts"), nil, nil
 		}
 
-		signer, _ := simtypes.RandomAcc(r, accs)
-		service := RandomService(r, 1, signer.Address.String())
-		msg := types.NewMsgCreateService(
+		// Create a random service
+		service := RandomService(r, accs)
+
+		// Get the admin account that should sign the transaction
+		adminAddr, err := sdk.AccAddressFromBech32(service.Admin)
+		if err != nil {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "error while parsing admin address"), nil, nil
+		}
+
+		// Make sure the admin account has enough tokens
+		params, err := k.GetParams(ctx)
+		if err != nil {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "error while getting params"), nil, nil
+		}
+
+		if params.ServiceRegistrationFee.IsAnyGTE(bk.GetAllBalances(ctx, adminAddr)) {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "insufficient funds"), nil, nil
+		}
+
+		// Get the account that will sign the transaction
+		signer, found := simtesting.GetSimAccount(adminAddr, accs)
+		if !found {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "admin account not found"), nil, nil
+		}
+
+		// Create the message
+		msg = types.NewMsgCreateService(
 			service.Name,
 			service.Description,
 			service.Website,
 			service.PictureURL,
 			service.Admin,
 		)
-
 		return simtesting.SendMsg(r, types.ModuleName, app, ak, bk, msg, ctx, signer)
 	}
 }
@@ -122,38 +144,65 @@ func SimulateMsgUpdateService(ak authkeeper.AccountKeeper, bk bankkeeper.Keeper,
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
+		var msg = &types.MsgUpdateService{}
+
 		// No account skipping
 		if len(accs) == 0 {
-			return simtypes.NoOpMsg(types.ModuleName, "MsgUpdateService", "skip"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "no accounts"), nil, nil
 		}
 
 		// Get a random service to update
 		service, found := GetRandomExistingService(r, ctx, k, nil)
 		if !found {
-			return simtypes.NoOpMsg(types.ModuleName, "MsgUpdateService", "skip"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "no service found"), nil, nil
 		}
 
 		// Get the service admin sim account
-		adminAddr := sdk.MustAccAddressFromBech32(service.Admin)
-		simAccount, found := simtesting.GetSimAccount(adminAddr, accs)
+		adminAddr, err := sdk.AccAddressFromBech32(service.Admin)
+		if err != nil {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "error while parsing admin address"), nil, nil
+		}
+
+		// Get the params to be updates
+		updatedName := types.DoNotModify
+		if r.Intn(100) < 50 {
+			// 50% chance of updating the name
+			updatedName = simtypes.RandStringOfLength(r, 24)
+		}
+
+		updatedDescription := types.DoNotModify
+		if r.Intn(100) < 50 {
+			// 50% chance of updating the description
+			updatedDescription = simtypes.RandStringOfLength(r, 24)
+		}
+
+		updatedWebsite := types.DoNotModify
+		if r.Intn(100) < 50 {
+			// 50% chance of updating the website
+			updatedWebsite = simtypes.RandStringOfLength(r, 24)
+		}
+
+		updatedPictureURL := types.DoNotModify
+		if r.Intn(100) < 50 {
+			// 50% chance of updating the picture URL
+			updatedPictureURL = simtypes.RandStringOfLength(r, 24)
+		}
+
+		signer, found := simtesting.GetSimAccount(adminAddr, accs)
 		if !found {
 			return simtypes.NoOpMsg(types.ModuleName, "service admin not found", "skip"), nil, nil
 		}
 
-		// Generate the new service fields
-		newService := RandomService(r, service.ID, service.Admin)
-
 		// Create the msg
-		msg := types.NewMsgUpdateService(
+		msg = types.NewMsgUpdateService(
 			service.ID,
-			newService.Name,
-			newService.Description,
-			newService.Website,
-			newService.PictureURL,
-			simAccount.Address.String(),
+			updatedName,
+			updatedDescription,
+			updatedWebsite,
+			updatedPictureURL,
+			signer.Address.String(),
 		)
-
-		return simtesting.SendMsg(r, types.ModuleName, app, ak, bk, msg, ctx, simAccount)
+		return simtesting.SendMsg(r, types.ModuleName, app, ak, bk, msg, ctx, signer)
 	}
 }
 
@@ -161,9 +210,11 @@ func SimulateMsgActivateService(ak authkeeper.AccountKeeper, bk bankkeeper.Keepe
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
+		var msg = &types.MsgActivateService{}
+
 		// No account skipping
 		if len(accs) == 0 {
-			return simtypes.NoOpMsg(types.ModuleName, "MsgActivateService", "skip"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "skip"), nil, nil
 		}
 
 		// Get a random service to activate
@@ -171,19 +222,22 @@ func SimulateMsgActivateService(ak authkeeper.AccountKeeper, bk bankkeeper.Keepe
 			return s.Status == types.SERVICE_STATUS_CREATED || s.Status == types.SERVICE_STATUS_INACTIVE
 		})
 		if !found {
-			return simtypes.NoOpMsg(types.ModuleName, "MsgActivateService", "skip"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "skip"), nil, nil
 		}
 
 		// Get the service admin sim account
-		adminAddr := sdk.MustAccAddressFromBech32(service.Admin)
+		adminAddr, err := sdk.AccAddressFromBech32(service.Admin)
+		if err != nil {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "error while parsing admin address"), nil, nil
+		}
+
 		simAccount, found := simtesting.GetSimAccount(adminAddr, accs)
 		if !found {
-			return simtypes.NoOpMsg(types.ModuleName, "service admin not found", "skip"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "service admin not found"), nil, nil
 		}
 
 		// Create the msg
-		msg := types.NewMsgActivateService(service.ID, simAccount.Address.String())
-
+		msg = types.NewMsgActivateService(service.ID, simAccount.Address.String())
 		return simtesting.SendMsg(r, types.ModuleName, app, ak, bk, msg, ctx, simAccount)
 	}
 }
@@ -192,9 +246,11 @@ func SimulateMsgDeactivateService(ak authkeeper.AccountKeeper, bk bankkeeper.Kee
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
+		var msg = &types.MsgDeactivateService{}
+
 		// No account skipping
 		if len(accs) == 0 {
-			return simtypes.NoOpMsg(types.ModuleName, "MsgDeactivateService", "skip"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "no accounts"), nil, nil
 		}
 
 		// Get a random service
@@ -202,19 +258,22 @@ func SimulateMsgDeactivateService(ak authkeeper.AccountKeeper, bk bankkeeper.Kee
 			return s.Status == types.SERVICE_STATUS_ACTIVE
 		})
 		if !found {
-			return simtypes.NoOpMsg(types.ModuleName, "MsgDeactivateService", "skip"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "service not found"), nil, nil
 		}
 
 		// Get the service admin sim account
-		adminAddr := sdk.MustAccAddressFromBech32(service.Admin)
+		adminAddr, err := sdk.AccAddressFromBech32(service.Admin)
+		if err != nil {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "error while parsing admin address"), nil, nil
+		}
+
 		simAccount, found := simtesting.GetSimAccount(adminAddr, accs)
 		if !found {
-			return simtypes.NoOpMsg(types.ModuleName, "service admin not found", "skip"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "admin account not found"), nil, nil
 		}
 
 		// Create the msg
-		msg := types.NewMsgDeactivateService(service.ID, simAccount.Address.String())
-
+		msg = types.NewMsgDeactivateService(service.ID, simAccount.Address.String())
 		return simtesting.SendMsg(r, types.ModuleName, app, ak, bk, msg, ctx, simAccount)
 	}
 }
@@ -223,31 +282,40 @@ func SimulateMsgTransferServiceOwnership(ak authkeeper.AccountKeeper, bk bankkee
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
+		var msg = &types.MsgTransferServiceOwnership{}
+
 		// No account skipping
 		if len(accs) == 0 {
-			return simtypes.NoOpMsg(types.ModuleName, "MsgTransferServiceOwnership", "skip"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "no accounts"), nil, nil
 		}
 
 		// Get a random service
 		service, found := GetRandomExistingService(r, ctx, k, nil)
 		if !found {
-			return simtypes.NoOpMsg(types.ModuleName, "MsgTransferServiceOwnership", "skip"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "service not found"), nil, nil
 		}
 
 		// Get the service admin sim account
-		adminAddr := sdk.MustAccAddressFromBech32(service.Admin)
-		simAccount, found := simtesting.GetSimAccount(adminAddr, accs)
-		if !found {
-			return simtypes.NoOpMsg(types.ModuleName, "service admin not found", "skip"), nil, nil
+		adminAddr, err := sdk.AccAddressFromBech32(service.Admin)
+		if err != nil {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "error while parsing admin address"), nil, nil
 		}
 
 		// Get a new admin
 		newAdminAccount, _ := simtypes.RandomAcc(r, accs)
+		if bytes.Equal(newAdminAccount.Address, adminAddr) {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "new admin is the same as the current one"), nil, nil
+		}
+
+		// Get the signer
+		signer, found := simtesting.GetSimAccount(adminAddr, accs)
+		if !found {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "service admin not found"), nil, nil
+		}
 
 		// Create the msg
-		msg := types.NewMsgTransferServiceOwnership(service.ID, newAdminAccount.Address.String(), simAccount.Address.String())
-
-		return simtesting.SendMsg(r, types.ModuleName, app, ak, bk, msg, ctx, simAccount)
+		msg = types.NewMsgTransferServiceOwnership(service.ID, newAdminAccount.Address.String(), signer.Address.String())
+		return simtesting.SendMsg(r, types.ModuleName, app, ak, bk, msg, ctx, signer)
 	}
 }
 
@@ -255,9 +323,11 @@ func SimulateMsgDeleteService(ak authkeeper.AccountKeeper, bk bankkeeper.Keeper,
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
+		var msg = &types.MsgDeleteService{}
+
 		// No account skipping
 		if len(accs) == 0 {
-			return simtypes.NoOpMsg(types.ModuleName, "MsgDeleteService", "skip"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "no accounts"), nil, nil
 		}
 
 		// Get a random service
@@ -265,20 +335,23 @@ func SimulateMsgDeleteService(ak authkeeper.AccountKeeper, bk bankkeeper.Keeper,
 			return s.Status == types.SERVICE_STATUS_INACTIVE
 		})
 		if !found {
-			return simtypes.NoOpMsg(types.ModuleName, "MsgDeleteService", "skip"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "service not found"), nil, nil
 		}
 
 		// Get the service admin sim account
-		adminAddr := sdk.MustAccAddressFromBech32(service.Admin)
-		simAccount, found := simtesting.GetSimAccount(adminAddr, accs)
+		adminAddr, err := sdk.AccAddressFromBech32(service.Admin)
+		if err != nil {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "error while parsing admin address"), nil, nil
+		}
+
+		signer, found := simtesting.GetSimAccount(adminAddr, accs)
 		if !found {
-			return simtypes.NoOpMsg(types.ModuleName, "MsgDeleteService", "service admin not found"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "service admin not found"), nil, nil
 		}
 
 		// Create the msg
-		msg := types.NewMsgDeleteService(service.ID, simAccount.Address.String())
-
-		return simtesting.SendMsg(r, types.ModuleName, app, ak, bk, msg, ctx, simAccount)
+		msg = types.NewMsgDeleteService(service.ID, signer.Address.String())
+		return simtesting.SendMsg(r, types.ModuleName, app, ak, bk, msg, ctx, signer)
 	}
 }
 
@@ -286,29 +359,35 @@ func SimulateMsgSetServiceParams(ak authkeeper.AccountKeeper, bk bankkeeper.Keep
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
+		var msg = &types.MsgSetServiceParams{}
+
 		// No account skipping
 		if len(accs) == 0 {
-			return simtypes.NoOpMsg(types.ModuleName, "MsgSetServiceParams", "skip"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "no accounts"), nil, nil
 		}
 
 		// Get a random service
 		service, found := GetRandomExistingService(r, ctx, k, nil)
 		if !found {
-			return simtypes.NoOpMsg(types.ModuleName, "MsgSetServiceParams", "skip"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "service not found"), nil, nil
 		}
+
+		// Get new random params
+		serviceParams := RandomServiceParams(r)
 
 		// Get the service admin sim account
-		adminAddr := sdk.MustAccAddressFromBech32(service.Admin)
-		simAccount, found := simtesting.GetSimAccount(adminAddr, accs)
-		if !found {
-			return simtypes.NoOpMsg(types.ModuleName, "service admin not found", "skip"), nil, nil
+		adminAddr, err := sdk.AccAddressFromBech32(service.Admin)
+		if err != nil {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "error while parsing admin address"), nil, nil
 		}
 
-		serviceParams := types.DefaultServiceParams()
+		signer, found := simtesting.GetSimAccount(adminAddr, accs)
+		if !found {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "service admin not found"), nil, nil
+		}
 
 		// Create the msg
-		msg := types.NewMsgSetServiceParams(service.ID, serviceParams, service.Admin)
-
-		return simtesting.SendMsg(r, types.ModuleName, app, ak, bk, msg, ctx, simAccount)
+		msg = types.NewMsgSetServiceParams(service.ID, serviceParams, service.Admin)
+		return simtesting.SendMsg(r, types.ModuleName, app, ak, bk, msg, ctx, signer)
 	}
 }
