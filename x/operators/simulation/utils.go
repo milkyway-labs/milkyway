@@ -22,9 +22,9 @@ func RandomOperator(r *rand.Rand, accounts []simtypes.Account) types.Operator {
 	return types.NewOperator(
 		r.Uint32(),
 		randomOperatorStatus(r),
-		simtesting.RandomString(r, 10),
-		simtesting.RandomString(r, 20),
-		simtesting.RandomString(r, 20),
+		simtypes.RandStringOfLength(r, 10),
+		simtypes.RandStringOfLength(r, 20),
+		simtypes.RandStringOfLength(r, 20),
 		adminAccount.Address.String(),
 	)
 }

@@ -4,10 +4,11 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 
 	"github.com/milkyway-labs/milkyway/testutils/simtesting"
+	"github.com/milkyway-labs/milkyway/utils"
 	"github.com/milkyway-labs/milkyway/x/operators/types"
 )
 
-// RandomizedGenState generates a random GenesisState for the services module
+// RandomizedGenState generates a random GenesisState for the operators module
 func RandomizedGenState(simState *module.SimulationState) {
 	// Generate a random list of operators
 	var operators []types.Operator
@@ -37,14 +38,13 @@ func RandomizedGenState(simState *module.SimulationState) {
 		))
 	}
 
-	// Generate the unbonding operators
-	var unbondingOperators []types.UnbondingOperator
-	for _, operator := range operators {
-		// 85% chance of not being unbonded
-		if simState.Rand.Intn(100) < 85 {
-			continue
-		}
+	// Set the inactivating operators to be unbonded
+	inactivatingOperators := utils.Filter(operators, func(operator types.Operator) bool {
+		return operator.Status == types.OPERATOR_STATUS_INACTIVATING
+	})
 
+	var unbondingOperators []types.UnbondingOperator
+	for _, operator := range inactivatingOperators {
 		unbondingOperators = append(unbondingOperators, types.NewUnbondingOperator(
 			operator.ID,
 			simtesting.RandomFutureTime(simState.Rand, simState.GenTimestamp),

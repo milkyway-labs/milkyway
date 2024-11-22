@@ -70,15 +70,6 @@ func GetSimAccount(address sdk.Address, accs []simtypes.Account) (simtypes.Accou
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// RandomString returns a random string of the specified size
-func RandomString(r *rand.Rand, size int) string {
-	b := make([]byte, size)
-	for i := range b {
-		b[i] = byte(r.Intn(256))
-	}
-	return string(b)
-}
-
 // RandomFutureTime returns a random future time
 func RandomFutureTime(r *rand.Rand, currentTime time.Time) time.Time {
 	return currentTime.Add(time.Duration(r.Int63n(1e9)))

@@ -31,7 +31,7 @@ func NewDecodeStore(keeper *keeper.Keeper) func(kvA kv.Pair, kvB kv.Pair) string
 			return fmt.Sprintf("operatorIDA: %d\noperatorIDB: %d", valueA, valueB)
 
 		default:
-			panic(fmt.Sprintf("invalid services key prefix %X", kvA.Key[:1]))
+			panic(fmt.Sprintf("invalid operators key prefix %X", kvA.Key[:1]))
 		}
 	}
 }

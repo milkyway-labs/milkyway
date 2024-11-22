@@ -103,7 +103,7 @@ func SimulateMsgRegisterOperator(ak authkeeper.AccountKeeper, bk bankkeeper.Keep
 			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "no accounts"), nil, nil
 		}
 
-		// Get a random service
+		// Get a random operator
 		operator := RandomOperator(r, accs)
 
 		// Get the admin account that should sign the transaction
