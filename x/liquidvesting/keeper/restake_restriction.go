@@ -26,7 +26,7 @@ func (k *Keeper) RestakeRestrictionFn(ctx context.Context, restakerAddress strin
 	// We have some vested representation to restake, ensure the user
 	// insurance fund can cover the amount
 
-	// Get the current vested representations that are being coverd
+	// Get the current vested representations that are being covered
 	// by the insurance fund
 	totalVestedRepresentations, err := k.GetAllUserActiveVestedRepresentations(ctx, restakerAddress)
 	if err != nil {

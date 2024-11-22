@@ -38,7 +38,7 @@ var _ = time.Kitchen
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // MsgJoinService defines the message structure for the
-// JoinService gRPC service method. It allows the opeator admin to
+// JoinService gRPC service method. It allows the operator admin to
 // start securing a AVS.
 type MsgJoinService struct {
 	Sender     string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
@@ -138,7 +138,7 @@ func (m *MsgJoinServiceResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgJoinServiceResponse proto.InternalMessageInfo
 
 // MsgLeaveService defines the message structure for the
-// LeaveService gRPC service method. It allows the opeator admin to
+// LeaveService gRPC service method. It allows the operator admin to
 // stop securing a AVS.
 type MsgLeaveService struct {
 	Sender     string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
@@ -200,7 +200,7 @@ func (m *MsgLeaveService) GetServiceID() uint32 {
 	return 0
 }
 
-// MsgLeaveerviceResponse is the return value of MsgLeveService.
+// MsgLeaveServiceResponse is the return value of MsgLeaveService.
 type MsgLeaveServiceResponse struct {
 }
 

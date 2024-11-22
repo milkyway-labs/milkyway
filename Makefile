@@ -318,6 +318,7 @@ format:
 	find . -name '*.go' -type f -not -path "*.git*" -not -path "./client/docs/statik/statik.go" -not -name "*_mocks.go" -not -name '*.pb.go' -not -name '*.pulsar.go' | xargs gofmt -w -s
 	find . -name '*.go' -type f -not -path "*.git*" -not -path "./client/docs/statik/statik.go" -not -name "*_mocks.go" -not -name '*.pb.go' -not -name '*.pulsar.go' | xargs misspell -w
 	find . -name '*.go' -type f -not -path "*.git*" -not -path "./client/docs/statik/statik.go" -not -name "*_mocks.go" -not -name '*.pb.go' -not -name '*.pulsar.go' | xargs goimports -w -local github.com/milkyway-labs/milkyway
+	find . -name '*.proto' -type f -not -path "*.git*" | xargs misspell -w
 .PHONY: format
 
 ###############################################################################

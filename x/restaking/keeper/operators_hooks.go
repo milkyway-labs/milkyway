@@ -80,7 +80,7 @@ func (o *OperatorsHooks) removeOperatorFromServicesAllowList(ctx context.Context
 		// list lets check if is now empty and in this case we have to disable
 		// the service to prevent unwanted operators to join.
 		serviceID := key.K1()
-		isConfigured, err := o.IsServiceOpertorsAllowListConfigured(ctx, serviceID)
+		isConfigured, err := o.IsServiceOperatorsAllowListConfigured(ctx, serviceID)
 		if err != nil {
 			return err
 		}

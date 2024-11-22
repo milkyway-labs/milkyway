@@ -172,7 +172,7 @@ func (suite *KeeperTestSuite) CreateOperator(ctx sdk.Context, name string, admin
 }
 
 // UpdateOperatorParams updates the operator's params.
-// TODO: split functionalites
+// TODO: split functionalities
 func (suite *KeeperTestSuite) UpdateOperatorParams(
 	ctx sdk.Context,
 	operatorID uint32,

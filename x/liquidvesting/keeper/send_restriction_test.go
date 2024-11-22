@@ -104,7 +104,7 @@ func (suite *KeeperTestSuite) TestKeeper_BankSend() {
 				// Ensure we can transfer the vested representation
 				suite.bk.SetSendEnabled(ctx, vestedDenom, true)
 
-				// Create a operator
+				// Create an operator
 				operator := operatorstypes.NewOperator(
 					1,
 					operatorstypes.OPERATOR_STATUS_ACTIVE,

@@ -927,8 +927,8 @@ func (k *Keeper) UnbondRestakedAssets(ctx context.Context, user sdk.AccAddress, 
 		return time.Time{}, err
 	}
 
-	truncatedToUndalegateTokens, _ := toUndelegateTokens.TruncateDecimal()
-	if !truncatedToUndalegateTokens.IsZero() {
+	truncatedToUndelegateTokens, _ := toUndelegateTokens.TruncateDecimal()
+	if !truncatedToUndelegateTokens.IsZero() {
 		return time.Time{}, fmt.Errorf("user hasn't restaked the provided amount: %s", amount.String())
 	}
 
@@ -1007,7 +1007,7 @@ func (k *Keeper) GetAllOperatorUnbondingDelegations(ctx context.Context) ([]type
 }
 
 // GetAllUserOperatorUnbondingDelegations returns all the user's unbonding delegations
-// from a operator
+// from an operator
 func (k *Keeper) GetAllUserOperatorUnbondingDelegations(ctx context.Context, userAddress string) []types.UnbondingDelegation {
 	store := k.storeService.OpenKVStore(ctx)
 

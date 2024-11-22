@@ -23,15 +23,15 @@ func (k *Keeper) ServiceAllowedOperatorsIterator(ctx context.Context, serviceID 
 // GetAllServiceAllowedOperators returns all operators that have been whitelisted
 // by a service
 func (k *Keeper) GetAllServiceAllowedOperators(ctx context.Context, serviceID uint32) ([]uint32, error) {
-	iteretor, err := k.ServiceAllowedOperatorsIterator(ctx, serviceID)
+	iterator, err := k.ServiceAllowedOperatorsIterator(ctx, serviceID)
 	if err != nil {
 		return nil, err
 	}
 
-	defer iteretor.Close()
+	defer iterator.Close()
 	var operators []uint32
-	for ; iteretor.Valid(); iteretor.Next() {
-		serviceOperatorPair, err := iteretor.Key()
+	for ; iterator.Valid(); iterator.Next() {
+		serviceOperatorPair, err := iterator.Key()
 		if err != nil {
 			return nil, err
 		}
@@ -57,15 +57,15 @@ func (k *Keeper) RemoveOperatorFromServiceAllowList(ctx context.Context, service
 	return k.serviceOperatorsAllowList.Remove(ctx, key)
 }
 
-// IsServiceOpertorsAllowListConfigured returns true if the operators allow list
-func (k *Keeper) IsServiceOpertorsAllowListConfigured(ctx context.Context, serviceID uint32) (bool, error) {
-	iteretor, err := k.ServiceAllowedOperatorsIterator(ctx, serviceID)
+// IsServiceOperatorsAllowListConfigured returns true if the operators allow list
+func (k *Keeper) IsServiceOperatorsAllowListConfigured(ctx context.Context, serviceID uint32) (bool, error) {
+	iterator, err := k.ServiceAllowedOperatorsIterator(ctx, serviceID)
 	if err != nil {
 		return false, err
 	}
-	defer iteretor.Close()
+	defer iterator.Close()
 
-	for ; iteretor.Valid(); iteretor.Next() {
+	for ; iterator.Valid(); iterator.Next() {
 		return true, nil
 	}
 
@@ -82,7 +82,7 @@ func (k *Keeper) IsOperatorInServiceAllowList(ctx context.Context, serviceID uin
 // CanOperatorValidateService returns true if the given operator can secure
 // the given service
 func (k *Keeper) CanOperatorValidateService(ctx context.Context, serviceID uint32, operatorID uint32) (bool, error) {
-	configured, err := k.IsServiceOpertorsAllowListConfigured(ctx, serviceID)
+	configured, err := k.IsServiceOperatorsAllowListConfigured(ctx, serviceID)
 	if err != nil {
 		return false, err
 	}
@@ -103,7 +103,7 @@ func (k *Keeper) ServiceSecuringPoolsIterator(ctx context.Context, serviceID uin
 }
 
 // GetAllServiceSecuringPools returns all pools that have been allowed to
-// to secure the give service
+// secure the give service
 func (k *Keeper) GetAllServiceSecuringPools(ctx context.Context, serviceID uint32) ([]uint32, error) {
 	iterator, err := k.ServiceSecuringPoolsIterator(ctx, serviceID)
 	if err != nil {

@@ -55,7 +55,7 @@ func (k *Keeper) BurnVestedRepresentation(
 		if userBalanceOfC.GTE(c.Amount) {
 			liquidCoins = liquidCoins.Add(c)
 		} else {
-			// The user's balance of the coin c is lower then the amount to burn,
+			// The user's balance of the coin c is lower than the amount to burn,
 			// consider it as to unbond
 			liquidCoins = liquidCoins.Add(sdk.NewCoin(c.Denom, userBalanceOfC))
 			toUnbondCoins = toUnbondCoins.Add(sdk.NewCoin(c.Denom, c.Amount.Sub(userBalanceOfC)))
@@ -151,7 +151,7 @@ func (k *Keeper) InsertBurnCoinsToUnbondingQueue(ctx context.Context, burnCoins 
 	return k.SetBurnCoinsQueueTimeSlice(ctx, burnCoins.CompletionTime, timeSlice)
 }
 
-// BurnCoinsQueueIterator returns all the BurnCoins from time 0 until endTime.
+// BurnCoinsUnbondingQueueIterator returns all the BurnCoins from time 0 until endTime.
 func (k *Keeper) BurnCoinsUnbondingQueueIterator(ctx context.Context, endTime time.Time) (storetypes.Iterator, error) {
 	store := k.storeService.OpenKVStore(ctx)
 	return store.Iterator(types.BurnCoinsQueueKey, storetypes.InclusiveEndBytes(types.GetBurnCoinsQueueTimeKey(endTime)))

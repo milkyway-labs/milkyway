@@ -9,7 +9,7 @@ import "milkyway/assets/v1/models.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/x/assets/types";
 
-// Msg defines the services module's gRPC message service.
+// Msg defines the assets module's gRPC message service.
 service Msg {
   option (cosmos.msg.v1.service) = true;
 

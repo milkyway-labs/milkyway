@@ -17,7 +17,7 @@ func GetServiceAddress(serviceID uint32) sdk.AccAddress {
 	return authtypes.NewModuleAddress(fmt.Sprintf("service-%d", serviceID))
 }
 
-// ParseServiceID parses a string into a uint32
+// ParseServiceID parses a string into an uint32
 func ParseServiceID(value string) (uint32, error) {
 	id, err := strconv.ParseUint(value, 10, 32)
 	if err != nil {

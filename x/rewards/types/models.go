@@ -146,7 +146,7 @@ func (plan RewardsPlan) Validate(unpacker codectypes.AnyUnpacker) error {
 	return nil
 }
 
-// ParseRewardsPlanID tries parsing the given value as an rewards plan id
+// ParseRewardsPlanID tries parsing the given value as a rewards plan id
 func ParseRewardsPlanID(value string) (uint64, error) {
 	planID, err := strconv.ParseUint(value, 10, 64)
 	if err != nil {

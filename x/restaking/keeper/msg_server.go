@@ -448,7 +448,7 @@ func (k msgServer) UndelegateOperator(ctx context.Context, msg *types.MsgUndeleg
 	for _, token := range msg.Amount {
 		if token.Amount.IsInt64() {
 			defer func() {
-				telemetry.IncrCounter(1, types.ModuleName, "undelegete_operator")
+				telemetry.IncrCounter(1, types.ModuleName, "undelegate_operator")
 				telemetry.SetGaugeWithLabels(
 					[]string{"tx", "msg", sdk.MsgTypeURL(msg)},
 					float32(token.Amount.Int64()),
@@ -534,7 +534,7 @@ func (k msgServer) UndelegateService(ctx context.Context, msg *types.MsgUndelega
 	for _, token := range msg.Amount {
 		if token.Amount.IsInt64() {
 			defer func() {
-				telemetry.IncrCounter(1, types.ModuleName, "undelegete_service")
+				telemetry.IncrCounter(1, types.ModuleName, "undelegate_service")
 				telemetry.SetGaugeWithLabels(
 					[]string{"tx", "msg", sdk.MsgTypeURL(msg)},
 					float32(token.Amount.Int64()),

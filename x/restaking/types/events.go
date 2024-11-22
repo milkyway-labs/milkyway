@@ -8,7 +8,6 @@ const (
 	EventTypeRemoveAllowedOperator   = "remove_allowed_operator"
 	EventTypeBorrowPoolSecurity      = "borrow_pool_security"
 	EventTypeCeasePoolSecurityBorrow = "cease_pool_security_borrow"
-	EventTypeUpdateServiceParams     = "update_service_params"
 	EventTypeDelegatePool            = "delegate_pool"
 	EventTypeDelegateOperator        = "delegate_operator"
 	EventTypeDelegateService         = "delegate_service"

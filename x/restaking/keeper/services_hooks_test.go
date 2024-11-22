@@ -53,7 +53,7 @@ func (suite *KeeperTestSuite) TestServicesHooks_BeforeServiceDeleted() {
 				suite.Require().NoError(err)
 			},
 			check: func(ctx sdk.Context) {
-				configured, err := suite.k.IsServiceOpertorsAllowListConfigured(ctx, 1)
+				configured, err := suite.k.IsServiceOperatorsAllowListConfigured(ctx, 1)
 				suite.Require().NoError(err)
 				suite.Require().False(configured)
 			},

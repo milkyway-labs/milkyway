@@ -27,7 +27,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
-// Msg defines the services module's gRPC message service.
+// Msg defines the assets module's gRPC message service.
 type MsgClient interface {
 	// RegisterAsset defines the operation for registering an asset.
 	RegisterAsset(ctx context.Context, in *MsgRegisterAsset, opts ...grpc.CallOption) (*MsgRegisterAssetResponse, error)
@@ -68,7 +68,7 @@ func (c *msgClient) DeregisterAsset(ctx context.Context, in *MsgDeregisterAsset,
 // All implementations must embed UnimplementedMsgServer
 // for forward compatibility.
 //
-// Msg defines the services module's gRPC message service.
+// Msg defines the assets module's gRPC message service.
 type MsgServer interface {
 	// RegisterAsset defines the operation for registering an asset.
 	RegisterAsset(context.Context, *MsgRegisterAsset) (*MsgRegisterAssetResponse, error)

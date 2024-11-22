@@ -6,16 +6,13 @@ import (
 	"time"
 
 	"cosmossdk.io/math"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/milkyway-labs/milkyway/x/rewards/types"
-
 	"github.com/cosmos/cosmos-sdk/testutil"
-
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
 	milkyway "github.com/milkyway-labs/milkyway/app"
 	"github.com/milkyway-labs/milkyway/x/rewards/client/cli"
+	"github.com/milkyway-labs/milkyway/x/rewards/types"
 )
 
 func TestCliUtils_parseRewardsPlan(t *testing.T) {

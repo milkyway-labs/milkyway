@@ -38,7 +38,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // account to mint a user's staked vested tokens representation that can be
 // used in the liquid vesting module.
 type MsgMintVestedRepresentation struct {
-	// User that want to triger the tokens mint.
+	// User that want to trigger the tokens mint.
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
 	// User that will receive the minted tokens.
 	Receiver string `protobuf:"bytes,2,opt,name=receiver,proto3" json:"receiver,omitempty"`
@@ -142,7 +142,7 @@ var xxx_messageInfo_MsgMintVestedRepresentationResponse proto.InternalMessageInf
 // BurnVestedRepresentation gRPC service method. It allows an authorized
 // account to burn a user's staked vested tokens representation.
 type MsgBurnVestedRepresentation struct {
-	// User that want to triger the tokens burn.
+	// User that want to trigger the tokens burn.
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
 	// User from which we want to burn the tokens.
 	User string `protobuf:"bytes,2,opt,name=user,proto3" json:"user,omitempty"`
