@@ -4,6 +4,16 @@ import (
 	"slices"
 )
 
+// Find returns the first element in the slice that satisfies the given predicate, or false if none is found.
+func Find[T any](slice []T, searchFunction func(T) bool) (*T, bool) {
+	for i, v := range slice {
+		if searchFunction(v) {
+			return &slice[i], true
+		}
+	}
+	return nil, false
+}
+
 // FindDuplicate returns the first duplicate element in the slice.
 // If no duplicates are found, it returns nil instead.
 func FindDuplicate[T comparable](slice []T) *T {

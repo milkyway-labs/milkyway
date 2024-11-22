@@ -101,6 +101,42 @@ func TestGenesisState_Validate(t *testing.T) {
 			shouldErr: true,
 		},
 		{
+			name: "not found unbonding operator returns error",
+			genesis: &types.GenesisState{
+				NextOperatorID: 1,
+				UnbondingOperators: []types.UnbondingOperator{
+					types.NewUnbondingOperator(
+						1,
+						time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC),
+					),
+				},
+			},
+			shouldErr: true,
+		},
+		{
+			name: "unbonding operator with status non inactivating returns error",
+			genesis: &types.GenesisState{
+				NextOperatorID: 1,
+				Operators: []types.Operator{
+					types.NewOperator(
+						1,
+						types.OPERATOR_STATUS_ACTIVE,
+						"MilkyWay Operator",
+						"https://milkyway.com",
+						"https://milkyway.com/picture",
+						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					),
+				},
+				UnbondingOperators: []types.UnbondingOperator{
+					types.NewUnbondingOperator(
+						1,
+						time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC),
+					),
+				},
+			},
+			shouldErr: true,
+		},
+		{
 			name: "invalid params returns error",
 			genesis: &types.GenesisState{
 				NextOperatorID: 1,
@@ -122,7 +158,7 @@ func TestGenesisState_Validate(t *testing.T) {
 				Operators: []types.Operator{
 					types.NewOperator(
 						1,
-						types.OPERATOR_STATUS_ACTIVE,
+						types.OPERATOR_STATUS_INACTIVATING,
 						"MilkyWay Operator",
 						"https://milkyway.com",
 						"https://milkyway.com/picture",

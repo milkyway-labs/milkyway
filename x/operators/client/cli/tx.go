@@ -58,7 +58,7 @@ func GetCmdSetOperatorParams() *cobra.Command {
 			creator := clientCtx.FromAddress.String()
 
 			// Create and validate the message
-			msg := types.NewMsgSetOperatorParams(creator, id, types.NewOperatorParams(commissionRete))
+			msg := types.NewMsgSetOperatorParams(id, types.NewOperatorParams(commissionRete), creator)
 			if err = msg.ValidateBasic(); err != nil {
 				return fmt.Errorf("message validation failed: %w", err)
 			}

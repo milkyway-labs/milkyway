@@ -66,10 +66,23 @@ func (data *GenesisState) Validate() error {
 	}
 
 	// Validate unbonding operators
-	for _, operator := range data.UnbondingOperators {
-		err := operator.Validate()
+	for _, unbondingOperator := range data.UnbondingOperators {
+		err := unbondingOperator.Validate()
 		if err != nil {
-			return fmt.Errorf("invalid unbonding operator with id %d: %s", operator.OperatorID, err)
+			return fmt.Errorf("invalid unbonding operator with id %d: %s", unbondingOperator.OperatorID, err)
+		}
+
+		// Make sure the operator status is inactivating
+		operator, found := utils.Find(data.Operators, func(operator Operator) bool {
+			return operator.ID == unbondingOperator.OperatorID
+		})
+
+		if !found {
+			return fmt.Errorf("unbonding operator with id %d not found", unbondingOperator.OperatorID)
+		}
+
+		if operator.Status != OPERATOR_STATUS_INACTIVATING {
+			return fmt.Errorf("operator with id %d is not inactivating", unbondingOperator.OperatorID)
 		}
 	}
 
