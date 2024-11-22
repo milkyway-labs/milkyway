@@ -30,11 +30,6 @@ issues:
   max-same-issues: 10000
   exclude-dirs:
     - "app/ibc-hooks/*"
-    - "x/epochs/*"
-    - "x/interchainquery/*"
-    - "x/icacallbacks/*"
-    - "x/stakeibc/*"
-    - "x/records/*"
     - "x/tokenfactory/*"
   exclude-rules:
     - text: "The legacy v1beta1 gov types maintained in this file are deprecated and will be removed in a future release"

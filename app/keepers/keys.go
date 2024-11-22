@@ -35,17 +35,12 @@ import (
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
 	assetstypes "github.com/milkyway-labs/milkyway/x/assets/types"
-	epochstypes "github.com/milkyway-labs/milkyway/x/epochs/types"
-	icacallbackstypes "github.com/milkyway-labs/milkyway/x/icacallbacks/types"
-	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
-	recordstypes "github.com/milkyway-labs/milkyway/x/records/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 	rewardstypes "github.com/milkyway-labs/milkyway/x/rewards/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
-	stakeibctypes "github.com/milkyway-labs/milkyway/x/stakeibc/types"
 	tokenfactorytypes "github.com/milkyway-labs/milkyway/x/tokenfactory/types"
 )
 
@@ -84,13 +79,6 @@ func (appKeepers *AppKeepers) GenerateKeys() {
 		marketmaptypes.StoreKey,
 		oracletypes.StoreKey,
 		feemarkettypes.StoreKey,
-
-		// Stride
-		epochstypes.StoreKey,
-		icqtypes.StoreKey,
-		icacallbackstypes.StoreKey,
-		recordstypes.StoreKey,
-		stakeibctypes.StoreKey,
 
 		// Custom modules
 		servicestypes.StoreKey,

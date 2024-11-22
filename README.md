@@ -30,4 +30,3 @@ MilkyWay is licensed under the [Apache 2.0](LICENSE) license.
 We also use portions of the codebase from other developers' software to implement some of our features:
 
 - [Cosmos SDK](https://github.com/cosmos/cosmos-sdk), licensed under the [Apache 2.0](https://github.com/cosmos/cosmos-sdk?tab=Apache-2.0-1-ov-file)
-- [Stride](https://github.com/stride-labs/stride), licensed under the [Apache 2.0](https://github.com/stride-labs/stride?tab=Apache-2.0-1-ov-file)

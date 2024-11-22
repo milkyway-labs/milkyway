@@ -32,17 +32,12 @@ import (
 	"github.com/skip-mev/feemarket/x/feemarket"
 
 	"github.com/milkyway-labs/milkyway/x/assets"
-	"github.com/milkyway-labs/milkyway/x/epochs"
-	"github.com/milkyway-labs/milkyway/x/icacallbacks"
-	"github.com/milkyway-labs/milkyway/x/interchainquery"
 	"github.com/milkyway-labs/milkyway/x/liquidvesting"
 	"github.com/milkyway-labs/milkyway/x/operators"
 	"github.com/milkyway-labs/milkyway/x/pools"
-	"github.com/milkyway-labs/milkyway/x/records"
 	"github.com/milkyway-labs/milkyway/x/restaking"
 	"github.com/milkyway-labs/milkyway/x/rewards"
 	"github.com/milkyway-labs/milkyway/x/services"
-	"github.com/milkyway-labs/milkyway/x/stakeibc"
 )
 
 var AppModuleBasics = module.NewBasicManager(
@@ -78,13 +73,6 @@ var AppModuleBasics = module.NewBasicManager(
 	pfmrouter.AppModuleBasic{},
 	ratelimit.AppModuleBasic{},
 	icsprovider.AppModuleBasic{},
-
-	// Stride modules
-	stakeibc.AppModuleBasic{},
-	epochs.AppModuleBasic{},
-	interchainquery.AppModuleBasic{},
-	records.AppModuleBasic{},
-	icacallbacks.AppModuleBasic{},
 
 	// MilkyWay modules
 	services.AppModuleBasic{},
