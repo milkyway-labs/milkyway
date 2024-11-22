@@ -43,7 +43,6 @@ type OracleKeeper interface {
 }
 
 type PoolsKeeper interface {
-	GetParams(ctx context.Context) (poolstypes.Params, error)
 	GetPool(ctx context.Context, poolID uint32) (poolstypes.Pool, bool, error)
 	GetPools(ctx context.Context) ([]poolstypes.Pool, error)
 	IteratePools(ctx context.Context, cb func(pool poolstypes.Pool) (stop bool, err error)) error

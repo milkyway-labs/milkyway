@@ -65,17 +65,17 @@ func (suite *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	// Create services.
 	serviceAdmin1 := testutil.TestAddress(10000)
 	service1 := suite.CreateService(ctx, "Service1", serviceAdmin1.String())
-	serviceAdmin2 := testutil.TestAddress(10001)
-	service2 := suite.CreateService(ctx, "Service2", serviceAdmin2.String())
-	serviceAdmin3 := testutil.TestAddress(10003)
-	service3 := suite.CreateService(ctx, "Service3", serviceAdmin3.String())
-
-	// Add only Service1 and Service2 to the pools module's allowed list.
-	poolsParams, err := suite.poolsKeeper.GetParams(ctx)
+	err := suite.servicesKeeper.SetServiceAccredited(ctx, service1.ID, true)
 	suite.Require().NoError(err)
 
-	poolsParams.AllowedServicesIDs = []uint32{service1.ID, service2.ID}
-	err = suite.poolsKeeper.SetParams(ctx, poolsParams)
+	serviceAdmin2 := testutil.TestAddress(10001)
+	service2 := suite.CreateService(ctx, "Service2", serviceAdmin2.String())
+	err = suite.servicesKeeper.SetServiceAccredited(ctx, service2.ID, true)
+	suite.Require().NoError(err)
+
+	serviceAdmin3 := testutil.TestAddress(10003)
+	service3 := suite.CreateService(ctx, "Service3", serviceAdmin3.String())
+	err = suite.servicesKeeper.SetServiceAccredited(ctx, service3.ID, false)
 	suite.Require().NoError(err)
 
 	// Create operators.
@@ -85,6 +85,11 @@ func (suite *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	operator2 := suite.CreateOperator(ctx, "Operator2", operatorAdmin2.String())
 	operatorAdmin3 := testutil.TestAddress(10006)
 	operator3 := suite.CreateOperator(ctx, "Operator3", operatorAdmin3.String())
+
+	// Whitelist only $MILK and $MUSD pools.
+	suite.AddPoolsToServiceSecuringPools(ctx, service2.ID, []uint32{1, 3})
+	// Whitelist only Operator2 and Operator3.
+	suite.AddOperatorsToServiceAllowList(ctx, service3.ID, []uint32{operator2.ID, operator3.ID})
 
 	suite.UpdateOperatorParams(ctx, operator1.ID, utils.MustParseDec("0.1"), []uint32{service1.ID, service2.ID, service3.ID})
 	suite.UpdateOperatorParams(ctx, operator2.ID, utils.MustParseDec("0.05"), []uint32{service1.ID, service3.ID})
@@ -123,29 +128,25 @@ func (suite *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	suite.Require().NoError(err)
 
 	aliceAddr := testutil.TestAddress(1)
-	suite.SetUserPreferences(ctx, aliceAddr.String(), true, true, nil)
-	suite.DelegatePool(ctx, utils.MustParseCoin("100_000000umilk"), aliceAddr.String(), true) // $300
-	suite.DelegatePool(ctx, utils.MustParseCoin("100_000000uinit"), aliceAddr.String(), true) // $200
+	suite.SetUserPreferences(ctx, aliceAddr.String(), false, true, nil)
+	suite.DelegatePool(ctx, utils.MustParseCoin("100_000000umilk"), aliceAddr.String(), true) // $200
+	suite.DelegatePool(ctx, utils.MustParseCoin("100_000000uinit"), aliceAddr.String(), true) // $300
 	suite.DelegatePool(ctx, utils.MustParseCoin("500_000000uusd"), aliceAddr.String(), true)  // $500
 
-	// Whitelist only $MILK and $MUSD pools.
-	suite.AddPoolsToServiceSecuringPools(ctx, service2.ID, []uint32{1, 3})
-	// Whitelist only Operator2 and Operator3.
-	suite.AddOperatorsToServiceAllowList(ctx, service3.ID, []uint32{operator2.ID, operator3.ID})
-
 	bobAddr := testutil.TestAddress(2)
+	suite.SetUserPreferences(ctx, bobAddr.String(), false, true, nil)
 	suite.DelegateService(ctx, service1.ID, utils.MustParseCoins("100_000000uinit"), bobAddr.String(), true) // $300
-	suite.DelegateService(ctx,
-		service2.ID, utils.MustParseCoins("200_000000uinit"), bobAddr.String(), true) // $600
+	suite.DelegateService(ctx, service2.ID, utils.MustParseCoins("200_000000uinit"), bobAddr.String(), true) // $600
 	suite.DelegateService(ctx, service3.ID, utils.MustParseCoins("300_000000uinit"), bobAddr.String(), true) // $900
 
 	charlieAddr := testutil.TestAddress(3)
+	suite.SetUserPreferences(ctx, charlieAddr.String(), false, true, nil)
 	suite.DelegateOperator(ctx, operator1.ID, utils.MustParseCoins("1000_000000uusd"), charlieAddr.String(), true) // $1000
 	suite.DelegateOperator(ctx, operator2.ID, utils.MustParseCoins("1000_000000uusd"), charlieAddr.String(), true) // $1000
 	suite.DelegateOperator(ctx, operator3.ID, utils.MustParseCoins("500_000000uusd"), charlieAddr.String(), true)  // $500
 
 	davidAddr := testutil.TestAddress(4)
-	suite.SetUserPreferences(ctx, davidAddr.String(), true, true, nil)
+	suite.SetUserPreferences(ctx, davidAddr.String(), false, true, nil)
 	suite.DelegatePool(ctx, utils.MustParseCoin("200_000000umilk"), davidAddr.String(), true)                    // $400
 	suite.DelegatePool(ctx, utils.MustParseCoin("200_000000uinit"), davidAddr.String(), true)                    // $600
 	suite.DelegatePool(ctx, utils.MustParseCoin("200_000000uusd"), davidAddr.String(), true)                     // $200
@@ -170,9 +171,11 @@ func (suite *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	rewards, err := suite.keeper.GetPoolDelegationRewards(ctx, aliceAddr, 1)
 	suite.Require().NoError(err)
 	suite.Require().Equal("4061.052631578900000000service1,25161.000000000000000000service2", rewards.Sum().String())
+
 	rewards, err = suite.keeper.GetPoolDelegationRewards(ctx, aliceAddr, 2)
 	suite.Require().NoError(err)
 	suite.Require().Equal("6091.578947368400000000service1", rewards.Sum().String())
+
 	rewards, err = suite.keeper.GetPoolDelegationRewards(ctx, aliceAddr, 3)
 	suite.Require().NoError(err)
 	suite.Require().Equal("10152.631578947000000000service1,62902.500000000000000000service2", rewards.Sum().String())
@@ -330,14 +333,6 @@ func (suite *KeeperTestSuite) TestAllocateRewards_ZeroDelegations() {
 	serviceAdmin := testutil.TestAddress(10000)
 	service := suite.CreateService(ctx, "Service", serviceAdmin.String())
 
-	// Add the created service ID to the pools module's allowed list.
-	poolsParams, err := suite.poolsKeeper.GetParams(ctx)
-	suite.Require().NoError(err)
-
-	poolsParams.AllowedServicesIDs = []uint32{service.ID}
-	err = suite.poolsKeeper.SetParams(ctx, poolsParams)
-	suite.Require().NoError(err)
-
 	// Create an active rewards plan.
 	planStartTime := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
 	planEndTime := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
@@ -361,7 +356,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_ZeroDelegations() {
 	suite.UpdateOperatorParams(ctx, operator.ID, utils.MustParseDec("0.1"), []uint32{service.ID})
 
 	// Call AllocateRewards to set last rewards allocation time.
-	err = suite.keeper.AllocateRewards(ctx)
+	err := suite.keeper.AllocateRewards(ctx)
 	suite.Require().NoError(err)
 
 	// Try allocating rewards.
@@ -420,14 +415,6 @@ func (suite *KeeperTestSuite) TestAllocateRewards_WeightedDistributions() {
 	serviceAdmin := testutil.TestAddress(10000)
 	service := suite.CreateService(ctx, "Service", serviceAdmin.String())
 
-	// Add the created service ID to the pools module's allowed list.
-	poolsParams, err := suite.poolsKeeper.GetParams(ctx)
-	suite.Require().NoError(err)
-
-	poolsParams.AllowedServicesIDs = []uint32{service.ID}
-	err = suite.poolsKeeper.SetParams(ctx, poolsParams)
-	suite.Require().NoError(err)
-
 	// Create operators.
 	operatorAdmin1 := testutil.TestAddress(10001)
 	operator1 := suite.CreateOperator(ctx, "Operator1", operatorAdmin1.String())
@@ -437,7 +424,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_WeightedDistributions() {
 	suite.UpdateOperatorParams(ctx, operator2.ID, utils.MustParseDec("0.1"), []uint32{service.ID})
 
 	// Call AllocateRewards to set last rewards allocation time.
-	err = suite.keeper.AllocateRewards(ctx)
+	err := suite.keeper.AllocateRewards(ctx)
 	suite.Require().NoError(err)
 
 	// Delegate to $MILK pool.
@@ -544,14 +531,6 @@ func (suite *KeeperTestSuite) TestAllocateRewards_EgalitarianDistributions() {
 	serviceAdmin := testutil.TestAddress(10000)
 	service := suite.CreateService(ctx, "Service", serviceAdmin.String())
 
-	// Add the created service ID to the pools module's allowed list.
-	poolsParams, err := suite.poolsKeeper.GetParams(ctx)
-	suite.Require().NoError(err)
-
-	poolsParams.AllowedServicesIDs = []uint32{service.ID}
-	err = suite.poolsKeeper.SetParams(ctx, poolsParams)
-	suite.Require().NoError(err)
-
 	// Create operators.
 	operatorAdmin1 := testutil.TestAddress(10001)
 	operator1 := suite.CreateOperator(ctx, "Operator1", operatorAdmin1.String())
@@ -561,7 +540,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_EgalitarianDistributions() {
 	suite.UpdateOperatorParams(ctx, operator2.ID, utils.MustParseDec("0.1"), []uint32{service.ID})
 
 	// Call AllocateRewards to set last rewards allocation time.
-	err = suite.keeper.AllocateRewards(ctx)
+	err := suite.keeper.AllocateRewards(ctx)
 	suite.Require().NoError(err)
 
 	// Create an active rewards plan.
@@ -663,16 +642,8 @@ func (suite *KeeperTestSuite) TestAllocateRewards_TrustedServices() {
 	serviceAdmin2 := testutil.TestAddress(10001)
 	service2 := suite.CreateService(ctx, "Service2", serviceAdmin2.String())
 
-	// Add Service1 and Service2 to the pools module's allowed list.
-	poolsParams, err := suite.poolsKeeper.GetParams(ctx)
-	suite.Require().NoError(err)
-
-	poolsParams.AllowedServicesIDs = []uint32{service1.ID, service2.ID}
-	err = suite.poolsKeeper.SetParams(ctx, poolsParams)
-	suite.Require().NoError(err)
-
 	// Call AllocateRewards to set last rewards allocation time.
-	err = suite.keeper.AllocateRewards(ctx)
+	err := suite.keeper.AllocateRewards(ctx)
 	suite.Require().NoError(err)
 
 	// Create active rewards plans.
@@ -773,16 +744,8 @@ func (suite *KeeperTestSuite) TestAllocateRewards_UserTrustedServiceUpdated() {
 	serviceAdmin2 := testutil.TestAddress(10001)
 	service2 := suite.CreateService(ctx, "Service2", serviceAdmin2.String())
 
-	// Add Service1 and Service2 to the pools module's allowed list.
-	poolsParams, err := suite.poolsKeeper.GetParams(ctx)
-	suite.Require().NoError(err)
-
-	poolsParams.AllowedServicesIDs = []uint32{service1.ID, service2.ID}
-	err = suite.poolsKeeper.SetParams(ctx, poolsParams)
-	suite.Require().NoError(err)
-
 	// Call AllocateRewards to set last rewards allocation time.
-	err = suite.keeper.AllocateRewards(ctx)
+	err := suite.keeper.AllocateRewards(ctx)
 	suite.Require().NoError(err)
 
 	// Create active rewards plans.

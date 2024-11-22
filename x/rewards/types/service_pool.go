@@ -136,7 +136,7 @@ func removeZeroServicePools(pools ServicePools) ServicePools {
 // ServicePool functions
 
 // NewServicePool return new ServicePool instance
-func NewServicePool(serviceID uint32, pools ...DecPool) ServicePool {
+func NewServicePool(serviceID uint32, pools DecPools) ServicePool {
 	return ServicePool{serviceID, pools}
 }
 

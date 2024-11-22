@@ -150,13 +150,13 @@ func (k *Keeper) IncrementDelegationTargetPeriod(ctx context.Context, target Del
 				// ergo we instead add to the community pool
 				communityFunding = communityFunding.Add(types.NewDecPool(token.Denom, rewardCoins))
 				current = current.Add(
-					types.NewServicePool(reward.ServiceID, types.NewDecPool(token.Denom, sdk.DecCoins{})),
+					types.NewServicePool(reward.ServiceID, types.DecPools{types.NewDecPool(token.Denom, sdk.DecCoins{})}),
 				)
 			} else {
 				current = current.Add(
 					types.NewServicePool(
 						reward.ServiceID,
-						types.NewDecPool(token.Denom, rewardCoins.QuoDecTruncate(token.Amount)),
+						types.DecPools{types.NewDecPool(token.Denom, rewardCoins.QuoDecTruncate(token.Amount))},
 					),
 				)
 			}

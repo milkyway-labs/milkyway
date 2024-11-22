@@ -18,15 +18,9 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		panic(err)
 	}
 
-	params, err := k.GetParams(ctx)
-	if err != nil {
-		panic(err)
-	}
-
 	return types.NewGenesis(
 		nextPoolID,
 		pools,
-		params,
 	)
 }
 
@@ -34,13 +28,8 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 
 // InitGenesis initializes the genesis store using the provided data
 func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) error {
-	err := k.SetParams(ctx, data.Params)
-	if err != nil {
-		return err
-	}
-
 	// Set the next pool id
-	err = k.SetNextPoolID(ctx, data.NextPoolID)
+	err := k.SetNextPoolID(ctx, data.NextPoolID)
 	if err != nil {
 		return err
 	}
