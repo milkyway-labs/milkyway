@@ -90,13 +90,6 @@ import (
 
 	assetskeeper "github.com/milkyway-labs/milkyway/x/assets/keeper"
 	assetstypes "github.com/milkyway-labs/milkyway/x/assets/types"
-	epochskeeper "github.com/milkyway-labs/milkyway/x/epochs/keeper"
-	epochstypes "github.com/milkyway-labs/milkyway/x/epochs/types"
-	"github.com/milkyway-labs/milkyway/x/icacallbacks"
-	icacallbackskeeper "github.com/milkyway-labs/milkyway/x/icacallbacks/keeper"
-	icacallbackstypes "github.com/milkyway-labs/milkyway/x/icacallbacks/types"
-	icqkeeper "github.com/milkyway-labs/milkyway/x/interchainquery/keeper"
-	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
 	"github.com/milkyway-labs/milkyway/x/liquidvesting"
 	liquidvestingkeeper "github.com/milkyway-labs/milkyway/x/liquidvesting/keeper"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/x/liquidvesting/types"
@@ -104,18 +97,12 @@ import (
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	poolskeeper "github.com/milkyway-labs/milkyway/x/pools/keeper"
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
-	"github.com/milkyway-labs/milkyway/x/records"
-	recordskeeper "github.com/milkyway-labs/milkyway/x/records/keeper"
-	recordstypes "github.com/milkyway-labs/milkyway/x/records/types"
 	restakingkeeper "github.com/milkyway-labs/milkyway/x/restaking/keeper"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 	rewardskeeper "github.com/milkyway-labs/milkyway/x/rewards/keeper"
 	rewardstypes "github.com/milkyway-labs/milkyway/x/rewards/types"
 	serviceskeeper "github.com/milkyway-labs/milkyway/x/services/keeper"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
-	"github.com/milkyway-labs/milkyway/x/stakeibc"
-	stakeibckeeper "github.com/milkyway-labs/milkyway/x/stakeibc/keeper"
-	stakeibctypes "github.com/milkyway-labs/milkyway/x/stakeibc/types"
 	tokenfactorykeeper "github.com/milkyway-labs/milkyway/x/tokenfactory/keeper"
 	tokenfactorytypes "github.com/milkyway-labs/milkyway/x/tokenfactory/types"
 )
@@ -161,13 +148,6 @@ type AppKeepers struct {
 
 	// ICS
 	ProviderKeeper icsproviderkeeper.Keeper
-
-	// Stride
-	EpochsKeeper          *epochskeeper.Keeper
-	InterchainQueryKeeper icqkeeper.Keeper
-	ICACallbacksKeeper    *icacallbackskeeper.Keeper
-	RecordsKeeper         *recordskeeper.Keeper
-	StakeIBCKeeper        stakeibckeeper.Keeper
 
 	// Custom
 	ServicesKeeper      *serviceskeeper.Keeper
@@ -658,51 +638,6 @@ func NewAppKeeper(
 		appKeepers.LiquidVestingKeeper.RestakeRestrictionFn,
 	)
 
-	// ---------------------- //
-	// --- Stride Keepers --- //
-	// ---------------------- //
-
-	appKeepers.InterchainQueryKeeper = icqkeeper.NewKeeper(
-		appCodec,
-		appKeepers.keys[icqtypes.StoreKey],
-		appKeepers.IBCKeeper,
-	)
-
-	appKeepers.ICACallbacksKeeper = icacallbackskeeper.NewKeeper(
-		appCodec,
-		appKeepers.keys[icacallbackstypes.StoreKey],
-		appKeepers.keys[icacallbackstypes.MemStoreKey],
-		*appKeepers.IBCKeeper,
-	)
-
-	appKeepers.RecordsKeeper = recordskeeper.NewKeeper(
-		appCodec,
-		appKeepers.keys[recordstypes.StoreKey],
-		appKeepers.keys[recordstypes.MemStoreKey],
-		appKeepers.AccountKeeper,
-		appKeepers.TransferKeeper,
-		*appKeepers.IBCKeeper,
-		*appKeepers.ICACallbacksKeeper,
-	)
-
-	appKeepers.StakeIBCKeeper = stakeibckeeper.NewKeeper(
-		appCodec,
-		appKeepers.keys[stakeibctypes.StoreKey],
-		appKeepers.keys[stakeibctypes.MemStoreKey],
-		runtime.NewKVStoreService(appKeepers.keys[stakeibctypes.StoreKey]),
-		govAuthority,
-		appKeepers.AccountKeeper,
-		appKeepers.BankKeeper,
-		appKeepers.ICAControllerKeeper,
-		*appKeepers.IBCKeeper,
-		appKeepers.InterchainQueryKeeper,
-		*appKeepers.RecordsKeeper,
-		*appKeepers.ICACallbacksKeeper,
-		appKeepers.RateLimitKeeper,
-	)
-
-	appKeepers.EpochsKeeper = epochskeeper.NewKeeper(appCodec, appKeepers.keys[epochstypes.StoreKey])
-
 	// Must be called on PFMRouter AFTER TransferKeeper initialized
 	appKeepers.PFMRouterKeeper.SetTransferKeeper(appKeepers.TransferKeeper)
 
@@ -785,10 +720,6 @@ func NewAppKeeper(
 		*appKeepers.RateLimitKeeper,
 		transferStack,
 	)
-	transferStack = records.NewIBCModule(
-		*appKeepers.RecordsKeeper,
-		transferStack,
-	)
 	transferStack = ibcfee.NewIBCMiddleware(
 		transferStack,
 		appKeepers.IBCFeeKeeper,
@@ -797,11 +728,8 @@ func NewAppKeeper(
 	// Create ICAHost Stack
 	var icaHostStack porttypes.IBCModule = icahost.NewIBCModule(appKeepers.ICAHostKeeper)
 
-	// Create InterChain Callbacks Stack
-	var icaCallbacksStack porttypes.IBCModule = icacallbacks.NewIBCModule(*appKeepers.ICACallbacksKeeper)
-	appKeepers.StakeIBCKeeper.SetHooks(stakeibctypes.NewMultiStakeIBCHooks())
-	icaCallbacksStack = stakeibc.NewIBCMiddleware(icaCallbacksStack, appKeepers.StakeIBCKeeper)
-	icaCallbacksStack = icacontroller.NewIBCMiddleware(icaCallbacksStack, appKeepers.ICAControllerKeeper)
+	var icaControllerStack porttypes.IBCModule
+	icaControllerStack = icacontroller.NewIBCMiddleware(icaControllerStack, appKeepers.ICAControllerKeeper)
 
 	var wasmStack porttypes.IBCModule
 	wasmStack = wasm.NewIBCHandler(appKeepers.WasmKeeper, appKeepers.IBCKeeper.ChannelKeeper, appKeepers.IBCFeeKeeper)
@@ -810,30 +738,12 @@ func NewAppKeeper(
 	// Create IBC Router & seal
 	ibcRouter := porttypes.NewRouter().
 		AddRoute(icahosttypes.SubModuleName, icaHostStack).
-		AddRoute(icacontrollertypes.SubModuleName, icaCallbacksStack).
+		AddRoute(icacontrollertypes.SubModuleName, icaControllerStack).
 		AddRoute(ibctransfertypes.ModuleName, transferStack).
 		AddRoute(providertypes.ModuleName, appKeepers.ProviderModule).
 		AddRoute(wasmtypes.ModuleName, wasmStack)
 
 	appKeepers.IBCKeeper.SetRouter(ibcRouter)
-
-	appKeepers.EpochsKeeper = appKeepers.EpochsKeeper.SetHooks(
-		epochstypes.NewMultiEpochHooks(
-			appKeepers.StakeIBCKeeper.Hooks(),
-		),
-	)
-
-	// Register ICQ callbacks
-	err = appKeepers.InterchainQueryKeeper.SetCallbackHandler(stakeibctypes.ModuleName, appKeepers.StakeIBCKeeper.ICQCallbackHandler())
-	if err != nil {
-		panic(err)
-	}
-
-	// Register IBC callbacks
-	err = appKeepers.ICACallbacksKeeper.SetICACallbacks(appKeepers.StakeIBCKeeper.Callbacks(), appKeepers.RecordsKeeper.Callbacks())
-	if err != nil {
-		panic(err)
-	}
 
 	return appKeepers
 }

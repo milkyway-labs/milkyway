@@ -68,28 +68,18 @@ import (
 
 	"github.com/milkyway-labs/milkyway/x/assets"
 	assetstypes "github.com/milkyway-labs/milkyway/x/assets/types"
-	"github.com/milkyway-labs/milkyway/x/epochs"
-	epochstypes "github.com/milkyway-labs/milkyway/x/epochs/types"
-	"github.com/milkyway-labs/milkyway/x/icacallbacks"
-	icacallbackstypes "github.com/milkyway-labs/milkyway/x/icacallbacks/types"
-	"github.com/milkyway-labs/milkyway/x/interchainquery"
-	icqtypes "github.com/milkyway-labs/milkyway/x/interchainquery/types"
 	"github.com/milkyway-labs/milkyway/x/liquidvesting"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 	"github.com/milkyway-labs/milkyway/x/operators"
 	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
 	"github.com/milkyway-labs/milkyway/x/pools"
 	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
-	"github.com/milkyway-labs/milkyway/x/records"
-	recordstypes "github.com/milkyway-labs/milkyway/x/records/types"
 	"github.com/milkyway-labs/milkyway/x/restaking"
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 	"github.com/milkyway-labs/milkyway/x/rewards"
 	rewardstypes "github.com/milkyway-labs/milkyway/x/rewards/types"
 	"github.com/milkyway-labs/milkyway/x/services"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
-	"github.com/milkyway-labs/milkyway/x/stakeibc"
-	stakeibctypes "github.com/milkyway-labs/milkyway/x/stakeibc/types"
 	tokenfactorytypes "github.com/milkyway-labs/milkyway/x/tokenfactory/types"
 )
 
@@ -111,11 +101,6 @@ var MaccPerms = map[string][]string{
 
 	// Skip
 	oracletypes.ModuleName: nil,
-
-	// Stride
-	icqtypes.ModuleName:               nil,
-	stakeibctypes.ModuleName:          {authtypes.Minter, authtypes.Burner, authtypes.Staking},
-	stakeibctypes.RewardCollectorName: nil,
 
 	// MilkyWay permissions
 	rewardstypes.RewardsPoolName:  nil,
@@ -167,13 +152,6 @@ func appModules(
 		app.PFMRouterModule,
 		app.RateLimitModule,
 		app.ProviderModule,
-
-		// Stride modules
-		stakeibc.NewAppModule(appCodec, app.StakeIBCKeeper, app.AccountKeeper, app.BankKeeper),
-		epochs.NewAppModule(appCodec, *app.EpochsKeeper),
-		interchainquery.NewAppModule(appCodec, app.InterchainQueryKeeper),
-		records.NewAppModule(appCodec, *app.RecordsKeeper, app.AccountKeeper, app.BankKeeper),
-		icacallbacks.NewAppModule(appCodec, *app.ICACallbacksKeeper, app.AccountKeeper, app.BankKeeper),
 
 		// MilkyWay modules
 		services.NewAppModule(appCodec, app.ServicesKeeper, app.AccountKeeper, app.BankKeeper),
@@ -272,16 +250,12 @@ func orderBeginBlockers() []string {
 		providertypes.ModuleName,
 		consensusparamtypes.ModuleName,
 		wasmtypes.ModuleName,
+		ratelimittypes.ModuleName,
 
 		// Skip modules
 		oracletypes.ModuleName,
 		marketmaptypes.ModuleName,
 		feemarkettypes.ModuleName,
-
-		// Stride modules
-		stakeibctypes.ModuleName,
-		epochstypes.ModuleName,
-		ratelimittypes.ModuleName,
 
 		// MilkyWay modules
 		rewardstypes.ModuleName,
@@ -333,10 +307,6 @@ func orderEndBlockers() []string {
 		oracletypes.ModuleName,
 		feemarkettypes.ModuleName,
 
-		// Stride modules
-		stakeibctypes.ModuleName,
-		icqtypes.ModuleName,
-
 		// MilkyWay modules
 		servicestypes.ModuleName,
 		operatorstypes.ModuleName,
@@ -381,13 +351,6 @@ func orderInitBlockers() []string {
 		// Skip modules
 		oracletypes.ModuleName,
 		marketmaptypes.ModuleName,
-
-		// Stride modules
-		stakeibctypes.ModuleName,
-		epochstypes.ModuleName,
-		icqtypes.ModuleName,
-		recordstypes.ModuleName,
-		icacallbackstypes.ModuleName,
 
 		// MilkyWay modules
 		servicestypes.ModuleName,
