@@ -19,7 +19,7 @@ type Keeper struct {
 
 	accountKeeper types.AccountKeeper
 	poolKeeper    types.CommunityPoolKeeper
-	schema        collections.Schema
+	Schema        collections.Schema
 
 	nextOperatorID     collections.Sequence                          // Next operator ID
 	operators          collections.Map[uint32, types.Operator]       // operator ID -> operator
@@ -85,7 +85,7 @@ func NewKeeper(
 	if err != nil {
 		panic(err)
 	}
-	k.schema = schema
+	k.Schema = schema
 
 	return k
 }

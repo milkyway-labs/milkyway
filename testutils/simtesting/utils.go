@@ -2,6 +2,7 @@ package simtesting
 
 import (
 	"math/rand"
+	"time"
 
 	sdkmath "cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/baseapp"
@@ -18,7 +19,11 @@ import (
 
 // SendMsg sends a transaction with the specified message.
 func SendMsg(
-	r *rand.Rand, moduleName string, app *baseapp.BaseApp, ak authkeeper.AccountKeeper, bk bankkeeper.Keeper,
+	r *rand.Rand,
+	moduleName string,
+	app *baseapp.BaseApp,
+	ak authkeeper.AccountKeeper,
+	bk bankkeeper.Keeper,
 	msg sdk.Msg, ctx sdk.Context,
 	simAccount simtypes.Account,
 ) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
@@ -61,6 +66,27 @@ func GetSimAccount(address sdk.Address, accs []simtypes.Account) (simtypes.Accou
 		}
 	}
 	return simtypes.Account{}, false
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// RandomString returns a random string of the specified size
+func RandomString(r *rand.Rand, size int) string {
+	b := make([]byte, size)
+	for i := range b {
+		b[i] = byte(r.Intn(256))
+	}
+	return string(b)
+}
+
+// RandomFutureTime returns a random future time
+func RandomFutureTime(r *rand.Rand, currentTime time.Time) time.Time {
+	return currentTime.Add(time.Duration(r.Int63n(1e9)))
+}
+
+// RandomDuration returns a random duration between the min and max
+func RandomDuration(r *rand.Rand, min time.Duration, max time.Duration) time.Duration {
+	return time.Duration(r.Int63n(int64(max-min))) + min
 }
 
 // RandomCoin returns a random coin having the specified denomination and the max given amount

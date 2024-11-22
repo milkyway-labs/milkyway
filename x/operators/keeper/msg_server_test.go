@@ -882,7 +882,6 @@ func (suite *KeeperTestSuite) TestMsgServer_DeleteOperator() {
 }
 
 func (suite *KeeperTestSuite) TestMsgServer_SetOperatorParams() {
-	testOperatorId := uint32(2)
 	operatorAdmin := "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"
 
 	testCases := []struct {
@@ -895,37 +894,85 @@ func (suite *KeeperTestSuite) TestMsgServer_SetOperatorParams() {
 	}{
 		{
 			name: "set invalid params fails",
+			store: func(ctx sdk.Context) {
+				// Register a test operator
+				err := suite.k.CreateOperator(ctx, types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					operatorAdmin,
+				))
+				suite.Require().NoError(err)
+			},
 			msg: types.NewMsgSetOperatorParams(
-				operatorAdmin,
-				testOperatorId,
+				1,
 				types.NewOperatorParams(sdkmath.LegacyNewDec(-1)),
+				operatorAdmin,
 			),
 			shouldErr: true,
 		},
 		{
 			name: "not admin can't set params",
+			store: func(ctx sdk.Context) {
+				// Register a test operator
+				err := suite.k.CreateOperator(ctx, types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					operatorAdmin,
+				))
+				suite.Require().NoError(err)
+			},
 			msg: types.NewMsgSetOperatorParams(
-				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
-				testOperatorId,
+				1,
 				types.NewOperatorParams(sdkmath.LegacyMustNewDecFromStr("0.2")),
+				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 			),
 			shouldErr: true,
 		},
 		{
 			name: "set params for not existing operator fails",
+			store: func(ctx sdk.Context) {
+				// Register a test operator
+				err := suite.k.CreateOperator(ctx, types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					operatorAdmin,
+				))
+				suite.Require().NoError(err)
+			},
 			msg: types.NewMsgSetOperatorParams(
-				operatorAdmin,
 				3,
 				types.NewOperatorParams(sdkmath.LegacyMustNewDecFromStr("0.2")),
+				operatorAdmin,
 			),
 			shouldErr: true,
 		},
 		{
 			name: "set params works properly",
+			store: func(ctx sdk.Context) {
+				// Register a test operator
+				err := suite.k.CreateOperator(ctx, types.NewOperator(
+					1,
+					types.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					operatorAdmin,
+				))
+				suite.Require().NoError(err)
+			},
 			msg: types.NewMsgSetOperatorParams(
-				operatorAdmin,
-				testOperatorId,
+				1,
 				types.NewOperatorParams(sdkmath.LegacyMustNewDecFromStr("0.2")),
+				operatorAdmin,
 			),
 			expEvents: []sdk.Event{
 				sdk.NewEvent(
@@ -934,7 +981,7 @@ func (suite *KeeperTestSuite) TestMsgServer_SetOperatorParams() {
 			},
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				params, err := suite.k.GetOperatorParams(ctx, testOperatorId)
+				params, err := suite.k.GetOperatorParams(ctx, 1)
 				suite.Require().Nil(err)
 				suite.Require().Equal(types.NewOperatorParams(
 					sdkmath.LegacyMustNewDecFromStr("0.2"),
@@ -947,22 +994,11 @@ func (suite *KeeperTestSuite) TestMsgServer_SetOperatorParams() {
 		tc := tc
 		suite.Run(tc.name, func() {
 			suite.SetupTest()
-			ctx := suite.ctx
 
+			ctx, _ := suite.ctx.CacheContext()
 			if tc.store != nil {
 				tc.store(ctx)
 			}
-
-			// Register a test operator
-			err := suite.k.CreateOperator(ctx, types.NewOperator(
-				testOperatorId,
-				types.OPERATOR_STATUS_ACTIVE,
-				"MilkyWay Operator",
-				"https://milkyway.com",
-				"https://milkyway.com/picture",
-				operatorAdmin,
-			))
-			suite.Require().NoError(err)
 
 			msgServer := keeper.NewMsgServer(suite.k)
 			res, err := msgServer.SetOperatorParams(ctx, tc.msg)

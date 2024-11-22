@@ -251,11 +251,11 @@ func (msg *MsgUpdateParams) GetSigners() []sdk.AccAddress {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-func NewMsgSetOperatorParams(sender string, operatorID uint32, operatorParams OperatorParams) *MsgSetOperatorParams {
+func NewMsgSetOperatorParams(operatorID uint32, operatorParams OperatorParams, sender string) *MsgSetOperatorParams {
 	return &MsgSetOperatorParams{
-		Sender:     sender,
 		OperatorID: operatorID,
 		Params:     operatorParams,
+		Sender:     sender,
 	}
 }
 
