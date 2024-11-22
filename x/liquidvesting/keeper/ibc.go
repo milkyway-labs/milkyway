@@ -41,10 +41,7 @@ func (k *Keeper) OnRecvPacket(
 	}
 
 	// Get the total deposit amount from the message
-	totalDeposit, err := msgDepositInsurance.GetTotalDepositAmount()
-	if err != nil {
-		return err
-	}
+	totalDeposit := msgDepositInsurance.GetTotalDepositAmount()
 
 	// Parse the amount from the ics20Packet
 	amount, ok := math.NewIntFromString(data.GetAmount())
@@ -55,7 +52,7 @@ func (k *Keeper) OnRecvPacket(
 
 	// Ensure that we have received the same amount of tokens
 	// as the ones that needs to be added to the users' insurance fund
-	if !receivedAmount.Equal(totalDeposit) {
+	if !receivedAmount.Amount.Equal(totalDeposit) {
 		return fmt.Errorf("amount received is not equal to the amounts to deposit in the users' insurance fund")
 	}
 
@@ -64,11 +61,11 @@ func (k *Keeper) OnRecvPacket(
 		// Convert the coin denom to its IBC representation
 		sourcePrefix := transfertypes.GetDenomPrefix(packet.GetDestPort(), packet.GetDestChannel())
 		// NOTE: sourcePrefix contains the trailing "/"
-		prefixedDenom := sourcePrefix + deposit.Amount.Denom
+		prefixedDenom := sourcePrefix + data.Denom
 		// construct the denomination trace from the full raw denomination
 		denomTrace := transfertypes.ParseDenomTrace(prefixedDenom)
 		// Convert the insurance deposit to its IBC representation
-		ibcCoin := sdk.NewCoin(denomTrace.IBCDenom(), deposit.Amount.Amount)
+		ibcCoin := sdk.NewCoin(denomTrace.IBCDenom(), deposit.Amount)
 
 		err = k.AddToUserInsuranceFund(ctx, deposit.Depositor, sdk.NewCoins(ibcCoin))
 		if err != nil {
