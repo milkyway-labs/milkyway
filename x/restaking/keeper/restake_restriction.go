@@ -18,10 +18,10 @@ func (k *Keeper) SetRestakeRestriction(restriction types.RestakeRestrictionFn) {
 }
 
 // ValidateRestake returns nil if the restake operation is allowed, otherwise returns an error.
-func (k *Keeper) ValidateRestake(ctx context.Context, restakerAddrees string, restakedAmount sdk.Coins, target types.DelegationTarget) error {
+func (k *Keeper) ValidateRestake(ctx context.Context, restakerAddress string, restakedAmount sdk.Coins, target types.DelegationTarget) error {
 	if k.restakeRestriction == nil {
 		return nil
 	}
 
-	return k.restakeRestriction(ctx, restakerAddrees, restakedAmount, target)
+	return k.restakeRestriction(ctx, restakerAddress, restakedAmount, target)
 }

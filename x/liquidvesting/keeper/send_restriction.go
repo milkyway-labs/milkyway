@@ -54,7 +54,7 @@ func (k *Keeper) SendRestrictionFn(ctx context.Context, from sdk.AccAddress, to 
 			// this means that the user is trying to send those tokens
 			// somewhere else. Block it since the vested representation
 			// can only be sent to the restaking module.
-			return nil, errors.Wrapf(types.ErrVestedRepresentationCannoteBeTransferred, "coin %s", coin.Denom)
+			return nil, errors.Wrapf(types.ErrVestedRepresentationCannotBeTransferred, "coin %s", coin.Denom)
 		}
 	}
 

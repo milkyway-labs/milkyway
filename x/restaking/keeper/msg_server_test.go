@@ -529,7 +529,7 @@ func (suite *KeeperTestSuite) TestMsgServer_AddOperatorToAllowList() {
 			),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				configured, err := suite.k.IsServiceOpertorsAllowListConfigured(ctx, 1)
+				configured, err := suite.k.IsServiceOperatorsAllowListConfigured(ctx, 1)
 				suite.Require().NoError(err)
 				suite.Require().True(configured)
 				whitelisted, err := suite.k.CanOperatorValidateService(ctx, 1, 1)

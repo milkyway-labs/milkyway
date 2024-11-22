@@ -127,7 +127,7 @@ func (msg *MsgDeactivateOperator) GetSigners() []sdk.AccAddress {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// NewMsgReactivateOperator creates a new MsgRactivateOperator instance
+// NewMsgReactivateOperator creates a new MsgReactivateOperator instance
 func NewMsgReactivateOperator(operatorID uint32, sender string) *MsgReactivateOperator {
 	return &MsgReactivateOperator{
 		OperatorID: operatorID,

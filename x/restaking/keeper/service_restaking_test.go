@@ -174,7 +174,7 @@ func (suite *KeeperTestSuite) TestKeeper_IsServiceOperatorsAllowListConfigured()
 				tc.store(ctx)
 			}
 
-			isInitialized, err := suite.k.IsServiceOpertorsAllowListConfigured(ctx, tc.serviceID)
+			isInitialized, err := suite.k.IsServiceOperatorsAllowListConfigured(ctx, tc.serviceID)
 			suite.Require().NoError(err)
 			suite.Require().Equal(tc.isInitialized, isInitialized)
 		})

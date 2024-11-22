@@ -44,7 +44,7 @@ func (a AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 				{
 					RpcMethod: "UserRestakableAssets",
 					Use:       "user-restakable-assets [user-address]",
-					Short:     "Query the user's assets that are coverd by their insurance fund and that can be restaked",
+					Short:     "Query the user's assets that are covered by their insurance fund and that can be restaked",
 					Example:   fmt.Sprintf(`$ %s query liquidvesting user-restakable-assets init1...`, version.AppName),
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "user_address"},

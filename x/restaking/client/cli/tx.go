@@ -224,7 +224,7 @@ func GetUnbondFromPoolCmd() *cobra.Command {
 	return cmd
 }
 
-// GetUnbondFromOperatorCmd returns the command allowing to unbong from an operator
+// GetUnbondFromOperatorCmd returns the command allowing to unbond from an operator
 func GetUnbondFromOperatorCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "operator [operator-id] [amount]",
