@@ -206,6 +206,11 @@ func (k *Keeper) AllocateRewardsByPlan(
 		return servicestypes.ErrServiceNotFound
 	}
 
+	// Ensure that we are distribution rewards only for active services
+	if !service.IsActive() {
+		return nil
+	}
+
 	eligiblePools, err := k.getEligiblePools(ctx, service, pools)
 	if err != nil {
 		return err
@@ -349,6 +354,11 @@ func (k *Keeper) getEligibleOperators(
 ) (eligibleOperators []DelegationTarget, err error) {
 	// TODO: can we optimize this? maybe by having a new index key
 	for _, operator := range operators {
+		// Ensure we consider only active operators
+		if !operator.IsActive() {
+			continue
+		}
+
 		operatorJoinedServices, err := k.restakingKeeper.HasOperatorJoinedService(ctx, operator.ID, service.ID)
 		if err != nil {
 			return nil, err
