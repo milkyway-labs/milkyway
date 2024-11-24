@@ -19,14 +19,21 @@ func (k *Keeper) OnRecvPacket(
 	data transfertypes.FungibleTokenPacketData,
 	msgDepositInsurance types.MsgDepositInsurance,
 ) error {
-	// Ensure that the sender is allowed to deposit
-	canDeposit, err := k.isAllowedDepositor(ctx, data.Sender)
+	// Get the params
+	params, err := k.GetParams(ctx)
 	if err != nil {
 		return err
 	}
 
-	if !canDeposit {
+	// Ensure that the sender is allowed to deposit
+	if !slices.Contains(params.TrustedDelegates, data.Sender) {
 		return fmt.Errorf("the sender %s is not allowed to deposit", data.Sender)
+	}
+
+	// Check if is allowed to receive deposits to the insurance fund
+	// from the channel
+	if !params.IsAllowedChannel(packet.DestinationChannel) {
+		return fmt.Errorf("deposit not allowed using channel %s", packet.DestinationChannel)
 	}
 
 	// Ensure the receiver is the x/liquidvesting module account
@@ -82,15 +89,4 @@ func (k *Keeper) OnRecvPacket(
 	}
 
 	return nil
-}
-
-// IsAllowedDepositor checks if the provided address is allowed to deposit funds
-// to the insurance fund.
-func (k *Keeper) isAllowedDepositor(ctx sdk.Context, address string) (bool, error) {
-	params, err := k.GetParams(ctx)
-	if err != nil {
-		return false, err
-	}
-
-	return slices.Contains(params.TrustedDelegates, address), nil
 }

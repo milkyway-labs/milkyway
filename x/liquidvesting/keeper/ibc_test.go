@@ -16,28 +16,38 @@ import (
 
 func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 	testCases := []struct {
-		name           string
-		store          func(ctx sdk.Context)
-		transferAmount sdk.Coin
-		sender         string
-		receiver       string
-		memo           string
-		shouldErr      bool
-		check          func(sdk.Context)
+		name               string
+		store              func(ctx sdk.Context)
+		destinationChannel string
+		transferAmount     sdk.Coin
+		sender             string
+		receiver           string
+		memo               string
+		shouldErr          bool
+		check              func(sdk.Context)
 	}{
 		{
-			name:           "empty memo works as normal transfer",
-			transferAmount: sdk.NewInt64Coin("foo", 1000),
-			sender:         "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-			receiver:       "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-			memo:           "",
-			shouldErr:      false,
+			name:               "empty memo works as normal transfer",
+			destinationChannel: "channel-0",
+			transferAmount:     sdk.NewInt64Coin("foo", 1000),
+			sender:             "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			receiver:           "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			memo:               "",
+			shouldErr:          false,
 		},
 		{
-			name:           "sending to a normal account returns error",
-			transferAmount: sdk.NewInt64Coin("foo", 1000),
-			sender:         "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-			receiver:       "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			name: "sending to a normal account returns error",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SetParams(ctx, types.Params{
+					InsurancePercentage: sdkmath.LegacyNewDec(2),
+					AllowedChannels:     []string{"channel-0"},
+				})
+				suite.Require().NoError(err)
+			},
+			destinationChannel: "channel-0",
+			transferAmount:     sdk.NewInt64Coin("foo", 1000),
+			sender:             "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			receiver:           "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 			memo: fmt.Sprintf(`{
 			"liquidvesting": {
 				"amounts": [{
@@ -54,10 +64,18 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			},
 		},
 		{
-			name:           "depositing more coins then received returns error",
-			transferAmount: sdk.NewInt64Coin("foo", 1000),
-			sender:         "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-			receiver:       authtypes.NewModuleAddress(types.ModuleName).String(),
+			name: "depositing more coins then received returns error",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SetParams(ctx, types.Params{
+					InsurancePercentage: sdkmath.LegacyNewDec(2),
+					AllowedChannels:     []string{"channel-0"},
+				})
+				suite.Require().NoError(err)
+			},
+			destinationChannel: "channel-0",
+			transferAmount:     sdk.NewInt64Coin("foo", 1000),
+			sender:             "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			receiver:           authtypes.NewModuleAddress(types.ModuleName).String(),
 			memo: fmt.Sprintf(`{
             "liquidvesting": {
                 "amounts": [{
@@ -81,10 +99,18 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			},
 		},
 		{
-			name:           "deposit less coins then received returns error",
-			transferAmount: sdk.NewInt64Coin("foo", 1000),
-			sender:         "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-			receiver:       authtypes.NewModuleAddress(types.ModuleName).String(),
+			name: "deposit less coins then received returns error",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SetParams(ctx, types.Params{
+					InsurancePercentage: sdkmath.LegacyNewDec(2),
+					AllowedChannels:     []string{"channel-0"},
+				})
+				suite.Require().NoError(err)
+			},
+			destinationChannel: "channel-0",
+			transferAmount:     sdk.NewInt64Coin("foo", 1000),
+			sender:             "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			receiver:           authtypes.NewModuleAddress(types.ModuleName).String(),
 			memo: fmt.Sprintf(`{
             "liquidvesting": {
                 "amounts": [{
@@ -108,10 +134,18 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			},
 		},
 		{
-			name:           "unauthorized depositor can't deposit",
-			transferAmount: sdk.NewInt64Coin("foo", 1000),
-			sender:         "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-			receiver:       authtypes.NewModuleAddress(types.ModuleName).String(),
+			name: "unauthorized depositor can't deposit",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SetParams(ctx, types.Params{
+					InsurancePercentage: sdkmath.LegacyNewDec(2),
+					AllowedChannels:     []string{"channel-0"},
+				})
+				suite.Require().NoError(err)
+			},
+			destinationChannel: "channel-0",
+			transferAmount:     sdk.NewInt64Coin("foo", 1000),
+			sender:             "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+			receiver:           authtypes.NewModuleAddress(types.ModuleName).String(),
 			memo: fmt.Sprintf(`{
             "liquidvesting": {
                 "amounts": [{
@@ -135,18 +169,48 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			},
 		},
 		{
+			name: "deposit from not allowed channel fails",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SetParams(ctx, types.Params{
+					InsurancePercentage: sdkmath.LegacyNewDec(2),
+					AllowedChannels:     []string{"channel-0"},
+				})
+				suite.Require().NoError(err)
+			},
+			destinationChannel: "channel-0",
+			transferAmount:     sdk.NewInt64Coin("foo", 1000),
+			sender:             "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+			receiver:           authtypes.NewModuleAddress(types.ModuleName).String(),
+			memo: fmt.Sprintf(`{
+            "liquidvesting": {
+                "amounts": [{
+                    "depositor": "%s",
+                    "amount": "600"
+                },
+                {
+                    "depositor": "%s",
+                    "amount": "400"
+                }]
+            }}`,
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"),
+			shouldErr: true,
+		},
+		{
 			name: "correct deposit works properly",
 			store: func(ctx sdk.Context) {
 				// Set the sender as an allowed depositor
 				err := suite.k.SetParams(ctx, types.Params{
 					InsurancePercentage: sdkmath.LegacyNewDec(2),
 					TrustedDelegates:    []string{"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"},
+					AllowedChannels:     []string{"channel-0"},
 				})
 				suite.Require().NoError(err)
 			},
-			transferAmount: sdk.NewInt64Coin("foo", 1000),
-			sender:         "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-			receiver:       authtypes.NewModuleAddress(types.ModuleName).String(),
+			destinationChannel: "channel-0",
+			transferAmount:     sdk.NewInt64Coin("foo", 1000),
+			sender:             "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+			receiver:           authtypes.NewModuleAddress(types.ModuleName).String(),
 			memo: fmt.Sprintf(`{
             "liquidvesting": {
                 "amounts": [{
@@ -199,7 +263,7 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			// Build the packet
 			packet := channeltypes.Packet{
 				Data:               dataBz,
-				DestinationChannel: "channel-0",
+				DestinationChannel: tc.destinationChannel,
 				DestinationPort:    "transfer",
 			}
 

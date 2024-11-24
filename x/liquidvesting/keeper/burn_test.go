@@ -235,6 +235,7 @@ func (suite *KeeperTestSuite) TestKeeper_TestIsBurner() {
 					[]string{"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"},
 					nil,
 					nil,
+					nil,
 				))
 				suite.Assert().NoError(err)
 			},
