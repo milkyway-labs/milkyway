@@ -64,14 +64,18 @@ func (k msgServer) CreateRewardsPlan(ctx context.Context, msg *types.MsgCreateRe
 		return nil, err
 	}
 
-	creationFee := params.RewardsPlanCreationFee
-	if creationFee.IsAllPositive() {
-		senderAddr, err := k.accountKeeper.AddressCodec().StringToBytes(msg.Sender)
-		if err != nil {
-			return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid sender address: %s", err)
+	if !params.RewardsPlanCreationFee.IsZero() {
+		// Make sure the specified fees are enough
+		if !msg.FeeAmount.IsAnyGTE(params.RewardsPlanCreationFee) {
+			return nil, errors.Wrapf(sdkerrors.ErrInsufficientFunds, "insufficient funds: %s < %s", msg.FeeAmount, params.RewardsPlanCreationFee)
 		}
 
-		err = k.communityPoolKeeper.FundCommunityPool(ctx, creationFee, senderAddr)
+		userAddress, err := sdk.AccAddressFromBech32(msg.Sender)
+		if err != nil {
+			return nil, errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address: %s", msg.Sender)
+		}
+
+		err = k.communityPoolKeeper.FundCommunityPool(ctx, msg.FeeAmount, userAddress)
 		if err != nil {
 			return nil, err
 		}

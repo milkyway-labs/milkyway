@@ -88,6 +88,16 @@ message MsgCreateRewardsPlan {
   // UsersDistribution is the rewards distribution parameters for users who
   // delegated directly to the service.
   UsersDistribution users_distribution = 9 [ (gogoproto.nullable) = false ];
+
+  // FeeAmount represents the fees that are going to be paid to create the
+  // rewards plan. These should always be greater or equals of any of the coins
+  // specified inside the RewardsPlanCreationFee field of the modules params.
+  // If no fees are specified inside the module parameters, this field can be
+  // omitted.
+  repeated cosmos.base.v1beta1.Coin fee_amount = 10 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
 }
 
 // MsgCreateRewardsPlanResponse is the return value of

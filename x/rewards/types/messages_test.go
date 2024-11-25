@@ -21,6 +21,7 @@ var msgCreateRewardsPlan = types.NewMsgCreateRewardsPlan(
 	types.NewBasicPoolsDistribution(1),
 	types.NewBasicOperatorsDistribution(1),
 	types.NewBasicUsersDistribution(1),
+	sdk.NewCoins(sdk.NewCoin("stake", sdkmath.NewInt(100))),
 	"cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn",
 )
 
@@ -41,6 +42,7 @@ func TestMsgCreateRewardsPlan_ValidateBasic(t *testing.T) {
 				msgCreateRewardsPlan.PoolsDistribution,
 				msgCreateRewardsPlan.OperatorsDistribution,
 				msgCreateRewardsPlan.UsersDistribution,
+				msgCreateRewardsPlan.FeeAmount,
 				msgCreateRewardsPlan.Sender,
 			),
 			shouldErr: true,
@@ -56,6 +58,7 @@ func TestMsgCreateRewardsPlan_ValidateBasic(t *testing.T) {
 				msgCreateRewardsPlan.PoolsDistribution,
 				msgCreateRewardsPlan.OperatorsDistribution,
 				msgCreateRewardsPlan.UsersDistribution,
+				msgCreateRewardsPlan.FeeAmount,
 				msgCreateRewardsPlan.Sender,
 			),
 			shouldErr: true,
@@ -71,6 +74,23 @@ func TestMsgCreateRewardsPlan_ValidateBasic(t *testing.T) {
 				msgCreateRewardsPlan.PoolsDistribution,
 				msgCreateRewardsPlan.OperatorsDistribution,
 				msgCreateRewardsPlan.UsersDistribution,
+				msgCreateRewardsPlan.FeeAmount,
+				msgCreateRewardsPlan.Sender,
+			),
+			shouldErr: true,
+		},
+		{
+			name: "invalid fee amount returns error",
+			msg: types.NewMsgCreateRewardsPlan(
+				msgCreateRewardsPlan.ServiceID,
+				msgCreateRewardsPlan.Description,
+				msgCreateRewardsPlan.Amount,
+				msgCreateRewardsPlan.StartTime,
+				msgCreateRewardsPlan.EndTime,
+				msgCreateRewardsPlan.PoolsDistribution,
+				msgCreateRewardsPlan.OperatorsDistribution,
+				msgCreateRewardsPlan.UsersDistribution,
+				sdk.Coins{sdk.Coin{Denom: "umilk", Amount: sdkmath.NewInt(-100)}},
 				msgCreateRewardsPlan.Sender,
 			),
 			shouldErr: true,
@@ -86,6 +106,7 @@ func TestMsgCreateRewardsPlan_ValidateBasic(t *testing.T) {
 				msgCreateRewardsPlan.PoolsDistribution,
 				msgCreateRewardsPlan.OperatorsDistribution,
 				msgCreateRewardsPlan.UsersDistribution,
+				msgCreateRewardsPlan.FeeAmount,
 				"invalid",
 			),
 			shouldErr: true,
@@ -111,7 +132,7 @@ func TestMsgCreateRewardsPlan_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgCreateRewardsPlan_GetSignBytes(t *testing.T) {
-	expected := `{"type":"milkyway/MsgCreateRewardsPlan","value":{"amount":[{"amount":"1000","denom":"stake"}],"description":"Test rewards plan","end_time":"2024-12-31T23:59:59Z","operators_distribution":{"delegation_type":2,"type":{"type":"milkyway/DistributionTypeBasic","value":{}},"weight":1},"pools_distribution":{"delegation_type":1,"type":{"type":"milkyway/DistributionTypeBasic","value":{}},"weight":1},"sender":"cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn","service_id":1,"start_time":"2024-01-01T00:00:00Z","users_distribution":{"type":{},"weight":1}}}`
+	expected := `{"type":"milkyway/MsgCreateRewardsPlan","value":{"amount":[{"amount":"1000","denom":"stake"}],"description":"Test rewards plan","end_time":"2024-12-31T23:59:59Z","fee_amount":[{"amount":"100","denom":"stake"}],"operators_distribution":{"delegation_type":2,"type":{"type":"milkyway/DistributionTypeBasic","value":{}},"weight":1},"pools_distribution":{"delegation_type":1,"type":{"type":"milkyway/DistributionTypeBasic","value":{}},"weight":1},"sender":"cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn","service_id":1,"start_time":"2024-01-01T00:00:00Z","users_distribution":{"type":{},"weight":1}}}`
 	require.Equal(t, expected, string(msgCreateRewardsPlan.GetSignBytes()))
 }
 

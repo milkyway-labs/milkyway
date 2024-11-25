@@ -276,6 +276,7 @@ func (suite *KeeperTestSuite) CreateRewardsPlan(
 		poolsDistr,
 		operatorsDistr,
 		usersDistr,
+		nil,
 		service.Admin,
 	))
 	suite.Require().NoError(err)
