@@ -20,10 +20,6 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	icacontrollertypes "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/controller/types"
-	icagenesistypes "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/genesis/types"
-	icahosttypes "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/host/types"
-	icatypes "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts/types"
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 	ibctypes "github.com/cosmos/ibc-go/v8/modules/core/types"
 )
@@ -40,7 +36,6 @@ type GenesisState map[string]json.RawMessage
 // NewDefaultGenesisState generates the default state for the application.
 func NewDefaultGenesisState(cdc codec.Codec, mbm module.BasicManager) GenesisState {
 	return GenesisState(mbm.DefaultGenesis(cdc)).
-		ConfigureICA(cdc).
 		ConfigureIBCAllowedClients(cdc).
 		AddMarketData(cdc)
 }
@@ -78,52 +73,6 @@ func (genState GenesisState) AddMarketData(cdc codec.JSONCodec) GenesisState {
 	// write the updates to genState
 	genState[marketmaptypes.ModuleName] = cdc.MustMarshalJSON(&marketGenState)
 	genState[oracletypes.ModuleName] = cdc.MustMarshalJSON(&oracleGenState)
-	return genState
-}
-
-func (genState GenesisState) ConfigureICA(cdc codec.JSONCodec) GenesisState {
-	// create ICS27 Controller submodule params
-	controllerParams := icacontrollertypes.Params{
-		ControllerEnabled: true,
-	}
-
-	// create ICS27 Host submodule params
-	hostParams := icahosttypes.Params{
-		HostEnabled: true,
-		AllowMessages: []string{
-			authzMsgExec,
-			authzMsgGrant,
-			authzMsgRevoke,
-			bankMsgSend,
-			bankMsgMultiSend,
-			feegrantMsgGrantAllowance,
-			feegrantMsgRevokeAllowance,
-			groupCreateGroup,
-			groupCreateGroupPolicy,
-			groupExec,
-			groupLeaveGroup,
-			groupSubmitProposal,
-			groupUpdateGroupAdmin,
-			groupUpdateGroupMember,
-			groupUpdateGroupPolicyAdmin,
-			groupUpdateGroupPolicyDecisionPolicy,
-			groupVote,
-			groupWithdrawProposal,
-			transferMsgTransfer,
-			nftTransferMsgTransfer,
-			sftTransferMsgTransfer,
-			moveMsgPublishModuleBundle,
-			moveMsgExecuteEntryFunction,
-			moveMsgExecuteScript,
-		},
-	}
-
-	var icaGenState icagenesistypes.GenesisState
-	cdc.MustUnmarshalJSON(genState[icatypes.ModuleName], &icaGenState)
-	icaGenState.ControllerGenesisState.Params = controllerParams
-	icaGenState.HostGenesisState.Params = hostParams
-	genState[icatypes.ModuleName] = cdc.MustMarshalJSON(&icaGenState)
-
 	return genState
 }
 

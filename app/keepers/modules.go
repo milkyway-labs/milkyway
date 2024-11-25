@@ -20,7 +20,6 @@ import (
 	pfmrouter "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward"
 	ratelimit "github.com/cosmos/ibc-apps/modules/rate-limiting/v8"
 	"github.com/cosmos/ibc-go/modules/capability"
-	ica "github.com/cosmos/ibc-go/v8/modules/apps/27-interchain-accounts"
 	ibcfee "github.com/cosmos/ibc-go/v8/modules/apps/29-fee"
 	"github.com/cosmos/ibc-go/v8/modules/apps/transfer"
 	ibc "github.com/cosmos/ibc-go/v8/modules/core"
@@ -69,7 +68,6 @@ var AppModuleBasics = module.NewBasicManager(
 	// IBC Modules
 	ibcfee.AppModuleBasic{},
 	transfer.AppModuleBasic{},
-	ica.AppModuleBasic{},
 	pfmrouter.AppModuleBasic{},
 	ratelimit.AppModuleBasic{},
 	icsprovider.AppModuleBasic{},
