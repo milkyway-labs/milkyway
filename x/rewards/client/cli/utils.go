@@ -86,9 +86,12 @@ func ParseRewardsPlan(cdc codec.Codec, path string) (ParsedRewardsPlan, error) {
 		return ParsedRewardsPlan{}, fmt.Errorf("invalid amount per day: %w", err)
 	}
 
-	feeAmount, err := sdk.ParseCoinsNormalized(rewardsPlanJSON.FeeAmount)
-	if err != nil {
-		return ParsedRewardsPlan{}, fmt.Errorf("invalid fee amount: %w", err)
+	feeAmount := sdk.NewCoins()
+	if rewardsPlanJSON.FeeAmount != "" {
+		feeAmount, err = sdk.ParseCoinsNormalized(rewardsPlanJSON.FeeAmount)
+		if err != nil {
+			return ParsedRewardsPlan{}, fmt.Errorf("invalid fee amount: %w", err)
+		}
 	}
 
 	return ParsedRewardsPlan{

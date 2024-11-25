@@ -22,7 +22,7 @@ func TestCLIUtils_parseRewardsPlan(t *testing.T) {
 		name      string
 		jsonFile  *os.File
 		shouldErr bool
-		expected  types.RewardsPlan
+		expected  cli.ParsedRewardsPlan
 	}{
 		{
 			name: "parse basic distribution json",
@@ -49,20 +49,24 @@ func TestCLIUtils_parseRewardsPlan(t *testing.T) {
 	        "type": {
 	            "@type": "/milkyway.rewards.v1.UsersDistributionTypeBasic"
 	        }
-	    }
+	    },
+		"fee_amount": "100uinit"
 	}`),
 			shouldErr: false,
-			expected: types.NewRewardsPlan(
-				1,
-				"test plan",
-				1,
-				sdk.NewCoins(sdk.NewCoin("uinit", math.NewInt(1000))),
-				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
-				time.Date(2024, 12, 31, 23, 59, 59, 0, time.UTC),
-				types.NewBasicPoolsDistribution(1),
-				types.NewBasicOperatorsDistribution(2),
-				types.NewBasicUsersDistribution(3),
-			),
+			expected: cli.ParsedRewardsPlan{
+				RewardsPlan: types.NewRewardsPlan(
+					1,
+					"test plan",
+					1,
+					sdk.NewCoins(sdk.NewCoin("uinit", math.NewInt(1000))),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2024, 12, 31, 23, 59, 59, 0, time.UTC),
+					types.NewBasicPoolsDistribution(1),
+					types.NewBasicOperatorsDistribution(2),
+					types.NewBasicUsersDistribution(3),
+				),
+				FeeAmount: sdk.NewCoins(sdk.NewInt64Coin("uinit", 100)),
+			},
 		},
 		{
 			name: "parse egalitarian distribution json",
@@ -89,20 +93,24 @@ func TestCLIUtils_parseRewardsPlan(t *testing.T) {
 	        "type": {
 	            "@type": "/milkyway.rewards.v1.UsersDistributionTypeBasic"
 	        }
-	    }
+	    },
+		"fee_amount": "100uinit"
 	}`),
 			shouldErr: false,
-			expected: types.NewRewardsPlan(
-				1,
-				"test plan",
-				1,
-				sdk.NewCoins(sdk.NewCoin("uinit", math.NewInt(1000))),
-				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
-				time.Date(2024, 12, 31, 23, 59, 59, 0, time.UTC),
-				types.NewBasicPoolsDistribution(1),
-				types.NewEgalitarianOperatorsDistribution(2),
-				types.NewBasicUsersDistribution(3),
-			),
+			expected: cli.ParsedRewardsPlan{
+				RewardsPlan: types.NewRewardsPlan(
+					1,
+					"test plan",
+					1,
+					sdk.NewCoins(sdk.NewCoin("uinit", math.NewInt(1000))),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2024, 12, 31, 23, 59, 59, 0, time.UTC),
+					types.NewBasicPoolsDistribution(1),
+					types.NewEgalitarianOperatorsDistribution(2),
+					types.NewBasicUsersDistribution(3),
+				),
+				FeeAmount: sdk.NewCoins(sdk.NewInt64Coin("uinit", 100)),
+			},
 		},
 		{
 			name: "parse weighted distribution json",
@@ -131,20 +139,24 @@ func TestCLIUtils_parseRewardsPlan(t *testing.T) {
 	        "type": {
 	            "@type": "/milkyway.rewards.v1.UsersDistributionTypeBasic"
 	        }
-	    }
+	    },
+		"fee_amount": "100uinit"
 	}`),
 			shouldErr: false,
-			expected: types.NewRewardsPlan(
-				1,
-				"test plan",
-				1,
-				sdk.NewCoins(sdk.NewCoin("uinit", math.NewInt(1000))),
-				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
-				time.Date(2024, 12, 31, 23, 59, 59, 0, time.UTC),
-				types.NewWeightedPoolsDistribution(1, []types.DistributionWeight{types.NewDistributionWeight(1, 1)}),
-				types.NewWeightedOperatorsDistribution(2, []types.DistributionWeight{types.NewDistributionWeight(2, 2)}),
-				types.NewBasicUsersDistribution(3),
-			),
+			expected: cli.ParsedRewardsPlan{
+				RewardsPlan: types.NewRewardsPlan(
+					1,
+					"test plan",
+					1,
+					sdk.NewCoins(sdk.NewCoin("uinit", math.NewInt(1000))),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2024, 12, 31, 23, 59, 59, 0, time.UTC),
+					types.NewWeightedPoolsDistribution(1, []types.DistributionWeight{types.NewDistributionWeight(1, 1)}),
+					types.NewWeightedOperatorsDistribution(2, []types.DistributionWeight{types.NewDistributionWeight(2, 2)}),
+					types.NewBasicUsersDistribution(3),
+				),
+				FeeAmount: sdk.NewCoins(sdk.NewInt64Coin("uinit", 100)),
+			},
 		},
 		{
 			name: "parse edit rewards plan json",
@@ -173,17 +185,20 @@ func TestCLIUtils_parseRewardsPlan(t *testing.T) {
 	    }
 	}`),
 			shouldErr: false,
-			expected: types.NewRewardsPlan(
-				1,
-				"test plan",
-				0,
-				sdk.NewCoins(sdk.NewCoin("uinit", math.NewInt(1000))),
-				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
-				time.Date(2024, 12, 31, 23, 59, 59, 0, time.UTC),
-				types.NewBasicPoolsDistribution(1),
-				types.NewBasicOperatorsDistribution(2),
-				types.NewBasicUsersDistribution(3),
-			),
+			expected: cli.ParsedRewardsPlan{
+				RewardsPlan: types.NewRewardsPlan(
+					1,
+					"test plan",
+					0,
+					sdk.NewCoins(sdk.NewCoin("uinit", math.NewInt(1000))),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2024, 12, 31, 23, 59, 59, 0, time.UTC),
+					types.NewBasicPoolsDistribution(1),
+					types.NewBasicOperatorsDistribution(2),
+					types.NewBasicUsersDistribution(3),
+				),
+				FeeAmount: sdk.NewCoins(),
+			},
 		},
 	}
 
