@@ -123,6 +123,7 @@ func SimulateMsgCreateService(ak authkeeper.AccountKeeper, bk bankkeeper.Keeper,
 		for _, feeCoin := range params.ServiceRegistrationFee {
 			if bk.GetBalance(ctx, adminAddress, feeCoin.Denom).IsGTE(feeCoin) {
 				feesAmount = feesAmount.Add(feeCoin)
+				break
 			}
 		}
 
