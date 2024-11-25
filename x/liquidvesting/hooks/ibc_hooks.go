@@ -44,6 +44,19 @@ func (h IBCHooks) onRecvIcs20Packet(
 		return im.App.OnRecvPacket(ctx, packet, relayer)
 	}
 
+	params, err := h.GetParams(ctx)
+	if err != nil {
+		return milkywaytypes.NewEmitErrorAcknowledgement(err)
+	}
+
+	// Check if is allowed to receive deposits to the insurance fund
+	// from the channel
+	if !params.IsAllowedChannel(packet.DestinationChannel) {
+		return milkywaytypes.NewEmitErrorAcknowledgement(
+			fmt.Errorf("deposit not allowed from channel %s", packet.DestinationChannel),
+		)
+	}
+
 	// Ensure the receiver is the x/liquidvesting module account
 	if ics20Packet.Receiver != h.ModuleAddress {
 		return milkywaytypes.NewEmitErrorAcknowledgement(

@@ -16,16 +16,18 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 	allowedDepositor := authtypes.NewModuleAddress("user1")
 	user2 := authtypes.NewModuleAddress("user2")
 	moduleAddress := authtypes.NewModuleAddress(types.ModuleName).String()
+	allowedChannel := "channel-1"
 
 	testCases := []struct {
-		name           string
-		transferAmount sdk.Coin
-		sender         string
-		receiver       string
-		memo           string
-		shouldErr      bool
-		errorMessage   string
-		check          func(sdk.Context)
+		name               string
+		transferAmount     sdk.Coin
+		sender             string
+		receiver           string
+		memo               string
+		destinationChannel string
+		shouldErr          bool
+		errorMessage       string
+		check              func(sdk.Context)
 	}{
 		{
 			name:           "empty memo",
@@ -34,6 +36,26 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			receiver:       user2.String(),
 			memo:           "",
 			shouldErr:      false,
+		},
+		{
+			name:           "deposit from not allowed channel fails",
+			transferAmount: sdk.NewInt64Coin("foo", 1000),
+			sender:         allowedDepositor.String(),
+			receiver:       moduleAddress,
+			memo: fmt.Sprintf(`{
+            "liquidvesting": {
+                "amounts": [{
+                    "depositor": "%s",
+                    "amount": "600"
+                },
+                {
+                    "depositor": "%s",
+                    "amount": "400"
+                }]
+            }}`, allowedDepositor.String(), user2.String()),
+			destinationChannel: "channel-2",
+			shouldErr:          true,
+			errorMessage:       "ibc hook error: deposit not allowed from channel channel-2",
 		},
 		{
 			name:           "trigger by sending to a normal account",
@@ -47,7 +69,8 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 					"amount": "1000"
 				}]
 			}}`, allowedDepositor.String()),
-			shouldErr: true,
+			destinationChannel: allowedChannel,
+			shouldErr:          true,
 			errorMessage: fmt.Sprintf(
 				"ibc hook error: the receiver should be the module address, got: %s, expected: %s",
 				user2.String(), moduleAddress),
@@ -68,8 +91,9 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
                     "amount": "601"
                 }]
             }}`, allowedDepositor.String(), user2.String()),
-			shouldErr:    true,
-			errorMessage: "ibc hook error: amount received is not equal to the amounts to deposit in the users' insurance fund",
+			destinationChannel: allowedChannel,
+			shouldErr:          true,
+			errorMessage:       "ibc hook error: amount received is not equal to the amounts to deposit in the users' insurance fund",
 		},
 		{
 			name:           "deposit less coins then received",
@@ -87,8 +111,9 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
                     "amount": "600"
                 }]
             }}`, allowedDepositor.String(), user2.String()),
-			shouldErr:    true,
-			errorMessage: "ibc hook error: amount received is not equal to the amounts to deposit in the users' insurance fund",
+			destinationChannel: allowedChannel,
+			shouldErr:          true,
+			errorMessage:       "ibc hook error: amount received is not equal to the amounts to deposit in the users' insurance fund",
 		},
 		{
 			name:           "unauthorized depositor can't deposit",
@@ -106,8 +131,9 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
                     "amount": "400"
                 }]
             }}`, allowedDepositor.String(), user2.String()),
-			shouldErr:    true,
-			errorMessage: fmt.Sprintf("ibc hook error: the sender %s is not allowed to deposit", user2.String()),
+			destinationChannel: allowedChannel,
+			shouldErr:          true,
+			errorMessage:       fmt.Sprintf("ibc hook error: the sender %s is not allowed to deposit", user2.String()),
 		},
 		{
 			name:           "correct deposit",
@@ -125,7 +151,8 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
                     "amount": "400"
                 }]
             }}`, allowedDepositor.String(), user2.String()),
-			shouldErr: false,
+			destinationChannel: allowedChannel,
+			shouldErr:          false,
 			check: func(ctx sdk.Context) {
 				addrInsuranceFund, err := suite.k.GetUserInsuranceFundBalance(ctx, allowedDepositor.String())
 				suite.Assert().NoError(err)
@@ -144,6 +171,7 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 			// Allowed the depositor to deposit coins
 			params := types.DefaultParams()
 			params.TrustedDelegates = []string{allowedDepositor.String()}
+			params.AllowedChannels = []string{allowedChannel}
 			err := suite.k.SetParams(suite.ctx, params)
 			suite.Require().NoError(err)
 
@@ -160,7 +188,8 @@ func (suite *KeeperTestSuite) TestKeeper_IBCHooks() {
 
 			relayer := suite.ak.GetModuleAddress("relayer")
 			ack := suite.ibcm.OnRecvPacket(suite.ctx, channeltypes.Packet{
-				Data: dataBz,
+				DestinationChannel: tc.destinationChannel,
+				Data:               dataBz,
 			}, relayer)
 			ack.Acknowledgement()
 

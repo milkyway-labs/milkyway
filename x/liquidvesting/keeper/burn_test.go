@@ -182,6 +182,7 @@ func (suite *KeeperTestSuite) TestKeeper_TestIsBurner() {
 					[]string{burnerAccount},
 					nil,
 					nil,
+					nil,
 				)))
 
 			isBurner, err := suite.k.IsBurner(suite.ctx, sdk.MustAccAddressFromBech32(tc.account))

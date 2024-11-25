@@ -154,7 +154,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 		{
 			name: "should block negative insurance fund percentage",
 			genesis: types.NewGenesisState(
-				types.NewParams(math.LegacyNewDec(-1), nil, nil, nil),
+				types.NewParams(math.LegacyNewDec(-1), nil, nil, nil, nil),
 				nil, nil,
 			),
 			shouldErr: true,
@@ -162,7 +162,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 		{
 			name: "should block 0 insurance fund percentage",
 			genesis: types.NewGenesisState(
-				types.NewParams(math.LegacyNewDec(0), nil, nil, nil),
+				types.NewParams(math.LegacyNewDec(0), nil, nil, nil, nil),
 				nil, nil,
 			),
 			shouldErr: true,
@@ -170,7 +170,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 		{
 			name: "should allow 100 insurance fund percentage",
 			genesis: types.NewGenesisState(
-				types.NewParams(math.LegacyNewDec(100), nil, nil, nil),
+				types.NewParams(math.LegacyNewDec(100), nil, nil, nil, nil),
 				nil, nil,
 			),
 			shouldErr: false,
@@ -182,7 +182,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 		{
 			name: "should block > 100 insurance fund percentage",
 			genesis: types.NewGenesisState(
-				types.NewParams(math.LegacyNewDec(101), nil, nil, nil),
+				types.NewParams(math.LegacyNewDec(101), nil, nil, nil, nil),
 				nil, nil,
 			),
 			shouldErr: true,
@@ -190,7 +190,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 		{
 			name: "should block invalid minter address",
 			genesis: types.NewGenesisState(
-				types.NewParams(math.LegacyNewDec(2), nil, []string{"cosmos1fdsfd"}, nil),
+				types.NewParams(math.LegacyNewDec(2), nil, []string{"cosmos1fdsfd"}, nil, nil),
 				nil, nil,
 			),
 			shouldErr: true,
@@ -198,7 +198,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 		{
 			name: "should block invalid burners address",
 			genesis: types.NewGenesisState(
-				types.NewParams(math.LegacyNewDec(2), []string{"cosmos1fdsfd"}, nil, nil),
+				types.NewParams(math.LegacyNewDec(2), []string{"cosmos1fdsfd"}, nil, nil, nil),
 				nil, nil,
 			),
 			shouldErr: true,
@@ -206,7 +206,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 		{
 			name: "should block invalid allowed depositors address",
 			genesis: types.NewGenesisState(
-				types.NewParams(math.LegacyNewDec(2), nil, nil, []string{"cosmos1fdsfd"}),
+				types.NewParams(math.LegacyNewDec(2), nil, nil, []string{"cosmos1fdsfd"}, nil),
 				nil, nil,
 			),
 			shouldErr: true,
