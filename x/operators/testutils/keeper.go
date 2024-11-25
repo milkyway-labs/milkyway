@@ -39,6 +39,7 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		data.Cdc,
 		data.StoreService,
 		data.AccountKeeper,
+		data.BankKeeper,
 		data.DistributionKeeper,
 		data.AuthorityAddress,
 	)

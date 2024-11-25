@@ -47,21 +47,9 @@ func (k msgServer) RegisterOperator(ctx context.Context, msg *types.MsgRegisterO
 	}
 
 	// Charge for the creation
-	params, err := k.GetParams(ctx)
+	err = k.PayRegistrationFees(ctx, msg.Sender)
 	if err != nil {
 		return nil, err
-	}
-
-	if !params.OperatorRegistrationFee.IsZero() {
-		userAddress, err := sdk.AccAddressFromBech32(operator.Admin)
-		if err != nil {
-			return nil, errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid operator admin address: %s", operator.Admin)
-		}
-
-		err = k.poolKeeper.FundCommunityPool(ctx, params.OperatorRegistrationFee, userAddress)
-		if err != nil {
-			return nil, err
-		}
 	}
 
 	// Store the operator

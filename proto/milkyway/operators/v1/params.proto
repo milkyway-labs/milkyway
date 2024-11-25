@@ -14,7 +14,7 @@ message Params {
   // transferred to the community pool.
   repeated cosmos.base.v1beta1.Coin operator_registration_fee = 1 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
-    (gogoproto.moretags) = "yaml:\"operator_creation_fee\"",
+    (gogoproto.moretags) = "yaml:\"operator_registration_fee\"",
     (gogoproto.nullable) = false
   ];
 

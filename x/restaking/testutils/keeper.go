@@ -53,6 +53,7 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		data.Cdc,
 		runtime.NewKVStoreService(data.Keys[operatorstypes.StoreKey]),
 		data.AccountKeeper,
+		data.BankKeeper,
 		data.DistributionKeeper,
 		data.AuthorityAddress,
 	)
