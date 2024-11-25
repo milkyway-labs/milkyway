@@ -8,12 +8,6 @@ import (
 	"github.com/milkyway-labs/milkyway/app/params"
 )
 
-var encodingConfig params.EncodingConfig = MakeEncodingConfig()
-
-func GetEncodingConfig() params.EncodingConfig {
-	return encodingConfig
-}
-
 // MakeEncodingConfig creates an EncodingConfig.
 func MakeEncodingConfig() params.EncodingConfig {
 	encodingConfig := params.MakeEncodingConfig()

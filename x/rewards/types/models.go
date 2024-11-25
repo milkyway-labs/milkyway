@@ -174,6 +174,8 @@ func GetDistributionType(unpacker codectypes.AnyUnpacker, distr Distribution) (D
 	return distrType, nil
 }
 
+// --------------------------------------------------------------------------------------------------------------------
+
 // NewDistributionWeight creates a new distribution weight
 func NewDistributionWeight(targetID, weight uint32) DistributionWeight {
 	return DistributionWeight{
@@ -184,17 +186,31 @@ func NewDistributionWeight(targetID, weight uint32) DistributionWeight {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// newBasicDistribution creates a new basic distribution
-func newBasicDistribution(delType restakingtypes.DelegationType, weight uint32) Distribution {
-	a, err := codectypes.NewAnyWithValue(&DistributionTypeBasic{})
+// NewDistribution creates a new distribution instance
+func NewDistribution(delegationType restakingtypes.DelegationType, weight uint32, distributionType DistributionType) Distribution {
+	distrTypeAny, err := codectypes.NewAnyWithValue(distributionType)
 	if err != nil {
 		panic(err)
 	}
+
 	return Distribution{
-		DelegationType: delType,
+		DelegationType: delegationType,
 		Weight:         weight,
-		Type:           a,
+		Type:           distrTypeAny,
 	}
+}
+
+// UnpackInterfaces implements codectypes.UnpackInterfacesMessage
+func (d *Distribution) UnpackInterfaces(unpacker codectypes.AnyUnpacker) error {
+	var target DistributionType
+	return unpacker.UnpackAny(d.Type, &target)
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// newBasicDistribution creates a new basic distribution
+func newBasicDistribution(delType restakingtypes.DelegationType, weight uint32) Distribution {
+	return NewDistribution(delType, weight, &DistributionTypeBasic{})
 }
 
 // NewBasicPoolsDistribution creates a new basic pools distribution
@@ -219,15 +235,7 @@ func (t DistributionTypeBasic) isDistributionType() {}
 
 // newWeightedDistribution creates a new weighted distribution
 func newWeightedDistribution(delType restakingtypes.DelegationType, weight uint32, weights []DistributionWeight) Distribution {
-	a, err := codectypes.NewAnyWithValue(&DistributionTypeWeighted{Weights: weights})
-	if err != nil {
-		panic(err)
-	}
-	return Distribution{
-		DelegationType: delType,
-		Weight:         weight,
-		Type:           a,
-	}
+	return NewDistribution(delType, weight, &DistributionTypeWeighted{Weights: weights})
 }
 
 // NewWeightedPoolsDistribution creates a new weighted pools distribution
@@ -267,15 +275,7 @@ func (t DistributionTypeWeighted) isDistributionType() {}
 
 // newEgalitarianDistribution creates a new egalitarian distribution
 func newEgalitarianDistribution(delType restakingtypes.DelegationType, weight uint32) Distribution {
-	a, err := codectypes.NewAnyWithValue(&DistributionTypeEgalitarian{})
-	if err != nil {
-		panic(err)
-	}
-	return Distribution{
-		DelegationType: delType,
-		Weight:         weight,
-		Type:           a,
-	}
+	return NewDistribution(delType, weight, &DistributionTypeEgalitarian{})
 }
 
 // NewEgalitarianPoolsDistribution creates a new egalitarian pools distribution
@@ -315,16 +315,31 @@ func GetUsersDistributionType(unpacker codectypes.AnyUnpacker, distr UsersDistri
 	return distrType, nil
 }
 
-// NewBasicUsersDistribution creates a new basic users distribution
-func NewBasicUsersDistribution(weight uint32) UsersDistribution {
-	a, err := codectypes.NewAnyWithValue(&UsersDistributionTypeBasic{})
+// --------------------------------------------------------------------------------------------------------------------
+
+func NewUsersDistribution(weight uint32, distributionType UsersDistributionType) UsersDistribution {
+	distrTypeAny, err := codectypes.NewAnyWithValue(distributionType)
 	if err != nil {
 		panic(err)
 	}
+
 	return UsersDistribution{
 		Weight: weight,
-		Type:   a,
+		Type:   distrTypeAny,
 	}
+}
+
+// UnpackInterfaces implements codectypes.UnpackInterfacesMessage
+func (u *UsersDistribution) UnpackInterfaces(unpacker codectypes.AnyUnpacker) error {
+	var target UsersDistributionType
+	return unpacker.UnpackAny(u.Type, &target)
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewBasicUsersDistribution creates a new basic users distribution
+func NewBasicUsersDistribution(weight uint32) UsersDistribution {
+	return NewUsersDistribution(weight, &UsersDistributionTypeBasic{})
 }
 
 // Validate checks the users distribution for validity
