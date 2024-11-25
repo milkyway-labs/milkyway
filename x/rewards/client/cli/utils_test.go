@@ -10,13 +10,13 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/testutils"
+	milkywayapp "github.com/milkyway-labs/milkyway/app"
 	"github.com/milkyway-labs/milkyway/x/rewards/client/cli"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 )
 
-func TestCliUtils_parseRewardsPlan(t *testing.T) {
-	cdc, _ := testutils.MakeCodecs()
+func TestCLIUtils_parseRewardsPlan(t *testing.T) {
+	cdc, _ := milkywayapp.MakeCodecs()
 
 	testCases := []struct {
 		name      string
