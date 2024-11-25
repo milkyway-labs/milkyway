@@ -10,14 +10,13 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	milkyway "github.com/milkyway-labs/milkyway/app"
+	milkywayapp "github.com/milkyway-labs/milkyway/app"
 	"github.com/milkyway-labs/milkyway/x/rewards/client/cli"
 	"github.com/milkyway-labs/milkyway/x/rewards/types"
 )
 
-func TestCliUtils_parseRewardsPlan(t *testing.T) {
-	encodingConfig := milkyway.MakeEncodingConfig()
-	codec := encodingConfig.Marshaler
+func TestCLIUtils_parseRewardsPlan(t *testing.T) {
+	cdc, _ := milkywayapp.MakeCodecs()
 
 	testCases := []struct {
 		name      string
@@ -191,7 +190,7 @@ func TestCliUtils_parseRewardsPlan(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			require.NotNil(t, tc.jsonFile)
-			plan, err := cli.ParseRewardsPlan(codec, tc.jsonFile.Name())
+			plan, err := cli.ParseRewardsPlan(cdc, tc.jsonFile.Name())
 			if tc.shouldErr {
 				require.Error(t, err)
 			} else {

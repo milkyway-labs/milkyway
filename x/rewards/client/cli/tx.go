@@ -86,6 +86,7 @@ Where rewards_plan.json contains:
 			if err != nil {
 				return fmt.Errorf("parsing rewards plan json: %w", err)
 			}
+
 			err = rewardsPlan.Validate(clientCtx.Codec)
 			if err != nil {
 				return fmt.Errorf("invalid rewards plan json: %w", err)
@@ -103,6 +104,12 @@ Where rewards_plan.json contains:
 				rewardsPlan.UsersDistribution,
 				creator,
 			)
+
+			// Validate the message
+			err = msg.ValidateBasic()
+			if err != nil {
+				return fmt.Errorf("invalid message: %w", err)
+			}
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
@@ -196,6 +203,12 @@ Where rewards_plan.json contains:
 				rewardsPlan.UsersDistribution,
 				sender,
 			)
+
+			// Validate the message
+			err = msg.ValidateBasic()
+			if err != nil {
+				return err
+			}
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
