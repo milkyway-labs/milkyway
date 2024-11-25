@@ -66,7 +66,7 @@ func (k msgServer) CreateService(goCtx context.Context, msg *types.MsgCreateServ
 
 		userAddress, err := sdk.AccAddressFromBech32(service.Admin)
 		if err != nil {
-			return nil, errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid operator admin address: %s", service.Admin)
+			return nil, errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid service admin address: %s", service.Admin)
 		}
 
 		err = k.poolKeeper.FundCommunityPool(ctx, msg.FeeAmount, userAddress)
