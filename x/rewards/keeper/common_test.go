@@ -136,6 +136,7 @@ func (suite *KeeperTestSuite) CreateService(ctx sdk.Context, name string, admin 
 		fmt.Sprintf("%s AVS", name),
 		"https://example.com",
 		"https://example.com/picture.png",
+		nil,
 		admin,
 	))
 	suite.Require().NoError(err)

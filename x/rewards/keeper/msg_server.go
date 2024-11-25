@@ -70,9 +70,9 @@ func (k msgServer) CreateRewardsPlan(ctx context.Context, msg *types.MsgCreateRe
 			return nil, errors.Wrapf(sdkerrors.ErrInsufficientFunds, "insufficient funds: %s < %s", msg.FeeAmount, params.RewardsPlanCreationFee)
 		}
 
-		userAddress, err := sdk.AccAddressFromBech32(msg.Sender)
+		userAddress, err := sdk.AccAddressFromBech32(service.Admin)
 		if err != nil {
-			return nil, errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address: %s", msg.Sender)
+			return nil, errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address: %s", service.Admin)
 		}
 
 		err = k.communityPoolKeeper.FundCommunityPool(ctx, msg.FeeAmount, userAddress)

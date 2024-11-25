@@ -82,7 +82,7 @@ func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 			shouldErr: true,
 		},
 		{
-			name: "service is created and fee is charged",
+			name: "plan is created and fee is charged",
 			store: func(ctx sdk.Context) {
 				// Create a service
 				_, _ = suite.setupSampleServiceAndOperator(ctx)
@@ -147,7 +147,7 @@ func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 			},
 		},
 		{
-			name: "service is created and fee is charged - one of many fees denoms",
+			name: "plan is created and fee is charged - one of many fees denoms",
 			store: func(ctx sdk.Context) {
 				// Create a service
 				_, _ = suite.setupSampleServiceAndOperator(ctx)
