@@ -21,6 +21,9 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&DistributionTypeBasic{}, "milkyway/DistributionTypeBasic", nil)
 	cdc.RegisterConcrete(&DistributionTypeWeighted{}, "milkyway/DistributionTypeWeighted", nil)
 	cdc.RegisterConcrete(&DistributionTypeEgalitarian{}, "milkyway/DistributionTypeEgalitarian", nil)
+
+	cdc.RegisterInterface((*UsersDistributionType)(nil), nil)
+	cdc.RegisterConcrete(&UsersDistributionTypeBasic{}, "milkyway/UsersDistributionTypeBasic", nil)
 }
 
 func RegisterInterfaces(registry types.InterfaceRegistry) {
