@@ -557,6 +557,7 @@ func NewAppKeeper(
 		appCodec,
 		runtime.NewKVStoreService(appKeepers.keys[servicestypes.StoreKey]),
 		appKeepers.AccountKeeper,
+		appKeepers.BankKeeper,
 		appKeepers.DistrKeeper,
 		govAuthority,
 	)

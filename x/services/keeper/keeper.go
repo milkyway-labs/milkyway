@@ -17,6 +17,7 @@ type Keeper struct {
 	hooks types.ServicesHooks
 
 	accountKeeper types.AccountKeeper
+	bankKeeper    types.BankKeeper
 	poolKeeper    types.CommunityPoolKeeper
 
 	storeService corestoretypes.KVStoreService
@@ -38,6 +39,7 @@ func NewKeeper(
 	cdc codec.BinaryCodec,
 	storeService corestoretypes.KVStoreService,
 	accountKeeper types.AccountKeeper,
+	bankKeeper types.BankKeeper,
 	poolKeeper types.CommunityPoolKeeper,
 	authority string,
 ) *Keeper {
@@ -46,6 +48,7 @@ func NewKeeper(
 	k := &Keeper{
 		cdc:           cdc,
 		accountKeeper: accountKeeper,
+		bankKeeper:    bankKeeper,
 		poolKeeper:    poolKeeper,
 		authority:     authority,
 		storeService:  storeService,

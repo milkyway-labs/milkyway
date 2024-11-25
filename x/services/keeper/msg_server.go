@@ -53,21 +53,9 @@ func (k msgServer) CreateService(goCtx context.Context, msg *types.MsgCreateServ
 	// Charge for the creation
 	// We do not place this inside the CreateService method to avoid charging fees during genesis
 	// init and other places that use that method
-	params, err := k.GetParams(ctx)
+	err = k.PayRegistrationFees(ctx, msg.Sender)
 	if err != nil {
 		return nil, err
-	}
-
-	if !params.ServiceRegistrationFee.IsZero() {
-		userAddress, err := sdk.AccAddressFromBech32(service.Admin)
-		if err != nil {
-			return nil, errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid service admin address: %s", service.Admin)
-		}
-
-		err = k.poolKeeper.FundCommunityPool(ctx, params.ServiceRegistrationFee, userAddress)
-		if err != nil {
-			return nil, err
-		}
 	}
 
 	// Create the service
