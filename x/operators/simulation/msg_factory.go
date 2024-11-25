@@ -123,6 +123,7 @@ func SimulateMsgRegisterOperator(ak authkeeper.AccountKeeper, bk bankkeeper.Keep
 		for _, feeCoin := range params.OperatorRegistrationFee {
 			if bk.GetBalance(ctx, adminAddress, feeCoin.Denom).IsGTE(feeCoin) {
 				feesAmount = feesAmount.Add(feeCoin)
+				break
 			}
 		}
 
