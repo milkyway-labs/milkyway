@@ -118,7 +118,7 @@ func SimulateMsgCreateService(ak authkeeper.AccountKeeper, bk bankkeeper.Keeper,
 			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "error while getting params"), nil, nil
 		}
 
-		if params.ServiceRegistrationFee.IsAnyGTE(bk.GetAllBalances(ctx, adminAddr)) {
+		if bk.GetAllBalances(ctx, adminAddr).IsAllLT(params.ServiceRegistrationFee) {
 			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "insufficient funds"), nil, nil
 		}
 
