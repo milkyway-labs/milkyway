@@ -160,6 +160,7 @@ func (suite *KeeperTestSuite) CreateOperator(ctx sdk.Context, name string, admin
 		name,
 		"https://example.com",
 		"https://example.com/picture.png",
+		nil,
 		admin,
 	))
 	suite.Require().NoError(err)

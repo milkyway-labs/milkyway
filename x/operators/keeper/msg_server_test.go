@@ -30,6 +30,7 @@ func (suite *KeeperTestSuite) TestMsgServer_RegisterOperator() {
 				"MilkyWay Operator",
 				"https://milkyway.com",
 				"https://milkyway.com/picture",
+				nil,
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			),
 			shouldErr: true,
@@ -50,6 +51,35 @@ func (suite *KeeperTestSuite) TestMsgServer_RegisterOperator() {
 				types.DoNotModify,
 				"https://milkyway.com",
 				"https://milkyway.com/picture",
+				nil,
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "not enough fees paid returns error",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SetNextOperatorID(ctx, 2)
+				suite.Require().NoError(err)
+
+				err = suite.k.SetParams(ctx, types.NewParams(
+					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),
+					6*time.Hour,
+				))
+				suite.Require().NoError(err)
+
+				// Send funds to the user
+				suite.fundAccount(
+					ctx,
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(200_000_000))),
+				)
+			},
+			msg: types.NewMsgRegisterOperator(
+				"MilkyWay Operator",
+				"https://milkyway.com",
+				"https://milkyway.com/picture",
+				sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(50_000_000))),
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			),
 			shouldErr: true,
@@ -77,6 +107,7 @@ func (suite *KeeperTestSuite) TestMsgServer_RegisterOperator() {
 				"MilkyWay Operator",
 				"https://milkyway.com",
 				"https://milkyway.com/picture",
+				sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000))),
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			),
 			shouldErr: false,
@@ -126,6 +157,102 @@ func (suite *KeeperTestSuite) TestMsgServer_RegisterOperator() {
 				// Make sure the community pool was funded
 				poolBalance := suite.bk.GetBalance(ctx, authtypes.NewModuleAddress(distrtypes.ModuleName), "uatom")
 				suite.Require().Equal(sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000)), poolBalance)
+			},
+		},
+		{
+
+			name: "operator registered successfully - one of many fees denoms",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SetNextOperatorID(ctx, 2)
+				suite.Require().NoError(err)
+
+				err = suite.k.SetParams(ctx, types.NewParams(
+					sdk.NewCoins(
+						sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000)),
+						sdk.NewCoin("utia", sdkmath.NewInt(30_000_000)),
+						sdk.NewCoin("milktia", sdkmath.NewInt(80_000_000)),
+					),
+					6*time.Hour,
+				))
+				suite.Require().NoError(err)
+
+				// Send funds to the user
+				suite.fundAccount(
+					ctx,
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					sdk.NewCoins(
+						sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000)),
+						sdk.NewCoin("utia", sdkmath.NewInt(100_000_000)),
+						sdk.NewCoin("milktia", sdkmath.NewInt(100_000_000)),
+					),
+				)
+			},
+			msg: types.NewMsgRegisterOperator(
+				"MilkyWay Operator",
+				"https://milkyway.com",
+				"https://milkyway.com/picture",
+				sdk.NewCoins(
+					sdk.NewCoin("uatom", sdkmath.NewInt(20_000_000)),
+					sdk.NewCoin("utia", sdkmath.NewInt(15_000_000)),
+					sdk.NewCoin("milktia", sdkmath.NewInt(80_000_000)),
+				),
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			shouldErr: false,
+			expResponse: &types.MsgRegisterOperatorResponse{
+				NewOperatorID: 2,
+			},
+			expEvents: []sdk.Event{
+				sdk.NewEvent(
+					types.EventTypeRegisterOperator,
+					sdk.NewAttribute(types.AttributeKeyOperatorID, "2"),
+				),
+			},
+			check: func(ctx sdk.Context) {
+				// Make sure the operator was stored
+				stored, found, err := suite.k.GetOperator(ctx, 2)
+				suite.Require().NoError(err)
+				suite.Require().True(found)
+				suite.Require().Equal(types.NewOperator(
+					2,
+					types.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				), stored)
+
+				// Make sure the operator account has been created
+				hasAccount := suite.ak.HasAccount(ctx, types.GetOperatorAddress(2))
+				suite.Require().True(hasAccount)
+
+				// Make sure the newly registered operator has the default params
+				params, err := suite.k.GetOperatorParams(ctx, 2)
+				suite.Require().NoError(err)
+				suite.Require().Equal(types.DefaultOperatorParams(), params)
+
+				// Make sure the next operator id has incremented
+				nextID, err := suite.k.GetNextOperatorID(ctx)
+				suite.Require().NoError(err)
+				suite.Require().Equal(uint32(3), nextID)
+
+				// Make sure the user's funds were deducted
+				userAddress, err := sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().NoError(err)
+				balance := suite.bk.GetAllBalances(ctx, userAddress)
+				suite.Require().Equal(sdk.NewCoins(
+					sdk.NewCoin("uatom", sdkmath.NewInt(80_000_000)),
+					sdk.NewCoin("utia", sdkmath.NewInt(85_000_000)),
+					sdk.NewCoin("milktia", sdkmath.NewInt(20_000_000)),
+				), balance)
+
+				// Make sure the community pool was funded
+				poolBalance := suite.bk.GetAllBalances(ctx, authtypes.NewModuleAddress(distrtypes.ModuleName))
+				suite.Require().Equal(sdk.NewCoins(
+					sdk.NewCoin("uatom", sdkmath.NewInt(20_000_000)),
+					sdk.NewCoin("utia", sdkmath.NewInt(15_000_000)),
+					sdk.NewCoin("milktia", sdkmath.NewInt(80_000_000)),
+				), poolBalance)
 			},
 		},
 	}

@@ -118,7 +118,15 @@ func SimulateMsgRegisterOperator(ak authkeeper.AccountKeeper, bk bankkeeper.Keep
 			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "could not get params"), nil, nil
 		}
 
-		if params.OperatorRegistrationFee.IsAnyGTE(bk.GetAllBalances(ctx, adminAddress)) {
+		// Check the fees that should be paid
+		feesAmount := sdk.NewCoins()
+		for _, feeCoin := range params.OperatorRegistrationFee {
+			if bk.GetBalance(ctx, adminAddress, feeCoin.Denom).IsGTE(feeCoin) {
+				feesAmount = feesAmount.Add(feeCoin)
+			}
+		}
+
+		if !params.OperatorRegistrationFee.IsZero() && feesAmount.IsZero() {
 			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "insufficient funds"), nil, nil
 		}
 
@@ -132,6 +140,7 @@ func SimulateMsgRegisterOperator(ak authkeeper.AccountKeeper, bk bankkeeper.Keep
 			operator.Moniker,
 			operator.Website,
 			operator.PictureURL,
+			feesAmount,
 			operator.Admin,
 		)
 		return simtesting.SendMsg(r, types.ModuleName, app, ak, bk, msg, ctx, signer)
