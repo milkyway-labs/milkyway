@@ -72,7 +72,7 @@ Where rewards_plan.json contains:
       "type": {
           "@type": "/milkyway.rewards.v1.UsersDistributionTypeBasic"
       }
-  },"
+  },
   "fee_amount: "1000stake"
 }
 `, version.AppName, types.ModuleName),
