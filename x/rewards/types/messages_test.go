@@ -132,7 +132,7 @@ func TestMsgCreateRewardsPlan_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgCreateRewardsPlan_GetSignBytes(t *testing.T) {
-	expected := `{"type":"milkyway/MsgCreateRewardsPlan","value":{"amount":[{"amount":"1000","denom":"stake"}],"description":"Test rewards plan","end_time":"2024-12-31T23:59:59Z","fee_amount":[{"amount":"100","denom":"stake"}],"operators_distribution":{"delegation_type":2,"type":{"type":"milkyway/DistributionTypeBasic","value":{}},"weight":1},"pools_distribution":{"delegation_type":1,"type":{"type":"milkyway/DistributionTypeBasic","value":{}},"weight":1},"sender":"cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn","service_id":1,"start_time":"2024-01-01T00:00:00Z","users_distribution":{"type":{},"weight":1}}}`
+	expected := `{"type":"milkyway/MsgCreateRewardsPlan","value":{"amount":[{"amount":"1000","denom":"stake"}],"description":"Test rewards plan","end_time":"2024-12-31T23:59:59Z","fee_amount":[{"amount":"100","denom":"stake"}],"operators_distribution":{"delegation_type":2,"type":{"type":"milkyway/DistributionTypeBasic","value":{}},"weight":1},"pools_distribution":{"delegation_type":1,"type":{"type":"milkyway/DistributionTypeBasic","value":{}},"weight":1},"sender":"cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn","service_id":1,"start_time":"2024-01-01T00:00:00Z","users_distribution":{"type":{"type":"milkyway/UsersDistributionTypeBasic","value":{}},"weight":1}}}`
 	require.Equal(t, expected, string(msgCreateRewardsPlan.GetSignBytes()))
 }
 
@@ -242,7 +242,7 @@ func TestMsgEditRewardsPlan_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgEditRewardsPlan_GetSignBytes(t *testing.T) {
-	expected := `{"type":"milkyway/MsgEditRewardsPlan","value":{"amount":[{"amount":"1000","denom":"stake"}],"description":"Test rewards plan","end_time":"2024-12-31T23:59:59Z","id":"1","operators_distribution":{"delegation_type":2,"type":{"type":"milkyway/DistributionTypeBasic","value":{}},"weight":1},"pools_distribution":{"delegation_type":1,"type":{"type":"milkyway/DistributionTypeBasic","value":{}},"weight":1},"sender":"cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn","start_time":"2024-01-01T00:00:00Z","users_distribution":{"type":{},"weight":1}}}`
+	expected := `{"type":"milkyway/MsgEditRewardsPlan","value":{"amount":[{"amount":"1000","denom":"stake"}],"description":"Test rewards plan","end_time":"2024-12-31T23:59:59Z","id":"1","operators_distribution":{"delegation_type":2,"type":{"type":"milkyway/DistributionTypeBasic","value":{}},"weight":1},"pools_distribution":{"delegation_type":1,"type":{"type":"milkyway/DistributionTypeBasic","value":{}},"weight":1},"sender":"cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn","start_time":"2024-01-01T00:00:00Z","users_distribution":{"type":{"type":"milkyway/UsersDistributionTypeBasic","value":{}},"weight":1}}}`
 	require.Equal(t, expected, string(msgEditRewardsPlan.GetSignBytes()))
 }
 
