@@ -53,12 +53,17 @@ func (k msgServer) RegisterOperator(ctx context.Context, msg *types.MsgRegisterO
 	}
 
 	if !params.OperatorRegistrationFee.IsZero() {
+		// Make sure the specified fees are enough
+		if !msg.FeeAmount.IsAnyGTE(params.OperatorRegistrationFee) {
+			return nil, errors.Wrapf(sdkerrors.ErrInsufficientFunds, "insufficient funds: %s < %s", msg.FeeAmount, params.OperatorRegistrationFee)
+		}
+
 		userAddress, err := sdk.AccAddressFromBech32(operator.Admin)
 		if err != nil {
 			return nil, errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid operator admin address: %s", operator.Admin)
 		}
 
-		err = k.poolKeeper.FundCommunityPool(ctx, params.OperatorRegistrationFee, userAddress)
+		err = k.poolKeeper.FundCommunityPool(ctx, msg.FeeAmount, userAddress)
 		if err != nil {
 			return nil, err
 		}

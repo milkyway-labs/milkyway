@@ -20,6 +20,7 @@ func NewMsgCreateRewardsPlan(
 	poolsDistribution Distribution,
 	operatorsDistribution Distribution,
 	usersDistribution UsersDistribution,
+	feeAmount sdk.Coins,
 	sender string,
 ) *MsgCreateRewardsPlan {
 	return &MsgCreateRewardsPlan{
@@ -32,6 +33,7 @@ func NewMsgCreateRewardsPlan(
 		PoolsDistribution:     poolsDistribution,
 		OperatorsDistribution: operatorsDistribution,
 		UsersDistribution:     usersDistribution,
+		FeeAmount:             feeAmount,
 	}
 }
 
@@ -64,6 +66,11 @@ func (m *MsgCreateRewardsPlan) ValidateBasic() error {
 
 	if m.OperatorsDistribution.DelegationType != restakingtypes.DELEGATION_TYPE_OPERATOR {
 		return fmt.Errorf("operators distribution has invalid delegation type: %v", m.OperatorsDistribution.DelegationType)
+	}
+
+	err = m.FeeAmount.Validate()
+	if err != nil {
+		return fmt.Errorf("invalid fee amount: %w", err)
 	}
 
 	_, err = sdk.AccAddressFromBech32(m.Sender)

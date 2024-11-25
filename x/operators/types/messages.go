@@ -10,11 +10,18 @@ import (
 )
 
 // NewMsgRegisterOperator creates a new MsgRegisterOperator instance
-func NewMsgRegisterOperator(moniker string, website string, pictureURL string, sender string) *MsgRegisterOperator {
+func NewMsgRegisterOperator(
+	moniker string,
+	website string,
+	pictureURL string,
+	feeAmount sdk.Coins,
+	sender string,
+) *MsgRegisterOperator {
 	return &MsgRegisterOperator{
 		Moniker:    moniker,
 		Website:    website,
 		PictureURL: pictureURL,
+		FeeAmount:  feeAmount,
 		Sender:     sender,
 	}
 }
@@ -31,6 +38,10 @@ func (msg *MsgRegisterOperator) ValidateBasic() error {
 
 	if msg.PictureURL == DoNotModify {
 		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid picture URL")
+	}
+
+	if err := msg.FeeAmount.Validate(); err != nil {
+		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid fee amount: %s", err)
 	}
 
 	_, err := sdk.AccAddressFromBech32(msg.Sender)

@@ -40,6 +40,7 @@ func (suite *KeeperTestSuite) TestCreateRewardsPlan_PoolOrOperatorNotFound() {
 			types.NewDistributionWeight(2, 2),
 		}),
 		types.NewBasicUsersDistribution(1),
+		nil,
 		service.Admin,
 	))
 	suite.Require().EqualError(err, "cannot get delegation target 1: pool not found: not found")
@@ -64,6 +65,7 @@ func (suite *KeeperTestSuite) TestCreateRewardsPlan_PoolOrOperatorNotFound() {
 			types.NewDistributionWeight(2, 2),
 		}),
 		types.NewBasicUsersDistribution(1),
+		nil,
 		service.Admin,
 	))
 	suite.Require().EqualError(err, "cannot get delegation target 2: operator not found: not found")

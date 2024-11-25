@@ -15,6 +15,7 @@ var msgRegisterOperator = types.NewMsgRegisterOperator(
 	"MilkyWay Operator",
 	"https://milkyway.com",
 	"https://milkyway.com/picture",
+	sdk.NewCoins(sdk.NewInt64Coin("uatom", 100_000_000)),
 	"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 )
 
@@ -30,6 +31,7 @@ func TestMsgRegisterOperator_ValidateBasic(t *testing.T) {
 				types.DoNotModify,
 				msgRegisterOperator.Website,
 				msgRegisterOperator.PictureURL,
+				msgRegisterOperator.FeeAmount,
 				msgRegisterOperator.Sender,
 			),
 			shouldErr: true,
@@ -40,6 +42,7 @@ func TestMsgRegisterOperator_ValidateBasic(t *testing.T) {
 				"",
 				msgRegisterOperator.Website,
 				msgRegisterOperator.PictureURL,
+				msgRegisterOperator.FeeAmount,
 				msgRegisterOperator.Sender,
 			),
 			shouldErr: true,
@@ -50,6 +53,7 @@ func TestMsgRegisterOperator_ValidateBasic(t *testing.T) {
 				msgRegisterOperator.Moniker,
 				types.DoNotModify,
 				msgRegisterOperator.PictureURL,
+				msgRegisterOperator.FeeAmount,
 				msgRegisterOperator.Sender,
 			),
 			shouldErr: true,
@@ -60,6 +64,18 @@ func TestMsgRegisterOperator_ValidateBasic(t *testing.T) {
 				msgRegisterOperator.Moniker,
 				msgRegisterOperator.Website,
 				types.DoNotModify,
+				msgRegisterOperator.FeeAmount,
+				msgRegisterOperator.Sender,
+			),
+			shouldErr: true,
+		},
+		{
+			name: "do-not-modify picture URL returns error",
+			msg: types.NewMsgRegisterOperator(
+				msgRegisterOperator.Moniker,
+				msgRegisterOperator.Website,
+				msgRegisterOperator.PictureURL,
+				sdk.Coins{sdk.Coin{Denom: "invalid", Amount: sdkmath.NewInt(-100)}},
 				msgRegisterOperator.Sender,
 			),
 			shouldErr: true,
@@ -70,6 +86,7 @@ func TestMsgRegisterOperator_ValidateBasic(t *testing.T) {
 				msgRegisterOperator.Moniker,
 				msgRegisterOperator.Website,
 				msgRegisterOperator.PictureURL,
+				msgRegisterOperator.FeeAmount,
 				"invalid",
 			),
 			shouldErr: true,
@@ -95,7 +112,7 @@ func TestMsgRegisterOperator_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgRegisterOperator_GetSignBytes(t *testing.T) {
-	expected := `{"type":"milkyway/MsgRegisterOperator","value":{"moniker":"MilkyWay Operator","picture_url":"https://milkyway.com/picture","sender":"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4","website":"https://milkyway.com"}}`
+	expected := `{"type":"milkyway/MsgRegisterOperator","value":{"fee_amount":[{"amount":"100000000","denom":"uatom"}],"moniker":"MilkyWay Operator","picture_url":"https://milkyway.com/picture","sender":"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4","website":"https://milkyway.com"}}`
 	require.Equal(t, expected, string(msgRegisterOperator.GetSignBytes()))
 }
 

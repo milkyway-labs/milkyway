@@ -35,6 +35,7 @@ func (suite *KeeperTestSuite) TestMsgServer_CreateService() {
 				"MilkyWay is a restaking platform",
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
+				nil,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 			),
 			shouldErr: true,
@@ -55,6 +56,7 @@ func (suite *KeeperTestSuite) TestMsgServer_CreateService() {
 				types.DoNotModify,
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
+				nil,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 			),
 			shouldErr: true,
@@ -75,6 +77,7 @@ func (suite *KeeperTestSuite) TestMsgServer_CreateService() {
 				"MilkyWay is a restaking platform",
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
+				nil,
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 			),
 			shouldErr: true,
@@ -100,6 +103,7 @@ func (suite *KeeperTestSuite) TestMsgServer_CreateService() {
 				"MilkyWay is a restaking platform",
 				"https://milkyway.com",
 				"https://milkyway.com/logo.png",
+				sdk.NewCoins(sdk.NewCoin("uatom", sdkmath.NewInt(100_000))),
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 			),
 			shouldErr: false,
@@ -146,6 +150,96 @@ func (suite *KeeperTestSuite) TestMsgServer_CreateService() {
 				// Make sure the fee was transferred to the module account
 				poolBalance := suite.bk.GetBalance(ctx, authtypes.NewModuleAddress(distrtypes.ModuleName), "uatom")
 				suite.Require().Equal(sdk.NewCoin("uatom", sdkmath.NewInt(100_000)), poolBalance)
+			},
+		},
+		{
+			name: "service is created and fee is charged - one of many fees denoms",
+			store: func(ctx sdk.Context) {
+				err := suite.k.SetNextServiceID(ctx, 1)
+				suite.Require().NoError(err)
+
+				err = suite.k.SetParams(ctx, types.NewParams(
+					sdk.NewCoins(
+						sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000)),
+						sdk.NewCoin("utia", sdkmath.NewInt(30_000_000)),
+						sdk.NewCoin("milktia", sdkmath.NewInt(80_000_000)),
+					),
+				))
+				suite.Require().NoError(err)
+
+				suite.fundAccount(ctx,
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					sdk.NewCoins(
+						sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000)),
+						sdk.NewCoin("utia", sdkmath.NewInt(100_000_000)),
+						sdk.NewCoin("milktia", sdkmath.NewInt(100_000_000)),
+					),
+				)
+			},
+			msg: types.NewMsgCreateService(
+				"MilkyWay",
+				"MilkyWay is a restaking platform",
+				"https://milkyway.com",
+				"https://milkyway.com/logo.png",
+				sdk.NewCoins(
+					sdk.NewCoin("uatom", sdkmath.NewInt(20_000_000)),
+					sdk.NewCoin("utia", sdkmath.NewInt(15_000_000)),
+					sdk.NewCoin("milktia", sdkmath.NewInt(80_000_000)),
+				),
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+			),
+			shouldErr: false,
+			expResponse: &types.MsgCreateServiceResponse{
+				NewServiceID: 1,
+			},
+			expEvents: sdk.Events{
+				sdk.NewEvent(
+					types.EventTypeCreateService,
+					sdk.NewAttribute(types.AttributeKeyServiceID, "1"),
+				),
+			},
+			check: func(ctx sdk.Context) {
+				// Make sure the service has been stored
+				stored, found, err := suite.k.GetService(ctx, 1)
+				suite.Require().NoError(err)
+				suite.Require().True(found)
+				suite.Require().Equal(types.NewService(
+					1,
+					types.SERVICE_STATUS_CREATED,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
+				), stored)
+
+				// Make sure the service account has been created properly
+				hasAccount := suite.ak.HasAccount(ctx, types.GetServiceAddress(1))
+				suite.Require().True(hasAccount)
+
+				// Make sure the next service id has been incremented
+				nextServiceID, err := suite.k.GetNextServiceID(ctx)
+				suite.Require().NoError(err)
+				suite.Require().Equal(uint32(2), nextServiceID)
+
+				// Make sure the user's funds were deducted
+				userAddress, err := sdk.AccAddressFromBech32("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd")
+				suite.Require().NoError(err)
+				balance := suite.bk.GetAllBalances(ctx, userAddress)
+				suite.Require().Equal(sdk.NewCoins(
+					sdk.NewCoin("uatom", sdkmath.NewInt(80_000_000)),
+					sdk.NewCoin("utia", sdkmath.NewInt(85_000_000)),
+					sdk.NewCoin("milktia", sdkmath.NewInt(20_000_000)),
+				), balance)
+
+				// Make sure the community pool was funded
+				poolBalance := suite.bk.GetAllBalances(ctx, authtypes.NewModuleAddress(distrtypes.ModuleName))
+				suite.Require().Equal(sdk.NewCoins(
+					sdk.NewCoin("uatom", sdkmath.NewInt(20_000_000)),
+					sdk.NewCoin("utia", sdkmath.NewInt(15_000_000)),
+					sdk.NewCoin("milktia", sdkmath.NewInt(80_000_000)),
+				), poolBalance)
 			},
 		},
 	}

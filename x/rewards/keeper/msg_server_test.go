@@ -5,6 +5,8 @@ import (
 
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 
 	"github.com/milkyway-labs/milkyway/app/testutil"
 	"github.com/milkyway-labs/milkyway/utils"
@@ -38,6 +40,7 @@ func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 				types.NewBasicPoolsDistribution(0),
 				types.NewBasicOperatorsDistribution(0),
 				types.NewBasicUsersDistribution(0),
+				sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100_000_000))),
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 			),
 			shouldErr: true,
@@ -52,11 +55,9 @@ func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 				_, _ = suite.setupSampleServiceAndOperator(ctx)
 
 				// Change rewards plan creation fee to 100 $MILK.
-				params, err := suite.keeper.Params.Get(ctx)
-				suite.Require().NoError(err)
-
-				params.RewardsPlanCreationFee = utils.MustParseCoins("100_000000umilk")
-				err = suite.keeper.Params.Set(ctx, params)
+				err := suite.keeper.Params.Set(ctx, types.NewParams(
+					sdk.NewCoins(sdk.NewInt64Coin("umilk", 100_000_000)),
+				))
 				suite.Require().NoError(err)
 
 				// Set the next plan id
@@ -75,22 +76,21 @@ func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 				types.NewBasicPoolsDistribution(0),
 				types.NewBasicOperatorsDistribution(0),
 				types.NewBasicUsersDistribution(0),
+				sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100_000_000))),
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 			),
 			shouldErr: true,
 		},
 		{
-			name: "service is created and fee is charged",
+			name: "plan is created and fee is charged",
 			store: func(ctx sdk.Context) {
 				// Create a service
 				_, _ = suite.setupSampleServiceAndOperator(ctx)
 
 				// Change rewards plan creation fee to 100 $MILK.
-				params, err := suite.keeper.Params.Get(ctx)
-				suite.Require().NoError(err)
-
-				params.RewardsPlanCreationFee = utils.MustParseCoins("100_000000umilk")
-				err = suite.keeper.Params.Set(ctx, params)
+				err := suite.keeper.Params.Set(ctx, types.NewParams(
+					sdk.NewCoins(sdk.NewInt64Coin("umilk", 100_000_000)),
+				))
 				suite.Require().NoError(err)
 
 				// Set the next plan id
@@ -98,7 +98,11 @@ func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 				suite.Require().NoError(err)
 
 				// Fund the sender account enough coins to pay the fee.
-				suite.FundAccount(ctx, testutil.TestAddress(10000).String(), utils.MustParseCoins("500_000000umilk"))
+				suite.FundAccount(
+					ctx,
+					testutil.TestAddress(10000).String(),
+					utils.MustParseCoins("500_000000umilk"),
+				)
 			},
 			msg: types.NewMsgCreateRewardsPlan(
 				1,
@@ -109,8 +113,10 @@ func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 				types.NewBasicPoolsDistribution(0),
 				types.NewBasicOperatorsDistribution(0),
 				types.NewBasicUsersDistribution(0),
+				sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100_000_000))),
 				testutil.TestAddress(10000).String(),
 			),
+			shouldErr: false,
 			expResponse: &types.MsgCreateRewardsPlanResponse{
 				NewRewardsPlanID: 1,
 			},
@@ -138,6 +144,94 @@ func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 
 				balances := suite.bankKeeper.GetAllBalances(ctx, senderAddr)
 				suite.Require().Equal("400000000umilk", balances.String())
+			},
+		},
+		{
+			name: "plan is created and fee is charged - one of many fees denoms",
+			store: func(ctx sdk.Context) {
+				// Create a service
+				_, _ = suite.setupSampleServiceAndOperator(ctx)
+
+				// Change rewards plan creation fee to 100 $MILK.
+				err := suite.keeper.Params.Set(ctx, types.NewParams(
+					sdk.NewCoins(
+						sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000)),
+						sdk.NewCoin("utia", sdkmath.NewInt(30_000_000)),
+						sdk.NewCoin("milktia", sdkmath.NewInt(80_000_000)),
+					),
+				))
+				suite.Require().NoError(err)
+
+				// Set the next plan id
+				err = suite.keeper.NextRewardsPlanID.Set(ctx, 1)
+				suite.Require().NoError(err)
+
+				// Fund the sender account enough coins to pay the fee.
+				suite.FundAccount(
+					ctx,
+					testutil.TestAddress(10000).String(),
+					sdk.NewCoins(
+						sdk.NewCoin("uatom", sdkmath.NewInt(100_000_000)),
+						sdk.NewCoin("utia", sdkmath.NewInt(100_000_000)),
+						sdk.NewCoin("milktia", sdkmath.NewInt(100_000_000)),
+					),
+				)
+			},
+			msg: types.NewMsgCreateRewardsPlan(
+				1,
+				"Rewards Plan",
+				utils.MustParseCoins("100_000000service"),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+				types.NewBasicPoolsDistribution(0),
+				types.NewBasicOperatorsDistribution(0),
+				types.NewBasicUsersDistribution(0),
+				sdk.NewCoins(
+					sdk.NewCoin("uatom", sdkmath.NewInt(20_000_000)),
+					sdk.NewCoin("utia", sdkmath.NewInt(15_000_000)),
+					sdk.NewCoin("milktia", sdkmath.NewInt(80_000_000)),
+				),
+				testutil.TestAddress(10000).String(),
+			),
+			shouldErr: false,
+			expResponse: &types.MsgCreateRewardsPlanResponse{
+				NewRewardsPlanID: 1,
+			},
+			expEvents: []sdk.Event{
+				sdk.NewEvent(
+					types.EventTypeCreateRewardsPlan,
+					sdk.NewAttribute(types.AttributeKeyRewardsPlanID, "1"),
+					sdk.NewAttribute(servicestypes.AttributeKeyServiceID, "1"),
+				),
+			},
+			check: func(ctx sdk.Context) {
+				// Make sure the next plan id has been increased
+				nextPlanID, err := suite.keeper.NextRewardsPlanID.Get(ctx)
+				suite.Require().NoError(err)
+
+				suite.Require().Equal(uint64(2), nextPlanID)
+
+				// Make sure the rewards plan has been created
+				_, err = suite.keeper.GetRewardsPlan(ctx, 1)
+				suite.Require().NoError(err)
+
+				// Make sure the user's funds were deducted
+				userAddress, err := sdk.AccAddressFromBech32(testutil.TestAddress(10000).String())
+				suite.Require().NoError(err)
+				balance := suite.bankKeeper.GetAllBalances(ctx, userAddress)
+				suite.Require().Equal(sdk.NewCoins(
+					sdk.NewCoin("uatom", sdkmath.NewInt(80_000_000)),
+					sdk.NewCoin("utia", sdkmath.NewInt(85_000_000)),
+					sdk.NewCoin("milktia", sdkmath.NewInt(20_000_000)),
+				), balance)
+
+				// Make sure the community pool was funded
+				poolBalance := suite.bankKeeper.GetAllBalances(ctx, authtypes.NewModuleAddress(distrtypes.ModuleName))
+				suite.Require().Equal(sdk.NewCoins(
+					sdk.NewCoin("uatom", sdkmath.NewInt(20_000_000)),
+					sdk.NewCoin("utia", sdkmath.NewInt(15_000_000)),
+					sdk.NewCoin("milktia", sdkmath.NewInt(80_000_000)),
+				), poolBalance)
 			},
 		},
 	}

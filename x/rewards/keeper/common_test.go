@@ -136,6 +136,7 @@ func (suite *KeeperTestSuite) CreateService(ctx sdk.Context, name string, admin 
 		fmt.Sprintf("%s AVS", name),
 		"https://example.com",
 		"https://example.com/picture.png",
+		nil,
 		admin,
 	))
 	suite.Require().NoError(err)
@@ -160,6 +161,7 @@ func (suite *KeeperTestSuite) CreateOperator(ctx sdk.Context, name string, admin
 		name,
 		"https://example.com",
 		"https://example.com/picture.png",
+		nil,
 		admin,
 	))
 	suite.Require().NoError(err)
@@ -275,6 +277,7 @@ func (suite *KeeperTestSuite) CreateRewardsPlan(
 		poolsDistr,
 		operatorsDistr,
 		usersDistr,
+		nil,
 		service.Admin,
 	))
 	suite.Require().NoError(err)

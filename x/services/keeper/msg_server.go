@@ -59,12 +59,17 @@ func (k msgServer) CreateService(goCtx context.Context, msg *types.MsgCreateServ
 	}
 
 	if !params.ServiceRegistrationFee.IsZero() {
+		// Make sure the specified fees are enough
+		if !msg.FeeAmount.IsAnyGTE(params.ServiceRegistrationFee) {
+			return nil, errors.Wrapf(sdkerrors.ErrInsufficientFunds, "insufficient funds: %s < %s", msg.FeeAmount, params.ServiceRegistrationFee)
+		}
+
 		userAddress, err := sdk.AccAddressFromBech32(service.Admin)
 		if err != nil {
 			return nil, errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid service admin address: %s", service.Admin)
 		}
 
-		err = k.poolKeeper.FundCommunityPool(ctx, params.ServiceRegistrationFee, userAddress)
+		err = k.poolKeeper.FundCommunityPool(ctx, msg.FeeAmount, userAddress)
 		if err != nil {
 			return nil, err
 		}

@@ -3,6 +3,7 @@ package milkyway.services.v1;
 
 import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
+import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/msg/v1/msg.proto";
 import "gogoproto/gogo.proto";
 import "milkyway/services/v1/params.proto";
@@ -82,6 +83,16 @@ message MsgCreateService {
   string picture_url = 5 [
     (gogoproto.moretags) = "yaml:\"picture_url\"",
     (gogoproto.customname) = "PictureURL"
+  ];
+
+  // FeeAmount represents the fees that are going to be paid to create the
+  // service. These should always be greater or equals of any of the coins
+  // specified inside the ServiceRegistrationFee field of the modules params.
+  // If no fees are specified inside the module parameters, this field can be
+  // omitted.
+  repeated cosmos.base.v1beta1.Coin fee_amount = 6 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
   ];
 }
 
