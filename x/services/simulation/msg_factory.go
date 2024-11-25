@@ -107,23 +107,31 @@ func SimulateMsgCreateService(ak authkeeper.AccountKeeper, bk bankkeeper.Keeper,
 		service := RandomService(r, accs)
 
 		// Get the admin account that should sign the transaction
-		adminAddr, err := sdk.AccAddressFromBech32(service.Admin)
+		adminAddress, err := sdk.AccAddressFromBech32(service.Admin)
 		if err != nil {
 			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "error while parsing admin address"), nil, nil
 		}
 
-		// Make sure the admin account has enough tokens
+		// Make sure the admin has enough funds to pay for the creation fees
 		params, err := k.GetParams(ctx)
 		if err != nil {
-			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "error while getting params"), nil, nil
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "could not get params"), nil, nil
 		}
 
-		if params.ServiceRegistrationFee.IsAnyGTE(bk.GetAllBalances(ctx, adminAddr)) {
+		// Check the fees that should be paid
+		feesAmount := sdk.NewCoins()
+		for _, feeCoin := range params.ServiceRegistrationFee {
+			if bk.GetBalance(ctx, adminAddress, feeCoin.Denom).IsGTE(feeCoin) {
+				feesAmount = feesAmount.Add(feeCoin)
+			}
+		}
+
+		if !params.ServiceRegistrationFee.IsZero() && feesAmount.IsZero() {
 			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "insufficient funds"), nil, nil
 		}
 
 		// Get the account that will sign the transaction
-		signer, found := simtesting.GetSimAccount(adminAddr, accs)
+		signer, found := simtesting.GetSimAccount(adminAddress, accs)
 		if !found {
 			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "admin account not found"), nil, nil
 		}
@@ -134,6 +142,7 @@ func SimulateMsgCreateService(ak authkeeper.AccountKeeper, bk bankkeeper.Keeper,
 			service.Description,
 			service.Website,
 			service.PictureURL,
+			feesAmount,
 			service.Admin,
 		)
 		return simtesting.SendMsg(r, types.ModuleName, app, ak, bk, msg, ctx, signer)

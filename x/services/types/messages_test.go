@@ -15,6 +15,7 @@ var msgCreateService = types.NewMsgCreateService(
 	"MilkyWay is an AVS of a restaking platform",
 	"https://milkyway.com",
 	"https://milkyway.com/logo.png",
+	sdk.NewCoins(sdk.NewInt64Coin("umilk", 100_000_000)),
 	"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 )
 
@@ -31,6 +32,7 @@ func TestMsgCreateService_ValidateBasic(t *testing.T) {
 				msgCreateService.Description,
 				msgCreateService.Website,
 				msgCreateService.PictureURL,
+				msgCreateService.FeeAmount,
 				msgCreateService.Sender,
 			),
 			shouldErr: true,
@@ -42,6 +44,7 @@ func TestMsgCreateService_ValidateBasic(t *testing.T) {
 				msgCreateService.Description,
 				msgCreateService.Website,
 				msgCreateService.PictureURL,
+				msgCreateService.FeeAmount,
 				msgCreateService.Sender,
 			),
 			shouldErr: true,
@@ -53,6 +56,7 @@ func TestMsgCreateService_ValidateBasic(t *testing.T) {
 				types.DoNotModify,
 				msgCreateService.Website,
 				msgCreateService.PictureURL,
+				msgCreateService.FeeAmount,
 				msgCreateService.Sender,
 			),
 			shouldErr: true,
@@ -64,6 +68,7 @@ func TestMsgCreateService_ValidateBasic(t *testing.T) {
 				msgCreateService.Description,
 				types.DoNotModify,
 				msgCreateService.PictureURL,
+				msgCreateService.FeeAmount,
 				msgCreateService.Sender,
 			),
 			shouldErr: true,
@@ -75,6 +80,19 @@ func TestMsgCreateService_ValidateBasic(t *testing.T) {
 				msgCreateService.Description,
 				msgCreateService.Website,
 				types.DoNotModify,
+				msgCreateService.FeeAmount,
+				msgCreateService.Sender,
+			),
+			shouldErr: true,
+		},
+		{
+			name: "invalid fee amount returns error",
+			msg: types.NewMsgCreateService(
+				msgCreateService.Name,
+				msgCreateService.Description,
+				msgCreateService.Website,
+				msgCreateService.PictureURL,
+				sdk.Coins{sdk.Coin{Denom: "umilk", Amount: sdkmath.NewInt(-100)}},
 				msgCreateService.Sender,
 			),
 			shouldErr: true,
@@ -86,6 +104,7 @@ func TestMsgCreateService_ValidateBasic(t *testing.T) {
 				msgCreateService.Description,
 				msgCreateService.Website,
 				msgCreateService.PictureURL,
+				msgCreateService.FeeAmount,
 				"invalid",
 			),
 			shouldErr: true,
@@ -110,7 +129,7 @@ func TestMsgCreateService_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgCreateService_GetSignBytes(t *testing.T) {
-	expected := `{"type":"milkyway/MsgCreateService","value":{"description":"MilkyWay is an AVS of a restaking platform","name":"MilkyWay","picture_url":"https://milkyway.com/logo.png","sender":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","website":"https://milkyway.com"}}`
+	expected := `{"type":"milkyway/MsgCreateService","value":{"description":"MilkyWay is an AVS of a restaking platform","fee_amount":[{"amount":"100000000","denom":"umilk"}],"name":"MilkyWay","picture_url":"https://milkyway.com/logo.png","sender":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","website":"https://milkyway.com"}}`
 	require.Equal(t, expected, string(msgCreateService.GetSignBytes()))
 }
 

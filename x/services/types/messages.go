@@ -14,12 +14,20 @@ var (
 )
 
 // NewMsgCreateService creates a new MsgCreateService instance
-func NewMsgCreateService(name, description, website, pictureURL, sender string) *MsgCreateService {
+func NewMsgCreateService(
+	name string,
+	description string,
+	website string,
+	pictureURL string,
+	feeAmount sdk.Coins,
+	sender string,
+) *MsgCreateService {
 	return &MsgCreateService{
 		Name:        name,
 		Description: description,
 		Website:     website,
 		PictureURL:  pictureURL,
+		FeeAmount:   feeAmount,
 		Sender:      sender,
 	}
 }
@@ -40,6 +48,10 @@ func (msg *MsgCreateService) ValidateBasic() error {
 
 	if msg.PictureURL == DoNotModify {
 		return errors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid picture URL")
+	}
+
+	if err := msg.FeeAmount.Validate(); err != nil {
+		return err
 	}
 
 	_, err := sdk.AccAddressFromBech32(msg.Sender)
