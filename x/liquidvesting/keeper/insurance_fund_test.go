@@ -115,7 +115,7 @@ func (suite *KeeperTestSuite) TestKeeper_UsedInsuranceFundIsUpdatedCorrectly() {
 	restaker := "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"
 
 	// Set insurance percentage to 2%
-	suite.k.SetParams(ctx, types.NewParams(math.LegacyNewDec(2), nil, nil, nil))
+	suite.k.SetParams(ctx, types.NewParams(math.LegacyNewDec(2), nil, nil, nil, nil))
 
 	// Fund the restaker insurance fund
 	suite.fundAccountInsuranceFund(ctx, restaker, sdk.NewCoins(sdk.NewInt64Coin("stake", 20)))
@@ -175,7 +175,7 @@ func (suite *KeeperTestSuite) TestKeeper_InsuranceFundUpdatesCorreclyWithComplet
 	restaker := "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"
 
 	// Set insurance percentage to 2%
-	suite.k.SetParams(ctx, types.NewParams(math.LegacyNewDec(2), nil, nil, nil))
+	suite.k.SetParams(ctx, types.NewParams(math.LegacyNewDec(2), nil, nil, nil, nil))
 
 	// Fund the restaker insurance fund
 	suite.fundAccountInsuranceFund(ctx, restaker, sdk.NewCoins(sdk.NewInt64Coin("stake", 20)))

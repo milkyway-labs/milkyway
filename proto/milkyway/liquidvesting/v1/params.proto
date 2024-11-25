@@ -32,4 +32,8 @@ message Params {
   // on the insurance fund.
   repeated string trusted_delegates = 4
       [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+
+  // List of channels from which is allowed to receive deposits to the insurance
+  // fund.
+  repeated string allowed_channels = 5;
 }

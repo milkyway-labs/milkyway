@@ -65,6 +65,7 @@ func (suite *KeeperTestSuite) TestMsgServer_MintVestedRepresentation() {
 				[]string{burnerAccount},
 				[]string{minterAccount},
 				nil,
+				nil,
 			)))
 
 			msgServer := keeper.NewMsgServer(suite.k)
@@ -155,6 +156,7 @@ func (suite *KeeperTestSuite) TestMsgServer_BurnVestedRepresentation() {
 				math.LegacyMustNewDecFromStr("2.0"),
 				[]string{burnerAccount},
 				[]string{minterAccount},
+				nil,
 				nil,
 			)))
 
@@ -292,6 +294,14 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateParams() {
 				suite.Assert().NoError(err)
 				suite.Assert().Equal(types.DefaultParams(), params)
 			},
+		},
+		{
+			name: "invalid allowed channels returns error",
+			msg: types.NewMsgUpdateParams(
+				authtypes.NewModuleAddress("gov").String(),
+				types.NewParams(math.LegacyNewDec(2), nil, nil, nil, []string{"invalid-channel"}),
+			),
+			shouldErr: true,
 		},
 	}
 
