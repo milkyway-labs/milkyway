@@ -12,7 +12,7 @@
 [![Discord](https://img.shields.io/discord/1166634853576482876)](https://discord.com/invite/4ywmNE3tqq)
 
 ## Introduction
-MilkyWay is a restaking protocol built as an _optimistic rollup_ on top of [Initia](https://initia.xyz/).
+MilkyWay is a restaking protocol providing users new and innovative ways to restake their assets and earn rewards.
 
 ## Useful links
 - [Take a look at the website](https://milkyway.zone)
