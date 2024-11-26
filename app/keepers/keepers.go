@@ -96,8 +96,6 @@ import (
 	rewardstypes "github.com/milkyway-labs/milkyway/x/rewards/types"
 	serviceskeeper "github.com/milkyway-labs/milkyway/x/services/keeper"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
-	tokenfactorykeeper "github.com/milkyway-labs/milkyway/x/tokenfactory/keeper"
-	tokenfactorytypes "github.com/milkyway-labs/milkyway/x/tokenfactory/types"
 )
 
 type AppKeepers struct {
@@ -123,7 +121,6 @@ type AppKeepers struct {
 	EvidenceKeeper        evidencekeeper.Keeper
 	AuthzKeeper           authzkeeper.Keeper
 	ConsensusParamsKeeper consensusparamkeeper.Keeper
-	TokenFactoryKeeper    tokenfactorykeeper.Keeper
 	FeeGrantKeeper        feegrantkeeper.Keeper
 
 	// Skip
@@ -377,21 +374,6 @@ func NewAppKeeper(
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ConsensusAddrPrefix()),
 		authtypes.FeeCollectorName,
 	)
-
-	contractKeeper := wasmkeeper.NewDefaultPermissionKeeper(appKeepers.WasmKeeper)
-	appKeepers.TokenFactoryKeeper = tokenfactorykeeper.NewKeeper(
-		addressCodec,
-		appCodec,
-		runtime.NewKVStoreService(appKeepers.keys[tokenfactorytypes.StoreKey]),
-		appKeepers.AccountKeeper,
-		appKeepers.BankKeeper,
-		appKeepers.DistrKeeper,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
-	)
-	appKeepers.TokenFactoryKeeper.SetContractKeeper(contractKeeper)
-
-	// Set the hooks based on the token factory keeper
-	appKeepers.BankKeeper.SetHooks(appKeepers.TokenFactoryKeeper.Hooks())
 
 	// gov depends on provider, so needs to be set after
 	govConfig := govtypes.DefaultConfig()

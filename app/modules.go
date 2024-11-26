@@ -79,7 +79,6 @@ import (
 	rewardstypes "github.com/milkyway-labs/milkyway/x/rewards/types"
 	"github.com/milkyway-labs/milkyway/x/services"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
-	tokenfactorytypes "github.com/milkyway-labs/milkyway/x/tokenfactory/types"
 )
 
 var MaccPerms = map[string][]string{
@@ -95,7 +94,6 @@ var MaccPerms = map[string][]string{
 	wasmtypes.ModuleName:              {authtypes.Burner},
 	feemarkettypes.ModuleName:         nil,
 	feemarkettypes.FeeCollectorName:   nil,
-	tokenfactorytypes.ModuleName:      {authtypes.Minter, authtypes.Burner},
 
 	// Skip
 	oracletypes.ModuleName: nil,
