@@ -17,81 +17,81 @@ import (
 	sync "sync"
 )
 
-var _ protoreflect.List = (*_MsgMintVestedRepresentation_3_list)(nil)
+var _ protoreflect.List = (*_MsgMintLockedRepresentation_3_list)(nil)
 
-type _MsgMintVestedRepresentation_3_list struct {
+type _MsgMintLockedRepresentation_3_list struct {
 	list *[]*v1beta1.Coin
 }
 
-func (x *_MsgMintVestedRepresentation_3_list) Len() int {
+func (x *_MsgMintLockedRepresentation_3_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_MsgMintVestedRepresentation_3_list) Get(i int) protoreflect.Value {
+func (x *_MsgMintLockedRepresentation_3_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
 }
 
-func (x *_MsgMintVestedRepresentation_3_list) Set(i int, value protoreflect.Value) {
+func (x *_MsgMintLockedRepresentation_3_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_MsgMintVestedRepresentation_3_list) Append(value protoreflect.Value) {
+func (x *_MsgMintLockedRepresentation_3_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_MsgMintVestedRepresentation_3_list) AppendMutable() protoreflect.Value {
+func (x *_MsgMintLockedRepresentation_3_list) AppendMutable() protoreflect.Value {
 	v := new(v1beta1.Coin)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_MsgMintVestedRepresentation_3_list) Truncate(n int) {
+func (x *_MsgMintLockedRepresentation_3_list) Truncate(n int) {
 	for i := n; i < len(*x.list); i++ {
 		(*x.list)[i] = nil
 	}
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_MsgMintVestedRepresentation_3_list) NewElement() protoreflect.Value {
+func (x *_MsgMintLockedRepresentation_3_list) NewElement() protoreflect.Value {
 	v := new(v1beta1.Coin)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_MsgMintVestedRepresentation_3_list) IsValid() bool {
+func (x *_MsgMintLockedRepresentation_3_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_MsgMintVestedRepresentation          protoreflect.MessageDescriptor
-	fd_MsgMintVestedRepresentation_sender   protoreflect.FieldDescriptor
-	fd_MsgMintVestedRepresentation_receiver protoreflect.FieldDescriptor
-	fd_MsgMintVestedRepresentation_amount   protoreflect.FieldDescriptor
+	md_MsgMintLockedRepresentation          protoreflect.MessageDescriptor
+	fd_MsgMintLockedRepresentation_sender   protoreflect.FieldDescriptor
+	fd_MsgMintLockedRepresentation_receiver protoreflect.FieldDescriptor
+	fd_MsgMintLockedRepresentation_amount   protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_milkyway_liquidvesting_v1_messages_proto_init()
-	md_MsgMintVestedRepresentation = File_milkyway_liquidvesting_v1_messages_proto.Messages().ByName("MsgMintVestedRepresentation")
-	fd_MsgMintVestedRepresentation_sender = md_MsgMintVestedRepresentation.Fields().ByName("sender")
-	fd_MsgMintVestedRepresentation_receiver = md_MsgMintVestedRepresentation.Fields().ByName("receiver")
-	fd_MsgMintVestedRepresentation_amount = md_MsgMintVestedRepresentation.Fields().ByName("amount")
+	md_MsgMintLockedRepresentation = File_milkyway_liquidvesting_v1_messages_proto.Messages().ByName("MsgMintLockedRepresentation")
+	fd_MsgMintLockedRepresentation_sender = md_MsgMintLockedRepresentation.Fields().ByName("sender")
+	fd_MsgMintLockedRepresentation_receiver = md_MsgMintLockedRepresentation.Fields().ByName("receiver")
+	fd_MsgMintLockedRepresentation_amount = md_MsgMintLockedRepresentation.Fields().ByName("amount")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgMintVestedRepresentation)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgMintLockedRepresentation)(nil)
 
-type fastReflection_MsgMintVestedRepresentation MsgMintVestedRepresentation
+type fastReflection_MsgMintLockedRepresentation MsgMintLockedRepresentation
 
-func (x *MsgMintVestedRepresentation) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgMintVestedRepresentation)(x)
+func (x *MsgMintLockedRepresentation) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgMintLockedRepresentation)(x)
 }
 
-func (x *MsgMintVestedRepresentation) slowProtoReflect() protoreflect.Message {
+func (x *MsgMintLockedRepresentation) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_liquidvesting_v1_messages_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -103,43 +103,43 @@ func (x *MsgMintVestedRepresentation) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgMintVestedRepresentation_messageType fastReflection_MsgMintVestedRepresentation_messageType
-var _ protoreflect.MessageType = fastReflection_MsgMintVestedRepresentation_messageType{}
+var _fastReflection_MsgMintLockedRepresentation_messageType fastReflection_MsgMintLockedRepresentation_messageType
+var _ protoreflect.MessageType = fastReflection_MsgMintLockedRepresentation_messageType{}
 
-type fastReflection_MsgMintVestedRepresentation_messageType struct{}
+type fastReflection_MsgMintLockedRepresentation_messageType struct{}
 
-func (x fastReflection_MsgMintVestedRepresentation_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgMintVestedRepresentation)(nil)
+func (x fastReflection_MsgMintLockedRepresentation_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgMintLockedRepresentation)(nil)
 }
-func (x fastReflection_MsgMintVestedRepresentation_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgMintVestedRepresentation)
+func (x fastReflection_MsgMintLockedRepresentation_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgMintLockedRepresentation)
 }
-func (x fastReflection_MsgMintVestedRepresentation_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgMintVestedRepresentation
+func (x fastReflection_MsgMintLockedRepresentation_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgMintLockedRepresentation
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgMintVestedRepresentation) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgMintVestedRepresentation
+func (x *fastReflection_MsgMintLockedRepresentation) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgMintLockedRepresentation
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgMintVestedRepresentation) Type() protoreflect.MessageType {
-	return _fastReflection_MsgMintVestedRepresentation_messageType
+func (x *fastReflection_MsgMintLockedRepresentation) Type() protoreflect.MessageType {
+	return _fastReflection_MsgMintLockedRepresentation_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgMintVestedRepresentation) New() protoreflect.Message {
-	return new(fastReflection_MsgMintVestedRepresentation)
+func (x *fastReflection_MsgMintLockedRepresentation) New() protoreflect.Message {
+	return new(fastReflection_MsgMintLockedRepresentation)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgMintVestedRepresentation) Interface() protoreflect.ProtoMessage {
-	return (*MsgMintVestedRepresentation)(x)
+func (x *fastReflection_MsgMintLockedRepresentation) Interface() protoreflect.ProtoMessage {
+	return (*MsgMintLockedRepresentation)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -147,22 +147,22 @@ func (x *fastReflection_MsgMintVestedRepresentation) Interface() protoreflect.Pr
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgMintVestedRepresentation) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgMintLockedRepresentation) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Sender != "" {
 		value := protoreflect.ValueOfString(x.Sender)
-		if !f(fd_MsgMintVestedRepresentation_sender, value) {
+		if !f(fd_MsgMintLockedRepresentation_sender, value) {
 			return
 		}
 	}
 	if x.Receiver != "" {
 		value := protoreflect.ValueOfString(x.Receiver)
-		if !f(fd_MsgMintVestedRepresentation_receiver, value) {
+		if !f(fd_MsgMintLockedRepresentation_receiver, value) {
 			return
 		}
 	}
 	if len(x.Amount) != 0 {
-		value := protoreflect.ValueOfList(&_MsgMintVestedRepresentation_3_list{list: &x.Amount})
-		if !f(fd_MsgMintVestedRepresentation_amount, value) {
+		value := protoreflect.ValueOfList(&_MsgMintLockedRepresentation_3_list{list: &x.Amount})
+		if !f(fd_MsgMintLockedRepresentation_amount, value) {
 			return
 		}
 	}
@@ -179,19 +179,19 @@ func (x *fastReflection_MsgMintVestedRepresentation) Range(f func(protoreflect.F
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgMintVestedRepresentation) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgMintLockedRepresentation) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "milkyway.liquidvesting.v1.MsgMintVestedRepresentation.sender":
+	case "milkyway.liquidvesting.v1.MsgMintLockedRepresentation.sender":
 		return x.Sender != ""
-	case "milkyway.liquidvesting.v1.MsgMintVestedRepresentation.receiver":
+	case "milkyway.liquidvesting.v1.MsgMintLockedRepresentation.receiver":
 		return x.Receiver != ""
-	case "milkyway.liquidvesting.v1.MsgMintVestedRepresentation.amount":
+	case "milkyway.liquidvesting.v1.MsgMintLockedRepresentation.amount":
 		return len(x.Amount) != 0
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintVestedRepresentation"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintLockedRepresentation"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintVestedRepresentation does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintLockedRepresentation does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -201,19 +201,19 @@ func (x *fastReflection_MsgMintVestedRepresentation) Has(fd protoreflect.FieldDe
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgMintVestedRepresentation) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgMintLockedRepresentation) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "milkyway.liquidvesting.v1.MsgMintVestedRepresentation.sender":
+	case "milkyway.liquidvesting.v1.MsgMintLockedRepresentation.sender":
 		x.Sender = ""
-	case "milkyway.liquidvesting.v1.MsgMintVestedRepresentation.receiver":
+	case "milkyway.liquidvesting.v1.MsgMintLockedRepresentation.receiver":
 		x.Receiver = ""
-	case "milkyway.liquidvesting.v1.MsgMintVestedRepresentation.amount":
+	case "milkyway.liquidvesting.v1.MsgMintLockedRepresentation.amount":
 		x.Amount = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintVestedRepresentation"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintLockedRepresentation"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintVestedRepresentation does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintLockedRepresentation does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -223,25 +223,25 @@ func (x *fastReflection_MsgMintVestedRepresentation) Clear(fd protoreflect.Field
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgMintVestedRepresentation) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgMintLockedRepresentation) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "milkyway.liquidvesting.v1.MsgMintVestedRepresentation.sender":
+	case "milkyway.liquidvesting.v1.MsgMintLockedRepresentation.sender":
 		value := x.Sender
 		return protoreflect.ValueOfString(value)
-	case "milkyway.liquidvesting.v1.MsgMintVestedRepresentation.receiver":
+	case "milkyway.liquidvesting.v1.MsgMintLockedRepresentation.receiver":
 		value := x.Receiver
 		return protoreflect.ValueOfString(value)
-	case "milkyway.liquidvesting.v1.MsgMintVestedRepresentation.amount":
+	case "milkyway.liquidvesting.v1.MsgMintLockedRepresentation.amount":
 		if len(x.Amount) == 0 {
-			return protoreflect.ValueOfList(&_MsgMintVestedRepresentation_3_list{})
+			return protoreflect.ValueOfList(&_MsgMintLockedRepresentation_3_list{})
 		}
-		listValue := &_MsgMintVestedRepresentation_3_list{list: &x.Amount}
+		listValue := &_MsgMintLockedRepresentation_3_list{list: &x.Amount}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintVestedRepresentation"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintLockedRepresentation"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintVestedRepresentation does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintLockedRepresentation does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -255,21 +255,21 @@ func (x *fastReflection_MsgMintVestedRepresentation) Get(descriptor protoreflect
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgMintVestedRepresentation) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgMintLockedRepresentation) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "milkyway.liquidvesting.v1.MsgMintVestedRepresentation.sender":
+	case "milkyway.liquidvesting.v1.MsgMintLockedRepresentation.sender":
 		x.Sender = value.Interface().(string)
-	case "milkyway.liquidvesting.v1.MsgMintVestedRepresentation.receiver":
+	case "milkyway.liquidvesting.v1.MsgMintLockedRepresentation.receiver":
 		x.Receiver = value.Interface().(string)
-	case "milkyway.liquidvesting.v1.MsgMintVestedRepresentation.amount":
+	case "milkyway.liquidvesting.v1.MsgMintLockedRepresentation.amount":
 		lv := value.List()
-		clv := lv.(*_MsgMintVestedRepresentation_3_list)
+		clv := lv.(*_MsgMintLockedRepresentation_3_list)
 		x.Amount = *clv.list
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintVestedRepresentation"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintLockedRepresentation"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintVestedRepresentation does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintLockedRepresentation does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -283,53 +283,53 @@ func (x *fastReflection_MsgMintVestedRepresentation) Set(fd protoreflect.FieldDe
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgMintVestedRepresentation) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgMintLockedRepresentation) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.liquidvesting.v1.MsgMintVestedRepresentation.amount":
+	case "milkyway.liquidvesting.v1.MsgMintLockedRepresentation.amount":
 		if x.Amount == nil {
 			x.Amount = []*v1beta1.Coin{}
 		}
-		value := &_MsgMintVestedRepresentation_3_list{list: &x.Amount}
+		value := &_MsgMintLockedRepresentation_3_list{list: &x.Amount}
 		return protoreflect.ValueOfList(value)
-	case "milkyway.liquidvesting.v1.MsgMintVestedRepresentation.sender":
-		panic(fmt.Errorf("field sender of message milkyway.liquidvesting.v1.MsgMintVestedRepresentation is not mutable"))
-	case "milkyway.liquidvesting.v1.MsgMintVestedRepresentation.receiver":
-		panic(fmt.Errorf("field receiver of message milkyway.liquidvesting.v1.MsgMintVestedRepresentation is not mutable"))
+	case "milkyway.liquidvesting.v1.MsgMintLockedRepresentation.sender":
+		panic(fmt.Errorf("field sender of message milkyway.liquidvesting.v1.MsgMintLockedRepresentation is not mutable"))
+	case "milkyway.liquidvesting.v1.MsgMintLockedRepresentation.receiver":
+		panic(fmt.Errorf("field receiver of message milkyway.liquidvesting.v1.MsgMintLockedRepresentation is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintVestedRepresentation"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintLockedRepresentation"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintVestedRepresentation does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintLockedRepresentation does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgMintVestedRepresentation) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgMintLockedRepresentation) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.liquidvesting.v1.MsgMintVestedRepresentation.sender":
+	case "milkyway.liquidvesting.v1.MsgMintLockedRepresentation.sender":
 		return protoreflect.ValueOfString("")
-	case "milkyway.liquidvesting.v1.MsgMintVestedRepresentation.receiver":
+	case "milkyway.liquidvesting.v1.MsgMintLockedRepresentation.receiver":
 		return protoreflect.ValueOfString("")
-	case "milkyway.liquidvesting.v1.MsgMintVestedRepresentation.amount":
+	case "milkyway.liquidvesting.v1.MsgMintLockedRepresentation.amount":
 		list := []*v1beta1.Coin{}
-		return protoreflect.ValueOfList(&_MsgMintVestedRepresentation_3_list{list: &list})
+		return protoreflect.ValueOfList(&_MsgMintLockedRepresentation_3_list{list: &list})
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintVestedRepresentation"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintLockedRepresentation"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintVestedRepresentation does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintLockedRepresentation does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgMintVestedRepresentation) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgMintLockedRepresentation) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.liquidvesting.v1.MsgMintVestedRepresentation", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.liquidvesting.v1.MsgMintLockedRepresentation", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -337,7 +337,7 @@ func (x *fastReflection_MsgMintVestedRepresentation) WhichOneof(d protoreflect.O
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgMintVestedRepresentation) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgMintLockedRepresentation) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -348,7 +348,7 @@ func (x *fastReflection_MsgMintVestedRepresentation) GetUnknown() protoreflect.R
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgMintVestedRepresentation) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgMintLockedRepresentation) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -360,7 +360,7 @@ func (x *fastReflection_MsgMintVestedRepresentation) SetUnknown(fields protorefl
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgMintVestedRepresentation) IsValid() bool {
+func (x *fastReflection_MsgMintLockedRepresentation) IsValid() bool {
 	return x != nil
 }
 
@@ -370,9 +370,9 @@ func (x *fastReflection_MsgMintVestedRepresentation) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgMintVestedRepresentation) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgMintLockedRepresentation) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgMintVestedRepresentation)
+		x := input.Message.Interface().(*MsgMintLockedRepresentation)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -408,7 +408,7 @@ func (x *fastReflection_MsgMintVestedRepresentation) ProtoMethods() *protoiface.
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgMintVestedRepresentation)
+		x := input.Message.Interface().(*MsgMintLockedRepresentation)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -468,7 +468,7 @@ func (x *fastReflection_MsgMintVestedRepresentation) ProtoMethods() *protoiface.
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgMintVestedRepresentation)
+		x := input.Message.Interface().(*MsgMintLockedRepresentation)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -500,10 +500,10 @@ func (x *fastReflection_MsgMintVestedRepresentation) ProtoMethods() *protoiface.
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgMintVestedRepresentation: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgMintLockedRepresentation: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgMintVestedRepresentation: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgMintLockedRepresentation: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -640,23 +640,23 @@ func (x *fastReflection_MsgMintVestedRepresentation) ProtoMethods() *protoiface.
 }
 
 var (
-	md_MsgMintVestedRepresentationResponse protoreflect.MessageDescriptor
+	md_MsgMintLockedRepresentationResponse protoreflect.MessageDescriptor
 )
 
 func init() {
 	file_milkyway_liquidvesting_v1_messages_proto_init()
-	md_MsgMintVestedRepresentationResponse = File_milkyway_liquidvesting_v1_messages_proto.Messages().ByName("MsgMintVestedRepresentationResponse")
+	md_MsgMintLockedRepresentationResponse = File_milkyway_liquidvesting_v1_messages_proto.Messages().ByName("MsgMintLockedRepresentationResponse")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgMintVestedRepresentationResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgMintLockedRepresentationResponse)(nil)
 
-type fastReflection_MsgMintVestedRepresentationResponse MsgMintVestedRepresentationResponse
+type fastReflection_MsgMintLockedRepresentationResponse MsgMintLockedRepresentationResponse
 
-func (x *MsgMintVestedRepresentationResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgMintVestedRepresentationResponse)(x)
+func (x *MsgMintLockedRepresentationResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgMintLockedRepresentationResponse)(x)
 }
 
-func (x *MsgMintVestedRepresentationResponse) slowProtoReflect() protoreflect.Message {
+func (x *MsgMintLockedRepresentationResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_liquidvesting_v1_messages_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -668,43 +668,43 @@ func (x *MsgMintVestedRepresentationResponse) slowProtoReflect() protoreflect.Me
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgMintVestedRepresentationResponse_messageType fastReflection_MsgMintVestedRepresentationResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgMintVestedRepresentationResponse_messageType{}
+var _fastReflection_MsgMintLockedRepresentationResponse_messageType fastReflection_MsgMintLockedRepresentationResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgMintLockedRepresentationResponse_messageType{}
 
-type fastReflection_MsgMintVestedRepresentationResponse_messageType struct{}
+type fastReflection_MsgMintLockedRepresentationResponse_messageType struct{}
 
-func (x fastReflection_MsgMintVestedRepresentationResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgMintVestedRepresentationResponse)(nil)
+func (x fastReflection_MsgMintLockedRepresentationResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgMintLockedRepresentationResponse)(nil)
 }
-func (x fastReflection_MsgMintVestedRepresentationResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgMintVestedRepresentationResponse)
+func (x fastReflection_MsgMintLockedRepresentationResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgMintLockedRepresentationResponse)
 }
-func (x fastReflection_MsgMintVestedRepresentationResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgMintVestedRepresentationResponse
+func (x fastReflection_MsgMintLockedRepresentationResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgMintLockedRepresentationResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgMintVestedRepresentationResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgMintVestedRepresentationResponse
+func (x *fastReflection_MsgMintLockedRepresentationResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgMintLockedRepresentationResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgMintVestedRepresentationResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgMintVestedRepresentationResponse_messageType
+func (x *fastReflection_MsgMintLockedRepresentationResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgMintLockedRepresentationResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgMintVestedRepresentationResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgMintVestedRepresentationResponse)
+func (x *fastReflection_MsgMintLockedRepresentationResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgMintLockedRepresentationResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgMintVestedRepresentationResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgMintVestedRepresentationResponse)(x)
+func (x *fastReflection_MsgMintLockedRepresentationResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgMintLockedRepresentationResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -712,7 +712,7 @@ func (x *fastReflection_MsgMintVestedRepresentationResponse) Interface() protore
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgMintVestedRepresentationResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgMintLockedRepresentationResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 }
 
 // Has reports whether a field is populated.
@@ -726,13 +726,13 @@ func (x *fastReflection_MsgMintVestedRepresentationResponse) Range(f func(protor
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgMintVestedRepresentationResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgMintLockedRepresentationResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintVestedRepresentationResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintLockedRepresentationResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintVestedRepresentationResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintLockedRepresentationResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -742,13 +742,13 @@ func (x *fastReflection_MsgMintVestedRepresentationResponse) Has(fd protoreflect
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgMintVestedRepresentationResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgMintLockedRepresentationResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintVestedRepresentationResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintLockedRepresentationResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintVestedRepresentationResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintLockedRepresentationResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -758,13 +758,13 @@ func (x *fastReflection_MsgMintVestedRepresentationResponse) Clear(fd protorefle
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgMintVestedRepresentationResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgMintLockedRepresentationResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintVestedRepresentationResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintLockedRepresentationResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintVestedRepresentationResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintLockedRepresentationResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -778,13 +778,13 @@ func (x *fastReflection_MsgMintVestedRepresentationResponse) Get(descriptor prot
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgMintVestedRepresentationResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgMintLockedRepresentationResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintVestedRepresentationResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintLockedRepresentationResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintVestedRepresentationResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintLockedRepresentationResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -798,36 +798,36 @@ func (x *fastReflection_MsgMintVestedRepresentationResponse) Set(fd protoreflect
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgMintVestedRepresentationResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgMintLockedRepresentationResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintVestedRepresentationResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintLockedRepresentationResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintVestedRepresentationResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintLockedRepresentationResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgMintVestedRepresentationResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgMintLockedRepresentationResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintVestedRepresentationResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgMintLockedRepresentationResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintVestedRepresentationResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgMintLockedRepresentationResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgMintVestedRepresentationResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgMintLockedRepresentationResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.liquidvesting.v1.MsgMintVestedRepresentationResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.liquidvesting.v1.MsgMintLockedRepresentationResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -835,7 +835,7 @@ func (x *fastReflection_MsgMintVestedRepresentationResponse) WhichOneof(d protor
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgMintVestedRepresentationResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgMintLockedRepresentationResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -846,7 +846,7 @@ func (x *fastReflection_MsgMintVestedRepresentationResponse) GetUnknown() protor
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgMintVestedRepresentationResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgMintLockedRepresentationResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -858,7 +858,7 @@ func (x *fastReflection_MsgMintVestedRepresentationResponse) SetUnknown(fields p
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgMintVestedRepresentationResponse) IsValid() bool {
+func (x *fastReflection_MsgMintLockedRepresentationResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -868,9 +868,9 @@ func (x *fastReflection_MsgMintVestedRepresentationResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgMintVestedRepresentationResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgMintLockedRepresentationResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgMintVestedRepresentationResponse)
+		x := input.Message.Interface().(*MsgMintLockedRepresentationResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -892,7 +892,7 @@ func (x *fastReflection_MsgMintVestedRepresentationResponse) ProtoMethods() *pro
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgMintVestedRepresentationResponse)
+		x := input.Message.Interface().(*MsgMintLockedRepresentationResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -922,7 +922,7 @@ func (x *fastReflection_MsgMintVestedRepresentationResponse) ProtoMethods() *pro
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgMintVestedRepresentationResponse)
+		x := input.Message.Interface().(*MsgMintLockedRepresentationResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -954,10 +954,10 @@ func (x *fastReflection_MsgMintVestedRepresentationResponse) ProtoMethods() *pro
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgMintVestedRepresentationResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgMintLockedRepresentationResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgMintVestedRepresentationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgMintLockedRepresentationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			default:
@@ -995,81 +995,81 @@ func (x *fastReflection_MsgMintVestedRepresentationResponse) ProtoMethods() *pro
 	}
 }
 
-var _ protoreflect.List = (*_MsgBurnVestedRepresentation_3_list)(nil)
+var _ protoreflect.List = (*_MsgBurnLockedRepresentation_3_list)(nil)
 
-type _MsgBurnVestedRepresentation_3_list struct {
+type _MsgBurnLockedRepresentation_3_list struct {
 	list *[]*v1beta1.Coin
 }
 
-func (x *_MsgBurnVestedRepresentation_3_list) Len() int {
+func (x *_MsgBurnLockedRepresentation_3_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_MsgBurnVestedRepresentation_3_list) Get(i int) protoreflect.Value {
+func (x *_MsgBurnLockedRepresentation_3_list) Get(i int) protoreflect.Value {
 	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
 }
 
-func (x *_MsgBurnVestedRepresentation_3_list) Set(i int, value protoreflect.Value) {
+func (x *_MsgBurnLockedRepresentation_3_list) Set(i int, value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_MsgBurnVestedRepresentation_3_list) Append(value protoreflect.Value) {
+func (x *_MsgBurnLockedRepresentation_3_list) Append(value protoreflect.Value) {
 	valueUnwrapped := value.Message()
 	concreteValue := valueUnwrapped.Interface().(*v1beta1.Coin)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_MsgBurnVestedRepresentation_3_list) AppendMutable() protoreflect.Value {
+func (x *_MsgBurnLockedRepresentation_3_list) AppendMutable() protoreflect.Value {
 	v := new(v1beta1.Coin)
 	*x.list = append(*x.list, v)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_MsgBurnVestedRepresentation_3_list) Truncate(n int) {
+func (x *_MsgBurnLockedRepresentation_3_list) Truncate(n int) {
 	for i := n; i < len(*x.list); i++ {
 		(*x.list)[i] = nil
 	}
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_MsgBurnVestedRepresentation_3_list) NewElement() protoreflect.Value {
+func (x *_MsgBurnLockedRepresentation_3_list) NewElement() protoreflect.Value {
 	v := new(v1beta1.Coin)
 	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_MsgBurnVestedRepresentation_3_list) IsValid() bool {
+func (x *_MsgBurnLockedRepresentation_3_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_MsgBurnVestedRepresentation        protoreflect.MessageDescriptor
-	fd_MsgBurnVestedRepresentation_sender protoreflect.FieldDescriptor
-	fd_MsgBurnVestedRepresentation_user   protoreflect.FieldDescriptor
-	fd_MsgBurnVestedRepresentation_amount protoreflect.FieldDescriptor
+	md_MsgBurnLockedRepresentation        protoreflect.MessageDescriptor
+	fd_MsgBurnLockedRepresentation_sender protoreflect.FieldDescriptor
+	fd_MsgBurnLockedRepresentation_user   protoreflect.FieldDescriptor
+	fd_MsgBurnLockedRepresentation_amount protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_milkyway_liquidvesting_v1_messages_proto_init()
-	md_MsgBurnVestedRepresentation = File_milkyway_liquidvesting_v1_messages_proto.Messages().ByName("MsgBurnVestedRepresentation")
-	fd_MsgBurnVestedRepresentation_sender = md_MsgBurnVestedRepresentation.Fields().ByName("sender")
-	fd_MsgBurnVestedRepresentation_user = md_MsgBurnVestedRepresentation.Fields().ByName("user")
-	fd_MsgBurnVestedRepresentation_amount = md_MsgBurnVestedRepresentation.Fields().ByName("amount")
+	md_MsgBurnLockedRepresentation = File_milkyway_liquidvesting_v1_messages_proto.Messages().ByName("MsgBurnLockedRepresentation")
+	fd_MsgBurnLockedRepresentation_sender = md_MsgBurnLockedRepresentation.Fields().ByName("sender")
+	fd_MsgBurnLockedRepresentation_user = md_MsgBurnLockedRepresentation.Fields().ByName("user")
+	fd_MsgBurnLockedRepresentation_amount = md_MsgBurnLockedRepresentation.Fields().ByName("amount")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgBurnVestedRepresentation)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgBurnLockedRepresentation)(nil)
 
-type fastReflection_MsgBurnVestedRepresentation MsgBurnVestedRepresentation
+type fastReflection_MsgBurnLockedRepresentation MsgBurnLockedRepresentation
 
-func (x *MsgBurnVestedRepresentation) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgBurnVestedRepresentation)(x)
+func (x *MsgBurnLockedRepresentation) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgBurnLockedRepresentation)(x)
 }
 
-func (x *MsgBurnVestedRepresentation) slowProtoReflect() protoreflect.Message {
+func (x *MsgBurnLockedRepresentation) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_liquidvesting_v1_messages_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1081,43 +1081,43 @@ func (x *MsgBurnVestedRepresentation) slowProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgBurnVestedRepresentation_messageType fastReflection_MsgBurnVestedRepresentation_messageType
-var _ protoreflect.MessageType = fastReflection_MsgBurnVestedRepresentation_messageType{}
+var _fastReflection_MsgBurnLockedRepresentation_messageType fastReflection_MsgBurnLockedRepresentation_messageType
+var _ protoreflect.MessageType = fastReflection_MsgBurnLockedRepresentation_messageType{}
 
-type fastReflection_MsgBurnVestedRepresentation_messageType struct{}
+type fastReflection_MsgBurnLockedRepresentation_messageType struct{}
 
-func (x fastReflection_MsgBurnVestedRepresentation_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgBurnVestedRepresentation)(nil)
+func (x fastReflection_MsgBurnLockedRepresentation_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgBurnLockedRepresentation)(nil)
 }
-func (x fastReflection_MsgBurnVestedRepresentation_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgBurnVestedRepresentation)
+func (x fastReflection_MsgBurnLockedRepresentation_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgBurnLockedRepresentation)
 }
-func (x fastReflection_MsgBurnVestedRepresentation_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgBurnVestedRepresentation
+func (x fastReflection_MsgBurnLockedRepresentation_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgBurnLockedRepresentation
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgBurnVestedRepresentation) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgBurnVestedRepresentation
+func (x *fastReflection_MsgBurnLockedRepresentation) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgBurnLockedRepresentation
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgBurnVestedRepresentation) Type() protoreflect.MessageType {
-	return _fastReflection_MsgBurnVestedRepresentation_messageType
+func (x *fastReflection_MsgBurnLockedRepresentation) Type() protoreflect.MessageType {
+	return _fastReflection_MsgBurnLockedRepresentation_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgBurnVestedRepresentation) New() protoreflect.Message {
-	return new(fastReflection_MsgBurnVestedRepresentation)
+func (x *fastReflection_MsgBurnLockedRepresentation) New() protoreflect.Message {
+	return new(fastReflection_MsgBurnLockedRepresentation)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgBurnVestedRepresentation) Interface() protoreflect.ProtoMessage {
-	return (*MsgBurnVestedRepresentation)(x)
+func (x *fastReflection_MsgBurnLockedRepresentation) Interface() protoreflect.ProtoMessage {
+	return (*MsgBurnLockedRepresentation)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -1125,22 +1125,22 @@ func (x *fastReflection_MsgBurnVestedRepresentation) Interface() protoreflect.Pr
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgBurnVestedRepresentation) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgBurnLockedRepresentation) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 	if x.Sender != "" {
 		value := protoreflect.ValueOfString(x.Sender)
-		if !f(fd_MsgBurnVestedRepresentation_sender, value) {
+		if !f(fd_MsgBurnLockedRepresentation_sender, value) {
 			return
 		}
 	}
 	if x.User != "" {
 		value := protoreflect.ValueOfString(x.User)
-		if !f(fd_MsgBurnVestedRepresentation_user, value) {
+		if !f(fd_MsgBurnLockedRepresentation_user, value) {
 			return
 		}
 	}
 	if len(x.Amount) != 0 {
-		value := protoreflect.ValueOfList(&_MsgBurnVestedRepresentation_3_list{list: &x.Amount})
-		if !f(fd_MsgBurnVestedRepresentation_amount, value) {
+		value := protoreflect.ValueOfList(&_MsgBurnLockedRepresentation_3_list{list: &x.Amount})
+		if !f(fd_MsgBurnLockedRepresentation_amount, value) {
 			return
 		}
 	}
@@ -1157,19 +1157,19 @@ func (x *fastReflection_MsgBurnVestedRepresentation) Range(f func(protoreflect.F
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgBurnVestedRepresentation) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgBurnLockedRepresentation) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "milkyway.liquidvesting.v1.MsgBurnVestedRepresentation.sender":
+	case "milkyway.liquidvesting.v1.MsgBurnLockedRepresentation.sender":
 		return x.Sender != ""
-	case "milkyway.liquidvesting.v1.MsgBurnVestedRepresentation.user":
+	case "milkyway.liquidvesting.v1.MsgBurnLockedRepresentation.user":
 		return x.User != ""
-	case "milkyway.liquidvesting.v1.MsgBurnVestedRepresentation.amount":
+	case "milkyway.liquidvesting.v1.MsgBurnLockedRepresentation.amount":
 		return len(x.Amount) != 0
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnVestedRepresentation"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnLockedRepresentation"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnVestedRepresentation does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnLockedRepresentation does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1179,19 +1179,19 @@ func (x *fastReflection_MsgBurnVestedRepresentation) Has(fd protoreflect.FieldDe
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgBurnVestedRepresentation) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgBurnLockedRepresentation) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "milkyway.liquidvesting.v1.MsgBurnVestedRepresentation.sender":
+	case "milkyway.liquidvesting.v1.MsgBurnLockedRepresentation.sender":
 		x.Sender = ""
-	case "milkyway.liquidvesting.v1.MsgBurnVestedRepresentation.user":
+	case "milkyway.liquidvesting.v1.MsgBurnLockedRepresentation.user":
 		x.User = ""
-	case "milkyway.liquidvesting.v1.MsgBurnVestedRepresentation.amount":
+	case "milkyway.liquidvesting.v1.MsgBurnLockedRepresentation.amount":
 		x.Amount = nil
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnVestedRepresentation"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnLockedRepresentation"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnVestedRepresentation does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnLockedRepresentation does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1201,25 +1201,25 @@ func (x *fastReflection_MsgBurnVestedRepresentation) Clear(fd protoreflect.Field
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgBurnVestedRepresentation) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgBurnLockedRepresentation) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "milkyway.liquidvesting.v1.MsgBurnVestedRepresentation.sender":
+	case "milkyway.liquidvesting.v1.MsgBurnLockedRepresentation.sender":
 		value := x.Sender
 		return protoreflect.ValueOfString(value)
-	case "milkyway.liquidvesting.v1.MsgBurnVestedRepresentation.user":
+	case "milkyway.liquidvesting.v1.MsgBurnLockedRepresentation.user":
 		value := x.User
 		return protoreflect.ValueOfString(value)
-	case "milkyway.liquidvesting.v1.MsgBurnVestedRepresentation.amount":
+	case "milkyway.liquidvesting.v1.MsgBurnLockedRepresentation.amount":
 		if len(x.Amount) == 0 {
-			return protoreflect.ValueOfList(&_MsgBurnVestedRepresentation_3_list{})
+			return protoreflect.ValueOfList(&_MsgBurnLockedRepresentation_3_list{})
 		}
-		listValue := &_MsgBurnVestedRepresentation_3_list{list: &x.Amount}
+		listValue := &_MsgBurnLockedRepresentation_3_list{list: &x.Amount}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnVestedRepresentation"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnLockedRepresentation"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnVestedRepresentation does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnLockedRepresentation does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1233,21 +1233,21 @@ func (x *fastReflection_MsgBurnVestedRepresentation) Get(descriptor protoreflect
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgBurnVestedRepresentation) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgBurnLockedRepresentation) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "milkyway.liquidvesting.v1.MsgBurnVestedRepresentation.sender":
+	case "milkyway.liquidvesting.v1.MsgBurnLockedRepresentation.sender":
 		x.Sender = value.Interface().(string)
-	case "milkyway.liquidvesting.v1.MsgBurnVestedRepresentation.user":
+	case "milkyway.liquidvesting.v1.MsgBurnLockedRepresentation.user":
 		x.User = value.Interface().(string)
-	case "milkyway.liquidvesting.v1.MsgBurnVestedRepresentation.amount":
+	case "milkyway.liquidvesting.v1.MsgBurnLockedRepresentation.amount":
 		lv := value.List()
-		clv := lv.(*_MsgBurnVestedRepresentation_3_list)
+		clv := lv.(*_MsgBurnLockedRepresentation_3_list)
 		x.Amount = *clv.list
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnVestedRepresentation"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnLockedRepresentation"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnVestedRepresentation does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnLockedRepresentation does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1261,53 +1261,53 @@ func (x *fastReflection_MsgBurnVestedRepresentation) Set(fd protoreflect.FieldDe
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgBurnVestedRepresentation) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgBurnLockedRepresentation) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.liquidvesting.v1.MsgBurnVestedRepresentation.amount":
+	case "milkyway.liquidvesting.v1.MsgBurnLockedRepresentation.amount":
 		if x.Amount == nil {
 			x.Amount = []*v1beta1.Coin{}
 		}
-		value := &_MsgBurnVestedRepresentation_3_list{list: &x.Amount}
+		value := &_MsgBurnLockedRepresentation_3_list{list: &x.Amount}
 		return protoreflect.ValueOfList(value)
-	case "milkyway.liquidvesting.v1.MsgBurnVestedRepresentation.sender":
-		panic(fmt.Errorf("field sender of message milkyway.liquidvesting.v1.MsgBurnVestedRepresentation is not mutable"))
-	case "milkyway.liquidvesting.v1.MsgBurnVestedRepresentation.user":
-		panic(fmt.Errorf("field user of message milkyway.liquidvesting.v1.MsgBurnVestedRepresentation is not mutable"))
+	case "milkyway.liquidvesting.v1.MsgBurnLockedRepresentation.sender":
+		panic(fmt.Errorf("field sender of message milkyway.liquidvesting.v1.MsgBurnLockedRepresentation is not mutable"))
+	case "milkyway.liquidvesting.v1.MsgBurnLockedRepresentation.user":
+		panic(fmt.Errorf("field user of message milkyway.liquidvesting.v1.MsgBurnLockedRepresentation is not mutable"))
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnVestedRepresentation"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnLockedRepresentation"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnVestedRepresentation does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnLockedRepresentation does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgBurnVestedRepresentation) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgBurnLockedRepresentation) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.liquidvesting.v1.MsgBurnVestedRepresentation.sender":
+	case "milkyway.liquidvesting.v1.MsgBurnLockedRepresentation.sender":
 		return protoreflect.ValueOfString("")
-	case "milkyway.liquidvesting.v1.MsgBurnVestedRepresentation.user":
+	case "milkyway.liquidvesting.v1.MsgBurnLockedRepresentation.user":
 		return protoreflect.ValueOfString("")
-	case "milkyway.liquidvesting.v1.MsgBurnVestedRepresentation.amount":
+	case "milkyway.liquidvesting.v1.MsgBurnLockedRepresentation.amount":
 		list := []*v1beta1.Coin{}
-		return protoreflect.ValueOfList(&_MsgBurnVestedRepresentation_3_list{list: &list})
+		return protoreflect.ValueOfList(&_MsgBurnLockedRepresentation_3_list{list: &list})
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnVestedRepresentation"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnLockedRepresentation"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnVestedRepresentation does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnLockedRepresentation does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgBurnVestedRepresentation) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgBurnLockedRepresentation) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.liquidvesting.v1.MsgBurnVestedRepresentation", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.liquidvesting.v1.MsgBurnLockedRepresentation", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1315,7 +1315,7 @@ func (x *fastReflection_MsgBurnVestedRepresentation) WhichOneof(d protoreflect.O
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgBurnVestedRepresentation) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgBurnLockedRepresentation) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1326,7 +1326,7 @@ func (x *fastReflection_MsgBurnVestedRepresentation) GetUnknown() protoreflect.R
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgBurnVestedRepresentation) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgBurnLockedRepresentation) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1338,7 +1338,7 @@ func (x *fastReflection_MsgBurnVestedRepresentation) SetUnknown(fields protorefl
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgBurnVestedRepresentation) IsValid() bool {
+func (x *fastReflection_MsgBurnLockedRepresentation) IsValid() bool {
 	return x != nil
 }
 
@@ -1348,9 +1348,9 @@ func (x *fastReflection_MsgBurnVestedRepresentation) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgBurnVestedRepresentation) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgBurnLockedRepresentation) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgBurnVestedRepresentation)
+		x := input.Message.Interface().(*MsgBurnLockedRepresentation)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1386,7 +1386,7 @@ func (x *fastReflection_MsgBurnVestedRepresentation) ProtoMethods() *protoiface.
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgBurnVestedRepresentation)
+		x := input.Message.Interface().(*MsgBurnLockedRepresentation)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1446,7 +1446,7 @@ func (x *fastReflection_MsgBurnVestedRepresentation) ProtoMethods() *protoiface.
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgBurnVestedRepresentation)
+		x := input.Message.Interface().(*MsgBurnLockedRepresentation)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1478,10 +1478,10 @@ func (x *fastReflection_MsgBurnVestedRepresentation) ProtoMethods() *protoiface.
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgBurnVestedRepresentation: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgBurnLockedRepresentation: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgBurnVestedRepresentation: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgBurnLockedRepresentation: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			case 1:
@@ -1618,23 +1618,23 @@ func (x *fastReflection_MsgBurnVestedRepresentation) ProtoMethods() *protoiface.
 }
 
 var (
-	md_MsgBurnVestedRepresentationResponse protoreflect.MessageDescriptor
+	md_MsgBurnLockedRepresentationResponse protoreflect.MessageDescriptor
 )
 
 func init() {
 	file_milkyway_liquidvesting_v1_messages_proto_init()
-	md_MsgBurnVestedRepresentationResponse = File_milkyway_liquidvesting_v1_messages_proto.Messages().ByName("MsgBurnVestedRepresentationResponse")
+	md_MsgBurnLockedRepresentationResponse = File_milkyway_liquidvesting_v1_messages_proto.Messages().ByName("MsgBurnLockedRepresentationResponse")
 }
 
-var _ protoreflect.Message = (*fastReflection_MsgBurnVestedRepresentationResponse)(nil)
+var _ protoreflect.Message = (*fastReflection_MsgBurnLockedRepresentationResponse)(nil)
 
-type fastReflection_MsgBurnVestedRepresentationResponse MsgBurnVestedRepresentationResponse
+type fastReflection_MsgBurnLockedRepresentationResponse MsgBurnLockedRepresentationResponse
 
-func (x *MsgBurnVestedRepresentationResponse) ProtoReflect() protoreflect.Message {
-	return (*fastReflection_MsgBurnVestedRepresentationResponse)(x)
+func (x *MsgBurnLockedRepresentationResponse) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_MsgBurnLockedRepresentationResponse)(x)
 }
 
-func (x *MsgBurnVestedRepresentationResponse) slowProtoReflect() protoreflect.Message {
+func (x *MsgBurnLockedRepresentationResponse) slowProtoReflect() protoreflect.Message {
 	mi := &file_milkyway_liquidvesting_v1_messages_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1646,43 +1646,43 @@ func (x *MsgBurnVestedRepresentationResponse) slowProtoReflect() protoreflect.Me
 	return mi.MessageOf(x)
 }
 
-var _fastReflection_MsgBurnVestedRepresentationResponse_messageType fastReflection_MsgBurnVestedRepresentationResponse_messageType
-var _ protoreflect.MessageType = fastReflection_MsgBurnVestedRepresentationResponse_messageType{}
+var _fastReflection_MsgBurnLockedRepresentationResponse_messageType fastReflection_MsgBurnLockedRepresentationResponse_messageType
+var _ protoreflect.MessageType = fastReflection_MsgBurnLockedRepresentationResponse_messageType{}
 
-type fastReflection_MsgBurnVestedRepresentationResponse_messageType struct{}
+type fastReflection_MsgBurnLockedRepresentationResponse_messageType struct{}
 
-func (x fastReflection_MsgBurnVestedRepresentationResponse_messageType) Zero() protoreflect.Message {
-	return (*fastReflection_MsgBurnVestedRepresentationResponse)(nil)
+func (x fastReflection_MsgBurnLockedRepresentationResponse_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_MsgBurnLockedRepresentationResponse)(nil)
 }
-func (x fastReflection_MsgBurnVestedRepresentationResponse_messageType) New() protoreflect.Message {
-	return new(fastReflection_MsgBurnVestedRepresentationResponse)
+func (x fastReflection_MsgBurnLockedRepresentationResponse_messageType) New() protoreflect.Message {
+	return new(fastReflection_MsgBurnLockedRepresentationResponse)
 }
-func (x fastReflection_MsgBurnVestedRepresentationResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgBurnVestedRepresentationResponse
+func (x fastReflection_MsgBurnLockedRepresentationResponse_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgBurnLockedRepresentationResponse
 }
 
 // Descriptor returns message descriptor, which contains only the protobuf
 // type information for the message.
-func (x *fastReflection_MsgBurnVestedRepresentationResponse) Descriptor() protoreflect.MessageDescriptor {
-	return md_MsgBurnVestedRepresentationResponse
+func (x *fastReflection_MsgBurnLockedRepresentationResponse) Descriptor() protoreflect.MessageDescriptor {
+	return md_MsgBurnLockedRepresentationResponse
 }
 
 // Type returns the message type, which encapsulates both Go and protobuf
 // type information. If the Go type information is not needed,
 // it is recommended that the message descriptor be used instead.
-func (x *fastReflection_MsgBurnVestedRepresentationResponse) Type() protoreflect.MessageType {
-	return _fastReflection_MsgBurnVestedRepresentationResponse_messageType
+func (x *fastReflection_MsgBurnLockedRepresentationResponse) Type() protoreflect.MessageType {
+	return _fastReflection_MsgBurnLockedRepresentationResponse_messageType
 }
 
 // New returns a newly allocated and mutable empty message.
-func (x *fastReflection_MsgBurnVestedRepresentationResponse) New() protoreflect.Message {
-	return new(fastReflection_MsgBurnVestedRepresentationResponse)
+func (x *fastReflection_MsgBurnLockedRepresentationResponse) New() protoreflect.Message {
+	return new(fastReflection_MsgBurnLockedRepresentationResponse)
 }
 
 // Interface unwraps the message reflection interface and
 // returns the underlying ProtoMessage interface.
-func (x *fastReflection_MsgBurnVestedRepresentationResponse) Interface() protoreflect.ProtoMessage {
-	return (*MsgBurnVestedRepresentationResponse)(x)
+func (x *fastReflection_MsgBurnLockedRepresentationResponse) Interface() protoreflect.ProtoMessage {
+	return (*MsgBurnLockedRepresentationResponse)(x)
 }
 
 // Range iterates over every populated field in an undefined order,
@@ -1690,7 +1690,7 @@ func (x *fastReflection_MsgBurnVestedRepresentationResponse) Interface() protore
 // Range returns immediately if f returns false.
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
-func (x *fastReflection_MsgBurnVestedRepresentationResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+func (x *fastReflection_MsgBurnLockedRepresentationResponse) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
 }
 
 // Has reports whether a field is populated.
@@ -1704,13 +1704,13 @@ func (x *fastReflection_MsgBurnVestedRepresentationResponse) Range(f func(protor
 // In other cases (aside from the nullable cases above),
 // a proto3 scalar field is populated if it contains a non-zero value, and
 // a repeated field is populated if it is non-empty.
-func (x *fastReflection_MsgBurnVestedRepresentationResponse) Has(fd protoreflect.FieldDescriptor) bool {
+func (x *fastReflection_MsgBurnLockedRepresentationResponse) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnVestedRepresentationResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnLockedRepresentationResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnVestedRepresentationResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnLockedRepresentationResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1720,13 +1720,13 @@ func (x *fastReflection_MsgBurnVestedRepresentationResponse) Has(fd protoreflect
 // associated with the given field number.
 //
 // Clear is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgBurnVestedRepresentationResponse) Clear(fd protoreflect.FieldDescriptor) {
+func (x *fastReflection_MsgBurnLockedRepresentationResponse) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnVestedRepresentationResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnLockedRepresentationResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnVestedRepresentationResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnLockedRepresentationResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1736,13 +1736,13 @@ func (x *fastReflection_MsgBurnVestedRepresentationResponse) Clear(fd protorefle
 // the default value of a bytes scalar is guaranteed to be a copy.
 // For unpopulated composite types, it returns an empty, read-only view
 // of the value; to obtain a mutable reference, use Mutable.
-func (x *fastReflection_MsgBurnVestedRepresentationResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgBurnLockedRepresentationResponse) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
 	default:
 		if descriptor.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnVestedRepresentationResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnLockedRepresentationResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnVestedRepresentationResponse does not contain field %s", descriptor.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnLockedRepresentationResponse does not contain field %s", descriptor.FullName()))
 	}
 }
 
@@ -1756,13 +1756,13 @@ func (x *fastReflection_MsgBurnVestedRepresentationResponse) Get(descriptor prot
 // empty, read-only value, then it panics.
 //
 // Set is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgBurnVestedRepresentationResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+func (x *fastReflection_MsgBurnLockedRepresentationResponse) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnVestedRepresentationResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnLockedRepresentationResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnVestedRepresentationResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnLockedRepresentationResponse does not contain field %s", fd.FullName()))
 	}
 }
 
@@ -1776,36 +1776,36 @@ func (x *fastReflection_MsgBurnVestedRepresentationResponse) Set(fd protoreflect
 // It panics if the field does not contain a composite type.
 //
 // Mutable is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgBurnVestedRepresentationResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgBurnLockedRepresentationResponse) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnVestedRepresentationResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnLockedRepresentationResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnVestedRepresentationResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnLockedRepresentationResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // NewField returns a new value that is assignable to the field
 // for the given descriptor. For scalars, this returns the default value.
 // For lists, maps, and messages, this returns a new, empty, mutable value.
-func (x *fastReflection_MsgBurnVestedRepresentationResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+func (x *fastReflection_MsgBurnLockedRepresentationResponse) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
 	default:
 		if fd.IsExtension() {
-			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnVestedRepresentationResponse"))
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.liquidvesting.v1.MsgBurnLockedRepresentationResponse"))
 		}
-		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnVestedRepresentationResponse does not contain field %s", fd.FullName()))
+		panic(fmt.Errorf("message milkyway.liquidvesting.v1.MsgBurnLockedRepresentationResponse does not contain field %s", fd.FullName()))
 	}
 }
 
 // WhichOneof reports which field within the oneof is populated,
 // returning nil if none are populated.
 // It panics if the oneof descriptor does not belong to this message.
-func (x *fastReflection_MsgBurnVestedRepresentationResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+func (x *fastReflection_MsgBurnLockedRepresentationResponse) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
 	switch d.FullName() {
 	default:
-		panic(fmt.Errorf("%s is not a oneof field in milkyway.liquidvesting.v1.MsgBurnVestedRepresentationResponse", d.FullName()))
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.liquidvesting.v1.MsgBurnLockedRepresentationResponse", d.FullName()))
 	}
 	panic("unreachable")
 }
@@ -1813,7 +1813,7 @@ func (x *fastReflection_MsgBurnVestedRepresentationResponse) WhichOneof(d protor
 // GetUnknown retrieves the entire list of unknown fields.
 // The caller may only mutate the contents of the RawFields
 // if the mutated bytes are stored back into the message with SetUnknown.
-func (x *fastReflection_MsgBurnVestedRepresentationResponse) GetUnknown() protoreflect.RawFields {
+func (x *fastReflection_MsgBurnLockedRepresentationResponse) GetUnknown() protoreflect.RawFields {
 	return x.unknownFields
 }
 
@@ -1824,7 +1824,7 @@ func (x *fastReflection_MsgBurnVestedRepresentationResponse) GetUnknown() protor
 // An empty RawFields may be passed to clear the fields.
 //
 // SetUnknown is a mutating operation and unsafe for concurrent use.
-func (x *fastReflection_MsgBurnVestedRepresentationResponse) SetUnknown(fields protoreflect.RawFields) {
+func (x *fastReflection_MsgBurnLockedRepresentationResponse) SetUnknown(fields protoreflect.RawFields) {
 	x.unknownFields = fields
 }
 
@@ -1836,7 +1836,7 @@ func (x *fastReflection_MsgBurnVestedRepresentationResponse) SetUnknown(fields p
 // message type, but the details are implementation dependent.
 // Validity is not part of the protobuf data model, and may not
 // be preserved in marshaling or other operations.
-func (x *fastReflection_MsgBurnVestedRepresentationResponse) IsValid() bool {
+func (x *fastReflection_MsgBurnLockedRepresentationResponse) IsValid() bool {
 	return x != nil
 }
 
@@ -1846,9 +1846,9 @@ func (x *fastReflection_MsgBurnVestedRepresentationResponse) IsValid() bool {
 // The returned methods type is identical to
 // "google.golang.org/protobuf/runtime/protoiface".Methods.
 // Consult the protoiface package documentation for details.
-func (x *fastReflection_MsgBurnVestedRepresentationResponse) ProtoMethods() *protoiface.Methods {
+func (x *fastReflection_MsgBurnLockedRepresentationResponse) ProtoMethods() *protoiface.Methods {
 	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
-		x := input.Message.Interface().(*MsgBurnVestedRepresentationResponse)
+		x := input.Message.Interface().(*MsgBurnLockedRepresentationResponse)
 		if x == nil {
 			return protoiface.SizeOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1870,7 +1870,7 @@ func (x *fastReflection_MsgBurnVestedRepresentationResponse) ProtoMethods() *pro
 	}
 
 	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
-		x := input.Message.Interface().(*MsgBurnVestedRepresentationResponse)
+		x := input.Message.Interface().(*MsgBurnLockedRepresentationResponse)
 		if x == nil {
 			return protoiface.MarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1900,7 +1900,7 @@ func (x *fastReflection_MsgBurnVestedRepresentationResponse) ProtoMethods() *pro
 		}, nil
 	}
 	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
-		x := input.Message.Interface().(*MsgBurnVestedRepresentationResponse)
+		x := input.Message.Interface().(*MsgBurnLockedRepresentationResponse)
 		if x == nil {
 			return protoiface.UnmarshalOutput{
 				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
@@ -1932,10 +1932,10 @@ func (x *fastReflection_MsgBurnVestedRepresentationResponse) ProtoMethods() *pro
 			fieldNum := int32(wire >> 3)
 			wireType := int(wire & 0x7)
 			if wireType == 4 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgBurnVestedRepresentationResponse: wiretype end group for non-group")
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgBurnLockedRepresentationResponse: wiretype end group for non-group")
 			}
 			if fieldNum <= 0 {
-				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgBurnVestedRepresentationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: MsgBurnLockedRepresentationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
 			default:
@@ -3755,11 +3755,11 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// MsgMintVestedRepresentation defines the message structure for the
-// MintVestedRepresentation gRPC service method. It allows an authorized
-// account to mint a user's staked vested tokens representation that can be
+// MsgMintLockedRepresentation defines the message structure for the
+// MintLockedRepresentation gRPC service method. It allows an authorized
+// account to mint a user's staked locked tokens representation that can be
 // used in the liquid vesting module.
-type MsgMintVestedRepresentation struct {
+type MsgMintLockedRepresentation struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -3772,8 +3772,8 @@ type MsgMintVestedRepresentation struct {
 	Amount []*v1beta1.Coin `protobuf:"bytes,3,rep,name=amount,proto3" json:"amount,omitempty"`
 }
 
-func (x *MsgMintVestedRepresentation) Reset() {
-	*x = MsgMintVestedRepresentation{}
+func (x *MsgMintLockedRepresentation) Reset() {
+	*x = MsgMintLockedRepresentation{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_liquidvesting_v1_messages_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3781,48 +3781,48 @@ func (x *MsgMintVestedRepresentation) Reset() {
 	}
 }
 
-func (x *MsgMintVestedRepresentation) String() string {
+func (x *MsgMintLockedRepresentation) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgMintVestedRepresentation) ProtoMessage() {}
+func (*MsgMintLockedRepresentation) ProtoMessage() {}
 
-// Deprecated: Use MsgMintVestedRepresentation.ProtoReflect.Descriptor instead.
-func (*MsgMintVestedRepresentation) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgMintLockedRepresentation.ProtoReflect.Descriptor instead.
+func (*MsgMintLockedRepresentation) Descriptor() ([]byte, []int) {
 	return file_milkyway_liquidvesting_v1_messages_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *MsgMintVestedRepresentation) GetSender() string {
+func (x *MsgMintLockedRepresentation) GetSender() string {
 	if x != nil {
 		return x.Sender
 	}
 	return ""
 }
 
-func (x *MsgMintVestedRepresentation) GetReceiver() string {
+func (x *MsgMintLockedRepresentation) GetReceiver() string {
 	if x != nil {
 		return x.Receiver
 	}
 	return ""
 }
 
-func (x *MsgMintVestedRepresentation) GetAmount() []*v1beta1.Coin {
+func (x *MsgMintLockedRepresentation) GetAmount() []*v1beta1.Coin {
 	if x != nil {
 		return x.Amount
 	}
 	return nil
 }
 
-// MsgMintVestedRepresentationResponse is the return value of
-// MsgMintVestedRepresentation.
-type MsgMintVestedRepresentationResponse struct {
+// MsgMintLockedRepresentationResponse is the return value of
+// MsgMintLockedRepresentation.
+type MsgMintLockedRepresentationResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *MsgMintVestedRepresentationResponse) Reset() {
-	*x = MsgMintVestedRepresentationResponse{}
+func (x *MsgMintLockedRepresentationResponse) Reset() {
+	*x = MsgMintLockedRepresentationResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_liquidvesting_v1_messages_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3830,21 +3830,21 @@ func (x *MsgMintVestedRepresentationResponse) Reset() {
 	}
 }
 
-func (x *MsgMintVestedRepresentationResponse) String() string {
+func (x *MsgMintLockedRepresentationResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgMintVestedRepresentationResponse) ProtoMessage() {}
+func (*MsgMintLockedRepresentationResponse) ProtoMessage() {}
 
-// Deprecated: Use MsgMintVestedRepresentationResponse.ProtoReflect.Descriptor instead.
-func (*MsgMintVestedRepresentationResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgMintLockedRepresentationResponse.ProtoReflect.Descriptor instead.
+func (*MsgMintLockedRepresentationResponse) Descriptor() ([]byte, []int) {
 	return file_milkyway_liquidvesting_v1_messages_proto_rawDescGZIP(), []int{1}
 }
 
-// MsgBurnVestedRepresentation defines the message structure for the
-// BurnVestedRepresentation gRPC service method. It allows an authorized
-// account to burn a user's staked vested tokens representation.
-type MsgBurnVestedRepresentation struct {
+// MsgBurnLockedRepresentation defines the message structure for the
+// BurnLockedRepresentation gRPC service method. It allows an authorized
+// account to burn a user's staked locked tokens representation.
+type MsgBurnLockedRepresentation struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -3857,8 +3857,8 @@ type MsgBurnVestedRepresentation struct {
 	Amount []*v1beta1.Coin `protobuf:"bytes,3,rep,name=amount,proto3" json:"amount,omitempty"`
 }
 
-func (x *MsgBurnVestedRepresentation) Reset() {
-	*x = MsgBurnVestedRepresentation{}
+func (x *MsgBurnLockedRepresentation) Reset() {
+	*x = MsgBurnLockedRepresentation{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_liquidvesting_v1_messages_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3866,48 +3866,48 @@ func (x *MsgBurnVestedRepresentation) Reset() {
 	}
 }
 
-func (x *MsgBurnVestedRepresentation) String() string {
+func (x *MsgBurnLockedRepresentation) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgBurnVestedRepresentation) ProtoMessage() {}
+func (*MsgBurnLockedRepresentation) ProtoMessage() {}
 
-// Deprecated: Use MsgBurnVestedRepresentation.ProtoReflect.Descriptor instead.
-func (*MsgBurnVestedRepresentation) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgBurnLockedRepresentation.ProtoReflect.Descriptor instead.
+func (*MsgBurnLockedRepresentation) Descriptor() ([]byte, []int) {
 	return file_milkyway_liquidvesting_v1_messages_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *MsgBurnVestedRepresentation) GetSender() string {
+func (x *MsgBurnLockedRepresentation) GetSender() string {
 	if x != nil {
 		return x.Sender
 	}
 	return ""
 }
 
-func (x *MsgBurnVestedRepresentation) GetUser() string {
+func (x *MsgBurnLockedRepresentation) GetUser() string {
 	if x != nil {
 		return x.User
 	}
 	return ""
 }
 
-func (x *MsgBurnVestedRepresentation) GetAmount() []*v1beta1.Coin {
+func (x *MsgBurnLockedRepresentation) GetAmount() []*v1beta1.Coin {
 	if x != nil {
 		return x.Amount
 	}
 	return nil
 }
 
-// MsgBurnVestedRepresentationResponse is the return value of
-// MsgBurnVestedRepresentation.
-type MsgBurnVestedRepresentationResponse struct {
+// MsgBurnLockedRepresentationResponse is the return value of
+// MsgBurnLockedRepresentation.
+type MsgBurnLockedRepresentationResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *MsgBurnVestedRepresentationResponse) Reset() {
-	*x = MsgBurnVestedRepresentationResponse{}
+func (x *MsgBurnLockedRepresentationResponse) Reset() {
+	*x = MsgBurnLockedRepresentationResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_milkyway_liquidvesting_v1_messages_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -3915,14 +3915,14 @@ func (x *MsgBurnVestedRepresentationResponse) Reset() {
 	}
 }
 
-func (x *MsgBurnVestedRepresentationResponse) String() string {
+func (x *MsgBurnLockedRepresentationResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*MsgBurnVestedRepresentationResponse) ProtoMessage() {}
+func (*MsgBurnLockedRepresentationResponse) ProtoMessage() {}
 
-// Deprecated: Use MsgBurnVestedRepresentationResponse.ProtoReflect.Descriptor instead.
-func (*MsgBurnVestedRepresentationResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use MsgBurnLockedRepresentationResponse.ProtoReflect.Descriptor instead.
+func (*MsgBurnLockedRepresentationResponse) Descriptor() ([]byte, []int) {
 	return file_milkyway_liquidvesting_v1_messages_proto_rawDescGZIP(), []int{3}
 }
 
@@ -4094,7 +4094,7 @@ var file_milkyway_liquidvesting_v1_messages_proto_rawDesc = []byte{
 	0x74, 0x6f, 0x1a, 0x26, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x6c, 0x69, 0x71,
 	0x75, 0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x2f, 0x70, 0x61,
 	0x72, 0x61, 0x6d, 0x73, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xb1, 0x02, 0x0a, 0x1b, 0x4d,
-	0x73, 0x67, 0x4d, 0x69, 0x6e, 0x74, 0x56, 0x65, 0x73, 0x74, 0x65, 0x64, 0x52, 0x65, 0x70, 0x72,
+	0x73, 0x67, 0x4d, 0x69, 0x6e, 0x74, 0x4c, 0x6f, 0x63, 0x6b, 0x65, 0x64, 0x52, 0x65, 0x70, 0x72,
 	0x65, 0x73, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x30, 0x0a, 0x06, 0x73, 0x65,
 	0x6e, 0x64, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14,
 	0x63, 0x6f, 0x73, 0x6d, 0x6f, 0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74,
@@ -4111,12 +4111,12 @@ var file_milkyway_liquidvesting_v1_messages_proto_rawDesc = []byte{
 	0xe7, 0xb0, 0x2a, 0x0c, 0x6c, 0x65, 0x67, 0x61, 0x63, 0x79, 0x5f, 0x63, 0x6f, 0x69, 0x6e, 0x73,
 	0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x3a, 0x34, 0x82, 0xe7, 0xb0, 0x2a, 0x06, 0x73,
 	0x65, 0x6e, 0x64, 0x65, 0x72, 0x8a, 0xe7, 0xb0, 0x2a, 0x24, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
-	0x61, 0x79, 0x2f, 0x4d, 0x73, 0x67, 0x4d, 0x69, 0x6e, 0x74, 0x56, 0x65, 0x73, 0x74, 0x65, 0x64,
+	0x61, 0x79, 0x2f, 0x4d, 0x73, 0x67, 0x4d, 0x69, 0x6e, 0x74, 0x4c, 0x6f, 0x63, 0x6b, 0x65, 0x64,
 	0x52, 0x65, 0x70, 0x72, 0x65, 0x73, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x25,
-	0x0a, 0x23, 0x4d, 0x73, 0x67, 0x4d, 0x69, 0x6e, 0x74, 0x56, 0x65, 0x73, 0x74, 0x65, 0x64, 0x52,
+	0x0a, 0x23, 0x4d, 0x73, 0x67, 0x4d, 0x69, 0x6e, 0x74, 0x4c, 0x6f, 0x63, 0x6b, 0x65, 0x64, 0x52,
 	0x65, 0x70, 0x72, 0x65, 0x73, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73,
 	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xa9, 0x02, 0x0a, 0x1b, 0x4d, 0x73, 0x67, 0x42, 0x75, 0x72,
-	0x6e, 0x56, 0x65, 0x73, 0x74, 0x65, 0x64, 0x52, 0x65, 0x70, 0x72, 0x65, 0x73, 0x65, 0x6e, 0x74,
+	0x6e, 0x4c, 0x6f, 0x63, 0x6b, 0x65, 0x64, 0x52, 0x65, 0x70, 0x72, 0x65, 0x73, 0x65, 0x6e, 0x74,
 	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x30, 0x0a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x18,
 	0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x18, 0xd2, 0xb4, 0x2d, 0x14, 0x63, 0x6f, 0x73, 0x6d, 0x6f,
 	0x73, 0x2e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x53, 0x74, 0x72, 0x69, 0x6e, 0x67, 0x52,
@@ -4132,9 +4132,9 @@ var file_milkyway_liquidvesting_v1_messages_proto_rawDesc = []byte{
 	0x6e, 0x73, 0x9a, 0xe7, 0xb0, 0x2a, 0x0c, 0x6c, 0x65, 0x67, 0x61, 0x63, 0x79, 0x5f, 0x63, 0x6f,
 	0x69, 0x6e, 0x73, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x3a, 0x34, 0x82, 0xe7, 0xb0,
 	0x2a, 0x06, 0x73, 0x65, 0x6e, 0x64, 0x65, 0x72, 0x8a, 0xe7, 0xb0, 0x2a, 0x24, 0x6d, 0x69, 0x6c,
-	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x4d, 0x73, 0x67, 0x42, 0x75, 0x72, 0x6e, 0x56, 0x65, 0x73,
-	0x74, 0x65, 0x64, 0x52, 0x65, 0x70, 0x72, 0x65, 0x73, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x22, 0x25, 0x0a, 0x23, 0x4d, 0x73, 0x67, 0x42, 0x75, 0x72, 0x6e, 0x56, 0x65, 0x73, 0x74,
+	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x4d, 0x73, 0x67, 0x42, 0x75, 0x72, 0x6e, 0x4c, 0x6f, 0x63,
+	0x6b, 0x65, 0x64, 0x52, 0x65, 0x70, 0x72, 0x65, 0x73, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x22, 0x25, 0x0a, 0x23, 0x4d, 0x73, 0x67, 0x42, 0x75, 0x72, 0x6e, 0x4c, 0x6f, 0x63, 0x6b,
 	0x65, 0x64, 0x52, 0x65, 0x70, 0x72, 0x65, 0x73, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e,
 	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xf5, 0x01, 0x0a, 0x18, 0x4d, 0x73, 0x67,
 	0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x49, 0x6e, 0x73, 0x75, 0x72, 0x61, 0x6e, 0x63,
@@ -4170,24 +4170,24 @@ var file_milkyway_liquidvesting_v1_messages_proto_rawDesc = []byte{
 	0x2f, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d, 0x73,
 	0x22, 0x19, 0x0a, 0x17, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72,
 	0x61, 0x6d, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0xb2, 0x04, 0x0a, 0x03,
-	0x4d, 0x73, 0x67, 0x12, 0x92, 0x01, 0x0a, 0x18, 0x4d, 0x69, 0x6e, 0x74, 0x56, 0x65, 0x73, 0x74,
+	0x4d, 0x73, 0x67, 0x12, 0x92, 0x01, 0x0a, 0x18, 0x4d, 0x69, 0x6e, 0x74, 0x4c, 0x6f, 0x63, 0x6b,
 	0x65, 0x64, 0x52, 0x65, 0x70, 0x72, 0x65, 0x73, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e,
 	0x12, 0x36, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x6c, 0x69, 0x71, 0x75,
 	0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67,
-	0x4d, 0x69, 0x6e, 0x74, 0x56, 0x65, 0x73, 0x74, 0x65, 0x64, 0x52, 0x65, 0x70, 0x72, 0x65, 0x73,
+	0x4d, 0x69, 0x6e, 0x74, 0x4c, 0x6f, 0x63, 0x6b, 0x65, 0x64, 0x52, 0x65, 0x70, 0x72, 0x65, 0x73,
 	0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x1a, 0x3e, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
 	0x77, 0x61, 0x79, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69, 0x6e,
-	0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4d, 0x69, 0x6e, 0x74, 0x56, 0x65, 0x73, 0x74,
+	0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x4d, 0x69, 0x6e, 0x74, 0x4c, 0x6f, 0x63, 0x6b,
 	0x65, 0x64, 0x52, 0x65, 0x70, 0x72, 0x65, 0x73, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e,
 	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x92, 0x01, 0x0a, 0x18, 0x42, 0x75, 0x72,
-	0x6e, 0x56, 0x65, 0x73, 0x74, 0x65, 0x64, 0x52, 0x65, 0x70, 0x72, 0x65, 0x73, 0x65, 0x6e, 0x74,
+	0x6e, 0x4c, 0x6f, 0x63, 0x6b, 0x65, 0x64, 0x52, 0x65, 0x70, 0x72, 0x65, 0x73, 0x65, 0x6e, 0x74,
 	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x36, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
 	0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x2e, 0x76,
-	0x31, 0x2e, 0x4d, 0x73, 0x67, 0x42, 0x75, 0x72, 0x6e, 0x56, 0x65, 0x73, 0x74, 0x65, 0x64, 0x52,
+	0x31, 0x2e, 0x4d, 0x73, 0x67, 0x42, 0x75, 0x72, 0x6e, 0x4c, 0x6f, 0x63, 0x6b, 0x65, 0x64, 0x52,
 	0x65, 0x70, 0x72, 0x65, 0x73, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x1a, 0x3e, 0x2e,
 	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76,
 	0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x73, 0x67, 0x42, 0x75, 0x72,
-	0x6e, 0x56, 0x65, 0x73, 0x74, 0x65, 0x64, 0x52, 0x65, 0x70, 0x72, 0x65, 0x73, 0x65, 0x6e, 0x74,
+	0x6e, 0x4c, 0x6f, 0x63, 0x6b, 0x65, 0x64, 0x52, 0x65, 0x70, 0x72, 0x65, 0x73, 0x65, 0x6e, 0x74,
 	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x89, 0x01,
 	0x0a, 0x15, 0x57, 0x69, 0x74, 0x68, 0x64, 0x72, 0x61, 0x77, 0x49, 0x6e, 0x73, 0x75, 0x72, 0x61,
 	0x6e, 0x63, 0x65, 0x46, 0x75, 0x6e, 0x64, 0x12, 0x33, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
@@ -4205,23 +4205,24 @@ var file_milkyway_liquidvesting_v1_messages_proto_rawDesc = []byte{
 	0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x2e, 0x76,
 	0x31, 0x2e, 0x4d, 0x73, 0x67, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x61, 0x72, 0x61, 0x6d,
 	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x1a, 0x05, 0x80, 0xe7, 0xb0, 0x2a, 0x01,
-	0x42, 0x85, 0x02, 0x0a, 0x1d, 0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
+	0x42, 0x88, 0x02, 0x0a, 0x1d, 0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
 	0x79, 0x2e, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x2e,
 	0x76, 0x31, 0x42, 0x0d, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x73, 0x50, 0x72, 0x6f, 0x74,
-	0x6f, 0x50, 0x01, 0x5a, 0x4f, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
+	0x6f, 0x50, 0x01, 0x5a, 0x52, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
 	0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x6d, 0x69,
-	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
-	0x77, 0x61, 0x79, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69, 0x6e,
-	0x67, 0x2f, 0x76, 0x31, 0x3b, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69,
-	0x6e, 0x67, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x4d, 0x4c, 0x58, 0xaa, 0x02, 0x19, 0x4d, 0x69, 0x6c,
-	0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73, 0x74,
-	0x69, 0x6e, 0x67, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x19, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
-	0x79, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x5c,
-	0x56, 0x31, 0xe2, 0x02, 0x25, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x4c, 0x69,
-	0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0x5c, 0x47,
-	0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x1b, 0x4d, 0x69, 0x6c,
-	0x6b, 0x79, 0x77, 0x61, 0x79, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73,
-	0x74, 0x69, 0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x76, 0x32, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x6d, 0x69,
+	0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73,
+	0x74, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x3b, 0x6c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65,
+	0x73, 0x74, 0x69, 0x6e, 0x67, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x4d, 0x4c, 0x58, 0xaa, 0x02, 0x19,
+	0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76,
+	0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x19, 0x4d, 0x69, 0x6c, 0x6b,
+	0x79, 0x77, 0x61, 0x79, 0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69,
+	0x6e, 0x67, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x25, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
+	0x5c, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64, 0x76, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x5c, 0x56,
+	0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x1b,
+	0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x3a, 0x3a, 0x4c, 0x69, 0x71, 0x75, 0x69, 0x64,
+	0x76, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x33,
 }
 
 var (
@@ -4238,10 +4239,10 @@ func file_milkyway_liquidvesting_v1_messages_proto_rawDescGZIP() []byte {
 
 var file_milkyway_liquidvesting_v1_messages_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_milkyway_liquidvesting_v1_messages_proto_goTypes = []interface{}{
-	(*MsgMintVestedRepresentation)(nil),         // 0: milkyway.liquidvesting.v1.MsgMintVestedRepresentation
-	(*MsgMintVestedRepresentationResponse)(nil), // 1: milkyway.liquidvesting.v1.MsgMintVestedRepresentationResponse
-	(*MsgBurnVestedRepresentation)(nil),         // 2: milkyway.liquidvesting.v1.MsgBurnVestedRepresentation
-	(*MsgBurnVestedRepresentationResponse)(nil), // 3: milkyway.liquidvesting.v1.MsgBurnVestedRepresentationResponse
+	(*MsgMintLockedRepresentation)(nil),         // 0: milkyway.liquidvesting.v1.MsgMintLockedRepresentation
+	(*MsgMintLockedRepresentationResponse)(nil), // 1: milkyway.liquidvesting.v1.MsgMintLockedRepresentationResponse
+	(*MsgBurnLockedRepresentation)(nil),         // 2: milkyway.liquidvesting.v1.MsgBurnLockedRepresentation
+	(*MsgBurnLockedRepresentationResponse)(nil), // 3: milkyway.liquidvesting.v1.MsgBurnLockedRepresentationResponse
 	(*MsgWithdrawInsuranceFund)(nil),            // 4: milkyway.liquidvesting.v1.MsgWithdrawInsuranceFund
 	(*MsgWithdrawInsuranceFundResponse)(nil),    // 5: milkyway.liquidvesting.v1.MsgWithdrawInsuranceFundResponse
 	(*MsgUpdateParams)(nil),                     // 6: milkyway.liquidvesting.v1.MsgUpdateParams
@@ -4250,16 +4251,16 @@ var file_milkyway_liquidvesting_v1_messages_proto_goTypes = []interface{}{
 	(*Params)(nil),                              // 9: milkyway.liquidvesting.v1.Params
 }
 var file_milkyway_liquidvesting_v1_messages_proto_depIdxs = []int32{
-	8, // 0: milkyway.liquidvesting.v1.MsgMintVestedRepresentation.amount:type_name -> cosmos.base.v1beta1.Coin
-	8, // 1: milkyway.liquidvesting.v1.MsgBurnVestedRepresentation.amount:type_name -> cosmos.base.v1beta1.Coin
+	8, // 0: milkyway.liquidvesting.v1.MsgMintLockedRepresentation.amount:type_name -> cosmos.base.v1beta1.Coin
+	8, // 1: milkyway.liquidvesting.v1.MsgBurnLockedRepresentation.amount:type_name -> cosmos.base.v1beta1.Coin
 	8, // 2: milkyway.liquidvesting.v1.MsgWithdrawInsuranceFund.amount:type_name -> cosmos.base.v1beta1.Coin
 	9, // 3: milkyway.liquidvesting.v1.MsgUpdateParams.params:type_name -> milkyway.liquidvesting.v1.Params
-	0, // 4: milkyway.liquidvesting.v1.Msg.MintVestedRepresentation:input_type -> milkyway.liquidvesting.v1.MsgMintVestedRepresentation
-	2, // 5: milkyway.liquidvesting.v1.Msg.BurnVestedRepresentation:input_type -> milkyway.liquidvesting.v1.MsgBurnVestedRepresentation
+	0, // 4: milkyway.liquidvesting.v1.Msg.MintLockedRepresentation:input_type -> milkyway.liquidvesting.v1.MsgMintLockedRepresentation
+	2, // 5: milkyway.liquidvesting.v1.Msg.BurnLockedRepresentation:input_type -> milkyway.liquidvesting.v1.MsgBurnLockedRepresentation
 	4, // 6: milkyway.liquidvesting.v1.Msg.WithdrawInsuranceFund:input_type -> milkyway.liquidvesting.v1.MsgWithdrawInsuranceFund
 	6, // 7: milkyway.liquidvesting.v1.Msg.UpdateParams:input_type -> milkyway.liquidvesting.v1.MsgUpdateParams
-	1, // 8: milkyway.liquidvesting.v1.Msg.MintVestedRepresentation:output_type -> milkyway.liquidvesting.v1.MsgMintVestedRepresentationResponse
-	3, // 9: milkyway.liquidvesting.v1.Msg.BurnVestedRepresentation:output_type -> milkyway.liquidvesting.v1.MsgBurnVestedRepresentationResponse
+	1, // 8: milkyway.liquidvesting.v1.Msg.MintLockedRepresentation:output_type -> milkyway.liquidvesting.v1.MsgMintLockedRepresentationResponse
+	3, // 9: milkyway.liquidvesting.v1.Msg.BurnLockedRepresentation:output_type -> milkyway.liquidvesting.v1.MsgBurnLockedRepresentationResponse
 	5, // 10: milkyway.liquidvesting.v1.Msg.WithdrawInsuranceFund:output_type -> milkyway.liquidvesting.v1.MsgWithdrawInsuranceFundResponse
 	7, // 11: milkyway.liquidvesting.v1.Msg.UpdateParams:output_type -> milkyway.liquidvesting.v1.MsgUpdateParamsResponse
 	8, // [8:12] is the sub-list for method output_type
@@ -4277,7 +4278,7 @@ func file_milkyway_liquidvesting_v1_messages_proto_init() {
 	file_milkyway_liquidvesting_v1_params_proto_init()
 	if !protoimpl.UnsafeEnabled {
 		file_milkyway_liquidvesting_v1_messages_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgMintVestedRepresentation); i {
+			switch v := v.(*MsgMintLockedRepresentation); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4289,7 +4290,7 @@ func file_milkyway_liquidvesting_v1_messages_proto_init() {
 			}
 		}
 		file_milkyway_liquidvesting_v1_messages_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgMintVestedRepresentationResponse); i {
+			switch v := v.(*MsgMintLockedRepresentationResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4301,7 +4302,7 @@ func file_milkyway_liquidvesting_v1_messages_proto_init() {
 			}
 		}
 		file_milkyway_liquidvesting_v1_messages_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgBurnVestedRepresentation); i {
+			switch v := v.(*MsgBurnLockedRepresentation); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -4313,7 +4314,7 @@ func file_milkyway_liquidvesting_v1_messages_proto_init() {
 			}
 		}
 		file_milkyway_liquidvesting_v1_messages_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*MsgBurnVestedRepresentationResponse); i {
+			switch v := v.(*MsgBurnLockedRepresentationResponse); i {
 			case 0:
 				return &v.state
 			case 1:

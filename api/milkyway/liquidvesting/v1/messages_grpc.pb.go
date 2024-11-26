@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Msg_MintVestedRepresentation_FullMethodName = "/milkyway.liquidvesting.v1.Msg/MintVestedRepresentation"
-	Msg_BurnVestedRepresentation_FullMethodName = "/milkyway.liquidvesting.v1.Msg/BurnVestedRepresentation"
+	Msg_MintLockedRepresentation_FullMethodName = "/milkyway.liquidvesting.v1.Msg/MintLockedRepresentation"
+	Msg_BurnLockedRepresentation_FullMethodName = "/milkyway.liquidvesting.v1.Msg/BurnLockedRepresentation"
 	Msg_WithdrawInsuranceFund_FullMethodName    = "/milkyway.liquidvesting.v1.Msg/WithdrawInsuranceFund"
 	Msg_UpdateParams_FullMethodName             = "/milkyway.liquidvesting.v1.Msg/UpdateParams"
 )
@@ -31,12 +31,12 @@ const (
 //
 // Msg defines the services module's gRPC message service.
 type MsgClient interface {
-	// MintVestedRepresentation defines the operation to mint a user's staked
-	// vested tokens representation that can be used in the liquid vesting module.
-	MintVestedRepresentation(ctx context.Context, in *MsgMintVestedRepresentation, opts ...grpc.CallOption) (*MsgMintVestedRepresentationResponse, error)
-	// BurnVestedRepresentation defines the operation to burn a user's staked
-	// vested tokens representation.
-	BurnVestedRepresentation(ctx context.Context, in *MsgBurnVestedRepresentation, opts ...grpc.CallOption) (*MsgBurnVestedRepresentationResponse, error)
+	// MintLockedRepresentation defines the operation to mint a user's staked
+	// locked tokens representation that can be used in the liquid vesting module.
+	MintLockedRepresentation(ctx context.Context, in *MsgMintLockedRepresentation, opts ...grpc.CallOption) (*MsgMintLockedRepresentationResponse, error)
+	// BurnLockedRepresentation defines the operation to burn a user's staked
+	// locked tokens representation.
+	BurnLockedRepresentation(ctx context.Context, in *MsgBurnLockedRepresentation, opts ...grpc.CallOption) (*MsgBurnLockedRepresentationResponse, error)
 	// WithdrawInsuranceFund defines the operation to withdraw an amount
 	// of tokens from the user's insurance fund.
 	// This can be used from the user to withdraw their funds after
@@ -58,20 +58,20 @@ func NewMsgClient(cc grpc.ClientConnInterface) MsgClient {
 	return &msgClient{cc}
 }
 
-func (c *msgClient) MintVestedRepresentation(ctx context.Context, in *MsgMintVestedRepresentation, opts ...grpc.CallOption) (*MsgMintVestedRepresentationResponse, error) {
+func (c *msgClient) MintLockedRepresentation(ctx context.Context, in *MsgMintLockedRepresentation, opts ...grpc.CallOption) (*MsgMintLockedRepresentationResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(MsgMintVestedRepresentationResponse)
-	err := c.cc.Invoke(ctx, Msg_MintVestedRepresentation_FullMethodName, in, out, cOpts...)
+	out := new(MsgMintLockedRepresentationResponse)
+	err := c.cc.Invoke(ctx, Msg_MintLockedRepresentation_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *msgClient) BurnVestedRepresentation(ctx context.Context, in *MsgBurnVestedRepresentation, opts ...grpc.CallOption) (*MsgBurnVestedRepresentationResponse, error) {
+func (c *msgClient) BurnLockedRepresentation(ctx context.Context, in *MsgBurnLockedRepresentation, opts ...grpc.CallOption) (*MsgBurnLockedRepresentationResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(MsgBurnVestedRepresentationResponse)
-	err := c.cc.Invoke(ctx, Msg_BurnVestedRepresentation_FullMethodName, in, out, cOpts...)
+	out := new(MsgBurnLockedRepresentationResponse)
+	err := c.cc.Invoke(ctx, Msg_BurnLockedRepresentation_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -104,12 +104,12 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 //
 // Msg defines the services module's gRPC message service.
 type MsgServer interface {
-	// MintVestedRepresentation defines the operation to mint a user's staked
-	// vested tokens representation that can be used in the liquid vesting module.
-	MintVestedRepresentation(context.Context, *MsgMintVestedRepresentation) (*MsgMintVestedRepresentationResponse, error)
-	// BurnVestedRepresentation defines the operation to burn a user's staked
-	// vested tokens representation.
-	BurnVestedRepresentation(context.Context, *MsgBurnVestedRepresentation) (*MsgBurnVestedRepresentationResponse, error)
+	// MintLockedRepresentation defines the operation to mint a user's staked
+	// locked tokens representation that can be used in the liquid vesting module.
+	MintLockedRepresentation(context.Context, *MsgMintLockedRepresentation) (*MsgMintLockedRepresentationResponse, error)
+	// BurnLockedRepresentation defines the operation to burn a user's staked
+	// locked tokens representation.
+	BurnLockedRepresentation(context.Context, *MsgBurnLockedRepresentation) (*MsgBurnLockedRepresentationResponse, error)
 	// WithdrawInsuranceFund defines the operation to withdraw an amount
 	// of tokens from the user's insurance fund.
 	// This can be used from the user to withdraw their funds after
@@ -131,11 +131,11 @@ type MsgServer interface {
 // pointer dereference when methods are called.
 type UnimplementedMsgServer struct{}
 
-func (UnimplementedMsgServer) MintVestedRepresentation(context.Context, *MsgMintVestedRepresentation) (*MsgMintVestedRepresentationResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MintVestedRepresentation not implemented")
+func (UnimplementedMsgServer) MintLockedRepresentation(context.Context, *MsgMintLockedRepresentation) (*MsgMintLockedRepresentationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MintLockedRepresentation not implemented")
 }
-func (UnimplementedMsgServer) BurnVestedRepresentation(context.Context, *MsgBurnVestedRepresentation) (*MsgBurnVestedRepresentationResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BurnVestedRepresentation not implemented")
+func (UnimplementedMsgServer) BurnLockedRepresentation(context.Context, *MsgBurnLockedRepresentation) (*MsgBurnLockedRepresentationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BurnLockedRepresentation not implemented")
 }
 func (UnimplementedMsgServer) WithdrawInsuranceFund(context.Context, *MsgWithdrawInsuranceFund) (*MsgWithdrawInsuranceFundResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WithdrawInsuranceFund not implemented")
@@ -164,38 +164,38 @@ func RegisterMsgServer(s grpc.ServiceRegistrar, srv MsgServer) {
 	s.RegisterService(&Msg_ServiceDesc, srv)
 }
 
-func _Msg_MintVestedRepresentation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgMintVestedRepresentation)
+func _Msg_MintLockedRepresentation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgMintLockedRepresentation)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).MintVestedRepresentation(ctx, in)
+		return srv.(MsgServer).MintLockedRepresentation(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_MintVestedRepresentation_FullMethodName,
+		FullMethod: Msg_MintLockedRepresentation_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).MintVestedRepresentation(ctx, req.(*MsgMintVestedRepresentation))
+		return srv.(MsgServer).MintLockedRepresentation(ctx, req.(*MsgMintLockedRepresentation))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_BurnVestedRepresentation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgBurnVestedRepresentation)
+func _Msg_BurnLockedRepresentation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgBurnLockedRepresentation)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).BurnVestedRepresentation(ctx, in)
+		return srv.(MsgServer).BurnLockedRepresentation(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Msg_BurnVestedRepresentation_FullMethodName,
+		FullMethod: Msg_BurnLockedRepresentation_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).BurnVestedRepresentation(ctx, req.(*MsgBurnVestedRepresentation))
+		return srv.(MsgServer).BurnLockedRepresentation(ctx, req.(*MsgBurnLockedRepresentation))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -244,12 +244,12 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*MsgServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "MintVestedRepresentation",
-			Handler:    _Msg_MintVestedRepresentation_Handler,
+			MethodName: "MintLockedRepresentation",
+			Handler:    _Msg_MintLockedRepresentation_Handler,
 		},
 		{
-			MethodName: "BurnVestedRepresentation",
-			Handler:    _Msg_BurnVestedRepresentation_Handler,
+			MethodName: "BurnLockedRepresentation",
+			Handler:    _Msg_BurnLockedRepresentation_Handler,
 		},
 		{
 			MethodName: "WithdrawInsuranceFund",
