@@ -3,7 +3,7 @@ package keeper
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v2/x/pools/types"
 )
 
 // ExportGenesis returns a new GenesisState instance containing the information currently present inside the store

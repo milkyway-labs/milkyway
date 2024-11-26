@@ -12,7 +12,7 @@ import (
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	milkywayerrors "github.com/milkyway-labs/milkyway/types/errors"
+	milkywayerrors "github.com/milkyway-labs/milkyway/v2/types/errors"
 )
 
 var (

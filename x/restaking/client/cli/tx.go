@@ -10,11 +10,11 @@ import (
 	"github.com/cosmos/cosmos-sdk/version"
 	"github.com/spf13/cobra"
 
-	"github.com/milkyway-labs/milkyway/utils"
-	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
-	"github.com/milkyway-labs/milkyway/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
+	"github.com/milkyway-labs/milkyway/v2/utils"
+	operatorstypes "github.com/milkyway-labs/milkyway/v2/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v2/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v2/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v2/x/services/types"
 )
 
 // GetTxCmd returns a new command to perform restaking transactions

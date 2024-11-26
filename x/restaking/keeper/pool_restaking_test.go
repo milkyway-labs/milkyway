@@ -4,8 +4,8 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
-	"github.com/milkyway-labs/milkyway/x/restaking/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v2/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v2/x/restaking/types"
 )
 
 func (suite *KeeperTestSuite) TestKeeper_SavePoolDelegation() {

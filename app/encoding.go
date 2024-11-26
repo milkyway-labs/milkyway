@@ -4,8 +4,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/std"
 
-	"github.com/milkyway-labs/milkyway/app/keepers"
-	"github.com/milkyway-labs/milkyway/app/params"
+	"github.com/milkyway-labs/milkyway/v2/app/keepers"
+	"github.com/milkyway-labs/milkyway/v2/app/params"
 )
 
 // MakeEncodingConfig creates an EncodingConfig.

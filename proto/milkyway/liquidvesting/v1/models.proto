@@ -7,7 +7,7 @@ import "google/protobuf/timestamp.proto";
 import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/x/liquidvesting/types";
+option go_package = "github.com/milkyway-labs/milkyway/v2/x/liquidvesting/types";
 
 // UserInsuranceFund defines a user's insurance fund.
 message UserInsuranceFund {

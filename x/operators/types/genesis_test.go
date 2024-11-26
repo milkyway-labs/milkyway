@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/x/operators/types"
+	"github.com/milkyway-labs/milkyway/v2/x/operators/types"
 )
 
 func TestGenesisState_Validate(t *testing.T) {

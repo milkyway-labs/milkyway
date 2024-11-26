@@ -9,7 +9,7 @@ import (
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 
-	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
+	"github.com/milkyway-labs/milkyway/v2/x/liquidvesting/types"
 )
 
 // OnRecvPacket processes the packet received from the IBC handler

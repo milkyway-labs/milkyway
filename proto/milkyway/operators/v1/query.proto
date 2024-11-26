@@ -7,7 +7,7 @@ import "cosmos/base/query/v1beta1/pagination.proto";
 import "milkyway/operators/v1/models.proto";
 import "milkyway/operators/v1/params.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/x/operators/types";
+option go_package = "github.com/milkyway-labs/milkyway/v2/x/operators/types";
 
 // Query defines the gRPC querier service.
 service Query {

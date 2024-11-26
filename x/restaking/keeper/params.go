@@ -5,7 +5,7 @@ import (
 	"slices"
 	"time"
 
-	"github.com/milkyway-labs/milkyway/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v2/x/restaking/types"
 )
 
 // UnbondingTime returns the unbonding time.

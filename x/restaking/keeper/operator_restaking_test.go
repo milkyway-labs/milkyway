@@ -4,8 +4,8 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
-	"github.com/milkyway-labs/milkyway/x/restaking/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v2/x/operators/types"
+	"github.com/milkyway-labs/milkyway/v2/x/restaking/types"
 )
 
 func (suite *KeeperTestSuite) TestKeeper_SaveOperatorDelegation() {

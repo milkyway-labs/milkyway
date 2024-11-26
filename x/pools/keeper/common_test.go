@@ -14,10 +14,10 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
-	milkyway "github.com/milkyway-labs/milkyway/app"
-	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
-	"github.com/milkyway-labs/milkyway/x/pools/keeper"
-	"github.com/milkyway-labs/milkyway/x/pools/types"
+	milkyway "github.com/milkyway-labs/milkyway/v2/app"
+	bankkeeper "github.com/milkyway-labs/milkyway/v2/x/bank/keeper"
+	"github.com/milkyway-labs/milkyway/v2/x/pools/keeper"
+	"github.com/milkyway-labs/milkyway/v2/x/pools/types"
 
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 

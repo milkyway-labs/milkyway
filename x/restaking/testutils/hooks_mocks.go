@@ -3,7 +3,7 @@ package testutils
 import (
 	"context"
 
-	"github.com/milkyway-labs/milkyway/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v2/x/restaking/types"
 )
 
 var _ types.RestakingHooks = &MockHooks{}

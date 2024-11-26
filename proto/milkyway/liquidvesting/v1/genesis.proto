@@ -6,7 +6,7 @@ import "google/protobuf/timestamp.proto";
 import "milkyway/liquidvesting/v1/params.proto";
 import "milkyway/liquidvesting/v1/models.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/x/liquidvesting/types";
+option go_package = "github.com/milkyway-labs/milkyway/v2/x/liquidvesting/types";
 
 // GenesisState defines the liquidvesting module's genesis state.
 message GenesisState {

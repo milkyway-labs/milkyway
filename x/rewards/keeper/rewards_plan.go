@@ -9,8 +9,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/milkyway-labs/milkyway/x/rewards/types"
-	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
+	"github.com/milkyway-labs/milkyway/v2/x/rewards/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v2/x/services/types"
 )
 
 func (k *Keeper) CreateRewardsPlan(

@@ -10,7 +10,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 
-	"github.com/milkyway-labs/milkyway/x/operators/types"
+	"github.com/milkyway-labs/milkyway/v2/x/operators/types"
 )
 
 const (

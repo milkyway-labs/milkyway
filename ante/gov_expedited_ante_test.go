@@ -14,8 +14,8 @@ import (
 	govv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	govv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 
-	"github.com/milkyway-labs/milkyway/ante"
-	"github.com/milkyway-labs/milkyway/app/helpers"
+	"github.com/milkyway-labs/milkyway/v2/ante"
+	"github.com/milkyway-labs/milkyway/v2/app/helpers"
 )
 
 func TestGovExpeditedProposalsDecorator(t *testing.T) {

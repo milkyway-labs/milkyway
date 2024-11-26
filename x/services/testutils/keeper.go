@@ -14,13 +14,13 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"go.uber.org/mock/gomock"
 
-	milkyway "github.com/milkyway-labs/milkyway/app"
-	"github.com/milkyway-labs/milkyway/testutils/storetesting"
-	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
-	poolskeeper "github.com/milkyway-labs/milkyway/x/pools/keeper"
-	poolstypes "github.com/milkyway-labs/milkyway/x/pools/types"
-	"github.com/milkyway-labs/milkyway/x/services/keeper"
-	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
+	milkyway "github.com/milkyway-labs/milkyway/v2/app"
+	"github.com/milkyway-labs/milkyway/v2/testutils/storetesting"
+	bankkeeper "github.com/milkyway-labs/milkyway/v2/x/bank/keeper"
+	poolskeeper "github.com/milkyway-labs/milkyway/v2/x/pools/keeper"
+	poolstypes "github.com/milkyway-labs/milkyway/v2/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v2/x/services/keeper"
+	servicestypes "github.com/milkyway-labs/milkyway/v2/x/services/types"
 )
 
 type KeeperTestData struct {

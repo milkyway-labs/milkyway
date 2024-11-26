@@ -10,12 +10,12 @@ import (
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	"github.com/stretchr/testify/suite"
 
-	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
-	operatorskeeper "github.com/milkyway-labs/milkyway/x/operators/keeper"
-	poolskeeper "github.com/milkyway-labs/milkyway/x/pools/keeper"
-	"github.com/milkyway-labs/milkyway/x/restaking/keeper"
-	"github.com/milkyway-labs/milkyway/x/restaking/testutils"
-	serviceskeeper "github.com/milkyway-labs/milkyway/x/services/keeper"
+	bankkeeper "github.com/milkyway-labs/milkyway/v2/x/bank/keeper"
+	operatorskeeper "github.com/milkyway-labs/milkyway/v2/x/operators/keeper"
+	poolskeeper "github.com/milkyway-labs/milkyway/v2/x/pools/keeper"
+	"github.com/milkyway-labs/milkyway/v2/x/restaking/keeper"
+	"github.com/milkyway-labs/milkyway/v2/x/restaking/testutils"
+	serviceskeeper "github.com/milkyway-labs/milkyway/v2/x/services/keeper"
 )
 
 func TestKeeperTestSuite(t *testing.T) {

@@ -1,4 +1,4 @@
-module github.com/milkyway-labs/milkyway
+module github.com/milkyway-labs/milkyway/v2
 
 go 1.23
 
@@ -409,6 +409,3 @@ exclude (
 	github.com/coinbase/rosetta-sdk-go v0.7.9
 	github.com/gogo/protobuf v1.3.3
 )
-
-// We have two different versions with the same tag
-retract v1.0.0-rc5

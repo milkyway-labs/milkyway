@@ -3,8 +3,8 @@ package keeper
 import (
 	"context"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v2/x/operators/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v2/x/restaking/types"
 )
 
 var _ operatorstypes.OperatorsHooks = OperatorsHooks{}

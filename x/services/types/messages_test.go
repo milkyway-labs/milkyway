@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/x/services/types"
+	"github.com/milkyway-labs/milkyway/v2/x/services/types"
 )
 
 var msgCreateService = types.NewMsgCreateService(

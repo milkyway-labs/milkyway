@@ -7,7 +7,7 @@ import (
 	transfertypes "github.com/cosmos/ibc-go/v8/modules/apps/transfer/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/utils"
+	"github.com/milkyway-labs/milkyway/v2/utils"
 )
 
 func Test_DeserializeFungibleTokenPacketData(t *testing.T) {

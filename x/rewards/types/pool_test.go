@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/milkyway-labs/milkyway/x/rewards/types"
+	"github.com/milkyway-labs/milkyway/v2/x/rewards/types"
 )
 
 var (

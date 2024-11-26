@@ -64,12 +64,12 @@ import (
 	feemarketkeeper "github.com/skip-mev/feemarket/x/feemarket/keeper"
 	"github.com/spf13/cast"
 
-	milkywayante "github.com/milkyway-labs/milkyway/ante"
-	milkywayabci "github.com/milkyway-labs/milkyway/app/abci"
-	"github.com/milkyway-labs/milkyway/app/keepers"
-	"github.com/milkyway-labs/milkyway/app/upgrades"
-	_ "github.com/milkyway-labs/milkyway/client/docs/statik"
-	liquidvestingtypes "github.com/milkyway-labs/milkyway/x/liquidvesting/types"
+	milkywayante "github.com/milkyway-labs/milkyway/v2/ante"
+	milkywayabci "github.com/milkyway-labs/milkyway/v2/app/abci"
+	"github.com/milkyway-labs/milkyway/v2/app/keepers"
+	"github.com/milkyway-labs/milkyway/v2/app/upgrades"
+	_ "github.com/milkyway-labs/milkyway/v2/client/docs/statik"
+	liquidvestingtypes "github.com/milkyway-labs/milkyway/v2/x/liquidvesting/types"
 )
 
 var (

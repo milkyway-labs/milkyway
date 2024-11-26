@@ -17,8 +17,8 @@ import (
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
-	milkyway "github.com/milkyway-labs/milkyway/app"
-	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
+	milkyway "github.com/milkyway-labs/milkyway/v2/app"
+	bankkeeper "github.com/milkyway-labs/milkyway/v2/x/bank/keeper"
 )
 
 type BaseKeeperTestData struct {

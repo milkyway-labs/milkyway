@@ -5,7 +5,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/utils"
+	"github.com/milkyway-labs/milkyway/v2/utils"
 )
 
 // NewGenesis creates a new genesis state

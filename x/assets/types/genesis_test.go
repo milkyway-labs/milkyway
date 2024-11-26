@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/x/assets/types"
+	"github.com/milkyway-labs/milkyway/v2/x/assets/types"
 )
 
 func TestGenesis_Validate(t *testing.T) {

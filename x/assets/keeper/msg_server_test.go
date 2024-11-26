@@ -3,8 +3,8 @@ package keeper_test
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/x/assets/keeper"
-	"github.com/milkyway-labs/milkyway/x/assets/types"
+	"github.com/milkyway-labs/milkyway/v2/x/assets/keeper"
+	"github.com/milkyway-labs/milkyway/v2/x/assets/types"
 )
 
 func (suite *KeeperTestSuite) TestMsgServer_RegisterAsset() {

@@ -8,9 +8,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
-	"github.com/milkyway-labs/milkyway/x/rewards/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v2/x/operators/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v2/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v2/x/rewards/types"
 )
 
 // DeleteHistoricalRewards deletes all historical rewards for a target

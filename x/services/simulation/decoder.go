@@ -7,8 +7,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/kv"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
-	"github.com/milkyway-labs/milkyway/x/services/keeper"
-	"github.com/milkyway-labs/milkyway/x/services/types"
+	"github.com/milkyway-labs/milkyway/v2/x/services/keeper"
+	"github.com/milkyway-labs/milkyway/v2/x/services/types"
 )
 
 // NewDecodeStore returns a decoder function closure that unmarshals the KVPair's

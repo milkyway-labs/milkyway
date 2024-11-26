@@ -8,13 +8,13 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 
-	"github.com/milkyway-labs/milkyway/app/testutil"
-	"github.com/milkyway-labs/milkyway/utils"
-	operatorstypes "github.com/milkyway-labs/milkyway/x/operators/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
-	"github.com/milkyway-labs/milkyway/x/rewards/keeper"
-	"github.com/milkyway-labs/milkyway/x/rewards/types"
-	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
+	"github.com/milkyway-labs/milkyway/v2/app/testutil"
+	"github.com/milkyway-labs/milkyway/v2/utils"
+	operatorstypes "github.com/milkyway-labs/milkyway/v2/x/operators/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v2/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v2/x/rewards/keeper"
+	"github.com/milkyway-labs/milkyway/v2/x/rewards/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v2/x/services/types"
 )
 
 func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {

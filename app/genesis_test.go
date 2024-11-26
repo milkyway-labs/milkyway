@@ -11,7 +11,7 @@ import (
 	oracleconfig "github.com/skip-mev/connect/v2/oracle/config"
 	marketmaptypes "github.com/skip-mev/connect/v2/x/marketmap/types"
 
-	milkyway "github.com/milkyway-labs/milkyway/app"
+	milkyway "github.com/milkyway-labs/milkyway/v2/app"
 )
 
 func TestNewDefaultGenesisState(t *testing.T) {
