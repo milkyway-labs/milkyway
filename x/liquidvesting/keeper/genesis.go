@@ -53,15 +53,15 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 		// Update the total coins in the insurance fund
 		totalCoins = totalCoins.Add(entry.Balance...)
 
-		// Get the total vested representation that should be covered by the
+		// Get the total locked representation that should be covered by the
 		// insurance fund
-		totalVestedRepresentations, err := k.GetAllUserActiveVestedRepresentations(ctx, entry.UserAddress)
+		totalLockedRepresentations, err := k.GetAllUserActiveLockedRepresentations(ctx, entry.UserAddress)
 		if err != nil {
 			return err
 		}
 
 		// Check if the insurance fund can cover the restaked coins
-		canCover, required, err := insuranceFund.CanCoverDecCoins(state.Params.InsurancePercentage, totalVestedRepresentations)
+		canCover, required, err := insuranceFund.CanCoverDecCoins(state.Params.InsurancePercentage, totalLockedRepresentations)
 		if err != nil {
 			return err
 		}

@@ -13,13 +13,13 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-func MustGetVestedDenom(denom string) string {
-	vestedDenom, err := types.GetVestedRepresentationDenom(denom)
+func MustGetLockedDenom(denom string) string {
+	lockedDenom, err := types.GetLockedRepresentationDenom(denom)
 	if err != nil {
 		panic(err)
 	}
 
-	return vestedDenom
+	return lockedDenom
 }
 
 func (suite *KeeperTestSuite) TestKeeper_BankSend() {
@@ -31,54 +31,54 @@ func (suite *KeeperTestSuite) TestKeeper_BankSend() {
 		check     func(ctx sdk.Context)
 	}{
 		{
-			name: "send of vested tokens is not allowed",
+			name: "send of locked tokens is not allowed",
 			store: func(ctx sdk.Context) {
-				suite.mintVestedRepresentation(
+				suite.mintLockedRepresentation(
 					ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)),
 				)
 
-				vestedDenom, err := types.GetVestedRepresentationDenom("stake")
+				lockedDenom, err := types.GetLockedRepresentationDenom("stake")
 				suite.Require().NoError(err)
 
-				// Ensure we can transfer the vested representation
-				suite.bk.SetSendEnabled(ctx, vestedDenom, true)
+				// Ensure we can transfer the locked representation
+				suite.bk.SetSendEnabled(ctx, lockedDenom, true)
 			},
 			msg: banktypes.NewMsgSend(
 				sdk.MustAccAddressFromBech32("cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"),
 				sdk.MustAccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
-				sdk.NewCoins(sdk.NewInt64Coin(MustGetVestedDenom("stake"), 1000)),
+				sdk.NewCoins(sdk.NewInt64Coin(MustGetLockedDenom("stake"), 1000)),
 			),
 			shouldErr: true,
 		},
 		{
-			name: "send vested tokens to pool is allowed",
+			name: "send locked tokens to pool is allowed",
 			store: func(ctx sdk.Context) {
-				suite.mintVestedRepresentation(
+				suite.mintLockedRepresentation(
 					ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)),
 				)
 
-				vestedDenom, err := types.GetVestedRepresentationDenom("stake")
+				lockedDenom, err := types.GetLockedRepresentationDenom("stake")
 				suite.Require().NoError(err)
 
-				// Ensure we can transfer the vested representation
-				suite.bk.SetSendEnabled(ctx, vestedDenom, true)
+				// Ensure we can transfer the locked representation
+				suite.bk.SetSendEnabled(ctx, lockedDenom, true)
 
-				// Create a pool for the vested denom
-				err = suite.pk.SavePool(ctx, poolstypes.NewPool(1, vestedDenom))
+				// Create a pool for the locked denom
+				err = suite.pk.SavePool(ctx, poolstypes.NewPool(1, lockedDenom))
 				suite.Require().NoError(err)
 			},
 			msg: banktypes.NewMsgSend(
 				sdk.MustAccAddressFromBech32("cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"),
 				poolstypes.GetPoolAddress(1),
-				sdk.NewCoins(sdk.NewInt64Coin(MustGetVestedDenom("stake"), 1000)),
+				sdk.NewCoins(sdk.NewInt64Coin(MustGetLockedDenom("stake"), 1000)),
 			),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				vestedDenom, err := types.GetVestedRepresentationDenom("stake")
+				lockedDenom, err := types.GetLockedRepresentationDenom("stake")
 				suite.Require().NoError(err)
 
 				pool, found, err := suite.pk.GetPool(ctx, 1)
@@ -86,23 +86,23 @@ func (suite *KeeperTestSuite) TestKeeper_BankSend() {
 				suite.Require().True(found)
 
 				poolCoins := suite.bk.GetAllBalances(ctx, sdk.MustAccAddressFromBech32(pool.GetAddress()))
-				suite.Require().Equal(sdk.NewCoins(sdk.NewInt64Coin(vestedDenom, 1000)), poolCoins)
+				suite.Require().Equal(sdk.NewCoins(sdk.NewInt64Coin(lockedDenom, 1000)), poolCoins)
 			},
 		},
 		{
-			name: "send vested tokens to operator is allowed",
+			name: "send locked tokens to operator is allowed",
 			store: func(ctx sdk.Context) {
-				suite.mintVestedRepresentation(
+				suite.mintLockedRepresentation(
 					ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)),
 				)
 
-				vestedDenom, err := types.GetVestedRepresentationDenom("stake")
+				lockedDenom, err := types.GetLockedRepresentationDenom("stake")
 				suite.Require().NoError(err)
 
-				// Ensure we can transfer the vested representation
-				suite.bk.SetSendEnabled(ctx, vestedDenom, true)
+				// Ensure we can transfer the locked representation
+				suite.bk.SetSendEnabled(ctx, lockedDenom, true)
 
 				// Create an operator
 				operator := operatorstypes.NewOperator(
@@ -119,11 +119,11 @@ func (suite *KeeperTestSuite) TestKeeper_BankSend() {
 			msg: banktypes.NewMsgSend(
 				sdk.MustAccAddressFromBech32("cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"),
 				operatorstypes.GetOperatorAddress(1),
-				sdk.NewCoins(sdk.NewInt64Coin(MustGetVestedDenom("stake"), 1000)),
+				sdk.NewCoins(sdk.NewInt64Coin(MustGetLockedDenom("stake"), 1000)),
 			),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				vestedDenom, err := types.GetVestedRepresentationDenom("stake")
+				lockedDenom, err := types.GetLockedRepresentationDenom("stake")
 				suite.Require().NoError(err)
 
 				operator, found, err := suite.ok.GetOperator(ctx, 1)
@@ -131,23 +131,23 @@ func (suite *KeeperTestSuite) TestKeeper_BankSend() {
 				suite.Require().True(found)
 
 				poolCoins := suite.bk.GetAllBalances(ctx, sdk.MustAccAddressFromBech32(operator.GetAddress()))
-				suite.Require().Equal(sdk.NewCoins(sdk.NewInt64Coin(vestedDenom, 1000)), poolCoins)
+				suite.Require().Equal(sdk.NewCoins(sdk.NewInt64Coin(lockedDenom, 1000)), poolCoins)
 			},
 		},
 		{
-			name: "send vested tokens to service is allowed",
+			name: "send locked tokens to service is allowed",
 			store: func(ctx sdk.Context) {
-				suite.mintVestedRepresentation(
+				suite.mintLockedRepresentation(
 					ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)),
 				)
 
-				vestedDenom, err := types.GetVestedRepresentationDenom("stake")
+				lockedDenom, err := types.GetLockedRepresentationDenom("stake")
 				suite.Require().NoError(err)
 
-				// Ensure we can transfer the vested representation
-				suite.bk.SetSendEnabled(ctx, vestedDenom, true)
+				// Ensure we can transfer the locked representation
+				suite.bk.SetSendEnabled(ctx, lockedDenom, true)
 
 				// Create a service
 				service := servicestypes.NewService(
@@ -166,11 +166,11 @@ func (suite *KeeperTestSuite) TestKeeper_BankSend() {
 			msg: banktypes.NewMsgSend(
 				sdk.MustAccAddressFromBech32("cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"),
 				servicestypes.GetServiceAddress(1),
-				sdk.NewCoins(sdk.NewInt64Coin(MustGetVestedDenom("stake"), 1000)),
+				sdk.NewCoins(sdk.NewInt64Coin(MustGetLockedDenom("stake"), 1000)),
 			),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				vestedDenom, err := types.GetVestedRepresentationDenom("stake")
+				lockedDenom, err := types.GetLockedRepresentationDenom("stake")
 				suite.Require().NoError(err)
 
 				service, found, err := suite.sk.GetService(ctx, 1)
@@ -178,7 +178,7 @@ func (suite *KeeperTestSuite) TestKeeper_BankSend() {
 				suite.Require().True(found)
 
 				poolCoins := suite.bk.GetAllBalances(ctx, sdk.MustAccAddressFromBech32(service.GetAddress()))
-				suite.Require().Equal(sdk.NewCoins(sdk.NewInt64Coin(vestedDenom, 1000)), poolCoins)
+				suite.Require().Equal(sdk.NewCoins(sdk.NewInt64Coin(lockedDenom, 1000)), poolCoins)
 			},
 		},
 	}
@@ -225,10 +225,10 @@ func (suite *KeeperTestSuite) TestKeeper_SendRestrictionFn() {
 			expTo:     sdk.MustAccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
 		},
 		{
-			name:      "sending vested representation from user to user returns error",
+			name:      "sending locked representation from user to user returns error",
 			from:      sdk.MustAccAddressFromBech32("cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"),
 			to:        sdk.MustAccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
-			amount:    sdk.NewCoins(sdk.NewInt64Coin("vested/stake", 100)),
+			amount:    sdk.NewCoins(sdk.NewInt64Coin("locked/stake", 100)),
 			shouldErr: true,
 		},
 		{
@@ -247,12 +247,12 @@ func (suite *KeeperTestSuite) TestKeeper_SendRestrictionFn() {
 			name: "sending normal coins between restaking targets is not allowed",
 			store: func(ctx sdk.Context) {
 				// Create a test service and operator
-				suite.createPool(ctx, 1, vestedIBCDenom)
+				suite.createPool(ctx, 1, LockedIBCDenom)
 				suite.createOperator(ctx, 1)
 			},
 			from:      poolstypes.GetPoolAddress(1),
 			to:        operatorstypes.GetOperatorAddress(1),
-			amount:    sdk.NewCoins(sdk.NewInt64Coin("vested/stake", 100)),
+			amount:    sdk.NewCoins(sdk.NewInt64Coin("locked/stake", 100)),
 			shouldErr: true,
 		},
 		{
@@ -261,7 +261,7 @@ func (suite *KeeperTestSuite) TestKeeper_SendRestrictionFn() {
 			to:   sdk.MustAccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
 			amount: sdk.NewCoins(
 				sdk.NewInt64Coin("ibc/1", 100),
-				sdk.NewInt64Coin("vested/stake", 200),
+				sdk.NewInt64Coin("locked/stake", 200),
 			),
 			shouldErr: false,
 			expTo:     sdk.MustAccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
@@ -272,7 +272,7 @@ func (suite *KeeperTestSuite) TestKeeper_SendRestrictionFn() {
 			to:   authtypes.NewModuleAddress(liquidvestingtypes.ModuleName),
 			amount: sdk.NewCoins(
 				sdk.NewInt64Coin("ibc/1", 100),
-				sdk.NewInt64Coin("vested/stake", 200),
+				sdk.NewInt64Coin("locked/stake", 200),
 			),
 			shouldErr: false,
 			expTo:     authtypes.NewModuleAddress(liquidvestingtypes.ModuleName),

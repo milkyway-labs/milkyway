@@ -7,33 +7,33 @@ import (
 )
 
 const (
-	VestedRepresentationDenomPrefix = "vested"
+	LockedRepresentationDenomPrefix = "locked"
 )
 
-// GetVestedRepresentationDenom returns the denom used to
-// represent the vested version of the provided denom.
-func GetVestedRepresentationDenom(denom string) (string, error) {
-	if IsVestedRepresentationDenom(denom) {
+// GetLockedRepresentationDenom returns the denom used to
+// represent the locked version of the provided denom.
+func GetLockedRepresentationDenom(denom string) (string, error) {
+	if IsLockedRepresentationDenom(denom) {
 		return "", ErrInvalidDenom
 	}
 
-	// Create the vested representation of the provided denom
-	vestedDenom := strings.Join([]string{VestedRepresentationDenomPrefix, denom}, "/")
-	return vestedDenom, sdk.ValidateDenom(vestedDenom)
+	// Create the locked representation of the provided denom
+	lockedDenom := strings.Join([]string{LockedRepresentationDenomPrefix, denom}, "/")
+	return lockedDenom, sdk.ValidateDenom(lockedDenom)
 }
 
-// IsVestedRepresentationDenom tells if the provided denom is
-// a representation of a vested denom.
-func IsVestedRepresentationDenom(denom string) bool {
-	return strings.HasPrefix(denom, VestedRepresentationDenomPrefix+"/")
+// IsLockedRepresentationDenom tells if the provided denom is
+// a representation of a locked denom.
+func IsLockedRepresentationDenom(denom string) bool {
+	return strings.HasPrefix(denom, LockedRepresentationDenomPrefix+"/")
 }
 
-// VestedDenomToNative converts the denom of a vested token representation
+// LockedDenomToNative converts the denom of a locked token representation
 // to its native denom.
-func VestedDenomToNative(denom string) (string, error) {
-	if !strings.HasPrefix(denom, VestedRepresentationDenomPrefix+"/") {
+func LockedDenomToNative(denom string) (string, error) {
+	if !strings.HasPrefix(denom, LockedRepresentationDenomPrefix+"/") {
 		return "", ErrInvalidDenom
 	}
 
-	return strings.TrimPrefix(denom, VestedRepresentationDenomPrefix+"/"), nil
+	return strings.TrimPrefix(denom, LockedRepresentationDenomPrefix+"/"), nil
 }

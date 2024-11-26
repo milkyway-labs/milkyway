@@ -10,31 +10,31 @@ import (
 )
 
 func (k *Keeper) RestakeRestrictionFn(ctx context.Context, restakerAddress string, amount sdk.Coins, _ restakingtypes.DelegationTarget) error {
-	restakedVestedRepresentation := sdk.NewCoins()
+	restakedLockedRepresentation := sdk.NewCoins()
 	for _, coin := range amount {
-		if types.IsVestedRepresentationDenom(coin.Denom) {
-			restakedVestedRepresentation = restakedVestedRepresentation.Add(coin)
+		if types.IsLockedRepresentationDenom(coin.Denom) {
+			restakedLockedRepresentation = restakedLockedRepresentation.Add(coin)
 		}
 	}
 
-	// The user is not restaking any vested representation
+	// The user is not restaking any locked representation
 	// allow the restake operation
-	if restakedVestedRepresentation.IsZero() {
+	if restakedLockedRepresentation.IsZero() {
 		return nil
 	}
 
-	// We have some vested representation to restake, ensure the user
+	// We have some locked representation to restake, ensure the user
 	// insurance fund can cover the amount
 
-	// Get the current vested representations that are being covered
+	// Get the current locked representations that are being covered
 	// by the insurance fund
-	totalVestedRepresentations, err := k.GetAllUserActiveVestedRepresentations(ctx, restakerAddress)
+	totalLockedRepresentations, err := k.GetAllUserActiveLockedRepresentations(ctx, restakerAddress)
 	if err != nil {
 		return err
 	}
 
-	// Add the vested representations that are being restaked to the total
-	totalVestedRepresentations = totalVestedRepresentations.Add(sdk.NewDecCoinsFromCoins(restakedVestedRepresentation...)...)
+	// Add the locked representations that are being restaked to the total
+	totalLockedRepresentations = totalLockedRepresentations.Add(sdk.NewDecCoinsFromCoins(restakedLockedRepresentation...)...)
 
 	// Get the user's insurance fund
 	userInsuranceFund, err := k.GetUserInsuranceFund(ctx, restakerAddress)
@@ -49,7 +49,7 @@ func (k *Keeper) RestakeRestrictionFn(ctx context.Context, restakerAddress strin
 	}
 
 	// Check if the insurance fund can cover the newly restaked amount
-	canCover, _, err := userInsuranceFund.CanCoverDecCoins(params.InsurancePercentage, totalVestedRepresentations)
+	canCover, _, err := userInsuranceFund.CanCoverDecCoins(params.InsurancePercentage, totalLockedRepresentations)
 	if err != nil {
 		return err
 	}

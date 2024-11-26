@@ -20,8 +20,8 @@ func NewMsgServer(k *Keeper) types.MsgServer {
 	return &msgServer{Keeper: k}
 }
 
-// MintVestedRepresentation implements types.MsgServer.
-func (m msgServer) MintVestedRepresentation(ctx context.Context, msg *types.MsgMintVestedRepresentation) (*types.MsgMintVestedRepresentationResponse, error) {
+// MintLockedRepresentation implements types.MsgServer.
+func (m msgServer) MintLockedRepresentation(ctx context.Context, msg *types.MsgMintLockedRepresentation) (*types.MsgMintLockedRepresentationResponse, error) {
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return nil, err
@@ -41,7 +41,7 @@ func (m msgServer) MintVestedRepresentation(ctx context.Context, msg *types.MsgM
 		return nil, types.ErrNotMinter
 	}
 
-	mintedAmount, err := m.Keeper.MintVestedRepresentation(ctx, receiver, msg.Amount)
+	mintedAmount, err := m.Keeper.MintLockedRepresentation(ctx, receiver, msg.Amount)
 	if err != nil {
 		return nil, err
 	}
@@ -49,18 +49,18 @@ func (m msgServer) MintVestedRepresentation(ctx context.Context, msg *types.MsgM
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeMintVestedRepresentation,
+			types.EventTypeMintLockedRepresentation,
 			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
 			sdk.NewAttribute(sdk.AttributeKeyAmount, mintedAmount.String()),
 			sdk.NewAttribute(types.AttributeKeyReceiver, msg.Receiver),
 		),
 	})
 
-	return &types.MsgMintVestedRepresentationResponse{}, nil
+	return &types.MsgMintLockedRepresentationResponse{}, nil
 }
 
-// BurnVestedRepresentation implements types.MsgServer.
-func (m msgServer) BurnVestedRepresentation(ctx context.Context, msg *types.MsgBurnVestedRepresentation) (*types.MsgBurnVestedRepresentationResponse, error) {
+// BurnLockedRepresentation implements types.MsgServer.
+func (m msgServer) BurnLockedRepresentation(ctx context.Context, msg *types.MsgBurnLockedRepresentation) (*types.MsgBurnLockedRepresentationResponse, error) {
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return nil, err
@@ -80,7 +80,7 @@ func (m msgServer) BurnVestedRepresentation(ctx context.Context, msg *types.MsgB
 		return nil, types.ErrNotBurner
 	}
 
-	err = m.Keeper.BurnVestedRepresentation(ctx, user, msg.Amount)
+	err = m.Keeper.BurnLockedRepresentation(ctx, user, msg.Amount)
 	if err != nil {
 		return nil, err
 	}
@@ -88,14 +88,14 @@ func (m msgServer) BurnVestedRepresentation(ctx context.Context, msg *types.MsgB
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeBurnVestedRepresentation,
+			types.EventTypeBurnLockedRepresentation,
 			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
 			sdk.NewAttribute(sdk.AttributeKeyAmount, msg.Amount.String()),
 			sdk.NewAttribute(types.AttributeKeyUser, msg.User),
 		),
 	})
 
-	return &types.MsgBurnVestedRepresentationResponse{}, nil
+	return &types.MsgBurnLockedRepresentationResponse{}, nil
 }
 
 // WithdrawInsuranceFund implements types.MsgServer.

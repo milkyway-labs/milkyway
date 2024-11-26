@@ -119,7 +119,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFund() {
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
 				)
-				suite.mintVestedRepresentation(ctx,
+				suite.mintLockedRepresentation(ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
 				)
@@ -134,9 +134,9 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFund() {
 				)
 
 				// Delegate to the pool
-				suite.createPool(ctx, 1, vestedIBCDenom)
+				suite.createPool(ctx, 1, LockedIBCDenom)
 				_, err := suite.rk.DelegateToPool(ctx,
-					sdk.NewInt64Coin(vestedIBCDenom, 1000),
+					sdk.NewInt64Coin(LockedIBCDenom, 1000),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				)
 				suite.Require().NoError(err)
@@ -252,15 +252,15 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFunds() {
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
 				)
-				suite.mintVestedRepresentation(ctx,
+				suite.mintLockedRepresentation(ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
 				)
 
 				// Delegate to the pool
-				suite.createPool(ctx, 1, vestedIBCDenom)
+				suite.createPool(ctx, 1, LockedIBCDenom)
 				_, err := suite.rk.DelegateToPool(ctx,
-					sdk.NewInt64Coin(vestedIBCDenom, 1000),
+					sdk.NewInt64Coin(LockedIBCDenom, 1000),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				)
 				suite.Require().NoError(err)
@@ -328,7 +328,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserRestakableAssets() {
 			},
 			request:    types.NewQueryUserRestakableAssetsRequest("cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"),
 			shouldErr:  false,
-			expBalance: sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 100)),
+			expBalance: sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 100)),
 		},
 		{
 			name: "5% insurance fund",
@@ -343,7 +343,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserRestakableAssets() {
 			},
 			request:    types.NewQueryUserRestakableAssetsRequest("cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"),
 			shouldErr:  false,
-			expBalance: sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 20)),
+			expBalance: sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 20)),
 		},
 	}
 

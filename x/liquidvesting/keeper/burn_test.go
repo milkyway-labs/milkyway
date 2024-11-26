@@ -8,7 +8,7 @@ import (
 )
 
 func (suite *KeeperTestSuite) TestKeeper_TestBurn() {
-	vestedStakeDenom, err := types.GetVestedRepresentationDenom("stake")
+	lockedStakeDenom, err := types.GetLockedRepresentationDenom("stake")
 	suite.Assert().NoError(err)
 
 	testCases := []struct {
@@ -20,7 +20,7 @@ func (suite *KeeperTestSuite) TestKeeper_TestBurn() {
 		check     func(ctx sdk.Context)
 	}{
 		{
-			name: "burn non vested representation fails",
+			name: "burn non locked representation fails",
 			store: func(ctx sdk.Context) {
 				suite.fundAccount(ctx,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -37,19 +37,19 @@ func (suite *KeeperTestSuite) TestKeeper_TestBurn() {
 		{
 			name: "burn with no funds fails",
 			store: func(ctx sdk.Context) {
-				suite.mintVestedRepresentation(ctx,
+				suite.mintLockedRepresentation(ctx,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewCoins(sdk.NewInt64Coin("test", 1000)),
 				)
 			},
 			account:   "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-			amount:    sdk.NewCoins(sdk.NewInt64Coin(vestedStakeDenom, 1000)),
+			amount:    sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 1000)),
 			shouldErr: true,
 		},
 		{
 			name: "burn from user balance",
 			store: func(ctx sdk.Context) {
-				suite.mintVestedRepresentation(ctx,
+				suite.mintLockedRepresentation(ctx,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)),
 				)
@@ -59,13 +59,13 @@ func (suite *KeeperTestSuite) TestKeeper_TestBurn() {
 				)
 			},
 			account:   "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-			amount:    sdk.NewCoins(sdk.NewInt64Coin(vestedStakeDenom, 1000)),
+			amount:    sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 1000)),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				userAddr, err := sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
 				suite.Require().NoError(err)
 
-				// Make sure the user only has non vested coins
+				// Make sure the user only has non locked coins
 				coins := suite.bk.GetAllBalances(ctx, userAddr)
 				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake2", 200)), coins)
 			},
@@ -74,14 +74,14 @@ func (suite *KeeperTestSuite) TestKeeper_TestBurn() {
 			name: "burn from delegations",
 			store: func(ctx sdk.Context) {
 				// Add some tokens to the user's insurance fund so they can restake
-				// the vested representation
+				// the locked representation
 				suite.fundAccountInsuranceFund(ctx,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewCoins(sdk.NewInt64Coin("stake", 100)),
 				)
 
 				// Fund the account
-				suite.mintVestedRepresentation(ctx,
+				suite.mintLockedRepresentation(ctx,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)),
 				)
@@ -90,10 +90,10 @@ func (suite *KeeperTestSuite) TestKeeper_TestBurn() {
 					sdk.NewCoins(sdk.NewInt64Coin("stake2", 200)),
 				)
 
-				// Delegate some vested representation to pool, service and operator
-				suite.createPool(ctx, 1, vestedStakeDenom)
+				// Delegate some locked representation to pool, service and operator
+				suite.createPool(ctx, 1, lockedStakeDenom)
 				_, err = suite.rk.DelegateToPool(ctx,
-					sdk.NewInt64Coin(vestedStakeDenom, 200),
+					sdk.NewInt64Coin(lockedStakeDenom, 200),
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				)
 				suite.Assert().NoError(err)
@@ -101,7 +101,7 @@ func (suite *KeeperTestSuite) TestKeeper_TestBurn() {
 				suite.createService(ctx, 1)
 				_, err = suite.rk.DelegateToService(ctx,
 					1,
-					sdk.NewCoins(sdk.NewInt64Coin(vestedStakeDenom, 300)),
+					sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 300)),
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				)
 				suite.Assert().NoError(err)
@@ -109,13 +109,13 @@ func (suite *KeeperTestSuite) TestKeeper_TestBurn() {
 				suite.createOperator(ctx, 1)
 				_, err = suite.rk.DelegateToOperator(ctx,
 					1,
-					sdk.NewCoins(sdk.NewInt64Coin(vestedStakeDenom, 300)),
+					sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 300)),
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				)
 				suite.Assert().NoError(err)
 			},
 			account:   "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-			amount:    sdk.NewCoins(sdk.NewInt64Coin(vestedStakeDenom, 1000)),
+			amount:    sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 1000)),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				userAddr, err := sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
@@ -137,21 +137,21 @@ func (suite *KeeperTestSuite) TestKeeper_TestBurn() {
 
 				// Check that we are burning the coins that have been delegated
 				toBurnCoins := values[0].Amount
-				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin(vestedStakeDenom, 800)), toBurnCoins)
+				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 800)), toBurnCoins)
 			},
 		},
 		{
 			name: "burn more coins then owned delegations",
 			store: func(ctx sdk.Context) {
 				// Add some tokens to the user's insurance fund so they can restake
-				// the vested representation
+				// the locked representation
 				suite.fundAccountInsuranceFund(ctx,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewCoins(sdk.NewInt64Coin("stake", 100)),
 				)
 
 				// Fund the account
-				suite.mintVestedRepresentation(ctx,
+				suite.mintLockedRepresentation(ctx,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)),
 				)
@@ -160,10 +160,10 @@ func (suite *KeeperTestSuite) TestKeeper_TestBurn() {
 					sdk.NewCoins(sdk.NewInt64Coin("stake2", 200)),
 				)
 
-				// Delegate some vested representation to pool, service and operator
-				suite.createPool(ctx, 1, vestedStakeDenom)
+				// Delegate some locked representation to pool, service and operator
+				suite.createPool(ctx, 1, lockedStakeDenom)
 				_, err = suite.rk.DelegateToPool(ctx,
-					sdk.NewInt64Coin(vestedStakeDenom, 200),
+					sdk.NewInt64Coin(lockedStakeDenom, 200),
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				)
 				suite.Assert().NoError(err)
@@ -171,7 +171,7 @@ func (suite *KeeperTestSuite) TestKeeper_TestBurn() {
 				suite.createService(ctx, 1)
 				_, err = suite.rk.DelegateToService(ctx,
 					1,
-					sdk.NewCoins(sdk.NewInt64Coin(vestedStakeDenom, 300)),
+					sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 300)),
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				)
 				suite.Assert().NoError(err)
@@ -179,13 +179,13 @@ func (suite *KeeperTestSuite) TestKeeper_TestBurn() {
 				suite.createOperator(ctx, 1)
 				_, err = suite.rk.DelegateToOperator(ctx,
 					1,
-					sdk.NewCoins(sdk.NewInt64Coin(vestedStakeDenom, 300)),
+					sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 300)),
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				)
 				suite.Assert().NoError(err)
 			},
 			account:   "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-			amount:    sdk.NewCoins(sdk.NewInt64Coin(vestedStakeDenom, 2000)),
+			amount:    sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 2000)),
 			shouldErr: true,
 		},
 	}
@@ -199,7 +199,7 @@ func (suite *KeeperTestSuite) TestKeeper_TestBurn() {
 				tc.store(ctx)
 			}
 
-			err = suite.k.BurnVestedRepresentation(ctx, sdk.MustAccAddressFromBech32(tc.account), tc.amount)
+			err = suite.k.BurnLockedRepresentation(ctx, sdk.MustAccAddressFromBech32(tc.account), tc.amount)
 
 			if tc.shouldErr {
 				suite.Require().Error(err)

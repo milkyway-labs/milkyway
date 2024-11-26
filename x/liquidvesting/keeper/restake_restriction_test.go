@@ -19,17 +19,17 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestPoolRestaking() {
 			name: "no insurance fund",
 			store: func(ctx sdk.Context) {
 				// Create the pool
-				suite.createPool(ctx, 1, vestedIBCDenom)
+				suite.createPool(ctx, 1, LockedIBCDenom)
 
 				// Simulate the minting of the staking representation
-				suite.mintVestedRepresentation(
+				suite.mintLockedRepresentation(
 					ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
 				)
 			},
 			msg: restakingtypes.NewMsgDelegatePool(
-				sdk.NewInt64Coin(vestedIBCDenom, 300),
+				sdk.NewInt64Coin(LockedIBCDenom, 300),
 				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
 			shouldErr: true,
@@ -38,7 +38,7 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestPoolRestaking() {
 			name: "insufficient insurance fund",
 			store: func(ctx sdk.Context) {
 				// Create the pool
-				suite.createPool(ctx, 1, vestedIBCDenom)
+				suite.createPool(ctx, 1, LockedIBCDenom)
 
 				// Fund the user's insurance fund
 				suite.fundAccountInsuranceFund(
@@ -48,14 +48,14 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestPoolRestaking() {
 				)
 
 				// Simulate the minting of the staking representation
-				suite.mintVestedRepresentation(
+				suite.mintLockedRepresentation(
 					ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
 				)
 			},
 			msg: restakingtypes.NewMsgDelegatePool(
-				sdk.NewInt64Coin(vestedIBCDenom, 300),
+				sdk.NewInt64Coin(LockedIBCDenom, 300),
 				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
 			shouldErr: true,
@@ -64,7 +64,7 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestPoolRestaking() {
 			name: "covered funds already restaked",
 			store: func(ctx sdk.Context) {
 				// Create the pool
-				suite.createPool(ctx, 1, vestedIBCDenom)
+				suite.createPool(ctx, 1, LockedIBCDenom)
 
 				// Create a test service and operator
 				suite.createService(ctx, 1)
@@ -78,7 +78,7 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestPoolRestaking() {
 				)
 
 				// Mint the staked representation
-				suite.mintVestedRepresentation(
+				suite.mintLockedRepresentation(
 					ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
@@ -88,20 +88,20 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestPoolRestaking() {
 				msgSrv := restakingkeeper.NewMsgServer(suite.rk)
 				_, err := msgSrv.DelegateService(ctx, restakingtypes.NewMsgDelegateService(
 					1,
-					sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 150)),
+					sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 150)),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))
 				suite.Assert().NoError(err)
 
 				_, err = msgSrv.DelegateOperator(ctx, restakingtypes.NewMsgDelegateOperator(
 					1,
-					sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 150)),
+					sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 150)),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))
 				suite.Assert().NoError(err)
 			},
 			msg: restakingtypes.NewMsgDelegatePool(
-				sdk.NewInt64Coin(vestedIBCDenom, 150),
+				sdk.NewInt64Coin(LockedIBCDenom, 150),
 				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
 			shouldErr: true,
@@ -114,14 +114,14 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestPoolRestaking() {
 				suite.fundAccountInsuranceFund(ctx, "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre", insuranceFundCoins)
 
 				// Simulate the minting of the staking representation
-				suite.mintVestedRepresentation(
+				suite.mintLockedRepresentation(
 					ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
 				)
 			},
 			msg: restakingtypes.NewMsgDelegatePool(
-				sdk.NewInt64Coin(vestedIBCDenom, 300),
+				sdk.NewInt64Coin(LockedIBCDenom, 300),
 				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
 			expectedUsage: sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6)),
@@ -169,7 +169,7 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestServiceRestaking() {
 				suite.createService(ctx, 1)
 
 				// Simulate the minting of the staking representation
-				suite.mintVestedRepresentation(
+				suite.mintLockedRepresentation(
 					ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
@@ -177,7 +177,7 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestServiceRestaking() {
 			},
 			msg: restakingtypes.NewMsgDelegateService(
 				1,
-				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 300)),
+				sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 300)),
 				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
 			shouldErr: true,
@@ -193,7 +193,7 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestServiceRestaking() {
 				suite.fundAccountInsuranceFund(ctx, "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre", insuranceFundCoins)
 
 				// Simulate the minting of the staked representation
-				suite.mintVestedRepresentation(
+				suite.mintLockedRepresentation(
 					ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
@@ -201,7 +201,7 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestServiceRestaking() {
 			},
 			msg: restakingtypes.NewMsgDelegateService(
 				1,
-				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 300)),
+				sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 300)),
 				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
 			shouldErr: true,
@@ -213,7 +213,7 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestServiceRestaking() {
 				suite.createService(ctx, 1)
 
 				// Create a test pool and operator
-				suite.createPool(ctx, 1, vestedIBCDenom)
+				suite.createPool(ctx, 1, LockedIBCDenom)
 				suite.createOperator(ctx, 1)
 
 				// Fund the user account
@@ -224,7 +224,7 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestServiceRestaking() {
 				)
 
 				// Mint the staked representation
-				suite.mintVestedRepresentation(
+				suite.mintLockedRepresentation(
 					ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
@@ -234,21 +234,21 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestServiceRestaking() {
 				msgSrv := restakingkeeper.NewMsgServer(suite.rk)
 
 				_, err := msgSrv.DelegatePool(ctx, restakingtypes.NewMsgDelegatePool(
-					sdk.NewInt64Coin(vestedIBCDenom, 150),
+					sdk.NewInt64Coin(LockedIBCDenom, 150),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))
 				suite.Assert().NoError(err)
 
 				_, err = msgSrv.DelegateOperator(ctx, restakingtypes.NewMsgDelegateOperator(
 					1,
-					sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 150)),
+					sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 150)),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))
 				suite.Assert().NoError(err)
 			},
 			msg: restakingtypes.NewMsgDelegateService(
 				1,
-				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 150)),
+				sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 150)),
 				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
 			shouldErr: true,
@@ -267,7 +267,7 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestServiceRestaking() {
 				)
 
 				// Mint the staked representation
-				suite.mintVestedRepresentation(
+				suite.mintLockedRepresentation(
 					ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
@@ -275,7 +275,7 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestServiceRestaking() {
 			},
 			msg: restakingtypes.NewMsgDelegateService(
 				1,
-				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 300)),
+				sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 300)),
 				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
 			expectedUsage: sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6)),
@@ -323,7 +323,7 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestOperatorRestaking() {
 				suite.createOperator(ctx, 1)
 
 				// Simulate the minting of the staking representation
-				suite.mintVestedRepresentation(
+				suite.mintLockedRepresentation(
 					ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
@@ -331,7 +331,7 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestOperatorRestaking() {
 			},
 			msg: restakingtypes.NewMsgDelegateOperator(
 				1,
-				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 300)),
+				sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 300)),
 				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
 			shouldErr: true,
@@ -350,7 +350,7 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestOperatorRestaking() {
 				)
 
 				// Simulate the minting of the staked representation
-				suite.mintVestedRepresentation(
+				suite.mintLockedRepresentation(
 					ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
@@ -358,7 +358,7 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestOperatorRestaking() {
 			},
 			msg: restakingtypes.NewMsgDelegateOperator(
 				1,
-				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 300)),
+				sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 300)),
 				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
 			shouldErr: true,
@@ -369,7 +369,7 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestOperatorRestaking() {
 				// Create an operator
 				suite.createOperator(ctx, 1)
 
-				suite.createPool(ctx, 1, vestedIBCDenom)
+				suite.createPool(ctx, 1, LockedIBCDenom)
 				suite.createService(ctx, 1)
 
 				suite.fundAccountInsuranceFund(
@@ -379,7 +379,7 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestOperatorRestaking() {
 				)
 
 				// Mint the staked representation
-				suite.mintVestedRepresentation(
+				suite.mintLockedRepresentation(
 					ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
@@ -389,21 +389,21 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestOperatorRestaking() {
 				msgSrv := restakingkeeper.NewMsgServer(suite.rk)
 
 				_, err := msgSrv.DelegatePool(ctx, restakingtypes.NewMsgDelegatePool(
-					sdk.NewInt64Coin(vestedIBCDenom, 150),
+					sdk.NewInt64Coin(LockedIBCDenom, 150),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))
 				suite.Assert().NoError(err)
 
 				_, err = msgSrv.DelegateService(ctx, restakingtypes.NewMsgDelegateService(
 					1,
-					sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 150)),
+					sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 150)),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))
 				suite.Assert().NoError(err)
 			},
 			msg: restakingtypes.NewMsgDelegateOperator(
 				1,
-				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 150)),
+				sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 150)),
 				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
 			shouldErr: true,
@@ -421,7 +421,7 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestOperatorRestaking() {
 				)
 
 				// Mint the staked representation
-				suite.mintVestedRepresentation(
+				suite.mintLockedRepresentation(
 					ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10000)),
@@ -429,7 +429,7 @@ func (suite *KeeperTestSuite) TestRestakeRestriction_TestOperatorRestaking() {
 			},
 			msg: restakingtypes.NewMsgDelegateOperator(
 				1,
-				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 300)),
+				sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 300)),
 				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			),
 			expectedUsage: sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 6)),

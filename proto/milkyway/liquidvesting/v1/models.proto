@@ -19,7 +19,7 @@ message UserInsuranceFund {
 }
 
 // BurnCoins is a struct that contains the information about the coins to burn
-// once the unbonding period of the vested representation tokens ends.
+// once the unbonding period of the locked representation tokens ends.
 message BurnCoins {
   option (gogoproto.equal) = false;
   option (gogoproto.goproto_getters) = false;

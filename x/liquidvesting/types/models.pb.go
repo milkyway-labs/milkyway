@@ -78,7 +78,7 @@ func (m *UserInsuranceFund) GetBalance() github_com_cosmos_cosmos_sdk_types.Coin
 }
 
 // BurnCoins is a struct that contains the information about the coins to burn
-// once the unbonding period of the vested representation tokens ends.
+// once the unbonding period of the locked representation tokens ends.
 type BurnCoins struct {
 	// Address of who has delegated the coins.
 	DelegatorAddress string `protobuf:"bytes,1,opt,name=delegator_address,json=delegatorAddress,proto3" json:"delegator_address,omitempty"`

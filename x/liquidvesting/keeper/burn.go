@@ -30,17 +30,17 @@ func (k *Keeper) IsBurner(ctx context.Context, user sdk.AccAddress) (bool, error
 	return slices.Contains(params.Burners, stringAddr), nil
 }
 
-// BurnVestedRepresentation burns the vested staking representation
+// BurnLockedRepresentation burns the locked staking representation
 // from the user's balance.
 // NOTE: If the coins are restaked they will be unstaked first.
-func (k *Keeper) BurnVestedRepresentation(
+func (k *Keeper) BurnLockedRepresentation(
 	ctx context.Context,
 	accAddress sdk.AccAddress,
 	amount sdk.Coins,
 ) error {
-	// Ensure that we are burning vested representations tokens
+	// Ensure that we are burning locked representations tokens
 	for _, c := range amount {
-		if !types.IsVestedRepresentationDenom(c.Denom) {
+		if !types.IsLockedRepresentationDenom(c.Denom) {
 			return fmt.Errorf("invalid denom %s", c.Denom)
 		}
 	}

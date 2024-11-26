@@ -12,7 +12,7 @@ import (
 )
 
 func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
-	vestedStakeDenom, err := types.GetVestedRepresentationDenom("stake")
+	lockedStakeDenom, err := types.GetLockedRepresentationDenom("stake")
 	suite.Assert().NoError(err)
 
 	testCases := []struct {
@@ -80,27 +80,27 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				)
 
 				// Mint the staked representations
-				suite.mintVestedRepresentation(ctx,
+				suite.mintLockedRepresentation(ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)),
 				)
-				suite.mintVestedRepresentation(ctx,
+				suite.mintLockedRepresentation(ctx,
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 					sdk.NewCoins(sdk.NewInt64Coin("stake", 100)),
 				)
 
 				// Delegate the tokens so that they will be scheduled for burn after the
 				// unbonding period
-				suite.createPool(ctx, 1, vestedIBCDenom)
+				suite.createPool(ctx, 1, LockedIBCDenom)
 				_, err = suite.rk.DelegateToPool(ctx,
-					sdk.NewInt64Coin(vestedIBCDenom, 100),
+					sdk.NewInt64Coin(LockedIBCDenom, 100),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				)
 				suite.Assert().NoError(err)
 
-				suite.createPool(ctx, 2, vestedStakeDenom)
+				suite.createPool(ctx, 2, lockedStakeDenom)
 				_, err = suite.rk.DelegateToPool(ctx,
-					sdk.NewInt64Coin(vestedStakeDenom, 100),
+					sdk.NewInt64Coin(lockedStakeDenom, 100),
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				)
 				suite.Assert().NoError(err)
@@ -108,12 +108,12 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				// Burn the coins
 				userAddr, err := sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
 				suite.Assert().NoError(err)
-				err = suite.k.BurnVestedRepresentation(ctx, userAddr, sdk.NewCoins(sdk.NewInt64Coin(vestedStakeDenom, 100)))
+				err = suite.k.BurnLockedRepresentation(ctx, userAddr, sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 100)))
 				suite.Assert().NoError(err)
 
 				userAddr, err = sdk.AccAddressFromBech32("cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre")
 				suite.Assert().NoError(err)
-				err = suite.k.BurnVestedRepresentation(ctx, userAddr, sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 100)))
+				err = suite.k.BurnLockedRepresentation(ctx, userAddr, sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 100)))
 				suite.Assert().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
@@ -122,12 +122,12 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					types.NewBurnCoins(
 						"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 						time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC).Add(7*24*time.Hour),
-						sdk.NewCoins(sdk.NewInt64Coin(vestedStakeDenom, 100)),
+						sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 100)),
 					),
 					types.NewBurnCoins(
 						"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 						time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC).Add(7*24*time.Hour),
-						sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 100)),
+						sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 100)),
 					),
 				},
 				UserInsuranceFunds: []types.UserInsuranceFundEntry{
@@ -292,7 +292,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 				suite.Assert().NoError(err)
 
 				// Init the pools module
-				testPool := poolstypes.NewPool(1, vestedIBCDenom)
+				testPool := poolstypes.NewPool(1, LockedIBCDenom)
 				testPool.Tokens = math.NewIntFromUint64(50)
 				testPool.DelegatorShares = math.LegacyNewDecFromInt(math.NewIntFromUint64(50))
 				poolsKeeperGenesis := poolstypes.GenesisState{
@@ -312,7 +312,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 							1,
 							10,
 							time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
-							sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 51)),
+							sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 51)),
 							1,
 						),
 					},
@@ -320,7 +320,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 						restakingtypes.NewPoolDelegation(
 							1,
 							"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-							sdk.NewDecCoins(sdk.NewInt64DecCoin(testPool.GetSharesDenom(vestedIBCDenom), 50)),
+							sdk.NewDecCoins(sdk.NewInt64DecCoin(testPool.GetSharesDenom(LockedIBCDenom), 50)),
 						),
 					},
 				}
@@ -370,7 +370,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 				suite.Assert().NoError(err)
 
 				// Init the pools module
-				testPool := poolstypes.NewPool(1, vestedIBCDenom)
+				testPool := poolstypes.NewPool(1, LockedIBCDenom)
 				testPool.Tokens = math.NewIntFromUint64(50)
 				testPool.DelegatorShares = math.LegacyNewDecFromInt(math.NewIntFromUint64(50))
 				poolsKeeperGenesis := poolstypes.GenesisState{
@@ -390,7 +390,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 							1,
 							10,
 							time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
-							sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 100)),
+							sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 100)),
 							1,
 						),
 					},
@@ -398,7 +398,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 						restakingtypes.NewPoolDelegation(
 							1,
 							"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-							sdk.NewDecCoins(sdk.NewInt64DecCoin(testPool.GetSharesDenom(vestedIBCDenom), 50)),
+							sdk.NewDecCoins(sdk.NewInt64DecCoin(testPool.GetSharesDenom(LockedIBCDenom), 50)),
 						),
 					},
 				}
@@ -425,7 +425,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 					types.NewBurnCoins(
 						"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 						time.Now(),
-						sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 2)),
+						sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 2)),
 					),
 				},
 				nil,
@@ -443,7 +443,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 							1,
 							10,
 							time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
-							sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 2)),
+							sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 2)),
 							1,
 						),
 					},
@@ -457,7 +457,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 					types.NewBurnCoins(
 						"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 						time.Now(),
-						sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 2)),
+						sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 2)),
 					),
 				},
 				nil,
@@ -466,7 +466,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			check: func(ctx sdk.Context) {
 				burnCoins := suite.k.GetAllBurnCoins(ctx)
 				suite.Assert().Len(burnCoins, 1)
-				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 2)), burnCoins[0].Amount)
+				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 2)), burnCoins[0].Amount)
 			},
 		},
 	}

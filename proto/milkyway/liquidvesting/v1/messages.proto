@@ -14,15 +14,15 @@ option go_package = "github.com/milkyway-labs/milkyway/x/liquidvesting/types";
 service Msg {
   option (cosmos.msg.v1.service) = true;
 
-  // MintVestedRepresentation defines the operation to mint a user's staked
-  // vested tokens representation that can be used in the liquid vesting module.
-  rpc MintVestedRepresentation(MsgMintVestedRepresentation)
-      returns (MsgMintVestedRepresentationResponse);
+  // MintLockedRepresentation defines the operation to mint a user's staked
+  // locked tokens representation that can be used in the liquid vesting module.
+  rpc MintLockedRepresentation(MsgMintLockedRepresentation)
+      returns (MsgMintLockedRepresentationResponse);
 
-  // BurnVestedRepresentation defines the operation to burn a user's staked
-  // vested tokens representation.
-  rpc BurnVestedRepresentation(MsgBurnVestedRepresentation)
-      returns (MsgBurnVestedRepresentationResponse);
+  // BurnLockedRepresentation defines the operation to burn a user's staked
+  // locked tokens representation.
+  rpc BurnLockedRepresentation(MsgBurnLockedRepresentation)
+      returns (MsgBurnLockedRepresentationResponse);
 
   // WithdrawInsuranceFund defines the operation to withdraw an amount
   // of tokens from the user's insurance fund.
@@ -39,13 +39,13 @@ service Msg {
   rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
 }
 
-// MsgMintVestedRepresentation defines the message structure for the
-// MintVestedRepresentation gRPC service method. It allows an authorized
-// account to mint a user's staked vested tokens representation that can be
+// MsgMintLockedRepresentation defines the message structure for the
+// MintLockedRepresentation gRPC service method. It allows an authorized
+// account to mint a user's staked locked tokens representation that can be
 // used in the liquid vesting module.
-message MsgMintVestedRepresentation {
+message MsgMintLockedRepresentation {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/MsgMintVestedRepresentation";
+  option (amino.name) = "milkyway/MsgMintLockedRepresentation";
 
   // User that want to trigger the tokens mint.
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
@@ -61,16 +61,16 @@ message MsgMintVestedRepresentation {
   ];
 }
 
-// MsgMintVestedRepresentationResponse is the return value of
-// MsgMintVestedRepresentation.
-message MsgMintVestedRepresentationResponse {}
+// MsgMintLockedRepresentationResponse is the return value of
+// MsgMintLockedRepresentation.
+message MsgMintLockedRepresentationResponse {}
 
-// MsgBurnVestedRepresentation defines the message structure for the
-// BurnVestedRepresentation gRPC service method. It allows an authorized
-// account to burn a user's staked vested tokens representation.
-message MsgBurnVestedRepresentation {
+// MsgBurnLockedRepresentation defines the message structure for the
+// BurnLockedRepresentation gRPC service method. It allows an authorized
+// account to burn a user's staked locked tokens representation.
+message MsgBurnLockedRepresentation {
   option (cosmos.msg.v1.signer) = "sender";
-  option (amino.name) = "milkyway/MsgBurnVestedRepresentation";
+  option (amino.name) = "milkyway/MsgBurnLockedRepresentation";
 
   // User that want to trigger the tokens burn.
   string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
@@ -86,9 +86,9 @@ message MsgBurnVestedRepresentation {
   ];
 }
 
-// MsgBurnVestedRepresentationResponse is the return value of
-// MsgBurnVestedRepresentation.
-message MsgBurnVestedRepresentationResponse {}
+// MsgBurnLockedRepresentationResponse is the return value of
+// MsgBurnLockedRepresentation.
+message MsgBurnLockedRepresentationResponse {}
 
 // MsgWithdrawInsuranceFund defines the message structure for the
 // WithdrawInsuranceFund gRPC service method.

@@ -20,53 +20,53 @@ func (k *Keeper) GetAllUsersInsuranceFundsEntries(ctx sdk.Context) ([]types.User
 	return usersInsuranceFundState, err
 }
 
-// GetAllUserRestakedVestedRepresentations returns all restaked coins that are vested
+// GetAllUserRestakedLockedRepresentations returns all restaked coins that are locked
 // representation tokens for the provided user.
-func (k *Keeper) GetAllUserRestakedVestedRepresentations(ctx context.Context, userAddress string) (sdk.DecCoins, error) {
+func (k *Keeper) GetAllUserRestakedLockedRepresentations(ctx context.Context, userAddress string) (sdk.DecCoins, error) {
 	restakedCoins, err := k.restakingKeeper.GetAllUserRestakedCoins(ctx, userAddress)
 	if err != nil {
 		return nil, err
 	}
 
-	vestedRepresentations := sdk.NewDecCoins()
+	lockedRepresentations := sdk.NewDecCoins()
 	for _, coin := range restakedCoins {
-		if types.IsVestedRepresentationDenom(coin.Denom) {
-			vestedRepresentations = vestedRepresentations.Add(coin)
+		if types.IsLockedRepresentationDenom(coin.Denom) {
+			lockedRepresentations = lockedRepresentations.Add(coin)
 		}
 	}
 
-	return vestedRepresentations, nil
+	return lockedRepresentations, nil
 }
 
-// GetAllUserUnbondingVestedRepresentations returns all the vested representation
+// GetAllUserUnbondingLockedRepresentations returns all the locked representation
 // tokens that are currently unbonding for the provided user.
-func (k *Keeper) GetAllUserUnbondingVestedRepresentations(ctx context.Context, userAddress string) sdk.Coins {
-	vestedRepresentations := sdk.NewCoins()
+func (k *Keeper) GetAllUserUnbondingLockedRepresentations(ctx context.Context, userAddress string) sdk.Coins {
+	lockedRepresentations := sdk.NewCoins()
 
 	userUndelegations := k.restakingKeeper.GetAllUserUnbondingDelegations(ctx, userAddress)
 	for _, undelegation := range userUndelegations {
 		for _, entry := range undelegation.Entries {
 			for _, coin := range entry.Balance {
-				if types.IsVestedRepresentationDenom(coin.Denom) {
-					vestedRepresentations = vestedRepresentations.Add(coin)
+				if types.IsLockedRepresentationDenom(coin.Denom) {
+					lockedRepresentations = lockedRepresentations.Add(coin)
 				}
 			}
 		}
 	}
 
-	return vestedRepresentations
+	return lockedRepresentations
 }
 
-// GetAllUserActiveVestedRepresentations gets all the vested representation tokens
+// GetAllUserActiveLockedRepresentations gets all the locked representation tokens
 // that are restaked or are currently unbonding for the provided user.
-func (k *Keeper) GetAllUserActiveVestedRepresentations(ctx context.Context, userAddress string) (sdk.DecCoins, error) {
-	restakedCoins, err := k.GetAllUserRestakedVestedRepresentations(ctx, userAddress)
+func (k *Keeper) GetAllUserActiveLockedRepresentations(ctx context.Context, userAddress string) (sdk.DecCoins, error) {
+	restakedCoins, err := k.GetAllUserRestakedLockedRepresentations(ctx, userAddress)
 	if err != nil {
 		return nil, err
 	}
 
-	// Get the vested representation tokens that are currently unbonding
-	userUnbondingVestedRepresentations := k.GetAllUserUnbondingVestedRepresentations(ctx, userAddress)
+	// Get the locked representation tokens that are currently unbonding
+	userUnbondingLockedRepresentations := k.GetAllUserUnbondingLockedRepresentations(ctx, userAddress)
 
-	return restakedCoins.Add(sdk.NewDecCoinsFromCoins(userUnbondingVestedRepresentations...)...), nil
+	return restakedCoins.Add(sdk.NewDecCoinsFromCoins(userUnbondingLockedRepresentations...)...), nil
 }

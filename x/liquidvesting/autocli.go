@@ -57,10 +57,10 @@ func (a AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 			Service: liquidvestingv1.Msg_ServiceDesc.ServiceName,
 			RpcCommandOptions: []*autocliv1.RpcCommandOptions{
 				{
-					RpcMethod: "MintVestedRepresentation",
-					Use:       "mint-vested-representation [sender] [receiver] [amount]",
-					Short:     "Mint an user's staked vested tokens representation",
-					Example:   fmt.Sprintf(`$ %s tx liquidvesting mint-vested-representation init1... init1... 1000umilk`, version.AppName),
+					RpcMethod: "MintLockedRepresentation",
+					Use:       "mint-locked-representation [sender] [receiver] [amount]",
+					Short:     "Mint an user's staked locked tokens representation",
+					Example:   fmt.Sprintf(`$ %s tx liquidvesting mint-locked-representation init1... init1... 1000umilk`, version.AppName),
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "sender"},
 						{ProtoField: "receiver"},
@@ -68,10 +68,10 @@ func (a AppModule) AutoCLIOptions() *autocliv1.ModuleOptions {
 					},
 				},
 				{
-					RpcMethod: "BurnVestedRepresentation",
-					Use:       "burn-vested-representation [sender] [user] [amount]",
-					Short:     "Burns an user's staked vested tokens representation",
-					Example:   fmt.Sprintf(`$ %s tx liquidvesting burn-vested-representation init1... init1... 1000vestd/umilk`, version.AppName),
+					RpcMethod: "BurnLockedRepresentation",
+					Use:       "burn-locked-representation [sender] [user] [amount]",
+					Short:     "Burns an user's staked locked tokens representation",
+					Example:   fmt.Sprintf(`$ %s tx liquidvesting burn-locked-representation init1... init1... 1000vestd/umilk`, version.AppName),
 					PositionalArgs: []*autocliv1.PositionalArgDescriptor{
 						{ProtoField: "sender"},
 						{ProtoField: "user"},

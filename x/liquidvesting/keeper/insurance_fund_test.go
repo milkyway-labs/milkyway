@@ -131,8 +131,8 @@ func (suite *KeeperTestSuite) TestKeeper_UsedInsuranceFundIsUpdatedCorrectly() {
 	// Fund the restaker insurance fund
 	suite.fundAccountInsuranceFund(ctx, restaker, sdk.NewCoins(sdk.NewInt64Coin("stake", 20)))
 
-	// Mint some vested representation to the restaker
-	suite.mintVestedRepresentation(ctx, restaker, sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)))
+	// Mint some locked representation to the restaker
+	suite.mintLockedRepresentation(ctx, restaker, sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)))
 
 	// Check that the used insurance fund is 0
 	used, err := suite.k.GetUserUsedInsuranceFund(ctx, restaker)
@@ -140,13 +140,13 @@ func (suite *KeeperTestSuite) TestKeeper_UsedInsuranceFundIsUpdatedCorrectly() {
 	suite.Require().True(used.IsZero())
 
 	// Create a pool
-	pool := poolstypes.NewPool(1, "vested/stake")
+	pool := poolstypes.NewPool(1, "locked/stake")
 	err = suite.pk.SavePool(ctx, pool)
 	suite.Require().NoError(err)
 
 	// Restake some coins to the pool
 	restakingMsgService := restakingkeeper.NewMsgServer(suite.rk)
-	_, err = restakingMsgService.DelegatePool(ctx, restakingtypes.NewMsgDelegatePool(sdk.NewInt64Coin("vested/stake", 100), restaker))
+	_, err = restakingMsgService.DelegatePool(ctx, restakingtypes.NewMsgDelegatePool(sdk.NewInt64Coin("locked/stake", 100), restaker))
 	suite.Require().NoError(err)
 
 	// Check that the used insurance fund is 2stake
@@ -154,8 +154,8 @@ func (suite *KeeperTestSuite) TestKeeper_UsedInsuranceFundIsUpdatedCorrectly() {
 	suite.Require().NoError(err)
 	suite.Require().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake", 2)), used)
 
-	// Undelegate 1vested/stake
-	_, err = restakingMsgService.UndelegatePool(ctx, restakingtypes.NewMsgUndelegatePool(sdk.NewInt64Coin("vested/stake", 1), restaker))
+	// Undelegate 1locked/stake
+	_, err = restakingMsgService.UndelegatePool(ctx, restakingtypes.NewMsgUndelegatePool(sdk.NewInt64Coin("locked/stake", 1), restaker))
 	suite.Require().NoError(err)
 
 	// Check that the used insurance fund is still 2stake
@@ -195,8 +195,8 @@ func (suite *KeeperTestSuite) TestKeeper_InsuranceFundUpdatesCorreclyWithComplet
 	// Fund the restaker insurance fund
 	suite.fundAccountInsuranceFund(ctx, restaker, sdk.NewCoins(sdk.NewInt64Coin("stake", 20)))
 
-	// Mint some vested representation to the restaker
-	suite.mintVestedRepresentation(ctx, restaker, sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)))
+	// Mint some locked representation to the restaker
+	suite.mintLockedRepresentation(ctx, restaker, sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)))
 
 	// Check that the used insurance fund is 0
 	used, err := suite.k.GetUserUsedInsuranceFund(ctx, restaker)
@@ -204,13 +204,13 @@ func (suite *KeeperTestSuite) TestKeeper_InsuranceFundUpdatesCorreclyWithComplet
 	suite.Require().True(used.IsZero())
 
 	// Create a pool
-	pool := poolstypes.NewPool(1, "vested/stake")
+	pool := poolstypes.NewPool(1, "locked/stake")
 	err = suite.pk.SavePool(ctx, pool)
 	suite.Require().NoError(err)
 
 	// Restake some coins to the pool
 	restakingMsgService := restakingkeeper.NewMsgServer(suite.rk)
-	_, err = restakingMsgService.DelegatePool(ctx, restakingtypes.NewMsgDelegatePool(sdk.NewInt64Coin("vested/stake", 1000), restaker))
+	_, err = restakingMsgService.DelegatePool(ctx, restakingtypes.NewMsgDelegatePool(sdk.NewInt64Coin("locked/stake", 1000), restaker))
 	suite.Require().NoError(err)
 
 	// Check that the used insurance fund is 20stake
@@ -218,8 +218,8 @@ func (suite *KeeperTestSuite) TestKeeper_InsuranceFundUpdatesCorreclyWithComplet
 	suite.Require().NoError(err)
 	suite.Require().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake", 20)), used)
 
-	// Undelegate all the vested representations
-	_, err = restakingMsgService.UndelegatePool(ctx, restakingtypes.NewMsgUndelegatePool(sdk.NewInt64Coin("vested/stake", 1000), restaker))
+	// Undelegate all the locked representations
+	_, err = restakingMsgService.UndelegatePool(ctx, restakingtypes.NewMsgUndelegatePool(sdk.NewInt64Coin("locked/stake", 1000), restaker))
 	suite.Require().NoError(err)
 
 	// Check that the used insurance fund is still 20stake

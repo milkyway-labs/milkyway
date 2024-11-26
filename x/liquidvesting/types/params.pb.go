@@ -28,15 +28,15 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // Params defines the parameters for the module.
 type Params struct {
 	// This value represents the percentage that needs to be sent to the
-	// insurance fund in order to restake a certain amount of vested tokens.
+	// insurance fund in order to restake a certain amount of locked tokens.
 	// For example, if this value is 2%, a user must send 2 tokens to
-	// the insurance fund to restake 100 vested tokens
+	// the insurance fund to restake 100 locked tokens
 	InsurancePercentage cosmossdk_io_math.LegacyDec `protobuf:"bytes,1,opt,name=insurance_percentage,json=insurancePercentage,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"insurance_percentage"`
 	// This value represents the list of users who are authorized to execute the
-	// MsgBurnVestedRepresentation.
+	// MsgBurnLockedRepresentation.
 	Burners []string `protobuf:"bytes,2,rep,name=burners,proto3" json:"burners,omitempty"`
 	// This value represents the list of users who are authorized to execute the
-	// MsgMintVestedRepresentation.
+	// MsgMintLockedRepresentation.
 	Minters []string `protobuf:"bytes,3,rep,name=minters,proto3" json:"minters,omitempty"`
 	// TrustedDelegates represents the list of users who are allowed to deposit
 	// on the insurance fund.
