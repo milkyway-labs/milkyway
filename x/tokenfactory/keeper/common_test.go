@@ -5,14 +5,13 @@ import (
 	"testing"
 	"time"
 
-	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
-	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
-
 	"cosmossdk.io/core/address"
 	"cosmossdk.io/log"
 	"cosmossdk.io/math"
 	"cosmossdk.io/store"
 	"cosmossdk.io/store/metrics"
+	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
+	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 
 	"cosmossdk.io/x/tx/signing"
 	"github.com/cometbft/cometbft/crypto"
@@ -35,8 +34,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	authz "github.com/cosmos/cosmos-sdk/x/authz/module"
 
-	initiaappparams "github.com/initia-labs/initia/app/params"
-
 	codecaddress "github.com/cosmos/cosmos-sdk/codec/address"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -49,6 +46,7 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
+	"github.com/milkyway-labs/milkyway/app/params"
 	bankkeeper "github.com/milkyway-labs/milkyway/x/bank/keeper"
 	"github.com/milkyway-labs/milkyway/x/tokenfactory"
 	tokenfactorykeeper "github.com/milkyway-labs/milkyway/x/tokenfactory/keeper"
@@ -107,10 +105,10 @@ var (
 )
 
 func MakeTestCodec(t testing.TB) codec.Codec {
-	return MakeEncodingConfig(t).Codec
+	return MakeEncodingConfig(t).Marshaler
 }
 
-func MakeEncodingConfig(_ testing.TB) initiaappparams.EncodingConfig {
+func MakeEncodingConfig(_ testing.TB) params.EncodingConfig {
 	interfaceRegistry, _ := codectypes.NewInterfaceRegistryWithOptions(codectypes.InterfaceRegistryOptions{
 		ProtoFiles: proto.HybridResolver,
 		SigningOptions: signing.Options{
@@ -128,9 +126,9 @@ func MakeEncodingConfig(_ testing.TB) initiaappparams.EncodingConfig {
 	ModuleBasics.RegisterLegacyAminoCodec(legacyAmino)
 	ModuleBasics.RegisterInterfaces(interfaceRegistry)
 
-	return initiaappparams.EncodingConfig{
+	return params.EncodingConfig{
 		InterfaceRegistry: interfaceRegistry,
-		Codec:             appCodec,
+		Marshaler:         appCodec,
 		TxConfig:          txConfig,
 		Amino:             legacyAmino,
 	}
@@ -199,7 +197,7 @@ type TestKeepers struct {
 	WasmKeeper          *wasmkeeper.Keeper
 	TokenFactoryKeeper  *tokenfactorykeeper.Keeper
 	CommunityPoolKeeper *distrkeeper.Keeper
-	EncodingConfig      initiaappparams.EncodingConfig
+	EncodingConfig      params.EncodingConfig
 	Faucet              *TestFaucet
 	MultiStore          storetypes.CommitMultiStore
 	AddressCodec        address.Codec
@@ -262,7 +260,7 @@ func _createTestInput(
 	}, isCheckTx, log.NewNopLogger())
 
 	encodingConfig := MakeEncodingConfig(t)
-	appCodec := encodingConfig.Codec
+	appCodec := encodingConfig.Marshaler
 
 	maccPerms := map[string][]string{ // module account permissions
 		authtypes.FeeCollectorName:   nil,

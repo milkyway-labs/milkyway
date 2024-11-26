@@ -11,7 +11,6 @@ import (
 	distributiontypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	porttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
-	ibchookstypes "github.com/initia-labs/initia/x/ibc-hooks/types"
 
 	"github.com/milkyway-labs/milkyway/testutils/storetesting"
 	"github.com/milkyway-labs/milkyway/x/liquidvesting"
@@ -51,7 +50,7 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 			types.StoreKey, authtypes.StoreKey, banktypes.StoreKey,
 			operatorstypes.StoreKey, poolstypes.StoreKey, servicestypes.StoreKey,
 			restakingtypes.StoreKey, stakingtypes.StoreKey,
-			distributiontypes.StoreKey, ibchookstypes.StoreKey,
+			distributiontypes.StoreKey,
 		}),
 	}
 

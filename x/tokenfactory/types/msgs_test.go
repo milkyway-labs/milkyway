@@ -13,6 +13,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/authz"
 	"github.com/stretchr/testify/require"
 
+	"github.com/milkyway-labs/milkyway/app/params"
 	"github.com/milkyway-labs/milkyway/x/tokenfactory/types"
 
 	"github.com/cometbft/cometbft/crypto/ed25519"
@@ -20,7 +21,6 @@ import (
 
 	authcodec "github.com/cosmos/cosmos-sdk/x/auth/codec"
 	"github.com/cosmos/gogoproto/proto"
-	initiaappparams "github.com/initia-labs/initia/app/params"
 )
 
 func testMessageAuthzSerialization(t *testing.T, msg sdk.Msg) {
@@ -36,7 +36,7 @@ func testMessageAuthzSerialization(t *testing.T, msg sdk.Msg) {
 		mockMsgExec   authz.MsgExec
 	)
 
-	encodingConfig := initiaappparams.MakeEncodingConfig()
+	encodingConfig := params.MakeEncodingConfig()
 	std.RegisterLegacyAminoCodec(encodingConfig.Amino)
 	std.RegisterInterfaces(encodingConfig.InterfaceRegistry)
 	legacyAmino := encodingConfig.Amino
@@ -66,7 +66,6 @@ func testMessageAuthzSerialization(t *testing.T, msg sdk.Msg) {
 	testSerDeser(&msgRevoke, &mockMsgRevoke)
 
 	// Authz: Exec Msg
-
 	msgAny, err := codectypes.NewAnyWithValue(msg)
 	require.NoError(t, err)
 
@@ -144,7 +143,7 @@ func TestMsgCreateDenom(t *testing.T) {
 		return msg
 	})
 
-	codec := initiaappparams.MakeEncodingConfig().Codec
+	codec := params.MakeEncodingConfig().Marshaler
 	ac := authcodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix())
 
 	signers, _, err := codec.GetMsgV1Signers(&msg)
@@ -214,7 +213,7 @@ func TestMsgMint(t *testing.T) {
 	msg := createMsg(func(msg types.MsgMint) types.MsgMint {
 		return msg
 	})
-	codec := initiaappparams.MakeEncodingConfig().Codec
+	codec := params.MakeEncodingConfig().Marshaler
 	ac := authcodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix())
 
 	signers, _, err := codec.GetMsgV1Signers(&msg)
@@ -284,7 +283,7 @@ func TestMsgBurn(t *testing.T) {
 	)
 
 	// validate burn message was created as intended
-	codec := initiaappparams.MakeEncodingConfig().Codec
+	codec := params.MakeEncodingConfig().Marshaler
 	ac := authcodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix())
 
 	signers, _, err := codec.GetMsgV1Signers(baseMsg)
@@ -362,7 +361,7 @@ func TestMsgChangeAdmin(t *testing.T) {
 	)
 
 	// validate changeAdmin message was created as intended
-	codec := initiaappparams.MakeEncodingConfig().Codec
+	codec := params.MakeEncodingConfig().Marshaler
 	ac := authcodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix())
 
 	signers, _, err := codec.GetMsgV1Signers(baseMsg)
@@ -471,7 +470,7 @@ func TestMsgSetDenomMetadata(t *testing.T) {
 	)
 
 	// validate setDenomMetadata message was created as intended
-	codec := initiaappparams.MakeEncodingConfig().Codec
+	codec := params.MakeEncodingConfig().Marshaler
 	ac := authcodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix())
 
 	signers, _, err := codec.GetMsgV1Signers(baseMsg)

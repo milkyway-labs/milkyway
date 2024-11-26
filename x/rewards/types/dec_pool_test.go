@@ -5,8 +5,9 @@ import (
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/initia-labs/initia/x/distribution/types"
 	"github.com/stretchr/testify/suite"
+
+	"github.com/milkyway-labs/milkyway/x/rewards/types"
 )
 
 type decpoolTestSuite struct {
