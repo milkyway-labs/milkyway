@@ -39,7 +39,6 @@ import (
 	restakingtypes "github.com/milkyway-labs/milkyway/x/restaking/types"
 	rewardstypes "github.com/milkyway-labs/milkyway/x/rewards/types"
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
-	tokenfactorytypes "github.com/milkyway-labs/milkyway/x/tokenfactory/types"
 )
 
 func (appKeepers *AppKeepers) GenerateKeys() {
@@ -68,7 +67,6 @@ func (appKeepers *AppKeepers) GenerateKeys() {
 		providertypes.StoreKey,
 		consensusparamtypes.StoreKey,
 		wasmtypes.StoreKey,
-		tokenfactorytypes.StoreKey,
 		group.StoreKey,
 
 		// Skip
