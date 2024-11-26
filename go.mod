@@ -107,6 +107,7 @@ require (
 	github.com/bombsimon/wsl/v4 v4.4.1 // indirect
 	github.com/breml/bidichk v0.2.7 // indirect
 	github.com/breml/errchkjson v0.3.6 // indirect
+	github.com/btcsuite/btcd/btcec/v2 v2.3.4 // indirect
 	github.com/butuzov/ireturn v0.3.0 // indirect
 	github.com/butuzov/mirror v1.2.0 // indirect
 	github.com/bytedance/sonic v1.12.3 // indirect
@@ -386,23 +387,9 @@ replace (
 	// should use v0.11.0. The Cosmos build fails with types/context.go:65:29: undefined: comet.BlockInfo otherwise.
 	cosmossdk.io/core => cosmossdk.io/core v0.11.0
 
-	// Needs to be replaced due to iavlFastNodeModuleWhitelist feature
-	// Disabling fast nodes makes nodes sync faster.
-	// All nodes need to have the lockup fast nodes enabled though or else we process epoch slowly.
-	// Also, snapshot nodes need to have all fast nodes enabled in order to prune quickly.
-	cosmossdk.io/store => github.com/osmosis-labs/cosmos-sdk/store v0.1.0-alpha.1.0.20240509221435-b8feb2ffb728
-
-	// Direct cometbft branch link: https://github.com/osmosis-labs/cometbft/tree/osmo-v27/0.38.15, current branch: osmo-v27/v0.38.15
-	// Direct commit link: https://github.com/osmosis-labs/cometbft/commit/08ef650391304dae90486e906b59ded36cd16e49
-	// Direct tag link: https://github.com/osmosis-labs/cometbft/releases/tag/v0.38.15-v27-osmo-1
-	github.com/cometbft/cometbft => github.com/osmosis-labs/cometbft v0.38.15-v27-osmo-1
-
 	// replace as directed by sdk upgrading.md https://github.com/cosmos/cosmos-sdk/blob/393de266c8675dc16cc037c1a15011b1e990975f/UPGRADING.md?plain=1#L713
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
 )
-
-// MilkyWay custom
-replace github.com/cosmos/cosmos-sdk => github.com/osmosis-labs/cosmos-sdk v0.50.10-v27-osmo-1
 
 // Exclusions for non-used dependencies
 exclude (
