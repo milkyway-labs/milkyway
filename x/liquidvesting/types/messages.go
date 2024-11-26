@@ -6,20 +6,20 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// NewMsgMintVestedRepresentation creates a new MsgMintVestedRepresentation instance.
-func NewMsgMintVestedRepresentation(
+// NewMsgMintLockedRepresentation creates a new MsgMintLockedRepresentation instance.
+func NewMsgMintLockedRepresentation(
 	sender string,
 	receiver string,
 	amount sdk.Coins,
-) *MsgMintVestedRepresentation {
-	return &MsgMintVestedRepresentation{
+) *MsgMintLockedRepresentation {
+	return &MsgMintLockedRepresentation{
 		Sender:   sender,
 		Receiver: receiver,
 		Amount:   amount,
 	}
 }
 
-func (msg *MsgMintVestedRepresentation) ValidateBasic() error {
+func (msg *MsgMintLockedRepresentation) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address")
@@ -41,20 +41,20 @@ func (msg *MsgMintVestedRepresentation) ValidateBasic() error {
 	return nil
 }
 
-// NewMsgBurnVestedRepresentation creates a new MsgBurnVestedRepresentation instance.
-func NewMsgBurnVestedRepresentation(
+// NewMsgBurnLockedRepresentation creates a new MsgBurnLockedRepresentation instance.
+func NewMsgBurnLockedRepresentation(
 	sender string,
 	user string,
 	amount sdk.Coins,
-) *MsgBurnVestedRepresentation {
-	return &MsgBurnVestedRepresentation{
+) *MsgBurnLockedRepresentation {
+	return &MsgBurnLockedRepresentation{
 		Sender: sender,
 		User:   user,
 		Amount: amount,
 	}
 }
 
-func (msg *MsgBurnVestedRepresentation) ValidateBasic() error {
+func (msg *MsgBurnLockedRepresentation) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return errors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address")

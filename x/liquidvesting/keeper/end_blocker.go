@@ -33,7 +33,7 @@ func (k *Keeper) CompleteBurnCoins(ctx sdk.Context) error {
 
 		ctx.EventManager().EmitEvent(
 			sdk.NewEvent(
-				types.EventTypeBurnVestedRepresentation,
+				types.EventTypeBurnLockedRepresentation,
 				sdk.NewAttribute(sdk.AttributeKeyAmount, data.Amount.String()),
 				sdk.NewAttribute(types.AttributeKeyUser, data.DelegatorAddress),
 			),

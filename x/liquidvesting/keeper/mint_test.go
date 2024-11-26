@@ -6,7 +6,7 @@ import (
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 )
 
-func (suite *KeeperTestSuite) TestKeeper_MintVestedRepresentation() {
+func (suite *KeeperTestSuite) TestKeeper_MintLockedRepresentation() {
 	testCases := []struct {
 		name      string
 		store     func(ctx sdk.Context)
@@ -16,9 +16,9 @@ func (suite *KeeperTestSuite) TestKeeper_MintVestedRepresentation() {
 		check     func(ctx sdk.Context)
 	}{
 		{
-			name:      "can't mint vested representation of a vested representation",
+			name:      "can't mint locked representation of a locked representation",
 			to:        "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-			amount:    sdk.NewCoins(sdk.NewInt64Coin("vested/stake", 1000)),
+			amount:    sdk.NewCoins(sdk.NewInt64Coin("locked/stake", 1000)),
 			shouldErr: true,
 		},
 		{
@@ -27,10 +27,10 @@ func (suite *KeeperTestSuite) TestKeeper_MintVestedRepresentation() {
 			amount:    sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				denom, err := types.GetVestedRepresentationDenom("stake")
+				denom, err := types.GetLockedRepresentationDenom("stake")
 				suite.Assert().NoError(err)
 				accAddr := sdk.MustAccAddressFromBech32("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd")
-				balance := suite.bk.GetBalance(ctx, accAddr, "vested/stake")
+				balance := suite.bk.GetBalance(ctx, accAddr, "locked/stake")
 				suite.Assert().Equal(sdk.NewInt64Coin(denom, 1000), balance)
 			},
 		},
@@ -48,7 +48,7 @@ func (suite *KeeperTestSuite) TestKeeper_MintVestedRepresentation() {
 			userAddr, err := sdk.AccAddressFromBech32(tc.to)
 			suite.Require().NoError(err)
 
-			_, err = suite.k.MintVestedRepresentation(ctx, userAddr, tc.amount)
+			_, err = suite.k.MintLockedRepresentation(ctx, userAddr, tc.amount)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {

@@ -10,7 +10,7 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/x/services/types"
 )
 
-func (suite *KeeperTestSuite) TestKeeper_GetAllUserRestakedVestedRepresentations() {
+func (suite *KeeperTestSuite) TestKeeper_GetAllUserRestakedLockedRepresentations() {
 	testCases := []struct {
 		name     string
 		user     string
@@ -26,7 +26,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllUserRestakedVestedRepresentations
 			name: "computed amount is correct",
 			user: "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			setup: func(ctx sdk.Context) {
-				pool := poolstypes.NewPool(1, "vested/stake")
+				pool := poolstypes.NewPool(1, "locked/stake")
 				err := suite.pk.SavePool(ctx, pool)
 				suite.Require().NoError(err)
 
@@ -60,7 +60,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllUserRestakedVestedRepresentations
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin("stake", 20)),
 				)
-				suite.mintVestedRepresentation(
+				suite.mintLockedRepresentation(
 					ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)),
@@ -70,26 +70,26 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllUserRestakedVestedRepresentations
 
 				// Perform some delegations
 				_, err = restakingService.DelegatePool(ctx, restakingtypes.NewMsgDelegatePool(
-					sdk.NewInt64Coin("vested/stake", 200),
+					sdk.NewInt64Coin("locked/stake", 200),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))
 				suite.Require().NoError(err)
 
 				_, err = restakingService.DelegateService(ctx, restakingtypes.NewMsgDelegateService(
 					1,
-					sdk.NewCoins(sdk.NewInt64Coin("vested/stake", 200)),
+					sdk.NewCoins(sdk.NewInt64Coin("locked/stake", 200)),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))
 				suite.Require().NoError(err)
 
 				_, err = restakingService.DelegateOperator(ctx, restakingtypes.NewMsgDelegateOperator(
 					1,
-					sdk.NewCoins(sdk.NewInt64Coin("vested/stake", 600)),
+					sdk.NewCoins(sdk.NewInt64Coin("locked/stake", 600)),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))
 				suite.Require().NoError(err)
 			},
-			expected: sdk.NewDecCoins(sdk.NewInt64DecCoin("vested/stake", 1000)),
+			expected: sdk.NewDecCoins(sdk.NewInt64DecCoin("locked/stake", 1000)),
 		},
 	}
 
@@ -102,14 +102,14 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllUserRestakedVestedRepresentations
 				tc.setup(ctx)
 			}
 
-			coins, err := suite.k.GetAllUserRestakedVestedRepresentations(ctx, tc.user)
+			coins, err := suite.k.GetAllUserRestakedLockedRepresentations(ctx, tc.user)
 			suite.Require().NoError(err)
 			suite.Require().Equal(tc.expected, coins)
 		})
 	}
 }
 
-func (suite *KeeperTestSuite) TestKeeper_GetAllUserUnbondingVestedRepresentations() {
+func (suite *KeeperTestSuite) TestKeeper_GetAllUserUnbondingLockedRepresentations() {
 	testCases := []struct {
 		name     string
 		user     string
@@ -125,7 +125,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllUserUnbondingVestedRepresentation
 			name: "computed amount is correct",
 			user: "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			setup: func(ctx sdk.Context) {
-				pool := poolstypes.NewPool(1, "vested/stake")
+				pool := poolstypes.NewPool(1, "locked/stake")
 				err := suite.pk.SavePool(ctx, pool)
 				suite.Require().NoError(err)
 
@@ -159,7 +159,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllUserUnbondingVestedRepresentation
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin("stake", 20)),
 				)
-				suite.mintVestedRepresentation(
+				suite.mintLockedRepresentation(
 					ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)),
@@ -169,47 +169,47 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllUserUnbondingVestedRepresentation
 
 				// Perform some delegations
 				_, err = restakingService.DelegatePool(ctx, restakingtypes.NewMsgDelegatePool(
-					sdk.NewInt64Coin("vested/stake", 200),
+					sdk.NewInt64Coin("locked/stake", 200),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))
 				suite.Require().NoError(err)
 
 				_, err = restakingService.DelegateService(ctx, restakingtypes.NewMsgDelegateService(
 					1,
-					sdk.NewCoins(sdk.NewInt64Coin("vested/stake", 200)),
+					sdk.NewCoins(sdk.NewInt64Coin("locked/stake", 200)),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))
 				suite.Require().NoError(err)
 
 				_, err = restakingService.DelegateOperator(ctx, restakingtypes.NewMsgDelegateOperator(
 					1,
-					sdk.NewCoins(sdk.NewInt64Coin("vested/stake", 600)),
+					sdk.NewCoins(sdk.NewInt64Coin("locked/stake", 600)),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))
 				suite.Require().NoError(err)
 
 				// Perform some undelegations
 				_, err = restakingService.UndelegatePool(ctx, restakingtypes.NewMsgUndelegatePool(
-					sdk.NewInt64Coin("vested/stake", 100),
+					sdk.NewInt64Coin("locked/stake", 100),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))
 				suite.Require().NoError(err)
 
 				_, err = restakingService.UndelegateService(ctx, restakingtypes.NewMsgUndelegateService(
 					1,
-					sdk.NewCoins(sdk.NewInt64Coin("vested/stake", 100)),
+					sdk.NewCoins(sdk.NewInt64Coin("locked/stake", 100)),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))
 				suite.Require().NoError(err)
 
 				_, err = restakingService.UndelegateOperator(ctx, restakingtypes.NewMsgUndelegateOperator(
 					1,
-					sdk.NewCoins(sdk.NewInt64Coin("vested/stake", 400)),
+					sdk.NewCoins(sdk.NewInt64Coin("locked/stake", 400)),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))
 				suite.Require().NoError(err)
 			},
-			expected: sdk.NewCoins(sdk.NewInt64Coin("vested/stake", 600)),
+			expected: sdk.NewCoins(sdk.NewInt64Coin("locked/stake", 600)),
 		},
 	}
 
@@ -222,13 +222,13 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllUserUnbondingVestedRepresentation
 				tc.setup(ctx)
 			}
 
-			coins := suite.k.GetAllUserUnbondingVestedRepresentations(ctx, tc.user)
+			coins := suite.k.GetAllUserUnbondingLockedRepresentations(ctx, tc.user)
 			suite.Require().Equal(tc.expected, coins)
 		})
 	}
 }
 
-func (suite *KeeperTestSuite) TestKeeper_GetAllUserActiveVestedRepresentations() {
+func (suite *KeeperTestSuite) TestKeeper_GetAllUserActiveLockedRepresentations() {
 	testCases := []struct {
 		name     string
 		user     string
@@ -243,7 +243,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllUserActiveVestedRepresentations()
 			name: "computed amount is correct",
 			user: "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			setup: func(ctx sdk.Context) {
-				pool := poolstypes.NewPool(1, "vested/stake")
+				pool := poolstypes.NewPool(1, "locked/stake")
 				err := suite.pk.SavePool(ctx, pool)
 				suite.Require().NoError(err)
 
@@ -277,7 +277,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllUserActiveVestedRepresentations()
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin("stake", 20)),
 				)
-				suite.mintVestedRepresentation(
+				suite.mintLockedRepresentation(
 					ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 					sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)),
@@ -287,47 +287,47 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllUserActiveVestedRepresentations()
 
 				// Perform some delegations
 				_, err = restakingService.DelegatePool(ctx, restakingtypes.NewMsgDelegatePool(
-					sdk.NewInt64Coin("vested/stake", 200),
+					sdk.NewInt64Coin("locked/stake", 200),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))
 				suite.Require().NoError(err)
 
 				_, err = restakingService.DelegateService(ctx, restakingtypes.NewMsgDelegateService(
 					1,
-					sdk.NewCoins(sdk.NewInt64Coin("vested/stake", 200)),
+					sdk.NewCoins(sdk.NewInt64Coin("locked/stake", 200)),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))
 				suite.Require().NoError(err)
 
 				_, err = restakingService.DelegateOperator(ctx, restakingtypes.NewMsgDelegateOperator(
 					1,
-					sdk.NewCoins(sdk.NewInt64Coin("vested/stake", 600)),
+					sdk.NewCoins(sdk.NewInt64Coin("locked/stake", 600)),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))
 				suite.Require().NoError(err)
 
 				// Perform some undelegations
 				_, err = restakingService.UndelegatePool(ctx, restakingtypes.NewMsgUndelegatePool(
-					sdk.NewInt64Coin("vested/stake", 100),
+					sdk.NewInt64Coin("locked/stake", 100),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))
 				suite.Require().NoError(err)
 
 				_, err = restakingService.UndelegateService(ctx, restakingtypes.NewMsgUndelegateService(
 					1,
-					sdk.NewCoins(sdk.NewInt64Coin("vested/stake", 100)),
+					sdk.NewCoins(sdk.NewInt64Coin("locked/stake", 100)),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))
 				suite.Require().NoError(err)
 
 				_, err = restakingService.UndelegateOperator(ctx, restakingtypes.NewMsgUndelegateOperator(
 					1,
-					sdk.NewCoins(sdk.NewInt64Coin("vested/stake", 400)),
+					sdk.NewCoins(sdk.NewInt64Coin("locked/stake", 400)),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))
 				suite.Require().NoError(err)
 			},
-			expected: sdk.NewDecCoins(sdk.NewInt64DecCoin("vested/stake", 1000)),
+			expected: sdk.NewDecCoins(sdk.NewInt64DecCoin("locked/stake", 1000)),
 		},
 	}
 
@@ -340,7 +340,7 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllUserActiveVestedRepresentations()
 				tc.setup(ctx)
 			}
 
-			coins, err := suite.k.GetAllUserActiveVestedRepresentations(ctx, tc.user)
+			coins, err := suite.k.GetAllUserActiveLockedRepresentations(ctx, tc.user)
 			suite.Require().NoError(err)
 			suite.Require().Equal(tc.expected, coins)
 		})

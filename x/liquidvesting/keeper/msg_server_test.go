@@ -9,11 +9,11 @@ import (
 	"github.com/milkyway-labs/milkyway/x/liquidvesting/types"
 )
 
-func (suite *KeeperTestSuite) TestMsgServer_MintVestedRepresentation() {
+func (suite *KeeperTestSuite) TestMsgServer_MintLockedRepresentation() {
 	testCases := []struct {
 		name      string
 		store     func(ctx sdk.Context)
-		msg       *types.MsgMintVestedRepresentation
+		msg       *types.MsgMintLockedRepresentation
 		shouldErr bool
 		expEvents sdk.Events
 		check     func(ctx sdk.Context)
@@ -31,7 +31,7 @@ func (suite *KeeperTestSuite) TestMsgServer_MintVestedRepresentation() {
 				))
 				suite.Assert().NoError(err)
 			},
-			msg: types.NewMsgMintVestedRepresentation(
+			msg: types.NewMsgMintLockedRepresentation(
 				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 				sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
@@ -39,7 +39,7 @@ func (suite *KeeperTestSuite) TestMsgServer_MintVestedRepresentation() {
 			shouldErr: true,
 		},
 		{
-			name: "can't mint vested representation of vested representation coin",
+			name: "can't mint locked representation of locked representation coin",
 			store: func(ctx sdk.Context) {
 				// Store the params
 				err := suite.k.SetParams(ctx, types.NewParams(
@@ -51,10 +51,10 @@ func (suite *KeeperTestSuite) TestMsgServer_MintVestedRepresentation() {
 				))
 				suite.Assert().NoError(err)
 			},
-			msg: types.NewMsgMintVestedRepresentation(
+			msg: types.NewMsgMintLockedRepresentation(
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
-				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 1000)),
+				sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 1000)),
 			),
 			shouldErr: true,
 		},
@@ -71,7 +71,7 @@ func (suite *KeeperTestSuite) TestMsgServer_MintVestedRepresentation() {
 				))
 				suite.Assert().NoError(err)
 			},
-			msg: types.NewMsgMintVestedRepresentation(
+			msg: types.NewMsgMintLockedRepresentation(
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 				sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
@@ -79,16 +79,16 @@ func (suite *KeeperTestSuite) TestMsgServer_MintVestedRepresentation() {
 			shouldErr: false,
 			expEvents: sdk.Events{
 				sdk.NewEvent(
-					types.EventTypeMintVestedRepresentation,
+					types.EventTypeMintLockedRepresentation,
 					sdk.NewAttribute(sdk.AttributeKeySender, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
-					sdk.NewAttribute(sdk.AttributeKeyAmount, "1000"+vestedIBCDenom),
+					sdk.NewAttribute(sdk.AttributeKeyAmount, "1000"+LockedIBCDenom),
 					sdk.NewAttribute(types.AttributeKeyReceiver, "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn"),
 				),
 			},
 			check: func(ctx sdk.Context) {
 				balances := suite.bk.GetAllBalances(ctx, sdk.MustAccAddressFromBech32("cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn"))
 				suite.Assert().Equal(
-					sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 1000)),
+					sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 1000)),
 					balances,
 				)
 			},
@@ -106,7 +106,7 @@ func (suite *KeeperTestSuite) TestMsgServer_MintVestedRepresentation() {
 			}
 
 			msgServer := keeper.NewMsgServer(suite.k)
-			_, err := msgServer.MintVestedRepresentation(ctx, tc.msg)
+			_, err := msgServer.MintLockedRepresentation(ctx, tc.msg)
 
 			if tc.shouldErr {
 				suite.Assert().Error(err)
@@ -123,11 +123,11 @@ func (suite *KeeperTestSuite) TestMsgServer_MintVestedRepresentation() {
 	}
 }
 
-func (suite *KeeperTestSuite) TestMsgServer_BurnVestedRepresentation() {
+func (suite *KeeperTestSuite) TestMsgServer_BurnLockedRepresentation() {
 	testCases := []struct {
 		name      string
 		store     func(ctx sdk.Context)
-		msg       *types.MsgBurnVestedRepresentation
+		msg       *types.MsgBurnLockedRepresentation
 		shouldErr bool
 		expEvents sdk.Events
 		check     func(ctx sdk.Context)
@@ -144,15 +144,15 @@ func (suite *KeeperTestSuite) TestMsgServer_BurnVestedRepresentation() {
 				))
 				suite.Assert().NoError(err)
 
-				suite.mintVestedRepresentation(ctx,
+				suite.mintLockedRepresentation(ctx,
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
 				)
 			},
-			msg: types.NewMsgBurnVestedRepresentation(
+			msg: types.NewMsgBurnLockedRepresentation(
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
-				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 1000)),
+				sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 1000)),
 			),
 
 			shouldErr: true,
@@ -173,12 +173,12 @@ func (suite *KeeperTestSuite) TestMsgServer_BurnVestedRepresentation() {
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
 				)
-				suite.mintVestedRepresentation(ctx,
+				suite.mintLockedRepresentation(ctx,
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
 				)
 			},
-			msg: types.NewMsgBurnVestedRepresentation(
+			msg: types.NewMsgBurnLockedRepresentation(
 				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 				sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
@@ -197,22 +197,22 @@ func (suite *KeeperTestSuite) TestMsgServer_BurnVestedRepresentation() {
 				))
 				suite.Assert().NoError(err)
 
-				suite.mintVestedRepresentation(ctx,
+				suite.mintLockedRepresentation(ctx,
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
 				)
 			},
-			msg: types.NewMsgBurnVestedRepresentation(
+			msg: types.NewMsgBurnLockedRepresentation(
 				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
-				sdk.NewCoins(sdk.NewInt64Coin(vestedIBCDenom, 1000)),
+				sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 1000)),
 			),
 			shouldErr: false,
 			expEvents: sdk.Events{
 				sdk.NewEvent(
-					types.EventTypeBurnVestedRepresentation,
+					types.EventTypeBurnLockedRepresentation,
 					sdk.NewAttribute(sdk.AttributeKeySender, "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"),
-					sdk.NewAttribute(sdk.AttributeKeyAmount, "1000"+vestedIBCDenom),
+					sdk.NewAttribute(sdk.AttributeKeyAmount, "1000"+LockedIBCDenom),
 					sdk.NewAttribute(types.AttributeKeyUser, "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn"),
 				),
 			},
@@ -237,7 +237,7 @@ func (suite *KeeperTestSuite) TestMsgServer_BurnVestedRepresentation() {
 			}
 
 			msgServer := keeper.NewMsgServer(suite.k)
-			_, err := msgServer.BurnVestedRepresentation(ctx, tc.msg)
+			_, err := msgServer.BurnLockedRepresentation(ctx, tc.msg)
 
 			if tc.shouldErr {
 				suite.Assert().Error(err)
@@ -288,15 +288,15 @@ func (suite *KeeperTestSuite) TestMsgServer_WithdrawInsuranceFund() {
 				)
 
 				// Delegate to pool to simulate insurance fund utilization
-				suite.mintVestedRepresentation(ctx,
+				suite.mintLockedRepresentation(ctx,
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
 				)
 
-				suite.createPool(ctx, 1, vestedIBCDenom)
+				suite.createPool(ctx, 1, LockedIBCDenom)
 
 				_, err := suite.rk.DelegateToPool(ctx,
-					sdk.NewInt64Coin(vestedIBCDenom, 500),
+					sdk.NewInt64Coin(LockedIBCDenom, 500),
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 				)
 				suite.Assert().NoError(err)

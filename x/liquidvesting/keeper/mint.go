@@ -25,37 +25,37 @@ func (k *Keeper) IsMinter(ctx context.Context, user sdk.AccAddress) (bool, error
 	return slices.Contains(params.Minters, stringAddr), nil
 }
 
-// MintVestedRepresentation mints the vested staked representation of the provided
+// MintLockedRepresentation mints the locked staked representation of the provided
 // amount to the user.
-func (k *Keeper) MintVestedRepresentation(ctx context.Context, user sdk.AccAddress, amount sdk.Coins) (sdk.Coins, error) {
+func (k *Keeper) MintLockedRepresentation(ctx context.Context, user sdk.AccAddress, amount sdk.Coins) (sdk.Coins, error) {
 	var toMintTokens sdk.Coins
 	for _, coin := range amount {
-		// Create the vested representation for the received denom
-		vestedRepresentationDenom, err := types.GetVestedRepresentationDenom(coin.Denom)
+		// Create the locked representation for the received denom
+		lockedRepresentationDenom, err := types.GetLockedRepresentationDenom(coin.Denom)
 		if err != nil {
 			return sdk.Coins{}, err
 		}
 
-		// Check if we have the metadata for the vested representation
-		_, vestedDenomMetadataFound := k.bankKeeper.GetDenomMetaData(ctx, vestedRepresentationDenom)
-		if !vestedDenomMetadataFound {
-			// We don't have the metadata for the vested representation
+		// Check if we have the metadata for the locked representation
+		_, lockedDenomMetadataFound := k.bankKeeper.GetDenomMetaData(ctx, lockedRepresentationDenom)
+		if !lockedDenomMetadataFound {
+			// We don't have the metadata for the locked representation
 			// we should create it
 			denomMetadata := banktypes.Metadata{
 				DenomUnits: []*banktypes.DenomUnit{{
-					Denom:    vestedRepresentationDenom,
+					Denom:    lockedRepresentationDenom,
 					Exponent: 0,
 				}},
-				Base:        vestedRepresentationDenom,
-				Name:        vestedRepresentationDenom,
-				Symbol:      vestedRepresentationDenom,
-				Display:     vestedRepresentationDenom,
-				Description: "Vested representation of " + coin.Denom,
+				Base:        lockedRepresentationDenom,
+				Name:        lockedRepresentationDenom,
+				Symbol:      lockedRepresentationDenom,
+				Display:     lockedRepresentationDenom,
+				Description: "Locked representation of " + coin.Denom,
 			}
 			k.bankKeeper.SetDenomMetaData(ctx, denomMetadata)
 		}
 
-		toMintTokens = append(toMintTokens, sdk.NewCoin(vestedRepresentationDenom, coin.Amount))
+		toMintTokens = append(toMintTokens, sdk.NewCoin(lockedRepresentationDenom, coin.Amount))
 	}
 
 	// Mint the tokens to the module

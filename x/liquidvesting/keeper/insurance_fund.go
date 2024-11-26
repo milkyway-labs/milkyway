@@ -102,17 +102,17 @@ func (k *Keeper) GetInsuranceFundBalance(ctx context.Context) (sdk.Coins, error)
 }
 
 // GetUserUsedInsuranceFund returns the amount of coins that are used
-// to cover the user's vested representation tokens that have been restaked.
+// to cover the user's locked representation tokens that have been restaked.
 func (k *Keeper) GetUserUsedInsuranceFund(ctx context.Context, userAddress string) (sdk.Coins, error) {
-	// Get vested representations that the insurance fund covers
-	vestedRepresentations, err := k.GetAllUserActiveVestedRepresentations(ctx, userAddress)
+	// Get locked representations that the insurance fund covers
+	lockedRepresentations, err := k.GetAllUserActiveLockedRepresentations(ctx, userAddress)
 	if err != nil {
 		return nil, err
 	}
 
-	// No vested representation tokens were restaked, the used
+	// No locked representation tokens were restaked, the used
 	// insurance fund is zero
-	if vestedRepresentations.IsZero() {
+	if lockedRepresentations.IsZero() {
 		return sdk.NewCoins(), nil
 	}
 
@@ -128,8 +128,8 @@ func (k *Keeper) GetUserUsedInsuranceFund(ctx context.Context, userAddress strin
 
 	// Compute the used insurance fund
 	usedInsuranceFund := sdk.NewCoins()
-	for _, coin := range vestedRepresentations {
-		nativeDenom, err := types.VestedDenomToNative(coin.Denom)
+	for _, coin := range lockedRepresentations {
+		nativeDenom, err := types.LockedDenomToNative(coin.Denom)
 		if err != nil {
 			return nil, err
 		}
@@ -162,17 +162,17 @@ func (k *Keeper) CanWithdrawFromInsuranceFund(ctx context.Context, user string, 
 		return false, err
 	}
 
-	// Get all the vested representations that are currently being
+	// Get all the locked representations that are currently being
 	// covered by the user's insurance fund.
-	vestedRepresentations, err := k.GetAllUserActiveVestedRepresentations(ctx, user)
+	lockedRepresentations, err := k.GetAllUserActiveLockedRepresentations(ctx, user)
 	if err != nil {
 		return false, err
 	}
 
 	// Ensure that the user's insurance fund can cover the user's restaked
-	// vested representations after the withdrawal.
+	// locked representations after the withdrawal.
 	userInsuranceFund.Balance = userInsuranceFund.Balance.Sub(amount...)
-	canCover, _, err := userInsuranceFund.CanCoverDecCoins(params.InsurancePercentage, vestedRepresentations)
+	canCover, _, err := userInsuranceFund.CanCoverDecCoins(params.InsurancePercentage, lockedRepresentations)
 
 	return canCover, err
 }

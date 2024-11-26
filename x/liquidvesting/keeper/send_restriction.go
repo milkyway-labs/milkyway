@@ -10,7 +10,7 @@ import (
 )
 
 // SendRestrictionFn function that can be used in the x/bank module to block the
-// transfer of the vested representation tokens.
+// transfer of the locked representation tokens.
 func (k *Keeper) SendRestrictionFn(ctx context.Context, from sdk.AccAddress, to sdk.AccAddress, amount sdk.Coins) (sdk.AccAddress, error) {
 	fromAddrStr, err := k.accountKeeper.AddressCodec().BytesToString(from)
 	if err != nil {
@@ -22,7 +22,7 @@ func (k *Keeper) SendRestrictionFn(ctx context.Context, from sdk.AccAddress, to 
 	}
 
 	// Don't check when transferring from or to the module account, this is to allow
-	// the minting and burning of the vested representations
+	// the minting and burning of the locked representations
 	if toAddrStr == k.ModuleAddress || fromAddrStr == k.ModuleAddress {
 		return to, nil
 	}
@@ -41,8 +41,8 @@ func (k *Keeper) SendRestrictionFn(ctx context.Context, from sdk.AccAddress, to 
 	}
 
 	for _, coin := range amount {
-		// Check if coin is a representation of a vested originalDenom
-		if !types.IsVestedRepresentationDenom(coin.Denom) {
+		// Check if coin is a representation of a locked originalDenom
+		if !types.IsLockedRepresentationDenom(coin.Denom) {
 			continue
 		}
 
@@ -52,9 +52,9 @@ func (k *Keeper) SendRestrictionFn(ctx context.Context, from sdk.AccAddress, to 
 		if !isToRestakingTarget && !isFromRestakingTarget {
 			// Neither the sender nor the receiver is a restaking module
 			// this means that the user is trying to send those tokens
-			// somewhere else. Block it since the vested representation
+			// somewhere else. Block it since the locked representation
 			// can only be sent to the restaking module.
-			return nil, errors.Wrapf(types.ErrVestedRepresentationCannotBeTransferred, "coin %s", coin.Denom)
+			return nil, errors.Wrapf(types.ErrLockedRepresentationCannotBeTransferred, "coin %s", coin.Denom)
 		}
 	}
 

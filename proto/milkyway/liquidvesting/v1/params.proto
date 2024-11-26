@@ -9,9 +9,9 @@ option go_package = "github.com/milkyway-labs/milkyway/x/liquidvesting/types";
 // Params defines the parameters for the module.
 message Params {
   // This value represents the percentage that needs to be sent to the
-  // insurance fund in order to restake a certain amount of vested tokens.
+  // insurance fund in order to restake a certain amount of locked tokens.
   // For example, if this value is 2%, a user must send 2 tokens to
-  // the insurance fund to restake 100 vested tokens
+  // the insurance fund to restake 100 locked tokens
   string insurance_percentage = 1 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
@@ -19,12 +19,12 @@ message Params {
   ];
 
   // This value represents the list of users who are authorized to execute the
-  // MsgBurnVestedRepresentation.
+  // MsgBurnLockedRepresentation.
   repeated string burners = 2
       [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 
   // This value represents the list of users who are authorized to execute the
-  // MsgMintVestedRepresentation.
+  // MsgMintLockedRepresentation.
   repeated string minters = 3
       [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 

@@ -34,8 +34,8 @@ func (u *UserInsuranceFund) Validate() error {
 func (u *UserInsuranceFund) CanCoverDecCoins(insurancePercentage sdkmath.LegacyDec, coins sdk.DecCoins) (bool, sdk.Coins, error) {
 	required := sdk.NewCoins()
 	for _, coin := range coins {
-		if IsVestedRepresentationDenom(coin.Denom) {
-			nativeDenom, err := VestedDenomToNative(coin.Denom)
+		if IsLockedRepresentationDenom(coin.Denom) {
+			nativeDenom, err := LockedDenomToNative(coin.Denom)
 			if err != nil {
 				return false, nil, err
 			}

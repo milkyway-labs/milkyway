@@ -31,7 +31,7 @@ import (
 
 const (
 	IBCDenom       = "ibc/D79E7D83AB399BFFF93433E54FAA480C191248FC556924A2A8351AE2638B3877"
-	vestedIBCDenom = "vested/" + IBCDenom
+	LockedIBCDenom = "locked/" + IBCDenom
 )
 
 func TestKeeperTestSuite(t *testing.T) {
@@ -91,13 +91,13 @@ func (suite *KeeperTestSuite) fundAccount(ctx sdk.Context, address string, amoun
 	suite.Assert().NoError(err)
 }
 
-// mintVestedRepresentation mints the vested representation of the provided amount to
+// mintLockedRepresentation mints the locked representation of the provided amount to
 // the user balance
-func (suite *KeeperTestSuite) mintVestedRepresentation(ctx sdk.Context, address string, amount sdk.Coins) {
+func (suite *KeeperTestSuite) mintLockedRepresentation(ctx sdk.Context, address string, amount sdk.Coins) {
 	accAddress, err := sdk.AccAddressFromBech32(address)
 	suite.Assert().NoError(err)
 
-	_, err = suite.k.MintVestedRepresentation(ctx, accAddress, amount)
+	_, err = suite.k.MintLockedRepresentation(ctx, accAddress, amount)
 	suite.Assert().NoError(err)
 }
 

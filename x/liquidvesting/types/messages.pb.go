@@ -33,11 +33,11 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// MsgMintVestedRepresentation defines the message structure for the
-// MintVestedRepresentation gRPC service method. It allows an authorized
-// account to mint a user's staked vested tokens representation that can be
+// MsgMintLockedRepresentation defines the message structure for the
+// MintLockedRepresentation gRPC service method. It allows an authorized
+// account to mint a user's staked locked tokens representation that can be
 // used in the liquid vesting module.
-type MsgMintVestedRepresentation struct {
+type MsgMintLockedRepresentation struct {
 	// User that want to trigger the tokens mint.
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
 	// User that will receive the minted tokens.
@@ -46,18 +46,18 @@ type MsgMintVestedRepresentation struct {
 	Amount github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,3,rep,name=amount,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"amount"`
 }
 
-func (m *MsgMintVestedRepresentation) Reset()         { *m = MsgMintVestedRepresentation{} }
-func (m *MsgMintVestedRepresentation) String() string { return proto.CompactTextString(m) }
-func (*MsgMintVestedRepresentation) ProtoMessage()    {}
-func (*MsgMintVestedRepresentation) Descriptor() ([]byte, []int) {
+func (m *MsgMintLockedRepresentation) Reset()         { *m = MsgMintLockedRepresentation{} }
+func (m *MsgMintLockedRepresentation) String() string { return proto.CompactTextString(m) }
+func (*MsgMintLockedRepresentation) ProtoMessage()    {}
+func (*MsgMintLockedRepresentation) Descriptor() ([]byte, []int) {
 	return fileDescriptor_464962308475a38f, []int{0}
 }
-func (m *MsgMintVestedRepresentation) XXX_Unmarshal(b []byte) error {
+func (m *MsgMintLockedRepresentation) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgMintVestedRepresentation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgMintLockedRepresentation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgMintVestedRepresentation.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgMintLockedRepresentation.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -67,56 +67,56 @@ func (m *MsgMintVestedRepresentation) XXX_Marshal(b []byte, deterministic bool) 
 		return b[:n], nil
 	}
 }
-func (m *MsgMintVestedRepresentation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgMintVestedRepresentation.Merge(m, src)
+func (m *MsgMintLockedRepresentation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgMintLockedRepresentation.Merge(m, src)
 }
-func (m *MsgMintVestedRepresentation) XXX_Size() int {
+func (m *MsgMintLockedRepresentation) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgMintVestedRepresentation) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgMintVestedRepresentation.DiscardUnknown(m)
+func (m *MsgMintLockedRepresentation) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgMintLockedRepresentation.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgMintVestedRepresentation proto.InternalMessageInfo
+var xxx_messageInfo_MsgMintLockedRepresentation proto.InternalMessageInfo
 
-func (m *MsgMintVestedRepresentation) GetSender() string {
+func (m *MsgMintLockedRepresentation) GetSender() string {
 	if m != nil {
 		return m.Sender
 	}
 	return ""
 }
 
-func (m *MsgMintVestedRepresentation) GetReceiver() string {
+func (m *MsgMintLockedRepresentation) GetReceiver() string {
 	if m != nil {
 		return m.Receiver
 	}
 	return ""
 }
 
-func (m *MsgMintVestedRepresentation) GetAmount() github_com_cosmos_cosmos_sdk_types.Coins {
+func (m *MsgMintLockedRepresentation) GetAmount() github_com_cosmos_cosmos_sdk_types.Coins {
 	if m != nil {
 		return m.Amount
 	}
 	return nil
 }
 
-// MsgMintVestedRepresentationResponse is the return value of
-// MsgMintVestedRepresentation.
-type MsgMintVestedRepresentationResponse struct {
+// MsgMintLockedRepresentationResponse is the return value of
+// MsgMintLockedRepresentation.
+type MsgMintLockedRepresentationResponse struct {
 }
 
-func (m *MsgMintVestedRepresentationResponse) Reset()         { *m = MsgMintVestedRepresentationResponse{} }
-func (m *MsgMintVestedRepresentationResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgMintVestedRepresentationResponse) ProtoMessage()    {}
-func (*MsgMintVestedRepresentationResponse) Descriptor() ([]byte, []int) {
+func (m *MsgMintLockedRepresentationResponse) Reset()         { *m = MsgMintLockedRepresentationResponse{} }
+func (m *MsgMintLockedRepresentationResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgMintLockedRepresentationResponse) ProtoMessage()    {}
+func (*MsgMintLockedRepresentationResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_464962308475a38f, []int{1}
 }
-func (m *MsgMintVestedRepresentationResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgMintLockedRepresentationResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgMintVestedRepresentationResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgMintLockedRepresentationResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgMintVestedRepresentationResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgMintLockedRepresentationResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -126,22 +126,22 @@ func (m *MsgMintVestedRepresentationResponse) XXX_Marshal(b []byte, deterministi
 		return b[:n], nil
 	}
 }
-func (m *MsgMintVestedRepresentationResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgMintVestedRepresentationResponse.Merge(m, src)
+func (m *MsgMintLockedRepresentationResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgMintLockedRepresentationResponse.Merge(m, src)
 }
-func (m *MsgMintVestedRepresentationResponse) XXX_Size() int {
+func (m *MsgMintLockedRepresentationResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgMintVestedRepresentationResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgMintVestedRepresentationResponse.DiscardUnknown(m)
+func (m *MsgMintLockedRepresentationResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgMintLockedRepresentationResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgMintVestedRepresentationResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgMintLockedRepresentationResponse proto.InternalMessageInfo
 
-// MsgBurnVestedRepresentation defines the message structure for the
-// BurnVestedRepresentation gRPC service method. It allows an authorized
-// account to burn a user's staked vested tokens representation.
-type MsgBurnVestedRepresentation struct {
+// MsgBurnLockedRepresentation defines the message structure for the
+// BurnLockedRepresentation gRPC service method. It allows an authorized
+// account to burn a user's staked locked tokens representation.
+type MsgBurnLockedRepresentation struct {
 	// User that want to trigger the tokens burn.
 	Sender string `protobuf:"bytes,1,opt,name=sender,proto3" json:"sender,omitempty"`
 	// User from which we want to burn the tokens.
@@ -150,18 +150,18 @@ type MsgBurnVestedRepresentation struct {
 	Amount github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,3,rep,name=amount,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"amount"`
 }
 
-func (m *MsgBurnVestedRepresentation) Reset()         { *m = MsgBurnVestedRepresentation{} }
-func (m *MsgBurnVestedRepresentation) String() string { return proto.CompactTextString(m) }
-func (*MsgBurnVestedRepresentation) ProtoMessage()    {}
-func (*MsgBurnVestedRepresentation) Descriptor() ([]byte, []int) {
+func (m *MsgBurnLockedRepresentation) Reset()         { *m = MsgBurnLockedRepresentation{} }
+func (m *MsgBurnLockedRepresentation) String() string { return proto.CompactTextString(m) }
+func (*MsgBurnLockedRepresentation) ProtoMessage()    {}
+func (*MsgBurnLockedRepresentation) Descriptor() ([]byte, []int) {
 	return fileDescriptor_464962308475a38f, []int{2}
 }
-func (m *MsgBurnVestedRepresentation) XXX_Unmarshal(b []byte) error {
+func (m *MsgBurnLockedRepresentation) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgBurnVestedRepresentation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgBurnLockedRepresentation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgBurnVestedRepresentation.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgBurnLockedRepresentation.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -171,56 +171,56 @@ func (m *MsgBurnVestedRepresentation) XXX_Marshal(b []byte, deterministic bool) 
 		return b[:n], nil
 	}
 }
-func (m *MsgBurnVestedRepresentation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgBurnVestedRepresentation.Merge(m, src)
+func (m *MsgBurnLockedRepresentation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgBurnLockedRepresentation.Merge(m, src)
 }
-func (m *MsgBurnVestedRepresentation) XXX_Size() int {
+func (m *MsgBurnLockedRepresentation) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgBurnVestedRepresentation) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgBurnVestedRepresentation.DiscardUnknown(m)
+func (m *MsgBurnLockedRepresentation) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgBurnLockedRepresentation.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgBurnVestedRepresentation proto.InternalMessageInfo
+var xxx_messageInfo_MsgBurnLockedRepresentation proto.InternalMessageInfo
 
-func (m *MsgBurnVestedRepresentation) GetSender() string {
+func (m *MsgBurnLockedRepresentation) GetSender() string {
 	if m != nil {
 		return m.Sender
 	}
 	return ""
 }
 
-func (m *MsgBurnVestedRepresentation) GetUser() string {
+func (m *MsgBurnLockedRepresentation) GetUser() string {
 	if m != nil {
 		return m.User
 	}
 	return ""
 }
 
-func (m *MsgBurnVestedRepresentation) GetAmount() github_com_cosmos_cosmos_sdk_types.Coins {
+func (m *MsgBurnLockedRepresentation) GetAmount() github_com_cosmos_cosmos_sdk_types.Coins {
 	if m != nil {
 		return m.Amount
 	}
 	return nil
 }
 
-// MsgBurnVestedRepresentationResponse is the return value of
-// MsgBurnVestedRepresentation.
-type MsgBurnVestedRepresentationResponse struct {
+// MsgBurnLockedRepresentationResponse is the return value of
+// MsgBurnLockedRepresentation.
+type MsgBurnLockedRepresentationResponse struct {
 }
 
-func (m *MsgBurnVestedRepresentationResponse) Reset()         { *m = MsgBurnVestedRepresentationResponse{} }
-func (m *MsgBurnVestedRepresentationResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgBurnVestedRepresentationResponse) ProtoMessage()    {}
-func (*MsgBurnVestedRepresentationResponse) Descriptor() ([]byte, []int) {
+func (m *MsgBurnLockedRepresentationResponse) Reset()         { *m = MsgBurnLockedRepresentationResponse{} }
+func (m *MsgBurnLockedRepresentationResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgBurnLockedRepresentationResponse) ProtoMessage()    {}
+func (*MsgBurnLockedRepresentationResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_464962308475a38f, []int{3}
 }
-func (m *MsgBurnVestedRepresentationResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgBurnLockedRepresentationResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgBurnVestedRepresentationResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgBurnLockedRepresentationResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgBurnVestedRepresentationResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgBurnLockedRepresentationResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -230,17 +230,17 @@ func (m *MsgBurnVestedRepresentationResponse) XXX_Marshal(b []byte, deterministi
 		return b[:n], nil
 	}
 }
-func (m *MsgBurnVestedRepresentationResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgBurnVestedRepresentationResponse.Merge(m, src)
+func (m *MsgBurnLockedRepresentationResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgBurnLockedRepresentationResponse.Merge(m, src)
 }
-func (m *MsgBurnVestedRepresentationResponse) XXX_Size() int {
+func (m *MsgBurnLockedRepresentationResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgBurnVestedRepresentationResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgBurnVestedRepresentationResponse.DiscardUnknown(m)
+func (m *MsgBurnLockedRepresentationResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgBurnLockedRepresentationResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgBurnVestedRepresentationResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgBurnLockedRepresentationResponse proto.InternalMessageInfo
 
 // MsgWithdrawInsuranceFund defines the message structure for the
 // WithdrawInsuranceFund gRPC service method.
@@ -431,10 +431,10 @@ func (m *MsgUpdateParamsResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgUpdateParamsResponse proto.InternalMessageInfo
 
 func init() {
-	proto.RegisterType((*MsgMintVestedRepresentation)(nil), "milkyway.liquidvesting.v1.MsgMintVestedRepresentation")
-	proto.RegisterType((*MsgMintVestedRepresentationResponse)(nil), "milkyway.liquidvesting.v1.MsgMintVestedRepresentationResponse")
-	proto.RegisterType((*MsgBurnVestedRepresentation)(nil), "milkyway.liquidvesting.v1.MsgBurnVestedRepresentation")
-	proto.RegisterType((*MsgBurnVestedRepresentationResponse)(nil), "milkyway.liquidvesting.v1.MsgBurnVestedRepresentationResponse")
+	proto.RegisterType((*MsgMintLockedRepresentation)(nil), "milkyway.liquidvesting.v1.MsgMintLockedRepresentation")
+	proto.RegisterType((*MsgMintLockedRepresentationResponse)(nil), "milkyway.liquidvesting.v1.MsgMintLockedRepresentationResponse")
+	proto.RegisterType((*MsgBurnLockedRepresentation)(nil), "milkyway.liquidvesting.v1.MsgBurnLockedRepresentation")
+	proto.RegisterType((*MsgBurnLockedRepresentationResponse)(nil), "milkyway.liquidvesting.v1.MsgBurnLockedRepresentationResponse")
 	proto.RegisterType((*MsgWithdrawInsuranceFund)(nil), "milkyway.liquidvesting.v1.MsgWithdrawInsuranceFund")
 	proto.RegisterType((*MsgWithdrawInsuranceFundResponse)(nil), "milkyway.liquidvesting.v1.MsgWithdrawInsuranceFundResponse")
 	proto.RegisterType((*MsgUpdateParams)(nil), "milkyway.liquidvesting.v1.MsgUpdateParams")
@@ -446,50 +446,50 @@ func init() {
 }
 
 var fileDescriptor_464962308475a38f = []byte{
-	// 674 bytes of a gzipped FileDescriptorProto
+	// 675 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x95, 0xcf, 0x6b, 0x13, 0x41,
 	0x14, 0xc7, 0xb3, 0x6d, 0x0d, 0x76, 0x5a, 0x50, 0x97, 0x4a, 0x93, 0x08, 0xdb, 0x76, 0xfd, 0x41,
-	0x08, 0xed, 0xae, 0x49, 0x8b, 0x62, 0x05, 0xa5, 0x11, 0x04, 0x85, 0x80, 0x46, 0x54, 0xf0, 0x52,
-	0x26, 0xd9, 0x61, 0x3b, 0x34, 0x3b, 0x13, 0xe7, 0xcd, 0xa6, 0xe6, 0x26, 0xde, 0xf4, 0x24, 0x1e,
-	0xfd, 0x0f, 0xf4, 0x14, 0xc5, 0x3f, 0xa2, 0xc7, 0xe2, 0x49, 0x2f, 0x55, 0xda, 0x43, 0xee, 0x82,
-	0x77, 0xd9, 0xdd, 0xc9, 0xb6, 0x0d, 0xdd, 0xa4, 0x04, 0x11, 0x2f, 0x49, 0x66, 0xde, 0xfb, 0xbe,
-	0x1f, 0x1f, 0xe6, 0xbd, 0xa0, 0xbc, 0x47, 0x1b, 0x9b, 0xed, 0x2d, 0xdc, 0xb6, 0x1b, 0xf4, 0xb9,
-	0x4f, 0x9d, 0x16, 0x01, 0x49, 0x99, 0x6b, 0xb7, 0x8a, 0xb6, 0x47, 0x00, 0xb0, 0x4b, 0xc0, 0x6a,
-	0x0a, 0x2e, 0xb9, 0x9e, 0xed, 0x79, 0x5a, 0x47, 0x3c, 0xad, 0x56, 0x31, 0x77, 0x0e, 0x7b, 0x94,
-	0x71, 0x3b, 0xfc, 0x8c, 0xbc, 0x73, 0xd9, 0x3a, 0x07, 0x8f, 0xc3, 0x7a, 0x78, 0xb2, 0xa3, 0x83,
-	0x32, 0xcd, 0x46, 0x27, 0xdb, 0x83, 0x28, 0x0d, 0xb8, 0xca, 0x60, 0x28, 0x43, 0x0d, 0x03, 0xb1,
-	0x5b, 0xc5, 0x1a, 0x91, 0xb8, 0x68, 0xd7, 0x39, 0x65, 0xca, 0x3e, 0xe3, 0x72, 0x97, 0x47, 0x01,
-	0x83, 0x5f, 0xea, 0xf6, 0x4a, 0x72, 0x07, 0x4d, 0x2c, 0xb0, 0xa7, 0xd2, 0x9a, 0x9f, 0xc6, 0xd0,
-	0x85, 0x0a, 0xb8, 0x15, 0xca, 0xe4, 0x13, 0x02, 0x92, 0x38, 0x55, 0xd2, 0x14, 0x04, 0x08, 0x93,
-	0x58, 0x52, 0xce, 0xf4, 0xab, 0x28, 0x0d, 0x84, 0x39, 0x44, 0x64, 0xb4, 0x79, 0x2d, 0x3f, 0x59,
-	0xce, 0x7c, 0xfd, 0xb2, 0x34, 0xa3, 0x0a, 0x5f, 0x73, 0x1c, 0x41, 0x00, 0x1e, 0x49, 0x41, 0x99,
-	0x5b, 0x55, 0x7e, 0xfa, 0x0a, 0x3a, 0x2d, 0x48, 0x9d, 0xd0, 0x16, 0x11, 0x99, 0xb1, 0x21, 0x9a,
-	0xd8, 0x53, 0x97, 0x28, 0x8d, 0x3d, 0xee, 0x33, 0x99, 0x19, 0x9f, 0x1f, 0xcf, 0x4f, 0x95, 0xb2,
-	0x96, 0x12, 0x04, 0x6d, 0x5b, 0xaa, 0x6d, 0xeb, 0x0e, 0xa7, 0xac, 0xbc, 0xb6, 0xbd, 0x3b, 0x97,
-	0xfa, 0xf8, 0x63, 0x2e, 0xef, 0x52, 0xb9, 0xe1, 0xd7, 0xac, 0x3a, 0xf7, 0x14, 0x4a, 0xf5, 0xb5,
-	0x04, 0xce, 0xa6, 0x2d, 0xdb, 0x4d, 0x02, 0xa1, 0x00, 0xde, 0x77, 0x3b, 0x85, 0xe9, 0x06, 0x71,
-	0x71, 0xbd, 0xbd, 0x1e, 0x80, 0x83, 0xaa, 0xca, 0xb5, 0xba, 0xf2, 0xaa, 0xdb, 0x29, 0xa8, 0xc2,
-	0xdf, 0x74, 0x3b, 0x85, 0x4b, 0x31, 0xb5, 0x01, 0x4c, 0xcc, 0xcb, 0xe8, 0xe2, 0x00, 0x73, 0x95,
-	0x40, 0x93, 0x33, 0x20, 0xe6, 0x87, 0x08, 0x6d, 0xd9, 0x17, 0xec, 0x2f, 0xa1, 0x5d, 0x44, 0x13,
-	0x3e, 0x9c, 0x00, 0x6b, 0xe8, 0xf5, 0x3f, 0x22, 0x4d, 0x62, 0xa1, 0x90, 0x26, 0x99, 0x63, 0xa4,
-	0xbf, 0x35, 0x94, 0xa9, 0x80, 0xfb, 0x94, 0xca, 0x0d, 0x47, 0xe0, 0xad, 0x7b, 0x0c, 0x7c, 0x81,
-	0x59, 0x9d, 0xdc, 0xf5, 0x99, 0x33, 0x02, 0xcf, 0x03, 0x42, 0x63, 0xff, 0x90, 0x50, 0xb1, 0x8f,
-	0xd0, 0xc2, 0x61, 0x42, 0xc7, 0xb6, 0x66, 0x9a, 0x68, 0x3e, 0xc9, 0x16, 0xb3, 0xf9, 0xae, 0xa1,
-	0x33, 0x15, 0x70, 0x1f, 0x37, 0x1d, 0x2c, 0xc9, 0x83, 0x70, 0xc6, 0xf5, 0xfb, 0x68, 0x12, 0xfb,
-	0x72, 0x83, 0x0b, 0x2a, 0xdb, 0x8a, 0xca, 0xe2, 0xaf, 0xdd, 0xb9, 0xb3, 0x6d, 0xec, 0x35, 0x56,
-	0xcd, 0xd8, 0x64, 0x26, 0x92, 0x3a, 0x90, 0xeb, 0xb7, 0x51, 0x3a, 0xda, 0x1c, 0xe1, 0xf3, 0x9b,
-	0x2a, 0x2d, 0x58, 0x89, 0xab, 0xcf, 0x8a, 0xd2, 0x97, 0x27, 0x02, 0x68, 0x55, 0x25, 0x5b, 0xbd,
-	0x11, 0xf4, 0x7d, 0x10, 0x30, 0x68, 0x3d, 0x69, 0x4b, 0xf5, 0xf5, 0x61, 0x66, 0xd1, 0x6c, 0xdf,
-	0x55, 0xaf, 0xed, 0xd2, 0xe7, 0x09, 0x34, 0x5e, 0x01, 0x57, 0x7f, 0x17, 0x3c, 0x8d, 0xa4, 0x2d,
-	0x76, 0x6d, 0x40, 0xad, 0x03, 0x46, 0x39, 0x77, 0x6b, 0x34, 0x5d, 0xaf, 0xb8, 0xb0, 0xa8, 0xc4,
-	0xf9, 0x1f, 0x52, 0x54, 0x92, 0x6e, 0x58, 0x51, 0xc3, 0x86, 0x48, 0x7f, 0xad, 0xa1, 0xf3, 0xc7,
-	0x4f, 0xd0, 0xf2, 0xe0, 0xc8, 0xc7, 0x8a, 0x72, 0x37, 0x47, 0x10, 0xc5, 0xb5, 0x30, 0x34, 0x7d,
-	0xe4, 0xc1, 0x16, 0x06, 0x07, 0x3b, 0xec, 0x9b, 0x2b, 0x9d, 0xdc, 0xb7, 0x97, 0x2f, 0x77, 0xea,
-	0x65, 0xb7, 0x53, 0xd0, 0xca, 0x0f, 0xb7, 0xf7, 0x0c, 0x6d, 0x67, 0xcf, 0xd0, 0x7e, 0xee, 0x19,
-	0xda, 0xdb, 0x7d, 0x23, 0xb5, 0xb3, 0x6f, 0xa4, 0xbe, 0xed, 0x1b, 0xa9, 0x67, 0xd7, 0x0f, 0xcd,
-	0x77, 0x2f, 0xfc, 0x52, 0x03, 0xd7, 0x20, 0x3e, 0xd9, 0x2f, 0xfa, 0x1e, 0x6b, 0x38, 0xf4, 0xb5,
-	0x74, 0xf8, 0x7f, 0xba, 0xfc, 0x27, 0x00, 0x00, 0xff, 0xff, 0x46, 0xa4, 0x59, 0xd9, 0x3b, 0x08,
-	0x00, 0x00,
+	0x08, 0xed, 0xae, 0x49, 0x8b, 0x62, 0x05, 0xa5, 0x11, 0x04, 0xc5, 0x80, 0x46, 0x44, 0xf0, 0x52,
+	0x26, 0xbb, 0xc3, 0x76, 0x68, 0x76, 0x26, 0xee, 0x9b, 0x4d, 0xcd, 0x4d, 0xbc, 0xe9, 0x49, 0x3c,
+	0xfa, 0x1f, 0xe8, 0x29, 0x8a, 0x7f, 0x44, 0x8f, 0xc5, 0x93, 0x5e, 0xaa, 0xb4, 0x87, 0xdc, 0x05,
+	0xef, 0xb2, 0xbb, 0x93, 0x6d, 0x1b, 0xba, 0x9b, 0x12, 0x44, 0xbc, 0x24, 0x99, 0x79, 0xef, 0xfb,
+	0x7e, 0x7c, 0x98, 0xf7, 0x82, 0x8a, 0x2e, 0x6d, 0x6e, 0x76, 0xb6, 0x70, 0xc7, 0x6c, 0xd2, 0xe7,
+	0x3e, 0xb5, 0xdb, 0x04, 0x04, 0x65, 0x8e, 0xd9, 0x2e, 0x9b, 0x2e, 0x01, 0xc0, 0x0e, 0x01, 0xa3,
+	0xe5, 0x71, 0xc1, 0xd5, 0x7c, 0xdf, 0xd3, 0x38, 0xe2, 0x69, 0xb4, 0xcb, 0x85, 0x73, 0xd8, 0xa5,
+	0x8c, 0x9b, 0xe1, 0x67, 0xe4, 0x5d, 0xc8, 0x5b, 0x1c, 0x5c, 0x0e, 0xeb, 0xe1, 0xc9, 0x8c, 0x0e,
+	0xd2, 0x34, 0x1b, 0x9d, 0x4c, 0x17, 0xa2, 0x34, 0xe0, 0x48, 0x83, 0x26, 0x0d, 0x0d, 0x0c, 0xc4,
+	0x6c, 0x97, 0x1b, 0x44, 0xe0, 0xb2, 0x69, 0x71, 0xca, 0xa4, 0x7d, 0xc6, 0xe1, 0x0e, 0x8f, 0x02,
+	0x06, 0xbf, 0xe4, 0xed, 0x95, 0xe4, 0x0e, 0x5a, 0xd8, 0xc3, 0xae, 0x4c, 0xab, 0x7f, 0x1a, 0x43,
+	0x17, 0x6a, 0xe0, 0xd4, 0x28, 0x13, 0x0f, 0xb8, 0xb5, 0x49, 0xec, 0x3a, 0x69, 0x79, 0x04, 0x08,
+	0x13, 0x58, 0x50, 0xce, 0xd4, 0xab, 0x28, 0x0b, 0x84, 0xd9, 0xc4, 0xcb, 0x29, 0xf3, 0x4a, 0x71,
+	0xb2, 0x9a, 0xfb, 0xfa, 0x65, 0x69, 0x46, 0x16, 0xbe, 0x66, 0xdb, 0x1e, 0x01, 0x78, 0x2c, 0x3c,
+	0xca, 0x9c, 0xba, 0xf4, 0x53, 0x57, 0xd0, 0x69, 0x8f, 0x58, 0x84, 0xb6, 0x89, 0x97, 0x1b, 0x1b,
+	0xa2, 0x89, 0x3d, 0x55, 0x81, 0xb2, 0xd8, 0xe5, 0x3e, 0x13, 0xb9, 0xf1, 0xf9, 0xf1, 0xe2, 0x54,
+	0x25, 0x6f, 0x48, 0x41, 0xd0, 0xb6, 0x21, 0xdb, 0x36, 0xee, 0x70, 0xca, 0xaa, 0x6b, 0xdb, 0xbb,
+	0x73, 0x99, 0x8f, 0x3f, 0xe6, 0x8a, 0x0e, 0x15, 0x1b, 0x7e, 0xc3, 0xb0, 0xb8, 0x2b, 0x51, 0xca,
+	0xaf, 0x25, 0xb0, 0x37, 0x4d, 0xd1, 0x69, 0x11, 0x08, 0x05, 0xf0, 0xbe, 0xd7, 0x2d, 0x4d, 0x37,
+	0x89, 0x83, 0xad, 0xce, 0x7a, 0x00, 0x0e, 0xea, 0x32, 0xd7, 0xea, 0xca, 0xab, 0x5e, 0xb7, 0x24,
+	0x0b, 0x7f, 0xd3, 0xeb, 0x96, 0x2e, 0xc5, 0xd4, 0x52, 0x98, 0xe8, 0x97, 0xd1, 0xc5, 0x14, 0x73,
+	0x9d, 0x40, 0x8b, 0x33, 0x20, 0xfa, 0x87, 0x08, 0x6d, 0xd5, 0xf7, 0xd8, 0x5f, 0x42, 0xbb, 0x88,
+	0x26, 0x7c, 0x38, 0x01, 0xd6, 0xd0, 0xeb, 0x7f, 0x44, 0x9a, 0xc4, 0x42, 0x22, 0x4d, 0x32, 0xc7,
+	0x48, 0x7f, 0x2b, 0x28, 0x57, 0x03, 0xe7, 0x29, 0x15, 0x1b, 0xb6, 0x87, 0xb7, 0xee, 0x31, 0xf0,
+	0x3d, 0xcc, 0x2c, 0x72, 0xd7, 0x67, 0xf6, 0x08, 0x3c, 0x0f, 0x08, 0x8d, 0xfd, 0x43, 0x42, 0xe5,
+	0x01, 0x42, 0x0b, 0x87, 0x09, 0x1d, 0xdb, 0x9a, 0xae, 0xa3, 0xf9, 0x24, 0x5b, 0xcc, 0xe6, 0xbb,
+	0x82, 0xce, 0xd4, 0xc0, 0x79, 0xd2, 0xb2, 0xb1, 0x20, 0x0f, 0xc3, 0x19, 0x57, 0xef, 0xa3, 0x49,
+	0xec, 0x8b, 0x0d, 0xee, 0x51, 0xd1, 0x91, 0x54, 0x16, 0x7f, 0xed, 0xce, 0x9d, 0xed, 0x60, 0xb7,
+	0xb9, 0xaa, 0xc7, 0x26, 0x3d, 0x91, 0xd4, 0x81, 0x5c, 0xbd, 0x8d, 0xb2, 0xd1, 0xe6, 0x08, 0x9f,
+	0xdf, 0x54, 0x65, 0xc1, 0x48, 0x5c, 0x7d, 0x46, 0x94, 0xbe, 0x3a, 0x11, 0x40, 0xab, 0x4b, 0xd9,
+	0xea, 0x8d, 0xa0, 0xef, 0x83, 0x80, 0x41, 0xeb, 0x49, 0x5b, 0x6a, 0xa0, 0x0f, 0x3d, 0x8f, 0x66,
+	0x07, 0xae, 0xfa, 0x6d, 0x57, 0x3e, 0x4f, 0xa0, 0xf1, 0x1a, 0x38, 0xea, 0xbb, 0xe0, 0x69, 0x24,
+	0x6d, 0xb1, 0x6b, 0x29, 0xb5, 0xa6, 0x8c, 0x72, 0xe1, 0xd6, 0x68, 0xba, 0x7e, 0x71, 0x61, 0x51,
+	0x89, 0xf3, 0x3f, 0xa4, 0xa8, 0x24, 0xdd, 0xb0, 0xa2, 0x86, 0x0d, 0x91, 0xfa, 0x5a, 0x41, 0xe7,
+	0x8f, 0x9f, 0xa0, 0xe5, 0xf4, 0xc8, 0xc7, 0x8a, 0x0a, 0x37, 0x47, 0x10, 0xc5, 0xb5, 0x30, 0x34,
+	0x7d, 0xe4, 0xc1, 0x96, 0xd2, 0x83, 0x1d, 0xf6, 0x2d, 0x54, 0x4e, 0xee, 0xdb, 0xcf, 0x57, 0x38,
+	0xf5, 0xb2, 0xd7, 0x2d, 0x29, 0xd5, 0x47, 0xdb, 0x7b, 0x9a, 0xb2, 0xb3, 0xa7, 0x29, 0x3f, 0xf7,
+	0x34, 0xe5, 0xed, 0xbe, 0x96, 0xd9, 0xd9, 0xd7, 0x32, 0xdf, 0xf6, 0xb5, 0xcc, 0xb3, 0xeb, 0x87,
+	0xe6, 0xbb, 0x1f, 0x7e, 0xa9, 0x89, 0x1b, 0x10, 0x9f, 0xcc, 0x17, 0x03, 0x8f, 0x35, 0x1c, 0xfa,
+	0x46, 0x36, 0xfc, 0x3f, 0x5d, 0xfe, 0x13, 0x00, 0x00, 0xff, 0xff, 0x41, 0x8f, 0xe5, 0xa2, 0x3b,
+	0x08, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -504,12 +504,12 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgClient interface {
-	// MintVestedRepresentation defines the operation to mint a user's staked
-	// vested tokens representation that can be used in the liquid vesting module.
-	MintVestedRepresentation(ctx context.Context, in *MsgMintVestedRepresentation, opts ...grpc.CallOption) (*MsgMintVestedRepresentationResponse, error)
-	// BurnVestedRepresentation defines the operation to burn a user's staked
-	// vested tokens representation.
-	BurnVestedRepresentation(ctx context.Context, in *MsgBurnVestedRepresentation, opts ...grpc.CallOption) (*MsgBurnVestedRepresentationResponse, error)
+	// MintLockedRepresentation defines the operation to mint a user's staked
+	// locked tokens representation that can be used in the liquid vesting module.
+	MintLockedRepresentation(ctx context.Context, in *MsgMintLockedRepresentation, opts ...grpc.CallOption) (*MsgMintLockedRepresentationResponse, error)
+	// BurnLockedRepresentation defines the operation to burn a user's staked
+	// locked tokens representation.
+	BurnLockedRepresentation(ctx context.Context, in *MsgBurnLockedRepresentation, opts ...grpc.CallOption) (*MsgBurnLockedRepresentationResponse, error)
 	// WithdrawInsuranceFund defines the operation to withdraw an amount
 	// of tokens from the user's insurance fund.
 	// This can be used from the user to withdraw their funds after
@@ -531,18 +531,18 @@ func NewMsgClient(cc grpc1.ClientConn) MsgClient {
 	return &msgClient{cc}
 }
 
-func (c *msgClient) MintVestedRepresentation(ctx context.Context, in *MsgMintVestedRepresentation, opts ...grpc.CallOption) (*MsgMintVestedRepresentationResponse, error) {
-	out := new(MsgMintVestedRepresentationResponse)
-	err := c.cc.Invoke(ctx, "/milkyway.liquidvesting.v1.Msg/MintVestedRepresentation", in, out, opts...)
+func (c *msgClient) MintLockedRepresentation(ctx context.Context, in *MsgMintLockedRepresentation, opts ...grpc.CallOption) (*MsgMintLockedRepresentationResponse, error) {
+	out := new(MsgMintLockedRepresentationResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.liquidvesting.v1.Msg/MintLockedRepresentation", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *msgClient) BurnVestedRepresentation(ctx context.Context, in *MsgBurnVestedRepresentation, opts ...grpc.CallOption) (*MsgBurnVestedRepresentationResponse, error) {
-	out := new(MsgBurnVestedRepresentationResponse)
-	err := c.cc.Invoke(ctx, "/milkyway.liquidvesting.v1.Msg/BurnVestedRepresentation", in, out, opts...)
+func (c *msgClient) BurnLockedRepresentation(ctx context.Context, in *MsgBurnLockedRepresentation, opts ...grpc.CallOption) (*MsgBurnLockedRepresentationResponse, error) {
+	out := new(MsgBurnLockedRepresentationResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.liquidvesting.v1.Msg/BurnLockedRepresentation", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -569,12 +569,12 @@ func (c *msgClient) UpdateParams(ctx context.Context, in *MsgUpdateParams, opts 
 
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
-	// MintVestedRepresentation defines the operation to mint a user's staked
-	// vested tokens representation that can be used in the liquid vesting module.
-	MintVestedRepresentation(context.Context, *MsgMintVestedRepresentation) (*MsgMintVestedRepresentationResponse, error)
-	// BurnVestedRepresentation defines the operation to burn a user's staked
-	// vested tokens representation.
-	BurnVestedRepresentation(context.Context, *MsgBurnVestedRepresentation) (*MsgBurnVestedRepresentationResponse, error)
+	// MintLockedRepresentation defines the operation to mint a user's staked
+	// locked tokens representation that can be used in the liquid vesting module.
+	MintLockedRepresentation(context.Context, *MsgMintLockedRepresentation) (*MsgMintLockedRepresentationResponse, error)
+	// BurnLockedRepresentation defines the operation to burn a user's staked
+	// locked tokens representation.
+	BurnLockedRepresentation(context.Context, *MsgBurnLockedRepresentation) (*MsgBurnLockedRepresentationResponse, error)
 	// WithdrawInsuranceFund defines the operation to withdraw an amount
 	// of tokens from the user's insurance fund.
 	// This can be used from the user to withdraw their funds after
@@ -592,11 +592,11 @@ type MsgServer interface {
 type UnimplementedMsgServer struct {
 }
 
-func (*UnimplementedMsgServer) MintVestedRepresentation(ctx context.Context, req *MsgMintVestedRepresentation) (*MsgMintVestedRepresentationResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method MintVestedRepresentation not implemented")
+func (*UnimplementedMsgServer) MintLockedRepresentation(ctx context.Context, req *MsgMintLockedRepresentation) (*MsgMintLockedRepresentationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MintLockedRepresentation not implemented")
 }
-func (*UnimplementedMsgServer) BurnVestedRepresentation(ctx context.Context, req *MsgBurnVestedRepresentation) (*MsgBurnVestedRepresentationResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BurnVestedRepresentation not implemented")
+func (*UnimplementedMsgServer) BurnLockedRepresentation(ctx context.Context, req *MsgBurnLockedRepresentation) (*MsgBurnLockedRepresentationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BurnLockedRepresentation not implemented")
 }
 func (*UnimplementedMsgServer) WithdrawInsuranceFund(ctx context.Context, req *MsgWithdrawInsuranceFund) (*MsgWithdrawInsuranceFundResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WithdrawInsuranceFund not implemented")
@@ -609,38 +609,38 @@ func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
 	s.RegisterService(&_Msg_serviceDesc, srv)
 }
 
-func _Msg_MintVestedRepresentation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgMintVestedRepresentation)
+func _Msg_MintLockedRepresentation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgMintLockedRepresentation)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).MintVestedRepresentation(ctx, in)
+		return srv.(MsgServer).MintLockedRepresentation(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/milkyway.liquidvesting.v1.Msg/MintVestedRepresentation",
+		FullMethod: "/milkyway.liquidvesting.v1.Msg/MintLockedRepresentation",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).MintVestedRepresentation(ctx, req.(*MsgMintVestedRepresentation))
+		return srv.(MsgServer).MintLockedRepresentation(ctx, req.(*MsgMintLockedRepresentation))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_BurnVestedRepresentation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgBurnVestedRepresentation)
+func _Msg_BurnLockedRepresentation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgBurnLockedRepresentation)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).BurnVestedRepresentation(ctx, in)
+		return srv.(MsgServer).BurnLockedRepresentation(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/milkyway.liquidvesting.v1.Msg/BurnVestedRepresentation",
+		FullMethod: "/milkyway.liquidvesting.v1.Msg/BurnLockedRepresentation",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).BurnVestedRepresentation(ctx, req.(*MsgBurnVestedRepresentation))
+		return srv.(MsgServer).BurnLockedRepresentation(ctx, req.(*MsgBurnLockedRepresentation))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -686,12 +686,12 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*MsgServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "MintVestedRepresentation",
-			Handler:    _Msg_MintVestedRepresentation_Handler,
+			MethodName: "MintLockedRepresentation",
+			Handler:    _Msg_MintLockedRepresentation_Handler,
 		},
 		{
-			MethodName: "BurnVestedRepresentation",
-			Handler:    _Msg_BurnVestedRepresentation_Handler,
+			MethodName: "BurnLockedRepresentation",
+			Handler:    _Msg_BurnLockedRepresentation_Handler,
 		},
 		{
 			MethodName: "WithdrawInsuranceFund",
@@ -706,7 +706,7 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 	Metadata: "milkyway/liquidvesting/v1/messages.proto",
 }
 
-func (m *MsgMintVestedRepresentation) Marshal() (dAtA []byte, err error) {
+func (m *MsgMintLockedRepresentation) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -716,12 +716,12 @@ func (m *MsgMintVestedRepresentation) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgMintVestedRepresentation) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgMintLockedRepresentation) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgMintVestedRepresentation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgMintLockedRepresentation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -757,7 +757,7 @@ func (m *MsgMintVestedRepresentation) MarshalToSizedBuffer(dAtA []byte) (int, er
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgMintVestedRepresentationResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgMintLockedRepresentationResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -767,12 +767,12 @@ func (m *MsgMintVestedRepresentationResponse) Marshal() (dAtA []byte, err error)
 	return dAtA[:n], nil
 }
 
-func (m *MsgMintVestedRepresentationResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgMintLockedRepresentationResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgMintVestedRepresentationResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgMintLockedRepresentationResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -780,7 +780,7 @@ func (m *MsgMintVestedRepresentationResponse) MarshalToSizedBuffer(dAtA []byte) 
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgBurnVestedRepresentation) Marshal() (dAtA []byte, err error) {
+func (m *MsgBurnLockedRepresentation) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -790,12 +790,12 @@ func (m *MsgBurnVestedRepresentation) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgBurnVestedRepresentation) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgBurnLockedRepresentation) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgBurnVestedRepresentation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgBurnLockedRepresentation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -831,7 +831,7 @@ func (m *MsgBurnVestedRepresentation) MarshalToSizedBuffer(dAtA []byte) (int, er
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgBurnVestedRepresentationResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgBurnLockedRepresentationResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -841,12 +841,12 @@ func (m *MsgBurnVestedRepresentationResponse) Marshal() (dAtA []byte, err error)
 	return dAtA[:n], nil
 }
 
-func (m *MsgBurnVestedRepresentationResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgBurnLockedRepresentationResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgBurnVestedRepresentationResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgBurnLockedRepresentationResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -995,7 +995,7 @@ func encodeVarintMessages(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *MsgMintVestedRepresentation) Size() (n int) {
+func (m *MsgMintLockedRepresentation) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1018,7 +1018,7 @@ func (m *MsgMintVestedRepresentation) Size() (n int) {
 	return n
 }
 
-func (m *MsgMintVestedRepresentationResponse) Size() (n int) {
+func (m *MsgMintLockedRepresentationResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1027,7 +1027,7 @@ func (m *MsgMintVestedRepresentationResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgBurnVestedRepresentation) Size() (n int) {
+func (m *MsgBurnLockedRepresentation) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1050,7 +1050,7 @@ func (m *MsgBurnVestedRepresentation) Size() (n int) {
 	return n
 }
 
-func (m *MsgBurnVestedRepresentationResponse) Size() (n int) {
+func (m *MsgBurnLockedRepresentationResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1117,7 +1117,7 @@ func sovMessages(x uint64) (n int) {
 func sozMessages(x uint64) (n int) {
 	return sovMessages(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *MsgMintVestedRepresentation) Unmarshal(dAtA []byte) error {
+func (m *MsgMintLockedRepresentation) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1140,10 +1140,10 @@ func (m *MsgMintVestedRepresentation) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgMintVestedRepresentation: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgMintLockedRepresentation: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgMintVestedRepresentation: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgMintLockedRepresentation: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1265,7 +1265,7 @@ func (m *MsgMintVestedRepresentation) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgMintVestedRepresentationResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgMintLockedRepresentationResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1288,10 +1288,10 @@ func (m *MsgMintVestedRepresentationResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgMintVestedRepresentationResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgMintLockedRepresentationResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgMintVestedRepresentationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgMintLockedRepresentationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
@@ -1315,7 +1315,7 @@ func (m *MsgMintVestedRepresentationResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgBurnVestedRepresentation) Unmarshal(dAtA []byte) error {
+func (m *MsgBurnLockedRepresentation) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1338,10 +1338,10 @@ func (m *MsgBurnVestedRepresentation) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgBurnVestedRepresentation: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgBurnLockedRepresentation: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgBurnVestedRepresentation: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgBurnLockedRepresentation: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1463,7 +1463,7 @@ func (m *MsgBurnVestedRepresentation) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgBurnVestedRepresentationResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgBurnLockedRepresentationResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1486,10 +1486,10 @@ func (m *MsgBurnVestedRepresentationResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgBurnVestedRepresentationResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgBurnLockedRepresentationResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgBurnVestedRepresentationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgBurnLockedRepresentationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

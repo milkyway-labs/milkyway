@@ -109,12 +109,12 @@ func (q Querier) UserRestakableAssets(ctx context.Context, req *types.QueryUserR
 	for _, coin := range balance {
 		restakableAmount := math.LegacyNewDecFromInt(coin.Amount).MulInt64(100).QuoTruncate(params.InsurancePercentage).TruncateInt()
 
-		vestedDenom, err := types.GetVestedRepresentationDenom(coin.Denom)
+		lockedDenom, err := types.GetLockedRepresentationDenom(coin.Denom)
 		if err != nil {
 			return nil, err
 		}
 
-		restakableCoins = restakableCoins.Add(sdk.NewCoin(vestedDenom, restakableAmount))
+		restakableCoins = restakableCoins.Add(sdk.NewCoin(lockedDenom, restakableAmount))
 	}
 
 	return &types.QueryUserRestakableAssetsResponse{Amount: restakableCoins}, nil
