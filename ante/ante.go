@@ -103,7 +103,10 @@ func NewAnteHandler(opts HandlerOptions) (sdk.AnteHandler, error) {
 					opts.AccountKeeper,
 					opts.BankKeeper,
 					opts.FeegrantKeeper,
-					opts.TxFeeChecker)))
+					opts.TxFeeChecker,
+				),
+			),
+		)
 	}
 
 	return sdk.ChainAnteDecorators(anteDecorators...), nil

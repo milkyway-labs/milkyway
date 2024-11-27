@@ -629,6 +629,10 @@ func minTxFeesChecker(ctx sdk.Context, tx sdk.Tx, feemarketKp feemarketkeeper.Ke
 		return nil, 0, err
 	}
 
+	if feeMarketParams.MinBaseGasPrice.IsZero() {
+		return feeTx.GetFee(), 0, nil
+	}
+
 	feeRequired := sdk.NewCoins(
 		sdk.NewCoin(
 			feeMarketParams.FeeDenom,
