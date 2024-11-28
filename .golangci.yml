@@ -28,9 +28,6 @@ linters:
 issues:
   max-issues-per-linter: 10000
   max-same-issues: 10000
-  exclude-dirs:
-    - "app/ibc-hooks/*"
-    - "x/tokenfactory/*"
   exclude-rules:
     - text: "The legacy v1beta1 gov types maintained in this file are deprecated and will be removed in a future release"
       linters:
