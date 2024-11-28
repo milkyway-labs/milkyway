@@ -9,6 +9,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	connecttypes "github.com/skip-mev/connect/v2/pkg/types"
 	marketmapkeeper "github.com/skip-mev/connect/v2/x/marketmap/keeper"
@@ -21,7 +22,6 @@ import (
 	"github.com/milkyway-labs/milkyway/v2/utils"
 	assetskeeper "github.com/milkyway-labs/milkyway/v2/x/assets/keeper"
 	assetstypes "github.com/milkyway-labs/milkyway/v2/x/assets/types"
-	bankkeeper "github.com/milkyway-labs/milkyway/v2/x/bank/keeper"
 	operatorskeeper "github.com/milkyway-labs/milkyway/v2/x/operators/keeper"
 	operatorstypes "github.com/milkyway-labs/milkyway/v2/x/operators/types"
 	poolskeeper "github.com/milkyway-labs/milkyway/v2/x/pools/keeper"
@@ -43,7 +43,7 @@ type KeeperTestSuite struct {
 	cdc codec.Codec
 
 	accountKeeper   authkeeper.AccountKeeper
-	bankKeeper      bankkeeper.Keeper
+	bankKeeper      bankkeeper.BaseKeeper
 	marketMapKeeper *marketmapkeeper.Keeper
 	oracleKeeper    oraclekeeper.Keeper
 	assetsKeeper    *assetskeeper.Keeper

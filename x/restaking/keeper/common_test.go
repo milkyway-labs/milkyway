@@ -7,10 +7,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	"github.com/stretchr/testify/suite"
 
-	bankkeeper "github.com/milkyway-labs/milkyway/v2/x/bank/keeper"
 	operatorskeeper "github.com/milkyway-labs/milkyway/v2/x/operators/keeper"
 	poolskeeper "github.com/milkyway-labs/milkyway/v2/x/pools/keeper"
 	"github.com/milkyway-labs/milkyway/v2/x/restaking/keeper"
@@ -31,7 +31,7 @@ type KeeperTestSuite struct {
 	storeService corestoretypes.KVStoreService
 
 	ak authkeeper.AccountKeeper
-	bk bankkeeper.Keeper
+	bk bankkeeper.BaseKeeper
 	pk *poolskeeper.Keeper
 	ok *operatorskeeper.Keeper
 	sk *serviceskeeper.Keeper

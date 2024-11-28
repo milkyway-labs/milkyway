@@ -3,9 +3,9 @@ package keeper_test
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
-	bankkeeper "github.com/milkyway-labs/milkyway/v2/x/bank/keeper"
 	"github.com/milkyway-labs/milkyway/v2/x/liquidvesting/types"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/v2/x/liquidvesting/types"
 	operatorstypes "github.com/milkyway-labs/milkyway/v2/x/operators/types"

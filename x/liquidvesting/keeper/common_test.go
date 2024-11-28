@@ -9,6 +9,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	capabilitytypes "github.com/cosmos/ibc-go/modules/capability/types"
 	clienttypes "github.com/cosmos/ibc-go/v8/modules/core/02-client/types"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
@@ -16,7 +17,6 @@ import (
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 	"github.com/stretchr/testify/suite"
 
-	bankkeeper "github.com/milkyway-labs/milkyway/v2/x/bank/keeper"
 	"github.com/milkyway-labs/milkyway/v2/x/liquidvesting/keeper"
 	"github.com/milkyway-labs/milkyway/v2/x/liquidvesting/testutils"
 	"github.com/milkyway-labs/milkyway/v2/x/liquidvesting/types"
@@ -47,7 +47,7 @@ type KeeperTestSuite struct {
 	liquidVestingModuleAddress sdk.AccAddress
 
 	ak authkeeper.AccountKeeper
-	bk *bankkeeper.Keeper
+	bk bankkeeper.BaseKeeper
 	ok *operatorskeeper.Keeper
 	pk *poolskeeper.Keeper
 	sk *serviceskeeper.Keeper
@@ -66,7 +66,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 	suite.liquidVestingModuleAddress = authtypes.NewModuleAddress(types.ModuleName)
 
 	suite.ak = data.AccountKeeper
-	suite.bk = &data.BankKeeper
+	suite.bk = data.BankKeeper
 	suite.ibcm = data.IBCMiddleware
 	suite.pk = data.PoolsKeeper
 

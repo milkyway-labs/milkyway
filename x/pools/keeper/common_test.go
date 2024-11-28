@@ -7,25 +7,23 @@ import (
 	"cosmossdk.io/log"
 	"cosmossdk.io/store"
 	"cosmossdk.io/store/metrics"
+	storetypes "cosmossdk.io/store/types"
+	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	db "github.com/cosmos/cosmos-db"
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/runtime"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	authcodec "github.com/cosmos/cosmos-sdk/x/auth/codec"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	"github.com/stretchr/testify/suite"
 
 	milkyway "github.com/milkyway-labs/milkyway/v2/app"
-	bankkeeper "github.com/milkyway-labs/milkyway/v2/x/bank/keeper"
 	"github.com/milkyway-labs/milkyway/v2/x/pools/keeper"
 	"github.com/milkyway-labs/milkyway/v2/x/pools/types"
-
-	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
-
-	storetypes "cosmossdk.io/store/types"
-	db "github.com/cosmos/cosmos-db"
-	"github.com/cosmos/cosmos-sdk/codec"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/stretchr/testify/suite"
 )
 
 func TestKeeperTestSuite(t *testing.T) {
@@ -42,7 +40,7 @@ type KeeperTestSuite struct {
 	storeService corestoretypes.KVStoreService
 
 	ak authkeeper.AccountKeeper
-	bk bankkeeper.Keeper
+	bk bankkeeper.BaseKeeper
 	k  *keeper.Keeper
 }
 
@@ -80,7 +78,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 		sdk.GetConfig().GetBech32AccountAddrPrefix(),
 		authorityAddr,
 	)
-	suite.bk = bankkeeper.NewKeeper(
+	suite.bk = bankkeeper.NewBaseKeeper(
 		suite.cdc,
 		runtime.NewKVStoreService(keys[banktypes.StoreKey]),
 		suite.ak,
