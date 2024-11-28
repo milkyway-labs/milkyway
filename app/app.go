@@ -120,7 +120,7 @@ func init() {
 	DefaultNodeHome = filepath.Join(userHomeDir, "."+appName)
 }
 
-// NewMilkyWayApp returns a reference to an initialized Initia.
+// NewMilkyWayApp returns a reference to an initialized MilkyWayApp.
 func NewMilkyWayApp(
 	logger log.Logger,
 	db dbm.DB,
