@@ -13,8 +13,7 @@ import (
 )
 
 type Keeper struct {
-	cdc          codec.Codec
-	storeService corestoretypes.KVStoreService
+	cdc codec.Codec
 
 	Schema        collections.Schema
 	Assets        collections.Map[string, types.Asset]                 // denom => types.Asset
@@ -30,8 +29,7 @@ func NewKeeper(
 ) *Keeper {
 	sb := collections.NewSchemaBuilder(storeService)
 	k := &Keeper{
-		cdc:          cdc,
-		storeService: storeService,
+		cdc: cdc,
 
 		Assets: collections.NewMap(
 			sb,
