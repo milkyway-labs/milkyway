@@ -120,34 +120,10 @@
       }
     },
     {
-      "url": "./tmp-swagger-gen/initia/ibchooks/v1/query.swagger.json",
-      "operationIds": {
-        "rename": {
-          "Params": "IBCHooksParams"
-        }
-      }
-    },
-    {
-      "url": "./tmp-swagger-gen/opinit/opchild/v1/query.swagger.json",
-      "operationIds": {
-        "rename": {
-          "Params": "OPChildParams"
-        }
-      }
-    },
-    {
       "url": "./tmp-swagger-gen/cosmwasm/wasm/v1/query.swagger.json",
       "operationIds": {
         "rename": {
           "Params": "WasmParams"
-        }
-      }
-    },
-    {
-      "url": "./tmp-swagger-gen/milkyway/tokenfactory/v1/query.swagger.json",
-      "operationIds": {
-        "rename": {
-          "Params": "TokenFactoryParams"
         }
       }
     },
