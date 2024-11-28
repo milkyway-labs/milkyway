@@ -6,6 +6,7 @@ import (
 	"sort"
 	"time"
 
+	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
@@ -26,41 +27,18 @@ import (
 // IterateAllOperatorsJoinedServices iterates over all the operators and their joined services,
 // performing the given action. If the action returns true, the iteration will stop.
 func (k *Keeper) IterateAllOperatorsJoinedServices(ctx context.Context, action func(operatorID uint32, serviceID uint32) (stop bool, err error)) error {
-	iterator, err := k.operatorJoinedServices.Iterate(ctx, nil)
-	if err != nil {
-		return err
-	}
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		operatorServicePair, err := iterator.Key()
-		if err != nil {
-			return err
-		}
-
-		stop, err := action(operatorServicePair.K1(), operatorServicePair.K2())
-		if err != nil {
-			return err
-		}
-
-		if stop {
-			break
-		}
-	}
-
-	return nil
+	err := k.operatorJoinedServices.Walk(ctx, nil, func(key collections.Pair[uint32, uint32], _ collections.NoValue) (stop bool, err error) {
+		operatorID := key.K1()
+		serviceID := key.K2()
+		return action(operatorID, serviceID)
+	})
+	return err
 }
 
 // GetAllOperatorsJoinedServices returns all services that each operator has joined
 func (k *Keeper) GetAllOperatorsJoinedServices(ctx context.Context) ([]types.OperatorJoinedServices, error) {
-	iterator, err := k.operatorJoinedServices.Iterate(ctx, nil)
-	if err != nil {
-		return nil, err
-	}
-	defer iterator.Close()
-
 	items := make(map[uint32]types.OperatorJoinedServices)
-	err = k.IterateAllOperatorsJoinedServices(ctx, func(operatorID uint32, serviceID uint32) (stop bool, err error) {
+	err := k.IterateAllOperatorsJoinedServices(ctx, func(operatorID uint32, serviceID uint32) (stop bool, err error) {
 		joinedServicesRecord, ok := items[operatorID]
 		if !ok {
 			joinedServicesRecord = types.NewOperatorJoinedServices(operatorID, nil)
@@ -95,31 +73,12 @@ func (k *Keeper) GetAllOperatorsJoinedServices(ctx context.Context) ([]types.Ope
 // IterateAllServicesAllowedOperators iterates over all the services and their allowed operators,
 // performing the given action. If the action returns true, the iteration will stop.
 func (k *Keeper) IterateAllServicesAllowedOperators(ctx context.Context, action func(serviceID uint32, operatorID uint32) (stop bool, err error)) error {
-	iterator, err := k.serviceOperatorsAllowList.Iterate(ctx, nil)
-	if err != nil {
-		return err
-	}
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		serviceOperatorPair, err := iterator.Key()
-		if err != nil {
-			return err
-		}
-		serviceID := serviceOperatorPair.K1()
-		operatorID := serviceOperatorPair.K2()
-
-		stop, err := action(serviceID, operatorID)
-		if err != nil {
-			return err
-		}
-
-		if stop {
-			break
-		}
-	}
-
-	return nil
+	err := k.serviceOperatorsAllowList.Walk(ctx, nil, func(key collections.Pair[uint32, uint32]) (stop bool, err error) {
+		serviceID := key.K1()
+		operatorID := key.K2()
+		return action(serviceID, operatorID)
+	})
+	return err
 }
 
 // GetAllServicesAllowedOperators returns all the operators that are allowed to secure a service for all the services
@@ -159,29 +118,21 @@ func (k *Keeper) GetAllServicesAllowedOperators(ctx context.Context) ([]types.Se
 
 // GetAllServicesSecuringPools returns all the pools from which the services are allowed to borrow security
 func (k *Keeper) GetAllServicesSecuringPools(ctx context.Context) ([]types.ServiceSecuringPools, error) {
-	iterator, err := k.serviceSecuringPools.Iterate(ctx, nil)
-	if err != nil {
-		return nil, err
-	}
-	defer iterator.Close()
-
 	items := make(map[uint32]types.ServiceSecuringPools)
-	for ; iterator.Valid(); iterator.Next() {
-		servicePoolPair, err := iterator.Key()
-		if err != nil {
-			return nil, err
-		}
-		serviceID := servicePoolPair.K1()
-		poolID := servicePoolPair.K2()
-
+	err := k.serviceSecuringPools.Walk(ctx, nil, func(key collections.Pair[uint32, uint32]) (stop bool, err error) {
+		serviceID := key.K1()
+		poolID := key.K2()
 		securingPools, ok := items[serviceID]
 		if !ok {
 			securingPools = types.NewServiceSecuringPools(serviceID, nil)
 		}
 		securingPools.PoolIDs = append(securingPools.PoolIDs, poolID)
 		items[serviceID] = securingPools
+		return false, nil
+	})
+	if err != nil {
+		return nil, err
 	}
-
 	if len(items) == 0 {
 		return nil, nil
 	}

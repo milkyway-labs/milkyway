@@ -27,8 +27,8 @@ func (k *Keeper) GetAllServiceAllowedOperators(ctx context.Context, serviceID ui
 	if err != nil {
 		return nil, err
 	}
-
 	defer iterator.Close()
+
 	var operators []uint32
 	for ; iterator.Valid(); iterator.Next() {
 		serviceOperatorPair, err := iterator.Key()
@@ -64,12 +64,7 @@ func (k *Keeper) IsServiceOperatorsAllowListConfigured(ctx context.Context, serv
 		return false, err
 	}
 	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		return true, nil
-	}
-
-	return false, nil
+	return iterator.Valid(), nil
 }
 
 // IsOperatorInServiceAllowList returns true if the given operator is in the
@@ -145,12 +140,7 @@ func (k *Keeper) IsServiceSecuringPoolsConfigured(ctx context.Context, serviceID
 		return false, err
 	}
 	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		return true, nil
-	}
-
-	return false, nil
+	return iterator.Valid(), nil
 }
 
 // IsPoolInServiceSecuringPools returns true if the pool is in the list

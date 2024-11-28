@@ -51,8 +51,8 @@ func (k *Keeper) PoolByDenom(ctx context.Context, request *types.QueryPoolByDeno
 
 // Pools implements the Query/Pools gRPC method
 func (k *Keeper) Pools(ctx context.Context, request *types.QueryPoolsRequest) (*types.QueryPoolsResponse, error) {
-	pools, pageRes, err := query.CollectionPaginate(ctx, k.pools, request.Pagination, func(key uint32, value types.Pool) (types.Pool, error) {
-		return value, nil
+	pools, pageRes, err := query.CollectionPaginate(ctx, k.pools, request.Pagination, func(_ uint32, pool types.Pool) (types.Pool, error) {
+		return pool, nil
 	})
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
