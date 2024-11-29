@@ -2,9 +2,11 @@ package keeper
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
+	"cosmossdk.io/collections"
 	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	"github.com/cosmos/cosmos-sdk/telemetry"
@@ -44,15 +46,13 @@ func (k *Keeper) GetOperators(ctx context.Context) ([]types.Operator, error) {
 func (k *Keeper) IterateInactivatingOperatorQueue(ctx context.Context, endTime time.Time, fn func(operator types.Operator) (stop bool, err error)) error {
 	return k.iterateInactivatingOperatorsKeys(ctx, endTime, func(key, value []byte) (stop bool, err error) {
 		operatorID, _ := types.SplitInactivatingOperatorQueueKey(key)
-		operator, found, err := k.GetOperator(ctx, operatorID)
+		operator, err := k.GetOperator(ctx, operatorID)
 		if err != nil {
+			if errors.Is(err, collections.ErrNotFound) {
+				return true, fmt.Errorf("operator %d does not exist", operatorID)
+			}
 			return true, err
 		}
-
-		if !found {
-			return true, fmt.Errorf("operator %d does not exist", operatorID)
-		}
-
 		return fn(operator)
 	})
 }

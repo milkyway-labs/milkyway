@@ -717,9 +717,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 			expShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("service/1/umilk", sdkmath.LegacyNewDec(500))),
 			check: func(ctx sdk.Context) {
 				// Make sure the service now exists
-				service, found, err := suite.sk.GetService(ctx, 1)
+				service, err := suite.sk.GetService(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(servicestypes.Service{
 					ID:      1,
 					Status:  servicestypes.SERVICE_STATUS_ACTIVE,
@@ -804,9 +803,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 			expShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("service/1/uinit", sdkmath.LegacyNewDec(100))),
 			check: func(ctx sdk.Context) {
 				// Make sure the service now exists
-				service, found, err := suite.sk.GetService(ctx, 1)
+				service, err := suite.sk.GetService(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(servicestypes.Service{
 					ID:      1,
 					Status:  servicestypes.SERVICE_STATUS_ACTIVE,
@@ -912,9 +910,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 			),
 			check: func(ctx sdk.Context) {
 				// Make sure the service now exists
-				service, found, err := suite.sk.GetService(ctx, 1)
+				service, err := suite.sk.GetService(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(servicestypes.Service{
 					ID:      1,
 					Status:  servicestypes.SERVICE_STATUS_ACTIVE,

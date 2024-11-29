@@ -214,13 +214,12 @@ func (k *Keeper) RemoveServiceDelegation(ctx context.Context, delegation types.D
 // DelegateToService sends the given amount to the service account and saves the delegation for the given user
 func (k *Keeper) DelegateToService(ctx context.Context, serviceID uint32, amount sdk.Coins, delegator string) (sdk.DecCoins, error) {
 	// Get the service
-	service, found, err := k.servicesKeeper.GetService(ctx, serviceID)
+	service, err := k.servicesKeeper.GetService(ctx, serviceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return sdk.NewDecCoins(), servicestypes.ErrServiceNotFound
+		}
 		return nil, err
-	}
-
-	if !found {
-		return sdk.NewDecCoins(), servicestypes.ErrServiceNotFound
 	}
 
 	restakableDenoms, err := k.GetRestakableDenoms(ctx)
@@ -317,13 +316,12 @@ func (k *Keeper) GetServiceUnbondingDelegation(ctx context.Context, serviceID ui
 // unbonding delegation for the given user
 func (k *Keeper) UndelegateFromService(ctx context.Context, serviceID uint32, amount sdk.Coins, delegator string) (time.Time, error) {
 	// Find the service
-	service, found, err := k.servicesKeeper.GetService(ctx, serviceID)
+	service, err := k.servicesKeeper.GetService(ctx, serviceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return time.Time{}, servicestypes.ErrServiceNotFound
+		}
 		return time.Time{}, err
-	}
-
-	if !found {
-		return time.Time{}, servicestypes.ErrServiceNotFound
 	}
 
 	// Get the shares

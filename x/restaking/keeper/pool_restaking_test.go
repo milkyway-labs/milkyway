@@ -308,9 +308,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 			expShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(100))),
 			check: func(ctx sdk.Context) {
 				// Make sure the pool now exists
-				pool, found, err := suite.pk.GetPool(ctx, 1)
+				pool, err := suite.pk.GetPool(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(poolstypes.Pool{
 					ID:              1,
 					Denom:           "umilk",
@@ -374,9 +373,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 			expShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(500))),
 			check: func(ctx sdk.Context) {
 				// Make sure the pool now exists
-				pool, found, err := suite.pk.GetPool(ctx, 1)
+				pool, err := suite.pk.GetPool(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(poolstypes.Pool{
 					ID:              1,
 					Denom:           "umilk",
@@ -448,9 +446,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 			expShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDecWithPrec(15625, 2))),
 			check: func(ctx sdk.Context) {
 				// Make sure the pool now exists
-				pool, found, err := suite.pk.GetPool(ctx, 1)
+				pool, err := suite.pk.GetPool(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(poolstypes.Pool{
 					ID:              1,
 					Denom:           "umilk",
