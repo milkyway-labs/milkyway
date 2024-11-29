@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -30,26 +31,24 @@ func NewMsgServer(keeper *Keeper) types.MsgServer {
 
 // JoinService defines the rpc method for Msg/JoinService
 func (k msgServer) JoinService(ctx context.Context, msg *types.MsgJoinService) (*types.MsgJoinServiceResponse, error) {
-	operator, found, err := k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
+	operator, err := k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, operatorstypes.ErrOperatorNotFound
+		}
 		return nil, err
-	}
-
-	if !found {
-		return nil, operatorstypes.ErrOperatorNotFound
 	}
 
 	if operator.Admin != msg.Sender {
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can join the service")
 	}
 
-	service, found, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	service, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, errors.Wrapf(sdkerrors.ErrNotFound, "service %d not found", msg.ServiceID)
+		}
 		return nil, err
-	}
-
-	if !found {
-		return nil, errors.Wrapf(sdkerrors.ErrNotFound, "service %d not found", msg.ServiceID)
 	}
 
 	if !service.IsActive() {
@@ -75,26 +74,24 @@ func (k msgServer) JoinService(ctx context.Context, msg *types.MsgJoinService) (
 
 // LeaveService defines the rpc method for Msg/LeaveService
 func (k msgServer) LeaveService(ctx context.Context, msg *types.MsgLeaveService) (*types.MsgLeaveServiceResponse, error) {
-	operator, found, err := k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
+	operator, err := k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, operatorstypes.ErrOperatorNotFound
+		}
 		return nil, err
-	}
-
-	if !found {
-		return nil, operatorstypes.ErrOperatorNotFound
 	}
 
 	if operator.Admin != msg.Sender {
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the admin can leave the service")
 	}
 
-	_, found, err = k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	_, err = k.servicesKeeper.GetService(ctx, msg.ServiceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, errors.Wrapf(sdkerrors.ErrNotFound, "service %d not found", msg.ServiceID)
+		}
 		return nil, err
-	}
-
-	if !found {
-		return nil, errors.Wrapf(sdkerrors.ErrNotFound, "service %d not found", msg.ServiceID)
 	}
 
 	err = k.RemoveServiceFromOperatorJoinedServices(ctx, msg.OperatorID, msg.ServiceID)
@@ -117,23 +114,21 @@ func (k msgServer) LeaveService(ctx context.Context, msg *types.MsgLeaveService)
 // AddOperatorToAllowList defines the rpc method for Msg/AddOperatorToAllowList
 func (k msgServer) AddOperatorToAllowList(ctx context.Context, msg *types.MsgAddOperatorToAllowList) (*types.MsgAddOperatorToAllowListResponse, error) {
 	// Ensure that the service exists
-	service, found, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	service, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, servicestypes.ErrServiceNotFound
+		}
 		return nil, err
-	}
-
-	if !found {
-		return nil, servicestypes.ErrServiceNotFound
 	}
 
 	// Ensure that the operator exists
-	_, found, err = k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
+	_, err = k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, operatorstypes.ErrOperatorNotFound
+		}
 		return nil, err
-	}
-
-	if !found {
-		return nil, operatorstypes.ErrOperatorNotFound
 	}
 
 	// Ensure the service admin is performing this action
@@ -171,13 +166,12 @@ func (k msgServer) AddOperatorToAllowList(ctx context.Context, msg *types.MsgAdd
 // RemoveOperatorFromAllowlist defines the rpc method for Msg/RemoveOperatorFromAllowlist
 func (k msgServer) RemoveOperatorFromAllowlist(ctx context.Context, msg *types.MsgRemoveOperatorFromAllowlist) (*types.MsgRemoveOperatorFromAllowlistResponse, error) {
 	// Ensure that the service exists
-	service, found, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	service, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, servicestypes.ErrServiceNotFound
+		}
 		return nil, err
-	}
-
-	if !found {
-		return nil, servicestypes.ErrServiceNotFound
 	}
 
 	// Ensure the service admin is performing this action
@@ -215,13 +209,12 @@ func (k msgServer) RemoveOperatorFromAllowlist(ctx context.Context, msg *types.M
 // BorrowPoolSecurity defines the rpc method for Msg/BorrowPoolSecurity
 func (k msgServer) BorrowPoolSecurity(ctx context.Context, msg *types.MsgBorrowPoolSecurity) (*types.MsgBorrowPoolSecurityResponse, error) {
 	// Ensure that the service exists
-	service, found, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	service, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, servicestypes.ErrServiceNotFound
+		}
 		return nil, err
-	}
-
-	if !found {
-		return nil, servicestypes.ErrServiceNotFound
 	}
 
 	// Ensure the service is active
@@ -230,13 +223,12 @@ func (k msgServer) BorrowPoolSecurity(ctx context.Context, msg *types.MsgBorrowP
 	}
 
 	// Ensure that the pool exists
-	_, found, err = k.poolsKeeper.GetPool(ctx, msg.PoolID)
+	_, err = k.poolsKeeper.GetPool(ctx, msg.PoolID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, poolstypes.ErrPoolNotFound
+		}
 		return nil, err
-	}
-
-	if !found {
-		return nil, poolstypes.ErrPoolNotFound
 	}
 
 	// Ensure the service admin is performing this action
@@ -276,13 +268,12 @@ func (k msgServer) BorrowPoolSecurity(ctx context.Context, msg *types.MsgBorrowP
 // CeasePoolSecurityBorrow defines the rpc method for Msg/CeasePoolSecurityBorrow
 func (k msgServer) CeasePoolSecurityBorrow(ctx context.Context, msg *types.MsgCeasePoolSecurityBorrow) (*types.MsgCeasePoolSecurityBorrowResponse, error) {
 	// Ensure that the service exists
-	service, found, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	service, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, servicestypes.ErrServiceNotFound
+		}
 		return nil, err
-	}
-
-	if !found {
-		return nil, servicestypes.ErrServiceNotFound
 	}
 
 	// Ensure the service admin is performing this action

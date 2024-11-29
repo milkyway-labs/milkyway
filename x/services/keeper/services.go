@@ -64,13 +64,12 @@ func (k *Keeper) CreateService(ctx context.Context, service types.Service) error
 
 // ActivateService activates the service with the given ID
 func (k *Keeper) ActivateService(ctx context.Context, serviceID uint32) error {
-	service, found, err := k.GetService(ctx, serviceID)
+	service, err := k.GetService(ctx, serviceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return types.ErrServiceNotFound
+		}
 		return err
-	}
-
-	if !found {
-		return types.ErrServiceNotFound
 	}
 
 	// Check if the service is already active
@@ -93,13 +92,12 @@ func (k *Keeper) ActivateService(ctx context.Context, serviceID uint32) error {
 
 // DeactivateService deactivates the service with the given ID
 func (k *Keeper) DeactivateService(ctx context.Context, serviceID uint32) error {
-	service, exists, err := k.GetService(ctx, serviceID)
+	service, err := k.GetService(ctx, serviceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return types.ErrServiceNotFound
+		}
 		return err
-	}
-
-	if !exists {
-		return types.ErrServiceNotFound
 	}
 
 	// Make sure the service is active
@@ -121,13 +119,12 @@ func (k *Keeper) DeactivateService(ctx context.Context, serviceID uint32) error 
 
 // DeleteService deletes the service with the given ID
 func (k *Keeper) DeleteService(ctx context.Context, serviceID uint32) error {
-	service, exists, err := k.GetService(ctx, serviceID)
+	service, err := k.GetService(ctx, serviceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return types.ErrServiceNotFound
+		}
 		return err
-	}
-
-	if !exists {
-		return types.ErrServiceNotFound
 	}
 
 	// Make sure the service is not active
@@ -153,13 +150,12 @@ func (k *Keeper) DeleteService(ctx context.Context, serviceID uint32) error {
 // SetServiceAccredited sets the accreditation of the service with the given ID
 func (k *Keeper) SetServiceAccredited(ctx context.Context, serviceID uint32, accredited bool) error {
 	// Check if the service exists
-	service, found, err := k.GetService(ctx, serviceID)
+	service, err := k.GetService(ctx, serviceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return types.ErrServiceNotFound
+		}
 		return err
-	}
-
-	if !found {
-		return errors.Wrapf(types.ErrServiceNotFound, "service with id %d not found", serviceID)
 	}
 
 	// Skip any operation if the service accreditation status does not change
@@ -184,15 +180,8 @@ func (k *Keeper) HasService(ctx context.Context, serviceID uint32) (bool, error)
 }
 
 // GetService returns an Service from the KVStore
-func (k *Keeper) GetService(ctx context.Context, serviceID uint32) (service types.Service, found bool, err error) {
-	service, err = k.services.Get(ctx, serviceID)
-	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return service, false, nil
-		}
-		return service, false, err
-	}
-	return service, true, nil
+func (k *Keeper) GetService(ctx context.Context, serviceID uint32) (service types.Service, err error) {
+	return k.services.Get(ctx, serviceID)
 }
 
 // GetServiceParams returns the params for the service with the given ID

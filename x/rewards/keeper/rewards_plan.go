@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -24,13 +25,12 @@ func (k *Keeper) CreateRewardsPlan(
 	operatorsDistribution types.Distribution,
 	usersDistribution types.UsersDistribution,
 ) (types.RewardsPlan, error) {
-	_, found, err := k.servicesKeeper.GetService(ctx, serviceID)
+	_, err := k.servicesKeeper.GetService(ctx, serviceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return types.RewardsPlan{}, servicestypes.ErrServiceNotFound
+		}
 		return types.RewardsPlan{}, err
-	}
-
-	if !found {
-		return types.RewardsPlan{}, servicestypes.ErrServiceNotFound
 	}
 
 	// Get the plan id to be used
@@ -130,13 +130,12 @@ func (k *Keeper) terminateRewardsPlan(ctx context.Context, plan types.RewardsPla
 	remaining := k.bankKeeper.GetAllBalances(ctx, rewardsPoolAddr)
 	if remaining.IsAllPositive() {
 		// Get the service's address.
-		service, found, err := k.servicesKeeper.GetService(ctx, plan.ServiceID)
+		service, err := k.servicesKeeper.GetService(ctx, plan.ServiceID)
 		if err != nil {
+			if errors.IsOf(err, collections.ErrNotFound) {
+				return servicestypes.ErrServiceNotFound
+			}
 			return err
-		}
-
-		if !found {
-			return servicestypes.ErrServiceNotFound
 		}
 
 		serviceAddr, err := k.accountKeeper.AddressCodec().StringToBytes(service.Address)

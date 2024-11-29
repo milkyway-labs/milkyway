@@ -2,7 +2,9 @@ package keeper
 
 import (
 	"context"
+	"errors"
 
+	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
@@ -19,13 +21,12 @@ func (k *Keeper) PoolByID(ctx context.Context, request *types.QueryPoolByIdReque
 		return nil, status.Error(codes.InvalidArgument, "invalid pool id")
 	}
 
-	pool, found, err := k.GetPool(ctx, request.PoolId)
+	pool, err := k.GetPool(ctx, request.PoolId)
 	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			return nil, status.Error(codes.NotFound, "pool not found")
+		}
 		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	if !found {
-		return nil, status.Error(codes.NotFound, "pool not found")
 	}
 
 	return &types.QueryPoolResponse{Pool: pool}, nil

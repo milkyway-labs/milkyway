@@ -289,9 +289,8 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				Params: types.DefaultParams(),
 			},
 			check: func(ctx sdk.Context) {
-				operator, found, err := suite.k.GetOperator(ctx, 1)
+				operator, err := suite.k.GetOperator(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
@@ -305,9 +304,8 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				params, err := suite.k.GetOperatorParams(ctx, 1)
 				suite.Require().Equal(types.DefaultOperatorParams(), params)
 
-				operator, found, err = suite.k.GetOperator(ctx, 2)
+				operator, err = suite.k.GetOperator(ctx, 2)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					2,
 					types.OPERATOR_STATUS_INACTIVATING,

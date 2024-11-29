@@ -3,7 +3,6 @@ package keeper
 import (
 	"context"
 
-	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -52,13 +51,6 @@ func (k *Keeper) SavePool(ctx context.Context, pool types.Pool) error {
 
 // GetPool retrieves the pool with the given ID from the store.
 // If the pool does not exist, false is returned instead
-func (k *Keeper) GetPool(ctx context.Context, id uint32) (types.Pool, bool, error) {
-	pool, err := k.pools.Get(ctx, id)
-	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return types.Pool{}, false, nil
-		}
-		return types.Pool{}, false, err
-	}
-	return pool, true, nil
+func (k *Keeper) GetPool(ctx context.Context, id uint32) (types.Pool, error) {
+	return k.pools.Get(ctx, id)
 }

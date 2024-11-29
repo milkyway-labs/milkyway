@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -27,13 +28,12 @@ func NewMsgServer(k *Keeper) types.MsgServer {
 // CreateRewardsPlan defines the rpc method for Msg/CreateRewardsPlan
 func (k msgServer) CreateRewardsPlan(ctx context.Context, msg *types.MsgCreateRewardsPlan) (*types.MsgCreateRewardsPlanResponse, error) {
 	// Make sure the creator is the admin of the service
-	service, found, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
+	service, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, servicestypes.ErrServiceNotFound
+		}
 		return nil, err
-	}
-
-	if !found {
-		return nil, servicestypes.ErrServiceNotFound
 	}
 
 	if msg.Sender != service.Admin {
@@ -103,13 +103,12 @@ func (k msgServer) EditRewardsPlan(ctx context.Context, msg *types.MsgEditReward
 	}
 
 	// Get the service to which the rewards is associated
-	service, found, err := k.servicesKeeper.GetService(ctx, rewardsPlan.ServiceID)
+	service, err := k.servicesKeeper.GetService(ctx, rewardsPlan.ServiceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, servicestypes.ErrServiceNotFound
+		}
 		return nil, err
-	}
-
-	if !found {
-		return nil, servicestypes.ErrServiceNotFound
 	}
 
 	// Make sure the editor is the admin of the service
@@ -212,13 +211,12 @@ func (k msgServer) WithdrawOperatorCommission(ctx context.Context, msg *types.Ms
 		return nil, sdkerrors.ErrInvalidAddress.Wrapf("invalid sender address: %s", err)
 	}
 
-	operator, found, err := k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
+	operator, err := k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, operatorstypes.ErrOperatorNotFound
+		}
 		return nil, err
-	}
-
-	if !found {
-		return nil, operatorstypes.ErrOperatorNotFound
 	}
 
 	if msg.Sender != operator.Admin {

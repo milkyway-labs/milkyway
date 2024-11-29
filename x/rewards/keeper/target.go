@@ -35,12 +35,12 @@ func (k *Keeper) GetDelegationTarget(
 ) (DelegationTarget, error) {
 	switch delType {
 	case restakingtypes.DELEGATION_TYPE_POOL:
-		pool, found, err := k.poolsKeeper.GetPool(ctx, targetID)
+		pool, err := k.poolsKeeper.GetPool(ctx, targetID)
 		if err != nil {
+			if errors.IsOf(err, collections.ErrNotFound) {
+				return DelegationTarget{}, poolstypes.ErrPoolNotFound
+			}
 			return DelegationTarget{}, err
-		}
-		if !found {
-			return DelegationTarget{}, poolstypes.ErrPoolNotFound
 		}
 		return DelegationTarget{
 			DelegationTarget:       pool,
@@ -51,12 +51,12 @@ func (k *Keeper) GetDelegationTarget(
 			OutstandingRewards:     k.PoolOutstandingRewards,
 		}, nil
 	case restakingtypes.DELEGATION_TYPE_OPERATOR:
-		operator, found, err := k.operatorsKeeper.GetOperator(ctx, targetID)
+		operator, err := k.operatorsKeeper.GetOperator(ctx, targetID)
 		if err != nil {
+			if errors.IsOf(err, collections.ErrNotFound) {
+				return DelegationTarget{}, operatorstypes.ErrOperatorNotFound
+			}
 			return DelegationTarget{}, err
-		}
-		if !found {
-			return DelegationTarget{}, operatorstypes.ErrOperatorNotFound
 		}
 		return DelegationTarget{
 			DelegationTarget:       operator,
@@ -67,12 +67,12 @@ func (k *Keeper) GetDelegationTarget(
 			OutstandingRewards:     k.OperatorOutstandingRewards,
 		}, nil
 	case restakingtypes.DELEGATION_TYPE_SERVICE:
-		service, found, err := k.servicesKeeper.GetService(ctx, targetID)
+		service, err := k.servicesKeeper.GetService(ctx, targetID)
 		if err != nil {
+			if errors.IsOf(err, collections.ErrNotFound) {
+				return DelegationTarget{}, servicestypes.ErrServiceNotFound
+			}
 			return DelegationTarget{}, err
-		}
-		if !found {
-			return DelegationTarget{}, servicestypes.ErrServiceNotFound
 		}
 		return DelegationTarget{
 			DelegationTarget:       service,

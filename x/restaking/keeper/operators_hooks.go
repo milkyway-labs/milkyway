@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"cosmossdk.io/collections"
@@ -85,13 +86,12 @@ func (o *OperatorsHooks) removeOperatorFromServicesAllowList(ctx context.Context
 			return err
 		}
 		if !isConfigured {
-			service, found, err := o.servicesKeeper.GetService(ctx, serviceID)
+			service, err := o.servicesKeeper.GetService(ctx, serviceID)
 			if err != nil {
+				if errors.Is(err, collections.ErrNotFound) {
+					return fmt.Errorf("service %d not found", serviceID)
+				}
 				return err
-			}
-
-			if !found {
-				return fmt.Errorf("service %d not found", serviceID)
 			}
 
 			if !service.IsActive() {

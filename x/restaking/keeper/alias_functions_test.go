@@ -812,7 +812,7 @@ func (suite *KeeperTestSuite) TestKeeper_UnbondRestakedAssets() {
 				suite.Require().NoError(err)
 				suite.Assert().True(found)
 				suite.Assert().Equal(types.DELEGATION_TYPE_OPERATOR, del.Type)
-				operator, _, err := suite.ok.GetOperator(ctx, 1)
+				operator, err := suite.ok.GetOperator(ctx, 1)
 				suite.Require().NoError(err)
 				suite.Assert().Equal(
 					sdk.NewDecCoins(sdk.NewInt64DecCoin("stake", 50)),

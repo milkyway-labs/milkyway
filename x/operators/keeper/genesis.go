@@ -1,8 +1,10 @@
 package keeper
 
 import (
+	"errors"
 	"fmt"
 
+	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/v3/x/operators/types"
@@ -65,13 +67,12 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 	// Store the operator params
 	for _, operatorParams := range state.OperatorsParams {
 		// Ensure that the operator is present
-		_, found, err := k.GetOperator(ctx, operatorParams.OperatorID)
+		_, err := k.GetOperator(ctx, operatorParams.OperatorID)
 		if err != nil {
+			if errors.Is(err, collections.ErrNotFound) {
+				return fmt.Errorf("can't set operator params for %d, operator not found", operatorParams.OperatorID)
+			}
 			return err
-		}
-
-		if !found {
-			return fmt.Errorf("can't set operator params for %d, operator not found", operatorParams.OperatorID)
 		}
 
 		err = k.SaveOperatorParams(ctx, operatorParams.OperatorID, operatorParams.Params)
