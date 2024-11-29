@@ -37,11 +37,11 @@ func (genState GenesisState) AddMarketData(cdc codec.JSONCodec) GenesisState {
 	var marketGenState marketmaptypes.GenesisState
 	cdc.MustUnmarshalJSON(genState[marketmaptypes.ModuleName], &marketGenState)
 
-	// Load initial markets
-	coreMarkets := marketmaps.CoreMarketMap
-	markets := coreMarkets.Markets
+	// Load the initial markets into the marketmap genesis state
+	marketGenState.MarketMap = marketmaps.CoreMarketMap
 
 	// Sort keys so we can deterministically iterate over map items.
+	markets := marketGenState.MarketMap.Markets
 	keys := make([]string, 0, len(markets))
 	for name := range markets {
 		keys = append(keys, name)
@@ -51,7 +51,8 @@ func (genState GenesisState) AddMarketData(cdc codec.JSONCodec) GenesisState {
 	// Initialize all markets
 	var id uint64
 	currencyPairGenesis := make([]oracletypes.CurrencyPairGenesis, len(markets))
-	for _, market := range markets {
+	for _, key := range keys {
+		market := markets[key]
 		currencyPairGenesis[id] = oracletypes.CurrencyPairGenesis{
 			CurrencyPair:      market.Ticker.CurrencyPair,
 			CurrencyPairPrice: nil,
