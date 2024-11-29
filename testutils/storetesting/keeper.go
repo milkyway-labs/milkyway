@@ -12,13 +12,13 @@ import (
 	authcodec "github.com/cosmos/cosmos-sdk/x/auth/codec"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
 	milkyway "github.com/milkyway-labs/milkyway/v2/app"
-	bankkeeper "github.com/milkyway-labs/milkyway/v2/x/bank/keeper"
 )
 
 type BaseKeeperTestData struct {
@@ -31,7 +31,7 @@ type BaseKeeperTestData struct {
 	AuthorityAddress string
 
 	AccountKeeper      authkeeper.AccountKeeper
-	BankKeeper         bankkeeper.Keeper
+	BankKeeper         bankkeeper.BaseKeeper
 	DistributionKeeper distrkeeper.Keeper
 }
 
@@ -72,7 +72,7 @@ func NewBaseKeeperTestData(t *testing.T, keys []string) BaseKeeperTestData {
 		sdk.GetConfig().GetBech32AccountAddrPrefix(),
 		data.AuthorityAddress,
 	)
-	data.BankKeeper = bankkeeper.NewKeeper(
+	data.BankKeeper = bankkeeper.NewBaseKeeper(
 		data.Cdc,
 		runtime.NewKVStoreService(data.Keys[banktypes.StoreKey]),
 		data.AccountKeeper,

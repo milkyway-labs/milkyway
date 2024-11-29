@@ -10,13 +10,13 @@ import (
 	authcodec "github.com/cosmos/cosmos-sdk/x/auth/codec"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"go.uber.org/mock/gomock"
 
 	milkyway "github.com/milkyway-labs/milkyway/v2/app"
 	"github.com/milkyway-labs/milkyway/v2/testutils/storetesting"
-	bankkeeper "github.com/milkyway-labs/milkyway/v2/x/bank/keeper"
 	poolskeeper "github.com/milkyway-labs/milkyway/v2/x/pools/keeper"
 	poolstypes "github.com/milkyway-labs/milkyway/v2/x/pools/types"
 	"github.com/milkyway-labs/milkyway/v2/x/services/keeper"
@@ -70,7 +70,7 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		sdk.GetConfig().GetBech32AccountAddrPrefix(),
 		authorityAddr,
 	)
-	data.BankKeeper = bankkeeper.NewKeeper(
+	data.BankKeeper = bankkeeper.NewBaseKeeper(
 		data.Cdc,
 		runtime.NewKVStoreService(data.Keys[banktypes.StoreKey]),
 		data.AccountKeeper,

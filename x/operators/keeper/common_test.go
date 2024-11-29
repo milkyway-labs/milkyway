@@ -6,10 +6,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	"github.com/stretchr/testify/suite"
 
-	bankkeeper "github.com/milkyway-labs/milkyway/v2/x/bank/keeper"
 	"github.com/milkyway-labs/milkyway/v2/x/operators/keeper"
 	"github.com/milkyway-labs/milkyway/v2/x/operators/testutils"
 )
@@ -25,7 +25,7 @@ type KeeperTestSuite struct {
 	ctx sdk.Context
 
 	ak    authkeeper.AccountKeeper
-	bk    bankkeeper.Keeper
+	bk    bankkeeper.BaseKeeper
 	k     *keeper.Keeper
 	hooks *testutils.MockHooks
 }
