@@ -1,0 +1,78 @@
+github_repo: github.com/milkyway-labs/milkyway
+version: 2.0.2
+
+types:
+  # Types shown inside the CHANGELOG
+  - code: feat
+    title: Features
+    description: A new feature
+    hide: false
+  - code: fix
+    title: Bug Fixes
+    description: A bug fix
+    hide: false
+  - code: revert
+    title: Reverts
+    description: Reverts a previous commit
+    hide: false
+  - code: perf
+    title: Performance Improvements
+    description: A code change that improves performance
+    hide: false
+  - code: deps
+    title: Dependencies
+    description: Updates a third party dependencies
+    hide: false
+
+  # Hidden types
+  - code: refactor
+    title: Code Refactoring
+    description: A code change that neither fixes a bug nor adds a feature
+    hide: true
+  - code: build
+    title: Builds
+    description: 'Changes that affect the build system or external dependencies (example
+    scopes: gulp, broccoli, npm)'
+    hide: true
+  - code: ci
+    title: Continuous Integrations
+    description: 'Changes to our CI configuration files and scripts (example scopes:
+    Travis, Circle, BrowserStack, SauceLabs)'
+    hide: true
+  - code: test
+    title: Tests
+    description: Adding missing tests or correcting existing tests
+    hide: true
+  - code: chore
+    title: Chores
+    description: Other changes that don't modify src or test files
+    hide: true
+  - code: docs
+    title: Documentation
+    description: Documentation only changes
+    hide: true
+  - code: style
+    title: Styles
+    description: Changes that do not affect the meaning of the code (white-space, formatting,
+      missing semi-colons, etc)
+    hide: true
+
+modules:
+  - id: x/assets
+    description: Assets
+  - id: x/liquidvesting
+    description: Liquid Vesting
+  - id: x/operators
+    description: Operators
+  - id: x/pools
+    description: Pools
+  - id: x/restaking
+    description: Restaking
+  - id: x/rewards
+    description: Rewards
+  - id: x/services
+    description: Services
+  - id: other
+    description: Other
+  - id: none
+    description: None
