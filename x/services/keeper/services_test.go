@@ -1,6 +1,7 @@
 package keeper_test
 
 import (
+	"cosmossdk.io/collections"
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -145,9 +146,8 @@ func (suite *KeeperTestSuite) TestKeeper_CreateService() {
 				suite.Require().True(hasAccount)
 
 				// Make sure the service has been created
-				service, found, err := suite.k.GetService(ctx, 1)
+				service, err := suite.k.GetService(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewService(
 					1,
 					types.SERVICE_STATUS_ACTIVE,
@@ -240,9 +240,8 @@ func (suite *KeeperTestSuite) TestKeeper_ActivateService() {
 			serviceID: 1,
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				service, found, err := suite.k.GetService(ctx, 1)
+				service, err := suite.k.GetService(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewService(
 					1,
 					types.SERVICE_STATUS_ACTIVE,
@@ -335,9 +334,8 @@ func (suite *KeeperTestSuite) TestKeeper_DeactivateService() {
 			serviceID: 1,
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				service, found, err := suite.k.GetService(ctx, 1)
+				service, err := suite.k.GetService(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewService(
 					1,
 					types.SERVICE_STATUS_INACTIVE,
@@ -415,9 +413,8 @@ func (suite *KeeperTestSuite) TestKeeper_SetServiceAccreditation() {
 			shouldErr:  false,
 			check: func(ctx sdk.Context) {
 				// Accreditation didn't change
-				service, found, err := suite.k.GetService(ctx, 1)
+				service, err := suite.k.GetService(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().False(service.Accredited)
 
 				// Make sure the hook wasn't called
@@ -444,9 +441,8 @@ func (suite *KeeperTestSuite) TestKeeper_SetServiceAccreditation() {
 			shouldErr:  false,
 			check: func(ctx sdk.Context) {
 				// Accreditation changed
-				service, found, err := suite.k.GetService(ctx, 1)
+				service, err := suite.k.GetService(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().True(service.Accredited)
 
 				// Make sure the hook was called
@@ -485,14 +481,12 @@ func (suite *KeeperTestSuite) TestKeeper_GetService() {
 		name       string
 		store      func(ctx sdk.Context)
 		serviceID  uint32
-		shouldErr  bool
 		expFound   bool
 		expService types.Service
 	}{
 		{
 			name:      "service not found returns false",
 			serviceID: 1,
-			shouldErr: false,
 			expFound:  false,
 		},
 		{
@@ -511,7 +505,6 @@ func (suite *KeeperTestSuite) TestKeeper_GetService() {
 				suite.Require().NoError(err)
 			},
 			serviceID: 1,
-			shouldErr: false,
 			expFound:  true,
 			expService: types.NewService(
 				1,
@@ -534,18 +527,12 @@ func (suite *KeeperTestSuite) TestKeeper_GetService() {
 				tc.store(ctx)
 			}
 
-			service, found, err := suite.k.GetService(ctx, tc.serviceID)
-			if tc.shouldErr {
-				suite.Require().Error(err)
+			service, err := suite.k.GetService(ctx, tc.serviceID)
+			if !tc.expFound {
+				suite.Require().ErrorIs(err, collections.ErrNotFound)
 			} else {
 				suite.Require().NoError(err)
-
-				if !tc.expFound {
-					suite.Require().False(found)
-				} else {
-					suite.Require().True(found)
-					suite.Require().Equal(tc.expService, service)
-				}
+				suite.Require().Equal(tc.expService, service)
 			}
 		})
 	}

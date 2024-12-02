@@ -2,7 +2,9 @@ package keeper
 
 import (
 	"context"
+	"errors"
 
+	"cosmossdk.io/collections"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -18,13 +20,12 @@ func (k *Keeper) Service(ctx context.Context, request *types.QueryServiceRequest
 		return nil, status.Error(codes.InvalidArgument, "invalid service ID")
 	}
 
-	service, found, err := k.GetService(ctx, request.ServiceId)
+	service, err := k.GetService(ctx, request.ServiceId)
 	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			return nil, status.Error(codes.NotFound, "service not found")
+		}
 		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	if !found {
-		return nil, status.Error(codes.NotFound, "service not found")
 	}
 
 	return &types.QueryServiceResponse{Service: service}, nil
@@ -54,13 +55,12 @@ func (k *Keeper) ServiceParams(ctx context.Context, request *types.QueryServiceP
 	}
 
 	// Ensure the service exists
-	_, found, err := k.GetService(ctx, request.ServiceId)
+	_, err := k.GetService(ctx, request.ServiceId)
 	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			return nil, status.Error(codes.NotFound, "service not found")
+		}
 		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	if !found {
-		return nil, status.Error(codes.NotFound, "service not found")
 	}
 
 	// Get the service params

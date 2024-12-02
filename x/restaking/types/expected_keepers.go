@@ -24,14 +24,14 @@ type BankKeeper interface {
 type PoolsKeeper interface {
 	GetPoolByDenom(ctx context.Context, denom string) (poolstypes.Pool, bool, error)
 	CreateOrGetPoolByDenom(ctx context.Context, denom string) (poolstypes.Pool, error)
-	GetPool(ctx context.Context, poolID uint32) (poolstypes.Pool, bool, error)
+	GetPool(ctx context.Context, poolID uint32) (poolstypes.Pool, error)
 	SavePool(ctx context.Context, pool poolstypes.Pool) error
 	IteratePools(ctx context.Context, cb func(poolstypes.Pool) (bool, error)) error
 	GetPools(ctx context.Context) ([]poolstypes.Pool, error)
 }
 
 type OperatorsKeeper interface {
-	GetOperator(ctx context.Context, operatorID uint32) (operatorstypes.Operator, bool, error)
+	GetOperator(ctx context.Context, operatorID uint32) (operatorstypes.Operator, error)
 	SaveOperator(ctx context.Context, operator operatorstypes.Operator) error
 	IterateOperators(ctx context.Context, cb func(operatorstypes.Operator) (bool, error)) error
 	GetOperators(ctx context.Context) ([]operatorstypes.Operator, error)
@@ -41,7 +41,7 @@ type OperatorsKeeper interface {
 
 type ServicesKeeper interface {
 	HasService(ctx context.Context, serviceID uint32) (bool, error)
-	GetService(ctx context.Context, serviceID uint32) (servicestypes.Service, bool, error)
+	GetService(ctx context.Context, serviceID uint32) (servicestypes.Service, error)
 	SaveService(ctx context.Context, service servicestypes.Service) error
 	IterateServices(ctx context.Context, cb func(servicestypes.Service) (bool, error)) error
 	GetServices(ctx context.Context) ([]servicestypes.Service, error)
