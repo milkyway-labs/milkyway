@@ -1,6 +1,10 @@
 # This module represents buf.build/milkyway-labs/milkyway
-version: v1
-name: buf.build/milkyway-labs/milkyway
+version: v2
+
+modules:
+  - path: .
+    name: buf.build/milkyway-labs/milkyway
+
 deps:
   - buf.build/cosmos/cosmos-sdk
   - buf.build/cosmos/cosmos-proto
@@ -23,5 +27,6 @@ lint:
     - SERVICE_SUFFIX
     - PACKAGE_VERSION_SUFFIX
     - RPC_REQUEST_STANDARD_NAME
+    - ENUM_NO_ALLOW_ALIAS
   ignore:
     - tendermint
