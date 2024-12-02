@@ -32,7 +32,8 @@ type Params struct {
 	// types of restaking: pool, operator and service restaking.
 	UnbondingTime time.Duration `protobuf:"varint,1,opt,name=unbonding_time,json=unbondingTime,proto3,stdduration" json:"unbonding_time,omitempty"`
 	// AllowedDenoms represents the list of denoms allowed for restaking
-	// and that will be considered when computing rewards.
+	// and that will be considered when computing rewards. If no denoms are set,
+	// all denoms will be considered as restakable.
 	AllowedDenoms []string `protobuf:"bytes,2,rep,name=allowed_denoms,json=allowedDenoms,proto3" json:"allowed_denoms,omitempty"`
 }
 
