@@ -17,10 +17,10 @@ import (
 )
 
 func getOperatorsGenState(simState *module.SimulationState) operatorstypes.GenesisState {
-	operatorsGenesisJson, found := simState.GenState[operatorstypes.ModuleName]
+	operatorsGenesisJSON, found := simState.GenState[operatorstypes.ModuleName]
 	var operatorsGenesis operatorstypes.GenesisState
 	if found {
-		simState.Cdc.MustUnmarshalJSON(operatorsGenesisJson, &operatorsGenesis)
+		simState.Cdc.MustUnmarshalJSON(operatorsGenesisJSON, &operatorsGenesis)
 	} else {
 		operatorsGenesis = *operatorstypes.DefaultGenesis()
 	}
@@ -29,10 +29,10 @@ func getOperatorsGenState(simState *module.SimulationState) operatorstypes.Genes
 }
 
 func getServicesGenState(simState *module.SimulationState) servicestypes.GenesisState {
-	servicesGenesisJson, found := simState.GenState[servicestypes.ModuleName]
+	servicesGenesisJSON, found := simState.GenState[servicestypes.ModuleName]
 	var servicesGenesis servicestypes.GenesisState
 	if found {
-		simState.Cdc.MustUnmarshalJSON(servicesGenesisJson, &servicesGenesis)
+		simState.Cdc.MustUnmarshalJSON(servicesGenesisJSON, &servicesGenesis)
 	} else {
 		servicesGenesis = *servicestypes.DefaultGenesis()
 	}
@@ -41,10 +41,10 @@ func getServicesGenState(simState *module.SimulationState) servicestypes.Genesis
 }
 
 func getPoolsGenState(simState *module.SimulationState) poolstypes.GenesisState {
-	poolsGenesisJson, found := simState.GenState[poolstypes.ModuleName]
+	poolsGenesisJSON, found := simState.GenState[poolstypes.ModuleName]
 	var poolsGenesis poolstypes.GenesisState
 	if found {
-		simState.Cdc.MustUnmarshalJSON(poolsGenesisJson, &poolsGenesis)
+		simState.Cdc.MustUnmarshalJSON(poolsGenesisJSON, &poolsGenesis)
 	} else {
 		poolsGenesis = *poolstypes.DefaultGenesis()
 	}
