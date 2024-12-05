@@ -173,7 +173,7 @@ func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.Wei
 
 // RegisterStoreDecoder registers a decoder for supply module's types
 func (am AppModule) RegisterStoreDecoder(sdr simtypes.StoreDecoderRegistry) {
-	sdr[types.StoreKey] = simtypes.NewStoreDecoderFuncFromCollectionsSchema(am.keeper.Schema)
+	sdr[types.StoreKey] = simulation.NewDecodeStore(am.cdc, am.keeper)
 }
 
 func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
