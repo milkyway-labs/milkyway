@@ -58,7 +58,7 @@ require (
 
 require (
 	github.com/cosmos/rosetta v0.50.10
-	golang.org/x/sync v0.9.0
+	golang.org/x/sync v0.10.0
 )
 
 require (
