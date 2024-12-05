@@ -12,7 +12,7 @@ func RandomizedGenState(simState *module.SimulationState) {
 		RandomOperatorJoinedServices(simState),
 		RandomServiceAllowedOperators(simState),
 		RandomServiceSecuringPools(simState),
-		// empty delegations since we need to also perform side effects to other
+		// empty delegations and undelegations since we need to also perform side effects to other
 		// modules to keep the shares consistent.
 		nil,
 		nil,

@@ -6,17 +6,17 @@ import (
 	"fmt"
 
 	"cosmossdk.io/core/appmodule"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	"github.com/spf13/cobra"
-
 	abci "github.com/cometbft/cometbft/abci/types"
-
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
+	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/spf13/cobra"
 
 	"github.com/milkyway-labs/milkyway/v3/x/restaking/client/cli"
 	"github.com/milkyway-labs/milkyway/v3/x/restaking/keeper"
@@ -102,12 +102,31 @@ type AppModule struct {
 
 	// To ensure setting hooks properly, keeper must be a reference
 	keeper *keeper.Keeper
+
+	ak              authkeeper.AccountKeeper
+	bk              bankkeeper.Keeper
+	poolsKeeper     types.PoolsKeeper
+	operatorsKeeper types.OperatorsKeeper
+	servicesKeeper  types.ServicesKeeper
 }
 
-func NewAppModule(cdc codec.Codec, keeper *keeper.Keeper) AppModule {
+func NewAppModule(
+	cdc codec.Codec,
+	keeper *keeper.Keeper,
+	ak authkeeper.AccountKeeper,
+	bk bankkeeper.Keeper,
+	poolsKeeper types.PoolsKeeper,
+	operatorsKeeper types.OperatorsKeeper,
+	servicesKeeper types.ServicesKeeper,
+) AppModule {
 	return AppModule{
-		AppModuleBasic: NewAppModuleBasic(cdc),
-		keeper:         keeper,
+		AppModuleBasic:  NewAppModuleBasic(cdc),
+		keeper:          keeper,
+		ak:              ak,
+		bk:              bk,
+		poolsKeeper:     poolsKeeper,
+		operatorsKeeper: operatorsKeeper,
+		servicesKeeper:  servicesKeeper,
 	}
 }
 
@@ -179,6 +198,11 @@ func (am AppModule) RegisterStoreDecoder(sdr simtypes.StoreDecoderRegistry) {
 func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
 	return simulation.WeightedOperations(
 		simState.AppParams,
+		am.ak,
+		am.bk,
+		am.poolsKeeper,
+		am.operatorsKeeper,
+		am.servicesKeeper,
 		am.keeper,
 	)
 }

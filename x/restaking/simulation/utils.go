@@ -1,13 +1,17 @@
 package simulation
 
 import (
+	"math/rand"
 	"time"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simulation "github.com/cosmos/cosmos-sdk/types/simulation"
 
+	"github.com/milkyway-labs/milkyway/v2/utils"
 	operatorstypes "github.com/milkyway-labs/milkyway/v2/x/operators/types"
 	poolstypes "github.com/milkyway-labs/milkyway/v2/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v2/x/restaking/keeper"
 	"github.com/milkyway-labs/milkyway/v2/x/restaking/types"
 	servicestypes "github.com/milkyway-labs/milkyway/v2/x/services/types"
 )
@@ -161,24 +165,8 @@ func RandomUserPreferencesEntries(simState *module.SimulationState) []types.User
 	if len(servicesGenesis.Services) > 0 {
 		accounts := simulation.RandomAccounts(simState.Rand, simState.Rand.Intn(10))
 		for _, account := range accounts {
-			// Add some services to the user's trusted services
-			var userTrustedServiceIDs []uint32
-			for _, service := range servicesGenesis.Services {
-				// 50% of adding the service to the user's trusted services
-				if simState.Rand.Intn(2) == 0 {
-					continue
-				}
-				userTrustedServiceIDs = append(userTrustedServiceIDs, service.ID)
-			}
-
 			// Create the user preferences
-			userPreferences := types.NewUserPreferences(
-				// 50% of trusting non accredited service
-				simState.Rand.Intn(2) == 0,
-				// 50% of trusting accredited service
-				simState.Rand.Intn(2) == 0,
-				userTrustedServiceIDs,
-			)
+			userPreferences := RandomUserPreferences(simState.Rand, servicesGenesis.Services)
 			usersPreferences = append(
 				usersPreferences,
 				types.NewUserPreferencesEntry(account.Address.String(), userPreferences),
@@ -192,4 +180,44 @@ func RandomUserPreferencesEntries(simState *module.SimulationState) []types.User
 func RandomParams(simState *module.SimulationState) types.Params {
 	unbondingDays := time.Duration(simState.Rand.Intn(7) + 1)
 	return types.NewParams(time.Hour*24*unbondingDays, nil)
+}
+
+func RandomUserPreferences(r *rand.Rand, services []servicestypes.Service) types.UserPreferences {
+	// Add some services to the user's trusted services
+	var userTrustedServiceIDs []uint32
+	for _, service := range services {
+		// 50% of adding the service to the user's trusted services
+		if r.Intn(2) == 0 {
+			continue
+		}
+		userTrustedServiceIDs = append(userTrustedServiceIDs, service.ID)
+	}
+
+	// Create the user preferences
+	userPreferences := types.NewUserPreferences(
+		// 50% of trusting non accredited service
+		r.Intn(2) == 0,
+		// 50% of trusting accredited service
+		r.Intn(2) == 0,
+		userTrustedServiceIDs,
+	)
+	return userPreferences
+}
+
+func GetRandomExistingDelegation(r *rand.Rand, ctx sdk.Context, k *keeper.Keeper, filter func(delegation types.Delegation) bool) (types.Delegation, bool) {
+	delegations, err := k.GetAllDelegations(ctx)
+	if err != nil {
+		panic(err)
+	}
+
+	if filter != nil {
+		delegations = utils.Filter(delegations, filter)
+	}
+
+	if len(delegations) == 0 {
+		return types.Delegation{}, false
+	}
+
+	randomIndex := r.Intn(len(delegations))
+	return delegations[randomIndex], true
 }
