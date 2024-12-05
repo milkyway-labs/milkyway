@@ -14,8 +14,6 @@ import (
 )
 
 // Simulation operation weights constants
-//
-//nolint:gosec // The followings are not sensitive information
 const (
 	DefaultWeightMsgUpdateParams int = 50
 
