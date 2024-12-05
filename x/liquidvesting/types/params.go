@@ -6,6 +6,7 @@ import (
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/bech32"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 )
 
@@ -49,7 +50,7 @@ func (p *Params) Validate() error {
 		}
 	}
 	for _, address := range p.TrustedDelegates {
-		_, err := sdk.AccAddressFromBech32(address)
+		_, _, err := bech32.DecodeAndConvert(address)
 		if err != nil {
 			return err
 		}

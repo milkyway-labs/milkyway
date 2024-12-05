@@ -404,6 +404,30 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateParams() {
 			),
 			shouldErr: true,
 		},
+		{
+			name: "trust delegates with invalid bech32 prefix returns error",
+			msg: types.NewMsgUpdateParams(
+				authtypes.NewModuleAddress("gov").String(),
+				types.NewParams(math.LegacyNewDec(2), nil, nil, []string{"invalid"}, nil),
+			),
+			shouldErr: true,
+		},
+		{
+			name: "trust delegates with different bech32 prefix are allowed",
+			msg: types.NewMsgUpdateParams(
+				authtypes.NewModuleAddress("gov").String(),
+				types.NewParams(math.LegacyNewDec(2), nil, nil, []string{"celestia102lq49sg6lmw2e0mw740tjldzq68v0yfhj2vst"}, nil),
+			),
+			shouldErr: false,
+			expEvents: sdk.Events{},
+			check: func(ctx sdk.Context) {
+				params, err := suite.k.GetParams(ctx)
+				suite.Assert().NoError(err)
+
+				expParams := types.NewParams(math.LegacyNewDec(2), nil, nil, []string{"celestia102lq49sg6lmw2e0mw740tjldzq68v0yfhj2vst"}, nil)
+				suite.Assert().Equal(expParams, params)
+			},
+		},
 	}
 
 	for _, tc := range testCases {
