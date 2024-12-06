@@ -71,16 +71,10 @@ func NewDecodeStore(cdc codec.BinaryCodec, keeper *keeper.Keeper) func(kvA kv.Pa
 			return fmt.Sprintf("%v\n%v", listA, listB)
 
 		// Collections
-		case bytes.Equal(kvA.Key[:1], types.OperatorJoinedServicesPrefix):
-			return collectionsDecoder(kvA, kvB)
-
-		case bytes.Equal(kvA.Key[:1], types.ServiceOperatorsAllowListPrefix):
-			return collectionsDecoder(kvA, kvB)
-
-		case bytes.Equal(kvA.Key[:1], types.ServiceSecuringPoolsPrefix):
-			return collectionsDecoder(kvA, kvB)
-
-		case bytes.Equal(kvA.Key[:1], types.UserPreferencesPrefix):
+		case bytes.Equal(kvA.Key[:1], types.OperatorJoinedServicesPrefix),
+			bytes.Equal(kvA.Key[:1], types.ServiceOperatorsAllowListPrefix),
+			bytes.Equal(kvA.Key[:1], types.ServiceSecuringPoolsPrefix),
+			bytes.Equal(kvA.Key[:1], types.UserPreferencesPrefix):
 			return collectionsDecoder(kvA, kvB)
 
 		default:
