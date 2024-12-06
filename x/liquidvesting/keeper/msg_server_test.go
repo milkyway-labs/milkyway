@@ -27,7 +27,6 @@ func (suite *KeeperTestSuite) TestMsgServer_MintLockedRepresentation() {
 					[]string{"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"},
 					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
 					nil,
-					nil,
 				))
 				suite.Assert().NoError(err)
 			},
@@ -47,7 +46,6 @@ func (suite *KeeperTestSuite) TestMsgServer_MintLockedRepresentation() {
 					[]string{"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"},
 					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
 					nil,
-					nil,
 				))
 				suite.Assert().NoError(err)
 			},
@@ -66,7 +64,6 @@ func (suite *KeeperTestSuite) TestMsgServer_MintLockedRepresentation() {
 					math.LegacyMustNewDecFromStr("2.0"),
 					[]string{"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"},
 					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
-					nil,
 					nil,
 				))
 				suite.Assert().NoError(err)
@@ -140,7 +137,6 @@ func (suite *KeeperTestSuite) TestMsgServer_BurnLockedRepresentation() {
 					[]string{"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"},
 					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
 					nil,
-					nil,
 				))
 				suite.Assert().NoError(err)
 
@@ -164,7 +160,6 @@ func (suite *KeeperTestSuite) TestMsgServer_BurnLockedRepresentation() {
 					math.LegacyMustNewDecFromStr("2.0"),
 					[]string{"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"},
 					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
-					nil,
 					nil,
 				))
 				suite.Assert().NoError(err)
@@ -192,7 +187,6 @@ func (suite *KeeperTestSuite) TestMsgServer_BurnLockedRepresentation() {
 					math.LegacyMustNewDecFromStr("2.0"),
 					[]string{"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"},
 					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
-					nil,
 					nil,
 				))
 				suite.Assert().NoError(err)
@@ -400,33 +394,9 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateParams() {
 			name: "invalid allowed channels returns error",
 			msg: types.NewMsgUpdateParams(
 				authtypes.NewModuleAddress("gov").String(),
-				types.NewParams(math.LegacyNewDec(2), nil, nil, nil, []string{"invalid-channel"}),
+				types.NewParams(math.LegacyNewDec(2), nil, nil, []string{"invalid-channel"}),
 			),
 			shouldErr: true,
-		},
-		{
-			name: "trust delegates with invalid bech32 prefix returns error",
-			msg: types.NewMsgUpdateParams(
-				authtypes.NewModuleAddress("gov").String(),
-				types.NewParams(math.LegacyNewDec(2), nil, nil, []string{"invalid"}, nil),
-			),
-			shouldErr: true,
-		},
-		{
-			name: "trust delegates with different bech32 prefix are allowed",
-			msg: types.NewMsgUpdateParams(
-				authtypes.NewModuleAddress("gov").String(),
-				types.NewParams(math.LegacyNewDec(2), nil, nil, []string{"celestia102lq49sg6lmw2e0mw740tjldzq68v0yfhj2vst"}, nil),
-			),
-			shouldErr: false,
-			expEvents: sdk.Events{},
-			check: func(ctx sdk.Context) {
-				params, err := suite.k.GetParams(ctx)
-				suite.Assert().NoError(err)
-
-				expParams := types.NewParams(math.LegacyNewDec(2), nil, nil, []string{"celestia102lq49sg6lmw2e0mw740tjldzq68v0yfhj2vst"}, nil)
-				suite.Assert().Equal(expParams, params)
-			},
 		},
 	}
 
