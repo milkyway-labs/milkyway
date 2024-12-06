@@ -342,3 +342,13 @@ func (m *MsgWithdrawOperatorCommission) GetSigners() []sdk.AccAddress {
 
 	return []sdk.AccAddress{addr}
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// NewMsgUpdateParams creates a new MsgUpdateParams instance
+func NewMsgUpdateParams(params Params, authority string) *MsgUpdateParams {
+	return &MsgUpdateParams{
+		Authority: authority,
+		Params:    params,
+	}
+}

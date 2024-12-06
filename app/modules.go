@@ -154,7 +154,7 @@ func appModules(
 		pools.NewAppModule(appCodec, app.PoolsKeeper),
 		restaking.NewAppModule(appCodec, app.RestakingKeeper, app.AccountKeeper, app.BankKeeper, app.PoolsKeeper, app.OperatorsKeeper, app.ServicesKeeper),
 		assets.NewAppModule(appCodec, app.AssetsKeeper),
-		rewards.NewAppModule(appCodec, app.RewardsKeeper),
+		rewards.NewAppModule(appCodec, app.RewardsKeeper, app.AccountKeeper, app.BankKeeper),
 		liquidvesting.NewAppModule(appCodec, app.LiquidVestingKeeper),
 	}
 }
