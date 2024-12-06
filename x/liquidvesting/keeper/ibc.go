@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"fmt"
-	"slices"
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -23,11 +22,6 @@ func (k *Keeper) OnRecvPacket(
 	params, err := k.GetParams(ctx)
 	if err != nil {
 		return err
-	}
-
-	// Ensure that the sender is allowed to deposit
-	if !slices.Contains(params.TrustedDelegates, data.Sender) {
-		return fmt.Errorf("the sender %s is not allowed to deposit", data.Sender)
 	}
 
 	// Check if is allowed to receive deposits to the insurance fund
