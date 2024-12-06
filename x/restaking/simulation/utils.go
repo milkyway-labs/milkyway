@@ -8,12 +8,12 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simulation "github.com/cosmos/cosmos-sdk/types/simulation"
 
-	"github.com/milkyway-labs/milkyway/v2/utils"
-	operatorstypes "github.com/milkyway-labs/milkyway/v2/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v2/x/pools/types"
-	"github.com/milkyway-labs/milkyway/v2/x/restaking/keeper"
-	"github.com/milkyway-labs/milkyway/v2/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v2/x/services/types"
+	"github.com/milkyway-labs/milkyway/v3/utils"
+	operatorstypes "github.com/milkyway-labs/milkyway/v3/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v3/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v3/x/restaking/keeper"
+	"github.com/milkyway-labs/milkyway/v3/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v3/x/services/types"
 )
 
 func getOperatorsGenState(simState *module.SimulationState) operatorstypes.GenesisState {
