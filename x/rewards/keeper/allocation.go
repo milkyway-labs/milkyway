@@ -197,13 +197,12 @@ func (k *Keeper) AllocateRewardsByPlan(
 		return err
 	}
 
-	service, found, err := k.servicesKeeper.GetService(ctx, plan.ServiceID)
+	service, err := k.servicesKeeper.GetService(ctx, plan.ServiceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return servicestypes.ErrServiceNotFound
+		}
 		return err
-	}
-
-	if !found {
-		return servicestypes.ErrServiceNotFound
 	}
 
 	// Ensure that we are distribution rewards only for active services

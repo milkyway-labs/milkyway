@@ -81,9 +81,8 @@ func (suite *KeeperTestSuite) TestKeeper_BankSend() {
 				lockedDenom, err := types.GetLockedRepresentationDenom("stake")
 				suite.Require().NoError(err)
 
-				pool, found, err := suite.pk.GetPool(ctx, 1)
+				pool, err := suite.pk.GetPool(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 
 				poolCoins := suite.bk.GetAllBalances(ctx, sdk.MustAccAddressFromBech32(pool.GetAddress()))
 				suite.Require().Equal(sdk.NewCoins(sdk.NewInt64Coin(lockedDenom, 1000)), poolCoins)
@@ -126,9 +125,8 @@ func (suite *KeeperTestSuite) TestKeeper_BankSend() {
 				lockedDenom, err := types.GetLockedRepresentationDenom("stake")
 				suite.Require().NoError(err)
 
-				operator, found, err := suite.ok.GetOperator(ctx, 1)
+				operator, err := suite.ok.GetOperator(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 
 				poolCoins := suite.bk.GetAllBalances(ctx, sdk.MustAccAddressFromBech32(operator.GetAddress()))
 				suite.Require().Equal(sdk.NewCoins(sdk.NewInt64Coin(lockedDenom, 1000)), poolCoins)
@@ -173,9 +171,8 @@ func (suite *KeeperTestSuite) TestKeeper_BankSend() {
 				lockedDenom, err := types.GetLockedRepresentationDenom("stake")
 				suite.Require().NoError(err)
 
-				service, found, err := suite.sk.GetService(ctx, 1)
+				service, err := suite.sk.GetService(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 
 				poolCoins := suite.bk.GetAllBalances(ctx, sdk.MustAccAddressFromBech32(service.GetAddress()))
 				suite.Require().Equal(sdk.NewCoins(sdk.NewInt64Coin(lockedDenom, 1000)), poolCoins)

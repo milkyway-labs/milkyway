@@ -38,13 +38,12 @@ func (k Querier) OperatorJoinedServices(ctx context.Context, req *types.QueryOpe
 		return nil, status.Error(codes.InvalidArgument, "operator id cannot be 0")
 	}
 
-	_, found, err := k.operatorsKeeper.GetOperator(ctx, req.OperatorId)
+	_, err := k.operatorsKeeper.GetOperator(ctx, req.OperatorId)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, status.Error(codes.InvalidArgument, "operator not found")
+		}
 		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	if !found {
-		return nil, status.Error(codes.InvalidArgument, "operator not found")
 	}
 
 	// Get the operator joined services
@@ -124,13 +123,12 @@ func (k Querier) ServiceOperators(ctx context.Context, req *types.QueryServiceOp
 		return nil, status.Error(codes.InvalidArgument, "service id cannot be 0")
 	}
 
-	_, found, err := k.servicesKeeper.GetService(ctx, req.ServiceId)
+	_, err := k.servicesKeeper.GetService(ctx, req.ServiceId)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, status.Error(codes.NotFound, "service not found")
+		}
 		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	if !found {
-		return nil, status.Error(codes.NotFound, "service not found")
 	}
 
 	eligibleOperators, pageResponse, err := query.CollectionFilteredPaginate(ctx, k.operatorJoinedServices.Indexes.Service, req.Pagination,
@@ -146,14 +144,13 @@ func (k Querier) ServiceOperators(ctx context.Context, req *types.QueryServiceOp
 			// Here is k2 the operator id since the Service index provides association
 			// between a service and the operator securing it
 			operatorID := key.K2()
-			operator, found, err := k.operatorsKeeper.GetOperator(ctx, operatorID)
+			operator, err := k.operatorsKeeper.GetOperator(ctx, operatorID)
 			if err != nil {
+				if errors.IsOf(err, collections.ErrNotFound) {
+					return operatorstypes.Operator{}, errors.Wrapf(
+						operatorstypes.ErrOperatorNotFound, "operator %d not found", operatorID)
+				}
 				return operatorstypes.Operator{}, err
-			}
-
-			if !found {
-				return operatorstypes.Operator{}, errors.Wrapf(
-					operatorstypes.ErrOperatorNotFound, "operator %d not found", operatorID)
 			}
 			return operator, nil
 		}, query.WithCollectionPaginationPairPrefix[uint32, uint32](req.ServiceId))
@@ -834,13 +831,12 @@ func (k Querier) DelegatorPools(ctx context.Context, req *types.QueryDelegatorPo
 			return err
 		}
 
-		pool, found, err := k.poolsKeeper.GetPool(ctx, delegation.TargetID)
+		pool, err := k.poolsKeeper.GetPool(ctx, delegation.TargetID)
 		if err != nil {
+			if errors.IsOf(err, collections.ErrNotFound) {
+				return poolstypes.ErrPoolNotFound
+			}
 			return err
-		}
-
-		if !found {
-			return poolstypes.ErrPoolNotFound
 		}
 
 		pools = append(pools, pool)
@@ -879,13 +875,12 @@ func (k Querier) DelegatorPool(ctx context.Context, req *types.QueryDelegatorPoo
 		return nil, status.Error(codes.NotFound, "pool delegation not found")
 	}
 
-	pool, found, err := k.poolsKeeper.GetPool(ctx, delegation.TargetID)
+	pool, err := k.poolsKeeper.GetPool(ctx, delegation.TargetID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, status.Error(codes.NotFound, "pool not found")
+		}
 		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	if !found {
-		return nil, status.Error(codes.NotFound, "pool not found")
 	}
 
 	return &types.QueryDelegatorPoolResponse{
@@ -915,13 +910,12 @@ func (k Querier) DelegatorOperators(ctx context.Context, req *types.QueryDelegat
 			return err
 		}
 
-		operator, found, err := k.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
+		operator, err := k.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
 		if err != nil {
+			if errors.IsOf(err, collections.ErrNotFound) {
+				return operatorstypes.ErrOperatorNotFound
+			}
 			return err
-		}
-
-		if !found {
-			return operatorstypes.ErrOperatorNotFound
 		}
 
 		operators = append(operators, operator)
@@ -960,13 +954,12 @@ func (k Querier) DelegatorOperator(ctx context.Context, req *types.QueryDelegato
 		return nil, status.Error(codes.NotFound, "operator delegation not found")
 	}
 
-	operator, found, err := k.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
+	operator, err := k.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, status.Error(codes.NotFound, "operator not found")
+		}
 		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	if !found {
-		return nil, status.Error(codes.NotFound, "operator not found")
 	}
 
 	return &types.QueryDelegatorOperatorResponse{
@@ -996,13 +989,12 @@ func (k Querier) DelegatorServices(ctx context.Context, req *types.QueryDelegato
 			return err
 		}
 
-		pool, found, err := k.servicesKeeper.GetService(ctx, delegation.TargetID)
+		pool, err := k.servicesKeeper.GetService(ctx, delegation.TargetID)
 		if err != nil {
+			if errors.IsOf(err, collections.ErrNotFound) {
+				return servicestypes.ErrServiceNotFound
+			}
 			return err
-		}
-
-		if !found {
-			return servicestypes.ErrServiceNotFound
 		}
 
 		services = append(services, pool)
@@ -1041,13 +1033,12 @@ func (k Querier) DelegatorService(ctx context.Context, req *types.QueryDelegator
 		return nil, status.Error(codes.NotFound, "service delegation not found")
 	}
 
-	service, found, err := k.servicesKeeper.GetService(ctx, delegation.TargetID)
+	service, err := k.servicesKeeper.GetService(ctx, delegation.TargetID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, status.Error(codes.NotFound, "service not found")
+		}
 		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	if !found {
-		return nil, status.Error(codes.NotFound, "service not found")
 	}
 
 	return &types.QueryDelegatorServiceResponse{
@@ -1089,13 +1080,12 @@ func (k Querier) Params(ctx context.Context, _ *types.QueryParamsRequest) (*type
 
 // PoolDelegationToPoolDelegationResponse converts a PoolDelegation to a PoolDelegationResponse
 func PoolDelegationToPoolDelegationResponse(ctx context.Context, k *Keeper, delegation types.Delegation) (types.DelegationResponse, error) {
-	pool, found, err := k.poolsKeeper.GetPool(ctx, delegation.TargetID)
+	pool, err := k.poolsKeeper.GetPool(ctx, delegation.TargetID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return types.DelegationResponse{}, poolstypes.ErrPoolNotFound
+		}
 		return types.DelegationResponse{}, err
-	}
-
-	if !found {
-		return types.DelegationResponse{}, poolstypes.ErrPoolNotFound
 	}
 
 	truncatedBalance, _ := pool.TokensFromShares(delegation.Shares).TruncateDecimal()
@@ -1104,13 +1094,12 @@ func PoolDelegationToPoolDelegationResponse(ctx context.Context, k *Keeper, dele
 
 // OperatorDelegationToOperatorDelegationResponse converts a OperatorDelegation to a OperatorDelegationResponse
 func OperatorDelegationToOperatorDelegationResponse(ctx context.Context, k *Keeper, delegation types.Delegation) (types.DelegationResponse, error) {
-	operator, found, err := k.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
+	operator, err := k.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return types.DelegationResponse{}, operatorstypes.ErrOperatorNotFound
+		}
 		return types.DelegationResponse{}, err
-	}
-
-	if !found {
-		return types.DelegationResponse{}, operatorstypes.ErrOperatorNotFound
 	}
 
 	truncatedBalance, _ := operator.TokensFromShares(delegation.Shares).TruncateDecimal()
@@ -1119,13 +1108,12 @@ func OperatorDelegationToOperatorDelegationResponse(ctx context.Context, k *Keep
 
 // ServiceDelegationToServiceDelegationResponse converts a ServiceDelegation to a ServiceDelegationResponse
 func ServiceDelegationToServiceDelegationResponse(ctx context.Context, k *Keeper, delegation types.Delegation) (types.DelegationResponse, error) {
-	service, found, err := k.servicesKeeper.GetService(ctx, delegation.TargetID)
+	service, err := k.servicesKeeper.GetService(ctx, delegation.TargetID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return types.DelegationResponse{}, servicestypes.ErrServiceNotFound
+		}
 		return types.DelegationResponse{}, err
-	}
-
-	if !found {
-		return types.DelegationResponse{}, servicestypes.ErrServiceNotFound
 	}
 
 	truncatedBalance, _ := service.TokensFromShares(delegation.Shares).TruncateDecimal()

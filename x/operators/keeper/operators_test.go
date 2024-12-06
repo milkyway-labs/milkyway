@@ -3,6 +3,7 @@ package keeper_test
 import (
 	"time"
 
+	"cosmossdk.io/collections"
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -147,9 +148,8 @@ func (suite *KeeperTestSuite) TestKeeper_CreateOperator() {
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				// Make sure the operator has been stored
-				stored, found, err := suite.k.GetOperator(ctx, 1)
+				stored, err := suite.k.GetOperator(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
@@ -198,14 +198,12 @@ func (suite *KeeperTestSuite) TestKeeper_GetOperator() {
 		setup       func()
 		store       func(ctx sdk.Context)
 		operatorID  uint32
-		shouldErr   bool
 		expFound    bool
 		expOperator types.Operator
 	}{
 		{
 			name:       "non existing operator returns false",
 			operatorID: 1,
-			shouldErr:  false,
 			expFound:   false,
 		},
 		{
@@ -223,7 +221,6 @@ func (suite *KeeperTestSuite) TestKeeper_GetOperator() {
 			},
 			operatorID: 1,
 			expFound:   true,
-			shouldErr:  false,
 			expOperator: types.NewOperator(
 				1,
 				types.OPERATOR_STATUS_ACTIVE,
@@ -248,15 +245,12 @@ func (suite *KeeperTestSuite) TestKeeper_GetOperator() {
 				tc.store(ctx)
 			}
 
-			operator, found, err := suite.k.GetOperator(ctx, tc.operatorID)
-			if tc.shouldErr {
-				suite.Require().Error(err)
-			} else {
+			operator, err := suite.k.GetOperator(ctx, tc.operatorID)
+			if tc.expFound {
 				suite.Require().NoError(err)
-				suite.Require().Equal(tc.expFound, found)
-				if tc.expFound {
-					suite.Require().Equal(tc.expOperator, operator)
-				}
+				suite.Require().Equal(tc.expOperator, operator)
+			} else {
+				suite.Require().ErrorIs(err, collections.ErrNotFound)
 			}
 		})
 	}
@@ -283,9 +277,8 @@ func (suite *KeeperTestSuite) TestKeeper_SaveOperator() {
 			),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				stored, found, err := suite.k.GetOperator(ctx, 1)
+				stored, err := suite.k.GetOperator(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
@@ -319,9 +312,8 @@ func (suite *KeeperTestSuite) TestKeeper_SaveOperator() {
 			),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
-				stored, found, err := suite.k.GetOperator(ctx, 1)
+				stored, err := suite.k.GetOperator(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_INACTIVATING,
@@ -431,9 +423,8 @@ func (suite *KeeperTestSuite) TestKeeper_StartOperatorInactivation() {
 			),
 			check: func(ctx sdk.Context) {
 				// Make sure the operator status has been updated
-				stored, found, err := suite.k.GetOperator(ctx, 1)
+				stored, err := suite.k.GetOperator(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_INACTIVATING,
@@ -524,9 +515,8 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteOperatorInactivation() {
 			),
 			check: func(ctx sdk.Context) {
 				// Make sure the operator status has been updated
-				stored, found, err := suite.k.GetOperator(ctx, 1)
+				stored, err := suite.k.GetOperator(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_INACTIVE,
@@ -637,9 +627,8 @@ func (suite *KeeperTestSuite) TestKeeper_ReactivateInactiveOperator() {
 			operatorID: 1,
 			shouldErr:  false,
 			check: func(ctx sdk.Context) {
-				operator, found, err := suite.k.GetOperator(ctx, 1)
+				operator, err := suite.k.GetOperator(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
@@ -665,11 +654,8 @@ func (suite *KeeperTestSuite) TestKeeper_ReactivateInactiveOperator() {
 			if tc.store != nil {
 				tc.store(ctx)
 			}
-			operator, found, err := suite.k.GetOperator(ctx, tc.operatorID)
+			operator, err := suite.k.GetOperator(ctx, tc.operatorID)
 			suite.Require().NoError(err)
-			if !found {
-				suite.Fail("operator not found")
-			}
 
 			err = suite.k.ReactivateInactiveOperator(ctx, operator)
 			if tc.shouldErr {

@@ -2,7 +2,9 @@ package keeper
 
 import (
 	"context"
+	"errors"
 
+	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
@@ -19,13 +21,12 @@ func (k *Keeper) PoolByID(ctx context.Context, request *types.QueryPoolByIdReque
 		return nil, status.Error(codes.InvalidArgument, "invalid pool id")
 	}
 
-	pool, found, err := k.GetPool(ctx, request.PoolId)
+	pool, err := k.GetPool(ctx, request.PoolId)
 	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			return nil, status.Error(codes.NotFound, "pool not found")
+		}
 		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	if !found {
-		return nil, status.Error(codes.NotFound, "pool not found")
 	}
 
 	return &types.QueryPoolResponse{Pool: pool}, nil
@@ -51,8 +52,8 @@ func (k *Keeper) PoolByDenom(ctx context.Context, request *types.QueryPoolByDeno
 
 // Pools implements the Query/Pools gRPC method
 func (k *Keeper) Pools(ctx context.Context, request *types.QueryPoolsRequest) (*types.QueryPoolsResponse, error) {
-	pools, pageRes, err := query.CollectionPaginate(ctx, k.pools, request.Pagination, func(key uint32, value types.Pool) (types.Pool, error) {
-		return value, nil
+	pools, pageRes, err := query.CollectionPaginate(ctx, k.pools, request.Pagination, func(_ uint32, pool types.Pool) (types.Pool, error) {
+		return pool, nil
 	})
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
