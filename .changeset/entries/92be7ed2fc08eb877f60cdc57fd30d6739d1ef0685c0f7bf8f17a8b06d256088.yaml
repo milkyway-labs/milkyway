@@ -1,0 +1,6 @@
+type: refactor
+module: none
+pull_request: 213
+description: Bump Go module version to v3
+backward_compatible: true
+date: 2024-12-06T05:19:46.879531Z

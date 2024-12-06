@@ -8,11 +8,11 @@ import (
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/v2/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v2/x/pools/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/v2/x/restaking/types"
-	"github.com/milkyway-labs/milkyway/v2/x/rewards/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v2/x/services/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v3/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v3/x/pools/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v3/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v3/x/rewards/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v3/x/services/types"
 )
 
 // DelegationTarget is a wrapper around the delegation target that holds the

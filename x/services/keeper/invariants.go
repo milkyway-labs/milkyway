@@ -5,7 +5,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v2/x/services/types"
+	"github.com/milkyway-labs/milkyway/v3/x/services/types"
 )
 
 // RegisterInvariants registers all services module invariants

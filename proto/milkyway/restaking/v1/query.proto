@@ -13,7 +13,7 @@ import "milkyway/operators/v1/models.proto";
 import "milkyway/pools/v1/models.proto";
 import "milkyway/services/v1/models.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v2/x/restaking/types";
+option go_package = "github.com/milkyway-labs/milkyway/v3/x/restaking/types";
 
 // Query defines the gRPC querier service.
 service Query {

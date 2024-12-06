@@ -1,7 +1,7 @@
 package keeper_test
 
 import (
-	"github.com/milkyway-labs/milkyway/v2/utils"
+	"github.com/milkyway-labs/milkyway/v3/utils"
 )
 
 func (suite *KeeperTestSuite) TestServicesHooks_BeforeServiceDeleted() {

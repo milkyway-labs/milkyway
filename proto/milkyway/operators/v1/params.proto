@@ -4,7 +4,7 @@ package milkyway.operators.v1;
 import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v2/x/operators/types";
+option go_package = "github.com/milkyway-labs/milkyway/v3/x/operators/types";
 
 // Params defines the parameters for the operators module.
 message Params {

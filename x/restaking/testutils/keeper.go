@@ -8,15 +8,15 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
-	"github.com/milkyway-labs/milkyway/v2/testutils/storetesting"
-	operatorskeeper "github.com/milkyway-labs/milkyway/v2/x/operators/keeper"
-	operatorstypes "github.com/milkyway-labs/milkyway/v2/x/operators/types"
-	poolskeeper "github.com/milkyway-labs/milkyway/v2/x/pools/keeper"
-	poolstypes "github.com/milkyway-labs/milkyway/v2/x/pools/types"
-	"github.com/milkyway-labs/milkyway/v2/x/restaking/keeper"
-	"github.com/milkyway-labs/milkyway/v2/x/restaking/types"
-	serviceskeeper "github.com/milkyway-labs/milkyway/v2/x/services/keeper"
-	servicestypes "github.com/milkyway-labs/milkyway/v2/x/services/types"
+	"github.com/milkyway-labs/milkyway/v3/testutils/storetesting"
+	operatorskeeper "github.com/milkyway-labs/milkyway/v3/x/operators/keeper"
+	operatorstypes "github.com/milkyway-labs/milkyway/v3/x/operators/types"
+	poolskeeper "github.com/milkyway-labs/milkyway/v3/x/pools/keeper"
+	poolstypes "github.com/milkyway-labs/milkyway/v3/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v3/x/restaking/keeper"
+	"github.com/milkyway-labs/milkyway/v3/x/restaking/types"
+	serviceskeeper "github.com/milkyway-labs/milkyway/v3/x/services/keeper"
+	servicestypes "github.com/milkyway-labs/milkyway/v3/x/services/types"
 )
 
 type KeeperTestData struct {

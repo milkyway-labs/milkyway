@@ -4,7 +4,7 @@ package milkyway.pools.v1;
 import "gogoproto/gogo.proto";
 import "milkyway/pools/v1/models.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v2/x/pools/types";
+option go_package = "github.com/milkyway-labs/milkyway/v3/x/pools/types";
 
 // GenesisState defines the pools module's genesis state.
 message GenesisState {

@@ -9,7 +9,7 @@ import "gogoproto/gogo.proto";
 import "milkyway/rewards/v1/params.proto";
 import "milkyway/rewards/v1/models.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v2/x/rewards/types";
+option go_package = "github.com/milkyway-labs/milkyway/v3/x/rewards/types";
 
 // DelegatorWithdrawInfo is the address for where delegation rewards are
 // withdrawn to by default this struct is only used at genesis to feed in

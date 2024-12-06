@@ -6,7 +6,7 @@ import (
 
 	"cosmossdk.io/collections"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/v2/x/operators/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v3/x/operators/types"
 )
 
 var _ operatorstypes.OperatorsHooks = &OperatorsHooks{}
