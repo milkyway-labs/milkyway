@@ -3,7 +3,7 @@ package simulation
 import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milkyway/v2/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v3/x/restaking/types"
 )
 
 // RandomizedGenState generates a random GenesisState for the restaking module
