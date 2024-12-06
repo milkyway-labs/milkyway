@@ -7,7 +7,7 @@ import "google/protobuf/duration.proto";
 import "milkyway/operators/v1/models.proto";
 import "milkyway/operators/v1/params.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v2/x/operators/types";
+option go_package = "github.com/milkyway-labs/milkyway/v3/x/operators/types";
 
 // GenesisState defines the operators module's genesis state.
 message GenesisState {

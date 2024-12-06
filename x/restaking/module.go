@@ -17,9 +17,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milkyway/v2/x/restaking/client/cli"
-	"github.com/milkyway-labs/milkyway/v2/x/restaking/keeper"
-	"github.com/milkyway-labs/milkyway/v2/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v3/x/restaking/client/cli"
+	"github.com/milkyway-labs/milkyway/v3/x/restaking/keeper"
+	"github.com/milkyway-labs/milkyway/v3/x/restaking/types"
 )
 
 const (

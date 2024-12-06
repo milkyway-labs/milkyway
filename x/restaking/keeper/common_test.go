@@ -11,11 +11,11 @@ import (
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	"github.com/stretchr/testify/suite"
 
-	operatorskeeper "github.com/milkyway-labs/milkyway/v2/x/operators/keeper"
-	poolskeeper "github.com/milkyway-labs/milkyway/v2/x/pools/keeper"
-	"github.com/milkyway-labs/milkyway/v2/x/restaking/keeper"
-	"github.com/milkyway-labs/milkyway/v2/x/restaking/testutils"
-	serviceskeeper "github.com/milkyway-labs/milkyway/v2/x/services/keeper"
+	operatorskeeper "github.com/milkyway-labs/milkyway/v3/x/operators/keeper"
+	poolskeeper "github.com/milkyway-labs/milkyway/v3/x/pools/keeper"
+	"github.com/milkyway-labs/milkyway/v3/x/restaking/keeper"
+	"github.com/milkyway-labs/milkyway/v3/x/restaking/testutils"
+	serviceskeeper "github.com/milkyway-labs/milkyway/v3/x/services/keeper"
 )
 
 func TestKeeperTestSuite(t *testing.T) {

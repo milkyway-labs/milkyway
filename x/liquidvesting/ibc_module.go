@@ -11,9 +11,9 @@ import (
 	porttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 
-	"github.com/milkyway-labs/milkyway/v2/utils"
-	"github.com/milkyway-labs/milkyway/v2/x/liquidvesting/keeper"
-	"github.com/milkyway-labs/milkyway/v2/x/liquidvesting/types"
+	"github.com/milkyway-labs/milkyway/v3/utils"
+	"github.com/milkyway-labs/milkyway/v3/x/liquidvesting/keeper"
+	"github.com/milkyway-labs/milkyway/v3/x/liquidvesting/types"
 )
 
 type IBCModule struct {

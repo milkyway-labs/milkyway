@@ -6,9 +6,9 @@ import (
 	"cosmossdk.io/core/address"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/v2/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v2/x/pools/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v2/x/services/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v3/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v3/x/pools/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v3/x/services/types"
 )
 
 type AccountKeeper interface {

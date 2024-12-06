@@ -6,9 +6,9 @@ import (
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v2/x/liquidvesting/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v2/x/pools/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/v2/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v3/x/liquidvesting/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v3/x/pools/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v3/x/restaking/types"
 )
 
 func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {

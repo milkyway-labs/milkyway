@@ -8,11 +8,11 @@ import (
 	connecttypes "github.com/skip-mev/connect/v2/pkg/types"
 	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
 
-	assetstypes "github.com/milkyway-labs/milkyway/v2/x/assets/types"
-	operatorstypes "github.com/milkyway-labs/milkyway/v2/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v2/x/pools/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/v2/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v2/x/services/types"
+	assetstypes "github.com/milkyway-labs/milkyway/v3/x/assets/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v3/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v3/x/pools/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v3/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v3/x/services/types"
 )
 
 type AccountKeeper interface {

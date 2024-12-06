@@ -6,7 +6,7 @@ import (
 
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 
-	"github.com/milkyway-labs/milkyway/v2/utils"
+	"github.com/milkyway-labs/milkyway/v3/utils"
 )
 
 func NewGenesisState(

@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/v2/x/operators/types"
+	"github.com/milkyway-labs/milkyway/v3/x/operators/types"
 )
 
 func TestSplitInactivatingOperatorQueueKey(t *testing.T) {
