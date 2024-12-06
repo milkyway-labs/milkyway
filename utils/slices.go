@@ -57,6 +57,21 @@ func RemoveDuplicates[T comparable](slice []T) []T {
 	return result
 }
 
+// RemoveDuplicatesFunc removes all duplicate elements from the slice based
+// on the value returned by the provided function.
+func RemoveDuplicatesFunc[T any, C comparable](slice []T, compareBy func(T) C) []T {
+	seen := make(map[C]bool)
+	result := make([]T, 0, len(slice))
+	for _, v := range slice {
+		compareValue := compareBy(v)
+		if _, ok := seen[compareValue]; !ok {
+			seen[compareValue] = true
+			result = append(result, v)
+		}
+	}
+	return result
+}
+
 // Remove removes the first instance of value from the provided slice.
 func Remove[T comparable](slice []T, value T) (newSlice []T, removed bool) {
 	index := -1

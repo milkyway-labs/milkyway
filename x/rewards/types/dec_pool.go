@@ -22,6 +22,12 @@ func NewDecPoolsFromPools(pools Pools) DecPools {
 	return decPools.Sort()
 }
 
+// NewDecPools creates a new DecPools instance from the
+// given DecPool
+func NewDecPools(pools ...DecPool) DecPools {
+	return removeZeroDecPools(pools).Sort()
+}
+
 // Sum returns sum of pool tokens
 func (pools DecPools) Sum() (coins sdk.DecCoins) {
 	for _, p := range pools {
