@@ -68,6 +68,7 @@ import (
 	milkywayabci "github.com/milkyway-labs/milkyway/v3/app/abci"
 	"github.com/milkyway-labs/milkyway/v3/app/keepers"
 	"github.com/milkyway-labs/milkyway/v3/app/upgrades"
+	v3 "github.com/milkyway-labs/milkyway/v3/app/upgrades/v3"
 	_ "github.com/milkyway-labs/milkyway/v3/client/docs/statik"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/v3/x/liquidvesting/types"
 )
@@ -76,7 +77,9 @@ var (
 	// DefaultNodeHome default home directories for the application daemon
 	DefaultNodeHome string
 
-	Upgrades []upgrades.Upgrade
+	Upgrades = []upgrades.Upgrade{
+		v3.Upgrade,
+	}
 )
 
 var (
