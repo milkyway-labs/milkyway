@@ -319,7 +319,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserRestakableAssets() {
 			name: "1% insurance fund",
 			store: func(ctx sdk.Context) {
 				suite.Assert().NoError(suite.k.SetParams(ctx, types.NewParams(
-					math.LegacyMustNewDecFromStr("1"), nil, nil, nil, nil,
+					math.LegacyMustNewDecFromStr("1"), nil, nil, nil,
 				)))
 				suite.fundAccountInsuranceFund(ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
@@ -334,7 +334,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserRestakableAssets() {
 			name: "5% insurance fund",
 			store: func(ctx sdk.Context) {
 				suite.Assert().NoError(suite.k.SetParams(ctx, types.NewParams(
-					math.LegacyMustNewDecFromStr("5"), nil, nil, nil, nil,
+					math.LegacyMustNewDecFromStr("5"), nil, nil, nil,
 				)))
 				suite.fundAccountInsuranceFund(ctx,
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
