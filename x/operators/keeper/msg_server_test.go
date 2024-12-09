@@ -3,6 +3,7 @@ package keeper_test
 import (
 	"time"
 
+	"cosmossdk.io/collections"
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -122,9 +123,8 @@ func (suite *KeeperTestSuite) TestMsgServer_RegisterOperator() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the operator was stored
-				stored, found, err := suite.k.GetOperator(ctx, 2)
+				stored, err := suite.k.GetOperator(ctx, 2)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					2,
 					types.OPERATOR_STATUS_ACTIVE,
@@ -210,9 +210,8 @@ func (suite *KeeperTestSuite) TestMsgServer_RegisterOperator() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the operator was stored
-				stored, found, err := suite.k.GetOperator(ctx, 2)
+				stored, err := suite.k.GetOperator(ctx, 2)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					2,
 					types.OPERATOR_STATUS_ACTIVE,
@@ -387,9 +386,8 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperator() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the operator was updated
-				stored, found, err := suite.k.GetOperator(ctx, 1)
+				stored, err := suite.k.GetOperator(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
@@ -548,9 +546,8 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the operator was updated
-				stored, found, err := suite.k.GetOperator(ctx, 1)
+				stored, err := suite.k.GetOperator(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_INACTIVATING,
@@ -703,9 +700,8 @@ func (suite *KeeperTestSuite) TestMsgServer_ReactivateOperator() {
 				),
 			},
 			check: func(ctx sdk.Context) {
-				operator, found, err := suite.k.GetOperator(ctx, 1)
+				operator, err := suite.k.GetOperator(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
@@ -823,9 +819,8 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferOperatorOwnership() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the operator was updated
-				stored, found, err := suite.k.GetOperator(ctx, 1)
+				stored, err := suite.k.GetOperator(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewOperator(
 					1,
 					types.OPERATOR_STATUS_ACTIVE,
@@ -971,9 +966,8 @@ func (suite *KeeperTestSuite) TestMsgServer_DeleteOperator() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the operator was updated
-				_, found, err := suite.k.GetOperator(ctx, 1)
-				suite.Require().NoError(err)
-				suite.Require().False(found)
+				_, err := suite.k.GetOperator(ctx, 1)
+				suite.Require().ErrorIs(err, collections.ErrNotFound)
 
 				// Ensure the hook has been called
 				suite.Require().True(suite.hooks.CalledMap["BeforeOperatorDeleted"])

@@ -82,9 +82,8 @@ func (suite *KeeperTestSuite) TestOperatorHooks_BeforeOperatorDeleted() {
 				suite.Assert().False(joined)
 
 				// Ensure that the service is status has not changed
-				service, found, err := suite.sk.GetService(ctx, 2)
+				service, err := suite.sk.GetService(ctx, 2)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(servicestypes.SERVICE_STATUS_ACTIVE, service.Status)
 			},
 			operatorID: 1,
@@ -131,9 +130,8 @@ func (suite *KeeperTestSuite) TestOperatorHooks_BeforeOperatorDeleted() {
 				suite.Assert().True(joined)
 
 				// Ensure that the service is status has not changed
-				service, found, err := suite.sk.GetService(ctx, 2)
+				service, err := suite.sk.GetService(ctx, 2)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(servicestypes.SERVICE_STATUS_ACTIVE, service.Status)
 			},
 			operatorID: 1,
@@ -164,9 +162,8 @@ func (suite *KeeperTestSuite) TestOperatorHooks_BeforeOperatorDeleted() {
 				suite.Assert().False(joined)
 
 				// Ensure that the service is now inactive
-				service, found, err := suite.sk.GetService(ctx, 1)
+				service, err := suite.sk.GetService(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(servicestypes.SERVICE_STATUS_INACTIVE, service.Status)
 			},
 			operatorID: 1,
@@ -200,9 +197,8 @@ func (suite *KeeperTestSuite) TestOperatorHooks_BeforeOperatorDeleted() {
 				suite.Assert().False(joined)
 
 				// Ensure the service status has not changed
-				service, found, err := suite.sk.GetService(ctx, 1)
+				service, err := suite.sk.GetService(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(servicestypes.SERVICE_STATUS_ACTIVE, service.Status)
 			},
 			operatorID: 1,
@@ -233,9 +229,8 @@ func (suite *KeeperTestSuite) TestOperatorHooks_BeforeOperatorDeleted() {
 				suite.Assert().False(joined)
 
 				// Ensure the service status has not changed
-				service, found, err := suite.sk.GetService(ctx, 1)
+				service, err := suite.sk.GetService(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(servicestypes.SERVICE_STATUS_CREATED, service.Status)
 			},
 			operatorID: 1,
@@ -266,9 +261,8 @@ func (suite *KeeperTestSuite) TestOperatorHooks_BeforeOperatorDeleted() {
 				suite.Assert().False(joined)
 
 				// Ensure the service status has not changed
-				service, found, err := suite.sk.GetService(ctx, 1)
+				service, err := suite.sk.GetService(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(servicestypes.SERVICE_STATUS_INACTIVE, service.Status)
 			},
 			operatorID: 1,

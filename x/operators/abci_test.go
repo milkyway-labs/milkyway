@@ -78,9 +78,8 @@ func TestBeginBlocker(t *testing.T) {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the operator is still inactivating
-				operator, found, err := operatorsKeeper.GetOperator(ctx, 1)
+				operator, err := operatorsKeeper.GetOperator(ctx, 1)
 				require.NoError(t, err)
-				require.True(t, found)
 				require.Equal(t, types.OPERATOR_STATUS_INACTIVATING, operator.Status)
 
 				// Make sure the operator is still in the inactivating queue
@@ -116,9 +115,8 @@ func TestBeginBlocker(t *testing.T) {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the operator is inactive
-				operator, found, err := operatorsKeeper.GetOperator(ctx, 1)
+				operator, err := operatorsKeeper.GetOperator(ctx, 1)
 				require.NoError(t, err)
-				require.True(t, found)
 				require.Equal(t, types.OPERATOR_STATUS_INACTIVE, operator.Status)
 
 				// Make sure the operator is not in the inactivating queue

@@ -1,6 +1,7 @@
 package keeper_test
 
 import (
+	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/v3/x/pools/types"
@@ -124,9 +125,8 @@ func (suite *KeeperTestSuite) TestKeeper_SavePool() {
 			pool:      types.NewPool(1, "uatom"),
 			check: func(ctx sdk.Context) {
 				// Make sure the pool is saved properly
-				pool, found, err := suite.k.GetPool(ctx, 1)
+				pool, err := suite.k.GetPool(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewPool(1, "uatom"), pool)
 
 				// Make sure the pool account is created
@@ -147,9 +147,8 @@ func (suite *KeeperTestSuite) TestKeeper_SavePool() {
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				// Make sure the pool is saved properly
-				pool, found, err := suite.k.GetPool(ctx, 1)
+				pool, err := suite.k.GetPool(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewPool(1, "usdt"), pool)
 
 				// Make sure the pool account is created
@@ -186,14 +185,13 @@ func (suite *KeeperTestSuite) TestKeeper_SavePool() {
 
 func (suite *KeeperTestSuite) TestKeeper_GetPool() {
 	testCases := []struct {
-		name      string
-		setup     func()
-		store     func(ctx sdk.Context)
-		poolID    uint32
-		shouldErr bool
-		expFound  bool
-		expPool   types.Pool
-		check     func(ctx sdk.Context)
+		name     string
+		setup    func()
+		store    func(ctx sdk.Context)
+		poolID   uint32
+		expFound bool
+		expPool  types.Pool
+		check    func(ctx sdk.Context)
 	}{
 		{
 			name:     "not found pool returns error",
@@ -223,15 +221,12 @@ func (suite *KeeperTestSuite) TestKeeper_GetPool() {
 				tc.store(ctx)
 			}
 
-			pool, found, err := suite.k.GetPool(ctx, tc.poolID)
-			if tc.shouldErr {
-				suite.Require().Error(err)
-			} else {
+			pool, err := suite.k.GetPool(ctx, tc.poolID)
+			if tc.expFound {
 				suite.Require().NoError(err)
-				suite.Require().Equal(tc.expFound, found)
-				if tc.expFound {
-					suite.Require().Equal(tc.expPool, pool)
-				}
+				suite.Require().Equal(tc.expPool, pool)
+			} else {
+				suite.Require().ErrorIs(err, collections.ErrNotFound)
 			}
 
 			if tc.check != nil {

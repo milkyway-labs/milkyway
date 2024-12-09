@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -104,13 +105,12 @@ func (k msgServer) CreateService(goCtx context.Context, msg *types.MsgCreateServ
 // UpdateService defines the rpc method for Msg/UpdateService
 func (k msgServer) UpdateService(ctx context.Context, msg *types.MsgUpdateService) (*types.MsgUpdateServiceResponse, error) {
 	// Check if the service exists
-	service, found, err := k.GetService(ctx, msg.ServiceID)
+	service, err := k.GetService(ctx, msg.ServiceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, types.ErrServiceNotFound
+		}
 		return nil, err
-	}
-
-	if !found {
-		return nil, errors.Wrapf(sdkerrors.ErrInvalidRequest, "service with id %d not found", msg.ServiceID)
 	}
 
 	// Make sure the user that is updating the service is the admin
@@ -146,13 +146,12 @@ func (k msgServer) UpdateService(ctx context.Context, msg *types.MsgUpdateServic
 
 func (k msgServer) ActivateService(ctx context.Context, msg *types.MsgActivateService) (*types.MsgActivateServiceResponse, error) {
 	// Check if the service exists
-	service, found, err := k.GetService(ctx, msg.ServiceID)
+	service, err := k.GetService(ctx, msg.ServiceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, types.ErrServiceNotFound
+		}
 		return nil, err
-	}
-
-	if !found {
-		return nil, errors.Wrapf(types.ErrServiceNotFound, "service with id %d not found", msg.ServiceID)
 	}
 
 	// Make sure the user that is activating the service is the admin
@@ -181,13 +180,12 @@ func (k msgServer) ActivateService(ctx context.Context, msg *types.MsgActivateSe
 // DeactivateService defines the rpc method for Msg/DeactivateService
 func (k msgServer) DeactivateService(ctx context.Context, msg *types.MsgDeactivateService) (*types.MsgDeactivateServiceResponse, error) {
 	// Check if the service exists
-	service, found, err := k.GetService(ctx, msg.ServiceID)
+	service, err := k.GetService(ctx, msg.ServiceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, types.ErrServiceNotFound
+		}
 		return nil, err
-	}
-
-	if !found {
-		return nil, errors.Wrapf(types.ErrServiceNotFound, "service with id %d not found", msg.ServiceID)
 	}
 
 	// Make sure the user that is deactivating the service is the admin
@@ -215,13 +213,12 @@ func (k msgServer) DeactivateService(ctx context.Context, msg *types.MsgDeactiva
 
 func (k msgServer) DeleteService(ctx context.Context, msg *types.MsgDeleteService) (*types.MsgDeleteServiceResponse, error) {
 	// Check if the service exists
-	service, found, err := k.GetService(ctx, msg.ServiceID)
+	service, err := k.GetService(ctx, msg.ServiceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, types.ErrServiceNotFound
+		}
 		return nil, err
-	}
-
-	if !found {
-		return nil, errors.Wrapf(types.ErrServiceNotFound, "service with id %d not found", msg.ServiceID)
 	}
 
 	// Make sure the user that is deleting the service is the admin
@@ -250,13 +247,12 @@ func (k msgServer) DeleteService(ctx context.Context, msg *types.MsgDeleteServic
 // TransferServiceOwnership defines the rpc method for Msg/TransferServiceOwnership
 func (k msgServer) TransferServiceOwnership(ctx context.Context, msg *types.MsgTransferServiceOwnership) (*types.MsgTransferServiceOwnershipResponse, error) {
 	// Check if the service exists
-	service, found, err := k.GetService(ctx, msg.ServiceID)
+	service, err := k.GetService(ctx, msg.ServiceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, types.ErrServiceNotFound
+		}
 		return nil, err
-	}
-
-	if !found {
-		return nil, types.ErrServiceNotFound
 	}
 
 	// Make sure only the admin can transfer the service ownership
@@ -286,13 +282,12 @@ func (k msgServer) TransferServiceOwnership(ctx context.Context, msg *types.MsgT
 // SetServiceParams define the rpc method for Msg/SetServiceParams
 func (k msgServer) SetServiceParams(ctx context.Context, msg *types.MsgSetServiceParams) (*types.MsgSetServiceParamsResponse, error) {
 	// Get the service whose params are being set
-	service, found, err := k.GetService(ctx, msg.ServiceID)
+	service, err := k.GetService(ctx, msg.ServiceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, types.ErrServiceNotFound
+		}
 		return nil, err
-	}
-
-	if !found {
-		return nil, types.ErrServiceNotFound
 	}
 
 	// Ensure the sender is the service admin

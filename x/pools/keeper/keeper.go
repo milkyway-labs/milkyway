@@ -13,9 +13,8 @@ import (
 )
 
 type Keeper struct {
-	cdc          codec.Codec
-	storeService corestoretypes.KVStoreService
-	hooks        types.PoolsHooks
+	cdc   codec.Codec
+	hooks types.PoolsHooks
 
 	accountKeeper types.AccountKeeper
 
@@ -33,7 +32,6 @@ func NewKeeper(cdc codec.Codec,
 
 	k := &Keeper{
 		cdc:           cdc,
-		storeService:  storeService,
 		accountKeeper: accountKeeper,
 
 		nextPoolID: collections.NewSequence(

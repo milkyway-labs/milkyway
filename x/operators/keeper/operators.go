@@ -56,15 +56,8 @@ func (k *Keeper) CreateOperator(ctx context.Context, operator types.Operator) er
 
 // GetOperator returns the operator with the given ID.
 // If the operator does not exist, false is returned.
-func (k *Keeper) GetOperator(ctx context.Context, operatorID uint32) (operator types.Operator, found bool, err error) {
-	operator, err = k.operators.Get(ctx, operatorID)
-	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return types.Operator{}, false, nil
-		}
-		return types.Operator{}, false, err
-	}
-	return operator, true, nil
+func (k *Keeper) GetOperator(ctx context.Context, operatorID uint32) (operator types.Operator, err error) {
+	return k.operators.Get(ctx, operatorID)
 }
 
 // SaveOperator stores the given operator in the KVStore

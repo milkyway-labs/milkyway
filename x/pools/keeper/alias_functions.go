@@ -19,29 +19,10 @@ func (k *Keeper) createAccountIfNotExists(ctx context.Context, address sdk.AccAd
 
 // IteratePools iterates over the pools in the store and performs a callback function
 func (k *Keeper) IteratePools(ctx context.Context, cb func(pool types.Pool) (stop bool, err error)) error {
-	iterator, err := k.pools.Iterate(ctx, nil)
-	if err != nil {
-		return err
-	}
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		pool, err := iterator.Value()
-		if err != nil {
-			return err
-		}
-
-		stop, err := cb(pool)
-		if err != nil {
-			return err
-		}
-
-		if stop {
-			break
-		}
-	}
-
-	return nil
+	err := k.pools.Walk(ctx, nil, func(_ uint32, pool types.Pool) (stop bool, err error) {
+		return cb(pool)
+	})
+	return err
 }
 
 // GetPools returns the list of stored pools
@@ -57,23 +38,20 @@ func (k *Keeper) GetPools(ctx context.Context) ([]types.Pool, error) {
 // GetPoolByDenom returns the pool for the given denom if it exists.
 // If the pool does not exist, false is returned instead
 func (k *Keeper) GetPoolByDenom(ctx context.Context, denom string) (types.Pool, bool, error) {
-	iterator, err := k.pools.Iterate(ctx, nil)
+	var poolFound types.Pool
+	err := k.pools.Walk(ctx, nil, func(_ uint32, pool types.Pool) (stop bool, err error) {
+		if pool.Denom == denom {
+			poolFound = pool
+			return true, nil
+		}
+		return false, nil
+	})
 	if err != nil {
 		return types.Pool{}, false, err
 	}
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		pool, err := iterator.Value()
-		if err != nil {
-			return types.Pool{}, false, err
-		}
-
-		if pool.Denom == denom {
-			return pool, true, nil
-		}
+	if poolFound != (types.Pool{}) {
+		return poolFound, true, nil
 	}
-
 	return types.Pool{}, false, nil
 }
 

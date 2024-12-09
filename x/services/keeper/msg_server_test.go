@@ -1,6 +1,7 @@
 package keeper_test
 
 import (
+	"cosmossdk.io/collections"
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -118,9 +119,8 @@ func (suite *KeeperTestSuite) TestMsgServer_CreateService() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the service has been stored
-				stored, found, err := suite.k.GetService(ctx, 1)
+				stored, err := suite.k.GetService(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewService(
 					1,
 					types.SERVICE_STATUS_CREATED,
@@ -200,9 +200,8 @@ func (suite *KeeperTestSuite) TestMsgServer_CreateService() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the service has been stored
-				stored, found, err := suite.k.GetService(ctx, 1)
+				stored, err := suite.k.GetService(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewService(
 					1,
 					types.SERVICE_STATUS_CREATED,
@@ -386,9 +385,8 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateService() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the service was updated
-				stored, found, err := suite.k.GetService(ctx, 1)
+				stored, err := suite.k.GetService(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewService(
 					1,
 					types.SERVICE_STATUS_CREATED,
@@ -632,9 +630,8 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateService() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the service was deactivated
-				stored, found, err := suite.k.GetService(ctx, 1)
+				stored, err := suite.k.GetService(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewService(
 					1,
 					types.SERVICE_STATUS_INACTIVE,
@@ -770,9 +767,8 @@ func (suite *KeeperTestSuite) TestMsgServer_DeleteService() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the service was removed
-				_, found, err := suite.k.GetService(ctx, 1)
-				suite.Require().NoError(err)
-				suite.Require().False(found)
+				_, err := suite.k.GetService(ctx, 1)
+				suite.Require().ErrorIs(err, collections.ErrNotFound)
 			},
 		},
 		{
@@ -803,9 +799,8 @@ func (suite *KeeperTestSuite) TestMsgServer_DeleteService() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the service was removed
-				_, found, err := suite.k.GetService(ctx, 1)
-				suite.Require().NoError(err)
-				suite.Require().False(found)
+				_, err := suite.k.GetService(ctx, 1)
+				suite.Require().ErrorIs(err, collections.ErrNotFound)
 			},
 		},
 	}
@@ -914,9 +909,8 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferServiceOwnership() {
 			},
 			check: func(ctx sdk.Context) {
 				// Make sure the service was updated
-				stored, found, err := suite.k.GetService(ctx, 1)
+				stored, err := suite.k.GetService(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(types.NewService(
 					1,
 					types.SERVICE_STATUS_ACTIVE,
@@ -1228,9 +1222,8 @@ func (suite *KeeperTestSuite) TestMsgServer_AccreditService() {
 				),
 			},
 			check: func(ctx sdk.Context) {
-				service, found, err := suite.k.GetService(ctx, 1)
+				service, err := suite.k.GetService(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().True(service.Accredited)
 			},
 		},
@@ -1325,9 +1318,8 @@ func (suite *KeeperTestSuite) TestMsgService_RevokeServiceAccreditation() {
 				),
 			},
 			check: func(ctx sdk.Context) {
-				service, found, err := suite.k.GetService(ctx, 1)
+				service, err := suite.k.GetService(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().False(service.Accredited)
 			},
 		},

@@ -2,7 +2,9 @@ package keeper
 
 import (
 	"context"
+	"errors"
 
+	"cosmossdk.io/collections"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	restakingtypes "github.com/milkyway-labs/milkyway/v3/x/restaking/types"
@@ -133,13 +135,12 @@ func (k *Keeper) AfterDelegationModified(ctx context.Context, delType restakingt
 
 // AfterServiceAccreditationModified implements servicestypes.ServicesHooks
 func (k *Keeper) AfterServiceAccreditationModified(ctx context.Context, serviceID uint32) error {
-	service, found, err := k.servicesKeeper.GetService(ctx, serviceID)
+	service, err := k.servicesKeeper.GetService(ctx, serviceID)
 	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			return servicestypes.ErrServiceNotFound
+		}
 		return err
-	}
-
-	if !found {
-		return servicestypes.ErrServiceNotFound
 	}
 
 	err = k.restakingKeeper.IterateServiceDelegations(ctx, serviceID, func(del restakingtypes.Delegation) (stop bool, err error) {

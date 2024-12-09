@@ -6,6 +6,7 @@ import (
 	"sort"
 	"time"
 
+	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
 	"cosmossdk.io/math"
 	storetypes "cosmossdk.io/store/types"
@@ -26,41 +27,18 @@ import (
 // IterateAllOperatorsJoinedServices iterates over all the operators and their joined services,
 // performing the given action. If the action returns true, the iteration will stop.
 func (k *Keeper) IterateAllOperatorsJoinedServices(ctx context.Context, action func(operatorID uint32, serviceID uint32) (stop bool, err error)) error {
-	iterator, err := k.operatorJoinedServices.Iterate(ctx, nil)
-	if err != nil {
-		return err
-	}
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		operatorServicePair, err := iterator.Key()
-		if err != nil {
-			return err
-		}
-
-		stop, err := action(operatorServicePair.K1(), operatorServicePair.K2())
-		if err != nil {
-			return err
-		}
-
-		if stop {
-			break
-		}
-	}
-
-	return nil
+	err := k.operatorJoinedServices.Walk(ctx, nil, func(key collections.Pair[uint32, uint32], _ collections.NoValue) (stop bool, err error) {
+		operatorID := key.K1()
+		serviceID := key.K2()
+		return action(operatorID, serviceID)
+	})
+	return err
 }
 
 // GetAllOperatorsJoinedServices returns all services that each operator has joined
 func (k *Keeper) GetAllOperatorsJoinedServices(ctx context.Context) ([]types.OperatorJoinedServices, error) {
-	iterator, err := k.operatorJoinedServices.Iterate(ctx, nil)
-	if err != nil {
-		return nil, err
-	}
-	defer iterator.Close()
-
 	items := make(map[uint32]types.OperatorJoinedServices)
-	err = k.IterateAllOperatorsJoinedServices(ctx, func(operatorID uint32, serviceID uint32) (stop bool, err error) {
+	err := k.IterateAllOperatorsJoinedServices(ctx, func(operatorID uint32, serviceID uint32) (stop bool, err error) {
 		joinedServicesRecord, ok := items[operatorID]
 		if !ok {
 			joinedServicesRecord = types.NewOperatorJoinedServices(operatorID, nil)
@@ -95,31 +73,12 @@ func (k *Keeper) GetAllOperatorsJoinedServices(ctx context.Context) ([]types.Ope
 // IterateAllServicesAllowedOperators iterates over all the services and their allowed operators,
 // performing the given action. If the action returns true, the iteration will stop.
 func (k *Keeper) IterateAllServicesAllowedOperators(ctx context.Context, action func(serviceID uint32, operatorID uint32) (stop bool, err error)) error {
-	iterator, err := k.serviceOperatorsAllowList.Iterate(ctx, nil)
-	if err != nil {
-		return err
-	}
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		serviceOperatorPair, err := iterator.Key()
-		if err != nil {
-			return err
-		}
-		serviceID := serviceOperatorPair.K1()
-		operatorID := serviceOperatorPair.K2()
-
-		stop, err := action(serviceID, operatorID)
-		if err != nil {
-			return err
-		}
-
-		if stop {
-			break
-		}
-	}
-
-	return nil
+	err := k.serviceOperatorsAllowList.Walk(ctx, nil, func(key collections.Pair[uint32, uint32]) (stop bool, err error) {
+		serviceID := key.K1()
+		operatorID := key.K2()
+		return action(serviceID, operatorID)
+	})
+	return err
 }
 
 // GetAllServicesAllowedOperators returns all the operators that are allowed to secure a service for all the services
@@ -159,29 +118,21 @@ func (k *Keeper) GetAllServicesAllowedOperators(ctx context.Context) ([]types.Se
 
 // GetAllServicesSecuringPools returns all the pools from which the services are allowed to borrow security
 func (k *Keeper) GetAllServicesSecuringPools(ctx context.Context) ([]types.ServiceSecuringPools, error) {
-	iterator, err := k.serviceSecuringPools.Iterate(ctx, nil)
-	if err != nil {
-		return nil, err
-	}
-	defer iterator.Close()
-
 	items := make(map[uint32]types.ServiceSecuringPools)
-	for ; iterator.Valid(); iterator.Next() {
-		servicePoolPair, err := iterator.Key()
-		if err != nil {
-			return nil, err
-		}
-		serviceID := servicePoolPair.K1()
-		poolID := servicePoolPair.K2()
-
+	err := k.serviceSecuringPools.Walk(ctx, nil, func(key collections.Pair[uint32, uint32]) (stop bool, err error) {
+		serviceID := key.K1()
+		poolID := key.K2()
 		securingPools, ok := items[serviceID]
 		if !ok {
 			securingPools = types.NewServiceSecuringPools(serviceID, nil)
 		}
 		securingPools.PoolIDs = append(securingPools.PoolIDs, poolID)
 		items[serviceID] = securingPools
+		return false, nil
+	})
+	if err != nil {
+		return nil, err
 	}
-
 	if len(items) == 0 {
 		return nil, nil
 	}
@@ -266,7 +217,7 @@ func (k *Keeper) GetDelegationForTarget(
 // GetDelegationTargetFromDelegation returns the target of the given delegation.
 func (k *Keeper) GetDelegationTargetFromDelegation(
 	ctx context.Context, delegation types.Delegation,
-) (types.DelegationTarget, bool, error) {
+) (types.DelegationTarget, error) {
 	switch delegation.Type {
 	case types.DELEGATION_TYPE_POOL:
 		return k.poolsKeeper.GetPool(ctx, delegation.TargetID)
@@ -275,7 +226,7 @@ func (k *Keeper) GetDelegationTargetFromDelegation(
 	case types.DELEGATION_TYPE_OPERATOR:
 		return k.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
 	default:
-		return nil, false, nil
+		return nil, nil
 	}
 }
 
@@ -574,13 +525,12 @@ func (k *Keeper) GetAllDelegations(ctx context.Context) ([]types.Delegation, err
 func (k *Keeper) GetAllUserRestakedCoins(ctx context.Context, userAddress string) (sdk.DecCoins, error) {
 	totalDelegatedCoins := sdk.NewDecCoins()
 	err := k.IterateUserDelegations(ctx, userAddress, func(d types.Delegation) (bool, error) {
-		target, found, err := k.GetDelegationTargetFromDelegation(ctx, d)
+		target, err := k.GetDelegationTargetFromDelegation(ctx, d)
 		if err != nil {
+			if errors.IsOf(err, collections.ErrNotFound) {
+				return true, fmt.Errorf("can't find target for delegation %d, target id: %d", d.Type, d.TargetID)
+			}
 			return true, err
-		}
-
-		if !found {
-			return true, fmt.Errorf("can't find target for delegation %d, target id: %d", d.Type, d.TargetID)
 		}
 
 		totalDelegatedCoins = totalDelegatedCoins.Add(target.TokensFromShares(d.Shares)...)
@@ -677,32 +627,32 @@ func (k *Keeper) PerformDelegation(ctx context.Context, data types.DelegationDat
 func (k *Keeper) getUnbondingDelegationTarget(ctx context.Context, ubd types.UnbondingDelegation) (types.DelegationTarget, error) {
 	switch ubd.Type {
 	case types.DELEGATION_TYPE_POOL:
-		pool, found, err := k.poolsKeeper.GetPool(ctx, ubd.TargetID)
+		pool, err := k.poolsKeeper.GetPool(ctx, ubd.TargetID)
 		if err != nil {
+			if errors.IsOf(err, collections.ErrNotFound) {
+				return nil, poolstypes.ErrPoolNotFound
+			}
 			return nil, err
-		}
-		if !found {
-			return nil, poolstypes.ErrPoolNotFound
 		}
 		return pool, nil
 
 	case types.DELEGATION_TYPE_OPERATOR:
-		operator, found, err := k.operatorsKeeper.GetOperator(ctx, ubd.TargetID)
+		operator, err := k.operatorsKeeper.GetOperator(ctx, ubd.TargetID)
 		if err != nil {
+			if errors.IsOf(err, collections.ErrNotFound) {
+				return nil, operatorstypes.ErrOperatorNotFound
+			}
 			return nil, err
-		}
-		if !found {
-			return nil, operatorstypes.ErrOperatorNotFound
 		}
 		return operator, nil
 
 	case types.DELEGATION_TYPE_SERVICE:
-		service, found, err := k.servicesKeeper.GetService(ctx, ubd.TargetID)
+		service, err := k.servicesKeeper.GetService(ctx, ubd.TargetID)
 		if err != nil {
+			if errors.IsOf(err, collections.ErrNotFound) {
+				return nil, servicestypes.ErrServiceNotFound
+			}
 			return nil, err
-		}
-		if !found {
-			return nil, servicestypes.ErrServiceNotFound
 		}
 		return service, nil
 
@@ -841,13 +791,12 @@ func (k *Keeper) UnbondRestakedAssets(ctx context.Context, user sdk.AccAddress, 
 	toUndelegateTokens := sdk.NewDecCoinsFromCoins(amount...)
 
 	err := k.IterateUserDelegations(ctx, user.String(), func(delegation types.Delegation) (bool, error) {
-		target, found, err := k.GetDelegationTargetFromDelegation(ctx, delegation)
+		target, err := k.GetDelegationTargetFromDelegation(ctx, delegation)
 		if err != nil {
+			if errors.IsOf(err, collections.ErrNotFound) {
+				return false, nil
+			}
 			return true, err
-		}
-
-		if !found {
-			return false, nil
 		}
 
 		// Compute the shares that this delegation should have to undelegate
