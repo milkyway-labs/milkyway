@@ -121,12 +121,8 @@ func (suite *UpgradeTestSuite) TestUpgradeV3() {
 		sdk.NewInt64Coin("ibc/8D4FC51F696E03711B9B37A5787FB89BD2DDBAF788813478B002D552A12F9157", 1000000),
 	), rewardsParams.RewardsPlanCreationFee)
 
-	liquidVestingParams, err := suite.App.LiquidVestingKeeper.GetParams(suite.Ctx)
+	_, err = suite.App.LiquidVestingKeeper.GetParams(suite.Ctx)
 	suite.Require().NoError(err)
-	suite.Require().Equal([]string{
-		"celestia1nyk8qsfkrplvzex5yc4l5kghdr60nj7mutnw6z",
-		"celestia1vre9kvtw6w9lxkl3620zpzs5lpczhvjc0s6r2a",
-	}, liquidVestingParams.TrustedDelegates)
 
 	slashingParams, err := suite.App.SlashingKeeper.GetParams(suite.Ctx)
 	suite.Require().NoError(err)

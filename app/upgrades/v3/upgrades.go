@@ -58,10 +58,6 @@ func CreateUpgradeHandler(
 		if err != nil {
 			return nil, err
 		}
-		liquidVestingParams.TrustedDelegates = []string{
-			"celestia1nyk8qsfkrplvzex5yc4l5kghdr60nj7mutnw6z", // goose self-delegation address
-			"celestia1vre9kvtw6w9lxkl3620zpzs5lpczhvjc0s6r2a", // bot address
-		}
 		err = keepers.LiquidVestingKeeper.SetParams(ctx, liquidVestingParams)
 		if err != nil {
 			return nil, err
