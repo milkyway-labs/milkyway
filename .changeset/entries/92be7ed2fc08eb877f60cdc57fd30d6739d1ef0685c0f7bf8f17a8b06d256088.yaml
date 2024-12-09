@@ -1,6 +1,0 @@
-type: build
-module: none
-pull_request: 213
-description: Bumped Go module version to v3
-backward_compatible: true
-date: 2024-12-06T05:19:46.879531Z

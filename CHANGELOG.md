@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 -->
 
+## Version 3.0.0
+### Features
+#### Liquid Vesting
+- ([\#215](https://github.com/milkyway-labs/milkyway/pull/215)) Removed `trusted_delegates` from the params
+
+#### Other
+- ([\#214](https://github.com/milkyway-labs/milkyway/pull/214)) Added v3 upgrade handler
+
 ## Version 2.0.2
 
 ### Bug fixes
