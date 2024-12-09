@@ -26,7 +26,7 @@ type Keeper struct {
 	servicesKeeper  types.ServicesKeeper
 
 	// Keeper data
-	schema collections.Schema
+	Schema collections.Schema
 
 	// Here we use a IndexMap with NoValue instead of a KeySet because the cosmos-sdk don't
 	// provide a KeySet with indexes that we need in order to get the list of operators
@@ -103,7 +103,7 @@ func NewKeeper(
 	if err != nil {
 		panic(err)
 	}
-	k.schema = schema
+	k.Schema = schema
 
 	return k
 }
