@@ -1,0 +1,6 @@
+type: feat
+module: x/liquidvesting
+pull_request: 215
+description: Removed `trusted_delegated` from the params
+backward_compatible: false
+date: 2024-12-09T01:15:40.545534925Z

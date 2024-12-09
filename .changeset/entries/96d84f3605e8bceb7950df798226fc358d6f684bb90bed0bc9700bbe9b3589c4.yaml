@@ -1,0 +1,6 @@
+type: feat
+module: none
+pull_request: 214
+description: Added v3 upgrade handler
+backward_compatible: true
+date: 2024-12-09T01:16:27.796518596Z
