@@ -41,7 +41,7 @@ func (k Querier) OperatorJoinedServices(ctx context.Context, req *types.QueryOpe
 	_, err := k.operatorsKeeper.GetOperator(ctx, req.OperatorId)
 	if err != nil {
 		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, status.Error(codes.InvalidArgument, "operator not found")
+			return nil, status.Error(codes.NotFound, "operator not found")
 		}
 		return nil, status.Error(codes.Internal, err.Error())
 	}
@@ -147,8 +147,7 @@ func (k Querier) ServiceOperators(ctx context.Context, req *types.QueryServiceOp
 			operator, err := k.operatorsKeeper.GetOperator(ctx, operatorID)
 			if err != nil {
 				if errors.IsOf(err, collections.ErrNotFound) {
-					return operatorstypes.Operator{}, errors.Wrapf(
-						operatorstypes.ErrOperatorNotFound, "operator %d not found", operatorID)
+					return operatorstypes.Operator{}, status.Errorf(codes.NotFound, "operator %d not found", operatorID)
 				}
 				return operatorstypes.Operator{}, err
 			}

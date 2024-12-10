@@ -2,9 +2,9 @@ package keeper
 
 import (
 	"errors"
-	"fmt"
 
 	"cosmossdk.io/collections"
+	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/v3/x/operators/types"
@@ -70,7 +70,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 		_, err := k.GetOperator(ctx, operatorParams.OperatorID)
 		if err != nil {
 			if errors.Is(err, collections.ErrNotFound) {
-				return fmt.Errorf("can't set operator params for %d, operator not found", operatorParams.OperatorID)
+				return errorsmod.Wrapf(types.ErrOperatorNotFound, "operator %d not found", operatorParams.OperatorID)
 			}
 			return err
 		}

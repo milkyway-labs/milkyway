@@ -3,7 +3,6 @@ package keeper
 import (
 	"context"
 	"errors"
-	"fmt"
 	"time"
 
 	"cosmossdk.io/collections"
@@ -49,7 +48,7 @@ func (k *Keeper) IterateInactivatingOperatorQueue(ctx context.Context, endTime t
 		operator, err := k.GetOperator(ctx, operatorID)
 		if err != nil {
 			if errors.Is(err, collections.ErrNotFound) {
-				return true, fmt.Errorf("operator %d does not exist", operatorID)
+				return true, types.ErrOperatorNotFound
 			}
 			return true, err
 		}
