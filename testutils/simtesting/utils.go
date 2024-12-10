@@ -117,3 +117,21 @@ func RandomSubSlice[T any](r *rand.Rand, items []T) []T {
 
 	return elements
 }
+
+// RandomPositiveUint32 returns a random positive uint32
+func RandomPositiveUint32(r *rand.Rand) uint32 {
+	value := r.Uint32()
+	for value == 0 {
+		value = r.Uint32()
+	}
+	return value
+}
+
+// RandomPositiveUint64 returns a random positive uint64
+func RandomPositiveUint64(r *rand.Rand) uint64 {
+	value := r.Uint64()
+	for value == 0 {
+		value = r.Uint64()
+	}
+	return value
+}

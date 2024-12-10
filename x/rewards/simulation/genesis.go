@@ -16,9 +16,6 @@ func RandomizedGenState(simState *module.SimulationState) {
 		}
 	}
 
-	var poolsRecords types.DelegationTypeRecords
-	var operatorsRecords types.DelegationTypeRecords
-	var servicesRecords types.DelegationTypeRecords
 	var operatorAccumalatedCommisionRecords []types.OperatorAccumulatedCommissionRecord
 	var poolServiceTotalDelShares []types.PoolServiceTotalDelegatorShares
 
@@ -28,9 +25,9 @@ func RandomizedGenState(simState *module.SimulationState) {
 		rewardsPlans,
 		nil,
 		RandomDelegatorWithdrawInfos(simState.Rand, simState.Accounts),
-		poolsRecords,
-		operatorsRecords,
-		servicesRecords,
+		RandomDelegationTypeRecords(simState.Rand, []string{simState.BondDenom}),
+		RandomDelegationTypeRecords(simState.Rand, []string{simState.BondDenom}),
+		RandomDelegationTypeRecords(simState.Rand, []string{simState.BondDenom}),
 		operatorAccumalatedCommisionRecords,
 		poolServiceTotalDelShares,
 	)
