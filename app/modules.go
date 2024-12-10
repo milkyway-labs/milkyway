@@ -205,6 +205,7 @@ func simulationModules(
 		// MilkyWay modules
 		services.NewAppModule(appCodec, app.ServicesKeeper, app.AccountKeeper, app.BankKeeper),
 		operators.NewAppModule(appCodec, app.OperatorsKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper),
+		rewards.NewAppModule(appCodec, app.RewardsKeeper, app.AccountKeeper, app.BankKeeper),
 	}
 }
 
