@@ -17,10 +17,12 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 
+	operatorskeeper "github.com/milkyway-labs/milkyway/v3/x/operators/keeper"
 	"github.com/milkyway-labs/milkyway/v3/x/rewards/client/cli"
 	"github.com/milkyway-labs/milkyway/v3/x/rewards/keeper"
 	"github.com/milkyway-labs/milkyway/v3/x/rewards/simulation"
 	"github.com/milkyway-labs/milkyway/v3/x/rewards/types"
+	serviceskeeper "github.com/milkyway-labs/milkyway/v3/x/services/keeper"
 )
 
 const (
@@ -100,6 +102,9 @@ type AppModule struct {
 
 	accountKeeper authkeeper.AccountKeeper
 	bankKeeper    bankkeeper.Keeper
+
+	operatorsKeeper *operatorskeeper.Keeper
+	servicesKeeper  *serviceskeeper.Keeper
 }
 
 func NewAppModule(
@@ -107,12 +112,16 @@ func NewAppModule(
 	keeper *keeper.Keeper,
 	accountKeeper authkeeper.AccountKeeper,
 	bankKeeper bankkeeper.Keeper,
+	operatorsKeeper *operatorskeeper.Keeper,
+	serviceKeeper *serviceskeeper.Keeper,
 ) AppModule {
 	return AppModule{
-		AppModuleBasic: NewAppModuleBasic(cdc),
-		keeper:         keeper,
-		accountKeeper:  accountKeeper,
-		bankKeeper:     bankKeeper,
+		AppModuleBasic:  NewAppModuleBasic(cdc),
+		keeper:          keeper,
+		accountKeeper:   accountKeeper,
+		bankKeeper:      bankKeeper,
+		operatorsKeeper: operatorsKeeper,
+		servicesKeeper:  serviceKeeper,
 	}
 }
 
@@ -189,6 +198,8 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 		simState.AppParams,
 		am.accountKeeper,
 		am.bankKeeper,
+		am.operatorsKeeper,
+		am.servicesKeeper,
 		am.keeper,
 	)
 }

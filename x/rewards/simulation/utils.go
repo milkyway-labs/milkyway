@@ -9,8 +9,11 @@ import (
 
 	"github.com/milkyway-labs/milkyway/v3/testutils/simtesting"
 	"github.com/milkyway-labs/milkyway/v3/utils"
+	poolstypes "github.com/milkyway-labs/milkyway/v3/x/pools/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/v3/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v3/x/rewards/keeper"
 	"github.com/milkyway-labs/milkyway/v3/x/rewards/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v3/x/services/types"
 )
 
 func RandomParams(r *rand.Rand, rewardsPlanCreationFeeDenoms []string) types.Params {
@@ -45,9 +48,9 @@ func RandomDistributionType(r *rand.Rand) types.DistributionType {
 	}
 }
 
-func RandomDistribution(r *rand.Rand) types.Distribution {
+func RandomDistribution(r *rand.Rand, delegationType restakingtypes.DelegationType) types.Distribution {
 	return types.NewDistribution(
-		restakingtypes.DELEGATION_TYPE_POOL,
+		delegationType,
 		r.Uint32(),
 		RandomDistributionType(r),
 	)
@@ -75,23 +78,43 @@ func RandomRewardsPlan(r *rand.Rand, serviceID uint32, amtPerDeyDenoms []string)
 		randomAmountPerDays,
 		simtypes.RandTimestamp(r),
 		simtypes.RandTimestamp(r),
-		RandomDistribution(r),
-		RandomDistribution(r),
+		RandomDistribution(r, restakingtypes.DELEGATION_TYPE_POOL),
+		RandomDistribution(r, restakingtypes.DELEGATION_TYPE_OPERATOR),
 		RandomUsersDistribution(r),
 	)
 }
 
-func RandomRewardsPlans(r *rand.Rand, allowedDenoms []string) []types.RewardsPlan {
+func RandomRewardsPlans(r *rand.Rand, services []servicestypes.Service, allowedDenoms []string) []types.RewardsPlan {
+	// We can't create a rewards if there are no services
+	if len(services) == 0 {
+		return nil
+	}
+
 	// Get a random numer of rewards plans to create
 	rewardsPlanCount := r.Intn(30)
 
 	// Generate the rewards plans
 	var rewardsPlans []types.RewardsPlan
 	for id := 0; id < rewardsPlanCount; id++ {
-		rewardsPlans = append(rewardsPlans, RandomRewardsPlan(r, uint32(r.Intn(10)+1), allowedDenoms))
+		serviceIndex := r.Intn(len(services))
+		rewardsPlans = append(rewardsPlans, RandomRewardsPlan(r, services[serviceIndex].ID, allowedDenoms))
 	}
 
 	return rewardsPlans
+}
+
+func GetRandomExistingRewardsPlan(r *rand.Rand, ctx sdk.Context, k *keeper.Keeper) (types.RewardsPlan, bool) {
+	var plans []types.RewardsPlan
+	k.RewardsPlans.Walk(ctx, nil, func(key uint64, p types.RewardsPlan) (bool, error) {
+		plans = append(plans, p)
+		return false, nil
+	})
+
+	if len(plans) == 0 {
+		return types.RewardsPlan{}, false
+	}
+
+	return plans[r.Intn(len(plans))], true
 }
 
 func RandomDelegatorWithdrawInfos(r *rand.Rand, accs []simtypes.Account) []types.DelegatorWithdrawInfo {
@@ -138,15 +161,17 @@ func RandomDecPools(r *rand.Rand, availableDenoms []string) types.DecPools {
 	return pools
 }
 
-func RandomServicePools(r *rand.Rand, availableDenoms []string) types.ServicePools {
+func RandomServicePools(
+	r *rand.Rand,
+	servicesGenesis servicestypes.GenesisState,
+	availableDenoms []string,
+) types.ServicePools {
 	var servicePools types.ServicePools
 
-	// Generate some random service pools
-	servicePoolsCount := r.Intn(10)
-	for j := 0; j < servicePoolsCount; j++ {
+	services := simtesting.RandomSubSlice(r, servicesGenesis.Services)
+	for _, service := range services {
 		servicePools = append(servicePools, types.ServicePool{
-			// Use Int31 to ensure we can add 1 without causing a integer overflow
-			ServiceID: uint32(r.Int31()) + 1,
+			ServiceID: service.ID,
 			DecPools:  RandomDecPools(r, availableDenoms),
 		})
 	}
@@ -180,12 +205,16 @@ func RandomOutstandingRewardsRecords(r *rand.Rand, availableDenoms []string) []t
 	return outstandingRewardsRecords
 }
 
-func RandomHistoricalRewardsRecords(r *rand.Rand, availableDenoms []string) []types.HistoricalRewardsRecord {
+func RandomHistoricalRewardsRecords(
+	r *rand.Rand,
+	servicesGenesis servicestypes.GenesisState,
+	availableDenoms []string,
+) []types.HistoricalRewardsRecord {
 	var historicalRewardsRecords []types.HistoricalRewardsRecord
 
 	count := r.Intn(10)
 	for i := 0; i < count; i++ {
-		servicePools := RandomServicePools(r, availableDenoms)
+		servicePools := RandomServicePools(r, servicesGenesis, availableDenoms)
 		// Ignore empty service pools
 		if len(servicePools) == 0 {
 			continue
@@ -204,13 +233,17 @@ func RandomHistoricalRewardsRecords(r *rand.Rand, availableDenoms []string) []ty
 	return historicalRewardsRecords
 }
 
-func RandomCurrentRewardsRecords(r *rand.Rand, availableDenoms []string) []types.CurrentRewardsRecord {
+func RandomCurrentRewardsRecords(
+	r *rand.Rand,
+	servicesGenesis servicestypes.GenesisState,
+	availableDenoms []string,
+) []types.CurrentRewardsRecord {
 	var currentRewardsRecords []types.CurrentRewardsRecord
 
 	count := r.Intn(10)
 	for i := 0; i < count; i++ {
 		currentRewards := types.CurrentRewards{
-			Rewards: RandomServicePools(r, availableDenoms),
+			Rewards: RandomServicePools(r, servicesGenesis, availableDenoms),
 			Period:  r.Uint64(),
 		}
 		// Ignore CurrentRewards if empty
@@ -272,21 +305,29 @@ func RandomOperatorAccumulatedCommissionRecords(r *rand.Rand, availableDenoms []
 	return records
 }
 
-func RandomPoolServiceTotalDelegatorShares(r *rand.Rand, availableDenoms []string) []types.PoolServiceTotalDelegatorShares {
+func RandomPoolServiceTotalDelegatorShares(
+	r *rand.Rand,
+	poolsGenesis poolstypes.GenesisState,
+	servicesGenesis servicestypes.GenesisState,
+	availableDenoms []string,
+) []types.PoolServiceTotalDelegatorShares {
 	var records []types.PoolServiceTotalDelegatorShares
 
-	count := r.Intn(10)
-	for i := 0; i < count; i++ {
-		randomDenom := availableDenoms[r.Intn(len(availableDenoms))]
-		decCoin := sdk.NewDecCoinFromDec(randomDenom, simtypes.RandomDecAmount(
-			r, math.LegacyNewDecFromInt(math.NewIntFromUint64(simtesting.RandomPositiveUint64(r))),
-		))
+	services := simtesting.RandomSubSlice(r, servicesGenesis.Services)
+	pools := simtesting.RandomSubSlice(r, poolsGenesis.Pools)
+	for _, service := range services {
+		for _, pool := range pools {
+			randomDenom := availableDenoms[r.Intn(len(availableDenoms))]
+			decCoin := sdk.NewDecCoinFromDec(randomDenom, simtypes.RandomDecAmount(
+				r, math.LegacyNewDecFromInt(math.NewIntFromUint64(simtesting.RandomPositiveUint64(r))),
+			))
 
-		records = append(records, types.PoolServiceTotalDelegatorShares{
-			PoolID:    simtesting.RandomPositiveUint32(r),
-			ServiceID: simtesting.RandomPositiveUint32(r),
-			Shares:    sdk.NewDecCoins(decCoin),
-		})
+			records = append(records, types.PoolServiceTotalDelegatorShares{
+				PoolID:    pool.ID,
+				ServiceID: service.ID,
+				Shares:    sdk.NewDecCoins(decCoin),
+			})
+		}
 	}
 
 	return records

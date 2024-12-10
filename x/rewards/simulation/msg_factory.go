@@ -1,7 +1,9 @@
 package simulation
 
 import (
+	"fmt"
 	"math/rand"
+	"time"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -10,8 +12,15 @@ import (
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 
+	"github.com/milkyway-labs/milkyway/v3/testutils/simtesting"
+	"github.com/milkyway-labs/milkyway/v3/utils"
+	operatorskeeper "github.com/milkyway-labs/milkyway/v3/x/operators/keeper"
+	operatorssimulation "github.com/milkyway-labs/milkyway/v3/x/operators/simulation"
+	restakingtypes "github.com/milkyway-labs/milkyway/v3/x/restaking/types"
 	"github.com/milkyway-labs/milkyway/v3/x/rewards/keeper"
 	"github.com/milkyway-labs/milkyway/v3/x/rewards/types"
+	serviceskeeper "github.com/milkyway-labs/milkyway/v3/x/services/keeper"
+	servicessimulation "github.com/milkyway-labs/milkyway/v3/x/services/simulation"
 )
 
 // Simulation operation weights constants
@@ -33,6 +42,8 @@ func WeightedOperations(
 	appParams simtypes.AppParams,
 	ak authkeeper.AccountKeeper,
 	bk bankkeeper.Keeper,
+	ok *operatorskeeper.Keeper,
+	sk *serviceskeeper.Keeper,
 	k *keeper.Keeper,
 ) simulation.WeightedOperations {
 	var (
@@ -65,31 +76,148 @@ func WeightedOperations(
 	})
 
 	return simulation.WeightedOperations{
-		simulation.NewWeightedOperation(weightMsgCreateRewardsPlan, SimulateMsgCreateRewardsPlan(ak, bk, k)),
-		simulation.NewWeightedOperation(weightMsgEditRewardsPlan, SimulateMsgEditRewardsPlan(ak, bk, k)),
+		simulation.NewWeightedOperation(weightMsgCreateRewardsPlan, SimulateMsgCreateRewardsPlan(ak, bk, sk, k)),
+		simulation.NewWeightedOperation(weightMsgEditRewardsPlan, SimulateMsgEditRewardsPlan(ak, bk, sk, k)),
 		simulation.NewWeightedOperation(weightMsgSetWithdrawAddress, SimulateMsgSetWithdrawAddress(ak, bk, k)),
 		simulation.NewWeightedOperation(weightMsgWithdrawDelegatorReward, SimulateMsgWithdrawDelegatorReward(ak, bk, k)),
-		simulation.NewWeightedOperation(weightMsgWithdrawOperatorCommission, SimulateMsgWithdrawOperatorCommission(ak, bk, k)),
+		simulation.NewWeightedOperation(weightMsgWithdrawOperatorCommission, SimulateMsgWithdrawOperatorCommission(ak, bk, ok, k)),
 	}
 }
 
 // --------------------------------------------------------------------------------------------------------------------
 
-func SimulateMsgCreateRewardsPlan(ak authkeeper.AccountKeeper, bk bankkeeper.Keeper, k *keeper.Keeper) simtypes.Operation {
+func SimulateMsgCreateRewardsPlan(
+	ak authkeeper.AccountKeeper,
+	bk bankkeeper.Keeper,
+	sk *serviceskeeper.Keeper,
+	k *keeper.Keeper,
+) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		msg := &types.MsgCreateRewardsPlan{}
-		return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "TODO"), nil, nil
+
+		// Get a random service
+		service, found := servicessimulation.GetRandomExistingService(r, ctx, sk, nil)
+		if !found {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "no service found"), nil, nil
+		}
+
+		// Get the module parameters to get the fees required to create a rewards plan
+		rewardsParams, err := k.GetParams(ctx)
+		if err != nil {
+			panic(err)
+		}
+
+		// Get a random account
+		adminAddress, err := sdk.AccAddressFromBech32(service.Admin)
+		if err != nil {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "invalid admin address"), nil, nil
+		}
+
+		// Ensure the sender has enough balance to create a rewards plan
+		senderSpendableBalance := bk.SpendableCoins(ctx, adminAddress)
+		if !senderSpendableBalance.IsAllGTE(rewardsParams.RewardsPlanCreationFee) {
+			return simtypes.NoOpMsg(
+				types.ModuleName,
+				sdk.MsgTypeURL(msg),
+				fmt.Sprintf("sender: %s don't have enough balance to create rewards plan, required: %s, available: %s",
+					service.Admin,
+					rewardsParams.RewardsPlanCreationFee.String(),
+					senderSpendableBalance.String(),
+				),
+			), nil, nil
+		}
+
+		// Compute some random start/end time
+		rewardsStart := ctx.BlockTime().Add(time.Hour * time.Duration(r.Intn(10)+1))
+		rewardsEnd := rewardsStart.Add(time.Hour * time.Duration(r.Intn(96)+1))
+
+		// Get a random rewards plan amount
+		amount, err := simtypes.RandomFees(r, ctx, senderSpendableBalance)
+		if err != nil {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), err.Error()), nil, nil
+		}
+
+		signer, found := simtesting.GetSimAccount(adminAddress, accs)
+		if !found {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "admin account not found"), nil, nil
+		}
+
+		msg = types.NewMsgCreateRewardsPlan(
+			service.ID,
+			simtypes.RandStringOfLength(r, 32),
+			amount,
+			rewardsStart,
+			rewardsEnd,
+			RandomDistribution(r, restakingtypes.DELEGATION_TYPE_POOL),
+			RandomDistribution(r, restakingtypes.DELEGATION_TYPE_OPERATOR),
+			RandomUsersDistribution(r),
+			rewardsParams.RewardsPlanCreationFee,
+			service.Admin,
+		)
+		return simtesting.SendMsg(r, types.ModuleName, app, ak, bk, msg, ctx, signer)
 	}
 }
 
-func SimulateMsgEditRewardsPlan(ak authkeeper.AccountKeeper, bk bankkeeper.Keeper, k *keeper.Keeper) simtypes.Operation {
+func SimulateMsgEditRewardsPlan(
+	ak authkeeper.AccountKeeper,
+	bk bankkeeper.Keeper,
+	sk *serviceskeeper.Keeper,
+	k *keeper.Keeper,
+) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		msg := &types.MsgEditRewardsPlan{}
-		return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "TODO"), nil, nil
+
+		plan, found := GetRandomExistingRewardsPlan(r, ctx, k)
+		if !found {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "no rewards plan found"), nil, nil
+		}
+
+		// Get the service admin
+		service, found, err := sk.GetService(ctx, plan.ServiceID)
+		if err != nil {
+			panic(err)
+		}
+		if !found {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "service not found"), nil, nil
+		}
+
+		adminAddress, err := sdk.AccAddressFromBech32(service.Admin)
+		if err != nil {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "invalid admin address"), nil, nil
+		}
+
+		// Get a random rewards plan amount
+		senderSpendableBalance := bk.SpendableCoins(ctx, adminAddress)
+		amount, err := simtypes.RandomFees(r, ctx, senderSpendableBalance)
+		if err != nil {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), err.Error()), nil, nil
+		}
+
+		// Compute some random start/end time
+		rewardsStart := ctx.BlockTime().Add(time.Hour * time.Duration(r.Intn(10)+1))
+		rewardsEnd := rewardsStart.Add(time.Hour * time.Duration(r.Intn(96)+1))
+
+		signer, found := simtesting.GetSimAccount(adminAddress, accs)
+		if !found {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "admin account not found"), nil, nil
+		}
+
+		msg = types.NewMsgEditRewardsPlan(
+			plan.ID,
+			simtypes.RandStringOfLength(r, 32),
+			amount,
+			rewardsStart,
+			rewardsEnd,
+			RandomDistribution(r, restakingtypes.DELEGATION_TYPE_POOL),
+			RandomDistribution(r, restakingtypes.DELEGATION_TYPE_OPERATOR),
+			RandomUsersDistribution(r),
+			service.Admin,
+		)
+		return simtesting.SendMsg(r, types.ModuleName, app, ak, bk, msg, ctx, signer)
 	}
 }
 
@@ -98,7 +226,14 @@ func SimulateMsgSetWithdrawAddress(ak authkeeper.AccountKeeper, bk bankkeeper.Ke
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		msg := &types.MsgSetWithdrawAddress{}
-		return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "TODO"), nil, nil
+
+		if len(accs) == 0 {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "no accounts"), nil, nil
+		}
+
+		sender, _ := simtypes.RandomAcc(r, accs)
+		msg = types.NewMsgSetWithdrawAddress(sender.Address.String(), sender.Address.String())
+		return simtesting.SendMsg(r, types.ModuleName, app, ak, bk, msg, ctx, sender)
 	}
 }
 
@@ -107,15 +242,74 @@ func SimulateMsgWithdrawDelegatorReward(ak authkeeper.AccountKeeper, bk bankkeep
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		msg := &types.MsgWithdrawDelegatorReward{}
-		return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "TODO"), nil, nil
+
+		if len(accs) == 0 {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "no accounts"), nil, nil
+		}
+		sender, _ := simtypes.RandomAcc(r, accs)
+
+		// Get the user's pending rewards
+		queryServer := keeper.NewQueryServer(k)
+		res, err := queryServer.DelegatorTotalRewards(ctx, &types.QueryDelegatorTotalRewardsRequest{
+			DelegatorAddress: sender.Address.String(),
+		})
+		if err != nil {
+			panic(err)
+		}
+
+		// Get delegation reward so that we can withdraw the rewards
+		delegatorRewards, found := utils.Find(res.Rewards, func(d types.DelegationDelegatorReward) bool {
+			return !d.Reward.IsEmpty()
+		})
+		if !found {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "no rewards"), nil, nil
+		}
+
+		msg = types.NewMsgWithdrawDelegatorReward(
+			delegatorRewards.DelegationType,
+			delegatorRewards.DelegationTargetID,
+			sender.Address.String(),
+		)
+		return simtesting.SendMsg(r, types.ModuleName, app, ak, bk, msg, ctx, sender)
 	}
 }
 
-func SimulateMsgWithdrawOperatorCommission(ak authkeeper.AccountKeeper, bk bankkeeper.Keeper, k *keeper.Keeper) simtypes.Operation {
+func SimulateMsgWithdrawOperatorCommission(
+	ak authkeeper.AccountKeeper,
+	bk bankkeeper.Keeper,
+	ok *operatorskeeper.Keeper,
+	k *keeper.Keeper,
+) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		msg := &types.MsgWithdrawOperatorCommission{}
-		return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "TODO"), nil, nil
+
+		operator, found := operatorssimulation.GetRandomExistingOperator(r, ctx, ok, nil)
+		if !found {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "operator not found"), nil, nil
+		}
+
+		adminAddress, err := sdk.AccAddressFromBech32(operator.Admin)
+		if err != nil {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "invalid admin address"), nil, nil
+		}
+
+		signer, found := simtesting.GetSimAccount(adminAddress, accs)
+		if !found {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "admin account not found"), nil, nil
+		}
+
+		commission, err := k.GetOperatorAccumulatedCommission(ctx, operator.ID)
+		if err != nil {
+			panic(err)
+		}
+
+		if commission.Commissions.IsEmpty() {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "no commissions to withdraw"), nil, nil
+		}
+
+		msg = types.NewMsgWithdrawOperatorCommission(operator.ID, operator.Admin)
+		return simtesting.SendMsg(r, types.ModuleName, app, ak, bk, msg, ctx, signer)
 	}
 }

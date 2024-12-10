@@ -103,6 +103,11 @@ func RandomDecCoins(r *rand.Rand, availableDenoms []string, maxAmount sdkmath.Le
 
 // RandomSubSlice returns a random subset of the given slice
 func RandomSubSlice[T any](r *rand.Rand, items []T) []T {
+	// Empty slice, we can't pick random elements
+	if len(items) == 0 {
+		return nil
+	}
+
 	// We store here the selected index, this allows T to not be comparable.
 	pickedIndexes := make(map[int]bool)
 
