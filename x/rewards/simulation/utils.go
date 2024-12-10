@@ -251,16 +251,43 @@ func RandomDelegatorStartingInfoRecords(
 	return delegatorStartingInfoRecords
 }
 
-func RandomDelegationTypeRecords(r *rand.Rand, availableDenoms []string) types.DelegationTypeRecords {
-	outstandingRewardsRecords := RandomOutstandingRewardsRecords(r, availableDenoms)
-	historicalRewardsRecords := RandomHistoricalRewardsRecords(r, availableDenoms)
-	currentRewardsRecords := RandomCurrentRewardsRecords(r, availableDenoms)
-	delegatorStartingInfoRecords := RandomDelegatorStartingInfoRecords(r, availableDenoms)
+func RandomOperatorAccumulatedCommissionRecords(r *rand.Rand, availableDenoms []string) []types.OperatorAccumulatedCommissionRecord {
+	var records []types.OperatorAccumulatedCommissionRecord
 
-	return types.NewDelegationTypeRecords(
-		outstandingRewardsRecords,
-		historicalRewardsRecords,
-		currentRewardsRecords,
-		delegatorStartingInfoRecords,
-	)
+	count := r.Intn(10)
+	for i := 0; i < count; i++ {
+		randomDenoms := simtesting.RandomSubSlice(r, availableDenoms)
+		if len(randomDenoms) == 0 {
+			continue
+		}
+
+		records = append(records, types.OperatorAccumulatedCommissionRecord{
+			OperatorID: simtesting.RandomPositiveUint32(r),
+			Accumulated: types.AccumulatedCommission{
+				Commissions: RandomDecPools(r, availableDenoms),
+			},
+		})
+	}
+
+	return records
+}
+
+func RandomPoolServiceTotalDelegatorShares(r *rand.Rand, availableDenoms []string) []types.PoolServiceTotalDelegatorShares {
+	var records []types.PoolServiceTotalDelegatorShares
+
+	count := r.Intn(10)
+	for i := 0; i < count; i++ {
+		randomDenom := availableDenoms[r.Intn(len(availableDenoms))]
+		decCoin := sdk.NewDecCoinFromDec(randomDenom, simtypes.RandomDecAmount(
+			r, math.LegacyNewDecFromInt(math.NewIntFromUint64(simtesting.RandomPositiveUint64(r))),
+		))
+
+		records = append(records, types.PoolServiceTotalDelegatorShares{
+			PoolID:    simtesting.RandomPositiveUint32(r),
+			ServiceID: simtesting.RandomPositiveUint32(r),
+			Shares:    sdk.NewDecCoins(decCoin),
+		})
+	}
+
+	return records
 }
