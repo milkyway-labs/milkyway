@@ -87,3 +87,59 @@ func RandomCoin(r *rand.Rand, denom string, maxAmount int) sdk.Coin {
 		sdkmath.NewInt(int64(r.Intn(maxAmount*1e6))),
 	)
 }
+
+// RandomDecCoins returns a random sdk.DecCoins where the coins' denom will be
+// randomly chosen from the provided denoms
+func RandomDecCoins(r *rand.Rand, availableDenoms []string, maxAmount sdkmath.LegacyDec) sdk.DecCoins {
+	coins := sdk.NewDecCoins()
+
+	for _, denom := range RandomSubSlice(r, availableDenoms) {
+		randomDec := simtypes.RandomDecAmount(r, maxAmount)
+		coins = coins.Add(sdk.NewDecCoinFromDec(denom, randomDec))
+	}
+
+	return coins
+}
+
+// RandomSubSlice returns a random subset of the given slice
+func RandomSubSlice[T any](r *rand.Rand, items []T) []T {
+	// We store here the selected index, this allows T to not be comparable.
+	pickedIndexes := make(map[int]bool)
+
+	var elements []T
+	// Randomly select how many items to pick
+	count := r.Intn(len(items))
+	for i := 0; i < count; i++ {
+		// Get a random index
+		index := r.Intn(len(items))
+		_, found := pickedIndexes[index]
+
+		// Check if we have already picked this element
+		if !found {
+			// Element not picked, add it
+			elements = append(elements, items[index])
+			// Signal that we have picked the element at index
+			pickedIndexes[index] = true
+		}
+	}
+
+	return elements
+}
+
+// RandomPositiveUint32 returns a random positive uint32
+func RandomPositiveUint32(r *rand.Rand) uint32 {
+	value := r.Uint32()
+	for value == 0 {
+		value = r.Uint32()
+	}
+	return value
+}
+
+// RandomPositiveUint64 returns a random positive uint64
+func RandomPositiveUint64(r *rand.Rand) uint64 {
+	value := r.Uint64()
+	for value == 0 {
+		value = r.Uint64()
+	}
+	return value
+}
