@@ -970,7 +970,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_InactiveOperator() {
 	suite.Require().NoError(err)
 
 	// Refresh the updated state of operator 2.
-	operator2, _, err = suite.operatorsKeeper.GetOperator(ctx, operator2.ID)
+	operator2, err = suite.operatorsKeeper.GetOperator(ctx, operator2.ID)
 	suite.Require().NoError(err)
 	// Operator 2 becomes inactive.
 	err = suite.operatorsKeeper.StartOperatorInactivation(ctx, operator2)

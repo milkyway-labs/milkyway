@@ -1,8 +1,10 @@
 package keeper
 
 import (
+	"errors"
 	"fmt"
 
+	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/v3/x/operators/types"
@@ -182,13 +184,12 @@ func PoolsDelegatorsSharesInvariant(k *Keeper) sdk.Invariant {
 		}
 
 		for poolID, delegatorsShares := range poolsDelegatorsShares {
-			pool, found, err := k.poolsKeeper.GetPool(ctx, poolID)
+			pool, err := k.poolsKeeper.GetPool(ctx, poolID)
 			if err != nil {
+				if errors.Is(err, collections.ErrNotFound) {
+					panic(fmt.Errorf("pool with id %d not found", poolID))
+				}
 				panic(err)
-			}
-
-			if !found {
-				panic(fmt.Errorf("pool with id %d not found", poolID))
 			}
 
 			sharesAmount := delegatorsShares.AmountOf(pool.GetSharesDenom(pool.Denom))
@@ -266,13 +267,12 @@ func OperatorsDelegatorsSharesInvariant(k *Keeper) sdk.Invariant {
 		}
 
 		for operatorID, delegatorsShares := range operatorsDelegatorsShares {
-			operator, found, err := k.operatorsKeeper.GetOperator(ctx, operatorID)
+			operator, err := k.operatorsKeeper.GetOperator(ctx, operatorID)
 			if err != nil {
+				if errors.Is(err, collections.ErrNotFound) {
+					panic(fmt.Errorf("operator with id %d not found", operatorID))
+				}
 				panic(err)
-			}
-
-			if !found {
-				panic(fmt.Errorf("operator with id %d not found", operatorID))
 			}
 
 			if !operator.DelegatorShares.Equal(delegatorsShares) {
@@ -348,13 +348,12 @@ func ServicesDelegatorsSharesInvariant(k *Keeper) sdk.Invariant {
 		}
 
 		for serviceID, delegatorsShares := range servicesDelegatorsShares {
-			service, found, err := k.servicesKeeper.GetService(ctx, serviceID)
+			service, err := k.servicesKeeper.GetService(ctx, serviceID)
 			if err != nil {
+				if errors.Is(err, collections.ErrNotFound) {
+					panic(fmt.Errorf("service with id %d not found", serviceID))
+				}
 				panic(err)
-			}
-
-			if !found {
-				panic(fmt.Errorf("service with id %d not found", serviceID))
 			}
 
 			if !service.DelegatorShares.Equal(delegatorsShares) {
@@ -374,15 +373,13 @@ func AllowedOperatorsExistInvariant(k *Keeper) sdk.Invariant {
 		// Iterate over all the services joined by operators
 		var notFoundOperatorsIDs []uint32
 		err := k.IterateAllServicesAllowedOperators(ctx, func(serviceID uint32, operatorID uint32) (stop bool, err error) {
-			_, found, err := k.operatorsKeeper.GetOperator(ctx, serviceID)
+			_, err = k.operatorsKeeper.GetOperator(ctx, serviceID)
 			if err != nil {
+				if errors.Is(err, collections.ErrNotFound) {
+					notFoundOperatorsIDs = append(notFoundOperatorsIDs, operatorID)
+				}
 				return true, err
 			}
-
-			if !found {
-				notFoundOperatorsIDs = append(notFoundOperatorsIDs, operatorID)
-			}
-
 			return false, nil
 		})
 		if err != nil {
@@ -405,15 +402,13 @@ func OperatorsJoinedServicesExistInvariant(k *Keeper) sdk.Invariant {
 		// Iterate over all the operators joined services
 		var notFoundServicesIDs []uint32
 		err := k.IterateAllOperatorsJoinedServices(ctx, func(operatorID uint32, serviceID uint32) (stop bool, err error) {
-			_, found, err := k.servicesKeeper.GetService(ctx, serviceID)
+			_, err = k.servicesKeeper.GetService(ctx, serviceID)
 			if err != nil {
+				if errors.Is(err, collections.ErrNotFound) {
+					notFoundServicesIDs = append(notFoundServicesIDs, serviceID)
+				}
 				return false, err
 			}
-
-			if !found {
-				notFoundServicesIDs = append(notFoundServicesIDs, serviceID)
-			}
-
 			return false, nil
 		})
 		if err != nil {

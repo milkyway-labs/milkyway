@@ -19,8 +19,7 @@ type Keeper struct {
 	accountKeeper types.AccountKeeper
 	poolKeeper    types.CommunityPoolKeeper
 
-	storeService corestoretypes.KVStoreService
-	Schema       collections.Schema
+	Schema collections.Schema
 
 	nextServiceID     collections.Sequence                         // Next service ID
 	services          collections.Map[uint32, types.Service]       // service ID -> service
@@ -48,7 +47,6 @@ func NewKeeper(
 		accountKeeper: accountKeeper,
 		poolKeeper:    poolKeeper,
 		authority:     authority,
-		storeService:  storeService,
 
 		nextServiceID: collections.NewSequence(
 			sb,

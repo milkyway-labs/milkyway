@@ -2,11 +2,13 @@ package keeper
 
 import (
 	"context"
-	"fmt"
+	"errors"
 
 	"cosmossdk.io/collections"
+	errorsmod "cosmossdk.io/errors"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/v3/x/operators/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v3/x/services/types"
 )
 
 var _ operatorstypes.OperatorsHooks = &OperatorsHooks{}
@@ -85,13 +87,12 @@ func (o *OperatorsHooks) removeOperatorFromServicesAllowList(ctx context.Context
 			return err
 		}
 		if !isConfigured {
-			service, found, err := o.servicesKeeper.GetService(ctx, serviceID)
+			service, err := o.servicesKeeper.GetService(ctx, serviceID)
 			if err != nil {
+				if errors.Is(err, collections.ErrNotFound) {
+					return errorsmod.Wrapf(servicestypes.ErrServiceNotFound, "service %d not found", serviceID)
+				}
 				return err
-			}
-
-			if !found {
-				return fmt.Errorf("service %d not found", serviceID)
 			}
 
 			if !service.IsActive() {

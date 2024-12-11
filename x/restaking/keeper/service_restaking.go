@@ -27,8 +27,8 @@ func (k *Keeper) GetAllServiceAllowedOperators(ctx context.Context, serviceID ui
 	if err != nil {
 		return nil, err
 	}
-
 	defer iterator.Close()
+
 	var operators []uint32
 	for ; iterator.Valid(); iterator.Next() {
 		serviceOperatorPair, err := iterator.Key()
@@ -64,12 +64,7 @@ func (k *Keeper) IsServiceOperatorsAllowListConfigured(ctx context.Context, serv
 		return false, err
 	}
 	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		return true, nil
-	}
-
-	return false, nil
+	return iterator.Valid(), nil
 }
 
 // IsOperatorInServiceAllowList returns true if the given operator is in the
@@ -145,12 +140,7 @@ func (k *Keeper) IsServiceSecuringPoolsConfigured(ctx context.Context, serviceID
 		return false, err
 	}
 	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		return true, nil
-	}
-
-	return false, nil
+	return iterator.Valid(), nil
 }
 
 // IsPoolInServiceSecuringPools returns true if the pool is in the list
@@ -224,13 +214,12 @@ func (k *Keeper) RemoveServiceDelegation(ctx context.Context, delegation types.D
 // DelegateToService sends the given amount to the service account and saves the delegation for the given user
 func (k *Keeper) DelegateToService(ctx context.Context, serviceID uint32, amount sdk.Coins, delegator string) (sdk.DecCoins, error) {
 	// Get the service
-	service, found, err := k.servicesKeeper.GetService(ctx, serviceID)
+	service, err := k.servicesKeeper.GetService(ctx, serviceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return sdk.NewDecCoins(), servicestypes.ErrServiceNotFound
+		}
 		return nil, err
-	}
-
-	if !found {
-		return sdk.NewDecCoins(), servicestypes.ErrServiceNotFound
 	}
 
 	restakableDenoms, err := k.GetRestakableDenoms(ctx)
@@ -327,13 +316,12 @@ func (k *Keeper) GetServiceUnbondingDelegation(ctx context.Context, serviceID ui
 // unbonding delegation for the given user
 func (k *Keeper) UndelegateFromService(ctx context.Context, serviceID uint32, amount sdk.Coins, delegator string) (time.Time, error) {
 	// Find the service
-	service, found, err := k.servicesKeeper.GetService(ctx, serviceID)
+	service, err := k.servicesKeeper.GetService(ctx, serviceID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return time.Time{}, servicestypes.ErrServiceNotFound
+		}
 		return time.Time{}, err
-	}
-
-	if !found {
-		return time.Time{}, servicestypes.ErrServiceNotFound
 	}
 
 	// Get the shares

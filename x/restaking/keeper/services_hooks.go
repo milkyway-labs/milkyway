@@ -46,7 +46,7 @@ func (h *ServicesHooks) BeforeServiceDeleted(ctx context.Context, serviceID uint
 
 	// Get the iterator to iterate over the operators that are
 	// allowed to secure this service
-	serviceOperatorsAllowListIter, err := h.serviceOperatorsAllowList.Iterate(ctx, collections.NewPrefixedPairRange[uint32, uint32](serviceID))
+	serviceOperatorsAllowListIter, err := h.ServiceAllowedOperatorsIterator(ctx, serviceID)
 	if err != nil {
 		return err
 	}
@@ -66,7 +66,7 @@ func (h *ServicesHooks) BeforeServiceDeleted(ctx context.Context, serviceID uint
 
 	// Get the iterator to iterate over the list of pools from
 	// which the service is allowed to borrow security
-	serviceSecuringPoolsIter, err := h.serviceSecuringPools.Iterate(ctx, collections.NewPrefixedPairRange[uint32, uint32](serviceID))
+	serviceSecuringPoolsIter, err := h.ServiceSecuringPoolsIterator(ctx, serviceID)
 	if err != nil {
 		return err
 	}

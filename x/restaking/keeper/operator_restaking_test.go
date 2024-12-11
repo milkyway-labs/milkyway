@@ -367,9 +367,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 			),
 			check: func(ctx sdk.Context) {
 				// Make sure the operator now exists
-				operator, found, err := suite.ok.GetOperator(ctx, 1)
+				operator, err := suite.ok.GetOperator(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(operatorstypes.Operator{
 					ID:      1,
 					Status:  operatorstypes.OPERATOR_STATUS_ACTIVE,
@@ -455,9 +454,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 			),
 			check: func(ctx sdk.Context) {
 				// Make sure the operator now exists
-				operator, found, err := suite.ok.GetOperator(ctx, 1)
+				operator, err := suite.ok.GetOperator(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(operatorstypes.Operator{
 					ID:      1,
 					Status:  operatorstypes.OPERATOR_STATUS_ACTIVE,
@@ -562,9 +560,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 			),
 			check: func(ctx sdk.Context) {
 				// Make sure the operator now exists
-				operator, found, err := suite.ok.GetOperator(ctx, 1)
+				operator, err := suite.ok.GetOperator(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().True(found)
 				suite.Require().Equal(operatorstypes.Operator{
 					ID:      1,
 					Status:  operatorstypes.OPERATOR_STATUS_ACTIVE,

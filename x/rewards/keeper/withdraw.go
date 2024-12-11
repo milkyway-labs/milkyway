@@ -2,8 +2,10 @@ package keeper
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
+	"cosmossdk.io/collections"
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -63,13 +65,12 @@ func (k *Keeper) WithdrawDelegationRewards(
 
 // WithdrawOperatorCommission withdraws the operator's accumulated commission
 func (k *Keeper) WithdrawOperatorCommission(ctx context.Context, operatorID uint32) (types.Pools, error) {
-	operator, found, err := k.operatorsKeeper.GetOperator(ctx, operatorID)
+	operator, err := k.operatorsKeeper.GetOperator(ctx, operatorID)
 	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			return nil, operatorstypes.ErrOperatorNotFound
+		}
 		return nil, err
-	}
-
-	if !found {
-		return nil, operatorstypes.ErrOperatorNotFound
 	}
 
 	// Fetch the operator accumulated commission

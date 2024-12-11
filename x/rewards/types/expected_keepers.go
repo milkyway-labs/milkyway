@@ -43,20 +43,20 @@ type OracleKeeper interface {
 }
 
 type PoolsKeeper interface {
-	GetPool(ctx context.Context, poolID uint32) (poolstypes.Pool, bool, error)
+	GetPool(ctx context.Context, poolID uint32) (poolstypes.Pool, error)
 	GetPools(ctx context.Context) ([]poolstypes.Pool, error)
 	IteratePools(ctx context.Context, cb func(pool poolstypes.Pool) (stop bool, err error)) error
 }
 
 type OperatorsKeeper interface {
-	GetOperator(ctx context.Context, operatorID uint32) (operatorstypes.Operator, bool, error)
+	GetOperator(ctx context.Context, operatorID uint32) (operatorstypes.Operator, error)
 	GetOperators(ctx context.Context) ([]operatorstypes.Operator, error)
 	IterateOperators(ctx context.Context, cb func(operator operatorstypes.Operator) (stop bool, err error)) error
 	GetOperatorParams(ctx context.Context, operatorID uint32) (operatorstypes.OperatorParams, error)
 }
 
 type ServicesKeeper interface {
-	GetService(ctx context.Context, serviceID uint32) (servicestypes.Service, bool, error)
+	GetService(ctx context.Context, serviceID uint32) (servicestypes.Service, error)
 	GetServiceParams(ctx context.Context, serviceID uint32) (servicestypes.ServiceParams, error)
 	IterateServices(ctx context.Context, cb func(service servicestypes.Service) (stop bool, err error)) error
 }

@@ -2,9 +2,9 @@ package keeper
 
 import (
 	"context"
+	"errors"
 
-	"cosmossdk.io/store/prefix"
-	"github.com/cosmos/cosmos-sdk/runtime"
+	"cosmossdk.io/collections"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -16,13 +16,12 @@ var _ types.QueryServer = &Keeper{}
 
 // Operator implements the Query/Operator gRPC method
 func (k *Keeper) Operator(ctx context.Context, request *types.QueryOperatorRequest) (*types.QueryOperatorResponse, error) {
-	operator, found, err := k.GetOperator(ctx, request.OperatorId)
+	operator, err := k.GetOperator(ctx, request.OperatorId)
 	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			return nil, status.Error(codes.NotFound, "operator not found")
+		}
 		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	if !found {
-		return nil, status.Error(codes.NotFound, "operator not found")
 	}
 
 	return &types.QueryOperatorResponse{Operator: operator}, nil
@@ -30,23 +29,12 @@ func (k *Keeper) Operator(ctx context.Context, request *types.QueryOperatorReque
 
 // Operators implements the Query/Operators gRPC method
 func (k *Keeper) Operators(ctx context.Context, request *types.QueryOperatorsRequest) (*types.QueryOperatorsResponse, error) {
-	store := k.storeService.OpenKVStore(ctx)
-	operatorsStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.OperatorPrefix)
-
-	var operators []types.Operator
-	pageRes, err := query.Paginate(operatorsStore, request.Pagination, func(key []byte, value []byte) error {
-		var operator types.Operator
-		if err := k.cdc.Unmarshal(value, &operator); err != nil {
-			return status.Error(codes.Internal, err.Error())
-		}
-
-		operators = append(operators, operator)
-		return nil
+	operators, pageRes, err := query.CollectionPaginate(ctx, k.operators, request.Pagination, func(_ uint32, operator types.Operator) (types.Operator, error) {
+		return operator, nil
 	})
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
-
 	return &types.QueryOperatorsResponse{
 		Operators:  operators,
 		Pagination: pageRes,
@@ -54,13 +42,12 @@ func (k *Keeper) Operators(ctx context.Context, request *types.QueryOperatorsReq
 }
 
 func (k *Keeper) OperatorParams(ctx context.Context, request *types.QueryOperatorParamsRequest) (*types.QueryOperatorParamsResponse, error) {
-	_, found, err := k.GetOperator(ctx, request.OperatorId)
+	_, err := k.GetOperator(ctx, request.OperatorId)
 	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			return nil, status.Error(codes.NotFound, "operator not found")
+		}
 		return nil, status.Error(codes.Internal, err.Error())
-	}
-
-	if !found {
-		return nil, types.ErrOperatorNotFound
 	}
 
 	params, err := k.GetOperatorParams(ctx, request.OperatorId)

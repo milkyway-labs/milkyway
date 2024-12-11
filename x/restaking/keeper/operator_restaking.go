@@ -81,13 +81,12 @@ func (k *Keeper) RemoveOperatorDelegation(ctx context.Context, delegation types.
 // DelegateToOperator sends the given amount to the operator account and saves the delegation for the given user
 func (k *Keeper) DelegateToOperator(ctx context.Context, operatorID uint32, amount sdk.Coins, delegator string) (sdk.DecCoins, error) {
 	// Get the operator
-	operator, found, err := k.operatorsKeeper.GetOperator(ctx, operatorID)
+	operator, err := k.operatorsKeeper.GetOperator(ctx, operatorID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return sdk.NewDecCoins(), operatorstypes.ErrOperatorNotFound
+		}
 		return nil, err
-	}
-
-	if !found {
-		return sdk.NewDecCoins(), operatorstypes.ErrOperatorNotFound
 	}
 
 	restakableDenoms, err := k.GetRestakableDenoms(ctx)
@@ -164,13 +163,12 @@ func (k *Keeper) GetOperatorUnbondingDelegation(ctx context.Context, operatorID 
 // unbonding delegation for the given user
 func (k *Keeper) UndelegateFromOperator(ctx context.Context, operatorID uint32, amount sdk.Coins, delegator string) (time.Time, error) {
 	// Find the operator
-	operator, found, err := k.operatorsKeeper.GetOperator(ctx, operatorID)
+	operator, err := k.operatorsKeeper.GetOperator(ctx, operatorID)
 	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return time.Time{}, operatorstypes.ErrOperatorNotFound
+		}
 		return time.Time{}, err
-	}
-
-	if !found {
-		return time.Time{}, operatorstypes.ErrOperatorNotFound
 	}
 
 	// Get the shares

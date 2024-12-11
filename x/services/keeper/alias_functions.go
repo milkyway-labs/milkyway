@@ -19,29 +19,10 @@ func (k *Keeper) createAccountIfNotExists(ctx context.Context, address sdk.AccAd
 
 // IterateServices iterates over the services in the store and performs a callback function
 func (k *Keeper) IterateServices(ctx context.Context, cb func(service types.Service) (stop bool, err error)) error {
-	iterator, err := k.services.Iterate(ctx, nil)
-	if err != nil {
-		return err
-	}
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		service, err := iterator.Value()
-		if err != nil {
-			return err
-		}
-
-		stop, err := cb(service)
-		if err != nil {
-			return err
-		}
-
-		if stop {
-			break
-		}
-	}
-
-	return nil
+	err := k.services.Walk(ctx, nil, func(_ uint32, service types.Service) (stop bool, err error) {
+		return cb(service)
+	})
+	return err
 }
 
 // GetServices returns the services stored in the KVStore
