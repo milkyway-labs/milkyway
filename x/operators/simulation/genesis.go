@@ -58,3 +58,16 @@ func RandomizedGenState(simState *module.SimulationState) {
 	genesis := types.NewGenesisState(nextOperatorID, operators, operatorParams, unbondingOperators, params)
 	simState.GenState[types.ModuleName] = simState.Cdc.MustMarshalJSON(genesis)
 }
+
+// GetGenesisState returns the operators genesis state from the SimulationState
+func GetGenesisState(simState *module.SimulationState) types.GenesisState {
+	operatorsGenesisJSON, found := simState.GenState[types.ModuleName]
+	var operatorsGenesis types.GenesisState
+	if found {
+		simState.Cdc.MustUnmarshalJSON(operatorsGenesisJSON, &operatorsGenesis)
+	} else {
+		operatorsGenesis = *types.DefaultGenesis()
+	}
+
+	return operatorsGenesis
+}

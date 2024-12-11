@@ -18,10 +18,13 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 
+	operatorskeeper "github.com/milkyway-labs/milkyway/v3/x/operators/keeper"
+	poolskeeper "github.com/milkyway-labs/milkyway/v3/x/pools/keeper"
 	"github.com/milkyway-labs/milkyway/v3/x/restaking/client/cli"
 	"github.com/milkyway-labs/milkyway/v3/x/restaking/keeper"
 	"github.com/milkyway-labs/milkyway/v3/x/restaking/simulation"
 	"github.com/milkyway-labs/milkyway/v3/x/restaking/types"
+	serviceskeeper "github.com/milkyway-labs/milkyway/v3/x/services/keeper"
 )
 
 const (
@@ -105,9 +108,9 @@ type AppModule struct {
 
 	ak              authkeeper.AccountKeeper
 	bk              bankkeeper.Keeper
-	poolsKeeper     types.PoolsKeeper
-	operatorsKeeper types.OperatorsKeeper
-	servicesKeeper  types.ServicesKeeper
+	poolsKeeper     *poolskeeper.Keeper
+	operatorsKeeper *operatorskeeper.Keeper
+	servicesKeeper  *serviceskeeper.Keeper
 }
 
 func NewAppModule(
@@ -115,9 +118,9 @@ func NewAppModule(
 	keeper *keeper.Keeper,
 	ak authkeeper.AccountKeeper,
 	bk bankkeeper.Keeper,
-	poolsKeeper types.PoolsKeeper,
-	operatorsKeeper types.OperatorsKeeper,
-	servicesKeeper types.ServicesKeeper,
+	poolsKeeper *poolskeeper.Keeper,
+	operatorsKeeper *operatorskeeper.Keeper,
+	servicesKeeper *serviceskeeper.Keeper,
 ) AppModule {
 	return AppModule{
 		AppModuleBasic:  NewAppModuleBasic(cdc),

@@ -87,3 +87,33 @@ func RandomCoin(r *rand.Rand, denom string, maxAmount int) sdk.Coin {
 		sdkmath.NewInt(int64(r.Intn(maxAmount*1e6))),
 	)
 }
+
+// RandomSubSlice returns a random subset of the given slice
+func RandomSubSlice[T any](r *rand.Rand, items []T) []T {
+	// Empty slice, we can't pick random elements
+	if len(items) == 0 {
+		return nil
+	}
+
+	// We store here the selected index, this allows T to not be comparable.
+	pickedIndexes := make(map[int]bool)
+
+	var elements []T
+	// Randomly select how many items to pick
+	count := r.Intn(len(items))
+	for i := 0; i < count; i++ {
+		// Get a random index
+		index := r.Intn(len(items))
+		_, found := pickedIndexes[index]
+
+		// Check if we have already picked this element
+		if !found {
+			// Element not picked, add it
+			elements = append(elements, items[index])
+			// Signal that we have picked the element at index
+			pickedIndexes[index] = true
+		}
+	}
+
+	return elements
+}
