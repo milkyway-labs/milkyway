@@ -18,6 +18,7 @@ import (
 	"github.com/spf13/cobra"
 
 	operatorskeeper "github.com/milkyway-labs/milkyway/v3/x/operators/keeper"
+	poolskeeper "github.com/milkyway-labs/milkyway/v3/x/pools/keeper"
 	"github.com/milkyway-labs/milkyway/v3/x/rewards/client/cli"
 	"github.com/milkyway-labs/milkyway/v3/x/rewards/keeper"
 	"github.com/milkyway-labs/milkyway/v3/x/rewards/simulation"
@@ -103,6 +104,7 @@ type AppModule struct {
 	accountKeeper authkeeper.AccountKeeper
 	bankKeeper    bankkeeper.Keeper
 
+	poolsKeeper     *poolskeeper.Keeper
 	operatorsKeeper *operatorskeeper.Keeper
 	servicesKeeper  *serviceskeeper.Keeper
 }
@@ -112,6 +114,7 @@ func NewAppModule(
 	keeper *keeper.Keeper,
 	accountKeeper authkeeper.AccountKeeper,
 	bankKeeper bankkeeper.Keeper,
+	poolsKeeper *poolskeeper.Keeper,
 	operatorsKeeper *operatorskeeper.Keeper,
 	serviceKeeper *serviceskeeper.Keeper,
 ) AppModule {
@@ -120,6 +123,7 @@ func NewAppModule(
 		keeper:          keeper,
 		accountKeeper:   accountKeeper,
 		bankKeeper:      bankKeeper,
+		poolsKeeper:     poolsKeeper,
 		operatorsKeeper: operatorsKeeper,
 		servicesKeeper:  serviceKeeper,
 	}
@@ -198,6 +202,7 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 		simState.AppParams,
 		am.accountKeeper,
 		am.bankKeeper,
+		am.poolsKeeper,
 		am.operatorsKeeper,
 		am.servicesKeeper,
 		am.keeper,

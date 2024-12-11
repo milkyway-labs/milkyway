@@ -16,6 +16,9 @@ import (
 	"github.com/milkyway-labs/milkyway/v3/utils"
 	operatorskeeper "github.com/milkyway-labs/milkyway/v3/x/operators/keeper"
 	operatorssimulation "github.com/milkyway-labs/milkyway/v3/x/operators/simulation"
+	operatorstypes "github.com/milkyway-labs/milkyway/v3/x/operators/types"
+	poolskeeper "github.com/milkyway-labs/milkyway/v3/x/pools/keeper"
+	poolssimulation "github.com/milkyway-labs/milkyway/v3/x/pools/simulation"
 	restakingtypes "github.com/milkyway-labs/milkyway/v3/x/restaking/types"
 	"github.com/milkyway-labs/milkyway/v3/x/rewards/keeper"
 	"github.com/milkyway-labs/milkyway/v3/x/rewards/types"
@@ -42,6 +45,7 @@ func WeightedOperations(
 	appParams simtypes.AppParams,
 	ak authkeeper.AccountKeeper,
 	bk bankkeeper.Keeper,
+	pk *poolskeeper.Keeper,
 	ok *operatorskeeper.Keeper,
 	sk *serviceskeeper.Keeper,
 	k *keeper.Keeper,
@@ -76,8 +80,8 @@ func WeightedOperations(
 	})
 
 	return simulation.WeightedOperations{
-		simulation.NewWeightedOperation(weightMsgCreateRewardsPlan, SimulateMsgCreateRewardsPlan(ak, bk, sk, k)),
-		simulation.NewWeightedOperation(weightMsgEditRewardsPlan, SimulateMsgEditRewardsPlan(ak, bk, sk, k)),
+		simulation.NewWeightedOperation(weightMsgCreateRewardsPlan, SimulateMsgCreateRewardsPlan(ak, bk, pk, ok, sk, k)),
+		simulation.NewWeightedOperation(weightMsgEditRewardsPlan, SimulateMsgEditRewardsPlan(ak, bk, pk, ok, sk, k)),
 		simulation.NewWeightedOperation(weightMsgSetWithdrawAddress, SimulateMsgSetWithdrawAddress(ak, bk, k)),
 		simulation.NewWeightedOperation(weightMsgWithdrawDelegatorReward, SimulateMsgWithdrawDelegatorReward(ak, bk, k)),
 		simulation.NewWeightedOperation(weightMsgWithdrawOperatorCommission, SimulateMsgWithdrawOperatorCommission(ak, bk, ok, k)),
@@ -89,6 +93,8 @@ func WeightedOperations(
 func SimulateMsgCreateRewardsPlan(
 	ak authkeeper.AccountKeeper,
 	bk bankkeeper.Keeper,
+	pk *poolskeeper.Keeper,
+	ok *operatorskeeper.Keeper,
 	sk *serviceskeeper.Keeper,
 	k *keeper.Keeper,
 ) simtypes.Operation {
@@ -129,6 +135,20 @@ func SimulateMsgCreateRewardsPlan(
 			), nil, nil
 		}
 
+		// Get a random pool that we will use to configure the pool distribution
+		pool, found := poolssimulation.GetRandomExistingPool(r, ctx, pk, nil)
+		if !found {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "no pool found"), nil, nil
+		}
+
+		// Get a random operator that we will use to configure the operator distribution
+		operator, found := operatorssimulation.GetRandomExistingOperator(r, ctx, ok, func(o operatorstypes.Operator) bool {
+			return o.IsActive()
+		})
+		if !found {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "no operator found"), nil, nil
+		}
+
 		// Compute some random start/end time
 		rewardsStart := ctx.BlockTime().Add(time.Hour * time.Duration(r.Intn(10)+1))
 		rewardsEnd := rewardsStart.Add(time.Hour * time.Duration(r.Intn(96)+1))
@@ -150,8 +170,8 @@ func SimulateMsgCreateRewardsPlan(
 			amount,
 			rewardsStart,
 			rewardsEnd,
-			RandomDistribution(r, restakingtypes.DELEGATION_TYPE_POOL),
-			RandomDistribution(r, restakingtypes.DELEGATION_TYPE_OPERATOR),
+			RandomDistribution(r, restakingtypes.DELEGATION_TYPE_POOL, pool),
+			RandomDistribution(r, restakingtypes.DELEGATION_TYPE_OPERATOR, operator),
 			RandomUsersDistribution(r),
 			rewardsParams.RewardsPlanCreationFee,
 			service.Admin,
@@ -163,6 +183,8 @@ func SimulateMsgCreateRewardsPlan(
 func SimulateMsgEditRewardsPlan(
 	ak authkeeper.AccountKeeper,
 	bk bankkeeper.Keeper,
+	pk *poolskeeper.Keeper,
+	ok *operatorskeeper.Keeper,
 	sk *serviceskeeper.Keeper,
 	k *keeper.Keeper,
 ) simtypes.Operation {
@@ -174,6 +196,20 @@ func SimulateMsgEditRewardsPlan(
 		plan, found := GetRandomExistingRewardsPlan(r, ctx, k)
 		if !found {
 			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "no rewards plan found"), nil, nil
+		}
+
+		// Get a random pool that we will use to configure the pool distribution
+		pool, found := poolssimulation.GetRandomExistingPool(r, ctx, pk, nil)
+		if !found {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "no pool found"), nil, nil
+		}
+
+		// Get a random operator that we will use to configure the operator distribution
+		operator, found := operatorssimulation.GetRandomExistingOperator(r, ctx, ok, func(o operatorstypes.Operator) bool {
+			return o.IsActive()
+		})
+		if !found {
+			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "no operator found"), nil, nil
 		}
 
 		// Get the service admin
@@ -212,8 +248,8 @@ func SimulateMsgEditRewardsPlan(
 			amount,
 			rewardsStart,
 			rewardsEnd,
-			RandomDistribution(r, restakingtypes.DELEGATION_TYPE_POOL),
-			RandomDistribution(r, restakingtypes.DELEGATION_TYPE_OPERATOR),
+			RandomDistribution(r, restakingtypes.DELEGATION_TYPE_POOL, pool),
+			RandomDistribution(r, restakingtypes.DELEGATION_TYPE_OPERATOR, operator),
 			RandomUsersDistribution(r),
 			service.Admin,
 		)

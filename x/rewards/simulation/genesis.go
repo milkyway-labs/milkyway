@@ -3,24 +3,25 @@ package simulation
 import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	poolstypes "github.com/milkyway-labs/milkyway/v3/x/pools/types"
+	operatorssimulation "github.com/milkyway-labs/milkyway/v3/x/operators/simulation"
+	poolssimulation "github.com/milkyway-labs/milkyway/v3/x/pools/simulation"
 	"github.com/milkyway-labs/milkyway/v3/x/rewards/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v3/x/services/types"
+	servicessimulation "github.com/milkyway-labs/milkyway/v3/x/services/simulation"
 )
 
 // RandomizedGenState generates a random GenesisState for the operators module
 func RandomizedGenState(simState *module.SimulationState) {
-	// Get the services genesis state
-	rawServicesGenesis := simState.GenState[servicestypes.ModuleName]
-	var servicesGenesis servicestypes.GenesisState
-	simState.Cdc.MustUnmarshalJSON(rawServicesGenesis, &servicesGenesis)
+	servicesGenesis := servicessimulation.GetGenesisState(simState)
+	poolsGenesis := poolssimulation.GetGenesisState(simState)
+	operatorsGenesis := operatorssimulation.GetGenesisState(simState)
 
-	// Get the pools genesis state
-	rawPoolsGenesis := simState.GenState[poolstypes.ModuleName]
-	var poolsGenesis poolstypes.GenesisState
-	simState.Cdc.MustUnmarshalJSON(rawPoolsGenesis, &poolsGenesis)
-
-	rewardsPlans := RandomRewardsPlans(simState.Rand, servicesGenesis.Services, []string{simState.BondDenom})
+	rewardsPlans := RandomRewardsPlans(
+		simState.Rand,
+		poolsGenesis.Pools,
+		operatorsGenesis.Operators,
+		servicesGenesis.Services,
+		[]string{simState.BondDenom},
+	)
 	nextRewardsPlan := uint64(1)
 	for _, plan := range rewardsPlans {
 		if plan.ID >= nextRewardsPlan {
@@ -39,7 +40,7 @@ func RandomizedGenState(simState *module.SimulationState) {
 		types.NewDelegationTypeRecords(nil, nil, nil, nil),
 		types.NewDelegationTypeRecords(nil, nil, nil, nil),
 		types.NewDelegationTypeRecords(nil, nil, nil, nil),
-		RandomOperatorAccumulatedCommissionRecords(simState.Rand, []string{simState.BondDenom}),
+		RandomOperatorAccumulatedCommissionRecords(simState.Rand, operatorsGenesis.Operators, []string{simState.BondDenom}),
 		RandomPoolServiceTotalDelegatorShares(simState.Rand, poolsGenesis, servicesGenesis, []string{simState.BondDenom}),
 	)
 	simState.GenState[types.ModuleName] = simState.Cdc.MustMarshalJSON(genesis)
