@@ -100,8 +100,8 @@ func RandomSubSlice[T any](r *rand.Rand, items []T) []T {
 
 	var elements []T
 	// Randomly select how many items to pick
-	count := r.Intn(len(items))
-	for i := 0; i < count; i++ {
+	count := r.Intn(len(items) + 1)
+	for len(pickedIndexes) < count {
 		// Get a random index
 		index := r.Intn(len(items))
 		_, found := pickedIndexes[index]
