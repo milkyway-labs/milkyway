@@ -2,6 +2,7 @@ package simulation
 
 import (
 	"math/rand"
+	"slices"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -528,7 +529,7 @@ func SimulateMsgDelegateService(
 		}
 
 		// Get a random service
-		operator, found := servicessimulation.GetRandomExistingService(r, ctx, sk, func(s servicestypes.Service) bool {
+		service, found := servicessimulation.GetRandomExistingService(r, ctx, sk, func(s servicestypes.Service) bool {
 			return s.IsActive()
 		})
 		if !found {
@@ -537,6 +538,8 @@ func SimulateMsgDelegateService(
 
 		// Get a random delegator with a random amount
 		delegator, coins, skip := randomDelegatorAndAmount(r, ctx, accs, k, bk, ak)
+		// Filter the coins to only those that can be restaked toward the service
+		coins = filterServiceRestakableCoins(sk, ctx, service.ID, coins)
 
 		// If coins slice is empty, we can not create valid msg
 		if len(coins) == 0 {
@@ -547,7 +550,7 @@ func SimulateMsgDelegateService(
 			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "skip delegate"), nil, nil
 		}
 
-		msg = types.NewMsgDelegateService(operator.ID, coins, delegator.Address.String())
+		msg = types.NewMsgDelegateService(service.ID, coins, delegator.Address.String())
 
 		return simtesting.SendMsg(r, types.ModuleName, app, ak, bk, msg, ctx, delegator)
 	}
@@ -611,4 +614,24 @@ func randomDelegatorAndAmount(
 	}
 
 	return delegator, coins, false
+}
+
+func filterServiceRestakableCoins(sk *serviceskeeper.Keeper, ctx sdk.Context, serviceID uint32, coins sdk.Coins) sdk.Coins {
+	serviceParams, err := sk.GetServiceParams(ctx, serviceID)
+	if err != nil {
+		panic(err)
+	}
+	// If empty allows all denoms
+	if len(serviceParams.AllowedDenoms) == 0 {
+		return coins
+	}
+
+	filteredCoins := sdk.NewCoins()
+	for _, coin := range coins {
+		if slices.Contains(serviceParams.AllowedDenoms, coin.Denom) {
+			filteredCoins = filteredCoins.Add(coin)
+		}
+	}
+
+	return filteredCoins
 }
