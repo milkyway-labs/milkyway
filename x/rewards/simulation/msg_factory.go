@@ -1,10 +1,12 @@
 package simulation
 
 import (
+	"errors"
 	"fmt"
 	"math/rand"
 	"time"
 
+	"cosmossdk.io/collections"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
@@ -213,12 +215,12 @@ func SimulateMsgEditRewardsPlan(
 		}
 
 		// Get the service admin
-		service, found, err := sk.GetService(ctx, plan.ServiceID)
+		service, err := sk.GetService(ctx, plan.ServiceID)
 		if err != nil {
+			if errors.Is(err, collections.ErrNotFound) {
+				return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "service not found"), nil, nil
+			}
 			panic(err)
-		}
-		if !found {
-			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "service not found"), nil, nil
 		}
 
 		adminAddress, err := sdk.AccAddressFromBech32(service.Admin)
