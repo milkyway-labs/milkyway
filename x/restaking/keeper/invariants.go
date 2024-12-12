@@ -373,7 +373,7 @@ func AllowedOperatorsExistInvariant(k *Keeper) sdk.Invariant {
 		// Iterate over all the services joined by operators
 		var notFoundOperatorsIDs []uint32
 		err := k.IterateAllServicesAllowedOperators(ctx, func(serviceID uint32, operatorID uint32) (stop bool, err error) {
-			_, err = k.operatorsKeeper.GetOperator(ctx, serviceID)
+			_, err = k.operatorsKeeper.GetOperator(ctx, operatorID)
 			if err != nil {
 				if errors.Is(err, collections.ErrNotFound) {
 					notFoundOperatorsIDs = append(notFoundOperatorsIDs, operatorID)

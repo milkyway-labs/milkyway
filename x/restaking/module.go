@@ -6,20 +6,25 @@ import (
 	"fmt"
 
 	"cosmossdk.io/core/appmodule"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	"github.com/spf13/cobra"
-
 	abci "github.com/cometbft/cometbft/abci/types"
-
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
+	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
+	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/spf13/cobra"
 
+	operatorskeeper "github.com/milkyway-labs/milkyway/v3/x/operators/keeper"
+	poolskeeper "github.com/milkyway-labs/milkyway/v3/x/pools/keeper"
 	"github.com/milkyway-labs/milkyway/v3/x/restaking/client/cli"
 	"github.com/milkyway-labs/milkyway/v3/x/restaking/keeper"
+	"github.com/milkyway-labs/milkyway/v3/x/restaking/simulation"
 	"github.com/milkyway-labs/milkyway/v3/x/restaking/types"
+	serviceskeeper "github.com/milkyway-labs/milkyway/v3/x/services/keeper"
 )
 
 const (
@@ -100,12 +105,31 @@ type AppModule struct {
 
 	// To ensure setting hooks properly, keeper must be a reference
 	keeper *keeper.Keeper
+
+	ak              authkeeper.AccountKeeper
+	bk              bankkeeper.Keeper
+	poolsKeeper     *poolskeeper.Keeper
+	operatorsKeeper *operatorskeeper.Keeper
+	servicesKeeper  *serviceskeeper.Keeper
 }
 
-func NewAppModule(cdc codec.Codec, keeper *keeper.Keeper) AppModule {
+func NewAppModule(
+	cdc codec.Codec,
+	keeper *keeper.Keeper,
+	ak authkeeper.AccountKeeper,
+	bk bankkeeper.Keeper,
+	poolsKeeper *poolskeeper.Keeper,
+	operatorsKeeper *operatorskeeper.Keeper,
+	servicesKeeper *serviceskeeper.Keeper,
+) AppModule {
 	return AppModule{
-		AppModuleBasic: NewAppModuleBasic(cdc),
-		keeper:         keeper,
+		AppModuleBasic:  NewAppModuleBasic(cdc),
+		keeper:          keeper,
+		ak:              ak,
+		bk:              bk,
+		poolsKeeper:     poolsKeeper,
+		operatorsKeeper: operatorsKeeper,
+		servicesKeeper:  servicesKeeper,
 	}
 }
 
@@ -156,3 +180,33 @@ func (am AppModule) EndBlock(ctx context.Context) error {
 func (am AppModule) IsOnePerModuleType() {}
 
 func (am AppModule) IsAppModule() {}
+
+// AppModuleSimulation functions
+
+// GenerateGenesisState creates a randomized GenState of the restaking module.
+func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
+	simulation.RandomizedGenState(simState)
+}
+
+// ProposalMsgs returns msgs used for governance proposals for simulations.
+func (am AppModule) ProposalMsgs(simState module.SimulationState) []simtypes.WeightedProposalMsg {
+	return simulation.ProposalMsgs(am.keeper)
+}
+
+// RegisterStoreDecoder registers a decoder for restaking module's types
+func (am AppModule) RegisterStoreDecoder(sdr simtypes.StoreDecoderRegistry) {
+	sdr[types.StoreKey] = simulation.NewDecodeStore(am.cdc, am.keeper)
+}
+
+// WeightedOperations returns all the restaking module operations with their respective weights.
+func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
+	return simulation.WeightedOperations(
+		simState.AppParams,
+		am.ak,
+		am.bk,
+		am.poolsKeeper,
+		am.operatorsKeeper,
+		am.servicesKeeper,
+		am.keeper,
+	)
+}
