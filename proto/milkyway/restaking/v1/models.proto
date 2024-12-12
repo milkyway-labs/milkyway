@@ -154,3 +154,13 @@ message UserPreferences {
   repeated uint32 trusted_services_ids = 3
       [ (gogoproto.customname) = "TrustedServicesIDs" ];
 }
+
+// TotalRestakedAssets is a struct that contains the total amount of assets
+// that have been restaked inside the chain.
+message TotalRestakedAssets {
+  // Coins is the amount of coins that have been restaked.
+  repeated cosmos.base.v1beta1.Coin coins = 1 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+}

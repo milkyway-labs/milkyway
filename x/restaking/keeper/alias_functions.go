@@ -543,6 +543,58 @@ func (k *Keeper) GetAllUserRestakedCoins(ctx context.Context, userAddress string
 	return totalDelegatedCoins, nil
 }
 
+// IncreaseTotalRestakedAssets increases the total restaked assets by the given
+// amount and returns the new total restaked assets. It returns an error if the
+// total restaked value exceeds the restaking cap. If the restaking cap is zero,
+// the total restaked value is not checked.
+func (k *Keeper) IncreaseTotalRestakedAssets(ctx context.Context, amount sdk.Coins) (sdk.Coins, error) {
+	totalRestakedAssets, err := k.GetTotalRestakedAssets(ctx)
+	if err != nil {
+		return nil, err
+	}
+	totalRestakedAssets = totalRestakedAssets.Add(amount...)
+
+	// Check against the restaking cap only if it is non-zero
+	restakingCap, err := k.RestakingCap(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if !restakingCap.IsZero() {
+		totalRestakedValue, err := k.GetCoinsValue(ctx, totalRestakedAssets)
+		if err != nil {
+			return nil, err
+		}
+		if totalRestakedValue.GT(restakingCap) {
+			return nil, types.ErrRestakingCapExceeded.Wrapf(
+				"total restaked value %s is greater than the cap %s",
+				totalRestakedValue,
+				restakingCap,
+			)
+		}
+	}
+
+	err = k.SetTotalRestakedAssets(ctx, totalRestakedAssets)
+	if err != nil {
+		return nil, err
+	}
+	return totalRestakedAssets, nil
+}
+
+// DecreaseTotalRestakedAssets decreases the total restaked assets by the given
+// amount.
+func (k *Keeper) DecreaseTotalRestakedAssets(ctx context.Context, amount sdk.Coins) error {
+	totalRestakedAssets, err := k.GetTotalRestakedAssets(ctx)
+	if err != nil {
+		return err
+	}
+	var hasNeg bool
+	totalRestakedAssets, hasNeg = totalRestakedAssets.SafeSub(amount...)
+	if hasNeg {
+		return fmt.Errorf("negative total restaked assets: %s", totalRestakedAssets)
+	}
+	return k.SetTotalRestakedAssets(ctx, totalRestakedAssets)
+}
+
 // PerformDelegation performs a delegation of the given amount from the delegator to the receiver.
 // It sends the coins to the receiver address and updates the delegation object and returns the new
 // shares of the delegation.
@@ -563,6 +615,12 @@ func (k *Keeper) PerformDelegation(ctx context.Context, data types.DelegationDat
 
 	// Check if the restake operation is allowed
 	err := k.ValidateRestake(ctx, delegator, data.Amount, data.Target)
+	if err != nil {
+		return nil, err
+	}
+
+	// Increase the total restaked assets
+	_, err = k.IncreaseTotalRestakedAssets(ctx, data.Amount)
 	if err != nil {
 		return nil, err
 	}
@@ -752,6 +810,12 @@ func (k *Keeper) PerformUndelegation(ctx context.Context, data types.Undelegatio
 	// if k.HasMaxUnbondingDelegationEntries(ctx, delAddr, valAddr) {
 	//	 return time.Time{}, types.ErrMaxUnbondingDelegationEntries
 	// }
+
+	// Decrease the total restaked assets
+	err := k.DecreaseTotalRestakedAssets(ctx, data.Amount)
+	if err != nil {
+		return time.Time{}, err
+	}
 
 	// Unbond the tokens
 	returnAmount, err := k.Unbond(ctx, data)
@@ -1080,4 +1144,23 @@ func (k *Keeper) GetUserTrustedServicesIDs(ctx context.Context, userAddress stri
 	}
 
 	return trustedServicesIDs, nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// GetTotalRestakedAssets returns the total amount of restaked assets
+func (k *Keeper) GetTotalRestakedAssets(ctx context.Context) (sdk.Coins, error) {
+	total, err := k.totalRestakedAssets.Get(ctx)
+	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return total.Coins, nil
+}
+
+// SetTotalRestakedAssets sets the total amount of restaked assets
+func (k *Keeper) SetTotalRestakedAssets(ctx context.Context, coins sdk.Coins) error {
+	return k.totalRestakedAssets.Set(ctx, types.TotalRestakedAssets{Coins: coins})
 }

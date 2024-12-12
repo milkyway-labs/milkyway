@@ -24,6 +24,7 @@ func RandomizedGenState(simState *module.SimulationState) {
 		nil,
 		nil,
 		RandomUserPreferencesEntries(simState.Rand, servicesGenesis.Services),
+		nil,
 		RandomParams(simState.Rand),
 	)
 	simState.GenState[types.ModuleName] = simState.Cdc.MustMarshalJSON(genesis)

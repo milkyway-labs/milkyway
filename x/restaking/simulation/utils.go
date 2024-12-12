@@ -4,8 +4,9 @@ import (
 	"math/rand"
 	"time"
 
+	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	simulation "github.com/cosmos/cosmos-sdk/types/simulation"
+	"github.com/cosmos/cosmos-sdk/types/simulation"
 
 	"github.com/milkyway-labs/milkyway/v3/testutils/simtesting"
 	"github.com/milkyway-labs/milkyway/v3/utils"
@@ -123,7 +124,7 @@ func RandomUserPreferencesEntries(
 
 func RandomParams(r *rand.Rand) types.Params {
 	unbondingDays := time.Duration(r.Intn(7) + 1)
-	return types.NewParams(time.Hour*24*unbondingDays, nil)
+	return types.NewParams(time.Hour*24*unbondingDays, nil, simulation.RandomDecAmount(r, math.LegacyNewDec(10000)))
 }
 
 func RandomUserPreferences(r *rand.Rand, services []servicestypes.Service) types.UserPreferences {

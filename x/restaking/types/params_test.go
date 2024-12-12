@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	"cosmossdk.io/math"
 	"github.com/stretchr/testify/require"
 
 	"github.com/milkyway-labs/milkyway/v3/x/restaking/types"
@@ -17,17 +18,22 @@ func TestParams_Validate(t *testing.T) {
 	}{
 		{
 			name:      "invalid unbonding time returns error",
-			params:    types.NewParams(0, nil),
+			params:    types.NewParams(0, nil, types.DefaultRestakingCap),
 			shouldErr: true,
 		},
 		{
 			name:      "invalid denom returns error",
-			params:    types.NewParams(5, []string{"1denom"}),
+			params:    types.NewParams(5, []string{"1denom"}, types.DefaultRestakingCap),
 			shouldErr: true,
 		},
 		{
 			name:      "empty denom returns error",
-			params:    types.NewParams(5, []string{""}),
+			params:    types.NewParams(5, []string{""}, types.DefaultRestakingCap),
+			shouldErr: true,
+		},
+		{
+			name:      "negative restaking cap returns error",
+			params:    types.NewParams(5, nil, math.LegacyNewDec(-1)),
 			shouldErr: true,
 		},
 		{
@@ -37,7 +43,7 @@ func TestParams_Validate(t *testing.T) {
 		},
 		{
 			name:      "valid params return no error",
-			params:    types.NewParams(5*time.Hour, nil),
+			params:    types.NewParams(5*time.Hour, nil, math.LegacyNewDec(100000)),
 			shouldErr: false,
 		},
 	}

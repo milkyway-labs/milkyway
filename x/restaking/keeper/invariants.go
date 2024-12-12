@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
@@ -36,6 +37,9 @@ func RegisterInvariants(ir sdk.InvariantRegistry, k *Keeper) {
 		AllowedOperatorsExistInvariant(k))
 	ir.RegisterRoute(types.ModuleName, "operators-joined-services-exist",
 		OperatorsJoinedServicesExistInvariant(k))
+
+	ir.RegisterRoute(types.ModuleName, "total-restaked-assets",
+		TotalRestakedAssetsInvariant(k))
 }
 
 // AccountsBalancesInvariants checks that the pools, operators and services accounts have the correct balance
@@ -422,5 +426,60 @@ func OperatorsJoinedServicesExistInvariant(k *Keeper) sdk.Invariant {
 
 		return sdk.FormatInvariant(types.ModuleName, "joined services exist", fmt.Sprintf(
 			"joined services exist invariant broken\n%s", msg)), len(notFoundServicesIDs) > 0
+	}
+}
+
+func TotalRestakedAssetsInvariant(k *Keeper) sdk.Invariant {
+	return func(ctx sdk.Context) (string, bool) {
+		// Get all the restaked assets
+		totalRestakedAssets, err := k.GetTotalRestakedAssets(ctx)
+		if err != nil {
+			panic(err)
+		}
+
+		// Helper function to get restaked assets from specific type of delegations
+		getRestakedAssets := func(iterFn func(context.Context, func(types.Delegation) (bool, error)) error) sdk.Coins {
+			restakedAssets := sdk.NewCoins()
+			targets := map[uint32]types.DelegationTarget{}
+			err := iterFn(ctx, func(del types.Delegation) (stop bool, err error) {
+				target, ok := targets[del.TargetID]
+				if !ok {
+					target, err = k.GetDelegationTargetFromDelegation(ctx, del)
+					if err != nil {
+						return true, err
+					}
+					targets[del.TargetID] = target
+				}
+
+				tokens := target.TokensFromSharesTruncated(del.Shares)
+				tokensTruncated, _ := tokens.TruncateDecimal()
+				restakedAssets = restakedAssets.Add(tokensTruncated...)
+				return false, nil
+			})
+			if err != nil {
+				panic(err)
+			}
+			return restakedAssets
+		}
+
+		totalRestakedAssetsFromDels := sdk.NewCoins()
+		totalRestakedAssetsFromDels = totalRestakedAssetsFromDels.Add(
+			getRestakedAssets(k.IterateAllPoolDelegations)...)
+		totalRestakedAssetsFromDels = totalRestakedAssetsFromDels.Add(
+			getRestakedAssets(k.IterateAllOperatorDelegations)...)
+		totalRestakedAssetsFromDels = totalRestakedAssetsFromDels.Add(
+			getRestakedAssets(k.IterateAllServiceDelegations)...)
+
+		// Check if any of the total restaked assets calculated from delegations is
+		// greater than the total restaked assets stored. Note that because of the
+		// truncation, the total restaked assets calculated from delegations should be
+		// less than or equal to the total restaked assets stored.
+		broken := totalRestakedAssetsFromDels.IsAnyGT(totalRestakedAssets)
+
+		return sdk.FormatInvariant(types.ModuleName, "total restaked assets", fmt.Sprintf(
+			"total restaked assets invariant broken\n"+
+				"total restaked assets stored: %v\n"+
+				"total restaked assets calculated from delegations: %v\n",
+			totalRestakedAssets, totalRestakedAssetsFromDels)), broken
 	}
 }

@@ -9,10 +9,17 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	distributiontypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
+	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	porttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
+	marketmapkeeper "github.com/skip-mev/connect/v2/x/marketmap/keeper"
+	marketmaptypes "github.com/skip-mev/connect/v2/x/marketmap/types"
+	oraclekeeper "github.com/skip-mev/connect/v2/x/oracle/keeper"
+	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
 
 	"github.com/milkyway-labs/milkyway/v3/testutils/storetesting"
+	assetskeeper "github.com/milkyway-labs/milkyway/v3/x/assets/keeper"
+	assetstypes "github.com/milkyway-labs/milkyway/v3/x/assets/types"
 	"github.com/milkyway-labs/milkyway/v3/x/liquidvesting"
 	"github.com/milkyway-labs/milkyway/v3/x/liquidvesting/keeper"
 	"github.com/milkyway-labs/milkyway/v3/x/liquidvesting/types"
@@ -77,6 +84,22 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		data.DistributionKeeper,
 		data.AuthorityAddress,
 	)
+	marketMapKeeper := marketmapkeeper.NewKeeper(
+		runtime.NewKVStoreService(data.Keys[marketmaptypes.StoreKey]),
+		data.Cdc,
+		authtypes.NewModuleAddress(govtypes.ModuleName),
+	)
+	oracleKeeper := oraclekeeper.NewKeeper(
+		runtime.NewKVStoreService(data.Keys[oracletypes.StoreKey]),
+		data.Cdc,
+		marketMapKeeper,
+		authtypes.NewModuleAddress(govtypes.ModuleName),
+	)
+	assetsKeeper := assetskeeper.NewKeeper(
+		data.Cdc,
+		runtime.NewKVStoreService(data.Keys[assetstypes.StoreKey]),
+		data.AuthorityAddress,
+	)
 	data.RestakingKeeper = restakingkeeper.NewKeeper(
 		data.Cdc,
 		runtime.NewKVStoreService(data.Keys[restakingtypes.StoreKey]),
@@ -85,6 +108,8 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		data.PoolsKeeper,
 		data.OperatorsKeeper,
 		data.ServicesKeeper,
+		&oracleKeeper,
+		assetsKeeper,
 		data.AuthorityAddress,
 	)
 	data.Keeper = keeper.NewKeeper(

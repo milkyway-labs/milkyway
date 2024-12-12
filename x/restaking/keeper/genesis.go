@@ -38,6 +38,11 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		panic(err)
 	}
 
+	totalRestakedAssets, err := k.GetTotalRestakedAssets(ctx)
+	if err != nil {
+		panic(err)
+	}
+
 	params, err := k.GetParams(ctx)
 	if err != nil {
 		panic(err)
@@ -50,6 +55,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		delegations,
 		unbondingDelegations,
 		preferences,
+		totalRestakedAssets,
 		params,
 	)
 }
@@ -115,6 +121,12 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, data *types.GenesisState) error {
 		if err != nil {
 			return err
 		}
+	}
+
+	// Store the total restaked assets
+	err := k.SetTotalRestakedAssets(ctx, data.TotalRestakedAssets)
+	if err != nil {
+		return err
 	}
 
 	// Store the params

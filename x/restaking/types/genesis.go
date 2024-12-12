@@ -16,6 +16,7 @@ func NewGenesis(
 	delegations []Delegation,
 	unbondingDelegations []UnbondingDelegation,
 	usersPreferencesEntries []UserPreferencesEntry,
+	totalRestakedAssets sdk.Coins,
 	params Params,
 ) *GenesisState {
 	return &GenesisState{
@@ -25,6 +26,7 @@ func NewGenesis(
 		Delegations:              delegations,
 		UnbondingDelegations:     unbondingDelegations,
 		UsersPreferences:         usersPreferencesEntries,
+		TotalRestakedAssets:      totalRestakedAssets,
 		Params:                   params,
 	}
 }
@@ -32,6 +34,7 @@ func NewGenesis(
 // DefaultGenesis returns a default genesis state
 func DefaultGenesis() *GenesisState {
 	return NewGenesis(
+		nil,
 		nil,
 		nil,
 		nil,
@@ -102,8 +105,13 @@ func (g *GenesisState) Validate() error {
 		}
 	}
 
+	err := g.TotalRestakedAssets.Validate()
+	if err != nil {
+		return fmt.Errorf("invalid total restaked assets: %w", err)
+	}
+
 	// Validate the params
-	err := g.Params.Validate()
+	err = g.Params.Validate()
 	if err != nil {
 		return fmt.Errorf("invalid params: %w", err)
 	}

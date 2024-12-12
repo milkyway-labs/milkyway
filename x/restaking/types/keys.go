@@ -41,6 +41,8 @@ var (
 	UnbondingQueueKey = []byte{0xd1}
 
 	UserPreferencesPrefix = []byte{0xe1}
+
+	TotalRestakedAssetsKey = []byte{0xf1}
 )
 
 // --------------------------------------------------------------------------------------------------------------------

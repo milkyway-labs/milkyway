@@ -24,6 +24,8 @@ type Keeper struct {
 	poolsKeeper     types.PoolsKeeper
 	operatorsKeeper types.OperatorsKeeper
 	servicesKeeper  types.ServicesKeeper
+	oracleKeeper    types.OracleKeeper
+	assetsKeeper    types.AssetsKeeper
 
 	// Keeper data
 	Schema collections.Schema
@@ -42,6 +44,9 @@ type Keeper struct {
 	// The map stores user address -> UsersPreferences associations
 	usersPreferences collections.Map[string, types.UserPreferences]
 
+	// Total restaked assets inside the chain
+	totalRestakedAssets collections.Item[types.TotalRestakedAssets]
+
 	hooks              types.RestakingHooks
 	restakeRestriction types.RestakeRestrictionFn
 }
@@ -54,6 +59,8 @@ func NewKeeper(
 	poolsKeeper types.PoolsKeeper,
 	operatorsKeeper types.OperatorsKeeper,
 	servicesKeeper types.ServicesKeeper,
+	oracleKeeper types.OracleKeeper,
+	assetsKeeper types.AssetsKeeper,
 	authority string,
 ) *Keeper {
 	// Ensure that authority is a valid AccAddress
@@ -72,6 +79,8 @@ func NewKeeper(
 		poolsKeeper:     poolsKeeper,
 		operatorsKeeper: operatorsKeeper,
 		servicesKeeper:  servicesKeeper,
+		oracleKeeper:    oracleKeeper,
+		assetsKeeper:    assetsKeeper,
 
 		operatorJoinedServices: collections.NewIndexedMap(
 			sb, types.OperatorJoinedServicesPrefix,
@@ -95,6 +104,11 @@ func NewKeeper(
 			"users_preferences",
 			collections.StringKey,
 			codec.CollValue[types.UserPreferences](cdc),
+		),
+		totalRestakedAssets: collections.NewItem(
+			sb, types.TotalRestakedAssetsKey,
+			"total_restaked_assets",
+			codec.CollValue[types.TotalRestakedAssets](cdc),
 		),
 		authority: authority,
 	}
