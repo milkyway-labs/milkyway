@@ -2,6 +2,7 @@ syntax = "proto3";
 package milkyway.restaking.v1;
 
 import "gogoproto/gogo.proto";
+import "cosmos_proto/cosmos.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/v3/x/restaking/types";
 
@@ -17,4 +18,13 @@ message Params {
   // and that will be considered when computing rewards. If no denoms are set,
   // all denoms will be considered as restakable.
   repeated string allowed_denoms = 2;
+
+  // RestakingCap represents the maximum USD value of overall restaked assets
+  // inside the chain. If set to 0, it indicates no limit, allowing any amount
+  // of assets to be restaked.
+  string restaking_cap = 3 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false
+  ];
 }

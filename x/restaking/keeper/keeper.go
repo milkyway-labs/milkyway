@@ -24,6 +24,8 @@ type Keeper struct {
 	poolsKeeper     types.PoolsKeeper
 	operatorsKeeper types.OperatorsKeeper
 	servicesKeeper  types.ServicesKeeper
+	oracleKeeper    types.OracleKeeper
+	assetsKeeper    types.AssetsKeeper
 
 	// Keeper data
 	Schema collections.Schema
@@ -54,6 +56,8 @@ func NewKeeper(
 	poolsKeeper types.PoolsKeeper,
 	operatorsKeeper types.OperatorsKeeper,
 	servicesKeeper types.ServicesKeeper,
+	oracleKeeper types.OracleKeeper,
+	assetsKeeper types.AssetsKeeper,
 	authority string,
 ) *Keeper {
 	// Ensure that authority is a valid AccAddress
@@ -72,6 +76,8 @@ func NewKeeper(
 		poolsKeeper:     poolsKeeper,
 		operatorsKeeper: operatorsKeeper,
 		servicesKeeper:  servicesKeeper,
+		oracleKeeper:    oracleKeeper,
+		assetsKeeper:    assetsKeeper,
 
 		operatorJoinedServices: collections.NewIndexedMap(
 			sb, types.OperatorJoinedServicesPrefix,

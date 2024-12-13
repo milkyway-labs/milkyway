@@ -269,7 +269,7 @@ func TestMsgUpdateParams_ValidateBasic(t *testing.T) {
 		{
 			name: "invalid params return error",
 			msg: types.NewMsgUpdateParams(
-				types.NewParams(0, nil),
+				types.NewParams(0, nil, types.DefaultRestakingCap),
 				msgUpdateParams.Authority,
 			),
 			shouldErr: true,
@@ -302,7 +302,7 @@ func TestMsgUpdateParams_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgUpdateParams_GetSignBytes(t *testing.T) {
-	expected := `{"type":"milkyway/restaking/MsgUpdateParams","value":{"authority":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","params":{"unbonding_time":"259200000000000"}}}`
+	expected := `{"type":"milkyway/restaking/MsgUpdateParams","value":{"authority":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","params":{"restaking_cap":"0.000000000000000000","unbonding_time":"259200000000000"}}}`
 	require.Equal(t, expected, string(msgUpdateParams.GetSignBytes()))
 }
 

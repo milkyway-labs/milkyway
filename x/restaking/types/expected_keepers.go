@@ -5,7 +5,10 @@ import (
 
 	"cosmossdk.io/core/address"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	connecttypes "github.com/skip-mev/connect/v2/pkg/types"
+	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
 
+	assetstypes "github.com/milkyway-labs/milkyway/v3/x/assets/types"
 	operatorstypes "github.com/milkyway-labs/milkyway/v3/x/operators/types"
 	poolstypes "github.com/milkyway-labs/milkyway/v3/x/pools/types"
 	servicestypes "github.com/milkyway-labs/milkyway/v3/x/services/types"
@@ -47,4 +50,13 @@ type ServicesKeeper interface {
 	GetServices(ctx context.Context) ([]servicestypes.Service, error)
 	DeactivateService(ctx context.Context, serviceID uint32) error
 	GetServiceParams(ctx context.Context, serviceID uint32) (servicestypes.ServiceParams, error)
+}
+
+type OracleKeeper interface {
+	GetPriceWithNonceForCurrencyPair(ctx sdk.Context, cp connecttypes.CurrencyPair) (oracletypes.QuotePriceWithNonce, error)
+	GetDecimalsForCurrencyPair(ctx sdk.Context, cp connecttypes.CurrencyPair) (decimals uint64, err error)
+}
+
+type AssetsKeeper interface {
+	GetAsset(ctx context.Context, denom string) (assetstypes.Asset, error)
 }

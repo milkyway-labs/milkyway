@@ -3312,13 +3312,13 @@ func (suite *KeeperTestSuite) TestQuerier_Params() {
 		{
 			name: "params are returned properly",
 			store: func(ctx sdk.Context) {
-				params := types.NewParams(30*24*time.Hour, []string{"uinit", "umilk"})
+				params := types.NewParams(30*24*time.Hour, []string{"uinit", "umilk"}, sdkmath.LegacyNewDec(100000))
 				err := suite.k.SetParams(ctx, params)
 				suite.Require().NoError(err)
 			},
 			request:   types.NewQueryParamsRequest(),
 			shouldErr: false,
-			expParams: types.NewParams(30*24*time.Hour, []string{"uinit", "umilk"}),
+			expParams: types.NewParams(30*24*time.Hour, []string{"uinit", "umilk"}, sdkmath.LegacyNewDec(100000)),
 		},
 	}
 

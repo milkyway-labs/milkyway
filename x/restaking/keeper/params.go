@@ -5,6 +5,8 @@ import (
 	"slices"
 	"time"
 
+	"cosmossdk.io/math"
+
 	"github.com/milkyway-labs/milkyway/v3/x/restaking/types"
 )
 
@@ -49,6 +51,16 @@ func (k *Keeper) IsDenomRestakable(ctx context.Context, denom string) (bool, err
 	}
 
 	return len(params.AllowedDenoms) == 0 || slices.Contains(params.AllowedDenoms, denom), nil
+}
+
+// RestakingCap returns the maximum USD value of tokens that can be restaked.
+func (k *Keeper) RestakingCap(ctx context.Context) (math.LegacyDec, error) {
+	params, err := k.GetParams(ctx)
+	if err != nil {
+		return math.LegacyDec{}, err
+	}
+
+	return params.RestakingCap, nil
 }
 
 // SetParams sets module parameters

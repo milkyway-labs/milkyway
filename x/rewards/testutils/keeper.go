@@ -92,6 +92,11 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		data.DistributionKeeper,
 		data.AuthorityAddress,
 	)
+	data.AssetsKeeper = assetskeeper.NewKeeper(
+		data.Cdc,
+		runtime.NewKVStoreService(data.Keys[assetstypes.StoreKey]),
+		data.AuthorityAddress,
+	)
 	data.RestakingKeeper = restakingkeeper.NewKeeper(
 		data.Cdc,
 		runtime.NewKVStoreService(data.Keys[restakingtypes.StoreKey]),
@@ -100,11 +105,8 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		data.PoolsKeeper,
 		data.OperatorsKeeper,
 		data.ServicesKeeper,
-		data.AuthorityAddress,
-	)
-	data.AssetsKeeper = assetskeeper.NewKeeper(
-		data.Cdc,
-		runtime.NewKVStoreService(data.Keys[assetstypes.StoreKey]),
+		&data.OracleKeeper,
+		data.AssetsKeeper,
 		data.AuthorityAddress,
 	)
 

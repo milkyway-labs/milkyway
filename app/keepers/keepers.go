@@ -510,6 +510,11 @@ func NewAppKeeper(
 		runtime.NewKVStoreService(appKeepers.keys[poolstypes.StoreKey]),
 		appKeepers.AccountKeeper,
 	)
+	appKeepers.AssetsKeeper = assetskeeper.NewKeeper(
+		appCodec,
+		runtime.NewKVStoreService(appKeepers.keys[assetstypes.StoreKey]),
+		govAuthority,
+	)
 	appKeepers.RestakingKeeper = restakingkeeper.NewKeeper(
 		appCodec,
 		runtime.NewKVStoreService(appKeepers.keys[restakingtypes.StoreKey]),
@@ -518,11 +523,8 @@ func NewAppKeeper(
 		appKeepers.PoolsKeeper,
 		appKeepers.OperatorsKeeper,
 		appKeepers.ServicesKeeper,
-		govAuthority,
-	)
-	appKeepers.AssetsKeeper = assetskeeper.NewKeeper(
-		appCodec,
-		runtime.NewKVStoreService(appKeepers.keys[assetstypes.StoreKey]),
+		appKeepers.OracleKeeper,
+		appKeepers.AssetsKeeper,
 		govAuthority,
 	)
 	appKeepers.RewardsKeeper = rewardskeeper.NewKeeper(

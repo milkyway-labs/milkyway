@@ -1081,3 +1081,36 @@ func (k *Keeper) GetUserTrustedServicesIDs(ctx context.Context, userAddress stri
 
 	return trustedServicesIDs, nil
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// GetTotalRestakedAssets returns the total amount of restaked assets
+func (k *Keeper) GetTotalRestakedAssets(ctx context.Context) (sdk.Coins, error) {
+	totalRestakedAssets := sdk.NewCoins()
+
+	err := k.poolsKeeper.IteratePools(ctx, func(pool poolstypes.Pool) (bool, error) {
+		totalRestakedAssets = totalRestakedAssets.Add(pool.GetTokens()...)
+		return false, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	err = k.operatorsKeeper.IterateOperators(ctx, func(operator operatorstypes.Operator) (bool, error) {
+		totalRestakedAssets = totalRestakedAssets.Add(operator.GetTokens()...)
+		return false, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	err = k.servicesKeeper.IterateServices(ctx, func(service servicestypes.Service) (bool, error) {
+		totalRestakedAssets = totalRestakedAssets.Add(service.GetTokens()...)
+		return false, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return totalRestakedAssets, nil
+}

@@ -335,6 +335,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				err := suite.k.SetParams(ctx, types.NewParams(
 					30*24*time.Hour,
 					nil,
+					sdkmath.LegacyNewDec(100000),
 				))
 				suite.Require().NoError(err)
 			},
@@ -342,6 +343,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				Params: types.NewParams(
 					30*24*time.Hour,
 					nil,
+					sdkmath.LegacyNewDec(100000),
 				),
 			},
 		},
@@ -620,7 +622,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 			},
 		},
 		{
-			name: "user preferences are exported properly",
+			name: "user preferences are stored properly",
 			genesis: &types.GenesisState{
 				Params: types.DefaultParams(),
 				UsersPreferences: []types.UserPreferencesEntry{
@@ -655,6 +657,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				Params: types.NewParams(
 					30*24*time.Hour,
 					nil,
+					sdkmath.LegacyNewDec(100000),
 				),
 			},
 			check: func(ctx sdk.Context) {
@@ -663,6 +666,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				suite.Require().Equal(types.NewParams(
 					30*24*time.Hour,
 					nil,
+					sdkmath.LegacyNewDec(100000),
 				), params)
 			},
 		},
