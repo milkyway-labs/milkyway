@@ -20,7 +20,8 @@ message Params {
   repeated string allowed_denoms = 2;
 
   // RestakingCap represents the maximum USD value of overall restaked assets
-  // inside the chain.
+  // inside the chain. If set to 0, it indicates no limit, allowing any amount
+  // of assets to be restaked.
   string restaking_cap = 3 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",

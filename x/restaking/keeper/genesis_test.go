@@ -6,7 +6,6 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v3/utils"
 	"github.com/milkyway-labs/milkyway/v3/x/restaking/types"
 )
 
@@ -331,20 +330,6 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			},
 		},
 		{
-			name: "total restaked assets are exported properly",
-			store: func(ctx sdk.Context) {
-				err := suite.k.SetParams(ctx, types.DefaultParams())
-				suite.Require().NoError(err)
-
-				err = suite.k.SetTotalRestakedAssets(ctx, utils.MustParseCoins("1000000umilk,2000000utia"))
-				suite.Require().NoError(err)
-			},
-			expGenesis: &types.GenesisState{
-				Params:              types.DefaultParams(),
-				TotalRestakedAssets: utils.MustParseCoins("1000000umilk,2000000utia"),
-			},
-		},
-		{
 			name: "params are exported properly",
 			store: func(ctx sdk.Context) {
 				err := suite.k.SetParams(ctx, types.NewParams(
@@ -664,18 +649,6 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 						),
 					),
 				}, stored)
-			},
-		},
-		{
-			name: "total restaked assets are stored properly",
-			genesis: &types.GenesisState{
-				Params:              types.DefaultParams(),
-				TotalRestakedAssets: utils.MustParseCoins("1000000umilk,2000000utia"),
-			},
-			check: func(ctx sdk.Context) {
-				stored, err := suite.k.GetTotalRestakedAssets(ctx)
-				suite.Require().NoError(err)
-				suite.Require().Equal(utils.MustParseCoins("1000000umilk,2000000utia"), stored)
 			},
 		},
 		{

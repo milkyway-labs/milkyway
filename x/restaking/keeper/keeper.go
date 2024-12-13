@@ -44,9 +44,6 @@ type Keeper struct {
 	// The map stores user address -> UsersPreferences associations
 	usersPreferences collections.Map[string, types.UserPreferences]
 
-	// Total restaked assets inside the chain
-	totalRestakedAssets collections.Item[types.TotalRestakedAssets]
-
 	hooks              types.RestakingHooks
 	restakeRestriction types.RestakeRestrictionFn
 }
@@ -104,11 +101,6 @@ func NewKeeper(
 			"users_preferences",
 			collections.StringKey,
 			codec.CollValue[types.UserPreferences](cdc),
-		),
-		totalRestakedAssets: collections.NewItem(
-			sb, types.TotalRestakedAssetsKey,
-			"total_restaked_assets",
-			codec.CollValue[types.TotalRestakedAssets](cdc),
 		),
 		authority: authority,
 	}

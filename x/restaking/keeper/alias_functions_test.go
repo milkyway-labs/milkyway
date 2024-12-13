@@ -6,7 +6,6 @@ import (
 
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	"github.com/milkyway-labs/milkyway/v3/utils"
 	operatorstypes "github.com/milkyway-labs/milkyway/v3/x/operators/types"
 	servicestypes "github.com/milkyway-labs/milkyway/v3/x/services/types"
 
@@ -971,87 +970,6 @@ func (suite *KeeperTestSuite) TestKeeper_GetUserPreferencesEntries() {
 			} else {
 				suite.Require().NoError(err)
 				suite.Require().Equal(tc.expEntries, entries)
-			}
-		})
-	}
-}
-
-// --------------------------------------------------------------------------------------------------------------------
-
-func (suite *KeeperTestSuite) TestKeeper_IncreaseTotalRestakedAssets() {
-	testCases := []struct {
-		name                   string
-		store                  func(ctx sdk.Context)
-		amount                 sdk.Coins
-		shouldErr              bool
-		expTotalRestakedAssets sdk.Coins
-	}{
-		{
-			name:                   "increasing total restaked assets works properly",
-			amount:                 utils.MustParseCoins("1000000umilk,2000000utia"),
-			shouldErr:              false,
-			expTotalRestakedAssets: utils.MustParseCoins("1000000umilk,2000000utia"),
-		},
-		{
-			name: "increasing total restaked assets works properly 2",
-			store: func(ctx sdk.Context) {
-				err := suite.k.SetTotalRestakedAssets(ctx, utils.MustParseCoins("1000000umilk"))
-				suite.Require().NoError(err)
-			},
-			amount:                 utils.MustParseCoins("2000000utia"),
-			shouldErr:              false,
-			expTotalRestakedAssets: utils.MustParseCoins("1000000umilk,2000000utia"),
-		},
-		{
-			name: "not exceeding restaking cap returns no error",
-			store: func(ctx sdk.Context) {
-				// Set restaking cap
-				err := suite.k.SetParams(ctx, types.NewParams(
-					types.DefaultUnbondingTime, nil, sdkmath.LegacyNewDec(10000)),
-				)
-				suite.Require().NoError(err)
-
-				suite.RegisterCurrency(ctx, "umilk", "MILK", 6, sdkmath.LegacyNewDec(5))
-
-				err = suite.k.SetTotalRestakedAssets(ctx, utils.MustParseCoins("1000_000000umilk")) // $5000
-				suite.Require().NoError(err)
-			},
-			amount:                 utils.MustParseCoins("1000_000000umilk"), // $5000
-			shouldErr:              false,
-			expTotalRestakedAssets: utils.MustParseCoins("2000_000000umilk"),
-		},
-		{
-			name: "exceeding restaking cap returns an error",
-			store: func(ctx sdk.Context) {
-				// Set restaking cap
-				err := suite.k.SetParams(ctx, types.NewParams(
-					types.DefaultUnbondingTime, nil, sdkmath.LegacyNewDec(10000)),
-				)
-				suite.Require().NoError(err)
-
-				suite.RegisterCurrency(ctx, "umilk", "MILK", 6, sdkmath.LegacyNewDec(5))
-
-				err = suite.k.SetTotalRestakedAssets(ctx, utils.MustParseCoins("1000_000000umilk")) // $5000
-				suite.Require().NoError(err)
-			},
-			amount:    utils.MustParseCoins("1100_000000umilk"), // $5500
-			shouldErr: true,
-		},
-	}
-
-	for _, tc := range testCases {
-		suite.Run(tc.name, func() {
-			ctx, _ := suite.ctx.CacheContext()
-			if tc.store != nil {
-				tc.store(ctx)
-			}
-
-			totalRestakedAssets, err := suite.k.IncreaseTotalRestakedAssets(ctx, tc.amount)
-			if tc.shouldErr {
-				suite.Require().Error(err)
-			} else {
-				suite.Require().NoError(err)
-				suite.Require().Equal(tc.expTotalRestakedAssets, totalRestakedAssets)
 			}
 		})
 	}

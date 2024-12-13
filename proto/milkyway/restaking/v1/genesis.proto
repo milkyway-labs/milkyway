@@ -77,10 +77,4 @@ message GenesisState {
   // UserPreferences represents the user preferences.
   repeated UserPreferencesEntry users_preferences = 7
       [ (gogoproto.nullable) = false ];
-
-  // TotalRestakedAssets represents the total restaked assets.
-  repeated cosmos.base.v1beta1.Coin total_restaked_assets = 8 [
-    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
-    (gogoproto.nullable) = false
-  ];
 }

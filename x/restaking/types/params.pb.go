@@ -38,7 +38,8 @@ type Params struct {
 	// all denoms will be considered as restakable.
 	AllowedDenoms []string `protobuf:"bytes,2,rep,name=allowed_denoms,json=allowedDenoms,proto3" json:"allowed_denoms,omitempty"`
 	// RestakingCap represents the maximum USD value of overall restaked assets
-	// inside the chain.
+	// inside the chain. If set to 0, it indicates no limit, allowing any amount
+	// of assets to be restaked.
 	RestakingCap cosmossdk_io_math.LegacyDec `protobuf:"bytes,3,opt,name=restaking_cap,json=restakingCap,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"restaking_cap"`
 }
 
