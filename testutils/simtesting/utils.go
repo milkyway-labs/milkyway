@@ -88,6 +88,17 @@ func RandomCoin(r *rand.Rand, denom string, maxAmount int) sdk.Coin {
 	)
 }
 
+// RandomDecCoins returns a random list of DecCoins by randomly selecting
+// a sub set of the provided denoms.
+func RandomDecCoins(r *rand.Rand, denoms []string, maxAmount sdkmath.LegacyDec) sdk.DecCoins {
+	coins := sdk.NewDecCoins()
+	for _, denom := range RandomSubSlice(r, denoms) {
+		coins = coins.Add(sdk.NewDecCoinFromDec(denom, simtypes.RandomDecAmount(r, maxAmount)))
+	}
+
+	return coins
+}
+
 // RandomSubSlice returns a random subset of the given slice
 func RandomSubSlice[T any](r *rand.Rand, items []T) []T {
 	// Empty slice, we can't pick random elements
@@ -116,4 +127,27 @@ func RandomSubSlice[T any](r *rand.Rand, items []T) []T {
 	}
 
 	return elements
+}
+
+// RandomPositiveUint32 returns a random positive uint32
+func RandomPositiveUint32(r *rand.Rand) uint32 {
+	value := r.Uint32()
+	for value == 0 {
+		value = r.Uint32()
+	}
+	return value
+}
+
+// RandomPositiveUint64 returns a random positive uint64
+func RandomPositiveUint64(r *rand.Rand) uint64 {
+	value := r.Uint64()
+	for value == 0 {
+		value = r.Uint64()
+	}
+	return value
+}
+
+// RandomSliceElement returns a random element from the given slice
+func RandomSliceElement[T any](r *rand.Rand, slice []T) T {
+	return slice[r.Intn(len(slice))]
 }

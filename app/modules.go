@@ -154,7 +154,7 @@ func appModules(
 		pools.NewAppModule(appCodec, app.PoolsKeeper),
 		restaking.NewAppModule(appCodec, app.RestakingKeeper, app.AccountKeeper, app.BankKeeper, app.PoolsKeeper, app.OperatorsKeeper, app.ServicesKeeper),
 		assets.NewAppModule(appCodec, app.AssetsKeeper),
-		rewards.NewAppModule(appCodec, app.RewardsKeeper),
+		rewards.NewAppModule(appCodec, app.RewardsKeeper, app.AccountKeeper, app.BankKeeper, app.PoolsKeeper, app.OperatorsKeeper, app.ServicesKeeper),
 		liquidvesting.NewAppModule(appCodec, app.LiquidVestingKeeper),
 	}
 }
@@ -206,6 +206,7 @@ func simulationModules(
 		services.NewAppModule(appCodec, app.ServicesKeeper, app.AccountKeeper, app.BankKeeper),
 		operators.NewAppModule(appCodec, app.OperatorsKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper),
 		restaking.NewAppModule(appCodec, app.RestakingKeeper, app.AccountKeeper, app.BankKeeper, app.PoolsKeeper, app.OperatorsKeeper, app.ServicesKeeper),
+		rewards.NewAppModule(appCodec, app.RewardsKeeper, app.AccountKeeper, app.BankKeeper, app.PoolsKeeper, app.OperatorsKeeper, app.ServicesKeeper),
 	}
 }
 
