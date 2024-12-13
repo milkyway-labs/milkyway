@@ -11,31 +11,31 @@ option go_package = "github.com/milkyway-labs/milkyway/v3/x/restaking/types";
 // individual operator.
 message OperatorJoinedServices {
   // OperatorID is the ID of the operator.
-  uint32 operator_id = 1 [ (gogoproto.customname) = "OperatorID" ];
+  uint32 operator_id = 1 [(gogoproto.customname) = "OperatorID"];
 
   // ServiceIDs represents the list of services joined by the operator.
-  repeated uint32 service_ids = 2 [ (gogoproto.customname) = "ServiceIDs" ];
+  repeated uint32 service_ids = 2 [(gogoproto.customname) = "ServiceIDs"];
 }
 
 // ServiceAllowedOperators represents the operators allowed to secure a
 // a service.
 message ServiceAllowedOperators {
   // ServiceID is the ID of the service.
-  uint32 service_id = 1 [ (gogoproto.customname) = "ServiceID" ];
+  uint32 service_id = 1 [(gogoproto.customname) = "ServiceID"];
 
   // OperatorIDs defines the allowed operator IDs.
-  repeated uint32 operator_ids = 2 [ (gogoproto.customname) = "OperatorIDs" ];
+  repeated uint32 operator_ids = 2 [(gogoproto.customname) = "OperatorIDs"];
 }
 
 // ServiceSecuringPools represents the list pools from which a service can
 // borrow security
 message ServiceSecuringPools {
   // ServiceID is the ID of the service.
-  uint32 service_id = 1 [ (gogoproto.customname) = "ServiceID" ];
+  uint32 service_id = 1 [(gogoproto.customname) = "ServiceID"];
 
   // PoolIDs defines the IDs of the pools from which the service can borrow
   // security.
-  repeated uint32 pool_ids = 2 [ (gogoproto.customname) = "PoolIDs" ];
+  repeated uint32 pool_ids = 2 [(gogoproto.customname) = "PoolIDs"];
 }
 
 // UserPreferencesEntry represents the user preferences.
@@ -44,36 +44,31 @@ message UserPreferencesEntry {
   string user_address = 1;
 
   // Preferences is the user preferences.
-  UserPreferences preferences = 2 [ (gogoproto.nullable) = false ];
+  UserPreferences preferences = 2 [(gogoproto.nullable) = false];
 }
 
 // GenesisState defines the restaking module's genesis state.
 message GenesisState {
   // Params defines the parameters of the module.
-  Params params = 1 [ (gogoproto.nullable) = false ];
+  Params params = 1 [(gogoproto.nullable) = false];
 
   // OperatorsJoinedServices defines the list of the services that each operator
   // has joined.
-  repeated OperatorJoinedServices operators_joined_services = 2
-      [ (gogoproto.nullable) = false ];
+  repeated OperatorJoinedServices operators_joined_services = 2 [(gogoproto.nullable) = false];
 
   // ServiceAllowedOperators defines the operators allowed to secure each
   // service.
-  repeated ServiceAllowedOperators services_allowed_operators = 3
-      [ (gogoproto.nullable) = false ];
+  repeated ServiceAllowedOperators services_allowed_operators = 3 [(gogoproto.nullable) = false];
 
   // ServicesSecuringPools defines the whitelisted pools for each service.
-  repeated ServiceSecuringPools services_securing_pools = 4
-      [ (gogoproto.nullable) = false ];
+  repeated ServiceSecuringPools services_securing_pools = 4 [(gogoproto.nullable) = false];
 
   // Delegations represents the delegations.
-  repeated Delegation delegations = 5 [ (gogoproto.nullable) = false ];
+  repeated Delegation delegations = 5 [(gogoproto.nullable) = false];
 
   // UnbondingDelegations represents the unbonding delegations.
-  repeated UnbondingDelegation unbonding_delegations = 6
-      [ (gogoproto.nullable) = false ];
+  repeated UnbondingDelegation unbonding_delegations = 6 [(gogoproto.nullable) = false];
 
   // UserPreferences represents the user preferences.
-  repeated UserPreferencesEntry users_preferences = 7
-      [ (gogoproto.nullable) = false ];
+  repeated UserPreferencesEntry users_preferences = 7 [(gogoproto.nullable) = false];
 }

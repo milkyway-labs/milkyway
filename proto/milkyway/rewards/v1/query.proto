@@ -1,12 +1,11 @@
 syntax = "proto3";
 package milkyway.rewards.v1;
 
-import "google/api/annotations.proto";
-import "gogoproto/gogo.proto";
-import "cosmos_proto/cosmos.proto";
 import "amino/amino.proto";
-import "cosmos/base/v1beta1/coin.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
 import "milkyway/rewards/v1/models.proto";
 import "milkyway/rewards/v1/params.proto";
 
@@ -22,85 +21,68 @@ service Query {
   }
 
   // RewardsPlans queries all rewards plans.
-  rpc RewardsPlans(QueryRewardsPlansRequest)
-      returns (QueryRewardsPlansResponse) {
+  rpc RewardsPlans(QueryRewardsPlansRequest) returns (QueryRewardsPlansResponse) {
     option (google.api.http).get = "/milkyway/rewards/v1/rewards_plans";
   }
 
   // RewardsPlan queries a specific rewards plan by its ID.
   rpc RewardsPlan(QueryRewardsPlanRequest) returns (QueryRewardsPlanResponse) {
-    option (google.api.http).get =
-        "/milkyway/rewards/v1/rewards_plans/{plan_id}";
+    option (google.api.http).get = "/milkyway/rewards/v1/rewards_plans/{plan_id}";
   }
 
   // PoolOutstandingRewards queries rewards of a pool.
-  rpc PoolOutstandingRewards(QueryPoolOutstandingRewardsRequest)
-      returns (QueryPoolOutstandingRewardsResponse) {
-    option (google.api.http).get =
-        "/milkyway/rewards/v1/pools/{pool_id}/outstanding_rewards";
+  rpc PoolOutstandingRewards(QueryPoolOutstandingRewardsRequest) returns (QueryPoolOutstandingRewardsResponse) {
+    option (google.api.http).get = "/milkyway/rewards/v1/pools/{pool_id}/outstanding_rewards";
   }
 
   // OperatorOutstandingRewards queries rewards of an operator.
-  rpc OperatorOutstandingRewards(QueryOperatorOutstandingRewardsRequest)
-      returns (QueryOperatorOutstandingRewardsResponse) {
-    option (google.api.http).get =
-        "/milkyway/rewards/v1/operators/{operator_id}/outstanding_rewards";
+  rpc OperatorOutstandingRewards(QueryOperatorOutstandingRewardsRequest) returns (QueryOperatorOutstandingRewardsResponse) {
+    option (google.api.http).get = "/milkyway/rewards/v1/operators/{operator_id}/outstanding_rewards";
   }
 
   // ServiceOutstandingRewards queries rewards of a service.
-  rpc ServiceOutstandingRewards(QueryServiceOutstandingRewardsRequest)
-      returns (QueryServiceOutstandingRewardsResponse) {
-    option (google.api.http).get =
-        "/milkyway/rewards/v1/services/{service_id}/outstanding_rewards";
+  rpc ServiceOutstandingRewards(QueryServiceOutstandingRewardsRequest) returns (QueryServiceOutstandingRewardsResponse) {
+    option (google.api.http).get = "/milkyway/rewards/v1/services/{service_id}/outstanding_rewards";
   }
 
   // OperatorCommission queries accumulated commission for an operator.
-  rpc OperatorCommission(QueryOperatorCommissionRequest)
-      returns (QueryOperatorCommissionResponse) {
-    option (google.api.http).get =
-        "/milkyway/rewards/v1/operators/{operator_id}/commission";
+  rpc OperatorCommission(QueryOperatorCommissionRequest) returns (QueryOperatorCommissionResponse) {
+    option (google.api.http).get = "/milkyway/rewards/v1/operators/{operator_id}/commission";
   }
 
   // PoolDelegationRewards queries the total rewards accrued by a pool
   // delegation.
-  rpc PoolDelegationRewards(QueryPoolDelegationRewardsRequest)
-      returns (QueryPoolDelegationRewardsResponse) {
+  rpc PoolDelegationRewards(QueryPoolDelegationRewardsRequest) returns (QueryPoolDelegationRewardsResponse) {
     option (google.api.http).get =
-        "/milkyway/rewards/v1/delegators/{delegator_address}/rewards/pools/"
-        "{pool_id}";
+      "/milkyway/rewards/v1/delegators/{delegator_address}/rewards/pools/"
+      "{pool_id}";
   }
 
   // OperatorDelegationRewards queries the total rewards accrued by a operator
   // delegation.
-  rpc OperatorDelegationRewards(QueryOperatorDelegationRewardsRequest)
-      returns (QueryOperatorDelegationRewardsResponse) {
+  rpc OperatorDelegationRewards(QueryOperatorDelegationRewardsRequest) returns (QueryOperatorDelegationRewardsResponse) {
     option (google.api.http).get =
-        "/milkyway/rewards/v1/delegators/{delegator_address}/rewards/operators/"
-        "{operator_id}";
+      "/milkyway/rewards/v1/delegators/{delegator_address}/rewards/operators/"
+      "{operator_id}";
   }
 
   // ServiceDelegationRewards queries the total rewards accrued by a service
   // delegation.
-  rpc ServiceDelegationRewards(QueryServiceDelegationRewardsRequest)
-      returns (QueryServiceDelegationRewardsResponse) {
+  rpc ServiceDelegationRewards(QueryServiceDelegationRewardsRequest) returns (QueryServiceDelegationRewardsResponse) {
     option (google.api.http).get =
-        "/milkyway/rewards/v1/delegators/{delegator_address}/rewards/services/"
-        "{service_id}";
+      "/milkyway/rewards/v1/delegators/{delegator_address}/rewards/services/"
+      "{service_id}";
   }
 
   // DelegatorTotalRewards queries the total rewards accrued by a single
   // delegator
-  rpc DelegatorTotalRewards(QueryDelegatorTotalRewardsRequest)
-      returns (QueryDelegatorTotalRewardsResponse) {
-    option (google.api.http).get =
-        "/milkyway/rewards/v1/delegators/{delegator_address}/rewards";
+  rpc DelegatorTotalRewards(QueryDelegatorTotalRewardsRequest) returns (QueryDelegatorTotalRewardsResponse) {
+    option (google.api.http).get = "/milkyway/rewards/v1/delegators/{delegator_address}/rewards";
   }
 
   // DelegatorWithdrawAddress queries withdraw address of a delegator.
-  rpc DelegatorWithdrawAddress(QueryDelegatorWithdrawAddressRequest)
-      returns (QueryDelegatorWithdrawAddressResponse) {
-    option (google.api.http).get =
-        "/milkyway/rewards/v1/delegators/{delegator_address}/withdraw_address";
+  rpc DelegatorWithdrawAddress(QueryDelegatorWithdrawAddressRequest) returns (QueryDelegatorWithdrawAddressResponse) {
+    option (google.api.http).get = "/milkyway/rewards/v1/delegators/{delegator_address}/withdraw_address";
   }
 }
 
@@ -109,7 +91,7 @@ message QueryParamsRequest {}
 
 // QueryParamsResponse is the response type for the Query/Params RPC method.
 message QueryParamsResponse {
-  Params params = 1 [ (gogoproto.nullable) = false ];
+  Params params = 1 [(gogoproto.nullable) = false];
 }
 
 // QueryRewardsPlansRequest is the request type for the Query/RewardsPlans RPC
@@ -122,8 +104,10 @@ message QueryRewardsPlansRequest {
 // QueryRewardsPlansResponse is the response type for the Query/RewardsPlans
 // RPC method.
 message QueryRewardsPlansResponse {
-  repeated RewardsPlan rewards_plans = 1
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+  repeated RewardsPlan rewards_plans = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 
   // pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -131,12 +115,14 @@ message QueryRewardsPlansResponse {
 
 // QueryRewardsPlanRequest is the request type for the Query/RewardsPlan RPC
 // method.
-message QueryRewardsPlanRequest { uint64 plan_id = 1; }
+message QueryRewardsPlanRequest {
+  uint64 plan_id = 1;
+}
 
 // QueryRewardsPlanResponse is the response type for the Query/RewardsPlan RPC
 // method.
 message QueryRewardsPlanResponse {
-  RewardsPlan rewards_plan = 2 [ (gogoproto.nullable) = false ];
+  RewardsPlan rewards_plan = 2 [(gogoproto.nullable) = false];
 }
 
 // QueryPoolOutstandingRewardsRequest is the request type for the
@@ -149,8 +135,10 @@ message QueryPoolOutstandingRewardsRequest {
 // QueryPoolOutstandingRewardsResponse is the response type for the
 // Query/PoolOutstandingRewards RPC method.
 message QueryPoolOutstandingRewardsResponse {
-  OutstandingRewards rewards = 1
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+  OutstandingRewards rewards = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 }
 
 // QueryOperatorOutstandingRewardsRequest is the request type for the
@@ -163,8 +151,10 @@ message QueryOperatorOutstandingRewardsRequest {
 // QueryOperatorOutstandingRewardsResponse is the response type for the
 // Query/OperatorOutstandingRewards RPC method.
 message QueryOperatorOutstandingRewardsResponse {
-  OutstandingRewards rewards = 1
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+  OutstandingRewards rewards = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 }
 
 // QueryServiceOutstandingRewardsRequest is the request type for the
@@ -177,8 +167,10 @@ message QueryServiceOutstandingRewardsRequest {
 // QueryServiceOutstandingRewardsResponse is the response type for the
 // Query/ServiceOutstandingRewards RPC method.
 message QueryServiceOutstandingRewardsResponse {
-  OutstandingRewards rewards = 1
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+  OutstandingRewards rewards = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 }
 
 // QueryOperatorCommissionRequest is the request type for the
@@ -192,16 +184,17 @@ message QueryOperatorCommissionRequest {
 // Query/OperatorCommission RPC method
 message QueryOperatorCommissionResponse {
   // commission defines the commission the operator received.
-  AccumulatedCommission commission = 1
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+  AccumulatedCommission commission = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 }
 
 // QueryPoolDelegationRewardsRequest is the request type for the
 // Query/PoolDelegationRewards RPC method.
 message QueryPoolDelegationRewardsRequest {
   // delegator_address defines the delegator address to query for.
-  string delegator_address = 1
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // pool_id defines the pool ID to query for.
   uint32 pool_id = 2;
@@ -222,8 +215,7 @@ message QueryPoolDelegationRewardsResponse {
 // Query/OperatorDelegationRewards RPC method.
 message QueryOperatorDelegationRewardsRequest {
   // delegator_address defines the delegator address to query for.
-  string delegator_address = 1
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // operator_id defines the operator ID to query for.
   uint32 operator_id = 2;
@@ -244,8 +236,7 @@ message QueryOperatorDelegationRewardsResponse {
 // Query/ServiceDelegationRewards RPC method.
 message QueryServiceDelegationRewardsRequest {
   // delegator_address defines the delegator address to query for.
-  string delegator_address = 1
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // service_id defines the service ID to query for.
   uint32 service_id = 2;
@@ -266,16 +257,17 @@ message QueryServiceDelegationRewardsResponse {
 // Query/DelegatorTotalRewards RPC method.
 message QueryDelegatorTotalRewardsRequest {
   // delegator_address defines the delegator address to query for.
-  string delegator_address = 1
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
 // QueryDelegatorTotalRewardsResponse is the response type for the
 // Query/DelegatorTotalRewards RPC method.
 message QueryDelegatorTotalRewardsResponse {
   // rewards defines all the rewards accrued by a delegator.
-  repeated DelegationDelegatorReward rewards = 1
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+  repeated DelegationDelegatorReward rewards = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 
   // total defines the sum of all the rewards.
   repeated DecPool total = 2 [
@@ -289,14 +281,12 @@ message QueryDelegatorTotalRewardsResponse {
 // Query/DelegatorWithdrawAddress RPC method.
 message QueryDelegatorWithdrawAddressRequest {
   // delegator_address defines the delegator address to query for.
-  string delegator_address = 1
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
 // QueryDelegatorWithdrawAddressResponse is the response type for the
 // Query/DelegatorWithdrawAddress RPC method.
 message QueryDelegatorWithdrawAddressResponse {
   // withdraw_address defines the delegator address to query for.
-  string withdraw_address = 1
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string withdraw_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }

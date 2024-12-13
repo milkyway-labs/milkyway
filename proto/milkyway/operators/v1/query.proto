@@ -1,9 +1,9 @@
 syntax = "proto3";
 package milkyway.operators.v1;
 
+import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "cosmos/base/query/v1beta1/pagination.proto";
 import "milkyway/operators/v1/models.proto";
 import "milkyway/operators/v1/params.proto";
 
@@ -14,16 +14,13 @@ service Query {
   // Operator defines a gRPC query method that returns the operator by the given
   // operator id.
   rpc Operator(QueryOperatorRequest) returns (QueryOperatorResponse) {
-    option (google.api.http).get =
-        "/milkyway/operators/v1/operators/{operator_id}";
+    option (google.api.http).get = "/milkyway/operators/v1/operators/{operator_id}";
   }
 
   // OperatorParams defines a gRPC query method that returns the operator's
   // params by the given operator id.
-  rpc OperatorParams(QueryOperatorParamsRequest)
-      returns (QueryOperatorParamsResponse) {
-    option (google.api.http).get =
-        "/milkyway/operators/v1/operators/{operator_id}/params";
+  rpc OperatorParams(QueryOperatorParamsRequest) returns (QueryOperatorParamsResponse) {
+    option (google.api.http).get = "/milkyway/operators/v1/operators/{operator_id}/params";
   }
 
   // Operators defines a gRPC query method that returns the list of operators.
@@ -46,7 +43,7 @@ message QueryOperatorRequest {
 
 // QueryOperatorResponse is the response type for the Query/Operator RPC method.
 message QueryOperatorResponse {
-  Operator operator = 1 [ (gogoproto.nullable) = false ];
+  Operator operator = 1 [(gogoproto.nullable) = false];
 }
 
 // QueryOperatorParamsRequest is the request type for the Query/OperatorParams
@@ -59,7 +56,7 @@ message QueryOperatorParamsRequest {
 // QueryOperatorParamsResponse is the response type for the Query/OperatorParams
 // RPC method.
 message QueryOperatorParamsResponse {
-  OperatorParams operator_params = 1 [ (gogoproto.nullable) = false ];
+  OperatorParams operator_params = 1 [(gogoproto.nullable) = false];
 }
 
 // QueryOperatorsRequest is the request type for the Query/Operators RPC method.
@@ -71,7 +68,7 @@ message QueryOperatorsRequest {
 // method.
 message QueryOperatorsResponse {
   // Operators is the list of operators
-  repeated Operator operators = 1 [ (gogoproto.nullable) = false ];
+  repeated Operator operators = 1 [(gogoproto.nullable) = false];
 
   // Pagination defines the pagination response
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -82,5 +79,5 @@ message QueryParamsRequest {}
 
 // QueryParamsResponse is the response type for the Query/Params RPC method.
 message QueryParamsResponse {
-  Params params = 1 [ (gogoproto.nullable) = false ];
+  Params params = 1 [(gogoproto.nullable) = false];
 }

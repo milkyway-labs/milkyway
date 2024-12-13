@@ -1,16 +1,16 @@
 syntax = "proto3";
 package milkyway.restaking.v1;
 
+import "amino/amino.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos/query/v1/query.proto";
+import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "cosmos_proto/cosmos.proto";
-import "cosmos/query/v1/query.proto";
-import "amino/amino.proto";
-import "milkyway/restaking/v1/models.proto";
-import "milkyway/restaking/v1/params.proto";
 import "milkyway/operators/v1/models.proto";
 import "milkyway/pools/v1/models.proto";
+import "milkyway/restaking/v1/models.proto";
+import "milkyway/restaking/v1/params.proto";
 import "milkyway/services/v1/models.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/v3/x/restaking/types";
@@ -18,260 +18,217 @@ option go_package = "github.com/milkyway-labs/milkyway/v3/x/restaking/types";
 // Query defines the gRPC querier service.
 service Query {
   // OperatorJoinedServices queries the services that an operator has joined.
-  rpc OperatorJoinedServices(QueryOperatorJoinedServicesRequest)
-      returns (QueryOperatorJoinedServicesResponse) {
+  rpc OperatorJoinedServices(QueryOperatorJoinedServicesRequest) returns (QueryOperatorJoinedServicesResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get =
-        "/milkyway/restaking/v1/operators/{operator_id}/joined_services";
+    option (google.api.http).get = "/milkyway/restaking/v1/operators/{operator_id}/joined_services";
   }
 
   // ServiceAllowedOperators queries the allowed operators for a given service.
-  rpc ServiceAllowedOperators(QueryServiceAllowedOperatorsRequest)
-      returns (QueryServiceAllowedOperatorsResponse) {
+  rpc ServiceAllowedOperators(QueryServiceAllowedOperatorsRequest) returns (QueryServiceAllowedOperatorsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get =
-        "/milkyway/restaking/v1/services/{service_id}/allowed_operators";
+    option (google.api.http).get = "/milkyway/restaking/v1/services/{service_id}/allowed_operators";
   }
 
   // ServiceSecuringPools queries the pools that are securing a given service.
-  rpc ServiceSecuringPools(QueryServiceSecuringPoolsRequest)
-      returns (QueryServiceSecuringPoolsResponse) {
+  rpc ServiceSecuringPools(QueryServiceSecuringPoolsRequest) returns (QueryServiceSecuringPoolsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get =
-        "/milkyway/restaking/v1/services/{service_id}/securing_pools";
+    option (google.api.http).get = "/milkyway/restaking/v1/services/{service_id}/securing_pools";
   }
 
-  rpc ServiceOperators(QueryServiceOperatorsRequest)
-      returns (QueryServiceOperatorsResponse) {
+  // ServiceOperators queries the operators for a given service.
+  rpc ServiceOperators(QueryServiceOperatorsRequest) returns (QueryServiceOperatorsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get =
-        "/milkyway/restaking/v1/services/{service_id}/operators";
+    option (google.api.http).get = "/milkyway/restaking/v1/services/{service_id}/operators";
   }
 
   // PoolDelegations queries the delegations info for the given pool.
-  rpc PoolDelegations(QueryPoolDelegationsRequest)
-      returns (QueryPoolDelegationsResponse) {
+  rpc PoolDelegations(QueryPoolDelegationsRequest) returns (QueryPoolDelegationsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get =
-        "/milkyway/restaking/v1/pools/{pool_id}/delegations";
+    option (google.api.http).get = "/milkyway/restaking/v1/pools/{pool_id}/delegations";
   }
 
   // PoolDelegation queries the delegation info for the given pool and
   // delegator.
-  rpc PoolDelegation(QueryPoolDelegationRequest)
-      returns (QueryPoolDelegationResponse) {
+  rpc PoolDelegation(QueryPoolDelegationRequest) returns (QueryPoolDelegationResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get = "/milkyway/restaking/v1/pools/{pool_id}/"
-                                   "delegations/{delegator_address}";
+    option (google.api.http).get =
+      "/milkyway/restaking/v1/pools/{pool_id}/"
+      "delegations/{delegator_address}";
   }
 
   // PoolUnbondingDelegations queries the unbonding delegations info for the
   // given pool.
-  rpc PoolUnbondingDelegations(QueryPoolUnbondingDelegationsRequest)
-      returns (QueryPoolUnbondingDelegationsResponse) {
+  rpc PoolUnbondingDelegations(QueryPoolUnbondingDelegationsRequest) returns (QueryPoolUnbondingDelegationsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get =
-        "/milkyway/restaking/v1/pools/{pool_id}/unbonding_delegations";
+    option (google.api.http).get = "/milkyway/restaking/v1/pools/{pool_id}/unbonding_delegations";
   }
 
   // PoolUnbondingDelegation queries the unbonding delegation info for the given
   // pool and delegator.
-  rpc PoolUnbondingDelegation(QueryPoolUnbondingDelegationRequest)
-      returns (QueryPoolUnbondingDelegationResponse) {
+  rpc PoolUnbondingDelegation(QueryPoolUnbondingDelegationRequest) returns (QueryPoolUnbondingDelegationResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get = "/milkyway/restaking/v1/pools/{pool_id}/"
-                                   "unbonding_delegations/{delegator_address}";
+    option (google.api.http).get =
+      "/milkyway/restaking/v1/pools/{pool_id}/"
+      "unbonding_delegations/{delegator_address}";
   }
 
   // OperatorDelegations queries the delegations info for the given operator.
-  rpc OperatorDelegations(QueryOperatorDelegationsRequest)
-      returns (QueryOperatorDelegationsResponse) {
+  rpc OperatorDelegations(QueryOperatorDelegationsRequest) returns (QueryOperatorDelegationsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get =
-        "/milkyway/restaking/v1/operators/{operator_id}/delegations";
+    option (google.api.http).get = "/milkyway/restaking/v1/operators/{operator_id}/delegations";
   }
 
   // OperatorDelegation queries the delegation info for the given operator and
   // delegator.
-  rpc OperatorDelegation(QueryOperatorDelegationRequest)
-      returns (QueryOperatorDelegationResponse) {
+  rpc OperatorDelegation(QueryOperatorDelegationRequest) returns (QueryOperatorDelegationResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
     option (google.api.http).get =
-        "/milkyway/restaking/v1/operators/{operator_id}/delegations/"
-        "{delegator_address}";
+      "/milkyway/restaking/v1/operators/{operator_id}/delegations/"
+      "{delegator_address}";
   }
 
   // OperatorUnbondingDelegations queries the unbonding delegations info for the
   // given operator.
-  rpc OperatorUnbondingDelegations(QueryOperatorUnbondingDelegationsRequest)
-      returns (QueryOperatorUnbondingDelegationsResponse) {
+  rpc OperatorUnbondingDelegations(QueryOperatorUnbondingDelegationsRequest) returns (QueryOperatorUnbondingDelegationsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get =
-        "/milkyway/restaking/v1/operators/{operator_id}/unbonding_delegations";
+    option (google.api.http).get = "/milkyway/restaking/v1/operators/{operator_id}/unbonding_delegations";
   }
 
   // OperatorUnbondingDelegation queries the unbonding delegation info for the
   // given operator and delegator.
-  rpc OperatorUnbondingDelegation(QueryOperatorUnbondingDelegationRequest)
-      returns (QueryOperatorUnbondingDelegationResponse) {
+  rpc OperatorUnbondingDelegation(QueryOperatorUnbondingDelegationRequest) returns (QueryOperatorUnbondingDelegationResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
     option (google.api.http).get =
-        "/milkyway/restaking/v1/operators/{operator_id}/unbonding_delegations/"
-        "{delegator_address}";
+      "/milkyway/restaking/v1/operators/{operator_id}/unbonding_delegations/"
+      "{delegator_address}";
   }
 
   // ServiceDelegations queries the delegations info for the given service.
-  rpc ServiceDelegations(QueryServiceDelegationsRequest)
-      returns (QueryServiceDelegationsResponse) {
+  rpc ServiceDelegations(QueryServiceDelegationsRequest) returns (QueryServiceDelegationsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get =
-        "/milkyway/restaking/v1/services/{service_id}/delegations";
+    option (google.api.http).get = "/milkyway/restaking/v1/services/{service_id}/delegations";
   }
 
   // ServiceDelegation queries the delegation info for the given service and
   // delegator.
-  rpc ServiceDelegation(QueryServiceDelegationRequest)
-      returns (QueryServiceDelegationResponse) {
+  rpc ServiceDelegation(QueryServiceDelegationRequest) returns (QueryServiceDelegationResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
     option (google.api.http).get =
-        "/milkyway/restaking/v1/services/{service_id}/delegations/"
-        "{delegator_address}";
+      "/milkyway/restaking/v1/services/{service_id}/delegations/"
+      "{delegator_address}";
   }
 
   // ServiceUnbondingDelegations queries the unbonding delegations info for the
   // given service.
-  rpc ServiceUnbondingDelegations(QueryServiceUnbondingDelegationsRequest)
-      returns (QueryServiceUnbondingDelegationsResponse) {
+  rpc ServiceUnbondingDelegations(QueryServiceUnbondingDelegationsRequest) returns (QueryServiceUnbondingDelegationsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get =
-        "/milkyway/restaking/v1/services/{service_id}/unbonding_delegations";
+    option (google.api.http).get = "/milkyway/restaking/v1/services/{service_id}/unbonding_delegations";
   }
 
   // ServiceUnbondingDelegation queries the unbonding delegation info for the
   // given service and delegator.
-  rpc ServiceUnbondingDelegation(QueryServiceUnbondingDelegationRequest)
-      returns (QueryServiceUnbondingDelegationResponse) {
+  rpc ServiceUnbondingDelegation(QueryServiceUnbondingDelegationRequest) returns (QueryServiceUnbondingDelegationResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
     option (google.api.http).get =
-        "/milkyway/restaking/v1/services/{service_id}/unbonding_delegations/"
-        "{delegator_address}";
+      "/milkyway/restaking/v1/services/{service_id}/unbonding_delegations/"
+      "{delegator_address}";
   }
 
   // DelegatorPoolDelegations queries all the pool delegations of a given
   // delegator address.
-  rpc DelegatorPoolDelegations(QueryDelegatorPoolDelegationsRequest)
-      returns (QueryDelegatorPoolDelegationsResponse) {
+  rpc DelegatorPoolDelegations(QueryDelegatorPoolDelegationsRequest) returns (QueryDelegatorPoolDelegationsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get =
-        "/milkyway/restaking/v1/delegations/{delegator_address}/pools";
+    option (google.api.http).get = "/milkyway/restaking/v1/delegations/{delegator_address}/pools";
   }
 
   // DelegatorPoolUnbondingDelegations queries all the pool unbonding
   // delegations of a given delegator address.
-  rpc DelegatorPoolUnbondingDelegations(
-      QueryDelegatorPoolUnbondingDelegationsRequest)
-      returns (QueryDelegatorPoolUnbondingDelegationsResponse) {
+  rpc DelegatorPoolUnbondingDelegations(QueryDelegatorPoolUnbondingDelegationsRequest) returns (QueryDelegatorPoolUnbondingDelegationsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get = "/milkyway/restaking/v1/delegations/"
-                                   "{delegator_address}/unbonding_pools";
+    option (google.api.http).get =
+      "/milkyway/restaking/v1/delegations/"
+      "{delegator_address}/unbonding_pools";
   }
 
   // DelegatorOperatorDelegations queries all the operator delegations of a
   // given delegator address.
-  rpc DelegatorOperatorDelegations(QueryDelegatorOperatorDelegationsRequest)
-      returns (QueryDelegatorOperatorDelegationsResponse) {
+  rpc DelegatorOperatorDelegations(QueryDelegatorOperatorDelegationsRequest) returns (QueryDelegatorOperatorDelegationsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get =
-        "/milkyway/restaking/v1/delegations/{delegator_address}/operators";
+    option (google.api.http).get = "/milkyway/restaking/v1/delegations/{delegator_address}/operators";
   }
 
   // DelegatorOperatorUnbondingDelegations queries all the operator unbonding
   // delegations of a given delegator address.
-  rpc DelegatorOperatorUnbondingDelegations(
-      QueryDelegatorOperatorUnbondingDelegationsRequest)
-      returns (QueryDelegatorOperatorUnbondingDelegationsResponse) {
+  rpc DelegatorOperatorUnbondingDelegations(QueryDelegatorOperatorUnbondingDelegationsRequest) returns (QueryDelegatorOperatorUnbondingDelegationsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get = "/milkyway/restaking/v1/delegations/"
-                                   "{delegator_address}/unbonding_operators";
+    option (google.api.http).get =
+      "/milkyway/restaking/v1/delegations/"
+      "{delegator_address}/unbonding_operators";
   }
 
   // DelegatorServiceDelegations queries all the service delegations of a given
   // delegator address.
-  rpc DelegatorServiceDelegations(QueryDelegatorServiceDelegationsRequest)
-      returns (QueryDelegatorServiceDelegationsResponse) {
+  rpc DelegatorServiceDelegations(QueryDelegatorServiceDelegationsRequest) returns (QueryDelegatorServiceDelegationsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get =
-        "/milkyway/restaking/v1/delegations/{delegator_address}/services";
+    option (google.api.http).get = "/milkyway/restaking/v1/delegations/{delegator_address}/services";
   }
 
   // DelegatorServiceUnbondingDelegations queries all the service unbonding
   // delegations of a given delegator address.
-  rpc DelegatorServiceUnbondingDelegations(
-      QueryDelegatorServiceUnbondingDelegationsRequest)
-      returns (QueryDelegatorServiceUnbondingDelegationsResponse) {
+  rpc DelegatorServiceUnbondingDelegations(QueryDelegatorServiceUnbondingDelegationsRequest) returns (QueryDelegatorServiceUnbondingDelegationsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get = "/milkyway/restaking/v1/delegations/"
-                                   "{delegator_address}/unbonding_services";
+    option (google.api.http).get =
+      "/milkyway/restaking/v1/delegations/"
+      "{delegator_address}/unbonding_services";
   }
 
   // DelegatorPools queries all pools info for given delegator
   // address.
-  rpc DelegatorPools(QueryDelegatorPoolsRequest)
-      returns (QueryDelegatorPoolsResponse) {
+  rpc DelegatorPools(QueryDelegatorPoolsRequest) returns (QueryDelegatorPoolsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get =
-        "/milkyway/restaking/v1/delegators/{delegator_address}/pools";
+    option (google.api.http).get = "/milkyway/restaking/v1/delegators/{delegator_address}/pools";
   }
 
   // DelegatorPool queries the pool info for given delegator and pool id.
-  rpc DelegatorPool(QueryDelegatorPoolRequest)
-      returns (QueryDelegatorPoolResponse) {
+  rpc DelegatorPool(QueryDelegatorPoolRequest) returns (QueryDelegatorPoolResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get =
-        "/milkyway/restaking/v1/delegators/{delegator_address}/pools/{pool_id}";
+    option (google.api.http).get = "/milkyway/restaking/v1/delegators/{delegator_address}/pools/{pool_id}";
   }
 
   // DelegatorOperators queries all operators info for given delegator
-  rpc DelegatorOperators(QueryDelegatorOperatorsRequest)
-      returns (QueryDelegatorOperatorsResponse) {
+  rpc DelegatorOperators(QueryDelegatorOperatorsRequest) returns (QueryDelegatorOperatorsResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get =
-        "/milkyway/restaking/v1/delegators/{delegator_address}/operators";
+    option (google.api.http).get = "/milkyway/restaking/v1/delegators/{delegator_address}/operators";
   }
 
   // DelegatorOperator queries the operator info for given delegator and
   // operator id.
-  rpc DelegatorOperator(QueryDelegatorOperatorRequest)
-      returns (QueryDelegatorOperatorResponse) {
+  rpc DelegatorOperator(QueryDelegatorOperatorRequest) returns (QueryDelegatorOperatorResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
     option (google.api.http).get =
-        "/milkyway/restaking/v1/delegators/{delegator_address}/operators/"
-        "{operator_id}";
+      "/milkyway/restaking/v1/delegators/{delegator_address}/operators/"
+      "{operator_id}";
   }
 
   // DelegatorServices queries all services info for given delegator
-  rpc DelegatorServices(QueryDelegatorServicesRequest)
-      returns (QueryDelegatorServicesResponse) {
+  rpc DelegatorServices(QueryDelegatorServicesRequest) returns (QueryDelegatorServicesResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get =
-        "/milkyway/restaking/v1/delegators/{delegator_address}/services";
+    option (google.api.http).get = "/milkyway/restaking/v1/delegators/{delegator_address}/services";
   }
 
   // DelegatorService queries the service info for given delegator and service
   // id.
-  rpc DelegatorService(QueryDelegatorServiceRequest)
-      returns (QueryDelegatorServiceResponse) {
+  rpc DelegatorService(QueryDelegatorServiceRequest) returns (QueryDelegatorServiceResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get = "/milkyway/restaking/v1/delegators/"
-                                   "{delegator_address}/services/{service_id}";
+    option (google.api.http).get =
+      "/milkyway/restaking/v1/delegators/"
+      "{delegator_address}/services/{service_id}";
   }
 
   // UserPreferences queries the user preferences.
-  rpc UserPreferences(QueryUserPreferencesRequest)
-      returns (QueryUserPreferencesResponse) {
+  rpc UserPreferences(QueryUserPreferencesRequest) returns (QueryUserPreferencesResponse) {
     option (cosmos.query.v1.module_query_safe) = true;
-    option (google.api.http).get =
-        "/milkyway/restaking/v1/users/{user_address}/preferences";
+    option (google.api.http).get = "/milkyway/restaking/v1/users/{user_address}/preferences";
   }
 
   // Params queries the restaking parameters.
@@ -356,8 +313,7 @@ message QueryServiceOperatorsRequest {
 // RPC method.
 message QueryServiceOperatorsResponse {
   // Operators is the list of operators
-  repeated milkyway.operators.v1.Operator operators = 1
-      [ (gogoproto.nullable) = false ];
+  repeated milkyway.operators.v1.Operator operators = 1 [(gogoproto.nullable) = false];
 
   // Pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -377,7 +333,7 @@ message QueryPoolDelegationsRequest {
 // RPC method.
 message QueryPoolDelegationsResponse {
   // Delegations is the list of delegations.
-  repeated DelegationResponse delegations = 1 [ (gogoproto.nullable) = false ];
+  repeated DelegationResponse delegations = 1 [(gogoproto.nullable) = false];
 
   // Pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -390,15 +346,14 @@ message QueryPoolDelegationRequest {
   uint32 pool_id = 1;
 
   // DelegatorAddress is the address of the delegator to query
-  string delegator_address = 2
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
 // QueryPoolDelegationResponse is response type for the Query/PoolDelegation RPC
 // method.
 message QueryPoolDelegationResponse {
   // Delegation is the delegation
-  DelegationResponse delegation = 1 [ (gogoproto.nullable) = false ];
+  DelegationResponse delegation = 1 [(gogoproto.nullable) = false];
 }
 
 // QueryPoolUnbondingDelegationsRequest is request type for the
@@ -411,8 +366,7 @@ message QueryPoolUnbondingDelegationsRequest {
 // QueryPoolUnbondingDelegationsResponse is response type for the
 // Query/PoolUnbondingDelegations RPC method.
 message QueryPoolUnbondingDelegationsResponse {
-  repeated UnbondingDelegation unbonding_delegations = 1
-      [ (gogoproto.nullable) = false ];
+  repeated UnbondingDelegation unbonding_delegations = 1 [(gogoproto.nullable) = false];
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
@@ -420,14 +374,13 @@ message QueryPoolUnbondingDelegationsResponse {
 // Query/PoolUnbondingDelegation RPC method.
 message QueryPoolUnbondingDelegationRequest {
   uint32 pool_id = 1;
-  string delegator_address = 2
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
 // QueryPoolUnbondingDelegationResponse is response type for the
 // Query/PoolUnbondingDelegation RPC method.
 message QueryPoolUnbondingDelegationResponse {
-  UnbondingDelegation unbonding_delegation = 1 [ (gogoproto.nullable) = false ];
+  UnbondingDelegation unbonding_delegation = 1 [(gogoproto.nullable) = false];
 }
 
 // QueryOperatorDelegationsRequest is request type for the
@@ -444,7 +397,7 @@ message QueryOperatorDelegationsRequest {
 // Query/OperatorDelegations RPC method.
 message QueryOperatorDelegationsResponse {
   // Delegations is the list of delegations
-  repeated DelegationResponse delegations = 1 [ (gogoproto.nullable) = false ];
+  repeated DelegationResponse delegations = 1 [(gogoproto.nullable) = false];
 
   // Pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -457,15 +410,14 @@ message QueryOperatorDelegationRequest {
   uint32 operator_id = 1;
 
   // DelegatorAddress is the address of the delegator to query
-  string delegator_address = 2
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
 // QueryOperatorDelegationResponse is response type for the
 // Query/OperatorDelegation RPC method.
 message QueryOperatorDelegationResponse {
   // Delegation is the delegation
-  DelegationResponse delegation = 1 [ (gogoproto.nullable) = false ];
+  DelegationResponse delegation = 1 [(gogoproto.nullable) = false];
 }
 
 // QueryOperatorUnbondingDelegationsRequest is request type for the
@@ -482,8 +434,7 @@ message QueryOperatorUnbondingDelegationsRequest {
 // Query/OperatorUnbondingDelegations RPC method.
 message QueryOperatorUnbondingDelegationsResponse {
   // UnbondingDelegations is the list of unbonding delegations
-  repeated UnbondingDelegation unbonding_delegations = 1
-      [ (gogoproto.nullable) = false ];
+  repeated UnbondingDelegation unbonding_delegations = 1 [(gogoproto.nullable) = false];
 
   // Pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -496,15 +447,14 @@ message QueryOperatorUnbondingDelegationRequest {
   uint32 operator_id = 1;
 
   // DelegatorAddress is the address of the delegator to query
-  string delegator_address = 2
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
 // QueryOperatorUnbondingDelegationResponse is response type for the
 // Query/OperatorUnbondingDelegation RPC method.
 message QueryOperatorUnbondingDelegationResponse {
   // UnbondingDelegation is the unbonding delegation
-  UnbondingDelegation unbonding_delegation = 1 [ (gogoproto.nullable) = false ];
+  UnbondingDelegation unbonding_delegation = 1 [(gogoproto.nullable) = false];
 }
 
 // QueryServiceDelegationsRequest is request type for the
@@ -521,7 +471,7 @@ message QueryServiceDelegationsRequest {
 // Query/ServiceDelegations RPC method.
 message QueryServiceDelegationsResponse {
   // Delegations is the list of delegations
-  repeated DelegationResponse delegations = 1 [ (gogoproto.nullable) = false ];
+  repeated DelegationResponse delegations = 1 [(gogoproto.nullable) = false];
 
   // Pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -534,15 +484,14 @@ message QueryServiceDelegationRequest {
   uint32 service_id = 1;
 
   // DelegatorAddress is the address of the delegator to query
-  string delegator_address = 2
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
 // QueryServiceDelegationResponse is response type for the
 // Query/ServiceDelegation RPC method.
 message QueryServiceDelegationResponse {
   // Delegation is the delegation
-  DelegationResponse delegation = 1 [ (gogoproto.nullable) = false ];
+  DelegationResponse delegation = 1 [(gogoproto.nullable) = false];
 }
 
 // QueryServiceUnbondingDelegationsRequest is request type for the
@@ -559,8 +508,7 @@ message QueryServiceUnbondingDelegationsRequest {
 // Query/ServiceUnbondingDelegations RPC method.
 message QueryServiceUnbondingDelegationsResponse {
   // UnbondingDelegations is the list of unbonding delegations
-  repeated UnbondingDelegation unbonding_delegations = 1
-      [ (gogoproto.nullable) = false ];
+  repeated UnbondingDelegation unbonding_delegations = 1 [(gogoproto.nullable) = false];
 
   // Pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -573,23 +521,21 @@ message QueryServiceUnbondingDelegationRequest {
   uint32 service_id = 1;
 
   // DelegatorAddress is the address of the delegator to query
-  string delegator_address = 2
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 }
 
 // QueryServiceUnbondingDelegationResponse is response type for the
 // Query/ServiceUnbondingDelegation RPC method.
 message QueryServiceUnbondingDelegationResponse {
   // UnbondingDelegation is the unbonding delegation
-  UnbondingDelegation unbonding_delegation = 1 [ (gogoproto.nullable) = false ];
+  UnbondingDelegation unbonding_delegation = 1 [(gogoproto.nullable) = false];
 }
 
 // QueryDelegatorPoolDelegationsRequest is request type for the
 // Query/DelegatorPoolDelegations RPC method.
 message QueryDelegatorPoolDelegationsRequest {
   // DelegatorAddress is the address of the delegator to query
-  string delegator_address = 1
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // Pagination defines an optional pagination for the request.
   cosmos.base.query.v1beta1.PageRequest pagination = 2;
@@ -599,7 +545,7 @@ message QueryDelegatorPoolDelegationsRequest {
 // Query/DelegatorPoolDelegations RPC method.
 message QueryDelegatorPoolDelegationsResponse {
   // Delegations is the list of delegations
-  repeated DelegationResponse delegations = 1 [ (gogoproto.nullable) = false ];
+  repeated DelegationResponse delegations = 1 [(gogoproto.nullable) = false];
 
   // Pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -609,8 +555,7 @@ message QueryDelegatorPoolDelegationsResponse {
 // Query/DelegatorPoolUnbondingDelegations RPC method.
 message QueryDelegatorPoolUnbondingDelegationsRequest {
   // DelegatorAddress is the address of the delegator to query
-  string delegator_address = 1
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // Pagination defines an optional pagination for the request.
   cosmos.base.query.v1beta1.PageRequest pagination = 2;
@@ -620,8 +565,7 @@ message QueryDelegatorPoolUnbondingDelegationsRequest {
 // Query/DelegatorPoolUnbondingDelegations RPC method.
 message QueryDelegatorPoolUnbondingDelegationsResponse {
   // UnbondingDelegations is the list of unbonding delegations
-  repeated UnbondingDelegation unbonding_delegations = 1
-      [ (gogoproto.nullable) = false ];
+  repeated UnbondingDelegation unbonding_delegations = 1 [(gogoproto.nullable) = false];
 
   // Pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -631,8 +575,7 @@ message QueryDelegatorPoolUnbondingDelegationsResponse {
 // Query/DelegatorOperatorDelegations RPC method.
 message QueryDelegatorOperatorDelegationsRequest {
   // DelegatorAddress is the address of the delegator to query
-  string delegator_address = 1
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // Pagination defines an optional pagination for the request.
   cosmos.base.query.v1beta1.PageRequest pagination = 2;
@@ -642,7 +585,7 @@ message QueryDelegatorOperatorDelegationsRequest {
 // Query/DelegatorOperatorDelegations RPC method.
 message QueryDelegatorOperatorDelegationsResponse {
   // Delegations is the list of delegations
-  repeated DelegationResponse delegations = 1 [ (gogoproto.nullable) = false ];
+  repeated DelegationResponse delegations = 1 [(gogoproto.nullable) = false];
 
   // Pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -652,8 +595,7 @@ message QueryDelegatorOperatorDelegationsResponse {
 // Query/DelegatorOperatorUnbondingDelegations RPC method.
 message QueryDelegatorOperatorUnbondingDelegationsRequest {
   // DelegatorAddress is the address of the delegator to query
-  string delegator_address = 1
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // Pagination defines an optional pagination for the request.
   cosmos.base.query.v1beta1.PageRequest pagination = 2;
@@ -663,8 +605,7 @@ message QueryDelegatorOperatorUnbondingDelegationsRequest {
 // Query/DelegatorOperatorUnbondingDelegations RPC method.
 message QueryDelegatorOperatorUnbondingDelegationsResponse {
   // UnbondingDelegations is the list of unbonding delegations
-  repeated UnbondingDelegation unbonding_delegations = 1
-      [ (gogoproto.nullable) = false ];
+  repeated UnbondingDelegation unbonding_delegations = 1 [(gogoproto.nullable) = false];
 
   // Pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -674,8 +615,7 @@ message QueryDelegatorOperatorUnbondingDelegationsResponse {
 // Query/DelegatorServiceDelegations RPC method.
 message QueryDelegatorServiceDelegationsRequest {
   // DelegatorAddress is the address of the delegator to query
-  string delegator_address = 1
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // Pagination defines an optional pagination for the request.
   cosmos.base.query.v1beta1.PageRequest pagination = 2;
@@ -685,7 +625,7 @@ message QueryDelegatorServiceDelegationsRequest {
 // Query/DelegatorServiceDelegations RPC method.
 message QueryDelegatorServiceDelegationsResponse {
   // Delegations is the list of delegations
-  repeated DelegationResponse delegations = 1 [ (gogoproto.nullable) = false ];
+  repeated DelegationResponse delegations = 1 [(gogoproto.nullable) = false];
 
   // Pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -695,8 +635,7 @@ message QueryDelegatorServiceDelegationsResponse {
 // Query/DelegatorServiceUnbondingDelegations RPC method.
 message QueryDelegatorServiceUnbondingDelegationsRequest {
   // DelegatorAddress is the address of the delegator to query
-  string delegator_address = 1
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // Pagination defines an optional pagination for the request.
   cosmos.base.query.v1beta1.PageRequest pagination = 2;
@@ -706,8 +645,7 @@ message QueryDelegatorServiceUnbondingDelegationsRequest {
 // Query/DelegatorServiceUnbondingDelegations RPC method.
 message QueryDelegatorServiceUnbondingDelegationsResponse {
   // UnbondingDelegations is the list of unbonding delegations
-  repeated UnbondingDelegation unbonding_delegations = 1
-      [ (gogoproto.nullable) = false ];
+  repeated UnbondingDelegation unbonding_delegations = 1 [(gogoproto.nullable) = false];
 
   // Pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -717,8 +655,7 @@ message QueryDelegatorServiceUnbondingDelegationsResponse {
 // method.
 message QueryDelegatorPoolsRequest {
   // DelegatorAddress is the address of the delegator to query
-  string delegator_address = 1
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // Pagination defines an optional pagination for the request.
   cosmos.base.query.v1beta1.PageRequest pagination = 2;
@@ -728,7 +665,7 @@ message QueryDelegatorPoolsRequest {
 // method.
 message QueryDelegatorPoolsResponse {
   // Pools is the list of pools
-  repeated milkyway.pools.v1.Pool pools = 1 [ (gogoproto.nullable) = false ];
+  repeated milkyway.pools.v1.Pool pools = 1 [(gogoproto.nullable) = false];
 
   // Pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -738,8 +675,7 @@ message QueryDelegatorPoolsResponse {
 // method.
 message QueryDelegatorPoolRequest {
   // DelegatorAddress is the address of the delegator to query
-  string delegator_address = 1
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // PoolId is the ID of the pool to query
   uint32 pool_id = 2;
@@ -749,15 +685,14 @@ message QueryDelegatorPoolRequest {
 // method.
 message QueryDelegatorPoolResponse {
   // Pool is the pool
-  milkyway.pools.v1.Pool pool = 1 [ (gogoproto.nullable) = false ];
+  milkyway.pools.v1.Pool pool = 1 [(gogoproto.nullable) = false];
 }
 
 // QueryDelegatorOperatorsRequest is request type for the
 // Query/DelegatorOperators RPC method.
 message QueryDelegatorOperatorsRequest {
   // DelegatorAddress is the address of the delegator to query
-  string delegator_address = 1
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // Pagination defines an optional pagination for the request.
   cosmos.base.query.v1beta1.PageRequest pagination = 2;
@@ -767,8 +702,7 @@ message QueryDelegatorOperatorsRequest {
 // Query/DelegatorOperators RPC method.
 message QueryDelegatorOperatorsResponse {
   // Operators is the list of operators
-  repeated milkyway.operators.v1.Operator operators = 1
-      [ (gogoproto.nullable) = false ];
+  repeated milkyway.operators.v1.Operator operators = 1 [(gogoproto.nullable) = false];
 
   // Pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -778,8 +712,7 @@ message QueryDelegatorOperatorsResponse {
 // RPC method.
 message QueryDelegatorOperatorRequest {
   // DelegatorAddress is the address of the delegator to query
-  string delegator_address = 1
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // OperatorId is the ID of the operator to query
   uint32 operator_id = 2;
@@ -789,15 +722,14 @@ message QueryDelegatorOperatorRequest {
 // Query/DelegatorOperator RPC method.
 message QueryDelegatorOperatorResponse {
   // Operator is the operator
-  milkyway.operators.v1.Operator operator = 1 [ (gogoproto.nullable) = false ];
+  milkyway.operators.v1.Operator operator = 1 [(gogoproto.nullable) = false];
 }
 
 // QueryDelegatorServicesRequest is request type for the Query/DelegatorServices
 // RPC method.
 message QueryDelegatorServicesRequest {
   // DelegatorAddress is the address of the delegator to query
-  string delegator_address = 1
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // Pagination defines an optional pagination for the request.
   cosmos.base.query.v1beta1.PageRequest pagination = 2;
@@ -807,8 +739,7 @@ message QueryDelegatorServicesRequest {
 // Query/DelegatorServices RPC method.
 message QueryDelegatorServicesResponse {
   // Services is the list of services
-  repeated milkyway.services.v1.Service services = 1
-      [ (gogoproto.nullable) = false ];
+  repeated milkyway.services.v1.Service services = 1 [(gogoproto.nullable) = false];
 
   // Pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -818,8 +749,7 @@ message QueryDelegatorServicesResponse {
 // RPC method.
 message QueryDelegatorServiceRequest {
   // DelegatorAddress is the address of the delegator to query
-  string delegator_address = 1
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // ServiceId is the ID of the service to query
   uint32 service_id = 2;
@@ -829,7 +759,7 @@ message QueryDelegatorServiceRequest {
 // RPC method.
 message QueryDelegatorServiceResponse {
   // Service is the service
-  milkyway.services.v1.Service service = 1 [ (gogoproto.nullable) = false ];
+  milkyway.services.v1.Service service = 1 [(gogoproto.nullable) = false];
 }
 
 // QueryUserPreferences is request type for the Query/UserPreferences RPC
@@ -843,7 +773,7 @@ message QueryUserPreferencesRequest {
 // RPC method.
 message QueryUserPreferencesResponse {
   // Preferences is the user preferences
-  UserPreferences preferences = 1 [ (gogoproto.nullable) = false ];
+  UserPreferences preferences = 1 [(gogoproto.nullable) = false];
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -852,6 +782,8 @@ message QueryParamsRequest {}
 // QueryParamsResponse is response type for the Query/Params RPC method.
 message QueryParamsResponse {
   // params holds all the parameters of this module.
-  Params params = 1
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 }

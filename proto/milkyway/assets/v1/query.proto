@@ -2,9 +2,9 @@ syntax = "proto3";
 package milkyway.assets.v1;
 
 import "amino/amino.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "cosmos/base/query/v1beta1/pagination.proto";
 import "milkyway/assets/v1/models.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/v3/x/assets/types";
@@ -36,8 +36,10 @@ message QueryAssetsRequest {
 // QueryAssetsResponse is the response type for the Query/Assets RPC method.
 message QueryAssetsResponse {
   // Assets represents all the assets registered.
-  repeated Asset assets = 1
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+  repeated Asset assets = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 
   // Pagination defines the pagination in the response.
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -52,5 +54,5 @@ message QueryAssetRequest {
 // QueryAssetResponse is the response type for the Query/Asset RPC method.
 message QueryAssetResponse {
   // Asset is the asset associated with the token denomination.
-  Asset asset = 1 [ (gogoproto.nullable) = false ];
+  Asset asset = 1 [(gogoproto.nullable) = false];
 }

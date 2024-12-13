@@ -2,10 +2,10 @@ syntax = "proto3";
 package milkyway.liquidvesting.v1;
 
 import "amino/amino.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos/base/v1beta1/coin.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "cosmos/base/v1beta1/coin.proto";
-import "cosmos/base/query/v1beta1/pagination.proto";
 import "milkyway/liquidvesting/v1/params.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/v3/x/liquidvesting/types";
@@ -14,33 +14,26 @@ option go_package = "github.com/milkyway-labs/milkyway/v3/x/liquidvesting/types"
 service Query {
   // UserInsuranceFund defines a gRPC query method that returns the user's
   // insurance fund balance given their address.
-  rpc UserInsuranceFund(QueryUserInsuranceFundRequest)
-      returns (QueryUserInsuranceFundResponse) {
-    option (google.api.http).get =
-        "/milkyway/liquidvesting/v1/user_insurance_funds/{user_address}";
+  rpc UserInsuranceFund(QueryUserInsuranceFundRequest) returns (QueryUserInsuranceFundResponse) {
+    option (google.api.http).get = "/milkyway/liquidvesting/v1/user_insurance_funds/{user_address}";
   }
 
   // UserInsuranceFunds defines a gRPC query method that returns all user's
   // insurance fund balance.
-  rpc UserInsuranceFunds(QueryUserInsuranceFundsRequest)
-      returns (QueryUserInsuranceFundsResponse) {
-    option (google.api.http).get =
-        "/milkyway/liquidvesting/v1/user_insurance_funds";
+  rpc UserInsuranceFunds(QueryUserInsuranceFundsRequest) returns (QueryUserInsuranceFundsResponse) {
+    option (google.api.http).get = "/milkyway/liquidvesting/v1/user_insurance_funds";
   }
 
   // UserRestakableAssets defines a gRPC query method that returns
   // the amount of assets that can be restaked from the one minted by this
   // module.
-  rpc UserRestakableAssets(QueryUserRestakableAssetsRequest)
-      returns (QueryUserRestakableAssetsResponse) {
-    option (google.api.http).get =
-        "/milkyway/liquidvesting/v1/user_restakable_assets/{user_address}";
+  rpc UserRestakableAssets(QueryUserRestakableAssetsRequest) returns (QueryUserRestakableAssetsResponse) {
+    option (google.api.http).get = "/milkyway/liquidvesting/v1/user_restakable_assets/{user_address}";
   }
 
   // InsuranceFund defines a gRPC query method that returns the amount of tokens
   // that are in the insurance fund.
-  rpc InsuranceFund(QueryInsuranceFundRequest)
-      returns (QueryInsuranceFundResponse) {
+  rpc InsuranceFund(QueryInsuranceFundRequest) returns (QueryInsuranceFundResponse) {
     option (google.api.http).get = "/milkyway/liquidvesting/v1/insurance_fund";
   }
 
@@ -105,8 +98,10 @@ message UserInsuranceFundData {
 // Query/UserInsuranceFunds RPC method.
 message QueryUserInsuranceFundsResponse {
   // insurance_funds is the list of users insurance funds.
-  repeated UserInsuranceFundData insurance_funds = 1
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+  repeated UserInsuranceFundData insurance_funds = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 
   // Pagination defines the pagination response
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -148,5 +143,5 @@ message QueryParamsRequest {}
 
 // QueryParamsResponse is the response type for the Query/Params RPC method.
 message QueryParamsResponse {
-  Params params = 1 [ (gogoproto.nullable) = false ];
+  Params params = 1 [(gogoproto.nullable) = false];
 }

@@ -1,11 +1,11 @@
 syntax = "proto3";
 package milkyway.liquidvesting.v1;
 
+import "amino/amino.proto";
 import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
-import "amino/amino.proto";
-import "cosmos_proto/cosmos.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/v3/x/liquidvesting/types";
 
@@ -25,8 +25,7 @@ message BurnCoins {
   option (gogoproto.goproto_getters) = false;
 
   // Address of who has delegated the coins.
-  string delegator_address = 1
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string delegator_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // CompletionTime is the unix time for unbonding completion.
   google.protobuf.Timestamp completion_time = 2 [
@@ -44,15 +43,17 @@ message BurnCoins {
 
 // BurnCoinsList represents a list of BurnCoins.
 message BurnCoinsList {
-  repeated BurnCoins data = 1
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+  repeated BurnCoins data = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 }
 
 // UserInsuranceFundEntry represents an entry containing the data of a user
 // insurance fund.
 message UserInsuranceFundEntry {
   // Address of who owns the insurance fund.
-  string user_address = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string user_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // Amount of coins deposited into the user's insurance fund.
   repeated cosmos.base.v1beta1.Coin balance = 2 [

@@ -3,7 +3,6 @@ package milkyway.operators.v1;
 
 import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
-import "google/protobuf/duration.proto";
 import "milkyway/operators/v1/models.proto";
 import "milkyway/operators/v1/params.proto";
 
@@ -12,11 +11,11 @@ option go_package = "github.com/milkyway-labs/milkyway/v3/x/operators/types";
 // GenesisState defines the operators module's genesis state.
 message GenesisState {
   // Params defines the parameters of the module.
-  Params params = 1 [ (gogoproto.nullable) = false ];
+  Params params = 1 [(gogoproto.nullable) = false];
 
   // NextOperatorID defines the ID that will be assigned to the
   // next operator that gets created.
-  uint32 next_operator_id = 2 [ (gogoproto.customname) = "NextOperatorID" ];
+  uint32 next_operator_id = 2 [(gogoproto.customname) = "NextOperatorID"];
 
   // Operators defines the list of operators.
   repeated Operator operators = 3 [
@@ -42,20 +41,22 @@ message GenesisState {
 // unbonded.
 message UnbondingOperator {
   // OperatorID is the ID of the operator that is being unbonded.
-  uint32 operator_id = 1 [ (gogoproto.customname) = "OperatorID" ];
+  uint32 operator_id = 1 [(gogoproto.customname) = "OperatorID"];
 
   // UnbondingCompletionTime is the time at which the unbonding of the operator
   // will be completed
-  google.protobuf.Timestamp unbonding_completion_time = 2
-      [ (gogoproto.stdtime) = true, (gogoproto.nullable) = false ];
+  google.protobuf.Timestamp unbonding_completion_time = 2 [
+    (gogoproto.stdtime) = true,
+    (gogoproto.nullable) = false
+  ];
 }
 
 // OperatorParamsRecord represents the params that have been set for an
 // individual operator.
 message OperatorParamsRecord {
   // OperatorID is the ID of the operator.
-  uint32 operator_id = 1 [ (gogoproto.customname) = "OperatorID" ];
+  uint32 operator_id = 1 [(gogoproto.customname) = "OperatorID"];
 
   // Params defines the parameters for the operators module.
-  OperatorParams params = 2 [ (gogoproto.nullable) = false ];
+  OperatorParams params = 2 [(gogoproto.nullable) = false];
 }

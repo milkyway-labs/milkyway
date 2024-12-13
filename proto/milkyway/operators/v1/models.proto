@@ -1,9 +1,9 @@
 syntax = "proto3";
 package milkyway.operators.v1;
 
-import "gogoproto/gogo.proto";
-import "cosmos_proto/cosmos.proto";
 import "cosmos/base/v1beta1/coin.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/v3/x/operators/types";
 option (gogoproto.goproto_getters_all) = false;
@@ -31,13 +31,13 @@ enum OperatorStatus {
 // Operator defines the fields of an operator
 message Operator {
   // ID is the auto-generated unique identifier for the operator
-  uint32 id = 1 [ (gogoproto.customname) = "ID" ];
+  uint32 id = 1 [(gogoproto.customname) = "ID"];
 
   // Status is the status of the operator
   OperatorStatus status = 2;
 
   // Admin is the address of the user that can manage the operator
-  string admin = 3 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string admin = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // Moniker is the identifier of the operator
   string moniker = 4;
@@ -46,11 +46,11 @@ message Operator {
   string website = 5;
 
   // PictureURL is the URL of the picture of the operator
-  string picture_url = 6 [ (gogoproto.customname) = "PictureURL" ];
+  string picture_url = 6 [(gogoproto.customname) = "PictureURL"];
 
   // Address is the address of the account associated to the operator.
   // This will be used to store tokens that are delegated to this operator.
-  string address = 7 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string address = 7 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // Tokens define the delegated tokens.
   repeated cosmos.base.v1beta1.Coin tokens = 8 [

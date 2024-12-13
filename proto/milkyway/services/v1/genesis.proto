@@ -10,7 +10,7 @@ option go_package = "github.com/milkyway-labs/milkyway/v3/x/services/types";
 // GenesisState defines the services module's genesis state.
 message GenesisState {
   // Params defines the parameters of the module.
-  Params params = 1 [ (gogoproto.nullable) = false ];
+  Params params = 1 [(gogoproto.nullable) = false];
 
   // Services defines the list of services.
   repeated Service services = 2 [
@@ -20,11 +20,10 @@ message GenesisState {
 
   // NextServiceID defines the ID that will be assigned to the
   // next service that gets created.
-  uint32 next_service_id = 3 [ (gogoproto.customname) = "NextServiceID" ];
+  uint32 next_service_id = 3 [(gogoproto.customname) = "NextServiceID"];
 
   // ServicesParams defines the list of service parameters.
-  repeated ServiceParamsRecord services_params = 4
-      [ (gogoproto.nullable) = false ];
+  repeated ServiceParamsRecord services_params = 4 [(gogoproto.nullable) = false];
 }
 
 // ServiceParamsRecord represents the parameters that have been set for
@@ -32,9 +31,9 @@ message GenesisState {
 message ServiceParamsRecord {
   // ServiceID represents the ID of the service to which the parameters
   // should be set.
-  uint32 service_id = 1 [ (gogoproto.customname) = "ServiceID" ];
+  uint32 service_id = 1 [(gogoproto.customname) = "ServiceID"];
 
   // Params represents the parameters that should be set to the
   // service.
-  ServiceParams params = 2 [ (gogoproto.nullable) = false ];
+  ServiceParams params = 2 [(gogoproto.nullable) = false];
 }

@@ -1,8 +1,8 @@
 syntax = "proto3";
 package milkyway.liquidvesting.v1;
 
-import "gogoproto/gogo.proto";
 import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/v3/x/liquidvesting/types";
 
@@ -23,13 +23,11 @@ message Params {
 
   // This value represents the list of users who are authorized to execute the
   // MsgBurnLockedRepresentation.
-  repeated string burners = 2
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  repeated string burners = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // This value represents the list of users who are authorized to execute the
   // MsgMintLockedRepresentation.
-  repeated string minters = 3
-      [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  repeated string minters = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // List of channels from which is allowed to receive deposits to the insurance
   // fund.
