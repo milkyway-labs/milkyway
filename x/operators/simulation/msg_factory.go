@@ -10,9 +10,9 @@ import (
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 
-	"github.com/milkyway-labs/milkyway/v6/testutils/simtesting"
-	"github.com/milkyway-labs/milkyway/v6/x/operators/keeper"
-	"github.com/milkyway-labs/milkyway/v6/x/operators/types"
+	"github.com/milkyway-labs/milkyway/v7/testutils/simtesting"
+	"github.com/milkyway-labs/milkyway/v7/x/operators/keeper"
+	"github.com/milkyway-labs/milkyway/v7/x/operators/types"
 )
 
 // Simulation operation weights constants

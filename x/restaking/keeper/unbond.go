@@ -9,11 +9,11 @@ import (
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v6/utils"
-	operatorstypes "github.com/milkyway-labs/milkyway/v6/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v6/x/pools/types"
-	"github.com/milkyway-labs/milkyway/v6/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v6/x/services/types"
+	"github.com/milkyway-labs/milkyway/v7/utils"
+	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v7/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
 )
 
 // IncrementUnbondingID increments and returns a unique ID for an unbonding operation

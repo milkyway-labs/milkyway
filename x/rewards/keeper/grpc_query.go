@@ -10,8 +10,8 @@ import (
 	"cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/types/query"
 
-	restakingtypes "github.com/milkyway-labs/milkyway/v6/x/restaking/types"
-	"github.com/milkyway-labs/milkyway/v6/x/rewards/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v7/x/rewards/types"
 )
 
 var _ types.QueryServer = queryServer{}

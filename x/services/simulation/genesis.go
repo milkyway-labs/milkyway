@@ -3,7 +3,7 @@ package simulation
 import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milkyway/v6/x/services/types"
+	"github.com/milkyway-labs/milkyway/v7/x/services/types"
 )
 
 // RandomizedGenState generates a random GenesisState for the services module

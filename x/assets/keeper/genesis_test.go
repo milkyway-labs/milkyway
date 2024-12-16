@@ -3,7 +3,7 @@ package keeper_test
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v6/x/assets/types"
+	"github.com/milkyway-labs/milkyway/v7/x/assets/types"
 )
 
 func (suite *KeeperTestSuite) TestExportGenesis() {

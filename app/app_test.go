@@ -7,9 +7,9 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/stretchr/testify/require"
 
-	milkyway "github.com/milkyway-labs/milkyway/v6/app"
-	milkywayhelpers "github.com/milkyway-labs/milkyway/v6/app/helpers"
-	liquidvestingtypes "github.com/milkyway-labs/milkyway/v6/x/liquidvesting/types"
+	milkyway "github.com/milkyway-labs/milkyway/v7/app"
+	milkywayhelpers "github.com/milkyway-labs/milkyway/v7/app/helpers"
+	liquidvestingtypes "github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
 )
 
 func TestMilkyWayApp_BlockedModuleAccountAddrs(t *testing.T) {

@@ -3,11 +3,11 @@ package keeper_test
 import (
 	"time"
 
-	"github.com/milkyway-labs/milkyway/v6/app/testutil"
-	"github.com/milkyway-labs/milkyway/v6/utils"
-	restakingtypes "github.com/milkyway-labs/milkyway/v6/x/restaking/types"
-	"github.com/milkyway-labs/milkyway/v6/x/rewards/keeper"
-	"github.com/milkyway-labs/milkyway/v6/x/rewards/types"
+	"github.com/milkyway-labs/milkyway/v7/app/testutil"
+	"github.com/milkyway-labs/milkyway/v7/utils"
+	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v7/x/rewards/keeper"
+	"github.com/milkyway-labs/milkyway/v7/x/rewards/types"
 )
 
 func (suite *KeeperTestSuite) TestAllocateRewards_InactivePlan() {

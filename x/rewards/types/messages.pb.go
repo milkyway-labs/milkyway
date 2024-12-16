@@ -15,7 +15,7 @@ import (
 	grpc1 "github.com/cosmos/gogoproto/grpc"
 	proto "github.com/cosmos/gogoproto/proto"
 	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
-	types1 "github.com/milkyway-labs/milkyway/v6/x/restaking/types"
+	types1 "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"

@@ -4,7 +4,7 @@ import (
 	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v6/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v7/x/pools/types"
 )
 
 func (suite *KeeperTestSuite) TestKeeper_SetNextPoolID() {

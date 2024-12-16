@@ -12,8 +12,8 @@ import (
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v6/utils"
-	"github.com/milkyway-labs/milkyway/v6/x/rewards/types"
+	"github.com/milkyway-labs/milkyway/v7/utils"
+	"github.com/milkyway-labs/milkyway/v7/x/rewards/types"
 )
 
 func TestRewardsPlan_Validate(t *testing.T) {

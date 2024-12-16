@@ -7,7 +7,7 @@ import "google/api/annotations.proto";
 import "milkyway/services/v1/models.proto";
 import "milkyway/services/v1/params.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v6/x/services/types";
+option go_package = "github.com/milkyway-labs/milkyway/v7/x/services/types";
 
 // Query defines the gRPC querier service.
 service Query {

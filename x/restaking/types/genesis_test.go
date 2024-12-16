@@ -8,7 +8,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/v6/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v7/x/restaking/types"
 )
 
 func TestGenesis_Validate(t *testing.T) {

@@ -3,7 +3,7 @@ package keeper
 import (
 	"context"
 
-	restakingtypes "github.com/milkyway-labs/milkyway/v6/x/restaking/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
 )
 
 // AfterUserTrustedServiceUpdated is called after a user's trust in a service is

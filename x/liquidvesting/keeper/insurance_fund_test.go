@@ -4,10 +4,10 @@ import (
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v6/x/liquidvesting/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v6/x/pools/types"
-	restakingkeeper "github.com/milkyway-labs/milkyway/v6/x/restaking/keeper"
-	restakingtypes "github.com/milkyway-labs/milkyway/v6/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
+	restakingkeeper "github.com/milkyway-labs/milkyway/v7/x/restaking/keeper"
+	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
 )
 
 func (suite *KeeperTestSuite) TestKeeper_AddToInsuranceFund() {
