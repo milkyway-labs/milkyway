@@ -5,7 +5,7 @@ import (
 
 	"cosmossdk.io/collections"
 
-	"github.com/milkyway-labs/milkyway/v6/x/assets/types"
+	"github.com/milkyway-labs/milkyway/v7/x/assets/types"
 )
 
 // SetAsset stores an asset in the store

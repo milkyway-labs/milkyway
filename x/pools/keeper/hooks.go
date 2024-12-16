@@ -3,7 +3,7 @@ package keeper
 import (
 	"context"
 
-	"github.com/milkyway-labs/milkyway/v6/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v7/x/pools/types"
 )
 
 var _ types.PoolsHooks = &Keeper{}

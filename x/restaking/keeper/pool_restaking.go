@@ -7,8 +7,8 @@ import (
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	poolstypes "github.com/milkyway-labs/milkyway/v6/x/pools/types"
-	"github.com/milkyway-labs/milkyway/v6/x/restaking/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v7/x/restaking/types"
 )
 
 // GetPoolDelegation retrieves the delegation for the given user and pool

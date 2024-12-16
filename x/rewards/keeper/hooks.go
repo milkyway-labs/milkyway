@@ -7,8 +7,8 @@ import (
 	"cosmossdk.io/collections"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	restakingtypes "github.com/milkyway-labs/milkyway/v6/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v6/x/services/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
 )
 
 // AfterDelegationTargetCreated is called after a delegation target is created

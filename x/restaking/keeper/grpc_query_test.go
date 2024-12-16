@@ -7,11 +7,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/v6/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v6/x/pools/types"
-	"github.com/milkyway-labs/milkyway/v6/x/restaking/keeper"
-	"github.com/milkyway-labs/milkyway/v6/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v6/x/services/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v7/x/restaking/keeper"
+	"github.com/milkyway-labs/milkyway/v7/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
 )
 
 func (suite *KeeperTestSuite) TestQuerier_OperatorJoinedServices() {

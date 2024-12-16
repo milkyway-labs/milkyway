@@ -5,7 +5,7 @@ import "gogoproto/gogo.proto";
 import "milkyway/liquidvesting/v1/models.proto";
 import "milkyway/liquidvesting/v1/params.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v6/x/liquidvesting/types";
+option go_package = "github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types";
 
 // GenesisState defines the liquidvesting module's genesis state.
 message GenesisState {

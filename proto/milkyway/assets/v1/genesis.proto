@@ -5,7 +5,7 @@ import "amino/amino.proto";
 import "gogoproto/gogo.proto";
 import "milkyway/assets/v1/models.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v6/x/assets/types";
+option go_package = "github.com/milkyway-labs/milkyway/v7/x/assets/types";
 
 // GenesisState defines the module's genesis state.
 message GenesisState {

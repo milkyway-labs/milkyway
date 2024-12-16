@@ -10,7 +10,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/version"
 	"github.com/spf13/cobra"
 
-	"github.com/milkyway-labs/milkyway/v6/x/services/types"
+	"github.com/milkyway-labs/milkyway/v7/x/services/types"
 )
 
 // GetTxCmd returns a new command to perform services transactions

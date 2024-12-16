@@ -64,18 +64,24 @@ import (
 	feemarketkeeper "github.com/skip-mev/feemarket/x/feemarket/keeper"
 	"github.com/spf13/cast"
 
-	milkywayante "github.com/milkyway-labs/milkyway/v6/ante"
-	milkywayabci "github.com/milkyway-labs/milkyway/v6/app/abci"
-	"github.com/milkyway-labs/milkyway/v6/app/keepers"
-	"github.com/milkyway-labs/milkyway/v6/app/upgrades"
-	v6 "github.com/milkyway-labs/milkyway/v6/app/upgrades/v6"
-	_ "github.com/milkyway-labs/milkyway/v6/client/docs/statik"
-	liquidvestingtypes "github.com/milkyway-labs/milkyway/v6/x/liquidvesting/types"
+	milkywayante "github.com/milkyway-labs/milkyway/v7/ante"
+	milkywayabci "github.com/milkyway-labs/milkyway/v7/app/abci"
+	"github.com/milkyway-labs/milkyway/v7/app/forks"
+	v7 "github.com/milkyway-labs/milkyway/v7/app/forks/v7"
+	"github.com/milkyway-labs/milkyway/v7/app/keepers"
+	"github.com/milkyway-labs/milkyway/v7/app/upgrades"
+	v6 "github.com/milkyway-labs/milkyway/v7/app/upgrades/v6"
+	_ "github.com/milkyway-labs/milkyway/v7/client/docs/statik"
+	liquidvestingtypes "github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
 )
 
 var (
 	// DefaultNodeHome default home directories for the application daemon
 	DefaultNodeHome string
+
+	Forks = []forks.Fork{
+		v7.Fork,
+	}
 
 	Upgrades = []upgrades.Upgrade{
 		v6.Upgrade,
@@ -354,6 +360,7 @@ func NewMilkyWayApp(
 
 	app.setupUpgradeHandlers()
 	app.setupUpgradeStoreLoaders()
+	app.setupForksPreBlockers()
 
 	// At startup, after all modules have been registered, check that all prot
 	// annotations are correct.
@@ -544,6 +551,18 @@ func (app *MilkyWayApp) setupUpgradeHandlers() {
 				&app.AppKeepers,
 			),
 		)
+	}
+}
+
+func (app *MilkyWayApp) setupForksPreBlockers() {
+	for _, fork := range Forks {
+		currentPreBlocker := app.PreBlocker()
+		app.SetPreBlocker(func(ctx sdk.Context, req *abci.RequestFinalizeBlock) (*sdk.ResponsePreBlock, error) {
+			if req.Height == fork.ForkHeight {
+				fork.BeginForkLogic(ctx, &app.AppKeepers)
+			}
+			return currentPreBlocker(ctx, req)
+		})
 	}
 }
 

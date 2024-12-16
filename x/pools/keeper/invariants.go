@@ -5,8 +5,8 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v6/utils"
-	"github.com/milkyway-labs/milkyway/v6/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v7/utils"
+	"github.com/milkyway-labs/milkyway/v7/x/pools/types"
 )
 
 // RegisterInvariants registers all pools module invariants

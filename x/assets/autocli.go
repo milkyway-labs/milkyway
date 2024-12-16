@@ -6,7 +6,7 @@ import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 	"github.com/cosmos/cosmos-sdk/version"
 
-	assetsv1 "github.com/milkyway-labs/milkyway/v6/api/milkyway/assets/v1"
+	assetsv1 "github.com/milkyway-labs/milkyway/v7/api/milkyway/assets/v1"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.
