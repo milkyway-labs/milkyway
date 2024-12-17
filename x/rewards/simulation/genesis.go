@@ -40,7 +40,11 @@ func RandomizedGenState(simState *module.SimulationState) {
 		types.NewDelegationTypeRecords(nil, nil, nil, nil),
 		types.NewDelegationTypeRecords(nil, nil, nil, nil),
 		types.NewDelegationTypeRecords(nil, nil, nil, nil),
-		RandomOperatorAccumulatedCommissionRecords(simState.Rand, operatorsGenesis.Operators, []string{simState.BondDenom}),
+
+		// Empty accumulated commissions since we need to perform side effects on
+		// other modules to have valid commissions
+		nil,
+
 		RandomPoolServiceTotalDelegatorShares(simState.Rand, poolsGenesis, servicesGenesis, []string{simState.BondDenom}),
 	)
 	simState.GenState[types.ModuleName] = simState.Cdc.MustMarshalJSON(genesis)
