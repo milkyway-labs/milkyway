@@ -32,7 +32,7 @@ func CreateUpgradeHandler(
 		}
 
 		for ticker, market := range markets {
-			if strings.EqualFold(ticker, "TIA/USD") {
+			if strings.Contains(ticker, "TIA") {
 				continue
 			}
 
