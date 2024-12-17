@@ -148,7 +148,8 @@ func setup() (*milkyway.MilkyWayApp, milkyway.GenesisState) {
 		appOptions,
 		emptyWasmOpts,
 	)
-	return milkyWayApp, milkyWayApp.ModuleBasics.DefaultGenesis(milkyWayApp.AppCodec())
+
+	return milkyWayApp, milkyway.NewDefaultGenesisState(milkyWayApp.AppCodec(), milkyWayApp.ModuleBasics)
 }
 
 func genesisStateWithValSet(t *testing.T,
