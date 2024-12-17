@@ -8,7 +8,7 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "milkyway/liquidvesting/v1/params.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v3/x/liquidvesting/types";
+option go_package = "github.com/milkyway-labs/milkyway/v4/x/liquidvesting/types";
 
 // Query defines the gRPC querier service.
 service Query {

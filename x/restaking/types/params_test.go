@@ -7,7 +7,7 @@ import (
 	"cosmossdk.io/math"
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/v3/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v4/x/restaking/types"
 )
 
 func TestParams_Validate(t *testing.T) {

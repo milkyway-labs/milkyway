@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	govv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 
-	milkywayerrors "github.com/milkyway-labs/milkyway/v3/types/errors"
+	milkywayerrors "github.com/milkyway-labs/milkyway/v4/types/errors"
 )
 
 var expeditedPropDecoratorEnabled = true

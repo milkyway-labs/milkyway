@@ -64,14 +64,14 @@ import (
 	feemarketkeeper "github.com/skip-mev/feemarket/x/feemarket/keeper"
 	"github.com/spf13/cast"
 
-	milkywayante "github.com/milkyway-labs/milkyway/v3/ante"
-	milkywayabci "github.com/milkyway-labs/milkyway/v3/app/abci"
-	"github.com/milkyway-labs/milkyway/v3/app/keepers"
-	"github.com/milkyway-labs/milkyway/v3/app/upgrades"
-	v3 "github.com/milkyway-labs/milkyway/v3/app/upgrades/v3"
-	v4 "github.com/milkyway-labs/milkyway/v3/app/upgrades/v4"
-	_ "github.com/milkyway-labs/milkyway/v3/client/docs/statik"
-	liquidvestingtypes "github.com/milkyway-labs/milkyway/v3/x/liquidvesting/types"
+	milkywayante "github.com/milkyway-labs/milkyway/v4/ante"
+	milkywayabci "github.com/milkyway-labs/milkyway/v4/app/abci"
+	"github.com/milkyway-labs/milkyway/v4/app/keepers"
+	"github.com/milkyway-labs/milkyway/v4/app/upgrades"
+	v3 "github.com/milkyway-labs/milkyway/v4/app/upgrades/v3"
+	v4 "github.com/milkyway-labs/milkyway/v4/app/upgrades/v4"
+	_ "github.com/milkyway-labs/milkyway/v4/client/docs/statik"
+	liquidvestingtypes "github.com/milkyway-labs/milkyway/v4/x/liquidvesting/types"
 )
 
 var (

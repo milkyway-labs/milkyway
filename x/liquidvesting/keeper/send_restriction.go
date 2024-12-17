@@ -6,7 +6,7 @@ import (
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v3/x/liquidvesting/types"
+	"github.com/milkyway-labs/milkyway/v4/x/liquidvesting/types"
 )
 
 // SendRestrictionFn function that can be used in the x/bank module to block the

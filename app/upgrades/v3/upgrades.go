@@ -9,12 +9,12 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milkyway/v3/app/keepers"
-	"github.com/milkyway-labs/milkyway/v3/utils"
-	operatorskeeper "github.com/milkyway-labs/milkyway/v3/x/operators/keeper"
-	restakingkeeper "github.com/milkyway-labs/milkyway/v3/x/restaking/keeper"
-	rewardskeeper "github.com/milkyway-labs/milkyway/v3/x/rewards/keeper"
-	serviceskeeper "github.com/milkyway-labs/milkyway/v3/x/services/keeper"
+	"github.com/milkyway-labs/milkyway/v4/app/keepers"
+	"github.com/milkyway-labs/milkyway/v4/utils"
+	operatorskeeper "github.com/milkyway-labs/milkyway/v4/x/operators/keeper"
+	restakingkeeper "github.com/milkyway-labs/milkyway/v4/x/restaking/keeper"
+	rewardskeeper "github.com/milkyway-labs/milkyway/v4/x/rewards/keeper"
+	serviceskeeper "github.com/milkyway-labs/milkyway/v4/x/services/keeper"
 )
 
 func CreateUpgradeHandler(

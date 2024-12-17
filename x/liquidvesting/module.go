@@ -13,8 +13,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 
-	"github.com/milkyway-labs/milkyway/v3/x/liquidvesting/keeper"
-	"github.com/milkyway-labs/milkyway/v3/x/liquidvesting/types"
+	"github.com/milkyway-labs/milkyway/v4/x/liquidvesting/keeper"
+	"github.com/milkyway-labs/milkyway/v4/x/liquidvesting/types"
 )
 
 const (

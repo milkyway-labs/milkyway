@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/milkyway-labs/milkyway/v3/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v4/x/pools/types"
 )
 
 // SetNextPoolID sets the next pool ID to be used when registering a new Pool

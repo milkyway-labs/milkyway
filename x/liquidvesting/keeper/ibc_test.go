@@ -6,7 +6,7 @@ import (
 
 	sdkmath "cosmossdk.io/math"
 
-	"github.com/milkyway-labs/milkyway/v3/x/liquidvesting/types"
+	"github.com/milkyway-labs/milkyway/v4/x/liquidvesting/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"

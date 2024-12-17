@@ -8,7 +8,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/v3/x/operators/types"
+	"github.com/milkyway-labs/milkyway/v4/x/operators/types"
 )
 
 func TestParams_Validate(t *testing.T) {

@@ -3,7 +3,7 @@ package testutils
 import (
 	"context"
 
-	"github.com/milkyway-labs/milkyway/v3/x/services/types"
+	"github.com/milkyway-labs/milkyway/v4/x/services/types"
 )
 
 var _ types.ServicesHooks = &MockHooks{}

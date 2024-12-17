@@ -3,7 +3,7 @@ package simulation
 import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milkyway/v3/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v4/x/pools/types"
 )
 
 // GetGenesisState returns the pools genesis state from the SimulationState

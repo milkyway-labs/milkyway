@@ -3,7 +3,7 @@ package keeper
 import (
 	"context"
 
-	"github.com/milkyway-labs/milkyway/v3/x/operators/types"
+	"github.com/milkyway-labs/milkyway/v4/x/operators/types"
 )
 
 var _ types.OperatorsHooks = &Keeper{}

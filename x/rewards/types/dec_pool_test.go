@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/milkyway-labs/milkyway/v3/x/rewards/types"
+	"github.com/milkyway-labs/milkyway/v4/x/rewards/types"
 )
 
 type decpoolTestSuite struct {

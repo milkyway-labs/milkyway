@@ -3,7 +3,7 @@ package types
 import (
 	"fmt"
 
-	"github.com/milkyway-labs/milkyway/v3/utils"
+	"github.com/milkyway-labs/milkyway/v4/utils"
 )
 
 // NewGenesisState returns a new GenesisState instance

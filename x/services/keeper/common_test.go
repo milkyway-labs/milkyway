@@ -10,8 +10,8 @@ import (
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/milkyway-labs/milkyway/v3/x/services/keeper"
-	"github.com/milkyway-labs/milkyway/v3/x/services/testutils"
+	"github.com/milkyway-labs/milkyway/v4/x/services/keeper"
+	"github.com/milkyway-labs/milkyway/v4/x/services/testutils"
 )
 
 func TestKeeperTestSuite(t *testing.T) {

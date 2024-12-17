@@ -3,8 +3,8 @@ package keeper_test
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	restakingkeeper "github.com/milkyway-labs/milkyway/v3/x/restaking/keeper"
-	restakingtypes "github.com/milkyway-labs/milkyway/v3/x/restaking/types"
+	restakingkeeper "github.com/milkyway-labs/milkyway/v4/x/restaking/keeper"
+	restakingtypes "github.com/milkyway-labs/milkyway/v4/x/restaking/types"
 )
 
 func (suite *KeeperTestSuite) TestRestakeRestriction_TestPoolRestaking() {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/milkyway-labs/milkyway/v3/utils"
+	"github.com/milkyway-labs/milkyway/v4/utils"
 )
 
 func NewGenesisState(

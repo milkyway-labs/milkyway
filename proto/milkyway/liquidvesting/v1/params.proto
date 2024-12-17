@@ -4,7 +4,7 @@ package milkyway.liquidvesting.v1;
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v3/x/liquidvesting/types";
+option go_package = "github.com/milkyway-labs/milkyway/v4/x/liquidvesting/types";
 
 // Params defines the parameters for the module.
 message Params {
