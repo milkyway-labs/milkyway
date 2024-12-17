@@ -66,6 +66,8 @@ import (
 
 	milkywayante "github.com/milkyway-labs/milkyway/v3/ante"
 	milkywayabci "github.com/milkyway-labs/milkyway/v3/app/abci"
+	"github.com/milkyway-labs/milkyway/v3/app/forks"
+	ceers2112 "github.com/milkyway-labs/milkyway/v3/app/forks/ceers-2112"
 	"github.com/milkyway-labs/milkyway/v3/app/keepers"
 	"github.com/milkyway-labs/milkyway/v3/app/upgrades"
 	v3 "github.com/milkyway-labs/milkyway/v3/app/upgrades/v3"
@@ -76,6 +78,10 @@ import (
 var (
 	// DefaultNodeHome default home directories for the application daemon
 	DefaultNodeHome string
+
+	Forks = []forks.Fork{
+		ceers2112.Fork,
+	}
 
 	Upgrades = []upgrades.Upgrade{
 		v3.Upgrade,
@@ -354,6 +360,7 @@ func NewMilkyWayApp(
 
 	app.setupUpgradeHandlers()
 	app.setupUpgradeStoreLoaders()
+	app.setupForksPreBlockers()
 
 	// At startup, after all modules have been registered, check that all prot
 	// annotations are correct.
@@ -544,6 +551,18 @@ func (app *MilkyWayApp) setupUpgradeHandlers() {
 				&app.AppKeepers,
 			),
 		)
+	}
+}
+
+func (app *MilkyWayApp) setupForksPreBlockers() {
+	for _, fork := range Forks {
+		currentPreBlocker := app.PreBlocker()
+		app.SetPreBlocker(func(ctx sdk.Context, req *abci.RequestFinalizeBlock) (*sdk.ResponsePreBlock, error) {
+			if req.Height == fork.ForkHeight {
+				fork.BeginForkLogic(ctx, &app.AppKeepers)
+			}
+			return currentPreBlocker(ctx, req)
+		})
 	}
 }
 
