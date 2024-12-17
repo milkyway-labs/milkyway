@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 -->
 
+## Version 4.0.0
+### Features
+- ([\#222](https://github.com/milkyway-labs/milkyway/pull/222)) Added `v4` upgrade handler
+
+### Dependencies
+- ([\#221](https://github.com/milkyway-labs/milkyway/pull/221)) Updated `github.com/cosmos/cosmos-sdk` to `v0.50.11`
+
 ## Version 3.0.0
 ### Features
 #### Liquid Vesting

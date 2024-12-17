@@ -1,6 +1,0 @@
-type: refactor
-module: none
-pull_request: 208
-description: Apply Cosmos SDK v0.50 conventions
-backward_compatible: true
-date: 2024-12-10T08:38:13.018999Z

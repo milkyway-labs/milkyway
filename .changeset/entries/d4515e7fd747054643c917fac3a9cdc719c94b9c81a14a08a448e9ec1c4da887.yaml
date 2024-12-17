@@ -1,6 +1,0 @@
-type: deps
-module: none
-pull_request: 221
-description: Updated `github.com/cosmos/cosmos-sdk` to `v0.50.11`
-backward_compatible: false
-date: 2024-12-17T00:59:04.783742663Z
