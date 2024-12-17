@@ -10,6 +10,8 @@ option go_package = "github.com/milkyway-labs/milkyway/v3/x/assets/types";
 // GenesisState defines the module's genesis state.
 message GenesisState {
   // Assets defines the registered assets.
-  repeated Asset assets = 1
-      [ (gogoproto.nullable) = false, (amino.dont_omitempty) = true ];
+  repeated Asset assets = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
 }

@@ -1,9 +1,9 @@
 syntax = "proto3";
 package milkyway.pools.v1;
 
+import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "cosmos/base/query/v1beta1/pagination.proto";
 import "milkyway/pools/v1/models.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/v3/x/pools/types";
@@ -44,7 +44,7 @@ message QueryPoolByDenomRequest {
 // Query/PoolByDenom RPC methods.
 message QueryPoolResponse {
   // Pool is the queried pool
-  Pool pool = 1 [ (gogoproto.nullable) = false ];
+  Pool pool = 1 [(gogoproto.nullable) = false];
 }
 
 // QueryPoolsRequest is the request type for the Query/Pools RPC method.
@@ -55,7 +55,7 @@ message QueryPoolsRequest {
 // QueryPoolsResponse is the response type for the Query/Pools RPC method.
 message QueryPoolsResponse {
   // Pools is the list of pool
-  repeated Pool pools = 1 [ (gogoproto.nullable) = false ];
+  repeated Pool pools = 1 [(gogoproto.nullable) = false];
 
   // Pagination defines the pagination response
   cosmos.base.query.v1beta1.PageResponse pagination = 2;

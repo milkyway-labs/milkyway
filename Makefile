@@ -184,7 +184,11 @@ update-swagger-docs: statik
 ###                                Protobuf                                 ###
 ###############################################################################
 
-protoVer=0.14.0
+bufVer=1.47.2
+bufImageName=bufbuild/buf:$(bufVer)
+bufImage=$(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace $(bufImageName)
+
+protoVer=0.15.2
 protoImageName=ghcr.io/cosmos/proto-builder:$(protoVer)
 protoImage=$(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace $(protoImageName)
 
@@ -204,10 +208,10 @@ proto-pulsar-gen:
 	@$(protoImage) sh ./scripts/protocgen-pulsar.sh
 
 proto-format:
-	@$(protoImage) find ./ -name "*.proto" -exec clang-format -i {} \;
+	@$(bufImage) format -w
 
 proto-lint:
-	@$(protoImage) buf lint --error-format=json ./proto
+	@$(bufImage) lint --error-format=json ./proto
 
 proto-check-breaking:
 	@$(protoImage) buf breaking --against $(HTTPS_GIT)#branch=main
@@ -293,10 +297,10 @@ endif
 ###                                Benchmark                                ###
 ###############################################################################
 
-becnchstat_cmd=golang.org/x/perf/cmd/benchstat
+benchstat_cmd=golang.org/x/perf/cmd/benchstat
 benchmark:
 	@go test -mod=readonly -bench=. -count=$(BENCH_COUNT) -run=^a  ./... > bench-$(REF_NAME).txt
-	@test -e bench-master.txt && go run $(becnchstat_cmd) bench-master.txt bench-$(REF_NAME).txt || go run $(becnchstat_cmd) bench-$(REF_NAME).txt
+	@test -e bench-master.txt && go run $(benchstat_cmd) bench-master.txt bench-$(REF_NAME).txt || go run $(benchstat_cmd) bench-$(REF_NAME).txt
 .PHONY: benchmark
 
 ###############################################################################

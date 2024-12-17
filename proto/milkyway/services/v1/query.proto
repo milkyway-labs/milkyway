@@ -1,9 +1,9 @@
 syntax = "proto3";
 package milkyway.services.v1;
 
+import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "cosmos/base/query/v1beta1/pagination.proto";
 import "milkyway/services/v1/models.proto";
 import "milkyway/services/v1/params.proto";
 
@@ -14,8 +14,7 @@ service Query {
   // Service defines a gRPC query method that returns the service by the given
   // service id.
   rpc Service(QueryServiceRequest) returns (QueryServiceResponse) {
-    option (google.api.http).get =
-        "/milkyway/services/v1/services/{service_id}";
+    option (google.api.http).get = "/milkyway/services/v1/services/{service_id}";
   }
 
   // Services defines a gRPC query method that returns the actively validates
@@ -26,10 +25,8 @@ service Query {
 
   // ServiceParams defines a gRPC query method that returns the parameters of
   // service.
-  rpc ServiceParams(QueryServiceParamsRequest)
-      returns (QueryServiceParamsResponse) {
-    option (google.api.http).get =
-        "/milkyway/services/v1/services/{service_id}/params";
+  rpc ServiceParams(QueryServiceParamsRequest) returns (QueryServiceParamsResponse) {
+    option (google.api.http).get = "/milkyway/services/v1/services/{service_id}/params";
   }
 
   // Params defines a gRPC query method that returns the parameters of the
@@ -44,7 +41,7 @@ message QueryParamsRequest {}
 
 // QueryParamsResponse is the response type for the Query/Params RPC method.
 message QueryParamsResponse {
-  Params params = 1 [ (gogoproto.nullable) = false ];
+  Params params = 1 [(gogoproto.nullable) = false];
 }
 
 // QueryServicesRequest is the request type for the Query/Services RPC method.
@@ -55,7 +52,7 @@ message QueryServicesRequest {
 // QueryServicesResponse is the response type for the Query/Services RPC method.
 message QueryServicesResponse {
   // Services services defines the list of actively validates services
-  repeated Service services = 1 [ (gogoproto.nullable) = false ];
+  repeated Service services = 1 [(gogoproto.nullable) = false];
 
   // Pagination defines the pagination response
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
@@ -69,15 +66,17 @@ message QueryServiceRequest {
 
 // QueryServiceResponse is the response type for the Query/Service RPC method.
 message QueryServiceResponse {
-  Service service = 1 [ (gogoproto.nullable) = false ];
+  Service service = 1 [(gogoproto.nullable) = false];
 }
 
 // QueryServiceParamsRequest is the request type for the Query/ServiceParams RPC
 // method.
-message QueryServiceParamsRequest { uint32 service_id = 1; }
+message QueryServiceParamsRequest {
+  uint32 service_id = 1;
+}
 
 // QueryServiceParamsResponse is the response type for the Query/ServiceParams
 // RPC method.
 message QueryServiceParamsResponse {
-  ServiceParams service_params = 1 [ (gogoproto.nullable) = false ];
+  ServiceParams service_params = 1 [(gogoproto.nullable) = false];
 }

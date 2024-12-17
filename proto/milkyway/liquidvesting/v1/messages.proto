@@ -2,9 +2,9 @@ syntax = "proto3";
 package milkyway.liquidvesting.v1;
 
 import "amino/amino.proto";
-import "cosmos_proto/cosmos.proto";
-import "cosmos/msg/v1/msg.proto";
 import "cosmos/base/v1beta1/coin.proto";
+import "cosmos/msg/v1/msg.proto";
+import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "milkyway/liquidvesting/v1/params.proto";
 
@@ -16,13 +16,11 @@ service Msg {
 
   // MintLockedRepresentation defines the operation to mint a user's staked
   // locked tokens representation that can be used in the liquid vesting module.
-  rpc MintLockedRepresentation(MsgMintLockedRepresentation)
-      returns (MsgMintLockedRepresentationResponse);
+  rpc MintLockedRepresentation(MsgMintLockedRepresentation) returns (MsgMintLockedRepresentationResponse);
 
   // BurnLockedRepresentation defines the operation to burn a user's staked
   // locked tokens representation.
-  rpc BurnLockedRepresentation(MsgBurnLockedRepresentation)
-      returns (MsgBurnLockedRepresentationResponse);
+  rpc BurnLockedRepresentation(MsgBurnLockedRepresentation) returns (MsgBurnLockedRepresentationResponse);
 
   // WithdrawInsuranceFund defines the operation to withdraw an amount
   // of tokens from the user's insurance fund.
@@ -30,8 +28,7 @@ service Msg {
   // some of their staking representations have been burned or if the
   // balance in the insurance fund is more than the required to cover all
   // their staking representations.
-  rpc WithdrawInsuranceFund(MsgWithdrawInsuranceFund)
-      returns (MsgWithdrawInsuranceFundResponse);
+  rpc WithdrawInsuranceFund(MsgWithdrawInsuranceFund) returns (MsgWithdrawInsuranceFundResponse);
 
   // UpdateParams defines a (governance) operation for updating the module
   // parameters.
@@ -48,10 +45,10 @@ message MsgMintLockedRepresentation {
   option (amino.name) = "milkyway/MsgMintLockedRepresentation";
 
   // User that want to trigger the tokens mint.
-  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // User that will receive the minted tokens.
-  string receiver = 2 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string receiver = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // The amount of tokens that will be minted
   repeated cosmos.base.v1beta1.Coin amount = 3 [
@@ -73,10 +70,10 @@ message MsgBurnLockedRepresentation {
   option (amino.name) = "milkyway/MsgBurnLockedRepresentation";
 
   // User that want to trigger the tokens burn.
-  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // User from which we want to burn the tokens.
-  string user = 2 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string user = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // The amount of tokens that will be burned from the user's balance.
   repeated cosmos.base.v1beta1.Coin amount = 3 [
@@ -97,7 +94,7 @@ message MsgWithdrawInsuranceFund {
   option (amino.name) = "milkyway/MsgWithdrawInsuranceFund";
 
   // User that want to withdraw the tokens.
-  string sender = 1 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
+  string sender = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // The amount of tokens that will be withdrawn from the user's insurance fund.
   repeated cosmos.base.v1beta1.Coin amount = 2 [
@@ -107,6 +104,7 @@ message MsgWithdrawInsuranceFund {
   ];
 }
 
+// MsgWithdrawInsuranceFundResponse is the return value of MsgWithdrawInsuranceFund.
 message MsgWithdrawInsuranceFundResponse {}
 
 // MsgUpdateParams defines the message structure for the UpdateParams gRPC
@@ -125,7 +123,7 @@ message MsgUpdateParams {
   // Params define the parameters to update.
   //
   // NOTE: All parameters must be supplied.
-  Params params = 2 [ (gogoproto.nullable) = false ];
+  Params params = 2 [(gogoproto.nullable) = false];
 }
 
 // MsgUpdateParamsResponse is the return value of MsgUpdateParams.

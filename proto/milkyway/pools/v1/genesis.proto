@@ -15,6 +15,8 @@ message GenesisState {
   ];
 
   // Pools defines the list of pools.
-  repeated Pool pools = 2
-      [ (gogoproto.moretags) = "yaml:\"pools\"", (gogoproto.nullable) = false ];
+  repeated Pool pools = 2 [
+    (gogoproto.moretags) = "yaml:\"pools\"",
+    (gogoproto.nullable) = false
+  ];
 }
