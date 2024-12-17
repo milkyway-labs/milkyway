@@ -2,6 +2,8 @@ package v4
 
 import (
 	"context"
+	"maps"
+	"slices"
 	"strings"
 
 	upgradetypes "cosmossdk.io/x/upgrade/types"
@@ -31,7 +33,9 @@ func CreateUpgradeHandler(
 			return nil, err
 		}
 
-		for ticker, market := range markets {
+		for _, ticker := range slices.Sorted(maps.Keys(markets)) {
+			market := markets[ticker]
+
 			if strings.Contains(ticker, "TIA") {
 				continue
 			}
