@@ -1,4 +1,4 @@
-package v5
+package v6
 
 import (
 	"context"
@@ -11,6 +11,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 
 	"github.com/milkyway-labs/milkyway/v6/app/keepers"
+	liquidvestingtypes "github.com/milkyway-labs/milkyway/v6/x/liquidvesting/types"
 )
 
 func CreateUpgradeHandler(
@@ -50,6 +51,8 @@ func CreateUpgradeHandler(
 				return nil, err
 			}
 		}
+
+		keepers.AccountKeeper.GetModuleAccount(ctx, liquidvestingtypes.ModuleName)
 
 		return vm, nil
 	}

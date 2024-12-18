@@ -1,4 +1,4 @@
-package v5
+package v6
 
 import (
 	storetypes "cosmossdk.io/store/types"
@@ -6,7 +6,7 @@ import (
 	"github.com/milkyway-labs/milkyway/v6/app/upgrades"
 )
 
-const UpgradeName = "v5"
+const UpgradeName = "v6"
 
 var Upgrade = upgrades.Upgrade{
 	UpgradeName:          UpgradeName,
