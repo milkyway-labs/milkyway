@@ -64,13 +64,13 @@ import (
 	feemarketkeeper "github.com/skip-mev/feemarket/x/feemarket/keeper"
 	"github.com/spf13/cast"
 
-	milkywayante "github.com/milkyway-labs/milkyway/v5/ante"
-	milkywayabci "github.com/milkyway-labs/milkyway/v5/app/abci"
-	"github.com/milkyway-labs/milkyway/v5/app/keepers"
-	"github.com/milkyway-labs/milkyway/v5/app/upgrades"
-	v4 "github.com/milkyway-labs/milkyway/v5/app/upgrades/v5"
-	_ "github.com/milkyway-labs/milkyway/v5/client/docs/statik"
-	liquidvestingtypes "github.com/milkyway-labs/milkyway/v5/x/liquidvesting/types"
+	milkywayante "github.com/milkyway-labs/milkyway/v6/ante"
+	milkywayabci "github.com/milkyway-labs/milkyway/v6/app/abci"
+	"github.com/milkyway-labs/milkyway/v6/app/keepers"
+	"github.com/milkyway-labs/milkyway/v6/app/upgrades"
+	v6 "github.com/milkyway-labs/milkyway/v6/app/upgrades/v6"
+	_ "github.com/milkyway-labs/milkyway/v6/client/docs/statik"
+	liquidvestingtypes "github.com/milkyway-labs/milkyway/v6/x/liquidvesting/types"
 )
 
 var (
@@ -78,7 +78,7 @@ var (
 	DefaultNodeHome string
 
 	Upgrades = []upgrades.Upgrade{
-		v4.Upgrade,
+		v6.Upgrade,
 	}
 )
 

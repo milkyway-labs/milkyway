@@ -5,9 +5,9 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v5/utils"
-	"github.com/milkyway-labs/milkyway/v5/x/pools/keeper"
-	"github.com/milkyway-labs/milkyway/v5/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v6/utils"
+	"github.com/milkyway-labs/milkyway/v6/x/pools/keeper"
+	"github.com/milkyway-labs/milkyway/v6/x/pools/types"
 )
 
 // GetRandomExistingPool returns a random existing pool

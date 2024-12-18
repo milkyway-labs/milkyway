@@ -7,8 +7,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/v5/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v5/x/services/types"
+	"github.com/milkyway-labs/milkyway/v6/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v6/x/services/types"
 )
 
 func TestPoolDelegation_Validate(t *testing.T) {

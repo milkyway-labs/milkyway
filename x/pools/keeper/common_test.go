@@ -21,9 +21,9 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/stretchr/testify/suite"
 
-	milkyway "github.com/milkyway-labs/milkyway/v5/app"
-	"github.com/milkyway-labs/milkyway/v5/x/pools/keeper"
-	"github.com/milkyway-labs/milkyway/v5/x/pools/types"
+	milkyway "github.com/milkyway-labs/milkyway/v6/app"
+	"github.com/milkyway-labs/milkyway/v6/x/pools/keeper"
+	"github.com/milkyway-labs/milkyway/v6/x/pools/types"
 )
 
 func TestKeeperTestSuite(t *testing.T) {

@@ -8,7 +8,7 @@ import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "milkyway/liquidvesting/v1/params.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v5/x/liquidvesting/types";
+option go_package = "github.com/milkyway-labs/milkyway/v6/x/liquidvesting/types";
 
 // Msg defines the services module's gRPC message service.
 service Msg {

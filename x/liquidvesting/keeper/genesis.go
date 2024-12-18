@@ -5,7 +5,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v5/x/liquidvesting/types"
+	"github.com/milkyway-labs/milkyway/v6/x/liquidvesting/types"
 )
 
 // ExportGenesis returns the GenesisState associated with the given context
@@ -116,6 +116,9 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 			return err
 		}
 	}
+
+	// Create the module account if it doesn't exist
+	k.accountKeeper.GetModuleAccount(ctx, types.ModuleName)
 
 	return nil
 }

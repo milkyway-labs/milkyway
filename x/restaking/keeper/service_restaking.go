@@ -9,9 +9,9 @@ import (
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v5/utils"
-	"github.com/milkyway-labs/milkyway/v5/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v5/x/services/types"
+	"github.com/milkyway-labs/milkyway/v6/utils"
+	"github.com/milkyway-labs/milkyway/v6/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v6/x/services/types"
 )
 
 // ServiceAllowedOperatorsIterator returns an iterator that iterates over all

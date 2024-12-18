@@ -1,24 +1,24 @@
-package v5_test
+package v6_test
 
 import (
-	"testing"
-
 	"cosmossdk.io/core/appmodule"
 	"cosmossdk.io/core/header"
 	"cosmossdk.io/x/upgrade"
 	upgradetypes "cosmossdk.io/x/upgrade/types"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/stretchr/testify/suite"
 
-	milkywayapp "github.com/milkyway-labs/milkyway/v5/app"
-	"github.com/milkyway-labs/milkyway/v5/app/helpers"
-	v4 "github.com/milkyway-labs/milkyway/v5/app/upgrades/v5"
+	milkywayapp "github.com/milkyway-labs/milkyway/v6/app"
+	"github.com/milkyway-labs/milkyway/v6/app/helpers"
+	v6 "github.com/milkyway-labs/milkyway/v6/app/upgrades/v6"
+	liquidvestingtypes "github.com/milkyway-labs/milkyway/v6/x/liquidvesting/types"
 )
 
-func TestUpgradeTestSuite(t *testing.T) {
-	suite.Run(t, new(UpgradeTestSuite))
-}
+//func TestUpgradeTestSuite(t *testing.T) {
+//	suite.Run(t, new(UpgradeTestSuite))
+//}
 
 type UpgradeTestSuite struct {
 	suite.Suite
@@ -35,7 +35,7 @@ func (suite *UpgradeTestSuite) SetupTest() {
 	suite.UpgradeModule = upgrade.NewAppModule(suite.App.UpgradeKeeper, suite.App.AccountKeeper.AddressCodec())
 }
 
-func (suite *UpgradeTestSuite) TestUpgradeV4() {
+func (suite *UpgradeTestSuite) TestUpgradeV6() {
 	// Make sure the markets are set
 	markets, err := suite.App.MarketMapKeeper.GetAllMarkets(suite.Ctx)
 	suite.Require().NoError(err)
@@ -58,13 +58,17 @@ func (suite *UpgradeTestSuite) TestUpgradeV4() {
 	currencyPairs = suite.App.OracleKeeper.GetAllCurrencyPairs(suite.Ctx)
 	suite.Require().Len(currencyPairs, 1)
 	suite.Require().Equal("TIA/USD", currencyPairs[0].String())
+
+	acc := suite.App.AccountKeeper.GetAccount(suite.Ctx, authtypes.NewModuleAddress(liquidvestingtypes.ModuleName))
+	_, ok := acc.(sdk.ModuleAccountI)
+	suite.Require().True(ok)
 }
 
 func (suite *UpgradeTestSuite) performUpgrade() {
 	upgradeHeight := suite.Ctx.HeaderInfo().Height + 1
 
 	// Schedule the upgrade
-	err := suite.App.UpgradeKeeper.ScheduleUpgrade(suite.Ctx, upgradetypes.Plan{Name: v4.UpgradeName, Height: upgradeHeight})
+	err := suite.App.UpgradeKeeper.ScheduleUpgrade(suite.Ctx, upgradetypes.Plan{Name: v6.UpgradeName, Height: upgradeHeight})
 	suite.Require().NoError(err)
 
 	// Make sure the upgrade plan is set

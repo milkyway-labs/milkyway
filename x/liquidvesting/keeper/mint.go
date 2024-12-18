@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
-	"github.com/milkyway-labs/milkyway/v5/x/liquidvesting/types"
+	"github.com/milkyway-labs/milkyway/v6/x/liquidvesting/types"
 )
 
 // IsMinter tells if a user have the permissions to mint tokens.

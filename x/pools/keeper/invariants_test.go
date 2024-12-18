@@ -3,8 +3,8 @@ package keeper_test
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v5/x/pools/keeper"
-	"github.com/milkyway-labs/milkyway/v5/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v6/x/pools/keeper"
+	"github.com/milkyway-labs/milkyway/v6/x/pools/types"
 )
 
 func (suite *KeeperTestSuite) TestValidPoolsInvariant() {

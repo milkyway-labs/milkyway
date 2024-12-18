@@ -8,11 +8,12 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
-	restakingtypes "github.com/milkyway-labs/milkyway/v5/x/restaking/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v6/x/restaking/types"
 )
 
 type AccountKeeper interface {
 	AddressCodec() address.Codec
+	GetModuleAccount(ctx context.Context, moduleName string) sdk.ModuleAccountI
 }
 
 type BankKeeper interface {
