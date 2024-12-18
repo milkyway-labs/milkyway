@@ -14,7 +14,6 @@ import (
 	dbm "github.com/cosmos/cosmos-db"
 
 	"cosmossdk.io/log"
-	"cosmossdk.io/math"
 	"cosmossdk.io/store"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
@@ -105,14 +104,6 @@ func TestAppStateDeterminism(t *testing.T) {
 				interBlockCacheOpt(),
 				baseapp.SetChainID(AppChainID),
 			)
-
-			// NOTE: setting to zero to avoid failing the simulation
-			// due to the minimum staked tokens required to submit a vote
-			ante.SetMinStakedTokens(math.LegacyZeroDec())
-
-			// NOTE: setting to zero to avoid failing the simulation
-			// milkyway ante allows only certain proposals to be expedited - the simulation doesn't know about this
-			ante.SetExpeditedProposalsEnabled(false)
 
 			fmt.Printf(
 				"running non-determinism simulation; seed %d: %d/%d, attempt: %d/%d\n",
