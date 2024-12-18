@@ -1,4 +1,4 @@
-package v4_test
+package v5_test
 
 import (
 	"testing"
@@ -13,7 +13,7 @@ import (
 
 	milkywayapp "github.com/milkyway-labs/milkyway/v5/app"
 	"github.com/milkyway-labs/milkyway/v5/app/helpers"
-	v4 "github.com/milkyway-labs/milkyway/v5/app/upgrades/v4"
+	v4 "github.com/milkyway-labs/milkyway/v5/app/upgrades/v5"
 )
 
 func TestUpgradeTestSuite(t *testing.T) {
