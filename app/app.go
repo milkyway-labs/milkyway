@@ -295,7 +295,7 @@ func NewMilkyWayApp(
 			SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
 
 			Codec:                 appCodec,
-			IBCkeeper:             app.IBCKeeper,
+			IBCKeeper:             app.IBCKeeper,
 			StakingKeeper:         app.StakingKeeper,
 			FeeMarketKeeper:       app.FeeMarketKeeper,
 			WasmConfig:            &wasmConfig,

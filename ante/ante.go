@@ -39,7 +39,7 @@ type HandlerOptions struct {
 	AccountKeeper         feemarketante.AccountKeeper
 	BankKeeper            feemarketante.BankKeeper
 	Codec                 codec.BinaryCodec
-	IBCkeeper             *ibckeeper.Keeper
+	IBCKeeper             *ibckeeper.Keeper
 	StakingKeeper         *stakingkeeper.Keeper
 	FeeMarketKeeper       *feemarketkeeper.Keeper
 	TxFeeChecker          ante.TxFeeChecker
@@ -57,7 +57,7 @@ func NewAnteHandler(opts HandlerOptions) (sdk.AnteHandler, error) {
 	if opts.SignModeHandler == nil {
 		return nil, errorsmod.Wrap(milkywayerrors.ErrLogic, "sign mode handler is required for AnteHandler")
 	}
-	if opts.IBCkeeper == nil {
+	if opts.IBCKeeper == nil {
 		return nil, errorsmod.Wrap(milkywayerrors.ErrLogic, "IBC keeper is required for AnteHandler")
 	}
 	if opts.FeeMarketKeeper == nil {
@@ -82,14 +82,12 @@ func NewAnteHandler(opts HandlerOptions) (sdk.AnteHandler, error) {
 		ante.NewTxTimeoutHeightDecorator(),
 		ante.NewValidateMemoDecorator(opts.AccountKeeper),
 		ante.NewConsumeGasForTxSizeDecorator(opts.AccountKeeper),
-		NewGovVoteDecorator(opts.Codec, opts.StakingKeeper),
-		NewGovExpeditedProposalsDecorator(opts.Codec),
 		ante.NewSetPubKeyDecorator(opts.AccountKeeper), // SetPubKeyDecorator must be called before all signature verification decorators
 		ante.NewValidateSigCountDecorator(opts.AccountKeeper),
 		ante.NewSigGasConsumeDecorator(opts.AccountKeeper, sigGasConsumer),
 		ante.NewSigVerificationDecorator(opts.AccountKeeper, opts.SignModeHandler),
 		ante.NewIncrementSequenceDecorator(opts.AccountKeeper),
-		ibcante.NewRedundantRelayDecorator(opts.IBCkeeper),
+		ibcante.NewRedundantRelayDecorator(opts.IBCKeeper),
 	}
 
 	if UseFeeMarketDecorator {
