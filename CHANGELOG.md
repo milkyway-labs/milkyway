@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 -->
 
+## Version 5.0.0
+### Features
+#### Other
+- ([\#224](https://github.com/milkyway-labs/milkyway/pull/224)) Removed gov ante decorators to allow any proposal to be run as expedited
+
 ## Version 4.0.0
 ### Features
 - ([\#222](https://github.com/milkyway-labs/milkyway/pull/222)) Added `v4` upgrade handler
