@@ -22,7 +22,7 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	milkyway "github.com/milkyway-labs/milkyway/v5/app"
+	milkyway "github.com/milkyway-labs/milkyway/v6/app"
 )
 
 // Simulation parameter constants

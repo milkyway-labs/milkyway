@@ -30,13 +30,13 @@ import (
 	"github.com/skip-mev/connect/v2/x/oracle"
 	"github.com/skip-mev/feemarket/x/feemarket"
 
-	"github.com/milkyway-labs/milkyway/v5/x/assets"
-	"github.com/milkyway-labs/milkyway/v5/x/liquidvesting"
-	"github.com/milkyway-labs/milkyway/v5/x/operators"
-	"github.com/milkyway-labs/milkyway/v5/x/pools"
-	"github.com/milkyway-labs/milkyway/v5/x/restaking"
-	"github.com/milkyway-labs/milkyway/v5/x/rewards"
-	"github.com/milkyway-labs/milkyway/v5/x/services"
+	"github.com/milkyway-labs/milkyway/v6/x/assets"
+	"github.com/milkyway-labs/milkyway/v6/x/liquidvesting"
+	"github.com/milkyway-labs/milkyway/v6/x/operators"
+	"github.com/milkyway-labs/milkyway/v6/x/pools"
+	"github.com/milkyway-labs/milkyway/v6/x/restaking"
+	"github.com/milkyway-labs/milkyway/v6/x/rewards"
+	"github.com/milkyway-labs/milkyway/v6/x/services"
 )
 
 var AppModuleBasics = module.NewBasicManager(

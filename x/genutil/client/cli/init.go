@@ -25,7 +25,7 @@ import (
 	"github.com/cosmos/go-bip39"
 	"github.com/spf13/cobra"
 
-	milkywayapp "github.com/milkyway-labs/milkyway/v5/app"
+	milkywayapp "github.com/milkyway-labs/milkyway/v6/app"
 )
 
 type printInfo struct {

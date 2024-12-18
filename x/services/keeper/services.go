@@ -8,7 +8,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/milkyway-labs/milkyway/v5/x/services/types"
+	"github.com/milkyway-labs/milkyway/v6/x/services/types"
 )
 
 // SetNextServiceID sets the next service ID to be used when registering a new Service

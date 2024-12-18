@@ -13,11 +13,11 @@ import (
 	"github.com/cosmos/cosmos-sdk/runtime"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v5/utils"
-	operatorstypes "github.com/milkyway-labs/milkyway/v5/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v5/x/pools/types"
-	"github.com/milkyway-labs/milkyway/v5/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v5/x/services/types"
+	"github.com/milkyway-labs/milkyway/v6/utils"
+	operatorstypes "github.com/milkyway-labs/milkyway/v6/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v6/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v6/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v6/x/services/types"
 )
 
 // --------------------------------------------------------------------------------------------------------------------
