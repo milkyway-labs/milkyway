@@ -1,4 +1,4 @@
-package v5_test
+package v6_test
 
 import (
 	"testing"
@@ -9,11 +9,14 @@ import (
 	upgradetypes "cosmossdk.io/x/upgrade/types"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	"github.com/stretchr/testify/suite"
 
 	milkywayapp "github.com/milkyway-labs/milkyway/v6/app"
 	"github.com/milkyway-labs/milkyway/v6/app/helpers"
-	v4 "github.com/milkyway-labs/milkyway/v6/app/upgrades/v5"
+	v4 "github.com/milkyway-labs/milkyway/v6/app/upgrades/v6"
+	"github.com/milkyway-labs/milkyway/v6/utils"
+	liquidvestingtypes "github.com/milkyway-labs/milkyway/v6/x/liquidvesting/types"
 )
 
 func TestUpgradeTestSuite(t *testing.T) {
@@ -35,7 +38,7 @@ func (suite *UpgradeTestSuite) SetupTest() {
 	suite.UpgradeModule = upgrade.NewAppModule(suite.App.UpgradeKeeper, suite.App.AccountKeeper.AddressCodec())
 }
 
-func (suite *UpgradeTestSuite) TestUpgradeV4() {
+func (suite *UpgradeTestSuite) TestUpgradeV6() {
 	// Make sure the markets are set
 	markets, err := suite.App.MarketMapKeeper.GetAllMarkets(suite.Ctx)
 	suite.Require().NoError(err)
@@ -45,19 +48,31 @@ func (suite *UpgradeTestSuite) TestUpgradeV4() {
 	currencyPairs := suite.App.OracleKeeper.GetAllCurrencyPairs(suite.Ctx)
 	suite.Require().Len(currencyPairs, 63)
 
+	// In testnet v5, we have liquid vesting module account set as a BaseAccount.
+	liquidVestingModuleAddr := suite.App.AccountKeeper.GetModuleAddress(liquidvestingtypes.ModuleName)
+	acc := suite.App.AccountKeeper.GetAccount(suite.Ctx, liquidVestingModuleAddr)
+	suite.App.AccountKeeper.RemoveAccount(suite.Ctx, acc)
+	err = suite.App.BankKeeper.MintCoins(suite.Ctx, minttypes.ModuleName, utils.MustParseCoins("1utia"))
+	suite.Require().NoError(err)
+	err = suite.App.BankKeeper.SendCoinsFromModuleToAccount(
+		suite.Ctx,
+		minttypes.ModuleName,
+		liquidVestingModuleAddr,
+		utils.MustParseCoins("1utia"),
+	)
+	suite.Require().NoError(err)
+
 	// Perform the upgrade
 	suite.performUpgrade()
 
-	// Make sure only the TIA/USD market is left
-	markets, err = suite.App.MarketMapKeeper.GetAllMarkets(suite.Ctx)
-	suite.Require().NoError(err)
-	suite.Require().Len(markets, 1)
-	suite.Require().Equal("TIA/USD", markets["TIA/USD"].Ticker.String())
-
-	// Make sure the only currency pair left is TIA/USD
+	// Make sure all the currency pairs are deleted
 	currencyPairs = suite.App.OracleKeeper.GetAllCurrencyPairs(suite.Ctx)
-	suite.Require().Len(currencyPairs, 1)
-	suite.Require().Equal("TIA/USD", currencyPairs[0].String())
+	suite.Require().Empty(currencyPairs)
+
+	acc = suite.App.AccountKeeper.GetAccount(suite.Ctx, liquidVestingModuleAddr)
+	suite.Require().NotNil(acc)
+	_, ok := acc.(sdk.ModuleAccountI)
+	suite.Require().True(ok)
 }
 
 func (suite *UpgradeTestSuite) performUpgrade() {

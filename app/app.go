@@ -68,7 +68,7 @@ import (
 	milkywayabci "github.com/milkyway-labs/milkyway/v6/app/abci"
 	"github.com/milkyway-labs/milkyway/v6/app/keepers"
 	"github.com/milkyway-labs/milkyway/v6/app/upgrades"
-	v5 "github.com/milkyway-labs/milkyway/v6/app/upgrades/v5"
+	v6 "github.com/milkyway-labs/milkyway/v6/app/upgrades/v6"
 	_ "github.com/milkyway-labs/milkyway/v6/client/docs/statik"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/v6/x/liquidvesting/types"
 )
@@ -78,7 +78,7 @@ var (
 	DefaultNodeHome string
 
 	Upgrades = []upgrades.Upgrade{
-		v5.Upgrade,
+		v6.Upgrade,
 	}
 )
 
