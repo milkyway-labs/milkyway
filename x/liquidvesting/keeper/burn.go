@@ -11,7 +11,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/runtime"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v4/x/liquidvesting/types"
+	"github.com/milkyway-labs/milkyway/v5/x/liquidvesting/types"
 )
 
 // IsBurner tells if a user have the permissions to burn tokens

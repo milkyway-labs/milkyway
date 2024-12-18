@@ -3,7 +3,7 @@ package keeper_test
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	servicestypes "github.com/milkyway-labs/milkyway/v4/x/services/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v5/x/services/types"
 )
 
 func (suite *KeeperTestSuite) TestOperatorHooks_BeforeOperatorDeleted() {

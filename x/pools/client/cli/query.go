@@ -8,7 +8,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/version"
 	"github.com/spf13/cobra"
 
-	"github.com/milkyway-labs/milkyway/v4/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v5/x/pools/types"
 )
 
 // GetQueryCmd returns the command allowing to perform queries

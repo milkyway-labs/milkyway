@@ -10,7 +10,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milkyway/v4/app/keepers"
+	"github.com/milkyway-labs/milkyway/v5/app/keepers"
 )
 
 func CreateUpgradeHandler(

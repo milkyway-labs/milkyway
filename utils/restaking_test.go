@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/v4/utils"
+	"github.com/milkyway-labs/milkyway/v5/utils"
 )
 
 func TestGetTokenDenomFromSharesDenom_IBCDenom(t *testing.T) {

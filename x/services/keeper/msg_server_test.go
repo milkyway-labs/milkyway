@@ -7,8 +7,8 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 
-	"github.com/milkyway-labs/milkyway/v4/x/services/keeper"
-	"github.com/milkyway-labs/milkyway/v4/x/services/types"
+	"github.com/milkyway-labs/milkyway/v5/x/services/keeper"
+	"github.com/milkyway-labs/milkyway/v5/x/services/types"
 )
 
 func (suite *KeeperTestSuite) TestMsgServer_CreateService() {

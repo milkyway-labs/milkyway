@@ -8,10 +8,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/version"
 	"github.com/spf13/cobra"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/v4/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v4/x/pools/types"
-	"github.com/milkyway-labs/milkyway/v4/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v4/x/services/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v5/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v5/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v5/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v5/x/services/types"
 )
 
 // GetQueryCmd returns the command allowing to perform queries

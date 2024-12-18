@@ -7,8 +7,8 @@ import (
 	"cosmossdk.io/collections"
 	errorsmod "cosmossdk.io/errors"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/v4/x/operators/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v4/x/services/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v5/x/operators/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v5/x/services/types"
 )
 
 var _ operatorstypes.OperatorsHooks = &OperatorsHooks{}

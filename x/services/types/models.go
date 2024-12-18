@@ -9,7 +9,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	"github.com/milkyway-labs/milkyway/v4/utils"
+	"github.com/milkyway-labs/milkyway/v5/utils"
 )
 
 // GetServiceAddress generates a service address from its id

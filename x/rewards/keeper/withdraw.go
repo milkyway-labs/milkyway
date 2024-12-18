@@ -10,8 +10,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/v4/x/operators/types"
-	"github.com/milkyway-labs/milkyway/v4/x/rewards/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v5/x/operators/types"
+	"github.com/milkyway-labs/milkyway/v5/x/rewards/types"
 )
 
 // SetWithdrawAddress sets a new address that will receive the rewards upon withdrawal

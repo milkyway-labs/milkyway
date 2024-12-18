@@ -12,9 +12,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/suite"
 
-	milkywayapp "github.com/milkyway-labs/milkyway/v4/app"
-	"github.com/milkyway-labs/milkyway/v4/app/helpers"
-	v3 "github.com/milkyway-labs/milkyway/v4/app/upgrades/v3"
+	milkywayapp "github.com/milkyway-labs/milkyway/v5/app"
+	"github.com/milkyway-labs/milkyway/v5/app/helpers"
+	v3 "github.com/milkyway-labs/milkyway/v5/app/upgrades/v3"
 )
 
 func TestUpgradeTestSuite(t *testing.T) {

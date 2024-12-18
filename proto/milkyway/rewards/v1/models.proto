@@ -9,7 +9,7 @@ import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 import "milkyway/restaking/v1/models.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v4/x/rewards/types";
+option go_package = "github.com/milkyway-labs/milkyway/v5/x/rewards/types";
 option (gogoproto.goproto_getters_all) = false;
 
 // RewardsPlan represents a rewards allocation plan.

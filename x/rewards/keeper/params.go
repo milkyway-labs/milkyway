@@ -6,7 +6,7 @@ import (
 
 	"cosmossdk.io/collections"
 
-	"github.com/milkyway-labs/milkyway/v4/x/rewards/types"
+	"github.com/milkyway-labs/milkyway/v5/x/rewards/types"
 )
 
 // SetParams sets module parameters

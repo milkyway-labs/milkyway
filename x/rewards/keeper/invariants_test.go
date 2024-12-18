@@ -4,11 +4,11 @@ import (
 	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/v4/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v4/x/pools/types"
-	"github.com/milkyway-labs/milkyway/v4/x/rewards/keeper"
-	"github.com/milkyway-labs/milkyway/v4/x/rewards/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v4/x/services/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v5/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v5/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v5/x/rewards/keeper"
+	"github.com/milkyway-labs/milkyway/v5/x/rewards/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v5/x/services/types"
 )
 
 func (suite *KeeperTestSuite) TestInvariants_ReferenceCountInvariant() {

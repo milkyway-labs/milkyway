@@ -9,7 +9,7 @@ import "gogoproto/gogo.proto";
 import "milkyway/operators/v1/models.proto";
 import "milkyway/operators/v1/params.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v4/x/operators/types";
+option go_package = "github.com/milkyway-labs/milkyway/v5/x/operators/types";
 
 // Msg defines the avs module's gRPC message service.
 service Msg {

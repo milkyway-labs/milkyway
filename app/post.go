@@ -8,7 +8,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/milkyway-labs/milkyway/v4/ante"
+	"github.com/milkyway-labs/milkyway/v5/ante"
 )
 
 // PostHandlerOptions are the options required for constructing a FeeMarket PostHandler.

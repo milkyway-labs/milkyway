@@ -7,7 +7,7 @@ import (
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v4/x/operators/types"
+	"github.com/milkyway-labs/milkyway/v5/x/operators/types"
 )
 
 // ExportGenesis returns the GenesisState associated with the given context

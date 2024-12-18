@@ -7,14 +7,14 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
-	"github.com/milkyway-labs/milkyway/v4/testutils/simtesting"
-	"github.com/milkyway-labs/milkyway/v4/utils"
-	operatorstypes "github.com/milkyway-labs/milkyway/v4/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v4/x/pools/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/v4/x/restaking/types"
-	"github.com/milkyway-labs/milkyway/v4/x/rewards/keeper"
-	"github.com/milkyway-labs/milkyway/v4/x/rewards/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v4/x/services/types"
+	"github.com/milkyway-labs/milkyway/v5/testutils/simtesting"
+	"github.com/milkyway-labs/milkyway/v5/utils"
+	operatorstypes "github.com/milkyway-labs/milkyway/v5/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v5/x/pools/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v5/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v5/x/rewards/keeper"
+	"github.com/milkyway-labs/milkyway/v5/x/rewards/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v5/x/services/types"
 )
 
 func RandomParams(r *rand.Rand, rewardsPlanCreationFeeDenoms []string) types.Params {

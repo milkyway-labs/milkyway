@@ -10,8 +10,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	restakingtypes "github.com/milkyway-labs/milkyway/v4/x/restaking/types"
-	"github.com/milkyway-labs/milkyway/v4/x/rewards/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v5/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v5/x/rewards/types"
 )
 
 // initializeDelegation initializes a delegation for a target

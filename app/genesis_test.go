@@ -13,7 +13,7 @@ import (
 	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
 	"github.com/stretchr/testify/require"
 
-	milkyway "github.com/milkyway-labs/milkyway/v4/app"
+	milkyway "github.com/milkyway-labs/milkyway/v5/app"
 )
 
 func TestNewDefaultGenesisState(t *testing.T) {

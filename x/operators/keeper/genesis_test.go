@@ -6,7 +6,7 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v4/x/operators/types"
+	"github.com/milkyway-labs/milkyway/v5/x/operators/types"
 )
 
 func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
