@@ -6,13 +6,13 @@ import (
 
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/v5/x/operators/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v5/x/services/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v6/x/operators/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v6/x/services/types"
 
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v5/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v6/x/restaking/types"
 )
 
 func (suite *KeeperTestSuite) TestKeeper_GetAllOperatorsJoinedServicesRecord() {

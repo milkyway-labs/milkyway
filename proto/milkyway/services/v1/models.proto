@@ -5,7 +5,7 @@ import "cosmos/base/v1beta1/coin.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v5/x/services/types";
+option go_package = "github.com/milkyway-labs/milkyway/v6/x/services/types";
 option (gogoproto.goproto_getters_all) = false;
 
 // ServiceStatus defines the status of a service

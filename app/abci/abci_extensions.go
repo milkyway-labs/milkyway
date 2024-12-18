@@ -22,7 +22,7 @@ import (
 
 	oraclepreblock "github.com/skip-mev/connect/v2/abci/preblock/oracle"
 
-	"github.com/milkyway-labs/milkyway/v5/app/keepers"
+	"github.com/milkyway-labs/milkyway/v6/app/keepers"
 )
 
 type SetupData struct {

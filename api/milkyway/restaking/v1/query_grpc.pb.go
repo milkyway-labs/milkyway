@@ -63,6 +63,7 @@ type QueryClient interface {
 	ServiceAllowedOperators(ctx context.Context, in *QueryServiceAllowedOperatorsRequest, opts ...grpc.CallOption) (*QueryServiceAllowedOperatorsResponse, error)
 	// ServiceSecuringPools queries the pools that are securing a given service.
 	ServiceSecuringPools(ctx context.Context, in *QueryServiceSecuringPoolsRequest, opts ...grpc.CallOption) (*QueryServiceSecuringPoolsResponse, error)
+	// ServiceOperators queries the operators for a given service.
 	ServiceOperators(ctx context.Context, in *QueryServiceOperatorsRequest, opts ...grpc.CallOption) (*QueryServiceOperatorsResponse, error)
 	// PoolDelegations queries the delegations info for the given pool.
 	PoolDelegations(ctx context.Context, in *QueryPoolDelegationsRequest, opts ...grpc.CallOption) (*QueryPoolDelegationsResponse, error)
@@ -456,6 +457,7 @@ type QueryServer interface {
 	ServiceAllowedOperators(context.Context, *QueryServiceAllowedOperatorsRequest) (*QueryServiceAllowedOperatorsResponse, error)
 	// ServiceSecuringPools queries the pools that are securing a given service.
 	ServiceSecuringPools(context.Context, *QueryServiceSecuringPoolsRequest) (*QueryServiceSecuringPoolsResponse, error)
+	// ServiceOperators queries the operators for a given service.
 	ServiceOperators(context.Context, *QueryServiceOperatorsRequest) (*QueryServiceOperatorsResponse, error)
 	// PoolDelegations queries the delegations info for the given pool.
 	PoolDelegations(context.Context, *QueryPoolDelegationsRequest) (*QueryPoolDelegationsResponse, error)

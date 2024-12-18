@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/v5/x/operators/types"
+	"github.com/milkyway-labs/milkyway/v6/x/operators/types"
 )
 
 func TestParseOperatorID(t *testing.T) {
