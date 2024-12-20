@@ -31,7 +31,7 @@ require (
 	github.com/cosmos/ibc-go/v8 v8.5.2
 	github.com/cosmos/ics23/go v0.11.0 // indirect
 	github.com/cosmos/interchain-security/v6 v6.3.0
-	github.com/cosmos/rosetta v0.50.10
+	github.com/cosmos/rosetta v0.50.11
 	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.4
 	github.com/golangci/golangci-lint v1.61.0
