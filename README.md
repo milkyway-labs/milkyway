@@ -1,6 +1,8 @@
-# MilkyWay
+# MilkyWay Chain
 
 [![Website](.img/cover.jpg)](https://milkyway.zone)
+
+**<p align="center">The Modular Staking Portal for Plug-in Security</p>**
 
 [![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/milkyway-labs/milkyway)](https://github.com/milkyway-labs/milkyway/releases)
 ![License](https://img.shields.io/github/license/milkyway-labs/milkyway.svg)
@@ -11,20 +13,48 @@
 [![Lint status](https://github.com/milkyway-labs/milkyway/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/milkyway-labs/milkyway/actions/workflows/lint.yml?query=branch%3Amain+)
 [![Discord](https://img.shields.io/discord/1166634853576482876)](https://discord.com/invite/4ywmNE3tqq)
 
-## Introduction
-MilkyWay is a restaking protocol providing users new and innovative ways to restake their assets and earn rewards.
+## What is MilkyWay?
 
-## Useful links
-- [Take a look at the website](https://milkyway.zone)
-- [Read the documentation](https://docs.milkyway.zone)
+MilkyWay is the first modular staking portal designed to secure an expanding constellation of networks and services through a trust-minimized, multi-asset, multi-chain restaking platform. Launched in December 2023 with milkTIA—Celestia’s inaugural liquid staking solution. MilkyWay initially allowed users to unlock staked TIA for maximizing yields via seamless DeFi engagement. Over time, it evolved into a more versatile platform that safeguards a growing array of Actively Validated Services (AVSs). At its core lies the MilkyWay Chain, a modular L1 coordination layer that allows AVSs to “plug in” and to precisely configure asset allocation, stake distribution, and slashing parameters. By restaking both native and liquid-staked assets, it diversifies security while providing a sovereign environment with direct control over consensus and validation rules.
 
-## Social networks
-- [Take a look at the website](https://milkyway.zone)
-- [Follow us on Twitter](https://twitter.com/milky_way_zone)
-- [Read about us on Medium](https://medium.com/milkyway-zone)
-- [Join our Discord chat](https://discord.com/invite/4ywmNE3tqq)
+This modular architecture frees developers and AVSs from the constraints of traditional parent chains, fostering experimentation with new governance models, incentive mechanisms, and specialized use cases. From reinforcing off-chain systems to introducing innovative staking-based financial instruments, MilkyWay sets the stage for broad ecosystem growth and adaptability. As its capabilities mature and its scope widens, the platform establishes a resilient foundation for an interconnected, composable future. By transcending conventional staking solutions and operating as a flexible, sovereign environment, MilkyWay nurtures a more adaptive, trust-minimized blockchain ecosystem. Ultimately, this dynamic approach broadens participation, strengthens interoperability, and ushers in a new era of decentralized infrastructure.
+
+To learn more about MilkyWay, visit the [MilkyWay Documentation](https://docs.milkyway.zone/).
+
+## Install MilkyWay Core
+
+To find comprehensive instructions on hardware specifications, MilkyWay Core installation, full node operation, and joining a network, please refer to the [MilkyWay node tutorial](https://docs.milkyway.zone/modular-restaking/guides/consensus).
+
+## Interact with MilkyWay
+
+For users looking to interact with the MilkyWay blockchain without setting up a full node, the following official wallets provide a convenient interface.
+
+- [Keplr](https://chromewebstore.google.com/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap)
+- [Leap](https://chromewebstore.google.com/detail/keplr/dmkamcknogkgcdfhhbddcghachkejeap) 
+- [Cosmostation](https://chromewebstore.google.com/detail/cosmostation-wallet/fpkhgmpbidmiogeglndfbkegfdlnajnf?hl=en)
+
+Developers seeking direct blockchain interaction can download the [milkywayd](https://github.com/orgs/milkyway-labs/packages?repo_name=milkyway), the CLI and node daemon for MilkyWay chain. For detailed instructions on installing and using CLI, refer to the official MilkyWay [documentation](https://docs.milkyway.zone/).
+
+## For Developers
+
+For an introduction to building on MilkyWay, start with the [MilkyWay Docs](https://docs.milkyway.zone/), and explore the [Services/Operators Guide](https://docs.milkyway.zone/modular-restaking/guides) for an overview of the restaking infrastructure.
+
+- [milkyway.proto](https://github.com/milkyway-labs/milkyway.proto): a set of TypeScript and JavaScript definitions compatible with [Cosmjs](https://github.com/cosmos/cosmjs) to easily integrate your web-app with MilkyWay
+
+- [milkywayd](https://github.com/orgs/milkyway-labs/packages?repo_name=milkyway): the MilkyWay blockchain’s CLI and node daemon
+
+- [mintscan](https://www.mintscan.io/milkyway): third party block explorer and chain analytics
+
+## Resources
+
+- [Official Website](https://milkyway.zone)
+- [Documentation](https://docs.milkyway.zone/)
+- [X (Formerly Twitter)](https://twitter.com/milky_way_zone)
+- [Blog](https://medium.com/milkyway-zone)
+- [Discord](https://discord.com/invite/4ywmNE3tqq)
 
 ## License
+
 MilkyWay is licensed under the [Apache 2.0](LICENSE) license.
 
 We also use portions of the codebase from other developers' software to implement some of our features:
