@@ -249,23 +249,25 @@ func (k Querier) PoolUnbondingDelegations(ctx context.Context, req *types.QueryP
 	delegationsStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.PoolUnbondingDelegationPrefix)
 
 	// Query the pool unbonding delegations for the given pool id
-	var unbondingDelegations []types.UnbondingDelegation
-	pageRes, err := query.Paginate(delegationsStore, req.Pagination, func(key []byte, value []byte) error {
-		unbond, err := types.UnmarshalUnbondingDelegation(k.cdc, value)
-		if err != nil {
-			return err
+	unbondingDelegations, pageRes, err := query.GenericFilteredPaginate(k.cdc, delegationsStore, req.Pagination, func(_ []byte, unbond *types.UnbondingDelegation) (*types.UnbondingDelegation, error) {
+		if unbond.TargetID != req.PoolId {
+			return nil, nil
 		}
-		if unbond.TargetID == req.PoolId {
-			unbondingDelegations = append(unbondingDelegations, unbond)
-		}
-		return nil
+		return unbond, nil
+	}, func() *types.UnbondingDelegation {
+		return &types.UnbondingDelegation{}
 	})
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
+	unbondingDels := make([]types.UnbondingDelegation, len(unbondingDelegations))
+	for i, unbond := range unbondingDelegations {
+		unbondingDels[i] = *unbond
+	}
+
 	return &types.QueryPoolUnbondingDelegationsResponse{
-		UnbondingDelegations: unbondingDelegations,
+		UnbondingDelegations: unbondingDels,
 		Pagination:           pageRes,
 	}, nil
 }
@@ -390,23 +392,25 @@ func (k Querier) OperatorUnbondingDelegations(ctx context.Context, req *types.Qu
 	delegationsStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.OperatorUnbondingDelegationPrefix)
 
 	// Query the operator unbonding delegations for the given pool id
-	var unbondingDelegations []types.UnbondingDelegation
-	pageRes, err := query.Paginate(delegationsStore, req.Pagination, func(key []byte, value []byte) error {
-		unbond, err := types.UnmarshalUnbondingDelegation(k.cdc, value)
-		if err != nil {
-			return err
+	unbondingDelegations, pageRes, err := query.GenericFilteredPaginate(k.cdc, delegationsStore, req.Pagination, func(_ []byte, unbond *types.UnbondingDelegation) (*types.UnbondingDelegation, error) {
+		if unbond.TargetID != req.OperatorId {
+			return nil, nil
 		}
-		if unbond.TargetID == req.OperatorId {
-			unbondingDelegations = append(unbondingDelegations, unbond)
-		}
-		return nil
+		return unbond, nil
+	}, func() *types.UnbondingDelegation {
+		return &types.UnbondingDelegation{}
 	})
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
+	unbondingDels := make([]types.UnbondingDelegation, len(unbondingDelegations))
+	for i, unbond := range unbondingDelegations {
+		unbondingDels[i] = *unbond
+	}
+
 	return &types.QueryOperatorUnbondingDelegationsResponse{
-		UnbondingDelegations: unbondingDelegations,
+		UnbondingDelegations: unbondingDels,
 		Pagination:           pageRes,
 	}, nil
 }
@@ -531,23 +535,25 @@ func (k Querier) ServiceUnbondingDelegations(ctx context.Context, req *types.Que
 	delegationsStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.ServiceUnbondingDelegationPrefix)
 
 	// Query the service unbonding delegations for the given pool id
-	var unbondingDelegations []types.UnbondingDelegation
-	pageRes, err := query.Paginate(delegationsStore, req.Pagination, func(key []byte, value []byte) error {
-		unbond, err := types.UnmarshalUnbondingDelegation(k.cdc, value)
-		if err != nil {
-			return err
+	unbondingDelegations, pageRes, err := query.GenericFilteredPaginate(k.cdc, delegationsStore, req.Pagination, func(_ []byte, unbond *types.UnbondingDelegation) (*types.UnbondingDelegation, error) {
+		if unbond.TargetID != req.ServiceId {
+			return nil, nil
 		}
-		if unbond.TargetID == req.ServiceId {
-			unbondingDelegations = append(unbondingDelegations, unbond)
-		}
-		return nil
+		return unbond, nil
+	}, func() *types.UnbondingDelegation {
+		return &types.UnbondingDelegation{}
 	})
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 
+	unbondingDels := make([]types.UnbondingDelegation, len(unbondingDelegations))
+	for i, unbond := range unbondingDelegations {
+		unbondingDels[i] = *unbond
+	}
+
 	return &types.QueryServiceUnbondingDelegationsResponse{
-		UnbondingDelegations: unbondingDelegations,
+		UnbondingDelegations: unbondingDels,
 		Pagination:           pageRes,
 	}, nil
 }
