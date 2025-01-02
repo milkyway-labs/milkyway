@@ -391,7 +391,7 @@ func (k Querier) OperatorUnbondingDelegations(ctx context.Context, req *types.Qu
 	store := k.storeService.OpenKVStore(ctx)
 	delegationsStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.OperatorUnbondingDelegationPrefix)
 
-	// Query the operator unbonding delegations for the given pool id
+	// Query the operator unbonding delegations for the given operator id
 	unbondingDelegations, pageRes, err := query.GenericFilteredPaginate(k.cdc, delegationsStore, req.Pagination, func(_ []byte, unbond *types.UnbondingDelegation) (*types.UnbondingDelegation, error) {
 		if unbond.TargetID != req.OperatorId {
 			return nil, nil
@@ -534,7 +534,7 @@ func (k Querier) ServiceUnbondingDelegations(ctx context.Context, req *types.Que
 	store := k.storeService.OpenKVStore(ctx)
 	delegationsStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.ServiceUnbondingDelegationPrefix)
 
-	// Query the service unbonding delegations for the given pool id
+	// Query the service unbonding delegations for the given service id
 	unbondingDelegations, pageRes, err := query.GenericFilteredPaginate(k.cdc, delegationsStore, req.Pagination, func(_ []byte, unbond *types.UnbondingDelegation) (*types.UnbondingDelegation, error) {
 		if unbond.TargetID != req.ServiceId {
 			return nil, nil
