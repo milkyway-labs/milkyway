@@ -255,7 +255,9 @@ func (k Querier) PoolUnbondingDelegations(ctx context.Context, req *types.QueryP
 		if err != nil {
 			return err
 		}
-		unbondingDelegations = append(unbondingDelegations, unbond)
+		if unbond.TargetID == req.PoolId {
+			unbondingDelegations = append(unbondingDelegations, unbond)
+		}
 		return nil
 	})
 	if err != nil {
@@ -394,7 +396,9 @@ func (k Querier) OperatorUnbondingDelegations(ctx context.Context, req *types.Qu
 		if err != nil {
 			return err
 		}
-		unbondingDelegations = append(unbondingDelegations, unbond)
+		if unbond.TargetID == req.OperatorId {
+			unbondingDelegations = append(unbondingDelegations, unbond)
+		}
 		return nil
 	})
 	if err != nil {
@@ -533,7 +537,9 @@ func (k Querier) ServiceUnbondingDelegations(ctx context.Context, req *types.Que
 		if err != nil {
 			return err
 		}
-		unbondingDelegations = append(unbondingDelegations, unbond)
+		if unbond.TargetID == req.ServiceId {
+			unbondingDelegations = append(unbondingDelegations, unbond)
+		}
 		return nil
 	})
 	if err != nil {
