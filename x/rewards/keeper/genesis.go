@@ -24,11 +24,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) (*types.GenesisState, error) {
 	}
 
 	// Get the rewards plans
-	var rewardsPlans []types.RewardsPlan
-	err = k.RewardsPlans.Walk(ctx, nil, func(id uint64, plan types.RewardsPlan) (stop bool, err error) {
-		rewardsPlans = append(rewardsPlans, plan)
-		return false, nil
-	})
+	rewardsPlans, err := k.GetRewardsPlans(ctx)
 	if err != nil {
 		return nil, err
 	}

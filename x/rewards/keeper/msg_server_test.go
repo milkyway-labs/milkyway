@@ -82,6 +82,89 @@ func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 			shouldErr: true,
 		},
 		{
+			name: "plan is created and gas is charged based on existing plans",
+			store: func(ctx sdk.Context) {
+				// Create a service
+				_, _ = suite.setupSampleServiceAndOperator(ctx)
+
+				// Change rewards plan creation fee to 100 $MILK.
+				err := suite.keeper.Params.Set(ctx, types.NewParams(
+					sdk.NewCoins(sdk.NewInt64Coin("umilk", 100_000_000)),
+				))
+				suite.Require().NoError(err)
+
+				// Create a rewards plan
+				_, err = suite.keeper.CreateRewardsPlan(
+					ctx,
+					"Rewards Plan",
+					1,
+					utils.MustParseCoin("100_000000service"),
+					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+					types.NewBasicPoolsDistribution(0),
+					types.NewBasicOperatorsDistribution(0),
+					types.NewBasicUsersDistribution(0),
+				)
+				suite.Require().NoError(err)
+
+				// Set the next plan id
+				err = suite.keeper.NextRewardsPlanID.Set(ctx, 2)
+				suite.Require().NoError(err)
+
+				// Fund the sender account enough coins to pay the fee.
+				suite.FundAccount(
+					ctx,
+					testutil.TestAddress(10000).String(),
+					utils.MustParseCoins("500_000000umilk"),
+				)
+			},
+			msg: types.NewMsgCreateRewardsPlan(
+				1,
+				"Rewards Plan",
+				utils.MustParseCoin("100_000000service"),
+				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+				types.NewBasicPoolsDistribution(0),
+				types.NewBasicOperatorsDistribution(0),
+				types.NewBasicUsersDistribution(0),
+				sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100_000_000))),
+				testutil.TestAddress(10000).String(),
+			),
+			shouldErr: false,
+			expResponse: &types.MsgCreateRewardsPlanResponse{
+				NewRewardsPlanID: 2,
+			},
+			expEvents: []sdk.Event{
+				sdk.NewEvent(
+					types.EventTypeCreateRewardsPlan,
+					sdk.NewAttribute(types.AttributeKeyRewardsPlanID, "2"),
+					sdk.NewAttribute(servicestypes.AttributeKeyServiceID, "1"),
+				),
+			},
+			check: func(ctx sdk.Context) {
+				// Make sure gas consumption is equal or greater than the base gas fee
+				gasConsumed := ctx.GasMeter().GasConsumed()
+				suite.Require().GreaterOrEqual(gasConsumed, types.BaseGasFeeForNewPlan)
+
+				// Make sure the next plan id has been increased
+				nextPlanID, err := suite.keeper.NextRewardsPlanID.Get(ctx)
+				suite.Require().NoError(err)
+
+				suite.Require().Equal(uint64(3), nextPlanID)
+
+				// Make sure the rewards plan has been created
+				_, err = suite.keeper.GetRewardsPlan(ctx, 1)
+				suite.Require().NoError(err)
+
+				// Make sure the balance is decreased by amount of the fee
+				senderAddr, err := sdk.AccAddressFromBech32(testutil.TestAddress(10000).String())
+				suite.Require().NoError(err)
+
+				balances := suite.bankKeeper.GetAllBalances(ctx, senderAddr)
+				suite.Require().Equal("400000000umilk", balances.String())
+			},
+		},
+		{
 			name: "plan is created and fee is charged",
 			store: func(ctx sdk.Context) {
 				// Create a service

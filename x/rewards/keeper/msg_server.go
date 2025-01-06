@@ -40,6 +40,15 @@ func (k msgServer) CreateRewardsPlan(ctx context.Context, msg *types.MsgCreateRe
 		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only service admin can create rewards plan")
 	}
 
+	// Charge a scaling gas consumption fee
+	rewardsPlans, err := k.GetRewardsPlans(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.GasMeter().ConsumeGas(types.BaseGasFeeForNewPlan*uint64(len(rewardsPlans)), "create rewards plan gas cost")
+
 	// Create the plan
 	plan, err := k.Keeper.CreateRewardsPlan(
 		ctx,
@@ -82,7 +91,6 @@ func (k msgServer) CreateRewardsPlan(ctx context.Context, msg *types.MsgCreateRe
 	}
 
 	// Emit the event
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeCreateRewardsPlan,

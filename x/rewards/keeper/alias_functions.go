@@ -43,6 +43,18 @@ func (k *Keeper) DeleteHistoricalRewards(ctx context.Context, target DelegationT
 
 // --------------------------------------------------------------------------------------------------------------------
 
+// GetRewardsPlans returns all rewards plans
+func (k *Keeper) GetRewardsPlans(ctx context.Context) ([]types.RewardsPlan, error) {
+	var rewardsPlans []types.RewardsPlan
+	err := k.RewardsPlans.Walk(ctx, nil, func(id uint64, plan types.RewardsPlan) (stop bool, err error) {
+		rewardsPlans = append(rewardsPlans, plan)
+		return false, nil
+	})
+	return rewardsPlans, err
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
 // GetOutstandingRewardsCoins returns the outstanding rewards coins for a target
 func (k *Keeper) GetOutstandingRewardsCoins(ctx context.Context, target DelegationTarget) (types.DecPools, error) {
 	rewards, err := target.OutstandingRewards.Get(ctx, target.GetID())
