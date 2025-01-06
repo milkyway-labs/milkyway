@@ -20,7 +20,7 @@ func RandomizedGenState(simState *module.SimulationState) {
 		poolsGenesis.Pools,
 		operatorsGenesis.Operators,
 		servicesGenesis.Services,
-		[]string{simState.BondDenom},
+		simState.BondDenom,
 	)
 	nextRewardsPlan := uint64(1)
 	for _, plan := range rewardsPlans {

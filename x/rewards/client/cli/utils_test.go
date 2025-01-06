@@ -35,19 +35,19 @@ func TestCLIUtils_parseRewardsPlan(t *testing.T) {
 	    "pools_distribution": {
 	        "weight": 1,
 	        "type": {
-	            "@type":"/milkyway.rewards.v1.DistributionTypeBasic"
+	            "@type":"/milkyway.rewards.v2.DistributionTypeBasic"
 	        }
 	    },
 	    "operators_distribution": {
 	        "weight": 2,
 	        "type": {
-	            "@type": "/milkyway.rewards.v1.DistributionTypeBasic"
+	            "@type": "/milkyway.rewards.v2.DistributionTypeBasic"
 	        }
 	    },
 	    "users_distribution": {
 	        "weight": 3,
 	        "type": {
-	            "@type": "/milkyway.rewards.v1.UsersDistributionTypeBasic"
+	            "@type": "/milkyway.rewards.v2.UsersDistributionTypeBasic"
 	        }
 	    },
 		"fee_amount": "100uinit"
@@ -58,7 +58,7 @@ func TestCLIUtils_parseRewardsPlan(t *testing.T) {
 					1,
 					"test plan",
 					1,
-					sdk.NewCoins(sdk.NewCoin("uinit", math.NewInt(1000))),
+					sdk.NewCoin("uinit", math.NewInt(1000)),
 					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 					time.Date(2024, 12, 31, 23, 59, 59, 0, time.UTC),
 					types.NewBasicPoolsDistribution(1),
@@ -79,19 +79,19 @@ func TestCLIUtils_parseRewardsPlan(t *testing.T) {
 	    "pools_distribution": {
 	        "weight": 1,
 	        "type": {
-	            "@type":"/milkyway.rewards.v1.DistributionTypeBasic"
+	            "@type":"/milkyway.rewards.v2.DistributionTypeBasic"
 	        }
 	    },
 	    "operators_distribution": {
 	        "weight": 2,
 	        "type": {
-	            "@type": "/milkyway.rewards.v1.DistributionTypeEgalitarian"
+	            "@type": "/milkyway.rewards.v2.DistributionTypeEgalitarian"
 	        }
 	    },
 	    "users_distribution": {
 	        "weight": 3,
 	        "type": {
-	            "@type": "/milkyway.rewards.v1.UsersDistributionTypeBasic"
+	            "@type": "/milkyway.rewards.v2.UsersDistributionTypeBasic"
 	        }
 	    },
 		"fee_amount": "100uinit"
@@ -102,7 +102,7 @@ func TestCLIUtils_parseRewardsPlan(t *testing.T) {
 					1,
 					"test plan",
 					1,
-					sdk.NewCoins(sdk.NewCoin("uinit", math.NewInt(1000))),
+					sdk.NewCoin("uinit", math.NewInt(1000)),
 					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 					time.Date(2024, 12, 31, 23, 59, 59, 0, time.UTC),
 					types.NewBasicPoolsDistribution(1),
@@ -123,21 +123,21 @@ func TestCLIUtils_parseRewardsPlan(t *testing.T) {
 	    "pools_distribution": {
 	        "weight": 1,
 	        "type": {
-	            "@type":"/milkyway.rewards.v1.DistributionTypeWeighted",
+	            "@type":"/milkyway.rewards.v2.DistributionTypeWeighted",
                 "weights": [{ "delegation_target_id": 1, "weight": 1 }]	
 	        }
 	    },
 	    "operators_distribution": {
 	        "weight": 2,
 	        "type": {
-	            "@type": "/milkyway.rewards.v1.DistributionTypeWeighted",
+	            "@type": "/milkyway.rewards.v2.DistributionTypeWeighted",
                  "weights": [{ "delegation_target_id": 2, "weight": 2 }]	
 	        }
 	    },
 	    "users_distribution": {
 	        "weight": 3,
 	        "type": {
-	            "@type": "/milkyway.rewards.v1.UsersDistributionTypeBasic"
+	            "@type": "/milkyway.rewards.v2.UsersDistributionTypeBasic"
 	        }
 	    },
 		"fee_amount": "100uinit"
@@ -148,7 +148,7 @@ func TestCLIUtils_parseRewardsPlan(t *testing.T) {
 					1,
 					"test plan",
 					1,
-					sdk.NewCoins(sdk.NewCoin("uinit", math.NewInt(1000))),
+					sdk.NewCoin("uinit", math.NewInt(1000)),
 					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 					time.Date(2024, 12, 31, 23, 59, 59, 0, time.UTC),
 					types.NewWeightedPoolsDistribution(1, []types.DistributionWeight{types.NewDistributionWeight(1, 1)}),
@@ -168,19 +168,19 @@ func TestCLIUtils_parseRewardsPlan(t *testing.T) {
 	    "pools_distribution": {
 	        "weight": 1,
 	        "type": {
-	            "@type":"/milkyway.rewards.v1.DistributionTypeBasic"
+	            "@type":"/milkyway.rewards.v2.DistributionTypeBasic"
 	        }
 	    },
 	    "operators_distribution": {
 	        "weight": 2,
 	        "type": {
-	            "@type": "/milkyway.rewards.v1.DistributionTypeBasic"
+	            "@type": "/milkyway.rewards.v2.DistributionTypeBasic"
 	        }
 	    },
 	    "users_distribution": {
 	        "weight": 3,
 	        "type": {
-	            "@type": "/milkyway.rewards.v1.UsersDistributionTypeBasic"
+	            "@type": "/milkyway.rewards.v2.UsersDistributionTypeBasic"
 	        }
 	    }
 	}`),
@@ -190,7 +190,7 @@ func TestCLIUtils_parseRewardsPlan(t *testing.T) {
 					1,
 					"test plan",
 					0,
-					sdk.NewCoins(sdk.NewCoin("uinit", math.NewInt(1000))),
+					sdk.NewCoin("uinit", math.NewInt(1000)),
 					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 					time.Date(2024, 12, 31, 23, 59, 59, 0, time.UTC),
 					types.NewBasicPoolsDistribution(1),

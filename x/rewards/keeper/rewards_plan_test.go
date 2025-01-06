@@ -18,7 +18,7 @@ func (suite *KeeperTestSuite) TestCreateRewardsPlan_PoolOrOperatorNotFound() {
 	service, _ := suite.setupSampleServiceAndOperator(ctx)
 
 	// Create an active rewards plan.
-	amtPerDay := utils.MustParseCoins("100_000000service")
+	amtPerDay := utils.MustParseCoin("100_000000service")
 	planStartTime := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
 	planEndTime := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
 
@@ -81,7 +81,7 @@ func (suite *KeeperTestSuite) TestTerminateEndedRewardsPlans() {
 	plan := suite.CreateBasicRewardsPlan(
 		ctx,
 		service.ID,
-		utils.MustParseCoins("100_000000service"),
+		utils.MustParseCoin("100_000000service"),
 		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 		time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 		utils.MustParseCoins("10000_000000service"),

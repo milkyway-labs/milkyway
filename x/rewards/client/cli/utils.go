@@ -81,7 +81,7 @@ func ParseRewardsPlan(cdc codec.Codec, path string) (ParsedRewardsPlan, error) {
 		Weight: rewardsPlanJSON.UsersDistribution.Weight,
 	}
 
-	amountPerDay, err := sdk.ParseCoinsNormalized(rewardsPlanJSON.AmountPerDay)
+	amountPerDay, err := sdk.ParseCoinNormalized(rewardsPlanJSON.AmountPerDay)
 	if err != nil {
 		return ParsedRewardsPlan{}, fmt.Errorf("invalid amount per day: %w", err)
 	}

@@ -34,7 +34,7 @@ func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 			msg: types.NewMsgCreateRewardsPlan(
 				1,
 				"Rewards Plan",
-				utils.MustParseCoins("100_000000service"),
+				utils.MustParseCoin("100_000000service"),
 				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 				types.NewBasicPoolsDistribution(0),
@@ -70,7 +70,7 @@ func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 			msg: types.NewMsgCreateRewardsPlan(
 				1,
 				"Rewards Plan",
-				utils.MustParseCoins("100_000000service"),
+				utils.MustParseCoin("100_000000service"),
 				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 				types.NewBasicPoolsDistribution(0),
@@ -107,7 +107,7 @@ func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 			msg: types.NewMsgCreateRewardsPlan(
 				1,
 				"Rewards Plan",
-				utils.MustParseCoins("100_000000service"),
+				utils.MustParseCoin("100_000000service"),
 				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 				types.NewBasicPoolsDistribution(0),
@@ -180,7 +180,7 @@ func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 			msg: types.NewMsgCreateRewardsPlan(
 				1,
 				"Rewards Plan",
-				utils.MustParseCoins("100_000000service"),
+				utils.MustParseCoin("100_000000service"),
 				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 				types.NewBasicPoolsDistribution(0),
@@ -286,7 +286,7 @@ func (suite *KeeperTestSuite) TestMsgEditRewardsPlan() {
 			msg: types.NewMsgEditRewardsPlan(
 				1,
 				"Rewards Plan",
-				utils.MustParseCoins("100_000000service"),
+				utils.MustParseCoin("100_000000service"),
 				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 				types.NewBasicPoolsDistribution(0),
@@ -311,7 +311,7 @@ func (suite *KeeperTestSuite) TestMsgEditRewardsPlan() {
 					ctx,
 					"Rewards Plan",
 					1,
-					utils.MustParseCoins("100_000000service"),
+					utils.MustParseCoin("100_000000service"),
 					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 					types.NewBasicPoolsDistribution(0),
@@ -323,7 +323,7 @@ func (suite *KeeperTestSuite) TestMsgEditRewardsPlan() {
 			msg: types.NewMsgEditRewardsPlan(
 				1,
 				"Rewards Plan",
-				utils.MustParseCoins("100_000000service"),
+				utils.MustParseCoin("100_000000service"),
 				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 				types.NewBasicPoolsDistribution(0),
@@ -351,7 +351,7 @@ func (suite *KeeperTestSuite) TestMsgEditRewardsPlan() {
 					ctx,
 					"Rewards Plan",
 					1,
-					utils.MustParseCoins("100_000000service"),
+					utils.MustParseCoin("100_000000service"),
 					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 					types.NewBasicPoolsDistribution(0),
@@ -363,7 +363,7 @@ func (suite *KeeperTestSuite) TestMsgEditRewardsPlan() {
 			msg: types.NewMsgEditRewardsPlan(
 				1,
 				"Rewards Plan",
-				utils.MustParseCoins("100_000000service"),
+				utils.MustParseCoin("100_000000service"),
 				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 				time.Date(2023, 12, 1, 0, 0, 0, 0, time.UTC),
 				types.NewBasicPoolsDistribution(0),
@@ -391,7 +391,7 @@ func (suite *KeeperTestSuite) TestMsgEditRewardsPlan() {
 					ctx,
 					"Rewards Plan",
 					1,
-					utils.MustParseCoins("100_000000service"),
+					utils.MustParseCoin("100_000000service"),
 					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 					types.NewBasicPoolsDistribution(0),
@@ -403,7 +403,7 @@ func (suite *KeeperTestSuite) TestMsgEditRewardsPlan() {
 			msg: types.NewMsgEditRewardsPlan(
 				1,
 				"Rewards Plan - Edited",
-				utils.MustParseCoins("100_000000service"),
+				utils.MustParseCoin("100_000000service"),
 				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 				time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 				types.NewBasicPoolsDistribution(0),
@@ -431,7 +431,7 @@ func (suite *KeeperTestSuite) TestMsgEditRewardsPlan() {
 					ctx,
 					"Rewards Plan",
 					1,
-					utils.MustParseCoins("100_000000service"),
+					utils.MustParseCoin("100_000000service"),
 					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 					types.NewBasicPoolsDistribution(0),
@@ -443,7 +443,7 @@ func (suite *KeeperTestSuite) TestMsgEditRewardsPlan() {
 			msg: types.NewMsgEditRewardsPlan(
 				1,
 				"Rewards Plan - Edited",
-				utils.MustParseCoins("200_000000service"),
+				utils.MustParseCoin("200_000000service"),
 				time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 				time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC),
 				types.NewBasicPoolsDistribution(1),
@@ -464,7 +464,7 @@ func (suite *KeeperTestSuite) TestMsgEditRewardsPlan() {
 				// Make sure the rewards plan has been edited
 				plan, err := suite.keeper.GetRewardsPlan(ctx, 1)
 				suite.Require().NoError(err)
-				suite.Require().Equal(utils.MustParseCoins("200_000000service"), plan.AmountPerDay)
+				suite.Require().Equal(utils.MustParseCoin("200_000000service"), plan.AmountPerDay)
 				suite.Require().Equal(
 					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 					plan.StartTime,
@@ -677,7 +677,7 @@ func (suite *KeeperTestSuite) TestMsgWithdrawDelegatorReward() {
 				suite.CreateBasicRewardsPlan(
 					ctx,
 					service.ID,
-					utils.MustParseCoins("100_000000service"),
+					utils.MustParseCoin("100_000000service"),
 					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 					utils.MustParseCoins("10000_000000service"),
@@ -792,7 +792,7 @@ func (suite *KeeperTestSuite) TestMsgWithdrawOperatorCommission() {
 				suite.CreateBasicRewardsPlan(
 					ctx,
 					service.ID,
-					utils.MustParseCoins("100_000000service"),
+					utils.MustParseCoin("100_000000service"),
 					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 					utils.MustParseCoins("10000_000000service"),
@@ -826,7 +826,7 @@ func (suite *KeeperTestSuite) TestMsgWithdrawOperatorCommission() {
 				suite.CreateBasicRewardsPlan(
 					ctx,
 					service.ID,
-					utils.MustParseCoins("100_000000service"),
+					utils.MustParseCoin("100_000000service"),
 					time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 					time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 					utils.MustParseCoins("10000_000000service"),

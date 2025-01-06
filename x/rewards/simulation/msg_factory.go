@@ -169,7 +169,7 @@ func SimulateMsgCreateRewardsPlan(
 		msg = types.NewMsgCreateRewardsPlan(
 			service.ID,
 			simtypes.RandStringOfLength(r, 32),
-			amount,
+			amount[0],
 			rewardsStart,
 			rewardsEnd,
 			RandomDistribution(r, restakingtypes.DELEGATION_TYPE_POOL, pool),
@@ -247,7 +247,7 @@ func SimulateMsgEditRewardsPlan(
 		msg = types.NewMsgEditRewardsPlan(
 			plan.ID,
 			simtypes.RandStringOfLength(r, 32),
-			amount,
+			amount[0],
 			rewardsStart,
 			rewardsEnd,
 			RandomDistribution(r, restakingtypes.DELEGATION_TYPE_POOL, pool),

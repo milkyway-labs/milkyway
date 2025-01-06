@@ -250,7 +250,7 @@ func (suite *KeeperTestSuite) AddOperatorsToServiceAllowList(
 func (suite *KeeperTestSuite) CreateRewardsPlan(
 	ctx sdk.Context,
 	serviceID uint32,
-	amtPerDay sdk.Coins,
+	amtPerDay sdk.Coin,
 	startTime time.Time,
 	endTime time.Time,
 	poolsDistr rewardstypes.Distribution,
@@ -294,7 +294,7 @@ func (suite *KeeperTestSuite) CreateRewardsPlan(
 func (suite *KeeperTestSuite) CreateBasicRewardsPlan(
 	ctx sdk.Context,
 	serviceID uint32,
-	amtPerDay sdk.Coins,
+	amtPerDay sdk.Coin,
 	startTime,
 	endTime time.Time,
 	initialRewards sdk.Coins,

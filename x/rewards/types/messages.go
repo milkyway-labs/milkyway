@@ -14,7 +14,7 @@ import (
 func NewMsgCreateRewardsPlan(
 	serviceID uint32,
 	description string,
-	amt sdk.Coins,
+	amt sdk.Coin,
 	startTime,
 	endTime time.Time,
 	poolsDistribution Distribution,
@@ -122,7 +122,7 @@ func (m *MsgCreateRewardsPlan) UnpackInterfaces(unpacker codectypes.AnyUnpacker)
 func NewMsgEditRewardsPlan(
 	id uint64,
 	description string,
-	amount sdk.Coins,
+	amount sdk.Coin,
 	startTime,
 	endTime time.Time,
 	poolsDistribution Distribution,

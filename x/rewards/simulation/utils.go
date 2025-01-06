@@ -74,14 +74,9 @@ func RandomRewardsPlan(
 	serviceID uint32,
 	pools []poolstypes.Pool,
 	operators []operatorstypes.Operator,
-	amtPerDeyDenoms []string,
+	amtPerDeyDenom string,
 ) types.RewardsPlan {
-	randomAmountPerDays := sdk.NewCoins()
-	for _, denom := range amtPerDeyDenoms {
-		randomAmountPerDays = randomAmountPerDays.Add(
-			sdk.NewInt64Coin(denom, r.Int63()))
-	}
-
+	randomAmountPerDays := sdk.NewInt64Coin(amtPerDeyDenom, r.Int63())
 	randomPool := simtesting.RandomSliceElement(r, pools)
 	randomOperator := simtesting.RandomSliceElement(r, operators)
 
@@ -103,7 +98,7 @@ func RandomRewardsPlans(
 	pools []poolstypes.Pool,
 	operators []operatorstypes.Operator,
 	services []servicestypes.Service,
-	allowedDenoms []string,
+	allowedDenom string,
 ) []types.RewardsPlan {
 	// We can't create a rewards plan if we don't have
 	// services, pools or operators
@@ -122,7 +117,7 @@ func RandomRewardsPlans(
 			services[serviceIndex].ID,
 			pools,
 			operators,
-			allowedDenoms,
+			allowedDenom,
 		))
 	}
 

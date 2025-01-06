@@ -16,7 +16,8 @@ import (
 )
 
 type Keeper struct {
-	cdc codec.Codec
+	cdc          codec.Codec
+	storeService corestoretypes.KVStoreService
 
 	accountKeeper       types.AccountKeeper
 	bankKeeper          types.BankKeeper
@@ -72,7 +73,9 @@ func NewKeeper(
 ) *Keeper {
 	sb := collections.NewSchemaBuilder(storeService)
 	k := &Keeper{
-		cdc:                 cdc,
+		cdc:          cdc,
+		storeService: storeService,
+
 		accountKeeper:       accountKeeper,
 		bankKeeper:          bankKeeper,
 		communityPoolKeeper: communityPoolKeeper,

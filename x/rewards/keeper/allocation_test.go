@@ -26,7 +26,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_InactivePlan() {
 	suite.CreateBasicRewardsPlan(
 		ctx,
 		service.ID,
-		utils.MustParseCoins("100_000000service"),
+		utils.MustParseCoin("100_000000service"),
 		planStartTime,
 		planEndTime,
 		utils.MustParseCoins("100000_000000service"),
@@ -101,7 +101,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	suite.CreateBasicRewardsPlan(
 		ctx,
 		service1.ID,
-		utils.MustParseCoins("1000_000000service1"),
+		utils.MustParseCoin("1000_000000service1"),
 		planStartTime,
 		planEndTime,
 		utils.MustParseCoins("100000_000000service1"),
@@ -109,7 +109,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	suite.CreateBasicRewardsPlan(
 		ctx,
 		service2.ID,
-		utils.MustParseCoins("5000_000000service2"),
+		utils.MustParseCoin("5000_000000service2"),
 		planStartTime,
 		planEndTime,
 		utils.MustParseCoins("100000_000000service2"),
@@ -117,7 +117,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	suite.CreateBasicRewardsPlan(
 		ctx,
 		service3.ID,
-		utils.MustParseCoins("10000_000000service3"),
+		utils.MustParseCoin("10000_000000service3"),
 		planStartTime,
 		planEndTime,
 		utils.MustParseCoins("100000_000000service3"),
@@ -276,7 +276,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_MovingPrice() {
 	suite.CreateBasicRewardsPlan(
 		ctx,
 		service.ID,
-		utils.MustParseCoins("100_000000service"),
+		utils.MustParseCoin("100_000000service"),
 		planStartTime,
 		planEndTime,
 		utils.MustParseCoins("100000_000000service"),
@@ -339,7 +339,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_ZeroDelegations() {
 	suite.CreateRewardsPlan(
 		ctx,
 		service.ID,
-		utils.MustParseCoins("100_000000service"),
+		utils.MustParseCoin("100_000000service"),
 		planStartTime,
 		planEndTime,
 		types.NewBasicPoolsDistribution(1),
@@ -458,7 +458,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_WeightedDistributions() {
 	suite.CreateRewardsPlan(
 		ctx,
 		service.ID,
-		utils.MustParseCoins("100_000000service"),
+		utils.MustParseCoin("100_000000service"),
 		planStartTime,
 		planEndTime,
 		types.NewWeightedPoolsDistribution(3, []types.DistributionWeight{
@@ -549,7 +549,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_EgalitarianDistributions() {
 	suite.CreateRewardsPlan(
 		ctx,
 		service.ID,
-		utils.MustParseCoins("100_000000service"),
+		utils.MustParseCoin("100_000000service"),
 		planStartTime,
 		planEndTime,
 		types.NewEgalitarianPoolsDistribution(3),
@@ -652,7 +652,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_TrustedServices() {
 	suite.CreateBasicRewardsPlan(
 		ctx,
 		service1.ID,
-		utils.MustParseCoins("1000_000000service1"),
+		utils.MustParseCoin("1000_000000service1"),
 		planStartTime,
 		planEndTime,
 		utils.MustParseCoins("100000_000000service1"),
@@ -660,7 +660,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_TrustedServices() {
 	suite.CreateBasicRewardsPlan(
 		ctx,
 		service2.ID,
-		utils.MustParseCoins("5000_000000service2"),
+		utils.MustParseCoin("5000_000000service2"),
 		planStartTime,
 		planEndTime,
 		utils.MustParseCoins("100000_000000service2"),
@@ -754,7 +754,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_UserTrustedServiceUpdated() {
 	suite.CreateBasicRewardsPlan(
 		ctx,
 		service1.ID,
-		utils.MustParseCoins("1000_000000service1"),
+		utils.MustParseCoin("1000_000000service1"),
 		planStartTime,
 		planEndTime,
 		utils.MustParseCoins("100000_000000service1"),
@@ -762,7 +762,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_UserTrustedServiceUpdated() {
 	suite.CreateBasicRewardsPlan(
 		ctx,
 		service2.ID,
-		utils.MustParseCoins("5000_000000service2"),
+		utils.MustParseCoin("5000_000000service2"),
 		planStartTime,
 		planEndTime,
 		utils.MustParseCoins("100000_000000service2"),
@@ -838,7 +838,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_InactiveService() {
 	suite.CreateBasicRewardsPlan(
 		ctx,
 		service1.ID,
-		utils.MustParseCoins("1000_000000service1"),
+		utils.MustParseCoin("1000_000000service1"),
 		planStartTime,
 		planEndTime,
 		utils.MustParseCoins("100000_000000service1"),
@@ -846,7 +846,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_InactiveService() {
 	suite.CreateBasicRewardsPlan(
 		ctx,
 		service2.ID,
-		utils.MustParseCoins("2000_000000service2"),
+		utils.MustParseCoin("2000_000000service2"),
 		planStartTime,
 		planEndTime,
 		utils.MustParseCoins("100000_000000service2"),
@@ -928,7 +928,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_InactiveOperator() {
 	suite.CreateBasicRewardsPlan(
 		ctx,
 		service.ID,
-		utils.MustParseCoins("1000_000000service"),
+		utils.MustParseCoin("1000_000000service"),
 		planStartTime,
 		planEndTime,
 		utils.MustParseCoins("100000_000000service"),

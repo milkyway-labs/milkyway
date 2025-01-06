@@ -37,14 +37,14 @@ func RegisterInterfaces(registry types.InterfaceRegistry) {
 		&MsgUpdateParams{},
 	)
 	registry.RegisterInterface(
-		"milkyway.rewards.v1.DistributionType",
+		"milkyway.rewards.v2.DistributionType",
 		(*DistributionType)(nil),
 		&DistributionTypeBasic{},
 		&DistributionTypeWeighted{},
 		&DistributionTypeEgalitarian{},
 	)
 	registry.RegisterInterface(
-		"milkyway.rewards.v1.UsersDistributionType",
+		"milkyway.rewards.v2.UsersDistributionType",
 		(*UsersDistributionType)(nil),
 		&UsersDistributionTypeBasic{},
 	)

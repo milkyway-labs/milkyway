@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	corestoretypes "cosmossdk.io/core/store"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
@@ -39,7 +40,8 @@ type KeeperTestData struct {
 	RestakingKeeper *restakingkeeper.Keeper
 	AssetsKeeper    *assetskeeper.Keeper
 
-	Keeper *rewardskeeper.Keeper
+	StoreService corestoretypes.KVStoreService
+	Keeper       *rewardskeeper.Keeper
 }
 
 func NewKeeperTestData(t *testing.T) KeeperTestData {
@@ -110,9 +112,10 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		data.AuthorityAddress,
 	)
 
+	data.StoreService = runtime.NewKVStoreService(data.Keys[rewardstypes.StoreKey])
 	data.Keeper = rewardskeeper.NewKeeper(
 		data.Cdc,
-		runtime.NewKVStoreService(data.Keys[rewardstypes.StoreKey]),
+		data.StoreService,
 		data.AccountKeeper,
 		data.BankKeeper,
 		data.DistributionKeeper,

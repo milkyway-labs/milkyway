@@ -30,7 +30,10 @@ func TestGenesisState_Validate(t *testing.T) {
 				NextRewardsPlanID: 1,
 				RewardsPlans: []types.RewardsPlan{
 					types.NewRewardsPlan(
-						1, "Rewards plan", 0, utils.MustParseCoins("10_000000umilk"),
+						1,
+						"Rewards plan",
+						0,
+						utils.MustParseCoin("10_000000umilk"),
 						time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
 						time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
 						types.NewBasicPoolsDistribution(0), types.NewBasicOperatorsDistribution(0),

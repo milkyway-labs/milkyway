@@ -38,7 +38,7 @@ func NewRewardsPlan(
 	id uint64,
 	description string,
 	serviceID uint32,
-	amtPerDay sdk.Coins,
+	amtPerDay sdk.Coin,
 	startTime,
 	endTime time.Time,
 	poolsDistribution Distribution,
@@ -90,6 +90,10 @@ func (plan RewardsPlan) Validate(unpacker codectypes.AnyUnpacker) error {
 	err := plan.AmountPerDay.Validate()
 	if err != nil {
 		return fmt.Errorf("invalid amount per day: %w", err)
+	}
+
+	if plan.AmountPerDay.IsZero() {
+		return fmt.Errorf("amount per day must be positive: %s", plan.AmountPerDay)
 	}
 
 	if !plan.EndTime.After(plan.StartTime) {

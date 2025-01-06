@@ -164,35 +164,32 @@ func (k *Keeper) AllocateRewardsByPlan(
 ) error {
 	// Calculate rewards amount for this block by following formula:
 	// amountPerDay * timeSinceLastAllocation(ms) / 1 day(ms)
-	rewards := sdk.NewDecCoinsFromCoins(plan.AmountPerDay...).
-		MulDecTruncate(math.LegacyNewDec(timeSinceLastAllocation.Milliseconds())).
-		QuoDecTruncate(math.LegacyNewDec((24 * time.Hour).Milliseconds()))
+	rewardsAmount := math.LegacyNewDecFromInt(plan.AmountPerDay.Amount).
+		MulTruncate(math.LegacyNewDec(timeSinceLastAllocation.Milliseconds())).
+		QuoTruncate(math.LegacyNewDec((24 * time.Hour).Milliseconds()))
 
 	// Truncate decimal and move the truncated rewards to the global rewards
 	// pool.
-	rewardsTruncated, _ := rewards.TruncateDecimal()
-
-	// Use this truncated rewards so that we don't allocate more rewards than
-	// what have been moved to the global rewards pool.
-	rewards = sdk.NewDecCoinsFromCoins(rewardsTruncated...)
+	rewardsTruncated := sdk.NewCoin(plan.AmountPerDay.Denom, rewardsAmount.TruncateInt())
+	rewards := sdk.NewDecCoinsFromCoins(rewardsTruncated)
 
 	// Check if the rewards pool has enough coins to allocate rewards.
 	planRewardsPoolAddr := plan.MustGetRewardsPoolAddress(k.accountKeeper.AddressCodec())
-	balances := k.bankKeeper.GetAllBalances(ctx, planRewardsPoolAddr)
+	balance := k.bankKeeper.GetBalance(ctx, planRewardsPoolAddr, rewardsTruncated.Denom)
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	if !balances.IsAllGTE(rewardsTruncated) {
+	if !balance.IsGTE(rewardsTruncated) {
 		sdkCtx.Logger().Info(
 			"Skipping rewards plan because its rewards pool has insufficient balances",
 			"plan_id", plan.ID,
-			"balances", balances.String(),
-			"rewards", rewards.String(),
+			"balance", balance.String(),
+			"rewards", rewardsTruncated.String(),
 		)
 		return nil
 	}
 
 	// Send the current block's rewards to the global rewards pool.
-	err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, planRewardsPoolAddr, types.RewardsPoolName, rewardsTruncated)
+	err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, planRewardsPoolAddr, types.RewardsPoolName, sdk.NewCoins(rewardsTruncated))
 	if err != nil {
 		return err
 	}
