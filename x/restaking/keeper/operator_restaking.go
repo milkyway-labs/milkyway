@@ -89,6 +89,11 @@ func (k *Keeper) DelegateToOperator(ctx context.Context, operatorID uint32, amou
 		return nil, err
 	}
 
+	// Make sure the operator is active
+	if !operator.IsActive() {
+		return sdk.NewDecCoins(), operatorstypes.ErrOperatorNotActive
+	}
+
 	restakableDenoms, err := k.GetRestakableDenoms(ctx)
 	if err != nil {
 		return nil, err
@@ -102,11 +107,6 @@ func (k *Keeper) DelegateToOperator(ctx context.Context, operatorID uint32, amou
 				return sdk.NewDecCoins(), errors.Wrapf(types.ErrDenomNotRestakable, "%s cannot be restaked", coin.Denom)
 			}
 		}
-	}
-
-	// Make sure the operator is active
-	if !operator.IsActive() {
-		return sdk.NewDecCoins(), operatorstypes.ErrOperatorNotActive
 	}
 
 	return k.PerformDelegation(ctx, types.DelegationData{

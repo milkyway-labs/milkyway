@@ -165,10 +165,6 @@ func (o Operator) RemoveDelShares(delShares sdk.DecCoins) (Operator, sdk.Coins) 
 		// However, fully use all the delegator shares
 		issuedTokens, _ = o.TokensFromShares(delShares).TruncateDecimal()
 		o.Tokens = o.Tokens.Sub(issuedTokens...)
-
-		if o.Tokens.IsAnyNegative() {
-			panic("attempting to remove more tokens than available in operator")
-		}
 	}
 
 	o.DelegatorShares = remainingShares

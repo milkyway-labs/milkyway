@@ -222,6 +222,11 @@ func (k *Keeper) DelegateToService(ctx context.Context, serviceID uint32, amount
 		return nil, err
 	}
 
+	// Make sure the service is active
+	if !service.IsActive() {
+		return sdk.NewDecCoins(), servicestypes.ErrServiceNotActive
+	}
+
 	restakableDenoms, err := k.GetRestakableDenoms(ctx)
 	if err != nil {
 		return nil, err
@@ -255,11 +260,6 @@ func (k *Keeper) DelegateToService(ctx context.Context, serviceID uint32, amount
 				return sdk.NewDecCoins(), errors.Wrapf(types.ErrDenomNotRestakable, "%s cannot be restaked", coin.Denom)
 			}
 		}
-	}
-
-	// Make sure the service is active
-	if !service.IsActive() {
-		return sdk.NewDecCoins(), servicestypes.ErrServiceNotActive
 	}
 
 	return k.PerformDelegation(ctx, types.DelegationData{

@@ -122,6 +122,11 @@ func (k msgServer) AddOperatorToAllowList(ctx context.Context, msg *types.MsgAdd
 		return nil, err
 	}
 
+	// Ensure the service admin is performing this action
+	if service.Admin != msg.Sender {
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the service admin can allow an operator")
+	}
+
 	// Ensure that the operator exists
 	_, err = k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
 	if err != nil {
@@ -129,11 +134,6 @@ func (k msgServer) AddOperatorToAllowList(ctx context.Context, msg *types.MsgAdd
 			return nil, operatorstypes.ErrOperatorNotFound
 		}
 		return nil, err
-	}
-
-	// Ensure the service admin is performing this action
-	if service.Admin != msg.Sender {
-		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized, "only the service admin can allow an operator")
 	}
 
 	// Ensure operator is not allowed before adding it
@@ -217,6 +217,12 @@ func (k msgServer) BorrowPoolSecurity(ctx context.Context, msg *types.MsgBorrowP
 		return nil, err
 	}
 
+	// Ensure the service admin is performing this action
+	if service.Admin != msg.Sender {
+		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized,
+			"only the service admin can borrow the security from a new pool")
+	}
+
 	// Ensure the service is active
 	if !service.IsActive() {
 		return nil, errors.Wrapf(servicestypes.ErrServiceNotActive, "service %d is not active", msg.ServiceID)
@@ -229,12 +235,6 @@ func (k msgServer) BorrowPoolSecurity(ctx context.Context, msg *types.MsgBorrowP
 			return nil, poolstypes.ErrPoolNotFound
 		}
 		return nil, err
-	}
-
-	// Ensure the service admin is performing this action
-	if service.Admin != msg.Sender {
-		return nil, errors.Wrapf(sdkerrors.ErrUnauthorized,
-			"only the service admin can borrow the security from a new pool")
 	}
 
 	// Ensure the pool is not in the service securing pools list
