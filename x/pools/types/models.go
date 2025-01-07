@@ -122,28 +122,6 @@ func (p Pool) SharesFromTokens(amt sdk.Coins) (sdk.DecCoins, error) {
 	return shares, nil
 }
 
-// SharesFromTokensTruncated returns the truncated shares of a delegation given
-// a bond amount. It returns an error if the pool has no tokens.
-func (p Pool) SharesFromTokensTruncated(amt sdk.Coins) (sdk.DecCoins, error) {
-	if p.Tokens.IsZero() {
-		return sdk.NewDecCoins(), ErrInsufficientShares
-	}
-
-	shares := sdk.NewDecCoins()
-	for _, coin := range amt {
-		if coin.Denom != p.Denom {
-			return sdk.NewDecCoins(), ErrInvalidDenom
-		}
-
-		shareDenom := p.GetSharesDenom(coin.Denom)
-		shareAmount := p.DelegatorShares.MulInt(coin.Amount).QuoTruncate(sdkmath.LegacyNewDecFromInt(p.Tokens))
-
-		shares = shares.Add(sdk.NewDecCoinFromDec(shareDenom, shareAmount))
-	}
-
-	return shares, nil
-}
-
 // SharesFromDecCoins returns the shares of a delegation given a bond amount. It
 // returns an error if the service has no tokens.
 func (p Pool) SharesFromDecCoins(coins sdk.DecCoins) (sdk.DecCoins, error) {

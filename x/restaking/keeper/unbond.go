@@ -72,16 +72,6 @@ func (k *Keeper) ValidateUnbondAmount(
 		return shares, err
 	}
 
-	sharesTruncated, err := target.SharesFromTokensTruncated(amt)
-	if err != nil {
-		return shares, err
-	}
-
-	// Ensure that the shares to be unbonded are not greater than the shares that the delegator has
-	if utils.IsAnyGT(sharesTruncated, delShares) {
-		return shares, types.ErrInvalidShares
-	}
-
 	// Cap the shares at the delegation's shares. Shares being greater could occur
 	// due to rounding, however we don't want to truncate the shares or take the
 	// minimum because we want to allow for the full withdraw of shares from a

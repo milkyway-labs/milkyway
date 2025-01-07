@@ -18,7 +18,6 @@ type DelegationTarget interface {
 	TokensFromShares(shares sdk.DecCoins) sdk.DecCoins
 	TokensFromSharesTruncated(shares sdk.DecCoins) sdk.DecCoins
 	SharesFromTokens(amt sdk.Coins) (sdk.DecCoins, error)
-	SharesFromTokensTruncated(tokens sdk.Coins) (sdk.DecCoins, error)
 	SharesFromDecCoins(amt sdk.DecCoins) (sdk.DecCoins, error)
 }
 

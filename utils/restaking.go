@@ -93,28 +93,6 @@ func SharesFromTokens(tokens sdk.Coins, getShareDenom ShareDenomGetter, delegate
 	return shares, nil
 }
 
-// SharesFromTokensTruncated returns the truncated shares of a delegation given a bond amount.
-func SharesFromTokensTruncated(tokens sdk.Coins, getShareDenom ShareDenomGetter, delegatedTokens sdk.Coins, delegatorsShares sdk.DecCoins) (sdk.DecCoins, error) {
-	shares := sdk.NewDecCoins()
-	for _, token := range tokens {
-		sharesDenom := getShareDenom(token.Denom)
-
-		delegatorTokenShares := delegatorsShares.AmountOf(sharesDenom)
-		operatorTokenAmount := delegatedTokens.AmountOf(token.Denom)
-
-		var sharesAmount sdkmath.LegacyDec
-		if operatorTokenAmount.IsZero() {
-			sharesAmount = sdkmath.LegacyNewDecFromInt(token.Amount)
-		} else {
-			sharesAmount = delegatorTokenShares.MulInt(token.Amount).QuoTruncate(sdkmath.LegacyNewDecFromInt(operatorTokenAmount))
-		}
-
-		shares = shares.Add(sdk.NewDecCoinFromDec(sharesDenom, sharesAmount))
-	}
-
-	return shares, nil
-}
-
 // SharesFromDecCoins returns the shares of a delegation given a bond amount.
 func SharesFromDecCoins(tokens sdk.DecCoins, getShareDenom ShareDenomGetter, delegatedTokens sdk.Coins, delegatorsShares sdk.DecCoins) (sdk.DecCoins, error) {
 	shares := sdk.NewDecCoins()

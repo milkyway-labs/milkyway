@@ -127,15 +127,6 @@ func (o Operator) SharesFromTokens(tokens sdk.Coins) (sdk.DecCoins, error) {
 	return utils.SharesFromTokens(tokens, o.GetSharesDenom, o.Tokens, o.DelegatorShares)
 }
 
-// SharesFromTokensTruncated returns the truncated shares of a delegation given a bond amount.
-// It returns an error if the operator has no tokens.
-func (o Operator) SharesFromTokensTruncated(tokens sdk.Coins) (sdk.DecCoins, error) {
-	if o.Tokens.IsZero() {
-		return sdk.NewDecCoins(), ErrInsufficientShares
-	}
-	return utils.SharesFromTokensTruncated(tokens, o.GetSharesDenom, o.Tokens, o.DelegatorShares)
-}
-
 // SharesFromDecCoins returns the shares of a delegation given a bond amount. It
 // returns an error if the operator has no tokens.
 func (o Operator) SharesFromDecCoins(tokens sdk.DecCoins) (sdk.DecCoins, error) {
