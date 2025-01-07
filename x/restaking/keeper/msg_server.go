@@ -55,6 +55,16 @@ func (k msgServer) JoinService(ctx context.Context, msg *types.MsgJoinService) (
 		return nil, errors.Wrapf(servicestypes.ErrServiceNotActive, "service %d is not active", msg.ServiceID)
 	}
 
+	// Make sure the operator is allowed to join
+	operatorAllowed, err := k.CanOperatorValidateService(ctx, msg.ServiceID, msg.OperatorID)
+	if err != nil {
+		return nil, err
+	}
+
+	if !operatorAllowed {
+		return nil, types.ErrOperatorNotAllowed
+	}
+
 	err = k.AddServiceToOperatorJoinedServices(ctx, msg.OperatorID, msg.ServiceID)
 	if err != nil {
 		return nil, err

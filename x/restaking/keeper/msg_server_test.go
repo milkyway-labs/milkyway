@@ -38,7 +38,8 @@ func (suite *KeeperTestSuite) TestMsgServer_JoinService() {
 			name: "non-existent service id returns an error",
 			store: func(ctx sdk.Context) {
 				err := suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
-					1, operatorstypes.OPERATOR_STATUS_ACTIVE,
+					1,
+					operatorstypes.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
@@ -57,7 +58,8 @@ func (suite *KeeperTestSuite) TestMsgServer_JoinService() {
 			name: "only operator admin can perform JoinService",
 			store: func(ctx sdk.Context) {
 				err := suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
-					1, operatorstypes.OPERATOR_STATUS_ACTIVE,
+					1,
+					operatorstypes.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
@@ -66,7 +68,8 @@ func (suite *KeeperTestSuite) TestMsgServer_JoinService() {
 				suite.Require().NoError(err)
 
 				err = suite.sk.SaveService(ctx, servicestypes.NewService(
-					1, servicestypes.SERVICE_STATUS_ACTIVE,
+					1,
+					servicestypes.SERVICE_STATUS_ACTIVE,
 					"MilkyWay",
 					"MilkyWay is a restaking platform",
 					"https://milkyway.com",
@@ -87,7 +90,8 @@ func (suite *KeeperTestSuite) TestMsgServer_JoinService() {
 			name: "service not active returns error",
 			store: func(ctx sdk.Context) {
 				err := suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
-					1, operatorstypes.OPERATOR_STATUS_ACTIVE,
+					1,
+					operatorstypes.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
@@ -96,7 +100,8 @@ func (suite *KeeperTestSuite) TestMsgServer_JoinService() {
 				suite.Require().NoError(err)
 
 				err = suite.sk.SaveService(ctx, servicestypes.NewService(
-					1, servicestypes.SERVICE_STATUS_INACTIVE,
+					1,
+					servicestypes.SERVICE_STATUS_INACTIVE,
 					"MilkyWay",
 					"MilkyWay is a restaking platform",
 					"https://milkyway.com",
@@ -117,7 +122,8 @@ func (suite *KeeperTestSuite) TestMsgServer_JoinService() {
 			name: "can't join inactive service",
 			store: func(ctx sdk.Context) {
 				err := suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
-					1, operatorstypes.OPERATOR_STATUS_ACTIVE,
+					1,
+					operatorstypes.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
@@ -125,7 +131,8 @@ func (suite *KeeperTestSuite) TestMsgServer_JoinService() {
 				))
 				suite.Require().NoError(err)
 				err = suite.sk.SaveService(ctx, servicestypes.NewService(
-					1, servicestypes.SERVICE_STATUS_INACTIVE,
+					1,
+					servicestypes.SERVICE_STATUS_INACTIVE,
 					"MilkyWay",
 					"MilkyWay is a restaking platform",
 					"https://milkyway.com",
@@ -146,7 +153,8 @@ func (suite *KeeperTestSuite) TestMsgServer_JoinService() {
 			name: "can't join created service",
 			store: func(ctx sdk.Context) {
 				err := suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
-					1, operatorstypes.OPERATOR_STATUS_ACTIVE,
+					1,
+					operatorstypes.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
@@ -154,7 +162,8 @@ func (suite *KeeperTestSuite) TestMsgServer_JoinService() {
 				))
 				suite.Require().NoError(err)
 				err = suite.sk.SaveService(ctx, servicestypes.NewService(
-					1, servicestypes.SERVICE_STATUS_INACTIVE,
+					1,
+					servicestypes.SERVICE_STATUS_INACTIVE,
 					"MilkyWay",
 					"MilkyWay is a restaking platform",
 					"https://milkyway.com",
@@ -172,10 +181,11 @@ func (suite *KeeperTestSuite) TestMsgServer_JoinService() {
 			shouldErr: true,
 		},
 		{
-			name: "join is performed correctly",
+			name: "can't join service due to allow list",
 			store: func(ctx sdk.Context) {
 				err := suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
-					1, operatorstypes.OPERATOR_STATUS_ACTIVE,
+					1,
+					operatorstypes.OPERATOR_STATUS_ACTIVE,
 					"MilkyWay Operator",
 					"https://milkyway.com",
 					"https://milkyway.com/picture",
@@ -184,7 +194,8 @@ func (suite *KeeperTestSuite) TestMsgServer_JoinService() {
 				suite.Require().NoError(err)
 
 				err = suite.sk.SaveService(ctx, servicestypes.NewService(
-					1, servicestypes.SERVICE_STATUS_ACTIVE,
+					1,
+					servicestypes.SERVICE_STATUS_ACTIVE,
 					"MilkyWay",
 					"MilkyWay is a restaking platform",
 					"https://milkyway.com",
@@ -192,6 +203,83 @@ func (suite *KeeperTestSuite) TestMsgServer_JoinService() {
 					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 					false,
 				))
+				suite.Require().NoError(err)
+
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 1, 2)
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgJoinService(
+				1,
+				1,
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			shouldErr: true,
+		},
+		{
+			name: "join is performed correctly - no allow list",
+			store: func(ctx sdk.Context) {
+				err := suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
+					1,
+					operatorstypes.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+				suite.Require().NoError(err)
+
+				err = suite.sk.SaveService(ctx, servicestypes.NewService(
+					1,
+					servicestypes.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
+				))
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgJoinService(
+				1,
+				1,
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			shouldErr: false,
+			expEvents: sdk.Events{
+				sdk.NewEvent(
+					types.EventTypeJoinService,
+					sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, "1"),
+					sdk.NewAttribute(servicestypes.AttributeKeyServiceID, "1"),
+				),
+			},
+		},
+		{
+			name: "join is performed correctly - allow list",
+			store: func(ctx sdk.Context) {
+				err := suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
+					1,
+					operatorstypes.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+				suite.Require().NoError(err)
+
+				err = suite.sk.SaveService(ctx, servicestypes.NewService(
+					1,
+					servicestypes.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					false,
+				))
+				suite.Require().NoError(err)
+
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
 				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgJoinService(
