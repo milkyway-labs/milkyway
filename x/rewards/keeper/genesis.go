@@ -312,7 +312,17 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 	if rewardsPoolAcc == nil {
 		return fmt.Errorf("rewards pool module account has not been set")
 	}
-	rewardsPoolBalances := k.bankKeeper.GetAllBalances(ctx, rewardsPoolAcc.GetAddress())
+
+	totalOutstandingRewardsTruncated, _ := totalOutstandingRewards.TruncateDecimal()
+
+	// Get the rewards pool balances based on the denoms that have outstanding rewards
+	// This is to avoid the call to GetAllBalances which can be exploited by a malicious user
+	// since it iterates unboundedly over the full address balance
+	rewardsPoolBalances := sdk.NewCoins()
+	for _, outstandingReward := range totalOutstandingRewards {
+		rewardsPoolBalance := k.bankKeeper.GetBalance(ctx, rewardsPoolAcc.GetAddress(), outstandingReward.Denom)
+		rewardsPoolBalances = rewardsPoolBalances.Add(rewardsPoolBalance)
+	}
 
 	// Save the rewards pool module account if balances are zero.
 	// This code is taken from Cosmos SDK.
@@ -320,7 +330,6 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 		k.accountKeeper.SetModuleAccount(ctx, rewardsPoolAcc)
 	}
 
-	totalOutstandingRewardsTruncated, _ := totalOutstandingRewards.TruncateDecimal()
 	if totalOutstandingRewardsTruncated.IsAnyGT(rewardsPoolBalances) {
 		return fmt.Errorf("rewards pool module balance does not match the module holdings: %s < %s",
 			rewardsPoolBalances,
