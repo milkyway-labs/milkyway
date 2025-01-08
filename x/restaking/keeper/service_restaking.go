@@ -216,9 +216,6 @@ func (k *Keeper) DelegateToService(ctx context.Context, serviceID uint32, amount
 	// Get the service
 	service, err := k.servicesKeeper.GetService(ctx, serviceID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return sdk.NewDecCoins(), servicestypes.ErrServiceNotFound
-		}
 		return nil, err
 	}
 
@@ -318,9 +315,6 @@ func (k *Keeper) UndelegateFromService(ctx context.Context, serviceID uint32, am
 	// Find the service
 	service, err := k.servicesKeeper.GetService(ctx, serviceID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return time.Time{}, servicestypes.ErrServiceNotFound
-		}
 		return time.Time{}, err
 	}
 

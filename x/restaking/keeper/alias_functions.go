@@ -527,9 +527,6 @@ func (k *Keeper) GetAllUserRestakedCoins(ctx context.Context, userAddress string
 	err := k.IterateUserDelegations(ctx, userAddress, func(d types.Delegation) (bool, error) {
 		target, err := k.GetDelegationTargetFromDelegation(ctx, d)
 		if err != nil {
-			if errors.IsOf(err, collections.ErrNotFound) {
-				return true, fmt.Errorf("can't find target for delegation %d, target id: %d", d.Type, d.TargetID)
-			}
 			return true, err
 		}
 
@@ -629,9 +626,6 @@ func (k *Keeper) getUnbondingDelegationTarget(ctx context.Context, ubd types.Unb
 	case types.DELEGATION_TYPE_POOL:
 		pool, err := k.poolsKeeper.GetPool(ctx, ubd.TargetID)
 		if err != nil {
-			if errors.IsOf(err, collections.ErrNotFound) {
-				return nil, poolstypes.ErrPoolNotFound
-			}
 			return nil, err
 		}
 		return pool, nil
@@ -639,9 +633,6 @@ func (k *Keeper) getUnbondingDelegationTarget(ctx context.Context, ubd types.Unb
 	case types.DELEGATION_TYPE_OPERATOR:
 		operator, err := k.operatorsKeeper.GetOperator(ctx, ubd.TargetID)
 		if err != nil {
-			if errors.IsOf(err, collections.ErrNotFound) {
-				return nil, operatorstypes.ErrOperatorNotFound
-			}
 			return nil, err
 		}
 		return operator, nil
@@ -649,9 +640,6 @@ func (k *Keeper) getUnbondingDelegationTarget(ctx context.Context, ubd types.Unb
 	case types.DELEGATION_TYPE_SERVICE:
 		service, err := k.servicesKeeper.GetService(ctx, ubd.TargetID)
 		if err != nil {
-			if errors.IsOf(err, collections.ErrNotFound) {
-				return nil, servicestypes.ErrServiceNotFound
-			}
 			return nil, err
 		}
 		return service, nil

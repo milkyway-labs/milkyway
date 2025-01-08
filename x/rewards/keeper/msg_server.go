@@ -4,13 +4,11 @@ import (
 	"context"
 	"fmt"
 
-	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
 	"github.com/milkyway-labs/milkyway/v7/x/rewards/types"
 	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
 )
@@ -30,9 +28,6 @@ func (k msgServer) CreateRewardsPlan(ctx context.Context, msg *types.MsgCreateRe
 	// Make sure the creator is the admin of the service
 	service, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, servicestypes.ErrServiceNotFound
-		}
 		return nil, err
 	}
 
@@ -113,9 +108,6 @@ func (k msgServer) EditRewardsPlan(ctx context.Context, msg *types.MsgEditReward
 	// Get the service to which the rewards is associated
 	service, err := k.servicesKeeper.GetService(ctx, rewardsPlan.ServiceID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, servicestypes.ErrServiceNotFound
-		}
 		return nil, err
 	}
 
@@ -221,9 +213,6 @@ func (k msgServer) WithdrawOperatorCommission(ctx context.Context, msg *types.Ms
 
 	operator, err := k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, operatorstypes.ErrOperatorNotFound
-		}
 		return nil, err
 	}
 

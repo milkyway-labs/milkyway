@@ -66,9 +66,6 @@ func (k *Keeper) CreateService(ctx context.Context, service types.Service) error
 func (k *Keeper) ActivateService(ctx context.Context, serviceID uint32) error {
 	service, err := k.GetService(ctx, serviceID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return types.ErrServiceNotFound
-		}
 		return err
 	}
 
@@ -94,9 +91,6 @@ func (k *Keeper) ActivateService(ctx context.Context, serviceID uint32) error {
 func (k *Keeper) DeactivateService(ctx context.Context, serviceID uint32) error {
 	service, err := k.GetService(ctx, serviceID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return types.ErrServiceNotFound
-		}
 		return err
 	}
 
@@ -121,9 +115,6 @@ func (k *Keeper) DeactivateService(ctx context.Context, serviceID uint32) error 
 func (k *Keeper) DeleteService(ctx context.Context, serviceID uint32) error {
 	service, err := k.GetService(ctx, serviceID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return types.ErrServiceNotFound
-		}
 		return err
 	}
 
@@ -152,9 +143,6 @@ func (k *Keeper) SetServiceAccredited(ctx context.Context, serviceID uint32, acc
 	// Check if the service exists
 	service, err := k.GetService(ctx, serviceID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return types.ErrServiceNotFound
-		}
 		return err
 	}
 

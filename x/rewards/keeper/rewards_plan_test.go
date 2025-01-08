@@ -43,7 +43,7 @@ func (suite *KeeperTestSuite) TestCreateRewardsPlan_PoolOrOperatorNotFound() {
 		nil,
 		service.Admin,
 	))
-	suite.Require().EqualError(err, "cannot get delegation target 1: pool not found: not found")
+	suite.Require().ErrorIs(err, collections.ErrNotFound)
 
 	suite.DelegatePool(ctx, utils.MustParseCoin("100_000000umilk"), testutil.TestAddress(1).String(), true)
 	suite.DelegatePool(ctx, utils.MustParseCoin("100_000000uinit"), testutil.TestAddress(2).String(), true)
@@ -68,7 +68,7 @@ func (suite *KeeperTestSuite) TestCreateRewardsPlan_PoolOrOperatorNotFound() {
 		nil,
 		service.Admin,
 	))
-	suite.Require().EqualError(err, "cannot get delegation target 2: operator not found: not found")
+	suite.Require().ErrorIs(err, collections.ErrNotFound)
 }
 
 func (suite *KeeperTestSuite) TestTerminateEndedRewardsPlans() {

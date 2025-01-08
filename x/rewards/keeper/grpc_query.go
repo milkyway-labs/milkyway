@@ -59,7 +59,7 @@ func (q queryServer) RewardsPlan(ctx context.Context, req *types.QueryRewardsPla
 	plan, err := q.k.RewardsPlans.Get(ctx, req.PlanId)
 	if err != nil {
 		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, status.Error(codes.NotFound, "plan not found")
+			return nil, status.Errorf(codes.NotFound, "plan with id %d not found", req.PlanId)
 		}
 		return nil, err
 	}

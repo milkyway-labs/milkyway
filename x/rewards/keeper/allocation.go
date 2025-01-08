@@ -196,9 +196,6 @@ func (k *Keeper) AllocateRewardsByPlan(
 
 	service, err := k.servicesKeeper.GetService(ctx, plan.ServiceID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return servicestypes.ErrServiceNotFound
-		}
 		return err
 	}
 

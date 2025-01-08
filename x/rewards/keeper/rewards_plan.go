@@ -5,13 +5,11 @@ import (
 	"fmt"
 	"time"
 
-	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/milkyway-labs/milkyway/v7/x/rewards/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
 )
 
 func (k *Keeper) CreateRewardsPlan(
@@ -27,9 +25,6 @@ func (k *Keeper) CreateRewardsPlan(
 ) (types.RewardsPlan, error) {
 	_, err := k.servicesKeeper.GetService(ctx, serviceID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return types.RewardsPlan{}, servicestypes.ErrServiceNotFound
-		}
 		return types.RewardsPlan{}, err
 	}
 
@@ -132,9 +127,6 @@ func (k *Keeper) terminateRewardsPlan(ctx context.Context, plan types.RewardsPla
 		// Get the service's address.
 		service, err := k.servicesKeeper.GetService(ctx, plan.ServiceID)
 		if err != nil {
-			if errors.IsOf(err, collections.ErrNotFound) {
-				return servicestypes.ErrServiceNotFound
-			}
 			return err
 		}
 

@@ -9,10 +9,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
 	"github.com/milkyway-labs/milkyway/v7/x/rewards/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
 )
 
 // DelegationTarget is a wrapper around the delegation target that holds the
@@ -37,9 +35,6 @@ func (k *Keeper) GetDelegationTarget(
 	case restakingtypes.DELEGATION_TYPE_POOL:
 		pool, err := k.poolsKeeper.GetPool(ctx, targetID)
 		if err != nil {
-			if errors.IsOf(err, collections.ErrNotFound) {
-				return DelegationTarget{}, poolstypes.ErrPoolNotFound
-			}
 			return DelegationTarget{}, err
 		}
 		return DelegationTarget{
@@ -53,9 +48,6 @@ func (k *Keeper) GetDelegationTarget(
 	case restakingtypes.DELEGATION_TYPE_OPERATOR:
 		operator, err := k.operatorsKeeper.GetOperator(ctx, targetID)
 		if err != nil {
-			if errors.IsOf(err, collections.ErrNotFound) {
-				return DelegationTarget{}, operatorstypes.ErrOperatorNotFound
-			}
 			return DelegationTarget{}, err
 		}
 		return DelegationTarget{
@@ -69,9 +61,6 @@ func (k *Keeper) GetDelegationTarget(
 	case restakingtypes.DELEGATION_TYPE_SERVICE:
 		service, err := k.servicesKeeper.GetService(ctx, targetID)
 		if err != nil {
-			if errors.IsOf(err, collections.ErrNotFound) {
-				return DelegationTarget{}, servicestypes.ErrServiceNotFound
-			}
 			return DelegationTarget{}, err
 		}
 		return DelegationTarget{

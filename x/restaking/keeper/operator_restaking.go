@@ -83,9 +83,6 @@ func (k *Keeper) DelegateToOperator(ctx context.Context, operatorID uint32, amou
 	// Get the operator
 	operator, err := k.operatorsKeeper.GetOperator(ctx, operatorID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return sdk.NewDecCoins(), operatorstypes.ErrOperatorNotFound
-		}
 		return nil, err
 	}
 
@@ -165,9 +162,6 @@ func (k *Keeper) UndelegateFromOperator(ctx context.Context, operatorID uint32, 
 	// Find the operator
 	operator, err := k.operatorsKeeper.GetOperator(ctx, operatorID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return time.Time{}, operatorstypes.ErrOperatorNotFound
-		}
 		return time.Time{}, err
 	}
 

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -33,9 +32,6 @@ func NewMsgServer(keeper *Keeper) types.MsgServer {
 func (k msgServer) JoinService(ctx context.Context, msg *types.MsgJoinService) (*types.MsgJoinServiceResponse, error) {
 	operator, err := k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, operatorstypes.ErrOperatorNotFound
-		}
 		return nil, err
 	}
 
@@ -45,9 +41,6 @@ func (k msgServer) JoinService(ctx context.Context, msg *types.MsgJoinService) (
 
 	service, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, errors.Wrapf(sdkerrors.ErrNotFound, "service %d not found", msg.ServiceID)
-		}
 		return nil, err
 	}
 
@@ -86,9 +79,6 @@ func (k msgServer) JoinService(ctx context.Context, msg *types.MsgJoinService) (
 func (k msgServer) LeaveService(ctx context.Context, msg *types.MsgLeaveService) (*types.MsgLeaveServiceResponse, error) {
 	operator, err := k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, operatorstypes.ErrOperatorNotFound
-		}
 		return nil, err
 	}
 
@@ -98,9 +88,6 @@ func (k msgServer) LeaveService(ctx context.Context, msg *types.MsgLeaveService)
 
 	_, err = k.servicesKeeper.GetService(ctx, msg.ServiceID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, errors.Wrapf(sdkerrors.ErrNotFound, "service %d not found", msg.ServiceID)
-		}
 		return nil, err
 	}
 
@@ -126,9 +113,6 @@ func (k msgServer) AddOperatorToAllowList(ctx context.Context, msg *types.MsgAdd
 	// Ensure that the service exists
 	service, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, servicestypes.ErrServiceNotFound
-		}
 		return nil, err
 	}
 
@@ -140,9 +124,6 @@ func (k msgServer) AddOperatorToAllowList(ctx context.Context, msg *types.MsgAdd
 	// Ensure that the operator exists
 	_, err = k.operatorsKeeper.GetOperator(ctx, msg.OperatorID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, operatorstypes.ErrOperatorNotFound
-		}
 		return nil, err
 	}
 
@@ -178,9 +159,6 @@ func (k msgServer) RemoveOperatorFromAllowlist(ctx context.Context, msg *types.M
 	// Ensure that the service exists
 	service, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, servicestypes.ErrServiceNotFound
-		}
 		return nil, err
 	}
 
@@ -221,9 +199,6 @@ func (k msgServer) BorrowPoolSecurity(ctx context.Context, msg *types.MsgBorrowP
 	// Ensure that the service exists
 	service, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, servicestypes.ErrServiceNotFound
-		}
 		return nil, err
 	}
 
@@ -241,9 +216,6 @@ func (k msgServer) BorrowPoolSecurity(ctx context.Context, msg *types.MsgBorrowP
 	// Ensure that the pool exists
 	_, err = k.poolsKeeper.GetPool(ctx, msg.PoolID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, poolstypes.ErrPoolNotFound
-		}
 		return nil, err
 	}
 
@@ -280,9 +252,6 @@ func (k msgServer) CeasePoolSecurityBorrow(ctx context.Context, msg *types.MsgCe
 	// Ensure that the service exists
 	service, err := k.servicesKeeper.GetService(ctx, msg.ServiceID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, servicestypes.ErrServiceNotFound
-		}
 		return nil, err
 	}
 

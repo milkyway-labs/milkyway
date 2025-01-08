@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -101,9 +100,6 @@ func (k msgServer) UpdateOperator(ctx context.Context, msg *types.MsgUpdateOpera
 	// Check if the operator exists
 	operator, err := k.GetOperator(ctx, msg.OperatorID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, types.ErrOperatorNotFound
-		}
 		return nil, err
 	}
 
@@ -143,9 +139,6 @@ func (k msgServer) DeactivateOperator(ctx context.Context, msg *types.MsgDeactiv
 	// Check if the operator exists
 	operator, err := k.GetOperator(ctx, msg.OperatorID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, types.ErrOperatorNotFound
-		}
 		return nil, err
 	}
 
@@ -176,9 +169,6 @@ func (k msgServer) ReactivateOperator(ctx context.Context, msg *types.MsgReactiv
 	// Check if the operator exists
 	operator, err := k.GetOperator(ctx, msg.OperatorID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, types.ErrOperatorNotFound
-		}
 		return nil, err
 	}
 
@@ -209,9 +199,6 @@ func (k msgServer) DeleteOperator(ctx context.Context, msg *types.MsgDeleteOpera
 	// Check if the operator exists
 	operator, err := k.GetOperator(ctx, msg.OperatorID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, types.ErrOperatorNotFound
-		}
 		return nil, err
 	}
 
@@ -242,9 +229,6 @@ func (k msgServer) TransferOperatorOwnership(ctx context.Context, msg *types.Msg
 	// Check if the operator exists
 	operator, err := k.GetOperator(ctx, msg.OperatorID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, types.ErrOperatorNotFound
-		}
 		return nil, err
 	}
 
@@ -276,9 +260,6 @@ func (k msgServer) TransferOperatorOwnership(ctx context.Context, msg *types.Msg
 func (k msgServer) SetOperatorParams(ctx context.Context, msg *types.MsgSetOperatorParams) (*types.MsgSetOperatorParamsResponse, error) {
 	operator, err := k.GetOperator(ctx, msg.OperatorID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, types.ErrOperatorNotFound
-		}
 		return nil, err
 	}
 

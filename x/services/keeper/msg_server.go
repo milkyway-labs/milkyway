@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"cosmossdk.io/collections"
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -107,9 +106,6 @@ func (k msgServer) UpdateService(ctx context.Context, msg *types.MsgUpdateServic
 	// Check if the service exists
 	service, err := k.GetService(ctx, msg.ServiceID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, types.ErrServiceNotFound
-		}
 		return nil, err
 	}
 
@@ -148,9 +144,6 @@ func (k msgServer) ActivateService(ctx context.Context, msg *types.MsgActivateSe
 	// Check if the service exists
 	service, err := k.GetService(ctx, msg.ServiceID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, types.ErrServiceNotFound
-		}
 		return nil, err
 	}
 
@@ -182,9 +175,6 @@ func (k msgServer) DeactivateService(ctx context.Context, msg *types.MsgDeactiva
 	// Check if the service exists
 	service, err := k.GetService(ctx, msg.ServiceID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, types.ErrServiceNotFound
-		}
 		return nil, err
 	}
 
@@ -215,9 +205,6 @@ func (k msgServer) DeleteService(ctx context.Context, msg *types.MsgDeleteServic
 	// Check if the service exists
 	service, err := k.GetService(ctx, msg.ServiceID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, types.ErrServiceNotFound
-		}
 		return nil, err
 	}
 
@@ -249,9 +236,6 @@ func (k msgServer) TransferServiceOwnership(ctx context.Context, msg *types.MsgT
 	// Check if the service exists
 	service, err := k.GetService(ctx, msg.ServiceID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, types.ErrServiceNotFound
-		}
 		return nil, err
 	}
 
@@ -284,9 +268,6 @@ func (k msgServer) SetServiceParams(ctx context.Context, msg *types.MsgSetServic
 	// Get the service whose params are being set
 	service, err := k.GetService(ctx, msg.ServiceID)
 	if err != nil {
-		if errors.IsOf(err, collections.ErrNotFound) {
-			return nil, types.ErrServiceNotFound
-		}
 		return nil, err
 	}
 
