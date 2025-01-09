@@ -3,6 +3,7 @@ package types
 import (
 	"time"
 
+	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
@@ -163,4 +164,21 @@ func ServiceUnbondingDelegationsStorePrefix(delegatorAddress string) []byte {
 // UserServiceUnbondingDelegationKey returns the key used to store the unbonding delegation for the given pool and delegator
 func UserServiceUnbondingDelegationKey(delegatorAddress string, serviceID uint32) []byte {
 	return append(ServiceUnbondingDelegationsStorePrefix(delegatorAddress), servicestypes.GetServiceIDBytes(serviceID)...)
+}
+
+// GetDelegationKeyBuilders returns the key builders for the given delegation
+func GetDelegationKeyBuilders(delegation Delegation) (DelegationKeyBuilder, DelegationByTargetIDBuilder, error) {
+	switch delegation.Type {
+	case DELEGATION_TYPE_POOL:
+		return UserPoolDelegationStoreKey, DelegationByPoolIDStoreKey, nil
+
+	case DELEGATION_TYPE_OPERATOR:
+		return UserOperatorDelegationStoreKey, DelegationByOperatorIDStoreKey, nil
+
+	case DELEGATION_TYPE_SERVICE:
+		return UserServiceDelegationStoreKey, DelegationByServiceIDStoreKey, nil
+
+	default:
+		return nil, nil, errors.Wrapf(ErrInvalidDelegationType, "invalid delegation type: %v", delegation.Type)
+	}
 }

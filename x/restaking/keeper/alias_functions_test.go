@@ -15,6 +15,102 @@ import (
 	"github.com/milkyway-labs/milkyway/v7/x/restaking/types"
 )
 
+func (suite *KeeperTestSuite) TestKeeper_SetDelegation() {
+	testCases := []struct {
+		name       string
+		delegation types.Delegation
+		shouldErr  bool
+		check      func(ctx sdk.Context)
+	}{
+		{
+			name: "pool delegation is set properly",
+			delegation: types.NewPoolDelegation(
+				1,
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(50))),
+			),
+			shouldErr: false,
+			check: func(ctx sdk.Context) {
+				store := suite.storeService.OpenKVStore(ctx)
+
+				// Make sure the delegation key exists
+				found, err := store.Has(types.UserPoolDelegationStoreKey("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", 1))
+				suite.Require().NoError(err)
+				suite.Require().True(found)
+
+				// Make sure the delegation-by-pool-id exists
+				found, err = store.Has(types.DelegationByPoolIDStoreKey(1, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"))
+				suite.Require().NoError(err)
+				suite.Require().True(found)
+			},
+		},
+		{
+			name: "operator delegation is set properly",
+			delegation: types.NewOperatorDelegation(
+				1,
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
+			),
+			shouldErr: false,
+			check: func(ctx sdk.Context) {
+				store := suite.storeService.OpenKVStore(ctx)
+
+				// Make sure the delegation key exists
+				found, err := store.Has(types.UserOperatorDelegationStoreKey("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", 1))
+				suite.Require().NoError(err)
+				suite.Require().True(found)
+
+				// Make sure the delegation-by-operator-id exists
+				found, err = store.Has(types.DelegationByOperatorIDStoreKey(1, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"))
+				suite.Require().NoError(err)
+				suite.Require().True(found)
+			},
+		},
+		{
+			name: "service delegation is set properly",
+			delegation: types.NewServiceDelegation(
+				1,
+				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+				sdk.NewDecCoins(sdk.NewDecCoinFromDec("umilk", sdkmath.LegacyNewDec(100))),
+			),
+			shouldErr: false,
+			check: func(ctx sdk.Context) {
+				store := suite.storeService.OpenKVStore(ctx)
+
+				// Make sure the delegation key exists
+				stored, err := store.Get(types.UserServiceDelegationStoreKey("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", 1))
+				suite.Require().NoError(err)
+				suite.Require().NotEmpty(stored)
+
+				// Make sure the delegation-by-service-id exists
+				stored, err = store.Get(types.DelegationByServiceIDStoreKey(1, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"))
+				suite.Require().NoError(err)
+				suite.Require().NotEmpty(stored)
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+
+			err := suite.k.SetDelegation(ctx, tc.delegation)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+			}
+
+			if tc.check != nil {
+				tc.check(ctx)
+			}
+		})
+	}
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
 func (suite *KeeperTestSuite) TestKeeper_GetAllOperatorsJoinedServicesRecord() {
 	testCases := []struct {
 		name       string

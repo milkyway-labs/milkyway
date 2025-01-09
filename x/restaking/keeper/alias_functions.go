@@ -155,29 +155,12 @@ func (k *Keeper) GetAllServicesSecuringPools(ctx context.Context) ([]types.Servi
 // --- Delegation operations
 // --------------------------------------------------------------------------------------------------------------------
 
-// getDelegationKeyBuilders returns the key builders for the given delegation
-func (k *Keeper) getDelegationKeyBuilders(delegation types.Delegation) (types.DelegationKeyBuilder, types.DelegationByTargetIDBuilder, error) {
-	switch delegation.Type {
-	case types.DELEGATION_TYPE_POOL:
-		return types.UserPoolDelegationStoreKey, types.DelegationByPoolIDStoreKey, nil
-
-	case types.DELEGATION_TYPE_OPERATOR:
-		return types.UserOperatorDelegationStoreKey, types.DelegationByOperatorIDStoreKey, nil
-
-	case types.DELEGATION_TYPE_SERVICE:
-		return types.UserServiceDelegationStoreKey, types.DelegationByServiceIDStoreKey, nil
-
-	default:
-		return nil, nil, errors.Wrapf(types.ErrInvalidDelegationType, "invalid delegation type: %v", delegation.Type)
-	}
-}
-
 // SetDelegation stores the given delegation in the store
 func (k *Keeper) SetDelegation(ctx context.Context, delegation types.Delegation) error {
 	store := k.storeService.OpenKVStore(ctx)
 
 	// Get the keys builders
-	getDelegationKey, getDelegationByTargetID, err := k.getDelegationKeyBuilders(delegation)
+	getDelegationKey, getDelegationByTargetID, err := types.GetDelegationKeyBuilders(delegation)
 	if err != nil {
 		return err
 	}
@@ -189,8 +172,8 @@ func (k *Keeper) SetDelegation(ctx context.Context, delegation types.Delegation)
 		return err
 	}
 
-	// Store the delegation in the delegations by pool ID store
-	err = store.Set(getDelegationByTargetID(delegation.TargetID, delegation.UserAddress), []byte{})
+	// Store the delegation in the delegations by target id store
+	err = store.Set(getDelegationByTargetID(delegation.TargetID, delegation.UserAddress), delegationBz)
 	if err != nil {
 		return err
 	}
