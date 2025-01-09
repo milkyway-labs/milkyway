@@ -1,5 +1,5 @@
 syntax = "proto3";
-package milkyway.rewards.v2;
+package milkyway.rewards.v1;
 
 import "amino/amino.proto";
 import "cosmos/base/v1beta1/coin.proto";
@@ -8,8 +8,8 @@ import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
 import "milkyway/restaking/v1/models.proto";
-import "milkyway/rewards/v2/models.proto";
-import "milkyway/rewards/v2/params.proto";
+import "milkyway/rewards/v1/models.proto";
+import "milkyway/rewards/v1/params.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/v7/x/rewards/types";
 

@@ -582,14 +582,26 @@ func (k msgServer) UndelegateService(ctx context.Context, msg *types.MsgUndelega
 // SetUserPreferences defines the rpc method for Msg/SetUserPreferences
 func (k msgServer) SetUserPreferences(ctx context.Context, msg *types.MsgSetUserPreferences) (*types.MsgSetUserPreferencesResponse, error) {
 	// Make sure that each service exists
-	for _, serviceID := range msg.Preferences.TrustedServicesIDs {
-		hasService, err := k.servicesKeeper.HasService(ctx, serviceID)
+	for _, entry := range msg.Preferences.TrustedServices {
+		hasService, err := k.servicesKeeper.HasService(ctx, entry.ServiceID)
 		if err != nil {
 			return nil, err
 		}
 
 		if !hasService {
-			return nil, errors.Wrapf(servicestypes.ErrServiceNotFound, "service %d does not exist", serviceID)
+			return nil, errors.Wrapf(servicestypes.ErrServiceNotFound, "service %d does not exist", entry.ServiceID)
+		}
+
+		// Make sure the pools exist
+		for _, poolID := range entry.PoolsIDs {
+			hasPool, err := k.poolsKeeper.HasPool(ctx, poolID)
+			if err != nil {
+				return nil, err
+			}
+
+			if !hasPool {
+				return nil, errors.Wrapf(poolstypes.ErrPoolNotFound, "pool %d does not exist", poolID)
+			}
 		}
 	}
 

@@ -1083,19 +1083,22 @@ func (k *Keeper) GetUserTrustedServicesIDs(ctx context.Context, userAddress stri
 	if err != nil {
 		return nil, err
 	}
-
-	var trustedServicesIDs []uint32
-	err = k.servicesKeeper.IterateServices(ctx, func(service servicestypes.Service) (stop bool, err error) {
-		if preferences.IsServiceTrusted(service) {
-			trustedServicesIDs = append(trustedServicesIDs, service.ID)
+	if len(preferences.TrustedServices) == 0 {
+		// Return all service IDs
+		var serviceIDs []uint32
+		err = k.servicesKeeper.IterateServices(ctx, func(service servicestypes.Service) (bool, error) {
+			serviceIDs = append(serviceIDs, service.ID)
+			return false, nil
+		})
+		if err != nil {
+			return nil, err
 		}
-		return false, nil
-	})
-	if err != nil {
-		return nil, err
+		return serviceIDs, nil
 	}
 
-	return trustedServicesIDs, nil
+	return utils.Map(preferences.TrustedServices, func(entry types.TrustedServiceEntry) uint32 {
+		return entry.ServiceID
+	}), nil
 }
 
 // --------------------------------------------------------------------------------------------------------------------

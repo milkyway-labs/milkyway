@@ -49,6 +49,11 @@ func (k *Keeper) SavePool(ctx context.Context, pool types.Pool) error {
 	return k.poolAddressSet.Set(ctx, pool.Address)
 }
 
+// HasPool checks if a pool with the given ID exists in the store
+func (k *Keeper) HasPool(ctx context.Context, id uint32) (bool, error) {
+	return k.pools.Has(ctx, id)
+}
+
 // GetPool retrieves the pool with the given ID from the store.
 // If the pool does not exist, false is returned instead
 func (k *Keeper) GetPool(ctx context.Context, id uint32) (types.Pool, error) {

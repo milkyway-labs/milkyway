@@ -129,19 +129,12 @@ func RandomParams(r *rand.Rand) types.Params {
 
 func RandomUserPreferences(r *rand.Rand, services []servicestypes.Service) types.UserPreferences {
 	// Add some services to the user's trusted services
-	userTrustedServiceIDs := utils.Map(simtesting.RandomSubSlice(r, services), func(s servicestypes.Service) uint32 {
-		return s.ID
+	trustedServices := simtesting.RandomSubSlice(r, services)
+	trustedServiceEntries := utils.Map(trustedServices, func(s servicestypes.Service) types.TrustedServiceEntry {
+		return types.NewTrustedServiceEntry(s.ID, nil)
 	})
 
-	// Create the user preferences
-	userPreferences := types.NewUserPreferences(
-		// 50% of trusting non accredited service
-		r.Intn(2) == 0,
-		// 50% of trusting accredited service
-		r.Intn(2) == 0,
-		userTrustedServiceIDs,
-	)
-	return userPreferences
+	return types.NewUserPreferences(trustedServiceEntries)
 }
 
 func GetRandomExistingDelegation(

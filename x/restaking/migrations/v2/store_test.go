@@ -9,6 +9,7 @@ import (
 	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
 	v2 "github.com/milkyway-labs/milkyway/v7/x/restaking/migrations/v2"
 	"github.com/milkyway-labs/milkyway/v7/x/restaking/testutils"
+	"github.com/milkyway-labs/milkyway/v7/x/restaking/types"
 	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
 )
 
@@ -151,6 +152,80 @@ func TestMigrateStore_removeNotAllowedJoinedServices(t *testing.T) {
 
 			if tc.check != nil {
 				tc.check(ctx)
+			}
+		})
+	}
+}
+
+func TestMigrateStore_migratePreferences(t *testing.T) {
+	testData := testutils.NewKeeperTestData(t)
+
+	testCases := []struct {
+		name           string
+		oldPreferences []v2.UserPreferencesEntry
+		shouldErr      bool
+		expPreferences []types.UserPreferencesEntry
+	}{
+		{
+			name: "preferences are migrated properly",
+			oldPreferences: []v2.UserPreferencesEntry{
+				{
+					UserAddress: "cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn",
+					Preferences: v2.UserPreferences{
+						TrustAccreditedServices:    false,
+						TrustNonAccreditedServices: true,
+						TrustedServicesIDs:         []uint32{1, 2, 3},
+					},
+				},
+				{
+					UserAddress: "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					Preferences: v2.UserPreferences{
+						TrustAccreditedServices:    false,
+						TrustNonAccreditedServices: true,
+						TrustedServicesIDs:         []uint32{4, 5},
+					},
+				},
+			},
+			shouldErr: false,
+			expPreferences: []types.UserPreferencesEntry{
+				types.NewUserPreferencesEntry("cosmos10d07y265gmmuvt4z0w9aw880jnsr700j6zn9kn", types.NewUserPreferences([]types.TrustedServiceEntry{
+					types.NewTrustedServiceEntry(1, nil),
+					types.NewTrustedServiceEntry(2, nil),
+					types.NewTrustedServiceEntry(3, nil),
+				})),
+				types.NewUserPreferencesEntry("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd", types.NewUserPreferences([]types.TrustedServiceEntry{
+					types.NewTrustedServiceEntry(4, nil),
+					types.NewTrustedServiceEntry(5, nil),
+				})),
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			ctx, _ := testData.Context.CacheContext()
+
+			// Store the delegations
+			store := testData.StoreService.OpenKVStore(ctx)
+			for _, entry := range tc.oldPreferences {
+				key := append(types.UserPreferencesPrefix, []byte(entry.UserAddress)...)
+				err := store.Set(key, testData.Cdc.MustMarshal(&entry.Preferences))
+				require.NoError(t, err)
+			}
+
+			err := v2.MigrateStore(ctx, testData.Keeper, testData.StoreService, testData.Cdc)
+			if tc.shouldErr {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+			}
+
+			// Check the new preferences
+			for _, entry := range tc.expPreferences {
+				stored, err := testData.Keeper.GetUserPreferences(ctx, entry.UserAddress)
+				require.NoError(t, err)
+				require.Equal(t, entry.Preferences, stored)
 			}
 		})
 	}

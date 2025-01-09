@@ -512,11 +512,11 @@ func TestMsgUndelegateService_GetSigners(t *testing.T) {
 // --------------------------------------------------------------------------------------------------------------------
 
 var msgSetUserPreferences = types.NewMsgSetUserPreferences(
-	types.NewUserPreferences(
-		true,
-		false,
-		[]uint32{1, 2, 3},
-	),
+	types.NewUserPreferences([]types.TrustedServiceEntry{
+		types.NewTrustedServiceEntry(1, nil),
+		types.NewTrustedServiceEntry(2, nil),
+		types.NewTrustedServiceEntry(3, nil),
+	}),
 	"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 )
 
@@ -529,11 +529,9 @@ func TestMsgSetUserPreferences_ValidateBasic(t *testing.T) {
 		{
 			name: "invalid preferences returns error",
 			msg: types.NewMsgSetUserPreferences(
-				types.NewUserPreferences(
-					false,
-					true,
-					[]uint32{0},
-				),
+				types.NewUserPreferences([]types.TrustedServiceEntry{
+					types.NewTrustedServiceEntry(0, nil),
+				}),
 				msgSetUserPreferences.User,
 			),
 			shouldErr: true,
@@ -566,7 +564,7 @@ func TestMsgSetUserPreferences_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgSetUserPreferences_GetSignBytes(t *testing.T) {
-	expected := `{"type":"milkyway/MsgSetUserPreferences","value":{"preferences":{"trust_non_accredited_services":true,"trusted_services_ids":[1,2,3]},"user":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"}}`
+	expected := `{"type":"milkyway/MsgSetUserPreferences","value":{"preferences":{"trusted_services":[{"service_id":1},{"service_id":2},{"service_id":3}]},"user":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"}}`
 	require.Equal(t, expected, string(msgSetUserPreferences.GetSignBytes()))
 }
 

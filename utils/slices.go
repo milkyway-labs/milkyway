@@ -44,6 +44,19 @@ func Map[T, U any](slice []T, f func(T) U) []U {
 	return result
 }
 
+// MapWithErr applies the given function to each element in the slice and returns a new slice with the results.
+func MapWithErr[T, U any](slice []T, f func(T) (U, error)) ([]U, error) {
+	result := make([]U, len(slice))
+	for i, v := range slice {
+		res, err := f(v)
+		if err != nil {
+			return nil, err
+		}
+		result[i] = res
+	}
+	return result, nil
+}
+
 // RemoveDuplicates removes all duplicate elements from the slice.
 func RemoveDuplicates[T comparable](slice []T) []T {
 	seen := make(map[T]bool)
@@ -88,7 +101,9 @@ func Remove[T comparable](slice []T, value T) (newSlice []T, removed bool) {
 	return append(slice[:index], slice[index+1:]...), true
 }
 
-// Intersect returns the intersection of two slices.
+// Intersect returns the intersection of two slices (A ∩ B).
+// Examples:
+// Intersect([]int{1, 2, 3}, []int{2, 3, 4}) => []int{2, 3}
 func Intersect[T comparable](a, b []T) []T {
 	var result []T
 	for _, v := range a {
@@ -98,6 +113,26 @@ func Intersect[T comparable](a, b []T) []T {
 	}
 
 	return result
+}
+
+// Difference returns the elements that are in a but not in b (A - B).
+// Examples:
+// Difference([]int{1, 2, 3}, []int{2, 3, 4}) => []int{1}
+func Difference[T comparable](a, b []T) []T {
+	var result []T
+	for _, v := range RemoveDuplicates(a) {
+		if !slices.Contains(b, v) {
+			result = append(result, v)
+		}
+	}
+	return result
+}
+
+// Union returns the union of two slices (A ∪ B).
+// Examples:
+// Union([]int{1, 2, 3}, []int{2, 3, 4}) => []int{1, 2, 3, 4}
+func Union[T comparable](a, b []T) []T {
+	return RemoveDuplicates(append(a, b...))
 }
 
 // Filter returns the elements of the slice that satisfy the given predicate.

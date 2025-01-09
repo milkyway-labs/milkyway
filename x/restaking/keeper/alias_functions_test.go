@@ -1017,36 +1017,34 @@ func (suite *KeeperTestSuite) TestKeeper_GetUserPreferencesEntries() {
 		{
 			name: "entries are returned properly",
 			store: func(ctx sdk.Context) {
-				err := suite.k.SetUserPreferences(ctx, "cosmos1y54exmx84cqtasvjnskf9f63djuuj68p7hqf47", types.NewUserPreferences(
-					true,
-					false,
-					[]uint32{1, 2, 3},
-				))
+				err := suite.k.SetUserPreferences(ctx, "cosmos1y54exmx84cqtasvjnskf9f63djuuj68p7hqf47", types.NewUserPreferences([]types.TrustedServiceEntry{
+					types.NewTrustedServiceEntry(1, nil),
+					types.NewTrustedServiceEntry(2, nil),
+					types.NewTrustedServiceEntry(3, nil),
+				}))
 				suite.Require().NoError(err)
 
-				err = suite.k.SetUserPreferences(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", types.NewUserPreferences(
-					false,
-					true,
-					[]uint32{4, 5},
-				))
+				err = suite.k.SetUserPreferences(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", types.NewUserPreferences([]types.TrustedServiceEntry{
+					types.NewTrustedServiceEntry(4, nil),
+					types.NewTrustedServiceEntry(5, nil),
+				}))
 				suite.Require().NoError(err)
 			},
 			expEntries: []types.UserPreferencesEntry{
 				types.NewUserPreferencesEntry(
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
-					types.NewUserPreferences(
-						false,
-						true,
-						[]uint32{4, 5},
-					),
+					types.NewUserPreferences([]types.TrustedServiceEntry{
+						types.NewTrustedServiceEntry(4, nil),
+						types.NewTrustedServiceEntry(5, nil),
+					}),
 				),
 				types.NewUserPreferencesEntry(
 					"cosmos1y54exmx84cqtasvjnskf9f63djuuj68p7hqf47",
-					types.NewUserPreferences(
-						true,
-						false,
-						[]uint32{1, 2, 3},
-					),
+					types.NewUserPreferences([]types.TrustedServiceEntry{
+						types.NewTrustedServiceEntry(1, nil),
+						types.NewTrustedServiceEntry(2, nil),
+						types.NewTrustedServiceEntry(3, nil),
+					}),
 				),
 			},
 		},

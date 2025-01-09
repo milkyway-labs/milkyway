@@ -198,15 +198,10 @@ func (suite *KeeperTestSuite) UpdateOperatorParams(
 func (suite *KeeperTestSuite) SetUserPreferences(
 	ctx sdk.Context,
 	userAddress string,
-	trustNonAccreditedServices,
-	trustAccreditedServices bool,
-	trustedServicesIDs []uint32,
+	trustedServices []restakingtypes.TrustedServiceEntry,
 ) {
-	err := suite.restakingKeeper.SetUserPreferences(
-		ctx,
-		userAddress,
-		restakingtypes.NewUserPreferences(trustNonAccreditedServices, trustAccreditedServices, trustedServicesIDs),
-	)
+	preferences := restakingtypes.NewUserPreferences(trustedServices)
+	err := suite.restakingKeeper.SetUserPreferences(ctx, userAddress, preferences)
 	suite.Require().NoError(err)
 }
 

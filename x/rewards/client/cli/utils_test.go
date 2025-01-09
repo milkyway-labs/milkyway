@@ -35,19 +35,19 @@ func TestCLIUtils_parseRewardsPlan(t *testing.T) {
 	    "pools_distribution": {
 	        "weight": 1,
 	        "type": {
-	            "@type":"/milkyway.rewards.v2.DistributionTypeBasic"
+	            "@type":"/milkyway.rewards.v1.DistributionTypeBasic"
 	        }
 	    },
 	    "operators_distribution": {
 	        "weight": 2,
 	        "type": {
-	            "@type": "/milkyway.rewards.v2.DistributionTypeBasic"
+	            "@type": "/milkyway.rewards.v1.DistributionTypeBasic"
 	        }
 	    },
 	    "users_distribution": {
 	        "weight": 3,
 	        "type": {
-	            "@type": "/milkyway.rewards.v2.UsersDistributionTypeBasic"
+	            "@type": "/milkyway.rewards.v1.UsersDistributionTypeBasic"
 	        }
 	    },
 		"fee_amount": "100uinit"
@@ -79,19 +79,19 @@ func TestCLIUtils_parseRewardsPlan(t *testing.T) {
 	    "pools_distribution": {
 	        "weight": 1,
 	        "type": {
-	            "@type":"/milkyway.rewards.v2.DistributionTypeBasic"
+	            "@type":"/milkyway.rewards.v1.DistributionTypeBasic"
 	        }
 	    },
 	    "operators_distribution": {
 	        "weight": 2,
 	        "type": {
-	            "@type": "/milkyway.rewards.v2.DistributionTypeEgalitarian"
+	            "@type": "/milkyway.rewards.v1.DistributionTypeEgalitarian"
 	        }
 	    },
 	    "users_distribution": {
 	        "weight": 3,
 	        "type": {
-	            "@type": "/milkyway.rewards.v2.UsersDistributionTypeBasic"
+	            "@type": "/milkyway.rewards.v1.UsersDistributionTypeBasic"
 	        }
 	    },
 		"fee_amount": "100uinit"
@@ -123,21 +123,21 @@ func TestCLIUtils_parseRewardsPlan(t *testing.T) {
 	    "pools_distribution": {
 	        "weight": 1,
 	        "type": {
-	            "@type":"/milkyway.rewards.v2.DistributionTypeWeighted",
+	            "@type":"/milkyway.rewards.v1.DistributionTypeWeighted",
                 "weights": [{ "delegation_target_id": 1, "weight": 1 }]	
 	        }
 	    },
 	    "operators_distribution": {
 	        "weight": 2,
 	        "type": {
-	            "@type": "/milkyway.rewards.v2.DistributionTypeWeighted",
+	            "@type": "/milkyway.rewards.v1.DistributionTypeWeighted",
                  "weights": [{ "delegation_target_id": 2, "weight": 2 }]	
 	        }
 	    },
 	    "users_distribution": {
 	        "weight": 3,
 	        "type": {
-	            "@type": "/milkyway.rewards.v2.UsersDistributionTypeBasic"
+	            "@type": "/milkyway.rewards.v1.UsersDistributionTypeBasic"
 	        }
 	    },
 		"fee_amount": "100uinit"
@@ -168,19 +168,19 @@ func TestCLIUtils_parseRewardsPlan(t *testing.T) {
 	    "pools_distribution": {
 	        "weight": 1,
 	        "type": {
-	            "@type":"/milkyway.rewards.v2.DistributionTypeBasic"
+	            "@type":"/milkyway.rewards.v1.DistributionTypeBasic"
 	        }
 	    },
 	    "operators_distribution": {
 	        "weight": 2,
 	        "type": {
-	            "@type": "/milkyway.rewards.v2.DistributionTypeBasic"
+	            "@type": "/milkyway.rewards.v1.DistributionTypeBasic"
 	        }
 	    },
 	    "users_distribution": {
 	        "weight": 3,
 	        "type": {
-	            "@type": "/milkyway.rewards.v2.UsersDistributionTypeBasic"
+	            "@type": "/milkyway.rewards.v1.UsersDistributionTypeBasic"
 	        }
 	    }
 	}`),

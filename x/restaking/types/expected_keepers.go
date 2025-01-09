@@ -27,6 +27,7 @@ type BankKeeper interface {
 type PoolsKeeper interface {
 	GetPoolByDenom(ctx context.Context, denom string) (poolstypes.Pool, bool, error)
 	CreateOrGetPoolByDenom(ctx context.Context, denom string) (poolstypes.Pool, error)
+	HasPool(ctx context.Context, poolID uint32) (bool, error)
 	GetPool(ctx context.Context, poolID uint32) (poolstypes.Pool, error)
 	SavePool(ctx context.Context, pool poolstypes.Pool) error
 	IteratePools(ctx context.Context, cb func(poolstypes.Pool) (bool, error)) error

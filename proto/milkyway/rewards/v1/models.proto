@@ -1,13 +1,15 @@
 syntax = "proto3";
 package milkyway.rewards.v1;
 
+import "amino/amino.proto";
 import "cosmos/base/v1beta1/coin.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
+import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
-import "milkyway/rewards/v2/models.proto";
+import "milkyway/restaking/v1/models.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v7/x/rewards/migrations/v2";
+option go_package = "github.com/milkyway-labs/milkyway/v7/x/rewards/types";
 option (gogoproto.goproto_getters_all) = false;
 
 // RewardsPlan represents a rewards allocation plan.
@@ -25,10 +27,7 @@ message RewardsPlan {
 
   // AmountPerDay is the amount of rewards to be distributed, per day.
   // The rewards amount for every block will be calculated based on this.
-  repeated cosmos.base.v1beta1.Coin amount_per_day = 4 [
-    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
-    (gogoproto.nullable) = false
-  ];
+  cosmos.base.v1beta1.Coin amount_per_day = 11 [(gogoproto.nullable) = false];
 
   // StartTime is the starting time of the plan.
   google.protobuf.Timestamp start_time = 5 [
@@ -48,11 +47,226 @@ message RewardsPlan {
   string rewards_pool = 7 [(cosmos_proto.scalar) = "cosmos.AddressString"];
 
   // PoolsDistribution is the rewards distribution parameters for pools.
-  milkyway.rewards.v2.Distribution pools_distribution = 8 [(gogoproto.nullable) = false];
+  Distribution pools_distribution = 8 [(gogoproto.nullable) = false];
 
   // OperatorsDistribution is the rewards distribution parameters for operators.
-  milkyway.rewards.v2.Distribution operators_distribution = 9 [(gogoproto.nullable) = false];
+  Distribution operators_distribution = 9 [(gogoproto.nullable) = false];
 
   // UsersDistribution is the rewards distribution parameters for users.
-  milkyway.rewards.v2.UsersDistribution users_distribution = 10 [(gogoproto.nullable) = false];
+  UsersDistribution users_distribution = 10 [(gogoproto.nullable) = false];
+
+  reserved 4; // old amount_per_day
+}
+
+// Distribution represents distribution parameters for restaking
+// pools/operators.
+message Distribution {
+  option (gogoproto.equal) = true;
+
+  // DelegationType is the type of delegation target which this distribution
+  // parameters are for. It can be one of DELEGATION_TYPE_POOL and
+  // DELEGATION_TYPE_OPERATOR.
+  milkyway.restaking.v1.DelegationType delegation_type = 1;
+
+  // Weight is the rewards distribution weight among other types of delegation
+  // targets.
+  uint32 weight = 2;
+
+  // Type is one of basic/weighted/egalitarian distributions.
+  google.protobuf.Any type = 3 [(cosmos_proto.accepts_interface) = "milkyway.rewards.v1.DistributionType"];
+}
+
+// DistributionTypeBasic represents the simplest form of distribution.
+// Rewards are allocated to entities based on their delegation values.
+// For example, if there are three operators with delegation values of
+// $1000, $1500, and $2000, their rewards will be distributed in a
+// 2:3:4 ratio.
+message DistributionTypeBasic {
+  option (cosmos_proto.implements_interface) = "milkyway.rewards.v1.DistributionType";
+}
+
+// DistributionTypeWeighted is a type of distribution where the reward
+// weights for each entity are explicitly defined. Only the specified
+// delegation targets will receive rewards.
+message DistributionTypeWeighted {
+  option (cosmos_proto.implements_interface) = "milkyway.rewards.v1.DistributionType";
+
+  repeated DistributionWeight weights = 1 [(gogoproto.nullable) = false];
+}
+
+// DistributionWeight defines a delegation target and its assigned weight.
+message DistributionWeight {
+  uint32 delegation_target_id = 1 [(gogoproto.customname) = "DelegationTargetID"];
+
+  uint32 weight = 2;
+}
+
+// DistributionTypeEgalitarian is a distribution method where all entities
+// receive an equal share of rewards(a.k.a. egalitarian method).
+message DistributionTypeEgalitarian {
+  option (cosmos_proto.implements_interface) = "milkyway.rewards.v1.DistributionType";
+}
+
+// Distribution represents distribution parameters for delegators who directly
+// staked their tokens to the service.
+message UsersDistribution {
+  option (gogoproto.equal) = true;
+
+  // Weight is the rewards distribution weight among other types of delegation
+  // targets.
+  uint32 weight = 1;
+
+  // Type defines the rewards distribution method. Currently only the basic
+  // distribution is allowed.
+  google.protobuf.Any type = 2 [(cosmos_proto.accepts_interface) = "milkyway.rewards.v1.UsersDistributionType"];
+}
+
+// UsersDistributionTypeBasic represents the simplest form of distribution.
+// Rewards are allocated to entities based on their delegation values.
+// For example, if there are three users with delegation values of
+// $1000, $1500, and $2000, their rewards will be distributed in a
+// 2:3:4 ratio.
+message UsersDistributionTypeBasic {
+  option (cosmos_proto.implements_interface) = "milkyway.rewards.v1.UsersDistributionType";
+}
+
+// HistoricalRewards represents historical rewards for a delegation target.
+// Height is implicit within the store key.
+// Cumulative reward ratio is the sum from the zeroeth period
+// until this period of rewards / tokens, per the spec.
+// The reference count indicates the number of objects
+// which might need to reference this historical entry at any point.
+// ReferenceCount =
+//    number of outstanding delegations which ended the associated period (and
+//    might need to read that record)
+//  + number of slashes which ended the associated period (and might need to
+//  read that record)
+//  + one per validator for the zeroeth period, set on initialization
+message HistoricalRewards {
+  repeated ServicePool cumulative_reward_ratios = 1 [
+    (gogoproto.moretags) = "yaml:\"cumulative_reward_ratios\"",
+    (gogoproto.castrepeated) = "ServicePools",
+    (gogoproto.nullable) = false
+  ];
+  uint32 reference_count = 2 [(gogoproto.moretags) = "yaml:\"reference_count\""];
+}
+
+// CurrentRewards represents current rewards and current
+// period for a delegation target kept as a running counter and incremented
+// each block as long as the delegation target's tokens remain constant.
+message CurrentRewards {
+  repeated ServicePool rewards = 1 [
+    (gogoproto.moretags) = "yaml:\"rewards\"",
+    (gogoproto.castrepeated) = "ServicePools",
+    (gogoproto.nullable) = false
+  ];
+  uint64 period = 2;
+}
+
+// OutstandingRewards represents outstanding (un-withdrawn) rewards
+// for a delegation target inexpensive to track, allows simple sanity checks.
+message OutstandingRewards {
+  repeated DecPool rewards = 1 [
+    (gogoproto.moretags) = "yaml:\"rewards\"",
+    (gogoproto.castrepeated) = "DecPools",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// AccumulatedCommission represents accumulated commission
+// for a delegation target kept as a running counter, can be withdrawn at any
+// time.
+message AccumulatedCommission {
+  repeated DecPool commissions = 1 [
+    (gogoproto.castrepeated) = "DecPools",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+// DelegatorStartingInfo represents the starting info for a delegator reward
+// period. It tracks the previous delegation target period, the delegation's
+// amount of staking token, and the creation height (to check later on if any
+// slashes have occurred). NOTE: Even though validators are slashed to whole
+// staking tokens, the delegators within the validator may be left with less
+// than a full token, thus sdk.Dec is used.
+message DelegatorStartingInfo {
+  uint64 previous_period = 1 [(gogoproto.moretags) = "yaml:\"previous_period\""];
+  repeated cosmos.base.v1beta1.DecCoin stakes = 2 [
+    (gogoproto.moretags) = "yaml:\"stakes\"",
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
+    (gogoproto.nullable) = false
+  ];
+  uint64 height = 3 [
+    (gogoproto.moretags) = "yaml:\"creation_height\"",
+    (gogoproto.jsontag) = "creation_height"
+  ];
+}
+
+// DelegationDelegatorReward represents the properties of a delegator's
+// delegation reward. The delegator address implicit in the within the
+// query request.
+message DelegationDelegatorReward {
+  milkyway.restaking.v1.DelegationType delegation_type = 1;
+
+  uint32 delegation_target_id = 2 [(gogoproto.customname) = "DelegationTargetID"];
+
+  repeated DecPool reward = 3 [
+    (gogoproto.castrepeated) = "DecPools",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+// TODO: add SlashEvent
+
+// ---------------------------------------------------------------------------
+
+// PoolServiceTotalDelegatorShares represents the total delegator shares for a
+// pool-service pair.
+message PoolServiceTotalDelegatorShares {
+  uint32 pool_id = 1 [(gogoproto.customname) = "PoolID"];
+  uint32 service_id = 2 [(gogoproto.customname) = "ServiceID"];
+  repeated cosmos.base.v1beta1.DecCoin shares = 3 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// ---------------------------------------------------------------------------
+
+// Types below are taken from Initia's modified version of x/distribution.
+// See
+// https://github.com/initia-labs/initia/blob/v0.2.10/proto/initia/distribution/v1/distribution.proto#L38-L56
+
+// Pool is a Coins wrapper with denom which represents the rewards pool for the
+// given denom. It is used to represent the rewards associated with the denom.
+message Pool {
+  string denom = 1 [(gogoproto.moretags) = "yaml:\"denom\""];
+  repeated cosmos.base.v1beta1.Coin coins = 2 [
+    (gogoproto.moretags) = "yaml:\"coins\"",
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// DecPool is a DecCoins wrapper with denom which represents the rewards pool
+// for the given denom. It is used to represent the rewards associated with the
+// denom.
+message DecPool {
+  string denom = 1 [(gogoproto.moretags) = "yaml:\"denom\""];
+  repeated cosmos.base.v1beta1.DecCoin dec_coins = 2 [
+    (gogoproto.moretags) = "yaml:\"dec_coins\"",
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// ServicePool represents the rewards pool for a service.
+message ServicePool {
+  uint32 service_id = 1 [(gogoproto.customname) = "ServiceID"];
+  repeated DecPool dec_pools = 2 [
+    (gogoproto.castrepeated) = "DecPools",
+    (gogoproto.nullable) = false
+  ];
 }

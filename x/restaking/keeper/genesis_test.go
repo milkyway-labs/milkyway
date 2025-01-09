@@ -308,11 +308,11 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				err := suite.k.SetParams(ctx, types.DefaultParams())
 				suite.Require().NoError(err)
 
-				err = suite.k.SetUserPreferences(ctx, "cosmos1jseuux3pktht0kkhlcsv4kqff3mql65udqs4jw", types.NewUserPreferences(
-					true,
-					false,
-					[]uint32{1, 2, 3},
-				))
+				err = suite.k.SetUserPreferences(ctx, "cosmos1jseuux3pktht0kkhlcsv4kqff3mql65udqs4jw", types.NewUserPreferences([]types.TrustedServiceEntry{
+					types.NewTrustedServiceEntry(1, nil),
+					types.NewTrustedServiceEntry(2, nil),
+					types.NewTrustedServiceEntry(3, nil),
+				}))
 				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
@@ -320,11 +320,11 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 				UsersPreferences: []types.UserPreferencesEntry{
 					types.NewUserPreferencesEntry(
 						"cosmos1jseuux3pktht0kkhlcsv4kqff3mql65udqs4jw",
-						types.NewUserPreferences(
-							true,
-							false,
-							[]uint32{1, 2, 3},
-						),
+						types.NewUserPreferences([]types.TrustedServiceEntry{
+							types.NewTrustedServiceEntry(1, nil),
+							types.NewTrustedServiceEntry(2, nil),
+							types.NewTrustedServiceEntry(3, nil),
+						}),
 					),
 				},
 			},
@@ -628,11 +628,11 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				UsersPreferences: []types.UserPreferencesEntry{
 					types.NewUserPreferencesEntry(
 						"cosmos1jseuux3pktht0kkhlcsv4kqff3mql65udqs4jw",
-						types.NewUserPreferences(
-							true,
-							false,
-							[]uint32{1, 2, 3},
-						),
+						types.NewUserPreferences([]types.TrustedServiceEntry{
+							types.NewTrustedServiceEntry(1, nil),
+							types.NewTrustedServiceEntry(2, nil),
+							types.NewTrustedServiceEntry(3, nil),
+						}),
 					),
 				},
 			},
@@ -642,11 +642,11 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 				suite.Require().Equal([]types.UserPreferencesEntry{
 					types.NewUserPreferencesEntry(
 						"cosmos1jseuux3pktht0kkhlcsv4kqff3mql65udqs4jw",
-						types.NewUserPreferences(
-							true,
-							false,
-							[]uint32{1, 2, 3},
-						),
+						types.NewUserPreferences([]types.TrustedServiceEntry{
+							types.NewTrustedServiceEntry(1, nil),
+							types.NewTrustedServiceEntry(2, nil),
+							types.NewTrustedServiceEntry(3, nil),
+						}),
 					),
 				}, stored)
 			},

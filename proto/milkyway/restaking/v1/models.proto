@@ -150,15 +150,21 @@ message DTDataList {
 // UserPreferences is a struct that contains a user's preferences for
 // restaking.
 message UserPreferences {
-  // TrustNonAccreditedServices tells whether the user trusts all non-accredited
-  // services present on the platform.
-  bool trust_non_accredited_services = 1;
+  // TrustedServices is a list of services that the user trusts
+  repeated TrustedServiceEntry trusted_services = 4 [
+    (gogoproto.customname) = "TrustedServices",
+    (gogoproto.nullable) = false
+  ];
 
-  // TrustAccreditedServices tells whether the user trusts all accredited
-  // services present on the platform.
-  bool trust_accredited_services = 2;
+  reserved 1 to 3; // trusted_non_accredited_services, trust_accredited_services, trusted_services_ids
+}
 
-  // TrustedServicesIDs is a list of service IDs that the user trusts (both
-  // accredited and non-accredited).
-  repeated uint32 trusted_services_ids = 3 [(gogoproto.customname) = "TrustedServicesIDs"];
+// TrustedServiceEntry is a struct that contains the ID of a service that the user trusts
+// and the IDs of the pools that the user wants the service to access
+message TrustedServiceEntry {
+  // ServiceID represents the ID of the service that the user trusts
+  uint32 service_id = 1 [(gogoproto.customname) = "ServiceID"];
+
+  // PoolsIDs represents the IDs of the pools that the user wants the service with ServiceID to access
+  repeated uint32 pools_ids = 2 [(gogoproto.customname) = "PoolsIDs"];
 }

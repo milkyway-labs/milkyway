@@ -2455,7 +2455,10 @@ func (suite *KeeperTestSuite) TestMsgServer_SetUserPreferences() {
 		{
 			name: "not found services return error",
 			msg: types.NewMsgSetUserPreferences(
-				types.NewUserPreferences(true, true, []uint32{1, 2}),
+				types.NewUserPreferences([]types.TrustedServiceEntry{
+					types.NewTrustedServiceEntry(1, nil),
+					types.NewTrustedServiceEntry(2, nil),
+				}),
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			),
 			shouldErr: true,
@@ -2463,7 +2466,9 @@ func (suite *KeeperTestSuite) TestMsgServer_SetUserPreferences() {
 		{
 			name: "invalid user preferences return error",
 			msg: types.NewMsgSetUserPreferences(
-				types.NewUserPreferences(true, true, []uint32{0}),
+				types.NewUserPreferences([]types.TrustedServiceEntry{
+					types.NewTrustedServiceEntry(0, nil),
+				}),
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			),
 			shouldErr: true,
@@ -2497,7 +2502,10 @@ func (suite *KeeperTestSuite) TestMsgServer_SetUserPreferences() {
 				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgSetUserPreferences(
-				types.NewUserPreferences(true, true, []uint32{1, 2}),
+				types.NewUserPreferences([]types.TrustedServiceEntry{
+					types.NewTrustedServiceEntry(1, nil),
+					types.NewTrustedServiceEntry(2, nil),
+				}),
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			),
 			shouldErr: false,
@@ -2511,11 +2519,10 @@ func (suite *KeeperTestSuite) TestMsgServer_SetUserPreferences() {
 				// Make sure the preferences are stored properly
 				stored, err := suite.k.GetUserPreferences(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
 				suite.Require().NoError(err)
-				suite.Require().Equal(types.NewUserPreferences(
-					true,
-					true,
-					[]uint32{1, 2},
-				), stored)
+				suite.Require().Equal(types.NewUserPreferences([]types.TrustedServiceEntry{
+					types.NewTrustedServiceEntry(1, nil),
+					types.NewTrustedServiceEntry(2, nil),
+				}), stored)
 			},
 		},
 		{
@@ -2547,12 +2554,15 @@ func (suite *KeeperTestSuite) TestMsgServer_SetUserPreferences() {
 				suite.Require().NoError(err)
 
 				// Set the user preferences
-				preferences := types.NewUserPreferences(true, true, []uint32{1, 2})
+				preferences := types.NewUserPreferences([]types.TrustedServiceEntry{
+					types.NewTrustedServiceEntry(1, nil),
+					types.NewTrustedServiceEntry(2, nil),
+				})
 				err = suite.k.SetUserPreferences(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4", preferences)
 				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgSetUserPreferences(
-				types.NewUserPreferences(false, false, nil),
+				types.NewUserPreferences(nil),
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			),
 			shouldErr: false,
@@ -2566,11 +2576,7 @@ func (suite *KeeperTestSuite) TestMsgServer_SetUserPreferences() {
 				// Make sure the preferences are stored properly
 				stored, err := suite.k.GetUserPreferences(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
 				suite.Require().NoError(err)
-				suite.Require().Equal(types.NewUserPreferences(
-					false,
-					false,
-					nil,
-				), stored)
+				suite.Require().Equal(types.NewUserPreferences(nil), stored)
 			},
 		},
 	}

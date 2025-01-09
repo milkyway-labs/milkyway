@@ -242,11 +242,9 @@ func TestGenesis_Validate(t *testing.T) {
 				[]types.UserPreferencesEntry{
 					types.NewUserPreferencesEntry(
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-						types.NewUserPreferences(
-							true,
-							false,
-							[]uint32{0},
-						),
+						types.NewUserPreferences([]types.TrustedServiceEntry{
+							types.NewTrustedServiceEntry(0, []uint32{1}),
+						}),
 					),
 				},
 				types.DefaultParams(),
@@ -318,11 +316,11 @@ func TestGenesis_Validate(t *testing.T) {
 				[]types.UserPreferencesEntry{
 					types.NewUserPreferencesEntry(
 						"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-						types.NewUserPreferences(
-							true,
-							false,
-							[]uint32{1, 2, 3},
-						),
+						types.NewUserPreferences([]types.TrustedServiceEntry{
+							types.NewTrustedServiceEntry(1, nil),
+							types.NewTrustedServiceEntry(2, nil),
+							types.NewTrustedServiceEntry(3, nil),
+						}),
 					),
 				},
 				types.NewParams(5*24*time.Hour, nil, sdkmath.LegacyNewDec(100000)),

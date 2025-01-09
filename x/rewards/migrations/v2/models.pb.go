@@ -91,10 +91,6 @@ func (m *RewardsPlan) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_RewardsPlan proto.InternalMessageInfo
 
-func init() {
-	proto.RegisterType((*RewardsPlan)(nil), "milkyway.rewards.v1.RewardsPlan")
-}
-
 func init() { proto.RegisterFile("milkyway/rewards/v1/models.proto", fileDescriptor_fcf66d1f3415f5b6) }
 
 var fileDescriptor_fcf66d1f3415f5b6 = []byte{

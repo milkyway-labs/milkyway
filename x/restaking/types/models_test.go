@@ -193,18 +193,31 @@ func TestUserPreferences_Validate(t *testing.T) {
 	}{
 		{
 			name: "invalid service id returns error",
-			preferences: types.UserPreferences{
-				TrustedServicesIDs: []uint32{0},
-			},
+			preferences: types.NewUserPreferences([]types.TrustedServiceEntry{
+				types.NewTrustedServiceEntry(0, nil),
+			}),
+			shouldErr: true,
+		},
+		{
+			name: "invalid pool id returns error",
+			preferences: types.NewUserPreferences([]types.TrustedServiceEntry{
+				types.NewTrustedServiceEntry(1, []uint32{0}),
+			}),
+			shouldErr: true,
+		},
+		{
+			name: "duplicated entry for the same service id returns error",
+			preferences: types.NewUserPreferences([]types.TrustedServiceEntry{
+				types.NewTrustedServiceEntry(1, nil),
+				types.NewTrustedServiceEntry(1, nil),
+			}),
 			shouldErr: true,
 		},
 		{
 			name: "valid preferences returns no error",
-			preferences: types.NewUserPreferences(
-				false,
-				true,
-				[]uint32{1, 2, 6, 7},
-			),
+			preferences: types.NewUserPreferences([]types.TrustedServiceEntry{
+				types.NewTrustedServiceEntry(1, []uint32{1, 2}),
+			}),
 			shouldErr: false,
 		},
 	}
@@ -222,16 +235,18 @@ func TestUserPreferences_Validate(t *testing.T) {
 	}
 }
 
-func TestUserPreferences_IsServiceTrusted(t *testing.T) {
+func TestUserPreferences_TrustedServicesIDs(t *testing.T) {
 	testCases := []struct {
 		name        string
 		preferences types.UserPreferences
 		service     servicestypes.Service
-		trusted     bool
+		expTrusted  bool
 	}{
 		{
-			name:        "user does not trust any services - accredited service",
-			preferences: types.NewUserPreferences(false, false, nil),
+			name: "user trusts only specified services - specified and accredited service",
+			preferences: types.NewUserPreferences([]types.TrustedServiceEntry{
+				types.NewTrustedServiceEntry(1, nil),
+			}),
 			service: servicestypes.NewService(
 				1,
 				servicestypes.SERVICE_STATUS_ACTIVE,
@@ -242,11 +257,13 @@ func TestUserPreferences_IsServiceTrusted(t *testing.T) {
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				true,
 			),
-			trusted: false,
+			expTrusted: true,
 		},
 		{
-			name:        "user does not trust any services - non-accredited service",
-			preferences: types.NewUserPreferences(false, false, nil),
+			name: "user trusts only specified services - specified and non-accredited service",
+			preferences: types.NewUserPreferences([]types.TrustedServiceEntry{
+				types.NewTrustedServiceEntry(1, nil),
+			}),
 			service: servicestypes.NewService(
 				1,
 				servicestypes.SERVICE_STATUS_ACTIVE,
@@ -257,131 +274,13 @@ func TestUserPreferences_IsServiceTrusted(t *testing.T) {
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				false,
 			),
-			trusted: false,
+			expTrusted: true,
 		},
 		{
-			name:        "user only trusts accredited services - accredited service",
-			preferences: types.NewUserPreferences(false, true, nil),
-			service: servicestypes.NewService(
-				1,
-				servicestypes.SERVICE_STATUS_ACTIVE,
-				"MilkyWay",
-				"MilkyWay is an AVS of a restaking platform",
-				"https://milkyway.com",
-				"https://milkyway.com/logo.png",
-				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				true,
-			),
-			trusted: true,
-		},
-		{
-			name:        "user only trusts accredited services - non-accredited service",
-			preferences: types.NewUserPreferences(false, true, nil),
-			service: servicestypes.NewService(
-				1,
-				servicestypes.SERVICE_STATUS_ACTIVE,
-				"MilkyWay",
-				"MilkyWay is an AVS of a restaking platform",
-				"https://milkyway.com",
-				"https://milkyway.com/logo.png",
-				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				false,
-			),
-			trusted: false,
-		},
-		{
-			name:        "user only trusts non-accredited services - accredited service",
-			preferences: types.NewUserPreferences(true, false, nil),
-			service: servicestypes.NewService(
-				1,
-				servicestypes.SERVICE_STATUS_ACTIVE,
-				"MilkyWay",
-				"MilkyWay is an AVS of a restaking platform",
-				"https://milkyway.com",
-				"https://milkyway.com/logo.png",
-				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				true,
-			),
-			trusted: false,
-		},
-		{
-			name:        "user only trusts non-accredited services - non-accredited service",
-			preferences: types.NewUserPreferences(true, false, nil),
-			service: servicestypes.NewService(
-				1,
-				servicestypes.SERVICE_STATUS_ACTIVE,
-				"MilkyWay",
-				"MilkyWay is an AVS of a restaking platform",
-				"https://milkyway.com",
-				"https://milkyway.com/logo.png",
-				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				false,
-			),
-			trusted: true,
-		},
-		{
-			name:        "user trusts both accredited and non-accredited services - accredited service",
-			preferences: types.NewUserPreferences(true, true, nil),
-			service: servicestypes.NewService(
-				1,
-				servicestypes.SERVICE_STATUS_ACTIVE,
-				"MilkyWay",
-				"MilkyWay is an AVS of a restaking platform",
-				"https://milkyway.com",
-				"https://milkyway.com/logo.png",
-				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				true,
-			),
-			trusted: true,
-		},
-		{
-			name:        "user trusts both accredited and non-accredited services - non-accredited service",
-			preferences: types.NewUserPreferences(true, true, nil),
-			service: servicestypes.NewService(
-				1,
-				servicestypes.SERVICE_STATUS_ACTIVE,
-				"MilkyWay",
-				"MilkyWay is an AVS of a restaking platform",
-				"https://milkyway.com",
-				"https://milkyway.com/logo.png",
-				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				false,
-			),
-			trusted: true,
-		},
-		{
-			name:        "user trusts only specified services - specified and accredited service",
-			preferences: types.NewUserPreferences(false, false, []uint32{1}),
-			service: servicestypes.NewService(
-				1,
-				servicestypes.SERVICE_STATUS_ACTIVE,
-				"MilkyWay",
-				"MilkyWay is an AVS of a restaking platform",
-				"https://milkyway.com",
-				"https://milkyway.com/logo.png",
-				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				true,
-			),
-			trusted: true,
-		},
-		{
-			name:        "user trusts only specified services - specified and non-accredited service",
-			preferences: types.NewUserPreferences(false, false, []uint32{1}),
-			service: servicestypes.NewService(
-				1,
-				servicestypes.SERVICE_STATUS_ACTIVE,
-				"MilkyWay",
-				"MilkyWay is an AVS of a restaking platform",
-				"https://milkyway.com",
-				"https://milkyway.com/logo.png",
-				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
-				false,
-			),
-			trusted: true,
-		},
-		{
-			name:        "user trusts only specified services - not specified and accredited service",
-			preferences: types.NewUserPreferences(false, false, []uint32{1}),
+			name: "user trusts only specified services - not specified and accredited service",
+			preferences: types.NewUserPreferences([]types.TrustedServiceEntry{
+				types.NewTrustedServiceEntry(1, nil),
+			}),
 			service: servicestypes.NewService(
 				2,
 				servicestypes.SERVICE_STATUS_ACTIVE,
@@ -392,12 +291,13 @@ func TestUserPreferences_IsServiceTrusted(t *testing.T) {
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				true,
 			),
-			trusted: false,
+			expTrusted: false,
 		},
 		{
-			name:        "user trusts only specified services - not specified and non-accredited service",
-			preferences: types.NewUserPreferences(false, false, []uint32{1}),
-			service: servicestypes.NewService(
+			name: "user trusts only specified services - not specified and non-accredited service",
+			preferences: types.NewUserPreferences([]types.TrustedServiceEntry{
+				types.NewTrustedServiceEntry(1, nil),
+			}), service: servicestypes.NewService(
 				2,
 				servicestypes.SERVICE_STATUS_ACTIVE,
 				"MilkyWay",
@@ -407,14 +307,91 @@ func TestUserPreferences_IsServiceTrusted(t *testing.T) {
 				"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
 				false,
 			),
-			trusted: false,
+			expTrusted: false,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			trusted := tc.preferences.IsServiceTrusted(tc.service)
-			require.Equal(t, tc.trusted, trusted)
+			trusted := tc.preferences.TrustedServicesIDs()
+			if tc.expTrusted {
+				require.Contains(t, trusted, tc.service.ID)
+			} else {
+				require.NotContains(t, trusted, tc.service.ID)
+			}
+		})
+	}
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+func TestComputeChangedServices(t *testing.T) {
+	testCases := []struct {
+		name       string
+		before     types.UserPreferences
+		after      types.UserPreferences
+		expEntries []types.TrustedServiceEntry
+	}{
+		{
+			name: "no changes",
+			before: types.NewUserPreferences([]types.TrustedServiceEntry{
+				types.NewTrustedServiceEntry(1, []uint32{1, 2}),
+			}),
+			after: types.NewUserPreferences([]types.TrustedServiceEntry{
+				types.NewTrustedServiceEntry(1, []uint32{1, 2}),
+			}),
+			expEntries: nil,
+		},
+		{
+			name: "service removed",
+			before: types.NewUserPreferences([]types.TrustedServiceEntry{
+				types.NewTrustedServiceEntry(1, []uint32{1, 2}),
+			}),
+			after: types.NewUserPreferences(nil),
+			expEntries: []types.TrustedServiceEntry{
+				types.NewTrustedServiceEntry(1, []uint32{1, 2}),
+			},
+		},
+		{
+			name:   "service added",
+			before: types.NewUserPreferences(nil),
+			after: types.NewUserPreferences([]types.TrustedServiceEntry{
+				types.NewTrustedServiceEntry(1, []uint32{1, 2}),
+			}),
+			expEntries: []types.TrustedServiceEntry{
+				types.NewTrustedServiceEntry(1, []uint32{1, 2}),
+			},
+		},
+		{
+			name: "pool within service removed",
+			before: types.NewUserPreferences([]types.TrustedServiceEntry{
+				types.NewTrustedServiceEntry(1, []uint32{1, 2}),
+			}),
+			after: types.NewUserPreferences([]types.TrustedServiceEntry{
+				types.NewTrustedServiceEntry(1, []uint32{1}),
+			}),
+			expEntries: []types.TrustedServiceEntry{
+				types.NewTrustedServiceEntry(1, []uint32{2}),
+			},
+		},
+		{
+			name: "pool within service added",
+			before: types.NewUserPreferences([]types.TrustedServiceEntry{
+				types.NewTrustedServiceEntry(1, []uint32{1}),
+			}),
+			after: types.NewUserPreferences([]types.TrustedServiceEntry{
+				types.NewTrustedServiceEntry(1, []uint32{1, 2}),
+			}),
+			expEntries: []types.TrustedServiceEntry{
+				types.NewTrustedServiceEntry(1, []uint32{2}),
+			},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			entries := types.ComputeChangedServices(tc.before, tc.after)
+			require.Equal(t, tc.expEntries, entries)
 		})
 	}
 }

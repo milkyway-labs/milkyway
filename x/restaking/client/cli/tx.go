@@ -567,11 +567,8 @@ func GetCeasePoolSecurityBorrowTxCmd() *cobra.Command {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-//nolint:gosec // This is not a hardcoded credential
 const (
-	trustNonAccreditedServicesFlag = "trust-non-accredited-services"
-	trustAccreditedServicesFlag    = "trust-accredited-services"
-	trustedServicesIDsFlag         = "trusted-services-ids"
+	trustedServiceFlag = "trusted-service"
 )
 
 func GetUserTxCmd() *cobra.Command {
@@ -594,12 +591,16 @@ func GetSetUserPreferencesCmd() *cobra.Command {
 		Short: "Set your user preferences regarding the restaking module",
 		Long: `Set your user preferences regarding the restaking module.
 
+The trusted services must be provided in the following format:
+<serviceID>-<poolID>,<poolID>,<poolID>
+
+Each trusted service must be provided separately using the --trusted-service flag.
+
 If you are updating your preferences, you must provide all the flags that you want to set 
 (i.e. the values you provide will completely override the existing ones)`,
 		Example: fmt.Sprintf(`%s tx %s user set-preferences \
---trust-accredited-services \
---trust-non-accredited-services \
---trusted-services-ids 1,2,3 \
+--trusted-service 1-1,2,3 \
+--trusted-service 2-4,5,6
 --from alice`, version.AppName, types.ModuleName),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -607,24 +608,19 @@ If you are updating your preferences, you must provide all the flags that you wa
 				return err
 			}
 
-			trustAccreditedServices, err := cmd.Flags().GetBool(trustAccreditedServicesFlag)
+			trustedServicesStrings, err := cmd.Flags().GetStringArray(trustedServiceFlag)
 			if err != nil {
 				return err
 			}
 
-			trustNonAccreditedServices, err := cmd.Flags().GetBool(trustNonAccreditedServicesFlag)
+			// Parse the trusted services
+			trustedServices, err := utils.MapWithErr(trustedServicesStrings, ParseTrustedServiceEntry)
 			if err != nil {
-				return err
+				return fmt.Errorf("invalid trusted services: %w", err)
 			}
-
-			trustedServices, err := cmd.Flags().GetUintSlice(trustedServicesIDsFlag)
-			if err != nil {
-				return err
-			}
-			trustedServicesIDs := utils.Map(trustedServices, func(t uint) uint32 { return uint32(t) })
 
 			// Create and validate the message
-			preferences := types.NewUserPreferences(trustNonAccreditedServices, trustAccreditedServices, trustedServicesIDs)
+			preferences := types.NewUserPreferences(trustedServices)
 			msg := types.NewMsgSetUserPreferences(preferences, clientCtx.FromAddress.String())
 			if err = msg.ValidateBasic(); err != nil {
 				return fmt.Errorf("message validation failed: %w", err)
@@ -634,9 +630,7 @@ If you are updating your preferences, you must provide all the flags that you wa
 		},
 	}
 
-	cmd.Flags().Bool(trustNonAccreditedServicesFlag, false, "Trust non-accredited services")
-	cmd.Flags().Bool(trustAccreditedServicesFlag, false, "Trust accredited services")
-	cmd.Flags().UintSlice(trustedServicesIDsFlag, nil, "List of IDs of the services you trust")
+	cmd.Flags().StringArray(trustedServiceFlag, nil, "List of services to trust")
 
 	flags.AddTxFlagsToCmd(cmd)
 

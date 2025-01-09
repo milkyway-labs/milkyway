@@ -9,6 +9,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/milkyway-labs/milkyway/v7/utils"
 	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
 	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
 	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
@@ -303,35 +304,132 @@ func MustUnmarshalUnbondingDelegation(cdc codec.BinaryCodec, bz []byte) Unbondin
 // --------------------------------------------------------------------------------------------------------------------
 
 // NewUserPreferences creates a new UserPreferences instance
-func NewUserPreferences(trustNonAccreditedServices bool, trustAccreditedServices bool, trustedServiceIDs []uint32) UserPreferences {
+func NewUserPreferences(trustedServices []TrustedServiceEntry) UserPreferences {
 	return UserPreferences{
-		TrustNonAccreditedServices: trustNonAccreditedServices,
-		TrustAccreditedServices:    trustAccreditedServices,
-		TrustedServicesIDs:         trustedServiceIDs,
+		TrustedServices: trustedServices,
 	}
 }
 
 // DefaultUserPreferences returns the default user preferences
 func DefaultUserPreferences() UserPreferences {
-	return NewUserPreferences(false, true, nil)
+	return NewUserPreferences(nil)
 }
 
 // Validate validates the user preferences
 func (p UserPreferences) Validate() error {
-	for _, serviceID := range p.TrustedServicesIDs {
-		if serviceID == 0 {
-			return fmt.Errorf("invalid service id")
+	var trustedServicesIDs []uint32
+	for _, entry := range p.TrustedServices {
+		// Validate the entry
+		if err := entry.Validate(); err != nil {
+			return err
 		}
-	}
 
-	// TODO: check duplicate service IDs
+		// Make sure there are no other entries for the same service id
+		if slices.Contains(trustedServicesIDs, entry.ServiceID) {
+			return fmt.Errorf("duplicate service id: %d", entry.ServiceID)
+		}
+
+		trustedServicesIDs = append(trustedServicesIDs, entry.ServiceID)
+	}
 
 	return nil
 }
 
-// IsServiceTrusted returns whether the user trusts the given service
-func (p UserPreferences) IsServiceTrusted(service servicestypes.Service) bool {
-	return slices.Contains(p.TrustedServicesIDs, service.ID) ||
-		(service.Accredited && p.TrustAccreditedServices) ||
-		(!service.Accredited && p.TrustNonAccreditedServices)
+// GetTrustedServiceEntry returns the trusted service entry for the given service id
+func (p UserPreferences) GetTrustedServiceEntry(serviceID uint32) TrustedServiceEntry {
+	for _, entry := range p.TrustedServices {
+		if entry.ServiceID == serviceID {
+			return entry
+		}
+	}
+	return TrustedServiceEntry{}
+}
+
+// TrustedServicesIDs returns the list of service ids that the user trusts
+func (p UserPreferences) TrustedServicesIDs() []uint32 {
+	return utils.Map(p.TrustedServices, func(entry TrustedServiceEntry) uint32 { return entry.ServiceID })
+}
+
+// IsServiceTrusted tells whether the user trusts the given service
+func (p UserPreferences) IsServiceTrusted(serviceID uint32) bool {
+	return len(p.TrustedServices) == 0 || slices.Contains(p.TrustedServicesIDs(), serviceID)
+}
+
+// IsServiceTrustedWithPool tells whether the user trusts the given service with the given pool
+func (p UserPreferences) IsServiceTrustedWithPool(serviceID, poolID uint32) bool {
+	if len(p.TrustedServices) == 0 {
+		return true
+	}
+	entry := p.GetTrustedServiceEntry(serviceID)
+	return entry.ServiceID != 0 && (len(entry.PoolsIDs) == 0 || slices.Contains(entry.PoolsIDs, poolID))
+}
+
+// ComputeChangedServices returns the list of services that have changed between the two user preferences.
+// A service is considered changed in the following cases:
+// - It was trusted in the old preferences but not in the new preferences
+// - It was not trusted in the old preferences but it is in the new preferences
+// - It was trusted in both preferences but the pools have changed
+//
+// The returned list will contain an entry for each service that has changed.
+// The entry will contain the service id and the pools ids that have changed (either removed or added).
+// CONTRACT: this function is never triggered in Begin/End block or any proposal execution
+func ComputeChangedServices(before UserPreferences, after UserPreferences) (changed []TrustedServiceEntry) {
+	beforeTrusted := before.TrustedServicesIDs()
+	afterTrusted := after.TrustedServicesIDs()
+
+	// Get the deleted entries (A - B)
+	for _, serviceID := range utils.Difference(beforeTrusted, afterTrusted) {
+		changed = append(changed, before.GetTrustedServiceEntry(serviceID))
+	}
+
+	// Get the added entries (B - A)
+	for _, serviceID := range utils.Difference(afterTrusted, beforeTrusted) {
+		changed = append(changed, after.GetTrustedServiceEntry(serviceID))
+	}
+
+	// Find the list of services that have changed pools (A ∩ B)
+	for _, serviceID := range utils.Intersect(beforeTrusted, afterTrusted) {
+		beforePools := before.GetTrustedServiceEntry(serviceID).PoolsIDs
+		afterPools := after.GetTrustedServiceEntry(serviceID).PoolsIDs
+
+		removedPools := utils.Difference(beforePools, afterPools)
+		addedPools := utils.Difference(afterPools, beforePools)
+
+		if !slices.Equal(beforePools, afterPools) {
+			changed = append(changed, NewTrustedServiceEntry(
+				serviceID,
+				utils.Union(removedPools, addedPools),
+			))
+		}
+	}
+
+	return changed
+}
+
+// NewTrustedServiceEntry creates a new TrustedServiceEntry instance
+func NewTrustedServiceEntry(serviceID uint32, poolsIDs []uint32) TrustedServiceEntry {
+	return TrustedServiceEntry{
+		ServiceID: serviceID,
+		PoolsIDs:  poolsIDs,
+	}
+}
+
+// Validate validates the trusted service entry
+func (e TrustedServiceEntry) Validate() error {
+	if e.ServiceID == 0 {
+		return fmt.Errorf("invalid service id")
+	}
+
+	for _, poolID := range e.PoolsIDs {
+		if poolID == 0 {
+			return fmt.Errorf("invalid pool id")
+		}
+	}
+
+	duplicated := utils.FindDuplicate(e.PoolsIDs)
+	if duplicated != nil {
+		return fmt.Errorf("duplicated pool id: %d", *duplicated)
+	}
+
+	return nil
 }
