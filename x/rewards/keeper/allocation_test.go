@@ -5,6 +5,7 @@ import (
 
 	"github.com/milkyway-labs/milkyway/v7/app/testutil"
 	"github.com/milkyway-labs/milkyway/v7/utils"
+	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
 	"github.com/milkyway-labs/milkyway/v7/x/rewards/keeper"
 	"github.com/milkyway-labs/milkyway/v7/x/rewards/types"
@@ -378,6 +379,11 @@ func (suite *KeeperTestSuite) TestAllocateRewards_ZeroDelegations() {
 	// Try allocating rewards.
 	ctx = suite.allocateRewards(ctx, 10*time.Second)
 
+	// The rewards pool must be empty since no rewards have been allocated.
+	rewardsPool := suite.accountKeeper.GetModuleAddress(types.RewardsPoolName)
+	balances := suite.bankKeeper.GetAllBalances(ctx, rewardsPool)
+	suite.Require().Empty(balances)
+
 	// There must be no outstanding rewards allocated.
 	target, err := suite.keeper.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, operator.ID)
 	suite.Require().NoError(err)
@@ -415,6 +421,181 @@ func (suite *KeeperTestSuite) TestAllocateRewards_ZeroDelegations() {
 	rewards, err = suite.keeper.GetServiceDelegationRewards(ctx, delAddr2, service.ID)
 	suite.Require().NoError(err)
 	suite.Require().Equal("8680.500000000000000000service", rewards.Sum().String())
+}
+
+func (suite *KeeperTestSuite) TestAllocateRewards_TransferRewardsOnlyWhenAllocatingRewards_Pool() {
+	// Cache the context to avoid test conflicts
+	ctx, _ := suite.ctx.CacheContext()
+
+	suite.RegisterCurrency(ctx, "umilk", "MILK", 6, utils.MustParseDec("1"))
+
+	// Create a service.
+	serviceAdmin := testutil.TestAddress(10000)
+	service := suite.CreateService(ctx, "Service", serviceAdmin.String())
+
+	// Create an active rewards plan.
+	suite.CreateBasicRewardsPlan(
+		ctx,
+		service.ID,
+		utils.MustParseCoin("100_000000service"),
+		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+		time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+		utils.MustParseCoins("100000_000000service"),
+	)
+
+	// Call AllocateRewards to set last rewards allocation time.
+	err := suite.keeper.AllocateRewards(ctx)
+	suite.Require().NoError(err)
+
+	rewardsPool := suite.accountKeeper.GetModuleAddress(types.RewardsPoolName)
+
+	// There's no delegations yet, so no need to allocate rewards.
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+	balances := suite.bankKeeper.GetAllBalances(ctx, rewardsPool)
+	suite.Require().Empty(balances)
+
+	// Alice delegates $MILK to the pool.
+	aliceAddr := testutil.TestAddress(1)
+	suite.DelegatePool(ctx, utils.MustParseCoin("10_000000umilk"), aliceAddr.String(), true)
+
+	// The service is not being secured by the $MILK pool so no rewards allocation
+	// happens yet. Note that Alice trusts all services through all pools by default.
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+	balances = suite.bankKeeper.GetAllBalances(ctx, rewardsPool)
+	suite.Require().Empty(balances)
+
+	// Now the service whitelists the pool, but Alice doesn't trust the service.
+	// So no rewards allocation happens yet.
+	suite.AddPoolsToServiceSecuringPools(ctx, service.ID, []uint32{1})
+	suite.SetUserPreferences(ctx, aliceAddr.String(), []restakingtypes.TrustedServiceEntry{
+		restakingtypes.NewTrustedServiceEntry(2, nil),
+	})
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+	balances = suite.bankKeeper.GetAllBalances(ctx, rewardsPool)
+	suite.Require().Empty(balances)
+
+	// Finally, Alice trust the service through the pool and rewards are allocated.
+	suite.SetUserPreferences(ctx, aliceAddr.String(), []restakingtypes.TrustedServiceEntry{
+		restakingtypes.NewTrustedServiceEntry(service.ID, nil),
+	})
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+	balances = suite.bankKeeper.GetAllBalances(ctx, rewardsPool)
+	suite.Require().NotEmpty(balances)
+}
+
+func (suite *KeeperTestSuite) TestAllocateRewards_TransferRewardsOnlyWhenAllocatingRewards_Operator() {
+	// Cache the context to avoid test conflicts
+	ctx, _ := suite.ctx.CacheContext()
+
+	suite.RegisterCurrency(ctx, "umilk", "MILK", 6, utils.MustParseDec("1"))
+
+	// Create a service.
+	serviceAdmin := testutil.TestAddress(10000)
+	service := suite.CreateService(ctx, "Service", serviceAdmin.String())
+
+	// Create an inactive operator.
+	operatorAdmin := testutil.TestAddress(10001)
+	operator := suite.CreateOperator(ctx, "Operator", operatorAdmin.String())
+
+	// Create an active rewards plan.
+	suite.CreateBasicRewardsPlan(
+		ctx,
+		service.ID,
+		utils.MustParseCoin("100_000000service"),
+		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+		time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+		utils.MustParseCoins("100000_000000service"),
+	)
+
+	// Call AllocateRewards to set last rewards allocation time.
+	err := suite.keeper.AllocateRewards(ctx)
+	suite.Require().NoError(err)
+
+	rewardsPool := suite.accountKeeper.GetModuleAddress(types.RewardsPoolName)
+
+	// There's no delegations yet, so no need to allocate rewards.
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+	balances := suite.bankKeeper.GetAllBalances(ctx, rewardsPool)
+	suite.Require().Empty(balances)
+
+	// Alice delegates $MILK to the operator.
+	aliceAddr := testutil.TestAddress(1)
+	suite.DelegateOperator(ctx, operator.ID, utils.MustParseCoins("10_000000umilk"), aliceAddr.String(), true)
+
+	// The operator hasn't joined the service so no rewards allocation happens yet.
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+	balances = suite.bankKeeper.GetAllBalances(ctx, rewardsPool)
+	suite.Require().Empty(balances)
+
+	// Now the operator joins the service but at the same time it becomes inactive.
+	// So no rewards allocation happens yet.
+	suite.UpdateOperatorParams(ctx, operator.ID, utils.MustParseDec("0.1"), []uint32{service.ID})
+	operator, err = suite.operatorsKeeper.GetOperator(ctx, operator.ID)
+	suite.Require().NoError(err)
+	operator.Status = operatorstypes.OPERATOR_STATUS_INACTIVE
+	err = suite.operatorsKeeper.SaveOperator(ctx, operator)
+	suite.Require().NoError(err)
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+	balances = suite.bankKeeper.GetAllBalances(ctx, rewardsPool)
+	suite.Require().Empty(balances)
+
+	// Now the operator becomes active, but the service doesn't allow the operator to
+	// validate it, so no rewards allocation happens yet.
+	operator.Status = operatorstypes.OPERATOR_STATUS_ACTIVE
+	err = suite.operatorsKeeper.SaveOperator(ctx, operator)
+	suite.Require().NoError(err)
+	suite.AddOperatorsToServiceAllowList(ctx, service.ID, []uint32{2})
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+	balances = suite.bankKeeper.GetAllBalances(ctx, rewardsPool)
+	suite.Require().Empty(balances)
+
+	// Finally, the service allows the operator to validate it and rewards are
+	// allocated.
+	suite.AddOperatorsToServiceAllowList(ctx, service.ID, []uint32{operator.ID})
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+	balances = suite.bankKeeper.GetAllBalances(ctx, rewardsPool)
+	suite.Require().NotEmpty(balances)
+}
+
+func (suite *KeeperTestSuite) TestAllocateRewards_TransferRewardsOnlyWhenAllocatingRewards_Service() {
+	// Cache the context to avoid test conflicts
+	ctx, _ := suite.ctx.CacheContext()
+
+	suite.RegisterCurrency(ctx, "umilk", "MILK", 6, utils.MustParseDec("1"))
+
+	// Create a service.
+	serviceAdmin := testutil.TestAddress(10000)
+	service := suite.CreateService(ctx, "Service", serviceAdmin.String())
+
+	// Create an active rewards plan.
+	suite.CreateBasicRewardsPlan(
+		ctx,
+		service.ID,
+		utils.MustParseCoin("100_000000service"),
+		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+		time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+		utils.MustParseCoins("100000_000000service"),
+	)
+
+	// Call AllocateRewards to set last rewards allocation time.
+	err := suite.keeper.AllocateRewards(ctx)
+	suite.Require().NoError(err)
+
+	rewardsPool := suite.accountKeeper.GetModuleAddress(types.RewardsPoolName)
+
+	// There's no delegations yet, so no need to allocate rewards.
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+	balances := suite.bankKeeper.GetAllBalances(ctx, rewardsPool)
+	suite.Require().Empty(balances)
+
+	// Alice delegates $MILK to the service.
+	aliceAddr := testutil.TestAddress(1)
+	suite.DelegateService(ctx, service.ID, utils.MustParseCoins("10_000000umilk"), aliceAddr.String(), true)
+
+	// The service allocates rewards right after a user delegates to it.
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+	balances = suite.bankKeeper.GetAllBalances(ctx, rewardsPool)
+	suite.Require().NotEmpty(balances)
 }
 
 func (suite *KeeperTestSuite) TestAllocateRewards_WeightedDistributions() {

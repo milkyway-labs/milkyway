@@ -199,12 +199,6 @@ func (k *Keeper) AllocateRewardsByPlan(
 		return nil
 	}
 
-	// Send the current block's rewards to the global rewards pool.
-	err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, planRewardsPoolAddr, types.RewardsPoolName, sdk.NewCoins(rewardsTruncated))
-	if err != nil {
-		return err
-	}
-
 	eligiblePools, err := k.getEligiblePools(ctx, service.ID, pools, delTargetCache)
 	if err != nil {
 		return err
@@ -239,6 +233,12 @@ func (k *Keeper) AllocateRewardsByPlan(
 	// There's no delegations at all, so just skip.
 	if totalDelValues.IsZero() {
 		return nil
+	}
+
+	// Send the current block's rewards to the global rewards pool.
+	err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, planRewardsPoolAddr, types.RewardsPoolName, sdk.NewCoins(rewardsTruncated))
+	if err != nil {
+		return err
 	}
 
 	// Only sum weights with non-zero delegation values.
