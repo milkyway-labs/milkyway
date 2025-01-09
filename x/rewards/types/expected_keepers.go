@@ -51,7 +51,6 @@ type PoolsKeeper interface {
 
 type OperatorsKeeper interface {
 	GetOperator(ctx context.Context, operatorID uint32) (operatorstypes.Operator, error)
-	GetOperators(ctx context.Context) ([]operatorstypes.Operator, error)
 	IterateOperators(ctx context.Context, cb func(operator operatorstypes.Operator) (stop bool, err error)) error
 	GetOperatorParams(ctx context.Context, operatorID uint32) (operatorstypes.OperatorParams, error)
 }
@@ -63,13 +62,11 @@ type ServicesKeeper interface {
 }
 
 type RestakingKeeper interface {
-	HasOperatorJoinedService(ctx context.Context, operatorID uint32, serviceID uint32) (bool, error)
+	IterateServiceValidatingOperators(ctx context.Context, serviceID uint32, action func(operatorID uint32) (stop bool, err error)) error
 	CanOperatorValidateService(ctx context.Context, serviceID uint32, operatorID uint32) (bool, error)
 	IsServiceSecuredByPool(ctx context.Context, serviceID uint32, poolID uint32) (bool, error)
 	GetRestakableDenoms(ctx context.Context) ([]string, error)
 	GetPoolDelegation(ctx context.Context, poolID uint32, userAddress string) (restakingtypes.Delegation, bool, error)
-	GetOperatorDelegation(ctx context.Context, operatorID uint32, userAddress string) (restakingtypes.Delegation, bool, error)
-	GetServiceDelegation(ctx context.Context, serviceID uint32, userAddress string) (restakingtypes.Delegation, bool, error)
 	GetDelegationForTarget(ctx context.Context, target restakingtypes.DelegationTarget, delegator string) (restakingtypes.Delegation, bool, error)
 
 	IterateUserPoolDelegations(ctx context.Context, userAddress string, cb func(del restakingtypes.Delegation) (stop bool, err error)) error

@@ -24,6 +24,15 @@ type DelegationTarget struct {
 	OutstandingRewards     collections.Map[uint32, types.OutstandingRewards]
 }
 
+// delegationTargetKey is used as a key of the delegation target cache map.
+type delegationTargetKey struct {
+	typ restakingtypes.DelegationType
+	id  uint32
+}
+
+// delegationTargetCache is a cache of delegation targets.
+type delegationTargetCache map[delegationTargetKey]DelegationTarget
+
 // GetDelegationTarget returns the wrapped delegation target for the given
 // delegation type and target ID.
 func (k *Keeper) GetDelegationTarget(

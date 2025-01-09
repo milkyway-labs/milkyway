@@ -21,8 +21,6 @@ import (
 )
 
 // --------------------------------------------------------------------------------------------------------------------
-// --- Params operations
-// --------------------------------------------------------------------------------------------------------------------
 
 // IterateServiceValidatingOperators iterates over all the operators that have
 // joined the given service, performing the given action. If the action returns

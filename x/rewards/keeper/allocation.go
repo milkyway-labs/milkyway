@@ -106,10 +106,9 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 		return len(restakableDenoms) == 0 || slices.Contains(restakableDenoms, pool.Denom)
 	})
 
-	operators, err := k.operatorsKeeper.GetOperators(ctx)
-	if err != nil {
-		return err
-	}
+	// We cache delegation targets to avoid fetching the same delegation target
+	// multiple times inside AllocateRewardsByPlan.
+	delTargetCache := delegationTargetCache{}
 
 	// Iterate all rewards plan stored and allocate rewards by plan if it's
 	// active(plan's start time <= current block time < plans' end time).
@@ -147,7 +146,7 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 			}
 		}
 
-		err = k.AllocateRewardsByPlan(ctx, plan, timeSinceLastAllocation, pools, operators, serviceRestakableDenoms)
+		err = k.AllocateRewardsByPlan(ctx, plan, timeSinceLastAllocation, pools, delTargetCache, serviceRestakableDenoms)
 		if err != nil {
 			return false, err
 		}
@@ -158,9 +157,22 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 
 // AllocateRewardsByPlan allocates rewards by a specific rewards plan.
 func (k *Keeper) AllocateRewardsByPlan(
-	ctx context.Context, plan types.RewardsPlan, timeSinceLastAllocation time.Duration,
-	pools []poolstypes.Pool, operators []operatorstypes.Operator, restakableDenoms []string,
+	ctx context.Context,
+	plan types.RewardsPlan,
+	timeSinceLastAllocation time.Duration,
+	pools []poolstypes.Pool,
+	delTargetCache map[delegationTargetKey]DelegationTarget,
+	restakableDenoms []string,
 ) error {
+	service, err := k.servicesKeeper.GetService(ctx, plan.ServiceID)
+	if err != nil {
+		return err
+	}
+	// Ensure that we are distributing rewards only for active services
+	if !service.IsActive() {
+		return nil
+	}
+
 	// Calculate rewards amount for this block by following formula:
 	// amountPerDay * timeSinceLastAllocation(ms) / 1 day(ms)
 	rewardsAmount := math.LegacyNewDecFromInt(plan.AmountPerDay.Amount).
@@ -188,22 +200,12 @@ func (k *Keeper) AllocateRewardsByPlan(
 	}
 
 	// Send the current block's rewards to the global rewards pool.
-	err := k.bankKeeper.SendCoinsFromAccountToModule(ctx, planRewardsPoolAddr, types.RewardsPoolName, sdk.NewCoins(rewardsTruncated))
+	err = k.bankKeeper.SendCoinsFromAccountToModule(ctx, planRewardsPoolAddr, types.RewardsPoolName, sdk.NewCoins(rewardsTruncated))
 	if err != nil {
 		return err
 	}
 
-	service, err := k.servicesKeeper.GetService(ctx, plan.ServiceID)
-	if err != nil {
-		return err
-	}
-
-	// Ensure that we are distribution rewards only for active services
-	if !service.IsActive() {
-		return nil
-	}
-
-	eligiblePools, err := k.getEligiblePools(ctx, service, pools)
+	eligiblePools, err := k.getEligiblePools(ctx, service.ID, pools, delTargetCache)
 	if err != nil {
 		return err
 	}
@@ -212,7 +214,7 @@ func (k *Keeper) AllocateRewardsByPlan(
 		return err
 	}
 
-	eligibleOperators, err := k.getEligibleOperators(ctx, service, operators)
+	eligibleOperators, err := k.getEligibleOperators(ctx, service.ID, delTargetCache)
 	if err != nil {
 		return err
 	}
@@ -301,19 +303,23 @@ func (k *Keeper) AllocateRewardsByPlan(
 // allocation.
 func (k *Keeper) getEligiblePools(
 	ctx context.Context,
-	service servicestypes.Service,
+	serviceID uint32,
 	pools []poolstypes.Pool,
+	delTargetCache delegationTargetCache,
 ) (eligiblePools []DelegationTarget, err error) {
 	// Only include pools from which the service is borrowing security.
 	for _, pool := range pools {
-		isSecured, err := k.restakingKeeper.IsServiceSecuredByPool(ctx, service.ID, pool.ID)
+		isSecured, err := k.restakingKeeper.IsServiceSecuredByPool(ctx, serviceID, pool.ID)
 		if err != nil {
 			return nil, err
+		}
+		if !isSecured {
+			continue
 		}
 
 		// If the service has zero total delegator shares for this pool which means no
 		// users trust the service, then skip it.
-		shares, err := k.GetPoolServiceTotalDelegatorShares(ctx, pool.ID, service.ID)
+		shares, err := k.GetPoolServiceTotalDelegatorShares(ctx, pool.ID, serviceID)
 		if err != nil {
 			return nil, err
 		}
@@ -321,13 +327,16 @@ func (k *Keeper) getEligiblePools(
 			continue
 		}
 
-		if isSecured {
-			target, err := k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_POOL, pool.ID)
+		targetKey := delegationTargetKey{restakingtypes.DELEGATION_TYPE_POOL, pool.ID}
+		target, ok := delTargetCache[targetKey]
+		if !ok {
+			target, err = k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_POOL, pool.ID)
 			if err != nil {
 				return nil, err
 			}
-			eligiblePools = append(eligiblePools, target)
+			delTargetCache[targetKey] = target
 		}
+		eligiblePools = append(eligiblePools, target)
 	}
 
 	return eligiblePools, nil
@@ -338,35 +347,45 @@ func (k *Keeper) getEligiblePools(
 // service params don't have any whitelisted operators, then all operators that
 // have joined the service are eligible for rewards allocation.
 func (k *Keeper) getEligibleOperators(
-	ctx context.Context, service servicestypes.Service,
-	operators []operatorstypes.Operator,
+	ctx context.Context,
+	serviceID uint32,
+	delTargetCache delegationTargetCache,
 ) (eligibleOperators []DelegationTarget, err error) {
-	// TODO: can we optimize this? maybe by having a new index key
-	for _, operator := range operators {
-		// Ensure we consider only active operators
-		if !operator.IsActive() {
-			continue
-		}
-
-		operatorJoinedServices, err := k.restakingKeeper.HasOperatorJoinedService(ctx, operator.ID, service.ID)
-		if err != nil {
-			return nil, err
-		}
-
-		if operatorJoinedServices {
-			canValidateService, err := k.restakingKeeper.CanOperatorValidateService(ctx, service.ID, operator.ID)
+	err = k.restakingKeeper.IterateServiceValidatingOperators(ctx, serviceID, func(operatorID uint32) (stop bool, err error) {
+		targetKey := delegationTargetKey{restakingtypes.DELEGATION_TYPE_OPERATOR, operatorID}
+		target, ok := delTargetCache[targetKey]
+		if !ok {
+			target, err = k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, operatorID)
 			if err != nil {
-				return nil, err
+				return true, err
 			}
-
-			if canValidateService {
-				target, err := k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, operator.ID)
-				if err != nil {
-					return nil, err
-				}
-				eligibleOperators = append(eligibleOperators, target)
-			}
+			delTargetCache[targetKey] = target
 		}
+
+		// Check if the operator is active
+		operator, ok := target.DelegationTarget.(operatorstypes.Operator)
+		if !ok {
+			return true, fmt.Errorf("invalid operator type: %T", target.DelegationTarget)
+		}
+		if !operator.IsActive() {
+			return false, nil
+		}
+
+		// We're already making sure that the operator can join a service only when it's
+		// allowed by the service but here we're double-checking.
+		canValidate, err := k.restakingKeeper.CanOperatorValidateService(ctx, serviceID, operatorID)
+		if err != nil {
+			return true, err
+		}
+		if !canValidate {
+			return false, nil
+		}
+
+		eligibleOperators = append(eligibleOperators, target)
+		return false, nil
+	})
+	if err != nil {
+		return nil, err
 	}
 	return eligibleOperators, nil
 }

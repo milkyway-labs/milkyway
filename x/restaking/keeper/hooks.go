@@ -110,6 +110,8 @@ func (k *Keeper) BeforeServiceDelegationRemoved(ctx context.Context, serviceID u
 	return nil
 }
 
+// --------------------------------------------------------------------------------------------------------------------
+
 // AfterUnbondingInitiated implements types.RestakingHooks
 func (k *Keeper) AfterUnbondingInitiated(ctx context.Context, unbondingDelegationID uint64) error {
 	if k.hooks != nil {
