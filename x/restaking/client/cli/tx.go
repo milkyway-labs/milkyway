@@ -592,14 +592,17 @@ func GetSetUserPreferencesCmd() *cobra.Command {
 		Long: `Set your user preferences regarding the restaking module.
 
 The trusted services must be provided in the following format:
-<serviceID>-<poolID>,<poolID>,<poolID>
+1) <serviceID>
+2) <serviceID>-<poolID>,<poolID>,<poolID>
+
+Specifying <serviceID> only means that you trust the service through all pools.
 
 Each trusted service must be provided separately using the --trusted-service flag.
 
 If you are updating your preferences, you must provide all the flags that you want to set 
 (i.e. the values you provide will completely override the existing ones)`,
 		Example: fmt.Sprintf(`%s tx %s user set-preferences \
---trusted-service 1-1,2,3 \
+--trusted-service 1 \
 --trusted-service 2-4,5,6
 --from alice`, version.AppName, types.ModuleName),
 		RunE: func(cmd *cobra.Command, args []string) error {

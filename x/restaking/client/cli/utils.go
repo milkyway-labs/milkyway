@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"fmt"
 	"strings"
 
 	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
@@ -12,24 +11,24 @@ import (
 // ParseTrustedServiceEntry parses a string into a TrustedServiceEntry.
 // The value provided must be in the format: "<serviceID>-<poolID>,<poolID>,<poolID>"
 func ParseTrustedServiceEntry(value string) (types.TrustedServiceEntry, error) {
-	var serviceIDString, poolsIDsStrings string
-	_, err := fmt.Sscanf(value, "%s-%s", &serviceIDString, &poolsIDsStrings)
-	if err != nil {
-		return types.TrustedServiceEntry{}, err
-	}
+	parts := strings.SplitN(value, "-", 2)
 
+	serviceIDString := parts[0]
 	serviceID, err := servicestypes.ParseServiceID(serviceIDString)
 	if err != nil {
 		return types.TrustedServiceEntry{}, err
 	}
 
 	var poolsIDs []uint32
-	for _, poolID := range strings.Split(poolsIDsStrings, ",") {
-		parsedPoolID, err := poolstypes.ParsePoolID(poolID)
-		if err != nil {
-			return types.TrustedServiceEntry{}, err
+	if len(parts) == 2 {
+		poolsIDsStrings := parts[1]
+		for _, poolID := range strings.Split(poolsIDsStrings, ",") {
+			parsedPoolID, err := poolstypes.ParsePoolID(poolID)
+			if err != nil {
+				return types.TrustedServiceEntry{}, err
+			}
+			poolsIDs = append(poolsIDs, parsedPoolID)
 		}
-		poolsIDs = append(poolsIDs, parsedPoolID)
 	}
 
 	return types.NewTrustedServiceEntry(serviceID, poolsIDs), nil
