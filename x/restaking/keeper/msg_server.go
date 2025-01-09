@@ -136,6 +136,34 @@ func (k msgServer) AddOperatorToAllowList(ctx context.Context, msg *types.MsgAdd
 		return nil, types.ErrOperatorAlreadyAllowed
 	}
 
+	// If the service didn't have any operators in the allow list, it means the
+	// service allowed any operators to join the service. Since we're adding an
+	// operator to the allow list, we need make all the operators that have joined
+	// the service to leave the service
+	configured, err := k.IsServiceOperatorsAllowListConfigured(ctx, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+	if !configured {
+		var leavingOperatorsIDs []uint32
+		err = k.IterateServiceValidatingOperators(ctx, msg.ServiceID, func(operatorID uint32) (stop bool, err error) {
+			if operatorID != msg.OperatorID {
+				leavingOperatorsIDs = append(leavingOperatorsIDs, operatorID)
+			}
+			return false, nil
+		})
+		if err != nil {
+			return nil, err
+		}
+
+		for _, operatorID := range leavingOperatorsIDs {
+			err = k.RemoveServiceFromOperatorJoinedServices(ctx, operatorID, msg.ServiceID)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+
 	// Add the operator to the service's operators allow list
 	err = k.AddOperatorToServiceAllowList(ctx, msg.ServiceID, msg.OperatorID)
 	if err != nil {
@@ -180,6 +208,23 @@ func (k msgServer) RemoveOperatorFromAllowlist(ctx context.Context, msg *types.M
 	err = k.RemoveOperatorFromServiceAllowList(ctx, msg.ServiceID, msg.OperatorID)
 	if err != nil {
 		return nil, err
+	}
+
+	// Check if the operator was the last operator in the service's allow list
+	// If so, removing the operator from the allow list means the service
+	// allows all operators so we don't forcefully remove the service from the
+	// operator's joined services list
+	configured, err := k.IsServiceOperatorsAllowListConfigured(ctx, msg.ServiceID)
+	if err != nil {
+		return nil, err
+	}
+	if configured {
+		// Since the operator is removed from the service's allow list, remove the
+		// service from the operator's joined services list
+		err = k.RemoveServiceFromOperatorJoinedServices(ctx, msg.OperatorID, msg.ServiceID)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)

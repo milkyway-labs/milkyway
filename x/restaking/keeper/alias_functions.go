@@ -24,6 +24,15 @@ import (
 // --- Params operations
 // --------------------------------------------------------------------------------------------------------------------
 
+// IterateServiceValidatingOperators iterates over all the operators that have
+// joined the given service, performing the given action. If the action returns
+// true, the iteration will stop.
+func (k *Keeper) IterateServiceValidatingOperators(ctx context.Context, serviceID uint32, action func(operatorID uint32) (stop bool, err error)) error {
+	return k.operatorJoinedServices.Indexes.Service.Walk(ctx, collections.NewPrefixedPairRange[uint32, uint32](serviceID), func(_, operatorID uint32) (stop bool, err error) {
+		return action(operatorID)
+	})
+}
+
 // IterateAllOperatorsJoinedServices iterates over all the operators and their joined services,
 // performing the given action. If the action returns true, the iteration will stop.
 func (k *Keeper) IterateAllOperatorsJoinedServices(ctx context.Context, action func(operatorID uint32, serviceID uint32) (stop bool, err error)) error {

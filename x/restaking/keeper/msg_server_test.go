@@ -632,6 +632,72 @@ func (suite *KeeperTestSuite) TestMsgServer_AddOperatorToAllowList() {
 				),
 			},
 		},
+		{
+			name: "adding the first operator to allow list makes other operators to leave",
+			store: func(ctx sdk.Context) {
+				err := suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
+					1, operatorstypes.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+				suite.Require().NoError(err)
+				err = suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
+					2, operatorstypes.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator 2",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+				suite.Require().NoError(err)
+
+				err = suite.sk.SaveService(ctx, servicestypes.NewService(
+					1, servicestypes.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					false,
+				))
+				suite.Require().NoError(err)
+
+				err = suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 1)
+				err = suite.k.AddServiceToOperatorJoinedServices(ctx, 2, 1)
+				suite.Require().NoError(err)
+			},
+			msg: types.NewMsgAddOperatorToAllowList(
+				1,
+				1,
+				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+			),
+			shouldErr: false,
+			check: func(ctx sdk.Context) {
+				configured, err := suite.k.IsServiceOperatorsAllowListConfigured(ctx, 1)
+				suite.Require().NoError(err)
+				suite.Require().True(configured)
+				whitelisted, err := suite.k.CanOperatorValidateService(ctx, 1, 2)
+				suite.Require().NoError(err)
+				suite.Require().False(whitelisted)
+				whitelisted, err = suite.k.CanOperatorValidateService(ctx, 1, 1)
+				suite.Require().NoError(err)
+				suite.Require().True(whitelisted)
+				joined, err := suite.k.HasOperatorJoinedService(ctx, 1, 1)
+				suite.Require().NoError(err)
+				suite.Require().True(joined)
+				joined, err = suite.k.HasOperatorJoinedService(ctx, 1, 2)
+				suite.Require().NoError(err)
+				suite.Require().False(joined)
+			},
+			expEvents: sdk.Events{
+				sdk.NewEvent(
+					types.EventTypeAllowOperator,
+					sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, "1"),
+					sdk.NewAttribute(servicestypes.AttributeKeyServiceID, "1"),
+				),
+			},
+		},
 	}
 
 	for _, tc := range testCases {
@@ -783,6 +849,104 @@ func (suite *KeeperTestSuite) TestMsgServer_RemoveAllowedOperator() {
 				canValidate, err := suite.k.CanOperatorValidateService(ctx, 1, 1)
 				suite.Require().NoError(err)
 				suite.Require().False(canValidate)
+			},
+			expEvents: sdk.Events{
+				sdk.NewEvent(
+					types.EventTypeRemoveAllowedOperator,
+					sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, "1"),
+					sdk.NewAttribute(servicestypes.AttributeKeyServiceID, "1"),
+				),
+			},
+		},
+		{
+			name: "operator is removed properly, leaves the service automatically",
+			store: func(ctx sdk.Context) {
+				err := suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
+					1, operatorstypes.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+				suite.Require().NoError(err)
+
+				err = suite.sk.SaveService(ctx, servicestypes.NewService(
+					1, servicestypes.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					false,
+				))
+				suite.Require().NoError(err)
+
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
+				suite.Require().NoError(err)
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 1, 2)
+				suite.Require().NoError(err)
+
+				err = suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 1)
+				suite.Require().NoError(err)
+			},
+			msg:       types.NewMsgRemoveOperatorFromAllowList(1, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+			shouldErr: false,
+			check: func(ctx sdk.Context) {
+				canValidate, err := suite.k.CanOperatorValidateService(ctx, 1, 1)
+				suite.Require().NoError(err)
+				suite.Require().False(canValidate)
+
+				joined, err := suite.k.HasOperatorJoinedService(ctx, 1, 1)
+				suite.Require().NoError(err)
+				suite.Require().False(joined)
+			},
+			expEvents: sdk.Events{
+				sdk.NewEvent(
+					types.EventTypeRemoveAllowedOperator,
+					sdk.NewAttribute(operatorstypes.AttributeKeyOperatorID, "1"),
+					sdk.NewAttribute(servicestypes.AttributeKeyServiceID, "1"),
+				),
+			},
+		},
+		{
+			name: "operator is removed and service allows all operators so it doesn't leave the service",
+			store: func(ctx sdk.Context) {
+				err := suite.ok.SaveOperator(ctx, operatorstypes.NewOperator(
+					1, operatorstypes.OPERATOR_STATUS_ACTIVE,
+					"MilkyWay Operator",
+					"https://milkyway.com",
+					"https://milkyway.com/picture",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+				))
+				suite.Require().NoError(err)
+
+				err = suite.sk.SaveService(ctx, servicestypes.NewService(
+					1, servicestypes.SERVICE_STATUS_ACTIVE,
+					"MilkyWay",
+					"MilkyWay is a restaking platform",
+					"https://milkyway.com",
+					"https://milkyway.com/logo.png",
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					false,
+				))
+				suite.Require().NoError(err)
+
+				err = suite.k.AddOperatorToServiceAllowList(ctx, 1, 1)
+				suite.Require().NoError(err)
+
+				err = suite.k.AddServiceToOperatorJoinedServices(ctx, 1, 1)
+				suite.Require().NoError(err)
+			},
+			msg:       types.NewMsgRemoveOperatorFromAllowList(1, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
+			shouldErr: false,
+			check: func(ctx sdk.Context) {
+				canValidate, err := suite.k.CanOperatorValidateService(ctx, 1, 1)
+				suite.Require().NoError(err)
+				suite.Require().True(canValidate)
+
+				joined, err := suite.k.HasOperatorJoinedService(ctx, 1, 1)
+				suite.Require().NoError(err)
+				suite.Require().True(joined)
 			},
 			expEvents: sdk.Events{
 				sdk.NewEvent(
