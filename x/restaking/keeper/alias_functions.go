@@ -181,8 +181,8 @@ func (k *Keeper) SetDelegation(ctx context.Context, delegation types.Delegation)
 		return err
 	}
 
-	// Store the delegation in the delegations by target id store
-	err = store.Set(getDelegationByTargetID(delegation.TargetID, delegation.UserAddress), delegationBz)
+	// Store the key in the delegation by target ID index (used for reversed lookup)
+	err = store.Set(getDelegationByTargetID(delegation.TargetID, delegation.UserAddress), []byte{})
 	if err != nil {
 		return err
 	}

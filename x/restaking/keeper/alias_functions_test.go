@@ -83,9 +83,9 @@ func (suite *KeeperTestSuite) TestKeeper_SetDelegation() {
 				suite.Require().NotEmpty(stored)
 
 				// Make sure the delegation-by-service-id exists
-				stored, err = store.Get(types.DelegationByServiceIDStoreKey(1, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"))
+				found, err := store.Has(types.DelegationByServiceIDStoreKey(1, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"))
 				suite.Require().NoError(err)
-				suite.Require().NotEmpty(stored)
+				suite.Require().True(found)
 			},
 		},
 	}
