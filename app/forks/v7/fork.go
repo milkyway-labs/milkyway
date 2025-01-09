@@ -3,11 +3,12 @@ package v7
 import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/module"
 
 	"github.com/milkyway-labs/milkyway/v7/app/keepers"
 )
 
-func BeginFork(ctx sdk.Context, keepers *keepers.AppKeepers) {
+func BeginFork(ctx sdk.Context, _ *module.Manager, _ module.Configurator, keepers *keepers.AppKeepers) {
 	ctx.Logger().Info(`
 ===================================================================================================
 ==== Forking chain state

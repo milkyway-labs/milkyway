@@ -2,6 +2,7 @@ package forks
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/module"
 
 	"github.com/milkyway-labs/milkyway/v7/app/keepers"
 )
@@ -16,5 +17,5 @@ type Fork struct {
 	ForkHeight int64
 
 	// Function that runs some custom state transition code at the beginning of a fork.
-	BeginForkLogic func(ctx sdk.Context, keepers *keepers.AppKeepers)
+	BeginForkLogic func(ctx sdk.Context, mm *module.Manager, cfg module.Configurator, keepers *keepers.AppKeepers)
 }

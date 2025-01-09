@@ -561,7 +561,7 @@ func (app *MilkyWayApp) setupForksPreBlockers() {
 		currentPreBlocker := app.PreBlocker()
 		app.SetPreBlocker(func(ctx sdk.Context, req *abci.RequestFinalizeBlock) (*sdk.ResponsePreBlock, error) {
 			if req.Height == fork.ForkHeight {
-				fork.BeginForkLogic(ctx, &app.AppKeepers)
+				fork.BeginForkLogic(ctx, app.mm, app.configurator, &app.AppKeepers)
 			}
 			return currentPreBlocker(ctx, req)
 		})

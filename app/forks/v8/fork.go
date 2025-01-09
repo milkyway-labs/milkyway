@@ -2,6 +2,7 @@ package v8
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/module"
 
 	"github.com/milkyway-labs/milkyway/v7/app/keepers"
 	"github.com/milkyway-labs/milkyway/v7/utils"
@@ -9,12 +10,26 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
 )
 
-func BeginFork(ctx sdk.Context, keepers *keepers.AppKeepers) {
+func BeginFork(ctx sdk.Context, mm *module.Manager, cfg module.Configurator, keepers *keepers.AppKeepers) {
 	ctx.Logger().Info(`
 ===================================================================================================
 ==== Forking chain state
 ===================================================================================================
 `)
+
+	// Run the store migrations manually since we're not using software upgrade.
+	fromVM, err := keepers.UpgradeKeeper.GetModuleVersionMap(ctx)
+	if err != nil {
+		panic(err)
+	}
+	vm, err := mm.RunMigrations(ctx, cfg, fromVM)
+	if err != nil {
+		panic(err)
+	}
+	err = keepers.UpgradeKeeper.SetModuleVersionMap(ctx, vm)
+	if err != nil {
+		panic(err)
+	}
 
 	// Get all pools IDs first.
 	pools, err := keepers.PoolsKeeper.GetPools(ctx)
