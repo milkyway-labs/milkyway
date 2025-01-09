@@ -86,6 +86,8 @@ func (suite *KeeperTestSuite) TestAllocateRewards_BasicScenario() {
 	operatorAdmin3 := testutil.TestAddress(10006)
 	operator3 := suite.CreateOperator(ctx, "Operator3", operatorAdmin3.String())
 
+	// Whitelist all pools.
+	suite.AddPoolsToServiceSecuringPools(ctx, service1.ID, []uint32{1, 2, 3})
 	// Whitelist only $MILK and $MUSD pools.
 	suite.AddPoolsToServiceSecuringPools(ctx, service2.ID, []uint32{1, 3})
 	// Whitelist only Operator2 and Operator3.
@@ -332,6 +334,8 @@ func (suite *KeeperTestSuite) TestAllocateRewards_ZeroDelegations() {
 	// Create a service.
 	serviceAdmin := testutil.TestAddress(10000)
 	service := suite.CreateService(ctx, "Service", serviceAdmin.String())
+	// Whitelist all pools.
+	suite.AddPoolsToServiceSecuringPools(ctx, service.ID, []uint32{1})
 
 	// Create an active rewards plan.
 	planStartTime := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
@@ -414,6 +418,8 @@ func (suite *KeeperTestSuite) TestAllocateRewards_WeightedDistributions() {
 	// Create a service.
 	serviceAdmin := testutil.TestAddress(10000)
 	service := suite.CreateService(ctx, "Service", serviceAdmin.String())
+	// Whitelist all pools.
+	suite.AddPoolsToServiceSecuringPools(ctx, service.ID, []uint32{1, 2})
 
 	// Create operators.
 	operatorAdmin1 := testutil.TestAddress(10001)
@@ -530,6 +536,8 @@ func (suite *KeeperTestSuite) TestAllocateRewards_EgalitarianDistributions() {
 	// Create a service.
 	serviceAdmin := testutil.TestAddress(10000)
 	service := suite.CreateService(ctx, "Service", serviceAdmin.String())
+	// Whitelist all pools.
+	suite.AddPoolsToServiceSecuringPools(ctx, service.ID, []uint32{1, 2})
 
 	// Create operators.
 	operatorAdmin1 := testutil.TestAddress(10001)
@@ -639,8 +647,12 @@ func (suite *KeeperTestSuite) TestAllocateRewards_TrustedServices() {
 	// Create services.
 	serviceAdmin1 := testutil.TestAddress(10000)
 	service1 := suite.CreateService(ctx, "Service1", serviceAdmin1.String())
+	// Whitelist all pools.
+	suite.AddPoolsToServiceSecuringPools(ctx, service1.ID, []uint32{1})
 	serviceAdmin2 := testutil.TestAddress(10001)
 	service2 := suite.CreateService(ctx, "Service2", serviceAdmin2.String())
+	// Whitelist all pools.
+	suite.AddPoolsToServiceSecuringPools(ctx, service2.ID, []uint32{1})
 
 	// Call AllocateRewards to set last rewards allocation time.
 	err := suite.keeper.AllocateRewards(ctx)
@@ -741,8 +753,12 @@ func (suite *KeeperTestSuite) TestAllocateRewards_UserTrustedServiceUpdated() {
 	// Create services.
 	serviceAdmin1 := testutil.TestAddress(10000)
 	service1 := suite.CreateService(ctx, "Service1", serviceAdmin1.String())
+	// Whitelist all pools.
+	suite.AddPoolsToServiceSecuringPools(ctx, service1.ID, []uint32{1})
 	serviceAdmin2 := testutil.TestAddress(10001)
 	service2 := suite.CreateService(ctx, "Service2", serviceAdmin2.String())
+	// Whitelist all pools.
+	suite.AddPoolsToServiceSecuringPools(ctx, service2.ID, []uint32{1})
 
 	// Call AllocateRewards to set last rewards allocation time.
 	err := suite.keeper.AllocateRewards(ctx)

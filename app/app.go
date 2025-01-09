@@ -68,6 +68,7 @@ import (
 	milkywayabci "github.com/milkyway-labs/milkyway/v7/app/abci"
 	"github.com/milkyway-labs/milkyway/v7/app/forks"
 	v7 "github.com/milkyway-labs/milkyway/v7/app/forks/v7"
+	v8 "github.com/milkyway-labs/milkyway/v7/app/forks/v8"
 	"github.com/milkyway-labs/milkyway/v7/app/keepers"
 	"github.com/milkyway-labs/milkyway/v7/app/upgrades"
 	v6 "github.com/milkyway-labs/milkyway/v7/app/upgrades/v6"
@@ -81,6 +82,7 @@ var (
 
 	Forks = []forks.Fork{
 		v7.Fork,
+		v8.Fork,
 	}
 
 	Upgrades = []upgrades.Upgrade{

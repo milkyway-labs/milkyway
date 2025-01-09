@@ -265,7 +265,7 @@ func (k msgServer) BorrowPoolSecurity(ctx context.Context, msg *types.MsgBorrowP
 	}
 
 	// Ensure the pool is not in the service securing pools list
-	isSecuring, err := k.IsPoolInServiceSecuringPools(ctx, msg.ServiceID, msg.PoolID)
+	isSecuring, err := k.IsServiceSecuredByPool(ctx, msg.ServiceID, msg.PoolID)
 	if err != nil {
 		return nil, err
 	}
@@ -307,7 +307,7 @@ func (k msgServer) CeasePoolSecurityBorrow(ctx context.Context, msg *types.MsgCe
 	}
 
 	// Ensure the pool is in the service securing pools list
-	isSecuring, err := k.IsPoolInServiceSecuringPools(ctx, msg.ServiceID, msg.PoolID)
+	isSecuring, err := k.IsServiceSecuredByPool(ctx, msg.ServiceID, msg.PoolID)
 	if err != nil {
 		return nil, err
 	}

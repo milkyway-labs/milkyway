@@ -392,6 +392,8 @@ func (suite *KeeperTestSuite) setupSampleServiceAndOperator(ctx sdk.Context) (se
 	// Create a service.
 	serviceAdmin := testutil.TestAddress(10000)
 	service := suite.CreateService(ctx, "Service", serviceAdmin.String())
+	// Whitelist all pools.
+	suite.AddPoolsToServiceSecuringPools(ctx, service.ID, []uint32{1, 2})
 
 	// Create an operator.
 	operatorAdmin := testutil.TestAddress(10001)

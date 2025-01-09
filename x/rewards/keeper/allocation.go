@@ -95,7 +95,6 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 		return err
 	}
 
-	// The list is empty all pools are allowed
 	pools, err := k.poolsKeeper.GetPools(ctx)
 	if err != nil {
 		return err
@@ -299,10 +298,7 @@ func (k *Keeper) AllocateRewardsByPlan(
 }
 
 // getEligiblePools returns a list of pools that are eligible for rewards
-// allocation based on the given service's service params. If the service's
-// service params don't have any whitelisted pools, then all pools are eligible
-// for rewards allocation. Also, if the service is not whitelisted in the pools
-// params, then no pools are eligible for rewards allocation.
+// allocation.
 func (k *Keeper) getEligiblePools(
 	ctx context.Context,
 	service servicestypes.Service,

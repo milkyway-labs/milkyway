@@ -360,7 +360,7 @@ func SimulateMsgBorrowPoolSecurity(
 			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "could not get service"), nil, nil
 		}
 
-		isServiceSecured, err := k.IsPoolInServiceSecuringPools(ctx, service.ID, pool.ID)
+		isServiceSecured, err := k.IsServiceSecuredByPool(ctx, service.ID, pool.ID)
 		if err != nil {
 			panic(err)
 		}
@@ -413,7 +413,7 @@ func SimulateMsgCeasePoolSecurityBorrow(
 			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "could not get service"), nil, nil
 		}
 
-		isServiceSecured, err := k.IsPoolInServiceSecuringPools(ctx, service.ID, pool.ID)
+		isServiceSecured, err := k.IsServiceSecuredByPool(ctx, service.ID, pool.ID)
 		if err != nil {
 			panic(err)
 		}

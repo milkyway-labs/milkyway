@@ -143,25 +143,9 @@ func (k *Keeper) IsServiceSecuringPoolsConfigured(ctx context.Context, serviceID
 	return iterator.Valid(), nil
 }
 
-// IsPoolInServiceSecuringPools returns true if the pool is in the list
-// of pools from which the service can borrow security
-func (k *Keeper) IsPoolInServiceSecuringPools(ctx context.Context, serviceID uint32, poolID uint32) (bool, error) {
-	key := collections.Join(serviceID, poolID)
-	return k.serviceSecuringPools.Has(ctx, key)
-}
-
 // IsServiceSecuredByPool returns true if the service is being secured
 // by the given pool
 func (k *Keeper) IsServiceSecuredByPool(ctx context.Context, serviceID uint32, poolID uint32) (bool, error) {
-	configured, err := k.IsServiceSecuringPoolsConfigured(ctx, serviceID)
-	if err != nil {
-		return false, err
-	}
-	// Allow all when the list is empty
-	if !configured {
-		return true, nil
-	}
-
 	key := collections.Join(serviceID, poolID)
 	return k.serviceSecuringPools.Has(ctx, key)
 }
