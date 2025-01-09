@@ -172,16 +172,22 @@ func (k Querier) PoolDelegations(ctx context.Context, req *types.QueryPoolDelega
 
 	// Get the pool delegations store
 	store := k.storeService.OpenKVStore(ctx)
-	delegationsStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.PoolDelegationPrefix)
+	keyPrefix := types.DelegationsByPoolIDStorePrefix(req.PoolId)
+	indexStore := prefix.NewStore(runtime.KVStoreAdapter(store), keyPrefix)
 
 	// Query the pool delegations for the given pool id
-	delegations, pageRes, err := query.GenericFilteredPaginate(k.cdc, delegationsStore, req.Pagination, func(key []byte, delegation *types.Delegation) (*types.Delegation, error) {
-		if delegation.TargetID != req.PoolId {
-			return nil, nil
+	var delegations []types.Delegation
+	pageRes, err := query.Paginate(indexStore, req.Pagination, func(key, _ []byte) error {
+		_, userAddress := types.ParseDelegationByPoolIDStoreKey(append(keyPrefix, key...))
+		delegation, found, err := k.GetPoolDelegation(ctx, req.PoolId, userAddress)
+		if err != nil {
+			return err
 		}
-		return delegation, nil
-	}, func() *types.Delegation {
-		return &types.Delegation{}
+		if !found {
+			return types.ErrDelegationNotFound
+		}
+		delegations = append(delegations, delegation)
+		return nil
 	})
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
@@ -189,7 +195,7 @@ func (k Querier) PoolDelegations(ctx context.Context, req *types.QueryPoolDelega
 
 	poolDelegations := make([]types.DelegationResponse, len(delegations))
 	for i, delegation := range delegations {
-		response, err := PoolDelegationToPoolDelegationResponse(ctx, k.Keeper, *delegation)
+		response, err := PoolDelegationToPoolDelegationResponse(ctx, k.Keeper, delegation)
 		if err != nil {
 			return nil, status.Error(codes.Internal, err.Error())
 		}
@@ -311,16 +317,22 @@ func (k Querier) OperatorDelegations(ctx context.Context, req *types.QueryOperat
 
 	// Get the operator delegations store
 	store := k.storeService.OpenKVStore(ctx)
-	delegationsStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.OperatorDelegationPrefix)
+	keyPrefix := types.DelegationsByOperatorIDStorePrefix(req.OperatorId)
+	indexStore := prefix.NewStore(runtime.KVStoreAdapter(store), keyPrefix)
 
-	// Query the operator delegations for the given pool id
-	delegations, pageRes, err := query.GenericFilteredPaginate(k.cdc, delegationsStore, req.Pagination, func(key []byte, delegation *types.Delegation) (*types.Delegation, error) {
-		if delegation.TargetID != req.OperatorId {
-			return nil, nil
+	// Query the operator delegations for the given operator id
+	var delegations []types.Delegation
+	pageRes, err := query.Paginate(indexStore, req.Pagination, func(key, _ []byte) error {
+		_, userAddress := types.ParseDelegationByOperatorIDStoreKey(append(keyPrefix, key...))
+		delegation, found, err := k.GetOperatorDelegation(ctx, req.OperatorId, userAddress)
+		if err != nil {
+			return err
 		}
-		return delegation, nil
-	}, func() *types.Delegation {
-		return &types.Delegation{}
+		if !found {
+			return types.ErrDelegationNotFound
+		}
+		delegations = append(delegations, delegation)
+		return nil
 	})
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
@@ -328,7 +340,7 @@ func (k Querier) OperatorDelegations(ctx context.Context, req *types.QueryOperat
 
 	operatorDelegations := make([]types.DelegationResponse, len(delegations))
 	for i, delegation := range delegations {
-		response, err := OperatorDelegationToOperatorDelegationResponse(ctx, k.Keeper, *delegation)
+		response, err := OperatorDelegationToOperatorDelegationResponse(ctx, k.Keeper, delegation)
 		if err != nil {
 			return nil, status.Error(codes.Internal, err.Error())
 		}
@@ -450,24 +462,29 @@ func (k Querier) ServiceDelegations(ctx context.Context, req *types.QueryService
 
 	// Get the service delegations store
 	store := k.storeService.OpenKVStore(ctx)
-	delegationsStore := prefix.NewStore(runtime.KVStoreAdapter(store), types.ServiceDelegationPrefix)
+	keyPrefix := types.DelegationsByServiceIDStorePrefix(req.ServiceId)
+	indexStore := prefix.NewStore(runtime.KVStoreAdapter(store), keyPrefix)
 
-	// Query the service delegations for the given pool id
-	delegations, pageRes, err := query.GenericFilteredPaginate(k.cdc, delegationsStore, req.Pagination, func(key []byte, delegation *types.Delegation) (*types.Delegation, error) {
-		if delegation.TargetID != req.ServiceId {
-			return nil, nil
+	// Query the service delegations for the given service id
+	var delegations []types.Delegation
+	pageRes, err := query.Paginate(indexStore, req.Pagination, func(key, _ []byte) error {
+		_, userAddress := types.ParseDelegationByServiceIDStoreKey(append(keyPrefix, key...))
+		delegation, found, err := k.GetServiceDelegation(ctx, req.ServiceId, userAddress)
+		if err != nil {
+			return err
 		}
-		return delegation, nil
-	}, func() *types.Delegation {
-		return &types.Delegation{}
+		if !found {
+			return types.ErrDelegationNotFound
+		}
+		delegations = append(delegations, delegation)
+		return nil
 	})
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
-
 	serviceDelegationResponses := make([]types.DelegationResponse, len(delegations))
 	for i, delegation := range delegations {
-		response, err := ServiceDelegationToServiceDelegationResponse(ctx, k.Keeper, *delegation)
+		response, err := ServiceDelegationToServiceDelegationResponse(ctx, k.Keeper, delegation)
 		if err != nil {
 			return nil, status.Error(codes.Internal, err.Error())
 		}

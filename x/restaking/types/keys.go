@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/binary"
 	"time"
 
 	"cosmossdk.io/errors"
@@ -31,13 +32,13 @@ var (
 	PoolDelegationsByPoolIDPrefix = []byte{0xa2}
 	PoolUnbondingDelegationPrefix = []byte{0xa3}
 
-	OperatorDelegationPrefix          = []byte{0xb1}
-	OperatorDelegationByOperatorID    = []byte{0xb2}
-	OperatorUnbondingDelegationPrefix = []byte{0xb3}
+	OperatorDelegationPrefix              = []byte{0xb1}
+	OperatorDelegationsByOperatorIDPrefix = []byte{0xb2}
+	OperatorUnbondingDelegationPrefix     = []byte{0xb3}
 
-	ServiceDelegationPrefix            = []byte{0xc1}
-	ServiceDelegationByServiceIDPrefix = []byte{0xc2}
-	ServiceUnbondingDelegationPrefix   = []byte{0xc3}
+	ServiceDelegationPrefix             = []byte{0xc1}
+	ServiceDelegationsByServiceIDPrefix = []byte{0xc2}
+	ServiceUnbondingDelegationPrefix    = []byte{0xc3}
 
 	UnbondingQueueKey = []byte{0xd1}
 
@@ -92,6 +93,13 @@ func DelegationByPoolIDStoreKey(poolID uint32, delegatorAddress string) []byte {
 	return append(DelegationsByPoolIDStorePrefix(poolID), []byte(delegatorAddress)...)
 }
 
+// ParseDelegationByPoolIDStoreKey returns the poolID and delegator address from the given key
+func ParseDelegationByPoolIDStoreKey(key []byte) (poolID uint32, delegatorAddress string) {
+	poolID = binary.BigEndian.Uint32(key[1:5])
+	delegatorAddress = string(key[5:])
+	return
+}
+
 // PoolUnbondingDelegationsStorePrefix returns the prefix used to store all the unbonding delegations to a given pool
 func PoolUnbondingDelegationsStorePrefix(delegatorAddress string) []byte {
 	return append(PoolUnbondingDelegationPrefix, []byte(delegatorAddress)...)
@@ -116,12 +124,19 @@ func UserOperatorDelegationStoreKey(delegator string, operatorID uint32) []byte 
 
 // DelegationsByOperatorIDStorePrefix returns the prefix used to store the delegations to a given operator
 func DelegationsByOperatorIDStorePrefix(operatorID uint32) []byte {
-	return append(OperatorDelegationByOperatorID, operatorstypes.GetOperatorIDBytes(operatorID)...)
+	return append(OperatorDelegationsByOperatorIDPrefix, operatorstypes.GetOperatorIDBytes(operatorID)...)
 }
 
 // DelegationByOperatorIDStoreKey returns the key used to store the operator -> user delegation association
 func DelegationByOperatorIDStoreKey(operatorID uint32, delegatorAddress string) []byte {
 	return append(DelegationsByOperatorIDStorePrefix(operatorID), []byte(delegatorAddress)...)
+}
+
+// ParseDelegationByOperatorIDStoreKey returns the operatorID and delegator address from the given key
+func ParseDelegationByOperatorIDStoreKey(key []byte) (operatorID uint32, delegatorAddress string) {
+	operatorID = binary.BigEndian.Uint32(key[1:5])
+	delegatorAddress = string(key[5:])
+	return
 }
 
 // OperatorUnbondingDelegationsStorePrefix returns the prefix used to store all the unbonding delegations to a given pool
@@ -148,12 +163,19 @@ func UserServiceDelegationStoreKey(delegator string, serviceID uint32) []byte {
 
 // DelegationsByServiceIDStorePrefix returns the prefix used to store the delegations to a given service
 func DelegationsByServiceIDStorePrefix(serviceID uint32) []byte {
-	return append(ServiceDelegationByServiceIDPrefix, servicestypes.GetServiceIDBytes(serviceID)...)
+	return append(ServiceDelegationsByServiceIDPrefix, servicestypes.GetServiceIDBytes(serviceID)...)
 }
 
 // DelegationByServiceIDStoreKey returns the key used to store the service -> user delegation association
 func DelegationByServiceIDStoreKey(serviceID uint32, delegatorAddress string) []byte {
 	return append(DelegationsByServiceIDStorePrefix(serviceID), []byte(delegatorAddress)...)
+}
+
+// ParseDelegationByServiceIDStoreKey returns the serviceID and delegator address from the given key
+func ParseDelegationByServiceIDStoreKey(key []byte) (serviceID uint32, delegatorAddress string) {
+	serviceID = binary.BigEndian.Uint32(key[1:5])
+	delegatorAddress = string(key[5:])
+	return
 }
 
 // ServiceUnbondingDelegationsStorePrefix returns the prefix used to store all the unbonding delegations to a given pool
@@ -171,13 +193,10 @@ func GetDelegationKeyBuilders(delegation Delegation) (DelegationKeyBuilder, Dele
 	switch delegation.Type {
 	case DELEGATION_TYPE_POOL:
 		return UserPoolDelegationStoreKey, DelegationByPoolIDStoreKey, nil
-
 	case DELEGATION_TYPE_OPERATOR:
 		return UserOperatorDelegationStoreKey, DelegationByOperatorIDStoreKey, nil
-
 	case DELEGATION_TYPE_SERVICE:
 		return UserServiceDelegationStoreKey, DelegationByServiceIDStoreKey, nil
-
 	default:
 		return nil, nil, errors.Wrapf(ErrInvalidDelegationType, "invalid delegation type: %v", delegation.Type)
 	}
