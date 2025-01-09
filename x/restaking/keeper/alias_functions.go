@@ -190,10 +190,37 @@ func (k *Keeper) SetDelegation(ctx context.Context, delegation types.Delegation)
 	return nil
 }
 
+// GetDelegationsForTarget returns all the delegations for the given target
+func (k *Keeper) GetDelegationsForTarget(ctx context.Context, target types.DelegationTarget) ([]types.Delegation, error) {
+	store := k.storeService.OpenKVStore(ctx)
+
+	// Get the function used to build the store prefix to get the delegations
+	var buildStorePrefix func(targetID uint32) []byte
+	switch target.(type) {
+	case poolstypes.Pool:
+		buildStorePrefix = types.DelegationsByPoolIDStorePrefix
+	case operatorstypes.Operator:
+		buildStorePrefix = types.DelegationsByOperatorIDStorePrefix
+	case servicestypes.Service:
+		buildStorePrefix = types.DelegationsByServiceIDStorePrefix
+	default:
+		return nil, fmt.Errorf("invalid target type %T", target)
+	}
+
+	iterator := storetypes.KVStorePrefixIterator(runtime.KVStoreAdapter(store), buildStorePrefix(target.GetID()))
+	defer iterator.Close()
+
+	var delegations []types.Delegation
+	for ; iterator.Valid(); iterator.Next() {
+		delegation := types.MustUnmarshalDelegation(k.cdc, iterator.Value())
+		delegations = append(delegations, delegation)
+	}
+
+	return delegations, nil
+}
+
 // GetDelegationForTarget returns the delegation for the given delegator and target.
-func (k *Keeper) GetDelegationForTarget(
-	ctx context.Context, target types.DelegationTarget, delegator string,
-) (types.Delegation, bool, error) {
+func (k *Keeper) GetDelegationForTarget(ctx context.Context, target types.DelegationTarget, delegator string) (types.Delegation, bool, error) {
 	switch target.(type) {
 	case poolstypes.Pool:
 		return k.GetPoolDelegation(ctx, target.GetID(), delegator)
@@ -207,9 +234,7 @@ func (k *Keeper) GetDelegationForTarget(
 }
 
 // GetDelegationTargetFromDelegation returns the target of the given delegation.
-func (k *Keeper) GetDelegationTargetFromDelegation(
-	ctx context.Context, delegation types.Delegation,
-) (types.DelegationTarget, error) {
+func (k *Keeper) GetDelegationTargetFromDelegation(ctx context.Context, delegation types.Delegation) (types.DelegationTarget, error) {
 	switch delegation.Type {
 	case types.DELEGATION_TYPE_POOL:
 		return k.poolsKeeper.GetPool(ctx, delegation.TargetID)
@@ -436,9 +461,7 @@ func (k *Keeper) GetAllServiceDelegations(ctx context.Context) ([]types.Delegati
 // 1. Pool delegations
 // 2. Service delegations
 // 3. Operator delegations
-func (k *Keeper) IterateUserDelegations(
-	ctx context.Context, userAddress string, cb func(del types.Delegation) (stop bool, err error),
-) error {
+func (k *Keeper) IterateUserDelegations(ctx context.Context, userAddress string, cb func(del types.Delegation) (stop bool, err error)) error {
 	store := k.storeService.OpenKVStore(ctx)
 
 	poolIterator := storetypes.KVStorePrefixIterator(runtime.KVStoreAdapter(store), types.UserPoolDelegationsStorePrefix(userAddress))
@@ -576,6 +599,21 @@ func (k *Keeper) PerformDelegation(ctx context.Context, data types.DelegationDat
 			return nil, err
 		}
 	}
+
+	// -----------------------------------------
+	// --- Scaling gas costs
+	// -----------------------------------------
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+
+	// Charge gas based on the number of delegations that this target has
+	delegations, err := k.GetDelegationsForTarget(ctx, data.Target)
+	if err != nil {
+		return nil, err
+	}
+	sdkCtx.GasMeter().ConsumeGas(types.BaseDelegationGasCost*uint64(len(delegations)), "delegation update gas cost")
+
+	// Charge gas based on the number of denoms that are being delegated
+	sdkCtx.GasMeter().ConsumeGas(types.BaseDelegationDenomCost*uint64(len(data.Amount)), "multi-denom delegation gas cost")
 
 	// Convert the addresses to sdk.AccAddress
 	delegatorAddress, err := k.accountKeeper.AddressCodec().StringToBytes(delegator)

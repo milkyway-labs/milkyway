@@ -276,7 +276,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 				suite.Require().NoError(err)
 
 				// Set the next pool id
-				suite.pk.SetNextPoolID(ctx, 2)
+				err = suite.pk.SetNextPoolID(ctx, 2)
+				suite.Require().NoError(err)
 
 				// Send some funds to the user
 				suite.fundAccount(
@@ -293,7 +294,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 			name: "delegating to a non-existing pool works properly",
 			store: func(ctx sdk.Context) {
 				// Set the next pool id
-				suite.pk.SetNextPoolID(ctx, 1)
+				err := suite.pk.SetNextPoolID(ctx, 1)
+				suite.Require().NoError(err)
 
 				// Send some funds to the user
 				suite.fundAccount(
@@ -307,6 +309,10 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 			shouldErr: false,
 			expShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(100))),
 			check: func(ctx sdk.Context) {
+				// Make sure the gas charged is at least BaseDelegationDenomCost
+				// since it's the first delegation and we are delegating one denom
+				suite.Require().GreaterOrEqual(suite.ctx.GasMeter().GasConsumed(), types.BaseDelegationDenomCost)
+
 				// Make sure the pool now exists
 				pool, err := suite.pk.GetPool(ctx, 1)
 				suite.Require().NoError(err)
@@ -358,7 +364,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 				)
 
 				// Set the next pool id
-				suite.pk.SetNextPoolID(ctx, 2)
+				err = suite.pk.SetNextPoolID(ctx, 2)
+				suite.Require().NoError(err)
 
 				// Send some funds to the user
 				suite.fundAccount(
@@ -372,6 +379,10 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 			shouldErr: false,
 			expShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDec(500))),
 			check: func(ctx sdk.Context) {
+				// Make sure the gas charged is at least BaseDelegationDenomCost
+				// since it's the first delegation and we are delegating one denom
+				suite.Require().GreaterOrEqual(suite.ctx.GasMeter().GasConsumed(), types.BaseDelegationDenomCost)
+
 				// Make sure the pool now exists
 				pool, err := suite.pk.GetPool(ctx, 1)
 				suite.Require().NoError(err)
@@ -423,7 +434,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 				)
 
 				// Set the next pool id
-				suite.pk.SetNextPoolID(ctx, 2)
+				err = suite.pk.SetNextPoolID(ctx, 2)
+				suite.Require().NoError(err)
 
 				// Save the existing delegation
 				err = suite.k.SetDelegation(ctx, types.NewPoolDelegation(
@@ -445,6 +457,13 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 			shouldErr: false,
 			expShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDecWithPrec(15625, 2))),
 			check: func(ctx sdk.Context) {
+				// Make sure the gas charged is at least BaseDelegationGasCost + BaseDelegationDenomCost
+				// since it's the first delegation and we are delegating one denom
+				suite.Require().GreaterOrEqual(
+					suite.ctx.GasMeter().GasConsumed(),
+					types.BaseDelegationGasCost+types.BaseDelegationDenomCost,
+				)
+
 				// Make sure the pool now exists
 				pool, err := suite.pk.GetPool(ctx, 1)
 				suite.Require().NoError(err)

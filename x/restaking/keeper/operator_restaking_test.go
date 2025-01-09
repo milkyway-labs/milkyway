@@ -310,7 +310,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 				suite.Require().NoError(err)
 
 				// Set the next operator id
-				suite.ok.SetNextOperatorID(ctx, 2)
+				err = suite.ok.SetNextOperatorID(ctx, 2)
+				suite.Require().NoError(err)
 
 				// Send some funds to the user
 				suite.fundAccount(
@@ -349,7 +350,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 				)
 
 				// Set the next operator id
-				suite.ok.SetNextOperatorID(ctx, 2)
+				err = suite.ok.SetNextOperatorID(ctx, 2)
+				suite.Require().NoError(err)
 
 				// Send some funds to the user
 				suite.fundAccount(
@@ -366,6 +368,10 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 				sdk.NewDecCoinFromDec("operator/1/umilk", sdkmath.LegacyNewDec(500)),
 			),
 			check: func(ctx sdk.Context) {
+				// Make sure the gas charged is at least BaseDelegationDenomCost since this was
+				// the first delegation and only has one denom
+				suite.Require().GreaterOrEqual(suite.ctx.GasMeter().GasConsumed(), types.BaseDelegationDenomCost)
+
 				// Make sure the operator now exists
 				operator, err := suite.ok.GetOperator(ctx, 1)
 				suite.Require().NoError(err)
@@ -426,7 +432,8 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 				)
 
 				// Set the next operator id
-				suite.ok.SetNextOperatorID(ctx, 2)
+				err = suite.ok.SetNextOperatorID(ctx, 2)
+				suite.Require().NoError(err)
 
 				// Save the existing delegation
 				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
@@ -453,6 +460,14 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 				sdk.NewDecCoinFromDec("operator/1/uinit", sdkmath.LegacyNewDec(100)),
 			),
 			check: func(ctx sdk.Context) {
+				// Make sure the gas charged is at least
+				// BaseDelegationGasCost + BaseDelegationDenomCost
+				// since a delegation already exists and we are delegating two denoms
+				suite.Require().GreaterOrEqual(
+					suite.ctx.GasMeter().GasConsumed(),
+					types.BaseDelegationGasCost+types.BaseDelegationDenomCost,
+				)
+
 				// Make sure the operator now exists
 				operator, err := suite.ok.GetOperator(ctx, 1)
 				suite.Require().NoError(err)
@@ -524,7 +539,7 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 				)
 
 				// Set the next operator id
-				suite.ok.SetNextOperatorID(ctx, 2)
+				err = suite.ok.SetNextOperatorID(ctx, 2)
 
 				// Save the existing delegation
 				err = suite.k.SetDelegation(ctx, types.NewOperatorDelegation(
@@ -559,6 +574,14 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToOperator() {
 				sdk.NewDecCoinFromDec("operator/1/uinit", sdkmath.LegacyNewDec(600)),
 			),
 			check: func(ctx sdk.Context) {
+				// Make sure the gas charged is at least
+				// BaseDelegationGasCost + (2 * BaseDelegationDenomCost)
+				// since a delegation already exists and we are delegating two denoms
+				suite.Require().GreaterOrEqual(
+					suite.ctx.GasMeter().GasConsumed(),
+					types.BaseDelegationGasCost+2*types.BaseDelegationDenomCost,
+				)
+
 				// Make sure the operator now exists
 				operator, err := suite.ok.GetOperator(ctx, 1)
 				suite.Require().NoError(err)

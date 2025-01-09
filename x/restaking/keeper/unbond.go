@@ -106,6 +106,10 @@ func (k *Keeper) Unbond(ctx context.Context, data types.UndelegationData) (amoun
 		return amount, errors.Wrap(types.ErrNotEnoughDelegationShares, delegation.Shares.String())
 	}
 
+	// Charge gas cost based on the number of denoms inside the unbonding delegation
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sdkCtx.GasMeter().ConsumeGas(types.BaseDelegationDenomCost*uint64(len(delegation.Shares)), "undelegation gas cost")
+
 	// Subtract shares from delegation
 	delegation.Shares = delegation.Shares.Sub(data.Shares)
 

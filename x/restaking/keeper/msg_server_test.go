@@ -4,6 +4,7 @@ import (
 	"time"
 
 	sdkmath "cosmossdk.io/math"
+	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
@@ -1391,6 +1392,11 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegatePool() {
 					sdk.NewAttribute(types.AttributeKeyNewShares, "500.000000000000000000pool/1/umilk"),
 				),
 			},
+			check: func(ctx sdk.Context) {
+				// Make sure the gas charged is at least BaseDelegationDenomCost
+				// The 34450 is obtained by running this test with BaseDelegationDenomCost set to 0
+				suite.Require().GreaterOrEqual(ctx.GasMeter().GasConsumed(), 34450+types.BaseDelegationDenomCost)
+			},
 		},
 		{
 			name: "allowed denom is delegated properly",
@@ -1429,6 +1435,11 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegatePool() {
 					sdk.NewAttribute(types.AttributeKeyNewShares, "500.000000000000000000pool/1/umilk"),
 				),
 			},
+			check: func(ctx sdk.Context) {
+				// Make sure the gas charged is at least BaseDelegationDenomCost
+				// The 34565 value is obtained by running this test with BaseDelegationDenomCost set to 0
+				suite.Require().GreaterOrEqual(ctx.GasMeter().GasConsumed(), 34565+types.BaseDelegationDenomCost)
+			},
 		},
 	}
 
@@ -1446,6 +1457,9 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegatePool() {
 			if tc.store != nil {
 				tc.store(ctx)
 			}
+
+			// Reset the gas meter
+			ctx = ctx.WithGasMeter(storetypes.NewInfiniteGasMeter())
 
 			msgServer := keeper.NewMsgServer(suite.k)
 			_, err := msgServer.DelegatePool(ctx, tc.msg)
@@ -1537,6 +1551,10 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegatePool() {
 				),
 			},
 			check: func(ctx sdk.Context) {
+				// Make sure the gas charged is at least BaseDelegationDenomCost
+				// The 36950 is obtained by running this test with BaseDelegationDenomCost set to 0
+				suite.Require().GreaterOrEqual(ctx.GasMeter().GasConsumed(), 36950+types.BaseDelegationDenomCost)
+
 				// Check the delegation
 				delegation, found, err := suite.k.GetPoolDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
 				suite.Require().NoError(err)
@@ -1559,6 +1577,9 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegatePool() {
 			if tc.store != nil {
 				tc.store(ctx)
 			}
+
+			// Reset the gas meter
+			ctx = ctx.WithGasMeter(storetypes.NewInfiniteGasMeter())
 
 			msgServer := keeper.NewMsgServer(suite.k)
 			_, err := msgServer.UndelegatePool(ctx, tc.msg)
@@ -1694,6 +1715,11 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateOperator() {
 					sdk.NewAttribute(types.AttributeKeyNewShares, "500.000000000000000000operator/1/umilk"),
 				),
 			},
+			check: func(ctx sdk.Context) {
+				// Make sure the gas charged is at least BaseDelegationDenomCost
+				// The 49110 is obtained by running this test with BaseDelegationDenomCost set to 0
+				suite.Require().GreaterOrEqual(ctx.GasMeter().GasConsumed(), 49110+types.BaseDelegationDenomCost)
+			},
 		},
 		{
 			name: "allowed denom is delegated properly",
@@ -1738,6 +1764,11 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateOperator() {
 					sdk.NewAttribute(types.AttributeKeyNewShares, "500.000000000000000000operator/1/umilk"),
 				),
 			},
+			check: func(ctx sdk.Context) {
+				// Make sure the gas charged is at least BaseDelegationDenomCost
+				// The 49210 is obtained by running this test with BaseDelegationDenomCost set to 0
+				suite.Require().GreaterOrEqual(ctx.GasMeter().GasConsumed(), 49210+types.BaseDelegationDenomCost)
+			},
 		},
 	}
 
@@ -1755,6 +1786,9 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateOperator() {
 			if tc.store != nil {
 				tc.store(ctx)
 			}
+
+			// Reset the gas meter
+			ctx = ctx.WithGasMeter(storetypes.NewInfiniteGasMeter())
 
 			msgServer := keeper.NewMsgServer(suite.k)
 			_, err := msgServer.DelegateOperator(ctx, tc.msg)
@@ -1850,6 +1884,10 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegateOperator() {
 				),
 			},
 			check: func(ctx sdk.Context) {
+				// Make sure the gas charged is at least BaseDelegationDenomCost
+				// The 36690 is obtained by running this test with BaseDelegationDenomCost set to 0
+				suite.Require().GreaterOrEqual(ctx.GasMeter().GasConsumed(), 36690+types.BaseDelegationDenomCost)
+
 				// Check the delegation
 				delegation, found, err := suite.k.GetOperatorDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
 				suite.Require().NoError(err)
@@ -1872,6 +1910,9 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegateOperator() {
 			if tc.store != nil {
 				tc.store(ctx)
 			}
+
+			// Reset the gas meter
+			ctx = ctx.WithGasMeter(storetypes.NewInfiniteGasMeter())
 
 			msgServer := keeper.NewMsgServer(suite.k)
 			_, err := msgServer.UndelegateOperator(ctx, tc.msg)
@@ -2081,6 +2122,11 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateService() {
 					sdk.NewAttribute(types.AttributeKeyNewShares, "500.000000000000000000service/1/umilk"),
 				),
 			},
+			check: func(ctx sdk.Context) {
+				// Make sure the gas charged is at least BaseDelegationDenomCost
+				// The 50060 is obtained by running this test with BaseDelegationDenomCost set to 0
+				suite.Require().GreaterOrEqual(ctx.GasMeter().GasConsumed(), 50060+types.BaseDelegationDenomCost)
+			},
 		},
 		{
 			name: "allowed denom is delegated properly",
@@ -2125,6 +2171,11 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateService() {
 					sdk.NewAttribute(types.AttributeKeyNewShares, "500.000000000000000000service/1/umilk"),
 				),
 			},
+			check: func(ctx sdk.Context) {
+				// Make sure the gas charged is at least BaseDelegationDenomCost
+				// The 50170 is obtained by running this test with BaseDelegationDenomCost set to 0
+				suite.Require().GreaterOrEqual(ctx.GasMeter().GasConsumed(), 50170+types.BaseDelegationDenomCost)
+			},
 		},
 		{
 			name: "allowed service denom is delegated properly",
@@ -2168,6 +2219,11 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateService() {
 					sdk.NewAttribute(sdk.AttributeKeyAmount, "100umilk"),
 					sdk.NewAttribute(types.AttributeKeyNewShares, "500.000000000000000000service/1/umilk"),
 				),
+			},
+			check: func(ctx sdk.Context) {
+				// Make sure the gas charged is at least BaseDelegationDenomCost
+				// The 50080 is obtained by running this test with BaseDelegationDenomCost set to 0
+				suite.Require().GreaterOrEqual(ctx.GasMeter().GasConsumed(), 50080+types.BaseDelegationDenomCost)
 			},
 		},
 		{
@@ -2217,6 +2273,11 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateService() {
 					sdk.NewAttribute(types.AttributeKeyNewShares, "500.000000000000000000service/1/umilk"),
 				),
 			},
+			check: func(ctx sdk.Context) {
+				// Make sure the gas charged is at least BaseDelegationDenomCost
+				// The 50230 is obtained by running this test with BaseDelegationDenomCost set to 0
+				suite.Require().GreaterOrEqual(ctx.GasMeter().GasConsumed(), 50230+types.BaseDelegationDenomCost)
+			},
 		},
 	}
 
@@ -2234,6 +2295,9 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateService() {
 			if tc.store != nil {
 				tc.store(ctx)
 			}
+
+			// Reset the gas meter
+			ctx = ctx.WithGasMeter(storetypes.NewInfiniteGasMeter())
 
 			msgServer := keeper.NewMsgServer(suite.k)
 			_, err := msgServer.DelegateService(ctx, tc.msg)
@@ -2329,6 +2393,10 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegateService() {
 				),
 			},
 			check: func(ctx sdk.Context) {
+				// Make sure the gas charged is at least BaseDelegationDenomCost
+				// The 36680 is obtained by running this test with BaseDelegationDenomCost set to 0
+				suite.Require().GreaterOrEqual(ctx.GasMeter().GasConsumed(), 36680+types.BaseDelegationDenomCost)
+
 				// Check the delegation
 				delegation, found, err := suite.k.GetServiceDelegation(ctx, 1, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
 				suite.Require().NoError(err)
@@ -2351,6 +2419,9 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegateService() {
 			if tc.store != nil {
 				tc.store(ctx)
 			}
+
+			// Reset the gas meter
+			ctx = ctx.WithGasMeter(storetypes.NewInfiniteGasMeter())
 
 			msgServer := keeper.NewMsgServer(suite.k)
 			_, err := msgServer.UndelegateService(ctx, tc.msg)

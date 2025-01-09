@@ -8,8 +8,6 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
 )
 
-// --------------------------------------------------------------------------------------------------------------------
-
 func (suite *KeeperTestSuite) TestKeeper_GetAllServiceAllowedOperators() {
 	testCases := []struct {
 		name      string
@@ -716,6 +714,10 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 			shouldErr: false,
 			expShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("service/1/umilk", sdkmath.LegacyNewDec(500))),
 			check: func(ctx sdk.Context) {
+				// Make sure the gas charged is at least BaseDelegationDenomCost since this was
+				// the first delegation and only has one denom
+				suite.Require().GreaterOrEqual(suite.ctx.GasMeter().GasConsumed(), types.BaseDelegationDenomCost)
+
 				// Make sure the service now exists
 				service, err := suite.sk.GetService(ctx, 1)
 				suite.Require().NoError(err)
@@ -755,6 +757,14 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 		{
 			name: "delegating another token denom works properly",
 			store: func(ctx sdk.Context) {
+				// Make sure the gas charged is at least
+				// BaseDelegationGasCost + BaseDelegationDenomCost
+				// since a delegation already exists and we are delegating two denoms
+				suite.Require().GreaterOrEqual(
+					suite.ctx.GasMeter().GasConsumed(),
+					types.BaseDelegationGasCost+types.BaseDelegationDenomCost,
+				)
+
 				// Create the service
 				err := suite.sk.SaveService(ctx, servicestypes.Service{
 					ID:      1,
@@ -909,6 +919,14 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToService() {
 				sdk.NewDecCoinFromDec("service/1/uinit", sdkmath.LegacyNewDec(600)),
 			),
 			check: func(ctx sdk.Context) {
+				// Make sure the gas charged is at least
+				// BaseDelegationGasCost + (2 * BaseDelegationDenomCost)
+				// since a delegation already exists and we are delegating two denoms
+				suite.Require().GreaterOrEqual(
+					suite.ctx.GasMeter().GasConsumed(),
+					types.BaseDelegationGasCost+2*types.BaseDelegationDenomCost,
+				)
+
 				// Make sure the service now exists
 				service, err := suite.sk.GetService(ctx, 1)
 				suite.Require().NoError(err)
