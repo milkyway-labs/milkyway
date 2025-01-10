@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - (ede14aa85f2779115c22aa2de86154ca1b49041d) Replaced `GetAllBalances` inside `InitGenesis`
 - (62fc7f1cd047ca016ba0f9582555c932953c3820) Avoid transferring rewards when skipping the allocation
 - (1addfbe145d74572f8d6e8124132251d2cc0d94f) Fixed bugs in the calculation of pool-service total delegator shares
+- (81ceb4c74975c756a5fc86e0222bb3b347d71b08) Fixed rewards allocations
 
 ### Restaking
 - (a27d0d8f586d363921cd004b5e4003b1e9fb2ef5) Improved gas usage
@@ -21,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - (cac1c3db7d31183a33a625ac72fd4b05829c6dbf) Optimized delegations by target id queries
 - (449f0e6fc18f2b40d436ffdfe4c91ac537e54a31) Optimized the `getEligibleOperators` query
 - (50af532e80818756b917558d5c24ab3c31c99729) Improve the `UserPreferences` structure and its features
+- (76b80f8157b0ec3dc4aa6da289967e1e7699191e) Updated the meaning of default user preferences from "Trust all services" to "Trust no service"
 
 ### Other
 - (d63822aa8a98263a9bcc6a6984d0483f13664913) Remove `SharesFromTokensTruncated` in favor of `SharesFromTokens`
