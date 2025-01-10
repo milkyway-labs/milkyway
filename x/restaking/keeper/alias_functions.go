@@ -1076,31 +1076,6 @@ func (k *Keeper) GetUserPreferencesEntries(ctx context.Context) ([]types.UserPre
 	return entries, nil
 }
 
-// GetUserTrustedServicesIDs returns the IDs of the services that the user trusts
-// based on the user preferences and the services' status.
-func (k *Keeper) GetUserTrustedServicesIDs(ctx context.Context, userAddress string) ([]uint32, error) {
-	preferences, err := k.GetUserPreferences(ctx, userAddress)
-	if err != nil {
-		return nil, err
-	}
-	if len(preferences.TrustedServices) == 0 {
-		// Return all service IDs
-		var serviceIDs []uint32
-		err = k.servicesKeeper.IterateServices(ctx, func(service servicestypes.Service) (bool, error) {
-			serviceIDs = append(serviceIDs, service.ID)
-			return false, nil
-		})
-		if err != nil {
-			return nil, err
-		}
-		return serviceIDs, nil
-	}
-
-	return utils.Map(preferences.TrustedServices, func(entry types.TrustedServiceEntry) uint32 {
-		return entry.ServiceID
-	}), nil
-}
-
 // --------------------------------------------------------------------------------------------------------------------
 
 // GetTotalRestakedAssets returns the total amount of restaked assets

@@ -92,16 +92,8 @@ func updateServiceSecuringPools(ctx sdk.Context, keepers *keepers.AppKeepers) er
 func updatePoolServiceTotalDelShares(ctx sdk.Context, keepers *keepers.AppKeepers) error {
 	preferencesCache := map[string]restakingtypes.UserPreferences{}
 
-	allServices, err := keepers.ServicesKeeper.GetServices(ctx)
-	if err != nil {
-		return err
-	}
-	allServicesIDs := utils.Map(allServices, func(service servicestypes.Service) uint32 {
-		return service.ID
-	})
-
 	// First clear all the existing pool-service total delegator shares.
-	err = keepers.RewardsKeeper.PoolServiceTotalDelegatorShares.Clear(ctx, nil)
+	err := keepers.RewardsKeeper.PoolServiceTotalDelegatorShares.Clear(ctx, nil)
 	if err != nil {
 		return err
 	}
@@ -118,15 +110,15 @@ func updatePoolServiceTotalDelShares(ctx sdk.Context, keepers *keepers.AppKeeper
 			preferencesCache[delegation.UserAddress] = preferences
 		}
 
-		for _, serviceID := range allServicesIDs {
-			if !preferences.IsServiceTrustedWithPool(serviceID, delegation.TargetID) {
+		for _, entry := range preferences.TrustedServices {
+			if !preferences.IsServiceTrustedWithPool(entry.ServiceID, delegation.TargetID) {
 				continue
 			}
 
 			err = keepers.RewardsKeeper.IncrementPoolServiceTotalDelegatorShares(
 				ctx,
 				delegation.TargetID,
-				serviceID,
+				entry.ServiceID,
 				delegation.Shares,
 			)
 			if err != nil {

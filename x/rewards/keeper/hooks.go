@@ -6,10 +6,8 @@ import (
 	"cosmossdk.io/collections"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/milkyway-labs/milkyway/v7/utils"
 	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
 	"github.com/milkyway-labs/milkyway/v7/x/rewards/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
 )
 
 // AfterDelegationTargetCreated is called after a delegation target is created
@@ -67,25 +65,18 @@ func (k *Keeper) BeforeDelegationSharesModified(ctx context.Context, delType res
 	}
 
 	if delType == restakingtypes.DELEGATION_TYPE_POOL {
-		// Note that it'll return all services IDs that are stored when the user sets no
-		// entries in its preferences.
-		servicesIDs, err := k.restakingKeeper.GetUserTrustedServicesIDs(ctx, delegator)
-		if err != nil {
-			return err
-		}
-
 		preferences, err := k.restakingKeeper.GetUserPreferences(ctx, delegator)
 		if err != nil {
 			return err
 		}
 
-		for _, serviceID := range servicesIDs {
-			if preferences.IsServiceTrustedWithPool(serviceID, targetID) {
+		for _, entry := range preferences.TrustedServices {
+			if preferences.IsServiceTrustedWithPool(entry.ServiceID, targetID) {
 				// We decrement the amount of shares within the pool-service pair here so that we
 				// can later increment those shares again within the AfterDelegationModified
 				// hook. This is due in order to keep consistency if the shares change due to a
 				// new delegation or an undelegation
-				err = k.DecrementPoolServiceTotalDelegatorShares(ctx, targetID, serviceID, del.Shares)
+				err = k.DecrementPoolServiceTotalDelegatorShares(ctx, targetID, entry.ServiceID, del.Shares)
 				if err != nil {
 					return err
 				}
@@ -123,25 +114,18 @@ func (k *Keeper) AfterDelegationModified(ctx context.Context, delType restakingt
 			return sdkerrors.ErrNotFound.Wrapf("pool delegation not found: %d, %s", targetID, delegator)
 		}
 
-		// Note that it'll return all services IDs that are stored when the user sets no
-		// entries in its preferences.
-		servicesIDs, err := k.restakingKeeper.GetUserTrustedServicesIDs(ctx, delegator)
-		if err != nil {
-			return err
-		}
-
 		preferences, err := k.restakingKeeper.GetUserPreferences(ctx, delegator)
 		if err != nil {
 			return err
 		}
 
-		for _, serviceID := range servicesIDs {
-			if preferences.IsServiceTrustedWithPool(serviceID, targetID) {
+		for _, entry := range preferences.TrustedServices {
+			if preferences.IsServiceTrustedWithPool(entry.ServiceID, targetID) {
 				// We decremented the amount of shares within the pool-service pair in the
 				// BeforeDelegationSharesModified hook. We increment the shares here again
 				// to keep consistency if the shares change due to a new delegation or an
 				// undelegation
-				err = k.IncrementPoolServiceTotalDelegatorShares(ctx, targetID, serviceID, delegation.Shares)
+				err = k.IncrementPoolServiceTotalDelegatorShares(ctx, targetID, entry.ServiceID, delegation.Shares)
 				if err != nil {
 					return err
 				}
@@ -196,13 +180,7 @@ func (k *Keeper) AfterUserPreferencesModified(
 		return err
 	}
 
-	allServices, err := k.servicesKeeper.GetServices(ctx)
-	if err != nil {
-		return err
-	}
-	allServicesIDs := utils.Map(allServices, func(service servicestypes.Service) uint32 {
-		return service.ID
-	})
+	changedServicesIDs := restakingtypes.ComputeChangedServicesIDs(oldPreferences, newPreferences)
 
 	err = k.restakingKeeper.IterateUserPoolDelegations(ctx, userAddress, func(delegation restakingtypes.Delegation) (stop bool, err error) {
 		poolID := delegation.TargetID
@@ -212,7 +190,7 @@ func (k *Keeper) AfterUserPreferencesModified(
 			return true, err
 		}
 
-		for _, serviceID := range allServicesIDs {
+		for _, serviceID := range changedServicesIDs {
 			trustedBefore := oldPreferences.IsServiceTrustedWithPool(serviceID, poolID)
 			trustedAfter := newPreferences.IsServiceTrustedWithPool(serviceID, poolID)
 

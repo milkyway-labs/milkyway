@@ -327,10 +327,10 @@ func TestUserPreferences_TrustedServicesIDs(t *testing.T) {
 
 func TestComputeChangedServices(t *testing.T) {
 	testCases := []struct {
-		name       string
-		before     types.UserPreferences
-		after      types.UserPreferences
-		expEntries []types.TrustedServiceEntry
+		name                string
+		before              types.UserPreferences
+		after               types.UserPreferences
+		expectedServicesIDs []uint32
 	}{
 		{
 			name: "no changes",
@@ -340,17 +340,15 @@ func TestComputeChangedServices(t *testing.T) {
 			after: types.NewUserPreferences([]types.TrustedServiceEntry{
 				types.NewTrustedServiceEntry(1, []uint32{1, 2}),
 			}),
-			expEntries: nil,
+			expectedServicesIDs: nil,
 		},
 		{
 			name: "service removed",
 			before: types.NewUserPreferences([]types.TrustedServiceEntry{
 				types.NewTrustedServiceEntry(1, []uint32{1, 2}),
 			}),
-			after: types.NewUserPreferences(nil),
-			expEntries: []types.TrustedServiceEntry{
-				types.NewTrustedServiceEntry(1, []uint32{1, 2}),
-			},
+			after:               types.NewUserPreferences(nil),
+			expectedServicesIDs: []uint32{1},
 		},
 		{
 			name:   "service added",
@@ -358,9 +356,7 @@ func TestComputeChangedServices(t *testing.T) {
 			after: types.NewUserPreferences([]types.TrustedServiceEntry{
 				types.NewTrustedServiceEntry(1, []uint32{1, 2}),
 			}),
-			expEntries: []types.TrustedServiceEntry{
-				types.NewTrustedServiceEntry(1, []uint32{1, 2}),
-			},
+			expectedServicesIDs: []uint32{1},
 		},
 		{
 			name: "pool within service removed",
@@ -370,9 +366,7 @@ func TestComputeChangedServices(t *testing.T) {
 			after: types.NewUserPreferences([]types.TrustedServiceEntry{
 				types.NewTrustedServiceEntry(1, []uint32{1}),
 			}),
-			expEntries: []types.TrustedServiceEntry{
-				types.NewTrustedServiceEntry(1, []uint32{2}),
-			},
+			expectedServicesIDs: []uint32{1},
 		},
 		{
 			name: "pool within service added",
@@ -382,16 +376,14 @@ func TestComputeChangedServices(t *testing.T) {
 			after: types.NewUserPreferences([]types.TrustedServiceEntry{
 				types.NewTrustedServiceEntry(1, []uint32{1, 2}),
 			}),
-			expEntries: []types.TrustedServiceEntry{
-				types.NewTrustedServiceEntry(1, []uint32{2}),
-			},
+			expectedServicesIDs: []uint32{1},
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			entries := types.ComputeChangedServices(tc.before, tc.after)
-			require.Equal(t, tc.expEntries, entries)
+			entries := types.ComputeChangedServicesIDs(tc.before, tc.after)
+			require.Equal(t, tc.expectedServicesIDs, entries)
 		})
 	}
 }

@@ -3,7 +3,6 @@ package keeper
 import (
 	"context"
 	"fmt"
-	"slices"
 
 	"cosmossdk.io/collections"
 	"cosmossdk.io/math"
@@ -87,19 +86,13 @@ func (k *Keeper) calculateDelegationRewardsBetween(
 	var decPools types.DecPools
 
 	if target.DelegationType == restakingtypes.DELEGATION_TYPE_POOL {
-		servicesIDs, err := k.restakingKeeper.GetUserTrustedServicesIDs(ctx, delegator)
-		if err != nil {
-			return nil, err
-		}
-
 		preferences, err := k.restakingKeeper.GetUserPreferences(ctx, delegator)
 		if err != nil {
 			return nil, err
 		}
 
 		for _, diff := range differences {
-			if slices.Contains(servicesIDs, diff.ServiceID) &&
-				preferences.IsServiceTrustedWithPool(diff.ServiceID, target.GetID()) {
+			if preferences.IsServiceTrustedWithPool(diff.ServiceID, target.GetID()) {
 				decPools = decPools.Add(diff.DecPools...)
 			}
 		}

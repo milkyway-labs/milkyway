@@ -352,54 +352,45 @@ func (p UserPreferences) TrustedServicesIDs() []uint32 {
 
 // IsServiceTrusted tells whether the user trusts the given service
 func (p UserPreferences) IsServiceTrusted(serviceID uint32) bool {
-	return len(p.TrustedServices) == 0 || slices.Contains(p.TrustedServicesIDs(), serviceID)
+	return slices.Contains(p.TrustedServicesIDs(), serviceID)
 }
 
 // IsServiceTrustedWithPool tells whether the user trusts the given service with the given pool
 func (p UserPreferences) IsServiceTrustedWithPool(serviceID, poolID uint32) bool {
 	if len(p.TrustedServices) == 0 {
-		return true
+		return false
 	}
 	entry := p.GetTrustedServiceEntry(serviceID)
 	return entry.ServiceID != 0 && (len(entry.PoolsIDs) == 0 || slices.Contains(entry.PoolsIDs, poolID))
 }
 
-// ComputeChangedServices returns the list of services that have changed between the two user preferences.
+// ComputeChangedServicesIDs returns the list of service IDs that have changed
+// between the two user preferences.
 // A service is considered changed in the following cases:
 // - It was trusted in the old preferences but not in the new preferences
 // - It was not trusted in the old preferences but it is in the new preferences
 // - It was trusted in both preferences but the pools have changed
 //
-// The returned list will contain an entry for each service that has changed.
-// The entry will contain the service id and the pools ids that have changed (either removed or added).
+// The result will contain the all services ids that have changed
+// (either removed,added or modified).
 // CONTRACT: this function is never triggered in Begin/End block or any proposal execution
-func ComputeChangedServices(before UserPreferences, after UserPreferences) (changed []TrustedServiceEntry) {
+func ComputeChangedServicesIDs(before UserPreferences, after UserPreferences) (changed []uint32) {
 	beforeTrusted := before.TrustedServicesIDs()
 	afterTrusted := after.TrustedServicesIDs()
 
 	// Get the deleted entries (A - B)
-	for _, serviceID := range utils.Difference(beforeTrusted, afterTrusted) {
-		changed = append(changed, before.GetTrustedServiceEntry(serviceID))
-	}
+	changed = append(changed, utils.Difference(beforeTrusted, afterTrusted)...)
 
 	// Get the added entries (B - A)
-	for _, serviceID := range utils.Difference(afterTrusted, beforeTrusted) {
-		changed = append(changed, after.GetTrustedServiceEntry(serviceID))
-	}
+	changed = append(changed, utils.Difference(afterTrusted, beforeTrusted)...)
 
 	// Find the list of services that have changed pools (A ∩ B)
 	for _, serviceID := range utils.Intersect(beforeTrusted, afterTrusted) {
 		beforePools := before.GetTrustedServiceEntry(serviceID).PoolsIDs
 		afterPools := after.GetTrustedServiceEntry(serviceID).PoolsIDs
 
-		removedPools := utils.Difference(beforePools, afterPools)
-		addedPools := utils.Difference(afterPools, beforePools)
-
 		if !slices.Equal(beforePools, afterPools) {
-			changed = append(changed, NewTrustedServiceEntry(
-				serviceID,
-				utils.Union(removedPools, addedPools),
-			))
+			changed = append(changed, serviceID)
 		}
 	}
 

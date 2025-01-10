@@ -9,7 +9,6 @@ import (
 )
 
 // MigrateStore performs in-place store migrations from v1 to v2. The migrations include:
-// - Properly setting the delegation-by-target-id values
 // - Removing joined operators that are not allowed by the services they have joined
 // - Upgrading the user preferences to the new format
 func MigrateStore(ctx sdk.Context, keeper Keeper, storeService corestoretypes.KVStoreService, cdc codec.BinaryCodec) error {

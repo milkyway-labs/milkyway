@@ -81,7 +81,6 @@ type RestakingKeeper interface {
 	IterateAllServiceDelegations(ctx context.Context, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
 
 	GetUserPreferences(ctx context.Context, userAddress string) (restakingtypes.UserPreferences, error)
-	GetUserTrustedServicesIDs(ctx context.Context, userAddress string) ([]uint32, error)
 }
 
 type AssetsKeeper interface {

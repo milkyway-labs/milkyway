@@ -253,6 +253,9 @@ func (suite *KeeperTestSuite) TestQuerier_PoolOutstandingRewards() {
 				// Delegate to the pool
 				delAddr := testutil.TestAddress(1)
 				suite.DelegatePool(ctx, utils.MustParseCoin("100_000000umilk"), delAddr.String(), true)
+				suite.SetUserPreferences(ctx, delAddr.String(), []restakingtypes.TrustedServiceEntry{
+					restakingtypes.NewTrustedServiceEntry(service.ID, nil),
+				})
 			},
 			updateCtx: func(ctx sdk.Context) sdk.Context {
 				// Allocate rewards
@@ -563,6 +566,9 @@ func (suite *KeeperTestSuite) TestQuerier_PoolDelegationRewards() {
 				// Delegate to the pool
 				delAddr := testutil.TestAddress(1)
 				suite.DelegatePool(ctx, utils.MustParseCoin("100_000000umilk"), delAddr.String(), true)
+				suite.SetUserPreferences(ctx, delAddr.String(), []restakingtypes.TrustedServiceEntry{
+					restakingtypes.NewTrustedServiceEntry(service.ID, nil),
+				})
 			},
 			updateCtx: func(ctx sdk.Context) sdk.Context {
 				// Allocate rewards
@@ -801,6 +807,9 @@ func (suite *KeeperTestSuite) TestQuerier_DelegatorTotalRewards() {
 				// Delegate to pools, operators and services
 				delAddr := testutil.TestAddress(1)
 				suite.DelegatePool(ctx, utils.MustParseCoin("100_000000umilk"), delAddr.String(), true)
+				suite.SetUserPreferences(ctx, delAddr.String(), []restakingtypes.TrustedServiceEntry{
+					restakingtypes.NewTrustedServiceEntry(service.ID, nil),
+				})
 				suite.DelegateOperator(ctx, operator.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
 				suite.DelegateService(ctx, service.ID, utils.MustParseCoins("100_000000umilk"), delAddr.String(), true)
 			},

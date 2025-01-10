@@ -201,7 +201,8 @@ func (suite *KeeperTestSuite) SetUserPreferences(
 	trustedServices []restakingtypes.TrustedServiceEntry,
 ) {
 	preferences := restakingtypes.NewUserPreferences(trustedServices)
-	err := suite.restakingKeeper.SetUserPreferences(ctx, userAddress, preferences)
+	msgServer := restakingkeeper.NewMsgServer(suite.restakingKeeper)
+	_, err := msgServer.SetUserPreferences(ctx, restakingtypes.NewMsgSetUserPreferences(preferences, userAddress))
 	suite.Require().NoError(err)
 }
 
