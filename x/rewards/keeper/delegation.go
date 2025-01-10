@@ -92,8 +92,14 @@ func (k *Keeper) calculateDelegationRewardsBetween(
 			return nil, err
 		}
 
+		preferences, err := k.restakingKeeper.GetUserPreferences(ctx, delegator)
+		if err != nil {
+			return nil, err
+		}
+
 		for _, diff := range differences {
-			if slices.Contains(servicesIDs, diff.ServiceID) {
+			if slices.Contains(servicesIDs, diff.ServiceID) &&
+				preferences.IsServiceTrustedWithPool(diff.ServiceID, target.GetID()) {
 				decPools = decPools.Add(diff.DecPools...)
 			}
 		}

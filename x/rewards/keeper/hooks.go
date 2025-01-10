@@ -3,10 +3,12 @@ package keeper
 import (
 	"context"
 
+	"cosmossdk.io/collections"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/milkyway-labs/milkyway/v7/utils"
 	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v7/x/rewards/types"
 	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
 )
 
@@ -65,19 +67,28 @@ func (k *Keeper) BeforeDelegationSharesModified(ctx context.Context, delType res
 	}
 
 	if delType == restakingtypes.DELEGATION_TYPE_POOL {
+		// Note that it'll return all services IDs that are stored when the user sets no
+		// entries in its preferences.
 		servicesIDs, err := k.restakingKeeper.GetUserTrustedServicesIDs(ctx, delegator)
 		if err != nil {
 			return err
 		}
 
+		preferences, err := k.restakingKeeper.GetUserPreferences(ctx, delegator)
+		if err != nil {
+			return err
+		}
+
 		for _, serviceID := range servicesIDs {
-			// We decrement the amount of shares within the pool-service pair here so that we
-			// can later increment those shares again within the AfterDelegationModified
-			// hook. This is due in order to keep consistency if the shares change due to a
-			// new delegation or an undelegation
-			err = k.DecrementPoolServiceTotalDelegatorShares(ctx, targetID, serviceID, del.Shares)
-			if err != nil {
-				return err
+			if preferences.IsServiceTrustedWithPool(serviceID, targetID) {
+				// We decrement the amount of shares within the pool-service pair here so that we
+				// can later increment those shares again within the AfterDelegationModified
+				// hook. This is due in order to keep consistency if the shares change due to a
+				// new delegation or an undelegation
+				err = k.DecrementPoolServiceTotalDelegatorShares(ctx, targetID, serviceID, del.Shares)
+				if err != nil {
+					return err
+				}
 			}
 		}
 	}
@@ -112,20 +123,59 @@ func (k *Keeper) AfterDelegationModified(ctx context.Context, delType restakingt
 			return sdkerrors.ErrNotFound.Wrapf("pool delegation not found: %d, %s", targetID, delegator)
 		}
 
+		// Note that it'll return all services IDs that are stored when the user sets no
+		// entries in its preferences.
 		servicesIDs, err := k.restakingKeeper.GetUserTrustedServicesIDs(ctx, delegator)
 		if err != nil {
 			return err
 		}
 
+		preferences, err := k.restakingKeeper.GetUserPreferences(ctx, delegator)
+		if err != nil {
+			return err
+		}
+
 		for _, serviceID := range servicesIDs {
-			// We decremented the amount of shares within the pool-service pair in the
-			// BeforeDelegationSharesModified hook. We increment the shares here again
-			// to keep consistency if the shares change due to a new delegation or an
-			// undelegation
-			err = k.IncrementPoolServiceTotalDelegatorShares(ctx, targetID, serviceID, delegation.Shares)
-			if err != nil {
-				return err
+			if preferences.IsServiceTrustedWithPool(serviceID, targetID) {
+				// We decremented the amount of shares within the pool-service pair in the
+				// BeforeDelegationSharesModified hook. We increment the shares here again
+				// to keep consistency if the shares change due to a new delegation or an
+				// undelegation
+				err = k.IncrementPoolServiceTotalDelegatorShares(ctx, targetID, serviceID, delegation.Shares)
+				if err != nil {
+					return err
+				}
 			}
+		}
+	}
+
+	return nil
+}
+
+// BeforeServiceDeleted is called before a service is deleted
+func (k *Keeper) BeforeServiceDeleted(ctx context.Context, serviceID uint32) error {
+	err := k.BeforeDelegationTargetRemoved(ctx, restakingtypes.DELEGATION_TYPE_SERVICE, serviceID)
+	if err != nil {
+		return err
+	}
+
+	// Clean up pool-service total delegator shares for the service
+	var keysToDelete []collections.Pair[uint32, uint32]
+	err = k.PoolServiceTotalDelegatorShares.Walk(ctx, nil, func(key collections.Pair[uint32, uint32], _ types.PoolServiceTotalDelegatorShares) (stop bool, err error) {
+		if key.K2() != serviceID {
+			return false, nil
+		}
+		keysToDelete = append(keysToDelete, key)
+		return false, nil
+	})
+	if err != nil {
+		return err
+	}
+
+	for _, key := range keysToDelete {
+		err = k.PoolServiceTotalDelegatorShares.Remove(ctx, key)
+		if err != nil {
+			return err
 		}
 	}
 

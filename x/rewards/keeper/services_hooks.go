@@ -34,7 +34,7 @@ func (h ServicesHooks) AfterServiceDeactivated(context.Context, uint32) error {
 
 // BeforeServiceDeleted implements servicestypes.ServicesHooks
 func (h ServicesHooks) BeforeServiceDeleted(ctx context.Context, serviceID uint32) error {
-	return h.k.BeforeDelegationTargetRemoved(ctx, restakingtypes.DELEGATION_TYPE_SERVICE, serviceID)
+	return h.k.BeforeServiceDeleted(ctx, serviceID)
 }
 
 // AfterServiceAccreditationModified implements servicestypes.ServicesHooks

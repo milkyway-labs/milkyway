@@ -474,7 +474,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_TransferRewardsOnlyWhenAllocat
 	balances = suite.bankKeeper.GetAllBalances(ctx, rewardsPool)
 	suite.Require().Empty(balances)
 
-	// Finally, Alice trust the service through the pool and rewards are allocated.
+	// Finally, Alice trusts the service through the pool and rewards are allocated.
 	suite.SetUserPreferences(ctx, aliceAddr.String(), []restakingtypes.TrustedServiceEntry{
 		restakingtypes.NewTrustedServiceEntry(service.ID, nil),
 	})
@@ -596,6 +596,61 @@ func (suite *KeeperTestSuite) TestAllocateRewards_TransferRewardsOnlyWhenAllocat
 	ctx = suite.allocateRewards(ctx, 10*time.Second)
 	balances = suite.bankKeeper.GetAllBalances(ctx, rewardsPool)
 	suite.Require().NotEmpty(balances)
+}
+
+func (suite *KeeperTestSuite) TestAllocateRewards_NoRewardsForNonTrustedPools() {
+	// Cache the context to avoid test conflicts
+	ctx, _ := suite.ctx.CacheContext()
+
+	suite.RegisterCurrency(ctx, "umilk", "MILK", 6, utils.MustParseDec("1"))
+
+	// Create a service.
+	serviceAdmin := testutil.TestAddress(10000)
+	service := suite.CreateService(ctx, "Service", serviceAdmin.String())
+
+	// Create an active rewards plan.
+	suite.CreateBasicRewardsPlan(
+		ctx,
+		service.ID,
+		utils.MustParseCoin("1000_000000service"),
+		time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC),
+		time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
+		utils.MustParseCoins("100000_000000service"),
+	)
+	suite.AddPoolsToServiceSecuringPools(ctx, service.ID, []uint32{1})
+
+	// Call AllocateRewards to set last rewards allocation time.
+	err := suite.keeper.AllocateRewards(ctx)
+	suite.Require().NoError(err)
+
+	// Alice, Bob and Charlie delegate $MILK to the pool.
+	aliceAddr := testutil.TestAddress(1)
+	suite.DelegatePool(ctx, utils.MustParseCoin("10_000000umilk"), aliceAddr.String(), true)
+	bobAddr := testutil.TestAddress(2)
+	suite.DelegatePool(ctx, utils.MustParseCoin("10_000000umilk"), bobAddr.String(), true)
+	charlieAddr := testutil.TestAddress(3)
+	suite.DelegatePool(ctx, utils.MustParseCoin("10_000000umilk"), charlieAddr.String(), true)
+
+	// Alice trusts the service through pool 2, which doesn't exist.
+	suite.SetUserPreferences(ctx, aliceAddr.String(), []restakingtypes.TrustedServiceEntry{
+		restakingtypes.NewTrustedServiceEntry(1, []uint32{2}),
+	})
+	// Bob doesn't trust the service at all.
+	suite.SetUserPreferences(ctx, bobAddr.String(), []restakingtypes.TrustedServiceEntry{
+		restakingtypes.NewTrustedServiceEntry(2, nil),
+	})
+
+	// Only Charlie receives rewards.
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+	rewards, err := suite.keeper.GetPoolDelegationRewards(ctx, aliceAddr, 1)
+	suite.Require().NoError(err)
+	suite.Require().Empty(rewards)
+	rewards, err = suite.keeper.GetPoolDelegationRewards(ctx, bobAddr, 1)
+	suite.Require().NoError(err)
+	suite.Require().Empty(rewards)
+	rewards, err = suite.keeper.GetPoolDelegationRewards(ctx, charlieAddr, 1)
+	suite.Require().NoError(err)
+	suite.Require().Equal("115740.000000000000000000service", rewards.Sum().String())
 }
 
 func (suite *KeeperTestSuite) TestAllocateRewards_WeightedDistributions() {
