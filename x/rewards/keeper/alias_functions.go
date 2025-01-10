@@ -259,3 +259,17 @@ func (k *Keeper) DecrementPoolServiceTotalDelegatorShares(
 	}
 	return k.SetPoolServiceTotalDelegatorShares(ctx, poolID, serviceID, newShares)
 }
+
+// GetDelegationTargetTrustedTokens returns the amount of tokens of a delegation target
+// considering trusted services(it only applies to pools).
+func (k *Keeper) GetDelegationTargetTrustedTokens(ctx context.Context, serviceID uint32, target DelegationTarget) (sdk.Coins, error) {
+	tokens := target.GetTokens()
+	if target.DelegationType == restakingtypes.DELEGATION_TYPE_POOL {
+		totalDelShares, err := k.GetPoolServiceTotalDelegatorShares(ctx, target.GetID(), serviceID)
+		if err != nil {
+			return nil, err
+		}
+		tokens, _ = target.TokensFromSharesTruncated(totalDelShares).TruncateDecimal()
+	}
+	return tokens, nil
+}

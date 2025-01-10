@@ -3,6 +3,8 @@ package keeper_test
 import (
 	"time"
 
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
 	"github.com/milkyway-labs/milkyway/v7/app/testutil"
 	"github.com/milkyway-labs/milkyway/v7/utils"
 	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
@@ -1288,4 +1290,180 @@ func (suite *KeeperTestSuite) TestAllocateRewards_InactiveOperator() {
 	rewards, err = suite.keeper.GetDelegationRewards(ctx, aliceAddr, restakingtypes.DELEGATION_TYPE_OPERATOR, operator2.ID)
 	suite.Require().NoError(err)
 	suite.Assert().True(rewards.IsEmpty())
+}
+
+func (suite *KeeperTestSuite) TestAllocateRewards_ExcludeNonTrustedTokens() {
+	// Cache the context to avoid test conflicts
+	ctx, _ := suite.ctx.CacheContext()
+
+	// Register $MILK
+	suite.RegisterCurrency(ctx, "umilk", "MILK", 6, utils.MustParseDec("1"))
+
+	// Create a service.
+	serviceAdmin := testutil.TestAddress(10000)
+	service := suite.CreateService(ctx, "Service", serviceAdmin.String())
+
+	// Create an active rewards plan.
+	planStartTime := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
+	planEndTime := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
+	suite.CreateBasicRewardsPlan(
+		ctx,
+		service.ID,
+		utils.MustParseCoin("1000_000000service"),
+		planStartTime,
+		planEndTime,
+		utils.MustParseCoins("100000_000000service"),
+	)
+
+	// Call AllocateRewards to set last rewards allocation time.
+	err := suite.keeper.AllocateRewards(ctx)
+	suite.Require().NoError(err)
+
+	// Alice trusts the service and delegates $MILK to the pool.
+	aliceAddr := testutil.TestAddress(1)
+	suite.SetUserPreferences(ctx, aliceAddr.String(), []restakingtypes.TrustedServiceEntry{
+		restakingtypes.NewTrustedServiceEntry(service.ID, nil),
+	})
+	suite.DelegatePool(ctx, utils.MustParseCoin("10_000000umilk"), aliceAddr.String(), true)
+
+	// Add the pool to the service's securing pools list so that rewards can be
+	// allocated to the pool.
+	suite.AddPoolsToServiceSecuringPools(ctx, service.ID, []uint32{1})
+
+	// Bob doesn't trust the service but still delegates $MILK to the pool.
+	bobAddr := testutil.TestAddress(2)
+	suite.DelegatePool(ctx, utils.MustParseCoin("1000_000000umilk"), bobAddr.String(), true)
+
+	// Also, Alice delegates $MILK to the service directly.
+	suite.DelegateService(ctx, service.ID, utils.MustParseCoins("10_000000umilk"), aliceAddr.String(), true)
+
+	// Try allocating rewards.
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+
+	// Alice receives the same amount of rewards from both the pool and the service
+	// delegations.
+	rewards, err := suite.keeper.GetPoolDelegationRewards(ctx, aliceAddr, 1)
+	suite.Require().NoError(err)
+	// Rewards plan allocates total of 1000 * 10 / 86400 ~= 0.115741 $SERVICE and
+	// Alice receives half of it as a pool restaker, and half of it as a service restaker
+	suite.Require().Equal("57870.000000000000000000service", rewards.Sum().String())
+	rewards, err = suite.keeper.GetServiceDelegationRewards(ctx, aliceAddr, service.ID)
+	suite.Require().NoError(err)
+	suite.Require().Equal("57870.000000000000000000service", rewards.Sum().String())
+
+	// Bob didn't receive rewards from the service since he doesn't trust it.
+	rewards, err = suite.keeper.GetPoolDelegationRewards(ctx, bobAddr, 1)
+	suite.Require().NoError(err)
+	suite.Require().Empty(rewards)
+}
+
+func (suite *KeeperTestSuite) TestAllocateRewards_NoRewardsAfterUnbonding() {
+	// Cache the context to avoid test conflicts
+	ctx, _ := suite.ctx.CacheContext()
+
+	// Register $MILK
+	suite.RegisterCurrency(ctx, "umilk", "MILK", 6, utils.MustParseDec("1"))
+
+	// Create a service.
+	serviceAdmin := testutil.TestAddress(10000)
+	service := suite.CreateService(ctx, "Service", serviceAdmin.String())
+
+	// Create an active rewards plan.
+	planStartTime := time.Date(2024, 1, 1, 0, 0, 0, 0, time.UTC)
+	planEndTime := time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC)
+	plan := suite.CreateBasicRewardsPlan(
+		ctx,
+		service.ID,
+		utils.MustParseCoin("1000_000000service"),
+		planStartTime,
+		planEndTime,
+		utils.MustParseCoins("100000_000000service"),
+	)
+
+	// Call AllocateRewards to set last rewards allocation time.
+	err := suite.keeper.AllocateRewards(ctx)
+	suite.Require().NoError(err)
+
+	// Alice trusts the service and delegates $MILK to the pool.
+	aliceAddr := testutil.TestAddress(1)
+	suite.SetUserPreferences(ctx, aliceAddr.String(), []restakingtypes.TrustedServiceEntry{
+		restakingtypes.NewTrustedServiceEntry(service.ID, nil),
+	})
+	suite.DelegatePool(ctx, utils.MustParseCoin("10_000000umilk"), aliceAddr.String(), true)
+
+	// Add the pool to the service's securing pools list so that rewards can be
+	// allocated to the pool.
+	suite.AddPoolsToServiceSecuringPools(ctx, service.ID, []uint32{1})
+
+	// Bob doesn't trust the service but still delegates $MILK to the pool.
+	bobAddr := testutil.TestAddress(2)
+	suite.DelegatePool(ctx, utils.MustParseCoin("1000_000000umilk"), bobAddr.String(), true)
+
+	// Also, Alice delegates $MILK to the service directly.
+	suite.DelegateService(ctx, service.ID, utils.MustParseCoins("10_000000umilk"), aliceAddr.String(), true)
+
+	// Try allocating rewards.
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+
+	// Alice receives the same amount of rewards from both the pool and the service
+	// delegations.
+	rewards, err := suite.keeper.GetPoolDelegationRewards(ctx, aliceAddr, 1)
+	suite.Require().NoError(err)
+	// Rewards plan allocates total of 1000 * 10 / 86400 ~= 0.115741 $SERVICE and
+	// Alice receives half of it as a pool restaker, and half of it as a service restaker
+	suite.Require().Equal("57870.000000000000000000service", rewards.Sum().String())
+	rewards, err = suite.keeper.GetServiceDelegationRewards(ctx, aliceAddr, service.ID)
+	suite.Require().NoError(err)
+	suite.Require().Equal("57870.000000000000000000service", rewards.Sum().String())
+
+	// Bob didn't receive rewards from the service since he doesn't trust it.
+	rewards, err = suite.keeper.GetPoolDelegationRewards(ctx, bobAddr, 1)
+	suite.Require().NoError(err)
+	suite.Require().Empty(rewards)
+
+	// Now Alice unbonds all tokens from the service.
+	_, err = suite.restakingKeeper.UndelegateFromService(
+		ctx,
+		service.ID,
+		utils.MustParseCoins("10_000000umilk"),
+		aliceAddr.String(),
+	)
+	suite.Require().NoError(err)
+	// Also make sure Alice withdraws all her rewards frm the pool to make the
+	// calculation easier.
+	_, err = keeper.NewMsgServer(suite.keeper).WithdrawDelegatorReward(
+		ctx,
+		types.NewMsgWithdrawDelegatorReward(restakingtypes.DELEGATION_TYPE_POOL, 1, aliceAddr.String()),
+	)
+	suite.Require().NoError(err)
+
+	// Alice doesn't receive rewards from the service immediately after unbonding.
+	// Instead, all rewards now go to the pool.
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+	_, err = suite.keeper.GetServiceDelegationRewards(ctx, aliceAddr, service.ID)
+	suite.Require().ErrorIs(err, sdkerrors.ErrNotFound)
+	rewards, err = suite.keeper.GetPoolDelegationRewards(ctx, aliceAddr, 1)
+	suite.Require().NoError(err)
+	suite.Require().Equal("115740.000000000000000000service", rewards.Sum().String())
+
+	// Alice also unbonds from the pool, making the rewards allocation to stop
+	// entirely.
+	_, err = suite.restakingKeeper.UndelegateFromPool(ctx, utils.MustParseCoin("10_000000umilk"), aliceAddr.String())
+	suite.Require().NoError(err)
+
+	// Make sure no rewards were distributed.
+	rewardsPool := suite.accountKeeper.GetModuleAddress(types.RewardsPoolName)
+	moduleBalancesBefore := suite.bankKeeper.GetAllBalances(ctx, rewardsPool)
+	poolBalancesBefore := suite.bankKeeper.GetAllBalances(
+		ctx,
+		plan.MustGetRewardsPoolAddress(suite.accountKeeper.AddressCodec()),
+	)
+	ctx = suite.allocateRewards(ctx, 10*time.Second)
+	moduleBalancesAfter := suite.bankKeeper.GetAllBalances(ctx, rewardsPool)
+	poolBalancesAfter := suite.bankKeeper.GetAllBalances(
+		ctx,
+		plan.MustGetRewardsPoolAddress(suite.accountKeeper.AddressCodec()),
+	)
+	suite.Require().Equal(moduleBalancesBefore, moduleBalancesAfter)
+	suite.Require().Equal(poolBalancesBefore, poolBalancesAfter)
 }

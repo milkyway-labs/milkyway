@@ -203,7 +203,7 @@ func (k *Keeper) AllocateRewardsByPlan(
 	if err != nil {
 		return err
 	}
-	poolDistrInfos, totalPoolsDelValues, err := k.getDistrInfos(ctx, eligiblePools, restakableDenoms)
+	poolDistrInfos, totalPoolsDelValues, err := k.getDistrInfos(ctx, service.ID, eligiblePools, restakableDenoms)
 	if err != nil {
 		return err
 	}
@@ -212,7 +212,7 @@ func (k *Keeper) AllocateRewardsByPlan(
 	if err != nil {
 		return err
 	}
-	operatorDistrInfos, totalOperatorsDelValues, err := k.getDistrInfos(ctx, eligibleOperators, restakableDenoms)
+	operatorDistrInfos, totalOperatorsDelValues, err := k.getDistrInfos(ctx, service.ID, eligibleOperators, restakableDenoms)
 	if err != nil {
 		return err
 	}
@@ -395,15 +395,20 @@ func (k *Keeper) getEligibleOperators(
 // delegation values of all targets.
 func (k *Keeper) getDistrInfos(
 	ctx context.Context,
+	serviceID uint32,
 	targets []DelegationTarget,
 	restakableDenoms []string,
 ) (distrInfos []DistributionInfo, totalDelValues math.LegacyDec, err error) {
 	totalDelValues = math.LegacyZeroDec()
 	for _, target := range targets {
-		var targetTokens sdk.Coins
+		tokens, err := k.GetDelegationTargetTrustedTokens(ctx, serviceID, target)
+		if err != nil {
+			return nil, math.LegacyDec{}, err
+		}
 
 		// Filter out the coins that are not allowed to be restaked
-		for _, coin := range target.GetTokens() {
+		var targetTokens sdk.Coins
+		for _, coin := range tokens {
 			isRestakable := len(restakableDenoms) == 0 || slices.Contains(restakableDenoms, coin.Denom)
 			if isRestakable {
 				targetTokens = append(targetTokens, coin)
@@ -572,7 +577,12 @@ func (k *Keeper) allocateRewardsToUsers(
 func (k *Keeper) allocateDelegationTargetRewards(
 	ctx context.Context, serviceID uint32, distrInfo DistributionInfo, rewards sdk.DecCoins,
 ) error {
-	for _, token := range distrInfo.DelegationTarget.GetTokens() {
+	tokens, err := k.GetDelegationTargetTrustedTokens(ctx, serviceID, distrInfo.DelegationTarget)
+	if err != nil {
+		return err
+	}
+
+	for _, token := range tokens {
 		tokenValue, err := k.GetCoinValue(ctx, token)
 		if err != nil {
 			return err
