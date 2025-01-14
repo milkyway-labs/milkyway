@@ -1,6 +1,7 @@
 package keeper_test
 
 import (
+	"fmt"
 	"time"
 
 	sdkmath "cosmossdk.io/math"
@@ -8,6 +9,7 @@ import (
 
 	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
 	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v7/x/restaking/keeper"
 	"github.com/milkyway-labs/milkyway/v7/x/restaking/types"
 	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
 )
@@ -311,6 +313,100 @@ func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {
 			if tc.check != nil {
 				tc.check(ctx)
 			}
+		})
+	}
+}
+
+func (suite *KeeperTestSuite) TestGasConsumption_UndelegateVsEndBlockProcessing() {
+	for _, numDenomsPerDelegation := range []int{1, 10, 30, 100, 500} {
+		suite.Run(fmt.Sprintf("with%dDenoms", numDenomsPerDelegation), func() {
+			ctx, _ := suite.ctx.CacheContext()
+
+			ctx = ctx.
+				WithBlockHeight(10).
+				WithBlockTime(time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC))
+
+			// Set the unbonding time to 7 days
+			params, err := suite.k.GetParams(ctx)
+			suite.Require().NoError(err)
+			params.UnbondingTime = 7 * 24 * time.Hour
+			err = suite.k.SetParams(ctx, params)
+			suite.Require().NoError(err)
+
+			// Create a delegator address
+			delegator := "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"
+
+			// Generate denoms to delegate
+			denoms := make([]string, numDenomsPerDelegation)
+			for i := range denoms {
+				denoms[i] = fmt.Sprintf("denom%d", i)
+			}
+
+			// Create a service to delegate to
+			const serviceID = 1
+			serviceAddress := servicestypes.GetServiceAddress(serviceID).String()
+			err = suite.sk.SaveService(ctx, servicestypes.Service{
+				ID:              serviceID,
+				Status:          servicestypes.SERVICE_STATUS_ACTIVE,
+				Address:         serviceAddress,
+				Tokens:          sdk.NewCoins(),
+				DelegatorShares: sdk.NewDecCoins(),
+			})
+			suite.Require().NoError(err)
+
+			// Fund the delegator account with sufficient balance
+			initialBalance := sdk.NewCoins()
+			for _, denom := range denoms {
+				initialBalance = initialBalance.Add(sdk.NewInt64Coin(denom, 1000_000000))
+			}
+			suite.fundAccount(ctx, delegator, initialBalance)
+
+			// Prepare the total amount to delegate
+			delAmt := sdk.NewCoins()
+			for _, denom := range denoms {
+				delAmt = delAmt.Add(sdk.NewInt64Coin(denom, 100_000000))
+			}
+
+			// Delegate multiple denominations to the service using MsgServer
+			//
+			// NOTE: We don't include this as part of the gas comparison because delegations can
+			// be cheaply accumulated over arbitrary amounts of time and undelegated in a batch in a single block.
+			// The attack vector hinges on this burst of undelegations to pack >1 block worth of unmetered gas
+			// into a single block of gas consumption.
+			msgServer := keeper.NewMsgServer(suite.k)
+			_, err = msgServer.DelegateService(ctx, types.NewMsgDelegateService(serviceID, delAmt, delegator))
+			suite.Require().NoError(err)
+
+			// --- Undelegation Gas Tracking ---
+
+			// Measure gas consumption during initial undelegation
+			undelegationGasStart := ctx.GasMeter().GasConsumed()
+
+			// Undelegate the denominations using MsgServer
+			_, err = msgServer.UndelegateService(ctx, types.NewMsgUndelegateService(serviceID, delAmt, delegator))
+			suite.Require().NoError(err)
+
+			// Calculate gas used during undelegations
+			gasUsedForUndelegation := ctx.GasMeter().GasConsumed() - undelegationGasStart
+
+			// --- EndBlock Unbond Completion Gas Tracking ---
+
+			// Advance context time to when undelegations mature
+			ctx = ctx.WithBlockTime(ctx.BlockTime().Add(7 * 24 * time.Hour))
+
+			endBlockGasStart := ctx.GasMeter().GasConsumed()
+
+			// Measure gas consumption during end block processing
+			// NOTE: we isolate the component of the EndBlock call we want to test
+			err = suite.k.CompleteMatureUnbondingDelegations(ctx)
+			suite.Require().NoError(err)
+
+			// Calculate gas used during end block processing
+			gasUsedForEndBlock := ctx.GasMeter().GasConsumed() - endBlockGasStart
+
+			// --- Gas Consumption Comparison ---
+
+			suite.Require().GreaterOrEqual(gasUsedForUndelegation, gasUsedForEndBlock)
 		})
 	}
 }
