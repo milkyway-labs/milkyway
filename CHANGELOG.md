@@ -7,43 +7,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Rewards
 
-- ([a460b9f](https://github.com/milkyway-labs/milkyway/commit/a460b9f)) Updated rewards plan to only support a single
-  denom
-- ([04b6547](https://github.com/milkyway-labs/milkyway/commit/04b6547)) Added base gas fee consumption for rewards plan
-  creation
-- ([ede14aa](https://github.com/milkyway-labs/milkyway/commit/ede14aa)) Replaced `GetAllBalances` inside `InitGenesis`
-- ([62fc7f1](https://github.com/milkyway-labs/milkyway/commit/62fc7f1)) Avoid transferring rewards when skipping the
-  allocation
-- ([1addfbe](https://github.com/milkyway-labs/milkyway/commit/1addfbe)) Fixed bugs in the calculation of pool-service
-  total delegator shares
-- ([81ceb4c](https://github.com/milkyway-labs/milkyway/commit/81ceb4c)) Fixed rewards allocations
+- ([2eca460](https://github.com/milkyway-labs/milkyway/commit/2eca460)) Updated rewards plan to only support a single denom
+- ([fdcc23c](https://github.com/milkyway-labs/milkyway/commit/fdcc23c)) Added base gas fee consumption for rewards plan creation
+- ([d2694ea](https://github.com/milkyway-labs/milkyway/commit/d2694ea)) Replaced `GetAllBalances` inside `InitGenesis`
+- ([a171ac0](https://github.com/milkyway-labs/milkyway/commit/a171ac0)) Avoid transferring rewards when skipping the allocation
+- ([8baa348](https://github.com/milkyway-labs/milkyway/commit/8baa348)) Fixed bugs in the calculation of pool-service total delegator shares
+- ([85212d2](https://github.com/milkyway-labs/milkyway/commit/85212d2)) Fixed rewards allocations
 
 ### Restaking
 
-- ([a27d0d8](https://github.com/milkyway-labs/milkyway/commit/a27d0d8)) Improved gas usage
-- ([f5815d3](https://github.com/milkyway-labs/milkyway/commit/f5815d3)) Added check to make sure an operator is allowed
-  to join a service while executing `MsgJoinService`
-- ([96b0d54](https://github.com/milkyway-labs/milkyway/commit/96b0d54)) Made sure operators that are removed from an
-  allowlist also leave the service
-- ([f522eb8](https://github.com/milkyway-labs/milkyway/commit/f522eb8)) Added scaling gas costs to delegations and
-  undelegations
-- ([623fa32](https://github.com/milkyway-labs/milkyway/commit/623fa32)) Updated the meaning of empty securing pools to "
-  No pools" rather than "All pools"
-- ([cac1c3d](https://github.com/milkyway-labs/milkyway/commit/cac1c3d)) Optimized delegations by target id queries
-- ([449f0e6](https://github.com/milkyway-labs/milkyway/commit/449f0e6)) Optimized the `getEligibleOperators` query
-- ([50af532](https://github.com/milkyway-labs/milkyway/commit/50af532)) Improve the `UserPreferences` structure and its
-  features
-- ([76b80f8](https://github.com/milkyway-labs/milkyway/commit/76b80f8)) Updated the meaning of default user preferences
-  from "Trust all services" to "Trust no service"
+- ([987da9f](https://github.com/milkyway-labs/milkyway/commit/987da9f)) Improved gas usage
+- ([2a74f58](https://github.com/milkyway-labs/milkyway/commit/2a74f58)) Added check to make sure an operator is allowed  to join a service while executing `MsgJoinService`
+- ([c8f7880](https://github.com/milkyway-labs/milkyway/commit/c8f7880)) Made sure operators that are removed from an allowlist also leave the service
+- ([1fce5da](https://github.com/milkyway-labs/milkyway/commit/1fce5da)) Added scaling gas costs to delegations and undelegations
+- ([1d2e6de](https://github.com/milkyway-labs/milkyway/commit/1d2e6de)) Updated the meaning of empty securing pools to "No pools" rather than "All pools"
+- ([1caccb5](https://github.com/milkyway-labs/milkyway/commit/1caccb5)) Optimized delegations by target id queries
+- ([263fd65](https://github.com/milkyway-labs/milkyway/commit/263fd65)) Optimized the `getEligibleOperators` query
+- ([bfcaff9](https://github.com/milkyway-labs/milkyway/commit/bfcaff9)) Improve the `UserPreferences` structure and its features
+- ([64ccbd3](https://github.com/milkyway-labs/milkyway/commit/64ccbd3)) Updated the meaning of default user preferences from "Trust all services" to "Trust no service"
 
 ### Other
 
-- ([d63822a](https://github.com/milkyway-labs/milkyway/commit/d63822a)) Remove `SharesFromTokensTruncated` in favor of
-  `SharesFromTokens`
-- ([438f1f7](https://github.com/milkyway-labs/milkyway/commit/438f1f7)) Remove unnecessary error overrides
-- ([c9bc987](https://github.com/milkyway-labs/milkyway/commit/c9bc987)) Fixed `ParseTrustedServiceEntry`
-- ([e0ad42a](https://github.com/milkyway-labs/milkyway/commit/e0ad42a)) Added the support for store migrations inside
-  hard fork handlers
+- ([7090ac2](https://github.com/milkyway-labs/milkyway/commit/7090ac2)) Remove `SharesFromTokensTruncated` in favor of `SharesFromTokens`
+- ([3f892b7](https://github.com/milkyway-labs/milkyway/commit/3f892b7)) Remove unnecessary error overrides
+- ([94deb84](https://github.com/milkyway-labs/milkyway/commit/94deb84)) Fixed `ParseTrustedServiceEntry`
+- ([669ce32](https://github.com/milkyway-labs/milkyway/commit/669ce32)) Added the support for store migrations inside hard fork handlers
 
 ## Version 7.0.0
 
