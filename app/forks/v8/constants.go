@@ -5,6 +5,6 @@ import (
 )
 
 var Fork = forks.Fork{
-	ForkHeight:     610750,
+	ForkHeight:     771090,
 	BeginForkLogic: BeginFork,
 }
