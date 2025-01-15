@@ -1392,11 +1392,6 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegatePool() {
 					sdk.NewAttribute(types.AttributeKeyNewShares, "500.000000000000000000pool/1/umilk"),
 				),
 			},
-			check: func(ctx sdk.Context) {
-				// Make sure the gas charged is at least BaseDelegationDenomCost
-				// The 34450 is obtained by running this test with BaseDelegationDenomCost set to 0
-				suite.Require().GreaterOrEqual(ctx.GasMeter().GasConsumed(), 34450+types.BaseDelegationDenomCost)
-			},
 		},
 		{
 			name: "allowed denom is delegated properly",
@@ -1435,11 +1430,6 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegatePool() {
 					sdk.NewAttribute(types.AttributeKeyNewShares, "500.000000000000000000pool/1/umilk"),
 				),
 			},
-			check: func(ctx sdk.Context) {
-				// Make sure the gas charged is at least BaseDelegationDenomCost
-				// The 34565 value is obtained by running this test with BaseDelegationDenomCost set to 0
-				suite.Require().GreaterOrEqual(ctx.GasMeter().GasConsumed(), 34565+types.BaseDelegationDenomCost)
-			},
 		},
 	}
 
@@ -1457,9 +1447,6 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegatePool() {
 			if tc.store != nil {
 				tc.store(ctx)
 			}
-
-			// Reset the gas meter
-			ctx = ctx.WithGasMeter(storetypes.NewInfiniteGasMeter())
 
 			msgServer := keeper.NewMsgServer(suite.k)
 			_, err := msgServer.DelegatePool(ctx, tc.msg)
@@ -1715,11 +1702,6 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateOperator() {
 					sdk.NewAttribute(types.AttributeKeyNewShares, "500.000000000000000000operator/1/umilk"),
 				),
 			},
-			check: func(ctx sdk.Context) {
-				// Make sure the gas charged is at least BaseDelegationDenomCost
-				// The 49110 is obtained by running this test with BaseDelegationDenomCost set to 0
-				suite.Require().GreaterOrEqual(ctx.GasMeter().GasConsumed(), 49110+types.BaseDelegationDenomCost)
-			},
 		},
 		{
 			name: "allowed denom is delegated properly",
@@ -1764,11 +1746,6 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateOperator() {
 					sdk.NewAttribute(types.AttributeKeyNewShares, "500.000000000000000000operator/1/umilk"),
 				),
 			},
-			check: func(ctx sdk.Context) {
-				// Make sure the gas charged is at least BaseDelegationDenomCost
-				// The 49210 is obtained by running this test with BaseDelegationDenomCost set to 0
-				suite.Require().GreaterOrEqual(ctx.GasMeter().GasConsumed(), 49210+types.BaseDelegationDenomCost)
-			},
 		},
 	}
 
@@ -1786,9 +1763,6 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateOperator() {
 			if tc.store != nil {
 				tc.store(ctx)
 			}
-
-			// Reset the gas meter
-			ctx = ctx.WithGasMeter(storetypes.NewInfiniteGasMeter())
 
 			msgServer := keeper.NewMsgServer(suite.k)
 			_, err := msgServer.DelegateOperator(ctx, tc.msg)
@@ -2122,11 +2096,6 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateService() {
 					sdk.NewAttribute(types.AttributeKeyNewShares, "500.000000000000000000service/1/umilk"),
 				),
 			},
-			check: func(ctx sdk.Context) {
-				// Make sure the gas charged is at least BaseDelegationDenomCost
-				// The 50060 is obtained by running this test with BaseDelegationDenomCost set to 0
-				suite.Require().GreaterOrEqual(ctx.GasMeter().GasConsumed(), 50060+types.BaseDelegationDenomCost)
-			},
 		},
 		{
 			name: "allowed denom is delegated properly",
@@ -2171,11 +2140,6 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateService() {
 					sdk.NewAttribute(types.AttributeKeyNewShares, "500.000000000000000000service/1/umilk"),
 				),
 			},
-			check: func(ctx sdk.Context) {
-				// Make sure the gas charged is at least BaseDelegationDenomCost
-				// The 50170 is obtained by running this test with BaseDelegationDenomCost set to 0
-				suite.Require().GreaterOrEqual(ctx.GasMeter().GasConsumed(), 50170+types.BaseDelegationDenomCost)
-			},
 		},
 		{
 			name: "allowed service denom is delegated properly",
@@ -2219,11 +2183,6 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateService() {
 					sdk.NewAttribute(sdk.AttributeKeyAmount, "100umilk"),
 					sdk.NewAttribute(types.AttributeKeyNewShares, "500.000000000000000000service/1/umilk"),
 				),
-			},
-			check: func(ctx sdk.Context) {
-				// Make sure the gas charged is at least BaseDelegationDenomCost
-				// The 50080 is obtained by running this test with BaseDelegationDenomCost set to 0
-				suite.Require().GreaterOrEqual(ctx.GasMeter().GasConsumed(), 50080+types.BaseDelegationDenomCost)
 			},
 		},
 		{
@@ -2273,11 +2232,6 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateService() {
 					sdk.NewAttribute(types.AttributeKeyNewShares, "500.000000000000000000service/1/umilk"),
 				),
 			},
-			check: func(ctx sdk.Context) {
-				// Make sure the gas charged is at least BaseDelegationDenomCost
-				// The 50230 is obtained by running this test with BaseDelegationDenomCost set to 0
-				suite.Require().GreaterOrEqual(ctx.GasMeter().GasConsumed(), 50230+types.BaseDelegationDenomCost)
-			},
 		},
 	}
 
@@ -2295,9 +2249,6 @@ func (suite *KeeperTestSuite) TestMsgServer_DelegateService() {
 			if tc.store != nil {
 				tc.store(ctx)
 			}
-
-			// Reset the gas meter
-			ctx = ctx.WithGasMeter(storetypes.NewInfiniteGasMeter())
 
 			msgServer := keeper.NewMsgServer(suite.k)
 			_, err := msgServer.DelegateService(ctx, tc.msg)

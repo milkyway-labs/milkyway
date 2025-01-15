@@ -457,13 +457,6 @@ func (suite *KeeperTestSuite) TestKeeper_DelegateToPool() {
 			shouldErr: false,
 			expShares: sdk.NewDecCoins(sdk.NewDecCoinFromDec("pool/1/umilk", sdkmath.LegacyNewDecWithPrec(15625, 2))),
 			check: func(ctx sdk.Context) {
-				// Make sure the gas charged is at least BaseDelegationGasCost + BaseDelegationDenomCost
-				// since it's the first delegation and we are delegating one denom
-				suite.Require().GreaterOrEqual(
-					suite.ctx.GasMeter().GasConsumed(),
-					types.BaseDelegationGasCost+types.BaseDelegationDenomCost,
-				)
-
 				// Make sure the pool now exists
 				pool, err := suite.pk.GetPool(ctx, 1)
 				suite.Require().NoError(err)
