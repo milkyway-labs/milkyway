@@ -6,41 +6,57 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## Version 8.0.0
 
 ### Rewards
-- (a460b9f8f8beea70783c5d05559a98467943d1d5) Updated rewards plan to only support a single denom
-- (04b65474c5564a712bfb7f9b80e618b535c1ab70) Added base gas fee consumption for rewards plan creation
-- (ede14aa85f2779115c22aa2de86154ca1b49041d) Replaced `GetAllBalances` inside `InitGenesis`
-- (62fc7f1cd047ca016ba0f9582555c932953c3820) Avoid transferring rewards when skipping the allocation
-- (1addfbe145d74572f8d6e8124132251d2cc0d94f) Fixed bugs in the calculation of pool-service total delegator shares
-- (81ceb4c74975c756a5fc86e0222bb3b347d71b08) Fixed rewards allocations
+
+- ([a460b9f](https://github.com/milkyway-labs/milkyway/commit/a460b9f)) Updated rewards plan to only support a single
+  denom
+- ([04b6547](https://github.com/milkyway-labs/milkyway/commit/04b6547)) Added base gas fee consumption for rewards plan
+  creation
+- ([ede14aa](https://github.com/milkyway-labs/milkyway/commit/ede14aa)) Replaced `GetAllBalances` inside `InitGenesis`
+- ([62fc7f1](https://github.com/milkyway-labs/milkyway/commit/62fc7f1)) Avoid transferring rewards when skipping the
+  allocation
+- ([1addfbe](https://github.com/milkyway-labs/milkyway/commit/1addfbe)) Fixed bugs in the calculation of pool-service
+  total delegator shares
+- ([81ceb4c](https://github.com/milkyway-labs/milkyway/commit/81ceb4c)) Fixed rewards allocations
 
 ### Restaking
-- (a27d0d8f586d363921cd004b5e4003b1e9fb2ef5) Improved gas usage
-- (f5815d3560599e7136c53c03ff3547f2727664b2) Added check to make sure an operator is allowed to join a service while executing `MsgJoinService`
-- (96b0d54f677ce6994f0c7277f372fe29b6759290) Made sure operators that are removed from an allowlist also leave the service
-- (f522eb852157e06a978e92720944d5ce86c00640) Added scaling gas costs to delegations and undelegations
-- (623fa32c85277201ddcda52acd73c23db7820cb8) Updated the meaning of empty securing pools to "No pools" rather than "All pools"
-- (cac1c3db7d31183a33a625ac72fd4b05829c6dbf) Optimized delegations by target id queries
-- (449f0e6fc18f2b40d436ffdfe4c91ac537e54a31) Optimized the `getEligibleOperators` query
-- (50af532e80818756b917558d5c24ab3c31c99729) Improve the `UserPreferences` structure and its features
-- (76b80f8157b0ec3dc4aa6da289967e1e7699191e) Updated the meaning of default user preferences from "Trust all services" to "Trust no service"
+
+- ([a27d0d8](https://github.com/milkyway-labs/milkyway/commit/a27d0d8)) Improved gas usage
+- ([f5815d3](https://github.com/milkyway-labs/milkyway/commit/f5815d3)) Added check to make sure an operator is allowed
+  to join a service while executing `MsgJoinService`
+- ([96b0d54](https://github.com/milkyway-labs/milkyway/commit/96b0d54)) Made sure operators that are removed from an
+  allowlist also leave the service
+- ([f522eb8](https://github.com/milkyway-labs/milkyway/commit/f522eb8)) Added scaling gas costs to delegations and
+  undelegations
+- ([623fa32](https://github.com/milkyway-labs/milkyway/commit/623fa32)) Updated the meaning of empty securing pools to "
+  No pools" rather than "All pools"
+- ([cac1c3d](https://github.com/milkyway-labs/milkyway/commit/cac1c3d)) Optimized delegations by target id queries
+- ([449f0e6](https://github.com/milkyway-labs/milkyway/commit/449f0e6)) Optimized the `getEligibleOperators` query
+- ([50af532](https://github.com/milkyway-labs/milkyway/commit/50af532)) Improve the `UserPreferences` structure and its
+  features
+- ([76b80f8](https://github.com/milkyway-labs/milkyway/commit/76b80f8)) Updated the meaning of default user preferences
+  from "Trust all services" to "Trust no service"
 
 ### Other
-- (d63822aa8a98263a9bcc6a6984d0483f13664913) Remove `SharesFromTokensTruncated` in favor of `SharesFromTokens`
-- (438f1f76fbbf166df31c664257d6692ea174599d) Remove unnecessary error overrides
-- (c9bc987b0aaca466a66f998b7e9c02ed324bccd3) Fixed `ParseTrustedServiceEntry`
-- (e0ad42a89bd2fa200419db3afc12de285162a6a6) Added the support for store migrations inside hard fork handlers
+
+- ([d63822a](https://github.com/milkyway-labs/milkyway/commit/d63822a)) Remove `SharesFromTokensTruncated` in favor of
+  `SharesFromTokens`
+- ([438f1f7](https://github.com/milkyway-labs/milkyway/commit/438f1f7)) Remove unnecessary error overrides
+- ([c9bc987](https://github.com/milkyway-labs/milkyway/commit/c9bc987)) Fixed `ParseTrustedServiceEntry`
+- ([e0ad42a](https://github.com/milkyway-labs/milkyway/commit/e0ad42a)) Added the support for store migrations inside
+  hard fork handlers
 
 ## Version 7.0.0
 
 ### Bug fixes
 ### Restaking
 
-* Set restaking cap to `0` (ed8281a9bc8c0ce5de91019d23bf788d2f4c0af2)
+- ([ed8281a](https://github.com/milkyway-labs/milkyway/commit/ed8281a)) Set restaking cap to `0`
 
 ## Version 6.1.0
 ### Features
 
-* Removed the deletion of markets from upgrade handler (d275ee8)
+- ([d275ee8](https://github.com/milkyway-labs/milkyway/commit/d275ee8)) Removed the deletion of markets from upgrade
+  handler
 
 ## Version 6.0-ceers
 This version has been released to update the `ceers-2112` testnet to version `v6` of the software.
@@ -48,14 +64,14 @@ This version has been released to update the `ceers-2112` testnet to version `v6
 ### Bug fixes
 #### LiquidVesting
 
-* Properly set the `x/liquidvesting` module
-  account (https://github.com/milkyway-labs/milkyway/commit/adf62d4fd620c76f39d9fb76bb6ffada01139e93)
+* ([adf62d4](https://github.com/milkyway-labs/milkyway/commit/adf62d4)) Properly set the `x/liquidvesting` module
+  account
 
 ## Version 6.0.0
 ### Bug fixes
 #### LiquidVesting
 
-* Properly initialized the module account
+* ([\#225](https://github.com/milkyway-labs/milkyway/pull/225)) Properly initialized the module account
 
 ## Version 5.0.0
 ### Features
@@ -89,7 +105,7 @@ This version has been released to update the `ceers-2112` testnet to version `v6
 
 #### Build
 
-* Fixed [buf](https://buf.build) build errors
+* ([a3ba245](https://github.com/milkyway-labs/milkyway/commit/a3ba245)) Fixed [buf](https://buf.build) build errors
 
 ## Version 2.0.1
 
@@ -97,8 +113,7 @@ This version has been released to update the `ceers-2112` testnet to version `v6
 
 #### x/marketmap
 
-* Fixed the default genesis state
-  generation ([89f6385](https://github.com/milkyway-labs/milkyway/commit/89f638567af91e819e6ae3948823b55a24292d61))
+* ([89f6385](https://github.com/milkyway-labs/milkyway/commit/89f6385)) Fixed the default genesis state generation
 
 ## Version 2.0.0
 
