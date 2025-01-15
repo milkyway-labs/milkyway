@@ -1,0 +1,16 @@
+# Modules
+
+- [services](./services/index.md)
+   - [v1](./services/v1/index.md)
+- [restaking](./restaking/index.md)
+   - [v1](./restaking/v1/index.md)
+- [assets](./assets/index.md)
+   - [v1](./assets/v1/index.md)
+- [rewards](./rewards/index.md)
+   - [v1](./rewards/v1/index.md)
+- [pools](./pools/index.md)
+   - [v1](./pools/v1/index.md)
+- [operators](./operators/index.md)
+   - [v1](./operators/v1/index.md)
+- [liquidvesting](./liquidvesting/index.md)
+   - [v1](./liquidvesting/v1/index.md)
