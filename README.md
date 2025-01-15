@@ -2,7 +2,7 @@
 
 [![Website](.img/cover.jpg)](https://milkyway.zone)
 
-**<p align="center">The First and Largest Liquid Staking and Restaking for Modular Ecosystem</p>**
+**<p align="center">The First and Largest Liquid Staking and Restaking in the Modular Ecosystem</p>**
 
 [![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/milkyway-labs/milkyway)](https://github.com/milkyway-labs/milkyway/releases)
 ![License](https://img.shields.io/github/license/milkyway-labs/milkyway.svg)
