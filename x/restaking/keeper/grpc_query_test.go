@@ -581,6 +581,64 @@ func (suite *KeeperTestSuite) TestQuerier_PoolUnbondingDelegations() {
 				),
 			},
 		},
+		{
+			name: "query with pool id returns data properly",
+			store: func(ctx sdk.Context) {
+				pool1 := poolstypes.Pool{
+					ID:              1,
+					Denom:           "umilk",
+					Address:         poolstypes.GetPoolAddress(1).String(),
+					Tokens:          sdkmath.NewInt(150),
+					DelegatorShares: sdkmath.LegacyNewDec(150),
+				}
+				err := suite.pk.SavePool(ctx, pool1)
+				suite.Require().NoError(err)
+				pool2 := poolstypes.Pool{
+					ID:              2,
+					Denom:           "utia",
+					Address:         poolstypes.GetPoolAddress(2).String(),
+					Tokens:          sdkmath.NewInt(150),
+					DelegatorShares: sdkmath.LegacyNewDec(150),
+				}
+				err = suite.pk.SavePool(ctx, pool2)
+				suite.Require().NoError(err)
+
+				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
+					types.UndelegationData{
+						Target:                   pool1,
+						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+						BuildUnbondingDelegation: types.NewPoolUnbondingDelegation,
+					},
+					10,
+					time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC),
+					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
+				)
+				suite.Require().NoError(err)
+				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
+					types.UndelegationData{
+						Target:                   pool2,
+						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+						BuildUnbondingDelegation: types.NewPoolUnbondingDelegation,
+					},
+					15,
+					time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC),
+					sdk.NewCoins(sdk.NewCoin("utia", sdkmath.NewInt(50))),
+				)
+				suite.Require().NoError(err)
+			},
+			request:   types.NewQueryPoolUnbondingDelegationsRequest(2, nil),
+			shouldErr: false,
+			expUnbondingDelegations: []types.UnbondingDelegation{
+				types.NewPoolUnbondingDelegation(
+					"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+					2,
+					15,
+					time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC),
+					sdk.NewCoins(sdk.NewCoin("utia", sdkmath.NewInt(50))),
+					2,
+				),
+			},
+		},
 	}
 
 	for _, tc := range testCases {
@@ -1049,6 +1107,71 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorUnbondingDelegations() {
 				types.NewOperatorUnbondingDelegation(
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					1,
+					20,
+					time.Date(2024, 1, 2, 12, 0, 0, 0, time.UTC),
+					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(50))),
+					2,
+				),
+			},
+		},
+		{
+			name: "query with operator id returns data properly",
+			store: func(ctx sdk.Context) {
+				operator1 := operatorstypes.Operator{
+					ID:      1,
+					Address: operatorstypes.GetOperatorAddress(1).String(),
+					Tokens: sdk.NewCoins(
+						sdk.NewCoin("umilk", sdkmath.NewInt(150)),
+					),
+					DelegatorShares: sdk.NewDecCoins(
+						sdk.NewDecCoinFromDec("operators/1/umilk", sdkmath.LegacyNewDec(150)),
+					),
+				}
+				err := suite.ok.SaveOperator(ctx, operator1)
+				suite.Require().NoError(err)
+				operator2 := operatorstypes.Operator{
+					ID:      2,
+					Address: operatorstypes.GetOperatorAddress(2).String(),
+					Tokens: sdk.NewCoins(
+						sdk.NewCoin("umilk", sdkmath.NewInt(150)),
+					),
+					DelegatorShares: sdk.NewDecCoins(
+						sdk.NewDecCoinFromDec("operators/2/umilk", sdkmath.LegacyNewDec(150)),
+					),
+				}
+				err = suite.ok.SaveOperator(ctx, operator2)
+				suite.Require().NoError(err)
+
+				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
+					types.UndelegationData{
+						Target:                   operator1,
+						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+						BuildUnbondingDelegation: types.NewOperatorUnbondingDelegation,
+					},
+					10,
+					time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC),
+					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
+				)
+				suite.Require().NoError(err)
+
+				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
+					types.UndelegationData{
+						Target:                   operator2,
+						Delegator:                "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+						BuildUnbondingDelegation: types.NewOperatorUnbondingDelegation,
+					},
+					20,
+					time.Date(2024, 1, 2, 12, 0, 0, 0, time.UTC),
+					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(50))),
+				)
+				suite.Require().NoError(err)
+			},
+			request:   types.NewQueryOperatorUnbondingDelegationsRequest(2, nil),
+			shouldErr: false,
+			expUnbondingDelegations: []types.UnbondingDelegation{
+				types.NewOperatorUnbondingDelegation(
+					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+					2,
 					20,
 					time.Date(2024, 1, 2, 12, 0, 0, 0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(50))),
@@ -1528,6 +1651,71 @@ func (suite *KeeperTestSuite) TestQuerier_ServiceUnbondingDelegations() {
 				types.NewServiceUnbondingDelegation(
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 					1,
+					20,
+					time.Date(2024, 1, 2, 12, 0, 0, 0, time.UTC),
+					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(50))),
+					2,
+				),
+			},
+		},
+		{
+			name: "query with service id returns data properly",
+			store: func(ctx sdk.Context) {
+				service1 := servicestypes.Service{
+					ID:      1,
+					Address: servicestypes.GetServiceAddress(1).String(),
+					Tokens: sdk.NewCoins(
+						sdk.NewCoin("umilk", sdkmath.NewInt(150)),
+					),
+					DelegatorShares: sdk.NewDecCoins(
+						sdk.NewDecCoinFromDec("services/1/umilk", sdkmath.LegacyNewDec(150)),
+					),
+				}
+				err := suite.sk.SaveService(ctx, service1)
+				suite.Require().NoError(err)
+				service2 := servicestypes.Service{
+					ID:      2,
+					Address: servicestypes.GetServiceAddress(2).String(),
+					Tokens: sdk.NewCoins(
+						sdk.NewCoin("umilk", sdkmath.NewInt(150)),
+					),
+					DelegatorShares: sdk.NewDecCoins(
+						sdk.NewDecCoinFromDec("services/2/umilk", sdkmath.LegacyNewDec(150)),
+					),
+				}
+				err = suite.sk.SaveService(ctx, service2)
+				suite.Require().NoError(err)
+
+				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
+					types.UndelegationData{
+						Target:                   service1,
+						Delegator:                "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd",
+						BuildUnbondingDelegation: types.NewServiceUnbondingDelegation,
+					},
+					10,
+					time.Date(2024, 1, 1, 12, 0, 0, 0, time.UTC),
+					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(100))),
+				)
+				suite.Require().NoError(err)
+
+				_, err = suite.k.SetUnbondingDelegationEntry(ctx,
+					types.UndelegationData{
+						Target:                   service2,
+						Delegator:                "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+						BuildUnbondingDelegation: types.NewServiceUnbondingDelegation,
+					},
+					20,
+					time.Date(2024, 1, 2, 12, 0, 0, 0, time.UTC),
+					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(50))),
+				)
+				suite.Require().NoError(err)
+			},
+			request:   types.NewQueryServiceUnbondingDelegationsRequest(2, nil),
+			shouldErr: false,
+			expUnbondingDelegations: []types.UnbondingDelegation{
+				types.NewServiceUnbondingDelegation(
+					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
+					2,
 					20,
 					time.Date(2024, 1, 2, 12, 0, 0, 0, time.UTC),
 					sdk.NewCoins(sdk.NewCoin("umilk", sdkmath.NewInt(50))),
