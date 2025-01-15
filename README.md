@@ -2,7 +2,7 @@
 
 [![Website](.img/cover.jpg)](https://milkyway.zone)
 
-**<p align="center">The Modular Staking Portal for Plug-in Security</p>**
+**<p align="center">The First and Largest Liquid Staking and Restaking for Modular Ecosystem</p>**
 
 [![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/milkyway-labs/milkyway)](https://github.com/milkyway-labs/milkyway/releases)
 ![License](https://img.shields.io/github/license/milkyway-labs/milkyway.svg)
@@ -15,7 +15,11 @@
 
 ## What is MilkyWay?
 
-MilkyWay is the first modular staking portal designed to secure an expanding constellation of networks and services through a trust-minimized, multi-asset, multi-chain restaking platform. Launched in December 2023 with milkTIA—Celestia’s inaugural liquid staking solution. MilkyWay initially allowed users to unlock staked TIA for maximizing yields via seamless DeFi engagement. Over time, it evolved into a more versatile platform that safeguards a growing array of Actively Validated Services (AVSs). At its core lies the MilkyWay Chain, a modular L1 coordination layer that allows AVSs to “plug in” and to precisely configure asset allocation, stake distribution, and slashing parameters. By restaking both native and liquid-staked assets, it diversifies security while providing a sovereign environment with direct control over consensus and validation rules.
+MilkyWay is the first and largest liquid staking and restaking protocol in the modular ecosystem.
+
+In December 2023, as strong believers in modular architecture, we began our journey by pioneering an enhanced liquid staking solution for the Celestia blockchain. We have evolved into a comprehensive solution that unifies liquidity and security across a broad range of blockchain services. MilkyWay aims to consolidate fragmented trust and security by allowing multiple services to tap into a single, flexible pool of staked assets.
+
+This repository is the codebase of the MilkyWay Chain, a modular L1 coordination layer, built with the Cosmos SDK that is designed to secure an expanding constellation of networks and services through a trust-minimized, multi-asset, multi-chain restaking platform. It allows AVSs to “plug in” and to precisely configure asset allocation, stake distribution, rewards distribution, and slashing parameters. By restaking both native and liquid-staked assets, it diversifies security while providing a sovereign environment with direct control over consensus and validation rules.
 
 This modular architecture frees developers and AVSs from the constraints of traditional parent chains, fostering experimentation with new governance models, incentive mechanisms, and specialized use cases. From reinforcing off-chain systems to introducing innovative staking-based financial instruments, MilkyWay sets the stage for broad ecosystem growth and adaptability. As its capabilities mature and its scope widens, the platform establishes a resilient foundation for an interconnected, composable future. By transcending conventional staking solutions and operating as a flexible, sovereign environment, MilkyWay nurtures a more adaptive, trust-minimized blockchain ecosystem. Ultimately, this dynamic approach broadens participation, strengthens interoperability, and ushers in a new era of decentralized infrastructure.
 
