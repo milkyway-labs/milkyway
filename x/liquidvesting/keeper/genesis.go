@@ -78,7 +78,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 	if err != nil {
 		return err
 	}
-	if !coins.Equal(totalCoins) {
+	if !coins.IsAllGTE(totalCoins) {
 		return fmt.Errorf("the liquid vesting module doesn't have the coins specified in the users' insurance fund")
 	}
 
