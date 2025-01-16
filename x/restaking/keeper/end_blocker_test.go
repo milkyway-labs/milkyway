@@ -5,6 +5,7 @@ import (
 	"time"
 
 	sdkmath "cosmossdk.io/math"
+	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
@@ -380,21 +381,22 @@ func (suite *KeeperTestSuite) TestGasConsumption_UndelegateVsEndBlockProcessing(
 			// --- Undelegation Gas Tracking ---
 
 			// Measure gas consumption during initial undelegation
-			undelegationGasStart := ctx.GasMeter().GasConsumed()
+			ctx = ctx.WithGasMeter(storetypes.NewInfiniteGasMeter())
 
 			// Undelegate the denominations using MsgServer
 			_, err = msgServer.UndelegateService(ctx, types.NewMsgUndelegateService(serviceID, delAmt, delegator))
 			suite.Require().NoError(err)
 
 			// Calculate gas used during undelegations
-			gasUsedForUndelegation := ctx.GasMeter().GasConsumed() - undelegationGasStart
+			gasUsedForUndelegation := ctx.GasMeter().GasConsumed()
+			fmt.Println("Gas used for undelegation:", gasUsedForUndelegation)
 
 			// --- EndBlock Unbond Completion Gas Tracking ---
 
 			// Advance context time to when undelegations mature
 			ctx = ctx.WithBlockTime(ctx.BlockTime().Add(7 * 24 * time.Hour))
 
-			endBlockGasStart := ctx.GasMeter().GasConsumed()
+			ctx = ctx.WithGasMeter(storetypes.NewInfiniteGasMeter())
 
 			// Measure gas consumption during end block processing
 			// NOTE: we isolate the component of the EndBlock call we want to test
@@ -402,7 +404,8 @@ func (suite *KeeperTestSuite) TestGasConsumption_UndelegateVsEndBlockProcessing(
 			suite.Require().NoError(err)
 
 			// Calculate gas used during end block processing
-			gasUsedForEndBlock := ctx.GasMeter().GasConsumed() - endBlockGasStart
+			gasUsedForEndBlock := ctx.GasMeter().GasConsumed()
+			fmt.Println("Gas used for end block:", gasUsedForEndBlock)
 
 			// --- Gas Consumption Comparison ---
 
