@@ -13,8 +13,9 @@ off-chain denominations.
    * [Assets](#assets)
    * [TickerIndex](#tickerindex)
 * [Events](#events)
-   * [RegisterAsset](#registerasset)
-   * [DeregisterAsset](#deregisterasset)
+   * [Handlers](#handlers)
+      * [MsgRegisterAsset](#msgregisterasset)
+      * [MsgDeregisterAsset](#msgderegisterasset)
 
 ## Concepts
 
@@ -47,9 +48,9 @@ This is used to quickly look up the on-chain denomination of an off-chain ticker
 
 ## Events
 
-The assets module emits the following events:
+### Handlers
 
-### RegisterAsset
+#### MsgRegisterAsset
 
 |       Type       | Attribute Key | Attribute Value |
 |:----------------:|:-------------:|:---------------:|
@@ -57,7 +58,7 @@ The assets module emits the following events:
 | `register_asset` |   `ticker`    |   `{ticker}`    |
 | `register_asset` |  `exponent`   |  `{exponent}`   |
 
-### DeregisterAsset
+#### MsgDeregisterAsset
 
 |        Type        | Attribute Key | Attribute Value |
 |:------------------:|:-------------:|:---------------:|
