@@ -1,4 +1,4 @@
-FROM golang:1.23-alpine
+FROM --platform=linux/amd64 golang:1.23-alpine
 ARG arch=x86_64
 
 # Set up dependencies
