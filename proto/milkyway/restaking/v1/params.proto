@@ -26,4 +26,8 @@ message Params {
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
     (gogoproto.nullable) = false
   ];
+
+  // MaxEntries represents the maximum number of entries for unbonding
+  // delegation.
+  uint32 max_entries = 4;
 }
