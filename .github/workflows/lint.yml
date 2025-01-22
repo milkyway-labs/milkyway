@@ -7,10 +7,6 @@ on:
     branches:
       - main
 
-env:
-  GOPRIVATE: github.com/milkyway-labs
-  GH_ACCESS_TOKEN: ${{ secrets.GOPRIVATE_ACCESS_TOKEN }}
-
 # Cancel all previous runs of the same workflow when a new one is triggered in the same branch.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -28,9 +24,6 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: '1.23'
-
-      - name: Setup GOPRIVATE 🛡️
-        run: git config --global url.https://$GH_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
 
       - name: Compute diff 📜
         uses: technote-space/get-diff-action@v6.1.2
