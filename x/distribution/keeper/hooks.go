@@ -8,6 +8,8 @@ import (
 	vestingexported "github.com/cosmos/cosmos-sdk/x/auth/vesting/exported"
 	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+
+	"github.com/milkyway-labs/milkyway/v7/x/distribution/types"
 )
 
 var _ stakingtypes.StakingHooks = Hooks{}
@@ -58,7 +60,7 @@ func (h Hooks) BeforeDelegationSharesModified(ctx context.Context, delAddr sdk.A
 	acc := h.k.accountKeeper.GetAccount(ctx, delAddr)
 	_, isVestingAcc := acc.(vestingexported.VestingAccount)
 	if isVestingAcc {
-		shares = shares.QuoInt64(2) // 50%
+		shares = shares.MulTruncate(types.VestingAccountRewardsRatio)
 	}
 
 	validator, err := h.k.Validators.Get(ctx, valAddr)
@@ -85,7 +87,7 @@ func (h Hooks) AfterDelegationModified(ctx context.Context, delAddr sdk.AccAddre
 	acc := h.k.accountKeeper.GetAccount(ctx, delAddr)
 	_, isVestingAcc := acc.(vestingexported.VestingAccount)
 	if isVestingAcc {
-		shares = shares.QuoInt64(2)
+		shares = shares.MulTruncate(types.VestingAccountRewardsRatio)
 	}
 
 	validator, err := h.k.Validators.Get(ctx, valAddr)

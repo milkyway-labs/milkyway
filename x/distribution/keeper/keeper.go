@@ -21,7 +21,7 @@ type Keeper struct {
 	accountKeeper distrtypes.AccountKeeper
 	stakingKeeper types.StakingKeeper
 
-	Validators    collections.Map[sdk.ValAddress, stakingtypes.Validator]
+	Validators collections.Map[sdk.ValAddress, stakingtypes.Validator]
 }
 
 func NewKeeper(
@@ -72,7 +72,7 @@ func (sk StakingKeeper) Delegation(ctx context.Context, delAddr sdk.AccAddress, 
 	acc := sk.k.accountKeeper.GetAccount(ctx, delAddr)
 	_, isVestingAcc := acc.(vestingexported.VestingAccount)
 	if isVestingAcc {
-		delegation.Shares = delegation.Shares.QuoInt64(2)
+		delegation.Shares = delegation.Shares.MulTruncate(types.VestingAccountRewardsRatio)
 	}
 	return delegation, nil
 }

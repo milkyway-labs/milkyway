@@ -24,6 +24,7 @@ import (
 	assetskeeper "github.com/milkyway-labs/milkyway/v7/x/assets/keeper"
 	"github.com/milkyway-labs/milkyway/v7/x/distribution/keeper"
 	"github.com/milkyway-labs/milkyway/v7/x/distribution/testutils"
+	"github.com/milkyway-labs/milkyway/v7/x/distribution/types"
 	operatorskeeper "github.com/milkyway-labs/milkyway/v7/x/operators/keeper"
 	poolskeeper "github.com/milkyway-labs/milkyway/v7/x/pools/keeper"
 	serviceskeeper "github.com/milkyway-labs/milkyway/v7/x/services/keeper"
@@ -73,6 +74,9 @@ func (suite *KeeperTestSuite) SetupTest() {
 
 	err := suite.stakingKeeper.SetParams(suite.ctx, stakingtypes.DefaultParams())
 	suite.Require().NoError(err)
+
+	// Reset to the default(50%) for every test
+	types.VestingAccountRewardsRatio = sdkmath.LegacyNewDecWithPrec(5, 1)
 }
 
 // fundAccount adds the given amount of coins to the account with the given address
