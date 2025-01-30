@@ -1,0 +1,6 @@
+type: style
+module: none
+pull_request: 247
+description: Bump Go module version to v8
+backward_compatible: true
+date: 2025-01-30T07:30:46.27344Z
