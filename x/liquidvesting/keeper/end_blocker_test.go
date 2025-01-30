@@ -38,6 +38,7 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 					7*24*time.Hour,
 					nil,
 					restakingtypes.DefaultRestakingCap,
+					restakingtypes.DefaultMaxEntries,
 				))
 				suite.Require().NoError(err)
 
@@ -125,6 +126,7 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 					7*24*time.Hour,
 					nil,
 					restakingtypes.DefaultRestakingCap,
+					restakingtypes.DefaultMaxEntries,
 				))
 				suite.Require().NoError(err)
 

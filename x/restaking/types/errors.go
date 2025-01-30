@@ -20,4 +20,5 @@ var (
 	ErrPoolNotSecuringService         = errors.Register(ModuleName, 13, "pool not securing the service")
 	ErrDenomNotRestakable             = errors.Register(ModuleName, 14, "denom not restakable")
 	ErrRestakingCapExceeded           = errors.Register(ModuleName, 15, "restaking cap exceeded")
+	ErrMaxUnbondingDelegationEntries  = errors.Register(ModuleName, 16, "too many unbonding delegation entries for (delegator, delegation target) tuple")
 )

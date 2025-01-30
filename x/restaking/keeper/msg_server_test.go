@@ -1492,7 +1492,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegatePool() {
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding time to 1 week
-				err := suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour, nil, types.DefaultRestakingCap))
+				err := suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour, nil, types.DefaultRestakingCap, types.DefaultMaxEntries))
 				suite.Require().NoError(err)
 
 				// Create the pool
@@ -1809,7 +1809,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegateOperator() {
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding time to 1 week
-				err := suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour, nil, types.DefaultRestakingCap))
+				err := suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour, nil, types.DefaultRestakingCap, types.DefaultMaxEntries))
 				suite.Require().NoError(err)
 
 				// Create the operator
@@ -2295,7 +2295,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegateService() {
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding time to 1 week
-				err := suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour, nil, types.DefaultRestakingCap))
+				err := suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour, nil, types.DefaultRestakingCap, types.DefaultMaxEntries))
 				suite.Require().NoError(err)
 
 				// Create the service

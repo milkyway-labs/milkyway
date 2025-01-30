@@ -82,6 +82,7 @@ func (suite *KeeperTestSuite) TestKeeper_ValidateRestakeRestakingCap() {
 					types.DefaultUnbondingTime,
 					nil,
 					sdkmath.LegacyNewDec(5000),
+					types.DefaultMaxEntries,
 				))
 				suite.Require().NoError(err)
 			},
@@ -93,7 +94,7 @@ func (suite *KeeperTestSuite) TestKeeper_ValidateRestakeRestakingCap() {
 			store: func(ctx sdk.Context) {
 				// Set restaking cap
 				err := suite.k.SetParams(ctx, types.NewParams(
-					types.DefaultUnbondingTime, nil, sdkmath.LegacyNewDec(5000)),
+					types.DefaultUnbondingTime, nil, sdkmath.LegacyNewDec(5000), types.DefaultMaxEntries),
 				)
 				suite.Require().NoError(err)
 			},

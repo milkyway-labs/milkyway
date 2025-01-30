@@ -18,22 +18,27 @@ func TestParams_Validate(t *testing.T) {
 	}{
 		{
 			name:      "invalid unbonding time returns error",
-			params:    types.NewParams(0, nil, types.DefaultRestakingCap),
+			params:    types.NewParams(0, nil, types.DefaultRestakingCap, types.DefaultMaxEntries),
 			shouldErr: true,
 		},
 		{
 			name:      "invalid denom returns error",
-			params:    types.NewParams(5, []string{"1denom"}, types.DefaultRestakingCap),
+			params:    types.NewParams(5, []string{"1denom"}, types.DefaultRestakingCap, types.DefaultMaxEntries),
 			shouldErr: true,
 		},
 		{
 			name:      "empty denom returns error",
-			params:    types.NewParams(5, []string{""}, types.DefaultRestakingCap),
+			params:    types.NewParams(5, []string{""}, types.DefaultRestakingCap, types.DefaultMaxEntries),
 			shouldErr: true,
 		},
 		{
 			name:      "negative restaking cap returns error",
-			params:    types.NewParams(5, nil, math.LegacyNewDec(-1)),
+			params:    types.NewParams(5, nil, math.LegacyNewDec(-1), types.DefaultMaxEntries),
+			shouldErr: true,
+		},
+		{
+			name:      "zero max entries returns error",
+			params:    types.NewParams(5, nil, types.DefaultRestakingCap, 0),
 			shouldErr: true,
 		},
 		{
@@ -43,7 +48,7 @@ func TestParams_Validate(t *testing.T) {
 		},
 		{
 			name:      "valid params return no error",
-			params:    types.NewParams(5*time.Hour, nil, math.LegacyNewDec(100000)),
+			params:    types.NewParams(5*time.Hour, nil, math.LegacyNewDec(100000), types.DefaultMaxEntries),
 			shouldErr: false,
 		},
 	}

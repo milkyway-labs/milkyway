@@ -70,6 +70,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					7*24*time.Hour,
 					nil,
 					restakingtypes.DefaultRestakingCap,
+					restakingtypes.DefaultMaxEntries,
 				))
 				suite.Require().NoError(err)
 

@@ -10,6 +10,7 @@ import (
 
 const (
 	DefaultUnbondingTime = 3 * 24 * time.Hour
+	DefaultMaxEntries    = 7
 )
 
 var (
@@ -17,17 +18,23 @@ var (
 )
 
 // NewParams returns a new Params instance
-func NewParams(unbondingTime time.Duration, allowedDenoms []string, restakingCap math.LegacyDec) Params {
+func NewParams(
+	unbondingTime time.Duration,
+	allowedDenoms []string,
+	restakingCap math.LegacyDec,
+	maxEntries uint32,
+) Params {
 	return Params{
 		UnbondingTime: unbondingTime,
 		AllowedDenoms: allowedDenoms,
 		RestakingCap:  restakingCap,
+		MaxEntries:    maxEntries,
 	}
 }
 
 // DefaultParams return a Params instance with default values set
 func DefaultParams() Params {
-	return NewParams(DefaultUnbondingTime, nil, DefaultRestakingCap)
+	return NewParams(DefaultUnbondingTime, nil, DefaultRestakingCap, DefaultMaxEntries)
 }
 
 // Validate performs basic validation of params
@@ -45,6 +52,10 @@ func (p *Params) Validate() error {
 
 	if p.RestakingCap.IsNegative() {
 		return fmt.Errorf("restaking cap cannot be negative: %s", p.RestakingCap)
+	}
+
+	if p.MaxEntries == 0 {
+		return fmt.Errorf("max entries must be positive: %d", p.MaxEntries)
 	}
 
 	return nil

@@ -63,6 +63,15 @@ func (k *Keeper) RestakingCap(ctx context.Context) (math.LegacyDec, error) {
 	return params.RestakingCap, nil
 }
 
+// MaxEntries returns the maximum number of simultaneous unbonding delegations.
+func (k *Keeper) MaxEntries(ctx context.Context) (uint32, error) {
+	params, err := k.GetParams(ctx)
+	if err != nil {
+		return 0, err
+	}
+	return params.MaxEntries, nil
+}
+
 // SetParams sets module parameters
 func (k *Keeper) SetParams(ctx context.Context, params types.Params) error {
 	store := k.storeService.OpenKVStore(ctx)
