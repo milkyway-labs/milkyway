@@ -11,7 +11,7 @@ import "milkyway/restaking/v1/models.proto";
 import "milkyway/rewards/v1/models.proto";
 import "milkyway/rewards/v1/params.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v7/x/rewards/types";
+option go_package = "github.com/milkyway-labs/milkyway/v8/x/rewards/types";
 
 // Msg defines the services module's gRPC message service.
 service Msg {

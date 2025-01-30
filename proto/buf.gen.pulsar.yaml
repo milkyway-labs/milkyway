@@ -2,7 +2,7 @@ version: v1
 managed:
   enabled: true
   go_package_prefix:
-    default: github.com/milkyway-labs/milkyway/v7/api
+    default: github.com/milkyway-labs/milkyway/v8/api
     except:
       - buf.build/googleapis/googleapis
       - buf.build/cosmos/gogo-proto

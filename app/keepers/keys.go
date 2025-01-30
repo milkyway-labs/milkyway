@@ -32,13 +32,13 @@ import (
 
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
-	assetstypes "github.com/milkyway-labs/milkyway/v7/x/assets/types"
-	liquidvestingtypes "github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
-	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
-	rewardstypes "github.com/milkyway-labs/milkyway/v7/x/rewards/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
+	assetstypes "github.com/milkyway-labs/milkyway/v8/x/assets/types"
+	liquidvestingtypes "github.com/milkyway-labs/milkyway/v8/x/liquidvesting/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v8/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v8/x/pools/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v8/x/restaking/types"
+	rewardstypes "github.com/milkyway-labs/milkyway/v8/x/rewards/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v8/x/services/types"
 )
 
 func (appKeepers *AppKeepers) GenerateKeys() {

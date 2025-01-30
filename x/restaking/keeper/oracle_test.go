@@ -1,7 +1,7 @@
 package keeper_test
 
 import (
-	"github.com/milkyway-labs/milkyway/v7/utils"
+	"github.com/milkyway-labs/milkyway/v8/utils"
 )
 
 func (suite *KeeperTestSuite) TestGetAssetAndPrice() {

@@ -6,7 +6,7 @@ import (
 	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v7/x/rewards/types"
+	"github.com/milkyway-labs/milkyway/v8/x/rewards/types"
 )
 
 // ExportGenesis returns the GenesisState associated with the given context

@@ -5,8 +5,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	"github.com/milkyway-labs/milkyway/v7/x/liquidvesting/keeper"
-	"github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
+	"github.com/milkyway-labs/milkyway/v8/x/liquidvesting/keeper"
+	"github.com/milkyway-labs/milkyway/v8/x/liquidvesting/types"
 )
 
 func (suite *KeeperTestSuite) TestMsgServer_MintLockedRepresentation() {

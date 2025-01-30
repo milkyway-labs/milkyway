@@ -4,7 +4,7 @@ package milkyway.rewards.v1;
 import "cosmos/base/v1beta1/coin.proto";
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v7/x/rewards/types";
+option go_package = "github.com/milkyway-labs/milkyway/v8/x/rewards/types";
 option (gogoproto.goproto_getters_all) = false;
 
 // Params defines the parameters for the module.

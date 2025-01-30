@@ -8,11 +8,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
-	"github.com/milkyway-labs/milkyway/v7/x/restaking/keeper"
-	"github.com/milkyway-labs/milkyway/v7/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v8/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v8/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v8/x/restaking/keeper"
+	"github.com/milkyway-labs/milkyway/v8/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v8/x/services/types"
 )
 
 func (suite *KeeperTestSuite) TestMsgServer_JoinService() {

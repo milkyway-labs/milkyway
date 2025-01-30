@@ -12,10 +12,10 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/hashicorp/go-metrics"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
-	"github.com/milkyway-labs/milkyway/v7/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v8/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v8/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v8/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v8/x/services/types"
 )
 
 var _ types.MsgServer = msgServer{}

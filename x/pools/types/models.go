@@ -8,7 +8,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	"github.com/milkyway-labs/milkyway/v7/utils"
+	"github.com/milkyway-labs/milkyway/v8/utils"
 )
 
 // GetPoolAddress generates a pool address from its id

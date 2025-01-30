@@ -3,7 +3,7 @@ package v2
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v7/x/rewards/types"
+	"github.com/milkyway-labs/milkyway/v8/x/rewards/types"
 )
 
 func PlanStoreKey(id uint64) []byte {

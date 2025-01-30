@@ -5,12 +5,12 @@ import (
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/milkyway-labs/milkyway/v7/app/testutil"
-	"github.com/milkyway-labs/milkyway/v7/utils"
-	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
-	"github.com/milkyway-labs/milkyway/v7/x/rewards/keeper"
-	"github.com/milkyway-labs/milkyway/v7/x/rewards/types"
+	"github.com/milkyway-labs/milkyway/v8/app/testutil"
+	"github.com/milkyway-labs/milkyway/v8/utils"
+	operatorstypes "github.com/milkyway-labs/milkyway/v8/x/operators/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v8/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v8/x/rewards/keeper"
+	"github.com/milkyway-labs/milkyway/v8/x/rewards/types"
 )
 
 func (suite *KeeperTestSuite) TestAllocateRewards_InactivePlan() {

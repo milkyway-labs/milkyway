@@ -6,11 +6,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 
-	"github.com/milkyway-labs/milkyway/v7/app/testutil"
-	"github.com/milkyway-labs/milkyway/v7/utils"
-	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
-	"github.com/milkyway-labs/milkyway/v7/x/rewards/keeper"
-	"github.com/milkyway-labs/milkyway/v7/x/rewards/types"
+	"github.com/milkyway-labs/milkyway/v8/app/testutil"
+	"github.com/milkyway-labs/milkyway/v8/utils"
+	restakingtypes "github.com/milkyway-labs/milkyway/v8/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v8/x/rewards/keeper"
+	"github.com/milkyway-labs/milkyway/v8/x/rewards/types"
 )
 
 func (suite *KeeperTestSuite) TestQuerier_RewardsPlans() {

@@ -8,7 +8,7 @@ import (
 	cosmoserrors "cosmossdk.io/errors"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/milkyway-labs/milkyway/v7/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v8/x/restaking/types"
 )
 
 // SetUserPreferences sets the given preferences for the user having the given address

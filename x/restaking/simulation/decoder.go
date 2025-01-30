@@ -9,8 +9,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/kv"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
-	"github.com/milkyway-labs/milkyway/v7/x/restaking/keeper"
-	"github.com/milkyway-labs/milkyway/v7/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v8/x/restaking/keeper"
+	"github.com/milkyway-labs/milkyway/v8/x/restaking/types"
 )
 
 // NewDecodeStore returns a decoder function closure that unmarshals the KVPair's

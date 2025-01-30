@@ -1,7 +1,7 @@
 package v8
 
 import (
-	"github.com/milkyway-labs/milkyway/v7/app/forks"
+	"github.com/milkyway-labs/milkyway/v8/app/forks"
 )
 
 var Fork = forks.Fork{

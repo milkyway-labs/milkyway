@@ -13,12 +13,12 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	gogotypes "github.com/cosmos/gogoproto/types"
 
-	"github.com/milkyway-labs/milkyway/v7/utils"
-	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
-	"github.com/milkyway-labs/milkyway/v7/x/rewards/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
+	"github.com/milkyway-labs/milkyway/v8/utils"
+	operatorstypes "github.com/milkyway-labs/milkyway/v8/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v8/x/pools/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v8/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v8/x/rewards/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v8/x/services/types"
 )
 
 // DistributionInfo stores information about a delegation target and its

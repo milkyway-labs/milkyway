@@ -8,7 +8,7 @@ import (
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
+	"github.com/milkyway-labs/milkyway/v8/x/liquidvesting/types"
 )
 
 // AddToUserInsuranceFund adds the provided amount to the user's insurance fund.

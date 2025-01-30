@@ -3,7 +3,7 @@ package keeper
 import (
 	"context"
 
-	"github.com/milkyway-labs/milkyway/v7/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v8/x/restaking/types"
 )
 
 var _ types.RestakingHooks = &Keeper{}

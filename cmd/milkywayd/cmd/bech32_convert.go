@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	addressutil "github.com/milkyway-labs/milkyway/v7/pkg/address"
+	addressutil "github.com/milkyway-labs/milkyway/v8/pkg/address"
 )
 
 var flagBech32Prefix = "prefix"

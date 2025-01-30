@@ -6,9 +6,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/v7/testutils"
-	"github.com/milkyway-labs/milkyway/v7/utils"
-	"github.com/milkyway-labs/milkyway/v7/x/rewards/types"
+	"github.com/milkyway-labs/milkyway/v8/testutils"
+	"github.com/milkyway-labs/milkyway/v8/utils"
+	"github.com/milkyway-labs/milkyway/v8/x/rewards/types"
 )
 
 func TestGenesisState_Validate(t *testing.T) {

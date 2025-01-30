@@ -5,8 +5,8 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v8/x/liquidvesting/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v8/x/restaking/types"
 )
 
 func (k *Keeper) RestakeRestrictionFn(ctx context.Context, restakerAddress string, amount sdk.Coins, _ restakingtypes.DelegationTarget) error {

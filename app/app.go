@@ -64,16 +64,16 @@ import (
 	feemarketkeeper "github.com/skip-mev/feemarket/x/feemarket/keeper"
 	"github.com/spf13/cast"
 
-	milkywayante "github.com/milkyway-labs/milkyway/v7/ante"
-	milkywayabci "github.com/milkyway-labs/milkyway/v7/app/abci"
-	"github.com/milkyway-labs/milkyway/v7/app/forks"
-	v7 "github.com/milkyway-labs/milkyway/v7/app/forks/v7"
-	v8 "github.com/milkyway-labs/milkyway/v7/app/forks/v8"
-	"github.com/milkyway-labs/milkyway/v7/app/keepers"
-	"github.com/milkyway-labs/milkyway/v7/app/upgrades"
-	v6 "github.com/milkyway-labs/milkyway/v7/app/upgrades/v6"
-	_ "github.com/milkyway-labs/milkyway/v7/client/docs/statik"
-	liquidvestingtypes "github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
+	milkywayante "github.com/milkyway-labs/milkyway/v8/ante"
+	milkywayabci "github.com/milkyway-labs/milkyway/v8/app/abci"
+	"github.com/milkyway-labs/milkyway/v8/app/forks"
+	v7 "github.com/milkyway-labs/milkyway/v8/app/forks/v7"
+	v8 "github.com/milkyway-labs/milkyway/v8/app/forks/v8"
+	"github.com/milkyway-labs/milkyway/v8/app/keepers"
+	"github.com/milkyway-labs/milkyway/v8/app/upgrades"
+	v6 "github.com/milkyway-labs/milkyway/v8/app/upgrades/v6"
+	_ "github.com/milkyway-labs/milkyway/v8/client/docs/statik"
+	liquidvestingtypes "github.com/milkyway-labs/milkyway/v8/x/liquidvesting/types"
 )
 
 var (

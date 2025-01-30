@@ -11,8 +11,8 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 
-	"github.com/milkyway-labs/milkyway/v7/utils"
-	"github.com/milkyway-labs/milkyway/v7/x/rewards/types"
+	"github.com/milkyway-labs/milkyway/v8/utils"
+	"github.com/milkyway-labs/milkyway/v8/x/rewards/types"
 )
 
 const (
