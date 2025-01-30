@@ -72,6 +72,7 @@ import (
 	"github.com/milkyway-labs/milkyway/v7/app/keepers"
 	"github.com/milkyway-labs/milkyway/v7/app/upgrades"
 	v6 "github.com/milkyway-labs/milkyway/v7/app/upgrades/v6"
+	v9 "github.com/milkyway-labs/milkyway/v7/app/upgrades/v9"
 	_ "github.com/milkyway-labs/milkyway/v7/client/docs/statik"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
 )
@@ -87,6 +88,7 @@ var (
 
 	Upgrades = []upgrades.Upgrade{
 		v6.Upgrade,
+		v9.Upgrade,
 	}
 )
 
