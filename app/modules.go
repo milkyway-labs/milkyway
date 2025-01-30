@@ -45,7 +45,6 @@ import (
 	consensusparamtypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
 	"github.com/cosmos/cosmos-sdk/x/crisis"
 	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
-	distr "github.com/cosmos/cosmos-sdk/x/distribution"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
@@ -67,6 +66,7 @@ import (
 
 	"github.com/milkyway-labs/milkyway/v7/x/assets"
 	assetstypes "github.com/milkyway-labs/milkyway/v7/x/assets/types"
+	distr "github.com/milkyway-labs/milkyway/v7/x/distribution"
 	"github.com/milkyway-labs/milkyway/v7/x/liquidvesting"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
 	"github.com/milkyway-labs/milkyway/v7/x/operators"

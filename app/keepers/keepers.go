@@ -38,6 +38,7 @@ import (
 	consensusparamtypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
 	crisiskeeper "github.com/cosmos/cosmos-sdk/x/crisis/keeper"
 	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
+	sdkdistrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	govv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
@@ -68,7 +69,6 @@ import (
 
 	evidencekeeper "cosmossdk.io/x/evidence/keeper"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
-	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
 	govkeeper "github.com/cosmos/cosmos-sdk/x/gov/keeper"
 	mintkeeper "github.com/cosmos/cosmos-sdk/x/mint/keeper"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
@@ -83,6 +83,7 @@ import (
 
 	assetskeeper "github.com/milkyway-labs/milkyway/v7/x/assets/keeper"
 	assetstypes "github.com/milkyway-labs/milkyway/v7/x/assets/types"
+	distrkeeper "github.com/milkyway-labs/milkyway/v7/x/distribution/keeper"
 	"github.com/milkyway-labs/milkyway/v7/x/liquidvesting"
 	liquidvestingkeeper "github.com/milkyway-labs/milkyway/v7/x/liquidvesting/keeper"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
@@ -606,7 +607,7 @@ func NewAppKeeper(
 		appKeepers.AccountKeeper,
 		appKeepers.BankKeeper,
 		appKeepers.StakingKeeper,
-		distrkeeper.NewQuerier(appKeepers.DistrKeeper),
+		sdkdistrkeeper.NewQuerier(appKeepers.DistrKeeper.Keeper),
 		appKeepers.IBCFeeKeeper,
 		appKeepers.IBCKeeper.ChannelKeeper,
 		appKeepers.IBCKeeper.PortKeeper,
