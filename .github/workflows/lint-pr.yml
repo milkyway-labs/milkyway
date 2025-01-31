@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   main:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Lint PR 🧹
         uses: amannn/action-semantic-pull-request@v5.5.3
