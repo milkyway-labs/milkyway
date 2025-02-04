@@ -1,0 +1,41 @@
+syntax = "proto3";
+package milkyway.vestingreward.v1;
+
+import "amino/amino.proto";
+import "cosmos/msg/v1/msg.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/v7/x/vestingreward/types";
+
+// Msg defines the module's gRPC message service.
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+
+  // UpdateVestingAccountsRewardRatio defines a (governance) operation for updating the vesting accounts reward ratio.
+  // The authority defaults to the x/gov module account.
+  rpc UpdateVestingAccountsRewardRatio(MsgUpdateVestingAccountsRewardRatio) returns (MsgUpdateVestingAccountsRewardRatioResponse);
+}
+
+// MsgUpdateVestingAccountsRewardRatio defines the message structure for the UpdateVestingAccountsRewardRatio gRPC
+// service method. It allows the authority to update the vesting accounts reward ratio.
+message MsgUpdateVestingAccountsRewardRatio {
+  option (cosmos.msg.v1.signer) = "authority";
+  option (amino.name) = "milkyway/MsgUpdateVestingAccountsRewardRatio";
+
+  // Authority is the address that controls the module (defaults to x/gov unless
+  // overwritten).
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+
+  // VestingAccountsRewardRatio defines the proportion of staking rewards allocated to
+  // vesting accounts relative to normal accounts.
+  string vesting_accounts_reward_ratio = 2 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+// MsgUpdateVestingAccountsRewardRatioResponse is the return value of MsgUpdateVestingAccountsRewardRatio.
+message MsgUpdateVestingAccountsRewardRatioResponse {}

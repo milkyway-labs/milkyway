@@ -39,6 +39,7 @@ import (
 	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
 	rewardstypes "github.com/milkyway-labs/milkyway/v7/x/rewards/types"
 	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
+	vestingrewardtypes "github.com/milkyway-labs/milkyway/v7/x/vestingreward/types"
 )
 
 func (appKeepers *AppKeepers) GenerateKeys() {
@@ -82,6 +83,7 @@ func (appKeepers *AppKeepers) GenerateKeys() {
 		assetstypes.StoreKey,
 		rewardstypes.StoreKey,
 		liquidvestingtypes.StoreKey,
+		vestingrewardtypes.StoreKey,
 	)
 
 	// Define transient store keys

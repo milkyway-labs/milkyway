@@ -3,6 +3,7 @@ package keeper_test
 import (
 	"context"
 	"testing"
+	"time"
 
 	corestoretypes "cosmossdk.io/core/store"
 	sdkmath "cosmossdk.io/math"
@@ -14,20 +15,15 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/vesting"
 	vestingtypes "github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
+	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
+	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	marketmapkeeper "github.com/skip-mev/connect/v2/x/marketmap/keeper"
-	oraclekeeper "github.com/skip-mev/connect/v2/x/oracle/keeper"
 	"github.com/stretchr/testify/suite"
 
-	assetskeeper "github.com/milkyway-labs/milkyway/v7/x/assets/keeper"
-	"github.com/milkyway-labs/milkyway/v7/x/distribution/keeper"
-	"github.com/milkyway-labs/milkyway/v7/x/distribution/testutils"
-	"github.com/milkyway-labs/milkyway/v7/x/distribution/types"
-	operatorskeeper "github.com/milkyway-labs/milkyway/v7/x/operators/keeper"
-	poolskeeper "github.com/milkyway-labs/milkyway/v7/x/pools/keeper"
-	serviceskeeper "github.com/milkyway-labs/milkyway/v7/x/services/keeper"
+	"github.com/milkyway-labs/milkyway/v7/x/vestingreward/keeper"
+	"github.com/milkyway-labs/milkyway/v7/x/vestingreward/testutils"
 )
 
 func TestKeeperTestSuite(t *testing.T) {
@@ -42,16 +38,11 @@ type KeeperTestSuite struct {
 
 	storeService corestoretypes.KVStoreService
 
-	ak              authkeeper.AccountKeeper
-	bk              bankkeeper.BaseKeeper
-	stakingKeeper   *stakingkeeper.Keeper
-	pk              *poolskeeper.Keeper
-	ok              *operatorskeeper.Keeper
-	sk              *serviceskeeper.Keeper
-	marketMapKeeper *marketmapkeeper.Keeper
-	oracleKeeper    *oraclekeeper.Keeper
-	assetsKeeper    *assetskeeper.Keeper
-	k               keeper.Keeper
+	ak authkeeper.AccountKeeper
+	bk bankkeeper.BaseKeeper
+	sk *stakingkeeper.Keeper
+	dk distrkeeper.Keeper
+	k  *keeper.Keeper
 }
 
 func (suite *KeeperTestSuite) SetupTest() {
@@ -63,37 +54,67 @@ func (suite *KeeperTestSuite) SetupTest() {
 	// Build keepers
 	suite.ak = data.AccountKeeper
 	suite.bk = data.BankKeeper
-	suite.stakingKeeper = data.StakingKeeper
-	suite.pk = data.PoolsKeeper
-	suite.ok = data.OperatorsKeeper
-	suite.sk = data.ServicesKeeper
-	suite.marketMapKeeper = data.MarketMapKeeper
-	suite.oracleKeeper = data.OracleKeeper
-	suite.assetsKeeper = data.AssetsKeeper
+	suite.sk = data.StakingKeeper
+	suite.dk = data.DistrKeeper
 	suite.k = data.Keeper
 
-	err := suite.stakingKeeper.SetParams(suite.ctx, stakingtypes.DefaultParams())
+	// Set default module parameters
+	err := suite.sk.SetParams(suite.ctx, stakingtypes.DefaultParams())
 	suite.Require().NoError(err)
-
-	// Reset to the default(50%) for every test
-	types.VestingAccountRewardsRatio = sdkmath.LegacyNewDecWithPrec(5, 1)
+	err = suite.dk.Params.Set(suite.ctx, distrtypes.DefaultParams())
+	suite.Require().NoError(err)
 }
 
-// fundAccount adds the given amount of coins to the account with the given address
+// fundAccount adds the given amount of coins to the account with the given
+// address.
 func (suite *KeeperTestSuite) fundAccount(ctx context.Context, address string, amount sdk.Coins) {
-	moduleAcc := suite.ak.GetModuleAccount(ctx, minttypes.ModuleName)
-
 	// Mint the coins
-	err := suite.bk.MintCoins(ctx, moduleAcc.GetName(), amount)
+	err := suite.bk.MintCoins(ctx, minttypes.ModuleName, amount)
 	suite.Require().NoError(err)
 
-	// Get the amount to the user
-	userAddress, err := sdk.AccAddressFromBech32(address)
+	// Send the amount to the user
+	userAddress, err := suite.ak.AddressCodec().StringToBytes(address)
 	suite.Require().NoError(err)
-	err = suite.bk.SendCoinsFromModuleToAccount(ctx, moduleAcc.GetName(), userAddress, amount)
+	err = suite.bk.SendCoinsFromModuleToAccount(ctx, minttypes.ModuleName, userAddress, amount)
 	suite.Require().NoError(err)
 }
 
+// fundModuleAccount adds the given amount of coins to the module account with
+// the given name.
+func (suite *KeeperTestSuite) fundModuleAccount(ctx context.Context, moduleName string, amount sdk.Coins) {
+	// Mint the coins
+	err := suite.bk.MintCoins(ctx, minttypes.ModuleName, amount)
+	suite.Require().NoError(err)
+
+	// Send the amount to the module
+	err = suite.bk.SendCoinsFromModuleToModule(ctx, minttypes.ModuleName, moduleName, amount)
+	suite.Require().NoError(err)
+}
+
+// allocateTokensToValidator allocates the given amount of tokens to the given
+// validator.
+func (suite *KeeperTestSuite) allocateTokensToValidator(
+	ctx sdk.Context,
+	validator stakingtypes.ValidatorI,
+	tokens sdk.DecCoins,
+	fund bool,
+) sdk.Context {
+	if fund {
+		// We need to ceil the dec coins to fund
+		coins := sdk.NewCoins()
+		for _, token := range tokens {
+			coins = coins.Add(sdk.NewCoin(token.Denom, token.Amount.Ceil().TruncateInt()))
+		}
+		suite.fundModuleAccount(ctx, distrtypes.ModuleName, coins)
+	}
+	ctx = ctx.WithBlockHeight(ctx.BlockHeight() + 1).WithBlockTime(ctx.BlockTime().Add(5 * time.Second))
+	err := suite.dk.AllocateTokensToValidator(ctx, validator, tokens)
+	suite.Require().NoError(err)
+	return ctx
+}
+
+// createValidator creates a validator with the given owner, commission rates,
+// initial delegation value.
 func (suite *KeeperTestSuite) createValidator(
 	ctx context.Context,
 	owner sdk.AccAddress,
@@ -119,20 +140,21 @@ func (suite *KeeperTestSuite) createValidator(
 		Pubkey:            pkAny,
 		Value:             value,
 	}
-	_, err = stakingkeeper.NewMsgServerImpl(suite.stakingKeeper).CreateValidator(ctx, msg)
+	_, err = stakingkeeper.NewMsgServerImpl(suite.sk).CreateValidator(ctx, msg)
 	suite.Require().NoError(err)
 
-	validator, err := suite.stakingKeeper.Validator(ctx, valAddr)
+	validator, err := suite.sk.Validator(ctx, valAddr)
 	suite.Require().NoError(err)
 	return validator
 }
 
+// delegate creates a delegation from the given delegator to the given validator.
 func (suite *KeeperTestSuite) delegate(ctx context.Context, delegator, validator string, amount sdk.Coin, fund bool) {
 	if fund {
 		suite.fundAccount(ctx, delegator, sdk.NewCoins(amount))
 	}
 
-	_, err := stakingkeeper.NewMsgServerImpl(suite.stakingKeeper).Delegate(ctx, &stakingtypes.MsgDelegate{
+	_, err := stakingkeeper.NewMsgServerImpl(suite.sk).Delegate(ctx, &stakingtypes.MsgDelegate{
 		DelegatorAddress: delegator,
 		ValidatorAddress: validator,
 		Amount:           amount,
@@ -140,6 +162,7 @@ func (suite *KeeperTestSuite) delegate(ctx context.Context, delegator, validator
 	suite.Require().NoError(err)
 }
 
+// createVestingAccount creates a vesting account with the given parameters.
 func (suite *KeeperTestSuite) createVestingAccount(ctx context.Context, from, to string, amount sdk.Coins, endTime int64, delayed, fund bool) {
 	if fund {
 		suite.fundAccount(ctx, from, amount)

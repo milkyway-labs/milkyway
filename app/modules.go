@@ -45,6 +45,7 @@ import (
 	consensusparamtypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
 	"github.com/cosmos/cosmos-sdk/x/crisis"
 	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
+	distr "github.com/cosmos/cosmos-sdk/x/distribution"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
@@ -66,7 +67,6 @@ import (
 
 	"github.com/milkyway-labs/milkyway/v7/x/assets"
 	assetstypes "github.com/milkyway-labs/milkyway/v7/x/assets/types"
-	distr "github.com/milkyway-labs/milkyway/v7/x/distribution"
 	"github.com/milkyway-labs/milkyway/v7/x/liquidvesting"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
 	"github.com/milkyway-labs/milkyway/v7/x/operators"
@@ -79,6 +79,8 @@ import (
 	rewardstypes "github.com/milkyway-labs/milkyway/v7/x/rewards/types"
 	"github.com/milkyway-labs/milkyway/v7/x/services"
 	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
+	"github.com/milkyway-labs/milkyway/v7/x/vestingreward"
+	vestingrewardtypes "github.com/milkyway-labs/milkyway/v7/x/vestingreward/types"
 )
 
 var MaccPerms = map[string][]string{
@@ -156,6 +158,7 @@ func appModules(
 		assets.NewAppModule(appCodec, app.AssetsKeeper),
 		rewards.NewAppModule(appCodec, app.RewardsKeeper, app.AccountKeeper, app.BankKeeper, app.PoolsKeeper, app.OperatorsKeeper, app.ServicesKeeper),
 		liquidvesting.NewAppModule(appCodec, app.LiquidVestingKeeper),
+		vestingreward.NewAppModule(appCodec, app.VestingRewardKeeper),
 	}
 }
 
@@ -354,6 +357,7 @@ func orderInitBlockers() []string {
 		assetstypes.ModuleName,
 		rewardstypes.ModuleName,
 		liquidvestingtypes.ModuleName,
+		vestingrewardtypes.ModuleName,
 
 		// The feemarket module should ideally be initialized before the genutil module in theory:
 		// The feemarket antehandler performs checks in DeliverTx, which is called by gentx.

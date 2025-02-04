@@ -38,7 +38,7 @@ import (
 	consensusparamtypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
 	crisiskeeper "github.com/cosmos/cosmos-sdk/x/crisis/keeper"
 	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
-	sdkdistrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
+	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	govv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
@@ -83,7 +83,6 @@ import (
 
 	assetskeeper "github.com/milkyway-labs/milkyway/v7/x/assets/keeper"
 	assetstypes "github.com/milkyway-labs/milkyway/v7/x/assets/types"
-	distrkeeper "github.com/milkyway-labs/milkyway/v7/x/distribution/keeper"
 	"github.com/milkyway-labs/milkyway/v7/x/liquidvesting"
 	liquidvestingkeeper "github.com/milkyway-labs/milkyway/v7/x/liquidvesting/keeper"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
@@ -97,6 +96,8 @@ import (
 	rewardstypes "github.com/milkyway-labs/milkyway/v7/x/rewards/types"
 	serviceskeeper "github.com/milkyway-labs/milkyway/v7/x/services/keeper"
 	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
+	vestingrewardkeeper "github.com/milkyway-labs/milkyway/v7/x/vestingreward/keeper"
+	vestingrewardtypes "github.com/milkyway-labs/milkyway/v7/x/vestingreward/types"
 )
 
 type AppKeepers struct {
@@ -146,6 +147,7 @@ type AppKeepers struct {
 	AssetsKeeper        *assetskeeper.Keeper
 	RewardsKeeper       *rewardskeeper.Keeper
 	LiquidVestingKeeper *liquidvestingkeeper.Keeper
+	VestingRewardKeeper *vestingrewardkeeper.Keeper
 
 	// Modules
 	IBCFeeKeeper    ibcfeekeeper.Keeper
@@ -187,6 +189,8 @@ func NewAppKeeper(
 		os.Exit(1)
 	}
 
+	govAuthority := authtypes.NewModuleAddress(govtypes.ModuleName).String()
+
 	appKeepers.ParamsKeeper = initParamsKeeper(
 		appCodec,
 		legacyAmino,
@@ -198,7 +202,7 @@ func NewAppKeeper(
 	appKeepers.ConsensusParamsKeeper = consensusparamkeeper.NewKeeper(
 		appCodec,
 		runtime.NewKVStoreService(appKeepers.keys[consensusparamtypes.StoreKey]),
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 		runtime.EventService{},
 	)
 	bApp.SetParamStore(appKeepers.ConsensusParamsKeeper.ParamsStore)
@@ -227,7 +231,7 @@ func NewAppKeeper(
 		maccPerms,
 		addressCodec,
 		sdk.GetConfig().GetBech32AccountAddrPrefix(),
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 	)
 
 	appKeepers.BankKeeper = bankkeeper.NewBaseKeeper(
@@ -235,7 +239,7 @@ func NewAppKeeper(
 		runtime.NewKVStoreService(appKeepers.keys[banktypes.StoreKey]),
 		appKeepers.AccountKeeper,
 		blockedAddress,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 		logger,
 	)
 
@@ -245,7 +249,7 @@ func NewAppKeeper(
 		invCheckPeriod,
 		appKeepers.BankKeeper,
 		authtypes.FeeCollectorName,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 		appKeepers.AccountKeeper.AddressCodec(),
 	)
 
@@ -267,19 +271,32 @@ func NewAppKeeper(
 		runtime.NewKVStoreService(appKeepers.keys[stakingtypes.StoreKey]),
 		appKeepers.AccountKeeper,
 		appKeepers.BankKeeper,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix()),
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ConsensusAddrPrefix()),
 	)
+
+	// To make a cyclic dependency between vestingreward keeper and distribution
+	// keeper, we first create an empty keeper and then fill its actual values later
+	appKeepers.VestingRewardKeeper = &vestingrewardkeeper.Keeper{}
 
 	appKeepers.DistrKeeper = distrkeeper.NewKeeper(
 		appCodec,
 		runtime.NewKVStoreService(appKeepers.keys[distrtypes.StoreKey]),
 		appKeepers.AccountKeeper,
 		appKeepers.BankKeeper,
-		appKeepers.StakingKeeper,
+		appKeepers.VestingRewardKeeper.AdjustedStakingKeeper(appKeepers.StakingKeeper),
 		authtypes.FeeCollectorName,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
+	)
+
+	*appKeepers.VestingRewardKeeper = *vestingrewardkeeper.NewKeeper(
+		appCodec,
+		runtime.NewKVStoreService(appKeepers.keys[vestingrewardtypes.StoreKey]),
+		appKeepers.AccountKeeper,
+		appKeepers.StakingKeeper,
+		appKeepers.DistrKeeper,
+		govAuthority,
 	)
 
 	appKeepers.SlashingKeeper = slashingkeeper.NewKeeper(
@@ -287,7 +304,7 @@ func NewAppKeeper(
 		legacyAmino,
 		runtime.NewKVStoreService(appKeepers.keys[slashingtypes.StoreKey]),
 		appKeepers.StakingKeeper,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 	)
 
 	// register the staking hooks
@@ -297,6 +314,7 @@ func NewAppKeeper(
 			appKeepers.DistrKeeper.Hooks(),
 			appKeepers.SlashingKeeper.Hooks(),
 			appKeepers.ProviderKeeper.Hooks(),
+			appKeepers.VestingRewardKeeper.Hooks(),
 		),
 	)
 
@@ -305,7 +323,7 @@ func NewAppKeeper(
 		appKeepers.keys[feemarkettypes.StoreKey],
 		appKeepers.AccountKeeper,
 		&DefaultFeemarketDenomResolver{},
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 	)
 
 	appKeepers.MarketMapKeeper = marketmapkeeper.NewKeeper(
@@ -333,7 +351,7 @@ func NewAppKeeper(
 		appCodec,
 		homePath,
 		bApp,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 	)
 
 	appKeepers.GroupKeeper = groupkeeper.NewKeeper(
@@ -352,7 +370,7 @@ func NewAppKeeper(
 		appKeepers.StakingKeeper,
 		appKeepers.UpgradeKeeper,
 		appKeepers.ScopedIBCKeeper,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 	)
 
 	appKeepers.ProviderKeeper = icsproviderkeeper.NewKeeper(
@@ -370,7 +388,7 @@ func NewAppKeeper(
 		appKeepers.DistrKeeper,
 		appKeepers.BankKeeper,
 		govkeeper.Keeper{}, // cyclic dependency between provider and governance, will be set later
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix()),
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ConsensusAddrPrefix()),
 		authtypes.FeeCollectorName,
@@ -391,7 +409,7 @@ func NewAppKeeper(
 		appKeepers.DistrKeeper,
 		bApp.MsgServiceRouter(),
 		govConfig,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 	)
 
 	// mint keeper must be created after provider keeper
@@ -402,7 +420,7 @@ func NewAppKeeper(
 		appKeepers.AccountKeeper,
 		appKeepers.BankKeeper,
 		authtypes.FeeCollectorName,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 	)
 
 	appKeepers.ProviderKeeper.SetGovKeeper(*appKeepers.GovKeeper)
@@ -449,8 +467,6 @@ func NewAppKeeper(
 		appKeepers.IBCKeeper.PortKeeper, appKeepers.AccountKeeper, appKeepers.BankKeeper,
 	)
 
-	govAuthority := authtypes.NewModuleAddress(govtypes.ModuleName).String()
-
 	// Create RateLimit keeper
 	appKeepers.RateLimitKeeper = ratelimitkeeper.NewKeeper(
 		appCodec, // BinaryCodec
@@ -484,7 +500,7 @@ func NewAppKeeper(
 		appKeepers.AccountKeeper,
 		appKeepers.BankKeeper,
 		appKeepers.ScopedTransferKeeper,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 	)
 
 	// ----------------------
@@ -607,7 +623,7 @@ func NewAppKeeper(
 		appKeepers.AccountKeeper,
 		appKeepers.BankKeeper,
 		appKeepers.StakingKeeper,
-		sdkdistrkeeper.NewQuerier(appKeepers.DistrKeeper.Keeper),
+		distrkeeper.NewQuerier(appKeepers.DistrKeeper),
 		appKeepers.IBCFeeKeeper,
 		appKeepers.IBCKeeper.ChannelKeeper,
 		appKeepers.IBCKeeper.PortKeeper,
