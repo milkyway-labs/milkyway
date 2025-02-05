@@ -67,6 +67,8 @@ import (
 
 	"github.com/milkyway-labs/milkyway/v7/x/assets"
 	assetstypes "github.com/milkyway-labs/milkyway/v7/x/assets/types"
+	"github.com/milkyway-labs/milkyway/v7/x/investors"
+	investorstypes "github.com/milkyway-labs/milkyway/v7/x/investors/types"
 	"github.com/milkyway-labs/milkyway/v7/x/liquidvesting"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
 	"github.com/milkyway-labs/milkyway/v7/x/operators"
@@ -79,8 +81,6 @@ import (
 	rewardstypes "github.com/milkyway-labs/milkyway/v7/x/rewards/types"
 	"github.com/milkyway-labs/milkyway/v7/x/services"
 	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
-	"github.com/milkyway-labs/milkyway/v7/x/vestingreward"
-	vestingrewardtypes "github.com/milkyway-labs/milkyway/v7/x/vestingreward/types"
 )
 
 var MaccPerms = map[string][]string{
@@ -158,7 +158,7 @@ func appModules(
 		assets.NewAppModule(appCodec, app.AssetsKeeper),
 		rewards.NewAppModule(appCodec, app.RewardsKeeper, app.AccountKeeper, app.BankKeeper, app.PoolsKeeper, app.OperatorsKeeper, app.ServicesKeeper),
 		liquidvesting.NewAppModule(appCodec, app.LiquidVestingKeeper),
-		vestingreward.NewAppModule(appCodec, app.VestingRewardKeeper),
+		investors.NewAppModule(appCodec, app.InvestorsKeeper),
 	}
 }
 
@@ -357,7 +357,7 @@ func orderInitBlockers() []string {
 		assetstypes.ModuleName,
 		rewardstypes.ModuleName,
 		liquidvestingtypes.ModuleName,
-		vestingrewardtypes.ModuleName,
+		investorstypes.ModuleName,
 
 		// The feemarket module should ideally be initialized before the genutil module in theory:
 		// The feemarket antehandler performs checks in DeliverTx, which is called by gentx.

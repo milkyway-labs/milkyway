@@ -4,25 +4,25 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v7/x/vestingreward/types"
+	"github.com/milkyway-labs/milkyway/v7/x/investors/types"
 )
 
 // ExportGenesis returns the GenesisState associated with the given context
 func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
-	vestingAccountsRewardRatio, err := k.VestingAccountsRewardRatio.Get(ctx)
+	investorsRewardRatio, err := k.InvestorsRewardRatio.Get(ctx)
 	if err != nil {
 		panic(err)
 	}
 
-	var validatorsVestingAccountsShares []types.ValidatorVestingAccountsShares
-	err = k.ValidatorsVestingAccountsShares.Walk(ctx, nil, func(valAddr sdk.ValAddress, shares sdkmath.LegacyDec) (stop bool, err error) {
+	var validatorsInvestorsShares []types.ValidatorInvestorsShares
+	err = k.ValidatorsInvestorsShares.Walk(ctx, nil, func(valAddr sdk.ValAddress, shares sdkmath.LegacyDec) (stop bool, err error) {
 		validator, err := k.stakingKeeper.ValidatorAddressCodec().BytesToString(valAddr)
 		if err != nil {
 			return true, err
 		}
-		validatorsVestingAccountsShares = append(validatorsVestingAccountsShares, types.ValidatorVestingAccountsShares{
-			ValidatorAddress:      validator,
-			VestingAccountsShares: shares,
+		validatorsInvestorsShares = append(validatorsInvestorsShares, types.ValidatorInvestorsShares{
+			ValidatorAddress: validator,
+			InvestorsShares:  shares,
 		})
 		return false, nil
 	})
@@ -31,24 +31,24 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	}
 
 	return types.NewGenesisState(
-		vestingAccountsRewardRatio,
-		validatorsVestingAccountsShares,
+		investorsRewardRatio,
+		validatorsInvestorsShares,
 	)
 }
 
 // InitGenesis initializes the state from a GenesisState
 func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
-	err := k.VestingAccountsRewardRatio.Set(ctx, state.VestingAccountsRewardRatio)
+	err := k.InvestorsRewardRatio.Set(ctx, state.InvestorsRewardRatio)
 	if err != nil {
 		return err
 	}
 
-	for _, shares := range state.ValidatorsVestingAccountsShares {
+	for _, shares := range state.ValidatorsInvestorsShares {
 		valAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(shares.ValidatorAddress)
 		if err != nil {
 			return err
 		}
-		err = k.ValidatorsVestingAccountsShares.Set(ctx, valAddr, shares.VestingAccountsShares)
+		err = k.ValidatorsInvestorsShares.Set(ctx, valAddr, shares.InvestorsShares)
 		if err != nil {
 			return err
 		}

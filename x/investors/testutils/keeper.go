@@ -15,8 +15,8 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"github.com/milkyway-labs/milkyway/v7/testutils/storetesting"
-	"github.com/milkyway-labs/milkyway/v7/x/vestingreward/keeper"
-	"github.com/milkyway-labs/milkyway/v7/x/vestingreward/types"
+	"github.com/milkyway-labs/milkyway/v7/x/investors/keeper"
+	"github.com/milkyway-labs/milkyway/v7/x/investors/types"
 )
 
 type KeeperTestData struct {

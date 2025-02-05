@@ -10,24 +10,22 @@ import (
 )
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	// Abbreviated message name is required since the maximum length of the name is
-	// 39
-	legacy.RegisterAminoMsg(cdc, &MsgUpdateVestingAccountsRewardRatio{}, "milkyway/MsgUpdateVARewardRatio")
+	legacy.RegisterAminoMsg(cdc, &MsgUpdateInvestorsRewardRatio{}, "milkyway/MsgUpdateInvestorsRewardRatio")
 }
 
 func RegisterInterfaces(registry types.InterfaceRegistry) {
 	registry.RegisterImplementations(
 		(*sdk.Msg)(nil),
-		&MsgUpdateVestingAccountsRewardRatio{},
+		&MsgUpdateInvestorsRewardRatio{},
 	)
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
 }
 
-// AminoCdc references the global x/vestingreward module codec. Note, the codec should
-// ONLY be used in certain instances of tests and for JSON encoding as Amino is
-// still used for that purpose.
+// AminoCdc references the global x/investors module codec. Note, the codec
+// should ONLY be used in certain instances of tests and for JSON encoding as
+// Amino is still used for that purpose.
 //
-// The actual codec used for serialization should be provided to x/vestingreward and
+// The actual codec used for serialization should be provided to x/investors and
 // defined at the application level.
 var AminoCdc = codec.NewLegacyAmino()
 

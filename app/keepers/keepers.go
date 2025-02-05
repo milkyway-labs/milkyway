@@ -83,6 +83,8 @@ import (
 
 	assetskeeper "github.com/milkyway-labs/milkyway/v7/x/assets/keeper"
 	assetstypes "github.com/milkyway-labs/milkyway/v7/x/assets/types"
+	investorskeeper "github.com/milkyway-labs/milkyway/v7/x/investors/keeper"
+	investorstypes "github.com/milkyway-labs/milkyway/v7/x/investors/types"
 	"github.com/milkyway-labs/milkyway/v7/x/liquidvesting"
 	liquidvestingkeeper "github.com/milkyway-labs/milkyway/v7/x/liquidvesting/keeper"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
@@ -96,8 +98,6 @@ import (
 	rewardstypes "github.com/milkyway-labs/milkyway/v7/x/rewards/types"
 	serviceskeeper "github.com/milkyway-labs/milkyway/v7/x/services/keeper"
 	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
-	vestingrewardkeeper "github.com/milkyway-labs/milkyway/v7/x/vestingreward/keeper"
-	vestingrewardtypes "github.com/milkyway-labs/milkyway/v7/x/vestingreward/types"
 )
 
 type AppKeepers struct {
@@ -147,7 +147,7 @@ type AppKeepers struct {
 	AssetsKeeper        *assetskeeper.Keeper
 	RewardsKeeper       *rewardskeeper.Keeper
 	LiquidVestingKeeper *liquidvestingkeeper.Keeper
-	VestingRewardKeeper *vestingrewardkeeper.Keeper
+	InvestorsKeeper     *investorskeeper.Keeper
 
 	// Modules
 	IBCFeeKeeper    ibcfeekeeper.Keeper
@@ -276,23 +276,23 @@ func NewAppKeeper(
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ConsensusAddrPrefix()),
 	)
 
-	// To make a cyclic dependency between vestingreward keeper and distribution
-	// keeper, we first create an empty keeper and then fill its actual values later
-	appKeepers.VestingRewardKeeper = &vestingrewardkeeper.Keeper{}
+	// To make a cyclic dependency between investors keeper and distribution keeper,
+	// we first create an empty keeper and then fill its actual values later
+	appKeepers.InvestorsKeeper = &investorskeeper.Keeper{}
 
 	appKeepers.DistrKeeper = distrkeeper.NewKeeper(
 		appCodec,
 		runtime.NewKVStoreService(appKeepers.keys[distrtypes.StoreKey]),
 		appKeepers.AccountKeeper,
 		appKeepers.BankKeeper,
-		appKeepers.VestingRewardKeeper.AdjustedStakingKeeper(appKeepers.StakingKeeper),
+		appKeepers.InvestorsKeeper.AdjustedStakingKeeper(appKeepers.StakingKeeper),
 		authtypes.FeeCollectorName,
 		govAuthority,
 	)
 
-	*appKeepers.VestingRewardKeeper = *vestingrewardkeeper.NewKeeper(
+	*appKeepers.InvestorsKeeper = *investorskeeper.NewKeeper(
 		appCodec,
-		runtime.NewKVStoreService(appKeepers.keys[vestingrewardtypes.StoreKey]),
+		runtime.NewKVStoreService(appKeepers.keys[investorstypes.StoreKey]),
 		appKeepers.AccountKeeper,
 		appKeepers.StakingKeeper,
 		appKeepers.DistrKeeper,
@@ -314,7 +314,7 @@ func NewAppKeeper(
 			appKeepers.DistrKeeper.Hooks(),
 			appKeepers.SlashingKeeper.Hooks(),
 			appKeepers.ProviderKeeper.Hooks(),
-			appKeepers.VestingRewardKeeper.Hooks(),
+			appKeepers.InvestorsKeeper.Hooks(),
 		),
 	)
 

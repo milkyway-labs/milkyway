@@ -10,7 +10,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v7/x/vestingreward/types"
+	"github.com/milkyway-labs/milkyway/v7/x/investors/types"
 )
 
 type Keeper struct {
@@ -20,9 +20,9 @@ type Keeper struct {
 	stakingKeeper types.StakingKeeper
 	distrKeeper   types.DistrKeeper
 
-	Schema                          collections.Schema
-	VestingAccountsRewardRatio      collections.Item[sdkmath.LegacyDec]
-	ValidatorsVestingAccountsShares collections.Map[sdk.ValAddress, sdkmath.LegacyDec]
+	Schema                    collections.Schema
+	InvestorsRewardRatio      collections.Item[sdkmath.LegacyDec]
+	ValidatorsInvestorsShares collections.Map[sdk.ValAddress, sdkmath.LegacyDec]
 
 	// authority represents the address capable of executing a governance message.
 	// Typically, this should be the x/gov module account.
@@ -47,16 +47,16 @@ func NewKeeper(
 		distrKeeper:   distrKeeper,
 		authority:     authority,
 
-		VestingAccountsRewardRatio: collections.NewItem(
+		InvestorsRewardRatio: collections.NewItem(
 			sb,
-			types.VestingAccountsRewardRatioKey,
-			"vesting_accounts_reward_ratio",
+			types.InvestorsRewardRatioKey,
+			"investors_reward_ratio",
 			sdk.LegacyDecValue,
 		),
-		ValidatorsVestingAccountsShares: collections.NewMap(
+		ValidatorsInvestorsShares: collections.NewMap(
 			sb,
-			types.ValidatorsVestingAccountSharesKeyPrefix,
-			"validators_vesting_accounts_shares",
+			types.ValidatorsInvestorSharesKeyPrefix,
+			"validators_investors_shares",
 			sdk.ValAddressKey,
 			sdk.LegacyDecValue,
 		),

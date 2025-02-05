@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"github.com/milkyway-labs/milkyway/v7/x/vestingreward/types"
+	"github.com/milkyway-labs/milkyway/v7/x/investors/types"
 )
 
 type AdjustedStakingKeeper struct {
@@ -26,12 +26,12 @@ func (sk *AdjustedStakingKeeper) Validator(ctx context.Context, address sdk.ValA
 }
 
 func (sk *AdjustedStakingKeeper) Delegation(ctx context.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) (stakingtypes.DelegationI, error) {
-	delegation, isVestingAcc, err := sk.k.GetDelegation(ctx, delAddr, valAddr)
+	delegation, isInvestor, err := sk.k.GetDelegation(ctx, delAddr, valAddr)
 	if err != nil {
 		return nil, err
 	}
-	if isVestingAcc {
-		rewardRatio, err := sk.k.VestingAccountsRewardRatio.Get(ctx)
+	if isInvestor {
+		rewardRatio, err := sk.k.InvestorsRewardRatio.Get(ctx)
 		if err != nil {
 			return nil, err
 		}

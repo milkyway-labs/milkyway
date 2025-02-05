@@ -13,36 +13,36 @@ import (
 	"github.com/milkyway-labs/milkyway/v7/utils"
 )
 
-func (suite *KeeperTestSuite) TestVestingAccountsRewardRatio() {
+func (suite *KeeperTestSuite) TestInvestorsRewardRatio() {
 	testCases := []struct {
-		name                     string
-		rewardRatio              sdkmath.LegacyDec
-		expNormalAccountRewards  string
-		expVestingAccountRewards string
+		name                    string
+		investorsRewardRatio    sdkmath.LegacyDec
+		expNormalAccountRewards string
+		expInvestorRewards      string
 	}{
 		{
-			name:                     "0% vesting account rewards ratio",
-			rewardRatio:              sdkmath.LegacyZeroDec(),
-			expNormalAccountRewards:  "500000.000000000000000000stake",
-			expVestingAccountRewards: "",
+			name:                    "0% investors reward ratio",
+			investorsRewardRatio:    sdkmath.LegacyZeroDec(),
+			expNormalAccountRewards: "500000.000000000000000000stake",
+			expInvestorRewards:      "",
 		},
 		{
-			name:                     "10% vesting account rewards ratio",
-			rewardRatio:              utils.MustParseDec("0.1"),
-			expNormalAccountRewards:  "476190.476190476190000000stake", // 1000000 * 1 / 2.1
-			expVestingAccountRewards: "47619.047619047619000000stake",  // 1000000 * 0.1 / 2.1
+			name:                    "10% investors reward ratio",
+			investorsRewardRatio:    utils.MustParseDec("0.1"),
+			expNormalAccountRewards: "476190.476190476190000000stake", // 1000000 * 1 / 2.1
+			expInvestorRewards:      "47619.047619047619000000stake",  // 1000000 * 0.1 / 2.1
 		},
 		{
-			name:                     "50% vesting account rewards ratio",
-			rewardRatio:              utils.MustParseDec("0.5"),
-			expNormalAccountRewards:  "400000.000000000000000000stake",
-			expVestingAccountRewards: "200000.000000000000000000stake",
+			name:                    "50% investors reward ratio",
+			investorsRewardRatio:    utils.MustParseDec("0.5"),
+			expNormalAccountRewards: "400000.000000000000000000stake",
+			expInvestorRewards:      "200000.000000000000000000stake",
 		},
 		{
-			name:                     "100% vesting account rewards ratio",
-			rewardRatio:              sdkmath.LegacyOneDec(),
-			expNormalAccountRewards:  "333333.333333333333000000stake",
-			expVestingAccountRewards: "333333.333333333333000000stake",
+			name:                    "100% investors reward ratio",
+			investorsRewardRatio:    sdkmath.LegacyOneDec(),
+			expNormalAccountRewards: "333333.333333333333000000stake",
+			expInvestorRewards:      "333333.333333333333000000stake",
 		},
 	}
 
@@ -52,16 +52,16 @@ func (suite *KeeperTestSuite) TestVestingAccountsRewardRatio() {
 
 			ctx := suite.ctx.WithBlockTime(time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC))
 
-			err := suite.k.UpdateVestingAccountsRewardRatio(ctx, tc.rewardRatio)
+			err := suite.k.UpdateInvestorsRewardRatio(ctx, tc.investorsRewardRatio)
 			suite.Require().NoError(err)
 
 			normalAddr := testutil.TestAddress(1)
-			vestingAddr := testutil.TestAddress(2)
+			investorAddr := testutil.TestAddress(2)
 			vestingEndTime := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
 			suite.createVestingAccount(
 				ctx,
 				testutil.TestAddress(10001).String(),
-				vestingAddr.String(),
+				investorAddr.String(),
 				utils.MustParseCoins("1000000stake"),
 				vestingEndTime.Unix(),
 				false,
@@ -77,7 +77,7 @@ func (suite *KeeperTestSuite) TestVestingAccountsRewardRatio() {
 				true,
 			)
 			suite.delegate(ctx, normalAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), true)
-			suite.delegate(ctx, vestingAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), false)
+			suite.delegate(ctx, investorAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), false)
 
 			ctx = suite.allocateTokensToValidator(ctx, validator, utils.MustParseDecCoins("1000000stake"), true)
 
@@ -91,23 +91,23 @@ func (suite *KeeperTestSuite) TestVestingAccountsRewardRatio() {
 			suite.Require().NoError(err)
 			suite.Require().Equal(tc.expNormalAccountRewards, rewards.Rewards.String())
 
-			// Query the vesting account's rewards
+			// Query the investor's rewards
 			cacheCtx, _ = ctx.CacheContext()
 			rewards, err = querier.DelegationRewards(cacheCtx, &distrtypes.QueryDelegationRewardsRequest{
-				DelegatorAddress: vestingAddr.String(),
+				DelegatorAddress: investorAddr.String(),
 				ValidatorAddress: validator.GetOperator(),
 			})
 			suite.Require().NoError(err)
-			suite.Require().Equal(tc.expVestingAccountRewards, rewards.Rewards.String())
+			suite.Require().Equal(tc.expInvestorRewards, rewards.Rewards.String())
 		})
 	}
 }
 
-func (suite *KeeperTestSuite) TestUpdateVestingAccountsRewardRatio() {
+func (suite *KeeperTestSuite) TestUpdateInvestorsRewardRatio() {
 	ctx, _ := suite.ctx.CacheContext()
 	ctx = ctx.WithBlockTime(time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC))
 
-	err := suite.k.UpdateVestingAccountsRewardRatio(ctx, sdkmath.LegacyNewDecWithPrec(5, 1)) // 50%
+	err := suite.k.UpdateInvestorsRewardRatio(ctx, sdkmath.LegacyNewDecWithPrec(5, 1)) // 50%
 	suite.Require().NoError(err)
 
 	valOwnerAddr := testutil.TestAddress(10000)
@@ -120,12 +120,12 @@ func (suite *KeeperTestSuite) TestUpdateVestingAccountsRewardRatio() {
 	)
 
 	normalAddr := testutil.TestAddress(1)
-	vestingAddr := testutil.TestAddress(2)
+	investorAddr := testutil.TestAddress(2)
 	vestingEndTime := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
 	suite.createVestingAccount(
 		ctx,
 		testutil.TestAddress(10001).String(),
-		vestingAddr.String(),
+		investorAddr.String(),
 		utils.MustParseCoins("1000000stake"),
 		vestingEndTime.Unix(),
 		false,
@@ -133,7 +133,7 @@ func (suite *KeeperTestSuite) TestUpdateVestingAccountsRewardRatio() {
 	)
 
 	suite.delegate(ctx, normalAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), true)
-	suite.delegate(ctx, vestingAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), false)
+	suite.delegate(ctx, investorAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), false)
 
 	// Allocate 1000000stake as rewards
 	ctx = suite.allocateTokensToValidator(ctx, validator, utils.MustParseDecCoins("1000000stake"), true)
@@ -142,28 +142,28 @@ func (suite *KeeperTestSuite) TestUpdateVestingAccountsRewardRatio() {
 	// Query the normal account's rewards
 	cacheCtx, _ := ctx.CacheContext()
 	rewards, err := querier.DelegationRewards(cacheCtx, &distrtypes.QueryDelegationRewardsRequest{
-		DelegatorAddress: vestingAddr.String(),
+		DelegatorAddress: investorAddr.String(),
 		ValidatorAddress: validator.GetOperator(),
 	})
 	suite.Require().NoError(err)
 	suite.Require().Equal("200000.000000000000000000stake", rewards.Rewards.String())
 
 	// Update the reward ratio to 100%
-	err = suite.k.UpdateVestingAccountsRewardRatio(ctx, sdkmath.LegacyOneDec()) // 100%
+	err = suite.k.UpdateInvestorsRewardRatio(ctx, sdkmath.LegacyOneDec()) // 100%
 	suite.Require().NoError(err)
 
 	// Withdraw the rewards, it shouldn't be changed
-	withdrawn, err := suite.dk.WithdrawDelegationRewards(ctx, vestingAddr, sdk.ValAddress(valOwnerAddr))
+	withdrawn, err := suite.dk.WithdrawDelegationRewards(ctx, investorAddr, sdk.ValAddress(valOwnerAddr))
 	suite.Require().NoError(err)
 	suite.Require().Equal("200000stake", withdrawn.String())
 
 	// Allocate 1000000stake as rewards again
 	ctx = suite.allocateTokensToValidator(ctx, validator, utils.MustParseDecCoins("1000000stake"), true)
 
-	// The vesting account receives more rewards than before
+	// The investor receives more rewards than before
 	cacheCtx, _ = ctx.CacheContext()
 	rewards, err = querier.DelegationRewards(cacheCtx, &distrtypes.QueryDelegationRewardsRequest{
-		DelegatorAddress: vestingAddr.String(),
+		DelegatorAddress: investorAddr.String(),
 		ValidatorAddress: validator.GetOperator(),
 	})
 	suite.Require().NoError(err)

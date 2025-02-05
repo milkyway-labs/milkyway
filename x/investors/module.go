@@ -1,4 +1,4 @@
-package vestingreward
+package investors
 
 import (
 	"context"
@@ -13,8 +13,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 
-	"github.com/milkyway-labs/milkyway/v7/x/vestingreward/keeper"
-	"github.com/milkyway-labs/milkyway/v7/x/vestingreward/types"
+	"github.com/milkyway-labs/milkyway/v7/x/investors/keeper"
+	"github.com/milkyway-labs/milkyway/v7/x/investors/types"
 )
 
 const (

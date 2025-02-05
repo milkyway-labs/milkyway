@@ -33,13 +33,13 @@ import (
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
 	assetstypes "github.com/milkyway-labs/milkyway/v7/x/assets/types"
+	investorstypes "github.com/milkyway-labs/milkyway/v7/x/investors/types"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
 	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
 	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
 	rewardstypes "github.com/milkyway-labs/milkyway/v7/x/rewards/types"
 	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
-	vestingrewardtypes "github.com/milkyway-labs/milkyway/v7/x/vestingreward/types"
 )
 
 func (appKeepers *AppKeepers) GenerateKeys() {
@@ -83,7 +83,7 @@ func (appKeepers *AppKeepers) GenerateKeys() {
 		assetstypes.StoreKey,
 		rewardstypes.StoreKey,
 		liquidvestingtypes.StoreKey,
-		vestingrewardtypes.StoreKey,
+		investorstypes.StoreKey,
 	)
 
 	// Define transient store keys

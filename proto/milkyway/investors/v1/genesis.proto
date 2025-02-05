@@ -1,0 +1,35 @@
+syntax = "proto3";
+package milkyway.investors.v1;
+
+import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/v7/x/investors/types";
+
+// ValidatorInvestorsShares defines the total delegation shares of investors for a validator.
+message ValidatorInvestorsShares {
+  // ValidatorAddress is the address of the validator.
+  string validator_address = 1 [(cosmos_proto.scalar) = "cosmos.ValidatorAddressString"];
+  // InvestorsShares defines the total delegation shares of investors for the validator.
+  string investors_shares = 2 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false
+  ];
+}
+
+// GenesisState defines the module's genesis state.
+message GenesisState {
+  // InvestorsRewardRatio defines the proportion of staking rewards allocated to
+  // investors relative to normal accounts.
+  string investors_reward_ratio = 1 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+
+  // ValidatorInvestorsShares defines the list of total delegation shares of investors for validators.
+  repeated ValidatorInvestorsShares validators_investors_shares = 2 [(gogoproto.nullable) = false];
+}
