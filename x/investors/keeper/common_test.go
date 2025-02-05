@@ -177,3 +177,9 @@ func (suite *KeeperTestSuite) createVestingAccount(ctx context.Context, from, to
 	_, err := vesting.NewMsgServerImpl(suite.ak, suite.bk).CreateVestingAccount(ctx, msg)
 	suite.Require().NoError(err)
 }
+
+func (suite *KeeperTestSuite) isVestingInvestor(ctx context.Context, addr sdk.AccAddress) bool {
+	isVestingAddr, err := suite.k.VestingInvestors.Has(ctx, addr)
+	suite.Require().NoError(err)
+	return isVestingAddr
+}

@@ -262,6 +262,7 @@ func orderBeginBlockers() []string {
 		operatorstypes.ModuleName,
 		poolstypes.ModuleName,
 		restakingtypes.ModuleName,
+		investorstypes.ModuleName,
 	}
 }
 

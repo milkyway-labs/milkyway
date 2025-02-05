@@ -123,6 +123,11 @@ func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.Raw
 // ConsensusVersion implements ConsensusVersion.
 func (AppModule) ConsensusVersion() uint64 { return consensusVersion }
 
+// BeginBlock executes all ABCI BeginBlock logic respective to the module.
+func (am AppModule) BeginBlock(ctx context.Context) error {
+	return BeginBlocker(ctx, am.keeper)
+}
+
 func (am AppModule) IsOnePerModuleType() {}
 
 func (am AppModule) IsAppModule() {}

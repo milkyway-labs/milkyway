@@ -17,17 +17,19 @@ var (
 // NewGenesisState returns a new GenesisState instance
 func NewGenesisState(
 	investorsRewardRatio sdkmath.LegacyDec,
+	vestingInvestorsAddrs []string,
 	validatorsInvestorsShares []ValidatorInvestorsShares,
 ) *GenesisState {
 	return &GenesisState{
 		InvestorsRewardRatio:      investorsRewardRatio,
+		VestingInvestorsAddresses: vestingInvestorsAddrs,
 		ValidatorsInvestorsShares: validatorsInvestorsShares,
 	}
 }
 
 // DefaultGenesis returns a default GenesisState
 func DefaultGenesis() *GenesisState {
-	return NewGenesisState(DefaultInvestorsRewardRatio, nil)
+	return NewGenesisState(DefaultInvestorsRewardRatio, nil, nil)
 }
 
 // Validate validates the GenesisState and returns an error if it is invalid.
@@ -37,11 +39,16 @@ func (data *GenesisState) Validate() error {
 		return err
 	}
 
-	duplicate := utils.FindDuplicateFunc(data.ValidatorsInvestorsShares, func(a, b ValidatorInvestorsShares) bool {
-		return a.ValidatorAddress == b.ValidatorAddress
-	})
-	if duplicate != nil {
-		return fmt.Errorf("duplicated validator address: %s", duplicate.ValidatorAddress)
+	for _, investor := range data.VestingInvestorsAddresses {
+		_, err = sdk.AccAddressFromBech32(investor)
+		if err != nil {
+			return fmt.Errorf("invalid investor address: %w", err)
+		}
+	}
+
+	duplicatedInvestor := utils.FindDuplicate(data.VestingInvestorsAddresses)
+	if duplicatedInvestor != nil {
+		return fmt.Errorf("duplicated investor address: %s", *duplicatedInvestor)
 	}
 
 	for _, shares := range data.ValidatorsInvestorsShares {
@@ -49,6 +56,13 @@ func (data *GenesisState) Validate() error {
 		if err != nil {
 			return fmt.Errorf("invalid validator investors shares for %s: %w", shares.ValidatorAddress, err)
 		}
+	}
+
+	duplicatedShares := utils.FindDuplicateFunc(data.ValidatorsInvestorsShares, func(a, b ValidatorInvestorsShares) bool {
+		return a.ValidatorAddress == b.ValidatorAddress
+	})
+	if duplicatedShares != nil {
+		return fmt.Errorf("duplicated validator address: %s", duplicatedShares.ValidatorAddress)
 	}
 
 	return nil

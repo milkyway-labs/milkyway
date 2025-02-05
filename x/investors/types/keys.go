@@ -11,5 +11,7 @@ const (
 
 var (
 	InvestorsRewardRatioKey           = collections.NewPrefix(0x01)
-	ValidatorsInvestorSharesKeyPrefix = collections.NewPrefix(0x02)
+	InvestorsVestingQueueKeyPrefix    = collections.NewPrefix(0x02)
+	VestingInvestorsKeyPrefix         = collections.NewPrefix(0x03)
+	ValidatorsInvestorSharesKeyPrefix = collections.NewPrefix(0x04)
 )

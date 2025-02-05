@@ -26,16 +26,22 @@ func (sk *AdjustedStakingKeeper) Validator(ctx context.Context, address sdk.ValA
 }
 
 func (sk *AdjustedStakingKeeper) Delegation(ctx context.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) (stakingtypes.DelegationI, error) {
-	delegation, isInvestor, err := sk.k.GetDelegation(ctx, delAddr, valAddr)
+	delegation, err := sk.GetDelegation(ctx, delAddr, valAddr)
 	if err != nil {
 		return nil, err
 	}
-	if isInvestor {
+
+	isVestingInvestor, err := sk.k.VestingInvestors.Has(ctx, delAddr)
+	if err != nil {
+		return nil, err
+	}
+	if isVestingInvestor {
 		rewardRatio, err := sk.k.InvestorsRewardRatio.Get(ctx)
 		if err != nil {
 			return nil, err
 		}
 		delegation.Shares = delegation.Shares.MulTruncate(rewardRatio)
 	}
+
 	return delegation, nil
 }

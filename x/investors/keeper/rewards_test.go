@@ -67,6 +67,8 @@ func (suite *KeeperTestSuite) TestInvestorsRewardRatio() {
 				false,
 				true,
 			)
+			err = suite.k.TrySetVestingInvestor(ctx, investorAddr)
+			suite.Require().NoError(err)
 
 			valOwnerAddr := testutil.TestAddress(10000)
 			validator := suite.createValidator(
@@ -131,6 +133,8 @@ func (suite *KeeperTestSuite) TestUpdateInvestorsRewardRatio() {
 		false,
 		true,
 	)
+	err = suite.k.TrySetVestingInvestor(ctx, investorAddr)
+	suite.Require().NoError(err)
 
 	suite.delegate(ctx, normalAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), true)
 	suite.delegate(ctx, investorAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), false)

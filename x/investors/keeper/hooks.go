@@ -19,26 +19,34 @@ func (k *Keeper) Hooks() Hooks {
 }
 
 func (h Hooks) BeforeDelegationSharesModified(ctx context.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) error {
-	delegation, isInvestor, err := h.k.GetDelegation(ctx, delAddr, valAddr)
+	isVestingInvestor, err := h.k.VestingInvestors.Has(ctx, delAddr)
 	if err != nil {
 		return err
 	}
-	// If the account is not an investor, do nothing
-	if !isInvestor {
+	if !isVestingInvestor {
 		return nil
+	}
+
+	delegation, err := h.k.stakingKeeper.GetDelegation(ctx, delAddr, valAddr)
+	if err != nil {
+		return err
 	}
 
 	return h.k.DecrementValidatorInvestorsShares(ctx, valAddr, delegation.GetShares())
 }
 
 func (h Hooks) AfterDelegationModified(ctx context.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) error {
-	delegation, isInvestor, err := h.k.GetDelegation(ctx, delAddr, valAddr)
+	isVestingInvestor, err := h.k.VestingInvestors.Has(ctx, delAddr)
 	if err != nil {
 		return err
 	}
-	// If the account is not an investor, do nothing
-	if !isInvestor {
+	if !isVestingInvestor {
 		return nil
+	}
+
+	delegation, err := h.k.stakingKeeper.GetDelegation(ctx, delAddr, valAddr)
+	if err != nil {
+		return err
 	}
 
 	return h.k.IncrementValidatorInvestorsShares(ctx, valAddr, delegation.GetShares())

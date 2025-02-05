@@ -31,6 +31,7 @@ import (
 	"github.com/skip-mev/feemarket/x/feemarket"
 
 	"github.com/milkyway-labs/milkyway/v7/x/assets"
+	"github.com/milkyway-labs/milkyway/v7/x/investors"
 	"github.com/milkyway-labs/milkyway/v7/x/liquidvesting"
 	"github.com/milkyway-labs/milkyway/v7/x/operators"
 	"github.com/milkyway-labs/milkyway/v7/x/pools"
@@ -80,4 +81,5 @@ var AppModuleBasics = module.NewBasicManager(
 	assets.AppModuleBasic{},
 	rewards.AppModuleBasic{},
 	liquidvesting.AppModuleBasic{},
+	investors.AppModuleBasic{},
 )

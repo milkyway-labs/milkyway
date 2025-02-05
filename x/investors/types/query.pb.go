@@ -32,7 +32,8 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// QueryInvestorsRewardRatioRequest is request type for the Query/InvestorsRewardRatio RPC method.
+// QueryInvestorsRewardRatioRequest is request type for the
+// Query/InvestorsRewardRatio RPC method.
 type QueryInvestorsRewardRatioRequest struct {
 }
 
@@ -69,10 +70,11 @@ func (m *QueryInvestorsRewardRatioRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryInvestorsRewardRatioRequest proto.InternalMessageInfo
 
-// QueryInvestorsRewardRatioResponse is response type for the Query/InvestorsRewardRatio RPC method.
+// QueryInvestorsRewardRatioResponse is response type for the
+// Query/InvestorsRewardRatio RPC method.
 type QueryInvestorsRewardRatioResponse struct {
 	// InvestorsRewardRatio defines the proportion of staking rewards allocated to
-	// investors relative to normal accounts.
+	// vesting investors relative to normal users.
 	InvestorsRewardRatio cosmossdk_io_math.LegacyDec `protobuf:"bytes,2,opt,name=investors_reward_ratio,json=investorsRewardRatio,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"investors_reward_ratio"`
 }
 

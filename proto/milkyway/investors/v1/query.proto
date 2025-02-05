@@ -16,13 +16,15 @@ service Query {
   }
 }
 
-// QueryInvestorsRewardRatioRequest is request type for the Query/InvestorsRewardRatio RPC method.
+// QueryInvestorsRewardRatioRequest is request type for the
+// Query/InvestorsRewardRatio RPC method.
 message QueryInvestorsRewardRatioRequest {}
 
-// QueryInvestorsRewardRatioResponse is response type for the Query/InvestorsRewardRatio RPC method.
+// QueryInvestorsRewardRatioResponse is response type for the
+// Query/InvestorsRewardRatio RPC method.
 message QueryInvestorsRewardRatioResponse {
   // InvestorsRewardRatio defines the proportion of staking rewards allocated to
-  // investors relative to normal accounts.
+  // vesting investors relative to normal users.
   string investors_reward_ratio = 2 [
     (cosmos_proto.scalar) = "cosmos.Dec",
     (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",

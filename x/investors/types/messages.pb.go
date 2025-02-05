@@ -32,14 +32,15 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// MsgUpdateInvestorsRewardRatio defines the message structure for the UpdateInvestorsRewardRatio gRPC
-// service method. It allows the authority to update the investors reward ratio.
+// MsgUpdateInvestorsRewardRatio defines the message structure for the
+// UpdateInvestorsRewardRatio gRPC service method. It allows the authority to
+// update the investors reward ratio.
 type MsgUpdateInvestorsRewardRatio struct {
 	// Authority is the address that controls the module (defaults to x/gov unless
 	// overwritten).
 	Authority string `protobuf:"bytes,1,opt,name=authority,proto3" json:"authority,omitempty"`
 	// InvestorsRewardRatio defines the proportion of staking rewards allocated to
-	// investors relative to normal accounts.
+	// vesting investors relative to normal users.
 	InvestorsRewardRatio cosmossdk_io_math.LegacyDec `protobuf:"bytes,2,opt,name=investors_reward_ratio,json=investorsRewardRatio,proto3,customtype=cosmossdk.io/math.LegacyDec" json:"investors_reward_ratio"`
 }
 
@@ -83,7 +84,8 @@ func (m *MsgUpdateInvestorsRewardRatio) GetAuthority() string {
 	return ""
 }
 
-// MsgUpdateInvestorsRewardRatioResponse is the return value of MsgUpdateInvestorsRewardRatio.
+// MsgUpdateInvestorsRewardRatioResponse is the return value of
+// MsgUpdateInvestorsRewardRatio.
 type MsgUpdateInvestorsRewardRatioResponse struct {
 }
 
@@ -171,8 +173,9 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgClient interface {
-	// UpdateInvestorsRewardRatio defines a (governance) operation for updating the investors reward ratio.
-	// The authority defaults to the x/gov module account.
+	// UpdateInvestorsRewardRatio defines a (governance) operation for updating
+	// the investors reward ratio. The authority defaults to the x/gov module
+	// account.
 	UpdateInvestorsRewardRatio(ctx context.Context, in *MsgUpdateInvestorsRewardRatio, opts ...grpc.CallOption) (*MsgUpdateInvestorsRewardRatioResponse, error)
 }
 
@@ -195,8 +198,9 @@ func (c *msgClient) UpdateInvestorsRewardRatio(ctx context.Context, in *MsgUpdat
 
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
-	// UpdateInvestorsRewardRatio defines a (governance) operation for updating the investors reward ratio.
-	// The authority defaults to the x/gov module account.
+	// UpdateInvestorsRewardRatio defines a (governance) operation for updating
+	// the investors reward ratio. The authority defaults to the x/gov module
+	// account.
 	UpdateInvestorsRewardRatio(context.Context, *MsgUpdateInvestorsRewardRatio) (*MsgUpdateInvestorsRewardRatioResponse, error)
 }
 

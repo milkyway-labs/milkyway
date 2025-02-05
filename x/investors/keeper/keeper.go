@@ -20,8 +20,12 @@ type Keeper struct {
 	stakingKeeper types.StakingKeeper
 	distrKeeper   types.DistrKeeper
 
-	Schema                    collections.Schema
-	InvestorsRewardRatio      collections.Item[sdkmath.LegacyDec]
+	Schema               collections.Schema
+	InvestorsRewardRatio collections.Item[sdkmath.LegacyDec]
+	// (vesting end time(in unix seconds), investor address)
+	InvestorsVestingQueue collections.KeySet[collections.Pair[int64, sdk.AccAddress]]
+	// Set of investors that are still in their vesting period
+	VestingInvestors          collections.KeySet[sdk.AccAddress]
 	ValidatorsInvestorsShares collections.Map[sdk.ValAddress, sdkmath.LegacyDec]
 
 	// authority represents the address capable of executing a governance message.
@@ -52,6 +56,18 @@ func NewKeeper(
 			types.InvestorsRewardRatioKey,
 			"investors_reward_ratio",
 			sdk.LegacyDecValue,
+		),
+		InvestorsVestingQueue: collections.NewKeySet(
+			sb,
+			types.InvestorsVestingQueueKeyPrefix,
+			"investors_vesting_queue",
+			collections.PairKeyCodec(collections.Int64Key, sdk.AccAddressKey),
+		),
+		VestingInvestors: collections.NewKeySet(
+			sb,
+			types.VestingInvestorsKeyPrefix,
+			"vesting_investors",
+			sdk.AccAddressKey,
 		),
 		ValidatorsInvestorsShares: collections.NewMap(
 			sb,
