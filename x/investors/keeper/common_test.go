@@ -95,7 +95,7 @@ func (suite *KeeperTestSuite) fundModuleAccount(ctx context.Context, moduleName 
 // validator.
 func (suite *KeeperTestSuite) allocateTokensToValidator(
 	ctx sdk.Context,
-	validator stakingtypes.ValidatorI,
+	valAddr sdk.ValAddress,
 	tokens sdk.DecCoins,
 	fund bool,
 ) sdk.Context {
@@ -108,7 +108,10 @@ func (suite *KeeperTestSuite) allocateTokensToValidator(
 		suite.fundModuleAccount(ctx, distrtypes.ModuleName, coins)
 	}
 	ctx = ctx.WithBlockHeight(ctx.BlockHeight() + 1).WithBlockTime(ctx.BlockTime().Add(5 * time.Second))
-	err := suite.dk.AllocateTokensToValidator(ctx, validator, tokens)
+	// We get 'adjusted' validator since that is what the distribution module uses
+	validator, err := suite.k.GetAdjustedValidator(ctx, valAddr)
+	suite.Require().NoError(err)
+	err = suite.dk.AllocateTokensToValidator(ctx, validator, tokens)
 	suite.Require().NoError(err)
 	return ctx
 }

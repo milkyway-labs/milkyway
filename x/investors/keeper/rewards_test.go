@@ -78,10 +78,11 @@ func (suite *KeeperTestSuite) TestInvestorsRewardRatio() {
 				utils.MustParseCoin("1000000stake"),
 				true,
 			)
+			valAddr := sdk.ValAddress(valOwnerAddr)
 			suite.delegate(ctx, normalAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), true)
 			suite.delegate(ctx, investorAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), false)
 
-			ctx = suite.allocateTokensToValidator(ctx, validator, utils.MustParseDecCoins("1000000stake"), true)
+			ctx = suite.allocateTokensToValidator(ctx, valAddr, utils.MustParseDecCoins("1000000stake"), true)
 
 			querier := distrkeeper.NewQuerier(suite.dk)
 			// Query the normal account's rewards
@@ -120,6 +121,7 @@ func (suite *KeeperTestSuite) TestUpdateInvestorsRewardRatio() {
 		utils.MustParseCoin("1000000stake"),
 		true,
 	)
+	valAddr := sdk.ValAddress(valOwnerAddr)
 
 	normalAddr := testutil.TestAddress(1)
 	investorAddr := testutil.TestAddress(2)
@@ -140,7 +142,7 @@ func (suite *KeeperTestSuite) TestUpdateInvestorsRewardRatio() {
 	suite.delegate(ctx, investorAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), false)
 
 	// Allocate 1000000stake as rewards
-	ctx = suite.allocateTokensToValidator(ctx, validator, utils.MustParseDecCoins("1000000stake"), true)
+	ctx = suite.allocateTokensToValidator(ctx, valAddr, utils.MustParseDecCoins("1000000stake"), true)
 
 	querier := distrkeeper.NewQuerier(suite.dk)
 	// Query the normal account's rewards
@@ -157,12 +159,12 @@ func (suite *KeeperTestSuite) TestUpdateInvestorsRewardRatio() {
 	suite.Require().NoError(err)
 
 	// Withdraw the rewards, it shouldn't be changed
-	withdrawn, err := suite.dk.WithdrawDelegationRewards(ctx, investorAddr, sdk.ValAddress(valOwnerAddr))
+	withdrawn, err := suite.dk.WithdrawDelegationRewards(ctx, investorAddr, valAddr)
 	suite.Require().NoError(err)
 	suite.Require().Equal("200000stake", withdrawn.String())
 
 	// Allocate 1000000stake as rewards again
-	ctx = suite.allocateTokensToValidator(ctx, validator, utils.MustParseDecCoins("1000000stake"), true)
+	ctx = suite.allocateTokensToValidator(ctx, valAddr, utils.MustParseDecCoins("1000000stake"), true)
 
 	// The investor receives more rewards than before
 	cacheCtx, _ = ctx.CacheContext()
@@ -175,6 +177,86 @@ func (suite *KeeperTestSuite) TestUpdateInvestorsRewardRatio() {
 
 	// The normal account's rewards are now 400000stake(already given) +
 	// 333333.3stake(newly allocated) = 733333.3stake
+	cacheCtx, _ = ctx.CacheContext()
+	rewards, err = querier.DelegationRewards(cacheCtx, &distrtypes.QueryDelegationRewardsRequest{
+		DelegatorAddress: normalAddr.String(),
+		ValidatorAddress: validator.GetOperator(),
+	})
+	suite.Require().NoError(err)
+	suite.Require().Equal("733333.333333333333000000stake", rewards.Rewards.String())
+}
+
+func (suite *KeeperTestSuite) TestVestingEndedInvestorsReward() {
+	ctx, _ := suite.ctx.CacheContext()
+	ctx = ctx.WithBlockTime(time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC))
+
+	err := suite.k.UpdateInvestorsRewardRatio(ctx, sdkmath.LegacyNewDecWithPrec(5, 1)) // 50%
+	suite.Require().NoError(err)
+
+	valOwnerAddr := testutil.TestAddress(10000)
+	validator := suite.createValidator(
+		ctx,
+		valOwnerAddr,
+		stakingtypes.NewCommissionRates(utils.MustParseDec("0"), utils.MustParseDec("0.2"), utils.MustParseDec("0.01")),
+		utils.MustParseCoin("1000000stake"),
+		true,
+	)
+	valAddr := sdk.ValAddress(valOwnerAddr)
+
+	normalAddr := testutil.TestAddress(1)
+	investorAddr := testutil.TestAddress(2)
+	vestingEndTime := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
+	suite.createVestingAccount(
+		ctx,
+		testutil.TestAddress(10001).String(),
+		investorAddr.String(),
+		utils.MustParseCoins("1000000stake"),
+		vestingEndTime.Unix(),
+		false,
+		true,
+	)
+	err = suite.k.TrySetVestingInvestor(ctx, investorAddr)
+	suite.Require().NoError(err)
+
+	suite.delegate(ctx, normalAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), true)
+	suite.delegate(ctx, investorAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), false)
+
+	// Allocate 1000000stake as rewards
+	ctx = suite.allocateTokensToValidator(ctx, valAddr, utils.MustParseDecCoins("1000000stake"), true)
+
+	querier := distrkeeper.NewQuerier(suite.dk)
+	// Query the investor's rewards
+	cacheCtx, _ := ctx.CacheContext()
+	rewards, err := querier.DelegationRewards(cacheCtx, &distrtypes.QueryDelegationRewardsRequest{
+		DelegatorAddress: investorAddr.String(),
+		ValidatorAddress: validator.GetOperator(),
+	})
+	suite.Require().NoError(err)
+	suite.Require().Equal("200000.000000000000000000stake", rewards.Rewards.String())
+
+	// Now the investor's vesting period is over, the investor should receive normal
+	// rewards
+	ctx = ctx.WithBlockTime(vestingEndTime)
+	err = suite.k.RemoveVestingEndedInvestors(ctx)
+	suite.Require().NoError(err)
+	suite.Require().False(suite.isVestingInvestor(ctx, investorAddr))
+
+	// Allocate 1000000stake as rewards
+	ctx = suite.allocateTokensToValidator(ctx, valAddr, utils.MustParseDecCoins("1000000stake"), true)
+
+	// Query the investor's rewards
+	// The investor should receive ~333333stake = 1000000 / 3
+	cacheCtx, _ = ctx.CacheContext()
+	rewards, err = querier.DelegationRewards(cacheCtx, &distrtypes.QueryDelegationRewardsRequest{
+		DelegatorAddress: investorAddr.String(),
+		ValidatorAddress: validator.GetOperator(),
+	})
+	suite.Require().NoError(err)
+	suite.Require().Equal("333333.333333333333000000stake", rewards.Rewards.String())
+
+	// Query the normal account's rewards
+	// The normal account received ~333333stake = 1000000 / 3 for this block,
+	// so the accmulated rewards should be ~733333stake = 400000 + 333333
 	cacheCtx, _ = ctx.CacheContext()
 	rewards, err = querier.DelegationRewards(cacheCtx, &distrtypes.QueryDelegationRewardsRequest{
 		DelegatorAddress: normalAddr.String(),

@@ -26,4 +26,5 @@ type StakingKeeper interface {
 // DistrKeeper defines the expected distribution keeper.
 type DistrKeeper interface {
 	IncrementValidatorPeriod(ctx context.Context, val stakingtypes.ValidatorI) (uint64, error)
+	WithdrawDelegationRewards(ctx context.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) (sdk.Coins, error)
 }

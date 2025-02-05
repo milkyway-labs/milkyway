@@ -7,18 +7,16 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+// RemoveVestingEndedInvestors removes all investors from the vesting queue that
+// have ended their vesting period.
 func (k *Keeper) RemoveVestingEndedInvestors(ctx context.Context) error {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	currTime := sdkCtx.BlockHeader().Time.Unix()
-	var keysToRemove []collections.Pair[int64, sdk.AccAddress]
-	err := k.InvestorsVestingQueue.Walk(
-		ctx,
-		collections.NewPrefixUntilPairRange[int64, sdk.AccAddress](currTime),
-		func(key collections.Pair[int64, sdk.AccAddress]) (stop bool, err error) {
-			keysToRemove = append(keysToRemove, key)
-			return false, nil
-		},
-	)
+	currTime := sdkCtx.BlockTime().Unix()
+	iter, err := k.InvestorsVestingQueue.Iterate(ctx, collections.NewPrefixUntilPairRange[int64, sdk.AccAddress](currTime))
+	if err != nil {
+		return err
+	}
+	keysToRemove, err := iter.Keys()
 	if err != nil {
 		return err
 	}
@@ -30,7 +28,7 @@ func (k *Keeper) RemoveVestingEndedInvestors(ctx context.Context) error {
 		}
 
 		investorAddr := key.K2()
-		err = k.VestingInvestors.Remove(ctx, investorAddr)
+		err = k.RemoveVestingInvestor(ctx, investorAddr)
 		if err != nil {
 			return err
 		}

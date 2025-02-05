@@ -45,7 +45,7 @@ func (k *Keeper) TrySetVestingInvestor(ctx context.Context, addr sdk.AccAddress)
 	// Check if the vesting period is over, in which case the account should not be
 	// added to the queue and the list.
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	currTime := sdkCtx.BlockHeader().Time.Unix()
+	currTime := sdkCtx.BlockTime().Unix()
 	if currTime >= vacc.GetEndTime() {
 		return nil
 	}
@@ -94,6 +94,17 @@ func (k *Keeper) DecrementValidatorInvestorsShares(ctx context.Context, valAddr 
 
 // --------------------------------------------------------------------------------------------------------------------
 
+// IncrementValidatorPeriod increments the period of a validator using
+// GetAdjustedValidator.
+func (k *Keeper) IncrementValidatorPeriod(ctx context.Context, valAddr sdk.ValAddress) error {
+	validator, err := k.GetAdjustedValidator(ctx, valAddr)
+	if err != nil {
+		return err
+	}
+	_, err = k.distrKeeper.IncrementValidatorPeriod(ctx, validator)
+	return err
+}
+
 // UpdateInvestorsRewardRatio updates the investors reward ratio. It also
 // increments the period of all validators, since each validator's total tokens
 // need to be adjusted after updating the ratio.
@@ -110,11 +121,7 @@ func (k *Keeper) UpdateInvestorsRewardRatio(ctx context.Context, ratio sdkmath.L
 		if innerErr != nil {
 			return true
 		}
-		validator, innerErr = k.GetAdjustedValidator(ctx, valAddr)
-		if innerErr != nil {
-			return true
-		}
-		_, innerErr = k.distrKeeper.IncrementValidatorPeriod(ctx, validator)
+		innerErr = k.IncrementValidatorPeriod(ctx, valAddr)
 		return innerErr != nil
 	})
 	if err != nil {
@@ -147,4 +154,45 @@ func (k *Keeper) GetAdjustedValidator(ctx context.Context, valAddr sdk.ValAddres
 		validator, _ = validator.RemoveDelShares(investorsShares.MulRoundUp(oneMinusRewardRatio))
 	}
 	return validator, nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// RemoveVestingInvestor removes an investor from the vesting investors list and
+// withdraws rewards from all the validators that the investor was delegating to.
+func (k *Keeper) RemoveVestingInvestor(ctx context.Context, investorAddr sdk.AccAddress) error {
+	// Remove from VestingInvestors first so that inside WithdrawDelegationRewards
+	// the account's new starting info can be set correctly using non-deducted
+	// delegation shares. Note that WithdrawDelegationRewards uses the previous
+	// starting info's stake(=tokens) to calculate the rewards so the change to the
+	// delegation shares prior to calling it doesn't affect the rewards amount.
+	err := k.VestingInvestors.Remove(ctx, investorAddr)
+	if err != nil {
+		return err
+	}
+
+	// Withdraw rewards from all validators that the investor was delegating to.
+	delegations, err := k.stakingKeeper.GetAllDelegatorDelegations(ctx, investorAddr)
+	if err != nil {
+		return err
+	}
+	for _, delegation := range delegations {
+		valAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(delegation.ValidatorAddress)
+		if err != nil {
+			return err
+		}
+		// Calling WithdrawDelegationRewards increments the validator's period so no need
+		// to call IncrementValidatorPeriod here.
+		_, err = k.distrKeeper.WithdrawDelegationRewards(ctx, investorAddr, valAddr)
+		if err != nil {
+			return err
+		}
+
+		err = k.DecrementValidatorInvestorsShares(ctx, valAddr, delegation.Shares)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
