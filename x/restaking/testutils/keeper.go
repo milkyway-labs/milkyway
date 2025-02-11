@@ -6,7 +6,6 @@ import (
 	corestoretypes "cosmossdk.io/core/store"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	marketmapkeeper "github.com/skip-mev/connect/v2/x/marketmap/keeper"
 	marketmaptypes "github.com/skip-mev/connect/v2/x/marketmap/types"
@@ -45,7 +44,6 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	data := KeeperTestData{
 		BaseKeeperTestData: storetesting.NewBaseKeeperTestData(t, []string{
 			types.StoreKey,
-			authtypes.StoreKey, banktypes.StoreKey,
 			poolstypes.StoreKey, operatorstypes.StoreKey, servicestypes.StoreKey,
 			marketmaptypes.StoreKey, oracletypes.StoreKey, assetstypes.StoreKey,
 		}),

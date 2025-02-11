@@ -79,6 +79,8 @@ import (
 	rewardstypes "github.com/milkyway-labs/milkyway/v7/x/rewards/types"
 	"github.com/milkyway-labs/milkyway/v7/x/services"
 	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
+	"github.com/milkyway-labs/milkyway/v7/x/tokenfactory"
+	tokenfactorytypes "github.com/milkyway-labs/milkyway/v7/x/tokenfactory/types"
 )
 
 var MaccPerms = map[string][]string{
@@ -94,6 +96,7 @@ var MaccPerms = map[string][]string{
 	wasmtypes.ModuleName:              {authtypes.Burner},
 	feemarkettypes.ModuleName:         nil,
 	feemarkettypes.FeeCollectorName:   nil,
+	tokenfactorytypes.ModuleName:      {authtypes.Minter, authtypes.Burner},
 
 	// Skip
 	oracletypes.ModuleName: nil,
@@ -135,6 +138,7 @@ func appModules(
 		sdkparams.NewAppModule(app.ParamsKeeper),
 		consensus.NewAppModule(appCodec, app.ConsensusParamsKeeper),
 		wasm.NewAppModule(appCodec, &app.AppKeepers.WasmKeeper, app.AppKeepers.StakingKeeper, app.AppKeepers.AccountKeeper, app.AppKeepers.BankKeeper, app.MsgServiceRouter(), app.GetSubspace(wasmtypes.ModuleName)),
+		tokenfactory.NewAppModule(*app.TokenFactoryKeeper, app.AccountKeeper, app.BankKeeper),
 
 		// Skip modules
 		feemarket.NewAppModule(appCodec, *app.FeeMarketKeeper),
@@ -341,6 +345,7 @@ func orderInitBlockers() []string {
 		paramstypes.ModuleName,
 		upgradetypes.ModuleName,
 		vestingtypes.ModuleName,
+		tokenfactorytypes.ModuleName,
 
 		// Skip modules
 		oracletypes.ModuleName,

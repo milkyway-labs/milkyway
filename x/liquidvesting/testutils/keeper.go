@@ -3,12 +3,9 @@ package testutils
 import (
 	"testing"
 
-	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	distributiontypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	porttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
@@ -36,8 +33,6 @@ import (
 type KeeperTestData struct {
 	storetesting.BaseKeeperTestData
 
-	StoreKey storetypes.StoreKey
-
 	LiquidVestingModuleAddress sdk.AccAddress
 
 	Keeper          *keeper.Keeper
@@ -54,10 +49,9 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 
 	var data = KeeperTestData{
 		BaseKeeperTestData: storetesting.NewBaseKeeperTestData(t, []string{
-			types.StoreKey, authtypes.StoreKey, banktypes.StoreKey,
+			types.StoreKey,
 			operatorstypes.StoreKey, poolstypes.StoreKey, servicestypes.StoreKey,
 			restakingtypes.StoreKey, stakingtypes.StoreKey,
-			distributiontypes.StoreKey,
 		}),
 	}
 

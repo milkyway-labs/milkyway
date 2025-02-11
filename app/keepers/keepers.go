@@ -96,6 +96,8 @@ import (
 	rewardstypes "github.com/milkyway-labs/milkyway/v7/x/rewards/types"
 	serviceskeeper "github.com/milkyway-labs/milkyway/v7/x/services/keeper"
 	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
+	tokenfactorykeeper "github.com/milkyway-labs/milkyway/v7/x/tokenfactory/keeper"
+	tokenfactorytypes "github.com/milkyway-labs/milkyway/v7/x/tokenfactory/types"
 )
 
 type AppKeepers struct {
@@ -136,6 +138,9 @@ type AppKeepers struct {
 
 	// ICS
 	ProviderKeeper icsproviderkeeper.Keeper
+
+	// TokenFactory
+	TokenFactoryKeeper *tokenfactorykeeper.Keeper
 
 	// Custom
 	ServicesKeeper      *serviceskeeper.Keeper
@@ -450,6 +455,16 @@ func NewAppKeeper(
 
 	govAuthority := authtypes.NewModuleAddress(govtypes.ModuleName).String()
 
+	tokenFactoryKeeper := tokenfactorykeeper.NewKeeper(
+		appCodec,
+		runtime.NewKVStoreService(appKeepers.keys[tokenfactorytypes.StoreKey]),
+		appKeepers.AccountKeeper,
+		appKeepers.BankKeeper,
+		appKeepers.DistrKeeper,
+		govAuthority,
+	)
+	appKeepers.TokenFactoryKeeper = &tokenFactoryKeeper
+
 	// Create RateLimit keeper
 	appKeepers.RateLimitKeeper = ratelimitkeeper.NewKeeper(
 		appCodec, // BinaryCodec
@@ -620,6 +635,8 @@ func NewAppKeeper(
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 		wasmOpts...,
 	)
+	contractKeeper := wasmkeeper.NewDefaultPermissionKeeper(appKeepers.WasmKeeper)
+	appKeepers.TokenFactoryKeeper.SetContractKeeper(contractKeeper)
 
 	// Middleware Stacks
 	appKeepers.TransferModule = transfer.NewAppModule(appKeepers.TransferKeeper)
