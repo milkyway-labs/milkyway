@@ -3715,65 +3715,66 @@ func (x *fastReflection_DTDataList) ProtoMethods() *protoiface.Methods {
 	}
 }
 
-var _ protoreflect.List = (*_UserPreferences_3_list)(nil)
+var _ protoreflect.List = (*_UserPreferences_4_list)(nil)
 
-type _UserPreferences_3_list struct {
-	list *[]uint32
+type _UserPreferences_4_list struct {
+	list *[]*TrustedServiceEntry
 }
 
-func (x *_UserPreferences_3_list) Len() int {
+func (x *_UserPreferences_4_list) Len() int {
 	if x.list == nil {
 		return 0
 	}
 	return len(*x.list)
 }
 
-func (x *_UserPreferences_3_list) Get(i int) protoreflect.Value {
-	return protoreflect.ValueOfUint32((*x.list)[i])
+func (x *_UserPreferences_4_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfMessage((*x.list)[i].ProtoReflect())
 }
 
-func (x *_UserPreferences_3_list) Set(i int, value protoreflect.Value) {
-	valueUnwrapped := value.Uint()
-	concreteValue := (uint32)(valueUnwrapped)
+func (x *_UserPreferences_4_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*TrustedServiceEntry)
 	(*x.list)[i] = concreteValue
 }
 
-func (x *_UserPreferences_3_list) Append(value protoreflect.Value) {
-	valueUnwrapped := value.Uint()
-	concreteValue := (uint32)(valueUnwrapped)
+func (x *_UserPreferences_4_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Message()
+	concreteValue := valueUnwrapped.Interface().(*TrustedServiceEntry)
 	*x.list = append(*x.list, concreteValue)
 }
 
-func (x *_UserPreferences_3_list) AppendMutable() protoreflect.Value {
-	panic(fmt.Errorf("AppendMutable can not be called on message UserPreferences at list field TrustedServicesIds as it is not of Message kind"))
+func (x *_UserPreferences_4_list) AppendMutable() protoreflect.Value {
+	v := new(TrustedServiceEntry)
+	*x.list = append(*x.list, v)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_UserPreferences_3_list) Truncate(n int) {
+func (x *_UserPreferences_4_list) Truncate(n int) {
+	for i := n; i < len(*x.list); i++ {
+		(*x.list)[i] = nil
+	}
 	*x.list = (*x.list)[:n]
 }
 
-func (x *_UserPreferences_3_list) NewElement() protoreflect.Value {
-	v := uint32(0)
-	return protoreflect.ValueOfUint32(v)
+func (x *_UserPreferences_4_list) NewElement() protoreflect.Value {
+	v := new(TrustedServiceEntry)
+	return protoreflect.ValueOfMessage(v.ProtoReflect())
 }
 
-func (x *_UserPreferences_3_list) IsValid() bool {
+func (x *_UserPreferences_4_list) IsValid() bool {
 	return x.list != nil
 }
 
 var (
-	md_UserPreferences                               protoreflect.MessageDescriptor
-	fd_UserPreferences_trust_non_accredited_services protoreflect.FieldDescriptor
-	fd_UserPreferences_trust_accredited_services     protoreflect.FieldDescriptor
-	fd_UserPreferences_trusted_services_ids          protoreflect.FieldDescriptor
+	md_UserPreferences                  protoreflect.MessageDescriptor
+	fd_UserPreferences_trusted_services protoreflect.FieldDescriptor
 )
 
 func init() {
 	file_milkyway_restaking_v1_models_proto_init()
 	md_UserPreferences = File_milkyway_restaking_v1_models_proto.Messages().ByName("UserPreferences")
-	fd_UserPreferences_trust_non_accredited_services = md_UserPreferences.Fields().ByName("trust_non_accredited_services")
-	fd_UserPreferences_trust_accredited_services = md_UserPreferences.Fields().ByName("trust_accredited_services")
-	fd_UserPreferences_trusted_services_ids = md_UserPreferences.Fields().ByName("trusted_services_ids")
+	fd_UserPreferences_trusted_services = md_UserPreferences.Fields().ByName("trusted_services")
 }
 
 var _ protoreflect.Message = (*fastReflection_UserPreferences)(nil)
@@ -3841,21 +3842,9 @@ func (x *fastReflection_UserPreferences) Interface() protoreflect.ProtoMessage {
 // While iterating, mutating operations may only be performed
 // on the current field descriptor.
 func (x *fastReflection_UserPreferences) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
-	if x.TrustNonAccreditedServices != false {
-		value := protoreflect.ValueOfBool(x.TrustNonAccreditedServices)
-		if !f(fd_UserPreferences_trust_non_accredited_services, value) {
-			return
-		}
-	}
-	if x.TrustAccreditedServices != false {
-		value := protoreflect.ValueOfBool(x.TrustAccreditedServices)
-		if !f(fd_UserPreferences_trust_accredited_services, value) {
-			return
-		}
-	}
-	if len(x.TrustedServicesIds) != 0 {
-		value := protoreflect.ValueOfList(&_UserPreferences_3_list{list: &x.TrustedServicesIds})
-		if !f(fd_UserPreferences_trusted_services_ids, value) {
+	if len(x.TrustedServices) != 0 {
+		value := protoreflect.ValueOfList(&_UserPreferences_4_list{list: &x.TrustedServices})
+		if !f(fd_UserPreferences_trusted_services, value) {
 			return
 		}
 	}
@@ -3874,12 +3863,8 @@ func (x *fastReflection_UserPreferences) Range(f func(protoreflect.FieldDescript
 // a repeated field is populated if it is non-empty.
 func (x *fastReflection_UserPreferences) Has(fd protoreflect.FieldDescriptor) bool {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.UserPreferences.trust_non_accredited_services":
-		return x.TrustNonAccreditedServices != false
-	case "milkyway.restaking.v1.UserPreferences.trust_accredited_services":
-		return x.TrustAccreditedServices != false
-	case "milkyway.restaking.v1.UserPreferences.trusted_services_ids":
-		return len(x.TrustedServicesIds) != 0
+	case "milkyway.restaking.v1.UserPreferences.trusted_services":
+		return len(x.TrustedServices) != 0
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.UserPreferences"))
@@ -3896,12 +3881,8 @@ func (x *fastReflection_UserPreferences) Has(fd protoreflect.FieldDescriptor) bo
 // Clear is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_UserPreferences) Clear(fd protoreflect.FieldDescriptor) {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.UserPreferences.trust_non_accredited_services":
-		x.TrustNonAccreditedServices = false
-	case "milkyway.restaking.v1.UserPreferences.trust_accredited_services":
-		x.TrustAccreditedServices = false
-	case "milkyway.restaking.v1.UserPreferences.trusted_services_ids":
-		x.TrustedServicesIds = nil
+	case "milkyway.restaking.v1.UserPreferences.trusted_services":
+		x.TrustedServices = nil
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.UserPreferences"))
@@ -3918,17 +3899,11 @@ func (x *fastReflection_UserPreferences) Clear(fd protoreflect.FieldDescriptor) 
 // of the value; to obtain a mutable reference, use Mutable.
 func (x *fastReflection_UserPreferences) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
 	switch descriptor.FullName() {
-	case "milkyway.restaking.v1.UserPreferences.trust_non_accredited_services":
-		value := x.TrustNonAccreditedServices
-		return protoreflect.ValueOfBool(value)
-	case "milkyway.restaking.v1.UserPreferences.trust_accredited_services":
-		value := x.TrustAccreditedServices
-		return protoreflect.ValueOfBool(value)
-	case "milkyway.restaking.v1.UserPreferences.trusted_services_ids":
-		if len(x.TrustedServicesIds) == 0 {
-			return protoreflect.ValueOfList(&_UserPreferences_3_list{})
+	case "milkyway.restaking.v1.UserPreferences.trusted_services":
+		if len(x.TrustedServices) == 0 {
+			return protoreflect.ValueOfList(&_UserPreferences_4_list{})
 		}
-		listValue := &_UserPreferences_3_list{list: &x.TrustedServicesIds}
+		listValue := &_UserPreferences_4_list{list: &x.TrustedServices}
 		return protoreflect.ValueOfList(listValue)
 	default:
 		if descriptor.IsExtension() {
@@ -3950,14 +3925,10 @@ func (x *fastReflection_UserPreferences) Get(descriptor protoreflect.FieldDescri
 // Set is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_UserPreferences) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.UserPreferences.trust_non_accredited_services":
-		x.TrustNonAccreditedServices = value.Bool()
-	case "milkyway.restaking.v1.UserPreferences.trust_accredited_services":
-		x.TrustAccreditedServices = value.Bool()
-	case "milkyway.restaking.v1.UserPreferences.trusted_services_ids":
+	case "milkyway.restaking.v1.UserPreferences.trusted_services":
 		lv := value.List()
-		clv := lv.(*_UserPreferences_3_list)
-		x.TrustedServicesIds = *clv.list
+		clv := lv.(*_UserPreferences_4_list)
+		x.TrustedServices = *clv.list
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.UserPreferences"))
@@ -3978,16 +3949,12 @@ func (x *fastReflection_UserPreferences) Set(fd protoreflect.FieldDescriptor, va
 // Mutable is a mutating operation and unsafe for concurrent use.
 func (x *fastReflection_UserPreferences) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.UserPreferences.trusted_services_ids":
-		if x.TrustedServicesIds == nil {
-			x.TrustedServicesIds = []uint32{}
+	case "milkyway.restaking.v1.UserPreferences.trusted_services":
+		if x.TrustedServices == nil {
+			x.TrustedServices = []*TrustedServiceEntry{}
 		}
-		value := &_UserPreferences_3_list{list: &x.TrustedServicesIds}
+		value := &_UserPreferences_4_list{list: &x.TrustedServices}
 		return protoreflect.ValueOfList(value)
-	case "milkyway.restaking.v1.UserPreferences.trust_non_accredited_services":
-		panic(fmt.Errorf("field trust_non_accredited_services of message milkyway.restaking.v1.UserPreferences is not mutable"))
-	case "milkyway.restaking.v1.UserPreferences.trust_accredited_services":
-		panic(fmt.Errorf("field trust_accredited_services of message milkyway.restaking.v1.UserPreferences is not mutable"))
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.UserPreferences"))
@@ -4001,13 +3968,9 @@ func (x *fastReflection_UserPreferences) Mutable(fd protoreflect.FieldDescriptor
 // For lists, maps, and messages, this returns a new, empty, mutable value.
 func (x *fastReflection_UserPreferences) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
 	switch fd.FullName() {
-	case "milkyway.restaking.v1.UserPreferences.trust_non_accredited_services":
-		return protoreflect.ValueOfBool(false)
-	case "milkyway.restaking.v1.UserPreferences.trust_accredited_services":
-		return protoreflect.ValueOfBool(false)
-	case "milkyway.restaking.v1.UserPreferences.trusted_services_ids":
-		list := []uint32{}
-		return protoreflect.ValueOfList(&_UserPreferences_3_list{list: &list})
+	case "milkyway.restaking.v1.UserPreferences.trusted_services":
+		list := []*TrustedServiceEntry{}
+		return protoreflect.ValueOfList(&_UserPreferences_4_list{list: &list})
 	default:
 		if fd.IsExtension() {
 			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.UserPreferences"))
@@ -4077,18 +4040,11 @@ func (x *fastReflection_UserPreferences) ProtoMethods() *protoiface.Methods {
 		var n int
 		var l int
 		_ = l
-		if x.TrustNonAccreditedServices {
-			n += 2
-		}
-		if x.TrustAccreditedServices {
-			n += 2
-		}
-		if len(x.TrustedServicesIds) > 0 {
-			l = 0
-			for _, e := range x.TrustedServicesIds {
-				l += runtime.Sov(uint64(e))
+		if len(x.TrustedServices) > 0 {
+			for _, e := range x.TrustedServices {
+				l = options.Size(e)
+				n += 1 + l + runtime.Sov(uint64(l))
 			}
-			n += 1 + runtime.Sov(uint64(l)) + l
 		}
 		if x.unknownFields != nil {
 			n += len(x.unknownFields)
@@ -4119,45 +4075,21 @@ func (x *fastReflection_UserPreferences) ProtoMethods() *protoiface.Methods {
 			i -= len(x.unknownFields)
 			copy(dAtA[i:], x.unknownFields)
 		}
-		if len(x.TrustedServicesIds) > 0 {
-			var pksize2 int
-			for _, num := range x.TrustedServicesIds {
-				pksize2 += runtime.Sov(uint64(num))
-			}
-			i -= pksize2
-			j1 := i
-			for _, num := range x.TrustedServicesIds {
-				for num >= 1<<7 {
-					dAtA[j1] = uint8(uint64(num)&0x7f | 0x80)
-					num >>= 7
-					j1++
+		if len(x.TrustedServices) > 0 {
+			for iNdEx := len(x.TrustedServices) - 1; iNdEx >= 0; iNdEx-- {
+				encoded, err := options.Marshal(x.TrustedServices[iNdEx])
+				if err != nil {
+					return protoiface.MarshalOutput{
+						NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+						Buf:               input.Buf,
+					}, err
 				}
-				dAtA[j1] = uint8(num)
-				j1++
+				i -= len(encoded)
+				copy(dAtA[i:], encoded)
+				i = runtime.EncodeVarint(dAtA, i, uint64(len(encoded)))
+				i--
+				dAtA[i] = 0x22
 			}
-			i = runtime.EncodeVarint(dAtA, i, uint64(pksize2))
-			i--
-			dAtA[i] = 0x1a
-		}
-		if x.TrustAccreditedServices {
-			i--
-			if x.TrustAccreditedServices {
-				dAtA[i] = 1
-			} else {
-				dAtA[i] = 0
-			}
-			i--
-			dAtA[i] = 0x10
-		}
-		if x.TrustNonAccreditedServices {
-			i--
-			if x.TrustNonAccreditedServices {
-				dAtA[i] = 1
-			} else {
-				dAtA[i] = 0
-			}
-			i--
-			dAtA[i] = 0x8
 		}
 		if input.Buf != nil {
 			input.Buf = append(input.Buf, dAtA...)
@@ -4208,11 +4140,534 @@ func (x *fastReflection_UserPreferences) ProtoMethods() *protoiface.Methods {
 				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: UserPreferences: illegal tag %d (wire type %d)", fieldNum, wire)
 			}
 			switch fieldNum {
+			case 4:
+				if wireType != 2 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TrustedServices", wireType)
+				}
+				var msglen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+					}
+					if iNdEx >= l {
+						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					msglen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if msglen < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				postIndex := iNdEx + msglen
+				if postIndex < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if postIndex > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				x.TrustedServices = append(x.TrustedServices, &TrustedServiceEntry{})
+				if err := options.Unmarshal(dAtA[iNdEx:postIndex], x.TrustedServices[len(x.TrustedServices)-1]); err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				iNdEx = postIndex
+			default:
+				iNdEx = preIndex
+				skippy, err := runtime.Skip(dAtA[iNdEx:])
+				if err != nil {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, err
+				}
+				if (skippy < 0) || (iNdEx+skippy) < 0 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrInvalidLength
+				}
+				if (iNdEx + skippy) > l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				if !options.DiscardUnknown {
+					x.unknownFields = append(x.unknownFields, dAtA[iNdEx:iNdEx+skippy]...)
+				}
+				iNdEx += skippy
+			}
+		}
+
+		if iNdEx > l {
+			return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+		}
+		return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, nil
+	}
+	return &protoiface.Methods{
+		NoUnkeyedLiterals: struct{}{},
+		Flags:             protoiface.SupportMarshalDeterministic | protoiface.SupportUnmarshalDiscardUnknown,
+		Size:              size,
+		Marshal:           marshal,
+		Unmarshal:         unmarshal,
+		Merge:             nil,
+		CheckInitialized:  nil,
+	}
+}
+
+var _ protoreflect.List = (*_TrustedServiceEntry_2_list)(nil)
+
+type _TrustedServiceEntry_2_list struct {
+	list *[]uint32
+}
+
+func (x *_TrustedServiceEntry_2_list) Len() int {
+	if x.list == nil {
+		return 0
+	}
+	return len(*x.list)
+}
+
+func (x *_TrustedServiceEntry_2_list) Get(i int) protoreflect.Value {
+	return protoreflect.ValueOfUint32((*x.list)[i])
+}
+
+func (x *_TrustedServiceEntry_2_list) Set(i int, value protoreflect.Value) {
+	valueUnwrapped := value.Uint()
+	concreteValue := (uint32)(valueUnwrapped)
+	(*x.list)[i] = concreteValue
+}
+
+func (x *_TrustedServiceEntry_2_list) Append(value protoreflect.Value) {
+	valueUnwrapped := value.Uint()
+	concreteValue := (uint32)(valueUnwrapped)
+	*x.list = append(*x.list, concreteValue)
+}
+
+func (x *_TrustedServiceEntry_2_list) AppendMutable() protoreflect.Value {
+	panic(fmt.Errorf("AppendMutable can not be called on message TrustedServiceEntry at list field PoolsIds as it is not of Message kind"))
+}
+
+func (x *_TrustedServiceEntry_2_list) Truncate(n int) {
+	*x.list = (*x.list)[:n]
+}
+
+func (x *_TrustedServiceEntry_2_list) NewElement() protoreflect.Value {
+	v := uint32(0)
+	return protoreflect.ValueOfUint32(v)
+}
+
+func (x *_TrustedServiceEntry_2_list) IsValid() bool {
+	return x.list != nil
+}
+
+var (
+	md_TrustedServiceEntry            protoreflect.MessageDescriptor
+	fd_TrustedServiceEntry_service_id protoreflect.FieldDescriptor
+	fd_TrustedServiceEntry_pools_ids  protoreflect.FieldDescriptor
+)
+
+func init() {
+	file_milkyway_restaking_v1_models_proto_init()
+	md_TrustedServiceEntry = File_milkyway_restaking_v1_models_proto.Messages().ByName("TrustedServiceEntry")
+	fd_TrustedServiceEntry_service_id = md_TrustedServiceEntry.Fields().ByName("service_id")
+	fd_TrustedServiceEntry_pools_ids = md_TrustedServiceEntry.Fields().ByName("pools_ids")
+}
+
+var _ protoreflect.Message = (*fastReflection_TrustedServiceEntry)(nil)
+
+type fastReflection_TrustedServiceEntry TrustedServiceEntry
+
+func (x *TrustedServiceEntry) ProtoReflect() protoreflect.Message {
+	return (*fastReflection_TrustedServiceEntry)(x)
+}
+
+func (x *TrustedServiceEntry) slowProtoReflect() protoreflect.Message {
+	mi := &file_milkyway_restaking_v1_models_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+var _fastReflection_TrustedServiceEntry_messageType fastReflection_TrustedServiceEntry_messageType
+var _ protoreflect.MessageType = fastReflection_TrustedServiceEntry_messageType{}
+
+type fastReflection_TrustedServiceEntry_messageType struct{}
+
+func (x fastReflection_TrustedServiceEntry_messageType) Zero() protoreflect.Message {
+	return (*fastReflection_TrustedServiceEntry)(nil)
+}
+func (x fastReflection_TrustedServiceEntry_messageType) New() protoreflect.Message {
+	return new(fastReflection_TrustedServiceEntry)
+}
+func (x fastReflection_TrustedServiceEntry_messageType) Descriptor() protoreflect.MessageDescriptor {
+	return md_TrustedServiceEntry
+}
+
+// Descriptor returns message descriptor, which contains only the protobuf
+// type information for the message.
+func (x *fastReflection_TrustedServiceEntry) Descriptor() protoreflect.MessageDescriptor {
+	return md_TrustedServiceEntry
+}
+
+// Type returns the message type, which encapsulates both Go and protobuf
+// type information. If the Go type information is not needed,
+// it is recommended that the message descriptor be used instead.
+func (x *fastReflection_TrustedServiceEntry) Type() protoreflect.MessageType {
+	return _fastReflection_TrustedServiceEntry_messageType
+}
+
+// New returns a newly allocated and mutable empty message.
+func (x *fastReflection_TrustedServiceEntry) New() protoreflect.Message {
+	return new(fastReflection_TrustedServiceEntry)
+}
+
+// Interface unwraps the message reflection interface and
+// returns the underlying ProtoMessage interface.
+func (x *fastReflection_TrustedServiceEntry) Interface() protoreflect.ProtoMessage {
+	return (*TrustedServiceEntry)(x)
+}
+
+// Range iterates over every populated field in an undefined order,
+// calling f for each field descriptor and value encountered.
+// Range returns immediately if f returns false.
+// While iterating, mutating operations may only be performed
+// on the current field descriptor.
+func (x *fastReflection_TrustedServiceEntry) Range(f func(protoreflect.FieldDescriptor, protoreflect.Value) bool) {
+	if x.ServiceId != uint32(0) {
+		value := protoreflect.ValueOfUint32(x.ServiceId)
+		if !f(fd_TrustedServiceEntry_service_id, value) {
+			return
+		}
+	}
+	if len(x.PoolsIds) != 0 {
+		value := protoreflect.ValueOfList(&_TrustedServiceEntry_2_list{list: &x.PoolsIds})
+		if !f(fd_TrustedServiceEntry_pools_ids, value) {
+			return
+		}
+	}
+}
+
+// Has reports whether a field is populated.
+//
+// Some fields have the property of nullability where it is possible to
+// distinguish between the default value of a field and whether the field
+// was explicitly populated with the default value. Singular message fields,
+// member fields of a oneof, and proto2 scalar fields are nullable. Such
+// fields are populated only if explicitly set.
+//
+// In other cases (aside from the nullable cases above),
+// a proto3 scalar field is populated if it contains a non-zero value, and
+// a repeated field is populated if it is non-empty.
+func (x *fastReflection_TrustedServiceEntry) Has(fd protoreflect.FieldDescriptor) bool {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.TrustedServiceEntry.service_id":
+		return x.ServiceId != uint32(0)
+	case "milkyway.restaking.v1.TrustedServiceEntry.pools_ids":
+		return len(x.PoolsIds) != 0
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.TrustedServiceEntry"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.TrustedServiceEntry does not contain field %s", fd.FullName()))
+	}
+}
+
+// Clear clears the field such that a subsequent Has call reports false.
+//
+// Clearing an extension field clears both the extension type and value
+// associated with the given field number.
+//
+// Clear is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_TrustedServiceEntry) Clear(fd protoreflect.FieldDescriptor) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.TrustedServiceEntry.service_id":
+		x.ServiceId = uint32(0)
+	case "milkyway.restaking.v1.TrustedServiceEntry.pools_ids":
+		x.PoolsIds = nil
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.TrustedServiceEntry"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.TrustedServiceEntry does not contain field %s", fd.FullName()))
+	}
+}
+
+// Get retrieves the value for a field.
+//
+// For unpopulated scalars, it returns the default value, where
+// the default value of a bytes scalar is guaranteed to be a copy.
+// For unpopulated composite types, it returns an empty, read-only view
+// of the value; to obtain a mutable reference, use Mutable.
+func (x *fastReflection_TrustedServiceEntry) Get(descriptor protoreflect.FieldDescriptor) protoreflect.Value {
+	switch descriptor.FullName() {
+	case "milkyway.restaking.v1.TrustedServiceEntry.service_id":
+		value := x.ServiceId
+		return protoreflect.ValueOfUint32(value)
+	case "milkyway.restaking.v1.TrustedServiceEntry.pools_ids":
+		if len(x.PoolsIds) == 0 {
+			return protoreflect.ValueOfList(&_TrustedServiceEntry_2_list{})
+		}
+		listValue := &_TrustedServiceEntry_2_list{list: &x.PoolsIds}
+		return protoreflect.ValueOfList(listValue)
+	default:
+		if descriptor.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.TrustedServiceEntry"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.TrustedServiceEntry does not contain field %s", descriptor.FullName()))
+	}
+}
+
+// Set stores the value for a field.
+//
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType.
+// When setting a composite type, it is unspecified whether the stored value
+// aliases the source's memory in any way. If the composite value is an
+// empty, read-only value, then it panics.
+//
+// Set is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_TrustedServiceEntry) Set(fd protoreflect.FieldDescriptor, value protoreflect.Value) {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.TrustedServiceEntry.service_id":
+		x.ServiceId = uint32(value.Uint())
+	case "milkyway.restaking.v1.TrustedServiceEntry.pools_ids":
+		lv := value.List()
+		clv := lv.(*_TrustedServiceEntry_2_list)
+		x.PoolsIds = *clv.list
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.TrustedServiceEntry"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.TrustedServiceEntry does not contain field %s", fd.FullName()))
+	}
+}
+
+// Mutable returns a mutable reference to a composite type.
+//
+// If the field is unpopulated, it may allocate a composite value.
+// For a field belonging to a oneof, it implicitly clears any other field
+// that may be currently set within the same oneof.
+// For extension fields, it implicitly stores the provided ExtensionType
+// if not already stored.
+// It panics if the field does not contain a composite type.
+//
+// Mutable is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_TrustedServiceEntry) Mutable(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.TrustedServiceEntry.pools_ids":
+		if x.PoolsIds == nil {
+			x.PoolsIds = []uint32{}
+		}
+		value := &_TrustedServiceEntry_2_list{list: &x.PoolsIds}
+		return protoreflect.ValueOfList(value)
+	case "milkyway.restaking.v1.TrustedServiceEntry.service_id":
+		panic(fmt.Errorf("field service_id of message milkyway.restaking.v1.TrustedServiceEntry is not mutable"))
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.TrustedServiceEntry"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.TrustedServiceEntry does not contain field %s", fd.FullName()))
+	}
+}
+
+// NewField returns a new value that is assignable to the field
+// for the given descriptor. For scalars, this returns the default value.
+// For lists, maps, and messages, this returns a new, empty, mutable value.
+func (x *fastReflection_TrustedServiceEntry) NewField(fd protoreflect.FieldDescriptor) protoreflect.Value {
+	switch fd.FullName() {
+	case "milkyway.restaking.v1.TrustedServiceEntry.service_id":
+		return protoreflect.ValueOfUint32(uint32(0))
+	case "milkyway.restaking.v1.TrustedServiceEntry.pools_ids":
+		list := []uint32{}
+		return protoreflect.ValueOfList(&_TrustedServiceEntry_2_list{list: &list})
+	default:
+		if fd.IsExtension() {
+			panic(fmt.Errorf("proto3 declared messages do not support extensions: milkyway.restaking.v1.TrustedServiceEntry"))
+		}
+		panic(fmt.Errorf("message milkyway.restaking.v1.TrustedServiceEntry does not contain field %s", fd.FullName()))
+	}
+}
+
+// WhichOneof reports which field within the oneof is populated,
+// returning nil if none are populated.
+// It panics if the oneof descriptor does not belong to this message.
+func (x *fastReflection_TrustedServiceEntry) WhichOneof(d protoreflect.OneofDescriptor) protoreflect.FieldDescriptor {
+	switch d.FullName() {
+	default:
+		panic(fmt.Errorf("%s is not a oneof field in milkyway.restaking.v1.TrustedServiceEntry", d.FullName()))
+	}
+	panic("unreachable")
+}
+
+// GetUnknown retrieves the entire list of unknown fields.
+// The caller may only mutate the contents of the RawFields
+// if the mutated bytes are stored back into the message with SetUnknown.
+func (x *fastReflection_TrustedServiceEntry) GetUnknown() protoreflect.RawFields {
+	return x.unknownFields
+}
+
+// SetUnknown stores an entire list of unknown fields.
+// The raw fields must be syntactically valid according to the wire format.
+// An implementation may panic if this is not the case.
+// Once stored, the caller must not mutate the content of the RawFields.
+// An empty RawFields may be passed to clear the fields.
+//
+// SetUnknown is a mutating operation and unsafe for concurrent use.
+func (x *fastReflection_TrustedServiceEntry) SetUnknown(fields protoreflect.RawFields) {
+	x.unknownFields = fields
+}
+
+// IsValid reports whether the message is valid.
+//
+// An invalid message is an empty, read-only value.
+//
+// An invalid message often corresponds to a nil pointer of the concrete
+// message type, but the details are implementation dependent.
+// Validity is not part of the protobuf data model, and may not
+// be preserved in marshaling or other operations.
+func (x *fastReflection_TrustedServiceEntry) IsValid() bool {
+	return x != nil
+}
+
+// ProtoMethods returns optional fastReflectionFeature-path implementations of various operations.
+// This method may return nil.
+//
+// The returned methods type is identical to
+// "google.golang.org/protobuf/runtime/protoiface".Methods.
+// Consult the protoiface package documentation for details.
+func (x *fastReflection_TrustedServiceEntry) ProtoMethods() *protoiface.Methods {
+	size := func(input protoiface.SizeInput) protoiface.SizeOutput {
+		x := input.Message.Interface().(*TrustedServiceEntry)
+		if x == nil {
+			return protoiface.SizeOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Size:              0,
+			}
+		}
+		options := runtime.SizeInputToOptions(input)
+		_ = options
+		var n int
+		var l int
+		_ = l
+		if x.ServiceId != 0 {
+			n += 1 + runtime.Sov(uint64(x.ServiceId))
+		}
+		if len(x.PoolsIds) > 0 {
+			l = 0
+			for _, e := range x.PoolsIds {
+				l += runtime.Sov(uint64(e))
+			}
+			n += 1 + runtime.Sov(uint64(l)) + l
+		}
+		if x.unknownFields != nil {
+			n += len(x.unknownFields)
+		}
+		return protoiface.SizeOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Size:              n,
+		}
+	}
+
+	marshal := func(input protoiface.MarshalInput) (protoiface.MarshalOutput, error) {
+		x := input.Message.Interface().(*TrustedServiceEntry)
+		if x == nil {
+			return protoiface.MarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Buf:               input.Buf,
+			}, nil
+		}
+		options := runtime.MarshalInputToOptions(input)
+		_ = options
+		size := options.Size(x)
+		dAtA := make([]byte, size)
+		i := len(dAtA)
+		_ = i
+		var l int
+		_ = l
+		if x.unknownFields != nil {
+			i -= len(x.unknownFields)
+			copy(dAtA[i:], x.unknownFields)
+		}
+		if len(x.PoolsIds) > 0 {
+			var pksize2 int
+			for _, num := range x.PoolsIds {
+				pksize2 += runtime.Sov(uint64(num))
+			}
+			i -= pksize2
+			j1 := i
+			for _, num := range x.PoolsIds {
+				for num >= 1<<7 {
+					dAtA[j1] = uint8(uint64(num)&0x7f | 0x80)
+					num >>= 7
+					j1++
+				}
+				dAtA[j1] = uint8(num)
+				j1++
+			}
+			i = runtime.EncodeVarint(dAtA, i, uint64(pksize2))
+			i--
+			dAtA[i] = 0x12
+		}
+		if x.ServiceId != 0 {
+			i = runtime.EncodeVarint(dAtA, i, uint64(x.ServiceId))
+			i--
+			dAtA[i] = 0x8
+		}
+		if input.Buf != nil {
+			input.Buf = append(input.Buf, dAtA...)
+		} else {
+			input.Buf = dAtA
+		}
+		return protoiface.MarshalOutput{
+			NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+			Buf:               input.Buf,
+		}, nil
+	}
+	unmarshal := func(input protoiface.UnmarshalInput) (protoiface.UnmarshalOutput, error) {
+		x := input.Message.Interface().(*TrustedServiceEntry)
+		if x == nil {
+			return protoiface.UnmarshalOutput{
+				NoUnkeyedLiterals: input.NoUnkeyedLiterals,
+				Flags:             input.Flags,
+			}, nil
+		}
+		options := runtime.UnmarshalInputToOptions(input)
+		_ = options
+		dAtA := input.Buf
+		l := len(dAtA)
+		iNdEx := 0
+		for iNdEx < l {
+			preIndex := iNdEx
+			var wire uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
+				}
+				if iNdEx >= l {
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				wire |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			fieldNum := int32(wire >> 3)
+			wireType := int(wire & 0x7)
+			if wireType == 4 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: TrustedServiceEntry: wiretype end group for non-group")
+			}
+			if fieldNum <= 0 {
+				return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: TrustedServiceEntry: illegal tag %d (wire type %d)", fieldNum, wire)
+			}
+			switch fieldNum {
 			case 1:
 				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TrustNonAccreditedServices", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field ServiceId", wireType)
 				}
-				var v int
+				x.ServiceId = 0
 				for shift := uint(0); ; shift += 7 {
 					if shift >= 64 {
 						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
@@ -4222,33 +4677,12 @@ func (x *fastReflection_UserPreferences) ProtoMethods() *protoiface.Methods {
 					}
 					b := dAtA[iNdEx]
 					iNdEx++
-					v |= int(b&0x7F) << shift
+					x.ServiceId |= uint32(b&0x7F) << shift
 					if b < 0x80 {
 						break
 					}
 				}
-				x.TrustNonAccreditedServices = bool(v != 0)
 			case 2:
-				if wireType != 0 {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TrustAccreditedServices", wireType)
-				}
-				var v int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, runtime.ErrIntOverflow
-					}
-					if iNdEx >= l {
-						return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					v |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				x.TrustAccreditedServices = bool(v != 0)
-			case 3:
 				if wireType == 0 {
 					var v uint32
 					for shift := uint(0); ; shift += 7 {
@@ -4265,7 +4699,7 @@ func (x *fastReflection_UserPreferences) ProtoMethods() *protoiface.Methods {
 							break
 						}
 					}
-					x.TrustedServicesIds = append(x.TrustedServicesIds, v)
+					x.PoolsIds = append(x.PoolsIds, v)
 				} else if wireType == 2 {
 					var packedLen int
 					for shift := uint(0); ; shift += 7 {
@@ -4300,8 +4734,8 @@ func (x *fastReflection_UserPreferences) ProtoMethods() *protoiface.Methods {
 						}
 					}
 					elementCount = count
-					if elementCount != 0 && len(x.TrustedServicesIds) == 0 {
-						x.TrustedServicesIds = make([]uint32, 0, elementCount)
+					if elementCount != 0 && len(x.PoolsIds) == 0 {
+						x.PoolsIds = make([]uint32, 0, elementCount)
 					}
 					for iNdEx < postIndex {
 						var v uint32
@@ -4319,10 +4753,10 @@ func (x *fastReflection_UserPreferences) ProtoMethods() *protoiface.Methods {
 								break
 							}
 						}
-						x.TrustedServicesIds = append(x.TrustedServicesIds, v)
+						x.PoolsIds = append(x.PoolsIds, v)
 					}
 				} else {
-					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field TrustedServicesIds", wireType)
+					return protoiface.UnmarshalOutput{NoUnkeyedLiterals: input.NoUnkeyedLiterals, Flags: input.Flags}, fmt.Errorf("proto: wrong wireType = %d for field PoolsIds", wireType)
 				}
 			default:
 				iNdEx = preIndex
@@ -4779,15 +5213,8 @@ type UserPreferences struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// TrustNonAccreditedServices tells whether the user trusts all non-accredited
-	// services present on the platform.
-	TrustNonAccreditedServices bool `protobuf:"varint,1,opt,name=trust_non_accredited_services,json=trustNonAccreditedServices,proto3" json:"trust_non_accredited_services,omitempty"`
-	// TrustAccreditedServices tells whether the user trusts all accredited
-	// services present on the platform.
-	TrustAccreditedServices bool `protobuf:"varint,2,opt,name=trust_accredited_services,json=trustAccreditedServices,proto3" json:"trust_accredited_services,omitempty"`
-	// TrustedServicesIDs is a list of service IDs that the user trusts (both
-	// accredited and non-accredited).
-	TrustedServicesIds []uint32 `protobuf:"varint,3,rep,packed,name=trusted_services_ids,json=trustedServicesIds,proto3" json:"trusted_services_ids,omitempty"`
+	// TrustedServices is a list of services that the user trusts
+	TrustedServices []*TrustedServiceEntry `protobuf:"bytes,4,rep,name=trusted_services,json=trustedServices,proto3" json:"trusted_services,omitempty"`
 }
 
 func (x *UserPreferences) Reset() {
@@ -4810,23 +5237,56 @@ func (*UserPreferences) Descriptor() ([]byte, []int) {
 	return file_milkyway_restaking_v1_models_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *UserPreferences) GetTrustNonAccreditedServices() bool {
+func (x *UserPreferences) GetTrustedServices() []*TrustedServiceEntry {
 	if x != nil {
-		return x.TrustNonAccreditedServices
+		return x.TrustedServices
 	}
-	return false
+	return nil
 }
 
-func (x *UserPreferences) GetTrustAccreditedServices() bool {
-	if x != nil {
-		return x.TrustAccreditedServices
-	}
-	return false
+// TrustedServiceEntry is a struct that contains the ID of a service that the user trusts
+// and the IDs of the pools that the user wants the service to access
+type TrustedServiceEntry struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// ServiceID represents the ID of the service that the user trusts
+	ServiceId uint32 `protobuf:"varint,1,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
+	// PoolsIDs represents the IDs of the pools that the user wants the service with ServiceID to access
+	PoolsIds []uint32 `protobuf:"varint,2,rep,packed,name=pools_ids,json=poolsIds,proto3" json:"pools_ids,omitempty"`
 }
 
-func (x *UserPreferences) GetTrustedServicesIds() []uint32 {
+func (x *TrustedServiceEntry) Reset() {
+	*x = TrustedServiceEntry{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_milkyway_restaking_v1_models_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *TrustedServiceEntry) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TrustedServiceEntry) ProtoMessage() {}
+
+// Deprecated: Use TrustedServiceEntry.ProtoReflect.Descriptor instead.
+func (*TrustedServiceEntry) Descriptor() ([]byte, []int) {
+	return file_milkyway_restaking_v1_models_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *TrustedServiceEntry) GetServiceId() uint32 {
 	if x != nil {
-		return x.TrustedServicesIds
+		return x.ServiceId
+	}
+	return 0
+}
+
+func (x *TrustedServiceEntry) GetPoolsIds() []uint32 {
+	if x != nil {
+		return x.PoolsIds
 	}
 	return nil
 }
@@ -4942,45 +5402,47 @@ var file_milkyway_restaking_v1_models_proto_rawDesc = []byte{
 	0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
 	0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x44, 0x54,
 	0x44, 0x61, 0x74, 0x61, 0x42, 0x09, 0xc8, 0xde, 0x1f, 0x00, 0xa8, 0xe7, 0xb0, 0x2a, 0x01, 0x52,
-	0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0xda, 0x01, 0x0a, 0x0f, 0x55, 0x73, 0x65, 0x72, 0x50, 0x72,
-	0x65, 0x66, 0x65, 0x72, 0x65, 0x6e, 0x63, 0x65, 0x73, 0x12, 0x41, 0x0a, 0x1d, 0x74, 0x72, 0x75,
-	0x73, 0x74, 0x5f, 0x6e, 0x6f, 0x6e, 0x5f, 0x61, 0x63, 0x63, 0x72, 0x65, 0x64, 0x69, 0x74, 0x65,
-	0x64, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08,
-	0x52, 0x1a, 0x74, 0x72, 0x75, 0x73, 0x74, 0x4e, 0x6f, 0x6e, 0x41, 0x63, 0x63, 0x72, 0x65, 0x64,
-	0x69, 0x74, 0x65, 0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x12, 0x3a, 0x0a, 0x19,
-	0x74, 0x72, 0x75, 0x73, 0x74, 0x5f, 0x61, 0x63, 0x63, 0x72, 0x65, 0x64, 0x69, 0x74, 0x65, 0x64,
-	0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x52,
-	0x17, 0x74, 0x72, 0x75, 0x73, 0x74, 0x41, 0x63, 0x63, 0x72, 0x65, 0x64, 0x69, 0x74, 0x65, 0x64,
-	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x12, 0x48, 0x0a, 0x14, 0x74, 0x72, 0x75, 0x73,
-	0x74, 0x65, 0x64, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x5f, 0x69, 0x64, 0x73,
-	0x18, 0x03, 0x20, 0x03, 0x28, 0x0d, 0x42, 0x16, 0xe2, 0xde, 0x1f, 0x12, 0x54, 0x72, 0x75, 0x73,
-	0x74, 0x65, 0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x49, 0x44, 0x73, 0x52, 0x12,
-	0x74, 0x72, 0x75, 0x73, 0x74, 0x65, 0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x49,
-	0x64, 0x73, 0x2a, 0x8c, 0x01, 0x0a, 0x0e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f,
-	0x6e, 0x54, 0x79, 0x70, 0x65, 0x12, 0x1f, 0x0a, 0x1b, 0x44, 0x45, 0x4c, 0x45, 0x47, 0x41, 0x54,
-	0x49, 0x4f, 0x4e, 0x5f, 0x54, 0x59, 0x50, 0x45, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49,
-	0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x18, 0x0a, 0x14, 0x44, 0x45, 0x4c, 0x45, 0x47, 0x41,
-	0x54, 0x49, 0x4f, 0x4e, 0x5f, 0x54, 0x59, 0x50, 0x45, 0x5f, 0x50, 0x4f, 0x4f, 0x4c, 0x10, 0x01,
-	0x12, 0x1c, 0x0a, 0x18, 0x44, 0x45, 0x4c, 0x45, 0x47, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x5f, 0x54,
-	0x59, 0x50, 0x45, 0x5f, 0x4f, 0x50, 0x45, 0x52, 0x41, 0x54, 0x4f, 0x52, 0x10, 0x02, 0x12, 0x1b,
-	0x0a, 0x17, 0x44, 0x45, 0x4c, 0x45, 0x47, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x5f, 0x54, 0x59, 0x50,
-	0x45, 0x5f, 0x53, 0x45, 0x52, 0x56, 0x49, 0x43, 0x45, 0x10, 0x03, 0x1a, 0x04, 0x88, 0xa3, 0x1e,
-	0x00, 0x42, 0xea, 0x01, 0x0a, 0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77,
-	0x61, 0x79, 0x2e, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x42,
-	0x0b, 0x4d, 0x6f, 0x64, 0x65, 0x6c, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x4a,
-	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79,
-	0x77, 0x61, 0x79, 0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
-	0x79, 0x2f, 0x76, 0x36, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61,
-	0x79, 0x2f, 0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x3b, 0x72,
-	0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x4d, 0x52, 0x58,
-	0xaa, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x52, 0x65, 0x73, 0x74,
-	0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79,
-	0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31,
-	0xe2, 0x02, 0x21, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x73, 0x74,
-	0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61,
-	0x64, 0x61, 0x74, 0x61, 0xea, 0x02, 0x17, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x3a,
-	0x3a, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0x87, 0x01, 0x0a, 0x0f, 0x55, 0x73, 0x65, 0x72, 0x50, 0x72,
+	0x65, 0x66, 0x65, 0x72, 0x65, 0x6e, 0x63, 0x65, 0x73, 0x12, 0x6e, 0x0a, 0x10, 0x74, 0x72, 0x75,
+	0x73, 0x74, 0x65, 0x64, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x18, 0x04, 0x20,
+	0x03, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x72,
+	0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x2e, 0x54, 0x72, 0x75, 0x73,
+	0x74, 0x65, 0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x42,
+	0x17, 0xc8, 0xde, 0x1f, 0x00, 0xe2, 0xde, 0x1f, 0x0f, 0x54, 0x72, 0x75, 0x73, 0x74, 0x65, 0x64,
+	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x52, 0x0f, 0x74, 0x72, 0x75, 0x73, 0x74, 0x65,
+	0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x4a, 0x04, 0x08, 0x01, 0x10, 0x04, 0x22,
+	0x6e, 0x0a, 0x13, 0x54, 0x72, 0x75, 0x73, 0x74, 0x65, 0x64, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x2c, 0x0a, 0x0a, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x42, 0x0d, 0xe2, 0xde, 0x1f, 0x09,
+	0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x49, 0x44, 0x52, 0x09, 0x73, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x49, 0x64, 0x12, 0x29, 0x0a, 0x09, 0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x5f, 0x69, 0x64,
+	0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0d, 0x42, 0x0c, 0xe2, 0xde, 0x1f, 0x08, 0x50, 0x6f, 0x6f,
+	0x6c, 0x73, 0x49, 0x44, 0x73, 0x52, 0x08, 0x70, 0x6f, 0x6f, 0x6c, 0x73, 0x49, 0x64, 0x73, 0x2a,
+	0x8c, 0x01, 0x0a, 0x0e, 0x44, 0x65, 0x6c, 0x65, 0x67, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x54, 0x79,
+	0x70, 0x65, 0x12, 0x1f, 0x0a, 0x1b, 0x44, 0x45, 0x4c, 0x45, 0x47, 0x41, 0x54, 0x49, 0x4f, 0x4e,
+	0x5f, 0x54, 0x59, 0x50, 0x45, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45,
+	0x44, 0x10, 0x00, 0x12, 0x18, 0x0a, 0x14, 0x44, 0x45, 0x4c, 0x45, 0x47, 0x41, 0x54, 0x49, 0x4f,
+	0x4e, 0x5f, 0x54, 0x59, 0x50, 0x45, 0x5f, 0x50, 0x4f, 0x4f, 0x4c, 0x10, 0x01, 0x12, 0x1c, 0x0a,
+	0x18, 0x44, 0x45, 0x4c, 0x45, 0x47, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x5f, 0x54, 0x59, 0x50, 0x45,
+	0x5f, 0x4f, 0x50, 0x45, 0x52, 0x41, 0x54, 0x4f, 0x52, 0x10, 0x02, 0x12, 0x1b, 0x0a, 0x17, 0x44,
+	0x45, 0x4c, 0x45, 0x47, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x5f, 0x54, 0x59, 0x50, 0x45, 0x5f, 0x53,
+	0x45, 0x52, 0x56, 0x49, 0x43, 0x45, 0x10, 0x03, 0x1a, 0x04, 0x88, 0xa3, 0x1e, 0x00, 0x42, 0xea,
+	0x01, 0x0a, 0x19, 0x63, 0x6f, 0x6d, 0x2e, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e,
+	0x72, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2e, 0x76, 0x31, 0x42, 0x0b, 0x4d, 0x6f,
+	0x64, 0x65, 0x6c, 0x73, 0x50, 0x72, 0x6f, 0x74, 0x6f, 0x50, 0x01, 0x5a, 0x4a, 0x67, 0x69, 0x74,
+	0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
+	0x2d, 0x6c, 0x61, 0x62, 0x73, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x76,
+	0x37, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x6d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2f, 0x72,
+	0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x2f, 0x76, 0x31, 0x3b, 0x72, 0x65, 0x73, 0x74,
+	0x61, 0x6b, 0x69, 0x6e, 0x67, 0x76, 0x31, 0xa2, 0x02, 0x03, 0x4d, 0x52, 0x58, 0xaa, 0x02, 0x15,
+	0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x2e, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69,
+	0x6e, 0x67, 0x2e, 0x56, 0x31, 0xca, 0x02, 0x15, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79,
+	0x5c, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x5c, 0x56, 0x31, 0xe2, 0x02, 0x21,
+	0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x5c, 0x52, 0x65, 0x73, 0x74, 0x61, 0x6b, 0x69,
+	0x6e, 0x67, 0x5c, 0x56, 0x31, 0x5c, 0x47, 0x50, 0x42, 0x4d, 0x65, 0x74, 0x61, 0x64, 0x61, 0x74,
+	0x61, 0xea, 0x02, 0x17, 0x4d, 0x69, 0x6c, 0x6b, 0x79, 0x77, 0x61, 0x79, 0x3a, 0x3a, 0x52, 0x65,
+	0x73, 0x74, 0x61, 0x6b, 0x69, 0x6e, 0x67, 0x3a, 0x3a, 0x56, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x33,
 }
 
 var (
@@ -4996,7 +5458,7 @@ func file_milkyway_restaking_v1_models_proto_rawDescGZIP() []byte {
 }
 
 var file_milkyway_restaking_v1_models_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_milkyway_restaking_v1_models_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_milkyway_restaking_v1_models_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_milkyway_restaking_v1_models_proto_goTypes = []interface{}{
 	(DelegationType)(0),              // 0: milkyway.restaking.v1.DelegationType
 	(*Delegation)(nil),               // 1: milkyway.restaking.v1.Delegation
@@ -5006,27 +5468,29 @@ var file_milkyway_restaking_v1_models_proto_goTypes = []interface{}{
 	(*DTData)(nil),                   // 5: milkyway.restaking.v1.DTData
 	(*DTDataList)(nil),               // 6: milkyway.restaking.v1.DTDataList
 	(*UserPreferences)(nil),          // 7: milkyway.restaking.v1.UserPreferences
-	(*v1beta1.DecCoin)(nil),          // 8: cosmos.base.v1beta1.DecCoin
-	(*v1beta1.Coin)(nil),             // 9: cosmos.base.v1beta1.Coin
-	(*timestamppb.Timestamp)(nil),    // 10: google.protobuf.Timestamp
+	(*TrustedServiceEntry)(nil),      // 8: milkyway.restaking.v1.TrustedServiceEntry
+	(*v1beta1.DecCoin)(nil),          // 9: cosmos.base.v1beta1.DecCoin
+	(*v1beta1.Coin)(nil),             // 10: cosmos.base.v1beta1.Coin
+	(*timestamppb.Timestamp)(nil),    // 11: google.protobuf.Timestamp
 }
 var file_milkyway_restaking_v1_models_proto_depIdxs = []int32{
 	0,  // 0: milkyway.restaking.v1.Delegation.type:type_name -> milkyway.restaking.v1.DelegationType
-	8,  // 1: milkyway.restaking.v1.Delegation.shares:type_name -> cosmos.base.v1beta1.DecCoin
+	9,  // 1: milkyway.restaking.v1.Delegation.shares:type_name -> cosmos.base.v1beta1.DecCoin
 	1,  // 2: milkyway.restaking.v1.DelegationResponse.delegation:type_name -> milkyway.restaking.v1.Delegation
-	9,  // 3: milkyway.restaking.v1.DelegationResponse.balance:type_name -> cosmos.base.v1beta1.Coin
+	10, // 3: milkyway.restaking.v1.DelegationResponse.balance:type_name -> cosmos.base.v1beta1.Coin
 	0,  // 4: milkyway.restaking.v1.UnbondingDelegation.type:type_name -> milkyway.restaking.v1.DelegationType
 	4,  // 5: milkyway.restaking.v1.UnbondingDelegation.entries:type_name -> milkyway.restaking.v1.UnbondingDelegationEntry
-	10, // 6: milkyway.restaking.v1.UnbondingDelegationEntry.completion_time:type_name -> google.protobuf.Timestamp
-	9,  // 7: milkyway.restaking.v1.UnbondingDelegationEntry.initial_balance:type_name -> cosmos.base.v1beta1.Coin
-	9,  // 8: milkyway.restaking.v1.UnbondingDelegationEntry.balance:type_name -> cosmos.base.v1beta1.Coin
+	11, // 6: milkyway.restaking.v1.UnbondingDelegationEntry.completion_time:type_name -> google.protobuf.Timestamp
+	10, // 7: milkyway.restaking.v1.UnbondingDelegationEntry.initial_balance:type_name -> cosmos.base.v1beta1.Coin
+	10, // 8: milkyway.restaking.v1.UnbondingDelegationEntry.balance:type_name -> cosmos.base.v1beta1.Coin
 	0,  // 9: milkyway.restaking.v1.DTData.unbonding_delegation_type:type_name -> milkyway.restaking.v1.DelegationType
 	5,  // 10: milkyway.restaking.v1.DTDataList.data:type_name -> milkyway.restaking.v1.DTData
-	11, // [11:11] is the sub-list for method output_type
-	11, // [11:11] is the sub-list for method input_type
-	11, // [11:11] is the sub-list for extension type_name
-	11, // [11:11] is the sub-list for extension extendee
-	0,  // [0:11] is the sub-list for field type_name
+	8,  // 11: milkyway.restaking.v1.UserPreferences.trusted_services:type_name -> milkyway.restaking.v1.TrustedServiceEntry
+	12, // [12:12] is the sub-list for method output_type
+	12, // [12:12] is the sub-list for method input_type
+	12, // [12:12] is the sub-list for extension type_name
+	12, // [12:12] is the sub-list for extension extendee
+	0,  // [0:12] is the sub-list for field type_name
 }
 
 func init() { file_milkyway_restaking_v1_models_proto_init() }
@@ -5119,6 +5583,18 @@ func file_milkyway_restaking_v1_models_proto_init() {
 				return nil
 			}
 		}
+		file_milkyway_restaking_v1_models_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*TrustedServiceEntry); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -5126,7 +5602,7 @@ func file_milkyway_restaking_v1_models_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_milkyway_restaking_v1_models_proto_rawDesc,
 			NumEnums:      1,
-			NumMessages:   7,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
