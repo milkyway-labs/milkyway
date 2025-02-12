@@ -4,10 +4,12 @@ import (
 	"context"
 
 	upgradetypes "cosmossdk.io/x/upgrade/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
 	"github.com/milkyway-labs/milkyway/v7/app/keepers"
 	"github.com/milkyway-labs/milkyway/v7/x/restaking/types"
+	tokenfactorytypes "github.com/milkyway-labs/milkyway/v7/x/tokenfactory/types"
 )
 
 func CreateUpgradeHandler(
@@ -28,6 +30,13 @@ func CreateUpgradeHandler(
 		}
 		params.MaxEntries = types.DefaultMaxEntries
 		err = keepers.RestakingKeeper.SetParams(ctx, params)
+		if err != nil {
+			return nil, err
+		}
+
+		// Set the default tokenfactory parameters
+		sdkCtx := sdk.UnwrapSDKContext(ctx)
+		err = keepers.TokenFactoryKeeper.SetParams(sdkCtx, tokenfactorytypes.DefaultParams())
 		if err != nil {
 			return nil, err
 		}
