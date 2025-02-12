@@ -10,12 +10,12 @@ import (
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/testutil/sims"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	banktestutil "github.com/cosmos/cosmos-sdk/x/bank/testutil"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/stretchr/testify/suite"
 
 	milkywayapp "github.com/milkyway-labs/milkyway/v7/app"
+	bankkeeper "github.com/milkyway-labs/milkyway/v7/x/bank/keeper"
 	"github.com/milkyway-labs/milkyway/v7/x/tokenfactory/keeper"
 	"github.com/milkyway-labs/milkyway/v7/x/tokenfactory/testutils"
 	"github.com/milkyway-labs/milkyway/v7/x/tokenfactory/types"
@@ -67,7 +67,6 @@ func (s *KeeperTestSuite) SetupTest() {
 	})
 	s.TestAccs = sims.CreateRandomAccounts(3)
 
-	// Fund every TestAcc with two denoms, one of which is the denom creation fee
 	s.contractKeeper = wasmkeeper.NewGovPermissionKeeper(s.App.WasmKeeper)
 	s.queryClient = types.NewQueryClient(&baseapp.QueryServiceTestHelper{
 		GRPCQueryRouter: s.App.GRPCQueryRouter(),

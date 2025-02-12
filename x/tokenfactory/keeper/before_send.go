@@ -3,7 +3,6 @@ package keeper
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"strings"
 
 	wasmvmtypes "github.com/CosmWasm/wasmvm/v2/types"
@@ -134,7 +133,6 @@ func (k Keeper) callBeforeSendListener(context context.Context, from, to sdk.Acc
 	ctx := sdk.UnwrapSDKContext(context)
 	for _, coin := range amount {
 		cosmwasmAddress := k.GetBeforeSendHook(ctx, coin.Denom)
-		fmt.Println(cosmwasmAddress)
 		if cosmwasmAddress != "" {
 			cwAddr, err := sdk.AccAddressFromBech32(cosmwasmAddress)
 			if err != nil {

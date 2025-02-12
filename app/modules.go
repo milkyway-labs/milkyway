@@ -39,7 +39,6 @@ import (
 	vestingtypes "github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
 	"github.com/cosmos/cosmos-sdk/x/authz"
 	authzmodule "github.com/cosmos/cosmos-sdk/x/authz/module"
-	"github.com/cosmos/cosmos-sdk/x/bank"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/cosmos/cosmos-sdk/x/consensus"
 	consensusparamtypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
@@ -67,6 +66,7 @@ import (
 
 	"github.com/milkyway-labs/milkyway/v7/x/assets"
 	assetstypes "github.com/milkyway-labs/milkyway/v7/x/assets/types"
+	"github.com/milkyway-labs/milkyway/v7/x/bank"
 	"github.com/milkyway-labs/milkyway/v7/x/liquidvesting"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
 	"github.com/milkyway-labs/milkyway/v7/x/operators"
