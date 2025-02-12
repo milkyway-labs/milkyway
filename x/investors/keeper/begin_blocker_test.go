@@ -27,7 +27,7 @@ func (suite *KeeperTestSuite) TestRemoveVestingEndedInvestors() {
 		false,
 		true,
 	)
-	err := suite.k.TrySetVestingInvestor(ctx, investorAddr1)
+	err := suite.k.SetVestingInvestor(ctx, investorAddr1)
 	suite.Require().NoError(err)
 
 	// Vesting ends at T
@@ -41,7 +41,7 @@ func (suite *KeeperTestSuite) TestRemoveVestingEndedInvestors() {
 		false,
 		true,
 	)
-	err = suite.k.TrySetVestingInvestor(ctx, investorAddr2)
+	err = suite.k.SetVestingInvestor(ctx, investorAddr2)
 	suite.Require().NoError(err)
 
 	// Vesting ends at T'
@@ -55,7 +55,7 @@ func (suite *KeeperTestSuite) TestRemoveVestingEndedInvestors() {
 		false,
 		true,
 	)
-	err = suite.k.TrySetVestingInvestor(ctx, investorAddr3)
+	err = suite.k.SetVestingInvestor(ctx, investorAddr3)
 	suite.Require().NoError(err)
 
 	// All investors are still in vesting period so nothing happens

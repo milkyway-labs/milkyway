@@ -54,7 +54,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 		if err != nil {
 			return err
 		}
-		err = k.TrySetVestingInvestor(ctx, investorAddr)
+		err = k.SetVestingInvestor(ctx, investorAddr)
 		if err != nil {
 			return err
 		}

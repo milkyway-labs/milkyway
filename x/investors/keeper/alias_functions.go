@@ -28,11 +28,10 @@ func (k *Keeper) GetAllVestingInvestorsAddresses(ctx context.Context) ([]string,
 	return investors, err
 }
 
-// TrySetVestingInvestor tries to set an account as a vesting investor. It
-// returns an error if the account does not exist or is not a vesting account. It
-// also adds the account to the vesting investors queue. If the vesting period
-// was already over, nothing happens.
-func (k *Keeper) TrySetVestingInvestor(ctx context.Context, addr sdk.AccAddress) error {
+// SetVestingInvestor sets an account as a vesting investor. It returns an error
+// if the account does not exist or is not a vesting account. It also adds the
+// account to the vesting investors queue.
+func (k *Keeper) SetVestingInvestor(ctx context.Context, addr sdk.AccAddress) error {
 	acc := k.accountKeeper.GetAccount(ctx, addr)
 	if acc == nil {
 		return sdkerrors.ErrUnknownAddress.Wrapf("account %s does not exist", addr)
@@ -40,14 +39,6 @@ func (k *Keeper) TrySetVestingInvestor(ctx context.Context, addr sdk.AccAddress)
 	vacc, isVestingAcc := acc.(vestingexported.VestingAccount)
 	if !isVestingAcc {
 		return sdkerrors.ErrInvalidRequest.Wrapf("account %s is not a vesting account", addr)
-	}
-
-	// Check if the vesting period is over, in which case the account should not be
-	// added to the queue and the list.
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	currTime := sdkCtx.BlockTime().Unix()
-	if currTime >= vacc.GetEndTime() {
-		return nil
 	}
 
 	err := k.InvestorsVestingQueue.Set(ctx, collections.Join(vacc.GetEndTime(), addr))
