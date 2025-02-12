@@ -3,6 +3,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 -->
 
+## Version 9.0.0
+### Features
+#### Restaking
+- ([\#249](https://github.com/milkyway-labs/milkyway/pull/249)) Added a limit on the amount of unbonding entries that a target can have
+
+### Bug Fixes
+#### Liquid Vesting
+- ([\#231](https://github.com/milkyway-labs/milkyway/pull/231)) Removed the strict module account balance check
+
+#### Restaking
+- ([\#230](https://github.com/milkyway-labs/milkyway/pull/230)) Filtered unbonding delegations by requested target id
+- ([\#242](https://github.com/milkyway-labs/milkyway/pull/242)) Removed problematic scaling gas costs
+
 ## Version 8.1.1
 ### Bug fixes
 #### Build
