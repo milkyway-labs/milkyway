@@ -9,7 +9,7 @@ import (
 
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
-	"github.com/milkyway-labs/milkyway/v7/x/tokenfactory/types"
+	"github.com/milkyway-labs/milkyway/v9/x/tokenfactory/types"
 )
 
 type SendMsgTestCase struct {

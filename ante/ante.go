@@ -4,7 +4,7 @@ import (
 	feemarketante "github.com/skip-mev/feemarket/x/feemarket/ante"
 	feemarketkeeper "github.com/skip-mev/feemarket/x/feemarket/keeper"
 
-	milkywayerrors "github.com/milkyway-labs/milkyway/v7/types/errors"
+	milkywayerrors "github.com/milkyway-labs/milkyway/v9/types/errors"
 
 	ibcante "github.com/cosmos/ibc-go/v8/modules/core/ante"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"

@@ -14,11 +14,11 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/stretchr/testify/suite"
 
-	milkywayapp "github.com/milkyway-labs/milkyway/v7/app"
-	bankkeeper "github.com/milkyway-labs/milkyway/v7/x/bank/keeper"
-	"github.com/milkyway-labs/milkyway/v7/x/tokenfactory/keeper"
-	"github.com/milkyway-labs/milkyway/v7/x/tokenfactory/testutils"
-	"github.com/milkyway-labs/milkyway/v7/x/tokenfactory/types"
+	milkywayapp "github.com/milkyway-labs/milkyway/v9/app"
+	bankkeeper "github.com/milkyway-labs/milkyway/v9/x/bank/keeper"
+	"github.com/milkyway-labs/milkyway/v9/x/tokenfactory/keeper"
+	"github.com/milkyway-labs/milkyway/v9/x/tokenfactory/testutils"
+	"github.com/milkyway-labs/milkyway/v9/x/tokenfactory/types"
 )
 
 type KeeperTestSuite struct {

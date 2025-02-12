@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/milkyway-labs/milkyway/v7/x/tokenfactory/types"
+	"github.com/milkyway-labs/milkyway/v9/x/tokenfactory/types"
 )
 
 var _ types.QueryServer = Keeper{}

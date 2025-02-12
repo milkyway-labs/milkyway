@@ -5,8 +5,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 
-	"github.com/milkyway-labs/milkyway/v7/x/liquidvesting/keeper"
-	"github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
+	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting/keeper"
+	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
 )
 
 func (suite *KeeperTestSuite) TestQuerier_InsuranceFund() {

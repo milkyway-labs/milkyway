@@ -3,8 +3,8 @@ package v9
 import (
 	storetypes "cosmossdk.io/store/types"
 
-	"github.com/milkyway-labs/milkyway/v7/app/upgrades"
-	tokenfactorytypes "github.com/milkyway-labs/milkyway/v7/x/tokenfactory/types"
+	"github.com/milkyway-labs/milkyway/v9/app/upgrades"
+	tokenfactorytypes "github.com/milkyway-labs/milkyway/v9/x/tokenfactory/types"
 )
 
 const UpgradeName = "v9"

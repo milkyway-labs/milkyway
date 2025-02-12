@@ -6,8 +6,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v7/x/restaking/keeper"
-	"github.com/milkyway-labs/milkyway/v7/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v9/x/restaking/keeper"
+	"github.com/milkyway-labs/milkyway/v9/x/restaking/types"
 )
 
 // EndBlocker is called every block and is responsible for maturing unbonding delegations

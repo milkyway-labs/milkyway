@@ -31,7 +31,7 @@ import (
 
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 
-	milkyway "github.com/milkyway-labs/milkyway/v7/app"
+	milkyway "github.com/milkyway-labs/milkyway/v9/app"
 )
 
 // SimAppChainID hardcoded chainID for simulation

@@ -4,7 +4,7 @@ package milkyway.services.v1;
 import "cosmos/base/v1beta1/coin.proto";
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v7/x/services/types";
+option go_package = "github.com/milkyway-labs/milkyway/v9/x/services/types";
 
 // Params defines the parameters for the module.
 message Params {
