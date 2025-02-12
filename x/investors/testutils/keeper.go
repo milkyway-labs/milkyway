@@ -39,7 +39,7 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	}
 
 	// Setup the keys
-	data.StoreService = runtime.NewKVStoreService(data.Keys[distrtypes.StoreKey])
+	data.StoreService = runtime.NewKVStoreService(data.Keys[types.StoreKey])
 
 	// Build the keepers
 	data.StakingKeeper = stakingkeeper.NewKeeper(

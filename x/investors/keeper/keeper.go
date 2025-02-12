@@ -14,7 +14,7 @@ import (
 )
 
 type Keeper struct {
-	cdc codec.BinaryCodec
+	cdc codec.Codec
 
 	accountKeeper types.AccountKeeper
 	stakingKeeper types.StakingKeeper
@@ -35,7 +35,7 @@ type Keeper struct {
 
 // NewKeeper creates a new keeper
 func NewKeeper(
-	cdc codec.BinaryCodec,
+	cdc codec.Codec,
 	storeService corestoretypes.KVStoreService,
 	accountKeeper types.AccountKeeper,
 	stakingKeeper types.StakingKeeper,
