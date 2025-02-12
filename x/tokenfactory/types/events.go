@@ -5,7 +5,7 @@ const (
 	AttributeAmount                = "amount"
 	AttributeCreator               = "creator"
 	AttributeSubdenom              = "subdenom"
-	AttributeNewTokenDenom         = "new_token_denom"
+	AttributeNewTokenDenom         = "new_token_denom" //nolint:gosec
 	AttributeMintToAddress         = "mint_to_address"
 	AttributeBurnFromAddress       = "burn_from_address"
 	AttributeTransferFromAddress   = "transfer_from_address"
