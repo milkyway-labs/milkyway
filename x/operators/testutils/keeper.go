@@ -5,8 +5,6 @@ import (
 
 	corestoretypes "cosmossdk.io/core/store"
 	"github.com/cosmos/cosmos-sdk/runtime"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
 	"github.com/milkyway-labs/milkyway/v7/testutils/storetesting"
 	"github.com/milkyway-labs/milkyway/v7/x/operators/keeper"
@@ -27,7 +25,7 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 
 	var data = KeeperTestData{
 		BaseKeeperTestData: storetesting.NewBaseKeeperTestData(t, []string{
-			types.StoreKey, authtypes.StoreKey, banktypes.StoreKey,
+			types.StoreKey,
 		}),
 	}
 
