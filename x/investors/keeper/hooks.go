@@ -52,38 +52,36 @@ func (h Hooks) AfterDelegationModified(ctx context.Context, delAddr sdk.AccAddre
 	return h.k.IncrementValidatorInvestorsShares(ctx, valAddr, delegation.GetShares())
 }
 
-func (h Hooks) BeforeDelegationRemoved(ctx context.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) error {
-	// Just call BeforeDelegationSharesModified hook since all we want to do is
-	// decrementing the shares
-	return h.BeforeDelegationSharesModified(ctx, delAddr, valAddr)
+func (h Hooks) BeforeDelegationRemoved(context.Context, sdk.AccAddress, sdk.ValAddress) error {
+	return nil
 }
 
-func (h Hooks) BeforeValidatorSlashed(_ context.Context, _ sdk.ValAddress, _ sdkmath.LegacyDec) error {
+func (h Hooks) BeforeValidatorSlashed(context.Context, sdk.ValAddress, sdkmath.LegacyDec) error {
 	// TODO: implement it
 	return nil
 }
 
-func (h Hooks) AfterValidatorCreated(_ context.Context, _ sdk.ValAddress) error {
+func (h Hooks) AfterValidatorCreated(context.Context, sdk.ValAddress) error {
 	return nil
 }
 
-func (h Hooks) BeforeValidatorModified(_ context.Context, _ sdk.ValAddress) error {
+func (h Hooks) BeforeValidatorModified(context.Context, sdk.ValAddress) error {
 	return nil
 }
 
-func (h Hooks) AfterValidatorRemoved(_ context.Context, _ sdk.ConsAddress, _ sdk.ValAddress) error {
+func (h Hooks) AfterValidatorRemoved(context.Context, sdk.ConsAddress, sdk.ValAddress) error {
 	return nil
 }
 
-func (h Hooks) AfterValidatorBonded(_ context.Context, _ sdk.ConsAddress, _ sdk.ValAddress) error {
+func (h Hooks) AfterValidatorBonded(context.Context, sdk.ConsAddress, sdk.ValAddress) error {
 	return nil
 }
 
-func (h Hooks) AfterValidatorBeginUnbonding(_ context.Context, _ sdk.ConsAddress, _ sdk.ValAddress) error {
+func (h Hooks) AfterValidatorBeginUnbonding(context.Context, sdk.ConsAddress, sdk.ValAddress) error {
 	return nil
 }
 
-func (h Hooks) BeforeDelegationCreated(_ context.Context, _ sdk.AccAddress, _ sdk.ValAddress) error {
+func (h Hooks) BeforeDelegationCreated(context.Context, sdk.AccAddress, sdk.ValAddress) error {
 	return nil
 }
 

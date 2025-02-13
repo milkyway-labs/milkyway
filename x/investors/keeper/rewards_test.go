@@ -7,6 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
+	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"github.com/milkyway-labs/milkyway/v9/app/testutil"
@@ -256,7 +257,7 @@ func (suite *KeeperTestSuite) TestVestingEndedInvestorsReward() {
 
 	// Query the normal account's rewards
 	// The normal account received ~333333stake = 1000000 / 3 for this block,
-	// so the accmulated rewards should be ~733333stake = 400000 + 333333
+	// so the accumulated rewards should be ~733333stake = 400000 + 333333
 	cacheCtx, _ = ctx.CacheContext()
 	rewards, err = querier.DelegationRewards(cacheCtx, &distrtypes.QueryDelegationRewardsRequest{
 		DelegatorAddress: normalAddr.String(),
@@ -264,4 +265,45 @@ func (suite *KeeperTestSuite) TestVestingEndedInvestorsReward() {
 	})
 	suite.Require().NoError(err)
 	suite.Require().Equal("733333.333333333333000000stake", rewards.Rewards.String())
+}
+
+func (suite *KeeperTestSuite) TestUnbond() {
+	ctx, _ := suite.ctx.CacheContext()
+	ctx = ctx.WithBlockTime(time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC))
+
+	err := suite.k.UpdateInvestorsRewardRatio(ctx, sdkmath.LegacyNewDecWithPrec(5, 1)) // 50%
+	suite.Require().NoError(err)
+
+	valOwnerAddr := testutil.TestAddress(10000)
+	validator := suite.createValidator(
+		ctx,
+		valOwnerAddr,
+		stakingtypes.NewCommissionRates(utils.MustParseDec("0"), utils.MustParseDec("0.2"), utils.MustParseDec("0.01")),
+		utils.MustParseCoin("1000000stake"),
+		true,
+	)
+	valAddr := sdk.ValAddress(valOwnerAddr)
+
+	investorAddr := testutil.TestAddress(1)
+	vestingEndTime := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
+	suite.createVestingAccount(
+		ctx,
+		testutil.TestAddress(10001).String(),
+		investorAddr.String(),
+		utils.MustParseCoins("1000000stake"),
+		vestingEndTime.Unix(),
+		false,
+		true,
+	)
+	err = suite.k.SetVestingInvestor(ctx, investorAddr)
+	suite.Require().NoError(err)
+
+	suite.delegate(ctx, investorAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), false)
+
+	// Unbonding should work with vesting investors
+	_, err = stakingkeeper.NewMsgServerImpl(suite.sk).Undelegate(
+		ctx,
+		stakingtypes.NewMsgUndelegate(investorAddr.String(), valAddr.String(), utils.MustParseCoin("1000000stake")),
+	)
+	suite.Require().NoError(err)
 }
