@@ -28,7 +28,7 @@ func (suite *KeeperTestSuite) TestMsgServer_MintLockedRepresentation() {
 					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
 					nil,
 				))
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgMintLockedRepresentation(
 				"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
@@ -47,7 +47,7 @@ func (suite *KeeperTestSuite) TestMsgServer_MintLockedRepresentation() {
 					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
 					nil,
 				))
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgMintLockedRepresentation(
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -66,7 +66,7 @@ func (suite *KeeperTestSuite) TestMsgServer_MintLockedRepresentation() {
 					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
 					nil,
 				))
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgMintLockedRepresentation(
 				"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
@@ -108,7 +108,7 @@ func (suite *KeeperTestSuite) TestMsgServer_MintLockedRepresentation() {
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 				for _, event := range tc.expEvents {
 					suite.Require().Contains(ctx.EventManager().Events(), event)
 				}
@@ -138,7 +138,7 @@ func (suite *KeeperTestSuite) TestMsgServer_BurnLockedRepresentation() {
 					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
 					nil,
 				))
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 
 				suite.mintLockedRepresentation(ctx,
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
@@ -162,7 +162,7 @@ func (suite *KeeperTestSuite) TestMsgServer_BurnLockedRepresentation() {
 					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
 					nil,
 				))
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 
 				suite.fundAccount(ctx,
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
@@ -189,7 +189,7 @@ func (suite *KeeperTestSuite) TestMsgServer_BurnLockedRepresentation() {
 					[]string{"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"},
 					nil,
 				))
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 
 				suite.mintLockedRepresentation(ctx,
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
@@ -236,7 +236,7 @@ func (suite *KeeperTestSuite) TestMsgServer_BurnLockedRepresentation() {
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 				for _, event := range tc.expEvents {
 					suite.Require().Contains(ctx.EventManager().Events(), event)
 				}
@@ -287,13 +287,11 @@ func (suite *KeeperTestSuite) TestMsgServer_WithdrawInsuranceFund() {
 					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
 				)
 
-				suite.createPool(ctx, 1, LockedIBCDenom)
-
-				_, err := suite.rk.DelegateToPool(ctx,
+				_, err := suite.restakingKeeper.DelegateToPool(ctx,
 					sdk.NewInt64Coin(LockedIBCDenom, 500),
 					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
 				)
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 			},
 			msg: types.NewMsgWithdrawInsuranceFund(
 				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
@@ -346,7 +344,7 @@ func (suite *KeeperTestSuite) TestMsgServer_WithdrawInsuranceFund() {
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 				for _, event := range tc.expEvents {
 					suite.Require().Contains(ctx.EventManager().Events(), event)
 				}
@@ -386,7 +384,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateParams() {
 			expEvents: sdk.Events{},
 			check: func(ctx sdk.Context) {
 				params, err := suite.k.GetParams(ctx)
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 				suite.Assert().Equal(types.DefaultParams(), params)
 			},
 		},
@@ -415,7 +413,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateParams() {
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 				for _, event := range tc.expEvents {
 					suite.Require().Contains(ctx.EventManager().Events(), event)
 				}

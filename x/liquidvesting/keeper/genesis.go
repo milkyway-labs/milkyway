@@ -61,11 +61,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 		}
 
 		// Check if the insurance fund can cover the restaked coins
-		canCover, required, err := insuranceFund.CanCoverDecCoins(state.Params.InsurancePercentage, totalLockedRepresentations)
-		if err != nil {
-			return err
-		}
-
+		canCover, required := insuranceFund.CanCoverDecCoins(state.Params.InsurancePercentage, totalLockedRepresentations)
 		if !canCover {
 			return fmt.Errorf("user: %s insurance fund amount is too low, expected %s, got %s",
 				entry.UserAddress, required.String(), entry.Balance.String())

@@ -3,12 +3,17 @@ package keeper
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"cosmossdk.io/collections"
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v9/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v9/x/pools/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v9/x/services/types"
 )
 
 // AddToUserInsuranceFund adds the provided amount to the user's insurance fund.
@@ -24,10 +29,22 @@ func (k *Keeper) AddToUserInsuranceFund(ctx context.Context, user string, amount
 		}
 	}
 
+	newBalance := insuranceFund.Balance.Add(amount...)
+
+	err = k.beforeUserInsuranceFundModified(ctx, user, insuranceFund.Balance, newBalance)
+	if err != nil {
+		return err
+	}
+
 	// Update the user's insurance fund
-	insuranceFund.Add(amount)
+	insuranceFund.Balance = newBalance
 	// Store the updated user's insurance fund
-	return k.insuranceFunds.Set(ctx, user, insuranceFund)
+	err = k.insuranceFunds.Set(ctx, user, insuranceFund)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // WithdrawFromUserInsuranceFund withdraws coins from the user's insurance fund
@@ -46,8 +63,15 @@ func (k *Keeper) WithdrawFromUserInsuranceFund(ctx context.Context, user string,
 		return types.ErrInsufficientInsuranceFundBalance
 	}
 
+	newBalance := insuranceFund.Balance.Sub(amount...)
+
+	err = k.beforeUserInsuranceFundModified(ctx, user, insuranceFund.Balance, newBalance)
+	if err != nil {
+		return err
+	}
+
 	// Update the user insurance fund
-	insuranceFund.Balance = insuranceFund.Balance.Sub(amount...)
+	insuranceFund.Balance = newBalance
 	err = k.insuranceFunds.Set(ctx, user, insuranceFund)
 	if err != nil {
 		return err
@@ -65,6 +89,97 @@ func (k *Keeper) WithdrawFromUserInsuranceFund(ctx context.Context, user string,
 	}
 
 	return nil
+}
+
+// beforeUserInsuranceFundModified is called before modifying user's insurance
+// fund.
+func (k *Keeper) beforeUserInsuranceFundModified(ctx context.Context, user string, oldInsuranceFund, newInsuranceFund sdk.Coins) error {
+	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(user)
+	if err != nil {
+		return err
+	}
+
+	// Calculate old coverable coins and new coverable coins
+	params, err := k.GetParams(ctx)
+	if err != nil {
+		return err
+	}
+
+	// Iterating through all the user's delegations, withdraw rewards and update
+	// each delegation target's total covered locked shares.
+	err = k.restakingKeeper.IterateUserDelegations(ctx, user, func(del restakingtypes.Delegation) (stop bool, err error) {
+		target, err := k.restakingKeeper.GetDelegationTarget(ctx, del.Type, del.TargetID)
+		if err != nil {
+			return true, err
+		}
+
+		oldCoveredLockedShares, err := types.GetCoveredLockedShares(target, del, oldInsuranceFund, params.InsurancePercentage)
+		if err != nil {
+			return true, err
+		}
+		newCoveredLockedShares, err := types.GetCoveredLockedShares(target, del, newInsuranceFund, params.InsurancePercentage)
+		if err != nil {
+			return true, err
+		}
+
+		prevTargetCoveredLockedShares, err := k.GetTargetCoveredLockedShares(ctx, del.Type, del.TargetID)
+		if err != nil {
+			return true, err
+		}
+		newTargetCoveredLockedShares := prevTargetCoveredLockedShares.Add(newCoveredLockedShares...).Sub(oldCoveredLockedShares)
+
+		// Withdraw rewards
+		k.restakingOverrider.GetDelegationTarget = func(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32) (restakingtypes.DelegationTarget, error) {
+			uncoveredLockedShares := types.UncoveredLockedShares(target.GetDelegatorShares(), newTargetCoveredLockedShares)
+
+			switch target := target.(type) {
+			case poolstypes.Pool:
+				target, _, err = target.RemoveDelShares(uncoveredLockedShares)
+				if err != nil {
+					return nil, err
+				}
+				return target, nil
+			case operatorstypes.Operator:
+				target, _ = target.RemoveDelShares(uncoveredLockedShares)
+				return target, nil
+			case servicestypes.Service:
+				target, _ = target.RemoveDelShares(uncoveredLockedShares)
+				return target, nil
+			default:
+				return nil, fmt.Errorf("invalid target type %T", target)
+			}
+		}
+		k.restakingOverrider.GetDelegation = func(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32, delegator string) (restakingtypes.Delegation, bool, error) {
+			del.Shares = types.DeductUncoveredLockedShares(del.Shares, newCoveredLockedShares)
+			return del, true, nil
+		}
+		err = k.withRestakingOverrider(func() error {
+			_, err := k.rewardsKeeper.WithdrawDelegationRewards(ctx, delAddr, del.Type, del.TargetID)
+			return err
+		})
+		if err != nil {
+			return true, err
+		}
+
+		if newTargetCoveredLockedShares.IsZero() {
+			err = k.TargetsCoveredLockedShares.Remove(ctx, collections.Join(int32(del.Type), del.TargetID))
+			if err != nil {
+				return true, err
+			}
+		} else {
+			err = k.TargetsCoveredLockedShares.Set(
+				ctx,
+				collections.Join(int32(del.Type), del.TargetID),
+				types.CoveredLockedShares{Shares: newTargetCoveredLockedShares},
+			)
+			if err != nil {
+				return true, err
+			}
+		}
+
+		return false, nil
+	})
+	return err
 }
 
 // GetUserInsuranceFund returns the user's insurance fund.
@@ -172,7 +287,28 @@ func (k *Keeper) CanWithdrawFromInsuranceFund(ctx context.Context, user string, 
 	// Ensure that the user's insurance fund can cover the user's restaked
 	// locked representations after the withdrawal.
 	userInsuranceFund.Balance = userInsuranceFund.Balance.Sub(amount...)
-	canCover, _, err := userInsuranceFund.CanCoverDecCoins(params.InsurancePercentage, lockedRepresentations)
+	canCover, _ := userInsuranceFund.CanCoverDecCoins(params.InsurancePercentage, lockedRepresentations)
 
-	return canCover, err
+	return canCover, nil
+}
+
+func (k *Keeper) GetCoveredLockedShares(ctx context.Context, delegation restakingtypes.Delegation) (sdk.DecCoins, error) {
+	// Get coverable dec coins by the user's insurance fund
+	insuranceFund, err := k.GetUserInsuranceFundBalance(ctx, delegation.UserAddress)
+	if err != nil {
+		return nil, err
+	}
+	// Exit early if the user doesn't have insurance fund balance
+	if insuranceFund.IsZero() {
+		return nil, nil
+	}
+	target, err := k.restakingKeeper.GetDelegationTarget(ctx, delegation.Type, delegation.TargetID)
+	if err != nil {
+		return nil, err
+	}
+	params, err := k.GetParams(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return types.GetCoveredLockedShares(target, delegation, insuranceFund, params.InsurancePercentage)
 }

@@ -584,6 +584,7 @@ func NewAppKeeper(
 		appKeepers.AssetsKeeper,
 		govAuthority,
 	)
+	appKeepers.LiquidVestingKeeper = &liquidvestingkeeper.Keeper{}
 	appKeepers.RewardsKeeper = rewardskeeper.NewKeeper(
 		appCodec,
 		runtime.NewKVStoreService(appKeepers.keys[rewardstypes.StoreKey]),
@@ -593,8 +594,8 @@ func NewAppKeeper(
 		appKeepers.OracleKeeper,
 		appKeepers.PoolsKeeper,
 		appKeepers.OperatorsKeeper,
-		appKeepers.ServicesKeeper,
-		appKeepers.RestakingKeeper,
+		appKeepers.LiquidVestingKeeper.AdjustedServicesKeeper(appKeepers.ServicesKeeper),
+		appKeepers.LiquidVestingKeeper.AdjustedRestakingKeeper(appKeepers.RestakingKeeper),
 		appKeepers.AssetsKeeper,
 		govAuthority,
 	)
@@ -609,6 +610,7 @@ func NewAppKeeper(
 		appKeepers.PoolsKeeper,
 		appKeepers.ServicesKeeper,
 		appKeepers.RestakingKeeper,
+		appKeepers.RewardsKeeper,
 		authtypes.NewModuleAddress(liquidvestingtypes.ModuleName).String(),
 		govAuthority,
 	)
@@ -629,12 +631,10 @@ func NewAppKeeper(
 		appKeepers.RestakingKeeper.ServicesHooks(),
 		appKeepers.RewardsKeeper.ServicesHooks(),
 	))
-	appKeepers.RestakingKeeper.SetHooks(
+	appKeepers.RestakingKeeper.SetHooks(restakingtypes.NewMultiRestakingHooks(
+		appKeepers.LiquidVestingKeeper.RestakingHooks(),
 		appKeepers.RewardsKeeper.RestakingHooks(),
-	)
-	appKeepers.RestakingKeeper.SetRestakeRestriction(
-		appKeepers.LiquidVestingKeeper.RestakeRestrictionFn,
-	)
+	))
 
 	// Must be called on PFMRouter AFTER TransferKeeper initialized
 	appKeepers.PFMRouterKeeper.SetTransferKeeper(appKeepers.TransferKeeper)

@@ -3,9 +3,12 @@ package keeper
 import (
 	"context"
 
+	"cosmossdk.io/collections"
+	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
 )
 
 func (k *Keeper) GetAllUsersInsuranceFundsEntries(ctx sdk.Context) ([]types.UserInsuranceFundEntry, error) {
@@ -69,4 +72,45 @@ func (k *Keeper) GetAllUserActiveLockedRepresentations(ctx context.Context, user
 	userUnbondingLockedRepresentations := k.GetAllUserUnbondingLockedRepresentations(ctx, userAddress)
 
 	return restakedCoins.Add(sdk.NewDecCoinsFromCoins(userUnbondingLockedRepresentations...)...), nil
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// GetTargetCoveredLockedShares returns the covered locked shares for a delegation target.
+func (k *Keeper) GetTargetCoveredLockedShares(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32) (sdk.DecCoins, error) {
+	shares, err := k.TargetsCoveredLockedShares.Get(ctx, collections.Join(int32(delType), targetID))
+	if err != nil && !errors.IsOf(err, collections.ErrNotFound) {
+		return nil, err
+	}
+	return shares.Shares, nil
+}
+
+// IncrementTargetCoveredLockedShares increments the total locked shares for a target.
+func (k *Keeper) IncrementTargetCoveredLockedShares(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32, shares sdk.DecCoins) error {
+	prevShares, err := k.GetTargetCoveredLockedShares(ctx, delType, targetID)
+	if err != nil {
+		return err
+	}
+	newShares := prevShares.Add(shares...)
+	return k.TargetsCoveredLockedShares.Set(
+		ctx,
+		collections.Join(int32(delType), targetID),
+		types.CoveredLockedShares{Shares: newShares},
+	)
+}
+
+// DecrementTargetCoveredLockedShares decrements the total locked shares for a target.
+// If the total locked shares become zero, the record is deleted instead.
+func (k *Keeper) DecrementTargetCoveredLockedShares(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32, shares sdk.DecCoins) error {
+	prevShares, err := k.GetTargetCoveredLockedShares(ctx, delType, targetID)
+	if err != nil {
+		return err
+	}
+	newShares := prevShares.Sub(shares)
+	key := collections.Join(int32(delType), targetID)
+	// Delete the shares record if it becomes zero
+	if newShares.IsZero() {
+		return k.TargetsCoveredLockedShares.Remove(ctx, key)
+	}
+	return k.TargetsCoveredLockedShares.Set(ctx, key, types.CoveredLockedShares{Shares: newShares})
 }

@@ -102,7 +102,7 @@ func (k *Keeper) validateDistributionDelegationTargets(ctx context.Context, dist
 	}
 
 	for _, weight := range typ.Weights {
-		_, err = k.GetDelegationTarget(ctx, distribution.DelegationType, weight.DelegationTargetID)
+		_, err = k.restakingKeeper.GetDelegationTarget(ctx, distribution.DelegationType, weight.DelegationTargetID)
 		if err != nil {
 			return errors.Wrapf(err, "cannot get delegation target %d", weight.DelegationTargetID)
 		}

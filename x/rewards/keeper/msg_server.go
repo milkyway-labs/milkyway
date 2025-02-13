@@ -191,12 +191,7 @@ func (k msgServer) WithdrawDelegatorReward(ctx context.Context, msg *types.MsgWi
 		return nil, sdkerrors.ErrInvalidRequest.Wrapf("invalid delegation target ID: %d", msg.DelegationTargetID)
 	}
 
-	target, err := k.GetDelegationTarget(ctx, msg.DelegationType, msg.DelegationTargetID)
-	if err != nil {
-		return nil, err
-	}
-
-	rewards, err := k.WithdrawDelegationRewards(ctx, delAddr, target)
+	rewards, err := k.WithdrawDelegationRewards(ctx, delAddr, msg.DelegationType, msg.DelegationTargetID)
 	if err != nil {
 		return nil, err
 	}

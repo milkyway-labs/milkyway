@@ -12,7 +12,7 @@ import (
 
 // AfterDelegationTargetCreated is called after a delegation target is created
 func (k *Keeper) AfterDelegationTargetCreated(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32) error {
-	target, err := k.GetDelegationTarget(ctx, delType, targetID)
+	target, err := k.restakingKeeper.GetDelegationTarget(ctx, delType, targetID)
 	if err != nil {
 		return err
 	}
@@ -22,7 +22,7 @@ func (k *Keeper) AfterDelegationTargetCreated(ctx context.Context, delType resta
 
 // BeforeDelegationTargetRemoved is called before a delegation target is removed
 func (k *Keeper) BeforeDelegationTargetRemoved(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32) error {
-	target, err := k.GetDelegationTarget(ctx, delType, targetID)
+	target, err := k.restakingKeeper.GetDelegationTarget(ctx, delType, targetID)
 	if err != nil {
 		return err
 	}
@@ -32,7 +32,7 @@ func (k *Keeper) BeforeDelegationTargetRemoved(ctx context.Context, delType rest
 
 // BeforeDelegationCreated is called before a delegation to a target is created
 func (k *Keeper) BeforeDelegationCreated(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32) error {
-	target, err := k.GetDelegationTarget(ctx, delType, targetID)
+	target, err := k.restakingKeeper.GetDelegationTarget(ctx, delType, targetID)
 	if err != nil {
 		return err
 	}
@@ -43,14 +43,14 @@ func (k *Keeper) BeforeDelegationCreated(ctx context.Context, delType restakingt
 
 // BeforeDelegationSharesModified is called before a delegation to a target is modified
 func (k *Keeper) BeforeDelegationSharesModified(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32, delegator string) error {
-	target, err := k.GetDelegationTarget(ctx, delType, targetID)
+	target, err := k.restakingKeeper.GetDelegationTarget(ctx, delType, targetID)
 	if err != nil {
 		return err
 	}
 
 	// We don't have to initialize target here because we can assume BeforeDelegationCreated
 	// has already been called when delegation shares are being modified.
-	del, found, err := k.restakingKeeper.GetDelegationForTarget(ctx, target.DelegationTarget, delegator)
+	del, found, err := k.restakingKeeper.GetDelegation(ctx, delType, targetID, delegator)
 	if err != nil {
 		return err
 	}
@@ -89,23 +89,18 @@ func (k *Keeper) BeforeDelegationSharesModified(ctx context.Context, delType res
 
 // AfterDelegationModified is called after a delegation to a target is modified
 func (k *Keeper) AfterDelegationModified(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32, delegator string) error {
-	target, err := k.GetDelegationTarget(ctx, delType, targetID)
-	if err != nil {
-		return err
-	}
-
 	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(delegator)
 	if err != nil {
 		return err
 	}
 
-	err = k.initializeDelegation(ctx, target, delAddr)
+	err = k.initializeDelegation(ctx, delType, targetID, delAddr)
 	if err != nil {
 		return err
 	}
 
 	if delType == restakingtypes.DELEGATION_TYPE_POOL {
-		delegation, found, err := k.restakingKeeper.GetPoolDelegation(ctx, targetID, delegator)
+		delegation, found, err := k.restakingKeeper.GetDelegation(ctx, delType, targetID, delegator)
 		if err != nil {
 			return err
 		}
@@ -185,7 +180,7 @@ func (k *Keeper) AfterUserPreferencesModified(
 	err = k.restakingKeeper.IterateUserPoolDelegations(ctx, userAddress, func(delegation restakingtypes.Delegation) (stop bool, err error) {
 		poolID := delegation.TargetID
 
-		pool, err := k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_POOL, poolID)
+		pool, err := k.restakingKeeper.GetDelegationTarget(ctx, delegation.Type, poolID)
 		if err != nil {
 			return true, err
 		}
@@ -205,7 +200,7 @@ func (k *Keeper) AfterUserPreferencesModified(
 				return true, err
 			}
 
-			err = k.initializeDelegation(ctx, pool, delAddr)
+			err = k.initializeDelegation(ctx, delegation.Type, poolID, delAddr)
 			if err != nil {
 				return true, err
 			}

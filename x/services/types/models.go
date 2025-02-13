@@ -138,7 +138,7 @@ func (s Service) SharesFromTokens(tokens sdk.Coins) (sdk.DecCoins, error) {
 	if s.Tokens.IsZero() {
 		return sdk.NewDecCoins(), ErrInsufficientShares
 	}
-	return utils.SharesFromTokens(tokens, s.GetSharesDenom, s.Tokens, s.DelegatorShares)
+	return utils.SharesFromTokens(tokens, s.GetSharesDenom, s.Tokens, s.DelegatorShares), nil
 }
 
 // SharesFromDecCoins returns the shares of a delegation given a bond amount. It
@@ -147,7 +147,7 @@ func (s Service) SharesFromDecCoins(coins sdk.DecCoins) (sdk.DecCoins, error) {
 	if s.Tokens.IsZero() {
 		return sdk.NewDecCoins(), ErrInsufficientShares
 	}
-	return utils.SharesFromDecCoins(coins, s.GetSharesDenom, s.Tokens, s.DelegatorShares)
+	return utils.SharesFromDecCoins(coins, s.GetSharesDenom, s.Tokens, s.DelegatorShares), nil
 }
 
 // AddTokensFromDelegation adds the given amount of tokens to the service's total tokens,

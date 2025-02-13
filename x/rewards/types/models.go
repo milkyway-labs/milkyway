@@ -420,12 +420,3 @@ func (shares PoolServiceTotalDelegatorShares) Validate() error {
 	}
 	return nil
 }
-
-// --------------------------------------------------------------------------------------------------------------------
-
-// NewOutstandingRewards creates a new OutstandingRewards instance.
-func NewOutstandingRewards(rewards DecPools) OutstandingRewards {
-	return OutstandingRewards{
-		Rewards: rewards,
-	}
-}

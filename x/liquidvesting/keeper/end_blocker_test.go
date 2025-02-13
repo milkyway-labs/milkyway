@@ -11,7 +11,7 @@ import (
 
 func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 	lockedStakeDenom, err := types.GetLockedRepresentationDenom("stake")
-	suite.Assert().NoError(err)
+	suite.Require().NoError(err)
 
 	testCases := []struct {
 		name      string
@@ -34,7 +34,7 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding delegation time to 7 days
-				err = suite.rk.SetParams(ctx, restakingtypes.NewParams(
+				err = suite.restakingKeeper.SetParams(ctx, restakingtypes.NewParams(
 					7*24*time.Hour,
 					nil,
 					restakingtypes.DefaultRestakingCap,
@@ -59,35 +59,34 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 				)
 
 				// Delegate some locked representation to pool, service and operator
-				suite.createPool(ctx, 1, lockedStakeDenom)
-				_, err = suite.rk.DelegateToPool(ctx,
+				_, err = suite.restakingKeeper.DelegateToPool(ctx,
 					sdk.NewInt64Coin(lockedStakeDenom, 200),
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				)
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 
 				suite.createService(ctx, 1)
-				_, err = suite.rk.DelegateToService(ctx,
+				_, err = suite.restakingKeeper.DelegateToService(ctx,
 					1,
 					sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 300)),
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				)
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 
 				suite.createOperator(ctx, 1)
-				_, err = suite.rk.DelegateToOperator(ctx,
+				_, err = suite.restakingKeeper.DelegateToOperator(ctx,
 					1,
 					sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 300)),
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				)
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 
 				// Burn all the coins
 				err = suite.k.BurnLockedRepresentation(ctx,
 					sdk.MustAccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
 					sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 1000)),
 				)
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 			},
 			updateCtx: func(ctx sdk.Context) sdk.Context {
 				return ctx.WithBlockTime(ctx.BlockTime().Add(3 * 24 * time.Hour)) // 3 days later
@@ -109,7 +108,7 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 				// The user insurance fund signal that there are still 20 coins used
 				// to cover the restaking position
 				usedUserInsuranceFund, err := suite.k.GetUserUsedInsuranceFund(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake", 16)), usedUserInsuranceFund)
 			},
 		},
@@ -122,7 +121,7 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding delegation time to 7 days
-				err = suite.rk.SetParams(ctx, restakingtypes.NewParams(
+				err = suite.restakingKeeper.SetParams(ctx, restakingtypes.NewParams(
 					7*24*time.Hour,
 					nil,
 					restakingtypes.DefaultRestakingCap,
@@ -148,32 +147,31 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 				)
 
 				// Delegate some locked representation to pool, service and operator
-				suite.createPool(ctx, 1, lockedStakeDenom)
-				_, err = suite.rk.DelegateToPool(ctx, sdk.NewInt64Coin(lockedStakeDenom, 200), "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
-				suite.Assert().NoError(err)
+				_, err = suite.restakingKeeper.DelegateToPool(ctx, sdk.NewInt64Coin(lockedStakeDenom, 200), "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
+				suite.Require().NoError(err)
 
 				suite.createService(ctx, 1)
-				_, err = suite.rk.DelegateToService(ctx,
+				_, err = suite.restakingKeeper.DelegateToService(ctx,
 					1,
 					sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 300)),
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				)
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 
 				suite.createOperator(ctx, 1)
-				_, err = suite.rk.DelegateToOperator(ctx,
+				_, err = suite.restakingKeeper.DelegateToOperator(ctx,
 					1,
 					sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 300)),
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				)
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 
 				// Burn all the coins
 				err = suite.k.BurnLockedRepresentation(ctx,
 					sdk.MustAccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
 					sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 700)),
 				)
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 			},
 			updateCtx: func(ctx sdk.Context) sdk.Context {
 				return ctx.WithBlockTime(ctx.BlockTime().Add(7 * 24 * time.Hour)) // 7 days later
@@ -191,7 +189,7 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 
 				// The user insurance fund should update properly
 				userUsedInsuranceFund, err := suite.k.GetUserUsedInsuranceFund(ctx, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake", 6)), userUsedInsuranceFund)
 			},
 		},
@@ -215,15 +213,15 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 			}
 
 			// run the restaking keep end block logic
-			err = suite.rk.CompleteMatureUnbondingDelegations(ctx)
-			suite.Assert().NoError(err)
+			err = suite.restakingKeeper.CompleteMatureUnbondingDelegations(ctx)
+			suite.Require().NoError(err)
 
 			// run our end block logic
 			err = suite.k.CompleteBurnCoins(ctx)
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 				if tc.check != nil {
 					tc.check(ctx)
 				}

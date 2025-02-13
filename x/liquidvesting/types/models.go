@@ -19,10 +19,6 @@ func NewEmptyInsuranceFund() UserInsuranceFund {
 	return NewInsuranceFund(sdk.NewCoins())
 }
 
-func (u *UserInsuranceFund) Add(amount sdk.Coins) {
-	u.Balance = u.Balance.Add(amount...)
-}
-
 func (u *UserInsuranceFund) Validate() error {
 	if err := u.Balance.Validate(); err != nil {
 		return err
@@ -31,19 +27,14 @@ func (u *UserInsuranceFund) Validate() error {
 	return nil
 }
 
-func (u *UserInsuranceFund) CanCoverDecCoins(insurancePercentage sdkmath.LegacyDec, coins sdk.DecCoins) (bool, sdk.Coins, error) {
-	required := sdk.NewCoins()
-	for _, coin := range coins {
-		if IsLockedRepresentationDenom(coin.Denom) {
-			nativeDenom, err := LockedDenomToNative(coin.Denom)
-			if err != nil {
-				return false, nil, err
-			}
-			required = required.Add(sdk.NewCoin(nativeDenom, insurancePercentage.Mul(coin.Amount).QuoInt64(100).Ceil().TruncateInt()))
-		}
-	}
+func (u *UserInsuranceFund) CanCoverDecCoins(insurancePercentage sdkmath.LegacyDec, coins sdk.DecCoins) (bool, sdk.Coins) {
+	return CanCoverDecCoins(u.Balance, insurancePercentage, coins)
+}
 
-	return u.Balance.IsAllGTE(required), required, nil
+// CoverableDecCoins returns the amount of dec coins that can be covered by the
+// insurance fund.
+func (u *UserInsuranceFund) CoverableDecCoins(insurancePercentage sdkmath.LegacyDec) sdk.DecCoins {
+	return GetCoverableDecCoins(u.Balance, insurancePercentage)
 }
 
 func NewBurnCoins(delegator string, completionTime time.Time, amount sdk.Coins) BurnCoins {
