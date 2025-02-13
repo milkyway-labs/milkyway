@@ -8,11 +8,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
-	"github.com/milkyway-labs/milkyway/v7/x/restaking/keeper"
-	"github.com/milkyway-labs/milkyway/v7/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v9/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v9/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v9/x/restaking/keeper"
+	"github.com/milkyway-labs/milkyway/v9/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v9/x/services/types"
 )
 
 func (suite *KeeperTestSuite) TestMsgServer_JoinService() {
@@ -1492,7 +1492,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegatePool() {
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding time to 1 week
-				err := suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour, nil, types.DefaultRestakingCap))
+				err := suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour, nil, types.DefaultRestakingCap, types.DefaultMaxEntries))
 				suite.Require().NoError(err)
 
 				// Create the pool
@@ -1809,7 +1809,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegateOperator() {
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding time to 1 week
-				err := suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour, nil, types.DefaultRestakingCap))
+				err := suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour, nil, types.DefaultRestakingCap, types.DefaultMaxEntries))
 				suite.Require().NoError(err)
 
 				// Create the operator
@@ -2295,7 +2295,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UndelegateService() {
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding time to 1 week
-				err := suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour, nil, types.DefaultRestakingCap))
+				err := suite.k.SetParams(ctx, types.NewParams(7*24*time.Hour, nil, types.DefaultRestakingCap, types.DefaultMaxEntries))
 				suite.Require().NoError(err)
 
 				// Create the service

@@ -14,8 +14,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milkyway/v7/x/assets/keeper"
-	"github.com/milkyway-labs/milkyway/v7/x/assets/types"
+	"github.com/milkyway-labs/milkyway/v9/x/assets/keeper"
+	"github.com/milkyway-labs/milkyway/v9/x/assets/types"
 )
 
 const (

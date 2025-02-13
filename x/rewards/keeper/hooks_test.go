@@ -1,9 +1,9 @@
 package keeper_test
 
 import (
-	"github.com/milkyway-labs/milkyway/v7/app/testutil"
-	"github.com/milkyway-labs/milkyway/v7/utils"
-	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v9/app/testutil"
+	"github.com/milkyway-labs/milkyway/v9/utils"
+	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
 )
 
 func (suite *KeeperTestSuite) TestPoolServiceTotalDelegatorShares() {

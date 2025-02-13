@@ -30,14 +30,15 @@ import (
 	"github.com/skip-mev/connect/v2/x/oracle"
 	"github.com/skip-mev/feemarket/x/feemarket"
 
-	"github.com/milkyway-labs/milkyway/v7/x/assets"
-	"github.com/milkyway-labs/milkyway/v7/x/investors"
-	"github.com/milkyway-labs/milkyway/v7/x/liquidvesting"
-	"github.com/milkyway-labs/milkyway/v7/x/operators"
-	"github.com/milkyway-labs/milkyway/v7/x/pools"
-	"github.com/milkyway-labs/milkyway/v7/x/restaking"
-	"github.com/milkyway-labs/milkyway/v7/x/rewards"
-	"github.com/milkyway-labs/milkyway/v7/x/services"
+	"github.com/milkyway-labs/milkyway/v9/x/assets"
+	"github.com/milkyway-labs/milkyway/v9/x/investors"
+	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting"
+	"github.com/milkyway-labs/milkyway/v9/x/operators"
+	"github.com/milkyway-labs/milkyway/v9/x/pools"
+	"github.com/milkyway-labs/milkyway/v9/x/restaking"
+	"github.com/milkyway-labs/milkyway/v9/x/rewards"
+	"github.com/milkyway-labs/milkyway/v9/x/services"
+	"github.com/milkyway-labs/milkyway/v9/x/tokenfactory"
 )
 
 var AppModuleBasics = module.NewBasicManager(
@@ -60,6 +61,7 @@ var AppModuleBasics = module.NewBasicManager(
 	sdkparams.AppModuleBasic{},
 	consensus.AppModuleBasic{},
 	wasm.AppModuleBasic{},
+	tokenfactory.AppModuleBasic{},
 
 	// Skip modules
 	feemarket.AppModuleBasic{},

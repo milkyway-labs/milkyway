@@ -8,13 +8,13 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/simulation"
 
-	"github.com/milkyway-labs/milkyway/v7/testutils/simtesting"
-	"github.com/milkyway-labs/milkyway/v7/utils"
-	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
-	"github.com/milkyway-labs/milkyway/v7/x/restaking/keeper"
-	"github.com/milkyway-labs/milkyway/v7/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
+	"github.com/milkyway-labs/milkyway/v9/testutils/simtesting"
+	"github.com/milkyway-labs/milkyway/v9/utils"
+	operatorstypes "github.com/milkyway-labs/milkyway/v9/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v9/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v9/x/restaking/keeper"
+	"github.com/milkyway-labs/milkyway/v9/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v9/x/services/types"
 )
 
 func RandomOperatorJoinedServices(
@@ -124,7 +124,7 @@ func RandomUserPreferencesEntries(
 
 func RandomParams(r *rand.Rand) types.Params {
 	unbondingDays := time.Duration(r.Intn(7) + 1)
-	return types.NewParams(time.Hour*24*unbondingDays, nil, simulation.RandomDecAmount(r, math.LegacyNewDec(10000)))
+	return types.NewParams(time.Hour*24*unbondingDays, nil, simulation.RandomDecAmount(r, math.LegacyNewDec(10000)), uint32(r.Intn(20)+1))
 }
 
 func RandomUserPreferences(r *rand.Rand, services []servicestypes.Service) types.UserPreferences {

@@ -4,7 +4,7 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v7/x/investors/types"
+	"github.com/milkyway-labs/milkyway/v9/x/investors/types"
 )
 
 // ExportGenesis returns the GenesisState associated with the given context

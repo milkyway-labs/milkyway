@@ -3,8 +3,8 @@ package keeper_test
 import (
 	"time"
 
-	"github.com/milkyway-labs/milkyway/v7/app/testutil"
-	"github.com/milkyway-labs/milkyway/v7/utils"
+	"github.com/milkyway-labs/milkyway/v9/app/testutil"
+	"github.com/milkyway-labs/milkyway/v9/utils"
 )
 
 func (suite *KeeperTestSuite) TestRemoveVestingEndedInvestors() {

@@ -9,10 +9,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v7/utils"
-	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
+	"github.com/milkyway-labs/milkyway/v9/utils"
+	operatorstypes "github.com/milkyway-labs/milkyway/v9/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v9/x/pools/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v9/x/services/types"
 )
 
 // --------------------------------------------------------------------------------------------------------------------

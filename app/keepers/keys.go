@@ -32,14 +32,15 @@ import (
 
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
-	assetstypes "github.com/milkyway-labs/milkyway/v7/x/assets/types"
-	investorstypes "github.com/milkyway-labs/milkyway/v7/x/investors/types"
-	liquidvestingtypes "github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
-	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
-	rewardstypes "github.com/milkyway-labs/milkyway/v7/x/rewards/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
+	assetstypes "github.com/milkyway-labs/milkyway/v9/x/assets/types"
+	investorstypes "github.com/milkyway-labs/milkyway/v9/x/investors/types"
+	liquidvestingtypes "github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v9/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v9/x/pools/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
+	rewardstypes "github.com/milkyway-labs/milkyway/v9/x/rewards/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v9/x/services/types"
+	tokenfactorytypes "github.com/milkyway-labs/milkyway/v9/x/tokenfactory/types"
 )
 
 func (appKeepers *AppKeepers) GenerateKeys() {
@@ -69,6 +70,7 @@ func (appKeepers *AppKeepers) GenerateKeys() {
 		consensusparamtypes.StoreKey,
 		wasmtypes.StoreKey,
 		group.StoreKey,
+		tokenfactorytypes.StoreKey,
 
 		// Skip
 		marketmaptypes.StoreKey,

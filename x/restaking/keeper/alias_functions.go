@@ -13,11 +13,11 @@ import (
 	"github.com/cosmos/cosmos-sdk/runtime"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v7/utils"
-	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
-	"github.com/milkyway-labs/milkyway/v7/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
+	"github.com/milkyway-labs/milkyway/v9/utils"
+	operatorstypes "github.com/milkyway-labs/milkyway/v9/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v9/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v9/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v9/x/services/types"
 )
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -650,6 +650,30 @@ func (k *Keeper) getUnbondingDelegationKeyBuilder(ud types.UnbondingDelegation) 
 	}
 }
 
+// HasMaxUnbondingDelegationEntries checks if unbonding delegation has maximum number of entries.
+func (k Keeper) HasMaxUnbondingDelegationEntries(ctx context.Context, delegator string, target types.DelegationTarget) (bool, error) {
+	delType, err := types.GetDelegationTypeFromTarget(target)
+	if err != nil {
+		return false, err
+	}
+
+	ubd, found, err := k.GetUnbondingDelegation(ctx, delegator, delType, target.GetID())
+	if err != nil {
+		return false, err
+	}
+	if !found {
+		// If there's no unbonding delegation, then we know it hasn't reached the max
+		// entries
+		return false, nil
+	}
+
+	maxEntries, err := k.MaxEntries(ctx)
+	if err != nil {
+		return false, err
+	}
+	return len(ubd.Entries) >= int(maxEntries), nil
+}
+
 // SetUnbondingDelegation stores the given unbonding delegation in the store
 func (k *Keeper) SetUnbondingDelegation(ctx context.Context, ud types.UnbondingDelegation) ([]byte, error) {
 	// Get the key to be used to store the unbonding delegation
@@ -720,10 +744,14 @@ func (k *Keeper) RemoveUnbondingDelegation(ctx context.Context, ubd types.Unbond
 // an unbonding object and inserting it into the unbonding queue which will be
 // processed during the staking EndBlocker.
 func (k *Keeper) PerformUndelegation(ctx context.Context, data types.UndelegationData) (time.Time, error) {
-	// TODO: Probably we should implement this as well
-	// if k.HasMaxUnbondingDelegationEntries(ctx, delAddr, valAddr) {
-	//	 return time.Time{}, types.ErrMaxUnbondingDelegationEntries
-	// }
+	// Check if the unbonding delegation has reached the maximum number of entries
+	haxMaxEntries, err := k.HasMaxUnbondingDelegationEntries(ctx, data.Delegator, data.Target)
+	if err != nil {
+		return time.Time{}, err
+	}
+	if haxMaxEntries {
+		return time.Time{}, types.ErrMaxUnbondingDelegationEntries
+	}
 
 	// Unbond the tokens
 	returnAmount, err := k.Unbond(ctx, data)

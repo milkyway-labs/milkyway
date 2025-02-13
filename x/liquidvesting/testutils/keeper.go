@@ -3,12 +3,9 @@ package testutils
 import (
 	"testing"
 
-	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	distributiontypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	porttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
@@ -17,26 +14,24 @@ import (
 	oraclekeeper "github.com/skip-mev/connect/v2/x/oracle/keeper"
 	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
 
-	"github.com/milkyway-labs/milkyway/v7/testutils/storetesting"
-	assetskeeper "github.com/milkyway-labs/milkyway/v7/x/assets/keeper"
-	assetstypes "github.com/milkyway-labs/milkyway/v7/x/assets/types"
-	"github.com/milkyway-labs/milkyway/v7/x/liquidvesting"
-	"github.com/milkyway-labs/milkyway/v7/x/liquidvesting/keeper"
-	"github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
-	operatorskeeper "github.com/milkyway-labs/milkyway/v7/x/operators/keeper"
-	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
-	poolskeeper "github.com/milkyway-labs/milkyway/v7/x/pools/keeper"
-	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
-	restakingkeeper "github.com/milkyway-labs/milkyway/v7/x/restaking/keeper"
-	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
-	serviceskeeper "github.com/milkyway-labs/milkyway/v7/x/services/keeper"
-	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
+	"github.com/milkyway-labs/milkyway/v9/testutils/storetesting"
+	assetskeeper "github.com/milkyway-labs/milkyway/v9/x/assets/keeper"
+	assetstypes "github.com/milkyway-labs/milkyway/v9/x/assets/types"
+	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting"
+	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting/keeper"
+	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
+	operatorskeeper "github.com/milkyway-labs/milkyway/v9/x/operators/keeper"
+	operatorstypes "github.com/milkyway-labs/milkyway/v9/x/operators/types"
+	poolskeeper "github.com/milkyway-labs/milkyway/v9/x/pools/keeper"
+	poolstypes "github.com/milkyway-labs/milkyway/v9/x/pools/types"
+	restakingkeeper "github.com/milkyway-labs/milkyway/v9/x/restaking/keeper"
+	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
+	serviceskeeper "github.com/milkyway-labs/milkyway/v9/x/services/keeper"
+	servicestypes "github.com/milkyway-labs/milkyway/v9/x/services/types"
 )
 
 type KeeperTestData struct {
 	storetesting.BaseKeeperTestData
-
-	StoreKey storetypes.StoreKey
 
 	LiquidVestingModuleAddress sdk.AccAddress
 
@@ -54,10 +49,9 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 
 	var data = KeeperTestData{
 		BaseKeeperTestData: storetesting.NewBaseKeeperTestData(t, []string{
-			types.StoreKey, authtypes.StoreKey, banktypes.StoreKey,
+			types.StoreKey,
 			operatorstypes.StoreKey, poolstypes.StoreKey, servicestypes.StoreKey,
 			restakingtypes.StoreKey, stakingtypes.StoreKey,
-			distributiontypes.StoreKey,
 		}),
 	}
 

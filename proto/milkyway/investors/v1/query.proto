@@ -6,7 +6,7 @@ import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v7/x/investors/types";
+option go_package = "github.com/milkyway-labs/milkyway/v9/x/investors/types";
 
 // Query defines the gRPC querier service.
 service Query {

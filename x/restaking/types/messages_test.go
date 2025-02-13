@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/v7/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v9/x/restaking/types"
 )
 
 var msgUpdateOperatorParams = types.NewMsgJoinService(1, 1, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd")
@@ -269,7 +269,7 @@ func TestMsgUpdateParams_ValidateBasic(t *testing.T) {
 		{
 			name: "invalid params return error",
 			msg: types.NewMsgUpdateParams(
-				types.NewParams(0, nil, types.DefaultRestakingCap),
+				types.NewParams(0, nil, types.DefaultRestakingCap, types.DefaultMaxEntries),
 				msgUpdateParams.Authority,
 			),
 			shouldErr: true,
@@ -302,7 +302,7 @@ func TestMsgUpdateParams_ValidateBasic(t *testing.T) {
 }
 
 func TestMsgUpdateParams_GetSignBytes(t *testing.T) {
-	expected := `{"type":"milkyway/restaking/MsgUpdateParams","value":{"authority":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","params":{"restaking_cap":"0.000000000000000000","unbonding_time":"259200000000000"}}}`
+	expected := `{"type":"milkyway/restaking/MsgUpdateParams","value":{"authority":"cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd","params":{"max_entries":7,"restaking_cap":"0.000000000000000000","unbonding_time":"259200000000000"}}}`
 	require.Equal(t, expected, string(msgUpdateParams.GetSignBytes()))
 }
 

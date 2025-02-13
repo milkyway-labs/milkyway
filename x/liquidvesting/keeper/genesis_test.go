@@ -6,9 +6,9 @@ import (
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v9/x/pools/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
 )
 
 func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
@@ -70,6 +70,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					7*24*time.Hour,
 					nil,
 					restakingtypes.DefaultRestakingCap,
+					restakingtypes.DefaultMaxEntries,
 				))
 				suite.Require().NoError(err)
 

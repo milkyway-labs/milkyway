@@ -5,8 +5,8 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
 )
 
 func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
@@ -38,6 +38,7 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 					7*24*time.Hour,
 					nil,
 					restakingtypes.DefaultRestakingCap,
+					restakingtypes.DefaultMaxEntries,
 				))
 				suite.Require().NoError(err)
 
@@ -125,6 +126,7 @@ func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {
 					7*24*time.Hour,
 					nil,
 					restakingtypes.DefaultRestakingCap,
+					restakingtypes.DefaultMaxEntries,
 				))
 				suite.Require().NoError(err)
 

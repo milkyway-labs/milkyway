@@ -8,8 +8,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
-	"github.com/milkyway-labs/milkyway/v7/x/rewards/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v9/x/rewards/types"
 )
 
 var msgCreateRewardsPlan = types.NewMsgCreateRewardsPlan(

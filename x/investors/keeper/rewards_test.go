@@ -9,8 +9,8 @@ import (
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"github.com/milkyway-labs/milkyway/v7/app/testutil"
-	"github.com/milkyway-labs/milkyway/v7/utils"
+	"github.com/milkyway-labs/milkyway/v9/app/testutil"
+	"github.com/milkyway-labs/milkyway/v9/utils"
 )
 
 func (suite *KeeperTestSuite) TestInvestorsRewardRatio() {

@@ -8,7 +8,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/v7/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v9/x/restaking/types"
 )
 
 func TestGenesis_Validate(t *testing.T) {
@@ -227,7 +227,7 @@ func TestGenesis_Validate(t *testing.T) {
 				nil,
 				nil,
 				nil,
-				types.NewParams(0, nil, types.DefaultRestakingCap),
+				types.NewParams(0, nil, types.DefaultRestakingCap, types.DefaultMaxEntries),
 			),
 			shouldErr: true,
 		},
@@ -323,7 +323,7 @@ func TestGenesis_Validate(t *testing.T) {
 						}),
 					),
 				},
-				types.NewParams(5*24*time.Hour, nil, sdkmath.LegacyNewDec(100000)),
+				types.NewParams(5*24*time.Hour, nil, sdkmath.LegacyNewDec(100000), types.DefaultMaxEntries),
 			),
 			shouldErr: false,
 		},

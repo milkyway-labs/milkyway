@@ -68,7 +68,6 @@ import (
 	providertypes "github.com/cosmos/interchain-security/v6/x/ccv/provider/types"
 
 	evidencekeeper "cosmossdk.io/x/evidence/keeper"
-	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	govkeeper "github.com/cosmos/cosmos-sdk/x/gov/keeper"
 	mintkeeper "github.com/cosmos/cosmos-sdk/x/mint/keeper"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
@@ -81,23 +80,26 @@ import (
 	icsprovider "github.com/cosmos/interchain-security/v6/x/ccv/provider"
 	icsproviderkeeper "github.com/cosmos/interchain-security/v6/x/ccv/provider/keeper"
 
-	assetskeeper "github.com/milkyway-labs/milkyway/v7/x/assets/keeper"
-	assetstypes "github.com/milkyway-labs/milkyway/v7/x/assets/types"
-	investorskeeper "github.com/milkyway-labs/milkyway/v7/x/investors/keeper"
-	investorstypes "github.com/milkyway-labs/milkyway/v7/x/investors/types"
-	"github.com/milkyway-labs/milkyway/v7/x/liquidvesting"
-	liquidvestingkeeper "github.com/milkyway-labs/milkyway/v7/x/liquidvesting/keeper"
-	liquidvestingtypes "github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
-	operatorskeeper "github.com/milkyway-labs/milkyway/v7/x/operators/keeper"
-	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
-	poolskeeper "github.com/milkyway-labs/milkyway/v7/x/pools/keeper"
-	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
-	restakingkeeper "github.com/milkyway-labs/milkyway/v7/x/restaking/keeper"
-	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
-	rewardskeeper "github.com/milkyway-labs/milkyway/v7/x/rewards/keeper"
-	rewardstypes "github.com/milkyway-labs/milkyway/v7/x/rewards/types"
-	serviceskeeper "github.com/milkyway-labs/milkyway/v7/x/services/keeper"
-	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
+	assetskeeper "github.com/milkyway-labs/milkyway/v9/x/assets/keeper"
+	assetstypes "github.com/milkyway-labs/milkyway/v9/x/assets/types"
+	bankkeeper "github.com/milkyway-labs/milkyway/v9/x/bank/keeper"
+	investorskeeper "github.com/milkyway-labs/milkyway/v9/x/investors/keeper"
+	investorstypes "github.com/milkyway-labs/milkyway/v9/x/investors/types"
+	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting"
+	liquidvestingkeeper "github.com/milkyway-labs/milkyway/v9/x/liquidvesting/keeper"
+	liquidvestingtypes "github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
+	operatorskeeper "github.com/milkyway-labs/milkyway/v9/x/operators/keeper"
+	operatorstypes "github.com/milkyway-labs/milkyway/v9/x/operators/types"
+	poolskeeper "github.com/milkyway-labs/milkyway/v9/x/pools/keeper"
+	poolstypes "github.com/milkyway-labs/milkyway/v9/x/pools/types"
+	restakingkeeper "github.com/milkyway-labs/milkyway/v9/x/restaking/keeper"
+	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
+	rewardskeeper "github.com/milkyway-labs/milkyway/v9/x/rewards/keeper"
+	rewardstypes "github.com/milkyway-labs/milkyway/v9/x/rewards/types"
+	serviceskeeper "github.com/milkyway-labs/milkyway/v9/x/services/keeper"
+	servicestypes "github.com/milkyway-labs/milkyway/v9/x/services/types"
+	tokenfactorykeeper "github.com/milkyway-labs/milkyway/v9/x/tokenfactory/keeper"
+	tokenfactorytypes "github.com/milkyway-labs/milkyway/v9/x/tokenfactory/types"
 )
 
 type AppKeepers struct {
@@ -108,7 +110,7 @@ type AppKeepers struct {
 
 	// keepers
 	AccountKeeper         authkeeper.AccountKeeper
-	BankKeeper            bankkeeper.BaseKeeper
+	BankKeeper            bankkeeper.Keeper
 	CapabilityKeeper      *capabilitykeeper.Keeper
 	StakingKeeper         *stakingkeeper.Keeper
 	SlashingKeeper        slashingkeeper.Keeper
@@ -138,6 +140,9 @@ type AppKeepers struct {
 
 	// ICS
 	ProviderKeeper icsproviderkeeper.Keeper
+
+	// TokenFactory
+	TokenFactoryKeeper *tokenfactorykeeper.Keeper
 
 	// Custom
 	ServicesKeeper      *serviceskeeper.Keeper
@@ -234,7 +239,7 @@ func NewAppKeeper(
 		govAuthority,
 	)
 
-	appKeepers.BankKeeper = bankkeeper.NewBaseKeeper(
+	appKeepers.BankKeeper = bankkeeper.NewKeeper(
 		appCodec,
 		runtime.NewKVStoreService(appKeepers.keys[banktypes.StoreKey]),
 		appKeepers.AccountKeeper,
@@ -467,6 +472,16 @@ func NewAppKeeper(
 		appKeepers.IBCKeeper.PortKeeper, appKeepers.AccountKeeper, appKeepers.BankKeeper,
 	)
 
+	tokenFactoryKeeper := tokenfactorykeeper.NewKeeper(
+		appCodec,
+		runtime.NewKVStoreService(appKeepers.keys[tokenfactorytypes.StoreKey]),
+		appKeepers.AccountKeeper,
+		appKeepers.BankKeeper,
+		appKeepers.DistrKeeper,
+		govAuthority,
+	)
+	appKeepers.TokenFactoryKeeper = &tokenFactoryKeeper
+
 	// Create RateLimit keeper
 	appKeepers.RateLimitKeeper = ratelimitkeeper.NewKeeper(
 		appCodec, // BinaryCodec
@@ -502,6 +517,48 @@ func NewAppKeeper(
 		appKeepers.ScopedTransferKeeper,
 		govAuthority,
 	)
+
+	wasmDir := homePath
+	wasmConfig, err := wasm.ReadWasmConfig(appOpts)
+	if err != nil {
+		panic("error while reading wasm config: " + err.Error())
+	}
+
+	// allow connect queries
+	queryAllowlist := make(map[string]proto.Message)
+	queryAllowlist["/connect.oracle.v2.Query/GetAllCurrencyPairs"] = &oracletypes.GetAllCurrencyPairsResponse{}
+	queryAllowlist["/connect.oracle.v2.Query/GetPrice"] = &oracletypes.GetPriceResponse{}
+	queryAllowlist["/connect.oracle.v2.Query/GetPrices"] = &oracletypes.GetPricesResponse{}
+	queryAllowlist["/milkyway.operators.v1.Query/Operator"] = &operatorstypes.QueryOperatorResponse{}
+	queryAllowlist["/milkyway.restaking.v1.Query/ServiceOperators"] = &restakingtypes.QueryServiceOperatorsResponse{}
+
+	// use accept list stargate querier
+	wasmOpts = append(wasmOpts, wasmkeeper.WithQueryPlugins(&wasmkeeper.QueryPlugins{
+		Stargate: wasmkeeper.AcceptListStargateQuerier(queryAllowlist, bApp.GRPCQueryRouter(), appCodec),
+	}))
+
+	appKeepers.WasmKeeper = wasmkeeper.NewKeeper(
+		appCodec,
+		runtime.NewKVStoreService(appKeepers.keys[wasmtypes.StoreKey]),
+		appKeepers.AccountKeeper,
+		appKeepers.BankKeeper,
+		appKeepers.StakingKeeper,
+		distrkeeper.NewQuerier(appKeepers.DistrKeeper),
+		appKeepers.IBCFeeKeeper,
+		appKeepers.IBCKeeper.ChannelKeeper,
+		appKeepers.IBCKeeper.PortKeeper,
+		appKeepers.scopedWasmKeeper,
+		appKeepers.TransferKeeper,
+		bApp.MsgServiceRouter(),
+		bApp.GRPCQueryRouter(),
+		wasmDir,
+		wasmConfig,
+		wasmkeeper.BuiltInCapabilities(),
+		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		wasmOpts...,
+	)
+	contractKeeper := wasmkeeper.NewDefaultPermissionKeeper(appKeepers.WasmKeeper)
+	appKeepers.TokenFactoryKeeper.SetContractKeeper(contractKeeper)
 
 	// ----------------------
 	// --- Custom modules ---
@@ -575,6 +632,7 @@ func NewAppKeeper(
 
 	// Set the restrictions on sending tokens
 	appKeepers.BankKeeper.AppendSendRestriction(appKeepers.LiquidVestingKeeper.SendRestrictionFn)
+	appKeepers.BankKeeper.SetHooks(appKeepers.TokenFactoryKeeper.Hooks())
 
 	// Set the hooks up to this point
 	appKeepers.PoolsKeeper.SetHooks(
@@ -597,46 +655,6 @@ func NewAppKeeper(
 
 	// Must be called on PFMRouter AFTER TransferKeeper initialized
 	appKeepers.PFMRouterKeeper.SetTransferKeeper(appKeepers.TransferKeeper)
-
-	wasmDir := homePath
-	wasmConfig, err := wasm.ReadWasmConfig(appOpts)
-	if err != nil {
-		panic("error while reading wasm config: " + err.Error())
-	}
-
-	// allow connect queries
-	queryAllowlist := make(map[string]proto.Message)
-	queryAllowlist["/connect.oracle.v2.Query/GetAllCurrencyPairs"] = &oracletypes.GetAllCurrencyPairsResponse{}
-	queryAllowlist["/connect.oracle.v2.Query/GetPrice"] = &oracletypes.GetPriceResponse{}
-	queryAllowlist["/connect.oracle.v2.Query/GetPrices"] = &oracletypes.GetPricesResponse{}
-	queryAllowlist["/milkyway.operators.v1.Query/Operator"] = &operatorstypes.QueryOperatorResponse{}
-	queryAllowlist["/milkyway.restaking.v1.Query/ServiceOperators"] = &restakingtypes.QueryServiceOperatorsResponse{}
-
-	// use accept list stargate querier
-	wasmOpts = append(wasmOpts, wasmkeeper.WithQueryPlugins(&wasmkeeper.QueryPlugins{
-		Stargate: wasmkeeper.AcceptListStargateQuerier(queryAllowlist, bApp.GRPCQueryRouter(), appCodec),
-	}))
-
-	appKeepers.WasmKeeper = wasmkeeper.NewKeeper(
-		appCodec,
-		runtime.NewKVStoreService(appKeepers.keys[wasmtypes.StoreKey]),
-		appKeepers.AccountKeeper,
-		appKeepers.BankKeeper,
-		appKeepers.StakingKeeper,
-		distrkeeper.NewQuerier(appKeepers.DistrKeeper),
-		appKeepers.IBCFeeKeeper,
-		appKeepers.IBCKeeper.ChannelKeeper,
-		appKeepers.IBCKeeper.PortKeeper,
-		appKeepers.scopedWasmKeeper,
-		appKeepers.TransferKeeper,
-		bApp.MsgServiceRouter(),
-		bApp.GRPCQueryRouter(),
-		wasmDir,
-		wasmConfig,
-		wasmkeeper.BuiltInCapabilities(),
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
-		wasmOpts...,
-	)
 
 	// Middleware Stacks
 	appKeepers.TransferModule = transfer.NewAppModule(appKeepers.TransferKeeper)

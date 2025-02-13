@@ -7,9 +7,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/v7/x/operators"
-	"github.com/milkyway-labs/milkyway/v7/x/operators/testutils"
-	"github.com/milkyway-labs/milkyway/v7/x/operators/types"
+	"github.com/milkyway-labs/milkyway/v9/x/operators"
+	"github.com/milkyway-labs/milkyway/v9/x/operators/testutils"
+	"github.com/milkyway-labs/milkyway/v9/x/operators/types"
 )
 
 func TestBeginBlocker(t *testing.T) {

@@ -39,7 +39,6 @@ import (
 	vestingtypes "github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
 	"github.com/cosmos/cosmos-sdk/x/authz"
 	authzmodule "github.com/cosmos/cosmos-sdk/x/authz/module"
-	"github.com/cosmos/cosmos-sdk/x/bank"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/cosmos/cosmos-sdk/x/consensus"
 	consensusparamtypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
@@ -65,22 +64,25 @@ import (
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
-	"github.com/milkyway-labs/milkyway/v7/x/assets"
-	assetstypes "github.com/milkyway-labs/milkyway/v7/x/assets/types"
-	"github.com/milkyway-labs/milkyway/v7/x/investors"
-	investorstypes "github.com/milkyway-labs/milkyway/v7/x/investors/types"
-	"github.com/milkyway-labs/milkyway/v7/x/liquidvesting"
-	liquidvestingtypes "github.com/milkyway-labs/milkyway/v7/x/liquidvesting/types"
-	"github.com/milkyway-labs/milkyway/v7/x/operators"
-	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
-	"github.com/milkyway-labs/milkyway/v7/x/pools"
-	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
-	"github.com/milkyway-labs/milkyway/v7/x/restaking"
-	restakingtypes "github.com/milkyway-labs/milkyway/v7/x/restaking/types"
-	"github.com/milkyway-labs/milkyway/v7/x/rewards"
-	rewardstypes "github.com/milkyway-labs/milkyway/v7/x/rewards/types"
-	"github.com/milkyway-labs/milkyway/v7/x/services"
-	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
+	"github.com/milkyway-labs/milkyway/v9/x/assets"
+	assetstypes "github.com/milkyway-labs/milkyway/v9/x/assets/types"
+	"github.com/milkyway-labs/milkyway/v9/x/bank"
+	"github.com/milkyway-labs/milkyway/v9/x/investors"
+	investorstypes "github.com/milkyway-labs/milkyway/v9/x/investors/types"
+	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting"
+	liquidvestingtypes "github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
+	"github.com/milkyway-labs/milkyway/v9/x/operators"
+	operatorstypes "github.com/milkyway-labs/milkyway/v9/x/operators/types"
+	"github.com/milkyway-labs/milkyway/v9/x/pools"
+	poolstypes "github.com/milkyway-labs/milkyway/v9/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v9/x/restaking"
+	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v9/x/rewards"
+	rewardstypes "github.com/milkyway-labs/milkyway/v9/x/rewards/types"
+	"github.com/milkyway-labs/milkyway/v9/x/services"
+	servicestypes "github.com/milkyway-labs/milkyway/v9/x/services/types"
+	"github.com/milkyway-labs/milkyway/v9/x/tokenfactory"
+	tokenfactorytypes "github.com/milkyway-labs/milkyway/v9/x/tokenfactory/types"
 )
 
 var MaccPerms = map[string][]string{
@@ -96,6 +98,7 @@ var MaccPerms = map[string][]string{
 	wasmtypes.ModuleName:              {authtypes.Burner},
 	feemarkettypes.ModuleName:         nil,
 	feemarkettypes.FeeCollectorName:   nil,
+	tokenfactorytypes.ModuleName:      {authtypes.Minter, authtypes.Burner},
 
 	// Skip
 	oracletypes.ModuleName: nil,
@@ -137,6 +140,7 @@ func appModules(
 		sdkparams.NewAppModule(app.ParamsKeeper),
 		consensus.NewAppModule(appCodec, app.ConsensusParamsKeeper),
 		wasm.NewAppModule(appCodec, &app.AppKeepers.WasmKeeper, app.AppKeepers.StakingKeeper, app.AppKeepers.AccountKeeper, app.AppKeepers.BankKeeper, app.MsgServiceRouter(), app.GetSubspace(wasmtypes.ModuleName)),
+		tokenfactory.NewAppModule(*app.TokenFactoryKeeper, app.AccountKeeper, app.BankKeeper),
 
 		// Skip modules
 		feemarket.NewAppModule(appCodec, *app.FeeMarketKeeper),
@@ -345,6 +349,7 @@ func orderInitBlockers() []string {
 		paramstypes.ModuleName,
 		upgradetypes.ModuleName,
 		vestingtypes.ModuleName,
+		tokenfactorytypes.ModuleName,
 
 		// Skip modules
 		oracletypes.ModuleName,

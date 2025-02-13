@@ -6,24 +6,23 @@ import (
 	corestoretypes "cosmossdk.io/core/store"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	marketmapkeeper "github.com/skip-mev/connect/v2/x/marketmap/keeper"
 	marketmaptypes "github.com/skip-mev/connect/v2/x/marketmap/types"
 	oraclekeeper "github.com/skip-mev/connect/v2/x/oracle/keeper"
 	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
 
-	"github.com/milkyway-labs/milkyway/v7/testutils/storetesting"
-	assetskeeper "github.com/milkyway-labs/milkyway/v7/x/assets/keeper"
-	assetstypes "github.com/milkyway-labs/milkyway/v7/x/assets/types"
-	operatorskeeper "github.com/milkyway-labs/milkyway/v7/x/operators/keeper"
-	operatorstypes "github.com/milkyway-labs/milkyway/v7/x/operators/types"
-	poolskeeper "github.com/milkyway-labs/milkyway/v7/x/pools/keeper"
-	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
-	"github.com/milkyway-labs/milkyway/v7/x/restaking/keeper"
-	"github.com/milkyway-labs/milkyway/v7/x/restaking/types"
-	serviceskeeper "github.com/milkyway-labs/milkyway/v7/x/services/keeper"
-	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
+	"github.com/milkyway-labs/milkyway/v9/testutils/storetesting"
+	assetskeeper "github.com/milkyway-labs/milkyway/v9/x/assets/keeper"
+	assetstypes "github.com/milkyway-labs/milkyway/v9/x/assets/types"
+	operatorskeeper "github.com/milkyway-labs/milkyway/v9/x/operators/keeper"
+	operatorstypes "github.com/milkyway-labs/milkyway/v9/x/operators/types"
+	poolskeeper "github.com/milkyway-labs/milkyway/v9/x/pools/keeper"
+	poolstypes "github.com/milkyway-labs/milkyway/v9/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v9/x/restaking/keeper"
+	"github.com/milkyway-labs/milkyway/v9/x/restaking/types"
+	serviceskeeper "github.com/milkyway-labs/milkyway/v9/x/services/keeper"
+	servicestypes "github.com/milkyway-labs/milkyway/v9/x/services/types"
 )
 
 type KeeperTestData struct {
@@ -45,7 +44,6 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	data := KeeperTestData{
 		BaseKeeperTestData: storetesting.NewBaseKeeperTestData(t, []string{
 			types.StoreKey,
-			authtypes.StoreKey, banktypes.StoreKey,
 			poolstypes.StoreKey, operatorstypes.StoreKey, servicestypes.StoreKey,
 			marketmaptypes.StoreKey, oracletypes.StoreKey, assetstypes.StoreKey,
 		}),

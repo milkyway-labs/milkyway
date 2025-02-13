@@ -3,7 +3,7 @@ package v6
 import (
 	storetypes "cosmossdk.io/store/types"
 
-	"github.com/milkyway-labs/milkyway/v7/app/upgrades"
+	"github.com/milkyway-labs/milkyway/v9/app/upgrades"
 )
 
 const UpgradeName = "v6"

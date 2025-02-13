@@ -3,15 +3,14 @@ package keeper_test
 import (
 	"testing"
 
-	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/milkyway-labs/milkyway/v7/x/services/keeper"
-	"github.com/milkyway-labs/milkyway/v7/x/services/testutils"
+	"github.com/milkyway-labs/milkyway/v9/x/services/keeper"
+	"github.com/milkyway-labs/milkyway/v9/x/services/testutils"
 )
 
 func TestKeeperTestSuite(t *testing.T) {
@@ -23,8 +22,6 @@ type KeeperTestSuite struct {
 
 	ctx sdk.Context
 
-	storeKey storetypes.StoreKey
-
 	ak    authkeeper.AccountKeeper
 	bk    bankkeeper.BaseKeeper
 	k     *keeper.Keeper
@@ -34,7 +31,6 @@ type KeeperTestSuite struct {
 func (suite *KeeperTestSuite) SetupTest() {
 	data := testutils.NewKeeperTestData(suite.T())
 	suite.ctx = data.Context
-	suite.storeKey = data.StoreKey
 
 	// Build keepers
 	suite.ak = data.AccountKeeper

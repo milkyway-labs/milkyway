@@ -6,7 +6,7 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v7/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v9/x/restaking/types"
 )
 
 func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
@@ -336,6 +336,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					30*24*time.Hour,
 					nil,
 					sdkmath.LegacyNewDec(100000),
+					100,
 				))
 				suite.Require().NoError(err)
 			},
@@ -344,6 +345,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 					30*24*time.Hour,
 					nil,
 					sdkmath.LegacyNewDec(100000),
+					100,
 				),
 			},
 		},
@@ -658,6 +660,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 					30*24*time.Hour,
 					nil,
 					sdkmath.LegacyNewDec(100000),
+					100,
 				),
 			},
 			check: func(ctx sdk.Context) {
@@ -667,6 +670,7 @@ func (suite *KeeperTestSuite) TestKeeper_InitGenesis() {
 					30*24*time.Hour,
 					nil,
 					sdkmath.LegacyNewDec(100000),
+					100,
 				), params)
 			},
 		},

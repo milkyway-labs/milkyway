@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"cosmossdk.io/log"
-	storetypes "cosmossdk.io/store/types"
 	"github.com/cosmos/cosmos-sdk/runtime"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authcodec "github.com/cosmos/cosmos-sdk/x/auth/codec"
@@ -15,18 +14,17 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"go.uber.org/mock/gomock"
 
-	milkyway "github.com/milkyway-labs/milkyway/v7/app"
-	"github.com/milkyway-labs/milkyway/v7/testutils/storetesting"
-	poolskeeper "github.com/milkyway-labs/milkyway/v7/x/pools/keeper"
-	poolstypes "github.com/milkyway-labs/milkyway/v7/x/pools/types"
-	"github.com/milkyway-labs/milkyway/v7/x/services/keeper"
-	servicestypes "github.com/milkyway-labs/milkyway/v7/x/services/types"
+	milkyway "github.com/milkyway-labs/milkyway/v9/app"
+	"github.com/milkyway-labs/milkyway/v9/testutils/storetesting"
+	poolskeeper "github.com/milkyway-labs/milkyway/v9/x/pools/keeper"
+	poolstypes "github.com/milkyway-labs/milkyway/v9/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v9/x/services/keeper"
+	servicestypes "github.com/milkyway-labs/milkyway/v9/x/services/types"
 )
 
 type KeeperTestData struct {
 	storetesting.BaseKeeperTestData
 
-	StoreKey storetypes.StoreKey
 	MockCtrl *gomock.Controller
 
 	PoolKeeper  *MockCommunityPoolKeeper
@@ -39,15 +37,10 @@ type KeeperTestData struct {
 func NewKeeperTestData(t *testing.T) KeeperTestData {
 	var data = KeeperTestData{
 		BaseKeeperTestData: storetesting.NewBaseKeeperTestData(t, []string{
-			authtypes.StoreKey,
-			banktypes.StoreKey,
 			servicestypes.StoreKey,
 			poolstypes.StoreKey,
 		}),
 	}
-
-	// Define store keys
-	data.StoreKey = data.Keys[servicestypes.StoreKey]
 
 	// Setup the codecs
 	encodingConfig := milkyway.MakeEncodingConfig()

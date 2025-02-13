@@ -11,7 +11,7 @@ import (
 	vestingexported "github.com/cosmos/cosmos-sdk/x/auth/vesting/exported"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"github.com/milkyway-labs/milkyway/v7/x/investors/types"
+	"github.com/milkyway-labs/milkyway/v9/x/investors/types"
 )
 
 // GetAllVestingInvestorsAddresses returns all the vesting investors addresses.

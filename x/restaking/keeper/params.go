@@ -7,7 +7,7 @@ import (
 
 	"cosmossdk.io/math"
 
-	"github.com/milkyway-labs/milkyway/v7/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v9/x/restaking/types"
 )
 
 // UnbondingTime returns the unbonding time.
@@ -61,6 +61,15 @@ func (k *Keeper) RestakingCap(ctx context.Context) (math.LegacyDec, error) {
 	}
 
 	return params.RestakingCap, nil
+}
+
+// MaxEntries returns the maximum number of simultaneous unbonding delegations.
+func (k *Keeper) MaxEntries(ctx context.Context) (uint32, error) {
+	params, err := k.GetParams(ctx)
+	if err != nil {
+		return 0, err
+	}
+	return params.MaxEntries, nil
 }
 
 // SetParams sets module parameters
