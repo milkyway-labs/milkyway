@@ -88,7 +88,7 @@ func (suite *KeeperTestSuite) TestRemoveVestingEndedInvestors() {
 	suite.Require().False(suite.isVestingInvestor(ctx, investorAddr3))
 }
 
-func (suite *KeeperTestSuite) TestRemoveVestingInvestorRewards() {
+func (suite *KeeperTestSuite) TestRemoveVestingInvestor_RewardsAfterVestingEnded() {
 	ctx, _ := suite.ctx.CacheContext()
 	ctx = ctx.WithBlockTime(time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC))
 
@@ -151,4 +151,15 @@ func (suite *KeeperTestSuite) TestRemoveVestingInvestorRewards() {
 	})
 	suite.Require().NoError(err)
 	suite.Require().Equal("400000.000000000000000000stake", rewards.Rewards.String())
+
+	ctx = suite.allocateTokensToValidator(ctx, valAddr, utils.MustParseDecCoins("1000000stake"), true)
+
+	// Query the investor's rewards
+	cacheCtx, _ = ctx.CacheContext()
+	rewards, err = querier.DelegationRewards(cacheCtx, &distrtypes.QueryDelegationRewardsRequest{
+		DelegatorAddress: investorAddr.String(),
+		ValidatorAddress: validator.GetOperator(),
+	})
+	suite.Require().NoError(err)
+	suite.Require().Equal("333333.333333333333000000stake", rewards.Rewards.String())
 }
