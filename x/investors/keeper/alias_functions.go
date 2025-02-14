@@ -118,6 +118,9 @@ func (k *Keeper) UpdateInvestorsRewardRatio(ctx context.Context, ratio sdkmath.L
 			return err
 		}
 		delegations, err := k.stakingKeeper.GetAllDelegatorDelegations(ctx, investorAddr)
+		if err != nil {
+			return err
+		}
 		for _, delegation := range delegations {
 			valAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(delegation.ValidatorAddress)
 			if err != nil {
