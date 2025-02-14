@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 	"errors"
+	"slices"
 
 	"cosmossdk.io/collections"
 	sdkmath "cosmossdk.io/math"
@@ -97,29 +98,45 @@ func (k *Keeper) IncrementValidatorPeriod(ctx context.Context, valAddr sdk.ValAd
 }
 
 // UpdateInvestorsRewardRatio updates the investors reward ratio. It also
-// increments the period of all validators, since each validator's total tokens
-// need to be adjusted after updating the ratio.
+// increments the period of all validators to finalize the current epoch's
+// cumulated rewards before updating the ratio.
 func (k *Keeper) UpdateInvestorsRewardRatio(ctx context.Context, ratio sdkmath.LegacyDec) error {
 	err := types.ValidateInvestorsRewardRatio(ratio)
 	if err != nil {
 		return err
 	}
 
-	var innerErr error
-	err = k.stakingKeeper.IterateValidators(ctx, func(_ int64, validator stakingtypes.ValidatorI) (stop bool) {
-		var valAddr sdk.ValAddress
-		valAddr, innerErr = k.stakingKeeper.ValidatorAddressCodec().StringToBytes(validator.GetOperator())
-		if innerErr != nil {
-			return true
-		}
-		innerErr = k.IncrementValidatorPeriod(ctx, valAddr)
-		return innerErr != nil
-	})
+	// Get all validators that the vesting investors are delegating to.
+	var valAddrs []sdk.ValAddress
+	investors, err := k.GetAllVestingInvestorsAddresses(ctx)
 	if err != nil {
 		return err
 	}
-	if innerErr != nil {
-		return innerErr
+	for _, investor := range investors {
+		investorAddr, err := k.accountKeeper.AddressCodec().StringToBytes(investor)
+		if err != nil {
+			return err
+		}
+		delegations, err := k.stakingKeeper.GetAllDelegatorDelegations(ctx, investorAddr)
+		for _, delegation := range delegations {
+			valAddr, err := k.stakingKeeper.ValidatorAddressCodec().StringToBytes(delegation.ValidatorAddress)
+			if err != nil {
+				return err
+			}
+			valAddrs = append(valAddrs, valAddr)
+		}
+	}
+
+	// Remove duplicated addresses
+	valAddrs = slices.CompactFunc(valAddrs, func(a, b sdk.ValAddress) bool {
+		return a.Equals(b)
+	})
+
+	for _, valAddr := range valAddrs {
+		err = k.IncrementValidatorPeriod(ctx, valAddr)
+		if err != nil {
+			return err
+		}
 	}
 
 	return k.InvestorsRewardRatio.Set(ctx, ratio)
