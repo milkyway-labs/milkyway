@@ -3,6 +3,12 @@ package keeper_test
 import (
 	"time"
 
+	sdkmath "cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
+	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+
 	"github.com/milkyway-labs/milkyway/v9/app/testutil"
 	"github.com/milkyway-labs/milkyway/v9/utils"
 )
@@ -80,4 +86,69 @@ func (suite *KeeperTestSuite) TestRemoveVestingEndedInvestors() {
 	suite.Require().False(suite.isVestingInvestor(ctx, investorAddr1))
 	suite.Require().False(suite.isVestingInvestor(ctx, investorAddr2))
 	suite.Require().False(suite.isVestingInvestor(ctx, investorAddr3))
+}
+
+func (suite *KeeperTestSuite) TestRemoveVestingInvestorRewards() {
+	ctx, _ := suite.ctx.CacheContext()
+	ctx = ctx.WithBlockTime(time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC))
+
+	err := suite.k.UpdateInvestorsRewardRatio(ctx, sdkmath.LegacyNewDecWithPrec(5, 1)) // 50%
+	suite.Require().NoError(err)
+
+	valOwnerAddr := testutil.TestAddress(10000)
+	validator := suite.createValidator(
+		ctx,
+		valOwnerAddr,
+		stakingtypes.NewCommissionRates(utils.MustParseDec("0"), utils.MustParseDec("0.2"), utils.MustParseDec("0.01")),
+		utils.MustParseCoin("1000000stake"),
+		true,
+	)
+	valAddr := sdk.ValAddress(valOwnerAddr)
+
+	normalAddr := testutil.TestAddress(1)
+	investorAddr := testutil.TestAddress(2)
+	vestingEndTime := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
+	suite.createVestingAccount(
+		ctx,
+		testutil.TestAddress(10001).String(),
+		investorAddr.String(),
+		utils.MustParseCoins("1000000stake"),
+		vestingEndTime.Unix(),
+		false,
+		true,
+	)
+	err = suite.k.SetVestingInvestor(ctx, investorAddr)
+	suite.Require().NoError(err)
+
+	suite.delegate(ctx, normalAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), true)
+	suite.delegate(ctx, investorAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), false)
+
+	ctx = suite.allocateTokensToValidator(ctx, valAddr, utils.MustParseDecCoins("1000000stake"), true)
+
+	querier := distrkeeper.NewQuerier(suite.dk)
+	// Query the investor's rewards
+	cacheCtx, _ := ctx.CacheContext()
+	rewards, err := querier.DelegationRewards(cacheCtx, &distrtypes.QueryDelegationRewardsRequest{
+		DelegatorAddress: investorAddr.String(),
+		ValidatorAddress: validator.GetOperator(),
+	})
+	suite.Require().NoError(err)
+	suite.Require().Equal("200000.000000000000000000stake", rewards.Rewards.String())
+
+	// Remove the investor from the vesting investors list
+	err = suite.k.RemoveVestingInvestor(ctx, investorAddr)
+	suite.Require().NoError(err)
+
+	// Rewards are withdrawn
+	balances := suite.bk.GetAllBalances(ctx, investorAddr)
+	suite.Require().Equal("200000stake", balances.String())
+
+	// Query the normal account's rewards, it shouldn't be changed
+	cacheCtx, _ = ctx.CacheContext()
+	rewards, err = querier.DelegationRewards(cacheCtx, &distrtypes.QueryDelegationRewardsRequest{
+		DelegatorAddress: normalAddr.String(),
+		ValidatorAddress: validator.GetOperator(),
+	})
+	suite.Require().NoError(err)
+	suite.Require().Equal("400000.000000000000000000stake", rewards.Rewards.String())
 }

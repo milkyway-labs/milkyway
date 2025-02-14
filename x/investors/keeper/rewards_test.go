@@ -146,7 +146,7 @@ func (suite *KeeperTestSuite) TestUpdateInvestorsRewardRatio() {
 	ctx = suite.allocateTokensToValidator(ctx, valAddr, utils.MustParseDecCoins("1000000stake"), true)
 
 	querier := distrkeeper.NewQuerier(suite.dk)
-	// Query the normal account's rewards
+	// Query the investor's rewards
 	cacheCtx, _ := ctx.CacheContext()
 	rewards, err := querier.DelegationRewards(cacheCtx, &distrtypes.QueryDelegationRewardsRequest{
 		DelegatorAddress: investorAddr.String(),

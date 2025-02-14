@@ -13,6 +13,7 @@ import (
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	"github.com/stretchr/testify/require"
 
 	"github.com/milkyway-labs/milkyway/v9/testutils/storetesting"
 	"github.com/milkyway-labs/milkyway/v9/x/investors/keeper"
@@ -75,6 +76,8 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 			data.Keeper.Hooks(),
 		),
 	)
+
+	require.NoError(t, data.Keeper.InitGenesis(data.Context, types.DefaultGenesis()))
 
 	return data
 }
