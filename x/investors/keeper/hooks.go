@@ -18,6 +18,10 @@ func (k *Keeper) Hooks() Hooks {
 	return Hooks{k}
 }
 
+// BeforeDelegationSharesModified is called before the existing delegation is
+// being modified. If the delegator was a vesting investor, we decrement the
+// validator's vesting investors shares so that we can re-increment it with the
+// updated delegation shares after the delegation is modified.
 func (h Hooks) BeforeDelegationSharesModified(ctx context.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) error {
 	isVestingInvestor, err := h.k.VestingInvestors.Has(ctx, delAddr)
 	if err != nil {
@@ -35,6 +39,10 @@ func (h Hooks) BeforeDelegationSharesModified(ctx context.Context, delAddr sdk.A
 	return h.k.DecrementValidatorInvestorsShares(ctx, valAddr, delegation.GetShares())
 }
 
+// AfterDelegationModified is called after a new delegation is created or the
+// existing delegation is modified. If the delegator was a vesting investor, we
+// increment the validator's vesting investors shares because we decremented it
+// in BeforeDelegationSharesModified.
 func (h Hooks) AfterDelegationModified(ctx context.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) error {
 	isVestingInvestor, err := h.k.VestingInvestors.Has(ctx, delAddr)
 	if err != nil {
