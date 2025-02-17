@@ -3,7 +3,6 @@ package keeper
 import (
 	"context"
 	"errors"
-	"slices"
 
 	"cosmossdk.io/collections"
 	sdkmath "cosmossdk.io/math"
@@ -86,28 +85,14 @@ func (k *Keeper) DecrementValidatorInvestorsShares(ctx context.Context, valAddr 
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// IncrementValidatorPeriod increments the period of a validator using
-// GetAdjustedValidator.
-func (k *Keeper) IncrementValidatorPeriod(ctx context.Context, valAddr sdk.ValAddress) error {
-	validator, err := k.GetAdjustedValidator(ctx, valAddr)
-	if err != nil {
-		return err
-	}
-	_, err = k.distrKeeper.IncrementValidatorPeriod(ctx, validator)
-	return err
-}
-
-// UpdateInvestorsRewardRatio updates the investors reward ratio. It also
-// increments the period of all validators to finalize the current epoch's
-// cumulated rewards before updating the ratio.
+// UpdateInvestorsRewardRatio updates the investors reward ratio. It withdraws
+// rewards from all the validators that the investors were delegating to.
 func (k *Keeper) UpdateInvestorsRewardRatio(ctx context.Context, ratio sdkmath.LegacyDec) error {
 	err := types.ValidateInvestorsRewardRatio(ratio)
 	if err != nil {
 		return err
 	}
 
-	// Get all validators that the vesting investors are delegating to.
-	var valAddrs []sdk.ValAddress
 	investors, err := k.GetAllVestingInvestorsAddresses(ctx)
 	if err != nil {
 		return err
@@ -126,19 +111,37 @@ func (k *Keeper) UpdateInvestorsRewardRatio(ctx context.Context, ratio sdkmath.L
 			if err != nil {
 				return err
 			}
-			valAddrs = append(valAddrs, valAddr)
-		}
-	}
 
-	// Remove duplicated addresses
-	valAddrs = slices.CompactFunc(valAddrs, func(a, b sdk.ValAddress) bool {
-		return a.Equals(b)
-	})
-
-	for _, valAddr := range valAddrs {
-		err = k.IncrementValidatorPeriod(ctx, valAddr)
-		if err != nil {
-			return err
+			// Need to override Validator and Delegation methods used inside
+			// distrKeeper.WithdrawDelegationRewards
+			k.stakingKeeperOverrider.Validator = func(ctx context.Context, address sdk.ValAddress) (stakingtypes.ValidatorI, error) {
+				validator, err := k.stakingKeeper.GetValidator(ctx, valAddr)
+				if err != nil {
+					return stakingtypes.Validator{}, err
+				}
+				investorsShares, err := k.GetValidatorInvestorsShares(ctx, valAddr)
+				if err != nil {
+					return stakingtypes.Validator{}, err
+				}
+				if investorsShares.IsPositive() {
+					// Use the new vesting investors reward ratio
+					oneMinusRewardRatio := sdkmath.LegacyOneDec().Sub(ratio)
+					validator, _ = validator.RemoveDelShares(investorsShares.MulRoundUp(oneMinusRewardRatio))
+				}
+				return validator, nil
+			}
+			k.stakingKeeperOverrider.Delegation = func(ctx context.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) (stakingtypes.DelegationI, error) {
+				// Adjust the delegation shares using the new vesting investors reward ratio
+				delegation.Shares = delegation.Shares.MulTruncate(ratio)
+				return delegation, nil
+			}
+			err = k.withOverrider(func() error {
+				_, err := k.distrKeeper.WithdrawDelegationRewards(ctx, investorAddr, valAddr)
+				return err
+			})
+			if err != nil {
+				return err
+			}
 		}
 	}
 
@@ -157,11 +160,11 @@ func (k *Keeper) GetAdjustedValidator(ctx context.Context, valAddr sdk.ValAddres
 		return stakingtypes.Validator{}, err
 	}
 	if investorsShares.IsPositive() {
-		rewardRatio, err := k.InvestorsRewardRatio.Get(ctx)
+		investorsRewardRatio, err := k.InvestorsRewardRatio.Get(ctx)
 		if err != nil {
 			return stakingtypes.Validator{}, err
 		}
-		oneMinusRewardRatio := sdkmath.LegacyOneDec().Sub(rewardRatio)
+		oneMinusRewardRatio := sdkmath.LegacyOneDec().Sub(investorsRewardRatio)
 		validator, _ = validator.RemoveDelShares(investorsShares.MulRoundUp(oneMinusRewardRatio))
 	}
 	return validator, nil
@@ -172,16 +175,6 @@ func (k *Keeper) GetAdjustedValidator(ctx context.Context, valAddr sdk.ValAddres
 // RemoveVestingInvestor removes an investor from the vesting investors list and
 // withdraws rewards from all the validators that the investor was delegating to.
 func (k *Keeper) RemoveVestingInvestor(ctx context.Context, investorAddr sdk.AccAddress) error {
-	// Remove from VestingInvestors first so that inside WithdrawDelegationRewards
-	// the account's new starting info can be set correctly using non-deducted
-	// delegation shares. Note that WithdrawDelegationRewards uses the previous
-	// starting info's stake(=tokens) to calculate the rewards so the change to the
-	// delegation shares prior to calling it doesn't affect the rewards amount.
-	err := k.VestingInvestors.Remove(ctx, investorAddr)
-	if err != nil {
-		return err
-	}
-
 	// Withdraw rewards from all validators that the investor was delegating to.
 	delegations, err := k.stakingKeeper.GetAllDelegatorDelegations(ctx, investorAddr)
 	if err != nil {
@@ -192,9 +185,39 @@ func (k *Keeper) RemoveVestingInvestor(ctx context.Context, investorAddr sdk.Acc
 		if err != nil {
 			return err
 		}
-		// Calling WithdrawDelegationRewards increments the validator's period so no need
-		// to call IncrementValidatorPeriod here.
-		_, err = k.distrKeeper.WithdrawDelegationRewards(ctx, investorAddr, valAddr)
+
+		// Need to override Validator and Delegation methods used inside
+		// distrKeeper.WithdrawDelegationRewards
+		k.stakingKeeperOverrider.Validator = func(ctx context.Context, address sdk.ValAddress) (stakingtypes.ValidatorI, error) {
+			validator, err := k.stakingKeeper.GetValidator(ctx, valAddr)
+			if err != nil {
+				return stakingtypes.Validator{}, err
+			}
+			investorsShares, err := k.GetValidatorInvestorsShares(ctx, valAddr)
+			if err != nil {
+				return stakingtypes.Validator{}, err
+			}
+			// Subtract the investor's shares from the validator's shares since the investor
+			// is being removed from the vesting investors list.
+			investorsShares = investorsShares.Sub(delegation.Shares)
+			if investorsShares.IsPositive() {
+				investorsRewardRatio, err := k.InvestorsRewardRatio.Get(ctx)
+				if err != nil {
+					return stakingtypes.Validator{}, err
+				}
+				oneMinusRewardRatio := sdkmath.LegacyOneDec().Sub(investorsRewardRatio)
+				validator, _ = validator.RemoveDelShares(investorsShares.MulRoundUp(oneMinusRewardRatio))
+			}
+			return validator, nil
+		}
+		k.stakingKeeperOverrider.Delegation = func(ctx context.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) (stakingtypes.DelegationI, error) {
+			// Return the original delegation, not adjusted one
+			return delegation, nil
+		}
+		err = k.withOverrider(func() error {
+			_, err := k.distrKeeper.WithdrawDelegationRewards(ctx, investorAddr, valAddr)
+			return err
+		})
 		if err != nil {
 			return err
 		}
@@ -205,5 +228,5 @@ func (k *Keeper) RemoveVestingInvestor(ctx context.Context, investorAddr sdk.Acc
 		}
 	}
 
-	return nil
+	return k.VestingInvestors.Remove(ctx, investorAddr)
 }

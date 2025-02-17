@@ -111,9 +111,6 @@ func (suite *KeeperTestSuite) TestUpdateInvestorsRewardRatio() {
 	ctx, _ := suite.ctx.CacheContext()
 	ctx = ctx.WithBlockTime(time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC))
 
-	err := suite.k.UpdateInvestorsRewardRatio(ctx, sdkmath.LegacyNewDecWithPrec(5, 1)) // 50%
-	suite.Require().NoError(err)
-
 	valOwnerAddr := testutil.TestAddress(10000)
 	validator := suite.createValidator(
 		ctx,
@@ -136,55 +133,96 @@ func (suite *KeeperTestSuite) TestUpdateInvestorsRewardRatio() {
 		false,
 		true,
 	)
-	err = suite.k.SetVestingInvestor(ctx, investorAddr)
+	err := suite.k.SetVestingInvestor(ctx, investorAddr)
 	suite.Require().NoError(err)
 
-	suite.delegate(ctx, normalAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), true)
-	suite.delegate(ctx, investorAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), false)
+	testCases := []struct {
+		name         string
+		initialRatio sdkmath.LegacyDec
+		newRatio     sdkmath.LegacyDec
+		check        func(ctx sdk.Context)
+	}{
+		{
+			name:         "increase reward ratio",
+			initialRatio: utils.MustParseDec("0.5"),
+			newRatio:     utils.MustParseDec("1"),
+			check: func(ctx sdk.Context) {
+				querier := distrkeeper.NewQuerier(suite.dk)
 
-	// Allocate 1000000stake as rewards
-	ctx = suite.allocateTokensToValidator(ctx, valAddr, utils.MustParseDecCoins("1000000stake"), true)
+				// The investor receives more rewards than before
+				cacheCtx, _ := ctx.CacheContext()
+				rewards, err := querier.DelegationRewards(cacheCtx, &distrtypes.QueryDelegationRewardsRequest{
+					DelegatorAddress: investorAddr.String(),
+					ValidatorAddress: validator.GetOperator(),
+				})
+				suite.Require().NoError(err)
+				suite.Assert().Equal("333333.333333333333000000stake", rewards.Rewards.String())
 
-	querier := distrkeeper.NewQuerier(suite.dk)
-	// Query the investor's rewards
-	cacheCtx, _ := ctx.CacheContext()
-	rewards, err := querier.DelegationRewards(cacheCtx, &distrtypes.QueryDelegationRewardsRequest{
-		DelegatorAddress: investorAddr.String(),
-		ValidatorAddress: validator.GetOperator(),
-	})
-	suite.Require().NoError(err)
-	suite.Require().Equal("200000.000000000000000000stake", rewards.Rewards.String())
+				// The normal account's rewards are now 400000stake(already given) +
+				// 333333.3stake(newly allocated) = 733333.3stake
+				cacheCtx, _ = ctx.CacheContext()
+				rewards, err = querier.DelegationRewards(cacheCtx, &distrtypes.QueryDelegationRewardsRequest{
+					DelegatorAddress: normalAddr.String(),
+					ValidatorAddress: validator.GetOperator(),
+				})
+				suite.Require().NoError(err)
+				suite.Assert().Equal("733333.333333333333000000stake", rewards.Rewards.String())
+			},
+		},
+		{
+			name:         "decrease reward ratio",
+			initialRatio: utils.MustParseDec("1"),
+			newRatio:     utils.MustParseDec("0.5"),
+			check: func(ctx sdk.Context) {
+				querier := distrkeeper.NewQuerier(suite.dk)
 
-	// Update the reward ratio to 100%
-	err = suite.k.UpdateInvestorsRewardRatio(ctx, sdkmath.LegacyOneDec()) // 100%
-	suite.Require().NoError(err)
+				// The investor receives fewer rewards than before
+				cacheCtx, _ := ctx.CacheContext()
+				rewards, err := querier.DelegationRewards(cacheCtx, &distrtypes.QueryDelegationRewardsRequest{
+					DelegatorAddress: investorAddr.String(),
+					ValidatorAddress: validator.GetOperator(),
+				})
+				suite.Require().NoError(err)
+				suite.Assert().Equal("200000.000000000000000000stake", rewards.Rewards.String())
 
-	// Withdraw the rewards, it shouldn't be changed
-	withdrawn, err := suite.dk.WithdrawDelegationRewards(ctx, investorAddr, valAddr)
-	suite.Require().NoError(err)
-	suite.Require().Equal("200000stake", withdrawn.String())
+				// The normal account's rewards are now 333333.3stake(already given) +
+				// 400000stake(newly allocated) = 733333.3stake
+				cacheCtx, _ = ctx.CacheContext()
+				rewards, err = querier.DelegationRewards(cacheCtx, &distrtypes.QueryDelegationRewardsRequest{
+					DelegatorAddress: normalAddr.String(),
+					ValidatorAddress: validator.GetOperator(),
+				})
+				suite.Require().NoError(err)
+				suite.Assert().Equal("733333.333333333333000000stake", rewards.Rewards.String())
+			},
+		},
+	}
 
-	// Allocate 1000000stake as rewards again
-	ctx = suite.allocateTokensToValidator(ctx, valAddr, utils.MustParseDecCoins("1000000stake"), true)
+	for _, tc := range testCases {
+		suite.Run(tc.name, func() {
+			ctx, _ := ctx.CacheContext()
 
-	// The investor receives more rewards than before
-	cacheCtx, _ = ctx.CacheContext()
-	rewards, err = querier.DelegationRewards(cacheCtx, &distrtypes.QueryDelegationRewardsRequest{
-		DelegatorAddress: investorAddr.String(),
-		ValidatorAddress: validator.GetOperator(),
-	})
-	suite.Require().NoError(err)
-	suite.Require().Equal("333333.333333333333000000stake", rewards.Rewards.String())
+			err := suite.k.UpdateInvestorsRewardRatio(ctx, tc.initialRatio)
+			suite.Require().NoError(err)
 
-	// The normal account's rewards are now 400000stake(already given) +
-	// 333333.3stake(newly allocated) = 733333.3stake
-	cacheCtx, _ = ctx.CacheContext()
-	rewards, err = querier.DelegationRewards(cacheCtx, &distrtypes.QueryDelegationRewardsRequest{
-		DelegatorAddress: normalAddr.String(),
-		ValidatorAddress: validator.GetOperator(),
-	})
-	suite.Require().NoError(err)
-	suite.Require().Equal("733333.333333333333000000stake", rewards.Rewards.String())
+			suite.delegate(ctx, normalAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), true)
+			suite.delegate(ctx, investorAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), false)
+
+			// Allocate 1000000stake as rewards
+			ctx = suite.allocateTokensToValidator(ctx, valAddr, utils.MustParseDecCoins("1000000stake"), true)
+
+			// Update the reward ratio
+			err = suite.k.UpdateInvestorsRewardRatio(ctx, tc.newRatio)
+			suite.Require().NoError(err)
+
+			// Allocate 1000000stake as rewards again
+			ctx = suite.allocateTokensToValidator(ctx, valAddr, utils.MustParseDecCoins("1000000stake"), true)
+
+			if tc.check != nil {
+				tc.check(ctx)
+			}
+		})
+	}
 }
 
 func (suite *KeeperTestSuite) TestVestingEndedInvestorsReward() {

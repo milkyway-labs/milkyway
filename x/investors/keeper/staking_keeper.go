@@ -22,10 +22,18 @@ func (k *Keeper) AdjustedStakingKeeper(stakingKeeper types.StakingKeeper) *Adjus
 }
 
 func (sk *AdjustedStakingKeeper) Validator(ctx context.Context, address sdk.ValAddress) (stakingtypes.ValidatorI, error) {
+	if sk.k.stakingKeeperOverrider.state == stakingOverriderStateOverride {
+		return sk.k.stakingKeeperOverrider.Validator(ctx, address)
+	}
+
 	return sk.k.GetAdjustedValidator(ctx, address)
 }
 
 func (sk *AdjustedStakingKeeper) Delegation(ctx context.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) (stakingtypes.DelegationI, error) {
+	if sk.k.stakingKeeperOverrider.state == stakingOverriderStateOverride {
+		return sk.k.stakingKeeperOverrider.Delegation(ctx, delAddr, valAddr)
+	}
+
 	delegation, err := sk.GetDelegation(ctx, delAddr, valAddr)
 	if err != nil {
 		return nil, err
@@ -36,11 +44,16 @@ func (sk *AdjustedStakingKeeper) Delegation(ctx context.Context, delAddr sdk.Acc
 		return nil, err
 	}
 	if isVestingInvestor {
-		rewardRatio, err := sk.k.InvestorsRewardRatio.Get(ctx)
+		investorsRewardRatio, err := sk.k.InvestorsRewardRatio.Get(ctx)
 		if err != nil {
 			return nil, err
 		}
-		delegation.Shares = delegation.Shares.MulTruncate(rewardRatio)
+		delegation.Shares = delegation.Shares.MulTruncate(investorsRewardRatio)
+	}
+
+	// After the first call to Delegation, transition the injector's state to Inject
+	if sk.k.stakingKeeperOverrider.state == stakingOverriderStateWait {
+		sk.k.stakingKeeperOverrider.state = stakingOverriderStateOverride
 	}
 
 	return delegation, nil

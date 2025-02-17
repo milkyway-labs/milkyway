@@ -31,6 +31,8 @@ type Keeper struct {
 	// authority represents the address capable of executing a governance message.
 	// Typically, this should be the x/gov module account.
 	authority string
+
+	stakingKeeperOverrider stakingKeeperOverrider
 }
 
 // NewKeeper creates a new keeper
