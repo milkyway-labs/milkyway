@@ -25,10 +25,10 @@ const (
 // new states must be taken into account in order to update the delegator
 // starting info properly and that's why we use stakingKeeperOverrider.
 // stakingKeeperOverrider doesn't override the methods immediately when state is
-// set to stakingOverriderStateWait. Instead, the methods will be overridden after the
-// next call of stakingKeeper.Delegation ensuring that the overrides occur after
-// distrKeeper.WithdrawDelegationRewards has completed and just before
-// distrKeeper.initializeDelegation is executed.
+// set to stakingOverriderStateWait. Instead, the methods will be overridden
+// after the next call of stakingKeeper.Delegation ensuring that the overrides
+// occur after distrKeeper.WithdrawDelegationRewards has completed and just
+// before distrKeeper.initializeDelegation is executed.
 //
 // # state: none -> wait
 // val = stakingKeeper.Validator() # uses prev states
