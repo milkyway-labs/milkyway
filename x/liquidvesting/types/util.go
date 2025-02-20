@@ -72,3 +72,16 @@ func DeductUncoveredLockedShares(shares, coveredLockedShares sdk.DecCoins) sdk.D
 	uncovered := UncoveredLockedShares(shares, coveredLockedShares)
 	return shares.Sub(uncovered)
 }
+
+func HasLockedShares(shares sdk.DecCoins) bool {
+	for _, share := range shares {
+		tokenDenom := utils.GetTokenDenomFromSharesDenom(share.Denom)
+		if tokenDenom == "" {
+			continue
+		}
+		if IsLockedRepresentationDenom(tokenDenom) {
+			return true
+		}
+	}
+	return false
+}

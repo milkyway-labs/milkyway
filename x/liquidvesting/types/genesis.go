@@ -3,6 +3,8 @@ package types
 import (
 	"fmt"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
 )
 
@@ -11,19 +13,21 @@ func NewGenesisState(
 	params Params,
 	burnCoins []BurnCoins,
 	usersInsuranceFunds []UserInsuranceFundEntry,
+	lockedRepresentationDelegators []string,
 	targetsCoveredLockedShares []TargetCoveredLockedSharesRecord,
 ) *GenesisState {
 	return &GenesisState{
-		Params:                     params,
-		BurnCoins:                  burnCoins,
-		UserInsuranceFunds:         usersInsuranceFunds,
-		TargetsCoveredLockedShares: targetsCoveredLockedShares,
+		Params:                         params,
+		BurnCoins:                      burnCoins,
+		UserInsuranceFunds:             usersInsuranceFunds,
+		LockedRepresentationDelegators: lockedRepresentationDelegators,
+		TargetsCoveredLockedShares:     targetsCoveredLockedShares,
 	}
 }
 
 // DefaultGenesisState returns a default GenesisState.
 func DefaultGenesisState() *GenesisState {
-	return NewGenesisState(DefaultParams(), nil, nil, nil)
+	return NewGenesisState(DefaultParams(), nil, nil, nil, nil)
 }
 
 func (g *GenesisState) Validate() error {
@@ -39,6 +43,13 @@ func (g *GenesisState) Validate() error {
 
 	for _, userInsuranceFund := range g.UserInsuranceFunds {
 		if err := userInsuranceFund.Validate(); err != nil {
+			return err
+		}
+	}
+
+	for _, delegator := range g.LockedRepresentationDelegators {
+		_, err := sdk.AccAddressFromBech32(delegator)
+		if err != nil {
 			return err
 		}
 	}

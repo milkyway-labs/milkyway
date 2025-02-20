@@ -134,3 +134,33 @@ func (k *Keeper) IterateTargetsCoveredLockedShares(ctx context.Context, cb func(
 	})
 	return err
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// SetLockedRepresentationDelegator marks the user as a locked representation
+// delegator.
+func (k *Keeper) SetLockedRepresentationDelegator(ctx context.Context, userAddress string) error {
+	return k.LockedRepresentationDelegators.Set(ctx, userAddress)
+}
+
+// IsLockedRepresentationDelegator checks if the user is a locked representation
+// delegator.
+func (k *Keeper) IsLockedRepresentationDelegator(ctx context.Context, userAddress string) (bool, error) {
+	return k.LockedRepresentationDelegators.Has(ctx, userAddress)
+}
+
+// RemoveLockedRepresentationDelegator removes the user from the locked
+// representation delegators list.
+func (k *Keeper) RemoveLockedRepresentationDelegator(ctx context.Context, userAddress string) error {
+	return k.LockedRepresentationDelegators.Remove(ctx, userAddress)
+}
+
+// GetAllLockedRepresentationDelegators returns all the locked representation
+// delegators.
+func (k *Keeper) GetAllLockedRepresentationDelegators(ctx context.Context) ([]string, error) {
+	iter, err := k.LockedRepresentationDelegators.Iterate(ctx, nil)
+	if err != nil {
+		return nil, err
+	}
+	return iter.Keys()
+}

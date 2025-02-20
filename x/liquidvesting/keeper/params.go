@@ -6,8 +6,8 @@ import (
 	"fmt"
 
 	"cosmossdk.io/collections"
+	sdkmath "cosmossdk.io/math"
 
-	"github.com/milkyway-labs/milkyway/v9/utils"
 	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
 	operatorstypes "github.com/milkyway-labs/milkyway/v9/x/operators/types"
 	poolstypes "github.com/milkyway-labs/milkyway/v9/x/pools/types"
@@ -15,66 +15,49 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/v9/x/services/types"
 )
 
-func (k *Keeper) SetParams(ctx context.Context, params types.Params) error {
-	err := params.Validate()
+func (k *Keeper) beforeInsurancePercentageChanged(ctx context.Context, oldPercentage, newPercentage sdkmath.LegacyDec) error {
+	type delegationTargetCacheKey struct {
+		delType  restakingtypes.DelegationType
+		targetID uint32
+	}
+	delegationTargetCache := map[delegationTargetCacheKey]restakingtypes.DelegationTarget{}
+
+	delegators, err := k.GetAllLockedRepresentationDelegators(ctx)
 	if err != nil {
 		return err
 	}
 
-	oldParams, err := k.GetParams(ctx)
-	if err != nil {
-		return err
-	}
-
-	// If the insurance percentage has changed, we need to withdraw all delegators
-	// restaking rewards who have delegated locked tokens.
-	if !params.InsurancePercentage.Equal(oldParams.InsurancePercentage) {
-		// TODO: store locked shares delegators and iterate through them only
-		// TODO: DON'T USE GetAllDelegations!!!
-		delegations, err := k.restakingKeeper.GetAllDelegations(ctx)
+	for _, delegator := range delegators {
+		delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(delegator)
 		if err != nil {
 			return err
 		}
-		for _, delegation := range delegations {
-			// Only withdraw rewards for delegations that have locked shares
-			hasLockedShares := false
-			for _, share := range delegation.Shares {
-				tokenDenom := utils.GetTokenDenomFromSharesDenom(share.Denom)
-				if types.IsLockedRepresentationDenom(tokenDenom) {
-					hasLockedShares = true
-					break
+
+		err = k.restakingKeeper.IterateUserDelegations(ctx, delegator, func(del restakingtypes.Delegation) (stop bool, err error) {
+			target, ok := delegationTargetCache[delegationTargetCacheKey{del.Type, del.TargetID}]
+			if !ok {
+				target, err = k.restakingKeeper.GetDelegationTarget(ctx, del.Type, del.TargetID)
+				if err != nil {
+					return true, err
 				}
-			}
-			if !hasLockedShares {
-				continue
+				delegationTargetCache[delegationTargetCacheKey{del.Type, del.TargetID}] = target
 			}
 
-			delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(delegation.UserAddress)
+			userInsuranceFund, err := k.GetUserInsuranceFundBalance(ctx, delegator)
 			if err != nil {
-				return err
+				return true, err
 			}
-
-			// TODO: optimize GetDelegationTarget
-			target, err := k.restakingKeeper.GetDelegationTarget(ctx, delegation.Type, delegation.TargetID)
+			oldCoveredLockedShares, err := types.GetCoveredLockedShares(target, del, userInsuranceFund, oldPercentage)
 			if err != nil {
-				return err
+				return true, err
 			}
-
-			userInsuranceFund, err := k.GetUserInsuranceFundBalance(ctx, delegation.UserAddress)
+			newCoveredLockedShares, err := types.GetCoveredLockedShares(target, del, userInsuranceFund, newPercentage)
 			if err != nil {
-				return err
+				return true, err
 			}
-			oldCoveredLockedShares, err := types.GetCoveredLockedShares(target, delegation, userInsuranceFund, oldParams.InsurancePercentage)
+			oldTargetCoveredLockedShares, err := k.GetTargetCoveredLockedShares(ctx, del.Type, del.TargetID)
 			if err != nil {
-				return err
-			}
-			newCoveredLockedShares, err := types.GetCoveredLockedShares(target, delegation, userInsuranceFund, params.InsurancePercentage)
-			if err != nil {
-				return err
-			}
-			oldTargetCoveredLockedShares, err := k.GetTargetCoveredLockedShares(ctx, delegation.Type, delegation.TargetID)
-			if err != nil {
-				return err
+				return true, err
 			}
 			newTargetCoveredLockedShares := oldTargetCoveredLockedShares.Add(newCoveredLockedShares...).Sub(oldCoveredLockedShares)
 
@@ -99,25 +82,52 @@ func (k *Keeper) SetParams(ctx context.Context, params types.Params) error {
 				}
 			}
 			k.restakingOverrider.GetDelegation = func(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32, delegator string) (restakingtypes.Delegation, bool, error) {
-				delegation.Shares = types.DeductUncoveredLockedShares(delegation.Shares, newCoveredLockedShares)
-				return delegation, true, nil
+				del.Shares = types.DeductUncoveredLockedShares(del.Shares, newCoveredLockedShares)
+				return del, true, nil
 			}
 			err = k.withRestakingOverrider(func() error {
-				_, err := k.rewardsKeeper.WithdrawDelegationRewards(ctx, delAddr, delegation.Type, delegation.TargetID)
+				_, err := k.rewardsKeeper.WithdrawDelegationRewards(ctx, delAddr, del.Type, del.TargetID)
 				return err
 			})
 			if err != nil {
-				return err
+				return true, err
 			}
 
 			err = k.TargetsCoveredLockedShares.Set(
 				ctx,
-				collections.Join(int32(delegation.Type), delegation.TargetID),
+				collections.Join(int32(del.Type), del.TargetID),
 				types.TargetCoveredLockedShares{Shares: newTargetCoveredLockedShares},
 			)
 			if err != nil {
-				return err
+				return true, err
 			}
+
+			return false, nil
+		})
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (k *Keeper) SetParams(ctx context.Context, params types.Params) error {
+	err := params.Validate()
+	if err != nil {
+		return err
+	}
+
+	oldParams, err := k.GetParams(ctx)
+	if err != nil {
+		return err
+	}
+
+	// If the insurance percentage has changed, we need to withdraw all delegators
+	// restaking rewards who have delegated locked tokens.
+	if !params.InsurancePercentage.Equal(oldParams.InsurancePercentage) {
+		err = k.beforeInsurancePercentageChanged(ctx, oldParams.InsurancePercentage, params.InsurancePercentage)
+		if err != nil {
+			return err
 		}
 	}
 

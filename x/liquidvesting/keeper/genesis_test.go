@@ -144,6 +144,10 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)),
 					),
 				},
+				LockedRepresentationDelegators: []string{
+					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+				},
 			},
 		},
 	}
@@ -187,6 +191,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 				nil,
 				nil,
 				nil,
+				nil,
 			),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
@@ -201,6 +206,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 				nil,
 				nil,
 				nil,
+				nil,
 			),
 			shouldErr: true,
 		},
@@ -211,6 +217,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 				nil,
 				nil,
 				nil,
+				nil,
 			),
 			shouldErr: true,
 		},
@@ -218,6 +225,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			name: "should allow 100 insurance fund percentage",
 			genesis: types.NewGenesisState(
 				types.NewParams(math.LegacyNewDec(100), nil, nil, nil),
+				nil,
 				nil,
 				nil,
 				nil,
@@ -235,6 +243,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 				nil,
 				nil,
 				nil,
+				nil,
 			),
 			shouldErr: true,
 		},
@@ -242,6 +251,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			name: "should block invalid minter address",
 			genesis: types.NewGenesisState(
 				types.NewParams(math.LegacyNewDec(2), nil, []string{"cosmos1fdsfd"}, nil),
+				nil,
 				nil,
 				nil,
 				nil,
@@ -255,6 +265,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 				nil,
 				nil,
 				nil,
+				nil,
 			),
 			shouldErr: true,
 		},
@@ -262,6 +273,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			name: "should block invalid allowed depositors address",
 			genesis: types.NewGenesisState(
 				types.NewParams(math.LegacyNewDec(2), nil, nil, []string{"cosmos1fdsfd"}),
+				nil,
 				nil,
 				nil,
 				nil,
@@ -280,6 +292,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 					),
 				},
 				nil,
+				nil,
 			),
 			shouldErr: true,
 		},
@@ -294,6 +307,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)),
 					),
 				},
+				nil,
 				nil,
 			),
 			shouldErr: true,
@@ -351,6 +365,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 					),
 				},
 				nil,
+				nil,
 			),
 			shouldErr: true,
 		},
@@ -369,6 +384,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)),
 					),
 				},
+				nil,
 				nil,
 			),
 			shouldErr: false,
@@ -431,6 +447,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 					),
 				},
 				nil,
+				nil,
 			),
 			shouldErr: false,
 		},
@@ -445,6 +462,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 						sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 2)),
 					),
 				},
+				nil,
 				nil,
 				nil,
 			),
@@ -480,6 +498,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 				},
 				nil,
 				nil,
+				nil,
 			),
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
@@ -489,9 +508,40 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			},
 		},
 		{
+			name: "should block invalid locked representation delegators",
+			genesis: types.NewGenesisState(
+				types.DefaultParams(),
+				nil,
+				nil,
+				[]string{"cosmos1fdsfd"},
+				nil,
+			),
+			shouldErr: true,
+		},
+		{
+			name: "should initialize locked representation delegators properly",
+			genesis: types.NewGenesisState(
+				types.DefaultParams(),
+				nil,
+				nil,
+				[]string{"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre"},
+				nil,
+			),
+			shouldErr: false,
+			check: func(ctx sdk.Context) {
+				res, err := suite.k.IsLockedRepresentationDelegator(
+					ctx,
+					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
+				)
+				suite.Require().NoError(err)
+				suite.Require().True(res)
+			},
+		},
+		{
 			name: "should block invalid target covered locked shares",
 			genesis: types.NewGenesisState(
 				types.DefaultParams(),
+				nil,
 				nil,
 				nil,
 				[]types.TargetCoveredLockedSharesRecord{
@@ -510,6 +560,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 				types.DefaultParams(),
 				nil,
 				nil,
+				nil,
 				[]types.TargetCoveredLockedSharesRecord{
 					{
 						DelegationType:     0,
@@ -524,6 +575,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			name: "should initialize targets covered locked shares properly",
 			genesis: types.NewGenesisState(
 				types.DefaultParams(),
+				nil,
 				nil,
 				nil,
 				[]types.TargetCoveredLockedSharesRecord{

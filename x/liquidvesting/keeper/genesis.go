@@ -23,6 +23,11 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) (*types.GenesisState, error) {
 		return nil, err
 	}
 
+	lockedRepresentationDelegators, err := k.GetAllLockedRepresentationDelegators(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	var targetsCoveredLockedShares []types.TargetCoveredLockedSharesRecord
 	err = k.IterateTargetsCoveredLockedShares(ctx, func(delType restakingtypes.DelegationType, targetID uint32, shares sdk.DecCoins) (stop bool, err error) {
 		targetsCoveredLockedShares = append(targetsCoveredLockedShares, types.TargetCoveredLockedSharesRecord{
@@ -40,6 +45,7 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) (*types.GenesisState, error) {
 		params,
 		k.GetAllBurnCoins(ctx),
 		insuranceFundsEntries,
+		lockedRepresentationDelegators,
 		targetsCoveredLockedShares,
 	), nil
 }
@@ -127,6 +133,13 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 		// Update the undelegate amounts that can be considered for this user
 		undelegateAmounts[burnCoins.DelegatorAddress] = userUndelegateAmount.Sub(burnCoins.Amount...)
 		err = k.InsertBurnCoinsToUnbondingQueue(ctx, burnCoins)
+		if err != nil {
+			return err
+		}
+	}
+
+	for _, delegator := range state.LockedRepresentationDelegators {
+		err = k.SetLockedRepresentationDelegator(ctx, delegator)
 		if err != nil {
 			return err
 		}

@@ -15,9 +15,10 @@ const (
 var (
 	ParamsKey = collections.NewPrefix(0x01)
 
-	InsuranceFundKey             = collections.NewPrefix(0x10)
-	BurnCoinsQueueKey            = collections.NewPrefix(0x20)
-	CoveredLockedSharesKeyPrefix = collections.NewPrefix(0x30)
+	InsuranceFundKey                        = collections.NewPrefix(0x10)
+	BurnCoinsQueueKey                       = collections.NewPrefix(0x20)
+	CoveredLockedSharesKeyPrefix            = collections.NewPrefix(0x30)
+	LockedRepresentationDelegatorsKeyPrefix = collections.NewPrefix(0x40)
 )
 
 // GetBurnCoinsQueueTimeKey creates the prefix to obtain the list of

@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 
+	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
 )
 
@@ -25,6 +26,11 @@ func (h RestakingHooks) BeforeDelegationSharesModified(ctx context.Context, delT
 		return restakingtypes.ErrDelegationNotFound
 	}
 
+	// If the delegation has no locked shares, exit early.
+	if !types.HasLockedShares(delegation.Shares) {
+		return nil
+	}
+
 	coveredLockedShares, err := h.k.GetCoveredLockedShares(ctx, delegation)
 	if err != nil {
 		return err
@@ -43,6 +49,19 @@ func (h RestakingHooks) AfterDelegationModified(ctx context.Context, delType res
 	}
 	if !found {
 		return restakingtypes.ErrDelegationNotFound
+	}
+
+	// If the delegation has no locked shares, remove the delegator from the list and
+	// exit early.
+	if !types.HasLockedShares(delegation.Shares) {
+		return h.k.RemoveLockedRepresentationDelegator(ctx, delegation.UserAddress)
+	}
+
+	// If the delegation has locked representation inside, mark the delegator as
+	// locked representation delegator.
+	err = h.k.SetLockedRepresentationDelegator(ctx, delegation.UserAddress)
+	if err != nil {
+		return err
 	}
 
 	coveredLockedShares, err := h.k.GetCoveredLockedShares(ctx, delegation)

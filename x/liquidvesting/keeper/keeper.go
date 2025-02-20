@@ -28,7 +28,8 @@ type Keeper struct {
 	params         collections.Item[types.Params]
 	insuranceFunds collections.Map[string, types.UserInsuranceFund] // User address -> UserInsuranceFund
 	// (delegationType, targetID) -> types.CoveredLockedShares
-	TargetsCoveredLockedShares collections.Map[collections.Pair[int32, uint32], types.TargetCoveredLockedShares]
+	TargetsCoveredLockedShares     collections.Map[collections.Pair[int32, uint32], types.TargetCoveredLockedShares]
+	LockedRepresentationDelegators collections.KeySet[string]
 
 	// Addresses
 	ModuleAddress string
@@ -83,6 +84,12 @@ func NewKeeper(
 			"covered_locked_shares",
 			collections.PairKeyCodec(collections.Int32Key, collections.Uint32Key),
 			codec.CollValue[types.TargetCoveredLockedShares](cdc),
+		),
+		LockedRepresentationDelegators: collections.NewKeySet(
+			sb,
+			types.LockedRepresentationDelegatorsKeyPrefix,
+			"locked_representation_delegators",
+			collections.StringKey,
 		),
 
 		ModuleAddress: moduleAddress,
