@@ -87,6 +87,7 @@ func (k msgServer) RegisterOperator(ctx context.Context, msg *types.MsgRegisterO
 		sdk.NewEvent(
 			types.EventTypeRegisterOperator,
 			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", operator.ID)),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
 		),
 	})
 
@@ -128,6 +129,7 @@ func (k msgServer) UpdateOperator(ctx context.Context, msg *types.MsgUpdateOpera
 		sdk.NewEvent(
 			types.EventTypeUpdateOperator,
 			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", operator.ID)),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
 		),
 	})
 
@@ -158,6 +160,7 @@ func (k msgServer) DeactivateOperator(ctx context.Context, msg *types.MsgDeactiv
 		sdk.NewEvent(
 			types.EventTypeStartOperatorInactivation,
 			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", msg.OperatorID)),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
 		),
 	})
 
@@ -188,6 +191,7 @@ func (k msgServer) ReactivateOperator(ctx context.Context, msg *types.MsgReactiv
 		sdk.NewEvent(
 			types.EventTypeReactivateOperator,
 			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", msg.OperatorID)),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
 		),
 	})
 
@@ -218,6 +222,7 @@ func (k msgServer) DeleteOperator(ctx context.Context, msg *types.MsgDeleteOpera
 		sdk.NewEvent(
 			types.EventTypeDeleteOperator,
 			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", msg.OperatorID)),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
 		),
 	})
 
@@ -250,6 +255,7 @@ func (k msgServer) TransferOperatorOwnership(ctx context.Context, msg *types.Msg
 			types.EventTypeTransferOperatorOwnership,
 			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", msg.OperatorID)),
 			sdk.NewAttribute(types.AttributeKeyNewAdmin, msg.NewAdmin),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
 		),
 	})
 
@@ -282,7 +288,11 @@ func (k msgServer) SetOperatorParams(ctx context.Context, msg *types.MsgSetOpera
 	// Emit the event
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sdkCtx.EventManager().EmitEvents(sdk.Events{
-		sdk.NewEvent(types.EventTypeSetOperatorParams),
+		sdk.NewEvent(
+			types.EventTypeSetOperatorParams,
+			sdk.NewAttribute(types.AttributeKeyOperatorID, fmt.Sprintf("%d", msg.OperatorID)),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
+		),
 	})
 
 	return &types.MsgSetOperatorParamsResponse{}, nil
