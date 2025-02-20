@@ -10,9 +10,9 @@ import "milkyway/restaking/v1/models.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types";
 
-// CoveredLockedSharesRecord represents the covered locked shares of a
-// delegation target.
-message CoveredLockedSharesRecord {
+// TargetCoveredLockedSharesRecord represents the total covered locked shares of
+// a delegation target.
+message TargetCoveredLockedSharesRecord {
   // delegation_type is the type of the delegation target.
   milkyway.restaking.v1.DelegationType delegation_type = 1;
 
@@ -40,7 +40,7 @@ message GenesisState {
 
   // covered_locked_shares defines the total covered locked shares of each
   // delegation target.
-  repeated CoveredLockedShares covered_locked_shares = 4 [
+  repeated TargetCoveredLockedSharesRecord targets_covered_locked_shares = 4 [
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];

@@ -113,7 +113,7 @@ func (k *Keeper) SetParams(ctx context.Context, params types.Params) error {
 			err = k.TargetsCoveredLockedShares.Set(
 				ctx,
 				collections.Join(int32(delegation.Type), delegation.TargetID),
-				types.CoveredLockedShares{Shares: newTargetCoveredLockedShares},
+				types.TargetCoveredLockedShares{Shares: newTargetCoveredLockedShares},
 			)
 			if err != nil {
 				return err

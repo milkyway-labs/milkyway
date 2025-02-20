@@ -85,6 +85,15 @@ func (k *Keeper) GetTargetCoveredLockedShares(ctx context.Context, delType resta
 	return shares.Shares, nil
 }
 
+// SetTargetCoveredLockedShares sets the total locked shares for a target.
+func (k *Keeper) SetTargetCoveredLockedShares(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32, shares sdk.DecCoins) error {
+	return k.TargetsCoveredLockedShares.Set(
+		ctx,
+		collections.Join(int32(delType), targetID),
+		types.TargetCoveredLockedShares{Shares: shares},
+	)
+}
+
 // IncrementTargetCoveredLockedShares increments the total locked shares for a target.
 func (k *Keeper) IncrementTargetCoveredLockedShares(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32, shares sdk.DecCoins) error {
 	prevShares, err := k.GetTargetCoveredLockedShares(ctx, delType, targetID)
@@ -95,7 +104,7 @@ func (k *Keeper) IncrementTargetCoveredLockedShares(ctx context.Context, delType
 	return k.TargetsCoveredLockedShares.Set(
 		ctx,
 		collections.Join(int32(delType), targetID),
-		types.CoveredLockedShares{Shares: newShares},
+		types.TargetCoveredLockedShares{Shares: newShares},
 	)
 }
 
@@ -112,5 +121,16 @@ func (k *Keeper) DecrementTargetCoveredLockedShares(ctx context.Context, delType
 	if newShares.IsZero() {
 		return k.TargetsCoveredLockedShares.Remove(ctx, key)
 	}
-	return k.TargetsCoveredLockedShares.Set(ctx, key, types.CoveredLockedShares{Shares: newShares})
+	return k.TargetsCoveredLockedShares.Set(ctx, key, types.TargetCoveredLockedShares{Shares: newShares})
+}
+
+// IterateTargetsCoveredLockedShares iterates over all the targets covered locked
+// shares and calls cb.
+func (k *Keeper) IterateTargetsCoveredLockedShares(ctx context.Context, cb func(delType restakingtypes.DelegationType, targetID uint32, shares sdk.DecCoins) (stop bool, err error)) error {
+	err := k.TargetsCoveredLockedShares.Walk(ctx, nil, func(key collections.Pair[int32, uint32], shares types.TargetCoveredLockedShares) (stop bool, err error) {
+		delType := restakingtypes.DelegationType(key.K1())
+		targetID := key.K2()
+		return cb(delType, targetID, shares.Shares)
+	})
+	return err
 }

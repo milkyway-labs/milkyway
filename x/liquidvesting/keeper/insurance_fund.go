@@ -170,7 +170,7 @@ func (k *Keeper) beforeUserInsuranceFundModified(ctx context.Context, user strin
 			err = k.TargetsCoveredLockedShares.Set(
 				ctx,
 				collections.Join(int32(del.Type), del.TargetID),
-				types.CoveredLockedShares{Shares: newTargetCoveredLockedShares},
+				types.TargetCoveredLockedShares{Shares: newTargetCoveredLockedShares},
 			)
 			if err != nil {
 				return true, err

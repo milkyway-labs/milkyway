@@ -62,9 +62,9 @@ message UserInsuranceFundEntry {
   ];
 }
 
-// CoveredLockedShares represents the total covered locked shares of each
+// TargetCoveredLockedShares represents the total covered locked shares of each
 // delegation target.
-message CoveredLockedShares {
+message TargetCoveredLockedShares {
   // shares defines the total covered locked shares of the delegation target.
   repeated cosmos.base.v1beta1.DecCoin shares = 1 [
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",

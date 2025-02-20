@@ -6,6 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
 )
 
 // ExportGenesis returns the GenesisState associated with the given context
@@ -22,7 +23,25 @@ func (k *Keeper) ExportGenesis(ctx sdk.Context) (*types.GenesisState, error) {
 		return nil, err
 	}
 
-	return types.NewGenesisState(params, k.GetAllBurnCoins(ctx), insuranceFundsEntries), nil
+	var targetsCoveredLockedShares []types.TargetCoveredLockedSharesRecord
+	err = k.IterateTargetsCoveredLockedShares(ctx, func(delType restakingtypes.DelegationType, targetID uint32, shares sdk.DecCoins) (stop bool, err error) {
+		targetsCoveredLockedShares = append(targetsCoveredLockedShares, types.TargetCoveredLockedSharesRecord{
+			DelegationType:     delType,
+			DelegationTargetID: targetID,
+			Shares:             shares,
+		})
+		return false, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return types.NewGenesisState(
+		params,
+		k.GetAllBurnCoins(ctx),
+		insuranceFundsEntries,
+		targetsCoveredLockedShares,
+	), nil
 }
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -108,6 +127,18 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 		// Update the undelegate amounts that can be considered for this user
 		undelegateAmounts[burnCoins.DelegatorAddress] = userUndelegateAmount.Sub(burnCoins.Amount...)
 		err = k.InsertBurnCoinsToUnbondingQueue(ctx, burnCoins)
+		if err != nil {
+			return err
+		}
+	}
+
+	for _, targetCoveredLockedShares := range state.TargetsCoveredLockedShares {
+		err = k.SetTargetCoveredLockedShares(
+			ctx,
+			targetCoveredLockedShares.DelegationType,
+			targetCoveredLockedShares.DelegationTargetID,
+			targetCoveredLockedShares.Shares,
+		)
 		if err != nil {
 			return err
 		}
