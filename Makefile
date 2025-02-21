@@ -342,3 +342,12 @@ start-localnet-ci: build
 	./build/milkywayd start --home ~/.milkywayd-liveness --x-crisis-skip-assert-invariants
 
 .PHONY: start-localnet-ci
+
+###############################################################################
+###                             Documentation                               ###
+###############################################################################
+
+gen-modules-docs:
+	cd "${CURDIR}/scripts/docs-gen" && $(MAKE) gen
+
+.PHONY: gen-modules-docs
