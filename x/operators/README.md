@@ -8,6 +8,37 @@ This module allows the registration and management of metadata related to restak
 
 ## Contents
 
+* [Concepts](#concepts)
+   * [Operator](#operator)
+   * [Operator Params](#operator-params)
+   * [Inactivating queue](#inactivating-queue)
+* [State](#state)
+   * [Params](#params)
+   * [NextOperatorID](#nextoperatorid)
+   * [Operators](#operators)
+   * [Inactivating queue](#inactivating-queue)
+   * [Operator addresses](#operator-addresses)
+   * [Operator params](#operator-params)
+* [Messages](#messages)
+   * [MsgRegisterOperator](#msgregisteroperator)
+   * [MsgUpdateOperator](#msgupdateoperator)
+   * [MsgDeactivateOperator](#msgdeactivateoperator)
+   * [MsgReactivateOperator](#msgreactivateoperator)
+   * [MsgDeleteOperator](#msgdeleteoperator)
+   * [MsgSetOperatorParams](#msgsetoperatorparams)
+   * [MsgTransferOperatorOwnership](#msgtransferoperatorownership)
+* [Events](#events)
+   * [BeginBlocker](#beginblocker)
+   * [Handlers](#handlers)
+      * [MsgRegisterOperator](#msgregisteroperator)
+      * [MsgUpdateOperator](#msgupdateoperator)
+      * [MsgDeactivateOperator](#msgdeactivateoperator)
+      * [MsgReactivateOperator](#msgreactivateoperator)
+      * [MsgDeleteOperator](#msgdeleteoperator)
+      * [MsgSetOperatorParams](#msgsetoperatorparams)
+      * [MsgTransferOperatorOwnership](#msgtransferoperatorownership)
+* [Parameters](#parameters)
+
 ## Concepts
 
 ### Operator
@@ -239,3 +270,11 @@ The message will fail under the following conditions:
 |-----------------------|---------------|-------------------|
 | `set_operator_params` | `operator_id` | `{operatorID}`    |
 | `set_operator_params` | `sender`      | `{senderAddress}` |
+
+## Parameters
+
+The operators module contains the following parameters:
+
+```protobuf reference
+https://github.com/milkyway-labs/milkyway/blob/v8.1.0/proto/milkyway/operators/v1/params.proto#L9-L25
+```

@@ -26,6 +26,7 @@ This module allows the creation of synthetic tokens that represent tokens that h
       * [MsgMintLockedRepresentation](#msgmintlockedrepresentation)
       * [MsgBurnLockedRepresentation](#msgburnlockedrepresentation)
       * [MsgWithdrawInsuranceFund](#msgwithdrawinsurancefund)
+* [Parameters](#parameters)
 
 ## Concepts
 
@@ -252,5 +253,3 @@ The liquid vesting module contains the following parameters:
  ```protobuf reference
 https://github.com/milkyway-labs/milkyway/blob/v8.1.0/proto/milkyway/liquidvesting/v1/params.proto#L9-L35
 ```
-
-
