@@ -1,6 +1,6 @@
 venv:
     # Create a Python virtual environment if it doesn't exist
-	@if [ ! -d venv ]; then python3 -m venv venv; fi
+	@if [ ! -d venv ]; then python -m venv venv; fi
 
 install-requirements: venv
 	. "${CURDIR}/venv/bin/activate"; pip install -r requirements.txt 
