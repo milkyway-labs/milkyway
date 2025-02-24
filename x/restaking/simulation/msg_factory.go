@@ -114,7 +114,7 @@ func WeightedOperations(
 	})
 
 	return simulation.WeightedOperations{
-		simulation.NewWeightedOperation(weightMsgJoinService, SimulateMsgJoinService(ak, bk, opk, sk)),
+		simulation.NewWeightedOperation(weightMsgJoinService, SimulateMsgJoinService(ak, bk, opk, sk, k)),
 		simulation.NewWeightedOperation(weightMsgLeaveService, SimulateMsgLeaveService(ak, bk, opk, sk, k)),
 		simulation.NewWeightedOperation(weightMsgAddOperatorToAllowList, SimulateMsgAddOperatorToAllowList(ak, bk, opk, sk, k)),
 		simulation.NewWeightedOperation(weightMsgRemoveOperatorhFromAllowList, SimulateMsgRemoveOperatorFromAllowlist(ak, bk, opk, sk, k)),
@@ -132,6 +132,7 @@ func SimulateMsgJoinService(
 	bk bankkeeper.Keeper,
 	opk *operatorskeeper.Keeper,
 	sk *serviceskeeper.Keeper,
+	k *keeper.Keeper,
 ) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
@@ -153,7 +154,21 @@ func SimulateMsgJoinService(
 
 		// Get a random service
 		service, found := servicessimulation.GetRandomExistingService(r, ctx, sk, func(s servicestypes.Service) bool {
-			return s.IsActive()
+			if !s.IsActive() {
+				return false
+			}
+			configured, err := k.IsServiceOperatorsAllowListConfigured(ctx, s.ID)
+			if err != nil {
+				panic(err)
+			}
+			if !configured {
+				return true
+			}
+			isAllowed, err := k.IsOperatorInServiceAllowList(ctx, s.ID, operator.ID)
+			if err != nil {
+				panic(err)
+			}
+			return isAllowed
 		})
 		if !found {
 			return simtypes.NoOpMsg(types.ModuleName, sdk.MsgTypeURL(msg), "could not get service"), nil, nil
