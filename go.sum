@@ -466,8 +466,8 @@ github.com/cosmos/interchain-security/v6 v6.3.0 h1:AIsfxLUDtUGVfaqJ1WPwnYIOT5Axo
 github.com/cosmos/interchain-security/v6 v6.3.0/go.mod h1:6DSiV2w+DuPkxP1KGFtaxpiwf8Xt2iusj8O53KCx96Q=
 github.com/cosmos/ledger-cosmos-go v0.14.0 h1:WfCHricT3rPbkPSVKRH+L4fQGKYHuGOK9Edpel8TYpE=
 github.com/cosmos/ledger-cosmos-go v0.14.0/go.mod h1:E07xCWSBl3mTGofZ2QnL4cIUzMbbGVyik84QYKbX3RA=
-github.com/cosmos/rosetta v0.50.10 h1:JML9H+TYnpiUn1TucVmV5XVH9YF/Nd/GJqesaIpXq0c=
-github.com/cosmos/rosetta v0.50.10/go.mod h1:x7LfYPXzDkS3/8idE+ASifOokJacOiJGdrlj6/r8Bz0=
+github.com/cosmos/rosetta v0.50.12 h1:Dy8B5Hc6/aH1xxuUDYAVRvI2Dx5cilPsjCwG3INp6bE=
+github.com/cosmos/rosetta v0.50.12/go.mod h1:w80RJd4oW5r6t89rajdZGJbI0mucZ1CSZdi+YeSTKow=
 github.com/cosmos/rosetta-sdk-go v0.10.0 h1:E5RhTruuoA7KTIXUcMicL76cffyeoyvNybzUGSKFTcM=
 github.com/cosmos/rosetta-sdk-go v0.10.0/go.mod h1:SImAZkb96YbwvoRkzSMQB6noNJXFgWl/ENIznEoYQI4=
 github.com/cpuguy83/go-md2man/v2 v2.0.0-20190314233015-f79a8a8ca69d/go.mod h1:maD7wRr/U5Z6m/iR4s+kqSMx2CaBsrgA7czyZG/E6dU=
