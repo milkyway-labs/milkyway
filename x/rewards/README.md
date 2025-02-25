@@ -7,6 +7,11 @@
 ## Contents
 
 * [Concepts](#concepts)
+    * [F1 Distribution](#f1-distribution)
+    * [Rewards Plans](#rewards-plans)
+        * [Basic Distribution](#basic-distribution)
+        * [Weighted Distribution](#weighted-distribution)
+        * [Egalitarian Distribution](#egalitarian-distribution)
 * [State](#state)
     * [Params](#params)
     * [NextRewardsPlanID](#nextrewardsplanid)
@@ -20,7 +25,19 @@
     * [PoolServiceTotalDelegatorShares](#poolservicetotaldelegatorshares)
     * [OperatorAccumulatedCommissions](#operatoraccumulatedcommissions)
 * [Messages](#messages)
+    * [MsgCreateRewardsPlan](#msgcreaterewardsplan)
+    * [MsgEditRewardsPlan](#msgeditrewardsplan)
+    * [MsgSetWithdrawAddress](#msgsetwithdrawaddress)
+    * [MsgWithdrawDelegatorReward](#msgwithdrawdelegatorreward)
+    * [MsgWithdrawOperatorCommission](#msgwithdrawoperatorcommission)
 * [Events](#events)
+    * [BeginBlocker](#beginblocker)
+    * [Handlers](#handlers)
+        * [MsgCreateRewardsPlan](#msgcreaterewardsplan-1)
+        * [MsgEditRewardsPlan](#msgeditrewardsplan-1)
+        * [MsgSetWithdrawAddress](#msgsetwithdrawaddress-1)
+        * [MsgWithdrawDelegatorReward](#msgwithdrawdelegatorreward-1)
+        * [MsgWithdrawOperatorCommission](#msgwithdrawoperatorcommission-1)
 * [Parameters](#parameters)
 
 ## Concepts
@@ -314,6 +331,7 @@ The message will fail under the following conditions:
 |-----------------------|-------------------|-------------------|
 | `create_rewards_plan` | `rewards_plan_id` | `{rewardsPlanID}` |
 | `create_rewards_plan` | `service_id`      | `{serviceID}`     |
+| `create_rewards_plan` | `sender`          | `{senderAddress}` |
 
 #### MsgEditRewardsPlan
 
@@ -321,6 +339,7 @@ The message will fail under the following conditions:
 |---------------------|-------------------|-------------------|
 | `edit_rewards_plan` | `rewards_plan_id` | `{rewardsPlanID}` |
 | `edit_rewards_plan` | `service_id`      | `{serviceID}`     |
+| `edit_rewards_plan` | `sender`          | `{senderAddress}` |
 
 #### MsgSetWithdrawAddress
 
