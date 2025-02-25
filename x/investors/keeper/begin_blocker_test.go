@@ -5,8 +5,6 @@ import (
 
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
-	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"github.com/milkyway-labs/milkyway/v9/app/testutil"
@@ -125,15 +123,9 @@ func (suite *KeeperTestSuite) TestRemoveVestingInvestor_RewardsAfterVestingEnded
 
 	ctx = suite.allocateTokensToValidator(ctx, valAddr, utils.MustParseDecCoins("1000000stake"), true)
 
-	querier := distrkeeper.NewQuerier(suite.dk)
 	// Query the investor's rewards
-	cacheCtx, _ := ctx.CacheContext()
-	rewards, err := querier.DelegationRewards(cacheCtx, &distrtypes.QueryDelegationRewardsRequest{
-		DelegatorAddress: investorAddr.String(),
-		ValidatorAddress: validator.GetOperator(),
-	})
-	suite.Require().NoError(err)
-	suite.Require().Equal("200000.000000000000000000stake", rewards.Rewards.String())
+	rewards := suite.delegationRewards(ctx, investorAddr.String(), validator.GetOperator())
+	suite.Require().Equal("200000.000000000000000000stake", rewards.String())
 
 	// Remove the investor from the vesting investors list
 	err = suite.k.RemoveVestingInvestor(ctx, investorAddr)
@@ -144,22 +136,12 @@ func (suite *KeeperTestSuite) TestRemoveVestingInvestor_RewardsAfterVestingEnded
 	suite.Require().Equal("200000stake", balances.String())
 
 	// Query the normal account's rewards, it shouldn't be changed
-	cacheCtx, _ = ctx.CacheContext()
-	rewards, err = querier.DelegationRewards(cacheCtx, &distrtypes.QueryDelegationRewardsRequest{
-		DelegatorAddress: normalAddr.String(),
-		ValidatorAddress: validator.GetOperator(),
-	})
-	suite.Require().NoError(err)
-	suite.Require().Equal("400000.000000000000000000stake", rewards.Rewards.String())
+	rewards = suite.delegationRewards(ctx, normalAddr.String(), validator.GetOperator())
+	suite.Require().Equal("400000.000000000000000000stake", rewards.String())
 
 	ctx = suite.allocateTokensToValidator(ctx, valAddr, utils.MustParseDecCoins("1000000stake"), true)
 
 	// Query the investor's rewards
-	cacheCtx, _ = ctx.CacheContext()
-	rewards, err = querier.DelegationRewards(cacheCtx, &distrtypes.QueryDelegationRewardsRequest{
-		DelegatorAddress: investorAddr.String(),
-		ValidatorAddress: validator.GetOperator(),
-	})
-	suite.Require().NoError(err)
-	suite.Require().Equal("333333.333333333333000000stake", rewards.Rewards.String())
+	rewards = suite.delegationRewards(ctx, investorAddr.String(), validator.GetOperator())
+	suite.Require().Equal("333333.333333333333000000stake", rewards.String())
 }

@@ -2,6 +2,7 @@ package keeper_test
 
 import (
 	"context"
+	"errors"
 	"testing"
 	"time"
 
@@ -157,11 +158,10 @@ func (suite *KeeperTestSuite) delegate(ctx context.Context, delegator, validator
 		suite.fundAccount(ctx, delegator, sdk.NewCoins(amount))
 	}
 
-	_, err := stakingkeeper.NewMsgServerImpl(suite.sk).Delegate(ctx, &stakingtypes.MsgDelegate{
-		DelegatorAddress: delegator,
-		ValidatorAddress: validator,
-		Amount:           amount,
-	})
+	_, err := stakingkeeper.NewMsgServerImpl(suite.sk).Delegate(
+		ctx,
+		stakingtypes.NewMsgDelegate(delegator, validator, amount),
+	)
 	suite.Require().NoError(err)
 }
 
@@ -185,4 +185,18 @@ func (suite *KeeperTestSuite) isVestingInvestor(ctx context.Context, addr sdk.Ac
 	isVestingAddr, err := suite.k.VestingInvestors.Has(ctx, addr)
 	suite.Require().NoError(err)
 	return isVestingAddr
+}
+
+func (suite *KeeperTestSuite) delegationRewards(ctx sdk.Context, delegator, validator string) sdk.DecCoins {
+	querier := distrkeeper.NewQuerier(suite.dk)
+	cacheCtx, _ := ctx.CacheContext()
+	rewards, err := querier.DelegationRewards(cacheCtx, &distrtypes.QueryDelegationRewardsRequest{
+		DelegatorAddress: delegator,
+		ValidatorAddress: validator,
+	})
+	if errors.Is(err, stakingtypes.ErrNoDelegation) {
+		return nil
+	}
+	suite.Require().NoError(err)
+	return rewards.Rewards
 }
