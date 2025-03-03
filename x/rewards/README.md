@@ -68,6 +68,10 @@ A rewards plan consists of the following parameters:
 
 Each distribution method object also has `weight` field which is used to
 determine the distribution ratio among the pools, operators and users.
+If all distributions' weights are set to 0 the rewards are distributed based
+on restaked assets' USD value.
+If only some distributions' weights are set to 0 the rewards aren't
+distributed to them only.
 
 There are three types of distribution methods, while users distribution can only
 be basic:
@@ -113,6 +117,31 @@ Example:
 * Pool A's rewards: This block's rewards / Total number of pools
 * Pool B's rewards: This block's rewards / Total number of pools
 * ...
+
+### Rewards Allocation
+
+Rewards are allocated every block, based on the previous block's duration.
+Here's the formula to calculate rewards per block:
+
+```
+rewardsThisBlock = rewardsAmountPerDay * (prevBlockDuration / 86400)
+```
+
+Rewards are allocated to a pool's delegators when:
+
+1. The service is active
+2. The rewards plan's pool has enough balances to distribute rewards
+3. The service is secured by the pool. By default, a service is secured by no
+   pools
+4. There's at least one delegator to the pool who trusts the service with the
+   pool
+
+Rewards are allocated to an operator and its delegators when:
+
+1. The operator is active
+2. The service is active
+3. The operator has joined the service which implies that the operator is
+   allowed to validate the service
 
 ## State
 
