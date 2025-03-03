@@ -14,7 +14,7 @@ This module allows the registration and management of metadata related to restak
    * [Inactivating queue](#inactivating-queue)
 * [State](#state)
    * [Params](#params)
-   * [NextOperatorID](#nextoperatorid)
+   * [Next Operator ID](#next-operator-id)
    * [Operators](#operators)
    * [Inactivating queue](#inactivating-queue)
    * [Operator addresses](#operator-addresses)
@@ -91,7 +91,7 @@ The module params are stored using the `0x01` key:
 
 * Params: `0x01 -> ProtocolBuffer(params)`
 
-### NextOperatorID
+### Next Operator ID
 
 The ID that will be assigned to the next registered operator is stored using the `0xa1` key:
 
@@ -137,6 +137,12 @@ The message will fail under the following conditions:
 * The operator data are not valid
 * The user registering for the operator has not enough funds to pay for the registration fee set inside the module's
   params
+
+This message returns a `MsgRegisterOperatorResponse` that contains the ID of the newly registered operator.
+
+```protobuf reference
+https://github.com/milkyway-labs/milkyway/blob/v8.1.0/proto/milkyway/operators/v1/messages.proto#L85-L90
+```
 
 ### MsgUpdateOperator
 
