@@ -35,6 +35,7 @@ type BankKeeper interface {
 	GetAllBalances(ctx context.Context, addr sdk.AccAddress) sdk.Coins
 	GetDenomMetaData(ctx context.Context, denom string) (banktypes.Metadata, bool)
 	SetDenomMetaData(ctx context.Context, metadata banktypes.Metadata)
+	DenomOwners(ctx context.Context, req *banktypes.QueryDenomOwnersRequest) (*banktypes.QueryDenomOwnersResponse, error)
 }
 
 type PoolsKeeper interface {
@@ -57,8 +58,9 @@ type RestakingKeeper interface {
 	IterateUserDelegations(ctx context.Context, userAddress string, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
 	GetDelegationTarget(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32) (restakingtypes.DelegationTarget, error)
 	GetDelegation(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32, delegator string) (restakingtypes.Delegation, bool, error)
-	GetDelegationForTarget(ctx context.Context, target restakingtypes.DelegationTarget, delegator string) (restakingtypes.Delegation, bool, error)
-	GetAllDelegations(ctx context.Context) ([]restakingtypes.Delegation, error)
+	IterateAllPoolDelegations(ctx context.Context, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
+	IterateAllOperatorDelegations(ctx context.Context, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
+	IterateAllServiceDelegations(ctx context.Context, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
 }
 
 type RewardsKeeper interface {

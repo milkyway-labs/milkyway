@@ -1,30 +1,11 @@
 syntax = "proto3";
 package milkyway.liquidvesting.v1;
 
-import "amino/amino.proto";
-import "cosmos/base/v1beta1/coin.proto";
 import "gogoproto/gogo.proto";
 import "milkyway/liquidvesting/v1/models.proto";
 import "milkyway/liquidvesting/v1/params.proto";
-import "milkyway/restaking/v1/models.proto";
 
 option go_package = "github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types";
-
-// TargetCoveredLockedSharesRecord represents the total covered locked shares of
-// a delegation target.
-message TargetCoveredLockedSharesRecord {
-  // delegation_type is the type of the delegation target.
-  milkyway.restaking.v1.DelegationType delegation_type = 1;
-
-  // delegation_target_id is the ID of the delegation target.
-  uint32 delegation_target_id = 2 [(gogoproto.customname) = "DelegationTargetID"];
-
-  // shares defines the covered shares of the delegation target.
-  repeated cosmos.base.v1beta1.DecCoin shares = 3 [
-    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
-    (gogoproto.nullable) = false
-  ];
-}
 
 // GenesisState defines the liquidvesting module's genesis state.
 message GenesisState {
@@ -37,15 +18,4 @@ message GenesisState {
 
   // UserInsuranceFunds represents the users' insurance fund.
   repeated UserInsuranceFundEntry user_insurance_funds = 3 [(gogoproto.nullable) = false];
-
-  // locked_representation_delegators represents the list of delegators that have
-  // locked representation delegated.
-  repeated string locked_representation_delegators = 4;
-
-  // covered_locked_shares defines the total covered locked shares of each
-  // delegation target.
-  repeated TargetCoveredLockedSharesRecord targets_covered_locked_shares = 5 [
-    (gogoproto.nullable) = false,
-    (amino.dont_omitempty) = true
-  ];
 }

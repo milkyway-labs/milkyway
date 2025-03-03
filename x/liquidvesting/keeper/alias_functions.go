@@ -143,12 +143,6 @@ func (k *Keeper) SetLockedRepresentationDelegator(ctx context.Context, userAddre
 	return k.LockedRepresentationDelegators.Set(ctx, userAddress)
 }
 
-// IsLockedRepresentationDelegator checks if the user is a locked representation
-// delegator.
-func (k *Keeper) IsLockedRepresentationDelegator(ctx context.Context, userAddress string) (bool, error) {
-	return k.LockedRepresentationDelegators.Has(ctx, userAddress)
-}
-
 // RemoveLockedRepresentationDelegator removes the user from the locked
 // representation delegators list.
 func (k *Keeper) RemoveLockedRepresentationDelegator(ctx context.Context, userAddress string) error {
