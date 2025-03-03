@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
+language: en-US
+tone_instructions: ''
+early_access: true
+enable_free_tier: true
+reviews:
+  profile: assertive
+  request_changes_workflow: true
+  high_level_summary: true
+  review_status: true
+  commit_status: true
+  changed_files_summary: true
+  sequence_diagrams: true
+  assess_linked_issues: true
+  related_issues: true
+  related_prs: true
+  suggested_reviewers: true
+  path_filters: [
+    "!**/*.pb.go",
+    "!**/*.pb.gw.go",
+    "!**/*.pulsar.go"
+  ]
+  path_instructions: []
+  abort_on_close: true
+code_generation:
+  docstrings:
+    language: en-US

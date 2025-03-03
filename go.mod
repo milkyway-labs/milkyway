@@ -18,17 +18,17 @@ require (
 	cosmossdk.io/x/tx v0.13.7
 	cosmossdk.io/x/upgrade v0.1.4
 	github.com/CosmWasm/wasmd v0.53.0
-	github.com/CosmWasm/wasmvm/v2 v2.1.3 // indirect
+	github.com/CosmWasm/wasmvm/v2 v2.1.3
 	github.com/cometbft/cometbft v0.38.17
-	github.com/cosmos/cosmos-db v1.1.0
+	github.com/cosmos/cosmos-db v1.1.1
 	github.com/cosmos/cosmos-proto v1.0.0-beta.5
-	github.com/cosmos/cosmos-sdk v0.50.11
+	github.com/cosmos/cosmos-sdk v0.50.12
 	github.com/cosmos/go-bip39 v1.0.0
 	github.com/cosmos/gogoproto v1.7.0
 	github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8 v8.0.2
 	github.com/cosmos/ibc-apps/modules/rate-limiting/v8 v8.0.0
 	github.com/cosmos/ibc-go/modules/capability v1.0.1
-	github.com/cosmos/ibc-go/v8 v8.5.3
+	github.com/cosmos/ibc-go/v8 v8.6.1
 	github.com/cosmos/ics23/go v0.11.0 // indirect
 	github.com/cosmos/interchain-security/v6 v6.3.0
 	github.com/cosmos/rosetta v0.50.10
@@ -40,11 +40,11 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/hashicorp/go-metrics v0.5.3
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/prometheus/client_golang v1.20.5
+	github.com/prometheus/client_golang v1.21.0
 	github.com/rakyll/statik v0.1.7
 	github.com/skip-mev/connect/v2 v2.0.1
 	github.com/skip-mev/feemarket v1.1.1
-	github.com/spf13/cast v1.7.0
+	github.com/spf13/cast v1.7.1
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/pflag v1.0.6
 	github.com/spf13/viper v1.19.0
@@ -131,7 +131,7 @@ require (
 	github.com/cosmos/btcutil v1.0.5 // indirect
 	github.com/cosmos/gogogateway v1.2.0 // indirect
 	github.com/cosmos/iavl v1.2.2 // indirect
-	github.com/cosmos/ledger-cosmos-go v0.13.3 // indirect
+	github.com/cosmos/ledger-cosmos-go v0.14.0 // indirect
 	github.com/cosmos/rosetta-sdk-go v0.10.0 // indirect
 	github.com/creachadair/atomicfile v0.3.3 // indirect
 	github.com/creachadair/tomledit v0.0.26 // indirect
@@ -239,7 +239,7 @@ require (
 	github.com/karamaru-alpha/copyloopvar v1.1.0 // indirect
 	github.com/kisielk/errcheck v1.7.0 // indirect
 	github.com/kkHAIKE/contextcheck v1.1.5 // indirect
-	github.com/klauspost/compress v1.17.9 // indirect
+	github.com/klauspost/compress v1.17.11 // indirect
 	github.com/klauspost/cpuid/v2 v2.0.9 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/kr/text v0.2.0 // indirect
