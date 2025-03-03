@@ -119,6 +119,7 @@ func (suite *KeeperTestSuite) TestMsgServer_RegisterOperator() {
 				sdk.NewEvent(
 					types.EventTypeRegisterOperator,
 					sdk.NewAttribute(types.AttributeKeyOperatorID, "2"),
+					sdk.NewAttribute(sdk.AttributeKeySender, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
 				),
 			},
 			check: func(ctx sdk.Context) {
@@ -206,6 +207,7 @@ func (suite *KeeperTestSuite) TestMsgServer_RegisterOperator() {
 				sdk.NewEvent(
 					types.EventTypeRegisterOperator,
 					sdk.NewAttribute(types.AttributeKeyOperatorID, "2"),
+					sdk.NewAttribute(sdk.AttributeKeySender, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
 				),
 			},
 			check: func(ctx sdk.Context) {
@@ -382,6 +384,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateOperator() {
 				sdk.NewEvent(
 					types.EventTypeUpdateOperator,
 					sdk.NewAttribute(types.AttributeKeyOperatorID, "1"),
+					sdk.NewAttribute(sdk.AttributeKeySender, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
 				),
 			},
 			check: func(ctx sdk.Context) {
@@ -542,6 +545,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateOperator() {
 				sdk.NewEvent(
 					types.EventTypeStartOperatorInactivation,
 					sdk.NewAttribute(types.AttributeKeyOperatorID, "1"),
+					sdk.NewAttribute(sdk.AttributeKeySender, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
 				),
 			},
 			check: func(ctx sdk.Context) {
@@ -697,6 +701,7 @@ func (suite *KeeperTestSuite) TestMsgServer_ReactivateOperator() {
 				sdk.NewEvent(
 					types.EventTypeReactivateOperator,
 					sdk.NewAttribute(types.AttributeKeyOperatorID, "1"),
+					sdk.NewAttribute(sdk.AttributeKeySender, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"),
 				),
 			},
 			check: func(ctx sdk.Context) {
@@ -815,6 +820,7 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferOperatorOwnership() {
 					types.EventTypeTransferOperatorOwnership,
 					sdk.NewAttribute(types.AttributeKeyOperatorID, "1"),
 					sdk.NewAttribute(types.AttributeKeyNewAdmin, "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn"),
+					sdk.NewAttribute(sdk.AttributeKeySender, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
 				),
 			},
 			check: func(ctx sdk.Context) {
@@ -962,6 +968,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeleteOperator() {
 				sdk.NewEvent(
 					types.EventTypeDeleteOperator,
 					sdk.NewAttribute(types.AttributeKeyOperatorID, "1"),
+					sdk.NewAttribute(sdk.AttributeKeySender, "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4"),
 				),
 			},
 			check: func(ctx sdk.Context) {
@@ -1098,6 +1105,8 @@ func (suite *KeeperTestSuite) TestMsgServer_SetOperatorParams() {
 			expEvents: []sdk.Event{
 				sdk.NewEvent(
 					types.EventTypeSetOperatorParams,
+					sdk.NewAttribute(types.AttributeKeyOperatorID, "1"),
+					sdk.NewAttribute(sdk.AttributeKeySender, operatorAdmin),
 				),
 			},
 			shouldErr: false,
