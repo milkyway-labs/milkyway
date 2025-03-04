@@ -14,9 +14,9 @@ type AccountKeeper interface {
 	GetAccount(ctx context.Context, addr sdk.AccAddress) sdk.AccountI
 }
 
-// StakingKeeper defines the expected staking keeper.
+// StakingKeeper defines the expected staking keeper. It includes all methods
+// from distrtypes.StakingKeeper, plus GetValidator and GetDelegation.
 type StakingKeeper interface {
-	// distrtypes.StakingKeeper
 	ValidatorAddressCodec() address.Codec
 	ConsensusAddressCodec() address.Codec
 	IterateValidators(context.Context, func(index int64, validator stakingtypes.ValidatorI) (stop bool)) error

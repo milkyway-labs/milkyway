@@ -10,7 +10,9 @@ import (
 	"github.com/milkyway-labs/milkyway/v9/x/investors/types"
 )
 
-// BeginBlocker is called every block and is responsible for removing
+// BeginBlocker is called every block and is responsible for removing the
+// investors that have ended their vesting period from the vesting investors
+// queue.
 func BeginBlocker(ctx context.Context, k *keeper.Keeper) error {
 	defer telemetry.ModuleMeasureSince(types.ModuleName, time.Now(), telemetry.MetricKeyBeginBlocker)
 
