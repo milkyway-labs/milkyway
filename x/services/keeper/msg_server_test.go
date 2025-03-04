@@ -115,6 +115,7 @@ func (suite *KeeperTestSuite) TestMsgServer_CreateService() {
 				sdk.NewEvent(
 					types.EventTypeCreateService,
 					sdk.NewAttribute(types.AttributeKeyServiceID, "1"),
+					sdk.NewAttribute(sdk.AttributeKeySender, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"),
 				),
 			},
 			check: func(ctx sdk.Context) {
@@ -196,6 +197,7 @@ func (suite *KeeperTestSuite) TestMsgServer_CreateService() {
 				sdk.NewEvent(
 					types.EventTypeCreateService,
 					sdk.NewAttribute(types.AttributeKeyServiceID, "1"),
+					sdk.NewAttribute(sdk.AttributeKeySender, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"),
 				),
 			},
 			check: func(ctx sdk.Context) {
@@ -381,6 +383,7 @@ func (suite *KeeperTestSuite) TestMsgServer_UpdateService() {
 				sdk.NewEvent(
 					types.EventTypeUpdateService,
 					sdk.NewAttribute(types.AttributeKeyServiceID, "1"),
+					sdk.NewAttribute(sdk.AttributeKeySender, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"),
 				),
 			},
 			check: func(ctx sdk.Context) {
@@ -521,6 +524,7 @@ func (suite *KeeperTestSuite) TestMsgServer_ActivateService() {
 				sdk.NewEvent(
 					types.EventTypeActivateService,
 					sdk.NewAttribute(types.AttributeKeyServiceID, "1"),
+					sdk.NewAttribute(sdk.AttributeKeySender, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"),
 				),
 			},
 		},
@@ -626,6 +630,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeactivateService() {
 				sdk.NewEvent(
 					types.EventTypeDeactivateService,
 					sdk.NewAttribute(types.AttributeKeyServiceID, "1"),
+					sdk.NewAttribute(sdk.AttributeKeySender, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"),
 				),
 			},
 			check: func(ctx sdk.Context) {
@@ -763,6 +768,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeleteService() {
 				sdk.NewEvent(
 					types.EventTypeDeleteService,
 					sdk.NewAttribute(types.AttributeKeyServiceID, "1"),
+					sdk.NewAttribute(sdk.AttributeKeySender, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"),
 				),
 			},
 			check: func(ctx sdk.Context) {
@@ -795,6 +801,7 @@ func (suite *KeeperTestSuite) TestMsgServer_DeleteService() {
 				sdk.NewEvent(
 					types.EventTypeDeleteService,
 					sdk.NewAttribute(types.AttributeKeyServiceID, "1"),
+					sdk.NewAttribute(sdk.AttributeKeySender, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"),
 				),
 			},
 			check: func(ctx sdk.Context) {
@@ -905,6 +912,7 @@ func (suite *KeeperTestSuite) TestMsgServer_TransferServiceOwnership() {
 					types.EventTypeTransferServiceOwnership,
 					sdk.NewAttribute(types.AttributeKeyServiceID, "1"),
 					sdk.NewAttribute(types.AttributeKeyNewAdmin, "cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn"),
+					sdk.NewAttribute(sdk.AttributeKeySender, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"),
 				),
 			},
 			check: func(ctx sdk.Context) {
@@ -1049,6 +1057,7 @@ func (suite *KeeperTestSuite) TestMsgServer_SetServiceParams() {
 				sdk.NewEvent(
 					types.EventTypeSetServiceParams,
 					sdk.NewAttribute(types.AttributeKeyServiceID, "1"),
+					sdk.NewAttribute(sdk.AttributeKeySender, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd"),
 				),
 			},
 			check: func(ctx sdk.Context) {

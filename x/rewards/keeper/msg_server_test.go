@@ -139,6 +139,7 @@ func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 					types.EventTypeCreateRewardsPlan,
 					sdk.NewAttribute(types.AttributeKeyRewardsPlanID, "2"),
 					sdk.NewAttribute(servicestypes.AttributeKeyServiceID, "1"),
+					sdk.NewAttribute(sdk.AttributeKeySender, testutil.TestAddress(10000).String()),
 				),
 			},
 			check: func(ctx sdk.Context) {
@@ -208,6 +209,7 @@ func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 					types.EventTypeCreateRewardsPlan,
 					sdk.NewAttribute(types.AttributeKeyRewardsPlanID, "1"),
 					sdk.NewAttribute(servicestypes.AttributeKeyServiceID, "1"),
+					sdk.NewAttribute(sdk.AttributeKeySender, testutil.TestAddress(10000).String()),
 				),
 			},
 			check: func(ctx sdk.Context) {
@@ -285,6 +287,7 @@ func (suite *KeeperTestSuite) TestMsgCreateRewardsPlan() {
 					types.EventTypeCreateRewardsPlan,
 					sdk.NewAttribute(types.AttributeKeyRewardsPlanID, "1"),
 					sdk.NewAttribute(servicestypes.AttributeKeyServiceID, "1"),
+					sdk.NewAttribute(sdk.AttributeKeySender, testutil.TestAddress(10000).String()),
 				),
 			},
 			check: func(ctx sdk.Context) {
@@ -541,6 +544,7 @@ func (suite *KeeperTestSuite) TestMsgEditRewardsPlan() {
 					types.EventTypeEditRewardsPlan,
 					sdk.NewAttribute(types.AttributeKeyRewardsPlanID, "1"),
 					sdk.NewAttribute(servicestypes.AttributeKeyServiceID, "1"),
+					sdk.NewAttribute(sdk.AttributeKeySender, testutil.TestAddress(10000).String()),
 				),
 			},
 			check: func(ctx sdk.Context) {
