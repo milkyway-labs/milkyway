@@ -281,9 +281,13 @@ func NewAppKeeper(
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ConsensusAddrPrefix()),
 	)
 
-	// To make a cyclic dependency between investors keeper and distribution keeper,
-	// we first create an empty keeper and then fill its actual values later
-	appKeepers.InvestorsKeeper = &investorskeeper.Keeper{}
+	appKeepers.InvestorsKeeper = investorskeeper.NewKeeper(
+		appCodec,
+		runtime.NewKVStoreService(appKeepers.keys[investorstypes.StoreKey]),
+		appKeepers.AccountKeeper,
+		appKeepers.StakingKeeper,
+		govAuthority,
+	)
 
 	appKeepers.DistrKeeper = distrkeeper.NewKeeper(
 		appCodec,
@@ -295,14 +299,7 @@ func NewAppKeeper(
 		govAuthority,
 	)
 
-	*appKeepers.InvestorsKeeper = *investorskeeper.NewKeeper(
-		appCodec,
-		runtime.NewKVStoreService(appKeepers.keys[investorstypes.StoreKey]),
-		appKeepers.AccountKeeper,
-		appKeepers.StakingKeeper,
-		appKeepers.DistrKeeper,
-		govAuthority,
-	)
+	appKeepers.InvestorsKeeper.SetDistrKeeper(appKeepers.DistrKeeper)
 
 	appKeepers.SlashingKeeper = slashingkeeper.NewKeeper(
 		appCodec,

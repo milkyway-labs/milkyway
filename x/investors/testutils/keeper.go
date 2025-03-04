@@ -52,7 +52,13 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix()),
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ConsensusAddrPrefix()),
 	)
-	data.Keeper = &keeper.Keeper{}
+	data.Keeper = keeper.NewKeeper(
+		data.Cdc,
+		data.StoreService,
+		data.AccountKeeper,
+		data.StakingKeeper,
+		data.AuthorityAddress,
+	)
 	data.DistrKeeper = distrkeeper.NewKeeper(
 		data.Cdc,
 		runtime.NewKVStoreService(data.Keys[distrtypes.StoreKey]),
@@ -62,14 +68,8 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		authtypes.FeeCollectorName,
 		data.AuthorityAddress,
 	)
-	*data.Keeper = *keeper.NewKeeper(
-		data.Cdc,
-		data.StoreService,
-		data.AccountKeeper,
-		data.StakingKeeper,
-		data.DistrKeeper,
-		data.AuthorityAddress,
-	)
+	data.Keeper.SetDistrKeeper(data.DistrKeeper)
+
 	data.StakingKeeper.SetHooks(
 		stakingtypes.NewMultiStakingHooks(
 			data.DistrKeeper.Hooks(),

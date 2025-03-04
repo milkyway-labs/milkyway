@@ -41,7 +41,6 @@ func NewKeeper(
 	storeService corestoretypes.KVStoreService,
 	accountKeeper types.AccountKeeper,
 	stakingKeeper types.StakingKeeper,
-	distrKeeper types.DistrKeeper,
 	authority string,
 ) *Keeper {
 	sb := collections.NewSchemaBuilder(storeService)
@@ -50,7 +49,6 @@ func NewKeeper(
 		cdc:           cdc,
 		accountKeeper: accountKeeper,
 		stakingKeeper: stakingKeeper,
-		distrKeeper:   distrKeeper,
 		authority:     authority,
 
 		InvestorsRewardRatio: collections.NewItem(
@@ -93,4 +91,8 @@ func NewKeeper(
 func (k *Keeper) Logger(ctx context.Context) log.Logger {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	return sdkCtx.Logger().With("module", "x/"+types.ModuleName)
+}
+
+func (k *Keeper) SetDistrKeeper(distrKeeper types.DistrKeeper) {
+	k.distrKeeper = distrKeeper
 }
