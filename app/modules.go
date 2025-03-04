@@ -67,6 +67,8 @@ import (
 	"github.com/milkyway-labs/milkyway/v9/x/assets"
 	assetstypes "github.com/milkyway-labs/milkyway/v9/x/assets/types"
 	"github.com/milkyway-labs/milkyway/v9/x/bank"
+	"github.com/milkyway-labs/milkyway/v9/x/investors"
+	investorstypes "github.com/milkyway-labs/milkyway/v9/x/investors/types"
 	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
 	"github.com/milkyway-labs/milkyway/v9/x/operators"
@@ -160,6 +162,7 @@ func appModules(
 		assets.NewAppModule(appCodec, app.AssetsKeeper),
 		rewards.NewAppModule(appCodec, app.RewardsKeeper, app.AccountKeeper, app.BankKeeper, app.PoolsKeeper, app.OperatorsKeeper, app.ServicesKeeper),
 		liquidvesting.NewAppModule(appCodec, app.LiquidVestingKeeper),
+		investors.NewAppModule(appCodec, app.InvestorsKeeper),
 	}
 }
 
@@ -263,6 +266,7 @@ func orderBeginBlockers() []string {
 		operatorstypes.ModuleName,
 		poolstypes.ModuleName,
 		restakingtypes.ModuleName,
+		investorstypes.ModuleName,
 	}
 }
 
@@ -359,6 +363,7 @@ func orderInitBlockers() []string {
 		assetstypes.ModuleName,
 		rewardstypes.ModuleName,
 		liquidvestingtypes.ModuleName,
+		investorstypes.ModuleName,
 
 		// The feemarket module should ideally be initialized before the genutil module in theory:
 		// The feemarket antehandler performs checks in DeliverTx, which is called by gentx.
