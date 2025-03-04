@@ -6,6 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
 )
 
 // ExportGenesis returns the GenesisState associated with the given context
@@ -40,6 +41,7 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 		return err
 	}
 
+	userInsuranceFunds := map[string]sdk.Coins{}
 	totalCoins := sdk.NewCoins()
 	for _, entry := range state.UserInsuranceFunds {
 		insuranceFund := types.NewInsuranceFund(entry.Balance)
@@ -61,15 +63,13 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 		}
 
 		// Check if the insurance fund can cover the restaked coins
-		canCover, required, err := insuranceFund.CanCoverDecCoins(state.Params.InsurancePercentage, totalLockedRepresentations)
-		if err != nil {
-			return err
-		}
-
+		canCover, required := insuranceFund.CanCoverDecCoins(state.Params.InsurancePercentage, totalLockedRepresentations)
 		if !canCover {
 			return fmt.Errorf("user: %s insurance fund amount is too low, expected %s, got %s",
 				entry.UserAddress, required.String(), entry.Balance.String())
 		}
+
+		userInsuranceFunds[entry.UserAddress] = entry.Balance
 	}
 
 	// Ensure that the balance of the liquid vesting module is equal to the
@@ -115,6 +115,59 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 		if err != nil {
 			return err
 		}
+	}
+
+	// Initialize locked representation delegators and targets covered locked shares
+	type targetCacheKey struct {
+		delType  restakingtypes.DelegationType
+		targetID uint32
+	}
+	// Cache delegation targets to avoid multiple state reads
+	targetCache := map[targetCacheKey]restakingtypes.DelegationTarget{}
+	// TODO: optimize this by utilizing bank module's denom owners index?
+	cb := func(del restakingtypes.Delegation) (stop bool, err error) {
+		if !types.HasLockedShares(del.Shares) {
+			return false, nil
+		}
+		err = k.SetLockedRepresentationDelegator(ctx, del.UserAddress)
+		if err != nil {
+			return true, err
+		}
+		insuranceFund := userInsuranceFunds[del.UserAddress]
+		target, ok := targetCache[targetCacheKey{del.Type, del.TargetID}]
+		if !ok {
+			target, err = k.restakingKeeper.GetDelegationTarget(ctx, del.Type, del.TargetID)
+			if err != nil {
+				return true, err
+			}
+			targetCache[targetCacheKey{del.Type, del.TargetID}] = target
+		}
+		coveredLockedShares, err := types.GetCoveredLockedShares(
+			target,
+			del,
+			insuranceFund,
+			state.Params.InsurancePercentage,
+		)
+		if err != nil {
+			return true, err
+		}
+		err = k.IncrementTargetCoveredLockedShares(ctx, del.Type, del.TargetID, coveredLockedShares)
+		if err != nil {
+			return true, err
+		}
+		return false, nil
+	}
+	err = k.restakingKeeper.IterateAllPoolDelegations(ctx, cb)
+	if err != nil {
+		return err
+	}
+	err = k.restakingKeeper.IterateAllOperatorDelegations(ctx, cb)
+	if err != nil {
+		return err
+	}
+	err = k.restakingKeeper.IterateAllServiceDelegations(ctx, cb)
+	if err != nil {
+		return err
 	}
 
 	// Create the module account if it doesn't exist
