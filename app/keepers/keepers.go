@@ -584,7 +584,18 @@ func NewAppKeeper(
 		appKeepers.AssetsKeeper,
 		govAuthority,
 	)
-	appKeepers.LiquidVestingKeeper = &liquidvestingkeeper.Keeper{}
+	appKeepers.LiquidVestingKeeper = liquidvestingkeeper.NewKeeper(
+		appCodec,
+		runtime.NewKVStoreService(appKeepers.keys[liquidvestingtypes.StoreKey]),
+		appKeepers.AccountKeeper,
+		appKeepers.BankKeeper,
+		appKeepers.OperatorsKeeper,
+		appKeepers.PoolsKeeper,
+		appKeepers.ServicesKeeper,
+		appKeepers.RestakingKeeper,
+		authtypes.NewModuleAddress(liquidvestingtypes.ModuleName).String(),
+		govAuthority,
+	)
 	appKeepers.RewardsKeeper = rewardskeeper.NewKeeper(
 		appCodec,
 		runtime.NewKVStoreService(appKeepers.keys[rewardstypes.StoreKey]),
@@ -599,21 +610,7 @@ func NewAppKeeper(
 		appKeepers.AssetsKeeper,
 		govAuthority,
 	)
-
-	// Set hooks based on the rewards keeper
-	appKeepers.LiquidVestingKeeper = liquidvestingkeeper.NewKeeper(
-		appCodec,
-		runtime.NewKVStoreService(appKeepers.keys[liquidvestingtypes.StoreKey]),
-		appKeepers.AccountKeeper,
-		appKeepers.BankKeeper,
-		appKeepers.OperatorsKeeper,
-		appKeepers.PoolsKeeper,
-		appKeepers.ServicesKeeper,
-		appKeepers.RestakingKeeper,
-		appKeepers.RewardsKeeper,
-		authtypes.NewModuleAddress(liquidvestingtypes.ModuleName).String(),
-		govAuthority,
-	)
+	appKeepers.LiquidVestingKeeper.SetRewardsKeeper(appKeepers.RewardsKeeper)
 
 	// Set the restrictions on sending tokens
 	appKeepers.BankKeeper.AppendSendRestriction(appKeepers.LiquidVestingKeeper.SendRestrictionFn)

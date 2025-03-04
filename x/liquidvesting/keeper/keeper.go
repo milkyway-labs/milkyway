@@ -47,7 +47,6 @@ func NewKeeper(
 	poolsKeeper types.PoolsKeeper,
 	servicesKeeper types.ServicesKeeper,
 	restakingKeeper types.RestakingKeeper,
-	rewardsKeeper types.RewardsKeeper,
 	moduleAddress string,
 	authority string,
 ) *Keeper {
@@ -63,7 +62,6 @@ func NewKeeper(
 		poolsKeeper:     poolsKeeper,
 		servicesKeeper:  servicesKeeper,
 		restakingKeeper: restakingKeeper,
-		rewardsKeeper:   rewardsKeeper,
 
 		params: collections.NewItem(
 			sb,
@@ -81,7 +79,7 @@ func NewKeeper(
 		TargetsCoveredLockedShares: collections.NewMap(
 			sb,
 			types.CoveredLockedSharesKeyPrefix,
-			"covered_locked_shares",
+			"targets_covered_locked_shares",
 			collections.PairKeyCodec(collections.Int32Key, collections.Uint32Key),
 			codec.CollValue[types.TargetCoveredLockedShares](cdc),
 		),
@@ -108,4 +106,9 @@ func NewKeeper(
 // Logger returns a module-specific logger.
 func (k *Keeper) Logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", "x/"+types.ModuleName)
+}
+
+// SetRewardsKeeper sets the rewards keeper.
+func (k *Keeper) SetRewardsKeeper(rewardsKeeper types.RewardsKeeper) {
+	k.rewardsKeeper = rewardsKeeper
 }

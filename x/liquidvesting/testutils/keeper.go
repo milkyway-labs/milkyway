@@ -114,7 +114,18 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		data.AssetsKeeper,
 		data.AuthorityAddress,
 	)
-	data.Keeper = &keeper.Keeper{}
+	data.Keeper = keeper.NewKeeper(
+		data.Cdc,
+		runtime.NewKVStoreService(data.Keys[types.StoreKey]),
+		data.AccountKeeper,
+		data.BankKeeper,
+		data.OperatorsKeeper,
+		data.PoolsKeeper,
+		data.ServicesKeeper,
+		data.RestakingKeeper,
+		data.LiquidVestingModuleAddress.String(),
+		data.AuthorityAddress,
+	)
 	data.RewardsKeeper = rewardskeeper.NewKeeper(
 		data.Cdc,
 		runtime.NewKVStoreService(data.Keys[rewardstypes.StoreKey]),
@@ -129,19 +140,7 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		data.AssetsKeeper,
 		data.AuthorityAddress,
 	)
-	*data.Keeper = *keeper.NewKeeper(
-		data.Cdc,
-		runtime.NewKVStoreService(data.Keys[types.StoreKey]),
-		data.AccountKeeper,
-		data.BankKeeper,
-		data.OperatorsKeeper,
-		data.PoolsKeeper,
-		data.ServicesKeeper,
-		data.RestakingKeeper,
-		data.RewardsKeeper,
-		data.LiquidVestingModuleAddress.String(),
-		data.AuthorityAddress,
-	)
+	data.Keeper.SetRewardsKeeper(data.RewardsKeeper)
 	data.PoolsKeeper.SetHooks(
 		data.RewardsKeeper.PoolsHooks(),
 	)
