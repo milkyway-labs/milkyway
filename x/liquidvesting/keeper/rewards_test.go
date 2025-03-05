@@ -7,15 +7,17 @@ import (
 
 	"github.com/milkyway-labs/milkyway/v9/app/testutil"
 	"github.com/milkyway-labs/milkyway/v9/utils"
-	operatorstypes "github.com/milkyway-labs/milkyway/v9/x/operators/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
 	rewardstypes "github.com/milkyway-labs/milkyway/v9/x/rewards/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v9/x/services/types"
 )
 
 func (suite *KeeperTestSuite) TestCoveredLockedSharesRewards() {
 	ctx, _ := suite.ctx.CacheContext()
 	ctx = ctx.WithBlockTime(time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC))
+
+	// Register both currencies so that rewards can be allocated
+	suite.registerCurrency(ctx, "umilk", "MILK", 6, utils.MustParseDec("2"))
+	suite.registerCurrency(ctx, "locked/umilk", "MILK", 6, utils.MustParseDec("2"))
 
 	// Call AllocateRewards to set the last rewards allocation time
 	err := suite.rewardsKeeper.AllocateRewards(ctx)
@@ -27,31 +29,10 @@ func (suite *KeeperTestSuite) TestCoveredLockedSharesRewards() {
 	err = suite.k.SetParams(ctx, params)
 	suite.Require().NoError(err)
 
-	// Create a service
-	serviceAdmin := testutil.TestAddress(1)
-	err = suite.sk.CreateService(ctx, servicestypes.NewService(
-		1,
-		servicestypes.SERVICE_STATUS_ACTIVE,
-		"Service",
-		"",
-		"",
-		"",
-		serviceAdmin.String(),
-		false,
-	))
-	suite.Require().NoError(err)
+	// Create a service and an operator
+	suite.createService(ctx, 1)
+	suite.createOperator(ctx, 1)
 
-	// Create an operator
-	operatorAdmin := testutil.TestAddress(2)
-	err = suite.ok.CreateOperator(ctx, operatorstypes.NewOperator(
-		1,
-		operatorstypes.OPERATOR_STATUS_ACTIVE,
-		"Operator",
-		"",
-		"",
-		operatorAdmin.String(),
-	))
-	suite.Require().NoError(err)
 	// The operator joins the service
 	err = suite.restakingKeeper.AddServiceToOperatorJoinedServices(ctx, 1, 1)
 	suite.Require().NoError(err)
@@ -65,10 +46,6 @@ func (suite *KeeperTestSuite) TestCoveredLockedSharesRewards() {
 	// This is the test account
 	delAddr2 := testutil.TestAddress(4)
 	suite.mintLockedRepresentation(ctx, delAddr2.String(), utils.MustParseCoins("10000000umilk"))
-
-	// Register both currencies so that rewards can be allocated
-	suite.registerCurrency(ctx, "umilk", "MILK", 6, utils.MustParseDec("2"))
-	suite.registerCurrency(ctx, "locked/umilk", "MILK", 6, utils.MustParseDec("2"))
 
 	// The service admin creates a rewards plan
 	plan, err := suite.rewardsKeeper.CreateRewardsPlan(
@@ -290,6 +267,10 @@ func (suite *KeeperTestSuite) TestCoveredLockedSharesRewards_UpdateInsurancePerc
 	ctx, _ := suite.ctx.CacheContext()
 	ctx = ctx.WithBlockTime(time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC))
 
+	// Register both currencies so that rewards can be allocated
+	suite.registerCurrency(ctx, "umilk", "MILK", 6, utils.MustParseDec("2"))
+	suite.registerCurrency(ctx, "locked/umilk", "MILK", 6, utils.MustParseDec("2"))
+
 	// Call AllocateRewards to set the last rewards allocation time
 	err := suite.rewardsKeeper.AllocateRewards(ctx)
 	suite.Require().NoError(err)
@@ -300,31 +281,10 @@ func (suite *KeeperTestSuite) TestCoveredLockedSharesRewards_UpdateInsurancePerc
 	err = suite.k.SetParams(ctx, params)
 	suite.Require().NoError(err)
 
-	// Create a service
-	serviceAdmin := testutil.TestAddress(1)
-	err = suite.sk.CreateService(ctx, servicestypes.NewService(
-		1,
-		servicestypes.SERVICE_STATUS_ACTIVE,
-		"Service",
-		"",
-		"",
-		"",
-		serviceAdmin.String(),
-		false,
-	))
-	suite.Require().NoError(err)
+	// Create a service and an operator
+	suite.createService(ctx, 1)
+	suite.createOperator(ctx, 1)
 
-	// Create an operator
-	operatorAdmin := testutil.TestAddress(2)
-	err = suite.ok.CreateOperator(ctx, operatorstypes.NewOperator(
-		1,
-		operatorstypes.OPERATOR_STATUS_ACTIVE,
-		"Operator",
-		"",
-		"",
-		operatorAdmin.String(),
-	))
-	suite.Require().NoError(err)
 	// The operator joins the service
 	err = suite.restakingKeeper.AddServiceToOperatorJoinedServices(ctx, 1, 1)
 	suite.Require().NoError(err)
@@ -339,10 +299,6 @@ func (suite *KeeperTestSuite) TestCoveredLockedSharesRewards_UpdateInsurancePerc
 	delAddr2 := testutil.TestAddress(4)
 	suite.mintLockedRepresentation(ctx, delAddr2.String(), utils.MustParseCoins("10000000umilk"))
 	suite.fundAccountInsuranceFund(ctx, delAddr2.String(), utils.MustParseCoins("200000umilk")) // 2%
-
-	// Register both currencies so that rewards can be allocated
-	suite.registerCurrency(ctx, "umilk", "MILK", 6, utils.MustParseDec("2"))
-	suite.registerCurrency(ctx, "locked/umilk", "MILK", 6, utils.MustParseDec("2"))
 
 	// The service admin creates a rewards plan
 	plan, err := suite.rewardsKeeper.CreateRewardsPlan(
