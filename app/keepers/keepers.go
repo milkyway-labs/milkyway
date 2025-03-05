@@ -38,6 +38,7 @@ import (
 	consensusparamtypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
 	crisiskeeper "github.com/cosmos/cosmos-sdk/x/crisis/keeper"
 	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
+	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	govv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
@@ -67,7 +68,6 @@ import (
 	providertypes "github.com/cosmos/interchain-security/v6/x/ccv/provider/types"
 
 	evidencekeeper "cosmossdk.io/x/evidence/keeper"
-	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
 	govkeeper "github.com/cosmos/cosmos-sdk/x/gov/keeper"
 	mintkeeper "github.com/cosmos/cosmos-sdk/x/mint/keeper"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
@@ -83,6 +83,8 @@ import (
 	assetskeeper "github.com/milkyway-labs/milkyway/v9/x/assets/keeper"
 	assetstypes "github.com/milkyway-labs/milkyway/v9/x/assets/types"
 	bankkeeper "github.com/milkyway-labs/milkyway/v9/x/bank/keeper"
+	investorskeeper "github.com/milkyway-labs/milkyway/v9/x/investors/keeper"
+	investorstypes "github.com/milkyway-labs/milkyway/v9/x/investors/types"
 	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting"
 	liquidvestingkeeper "github.com/milkyway-labs/milkyway/v9/x/liquidvesting/keeper"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
@@ -150,6 +152,7 @@ type AppKeepers struct {
 	AssetsKeeper        *assetskeeper.Keeper
 	RewardsKeeper       *rewardskeeper.Keeper
 	LiquidVestingKeeper *liquidvestingkeeper.Keeper
+	InvestorsKeeper     *investorskeeper.Keeper
 
 	// Modules
 	IBCFeeKeeper    ibcfeekeeper.Keeper
@@ -191,6 +194,8 @@ func NewAppKeeper(
 		os.Exit(1)
 	}
 
+	govAuthority := authtypes.NewModuleAddress(govtypes.ModuleName).String()
+
 	appKeepers.ParamsKeeper = initParamsKeeper(
 		appCodec,
 		legacyAmino,
@@ -202,7 +207,7 @@ func NewAppKeeper(
 	appKeepers.ConsensusParamsKeeper = consensusparamkeeper.NewKeeper(
 		appCodec,
 		runtime.NewKVStoreService(appKeepers.keys[consensusparamtypes.StoreKey]),
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 		runtime.EventService{},
 	)
 	bApp.SetParamStore(appKeepers.ConsensusParamsKeeper.ParamsStore)
@@ -231,7 +236,7 @@ func NewAppKeeper(
 		maccPerms,
 		addressCodec,
 		sdk.GetConfig().GetBech32AccountAddrPrefix(),
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 	)
 
 	appKeepers.BankKeeper = bankkeeper.NewKeeper(
@@ -239,7 +244,7 @@ func NewAppKeeper(
 		runtime.NewKVStoreService(appKeepers.keys[banktypes.StoreKey]),
 		appKeepers.AccountKeeper,
 		blockedAddress,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 		logger,
 	)
 
@@ -249,7 +254,7 @@ func NewAppKeeper(
 		invCheckPeriod,
 		appKeepers.BankKeeper,
 		authtypes.FeeCollectorName,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 		appKeepers.AccountKeeper.AddressCodec(),
 	)
 
@@ -271,9 +276,17 @@ func NewAppKeeper(
 		runtime.NewKVStoreService(appKeepers.keys[stakingtypes.StoreKey]),
 		appKeepers.AccountKeeper,
 		appKeepers.BankKeeper,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix()),
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ConsensusAddrPrefix()),
+	)
+
+	appKeepers.InvestorsKeeper = investorskeeper.NewKeeper(
+		appCodec,
+		runtime.NewKVStoreService(appKeepers.keys[investorstypes.StoreKey]),
+		appKeepers.AccountKeeper,
+		appKeepers.StakingKeeper,
+		govAuthority,
 	)
 
 	appKeepers.DistrKeeper = distrkeeper.NewKeeper(
@@ -281,17 +294,19 @@ func NewAppKeeper(
 		runtime.NewKVStoreService(appKeepers.keys[distrtypes.StoreKey]),
 		appKeepers.AccountKeeper,
 		appKeepers.BankKeeper,
-		appKeepers.StakingKeeper,
+		appKeepers.InvestorsKeeper.AdjustedStakingKeeper(appKeepers.StakingKeeper),
 		authtypes.FeeCollectorName,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 	)
+
+	appKeepers.InvestorsKeeper.SetDistrKeeper(appKeepers.DistrKeeper)
 
 	appKeepers.SlashingKeeper = slashingkeeper.NewKeeper(
 		appCodec,
 		legacyAmino,
 		runtime.NewKVStoreService(appKeepers.keys[slashingtypes.StoreKey]),
 		appKeepers.StakingKeeper,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 	)
 
 	// register the staking hooks
@@ -301,6 +316,7 @@ func NewAppKeeper(
 			appKeepers.DistrKeeper.Hooks(),
 			appKeepers.SlashingKeeper.Hooks(),
 			appKeepers.ProviderKeeper.Hooks(),
+			appKeepers.InvestorsKeeper.Hooks(),
 		),
 	)
 
@@ -309,7 +325,7 @@ func NewAppKeeper(
 		appKeepers.keys[feemarkettypes.StoreKey],
 		appKeepers.AccountKeeper,
 		&DefaultFeemarketDenomResolver{},
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 	)
 
 	appKeepers.MarketMapKeeper = marketmapkeeper.NewKeeper(
@@ -337,7 +353,7 @@ func NewAppKeeper(
 		appCodec,
 		homePath,
 		bApp,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 	)
 
 	appKeepers.GroupKeeper = groupkeeper.NewKeeper(
@@ -356,7 +372,7 @@ func NewAppKeeper(
 		appKeepers.StakingKeeper,
 		appKeepers.UpgradeKeeper,
 		appKeepers.ScopedIBCKeeper,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 	)
 
 	appKeepers.ProviderKeeper = icsproviderkeeper.NewKeeper(
@@ -374,7 +390,7 @@ func NewAppKeeper(
 		appKeepers.DistrKeeper,
 		appKeepers.BankKeeper,
 		govkeeper.Keeper{}, // cyclic dependency between provider and governance, will be set later
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix()),
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ConsensusAddrPrefix()),
 		authtypes.FeeCollectorName,
@@ -395,7 +411,7 @@ func NewAppKeeper(
 		appKeepers.DistrKeeper,
 		bApp.MsgServiceRouter(),
 		govConfig,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 	)
 
 	// mint keeper must be created after provider keeper
@@ -406,7 +422,7 @@ func NewAppKeeper(
 		appKeepers.AccountKeeper,
 		appKeepers.BankKeeper,
 		authtypes.FeeCollectorName,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 	)
 
 	appKeepers.ProviderKeeper.SetGovKeeper(*appKeepers.GovKeeper)
@@ -453,8 +469,6 @@ func NewAppKeeper(
 		appKeepers.IBCKeeper.PortKeeper, appKeepers.AccountKeeper, appKeepers.BankKeeper,
 	)
 
-	govAuthority := authtypes.NewModuleAddress(govtypes.ModuleName).String()
-
 	tokenFactoryKeeper := tokenfactorykeeper.NewKeeper(
 		appCodec,
 		runtime.NewKVStoreService(appKeepers.keys[tokenfactorytypes.StoreKey]),
@@ -498,7 +512,7 @@ func NewAppKeeper(
 		appKeepers.AccountKeeper,
 		appKeepers.BankKeeper,
 		appKeepers.ScopedTransferKeeper,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		govAuthority,
 	)
 
 	wasmDir := homePath
