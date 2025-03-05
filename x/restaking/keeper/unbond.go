@@ -243,7 +243,7 @@ func (k *Keeper) CompleteUnbonding(ctx context.Context, data types.DTData) (sdk.
 	}
 
 	// Get the target of the unbonding delegation
-	target, err := k.getUnbondingDelegationTarget(ctx, ubd)
+	target, err := k.GetDelegationTarget(ctx, ubd.Type, ubd.TargetID)
 	if err != nil {
 		return nil, err
 	}

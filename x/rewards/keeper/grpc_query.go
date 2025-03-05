@@ -76,12 +76,12 @@ func (q queryServer) PoolOutstandingRewards(ctx context.Context, req *types.Quer
 		return nil, status.Error(codes.InvalidArgument, "invalid pool id")
 	}
 
-	target, err := q.k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_POOL, req.PoolId)
+	target, err := q.k.restakingKeeper.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_POOL, req.PoolId)
 	if err != nil {
 		return nil, err
 	}
 
-	rewards, err := target.OutstandingRewards.Get(ctx, target.GetID())
+	rewards, err := q.k.PoolOutstandingRewards.Get(ctx, target.GetID())
 	if err != nil && !errors.IsOf(err, collections.ErrNotFound) {
 		return nil, err
 	}
@@ -98,12 +98,12 @@ func (q queryServer) OperatorOutstandingRewards(ctx context.Context, req *types.
 		return nil, status.Error(codes.InvalidArgument, "invalid operator id")
 	}
 
-	target, err := q.k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, req.OperatorId)
+	target, err := q.k.restakingKeeper.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, req.OperatorId)
 	if err != nil {
 		return nil, err
 	}
 
-	rewards, err := target.OutstandingRewards.Get(ctx, target.GetID())
+	rewards, err := q.k.OperatorOutstandingRewards.Get(ctx, target.GetID())
 	if err != nil && !errors.IsOf(err, collections.ErrNotFound) {
 		return nil, err
 	}
@@ -120,12 +120,12 @@ func (q queryServer) ServiceOutstandingRewards(ctx context.Context, req *types.Q
 		return nil, status.Error(codes.InvalidArgument, "invalid service id")
 	}
 
-	target, err := q.k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_SERVICE, req.ServiceId)
+	target, err := q.k.restakingKeeper.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_SERVICE, req.ServiceId)
 	if err != nil {
 		return nil, err
 	}
 
-	rewards, err := target.OutstandingRewards.Get(ctx, target.GetID())
+	rewards, err := q.k.ServiceOutstandingRewards.Get(ctx, target.GetID())
 	if err != nil && !errors.IsOf(err, collections.ErrNotFound) {
 		return nil, err
 	}

@@ -31,7 +31,7 @@ func IsLockedRepresentationDenom(denom string) bool {
 // LockedDenomToNative converts the denom of a locked token representation
 // to its native denom.
 func LockedDenomToNative(denom string) (string, error) {
-	if !strings.HasPrefix(denom, LockedRepresentationDenomPrefix+"/") {
+	if !IsLockedRepresentationDenom(denom) {
 		return "", ErrInvalidDenom
 	}
 

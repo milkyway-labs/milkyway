@@ -13,7 +13,7 @@ import (
 
 func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 	lockedStakeDenom, err := types.GetLockedRepresentationDenom("stake")
-	suite.Assert().NoError(err)
+	suite.Require().NoError(err)
 
 	testCases := []struct {
 		name       string
@@ -66,7 +66,7 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 			},
 			store: func(ctx sdk.Context) {
 				// Set the unbonding delegation time to 7 days
-				err = suite.rk.SetParams(ctx, restakingtypes.NewParams(
+				err = suite.restakingKeeper.SetParams(ctx, restakingtypes.NewParams(
 					7*24*time.Hour,
 					nil,
 					restakingtypes.DefaultRestakingCap,
@@ -96,30 +96,28 @@ func (suite *KeeperTestSuite) TestKeeper_ExportGenesis() {
 
 				// Delegate the tokens so that they will be scheduled for burn after the
 				// unbonding period
-				suite.createPool(ctx, 1, LockedIBCDenom)
-				_, err = suite.rk.DelegateToPool(ctx,
+				_, err = suite.restakingKeeper.DelegateToPool(ctx,
 					sdk.NewInt64Coin(LockedIBCDenom, 100),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				)
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 
-				suite.createPool(ctx, 2, lockedStakeDenom)
-				_, err = suite.rk.DelegateToPool(ctx,
+				_, err = suite.restakingKeeper.DelegateToPool(ctx,
 					sdk.NewInt64Coin(lockedStakeDenom, 100),
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				)
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 
 				// Burn the coins
 				userAddr, err := sdk.AccAddressFromBech32("cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4")
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 				err = suite.k.BurnLockedRepresentation(ctx, userAddr, sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 100)))
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 
 				userAddr, err = sdk.AccAddressFromBech32("cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre")
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 				err = suite.k.BurnLockedRepresentation(ctx, userAddr, sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 100)))
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 			},
 			expGenesis: &types.GenesisState{
 				Params: types.DefaultParams(),
@@ -294,7 +292,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			store: func(ctx sdk.Context) {
 				// Send tokens to the liquid vesting module
 				err := suite.bk.MintCoins(ctx, types.ModuleName, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)))
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 
 				// Init the pools module
 				testPool := poolstypes.NewPool(1, LockedIBCDenom)
@@ -306,7 +304,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 				}
 
 				err = suite.pk.InitGenesis(ctx, &poolsKeeperGenesis)
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 
 				// Init the restaking module
 				restakingKeeperGenesis := &restakingtypes.GenesisState{
@@ -329,8 +327,8 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 						),
 					},
 				}
-				err = suite.rk.InitGenesis(ctx, restakingKeeperGenesis)
-				suite.Assert().NoError(err)
+				err = suite.restakingKeeper.InitGenesis(ctx, restakingKeeperGenesis)
+				suite.Require().NoError(err)
 			},
 			genesis: types.NewGenesisState(
 				types.DefaultParams(),
@@ -348,7 +346,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			name: "should initialize insurance fund properly",
 			store: func(ctx sdk.Context) {
 				err := suite.bk.MintCoins(ctx, types.ModuleName, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)))
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 			},
 			genesis: types.NewGenesisState(
 				types.DefaultParams(),
@@ -363,7 +361,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				balance, err := suite.k.GetUserInsuranceFundBalance(ctx, "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre")
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)), balance)
 			},
 		},
@@ -372,7 +370,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			store: func(ctx sdk.Context) {
 				// Send tokens to the liquid vesting module
 				err := suite.bk.MintCoins(ctx, types.ModuleName, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)))
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 
 				// Init the pools module
 				testPool := poolstypes.NewPool(1, LockedIBCDenom)
@@ -384,7 +382,7 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 				}
 
 				err = suite.pk.InitGenesis(ctx, &poolsKeeperGenesis)
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 
 				// Init the restaking module
 				restakingKeeperGenesis := &restakingtypes.GenesisState{
@@ -407,8 +405,8 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 						),
 					},
 				}
-				err = suite.rk.InitGenesis(ctx, restakingKeeperGenesis)
-				suite.Assert().NoError(err)
+				err = suite.restakingKeeper.InitGenesis(ctx, restakingKeeperGenesis)
+				suite.Require().NoError(err)
 			},
 			genesis: types.NewGenesisState(
 				types.DefaultParams(),
@@ -453,8 +451,8 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 						),
 					},
 				}
-				err := suite.rk.InitGenesis(ctx, restakingKeeperGenesis)
-				suite.Assert().NoError(err)
+				err := suite.restakingKeeper.InitGenesis(ctx, restakingKeeperGenesis)
+				suite.Require().NoError(err)
 			},
 			genesis: types.NewGenesisState(
 				types.DefaultParams(),
