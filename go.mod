@@ -40,7 +40,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/hashicorp/go-metrics v0.5.3
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/prometheus/client_golang v1.21.0
+	github.com/prometheus/client_golang v1.21.1
 	github.com/rakyll/statik v0.1.7
 	github.com/skip-mev/connect/v2 v2.0.1
 	github.com/skip-mev/feemarket v1.1.1
