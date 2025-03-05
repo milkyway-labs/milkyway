@@ -114,14 +114,20 @@ func (k *Keeper) SetParams(ctx context.Context, params types.Params) error {
 		return err
 	}
 
-	oldParams, err := k.GetParams(ctx)
+	isFirst := false // Whether the params are being set for the first time
+	oldParams, err := k.params.Get(ctx)
 	if err != nil {
-		return err
+		if errors.Is(err, collections.ErrNotFound) {
+			oldParams = types.DefaultParams()
+			isFirst = true
+		} else {
+			return err
+		}
 	}
 
 	// If the insurance percentage has changed, we need to withdraw all delegators
 	// restaking rewards who have delegated locked tokens.
-	if !params.InsurancePercentage.Equal(oldParams.InsurancePercentage) {
+	if !isFirst && !params.InsurancePercentage.Equal(oldParams.InsurancePercentage) {
 		err = k.beforeInsurancePercentageChanged(ctx, oldParams.InsurancePercentage, params.InsurancePercentage)
 		if err != nil {
 			return err
