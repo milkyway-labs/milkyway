@@ -17,9 +17,9 @@ type AdjustedServicesKeeper struct {
 }
 
 // AdjustedServicesKeeper returns a new instance of AdjustedServicesKeeper.
-func (k *Keeper) AdjustedServicesKeeper(keeper rewardstypes.ServicesKeeper) *AdjustedServicesKeeper {
+func (k *Keeper) AdjustedServicesKeeper(servicesKeeper rewardstypes.ServicesKeeper) *AdjustedServicesKeeper {
 	return &AdjustedServicesKeeper{
-		ServicesKeeper: keeper,
+		ServicesKeeper: servicesKeeper,
 		k:              k,
 	}
 }
@@ -50,9 +50,9 @@ type AdjustedRestakingKeeper struct {
 }
 
 // AdjustedRestakingKeeper returns a new instance of AdjustedRestakingKeeper.
-func (k *Keeper) AdjustedRestakingKeeper(keeper rewardstypes.RestakingKeeper) *AdjustedRestakingKeeper {
+func (k *Keeper) AdjustedRestakingKeeper(restakingKeeper rewardstypes.RestakingKeeper) *AdjustedRestakingKeeper {
 	return &AdjustedRestakingKeeper{
-		RestakingKeeper: keeper,
+		RestakingKeeper: restakingKeeper,
 		k:               k,
 	}
 }
