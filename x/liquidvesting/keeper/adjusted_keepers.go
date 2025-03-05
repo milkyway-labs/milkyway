@@ -12,11 +12,14 @@ import (
 	servicestypes "github.com/milkyway-labs/milkyway/v9/x/services/types"
 )
 
+// AdjustedServicesKeeper wraps around rewardstypes.ServicesKeeper and adjusts
+// the delegator shares of a service by deducting the uncovered locked shares.
 type AdjustedServicesKeeper struct {
 	rewardstypes.ServicesKeeper
 	k *Keeper
 }
 
+// AdjustedServicesKeeper returns a new instance of AdjustedServicesKeeper.
 func (k *Keeper) AdjustedServicesKeeper(keeper rewardstypes.ServicesKeeper) *AdjustedServicesKeeper {
 	return &AdjustedServicesKeeper{
 		ServicesKeeper: keeper,
@@ -24,6 +27,8 @@ func (k *Keeper) AdjustedServicesKeeper(keeper rewardstypes.ServicesKeeper) *Adj
 	}
 }
 
+// GetService returns the service with the given serviceID and deducts the
+// uncovered locked shares from the delegator shares.
 func (sk *AdjustedServicesKeeper) GetService(ctx context.Context, serviceID uint32) (servicestypes.Service, error) {
 	service, err := sk.ServicesKeeper.GetService(ctx, serviceID)
 	if err != nil {
@@ -40,11 +45,14 @@ func (sk *AdjustedServicesKeeper) GetService(ctx context.Context, serviceID uint
 
 // --------------------------------------------------------------------------------------------------------------------
 
+// AdjustedRestakingKeeper wraps around rewardstypes.RestakingKeeper and adjusts
+// the delegation shares by deducting the uncovered locked shares.
 type AdjustedRestakingKeeper struct {
 	rewardstypes.RestakingKeeper
 	k *Keeper
 }
 
+// AdjustedRestakingKeeper returns a new instance of AdjustedRestakingKeeper.
 func (k *Keeper) AdjustedRestakingKeeper(keeper rewardstypes.RestakingKeeper) *AdjustedRestakingKeeper {
 	return &AdjustedRestakingKeeper{
 		RestakingKeeper: keeper,
@@ -52,6 +60,8 @@ func (k *Keeper) AdjustedRestakingKeeper(keeper rewardstypes.RestakingKeeper) *A
 	}
 }
 
+// GetDelegationTarget returns the delegation target with the given targetID and
+// deducts the uncovered locked shares from the delegator shares.
 func (rk *AdjustedRestakingKeeper) GetDelegationTarget(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32) (restakingtypes.DelegationTarget, error) {
 	if rk.k.restakingOverrider.state == restakingOverriderStateOverride {
 		return rk.k.restakingOverrider.GetDelegationTarget(ctx, delType, targetID)
@@ -85,6 +95,8 @@ func (rk *AdjustedRestakingKeeper) GetDelegationTarget(ctx context.Context, delT
 	}
 }
 
+// GetDelegation returns the delegation with the given targetID and deducts the
+// uncovered locked shares from the delegator shares.
 func (rk *AdjustedRestakingKeeper) GetDelegation(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32, delegator string) (restakingtypes.Delegation, bool, error) {
 	if rk.k.restakingOverrider.state == restakingOverriderStateOverride {
 		return rk.k.restakingOverrider.GetDelegation(ctx, delType, targetID, delegator)

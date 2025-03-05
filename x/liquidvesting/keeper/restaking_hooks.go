@@ -105,6 +105,8 @@ func (h RestakingHooks) AfterServiceDelegationModified(ctx context.Context, serv
 	return h.AfterDelegationModified(ctx, restakingtypes.DELEGATION_TYPE_SERVICE, serviceID, delegator)
 }
 
+// Methods below are no-op, but are required to satisfy the interface.
+
 // BeforePoolDelegationCreated implements restakingtypes.RestakingHooks
 func (h RestakingHooks) BeforePoolDelegationCreated(context.Context, uint32, string) error {
 	return nil
