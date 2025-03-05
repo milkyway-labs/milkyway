@@ -101,11 +101,7 @@ func (k *Keeper) IncrementTargetCoveredLockedShares(ctx context.Context, delType
 		return err
 	}
 	newShares := prevShares.Add(shares...)
-	return k.TargetsCoveredLockedShares.Set(
-		ctx,
-		collections.Join(int32(delType), targetID),
-		types.TargetCoveredLockedShares{Shares: newShares},
-	)
+	return k.SetTargetCoveredLockedShares(ctx, delType, targetID, newShares)
 }
 
 // DecrementTargetCoveredLockedShares decrements the total locked shares for a target.
@@ -116,12 +112,11 @@ func (k *Keeper) DecrementTargetCoveredLockedShares(ctx context.Context, delType
 		return err
 	}
 	newShares := prevShares.Sub(shares)
-	key := collections.Join(int32(delType), targetID)
-	// Delete the shares record if it becomes zero
 	if newShares.IsZero() {
-		return k.TargetsCoveredLockedShares.Remove(ctx, key)
+		// Delete the shares record if it becomes zero
+		return k.RemoveTargetCoveredLockedShares(ctx, delType, targetID)
 	}
-	return k.TargetsCoveredLockedShares.Set(ctx, key, types.TargetCoveredLockedShares{Shares: newShares})
+	return k.SetTargetCoveredLockedShares(ctx, delType, targetID, newShares)
 }
 
 // IterateTargetsCoveredLockedShares iterates over all the targets covered locked
@@ -133,6 +128,12 @@ func (k *Keeper) IterateTargetsCoveredLockedShares(ctx context.Context, cb func(
 		return cb(delType, targetID, shares.Shares)
 	})
 	return err
+}
+
+// RemoveTargetCoveredLockedShares removes a target covered locked shares record
+// for the given delegation target.
+func (k *Keeper) RemoveTargetCoveredLockedShares(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32) error {
+	return k.TargetsCoveredLockedShares.Remove(ctx, collections.Join(int32(delType), targetID))
 }
 
 // --------------------------------------------------------------------------------------------------------------------

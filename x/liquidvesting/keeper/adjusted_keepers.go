@@ -2,11 +2,8 @@ package keeper
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
-	operatorstypes "github.com/milkyway-labs/milkyway/v9/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v9/x/pools/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
 	rewardstypes "github.com/milkyway-labs/milkyway/v9/x/rewards/types"
 	servicestypes "github.com/milkyway-labs/milkyway/v9/x/services/types"
@@ -77,22 +74,8 @@ func (rk *AdjustedRestakingKeeper) GetDelegationTarget(ctx context.Context, delT
 	}
 	uncoveredLockedShares := types.UncoveredLockedShares(target.GetDelegatorShares(), coveredLockedShares)
 
-	switch target := target.(type) {
-	case poolstypes.Pool:
-		target, _, err = target.RemoveDelShares(uncoveredLockedShares)
-		if err != nil {
-			return nil, err
-		}
-		return target, nil
-	case operatorstypes.Operator:
-		target, _ = target.RemoveDelShares(uncoveredLockedShares)
-		return target, nil
-	case servicestypes.Service:
-		target, _ = target.RemoveDelShares(uncoveredLockedShares)
-		return target, nil
-	default:
-		return nil, fmt.Errorf("invalid target type %T", target)
-	}
+	target, _, err = types.RemoveDelShares(target, uncoveredLockedShares)
+	return target, err
 }
 
 // GetDelegation returns the delegation with the given targetID and deducts the
