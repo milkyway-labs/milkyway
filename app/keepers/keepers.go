@@ -694,9 +694,9 @@ func NewAppKeeper(
 		appKeepers.IBCFeeKeeper,
 	)
 
-	// Prepare the osmosis ibc hooks logic
+	// Osmosis' wasm IBC hooks
 	milkPrefix := sdk.GetConfig().GetBech32AccountAddrPrefix()
-	wasmHooks := ibchooks.NewWasmHooks(appKeepers.IBCHooksKeeper, &appKeepers.WasmKeeper, milkPrefix) // The contract keeper needs to be set later
+	wasmHooks := ibchooks.NewWasmHooks(appKeepers.IBCHooksKeeper, &appKeepers.WasmKeeper, milkPrefix)
 	ibcHooksMiddleWare := ibchooks.NewICS4Middleware(
 		appKeepers.IBCKeeper.ChannelKeeper,
 		&wasmHooks,

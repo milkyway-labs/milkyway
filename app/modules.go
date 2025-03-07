@@ -67,7 +67,7 @@ import (
 	"github.com/milkyway-labs/milkyway/v9/x/assets"
 	assetstypes "github.com/milkyway-labs/milkyway/v9/x/assets/types"
 	"github.com/milkyway-labs/milkyway/v9/x/bank"
-	ibc_hooks "github.com/milkyway-labs/milkyway/v9/x/ibc-hooks"
+	ibchooks "github.com/milkyway-labs/milkyway/v9/x/ibc-hooks"
 	ibchookstypes "github.com/milkyway-labs/milkyway/v9/x/ibc-hooks/types"
 	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
@@ -156,7 +156,7 @@ func appModules(
 		app.PFMRouterModule,
 		app.RateLimitModule,
 		app.ProviderModule,
-		ibc_hooks.NewAppModule(app.AccountKeeper, *app.IBCHooksKeeper),
+		ibchooks.NewAppModule(app.AccountKeeper, *app.IBCHooksKeeper),
 
 		// MilkyWay modules
 		services.NewAppModule(appCodec, app.ServicesKeeper, app.AccountKeeper, app.BankKeeper),
