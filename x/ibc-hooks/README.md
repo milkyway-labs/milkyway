@@ -1,5 +1,7 @@
 # IBC-hooks
 
+This module is a copy of osmosis' `x/ibc-hooks` module.
+
 ## Wasm Hooks
 
 The wasm hook is an IBC middleware which is used to allow ICS-20 token transfers to initiate contract calls.
