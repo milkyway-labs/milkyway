@@ -24,7 +24,7 @@ func NewParams(allowedAsyncAckContracts []string) Params {
 	}
 }
 
-// DefaultParams returns default concentrated-liquidity module parameters.
+// DefaultParams returns default ibc-hooks module parameters.
 func DefaultParams() Params {
 	return Params{
 		AllowedAsyncAckContracts: []string{},

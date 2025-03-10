@@ -42,7 +42,7 @@ func GetQueryCmd() *cobra.Command {
 	return cmd
 }
 
-// GetCmdPoolParams return pool params.
+// GetCmdWasmSender returns a command to generate the local address for a wasm hooks sender.
 func GetCmdWasmSender() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "wasm-sender <channelID> <originalSender>",
@@ -50,7 +50,7 @@ func GetCmdWasmSender() *cobra.Command {
 		Long: strings.TrimSpace(
 			fmt.Sprintf(`Generate the local address for a wasm hooks sender.
 Example:
-$ %s query ibc-hooks wasm-hooks-sender channel-42 juno12smx2wdlyttvyzvzg54y2vnqwq2qjatezqwqxu
+$ %s query ibc-hooks wasm-sender channel-42 juno12smx2wdlyttvyzvzg54y2vnqwq2qjatezqwqxu
 `,
 				version.AppName,
 			),
