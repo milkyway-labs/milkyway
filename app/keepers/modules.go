@@ -31,6 +31,7 @@ import (
 	"github.com/skip-mev/feemarket/x/feemarket"
 
 	"github.com/milkyway-labs/milkyway/v9/x/assets"
+	ibchooks "github.com/milkyway-labs/milkyway/v9/x/ibc-hooks"
 	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting"
 	"github.com/milkyway-labs/milkyway/v9/x/operators"
 	"github.com/milkyway-labs/milkyway/v9/x/pools"
@@ -73,6 +74,7 @@ var AppModuleBasics = module.NewBasicManager(
 	pfmrouter.AppModuleBasic{},
 	ratelimit.AppModuleBasic{},
 	icsprovider.AppModuleBasic{},
+	ibchooks.AppModuleBasic{},
 
 	// MilkyWay modules
 	services.AppModuleBasic{},
