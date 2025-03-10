@@ -41,7 +41,7 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 // Validate params.
 func (p Params) Validate() error {
 	if err := validateAsyncAckAllowList(p.AllowedAsyncAckContracts); err != nil {
-		return err
+		return fmt.Errorf("invalid async ack allow list: %w", err)
 	}
 	return nil
 }
