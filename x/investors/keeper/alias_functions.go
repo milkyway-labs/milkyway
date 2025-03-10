@@ -1,0 +1,175 @@
+package keeper
+
+import (
+	"context"
+	"errors"
+
+	"cosmossdk.io/collections"
+	sdkmath "cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	vestingexported "github.com/cosmos/cosmos-sdk/x/auth/vesting/exported"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+
+	"github.com/milkyway-labs/milkyway/v9/x/investors/types"
+)
+
+// SetInvestorsRewardRatio sets the investors reward ratio.
+func (k *Keeper) SetInvestorsRewardRatio(ctx context.Context, ratio sdkmath.LegacyDec) error {
+	err := types.ValidateInvestorsRewardRatio(ratio)
+	if err != nil {
+		return err
+	}
+	return k.InvestorsRewardRatio.Set(ctx, ratio)
+}
+
+// GetInvestorsRewardRatio returns the investors reward ratio.
+func (k *Keeper) GetInvestorsRewardRatio(ctx context.Context) (sdkmath.LegacyDec, error) {
+	return k.InvestorsRewardRatio.Get(ctx)
+}
+
+// UpdateInvestorsRewardRatio updates the investors reward ratio. It withdraws
+// rewards from all the validators that the investors were delegating to.
+func (k *Keeper) UpdateInvestorsRewardRatio(ctx context.Context, ratio sdkmath.LegacyDec) error {
+	// Forcefully withdraw all vesting investors' staking rewards
+	investors, err := k.GetAllVestingInvestorsAddresses(ctx)
+	if err != nil {
+		return err
+	}
+	for _, investor := range investors {
+		err = k.WithdrawAllDelegationRewards(ctx, investor)
+		if err != nil {
+			return err
+		}
+	}
+
+	return k.SetInvestorsRewardRatio(ctx, ratio)
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// GetAllVestingInvestorsAddresses returns all the vesting investors addresses.
+func (k *Keeper) GetAllVestingInvestorsAddresses(ctx context.Context) ([]string, error) {
+	var investors []string
+	err := k.VestingInvestors.Walk(ctx, nil, func(addr string) (stop bool, err error) {
+		investors = append(investors, addr)
+		return false, nil
+	})
+	return investors, err
+}
+
+// SetVestingInvestor sets an account as a vesting investor. It returns an error
+// if the account does not exist or is not a vesting account. It also adds the
+// account to the vesting investors queue.
+func (k *Keeper) SetVestingInvestor(ctx context.Context, addr string) error {
+	accAddr, err := k.accountKeeper.AddressCodec().StringToBytes(addr)
+	if err != nil {
+		return err
+	}
+	acc := k.accountKeeper.GetAccount(ctx, accAddr)
+	if acc == nil {
+		return sdkerrors.ErrUnknownAddress.Wrapf("account %s does not exist", addr)
+	}
+	vacc, isVestingAcc := acc.(vestingexported.VestingAccount)
+	if !isVestingAcc {
+		return sdkerrors.ErrInvalidRequest.Wrapf("account %s is not a vesting account", addr)
+	}
+
+	err = k.InvestorsVestingQueue.Set(ctx, collections.Join(vacc.GetEndTime(), addr))
+	if err != nil {
+		return err
+	}
+	return k.VestingInvestors.Set(ctx, addr)
+}
+
+// IsVestingInvestor returns true if the account is a vesting investor.
+func (k *Keeper) IsVestingInvestor(ctx context.Context, addr string) (bool, error) {
+	return k.VestingInvestors.Has(ctx, addr)
+}
+
+// RemoveVestingInvestor removes an account from the vesting investors list.
+// Rewards accrued so far will be withdrawn automatically.
+func (k *Keeper) RemoveVestingInvestor(ctx context.Context, addr string) error {
+	// Forcefully withdraw all delegation rewards
+	err := k.WithdrawAllDelegationRewards(ctx, addr)
+	if err != nil {
+		return err
+	}
+
+	return k.VestingInvestors.Remove(ctx, addr)
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// GetVestingInvestorRewards returns the temporary rewards of a vesting investor.
+func (k *Keeper) GetVestingInvestorRewards(ctx context.Context, delegator string) (sdk.Coins, error) {
+	rewards, err := k.VestingInvestorsRewards.Get(ctx, delegator)
+	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return rewards.Rewards, nil
+}
+
+// SetVestingInvestorRewards sets the temporary rewards of a vesting investor.
+func (k *Keeper) SetVestingInvestorRewards(ctx context.Context, delegator string, rewards sdk.Coins) error {
+	return k.VestingInvestorsRewards.Set(ctx, delegator, types.VestingInvestorRewards{Rewards: rewards})
+}
+
+// IncrementVestingInvestorRewards increments the temporary rewards of a vesting
+// investor.
+func (k *Keeper) IncrementVestingInvestorRewards(ctx context.Context, delegator string, rewards sdk.Coins) error {
+	currentRewards, err := k.GetVestingInvestorRewards(ctx, delegator)
+	if err != nil {
+		return err
+	}
+	return k.SetVestingInvestorRewards(ctx, delegator, currentRewards.Add(rewards...))
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// GetDelegatorAddressByWithdrawAddress returns the delegator address associated
+// with the withdraw address. If the delegator hasn't set the withdraw address,
+// the withdraw address is considered as the delegator address.
+func (k *Keeper) GetDelegatorAddressByWithdrawAddress(ctx context.Context, withdrawAddr string) (string, error) {
+	delegator, err := k.Delegators.Get(ctx, withdrawAddr)
+	if err != nil {
+		if errors.Is(err, collections.ErrNotFound) {
+			// The delegator hasn't set the withdraw address, thus the withdraw address is
+			// the delegator's address
+			return withdrawAddr, nil
+		}
+		return "", err
+	}
+	return delegator, nil
+}
+
+// WithdrawAllDelegationRewards withdraws all the staking rewards allocated to
+// the delegator.
+func (k *Keeper) WithdrawAllDelegationRewards(ctx context.Context, delegator string) error {
+	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(delegator)
+	if err != nil {
+		return err
+	}
+
+	var innerErr error
+	err = k.stakingKeeper.IterateDelegatorDelegations(ctx, delAddr, func(delegation stakingtypes.Delegation) (stop bool) {
+		var valAddr sdk.ValAddress
+		valAddr, innerErr = k.stakingKeeper.ValidatorAddressCodec().StringToBytes(delegation.ValidatorAddress)
+		if innerErr != nil {
+			return true
+		}
+
+		_, innerErr = k.distrKeeper.WithdrawDelegationRewards(ctx, delAddr, valAddr)
+		if innerErr != nil {
+			return true
+		}
+		return innerErr != nil
+	})
+	if err != nil {
+		return err
+	}
+	return innerErr
+}
