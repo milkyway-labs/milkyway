@@ -17,6 +17,7 @@ type Keeper struct {
 	hooks      DistrHooks
 }
 
+// NewKeeper creates a new distribution Keeper instance
 func NewKeeper(
 	cdc codec.BinaryCodec, storeService store.KVStoreService,
 	ak types.AccountKeeper, bk types.BankKeeper, sk types.StakingKeeper,
@@ -39,4 +40,13 @@ func (k *Keeper) SetHooks(dh DistrHooks) *Keeper {
 	}
 	k.hooks = dh
 	return k
+}
+
+// AfterSetWithdrawAddress calls the AfterSetWithdrawAddress hook if it is
+// registered.
+func (k Keeper) AfterSetWithdrawAddress(ctx context.Context, delAddr, withdrawAddr sdk.AccAddress) error {
+	if k.hooks != nil {
+		return k.hooks.AfterSetWithdrawAddress(ctx, delAddr, withdrawAddr)
+	}
+	return nil
 }

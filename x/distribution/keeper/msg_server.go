@@ -40,7 +40,7 @@ func (k msgServer) SetWithdrawAddress(ctx context.Context, msg *types.MsgSetWith
 		return nil, err
 	}
 
-	err = k.hooks.AfterSetWithdrawAddress(ctx, delegatorAddress, withdrawAddress)
+	err = k.AfterSetWithdrawAddress(ctx, delegatorAddress, withdrawAddress)
 	if err != nil {
 		return nil, err
 	}
