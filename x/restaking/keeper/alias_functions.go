@@ -162,6 +162,21 @@ func (k *Keeper) GetAllServicesSecuringPools(ctx context.Context) ([]types.Servi
 // --- Delegation operations
 // --------------------------------------------------------------------------------------------------------------------
 
+// GetDelegationTarget returns types.DelegationTarget for the given delegation
+// type and target ID.
+func (k *Keeper) GetDelegationTarget(ctx context.Context, delType types.DelegationType, targetID uint32) (types.DelegationTarget, error) {
+	switch delType {
+	case types.DELEGATION_TYPE_POOL:
+		return k.poolsKeeper.GetPool(ctx, targetID)
+	case types.DELEGATION_TYPE_SERVICE:
+		return k.servicesKeeper.GetService(ctx, targetID)
+	case types.DELEGATION_TYPE_OPERATOR:
+		return k.operatorsKeeper.GetOperator(ctx, targetID)
+	default:
+		return nil, errors.Wrapf(types.ErrInvalidDelegationType, "invalid delegation type %v", delType)
+	}
+}
+
 // SetDelegation stores the given delegation in the store
 func (k *Keeper) SetDelegation(ctx context.Context, delegation types.Delegation) error {
 	store := k.storeService.OpenKVStore(ctx)
@@ -188,6 +203,21 @@ func (k *Keeper) SetDelegation(ctx context.Context, delegation types.Delegation)
 	return nil
 }
 
+// GetDelegation returns the delegation for the given delegation type, target ID
+// and delegator.
+func (k *Keeper) GetDelegation(ctx context.Context, delType types.DelegationType, targetID uint32, delegator string) (types.Delegation, bool, error) {
+	switch delType {
+	case types.DELEGATION_TYPE_POOL:
+		return k.GetPoolDelegation(ctx, targetID, delegator)
+	case types.DELEGATION_TYPE_OPERATOR:
+		return k.GetOperatorDelegation(ctx, targetID, delegator)
+	case types.DELEGATION_TYPE_SERVICE:
+		return k.GetServiceDelegation(ctx, targetID, delegator)
+	default:
+		return types.Delegation{}, false, errors.Wrapf(types.ErrInvalidDelegationType, "invalid delegation type %v", delType)
+	}
+}
+
 // GetDelegationForTarget returns the delegation for the given delegator and target.
 func (k *Keeper) GetDelegationForTarget(ctx context.Context, target types.DelegationTarget, delegator string) (types.Delegation, bool, error) {
 	switch target.(type) {
@@ -199,20 +229,6 @@ func (k *Keeper) GetDelegationForTarget(ctx context.Context, target types.Delega
 		return k.GetServiceDelegation(ctx, target.GetID(), delegator)
 	default:
 		return types.Delegation{}, false, fmt.Errorf("invalid target type %T", target)
-	}
-}
-
-// GetDelegationTargetFromDelegation returns the target of the given delegation.
-func (k *Keeper) GetDelegationTargetFromDelegation(ctx context.Context, delegation types.Delegation) (types.DelegationTarget, error) {
-	switch delegation.Type {
-	case types.DELEGATION_TYPE_POOL:
-		return k.poolsKeeper.GetPool(ctx, delegation.TargetID)
-	case types.DELEGATION_TYPE_SERVICE:
-		return k.servicesKeeper.GetService(ctx, delegation.TargetID)
-	case types.DELEGATION_TYPE_OPERATOR:
-		return k.operatorsKeeper.GetOperator(ctx, delegation.TargetID)
-	default:
-		return nil, nil
 	}
 }
 
@@ -509,7 +525,7 @@ func (k *Keeper) GetAllDelegations(ctx context.Context) ([]types.Delegation, err
 func (k *Keeper) GetAllUserRestakedCoins(ctx context.Context, userAddress string) (sdk.DecCoins, error) {
 	totalDelegatedCoins := sdk.NewDecCoins()
 	err := k.IterateUserDelegations(ctx, userAddress, func(d types.Delegation) (bool, error) {
-		target, err := k.GetDelegationTargetFromDelegation(ctx, d)
+		target, err := k.GetDelegationTarget(ctx, d.Type, d.TargetID)
 		if err != nil {
 			return true, err
 		}
@@ -603,35 +619,6 @@ func (k *Keeper) PerformDelegation(ctx context.Context, data types.DelegationDat
 // --------------------------------------------------------------------------------------------------------------------
 // --- Unbonding operations
 // --------------------------------------------------------------------------------------------------------------------
-
-// getUnbondingDelegationTarget returns the target of the given unbonding delegation
-func (k *Keeper) getUnbondingDelegationTarget(ctx context.Context, ubd types.UnbondingDelegation) (types.DelegationTarget, error) {
-	switch ubd.Type {
-	case types.DELEGATION_TYPE_POOL:
-		pool, err := k.poolsKeeper.GetPool(ctx, ubd.TargetID)
-		if err != nil {
-			return nil, err
-		}
-		return pool, nil
-
-	case types.DELEGATION_TYPE_OPERATOR:
-		operator, err := k.operatorsKeeper.GetOperator(ctx, ubd.TargetID)
-		if err != nil {
-			return nil, err
-		}
-		return operator, nil
-
-	case types.DELEGATION_TYPE_SERVICE:
-		service, err := k.servicesKeeper.GetService(ctx, ubd.TargetID)
-		if err != nil {
-			return nil, err
-		}
-		return service, nil
-
-	default:
-		return nil, errors.Wrapf(types.ErrInvalidDelegationType, "invalid delegation type %v", ubd.Type)
-	}
-}
 
 // getUnbondingDelegationKeyBuilder returns the key builder for the given unbonding delegation
 func (k *Keeper) getUnbondingDelegationKeyBuilder(ud types.UnbondingDelegation) (types.UnbondingDelegationKeyBuilder, error) {
@@ -791,7 +778,7 @@ func (k *Keeper) UnbondRestakedAssets(ctx context.Context, user sdk.AccAddress, 
 	toUndelegateTokens := sdk.NewDecCoinsFromCoins(amount...)
 
 	err := k.IterateUserDelegations(ctx, user.String(), func(delegation types.Delegation) (bool, error) {
-		target, err := k.GetDelegationTargetFromDelegation(ctx, delegation)
+		target, err := k.GetDelegationTarget(ctx, delegation.Type, delegation.TargetID)
 		if err != nil {
 			if errors.IsOf(err, collections.ErrNotFound) {
 				return false, nil

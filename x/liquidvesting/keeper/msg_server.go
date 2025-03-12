@@ -100,17 +100,7 @@ func (m msgServer) BurnLockedRepresentation(ctx context.Context, msg *types.MsgB
 
 // WithdrawInsuranceFund implements types.MsgServer.
 func (m msgServer) WithdrawInsuranceFund(ctx context.Context, msg *types.MsgWithdrawInsuranceFund) (*types.MsgWithdrawInsuranceFundResponse, error) {
-	canWithdraw, err := m.CanWithdrawFromInsuranceFund(ctx, msg.Sender, msg.Amount)
-	if err != nil {
-		return nil, err
-	}
-
-	if !canWithdraw {
-		return nil, types.ErrInsufficientBalance
-	}
-
-	// Send the tokens back to the user
-	err = m.WithdrawFromUserInsuranceFund(ctx, msg.Sender, msg.Amount)
+	err := m.WithdrawFromUserInsuranceFund(ctx, msg.Sender, msg.Amount)
 	if err != nil {
 		return nil, err
 	}

@@ -364,7 +364,7 @@ func orderInitBlockers() []string {
 		restakingtypes.ModuleName,
 		assetstypes.ModuleName,
 		rewardstypes.ModuleName,
-		liquidvestingtypes.ModuleName,
+		liquidvestingtypes.ModuleName, // it must appear after the restaking module
 
 		// The feemarket module should ideally be initialized before the genutil module in theory:
 		// The feemarket antehandler performs checks in DeliverTx, which is called by gentx.
