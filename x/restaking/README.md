@@ -14,45 +14,45 @@ admins to determine which operator is authorized to secure their service and fro
 ## Contents
 
 * [State](#state)
-   * [Unbonding ID](#unbonding-id)
-   * [Unbonding index](#unbonding-index)
-   * [Unbonding type](#unbonding-type)
-   * [Operator joined services](#operator-joined-services)
-   * [Service operators allow list](#service-operators-allow-list)
-   * [Service securing pools](#service-securing-pools)
-   * [Service joined by operator](#service-joined-by-operator)
-   * [Pool delegation](#pool-delegation)
-   * [Pool delegation by pool ID](#pool-delegation-by-pool-id)
-   * [Pool unbonding delegation](#pool-unbonding-delegation)
-   * [Operator delegation](#operator-delegation)
-   * [Operator delegations by operator ID](#operator-delegations-by-operator-id)
-   * [Operator unbonding delegation](#operator-unbonding-delegation)
-   * [Service delegation](#service-delegation)
-   * [Service delegations by service ID](#service-delegations-by-service-id)
-   * [Service unbonding delegation](#service-unbonding-delegation)
-   * [Unbonding queue](#unbonding-queue)
-   * [User preferences](#user-preferences)
+    * [Unbonding ID](#unbonding-id)
+    * [Unbonding index](#unbonding-index)
+    * [Unbonding type](#unbonding-type)
+    * [Operator joined services](#operator-joined-services)
+    * [Service operators allow list](#service-operators-allow-list)
+    * [Service securing pools](#service-securing-pools)
+    * [Service joined by operator](#service-joined-by-operator)
+    * [Pool delegation](#pool-delegation)
+    * [Pool delegation by pool ID](#pool-delegation-by-pool-id)
+    * [Pool unbonding delegation](#pool-unbonding-delegation)
+    * [Operator delegation](#operator-delegation)
+    * [Operator delegations by operator ID](#operator-delegations-by-operator-id)
+    * [Operator unbonding delegation](#operator-unbonding-delegation)
+    * [Service delegation](#service-delegation)
+    * [Service delegations by service ID](#service-delegations-by-service-id)
+    * [Service unbonding delegation](#service-unbonding-delegation)
+    * [Unbonding queue](#unbonding-queue)
+    * [User preferences](#user-preferences)
 * [State transitions](#state-transitions)
-   * [Delegations](#delegations)
-   * [Begin unbonding](#begin-unbonding)
-   * [Complete unbonding](#complete-unbonding)
+    * [Delegations](#delegations)
+    * [Begin unbonding](#begin-unbonding)
+    * [Complete unbonding](#complete-unbonding)
 * [Messages](#messages)
-   * [MsgJoinService](#msgjoinservice)
-   * [MsgLeaveService](#msgleaveservice)
-   * [MsgAddOperatorToAllowList](#msgaddoperatortoallowlist)
-   * [MsgRemoveOperatorFromAllowlist](#msgremoveoperatorfromallowlist)
-   * [MsgBorrowPoolSecurity](#msgborrowpoolsecurity)
-   * [MsgCeasePoolSecurityBorrow](#msgceasepoolsecurityborrow)
-   * [MsgDelegatePool](#msgdelegatepool)
-   * [MsgUndelegatePool](#msgundelegatepool)
-   * [MsgDelegateOperator](#msgdelegateoperator)
-   * [MsgUndelegateOperator](#msgundelegateoperator)
-   * [MsgDelegateService](#msgdelegateservice)
-   * [MsgUndelegateService](#msgundelegateservice)
-   * [MsgSetUserPreferences](#msgsetuserpreferences)
-   * [MsgUpdateParams](#msgupdateparams)
+    * [MsgJoinService](#msgjoinservice)
+    * [MsgLeaveService](#msgleaveservice)
+    * [MsgAddOperatorToAllowList](#msgaddoperatortoallowlist)
+    * [MsgRemoveOperatorFromAllowlist](#msgremoveoperatorfromallowlist)
+    * [MsgBorrowPoolSecurity](#msgborrowpoolsecurity)
+    * [MsgCeasePoolSecurityBorrow](#msgceasepoolsecurityborrow)
+    * [MsgDelegatePool](#msgdelegatepool)
+    * [MsgUndelegatePool](#msgundelegatepool)
+    * [MsgDelegateOperator](#msgdelegateoperator)
+    * [MsgUndelegateOperator](#msgundelegateoperator)
+    * [MsgDelegateService](#msgdelegateservice)
+    * [MsgUndelegateService](#msgundelegateservice)
+    * [MsgSetUserPreferences](#msgsetuserpreferences)
+    * [MsgUpdateParams](#msgupdateparams)
 * [End-Block](#end-block)
-   * [Unbonding Delegations](#unbonding-delegations)
+    * [Unbonding Delegations](#unbonding-delegations)
 * [Hooks](#hooks)
 * [Events](#events)
 * [Parameters](#parameters)
@@ -77,7 +77,7 @@ is initiated.
 
 ### Unbonding type
 
-UnbondingType represents the type of a `UnbondingDelegation`,
+UnbondingType represents the type of `UnbondingDelegation`,
 indicating to which entity (pool, operator, or service) the unbonding delegation is related.  
 This information can be used to determine the appropriate actions to take when a `UnbondingDelegation`
 has completed and the funds should be returned to the user's account.
@@ -93,7 +93,7 @@ OperatorJoinedServices maintains a record of the services that an operator has j
 ### Service operators allow list
 
 ServiceOperatorsAllowList stores which operators are allowed to join a service.
-It enables the creation of a whitelist of operators that can join a service.
+It allows obtaining the list of operators that have joined a specific service.
 
 * ServiceOperatorsAllowList: `collections.KeySet(0x14)`
 
@@ -107,44 +107,42 @@ ServiceSecuringPools stores from which pools a service is borrowing security.
 
 ServiceJoinedByOperator stores the indexes to perform a reverse lookup of
 [Operator joined services](#operator-joined-services).
-It allows to obtain the list of operators that have joined a specific service.
+It allows obtaining the list of operators that have joined a specific service.
 
 * ServiceJoinedByOperator: `indexes.NewReversePair(0x16)`
 
 ### Pool delegation
 
 PoolDelegation stores the delegation made by a user toward a pool.
-It allows to obtain all the user's delegation toward a pool and to quick check
-if a user has delegated toward a specific pool.
+It allows obtaining all of a user’s delegations for a pool and quickly checking if a delegation exists.
 
 * PoolDelegation: `0xa1 | UserAddr | PoolID -> ProtocolBuffer(Delegation)`
 
 ### Pool delegations by pool ID
 
 PoolDelegation stores the delegations made toward a specific pool.
-It allows to perform a reverse lookup of [Pool delegation](#pool-delegation).
+It supports a reverse lookup for [Pool delegation](#pool-delegation).
 
 * PoolDelegationsByPoolID: `0xa2 | PoolID | UserAddr -> []byte{}`
 
 ### Pool unbonding delegation
 
 PoolUnbondingDelegation stores the pools unbonding delegation made by a user.
-It allows to obtain a user's pool unbonding delegation.
+It allows obtaining a user's pool unbonding delegation.
 
 * PoolUnbondingDelegation: `0xa3 | UserAddr | PoolID -> ProtocolBuffer(UnbondingDelegation)`
 
 ### Operator delegation
 
 OperatorDelegation stores the delegation made by a user toward an operator.
-It allows to obtain all the user's delegation toward an operator and to quick check
-if a user has delegated toward a specific operator.
+It allows obtaining all of a user’s delegations to an operator.
 
 * PoolDelegation: `0xb1 | UserAddr | OperatorID -> ProtocolBuffer(Delegation)`
 
 ### Operator delegations by operator ID
 
 OperatorDelegationsByOperatorID stores the delegations made toward a specific operator.
-It allows to perform a reverse lookup of [Operator delegation](#operator-delegation).
+It supports a reverse lookup for [Operator delegation](#operator-delegation).
 
 * OperatorDelegationsByOperatorID: `0xb2 | OperatorID | UserAddr -> []byte{}`
 
@@ -152,22 +150,21 @@ It allows to perform a reverse lookup of [Operator delegation](#operator-delegat
 
 OperatorUnbondingDelegation stores the users' unbonding delegation that are related to
 an operator.
-It allows to obtain an user's operator unbonding delegation.
+It allows to obtain a user's operator unbonding delegation.
 
 * OperatorUnbondingDelegation: `0xb3 | UserAddr | OperatorID -> ProtocolBuffer(UnbondingDelegation)`
 
 ### Service delegation
 
 ServiceDelegation stores the delegation made by a user toward a service.
-It allows to obtain all the user's delegation toward a service and to quick check
-if a user has delegated toward a specific service.
+It allows obtaining all of a user’s delegations to a service.
 
 * ServiceDelegation: `0xc1 | UserAddr | ServiceID -> ProtocolBuffer(Delegation)`
 
 ### Service delegations by service ID
 
 ServiceDelegationsByServiceID stores the delegations made toward a specific service.
-It allows to perform a reverse lookup of [Service delegation](#delegations-delegation).
+It supports a reverse lookup for [Service delegation](#delegations-delegation).
 
 * ServiceDelegationsByServiceID: `0xc2 | ServiceID | UserAddr -> []byte{}`
 
@@ -175,7 +172,7 @@ It allows to perform a reverse lookup of [Service delegation](#delegations-deleg
 
 ServiceUnbondingDelegation stores the users' unbonding delegation that are related to
 a service.
-It allows to obtain an user's service unbonding delegation.
+It allows obtaining a user's service unbonding delegation.
 
 * ServiceUnbondingDelegation: `0xc3 | UserAddr | ServiceID -> ProtocolBuffer(UnbondingDelegation)`
 
@@ -211,12 +208,12 @@ The target object can be a `Pool`, `Operator` or `Service`.
 
 ### Begin unbonding
 
-When a user perform an `UndelegatePool`, `UndelegateOperator` or `UndelegateService`
+When a user perform a `UndelegatePool`, `UndelegateOperator` or `UndelegateService` 
 the following operations occur:
 
-* determine the shares based the amount of tokens that the user want to undelegate
-* subtract the computed shares from the `Delegation` object. In case the final shares are
-  0 the `Delegation` object will be removed
+* determine the shares based on the amount of tokens that the user want to undelegate
+* subtract the computed shares from the `Delegation` object. In case the final shares are 
+0 the `Delegation` object will be removed
 * subtract the undelegated tokens from the `Target` total delegated tokens
 * computes the time when the undelegated tokens will be returned to the user
 * increments the `UnbondingID`
@@ -232,7 +229,7 @@ the following operations occur:
 
 When an `UnbondingDelegationEntry` matures the following operations occur:
 
-* remove the index that associates the `UnbondigID` with the `UnbondingDelegation` object
+* remove the index that associates the `UnbondingID` with the `UnbondingDelegation` object
 * transfer the unbonded tokens from the target to the user
 * removes the `UnbondingDelegationEntry` from the `UnbondingDelegation` object
 * store the updated `UnbondingDelegation` or deletes in case the removed `UnbondingDelegationEntry` was the last one
@@ -243,7 +240,7 @@ In this section we describe the processing of the restaking messages.
 
 ### MsgJoinService
 
-It allows the operator's admin to start securing a AVS.
+It allows the operator's admin to start securing an AVS.
 
 ```protobuf reference
 https://github.com/milkyway-labs/milkyway/blob/v8.1.0/proto/milkyway/restaking/v1/messages.proto#L81-L93
@@ -270,7 +267,7 @@ This message is expected to fail if:
 
 ### MsgAddOperatorToAllowList
 
-It allows the service admin to add an operator to the list of allowed operator to secure the service.
+It allows the service admin to add an operator to the allowed list for securing the service.
 If the service didn't have an allow list after adding the operator to the allow list all the operators
 not in the allow list will be stopped from securing the service.
 
@@ -285,7 +282,7 @@ This message is expected to fail if:
 
 ### MsgRemoveOperatorFromAllowlist
 
-It allows the service admin to remove an operator to the list of allowed operator to secure the service.
+It allows the service admin to remove an operator from the allowed list.
 If the operator was securing the service will be stopped from securing it.
 When the last operator is removed from the allow list the service will allow all operators to join.
 
@@ -350,7 +347,7 @@ https://github.com/milkyway-labs/milkyway/blob/v8.1.0/proto/milkyway/restaking/v
 
 This message is expected to fail if:
 
-* the user wants to undelegates an amount greater then amount delegated
+* the user wants to undelegate an amount greater than the delegated amount
 
 ### MsgDelegateOperator
 
@@ -362,7 +359,7 @@ https://github.com/milkyway-labs/milkyway/blob/v8.1.0/proto/milkyway/restaking/v
 
 This message is expected to fail if:
 
-* don't exist an `Operator` with the given id
+* no `Operator` with the given id exists
 * the `Operator` is not active
 * the denom of the coin that the user wants to delegate is not allowed
 * the `sender` don't have the amount of coin that wants to delegate
@@ -377,8 +374,8 @@ https://github.com/milkyway-labs/milkyway/blob/v8.1.0/proto/milkyway/restaking/v
 
 This message is expected to fail if:
 
-* don't exist an `Operator` with the given id
-* the user wants to undelegates an amount greater then amount delegated toward that operator
+* no `Operator` with the given id exists
+* the user wants to undelegate an amount greater than the delegated amount
 
 ### MsgDelegateService
 
@@ -390,7 +387,7 @@ https://github.com/milkyway-labs/milkyway/blob/v8.1.0/proto/milkyway/restaking/v
 
 This message is expected to fail if:
 
-* don't exist a `Service` with the given id
+* no `Service` with the given id exists
 * the denom of the coin that the user wants to delegate is not allowed
 * the `sender` don't have the amount of coin that wants to delegate
 
@@ -404,8 +401,8 @@ https://github.com/milkyway-labs/milkyway/blob/v8.1.0/proto/milkyway/restaking/v
 
 This message is expected to fail if:
 
-* don't exist a `Service` with the given id
-* the user wants to undelegates an amount greater then amount delegated toward that operator
+* no `Service` with the given id exists
+* the user wants to undelegate an amount greater than the delegated amount
 
 ### MsgSetUserPreferences
 
@@ -428,8 +425,8 @@ This message is expected to fail if:
 
 ### MsgUpdateParams
 
-Allows to update the module parameters. The params are updated through a
-governance proposal where the signer is the gov module account address.
+Allows to update the module parameters. Parameters are updated via a 
+governance proposal, with the gov module account as the signer.
 
 ```protobuf reference
 https://github.com/milkyway-labs/milkyway/blob/v8.1.0/proto/milkyway/restaking/v1/messages.proto#L257-L274
