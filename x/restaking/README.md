@@ -53,7 +53,8 @@ from which pool they may borrow security.
 * [End-Block](#end-block)
    * [Unbonding Delegations](#unbonding-delegations)
 * [Hooks](#hooks)
-* [Events]
+* [Events](#events)
+* [Parameters](#parameters)
 
 ## State
 
@@ -592,4 +593,14 @@ The restaking module emits the following events:
 | -------------------- | ---------------- | ------------------ |
 | set_user_preferences | user             | {userAddress}      |
 
+### Parameters
+
+The restaking module contains the following parameters:
+
+| Key           |  Type             | Example            |
+| ------------- | ----------------- | ------------------ |
+| UnbondingTime | string (time ns)  | "259200000000000"  |
+| AllowedDenoms | []string          | {"utia", "uusdc"}  |
+| RestakingCap  | sdkmath.LegacyDec | "259200000000000"  |
+| MaxEntries    | uint32            | 7                  |
 
