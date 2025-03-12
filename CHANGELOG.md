@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 -->
 
+## Version 10.0.0
+### Features
+#### Other
+- ([\#265](https://github.com/milkyway-labs/milkyway/pull/265)) Added support for CosmWasm IBC hooks
+
+### Dependencies
+- ([\#111](https://github.com/milkyway-labs/milkyway/pull/111)) Updated `github.com/cosmos/cosmos-sdk` to `v0.50.13`
+
 ## Version 9.0.0
 ### Features
 #### Restaking
