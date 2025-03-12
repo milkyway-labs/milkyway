@@ -5,7 +5,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milkyway/v9/app/keepers"
+	"github.com/milkyway-labs/milkyway/v10/app/keepers"
 )
 
 func BeginFork(ctx sdk.Context, _ *module.Manager, _ module.Configurator, keepers *keepers.AppKeepers) {

@@ -32,15 +32,15 @@ import (
 
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
-	assetstypes "github.com/milkyway-labs/milkyway/v9/x/assets/types"
-	ibchookstypes "github.com/milkyway-labs/milkyway/v9/x/ibc-hooks/types"
-	liquidvestingtypes "github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
-	operatorstypes "github.com/milkyway-labs/milkyway/v9/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v9/x/pools/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
-	rewardstypes "github.com/milkyway-labs/milkyway/v9/x/rewards/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v9/x/services/types"
-	tokenfactorytypes "github.com/milkyway-labs/milkyway/v9/x/tokenfactory/types"
+	assetstypes "github.com/milkyway-labs/milkyway/v10/x/assets/types"
+	ibchookstypes "github.com/milkyway-labs/milkyway/v10/x/ibc-hooks/types"
+	liquidvestingtypes "github.com/milkyway-labs/milkyway/v10/x/liquidvesting/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v10/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v10/x/pools/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v10/x/restaking/types"
+	rewardstypes "github.com/milkyway-labs/milkyway/v10/x/rewards/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v10/x/services/types"
+	tokenfactorytypes "github.com/milkyway-labs/milkyway/v10/x/tokenfactory/types"
 )
 
 func (appKeepers *AppKeepers) GenerateKeys() {

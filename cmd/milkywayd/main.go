@@ -5,8 +5,8 @@ import (
 
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
 
-	milkywayapp "github.com/milkyway-labs/milkyway/v9/app"
-	"github.com/milkyway-labs/milkyway/v9/cmd/milkywayd/cmd"
+	milkywayapp "github.com/milkyway-labs/milkyway/v10/app"
+	"github.com/milkyway-labs/milkyway/v10/cmd/milkywayd/cmd"
 )
 
 func main() {

@@ -7,9 +7,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milkyway/v9/app/keepers"
-	"github.com/milkyway-labs/milkyway/v9/x/restaking/types"
-	tokenfactorytypes "github.com/milkyway-labs/milkyway/v9/x/tokenfactory/types"
+	"github.com/milkyway-labs/milkyway/v10/app/keepers"
+	"github.com/milkyway-labs/milkyway/v10/x/restaking/types"
+	tokenfactorytypes "github.com/milkyway-labs/milkyway/v10/x/tokenfactory/types"
 )
 
 func CreateUpgradeHandler(

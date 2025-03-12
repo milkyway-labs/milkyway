@@ -3,7 +3,7 @@ package milkyway.assets.v1;
 
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v9/x/assets/types";
+option go_package = "github.com/milkyway-labs/milkyway/v10/x/assets/types";
 option (gogoproto.goproto_getters_all) = false;
 
 // Asset represents an asset that can be registered on the chain.

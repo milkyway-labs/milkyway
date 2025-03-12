@@ -7,8 +7,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milkyway/v9/app/keepers"
-	ibchookstypes "github.com/milkyway-labs/milkyway/v9/x/ibc-hooks/types"
+	"github.com/milkyway-labs/milkyway/v10/app/keepers"
+	ibchookstypes "github.com/milkyway-labs/milkyway/v10/x/ibc-hooks/types"
 )
 
 func CreateUpgradeHandler(

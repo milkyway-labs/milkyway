@@ -9,8 +9,8 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 
-	"github.com/milkyway-labs/milkyway/v9/x/operators/keeper"
-	"github.com/milkyway-labs/milkyway/v9/x/operators/types"
+	"github.com/milkyway-labs/milkyway/v10/x/operators/keeper"
+	"github.com/milkyway-labs/milkyway/v10/x/operators/types"
 )
 
 func (suite *KeeperTestSuite) TestMsgServer_RegisterOperator() {

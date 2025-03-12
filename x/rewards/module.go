@@ -17,13 +17,13 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 
-	operatorskeeper "github.com/milkyway-labs/milkyway/v9/x/operators/keeper"
-	poolskeeper "github.com/milkyway-labs/milkyway/v9/x/pools/keeper"
-	"github.com/milkyway-labs/milkyway/v9/x/rewards/client/cli"
-	"github.com/milkyway-labs/milkyway/v9/x/rewards/keeper"
-	"github.com/milkyway-labs/milkyway/v9/x/rewards/simulation"
-	"github.com/milkyway-labs/milkyway/v9/x/rewards/types"
-	serviceskeeper "github.com/milkyway-labs/milkyway/v9/x/services/keeper"
+	operatorskeeper "github.com/milkyway-labs/milkyway/v10/x/operators/keeper"
+	poolskeeper "github.com/milkyway-labs/milkyway/v10/x/pools/keeper"
+	"github.com/milkyway-labs/milkyway/v10/x/rewards/client/cli"
+	"github.com/milkyway-labs/milkyway/v10/x/rewards/keeper"
+	"github.com/milkyway-labs/milkyway/v10/x/rewards/simulation"
+	"github.com/milkyway-labs/milkyway/v10/x/rewards/types"
+	serviceskeeper "github.com/milkyway-labs/milkyway/v10/x/services/keeper"
 )
 
 const (

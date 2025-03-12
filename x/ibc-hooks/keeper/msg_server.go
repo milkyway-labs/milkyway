@@ -5,7 +5,8 @@ import (
 	"strconv"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/milkyway-labs/milkyway/v9/x/ibc-hooks/types"
+
+	"github.com/milkyway-labs/milkyway/v10/x/ibc-hooks/types"
 )
 
 type msgServer struct {

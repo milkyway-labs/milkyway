@@ -20,10 +20,10 @@ import (
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 
-	"github.com/milkyway-labs/milkyway/v9/x/services/client/cli"
-	"github.com/milkyway-labs/milkyway/v9/x/services/keeper"
-	"github.com/milkyway-labs/milkyway/v9/x/services/simulation"
-	"github.com/milkyway-labs/milkyway/v9/x/services/types"
+	"github.com/milkyway-labs/milkyway/v10/x/services/client/cli"
+	"github.com/milkyway-labs/milkyway/v10/x/services/keeper"
+	"github.com/milkyway-labs/milkyway/v10/x/services/simulation"
+	"github.com/milkyway-labs/milkyway/v10/x/services/types"
 )
 
 const (

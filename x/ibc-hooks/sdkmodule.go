@@ -14,9 +14,9 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 
-	"github.com/milkyway-labs/milkyway/v9/x/ibc-hooks/client/cli"
-	"github.com/milkyway-labs/milkyway/v9/x/ibc-hooks/keeper"
-	"github.com/milkyway-labs/milkyway/v9/x/ibc-hooks/types"
+	"github.com/milkyway-labs/milkyway/v10/x/ibc-hooks/client/cli"
+	"github.com/milkyway-labs/milkyway/v10/x/ibc-hooks/keeper"
+	"github.com/milkyway-labs/milkyway/v10/x/ibc-hooks/types"
 )
 
 var (
