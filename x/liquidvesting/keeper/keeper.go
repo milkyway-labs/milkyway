@@ -30,6 +30,12 @@ type Keeper struct {
 	// (delegationType, targetID) -> types.CoveredLockedShares
 	TargetsCoveredLockedShares     collections.Map[collections.Pair[int32, uint32], types.TargetCoveredLockedShares]
 	LockedRepresentationDelegators collections.KeySet[string]
+	// PreviousDelegationsTokens is a temporary map of (user, delegation target) pair
+	// to the delegation's tokens that gets written before a user's delegation is
+	// modified and cleared right after the modification.
+	//
+	// (user, delegationType, targetID) -> PreviousDelegationTokens
+	PreviousDelegationsTokens collections.Map[collections.Triple[string, int32, uint32], types.PreviousDelegationTokens]
 
 	// Addresses
 	ModuleAddress string
@@ -88,6 +94,13 @@ func NewKeeper(
 			types.LockedRepresentationDelegatorsKeyPrefix,
 			"locked_representation_delegators",
 			collections.StringKey,
+		),
+		PreviousDelegationsTokens: collections.NewMap(
+			sb,
+			types.PreviousDelegationsTokensKeyPrefix,
+			"previous_delegations_tokens",
+			collections.TripleKeyCodec(collections.StringKey, collections.Int32Key, collections.Uint32Key),
+			codec.CollValue[types.PreviousDelegationTokens](cdc),
 		),
 
 		ModuleAddress: moduleAddress,

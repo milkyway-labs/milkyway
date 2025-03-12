@@ -274,32 +274,6 @@ func (suite *KeeperTestSuite) TestMsgServer_WithdrawInsuranceFund() {
 			shouldErr: true,
 		},
 		{
-			name: "can't withdraw more then available",
-			store: func(ctx sdk.Context) {
-				suite.fundAccountInsuranceFund(ctx,
-					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
-					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)),
-				)
-
-				// Delegate to pool to simulate insurance fund utilization
-				suite.mintLockedRepresentation(ctx,
-					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
-					sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 1000)),
-				)
-
-				_, err := suite.restakingKeeper.DelegateToPool(ctx,
-					sdk.NewInt64Coin(LockedIBCDenom, 500),
-					"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
-				)
-				suite.Require().NoError(err)
-			},
-			msg: types.NewMsgWithdrawInsuranceFund(
-				"cosmos1d03wa9qd8flfjtvldndw5csv94tvg5hzfcmcgn",
-				sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 10)),
-			),
-			shouldErr: true,
-		},
-		{
 			name: "withdraw correctly",
 			store: func(ctx sdk.Context) {
 				suite.fundAccountInsuranceFund(ctx,

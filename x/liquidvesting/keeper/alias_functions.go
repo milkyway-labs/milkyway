@@ -159,3 +159,39 @@ func (k *Keeper) GetAllLockedRepresentationDelegators(ctx context.Context) ([]st
 	}
 	return iter.Keys()
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+// SetPreviousDelegationTokens caches the previous delegation's tokens for the
+// user and the delegation target.
+func (k *Keeper) SetPreviousDelegationTokens(
+	ctx context.Context,
+	user string,
+	delType restakingtypes.DelegationType,
+	targetID uint32,
+	tokens sdk.DecCoins,
+) error {
+	return k.PreviousDelegationsTokens.Set(
+		ctx,
+		collections.Join3(user, int32(delType), targetID),
+		types.PreviousDelegationTokens{Tokens: tokens},
+	)
+}
+
+// GetPreviousDelegationTokens returns the cached previous delegation for the
+// user and the delegation target.
+func (k *Keeper) GetPreviousDelegationTokens(
+	ctx context.Context,
+	user string,
+	delType restakingtypes.DelegationType,
+	targetID uint32,
+) (sdk.DecCoins, error) {
+	tokens, err := k.PreviousDelegationsTokens.Get(ctx, collections.Join3(user, int32(delType), targetID))
+	if err != nil {
+		if errors.IsOf(err, collections.ErrNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return tokens.Tokens, nil
+}

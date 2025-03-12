@@ -71,3 +71,11 @@ message TargetCoveredLockedShares {
     (gogoproto.nullable) = false
   ];
 }
+
+// PreviousDelegationTokens represents the previous delegation's tokens.
+message PreviousDelegationTokens {
+  repeated cosmos.base.v1beta1.DecCoin tokens = 1 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
+    (gogoproto.nullable) = false
+  ];
+}

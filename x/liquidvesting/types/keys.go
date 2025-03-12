@@ -19,6 +19,7 @@ var (
 	BurnCoinsQueueKey                       = collections.NewPrefix(0x20)
 	CoveredLockedSharesKeyPrefix            = collections.NewPrefix(0x30)
 	LockedRepresentationDelegatorsKeyPrefix = collections.NewPrefix(0x40)
+	PreviousDelegationsTokensKeyPrefix      = collections.NewPrefix(0x50)
 )
 
 // GetBurnCoinsQueueTimeKey creates the prefix to obtain the list of

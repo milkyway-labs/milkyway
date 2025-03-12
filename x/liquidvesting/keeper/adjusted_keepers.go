@@ -74,8 +74,7 @@ func (rk *AdjustedRestakingKeeper) GetDelegationTarget(ctx context.Context, delT
 	}
 	uncoveredLockedShares := types.UncoveredLockedShares(target.GetDelegatorShares(), coveredLockedShares)
 
-	target, _, err = types.RemoveDelShares(target, uncoveredLockedShares)
-	return target, err
+	return types.DelegationTargetWithDeductedShares(target, uncoveredLockedShares)
 }
 
 // GetDelegation returns the delegation with the given targetID and deducts the
@@ -89,12 +88,18 @@ func (rk *AdjustedRestakingKeeper) GetDelegation(ctx context.Context, delType re
 	if err != nil || !found {
 		return restakingtypes.Delegation{}, found, err
 	}
+	// If the delegation is normal, exit early and return the delegation as is
+	if !types.HasLockedShares(delegation.Shares) {
+		return delegation, true, nil
+	}
 
+	// Deduct uncovered locked shares from the delegation
 	coveredLockedShares, err := rk.k.GetCoveredLockedShares(ctx, delegation)
 	if err != nil {
 		return restakingtypes.Delegation{}, false, err
 	}
-	delegation.Shares = types.DeductUncoveredLockedShares(delegation.Shares, coveredLockedShares)
+	uncoveredLockedShares := types.UncoveredLockedShares(delegation.Shares, coveredLockedShares)
+	delegation.Shares = delegation.Shares.Sub(uncoveredLockedShares)
 
 	// After the first call to GetDelegation, transition the overrider's
 	// state to Override

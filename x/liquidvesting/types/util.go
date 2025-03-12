@@ -1,6 +1,8 @@
 package types
 
 import (
+	"fmt"
+
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -53,18 +55,41 @@ func GetCoveredLockedShares(
 	delegation restakingtypes.Delegation,
 	insuranceFund sdk.Coins,
 	insurancePercentage sdkmath.LegacyDec,
+	activeLockedTokens sdk.DecCoins,
 ) (sdk.DecCoins, error) {
 	// Exit early if the user doesn't have insurance fund balance
 	if insuranceFund.IsZero() {
 		return nil, nil
 	}
 
-	coverable := GetCoverableDecCoins(insuranceFund, insurancePercentage)
+	delegationTokens := target.TokensFromSharesTruncated(delegation.Shares)
+	if _, hasNeg := activeLockedTokens.SafeSub(delegationTokens); hasNeg { // sanity check
+		panic(fmt.Sprintf("delegation tokens %s > active locked tokens %s", delegationTokens, activeLockedTokens))
+	}
 
-	// Calculate covered locked shares
-	tokens := target.TokensFromSharesTruncated(delegation.Shares)
-	coveredTokens := tokens.Intersect(coverable)
-	return target.SharesFromDecCoins(coveredTokens)
+	coveredTokens := sdk.NewDecCoins()
+	coverableTokens := GetCoverableDecCoins(insuranceFund, insurancePercentage)
+	for _, coverableToken := range coverableTokens {
+		delegationAmount := delegationTokens.AmountOf(coverableToken.Denom)
+		usedAmount := activeLockedTokens.AmountOf(coverableToken.Denom)
+		coveredTokens = coveredTokens.Add(sdk.NewDecCoinFromDec(
+			coverableToken.Denom,
+			sdkmath.LegacyMinDec(
+				delegationAmount,
+				coverableToken.Amount.MulTruncate(delegationAmount.QuoTruncate(usedAmount)),
+			),
+		))
+	}
+
+	// Convert tokens back to shares
+	coveredShares, err := target.SharesFromDecCoins(coveredTokens)
+	if err != nil {
+		return nil, err
+	}
+	// Truncate the shares to make the numbers to avoid unnecessary rounding errors
+	// in calculations
+	truncatedShares, _ := coveredShares.TruncateDecimal()
+	return sdk.NewDecCoinsFromCoins(truncatedShares...), nil
 }
 
 // UncoveredLockedShares returns the locked shares that are not covered by the
@@ -82,13 +107,6 @@ func UncoveredLockedShares(shares, coveredLockedShares sdk.DecCoins) sdk.DecCoin
 	return res
 }
 
-// DeductUncoveredLockedShares returns the shares with the uncovered locked
-// shares deducted.
-func DeductUncoveredLockedShares(shares, coveredLockedShares sdk.DecCoins) sdk.DecCoins {
-	uncovered := UncoveredLockedShares(shares, coveredLockedShares)
-	return shares.Sub(uncovered)
-}
-
 // HasLockedShares returns whether the provided shares contain any locked shares.
 func HasLockedShares(shares sdk.DecCoins) bool {
 	for _, share := range shares {
@@ -103,19 +121,38 @@ func HasLockedShares(shares sdk.DecCoins) bool {
 	return false
 }
 
-// RemoveDelShares returns the delegation target with the provided shares
-// removed, along with the issued tokens.
-func RemoveDelShares(target restakingtypes.DelegationTarget, shares sdk.DecCoins) (restakingtypes.DelegationTarget, sdk.Coins, error) {
+// DelegationTargetWithDeductedShares returns the delegation target with the
+// provided shares removed. It doesn't use DelegationTarget's RemoveDelShares
+// to avoid leaving excess tokens in the target.
+func DelegationTargetWithDeductedShares(target restakingtypes.DelegationTarget, shares sdk.DecCoins) (restakingtypes.DelegationTarget, error) {
+	remainingShares := target.GetDelegatorShares().Sub(shares)
 	switch target := target.(type) {
 	case poolstypes.Pool:
-		return target.RemoveDelShares(shares)
+		if remainingShares.IsZero() {
+			target.Tokens = sdkmath.ZeroInt()
+		} else {
+			tokens, _ := target.TokensFromSharesTruncated(remainingShares).TruncateDecimal()
+			target.Tokens = tokens.AmountOf(target.Denom)
+		}
+		target.DelegatorShares = remainingShares.AmountOf(target.GetSharesDenom(target.Denom))
+		return target, nil
 	case operatorstypes.Operator:
-		target, issuedTokens := target.RemoveDelShares(shares)
-		return target, issuedTokens, nil
+		if remainingShares.IsZero() {
+			target.Tokens = sdk.NewCoins()
+		} else {
+			target.Tokens, _ = target.TokensFromSharesTruncated(remainingShares).TruncateDecimal()
+		}
+		target.DelegatorShares = remainingShares
+		return target, nil
 	case servicestypes.Service:
-		target, issuedTokens := target.RemoveDelShares(shares)
-		return target, issuedTokens, nil
+		if remainingShares.IsZero() {
+			target.Tokens = sdk.NewCoins()
+		} else {
+			target.Tokens, _ = target.TokensFromSharesTruncated(remainingShares).TruncateDecimal()
+		}
+		target.DelegatorShares = remainingShares
+		return target, nil
 	default:
-		return nil, nil, restakingtypes.ErrInvalidDelegationType.Wrapf("invalid target type %T", target)
+		return nil, restakingtypes.ErrInvalidDelegationType.Wrapf("invalid target type %T", target)
 	}
 }

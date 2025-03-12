@@ -55,20 +55,6 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 		// Update the total coins in the insurance fund
 		totalCoins = totalCoins.Add(entry.Balance...)
 
-		// Get the total locked representation that should be covered by the
-		// insurance fund
-		totalLockedRepresentations, err := k.GetAllUserActiveLockedRepresentations(ctx, entry.UserAddress)
-		if err != nil {
-			return err
-		}
-
-		// Check if the insurance fund can cover the restaked coins
-		canCover, required := insuranceFund.CanCoverDecCoins(state.Params.InsurancePercentage, totalLockedRepresentations)
-		if !canCover {
-			return fmt.Errorf("user: %s insurance fund amount is too low, expected %s, got %s",
-				entry.UserAddress, required.String(), entry.Balance.String())
-		}
-
 		userInsuranceFunds[entry.UserAddress] = entry.Balance
 	}
 
@@ -118,12 +104,12 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 	}
 
 	// Initialize locked representation delegators and targets covered locked shares
-	type targetCacheKey struct {
-		delType  restakingtypes.DelegationType
-		targetID uint32
-	}
 	// Cache delegation targets to avoid multiple state reads
-	targetCache := map[targetCacheKey]restakingtypes.DelegationTarget{}
+	targetCache := delegationTargetCache{}
+
+	// Cache total active(restaked + unbonding) locked tokens per address
+	activeLockedTokensCache := map[string]sdk.DecCoins{}
+
 	// TODO: optimize this by utilizing bank module's denom owners index?
 	cb := func(del restakingtypes.Delegation) (stop bool, err error) {
 		if !types.HasLockedShares(del.Shares) {
@@ -134,19 +120,35 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 			return true, err
 		}
 		insuranceFund := userInsuranceFunds[del.UserAddress]
-		target, ok := targetCache[targetCacheKey{del.Type, del.TargetID}]
+		// If the user has no insurance fund balance, just skip
+		if insuranceFund.IsZero() {
+			return false, nil
+		}
+
+		target, ok := targetCache[delegationTargetCacheKey{del.Type, del.TargetID}]
 		if !ok {
 			target, err = k.restakingKeeper.GetDelegationTarget(ctx, del.Type, del.TargetID)
 			if err != nil {
 				return true, err
 			}
-			targetCache[targetCacheKey{del.Type, del.TargetID}] = target
+			targetCache[delegationTargetCacheKey{del.Type, del.TargetID}] = target
 		}
+
+		activeLockedTokens, ok := activeLockedTokensCache[del.UserAddress]
+		if !ok {
+			activeLockedTokens, err = k.GetAllUserActiveLockedRepresentations(ctx, del.UserAddress)
+			if err != nil {
+				return true, err
+			}
+			activeLockedTokensCache[del.UserAddress] = activeLockedTokens
+		}
+
 		coveredLockedShares, err := types.GetCoveredLockedShares(
 			target,
 			del,
 			insuranceFund,
 			state.Params.InsurancePercentage,
+			activeLockedTokens,
 		)
 		if err != nil {
 			return true, err

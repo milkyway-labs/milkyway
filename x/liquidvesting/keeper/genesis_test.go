@@ -6,6 +6,8 @@ import (
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/milkyway-labs/milkyway/v9/app/testutil"
+	"github.com/milkyway-labs/milkyway/v9/utils"
 	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
 	poolstypes "github.com/milkyway-labs/milkyway/v9/x/pools/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
@@ -288,61 +290,6 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			shouldErr: true,
 		},
 		{
-			name: "should block insurance fund initialization if insurance fund don't cover delegations and undelegations",
-			store: func(ctx sdk.Context) {
-				// Send tokens to the liquid vesting module
-				err := suite.bk.MintCoins(ctx, types.ModuleName, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)))
-				suite.Require().NoError(err)
-
-				// Init the pools module
-				testPool := poolstypes.NewPool(1, LockedIBCDenom)
-				testPool.Tokens = math.NewIntFromUint64(50)
-				testPool.DelegatorShares = math.LegacyNewDecFromInt(math.NewIntFromUint64(50))
-				poolsKeeperGenesis := poolstypes.GenesisState{
-					NextPoolID: 2,
-					Pools:      []poolstypes.Pool{testPool},
-				}
-
-				err = suite.pk.InitGenesis(ctx, &poolsKeeperGenesis)
-				suite.Require().NoError(err)
-
-				// Init the restaking module
-				restakingKeeperGenesis := &restakingtypes.GenesisState{
-					Params: restakingtypes.DefaultParams(),
-					UnbondingDelegations: []restakingtypes.UnbondingDelegation{
-						restakingtypes.NewPoolUnbondingDelegation(
-							"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-							1,
-							10,
-							time.Date(2024, 1, 8, 12, 0, 0, 0, time.UTC),
-							sdk.NewCoins(sdk.NewInt64Coin(LockedIBCDenom, 51)),
-							1,
-						),
-					},
-					Delegations: []restakingtypes.Delegation{
-						restakingtypes.NewPoolDelegation(
-							1,
-							"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-							sdk.NewDecCoins(sdk.NewInt64DecCoin(testPool.GetSharesDenom(LockedIBCDenom), 50)),
-						),
-					},
-				}
-				err = suite.restakingKeeper.InitGenesis(ctx, restakingKeeperGenesis)
-				suite.Require().NoError(err)
-			},
-			genesis: types.NewGenesisState(
-				types.DefaultParams(),
-				nil,
-				[]types.UserInsuranceFundEntry{
-					types.NewUserInsuranceFundEntry(
-						"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-						sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 2)),
-					),
-				},
-			),
-			shouldErr: true,
-		},
-		{
 			name: "should initialize insurance fund properly",
 			store: func(ctx sdk.Context) {
 				err := suite.bk.MintCoins(ctx, types.ModuleName, sdk.NewCoins(sdk.NewInt64Coin(IBCDenom, 100)))
@@ -495,4 +442,68 @@ func (suite *KeeperTestSuite) TestKeepr_InitGenesis() {
 			}
 		})
 	}
+}
+
+func (suite *KeeperTestSuite) TestInitGenesis_CoveredLockedShares() {
+	ctx, _ := suite.ctx.CacheContext()
+
+	err := suite.k.SetParams(ctx, types.NewParams(utils.MustParseDec("2"), nil, nil, nil)) // 2%
+	suite.Require().NoError(err)
+
+	// Create a service and an operator
+	suite.createService(ctx, 1)
+	suite.createOperator(ctx, 1)
+
+	delAddr := testutil.TestAddress(1) // Delegates locked representations
+
+	suite.fundAccountInsuranceFund(ctx, delAddr.String(), utils.MustParseCoins("10000stake"))
+	suite.mintLockedRepresentation(ctx, delAddr.String(), utils.MustParseCoins("10_000000stake"))
+	_, err = suite.restakingKeeper.DelegateToPool(ctx, utils.MustParseCoin("2_000000locked/stake"), delAddr.String())
+	suite.Require().NoError(err)
+	_, err = suite.restakingKeeper.DelegateToOperator(ctx, 1, utils.MustParseCoins("3_000000locked/stake"), delAddr.String())
+	suite.Require().NoError(err)
+	_, err = suite.restakingKeeper.DelegateToService(ctx, 1, utils.MustParseCoins("4_000000locked/stake"), delAddr.String())
+	suite.Require().NoError(err)
+
+	bankGenesis := suite.bk.ExportGenesis(ctx)
+	poolsGenesis := suite.pk.ExportGenesis(ctx)
+	operatorsGenesis := suite.ok.ExportGenesis(ctx)
+	servicesGenesis := suite.sk.ExportGenesis(ctx)
+	//rewardsGenesis, err := suite.rewardsKeeper.ExportGenesis(ctx)
+	//suite.Require().NoError(err)
+	restakingGenesis := suite.restakingKeeper.ExportGenesis(ctx)
+	liquidvestingGenesis, err := suite.k.ExportGenesis(ctx)
+	suite.Require().NoError(err)
+
+	// Reset the test suite
+	suite.SetupTest()
+	ctx, _ = suite.ctx.CacheContext()
+
+	// Initialize the modules from the previously exported genesis states
+	suite.bk.InitGenesis(ctx, bankGenesis)
+	err = suite.pk.InitGenesis(ctx, poolsGenesis)
+	suite.Require().NoError(err)
+	err = suite.ok.InitGenesis(ctx, operatorsGenesis)
+	suite.Require().NoError(err)
+	err = suite.sk.InitGenesis(ctx, servicesGenesis)
+	suite.Require().NoError(err)
+	//err = suite.rewardsKeeper.InitGenesis(ctx, rewardsGenesis)
+	//suite.Require().NoError(err)
+	err = suite.restakingKeeper.InitGenesis(ctx, restakingGenesis)
+	suite.Require().NoError(err)
+	err = suite.k.InitGenesis(ctx, liquidvestingGenesis)
+	suite.Require().NoError(err)
+
+	targetCoveredLockedShares, err := suite.k.GetTargetCoveredLockedShares(ctx, restakingtypes.DELEGATION_TYPE_POOL, 1)
+	suite.Require().NoError(err)
+	// 10000 / 2% * 2_000000 / (2_000000 + 3_000000 + 4_000000)
+	suite.Assert().Equal("111111.000000000000000000pool/1/locked/stake", targetCoveredLockedShares.String())
+	targetCoveredLockedShares, err = suite.k.GetTargetCoveredLockedShares(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, 1)
+	suite.Require().NoError(err)
+	// 10000 / 2% * 3_000000 / (2_000000 + 3_000000 + 4_000000)
+	suite.Assert().Equal("166666.000000000000000000operator/1/locked/stake", targetCoveredLockedShares.String())
+	targetCoveredLockedShares, err = suite.k.GetTargetCoveredLockedShares(ctx, restakingtypes.DELEGATION_TYPE_SERVICE, 1)
+	suite.Require().NoError(err)
+	// 10000 / 2% * 4_000000 / (2_000000 + 3_000000 + 4_000000)
+	suite.Assert().Equal("222222.000000000000000000service/1/locked/stake", targetCoveredLockedShares.String())
 }

@@ -3,6 +3,9 @@ package keeper
 import (
 	"context"
 
+	sdkmath "cosmossdk.io/math"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
 )
@@ -10,7 +13,7 @@ import (
 var _ restakingtypes.RestakingHooks = RestakingHooks{}
 
 type RestakingHooks struct {
-	k *Keeper
+	*Keeper
 }
 
 func (k *Keeper) RestakingHooks() RestakingHooks {
@@ -18,7 +21,7 @@ func (k *Keeper) RestakingHooks() RestakingHooks {
 }
 
 func (h RestakingHooks) BeforeDelegationSharesModified(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32, delegator string) error {
-	delegation, found, err := h.k.restakingKeeper.GetDelegation(ctx, delType, targetID, delegator)
+	delegation, found, err := h.restakingKeeper.GetDelegation(ctx, delType, targetID, delegator)
 	if err != nil {
 		return err
 	}
@@ -31,7 +34,42 @@ func (h RestakingHooks) BeforeDelegationSharesModified(ctx context.Context, delT
 		return nil
 	}
 
-	coveredLockedShares, err := h.k.GetCoveredLockedShares(ctx, delegation)
+	insuranceFund, err := h.GetUserInsuranceFundBalance(ctx, delegation.UserAddress)
+	if err != nil {
+		return err
+	}
+	// Exit early if the user doesn't have insurance fund balance
+	if insuranceFund.IsZero() {
+		return nil
+	}
+
+	// Temporarily save the delegation so that it can be used in the
+	// AfterDelegationModified hook.
+	target, err := h.restakingKeeper.GetDelegationTarget(ctx, delegation.Type, delegation.TargetID)
+	if err != nil {
+		return err
+	}
+	err = h.SetPreviousDelegationTokens(ctx, delegator, delType, targetID, target.TokensFromShares(delegation.Shares))
+	if err != nil {
+		return err
+	}
+
+	// Calculate covered locked shares
+	params, err := h.GetParams(ctx)
+	if err != nil {
+		return err
+	}
+	activeLockedTokens, err := h.GetAllUserActiveLockedRepresentations(ctx, delegation.UserAddress)
+	if err != nil {
+		return err
+	}
+	coveredLockedShares, err := types.GetCoveredLockedShares(
+		target,
+		delegation,
+		insuranceFund,
+		params.InsurancePercentage,
+		activeLockedTokens,
+	)
 	if err != nil {
 		return err
 	}
@@ -39,11 +77,11 @@ func (h RestakingHooks) BeforeDelegationSharesModified(ctx context.Context, delT
 		return nil
 	}
 
-	return h.k.DecrementTargetCoveredLockedShares(ctx, delType, targetID, coveredLockedShares)
+	return h.DecrementTargetCoveredLockedShares(ctx, delType, targetID, coveredLockedShares)
 }
 
 func (h RestakingHooks) AfterDelegationModified(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32, delegator string) error {
-	delegation, found, err := h.k.restakingKeeper.GetDelegation(ctx, delType, targetID, delegator)
+	delegation, found, err := h.restakingKeeper.GetDelegation(ctx, delType, targetID, delegator)
 	if err != nil {
 		return err
 	}
@@ -51,20 +89,76 @@ func (h RestakingHooks) AfterDelegationModified(ctx context.Context, delType res
 		return restakingtypes.ErrDelegationNotFound
 	}
 
-	// If the delegation has no locked shares, remove the delegator from the list and
-	// exit early.
+	// Depending on whether the delegation has locked shares or not, either remove
+	// the delegator from the locked representation delegators list or mark them as
+	// a locked representation delegator.
 	if !types.HasLockedShares(delegation.Shares) {
-		return h.k.RemoveLockedRepresentationDelegator(ctx, delegation.UserAddress)
+		return h.RemoveLockedRepresentationDelegator(ctx, delegator)
 	}
-
-	// If the delegation has locked representation inside, mark the delegator as
-	// locked representation delegator.
-	err = h.k.SetLockedRepresentationDelegator(ctx, delegation.UserAddress)
+	err = h.SetLockedRepresentationDelegator(ctx, delegator)
 	if err != nil {
 		return err
 	}
 
-	coveredLockedShares, err := h.k.GetCoveredLockedShares(ctx, delegation)
+	insuranceFund, err := h.GetUserInsuranceFundBalance(ctx, delegation.UserAddress)
+	if err != nil {
+		return err
+	}
+	// Exit early if the user doesn't have insurance fund balance
+	if insuranceFund.IsZero() {
+		return nil
+	}
+
+	// Get the cached delegation from the BeforeDelegationSharesModified hook.
+	prevDelegationTokens, err := h.GetPreviousDelegationTokens(ctx, delegator, delType, targetID)
+	if err != nil {
+		return err
+	}
+
+	// Calculate the previous active locked tokens before modifying the delegation.
+	target, err := h.restakingKeeper.GetDelegationTarget(ctx, delegation.Type, delegation.TargetID)
+	if err != nil {
+		return err
+	}
+	newDelegationTokens := target.TokensFromShares(delegation.Shares)
+	newActiveLockedTokens, err := h.GetAllUserActiveLockedRepresentations(ctx, delegator)
+	if err != nil {
+		return err
+	}
+	prevActiveLockedTokens := newActiveLockedTokens.Sub(newDelegationTokens).Add(prevDelegationTokens...)
+
+	params, err := h.GetParams(ctx)
+	if err != nil {
+		return err
+	}
+
+	// Withdraw restaking rewards from the user's all other delegations except for
+	// the current one since active locked tokens amount has changed and covered
+	// locked shares for the other delegations need to be updated.
+	err = h.WithdrawUserLockedRestakingRewards(
+		ctx,
+		delegator,
+		func(del restakingtypes.Delegation) bool {
+			return del.Type != delType || del.TargetID != targetID
+		},
+		func() (sdk.Coins, sdkmath.LegacyDec, sdk.DecCoins) {
+			return insuranceFund, params.InsurancePercentage, prevActiveLockedTokens
+		},
+		func() (sdk.Coins, sdkmath.LegacyDec, sdk.DecCoins) {
+			return insuranceFund, params.InsurancePercentage, newActiveLockedTokens
+		},
+	)
+	if err != nil {
+		return err
+	}
+
+	coveredLockedShares, err := types.GetCoveredLockedShares(
+		target,
+		delegation,
+		insuranceFund,
+		params.InsurancePercentage,
+		newActiveLockedTokens,
+	)
 	if err != nil {
 		return err
 	}
@@ -72,7 +166,7 @@ func (h RestakingHooks) AfterDelegationModified(ctx context.Context, delType res
 		return nil
 	}
 
-	return h.k.IncrementTargetCoveredLockedShares(ctx, delType, targetID, coveredLockedShares)
+	return h.IncrementTargetCoveredLockedShares(ctx, delType, targetID, coveredLockedShares)
 }
 
 // BeforePoolDelegationSharesModified implements restakingtypes.RestakingHooks
