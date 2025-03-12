@@ -50,6 +50,9 @@ from which pool they may borrow security.
    * [MsgUndelegateService](#msgundelegateservice)
    * [MsgSetUserPreferences](#msgsetuserpreferences)
    * [MsgUpdateParams](#msgupdateparams)
+* [End-Block](#end-block)
+   * [Unbonding Delegations](#unbonding-delegations)
+* [Hooks](#hooks)
 
 ## State
 
@@ -427,3 +430,49 @@ Params:
 https://github.com/milkyway-labs/milkyway/blob/v8.1.0/proto/milkyway/restaking/v1/params.proto#L9-L33
 ```
 
+## End-Block
+
+In this section we describe the operation that this modules executes during each abci end block call.
+
+### Unbonding delegations
+
+Complete the unbonding of all mature `UnbondingDelegations.Entries` within the `UnbondingQueue` with the following procedure:
+
+* removes the index that associates the `UnbondigID` with the `UnbondingDelegation` object
+* transfer the unbonded tokens from the target to the user
+* removes the `UnbondingDelegationEntry` from the `UnbondingDelegation` object
+* store the updated `UnbondingDelegation` or deletes in case the removed `UnbondingDelegationEntry` was the last one
+
+## Hooks
+
+Other modules may register operations to execute when a certain event has occurred within the restaking module.
+The following hooks can registered with restaking:
+
+* `BeforePoolDelegationCreated(ctx context.Context, poolID uint32, delegator string) error`
+    * called before a new `Delegation` object associated to a `Pool` is created
+* `BeforePoolDelegationSharesModified(ctx context.Context, poolID uint32, delegator string) error`
+    * called before the shares of `Delegation` object associated a `Pool` are modified
+* `AfterPoolDelegationModified(ctx context.Context, poolID uint32, delegator string) error`
+    * called after a `Delegation` object associated to a `Pool` is modified
+* `BeforePoolDelegationRemoved(ctx context.Context, poolID uint32, delegator string) error`
+    * called after a `Delegation` object associated to a `Pool` is removed
+* `BeforeOperatorDelegationCreated(ctx context.Context, operatorID uint32, delegator string) error`
+    * called before a new `Delegation` object associated to a `Operator` is created
+* `BeforeOperatorDelegationSharesModified(ctx context.Context, operatorID uint32, delegator string) error`
+    * called before the shares of `Delegation` object associated a `Operator` are modified
+* `AfterOperatorDelegationModified(ctx context.Context, operatorID uint32, delegator string) error`
+    * called after a `Delegation` object associated to a `Operator` is modified
+* `BeforeOperatorDelegationRemoved(ctx context.Context, operatorID uint32, delegator string) error`
+    * called after a `Delegation` object associated to a `Operator` is removed
+* `BeforeServiceDelegationCreated(ctx context.Context, serviceID uint32, delegator string) error`
+    * called before a new `Delegation` object associated to a `Service` is created
+* `BeforeServiceDelegationSharesModified(ctx context.Context, serviceID uint32, delegator string) error`
+    * called before the shares of `Delegation` object associated a `Service` are modified
+* `AfterServiceDelegationModified(ctx context.Context, serviceID uint32, delegator string) error`
+    * called after a `Delegation` object associated to a `Service` is modified
+* `BeforeServiceDelegationRemoved(ctx context.Context, serviceID uint32, delegator string) error`
+    * called after a `Delegation` object associated to a `Service` is removed
+* `AfterUnbondingInitiated(ctx context.Context, unbondingDelegationID uint64) error`
+    * called after a new `UnbondingDelegation` is created
+* `AfterUserPreferencesModified(ctx context.Context, userAddress string, oldPreferences, newPreferences UserPreferences) error`
+    * called after an user's preferences are modified
