@@ -33,6 +33,7 @@ import (
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
 	assetstypes "github.com/milkyway-labs/milkyway/v9/x/assets/types"
+	ibchookstypes "github.com/milkyway-labs/milkyway/v9/x/ibc-hooks/types"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
 	operatorstypes "github.com/milkyway-labs/milkyway/v9/x/operators/types"
 	poolstypes "github.com/milkyway-labs/milkyway/v9/x/pools/types"
@@ -77,6 +78,7 @@ func (appKeepers *AppKeepers) GenerateKeys() {
 		feemarkettypes.StoreKey,
 
 		// Custom modules
+		ibchookstypes.StoreKey,
 		servicestypes.StoreKey,
 		operatorstypes.StoreKey,
 		poolstypes.StoreKey,

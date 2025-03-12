@@ -83,6 +83,9 @@ import (
 	assetskeeper "github.com/milkyway-labs/milkyway/v9/x/assets/keeper"
 	assetstypes "github.com/milkyway-labs/milkyway/v9/x/assets/types"
 	bankkeeper "github.com/milkyway-labs/milkyway/v9/x/bank/keeper"
+	ibchooks "github.com/milkyway-labs/milkyway/v9/x/ibc-hooks"
+	ibchookskeeper "github.com/milkyway-labs/milkyway/v9/x/ibc-hooks/keeper"
+	ibchookstypes "github.com/milkyway-labs/milkyway/v9/x/ibc-hooks/types"
 	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting"
 	liquidvestingkeeper "github.com/milkyway-labs/milkyway/v9/x/liquidvesting/keeper"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
@@ -120,6 +123,7 @@ type AppKeepers struct {
 	UpgradeKeeper         *upgradekeeper.Keeper
 	ParamsKeeper          paramskeeper.Keeper
 	WasmKeeper            wasmkeeper.Keeper
+	ContractKeeper        *wasmkeeper.PermissionedKeeper
 	EvidenceKeeper        evidencekeeper.Keeper
 	AuthzKeeper           authzkeeper.Keeper
 	ConsensusParamsKeeper consensusparamkeeper.Keeper
@@ -135,6 +139,7 @@ type AppKeepers struct {
 	TransferKeeper  ibctransferkeeper.Keeper
 	PFMRouterKeeper *pfmrouterkeeper.Keeper
 	RateLimitKeeper *ratelimitkeeper.Keeper
+	IBCHooksKeeper  *ibchookskeeper.Keeper
 
 	// ICS
 	ProviderKeeper icsproviderkeeper.Keeper
@@ -540,12 +545,19 @@ func NewAppKeeper(
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 		wasmOpts...,
 	)
-	contractKeeper := wasmkeeper.NewDefaultPermissionKeeper(appKeepers.WasmKeeper)
-	appKeepers.TokenFactoryKeeper.SetContractKeeper(contractKeeper)
+	appKeepers.ContractKeeper = wasmkeeper.NewDefaultPermissionKeeper(appKeepers.WasmKeeper)
+	appKeepers.TokenFactoryKeeper.SetContractKeeper(appKeepers.ContractKeeper)
 
 	// ----------------------
 	// --- Custom modules ---
 	// ----------------------
+
+	appKeepers.IBCHooksKeeper = ibchookskeeper.NewKeeper(
+		appKeepers.keys[ibchookstypes.StoreKey],
+		appKeepers.GetSubspace(ibchookstypes.ModuleName),
+		appKeepers.IBCKeeper.ChannelKeeper,
+		appKeepers.ContractKeeper,
+	)
 
 	// Custom modules
 	appKeepers.ServicesKeeper = serviceskeeper.NewKeeper(
@@ -682,6 +694,16 @@ func NewAppKeeper(
 		appKeepers.IBCFeeKeeper,
 	)
 
+	// Osmosis' wasm IBC hooks
+	milkPrefix := sdk.GetConfig().GetBech32AccountAddrPrefix()
+	wasmHooks := ibchooks.NewWasmHooks(appKeepers.IBCHooksKeeper, &appKeepers.WasmKeeper, milkPrefix)
+	ibcHooksMiddleWare := ibchooks.NewICS4Middleware(
+		appKeepers.IBCKeeper.ChannelKeeper,
+		&wasmHooks,
+	)
+
+	transferStack = ibchooks.NewIBCMiddleware(transferStack, &ibcHooksMiddleWare)
+
 	var wasmStack porttypes.IBCModule
 	wasmStack = wasm.NewIBCHandler(appKeepers.WasmKeeper, appKeepers.IBCKeeper.ChannelKeeper, appKeepers.IBCFeeKeeper)
 	wasmStack = ibcfee.NewIBCMiddleware(wasmStack, appKeepers.IBCFeeKeeper)
@@ -727,6 +749,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(ratelimittypes.ModuleName).WithKeyTable(ratelimittypes.ParamKeyTable())
 	paramsKeeper.Subspace(providertypes.ModuleName).WithKeyTable(providertypes.ParamKeyTable())
 	paramsKeeper.Subspace(wasmtypes.ModuleName)
+	paramsKeeper.Subspace(ibchookstypes.ModuleName)
 
 	return paramsKeeper
 }

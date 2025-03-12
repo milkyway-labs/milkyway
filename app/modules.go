@@ -67,6 +67,8 @@ import (
 	"github.com/milkyway-labs/milkyway/v9/x/assets"
 	assetstypes "github.com/milkyway-labs/milkyway/v9/x/assets/types"
 	"github.com/milkyway-labs/milkyway/v9/x/bank"
+	ibchooks "github.com/milkyway-labs/milkyway/v9/x/ibc-hooks"
+	ibchookstypes "github.com/milkyway-labs/milkyway/v9/x/ibc-hooks/types"
 	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
 	"github.com/milkyway-labs/milkyway/v9/x/operators"
@@ -100,6 +102,9 @@ var MaccPerms = map[string][]string{
 
 	// Skip
 	oracletypes.ModuleName: nil,
+
+	// Osmosis IBC hooks
+	ibchookstypes.ModuleName: nil,
 
 	// MilkyWay permissions
 	rewardstypes.RewardsPoolName:  nil,
@@ -151,6 +156,7 @@ func appModules(
 		app.PFMRouterModule,
 		app.RateLimitModule,
 		app.ProviderModule,
+		ibchooks.NewAppModule(app.AccountKeeper, *app.IBCHooksKeeper),
 
 		// MilkyWay modules
 		services.NewAppModule(appCodec, app.ServicesKeeper, app.AccountKeeper, app.BankKeeper),
@@ -371,6 +377,8 @@ func orderInitBlockers() []string {
 		providertypes.ModuleName,
 		consensusparamtypes.ModuleName,
 		wasmtypes.ModuleName,
+		ibchookstypes.ModuleName,
+
 		// crisis needs to be last so that the genesis state is consistent
 		// when it checks invariants
 		crisistypes.ModuleName,
