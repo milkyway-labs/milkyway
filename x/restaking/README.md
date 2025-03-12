@@ -136,7 +136,7 @@ unbonding delegation.
 OperatorDelegation stores the delegation made by a user toward an operator. It allows to obtain all the user's
 delegation toward an operator and to quick check if a user has delegated toward a specific operator.
 
-* PoolDelegation: `0xb1 | UserAddr | OperatorID -> ProtocolBuffer(Delegation)`
+* OperatorDelegation: `0xb1 | UserAddr | OperatorID -> ProtocolBuffer(Delegation)`
 
 ### Operator delegations by operator ID
 
