@@ -68,21 +68,22 @@ is incremented every time a new unbonding operation (pool undelegation, service 
 
 ### Unbonding index
 
-UnbondingIndex stores indexes that are used to obtain the key of a `UnbondingDelegation` given 
-an `UnbondingID`.
+`UnbondingIndex` maintains indexes used to acquire the key of a `UnbondingDelegation` based on its unique identifier, `UnbondingID`.
 
 * UnbondingIndex: `0x02 | UnbondingID -> UnbondingDelegationKey`  
 
 ### Unbonding type
 
-UnbondingType stores the type of a `UnbondingDelegation`.
-This allow to know to which target the `UnbondingDelegation` refers to.
+UnbondingType represents the type of a `UnbondingDelegation`,
+indicating to which entity (pool, operator, or service) the unbonding delegation is related.  
+This information can be used to determine the appropriate actions to take when a `UnbondingDelegation` 
+has completed and the funds should be returned to the user's account.
 
 * UnbondingType: `0x03 | UnbondingID -> TargetID`
 
  ### Operator joined services
 
-OperatorJoinedServices stores which services an operator has joined.
+OperatorJoinedServices maintains a record of the services that an operator has joined.
 
 * OperatorJoinedServices: `collections.NewIndexedMap(0x13)`
 
@@ -101,7 +102,7 @@ ServiceSecuringPools stores from which pools a service is borrowing security.
 
 ### Service joined by operator
 
-ServiceJoinedByOperator stores the indexs to perform a reverse lookup of 
+ServiceJoinedByOperator stores the indexes to perform a reverse lookup of 
 [Operator joined services](#operator-joined-services).
 It allows to obtain the list of operators that have joined a specific service.
 
@@ -109,7 +110,7 @@ It allows to obtain the list of operators that have joined a specific service.
 
 ### Pool delegation
 
-PoolDelegation stores the delegation made toward a pool by a user.
+PoolDelegation stores the delegation made by a user toward a pool.
 It allows to obtain all the user's delegation toward a pool and to quick check 
 if a user has delegated toward a specific pool.
 
@@ -125,13 +126,13 @@ It allows to perform a reverse lookup of [Pool delegation](#pool-delegation).
 ### Pool unbonding delegation
 
 PoolUnbondingDelegation stores the pools unbonding delegation made by a user.
-It allows to obtain an user's pool unbonding delegation.
+It allows to obtain a user's pool unbonding delegation.
 
 * PoolUnbondingDelegation: `0xa3 | UserAddr | PoolID -> ProtocolBuffer(UnbondingDelegation)`
 
 ### Operator delegation
 
-OperatorDelegation stores the delegation made toward an operator by a user.
+OperatorDelegation stores the delegation made by a user toward an operator.
 It allows to obtain all the user's delegation toward an operator and to quick check 
 if a user has delegated toward a specific operator.
 
@@ -154,7 +155,7 @@ It allows to obtain an user's operator unbonding delegation.
 
 ### Service delegation
 
-ServiceDelegation stores the delegation made toward a service by a user.
+ServiceDelegation stores the delegation made by a user toward a service.
 It allows to obtain all the user's delegation toward a service and to quick check 
 if a user has delegated toward a specific service.
 
@@ -196,7 +197,7 @@ When a delegation occurs the target object is affected together with the
 internal state of the module.
 The target object can be a `Pool`, `Operator` or `Service`.
 
-* determine the delegators shares based on tokens delegated and the target's exchange rate
+* determine the delegators shares based on the tokens delegated and the total amount of tokens delegated toward the target
 * creates a new `Delegation` or update an existing one with the computed shares
 * move the tokens from the delegator account to the target's account
 * store the `Delegation` object in the target's delegation store (`PoolDelegation`, `OperatorDelegation` or `ServiceDelegation`)
@@ -207,14 +208,14 @@ The target object can be a `Pool`, `Operator` or `Service`.
 When a user perform an `UndelegatePool`, `UndelegateOperator` or `UndelegateService` 
 the following operations occur:
 
-* determines the shares based the amount of tokens that the user want to undelegate
+* determine the shares based the amount of tokens that the user want to undelegate
 * subtract the computed shares from the `Delegation` object. In case the final shares are 
 0 the `Delegation` object will be removed
 * subtract the undelegated tokens from the `Target` total delegated tokens
-* computes the time when the undelegated tokens will be returned to the users
+* computes the time when the undelegated tokens will be returned to the user
 * increments the `UnbondingID`
 * creates a new `UnbondingDelegation` or obtain an existing `UnbondingDelegation` in case 
-the user was already undelegating some tokens from that target
+the user was already undelegating some tokens from the target
 * adds a new `UnbondingDelegationEntry` to the `UnbondingDelegation`
 * stores the `UnbondingDelegation`, this is stored in `UserPoolUnbondingDelegation` for 
 pools, `UserOperatorUnbondingDelegation` for operators and `UserServiceUnbondingDelegation` for services
@@ -225,7 +226,7 @@ pools, `UserOperatorUnbondingDelegation` for operators and `UserServiceUnbonding
 
 When an `UnbondingDelegationEntry` matures the following operations occur:
 
-* removes the index that associates the `UnbondigID` with the `UnbondingDelegation` object
+* remove the index that associates the `UnbondigID` with the `UnbondingDelegation` object
 * transfer the unbonded tokens from the target to the user
 * removes the `UnbondingDelegationEntry` from the `UnbondingDelegation` object
 * store the updated `UnbondingDelegation` or deletes in case the removed `UnbondingDelegationEntry` was the last one
