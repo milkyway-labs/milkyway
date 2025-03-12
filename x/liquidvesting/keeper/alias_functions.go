@@ -195,3 +195,8 @@ func (k *Keeper) GetPreviousDelegationTokens(
 	}
 	return tokens.Tokens, nil
 }
+
+// RemovePreviousDelegationTokens removes the cache of the previous delegation.
+func (k *Keeper) RemovePreviousDelegationTokens(ctx context.Context, user string, delType restakingtypes.DelegationType, targetID uint32) error {
+	return k.PreviousDelegationsTokens.Remove(ctx, collections.Join3(user, int32(delType), targetID))
+}

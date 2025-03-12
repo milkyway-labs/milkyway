@@ -114,6 +114,10 @@ func (h RestakingHooks) AfterDelegationModified(ctx context.Context, delType res
 	if err != nil {
 		return err
 	}
+	err = h.RemovePreviousDelegationTokens(ctx, delegator, delType, targetID)
+	if err != nil {
+		return err
+	}
 
 	// Calculate the previous active locked tokens before modifying the delegation.
 	target, err := h.restakingKeeper.GetDelegationTarget(ctx, delegation.Type, delegation.TargetID)
