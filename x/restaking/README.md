@@ -53,6 +53,7 @@ from which pool they may borrow security.
 * [End-Block](#end-block)
    * [Unbonding Delegations](#unbonding-delegations)
 * [Hooks](#hooks)
+* [Events]
 
 ## State
 
@@ -476,3 +477,119 @@ The following hooks can registered with restaking:
     * called after a new `UnbondingDelegation` is created
 * `AfterUserPreferencesModified(ctx context.Context, userAddress string, oldPreferences, newPreferences UserPreferences) error`
     * called after an user's preferences are modified
+
+## Events
+
+The restaking module emits the following events:
+
+### EndBlocker
+
+| Type                  | Attribute Key         | Attribute Value                 |
+| --------------------- | --------------------- | ------------------------------- |
+| complete_unbonding    | amount                | {totalUnbondingAmount}          |
+| complete_unbonding    | unbonding_delegation  | {unbondingDelegationTargetType} |
+| complete_redelegation | target_id             | {delegationTargetId}            |
+| complete_unbonding    | delegator             | {delegatorAddress}              |
+
+### MsgJoinService
+
+| Type            | Attribute Key    | Attribute Value   |
+| --------------- | ---------------- | ----------------- |
+| join_service    | operator_id      | {operatorId}      |
+| join_service    | service_id       | {serviceId}       |
+
+### MsgLeaveService
+
+| Type            | Attribute Key    | Attribute Value   |
+| --------------- | ---------------- | ----------------- |
+| leave_service   | operator_id      | {operatorId}      |
+| leave_service   | service_id       | {serviceId}       |
+
+### MsgAddOperatorToAllowList
+
+| Type            | Attribute Key    | Attribute Value   |
+| --------------- | ---------------- | ----------------- |
+| allow_operator  | operator_id      | {operatorId}      |
+| allow_operator  | service_id       | {serviceId}       |
+
+### MsgRemoveOperatorFromAllowlist
+
+| Type                     | Attribute Key    | Attribute Value   |
+| ------------------------ | ---------------- | ----------------- |
+| remove_allowed_operator  | operator_id      | {operatorId}      |
+| remove_allowed_operator  | service_id       | {serviceId}       |
+
+ 
+### MsgBorrowPoolSecurity
+
+| Type                  | Attribute Key    | Attribute Value   |
+| --------------------- | ---------------- | ----------------- |
+| borrow_pool_security  | service_id       | {serviceId}       |
+| borrow_pool_security  | pool_id          | {poolId}          |
+
+### MsgCeasePoolSecurityBorrow
+
+| Type                        | Attribute Key    | Attribute Value   |
+| --------------------------- | ---------------- | ----------------- |
+| cease_pool_security_borrow  | service_id       | {serviceId}       |
+| cease_pool_security_borrow  | pool_id          | {poolId}          |
+
+### MsgDelegatePool
+
+| Type           | Attribute Key    | Attribute Value    |
+| -------------- | ---------------- | ------------------ |
+| delegate_pool  | delegator        | {delegatorAddress} |
+| delegate_pool  | amount           | {delegationAmount} |
+| delegate_pool  | new_shares       | {newShares}        |
+
+### MsgUndelegatePool
+
+| Type         | Attribute Key    | Attribute Value    |
+| ------------ | ---------------- | ------------------ |
+| unbond_pool  | amount           | {unbondAmount}     |
+| unbond_pool  | delegator        | {delegatorAddress} |
+| unbond_pool  | completion_time  | {completionTime}   |
+
+### MsgDelegateOperator
+
+| Type               | Attribute Key    | Attribute Value    |
+| ------------------ | ---------------- | ------------------ |
+| delegate_operator  | delegator        | {delegatorAddress} |
+| delegate_operator  | operator_id      | {operatorID}       |
+| delegate_operator  | amount           | {delegationAmount} |
+| delegate_operator  | new_shares       | {newShares}        |
+
+### MsgUndelegateOperator
+
+| Type            | Attribute Key    | Attribute Value    |
+| --------------- | ---------------- | ------------------ |
+| unbond_operator | amount           | {unbondAmount}     |
+| unbond_operator | delegator        | {delegatorAddress} |
+| unbond_operator | operator_id      | {operatorID}       |
+| unbond_operator | completion_time  | {completionTime}   |
+
+### MsgDelegateService
+
+| Type             | Attribute Key    | Attribute Value    |
+| ---------------- | ---------------- | ------------------ |
+| delegate_service | delegator        | {delegatorAddress} |
+| delegate_service | service_id       | {serviceID}        |
+| delegate_service | amount           | {delegationAmount} |
+| delegate_service | new_shares       | {newShares}        |
+
+### MsgUndelegateService
+
+| Type           | Attribute Key    | Attribute Value    |
+| -------------- | ---------------- | ------------------ |
+| unbond_service | amount           | {unbondAmount}     |
+| unbond_service | delegator        | {delegatorAddress} |
+| unbond_service | service_id       | {serviceID}        |
+| unbond_service | completion_time  | {completionTime}   |
+
+### MsgSetUserPreferences
+
+| Type                 | Attribute Key    | Attribute Value    |
+| -------------------- | ---------------- | ------------------ |
+| set_user_preferences | user             | {userAddress}      |
+
+
