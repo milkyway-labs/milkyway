@@ -35,7 +35,10 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 		}
 	}
 
-	// Initialize lookup table for delegator addresses
+	// Initialize lookup table for delegator addresses. Note that this should be done
+	// manually in the investors module, because the distribution module's
+	// AfterSetWithdrawAddress hook is not called when initializing the distribution
+	// module from genesis state.
 	k.distrKeeper.IterateDelegatorWithdrawAddrs(ctx, func(del, addr sdk.AccAddress) (stop bool) {
 		var delegator, withdrawAddr string
 		delegator, err = k.accountKeeper.AddressCodec().BytesToString(del)

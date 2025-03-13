@@ -49,7 +49,7 @@ func (suite *KeeperTestSuite) TestInvestorsRewardRatio() {
 
 			ctx := suite.ctx.WithBlockTime(time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC))
 
-			err := suite.k.UpdateInvestorsRewardRatio(ctx, tc.investorsRewardRatio)
+			err := suite.k.SetInvestorsRewardRatio(ctx, tc.investorsRewardRatio)
 			suite.Require().NoError(err)
 
 			normalAddr := testutil.TestAddress(1)
@@ -93,7 +93,7 @@ func (suite *KeeperTestSuite) TestCommunityPool() {
 	ctx, _ := suite.ctx.CacheContext()
 	ctx = suite.ctx.WithBlockTime(time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC))
 
-	err := suite.k.UpdateInvestorsRewardRatio(ctx, utils.MustParseDec("0.5")) // 50%
+	err := suite.k.SetInvestorsRewardRatio(ctx, utils.MustParseDec("0.5")) // 50%
 	suite.Require().NoError(err)
 
 	normalAddr := testutil.TestAddress(1)
@@ -145,7 +145,7 @@ func (suite *KeeperTestSuite) TestUpdateInvestorsRewardRatio() {
 	ctx, _ := suite.ctx.CacheContext()
 	ctx = ctx.WithBlockTime(time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC))
 
-	err := suite.k.UpdateInvestorsRewardRatio(ctx, utils.MustParseDec("0.5")) // 50%
+	err := suite.k.SetInvestorsRewardRatio(ctx, utils.MustParseDec("0.5")) // 50%
 	suite.Require().NoError(err)
 
 	valOwnerAddr := testutil.TestAddress(10000)
@@ -193,7 +193,7 @@ func (suite *KeeperTestSuite) TestVestingEndedInvestorsReward() {
 	ctx, _ := suite.ctx.CacheContext()
 	ctx = ctx.WithBlockTime(time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC))
 
-	err := suite.k.UpdateInvestorsRewardRatio(ctx, utils.MustParseDec("0.5")) // 50%
+	err := suite.k.SetInvestorsRewardRatio(ctx, utils.MustParseDec("0.5")) // 50%
 	suite.Require().NoError(err)
 
 	valOwnerAddr := testutil.TestAddress(10000)
