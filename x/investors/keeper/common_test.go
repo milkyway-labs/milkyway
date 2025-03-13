@@ -21,10 +21,10 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/stretchr/testify/suite"
 
-	distrkeeper "github.com/milkyway-labs/milkyway/v9/x/distribution/keeper"
-	"github.com/milkyway-labs/milkyway/v9/x/investors"
-	"github.com/milkyway-labs/milkyway/v9/x/investors/keeper"
-	"github.com/milkyway-labs/milkyway/v9/x/investors/testutils"
+	distrkeeper "github.com/milkyway-labs/milkyway/v10/x/distribution/keeper"
+	"github.com/milkyway-labs/milkyway/v10/x/investors"
+	"github.com/milkyway-labs/milkyway/v10/x/investors/keeper"
+	"github.com/milkyway-labs/milkyway/v10/x/investors/testutils"
 )
 
 func TestKeeperTestSuite(t *testing.T) {

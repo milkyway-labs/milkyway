@@ -3,8 +3,8 @@ package keeper_test
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v9/x/services/keeper"
-	"github.com/milkyway-labs/milkyway/v9/x/services/types"
+	"github.com/milkyway-labs/milkyway/v10/x/services/keeper"
+	"github.com/milkyway-labs/milkyway/v10/x/services/types"
 )
 
 func (suite *KeeperTestSuite) TestValidServicesInvariant() {

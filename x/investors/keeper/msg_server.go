@@ -6,7 +6,7 @@ import (
 	"cosmossdk.io/errors"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
-	"github.com/milkyway-labs/milkyway/v9/x/investors/types"
+	"github.com/milkyway-labs/milkyway/v10/x/investors/types"
 )
 
 var _ types.MsgServer = msgServer{}

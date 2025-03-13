@@ -5,10 +5,10 @@ import (
 
 	"cosmossdk.io/collections"
 
-	"github.com/milkyway-labs/milkyway/v9/app/testutil"
-	"github.com/milkyway-labs/milkyway/v9/utils"
-	rewardskeeper "github.com/milkyway-labs/milkyway/v9/x/rewards/keeper"
-	"github.com/milkyway-labs/milkyway/v9/x/rewards/types"
+	"github.com/milkyway-labs/milkyway/v10/app/testutil"
+	"github.com/milkyway-labs/milkyway/v10/utils"
+	rewardskeeper "github.com/milkyway-labs/milkyway/v10/x/rewards/keeper"
+	"github.com/milkyway-labs/milkyway/v10/x/rewards/types"
 )
 
 func (suite *KeeperTestSuite) TestCreateRewardsPlan_PoolOrOperatorNotFound() {

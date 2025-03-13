@@ -4,10 +4,11 @@ import (
 	"context"
 
 	upgradetypes "cosmossdk.io/x/upgrade/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milkyway/v9/app/keepers"
-	investorstypes "github.com/milkyway-labs/milkyway/v9/x/investors/types"
+	"github.com/milkyway-labs/milkyway/v10/app/keepers"
+	ibchookstypes "github.com/milkyway-labs/milkyway/v10/x/ibc-hooks/types"
 )
 
 func CreateUpgradeHandler(
@@ -21,13 +22,9 @@ func CreateUpgradeHandler(
 			return nil, err
 		}
 
-		// Set the default investors parameters
-		err = keepers.InvestorsKeeper.UpdateInvestorsRewardRatio(ctx, investorstypes.DefaultInvestorsRewardRatio)
-		if err != nil {
-			return nil, err
-		}
-		// Create the module account if it doesn't exist
-		keepers.AccountKeeper.GetModuleAccount(ctx, investorstypes.ModuleName)
+		// Set the default ibchooks parameters
+		sdkCtx := sdk.UnwrapSDKContext(ctx)
+		keepers.IBCHooksKeeper.SetParams(sdkCtx, ibchookstypes.DefaultParams())
 
 		return vm, nil
 	}

@@ -56,13 +56,13 @@ import (
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	oracleconfig "github.com/skip-mev/connect/v2/oracle/config"
 
-	genutilcli "github.com/milkyway-labs/milkyway/v9/x/genutil/client/cli"
+	genutilcli "github.com/milkyway-labs/milkyway/v10/x/genutil/client/cli"
 
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
-	milkyway "github.com/milkyway-labs/milkyway/v9/app"
+	milkyway "github.com/milkyway-labs/milkyway/v10/app"
 )
 
 // NewRootCmd creates a new root command for simd. It is called once in the

@@ -3,7 +3,7 @@ package keeper
 import (
 	"context"
 
-	"github.com/milkyway-labs/milkyway/v9/x/investors/types"
+	"github.com/milkyway-labs/milkyway/v10/x/investors/types"
 )
 
 // DistributeVestingInvestorsRewards distributes the redirected staking rewards

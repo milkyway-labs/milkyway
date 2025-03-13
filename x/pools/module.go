@@ -17,10 +17,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milkyway/v9/x/pools/client/cli"
+	"github.com/milkyway-labs/milkyway/v10/x/pools/client/cli"
 
-	"github.com/milkyway-labs/milkyway/v9/x/pools/keeper"
-	"github.com/milkyway-labs/milkyway/v9/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v10/x/pools/keeper"
+	"github.com/milkyway-labs/milkyway/v10/x/pools/types"
 )
 
 const (

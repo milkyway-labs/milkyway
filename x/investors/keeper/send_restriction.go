@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 
-	"github.com/milkyway-labs/milkyway/v9/x/investors/types"
+	"github.com/milkyway-labs/milkyway/v10/x/investors/types"
 )
 
 // SendRestrictionFn function that can be used in the x/bank module to intercept

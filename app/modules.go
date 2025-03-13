@@ -63,25 +63,27 @@ import (
 	"github.com/CosmWasm/wasmd/x/wasm"
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 
-	"github.com/milkyway-labs/milkyway/v9/x/assets"
-	assetstypes "github.com/milkyway-labs/milkyway/v9/x/assets/types"
-	"github.com/milkyway-labs/milkyway/v9/x/bank"
-	distr "github.com/milkyway-labs/milkyway/v9/x/distribution"
-	investorstypes "github.com/milkyway-labs/milkyway/v9/x/investors/types"
-	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting"
-	liquidvestingtypes "github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
-	"github.com/milkyway-labs/milkyway/v9/x/operators"
-	operatorstypes "github.com/milkyway-labs/milkyway/v9/x/operators/types"
-	"github.com/milkyway-labs/milkyway/v9/x/pools"
-	poolstypes "github.com/milkyway-labs/milkyway/v9/x/pools/types"
-	"github.com/milkyway-labs/milkyway/v9/x/restaking"
-	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
-	"github.com/milkyway-labs/milkyway/v9/x/rewards"
-	rewardstypes "github.com/milkyway-labs/milkyway/v9/x/rewards/types"
-	"github.com/milkyway-labs/milkyway/v9/x/services"
-	servicestypes "github.com/milkyway-labs/milkyway/v9/x/services/types"
-	"github.com/milkyway-labs/milkyway/v9/x/tokenfactory"
-	tokenfactorytypes "github.com/milkyway-labs/milkyway/v9/x/tokenfactory/types"
+	"github.com/milkyway-labs/milkyway/v10/x/assets"
+	assetstypes "github.com/milkyway-labs/milkyway/v10/x/assets/types"
+	"github.com/milkyway-labs/milkyway/v10/x/bank"
+	distr "github.com/milkyway-labs/milkyway/v10/x/distribution"
+	ibchooks "github.com/milkyway-labs/milkyway/v10/x/ibc-hooks"
+	ibchookstypes "github.com/milkyway-labs/milkyway/v10/x/ibc-hooks/types"
+	investorstypes "github.com/milkyway-labs/milkyway/v10/x/investors/types"
+	"github.com/milkyway-labs/milkyway/v10/x/liquidvesting"
+	liquidvestingtypes "github.com/milkyway-labs/milkyway/v10/x/liquidvesting/types"
+	"github.com/milkyway-labs/milkyway/v10/x/operators"
+	operatorstypes "github.com/milkyway-labs/milkyway/v10/x/operators/types"
+	"github.com/milkyway-labs/milkyway/v10/x/pools"
+	poolstypes "github.com/milkyway-labs/milkyway/v10/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v10/x/restaking"
+	restakingtypes "github.com/milkyway-labs/milkyway/v10/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v10/x/rewards"
+	rewardstypes "github.com/milkyway-labs/milkyway/v10/x/rewards/types"
+	"github.com/milkyway-labs/milkyway/v10/x/services"
+	servicestypes "github.com/milkyway-labs/milkyway/v10/x/services/types"
+	"github.com/milkyway-labs/milkyway/v10/x/tokenfactory"
+	tokenfactorytypes "github.com/milkyway-labs/milkyway/v10/x/tokenfactory/types"
 )
 
 var MaccPerms = map[string][]string{
@@ -101,6 +103,9 @@ var MaccPerms = map[string][]string{
 
 	// Skip
 	oracletypes.ModuleName: nil,
+
+	// Osmosis IBC hooks
+	ibchookstypes.ModuleName: nil,
 
 	// MilkyWay permissions
 	rewardstypes.RewardsPoolName:  nil,
@@ -153,6 +158,7 @@ func appModules(
 		app.PFMRouterModule,
 		app.RateLimitModule,
 		app.ProviderModule,
+		ibchooks.NewAppModule(app.AccountKeeper, *app.IBCHooksKeeper),
 
 		// MilkyWay modules
 		services.NewAppModule(appCodec, app.ServicesKeeper, app.AccountKeeper, app.BankKeeper),
@@ -374,6 +380,8 @@ func orderInitBlockers() []string {
 		providertypes.ModuleName,
 		consensusparamtypes.ModuleName,
 		wasmtypes.ModuleName,
+		ibchookstypes.ModuleName,
+
 		// crisis needs to be last so that the genesis state is consistent
 		// when it checks invariants
 		crisistypes.ModuleName,

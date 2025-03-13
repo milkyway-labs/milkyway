@@ -22,7 +22,7 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	oracleconfig "github.com/skip-mev/connect/v2/oracle/config"
 
-	milkywayapp "github.com/milkyway-labs/milkyway/v9/app"
+	milkywayapp "github.com/milkyway-labs/milkyway/v10/app"
 )
 
 func Setup(isCheckTx bool, homePath string) *milkywayapp.MilkyWayApp {

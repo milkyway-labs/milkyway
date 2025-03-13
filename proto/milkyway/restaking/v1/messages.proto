@@ -10,7 +10,7 @@ import "google/protobuf/timestamp.proto";
 import "milkyway/restaking/v1/models.proto";
 import "milkyway/restaking/v1/params.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v9/x/restaking/types";
+option go_package = "github.com/milkyway-labs/milkyway/v10/x/restaking/types";
 
 // Msg defines the restaking module's gRPC message service.
 service Msg {
