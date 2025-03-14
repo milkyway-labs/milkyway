@@ -7,7 +7,7 @@ import (
 	investorstypes "github.com/milkyway-labs/milkyway/v10/x/investors/types"
 )
 
-const UpgradeName = "v10"
+const UpgradeName = "v11"
 
 var Upgrade = upgrades.Upgrade{
 	UpgradeName:          UpgradeName,
