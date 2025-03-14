@@ -25,7 +25,7 @@ func CreateUpgradeHandler(
 		keepers.AccountKeeper.GetModuleAccount(ctx, investorstypes.ModuleName)
 
 		// TODO: specify vesting investors list
-		//keepers.InvestorsKeeper.SetVestingInvestor(ctx, "...")
+		// keepers.InvestorsKeeper.SetVestingInvestor(ctx, "...")
 
 		// Set the default investors parameters. Note that it uses
 		// UpdateInvestorsRewardRatio instead of SetInvestorsRewardRatio, just in case
