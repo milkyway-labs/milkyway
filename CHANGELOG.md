@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 -->
 
+## Version 10.1.0
+### Dependencies
+- ([\#268](https://github.com/milkyway-labs/milkyway/pull/268)) Updated `github.com/ibc-go/ibc` to `v8.7.0`
+
 ## Version 10.0.0
 ### Features
 #### Other
