@@ -1,0 +1,43 @@
+syntax = "proto3";
+package milkyway.investors.v1;
+
+import "amino/amino.proto";
+import "cosmos/msg/v1/msg.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/v9/x/investors/types";
+
+// Msg defines the investors module's gRPC message service.
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+  // UpdateInvestorsRewardRatio defines a (governance) operation for updating
+  // the investors reward ratio. The authority defaults to the x/gov module
+  // account.
+  rpc UpdateInvestorsRewardRatio(MsgUpdateInvestorsRewardRatio) returns (MsgUpdateInvestorsRewardRatioResponse);
+}
+
+// MsgUpdateInvestorsRewardRatio defines the message structure for the
+// UpdateInvestorsRewardRatio gRPC service method. It allows the authority to
+// update the investors reward ratio.
+message MsgUpdateInvestorsRewardRatio {
+  option (cosmos.msg.v1.signer) = "authority";
+  option (amino.name) = "milkyway/MsgUpdateInvestorsRewardRatio";
+
+  // Authority is the address that controls the module (defaults to x/gov unless
+  // overwritten).
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+
+  // InvestorsRewardRatio defines the proportion of staking rewards allocated to
+  // vesting investors relative to normal users.
+  string investors_reward_ratio = 2 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+// MsgUpdateInvestorsRewardRatioResponse is the return value of
+// MsgUpdateInvestorsRewardRatio.
+message MsgUpdateInvestorsRewardRatioResponse {}
