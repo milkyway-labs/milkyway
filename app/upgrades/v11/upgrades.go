@@ -21,13 +21,19 @@ func CreateUpgradeHandler(
 			return nil, err
 		}
 
-		// Set the default investors parameters
+		// Create the module account if it doesn't exist
+		keepers.AccountKeeper.GetModuleAccount(ctx, investorstypes.ModuleName)
+
+		// TODO: specify vesting investors list
+		//keepers.InvestorsKeeper.SetVestingInvestor(ctx, "...")
+
+		// Set the default investors parameters. Note that it uses
+		// UpdateInvestorsRewardRatio instead of SetInvestorsRewardRatio, just in case
+		// the investors were already delegating.
 		err = keepers.InvestorsKeeper.UpdateInvestorsRewardRatio(ctx, investorstypes.DefaultInvestorsRewardRatio)
 		if err != nil {
 			return nil, err
 		}
-		// Create the module account if it doesn't exist
-		keepers.AccountKeeper.GetModuleAccount(ctx, investorstypes.ModuleName)
 
 		return vm, nil
 	}
