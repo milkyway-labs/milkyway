@@ -6,11 +6,11 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v9/utils"
-	operatorstypes "github.com/milkyway-labs/milkyway/v9/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v9/x/pools/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v9/x/services/types"
+	"github.com/milkyway-labs/milkyway/v10/utils"
+	operatorstypes "github.com/milkyway-labs/milkyway/v10/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v10/x/pools/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v10/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v10/x/services/types"
 )
 
 // CanCoverDecCoins returns whether the insurance fund can cover the provided dec

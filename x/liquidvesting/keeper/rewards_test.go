@@ -5,10 +5,10 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v9/app/testutil"
-	"github.com/milkyway-labs/milkyway/v9/utils"
-	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
-	rewardstypes "github.com/milkyway-labs/milkyway/v9/x/rewards/types"
+	"github.com/milkyway-labs/milkyway/v10/app/testutil"
+	"github.com/milkyway-labs/milkyway/v10/utils"
+	restakingtypes "github.com/milkyway-labs/milkyway/v10/x/restaking/types"
+	rewardstypes "github.com/milkyway-labs/milkyway/v10/x/rewards/types"
 )
 
 func (suite *KeeperTestSuite) TestCoveredLockedSharesRewards() {

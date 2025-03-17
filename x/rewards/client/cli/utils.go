@@ -10,8 +10,8 @@ import (
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
-	"github.com/milkyway-labs/milkyway/v9/x/rewards/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v10/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v10/x/rewards/types"
 )
 
 type rewardsPlanJSON struct {

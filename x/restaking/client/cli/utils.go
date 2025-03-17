@@ -3,9 +3,9 @@ package cli
 import (
 	"strings"
 
-	poolstypes "github.com/milkyway-labs/milkyway/v9/x/pools/types"
-	"github.com/milkyway-labs/milkyway/v9/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v9/x/services/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v10/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v10/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v10/x/services/types"
 )
 
 // ParseTrustedServiceEntry parses a string into a TrustedServiceEntry.

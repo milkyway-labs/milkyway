@@ -9,7 +9,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
-	"github.com/milkyway-labs/milkyway/v9/x/services/types"
+	"github.com/milkyway-labs/milkyway/v10/x/services/types"
 )
 
 var _ types.MsgServer = msgServer{}
@@ -93,6 +93,7 @@ func (k msgServer) CreateService(goCtx context.Context, msg *types.MsgCreateServ
 		sdk.NewEvent(
 			types.EventTypeCreateService,
 			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", service.ID)),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
 		),
 	})
 
@@ -134,6 +135,7 @@ func (k msgServer) UpdateService(ctx context.Context, msg *types.MsgUpdateServic
 		sdk.NewEvent(
 			types.EventTypeUpdateService,
 			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
 		),
 	})
 
@@ -164,6 +166,7 @@ func (k msgServer) ActivateService(ctx context.Context, msg *types.MsgActivateSe
 		sdk.NewEvent(
 			types.EventTypeActivateService,
 			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
 		),
 	})
 
@@ -195,6 +198,7 @@ func (k msgServer) DeactivateService(ctx context.Context, msg *types.MsgDeactiva
 		sdk.NewEvent(
 			types.EventTypeDeactivateService,
 			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
 		),
 	})
 
@@ -225,6 +229,7 @@ func (k msgServer) DeleteService(ctx context.Context, msg *types.MsgDeleteServic
 		sdk.NewEvent(
 			types.EventTypeDeleteService,
 			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
 		),
 	})
 
@@ -257,6 +262,7 @@ func (k msgServer) TransferServiceOwnership(ctx context.Context, msg *types.MsgT
 			types.EventTypeTransferServiceOwnership,
 			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
 			sdk.NewAttribute(types.AttributeKeyNewAdmin, msg.NewAdmin),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
 		),
 	})
 
@@ -288,6 +294,7 @@ func (k msgServer) SetServiceParams(ctx context.Context, msg *types.MsgSetServic
 		sdk.NewEvent(
 			types.EventTypeSetServiceParams,
 			sdk.NewAttribute(types.AttributeKeyServiceID, fmt.Sprintf("%d", msg.ServiceID)),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
 		),
 	})
 

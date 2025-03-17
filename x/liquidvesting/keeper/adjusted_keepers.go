@@ -3,10 +3,10 @@ package keeper
 import (
 	"context"
 
-	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
-	rewardstypes "github.com/milkyway-labs/milkyway/v9/x/rewards/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v9/x/services/types"
+	"github.com/milkyway-labs/milkyway/v10/x/liquidvesting/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v10/x/restaking/types"
+	rewardstypes "github.com/milkyway-labs/milkyway/v10/x/rewards/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v10/x/services/types"
 )
 
 // AdjustedServicesKeeper wraps around rewardstypes.ServicesKeeper and adjusts

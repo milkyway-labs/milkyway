@@ -1,0 +1,11 @@
+syntax = "proto3";
+package osmosis.ibchooks;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/v10/x/ibc-hooks/types";
+
+message Params {
+  // List of contract addresses allowed to send asynchronous acknowledgments.
+  repeated string allowed_async_ack_contracts = 1 [(gogoproto.moretags) = "yaml:\"allowed_async_ack_contracts\""];
+}

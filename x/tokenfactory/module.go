@@ -22,9 +22,9 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 
-	"github.com/milkyway-labs/milkyway/v9/x/tokenfactory/client/cli"
-	"github.com/milkyway-labs/milkyway/v9/x/tokenfactory/keeper"
-	"github.com/milkyway-labs/milkyway/v9/x/tokenfactory/types"
+	"github.com/milkyway-labs/milkyway/v10/x/tokenfactory/client/cli"
+	"github.com/milkyway-labs/milkyway/v10/x/tokenfactory/keeper"
+	"github.com/milkyway-labs/milkyway/v10/x/tokenfactory/types"
 )
 
 var (

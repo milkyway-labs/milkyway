@@ -3,10 +3,10 @@ package keeper_test
 import (
 	sdkmath "cosmossdk.io/math"
 
-	"github.com/milkyway-labs/milkyway/v9/app/testutil"
-	"github.com/milkyway-labs/milkyway/v9/utils"
-	"github.com/milkyway-labs/milkyway/v9/x/liquidvesting/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v10/app/testutil"
+	"github.com/milkyway-labs/milkyway/v10/utils"
+	"github.com/milkyway-labs/milkyway/v10/x/liquidvesting/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v10/x/restaking/types"
 )
 
 func (suite *KeeperTestSuite) TestRestakingHooks_UpdateTargetCoveredLockedSharesAfterDelegation() {

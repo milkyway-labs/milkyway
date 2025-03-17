@@ -7,7 +7,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
 
-	"github.com/milkyway-labs/milkyway/v9/x/tokenfactory/types"
+	"github.com/milkyway-labs/milkyway/v10/x/tokenfactory/types"
 )
 
 // GetQueryCmd returns the cli query commands for this module

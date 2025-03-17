@@ -8,8 +8,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
-	restakingtypes "github.com/milkyway-labs/milkyway/v9/x/restaking/types"
-	rewardstypes "github.com/milkyway-labs/milkyway/v9/x/rewards/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v10/x/restaking/types"
+	rewardstypes "github.com/milkyway-labs/milkyway/v10/x/rewards/types"
 )
 
 type AccountKeeper interface {

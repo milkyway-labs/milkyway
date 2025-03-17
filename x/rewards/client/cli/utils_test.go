@@ -10,9 +10,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	milkywayapp "github.com/milkyway-labs/milkyway/v9/app"
-	"github.com/milkyway-labs/milkyway/v9/x/rewards/client/cli"
-	"github.com/milkyway-labs/milkyway/v9/x/rewards/types"
+	milkywayapp "github.com/milkyway-labs/milkyway/v10/app"
+	"github.com/milkyway-labs/milkyway/v10/x/rewards/client/cli"
+	"github.com/milkyway-labs/milkyway/v10/x/rewards/types"
 )
 
 func TestCLIUtils_parseRewardsPlan(t *testing.T) {

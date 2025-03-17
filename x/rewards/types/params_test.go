@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/v9/x/rewards/types"
+	"github.com/milkyway-labs/milkyway/v10/x/rewards/types"
 )
 
 func TestParams_Validate(t *testing.T) {

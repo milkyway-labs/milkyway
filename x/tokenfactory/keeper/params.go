@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"github.com/milkyway-labs/milkyway/v9/x/tokenfactory/types"
+	"github.com/milkyway-labs/milkyway/v10/x/tokenfactory/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )

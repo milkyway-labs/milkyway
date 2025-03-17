@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/milkyway-labs/milkyway/v9/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v10/x/pools/types"
 )
 
 var _ types.QueryServer = &Keeper{}

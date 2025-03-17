@@ -9,8 +9,8 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
-	"github.com/milkyway-labs/milkyway/v9/x/rewards/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v9/x/services/types"
+	"github.com/milkyway-labs/milkyway/v10/x/rewards/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v10/x/services/types"
 )
 
 var _ types.MsgServer = msgServer{}
@@ -91,6 +91,7 @@ func (k msgServer) CreateRewardsPlan(ctx context.Context, msg *types.MsgCreateRe
 			types.EventTypeCreateRewardsPlan,
 			sdk.NewAttribute(types.AttributeKeyRewardsPlanID, fmt.Sprint(plan.ID)),
 			sdk.NewAttribute(servicestypes.AttributeKeyServiceID, fmt.Sprint(msg.ServiceID)),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
 		),
 	})
 
@@ -139,6 +140,7 @@ func (k msgServer) EditRewardsPlan(ctx context.Context, msg *types.MsgEditReward
 			types.EventTypeEditRewardsPlan,
 			sdk.NewAttribute(types.AttributeKeyRewardsPlanID, fmt.Sprint(rewardsPlan.ID)),
 			sdk.NewAttribute(servicestypes.AttributeKeyServiceID, fmt.Sprint(rewardsPlan.ServiceID)),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Sender),
 		),
 	})
 
@@ -166,7 +168,6 @@ func (k msgServer) SetWithdrawAddress(ctx context.Context, msg *types.MsgSetWith
 		return nil, err
 	}
 
-	// Emit an event
 	// Emit the event
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sdkCtx.EventManager().EmitEvent(

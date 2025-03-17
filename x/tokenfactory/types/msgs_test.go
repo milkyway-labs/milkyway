@@ -14,8 +14,8 @@ import (
 	"github.com/cosmos/gogoproto/proto"
 	"github.com/stretchr/testify/require"
 
-	appparams "github.com/milkyway-labs/milkyway/v9/app/params"
-	"github.com/milkyway-labs/milkyway/v9/x/tokenfactory/types"
+	appparams "github.com/milkyway-labs/milkyway/v10/app/params"
+	"github.com/milkyway-labs/milkyway/v10/x/tokenfactory/types"
 
 	"github.com/cometbft/cometbft/crypto/ed25519"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"

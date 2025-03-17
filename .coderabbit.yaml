@@ -5,7 +5,7 @@ tone_instructions: ''
 early_access: true
 enable_free_tier: true
 reviews:
-  profile: assertive
+  profile: chill
   request_changes_workflow: true
   high_level_summary: true
   review_status: true
