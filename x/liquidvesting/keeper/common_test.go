@@ -3,6 +3,7 @@ package keeper_test
 import (
 	"fmt"
 	"testing"
+	"time"
 
 	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -184,6 +185,13 @@ func (suite *KeeperTestSuite) registerCurrency(ctx sdk.Context, denom string, ti
 	// Register the currency.
 	err = suite.assetsKeeper.SetAsset(ctx, assetstypes.NewAsset(denom, ticker, exponent))
 	suite.Require().NoError(err)
+}
+
+func (suite *KeeperTestSuite) allocateRewards(ctx sdk.Context, duration time.Duration) sdk.Context {
+	ctx = ctx.WithBlockTime(ctx.BlockTime().Add(duration)).WithBlockHeight(ctx.BlockHeight() + 1)
+	err := suite.rewardsKeeper.AllocateRewards(ctx)
+	suite.Require().NoError(err)
+	return ctx
 }
 
 // ---------------------------------------------
