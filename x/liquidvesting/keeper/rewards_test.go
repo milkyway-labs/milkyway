@@ -362,7 +362,7 @@ func (suite *KeeperTestSuite) TestCoveredLockedSharesRewards_UpdateInsurancePerc
 			},
 		},
 		{
-			name: "delegate, allocate, increase percentage and allocate",
+			name: "delegate, increase percentage and allocate",
 			run: func(ctx sdk.Context) {
 				_, err := suite.restakingKeeper.DelegateToOperator(ctx, 1, utils.MustParseCoins("10000000locked/stake"), delAddr2.String())
 				suite.Require().NoError(err)
