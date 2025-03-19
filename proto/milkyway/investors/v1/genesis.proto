@@ -1,0 +1,28 @@
+syntax = "proto3";
+package milkyway.investors.v1;
+
+import "amino/amino.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/milkyway-labs/milkyway/v9/x/investors/types";
+
+// GenesisState defines the investors module's genesis state.
+message GenesisState {
+  // InvestorsRewardRatio defines the proportion of staking rewards allocated to
+  // vesting investors relative to normal users.
+  string investors_reward_ratio = 1 [
+    (cosmos_proto.scalar) = "cosmos.Dec",
+    (gogoproto.customtype) = "cosmossdk.io/math.LegacyDec",
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+
+  // VestingInvestorsAddresses defines the list of investor addresses that are
+  // still in their vesting period and will receive rewards based on the
+  // InvestorsRewardRatio.
+  repeated string vesting_investors_addresses = 2 [
+    (cosmos_proto.scalar) = "cosmos.AddressString",
+    (amino.dont_omitempty) = true
+  ];
+}

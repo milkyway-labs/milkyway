@@ -44,7 +44,6 @@ import (
 	consensusparamtypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
 	"github.com/cosmos/cosmos-sdk/x/crisis"
 	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
-	distr "github.com/cosmos/cosmos-sdk/x/distribution"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
@@ -67,8 +66,10 @@ import (
 	"github.com/milkyway-labs/milkyway/v10/x/assets"
 	assetstypes "github.com/milkyway-labs/milkyway/v10/x/assets/types"
 	"github.com/milkyway-labs/milkyway/v10/x/bank"
+	distr "github.com/milkyway-labs/milkyway/v10/x/distribution"
 	ibchooks "github.com/milkyway-labs/milkyway/v10/x/ibc-hooks"
 	ibchookstypes "github.com/milkyway-labs/milkyway/v10/x/ibc-hooks/types"
+	investorstypes "github.com/milkyway-labs/milkyway/v10/x/investors/types"
 	"github.com/milkyway-labs/milkyway/v10/x/liquidvesting"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/v10/x/liquidvesting/types"
 	"github.com/milkyway-labs/milkyway/v10/x/operators"
@@ -109,6 +110,7 @@ var MaccPerms = map[string][]string{
 	// MilkyWay permissions
 	rewardstypes.RewardsPoolName:  nil,
 	liquidvestingtypes.ModuleName: {authtypes.Minter, authtypes.Burner},
+	investorstypes.ModuleName:     nil,
 }
 
 func appModules(
@@ -365,6 +367,7 @@ func orderInitBlockers() []string {
 		assetstypes.ModuleName,
 		rewardstypes.ModuleName,
 		liquidvestingtypes.ModuleName,
+		investorstypes.ModuleName,
 
 		// The feemarket module should ideally be initialized before the genutil module in theory:
 		// The feemarket antehandler performs checks in DeliverTx, which is called by gentx.

@@ -72,6 +72,7 @@ import (
 	"github.com/milkyway-labs/milkyway/v10/app/keepers"
 	"github.com/milkyway-labs/milkyway/v10/app/upgrades"
 	v10 "github.com/milkyway-labs/milkyway/v10/app/upgrades/v10"
+	v11 "github.com/milkyway-labs/milkyway/v10/app/upgrades/v11"
 	v6 "github.com/milkyway-labs/milkyway/v10/app/upgrades/v6"
 	v9 "github.com/milkyway-labs/milkyway/v10/app/upgrades/v9"
 	_ "github.com/milkyway-labs/milkyway/v10/client/docs/statik"
@@ -91,6 +92,7 @@ var (
 		v6.Upgrade,
 		v9.Upgrade,
 		v10.Upgrade,
+		v11.Upgrade,
 	}
 )
 

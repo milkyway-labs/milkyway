@@ -67,7 +67,6 @@ import (
 	providertypes "github.com/cosmos/interchain-security/v6/x/ccv/provider/types"
 
 	evidencekeeper "cosmossdk.io/x/evidence/keeper"
-	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
 	govkeeper "github.com/cosmos/cosmos-sdk/x/gov/keeper"
 	mintkeeper "github.com/cosmos/cosmos-sdk/x/mint/keeper"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
@@ -83,9 +82,12 @@ import (
 	assetskeeper "github.com/milkyway-labs/milkyway/v10/x/assets/keeper"
 	assetstypes "github.com/milkyway-labs/milkyway/v10/x/assets/types"
 	bankkeeper "github.com/milkyway-labs/milkyway/v10/x/bank/keeper"
+	distrkeeper "github.com/milkyway-labs/milkyway/v10/x/distribution/keeper"
 	ibchooks "github.com/milkyway-labs/milkyway/v10/x/ibc-hooks"
 	ibchookskeeper "github.com/milkyway-labs/milkyway/v10/x/ibc-hooks/keeper"
 	ibchookstypes "github.com/milkyway-labs/milkyway/v10/x/ibc-hooks/types"
+	investorskeeper "github.com/milkyway-labs/milkyway/v10/x/investors/keeper"
+	investorstypes "github.com/milkyway-labs/milkyway/v10/x/investors/types"
 	"github.com/milkyway-labs/milkyway/v10/x/liquidvesting"
 	liquidvestingkeeper "github.com/milkyway-labs/milkyway/v10/x/liquidvesting/keeper"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/v10/x/liquidvesting/types"
@@ -155,6 +157,7 @@ type AppKeepers struct {
 	AssetsKeeper        *assetskeeper.Keeper
 	RewardsKeeper       *rewardskeeper.Keeper
 	LiquidVestingKeeper *liquidvestingkeeper.Keeper
+	InvestorsKeeper     *investorskeeper.Keeper
 
 	// Modules
 	IBCFeeKeeper    ibcfeekeeper.Keeper
@@ -625,11 +628,23 @@ func NewAppKeeper(
 		govAuthority,
 	)
 
+	appKeepers.InvestorsKeeper = investorskeeper.NewKeeper(
+		appCodec,
+		runtime.NewKVStoreService(appKeepers.keys[investorstypes.StoreKey]),
+		appKeepers.AccountKeeper,
+		appKeepers.BankKeeper,
+		appKeepers.StakingKeeper,
+		appKeepers.DistrKeeper,
+		govAuthority,
+	)
+
 	// Set the restrictions on sending tokens
 	appKeepers.BankKeeper.AppendSendRestriction(appKeepers.LiquidVestingKeeper.SendRestrictionFn)
+	appKeepers.BankKeeper.AppendSendRestriction(appKeepers.InvestorsKeeper.SendRestrictionFn)
 	appKeepers.BankKeeper.SetHooks(appKeepers.TokenFactoryKeeper.Hooks())
 
 	// Set the hooks up to this point
+	appKeepers.DistrKeeper.SetHooks(appKeepers.InvestorsKeeper.Hooks())
 	appKeepers.PoolsKeeper.SetHooks(
 		appKeepers.RewardsKeeper.PoolsHooks(),
 	)
