@@ -23,11 +23,9 @@ jobs:
       - name: Build 🔨
         run: |
           make build-linux
+          mv ./build/milkywayd ./build/milkywayd-${VERSION}-linux-amd64
           SHA256_SUM=$(sha256sum ./build/milkywayd-${VERSION}-linux-amd64 | awk '{ print $1 }')
           echo "SHA256_SUM=${SHA256_SUM}" >> $GITHUB_ENV
-
-      - name: Rename binary 🔨
-        run: mv ./build/milkywayd ./build/milkywayd-${VERSION}-linux-amd64
 
       - name: Generate release notes 📜
         run: |
@@ -37,7 +35,7 @@ jobs:
           echo "" >> release_notes.txt
           echo "\`\`\`" >> release_notes.txt
           echo "Checksum-Sha256:" >> release_notes.txt
-          echo "${SHA256_SUM} milkywayd-${VERSION}-linux-amd64"
+          echo "${SHA256_SUM} milkywayd-${VERSION}-linux-amd64" >> release_notes.txt
           echo "\`\`\`" >> release_notes.txt
 
       - name: Create GitHub Release 📤
