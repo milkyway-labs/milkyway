@@ -124,7 +124,7 @@ func (o Operator) SharesFromTokens(tokens sdk.Coins) (sdk.DecCoins, error) {
 	if o.Tokens.IsZero() {
 		return sdk.NewDecCoins(), ErrInsufficientShares
 	}
-	return utils.SharesFromTokens(tokens, o.GetSharesDenom, o.Tokens, o.DelegatorShares)
+	return utils.SharesFromTokens(tokens, o.GetSharesDenom, o.Tokens, o.DelegatorShares), nil
 }
 
 // SharesFromDecCoins returns the shares of a delegation given a bond amount. It
@@ -133,7 +133,7 @@ func (o Operator) SharesFromDecCoins(tokens sdk.DecCoins) (sdk.DecCoins, error) 
 	if o.Tokens.IsZero() {
 		return sdk.NewDecCoins(), ErrInsufficientShares
 	}
-	return utils.SharesFromDecCoins(tokens, o.GetSharesDenom, o.Tokens, o.DelegatorShares)
+	return utils.SharesFromDecCoins(tokens, o.GetSharesDenom, o.Tokens, o.DelegatorShares), nil
 }
 
 // AddTokensFromDelegation adds the given amount of tokens to the operator's total tokens,

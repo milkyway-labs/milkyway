@@ -5,7 +5,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/milkyway-labs/milkyway/v10/x/liquidvesting/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v10/x/pools/types"
 	restakingkeeper "github.com/milkyway-labs/milkyway/v10/x/restaking/keeper"
 	restakingtypes "github.com/milkyway-labs/milkyway/v10/x/restaking/types"
 )
@@ -36,20 +35,20 @@ func (suite *KeeperTestSuite) TestKeeper_AddToInsuranceFund() {
 			for address, amount := range tc.deposits {
 				// Mint the coins that should be in the module
 				err := suite.bk.MintCoins(ctx, types.ModuleName, amount)
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 
 				err = suite.k.AddToUserInsuranceFund(ctx, address, amount)
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 			}
 
 			for address, expectedAmount := range tc.deposits {
 				amount, err := suite.k.GetUserInsuranceFundBalance(ctx, address)
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 				suite.Assert().Equal(expectedAmount, amount)
 			}
 
 			balance, err := suite.k.GetInsuranceFundBalance(ctx)
-			suite.Assert().NoError(err)
+			suite.Require().NoError(err)
 			suite.Assert().Equal(tc.expectedTotalAmount, balance)
 		})
 	}
@@ -113,7 +112,7 @@ func (suite *KeeperTestSuite) TestKeeper_WithdrawFromInsuranceFund() {
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 			}
 		})
 	}
@@ -139,13 +138,8 @@ func (suite *KeeperTestSuite) TestKeeper_UsedInsuranceFundIsUpdatedCorrectly() {
 	suite.Require().NoError(err)
 	suite.Require().True(used.IsZero())
 
-	// Create a pool
-	pool := poolstypes.NewPool(1, "locked/stake")
-	err = suite.pk.SavePool(ctx, pool)
-	suite.Require().NoError(err)
-
 	// Restake some coins to the pool
-	restakingMsgService := restakingkeeper.NewMsgServer(suite.rk)
+	restakingMsgService := restakingkeeper.NewMsgServer(suite.restakingKeeper)
 	_, err = restakingMsgService.DelegatePool(ctx, restakingtypes.NewMsgDelegatePool(sdk.NewInt64Coin("locked/stake", 100), restaker))
 	suite.Require().NoError(err)
 
@@ -164,18 +158,18 @@ func (suite *KeeperTestSuite) TestKeeper_UsedInsuranceFundIsUpdatedCorrectly() {
 	suite.Require().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake", 2)), used)
 
 	// Wait for the unbonding period to expire
-	restakingParams, err := suite.rk.GetParams(ctx)
+	restakingParams, err := suite.restakingKeeper.GetParams(ctx)
 	suite.Require().NoError(err)
 
 	ctx = ctx.WithBlockHeight(ctx.BlockHeight() + 100).
 		WithBlockTime(ctx.BlockTime().Add(restakingParams.UnbondingTime))
 
 	// Trigger the unbonding
-	err = suite.rk.CompleteMatureUnbondingDelegations(ctx)
+	err = suite.restakingKeeper.CompleteMatureUnbondingDelegations(ctx)
 	suite.Require().NoError(err)
 
 	// Ensure the user has no pending undelegations
-	unbondingDelegations := suite.rk.GetAllUserUnbondingDelegations(ctx, restaker)
+	unbondingDelegations := suite.restakingKeeper.GetAllUserUnbondingDelegations(ctx, restaker)
 	suite.Require().Empty(unbondingDelegations)
 
 	// Check that the user used insurance fund is still 2stake
@@ -203,13 +197,8 @@ func (suite *KeeperTestSuite) TestKeeper_InsuranceFundUpdatesCorreclyWithComplet
 	suite.Require().NoError(err)
 	suite.Require().True(used.IsZero())
 
-	// Create a pool
-	pool := poolstypes.NewPool(1, "locked/stake")
-	err = suite.pk.SavePool(ctx, pool)
-	suite.Require().NoError(err)
-
 	// Restake some coins to the pool
-	restakingMsgService := restakingkeeper.NewMsgServer(suite.rk)
+	restakingMsgService := restakingkeeper.NewMsgServer(suite.restakingKeeper)
 	_, err = restakingMsgService.DelegatePool(ctx, restakingtypes.NewMsgDelegatePool(sdk.NewInt64Coin("locked/stake", 1000), restaker))
 	suite.Require().NoError(err)
 
@@ -228,18 +217,18 @@ func (suite *KeeperTestSuite) TestKeeper_InsuranceFundUpdatesCorreclyWithComplet
 	suite.Require().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake", 20)), used)
 
 	// Wait for the unbonding period to expire
-	restakingParams, err := suite.rk.GetParams(ctx)
+	restakingParams, err := suite.restakingKeeper.GetParams(ctx)
 	suite.Require().NoError(err)
 
 	ctx = ctx.WithBlockHeight(ctx.BlockHeight() + 100).
 		WithBlockTime(ctx.BlockTime().Add(restakingParams.UnbondingTime))
 
 	// Trigger the unbonding
-	err = suite.rk.CompleteMatureUnbondingDelegations(ctx)
+	err = suite.restakingKeeper.CompleteMatureUnbondingDelegations(ctx)
 	suite.Require().NoError(err)
 
 	// Ensure the user has no pending undelegations
-	unbondingDelegations := suite.rk.GetAllUserUnbondingDelegations(ctx, restaker)
+	unbondingDelegations := suite.restakingKeeper.GetAllUserUnbondingDelegations(ctx, restaker)
 	suite.Require().Empty(unbondingDelegations)
 
 	// Check that the user used insurance fund is zero

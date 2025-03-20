@@ -21,15 +21,27 @@ type Keeper struct {
 	poolsKeeper     types.PoolsKeeper
 	servicesKeeper  types.ServicesKeeper
 	restakingKeeper types.RestakingKeeper
+	rewardsKeeper   types.RewardsKeeper
 
 	// Keeper data
 	schema         collections.Schema
 	params         collections.Item[types.Params]
 	insuranceFunds collections.Map[string, types.UserInsuranceFund] // User address -> UserInsuranceFund
+	// (delegationType, targetID) -> types.CoveredLockedShares
+	TargetsCoveredLockedShares     collections.Map[collections.Pair[int32, uint32], types.TargetCoveredLockedShares]
+	LockedRepresentationDelegators collections.KeySet[string]
+	// PreviousDelegationsTokens is a temporary map of (user, delegation target) pair
+	// to the delegation's tokens that gets written before a user's delegation is
+	// modified and cleared right after the modification.
+	//
+	// (user, delegationType, targetID) -> PreviousDelegationTokens
+	PreviousDelegationsTokens collections.Map[collections.Triple[string, int32, uint32], types.PreviousDelegationTokens]
 
 	// Addresses
 	ModuleAddress string
 	authority     string
+
+	restakingOverrider restakingOverrider
 }
 
 func NewKeeper(
@@ -70,6 +82,26 @@ func NewKeeper(
 			collections.StringKey,
 			codec.CollValue[types.UserInsuranceFund](cdc),
 		),
+		TargetsCoveredLockedShares: collections.NewMap(
+			sb,
+			types.CoveredLockedSharesKeyPrefix,
+			"targets_covered_locked_shares",
+			collections.PairKeyCodec(collections.Int32Key, collections.Uint32Key),
+			codec.CollValue[types.TargetCoveredLockedShares](cdc),
+		),
+		LockedRepresentationDelegators: collections.NewKeySet(
+			sb,
+			types.LockedRepresentationDelegatorsKeyPrefix,
+			"locked_representation_delegators",
+			collections.StringKey,
+		),
+		PreviousDelegationsTokens: collections.NewMap(
+			sb,
+			types.PreviousDelegationsTokensKeyPrefix,
+			"previous_delegations_tokens",
+			collections.TripleKeyCodec(collections.StringKey, collections.Int32Key, collections.Uint32Key),
+			codec.CollValue[types.PreviousDelegationTokens](cdc),
+		),
 
 		ModuleAddress: moduleAddress,
 		authority:     authority,
@@ -87,4 +119,9 @@ func NewKeeper(
 // Logger returns a module-specific logger.
 func (k *Keeper) Logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", "x/"+types.ModuleName)
+}
+
+// SetRewardsKeeper sets the rewards keeper.
+func (k *Keeper) SetRewardsKeeper(rewardsKeeper types.RewardsKeeper) {
+	k.rewardsKeeper = rewardsKeeper
 }

@@ -114,7 +114,7 @@ func FilterCoinsByDenom(coins, coinsB sdk.Coins) sdk.Coins {
 
 // FilterDecCoinsByDenom returns the intersection of two coins.
 // e.g.
-// FilterDecCoinsByDenom{2A, 3B}, {A}) = {2A}
+// FilterDecCoinsByDenom({2A, 3B}, {A}) = {2A}
 // FilterDecCoinsByDenom({2A, 3B}, {5C}) = {}
 // FilterDecCoinsByDenom({2A, 3B}, {A, B}) = {2A, 3B}
 func FilterDecCoinsByDenom(coins, coinsB sdk.DecCoins) sdk.DecCoins {

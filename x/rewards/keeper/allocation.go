@@ -24,7 +24,7 @@ import (
 // DistributionInfo stores information about a delegation target and its
 // delegation value.
 type DistributionInfo struct {
-	DelegationTarget DelegationTarget
+	DelegationTarget restakingtypes.DelegationTarget
 	DelegationsValue math.LegacyDec
 }
 
@@ -95,7 +95,11 @@ func (k *Keeper) AllocateRewards(ctx context.Context) error {
 		return err
 	}
 
-	pools, err := k.poolsKeeper.GetPools(ctx)
+	var pools []poolstypes.Pool
+	err = k.poolsKeeper.IteratePools(ctx, func(pool poolstypes.Pool) (stop bool, err error) {
+		pools = append(pools, pool)
+		return false, nil
+	})
 	if err != nil {
 		return err
 	}
@@ -161,7 +165,7 @@ func (k *Keeper) AllocateRewardsByPlan(
 	plan types.RewardsPlan,
 	timeSinceLastAllocation time.Duration,
 	pools []poolstypes.Pool,
-	delTargetCache map[delegationTargetKey]DelegationTarget,
+	delTargetCache map[delegationTargetKey]restakingtypes.DelegationTarget,
 	restakableDenoms []string,
 ) error {
 	service, err := k.servicesKeeper.GetService(ctx, plan.ServiceID)
@@ -306,7 +310,7 @@ func (k *Keeper) getEligiblePools(
 	serviceID uint32,
 	pools []poolstypes.Pool,
 	delTargetCache delegationTargetCache,
-) (eligiblePools []DelegationTarget, err error) {
+) (eligiblePools []restakingtypes.DelegationTarget, err error) {
 	// Only include pools from which the service is borrowing security.
 	for _, pool := range pools {
 		isSecured, err := k.restakingKeeper.IsServiceSecuredByPool(ctx, serviceID, pool.ID)
@@ -330,7 +334,7 @@ func (k *Keeper) getEligiblePools(
 		targetKey := delegationTargetKey{restakingtypes.DELEGATION_TYPE_POOL, pool.ID}
 		target, ok := delTargetCache[targetKey]
 		if !ok {
-			target, err = k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_POOL, pool.ID)
+			target, err = k.restakingKeeper.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_POOL, pool.ID)
 			if err != nil {
 				return nil, err
 			}
@@ -350,12 +354,12 @@ func (k *Keeper) getEligibleOperators(
 	ctx context.Context,
 	serviceID uint32,
 	delTargetCache delegationTargetCache,
-) (eligibleOperators []DelegationTarget, err error) {
+) (eligibleOperators []restakingtypes.DelegationTarget, err error) {
 	err = k.restakingKeeper.IterateServiceValidatingOperators(ctx, serviceID, func(operatorID uint32) (stop bool, err error) {
 		targetKey := delegationTargetKey{restakingtypes.DELEGATION_TYPE_OPERATOR, operatorID}
 		target, ok := delTargetCache[targetKey]
 		if !ok {
-			target, err = k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, operatorID)
+			target, err = k.restakingKeeper.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, operatorID)
 			if err != nil {
 				return true, err
 			}
@@ -363,9 +367,9 @@ func (k *Keeper) getEligibleOperators(
 		}
 
 		// Check if the operator is active
-		operator, ok := target.DelegationTarget.(operatorstypes.Operator)
+		operator, ok := target.(operatorstypes.Operator)
 		if !ok {
-			return true, fmt.Errorf("invalid operator type: %T", target.DelegationTarget)
+			return true, fmt.Errorf("invalid operator type: %T", target)
 		}
 		if !operator.IsActive() {
 			return false, nil
@@ -396,7 +400,7 @@ func (k *Keeper) getEligibleOperators(
 func (k *Keeper) getDistrInfos(
 	ctx context.Context,
 	serviceID uint32,
-	targets []DelegationTarget,
+	targets []restakingtypes.DelegationTarget,
 	restakableDenoms []string,
 ) (distrInfos []DistributionInfo, totalDelValues math.LegacyDec, err error) {
 	totalDelValues = math.LegacyZeroDec()
@@ -560,7 +564,7 @@ func (k *Keeper) allocateRewardsToUsers(
 
 	switch distrType.(type) {
 	case *types.UsersDistributionTypeBasic:
-		target, err := k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_SERVICE, service.ID)
+		target, err := k.restakingKeeper.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_SERVICE, service.ID)
 		if err != nil {
 			return err
 		}
@@ -603,10 +607,10 @@ func (k *Keeper) allocateDelegationTargetRewards(
 
 // allocateRewardsPool allocates rewards to a specific delegation target's rewards pool.
 func (k *Keeper) allocateRewardsPool(
-	ctx context.Context, serviceID uint32, target DelegationTarget, denom string, rewards sdk.DecCoins,
+	ctx context.Context, serviceID uint32, target restakingtypes.DelegationTarget, denom string, rewards sdk.DecCoins,
 ) error {
 	shared := rewards
-	if target.DelegationType == restakingtypes.DELEGATION_TYPE_OPERATOR {
+	if _, ok := target.(operatorstypes.Operator); ok {
 		// Split tokens between operator and delegators according to commission
 		operatorParams, err := k.operatorsKeeper.GetOperatorParams(ctx, target.GetID())
 		if err != nil {
@@ -637,8 +641,13 @@ func (k *Keeper) allocateRewardsPool(
 		}
 	}
 
+	colls, err := k.getDelegationTargetCollections(target)
+	if err != nil {
+		return err
+	}
+
 	// Update current rewards
-	currentRewards, err := target.CurrentRewards.Get(ctx, target.GetID())
+	currentRewards, err := colls.CurrentRewards.Get(ctx, target.GetID())
 	if err != nil {
 		return err
 	}
@@ -646,19 +655,24 @@ func (k *Keeper) allocateRewardsPool(
 	currentRewards.Rewards = currentRewards.Rewards.Add(
 		types.NewServicePool(serviceID, types.DecPools{types.NewDecPool(denom, shared)}),
 	)
-	err = target.CurrentRewards.Set(ctx, target.GetID(), currentRewards)
+	err = colls.CurrentRewards.Set(ctx, target.GetID(), currentRewards)
 	if err != nil {
 		return err
 	}
 
 	// Update the outstanding rewards
-	outstanding, err := target.OutstandingRewards.Get(ctx, target.GetID())
+	outstanding, err := colls.OutstandingRewards.Get(ctx, target.GetID())
 	if err != nil {
 		return err
 	}
 
 	outstanding.Rewards = outstanding.Rewards.Add(types.NewDecPool(denom, rewards))
-	err = target.OutstandingRewards.Set(ctx, target.GetID(), outstanding)
+	err = colls.OutstandingRewards.Set(ctx, target.GetID(), outstanding)
+	if err != nil {
+		return err
+	}
+
+	delType, err := restakingtypes.GetDelegationTypeFromTarget(target)
 	if err != nil {
 		return err
 	}
@@ -667,7 +681,7 @@ func (k *Keeper) allocateRewardsPool(
 	sdkCtx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeRewards,
-			sdk.NewAttribute(types.AttributeKeyDelegationType, target.DelegationType.String()),
+			sdk.NewAttribute(types.AttributeKeyDelegationType, delType.String()),
 			sdk.NewAttribute(types.AttributeKeyDelegationTargetID, fmt.Sprint(target.GetID())),
 			sdk.NewAttribute(types.AttributeKeyPool, denom),
 			sdk.NewAttribute(sdk.AttributeKeyAmount, rewards.String()),

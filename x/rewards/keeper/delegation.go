@@ -9,14 +9,25 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
+	poolstypes "github.com/milkyway-labs/milkyway/v10/x/pools/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/v10/x/restaking/types"
 	"github.com/milkyway-labs/milkyway/v10/x/rewards/types"
 )
 
 // initializeDelegation initializes a delegation for a target
-func (k *Keeper) initializeDelegation(ctx context.Context, target DelegationTarget, delAddr sdk.AccAddress) error {
+func (k *Keeper) initializeDelegation(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32, delAddr sdk.AccAddress) error {
+	target, err := k.restakingKeeper.GetDelegationTarget(ctx, delType, targetID)
+	if err != nil {
+		return err
+	}
+
+	colls, err := k.getDelegationTargetCollections(target)
+	if err != nil {
+		return err
+	}
+
 	// Period has already been incremented - we want to store the period ended by this delegation action
-	currentRewards, err := target.CurrentRewards.Get(ctx, target.GetID())
+	currentRewards, err := colls.CurrentRewards.Get(ctx, target.GetID())
 	if err != nil {
 		return err
 	}
@@ -33,7 +44,7 @@ func (k *Keeper) initializeDelegation(ctx context.Context, target DelegationTarg
 		return err
 	}
 
-	delegation, found, err := k.restakingKeeper.GetDelegationForTarget(ctx, target.DelegationTarget, delegator)
+	delegation, found, err := k.restakingKeeper.GetDelegation(ctx, delType, targetID, delegator)
 	if err != nil {
 		return err
 	}
@@ -46,8 +57,11 @@ func (k *Keeper) initializeDelegation(ctx context.Context, target DelegationTarg
 	// We don't store directly, so multiply delegation shares * (tokens per share)
 	// NOTE: it's necessary to truncate so we don't allow withdrawing more rewards than owed
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	stake := target.TokensFromSharesTruncated(delegation.Shares)
-	return target.DelegatorStartingInfos.Set(
+	var stake sdk.DecCoins
+	if delegation.Shares.IsAllPositive() {
+		stake = target.TokensFromSharesTruncated(delegation.Shares)
+	}
+	return colls.DelegatorStartingInfos.Set(
 		ctx, collections.Join(target.GetID(), delAddr),
 		types.NewDelegatorStartingInfo(previousPeriod, stake, uint64(sdkCtx.BlockHeight())),
 	)
@@ -56,7 +70,7 @@ func (k *Keeper) initializeDelegation(ctx context.Context, target DelegationTarg
 // calculateDelegationRewardsBetween calculates the rewards accrued by a delegation between two periods
 func (k *Keeper) calculateDelegationRewardsBetween(
 	ctx context.Context,
-	target DelegationTarget,
+	target restakingtypes.DelegationTarget,
 	delegator string,
 	startingPeriod, endingPeriod uint64,
 	stakes sdk.DecCoins,
@@ -71,13 +85,18 @@ func (k *Keeper) calculateDelegationRewardsBetween(
 		panic("stake should not be negative")
 	}
 
-	// Return staking * (ending - starting)
-	starting, err := target.HistoricalRewards.Get(ctx, collections.Join(target.GetID(), startingPeriod))
+	colls, err := k.getDelegationTargetCollections(target)
 	if err != nil {
 		return nil, err
 	}
 
-	ending, err := target.HistoricalRewards.Get(ctx, collections.Join(target.GetID(), endingPeriod))
+	// Return staking * (ending - starting)
+	starting, err := colls.HistoricalRewards.Get(ctx, collections.Join(target.GetID(), startingPeriod))
+	if err != nil {
+		return nil, err
+	}
+
+	ending, err := colls.HistoricalRewards.Get(ctx, collections.Join(target.GetID(), endingPeriod))
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +104,7 @@ func (k *Keeper) calculateDelegationRewardsBetween(
 	differences := ending.CumulativeRewardRatios.Sub(starting.CumulativeRewardRatios)
 	var decPools types.DecPools
 
-	if target.DelegationType == restakingtypes.DELEGATION_TYPE_POOL {
+	if _, ok := target.(poolstypes.Pool); ok {
 		preferences, err := k.restakingKeeper.GetUserPreferences(ctx, delegator)
 		if err != nil {
 			return nil, err
@@ -115,15 +134,20 @@ func (k *Keeper) calculateDelegationRewardsBetween(
 // CalculateDelegationRewards calculates the total rewards accrued by a delegation
 // between the starting period and the current block height
 func (k *Keeper) CalculateDelegationRewards(
-	ctx context.Context, target DelegationTarget, del restakingtypes.Delegation, endingPeriod uint64,
+	ctx context.Context, target restakingtypes.DelegationTarget, del restakingtypes.Delegation, endingPeriod uint64,
 ) (rewards types.DecPools, err error) {
 	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(del.UserAddress)
 	if err != nil {
 		return nil, err
 	}
 
+	colls, err := k.getDelegationTargetCollections(target)
+	if err != nil {
+		return nil, err
+	}
+
 	// Fetch starting info for delegation
-	startingInfo, err := target.DelegatorStartingInfos.Get(ctx, collections.Join(target.GetID(), sdk.AccAddress(delAddr)))
+	startingInfo, err := colls.DelegatorStartingInfos.Get(ctx, collections.Join(target.GetID(), sdk.AccAddress(delAddr)))
 	if err != nil {
 		return nil, err
 	}
@@ -205,15 +229,20 @@ func (k *Keeper) CalculateDelegationRewards(
 
 // withdrawDelegationRewards withdraws the rewards from the delegation and reinitializes it
 func (k *Keeper) withdrawDelegationRewards(
-	ctx context.Context, target DelegationTarget, del restakingtypes.Delegation,
+	ctx context.Context, target restakingtypes.DelegationTarget, del restakingtypes.Delegation,
 ) (types.Pools, error) {
 	delAddr, err := k.accountKeeper.AddressCodec().StringToBytes(del.UserAddress)
 	if err != nil {
 		return nil, err
 	}
 
+	colls, err := k.getDelegationTargetCollections(target)
+	if err != nil {
+		return nil, err
+	}
+
 	// Check the existence of delegator starting info
-	hasInfo, err := target.DelegatorStartingInfos.Has(ctx, collections.Join(target.GetID(), sdk.AccAddress(delAddr)))
+	hasInfo, err := colls.DelegatorStartingInfos.Has(ctx, collections.Join(target.GetID(), sdk.AccAddress(delAddr)))
 	if err != nil {
 		return nil, err
 	}
@@ -272,13 +301,13 @@ func (k *Keeper) withdrawDelegationRewards(
 
 	// Update the outstanding rewards and the community operator only if the
 	// transaction was successful
-	err = target.OutstandingRewards.Set(ctx, target.GetID(), types.OutstandingRewards{Rewards: outstanding.Sub(rewards)})
+	err = colls.OutstandingRewards.Set(ctx, target.GetID(), types.OutstandingRewards{Rewards: outstanding.Sub(rewards)})
 	if err != nil {
 		return nil, err
 	}
 
 	// Decrement reference count of starting period
-	startingInfo, err := target.DelegatorStartingInfos.Get(ctx, collections.Join(target.GetID(), sdk.AccAddress(delAddr)))
+	startingInfo, err := colls.DelegatorStartingInfos.Get(ctx, collections.Join(target.GetID(), sdk.AccAddress(delAddr)))
 	if err != nil {
 		return nil, err
 	}
@@ -290,7 +319,7 @@ func (k *Keeper) withdrawDelegationRewards(
 	}
 
 	// Remove delegator starting info
-	err = target.DelegatorStartingInfos.Remove(ctx, collections.Join(target.GetID(), sdk.AccAddress(delAddr)))
+	err = colls.DelegatorStartingInfos.Remove(ctx, collections.Join(target.GetID(), sdk.AccAddress(delAddr)))
 	if err != nil {
 		return nil, err
 	}

@@ -7,12 +7,12 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	porttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
 	marketmapkeeper "github.com/skip-mev/connect/v2/x/marketmap/keeper"
 	marketmaptypes "github.com/skip-mev/connect/v2/x/marketmap/types"
 	oraclekeeper "github.com/skip-mev/connect/v2/x/oracle/keeper"
 	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
+	"github.com/stretchr/testify/require"
 
 	"github.com/milkyway-labs/milkyway/v10/testutils/storetesting"
 	assetskeeper "github.com/milkyway-labs/milkyway/v10/x/assets/keeper"
@@ -26,6 +26,8 @@ import (
 	poolstypes "github.com/milkyway-labs/milkyway/v10/x/pools/types"
 	restakingkeeper "github.com/milkyway-labs/milkyway/v10/x/restaking/keeper"
 	restakingtypes "github.com/milkyway-labs/milkyway/v10/x/restaking/types"
+	rewardskeeper "github.com/milkyway-labs/milkyway/v10/x/rewards/keeper"
+	rewardstypes "github.com/milkyway-labs/milkyway/v10/x/rewards/types"
 	serviceskeeper "github.com/milkyway-labs/milkyway/v10/x/services/keeper"
 	servicestypes "github.com/milkyway-labs/milkyway/v10/x/services/types"
 )
@@ -40,7 +42,11 @@ type KeeperTestData struct {
 	OperatorsKeeper *operatorskeeper.Keeper
 	PoolsKeeper     *poolskeeper.Keeper
 	ServicesKeeper  *serviceskeeper.Keeper
+	MarketMapKeeper *marketmapkeeper.Keeper
+	OracleKeeper    *oraclekeeper.Keeper
+	AssetsKeeper    *assetskeeper.Keeper
 	RestakingKeeper *restakingkeeper.Keeper
+	RewardsKeeper   *rewardskeeper.Keeper
 }
 
 // NewKeeperTestData returns a new KeeperTestData
@@ -51,7 +57,8 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		BaseKeeperTestData: storetesting.NewBaseKeeperTestData(t, []string{
 			types.StoreKey,
 			operatorstypes.StoreKey, poolstypes.StoreKey, servicestypes.StoreKey,
-			restakingtypes.StoreKey, stakingtypes.StoreKey,
+			restakingtypes.StoreKey, marketmaptypes.StoreKey, oracletypes.StoreKey,
+			assetstypes.StoreKey, rewardstypes.StoreKey,
 		}),
 	}
 
@@ -78,7 +85,7 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		data.DistributionKeeper,
 		data.AuthorityAddress,
 	)
-	marketMapKeeper := marketmapkeeper.NewKeeper(
+	data.MarketMapKeeper = marketmapkeeper.NewKeeper(
 		runtime.NewKVStoreService(data.Keys[marketmaptypes.StoreKey]),
 		data.Cdc,
 		authtypes.NewModuleAddress(govtypes.ModuleName),
@@ -86,10 +93,11 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 	oracleKeeper := oraclekeeper.NewKeeper(
 		runtime.NewKVStoreService(data.Keys[oracletypes.StoreKey]),
 		data.Cdc,
-		marketMapKeeper,
+		data.MarketMapKeeper,
 		authtypes.NewModuleAddress(govtypes.ModuleName),
 	)
-	assetsKeeper := assetskeeper.NewKeeper(
+	data.OracleKeeper = &oracleKeeper
+	data.AssetsKeeper = assetskeeper.NewKeeper(
 		data.Cdc,
 		runtime.NewKVStoreService(data.Keys[assetstypes.StoreKey]),
 		data.AuthorityAddress,
@@ -102,8 +110,8 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		data.PoolsKeeper,
 		data.OperatorsKeeper,
 		data.ServicesKeeper,
-		&oracleKeeper,
-		assetsKeeper,
+		data.OracleKeeper,
+		data.AssetsKeeper,
 		data.AuthorityAddress,
 	)
 	data.Keeper = keeper.NewKeeper(
@@ -118,14 +126,51 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		data.LiquidVestingModuleAddress.String(),
 		data.AuthorityAddress,
 	)
+	data.RewardsKeeper = rewardskeeper.NewKeeper(
+		data.Cdc,
+		runtime.NewKVStoreService(data.Keys[rewardstypes.StoreKey]),
+		data.AccountKeeper,
+		data.BankKeeper,
+		data.DistributionKeeper,
+		data.OracleKeeper,
+		data.PoolsKeeper,
+		data.OperatorsKeeper,
+		data.Keeper.AdjustedServicesKeeper(data.ServicesKeeper),
+		data.Keeper.AdjustedRestakingKeeper(data.RestakingKeeper),
+		data.AssetsKeeper,
+		data.AuthorityAddress,
+	)
+	data.Keeper.SetRewardsKeeper(data.RewardsKeeper)
+	data.PoolsKeeper.SetHooks(
+		data.RewardsKeeper.PoolsHooks(),
+	)
+	data.OperatorsKeeper.SetHooks(operatorstypes.NewMultiOperatorsHooks(
+		data.RestakingKeeper.OperatorsHooks(),
+		data.RewardsKeeper.OperatorsHooks(),
+	))
+	data.ServicesKeeper.SetHooks(servicestypes.NewMultiServicesHooks(
+		data.RestakingKeeper.ServicesHooks(),
+		data.RewardsKeeper.ServicesHooks(),
+	))
+	data.RestakingKeeper.SetHooks(restakingtypes.NewMultiRestakingHooks(
+		data.Keeper.RestakingHooks(),
+		data.RewardsKeeper.RestakingHooks(),
+	))
 
 	// Set bank hooks
 	data.BankKeeper.AppendSendRestriction(data.Keeper.SendRestrictionFn)
-	data.RestakingKeeper.SetRestakeRestriction(data.Keeper.RestakeRestrictionFn)
 
 	// Set ibc hooks
 	var ibcStack porttypes.IBCModule = mockIBCMiddleware{}
 	data.IBCMiddleware = liquidvesting.NewIBCMiddleware(ibcStack, data.Keeper)
+
+	// Call InitGenesis to set default params of the modules
+	require.NoError(t, data.PoolsKeeper.InitGenesis(data.Context, poolstypes.DefaultGenesis()))
+	require.NoError(t, data.OperatorsKeeper.InitGenesis(data.Context, operatorstypes.DefaultGenesis()))
+	require.NoError(t, data.ServicesKeeper.InitGenesis(data.Context, servicestypes.DefaultGenesis()))
+	require.NoError(t, data.RewardsKeeper.InitGenesis(data.Context, rewardstypes.DefaultGenesis()))
+	require.NoError(t, data.RestakingKeeper.InitGenesis(data.Context, restakingtypes.DefaultGenesis()))
+	require.NoError(t, data.Keeper.InitGenesis(data.Context, types.DefaultGenesisState()))
 
 	return data
 }

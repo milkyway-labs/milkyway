@@ -596,22 +596,6 @@ func NewAppKeeper(
 		appKeepers.AssetsKeeper,
 		govAuthority,
 	)
-	appKeepers.RewardsKeeper = rewardskeeper.NewKeeper(
-		appCodec,
-		runtime.NewKVStoreService(appKeepers.keys[rewardstypes.StoreKey]),
-		appKeepers.AccountKeeper,
-		appKeepers.BankKeeper,
-		appKeepers.DistrKeeper,
-		appKeepers.OracleKeeper,
-		appKeepers.PoolsKeeper,
-		appKeepers.OperatorsKeeper,
-		appKeepers.ServicesKeeper,
-		appKeepers.RestakingKeeper,
-		appKeepers.AssetsKeeper,
-		govAuthority,
-	)
-
-	// Set hooks based on the rewards keeper
 	appKeepers.LiquidVestingKeeper = liquidvestingkeeper.NewKeeper(
 		appCodec,
 		runtime.NewKVStoreService(appKeepers.keys[liquidvestingtypes.StoreKey]),
@@ -624,6 +608,21 @@ func NewAppKeeper(
 		authtypes.NewModuleAddress(liquidvestingtypes.ModuleName).String(),
 		govAuthority,
 	)
+	appKeepers.RewardsKeeper = rewardskeeper.NewKeeper(
+		appCodec,
+		runtime.NewKVStoreService(appKeepers.keys[rewardstypes.StoreKey]),
+		appKeepers.AccountKeeper,
+		appKeepers.BankKeeper,
+		appKeepers.DistrKeeper,
+		appKeepers.OracleKeeper,
+		appKeepers.PoolsKeeper,
+		appKeepers.OperatorsKeeper,
+		appKeepers.LiquidVestingKeeper.AdjustedServicesKeeper(appKeepers.ServicesKeeper),
+		appKeepers.LiquidVestingKeeper.AdjustedRestakingKeeper(appKeepers.RestakingKeeper),
+		appKeepers.AssetsKeeper,
+		govAuthority,
+	)
+	appKeepers.LiquidVestingKeeper.SetRewardsKeeper(appKeepers.RewardsKeeper)
 
 	// Set the restrictions on sending tokens
 	appKeepers.BankKeeper.AppendSendRestriction(appKeepers.LiquidVestingKeeper.SendRestrictionFn)
@@ -641,12 +640,10 @@ func NewAppKeeper(
 		appKeepers.RestakingKeeper.ServicesHooks(),
 		appKeepers.RewardsKeeper.ServicesHooks(),
 	))
-	appKeepers.RestakingKeeper.SetHooks(
+	appKeepers.RestakingKeeper.SetHooks(restakingtypes.NewMultiRestakingHooks(
+		appKeepers.LiquidVestingKeeper.RestakingHooks(),
 		appKeepers.RewardsKeeper.RestakingHooks(),
-	)
-	appKeepers.RestakingKeeper.SetRestakeRestriction(
-		appKeepers.LiquidVestingKeeper.RestakeRestrictionFn,
-	)
+	))
 
 	// Must be called on PFMRouter AFTER TransferKeeper initialized
 	appKeepers.PFMRouterKeeper.SetTransferKeeper(appKeepers.TransferKeeper)
