@@ -1,0 +1,45 @@
+name: Release
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+" # Push events to matching v*, i.e. v1.0, v20.15.10
+
+jobs:
+  Release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+
+      - name: Set up environment 🧰
+        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - name: Build 🔨
+        run: make build-linux
+
+      - name: Rename binary 🔨
+        run: mv ./build/milkywayd ./build/milkywayd-${TAG_NAME#v}-linux-amd64
+
+      - name: Compute SHA256 🔨
+        run: |
+          SHA256_SUM=$(sha256sum ./build/milkywayd-${TAG_NAME#v}-linux-amd64 | awk '{ print $1 }')
+          echo "SHA256_SUM=${SHA256_SUM}" >> $GITHUB_ENV
+          echo "## Features" > release_notes.txt
+          echo "" >> release_notes.txt
+          echo "## Bug Fixes" >> release_notes.txt
+          echo "" >> release_notes.txt
+          echo "\`\`\`" >> release_notes.txt
+          echo "Checksum-Sha256:" >> release_notes.txt
+          echo "${SHA256_SUM} milkywayd-${TAG_NAME#v}-linux-amd64"
+          echo "\`\`\`" > release_notes.txt
+
+      - name: Create GitHub Release 📤
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG_NAME }}
+          name: ${{ env.TAG_NAME }}
+          body_path: release_notes.txt
+          files: ./build/milkywayd-${{ env.TAG_NAME#v }}-linux-amd64
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
