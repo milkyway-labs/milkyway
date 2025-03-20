@@ -13,17 +13,19 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up environment 🧰
-        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+        run: |
+          echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
 
       - name: Build 🔨
         run: make build-linux
 
       - name: Rename binary 🔨
-        run: mv ./build/milkywayd ./build/milkywayd-${TAG_NAME#v}-linux-amd64
+        run: mv ./build/milkywayd ./build/milkywayd-${VERSION}-linux-amd64
 
       - name: Compute SHA256 🔨
         run: |
-          SHA256_SUM=$(sha256sum ./build/milkywayd-${TAG_NAME#v}-linux-amd64 | awk '{ print $1 }')
+          SHA256_SUM=$(sha256sum ./build/milkywayd-${VERSION}-linux-amd64 | awk '{ print $1 }')
           echo "SHA256_SUM=${SHA256_SUM}" >> $GITHUB_ENV
           echo "## Features" > release_notes.txt
           echo "" >> release_notes.txt
@@ -31,7 +33,7 @@ jobs:
           echo "" >> release_notes.txt
           echo "\`\`\`" >> release_notes.txt
           echo "Checksum-Sha256:" >> release_notes.txt
-          echo "${SHA256_SUM} milkywayd-${TAG_NAME#v}-linux-amd64"
+          echo "${SHA256_SUM} milkywayd-${VERSION}-linux-amd64"
           echo "\`\`\`" > release_notes.txt
 
       - name: Create GitHub Release 📤
@@ -40,6 +42,6 @@ jobs:
           tag_name: ${{ env.TAG_NAME }}
           name: ${{ env.TAG_NAME }}
           body_path: release_notes.txt
-          files: ./build/milkywayd-${{ env.TAG_NAME#v }}-linux-amd64
+          files: ./build/milkywayd-${{ env.VERSION }}-linux-amd64
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
