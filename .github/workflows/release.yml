@@ -29,11 +29,7 @@ jobs:
 
       - name: Generate release notes 📜
         run: |
-          echo "## Features" > release_notes.txt
-          echo "" >> release_notes.txt
-          echo "## Bug Fixes" >> release_notes.txt
-          echo "" >> release_notes.txt
-          echo "\`\`\`" >> release_notes.txt
+          echo "\`\`\`" > release_notes.txt
           echo "Checksum-Sha256:" >> release_notes.txt
           echo "${SHA256_SUM}  milkywayd-${VERSION}-linux-amd64" >> release_notes.txt
           echo "\`\`\`" >> release_notes.txt
