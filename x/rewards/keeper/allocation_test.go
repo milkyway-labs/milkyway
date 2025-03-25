@@ -387,13 +387,13 @@ func (suite *KeeperTestSuite) TestAllocateRewards_ZeroDelegations() {
 	suite.Require().Empty(balances)
 
 	// There must be no outstanding rewards allocated.
-	target, err := suite.keeper.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, operator.ID)
+	target, err := suite.restakingKeeper.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, operator.ID)
 	suite.Require().NoError(err)
 	rewards, err := suite.keeper.GetOutstandingRewardsCoins(ctx, target)
 	suite.Require().NoError(err)
 	suite.Require().Empty(rewards)
 
-	target, err = suite.keeper.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_SERVICE, service.ID)
+	target, err = suite.restakingKeeper.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_SERVICE, service.ID)
 	suite.Require().NoError(err)
 	rewards, err = suite.keeper.GetOutstandingRewardsCoins(ctx, target)
 	suite.Require().NoError(err)
@@ -412,7 +412,7 @@ func (suite *KeeperTestSuite) TestAllocateRewards_ZeroDelegations() {
 	ctx = suite.allocateRewards(ctx, 10*time.Second)
 
 	// Still the operator has no rewards.
-	target, err = suite.keeper.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, operator.ID)
+	target, err = suite.restakingKeeper.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, operator.ID)
 	suite.Require().NoError(err)
 	rewards, err = suite.keeper.GetOutstandingRewardsCoins(ctx, target)
 	suite.Require().NoError(err)

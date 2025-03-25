@@ -3,8 +3,9 @@ package keeper_test
 import (
 	"fmt"
 	"testing"
+	"time"
 
-	sdkmath "cosmossdk.io/math"
+	"cosmossdk.io/math"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
@@ -15,16 +16,24 @@ import (
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 	porttypes "github.com/cosmos/ibc-go/v8/modules/core/05-port/types"
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
+	connecttypes "github.com/skip-mev/connect/v2/pkg/types"
+	marketmapkeeper "github.com/skip-mev/connect/v2/x/marketmap/keeper"
+	marketmaptypes "github.com/skip-mev/connect/v2/x/marketmap/types"
+	oraclekeeper "github.com/skip-mev/connect/v2/x/oracle/keeper"
+	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
 	"github.com/stretchr/testify/suite"
 
+	assetskeeper "github.com/milkyway-labs/milkyway/v10/x/assets/keeper"
+	assetstypes "github.com/milkyway-labs/milkyway/v10/x/assets/types"
 	"github.com/milkyway-labs/milkyway/v10/x/liquidvesting/keeper"
 	"github.com/milkyway-labs/milkyway/v10/x/liquidvesting/testutils"
 	"github.com/milkyway-labs/milkyway/v10/x/liquidvesting/types"
 	operatorskeeper "github.com/milkyway-labs/milkyway/v10/x/operators/keeper"
 	operatorstypes "github.com/milkyway-labs/milkyway/v10/x/operators/types"
 	poolskeeper "github.com/milkyway-labs/milkyway/v10/x/pools/keeper"
-	poolstypes "github.com/milkyway-labs/milkyway/v10/x/pools/types"
 	restakingkeeper "github.com/milkyway-labs/milkyway/v10/x/restaking/keeper"
+	rewardskeeper "github.com/milkyway-labs/milkyway/v10/x/rewards/keeper"
+	rewardstypes "github.com/milkyway-labs/milkyway/v10/x/rewards/types"
 	serviceskeeper "github.com/milkyway-labs/milkyway/v10/x/services/keeper"
 	servicestypes "github.com/milkyway-labs/milkyway/v10/x/services/types"
 )
@@ -46,12 +55,16 @@ type KeeperTestSuite struct {
 
 	liquidVestingModuleAddress sdk.AccAddress
 
-	ak authkeeper.AccountKeeper
-	bk bankkeeper.BaseKeeper
-	ok *operatorskeeper.Keeper
-	pk *poolskeeper.Keeper
-	sk *serviceskeeper.Keeper
-	rk *restakingkeeper.Keeper
+	ak              authkeeper.AccountKeeper
+	bk              bankkeeper.BaseKeeper
+	ok              *operatorskeeper.Keeper
+	pk              *poolskeeper.Keeper
+	sk              *serviceskeeper.Keeper
+	marketMapKeeper *marketmapkeeper.Keeper
+	oracleKeeper    *oraclekeeper.Keeper
+	assetsKeeper    *assetskeeper.Keeper
+	restakingKeeper *restakingkeeper.Keeper
+	rewardsKeeper   *rewardskeeper.Keeper
 
 	k *keeper.Keeper
 
@@ -69,10 +82,13 @@ func (suite *KeeperTestSuite) SetupTest() {
 	suite.bk = data.BankKeeper
 	suite.ibcm = data.IBCMiddleware
 	suite.pk = data.PoolsKeeper
-
 	suite.ok = data.OperatorsKeeper
 	suite.sk = data.ServicesKeeper
-	suite.rk = data.RestakingKeeper
+	suite.marketMapKeeper = data.MarketMapKeeper
+	suite.oracleKeeper = data.OracleKeeper
+	suite.assetsKeeper = data.AssetsKeeper
+	suite.restakingKeeper = data.RestakingKeeper
+	suite.rewardsKeeper = data.RewardsKeeper
 	suite.k = data.Keeper
 
 	// Setup IBC
@@ -85,43 +101,31 @@ func (suite *KeeperTestSuite) SetupTest() {
 func (suite *KeeperTestSuite) fundAccount(ctx sdk.Context, address string, amount sdk.Coins) {
 	// Mint the tokens in the insurance fund.
 	err := suite.bk.MintCoins(ctx, types.ModuleName, amount)
-	suite.Assert().NoError(err)
+	suite.Require().NoError(err)
 
 	err = suite.bk.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.MustAccAddressFromBech32(address), amount)
-	suite.Assert().NoError(err)
+	suite.Require().NoError(err)
 }
 
 // mintLockedRepresentation mints the locked representation of the provided amount to
 // the user balance
 func (suite *KeeperTestSuite) mintLockedRepresentation(ctx sdk.Context, address string, amount sdk.Coins) {
 	accAddress, err := sdk.AccAddressFromBech32(address)
-	suite.Assert().NoError(err)
+	suite.Require().NoError(err)
 
 	_, err = suite.k.MintLockedRepresentation(ctx, accAddress, amount)
-	suite.Assert().NoError(err)
+	suite.Require().NoError(err)
 }
 
 // fundAccountInsuranceFund add the given amount of coins to the account's insurance fund
 func (suite *KeeperTestSuite) fundAccountInsuranceFund(ctx sdk.Context, address string, amount sdk.Coins) {
 	// Mint the tokens in the insurance fund.
 	err := suite.bk.MintCoins(ctx, types.ModuleName, amount)
-	suite.Assert().NoError(err)
+	suite.Require().NoError(err)
 
 	// Assign those tokens to the user insurance fund
 	err = suite.k.AddToUserInsuranceFund(ctx, address, amount)
-	suite.Assert().NoError(err)
-}
-
-// createPool creates a test pool with the given id and denom
-func (suite *KeeperTestSuite) createPool(ctx sdk.Context, id uint32, denom string) {
-	err := suite.pk.SavePool(ctx, poolstypes.Pool{
-		ID:              id,
-		Denom:           denom,
-		Address:         poolstypes.GetPoolAddress(id).String(),
-		Tokens:          sdkmath.NewInt(0),
-		DelegatorShares: sdkmath.LegacyNewDec(0),
-	})
-	suite.Assert().NoError(err)
+	suite.Require().NoError(err)
 }
 
 // createService creates a test service with the provided id
@@ -136,7 +140,7 @@ func (suite *KeeperTestSuite) createService(ctx sdk.Context, id uint32) {
 		fmt.Sprintf("service-%d-admin", id),
 		false,
 	))
-	suite.Assert().NoError(err)
+	suite.Require().NoError(err)
 }
 
 func (suite *KeeperTestSuite) createOperator(ctx sdk.Context, id uint32) {
@@ -148,7 +152,46 @@ func (suite *KeeperTestSuite) createOperator(ctx sdk.Context, id uint32) {
 		"",
 		fmt.Sprintf("operator-%d-admin", id),
 	))
-	suite.Assert().NoError(err)
+	suite.Require().NoError(err)
+}
+
+// This code snippet is copied from x/rewards/keeper/common_test.go
+// TODO: remove redundant code
+// registerCurrency registers a currency with the given denomination, ticker
+// and price. registerCurrency creates a market for the currency if not exists.
+func (suite *KeeperTestSuite) registerCurrency(ctx sdk.Context, denom string, ticker string, exponent uint32, price math.LegacyDec) {
+	// Create the market only if it doesn't exist.
+	mmTicker := marketmaptypes.NewTicker(ticker, rewardstypes.USDTicker, math.LegacyPrecision, 0, true)
+	hasMarket, err := suite.marketMapKeeper.HasMarket(ctx, mmTicker.String())
+	suite.Require().NoError(err)
+
+	if !hasMarket {
+		err = suite.marketMapKeeper.CreateMarket(ctx, marketmaptypes.Market{Ticker: mmTicker})
+		suite.Require().NoError(err)
+	}
+
+	// Set the price for the currency pair.
+	err = suite.oracleKeeper.SetPriceForCurrencyPair(
+		ctx,
+		connecttypes.NewCurrencyPair(ticker, rewardstypes.USDTicker),
+		oracletypes.QuotePrice{
+			Price:          math.NewIntFromBigInt(price.BigInt()),
+			BlockTimestamp: ctx.BlockTime(),
+			BlockHeight:    uint64(ctx.BlockHeight()),
+		},
+	)
+	suite.Require().NoError(err)
+
+	// Register the currency.
+	err = suite.assetsKeeper.SetAsset(ctx, assetstypes.NewAsset(denom, ticker, exponent))
+	suite.Require().NoError(err)
+}
+
+func (suite *KeeperTestSuite) allocateRewards(ctx sdk.Context, duration time.Duration) sdk.Context {
+	ctx = ctx.WithBlockTime(ctx.BlockTime().Add(duration)).WithBlockHeight(ctx.BlockHeight() + 1)
+	err := suite.rewardsKeeper.AllocateRewards(ctx)
+	suite.Require().NoError(err)
+	return ctx
 }
 
 // ---------------------------------------------

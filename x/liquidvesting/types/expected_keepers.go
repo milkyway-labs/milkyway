@@ -9,6 +9,7 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
 	restakingtypes "github.com/milkyway-labs/milkyway/v10/x/restaking/types"
+	rewardstypes "github.com/milkyway-labs/milkyway/v10/x/rewards/types"
 )
 
 type AccountKeeper interface {
@@ -34,6 +35,7 @@ type BankKeeper interface {
 	GetAllBalances(ctx context.Context, addr sdk.AccAddress) sdk.Coins
 	GetDenomMetaData(ctx context.Context, denom string) (banktypes.Metadata, bool)
 	SetDenomMetaData(ctx context.Context, metadata banktypes.Metadata)
+	DenomOwners(ctx context.Context, req *banktypes.QueryDenomOwnersRequest) (*banktypes.QueryDenomOwnersResponse, error)
 }
 
 type PoolsKeeper interface {
@@ -49,11 +51,18 @@ type ServicesKeeper interface {
 }
 
 type RestakingKeeper interface {
-	GetPoolDelegation(ctx context.Context, poolID uint32, userAddress string) (restakingtypes.Delegation, bool, error)
-	IterateUserServiceDelegations(ctx context.Context, userAddress string, cb func(restakingtypes.Delegation) (bool, error)) error
-	IterateUserOperatorDelegations(ctx context.Context, userAddress string, cb func(restakingtypes.Delegation) (bool, error)) error
 	UnbondRestakedAssets(ctx context.Context, user sdk.AccAddress, amount sdk.Coins) (time.Time, error)
 	GetAllUnbondingDelegations(ctx context.Context) ([]restakingtypes.UnbondingDelegation, error)
 	GetAllUserRestakedCoins(ctx context.Context, userAddress string) (sdk.DecCoins, error)
 	GetAllUserUnbondingDelegations(ctx context.Context, userAddress string) []restakingtypes.UnbondingDelegation
+	IterateUserDelegations(ctx context.Context, userAddress string, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
+	GetDelegationTarget(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32) (restakingtypes.DelegationTarget, error)
+	GetDelegation(ctx context.Context, delType restakingtypes.DelegationType, targetID uint32, delegator string) (restakingtypes.Delegation, bool, error)
+	IterateAllPoolDelegations(ctx context.Context, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
+	IterateAllOperatorDelegations(ctx context.Context, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
+	IterateAllServiceDelegations(ctx context.Context, cb func(del restakingtypes.Delegation) (stop bool, err error)) error
+}
+
+type RewardsKeeper interface {
+	WithdrawDelegationRewards(ctx context.Context, delAddr sdk.AccAddress, delType restakingtypes.DelegationType, targetID uint32) (rewardstypes.Pools, error)
 }

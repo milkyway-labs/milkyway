@@ -28,7 +28,7 @@ func (suite *KeeperTestSuite) TestKeeper_MintLockedRepresentation() {
 			shouldErr: false,
 			check: func(ctx sdk.Context) {
 				denom, err := types.GetLockedRepresentationDenom("stake")
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 				accAddr := sdk.MustAccAddressFromBech32("cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd")
 				balance := suite.bk.GetBalance(ctx, accAddr, "locked/stake")
 				suite.Assert().Equal(sdk.NewInt64Coin(denom, 1000), balance)

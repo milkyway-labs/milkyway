@@ -243,8 +243,9 @@ func (suite *KeeperTestSuite) TestKeeper_SendRestrictionFn() {
 		{
 			name: "sending normal coins between restaking targets is not allowed",
 			store: func(ctx sdk.Context) {
-				// Create a test service and operator
-				suite.createPool(ctx, 1, LockedIBCDenom)
+				// Create a test pool and operator
+				err := suite.pk.SavePool(ctx, poolstypes.NewPool(1, LockedIBCDenom))
+				suite.Require().NoError(err)
 				suite.createOperator(ctx, 1)
 			},
 			from:      poolstypes.GetPoolAddress(1),

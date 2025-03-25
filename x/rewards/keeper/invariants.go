@@ -143,7 +143,7 @@ func CanWithdrawInvariant(k *Keeper) sdk.Invariant {
 
 		// iterate over all pools
 		err = k.poolsKeeper.IteratePools(ctx, func(pool poolstypes.Pool) (stop bool, err error) {
-			target, err := k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_POOL, pool.ID)
+			target, err := k.restakingKeeper.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_POOL, pool.ID)
 			if err != nil {
 				return true, err
 			}
@@ -151,7 +151,7 @@ func CanWithdrawInvariant(k *Keeper) sdk.Invariant {
 			delegationAddrs, ok := poolDelegationAddrs[pool.ID]
 			if ok {
 				for _, delAddr := range delegationAddrs {
-					if _, err := k.WithdrawDelegationRewards(ctx, delAddr, target); err != nil {
+					if _, err := k.WithdrawDelegationRewards(ctx, delAddr, restakingtypes.DELEGATION_TYPE_POOL, pool.ID); err != nil {
 						panic(err)
 					}
 				}
@@ -179,7 +179,7 @@ func CanWithdrawInvariant(k *Keeper) sdk.Invariant {
 
 		// iterate over all operators
 		err = k.operatorsKeeper.IterateOperators(ctx, func(operator operatorstypes.Operator) (stop bool, err error) {
-			target, err := k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, operator.ID)
+			target, err := k.restakingKeeper.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_OPERATOR, operator.ID)
 			if err != nil {
 				return true, err
 			}
@@ -187,7 +187,7 @@ func CanWithdrawInvariant(k *Keeper) sdk.Invariant {
 			delegationAddrs, ok := operatorDelegationAddrs[operator.ID]
 			if ok {
 				for _, delAddr := range delegationAddrs {
-					if _, err := k.WithdrawDelegationRewards(ctx, delAddr, target); err != nil {
+					if _, err := k.WithdrawDelegationRewards(ctx, delAddr, restakingtypes.DELEGATION_TYPE_OPERATOR, operator.ID); err != nil {
 						panic(err)
 					}
 				}
@@ -216,7 +216,7 @@ func CanWithdrawInvariant(k *Keeper) sdk.Invariant {
 
 		// iterate over all services
 		err = k.servicesKeeper.IterateServices(ctx, func(service servicestypes.Service) (stop bool, err error) {
-			target, err := k.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_SERVICE, service.ID)
+			target, err := k.restakingKeeper.GetDelegationTarget(ctx, restakingtypes.DELEGATION_TYPE_SERVICE, service.ID)
 			if err != nil {
 				return true, err
 			}
@@ -224,7 +224,7 @@ func CanWithdrawInvariant(k *Keeper) sdk.Invariant {
 			delegationAddrs, ok := serviceDelegationAddrs[service.ID]
 			if ok {
 				for _, delAddr := range delegationAddrs {
-					if _, err := k.WithdrawDelegationRewards(ctx, delAddr, target); err != nil {
+					if _, err := k.WithdrawDelegationRewards(ctx, delAddr, restakingtypes.DELEGATION_TYPE_SERVICE, service.ID); err != nil {
 						panic(err)
 					}
 				}
