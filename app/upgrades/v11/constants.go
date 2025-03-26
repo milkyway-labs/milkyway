@@ -1,6 +1,8 @@
 package v11
 
 import (
+	_ "embed"
+
 	storetypes "cosmossdk.io/store/types"
 
 	"github.com/milkyway-labs/milkyway/v10/app/upgrades"
@@ -8,6 +10,9 @@ import (
 )
 
 const UpgradeName = "v11"
+
+//go:embed data.json
+var dataBz []byte
 
 var Upgrade = upgrades.Upgrade{
 	UpgradeName:          UpgradeName,
