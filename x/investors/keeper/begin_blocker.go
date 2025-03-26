@@ -11,8 +11,10 @@ import (
 // have ended their vesting period.
 func (k *Keeper) RemoveVestingEndedInvestors(ctx context.Context) error {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	currTime := sdkCtx.BlockTime().Unix()
-	iter, err := k.InvestorsVestingQueue.Iterate(ctx, collections.NewPrefixUntilPairRange[int64, string](currTime))
+	iter, err := k.InvestorsVestingQueue.Iterate(
+		ctx,
+		collections.NewPrefixUntilPairRange[int64, string](sdkCtx.BlockTime().Unix()),
+	)
 	if err != nil {
 		return err
 	}
