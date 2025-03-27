@@ -29,8 +29,12 @@ type Keeper struct {
 	VestingInvestors collections.KeySet[string]
 	// (withdraw address, rewards) pairs
 	VestingInvestorsRewards collections.Map[string, types.VestingInvestorRewards]
-	// (withdraw address, delegator) pairs
-	Delegators collections.Map[string, string]
+
+	// CurrentDelegator is set when a delegator's rewards are withdrawn
+	// and is removed right after the rewards are withdrawn.
+	// SendRestrictionFn uses this to determine the original delegator
+	// regardless of the withdraw address.
+	CurrentDelegator collections.Item[string]
 
 	// authority represents the address capable of executing a governance message.
 	// Typically, this should be the x/gov module account.
@@ -77,11 +81,10 @@ func NewKeeper(
 			collections.StringKey,
 			codec.CollValue[types.VestingInvestorRewards](cdc),
 		),
-		Delegators: collections.NewMap(
+		CurrentDelegator: collections.NewItem(
 			sb,
-			types.DelegatorsKeyPrefix,
-			"delegators",
-			collections.StringKey,
+			types.CurrentDelegatorKey,
+			"current_delegator",
 			collections.StringValue,
 		),
 	}

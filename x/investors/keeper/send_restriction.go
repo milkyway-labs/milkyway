@@ -2,7 +2,9 @@ package keeper
 
 import (
 	"context"
+	"errors"
 
+	"cosmossdk.io/collections"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 
@@ -17,17 +19,19 @@ import (
 func (k *Keeper) SendRestrictionFn(ctx context.Context, from sdk.AccAddress, to sdk.AccAddress, amount sdk.Coins) (sdk.AccAddress, error) {
 	// If the sender is not the distribution module account, skip.
 	distrModuleAddr := k.accountKeeper.GetModuleAddress(distrtypes.ModuleName)
+	// If the from address is not the distribution module address, it's probably a
+	// normal transfer so skip it.
 	if !from.Equals(distrModuleAddr) {
 		return to, nil
 	}
 
-	// Get the delegator address from the withdraw address
-	toAddrStr, err := k.accountKeeper.AddressCodec().BytesToString(to)
+	delegator, err := k.GetCurrentDelegator(ctx)
 	if err != nil {
-		return nil, err
-	}
-	delegator, err := k.GetDelegatorAddressByWithdrawAddress(ctx, toAddrStr)
-	if err != nil {
+		// If the current delegator is not set, it's probably community pool spend action
+		// so skip it.
+		if errors.Is(err, collections.ErrNotFound) {
+			return to, nil
+		}
 		return nil, err
 	}
 
@@ -36,6 +40,7 @@ func (k *Keeper) SendRestrictionFn(ctx context.Context, from sdk.AccAddress, to 
 	if err != nil {
 		return nil, err
 	}
+	// If the delegator is not a vesting investor skip it.
 	if !isVestingInvestor {
 		return to, nil
 	}

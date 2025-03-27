@@ -13,11 +13,6 @@ import (
 )
 
 func (suite *KeeperTestSuite) TestSendRestrictionFn() {
-	// normal send shouldn't be affected
-	// if the withdraw address is a vesting investor, it shouldn't be affected
-	// it should get the delegator address by the withdraw address
-	// if it's a vesting account but not a vesting investor, it shouldn't be affected
-	// happy path
 	ctx, _ := suite.ctx.CacheContext()
 	ctx = suite.ctx.WithBlockTime(time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC))
 
@@ -60,13 +55,15 @@ func (suite *KeeperTestSuite) TestSendRestrictionFn() {
 	suite.fundModuleAccount(ctx, distrtypes.ModuleName, utils.MustParseCoins("100000000stake"))
 
 	testCases := []struct {
-		name  string
-		setup func(ctx sdk.Context)
-		send  func(ctx sdk.Context)
-		check func(ctx sdk.Context)
+		name             string
+		setup            func(ctx sdk.Context)
+		currentDelegator sdk.AccAddress
+		send             func(ctx sdk.Context)
+		check            func(ctx sdk.Context)
 	}{
 		{
-			name: "vesting investor's staking rewards should be redirected",
+			name:             "vesting investor's staking rewards should be redirected",
+			currentDelegator: vestingInvestorAddr,
 			send: func(ctx sdk.Context) {
 				err := suite.bk.SendCoinsFromModuleToAccount(
 					ctx,
@@ -86,7 +83,8 @@ func (suite *KeeperTestSuite) TestSendRestrictionFn() {
 			},
 		},
 		{
-			name: "normal transfers should not be affected",
+			name:             "normal transfers should not be affected",
+			currentDelegator: normalAddr,
 			send: func(ctx sdk.Context) {
 				err := suite.bk.SendCoinsFromModuleToAccount(
 					ctx,
@@ -102,7 +100,8 @@ func (suite *KeeperTestSuite) TestSendRestrictionFn() {
 			},
 		},
 		{
-			name: "sending from a vesting investor should not be affected",
+			name:             "sending from a vesting investor should not be affected",
+			currentDelegator: nil,
 			send: func(ctx sdk.Context) {
 				err := suite.bk.SendCoinsFromAccountToModule(
 					ctx,
@@ -118,7 +117,8 @@ func (suite *KeeperTestSuite) TestSendRestrictionFn() {
 			},
 		},
 		{
-			name: "sending from normal accounts to a vesting investor should not be affected",
+			name:             "sending from normal accounts to a vesting investor should not be affected",
+			currentDelegator: nil,
 			send: func(ctx sdk.Context) {
 				err := suite.bk.SendCoins(
 					ctx,
@@ -134,7 +134,8 @@ func (suite *KeeperTestSuite) TestSendRestrictionFn() {
 			},
 		},
 		{
-			name: "normal vesting account should not be affected",
+			name:             "normal vesting account should not be affected",
+			currentDelegator: normalVestingAddr,
 			send: func(ctx sdk.Context) {
 				err := suite.bk.SendCoinsFromModuleToAccount(
 					ctx,
@@ -150,7 +151,8 @@ func (suite *KeeperTestSuite) TestSendRestrictionFn() {
 			},
 		},
 		{
-			name: "withdraw address is properly handled",
+			name:             "withdraw address is properly handled",
+			currentDelegator: vestingInvestorAddr,
 			setup: func(ctx sdk.Context) {
 				msgServer := distrkeeper.NewMsgServerImpl(suite.dk)
 				_, err := msgServer.SetWithdrawAddress(
@@ -177,30 +179,6 @@ func (suite *KeeperTestSuite) TestSendRestrictionFn() {
 				suite.Assert().Equal("1000000stake", balances.String())
 			},
 		},
-		{
-			name: "if the withdraw address is a vesting investor's, it should not be affected",
-			setup: func(ctx sdk.Context) {
-				msgServer := distrkeeper.NewMsgServerImpl(suite.dk)
-				_, err := msgServer.SetWithdrawAddress(
-					ctx,
-					distrtypes.NewMsgSetWithdrawAddress(normalAddr, vestingInvestorAddr),
-				)
-				suite.Require().NoError(err)
-			},
-			send: func(ctx sdk.Context) {
-				err := suite.bk.SendCoinsFromModuleToAccount(
-					ctx,
-					distrtypes.ModuleName,
-					vestingInvestorAddr,
-					utils.MustParseCoins("1000000stake"),
-				)
-				suite.Require().NoError(err)
-			},
-			check: func(ctx sdk.Context) {
-				balances := suite.bk.GetAllBalances(ctx, vestingInvestorAddr)
-				suite.Assert().Equal("3000000stake", balances.String())
-			},
-		},
 	}
 
 	for _, tc := range testCases {
@@ -209,6 +187,11 @@ func (suite *KeeperTestSuite) TestSendRestrictionFn() {
 
 			if tc.setup != nil {
 				tc.setup(ctx)
+			}
+
+			if tc.currentDelegator != nil {
+				err := suite.k.SetCurrentDelegator(ctx, tc.currentDelegator.String())
+				suite.Require().NoError(err)
 			}
 
 			tc.send(ctx)

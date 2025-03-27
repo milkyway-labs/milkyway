@@ -306,6 +306,7 @@ func NewAppKeeper(
 	// NOTE: stakingKeeper above is passed by reference, so that it will contain these hooks
 	appKeepers.StakingKeeper.SetHooks(
 		stakingtypes.NewMultiStakingHooks(
+			appKeepers.InvestorsKeeper.StakingHooks(), // It must appear before distrKeeper
 			appKeepers.DistrKeeper.Hooks(),
 			appKeepers.SlashingKeeper.Hooks(),
 			appKeepers.ProviderKeeper.Hooks(),
@@ -634,7 +635,7 @@ func NewAppKeeper(
 		appKeepers.AccountKeeper,
 		appKeepers.BankKeeper,
 		appKeepers.StakingKeeper,
-		appKeepers.DistrKeeper,
+		&appKeepers.DistrKeeper, // Need to pass reference since we're setting hooks later
 		govAuthority,
 	)
 
@@ -644,7 +645,7 @@ func NewAppKeeper(
 	appKeepers.BankKeeper.SetHooks(appKeepers.TokenFactoryKeeper.Hooks())
 
 	// Set the hooks up to this point
-	appKeepers.DistrKeeper.SetHooks(appKeepers.InvestorsKeeper.Hooks())
+	appKeepers.DistrKeeper.SetHooks(appKeepers.InvestorsKeeper.DistrHooks())
 	appKeepers.PoolsKeeper.SetHooks(
 		appKeepers.RewardsKeeper.PoolsHooks(),
 	)

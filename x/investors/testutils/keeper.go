@@ -67,12 +67,15 @@ func NewKeeperTestData(t *testing.T) KeeperTestData {
 		data.AccountKeeper,
 		data.BankKeeper,
 		data.StakingKeeper,
-		data.DistrKeeper,
+		&data.DistrKeeper, // Need to pass reference since we're setting hooks later
 		data.AuthorityAddress,
 	)
 
-	data.StakingKeeper.SetHooks(data.DistrKeeper.Hooks())
-	data.DistrKeeper.SetHooks(data.Keeper.Hooks())
+	data.StakingKeeper.SetHooks(stakingtypes.NewMultiStakingHooks(
+		data.Keeper.StakingHooks(), // It must appear before distrKeeper
+		data.DistrKeeper.Hooks(),
+	))
+	data.DistrKeeper.SetHooks(data.Keeper.DistrHooks())
 	data.BankKeeper.AppendSendRestriction(data.Keeper.SendRestrictionFn)
 
 	data.StakingKeeper.InitGenesis(data.Context, stakingtypes.DefaultGenesisState())

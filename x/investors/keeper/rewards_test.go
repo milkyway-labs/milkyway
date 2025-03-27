@@ -1,6 +1,7 @@
 package keeper_test
 
 import (
+	"fmt"
 	"time"
 
 	sdkmath "cosmossdk.io/math"
@@ -180,6 +181,7 @@ func (suite *KeeperTestSuite) TestUpdateInvestorsRewardRatio() {
 
 	// Investor's rewards are automatically withdrawn upon the ratio update
 	balancesBefore := suite.bk.GetAllBalances(ctx, investorAddr)
+	fmt.Println("this point:")
 	err = suite.k.UpdateInvestorsRewardRatio(ctx, utils.MustParseDec("1")) // 100%
 	suite.Require().NoError(err)
 	err = investors.EndBlocker(ctx, suite.k)

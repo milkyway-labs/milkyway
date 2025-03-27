@@ -130,21 +130,22 @@ func (k *Keeper) IncrementVestingInvestorRewards(ctx context.Context, delegator 
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// GetDelegatorAddressByWithdrawAddress returns the delegator address associated
-// with the withdraw address. If the delegator hasn't set the withdraw address,
-// the withdraw address is considered as the delegator address.
-func (k *Keeper) GetDelegatorAddressByWithdrawAddress(ctx context.Context, withdrawAddr string) (string, error) {
-	delegator, err := k.Delegators.Get(ctx, withdrawAddr)
-	if err != nil {
-		if errors.Is(err, collections.ErrNotFound) {
-			// The delegator hasn't set the withdraw address, thus the withdraw address is
-			// the delegator's address
-			return withdrawAddr, nil
-		}
-		return "", err
-	}
-	return delegator, nil
+// GetCurrentDelegator returns the current delegator.
+func (k *Keeper) GetCurrentDelegator(ctx context.Context) (string, error) {
+	return k.CurrentDelegator.Get(ctx)
 }
+
+// SetCurrentDelegator sets the current delegator.
+func (k *Keeper) SetCurrentDelegator(ctx context.Context, delegator string) error {
+	return k.CurrentDelegator.Set(ctx, delegator)
+}
+
+// RemoveCurrentDelegator removes the current delegator.
+func (k *Keeper) RemoveCurrentDelegator(ctx context.Context) error {
+	return k.CurrentDelegator.Remove(ctx)
+}
+
+// --------------------------------------------------------------------------------------------------------------------
 
 // WithdrawAllDelegationRewards withdraws all the staking rewards allocated to
 // the delegator.

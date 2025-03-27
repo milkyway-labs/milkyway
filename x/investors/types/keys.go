@@ -14,5 +14,5 @@ var (
 	InvestorsVestingQueueKeyPrefix  = collections.NewPrefix(0x02)
 	VestingInvestorsKeyPrefix       = collections.NewPrefix(0x03)
 	VestingInvestorRewardsKeyPrefix = collections.NewPrefix(0x04)
-	DelegatorsKeyPrefix             = collections.NewPrefix(0x05)
+	CurrentDelegatorKey             = collections.NewPrefix(0x05)
 )
