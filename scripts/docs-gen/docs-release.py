@@ -2,7 +2,7 @@ import os
 import shutil
 import argparse
 from packaging.version import Version
-from utils import generate_docs
+from utils import generate_docs, write_gitbook_meta
 
 
 def generate_release_docs(
@@ -20,7 +20,7 @@ def generate_release_docs(
         shutil.rmtree(version_dir)
 
     # Generate the documentation
-    generate_docs(modules_dir, version_dir)
+    generate_docs(modules_dir, version_dir, True)
 
     # Function to filter out the version dirs
     def version_dirs_filter(dir_name: str) -> bool:
@@ -40,6 +40,7 @@ def generate_release_docs(
 
     # Generate the new README.md
     with open(modules_readme, "w") as readme:
+        write_gitbook_meta(readme)
         readme.write("# Modules version\n\n")
 
         # Print first the main version

@@ -2,6 +2,7 @@ import requests
 import os
 import sys
 import re
+import io
 
 
 def github_url_to_raw(url: str) -> str:
@@ -13,7 +14,25 @@ def get_lines(text: str, start: int, end: int):
     return '\n'.join(lines[start-1:end])
 
 
-def process_markdown_file(file_path: str, output_dir: str) -> None:
+def write_gitbook_meta(file: io.TextIOWrapper):
+    file.write("""---
+layout:
+  title:
+    visible: true
+  description:
+    visible: false
+  tableOfContents:
+    visible: true
+  outline:
+    visible: false
+  pagination:
+    visible: true
+---
+
+""")
+
+
+def process_markdown_file(file_path: str, output_dir: str, gitbook_meta: bool):
     print(f"Processing {file_path}")
     with open(file_path, 'r') as file:
         content = file.read()
@@ -59,11 +78,13 @@ def process_markdown_file(file_path: str, output_dir: str) -> None:
         os.makedirs(parent)
 
     with open(output_dir, 'w') as file:
+        if gitbook_meta:
+            write_gitbook_meta(file)
         file.write(content)
     print(f"Saved to {output_dir}")
 
 
-def generate_docs(modules_dir: str, output_dir: str) -> None:
+def generate_docs(modules_dir: str, output_dir: str, gitbook_meta: bool = False):
     # Check if the modules directory exists
     if not os.path.isdir(modules_dir):
         sys.exit('Error: The modules directory does not exist.')
@@ -78,7 +99,7 @@ def generate_docs(modules_dir: str, output_dir: str) -> None:
             if filename.endswith('.md'):
                 file_path = os.path.join(foldername, filename)
                 output_path = file_path.replace(modules_dir, output_dir)
-                process_markdown_file(file_path, output_path)
+                process_markdown_file(file_path, output_path, gitbook_meta)
 
     # Delete the README.md file if it exists
     readme_file = os.path.join(output_dir, 'README.md')
@@ -91,6 +112,8 @@ def generate_docs(modules_dir: str, output_dir: str) -> None:
 
     # Generate the README.md file
     with open(readme_file, 'w') as readme:
+        if gitbook_meta:
+            write_gitbook_meta(readme)
         readme.write("# Modules\n\n")
         for module in modules:
             readme.write(f"- [{module}]({module}/README.md)\n")
