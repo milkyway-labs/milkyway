@@ -111,7 +111,7 @@ def update_summary(summary_file: str, docs_dir: str):
     """
     modules_by_version = get_modules_by_version(docs_dir)
     # Generate the new summary
-    new_content = ["[Modules](modules/README.md)"]
+    new_content = []
     for (version, modules) in modules_by_version:
         new_content.append(f"* [{version}](modules/{version}/README.md)")
         modules.sort()
