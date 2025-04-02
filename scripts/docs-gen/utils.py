@@ -3,6 +3,7 @@ import os
 import sys
 import re
 import io
+import pathlib
 
 
 def github_url_to_raw(url: str) -> str:
@@ -117,10 +118,17 @@ def generate_docs(modules_dir: str, output_dir: str, gitbook_meta: bool = False)
     modules = os.listdir(output_dir)
     modules.sort()
 
+    # Generate the modules section
+    modules_section = "## Modules\n"
+    for module in modules:
+        modules_section += (f"\n* [{module}]({module}/README.md)")
+
+    script_path = pathlib.Path(__file__).parent.resolve()
+    template_file_file = os.path.join(script_path, 'version-template.md')
+    version_template = open(template_file_file, 'r').read()
+    version_file = version_template.replace('{{ modules }}', modules_section)
+
     # Generate the README.md file
     with open(readme_file, 'w') as readme:
-        if gitbook_meta:
-            write_gitbook_meta(readme)
-        readme.write("# Modules\n\n")
-        for module in modules:
-            readme.write(f"* [{module}]({module}/README.md)\n")
+        readme.write(version_file)
+
