@@ -73,7 +73,7 @@ def update_summary(summary_file: str, docs_dir: str):
     for version, modules in summary.items():
         new_content += f"\n* [{version}](modules/{version}/README.md)\n"
         for module in modules:
-            new_content += f"  * [{module}](modules/{version}/{module}/README.md)\n"
+            new_content += f"  * [x/{module}](modules/{version}/{module}/README.md)\n"
 
     # Update the summary file
     with open(summary_file, 'r', encoding='utf-8') as file:
