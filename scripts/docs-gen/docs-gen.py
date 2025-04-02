@@ -51,7 +51,8 @@ def process_markdown_file(file_path: str, output_dir: str) -> None:
         reference_text = get_lines(res.text, start, end)
 
         # Update the content with the reference
-        content = content.replace(f" reference\n{reference_url}", f"\n{reference_text}")
+        content = content.replace(
+            f" reference\n{reference_url}", f"\n{reference_text}")
 
     # Save the file
     parent = os.path.dirname(output_dir)
@@ -85,6 +86,21 @@ def main():
                 file_path = os.path.join(foldername, filename)
                 output_path = file_path.replace(args.modules, args.output)
                 process_markdown_file(file_path, output_path)
+
+    # Delete the README.md file if it exists
+    readme_file = os.path.join(args.output, 'README.md')
+    if os.path.exists(readme_file):
+        os.remove(readme_file)
+
+    # Prepare the list of modules
+    modules = os.listdir(args.output)
+    modules.sort()
+
+    # Generate the README.md file
+    with open(readme_file, 'w') as readme:
+        readme.write("# Modules\n\n")
+        for module in modules:
+            readme.write(f"- [{module}]({module}/README.md)\n")
 
 
 if __name__ == "__main__":
