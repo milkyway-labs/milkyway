@@ -2,7 +2,7 @@ import os
 import shutil
 import argparse
 from packaging.version import Version
-from utils import generate_docs, write_gitbook_meta
+from utils import generate_docs
 import re
 
 

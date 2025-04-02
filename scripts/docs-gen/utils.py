@@ -95,8 +95,15 @@ def generate_docs(modules_dir: str, output_dir: str, gitbook_meta: bool = False)
 
     # Recursively search for markdown files in the modules directory
     for foldername, subfolders, filenames in os.walk(modules_dir):
+        # Prevent analysis of .md files in sub directories
+        relative_folder = foldername.replace(modules_dir, "")
+        relative_path_split = relative_folder.split("/")
+        if len(relative_path_split) > 2:
+            continue
+
         for filename in filenames:
             if filename.endswith('.md'):
+                print(f"Processing {filename} in {foldername}")
                 file_path = os.path.join(foldername, filename)
                 output_path = file_path.replace(modules_dir, output_dir)
                 process_markdown_file(file_path, output_path, gitbook_meta)
