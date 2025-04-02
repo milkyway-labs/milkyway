@@ -3,6 +3,7 @@ import shutil
 import argparse
 from packaging.version import Version
 from utils import generate_docs, write_gitbook_meta
+import re
 
 
 def generate_release_docs(
@@ -38,17 +39,55 @@ def generate_release_docs(
     if os.path.exists(modules_readme):
         os.remove(modules_readme)
 
-    # Generate the new README.md
-    with open(modules_readme, "w") as readme:
-        write_gitbook_meta(readme)
-        readme.write("# Modules version\n\n")
 
-        # Print first the main version
-        if os.path.exists(os.path.join(docs_dir, "main")):
-            readme.write("- [main](./main/README.md)\n")
-        # Print the various versions
-        for version in versions:
-            readme.write(f"- [{version}](./{version}/README.md)\n")
+def update_summary(summary_file: str, docs_dir: str):
+    summary = {}  # type: Dict[str, List[str]]
+    # Generate the summary section
+    for foldername, subfolders, filenames in os.walk(docs_dir):
+        folder = foldername.replace(docs_dir, "")
+        # Ignore the docs dir
+        if folder == "":
+            continue
+        # Ignore path deeper then 2 and the version path
+        folder_split = os.path.split(folder)
+        # The files are organized in version/module/README.md
+        version, module = folder_split
+
+        # We are starting exploring a new version
+        if version == "/":
+            summary[module] = []
+            continue
+
+        # We may have nested folders inside the module's folder
+        # this allows to ignore those cases
+        version_split = version.split("/")
+        version = version_split[1]
+        if version not in summary:
+            continue
+
+        # Add the module to the summary
+        summary[version].append(module)
+
+    # Generate the new summary
+    new_content = "## Chain Modules\n"
+    for version, modules in summary.items():
+        new_content += f"\n* [{version}](modules/{version}/README.md)\n"
+        for module in modules:
+            new_content += f"  * [{module}](modules/{version}/{module}/README.md)\n"
+
+    # Update the summary file
+    with open(summary_file, 'r', encoding='utf-8') as file:
+        content = file.read()
+
+    # Regular expression to match the ## Chain Modules section
+    # Matches everything after '## Chain Modules' until the next '## ' or end of file
+    pattern = r'(## Chain Modules\n)(.*?)(?=\n## |\Z)'
+
+    updated_content = re.sub(
+        pattern, new_content, content, flags=re.DOTALL)
+
+    with open(summary_file, 'w', encoding='utf-8') as file:
+        file.write(updated_content)
 
 
 def main():
@@ -65,7 +104,15 @@ def main():
     if release_version is None:
         release_version = "main"
 
+    summary_file = os.getenv("GITBOOK_SUMMARY")
+    if summary_file is None:
+        summary_file = "./summary.md"
+
+    # Generate the release documentation
     generate_release_docs(args.modules, docs_dir, release_version)
+
+    # Update the Gitbook summary
+    update_summary(summary_file, docs_dir)
 
 
 if __name__ == "__main__":

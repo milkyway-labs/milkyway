@@ -29,6 +29,7 @@ jobs:
       - name: Set up environment 🧰
         run: |
           echo "DOCS_DIR=${GITHUB_WORKSPACE}/milkyway-docs/modules" >> $GITHUB_ENV
+          echo "GITBOOK_SUMMARY=${GITHUB_WORKSPACE}/milkyway-docs/SUMMARY.md" >> $GITHUB_ENV
           if [[ "${{ github.ref }}" == refs/heads/main ]]; then
             echo "RELEASE_VERSION=main" >> $GITHUB_ENV
           elif [[ "${{ github.ref }}" == refs/heads/manuel/publish-tecnical-docs ]]; then
