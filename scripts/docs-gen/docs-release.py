@@ -72,6 +72,7 @@ def update_summary(summary_file: str, docs_dir: str):
     new_content = "## Chain Modules\n"
     for version, modules in summary.items():
         new_content += f"\n* [{version}](modules/{version}/README.md)\n"
+        modules.sort()
         for module in modules:
             new_content += f"  * [x/{module}](modules/{version}/{module}/README.md)\n"
 
