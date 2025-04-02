@@ -45,10 +45,10 @@ def generate_release_docs(
 
         # Print first the main version
         if os.path.exists(os.path.join(docs_dir, "main")):
-            readme.write("- [main](main/README.md)\n")
+            readme.write("- [main](./main/README.md)\n")
         # Print the various versions
         for version in versions:
-            readme.write(f"- [{version}]({version}/README.md)\n")
+            readme.write(f"- [{version}](./{version}/README.md)\n")
 
 
 def main():

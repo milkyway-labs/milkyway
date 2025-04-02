@@ -116,4 +116,4 @@ def generate_docs(modules_dir: str, output_dir: str, gitbook_meta: bool = False)
             write_gitbook_meta(readme)
         readme.write("# Modules\n\n")
         for module in modules:
-            readme.write(f"- [{module}]({module}/README.md)\n")
+            readme.write(f"- [{module}](./{module}/README.md)\n")
