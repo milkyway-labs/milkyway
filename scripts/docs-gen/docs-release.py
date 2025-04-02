@@ -69,23 +69,33 @@ def update_summary(summary_file: str, docs_dir: str):
         summary[version].append(module)
 
     # Generate the new summary
-    new_content = "## Chain Modules\n"
+    new_content = []
     for version, modules in summary.items():
-        new_content += f"\n* [{version}](modules/{version}/README.md)\n"
+        new_content.append(f"* [{version}](modules/{version}/README.md)")
         modules.sort()
         for module in modules:
-            new_content += f"  * [x/{module}](modules/{version}/{module}/README.md)\n"
+            new_content.append(f"  * [x/{module}](modules/{version}/{module}/README.md)")
 
     # Update the summary file
     with open(summary_file, 'r', encoding='utf-8') as file:
         content = file.read()
 
-    # Regular expression to match the ## Chain Modules section
-    # Matches everything after '## Chain Modules' until the next '## ' or end of file
-    pattern = r'(## Chain Modules\n)(.*?)(?=\n## |\Z)'
+    # Regular expression to match content between the <!-- modules --> tags,
+    # ensuring it works even if the section is empty or has indentation
+    # Matches everything between the tags
+    pattern = r'(\s*)(<!-- modules -->\n)(.*?)(\s*<!-- modules -->)'
 
-    updated_content = re.sub(
-        pattern, new_content, content, flags=re.DOTALL)
+    # Matches everything between the tags
+    def replace_match(match):
+        indent, start_tag, boh, end_tag = match.groups()
+        indent = indent.replace('\n', '')
+        end_tag = end_tag.replace('\n', '')
+        indented_content = '\n'.join(
+            [indent + line if line.strip() else indent for line in new_content])
+        return f'\n{indent}{start_tag}{indented_content}\n{end_tag}'
+
+    updated_content = re.sub(pattern, replace_match, content, flags=re.DOTALL)
+    print(updated_content)
 
     with open(summary_file, 'w', encoding='utf-8') as file:
         file.write(updated_content)
@@ -107,10 +117,10 @@ def main():
 
     summary_file = os.getenv("GITBOOK_SUMMARY")
     if summary_file is None:
-        summary_file = "./summary.md"
+        summary_file = "./test/SUMMARY.md"
 
     # Generate the release documentation
-    generate_release_docs(args.modules, docs_dir, release_version)
+    # generate_release_docs(args.modules, docs_dir, release_version)
 
     # Update the Gitbook summary
     update_summary(summary_file, docs_dir)
