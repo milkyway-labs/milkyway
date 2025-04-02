@@ -131,4 +131,3 @@ def generate_docs(modules_dir: str, output_dir: str, gitbook_meta: bool = False)
     # Generate the README.md file
     with open(readme_file, 'w') as readme:
         readme.write(version_file)
-
