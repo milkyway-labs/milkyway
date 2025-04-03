@@ -18,11 +18,12 @@ def get_modules(docs_dir: str) -> List[str]:
         # Ignore the docs dir
         if folder == "":
             continue
-        # Ignore path deeper then 2 and the version path
+
         folder_split = folder.split(os.path.sep)
         if len(folder_split) < 2:
             continue
-        _, module = folder_split
+
+        module = folder_split[1]
 
         # Add the module to the summary
         modules.append(module)
