@@ -32,6 +32,7 @@ import (
 
 	"github.com/milkyway-labs/milkyway/v10/x/assets"
 	ibchooks "github.com/milkyway-labs/milkyway/v10/x/ibc-hooks"
+	"github.com/milkyway-labs/milkyway/v10/x/investors"
 	"github.com/milkyway-labs/milkyway/v10/x/liquidvesting"
 	"github.com/milkyway-labs/milkyway/v10/x/operators"
 	"github.com/milkyway-labs/milkyway/v10/x/pools"
@@ -84,4 +85,5 @@ var AppModuleBasics = module.NewBasicManager(
 	assets.AppModuleBasic{},
 	rewards.AppModuleBasic{},
 	liquidvesting.AppModuleBasic{},
+	investors.AppModuleBasic{},
 )
