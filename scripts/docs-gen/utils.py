@@ -95,7 +95,7 @@ def generate_docs(modules_dir: str, output_dir: str, gitbook_meta: bool = False)
         os.makedirs(output_dir)
 
     # Recursively search for markdown files in the modules directory
-    for foldername, subfolders, filenames in os.walk(modules_dir):
+    for foldername, _, filenames in os.walk(modules_dir):
         # Prevent analysis of .md files in sub directories
         relative_folder = foldername.replace(modules_dir, "")
         relative_path_split = relative_folder.split("/")
@@ -109,25 +109,3 @@ def generate_docs(modules_dir: str, output_dir: str, gitbook_meta: bool = False)
                 output_path = file_path.replace(modules_dir, output_dir)
                 process_markdown_file(file_path, output_path, gitbook_meta)
 
-    # Delete the README.md file if it exists
-    readme_file = os.path.join(output_dir, 'README.md')
-    if os.path.exists(readme_file):
-        os.remove(readme_file)
-
-    # Prepare the list of modules
-    modules = os.listdir(output_dir)
-    modules.sort()
-
-    # Generate the modules section
-    modules_section = "## Modules\n"
-    for module in modules:
-        modules_section += (f"\n* [{module}]({module}/README.md)")
-
-    script_path = pathlib.Path(__file__).parent.resolve()
-    template_file_file = os.path.join(script_path, 'version-template.md')
-    version_template = open(template_file_file, 'r').read()
-    version_file = version_template.replace('{{ modules }}', modules_section)
-
-    # Generate the README.md file
-    with open(readme_file, 'w') as readme:
-        readme.write(version_file)
