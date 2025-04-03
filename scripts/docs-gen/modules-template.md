@@ -14,7 +14,7 @@ layout:
 
 # Chain modules
 
-Here are the documentation of our chain modules organized by version.
+Here is the list of custom modules present in our chain:
 
 {{ modules }}
 
