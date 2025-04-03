@@ -2,6 +2,7 @@ syntax = "proto3";
 package milkyway.investors.v1;
 
 import "amino/amino.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
@@ -13,6 +14,11 @@ service Query {
   // InvestorsRewardRatio queries the investors reward ratio.
   rpc InvestorsRewardRatio(QueryInvestorsRewardRatioRequest) returns (QueryInvestorsRewardRatioResponse) {
     option (google.api.http).get = "/milkyway/investors/v1/investors_reward_ratio";
+  }
+
+  // VestingInvestors queries the list of vesting investors.
+  rpc VestingInvestors(QueryVestingInvestorsRequest) returns (QueryVestingInvestorsResponse) {
+    option (google.api.http).get = "/milkyway/investors/v1/vesting_investors";
   }
 }
 
@@ -31,4 +37,21 @@ message QueryInvestorsRewardRatioResponse {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+}
+
+// QueryVestingInvestorsRequest is request type for the Query/VestingInvestors
+// RPC method.
+message QueryVestingInvestorsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+// QueryVestingInvestorsResponse is response type for the Query/VestingInvestors
+// RPC method.
+message QueryVestingInvestorsResponse {
+  repeated string vesting_investors_addresses = 1 [
+    (cosmos_proto.scalar) = "cosmos.AddressString",
+    (amino.dont_omitempty) = true
+  ];
+
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }

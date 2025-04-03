@@ -8,6 +8,7 @@ import (
 	cosmossdk_io_math "cosmossdk.io/math"
 	fmt "fmt"
 	_ "github.com/cosmos/cosmos-proto"
+	query "github.com/cosmos/cosmos-sdk/types/query"
 	_ "github.com/cosmos/cosmos-sdk/types/tx/amino"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	grpc1 "github.com/cosmos/gogoproto/grpc"
@@ -111,38 +112,151 @@ func (m *QueryInvestorsRewardRatioResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryInvestorsRewardRatioResponse proto.InternalMessageInfo
 
+// QueryVestingInvestorsRequest is request type for the Query/VestingInvestors
+// RPC method.
+type QueryVestingInvestorsRequest struct {
+	Pagination *query.PageRequest `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (m *QueryVestingInvestorsRequest) Reset()         { *m = QueryVestingInvestorsRequest{} }
+func (m *QueryVestingInvestorsRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryVestingInvestorsRequest) ProtoMessage()    {}
+func (*QueryVestingInvestorsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_51057f9e5aef062e, []int{2}
+}
+func (m *QueryVestingInvestorsRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryVestingInvestorsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryVestingInvestorsRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryVestingInvestorsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryVestingInvestorsRequest.Merge(m, src)
+}
+func (m *QueryVestingInvestorsRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryVestingInvestorsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryVestingInvestorsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryVestingInvestorsRequest proto.InternalMessageInfo
+
+func (m *QueryVestingInvestorsRequest) GetPagination() *query.PageRequest {
+	if m != nil {
+		return m.Pagination
+	}
+	return nil
+}
+
+// QueryVestingInvestorsResponse is response type for the Query/VestingInvestors
+// RPC method.
+type QueryVestingInvestorsResponse struct {
+	VestingInvestorsAddresses []string            `protobuf:"bytes,1,rep,name=vesting_investors_addresses,json=vestingInvestorsAddresses,proto3" json:"vesting_investors_addresses,omitempty"`
+	Pagination                *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+}
+
+func (m *QueryVestingInvestorsResponse) Reset()         { *m = QueryVestingInvestorsResponse{} }
+func (m *QueryVestingInvestorsResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryVestingInvestorsResponse) ProtoMessage()    {}
+func (*QueryVestingInvestorsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_51057f9e5aef062e, []int{3}
+}
+func (m *QueryVestingInvestorsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryVestingInvestorsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryVestingInvestorsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryVestingInvestorsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryVestingInvestorsResponse.Merge(m, src)
+}
+func (m *QueryVestingInvestorsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryVestingInvestorsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryVestingInvestorsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryVestingInvestorsResponse proto.InternalMessageInfo
+
+func (m *QueryVestingInvestorsResponse) GetVestingInvestorsAddresses() []string {
+	if m != nil {
+		return m.VestingInvestorsAddresses
+	}
+	return nil
+}
+
+func (m *QueryVestingInvestorsResponse) GetPagination() *query.PageResponse {
+	if m != nil {
+		return m.Pagination
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*QueryInvestorsRewardRatioRequest)(nil), "milkyway.investors.v1.QueryInvestorsRewardRatioRequest")
 	proto.RegisterType((*QueryInvestorsRewardRatioResponse)(nil), "milkyway.investors.v1.QueryInvestorsRewardRatioResponse")
+	proto.RegisterType((*QueryVestingInvestorsRequest)(nil), "milkyway.investors.v1.QueryVestingInvestorsRequest")
+	proto.RegisterType((*QueryVestingInvestorsResponse)(nil), "milkyway.investors.v1.QueryVestingInvestorsResponse")
 }
 
 func init() { proto.RegisterFile("milkyway/investors/v1/query.proto", fileDescriptor_51057f9e5aef062e) }
 
 var fileDescriptor_51057f9e5aef062e = []byte{
-	// 358 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x52, 0xcc, 0xcd, 0xcc, 0xc9,
-	0xae, 0x2c, 0x4f, 0xac, 0xd4, 0xcf, 0xcc, 0x2b, 0x4b, 0x2d, 0x2e, 0xc9, 0x2f, 0x2a, 0xd6, 0x2f,
-	0x33, 0xd4, 0x2f, 0x2c, 0x4d, 0x2d, 0xaa, 0xd4, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x12, 0x85,
-	0x29, 0xd1, 0x83, 0x2b, 0xd1, 0x2b, 0x33, 0x94, 0x12, 0x4c, 0xcc, 0xcd, 0xcc, 0xcb, 0xd7, 0x07,
-	0x93, 0x10, 0x95, 0x52, 0x92, 0xc9, 0xf9, 0xc5, 0xb9, 0xf9, 0xc5, 0xf1, 0x60, 0x9e, 0x3e, 0x84,
-	0x03, 0x95, 0x12, 0x49, 0xcf, 0x4f, 0xcf, 0x87, 0x88, 0x83, 0x58, 0x50, 0x51, 0x99, 0xf4, 0xfc,
-	0xfc, 0xf4, 0x9c, 0x54, 0xfd, 0xc4, 0x82, 0x4c, 0xfd, 0xc4, 0xbc, 0xbc, 0xfc, 0x92, 0xc4, 0x92,
-	0xcc, 0xfc, 0x3c, 0xa8, 0x1e, 0x25, 0x25, 0x2e, 0x85, 0x40, 0x90, 0x3b, 0x3c, 0x61, 0xd6, 0x06,
-	0xa5, 0x96, 0x27, 0x16, 0xa5, 0x04, 0x81, 0x14, 0x05, 0xa5, 0x16, 0x96, 0xa6, 0x16, 0x97, 0x28,
-	0x4d, 0x64, 0xe4, 0x52, 0xc4, 0xa3, 0xa8, 0xb8, 0x20, 0x3f, 0xaf, 0x38, 0x55, 0x28, 0x87, 0x4b,
-	0x0c, 0xee, 0xf6, 0xf8, 0x22, 0xb0, 0x82, 0xf8, 0x22, 0x90, 0x0a, 0x09, 0x26, 0x05, 0x46, 0x0d,
-	0x4e, 0x27, 0xb3, 0x13, 0xf7, 0xe4, 0x19, 0x6e, 0xdd, 0x93, 0x97, 0x86, 0xb8, 0xb9, 0x38, 0x25,
-	0x5b, 0x2f, 0x33, 0x5f, 0x3f, 0x37, 0xb1, 0x24, 0x43, 0xcf, 0x27, 0x35, 0x3d, 0x31, 0xb9, 0xd2,
-	0x25, 0x35, 0xf9, 0xd2, 0x16, 0x5d, 0x2e, 0xa8, 0x97, 0x5c, 0x52, 0x93, 0x57, 0x3c, 0xdf, 0xa0,
-	0xc5, 0x18, 0x24, 0x92, 0x89, 0xc5, 0x56, 0xa3, 0x53, 0x8c, 0x5c, 0xac, 0x60, 0x37, 0x09, 0x1d,
-	0x60, 0xe4, 0x12, 0xc1, 0xe6, 0x30, 0x21, 0x73, 0x3d, 0xac, 0x81, 0xaa, 0x47, 0xc8, 0xbf, 0x52,
-	0x16, 0xa4, 0x6b, 0x84, 0x84, 0x81, 0x92, 0x69, 0xd3, 0xe5, 0x27, 0x93, 0x99, 0xf4, 0x85, 0x74,
-	0xf5, 0xb1, 0x47, 0x39, 0xf6, 0x00, 0x72, 0x0a, 0x3c, 0xf1, 0x48, 0x8e, 0xf1, 0xc2, 0x23, 0x39,
-	0xc6, 0x07, 0x8f, 0xe4, 0x18, 0x27, 0x3c, 0x96, 0x63, 0xb8, 0xf0, 0x58, 0x8e, 0xe1, 0xc6, 0x63,
-	0x39, 0x86, 0x28, 0xf3, 0xf4, 0xcc, 0x92, 0x8c, 0xd2, 0x24, 0xbd, 0xe4, 0xfc, 0x5c, 0xb8, 0x91,
-	0xba, 0x39, 0x89, 0x49, 0xc5, 0x08, 0x0b, 0xca, 0x0c, 0x0d, 0xf4, 0x2b, 0x90, 0xac, 0x29, 0xa9,
-	0x2c, 0x48, 0x2d, 0x4e, 0x62, 0x03, 0x47, 0xaf, 0x31, 0x20, 0x00, 0x00, 0xff, 0xff, 0xcb, 0x97,
-	0x3c, 0xa8, 0x7c, 0x02, 0x00, 0x00,
+	// 538 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x53, 0x3f, 0x6f, 0x13, 0x31,
+	0x1c, 0x8d, 0x83, 0x40, 0xaa, 0x59, 0xc0, 0x0a, 0xa8, 0x4d, 0xdb, 0x6b, 0x7a, 0x03, 0x44, 0x91,
+	0x62, 0x37, 0x2d, 0x50, 0xd6, 0x46, 0x15, 0x08, 0x89, 0x81, 0x06, 0x89, 0x01, 0x09, 0x45, 0x4e,
+	0x62, 0x5c, 0xab, 0xc9, 0xf9, 0x7a, 0x76, 0xae, 0xdc, 0xca, 0x27, 0x00, 0xf1, 0x25, 0xd8, 0x60,
+	0xe8, 0x07, 0x60, 0xa3, 0x63, 0x55, 0x16, 0xc4, 0x50, 0xa1, 0x04, 0x89, 0x2f, 0xc1, 0x80, 0xce,
+	0x76, 0xfe, 0x50, 0x2e, 0xad, 0xba, 0x9c, 0xce, 0xf6, 0x7b, 0xef, 0xf7, 0x9e, 0x7f, 0x3f, 0xc3,
+	0xd5, 0x9e, 0xe8, 0xee, 0x25, 0x07, 0x34, 0x21, 0x22, 0x88, 0x99, 0xd2, 0x32, 0x52, 0x24, 0xae,
+	0x91, 0xfd, 0x3e, 0x8b, 0x12, 0x1c, 0x46, 0x52, 0x4b, 0x74, 0x6b, 0x04, 0xc1, 0x63, 0x08, 0x8e,
+	0x6b, 0xc5, 0x9b, 0xb4, 0x27, 0x02, 0x49, 0xcc, 0xd7, 0x22, 0x8b, 0x95, 0xb6, 0x54, 0x3d, 0xa9,
+	0x48, 0x8b, 0x2a, 0x66, 0x25, 0x48, 0x5c, 0x6b, 0x31, 0x4d, 0x6b, 0x24, 0xa4, 0x5c, 0x04, 0x54,
+	0x0b, 0x19, 0x38, 0xec, 0x82, 0xc5, 0x36, 0xcd, 0x8a, 0xd8, 0x85, 0x3b, 0x2a, 0x70, 0xc9, 0xa5,
+	0xdd, 0x4f, 0xff, 0xdc, 0xee, 0x12, 0x97, 0x92, 0x77, 0x19, 0xa1, 0xa1, 0x20, 0x34, 0x08, 0xa4,
+	0x36, 0x6a, 0x8e, 0xe3, 0xfb, 0xb0, 0xb4, 0x93, 0x16, 0x7c, 0x32, 0xb2, 0xd8, 0x60, 0x07, 0x34,
+	0xea, 0x34, 0x52, 0x50, 0x83, 0xed, 0xf7, 0x99, 0xd2, 0xfe, 0x7b, 0x00, 0x57, 0xcf, 0x01, 0xa9,
+	0x50, 0x06, 0x8a, 0xa1, 0x2e, 0xbc, 0x3d, 0xce, 0xd9, 0x8c, 0x0c, 0xa0, 0x19, 0xa5, 0x88, 0xf9,
+	0x7c, 0x09, 0x94, 0xe7, 0xea, 0x0f, 0x8e, 0x4e, 0x57, 0x72, 0x3f, 0x4e, 0x57, 0x16, 0xad, 0x67,
+	0xd5, 0xd9, 0xc3, 0x42, 0x92, 0x1e, 0xd5, 0xbb, 0xf8, 0x29, 0xe3, 0xb4, 0x9d, 0x6c, 0xb3, 0xf6,
+	0xc9, 0x61, 0x15, 0xba, 0x48, 0xdb, 0xac, 0xfd, 0xf1, 0xf7, 0xe7, 0x0a, 0x68, 0x14, 0x44, 0x46,
+	0x55, 0xff, 0x35, 0x5c, 0x32, 0x96, 0x5e, 0x30, 0xa5, 0x45, 0xc0, 0xa7, 0x9c, 0x19, 0xcf, 0xe8,
+	0x11, 0x84, 0x93, 0xab, 0x9b, 0x07, 0x25, 0x50, 0xbe, 0xbe, 0x7e, 0x07, 0x3b, 0xed, 0xf4, 0x9e,
+	0xb1, 0x6d, 0x95, 0xbb, 0x67, 0xfc, 0x8c, 0x72, 0xe6, 0xb8, 0x8d, 0x29, 0xa6, 0xff, 0x15, 0xc0,
+	0xe5, 0x19, 0x85, 0x5c, 0xee, 0x57, 0x70, 0x31, 0xb6, 0x67, 0xcd, 0x49, 0x7e, 0xda, 0xe9, 0x44,
+	0x4c, 0x29, 0xa6, 0xe6, 0x41, 0xe9, 0x4a, 0x79, 0xae, 0xbe, 0x7c, 0x72, 0x58, 0x2d, 0xb8, 0xea,
+	0x5b, 0xf6, 0xec, 0xb9, 0x8e, 0x44, 0xc0, 0x6d, 0xc6, 0x85, 0xf8, 0x8c, 0xfa, 0xd6, 0x88, 0x8f,
+	0x1e, 0xff, 0x13, 0x24, 0x6f, 0x82, 0xdc, 0xbd, 0x30, 0x88, 0xf5, 0x36, 0x9d, 0x64, 0xfd, 0x4f,
+	0x1e, 0x5e, 0x35, 0x49, 0xd0, 0x17, 0x00, 0x0b, 0x59, 0xad, 0x44, 0x9b, 0x38, 0x73, 0x64, 0xf1,
+	0x45, 0x13, 0x52, 0x7c, 0x78, 0x79, 0xa2, 0x75, 0xe8, 0xdf, 0x7f, 0xfb, 0xed, 0xd7, 0x87, 0x3c,
+	0x41, 0x55, 0x92, 0xfd, 0xa0, 0xb2, 0x47, 0x0a, 0x7d, 0x02, 0xf0, 0xc6, 0xd9, 0x8e, 0xa0, 0x8d,
+	0xf3, 0x5c, 0xcc, 0x18, 0x94, 0xe2, 0xbd, 0xcb, 0x91, 0x9c, 0xed, 0x35, 0x63, 0xbb, 0x82, 0xca,
+	0x33, 0x6c, 0xff, 0x37, 0x11, 0xf5, 0x9d, 0xa3, 0x81, 0x07, 0x8e, 0x07, 0x1e, 0xf8, 0x39, 0xf0,
+	0xc0, 0xbb, 0xa1, 0x97, 0x3b, 0x1e, 0x7a, 0xb9, 0xef, 0x43, 0x2f, 0xf7, 0x72, 0x93, 0x0b, 0xbd,
+	0xdb, 0x6f, 0xe1, 0xb6, 0xec, 0x8d, 0xd5, 0xaa, 0x5d, 0xda, 0x52, 0x13, 0xed, 0xb8, 0xb6, 0x46,
+	0xde, 0x4c, 0x55, 0xd0, 0x49, 0xc8, 0x54, 0xeb, 0x9a, 0x79, 0xc2, 0x1b, 0x7f, 0x03, 0x00, 0x00,
+	0xff, 0xff, 0x9d, 0x12, 0xf7, 0xee, 0x8c, 0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -159,6 +273,8 @@ const _ = grpc.SupportPackageIsVersion4
 type QueryClient interface {
 	// InvestorsRewardRatio queries the investors reward ratio.
 	InvestorsRewardRatio(ctx context.Context, in *QueryInvestorsRewardRatioRequest, opts ...grpc.CallOption) (*QueryInvestorsRewardRatioResponse, error)
+	// VestingInvestors queries the list of vesting investors.
+	VestingInvestors(ctx context.Context, in *QueryVestingInvestorsRequest, opts ...grpc.CallOption) (*QueryVestingInvestorsResponse, error)
 }
 
 type queryClient struct {
@@ -178,10 +294,21 @@ func (c *queryClient) InvestorsRewardRatio(ctx context.Context, in *QueryInvesto
 	return out, nil
 }
 
+func (c *queryClient) VestingInvestors(ctx context.Context, in *QueryVestingInvestorsRequest, opts ...grpc.CallOption) (*QueryVestingInvestorsResponse, error) {
+	out := new(QueryVestingInvestorsResponse)
+	err := c.cc.Invoke(ctx, "/milkyway.investors.v1.Query/VestingInvestors", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 type QueryServer interface {
 	// InvestorsRewardRatio queries the investors reward ratio.
 	InvestorsRewardRatio(context.Context, *QueryInvestorsRewardRatioRequest) (*QueryInvestorsRewardRatioResponse, error)
+	// VestingInvestors queries the list of vesting investors.
+	VestingInvestors(context.Context, *QueryVestingInvestorsRequest) (*QueryVestingInvestorsResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -190,6 +317,9 @@ type UnimplementedQueryServer struct {
 
 func (*UnimplementedQueryServer) InvestorsRewardRatio(ctx context.Context, req *QueryInvestorsRewardRatioRequest) (*QueryInvestorsRewardRatioResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InvestorsRewardRatio not implemented")
+}
+func (*UnimplementedQueryServer) VestingInvestors(ctx context.Context, req *QueryVestingInvestorsRequest) (*QueryVestingInvestorsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VestingInvestors not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -214,6 +344,24 @@ func _Query_InvestorsRewardRatio_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_VestingInvestors_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryVestingInvestorsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).VestingInvestors(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/milkyway.investors.v1.Query/VestingInvestors",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).VestingInvestors(ctx, req.(*QueryVestingInvestorsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Query_serviceDesc = _Query_serviceDesc
 var _Query_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "milkyway.investors.v1.Query",
@@ -222,6 +370,10 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "InvestorsRewardRatio",
 			Handler:    _Query_InvestorsRewardRatio_Handler,
+		},
+		{
+			MethodName: "VestingInvestors",
+			Handler:    _Query_VestingInvestors_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -284,6 +436,85 @@ func (m *QueryInvestorsRewardRatioResponse) MarshalToSizedBuffer(dAtA []byte) (i
 	return len(dAtA) - i, nil
 }
 
+func (m *QueryVestingInvestorsRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryVestingInvestorsRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryVestingInvestorsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryVestingInvestorsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryVestingInvestorsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryVestingInvestorsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.VestingInvestorsAddresses) > 0 {
+		for iNdEx := len(m.VestingInvestorsAddresses) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.VestingInvestorsAddresses[iNdEx])
+			copy(dAtA[i:], m.VestingInvestorsAddresses[iNdEx])
+			i = encodeVarintQuery(dAtA, i, uint64(len(m.VestingInvestorsAddresses[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
 	offset -= sovQuery(v)
 	base := offset
@@ -312,6 +543,38 @@ func (m *QueryInvestorsRewardRatioResponse) Size() (n int) {
 	_ = l
 	l = m.InvestorsRewardRatio.Size()
 	n += 1 + l + sovQuery(uint64(l))
+	return n
+}
+
+func (m *QueryVestingInvestorsRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryVestingInvestorsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.VestingInvestorsAddresses) > 0 {
+		for _, s := range m.VestingInvestorsAddresses {
+			l = len(s)
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
 	return n
 }
 
@@ -431,6 +694,210 @@ func (m *QueryInvestorsRewardRatioResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if err := m.InvestorsRewardRatio.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryVestingInvestorsRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryVestingInvestorsRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryVestingInvestorsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageRequest{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryVestingInvestorsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryVestingInvestorsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryVestingInvestorsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VestingInvestorsAddresses", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.VestingInvestorsAddresses = append(m.VestingInvestorsAddresses, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageResponse{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
