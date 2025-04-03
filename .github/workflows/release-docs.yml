@@ -25,7 +25,7 @@ jobs:
 
       - name: Set up environment 🧰
         run: |
-          echo "DOCS_DIR=${GITHUB_WORKSPACE}/milkyway-docs/modules" >> $GITHUB_ENV
+          echo "OUTPUT_DIR=${GITHUB_WORKSPACE}/milkyway-docs/modules" >> $GITHUB_ENV
           echo "GITBOOK_SUMMARY=${GITHUB_WORKSPACE}/milkyway-docs/SUMMARY.md" >> $GITHUB_ENV
 
       - name: Prepare docs venv 🔨

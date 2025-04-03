@@ -4,6 +4,7 @@ from utils import generate_docs
 import re
 import pathlib
 from typing import List
+import shutil
 
 
 def get_modules(docs_dir: str) -> List[str]:
@@ -123,22 +124,26 @@ def main():
     parser.add_argument("modules", help="The modules directory")
     args = parser.parse_args()
 
-    docs_dir = os.getenv("DOCS_DIR")
-    if docs_dir is None:
-        docs_dir = "./test"
+    output_dir = os.getenv("OUTPUT_DIR")
+    if output_dir is None:
+        output_dir = "./test"
 
     summary_file = os.getenv("GITBOOK_SUMMARY")
     if summary_file is None:
         summary_file = "./test/SUMMARY.md"
 
+    # Clear the previously generated documentation
+    if os.path.exists(output_dir):
+        shutil.rmtree(output_dir)
+    os.mkdir(output_dir)
     # Generate the release documentation
-    generate_release_docs(args.modules, docs_dir)
+    generate_release_docs(args.modules, output_dir)
 
     # Generate a README.md inside the docs dir
-    generate_modules_readme(docs_dir)
+    generate_modules_readme(output_dir)
 
     # Update the Gitbook summary
-    update_summary(summary_file, docs_dir)
+    update_summary(summary_file, output_dir)
 
 
 if __name__ == "__main__":
