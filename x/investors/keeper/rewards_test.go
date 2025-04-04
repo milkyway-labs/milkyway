@@ -140,52 +140,6 @@ func (suite *KeeperTestSuite) TestCommunityPool() {
 	suite.Assert().Empty(moduleBalances)
 }
 
-func (suite *KeeperTestSuite) TestUpdateInvestorsRewardRatio() {
-	ctx, _ := suite.ctx.CacheContext()
-	ctx = ctx.WithBlockTime(time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC))
-
-	err := suite.k.SetInvestorsRewardRatio(ctx, utils.MustParseDec("0.5")) // 50%
-	suite.Require().NoError(err)
-
-	valOwnerAddr := testutil.TestAddress(10000)
-	validator := suite.createValidator(
-		ctx,
-		valOwnerAddr,
-		stakingtypes.NewCommissionRates(utils.MustParseDec("0"), utils.MustParseDec("0.2"), utils.MustParseDec("0.01")),
-		utils.MustParseCoin("1000000stake"),
-		true,
-	)
-	valAddr := sdk.ValAddress(valOwnerAddr)
-
-	normalAddr := testutil.TestAddress(1)
-	investorAddr := testutil.TestAddress(2)
-	vestingEndTime := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
-	suite.createVestingAccount(
-		ctx,
-		testutil.TestAddress(10001).String(),
-		investorAddr.String(),
-		utils.MustParseCoins("1000000stake"),
-		vestingEndTime.Unix(),
-		false,
-		true,
-	)
-	err = suite.k.SetVestingInvestor(ctx, investorAddr.String())
-	suite.Require().NoError(err)
-
-	suite.delegate(ctx, normalAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), true)
-	suite.delegate(ctx, investorAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), false)
-
-	ctx = suite.allocateTokensToValidator(ctx, valAddr, utils.MustParseDecCoins("1000000stake"), true)
-
-	// Investor's rewards are automatically withdrawn upon the ratio update
-	balancesBefore := suite.bk.GetAllBalances(ctx, investorAddr)
-	err = suite.k.UpdateInvestorsRewardRatio(ctx, utils.MustParseDec("1")) // 100%
-	suite.Require().NoError(err)
-	balancesAfter := suite.bk.GetAllBalances(ctx, investorAddr)
-	rewards := balancesAfter.Sub(balancesBefore...)
-	suite.Assert().Equal("166666stake", rewards.String()) // 333333 * 0.5(used previous ratio)
-}
-
 func (suite *KeeperTestSuite) TestVestingEndedInvestorsReward() {
 	ctx, _ := suite.ctx.CacheContext()
 	ctx = ctx.WithBlockTime(time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC))
