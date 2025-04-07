@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-      - manuel/publish-tecnical-docs # Temp to test the workflow
 
 permissions:
   contents: write

@@ -3,7 +3,6 @@ import os
 import sys
 import re
 import io
-import pathlib
 
 
 def github_url_to_raw(url: str) -> str:
@@ -45,14 +44,14 @@ def process_markdown_file(file_path: str, output_dir: str, gitbook_meta: bool):
     for reference_url in set(references):  # Use set to remove duplicates
         values = reference_url.split('#L')
         if len(values) != 2:
-            print(f"Invalid link: {reference_url} in file ${file_path}")
+            print(f"Invalid link: {reference_url} in file {file_path}")
             continue
 
         # Get the url and the lines
         url, lines = values
         start_end_line = lines.replace('L', '').split('-')
         if len(start_end_line) != 2:
-            print(f"Invalid line format: {lines} in file ${file_path}")
+            print(f"Invalid line format: {lines} in file {file_path}")
             continue
         start, end = start_end_line
 
@@ -60,7 +59,7 @@ def process_markdown_file(file_path: str, output_dir: str, gitbook_meta: bool):
         start = int(start)
         end = int(end)
         if start < 0 or end < 0 or start >= end:
-            print(f"Invalid line range: {start}-{end} in file ${file_path}")
+            print(f"Invalid line range: {start}-{end} in file {file_path}")
             continue
         # Convert the reference url to a raw github url
         raw_url = github_url_to_raw(url)
