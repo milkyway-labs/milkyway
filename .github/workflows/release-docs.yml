@@ -1,0 +1,48 @@
+name: Publish docs
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  Modules:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+
+      - name: Checkout docs repo 🛎️
+        uses: actions/checkout@v4
+        with:
+          repository: 'milkyway-labs/milkyway-docs'
+          ref: 'main'
+          path: "./milkyway-docs"
+          ssh-key: ${{ secrets.DOCS_DEPLOY_KEY }}
+
+      - name: Set up environment 🧰
+        run: |
+          echo "OUTPUT_DIR=${GITHUB_WORKSPACE}/milkyway-docs/modules" >> $GITHUB_ENV
+          echo "GITBOOK_SUMMARY=${GITHUB_WORKSPACE}/milkyway-docs/SUMMARY.md" >> $GITHUB_ENV
+
+      - name: Prepare docs venv 🔨
+        run: make docs-install-deps
+
+      - name: Generate docs 📑
+        run: make gen-release-docs
+
+      - name: Commit and push changes
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DOCS_DEPLOY_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          cd milkyway-docs
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "Automated update from GitHub Actions"
+          git push origin main
+

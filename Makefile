@@ -347,7 +347,13 @@ start-localnet-ci: build
 ###                             Documentation                               ###
 ###############################################################################
 
+docs-install-deps:
+	cd "${CURDIR}/scripts/docs-gen" && $(MAKE) install-requirements
+
 gen-modules-docs:
 	cd "${CURDIR}/scripts/docs-gen" && $(MAKE) gen
+
+gen-release-docs:
+	cd "${CURDIR}/scripts/docs-gen" && $(MAKE) release
 
 .PHONY: gen-modules-docs
