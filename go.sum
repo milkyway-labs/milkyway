@@ -1055,8 +1055,8 @@ github.com/matttproud/golang_protobuf_extensions v1.0.1/go.mod h1:D8He9yQNgCq6Z5
 github.com/mgechev/revive v1.3.9 h1:18Y3R4a2USSBF+QZKFQwVkBROUda7uoBlkEuBD+YD1A=
 github.com/mgechev/revive v1.3.9/go.mod h1:+uxEIr5UH0TjXWHTno3xh4u7eg6jDpXKzQccA9UGhHU=
 github.com/miekg/dns v1.0.14/go.mod h1:W1PPwlIAgtquWBMBEV9nkV9Cazfe8ScdGz/Lj7v3Nrg=
-github.com/milkyway-labs/cosmos-sdk v0.0.0-20250403063922-6f62b1465f87 h1:DP7NmiUmT+Oy3p0AtzQaR8xA2C0kAnpoBN1CYXeuDQI=
-github.com/milkyway-labs/cosmos-sdk v0.0.0-20250403063922-6f62b1465f87/go.mod h1:hrWEFMU1eoXqLJeE6VVESpJDQH67FS1nnMrQIjO2daw=
+github.com/milkyway-labs/cosmos-sdk v0.50.13-milkyway-1 h1:31Zek5FBGw50AYUupm6gqLScK4cznnu11dk2L7w1rN4=
+github.com/milkyway-labs/cosmos-sdk v0.50.13-milkyway-1/go.mod h1:hrWEFMU1eoXqLJeE6VVESpJDQH67FS1nnMrQIjO2daw=
 github.com/minio/highwayhash v1.0.3 h1:kbnuUMoHYyVl7szWjSxJnxw11k2U709jqFPPmIUyD6Q=
 github.com/minio/highwayhash v1.0.3/go.mod h1:GGYsuwP/fPD6Y9hMiXuapVvlIUEhFhMTh0rxU3ik1LQ=
 github.com/mitchellh/cli v1.0.0/go.mod h1:hNIlj7HEI86fIcpObd7a0FcrxTWetlwJDGcceTlRvqc=
