@@ -11,6 +11,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/v10/x/operators/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v10/x/restaking/types"
 	"github.com/milkyway-labs/milkyway/v10/x/rewards/types"
 )
 
@@ -31,7 +32,7 @@ func (k *Keeper) SetWithdrawAddress(ctx context.Context, addr, withdrawAddr sdk.
 
 // WithdrawDelegationRewards withdraws the rewards from the delegation and reinitializes it
 func (k *Keeper) WithdrawDelegationRewards(
-	ctx context.Context, delAddr sdk.AccAddress, target DelegationTarget,
+	ctx context.Context, delAddr sdk.AccAddress, delType restakingtypes.DelegationType, targetID uint32,
 ) (types.Pools, error) {
 	// Get the delegation
 	delegator, err := k.accountKeeper.AddressCodec().BytesToString(delAddr)
@@ -39,7 +40,12 @@ func (k *Keeper) WithdrawDelegationRewards(
 		return nil, err
 	}
 
-	delegation, found, err := k.restakingKeeper.GetDelegationForTarget(ctx, target.DelegationTarget, delegator)
+	target, err := k.restakingKeeper.GetDelegationTarget(ctx, delType, targetID)
+	if err != nil {
+		return nil, err
+	}
+
+	delegation, found, err := k.restakingKeeper.GetDelegation(ctx, delType, targetID, delegator)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +61,7 @@ func (k *Keeper) WithdrawDelegationRewards(
 	}
 
 	// Reinitialize the delegation
-	err = k.initializeDelegation(ctx, target, delAddr)
+	err = k.initializeDelegation(ctx, delType, targetID, delAddr)
 	if err != nil {
 		return nil, err
 	}

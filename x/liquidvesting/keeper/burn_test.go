@@ -9,7 +9,7 @@ import (
 
 func (suite *KeeperTestSuite) TestKeeper_TestBurn() {
 	lockedStakeDenom, err := types.GetLockedRepresentationDenom("stake")
-	suite.Assert().NoError(err)
+	suite.Require().NoError(err)
 
 	testCases := []struct {
 		name      string
@@ -91,28 +91,27 @@ func (suite *KeeperTestSuite) TestKeeper_TestBurn() {
 				)
 
 				// Delegate some locked representation to pool, service and operator
-				suite.createPool(ctx, 1, lockedStakeDenom)
-				_, err = suite.rk.DelegateToPool(ctx,
+				_, err = suite.restakingKeeper.DelegateToPool(ctx,
 					sdk.NewInt64Coin(lockedStakeDenom, 200),
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				)
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 
 				suite.createService(ctx, 1)
-				_, err = suite.rk.DelegateToService(ctx,
+				_, err = suite.restakingKeeper.DelegateToService(ctx,
 					1,
 					sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 300)),
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				)
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 
 				suite.createOperator(ctx, 1)
-				_, err = suite.rk.DelegateToOperator(ctx,
+				_, err = suite.restakingKeeper.DelegateToOperator(ctx,
 					1,
 					sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 300)),
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				)
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 			},
 			account:   "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			amount:    sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 1000)),
@@ -125,7 +124,7 @@ func (suite *KeeperTestSuite) TestKeeper_TestBurn() {
 				suite.Assert().Equal(sdk.NewCoins(sdk.NewInt64Coin("stake2", 200)), coins)
 
 				// Compute when the unbond will end
-				unbondingTime, err := suite.rk.UnbondingTime(ctx)
+				unbondingTime, err := suite.restakingKeeper.UnbondingTime(ctx)
 				suite.Require().NoError(err)
 
 				unbondEnd := ctx.BlockHeader().Time.Add(unbondingTime)
@@ -161,28 +160,27 @@ func (suite *KeeperTestSuite) TestKeeper_TestBurn() {
 				)
 
 				// Delegate some locked representation to pool, service and operator
-				suite.createPool(ctx, 1, lockedStakeDenom)
-				_, err = suite.rk.DelegateToPool(ctx,
+				_, err = suite.restakingKeeper.DelegateToPool(ctx,
 					sdk.NewInt64Coin(lockedStakeDenom, 200),
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				)
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 
 				suite.createService(ctx, 1)
-				_, err = suite.rk.DelegateToService(ctx,
+				_, err = suite.restakingKeeper.DelegateToService(ctx,
 					1,
 					sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 300)),
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				)
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 
 				suite.createOperator(ctx, 1)
-				_, err = suite.rk.DelegateToOperator(ctx,
+				_, err = suite.restakingKeeper.DelegateToOperator(ctx,
 					1,
 					sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 300)),
 					"cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 				)
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 			},
 			account:   "cosmos167x6ehhple8gwz5ezy9x0464jltvdpzl6qfdt4",
 			amount:    sdk.NewCoins(sdk.NewInt64Coin(lockedStakeDenom, 2000)),
@@ -236,7 +234,7 @@ func (suite *KeeperTestSuite) TestKeeper_TestIsBurner() {
 					nil,
 					nil,
 				))
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 			},
 			account:     "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			expIsBurner: true,
@@ -256,7 +254,7 @@ func (suite *KeeperTestSuite) TestKeeper_TestIsBurner() {
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 				suite.Assert().Equal(tc.expIsBurner, isBurner)
 			}
 		})

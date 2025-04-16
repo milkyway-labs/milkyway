@@ -9,17 +9,21 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	operatorstypes "github.com/milkyway-labs/milkyway/v10/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v10/x/pools/types"
 	restakingtypes "github.com/milkyway-labs/milkyway/v10/x/restaking/types"
 	"github.com/milkyway-labs/milkyway/v10/x/rewards/types"
 )
 
 // DeleteHistoricalRewards deletes all historical rewards for a target
-func (k *Keeper) DeleteHistoricalRewards(ctx context.Context, target DelegationTarget) error {
-	collection := target.HistoricalRewards
+func (k *Keeper) DeleteHistoricalRewards(ctx context.Context, target restakingtypes.DelegationTarget) error {
+	colls, err := k.getDelegationTargetCollections(target)
+	if err != nil {
+		return err
+	}
 
 	// Walk over the collection and get the list of keys to be deleted
 	var keys []collections.Pair[uint32, uint64]
-	err := collection.Walk(
+	err = colls.HistoricalRewards.Walk(
 		ctx,
 		collections.NewPrefixedPairRange[uint32, uint64](target.GetID()),
 		func(key collections.Pair[uint32, uint64], value types.HistoricalRewards) (stop bool, err error) {
@@ -33,7 +37,7 @@ func (k *Keeper) DeleteHistoricalRewards(ctx context.Context, target DelegationT
 
 	// Delete all the keys from the collection
 	for _, key := range keys {
-		if err := collection.Remove(ctx, key); err != nil {
+		if err := colls.HistoricalRewards.Remove(ctx, key); err != nil {
 			return err
 		}
 	}
@@ -56,8 +60,12 @@ func (k *Keeper) GetRewardsPlans(ctx context.Context) ([]types.RewardsPlan, erro
 // --------------------------------------------------------------------------------------------------------------------
 
 // GetOutstandingRewardsCoins returns the outstanding rewards coins for a target
-func (k *Keeper) GetOutstandingRewardsCoins(ctx context.Context, target DelegationTarget) (types.DecPools, error) {
-	rewards, err := target.OutstandingRewards.Get(ctx, target.GetID())
+func (k *Keeper) GetOutstandingRewardsCoins(ctx context.Context, target restakingtypes.DelegationTarget) (types.DecPools, error) {
+	colls, err := k.getDelegationTargetCollections(target)
+	if err != nil {
+		return nil, err
+	}
+	rewards, err := colls.OutstandingRewards.Get(ctx, target.GetID())
 	if err != nil && !errors.IsOf(err, collections.ErrNotFound) {
 		return nil, err
 	}
@@ -122,7 +130,7 @@ func (k *Keeper) GetDelegatorWithdrawAddr(ctx context.Context, delegator sdk.Acc
 func (k *Keeper) GetDelegationRewards(
 	ctx context.Context, delAddr sdk.AccAddress, delType restakingtypes.DelegationType, targetID uint32,
 ) (types.DecPools, error) {
-	target, err := k.GetDelegationTarget(ctx, delType, targetID)
+	target, err := k.restakingKeeper.GetDelegationTarget(ctx, delType, targetID)
 	if err != nil {
 		return nil, err
 	}
@@ -132,7 +140,7 @@ func (k *Keeper) GetDelegationRewards(
 		return nil, err
 	}
 
-	delegation, found, err := k.restakingKeeper.GetDelegationForTarget(ctx, target.DelegationTarget, delegator)
+	delegation, found, err := k.restakingKeeper.GetDelegation(ctx, delType, targetID, delegator)
 	if err != nil {
 		return nil, err
 	}
@@ -262,9 +270,9 @@ func (k *Keeper) DecrementPoolServiceTotalDelegatorShares(
 
 // GetDelegationTargetTrustedTokens returns the amount of tokens of a delegation target
 // considering trusted services(it only applies to pools).
-func (k *Keeper) GetDelegationTargetTrustedTokens(ctx context.Context, serviceID uint32, target DelegationTarget) (sdk.Coins, error) {
+func (k *Keeper) GetDelegationTargetTrustedTokens(ctx context.Context, serviceID uint32, target restakingtypes.DelegationTarget) (sdk.Coins, error) {
 	tokens := target.GetTokens()
-	if target.DelegationType == restakingtypes.DELEGATION_TYPE_POOL {
+	if _, ok := target.(poolstypes.Pool); ok {
 		totalDelShares, err := k.GetPoolServiceTotalDelegatorShares(ctx, target.GetID(), serviceID)
 		if err != nil {
 			return nil, err

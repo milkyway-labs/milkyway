@@ -59,7 +59,7 @@ func (suite *KeeperTestSuite) TestQuerier_InsuranceFund() {
 
 			querier := keeper.NewQuerier(suite.k)
 			resp, err := querier.InsuranceFund(ctx, types.NewQueryInsuranceFundRequest())
-			suite.Assert().NoError(err)
+			suite.Require().NoError(err)
 			suite.Assert().Equal(tc.expBalance, resp.Amount)
 		})
 	}
@@ -134,8 +134,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFund() {
 				)
 
 				// Delegate to the pool
-				suite.createPool(ctx, 1, LockedIBCDenom)
-				_, err := suite.rk.DelegateToPool(ctx,
+				_, err := suite.restakingKeeper.DelegateToPool(ctx,
 					sdk.NewInt64Coin(LockedIBCDenom, 1000),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				)
@@ -166,7 +165,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFund() {
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 				suite.Assert().Equal(tc.expBalance, resp.Balance)
 				suite.Assert().Equal(tc.expUsed, resp.Used)
 			}
@@ -258,8 +257,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFunds() {
 				)
 
 				// Delegate to the pool
-				suite.createPool(ctx, 1, LockedIBCDenom)
-				_, err := suite.rk.DelegateToPool(ctx,
+				_, err := suite.restakingKeeper.DelegateToPool(ctx,
 					sdk.NewInt64Coin(LockedIBCDenom, 1000),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				)
@@ -295,7 +293,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserInsuranceFunds() {
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 				suite.Assert().Equal(tc.expInsuranceFunds, resp.InsuranceFunds)
 			}
 		})
@@ -318,7 +316,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserRestakableAssets() {
 		{
 			name: "1% insurance fund",
 			store: func(ctx sdk.Context) {
-				suite.Assert().NoError(suite.k.SetParams(ctx, types.NewParams(
+				suite.Require().NoError(suite.k.SetParams(ctx, types.NewParams(
 					math.LegacyMustNewDecFromStr("1"), nil, nil, nil,
 				)))
 				suite.fundAccountInsuranceFund(ctx,
@@ -333,7 +331,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserRestakableAssets() {
 		{
 			name: "5% insurance fund",
 			store: func(ctx sdk.Context) {
-				suite.Assert().NoError(suite.k.SetParams(ctx, types.NewParams(
+				suite.Require().NoError(suite.k.SetParams(ctx, types.NewParams(
 					math.LegacyMustNewDecFromStr("5"), nil, nil, nil,
 				)))
 				suite.fundAccountInsuranceFund(ctx,
@@ -361,7 +359,7 @@ func (suite *KeeperTestSuite) TestQuerier_UserRestakableAssets() {
 			if tc.shouldErr {
 				suite.Assert().Error(err)
 			} else {
-				suite.Assert().NoError(err)
+				suite.Require().NoError(err)
 				suite.Assert().Equal(tc.expBalance, resp.Amount)
 			}
 		})

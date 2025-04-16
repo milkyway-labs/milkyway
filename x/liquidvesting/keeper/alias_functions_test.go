@@ -3,11 +3,8 @@ package keeper_test
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/v10/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v10/x/pools/types"
 	restakingkeeper "github.com/milkyway-labs/milkyway/v10/x/restaking/keeper"
 	restakingtypes "github.com/milkyway-labs/milkyway/v10/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v10/x/services/types"
 )
 
 func (suite *KeeperTestSuite) TestKeeper_GetAllUserRestakedLockedRepresentations() {
@@ -26,33 +23,8 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllUserRestakedLockedRepresentations
 			name: "computed amount is correct",
 			user: "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			setup: func(ctx sdk.Context) {
-				pool := poolstypes.NewPool(1, "locked/stake")
-				err := suite.pk.SavePool(ctx, pool)
-				suite.Require().NoError(err)
-
-				service := servicestypes.NewService(
-					1,
-					servicestypes.SERVICE_STATUS_ACTIVE,
-					"test service",
-					"",
-					"",
-					"",
-					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-					false,
-				)
-				err = suite.sk.SaveService(ctx, service)
-				suite.Require().NoError(err)
-
-				operator := operatorstypes.NewOperator(
-					1,
-					operatorstypes.OPERATOR_STATUS_ACTIVE,
-					"test operator",
-					"",
-					"",
-					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-				)
-				err = suite.ok.SaveOperator(ctx, operator)
-				suite.Require().NoError(err)
+				suite.createService(ctx, 1)
+				suite.createOperator(ctx, 1)
 
 				// Fund the account
 				suite.fundAccountInsuranceFund(
@@ -66,10 +38,10 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllUserRestakedLockedRepresentations
 					sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)),
 				)
 
-				restakingService := restakingkeeper.NewMsgServer(suite.rk)
+				restakingService := restakingkeeper.NewMsgServer(suite.restakingKeeper)
 
 				// Perform some delegations
-				_, err = restakingService.DelegatePool(ctx, restakingtypes.NewMsgDelegatePool(
+				_, err := restakingService.DelegatePool(ctx, restakingtypes.NewMsgDelegatePool(
 					sdk.NewInt64Coin("locked/stake", 200),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))
@@ -125,33 +97,8 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllUserUnbondingLockedRepresentation
 			name: "computed amount is correct",
 			user: "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			setup: func(ctx sdk.Context) {
-				pool := poolstypes.NewPool(1, "locked/stake")
-				err := suite.pk.SavePool(ctx, pool)
-				suite.Require().NoError(err)
-
-				service := servicestypes.NewService(
-					1,
-					servicestypes.SERVICE_STATUS_ACTIVE,
-					"test service",
-					"",
-					"",
-					"",
-					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-					true,
-				)
-				err = suite.sk.SaveService(ctx, service)
-				suite.Require().NoError(err)
-
-				operator := operatorstypes.NewOperator(
-					1,
-					operatorstypes.OPERATOR_STATUS_ACTIVE,
-					"test operator",
-					"",
-					"",
-					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-				)
-				err = suite.ok.SaveOperator(ctx, operator)
-				suite.Require().NoError(err)
+				suite.createService(ctx, 1)
+				suite.createOperator(ctx, 1)
 
 				// Fund the account
 				suite.fundAccountInsuranceFund(
@@ -165,10 +112,10 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllUserUnbondingLockedRepresentation
 					sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)),
 				)
 
-				restakingService := restakingkeeper.NewMsgServer(suite.rk)
+				restakingService := restakingkeeper.NewMsgServer(suite.restakingKeeper)
 
 				// Perform some delegations
-				_, err = restakingService.DelegatePool(ctx, restakingtypes.NewMsgDelegatePool(
+				_, err := restakingService.DelegatePool(ctx, restakingtypes.NewMsgDelegatePool(
 					sdk.NewInt64Coin("locked/stake", 200),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))
@@ -243,33 +190,8 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllUserActiveLockedRepresentations()
 			name: "computed amount is correct",
 			user: "cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 			setup: func(ctx sdk.Context) {
-				pool := poolstypes.NewPool(1, "locked/stake")
-				err := suite.pk.SavePool(ctx, pool)
-				suite.Require().NoError(err)
-
-				service := servicestypes.NewService(
-					1,
-					servicestypes.SERVICE_STATUS_ACTIVE,
-					"test service",
-					"",
-					"",
-					"",
-					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-					true,
-				)
-				err = suite.sk.SaveService(ctx, service)
-				suite.Require().NoError(err)
-
-				operator := operatorstypes.NewOperator(
-					1,
-					operatorstypes.OPERATOR_STATUS_ACTIVE,
-					"test operator",
-					"",
-					"",
-					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
-				)
-				err = suite.ok.SaveOperator(ctx, operator)
-				suite.Require().NoError(err)
+				suite.createService(ctx, 1)
+				suite.createOperator(ctx, 1)
 
 				// Fund the account
 				suite.fundAccountInsuranceFund(
@@ -283,10 +205,10 @@ func (suite *KeeperTestSuite) TestKeeper_GetAllUserActiveLockedRepresentations()
 					sdk.NewCoins(sdk.NewInt64Coin("stake", 1000)),
 				)
 
-				restakingService := restakingkeeper.NewMsgServer(suite.rk)
+				restakingService := restakingkeeper.NewMsgServer(suite.restakingKeeper)
 
 				// Perform some delegations
-				_, err = restakingService.DelegatePool(ctx, restakingtypes.NewMsgDelegatePool(
+				_, err := restakingService.DelegatePool(ctx, restakingtypes.NewMsgDelegatePool(
 					sdk.NewInt64Coin("locked/stake", 200),
 					"cosmos1pgzph9rze2j2xxavx4n7pdhxlkgsq7raqh8hre",
 				))

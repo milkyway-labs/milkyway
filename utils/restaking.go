@@ -72,7 +72,7 @@ func ComputeTokensFromSharesTruncated(shares sdk.DecCoins, delegatedTokens sdk.C
 type ShareDenomGetter func(tokenDenom string) (shareDenom string)
 
 // SharesFromTokens returns the shares of a delegation given a bond amount.
-func SharesFromTokens(tokens sdk.Coins, getShareDenom ShareDenomGetter, delegatedTokens sdk.Coins, delegatorsShares sdk.DecCoins) (sdk.DecCoins, error) {
+func SharesFromTokens(tokens sdk.Coins, getShareDenom ShareDenomGetter, delegatedTokens sdk.Coins, delegatorsShares sdk.DecCoins) sdk.DecCoins {
 	shares := sdk.NewDecCoins()
 	for _, token := range tokens {
 		sharesDenom := getShareDenom(token.Denom)
@@ -90,11 +90,11 @@ func SharesFromTokens(tokens sdk.Coins, getShareDenom ShareDenomGetter, delegate
 		shares = shares.Add(sdk.NewDecCoinFromDec(sharesDenom, sharesAmount))
 	}
 
-	return shares, nil
+	return shares
 }
 
 // SharesFromDecCoins returns the shares of a delegation given a bond amount.
-func SharesFromDecCoins(tokens sdk.DecCoins, getShareDenom ShareDenomGetter, delegatedTokens sdk.Coins, delegatorsShares sdk.DecCoins) (sdk.DecCoins, error) {
+func SharesFromDecCoins(tokens sdk.DecCoins, getShareDenom ShareDenomGetter, delegatedTokens sdk.Coins, delegatorsShares sdk.DecCoins) sdk.DecCoins {
 	shares := sdk.NewDecCoins()
 	for _, token := range tokens {
 		sharesDenom := getShareDenom(token.Denom)
@@ -112,7 +112,7 @@ func SharesFromDecCoins(tokens sdk.DecCoins, getShareDenom ShareDenomGetter, del
 		shares = shares.Add(sdk.NewDecCoinFromDec(sharesDenom, sharesAmount))
 	}
 
-	return shares, nil
+	return shares
 }
 
 // IssueShares calculates the shares to issue for a delegation of the given amount.
@@ -124,10 +124,7 @@ func IssueShares(amount sdk.Coins, getShareDenom ShareDenomGetter, delegatedToke
 			issuedShares = issuedShares.Add(sdk.NewDecCoin(getShareDenom(token.Denom), token.Amount))
 		}
 	} else {
-		shares, err := SharesFromTokens(amount, getShareDenom, delegatedTokens, delegatorsShares)
-		if err != nil {
-			panic(err)
-		}
+		shares := SharesFromTokens(amount, getShareDenom, delegatedTokens, delegatorsShares)
 		issuedShares = shares
 	}
 
