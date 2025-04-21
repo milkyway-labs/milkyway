@@ -19,6 +19,7 @@ require (
 	cosmossdk.io/x/upgrade v0.1.4
 	github.com/CosmWasm/wasmd v0.53.0
 	github.com/CosmWasm/wasmvm/v2 v2.1.3
+	github.com/bcp-innovations/hyperlane-cosmos v1.0.0-rc0
 	github.com/cometbft/cometbft v0.38.17
 	github.com/cosmos/cosmos-db v1.1.1
 	github.com/cosmos/cosmos-proto v1.0.0-beta.5
@@ -57,8 +58,6 @@ require (
 	google.golang.org/protobuf v1.36.4
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
-
-require github.com/bcp-innovations/hyperlane-cosmos v1.0.0-rc0
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.2.1 // indirect
