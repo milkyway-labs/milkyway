@@ -4,6 +4,8 @@ import (
 	_ "embed"
 
 	storetypes "cosmossdk.io/store/types"
+	hyperlanetypes "github.com/bcp-innovations/hyperlane-cosmos/x/core/types"
+	warptypes "github.com/bcp-innovations/hyperlane-cosmos/x/warp/types"
 
 	"github.com/milkyway-labs/milkyway/v10/app/upgrades"
 	investorstypes "github.com/milkyway-labs/milkyway/v10/x/investors/types"
@@ -20,6 +22,8 @@ var Upgrade = upgrades.Upgrade{
 	StoreUpgrades: storetypes.StoreUpgrades{
 		Added: []string{
 			investorstypes.StoreKey,
+			hyperlanetypes.ModuleName,
+			warptypes.ModuleName,
 		},
 		Deleted: []string{},
 	},

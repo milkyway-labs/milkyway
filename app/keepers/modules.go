@@ -5,6 +5,8 @@ import (
 	feegrantmodule "cosmossdk.io/x/feegrant/module"
 	"cosmossdk.io/x/upgrade"
 	"github.com/CosmWasm/wasmd/x/wasm"
+	hyperlane "github.com/bcp-innovations/hyperlane-cosmos/x/core"
+	"github.com/bcp-innovations/hyperlane-cosmos/x/warp"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/auth/vesting"
@@ -68,6 +70,10 @@ var AppModuleBasics = module.NewBasicManager(
 	feemarket.AppModuleBasic{},
 	oracle.AppModuleBasic{},
 	marketmap.AppModuleBasic{},
+
+	// Hyperlane modules
+	hyperlane.AppModule{},
+	warp.AppModule{},
 
 	// IBC Modules
 	ibcfee.AppModuleBasic{},

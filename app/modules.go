@@ -1,6 +1,8 @@
 package milkyway
 
 import (
+	hyperlanetypes "github.com/bcp-innovations/hyperlane-cosmos/x/core/types"
+	warptypes "github.com/bcp-innovations/hyperlane-cosmos/x/warp/types"
 	distr "github.com/cosmos/cosmos-sdk/x/distribution"
 	"github.com/skip-mev/connect/v2/x/marketmap"
 	marketmaptypes "github.com/skip-mev/connect/v2/x/marketmap/types"
@@ -9,6 +11,8 @@ import (
 	"github.com/skip-mev/feemarket/x/feemarket"
 	feemarkettypes "github.com/skip-mev/feemarket/x/feemarket/types"
 
+	hyperlane "github.com/bcp-innovations/hyperlane-cosmos/x/core"
+	"github.com/bcp-innovations/hyperlane-cosmos/x/warp"
 	pfmroutertypes "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/types"
 	ratelimittypes "github.com/cosmos/ibc-apps/modules/rate-limiting/v8/types"
 	"github.com/cosmos/ibc-go/modules/capability"
@@ -151,6 +155,10 @@ func appModules(
 		feemarket.NewAppModule(appCodec, *app.FeeMarketKeeper),
 		oracle.NewAppModule(appCodec, *app.OracleKeeper),
 		marketmap.NewAppModule(appCodec, app.MarketMapKeeper),
+
+		// Hyperlane modules
+		hyperlane.NewAppModule(appCodec, app.HyperlaneKeeper),
+		warp.NewAppModule(appCodec, app.WarpKeeper),
 
 		// IBC Modules
 		ibcfee.NewAppModule(app.IBCFeeKeeper),
@@ -358,6 +366,10 @@ func orderInitBlockers() []string {
 		// Skip modules
 		oracletypes.ModuleName,
 		marketmaptypes.ModuleName,
+
+		// Hyperlane modules
+		hyperlanetypes.ModuleName,
+		warptypes.ModuleName,
 
 		// MilkyWay modules
 		servicestypes.ModuleName,
