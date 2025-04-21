@@ -64,6 +64,7 @@ func TestGenesisState_Validate(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			err := tc.state.Validate()
 			if tc.shouldErr {
 				require.Error(t, err)

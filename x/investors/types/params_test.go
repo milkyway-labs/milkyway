@@ -45,6 +45,7 @@ func TestValidateInvestorsRewardRatio(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			err := types.ValidateInvestorsRewardRatio(tc.ratio)
 			if tc.shouldErr {
 				require.Error(t, err)
