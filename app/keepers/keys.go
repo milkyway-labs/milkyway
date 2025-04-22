@@ -34,6 +34,7 @@ import (
 
 	assetstypes "github.com/milkyway-labs/milkyway/v10/x/assets/types"
 	ibchookstypes "github.com/milkyway-labs/milkyway/v10/x/ibc-hooks/types"
+	investorstypes "github.com/milkyway-labs/milkyway/v10/x/investors/types"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/v10/x/liquidvesting/types"
 	operatorstypes "github.com/milkyway-labs/milkyway/v10/x/operators/types"
 	poolstypes "github.com/milkyway-labs/milkyway/v10/x/pools/types"
@@ -86,6 +87,7 @@ func (appKeepers *AppKeepers) GenerateKeys() {
 		assetstypes.StoreKey,
 		rewardstypes.StoreKey,
 		liquidvestingtypes.StoreKey,
+		investorstypes.StoreKey,
 	)
 
 	// Define transient store keys
