@@ -95,6 +95,7 @@ func NewRootCmd() *cobra.Command {
 	initClientCtx := client.Context{}.
 		WithCodec(tempApplication.AppCodec()).
 		WithInterfaceRegistry(tempApplication.InterfaceRegistry()).
+		WithTxConfig(newFallbackTxConfig(tempApplication.GetTxConfig())).
 		WithLegacyAmino(tempApplication.LegacyAmino()).
 		WithInput(os.Stdin).
 		WithAccountRetriever(types.AccountRetriever{}).
@@ -134,7 +135,7 @@ func NewRootCmd() *cobra.Command {
 				if err != nil {
 					return err
 				}
-				initClientCtx = initClientCtx.WithTxConfig(txConfigWithTextual)
+				initClientCtx = initClientCtx.WithTxConfig(newFallbackTxConfig(txConfigWithTextual))
 			}
 
 			if err = client.SetCmdClientContextHandler(initClientCtx, cmd); err != nil {
