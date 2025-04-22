@@ -68,6 +68,10 @@ import (
 	providertypes "github.com/cosmos/interchain-security/v6/x/ccv/provider/types"
 
 	evidencekeeper "cosmossdk.io/x/evidence/keeper"
+	hyperlanekeeper "github.com/bcp-innovations/hyperlane-cosmos/x/core/keeper"
+	hyperlanetypes "github.com/bcp-innovations/hyperlane-cosmos/x/core/types"
+	warpkeeper "github.com/bcp-innovations/hyperlane-cosmos/x/warp/keeper"
+	warptypes "github.com/bcp-innovations/hyperlane-cosmos/x/warp/types"
 	govkeeper "github.com/cosmos/cosmos-sdk/x/gov/keeper"
 	mintkeeper "github.com/cosmos/cosmos-sdk/x/mint/keeper"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
@@ -148,6 +152,10 @@ type AppKeepers struct {
 
 	// TokenFactory
 	TokenFactoryKeeper *tokenfactorykeeper.Keeper
+
+	// Hyperlane
+	HyperlaneKeeper *hyperlanekeeper.Keeper
+	WarpKeeper      warpkeeper.Keeper
 
 	// Custom
 	ServicesKeeper      *serviceskeeper.Keeper
@@ -550,6 +558,28 @@ func NewAppKeeper(
 	)
 	appKeepers.ContractKeeper = wasmkeeper.NewDefaultPermissionKeeper(appKeepers.WasmKeeper)
 	appKeepers.TokenFactoryKeeper.SetContractKeeper(appKeepers.ContractKeeper)
+
+	hyperlaneKeeper := hyperlanekeeper.NewKeeper(
+		appCodec,
+		addressCodec,
+		runtime.NewKVStoreService(appKeepers.keys[hyperlanetypes.ModuleName]),
+		govAuthority,
+		appKeepers.BankKeeper,
+	)
+	appKeepers.HyperlaneKeeper = &hyperlaneKeeper
+
+	appKeepers.WarpKeeper = warpkeeper.NewKeeper(
+		appCodec,
+		addressCodec,
+		runtime.NewKVStoreService(appKeepers.keys[warptypes.ModuleName]),
+		govAuthority,
+		appKeepers.BankKeeper,
+		appKeepers.HyperlaneKeeper,
+		[]int32{
+			int32(warptypes.HYP_TOKEN_TYPE_COLLATERAL),
+			int32(warptypes.HYP_TOKEN_TYPE_SYNTHETIC),
+		},
+	)
 
 	// ----------------------
 	// --- Custom modules ---

@@ -1,6 +1,8 @@
 package keepers
 
 import (
+	hyperlanetypes "github.com/bcp-innovations/hyperlane-cosmos/x/core/types"
+	warptypes "github.com/bcp-innovations/hyperlane-cosmos/x/warp/types"
 	"github.com/cosmos/cosmos-sdk/x/group"
 	routertypes "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/types"
 	ratelimittypes "github.com/cosmos/ibc-apps/modules/rate-limiting/v8/types"
@@ -77,6 +79,10 @@ func (appKeepers *AppKeepers) GenerateKeys() {
 		marketmaptypes.StoreKey,
 		oracletypes.StoreKey,
 		feemarkettypes.StoreKey,
+
+		// Hyperlane
+		hyperlanetypes.ModuleName,
+		warptypes.ModuleName,
 
 		// Custom modules
 		ibchookstypes.StoreKey,
