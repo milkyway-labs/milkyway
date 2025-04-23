@@ -150,6 +150,26 @@ func (q queryServer) OperatorCommission(ctx context.Context, req *types.QueryOpe
 	return &types.QueryOperatorCommissionResponse{Commission: commission}, nil
 }
 
+func (q queryServer) PoolServiceTotalDelegatorShares(ctx context.Context, req *types.QueryPoolServiceTotalDelegatorSharesRequest) (*types.QueryPoolServiceTotalDelegatorSharesResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "empty request")
+	}
+
+	if req.PoolId == 0 {
+		return nil, status.Error(codes.InvalidArgument, "invalid pool id")
+	}
+	if req.ServiceId == 0 {
+		return nil, status.Error(codes.InvalidArgument, "invalid service id")
+	}
+
+	shares, err := q.k.GetPoolServiceTotalDelegatorShares(ctx, req.PoolId, req.ServiceId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.QueryPoolServiceTotalDelegatorSharesResponse{Shares: shares}, nil
+}
+
 func (q queryServer) PoolDelegationRewards(ctx context.Context, req *types.QueryPoolDelegationRewardsRequest) (*types.QueryPoolDelegationRewardsResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")

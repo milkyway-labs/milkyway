@@ -3,6 +3,7 @@ package milkyway.rewards.v1;
 
 import "amino/amino.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
+import "cosmos/base/v1beta1/coin.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
@@ -48,6 +49,12 @@ service Query {
   // OperatorCommission queries accumulated commission for an operator.
   rpc OperatorCommission(QueryOperatorCommissionRequest) returns (QueryOperatorCommissionResponse) {
     option (google.api.http).get = "/milkyway/rewards/v1/operators/{operator_id}/commission";
+  }
+
+  // PoolServiceTotalDelegatorShares queries the total delegator shares for a
+  // pool-service pair.
+  rpc PoolServiceTotalDelegatorShares(QueryPoolServiceTotalDelegatorSharesRequest) returns (QueryPoolServiceTotalDelegatorSharesResponse) {
+    option (google.api.http).get = "/milkyway/rewards/v1/pools/{pool_id}/services/{service_id}/total_delegator_shares";
   }
 
   // PoolDelegationRewards queries the total rewards accrued by a pool
@@ -185,6 +192,28 @@ message QueryOperatorCommissionRequest {
 message QueryOperatorCommissionResponse {
   // commission defines the commission the operator received.
   AccumulatedCommission commission = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+// QueryPoolServiceTotalDelegatorSharesRequest is the request type for the
+// Query/PoolServiceTotalDelegatorShares RPC method.
+message QueryPoolServiceTotalDelegatorSharesRequest {
+  // pool_id defines the pool ID to query for.
+  uint32 pool_id = 1;
+
+  // service_id defines the service ID to query for.
+  uint32 service_id = 2;
+}
+
+// QueryPoolServiceTotalDelegatorSharesResponse is the response type for the
+// Query/PoolServiceTotalDelegatorShares RPC method.
+message QueryPoolServiceTotalDelegatorSharesResponse {
+  // total_delegator_shares defines the total delegator shares for a
+  // pool-service pair.
+  repeated cosmos.base.v1beta1.DecCoin shares = 1 [
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
