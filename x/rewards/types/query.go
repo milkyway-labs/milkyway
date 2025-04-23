@@ -46,6 +46,14 @@ func NewQueryOperatorCommissionRequest(operatorID uint32) *QueryOperatorCommissi
 	}
 }
 
+// NewQueryPoolServiceTotalDelegatorSharesRequest creates a new instance of QueryPoolServiceTotalDelegatorSharesRequest.
+func NewQueryPoolServiceTotalDelegatorSharesRequest(poolID, serviceID uint32) *QueryPoolServiceTotalDelegatorSharesRequest {
+	return &QueryPoolServiceTotalDelegatorSharesRequest{
+		PoolId:    poolID,
+		ServiceId: serviceID,
+	}
+}
+
 // NewQueryPoolDelegationRewardsRequest creates a new instance of QueryPoolDelegationRewardsRequest.
 func NewQueryPoolDelegationRewardsRequest(poolID uint32, delegator string) *QueryPoolDelegationRewardsRequest {
 	return &QueryPoolDelegationRewardsRequest{

@@ -525,6 +525,71 @@ func (suite *KeeperTestSuite) TestQuerier_OperatorCommission() {
 	}
 }
 
+func (suite *KeeperTestSuite) TestQuerier_PoolServiceTotalShares() {
+	testCases := []struct {
+		name      string
+		store     func(ctx sdk.Context)
+		updateCtx func(ctx sdk.Context) sdk.Context
+		req       *types.QueryPoolServiceTotalDelegatorSharesRequest
+		shouldErr bool
+		expShares sdk.DecCoins
+	}{
+		{
+			name:      "invalid pool ID returns error",
+			req:       types.NewQueryPoolServiceTotalDelegatorSharesRequest(0, 1),
+			shouldErr: true,
+		},
+		{
+			name:      "invalid service ID returns error",
+			req:       types.NewQueryPoolServiceTotalDelegatorSharesRequest(1, 0),
+			shouldErr: true,
+		},
+		{
+			name: "existing commission is returned properly",
+			store: func(ctx sdk.Context) {
+				// Create a service.
+				serviceAdmin := testutil.TestAddress(10000)
+				service := suite.CreateService(ctx, "Service", serviceAdmin.String())
+
+				delAddr := testutil.TestAddress(1)
+				suite.DelegatePool(ctx, utils.MustParseCoin("10_000000umilk"), delAddr.String(), true)
+
+				suite.SetUserPreferences(ctx, delAddr.String(), []restakingtypes.TrustedServiceEntry{
+					restakingtypes.NewTrustedServiceEntry(service.ID, []uint32{1}),
+				})
+			},
+			updateCtx: func(ctx sdk.Context) sdk.Context {
+				// Allocate rewards
+				return suite.allocateRewards(ctx, 10*time.Second)
+			},
+			req:       types.NewQueryPoolServiceTotalDelegatorSharesRequest(1, 1),
+			shouldErr: false,
+			expShares: utils.MustParseDecCoins("10_000000pool/1/umilk"),
+		},
+	}
+
+	for _, tc := range testCases {
+		suite.Run(tc.name, func() {
+			ctx, _ := suite.ctx.CacheContext()
+			if tc.store != nil {
+				tc.store(ctx)
+			}
+			if tc.updateCtx != nil {
+				ctx = tc.updateCtx(ctx)
+			}
+
+			queryServer := keeper.NewQueryServer(suite.keeper)
+			res, err := queryServer.PoolServiceTotalDelegatorShares(ctx, tc.req)
+			if tc.shouldErr {
+				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
+				suite.Require().Equal(tc.expShares, res.Shares)
+			}
+		})
+	}
+}
+
 func (suite *KeeperTestSuite) TestQuerier_PoolDelegationRewards() {
 	testCases := []struct {
 		name       string
