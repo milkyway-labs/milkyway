@@ -30,7 +30,6 @@ import (
 	icsprovider "github.com/cosmos/interchain-security/v6/x/ccv/provider"
 	"github.com/skip-mev/connect/v2/x/marketmap"
 	"github.com/skip-mev/connect/v2/x/oracle"
-	"github.com/skip-mev/feemarket/x/feemarket"
 
 	"github.com/milkyway-labs/milkyway/v10/x/assets"
 	ibchooks "github.com/milkyway-labs/milkyway/v10/x/ibc-hooks"
@@ -67,7 +66,6 @@ var AppModuleBasics = module.NewBasicManager(
 	tokenfactory.AppModuleBasic{},
 
 	// Skip modules
-	feemarket.AppModuleBasic{},
 	oracle.AppModuleBasic{},
 	marketmap.AppModuleBasic{},
 

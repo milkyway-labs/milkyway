@@ -12,9 +12,7 @@ import (
 	reflectionv1 "cosmossdk.io/api/cosmos/reflection/v1"
 	"cosmossdk.io/client/v2/autocli"
 	"cosmossdk.io/core/appmodule"
-	errorsmod "cosmossdk.io/errors"
 	"cosmossdk.io/log"
-	"cosmossdk.io/math"
 	"cosmossdk.io/x/tx/signing"
 	upgradetypes "cosmossdk.io/x/upgrade/types"
 	"github.com/CosmWasm/wasmd/x/wasm"
@@ -41,7 +39,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/std"
 	"github.com/cosmos/cosmos-sdk/testutil/testdata"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/cosmos/cosmos-sdk/types/msgservice"
 	sigtypes "github.com/cosmos/cosmos-sdk/types/tx/signing"
@@ -61,7 +58,6 @@ import (
 	"github.com/rakyll/statik/fs"
 	oracleconfig "github.com/skip-mev/connect/v2/oracle/config"
 	oracleclient "github.com/skip-mev/connect/v2/service/clients/oracle"
-	feemarketkeeper "github.com/skip-mev/feemarket/x/feemarket/keeper"
 	"github.com/spf13/cast"
 
 	milkywayante "github.com/milkyway-labs/milkyway/v10/ante"
@@ -309,31 +305,16 @@ func NewMilkyWayApp(
 			Codec:                 appCodec,
 			IBCKeeper:             app.IBCKeeper,
 			StakingKeeper:         app.StakingKeeper,
-			FeeMarketKeeper:       app.FeeMarketKeeper,
 			WasmConfig:            &wasmConfig,
 			TXCounterStoreService: runtime.NewKVStoreService(app.AppKeepers.GetKey(wasmtypes.StoreKey)),
-			TxFeeChecker: func(ctx sdk.Context, tx sdk.Tx) (sdk.Coins, int64, error) {
-				return minTxFeesChecker(ctx, tx, *app.FeeMarketKeeper)
-			},
 		},
 	)
 	if err != nil {
 		panic(fmt.Errorf("failed to create AnteHandler: %s", err))
 	}
 
-	postHandlerOptions := PostHandlerOptions{
-		AccountKeeper:   app.AccountKeeper,
-		BankKeeper:      app.BankKeeper,
-		FeeMarketKeeper: app.FeeMarketKeeper,
-	}
-	postHandler, err := NewPostHandler(postHandlerOptions)
-	if err != nil {
-		panic(err)
-	}
-
 	// set ante and post handlers
 	app.SetAnteHandler(anteHandler)
-	app.SetPostHandler(postHandler)
 
 	// Initialize the ABCI extensions
 	data := milkywayabci.InitializeOracleABCIExtensions(milkywayabci.SetupData{
@@ -637,51 +618,6 @@ var EmptyWasmOptions []wasmkeeper.Option
 // Get implements AppOptions
 func (ao EmptyAppOptions) Get(_ string) interface{} {
 	return nil
-}
-
-// minTxFeesChecker will be executed only if the feemarket module is disabled.
-// In this case, the auth module's DeductFeeDecorator is executed, and
-// we use the minTxFeesChecker to enforce the minimum transaction fees.
-// Min tx fees are calculated as gas_limit * feemarket_min_base_gas_price
-func minTxFeesChecker(ctx sdk.Context, tx sdk.Tx, feemarketKp feemarketkeeper.Keeper) (sdk.Coins, int64, error) {
-	feeTx, ok := tx.(sdk.FeeTx)
-	if !ok {
-		return nil, 0, errorsmod.Wrap(sdkerrors.ErrTxDecode, "Tx must be a FeeTx")
-	}
-
-	// To keep the gentxs with zero fees, we need to skip the validation in the first block
-	if ctx.BlockHeight() == 0 {
-		return feeTx.GetFee(), 0, nil
-	}
-
-	feeMarketParams, err := feemarketKp.GetParams(ctx)
-	if err != nil {
-		return nil, 0, err
-	}
-
-	if feeMarketParams.MinBaseGasPrice.IsZero() {
-		return feeTx.GetFee(), 0, nil
-	}
-
-	feeRequired := sdk.NewCoins(
-		sdk.NewCoin(
-			feeMarketParams.FeeDenom,
-			feeMarketParams.MinBaseGasPrice.MulInt(math.NewIntFromUint64(feeTx.GetGas())).Ceil().RoundInt(),
-		),
-	)
-
-	feeCoins := feeTx.GetFee()
-	if len(feeCoins) != 1 {
-		return nil, 0, fmt.Errorf(
-			"expected exactly one fee coin; got %s, required: %s", feeCoins.String(), feeRequired.String())
-	}
-
-	if !feeCoins.IsAnyGTE(feeRequired) {
-		return nil, 0, fmt.Errorf(
-			"not enough fees provided; got %s, required: %s", feeCoins.String(), feeRequired.String())
-	}
-
-	return feeTx.GetFee(), 0, nil
 }
 
 // Close closes the underlying baseapp, the oracle service, and the prometheus server if required.

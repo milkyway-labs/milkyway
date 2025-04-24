@@ -1,8 +1,7 @@
 package ante
 
 import (
-	feemarketante "github.com/skip-mev/feemarket/x/feemarket/ante"
-	feemarketkeeper "github.com/skip-mev/feemarket/x/feemarket/keeper"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 
 	milkywayerrors "github.com/milkyway-labs/milkyway/v10/types/errors"
 
@@ -25,9 +24,6 @@ import (
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 )
 
-// UseFeeMarketDecorator to make the integration testing easier: we can switch off its ante and post decorators with this flag
-var UseFeeMarketDecorator = true
-
 // HandlerOptions extend the SDK's AnteHandler options by requiring the IBC
 // channel keeper.
 type HandlerOptions struct {
@@ -36,13 +32,11 @@ type HandlerOptions struct {
 	SignModeHandler        *txsigning.HandlerMap
 	SigGasConsumer         func(meter storetypes.GasMeter, sig signing.SignatureV2, params authtypes.Params) error
 
-	AccountKeeper         feemarketante.AccountKeeper
-	BankKeeper            feemarketante.BankKeeper
+	AccountKeeper         ante.AccountKeeper
+	BankKeeper            bankkeeper.Keeper
 	Codec                 codec.BinaryCodec
 	IBCKeeper             *ibckeeper.Keeper
 	StakingKeeper         *stakingkeeper.Keeper
-	FeeMarketKeeper       *feemarketkeeper.Keeper
-	TxFeeChecker          ante.TxFeeChecker
 	TXCounterStoreService corestoretypes.KVStoreService
 	WasmConfig            *wasmtypes.WasmConfig
 }
@@ -59,9 +53,6 @@ func NewAnteHandler(opts HandlerOptions) (sdk.AnteHandler, error) {
 	}
 	if opts.IBCKeeper == nil {
 		return nil, errorsmod.Wrap(milkywayerrors.ErrLogic, "IBC keeper is required for AnteHandler")
-	}
-	if opts.FeeMarketKeeper == nil {
-		return nil, errorsmod.Wrap(milkywayerrors.ErrLogic, "FeeMarket keeper is required for AnteHandler")
 	}
 
 	if opts.StakingKeeper == nil {
@@ -88,23 +79,6 @@ func NewAnteHandler(opts HandlerOptions) (sdk.AnteHandler, error) {
 		ante.NewSigVerificationDecorator(opts.AccountKeeper, opts.SignModeHandler),
 		ante.NewIncrementSequenceDecorator(opts.AccountKeeper),
 		ibcante.NewRedundantRelayDecorator(opts.IBCKeeper),
-	}
-
-	if UseFeeMarketDecorator {
-		anteDecorators = append(anteDecorators,
-			feemarketante.NewFeeMarketCheckDecorator(
-				opts.AccountKeeper,
-				opts.BankKeeper,
-				opts.FeegrantKeeper,
-				opts.FeeMarketKeeper,
-				ante.NewDeductFeeDecorator(
-					opts.AccountKeeper,
-					opts.BankKeeper,
-					opts.FeegrantKeeper,
-					opts.TxFeeChecker,
-				),
-			),
-		)
 	}
 
 	return sdk.ChainAnteDecorators(anteDecorators...), nil

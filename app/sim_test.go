@@ -24,7 +24,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 	simcli "github.com/cosmos/cosmos-sdk/x/simulation/client/cli"
 
-	"github.com/milkyway-labs/milkyway/v10/ante"
 	"github.com/milkyway-labs/milkyway/v10/app/sim"
 
 	milkyway "github.com/milkyway-labs/milkyway/v10/app"
@@ -49,9 +48,6 @@ func TestAppStateDeterminism(t *testing.T) {
 	if !sim.FlagEnabledValue {
 		t.Skip("skipping application simulation")
 	}
-
-	// since we can't provide tx fees to SimulateFromSeed(), we must switch off the feemarket
-	ante.UseFeeMarketDecorator = false
 
 	config := sim.NewConfigFromFlags()
 	config.InitialBlockHeight = 1

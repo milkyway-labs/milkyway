@@ -1,18 +1,7 @@
 package keepers
 
 import (
-	"fmt"
 	"os"
-
-	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
-	"github.com/cosmos/cosmos-sdk/x/group"
-	"github.com/cosmos/gogoproto/proto"
-	marketmapkeeper "github.com/skip-mev/connect/v2/x/marketmap/keeper"
-	marketmaptypes "github.com/skip-mev/connect/v2/x/marketmap/types"
-	oraclekeeper "github.com/skip-mev/connect/v2/x/oracle/keeper"
-	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
-	feemarketkeeper "github.com/skip-mev/feemarket/x/feemarket/keeper"
-	feemarkettypes "github.com/skip-mev/feemarket/x/feemarket/types"
 
 	"cosmossdk.io/log"
 	storetypes "cosmossdk.io/store/types"
@@ -39,10 +28,12 @@ import (
 	consensusparamtypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
 	crisiskeeper "github.com/cosmos/cosmos-sdk/x/crisis/keeper"
 	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
+	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	govv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	govv1beta1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
+	"github.com/cosmos/cosmos-sdk/x/group"
 	groupkeeper "github.com/cosmos/cosmos-sdk/x/group/keeper"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	"github.com/cosmos/cosmos-sdk/x/params"
@@ -50,6 +41,7 @@ import (
 	paramproposal "github.com/cosmos/cosmos-sdk/x/params/types/proposal"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	"github.com/cosmos/gogoproto/proto"
 	pfmroutertypes "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/types"
 	ratelimittypes "github.com/cosmos/ibc-apps/modules/rate-limiting/v8/types"
 	capabilitykeeper "github.com/cosmos/ibc-go/modules/capability/keeper"
@@ -66,6 +58,10 @@ import (
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"
 	providertypes "github.com/cosmos/interchain-security/v6/x/ccv/provider/types"
+	marketmapkeeper "github.com/skip-mev/connect/v2/x/marketmap/keeper"
+	marketmaptypes "github.com/skip-mev/connect/v2/x/marketmap/types"
+	oraclekeeper "github.com/skip-mev/connect/v2/x/oracle/keeper"
+	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
 
 	evidencekeeper "cosmossdk.io/x/evidence/keeper"
 	hyperlanekeeper "github.com/bcp-innovations/hyperlane-cosmos/x/core/keeper"
@@ -138,7 +134,6 @@ type AppKeepers struct {
 	// Skip
 	MarketMapKeeper *marketmapkeeper.Keeper
 	OracleKeeper    *oraclekeeper.Keeper
-	FeeMarketKeeper *feemarketkeeper.Keeper
 
 	// IBC
 	IBCKeeper       *ibckeeper.Keeper
@@ -318,14 +313,6 @@ func NewAppKeeper(
 			appKeepers.SlashingKeeper.Hooks(),
 			appKeepers.ProviderKeeper.Hooks(),
 		),
-	)
-
-	appKeepers.FeeMarketKeeper = feemarketkeeper.NewKeeper(
-		appCodec,
-		appKeepers.keys[feemarkettypes.StoreKey],
-		appKeepers.AccountKeeper,
-		&DefaultFeemarketDenomResolver{},
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
 
 	appKeepers.MarketMapKeeper = marketmapkeeper.NewKeeper(
@@ -796,18 +783,4 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(ibchookstypes.ModuleName)
 
 	return paramsKeeper
-}
-
-type DefaultFeemarketDenomResolver struct{}
-
-func (r *DefaultFeemarketDenomResolver) ConvertToDenom(_ sdk.Context, coin sdk.DecCoin, denom string) (sdk.DecCoin, error) {
-	if coin.Denom == denom {
-		return coin, nil
-	}
-
-	return sdk.DecCoin{}, fmt.Errorf("error resolving denom")
-}
-
-func (r *DefaultFeemarketDenomResolver) ExtraDenoms(_ sdk.Context) ([]string, error) {
-	return []string{}, nil
 }

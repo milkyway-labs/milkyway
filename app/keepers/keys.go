@@ -13,7 +13,6 @@ import (
 	providertypes "github.com/cosmos/interchain-security/v6/x/ccv/provider/types"
 	marketmaptypes "github.com/skip-mev/connect/v2/x/marketmap/types"
 	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
-	feemarkettypes "github.com/skip-mev/feemarket/x/feemarket/types"
 
 	storetypes "cosmossdk.io/store/types"
 	evidencetypes "cosmossdk.io/x/evidence/types"
@@ -78,7 +77,6 @@ func (appKeepers *AppKeepers) GenerateKeys() {
 		// Skip
 		marketmaptypes.StoreKey,
 		oracletypes.StoreKey,
-		feemarkettypes.StoreKey,
 
 		// Hyperlane
 		hyperlanetypes.ModuleName,
