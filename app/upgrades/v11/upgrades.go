@@ -38,7 +38,7 @@ func CreateUpgradeHandler(
 		if err != nil {
 			return nil, err
 		}
-		mintAmt := sdk.NewCoins(sdk.NewInt64Coin("umilk", 999_999_980)) // 1B - 20
+		mintAmt := sdk.NewCoins(sdk.NewInt64Coin("umilk", 999_999_980_000_000)) // 1B - 20
 		err = keepers.BankKeeper.MintCoins(ctx, minttypes.ModuleName, mintAmt)
 		if err != nil {
 			return nil, err
