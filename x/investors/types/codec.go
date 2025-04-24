@@ -9,13 +9,13 @@ import (
 )
 
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	legacy.RegisterAminoMsg(cdc, &MsgSetVestingInvestor{}, "milkyway/MsgSetVestingInvestor")
+	legacy.RegisterAminoMsg(cdc, &MsgAddVestingInvestor{}, "milkyway/MsgAddVestingInvestor")
 	legacy.RegisterAminoMsg(cdc, &MsgUpdateInvestorsRewardRatio{}, "milkyway/MsgUpdateInvestorsRewardRatio")
 }
 
 func RegisterInterfaces(registry types.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgSetVestingInvestor{},
+		&MsgAddVestingInvestor{},
 		&MsgUpdateInvestorsRewardRatio{},
 	)
 

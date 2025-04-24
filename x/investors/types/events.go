@@ -1,7 +1,7 @@
 package types
 
 const (
-	EventTypeSetVestingInvestor         = "set_vesting_investor"
+	EventTypeAddVestingInvestor         = "add_vesting_investor"
 	EventTypeUpdateInvestorsRewardRatio = "update_investors_reward_ratio"
 
 	AttributeKeyVestingInvestor      = "vesting_investor"

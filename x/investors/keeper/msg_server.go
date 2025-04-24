@@ -20,8 +20,8 @@ func NewMsgServer(k *Keeper) types.MsgServer {
 	return &msgServer{Keeper: k}
 }
 
-// SetVestingInvestor defines the rpc method for Msg/SetVestingInvestor
-func (k msgServer) SetVestingInvestor(ctx context.Context, msg *types.MsgSetVestingInvestor) (*types.MsgSetVestingInvestorResponse, error) {
+// AddVestingInvestor defines the rpc method for Msg/AddVestingInvestor
+func (k msgServer) AddVestingInvestor(ctx context.Context, msg *types.MsgAddVestingInvestor) (*types.MsgAddVestingInvestorResponse, error) {
 	// Check the authority
 	if k.authority != msg.Authority {
 		return nil, errors.Wrapf(govtypes.ErrInvalidSigner, "invalid authority; expected %s, got %s", k.authority, msg.Authority)
@@ -35,12 +35,12 @@ func (k msgServer) SetVestingInvestor(ctx context.Context, msg *types.MsgSetVest
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sdkCtx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeSetVestingInvestor,
+			types.EventTypeAddVestingInvestor,
 			sdk.NewAttribute(types.AttributeKeyVestingInvestor, msg.VestingInvestor),
 		),
 	})
 
-	return &types.MsgSetVestingInvestorResponse{}, nil
+	return &types.MsgAddVestingInvestorResponse{}, nil
 }
 
 // UpdateInvestorsRewardRatio defines the rpc method for Msg/UpdateInvestorsRewardRatio
