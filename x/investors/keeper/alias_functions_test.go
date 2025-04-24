@@ -83,23 +83,47 @@ func (suite *KeeperTestSuite) TestSetVestingInvestor() {
 		true,
 	)
 
+	valOwnerAddr := testutil.TestAddress(10000)
+	validator := suite.createValidator(
+		ctx,
+		valOwnerAddr,
+		stakingtypes.NewCommissionRates(utils.MustParseDec("0"), utils.MustParseDec("0.2"), utils.MustParseDec("0.01")),
+		utils.MustParseCoin("1000000stake"),
+		true,
+	)
+	valAddr := sdk.ValAddress(valOwnerAddr)
+
+	suite.delegate(ctx, activeVestingAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), false)
+	suite.delegate(ctx, endedVestingAddr.String(), validator.GetOperator(), utils.MustParseCoin("1000000stake"), false)
+
 	// endedVestingAddr's vesting schedule ends
 	ctx = ctx.WithBlockHeight(ctx.BlockHeight() + 1).WithBlockTime(time.Date(2025, 12, 1, 0, 0, 0, 0, time.UTC))
+	// allocate rewards
+	ctx = suite.allocateTokensToValidator(ctx, valAddr, utils.MustParseDecCoins("1000000stake"), true)
 
 	testCases := []struct {
 		name      string
 		addr      string
 		shouldErr bool
+		check     func(ctx sdk.Context)
 	}{
 		{
-			name:      "vesting account returns no error",
+			name:      "vesting account returns no error and rewards are withdrawn",
 			addr:      activeVestingAddr.String(),
 			shouldErr: false,
+			check: func(ctx sdk.Context) {
+				rewards := suite.withdrawRewards(ctx, activeVestingAddr, valAddr)
+				suite.Require().Equal("", rewards.String())
+			},
 		},
 		{
-			name:      "ended vesting account returns no error",
+			name:      "ended vesting account returns no error and rewards are not withdrawn",
 			addr:      endedVestingAddr.String(),
 			shouldErr: false,
+			check: func(ctx sdk.Context) {
+				rewards := suite.withdrawRewards(ctx, endedVestingAddr, valAddr)
+				suite.Require().Equal("333333stake", rewards.String())
+			},
 		},
 		{
 			name:      "invalid address returns error",
@@ -119,12 +143,17 @@ func (suite *KeeperTestSuite) TestSetVestingInvestor() {
 	}
 
 	for _, tc := range testCases {
+		ctx, _ := ctx.CacheContext()
+
 		suite.Run(tc.name, func() {
 			err := suite.k.SetVestingInvestor(ctx, tc.addr)
 			if tc.shouldErr {
 				suite.Require().Error(err)
 			} else {
 				suite.Require().NoError(err)
+				if tc.check != nil {
+					tc.check(ctx)
+				}
 			}
 		})
 	}

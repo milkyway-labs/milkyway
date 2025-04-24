@@ -73,6 +73,17 @@ func (k *Keeper) SetVestingInvestor(ctx context.Context, addr string) error {
 	if !isVestingAcc {
 		return sdkerrors.ErrInvalidRequest.Wrapf("account %s is not a vesting account", addr)
 	}
+	// If the vesting account's end time is in the past, do nothing and return early
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	if vacc.GetEndTime() <= sdkCtx.BlockTime().Unix() {
+		return nil
+	}
+
+	// Withdraw all delegation rewards accrued so far
+	err = k.WithdrawAllDelegationRewards(ctx, addr)
+	if err != nil {
+		return err
+	}
 
 	err = k.InvestorsVestingQueue.Set(ctx, collections.Join(vacc.GetEndTime(), addr))
 	if err != nil {
