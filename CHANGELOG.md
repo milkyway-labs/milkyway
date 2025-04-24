@@ -3,6 +3,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 -->
 
+## Version 11.0.0
+### Features
+#### Pools
+- ([\#278](https://github.com/milkyway-labs/milkyway/pull/278)) Added query to get total delegator shares 
+
+#### Other
+- ([\#275](https://github.com/milkyway-labs/milkyway/pull/275)) Added `x/investors` module
+- ([\#276](https://github.com/milkyway-labs/milkyway/pull/276)) Added Hyperlane support
+- ([\#279](https://github.com/milkyway-labs/milkyway/pull/279)) Removed `x/feemarket` module
+
+### Bug Fixes
+#### Other
+- ([\#277](https://github.com/milkyway-labs/milkyway/pull/277)) Fixed price oracle's transaction parse error
+
 ## Version 10.1.0
 ### Dependencies
 - ([\#268](https://github.com/milkyway-labs/milkyway/pull/268)) Updated `github.com/ibc-go/ibc` to `v8.7.0`
