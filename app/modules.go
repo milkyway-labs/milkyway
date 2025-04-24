@@ -8,8 +8,6 @@ import (
 	marketmaptypes "github.com/skip-mev/connect/v2/x/marketmap/types"
 	"github.com/skip-mev/connect/v2/x/oracle"
 	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
-	"github.com/skip-mev/feemarket/x/feemarket"
-	feemarkettypes "github.com/skip-mev/feemarket/x/feemarket/types"
 
 	hyperlane "github.com/bcp-innovations/hyperlane-cosmos/x/core"
 	"github.com/bcp-innovations/hyperlane-cosmos/x/warp"
@@ -101,8 +99,6 @@ var MaccPerms = map[string][]string{
 	ibcfeetypes.ModuleName:            nil,
 	providertypes.ConsumerRewardsPool: nil,
 	wasmtypes.ModuleName:              {authtypes.Burner},
-	feemarkettypes.ModuleName:         nil,
-	feemarkettypes.FeeCollectorName:   nil,
 	tokenfactorytypes.ModuleName:      {authtypes.Minter, authtypes.Burner},
 
 	// Skip
@@ -152,7 +148,6 @@ func appModules(
 		tokenfactory.NewAppModule(*app.TokenFactoryKeeper, app.AccountKeeper, app.BankKeeper),
 
 		// Skip modules
-		feemarket.NewAppModule(appCodec, *app.FeeMarketKeeper),
 		oracle.NewAppModule(appCodec, *app.OracleKeeper),
 		marketmap.NewAppModule(appCodec, app.MarketMapKeeper),
 
@@ -271,7 +266,6 @@ func orderBeginBlockers() []string {
 		// Skip modules
 		oracletypes.ModuleName,
 		marketmaptypes.ModuleName,
-		feemarkettypes.ModuleName,
 
 		// MilkyWay modules
 		rewardstypes.ModuleName,
@@ -320,7 +314,6 @@ func orderEndBlockers() []string {
 		// Skip modules
 		marketmaptypes.ModuleName,
 		oracletypes.ModuleName,
-		feemarkettypes.ModuleName,
 
 		// MilkyWay modules
 		servicestypes.ModuleName,
@@ -381,14 +374,6 @@ func orderInitBlockers() []string {
 		liquidvestingtypes.ModuleName,
 		investorstypes.ModuleName,
 
-		// The feemarket module should ideally be initialized before the genutil module in theory:
-		// The feemarket antehandler performs checks in DeliverTx, which is called by gentx.
-		// When the fee > 0, gentx needs to pay the fee. However, this is not expected.
-		// To resolve this issue, we should initialize the feemarket module after genutil, ensuring that the
-		// min fee is empty when gentx is called.
-		// A similar issue existed for the 'globalfee' module, which was previously used instead of 'feemarket'.
-		// For more details, please refer to the following link: https://github.com/cosmos/gaia/issues/2489
-		feemarkettypes.ModuleName,
 		providertypes.ModuleName,
 		consensusparamtypes.ModuleName,
 		wasmtypes.ModuleName,
