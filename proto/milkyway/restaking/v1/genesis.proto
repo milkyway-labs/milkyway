@@ -5,7 +5,7 @@ import "gogoproto/gogo.proto";
 import "milkyway/restaking/v1/models.proto";
 import "milkyway/restaking/v1/params.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v10/x/restaking/types";
+option go_package = "github.com/milkyway-labs/milkyway/v11/x/restaking/types";
 
 // OperatorJoinedServicesRecord represents the services joined by a
 // individual operator.

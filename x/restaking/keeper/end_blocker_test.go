@@ -8,11 +8,11 @@ import (
 	storetypes "cosmossdk.io/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/v10/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v10/x/pools/types"
-	"github.com/milkyway-labs/milkyway/v10/x/restaking/keeper"
-	"github.com/milkyway-labs/milkyway/v10/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v10/x/services/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v11/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v11/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v11/x/restaking/keeper"
+	"github.com/milkyway-labs/milkyway/v11/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v11/x/services/types"
 )
 
 func (suite *KeeperTestSuite) TestKeeper_CompleteMatureUnbondingDelegations() {

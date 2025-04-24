@@ -3,10 +3,10 @@ package simulation
 import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	operatorssimulation "github.com/milkyway-labs/milkyway/v10/x/operators/simulation"
-	poolssimulation "github.com/milkyway-labs/milkyway/v10/x/pools/simulation"
-	"github.com/milkyway-labs/milkyway/v10/x/restaking/types"
-	servicessimulation "github.com/milkyway-labs/milkyway/v10/x/services/simulation"
+	operatorssimulation "github.com/milkyway-labs/milkyway/v11/x/operators/simulation"
+	poolssimulation "github.com/milkyway-labs/milkyway/v11/x/pools/simulation"
+	"github.com/milkyway-labs/milkyway/v11/x/restaking/types"
+	servicessimulation "github.com/milkyway-labs/milkyway/v11/x/services/simulation"
 )
 
 // RandomizedGenState generates a random GenesisState for the restaking module

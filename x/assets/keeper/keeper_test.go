@@ -6,8 +6,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/milkyway-labs/milkyway/v10/x/assets/keeper"
-	"github.com/milkyway-labs/milkyway/v10/x/assets/testutils"
+	"github.com/milkyway-labs/milkyway/v11/x/assets/keeper"
+	"github.com/milkyway-labs/milkyway/v11/x/assets/testutils"
 )
 
 type KeeperTestSuite struct {

@@ -15,9 +15,9 @@ import (
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 
-	"github.com/milkyway-labs/milkyway/v10/utils"
-	"github.com/milkyway-labs/milkyway/v10/x/ibc-hooks/keeper"
-	"github.com/milkyway-labs/milkyway/v10/x/ibc-hooks/types"
+	"github.com/milkyway-labs/milkyway/v11/utils"
+	"github.com/milkyway-labs/milkyway/v11/x/ibc-hooks/keeper"
+	"github.com/milkyway-labs/milkyway/v11/x/ibc-hooks/types"
 )
 
 type WasmHooks struct {

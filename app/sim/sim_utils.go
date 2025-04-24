@@ -12,7 +12,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
-	milkyway "github.com/milkyway-labs/milkyway/v10/app"
+	milkyway "github.com/milkyway-labs/milkyway/v11/app"
 )
 
 // SimulationOperations retrieves the simulation params from the provided file path

@@ -3,7 +3,7 @@ package ante
 import (
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 
-	milkywayerrors "github.com/milkyway-labs/milkyway/v10/types/errors"
+	milkywayerrors "github.com/milkyway-labs/milkyway/v11/types/errors"
 
 	ibcante "github.com/cosmos/ibc-go/v8/modules/core/ante"
 	ibckeeper "github.com/cosmos/ibc-go/v8/modules/core/keeper"

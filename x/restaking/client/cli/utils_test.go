@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/v10/x/restaking/client/cli"
-	"github.com/milkyway-labs/milkyway/v10/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v11/x/restaking/client/cli"
+	"github.com/milkyway-labs/milkyway/v11/x/restaking/types"
 )
 
 func TestParseTrustedServiceEntry(t *testing.T) {

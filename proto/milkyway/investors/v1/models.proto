@@ -4,7 +4,7 @@ package milkyway.investors.v1;
 import "cosmos/base/v1beta1/coin.proto";
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v10/x/investors/types";
+option go_package = "github.com/milkyway-labs/milkyway/v11/x/investors/types";
 
 // VestingInvestorRewards defines the temporarily redirected rewards for
 // vesting investors.

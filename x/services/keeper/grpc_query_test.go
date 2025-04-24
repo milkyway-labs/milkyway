@@ -5,7 +5,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 
-	"github.com/milkyway-labs/milkyway/v10/x/services/types"
+	"github.com/milkyway-labs/milkyway/v11/x/services/types"
 )
 
 func (suite *KeeperTestSuite) TestKeeper_Services() {

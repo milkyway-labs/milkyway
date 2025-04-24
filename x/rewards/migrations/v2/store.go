@@ -8,7 +8,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v10/x/rewards/types"
+	"github.com/milkyway-labs/milkyway/v11/x/rewards/types"
 )
 
 // MigrateStore performs in-place store migrations from v1 to v2. The migrations include:

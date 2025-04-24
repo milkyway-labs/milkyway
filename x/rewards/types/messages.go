@@ -7,7 +7,7 @@ import (
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	restakingtypes "github.com/milkyway-labs/milkyway/v10/x/restaking/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v11/x/restaking/types"
 )
 
 // NewMsgCreateRewardsPlan creates a new MsgCreateRewardsPlan instance

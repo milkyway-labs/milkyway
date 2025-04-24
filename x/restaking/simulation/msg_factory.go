@@ -11,17 +11,17 @@ import (
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 
-	"github.com/milkyway-labs/milkyway/v10/testutils/simtesting"
-	operatorskeeper "github.com/milkyway-labs/milkyway/v10/x/operators/keeper"
-	operatorssimulation "github.com/milkyway-labs/milkyway/v10/x/operators/simulation"
-	operatorstypes "github.com/milkyway-labs/milkyway/v10/x/operators/types"
-	poolskeeper "github.com/milkyway-labs/milkyway/v10/x/pools/keeper"
-	poolssimulation "github.com/milkyway-labs/milkyway/v10/x/pools/simulation"
-	"github.com/milkyway-labs/milkyway/v10/x/restaking/keeper"
-	"github.com/milkyway-labs/milkyway/v10/x/restaking/types"
-	serviceskeeper "github.com/milkyway-labs/milkyway/v10/x/services/keeper"
-	servicessimulation "github.com/milkyway-labs/milkyway/v10/x/services/simulation"
-	servicestypes "github.com/milkyway-labs/milkyway/v10/x/services/types"
+	"github.com/milkyway-labs/milkyway/v11/testutils/simtesting"
+	operatorskeeper "github.com/milkyway-labs/milkyway/v11/x/operators/keeper"
+	operatorssimulation "github.com/milkyway-labs/milkyway/v11/x/operators/simulation"
+	operatorstypes "github.com/milkyway-labs/milkyway/v11/x/operators/types"
+	poolskeeper "github.com/milkyway-labs/milkyway/v11/x/pools/keeper"
+	poolssimulation "github.com/milkyway-labs/milkyway/v11/x/pools/simulation"
+	"github.com/milkyway-labs/milkyway/v11/x/restaking/keeper"
+	"github.com/milkyway-labs/milkyway/v11/x/restaking/types"
+	serviceskeeper "github.com/milkyway-labs/milkyway/v11/x/services/keeper"
+	servicessimulation "github.com/milkyway-labs/milkyway/v11/x/services/simulation"
+	servicestypes "github.com/milkyway-labs/milkyway/v11/x/services/types"
 )
 
 // Simulation operation weights constants

@@ -6,8 +6,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v10/x/liquidvesting/keeper"
-	"github.com/milkyway-labs/milkyway/v10/x/liquidvesting/types"
+	"github.com/milkyway-labs/milkyway/v11/x/liquidvesting/keeper"
+	"github.com/milkyway-labs/milkyway/v11/x/liquidvesting/types"
 )
 
 // EndBlocker is called every block and is responsible for maturing unbonding delegations

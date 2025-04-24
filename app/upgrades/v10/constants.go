@@ -3,8 +3,8 @@ package v10
 import (
 	storetypes "cosmossdk.io/store/types"
 
-	"github.com/milkyway-labs/milkyway/v10/app/upgrades"
-	ibchookstypes "github.com/milkyway-labs/milkyway/v10/x/ibc-hooks/types"
+	"github.com/milkyway-labs/milkyway/v11/app/upgrades"
+	ibchookstypes "github.com/milkyway-labs/milkyway/v11/x/ibc-hooks/types"
 )
 
 const UpgradeName = "v10"

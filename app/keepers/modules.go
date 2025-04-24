@@ -31,16 +31,16 @@ import (
 	"github.com/skip-mev/connect/v2/x/marketmap"
 	"github.com/skip-mev/connect/v2/x/oracle"
 
-	"github.com/milkyway-labs/milkyway/v10/x/assets"
-	ibchooks "github.com/milkyway-labs/milkyway/v10/x/ibc-hooks"
-	"github.com/milkyway-labs/milkyway/v10/x/investors"
-	"github.com/milkyway-labs/milkyway/v10/x/liquidvesting"
-	"github.com/milkyway-labs/milkyway/v10/x/operators"
-	"github.com/milkyway-labs/milkyway/v10/x/pools"
-	"github.com/milkyway-labs/milkyway/v10/x/restaking"
-	"github.com/milkyway-labs/milkyway/v10/x/rewards"
-	"github.com/milkyway-labs/milkyway/v10/x/services"
-	"github.com/milkyway-labs/milkyway/v10/x/tokenfactory"
+	"github.com/milkyway-labs/milkyway/v11/x/assets"
+	ibchooks "github.com/milkyway-labs/milkyway/v11/x/ibc-hooks"
+	"github.com/milkyway-labs/milkyway/v11/x/investors"
+	"github.com/milkyway-labs/milkyway/v11/x/liquidvesting"
+	"github.com/milkyway-labs/milkyway/v11/x/operators"
+	"github.com/milkyway-labs/milkyway/v11/x/pools"
+	"github.com/milkyway-labs/milkyway/v11/x/restaking"
+	"github.com/milkyway-labs/milkyway/v11/x/rewards"
+	"github.com/milkyway-labs/milkyway/v11/x/services"
+	"github.com/milkyway-labs/milkyway/v11/x/tokenfactory"
 )
 
 var AppModuleBasics = module.NewBasicManager(

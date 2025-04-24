@@ -4,7 +4,7 @@ package osmosis.ibchooks;
 import "gogoproto/gogo.proto";
 import "osmosis/ibchooks/params.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v10/x/ibc-hooks/types";
+option go_package = "github.com/milkyway-labs/milkyway/v11/x/ibc-hooks/types";
 
 message GenesisState {
   Params params = 1 [(gogoproto.nullable) = false];
