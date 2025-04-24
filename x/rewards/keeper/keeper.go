@@ -12,7 +12,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	gogotypes "github.com/cosmos/gogoproto/types"
 
-	"github.com/milkyway-labs/milkyway/v10/x/rewards/types"
+	"github.com/milkyway-labs/milkyway/v11/x/rewards/types"
 )
 
 type Keeper struct {

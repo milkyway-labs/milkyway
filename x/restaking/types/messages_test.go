@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/v10/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v11/x/restaking/types"
 )
 
 var msgUpdateOperatorParams = types.NewMsgJoinService(1, 1, "cosmos13t6y2nnugtshwuy0zkrq287a95lyy8vzleaxmd")

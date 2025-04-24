@@ -8,7 +8,7 @@ import (
 	wasmvmtypes "github.com/CosmWasm/wasmvm/v2/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v10/x/tokenfactory/types"
+	"github.com/milkyway-labs/milkyway/v11/x/tokenfactory/types"
 
 	errorsmod "cosmossdk.io/errors"
 	storetypes "cosmossdk.io/store/types"

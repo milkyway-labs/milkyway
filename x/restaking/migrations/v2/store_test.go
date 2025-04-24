@@ -6,11 +6,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/v10/x/operators/types"
-	v2 "github.com/milkyway-labs/milkyway/v10/x/restaking/migrations/v2"
-	"github.com/milkyway-labs/milkyway/v10/x/restaking/testutils"
-	"github.com/milkyway-labs/milkyway/v10/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v10/x/services/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v11/x/operators/types"
+	v2 "github.com/milkyway-labs/milkyway/v11/x/restaking/migrations/v2"
+	"github.com/milkyway-labs/milkyway/v11/x/restaking/testutils"
+	"github.com/milkyway-labs/milkyway/v11/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v11/x/services/types"
 )
 
 func TestMigrateStore_removeNotAllowedJoinedServices(t *testing.T) {

@@ -19,18 +19,19 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Query_Params_FullMethodName                     = "/milkyway.rewards.v1.Query/Params"
-	Query_RewardsPlans_FullMethodName               = "/milkyway.rewards.v1.Query/RewardsPlans"
-	Query_RewardsPlan_FullMethodName                = "/milkyway.rewards.v1.Query/RewardsPlan"
-	Query_PoolOutstandingRewards_FullMethodName     = "/milkyway.rewards.v1.Query/PoolOutstandingRewards"
-	Query_OperatorOutstandingRewards_FullMethodName = "/milkyway.rewards.v1.Query/OperatorOutstandingRewards"
-	Query_ServiceOutstandingRewards_FullMethodName  = "/milkyway.rewards.v1.Query/ServiceOutstandingRewards"
-	Query_OperatorCommission_FullMethodName         = "/milkyway.rewards.v1.Query/OperatorCommission"
-	Query_PoolDelegationRewards_FullMethodName      = "/milkyway.rewards.v1.Query/PoolDelegationRewards"
-	Query_OperatorDelegationRewards_FullMethodName  = "/milkyway.rewards.v1.Query/OperatorDelegationRewards"
-	Query_ServiceDelegationRewards_FullMethodName   = "/milkyway.rewards.v1.Query/ServiceDelegationRewards"
-	Query_DelegatorTotalRewards_FullMethodName      = "/milkyway.rewards.v1.Query/DelegatorTotalRewards"
-	Query_DelegatorWithdrawAddress_FullMethodName   = "/milkyway.rewards.v1.Query/DelegatorWithdrawAddress"
+	Query_Params_FullMethodName                          = "/milkyway.rewards.v1.Query/Params"
+	Query_RewardsPlans_FullMethodName                    = "/milkyway.rewards.v1.Query/RewardsPlans"
+	Query_RewardsPlan_FullMethodName                     = "/milkyway.rewards.v1.Query/RewardsPlan"
+	Query_PoolOutstandingRewards_FullMethodName          = "/milkyway.rewards.v1.Query/PoolOutstandingRewards"
+	Query_OperatorOutstandingRewards_FullMethodName      = "/milkyway.rewards.v1.Query/OperatorOutstandingRewards"
+	Query_ServiceOutstandingRewards_FullMethodName       = "/milkyway.rewards.v1.Query/ServiceOutstandingRewards"
+	Query_OperatorCommission_FullMethodName              = "/milkyway.rewards.v1.Query/OperatorCommission"
+	Query_PoolServiceTotalDelegatorShares_FullMethodName = "/milkyway.rewards.v1.Query/PoolServiceTotalDelegatorShares"
+	Query_PoolDelegationRewards_FullMethodName           = "/milkyway.rewards.v1.Query/PoolDelegationRewards"
+	Query_OperatorDelegationRewards_FullMethodName       = "/milkyway.rewards.v1.Query/OperatorDelegationRewards"
+	Query_ServiceDelegationRewards_FullMethodName        = "/milkyway.rewards.v1.Query/ServiceDelegationRewards"
+	Query_DelegatorTotalRewards_FullMethodName           = "/milkyway.rewards.v1.Query/DelegatorTotalRewards"
+	Query_DelegatorWithdrawAddress_FullMethodName        = "/milkyway.rewards.v1.Query/DelegatorWithdrawAddress"
 )
 
 // QueryClient is the client API for Query service.
@@ -54,6 +55,9 @@ type QueryClient interface {
 	ServiceOutstandingRewards(ctx context.Context, in *QueryServiceOutstandingRewardsRequest, opts ...grpc.CallOption) (*QueryServiceOutstandingRewardsResponse, error)
 	// OperatorCommission queries accumulated commission for an operator.
 	OperatorCommission(ctx context.Context, in *QueryOperatorCommissionRequest, opts ...grpc.CallOption) (*QueryOperatorCommissionResponse, error)
+	// PoolServiceTotalDelegatorShares queries the total delegator shares for a
+	// pool-service pair.
+	PoolServiceTotalDelegatorShares(ctx context.Context, in *QueryPoolServiceTotalDelegatorSharesRequest, opts ...grpc.CallOption) (*QueryPoolServiceTotalDelegatorSharesResponse, error)
 	// PoolDelegationRewards queries the total rewards accrued by a pool
 	// delegation.
 	PoolDelegationRewards(ctx context.Context, in *QueryPoolDelegationRewardsRequest, opts ...grpc.CallOption) (*QueryPoolDelegationRewardsResponse, error)
@@ -148,6 +152,16 @@ func (c *queryClient) OperatorCommission(ctx context.Context, in *QueryOperatorC
 	return out, nil
 }
 
+func (c *queryClient) PoolServiceTotalDelegatorShares(ctx context.Context, in *QueryPoolServiceTotalDelegatorSharesRequest, opts ...grpc.CallOption) (*QueryPoolServiceTotalDelegatorSharesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(QueryPoolServiceTotalDelegatorSharesResponse)
+	err := c.cc.Invoke(ctx, Query_PoolServiceTotalDelegatorShares_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *queryClient) PoolDelegationRewards(ctx context.Context, in *QueryPoolDelegationRewardsRequest, opts ...grpc.CallOption) (*QueryPoolDelegationRewardsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(QueryPoolDelegationRewardsResponse)
@@ -219,6 +233,9 @@ type QueryServer interface {
 	ServiceOutstandingRewards(context.Context, *QueryServiceOutstandingRewardsRequest) (*QueryServiceOutstandingRewardsResponse, error)
 	// OperatorCommission queries accumulated commission for an operator.
 	OperatorCommission(context.Context, *QueryOperatorCommissionRequest) (*QueryOperatorCommissionResponse, error)
+	// PoolServiceTotalDelegatorShares queries the total delegator shares for a
+	// pool-service pair.
+	PoolServiceTotalDelegatorShares(context.Context, *QueryPoolServiceTotalDelegatorSharesRequest) (*QueryPoolServiceTotalDelegatorSharesResponse, error)
 	// PoolDelegationRewards queries the total rewards accrued by a pool
 	// delegation.
 	PoolDelegationRewards(context.Context, *QueryPoolDelegationRewardsRequest) (*QueryPoolDelegationRewardsResponse, error)
@@ -263,6 +280,9 @@ func (UnimplementedQueryServer) ServiceOutstandingRewards(context.Context, *Quer
 }
 func (UnimplementedQueryServer) OperatorCommission(context.Context, *QueryOperatorCommissionRequest) (*QueryOperatorCommissionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OperatorCommission not implemented")
+}
+func (UnimplementedQueryServer) PoolServiceTotalDelegatorShares(context.Context, *QueryPoolServiceTotalDelegatorSharesRequest) (*QueryPoolServiceTotalDelegatorSharesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PoolServiceTotalDelegatorShares not implemented")
 }
 func (UnimplementedQueryServer) PoolDelegationRewards(context.Context, *QueryPoolDelegationRewardsRequest) (*QueryPoolDelegationRewardsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PoolDelegationRewards not implemented")
@@ -426,6 +446,24 @@ func _Query_OperatorCommission_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_PoolServiceTotalDelegatorShares_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryPoolServiceTotalDelegatorSharesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).PoolServiceTotalDelegatorShares(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Query_PoolServiceTotalDelegatorShares_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).PoolServiceTotalDelegatorShares(ctx, req.(*QueryPoolServiceTotalDelegatorSharesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Query_PoolDelegationRewards_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(QueryPoolDelegationRewardsRequest)
 	if err := dec(in); err != nil {
@@ -550,6 +588,10 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "OperatorCommission",
 			Handler:    _Query_OperatorCommission_Handler,
+		},
+		{
+			MethodName: "PoolServiceTotalDelegatorShares",
+			Handler:    _Query_PoolServiceTotalDelegatorShares_Handler,
 		},
 		{
 			MethodName: "PoolDelegationRewards",

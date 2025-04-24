@@ -4,7 +4,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milkyway/v10/app/keepers"
+	"github.com/milkyway-labs/milkyway/v11/app/keepers"
 )
 
 // Fork defines a struct containing the requisite fields for a non-software upgrade proposal

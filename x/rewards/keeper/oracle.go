@@ -10,8 +10,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	connecttypes "github.com/skip-mev/connect/v2/pkg/types"
 
-	assetstypes "github.com/milkyway-labs/milkyway/v10/x/assets/types"
-	"github.com/milkyway-labs/milkyway/v10/x/rewards/types"
+	assetstypes "github.com/milkyway-labs/milkyway/v11/x/assets/types"
+	"github.com/milkyway-labs/milkyway/v11/x/rewards/types"
 )
 
 func (k *Keeper) GetAssetAndPrice(ctx context.Context, denom string) (assetstypes.Asset, math.LegacyDec, error) {

@@ -5,7 +5,7 @@ import "gogoproto/gogo.proto";
 import "milkyway/services/v1/models.proto";
 import "milkyway/services/v1/params.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v10/x/services/types";
+option go_package = "github.com/milkyway-labs/milkyway/v11/x/services/types";
 
 // GenesisState defines the services module's genesis state.
 message GenesisState {

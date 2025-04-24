@@ -10,7 +10,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v10/x/investors/types"
+	"github.com/milkyway-labs/milkyway/v11/x/investors/types"
 )
 
 type Keeper struct {

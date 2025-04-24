@@ -11,7 +11,7 @@ import (
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	proto "github.com/cosmos/gogoproto/proto"
 	github_com_cosmos_gogoproto_types "github.com/cosmos/gogoproto/types"
-	types1 "github.com/milkyway-labs/milkyway/v10/x/rewards/types"
+	types1 "github.com/milkyway-labs/milkyway/v11/x/rewards/types"
 	_ "google.golang.org/protobuf/types/known/timestamppb"
 	io "io"
 	math "math"

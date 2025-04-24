@@ -6,7 +6,7 @@ import (
 	"cosmossdk.io/math"
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/v10/x/liquidvesting/types"
+	"github.com/milkyway-labs/milkyway/v11/x/liquidvesting/types"
 )
 
 func TestMsgDepositInsurance_Validate(t *testing.T) {

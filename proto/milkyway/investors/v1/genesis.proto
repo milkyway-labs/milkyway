@@ -5,7 +5,7 @@ import "amino/amino.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/milkyway-labs/milkyway/v10/x/investors/types";
+option go_package = "github.com/milkyway-labs/milkyway/v11/x/investors/types";
 
 // GenesisState defines the investors module's genesis state.
 message GenesisState {

@@ -8,8 +8,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 
-	"github.com/milkyway-labs/milkyway/v10/app/keepers"
-	investorstypes "github.com/milkyway-labs/milkyway/v10/x/investors/types"
+	"github.com/milkyway-labs/milkyway/v11/app/keepers"
+	investorstypes "github.com/milkyway-labs/milkyway/v11/x/investors/types"
 )
 
 const foundationAddress = "milk108zdtldyt6r98rlg6la6nvwczzxnh2mjajlj4g"

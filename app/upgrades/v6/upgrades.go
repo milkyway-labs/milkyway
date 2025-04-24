@@ -6,8 +6,8 @@ import (
 	upgradetypes "cosmossdk.io/x/upgrade/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milkyway/v10/app/keepers"
-	liquidvestingtypes "github.com/milkyway-labs/milkyway/v10/x/liquidvesting/types"
+	"github.com/milkyway-labs/milkyway/v11/app/keepers"
+	liquidvestingtypes "github.com/milkyway-labs/milkyway/v11/x/liquidvesting/types"
 )
 
 func CreateUpgradeHandler(

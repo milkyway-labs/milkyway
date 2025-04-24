@@ -3,7 +3,7 @@ package keeper
 import (
 	"context"
 
-	"github.com/milkyway-labs/milkyway/v10/x/services/types"
+	"github.com/milkyway-labs/milkyway/v11/x/services/types"
 )
 
 // SetParams sets module parameters

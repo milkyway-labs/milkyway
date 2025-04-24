@@ -6,7 +6,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v10/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v11/x/pools/types"
 )
 
 // createAccountIfNotExists creates an account if it does not exist

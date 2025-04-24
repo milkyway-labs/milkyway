@@ -9,8 +9,8 @@ import (
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/v10/x/operators/types"
-	"github.com/milkyway-labs/milkyway/v10/x/restaking/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v11/x/operators/types"
+	"github.com/milkyway-labs/milkyway/v11/x/restaking/types"
 )
 
 // AddServiceToOperatorJoinedServices adds the given service to the list of services joined by
