@@ -14,9 +14,6 @@ import (
 
 const UpgradeName = "v11"
 
-//go:embed data.json
-var dataBz []byte
-
 var Upgrade = upgrades.Upgrade{
 	UpgradeName:          UpgradeName,
 	CreateUpgradeHandler: CreateUpgradeHandler,
