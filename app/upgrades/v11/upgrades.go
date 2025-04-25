@@ -4,6 +4,8 @@ import (
 	"context"
 
 	upgradetypes "cosmossdk.io/x/upgrade/types"
+	hyperlanetypes "github.com/bcp-innovations/hyperlane-cosmos/x/core/types"
+	warptypes "github.com/bcp-innovations/hyperlane-cosmos/x/warp/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
@@ -24,6 +26,10 @@ func CreateUpgradeHandler(
 		if err != nil {
 			return nil, err
 		}
+
+		// Create the warp module account
+		keepers.AccountKeeper.GetModuleAccount(ctx, warptypes.ModuleName)
+		keepers.AccountKeeper.GetModuleAccount(ctx, hyperlanetypes.ModuleName)
 
 		// Set the default investors parameters. Note that it uses
 		// UpdateInvestorsRewardRatio instead of SetInvestorsRewardRatio, just in case
