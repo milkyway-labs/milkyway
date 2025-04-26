@@ -111,6 +111,7 @@ var MaccPerms = map[string][]string{
 	// MilkyWay permissions
 	rewardstypes.RewardsPoolName:  nil,
 	liquidvestingtypes.ModuleName: {authtypes.Minter, authtypes.Burner},
+	investorstypes.ModuleName:     nil,
 
 	// Warp module
 	warptypes.ModuleName:      {authtypes.Minter, authtypes.Burner},
