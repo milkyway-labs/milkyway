@@ -19,6 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
+	Msg_AddVestingInvestor_FullMethodName         = "/milkyway.investors.v1.Msg/AddVestingInvestor"
 	Msg_UpdateInvestorsRewardRatio_FullMethodName = "/milkyway.investors.v1.Msg/UpdateInvestorsRewardRatio"
 )
 
@@ -28,6 +29,9 @@ const (
 //
 // Msg defines the investors module's gRPC message service.
 type MsgClient interface {
+	// AddVestingInvestor defines a (governance) operation for adding a new
+	// vesting investor. The authority defaults to the x/gov module account.
+	AddVestingInvestor(ctx context.Context, in *MsgAddVestingInvestor, opts ...grpc.CallOption) (*MsgAddVestingInvestorResponse, error)
 	// UpdateInvestorsRewardRatio defines a (governance) operation for updating
 	// the investors reward ratio. The authority defaults to the x/gov module
 	// account.
@@ -40,6 +44,16 @@ type msgClient struct {
 
 func NewMsgClient(cc grpc.ClientConnInterface) MsgClient {
 	return &msgClient{cc}
+}
+
+func (c *msgClient) AddVestingInvestor(ctx context.Context, in *MsgAddVestingInvestor, opts ...grpc.CallOption) (*MsgAddVestingInvestorResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MsgAddVestingInvestorResponse)
+	err := c.cc.Invoke(ctx, Msg_AddVestingInvestor_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *msgClient) UpdateInvestorsRewardRatio(ctx context.Context, in *MsgUpdateInvestorsRewardRatio, opts ...grpc.CallOption) (*MsgUpdateInvestorsRewardRatioResponse, error) {
@@ -58,6 +72,9 @@ func (c *msgClient) UpdateInvestorsRewardRatio(ctx context.Context, in *MsgUpdat
 //
 // Msg defines the investors module's gRPC message service.
 type MsgServer interface {
+	// AddVestingInvestor defines a (governance) operation for adding a new
+	// vesting investor. The authority defaults to the x/gov module account.
+	AddVestingInvestor(context.Context, *MsgAddVestingInvestor) (*MsgAddVestingInvestorResponse, error)
 	// UpdateInvestorsRewardRatio defines a (governance) operation for updating
 	// the investors reward ratio. The authority defaults to the x/gov module
 	// account.
@@ -72,6 +89,9 @@ type MsgServer interface {
 // pointer dereference when methods are called.
 type UnimplementedMsgServer struct{}
 
+func (UnimplementedMsgServer) AddVestingInvestor(context.Context, *MsgAddVestingInvestor) (*MsgAddVestingInvestorResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddVestingInvestor not implemented")
+}
 func (UnimplementedMsgServer) UpdateInvestorsRewardRatio(context.Context, *MsgUpdateInvestorsRewardRatio) (*MsgUpdateInvestorsRewardRatioResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateInvestorsRewardRatio not implemented")
 }
@@ -94,6 +114,24 @@ func RegisterMsgServer(s grpc.ServiceRegistrar, srv MsgServer) {
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&Msg_ServiceDesc, srv)
+}
+
+func _Msg_AddVestingInvestor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgAddVestingInvestor)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).AddVestingInvestor(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Msg_AddVestingInvestor_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).AddVestingInvestor(ctx, req.(*MsgAddVestingInvestor))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Msg_UpdateInvestorsRewardRatio_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -121,6 +159,10 @@ var Msg_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "milkyway.investors.v1.Msg",
 	HandlerType: (*MsgServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "AddVestingInvestor",
+			Handler:    _Msg_AddVestingInvestor_Handler,
+		},
 		{
 			MethodName: "UpdateInvestorsRewardRatio",
 			Handler:    _Msg_UpdateInvestorsRewardRatio_Handler,
